@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E9862647D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79199626482
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234320AbiKKWTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 17:19:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
+        id S234644AbiKKWTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 17:19:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234681AbiKKWTW (ORCPT
+        with ESMTP id S234017AbiKKWTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 17:19:22 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05596575;
-        Fri, 11 Nov 2022 14:19:14 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso8863688pjg.5;
-        Fri, 11 Nov 2022 14:19:14 -0800 (PST)
+        Fri, 11 Nov 2022 17:19:23 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009A6659F;
+        Fri, 11 Nov 2022 14:19:16 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id y13so5998310pfp.7;
+        Fri, 11 Nov 2022 14:19:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bbF1U+/n89XohO4xIoGIR3CATloY9cnx1McB9SGbcIg=;
-        b=jijVAtpnCgQZzD+WE71V69tuMFlktDgN1brOYikpY2O9S8qhyjvBqeMr9nHhaLfKTz
-         OBlkTU7Xyf3/VUi3hrlKYRnluPBb3ke9PXbR+P+WBUubJSw9nOtZ7DDCjmYLtS8bDVfs
-         nJN5zPLpPELCgIs2CqIJDi5BW3Hl4G6UUcoAUK8tufhQydiMEVrsHCtjwfRshCI9m8RT
-         A0kP7CrHyzPEUsu+2+WL3NYi09zbYId/Y4/x7z1bdPBVfYPbxBrRtpoOZ51iUvMdiaZP
-         6w+EcfCNe1xGVRsg21ItKVjaMxA23szaVjHlki/6d4uaFE4K6oz4/j9MZ8w+ucQgBf/3
-         Mufw==
+        bh=yx7cuLL3+0qRhgMYucvbk77J8l2k/sPl8YHWPWSFSw8=;
+        b=G4iZsMpuI3nEGriXixkODoP02isRkQh2sxoomdWZNs0K6nNdhTMskVO8cMKpAqERqw
+         ufEwL02k6KprcVMdwU5XrKtO7iKZ88xyBBdF9kAjTuuTW2KetiSHTmEbNg2Q9O31mrnw
+         VTBNHNqp7jHeGo38JC5lFzDeHkUtKU4NSLVXI45JygOQorDfmR3YpInyMCHyOKgLlwa2
+         4twbJxK37/GJoYrTzUj/+zf1Af11xNgH2huxWgVCUhnywsrHVw2V+9lBrcR6fDxdE9iP
+         4UJlNb9du52KvJBWR6hYa848GtOp2PqBEBWSDVsdnrJymOmBMjWnZCinMSVDbwz7w1Py
+         mI8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bbF1U+/n89XohO4xIoGIR3CATloY9cnx1McB9SGbcIg=;
-        b=npMiwc18OY7pcSonxEEhFh9dIwSWuqwU7V62OpZwuoEPHoh1GtINZlQaAufThzIAIs
-         pAJX+a2V8Ecv4gyJXMjq9it9wCmJCs7fTXbyjJ5lTYWvG0wooh7ThS7cbUc4dZ7v+H+q
-         mM4BiZ/PPG6fjcQdhXt9jxdwjbhLZxFC+N4KFgcSESG6Rcydl1X2ozcn8PPhkLFE70Zs
-         F6mnfyUUhh0QsTbZ9m9XOAYxDh04DbcWR2SA19N6zb1TbUIAKoLVZ8TANGOyPawU+mBF
-         lxKCWF1MC/wVl5N1jrxaQBvnunMmY0Ue+3ZULjCaw+oUPRmpmKTJjjvDo5g8lybNMwMc
-         e8WA==
-X-Gm-Message-State: ANoB5pmZ4+f+dJQoMZtoumgy+C9E/JEvJLEJ/9zkkcxxVjTOD2jfn9es
-        GeHpWlDAjte/2m7nI8YGuvUsFoObRB8=
-X-Google-Smtp-Source: AA0mqf6K4i/uMz7cW08FZgV5bkjY8UWFpBpyVGoH8OqtXdAfFgmHsHtYhavX3/KgWIqsbW0pdyRUqQ==
-X-Received: by 2002:a17:902:b417:b0:188:4ba9:79ee with SMTP id x23-20020a170902b41700b001884ba979eemr4523501plr.83.1668205154161;
-        Fri, 11 Nov 2022 14:19:14 -0800 (PST)
+        bh=yx7cuLL3+0qRhgMYucvbk77J8l2k/sPl8YHWPWSFSw8=;
+        b=hWhJXy9bfpwCHhH5tVf8jVPVNq5l1nWGRXAbsCXL7bO0LflVcZpg05HCqPC9hb3/sX
+         pFWjhABS7sa8zvY07bFTL6URfbaNcYgmqk/uaAkrMI8VHzyGIKl5pNw0PMKpS1BjgsiR
+         OpqV10YZ374Z1tCaXp7ygnvE5Fr1jXu/SyQ21daKlP3rINIXYct+6BIB1LffqlPk1VUT
+         dqEM6PsTWKwzNghxgGwdnXKsheS46XA4ZxLLn2/GS10tHmEBZJhJVVml3AQFSyqie0/C
+         2+p4f3aoRw9z/L12DDe4ZvRmET42W235MegnG0JKSTPmlx4jlQJ4cRXPlppnHWzllXNN
+         iJCw==
+X-Gm-Message-State: ANoB5plcD0ZBy28uNoUyv2Simc5OfvlDXM+9OTVBh+zRUiG6PugIKxjK
+        vdBDXlv0VO+gzbYZD09WPctN5OjHtWE=
+X-Google-Smtp-Source: AA0mqf5Is0TzQtncpQZb1CVimdOL5Z1cCNQ2/l6SPRGnPTYgn2XLOx2m7iucPJ0hfKB9bv/h6JLrEQ==
+X-Received: by 2002:a63:221a:0:b0:464:3985:3c63 with SMTP id i26-20020a63221a000000b0046439853c63mr3396128pgi.141.1668205155875;
+        Fri, 11 Nov 2022 14:19:15 -0800 (PST)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:de05:ad1e:65ae:ea4d])
-        by smtp.gmail.com with ESMTPSA id q9-20020a170902bd8900b00180daa59314sm2201109pls.125.2022.11.11.14.19.12
+        by smtp.gmail.com with ESMTPSA id q9-20020a170902bd8900b00180daa59314sm2201109pls.125.2022.11.11.14.19.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 14:19:13 -0800 (PST)
+        Fri, 11 Nov 2022 14:19:15 -0800 (PST)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Linus Walleij <linus.walleij@linaro.org>
 Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-acpi@vger.kernel.org
-Subject: [PATCH v4 1/6] gpiolib: of: change of_find_gpio() to accept device node
-Date:   Fri, 11 Nov 2022 14:19:03 -0800
-Message-Id: <20221031-gpiolib-swnode-v4-1-6c1671890027@gmail.com>
+Subject: [PATCH v4 2/6] gpiolib: acpi: change acpi_find_gpio() to accept firmware node
+Date:   Fri, 11 Nov 2022 14:19:04 -0800
+Message-Id: <20221031-gpiolib-swnode-v4-2-6c1671890027@gmail.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 In-Reply-To: <20221031-gpiolib-swnode-v4-0-6c1671890027@gmail.com>
 References: <20221031-gpiolib-swnode-v4-0-6c1671890027@gmail.com>
@@ -76,95 +76,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation of switching all OF-based GPIO lookups to go through
-of_find_gpio() let's change it to accept device node as its argument as
-we do not always have access to device structure.
+In preparation of switching all ACPI-based GPIO lookups to go through
+acpi_find_gpio() let's change it to accept device node as its argument
+as we do not always have access to device structure.
 
 Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Acked-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- drivers/gpio/gpiolib-of.c | 7 +++----
- drivers/gpio/gpiolib-of.h | 4 ++--
- drivers/gpio/gpiolib.c    | 5 +++--
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/gpio/gpiolib-acpi.c | 8 ++++++--
+ drivers/gpio/gpiolib-acpi.h | 4 ++--
+ drivers/gpio/gpiolib.c      | 3 ++-
+ 3 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-index 4be3c21aa718..596b8e21700e 100644
---- a/drivers/gpio/gpiolib-of.c
-+++ b/drivers/gpio/gpiolib-of.c
-@@ -605,7 +605,7 @@ static const of_find_gpio_quirk of_find_gpio_quirks[] = {
- 	NULL
- };
+diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+index 064ba5150fd4..ccb74e208989 100644
+--- a/drivers/gpio/gpiolib-acpi.c
++++ b/drivers/gpio/gpiolib-acpi.c
+@@ -906,18 +906,22 @@ static bool acpi_can_fallback_to_crs(struct acpi_device *adev,
+ 	return con_id == NULL;
+ }
  
--struct gpio_desc *of_find_gpio(struct device *dev, const char *con_id,
-+struct gpio_desc *of_find_gpio(struct device_node *np, const char *con_id,
- 			       unsigned int idx, unsigned long *flags)
+-struct gpio_desc *acpi_find_gpio(struct device *dev,
++struct gpio_desc *acpi_find_gpio(struct fwnode_handle *fwnode,
+ 				 const char *con_id,
+ 				 unsigned int idx,
+ 				 enum gpiod_flags *dflags,
+ 				 unsigned long *lookupflags)
  {
- 	char prop_name[32]; /* 32 is max size of property name */
-@@ -623,8 +623,7 @@ struct gpio_desc *of_find_gpio(struct device *dev, const char *con_id,
- 			snprintf(prop_name, sizeof(prop_name), "%s",
- 				 gpio_suffixes[i]);
+-	struct acpi_device *adev = ACPI_COMPANION(dev);
++	struct acpi_device *adev;
+ 	struct acpi_gpio_info info;
+ 	struct gpio_desc *desc;
+ 	char propname[32];
+ 	int i;
  
--		desc = of_get_named_gpiod_flags(dev->of_node, prop_name, idx,
--						&of_flags);
-+		desc = of_get_named_gpiod_flags(np, prop_name, idx, &of_flags);
++	adev = to_acpi_device_node(fwnode);
++	if (!adev)
++		return ERR_PTR(-ENODEV);
++
+ 	/* Try first from _DSD */
+ 	for (i = 0; i < ARRAY_SIZE(gpio_suffixes); i++) {
+ 		if (con_id) {
+diff --git a/drivers/gpio/gpiolib-acpi.h b/drivers/gpio/gpiolib-acpi.h
+index 01e0cb480a00..bd1f9b92ea9e 100644
+--- a/drivers/gpio/gpiolib-acpi.h
++++ b/drivers/gpio/gpiolib-acpi.h
+@@ -60,7 +60,7 @@ int acpi_gpio_update_gpiod_flags(enum gpiod_flags *flags,
+ int acpi_gpio_update_gpiod_lookup_flags(unsigned long *lookupflags,
+ 					struct acpi_gpio_info *info);
  
- 		if (!gpiod_not_found(desc))
- 			break;
-@@ -632,7 +631,7 @@ struct gpio_desc *of_find_gpio(struct device *dev, const char *con_id,
+-struct gpio_desc *acpi_find_gpio(struct device *dev,
++struct gpio_desc *acpi_find_gpio(struct fwnode_handle *fwnode,
+ 				 const char *con_id,
+ 				 unsigned int idx,
+ 				 enum gpiod_flags *dflags,
+@@ -95,7 +95,7 @@ acpi_gpio_update_gpiod_lookup_flags(unsigned long *lookupflags,
+ }
  
- 	/* Properly named GPIO was not found, try workarounds */
- 	for (q = of_find_gpio_quirks; gpiod_not_found(desc) && *q; q++)
--		desc = (*q)(dev->of_node, con_id, idx, &of_flags);
-+		desc = (*q)(np, con_id, idx, &of_flags);
- 
- 	if (IS_ERR(desc))
- 		return desc;
-diff --git a/drivers/gpio/gpiolib-of.h b/drivers/gpio/gpiolib-of.h
-index 2a2f7d17fa7e..a6c593e6766c 100644
---- a/drivers/gpio/gpiolib-of.h
-+++ b/drivers/gpio/gpiolib-of.h
-@@ -16,7 +16,7 @@ struct gpio_desc;
- struct gpio_device;
- 
- #ifdef CONFIG_OF_GPIO
--struct gpio_desc *of_find_gpio(struct device *dev,
-+struct gpio_desc *of_find_gpio(struct device_node *np,
- 			       const char *con_id,
- 			       unsigned int idx,
- 			       unsigned long *lookupflags);
-@@ -25,7 +25,7 @@ void of_gpiochip_remove(struct gpio_chip *gc);
- int of_gpio_get_count(struct device *dev, const char *con_id);
- void of_gpio_dev_init(struct gpio_chip *gc, struct gpio_device *gdev);
- #else
--static inline struct gpio_desc *of_find_gpio(struct device *dev,
-+static inline struct gpio_desc *of_find_gpio(struct device_node *np,
- 					     const char *con_id,
- 					     unsigned int idx,
- 					     unsigned long *lookupflags)
+ static inline struct gpio_desc *
+-acpi_find_gpio(struct device *dev, const char *con_id,
++acpi_find_gpio(struct fwnode_handle *fwnode, const char *con_id,
+ 	       unsigned int idx, enum gpiod_flags *dflags,
+ 	       unsigned long *lookupflags)
+ {
 diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 11fb7ec883e9..a80fc8abb03f 100644
+index a80fc8abb03f..e874bb0ef685 100644
 --- a/drivers/gpio/gpiolib.c
 +++ b/drivers/gpio/gpiolib.c
-@@ -4122,14 +4122,15 @@ struct gpio_desc *__must_check gpiod_get_index(struct device *dev,
- 	int ret;
- 	/* Maybe we have a device name, maybe not */
- 	const char *devname = dev ? dev_name(dev) : "?";
--	const struct fwnode_handle *fwnode = dev ? dev_fwnode(dev) : NULL;
-+	struct fwnode_handle *fwnode = dev ? dev_fwnode(dev) : NULL;
- 
- 	dev_dbg(dev, "GPIO lookup for consumer %s\n", con_id);
- 
- 	/* Using device tree? */
- 	if (is_of_node(fwnode)) {
- 		dev_dbg(dev, "using device tree for GPIO lookup\n");
--		desc = of_find_gpio(dev, con_id, idx, &lookupflags);
-+		desc = of_find_gpio(to_of_node(fwnode),
-+				    con_id, idx, &lookupflags);
+@@ -4133,7 +4133,8 @@ struct gpio_desc *__must_check gpiod_get_index(struct device *dev,
+ 				    con_id, idx, &lookupflags);
  	} else if (is_acpi_node(fwnode)) {
  		dev_dbg(dev, "using ACPI for GPIO lookup\n");
- 		desc = acpi_find_gpio(dev, con_id, idx, &flags, &lookupflags);
+-		desc = acpi_find_gpio(dev, con_id, idx, &flags, &lookupflags);
++		desc = acpi_find_gpio(fwnode,
++				      con_id, idx, &flags, &lookupflags);
+ 	}
+ 
+ 	/*
 
 -- 
 b4 0.11.0-dev-28747
