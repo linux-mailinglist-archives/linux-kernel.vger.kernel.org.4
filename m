@@ -2,150 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106C3625E0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2215D625E19
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234160AbiKKPQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 10:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
+        id S234399AbiKKPSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 10:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234947AbiKKPP5 (ORCPT
+        with ESMTP id S234809AbiKKPQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 10:15:57 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE2682908;
-        Fri, 11 Nov 2022 07:15:04 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e727329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e727:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 241B01EC054E;
-        Fri, 11 Nov 2022 16:15:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1668179703;
+        Fri, 11 Nov 2022 10:16:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EC982912
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:15:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668179712;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rUkLtAes2bHlVR6TF/TOsV4kRyhqCvCXjQ6BIXFJmE4=;
-        b=LduFPuW4XNtNddh1mRBiUvLSDSbqgkpucFNKR0ZUff+DIGMBJTbCIZLhlS1f0AE+UoFAz3
-        DtNsRqpXU/0NpwhkQLMJA+KnV3XXjiliQUdIdh0CxgzA/M2vHN6gBbt7MRp/pX/PbtOCl3
-        SGLwUvhVvXzbLzr9yv7p6i2Gfssr7m0=
-Date:   Fri, 11 Nov 2022 16:14:58 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Yupeng Li <liyupeng@zbhlos.com>, Shyam-sundar.S-k@amd.com,
-        markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, caizp2008@163.com,
-        smf-linux@virginmedia.com
-Subject: Re: [PATCH 1/1] platform/x86/amd: Fix pmc compile dependency errors.
-Message-ID: <Y25m8tPTtyfHOCfK@zn.tnic>
-References: <20221026072531.346013-1-liyupeng@zbhlos.com>
- <0910bcc4-d55f-6f3a-b2df-4e30d164aeeb@redhat.com>
- <721f6a1a-1144-4fe4-e722-2ba2d7200680@amd.com>
+        bh=WFfjRSX6x+xXHoXLdolT6LJnuObdR7C+VEPrQ+OyqAA=;
+        b=PuDKI9vinHA12koPLu+7olOnuPzMjThZtovRz8oOo5A33pvIm3qddwpTve8FGEcXG0o2/f
+        n1CVkVkoX470JTKtvUY55mykOg0OmDNeDfVyOaZkPBsiObKiomAPZ+VuCNo8ZtLt093ARo
+        BWz+jvL5AKEVGMOwffjxThHV+DSkKcE=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-81-s-Y2A5D4P6K1BaiOaTjjOg-1; Fri, 11 Nov 2022 10:15:11 -0500
+X-MC-Unique: s-Y2A5D4P6K1BaiOaTjjOg-1
+Received: by mail-qk1-f200.google.com with SMTP id q14-20020a05620a0d8e00b006ef0350dae1so4932739qkl.12
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:15:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WFfjRSX6x+xXHoXLdolT6LJnuObdR7C+VEPrQ+OyqAA=;
+        b=miW7nEFqBqJYSvuQsgeTT3rmiGzXuPs+6+2r46sXMerEDp0fexEeMN+9o/b8f3rf1H
+         dO6baL33aOAJ2f/DIkAbZvT6snj0VO3xZkeML+qwiRkbjloF7Kboz03Pdd8ZN9EplBgn
+         6P8GZagkYjpO0UFIJVW2HI3CS2f0lFjFbOLmbWfef6lA3Abad1u+3Ifr6Nk/C1vAO8ys
+         2qWJnciNAXN6TxOf2biM05mPUk1zu6L9nPJfreqiEWwKYXeBx3IBdDYkfCvIFQxmzDzz
+         iaIT1IpTwZ31kC93d5eDs+TfAeNSyogY6XDozL8CAukQkevlksEFfopelTmV91R/3TfU
+         DxBg==
+X-Gm-Message-State: ANoB5pmilA/SmIc2pmzupyLsc5YitsTWn1GiyxJLlPAKt9DsddPDI2E/
+        ExT7MhGkwtF3ERvPuQ02WUUTdiTz7X7VcC/bl6fb8i1UeZkucOTWll4bRv634ejOugRrmujNkvo
+        Axo7VJH65Ho0SQnzBUdUdT88X
+X-Received: by 2002:ae9:f815:0:b0:6fa:2b22:ff3e with SMTP id x21-20020ae9f815000000b006fa2b22ff3emr1360149qkh.200.1668179710677;
+        Fri, 11 Nov 2022 07:15:10 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7vYL/+fo+qZqe8owiSVEkcRSV/WH8SUV6pATe7L3qLNPu68l1cgYhGGZAQ62WVFvh21qKR/A==
+X-Received: by 2002:ae9:f815:0:b0:6fa:2b22:ff3e with SMTP id x21-20020ae9f815000000b006fa2b22ff3emr1360121qkh.200.1668179710380;
+        Fri, 11 Nov 2022 07:15:10 -0800 (PST)
+Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
+        by smtp.gmail.com with ESMTPSA id ga16-20020a05622a591000b003a598fcddefsm1375111qtb.87.2022.11.11.07.15.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 07:15:09 -0800 (PST)
+Date:   Fri, 11 Nov 2022 16:14:59 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     "Longpeng(Mike)" <longpeng2@huawei.com>
+Cc:     stefanha@redhat.com, mst@redhat.com, jasowang@redhat.com,
+        virtualization@lists.linux-foundation.org, arei.gonglei@huawei.com,
+        yechuan@huawei.com, huangzhichao@huawei.com,
+        linux-kernel@vger.kernel.org, xiehong@huawei.com
+Subject: Re: [PATCH] vp_vdpa: harden the logic of set status
+Message-ID: <20221111151459.dyz42jclq26ai26q@sgarzare-redhat>
+References: <20221111145505.1232-1-longpeng2@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <721f6a1a-1144-4fe4-e722-2ba2d7200680@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221111145505.1232-1-longpeng2@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 06:27:52AM -0600, Mario Limonciello wrote:
-> On 11/7/22 04:28, Hans de Goede wrote:
-> > Hi,
-> > 
-> > On 10/26/22 09:25, Yupeng Li wrote:
-> > > When disabled CONFIG_SUSPEND and CONFIG_DEBUG_FS, get_metrics_table
-> > > and amd_pmc_idlemask_read is defined under two conditions of this,
-> > > pmc build with implicit declaration of function error.Some build error
-> > > messages are as follows:
-> > > 
-> > >   CC [M]  drivers/platform/x86/amd/pmc.o
-> > > drivers/platform/x86/amd/pmc.c: In function ‘smu_fw_info_show’:
-> > > drivers/platform/x86/amd/pmc.c:436:6: error: implicit declaration of function ‘get_metrics_table’ [-Werror=implicit-function-declaration]
-> > >    436 |  if (get_metrics_table(dev, &table))
-> > >        |      ^~~~~~~~~~~~~~~~~
-> > > drivers/platform/x86/amd/pmc.c: In function ‘amd_pmc_idlemask_show’:
-> > > drivers/platform/x86/amd/pmc.c:508:8: error: implicit declaration of function ‘amd_pmc_idlemask_read’; did you mean ‘amd_pmc_idlemask_show’? [-Werror=implicit-function-declaration]
-> > >    508 |   rc = amd_pmc_idlemask_read(dev, NULL, s);
-> > >        |        ^~~~~~~~~~~~~~~~~~~~~
-> > >        |        amd_pmc_idlemask_show
-> > > cc1: some warnings being treated as errors
-> > > 
-> > > Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
-> > > Reviewed-by: Caicai <caizp2008@163.com>
-> > 
-> > Thank you for your patch, however I do not believe that this is the correct fix:
-> > 
-> > > ---
-> > >   drivers/platform/x86/amd/pmc.c | 5 ++++-
-> > >   1 file changed, 4 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/platform/x86/amd/pmc.c b/drivers/platform/x86/amd/pmc.c
-> > > index ce859b300712..2b08039921b8 100644
-> > > --- a/drivers/platform/x86/amd/pmc.c
-> > > +++ b/drivers/platform/x86/amd/pmc.c
-> > > @@ -433,8 +433,10 @@ static int smu_fw_info_show(struct seq_file *s, void *unused)
-> > >   	struct smu_metrics table;
-> > >   	int idx;
-> > > +#if defined(CONFIG_SUSPEND) || defined(CONFIG_DEBUG_FS)
-> > >   	if (get_metrics_table(dev, &table))
-> > >   		return -EINVAL;
-> > > +#endif
-> > >   	seq_puts(s, "\n=== SMU Statistics ===\n");
-> > >   	seq_printf(s, "Table Version: %d\n", table.table_version);
-> > 
-> > The table variable gets used here, but now it no longer has been initialized by
-> > get_metrics_table() so just #ifdef-ing out the get_metrics_table() call is wrong.
-> > 
-> > > @@ -503,11 +505,12 @@ static int amd_pmc_idlemask_show(struct seq_file *s, void *unused)
-> > >   		if (rc)
-> > >   			return rc;
-> > >   	}
-> > > -
-> > >   	if (dev->major > 56 || (dev->major >= 55 && dev->minor >= 37)) {
-> > > +#if defined(CONFIG_SUSPEND) || defined(CONFIG_DEBUG_FS)
-> > >   		rc = amd_pmc_idlemask_read(dev, NULL, s);
-> > >   		if (rc)
-> > >   			return rc;
-> > > +#endif
-> > >   	} else {
-> > >   		seq_puts(s, "Unsupported SMU version for Idlemask\n");
-> > >   	}
-> > 
-> > Same thing except now nothing gets send to the struct seq_file *s,
-> > so this is wrong too.
-> > 
-> > Shyam / Mario, can you take a look at the reported compile errors please?
-> > 
-> > Regards,
-> > 
-> > Hans
-> > 
-> 
-> What kernel is this?  Shyam removed CONFIG_DEBUGFS in b37fe34c83.  So is
-> this failure still happening in 6.1-rc4?
+On Fri, Nov 11, 2022 at 10:55:05PM +0800, Longpeng(Mike) wrote:
+>From: Longpeng <longpeng2@huawei.com>
+>
+>1. We should not set status to 0 when invoking vp_vdpa_set_status().
+>
+>2. The driver MUST wait for a read of device_status to return 0 before
+>   reinitializing the device.
+>
+>Signed-off-by: Longpeng <longpeng2@huawei.com>
+>---
+> drivers/vdpa/virtio_pci/vp_vdpa.c | 11 ++++++++++-
+> 1 file changed, 10 insertions(+), 1 deletion(-)
+>
+>diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
+>index d448db0c4de3..d35fac5cde11 100644
+>--- a/drivers/vdpa/virtio_pci/vp_vdpa.c
+>+++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
+>@@ -212,8 +212,12 @@ static void vp_vdpa_set_status(struct vdpa_device *vdpa, u8 status)
+> {
+> 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
+> 	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
+>-	u8 s = vp_vdpa_get_status(vdpa);
 
-It managed to trickle into stable too:
+Is this change really needed?
 
-https://bugzilla.kernel.org/show_bug.cgi?id=216679
+>+	u8 s;
+>+
+>+	/* We should never be setting status to 0. */
+>+	BUG_ON(status == 0);
 
-Adding bug reporter to Cc too.
+IMHO panicking the kernel seems excessive in this case, please use 
+WARN_ON and maybe return earlier.
 
-From a quick glance, I'd drop all that ifdeffery and add empty stubs.
-IMNSVHO.
+>
+>+	s = vp_vdpa_get_status(vdpa);
+> 	if (status & VIRTIO_CONFIG_S_DRIVER_OK &&
+> 	    !(s & VIRTIO_CONFIG_S_DRIVER_OK)) {
+> 		vp_vdpa_request_irq(vp_vdpa);
+>@@ -229,6 +233,11 @@ static int vp_vdpa_reset(struct vdpa_device *vdpa)
+> 	u8 s = vp_vdpa_get_status(vdpa);
+>
+> 	vp_modern_set_status(mdev, 0);
+>+	/* After writing 0 to device_status, the driver MUST wait for a read of
+>+	 * device_status to return 0 before reinitializing the device.
+>+	 */
+>+	while (vp_modern_get_status(mdev))
+>+		msleep(1);
 
-Thx.
+Should we set a limit after which we give up? A malfunctioning device 
+could keep us here forever.
 
--- 
-Regards/Gruss,
-    Boris.
+Thanks,
+Stefano
 
-https://people.kernel.org/tglx/notes-about-netiquette
+>
+> 	if (s & VIRTIO_CONFIG_S_DRIVER_OK)
+> 		vp_vdpa_free_irq(vp_vdpa);
+>-- 
+>2.23.0
+>
+
