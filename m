@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 513D3624F2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:56:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F63D624F31
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbiKKA4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 19:56:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
+        id S231791AbiKKA7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 19:59:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiKKA4m (ORCPT
+        with ESMTP id S229536AbiKKA7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 19:56:42 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA16C606BC
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:56:41 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id v17so3020309plo.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:56:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=c8AB4APy2pddbTNqiGQoT5yqMTz/uyFuVDSxlzN+Oi0=;
-        b=aZS3vpOgOGqwuol0MaD23BOqPU3B6GloRsuvGNSE4Mq1CehxYKrRRfBCz1gLXnSrAx
-         4yk5hShqx2fuWMSjjgvk1TG7RtC9xtkfNAGrqLCNn6CH2ke3k75FVppth/FtKWp++AXh
-         jZV+LOklGig3Of0zt09LAZA9ZEAfmtrQldi9w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c8AB4APy2pddbTNqiGQoT5yqMTz/uyFuVDSxlzN+Oi0=;
-        b=dut1F/GiNeagdwMACGvVQbFgq3PfMYj+IxcQj5jvYZEC6xKI7t6VBD4sOTTir45KyH
-         Bt4VsJf/t8rWZgXoUqqXt1x3bzyKsiRuEiewVnJPT2apF3c4T6ZlmYAJrmV+s8mUWmKn
-         ODGBRyiMIPUQgRMCgzZXknza7Z1sNPhqjNTMMWyA7IKI2Nb0ojRpaQh1Sh2203A0JeeN
-         NDQpJ18nOPCdBVJUFWnY+A6H3k43wvicgtiQQuDeUll6Fz3dlXA7HJ9cEa0h/M0GrJ1c
-         gkqXCaiogL26103ZgdsKNVPoCJpSWsnFfG5swZWMAu2DjeWtXtKQhx+YKMjSsaOgmZgq
-         h1sQ==
-X-Gm-Message-State: ACrzQf0ZrsfJ2hymF36Iln7+QJHO2pzAM6NuClj1togbCIEKPqHHctex
-        bbiOJkWf0+iINe33rSBsH4VzLQ==
-X-Google-Smtp-Source: AMsMyM5mW+0hkuFQJ6UywbnVVXvPVuRqZe3ekCt3uLAhkI9kyRQRsO3Q/YuQgGdBAHAIuNUlzwlLHw==
-X-Received: by 2002:a17:90b:906:b0:212:e996:704a with SMTP id bo6-20020a17090b090600b00212e996704amr2772722pjb.13.1668128201364;
-        Thu, 10 Nov 2022 16:56:41 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:8d55:c60d:579d:741c])
-        by smtp.gmail.com with ESMTPSA id r19-20020a634413000000b0046f59bef0c5sm218722pga.89.2022.11.10.16.56.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 16:56:40 -0800 (PST)
-Date:   Fri, 11 Nov 2022 09:56:36 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv4 0/9] zsmalloc/zram: configurable zspage size
-Message-ID: <Y22dxEcs2g5mjuQ7@google.com>
-References: <20221031054108.541190-1-senozhatsky@chromium.org>
- <Y21+xp52OQYi/qjQ@google.com>
+        Thu, 10 Nov 2022 19:59:08 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C6C48768;
+        Thu, 10 Nov 2022 16:59:06 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N7gM81Fpfz4f3kpJ;
+        Fri, 11 Nov 2022 08:59:00 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgAnmdZVnm1jtHJLAQ--.61357S3;
+        Fri, 11 Nov 2022 08:59:03 +0800 (CST)
+Subject: Re: [PATCH] sbitmap: Use single per-bitmap counting to wake up queued
+ tags
+To:     Jan Kara <jack@suse.cz>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Gabriel Krisman Bertazi <krisman@suse.de>, axboe@kernel.dk,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Liu Song <liusong@linux.alibaba.com>,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20221105231055.25953-1-krisman@suse.de>
+ <2a445c5c-fd15-c0bf-8655-2fb5bde3fe67@huaweicloud.com>
+ <20221110111636.ufgyp4tkbzexugk2@quack3>
+ <210f2c3d-0bc1-0a5f-964b-d75020d3d9fb@huaweicloud.com>
+ <20221110153533.go5qs3psm75h27mx@quack3>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <535d8806-9abb-4caf-d75b-4013a262415d@huaweicloud.com>
+Date:   Fri, 11 Nov 2022 08:59:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y21+xp52OQYi/qjQ@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20221110153533.go5qs3psm75h27mx@quack3>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgAnmdZVnm1jtHJLAQ--.61357S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxZr1UZw48ZF15Aw47CFyrtFb_yoW5Xr1xpr
+        WDG3WxCF4DXry7Kr4qqr4FvanavrW8t3s3Wr1rJa48Arn2yFsIvay8tr1F9r4kZr4kJw10
+        qF15t39xWFyjva7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
+        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCT
+        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,45 +71,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi
 
-On (22/11/10 14:44), Minchan Kim wrote:
-> On Mon, Oct 31, 2022 at 02:40:59PM +0900, Sergey Senozhatsky wrote:
-> > 	Hello,
-> > 
-> > 	Some use-cases and/or data patterns may benefit from
-> > larger zspages. Currently the limit on the number of physical
-> > pages that are linked into a zspage is hardcoded to 4. Higher
-> > limit changes key characteristics of a number of the size
-> > classes, improving compactness of the pool and redusing the
-> > amount of memory zsmalloc pool uses. More on this in 0002
-> > commit message.
+在 2022/11/10 23:35, Jan Kara 写道:
+> Hi!
 > 
-> Hi Sergey,
+> On Thu 10-11-22 21:18:19, Yu Kuai wrote:
+>> 在 2022/11/10 19:16, Jan Kara 写道:
+>>> Hi!
+>>>
+>>> On Thu 10-11-22 17:42:49, Yu Kuai wrote:
+>>>> 在 2022/11/06 7:10, Gabriel Krisman Bertazi 写道:
+>>>>> +void sbitmap_queue_wake_up(struct sbitmap_queue *sbq, int nr)
+>>>>>     {
+>>>>> -	struct sbq_wait_state *ws;
+>>>>> -	unsigned int wake_batch;
+>>>>> -	int wait_cnt, cur, sub;
+>>>>> -	bool ret;
+>>>>> +	unsigned int wake_batch = READ_ONCE(sbq->wake_batch);
+>>>>> +	struct sbq_wait_state *ws = NULL;
+>>>>> +	unsigned int wakeups;
+>>>>> -	if (*nr <= 0)
+>>>>> -		return false;
+>>>>> +	if (!atomic_read(&sbq->ws_active))
+>>>>> +		return;
+>>>>> -	ws = sbq_wake_ptr(sbq);
+>>>>> -	if (!ws)
+>>>>> -		return false;
+>>>>> +	atomic_add(nr, &sbq->completion_cnt);
+>>>>> +	wakeups = atomic_read(&sbq->wakeup_cnt);
+>>>>> -	cur = atomic_read(&ws->wait_cnt);
+>>>>>     	do {
+>>>>> -		/*
+>>>>> -		 * For concurrent callers of this, callers should call this
+>>>>> -		 * function again to wakeup a new batch on a different 'ws'.
+>>>>> -		 */
+>>>>> -		if (cur == 0)
+>>>>> -			return true;
+>>>>> -		sub = min(*nr, cur);
+>>>>> -		wait_cnt = cur - sub;
+>>>>> -	} while (!atomic_try_cmpxchg(&ws->wait_cnt, &cur, wait_cnt));
+>>>>> -
+>>>>> -	/*
+>>>>> -	 * If we decremented queue without waiters, retry to avoid lost
+>>>>> -	 * wakeups.
+>>>>> -	 */
+>>>>> -	if (wait_cnt > 0)
+>>>>> -		return !waitqueue_active(&ws->wait);
+>>>>> +		if (atomic_read(&sbq->completion_cnt) - wakeups < wake_batch)
+>>>>> +			return;
+>>>>
+>>>> Should it be considered that completion_cnt overflow and becomes
+>>>> negtive?
+>>>
+>>> Yes, the counters can (and will) certainly overflow but since we only care
+>>> about (completion_cnt - wakeups), we should be fine - this number is always
+>>> sane (and relatively small) and in the kernel we do compile with signed
+>>> overflows being well defined.
+>>
+>> I'm worried about this: for example, the extreme scenaro that there
+>> is only one tag, currently there are only one infight rq and one thread
+>> is waiting for tag. When the infight rq complete, if 'completion_cnt'
+>> overflow to negative, then 'atomic_read(&sbq->completion_cnt) - wakeups
+>> < wake_batch' will be passed unexpected, then will the thread never be
+>> woken up if there are no new io issued ?
 > 
-> I think the idea that break of fixed subpages in zspage is
-> really good start to optimize further. However, I am worry
-> about introducing per-pool config this stage. How about
-> to introduce just one golden value for the zspage size?
-> order-3 or 4 in Kconfig with keeping default 2?
+> Well but my point is that 'wakeups' is staying close to completion_cnt. So
+> if completion_cnt wraps to INT_MIN, then 'wakeups' is close to INT_MAX and
+> so completion_cnt - wakeups is going to wrap back and still result in a
+> small number. That is simply how wrapping arithmetics works...
 
-Sorry, not sure I'm following. So you want a .config value
-for zspage limit? I really like the sysfs knob, because then
-one may set values on per-device basis (if they have multiple
-zram devices in a system with different data patterns):
+Yes, you're right, I'm being foolish here. 😆
 
-	zram0 which is used as a swap device uses, say, 4
-	zram1 which is vfat block device uses, say, 6
-	zram2 which is ext4 block device uses, say, 8
+Thanks,
+Kuai
+> 
+> 								Honza
+> 
 
-The whole point of the series is that one single value does
-not fit all purposes. There is no silver bullet.
-
-> And then we make more efforts to have auto tune based on
-> the wasted memory and the number of size classes on the
-> fly. A good thing to be able to achieve is we have indirect
-> table(handle <-> zpage) so we could move the object anytime
-> so I think we could do better way in the end.
-
-It still needs to be per zram device (per zspool). sysfs knob
-doesn't stop us from having auto-tuned values in the future.
