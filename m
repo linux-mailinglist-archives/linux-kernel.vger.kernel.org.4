@@ -2,92 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF266264B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C91686264B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234454AbiKKWgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 17:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
+        id S234607AbiKKWgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 17:36:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiKKWgi (ORCPT
+        with ESMTP id S234567AbiKKWgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 17:36:38 -0500
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABAD6713B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:36:37 -0800 (PST)
-Received: by mail-ua1-x933.google.com with SMTP id c26so1823508uak.5
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:36:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Y14SvCt3WkV61w719xQpLmfaxX972HWTaoEASWzbxw=;
-        b=ccILGE7efpG+za2PGnAtlj+Eq9I+J9ZyRsg4hnHWwZm6CjQT0GdHs1GhXctuinHWkA
-         awGbJE/ir58GdUmWBc7KJVwr5+pqZu92icX15uW5miYnf+zdDTDtJsCvMZZ5xd5oBLrq
-         V8BU5FJ+ZjHDQHZ3cl/atWAGfYanM/Dbnq2gCSJC54QkUkeZoKexI/cQHPXm/1wmheCM
-         zrp92bGgjb+HFE/H8NUwZ0GPyFhUO3mZsoK3C9/L8twyoNrAHv9hPJLB1dLH1PdRFMvj
-         RsPQ0OWPS35j7y5YfNst83OhgKehsWQuj9jRUuPQZRqmhJ7kcFCGDjPmw3Bp4k6MVUBE
-         NBuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5Y14SvCt3WkV61w719xQpLmfaxX972HWTaoEASWzbxw=;
-        b=cF0Yx+VNNF51nO71tnD1pY1CZ9FTTNguMC+4OHzemc6noUl6ZCHQLukF5kRnPC+klJ
-         cagNBc19VOM9b/S9L2Xsjlj+RsL8vEC0TdvwqUmFeYhHblo1lAvWbR8Z5U548x1WGuYp
-         GjVlSLfQKVsmGiLbdp1gGsGRnA5elZthxQX8M3wY3yb3VPBUcZFo7AQfNaecee/iO43+
-         H7GlUjgMPmyJhz2NB3bL0t7HN9RyHW9sc8giqw1+SGjB8o2m/2v6zv8JKEGQpZ5P+lc4
-         +fvlIoJqB/Ok+oFQlmnX+S4Pft6uBotfgb0lYIwoKIuUg5K/c/AuYVX8cHGv3vg5cZMO
-         ZOXQ==
-X-Gm-Message-State: ANoB5pmAYRVZD5Y5Bg4QWzFXsbnHDAApPeTAIMfaMWHiW4ykJ5faLVPd
-        n8XO38vHrma+wlBJKVhjMKabVo0SC87e18+d7V6ajFBJPfg=
-X-Google-Smtp-Source: AA0mqf7dkWkUnS/6Cu96O0+y/JKnUJlFiSpS41qu/zcfB5sIFTPFE0pNQ9eL/jHCnDBXd/NQTvs60eXgJqHPP6fz+7g=
-X-Received: by 2002:ab0:7384:0:b0:411:1606:21bf with SMTP id
- l4-20020ab07384000000b00411160621bfmr2062957uap.12.1668206196852; Fri, 11 Nov
- 2022 14:36:36 -0800 (PST)
+        Fri, 11 Nov 2022 17:36:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5BE77E6C;
+        Fri, 11 Nov 2022 14:36:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4067E62112;
+        Fri, 11 Nov 2022 22:36:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B131C433C1;
+        Fri, 11 Nov 2022 22:36:37 +0000 (UTC)
+Date:   Fri, 11 Nov 2022 22:36:31 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, Suzuki K Poulose <suzuki.poulose@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mark Rutland <mark.rutland@arm.com>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 2/2] arm64: errata: Workaround possible Cortex-A715
+ [ESR|FAR]_ELx corruption
+Message-ID: <Y27Ob8aRX919Hhu0@arm.com>
+References: <20221027023915.1318100-1-anshuman.khandual@arm.com>
+ <20221027023915.1318100-3-anshuman.khandual@arm.com>
+ <Y2v9EiNR40x/cCQm@arm.com>
+ <73c40107-0d7a-d988-c817-7bba6d72c371@arm.com>
 MIME-Version: 1.0
-References: <20221022225637.1406715-1-jim.cromie@gmail.com> <Y20+PqtF+dFAe7hX@kroah.com>
-In-Reply-To: <Y20+PqtF+dFAe7hX@kroah.com>
-From:   jim.cromie@gmail.com
-Date:   Fri, 11 Nov 2022 15:36:10 -0700
-Message-ID: <CAJfuBxzbSkGHdr+r35ZQ1aGhfqQS6bv8_NSbQY6ptsu0qLKCKA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] RESEND vmlinux.lds.h tweaks
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, jbaron@akamai.com,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kent Overstreet <kent.overstreet@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <73c40107-0d7a-d988-c817-7bba6d72c371@arm.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 11:09 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Sat, Oct 22, 2022 at 04:56:35PM -0600, Jim Cromie wrote:
-> > hi Greg,
-> >
-> > this time w/o the stale patch 2.
-> >
-> > These 2 patches are "no functional change", but they are a simple step
-> > towards de-duplicating the repetitive columms in the __dyndbg section.
-> >
-> > For a DYNAMIC_DEBUG=y kernel with 5k pr_debugs/drm.debugs, the
-> > footprint reduction should be ~100 KiB
->
-> Cool stuff, let me add it to my tree and see what breaks!  :)
->
-> greg k-h
+On Thu, Nov 10, 2022 at 08:45:07AM +0530, Anshuman Khandual wrote:
+> On 11/10/22 00:48, Catalin Marinas wrote:
+> > On Thu, Oct 27, 2022 at 08:09:15AM +0530, Anshuman Khandual wrote:
+> >> +#define __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION
+> >> +static inline pte_t ptep_modify_prot_start(struct vm_area_struct *vma,
+> >> +					   unsigned long addr,
+> >> +					   pte_t *ptep)
+> >> +{
+> >> +	pte_t pte = ptep_get_and_clear(vma->vm_mm, addr, ptep);
+> >>  
+> >> +	if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198)) {
+> >> +		/*
+> >> +		 * Break-before-make (BBM) is required for all user space mappings
+> >> +		 * when the permission changes from executable to non-executable
+> >> +		 * in cases where cpu is affected with errata #2645198.
+> >> +		 */
+> >> +		if (pte_user_exec(pte) && cpus_have_const_cap(ARM64_WORKAROUND_2645198))
+> >> +			__flush_tlb_range(vma, addr, addr + PAGE_SIZE, PAGE_SIZE, false, 3);
+> > 
+> > Why not flush_tlb_page() here?
+> > 
+> > But more importantly, can we not use ptep_clear_flush() instead (and
+> 
+> Something like ...
+> 
+> ptep_modify_prot_start -
+> 
+> if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198)) {
+> 	if (pte_user_exec(READ_ONCE(*ptep)) && cpus_have_const_cap(ARM64_WORKAROUND_2645198))
+> 		return ptep_clear_flush(vma, addr, ptep);
+> } else {
+> 	return ptep_get_and_clear(vma->vm_mm, addr, ptep);
+> }
 
-very good, thnks.
+Yes, this should work but avoid the 'else' when you have a return, so
+something like:
 
-on a rev2, I'd change _s_ _e_ macro vars,
-maybe _BEGIN_, _END_, or _1ST_, _LAST_
+	if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198) &&
+	    cpus_have_const_cap(ARM64_WORKAROUND_2645198) &&
+	    pte_user_exec(READ_ONCE(*ptep)))
+		return ptep_clear_flush(vma, addr, ptep);
 
-and maybe expand the commit-msgs for more explanation.
+	return ptep_get_and_clear(vma->vm_mm, addr, ptep);
+
+
+> > huge_ptep_clear_flush())? They return the pte and do the TLBI.
+> 
+> huge_ptep_modify_prot_start -
+> 
+> if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198)) {
+> 	if (pte_user_exec(READ_ONCE(*ptep)) && cpus_have_const_cap(ARM64_WORKAROUND_2645198))
+> 		return huge_ptep_clear_flush(vma, addr, ptep);
+> } else {
+> 	return huge_ptep_get_and_clear(vma->vm_mm, addr, ptep);
+> }
+> 
+> pte_user_exec(READ_ONCE(*ptep) should identify an user exec mapping even though
+> ptep represents a cont PTE/PMD huge page ? OR should huge_ptep_get() helper be
+> used instead ?
+
+This should work as a shortcut. The contiguous ptes should all be the
+same, so it's sufficient to check one of them.
+
+-- 
+Catalin
