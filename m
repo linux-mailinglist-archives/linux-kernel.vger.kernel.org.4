@@ -2,87 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 656636259F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8190A625A19
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233439AbiKKMB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 07:01:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
+        id S233844AbiKKMCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 07:02:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232943AbiKKMBy (ORCPT
+        with ESMTP id S233706AbiKKMCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 07:01:54 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C055BD71;
-        Fri, 11 Nov 2022 04:01:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668168114; x=1699704114;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CxMDF9YsdxZxuQZMs5AsEobdIllhpLgUIIiVSCXywkE=;
-  b=OjCpG3plltUSZ/K7BcDh37ayxgQ4z57CWtz6YQj6szOyMpIUj5wa3GV2
-   EcY3vZkDVVBi4RQ9M2VuhuXuUUg6Jhw8jYwAYEoyrMBSV4nKmF/nir+qn
-   Yf9HKgPQ3OyZaORDcWZIgVuR8jvNMJRZWVnkRxMXXGxaf73E8/r1j04AF
-   wMAB5sJ9pR+vFpb8diys2IEHhaU5UPjeiWq9w36/4TwtFt8yPFAg62e+v
-   TlgSCkr/RiTm8C9KZkvdSSkZlN0dc6y2qNHUsXdjwITgjYjicli64XIPP
-   Wj2kx7naJwBxKastHNWYA0puf7E2weZFVgqSAyve62Z48MxOSi/7WBqWo
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="311587535"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="311587535"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 04:01:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="726767492"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="726767492"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 11 Nov 2022 04:01:52 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1otSjH-00AgRD-1v;
-        Fri, 11 Nov 2022 14:01:51 +0200
-Date:   Fri, 11 Nov 2022 14:01:51 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] pinctrl: Move for_each_maps() to namespace and
- hide iterator inside
-Message-ID: <Y245rxdl0NRCKP78@smile.fi.intel.com>
-References: <20221109155724.42354-1-andriy.shevchenko@linux.intel.com>
- <Y2vQgdzBl+MvoqQM@smile.fi.intel.com>
- <CACRpkda=vhL_LKU1BjOBkJKPuFe5YOX8cAPpzU8SaRKRw1fq-Q@mail.gmail.com>
+        Fri, 11 Nov 2022 07:02:12 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B7C85443;
+        Fri, 11 Nov 2022 04:02:12 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 910896602A69;
+        Fri, 11 Nov 2022 12:02:09 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1668168130;
+        bh=e+ArDT2t4PV+LjnK1uWBh1mFJ4Qzmul7ZTkVo8z5z98=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=NlA5/UYUHX3fh8NqK0XR1cDLL/WxVXxdhaegLR0hC6YACWUfzSW/ZFSWte+ek9LGU
+         6+mfM4ZOA8RUHW/n1fE5uTfBIjkfSLidAwsJHsdQI1c+2B/+k5mVQLZPIkUnQVhFRi
+         jGeESG3//lYsYssu1ivxUu/Bh0t6c0tJS6k9H/79J76n6gtOwAKJifJP3LWbDP/9ux
+         ce7bWV5jVgCBjni8UTXUX9+z84M7dBzDcQaw0uqAvi+CaPHXqQL7oOyA2Bqk5h81O8
+         N0SADlp8lbNjz3Jbi0Mcf6kP04j3zuX513qscL5igKFGm8PkEzYobNXIN/sQa1H/jy
+         Oa6E//U6hR8xw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     agross@kernel.org
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
+        srinivas.kandagatla@linaro.org, jic23@kernel.org, lars@metafoo.de,
+        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        evgreen@chromium.org, gregkh@linuxfoundation.org,
+        a39.skl@gmail.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-hardening@vger.kernel.org,
+        marijn.suijten@somainline.org, kernel@collabora.com,
+        luca@z3ntu.xyz,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 06/11] dt-bindings: arm: qcom,ids: Add SoC IDs for MSM8956 and MSM8976
+Date:   Fri, 11 Nov 2022 13:01:51 +0100
+Message-Id: <20221111120156.48040-7-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221111120156.48040-1-angelogioacchino.delregno@collabora.com>
+References: <20221111120156.48040-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACRpkda=vhL_LKU1BjOBkJKPuFe5YOX8cAPpzU8SaRKRw1fq-Q@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 10:55:47AM +0100, Linus Walleij wrote:
-> On Wed, Nov 9, 2022 at 5:08 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Wed, Nov 09, 2022 at 05:57:24PM +0200, Andy Shevchenko wrote:
+Document the identifier of MSM8956/76.
 
-...
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ include/dt-bindings/arm/qcom,ids.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> > Meanwhile, Linus, do you think this change is useful?
-> 
-> Even if just a name change, it makes things better by being more
-> readable so yes :)
-
-v2 has been sent.
-
+diff --git a/include/dt-bindings/arm/qcom,ids.h b/include/dt-bindings/arm/qcom,ids.h
+index 8b1a0f43bd93..91633da5fcf6 100644
+--- a/include/dt-bindings/arm/qcom,ids.h
++++ b/include/dt-bindings/arm/qcom,ids.h
+@@ -78,6 +78,8 @@
+ #define QCOM_ID_MSM8616			250
+ #define QCOM_ID_MSM8992			251
+ #define QCOM_ID_APQ8094			253
++#define QCOM_ID_MSM8956			266
++#define QCOM_ID_MSM8976			278
+ #define QCOM_ID_MDM9607			290
+ #define QCOM_ID_APQ8096			291
+ #define QCOM_ID_MSM8998			292
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.38.1
 
