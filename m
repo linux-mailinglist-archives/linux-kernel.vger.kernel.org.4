@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB3D62644C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:17:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03663626450
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234497AbiKKWRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 17:17:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44850 "EHLO
+        id S233859AbiKKWRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 17:17:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234448AbiKKWR3 (ORCPT
+        with ESMTP id S234473AbiKKWR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Nov 2022 17:17:29 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8ED84B997
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:17:26 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id 11so4575696iou.0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:17:26 -0800 (PST)
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D974657B77
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:17:27 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id l6so3185828ilq.3
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:17:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pAqo2IY9qcxeeqd6VBniHfWVzxC9WIKztprXocMtHOo=;
-        b=IHrxVqRzdOVlFgCJjcAHP7xGi6G+KpW9xsG8h0U1Eck/d76md+hJkTMGmQPz2h2Cm5
-         0LG8PJmGr0zHtZJkP2Ru3CasZbedM7LDLdU2jm6+058/wEuiTf6vkifSJ7b54BSDUG+F
-         8YpXArxd6M5DPYS+dvHgRKQciCwA+NrtuLzfmoI74XiBOUbhvg+y3bpH0bmWGXVd4BEj
-         hcLANNGjawgGROMKx62vHjXJ/WRJ/X/XiDxiHHJIE2tWhdAdNd+RjlfjYdvcMqH35p4s
-         z4x1jq6XHvn+Sz8V8sIh3bQ2ZlzJzejxLofs1WOCcfNkBIDOUCa1OOGr5GDdoHED1HUT
-         6YCQ==
+        bh=B2uIhj+1kniLl98rxc2zGhFR3/ukaY2ppmVrEhlaB1M=;
+        b=eplYE5X6uNXmUiYQeBqfuI/BDxP9+t/E/ns/FxNcmLmjgfFnpJuJkKQJ0UmFT3qrs/
+         AwUE8VkjNjy9Vf85VXwHgfbS4fvL44x5SDItJFyqmnF5Jth0zUmgu2phi2/gQc2lQHG9
+         s1KqgxBf3KkIEnrK9RsBlDhO3BR+LDp+Gycfa+/sha6Ox54KfOMMC8et3UBKuiREJL/E
+         G9yvyErEP55T9w80uST+yv4ZdFV+waY/fCwV32PMwgxagO0HxDrsjzyVBuMZMFkuMUH+
+         su4Z70L+aqjJ426bfG5pHPxpgaBp2fp25DIc7yaSctwfmKGXticmkvwuoQWbFfwKLZQt
+         9liA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pAqo2IY9qcxeeqd6VBniHfWVzxC9WIKztprXocMtHOo=;
-        b=d+LNcZ/h1RATwjGSPya0bXf0Y0Dsrq4QelzwOdD+PlTAqDoG5YxLauohHxFbFso+Ff
-         sCFm2M0WgbtRTVwMzjxEHMx4VTbr3Td92R6LcG0/hYlntCGbwmPHOs5619cjs2ioDzxh
-         WhVzNifZgdMJE4Bggl/OQYnZyHT3OIIiZ4kJmQquKCnSS3fnmDQaGTVpI0LQDmTWet/Z
-         Bu+I+6tyQfQAu0Zr0oneHaXSR5btkfsgJayjY/Zu7Nr2sjcEjSIIJn3G89p6R0EkZo0c
-         suXgjluUphaeeReD2aEZfj0yNGrOiL8yesj0YDddb81fRqLOIXIHzRQO0H96XAgzI7Mc
-         0vBA==
-X-Gm-Message-State: ANoB5plsGWuJsZiv/RL/4X+d3d/ZEVu/I75OLJwn789YaSklCOx0uaMZ
-        pBV0zp+fZL14LMetW5F4vOk=
-X-Google-Smtp-Source: AA0mqf5Y4BJwj1yHUsxhbaxFIfRavIesvXu1ebRXuJGshO4Aa6jTAKpEkT88JgrZdvPOf0d+zkTISw==
-X-Received: by 2002:a05:6638:1a87:b0:375:2ff:b633 with SMTP id ce7-20020a0566381a8700b0037502ffb633mr1692439jab.100.1668205046232;
-        Fri, 11 Nov 2022 14:17:26 -0800 (PST)
+        bh=B2uIhj+1kniLl98rxc2zGhFR3/ukaY2ppmVrEhlaB1M=;
+        b=heAuYskw60aP/6SUotlvwltxcIWwUL3ZZx58clJmH2FuBHVe771tf+9YoP3K58byuR
+         sQG7Vmb4LEfYLXRpvviEvy6UkpQnQH9+aoOQtQvGPiz1EwoYUTa9mhWSbrhd/TLVASWC
+         ZR2DvKl9Rnh5EDvZRWwLKiXpDJPgHUxz6xrrlVuKPNTBOygn9aHWUaJBjIpb5yqFCV4k
+         XXSovv/IahifrYHSOn8pniCCGF9rI22tuXG0L03pcirGe0VgtKXsPCXnjvur7HUa+tji
+         y8KVOgWPCWDQVTnjYsJQnpSKaU1cGD7C1PDAjPwLBYg95tYc5uM21TsBT+ySQuiJ6OlG
+         FsxA==
+X-Gm-Message-State: ANoB5plo7XSAkdN+JAe4EO3iUcIp5uEQJRs7PChxtLytfjZM2O5mKjdn
+        k0qWibmsmx/f2FgVXBoTNtTFo2TFtmM7PJrY
+X-Google-Smtp-Source: AA0mqf43Ej/2CvnoWy3aMeGYEZ2N6lV6eGpN+JDr5q1wxFnhlWtCr9BpR5BpvvdZgpLI0N+dBNEyBQ==
+X-Received: by 2002:a05:6e02:1c03:b0:2fa:52cd:80eb with SMTP id l3-20020a056e021c0300b002fa52cd80ebmr1943790ilh.236.1668205047214;
+        Fri, 11 Nov 2022 14:17:27 -0800 (PST)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id c5-20020a928e05000000b002f611806ae9sm1113457ild.60.2022.11.11.14.17.25
+        by smtp.googlemail.com with ESMTPSA id c5-20020a928e05000000b002f611806ae9sm1113457ild.60.2022.11.11.14.17.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 14:17:25 -0800 (PST)
+        Fri, 11 Nov 2022 14:17:26 -0800 (PST)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
         dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
@@ -58,9 +58,9 @@ To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
 Cc:     daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
         linux@rasmusvillemoes.dk, joe@perches.com,
         Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH 1/7] drm: mark drm.debug-on-dyndbg as BROKEN for now
-Date:   Fri, 11 Nov 2022 15:17:09 -0700
-Message-Id: <20221111221715.563020-2-jim.cromie@gmail.com>
+Subject: [PATCH 2/7] drm_print: fixup improve stale comment
+Date:   Fri, 11 Nov 2022 15:17:10 -0700
+Message-Id: <20221111221715.563020-3-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221111221715.563020-1-jim.cromie@gmail.com>
 References: <20220912052852.1123868-1-jim.cromie@gmail.com>
@@ -77,46 +77,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drm.debug-on-dyndbg has a regression, due to a chicken-egg
-initialization problem:
+Cited commit uses stale macro name, fix this.  And improve the explanation.
 
-1- modprobe i915
-   i915 needs drm.ko, which is loaded 1st
+When DRM_USE_DYNAMIC_DEBUG=y, DECLARE_DYNDBG_CLASSMAP() does the
+mapping of DRM_UT_* onto BITs in drm.debug.  While this is still using
+the drm_debug_category enum to do the mapping, its doing so somewhat
+indirectly, with the ordered set of DRM_UT_* enum-vals.  This requires
+that the macro args: DRM_UT_* list must be kept in sync.
 
-2- "modprobe drm drm.debug=0x1ff" (virtual/implied)
-   drm.debug is set post-initialization, from boot-args etc
-
-3- `modprobe i915` finishes
-
-W/O drm.debug-on-dyndbg that just works, because all drm_dbg*
-callsites use drm_debug_enabled() to check __drm_debug & DEM_UT_<CAT>
-before printing.
-
-But the whole point of drm.debug-on-dyndbg is to avoid that runtime
-test, by enabling (at post-modinit) a static-key at each callsite in
-the just-loaded module.
-
-And since drm.ko is loaded before all dependent modules, none are
-"just-loaded", and no drm.debug callsites are present yet, except
-those in drm.ko itself.
-
+fixes: f158936b60a7 (drm: POC drm on dyndbg - use in core, 2 helpers, 3 drivers.)
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- drivers/gpu/drm/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+. emphasize ABI non-change despite enum val change - Jani
+---
+ include/drm/drm_print.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index 34f5a092c99e..0d1e59e6bb7e 100644
---- a/drivers/gpu/drm/Kconfig
-+++ b/drivers/gpu/drm/Kconfig
-@@ -54,6 +54,7 @@ config DRM_DEBUG_MM
- config DRM_USE_DYNAMIC_DEBUG
- 	bool "use dynamic debug to implement drm.debug"
- 	default y
-+	depends on BROKEN	# chicken-egg initial enable problem
- 	depends on DRM
- 	depends on DYNAMIC_DEBUG || DYNAMIC_DEBUG_CORE
- 	depends on JUMP_LABEL
+diff --git a/include/drm/drm_print.h b/include/drm/drm_print.h
+index a44fb7ef257f..06deb58d5af4 100644
+--- a/include/drm/drm_print.h
++++ b/include/drm/drm_print.h
+@@ -276,7 +276,10 @@ static inline struct drm_printer drm_err_printer(const char *prefix)
+  *
+  */
+ enum drm_debug_category {
+-	/* These names must match those in DYNAMIC_DEBUG_CLASSBITS */
++	/*
++	 * Keep DECLARE_DYNDBG_CLASSMAP args in sync with changes
++	 * here, the values define BIT()s in drm.debug, so are ABI.
++	 */
+ 	/**
+ 	 * @DRM_UT_CORE: Used in the generic drm code: drm_ioctl.c, drm_mm.c,
+ 	 * drm_memory.c, ...
 -- 
 2.38.1
 
