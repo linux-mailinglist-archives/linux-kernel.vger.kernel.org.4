@@ -2,140 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3737626494
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:22:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D61CB626496
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233972AbiKKWW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 17:22:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
+        id S233859AbiKKWXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 17:23:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234806AbiKKWWI (ORCPT
+        with ESMTP id S234718AbiKKWWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 17:22:08 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2288015717
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:21:01 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id c25so5959610ljr.8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:21:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+o26oEY0qputXYTzAwwAYZekOHht/31yMfdtXZlzRR4=;
-        b=CajQqRg+YwrZ8d/8ZoG3Wh0AIkat4euF0GVNVtQ74LDdgNz7DT/1Q1wuSW4ETzQL8w
-         KTFpjw4yXwC+fGQrB9yb4smZx6azpYNXg39ep+Rs6MzVsnICsH7yNpZk5ZPmHACbCYMF
-         c/XRpQczDvqzf3kfrnqA+KlGHwUwgdmyD64Giji18ng/E0aw+Npm02CEyA0U/btitstA
-         fYFl2MIzfsOysmtuZPX/rR4V2E+T72sosVeTDfysVpnFsaS9W3tBhRfTsZZ8R1hidnIp
-         LOWI6rI1eo5STfaIerMCHZmqgrOyKv1CzNtgayu/zd7Nf+l1XpQbALSadyMLQ8XMtOn9
-         PQkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+o26oEY0qputXYTzAwwAYZekOHht/31yMfdtXZlzRR4=;
-        b=jV4CQHcwmJCODsvCkiqjdR55/qsJU72i10pt1Be94ZO8vyR7F9BFNnb0T/ovDh6zoM
-         rbRN7gJE9Bi6HjHWSg2c9skoEjpJSeogyE1VAX/6nrSovXsQLczIJMHgcYd9MedAjA8F
-         vn5350AlFhVQvWzBaQOapS7QYLiQWyToeuAKXrMSMrpqVajSqU+zXuJZYq2CWDKS249n
-         u+w8+sPG45+/mkzqmCHsnKO7fdxUvfOyKeENuLv+9LSvHOB/7uWpfuuhSeFD3G+kyrQK
-         Wuxax0QgCWqS5YQ1mjQcE4OKBMxriWcXKFqG1lHYkd9cXDOK5NH1DXma8gKOtsEvbI75
-         pSEA==
-X-Gm-Message-State: ANoB5pmRTJpxzEFIRk0dYIATDYguYKJATPheR8GcjnB0DqlE4jeNQQ5n
-        /W8xGw5V9yaxNrSaRw9tzQJzcA==
-X-Google-Smtp-Source: AA0mqf4r5XbqiU+jo40QoGKWywM5FNSA1kzh7k6H0c/cblGIU+ngQUvecxuhzp5P1CVzN+gPQbc+LA==
-X-Received: by 2002:a2e:97c4:0:b0:277:5ce7:3411 with SMTP id m4-20020a2e97c4000000b002775ce73411mr1258209ljj.37.1668205259498;
-        Fri, 11 Nov 2022 14:20:59 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id h31-20020a0565123c9f00b00498f00420e9sm528022lfv.194.2022.11.11.14.20.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 14:20:59 -0800 (PST)
-Message-ID: <ed2050c9-3e5f-ef97-a399-c9dc0427f32d@linaro.org>
-Date:   Sat, 12 Nov 2022 01:20:58 +0300
+        Fri, 11 Nov 2022 17:22:49 -0500
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F395F005;
+        Fri, 11 Nov 2022 14:22:32 -0800 (PST)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2ABMMF9G1234185
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Fri, 11 Nov 2022 14:22:16 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2ABMMF9G1234185
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022110601; t=1668205337;
+        bh=MoNQ+dvAI1RNyo5Ci6a/1FS/k7NnsfPn0SHAYx5PQsc=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=yUyQiQOd1zIhu5pf3tbybDEXLkpH0nKfBiMgSPOuveVPtqYKNTgjXwKGx5Do9LDSh
+         b38m19wyYelpE7Mlvks20AOjIhBfLOZwO4ohX1oprQ/gUz6ZE08902TQM5Kv0IStc9
+         GE43e3X2TJtV5FRGxQgE40BZiwRhqCUQyUpLCtJ0i9P3Mrte5PqLbcQIpnoI0WL379
+         HyeF4d1WxDR852eg2VOHxAXyUvmh14kC0gmM4nY3jWgekFJKxKOdQjSedr8XVknTEt
+         IJtRhlsbm6NEQNSOSUDZODb6xymq6iGXUkEykX8hRF2JlNb4uTPERHi9HwPQ/DaUAj
+         LET0Wyr+5CV0Q==
+Date:   Fri, 11 Nov 2022 14:22:12 -0800
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+CC:     "Li, Xin3" <xin3.li@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Kevin Tian <kevin.tian@intel.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BRESEND_PATCH_5/6=5D_KVM=3A_x86/VMX=3A_add_kvm=5F?= =?US-ASCII?Q?vmx=5Freinject=5Fnmi=5Firq=28=29_for_NMI/IRQ_reinjection?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <0b5798d6-aa1d-8ad8-b129-9cffdfd4e5da@citrix.com>
+References: <20221110061545.1531-1-xin3.li@intel.com> <20221110061545.1531-6-xin3.li@intel.com> <Y2y+YgBUYuUHbPtd@hirez.programming.kicks-ass.net> <BN6PR1101MB2161976800EB14B74A24D9F3A8019@BN6PR1101MB2161.namprd11.prod.outlook.com> <Y24SoNKZtj/NPSGy@hirez.programming.kicks-ass.net> <6097036e-063f-5175-72b2-8935b12af853@redhat.com> <Y24908NWCdzUNqI0@hirez.programming.kicks-ass.net> <6fd26a70-3774-6ae7-73ea-4653aee106f0@redhat.com> <Y25a0Z2tOMWYZs4j@hirez.programming.kicks-ass.net> <0b5798d6-aa1d-8ad8-b129-9cffdfd4e5da@citrix.com>
+Message-ID: <8D824B88-1EBB-4CEC-9D1D-89123D536500@zytor.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [v1] drm/msm/disp/dpu1: pin 1 crtc to 1 encoder
-Content-Language: en-GB
-To:     Kalyan Thota <quic_kalyant@quicinc.com>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, robdclark@chromium.org,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_vpolimer@quicinc.com, quic_abhinavk@quicinc.com
-References: <1668174978-10676-1-git-send-email-quic_kalyant@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1668174978-10676-1-git-send-email-quic_kalyant@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/11/2022 16:56, Kalyan Thota wrote:
-> Pin each crtc with one encoder. This arrangement will
-> disallow crtc switching between encoders and also will
-> facilitate to advertise certain features on crtc based
-> on encoder type.
-> 
-> Changes in v1:
-> - use drm_for_each_encoder macro while iterating through
->    encoder list (Dmitry)
+On November 11, 2022 8:35:30 AM PST, Andrew Cooper <Andrew=2ECooper3@citrix=
+=2Ecom> wrote:
+>On 11/11/2022 14:23, Peter Zijlstra wrote:
+>> On Fri, Nov 11, 2022 at 01:48:26PM +0100, Paolo Bonzini wrote:
+>>> On 11/11/22 13:19, Peter Zijlstra wrote:
+>>>> On Fri, Nov 11, 2022 at 01:04:27PM +0100, Paolo Bonzini wrote:
+>>>>> On Intel you can optionally make it hold onto IRQs, but NMIs are alw=
+ays
+>>>>> eaten by the VMEXIT and have to be reinjected manually=2E
+>>>> That 'optionally' thing worries me -- as in, KVM is currently
+>>>> opting-out?
+>>> Yes, because "If the =E2=80=9Cprocess posted interrupts=E2=80=9D VM-ex=
+ecution control is 1,
+>>> the =E2=80=9Cacknowledge interrupt on exit=E2=80=9D VM-exit control is=
+ 1" (SDM 26=2E2=2E1=2E1,
+>>> checks on VM-Execution Control Fields)=2E  Ipse dixit=2E  Posted inter=
+rupts are
+>>> available and used on all processors since I think Ivy Bridge=2E
+>
+>On server SKUs=2E=C2=A0 Client only got "virtual interrupt processing" fa=
+irly
+>recently IIRC, which is the CPU-side property which matters=2E
+>
+>> (imagine the non-coc compliant reaction here)
+>>
+>> So instead of fixing it, they made it worse :-(
+>>
+>> And now FRED is arguably making it worse again, and people wonder why I
+>> hate virt=2E=2E=2E
+>
+>The only FRED-compatible fix is to send a self-NMI, because because you
+>may need a CSL change too=2E
+>
+>VT-x *does* hold the NMI latch (for VMEXIT_REASON NMI), so it's self-NMI
+>and then enable_nmi()s=2E
+>
+>Except the IRET to self won't work - it will need to be ERETS-to-self=2E=
+=C2=A0
+>Which I think is fine=2E
+>
+>But what isn't fine is the fact that a self-NMI doesn't deliver
+>synchronously, so you need to wait until it is pending, before enabling
+>NMIs=2E=C2=A0 (Well, actually you need to ensure that it's definitely del=
+ivered
+>before re-entering the VM)=2E
+>
+>And I'm totally out of ideas here=2E=2E=2E
+>
+>~Andrew
+>
 
-BTW: if these patches form a series, please send them so.
+There is no fundamental reason to do a CSL/IST change if you happen to kno=
+w a priori that the stack is in a valid state to have the NMI frame on it; =
+that is:
 
-> 
-> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c | 21 +++++++++++----------
->   1 file changed, 11 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index 7a5fabc..0d94eec0d 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -798,19 +798,20 @@ static int _dpu_kms_drm_obj_init(struct dpu_kms *dpu_kms)
->   	max_crtc_count = min(max_crtc_count, primary_planes_idx);
->   
->   	/* Create one CRTC per encoder */
-> -	for (i = 0; i < max_crtc_count; i++) {
-> -		crtc = dpu_crtc_init(dev, primary_planes[i], cursor_planes[i]);
-> -		if (IS_ERR(crtc)) {
-> -			ret = PTR_ERR(crtc);
-> -			return ret;
-> +	i = 0;
-> +	drm_for_each_encoder(encoder, dev) {
-> +		if (i < max_crtc_count) {
+1=2E Not deep into a nested I/O layer;
+2=2E Valid, and not in flux in any way=2E
 
-What if max_crtc_counter < num_encoders? I think we should disallow such 
-configuration. Can it happen on any of relevant platforms?
+Since this reinject will always be in a well-defined location, that's fine=
+=2E
 
-> +			crtc = dpu_crtc_init(dev, primary_planes[i], cursor_planes[i]);
-> +			if (IS_ERR(crtc)) {
-> +				ret = PTR_ERR(crtc);
-> +				return ret;
-> +			}
-> +			priv->crtcs[priv->num_crtcs++] = crtc;
-> +			encoder->possible_crtcs = 1 << drm_crtc_index(crtc);
->   		}
-> -		priv->crtcs[priv->num_crtcs++] = crtc;
-> +		i++;
->   	}
->   
-> -	/* All CRTCs are compatible with all encoders */
-> -	drm_for_each_encoder(encoder, dev)
-> -		encoder->possible_crtcs = (1 << priv->num_crtcs) - 1;
-> -
->   	return 0;
->   }
->   
+So I think *that* concern is not actually an issue=2E
 
--- 
-With best wishes
-Dmitry
-
+Again, note that this is not a FRED-specific problem=2E
