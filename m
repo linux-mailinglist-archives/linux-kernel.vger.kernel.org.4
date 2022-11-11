@@ -2,109 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665F8625A57
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:14:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A434625A5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233758AbiKKMOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 07:14:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
+        id S233814AbiKKMPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 07:15:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232968AbiKKMOO (ORCPT
+        with ESMTP id S232968AbiKKMO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 07:14:14 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9D5532C0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 04:14:12 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id y4so4128205plb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 04:14:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8h/gxEbgp/s/07Zs6AcE/Avv27PL6C1T/Tli7c1kLiY=;
-        b=yjBupdFzwDJFvHI1bjwTyb/Zc8dj3fTykmviPaLHAfVabpLtDuk3Cpl3cQyvwcsT8V
-         b6sMvIlfzJA7m6nETsGDXyABmw5jcg3muCpp2lIKoom6eigufGHytopetb8RfcVbd+Pp
-         q/VoA7+V14+W+iywQQ6H9c479EE9k3zJT2Cb0bj08PGQYslAW5TVS+hVnovJQPhPE44Y
-         fG0/aqQo8d3plBQNnesQcfD0sSEMoxeMGgmqwAd3EdZeD2BxT6ouQfNL+3IrHSbVnDBU
-         a4kDHY/RoS+SpFut9bug1tOtAg+qTsj6v9ZDkG4/5c1JliSOzLpw1HjFfLeGtpbcj/bM
-         BzLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8h/gxEbgp/s/07Zs6AcE/Avv27PL6C1T/Tli7c1kLiY=;
-        b=jycZ8x6JhXlGRt0D8ZMfvEjpvrWaPXmzaAPGckg9CvvBaFP8s/IXpZ5tdnL2JFANts
-         uts9tAr3XlINYZRjjlEsnzwV5a0LmjBeVPT8FvyoShxYxZq6i6ZrMEl/jkkNAbjQZku3
-         /TsIJ18hwHOh65qPkAAQN1PYzOPkEIpfDEj60nRtyzGs6HSDuSUu/9g3zdvXqeDxLqn8
-         H4yumsTJ0af8zZteZ4lMs7MiLAa+k7Fmj6KwvxssC1O0HXtau0b+bk3Bes7Zo60582cu
-         3mjpyLCNJ4OlWlnl1EUo+dJ9YzKpk2m4ui4gi3Wc4iMVwzU2MypNcYtVKJ6w6mmhzcrw
-         lN1A==
-X-Gm-Message-State: ANoB5pkoqvvvdNprEty98foKwPWXYzS8VtvugDZ773Mq5Z6I4BVTRG9B
-        p1vWcPqnKrnL70du9WL8EZUPkVPOD9c6E1c/3Bqq93j0Uc6Rxg==
-X-Google-Smtp-Source: AA0mqf6xZYsqTdkuJYEXRTfCQc2yElFRvIGtYWnXzaWhdSSpHBmCOGve7EiTtfEgh7UyFJZEaPYDv5+VK/8c94uvILo=
-X-Received: by 2002:a17:90a:d3d6:b0:211:2d90:321 with SMTP id
- d22-20020a17090ad3d600b002112d900321mr1658230pjw.84.1668168852228; Fri, 11
- Nov 2022 04:14:12 -0800 (PST)
+        Fri, 11 Nov 2022 07:14:59 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9BD532C0;
+        Fri, 11 Nov 2022 04:14:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668168898; x=1699704898;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4wRoo7N3PTMuyyFIGGkVMosd0G1YfaK6CY2wTW3dWT4=;
+  b=lkRAXUfpN0lZBBtBTw3+AtfLYQiYCq8bQnGX6GKF574/EjTD2+5vsOO0
+   x0k7a8xJvpae8GIDIKFJZQCCbgYDyrTOO7PGBK7H8Eu5hrj4cl7XsgR6f
+   7VUDd5jJIllHDw4tQOi6SGqJvjCcWI6r7ee7XPFoVk/j2G0E0nbmHAE/4
+   Z6uezAod5MoJJmaoyq44W3d++YJa90D6QqAExHhRGVzpyFKFD8SGxka0R
+   Rsu8rfZgJdo9bA5W47lDCx6Aclc1zl5OGx1UMK+gxfH4HO232Re/u/+D0
+   nGldqSZ1of7VXsaX2flva52UJkJ/ScHlZX6bIB6NHc9rdVbEW/IkqeSJl
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="291990239"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="291990239"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 04:14:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="639997733"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="639997733"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga007.fm.intel.com with ESMTP; 11 Nov 2022 04:14:56 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 6DC32155; Fri, 11 Nov 2022 14:15:20 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v2 1/2] device property: Get rid of __PROPERTY_ENTRY_ARRAY_EL*SIZE*()
+Date:   Fri, 11 Nov 2022 14:15:17 +0200
+Message-Id: <20221111121518.44145-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221108082533.21384-1-hayashi.kunihiko@socionext.com>
- <20221108082533.21384-2-hayashi.kunihiko@socionext.com> <CAPDyKFoiowaut9EhDeBH0ci50WJ7y8UFivxqExxS0EfV_KAhpw@mail.gmail.com>
- <5ed33703-0f20-68d0-d3d5-1a53ab08a1b8@socionext.com>
-In-Reply-To: <5ed33703-0f20-68d0-d3d5-1a53ab08a1b8@socionext.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 11 Nov 2022 13:13:35 +0100
-Message-ID: <CAPDyKFo-rQ9ijSXtzE6xV0d58xdqv1qfEV1+Jycfn1ekzVp1ug@mail.gmail.com>
-Subject: Re: [PATCH 1/4] mmc: f-sdh30: Add reset control support
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Nov 2022 at 07:15, Kunihiko Hayashi
-<hayashi.kunihiko@socionext.com> wrote:
->
-> Hi Ulf,
->
->
-> On 2022/11/09 21:15, Ulf Hansson wrote:
-> > On Tue, 8 Nov 2022 at 09:25, Kunihiko Hayashi
-> > <hayashi.kunihiko@socionext.com> wrote:
-> >>
-> >> Add reset control support for F_SDH30 controller. This is optional.
-> >>
-> >> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> >
-> > This needs an update to the DT doc too, which is also the case for patch4.
-> >
-> > That said, please convert the DT doc into the yaml based format as the
-> > first step.
->
-> Yes, I also think the document to be converted in order to add new compatible.
-> I'm concerned about the maintainer and the filename.
+First of all, _ELEMENT_SIZE() repeats existing sizeof_field() macro.
+Second, usage of _ARRAY_ELSIZE_LEN() adds unnecessary indirection
+to the data layout. It's more understandable when the data structure
+is placed explicitly. That said, get rid of those macros by replacing
+them with the existing helper and explicit data structure layout.
 
-If you can't find a maintainer from Socionext, feel free to put my
-name in there.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: rebased on latest Linux Next, fixed anon union assignment
+ include/linux/property.h | 34 ++++++++++++++--------------------
+ 1 file changed, 14 insertions(+), 20 deletions(-)
 
-I don't know if there are any good rules to apply for the filename in
-cases like this. Let's just try something and see what DT maintainers
-think of it. Perhaps just repeating the name of the driver for the
-filename? So something along the lines of:
-Documentation/devicetree/bindings/mmc/sdhci-f-sdh30.yaml
+diff --git a/include/linux/property.h b/include/linux/property.h
+index 5d840299146d..aa58d4e8a21c 100644
+--- a/include/linux/property.h
++++ b/include/linux/property.h
+@@ -12,6 +12,7 @@
+ 
+ #include <linux/bits.h>
+ #include <linux/fwnode.h>
++#include <linux/stddef.h>
+ #include <linux/types.h>
+ 
+ struct device;
+@@ -311,24 +312,14 @@ struct property_entry {
+  * crafted to avoid gcc-4.4.4's problems with initialization of anon unions
+  * and structs.
+  */
+-
+-#define __PROPERTY_ENTRY_ELEMENT_SIZE(_elem_)				\
+-	sizeof(((struct property_entry *)NULL)->value._elem_[0])
+-
+-#define __PROPERTY_ENTRY_ARRAY_ELSIZE_LEN(_name_, _elsize_, _Type_,	\
+-					  _val_, _len_)			\
+-(struct property_entry) {						\
+-	.name = _name_,							\
+-	.length = (_len_) * (_elsize_),					\
+-	.type = DEV_PROP_##_Type_,					\
+-	{ .pointer = _val_ },						\
++#define __PROPERTY_ENTRY_ARRAY_LEN(_name_, _elem_, _Type_, _val_, _len_)		\
++(struct property_entry) {								\
++	.name = _name_,									\
++	.length = (_len_) * sizeof_field(struct property_entry, value._elem_[0]),	\
++	.type = DEV_PROP_##_Type_,							\
++	{ .pointer = _val_ },								\
+ }
+ 
+-#define __PROPERTY_ENTRY_ARRAY_LEN(_name_, _elem_, _Type_, _val_, _len_)\
+-	__PROPERTY_ENTRY_ARRAY_ELSIZE_LEN(_name_,			\
+-				__PROPERTY_ENTRY_ELEMENT_SIZE(_elem_),	\
+-				_Type_, _val_, _len_)
+-
+ #define PROPERTY_ENTRY_U8_ARRAY_LEN(_name_, _val_, _len_)		\
+ 	__PROPERTY_ENTRY_ARRAY_LEN(_name_, u8_data, U8, _val_, _len_)
+ #define PROPERTY_ENTRY_U16_ARRAY_LEN(_name_, _val_, _len_)		\
+@@ -340,9 +331,12 @@ struct property_entry {
+ #define PROPERTY_ENTRY_STRING_ARRAY_LEN(_name_, _val_, _len_)		\
+ 	__PROPERTY_ENTRY_ARRAY_LEN(_name_, str, STRING, _val_, _len_)
+ #define PROPERTY_ENTRY_REF_ARRAY_LEN(_name_, _val_, _len_)		\
+-	__PROPERTY_ENTRY_ARRAY_ELSIZE_LEN(_name_,			\
+-				sizeof(struct software_node_ref_args),	\
+-				REF, _val_, _len_)
++(struct property_entry) {						\
++	.name = _name_,							\
++	.length = (_len_) * sizeof(struct software_node_ref_args),	\
++	.type = DEV_PROP_##_Type_,					\
++	{ .pointer = _val_ },						\
++}
+ 
+ #define PROPERTY_ENTRY_U8_ARRAY(_name_, _val_)				\
+ 	PROPERTY_ENTRY_U8_ARRAY_LEN(_name_, _val_, ARRAY_SIZE(_val_))
+@@ -360,7 +354,7 @@ struct property_entry {
+ #define __PROPERTY_ENTRY_ELEMENT(_name_, _elem_, _Type_, _val_)		\
+ (struct property_entry) {						\
+ 	.name = _name_,							\
+-	.length = __PROPERTY_ENTRY_ELEMENT_SIZE(_elem_),		\
++	.length = sizeof_field(struct property_entry, value._elem_[0]),	\
+ 	.is_inline = true,						\
+ 	.type = DEV_PROP_##_Type_,					\
+ 	{ .value = { ._elem_[0] = _val_ } },				\
+-- 
+2.35.1
 
->
-> I'll convert it anyway.
-
-Great, thanks for doing this!
-
-Kind regards
-Uffe
