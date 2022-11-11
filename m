@@ -2,131 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617E66259F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C05FE6259FD
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:02:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233519AbiKKMAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 07:00:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
+        id S233641AbiKKMCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 07:02:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233624AbiKKMAb (ORCPT
+        with ESMTP id S233653AbiKKMCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 07:00:31 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638506C729;
-        Fri, 11 Nov 2022 04:00:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668168030; x=1699704030;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=cEBkqBhvlhdSqicQY8nR684nIxo/8KEjEshZzsYziO0=;
-  b=CcZLXpThBV/PTBLEj+R4NSBINrjvPGxWLEBNwBQ6fs3wwqYRmH79on1h
-   4VgLwNqzbX1zjh+A6dGzDPaTXcfm2BYo8dII+ykwTHaLMcssYliE1q8Cm
-   pYHjRcQLBoNAUNHrUwhW1ox+djn1zVuz3lH4Z8mAIWMki6KGUmH1krY3g
-   JwZEsUCJsvpbWTyB3cNUfZAKoC6A20x42vYOJ59n87vpUSXjkw7Gdn+3r
-   jvhdqmrim8O9sQISi4nmuyFLYBb5whJwyyDYh4CnyscbWHtEpVRDTHEzN
-   5FWbTnBg9R0urTlCPWKfZvkVN7UkbPAtUkL1gIhCIzXaD8+R7lfcanlyC
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="291304590"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="291304590"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 04:00:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="780157656"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="780157656"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Nov 2022 04:00:29 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 4F0F5155; Fri, 11 Nov 2022 14:00:53 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v2 1/1] pinctrl: Move for_each_maps() to namespace and hide iterator inside
-Date:   Fri, 11 Nov 2022 14:00:48 +0200
-Message-Id: <20221111120048.42968-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 11 Nov 2022 07:02:06 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6547C8F7;
+        Fri, 11 Nov 2022 04:02:04 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B36476602A58;
+        Fri, 11 Nov 2022 12:02:00 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1668168122;
+        bh=6sm7RpVkIvUIpbMZQhVAr1igZdcFWx2OWANx/W4c5y8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=n7HigNHbgCVZCADC6QcYiymCcuHH8bFZLUOXYYb+QLVpYJj/HbLKMTAEs3tNdGuV6
+         FLxeFZhQLh2U4+MPwz/+j5BNDCUUlfs+d/Tqpy8/1uUAwJylk8xKiHe9ZnHGafuLcl
+         h3lHy9NSlOCWPyhBhS7iI1iuRU45/KF/eAC4Ju34nRXWJaaT5id5Q+vEKyA3JnYcE6
+         2rIXWwrh1kGgOFzghfCwXoZhj4DkUaYyjWdeTpvIgjE1Dd5WGYK3TH8VOupbwEFObJ
+         Pdog4zszM6x7FUxqde/Ya2QwdwoKR/YLh9IqdHsFO4/H6FJxnWKn4E+HoQpdPWGRpf
+         HNjZr/PEZpfgA==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     agross@kernel.org
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
+        srinivas.kandagatla@linaro.org, jic23@kernel.org, lars@metafoo.de,
+        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        evgreen@chromium.org, gregkh@linuxfoundation.org,
+        a39.skl@gmail.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-hardening@vger.kernel.org,
+        marijn.suijten@somainline.org, kernel@collabora.com,
+        luca@z3ntu.xyz,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 00/11] MSM8956/76 and Sony Xperia X / X Compact support
+Date:   Fri, 11 Nov 2022 13:01:45 +0100
+Message-Id: <20221111120156.48040-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-First of all, while for_each_maps() is private to pin control subsystem
-it's still better to have it put into a namespace.
+This series adds basic support for MSM8976 and its lower spec variant
+MSM8956, along with two devices: the Sony Xperia X and X Compact.
 
-Besides that, users are not relying on iterator variable, so hide it
-inside for-loop.
+For now, even though I do have a tree in which these two devices are
+fully booting, only a basic console boot is provided as the rest is
+awaiting cleanup and some more dependencies.
+Especially every device requiring IOMMU support, like MDSS, MDP and
+Adreno GPU cannot work with the current qcom_iommu driver, as it
+needs some code to get the ASIDs right for MSM8956/76.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: shuffled conditional to avoid NULL dereference
- drivers/pinctrl/core.c |  6 ++----
- drivers/pinctrl/core.h | 10 +++++-----
- 2 files changed, 7 insertions(+), 9 deletions(-)
+This series depends on [1].
 
-diff --git a/drivers/pinctrl/core.c b/drivers/pinctrl/core.c
-index 9e57f4c62e60..f2f99972a0d3 100644
---- a/drivers/pinctrl/core.c
-+++ b/drivers/pinctrl/core.c
-@@ -1028,7 +1028,6 @@ static struct pinctrl *create_pinctrl(struct device *dev,
- 	struct pinctrl *p;
- 	const char *devname;
- 	struct pinctrl_maps *maps_node;
--	int i;
- 	const struct pinctrl_map *map;
- 	int ret;
- 
-@@ -1054,7 +1053,7 @@ static struct pinctrl *create_pinctrl(struct device *dev,
- 
- 	mutex_lock(&pinctrl_maps_mutex);
- 	/* Iterate over the pin control maps to locate the right ones */
--	for_each_maps(maps_node, i, map) {
-+	for_each_pin_map(maps_node, map) {
- 		/* Map must be for this device */
- 		if (strcmp(map->dev_name, devname))
- 			continue;
-@@ -1805,13 +1804,12 @@ static inline const char *map_type(enum pinctrl_map_type type)
- static int pinctrl_maps_show(struct seq_file *s, void *what)
- {
- 	struct pinctrl_maps *maps_node;
--	int i;
- 	const struct pinctrl_map *map;
- 
- 	seq_puts(s, "Pinctrl maps:\n");
- 
- 	mutex_lock(&pinctrl_maps_mutex);
--	for_each_maps(maps_node, i, map) {
-+	for_each_pin_map(maps_node, map) {
- 		seq_printf(s, "device %s\nstate %s\ntype %s (%d)\n",
- 			   map->dev_name, map->name, map_type(map->type),
- 			   map->type);
-diff --git a/drivers/pinctrl/core.h b/drivers/pinctrl/core.h
-index 840103c40c14..35f3e84dd61b 100644
---- a/drivers/pinctrl/core.h
-+++ b/drivers/pinctrl/core.h
-@@ -242,8 +242,8 @@ extern int pinctrl_force_default(struct pinctrl_dev *pctldev);
- extern struct mutex pinctrl_maps_mutex;
- extern struct list_head pinctrl_maps;
- 
--#define for_each_maps(_maps_node_, _i_, _map_) \
--	list_for_each_entry(_maps_node_, &pinctrl_maps, node) \
--		for (_i_ = 0, _map_ = &_maps_node_->maps[_i_]; \
--			_i_ < _maps_node_->num_maps; \
--			_i_++, _map_ = &_maps_node_->maps[_i_])
-+#define for_each_pin_map(_maps_node_, _map_)						\
-+	list_for_each_entry(_maps_node_, &pinctrl_maps, node)				\
-+		for (unsigned int __i = 0;						\
-+		     __i < _maps_node_->num_maps && (_map_ = &_maps_node_->maps[__i]);	\
-+		     __i++)
+Tested on both Xperia X and X Compact.
+
+[1]: https://patchwork.kernel.org/project/linux-arm-msm/list/?series=690889
+
+
+Changes in v2:
+ - Removed commits from v1 that were picked already
+ - Added MSM8976 to socinfo and qcom,ids
+ - Added a commit to fix ordering in qfprom yaml
+ - Fix KPSS mailbox documentation to allow syscon on 8976
+ - Various fixes from series v1 feedback (thanks!)
+
+AngeloGioacchino Del Regno (9):
+  dt-bindings: iio: qcom-spmi-vadc: Add definitions for USB DP/DM VADCs
+  dt-bindings: nvmem: Fix qcom,qfprom compatibles enum ordering
+  dt-bindings: sram: qcom,imem: Document MSM8976
+  dt-bindings: mailbox: qcom: Allow syscon on
+    qcom,msm8976-apcs-kpss-global
+  dt-bindings: arm: qcom,ids: Add SoC IDs for MSM8956 and MSM8976
+  soc: qcom: socinfo: Add MSM8956/76 SoC IDs to the soc_id table
+  arm64: dts: qcom: Add configuration for PM8950 peripheral
+  arm64: dts: qcom: Add DTS for MSM8976 and MSM8956 SoCs
+  arm64: dts: qcom: Add support for SONY Xperia X/X Compact
+
+Marijn Suijten (2):
+  dt-bindings: nvmem: Add compatible for MSM8976
+  dt-bindings: arm: qcom: Document msm8956 and msm8976 SoC and devices
+
+ .../devicetree/bindings/arm/qcom.yaml         |   10 +
+ .../mailbox/qcom,apcs-kpss-global.yaml        |    2 +-
+ .../bindings/nvmem/qcom,qfprom.yaml           |    3 +-
+ .../devicetree/bindings/sram/qcom,imem.yaml   |    1 +
+ arch/arm64/boot/dts/qcom/Makefile             |    2 +
+ .../qcom/msm8956-sony-xperia-loire-kugo.dts   |   35 +
+ .../qcom/msm8956-sony-xperia-loire-suzu.dts   |   17 +
+ .../dts/qcom/msm8956-sony-xperia-loire.dtsi   |  282 ++++
+ arch/arm64/boot/dts/qcom/msm8956.dtsi         |   18 +
+ arch/arm64/boot/dts/qcom/msm8976.dtsi         | 1198 +++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8950.dtsi          |  165 +++
+ drivers/soc/qcom/socinfo.c                    |    2 +
+ include/dt-bindings/arm/qcom,ids.h            |    2 +
+ include/dt-bindings/iio/qcom,spmi-vadc.h      |    3 +
+ 14 files changed, 1738 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire-kugo.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire-suzu.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8956-sony-xperia-loire.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8956.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8976.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8950.dtsi
+
 -- 
-2.35.1
+2.38.1
 
