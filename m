@@ -2,61 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36EA56259BB
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:48:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 151836259C9
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:49:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233276AbiKKLsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 06:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
+        id S233153AbiKKLts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 06:49:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbiKKLsQ (ORCPT
+        with ESMTP id S233445AbiKKLtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 06:48:16 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B45E0BB
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 03:48:15 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1otSW4-0002UZ-Ln; Fri, 11 Nov 2022 12:48:12 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1otSW3-0007NZ-UL; Fri, 11 Nov 2022 12:48:11 +0100
-Date:   Fri, 11 Nov 2022 12:48:11 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Sherry Sun <sherry.sun@nxp.com>
-Cc:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH V4 12/14] arm64: dts: imx8mm-evk: Enable usdhc1 to
- support wifi
-Message-ID: <20221111114811.mvsjlfggxmdrhsep@pengutronix.de>
-References: <20221111032811.2456916-1-peng.fan@oss.nxp.com>
- <20221111032811.2456916-13-peng.fan@oss.nxp.com>
- <20221111090232.6ibqzoivfqsndhxg@pengutronix.de>
- <DU0PR04MB94177ED8966506D445CFBA5688009@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <AS8PR04MB8404426EC83A75A3058F774192009@AS8PR04MB8404.eurprd04.prod.outlook.com>
- <20221111093002.dpp73hkef6ihkduk@pengutronix.de>
- <AS8PR04MB8404B33905D685F820A6F07D92009@AS8PR04MB8404.eurprd04.prod.outlook.com>
+        Fri, 11 Nov 2022 06:49:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9F427DFE;
+        Fri, 11 Nov 2022 03:49:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D35761F9F;
+        Fri, 11 Nov 2022 11:49:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3279C433D6;
+        Fri, 11 Nov 2022 11:49:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668167371;
+        bh=qSBF/ECZfbRTbQB9J8HIoNk5t+QvNMgL7PClSWUYqHg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bDIzMdHf8JocXoaBMAdhZfvVkDbL8LWt55WECcKB2Aj7sGpoJ/Z1nK1+s6BvDOyxP
+         6ljjxNPHydGcoROQ7RP4oeTNKFHeQQfWsssQGZS54zMriSX9rojgnr3Lpj6+1c8Bxg
+         Lzw09yIadbQo7BWkA2+H08Vkwtl37yId4GXoZisap5zw5SIpoW11AEJ9s595Ztqa/J
+         FdvOI9s06XauojJxWqftvcjCaZInONfEh6jwSH9CEfSXzCxiGWH51iSpnbo/8NVPGI
+         lbaKylLSc8P/Czb+YHXPh70zYtCVVq1j5SN6QFSOVMLHqpRwq/BEJotuYV1/cB/9F+
+         DRC1QAsO/0jWQ==
+Date:   Fri, 11 Nov 2022 11:49:25 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>, lee@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linus.walleij@linaro.org, tglx@linutronix.de,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
+Subject: Re: [PATCH 09/12] irqchip: cirrus: Add driver for Cirrus Logic
+ CS48L31/32/33 codecs
+Message-ID: <Y242xYJQMC2JlMtH@sirena.org.uk>
+References: <87mt8zutib.wl-maz@kernel.org>
+ <c0c05799-6424-7edf-01b3-e28a10907b2c@opensource.cirrus.com>
+ <86pmdvow5y.wl-maz@kernel.org>
+ <ef60cbdb-f506-7bd6-a8e1-c92b6963a0f4@opensource.cirrus.com>
+ <86k042q1uc.wl-maz@kernel.org>
+ <05ae0e20-b472-f812-1afc-ef8c2a97cdeb@opensource.cirrus.com>
+ <87iljmve87.wl-maz@kernel.org>
+ <Y21gwGDb5CFft0kp@sirena.org.uk>
+ <87h6z5vs39.wl-maz@kernel.org>
+ <20221111111611.GH10437@ediswmail.ad.cirrus.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GX9PH0gqSEqgaksu"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <AS8PR04MB8404B33905D685F820A6F07D92009@AS8PR04MB8404.eurprd04.prod.outlook.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20221111111611.GH10437@ediswmail.ad.cirrus.com>
+X-Cookie: Should I do my BOBBIE VINTON medley?
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,168 +70,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-11-11, Sherry Sun wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Marco Felsch <m.felsch@pengutronix.de>
-> > Sent: 2022年11月11日 17:30
-> > To: Sherry Sun <sherry.sun@nxp.com>
-> > Cc: Peng Fan <peng.fan@nxp.com>; Peng Fan (OSS)
-> > <peng.fan@oss.nxp.com>; shawnguo@kernel.org; s.hauer@pengutronix.de;
-> > linux-kernel@vger.kernel.org; kernel@pengutronix.de; festevam@gmail.com;
-> > linux-arm-kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>
-> > Subject: Re: [PATCH V4 12/14] arm64: dts: imx8mm-evk: Enable usdhc1 to
-> > support wifi
-> > 
-> > On 22-11-11, Sherry Sun wrote:
-> > >
-> > >
-> > > > -----Original Message-----
-> > > > From: Peng Fan <peng.fan@nxp.com>
-> > > > Sent: 2022年11月11日 17:08
-> > > > To: Marco Felsch <m.felsch@pengutronix.de>; Peng Fan (OSS)
-> > > > <peng.fan@oss.nxp.com>
-> > > > Cc: shawnguo@kernel.org; s.hauer@pengutronix.de; linux-
-> > > > kernel@vger.kernel.org; Sherry Sun <sherry.sun@nxp.com>;
-> > > > kernel@pengutronix.de; festevam@gmail.com; linux-arm-
-> > > > kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>
-> > > > Subject: RE: [PATCH V4 12/14] arm64: dts: imx8mm-evk: Enable usdhc1
-> > > > to support wifi
-> > > >
-> > > > Sherry,
-> > > >
-> > > > > Subject: Re: [PATCH V4 12/14] arm64: dts: imx8mm-evk: Enable
-> > > > > usdhc1 to support wifi
-> > > > >
-> > > > > Hi Peng,
-> > > > >
-> > > > > On 22-11-11, Peng Fan (OSS) wrote:
-> > > > > > From: Sherry Sun <sherry.sun@nxp.com>
-> > > > > >
-> > > > > > Enable usdhc1 which is used for wifi.
-> > > > > >
-> > > > > > Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> > > > > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > > > > > ---
-> > > > > >  arch/arm64/boot/dts/freescale/imx8mm-evk.dts  | 27
-> > > > > > +++++++++++++ arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi |
-> > 39
-> > > > > +++++++++++++++++++
-> > > > > >  2 files changed, 66 insertions(+)
-> > > > > >
-> > > > > > diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> > > > > > b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> > > > > > index a2b24d4d4e3e..7b80f144327d 100644
-> > > > > > --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> > > > > > +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
-> > > > > > @@ -15,6 +15,13 @@ / {
-> > > > > >  	aliases {
-> > > > > >  		spi0 = &flexspi;
-> > > > > >  	};
-> > > > > > +
-> > > > > > +	usdhc1_pwrseq: usdhc1_pwrseq {
-> > > > > > +		compatible = "mmc-pwrseq-simple";
-> > > > > > +		pinctrl-names = "default";
-> > > > > > +		pinctrl-0 = <&pinctrl_usdhc1_gpio>;
-> > > > > > +		reset-gpios = <&gpio2 10 GPIO_ACTIVE_LOW>;
-> > > > > > +	};
-> > > > > >  };
-> > > > > >
-> > > > > >  &ddrc {
-> > > > > > @@ -53,6 +60,19 @@ flash@0 {
-> > > > > >  	};
-> > > > > >  };
-> > > > > >
-> > > > > > +&usdhc1 {
-> > > > > > +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-> > > > > > +	pinctrl-0 = <&pinctrl_usdhc1>, <&pinctrl_wlan>;
-> > > > > > +	pinctrl-1 = <&pinctrl_usdhc1_100mhz>, <&pinctrl_wlan>;
-> > > > > > +	pinctrl-2 = <&pinctrl_usdhc1_200mhz>, <&pinctrl_wlan>;
-> > > > > > +	bus-width = <4>;
-> > > > > > +	keep-power-in-suspend;
-> > > > > > +	mmc-pwrseq = <&usdhc1_pwrseq>;
-> > > > > > +	non-removable;
-> > > > > > +	wakeup-source;
-> > > > > > +	status = "okay";
-> > > > > > +};
-> > > > > > +
-> > > > > >  &usdhc3 {
-> > > > > >  	assigned-clocks = <&clk IMX8MM_CLK_USDHC3_ROOT>;
-> > > > > >  	assigned-clock-rates = <400000000>; @@ -125,4 +145,11 @@
-> > > > > > MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7
-> > > > > 0x1d6
-> > > > > >  			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE
-> > > > > 0x196
-> > > > > >  		>;
-> > > > > >  	};
-> > > > > > +
-> > > > > > +	pinctrl_wlan: wlangrp {
-> > > > > > +		fsl,pins = <
-> > > > > > +
-> > > > > 	MX8MM_IOMUXC_GPIO1_IO00_ANAMIX_REF_CLK_32K
-> > > > > 	0x141
-> > > > > > +			MX8MM_IOMUXC_SD1_DATA7_GPIO2_IO9
-> > > > > 	0x159
-> > > > > > +		>;
-> > > > > > +	};
-> > > > >
-> > > > > Out of curiousity, this is not shareable with the other ddr4 evk?
-> > > > [Peng Fan]
-> > > >
-> > > > Could you please help answer?
-> > > >
-> > >
-> > > Hi Peng, I suggest to remove the pinctrl_wlan configure here, it should be
-> > added along with the wifi wowlan subnode later.
-> > 
-> > Does this apply to the imx8mn-evk patch as well?
-> > 
-> > Also if the usdhc1 is used only for WLAN and this patch series don't add the
-> > WLAN subnode, we could remove this patch and the imx8mn-evk usdhc1
-> > patch completely till you have a complete patchset adding the full WLAN
-> > support.
-> > 
-> 
-> Hi Marco, actually here enable usdhc1 can support the wifi basic
-> function, so this patch is ok to enable wifi on 8mm, same for 8mn.
 
-Okay, thanks for the clarification.
+--GX9PH0gqSEqgaksu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> But pinctrl_wlan is used to support the out-of-band WoWLAN feature,
-> needs to be used with wifi child dts node, which looks like the
-> following code.
-> 
-> So I suggest to add the pinctrl_wlan along with the wifi_wake_host
-> child node later to support the wifi WoWLAN function. Here only need
-> to enable the usdhc1 to support wifi basic function, no need to add
-> pinctrl_wlan.
+On Fri, Nov 11, 2022 at 11:16:11AM +0000, Charles Keepax wrote:
+> On Fri, Nov 11, 2022 at 08:00:10AM +0000, Marc Zyngier wrote:
+>=20
+> > > ACPI gets to be a lot of fun here, it's just not idiomatic to describe
+> > > the internals of these devices in firmware there and a lot of the
+> > > systems shipping this stuff are targeted at other OSs and system
+> > > integrators are therefore not in the least worried about Linux
+> > > preferences.
 
-+1 from my side. @Peng can you drop the pinctrl_wlan from this patch and
-from the mx8mn patch as well?
+> I would echo Mark's statement that going the way of moving this
+> into DT/ACPI will actually likely necessitate the addition of a
+> lot of "board file" stuff in the future. If the part gets used in
+> any ACPI systems (granted support is not in yet but this is not a
+> super unlikely addition in the future for cs48l32) we will need to
+> support the laptops containing the part in Linux and the vendors are
+> extremely unlikely to put internal CODEC IRQs into the ACPI tables.
 
-Regards,
-  Marco
+It's a bit of a stronger issue than that in that it's not how ACPI is
+usually expected to work (it draws more from the PCI model where you
+just get a top level ID from the device and have to figure the rest out
+yourself).
 
-> &usdhc1 {
->     pinctrl-names = "default", "state_100mhz", "state_200mhz";
->     pinctrl-0 = <&pinctrl_usdhc1>, <&pinctrl_wlan>;
->     pinctrl-1 = <&pinctrl_usdhc1_100mhz>, <&pinctrl_wlan>;
->     pinctrl-2 = <&pinctrl_usdhc1_200mhz>, <&pinctrl_wlan>;
->     bus-width = <4>;
->     keep-power-in-suspend;
->     non-removable;
->     wakeup-source;
->     mmc-pwrseq = <&usdhc1_pwrseq>;
->     status = "okay";
-> 
->     wifi_wake_host {
->         compatible = "nxp,wifi-wake-host";
->         interrupt-parent = <&gpio2>;
->         interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
->         interrupt-names = "host-wake";
->     };
-> };
-> 
-> Best Regards
-> Sherry
+> An alternative approach would be to actually represent the MFD in
+> device tree, I think this would allow things to work and look
+> something like (totally not tested just for discussion):
+
+That's what Marc's pushing for - there is an idea to do that which works
+well enough for cases (like this irqchip for the most part, modulo how
+to handle the top level interrupts for the chip) where the way Linux
+wants to model the device maps clearly onto the hardware but like I was
+mentioning with the audio/clocking split it gets tricky where things are
+more up in the air and potentially changable since it's much harder to
+define a suitable ABI.
+
+--GX9PH0gqSEqgaksu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNuNsQACgkQJNaLcl1U
+h9DtIAf/aeBQQ3Lh5zmka+uBR54WcnQfWacUGj+JM5RC6CDwQ1Prz7UJd1YrZzbz
+NA5etQWvjvbCh/1Y+cn8KSpiNiKrNJmhVZOkqNehoPWPcyKFBbVKLhL8mRY5tk2f
+xPJkQ/MxrOFacsGRpkStfSZPew2Xt+cdIBOIN7vhww9+NHMsnGmx4xLjZc5tltpA
+BA9WFjV/yzMxgE2UiJYIX8QMZ8i3CftDNOIUS9KN2cXAqNa3S/+Nuxon5Qrc5Rmd
+07eq77gLTHoy0syRlbyDOjD24wVosKRomLl/B+koqEy5ZUJxjZz0W9IDllZ9fIKo
+B2IEu3AcIwLVXpeU0pwDN7OY6FCdFA==
+=Ljlu
+-----END PGP SIGNATURE-----
+
+--GX9PH0gqSEqgaksu--
