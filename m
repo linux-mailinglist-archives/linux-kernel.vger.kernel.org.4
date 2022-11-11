@@ -2,88 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91640624EC1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFAC1624EC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:17:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiKKAOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 19:14:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
+        id S230232AbiKKAQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 19:16:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiKKAOh (ORCPT
+        with ESMTP id S229489AbiKKAQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 19:14:37 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EEE59867
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:14:36 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id r12so6070219lfp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:14:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+oXVhnGb2jYR/2yfRREactGYhRFCxDg4Yp/NIk9q18U=;
-        b=aKAzIlBDGhIl2wGbKq341q3oerjnczIP8H+Euz5Gn3W6mt8UWAVP+cZsKfQ10KBBtn
-         qdMukrloPIWiXZbfJvk5F9Erlnrq/vginvrkPcscx8gOc97Fd6zAvMaHQyyAS4uyuY13
-         GsFYgYN5aLCD+gTbSPa9qE2s7xZWiP9/+pz7BC7iIqQTG9IJO+49dxdm0aIrecImN3Lj
-         t8snGC7/d+QOLrY+tEonholu9XcXWnAnMo+nF0D3v+E6o+jRQ7AxiN2DNpObpCrP3FFl
-         rtZG969Ff6U2pPL/co5Um6X9WlV5318nYzGPc3ZodioIbH6ds0rkeCoj31eXX37zigZh
-         +vSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+oXVhnGb2jYR/2yfRREactGYhRFCxDg4Yp/NIk9q18U=;
-        b=X+ri96SEMwWjxD6KoX7xu5jayl/Bx+CRup1TTSD/e3j43TcSWmG9KF7n2nhvV/oKT8
-         2ht8r8rzrms7joHLUSzJAbxBA+UMt+VLlY5rtabiU7ORkdeITd2OUnOxW+M9qC6PjaF0
-         xZ0UWu0UzgRNiwDjJiqKwy5FueryiakZR077m+f6DZrBVYeoyOxusyN8e7ZWV4H4StR3
-         lAYGI1VTf1VerbQmHlgLsZYYXEHTIQ5U/owm6mZxx4Wd/J2GPV+Ape6Vqn9Ryx0xISiQ
-         ZxC8NuNKy49AlRPcKnQ3j0s+U4776rys/Qnw0twptlsM8HZNXGT09tqphcnk4Jr/OeKP
-         GsWw==
-X-Gm-Message-State: ANoB5plFqomFW2/ios6c9NBWbPfAIxZFeJg+qK+6X00Rd/cJXCGtItMv
-        z9mhldfdMAFvCsNdWc5/holP46M45ON1jyEhdN5sFg==
-X-Google-Smtp-Source: AA0mqf6/hZJc8cry/lcWbAynIqguR/0KuFgkAPO3grVIg3pB6zKw0Phi6qrm5n7rbw78llPsM7TnN7AefvHju+xzyhw=
-X-Received: by 2002:ac2:44b7:0:b0:4b1:82c6:2959 with SMTP id
- c23-20020ac244b7000000b004b182c62959mr6319lfm.68.1668125674559; Thu, 10 Nov
- 2022 16:14:34 -0800 (PST)
+        Thu, 10 Nov 2022 19:16:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CB760EA1;
+        Thu, 10 Nov 2022 16:16:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F47361E63;
+        Fri, 11 Nov 2022 00:16:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E055C433D6;
+        Fri, 11 Nov 2022 00:16:54 +0000 (UTC)
+Date:   Thu, 10 Nov 2022 19:16:51 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+        "Guilherme G. Piccoli" <kernel@gpiccoli.net>
+Subject: Re: RCU stall on 6.1-rc4 (and some previous releases) related to
+ ftrace
+Message-ID: <20221110191651.3a177417@rorschach.local.home>
+In-Reply-To: <1ef5fe19-a82f-835e-fda5-455e9c2b94b4@igalia.com>
+References: <1ef5fe19-a82f-835e-fda5-455e9c2b94b4@igalia.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20221026224449.214839-1-joshdon@google.com> <Y1/HzzA1FIawYM11@hirez.programming.kicks-ass.net>
- <xm26fsf3wtc2.fsf@google.com> <Y2ItG4BU21Pm0S/u@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y2ItG4BU21Pm0S/u@hirez.programming.kicks-ass.net>
-From:   Josh Don <joshdon@google.com>
-Date:   Thu, 10 Nov 2022 16:14:22 -0800
-Message-ID: <CABk29Nurt9r-1Nq3vcefCrbAmsqgqDeNLhmiXQz2bnnMVXhVoQ@mail.gmail.com>
-Subject: Re: [PATCH v2] sched: async unthrottling for cfs bandwidth
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Benjamin Segall <bsegall@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org, Tejun Heo <tj@kernel.org>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Peter,
+On Thu, 10 Nov 2022 18:25:41 -0300
+"Guilherme G. Piccoli" <gpiccoli@igalia.com> wrote:
 
-Any other thoughts on this patch? Right now the only thing I have to
-change is to eliminate the redundant list_head, per Michal's
-suggestion. If the general idea here looks good to you, I can go ahead
-and do that and send the v3.
+> @@ -4184,6 +4184,7 @@ match_records(struct ftrace_hash *hash, char *func, int len, char *mod)
+>  		if (rec->flags & FTRACE_FL_DISABLED)
+>  			continue;
+>  
+> +		cond_resched();
+>  		if (ftrace_match_record(rec, &func_g, mod_match, exclude_mod)) {
+>  			ret = enter_record(hash, rec, clear_filter);
+>  			if (ret < 0) {
 
-Thanks,
-Josh
+This isn't where I would put it. I would add it after the if statement.
+That is, at the end of the loop.
+
+-- Steve
