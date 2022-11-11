@@ -2,125 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1BD8625FA6
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC24625FAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234255AbiKKQiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 11:38:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S234041AbiKKQir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 11:38:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233842AbiKKQiI (ORCPT
+        with ESMTP id S233714AbiKKQii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:38:08 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E89836B6
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:38:07 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id ja4-20020a05600c556400b003cf6e77f89cso5951213wmb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:38:07 -0800 (PST)
+        Fri, 11 Nov 2022 11:38:38 -0500
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FAD2497A;
+        Fri, 11 Nov 2022 08:38:33 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id x21so3303389qkj.0;
+        Fri, 11 Nov 2022 08:38:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=JaZVtFPPaLB1/chqLl5fXGZ9i1oLa0XpBUVRRJxd9cI=;
-        b=oZCyUTC9OW+Gao72Y6/Jy0WiGm29zM05RoR72zuCvODktorROYHO90I0wv148pxUJ3
-         AK61RQ5U62x4Rnv5wOt/kwbKT5vkWIIPdCRPXskn4CArmJgmYxukx8Hh8N76iuaCMrd7
-         MW4BNKE8I6AEM2OdLf7LnD4v5v7FD0+MyVozjtociVgHUjoblN1xGqLciTssf0vn8yCz
-         qZZlviM95ZPISMODwyEEmZBjsaEbNadI2eRHZwsGxZK/LPmRtWGtB2Pg6WvIsgmsaEbR
-         hMnqAU42OrbaqPR7sqSKj7H1sU3uW9peKaVCDtg0ihVjd3g0A3w17vX2/J5XbztGcgsE
-         fnEA==
+        bh=cc79vdpftLtKCsTxy/EdUCgt0SXSyffM6ZriKdKDbtw=;
+        b=n1RXtrlzLU+n02CT3soAPseTrXYQVpst+DE5CreTvGRr30AXGfdTHJAwTl5z881kL+
+         4LGEERExB03/Yq1vr6GzRpwkwSaKPi24hnT5xlWWEo9wki0gXDZiJ2kdh91/eoZWqtce
+         YN8dnyK4Ig4DFp/JA3DF3HgJm3iOWfFsD+YfLpg3WMwwLr/0q2yyLMa16q2PWZwlo7c+
+         A3RJwQNMhQT7aEFguxGUvn94tuj5v3Auw0RQPueXCBGczDqhhmhOqT87TdZw4BWB2zqG
+         UpG3eqKjuO05RFHM8jsAQdSqOqf7+B5IwnKB8cCp0fVon9oqGYQ+RTKgb81UW4MrCHiM
+         LHQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JaZVtFPPaLB1/chqLl5fXGZ9i1oLa0XpBUVRRJxd9cI=;
-        b=RPRJnSigE1UD569BJMpwjBRXMKzKa3UhLCtOB6qoNcLNYqLB85cwAtR7f9sblVPydM
-         /9s/ze40xMtA9CicpNUHMd2D7zQZitcmUi/AIAN4WzmybT8JhVtaqIhuB77WceBty/gE
-         Yz7lpRxRQfLn4i5DeLsIMnQ+zCidnq89Ra0zevp6NlWVsf7puvy4GGy6AtVn4tsTamdC
-         NCCdNP8k47dO2EPBs/+BVG2r/yyOsc2G1org0+gs/KWN4ntHUZiczzYDx/KSxEwD8NWq
-         wUuWOkBBzXWPg85t2ROexNmu4ZGn31UAPmZ8zI2E1DyjJMZ1+3X3qxCEF6xTvP4/meOY
-         FMqg==
-X-Gm-Message-State: ANoB5pmba7jXWNQx7SMfC6StlpUV9nZQ/wv4ssYunWuSFFJlN6+0w14i
-        QfuGQs0lLBxij9EZFMQ/daQfUA==
-X-Google-Smtp-Source: AA0mqf6HUq6BrzK2oEKsXnAtk4vpxLbFgDJjdJOF9mPjgwAHthV3NwQdmBi7OGwhXnGVxnyF073M6Q==
-X-Received: by 2002:a05:600c:204d:b0:3cf:a3c4:59b3 with SMTP id p13-20020a05600c204d00b003cfa3c459b3mr1854849wmg.198.1668184686366;
-        Fri, 11 Nov 2022 08:38:06 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id w9-20020adfee49000000b00228cd9f6349sm2265623wro.106.2022.11.11.08.38.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 08:38:05 -0800 (PST)
-Message-ID: <49722205-bd5b-8241-d2ff-7eb956e05ec1@linaro.org>
-Date:   Fri, 11 Nov 2022 16:38:04 +0000
+        bh=cc79vdpftLtKCsTxy/EdUCgt0SXSyffM6ZriKdKDbtw=;
+        b=oZ7zMys6ebWoI3YpBhFQy5m/q8gu6zjbEVO14KnrLxMkQnwn5GCMfN3DbTWY6kGcZ+
+         18Vk0s9z+T8aRFM3SLJt3Zq4dBX0ZFAJ6ddpsq20VN+fQa2r0msCx5xKMI5p5ktE/ys4
+         D0xtbvp569LNlPnIp73bsIcWz0C1uBoarW/CE1mxUcvowCaR1e8veSG9/QyiAtopSigG
+         f0WSeSTiMtQ4xAvlWtWx0RC2lfqyz2mA8zIaP+W3N4jL5R13kh7hBd3Vg8gHka5WD/Ur
+         /yIWxmi7SHviC5jf6/IJA6RQRz6KnBLpye9P2vnEHQmwJiGcZMun9DG5s09KwIJzZvNQ
+         oy+w==
+X-Gm-Message-State: ANoB5pkFKGQOK7hSdqUKeHpxaLlasfd9o0aDe1h4xzYClVyq8ymLA+vA
+        vGJujkR+Tnjg8iYDb8oD0Y8OIB+WCgI=
+X-Google-Smtp-Source: AA0mqf7UFI1m8W80QsrDOx3KAYJvkESRmsawupXo5W/rx00YTtgm89UZ7Lic9sd1Nb5bjpF9d6s9MQ==
+X-Received: by 2002:a37:bf46:0:b0:6ec:5409:5eaf with SMTP id p67-20020a37bf46000000b006ec54095eafmr1716543qkf.404.1668184712630;
+        Fri, 11 Nov 2022 08:38:32 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m15-20020a05622a054f00b003434d3b5938sm1536008qtx.2.2022.11.11.08.38.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 08:38:30 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 11 Nov 2022 08:38:28 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Ninad Malwade <nmalwade@nvidia.com>
+Cc:     treding@nvidia.com, jonathanh@nvidia.com, jdelvare@suse.com,
+        nicolinc@nvidia.com, rkasirajan@nvidia.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] ina3221: correct the update_interval value
+Message-ID: <20221111163828.GA323658@roeck-us.net>
+References: <20221108050029.24576-1-nmalwade@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2] ASoC: codecs: wsa883x: use correct header file
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        alsa-devel@alsa-project.org, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>
-References: <20221108001829.5100-1-rdunlap@infradead.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20221108001829.5100-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221108050029.24576-1-nmalwade@nvidia.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 08/11/2022 00:18, Randy Dunlap wrote:
-> Fix build errors when GPIOLIB is not set/enabled:
+On Tue, Nov 08, 2022 at 01:00:29PM +0800, Ninad Malwade wrote:
+> As per the INA3221 datasheet the samples value should not be
+> considered while calculating the update_interval value.
+> Section 8.4.2.2 from datasheet says - "The conversion-time
+> settings, along with the programmable-averaging mode, enable
+> the INA3221 to optimize available timing requirements in a given
+> application. For example, if a system requires data to be read
+> every 2 ms with all three channels monitored, configure the INA3221
+> with the conversion times for the shunt- and bus-voltage
+> measurements set to 332 μs"
 > 
-> ../sound/soc/codecs/wsa883x.c: In function 'wsa883x_probe':
-> ../sound/soc/codecs/wsa883x.c:1394:25: error: implicit declaration of function 'devm_gpiod_get_optional'; did you mean 'devm_regulator_get_optional'? [-Werror=implicit-function-declaration]
->           wsa883x->sd_n = devm_gpiod_get_optional(&pdev->dev, "powerdown",
-> ../sound/soc/codecs/wsa883x.c:1395:49: error: 'GPIOD_FLAGS_BIT_NONEXCLUSIVE' undeclared (first use in this function)
->           GPIOD_FLAGS_BIT_NONEXCLUSIVE);
-> ../sound/soc/codecs/wsa883x.c:1414:9: error: implicit declaration of function 'gpiod_direction_output'; did you mean 'gpio_direction_output'? [-Werror=implicit-function-declaration]
->           gpiod_direction_output(wsa883x->sd_n, 1);
+> As per above only conversion time and number of channels are
+> required to set the update_interval value. Correcting the same in
+> the driver.
 > 
-> Fixes: 43b8c7dc85a1 ("ASoC: codecs: add wsa883x amplifier support")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Cc: Banajit Goswami <bgoswami@quicinc.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Liam Girdwood <lgirdwood@gmail.com>
-> Cc: alsa-devel@alsa-project.org
-> Cc: Jaroslav Kysela <perex@perex.cz>
-> Cc: Takashi Iwai <tiwai@suse.com>
+> Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
+
+As a bug fix, this patch should come before any functional changes.
+
 > ---
-
-Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-
-
-
-> v2: add the correct header file instead of messing with GPIOLIB in Kconfig
+>  Documentation/hwmon/ina3221.rst | 3 +--
+>  drivers/hwmon/ina3221.c         | 4 +---
+>  2 files changed, 2 insertions(+), 5 deletions(-)
 > 
->   sound/soc/codecs/wsa883x.c |    2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff -- a/sound/soc/codecs/wsa883x.c b/sound/soc/codecs/wsa883x.c
-> --- a/sound/soc/codecs/wsa883x.c
-> +++ b/sound/soc/codecs/wsa883x.c
-> @@ -7,7 +7,7 @@
->   #include <linux/debugfs.h>
->   #include <linux/delay.h>
->   #include <linux/device.h>
-> -#include <linux/gpio.h>
-> +#include <linux/gpio/consumer.h>
->   #include <linux/init.h>
->   #include <linux/kernel.h>
->   #include <linux/module.h>
+> diff --git a/Documentation/hwmon/ina3221.rst b/Documentation/hwmon/ina3221.rst
+> index 8c12c54d2c24..a4f107d1e489 100644
+> --- a/Documentation/hwmon/ina3221.rst
+> +++ b/Documentation/hwmon/ina3221.rst
+> @@ -61,10 +61,9 @@ samples                 Number of samples using in the averaging mode.
+>  
+>  update_interval         Data conversion time in millisecond, following:
+>  
+> -                          update_interval = C x S x (BC + SC)
+> +                          update_interval = C x (BC + SC)
+>  
+>                            * C:	number of enabled channels
+> -                          * S:	number of samples
+>                            * BC:	bus-voltage conversion time in millisecond
+>                            * SC:	shunt-voltage conversion time in millisecond
+>  
+> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
+> index 2a57f4b60c29..e3aa57e3b039 100644
+> --- a/drivers/hwmon/ina3221.c
+> +++ b/drivers/hwmon/ina3221.c
+> @@ -183,11 +183,9 @@ static const int ina3221_avg_samples[] = {
+>  static inline u32 ina3221_interval_ms_to_conv_time(u16 config, int interval)
+>  {
+>  	u32 channels = hweight16(config & INA3221_CONFIG_CHs_EN_MASK);
+> -	u32 samples_idx = INA3221_CONFIG_AVG(config);
+> -	u32 samples = ina3221_avg_samples[samples_idx];
+>  
+>  	/* Bisect the result to Bus and Shunt conversion times */
+> -	return DIV_ROUND_CLOSEST(interval * 1000 / 2, channels * samples);
+> +	return DIV_ROUND_CLOSEST(interval / 2, channels);
+
+Same question as Thierry: Why drop the multiplication ?
+
+Guenter
+
+>  }
+>  
+>  /* Converting CONFIG register value to update_interval in usec */
