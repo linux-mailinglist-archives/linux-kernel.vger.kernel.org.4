@@ -2,54 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11022625A88
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDD5625A8F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233262AbiKKMg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 07:36:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
+        id S233384AbiKKMiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 07:38:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbiKKMg5 (ORCPT
+        with ESMTP id S231778AbiKKMiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 07:36:57 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B90804299B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 04:36:55 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AFEEF1FB;
-        Fri, 11 Nov 2022 04:37:01 -0800 (PST)
-Received: from [10.57.38.243] (unknown [10.57.38.243])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E14363F534;
-        Fri, 11 Nov 2022 04:36:53 -0800 (PST)
-Message-ID: <370142aa-8eae-8424-826d-c1fc21e4ea0f@arm.com>
-Date:   Fri, 11 Nov 2022 12:36:48 +0000
+        Fri, 11 Nov 2022 07:38:20 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B2F4299B;
+        Fri, 11 Nov 2022 04:38:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1668170275;
+        bh=vomVH4hGvaTNsTHXITvhcXN9JynH/ws7lJFxyIwVXrI=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=kZQLp5U7kMMYp6mfAsrl7LwptADZs8vfS+g5aOjUUxFrSMA447zx84J/9u/3CAxYk
+         z9JeXnY4AuuegECvKNk80p+rNKTxJZJPbEFRkDLh6kekj0XHLwxiuBTM9K80LWTIzs
+         qcMHJqyMHYKNJeOLP6BDMkv6CSAb7pw2OW1v9Y9d9MVqIRBOHvHvPf27tGV198QItG
+         pso7Ss/i5PzBvN7rB9oJPcnVuZAj70VL30OIeFedr3Ei15Kmvge8uzxgF3EWF0ZEft
+         pQC4lbStYnYVhfVpCR+1/u6DNuXRrxj6+fQoJEEBeZq9LGlOEaDIXV6x454Q9xhtcL
+         iHppbch+vzBzg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [157.180.224.127] ([157.180.224.127]) by web-mail.gmx.net
+ (3c-app-gmx-bap63.server.lan [172.19.172.133]) (via HTTP); Fri, 11 Nov 2022
+ 13:37:55 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [RFC] iommu/vt-d: set default value of INTEL_IOMMU_FLOPPY_WA to n
-Content-Language: en-GB
-To:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-Cc:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        harshit.m.mogalapalli@gmail.com,
-        David Woodhouse <dwmw2@infradead.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Darren Kenny <darren.kenny@oracle.com>
-References: <20221108125855.2984751-1-harshit.m.mogalapalli@oracle.com>
- <dc463b3e-2875-8aac-aca1-edacb90e5650@linux.intel.com>
- <76cbad17-ab5e-3dd9-cf94-df2b26748167@oracle.com>
- <3a7f5cdf-640b-f9d4-a25e-8be845abd7ba@linux.intel.com>
- <Y2wK6kWHE1iah/IG@char.us.oracle.com>
- <0f1ad424-18b0-c27f-dbf6-745801182bd2@linux.intel.com>
- <Y21mitQsO2RG652t@char.us.oracle.com>
- <e03aaca5-b62d-451c-85e0-53c28e8eea82@linux.intel.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <e03aaca5-b62d-451c-85e0-53c28e8eea82@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Message-ID: <trinity-b1022e89-9e6b-417e-9506-431574251dc3-1668170275463@3c-app-gmx-bap63>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Frank Wunderlich <linux@fw-web.de>
+Subject: Aw: Re:  [RFC v3 00/11] Add BananaPi R3
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 11 Nov 2022 13:37:55 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <a34fd2d5-b7ed-2fea-7a6c-acc7659cb001@gmail.com>
+References: <20221106085034.12582-1-linux@fw-web.de>
+ <trinity-e9c6aa94-6656-4d9c-9d9b-90ede6c8e6fc-1668099812662@3c-app-gmx-bs29>
+ <a34fd2d5-b7ed-2fea-7a6c-acc7659cb001@gmail.com>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:qzBXiIbmK6VlpmlzQ8d/pWtwIGf1DVbX1BVamaBSp5KUXn5tY9cVbZSny9tIZlVHZ48zw
+ m4pLYujy30CBnl5ZCRFMPVoBZnoCXRieIIqhDM36P11G6whstxQ6XptO9YpX+kxWWU9xqwQ2oYw1
+ m15+CPDoMA4eENjC50kiSs7+AigLrXkZSkyzmJE3CuogagZ487oPOk7zDhP7PCnAhwZZA+o2HZOY
+ BSbdgkBRfn0T7VcZXPDQKoqwBHfSPKl+TzwXf3QCTdyVwPKrRNWLXbx7mKy5FPlt94EHvrd0Lpuv
+ EY=
+UI-OutboundReport: notjunk:1;M01:P0:XUKcN6EumEM=;XqaSSbZ/dRE242s41zQECcN9B8U
+ wc/UjnMHgeRHgRqMkiIGi60wLr3JIqNTxGOMrX8leR8PSh4roQy7TcmUGUup+PO/qiqiyFkmG
+ 8+cRSy7VcikF+LecZRCjyIUSZYy6hxyltkOHSuag4z/ymfNZq5GWXN8EsZVFCSqMkxsZYH8Ko
+ NcnORU7vAQv1f6YAGdHOOtOms9qn1zvv3twqzeJ5PBgYg6pKVsWSGGi60M0Kl356TGVBbNmyl
+ nNdppagaCMgzfObw4IAs31aJTDS4TJclAhPo9KuWdpY9pgJamZoVz3Hjv5UtzvaPraSmmml6w
+ lgqQelRwRFGgv/sd6KmE9jele1CsNkylaIxfzdCX89GntbRqJDeM39xrIXRl1h4hFR4uQOmP3
+ WJAQ+bqmc30fcZJFmDCWhowgVCLOksNfgonQE48Tf2SYKsOlT6jJmNQR0TyFchoeDdXDu68wy
+ y3qCxdJjQNcJjTmf8X63TpiaehSIS4YZUcRo0c1QAtvCE5NBd4KayK8iT/yU3NBs9Z8iIscvA
+ 7YCKfGDlucJjtZjZUvj0pr22fOv11zTJgcAIzlArNvP+sW6UusFZ6w4ibbr0gXniGKBj3qLoK
+ 8CXBNJXCGw9IVuGQVSGeHnVXhPSKSFGadYGKh4FXkxdBd+tkyh0lJuxvcgnJG4xQ7/10EjNsE
+ tGg6KcExo2KPGYtvd8tQvISLkbH55EKjDMnzfsLWXV4AGLvUpyGPXZgxJiN9xziGMRYLhtR9f
+ uoHZczHnFlfSOC2Xvo0mIswxigdwkJVpOekKaU3RbAlfosGq+6BNqn/fLLyPtcCquxTE54DlF
+ E2eLqnILjtYM0+lmR4O+vQoCx1H2ZkY6K1MuqPDKWbFC8=
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,190 +78,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-11 02:31, Baolu Lu wrote:
-> On 2022/11/11 5:00, Konrad Rzeszutek Wilk wrote:
->> On Thu, Nov 10, 2022 at 02:39:53PM +0800, Baolu Lu wrote:
->>> On 2022/11/10 4:17, Konrad Rzeszutek Wilk wrote:
->>>> On Wed, Nov 09, 2022 at 09:16:53PM +0800, Baolu Lu wrote:
->>>>> On 2022/11/9 20:16, Harshit Mogalapalli wrote:
->>>>>>
->>>>>>
->>>>>> On 09/11/22 12:35 pm, Baolu Lu wrote:
->>>>>>> On 2022/11/8 20:58, Harshit Mogalapalli wrote:
->>>>>>>> It is likely that modern intel motherboard will not ship with a
->>>>>>>> floppy connection anymore, so let us disable it by default, as it
->>>>>>>> gets turned on when we do a make defconfig.
->>>>>>>>
->>>>>>>> Suggested-by: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
->>>>>>>> Signed-off-by: Harshit Mogalapalli 
->>>>>>>> <harshit.m.mogalapalli@oracle.com>
->>>>>>>> ---
->>>>>>>>     drivers/iommu/intel/Kconfig | 2 +-
->>>>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>>>
->>>>>>>> diff --git a/drivers/iommu/intel/Kconfig 
->>>>>>>> b/drivers/iommu/intel/Kconfig
->>>>>>>> index b7dff5092fd2..c783ae85ca9b 100644
->>>>>>>> --- a/drivers/iommu/intel/Kconfig
->>>>>>>> +++ b/drivers/iommu/intel/Kconfig
->>>>>>>> @@ -76,7 +76,7 @@ config INTEL_IOMMU_BROKEN_GFX_WA
->>>>>>>>           option is removed in the 2.6.32 kernel.
->>>>>>>>     config INTEL_IOMMU_FLOPPY_WA
->>>>>>>> -    def_bool y
->>>>>>>> +    def_bool n
->>>>>>>>         depends on X86
->>>>>>>>         help
->>>>>>>>           Floppy disk drivers are known to bypass DMA API calls
->>>>>>>
->>>>>>> Nobody selects or depends on this. How about removing this bool? 
->>>>>>> Only
->>>>>>> less than 10 lines of code are impacted and are not in any 
->>>>>>> performance
->>>>>>> path.
->>>>>>>
->>>>>>> diff --git a/drivers/iommu/intel/Kconfig 
->>>>>>> b/drivers/iommu/intel/Kconfig
->>>>>>> index b7dff5092fd2..5e077d1c5f5d 100644
->>>>>>> --- a/drivers/iommu/intel/Kconfig
->>>>>>> +++ b/drivers/iommu/intel/Kconfig
->>>>>>> @@ -75,15 +75,6 @@ config INTEL_IOMMU_BROKEN_GFX_WA
->>>>>>>           to use physical addresses for DMA, at least until this
->>>>>>>           option is removed in the 2.6.32 kernel.
->>>>>>>
->>>>>>> -config INTEL_IOMMU_FLOPPY_WA
->>>>>>> -    def_bool y
->>>>>>> -    depends on X86
->>>>>>> -    help
->>>>>>> -      Floppy disk drivers are known to bypass DMA API calls
->>>>>>> -      thereby failing to work when IOMMU is enabled. This
->>>>>>> -      workaround will setup a 1:1 mapping for the first
->>>>>>> -      16MiB to make floppy (an ISA device) work.
->>>>>>> -
->>>>>>>     config INTEL_IOMMU_SCALABLE_MODE_DEFAULT_ON
->>>>>>>         bool "Enable Intel IOMMU scalable mode by default"
->>>>>>>         default y
->>>>>>> diff --git a/drivers/iommu/intel/iommu.c 
->>>>>>> b/drivers/iommu/intel/iommu.c
->>>>>>> index 48cdcd0a5cf3..22801850f339 100644
->>>>>>> --- a/drivers/iommu/intel/iommu.c
->>>>>>> +++ b/drivers/iommu/intel/iommu.c
->>>>>>> @@ -4567,7 +4567,6 @@ static void
->>>>>>> intel_iommu_get_resv_regions(struct device *device,
->>>>>>>         }
->>>>>>>         rcu_read_unlock();
->>>>>>>
->>>>>>> -#ifdef CONFIG_INTEL_IOMMU_FLOPPY_WA
->>>>>>>         if (dev_is_pci(device)) {
->>>>>>>             struct pci_dev *pdev = to_pci_dev(device);
->>>>>>>
->>>>>>> @@ -4579,7 +4578,6 @@ static void
->>>>>>> intel_iommu_get_resv_regions(struct device *device,
->>>>>>>                     list_add_tail(&reg->list, head);
->>>>>>>             }
->>>>>>>         }
->>>>>>> -#endif /* CONFIG_INTEL_IOMMU_FLOPPY_WA */
->>>>>>>
->>>>>>>         reg = iommu_alloc_resv_region(IOAPIC_RANGE_START,
->>>>>>>                           IOAPIC_RANGE_END - IOAPIC_RANGE_START + 1,
->>>>>>>
->>>>>>
->>>>>> Hi Baolu,
->>>>>>
->>>>>> I have a question:
->>>>>> Shouldn't we remove the code between ifdef-endif statements?
->>>>>>
->>>>>> I mean something like this:
->>>>>>
->>>>>> diff --git a/drivers/iommu/intel/Kconfig 
->>>>>> b/drivers/iommu/intel/Kconfig
->>>>>> index b7dff5092fd2..5e077d1c5f5d 100644
->>>>>> --- a/drivers/iommu/intel/Kconfig
->>>>>> +++ b/drivers/iommu/intel/Kconfig
->>>>>> @@ -75,15 +75,6 @@ config INTEL_IOMMU_BROKEN_GFX_WA
->>>>>>              to use physical addresses for DMA, at least until this
->>>>>>              option is removed in the 2.6.32 kernel.
->>>>>>
->>>>>> -config INTEL_IOMMU_FLOPPY_WA
->>>>>> -       def_bool y
->>>>>> -       depends on X86
->>>>>> -       help
->>>>>> -         Floppy disk drivers are known to bypass DMA API calls
->>>>>> -         thereby failing to work when IOMMU is enabled. This
->>>>>> -         workaround will setup a 1:1 mapping for the first
->>>>>> -         16MiB to make floppy (an ISA device) work.
->>>>>> -
->>>>>>     config INTEL_IOMMU_SCALABLE_MODE_DEFAULT_ON
->>>>>>            bool "Enable Intel IOMMU scalable mode by default"
->>>>>>            default y
->>>>>> diff --git a/drivers/iommu/intel/iommu.c 
->>>>>> b/drivers/iommu/intel/iommu.c
->>>>>> index 48cdcd0a5cf3..2c416ad3204e 100644
->>>>>> --- a/drivers/iommu/intel/iommu.c
->>>>>> +++ b/drivers/iommu/intel/iommu.c
->>>>>> @@ -4567,20 +4567,6 @@ static void 
->>>>>> intel_iommu_get_resv_regions(struct
->>>>>> device *device,
->>>>>>            }
->>>>>>            rcu_read_unlock();
->>>>>>
->>>>>> -#ifdef CONFIG_INTEL_IOMMU_FLOPPY_WA
->>>>>> -       if (dev_is_pci(device)) {
->>>>>> -               struct pci_dev *pdev = to_pci_dev(device);
->>>>>> -
->>>>>> -               if ((pdev->class >> 8) == PCI_CLASS_BRIDGE_ISA) {
->>>>>> -                       reg = iommu_alloc_resv_region(0, 1UL << 
->>>>>> 24, prot,
->>>>>> -                                       IOMMU_RESV_DIRECT_RELAXABLE,
->>>>>> -                                       GFP_KERNEL);
->>>>>> -                       if (reg)
->>>>>> -                               list_add_tail(&reg->list, head);
->>>>>> -               }
->>>>>> -       }
->>>>>> -#endif /* CONFIG_INTEL_IOMMU_FLOPPY_WA */
->>>>>> -
->>>>>>            reg = iommu_alloc_resv_region(IOAPIC_RANGE_START,
->>>>>>                                          IOAPIC_RANGE_END -
->>>>>> IOAPIC_RANGE_START + 1,
->>>>>>                                          0, IOMMU_RESV_MSI, 
->>>>>> GFP_KERNEL);
->>>>>>
->>>>>> This code is introduced in Commit d850c2ee5fe2 ("iommu/vt-d: 
->>>>>> Expose ISA
->>>>>> direct mapping region via iommu_get_resv_regions")
->>>>>
->>>>> As long as floppy driver exists in the tree, we have to include above
->>>>> code. Otherwise, floppy drivers don't work. At least we can easily 
->>>>> find
->>>>> drivers/block/floppy.c which is still maintained (check 
->>>>> MAINTAINERS).:-)
->>>>
->>>> But this requires a machine with Intel IOMMU and ISA:
->>>>
->>>>>>> -      16MiB to make floppy (an ISA device) work.
->>>>
->>>> ISA device? I don't believe there are any Intel machines with an IOMMU
->>>> and an ISA device?
->>>
->>> This workaround was introduced by commit 49a0429e53f2 ("Intel IOMMU:
->>> Iommu floppy workaround") in 2007. I can't remember what happened 15
->>> years ago, but I believe there must have been corresponding hardware
->>> configurations at that time, and the Linux kernel has been maintained it
->>> to now.
->>
->> At what point can this be removed then?
-> 
-> No floppy block drivers in the tree or all floppy drivers' DMA going
-> through the kernel DMA APIs.
+Hi
 
-Presumably the point of the config is that ISA bridges aren't expected 
-on IA-64, so a tiny code saving can be made there, but at this point is 
-anyone really that bothered about any more? There's already tons more 
-code all through the driver to support newer features that aren't 
-meaningful to old IA-64 hardware, so in my opinion, meh. Given that this 
-already won't affect systems that truly can't have any ISA devices, I 
-don't see any issue with simply making it unconditional.
+> Gesendet: Freitag, 11. November 2022 um 10:17 Uhr
+> Von: "Matthias Brugger" <matthias.bgg@gmail.com>
+> An: "Frank Wunderlich" <frank-w@public-files.de>, "Rob Herring" <robh+dt=
+@kernel.org>
+> Cc: linux-mediatek@lists.infradead.org, "Krzysztof Kozlowski" <krzysztof=
+.kozlowski+dt@linaro.org>, linux-arm-kernel@lists.infradead.org, devicetre=
+e@vger.kernel.org, linux-kernel@vger.kernel.org, "Frank Wunderlich" <linux=
+@fw-web.de>
+> Betreff: Re: Aw: [RFC v3 00/11] Add BananaPi R3
+>
+>
+>
+> On 10/11/2022 18:03, Frank Wunderlich wrote:
+> > Hi Rob,
+> >
+> > can you please take Patches 1+3 of v1 into your tree?
+> > due to reordering in my tree i missed them in this version
+> >
+> > https://patchwork.kernel.org/project/linux-mediatek/list/?series=3D685=
+798
+> >
+>
+> They should go through the subsystem maintainers trees. I'd advise to re=
+send,
+> dropping the RFC prefix and add the corresponding maintainers.
 
-Note that plenty of chipsets still have an "ISA" bridge to an LPC 
-interface, so ISA DMA is not necessarily as dead as one might like to think.
+ok, wait for your push and i create v4 including the missing binding-patch=
+es and the reorder of wed-node together with my fixes.
 
-Robin.
+> Regards,
+> Matthias
+>
+> > pcie-bindings are here:
+> >
+> > https://patchwork.kernel.org/project/linux-mediatek/list/?series=3D690=
+172
+> >
+> > i found 1 error in bpi-r3 dts (properties from sfp1 not plural) which =
+i will fix in next version and will drop
+> > the compile comment in dt overlays.
+> >
+> > also i've found this commit:
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/commit/=
+?h=3Ddt/next&id=3D363547d2191cbc32ca954ba75d72908712398ff2
+> >
+> > so maybe i need to rename my overlay dts files to dtso?
+> >
+> > maybe the others can be applied (at least the mt7986 nodes)?
+
+does this solve your question about dt-overlays?
+
+just to note for all...it is all 1 board having sd+emmc on 1 mmc-controlle=
+r and nand+nor on one spi. it depends on hardware-switches which devices a=
+re accessable (1mmc+1 spi). Adding dts for all possible combinations will =
+add more dts (sd+nor, sd+nand, emmc+nor, emmc+nand) than adding the 2 over=
+lays or adds redundant config.
+
+or should i copy the emmc/sd dts and adding once nor or nand? so we have t=
+he dtsi and dts for combinations above (=3D5 total)?
+
+> > regards Frank
+>
