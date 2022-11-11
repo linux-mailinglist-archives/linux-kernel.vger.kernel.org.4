@@ -2,158 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28A96255D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A47F162560D
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233195AbiKKI5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:57:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
+        id S233419AbiKKJAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:00:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbiKKI5F (ORCPT
+        with ESMTP id S233610AbiKKJAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:57:05 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE929F5AA;
-        Fri, 11 Nov 2022 00:57:01 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id h9so5646951wrt.0;
-        Fri, 11 Nov 2022 00:57:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KaMcBLsoVyqtu03uWUf8qFf/NtXFui3YcFfaHhghhcg=;
-        b=dcUIec17fXShU0D22Ke0SSuSdFN+k+3iWRH8dz53i8WclFqju4JkG3PwJpCH+pnNrb
-         IEvbY0q8xwL2Vys7UlnRa+zXwyy+63UIkmfmd26FAdfebzmAmc5bRO+6FKjwvBJaH/0u
-         Xr3R2QNGt+JAQnqQajFyZU6jJOdDYf1Q+dty4/dlksaSHmm18+5Tks5yGne3Gc0z3KYY
-         N+1V4sZsWV+V3TJ4M8LMG8UTDcr5JLk2gHdCmREptMv28bLEkustBhNA4qofg5wUwaKz
-         VW+sgXmPESSIR9EwbeEpAC6aNinw8pcBx3j7Y88H+3DuZaoMXx0fKzJrMSiB+fg1S/ja
-         zp/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KaMcBLsoVyqtu03uWUf8qFf/NtXFui3YcFfaHhghhcg=;
-        b=A6kABpa4DOusCqULcTf0b2VdPsv5kZmvSZHs1aNprhjGsHkGFlhtTgmUKpvJnj6yhe
-         McI797r/JS9dmlSsgSHFRW+7bVth7+/r5bPNXS5+I1zSsWhFvpxtYJXfSWQswSkiZ1VM
-         VGJOSi0m+2c96tWdI2JQTyy3bEhvBL+wLxaLMlu5Rq++PLVbQaRL3QyCMBHztITcQm74
-         ikrY4o8NlsgflfK0b/tyYUAGqCJ9XYPeNZ4rM3lOtWoUDLteJdDWiYErk1r0+OexlVdE
-         Uvn5tuGDo1h8IDot2YCFE4yKoUhC/FeOU3jB0wugxxytuWEHw8q4Ps9JEL4M7HFWAw0i
-         Hy6A==
-X-Gm-Message-State: ANoB5pnkbdTJhzBOGdHwPFx+5srXIq1qeb4wA/guZEejDoUhWanHk7gi
-        Q4z2TgWacRMYfYDIxFh43dA=
-X-Google-Smtp-Source: AA0mqf4N7yuM8IdQE3lXSfvVQUBKrjMvD2Eg5wiPoWiejd00raH0z2svf3porYC6FthSfggv3GyuAg==
-X-Received: by 2002:a5d:558b:0:b0:236:7670:68b5 with SMTP id i11-20020a5d558b000000b00236767068b5mr605179wrv.149.1668157020392;
-        Fri, 11 Nov 2022 00:57:00 -0800 (PST)
-Received: from [192.168.1.131] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id d8-20020a1c7308000000b003cf7928e731sm2223476wmb.9.2022.11.11.00.56.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 00:56:58 -0800 (PST)
-Message-ID: <1925e515-1a0b-f1bf-0f99-47a45de10d06@gmail.com>
-Date:   Fri, 11 Nov 2022 09:56:57 +0100
+        Fri, 11 Nov 2022 04:00:00 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B938C582
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:58:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668157100; x=1699693100;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=s/K1OGKvxiKFArO/iGi6he/zO4L5VAtoS58akme1yUs=;
+  b=YqcMHBx25b8+npwSZF2W5p1wcSf0A5x6spe8wGpcUro+4qMlTCPr+j9L
+   QcGW3cB7mTBvMAAGpac6ALN18hNoOYpY2/LxYFPpkBvZ0I7AacN4YXKXf
+   H/GSVRDgYWBGSqRJVJJZ2XR+IyT/yUqkopsADA3ZoQhjQglZ9RTC0HjQs
+   gt6guvciPPDrfgrxmMJMkqgfKMJqqQg1iNRaoc0L5LM1dO96PW58t4U5+
+   hZMb0JjtoLee7w+Ue79MasFk+ePtjPPRstgiMEvGUNRU+Y7Dsu0Ufo3KX
+   adW4qtOJ0ZsZMuXBypkhoKfbW/1g4khCIpNKS6/aieEAcnna98SY2DcHF
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="291281600"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="291281600"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 00:58:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="966760126"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="966760126"
+Received: from lkp-server01.sh.intel.com (HELO e783503266e8) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 11 Nov 2022 00:58:00 -0800
+Received: from kbuild by e783503266e8 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1otPrM-0003n5-10;
+        Fri, 11 Nov 2022 08:58:00 +0000
+Date:   Fri, 11 Nov 2022 16:57:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        WANG Xuerui <git@xen0n.name>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Subject: drivers/crypto/hisilicon/sec2/sec_main.c:282:6: warning: Local
+ variable 'ctx_q_num' shadows outer variable [shadowVariable]
+Message-ID: <202211111655.DyDy9Bu6-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [RFC v3 04/11] arm64: dts: mt7986: add crypto related device
- nodes
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sam Shih <sam.shih@mediatek.com>,
-        Vic Wu <vic.wu@mediatek.com>
-References: <20221106085034.12582-1-linux@fw-web.de>
- <20221106085034.12582-5-linux@fw-web.de>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221106085034.12582-5-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4bbf3422df78029f03161640dcb1e9d1ed64d1ea
+commit: 57fc7323a8e7c2e7c1d5795ab63cb3ffea3cfdfb LoongArch: Add PCI controller support
+date:   3 months ago
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (cppcheck warning):
+        # apt-get install cppcheck
+        git checkout 57fc7323a8e7c2e7c1d5795ab63cb3ffea3cfdfb
+        cppcheck --quiet --enable=style,performance,portability --template=gcc FILE
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-On 06/11/2022 09:50, Frank Wunderlich wrote:
-> From: Sam Shih <sam.shih@mediatek.com>
-> 
-> This patch adds crypto engine support for MT7986.
-> 
-> Signed-off-by: Vic Wu <vic.wu@mediatek.com>
-> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+cppcheck warnings: (new ones prefixed by >>)
+>> drivers/crypto/hisilicon/sec2/sec_main.c:282:6: warning: Local variable 'ctx_q_num' shadows outer variable [shadowVariable]
+    u32 ctx_q_num;
+        ^
+   drivers/crypto/hisilicon/sec2/sec_main.c:304:12: note: Shadowed declaration
+   static u32 ctx_q_num = SEC_CTX_Q_NUM_DEF;
+              ^
+   drivers/crypto/hisilicon/sec2/sec_main.c:282:6: note: Shadow variable
+    u32 ctx_q_num;
+        ^
+--
+   drivers/crypto/hisilicon/qm.c:4563:8: warning: %x in format string (no. 2) requires 'unsigned int *' but the argument type is 'signed int *'. [invalidScanfArgType_int]
+    ret = sscanf(tbuf_bdf, "%u:%x:%u.%u", &tmp1, &bus, &device, &function);
+          ^
 
-Applied, thanks!
+cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
 
-> ---
->   arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts |  4 ++++
->   arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 15 +++++++++++++++
->   arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts |  4 ++++
->   3 files changed, 23 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-> index de5d771e5251..2b5d7ea31b4d 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-> @@ -43,6 +43,10 @@ reg_5v: regulator-5v {
->   	};
->   };
->   
-> +&crypto {
-> +	status = "okay";
-> +};
-> +
->   &eth {
->   	status = "okay";
->   
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-> index 58bbecfbab98..1c7a973c28ca 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-> @@ -205,6 +205,21 @@ trng: rng@1020f000 {
->   			status = "disabled";
->   		};
->   
-> +		crypto: crypto@10320000 {
-> +			compatible = "inside-secure,safexcel-eip97";
-> +			reg = <0 0x10320000 0 0x40000>;
-> +			interrupts = <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 118 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "ring0", "ring1", "ring2", "ring3";
-> +			clocks = <&infracfg CLK_INFRA_EIP97_CK>;
-> +			clock-names = "infra_eip97_ck";
-> +			assigned-clocks = <&topckgen CLK_TOP_EIP_B_SEL>;
-> +			assigned-clock-parents = <&apmixedsys CLK_APMIXED_NET2PLL>;
-> +			status = "disabled";
-> +		};
-> +
->   		uart0: serial@11002000 {
->   			compatible = "mediatek,mt7986-uart",
->   				     "mediatek,mt6577-uart";
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-> index cd1763fa7f19..a98025112b5a 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-> @@ -43,6 +43,10 @@ reg_5v: regulator-5v {
->   	};
->   };
->   
-> +&crypto {
-> +	status = "okay";
-> +};
-> +
->   &eth {
->   	status = "okay";
->   
+>> drivers/crypto/hisilicon/qm.c:1704:2: warning: Assignment of function parameter has no effect outside the function. Did you forget dereferencing it? [uselessAssignmentPtrArg]
+    dregs = NULL;
+    ^
+>> drivers/crypto/hisilicon/qm.c:4553:8: warning: sscanf() without field width limits can crash with huge input data. [invalidscanf]
+    ret = sscanf(buf, "%s %s", tbuf_bdf, val_buf);
+          ^
+>> drivers/crypto/hisilicon/qm.c:3499:46: warning: Parameter 'pdev' can be declared as pointer to const [constParameter]
+   static int qm_try_frozen_vfs(struct pci_dev *pdev,
+                                                ^
+>> drivers/crypto/hisilicon/qm.c:4229:29: warning: Uninitialized variable: tmp->distance [uninitvar]
+      if (res->distance < tmp->distance) {
+                               ^
+   drivers/crypto/hisilicon/qm.c:4222:7: note: Assuming condition is false
+     if (!res)
+         ^
+   drivers/crypto/hisilicon/qm.c:4229:29: note: Uninitialized variable: tmp->distance
+      if (res->distance < tmp->distance) {
+                               ^
+
+vim +/ctx_q_num +282 drivers/crypto/hisilicon/sec2/sec_main.c
+
+416d82204df44e Zaibo Xu 2019-11-13  279  
+416d82204df44e Zaibo Xu 2019-11-13  280  static int sec_ctx_q_num_set(const char *val, const struct kernel_param *kp)
+416d82204df44e Zaibo Xu 2019-11-13  281  {
+416d82204df44e Zaibo Xu 2019-11-13 @282  	u32 ctx_q_num;
+416d82204df44e Zaibo Xu 2019-11-13  283  	int ret;
+416d82204df44e Zaibo Xu 2019-11-13  284  
+416d82204df44e Zaibo Xu 2019-11-13  285  	if (!val)
+416d82204df44e Zaibo Xu 2019-11-13  286  		return -EINVAL;
+416d82204df44e Zaibo Xu 2019-11-13  287  
+416d82204df44e Zaibo Xu 2019-11-13  288  	ret = kstrtou32(val, 10, &ctx_q_num);
+416d82204df44e Zaibo Xu 2019-11-13  289  	if (ret)
+416d82204df44e Zaibo Xu 2019-11-13  290  		return -EINVAL;
+416d82204df44e Zaibo Xu 2019-11-13  291  
+7c7d902aa4059b Zaibo Xu 2020-01-11  292  	if (!ctx_q_num || ctx_q_num > SEC_CTX_Q_NUM_MAX || ctx_q_num & 0x1) {
+416d82204df44e Zaibo Xu 2019-11-13  293  		pr_err("ctx queue num[%u] is invalid!\n", ctx_q_num);
+416d82204df44e Zaibo Xu 2019-11-13  294  		return -EINVAL;
+416d82204df44e Zaibo Xu 2019-11-13  295  	}
+416d82204df44e Zaibo Xu 2019-11-13  296  
+416d82204df44e Zaibo Xu 2019-11-13  297  	return param_set_int(val, kp);
+416d82204df44e Zaibo Xu 2019-11-13  298  }
+416d82204df44e Zaibo Xu 2019-11-13  299  
+
+:::::: The code at line 282 was first introduced by commit
+:::::: 416d82204df44ef727de6eafafeaa4d12fdc78dc crypto: hisilicon - add HiSilicon SEC V2 driver
+
+:::::: TO: Zaibo Xu <xuzaibo@huawei.com>
+:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
