@@ -2,75 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6140E625CD8
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B2C1625CDB
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:22:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233172AbiKKOVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 09:21:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37032 "EHLO
+        id S234419AbiKKOWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 09:22:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234497AbiKKOVb (ORCPT
+        with ESMTP id S234348AbiKKOVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 09:21:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD23391F8;
-        Fri, 11 Nov 2022 06:12:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7B3461FE2;
-        Fri, 11 Nov 2022 14:12:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 190C0C433D6;
-        Fri, 11 Nov 2022 14:12:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668175925;
-        bh=WAd2AYa8S4taz0elUVTwqEBq+wYIB9mqbkD9M3zK2u0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q6Huf1RI0OOaM1olOX7NVqvOguysOcK98u/zds/K81EFra/5WrvbzAX/bPkLv1toQ
-         xVSVf9vhf/RX39Z0olTzjxGuzNQFg14t5FMj/Z+WGJMadaCWnxODNkFnxD+ByPw1Ko
-         17QKR9+A1fKQmURaxLCM23yno/O1blfEHCOxwK3gw0tEn5K7SUDiEGTtBslmoDPfU0
-         W3Vy7GfuxXUq4bzoF6k2sYN9OTxh1ehALTAflJNa5OM28aQ+sAOX3mpoUXJf5pfFpu
-         aBlgDA+7vDvHzto9QHhLIOByO0iKLMnnIOcbm75MadCqKzYNdbRvg/z1x49z7/71nN
-         ayn9HPu4483ZA==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Shunsuke Mie <mie@igel.co.jp>, Jon Mason <jdmason@kudzu.us>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org
-Subject: Re: [PATCH] PCI: endpoint: fix Kconfig indent style
-Date:   Fri, 11 Nov 2022 15:11:57 +0100
-Message-Id: <166817589315.218084.10094910873903826248.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220815025006.48167-1-mie@igel.co.jp>
-References: <20220815025006.48167-1-mie@igel.co.jp>
+        Fri, 11 Nov 2022 09:21:46 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8001645ECF;
+        Fri, 11 Nov 2022 06:14:07 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 322781FB;
+        Fri, 11 Nov 2022 06:14:13 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 57C313F73D;
+        Fri, 11 Nov 2022 06:14:05 -0800 (PST)
+Date:   Fri, 11 Nov 2022 14:14:02 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Huisong Li <lihuisong@huawei.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, rafael.j.wysocki@intel.com,
+        wanghuiqiang@huawei.com, zhangzekun11@huawei.com,
+        wangxiongfeng2@huawei.com, tanxiaofei@huawei.com,
+        guohanjun@huawei.com, xiexiuqi@huawei.com,
+        wangkefeng.wang@huawei.com, huangdaode@huawei.com
+Subject: Re: [PATCH V2 2/2] mailbox: pcc: fix 'pcc_chan_count' when fail to
+ initialize PCC
+Message-ID: <20221111141402.7cun26euzubpesjs@bogus>
+References: <20221110015034.7943-1-lihuisong@huawei.com>
+ <20221111024448.25012-1-lihuisong@huawei.com>
+ <20221111024448.25012-3-lihuisong@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221111024448.25012-3-lihuisong@huawei.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 Aug 2022 11:50:06 +0900, Shunsuke Mie wrote:
-> Change to follow the Kconfig style guide. This patch fixes to use tab
-> rather than space to indent, while help text is indented an additional
-> two spaces.
-> 
-> 
+Change $subject as
+"mailbox: pcc: Reset pcc_chan_count to zero in case of PCC probe failure"
 
-Applied to pci/misc, thanks!
+On Fri, Nov 11, 2022 at 10:44:48AM +0800, Huisong Li wrote:
+> Currently, 'pcc_chan_count' is a non-zero value if PCC subspaces are parsed
+> successfully and subsequent processes is failure during initializing PCC
+> process. This may cause that pcc_mbox_request_channel() can still be
+> executed successfully , which will misleads the caller that this channel is
+> available.
+>
 
-[1/1] PCI: endpoint: fix Kconfig indent style
-      https://git.kernel.org/lpieralisi/pci/c/2759ddf7535d
+I would reword this something like:
+"Currently, 'pcc_chan_count' is remains set to a non-zero value if PCC
+subspaces are parsed successfully but something else fail later during
+the initial PCC probing phase. This will result in pcc_mbox_request_channel()
+trying to access the resources that are not initialised or allocated and
+may end up in a system crash.
 
-Thanks,
-Lorenzo
+Reset pcc_chan_count to 0 when the PCC probe fails in order to prevent
+the possible issue as described above.
+"
+
+> Fixes: ce028702ddbc ("mailbox: pcc: Move bulk of PCCT parsing into pcc_mbox_probe")
+
+Other than that,
+
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+
+-- 
+Regards,
+Sudeep
