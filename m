@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F006256C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7A06256C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233803AbiKKJ0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:26:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
+        id S233735AbiKKJ0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:26:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233704AbiKKJ0S (ORCPT
+        with ESMTP id S233687AbiKKJ0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Nov 2022 04:26:18 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E876EB49;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D177878C;
         Fri, 11 Nov 2022 01:26:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 973AC61F0C;
-        Fri, 11 Nov 2022 09:26:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAA72C433B5;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34C5961F13;
+        Fri, 11 Nov 2022 09:26:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E44C43470;
         Fri, 11 Nov 2022 09:26:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1668158764;
-        bh=WEY2NyK7kGYSFZQ1MVYoHe3uZ9puPVnYkW8PQVcfqcw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VY1jZEd7SGw28EB7kPDbF3wRCNldktRQayjUTL47oIR4d3Xod0RdEaAqy56N8MwaT
-         lVXsHZFNlvslLGu4qNFn3Cy9e4X7z3SZpnlgenVHycnyJ4A4A7r1M2nxDo84SeinMk
-         DcmUb4Ftyf8kk3O8cVWcMqpX6xJJE9amaZErjraZtX1gKk2FEVlTy8jxiVVMkjE67A
-         PiU8qgesJaIxxK9jIcOpqF3tDNaU9XMcvtG0/2NNaLO7lICrAdDt397UuIuZaWmuK7
-         6fIYwBbxSbqf1mp4pX3Joe3SC5N9bBhtKC1lX0Z3zoCiifo36ATH+VymDJzJC5qi2D
-         cDGV+oEYU7w2w==
+        bh=UrFSXtJ3txbQP4cpdXwmp++PX9fOWMGWIAQXlwK8rWU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Ori2nCdeD5KLmQwtIrkUmbS+G1dB4qspOENLhoH3FQeXUT9fwtqwH56XFpWzbIcWg
+         LWyi0bKpGuJyltDxN4oxX4bJe8KxKVBkWCYpoFFPoWy2NkZ95oPBgPlS3nYkIm+bLq
+         KYiXz3RIc1TDCL2s/NmEgblOuBpa83QypxZrF24UipVSlqXO6q/XDX8/rmmXVpFZRf
+         kJ6qS+F1rnWtjPbSZP8u3d9UtbLz3Ul7qA1awHpK2NasuG/pEgZJefl4zgqbIMvRn+
+         l6iMmJj1qpeBBSlT2nDqnw4sfjFmsSeSTj5qNlTMlguoePcZ6zfoUysbXqny0BVsN6
+         pfN40Hcbf3wAw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1otQI3-0002kn-Oy; Fri, 11 Nov 2022 10:25:36 +0100
+        id 1otQI4-0002kp-IQ; Fri, 11 Nov 2022 10:25:36 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -46,10 +46,12 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 00/14] phy: qcom-qmp-combo: fix sc8280xp binding (set 3/3)
-Date:   Fri, 11 Nov 2022 10:24:43 +0100
-Message-Id: <20221111092457.10546-1-johan+linaro@kernel.org>
+Subject: [PATCH 01/14] dt-bindings: phy: qcom,qmp-usb3-dp: rename current bindings
+Date:   Fri, 11 Nov 2022 10:24:44 +0100
+Message-Id: <20221111092457.10546-2-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.4
+In-Reply-To: <20221111092457.10546-1-johan+linaro@kernel.org>
+References: <20221111092457.10546-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,53 +63,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series fixes the USB-DP PHY devicetree binding for SC8280XP and
-adds support for the new updated binding to the driver.
+The current QMP USB3-DP PHY bindings are based on the original MSM8996
+binding which provided multiple PHYs per IP block and these in turn were
+described by child nodes.
 
-As the full series including the preparatory parts is over forty patches
-and I've been posting this in three parts of which this is the last one.
-In an effort to get all of these into 6.2, I've also submitted all three
-series before waiting for the previous ones to be applied. Parts one and
-two can be found here:
+The QMP USB3-DP PHY block provides a single multi-protocol PHY and
+even if some resources are only used by either the USB or DP part of the
+device there is no real benefit in describing these resources in child
+nodes.
 
-	https://lore.kernel.org/lkml/20221111084255.8963-1-johan+linaro@kernel.org/
-	https://lore.kernel.org/lkml/20221111085643.9478-1-johan+linaro@kernel.org/
+The original MSM8996 binding also ended up describing the individual
+register blocks as belonging to either the wrapper node or the PHY child
+nodes.
 
-This last series adds a new binding for SC8280XP that drops the legacy
-child node and the (incomplete) description of register subregions.
+This is an unnecessary level of detail which has lead to problems when
+later IP blocks using different register layouts have been forced to fit
+the original mould rather than updating the binding. The bindings are
+arguable also incomplete as they only the describe register blocks used
+by the current Linux drivers (e.g. does not include the PCS_LANE
+registers).
 
-As the current bindings are both incomplete and incorrect it may be
-a good idea to update also the other platforms currently supported by
-this driver to the new binding scheme. The driver can support both
-schemes during a transitions period before removing the corresponding
-code (dt parsing and clock-provider registration).
+In preparation for adding new bindings for SC8280XP which further
+bindings can be based on, rename the current schema file after SC7180,
+which was the first supported platform, and add a reference to the
+SC8280XP bindings.
 
-Johan
-
-
-Johan Hovold (14):
-  dt-bindings: phy: qcom,qmp-usb3-dp: rename current bindings
-  dt-bindings: phy: qcom,qmp-usb3-dp: fix sc8280xp bindings
-  phy: qcom-qmp-combo: drop v4 reference-clock source
-  phy: qcom-qmp-combo: restructure PHY creation
-  phy: qcom-qmp-combo: register clocks sooner
-  phy: qcom-qmp-combo: generate pipe clock name
-  phy: qcom-qmp-combo: drop redundant clock structure
-  phy: qcom-qmp-combo: drop redundant clock allocation
-  phy: qcom-qmp-combo: add clock registration helper
-  phy: qcom-qmp-combo: separate clock and provider registration
-  phy: qcom-qmp-combo: clean up DP clock callbacks
-  phy: qcom-qmp-combo: rename common-register pointers
-  phy: qcom-qmp-combo: rename DP_PHY register pointer
-  phy: qcom-qmp-combo: add support for updated sc8280xp binding
-
- ....yaml => qcom,sc7180-qmp-usb3-dp-phy.yaml} |  23 +-
- .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml    | 111 ++++
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c     | 532 +++++++++++-------
- 3 files changed, 441 insertions(+), 225 deletions(-)
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ ...3-dp-phy.yaml => qcom,sc7180-qmp-usb3-dp-phy.yaml} | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
  rename Documentation/devicetree/bindings/phy/{qcom,qmp-usb3-dp-phy.yaml => qcom,sc7180-qmp-usb3-dp-phy.yaml} (92%)
- create mode 100644 Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
 
+diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml
+similarity index 92%
+rename from Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
+rename to Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml
+index 97a7ecafbf85..50b1fce530d5 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,qmp-usb3-dp-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml
+@@ -2,10 +2,17 @@
+ 
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/phy/qcom,qmp-usb3-dp-phy.yaml#"
++$id: "http://devicetree.org/schemas/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml#"
+ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
+ 
+-title: Qualcomm QMP USB3 DP PHY controller
++title: Qualcomm QMP USB3 DP PHY controller (SC7180)
++
++description:
++  The QMP PHY controller supports physical layer functionality for a number of
++  controllers on Qualcomm chipsets, such as, PCIe, UFS and USB.
++
++  Note that these bindings are for SoCs up to SC8180X. For newer SoCs, see
++  qcom,sc8280xp-qmp-usb43dp-phy.yaml.
+ 
+ maintainers:
+   - Wesley Cheng <quic_wcheng@quicinc.com>
 -- 
 2.37.4
 
