@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2776625156
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 04:13:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCFE625157
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 04:13:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbiKKDNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 22:13:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
+        id S232654AbiKKDNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 22:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbiKKDMz (ORCPT
+        with ESMTP id S231483AbiKKDM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 22:12:55 -0500
+        Thu, 10 Nov 2022 22:12:57 -0500
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDED05B5AC;
-        Thu, 10 Nov 2022 19:12:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3A72EF42;
+        Thu, 10 Nov 2022 19:12:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668136374; x=1699672374;
+  t=1668136376; x=1699672376;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=VsDB9dzd0mEr75cQiAY7peAbT1Qp+7elj42fOh/7AAo=;
-  b=CXohdT7Bp1D0gxxie1HJ5GTlDiS1KHIObiEM6VNDOq6BbB+o2LwpYQn3
-   r4oxhfv+ZihSdO7BnjpIll94sTegw4VD1Of/TudnjgkjxsnBjzvEwkZZu
-   seHoX1oVbHDnZX3CEQrOrSIs0/NkHEtMia5wf9J5imuzOcJH93li2gqf6
-   3hToYwXOyn0uPoezSNCMHAABVMhjOmpVJ104/45+78XLxuD0QmjVgkaxf
-   Fmc4rVy16POO3iWefrexaply2w9Nv9TZ3U7rDMajHSBuJaqtvEUXIgU/B
-   wLR8W1QZ/3G4Xy7K9GE3iyv4ZMF/QR81FsIFrPCob/4pwLqJD2LQXN32e
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="310224411"
+  bh=D2Rd/Pgneu6uQpvUYP+09V/ctmxkFwMNJvxyOCowpy0=;
+  b=Pdq3mywfMNQPVHBqLsIsLvShiWWCTPHHmYmRrhMuaw8bFtLm7+LlPE8O
+   S5V7sGrhuVHCsr3AvAkAqA0YUsJghmyoBqzuTo4/FlQturgwgVDl8kZZg
+   sWZht16t+KbRAovtv3OD8AvAvyNZ8SGXKAezmaGYTgvqmddW2eJqiPrt3
+   iVljrVXt9JjKc4JQVGqsv0DupTxzZXrwObmMOVpOq9fPm/Uvh6p0w23Z6
+   MldhNMZqo9L9GLOeOymuHklwkp1UhRPO0AZJyPBmVal4WR67Dep1R4Qm6
+   LlLXQwoAvD9kwZVyo10n68BUtzHk6dCla/se8dg9uxaoufNbcHLdtmnlP
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="310224414"
 X-IronPort-AV: E=Sophos;i="5.96,155,1665471600"; 
-   d="scan'208";a="310224411"
+   d="scan'208";a="310224414"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 19:12:54 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="812296085"
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 19:12:56 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="812296090"
 X-IronPort-AV: E=Sophos;i="5.96,155,1665471600"; 
-   d="scan'208";a="812296085"
+   d="scan'208";a="812296090"
 Received: from aschofie-mobl2.amr.corp.intel.com (HELO localhost) ([10.209.161.45])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 19:12:53 -0800
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 19:12:55 -0800
 From:   alison.schofield@intel.com
 To:     Dan Williams <dan.j.williams@intel.com>,
         Ira Weiny <ira.weiny@intel.com>,
@@ -48,9 +48,9 @@ To:     Dan Williams <dan.j.williams@intel.com>,
         Ingo Molnar <mingo@redhat.com>
 Cc:     Alison Schofield <alison.schofield@intel.com>,
         linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/6] cxl/memdev: Add trigger_poison_list sysfs attribute
-Date:   Thu, 10 Nov 2022 19:12:41 -0800
-Message-Id: <5055dd47526d900f85f43bb0d85f4ccd4c9502b6.1668115235.git.alison.schofield@intel.com>
+Subject: [PATCH v3 4/6] cxl/region: Add trigger_poison_list sysfs attribute
+Date:   Thu, 10 Nov 2022 19:12:42 -0800
+Message-Id: <a696d91e34fc845673345a6b024545df849a8fef.1668115235.git.alison.schofield@intel.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <cover.1668115235.git.alison.schofield@intel.com>
 References: <cover.1668115235.git.alison.schofield@intel.com>
@@ -67,74 +67,76 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Alison Schofield <alison.schofield@intel.com>
 
-When a boolean 'true' is written to this attribute the memdev driver
-retrieves the poison list from the device. The list includes addresses
-that are poisoned, or would result in poison if accessed, and the
-source of the poison. This attribute is only visible for devices
-supporting the capability. The retrieved errors are logged as kernel
-trace events with the label 'cxl_poison'.
+When a boolean 'true' is written to this attribute the region driver
+retrieves the poison list for the capacity each device contributes
+to this region. The list includes addresses that are poisoned, or
+would result in poison if accessed, and the source of the poison.
+The retrieved errors are logged as kernel trace events with the
+label 'cxl_poison'.
+
+Devices not supporting the poison list capability are ignored.
 
 Signed-off-by: Alison Schofield <alison.schofield@intel.com>
 ---
- Documentation/ABI/testing/sysfs-bus-cxl | 14 +++++++++
- drivers/cxl/core/memdev.c               | 41 +++++++++++++++++++++++++
- 2 files changed, 55 insertions(+)
+ Documentation/ABI/testing/sysfs-bus-cxl | 14 +++++++++++
+ drivers/cxl/core/region.c               | 33 +++++++++++++++++++++++++
+ 2 files changed, 47 insertions(+)
 
 diff --git a/Documentation/ABI/testing/sysfs-bus-cxl b/Documentation/ABI/testing/sysfs-bus-cxl
-index 8494ef27e8d2..1c5f4a853ba2 100644
+index 1c5f4a853ba2..54fad3bdcb2b 100644
 --- a/Documentation/ABI/testing/sysfs-bus-cxl
 +++ b/Documentation/ABI/testing/sysfs-bus-cxl
-@@ -388,3 +388,17 @@ Description:
- 		1), and checks that the hardware accepts the commit request.
- 		Reading this value indicates whether the region is committed or
- 		not.
+@@ -402,3 +402,17 @@ Description:
+ 		attribute is only visible for devices supporting the
+ 		capability. The retrieved errors are logged as kernel
+ 		trace events with the label 'cxl_poison'.
 +
 +
-+What:		/sys/bus/cxl/devices/memX/trigger_poison_list
++What:		/sys/bus/cxl/devices/regionZ/trigger_poison_list
 +Date:		November, 2022
 +KernelVersion:	v6.2
 +Contact:	linux-cxl@vger.kernel.org
 +Description:
 +		(WO) When a boolean 'true' is written to this attribute the
-+		memdev driver retrieves the poison list from the device. The
-+		list includes addresses that are poisoned or would result in
-+		poison if accessed, and the source of the poison. This
-+		attribute is only visible for devices supporting the
-+		capability. The retrieved errors are logged as kernel
-+		trace events with the label 'cxl_poison'.
-diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
-index 20ce488a7754..06d265db5127 100644
---- a/drivers/cxl/core/memdev.c
-+++ b/drivers/cxl/core/memdev.c
-@@ -106,12 +106,45 @@ static ssize_t numa_node_show(struct device *dev, struct device_attribute *attr,
++		region driver retrieves the poison list for the capacity
++		each device contributes to this region. The list includes
++		addresses that are poisoned, or would result in poison if
++		accessed, and the source of the poison. The retrieved
++		errors are logged as kernel trace events with the label
++		'cxl_poison'.
+diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
+index f9ae5ad284ff..68821238491e 100644
+--- a/drivers/cxl/core/region.c
++++ b/drivers/cxl/core/region.c
+@@ -72,6 +72,38 @@ static int is_dup(struct device *match, void *data)
+ 	return 0;
  }
- static DEVICE_ATTR_RO(numa_node);
  
 +static ssize_t trigger_poison_list_store(struct device *dev,
 +					 struct device_attribute *attr,
 +					 const char *buf, size_t len)
 +{
-+	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
-+	struct cxl_dev_state *cxlds = cxlmd->cxlds;
++	struct cxl_region *cxlr = to_cxl_region(dev);
++	struct cxl_region_params *p = &cxlr->params;
++	struct cxl_endpoint_decoder *cxled;
++	struct cxl_memdev *cxlmd;
 +	u64 offset, length;
++	int rc, i;
 +	bool tmp;
-+	int rc;
 +
 +	if (kstrtobool(buf, &tmp))
 +		return -EINVAL;
 +
-+	/* Per CXL Spec, separate the pmem and ram poison list reads */
-+	if (resource_size(&cxlds->pmem_res)) {
-+		offset = cxlds->pmem_res.start;
-+		length = resource_size(&cxlds->pmem_res);
-+		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
-+		if (rc)
-+			return rc;
-+	}
-+	if (resource_size(&cxlds->ram_res)) {
-+		offset = cxlds->ram_res.start;
-+		length = resource_size(&cxlds->ram_res);
-+		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
++	for (i = 0; i <  p->nr_targets; i++) {
++		cxled = p->targets[i];
++		cxlmd = cxled_to_memdev(cxled);
++		if (!test_bit(CXL_MEM_COMMAND_ID_GET_POISON,
++			      cxlmd->cxlds->enabled_cmds))
++			continue;
++
++		offset = cxl_dpa_resource_start(cxled);
++		length = cxl_dpa_size(cxled);
++		rc = cxl_mem_get_poison(cxlmd, offset, length, cxlr);
 +		if (rc)
 +			return rc;
 +	}
@@ -142,30 +144,16 @@ index 20ce488a7754..06d265db5127 100644
 +}
 +static DEVICE_ATTR_WO(trigger_poison_list);
 +
- static struct attribute *cxl_memdev_attributes[] = {
- 	&dev_attr_serial.attr,
- 	&dev_attr_firmware_version.attr,
- 	&dev_attr_payload_max.attr,
- 	&dev_attr_label_storage_size.attr,
- 	&dev_attr_numa_node.attr,
+ static ssize_t uuid_store(struct device *dev, struct device_attribute *attr,
+ 			  const char *buf, size_t len)
+ {
+@@ -570,6 +602,7 @@ static struct attribute *cxl_region_attrs[] = {
+ 	&dev_attr_interleave_granularity.attr,
+ 	&dev_attr_resource.attr,
+ 	&dev_attr_size.attr,
 +	&dev_attr_trigger_poison_list.attr,
  	NULL,
  };
- 
-@@ -130,6 +163,14 @@ static umode_t cxl_memdev_visible(struct kobject *kobj, struct attribute *a,
- {
- 	if (!IS_ENABLED(CONFIG_NUMA) && a == &dev_attr_numa_node.attr)
- 		return 0;
-+
-+	if (a == &dev_attr_trigger_poison_list.attr) {
-+		struct device *dev = kobj_to_dev(kobj);
-+
-+		if (!test_bit(CXL_MEM_COMMAND_ID_GET_POISON,
-+			      to_cxl_memdev(dev)->cxlds->enabled_cmds))
-+			return 0;
-+	}
- 	return a->mode;
- }
  
 -- 
 2.37.3
