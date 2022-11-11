@@ -2,100 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1286162653A
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 00:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13BB8626556
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 00:19:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233927AbiKKXQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 18:16:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
+        id S234427AbiKKXTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 18:19:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232979AbiKKXQI (ORCPT
+        with ESMTP id S234252AbiKKXTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 18:16:08 -0500
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF8C1006E;
-        Fri, 11 Nov 2022 15:16:07 -0800 (PST)
-Received: by mail-wr1-f42.google.com with SMTP id j15so8219800wrq.3;
-        Fri, 11 Nov 2022 15:16:07 -0800 (PST)
+        Fri, 11 Nov 2022 18:19:41 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C94882C48
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 15:19:38 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id u6so5353535plq.12
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 15:19:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PIpB8rVITnQiLV75Iez0MoucLLsKoDwgwgSNeYFDxFo=;
+        b=nzk9QqkNZX6pz5oA5R++fU/7JJn/1lgiJKup4h+DQwJ2d+UJ/iUfN4nEe+UxgtPrh0
+         0eLwsuSIesIh7+nq66CIeRuJ/z5EBlEFrcEZ9FA4C7hKF7HJ6iLQL1Y0iCXNA66p+++E
+         Nfr0JeWf20MCEDbV1f6F3zZlxQsX/IgQDTWSc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ML0RbCqbrCyj8dh7iybZeA9vXEsm9tqKolIzFc77JSI=;
-        b=fmk2xIc6jMoGi+fm0sWwW6UeXcnrhRldIpyAyWEna3L9KVyPpqrviVJNNKppLFyy++
-         IL1I8epJi5piDgujHTHT84ZkjkCF5Xtx6akqoapuoPFC5Or389QFXIfjKNrXpFcrORCu
-         k8DBIn7b4IMg9CVzXwpl6tjTivcNZY7djWnVKnndFU9G68aNlzGxvRuBT69fpLn1cgnZ
-         sgRYDIc7K0jWB/Ea9wqlbT8ASgphuDwya1Zx6VSlkmjqC8Mgg8qsszvm835zWTex3SLp
-         NwWTsepcOsoh0iD+Nm7uEFiNcRyl+aIShYNXgHmu5kw0Ke0ajQ68twKvVqS048GUQ898
-         CwYQ==
-X-Gm-Message-State: ANoB5pmvKh4iEQ14s1wU7bYjP5LJuVWoouT0Va9AIZTmYs5xqWNNFB6c
-        mC/ZlV+Zw4EmRS3Qu6yI43c=
-X-Google-Smtp-Source: AA0mqf7ZPoTb7TZ7vc2ApkuO6Q5VrxJgANuw8sRi7qmBR1m0pF2mXHBjTNBZVzTEOEMmWntExjnjlQ==
-X-Received: by 2002:adf:f952:0:b0:241:71fc:3b3d with SMTP id q18-20020adff952000000b0024171fc3b3dmr2317948wrr.268.1668208566495;
-        Fri, 11 Nov 2022 15:16:06 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id e1-20020a5d5001000000b002368424f89esm2900908wrt.67.2022.11.11.15.16.05
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PIpB8rVITnQiLV75Iez0MoucLLsKoDwgwgSNeYFDxFo=;
+        b=07x4UFdHGkKGCNDAI6dpi8vjZu1PWuySGCNbYdRoOB4wRZag9cfB8Ac4GsFahba4Oh
+         GvmbNV/UWkChK5ylZWMkuztVKelInb+0UwnSml8id2z5POCWo3BEp2EhL9La80CdwGMs
+         MuMvKgJ5TcqWNXG4TPCsZMxycEnM9mZ2MzKXvRfHPS+qP1Ypl5UtWSt1hnPcUmZZ9/0b
+         ZLaLghkE2wrcr/vJhGz4Axk2BSKgLFeQaX/+w+JE6A4xIFHSlXq46diX4nO4MLaEPmvf
+         +yDsFqAa/hPw5bvcpW5uT9Jj1lPAlaDgfOUzqLXpKNQLvpchDEVp7Wp1xZbFMQ6O6AT+
+         LiXA==
+X-Gm-Message-State: ANoB5pn2npZ30aXveAdg3UQQNuErfRP63+7Y87+kv8VryEQ4PM3gprBm
+        Ga7e4tOSqyiFj5IW+bK+FIz9QFRUk2TWIHIt
+X-Google-Smtp-Source: AA0mqf6T1tTau3QB8qtxBh7OFdBlmkbKx4ENAq7cmsEFPewbtal5FGCTC12Ni1swMo1dVhLLLjGy3w==
+X-Received: by 2002:a17:902:8f89:b0:187:a98:7ee5 with SMTP id z9-20020a1709028f8900b001870a987ee5mr4588805plo.142.1668208777361;
+        Fri, 11 Nov 2022 15:19:37 -0800 (PST)
+Received: from evgreen-glaptop.lan ([98.45.28.95])
+        by smtp.gmail.com with ESMTPSA id x128-20020a623186000000b0056da2ad6503sm2106900pfx.39.2022.11.11.15.19.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 15:16:06 -0800 (PST)
-Date:   Fri, 11 Nov 2022 23:16:03 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "bhe@redhat.com" <bhe@redhat.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>
-Subject: Re: [PATCH V3 10/11] drivers/hv/vmbus, video/hyperv_fb: Untangle and
- refactor Hyper-V panic notifiers
-Message-ID: <Y27XsybzcgCQ3fzD@liuwe-devbox-debian-v2>
-References: <20220819221731.480795-1-gpiccoli@igalia.com>
- <20220819221731.480795-11-gpiccoli@igalia.com>
- <BYAPR21MB16880251FC59B60542D2D996D75A9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <ae0a1017-7ec6-9615-7154-ea34c7bd2248@igalia.com>
- <SN6PR2101MB1693BC627B22432BA42EEBC2D7299@SN6PR2101MB1693.namprd21.prod.outlook.com>
- <efdaf27e-753e-e84f-dd7d-965101563679@igalia.com>
- <Y27Q9SSM6WkGFwf5@liuwe-devbox-debian-v2>
+        Fri, 11 Nov 2022 15:19:37 -0800 (PST)
+From:   Evan Green <evgreen@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     corbet@lwn.net, linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, jejb@linux.ibm.com,
+        Kees Cook <keescook@chromium.org>, dlunev@google.com,
+        zohar@linux.ibm.com, Matthew Garrett <mgarrett@aurora.tech>,
+        jarkko@kernel.org, linux-pm@vger.kernel.org,
+        Evan Green <evgreen@chromium.org>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Len Brown <len.brown@intel.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
+        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v5 00/11] Encrypted Hibernation
+Date:   Fri, 11 Nov 2022 15:16:25 -0800
+Message-Id: <20221111231636.3748636-1-evgreen@chromium.org>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y27Q9SSM6WkGFwf5@liuwe-devbox-debian-v2>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 10:47:17PM +0000, Wei Liu wrote:
-> On Thu, Nov 10, 2022 at 06:32:54PM -0300, Guilherme G. Piccoli wrote:
-> > [Trimming long CC list]
-> > 
-> > Hi Wei / Michael, just out of curiosity, did this (and patch 9) ended-up
-> > being queued in hyperv-next?
-> > 
-> 
-> No. They are not queued.
-> 
-> I didn't notice Michael's email and thought they would be picked up by
-> someone else while dealing with the whole series.
-> 
-> I will pick them up later.
+We are exploring enabling hibernation in some new scenarios. However,
+our security team has a few requirements, listed below:
+1. The hibernate image must be encrypted with protection derived from
+   both the platform (eg TPM) and user authentication data (eg
+   password).
+2. Hibernation must not be a vector by which a malicious userspace can
+   escalate to the kernel.
 
-They are now queued to hyperv-next. Thanks.
+Requirement #1 can be achieved solely with uswsusp, however requirement
+2 necessitates mechanisms in the kernel to guarantee integrity of the
+hibernate image. The kernel needs a way to authenticate that it generated
+the hibernate image being loaded, and that the image has not been tampered
+with. Adding support for in-kernel AEAD encryption with a TPM-sealed key
+allows us to achieve both requirements with a single computation pass.
+
+Matthew Garrett published a series [1] that aligns closely with this
+goal. His series utilized the fact that PCR23 is a resettable PCR that
+can be blocked from access by usermode. The TPM can create a sealed key
+tied to PCR23 in two ways. First, the TPM can attest to the value of
+PCR23 when the key was created, which the kernel can use on resume to
+verify that the kernel must have created the key (since it is the only
+one capable of modifying PCR23). It can also create a policy that enforces
+PCR23 be set to a specific value as a condition of unsealing the key,
+preventing usermode from unsealing the key by talking directly to the
+TPM.
+
+This series adopts that primitive as a foundation, tweaking and building
+on it a bit. Where Matthew's series used the TPM-backed key to encrypt a
+hash of the image, this series uses the key directly as a gcm(aes)
+encryption key, which the kernel uses to encrypt and decrypt the
+hibernate image in chunks of 16 pages. This provides both encryption and
+integrity, which turns out to be a noticeable performance improvement over
+separate passes for encryption and hashing.
+
+The series also introduces the concept of mixing user key material into
+the encryption key. This allows usermode to introduce key material
+based on unspecified external authentication data (in our case derived
+from something like the user password or PIN), without requiring
+usermode to do a separate encryption pass.
+
+Matthew also documented issues his series had [2] related to generating
+fake images by booting alternate kernels without the PCR23 limiting.
+With access to PCR23 on the same machine, usermode can create fake
+hibernate images that are indistinguishable to the new kernel from
+genuine ones. His post outlines a solution that involves adding more
+PCRs into the creation data and policy, with some gyrations to make this
+work well on a standard PC.
+
+Our approach would be similar: on our machines PCR 0 indicates whether
+the system is booted in secure/verified mode or developer mode. By
+adding PCR0 to the policy, we can reject hibernate images made in
+developer mode while in verified mode (or vice versa).
+
+Additionally, mixing in the user authentication data limits both
+data exfiltration attacks (eg a stolen laptop) and forged hibernation
+image attacks to attackers that already know the authentication data (eg
+user's password). This, combined with our relatively sealed userspace
+(dm-verity on the rootfs), and some judicious clearing of the hibernate
+image (such as across an OS update) further reduce the risk of an online
+attack. The remaining attack space of a forgery from someone with
+physical access to the device and knowledge of the authentication data
+is out of scope for us, given that flipping to developer mode or
+reflashing RO firmware trivially achieves the same thing.
+
+A couple of patches still need to be written on top of this series. The
+generalized functionality to OR in additional PCRs via Kconfig (like PCR
+0 or 5) still needs to be added. We'll also need a patch that disallows
+unencrypted forms of resume from hibernation, to fully close the door
+to malicious userspace. However, I wanted to get this series out first
+and get reactions from upstream before continuing to add to it.
+
+[1] https://patchwork.kernel.org/project/linux-pm/cover/20210220013255.1083202-1-matthewgarrett@google.com/
+[2] https://mjg59.dreamwidth.org/58077.html
+
+Changes in v5:
+ - Change to co-developed by Matthew (Kees)
+ - Change tags on RESTRICT_PCR patch (Kees)
+ - Rename to TCG_TPM2_RESTRICT_PCR
+ - Do nothing on TPM1.2 devices (Jarkko, Doug)
+ - Factored some math out to a helper function (Kees)
+ - Constified src in tpm2_key_encode().
+ - Make Matthew's tag match author
+ - Removed default n in Kconfig (Kees)
+ - Expanded commit message (Jarkko)
+ - Use Suggested-by tag instead of made up Sourced-from (Kees)
+ - ENCRYPTED_HIBERNATION should depend on TCG_TPM2_RESTRCT_PCR
+ - Remove pad struct member (Kees)
+ - Use a struct to access creation data (Kees)
+ - Build PCR bitmask programmatically in creation data (Kees)
+
+Changes in v4:
+ - Open code tpm2_pcr_reset implementation in tpm-interface.c (Jarkko)
+ - Rename interface symbol to tpm2_pcr_reset, fix kerneldocs (Jarkko)
+ - Augment the commit message (Jarkko)
+ - Local ordering and whitespace changes (Jarkko)
+ - s/tpm_pcr_reset/tpm2_pcr_reset/ due to change in other patch
+ - Variable ordering and whitespace fixes (Jarkko)
+ - Add NULL check explanation in teardown (Jarkko)
+ - Change strlen+1 to sizeof for static buffer (Jarkko)
+ - Fix nr_allocated_banks loop overflow (found via KASAN)
+ - Local variable reordering (Jarkko)
+ - Local variable ordering (Jarkko)
+
+Changes in v3:
+ - Unify tpm1/2_pcr_reset prototypes (Jarkko)
+ - Wait no, remove the TPM1 stuff altogether (Jarkko)
+ - Remove extra From tag and blank in commit msg (Jarkko).
+ - Split find_and_validate_cc() export to its own patch (Jarkko)
+ - Rename tpm_find_and_validate_cc() to tpm2_find_and_validate_cc().
+ - Fix up commit message (Jarkko)
+ - tpm2_find_and_validate_cc() was split (Jarkko)
+ - Simply fully restrict TPM1 since v2 failed to account for tunnelled
+   transport sessions (Stefan and Jarkko).
+ - Fix SoB and -- note ordering (Kees)
+ - Add comments describing the TPM2 spec type names for the new fields
+   in tpm2key.asn1 (Kees)
+ - Add len buffer checks in tpm2_key_encode() (Kees)
+ - Clarified creationpcrs documentation (Ben)
+ - Changed funky tag to suggested-by (Kees). Matthew, holler if you want
+   something different.
+ - ENCRYPTED_HIBERNATION needs TRUSTED_KEYS builtin for
+   key_type_trusted.
+ - Remove KEYS dependency since it's covered by TRUSTED_KEYS (Kees)
+ - Changed funky tag to Co-developed-by (Kees). Matthew, holler if you
+   want something different.
+ - Changed funky tag to Co-developed-by (Kees)
+
+Changes in v2:
+ - Fixed sparse warnings
+ - Adjust hash len by 2 due to new ASN.1 storage, and add underflow
+   check.
+ - Rework load/create_kernel_key() to eliminate a label (Andrey)
+ - Call put_device() needed from calling tpm_default_chip().
+ - Add missing static on snapshot_encrypted_byte_count()
+ - Fold in only the used kernel key bytes to the user key.
+ - Make the user key length 32 (Eric)
+ - Use CRYPTO_LIB_SHA256 for less boilerplate (Eric)
+ - Fixed some sparse warnings
+ - Use CRYPTO_LIB_SHA256 to get rid of sha256_data() (Eric)
+ - Adjusted offsets due to new ASN.1 format, and added a creation data
+   length check.
+ - Fix sparse warnings
+ - Fix session type comment (Andrey)
+ - Eliminate extra label in get/create_kernel_key() (Andrey)
+ - Call tpm_try_get_ops() before calling tpm2_flush_context().
+
+Evan Green (10):
+  tpm: Add support for in-kernel resetting of PCRs
+  tpm: Export and rename tpm2_find_and_validate_cc()
+  tpm: Allow PCR 23 to be restricted to kernel-only use
+  security: keys: trusted: Include TPM2 creation data
+  security: keys: trusted: Verify creation data
+  PM: hibernate: Add kernel-based encryption
+  PM: hibernate: Use TPM-backed keys to encrypt image
+  PM: hibernate: Mix user key in encrypted hibernate
+  PM: hibernate: Verify the digest encryption key
+  PM: hibernate: seal the encryption key with a PCR policy
+
+Matthew Garrett (1):
+  security: keys: trusted: Allow storage of PCR values in creation data
+
+ Documentation/power/userland-swsusp.rst       |    8 +
+ .../security/keys/trusted-encrypted.rst       |    6 +
+ drivers/char/tpm/Kconfig                      |   12 +
+ drivers/char/tpm/tpm-dev-common.c             |    6 +
+ drivers/char/tpm/tpm-interface.c              |   47 +
+ drivers/char/tpm/tpm.h                        |   15 +
+ drivers/char/tpm/tpm2-cmd.c                   |   29 +-
+ drivers/char/tpm/tpm2-space.c                 |    8 +-
+ include/keys/trusted-type.h                   |    9 +
+ include/linux/tpm.h                           |   19 +
+ include/uapi/linux/suspend_ioctls.h           |   28 +-
+ kernel/power/Kconfig                          |   15 +
+ kernel/power/Makefile                         |    1 +
+ kernel/power/power.h                          |    1 +
+ kernel/power/snapenc.c                        | 1105 +++++++++++++++++
+ kernel/power/snapshot.c                       |    5 +
+ kernel/power/user.c                           |   44 +-
+ kernel/power/user.h                           |  117 ++
+ security/keys/trusted-keys/tpm2key.asn1       |   15 +-
+ security/keys/trusted-keys/trusted_tpm1.c     |    9 +
+ security/keys/trusted-keys/trusted_tpm2.c     |  355 +++++-
+ 21 files changed, 1797 insertions(+), 57 deletions(-)
+ create mode 100644 kernel/power/snapenc.c
+ create mode 100644 kernel/power/user.h
+
+-- 
+2.38.1.431.g37b22c650d-goog
+
