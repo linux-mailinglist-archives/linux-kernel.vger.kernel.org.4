@@ -2,110 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC0F66258A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CCF6258B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:50:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233280AbiKKKsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 05:48:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
+        id S233311AbiKKKuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 05:50:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbiKKKsG (ORCPT
+        with ESMTP id S233368AbiKKKuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 05:48:06 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A538064CF;
-        Fri, 11 Nov 2022 02:48:05 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 4868320199;
-        Fri, 11 Nov 2022 10:48:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1668163684; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6WEAmxBHjoiaTFMT7VLwFHXkqROAYQK5hPFehSseOMw=;
-        b=rFyyoP0Yfoo8+wN9p4PS9adB9qj15yDj1qh832osE3tT6fbVlQqKp+AA2zdn2vX/16O6t3
-        4JjnVaU8nu9z7XBWkvf39A9eNBEboLxOrEtCBfy1txRk7oaDWt3LCwJLsD3+v/y6FMZNRr
-        0xlDN7KMqZ493cLJ05VM0gSLOo3da9c=
-Received: from suse.cz (unknown [10.100.208.146])
+        Fri, 11 Nov 2022 05:50:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC735F94;
+        Fri, 11 Nov 2022 02:50:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CD94A2C143;
-        Fri, 11 Nov 2022 10:48:03 +0000 (UTC)
-Date:   Fri, 11 Nov 2022 11:48:03 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Tom Rix <trix@redhat.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH printk v3 33/40] printk, xen: fbfront: create/use safe
- function for forcing preferred
-Message-ID: <Y24oY5PDIuQbN06R@alley>
-References: <20221107141638.3790965-1-john.ogness@linutronix.de>
- <20221107141638.3790965-34-john.ogness@linutronix.de>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59BE3B8258E;
+        Fri, 11 Nov 2022 10:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 120E9C433C1;
+        Fri, 11 Nov 2022 10:50:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668163817;
+        bh=CG33xjcu8GCUYHgP7+Ta7yNZMKpwfbVL52EN3gJl4xE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=AHLKxSolLtq3ZXZNxz3LylDroICD5Jrw/A2yWcgfGTKO318q9pqeFPIe5VpbVTKeV
+         6Y7YGQgJc0ihF38YgokPc9krRfiopfXH/dx05x+EtzJ1RXv5PN/gLwswzQ8u1dZB0K
+         L73Zx9CVATuhYQ69e/5kmtPEWRy3zDWa+T79NDFTY4dZZd/DHnlTZA7N+pCLjtLUwl
+         MdWWiW3eHfdC7FFHTsdblMxt9kKF4HfpsPvI6DltF/6ly1dNgD8Ms79JZGjVYrR+y9
+         knEbXvX6U1EwpTOW02kXpKgbpoefp2zeMGolxf9t+/QUfAeGR6KJORKMQV3cmgoEj9
+         2cVnyRvI8rmdw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F21F7C395FE;
+        Fri, 11 Nov 2022 10:50:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107141638.3790965-34-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v6 0/8] Extend TC key support for Sparx5 IS2 VCAP
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166816381698.5678.8071650741031013684.git-patchwork-notify@kernel.org>
+Date:   Fri, 11 Nov 2022 10:50:16 +0000
+References: <20221109114116.3612477-1-steen.hegelund@microchip.com>
+In-Reply-To: <20221109114116.3612477-1-steen.hegelund@microchip.com>
+To:     Steen Hegelund <steen.hegelund@microchip.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, UNGLinuxDriver@microchip.com,
+        rdunlap@infradead.org, casper.casan@gmail.com,
+        rmk+kernel@armlinux.org.uk, wanjiabing@vivo.com, nhuck@google.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, daniel.machon@microchip.com,
+        horatiu.vultur@microchip.com, lars.povlsen@microchip.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-11-07 15:22:31, John Ogness wrote:
-> With commit 9e124fe16ff2("xen: Enable console tty by default in domU
-> if it's not a dummy") a hack was implemented to make sure that the
-> tty console remains the console behind the /dev/console device. The
-> main problem with the hack is that, after getting the console pointer
-> to the tty console, it is assumed the pointer is still valid after
-> releasing the console_sem. This assumption is incorrect and unsafe.
+Hello:
+
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Wed, 9 Nov 2022 12:41:08 +0100 you wrote:
+> This provides extended tc flower filter key support for the Sparx5 VCAP
+> functionality.
 > 
-> Make the hack safe by introducing a new function
-> console_force_preferred_locked() and perform the full operation
-> under the console_list_lock.
+> It builds on top of the initial IS2 VCAP support found in this series:
 > 
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -3457,6 +3458,43 @@ int unregister_console(struct console *console)
->  }
->  EXPORT_SYMBOL(unregister_console);
->  
-> +/**
-> + * console_force_preferred_locked - force a registered console preferred
-> + * @con: The registered console to force preferred.
-> + *
-> + * Must be called under console_list_lock().
-> + */
-> +void console_force_preferred_locked(struct console *con)
-> +{
-> +	struct console *cur_pref_con;
+> https://lore.kernel.org/all/20221020130904.1215072-1-steen.hegelund@microchip.com/
+> 
+> [...]
 
-One more thing. It would make sense to check that it has
-really been called under console_list_lock():
+Here is the summary with links:
+  - [net-next,v6,1/8] net: microchip: sparx5: Differentiate IPv4 and IPv6 traffic in keyset config
+    https://git.kernel.org/netdev/net-next/c/30172a7241f8
+  - [net-next,v6,2/8] net: microchip: sparx5: Adding more tc flower keys for the IS2 VCAP
+    https://git.kernel.org/netdev/net-next/c/d6c2964db3fe
+  - [net-next,v6,3/8] net: microchip: sparx5: Find VCAP lookup from chain id
+    https://git.kernel.org/netdev/net-next/c/7de1dcadfaf9
+  - [net-next,v6,4/8] net: microchip: sparx5: Adding TC goto action and action checking
+    https://git.kernel.org/netdev/net-next/c/392d0ab04827
+  - [net-next,v6,5/8] net: microchip: sparx5: Match keys in configured port keysets
+    https://git.kernel.org/netdev/net-next/c/abc4010d1f6e
+  - [net-next,v6,6/8] net: microchip: sparx5: Let VCAP API validate added key- and actionfields
+    https://git.kernel.org/netdev/net-next/c/242df4f7f2cd
+  - [net-next,v6,7/8] net: microchip: sparx5: Add tc matchall filter and enable VCAP lookups
+    https://git.kernel.org/netdev/net-next/c/67456717012c
+  - [net-next,v6,8/8] net: microchip: sparx5: Adding KUNIT tests of key/action values in VCAP API
+    https://git.kernel.org/netdev/net-next/c/c956b9b318d9
 
-	lockdep_assert_console_list_lock_held();
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> +
-> +	if (!console_is_registered_locked(con))
-> +		return;
-> +
-> +	cur_pref_con = console_first();
-> +
-> +	/* Already preferred? */
-> +	if (cur_pref_con == con)
-> +		return;
-> +
 
-Best Regards,
-Petr
