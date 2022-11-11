@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CB8626312
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 21:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEEB4626315
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 21:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234500AbiKKUkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 15:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
+        id S234166AbiKKUka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 15:40:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231840AbiKKUkW (ORCPT
+        with ESMTP id S231840AbiKKUk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 15:40:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583BE845E7;
-        Fri, 11 Nov 2022 12:40:18 -0800 (PST)
+        Fri, 11 Nov 2022 15:40:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3A183BBA;
+        Fri, 11 Nov 2022 12:40:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0229EB827DA;
-        Fri, 11 Nov 2022 20:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7C47FC433D7;
-        Fri, 11 Nov 2022 20:40:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 288EF620EA;
+        Fri, 11 Nov 2022 20:40:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8BC8C433C1;
+        Fri, 11 Nov 2022 20:40:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668199215;
-        bh=MGPnWxh4tvBV+1Xxqjdq4EQiObbEg9pDz4uCpUSJLNo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=mRuuOmyXMHI1QHMbT3zpN17jMVaLaBPt6FvdljFLSd3lcCIyh4UgGWWchn+qS2CcU
-         04ZTzYEHH+4kRUavuFE8eQs2CxbqZrK5XgUt91ATkJULZRxgI/ZtZWzaabMUoLTZIJ
-         jRjDz/6nZXGFQ6EcBSHAP6ssihzHTh0Pfaxz46Br5tfBDgZB+ohoTcsqeQfnlpdbe7
-         N84if0ljui7fqzZJQ3Ojy/SIX5UQXoF7jpsAT2TM4Dd+STr0edSTwVVsH6+8rpXNzV
-         bJ8HVjN4w/YXUWf1xed3S/6aQPwTvfLNJ+izjQTRoxyMbEMnMoPxaIDxI+sE2zRSMX
-         wiQcB0bN6dl+w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 61F68E270EF;
-        Fri, 11 Nov 2022 20:40:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2] selftests/bpf: Fix xdp_synproxy compilation failure in
- 32-bit arch
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166819921539.1528.5255567846899299026.git-patchwork-notify@kernel.org>
-Date:   Fri, 11 Nov 2022 20:40:15 +0000
-References: <20221111030836.37632-1-yangjihong1@huawei.com>
-In-Reply-To: <20221111030836.37632-1-yangjihong1@huawei.com>
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
-        tariqt@nvidia.com, maximmi@nvidia.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        s=k20201202; t=1668199224;
+        bh=7WEo0XEdF37ad3EKSE0JnRvIRzSv8as0e854gPjKdVs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gS9iygnD8njjdMi9uvK01Y9cMjjVNQSpj3WQldG5XseUPMgMhAmebjMBmKPe1bvn7
+         Xw4ZmqaUPhBUpRgFsrHJfzAlTh9t62zJ88V8D+2Knp5VDYD/MZ9kraYoMixooNXB50
+         7r+q0ano1GSTBnsUJTPLF8T2Cta/I71/yNqdTIQQaMTsbPRL7tn/SrMjL5C9PpOJBK
+         0dYCN/LBqIgyacmGf8HzQ4mU5A+hzCDxBx6ObVVrry2usrGXsgAe2kzZR337bBgd4c
+         he1HYE6jo+YIYwsw07r0cnGw4FFx40dFKsgbPzgTGmFcCBaGRU7lF3fFTHf6eGt2UU
+         g8O3Y7EET5Tgg==
+Date:   Fri, 11 Nov 2022 14:40:21 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/9] arm64: dts: qcom: sc8280xp-crd: enable WiFi
+ controller
+Message-ID: <20221111204021.myjms5c2rntu4a76@builder.lan>
+References: <20221110103558.12690-1-johan+linaro@kernel.org>
+ <20221110103558.12690-7-johan+linaro@kernel.org>
+ <20221110113513.GA18247@thinkpad>
+ <Y254AvMKyDQ+tY0q@hovoldconsulting.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y254AvMKyDQ+tY0q@hovoldconsulting.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,32 +63,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Fri, 11 Nov 2022 11:08:36 +0800 you wrote:
-> xdp_synproxy fails to be compiled in the 32-bit arch, log is as follows:
+On Fri, Nov 11, 2022 at 05:27:46PM +0100, Johan Hovold wrote:
+> On Thu, Nov 10, 2022 at 05:05:13PM +0530, Manivannan Sadhasivam wrote:
+> > On Thu, Nov 10, 2022 at 11:35:55AM +0100, Johan Hovold wrote:
+> > > Enable the Qualcomm QCNFA765 Wireless Network Adapter connected to
+> > > PCIe4.
+> > > 
+> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > ---
+> > >  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 65 +++++++++++++++++++++++
+> > >  1 file changed, 65 insertions(+)
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> > > index 5b9e37a16f9f..ab5b0aadeead 100644
+> > > --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> > > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> > > @@ -81,6 +81,22 @@ vreg_misc_3p3: regulator-misc-3p3 {
+> > >  		regulator-always-on;
+> > >  	};
+> > >  
+> > > +	vreg_wlan: regulator-wlan {
+> > > +		compatible = "regulator-fixed";
+> > > +
+> > > +		regulator-name = "VCC_WLAN_3R9";
+> > > +		regulator-min-microvolt = <3900000>;
+> > > +		regulator-max-microvolt = <3900000>;
+> > > +
+> > > +		gpio = <&pmr735a_gpios 1 GPIO_ACTIVE_HIGH>;
+> > > +		enable-active-high;
+> > > +
+> > > +		pinctrl-names = "default";
+> > > +		pinctrl-0 = <&hastings_reg_en>;
+> > 
+> > Hastings is the family name of QCA639x WLAN chipsets. I don't think it would be
+> > applicable here. Please use "wlan_reg_en" as that matches the convention used
+> > throughout this file.
 > 
->   xdp_synproxy.c: In function 'parse_options':
->   xdp_synproxy.c:175:36: error: left shift count >= width of type [-Werror=shift-count-overflow]
->     175 |                 *tcpipopts = (mss6 << 32) | (ttl << 24) | (wscale << 16) | mss4;
->         |                                    ^~
->   xdp_synproxy.c: In function 'syncookie_open_bpf_maps':
->   xdp_synproxy.c:289:28: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
->     289 |                 .map_ids = (__u64)map_ids,
->         |                            ^
+> The pin name here comes from the schematics, which is what we should use
+> for naming when we can.
 > 
-> [...]
 
-Here is the summary with links:
-  - [bpf,v2] selftests/bpf: Fix xdp_synproxy compilation failure in 32-bit arch
-    https://git.kernel.org/bpf/bpf-next/c/e4c9cf0ce8c4
+Following the naming in the schematics is the right thing to do.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Regards,
+Bjorn
