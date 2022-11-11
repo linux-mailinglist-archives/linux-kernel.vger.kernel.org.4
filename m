@@ -2,110 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF90E62568E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F006256C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233498AbiKKJYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
+        id S233803AbiKKJ0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:26:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233554AbiKKJYL (ORCPT
+        with ESMTP id S233704AbiKKJ0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:24:11 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE7C6B21A
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:24:10 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 053065C012F;
-        Fri, 11 Nov 2022 04:24:10 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Fri, 11 Nov 2022 04:24:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1668158650; x=1668245050; bh=jvKlA3OV7r
-        FFevtmIcLs9NyKHMfzqV49E7rrc7UO0i8=; b=cbuvEWdJdWX4sBkxvwJSnw673d
-        3OMv8RK4/qxiMbEXznonexqV+zUHVFD9HPH4n8sld0q7z0F0a28DG4PB23RflHCJ
-        8+iUajwLRZt3ERG7RkpsWRYHckHLq2QeRBzf9KIPB0+vzXQFkXkKpbeUs2xc47OK
-        MBmj2n5iWDM0l0K27s1dT6VKj8/hBtCat/SYX6sPQ5F+aOc6RaJsHgD75oMAAb2b
-        NXHgs4azYTEP7jlUsV6dPVH7vFgctJBeIegDNRWjfrfxtV4e3x5HSuqKMkFSwSmG
-        5RZWd5/KJQCsRbM29y06nMjkp5D9krjfibXqjwr40HNHHABhV4iybu066KVg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668158650; x=1668245050; bh=jvKlA3OV7rFFevtmIcLs9NyKHMfz
-        qV49E7rrc7UO0i8=; b=ilPKICn0TGNUOQHH867mpQv9P93PSX8kBW+A1rxFZgxz
-        w9lXcnrqrisIvJpOqouUbSrYbUruLvkKmE3kb0OfHd/s5i1CY8XFkt5nyqHtuawI
-        fhlx+pecP9jzgINgRVy0FxnHnzLbqM0zzSqqXq89Gzi1uAOIlBtDBhsIoykDoe0t
-        Q5DM4ViJ/x0ogEpyP2ZTWQ27U99SF9wl0dVy/TqO/36Z4CrI2f8yrBJtIKpHXdyz
-        JxB65SrM8vJF6yTpgkyb4u7szqMLaPsz1bLdZWwBIKBnqd4W7FrWpGXgG+N9E66l
-        bOx1zuHPOjDan0aui91djAuJruwNq33nZxbBd/mblw==
-X-ME-Sender: <xms:uRRuY_WiLqlTc2b33y9o7tXV1kzlA-W-aJ-K1DekvyFrIlSlQAxDVQ>
-    <xme:uRRuY3mcFef8lP5wSKftrnQu0ZSGA99Vg89k4aqt0p9fvafJSCu3Js82qlQjAmKIR
-    aTwTdxMoQiytwxAnHM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeeigddtfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
-    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:uRRuY7attPPnxGseAUxx8xFZxobNC2y4CWqpmt0oBKP4H9thB5vaSQ>
-    <xmx:uRRuY6XmqlR9yclPT0kh5fwlyVydZDSeMPLguXgz6Rl7m2RL7TXQjg>
-    <xmx:uRRuY5k2XIpya8bAnbGfVdNOn7fEnuouS-lQ55FoQeMtIcm8PrW_xQ>
-    <xmx:uhRuY_jOIXMVeZOYreXts0mUusF6lS7ErHnPDrAb8xOqnEksoEVpbg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id AA9B2B60086; Fri, 11 Nov 2022 04:24:09 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <115eb408-1c59-49d6-9fca-c7b56431f472@app.fastmail.com>
-In-Reply-To: <CACPK8XdkXaVXzabFM-g6xQ1CBjZheiP9oFrYk5o1__QR7WBcdw@mail.gmail.com>
-References: <20221110013438.16212-1-zev@bewilderbeest.net>
- <CACPK8XdkXaVXzabFM-g6xQ1CBjZheiP9oFrYk5o1__QR7WBcdw@mail.gmail.com>
-Date:   Fri, 11 Nov 2022 10:23:48 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Joel Stanley" <joel@jms.id.au>,
-        "Zev Weiss" <zev@bewilderbeest.net>
-Cc:     linux-aspeed@lists.ozlabs.org, "Andrew Jeffery" <andrew@aj.id.au>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: aspeed: Update git tree URL
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Nov 2022 04:26:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E876EB49;
+        Fri, 11 Nov 2022 01:26:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 973AC61F0C;
+        Fri, 11 Nov 2022 09:26:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAA72C433B5;
+        Fri, 11 Nov 2022 09:26:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668158764;
+        bh=WEY2NyK7kGYSFZQ1MVYoHe3uZ9puPVnYkW8PQVcfqcw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VY1jZEd7SGw28EB7kPDbF3wRCNldktRQayjUTL47oIR4d3Xod0RdEaAqy56N8MwaT
+         lVXsHZFNlvslLGu4qNFn3Cy9e4X7z3SZpnlgenVHycnyJ4A4A7r1M2nxDo84SeinMk
+         DcmUb4Ftyf8kk3O8cVWcMqpX6xJJE9amaZErjraZtX1gKk2FEVlTy8jxiVVMkjE67A
+         PiU8qgesJaIxxK9jIcOpqF3tDNaU9XMcvtG0/2NNaLO7lICrAdDt397UuIuZaWmuK7
+         6fIYwBbxSbqf1mp4pX3Joe3SC5N9bBhtKC1lX0Z3zoCiifo36ATH+VymDJzJC5qi2D
+         cDGV+oEYU7w2w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1otQI3-0002kn-Oy; Fri, 11 Nov 2022 10:25:36 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH 00/14] phy: qcom-qmp-combo: fix sc8280xp binding (set 3/3)
+Date:   Fri, 11 Nov 2022 10:24:43 +0100
+Message-Id: <20221111092457.10546-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.37.4
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022, at 06:58, Joel Stanley wrote:
-> On Thu, 10 Nov 2022 at 01:34, Zev Weiss <zev@bewilderbeest.net> wrote:
->>
->> The description for joel/aspeed.git on git.kernel.org currently says:
->>
->>     Old Aspeed tree. Please see joel/bmc.git
->>
->> Let's update MAINTAINERS accordingly.
->>
->> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
->
-> Thanks!
->
-> Acked-by: Joel Stanley <joel@jms.id.au>
->
-> Arnd, does the soc team have a branch for these?
->
+This series fixes the USB-DP PHY devicetree binding for SC8280XP and
+adds support for the new updated binding to the driver.
 
-I usually treat updates to the MAITNAINERS file as bugfixes and
-merge them for the current release, as there is generally no risk
-of regressions, and it's better to have up-to-date information
-in the release kernel.
+As the full series including the preparatory parts is over forty patches
+and I've been posting this in three parts of which this is the last one.
+In an effort to get all of these into 6.2, I've also submitted all three
+series before waiting for the previous ones to be applied. Parts one and
+two can be found here:
 
-      Arnd
+	https://lore.kernel.org/lkml/20221111084255.8963-1-johan+linaro@kernel.org/
+	https://lore.kernel.org/lkml/20221111085643.9478-1-johan+linaro@kernel.org/
+
+This last series adds a new binding for SC8280XP that drops the legacy
+child node and the (incomplete) description of register subregions.
+
+As the current bindings are both incomplete and incorrect it may be
+a good idea to update also the other platforms currently supported by
+this driver to the new binding scheme. The driver can support both
+schemes during a transitions period before removing the corresponding
+code (dt parsing and clock-provider registration).
+
+Johan
+
+
+Johan Hovold (14):
+  dt-bindings: phy: qcom,qmp-usb3-dp: rename current bindings
+  dt-bindings: phy: qcom,qmp-usb3-dp: fix sc8280xp bindings
+  phy: qcom-qmp-combo: drop v4 reference-clock source
+  phy: qcom-qmp-combo: restructure PHY creation
+  phy: qcom-qmp-combo: register clocks sooner
+  phy: qcom-qmp-combo: generate pipe clock name
+  phy: qcom-qmp-combo: drop redundant clock structure
+  phy: qcom-qmp-combo: drop redundant clock allocation
+  phy: qcom-qmp-combo: add clock registration helper
+  phy: qcom-qmp-combo: separate clock and provider registration
+  phy: qcom-qmp-combo: clean up DP clock callbacks
+  phy: qcom-qmp-combo: rename common-register pointers
+  phy: qcom-qmp-combo: rename DP_PHY register pointer
+  phy: qcom-qmp-combo: add support for updated sc8280xp binding
+
+ ....yaml => qcom,sc7180-qmp-usb3-dp-phy.yaml} |  23 +-
+ .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml    | 111 ++++
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c     | 532 +++++++++++-------
+ 3 files changed, 441 insertions(+), 225 deletions(-)
+ rename Documentation/devicetree/bindings/phy/{qcom,qmp-usb3-dp-phy.yaml => qcom,sc7180-qmp-usb3-dp-phy.yaml} (92%)
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+
+-- 
+2.37.4
+
