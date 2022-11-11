@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994F1625EC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC70625ECC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234246AbiKKPxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 10:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
+        id S234343AbiKKPxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 10:53:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234081AbiKKPxQ (ORCPT
+        with ESMTP id S234222AbiKKPxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 10:53:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91CEFDB;
-        Fri, 11 Nov 2022 07:53:15 -0800 (PST)
+        Fri, 11 Nov 2022 10:53:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE9E99;
+        Fri, 11 Nov 2022 07:53:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A5C762020;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A36EB82665;
+        Fri, 11 Nov 2022 15:53:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65EBFC43470;
         Fri, 11 Nov 2022 15:53:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76FBAC433D7;
-        Fri, 11 Nov 2022 15:53:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668181994;
-        bh=827LrRq+aAVe6d/B8oWF9ujEZQmWxfy7tuvicaZNH6s=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Wrq/F6/2OcyhhipMfxPcuZx+8WO0euR/B8TXvoqhNYdi2XfkqOQ+BrSBnTRp6ZE7B
-         H7vC4maxMxrLisUZ4KY+LKeInE2UxhjskatPMp+wJ/Fys8RLh7RGf/n2tvIjO2RTHB
-         ty37kNv8asVzAxP+QBrQmX8FOhIfRLM8qf4o+KlJ7oyUDmBxILUjPDtQlWqZpwX/AJ
-         /dkKaNt/rHzgI1bB6QUKmv+RrSksXnnrwgQZEcSsIikpcRbOg1N5J4sIIHQbRtXNHd
-         7jA+4OPNl/rlgb3fW54xBHvjsXVti7XFYGPygWXp892VFDfA2SzcMg7Zbryr5UlkLa
-         /g+MtYhszn7zg==
+        s=k20201202; t=1668181997;
+        bh=EAiazw6z7s7c/6e5fgzEglD4gd00NZP2wBTixtgaPaE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DH5mJP6C2h3v9q5UH+aN1OQ/rtT6FJsH9ZOWBD/q6Gtd23tuP+ELdQrrWBdKkhIMe
+         23DLpKCbT1Tw9rZ6rB+H4vJvWQRUKkdwRSgtqbPE1LPo95aUrYIBGT1N38nC3FtHO+
+         GMBfqVeXnszuX+Mf+LobwBIAqM1RjCsBF7SSYUxQs2ZcWrlCGm6xi8h+7WyCmnnTUt
+         phJfIwu1wVP7t7Qq4v57POOYyDuIWhJ3Y/Myn623ZObyw1zW2ZCv0TVPKiLSN8HGlt
+         nsLq/E5AC6/K72RDnHIskIxIREA1dJM8S6RKcG+vwE8I/nxBl8Oa1d0T0yZUm0NkIL
+         teLwRB8GGWyCw==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         linux-trace-devel@vger.kernel.org
 Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V2 0/3] verification/rv: Add rv tool
-Date:   Fri, 11 Nov 2022 16:53:04 +0100
-Message-Id: <cover.1668180100.git.bristot@kernel.org>
+Subject: [PATCH V2 1/3] rv: Add rv tool
+Date:   Fri, 11 Nov 2022 16:53:05 +0100
+Message-Id: <fb51184f3b95aea0d7bfdc33ec09f4153aee84fa.1668180100.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <cover.1668180100.git.bristot@kernel.org>
+References: <cover.1668180100.git.bristot@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -53,10 +55,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the (user-space) runtime verification tool named rv.
+This is the (user-space) runtime verification tool, named rv.
 
 This tool aims to be the interface for in-kernel rv monitors, as
-well as the home for user-space controlled monitors.
+well as the home for monitors in user-space (online asynchronous),
+and in *eBPF.
 
 The tool receives a command as the first argument, the current
 commands are:
@@ -67,58 +70,653 @@ commands are:
 Each monitor is an independent piece of software inside the
 tool and can have their own arguments.
 
-Changes from v1:
-  - typos and format
-  - fixed __ikm_read_enable() value check in ikm_read_enable()
-  - adjust patch 2 log
-  - improved function comments (mainly those /**).
+There is no monitor implemented in this patch, it only
+adds the basic structure of the tool, based on rtla.
 
-Daniel Bristot de Oliveira (3):
-  rv: Add rv tool
-  tools/rv: Add in-kernel monitor interface
-  Documentation/rv: Add verification/rv man pages
+  # rv --help
+    rv version 6.1.0-rc4: help
 
- Documentation/tools/index.rst              |   1 +
- Documentation/tools/rv/Makefile            |  52 ++
- Documentation/tools/rv/common_appendix.rst |  16 +
- Documentation/tools/rv/common_ikm.rst      |  21 +
- Documentation/tools/rv/index.rst           |  24 +
- Documentation/tools/rv/rv-list.rst         |  43 ++
- Documentation/tools/rv/rv-mon-wip.rst      |  44 ++
- Documentation/tools/rv/rv-mon-wwnr.rst     |  43 ++
- Documentation/tools/rv/rv-mon.rst          |  55 ++
- Documentation/tools/rv/rv.rst              |  63 ++
- tools/verification/rv/Makefile             | 141 +++++
- tools/verification/rv/README.txt           |  38 ++
- tools/verification/rv/include/in_kernel.h  |   3 +
- tools/verification/rv/include/rv.h         |  12 +
- tools/verification/rv/include/trace.h      |  16 +
- tools/verification/rv/include/utils.h      |   8 +
- tools/verification/rv/src/in_kernel.c      | 698 +++++++++++++++++++++
- tools/verification/rv/src/rv.c             | 188 ++++++
- tools/verification/rv/src/trace.c          | 133 ++++
- tools/verification/rv/src/utils.c          |  47 ++
- 20 files changed, 1646 insertions(+)
- create mode 100644 Documentation/tools/rv/Makefile
- create mode 100644 Documentation/tools/rv/common_appendix.rst
- create mode 100644 Documentation/tools/rv/common_ikm.rst
- create mode 100644 Documentation/tools/rv/index.rst
- create mode 100644 Documentation/tools/rv/rv-list.rst
- create mode 100644 Documentation/tools/rv/rv-mon-wip.rst
- create mode 100644 Documentation/tools/rv/rv-mon-wwnr.rst
- create mode 100644 Documentation/tools/rv/rv-mon.rst
- create mode 100644 Documentation/tools/rv/rv.rst
+    usage: rv command [-h] [command_options]
+
+	-h/--help: print this menu
+
+	command: run one of the following command:
+	  list: list all available monitors
+	  mon:  run a monitor
+
+	[command options]: each command has its own set of options
+		           run rv command -h for further information
+
+*dot2bpf is the next patch set, depends on this, doing cleanups.
+
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+---
+ tools/verification/rv/Makefile        | 119 +++++++++++++++++
+ tools/verification/rv/README.txt      |  38 ++++++
+ tools/verification/rv/include/rv.h    |  12 ++
+ tools/verification/rv/include/trace.h |  16 +++
+ tools/verification/rv/include/utils.h |   8 ++
+ tools/verification/rv/src/rv.c        | 185 ++++++++++++++++++++++++++
+ tools/verification/rv/src/trace.c     | 133 ++++++++++++++++++
+ tools/verification/rv/src/utils.c     |  47 +++++++
+ 8 files changed, 558 insertions(+)
  create mode 100644 tools/verification/rv/Makefile
  create mode 100644 tools/verification/rv/README.txt
- create mode 100644 tools/verification/rv/include/in_kernel.h
  create mode 100644 tools/verification/rv/include/rv.h
  create mode 100644 tools/verification/rv/include/trace.h
  create mode 100644 tools/verification/rv/include/utils.h
- create mode 100644 tools/verification/rv/src/in_kernel.c
  create mode 100644 tools/verification/rv/src/rv.c
  create mode 100644 tools/verification/rv/src/trace.c
  create mode 100644 tools/verification/rv/src/utils.c
 
+diff --git a/tools/verification/rv/Makefile b/tools/verification/rv/Makefile
+new file mode 100644
+index 000000000000..1de111ac2641
+--- /dev/null
++++ b/tools/verification/rv/Makefile
+@@ -0,0 +1,119 @@
++NAME	:=	rv
++# Follow the kernel version
++VERSION :=	$(shell cat VERSION 2> /dev/null || make -sC ../../.. kernelversion | grep -v make)
++
++# From libtracefs:
++# Makefiles suck: This macro sets a default value of $(2) for the
++# variable named by $(1), unless the variable has been set by
++# environment or command line. This is necessary for CC and AR
++# because make sets default values, so the simpler ?= approach
++# won't work as expected.
++define allow-override
++  $(if $(or $(findstring environment,$(origin $(1))),\
++            $(findstring command line,$(origin $(1)))),,\
++    $(eval $(1) = $(2)))
++endef
++
++# Allow setting CC and AR, or setting CROSS_COMPILE as a prefix.
++$(call allow-override,CC,$(CROSS_COMPILE)gcc)
++$(call allow-override,AR,$(CROSS_COMPILE)ar)
++$(call allow-override,STRIP,$(CROSS_COMPILE)strip)
++$(call allow-override,PKG_CONFIG,pkg-config)
++$(call allow-override,LD_SO_CONF_PATH,/etc/ld.so.conf.d/)
++$(call allow-override,LDCONFIG,ldconfig)
++
++INSTALL	=	install
++MKDIR	=	mkdir
++FOPTS	:=	-flto=auto -ffat-lto-objects -fexceptions -fstack-protector-strong \
++		-fasynchronous-unwind-tables -fstack-clash-protection
++WOPTS	:= 	-Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -Wno-maybe-uninitialized
++
++TRACEFS_HEADERS	:= $$($(PKG_CONFIG) --cflags libtracefs)
++
++CFLAGS	:=	-O -g -DVERSION=\"$(VERSION)\" $(FOPTS) $(MOPTS) $(WOPTS) $(TRACEFS_HEADERS) $(EXTRA_CFLAGS) -I include
++LDFLAGS	:=	-ggdb $(EXTRA_LDFLAGS)
++LIBS	:=	$$($(PKG_CONFIG) --libs libtracefs)
++
++SRC	:=	$(wildcard src/*.c)
++HDR	:=	$(wildcard src/*.h)
++OBJ	:=	$(SRC:.c=.o)
++DIRS	:=	src
++FILES	:=	Makefile README.txt
++CEXT	:=	bz2
++TARBALL	:=	$(NAME)-$(VERSION).tar.$(CEXT)
++TAROPTS	:=	-cvjf $(TARBALL)
++BINDIR	:=	/usr/bin
++DATADIR	:=	/usr/share
++MANDIR	:=	$(DATADIR)/man
++LICDIR	:=	$(DATADIR)/licenses
++SRCTREE	:=	$(or $(BUILD_SRC),$(CURDIR))
++
++LIBTRACEEVENT_MIN_VERSION = 1.5
++LIBTRACEFS_MIN_VERSION = 1.3
++
++.PHONY:	all warnings show_warnings
++all:	warnings rv
++
++TEST_LIBTRACEEVENT = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEEVENT_MIN_VERSION) libtraceevent > /dev/null 2>&1 || echo n")
++ifeq ("$(TEST_LIBTRACEEVENT)", "n")
++WARNINGS = show_warnings
++MISSING_LIBS += echo "**   libtraceevent version $(LIBTRACEEVENT_MIN_VERSION) or higher";
++MISSING_PACKAGES += "libtraceevent-devel"
++MISSING_SOURCE += echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/ ";
++endif
++
++TEST_LIBTRACEFS = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEFS_MIN_VERSION) libtracefs > /dev/null 2>&1 || echo n")
++ifeq ("$(TEST_LIBTRACEFS)", "n")
++WARNINGS = show_warnings
++MISSING_LIBS += echo "**   libtracefs version $(LIBTRACEFS_MIN_VERSION) or higher";
++MISSING_PACKAGES += "libtracefs-devel"
++MISSING_SOURCE += echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/ ";
++endif
++
++define show_dependencies
++	@echo "********************************************";				\
++	echo "** NOTICE: Failed build dependencies";					\
++	echo "**";									\
++	echo "** Required Libraries:";							\
++	$(MISSING_LIBS)									\
++	echo "**";									\
++	echo "** Consider installing the latest libtracefs from your";			\
++	echo "** distribution, e.g., 'dnf install $(MISSING_PACKAGES)' on Fedora,";	\
++	echo "** or from source:";							\
++	echo "**";									\
++	$(MISSING_SOURCE)								\
++	echo "**";									\
++	echo "********************************************"
++endef
++
++show_warnings:
++	$(call show_dependencies);
++
++ifneq ("$(WARNINGS)", "")
++ERROR_OUT = $(error Please add the necessary dependencies)
++
++warnings: $(WARNINGS)
++	$(ERROR_OUT)
++endif
++
++rv: $(OBJ)
++	$(CC) -o rv $(LDFLAGS) $(OBJ) $(LIBS)
++
++.PHONY: install
++install:
++	$(MKDIR) -p $(DESTDIR)$(BINDIR)
++	$(INSTALL) rv -m 755 $(DESTDIR)$(BINDIR)
++	$(STRIP) $(DESTDIR)$(BINDIR)/rv
++
++.PHONY: clean tarball
++clean:
++	@test ! -f rv || rm rv
++	@test ! -f $(TARBALL) || rm -f $(TARBALL)
++	@rm -rf *~ $(OBJ) *.tar.$(CEXT)
++
++tarball: clean
++	rm -rf $(NAME)-$(VERSION) && mkdir $(NAME)-$(VERSION)
++	echo $(VERSION) > $(NAME)-$(VERSION)/VERSION
++	cp -r $(DIRS) $(FILES) $(NAME)-$(VERSION)
++	tar $(TAROPTS) --exclude='*~' $(NAME)-$(VERSION)
++	rm -rf $(NAME)-$(VERSION)
+diff --git a/tools/verification/rv/README.txt b/tools/verification/rv/README.txt
+new file mode 100644
+index 000000000000..e96be0dfff59
+--- /dev/null
++++ b/tools/verification/rv/README.txt
+@@ -0,0 +1,38 @@
++RV: Runtime Verification
++
++Runtime Verification (RV) is a lightweight (yet rigorous) method that
++complements classical exhaustive verification techniques (such as model
++checking and theorem proving) with a more practical approach for
++complex systems.
++
++The rv tool is the interface for a collection of monitors that aim
++analysing the logical and timing behavior of Linux.
++
++Installing RV
++
++RV depends on the following libraries and tools:
++
++ - libtracefs
++ - libtraceevent
++
++It also depends on python3-docutils to compile man pages.
++
++For development, we suggest the following steps for compiling rtla:
++
++  $ git clone git://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git
++  $ cd libtraceevent/
++  $ make
++  $ sudo make install
++  $ cd ..
++  $ git clone git://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git
++  $ cd libtracefs/
++  $ make
++  $ sudo make install
++  $ cd ..
++  $ cd $rv_src
++  $ make
++  $ sudo make install
++
++For further information, please see rv manpage and the kernel documentation:
++  Runtime Verification:
++    Documentation/trace/rv/runtime-verification.rst
+diff --git a/tools/verification/rv/include/rv.h b/tools/verification/rv/include/rv.h
+new file mode 100644
+index 000000000000..770fd6da3610
+--- /dev/null
++++ b/tools/verification/rv/include/rv.h
+@@ -0,0 +1,12 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define MAX_DESCRIPTION 1024
++#define MAX_DA_NAME_LEN	24
++
++struct monitor {
++	char name[MAX_DA_NAME_LEN];
++	char desc[MAX_DESCRIPTION];
++	int enabled;
++};
++
++int should_stop(void);
+diff --git a/tools/verification/rv/include/trace.h b/tools/verification/rv/include/trace.h
+new file mode 100644
+index 000000000000..8d89e8c303fa
+--- /dev/null
++++ b/tools/verification/rv/include/trace.h
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <tracefs.h>
++
++struct trace_instance {
++	struct tracefs_instance		*inst;
++	struct tep_handle		*tep;
++	struct trace_seq		*seq;
++};
++
++int trace_instance_init(struct trace_instance *trace, char *name);
++int trace_instance_start(struct trace_instance *trace);
++void trace_instance_destroy(struct trace_instance *trace);
++
++int collect_registered_events(struct tep_event *event, struct tep_record *record,
++			      int cpu, void *context);
+diff --git a/tools/verification/rv/include/utils.h b/tools/verification/rv/include/utils.h
+new file mode 100644
+index 000000000000..f24ae8282bd2
+--- /dev/null
++++ b/tools/verification/rv/include/utils.h
+@@ -0,0 +1,8 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define MAX_PATH		1024
++
++void debug_msg(const char *fmt, ...);
++void err_msg(const char *fmt, ...);
++
++extern int config_debug;
+diff --git a/tools/verification/rv/src/rv.c b/tools/verification/rv/src/rv.c
+new file mode 100644
+index 000000000000..a9ea1c891ce0
+--- /dev/null
++++ b/tools/verification/rv/src/rv.c
+@@ -0,0 +1,185 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * rv tool, the interface for the Linux kernel RV subsystem and home of
++ * user-space controlled monitors.
++ *
++ * Copyright (C) 2022 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
++ */
++
++#include <stdlib.h>
++#include <signal.h>
++#include <unistd.h>
++
++#include <trace.h>
++#include <utils.h>
++
++static int stop_session;
++
++/*
++ * stop_rv - tell monitors to stop
++ */
++static void stop_rv(int sig)
++{
++	stop_session = 1;
++}
++
++/**
++ * should_stop - check if the monitor should stop.
++ *
++ * Returns 1 if the monitor should stop, 0 otherwise.
++ */
++int should_stop(void)
++{
++	return stop_session;
++}
++
++/*
++ * rv_list - list all available monitors
++ */
++static void rv_list(int argc, char **argv)
++{
++	static const char *const usage[] = {
++		"",
++		"  usage: rv list [-h]",
++		"",
++		"	list all available monitors",
++		"",
++		"	-h/--help: print this menu",
++		NULL,
++	};
++	int i;
++
++	if (argc > 1) {
++		fprintf(stderr, "rv version %s\n", VERSION);
++
++		/* more than 1 is always usage */
++		for (i = 0; usage[i]; i++)
++			fprintf(stderr, "%s\n", usage[i]);
++
++		/* but only -h is valid */
++		if (!strcmp(argv[1], "-h") || !strcmp(argv[1], "--help"))
++			exit(0);
++		else
++			exit(1);
++	}
++
++	exit(0);
++}
++
++/*
++ * rv_mon - try to run a monitor passed as argument
++ */
++static void rv_mon(int argc, char **argv)
++{
++	char *monitor_name;
++	int i, run;
++
++	static const char *const usage[] = {
++		"",
++		"  usage: rv mon [-h] monitor [monitor options]",
++		"",
++		"	run a monitor",
++		"",
++		"	-h/--help: print this menu",
++		"",
++		"	monitor [monitor options]: the monitor, passing",
++		"	the arguments to the [monitor options]",
++		NULL,
++	};
++
++	/* requires at least one argument */
++	if (argc == 1) {
++
++		fprintf(stderr, "rv version %s\n", VERSION);
++
++		for (i = 0; usage[i]; i++)
++			fprintf(stderr, "%s\n", usage[i]);
++		exit(1);
++	} else if (!strcmp(argv[1], "-h") || !strcmp(argv[1], "--help")) {
++
++		fprintf(stderr, "rv version %s\n", VERSION);
++
++		for (i = 0; usage[i]; i++)
++			fprintf(stderr, "%s\n", usage[i]);
++		exit(0);
++	}
++
++	monitor_name = argv[1];
++	/*
++	 * Call all possible monitor implementations, looking
++	 * for the [monitor].
++	 */
++
++	if (!run)
++		err_msg("rv: monitor %s does not exist\n", monitor_name);
++	exit(!run);
++}
++
++static void usage(int exit_val, const char *fmt, ...)
++{
++	char message[1024];
++	va_list ap;
++	int i;
++
++	static const char *const usage[] = {
++		"",
++		"  usage: rv command [-h] [command_options]",
++		"",
++		"	-h/--help: print this menu",
++		"",
++		"	command: run one of the following command:",
++		"	  list: list all available monitors",
++		"	  mon:  run a monitor",
++		"",
++		"	[command options]: each command has its own set of options",
++		"		           run rv command -h for further information",
++		NULL,
++	};
++
++	va_start(ap, fmt);
++	vsnprintf(message, sizeof(message), fmt, ap);
++	va_end(ap);
++
++	fprintf(stderr, "rv version %s: %s\n", VERSION, message);
++
++	for (i = 0; usage[i]; i++)
++		fprintf(stderr, "%s\n", usage[i]);
++
++	exit(exit_val);
++}
++
++/*
++ * main - select which main sending the command
++ *
++ * main itself redirects the arguments to the sub-commands
++ * to handle the options.
++ *
++ * subcommands should exit.
++ */
++int main(int argc, char **argv)
++{
++	if (geteuid())
++		usage(1, "%s needs root permission", argv[0]);
++
++	if (argc <= 1)
++		usage(1, "%s requires a command", argv[0]);
++
++	if (!strcmp(argv[1], "-h") || !strcmp(argv[1], "--help"))
++		usage(0, "help");
++
++	if (!strcmp(argv[1], "list"))
++		rv_list(--argc, &argv[1]);
++
++	if (!strcmp(argv[1], "mon")) {
++		/*
++		 * monitor's main should monitor should_stop() function.
++		 * and exit.
++		 */
++		signal(SIGINT, stop_rv);
++
++		rv_mon(argc - 1, &argv[1]);
++	}
++
++	/* invalid sub-command */
++	usage(1, "%s does not know the %s command, old version?", argv[0], argv[1]);
++}
+diff --git a/tools/verification/rv/src/trace.c b/tools/verification/rv/src/trace.c
+new file mode 100644
+index 000000000000..2c7deed47f8d
+--- /dev/null
++++ b/tools/verification/rv/src/trace.c
+@@ -0,0 +1,133 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * trace helpers.
++ *
++ * Copyright (C) 2022 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
++ */
++
++#include <sys/sendfile.h>
++#include <tracefs.h>
++#include <signal.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <errno.h>
++
++#include <rv.h>
++#include <trace.h>
++#include <utils.h>
++
++/*
++ * create_instance - create a trace instance with *instance_name
++ */
++static struct tracefs_instance *create_instance(char *instance_name)
++{
++	return tracefs_instance_create(instance_name);
++}
++
++/*
++ * destroy_instance - remove a trace instance and free the data
++ */
++static void destroy_instance(struct tracefs_instance *inst)
++{
++	tracefs_instance_destroy(inst);
++	tracefs_instance_free(inst);
++}
++
++/**
++ * collect_registered_events - call the existing callback function for the event
++ *
++ * If an event has a registered callback function, call it.
++ * Otherwise, ignore the event.
++ *
++ * Returns 0 if the event was collected, 1 if the tool should stop collecting trace.
++ */
++int
++collect_registered_events(struct tep_event *event, struct tep_record *record,
++			  int cpu, void *context)
++{
++	struct trace_instance *trace = context;
++	struct trace_seq *s = trace->seq;
++
++	if (should_stop())
++		return 1;
++
++	if (!event->handler)
++		return 0;
++
++	event->handler(s, record, event, context);
++
++	return 0;
++}
++
++/**
++ * trace_instance_destroy - destroy and free a rv trace instance
++ */
++void trace_instance_destroy(struct trace_instance *trace)
++{
++	if (trace->inst) {
++		destroy_instance(trace->inst);
++		trace->inst = NULL;
++	}
++
++	if (trace->seq) {
++		free(trace->seq);
++		trace->seq = NULL;
++	}
++
++	if (trace->tep) {
++		tep_free(trace->tep);
++		trace->tep = NULL;
++	}
++}
++
++/**
++ * trace_instance_init - create an trace instance
++ *
++ * It is more than the tracefs instance, as it contains other
++ * things required for the tracing, such as the local events and
++ * a seq file.
++ *
++ * Note that the trace instance is returned disabled. This allows
++ * the tool to apply some other configs, like setting priority
++ * to the kernel threads, before starting generating trace entries.
++ *
++ * Returns 0 on success, non-zero otherwise.
++ */
++int trace_instance_init(struct trace_instance *trace, char *name)
++{
++	trace->seq = calloc(1, sizeof(*trace->seq));
++	if (!trace->seq)
++		goto out_err;
++
++	trace_seq_init(trace->seq);
++
++	trace->inst = create_instance(name);
++	if (!trace->inst)
++		goto out_err;
++
++	trace->tep = tracefs_local_events(NULL);
++	if (!trace->tep)
++		goto out_err;
++
++	/*
++	 * Let the main enable the record after setting some other
++	 * things such as the priority of the tracer's threads.
++	 */
++	tracefs_trace_off(trace->inst);
++
++	return 0;
++
++out_err:
++	trace_instance_destroy(trace);
++	return 1;
++}
++
++/**
++ * trace_instance_start - start tracing a given rv instance
++ *
++ * Returns 0 on success, -1 otherwise.
++ */
++int trace_instance_start(struct trace_instance *trace)
++{
++	return tracefs_trace_on(trace->inst);
++}
+diff --git a/tools/verification/rv/src/utils.c b/tools/verification/rv/src/utils.c
+new file mode 100644
+index 000000000000..5677b439dc2f
+--- /dev/null
++++ b/tools/verification/rv/src/utils.c
+@@ -0,0 +1,47 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * util functions.
++ *
++ * Copyright (C) 2022 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
++ */
++
++#include <stdarg.h>
++#include <stdio.h>
++#include <utils.h>
++
++int config_debug;
++
++#define MAX_MSG_LENGTH	1024
++
++/**
++ * err_msg - print an error message to the stderr
++ */
++void err_msg(const char *fmt, ...)
++{
++	char message[MAX_MSG_LENGTH];
++	va_list ap;
++
++	va_start(ap, fmt);
++	vsnprintf(message, sizeof(message), fmt, ap);
++	va_end(ap);
++
++	fprintf(stderr, "%s", message);
++}
++
++/**
++ * debug_msg - print a debug message to stderr if debug is set
++ */
++void debug_msg(const char *fmt, ...)
++{
++	char message[MAX_MSG_LENGTH];
++	va_list ap;
++
++	if (!config_debug)
++		return;
++
++	va_start(ap, fmt);
++	vsnprintf(message, sizeof(message), fmt, ap);
++	va_end(ap);
++
++	fprintf(stderr, "%s", message);
++}
 -- 
 2.37.3
 
