@@ -2,163 +2,376 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62258625B4D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:32:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C87625B4E
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:32:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233096AbiKKNcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 08:32:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47926 "EHLO
+        id S233367AbiKKNcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 08:32:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233593AbiKKNcI (ORCPT
+        with ESMTP id S231564AbiKKNcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 08:32:08 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1352A63B82
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 05:32:07 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id C2A86201CE;
-        Fri, 11 Nov 2022 13:32:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1668173525; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WtMVZmVBNliDJnkN/+t2+YykE0XW+qnU5sFYrxVeDEM=;
-        b=GsCge+l3Ra1Q+q3wlbzTiQ0iCqf/1jiNAl4CgS5bfql7h70j4+rrIZSnoxMuUPJ1xobVeS
-        DK7MMbsHIV3jqd13c1Md+yvaOA2lOGyAYpZVQqtI41noiqBRoSHRzFpuTIYHMDak8fJz2W
-        mJCx5TcARy5UGMozo/KpkkBRf35rCxo=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 666502C146;
-        Fri, 11 Nov 2022 13:32:05 +0000 (UTC)
-Date:   Fri, 11 Nov 2022 14:32:05 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH printk v3 07/40] console: introduce console_is_enabled()
- wrapper
-Message-ID: <Y25O1fi6hdfF7MMJ@alley>
-References: <20221107141638.3790965-1-john.ogness@linutronix.de>
- <20221107141638.3790965-8-john.ogness@linutronix.de>
- <Y2qBVZQDYnxv1af0@alley>
- <87a64y6e9k.fsf@jogness.linutronix.de>
+        Fri, 11 Nov 2022 08:32:50 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE505EF80;
+        Fri, 11 Nov 2022 05:32:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668173569; x=1699709569;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=xVe5NuQACj0+eXpuzAVwJPYI2FxjYOg4AK/VSwuoM1k=;
+  b=LZJ6K95MIXIjueYFOLCU4UpgIi63aAZyX3t4PZGStw8dZPhsEDAWDyOU
+   EvSnOal9tysoCqTLK3rl5s11qGaRXxlSO0HnqWniUSm+snFq5vjE70tqt
+   XIneD1YKISYioP+IFmmCPnJ9PtOjLV2G3lahll8H7htTtdFueINAUfafP
+   qxUN/DcnVTnuSr1T4iTpyuxVmUyTV2BtvmihSuC8OhabuWZUY34vCoQq2
+   DD3gT0JoSnb/B70U4egKPZPK3B+nRMb9JMI6nhXfc7ZuIHYSvgujz+lYq
+   KkmkihqUTPJBd6mw4WHO+VmKWJuyywhLQjtvCUovPXFrTUByLQW6AbIW8
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="397890559"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="397890559"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 05:32:49 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="726786584"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="726786584"
+Received: from iglushko-mobl1.ger.corp.intel.com ([10.249.44.68])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 05:32:45 -0800
+Date:   Fri, 11 Nov 2022 15:32:42 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 06/12] fpga: intel-m10-bmc: Add flash ops for sec
+ update
+In-Reply-To: <Y24K0LGs1tHru4vX@yilunxu-OptiPlex-7050>
+Message-ID: <375b8b75-9de0-6f9c-241e-27d479388fd7@linux.intel.com>
+References: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com> <20221108144305.45424-7-ilpo.jarvinen@linux.intel.com> <Y24K0LGs1tHru4vX@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a64y6e9k.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-734513149-1668166270=:1606"
+Content-ID: <888bab6-f8d1-ebef-d6fb-1f6c8d366bd9@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-11-10 16:11:43, John Ogness wrote:
-> On 2022-11-08, Petr Mladek <pmladek@suse.com> wrote:
-> >> --- a/kernel/printk/printk.c
-> >> +++ b/kernel/printk/printk.c
-> >> @@ -3021,7 +3021,7 @@ void console_stop(struct console *console)
-> >>  {
-> >>  	__pr_flush(console, 1000, true);
-> >>  	console_lock();
-> >> -	console->flags &= ~CON_ENABLED;
-> >> +	WRITE_ONCE(console->flags, console->flags & ~CON_ENABLED);
-> >
-> > My first reaction is that using the atomic operation only for the
-> > store side is suspicious. It is correct because the read is serialized
-> > by console_lock(). But it is far from obvious why we need and can do
-> > it this way.
-> 
-> The READ_ONCE()/WRITE_ONCE() usage is really about documenting data-race
-> reads and the writes that they are racing with.
-> 
-> For WRITE_ONCE() the rule is:
-> 
-> - If console->flags is modified for a registered console, it is done
->   under the console_list_lock and using WRITE_ONCE().
-> 
-> If we use a wrapper for this rule, then we can also add the lockdep
-> assertion that console_list_lock is held.
->
-> For READ_ONCE() the rule is:
-> 
-> - If console->flags is read for a registered console, then either
->   console_list_lock must be held _or_ it must be read via READ_ONCE().
->
-> If we use wrappers here, then we can use lockdep assertion on
-> console_list_lock for the non-READ_ONCE wrapper, and scru_read_lock
-> assertion for the READ_ONCE wrapper.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Exactly, all the assertions are one big advantage for hiding this into
-an API.
+--8323329-734513149-1668166270=:1606
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <b8f96e76-367c-d4ef-d139-44dcec4ef474@linux.intel.com>
 
-> > It would deserve a comment. But there are several other writes.
-> > Also it is not obvious why many other con->flags modifications
-> > do not need this.
-> >
-> > I think about hiding this into an API. We could also add some
-> > checks that it is used the right way. Also it might make sense
-> > to avoid using the READ_ONCE()/WRITE_ONCE by using
-> > set_bit()/test_bit().
+On Fri, 11 Nov 2022, Xu Yilun wrote:
+
+> On 2022-11-08 at 16:42:59 +0200, Ilpo Järvinen wrote:
+> > Access to flash staging area is different for N6000 from that of the
+> > SPI interfaced counterparts. Introduce intel_m10bmc_flash_ops to allow
+> > interface specific differentiations for the flash access path for sec
+> > update.
+> > 
+> > Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
+> > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> >  drivers/fpga/intel-m10-bmc-sec-update.c | 79 ++++++-------------------
+> >  drivers/mfd/intel-m10-bmc-spi.c         | 52 ++++++++++++++++
+> >  include/linux/mfd/intel-m10-bmc.h       | 14 +++++
+> >  3 files changed, 84 insertions(+), 61 deletions(-)
+> > 
+> > diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
+> > index dbe8aff95da3..3bd22d03616a 100644
+> > --- a/drivers/fpga/intel-m10-bmc-sec-update.c
+> > +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
+> > @@ -38,11 +38,9 @@ show_root_entry_hash(struct device *dev, u32 exp_magic,
+> >  	struct m10bmc_sec *sec = dev_get_drvdata(dev);
+> >  	int sha_num_bytes, i, ret, cnt = 0;
+> >  	u8 hash[REH_SHA384_SIZE];
+> > -	unsigned int stride;
+> >  	u32 magic;
+> >  
+> > -	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
+> > -	ret = m10bmc_raw_read(sec->m10bmc, prog_addr, &magic);
+> > +	ret = sec->m10bmc->flash_ops->read(sec->m10bmc, (u8 *)&magic, prog_addr, sizeof(magic));
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > @@ -50,19 +48,16 @@ show_root_entry_hash(struct device *dev, u32 exp_magic,
+> >  		return sysfs_emit(buf, "hash not programmed\n");
+> >  
+> >  	sha_num_bytes = FIELD_GET(REH_SHA_NUM_BYTES, magic) / 8;
+> > -	if ((sha_num_bytes % stride) ||
+> > -	    (sha_num_bytes != REH_SHA256_SIZE &&
+> > -	     sha_num_bytes != REH_SHA384_SIZE))   {
+> > +	if (sha_num_bytes != REH_SHA256_SIZE &&
+> > +	    sha_num_bytes != REH_SHA384_SIZE) {
+> >  		dev_err(sec->dev, "%s bad sha num bytes %d\n", __func__,
+> >  			sha_num_bytes);
+> >  		return -EINVAL;
+> >  	}
+> >  
+> > -	ret = regmap_bulk_read(sec->m10bmc->regmap, reh_addr,
+> > -			       hash, sha_num_bytes / stride);
+> > +	ret = sec->m10bmc->flash_ops->read(sec->m10bmc, hash, reh_addr, sha_num_bytes);
+> >  	if (ret) {
+> > -		dev_err(dev, "failed to read root entry hash: %x cnt %x: %d\n",
+> > -			reh_addr, sha_num_bytes / stride, ret);
+> > +		dev_err(dev, "failed to read root entry hash\n");
+> >  		return ret;
+> >  	}
+> >  
+> > @@ -98,27 +93,16 @@ DEVICE_ATTR_SEC_REH_RO(pr);
+> >  static ssize_t
+> >  show_canceled_csk(struct device *dev, u32 addr, char *buf)
+> >  {
+> > -	unsigned int i, stride, size = CSK_32ARRAY_SIZE * sizeof(u32);
+> > +	unsigned int i, size = CSK_32ARRAY_SIZE * sizeof(u32);
+> >  	struct m10bmc_sec *sec = dev_get_drvdata(dev);
+> >  	DECLARE_BITMAP(csk_map, CSK_BIT_LEN);
+> >  	__le32 csk_le32[CSK_32ARRAY_SIZE];
+> >  	u32 csk32[CSK_32ARRAY_SIZE];
+> >  	int ret;
+> >  
+> > -	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
+> > -	if (size % stride) {
+> > -		dev_err(sec->dev,
+> > -			"CSK vector size (0x%x) not aligned to stride (0x%x)\n",
+> > -			size, stride);
+> > -		WARN_ON_ONCE(1);
+> > -		return -EINVAL;
+> > -	}
+> > -
+> > -	ret = regmap_bulk_read(sec->m10bmc->regmap, addr, csk_le32,
+> > -			       size / stride);
+> > +	ret = sec->m10bmc->flash_ops->read(sec->m10bmc, (u8 *)&csk_le32, addr, size);
+> >  	if (ret) {
+> > -		dev_err(sec->dev, "failed to read CSK vector: %x cnt %x: %d\n",
+> > -			addr, size / stride, ret);
+> > +		dev_err(sec->dev, "failed to read CSK vector\n");
+> >  		return ret;
+> >  	}
+> >  
+> > @@ -157,31 +141,21 @@ static ssize_t flash_count_show(struct device *dev,
+> >  {
+> >  	struct m10bmc_sec *sec = dev_get_drvdata(dev);
+> >  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+> > -	unsigned int stride, num_bits;
+> > +	unsigned int num_bits;
+> >  	u8 *flash_buf;
+> >  	int cnt, ret;
+> >  
+> > -	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
+> >  	num_bits = FLASH_COUNT_SIZE * 8;
+> >  
+> > -	if (FLASH_COUNT_SIZE % stride) {
+> > -		dev_err(sec->dev,
+> > -			"FLASH_COUNT_SIZE (0x%x) not aligned to stride (0x%x)\n",
+> > -			FLASH_COUNT_SIZE, stride);
+> > -		WARN_ON_ONCE(1);
+> > -		return -EINVAL;
+> > -	}
+> > -
+> >  	flash_buf = kmalloc(FLASH_COUNT_SIZE, GFP_KERNEL);
+> >  	if (!flash_buf)
+> >  		return -ENOMEM;
+> >  
+> > -	ret = regmap_bulk_read(sec->m10bmc->regmap, csr_map->rsu_update_counter,
+> > -			       flash_buf, FLASH_COUNT_SIZE / stride);
+> > +	ret = sec->m10bmc->flash_ops->read(sec->m10bmc, flash_buf,
+> > +					   csr_map->rsu_update_counter,
+> > +					   FLASH_COUNT_SIZE);
+> >  	if (ret) {
+> > -		dev_err(sec->dev,
+> > -			"failed to read flash count: %x cnt %x: %d\n",
+> > -			csr_map->rsu_update_counter, FLASH_COUNT_SIZE / stride, ret);
+> > +		dev_err(sec->dev, "failed to read flash count\n");
+> >  		goto exit_free;
+> >  	}
+> >  	cnt = num_bits - bitmap_weight((unsigned long *)flash_buf, num_bits);
+> > @@ -470,15 +444,14 @@ static enum fw_upload_err m10bmc_sec_write(struct fw_upload *fwl, const u8 *data
+> >  {
+> >  	struct m10bmc_sec *sec = fwl->dd_handle;
+> >  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+> > -	u32 blk_size, doorbell, extra_offset;
+> > -	unsigned int stride, extra = 0;
+> > +	struct intel_m10bmc *m10bmc = sec->m10bmc;
+> > +	u32 blk_size, doorbell;
+> >  	int ret;
+> >  
+> > -	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
+> >  	if (sec->cancel_request)
+> >  		return rsu_cancel(sec);
+> >  
+> > -	ret = m10bmc_sys_read(sec->m10bmc, csr_map->doorbell, &doorbell);
+> > +	ret = m10bmc_sys_read(m10bmc, csr_map->doorbell, &doorbell);
+> >  	if (ret) {
+> >  		return FW_UPLOAD_ERR_RW_ERROR;
+> >  	} else if (rsu_prog(doorbell) != RSU_PROG_READY) {
+> > @@ -486,28 +459,12 @@ static enum fw_upload_err m10bmc_sec_write(struct fw_upload *fwl, const u8 *data
+> >  		return FW_UPLOAD_ERR_HW_ERROR;
+> >  	}
+> >  
+> > -	WARN_ON_ONCE(WRITE_BLOCK_SIZE % stride);
+> > +	WARN_ON_ONCE(WRITE_BLOCK_SIZE % regmap_get_reg_stride(m10bmc->regmap));
+> >  	blk_size = min_t(u32, WRITE_BLOCK_SIZE, size);
+> > -	ret = regmap_bulk_write(sec->m10bmc->regmap,
+> > -				M10BMC_STAGING_BASE + offset,
+> > -				(void *)data + offset,
+> > -				blk_size / stride);
+> > +	ret = m10bmc->flash_ops->write(m10bmc, data, offset, blk_size);
+> >  	if (ret)
+> >  		return FW_UPLOAD_ERR_RW_ERROR;
+> >  
+> > -	/*
+> > -	 * If blk_size is not aligned to stride, then handle the extra
+> > -	 * bytes with regmap_write.
+> > -	 */
+> > -	if (blk_size % stride) {
+> > -		extra_offset = offset + ALIGN_DOWN(blk_size, stride);
+> > -		memcpy(&extra, (u8 *)(data + extra_offset), blk_size % stride);
+> > -		ret = regmap_write(sec->m10bmc->regmap,
+> > -				   M10BMC_STAGING_BASE + extra_offset, extra);
+> > -		if (ret)
+> > -			return FW_UPLOAD_ERR_RW_ERROR;
+> > -	}
+> > -
+> >  	*written = blk_size;
+> >  	return FW_UPLOAD_ERR_NONE;
+> >  }
+> > diff --git a/drivers/mfd/intel-m10-bmc-spi.c b/drivers/mfd/intel-m10-bmc-spi.c
+> > index e7b0b3b03186..e3b2edb8bc07 100644
+> > --- a/drivers/mfd/intel-m10-bmc-spi.c
+> > +++ b/drivers/mfd/intel-m10-bmc-spi.c
+> > @@ -33,6 +33,57 @@ static struct regmap_config intel_m10bmc_regmap_config = {
+> >  	.max_register = M10BMC_MEM_END,
+> >  };
+> >  
+> > +static int m10bmc_spi_flash_write(struct intel_m10bmc *m10bmc, const u8 *buf, u32 offset, u32 size)
+> > +{
+> > +	unsigned int stride = regmap_get_reg_stride(m10bmc->regmap);
+> > +	u32 leftover = size % stride;
+> > +	u32 extra_offset, extra = 0;
+> > +	int ret;
+> > +
+> > +	if (WARN_ON_ONCE(stride > sizeof(extra)))
+> > +		return -EINVAL;
+> > +
+> > +	ret = regmap_bulk_write(m10bmc->regmap, M10BMC_STAGING_BASE + offset,
+> > +				buf + offset, size / stride);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	/* If size is not aligned to stride, then handle the extra bytes with regmap_write */
+> > +	if (leftover) {
+> > +		extra_offset = offset + ALIGN_DOWN(size, stride);
+> > +		memcpy(&extra, (u8 *)(buf + extra_offset), leftover);
+> > +
+> > +		ret = regmap_write(m10bmc->regmap, M10BMC_STAGING_BASE + extra_offset, extra);
+> > +		if (ret)
+> > +			return ret;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int m10bmc_spi_flash_read(struct intel_m10bmc *m10bmc, u8 *buf, u32 addr, u32 size)
+> > +{
+> > +	unsigned int stride = regmap_get_reg_stride(m10bmc->regmap);
+> > +	int ret;
+> > +
+> > +	if (WARN_ON_ONCE(size % stride)) {
+> > +		dev_err(m10bmc->dev, "read size (0x%x) not aligned to stride (0x%x)\n",
+> > +			size, stride);
 > 
-> I do not see any advantage of set_bit()/test_bit(). They have the
-> disadvantage that they only work with 1 bit at a time. And there are
-> multiple sites where more than 1 bit is set/tested. It is important that
-> the multi-bit tests are simultaneous.
+> Why read should be aligned to stride but write doesn't have to? It's odd that
+> same amount of data could be written into flash but can't be read back.
 
-Fair enough.
+I'll see what needs to be done with this before resubmitting.
 
-> > I would prefer to use the proposed API because it should make all
-> > accesses more clear and safe. And most importantly, it would help use
-> > to catch bugs.
-> >
-> > But I do not resist on it. The patch looks correct and we could do
-> > this later. I could live with it if we add some comments above the
-> > WRITE_ONCE() calls.
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	ret = regmap_bulk_read(m10bmc->regmap, addr, buf, size / stride);
+> > +	if (ret)
+> > +		dev_err(m10bmc->dev, "failed to read flash block data: %x cnt %x: %d\n",
+> > +			addr, size / stride, ret);
+> > +	return ret;
+> > +}
+> > +
+> > +static const struct intel_m10bmc_flash_ops m10bmc_spi_flash_ops = {
+> > +	.read = m10bmc_spi_flash_read,
+> > +	.write = m10bmc_spi_flash_write,
+> > +};
 > 
-> I do not want to do a full API replacement for all console->flags access
-> in this series or at this time. I am concerned that it is taking us too
-> far away from our current goal. Also, with the upcoming atomic/threaded
-> model, all consoles need to be modified that want to use it anyway. So
-> that would be a more appropriate time to require the use of new API's.
+> Is the flash ops used in other devices? For now, I see it's specific for
+> sec-update dev. So why not implement it in sec-update driver?
 
-Fair enough.
+Are you suggesting the sec-update driver should implement a similar split 
+per interface type (SPI/PMCI) as the mfd/bmc one currently does? ...While 
+doable, it seems a bit overkill to have that kind of double split.
 
-> For console_is_enabled() I will add the srcu_read_lock check. I suppose
-> I should also name the function console_srcu_is_enabled().
+-- 
+ i.
+
+> >  static int check_m10bmc_version(struct intel_m10bmc *ddata)
+> >  {
+> >  	unsigned int v;
+> > @@ -72,6 +123,7 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> >  
+> >  	info = (struct intel_m10bmc_platform_info *)id->driver_data;
+> >  	ddata->dev = dev;
+> > +	ddata->flash_ops = &m10bmc_spi_flash_ops;
+> >  
+> >  	ddata->regmap = devm_regmap_init_spi_avmm(spi, &intel_m10bmc_regmap_config);
+> >  	if (IS_ERR(ddata->regmap)) {
+> > diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+> > index d752c0d7cbdb..860408aa8db3 100644
+> > --- a/include/linux/mfd/intel-m10-bmc.h
+> > +++ b/include/linux/mfd/intel-m10-bmc.h
+> > @@ -161,16 +161,30 @@ struct intel_m10bmc_platform_info {
+> >  	const struct m10bmc_csr_map *csr_map;
+> >  };
+> >  
+> > +struct intel_m10bmc;
+> > +
+> > +/**
+> > + * struct intel_m10bmc_flash_ops - device specific operations for flash R/W
+> > + * @read: read a block of data from flash
+> > + * @write: write a block of data to flash
+> > + */
+> > +struct intel_m10bmc_flash_ops {
+> > +	int (*read)(struct intel_m10bmc *m10bmc, u8 *buf, u32 addr, u32 size);
+> > +	int (*write)(struct intel_m10bmc *m10bmc, const u8 *buf, u32 offset, u32 size);
+> > +};
+> > +
+> >  /**
+> >   * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
+> >   * @dev: this device
+> >   * @regmap: the regmap used to access registers by m10bmc itself
+> >   * @info: the platform information for MAX10 BMC
+> > + * @flash_ops: optional device specific operations for flash R/W
+> >   */
+> >  struct intel_m10bmc {
+> >  	struct device *dev;
+> >  	struct regmap *regmap;
+> >  	const struct intel_m10bmc_platform_info *info;
+> > +	const struct intel_m10bmc_flash_ops *flash_ops;
 > 
-> For the WRITE_ONCE() calls, I will add a static inline wrapper in
-> printk.c that includes the lockdep console_list_lock assertion. Perhaps
-> called console_srcu_write_flags(struct console *con, short flags).
-> 
-> In console_srcu_write_flags() and console_srcu_is_enabled() I can
-> document their relationship and when they are to be used. Both these
-> functions are used rarely and should be considered the exception, not
-> the rule.
-> 
-> For code that is reading registered console->flags under the
-> console_list_lock, I will leave the "normal access" as is. Just as I am
-> leaving the "normal access" for non-registered console-flags as is. We
-> can convert those to a new generic API later if we think it is really
-> necessary.
+> Same concern, maybe implement it in sec-update driver?
 
-Sounds reasonable.
-
-The main motivation for introducing the wrappers is that there are
-currently 40+ locations where console->flags are touched. It is easy
-to miss something especially when we are reworking the locking around
-this code. Some of the callers are outside kernel/printk/* which
-even increases the risk of a misuse. The lockdep checks
-would help us to catch potential mistakes.
-
-Anyway, I am fine with adding the wrappers for the synchronized reads
-later. This patchset is already big enough.
-
-Best Regards,
-Petr
+--8323329-734513149-1668166270=:1606--
