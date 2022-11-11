@@ -2,240 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E889626093
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE899626098
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233851AbiKKRlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 12:41:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40252 "EHLO
+        id S232841AbiKKRlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:41:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbiKKRlF (ORCPT
+        with ESMTP id S233739AbiKKRlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:41:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7B1623B2;
-        Fri, 11 Nov 2022 09:41:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D08F961EF1;
-        Fri, 11 Nov 2022 17:41:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3DC8C433D7;
-        Fri, 11 Nov 2022 17:41:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668188463;
-        bh=h0amQIIU7hED/32DFMcXw4epT9dOxlQO8lA1tG9vlT0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=rNJfBnDLMw+Gyy5dhe+jL1zlotxE1AreN70AKPHSP5ubJfTNcOCXse+Ierwr0yPZQ
-         31p1kr2SF4HooALu32k07NVWK91tpazAni/v/bMsFOo4L2vLUM43+Ugtx4ylUWk6A5
-         pOPxQMHOimhsrG/GucAc36pDuUK8JMO2kVjVj7ZhPsDyZqWH6F86ZVs9KrV/9NALgu
-         gvP+eDQWVyrEXKX7waWTtXPu+kLdmgpUjFH3SLYSLT2Vu6AkKuTMiOdoLv6YNtUw98
-         V7wNLil+U7oJzD0yJC4zgko03CnKJi20ggmBxb4nhe69hkYa8nX35oThu0GpckRrJR
-         eLY9Vkx4h07Gg==
-Date:   Fri, 11 Nov 2022 11:41:01 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mehta Sanju <Sanju.Mehta@amd.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] PCI/ACPI: PCI/ACPI: Validate devices with power
- resources support D3
-Message-ID: <20221111174101.GA729137@bhelgaas>
+        Fri, 11 Nov 2022 12:41:10 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E215BD7E
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:41:08 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id j15so7392791wrq.3
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:41:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mQc+U+ReOM3592berIYh4DDWOlLrLRncNp+/Rgp1ZZs=;
+        b=qD0B09wf7UHL9mhONRodDsVbaRoUAjow92r3KBk/2/qCJg1msjT98Mn9Yv2QQ36rFD
+         yxArxqutuRDKyyhlLqPxTcPvcTyGX2qtJrcu7Q453WuzG+SpOjGKElJxp3iSsMcUXuNi
+         AYZV3ev54k1iS/hqXeqLX3xqXjGO9I6Zdp899hBgLK4BySunsXz0EiIC/lmHeKoXoygz
+         584TbIISjqH1fONWSqhrCyF9bF9bu0ps7sEI5Etcuxu98BBGU5p123488oJwzgtmo4Q8
+         bemMzewYgLKcsHGdS4OfnaSSBIkbVB+hjr/Y4chW08q8tf4q4fA++IXyPsLKvzWN2Hvf
+         DRlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mQc+U+ReOM3592berIYh4DDWOlLrLRncNp+/Rgp1ZZs=;
+        b=4M0khkVzFQ3+A+S4Z84RqdRiH7WTAPmXDh3rYKr47zuBtcLi5LwJf/QEUGB7tpLgs0
+         grJbZdh8rCH6wkrFD8rqo0llMcykkkMiMwOO2lse6qE0Xt2QqldKj/BYCKKnR3isr8sT
+         /pzDE4DQon0+h8sfto09H9cX8E5m++Rx37Ts5Iz0plgyRb8YiI5ESejwSu8CGQ+W/RG0
+         aq9NTB59uvTpHlPDXwXJngvgYYg358Iq1/sZS2d0cmLOtvlK/Ux0Ukz///dHt5CrkFL4
+         v2qFeaJjix8PK1Ve0SN3lACAOoKuU6iXrj8u42eaxmb9sk757e5MrTnrRRgtkKoOHxtj
+         oHbQ==
+X-Gm-Message-State: ANoB5pncdorLMKt2OlAWK3mQIGAF4k7dVCyZvi5QMri3VMJuOczNX8se
+        ht3tNmhjb0GJ6IJCC3GrrbsXu49cu24bvw==
+X-Google-Smtp-Source: AA0mqf6QO76za2P4oaMRZoftFq7eyzPIZDvRx6LunCq/U3sq1PQ7aD6AzATfW75e8cMvraWxdO7MQg==
+X-Received: by 2002:adf:dbcc:0:b0:22e:4481:4a4 with SMTP id e12-20020adfdbcc000000b0022e448104a4mr1987440wrj.450.1668188466845;
+        Fri, 11 Nov 2022 09:41:06 -0800 (PST)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id m16-20020a05600c3b1000b003a3170a7af9sm3968642wms.4.2022.11.11.09.41.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Nov 2022 09:41:06 -0800 (PST)
+Message-ID: <57f10c5d-2a71-7f8d-e2ab-6e868d8ba79b@linaro.org>
+Date:   Fri, 11 Nov 2022 17:41:05 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221031223356.32570-1-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URI_TRY_3LD autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2] nvmem: u-boot-env: align endianness of crc32 values
+Content-Language: en-US
+To:     INAGAKI Hiroshi <musashino.open@gmail.com>, rafal@milecki.pl
+Cc:     linux-kernel@vger.kernel.org
+References: <20221012155133.287-1-musashino.open@gmail.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20221012155133.287-1-musashino.open@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 05:33:55PM -0500, Mario Limonciello wrote:
-> Firmware typically advertises that ACPI devices that represent PCIe
-> devices can support D3 by a combination of the value returned by
-> _S0W as well as the HotPlugSupportInD3 _DSD [1].
+
+
+On 12/10/2022 16:51, INAGAKI Hiroshi wrote:
+> This patch fixes crc32 error on Big-Endianness system by conversion of
+> calculated crc32 value.
 > 
-> `acpi_pci_bridge_d3` looks for this combination but also contains
-> an assumption that if an ACPI device contains power resources the PCIe
-> device it's associated with can support D3.  This was introduced
-> from commit c6e331312ebf ("PCI/ACPI: Whitelist hotplug ports for
-> D3 if power managed by ACPI").
+> Little-Endianness system:
 > 
-> Some firmware configurations for "AMD Pink Sardine" do not support
-> wake from D3 in _S0W for the ACPI device representing the PCIe root
-> port used for tunneling. The PCIe device will still be opted into
-> runtime PM in the kernel [2] because of the logic within
-> `acpi_pci_bridge_d3`. This currently happens because the ACPI
-> device contains power resources.
+>    obtained crc32: Little
+> calculated crc32: Little
 > 
-> When the thunderbolt driver is loaded two device links are created:
-> * USB4 router <- PCIe root port for tunneling
-> * USB4 router <- XHCI PCIe device
+> Big-Endianness system:
 > 
-> These device links are created because the ACPI devices declare the
-> `usb4-host-interface` _DSD [3]. For both links the USB4 router is the
-> supplier and these other devices are the consumers.
-> Here is a demonstration of this topology that occurs:
+>    obtained crc32: Little
+> calculated crc32: Big
 > 
-> |
-> ├─ 00:03.1
-> |       | "PCIe root port used for tunneling"
-> |       | ACPI Path: \_SB_.PCI0.GP11
-> |       | ACPI Power Resources: Yes
-
-I guess this means it has _PR0 and/or _PS0?  (same for devices below)
-
-> |       | ACPI _S0W return value: 0
-> |       | Device Links: supplier:pci:0000:c4:00.5
-> |       └─ PCIe Power state: D0
-
-What bus does 00:03.1 lead to?  I guess it doesn't lead to any of the
-devices below?
-
-> └─ 00:08.3
->         | ACPI Path: \_SB_.PCI0.GP19
->         ├─ PCIe Power state: D0
-
-I guess 00:08.3 is a Root Port leading to bus c4?
-
->         ├─ c4:00.3
->         |       | "XHCI PCIe device used for tunneling"
->         |       | ACPI Path: \_SB_.PCI0.GP19.XHC3
->         |       | ACPI Power Resources: Yes
->         |       | ACPI _S0W return value: 4
->         |       | Device Links: supplier:pci:0000:c4:00.5
->         |       └─ PCIe Power state: D3cold
->         └─ c4:00.5
->                 | "USB4 Router"
->                 | ACPI Path: \_SB_.PCI0.GP19.NHI0
->                 | ACPI Power Resources: Yes
->                 | ACPI _S0W return value: 4
->                 | Device Links: consumer:pci:0000:00:03.1 consumer:pci:0000:c4:00.3
->                 └─ PCIe Power state: D3cold
-
-I'm reading the excellent Documentation/driver-api/device_link.rst and
-trying to match up with this topology.  This is a case where 00:03.1
-is a consumer of c4:00.5.  The driver core automatically enforces that
-children are suspended before parents, but since 00:03.1 is an aunt
-(not a child) of c4:00.5, the device link enforces the requirement
-that 00:03.1 be suspended before c4:00.5.  Right?
-
-Is c4:00.5 an NHI?
-
-The PCI power states shown above are the failure case?  c4:00.5
-*should* remain in D0 as long as 00:03.1 is in D0, but was instead put
-in D3cold?
-
-> Currently runtime PM is allowed for all of these devices.
-
-This is because they all have _PR0 and/or _PS0?  (Diagram doesn't show
-that for 00:08.3, but I assume it must?)
-
-And I guess they all must have dev->is_hotplug_bridge set?
-
-> This means that
-> when all consumers are idle long enough, they will runtime suspend to
-> enter their deepest allowed sleep state. Once all consumers are in their
-> deepest allowed sleep state the suppliers will enter the deepest sleep
-> state as well.
+> log (APRESIA ApresiaLightGS120GT-SS, RTL8382M, Big-Endianness):
 > 
-> * The PCIe root port for tunneling doesn't support waking from D3hot or
->   D3cold so although runtime suspended it stays in D0.
-> * The XHCI PCIe device supports wakeup from D3cold so it runtime suspends
->   to D3cold.
-> * Both consumers are in their deepest state and the USB4 router supports
->   wakeup from D3cold, so it runtime suspends into this state.
+> [    8.570000] u_boot_env 18001200.spi:flash@0:partitions:partition@c0000: Invalid calculated CRC32: 0x88cd6f09 (expected: 0x096fcd88)
+> [    8.580000] u_boot_env: probe of 18001200.spi:flash@0:partitions:partition@c0000 failed with error -22
 > 
-> At least for AMD's case the hardware designer's expectation is the USB4
-> router should have also remained in D0 since the PCIe root port for
-> tunneling remained in D0 and a device link exists between the two devices.
-> The current Linux behavior is undefined.
-
-Is the requirement that the supplier can never be in a lower-power
-state than the consumer?
-
-I guess that's *not* actually a requirement even though that's the
-effect of this patch in this situation.  If it *were* that simple, we
-would just check the supplier and consumer power states instead of
-looking at all these ACPI properties.
-
-> Instead of making the assertion that the device can support D3 (and thus
-> runtime PM) solely from the presence of ACPI power resources, move the check
-> to later on in the function, which will have validated that the ACPI device
-> supports wake from D3hot or D3cold.
+> Fixes: f955dc1445069 ("nvmem: add driver handling U-Boot environment variables")
 > 
-> This fix prevents the USB4 router being put into D3 when the firmware
-> says that ACPI device representing the PCIe root port for tunneling can't
-> handle it while still allowing ACPI devices that don't have the
-> HotplugSupportInD3 _DSD to also enter D3 if they have power resources that
-> can wake from D3.
-
-So I guess this changes what acpi_pci_bridge_d3() returns for 00:03.1?
-Previously it returned "true" because it has _PR0/_PS0 (so
-acpi_pci_power_manageable() is true), but now it will return "false"
-because _S0W says it can only wake from D0?
-
-> Link: https://learn.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-pcie-root-ports-supporting-hot-plug-in-d3 [1]
-> Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/pcie/portdrv_pci.c?id=v6.0#n126 [2]
-> Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/thunderbolt/acpi.c?id=v6.0#n29 [3]
-> Fixes: dff6139015dc6 ("PCI/ACPI: Allow D3 only if Root Port can signal and wake from D3")
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: INAGAKI Hiroshi <musashino.open@gmail.com>
 > ---
-> v4->v5:
->  * Update github->git.kernel.org
->  * Correct arrow direction
->  * Clarify some commit message comments from Lukas' feedback.
-> v3->v4:
->  * Pick up tags
->  * Add more details to the commit message
-> v2->v3:
->  * Reword commit message
-> v1->v2:
->  * Just return value of acpi_pci_power_manageable (Rafael)
->  * Remove extra word in commit message
-> ---
->  drivers/pci/pci-acpi.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+
+Applied thanks,
+
+--srini
+> v1 -> v2
 > 
-> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-> index a46fec776ad77..8c6aec50dd471 100644
-> --- a/drivers/pci/pci-acpi.c
-> +++ b/drivers/pci/pci-acpi.c
-> @@ -984,10 +984,6 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
->  	if (acpi_pci_disabled || !dev->is_hotplug_bridge)
->  		return false;
->  
-> -	/* Assume D3 support if the bridge is power-manageable by ACPI. */
-> -	if (acpi_pci_power_manageable(dev))
-> -		return true;
-> -
->  	rpdev = pcie_find_root_port(dev);
->  	if (!rpdev)
->  		return false;
-> @@ -1023,7 +1019,8 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
->  	    obj->integer.value == 1)
->  		return true;
->  
-> -	return false;
-> +	/* Assume D3 support if the bridge is power-manageable by ACPI. */
-> +	return acpi_pci_power_manageable(dev);
->  }
->  
->  int acpi_pci_set_power_state(struct pci_dev *dev, pci_power_t state)
-> -- 
-> 2.34.1
+> - add missing cast to __le32 for calculated crc32
+>    (reported by kernel test robot <lkp@intel.com>)
 > 
+> - add missing "Fixes:" tag
+> 
+>   drivers/nvmem/u-boot-env.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/nvmem/u-boot-env.c b/drivers/nvmem/u-boot-env.c
+> index 8e72d1bbd649..b5aacf805fc6 100644
+> --- a/drivers/nvmem/u-boot-env.c
+> +++ b/drivers/nvmem/u-boot-env.c
+> @@ -143,7 +143,7 @@ static int u_boot_env_parse(struct u_boot_env *priv)
+>   	crc32_data_len = priv->mtd->size - crc32_data_offset;
+>   	data_len = priv->mtd->size - data_offset;
+>   
+> -	calc = crc32(~0, buf + crc32_data_offset, crc32_data_len) ^ ~0L;
+> +	calc = le32_to_cpu((__le32)crc32(~0, buf + crc32_data_offset, crc32_data_len) ^ ~0L);
+>   	if (calc != crc32) {
+>   		dev_err(dev, "Invalid calculated CRC32: 0x%08x (expected: 0x%08x)\n", calc, crc32);
+>   		err = -EINVAL;
+> 
+> base-commit: 60bbaad38109684b156e21112322e0a922f92cde
