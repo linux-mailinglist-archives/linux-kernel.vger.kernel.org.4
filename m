@@ -2,362 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FFB624EAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE075624EB5
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbiKKADm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 19:03:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
+        id S229461AbiKKAGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 19:06:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiKKADj (ORCPT
+        with ESMTP id S229777AbiKKAGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 19:03:39 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D9E4AF10
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:03:37 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id z192so4332998yba.0
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:03:37 -0800 (PST)
+        Thu, 10 Nov 2022 19:06:13 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2454D5FB
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:06:13 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id y13so3481018pfp.7
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:06:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PW7jLG4mkrc/DZMI9Yn7sZdLrRTaoprKkSk6ChmiPmY=;
-        b=c6C1btFM2MZxmWQxc5/vk8k7xcid5VQqAm1ALT/flnD9Tg1f1i5HnY7Z71/ECip1BC
-         gynNB0wkPPKLHO/jnILbEug3RrbOtPvAVC7KPwVEjTGMzaD4bJWy2WqitsON9Or4zOc8
-         KeF/Euou1Fw7q0GQemCEkH7wPEw/xWryQm2dsynT09rjc3/W8HWkxvkQGiaqRqlrxQ23
-         I0MVHNuin1RS5v/6A1HJ6KjXGXP6wGNPTkey3XZUuKII7ZwkGZWlnovhcFLqreWeV4RJ
-         +cryv+nNZwNIunzgTWD+pBNxcP/SYRzMxaOHjqK7DivClePVz7ed3lmjeVTXS/6rhjE9
-         cVCg==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sXQg6m0KDTXTm2nqz+lTg6WMBvdzJA0Ss4aaQqsqfi0=;
+        b=hNVPv+ey8HIvOZmC+WAnWIG8OYAeSlZS0xPLzYhDCZmnArotz5Y/nhfn9r9c8PCEFe
+         E8mVjVIva+def9PHp762BmRXmUoK5jg3heR3NAusrpN5STPSFfkervClje0NQa5CwXrE
+         HdlsTtSUM+MPo4+vdGUA38aqr644tAa7P5bI3VxUrx5hCBiuVMLzUakeu0v8EjWAOK7v
+         BgVrNZDyAWChq0qRi87Yhdn0EcEzkTu6Ae/6zTz8SPVNgwEGA83vKScQ/P1+h2fj3QJH
+         Ic9NMyWV4IhkYFZTb5wG6PyKY3kSFDqOOs7F1TgAuJpwI7fBOge9ep4GrU+eZD7ML8Bk
+         8lbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PW7jLG4mkrc/DZMI9Yn7sZdLrRTaoprKkSk6ChmiPmY=;
-        b=Pj+o0DPVB2ko4cMVVVdPgGF0Fznqb4+MerL39l9r5lr6yBwQBDFtsJ0PZr/TiTkn/R
-         cZ6cmKh7IJRMlqv/vzltpFejnB6Fpyh45WRXn1RWB9dgkj7ckhCndqZ+qgRymxUJkUql
-         useoR6j5lVOmx5gc6JiCayrk+6YarRHEqzMRW8V8WeUcOJ+by3I42JMduSPo1QLbyOmh
-         GhheNDHaDHXCAht404g7oup2Hvw3qPSqsFG34Bz/wFxxQfVy/t86ELgXyVxJFtfiH3tQ
-         UCnAO5g0lutjQoPMVzYrxOgAxycCopScW7VZAr5DWzCMgvBIMj3l4Ojr2IBLfkvGrO/w
-         pFpg==
-X-Gm-Message-State: ANoB5pmLljfsIPAdNEwjpl1dkGYd9Uq/MNGZa2KuwKUppEla7JGlmqOk
-        WcVc4W+lZOkDSo0JtZZI8jL90HeOtzH8ChexH3fAjw==
-X-Google-Smtp-Source: AA0mqf7fyJ1c9pMQhzHYjsI20+OgeqfNMYmXZp5Vt1mdw9h8Hxs7zRowUH06GT9ZMKuQadegWWniMKdAdiqLz14s3HM=
-X-Received: by 2002:a05:6902:1509:b0:6d4:b9b0:df0b with SMTP id
- q9-20020a056902150900b006d4b9b0df0bmr29829174ybu.413.1668125016117; Thu, 10
- Nov 2022 16:03:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20221107063807.81774-1-khuey@kylehuey.com> <20221107063807.81774-2-khuey@kylehuey.com>
- <64e62ab9-71f6-6d90-24de-402921c244e7@intel.com>
-In-Reply-To: <64e62ab9-71f6-6d90-24de-402921c244e7@intel.com>
-From:   Kyle Huey <me@kylehuey.com>
-Date:   Thu, 10 Nov 2022 16:03:21 -0800
-Message-ID: <CAP045ArEuTmA6DGoVEgeSRd-F+oQCqRaeyzwgdxuCnOP0jgqWA@mail.gmail.com>
-Subject: Re: [RESEND PATCH v6 1/2] x86/fpu: Allow PKRU to be (once again)
- written by ptrace.
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sXQg6m0KDTXTm2nqz+lTg6WMBvdzJA0Ss4aaQqsqfi0=;
+        b=obZawEVFgyQNFoSQIn6Psj8/ZsWYSvWvQ7+4VPJsVXwCFKwTfdSWi03p82ey/3CTVr
+         umplKiNKCwWAcy/8jr2XYhSt34FZEA01VI/9hQ5z6R1uZXKigQ4yVSYeX+kiFppo8M6t
+         35K8y37xa+kT0Dh5F5186zTdS7rRABFuDnEc6/XR6UqafPRrjyR/luq7WQgLJrPEdXrB
+         cLzIGv5wbjZMtt9nWLqkX/rJyRzImmT8mYgntrCozSDM4wEBHBpFSkasarJosdTWe9vZ
+         KFy4Bfs/Pdl0/UqtWAbbCuRT9DBhZx02gRgeLad56deg3unqH8OJuiHthWcCOXv6nDaA
+         EqaQ==
+X-Gm-Message-State: ACrzQf3I/0qggSswcZR2o4+2NoRUaq8uxaBDR7w1Bc/DrQ4ih/0kkS0y
+        AQ+qMVy4/JpPFqqSRwLrrQC5NQ==
+X-Google-Smtp-Source: AMsMyM4gD1W2r9wxYtObzCBR9GM6UAk6Hoer15K7R44TK7byNmqvji7Uiit5OvUTQRObzAPBYqhIPw==
+X-Received: by 2002:a05:6a00:bef:b0:56e:3a98:1089 with SMTP id x47-20020a056a000bef00b0056e3a981089mr3906306pfu.38.1668125172489;
+        Thu, 10 Nov 2022 16:06:12 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id s18-20020a170903215200b00186a6b6350esm234146ple.268.2022.11.10.16.06.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 16:06:12 -0800 (PST)
+Date:   Fri, 11 Nov 2022 00:06:08 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        "Robert O'Callahan" <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>,
-        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Yuan Yao <yuan.yao@intel.com>
+Subject: Re: [PATCH 36/44] KVM: x86: Do compatibility checks when onlining CPU
+Message-ID: <Y22R8GAvcuoWBELA@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-37-seanjc@google.com>
+ <20221103210402.GB1063309@ls.amr.corp.intel.com>
+ <Y2RB4qT02EkhMjPL@google.com>
+ <20221104071819.GD1063309@ls.amr.corp.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104071819.GD1063309@ls.amr.corp.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 10:23 AM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> Kyle, sorry this took so long to get to.  I do really appreciate the fix
-> and the selftest.  This seems like something we want to get merged
-> sooner rather than later, so please bear with me.
->
-> On 11/6/22 22:38, Kyle Huey wrote:
-> > There are three APIs that write PKRU: sigreturn, PTRACE_SETREGSET with
-> > NT_X86_XSTATE, and KVM_SET_XSAVE. sigreturn still uses XRSTOR to write to
-> > PKRU. KVM_SET_XSAVE has its own special handling to make PKRU writes take
-> > effect (in fpu_copy_uabi_to_guest_fpstate). Push that down into
-> > copy_uabi_to_xstate and have PTRACE_SETREGSET with NT_X86_XSTATE pass in
-> > a pointer to the appropriate PKRU slot. copy_sigframe_from_user_to_xstate
-> > depends on copy_uabi_to_xstate populating the PKRU field in the task's
-> > XSTATE so that __fpu_restore_sig can do a XRSTOR from it, so continue doing
-> > that.
->
-> Please always write functions() with parenthesis to make it clear what
-> you're talking about.  Also, there are much better ways to format this
-> paragraph.  I probably would have said:
->
-> There are three APIs that write PKRU:
-> 1. sigreturn
-> 2. PTRACE_SETREGSET with NT_X86_XSTATE
-> 3. KVM_SET_XSAVE
->
-> Then broken it up into three follow-on paragraphs.  I actually kinda had
-> to do this to even make sense of what you were trying to say above.  It
-> would also be nice to have a clear problem statement paired with the
-> mention of these three ABIs.
->
-> #1 and #3 work OK, right?  It's #2 that's broken?
+On Fri, Nov 04, 2022, Isaku Yamahata wrote:
+> On Thu, Nov 03, 2022 at 10:34:10PM +0000,
+> Sean Christopherson <seanjc@google.com> wrote:
+> 
+> > On Thu, Nov 03, 2022, Isaku Yamahata wrote:
+> > > On Wed, Nov 02, 2022 at 11:19:03PM +0000,
+> > > Sean Christopherson <seanjc@google.com> wrote:
+> > > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > > > index f223c845ed6e..c99222b71fcc 100644
+> > > > --- a/arch/x86/include/asm/kvm_host.h
+> > > > +++ b/arch/x86/include/asm/kvm_host.h
+> > > > @@ -1666,7 +1666,7 @@ struct kvm_x86_nested_ops {
+> > > >  };
+> > > >  
+> > > >  struct kvm_x86_init_ops {
+> > > > -	int (*check_processor_compatibility)(void);
+> > > > +	int (*check_processor_compatibility)(int cpu);
+> > > 
+> > > Is this cpu argument used only for error message to include cpu number
+> > > with avoiding repeating raw_smp_processor_id() in pr_err()?
+> > 
+> > Yep.
+> > 
+> > > The actual check is done on the current executing cpu.
+> > > 
+> > > If cpu != raw_smp_processor_id(), cpu is wrong. Although the function is called
+> > > in non-preemptive context, it's a bit confusing. So voting to remove it and
+> > > to use.
+> > 
+> > What if I rename the param is this_cpu?  I 100% agree the argument is confusing
+> > as-is, but forcing all the helpers to manually grab the cpu is quite annoying.
+> 
+> Makes sense. Let's settle it with this_cpu.
 
-Well this depends on one defines work. If you use my definition of
-"behaves equivalently to a hardware XRSTOR instruction" then #1
-works, #2 is totally broken, and #3 is subtly broken. But #3 has
-been the way that it is for a long time and the KVM maintainers
-don't want to change it, whereas #2 was broken recently (in the
-commit this fixes).
+Finally got to actually change the code, and am not a fan of passing "this_cpu"
+everywhere.  It's not terrible, but it's not clearly better than just grabbing
+the CPU on-demand.  And while manually grabbing the CPU in the helpers is annoying,
+in at least two cases the pain is just shifted to the caller.
 
-> > sigreturn still uses XRSTOR to write to PKRU.
->
-> ... which means?  That sigreturn is fine and does not need to be touched
-> in this patch?
-
-Yes (modulo refactoring).
-
-> > KVM_SET_XSAVE has its own special handling to make PKRU writes take
-> > effect (in fpu_copy_uabi_to_guest_fpstate()).  Push that down into
-> > copy_uabi_to_xstate() and have PTRACE_SETREGSET with NT_X86_XSTATE pass in
-> > a pointer to the appropriate PKRU slot.
->
-> So this is the bugfix?  KVM already does it right, and we just need to
-> make ptrace() share the KVM code?
-
-Largely but not entirely, because KVM's behavior is subtly different
-from XRSTOR's.
-KVM doesn't reinitialize PKRU to the hardware init value if the PKRU bit is
-not set in the xfeatures mask, whereas XRSTOR does (and thus ptrace previously
-did).
-
-> > copy_sigframe_from_user_to_xstate() depends on copy_uabi_to_xstate()
-> > populating the PKRU field in the task's XSTATE so that
-> > __fpu_restore_sig() can do a XRSTOR from it, so continue doing that.
->
-> I'm not quite sure what this chunk of the changelog is trying to tell
-> me.  Isn't this the sigreturn path?  Why did the paragraph above go from
-> talking about sigreturn to KVM then back to sigreturn?
-
-It's telling you that nothing really changed there. I can drop that.
-
-> > This also adds code to initialize the PKRU value to the hardware init value
-> > (namely 0) if the PKRU bit is not set in the XSTATE header provided to
-> > ptrace, to match XRSTOR.
->
-> The implication here is that we would like the sigreturn ABI and the
-> ptrace ABI to behave in a similar fashion, right?
-
-I don't personally care about sigreturn that much but I would like the
-ptrace ABI to behave like XRSTOR (which it did before 5.14), and the
-sigreturn ABI behaves like XRSTOR because it *is* XRSTOR (both
-before and after 5.14), so the ptrace ABI behaving like the sigreturn ABI
-arises transitively.
-
-> At a high level, this patch does a *LOT*.  Generally, it's nice when
-> bugfixes can be encapsulted in one patch, but I think there's too much
-> going on here for one patch.
-
-Ok. How about I break the first part into two pieces, one that changes the
-signatures of copy_uabi_from_kernel_to_xstate() and
-copy_sigframe_from_user_to_xstate(), and one that moves the relevant
-KVM code from fpu_copy_uabi_to_guest_fpstate() to copy_uabi_to_xstate()
-and deals with the edge case behavior of the mask?
-
-> > diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-> > index 3b28c5b25e12..c273669e8a00 100644
-> > --- a/arch/x86/kernel/fpu/core.c
-> > +++ b/arch/x86/kernel/fpu/core.c
-> > @@ -391,8 +391,6 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
-> >  {
-> >       struct fpstate *kstate = gfpu->fpstate;
-> >       const union fpregs_state *ustate = buf;
-> > -     struct pkru_state *xpkru;
-> > -     int ret;
-> >
-> >       if (!cpu_feature_enabled(X86_FEATURE_XSAVE)) {
-> >               if (ustate->xsave.header.xfeatures & ~XFEATURE_MASK_FPSSE)
-> > @@ -406,16 +404,16 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
-> >       if (ustate->xsave.header.xfeatures & ~xcr0)
-> >               return -EINVAL;
-> >
-> > -     ret = copy_uabi_from_kernel_to_xstate(kstate, ustate);
-> > -     if (ret)
-> > -             return ret;
-> > +     /*
-> > +      * Nullify @vpkru to preserve its current value if PKRU's bit isn't set
-> > +      * in the header.  KVM's odd ABI is to leave PKRU untouched in this
-> > +      * case (all other components are eventually re-initialized).
-> > +      * (Not clear that this is actually necessary for compat).
-> > +      */
-> > +     if (!(ustate->xsave.header.xfeatures & XFEATURE_MASK_PKRU))
-> > +             vpkru = NULL;
->
-> I'm not a big fan of hunks that are part of bugfixes where it is not
-> clear that the hunk is necessary.
-
-This is necessary to avoid changing KVM's behavior at the same time
-that we change
-ptrace, since KVM doesn't want the same behavior as ptrace.
-
-> > -     /* Retrieve PKRU if not in init state */
-> > -     if (kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU) {
-> > -             xpkru = get_xsave_addr(&kstate->regs.xsave, XFEATURE_PKRU);
-> > -             *vpkru = xpkru->pkru;
-> > -     }
-> > -     return 0;
-> > +     return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
-> >  }
-> >  EXPORT_SYMBOL_GPL(fpu_copy_uabi_to_guest_fpstate);
-> >  #endif /* CONFIG_KVM */
-> > diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
-> > index 75ffaef8c299..6d056b68f4ed 100644
-> > --- a/arch/x86/kernel/fpu/regset.c
-> > +++ b/arch/x86/kernel/fpu/regset.c
-> > @@ -167,7 +167,7 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
-> >       }
-> >
-> >       fpu_force_restore(fpu);
-> > -     ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf);
-> > +     ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf, &target->thread.pkru);
->
-> I actually hadn't dug into the KVM code around this before.  It seems
-> like the PKRU pointer (&target->thread.pkru) here can also be
-> &vcpu->arch.pkru if it comes from the KVM side.
-
-Right. Where we need to put PKRU to get the kernel to swap it in
-varies depending
-on whether this is a normal task or a VM.
-
-> I was missing why PKRU is so special here.  I think in *both* cases,
-> we're copying a potential PKRU value from userspace.  But, the fpstate
-> target is a useless place to write PKRU because the kernel doesn't
-> update from there.
-
-Right.
-
-> So, the copy-in function
-> (copy_uabi_from_kernel_to_xstate()) needs a place to stash PKRU where
-> the kernel will see it.  The place that the kernel wants to stash it is
-> either the task PKRU field or the KVM vcpu field.  That's what the
-> pointer provides.
-
-Right.
-
-> Also, is this getting a wee bit over 80 columns?
-
-Probably.
-
-> >  out:
-> >       vfree(tmpbuf);
-> > diff --git a/arch/x86/kernel/fpu/signal.c b/arch/x86/kernel/fpu/signal.c
-> > index 91d4b6de58ab..558076dbde5b 100644
-> > --- a/arch/x86/kernel/fpu/signal.c
-> > +++ b/arch/x86/kernel/fpu/signal.c
-> > @@ -396,7 +396,7 @@ static bool __fpu_restore_sig(void __user *buf, void __user *buf_fx,
-> >
-> >       fpregs = &fpu->fpstate->regs;
-> >       if (use_xsave() && !fx_only) {
-> > -             if (copy_sigframe_from_user_to_xstate(fpu->fpstate, buf_fx))
-> > +             if (copy_sigframe_from_user_to_xstate(tsk, buf_fx))
-> >                       return false;
->
-> This is also changing copy_sigframe_from_user_to_xstate() to take a
-> 'task_struct' instead of an 'fpstate'.  Why?  That function just turns
-> it right back into an fpstate with: tsk->thread.fpu.fpstate.
-
-So that we can also access tsk->thread.pkru at the same time.
-
-> >       } else {
-> >               if (__copy_from_user(&fpregs->fxsave, buf_fx,
-> > diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> > index c8340156bfd2..8f14981a3936 100644
-> > --- a/arch/x86/kernel/fpu/xstate.c
-> > +++ b/arch/x86/kernel/fpu/xstate.c
-> > @@ -1197,7 +1197,7 @@ static int copy_from_buffer(void *dst, unsigned int offset, unsigned int size,
-> >
-> >
-> >  static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
-> > -                            const void __user *ubuf)
-> > +                            const void __user *ubuf, u32 *pkru)
->
-> I think this function deserves a little comment about what it expects
-> from 'pkru' here.  Maybe:
-
-Ok.
-
-> /*
->  * The kernel will not update the actual PKRU register from the PKRU
->  * space in @fpstate.  Allow callers to pass in an alternate destination
->  * for PKRU.  This is currently either the pkru field from the
->  * task_struct or vcpu.
->  */
-
-Or NULL, but yeah, sure.
-
-> >  {
-> >       struct xregs_state *xsave = &fpstate->regs.xsave;
-> >       unsigned int offset, size;
-> > @@ -1246,6 +1246,21 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
-> >               }
-> >       }
-> >
-> > +     /*
-> > +      * Update the user protection key storage. Allow KVM to
-> > +      * pass in a NULL pkru pointer if the mask bit is unset
-> > +      * for its legacy ABI behavior.
-> > +      */
->
-> If I read this in 5 years, do I know what the "KVM legacy ABI behavior" is?
-
-Probably not. I'll be more specific.
-
-> > +     if (pkru)
-> > +             *pkru = 0;
-> > +
-> > +     if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
-> > +             struct pkru_state *xpkru;
-> > +
-> > +             xpkru = __raw_xsave_addr(xsave, XFEATURE_PKRU);
-> > +             *pkru = xpkru->pkru;
-> > +     }
->
-> This is a bit wonky.  The code kinda pretends that XFEATURE_MASK_PKRU
-> and 'pkru' are independent.  But, it's actually impossible to have a
-> pkru==NULL and have XFEATURE_MASK_PKRU set.  The code would oops in that
-> case.
-
-Right.
-
-> Would something like this be more clear?
->
->         if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
->                 struct pkru_state *xpkru;
->
->                 xpkru = __raw_xsave_addr(xsave, XFEATURE_PKRU);
->                 *pkru = xpkru->pkru;
->         } else {
->                 /*
->                  * KVM may pass a NULL 'pkru' to indicate
->                  * that it does not need PKRU updated.
->                  */
->                 if (pkru)
->                         *pkru = 0;
->         }
-
-Yeah, Sean Christopherson suggested this (with the else and if
-collapsed into a single level) when I submitted this previously.
-
-Thanks,
-
-- Kyle
+I'm going with your original suggestion of just grabbing raw_smp_processor_id()
+in the helpers that print the error message.
