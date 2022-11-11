@@ -2,129 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2F0626026
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E094626028
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234364AbiKKRKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 12:10:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
+        id S233593AbiKKRK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:10:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234319AbiKKRJq (ORCPT
+        with ESMTP id S231625AbiKKRK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:09:46 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00981BE2B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:09:21 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id e129so4849040pgc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:09:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8np7/G7bsyFXWgIxYekl7kPxfItn8rFnlB5cNNDFqN4=;
-        b=Vk1KDeaImsSydqONneD4SKhmcDiZUj2sLkG+UGXR5C18BKD9dc7eov9JlfcjpRveW/
-         GNIHwtiJ1+nQx310I5JwbrcGfdgVkVXyI1PtwfjTPZWc2FoLj3tmRsmmNfSgck/qEy9g
-         gKAEUutfqR699uAbQvSToUczY09dl3waMFGCiuaSsfjsRuuyJNWJccRA+O1k1FCqov9/
-         xFNi2xvq9+rAiVHmgFvjYTIZG14qNGciPN8QVxQPJx/wNh4Phk2iUcdVF9O/6/AMdGUw
-         6g2wmIckWDf8qhGutH8CNzy5bmj6IcVH+FF/yadUQHyth3btUtc5esxNUlxUdSJccoT/
-         /p5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8np7/G7bsyFXWgIxYekl7kPxfItn8rFnlB5cNNDFqN4=;
-        b=Rn8oH4aA7nrI62HErD6x8pbOGtyZyx1lTMGuayusCml49fWmDSC0RKXZ6W2KTSE3og
-         7sfW4ogSmOgTzNCnvVcBxKzdiZybsIiZRCnjhJ3Bknskk2rHI240SihRLlfDIgIRULwf
-         e7mcliomotCV7oEmNtzx5CWWjEe4IEzeNPQlbLKBIUwQY9LPTXomNGmjf94Vb0Sp2WY9
-         4MMcgSZWsny9xaJChy+TP4DDL5OVgNyRceg+gsmdJknmcuxzevpp3GOD9Ucp0SI1xGNC
-         Si9x15XpnIh/7ykpYq9dhbbeB4TDvEoT6QlLHzXd+dFE+ZoTJnO4as+7PHabBxvl5icT
-         fgUQ==
-X-Gm-Message-State: ANoB5pl+wkaeICJHccaA2OyoSi51ylx6RXwj8p+Nyoe5vdvbxwhbuv37
-        mhCdnsdu3Q2uUraugw48QmQ=
-X-Google-Smtp-Source: AA0mqf6bOc6eswnSV3TfmcRFzmPhTL6Ee1KbWpaBaOGQLlUb9Jl61D3zc4K3ORXo+CB6cVL5uBgJAg==
-X-Received: by 2002:a63:5115:0:b0:46f:a989:ad72 with SMTP id f21-20020a635115000000b0046fa989ad72mr2401863pgb.430.1668186561335;
-        Fri, 11 Nov 2022 09:09:21 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:dab:6951:19b1:b46b])
-        by smtp.gmail.com with ESMTPSA id o28-20020aa7979c000000b0056babe4fb8asm931672pfp.49.2022.11.11.09.09.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 09:09:20 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Fri, 11 Nov 2022 09:09:19 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv4 2/9] zsmalloc: turn zspage order into runtime variable
-Message-ID: <Y26BvxM1CeqnaLI3@google.com>
-References: <20221031054108.541190-1-senozhatsky@chromium.org>
- <20221031054108.541190-3-senozhatsky@chromium.org>
- <Y210OrSgrqWPr0DT@google.com>
- <Y24mEiy0pt2qSCqr@google.com>
+        Fri, 11 Nov 2022 12:10:57 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76906447;
+        Fri, 11 Nov 2022 09:10:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Tk0Hf69YpxSBIfkAMdq6PCEYbR7nI6ryQyiKET4SZR0=; b=5wn/6vDBGpTFEcDieElbxGjbHR
+        gr/SORd92RIorBuTsjdfZQxlTdTfTqLg8RqY2g5VRvTSj6bWf709Y37Q9tnGcyy2uhwWtrtLXKMrf
+        u2qODuuLaKIOtxICJ7TkXV9yONeRZDymOCXwmKQCCEkApiHp3TBPv4xU3K/5wMacl8EI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1otXXc-0028Sr-7k; Fri, 11 Nov 2022 18:10:08 +0100
+Date:   Fri, 11 Nov 2022 18:10:08 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: dsa: use NET_NAME_PREDICTABLE for user ports with
+ name given in DT
+Message-ID: <Y26B8NL3Rv2u/otG@lunn.ch>
+References: <20221111161729.915233-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y24mEiy0pt2qSCqr@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221111161729.915233-1-linux@rasmusvillemoes.dk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_PASS,T_SPF_HELO_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 07:38:10PM +0900, Sergey Senozhatsky wrote:
-< snip >
+> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+> index a9fde48cffd4..dfefcc4a9ccf 100644
+> --- a/net/dsa/slave.c
+> +++ b/net/dsa/slave.c
+> @@ -2374,16 +2374,25 @@ int dsa_slave_create(struct dsa_port *port)
+>  {
+>  	struct net_device *master = dsa_port_to_master(port);
+>  	struct dsa_switch *ds = port->ds;
+> -	const char *name = port->name;
+>  	struct net_device *slave_dev;
+>  	struct dsa_slave_priv *p;
+> +	const char *name;
+> +	int assign_type;
+>  	int ret;
+>  
+>  	if (!ds->num_tx_queues)
+>  		ds->num_tx_queues = 1;
+>  
+> +	if (port->name) {
+> +		name = port->name;
+> +		assign_type = NET_NAME_PREDICTABLE;
+> +	} else {
+> +		name = "eth%d";
+> +		assign_type = NET_NAME_UNKNOWN;
+> +	}
 
-> [..]
-> > >  enum fullness_group {
-> > >  	ZS_EMPTY,
-> > > @@ -230,12 +221,15 @@ struct link_free {
-> > >  struct zs_pool {
-> > >  	const char *name;
-> > >  
-> > > -	struct size_class *size_class[ZS_SIZE_CLASSES];
-> > > +	struct size_class **size_class;
-> > >  	struct kmem_cache *handle_cachep;
-> > >  	struct kmem_cache *zspage_cachep;
-> > >  
-> > >  	atomic_long_t pages_allocated;
-> > >  
-> > > +	u32 num_size_classes;
-> > > +	u32 min_alloc_size;
-> > 
-> > Please use int.
-> 
-> OK. Any reason why we don't want u32? I thought that
-> s16/u16/s32/u32/etc. is the new normal.
+I know it is a change in behaviour, but it seems like NET_NAME_ENUM
+should be used, not NET_NAME_UNKNOWN. alloc_etherdev_mqs() uses
+NET_NAME_ENUM.
 
-Oh, I didn't know the new normal.
+https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/netdevice.h#L42
+says that NET_NAME_UNKNOWN does not get passed to user space, but i
+assume NET_NAME_ENUM does. So maybe changing it would be an ABI
+change?
 
-# ag u32 mm/ | wc -l 
-65
+Humm, i don't know what the right thing is...
 
-Then, I'd like to use int to be consistent with others.
-
-> 
-> > From this patch, I couldn't figure why we need
-> > variable in the pool. Let's have the change in the patch where
-> > you really need to have the usecase.
-> 
-> Let me take a look.
-> 
-> > > -static int get_pages_per_zspage(int class_size)
-> > > +static int get_pages_per_zspage(u32 class_size, u32 num_pages)
-> > 
-> > Let's just use int instead of u32
-> > 
-> > Why do you need num_pages argument instead of using 1UL << ZS_DEFAULT_PAGE_ORDER?
-> > It looks like static value.
-> 
-> It is static right now, but in the a couple of patches it'll change to
-> dynamic.
-
-Then, plase have the change in the patch you will use to review easier.
+      Andrew
