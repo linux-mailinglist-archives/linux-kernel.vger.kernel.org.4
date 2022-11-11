@@ -2,77 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868236262AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 21:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C00696262AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 21:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234074AbiKKUQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 15:16:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54818 "EHLO
+        id S234088AbiKKURz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 15:17:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233752AbiKKUQc (ORCPT
+        with ESMTP id S232943AbiKKURx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 15:16:32 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4389B845F3
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 12:16:31 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so5587445pjd.4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 12:16:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I9wKcCSxee3fGRXsHP7+5SA+IgN1I4iGmJtWyDFL56E=;
-        b=UGGcoq5EqTZDBEOroTloMC/2p7lbC2mv10mi4sSO0LQrlP9xWkhOQFArogjX/OkBKZ
-         cFqpYVFtS4q0BU3j+718z5Pl9ZeT27aRjcpchJxdDChgNR4uF6P+SQBjamzmJJ5fk5Ub
-         88LwUbzwRg13X1b1Zav0YTgARnV90jIR6I/nQ=
+        Fri, 11 Nov 2022 15:17:53 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A635E11175
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 12:17:51 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id m9-20020a056e021c2900b002fadb905ddcso4678377ilh.18
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 12:17:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I9wKcCSxee3fGRXsHP7+5SA+IgN1I4iGmJtWyDFL56E=;
-        b=yGUxTLedwGu6au3JisZO+yTcZgLcyhPgg7+9q2kfJAFlpTueo5Wv/J356jFDWHShzh
-         u3eMqX3bZ7LywewQut2U4ek62NzKNkfdYck8ePrHXmqX3xhrybzXKSwqkA8zLgJxzH1V
-         +DCFIRc6cZvTIGlJXGgRUj0cq97ctITJf3cn8dMLG37UxUHGcQbAVRYi2HPnRQuxaRjr
-         JooPBilpF0OMx2l45oImxCS7cPN/En7+jJhrjl72MDsgfGkTiplv6PYLSQOsaPV88ar4
-         MlMuurB8Fp7fll49I3D0fGlBF323+MiXvSVm39muXphoAFmq4yjV5SvzdsfQ48/xWrqP
-         +Y+A==
-X-Gm-Message-State: ANoB5pmpJN3AwMnFVOyFcmTXr4w9Mn1vc+Og5zg7hbUhuIKFmWSc6/xb
-        ZmPy4zsyIZL5CSkxTaxrXirK+g==
-X-Google-Smtp-Source: AA0mqf4jt8C/RYYwBmrF+x8RmkjnEH0N0TDFuZ+EYwSxeV7yub85W/7zaVPeZs99zPYzESHhKKNLbA==
-X-Received: by 2002:a17:90b:3951:b0:217:cdc4:afef with SMTP id oe17-20020a17090b395100b00217cdc4afefmr3658282pjb.115.1668197790709;
-        Fri, 11 Nov 2022 12:16:30 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q24-20020a63e958000000b0047048c201e3sm1708532pgj.33.2022.11.11.12.16.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 12:16:30 -0800 (PST)
-Date:   Fri, 11 Nov 2022 12:16:29 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Karol Herbst <kherbst@redhat.com>
-Cc:     Jani Nikula <jani.nikula@intel.com>, Lyude Paul <lyude@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, Ilia Mirkin <imirkin@alum.mit.edu>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        "Nathan E. Egge" <unlord@xiph.org>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        Dave Airlie <airlied@redhat.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: Coverity: nouveau_dp_irq(): Null pointer dereferences
-Message-ID: <202211111215.1F421B7E@keescook>
-References: <202211100850.7A8DD75@keescook>
- <87iljl6ehe.fsf@intel.com>
- <202211111110.11B554B@keescook>
- <CACO55tt5KOgDYMEw=spDeoMaYuj2GQOuHU+BEgadr1nQiFOGhw@mail.gmail.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gyaZcp8B8nRUIyPycYcHuv+4RGt52VgPhOpupxsL+qw=;
+        b=RIRdBUfsqfki1EZJa45+xJQl0Gym/Hd9lqEU8pbdgg3fLnbE9iWph+r5/WXrpAvfHn
+         56DUNzJwMhWsExq+vZgW4b4Nvo1hSaWdV+mrf4ek6ZMjeQgR/B72gg2hil/irSNd2wg4
+         VNIc3Dp9xKm3M0FZ8ny5dlhqPFETuX96j3SLA/iWwLEPoIJkWcDAxoOInrc95wXYRPkE
+         FIHeNehY56fVvqIi8vCShrayTq4+agKAp8rYqTy3kROChXGyS3HCZKr46rIbZT9CSSQ9
+         wfYeWamwZVoXebx+2nAkNkWy9v5xKDPj82Fg/ZEakLMn4eQyrWtpqzllszMyj9f6CKWg
+         SNcg==
+X-Gm-Message-State: ANoB5pmARCaS1n8fOQUzH4tAJZugCLQS/H79ZD7yXDm+AgK/LCPMifXl
+        /3c7+fNBmQjOUVwboC/44jlGo/62PJ9P8AALV+LSDgqLY24g
+X-Google-Smtp-Source: AA0mqf7aY02f/kA19ZQ1ZdkUtTdYfGVMXDVjfXYR51Rq8aSOU+asihFQhkFWO5oFHHuZ0HKrmu5hAbVvT2p4SGDGFglCBefL6CU7
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACO55tt5KOgDYMEw=spDeoMaYuj2GQOuHU+BEgadr1nQiFOGhw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Received: by 2002:a92:c144:0:b0:302:36a2:4d3b with SMTP id
+ b4-20020a92c144000000b0030236a24d3bmr1783894ilh.258.1668197870991; Fri, 11
+ Nov 2022 12:17:50 -0800 (PST)
+Date:   Fri, 11 Nov 2022 12:17:50 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008400d405ed3795a5@google.com>
+Subject: [syzbot] WARNING in ida_free
+From:   syzbot <syzbot+84a3c66e4b9dbbb678a8@syzkaller.appspotmail.com>
+To:     asmadeus@codewreck.org, ericvh@gmail.com,
+        linux-kernel@vger.kernel.org, linux_oss@crudebyte.com,
+        lucho@ionkov.net, syzkaller-bugs@googlegroups.com,
+        v9fs-developer@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,71 +56,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 09:06:54PM +0100, Karol Herbst wrote:
-> On Fri, Nov 11, 2022 at 8:21 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Fri, Nov 11, 2022 at 11:13:17AM +0200, Jani Nikula wrote:
-> > > On Thu, 10 Nov 2022, coverity-bot <keescook@chromium.org> wrote:
-> > > > Hello!
-> > > >
-> > > > This is an experimental semi-automated report about issues detected by
-> > > > Coverity from a scan of next-20221110 as part of the linux-next scan project:
-> > > > https://scan.coverity.com/projects/linux-next-weekly-scan
-> > > >
-> > > > You're getting this email because you were associated with the identified
-> > > > lines of code (noted below) that were touched by commits:
-> > > >
-> > > >   Mon Aug 31 19:10:08 2020 -0400
-> > > >     a0922278f83e ("drm/nouveau/kms/nv50-: Refactor and cleanup DP HPD handling")
-> > >
-> > > Hi Kees, this looks like a good idea, but maybe double check the Cc list
-> > > generation? I was Cc'd on four mails today that I thought were
-> > > irrelevant to me.
-> >
-> > Hi!
-> >
-> > Heh, I was recently asked to _expand_ the CC list. :)
-> >
-> > For these last pass of reports, I added a get_maintainers.pl run to the
-> > identified commit. In this instance, the commit touched:
-> >
-> >  drivers/gpu/drm/nouveau/dispnv04/disp.c     |    6 +
-> >  drivers/gpu/drm/nouveau/dispnv50/disp.c     |  192 ++++++++++++++++++++++--------------------------
-> >  drivers/gpu/drm/nouveau/nouveau_connector.c |   14 ---
-> >  drivers/gpu/drm/nouveau/nouveau_display.c   |    2
-> >  drivers/gpu/drm/nouveau/nouveau_display.h   |    2
-> >  drivers/gpu/drm/nouveau/nouveau_dp.c        |  132 ++++++++++++++++++++++++++++-----
-> >  drivers/gpu/drm/nouveau/nouveau_encoder.h   |   33 +++++++-
-> >  7 files changed, 244 insertions(+), 137 deletions(-)
-> >
-> > And the get_maintainers.pl rationale was:
-> >
-> > Ben Skeggs <bskeggs@redhat.com> (supporter:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS,commit_signer:1/1=100%,commit_signer:6/16=38%,authored:4/16=25%,added_lines:23/124=19%,removed_lines:36/152=24%)
-> > Karol Herbst <kherbst@redhat.com> (supporter:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS,commit_signer:2/1=100%)
-> > Lyude Paul <lyude@redhat.com> (supporter:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS,commit_signer:9/16=56%,authored:6/16=38%,added_lines:92/124=74%,removed_lines:107/152=70%)
-> > David Airlie <airlied@gmail.com> (maintainer:DRM DRIVERS)
-> > Daniel Vetter <daniel@ffwll.ch> (maintainer:DRM DRIVERS)
-> > Ilia Mirkin <imirkin@alum.mit.edu> (commit_signer:1/1=100%,authored:1/1=100%,added_lines:2/2=100%,removed_lines:2/2=100%)
-> > "Nathan E. Egge" <unlord@xiph.org> (commit_signer:1/1=100%)
-> > Jani Nikula <jani.nikula@intel.com> (commit_signer:6/16=38%)
-> > Dave Airlie <airlied@redhat.com> (commit_signer:5/16=31%)
-> > Thomas Zimmermann <tzimmermann@suse.de> (commit_signer:4/16=25%,authored:4/16=25%)
-> > dri-devel@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS)
-> > nouveau@lists.freedesktop.org (open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS)
-> >
-> 
-> I'd say it's good enough to message supporters and the mailing lists
-> for at least Nouveau code, maybe even all drm drivers.
+Hello,
 
-i.e. leave out the commit_signer hits?
+syzbot found the following issue on:
 
-> Not sure what to do about actual maintainers, but I doubt Dave and
-> Daniel want to be CCed on every Coverity report here either.
+HEAD commit:    f0c4d9fc9cc9 Linux 6.1-rc4
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=17204056880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ff27f0c8b406726e
+dashboard link: https://syzkaller.appspot.com/bug?extid=84a3c66e4b9dbbb678a8
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
-I updated the CC logic based on this feedback:
-https://lore.kernel.org/linux-hardening/87h6zgfub4.fsf@kernel.org/
+Unfortunately, I don't have any reproducer for this issue yet.
 
-So maybe just mailing lists?
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/92c7e839ac32/disk-f0c4d9fc.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b7bedbc08fb4/vmlinux-f0c4d9fc.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3fe25e2dfdb7/Image-f0c4d9fc.gz.xz
 
--- 
-Kees Cook
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+84a3c66e4b9dbbb678a8@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+ida_free called for id=0 which is not allocated.
+WARNING: CPU: 0 PID: 3066 at lib/idr.c:525 ida_free+0x1b0/0x208 lib/idr.c:525
+Modules linked in:
+CPU: 0 PID: 3066 Comm: syz-executor.1 Not tainted 6.1.0-rc4-syzkaller-31833-gf0c4d9fc9cc9 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : ida_free+0x1b0/0x208 lib/idr.c:525
+lr : ida_free+0x1b0/0x208 lib/idr.c:525
+sp : ffff800012bf3c40
+x29: ffff800012bf3c80 x28: ffff0000c4048000 x27: 0000000000000000
+x26: 00000000000000c0 x25: 0000000000000002 x24: ffff80000d2dd050
+x23: 0007fffffffffffe x22: 0000000000000001 x21: 0000000000000000
+x20: 0000000000000000 x19: 0000000000000000 x18: 000000000000033b
+x17: 0000000000000000 x16: ffff80000db2a158 x15: ffff0000c4048000
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c4048000
+x11: ff808000081c06c8 x10: 0000000000000000 x9 : 16d63cd4e166ba00
+x8 : 16d63cd4e166ba00 x7 : ffff800008162114 x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : ffff0001fefbecc8 x1 : 0000000100000000 x0 : 0000000000000030
+Call trace:
+ ida_free+0x1b0/0x208 lib/idr.c:525
+ free_anon_bdev fs/super.c:1073 [inline]
+ kill_anon_super+0x34/0x44 fs/super.c:1087
+ v9fs_kill_super+0x24/0x50 fs/9p/vfs_super.c:223
+ deactivate_locked_super+0x70/0xe8 fs/super.c:332
+ deactivate_super+0xd0/0xd4 fs/super.c:363
+ cleanup_mnt+0x184/0x1c0 fs/namespace.c:1186
+ __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
+ task_work_run+0x100/0x148 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
+ prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+ exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+ el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+irq event stamp: 13153724
+hardirqs last  enabled at (13153723): [<ffff8000081621a4>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1366 [inline]
+hardirqs last  enabled at (13153723): [<ffff8000081621a4>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4950
+hardirqs last disabled at (13153724): [<ffff80000c00eacc>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+softirqs last  enabled at (13153716): [<ffff8000080102e4>] _stext+0x2e4/0x37c
+softirqs last disabled at (13153683): [<ffff800008017c68>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
+---[ end trace 0000000000000000 ]---
+list_del corruption, ffff00012527d000->next is NULL
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:50!
+Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 3066 Comm: syz-executor.1 Tainted: G        W          6.1.0-rc4-syzkaller-31833-gf0c4d9fc9cc9 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __list_del_entry_valid+0x70/0xd0 lib/list_debug.c:49
+lr : __list_del_entry_valid+0x70/0xd0 lib/list_debug.c:49
+sp : ffff800012bf3cc0
+x29: ffff800012bf3cc0 x28: ffff0000c4048000 x27: 0000000000000000
+x26: 00000000000000c0 x25: 0000000000000002 x24: ffff80000d2dd050
+x23: ffff80000d2d9000 x22: 0000000000000000 x21: 0000000000000000
+x20: 0000000000000000 x19: ffff00012527d000 x18: 00000000000000c0
+x17: ffff80000dcec198 x16: ffff80000db2a158 x15: ffff0000c4048000
+x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c4048000
+x11: ff808000081c06c8 x10: 0000000000000000 x9 : 16d63cd4e166ba00
+x8 : 16d63cd4e166ba00 x7 : ffff80000c01c69c x6 : 0000000000000000
+x5 : 0000000000000080 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : ffff0001fefddcc8 x1 : 0000000100000001 x0 : 0000000000000033
+Call trace:
+ __list_del_entry_valid+0x70/0xd0 lib/list_debug.c:49
+ __list_del_entry include/linux/list.h:134 [inline]
+ list_del_init include/linux/list.h:206 [inline]
+ __put_super+0x48/0x198 fs/super.c:289
+ put_super fs/super.c:311 [inline]
+ deactivate_locked_super+0xa0/0xe8 fs/super.c:343
+ deactivate_super+0xd0/0xd4 fs/super.c:363
+ cleanup_mnt+0x184/0x1c0 fs/namespace.c:1186
+ __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
+ task_work_run+0x100/0x148 kernel/task_work.c:179
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
+ prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+ exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+ el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+Code: d65f03c0 b001b160 91341000 94a843f8 (d4210000) 
+---[ end trace 0000000000000000 ]---
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
