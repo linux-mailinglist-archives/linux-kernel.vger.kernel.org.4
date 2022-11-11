@@ -2,121 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F21625B2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE9E625B33
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233756AbiKKN3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 08:29:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
+        id S233899AbiKKNaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 08:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbiKKN3G (ORCPT
+        with ESMTP id S233844AbiKKNaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 08:29:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9241117420
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 05:29:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1848D61FCC
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 13:29:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D4AFC433D6;
-        Fri, 11 Nov 2022 13:29:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668173344;
-        bh=fJkVku6UihzNOl7Dkq+EJ1F1NQcd6o7T8PJpq+a6u5g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=sKDywg44dWfWS34cuxFh2R+d8reKj6AAmR+3qlaY6swdV51HNKHp+6M9vHfazxesc
-         VXWaNscBPQrXju75qN7wfO36mSmKfTYyfakG67pbF5XPiHRJ9luWIXKAiqdRTJ8dBv
-         isWNKb+00FIIvfGZGUjNfDBrN1oD1CPNPWrovOfXpx1JcwJXc70jZyc/rceRSUmsvO
-         hUG+6+VIy/fM8Jq9qvjtK5AhvMVJQi/8XIHJo6o2EYoAX4ClqChrkok2J7aif9RxVf
-         TYjoD+UXI/JnK6xIy3+dUDNWE0APcH0FM00vLxDVcvfcIf+RqZt7HftsVKx4iUygc4
-         cQYtGy3GWN0fg==
-Date:   Fri, 11 Nov 2022 22:29:00 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: ftrace: Define ftrace_stub_graph only with
- FUNCTION_GRAPH_TRACER
-Message-Id: <20221111222900.0e4a1d4768730b9784249c86@kernel.org>
-In-Reply-To: <20221109192831.3057131-1-samitolvanen@google.com>
-References: <20221109192831.3057131-1-samitolvanen@google.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 11 Nov 2022 08:30:04 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D3D560367
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 05:30:02 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id v28so4881997pfi.12
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 05:30:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=M0HVMhLQv1RJfokbEb7w/OlQquqonqkODdkh8fwYdsI=;
+        b=SlLCCRurDhyCwz3e2I8fL7r/uAP6b1gny457Y5bcm2IsKnTrrPEpxgU3ZxL0Q/RVXG
+         jUkJtbv75/FGGaVJctxp871UliWISdbMdvJexhqM2rum4iSotN3qZs8FShHmMRhMqtTw
+         PDgE3iEXrtXiTqsjdqO1jzP/tgSoD5jpI4mWnErIbmZDMU7E6iFqU+qR0w+umw6yp5hX
+         Iu44nhVGTNgOX4F1l3USy5GwIcIUk16kChQ2FwDR1efIy9P/8dtoPaTYd2g7C+iCe44I
+         UR/gyr0IRWtiB/PbAT5TALWziKhRQDS1mf1uE/TlT1J10boVlUKOU2MYqq4hdP3QmRh0
+         8pxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M0HVMhLQv1RJfokbEb7w/OlQquqonqkODdkh8fwYdsI=;
+        b=Bj2/TSUCfPAHmzfcw71a6AK5JJsDw8MraDnOTd9JGpdHOr1ALGPZ5UBGaLEYNRWdLa
+         D9wgUsVMMKYaV6T1dTO/2U7PQ/mDot6tmjbgvZ+BSnTjg7O4y88JdUIyPdlKra12d3M+
+         58AkhcadWWjhvoNZ3bdM7AO8tcnWDDZi1q0A8QCg4DK1ZN6rU+RshDZB3SMzA5wH2pAx
+         ZH2rLr/j/ArK89FT7vOovVqR35BlYk5VSKSp5kLjzzqU1Oi6PMuzInVbDaJ0m+YnJpPO
+         kYZzDN38npA9cp1eVI6xMvVP+9WS6yEfZHAkQESFIaiEAvmCauM2E0fn+7tbJsM7+IaM
+         MB/A==
+X-Gm-Message-State: ANoB5plA/6j1wBjTttid2KASwQSP7lXu5qkbbpIkdbjOgyKuzh/3YwHr
+        9WxzqckYARGYnzgO7MpnetlU5WzivVPYESDDKqRk4Q==
+X-Google-Smtp-Source: AA0mqf6kliWqZX+ZuqUU2N7G7HxK+QseYkbm23tlyZ3IsNelzP82ZvMpOMo72W0xrY5NSLX5AtlqfHeDCyhR2t3+h4U=
+X-Received: by 2002:a63:493:0:b0:438:a751:f8fa with SMTP id
+ 141-20020a630493000000b00438a751f8famr1585765pge.601.1668173401716; Fri, 11
+ Nov 2022 05:30:01 -0800 (PST)
+MIME-Version: 1.0
+References: <CGME20221103195201eucas1p2a6ec2df41ebac3d9ccbb0b252c2cad34@eucas1p2.samsung.com>
+ <20221103195154.21495-1-semen.protsenko@linaro.org> <a7d9cd18-a328-209c-c89f-afdcb7db3eb0@samsung.com>
+ <b7ad6444-e7d2-1150-6134-3dae8129dcdb@samsung.com>
+In-Reply-To: <b7ad6444-e7d2-1150-6134-3dae8129dcdb@samsung.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Fri, 11 Nov 2022 14:29:49 +0100
+Message-ID: <CAPLW+4=Y6qZG2XjJR_BkX-ar4GWdETKO1tteJjfbxVc664e4Kg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] iommu/exynos: Convert to a module
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Janghyuck Kim <janghyuck.kim@samsung.com>,
+        Cho KyongHo <pullip.cho@samsung.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        David Virag <virag.david003@gmail.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Saravana Kannan <saravanak@google.com>,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  9 Nov 2022 19:28:31 +0000
-Sami Tolvanen <samitolvanen@google.com> wrote:
+On Thu, 10 Nov 2022 at 15:36, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
 
-> The 0-day bot reports that arm64 builds with CONFIG_CFI_CLANG +
-> CONFIG_FTRACE are broken when CONFIG_FUNCTION_GRAPH_TRACER is not
-> enabled:
-> 
->  ld.lld: error: undefined symbol: __kcfi_typeid_ftrace_stub_graph
->  >>> referenced by entry-ftrace.S:299 (arch/arm64/kernel/entry-ftrace.S:299)
->  >>>               arch/arm64/kernel/entry-ftrace.o:(.text+0x48) in archive vmlinux.a
-> 
-> This is caused by ftrace_stub_graph using SYM_TYPE_FUNC_START when
-> the address of the function is not taken in any C translation unit.
-> 
-> Fix the build by only defining ftrace_stub_graph when it's actually
-> needed, i.e. with CONFIG_FUNCTION_GRAPH_TRACER.
-> 
-> Link: https://lore.kernel.org/lkml/202210251659.tRMs78RH-lkp@intel.com/
-> Fixes: 883bbbffa5a4 ("ftrace,kcfi: Separate ftrace_stub() and ftrace_stub_graph()")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+[snip]
 
-This looks good to me.
+> I've finally made Exynos IOMMU working as a module on Exynos5433 based
+> TM2e board. It looks that this will be a bit longer journey that I've
+> initially thought. I've posted a simple update of the fix for the driver
+> initialization sequence, but the real problem is in the platform driver
+> framework and OF helpers.
+>
+> Basically to get it working as a module I had to apply the following
+> changes:
+>
+> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+> index 3dda62503102..f6921f5fcab6 100644
+> --- a/drivers/base/dd.c
+> +++ b/drivers/base/dd.c
+> @@ -257,7 +257,7 @@ static int deferred_devs_show(struct seq_file *s,
+> void *data)
+>   DEFINE_SHOW_ATTRIBUTE(deferred_devs);
+>
+>   #ifdef CONFIG_MODULES
+> -int driver_deferred_probe_timeout = 10;
+> +int driver_deferred_probe_timeout = 30;
+>   #else
+>   int driver_deferred_probe_timeout;
+>   #endif
+> diff --git a/drivers/of/property.c b/drivers/of/property.c
+> index 967f79b59016..e5df6672fee6 100644
+> --- a/drivers/of/property.c
+> +++ b/drivers/of/property.c
+> @@ -1384,7 +1384,7 @@ static struct device_node *parse_interrupts(struct
+> device_node *np,
+>   static const struct supplier_bindings of_supplier_bindings[] = {
+>          { .parse_prop = parse_clocks, },
+>          { .parse_prop = parse_interconnects, },
+> -       { .parse_prop = parse_iommus, .optional = true, },
+> +       { .parse_prop = parse_iommus, },
+>          { .parse_prop = parse_iommu_maps, .optional = true, },
+>          { .parse_prop = parse_mboxes, },
+>          { .parse_prop = parse_io_channels, },
+>
+> Without that a really nasty things happened.
+>
+> Initialization of the built-in drivers and loading modules takes time,
+> so the default 10s deferred probe timeout is not enough to ensure that
+> the built-in driver won't be probed before the Exynos IOMMU driver is
+> loaded.
+>
 
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Yeah, the whole time-based sync looks nasty... I remember coming
+across the slides by Andrzej Hajda called "Deferred Problem" [1], but
+I guess the proposed solution was never applied. Just hope that
+increasing the timeout is upstreamable solution.
 
-Thanks!
+[1] https://events19.linuxfoundation.org/wp-content/uploads/2017/12/Deferred-Problem-Issues-With-Complex-Dependencies-Between-Devices-in-Linux-Kernel-Andrzej-Hajda-Samsung.pdf
 
-> ---
->  arch/arm64/kernel/entry-ftrace.S | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
-> index 795344ab4ec4..322a831f8ede 100644
-> --- a/arch/arm64/kernel/entry-ftrace.S
-> +++ b/arch/arm64/kernel/entry-ftrace.S
-> @@ -299,11 +299,11 @@ SYM_TYPED_FUNC_START(ftrace_stub)
->  	ret
->  SYM_FUNC_END(ftrace_stub)
->  
-> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
->  SYM_TYPED_FUNC_START(ftrace_stub_graph)
->  	ret
->  SYM_FUNC_END(ftrace_stub_graph)
->  
-> -#ifdef CONFIG_FUNCTION_GRAPH_TRACER
->  /*
->   * void return_to_handler(void)
->   *
-> 
-> base-commit: f141df371335645ce29a87d9683a3f79fba7fd67
-> -- 
-> 2.38.1.431.g37b22c650d-goog
-> 
+> The second change fixes the problem that driver core probes Exynos IOMMU
+> controllers in parallel to probing the master devices, what results in
+> calling exynos_iommu_of_xlate() and exynos_iommu_probe_device() even on
+> the partially initialized IOMMU controllers or initializing the dma_ops
+> under the already probed and working master device. This was easy to
+> observe especially on the master devices with multiple IOMMU
+> controllers. I wasn't able to solve this concurrency/race issues inside
+> the Exynos IOMMU driver.
+>
+> Frankly speaking I don't know what is the rationale for making the
+> 'iommus' property optional, but this simply doesn't work well with IOMMU
+> driver being a module. CCed Saravana and Rob for this.
+>
 
+The patch which makes 'iommus' optional doesn't provide much of
+insight on reasons in commit message either.
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Without fixing the above issues, I would add a warning that compiling
+> the driver as a module leads to serious issues.
+>
+
+Nice catch! It doesn't reproduce on my platform, alas. Can I expect
+you to submit those patches? If so, I'll probably just wait for those
+to be applied, and then re-send my modularization series on top of it.
+Does that sounds reasonable?
+
+[snip]
+
+>
+> Best regards
+> --
+> Marek Szyprowski, PhD
+> Samsung R&D Institute Poland
+>
