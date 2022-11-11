@@ -2,61 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE1C625892
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:43:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A043625897
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:44:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233239AbiKKKnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 05:43:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
+        id S233316AbiKKKov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 05:44:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233023AbiKKKnb (ORCPT
+        with ESMTP id S232918AbiKKKos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 05:43:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA932DAD;
-        Fri, 11 Nov 2022 02:43:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3B3BB8256D;
-        Fri, 11 Nov 2022 10:43:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D08A6C433D6;
-        Fri, 11 Nov 2022 10:43:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668163406;
-        bh=qSf10Q0RCz9prfBSGp/ERyuz24K/NWgcXcVDUlam2as=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=El0c4Zi2xN1hi6NsMggMAR2lye8V9aBiQ8ZHugADh+TELK7VpsmgNKmAmUtq770y6
-         hy9PWrb9+oa3LP3fh7iCHsmVGVr5AzWUq14eYnMZlXuJaK08z9g1/xiv8HCI+8dSL2
-         1GcSMCDHtZoI6eVwvZSfNSwhPtr5xEoRgWdE8hgswIqD71JSLE85fa81NshJm4dKjp
-         z6czJbY05TcYc/CDfjR7gLdppqJgSjM/2zPIpGGcNfDHzDoEcpFHGmgjw61jARGjGC
-         WQOCqEjg5HOVWQpwqhV2CGMXKZudOKPrrMSEF85NHyJlcCzygkaSKrexJKQLScVjT0
-         M45hFvkJs6l4g==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     bcm-kernel-feedback-list@broadcom.com, linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Cyril Brulebois <kibi@debian.org>,
-        Jim Quinlan <jim2101024@gmail.com>, james.quinlan@broadcom.com
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 0/5] PCI: brcmstb: Add Multi-MSI and some improvements
-Date:   Fri, 11 Nov 2022 11:43:19 +0100
-Message-Id: <166816337015.202749.4605725952437837970.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221011184211.18128-1-jim2101024@gmail.com>
-References: <20221011184211.18128-1-jim2101024@gmail.com>
+        Fri, 11 Nov 2022 05:44:48 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258A365E5C;
+        Fri, 11 Nov 2022 02:44:47 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AB9vA9C019022;
+        Fri, 11 Nov 2022 10:44:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=oJdYxWuonUMkD49NmmkSxl5hIkspUmwaa1mPxqCCwxY=;
+ b=o5MI+Xz0CV49qhWcBf2MnCcYoI/XaMKpmh0OkiWgZncflZnPQy2qHyp+wUISMPFLT5ZW
+ 36ubDjigWT726UhQ3KS/NMHtrWK0KjZTdZ7yi6v2bzWE/XMGsQJdthXTMgLkH85fHu3b
+ JXGLgSKECRdmbS+g5fpVvj+R8VnMNdS5VXCS8HLR9ecHlXS3AdihHYUCb/nvpTB9EvNF
+ CjqIyp8rSD156xmh86+zGgtwHWVAwSvBGDoGAV8J5iZ/RN1s58wgJR9JMLdzZc5PmjmO
+ o2jxZIcBm89gp4ajOrHlPWYqjziExBB6Mnq67Op7fKXkq2VBOR0noV+bukkmcxRcET57 pg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kshc1gsgb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Nov 2022 10:44:40 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ABAid9n013850
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Nov 2022 10:44:39 GMT
+Received: from [10.79.43.101] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 11 Nov
+ 2022 02:44:35 -0800
+Message-ID: <93ee30cc-0a9c-df77-0ad3-1c35fc04a01b@quicinc.com>
+Date:   Fri, 11 Nov 2022 16:14:32 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 06/10] arm64: dts: qcom: Align with generic
+ osm-l3/epss-l3
+Content-Language: en-US
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Georgi Djakov <djakov@kernel.org>,
+        Mike Tipton <quic_mdtipton@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221111032515.3460-1-quic_bjorande@quicinc.com>
+ <20221111032515.3460-7-quic_bjorande@quicinc.com>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+In-Reply-To: <20221111032515.3460-7-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: b0thF9S4Aop_ZFlWALpvnNk1Kd68STjk
+X-Proofpoint-ORIG-GUID: b0thF9S4Aop_ZFlWALpvnNk1Kd68STjk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-11_06,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 mlxscore=0 malwarescore=0 adultscore=0
+ priorityscore=1501 phishscore=0 impostorscore=0 spamscore=0 clxscore=1015
+ mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211110071
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,33 +87,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 11 Oct 2022 14:42:05 -0400, Jim Quinlan wrote:
-> v2 -- Commit "PCI: brcmstb: Set RCB_{MPS,64B}_MODE bits"
->       - s/read compeletion boudnary/Read Completion Boundary/ (Bjorn)
-> 
-> v1 -- original
-> 
-> Jim Quinlan (5):
->   PCI: brcmstb: Enable Multi-MSI
->   PCI: brcmstb: Wait for 100ms following PERST# deassert
->   PCI: brcmstb: Replace status loops with read_poll_timeout_atomic()
->   PCI: brcmstb: Functions needlessly specified as "inline"
->   PCI: brcmstb: Set RCB_{MPS,64B}_MODE bits
-> 
-> [...]
 
-Applied to pci/brcmstb, thanks!
 
-[1/5] PCI: brcmstb: Enable Multi-MSI
-      https://git.kernel.org/lpieralisi/pci/c/198acab1772f
-[2/5] PCI: brcmstb: Wait for 100ms following PERST# deassert
-      https://git.kernel.org/lpieralisi/pci/c/3ae140ad827b
-[3/5] PCI: brcmstb: Replace status loops with read_poll_timeout_atomic()
-      https://git.kernel.org/lpieralisi/pci/c/ca5dcc76314d
-[4/5] PCI: brcmstb: Functions needlessly specified as "inline"
-      https://git.kernel.org/lpieralisi/pci/c/137b57413f56
-[5/5] PCI: brcmstb: Set RCB_{MPS,64B}_MODE bits
-      https://git.kernel.org/lpieralisi/pci/c/602fb860945f
+On 11/11/22 08:55, Bjorn Andersson wrote:
+> Update all references to OSM or EPSS L3 compatibles, to include the
+> generic compatible, as defined by the updated binding.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> Tested-by: Steev Klimaszewski <steev@kali.org>
+> ---
+> 
+> Changes since v1:
+> - None
+> 
+>   arch/arm64/boot/dts/qcom/sc7180.dtsi | 2 +-
+>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 +-
+>   arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
+>   arch/arm64/boot/dts/qcom/sm8150.dtsi | 2 +-
+>   arch/arm64/boot/dts/qcom/sm8250.dtsi | 2 +-
+>   5 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> index ea886cf08b4d..f71cf21a8dd8 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> @@ -3558,7 +3558,7 @@
+>   		};
+>   
+>   		osm_l3: interconnect@18321000 {
+> -			compatible = "qcom,sc7180-osm-l3";
+> +			compatible = "qcom,sc7180-osm-l3", "qcom,osm-l3";
+>   			reg = <0 0x18321000 0 0x1400>;
+>   
+>   			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index 07334e19be99..ad9c61768016 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -5359,7 +5359,7 @@
+>   		};
+>   
+>   		epss_l3: interconnect@18590000 {
+> -			compatible = "qcom,sc7280-epss-l3";
+> +			compatible = "qcom,sc7280-epss-l3", "qcom,epss-l3";
+>   			reg = <0 0x18590000 0 0x1000>;
+>   			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
+>   			clock-names = "xo", "alternate";
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> index 1a257f672887..9c7d484ce72f 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> @@ -5302,7 +5302,7 @@
+>   		};
+>   
+>   		osm_l3: interconnect@17d41000 {
+> -			compatible = "qcom,sdm845-osm-l3";
+> +			compatible = "qcom,sdm845-osm-l3", "qcom,osm-l3";
+>   			reg = <0 0x17d41000 0 0x1400>;
+>   
+>   			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
+> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> index 18bf51ce8b13..8409fb5ea532 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> @@ -3958,7 +3958,7 @@
+>   		};
+>   
+>   		osm_l3: interconnect@18321000 {
+> -			compatible = "qcom,sm8150-osm-l3";
+> +			compatible = "qcom,sm8150-osm-l3", "qcom,osm-l3";
+>   			reg = <0 0x18321000 0 0x1400>;
+>   
+>   			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
+> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> index 27b507f3632b..351c232b8dc6 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> @@ -4884,7 +4884,7 @@
+>   		};
+>   
+>   		epss_l3: interconnect@18590000 {
+> -			compatible = "qcom,sm8250-epss-l3";
+> +			compatible = "qcom,sm8250-epss-l3", "qcom,epss-l3";
 
-Thanks,
-Lorenzo
+if we do change sc7280, sm8250 epss compatible in the bindings, you'll
+no longer need to list the qcom,epss-l3 here. With ^^ done.
+
+Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
+
+
+>   			reg = <0 0x18590000 0 0x1000>;
+>   
+>   			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
