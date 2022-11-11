@@ -2,302 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C52625C42
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2CC625C4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 15:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234184AbiKKODD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 09:03:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
+        id S234321AbiKKODZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 09:03:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234175AbiKKOBe (ORCPT
+        with ESMTP id S234515AbiKKOCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 09:01:34 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EE1814C9;
-        Fri, 11 Nov 2022 05:57:03 -0800 (PST)
-Message-ID: <20221111132706.837228984@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668175020;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=jJ5OUs8oy/i3DiYcAeOessV+mjuhL6Xg3y+bf6DPjXE=;
-        b=qTQ1Kcf0eZL9Vl/+gd7SEW3hLQFRLy5/DL0moTd++wX2BOEdE0a0NJQEnqryc7X3F4cM8Z
-        aJ3rYAnCvPKSMVCoAWLYvZMLVS4OD3CGDw4XWhicE2Z7fXcwtAs+hW/ZLF1utUuT0Du3gB
-        Bz6UGMCEir/cfn4JC6whMffkvSirbuHufN4OVuj1u8r2geN/8OfWRUA7bo8M/Hf7jWpXFa
-        JN8BRZ+aAPYn1BbJ0dDIW+ek7KEyJjfQDAc7A9iP4+4lrs7t3BZFdz9Xnei9d3cJHGq+tD
-        QBJnqtGoIELtfDwKxtI85QAm35/8rsJMz3SCC4h9nuzfWTCrCt8CJHlhy5ddKg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668175020;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=jJ5OUs8oy/i3DiYcAeOessV+mjuhL6Xg3y+bf6DPjXE=;
-        b=oqWcyY3fyiDWYa67/poEIK+th+ooaPYHa1kO53AoX3kIveWrsBe/ZuBWmx41tY6PELy1QR
-        Oe+GDGVeLVX7nFAA==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
-        Allen Hubbe <allenbh@gmail.com>,
-        "Ahmed S. Darwish" <darwi@linutronix.de>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Subject: [patch 14/20] genirq/msi: Provide new domain id based interfaces for
- freeing interrupts
-References: <20221111131813.914374272@linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 11 Nov 2022 14:56:59 +0100 (CET)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Nov 2022 09:02:22 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21FA701A4;
+        Fri, 11 Nov 2022 05:57:35 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ABDoaW3002151;
+        Fri, 11 Nov 2022 13:57:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=2PT9ekc92Lt0QyNi8JjY4fmIbc6g40PvUICbYND34o4=;
+ b=KA5RmwkIJuTeNuVC1P/RELKvZkI12LrSVM3hnh2ZFLH6D/ydAodt2wextWFx8zEpp5b9
+ JWYZk/LPIq1j7PygstxOMMeW9ojtblf/nLTwPbW0B2uzs2QvuNehf/JXnkxh/z9mjMoi
+ YmbFuFsh12S8q5rPY/7Eixe6J/W3F7DGyQaQeimszbCRSFG+00QZ1aDgbRw40r6sXvNe
+ mLh1mrkDJK4LLmiAelbpai8vMV9gzbsVDeptsycICQh7uzeTnHEIb2Kw3R4hCoUfYUjJ
+ M1trykNuNDmPw3bG8Q1E/8RJuxjDZZ45j6Bc1lALq17WGsBwMBz2qn75hh2dERouEuFV Ig== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ksada22ny-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Nov 2022 13:57:05 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABDv2oe032184;
+        Fri, 11 Nov 2022 13:57:02 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3kngwkm2q3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 11 Nov 2022 13:57:02 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ABDv1Lt032178;
+        Fri, 11 Nov 2022 13:57:01 GMT
+Received: from kalyant-linux.qualcomm.com (kalyant-linux.qualcomm.com [10.204.66.210])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 2ABDv1Tt032175;
+        Fri, 11 Nov 2022 13:57:01 +0000
+Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
+        id D5B5D3892; Fri, 11 Nov 2022 05:57:00 -0800 (PST)
+From:   Kalyan Thota <quic_kalyant@quicinc.com>
+To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
+        linux-kernel@vger.kernel.org, robdclark@chromium.org,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
+        quic_abhinavk@quicinc.com
+Subject: [v1] drm/msm/disp/dpu1: populate disp_info with connector type
+Date:   Fri, 11 Nov 2022 05:56:59 -0800
+Message-Id: <1668175019-10960-1-git-send-email-quic_kalyant@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: e3xo3x1DB_6eXyQ3ETBigcsHHaPRvXY3
+X-Proofpoint-GUID: e3xo3x1DB_6eXyQ3ETBigcsHHaPRvXY3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-11_08,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
+ mlxscore=0 mlxlogscore=999 spamscore=0 malwarescore=0 impostorscore=0
+ bulkscore=0 priorityscore=1501 lowpriorityscore=0 suspectscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211110093
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide two sorts of interfaces to handle the different use cases:
+Populate disp_info with connector type. Since DRM encoder type
+for few encoders can be similar (like eDP and DP) this information
+will be useful to differentiate interfaces.
 
-  - msi_domain_free_irqs_range():
+Changes in v1:
+- add connector type in the disp_info (Dmitry)
+- add helper functions to know encoder type
+- update commit text reflecting the change
 
-	Handles a caller defined precise range
-
-  - msi_domain_free_irqs_all():
-
-	Frees all interrupts associated to a domain
-
-The latter is useful for device teardown and to handle the legacy MSI support
-which does not have any range information available.
-
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
 ---
- include/linux/msi.h |    9 +++
- kernel/irq/msi.c    |  146 +++++++++++++++++++++++++++++++++++++++++++---------
- 2 files changed, 132 insertions(+), 23 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 44 +++++++++++++++++++++++++++--
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h | 26 +++++++++++++++--
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c     |  2 ++
+ drivers/gpu/drm/msm/dp/dp_display.c         |  5 ++++
+ drivers/gpu/drm/msm/msm_drv.h               |  7 ++++-
+ 5 files changed, 77 insertions(+), 7 deletions(-)
 
---- a/include/linux/msi.h
-+++ b/include/linux/msi.h
-@@ -486,6 +486,15 @@ int msi_domain_alloc_irqs(struct irq_dom
- 			  int nvec);
- void msi_domain_free_irqs_descs_locked(struct irq_domain *domain, struct device *dev);
- void msi_domain_free_irqs(struct irq_domain *domain, struct device *dev);
-+
-+void msi_domain_free_irqs_range_locked(struct device *dev, unsigned int domid,
-+				       unsigned int first, unsigned int last);
-+void msi_domain_free_irqs_range(struct device *dev, unsigned int domid,
-+				unsigned int first, unsigned int last);
-+
-+void msi_domain_free_irqs_all_locked(struct device *dev, unsigned int domid);
-+void msi_domain_free_irqs_all(struct device *dev, unsigned int domid);
-+
- struct msi_domain_info *msi_get_domain_info(struct irq_domain *domain);
- 
- struct irq_domain *platform_msi_create_irq_domain(struct fwnode_handle *fwnode,
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -583,7 +583,25 @@ static inline void msi_sysfs_remove_desc
- #endif /* !CONFIG_SYSFS */
- 
- static int __msi_domain_alloc_irqs(struct irq_domain *domain, struct device *dev, int nvec);
--static void __msi_domain_free_irqs(struct irq_domain *domain, struct device *dev);
-+
-+static struct irq_domain *msi_get_device_domain(struct device *dev, unsigned int domid)
-+{
-+	struct irq_domain *domain;
-+
-+	lockdep_assert_held(&dev->msi.data->mutex);
-+
-+	if (WARN_ON_ONCE(domid >= MSI_MAX_DEVICE_IRQDOMAINS))
-+		return NULL;
-+
-+	domain = dev->msi.data->__irqdomains[domid];
-+	if (!domain)
-+		return NULL;
-+
-+	if (WARN_ON_ONCE(irq_domain_is_msi_parent(domain)))
-+		return NULL;
-+
-+	return domain;
-+}
- 
- static inline void irq_chip_write_msi_msg(struct irq_data *data,
- 					  struct msi_msg *msg)
-@@ -744,7 +762,6 @@ static struct msi_domain_ops msi_domain_
- 	.msi_prepare		= msi_domain_ops_prepare,
- 	.set_desc		= msi_domain_ops_set_desc,
- 	.domain_alloc_irqs	= __msi_domain_alloc_irqs,
--	.domain_free_irqs	= __msi_domain_free_irqs,
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+index 9c6817b..c9058aa 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+@@ -217,6 +217,40 @@ static u32 dither_matrix[DITHER_MATRIX_SZ] = {
+ 	15, 7, 13, 5, 3, 11, 1, 9, 12, 4, 14, 6, 0, 8, 2, 10
  };
  
- static void msi_domain_update_dom_ops(struct msi_domain_info *info)
-@@ -758,8 +775,6 @@ static void msi_domain_update_dom_ops(st
++bool dpu_encoder_is_external(struct drm_encoder *drm_enc)
++{
++	struct dpu_encoder_virt *dpu_enc;
++
++	if (!drm_enc)
++		return false;
++
++	dpu_enc = to_dpu_encoder_virt(drm_enc);
++	return (dpu_enc->disp_info.connector_type ==
++			DRM_MODE_CONNECTOR_DisplayPort);
++}
++
++bool dpu_encoder_is_virtual(struct drm_encoder *drm_enc)
++{
++	struct dpu_encoder_virt *dpu_enc;
++
++	if (!drm_enc)
++		return false;
++
++	dpu_enc = to_dpu_encoder_virt(drm_enc);
++	return (dpu_enc->disp_info.connector_type == DRM_MODE_CONNECTOR_WRITEBACK);
++}
++
++bool dpu_encoder_is_primary(struct drm_encoder *drm_enc)
++{
++	struct dpu_encoder_virt *dpu_enc;
++
++	if (!drm_enc)
++		return false;
++
++	dpu_enc = to_dpu_encoder_virt(drm_enc);
++	return((dpu_enc->disp_info.connector_type == DRM_MODE_CONNECTOR_DSI) ||
++		(dpu_enc->disp_info.connector_type == DRM_MODE_CONNECTOR_eDP));
++}
  
- 	if (ops->domain_alloc_irqs == NULL)
- 		ops->domain_alloc_irqs = msi_domain_ops_default.domain_alloc_irqs;
--	if (ops->domain_free_irqs == NULL)
--		ops->domain_free_irqs = msi_domain_ops_default.domain_free_irqs;
- 
- 	if (!(info->flags & MSI_FLAG_USE_DEF_DOM_OPS))
- 		return;
-@@ -1108,15 +1123,23 @@ int msi_domain_alloc_irqs(struct irq_dom
- 	return ret;
- }
- 
--static void __msi_domain_free_irqs(struct irq_domain *domain, struct device *dev)
-+static void __msi_domain_free_irqs(struct device *dev, struct irq_domain *domain,
-+				   struct msi_ctrl *ctrl)
+ bool dpu_encoder_is_widebus_enabled(const struct drm_encoder *drm_enc)
  {
- 	struct msi_domain_info *info = domain->host_data;
-+	struct xarray *xa = &dev->msi.data->__store;
- 	struct irq_data *irqd;
- 	struct msi_desc *desc;
--	int i;
-+	unsigned long idx;
-+	int i, base;
-+
-+	base = ctrl->domid * MSI_XA_DOMAIN_SIZE;
-+
-+	xa_for_each_range(xa, idx, desc, ctrl->first + base, ctrl->last + base) {
-+		/* Only handle MSI entries which have an interrupt associated */
-+		if (!msi_desc_match(desc, MSI_DESC_ASSOCIATED))
-+			continue;
+@@ -2412,7 +2446,7 @@ int dpu_encoder_setup(struct drm_device *dev, struct drm_encoder *enc,
+ 	struct dpu_kms *dpu_kms = to_dpu_kms(priv->kms);
+ 	struct drm_encoder *drm_enc = NULL;
+ 	struct dpu_encoder_virt *dpu_enc = NULL;
+-	int ret = 0;
++	int ret = 0, intf_i;
  
--	/* Only handle MSI entries which have an interrupt associated */
--	msi_for_each_desc(desc, dev, MSI_DESC_ASSOCIATED) {
- 		/* Make sure all interrupts are deactivated */
- 		for (i = 0; i < desc->nvec_used; i++) {
- 			irqd = irq_domain_get_irq_data(domain, desc->irq + i);
-@@ -1131,11 +1154,99 @@ static void __msi_domain_free_irqs(struc
- 	}
- }
+ 	dpu_enc = to_dpu_encoder_virt(enc);
  
--static void msi_domain_free_msi_descs(struct msi_domain_info *info,
--				      struct device *dev)
-+static void msi_domain_free_locked(struct device *dev, struct msi_ctrl *ctrl)
- {
-+	struct msi_domain_info *info;
-+	struct msi_domain_ops *ops;
-+	struct irq_domain *domain;
-+
-+	if (!msi_ctrl_valid(dev, ctrl))
-+		return;
-+
-+	domain = msi_get_device_domain(dev, ctrl->domid);
-+	if (!domain)
-+		return;
-+
-+	info = domain->host_data;
-+	ops = info->ops;
-+
-+	if (ops->domain_free_irqs)
-+		ops->domain_free_irqs(domain, dev);
-+	else
-+		__msi_domain_free_irqs(dev, domain, ctrl);
-+
-+	if (ops->msi_post_free)
-+		ops->msi_post_free(domain, dev);
-+
- 	if (info->flags & MSI_FLAG_FREE_MSI_DESCS)
--		msi_free_msi_descs(dev);
-+		msi_domain_free_descs(dev, ctrl);
-+}
-+
-+/**
-+ * msi_domain_free_irqs_range_locked - Free a range of interrupts from a MSI interrupt domain
-+ *				       associated to @dev with msi_lock held
-+ * @dev:	Pointer to device struct of the device for which the interrupts
-+ *		are freed
-+ * @domid:	Id of the interrupt domain to operate on
-+ * @first:	First index to free (inclusive)
-+ * @last:	Last index to free (inclusive)
-+ */
-+void msi_domain_free_irqs_range_locked(struct device *dev, unsigned int domid,
-+				       unsigned int first, unsigned int last)
-+{
-+	struct msi_ctrl ctrl = {
-+		.domid	= domid,
-+		.first	= first,
-+		.last	= last,
-+	};
-+	msi_domain_free_locked(dev, &ctrl);
-+}
-+
-+/**
-+ * msi_domain_free_irqs_range - Free a range of interrupts from a MSI interrupt domain
-+ *				associated to @dev
-+ * @dev:	Pointer to device struct of the device for which the interrupts
-+ *		are freed
-+ * @domid:	Id of the interrupt domain to operate on
-+ * @first:	First index to free (inclusive)
-+ * @last:	Last index to free (inclusive)
-+ */
-+void msi_domain_free_irqs_range(struct device *dev, unsigned int domid,
-+				unsigned int first, unsigned int last)
-+{
-+	msi_lock_descs(dev);
-+	msi_domain_free_irqs_range_locked(dev, domid, first, last);
-+	msi_unlock_descs(dev);
-+}
-+
-+/**
-+ * msi_domain_free_irqs_all_locked - Free all interrupts from a MSI interrupt
-+ *				     associated to a device
-+ * @dev:	Pointer to device struct of the device for which the interrupts
-+ *		are freed
-+ * @domid:	The id of the domain to operate on
-+ *
-+ * Must be invoked from within a msi_lock_descs() / msi_unlock_descs()
-+ * pair. Use this for MSI irqdomains which implement their own vector
-+ * allocation.
-+ */
-+void msi_domain_free_irqs_all_locked(struct device *dev, unsigned int domid)
-+{
-+	msi_domain_free_irqs_range_locked(dev, domid, 0, MSI_MAX_INDEX);
-+}
-+
-+/**
-+ * msi_domain_free_irqs_all - Free all interrupts from a MSI interrupt
-+ *			      associated to a device
-+ * @dev:	Pointer to device struct of the device for which the interrupts
-+ *		are freed
-+ * @domid:	The id of the domain to operate on
-+ */
-+void msi_domain_free_irqs_all(struct device *dev, unsigned int domid)
-+{
-+	msi_lock_descs(dev);
-+	msi_domain_free_irqs_range_locked(dev, domid, 0, MSI_MAX_INDEX);
-+	msi_unlock_descs(dev);
- }
+@@ -2424,13 +2458,17 @@ int dpu_encoder_setup(struct drm_device *dev, struct drm_encoder *enc,
+ 	timer_setup(&dpu_enc->frame_done_timer,
+ 			dpu_encoder_frame_done_timeout, 0);
  
- /**
-@@ -1150,18 +1261,7 @@ static void msi_domain_free_msi_descs(st
++	intf_i = disp_info->h_tile_instance[0];
+ 	if (disp_info->intf_type == DRM_MODE_ENCODER_DSI)
+ 		timer_setup(&dpu_enc->vsync_event_timer,
+ 				dpu_encoder_vsync_event_handler,
+ 				0);
+-	else if (disp_info->intf_type == DRM_MODE_ENCODER_TMDS)
++	else if (disp_info->intf_type == DRM_MODE_ENCODER_TMDS) {
+ 		dpu_enc->wide_bus_en = msm_dp_wide_bus_available(
+-				priv->dp[disp_info->h_tile_instance[0]]);
++				priv->dp[intf_i]);
++		disp_info->connector_type =
++			msm_dp_get_connector_type(priv->dp[intf_i]);
++	}
+ 
+ 	INIT_DELAYED_WORK(&dpu_enc->delayed_off_work,
+ 			dpu_encoder_off_work);
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+index 9e7236e..d361c5d 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+@@ -25,16 +25,18 @@
+  * @num_of_h_tiles:     Number of horizontal tiles in case of split interface
+  * @h_tile_instance:    Controller instance used per tile. Number of elements is
+  *                      based on num_of_h_tiles
+- * @is_cmd_mode		Boolean to indicate if the CMD mode is requested
++ * @is_cmd_mode:        Boolean to indicate if the CMD mode is requested
++ * @connector_type:     DRM_MODE_CONNECTOR_ type
+  * @is_te_using_watchdog_timer:  Boolean to indicate watchdog TE is
+- *				 used instead of panel TE in cmd mode panels
+- * @dsc:		DSC configuration data for DSC-enabled displays
++ *                      used instead of panel TE in cmd mode panels
++ * @dsc:                DSC configuration data for DSC-enabled displays
   */
- void msi_domain_free_irqs_descs_locked(struct irq_domain *domain, struct device *dev)
- {
--	struct msi_domain_info *info = domain->host_data;
--	struct msi_domain_ops *ops = info->ops;
--
--	lockdep_assert_held(&dev->msi.data->mutex);
--
--	if (WARN_ON_ONCE(irq_domain_is_msi_parent(domain)))
--		return;
--
--	ops->domain_free_irqs(domain, dev);
--	if (ops->msi_post_free)
--		ops->msi_post_free(domain, dev);
--	msi_domain_free_msi_descs(info, dev);
-+	msi_domain_free_irqs_range_locked(dev, MSI_DEFAULT_DOMAIN, 0, MSI_MAX_INDEX);
+ struct msm_display_info {
+ 	int intf_type;
+ 	uint32_t num_of_h_tiles;
+ 	uint32_t h_tile_instance[MAX_H_TILES_PER_DISPLAY];
+ 	bool is_cmd_mode;
++	int connector_type;
+ 	bool is_te_using_watchdog_timer;
+ 	struct drm_dsc_config *dsc;
+ };
+@@ -224,4 +226,22 @@ void dpu_encoder_cleanup_wb_job(struct drm_encoder *drm_enc,
+  */
+ bool dpu_encoder_is_valid_for_commit(struct drm_encoder *drm_enc);
+ 
++/**
++* dpu_encoder_is_external - find if the encoder is of type DP
++* @drm_enc:    Pointer to previously created drm encoder structure
++*/
++bool dpu_encoder_is_external(struct drm_encoder *drm_enc);
++
++/**
++* dpu_encoder_is_virtual - find if the encoder is of type Writeback
++* @drm_enc:    Pointer to previously created drm encoder structure
++*/
++bool dpu_encoder_is_virtual(struct drm_encoder *drm_enc);
++
++/**
++* dpu_encoder_is_primary - find if the encoder is of type DSI or eDP
++* @drm_enc:    Pointer to previously created drm encoder structure
++*/
++bool dpu_encoder_is_primary(struct drm_encoder *drm_enc);
++
+ #endif /* __DPU_ENCODER_H__ */
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+index 0d94eec0d..0709da2 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+@@ -574,6 +574,7 @@ static int _dpu_kms_initialize_dsi(struct drm_device *dev,
+ 
+ 		memset(&info, 0, sizeof(info));
+ 		info.intf_type = encoder->encoder_type;
++		info.connector_type = DRM_MODE_CONNECTOR_DSI;
+ 
+ 		rc = msm_dsi_modeset_init(priv->dsi[i], dev, encoder);
+ 		if (rc) {
+@@ -676,6 +677,7 @@ static int _dpu_kms_initialize_writeback(struct drm_device *dev,
+ 	/* use only WB idx 2 instance for DPU */
+ 	info.h_tile_instance[0] = WB_2;
+ 	info.intf_type = encoder->encoder_type;
++	info.connector_type = DRM_MODE_CONNECTOR_WRITEBACK;
+ 
+ 	rc = dpu_encoder_setup(dev, encoder, &info);
+ 	if (rc) {
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index bfd0aef..53f65dd 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -1509,6 +1509,11 @@ bool msm_dp_wide_bus_available(const struct msm_dp *dp_display)
+ 	return dp->wide_bus_en;
  }
  
- /**
++int msm_dp_get_connector_type(const struct msm_dp *dp_display)
++{
++	return dp_display->connector_type;
++}
++
+ void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor *minor)
+ {
+ 	struct dp_display_private *dp;
+diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
+index ea80846..2ecba6f 100644
+--- a/drivers/gpu/drm/msm/msm_drv.h
++++ b/drivers/gpu/drm/msm/msm_drv.h
+@@ -331,7 +331,7 @@ void msm_dp_snapshot(struct msm_disp_state *disp_state, struct msm_dp *dp_displa
+ 
+ void msm_dp_debugfs_init(struct msm_dp *dp_display, struct drm_minor *minor);
+ bool msm_dp_wide_bus_available(const struct msm_dp *dp_display);
+-
++int msm_dp_get_connector_type(const struct msm_dp *dp_display);
+ #else
+ static inline int __init msm_dp_register(void)
+ {
+@@ -365,6 +365,11 @@ static inline bool msm_dp_wide_bus_available(const struct msm_dp *dp_display)
+ 	return false;
+ }
+ 
++static inline int msm_dp_get_connector_type(const struct msm_dp *dp_display)
++{
++	return 0;
++}
++
+ #endif
+ 
+ #ifdef CONFIG_DRM_MSM_MDP4
+-- 
+2.7.4
 
