@@ -2,73 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 967F362608D
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2490362608F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233860AbiKKRis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 12:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
+        id S231261AbiKKRjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:39:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbiKKRir (ORCPT
+        with ESMTP id S233851AbiKKRjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:38:47 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011A85BD60
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:38:45 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id bs21so7371300wrb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:38:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZtQcHdnXGmdeDNnT4QITUKcKLbC/o+km4OY5CSxdgzs=;
-        b=cSDXdAat9tQMJS4E8j6Wnts/+Bwpb9BPztlmM1pJ9qpP1B/BHqtEhKhD3lNep7yuVT
-         gnpcbvZWTq09EXle8/gO56+MRYBltykMp+Tn1ympGRglkcnNKGWHGOUAvqMD+2esNJMx
-         rfGQTCMPG0Gy9PZJmAr6Z1BW57mZ8IvD2Q0bxmTEERCQgTCpSIplsaXUHSyPEl9SDO3d
-         xnStW0YJ6mH33xWvK/6t4tTk1b8IlYAoXMVWG9UGKBLx2gxM5BPYDSJMu2aigGtY5RZG
-         hILElqf0DpC2Qpi0JBgDahPqFIA2F47kSR5BgnkU8K9rnMdybE1p+A76Fc6clXMag47d
-         zosA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZtQcHdnXGmdeDNnT4QITUKcKLbC/o+km4OY5CSxdgzs=;
-        b=HRmhckKlIO5fcO4Ya1sBnIhgti3+YdlPL6CfkKv18P5nBvTVSWBK+d7aG4hUr5v5C1
-         QqqkZ3Q0v6F31dMHKl5xz9fo96bSaqfidOPo4JqahPjqfTbhF2FuzUxpeisK48J0qLD8
-         vNwlnzy6AwQzpHDTQu2AovT7W64P+R3VGWSj3Ta7Z8Vpdt2+Mz8Em5G2aHAKUZd6V1EY
-         5i7ruw6qjLpSoQCjSkvoH6Urlmycb221TX4Q6FkLQG5we7ZzovyGT+LHLId46lrKrBuE
-         VqR7CXU5wqqsJS/2OpmafnMHCl6LQTILAMCyh4C2eAZe/zTOQo57xqU3dqenId/4sZiv
-         DSBQ==
-X-Gm-Message-State: ANoB5pn6+8VkMO0oTkxg80j9TejgxV9m9UGFmp/vnhrLh9RWWiFsIJvc
-        Swfs/bQTwb9s8QXpf/NqIBQbHv/Op2uNdg==
-X-Google-Smtp-Source: AA0mqf74NAeCBN5gUlzhsgNa4hZcptbsUFtVAUofQmWbwyHDb7vC8af/fg1rJdiIDGHYknKp+Z9bUw==
-X-Received: by 2002:adf:a51d:0:b0:236:6302:2237 with SMTP id i29-20020adfa51d000000b0023663022237mr1937624wrb.519.1668188324529;
-        Fri, 11 Nov 2022 09:38:44 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id f20-20020a05600c155400b003c6f3e5ba42sm11225931wmg.46.2022.11.11.09.38.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 09:38:43 -0800 (PST)
-Message-ID: <b0544b8b-fe49-baa1-85eb-5151fa0c7261@linaro.org>
-Date:   Fri, 11 Nov 2022 17:38:42 +0000
+        Fri, 11 Nov 2022 12:39:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046AD61B84;
+        Fri, 11 Nov 2022 09:38:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9527E6206D;
+        Fri, 11 Nov 2022 17:38:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53C25C433C1;
+        Fri, 11 Nov 2022 17:38:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668188338;
+        bh=pVSG4o9o7ELZjK0i4XqofCGBuPWYjWKlXf96GCOImGc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=t1H/cEE4N44Xw3DctnOnlHXKoi27WfQjOTKxdjmtmS5ep1HuMVWnGoaD7M40rz/PZ
+         HDCenm1V5W+mtGUbmNqu3oSf+fUpPjUrAMNIT18SVLnuV1WXuG8A4817b55IJ4dI8Z
+         ion0aTgFjjYPAU0BvtvFpFaHuJ4VK5nzQ04BqU9CtdF4wm3hcmVpemXs+mVmOHXq29
+         ZFOb0H57A+Z3wtKiM5+JhmCUWey7dRhfe+wQwsUdPFWA8dexZYM9Jf3lDRZvlulz2r
+         bv0BFpbPPziC3o8ry8PqGp49AaI9HO3JHdXQAxFpyfdWRMvowhzIFjo4FCsub3v3PZ
+         TbEGlfhvOjuqQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     sj@kernel.org, damon@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        rongtao@cestc.cn, shuah@kernel.org, yuanchu@google.com
+Subject: Re: [PATCH] selftests/damon: Fix unnecessary compilation warnings
+Date:   Fri, 11 Nov 2022 17:38:55 +0000
+Message-Id: <20221111173855.108360-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <tencent_32CBE47252C5F69571B40751DE6054082D05@qq.com>
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2] nvmem: u-boot-env: fix crc32_data_offset on redundant
- u-boot-env
-Content-Language: en-US
-To:     Christian Lamparter <chunkeey@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     rafal@milecki.pl, gregkh@linuxfoundation.org,
-        a.fatoum@pengutronix.de
-References: <70a16eae113e08db2390b76e174f4837caa135c3.1667580636.git.chunkeey@gmail.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <70a16eae113e08db2390b76e174f4837caa135c3.1667580636.git.chunkeey@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,66 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Rong,
 
 
-On 04/11/2022 16:52, Christian Lamparter wrote:
-> The Western Digital MyBook Live (PowerPC 464/APM82181)
-> has a set of redundant u-boot-env. Loading up the driver
-> the following error:
+It would be better if you could notice the version of this patch using 'PATCH
+v2' like subject prefix from next time.
+
+On Fri, 11 Nov 2022 10:37:20 +0800 Rong Tao <rtoax@foxmail.com> wrote:
+
+> From: Rong Tao <rongtao@cestc.cn>
 > 
-> | u_boot_env: Invalid calculated CRC32: 0x4f8f2c86 (expected: 0x98b14514)
-> | u_boot_env: probe of partition@1e000 failed with error -22
+> When testing overflow and overread, there is no need to keep unnecessary
+> compilation warnings, we should simply ignore them.
 > 
-> Looking up the userspace libubootenv utilities source [0],
-> it looks like the "mark" or "flag" is not part of the
-> crc32 sum... which is unfortunate :(
+> How to reproduce the problem:
 > 
-> |static int libuboot_load(struct uboot_ctx *ctx)
-> |{
-> |[...]
-> |       if (ctx->redundant) {
-> |		[...]
-> |               offsetdata = offsetof(struct uboot_env_redund, data);
-> |		[...]					//-----^^
-> |       }
-> |       usable_envsize = ctx->size - offsetdata;
-> |       buf[0] = malloc(bufsize);
-> |[...]
-> |	for (i = 0; i < copies; i++) {
-> |		data = (uint8_t *)(buf[i] + offsetdata);
-> |               uint32_t crc;
-> |
-> |		ret = devread(ctx, i, buf[i]);
-> |		[...]
-> |		crc = *(uint32_t *)(buf[i] + offsetcrc);
-> |               dev->crc = crc32(0, (uint8_t *)data, usable_envsize);
-> |
+>     $ make -C tools/testing/selftests/
+>     ...
+>     warning: ‘write’ reading 4294967295 bytes from a region of size 1
+>     [-Wstringop-overread]
+>     warning: ‘read’ writing 4294967295 bytes into a region of size 25
+>     overflows the destination [-Wstringop-overflow=]
+
+Thank you for indenting as I suggested!  BTW, I'm ok to violate the line length
+limit for quoting commands outputs.
+
 > 
-> [0] https://github.com/sbabic/libubootenv/blob/master/src/uboot_env.c#L951
-> Fixes: d5542923f200 ("nvmem: add driver handling U-Boot environment variables")
-> Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
 > ---
-
-Applied thanks,
-
---srini
-> v1->v2:
-> 	- drop endian crc32 check - handled by pending patch
-> 	- added u-boot-env: tag to subject + adjusted subject
-> ---
->   drivers/nvmem/u-boot-env.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  tools/testing/selftests/damon/huge_count_read_write.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> diff --git a/drivers/nvmem/u-boot-env.c b/drivers/nvmem/u-boot-env.c
-> index 8e72d1bbd649..4fdbdccebda1 100644
-> --- a/drivers/nvmem/u-boot-env.c
-> +++ b/drivers/nvmem/u-boot-env.c
-> @@ -135,7 +135,7 @@ static int u_boot_env_parse(struct u_boot_env *priv)
->   		break;
->   	case U_BOOT_FORMAT_REDUNDANT:
->   		crc32_offset = offsetof(struct u_boot_env_image_redundant, crc32);
-> -		crc32_data_offset = offsetof(struct u_boot_env_image_redundant, mark);
-> +		crc32_data_offset = offsetof(struct u_boot_env_image_redundant, data);
->   		data_offset = offsetof(struct u_boot_env_image_redundant, data);
->   		break;
->   	}
+> diff --git a/tools/testing/selftests/damon/huge_count_read_write.c b/tools/testing/selftests/damon/huge_count_read_write.c
+> index ad7a6b4cf338..8fbe276870e7 100644
+> --- a/tools/testing/selftests/damon/huge_count_read_write.c
+> +++ b/tools/testing/selftests/damon/huge_count_read_write.c
+> @@ -8,6 +8,11 @@
+>  #include <unistd.h>
+>  #include <stdio.h>
+>  
+> +#pragma GCC diagnostic push
+> +/* Ignore read(2) overflow and write(2) overread compile warnings */
+> +#pragma GCC diagnostic ignored "-Wstringop-overread"
+
+This still trigger below error on my old gcc.
+
+    gcc -Wno-stringop-overread -Wno-stringop-overflow    huge_count_read_write.c  -o /home/sjpark/linux/tools/testing/selftests/damon/huge_count_read_write
+    huge_count_read_write.c:13:32: warning: unknown option after ‘#pragma GCC diagnostic’ kind [-Wpragmas]
+       13 | #pragma GCC diagnostic ignored "-Wstringop-overread"
+          |                                ^~~~~~~~~~~~~~~~~~~~~
+    cc1: warning: unrecognized command line option ‘-Wno-stringop-overread’
+
+I don't think that's a blocker of this patch, but hope to hear your opinion.
+
+
+Thanks,
+SJ
+
+> +#pragma GCC diagnostic ignored "-Wstringop-overflow"
+> +
+>  void write_read_with_huge_count(char *file)
+>  {
+>  	int filedesc = open(file, O_RDWR);
+> @@ -27,6 +32,8 @@ void write_read_with_huge_count(char *file)
+>  	close(filedesc);
+>  }
+>  
+> +#pragma GCC diagnostic pop
+> +
+>  int main(int argc, char *argv[])
+>  {
+>  	if (argc != 2) {
+> -- 
+> 2.31.1
+> 
