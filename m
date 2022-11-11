@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F03624F70
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 02:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EEB624F72
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 02:16:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232434AbiKKBQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 20:16:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
+        id S232346AbiKKBQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 20:16:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232256AbiKKBPT (ORCPT
+        with ESMTP id S232273AbiKKBPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 20:15:19 -0500
+        Thu, 10 Nov 2022 20:15:20 -0500
 Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDC3D27FDB;
-        Thu, 10 Nov 2022 17:14:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0BA4165B4;
+        Thu, 10 Nov 2022 17:14:48 -0800 (PST)
 Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 1B69E454;
-        Fri, 11 Nov 2022 02:14:44 +0100 (CET)
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 4CCF6456;
+        Fri, 11 Nov 2022 02:14:48 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202211; t=1668129284;
-        bh=MoO/mUS5QNTMdZjDy+3p1P3o4Hu+RTNLEIKcnT/Qc4M=;
+        s=202211; t=1668129288;
+        bh=QQcVqdOIas77625N9ryGqV0AYz/xIDRwp/LEjV3tj0k=;
         h=Date:From:Cc:Subject:References:In-Reply-To:From;
-        b=bwTSyNh/k3T4mHiVjl8qy7gY/YvacL9rTyoGH4wcsDXjKeT2P98D43lFDh22tJSCv
-         8Wrjii10haT2EvB1m7M4gGm9Sym/ULurTisyxMHoUdk/brts8x2Zg0vbSuoY4XdE56
-         yQNz+1Sj0rb3WfvkdyZtERrUHAj/Y+PYFd5KP3QwVg2Rp7dIhcNnfDEJ8RZocP+oF6
-         l/cCJWJKDy53gF+VSxABsfr3r8ij2n/TG4xtf8mVltUYBPRoY6BfsiEdlK9+OEPwF7
-         6mPSSyQ1NdHTr48J7kmcqnpyj7T0xQgJZQdI1f/bA5qlVV9/wCfwmndz8YyPVvR6id
-         +ZoVJXnHshBdw==
-Date:   Fri, 11 Nov 2022 02:14:43 +0100
+        b=AgogrmAVSGIQTQaEqN1R6KcRHReJy3t+0kIVk0CivXO0UQYdSy2Yjh3+NHs9o4bdH
+         ydsXG7g04tMLm035pJwjj1Yy+Fwcy0MX/njfcsvumOxIavfwu/X0dLO8v2eSGYZ+GE
+         Ji/smVBKbF6LK9b7Eg/u+5wxstiYkfqZa4VJVtrQsX7mJ1S9ByzVmHnmiRLj+xnr67
+         Nf5t8CUeq4ifjk0KKJ5ORg26JuNM1181wHW5jAwl8b0wVuiWkOoRo/7lwdX0AgIW93
+         9Ei3axHbOo40KIw8v0S5dYiSRbV5U7v/bcdYVwoGCbdhbQsRekvTrcDVHZ+Z4fpMwH
+         KIs/HoBiiFjbg==
+Date:   Fri, 11 Nov 2022 02:14:47 +0100
 From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
         <nabijaczleweli@nabijaczleweli.xyz>
 Cc:     Jonathan Corbet <corbet@lwn.net>,
         Federico Vaga <federico.vaga@vaga.pv.it>,
         Alex Shi <alexs@kernel.org>,
         Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>, Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Hu Haowen <src.res@email.cn>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH v3 13/15] fcntl: remove FASYNC_MAGIC
-Message-ID: <756e6016fab23e95d891b6284fbf52184135ee46.1668128257.git.nabijaczleweli@nabijaczleweli.xyz>
+        linux-scsi@vger.kernel.org
+Subject: [PATCH v3 14/15] scsi: ncr53c8xx: replace CCB_MAGIC with bool busy
+Message-ID: <7c5854769df2af955e991baf02b88fd0d84502d0.1668128257.git.nabijaczleweli@nabijaczleweli.xyz>
 References: <cover.1668128257.git.nabijaczleweli@nabijaczleweli.xyz>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ex6cawgqxz56lbn5"
+        protocol="application/pgp-signature"; boundary="lizvvs3xytaebgcx"
 Content-Disposition: inline
 In-Reply-To: <cover.1668128257.git.nabijaczleweli@nabijaczleweli.xyz>
 User-Agent: NeoMutt/20220429
@@ -66,31 +66,34 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---ex6cawgqxz56lbn5
+--lizvvs3xytaebgcx
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-We have largely moved away from this approach, and we have better
-debugging instrumentation nowadays: kill it.
+The only non-boolean check might as well be, since it just early-exits
+instead of noting the bug: lower it to a boolean and make it less
+confusing.
+
+As for magic numbers, we have largely moved away from this approach,
+and we have better debugging instrumentation nowadays: kill it.
 
 Link: https://lore.kernel.org/linux-doc/YyMlovoskUcHLEb7@kroah.com/
 Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
 ---
- Documentation/process/magic-number.rst                    | 1 -
- Documentation/translations/it_IT/process/magic-number.rst | 1 -
- Documentation/translations/zh_CN/process/magic-number.rst | 1 -
- Documentation/translations/zh_TW/process/magic-number.rst | 1 -
- fs/fcntl.c                                                | 6 ------
- include/linux/fs.h                                        | 3 ---
- 6 files changed, 13 deletions(-)
+ Documentation/process/magic-number.rst        |  1 -
+ .../it_IT/process/magic-number.rst            |  1 -
+ .../zh_CN/process/magic-number.rst            |  1 -
+ .../zh_TW/process/magic-number.rst            |  1 -
+ drivers/scsi/ncr53c8xx.c                      | 25 ++++++-------------
+ 5 files changed, 8 insertions(+), 21 deletions(-)
 
 diff --git a/Documentation/process/magic-number.rst b/Documentation/process=
 /magic-number.rst
-index e59c707ec785..6e432917a5a8 100644
+index 6e432917a5a8..5a8c2755ac9c 100644
 --- a/Documentation/process/magic-number.rst
 +++ b/Documentation/process/magic-number.rst
-@@ -68,6 +68,5 @@ Changelog::
+@@ -68,5 +68,4 @@ Changelog::
  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -102,9 +105,7 @@ index e59c707ec785..6e432917a5a8 100644
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
--FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
+-CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
 scsi/ncr53c8xx.c``
  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -113,10 +114,10 @@ scsi/ncr53c8xx.c``
 =3D=3D=3D=3D=3D=3D
 diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/Do=
 cumentation/translations/it_IT/process/magic-number.rst
-index 37a539867b6f..7d4c117ac626 100644
+index 7d4c117ac626..2fbc1876534a 100644
 --- a/Documentation/translations/it_IT/process/magic-number.rst
 +++ b/Documentation/translations/it_IT/process/magic-number.rst
-@@ -74,6 +74,5 @@ Registro dei cambiamenti::
+@@ -74,5 +74,4 @@ Registro dei cambiamenti::
  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -128,9 +129,7 @@ index 37a539867b6f..7d4c117ac626 100644
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
--FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
+-CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
 scsi/ncr53c8xx.c``
  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -139,10 +138,10 @@ scsi/ncr53c8xx.c``
 =3D=3D=3D=3D=3D=3D
 diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/Do=
 cumentation/translations/zh_CN/process/magic-number.rst
-index 8a3a3e872c52..c17e3f20440a 100644
+index c17e3f20440a..f8ec4767bc4e 100644
 --- a/Documentation/translations/zh_CN/process/magic-number.rst
 +++ b/Documentation/translations/zh_CN/process/magic-number.rst
-@@ -57,6 +57,5 @@ Linux =E9=AD=94=E6=9C=AF=E6=95=B0
+@@ -57,5 +57,4 @@ Linux =E9=AD=94=E6=9C=AF=E6=95=B0
  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -155,9 +154,7 @@ index 8a3a3e872c52..c17e3f20440a 100644
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
--FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
+-CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
 scsi/ncr53c8xx.c``
  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -166,10 +163,10 @@ scsi/ncr53c8xx.c``
 =3D=3D=3D=3D=3D=3D
 diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/Do=
 cumentation/translations/zh_TW/process/magic-number.rst
-index 7ace7834f7f9..e2eeb74e7192 100644
+index e2eeb74e7192..0ccc60bee3d6 100644
 --- a/Documentation/translations/zh_TW/process/magic-number.rst
 +++ b/Documentation/translations/zh_TW/process/magic-number.rst
-@@ -60,6 +60,5 @@ Linux =E9=AD=94=E8=A1=93=E6=95=B8
+@@ -60,5 +60,4 @@ Linux =E9=AD=94=E8=A1=93=E6=95=B8
  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -182,84 +179,130 @@ index 7ace7834f7f9..e2eeb74e7192 100644
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
--FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
+-CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
 scsi/ncr53c8xx.c``
  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
-diff --git a/fs/fcntl.c b/fs/fcntl.c
-index 146c9ab0cd4b..e366a3804108 100644
---- a/fs/fcntl.c
-+++ b/fs/fcntl.c
-@@ -924,7 +924,6 @@ struct fasync_struct *fasync_insert_entry(int fd, struc=
-t file *filp, struct fasy
- 	}
+diff --git a/drivers/scsi/ncr53c8xx.c b/drivers/scsi/ncr53c8xx.c
+index 4458449c960b..928417fca495 100644
+--- a/drivers/scsi/ncr53c8xx.c
++++ b/drivers/scsi/ncr53c8xx.c
+@@ -1095,15 +1095,6 @@ typedef u32 tagmap_t;
+ #define NS_WIDE		(2)
+ #define NS_PPR		(4)
 =20
- 	rwlock_init(&new->fa_lock);
--	new->magic =3D FASYNC_MAGIC;
- 	new->fa_file =3D filp;
- 	new->fa_fd =3D fd;
- 	new->fa_next =3D *fapp;
-@@ -988,11 +987,6 @@ static void kill_fasync_rcu(struct fasync_struct *fa, =
-int sig, int band)
- 		struct fown_struct *fown;
- 		unsigned long flags;
-=20
--		if (fa->magic !=3D FASYNC_MAGIC) {
--			printk(KERN_ERR "kill_fasync: bad magic number in "
--			       "fasync_struct!\n");
--			return;
--		}
- 		read_lock_irqsave(&fa->fa_lock, flags);
- 		if (fa->fa_file) {
- 			fown =3D &fa->fa_file->f_owner;
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index e654435f1651..acfd5db5341a 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -1345,15 +1345,12 @@ static inline int locks_lock_file_wait(struct file =
-*filp, struct file_lock *fl)
-=20
- struct fasync_struct {
- 	rwlock_t		fa_lock;
--	int			magic;
- 	int			fa_fd;
- 	struct fasync_struct	*fa_next; /* singly linked list */
- 	struct file		*fa_file;
- 	struct rcu_head		fa_rcu;
+-/*=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+-**
+-**	Misc.
+-**
+-**=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+-*/
+-
+-#define CCB_MAGIC	(0xf2691ad2)
+-
+ /*=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ **
+ **	Declaration of structs.
+@@ -1567,7 +1558,7 @@ struct ccb {
+ 	struct ccb *	link_ccb;	/* Host adapter CCB chain	*/
+ 	struct list_head link_ccbq;	/* Link to unit CCB queue	*/
+ 	u32		startp;		/* Initial data pointer		*/
+-	u_long		magic;		/* Free / busy  CCB flag	*/
++	bool		busy;
  };
 =20
--#define FASYNC_MAGIC 0x4601
--
- /* SMP safe fasync helpers: */
- extern int fasync_helper(int, struct file *, int, struct fasync_struct **);
- extern struct fasync_struct *fasync_insert_entry(int, struct file *, struc=
-t fasync_struct **, struct fasync_struct *);
+ #define CCB_PHYS(cp,lbl)	(cp->p_ccb + offsetof(struct ccb, lbl))
+@@ -4356,7 +4347,7 @@ static int ncr_queue_command (struct ncb *np, struct =
+scsi_cmnd *cmd)
+ 	*/
+=20
+ 	/* activate this job.  */
+-	cp->magic		=3D CCB_MAGIC;
++	cp->busy		=3D true;
+=20
+ 	/*
+ 	**	insert next CCBs into start queue.
+@@ -4667,7 +4658,7 @@ void ncr_complete (struct ncb *np, struct ccb *cp)
+ 	**	Sanity check
+ 	*/
+=20
+-	if (!cp || cp->magic !=3D CCB_MAGIC || !cp->cmd)
++	if (!cp || !cp->busy || !cp->cmd)
+ 		return;
+=20
+ 	/*
+@@ -6998,7 +6989,7 @@ static struct ccb *ncr_get_ccb(struct ncb *np, struct=
+ scsi_cmnd *cmd)
+ 		qp =3D ncr_list_pop(&lp->free_ccbq);
+ 		if (qp) {
+ 			cp =3D list_entry(qp, struct ccb, link_ccbq);
+-			if (cp->magic) {
++			if (cp->busy) {
+ 				PRINT_ADDR(cmd, "ccb free list corrupted "
+ 						"(@%p)\n", cp);
+ 				cp =3D NULL;
+@@ -7030,17 +7021,17 @@ static struct ccb *ncr_get_ccb(struct ncb *np, stru=
+ct scsi_cmnd *cmd)
+ 	**	Wait until available.
+ 	*/
+ #if 0
+-	while (cp->magic) {
++	while (cp->busy) {
+ 		if (flags & SCSI_NOSLEEP) break;
+ 		if (tsleep ((caddr_t)cp, PRIBIO|PCATCH, "ncr", 0))
+ 			break;
+ 	}
+ #endif
+=20
+-	if (cp->magic)
++	if (cp->busy)
+ 		return NULL;
+=20
+-	cp->magic =3D 1;
++	cp->busy =3D true;
+=20
+ 	/*
+ 	**	Move to next available tag if tag used.
+@@ -7119,7 +7110,7 @@ static void ncr_free_ccb (struct ncb *np, struct ccb =
+*cp)
+ 		}
+ 	}
+ 	cp -> host_status =3D HS_IDLE;
+-	cp -> magic =3D 0;
++	cp -> busy =3D false;
+ 	if (cp->queued) {
+ 		--np->queuedccbs;
+ 		cp->queued =3D 0;
 --=20
 2.30.2
 
---ex6cawgqxz56lbn5
+--lizvvs3xytaebgcx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNtogIACgkQvP0LAY0m
-WPEH2w//T2hWSD7xn3M02K7FydhyW0/rTvoslgeyEBz5PkqXLjvZvoq1o1dCBGtB
-az7GTffbbkzp4v7R5Zu1BNEvhFXrBYLqcpzDBtHYk488u8tDNSP303WutiAfbqu2
-tv6mqHdCu3gzgAeXCZdHakMOrQST1kXh5TFkMqC09qDvm8L/kLFyp5U4gGY2haCC
-DNe24a/HnS0bIGPOKH4bJHZaTzJi7omVEweIdTNaxQV9NGtGMK/x7tHWC47M2TJM
-7M/u6z1rbObQeU/2YAmgFylXurL5VPfSev4r8oI2uOqB3Z5dlC7HacDXxLmHAfcg
-3ckJ5oW4Qn65nJeOMfwFyXUWSq/XKbtWvituM2nHVS6tzcx8SagGs0EbTqIo2f1U
-ZjeFt7Q+P2w55lf1zz8+tdQtj84yFcS4hXvtx5q6Ybx6OWZ0gpITmtoPjb26pvwV
-Q7p8ZoMAp+2t8aOzWVsNtBksqoCbraahvBJ0FDKQ6dSohu/uzGMleOBlcyOpi4fm
-o3HRA3zwz6kdygG/2TFmMa5yp3SyyGuwv91drX883f7v1Oa47soaS5uDgCAd54aI
-RCVmFtI6zr/25f/35FpaKxAHipWYd1oVPe3vr/kTs//0/bvXhx2YtI8Vh6L3rKqr
-tYmhLLfawlakpQ769ntxNY+wrqTTLZTWav4mdhrkPwwyctQ1ETo=
-=4RTi
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNtogYACgkQvP0LAY0m
+WPE8zA/9H+n8iTX3GGWGL8YEY1UkTM3l+dWvbMMSaT/ZEXSf5fC0jq9zVhvW680b
+X1lOCjJdE1B0ZkRF4f6r+27VR9tMwivAwoTiuegkVHXWd5M2PaL4YLv1xbGm15DN
+wSHyKUrsjTvS0fcQt/5wx9XAOvYAYkZPCqS2UK4a8tcDRydC5L+j2ffhwC8u+2e5
+dE6zRHk3vvRdpYZz0GxSY5xA6ulbsY7fpoCPpmxM7MSaxrPk7xVNKCa9FDBwlIgP
+z9t8deN6zkNAidzTuuM+Ck0PZXCLkD4n9crf4xpeE6QlW0ZmCzLO4vAINZyKTx4Z
+2+Od8xdY3srTlWJtML+6EIpECoeGjs12NTIfmVc+FxItHImNAVcPmPscCKQYrOqv
+c2Kcsv1X8ZKfC7YIQuWO6mQeOYXWUP/atwPhMxbzDTEqqi968lr1JYKfi748RRKH
+cVARVrP28Dcx/enbK2R/uZRvy0/cLntCKzVG3eWO2S/7kbPAFLAFDcnrJX8IVV9F
+dwqr8VVuhl6mgmVqzw+WOjdHfs1O24H2OyaW/+8wVKzpvnL6IRj0bKOwQxqCoO8D
+Hzmvz+oO/pyR+5XdhCslJTpf+wFDC7U4rX8m0wrpLymW86at+cQeoRyuHCR0IK1D
+V6lZ3/Jmz4CE6kKzArUVi4+j/drAgk2PRVC9jkIsYSB48j8aqYw=
+=3YOK
 -----END PGP SIGNATURE-----
 
---ex6cawgqxz56lbn5--
+--lizvvs3xytaebgcx--
