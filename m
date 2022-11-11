@@ -2,213 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A756263B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 22:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3CD46263B9
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 22:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233750AbiKKVhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 16:37:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
+        id S234272AbiKKVh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 16:37:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232825AbiKKVhn (ORCPT
+        with ESMTP id S233844AbiKKVh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 16:37:43 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69856419BB
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 13:37:42 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id i9so3760357qki.10
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 13:37:42 -0800 (PST)
+        Fri, 11 Nov 2022 16:37:57 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A68B42F68;
+        Fri, 11 Nov 2022 13:37:56 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id v8so3757176qkg.12;
+        Fri, 11 Nov 2022 13:37:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nc4n1MTPVmkik2WRUCGka6QmClvTwjaiaovnK4SperE=;
-        b=fDo4uxcNfAiq0x5mVY0eM+CWr38FvRpzhoVWYbnPCtRzGjnljA7CZirv4+Bn/+bpt3
-         5i+Wp9D6oWtkPhhIg23rl8anfUHEYGwF0j11iUC5HVaSvebVKcVrXmB9P95sI4DBEEtv
-         S6QePXbYpwq97x0tlNe2PcQ5flJtzqEtAa35k=
+        bh=70bGPbiqAKd6Lj1pvfQPegklyN+fxl8EXb9nnpTKORY=;
+        b=LCFDZZp96QMSp2MflvI3wKXDOOyFAL4rJ/9RV5YRuGGm38PHTHZIUaRR0b7TIav77I
+         ZFtKMKoBbMin+VIf3lzjALLzK2bGCHmH4nGCYYx+6m/sc/7yEbjocmQ1d42Z9C/iKA9j
+         shfLHnoLIrulLtUaTCgJ4MfTyWqfN15N1+NuVg1uEewzATuuY0DdiapFdrgp8SiUV37Y
+         xkfwPvAoONlGVebwBWlazjzjToC0PLptLZMvicURSWI2L1xofSy2KzP3sHmJDXQC8WI5
+         BSZqK2ZEvNa1ezdor7Kldt+pzg4dnkSdhxtHpIDm94XsL1My7PfHa9k9uYxmTbQ0TnSk
+         iyLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nc4n1MTPVmkik2WRUCGka6QmClvTwjaiaovnK4SperE=;
-        b=KVNR04uVQ58UR8a+4eR4xRSSxYO8c44cPTyQ9GifAqEJ4Aa23hjGxj1SQ6lCOiuAX3
-         IBgY06vAb3eM547G6IJF2QZbFk31A+axeCRE9HumhpeqC3su2oINDFJkrYnDUA2KVLM1
-         OZLdy22ddHgv07lsXqbDzl1iKAvK1/lOZSn/yf6pumI6OwWdmLTMMq4vhSYodngEBt8e
-         dWJ/n+mHmVPjyL+JIZcbanVOC+zvfOZum4pccKt6f4reEH0MFJ4X+VAxJx42nkGPmCdR
-         nNCq9SHZI1sZ2hfl8w6PCpmHjW8JLvzRYQ7I8RfmZQCsczvHPMSRUCQ6oOh3s9cFMapZ
-         n7Fg==
-X-Gm-Message-State: ANoB5pl2fuIYTlhjpP4vsAy2WyVSv5obx94Ds+u5Ev0hREymxDeJubJJ
-        8GVnI2ZO8vlmRZu6xpXyGplVqA==
-X-Google-Smtp-Source: AA0mqf5nEGbuZxf99shvh2YzmRaM9mpNQ3mhcYP9R9XUcct4V4ILREu7/+AVJfG3muZTxkWwcEm9MA==
-X-Received: by 2002:a05:620a:16a9:b0:6ec:5735:2e25 with SMTP id s9-20020a05620a16a900b006ec57352e25mr2837685qkj.636.1668202661514;
-        Fri, 11 Nov 2022 13:37:41 -0800 (PST)
-Received: from smtpclient.apple (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id y23-20020a37f617000000b006fa22f0494bsm2008147qkj.117.2022.11.11.13.37.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 13:37:40 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH 2/2] adreno: Detect shutdown during get_param()
-Date:   Fri, 11 Nov 2022 16:37:40 -0500
-Message-Id: <F4D72FA8-C1D1-46ED-B56E-8BEFBB297E4A@joelfernandes.org>
-References: <899db0f8-7b8a-ed8f-30b8-4f630da1298d@quicinc.com>
-Cc:     linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Ross Zwisler <zwisler@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        dri-devel@lists.freedesktop.org, Emma Anholt <emma@anholt.net>,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>
-In-Reply-To: <899db0f8-7b8a-ed8f-30b8-4f630da1298d@quicinc.com>
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-X-Mailer: iPhone Mail (19G82)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        bh=70bGPbiqAKd6Lj1pvfQPegklyN+fxl8EXb9nnpTKORY=;
+        b=SXnnX2nqgf6mIGRK7VaX+To4xGCX75qwktT1JCH3lF93Q/OejloOwbDHJHyR/S1PQm
+         EAacG8dq5lZuSCSaK42hZu/k5GSQ63L6XTsIqZ6J66qyNOkuq6gH/dCbtiJDsJVtN3OW
+         wi8khiRGlM7moo3kFHMcwWbpMseYFGlz1WlMmVHiPrUagRXUgcXiJ92drVEJ7OT/f97A
+         13FHgXBF34rqjhSuPKOXLz4doTWVsw3EXtpruPMH4B0J5uWVuQfwsjE58mOvpAsMGzSI
+         tM+gtyUwQsakI2+oQrBH8sBJJ3ha7MMKoTtfXmnUUHD6uCsLLk36pkmGHHubYq2bVr2O
+         7T7Q==
+X-Gm-Message-State: ANoB5pkMI1IgZZQykoa/0T7VDfeiZPGQzSeRmmD1E1VTHT0fFzvG464v
+        4a1OnPr3TlvlBEZZtRu3TCs=
+X-Google-Smtp-Source: AA0mqf48Z6Ii+VzHnDMBVWN9P8PzYH/laMyIxHyHYRJVZB0TmCs0Vj2Y6KdY1dKXVjBoCJ64I0zHjA==
+X-Received: by 2002:ae9:ef53:0:b0:6fa:4a82:1152 with SMTP id d80-20020ae9ef53000000b006fa4a821152mr2931568qkg.504.1668202675397;
+        Fri, 11 Nov 2022 13:37:55 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m10-20020a05620a24ca00b006cbc6e1478csm2108327qkn.57.2022.11.11.13.37.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 13:37:54 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 11 Nov 2022 13:37:53 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     fenghua.yu@intel.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, janusz.krzysztofik@linux.intel.com,
+        lucas.demarchi@intel.com
+Subject: Re: [PATCH] hwmon/coretemp: Simplify platform device antics
+Message-ID: <20221111213753.GA1059841@roeck-us.net>
+References: <898dbb76a54aae6ca58ceefcab9ab18beeee2fff.1668096928.git.robin.murphy@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <898dbb76a54aae6ca58ceefcab9ab18beeee2fff.1668096928.git.robin.murphy@arm.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 10, 2022 at 04:20:25PM +0000, Robin Murphy wrote:
+> Coretemp's vestigial platform driver is odd. All the real work is done
+> globally by the initcall and CPU hotplug notifiers, while the "driver"
+> effectively just wraps an allocation and the registration of the hwmon
+> interface in a long-winded round-trip through the driver core. The whole
+> logic of dynamically creating and destroying platform devices to bring
+> the interfaces up and down is fatally flawed right away, since it
+> assumes platform_device_add() will synchronously bind the driver and set
+> drvdata before it returns, thus results in a NULL dereference if
+> drivers_autoprobe is turned off for the platform bus. Furthermore, the
+> unusual approach of doing that from within a CPU hotplug notifier is
+> also problematic. It's already commented in the code that it deadlocks
+> suspend, but it also causes lockdep issues for other drivers or
+> subsystems which may want to legitimately register a CPU hotplug
+> notifier from a platform bus notifier.
+> 
+> All of these issues can be solved by ripping this questionable behaviour
+> out completely, simply tying the platform devices to the lifetime of the
+> module itself, and directly managing the hwmon interfaces from the
+> hotplug notifiers. There is a slight user-visible change in that
+> /sys/bus/platform/drivers/coretemp will no longer appear, and
+> /sys/devices/platform/coretemp.n will remain present if package n is
+> hotplugged off, but hwmon users should really only be looking for the
+> presence of the hwmon interfaces, whose behaviour remains unchanged.
+> 
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+> 
+> I haven't been able to fully test hotplug since I only have a
+> single-socket Intel system to hand.
 
+Someone with access to hardware will have to validate this.
 
-> On Nov 11, 2022, at 4:28 PM, Akhil P Oommen <quic_akhilpo@quicinc.com> wro=
-te:
->=20
-> =EF=BB=BFOn 11/12/2022 1:19 AM, Joel Fernandes (Google) wrote:
->> Even though the GPU is shut down, during kexec reboot we can have userspa=
-ce
->> still running. This is especially true if KEXEC_JUMP is not enabled, beca=
-use we
->> do not freeze userspace in this case.
->>=20
->> To prevent crashes, track that the GPU is shutdown and prevent get_param(=
-) from
->> accessing GPU resources if we find it shutdown.
->>=20
->> This fixes the following crash during kexec reboot on an ARM64 device wit=
-h adreno GPU:
->>=20
->> [  292.534314] Kernel panic - not syncing: Asynchronous SError Interrupt
->> [  292.534323] Hardware name: Google Lazor (rev3 - 8) with LTE (DT)
->> [  292.534326] Call trace:
->> [  292.534328]  dump_backtrace+0x0/0x1d4
->> [  292.534337]  show_stack+0x20/0x2c
->> [  292.534342]  dump_stack_lvl+0x60/0x78
->> [  292.534347]  dump_stack+0x18/0x38
->> [  292.534352]  panic+0x148/0x3b0
->> [  292.534357]  nmi_panic+0x80/0x94
->> [  292.534364]  arm64_serror_panic+0x70/0x7c
->> [  292.534369]  do_serror+0x0/0x7c
->> [  292.534372]  do_serror+0x54/0x7c
->> [  292.534377]  el1h_64_error_handler+0x34/0x4c
->> [  292.534381]  el1h_64_error+0x7c/0x80
->> [  292.534386]  el1_interrupt+0x20/0x58
->> [  292.534389]  el1h_64_irq_handler+0x18/0x24
->> [  292.534395]  el1h_64_irq+0x7c/0x80
->> [  292.534399]  local_daif_inherit+0x10/0x18
->> [  292.534405]  el1h_64_sync_handler+0x48/0xb4
->> [  292.534410]  el1h_64_sync+0x7c/0x80
->> [  292.534414]  a6xx_gmu_set_oob+0xbc/0x1fc
->> [  292.534422]  a6xx_get_timestamp+0x40/0xb4
->> [  292.534426]  adreno_get_param+0x12c/0x1e0
->> [  292.534433]  msm_ioctl_get_param+0x64/0x70
->> [  292.534440]  drm_ioctl_kernel+0xe8/0x158
->> [  292.534448]  drm_ioctl+0x208/0x320
->> [  292.534453]  __arm64_sys_ioctl+0x98/0xd0
->> [  292.534461]  invoke_syscall+0x4c/0x118
->> [  292.534467]  el0_svc_common+0x98/0x104
->> [  292.534473]  do_el0_svc+0x30/0x80
->> [  292.534478]  el0_svc+0x20/0x50
->> [  292.534481]  el0t_64_sync_handler+0x78/0x108
->> [  292.534485]  el0t_64_sync+0x1a4/0x1a8
->> [  292.534632] Kernel Offset: 0x1a5f800000 from 0xffffffc008000000
->> [  292.534635] PHYS_OFFSET: 0x80000000
->> [  292.534638] CPU features: 0x40018541,a3300e42
->> [  292.534644] Memory Limit: none
->>=20
->> Cc: Rob Clark <robdclark@chromium.org>
->> Cc: Steven Rostedt <rostedt@goodmis.org>
->> Cc: Ricardo Ribalda <ribalda@chromium.org>
->> Cc: Ross Zwisler <zwisler@kernel.org>
->> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->> ---
->>  drivers/gpu/drm/msm/adreno/adreno_device.c | 1 +
->>  drivers/gpu/drm/msm/adreno/adreno_gpu.c    | 2 +-
->>  drivers/gpu/drm/msm/msm_gpu.h              | 3 +++
->>  3 files changed, 5 insertions(+), 1 deletion(-)
->>=20
->> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm=
-/msm/adreno/adreno_device.c
->> index f0cff62812c3..03d912dc0130 100644
->> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
->> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
->> @@ -612,6 +612,7 @@ static void adreno_shutdown(struct platform_device *p=
-dev)
->>  {
->>      struct msm_gpu *gpu =3D dev_to_gpu(&pdev->dev);
->>  +    gpu->is_shutdown =3D true;
->>      WARN_ON_ONCE(adreno_system_suspend(&pdev->dev));
->>  }
->>  diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/m=
-sm/adreno/adreno_gpu.c
->> index 382fb7f9e497..6903c6892469 100644
->> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
->> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
->> @@ -251,7 +251,7 @@ int adreno_get_param(struct msm_gpu *gpu, struct msm_=
-file_private *ctx,
->>      struct adreno_gpu *adreno_gpu =3D to_adreno_gpu(gpu);
->>        /* No pointer params yet */
->> -    if (*len !=3D 0)
->> +    if (*len !=3D 0 || gpu->is_shutdown)
->>          return -EINVAL;
-> This will race with shutdown.
+For both subject and description, please avoid terms like "antics",
+"odd", or "questionable". Please describe the problem in neutral terms.
 
-Could you clarify what you mean? At this point in the code, the shutdown is c=
-ompleted and it crashes here.
-
-> Probably, propagating back the return value of pm_runtime_get() in every p=
-ossible ioctl call path is the right thing to do.
-
-Ok I=E2=80=99ll look into that. But the patch I posted works reliably and fi=
-xes all crashes we could reproduce.
-
-> I have never thought about this scenario. Do you know why userspace is not=
- freezed before kexec?
-
-I am not sure. It depends on how kexec is used. The userspace freeze happens=
- only when kexec is called to switch back and forth between different kernel=
-s (persistence mode). In such scenario I believe the userspace has to be fro=
-zen and unfrozen. However for normal kexec, that does not happen.
-
-Thanks.
-
-
->=20
-> -Akhil.
->>        switch (param) {
->> diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.=
-h
->> index ff911e7305ce..f18b0a91442b 100644
->> --- a/drivers/gpu/drm/msm/msm_gpu.h
->> +++ b/drivers/gpu/drm/msm/msm_gpu.h
->> @@ -214,6 +214,9 @@ struct msm_gpu {
->>      /* does gpu need hw_init? */
->>      bool needs_hw_init;
->>  +    /* is the GPU shutdown? */
->> +    bool is_shutdown;
->> +
->>      /**
->>       * global_faults: number of GPU hangs not attributed to a particular=
-
->>       * address space
->=20
+Thanks,
+Guenter
