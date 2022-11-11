@@ -2,69 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617E862581F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17897625822
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233317AbiKKKWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 05:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
+        id S233689AbiKKKWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 05:22:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233720AbiKKKVc (ORCPT
+        with ESMTP id S233592AbiKKKVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 05:21:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67FC212A8B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 02:20:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 11 Nov 2022 05:21:41 -0500
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61DCAEA4;
+        Fri, 11 Nov 2022 02:21:37 -0800 (PST)
+Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0425961F35
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 10:20:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 675EEC433C1;
-        Fri, 11 Nov 2022 10:20:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668162037;
-        bh=MvaSTrv8RylylSx6mbqhSZIIc1HuqTr7XT/FG/ZSMW8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kT/w/4Q+34VkdaAvV7KrYgVdkPtC17P0sf0XsFpEsa7mf3lSDrIKvH7LzbAUASfWO
-         Ed3e/CkyFJYR2QbRA7UYDjFbFiTH8M/fWcdCwumGUK/O+YJuwJetbMqwCD1h9Dclu3
-         rOamB5vuONEBB3gON7gMQMtYsRYtK1+MMqVWVcQjbQ3cMxvTjL3ZrTLdcjw8WKxsMC
-         EL582gRwbpf8HnurENxT14/YVX9uTWBp/m/vdHK86OUWo946XyqmujBarlPCOZ6ZCL
-         aH9k1N9kwisWnyv8E/4n4m7acsO0NJeEEQVcXd48gCCuc3TWkNIRWZ+ZwuGnqSUIpC
-         f1djglQ4lgk6w==
-Message-ID: <28030a50-b3e9-e361-ad32-ca26d4756063@kernel.org>
-Date:   Fri, 11 Nov 2022 18:20:32 +0800
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id E37FD2070D;
+        Fri, 11 Nov 2022 12:21:34 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1668162095;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=u4K1Zr9Nd9xjqasmHb1Oi3vEJFEf/Rl2t4cMnoUhyi8=;
+        b=MeJPv5HYsv8Kwy5VGGktQdQ9wA1pwUJlNCJYFL4j4wRjXZIiaAkI6nXJx4+psWX9ZiMtQR
+        WTgmnFKCNbzMGnJ63ouZUUsEoSPVKRJtjtyjnEpHr0zu4zOFXPGNsNg63ApLWi/vwf1000
+        QtQYFUKMHhkeO3CF0+mBbdegKYq8y0E=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1668162095;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=u4K1Zr9Nd9xjqasmHb1Oi3vEJFEf/Rl2t4cMnoUhyi8=;
+        b=tI6XIgJpnJmo1ZaEbil4cop5fay0jxqg0ACX3dC9RiBk6omBhIzurOfAgLNi/xB2cY4aOZ
+        XSn39lbal3Zzx0NrqsAytBBEJv9j55OjCsrL93kOm0q6JjhSOhRKVRgkEbIdDaX+app8N8
+        I8UCQxH11QfRPCd2gCqvafVRFRG6KQ4=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1668162095; a=rsa-sha256; cv=none;
+        b=YX9mI5+JQNAalqyYlLg/+VcGCfkNyyuPQugRgGo9OKZmdkLaQPWf/uu0SZRNfBHRfaGQmQ
+        j4Wsgsxq874q4NyN6zvjCuJhsnKnUt3aOwj+dsvKJ40Z+h+pC1Sf98sLSjADU/+1i5K5wT
+        3rPj4mTa8B+c4SrKVh06p5B77OBab1k=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 74346634C99;
+        Fri, 11 Nov 2022 12:21:34 +0200 (EET)
+Date:   Fri, 11 Nov 2022 12:21:34 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v7 18/28] media: sun6i-csi: Introduce format match
+ structure, list and helper
+Message-ID: <Y24iLrBzM5BvnaqT@valkosipuli.retiisi.eu>
+References: <20221103163113.245462-1-paul.kocialkowski@bootlin.com>
+ <20221103163113.245462-19-paul.kocialkowski@bootlin.com>
+ <Y24hZjkRp0rBpzTZ@valkosipuli.retiisi.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 2/2] f2fs: move set_file_temperature into
- f2fs_new_inode
-Content-Language: en-US
-To:     Sheng Yong <shengyong@oppo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20221111100830.953733-1-shengyong@oppo.com>
- <20221111100830.953733-2-shengyong@oppo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20221111100830.953733-2-shengyong@oppo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y24hZjkRp0rBpzTZ@valkosipuli.retiisi.eu>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/11 18:08, Sheng Yong wrote:
-> Since the file name has already passed to f2fs_new_inode(), let's
-> move set_file_temperature() into f2fs_new_inode().
+On Fri, Nov 11, 2022 at 12:18:14PM +0200, Sakari Ailus wrote:
+> Hi Paul,
 > 
-> Signed-off-by: Sheng Yong <shengyong@oppo.com>
+> On Thu, Nov 03, 2022 at 05:31:03PM +0100, Paul Kocialkowski wrote:
+> > Introduce a list of mbus/pixel format combinations that need an exact
+> > match between the two sides. This is the case when using raw input
+> > configuration. The list will be used to replace the
+> > sun6i_csi_is_format_supported combinatory helper.
+> 
+> This patch introduces an unused function which generates a compiler warning
+> that is now treated as an error.
+> 
+> I'll squash this to the following patch that uses the function. I think the
+> commit message will do as-is.
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+Ok, maybe the helper actually should be mentioned. I used this:
 
-Thanks,
+Rework the capture link validate implementation with actual logic that
+reflects the possibilities of the device instead of the combinatory helper
+functions, using the added match list helper
+sun6i_csi_is_format_supported() when needed. Remove the previous dedicated
+helper.
+
+-- 
+Sakari Ailus
