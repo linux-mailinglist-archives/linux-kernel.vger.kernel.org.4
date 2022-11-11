@@ -2,156 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEF262587C
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B75625885
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233600AbiKKKiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 05:38:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
+        id S233903AbiKKKjq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 11 Nov 2022 05:39:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233096AbiKKKiQ (ORCPT
+        with ESMTP id S233868AbiKKKjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 05:38:16 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3A512605
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 02:38:15 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id y4so3953630plb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 02:38:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WDAe46mocv8N19iUrpVAVRFXORmPxnlQIO/wxgYUTno=;
-        b=FrAUhA4rAeuVcuLA/U9mmmOErKic7EKby5f9WqhnY49RBIBvSl6wi0k9EsT2MWpAsf
-         Y/mPpF4p1/2+X5nBq580SGeo7HCGsnKW9FTZXlhybSKLv5m8EByjVlbEXJQEbO3Mi2d8
-         rdiVUha2xJT+zYkfMj9qsT/cOiSRC5pTJAjVc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WDAe46mocv8N19iUrpVAVRFXORmPxnlQIO/wxgYUTno=;
-        b=HH9ggbAcsOXWFktaA3iJcWCubUGAkJouK1ntsenkWPiOTNZ+VYvIQLnxzzlAJCGpqW
-         AX3tyCqg+6v7JK+3//Vh6Tg0OgeOv9s40b25rxRYWqsLPkHRQpBwUStRnexrKoPRmAjZ
-         3/gfcmXr80MR/LAvyq56Bo7vGL1fzvI4LeiIl0Mcx18AUtfySbz25OdyUKGUKemSgOCq
-         szDtKxk36Zgv19VbklpzHNquy2YJLwbc839Bbuesdny1amQazCDiomJdmRrQ2BWPwpqb
-         +fFqUVnYBqjMVeSB+9JKIpHaHM78Z7Ka0CCQ5QjO99d1qCFdIGTIBubEBfxTig9FJrsb
-         IOow==
-X-Gm-Message-State: ANoB5pmdkkI0lR1o2gt+RcpmjOIDr/OJXgtraGkz6qXKbz2EiTA0jwzM
-        b209vYce4oW6lZZxGUSkkNpniw==
-X-Google-Smtp-Source: AA0mqf6GcDtWuq7A6v4bBbbht/rRQxdxBbsDvTtW7j1D9USVOdygPz0XjnNVRpkaQgPZt9texwKmfA==
-X-Received: by 2002:a17:902:c3d1:b0:188:82fc:e284 with SMTP id j17-20020a170902c3d100b0018882fce284mr1927093plj.76.1668163095189;
-        Fri, 11 Nov 2022 02:38:15 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:8d55:c60d:579d:741c])
-        by smtp.gmail.com with ESMTPSA id l16-20020a170903121000b00176b84eb29asm117500plh.301.2022.11.11.02.38.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 02:38:14 -0800 (PST)
-Date:   Fri, 11 Nov 2022 19:38:10 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv4 2/9] zsmalloc: turn zspage order into runtime variable
-Message-ID: <Y24mEiy0pt2qSCqr@google.com>
-References: <20221031054108.541190-1-senozhatsky@chromium.org>
- <20221031054108.541190-3-senozhatsky@chromium.org>
- <Y210OrSgrqWPr0DT@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y210OrSgrqWPr0DT@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Nov 2022 05:39:40 -0500
+Received: from smtp.220.in.ua (smtp.220.in.ua [89.184.67.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC521654CC;
+        Fri, 11 Nov 2022 02:39:39 -0800 (PST)
+Received: from smtpclient.apple (unknown [95.67.115.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp.220.in.ua (Postfix) with ESMTPSA id AA8051A25F73;
+        Fri, 11 Nov 2022 12:39:37 +0200 (EET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
+Subject: Re: [PATCH 02/13] leds: el15203000: Fix devm vs. non-devm ordering
+From:   Oleh Kravchenko <oleg@kaa.org.ua>
+In-Reply-To: <c53e4614-eb06-cda8-f9da-2ca58396df54@huawei.com>
+Date:   Fri, 11 Nov 2022 12:39:22 +0200
+Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pavel Machek <pavel@ucw.cz>,
+        "weiyongjun (A)" <weiyongjun1@huawei.com>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <AA4E5187-59BC-4E04-B392-7BD48F0443A1@kaa.org.ua>
+References: <1667983694-15040-1-git-send-email-wangyufen@huawei.com>
+ <1667983694-15040-3-git-send-email-wangyufen@huawei.com>
+ <5D15416B-1866-4031-9958-7CD763C0BD6E@kaa.org.ua>
+ <bbd67e6a-8ce0-dbe8-6ab1-9d4a015f4ee9@huawei.com>
+ <6D18A607-EC63-495F-BA2D-78E0DB056D3C@kaa.org.ua>
+ <c53e4614-eb06-cda8-f9da-2ca58396df54@huawei.com>
+To:     wangyufen <wangyufen@huawei.com>
+X-Mailer: Apple Mail (2.3731.200.110.1.12)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/10 13:59), Minchan Kim wrote:
-[..]
-> > +#define ZS_PAGE_ORDER_2		2
-> > +#define ZS_PAGE_ORDER_4		4
-> > +
-> > +/*
-> > + * A single 'zspage' is composed of up to 2^N discontiguous 0-order (single)
-> > + * pages. ZS_MAX_PAGE_ORDER defines upper limit on N, ZS_MIN_PAGE_ORDER
-> > + * defines lower limit on N. ZS_DEFAULT_PAGE_ORDER is recommended value.
+Hello Wang,
+
+> 11 лист. 2022 р. о 11:21 wangyufen <wangyufen@huawei.com> написав(ла):
 > 
-> It gives the impression:
 > 
->    2^2 <= the page nubmer of zspage <= 2^4
+> 在 2022/11/9 18:43, Oleh Kravchenko 写道:
+>> 
+>> 
+>>> 9 лист. 2022 р. о 12:25 wangyufen <wangyufen@huawei.com> написав(ла):
+>>> 
+>>> 
+>>> 在 2022/11/9 17:39, Oleh Kravchenko 写道:
+>>> 
+>>>>> -static void el15203000_remove(struct spi_device *spi)
+>>>>> 
+>>>> Is remove() callback from struct spi_driver deprecated?
+>>>> 
+>>> It is not that remove() callback is deprecated,
+>>> it's that after wrapping mutex_destroy() call with devm_add_action_or_reset(),
+>>> remove() callback is unnecessary here.
+>>> 
+>> When remove() is called, the memory allocated by devm_*() is valid.
+>> So what you try to fix here?
 > 
-> I think that's not what you want to describe. How about?
-> 
-> A single 'zspage' is composed of up to 2^N discontiguous 0-order (single)
-> pages and the N can be from ZS_MIN_PAGE_ORDER to ZS_MAX_PAGE_ORDER.
+> Fix the &priv->lock used after destroy, for details, please see patch #0
+> LKML: Wang Yufen: [PATCH 00/13] leds: Fix devm vs. non-devm ordering
 
-OK.
+It doesn’t make any sense for me.
+You saying that remove() called before devm_* allocation
+if it true then set_brightness_delayed() will crash the system in anyway.
 
-> > + */
-> > +#define ZS_MIN_PAGE_ORDER	ZS_PAGE_ORDER_2
-> > +#define ZS_MAX_PAGE_ORDER	ZS_PAGE_ORDER_4
-> > +#define ZS_DEFAULT_PAGE_ORDER	ZS_PAGE_ORDER_2
-> 
-> #define ZS_MIN_PAGE_ORDER	2
-> 
-> We can use the number directly instead of another wrapping at least
-> in this patch(Just in case: if you want to extent it later patch,
-> please do it in the patch)
+LED device has a parent SPI device; LED device can’t exist without SPI device.
 
-OK.
+So deallocation order should be next:
+1. LED device devm_*()
+2. SPI device remove()
 
-[..]
-> > -#define MAX(a, b) ((a) >= (b) ? (a) : (b))
-> > -/* ZS_MIN_ALLOC_SIZE must be multiple of ZS_ALIGN */
-> > -#define ZS_MIN_ALLOC_SIZE \
-> > -	MAX(32, (ZS_MAX_PAGES_PER_ZSPAGE << PAGE_SHIFT >> OBJ_INDEX_BITS))
-> > +#define ZS_MIN_ALLOC_SIZE	32U
-> 
-> Let's have some comment here to say that's not the final vaule which
-> is supposed to be pool->min_alloc_size.
-
-OK.
-
-[..]
-> >  enum fullness_group {
-> >  	ZS_EMPTY,
-> > @@ -230,12 +221,15 @@ struct link_free {
-> >  struct zs_pool {
-> >  	const char *name;
-> >  
-> > -	struct size_class *size_class[ZS_SIZE_CLASSES];
-> > +	struct size_class **size_class;
-> >  	struct kmem_cache *handle_cachep;
-> >  	struct kmem_cache *zspage_cachep;
-> >  
-> >  	atomic_long_t pages_allocated;
-> >  
-> > +	u32 num_size_classes;
-> > +	u32 min_alloc_size;
-> 
-> Please use int.
-
-OK. Any reason why we don't want u32? I thought that
-s16/u16/s32/u32/etc. is the new normal.
-
-> From this patch, I couldn't figure why we need
-> variable in the pool. Let's have the change in the patch where
-> you really need to have the usecase.
-
-Let me take a look.
-
-> > -static int get_pages_per_zspage(int class_size)
-> > +static int get_pages_per_zspage(u32 class_size, u32 num_pages)
-> 
-> Let's just use int instead of u32
-> 
-> Why do you need num_pages argument instead of using 1UL << ZS_DEFAULT_PAGE_ORDER?
-> It looks like static value.
-
-It is static right now, but in the a couple of patches it'll change to
-dynamic.
