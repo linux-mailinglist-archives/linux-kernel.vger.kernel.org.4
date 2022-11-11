@@ -2,53 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F396255B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 518616255BE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233256AbiKKItN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:49:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
+        id S233344AbiKKIwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 03:52:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233288AbiKKItI (ORCPT
+        with ESMTP id S232577AbiKKIwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:49:08 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84473742C1;
-        Fri, 11 Nov 2022 00:49:07 -0800 (PST)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 11 Nov 2022 17:49:06 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id D87142059027;
-        Fri, 11 Nov 2022 17:49:06 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Fri, 11 Nov 2022 17:49:06 +0900
-Received: from [10.212.156.100] (unknown [10.212.156.100])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 2CBFFB62AE;
-        Fri, 11 Nov 2022 17:49:06 +0900 (JST)
-Message-ID: <f1c8a87c-b084-5496-d3e1-2c524e83e2a3@socionext.com>
-Date:   Fri, 11 Nov 2022 17:49:05 +0900
+        Fri, 11 Nov 2022 03:52:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70737742C1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:52:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC27861EED
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:52:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8B2BC433D6;
+        Fri, 11 Nov 2022 08:52:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668156735;
+        bh=fXKuRB663cmxgQcjTNGenw4vOoT0/yPa+UqIg7NWx9Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XziARmjqY16i8b1xeJZrqjCAng9ByNMQSF7UcsCMzvhvXJothGBF/YoHONaoB1xxg
+         DNTijvthSSD/CWG7Yuxqwqixy56lzHBHwUhez3ov+X0bC0VwTSKkHLOJuu1kZpmp/K
+         DVA5kHyvw0x/jx9KlttSxXpLYh41dvXZPYPkg0RY=
+Date:   Fri, 11 Nov 2022 09:52:12 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Soha Jin <soha@lohu.info>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Wende Tan <twd2.me@gmail.com>
+Subject: Re: [PATCH v2] platform: use fwnode_irq_get_byname instead of
+ of_irq_get_byname to get irq
+Message-ID: <Y24NPPF+6CM6b/d2@kroah.com>
+References: <20221028164120.2798-1-soha@lohu.info>
+ <DS0PR05MB95440932459F31AA76618A75DA009@DS0PR05MB9544.namprd05.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/5] dt-bindings: arm: uniphier: Add system controller
- bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     soc@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221107103410.3443-1-hayashi.kunihiko@socionext.com>
- <20221107103410.3443-2-hayashi.kunihiko@socionext.com>
- <48988a50-3c3d-7a85-af28-66f7842e5893@linaro.org>
- <3fcebf71-bdcb-8592-020c-4aa240a9e9a7@socionext.com>
- <784c5975-661a-c71c-1489-229ada0a4e72@linaro.org>
-Content-Language: en-US
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <784c5975-661a-c71c-1489-229ada0a4e72@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DS0PR05MB95440932459F31AA76618A75DA009@DS0PR05MB9544.namprd05.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,24 +53,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/09 0:08, Krzysztof Kozlowski wrote:
-> On 08/11/2022 15:30, Kunihiko Hayashi wrote:
->>>> +additionalProperties:
->>>> +  type: object
->>>
->>> No, instead you should describe the children. This must me
->>> additionalProperties: false
->>
->> Each controller has different children, so need to define children
->> for each controller using "if".
+On Fri, Nov 11, 2022 at 08:30:46AM +0000, Soha Jin wrote:
+> > -----Original Message-----
+> > From: Soha Jin <soha@lohu.info>
+> > Sent: Saturday, October 29, 2022 12:41 AM
+> > 
+> > Not only platform devices described by OF have named interrupts, but
+> > devices described by ACPI also have named interrupts. The fwnode is an
+> > abstraction to different standards, and using fwnode_irq_get_byname can
+> > support more devices.
+> > 
+> > Moreover, when CONFIG_OF_IRQ is not enabled, there will be a stub method
+> > always returning 0, the if statement can be removed safely.
+> > 
+> > Signed-off-by: Soha Jin <soha@lohu.info>
+> > Tested-by: Wende Tan <twd2.me@gmail.com>
+> > ---
+> >  drivers/base/platform.c | 8 +++-----
+> >  1 file changed, 3 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/base/platform.c b/drivers/base/platform.c index
+> > 51bb2289865c..6cd7fd478c5f 100644
+> > --- a/drivers/base/platform.c
+> > +++ b/drivers/base/platform.c
+> > @@ -441,11 +441,9 @@ static int __platform_get_irq_byname(struct
+> > platform_device *dev,
+> >  	struct resource *r;
+> >  	int ret;
+> > 
+> > -	if (IS_ENABLED(CONFIG_OF_IRQ) && dev->dev.of_node) {
+> > -		ret = of_irq_get_byname(dev->dev.of_node, name);
+> > -		if (ret > 0 || ret == -EPROBE_DEFER)
+> > -			return ret;
+> > -	}
+> > +	ret = fwnode_irq_get_byname(dev_fwnode(&dev->dev), name);
+> > +	if (ret > 0 || ret == -EPROBE_DEFER)
+> > +		return ret;
+> > 
+> >  	r = platform_get_resource_byname(dev, IORESOURCE_IRQ, name);
+> >  	if (r) {
+> > --
+> > 2.30.2
+> > 
 > 
-> Then you should have different binding documents. Bindings should be
-> specific.
+> Hello Greg,
+> 
+> I noticed the original patch is merged into -next branch, but as I said in
+> the mail yesterday (maybe you did not see it), I already composed a v2
+> patch 2 weeks ago. Except the formatting fix, this patch also removed a
+> useless if-branch.
+> 
+> Are there any chance to correct this mistake?
 
-I see. I'll separate this document into the specific documents.
+Please submit a fixup patch, sorry, I can't rebase that branch now.
 
-Thank you,
-
----
-Best Regards
-Kunihiko Hayashi
+greg k-h
