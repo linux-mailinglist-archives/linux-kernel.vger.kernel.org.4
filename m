@@ -2,84 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C89A6258DA
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51D976258DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232968AbiKKKyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 05:54:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52910 "EHLO
+        id S233119AbiKKKzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 05:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233233AbiKKKxu (ORCPT
+        with ESMTP id S232918AbiKKKzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 05:53:50 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C7E77237;
-        Fri, 11 Nov 2022 02:53:30 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AB6bJYX010577;
-        Fri, 11 Nov 2022 10:53:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=VJRNnl6+/1qotuJJiHC0WcxX2r102v5SDUBExsAakS4=;
- b=cil7wKp4wgaDiNrp8EvEZc4u/42OHllByXBWO0Elod1FSRN5LVM9zobUnSP7yea20b9C
- nm65gop78zJN0xZTY6qkvRDk6s8m32Z60CvAVFR8yAN7+Oll0sQkMT2Ry4vuZ9D/cD7G
- rNIPDMB08JSeSdryKsrXquXvno+zYPcDeymqz+FIlm65aWMkAodqSFEzD7B740Sncmfk
- AqWUiVjkzNb6sqT/RLDXUHoDhy8ybYUcprMkrATrS3QDBU3GdT0tlkhu2uJBpox1debZ
- QRuSpI3+EjvSqh8sioZHSkak+I99p/8NfczAOmCj/4VZ3xTYcdNfaubc0VedC77BwqyE Qw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ksh9q0ug2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 10:53:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ABArLBk005989
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 10:53:21 GMT
-Received: from [10.79.43.101] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 11 Nov
- 2022 02:53:17 -0800
-Message-ID: <c9c51981-227a-e97d-137d-eb2d8d7df2a8@quicinc.com>
-Date:   Fri, 11 Nov 2022 16:23:14 +0530
+        Fri, 11 Nov 2022 05:55:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EB0A1B8;
+        Fri, 11 Nov 2022 02:55:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CD4661F4B;
+        Fri, 11 Nov 2022 10:55:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E807DC433D6;
+        Fri, 11 Nov 2022 10:55:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668164140;
+        bh=YgT9HbNnkYoJ9TgXZuI/u/GTK6ynNr2dgWPGMyfleo8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tg5/eFaZwwDS/Pqdk7YLePY85c3r3KXQOjcRK0VOWG/nex26O0uZ5qCkrjN6FuCr1
+         oJfKHN92CfYrXN1ZUofQEfQ+AywjGY3WHy600XYP3SHhEFT9ZrwfXecQninr88VAB1
+         bbrLu4TF9tHBejUhcRBF0Nwco8oCt/QrIALkR/z3JtQZ6D65YOdIrlX3lH81l6DrPz
+         1YaPnWbfkALBmwNp4X1zzaO0byDHp3viRWOoQkzK5DuZcZmlAq+15q30ho4tpGls3m
+         dHkdqcc4NxeP5vuIZEfgl1JB+Wwj+Qj8rrrNQOWke0Z/CfNGgsRO1F/p8ytvw7jwRO
+         QWY3nZhZ1jSrQ==
+Date:   Fri, 11 Nov 2022 11:55:33 +0100
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Frank Li <frank.li@nxp.com>
+Cc:     "mani@kernel.org" <mani@kernel.org>,
+        "allenbh@gmail.com" <allenbh@gmail.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "dave.jiang@intel.com" <dave.jiang@intel.com>,
+        "helgaas@kernel.org" <helgaas@kernel.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        "jdmason@kudzu.us" <jdmason@kudzu.us>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "ntb@lists.linux.dev" <ntb@lists.linux.dev>
+Subject: Re: [EXT] Re: [PATCH v16 4/7] PCI: endpoint: pci-epf-vntb: remove
+ unused field epf_db_phy
+Message-ID: <Y24qJb9UisCqpdKZ@lpieralisi>
+References: <20221102141014.1025893-1-Frank.Li@nxp.com>
+ <20221102141014.1025893-5-Frank.Li@nxp.com>
+ <Y20Yt7T0bivqUvop@lpieralisi>
+ <HE1PR0401MB23317A2372FCE691C230806E88009@HE1PR0401MB2331.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 09/10] dt-bindings: interconnect: qcom,msm8998-bwmon:
- Add sc8280xp bwmon instances
-Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221111032515.3460-1-quic_bjorande@quicinc.com>
- <20221111032515.3460-10-quic_bjorande@quicinc.com>
-From:   Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <20221111032515.3460-10-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 3hacMDek1z53puU-zxf4-NXY4oGAjs5q
-X-Proofpoint-ORIG-GUID: 3hacMDek1z53puU-zxf4-NXY4oGAjs5q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-11_06,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- phishscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 mlxscore=0 clxscore=1015 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211110072
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <HE1PR0401MB23317A2372FCE691C230806E88009@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,42 +66,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/11/22 08:55, Bjorn Andersson wrote:
-> The sc8280xp platform has two BWMON instances, one v4 and one v5. Extend
-> the existing qcom,msm8998-bwmon and qcom,sc7280-llcc-bwmon to describe
-> these.
+On Fri, Nov 11, 2022 at 02:39:12AM +0000, Frank Li wrote:
+> > -----Original Message-----
+> > From: Lorenzo Pieralisi <lpieralisi@kernel.org>
+> > Sent: Thursday, November 10, 2022 9:29 AM
+> > To: Frank Li <frank.li@nxp.com>
+> > Cc: mani@kernel.org; allenbh@gmail.com; bhelgaas@google.com;
+> > dave.jiang@intel.com; helgaas@kernel.org; imx@lists.linux.dev;
+> > jdmason@kudzu.us; kw@linux.com; linux-kernel@vger.kernel.org; linux-
+> > pci@vger.kernel.org; ntb@lists.linux.dev
+> > Subject: [EXT] Re: [PATCH v16 4/7] PCI: endpoint: pci-epf-vntb: remove
+> > unused field epf_db_phy
+> > 
+> > Caution: EXT Email
+> > 
+> > On Wed, Nov 02, 2022 at 10:10:11AM -0400, Frank Li wrote:
+> > > From: Frank Li <frank.li@nxp.com>
+> > >
+> > > epf_db_phy is not used, so remove it
+> > 
+> > Sentences end with a period (.). I can fix these things but
+> > we can't spend our lives telling you how to write a commit log,
+> > check how they are written in the PCI subsystem and follow the
+> > pattern.
 > 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> Tested-by: Steev Klimaszewski <steev@kali.org>
+> [Frank Li] Do you need me send new version to fix "."? Or you will plan
 
-Reviewed-by: Sibi Sankar <quic_sibis@quicinc.com>
+You don't have to write your name in brackets all the time in replies,
+it is clear from the indentation what I am replying to and to whom.
 
-> ---
+> queue these patches?
+
+I will queue them but next time I won't fix the commit log myself.
+
+> My means: 
+> Mani's below feedback will make both live easy.
+
+What feedback ? I am sorry I don't understand.
+
+Thank you,
+Lorenzo
+
+> 	 > 
+>                > None use epf_db_phy and remove it.
 > 
-> Changes since v1:
-> - Added "cpu" to compatible
+>                   "epf_db_phy is not used, so remove it"
 > 
->   .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml | 5 +++++
->   1 file changed, 5 insertions(+)
+>                 >
+>                 > 
+> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.k
+> > ernel.org%2Fall%2F20171026223701.GA25649%40bhelgaas-
+> > glaptop.roam.corp.google.com&amp;data=05%7C01%7CFrank.Li%40nxp.co
+> > m%7Ca0924bed538a494cbfd508dac3304e8e%7C686ea1d3bc2b4c6fa92cd99c
+> > 5c301635%7C0%7C0%7C638036909484154968%7CUnknown%7CTWFpbGZsb
+> > 3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0
+> > %3D%7C3000%7C%7C%7C&amp;sdata=B3G7sfaSVdLDC8BG95WzpBPFO5lPJ
+> > QpThKDcEexOHfU%3D&amp;reserved=0
 > 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-> index be29e0b80995..0c720dbde36e 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-> @@ -25,9 +25,14 @@ properties:
->         - items:
->             - enum:
->                 - qcom,sc7280-cpu-bwmon
-> +              - qcom,sc8280xp-cpu-bwmon
->                 - qcom,sdm845-bwmon
->             - const: qcom,msm8998-bwmon
->         - const: qcom,msm8998-bwmon       # BWMON v4
-> +      - items:
-> +          - enum:
-> +              - qcom,sc8280xp-llcc-bwmon
-> +          - const: qcom,sc7280-llcc-bwmon
->         - const: qcom,sc7280-llcc-bwmon   # BWMON v5
->         - const: qcom,sdm845-llcc-bwmon   # BWMON v5
->   
+> [Frank Li] Thank you for your documents.
+> 
+> > 
+> > >
+> > > Signed-off-by: Frank Li <frank.li@nxp.com>
+> > > Acked-by: Manivannan Sadhasivam <mani@kernel.org>
+> > > ---
+> > >  drivers/pci/endpoint/functions/pci-epf-vntb.c | 1 -
+> > >  1 file changed, 1 deletion(-)
+> > >
+> > > diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > > index 191924a83454..ee66101cb5c4 100644
+> > > --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > > +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > > @@ -136,7 +136,6 @@ struct epf_ntb {
+> > >
+> > >       struct epf_ntb_ctrl *reg;
+> > >
+> > > -     phys_addr_t epf_db_phy;
+> > >       void __iomem *epf_db;
+> > >
+> > >       phys_addr_t vpci_mw_phy[MAX_MW];
+> > > --
+> > > 2.34.1
+> > >
