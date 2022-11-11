@@ -2,246 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B3F16256F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9AAB6256DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233685AbiKKJjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:39:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
+        id S233637AbiKKJaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:30:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232749AbiKKJjP (ORCPT
+        with ESMTP id S233706AbiKKJaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:39:15 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC6FE03D;
-        Fri, 11 Nov 2022 01:39:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668159554; x=1699695554;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=7OZzuX8TLIQNsGznAUzwYn3l/SUlI1zbPCR2OGLlWao=;
-  b=D0hPWBn1z/++BgvyBSldldAa0H9YM5qdRqK5ar5sDS0eGW97zZslYMdP
-   HeiREBulYypVCRIPJmw+y3okkfm5Rqa2vs0riJJQXj6pgTAZEeYVECFbW
-   qEEBTCrsdDmo366M+R+0Sn6NS9WIA2VyUB57Ctau3tm0WluE8XUD0SGMb
-   c3AKHTUlLIBnF70DdG9FUvvzzPoK7KyK+3iIevDYR1KXp2q84iIg60B0z
-   zVueSQ9ngYLJwFNCtjbXl8f2wFu2Z5cxcPYi9FPkqxWbuCUF8QKM+8IHy
-   df7jfo7KAzgYaEyHY3AqMO5iv12vavkGgFLm3ds2pz1nQiPZWs+KC/7xg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="373697762"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="373697762"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 01:39:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="762617046"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="762617046"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga004.jf.intel.com with ESMTP; 11 Nov 2022 01:39:11 -0800
-Date:   Fri, 11 Nov 2022 17:29:51 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/12] mfd: intel-m10-bmc: Downscope SPI related defines
-Message-ID: <Y24WDyIPO7NRa8Vg@yilunxu-OptiPlex-7050>
-References: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com>
- <20221108144305.45424-8-ilpo.jarvinen@linux.intel.com>
+        Fri, 11 Nov 2022 04:30:06 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532F17BE69
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:30:05 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1otQMM-0000ND-OR; Fri, 11 Nov 2022 10:30:02 +0100
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1otQMM-00061j-6t; Fri, 11 Nov 2022 10:30:02 +0100
+Date:   Fri, 11 Nov 2022 10:30:02 +0100
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Sherry Sun <sherry.sun@nxp.com>
+Cc:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH V4 12/14] arm64: dts: imx8mm-evk: Enable usdhc1 to
+ support wifi
+Message-ID: <20221111093002.dpp73hkef6ihkduk@pengutronix.de>
+References: <20221111032811.2456916-1-peng.fan@oss.nxp.com>
+ <20221111032811.2456916-13-peng.fan@oss.nxp.com>
+ <20221111090232.6ibqzoivfqsndhxg@pengutronix.de>
+ <DU0PR04MB94177ED8966506D445CFBA5688009@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <AS8PR04MB8404426EC83A75A3058F774192009@AS8PR04MB8404.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221108144305.45424-8-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <AS8PR04MB8404426EC83A75A3058F774192009@AS8PR04MB8404.eurprd04.prod.outlook.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-08 at 16:43:00 +0200, Ilpo Järvinen wrote:
-> Move SPI related defines to per interface from the global header. This
+On 22-11-11, Sherry Sun wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Peng Fan <peng.fan@nxp.com>
+> > Sent: 2022å¹´11æœˆ11æ—¥ 17:08
+> > To: Marco Felsch <m.felsch@pengutronix.de>; Peng Fan (OSS)
+> > <peng.fan@oss.nxp.com>
+> > Cc: shawnguo@kernel.org; s.hauer@pengutronix.de; linux-
+> > kernel@vger.kernel.org; Sherry Sun <sherry.sun@nxp.com>;
+> > kernel@pengutronix.de; festevam@gmail.com; linux-arm-
+> > kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>
+> > Subject: RE: [PATCH V4 12/14] arm64: dts: imx8mm-evk: Enable usdhc1 to
+> > support wifi
+> > 
+> > Sherry,
+> > 
+> > > Subject: Re: [PATCH V4 12/14] arm64: dts: imx8mm-evk: Enable usdhc1 to
+> > > support wifi
+> > >
+> > > Hi Peng,
+> > >
+> > > On 22-11-11, Peng Fan (OSS) wrote:
+> > > > From: Sherry Sun <sherry.sun@nxp.com>
+> > > >
+> > > > Enable usdhc1 which is used for wifi.
+> > > >
+> > > > Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+> > > > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > > > ---
+> > > >  arch/arm64/boot/dts/freescale/imx8mm-evk.dts  | 27 +++++++++++++
+> > > > arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 39
+> > > +++++++++++++++++++
+> > > >  2 files changed, 66 insertions(+)
+> > > >
+> > > > diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> > > > b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> > > > index a2b24d4d4e3e..7b80f144327d 100644
+> > > > --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> > > > +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> > > > @@ -15,6 +15,13 @@ / {
+> > > >  	aliases {
+> > > >  		spi0 = &flexspi;
+> > > >  	};
+> > > > +
+> > > > +	usdhc1_pwrseq: usdhc1_pwrseq {
+> > > > +		compatible = "mmc-pwrseq-simple";
+> > > > +		pinctrl-names = "default";
+> > > > +		pinctrl-0 = <&pinctrl_usdhc1_gpio>;
+> > > > +		reset-gpios = <&gpio2 10 GPIO_ACTIVE_LOW>;
+> > > > +	};
+> > > >  };
+> > > >
+> > > >  &ddrc {
+> > > > @@ -53,6 +60,19 @@ flash@0 {
+> > > >  	};
+> > > >  };
+> > > >
+> > > > +&usdhc1 {
+> > > > +	pinctrl-names = "default", "state_100mhz", "state_200mhz";
+> > > > +	pinctrl-0 = <&pinctrl_usdhc1>, <&pinctrl_wlan>;
+> > > > +	pinctrl-1 = <&pinctrl_usdhc1_100mhz>, <&pinctrl_wlan>;
+> > > > +	pinctrl-2 = <&pinctrl_usdhc1_200mhz>, <&pinctrl_wlan>;
+> > > > +	bus-width = <4>;
+> > > > +	keep-power-in-suspend;
+> > > > +	mmc-pwrseq = <&usdhc1_pwrseq>;
+> > > > +	non-removable;
+> > > > +	wakeup-source;
+> > > > +	status = "okay";
+> > > > +};
+> > > > +
+> > > >  &usdhc3 {
+> > > >  	assigned-clocks = <&clk IMX8MM_CLK_USDHC3_ROOT>;
+> > > >  	assigned-clock-rates = <400000000>; @@ -125,4 +145,11 @@
+> > > > MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7
+> > > 0x1d6
+> > > >  			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE
+> > > 0x196
+> > > >  		>;
+> > > >  	};
+> > > > +
+> > > > +	pinctrl_wlan: wlangrp {
+> > > > +		fsl,pins = <
+> > > > +
+> > > 	MX8MM_IOMUXC_GPIO1_IO00_ANAMIX_REF_CLK_32K
+> > > 	0x141
+> > > > +			MX8MM_IOMUXC_SD1_DATA7_GPIO2_IO9
+> > > 	0x159
+> > > > +		>;
+> > > > +	};
+> > >
+> > > Out of curiousity, this is not shareable with the other ddr4 evk?
+> > [Peng Fan]
+> > 
+> > Could you please help answer?
+> > 
+> 
+> Hi Peng, I suggest to remove the pinctrl_wlan configure here, it should be added along with the wifi wowlan subnode later.
 
-These definitions are not for SPI, maybe more precisely like "SPI based
-board definitions".
+Does this apply to the imx8mn-evk patch as well?
 
-> makes it harder to shoot oneself into foot.
+Also if the usdhc1 is used only for WLAN and this patch series don't add
+the WLAN subnode, we could remove this patch and the imx8mn-evk usdhc1
+patch completely till you have a complete patchset adding the full WLAN
+support.
 
-Maybe better to use plain text in commit message.
+Regards,
+  Marco
 
 > 
-> Some bitfield defs are also moved to intel-m10-bmc-core which seems
-> more appropriate for them.
-
-I'm still not clear about the motivation of these movements. For example:
-
-We move the MAC registers in core, then should we also move sec update
-registers in sec update driver?
-
-We move the DOORBELL reg addr out, but keep DOORBELL reg fields in
-header file, seems make harder for people to get the whole picture.
-
-Thanks,
-Yilun
-
+> Best Regards
+> Sherry
 > 
-> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> ---
->  drivers/mfd/intel-m10-bmc-core.c  | 11 ++++++++
->  drivers/mfd/intel-m10-bmc-spi.c   | 39 +++++++++++++++++++++++++
->  include/linux/mfd/intel-m10-bmc.h | 47 -------------------------------
->  3 files changed, 50 insertions(+), 47 deletions(-)
 > 
-> diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
-> index 51b78b868235..50a4ec758bdb 100644
-> --- a/drivers/mfd/intel-m10-bmc-core.c
-> +++ b/drivers/mfd/intel-m10-bmc-core.c
-> @@ -12,6 +12,17 @@
->  #include <linux/mfd/intel-m10-bmc.h>
->  #include <linux/module.h>
->  
-> +/* Register fields of system registers */
-> +#define M10BMC_MAC_BYTE4		GENMASK(7, 0)
-> +#define M10BMC_MAC_BYTE3		GENMASK(15, 8)
-> +#define M10BMC_MAC_BYTE2		GENMASK(23, 16)
-> +#define M10BMC_MAC_BYTE1		GENMASK(31, 24)
-> +#define M10BMC_MAC_BYTE6		GENMASK(7, 0)
-> +#define M10BMC_MAC_BYTE5		GENMASK(15, 8)
-> +#define M10BMC_MAC_COUNT		GENMASK(23, 16)
-> +#define M10BMC_VER_MAJOR_MSK		GENMASK(23, 16)
-> +#define M10BMC_VER_PCB_INFO_MSK		GENMASK(31, 24)
-> +
->  static ssize_t bmc_version_show(struct device *dev,
->  				struct device_attribute *attr, char *buf)
->  {
-> diff --git a/drivers/mfd/intel-m10-bmc-spi.c b/drivers/mfd/intel-m10-bmc-spi.c
-> index e3b2edb8bc07..4a7a16d9f8d6 100644
-> --- a/drivers/mfd/intel-m10-bmc-spi.c
-> +++ b/drivers/mfd/intel-m10-bmc-spi.c
-> @@ -13,6 +13,45 @@
->  #include <linux/regmap.h>
->  #include <linux/spi/spi.h>
->  
-> +#define M10BMC_LEGACY_BUILD_VER		0x300468
-> +#define M10BMC_SYS_BASE			0x300800
-> +#define M10BMC_SYS_END			0x300fff
-> +#define M10BMC_FLASH_BASE		0x10000000
-> +#define M10BMC_FLASH_END		0x1fffffff
-> +#define M10BMC_MEM_END			M10BMC_FLASH_END
-> +
-> +#define M10BMC_STAGING_BASE		0x18000000
-> +
-> +/* Register offset of system registers */
-> +#define NIOS2_FW_VERSION		0x0
-> +#define M10BMC_MAC_LOW			0x10
-> +#define M10BMC_MAC_HIGH			0x14
-> +#define M10BMC_TEST_REG			0x3c
-> +#define M10BMC_BUILD_VER		0x68
-> +#define M10BMC_VER_LEGACY_INVALID	0xffffffff
-> +
-> +/* Secure update doorbell register, in system register region */
-> +#define M10BMC_DOORBELL			0x400
-> +
-> +/* Authorization Result register, in system register region */
-> +#define M10BMC_AUTH_RESULT		0x404
-> +
-> +/* Addresses for security related data in FLASH */
-> +#define BMC_REH_ADDR	0x17ffc004
-> +#define BMC_PROG_ADDR	0x17ffc000
-> +#define BMC_PROG_MAGIC	0x5746
-> +
-> +#define SR_REH_ADDR	0x17ffd004
-> +#define SR_PROG_ADDR	0x17ffd000
-> +#define SR_PROG_MAGIC	0x5253
-> +
-> +#define PR_REH_ADDR	0x17ffe004
-> +#define PR_PROG_ADDR	0x17ffe000
-> +#define PR_PROG_MAGIC	0x5250
-> +
-> +/* Address of 4KB inverted bit vector containing staging area FLASH count */
-> +#define STAGING_FLASH_COUNT	0x17ffb000
-> +
->  static const struct regmap_range m10bmc_regmap_range[] = {
->  	regmap_reg_range(M10BMC_LEGACY_BUILD_VER, M10BMC_LEGACY_BUILD_VER),
->  	regmap_reg_range(M10BMC_SYS_BASE, M10BMC_SYS_END),
-> diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
-> index 860408aa8db3..ed920f76d3c8 100644
-> --- a/include/linux/mfd/intel-m10-bmc.h
-> +++ b/include/linux/mfd/intel-m10-bmc.h
-> @@ -15,39 +15,8 @@ enum m10bmc_type {
->  	M10_N5010,
->  };
->  
-> -#define M10BMC_LEGACY_BUILD_VER		0x300468
-> -#define M10BMC_SYS_BASE			0x300800
-> -#define M10BMC_SYS_END			0x300fff
-> -#define M10BMC_FLASH_BASE		0x10000000
-> -#define M10BMC_FLASH_END		0x1fffffff
-> -#define M10BMC_MEM_END			M10BMC_FLASH_END
-> -
-> -#define M10BMC_STAGING_BASE		0x18000000
->  #define M10BMC_STAGING_SIZE		0x3800000
->  
-> -/* Register offset of system registers */
-> -#define NIOS2_FW_VERSION		0x0
-> -#define M10BMC_MAC_LOW			0x10
-> -#define M10BMC_MAC_BYTE4		GENMASK(7, 0)
-> -#define M10BMC_MAC_BYTE3		GENMASK(15, 8)
-> -#define M10BMC_MAC_BYTE2		GENMASK(23, 16)
-> -#define M10BMC_MAC_BYTE1		GENMASK(31, 24)
-> -#define M10BMC_MAC_HIGH			0x14
-> -#define M10BMC_MAC_BYTE6		GENMASK(7, 0)
-> -#define M10BMC_MAC_BYTE5		GENMASK(15, 8)
-> -#define M10BMC_MAC_COUNT		GENMASK(23, 16)
-> -#define M10BMC_TEST_REG			0x3c
-> -#define M10BMC_BUILD_VER		0x68
-> -#define M10BMC_VER_MAJOR_MSK		GENMASK(23, 16)
-> -#define M10BMC_VER_PCB_INFO_MSK		GENMASK(31, 24)
-> -#define M10BMC_VER_LEGACY_INVALID	0xffffffff
-> -
-> -/* Secure update doorbell register, in system register region */
-> -#define M10BMC_DOORBELL			0x400
-> -
-> -/* Authorization Result register, in system register region */
-> -#define M10BMC_AUTH_RESULT		0x404
-> -
->  /* Doorbell register fields */
->  #define DRBL_RSU_REQUEST		BIT(0)
->  #define DRBL_RSU_PROGRESS		GENMASK(7, 4)
-> @@ -108,22 +77,6 @@ enum m10bmc_type {
->  #define RSU_COMPLETE_INTERVAL_MS	1000
->  #define RSU_COMPLETE_TIMEOUT_MS		(40 * 60 * 1000)
->  
-> -/* Addresses for security related data in FLASH */
-> -#define BMC_REH_ADDR	0x17ffc004
-> -#define BMC_PROG_ADDR	0x17ffc000
-> -#define BMC_PROG_MAGIC	0x5746
-> -
-> -#define SR_REH_ADDR	0x17ffd004
-> -#define SR_PROG_ADDR	0x17ffd000
-> -#define SR_PROG_MAGIC	0x5253
-> -
-> -#define PR_REH_ADDR	0x17ffe004
-> -#define PR_PROG_ADDR	0x17ffe000
-> -#define PR_PROG_MAGIC	0x5250
-> -
-> -/* Address of 4KB inverted bit vector containing staging area FLASH count */
-> -#define STAGING_FLASH_COUNT	0x17ffb000
-> -
->  /**
->   * struct m10bmc_csr_map - Intel MAX 10 BMC CSR register map
->   */
-> -- 
-> 2.30.2
-> 
+> > Thanks,
+> > Peng.
+> > 
+> > >
+> > > Regards,
+> > >   Marco
+> > >
+> > > >  };
+> > > > diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+> > > > b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+> > > > index 7d6317d95b13..ce450965e837 100644
+> > > > --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+> > > > +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
+> > > > @@ -559,6 +559,45 @@ MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX
+> > > 	0x140
+> > > >  		>;
+> > > >  	};
+> > > >
+> > > > +	pinctrl_usdhc1_gpio: usdhc1grpgpio {
+> > > > +		fsl,pins = <
+> > > > +			MX8MM_IOMUXC_SD1_RESET_B_GPIO2_IO10	0x41
+> > > > +		>;
+> > > > +	};
+> > > > +
+> > > > +	pinctrl_usdhc1: usdhc1grp {
+> > > > +		fsl,pins = <
+> > > > +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK
+> > > 	0x190
+> > > > +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD
+> > > 	0x1d0
+> > > > +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0
+> > > 	0x1d0
+> > > > +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1
+> > > 	0x1d0
+> > > > +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2
+> > > 	0x1d0
+> > > > +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3
+> > > 	0x1d0
+> > > > +		>;
+> > > > +	};
+> > > > +
+> > > > +	pinctrl_usdhc1_100mhz: usdhc1grp100mhz {
+> > > > +		fsl,pins = <
+> > > > +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK
+> > > 	0x194
+> > > > +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD
+> > > 	0x1d4
+> > > > +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0
+> > > 	0x1d4
+> > > > +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1
+> > > 	0x1d4
+> > > > +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2
+> > > 	0x1d4
+> > > > +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3
+> > > 	0x1d4
+> > > > +		>;
+> > > > +	};
+> > > > +
+> > > > +	pinctrl_usdhc1_200mhz: usdhc1grp200mhz {
+> > > > +		fsl,pins = <
+> > > > +			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK
+> > > 	0x196
+> > > > +			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD
+> > > 	0x1d6
+> > > > +			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0
+> > > 	0x1d6
+> > > > +			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1
+> > > 	0x1d6
+> > > > +			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2
+> > > 	0x1d6
+> > > > +			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3
+> > > 	0x1d6
+> > > > +		>;
+> > > > +	};
+> > > > +
+> > > >  	pinctrl_usdhc2_gpio: usdhc2grpgpiogrp {
+> > > >  		fsl,pins = <
+> > > >  			MX8MM_IOMUXC_GPIO1_IO15_GPIO1_IO15
+> > > 	0x1c4
+> > > > --
+> > > > 2.37.1
+> > > >
+> > > >
+> > > >
