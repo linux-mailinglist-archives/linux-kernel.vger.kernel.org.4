@@ -2,171 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB1C625920
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00654625923
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233610AbiKKLLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 06:11:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
+        id S233318AbiKKLP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 06:15:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbiKKLK5 (ORCPT
+        with ESMTP id S230377AbiKKLP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 06:10:57 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFE3657FF;
-        Fri, 11 Nov 2022 03:10:56 -0800 (PST)
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4N7wtX3ws6z688hK;
-        Fri, 11 Nov 2022 19:08:36 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 12:10:53 +0100
-Received: from localhost (10.45.151.252) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 11 Nov
- 2022 11:10:53 +0000
-Date:   Fri, 11 Nov 2022 11:10:49 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Matt Ranostay <matt.ranostay@konsulko.com>
-CC:     Subhajit Ghosh <subhajit.ghosh@vixtechnology.com>,
-        <jic23@kernel.org>, <lars@metafoo.de>,
-        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH] iio: light: apds9960: Fix iio_event_spec structures
-Message-ID: <20221111111049.0000467f@Huawei.com>
-In-Reply-To: <CAJCx=g=WaGiBFYJTTjNgzrnW3We0qpuMvyy9iFAVDC8Mkbscsg@mail.gmail.com>
-References: <20221110101241.10576-1-subhajit.ghosh@vixtechnology.com>
-        <CAJCx=g=qRd+WaCLOHwnEjg1Myg4Ng=PK0sxcGgEG9VT+VpondA@mail.gmail.com>
-        <b6ac2692-3152-dfc4-5388-7986042970f0@vixtechnology.com>
-        <CAJCx=g=WaGiBFYJTTjNgzrnW3We0qpuMvyy9iFAVDC8Mkbscsg@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Fri, 11 Nov 2022 06:15:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5282E6711D
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 03:15:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC551B825C4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 11:15:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23C66C433C1;
+        Fri, 11 Nov 2022 11:15:17 +0000 (UTC)
+Date:   Fri, 11 Nov 2022 11:15:11 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Amit Pundir <amit.pundir@linaro.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [GIT PULL] arm64 updates for 6.1-rc1
+Message-ID: <Y24uvyDJU3CL1jOi@arm.com>
+References: <20221005144116.2256580-1-catalin.marinas@arm.com>
+ <CAMi1Hd38YB2m_r=m0wuDz+wErii37fUq1BJnvN9=y6opDzo_Fw@mail.gmail.com>
+ <Y0aq8y5mEZi14lJ/@arm.com>
+ <CAMi1Hd3Y9AibeVnh9_KYJ2EXar7bBSypKm4Tixj47htM7ZOURw@mail.gmail.com>
+ <CAMi1Hd1VBCFhf7+EXWHQWcGy4k=tcyLa7RGiFdprtRnegSG0Mw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.45.151.252]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMi1Hd1VBCFhf7+EXWHQWcGy4k=tcyLa7RGiFdprtRnegSG0Mw@mail.gmail.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Nov 2022 10:50:35 +0800
-Matt Ranostay <matt.ranostay@konsulko.com> wrote:
+On Tue, Nov 08, 2022 at 10:58:16PM +0530, Amit Pundir wrote:
+> On Tue, 25 Oct 2022 at 18:08, Amit Pundir <amit.pundir@linaro.org> wrote:
+> > On Wed, 12 Oct 2022 at 17:24, Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > On Sat, Oct 08, 2022 at 08:28:26PM +0530, Amit Pundir wrote:
+> > > > On Wed, 5 Oct 2022 at 20:11, Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > > > Will Deacon (2):
+> > > > >       arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()
+> > > >
+> > > > This patch broke AOSP on Dragonboard 845c (SDM845). I don't see any
+> > > > relevant crash in the attached log and device silently reboots into
+> > > > USB crash dump mode. The crash is fairly reproducible on db845c. I
+> > > > could trigger it twice in 5 reboots and it always crash at the same
+> > > > point during the boot process. Reverting this patch fixes the crash.
+> > > >
+> > > > I'm happy to test run any debug patche(s), that would help narrow
+> > > > down this breakage.
+[...]
+> > Further narrowed down the breakage to the userspace daemon rmtfs
+> > https://github.com/andersson/rmtfs. Is there anything specific in the
+> > userspace code that I should be paying attention to?
 
-> On Thu, Nov 10, 2022 at 10:45 PM Subhajit Ghosh
-> <subhajit.ghosh@vixtechnology.com> wrote:
-> >
-> >  
-> > >>                 .type = IIO_EV_TYPE_THRESH,
-> > >>                 .dir = IIO_EV_DIR_RISING,
-> > >> -               .mask_separate = BIT(IIO_EV_INFO_VALUE) |
-> > >> -                       BIT(IIO_EV_INFO_ENABLE),
-> > >> +               .mask_separate = BIT(IIO_EV_INFO_VALUE),  
-> > >
-> > > Probably more concise to use the following, and you won't need to add
-> > > an additional item to the structs.
-> > >
-> > >    .mask_separate = BIT(IIO_EV_INFO_VALUE),
-> > >    .mask_shared_by_type = BIT(IIO_EV_INFO_ENABLE),
-> > >  
-> >
-> > Above is the first thing I tried.
-> >
-> > Current implementation:
-> >
-> > root@stm32mp1:~# ls -1 /sys/bus/iio/devices/iio:device0/events/
-> > in_intensity_clear_thresh_falling_en
-> > in_intensity_clear_thresh_falling_value
-> > in_intensity_clear_thresh_rising_en
-> > in_intensity_clear_thresh_rising_value
-> >
-> > in_proximity_thresh_falling_en
-> > in_proximity_thresh_falling_value
-> > in_proximity_thresh_rising_en
-> > in_proximity_thresh_rising_value
-> >
-> >
-> > First method (Which you are suggesting):
-> > .mask_separate = BIT(IIO_EV_INFO_VALUE),
-> > .mask_shared_by_type = BIT(IIO_EV_INFO_ENABLE),
-> >
-> > root@stm32mp1:~# ls -1 /sys/bus/iio/devices/iio:device0/events/
-> > in_intensity_clear_thresh_falling_value
-> > in_intensity_clear_thresh_rising_value
-> > in_intensity_thresh_falling_en
-> > in_intensity_thresh_rising_en
-> >
-> > The above says all channels with with the type IIO_INTENSITY has
-> > the same enable but we require this particular channel (in_intensity_clear)
-> > regardless of direction to have the same enable.
-> > Using mask_shared_by_dir and mask_shared_by_all does not provide the logical
-> > attribute name.
-> >
-> >
-> > This patch provides the below:
-> >
-> > root@stm32mp1:~# ls -1 /sys/bus/iio/devices/iio:device0/events/
-> > in_intensity_clear_thresh_either_en
-> > in_intensity_clear_thresh_falling_value
-> > in_intensity_clear_thresh_rising_value
-> >
-> > in_proximity_thresh_either_en
-> > in_proximity_thresh_falling_value
-> > in_proximity_thresh_rising_value
-> >
-> > Verified using iio_event_monitor:
-> >
-> > root@stm32mp1:~# ./iio_event_monitor /dev/iio:device0
-> > Event: time: 1647143384807582753, type: proximity, channel: 0, evtype: thresh, direction: either
-> >  
-> 
-> Hmm maybe Jonathan will have some feedback on this (and if it is okay
-> to break the ABI interface). Been awhile since I've touched
-> this driver and a little rusty on iio events.  But I am guessing your
-> method makes sense since the event(s) has direction and a type, and
-> can't just have one of the .mask_shared_by_dir and mask_shared_by_type.
-> 
-> In any case:
-> 
-> Reviewed-by: Matt Ranostay <matt.ranostay@konsulko.com>
+Since you don't see anything in the logs like a crash and the system
+restarts, I suspect it's some deadlock and that's triggering the
+watchdog. We have an erratum (826319) but that's for Cortex-A53. IIUC
+SDM845 has Kryo 3xx series which based on some random google searches is
+derived from A75/A55. Unfortunately the MIDR_EL1 register doesn't match
+the Arm Ltd numbering, so I have no idea what CPUs these are by looking
+at the boot log.
 
-Hmm.  Given that event enables often cover a couple of different things
-(as done here) it isn't unknown for those to not be as easily covered
-as you have done.  As such, we have drivers were the ABI allows for
-enabling one event to end up enabling several others (even though they
-have separate enable attributes).  It's always been permitted for one
-IIO attribute write to have an effect on other attributes simply because
-we can't represent all dependencies.
+I wouldn't be surprised if you hit a similar bug, though I couldn't find
+anything close in the A55 errata notice.
 
-Now the bigger complexity / surprise here is the return of the either
-direction in response to enabling either rising or falling. 
-That is going to rather surprise your average writer of userspace code.
+While we could revert commit c44094eee32f ("arm64: dma: Drop cache
+invalidation from arch_dma_prep_coherent()"), if you hit a real hardware
+issue it may trigger in other scenario where we only do cache cleaning
+(without invalidate), like arch_sync_dma_for_device(). So I'd rather get
+to the bottom of this and potentially enable the workaround for this
+chipset.
 
-So patch covers what we should definitely have had in the first place.
-Hence it's a question of risk of someone running code that will be affected
-by the ABI change.  One of those fingers crossed moments...
+You could give it a quick try to by adding the MIDR ranges for SDM845 to
+struct midr_range workaround_clean_cache[].
 
-Jonathan
+After that I suggest you raise it with Qualcomm to investigate. Normally
+we ask for an erratum number to enable a workaround and it's only
+Qualcomm that can provide one here.
 
-> 
-> 
-> - Matt
-> 
-> >
-> > Regards
-> > Subhajit Ghosh
-> >
-> > --
-> > This email is confidential. If you have received this email in error please
-> > notify us immediately by return email and delete this email and any
-> > attachments. Vix accepts no liability for any damage caused by this email
-> > or any attachments due to viruses, interference, interception, corruption
-> > or unauthorised access.  
-
+-- 
+Catalin
