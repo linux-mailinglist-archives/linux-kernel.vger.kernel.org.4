@@ -2,152 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1512C625DE2
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:08:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60187625F2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234978AbiKKPIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 10:08:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
+        id S233958AbiKKQLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 11:11:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234864AbiKKPH6 (ORCPT
+        with ESMTP id S230043AbiKKQLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 10:07:58 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E8276FBC;
-        Fri, 11 Nov 2022 07:05:50 -0800 (PST)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N827v4msrz15MVY;
-        Fri, 11 Nov 2022 23:05:31 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+        Fri, 11 Nov 2022 11:11:07 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED65F5B2;
+        Fri, 11 Nov 2022 08:11:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668183065; x=1699719065;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Kmc8i17raTrE43RZ874eLzh3n+igMYXFyGNItktzJzY=;
+  b=tXDauwKH0HRhYNzpvvyuwjGl1UiyHkc222waYEgXysOMk96BeLqxbLxM
+   k9F45nOXBEudpr4l9xRDMhdyh3gee3GWUor8DLPcchkXCDrVY2CQuu19g
+   x0CWXWIpWCLWYxlL7hJL8+rsj0I12B8+laGFQ0VErfbUCa9makqPOw+0w
+   L63CzGeFLeTDKevHGk5G+AfMkGOlw5vnYN7zJa3jKImfsA8gUyjb0lc4d
+   E/iky6cjTDLcUy5irvLXnf+1E81WPhwMyQn96e+sT57PZh8BElTs1f/Lk
+   kLBjKK980j/J6YMg1oiDY5Sh9S+adDD5TYk7uevjnYagb0t+7t51qFw9n
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="123027573"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Nov 2022 09:11:03 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 23:05:46 +0800
-Received: from huawei.com (10.175.101.6) by kwepemm600015.china.huawei.com
- (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 11 Nov
- 2022 23:05:45 +0800
-From:   ChenXiaoSong <chenxiaosong2@huawei.com>
-To:     <trond.myklebust@hammerspace.com>, <anna@kernel.org>
-CC:     <linux-nfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chenxiaosong2@huawei.com>, <yi.zhang@huawei.com>,
-        <zhangxiaoxu5@huawei.com>
-Subject: [PATCH] NFSv4.1: handle memory allocation failure in nfs4_schedule_state_manager()
-Date:   Sat, 12 Nov 2022 00:10:33 +0800
-Message-ID: <20221111161033.899541-1-chenxiaosong2@huawei.com>
-X-Mailer: git-send-email 2.31.1
+ 15.1.2507.12; Fri, 11 Nov 2022 09:11:01 -0700
+Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 11 Nov 2022 09:10:55 -0700
+From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+        <andriy.shevchenko@linux.intel.com>,
+        <ilpo.jarvinen@linux.intel.com>, <macro@orcam.me.uk>,
+        <jay.dolan@accesio.com>, <cang1@live.co.uk>,
+        <u.kleine-koenig@pengutronix.de>, <wander@redhat.com>,
+        <etremblay@distech-controls.com>, <jk@ozlabs.org>,
+        <biju.das.jz@bp.renesas.com>, <geert+renesas@glider.be>,
+        <phil.edworthy@renesas.com>, <lukas@wunner.de>,
+        <UNGLinuxDriver@microchip.com>
+Subject: [PATCH v4 tty-next 0/3] 8250: microchip: pci1xxxx: Add driver for the pci1xxxx's quad-uart function
+Date:   Fri, 11 Nov 2022 21:41:27 +0530
+Message-ID: <20221111161130.2043882-1-kumaravel.thiagarajan@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If memory allocation fail in nfs4_schedule_state_manager() when mount
-NFSv4.1/NFSv4.2, nfs4_run_state_manager() will not be called, and current
-construction state will never be marked as ready or failed,
-nfs_wait_client_init_complete() will wait forever, as shown below:
+pci1xxxx is a PCIe switch with a multi-function endpoint on one of its
+downstream ports. Quad-uart is one of the functions in the multi-function
+endpoint. This patch adds device driver for the quad-uart function and
+enumerates between 1 to 4 instances of uarts based on the PCIe subsystem
+device ID.
 
-  syscall(mount)
-  ...
-    nfs4_init_client
-      nfs4_discover_server_trunking
-        nfs41_discover_server_trunking
-          nfs4_schedule_state_manager
-            kthread_run /* nfs4_run_state_manager() will not be called */
-              kthread_create
-                kthread_create_on_node
-                  __kthread_create_on_node
-                    create = kmalloc() = NULL
-                    return ERR_PTR(-ENOMEM)
-          nfs_wait_client_init_complete /* wait forever */
+The changes from v1->v2->v3->v4 are mentioned in each patch in the patchset.
 
-Fix this by checking return value of nfs4_schedule_state_manager() which
-can indicate whether kernel thread is created successful.
+Thanks to Andy Shevchenko, Ilpo Jarvinen, Chritophe JAILLET, Geert
+Uytterhoeven, Greg KH for their review comments.
 
-Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
----
- fs/nfs/nfs4_fs.h   |  2 +-
- fs/nfs/nfs4state.c | 15 ++++++++++-----
- 2 files changed, 11 insertions(+), 6 deletions(-)
+Kumaravel Thiagarajan (3):
+  8250: microchip: pci1xxxx: Add driver for quad-uart support.
+  8250: microchip: pci1xxxx: Add rs485 support to quad-uart driver
+  8250: microchip: pci1xxxx: Add power management functions to quad-uart
+    driver
 
-diff --git a/fs/nfs/nfs4_fs.h b/fs/nfs/nfs4_fs.h
-index cfef738d765e..74c6d1504010 100644
---- a/fs/nfs/nfs4_fs.h
-+++ b/fs/nfs/nfs4_fs.h
-@@ -502,7 +502,7 @@ extern int nfs4_state_mark_reclaim_nograce(struct nfs_client *, struct nfs4_stat
- extern void nfs4_schedule_lease_recovery(struct nfs_client *);
- extern int nfs4_wait_clnt_recover(struct nfs_client *clp);
- extern int nfs4_client_recover_expired_lease(struct nfs_client *clp);
--extern void nfs4_schedule_state_manager(struct nfs_client *);
-+extern int nfs4_schedule_state_manager(struct nfs_client *);
- extern void nfs4_schedule_path_down_recovery(struct nfs_client *clp);
- extern int nfs4_schedule_stateid_recovery(const struct nfs_server *, struct nfs4_state *);
- extern int nfs4_schedule_migration_recovery(const struct nfs_server *);
-diff --git a/fs/nfs/nfs4state.c b/fs/nfs/nfs4state.c
-index a2d2d5d1b088..127027f777c8 100644
---- a/fs/nfs/nfs4state.c
-+++ b/fs/nfs/nfs4state.c
-@@ -376,8 +376,9 @@ int nfs41_discover_server_trunking(struct nfs_client *clp,
- 		else
- 			set_bit(NFS4CLNT_LEASE_CONFIRM, &clp->cl_state);
- 	}
--	nfs4_schedule_state_manager(clp);
--	status = nfs_wait_client_init_complete(clp);
-+	status = nfs4_schedule_state_manager(clp);
-+	if (!status)
-+		status = nfs_wait_client_init_complete(clp);
- 	if (status < 0)
- 		nfs_put_client(clp);
- 	return status;
-@@ -1201,11 +1202,12 @@ static void nfs4_clear_state_manager_bit(struct nfs_client *clp)
- /*
-  * Schedule the nfs_client asynchronous state management routine
-  */
--void nfs4_schedule_state_manager(struct nfs_client *clp)
-+int nfs4_schedule_state_manager(struct nfs_client *clp)
- {
- 	struct task_struct *task;
- 	char buf[INET6_ADDRSTRLEN + sizeof("-manager") + 1];
- 	struct rpc_clnt *cl = clp->cl_rpcclient;
-+	int ret = 0;
- 
- 	while (cl != cl->cl_parent)
- 		cl = cl->cl_parent;
-@@ -1213,7 +1215,7 @@ void nfs4_schedule_state_manager(struct nfs_client *clp)
- 	set_bit(NFS4CLNT_RUN_MANAGER, &clp->cl_state);
- 	if (test_and_set_bit(NFS4CLNT_MANAGER_AVAILABLE, &clp->cl_state) != 0) {
- 		wake_up_var(&clp->cl_state);
--		return;
-+		goto out;
- 	}
- 	set_bit(NFS4CLNT_MANAGER_RUNNING, &clp->cl_state);
- 	__module_get(THIS_MODULE);
-@@ -1228,13 +1230,16 @@ void nfs4_schedule_state_manager(struct nfs_client *clp)
- 	rcu_read_unlock();
- 	task = kthread_run(nfs4_run_state_manager, clp, "%s", buf);
- 	if (IS_ERR(task)) {
-+		ret = PTR_ERR(task);
- 		printk(KERN_ERR "%s: kthread_run: %ld\n",
--			__func__, PTR_ERR(task));
-+			__func__, ret);
- 		nfs4_clear_state_manager_bit(clp);
- 		clear_bit(NFS4CLNT_MANAGER_AVAILABLE, &clp->cl_state);
- 		nfs_put_client(clp);
- 		module_put(THIS_MODULE);
- 	}
-+out:
-+	return ret;
- }
- 
- /*
+ MAINTAINERS                             |   7 +
+ drivers/tty/serial/8250/8250_pci.c      |  24 +-
+ drivers/tty/serial/8250/8250_pci1xxxx.c | 536 ++++++++++++++++++++++++
+ drivers/tty/serial/8250/8250_pcilib.c   |  34 ++
+ drivers/tty/serial/8250/8250_pcilib.h   |   5 +
+ drivers/tty/serial/8250/8250_port.c     |   8 +
+ drivers/tty/serial/8250/Kconfig         |  15 +
+ drivers/tty/serial/8250/Makefile        |   2 +
+ include/uapi/linux/serial_core.h        |   3 +
+ 9 files changed, 612 insertions(+), 22 deletions(-)
+ create mode 100644 drivers/tty/serial/8250/8250_pci1xxxx.c
+ create mode 100644 drivers/tty/serial/8250/8250_pcilib.c
+ create mode 100644 drivers/tty/serial/8250/8250_pcilib.h
+
 -- 
-2.31.1
+2.25.1
 
