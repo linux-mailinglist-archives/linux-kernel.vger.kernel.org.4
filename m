@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4FA6258D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3186258CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:52:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233982AbiKKKwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 05:52:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
+        id S233744AbiKKKwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 05:52:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233459AbiKKKvn (ORCPT
+        with ESMTP id S233563AbiKKKvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 05:51:43 -0500
+        Fri, 11 Nov 2022 05:51:50 -0500
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E90657FF;
-        Fri, 11 Nov 2022 02:51:42 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AB6QVBQ001249;
-        Fri, 11 Nov 2022 10:51:33 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FAB6585;
+        Fri, 11 Nov 2022 02:51:47 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ABAGTj8026689;
+        Fri, 11 Nov 2022 10:51:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=3IsGZYPi5nWoNmM8hEm0QKiBNUzRLQ933yF+VFuoZdA=;
- b=Shhjy/k+V+BrpZew73konBXYLk3dj5mvmxPTHesn2SuEMP4qUU8SETyyVpaQ4WjgFi/L
- UeVt6fb+9iVwzZ9T+EWrybmBmOT51GBnijruSrAICm3xhGzYiGNoYS/6k9NBM6qltzOr
- aapgwBZPMYIqzpcJJEKXKIyYMuKVBOW6CcZtkKEwAH1f1hd4a1Ksw/TWExrm4UgYBnYQ
- SNOFT2TkR8hILsr8ZlvyuU4aTtLyXtn6MG/lEZZ9dJE9Dwye+tUpYDCZXIMgdLscajXq
- Of751jVm1nVg+FOnlma9zfF0+T7Ze/ER6dHzr955KU0S7YYzsoJnqhXQ0a/j02rmY2iB wg== 
+ bh=5cAvctrQBZlpEK0PiVQAsUz4bv/wdFcdOJJsmPtYOG8=;
+ b=dWIlTHqNJVNJpYRHqWqBpUpgX3SP2QIxMcxdiVreSLjgG5fAhEOxt4Rtlej0TdSex3P8
+ e2zbQKzTzCv4xYOxIdSxfAdact0T8uL2pYBctt7Erkh/BnuxwT2ruFCc+FOhG4TntGJy
+ sfmo9OpdGIQPU6tz/zhr779EaL67Hkr3sOV2XY7inkyW5f2xms4OycRM5Nzoomgo7FWu
+ SblpfC3YDMVjAkKUl1Q8uWWT/lDLg2OQHCxNY/bKLzZZv7mP76N7l12OVrE6k5asXPA9
+ NsZq2ADBgQMENU0JKNEBdr9p6GYWZEnNhkQvSbZ89w1W9IvX7Mn8iOYOK391mcUb1tp0 qg== 
 Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ksh42gvnf-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kshkdgs03-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 10:51:33 +0000
+        Fri, 11 Nov 2022 10:51:38 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ABApWFS002952
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ABApbh3003003
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 10:51:32 GMT
+        Fri, 11 Nov 2022 10:51:37 GMT
 Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Fri, 11 Nov 2022 02:51:27 -0800
+ 15.2.986.29; Fri, 11 Nov 2022 02:51:32 -0800
 From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -53,9 +53,9 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         Sibi Sankar <quic_sibis@quicinc.com>,
         Rajendra Nayak <quic_rjendra@quicinc.com>, <vkoul@kernel.org>,
         "Souradeep Chowdhury" <quic_schowdhu@quicinc.com>
-Subject: [PATCH V18 3/7] MAINTAINERS: Add the entry for DCC(Data Capture and Compare) driver support
-Date:   Fri, 11 Nov 2022 16:20:29 +0530
-Message-ID: <48811ff2555c48e1fbecee2b62e863de5a2f1fa1.1668159970.git.quic_schowdhu@quicinc.com>
+Subject: [PATCH V18 4/7] arm64: dts: qcom: sm8150: Add Data Capture and Compare(DCC) support node
+Date:   Fri, 11 Nov 2022 16:20:30 +0530
+Message-ID: <d4c5ae3f63b3fb9ffa78d7e8c5dc72a864f174bb.1668159970.git.quic_schowdhu@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1668159970.git.quic_schowdhu@quicinc.com>
 References: <cover.1668159970.git.quic_schowdhu@quicinc.com>
@@ -66,15 +66,15 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _-_dZacCQUM7zo1qVw01Y0KbY0aZF-Vh
-X-Proofpoint-ORIG-GUID: _-_dZacCQUM7zo1qVw01Y0KbY0aZF-Vh
+X-Proofpoint-GUID: h2BZPMsax_F-pCEydmag2EkaX7oNmywD
+X-Proofpoint-ORIG-GUID: h2BZPMsax_F-pCEydmag2EkaX7oNmywD
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-11_06,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 suspectscore=0 impostorscore=0
- mlxscore=0 adultscore=0 mlxlogscore=871 clxscore=1015 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 impostorscore=0 adultscore=0 phishscore=0 clxscore=1015
+ spamscore=0 priorityscore=1501 malwarescore=0 mlxscore=0 suspectscore=0
+ mlxlogscore=912 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2210170000 definitions=main-2211110072
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -85,34 +85,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added the entries for all the files added as a part of driver support for
-DCC(Data Capture and Compare).
+Add the DCC(Data Capture and Compare) device tree node entry along with
+the addresses for register regions.
 
 Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 ---
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm64/boot/dts/qcom/sm8150.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cddc0ae..0fa438b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5720,6 +5720,14 @@ F:	include/linux/tfrc.h
- F:	include/uapi/linux/dccp.h
- F:	net/dccp/
+diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+index cef8c4f..38a840b 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+@@ -1767,6 +1767,12 @@
+ 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
+ 		};
  
-+DCC QTI DRIVER
-+M:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/ABI/testing/debugfs-driver-dcc
-+F:	Documentation/devicetree/bindings/soc/qcom/qcom,dcc.yaml
-+F:	drivers/soc/qcom/dcc.c
++		dma@10a2000 {
++			compatible = "qcom,sm8150-dcc", "qcom,dcc";
++			reg = <0x0 0x010a2000 0x0 0x1000>,
++			      <0x0 0x010ad000 0x0 0x3000>;
++		};
 +
- DECnet NETWORK LAYER
- L:	linux-decnet-user@lists.sourceforge.net
- S:	Orphan
+ 		pcie0: pci@1c00000 {
+ 			compatible = "qcom,pcie-sm8150", "snps,dw-pcie";
+ 			reg = <0 0x01c00000 0 0x3000>,
 -- 
 2.7.4
 
