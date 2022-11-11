@@ -2,95 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05829625FC5
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F030625FC7
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233940AbiKKQpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 11:45:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
+        id S233984AbiKKQp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 11:45:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbiKKQo6 (ORCPT
+        with ESMTP id S232901AbiKKQpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:44:58 -0500
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C041383B9D;
-        Fri, 11 Nov 2022 08:44:56 -0800 (PST)
-Received: by mail-wm1-f50.google.com with SMTP id v7so3255062wmn.0;
-        Fri, 11 Nov 2022 08:44:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UXPe6WX8jBjWxRwy3pL5D2Wep2saGki4oUGtlWeziig=;
-        b=lCAoP1Xr5XxJfhkEbEfYwx3rNXiF+zamx73gXcE8fPixkZwSpQkuVadYOWqQGYv4dM
-         nE/EFknjTL1dUkLl/U4yztZEPqcXsIa+t6BfqCay7G6xFw5hcCiSdFrLFrxRho8Hg5pJ
-         HG+llqempdKortXC3zYpmNyHGNp4fsaDAiauJi/u3bewOPhy7oOuWbUwTQ3hFmmO1FBL
-         NzD6HCaLhtYINLn93/QEwZaYBbGFwvh38Dw3mrPjybAi825onInryicSt0erAimwJy5q
-         oPKsv9rd/XA0A4cd27puSIthLPZANZJ2fH7dDIJI6GhY+iFNgo32RdITlTRarRebTrKx
-         asYA==
-X-Gm-Message-State: ANoB5png+VSceECWlN8gGcltmG6A8oYUM/uQjvA7Ry9jMUk388+Eii5/
-        tzKI2YS44omaBjQhsZ5Ncls=
-X-Google-Smtp-Source: AA0mqf5Sn0xQORHJpQN6R8VYO4G2A2ivXDMnYvQDhL1ytehzwGpbrmIn369cEycyw74wQAil/XuM7w==
-X-Received: by 2002:a05:600c:2195:b0:3cf:6c2f:950c with SMTP id e21-20020a05600c219500b003cf6c2f950cmr1893974wme.146.1668185095259;
-        Fri, 11 Nov 2022 08:44:55 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id c2-20020a5d4cc2000000b0023655e51c14sm2282939wrt.32.2022.11.11.08.44.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 08:44:54 -0800 (PST)
-Date:   Fri, 11 Nov 2022 16:44:52 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
-        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
-        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, dan.j.williams@intel.com,
-        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-        iommu@lists.linux.dev
-Subject: Re: [PATCH v2 00/12] Drivers: hv: Add PCI pass-thru support to
- Hyper-V Confidential VMs
-Message-ID: <Y258BO8ohVtVZvSH@liuwe-devbox-debian-v2>
-References: <1668147701-4583-1-git-send-email-mikelley@microsoft.com>
+        Fri, 11 Nov 2022 11:45:22 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF4FF012;
+        Fri, 11 Nov 2022 08:45:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668185121; x=1699721121;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=k8e9e7nUGMQKTjT/UB23G+Vl6wm0WUKF3M0J9ZTBV5A=;
+  b=VU7H6SgmkrWzhBo4aoeP8HpgPyVqEMDbxKqkTp203WVtdXHSDrAbDJIy
+   78igevk8o8z+lsk4z43kVE+s/MXWeAqVNZ0fHeeIlHuNPu7T8RfO2io2m
+   vRbi3Bv0nli7MlFmSSJ28pDwUbewPUH9FkcZw4xm2QAq8Ye6SdfqpOLT8
+   wRJmreaA6iQmb/X0eaPg4syNtl+w0IkcCIBavpxdk0CHPk3AeKzkHH1+m
+   lYYoWWymQ7ktffRnSqWdBgKHXRMi6v64BooqlclED8i7/xuKsm1AyEj3l
+   /iggxm8yH+Tfh/XsrB+2D2Jffqilv/u4S1VVixAgHyk1rfLh+Nt8QSrQP
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="397923900"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="397923900"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 08:45:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="668859256"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="668859256"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 11 Nov 2022 08:45:16 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1otX9V-00Ankg-1L;
+        Fri, 11 Nov 2022 18:45:13 +0200
+Date:   Fri, 11 Nov 2022 18:45:13 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        ilpo.jarvinen@linux.intel.com, macro@orcam.me.uk,
+        jay.dolan@accesio.com, cang1@live.co.uk,
+        u.kleine-koenig@pengutronix.de, wander@redhat.com,
+        etremblay@distech-controls.com, jk@ozlabs.org,
+        biju.das.jz@bp.renesas.com, geert+renesas@glider.be,
+        phil.edworthy@renesas.com, lukas@wunner.de,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v4 tty-next 3/3] 8250: microchip: pci1xxxx: Add power
+ management functions to quad-uart driver
+Message-ID: <Y258GVGTxyt5zZnW@smile.fi.intel.com>
+References: <20221111161130.2043882-1-kumaravel.thiagarajan@microchip.com>
+ <20221111161130.2043882-4-kumaravel.thiagarajan@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1668147701-4583-1-git-send-email-mikelley@microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221111161130.2043882-4-kumaravel.thiagarajan@microchip.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 10:21:29PM -0800, Michael Kelley wrote:
-[...]
-> Patch Organization
-> ==================
-> Patch 1 fixes a bug in __ioremap_caller() that affects the
-> existing Hyper-V code after the change to treat the vTOM bit as
-> a protection flag. Fixing the bug allows the old code to continue
-> to run until later patches in the series remove or update it.
-> This sequencing avoids the need to enable the new approach and
-> remove the old code in a single large patch.
-> 
-> Patch 2 handles the I/O APIC quirk by defining a new CC_ATTR enum
-> member that is set only when running on Hyper-V.
+On Fri, Nov 11, 2022 at 09:41:30PM +0530, Kumaravel Thiagarajan wrote:
+> pci1xxxx's quad-uart function has the capability to wake up the host
 
-I'm waiting for x86 maintainers acks on these two patches before merging
-this series.
+UART
 
-Thanks,
-Wei.
+> from suspend state. Enable wakeup before entering into suspend and
+> disable wakeup on resume.
+
+> Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+> Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+
+No Co-developed-by?
+
+> +static bool pci1xxxx_port_suspend(int line)
+> +{
+> +	struct uart_8250_port *up = serial8250_get_port(line);
+> +	struct uart_port *port = &up->port;
+> +	struct tty_port *tport = &port->state->port;
+> +	unsigned long flags;
+> +	bool ret = false;
+> +	u8 wakeup_mask;
+> +
+> +	mutex_lock(&tport->mutex);
+> +	if (port->suspended == 0 && port->dev) {
+> +		wakeup_mask = readb(up->port.membase + UART_WAKE_MASK_REG);
+> +
+> +		spin_lock_irqsave(&port->lock, flags);
+> +		port->mctrl &= ~TIOCM_OUT2;
+> +		port->ops->set_mctrl(port, port->mctrl);
+> +		spin_unlock_irqrestore(&port->lock, flags);
+
+> +		if ((wakeup_mask & UART_WAKE_SRCS) != UART_WAKE_SRCS)
+> +			ret = true;
+
+Can be
+		ret = (wakeup_mask & UART_WAKE_SRCS) != UART_WAKE_SRCS;
+
+> +	}
+> +
+> +	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
+> +	mutex_unlock(&tport->mutex);
+> +
+> +	return ret;
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
