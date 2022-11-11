@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68EEB624F72
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 02:16:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C416624F73
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 02:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232346AbiKKBQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 20:16:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
+        id S232602AbiKKBQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 20:16:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232273AbiKKBPU (ORCPT
+        with ESMTP id S232444AbiKKBPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 10 Nov 2022 20:15:20 -0500
 Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0BA4165B4;
-        Thu, 10 Nov 2022 17:14:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C85964A36;
+        Thu, 10 Nov 2022 17:14:54 -0800 (PST)
 Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 4CCF6456;
-        Fri, 11 Nov 2022 02:14:48 +0100 (CET)
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 7CCF92A2;
+        Fri, 11 Nov 2022 02:14:53 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202211; t=1668129288;
-        bh=QQcVqdOIas77625N9ryGqV0AYz/xIDRwp/LEjV3tj0k=;
+        s=202211; t=1668129293;
+        bh=tQs2et+30q6TN810oq+7r53WPOu/UGbheN1qxHEf9KU=;
         h=Date:From:Cc:Subject:References:In-Reply-To:From;
-        b=AgogrmAVSGIQTQaEqN1R6KcRHReJy3t+0kIVk0CivXO0UQYdSy2Yjh3+NHs9o4bdH
-         ydsXG7g04tMLm035pJwjj1Yy+Fwcy0MX/njfcsvumOxIavfwu/X0dLO8v2eSGYZ+GE
-         Ji/smVBKbF6LK9b7Eg/u+5wxstiYkfqZa4VJVtrQsX7mJ1S9ByzVmHnmiRLj+xnr67
-         Nf5t8CUeq4ifjk0KKJ5ORg26JuNM1181wHW5jAwl8b0wVuiWkOoRo/7lwdX0AgIW93
-         9Ei3axHbOo40KIw8v0S5dYiSRbV5U7v/bcdYVwoGCbdhbQsRekvTrcDVHZ+Z4fpMwH
-         KIs/HoBiiFjbg==
-Date:   Fri, 11 Nov 2022 02:14:47 +0100
+        b=I4G4eXq0aT/iCuyIVKNrHplLMz/549E20HLmOLJ3dT9OGjo/NnC0dCc+V0OOAsRgr
+         5qzAJHNV9tAISAHwfN9PbcE4jievI2XGFjoOUisKuLK2vPWJXGQ9P39fwkDkkia5zX
+         fpwjpPRik2GC4gOODkhrhdBgHbU6UCvm3ADc5x5PKL/uyF+wKJZDTKmCL+tyCBLep4
+         r2O4MztX7H5VsaNwEetiABhqDGOfvgyfot/Ym1h5Zjz5LYFgEmHZlhGQuclz/I6PRk
+         w60NhAUVyKdiOQM9fHXVoqkc/H9QSbjQ0oMT2NOWCiBAZ9vqK4HDgJiY5JjkNFqB+/
+         LDFQYMvMwji3w==
+Date:   Fri, 11 Nov 2022 02:14:52 +0100
 From:   Ahelenia =?utf-8?Q?Ziemia=C5=84ska?= 
         <nabijaczleweli@nabijaczleweli.xyz>
 Cc:     Jonathan Corbet <corbet@lwn.net>,
@@ -36,20 +36,25 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         Alex Shi <alexs@kernel.org>,
         Yanteng Si <siyanteng@loongson.cn>,
         Hu Haowen <src.res@email.cn>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Laura Abbott <labbott@kernel.org>,
+        Wenwen Wang <wenwen@cs.uga.edu>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Kees Cook <keescook@chromium.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, linux-doc@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wu XiangCheng <bobwxc@email.cn>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH v3 14/15] scsi: ncr53c8xx: replace CCB_MAGIC with bool busy
-Message-ID: <7c5854769df2af955e991baf02b88fd0d84502d0.1668128257.git.nabijaczleweli@nabijaczleweli.xyz>
+        linux-doc-tw-discuss@lists.sourceforge.net
+Subject: [PATCH v3 15/15] Documentation: remove magic-number.rst
+Message-ID: <93e66d80680c52e8d04763fb2d86f841c69e32c9.1668128257.git.nabijaczleweli@nabijaczleweli.xyz>
 References: <cover.1668128257.git.nabijaczleweli@nabijaczleweli.xyz>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lizvvs3xytaebgcx"
+        protocol="application/pgp-signature"; boundary="hshqtbvcgnylki4n"
 Content-Disposition: inline
 In-Reply-To: <cover.1668128257.git.nabijaczleweli@nabijaczleweli.xyz>
 User-Agent: NeoMutt/20220429
@@ -66,243 +71,584 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---lizvvs3xytaebgcx
+--hshqtbvcgnylki4n
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-The only non-boolean check might as well be, since it just early-exits
-instead of noting the bug: lower it to a boolean and make it less
-confusing.
+All noted magic numbers have been removed, and we don't want to encourage
+magicking up kernel structs going forward.
 
-As for magic numbers, we have largely moved away from this approach,
-and we have better debugging instrumentation nowadays: kill it.
-
-Link: https://lore.kernel.org/linux-doc/YyMlovoskUcHLEb7@kroah.com/
 Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
 ---
- Documentation/process/magic-number.rst        |  1 -
- .../it_IT/process/magic-number.rst            |  1 -
- .../zh_CN/process/magic-number.rst            |  1 -
- .../zh_TW/process/magic-number.rst            |  1 -
- drivers/scsi/ncr53c8xx.c                      | 25 ++++++-------------
- 5 files changed, 8 insertions(+), 21 deletions(-)
+ Documentation/process/index.rst               |  1 -
+ Documentation/process/magic-number.rst        | 71 -----------------
+ .../translations/it_IT/process/index.rst      |  1 -
+ .../it_IT/process/magic-number.rst            | 77 -------------------
+ .../translations/zh_CN/process/index.rst      |  1 -
+ .../zh_CN/process/magic-number.rst            | 60 ---------------
+ .../translations/zh_TW/process/index.rst      |  1 -
+ .../zh_TW/process/magic-number.rst            | 63 ---------------
+ 8 files changed, 275 deletions(-)
+ delete mode 100644 Documentation/process/magic-number.rst
+ delete mode 100644 Documentation/translations/it_IT/process/magic-number.r=
+st
+ delete mode 100644 Documentation/translations/zh_CN/process/magic-number.r=
+st
+ delete mode 100644 Documentation/translations/zh_TW/process/magic-number.r=
+st
 
+diff --git a/Documentation/process/index.rst b/Documentation/process/index.=
+rst
+index d4b6217472b0..a8c0c4bffa47 100644
+--- a/Documentation/process/index.rst
++++ b/Documentation/process/index.rst
+@@ -59,7 +59,6 @@ lack of a better place.
+=20
+    applying-patches
+    adding-syscalls
+-   magic-number
+    volatile-considered-harmful
+    botching-up-ioctls
+    clang-format
 diff --git a/Documentation/process/magic-number.rst b/Documentation/process=
 /magic-number.rst
-index 6e432917a5a8..5a8c2755ac9c 100644
+deleted file mode 100644
+index 5a8c2755ac9c..000000000000
 --- a/Documentation/process/magic-number.rst
-+++ b/Documentation/process/magic-number.rst
-@@ -68,5 +68,4 @@ Changelog::
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
++++ /dev/null
+@@ -1,71 +0,0 @@
+-.. _magicnumbers:
+-
+-Linux magic numbers
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+-
+-This file is a registry of magic numbers which are in use.  When you
+-add a magic number to a structure, you should also add it to this
+-file, since it is best if the magic numbers used by various structures
+-are unique.
+-
+-It is a **very** good idea to protect kernel data structures with magic
+-numbers.  This allows you to check at run time whether (a) a structure
+-has been clobbered, or (b) you've passed the wrong structure to a
+-routine.  This last is especially useful --- particularly when you are
+-passing pointers to structures via a void * pointer.  The tty code,
+-for example, does this frequently to pass driver-specific and line
+-discipline-specific structures back and forth.
+-
+-The way to use magic numbers is to declare them at the beginning of
+-the structure, like so::
+-
+-	struct tty_ldisc {
+-		int	magic;
+-		...
+-	};
+-
+-Please follow this discipline when you are adding future enhancements
+-to the kernel!  It has saved me countless hours of debugging,
+-especially in the screwy cases where an array has been overrun and
+-structures following the array have been overwritten.  Using this
+-discipline, these cases get detected quickly and safely.
+-
+-Changelog::
+-
+-					Theodore Ts'o
+-					31 Mar 94
+-
+-  The magic table is current to Linux 2.1.55.
+-
+-					Michael Chastain
+-					<mailto:mec@shout.net>
+-					22 Sep 1997
+-
+-  Now it should be up to date with Linux 2.1.112. Because
+-  we are in feature freeze time it is very unlikely that
+-  something will change before 2.2.x. The entries are
+-  sorted by number field.
+-
+-					Krzysztof G. Baranowski
+-					<mailto: kgb@knm.org.pl>
+-					29 Jul 1998
+-
+-  Updated the magic table to Linux 2.5.45. Right over the feature freeze,
+-  but it is possible that some new magic numbers will sneak into the
+-  kernel before 2.6.x yet.
+-
+-					Petr Baudis
+-					<pasky@ucw.cz>
+-					03 Nov 2002
+-
+-  Updated the magic table to Linux 2.5.74.
+-
+-					Fabian Frederick
+-					<ffrederick@users.sourceforge.net>
+-					09 Jul 2003
+-
+-
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
- Magic Name            Number           Structure                File
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+-Magic Name            Number           Structure                File
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
--CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
+diff --git a/Documentation/translations/it_IT/process/index.rst b/Documenta=
+tion/translations/it_IT/process/index.rst
+index 8d4e36a07ff4..71adf53bc297 100644
+--- a/Documentation/translations/it_IT/process/index.rst
++++ b/Documentation/translations/it_IT/process/index.rst
+@@ -56,7 +56,6 @@ perch=C3=A9 non si =C3=A8 trovato un posto migliore.
+=20
+    applying-patches
+    adding-syscalls
+-   magic-number
+    volatile-considered-harmful
+    clang-format
+    ../riscv/patch-acceptance
 diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/Do=
 cumentation/translations/it_IT/process/magic-number.rst
-index 7d4c117ac626..2fbc1876534a 100644
+deleted file mode 100644
+index 2fbc1876534a..000000000000
 --- a/Documentation/translations/it_IT/process/magic-number.rst
-+++ b/Documentation/translations/it_IT/process/magic-number.rst
-@@ -74,5 +74,4 @@ Registro dei cambiamenti::
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
++++ /dev/null
+@@ -1,77 +0,0 @@
+-.. include:: ../disclaimer-ita.rst
+-
+-:Original: :ref:`Documentation/process/magic-number.rst <magicnumbers>`
+-:Translator: Federico Vaga <federico.vaga@vaga.pv.it>
+-
+-.. _it_magicnumbers:
+-
+-I numeri magici di Linux
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+-
+-Questo documento =C3=A8 un registro dei numeri magici in uso.  Quando
+-aggiungete un numero magico ad una struttura, dovreste aggiungerlo anche
+-a questo documento; la cosa migliore =C3=A8 che tutti i numeri magici usati
+-dalle varie strutture siano unici.
+-
+-=C3=88 **davvero** un'ottima idea proteggere le strutture dati del kernel =
+con
+-dei numeri magici.  Questo vi permette in fase d'esecuzione di (a) verific=
+are
+-se una struttura =C3=A8 stata malmenata, o (b) avete passato a una procedu=
+ra la
+-struttura errata.  Quest'ultimo =C3=A8 molto utile - particolarmente quand=
+o si passa
+-una struttura dati tramite un puntatore void \*.  Il codice tty, per esemp=
+io,
+-effettua questa operazione con regolarit=C3=A0 passando avanti e indietro =
+le
+-strutture specifiche per driver e discipline.
+-
+-Per utilizzare un numero magico, dovete dichiararlo all'inizio della strut=
+tura
+-dati, come di seguito::
+-
+-	struct tty_ldisc {
+-		int	magic;
+-		...
+-	};
+-
+-Per favore, seguite questa direttiva quando aggiungerete migliorie al kern=
+el!
+-Mi ha risparmiato un numero illimitato di ore di debug, specialmente nei c=
+asi
+-pi=C3=B9 ostici dove si =C3=A8 andati oltre la dimensione di un vettore e =
+la struttura
+-dati che lo seguiva in memoria =C3=A8 stata sovrascritta.  Seguendo questa
+-direttiva, questi casi vengono identificati velocemente e in sicurezza.
+-
+-Registro dei cambiamenti::
+-
+-					Theodore Ts'o
+-					31 Mar 94
+-
+-  La tabella magica =C3=A8 aggiornata a Linux 2.1.55.
+-
+-					Michael Chastain
+-					<mailto:mec@shout.net>
+-					22 Sep 1997
+-
+-  Ora dovrebbe essere aggiornata a Linux 2.1.112. Dato che
+-  siamo in un momento di congelamento delle funzionalit=C3=A0
+-  (*feature freeze*) =C3=A8 improbabile che qualcosa cambi prima
+-  della versione 2.2.x.  Le righe sono ordinate secondo il
+-  campo numero.
+-
+-					Krzysztof G. Baranowski
+-					<mailto: kgb@knm.org.pl>
+-					29 Jul 1998
+-
+-  Aggiornamento della tabella a Linux 2.5.45. Giusti nel congelamento
+-  delle funzionalit=C3=A0 ma =C3=A8 comunque possibile che qualche nuovo
+-  numero magico s'intrufoli prima del kernel 2.6.x.
+-
+-					Petr Baudis
+-					<pasky@ucw.cz>
+-					03 Nov 2002
+-
+-  Aggiornamento della tabella magica a Linux 2.5.74.
+-
+-					Fabian Frederick
+-					<ffrederick@users.sourceforge.net>
+-					09 Jul 2003
+-
+-
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
- Nome magico           Numero           Struttura                File
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+-Nome magico           Numero           Struttura                File
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
--CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
+diff --git a/Documentation/translations/zh_CN/process/index.rst b/Documenta=
+tion/translations/zh_CN/process/index.rst
+index a1a35f88f4ae..300d579b3ad0 100644
+--- a/Documentation/translations/zh_CN/process/index.rst
++++ b/Documentation/translations/zh_CN/process/index.rst
+@@ -52,7 +52,6 @@
+ .. toctree::
+    :maxdepth: 1
+=20
+-   magic-number
+    volatile-considered-harmful
+=20
+ .. only::  subproject and html
 diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/Do=
 cumentation/translations/zh_CN/process/magic-number.rst
-index c17e3f20440a..f8ec4767bc4e 100644
+deleted file mode 100644
+index f8ec4767bc4e..000000000000
 --- a/Documentation/translations/zh_CN/process/magic-number.rst
-+++ b/Documentation/translations/zh_CN/process/magic-number.rst
-@@ -57,5 +57,4 @@ Linux =E9=AD=94=E6=9C=AF=E6=95=B0
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
++++ /dev/null
+@@ -1,60 +0,0 @@
+-.. _cn_magicnumbers:
+-
+-.. include:: ../disclaimer-zh_CN.rst
+-
+-:Original: :ref:`Documentation/process/magic-number.rst <magicnumbers>`
+-
+-=E5=A6=82=E6=9E=9C=E6=83=B3=E8=AF=84=E8=AE=BA=E6=88=96=E6=9B=B4=E6=96=B0=
+=E6=9C=AC=E6=96=87=E7=9A=84=E5=86=85=E5=AE=B9=EF=BC=8C=E8=AF=B7=E7=9B=B4=E6=
+=8E=A5=E5=8F=91=E4=BF=A1=E5=88=B0LKML=E3=80=82=E5=A6=82=E6=9E=9C=E4=BD=A0=
+=E4=BD=BF=E7=94=A8=E8=8B=B1=E6=96=87=E4=BA=A4=E6=B5=81=E6=9C=89=E5=9B=B0=E9=
+=9A=BE=E7=9A=84=E8=AF=9D=EF=BC=8C=E4=B9=9F=E5=8F=AF
+-=E4=BB=A5=E5=90=91=E4=B8=AD=E6=96=87=E7=89=88=E7=BB=B4=E6=8A=A4=E8=80=85=
+=E6=B1=82=E5=8A=A9=E3=80=82=E5=A6=82=E6=9E=9C=E6=9C=AC=E7=BF=BB=E8=AF=91=E6=
+=9B=B4=E6=96=B0=E4=B8=8D=E5=8F=8A=E6=97=B6=E6=88=96=E8=80=85=E7=BF=BB=E8=AF=
+=91=E5=AD=98=E5=9C=A8=E9=97=AE=E9=A2=98=EF=BC=8C=E8=AF=B7=E8=81=94=E7=B3=BB=
+=E4=B8=AD=E6=96=87=E7=89=88=E7=BB=B4=E6=8A=A4=E8=80=85::
+-
+-        =E4=B8=AD=E6=96=87=E7=89=88=E7=BB=B4=E6=8A=A4=E8=80=85=EF=BC=9A =
+=E8=B4=BE=E5=A8=81=E5=A8=81 Jia Wei Wei <harryxiyou@gmail.com>
+-        =E4=B8=AD=E6=96=87=E7=89=88=E7=BF=BB=E8=AF=91=E8=80=85=EF=BC=9A =
+=E8=B4=BE=E5=A8=81=E5=A8=81 Jia Wei Wei <harryxiyou@gmail.com>
+-        =E4=B8=AD=E6=96=87=E7=89=88=E6=A0=A1=E8=AF=91=E8=80=85=EF=BC=9A =
+=E8=B4=BE=E5=A8=81=E5=A8=81 Jia Wei Wei <harryxiyou@gmail.com>
+-
+-Linux =E9=AD=94=E6=9C=AF=E6=95=B0
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+-
+-=E8=BF=99=E4=B8=AA=E6=96=87=E4=BB=B6=E6=98=AF=E6=9C=89=E5=85=B3=E5=BD=93=
+=E5=89=8D=E4=BD=BF=E7=94=A8=E7=9A=84=E9=AD=94=E6=9C=AF=E5=80=BC=E6=B3=A8=E5=
+=86=8C=E8=A1=A8=E3=80=82=E5=BD=93=E4=BD=A0=E7=BB=99=E4=B8=80=E4=B8=AA=E7=BB=
+=93=E6=9E=84=E6=B7=BB=E5=8A=A0=E4=BA=86=E4=B8=80=E4=B8=AA=E9=AD=94=E6=9C=AF=
+=E5=80=BC=EF=BC=8C=E4=BD=A0=E4=B9=9F=E5=BA=94=E8=AF=A5=E6=8A=8A=E8=BF=99=E4=
+=B8=AA=E9=AD=94=E6=9C=AF=E5=80=BC=E6=B7=BB=E5=8A=A0=E5=88=B0=E8=BF=99=E4=B8=
+=AA=E6=96=87=E4=BB=B6=EF=BC=8C=E5=9B=A0=E4=B8=BA=E6=88=91=E4=BB=AC=E6=9C=80=
+=E5=A5=BD=E6=8A=8A=E7=94=A8=E4=BA=8E=E5=90=84=E7=A7=8D=E7=BB=93=E6=9E=84=E7=
+=9A=84=E9=AD=94=E6=9C=AF=E5=80=BC=E7=BB=9F=E4=B8=80=E8=B5=B7=E6=9D=A5=E3=80=
+=82
+-
+-=E4=BD=BF=E7=94=A8=E9=AD=94=E6=9C=AF=E5=80=BC=E6=9D=A5=E4=BF=9D=E6=8A=A4=
+=E5=86=85=E6=A0=B8=E6=95=B0=E6=8D=AE=E7=BB=93=E6=9E=84=E6=98=AF=E4=B8=80=E4=
+=B8=AA=E9=9D=9E=E5=B8=B8=E5=A5=BD=E7=9A=84=E4=B8=BB=E6=84=8F=E3=80=82=E8=BF=
+=99=E5=B0=B1=E5=85=81=E8=AE=B8=E4=BD=A0=E5=9C=A8=E8=BF=90=E8=A1=8C=E6=9C=9F=
+=E6=A3=80=E6=9F=A5(a)=E4=B8=80=E4=B8=AA=E7=BB=93=E6=9E=84=E6=98=AF=E5=90=A6=
+=E5=B7=B2=E7=BB=8F=E8=A2=AB=E6=94=BB=E5=87=BB=EF=BC=8C=E6=88=96=E8=80=85(b)=
+=E4=BD=A0=E5=B7=B2=E7=BB=8F=E7=BB=99=E4=B8=80=E4=B8=AA=E4=BE=8B=E8=A1=8C=E7=
+=A8=8B=E5=BA=8F=E9=80=9A=E8=BF=87=E4=BA=86=E4=B8=80=E4=B8=AA=E9=94=99=E8=AF=
+=AF=E7=9A=84=E7=BB=93=E6=9E=84=E3=80=82=E5=90=8E=E4=B8=80=E7=A7=8D=E6=83=85=
+=E5=86=B5=E7=89=B9=E5=88=AB=E5=9C=B0=E6=9C=89=E7=94=A8---=E7=89=B9=E5=88=AB=
+=E6=98=AF=E5=BD=93=E4=BD=A0=E9=80=9A=E8=BF=87=E4=B8=80=E4=B8=AA=E7=A9=BA=E6=
+=8C=87=E9=92=88=E6=8C=87=E5=90=91=E7=BB=93=E6=9E=84=E4=BD=93=E7=9A=84=E6=97=
+=B6=E5=80=99=E3=80=82tty=E6=BA=90=E7=A0=81=EF=BC=8C=E4=BE=8B=E5=A6=82=EF=BC=
+=8C=E7=BB=8F=E5=B8=B8=E9=80=9A=E8=BF=87=E7=89=B9=E5=AE=9A=E9=A9=B1=E5=8A=A8=
+=E4=BD=BF=E7=94=A8=E8=BF=99=E7=A7=8D=E6=96=B9=E6=B3=95=E5=B9=B6=E4=B8=94=E5=
+=8F=8D=E5=A4=8D=E5=9C=B0=E6=8E=92=E5=88=97=E7=89=B9=E5=AE=9A=E6=96=B9=E9=9D=
+=A2=E7=9A=84=E7=BB=93=E6=9E=84=E3=80=82
+-
+-=E4=BD=BF=E7=94=A8=E9=AD=94=E6=9C=AF=E5=80=BC=E7=9A=84=E6=96=B9=E6=B3=95=
+=E6=98=AF=E5=9C=A8=E7=BB=93=E6=9E=84=E7=9A=84=E5=BC=80=E5=A7=8B=E5=A4=84=E5=
+=A3=B0=E6=98=8E=E7=9A=84=EF=BC=8C=E5=A6=82=E4=B8=8B::
+-
+-        struct tty_ldisc {
+-	        int	magic;
+-        	...
+-        };
+-
+-=E5=BD=93=E4=BD=A0=E4=BB=A5=E5=90=8E=E7=BB=99=E5=86=85=E6=A0=B8=E6=B7=BB=
+=E5=8A=A0=E5=A2=9E=E5=BC=BA=E5=8A=9F=E8=83=BD=E7=9A=84=E6=97=B6=E5=80=99=EF=
+=BC=8C=E8=AF=B7=E9=81=B5=E5=AE=88=E8=BF=99=E6=9D=A1=E8=A7=84=E5=88=99=EF=BC=
+=81=E8=BF=99=E6=A0=B7=E5=B0=B1=E4=BC=9A=E8=8A=82=E7=9C=81=E6=95=B0=E4=B8=8D=
+=E6=B8=85=E7=9A=84=E8=B0=83=E8=AF=95=E6=97=B6=E9=97=B4=EF=BC=8C=E7=89=B9=E5=
+=88=AB=E6=98=AF=E4=B8=80=E4=BA=9B=E5=8F=A4=E6=80=AA=E7=9A=84=E6=83=85=E5=86=
+=B5=EF=BC=8C=E4=BE=8B=E5=A6=82=EF=BC=8C=E6=95=B0=E7=BB=84=E8=B6=85=E5=87=BA=
+=E8=8C=83=E5=9B=B4=E5=B9=B6=E4=B8=94=E9=87=8D=E6=96=B0=E5=86=99=E4=BA=86=E8=
+=B6=85=E5=87=BA=E9=83=A8=E5=88=86=E3=80=82=E9=81=B5=E5=AE=88=E8=BF=99=E4=B8=
+=AA=E8=A7=84=E5=88=99=EF=BC=8C=E2=80=AA=E8=BF=99=E4=BA=9B=E6=83=85=E5=86=B5=
+=E5=8F=AF=E4=BB=A5=E8=A2=AB=E5=BF=AB=E9=80=9F=E5=9C=B0=EF=BC=8C=E5=AE=89=E5=
+=85=A8=E5=9C=B0=E9=81=BF=E5=85=8D=E3=80=82
+-
+-		Theodore Ts'o
+-		  31 Mar 94
+-
+-=E7=BB=99=E5=BD=93=E5=89=8D=E7=9A=84Linux 2.1.55=E6=B7=BB=E5=8A=A0=E9=AD=
+=94=E6=9C=AF=E8=A1=A8=E3=80=82
+-
+-		Michael Chastain
+-		<mailto:mec@shout.net>
+-		22 Sep 1997
+-
+-=E7=8E=B0=E5=9C=A8=E5=BA=94=E8=AF=A5=E6=9C=80=E6=96=B0=E7=9A=84Linux 2.1.1=
+12.=E5=9B=A0=E4=B8=BA=E5=9C=A8=E7=89=B9=E6=80=A7=E5=86=BB=E7=BB=93=E6=9C=9F=
+=E9=97=B4=EF=BC=8C=E4=B8=8D=E8=83=BD=E5=9C=A82.2.x=E5=89=8D=E6=94=B9=E5=8F=
+=98=E4=BB=BB=E4=BD=95=E4=B8=9C=E8=A5=BF=E3=80=82=E8=BF=99=E4=BA=9B=E6=9D=A1=
+=E7=9B=AE=E8=A2=AB=E6=95=B0=E5=9F=9F=E6=89=80=E6=8E=92=E5=BA=8F=E3=80=82
+-
+-		Krzysztof G.Baranowski
+-	        <mailto: kgb@knm.org.pl>
+-		29 Jul 1998
+-
+-=E6=9B=B4=E6=96=B0=E9=AD=94=E6=9C=AF=E8=A1=A8=E5=88=B0Linux 2.5.45=E3=80=
+=82=E5=88=9A=E5=A5=BD=E8=B6=8A=E8=BF=87=E7=89=B9=E6=80=A7=E5=86=BB=E7=BB=93=
+=EF=BC=8C=E4=BD=86=E6=98=AF=E6=9C=89=E5=8F=AF=E8=83=BD=E8=BF=98=E4=BC=9A=E6=
+=9C=89=E4=B8=80=E4=BA=9B=E6=96=B0=E7=9A=84=E9=AD=94=E6=9C=AF=E5=80=BC=E5=9C=
+=A82.6.x=E4=B9=8B=E5=89=8D=E8=9E=8D=E5=85=A5=E5=88=B0=E5=86=85=E6=A0=B8=E4=
+=B8=AD=E3=80=82
+-
+-		Petr Baudis
+-		<pasky@ucw.cz>
+-		03 Nov 2002
+-
+-=E6=9B=B4=E6=96=B0=E9=AD=94=E6=9C=AF=E8=A1=A8=E5=88=B0Linux 2.5.74=E3=80=82
+-
+-		Fabian Frederick
+-                <ffrederick@users.sourceforge.net>
+-		09 Jul 2003
+-
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
- =E9=AD=94=E6=9C=AF=E6=95=B0=E5=90=8D              =E6=95=B0=E5=AD=97      =
+-=E9=AD=94=E6=9C=AF=E6=95=B0=E5=90=8D              =E6=95=B0=E5=AD=97      =
        =E7=BB=93=E6=9E=84                     =E6=96=87=E4=BB=B6
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
--CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
+diff --git a/Documentation/translations/zh_TW/process/index.rst b/Documenta=
+tion/translations/zh_TW/process/index.rst
+index c5c59b4fd595..cb3dea0b78ab 100644
+--- a/Documentation/translations/zh_TW/process/index.rst
++++ b/Documentation/translations/zh_TW/process/index.rst
+@@ -54,7 +54,6 @@
+ .. toctree::
+    :maxdepth: 1
+=20
+-   magic-number
+    volatile-considered-harmful
+=20
+ .. only::  subproject and html
 diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/Do=
 cumentation/translations/zh_TW/process/magic-number.rst
-index e2eeb74e7192..0ccc60bee3d6 100644
+deleted file mode 100644
+index 0ccc60bee3d6..000000000000
 --- a/Documentation/translations/zh_TW/process/magic-number.rst
-+++ b/Documentation/translations/zh_TW/process/magic-number.rst
-@@ -60,5 +60,4 @@ Linux =E9=AD=94=E8=A1=93=E6=95=B8
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
++++ /dev/null
+@@ -1,63 +0,0 @@
+-.. SPDX-License-Identifier: GPL-2.0
+-
+-.. _tw_magicnumbers:
+-
+-.. include:: ../disclaimer-zh_TW.rst
+-
+-:Original: :ref:`Documentation/process/magic-number.rst <magicnumbers>`
+-
+-=E5=A6=82=E6=9E=9C=E6=83=B3=E8=A9=95=E8=AB=96=E6=88=96=E6=9B=B4=E6=96=B0=
+=E6=9C=AC=E6=96=87=E7=9A=84=E5=85=A7=E5=AE=B9=EF=BC=8C=E8=AB=8B=E7=9B=B4=E6=
+=8E=A5=E7=99=BC=E4=BF=A1=E5=88=B0LKML=E3=80=82=E5=A6=82=E6=9E=9C=E4=BD=A0=
+=E4=BD=BF=E7=94=A8=E8=8B=B1=E6=96=87=E4=BA=A4=E6=B5=81=E6=9C=89=E5=9B=B0=E9=
+=9B=A3=E7=9A=84=E8=A9=B1=EF=BC=8C=E4=B9=9F=E5=8F=AF
+-=E4=BB=A5=E5=90=91=E4=B8=AD=E6=96=87=E7=89=88=E7=B6=AD=E8=AD=B7=E8=80=85=
+=E6=B1=82=E5=8A=A9=E3=80=82=E5=A6=82=E6=9E=9C=E6=9C=AC=E7=BF=BB=E8=AD=AF=E6=
+=9B=B4=E6=96=B0=E4=B8=8D=E5=8F=8A=E6=99=82=E6=88=96=E8=80=85=E7=BF=BB=E8=AD=
+=AF=E5=AD=98=E5=9C=A8=E5=95=8F=E9=A1=8C=EF=BC=8C=E8=AB=8B=E8=81=AF=E7=B9=AB=
+=E4=B8=AD=E6=96=87=E7=89=88=E7=B6=AD=E8=AD=B7=E8=80=85::
+-
+-        =E4=B8=AD=E6=96=87=E7=89=88=E7=B6=AD=E8=AD=B7=E8=80=85=EF=BC=9A =
+=E8=B3=88=E5=A8=81=E5=A8=81 Jia Wei Wei <harryxiyou@gmail.com>
+-        =E4=B8=AD=E6=96=87=E7=89=88=E7=BF=BB=E8=AD=AF=E8=80=85=EF=BC=9A =
+=E8=B3=88=E5=A8=81=E5=A8=81 Jia Wei Wei <harryxiyou@gmail.com>
+-        =E4=B8=AD=E6=96=87=E7=89=88=E6=A0=A1=E8=AD=AF=E8=80=85=EF=BC=9A =
+=E8=B3=88=E5=A8=81=E5=A8=81 Jia Wei Wei <harryxiyou@gmail.com>
+-                      =E8=83=A1=E7=9A=93=E6=96=87 Hu Haowen <src.res@email=
+=2Ecn>
+-
+-Linux =E9=AD=94=E8=A1=93=E6=95=B8
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+-
+-=E9=80=99=E5=80=8B=E6=96=87=E4=BB=B6=E6=98=AF=E6=9C=89=E9=97=9C=E7=95=B6=
+=E5=89=8D=E4=BD=BF=E7=94=A8=E7=9A=84=E9=AD=94=E8=A1=93=E5=80=BC=E8=A8=BB=E5=
+=86=8A=E8=A1=A8=E3=80=82=E7=95=B6=E4=BD=A0=E7=B5=A6=E4=B8=80=E5=80=8B=E7=B5=
+=90=E6=A7=8B=E6=B7=BB=E5=8A=A0=E4=BA=86=E4=B8=80=E5=80=8B=E9=AD=94=E8=A1=93=
+=E5=80=BC=EF=BC=8C=E4=BD=A0=E4=B9=9F=E6=87=89=E8=A9=B2=E6=8A=8A=E9=80=99=E5=
+=80=8B=E9=AD=94=E8=A1=93=E5=80=BC=E6=B7=BB=E5=8A=A0=E5=88=B0=E9=80=99=E5=80=
+=8B=E6=96=87=E4=BB=B6=EF=BC=8C=E5=9B=A0=E7=88=B2=E6=88=91=E5=80=91=E6=9C=80=
+=E5=A5=BD=E6=8A=8A=E7=94=A8=E6=96=BC=E5=90=84=E7=A8=AE=E7=B5=90=E6=A7=8B=E7=
+=9A=84=E9=AD=94=E8=A1=93=E5=80=BC=E7=B5=B1=E4=B8=80=E8=B5=B7=E4=BE=86=E3=80=
+=82
+-
+-=E4=BD=BF=E7=94=A8=E9=AD=94=E8=A1=93=E5=80=BC=E4=BE=86=E4=BF=9D=E8=AD=B7=
+=E5=85=A7=E6=A0=B8=E6=95=B8=E6=93=9A=E7=B5=90=E6=A7=8B=E6=98=AF=E4=B8=80=E5=
+=80=8B=E9=9D=9E=E5=B8=B8=E5=A5=BD=E7=9A=84=E4=B8=BB=E6=84=8F=E3=80=82=E9=80=
+=99=E5=B0=B1=E5=85=81=E8=A8=B1=E4=BD=A0=E5=9C=A8=E9=81=8B=E8=A1=8C=E6=9C=9F=
+=E6=AA=A2=E6=9F=A5(a)=E4=B8=80=E5=80=8B=E7=B5=90=E6=A7=8B=E6=98=AF=E5=90=A6=
+=E5=B7=B2=E7=B6=93=E8=A2=AB=E6=94=BB=E6=93=8A=EF=BC=8C=E6=88=96=E8=80=85(b)=
+=E4=BD=A0=E5=B7=B2=E7=B6=93=E7=B5=A6=E4=B8=80=E5=80=8B=E4=BE=8B=E8=A1=8C=E7=
+=A8=8B=E5=BA=8F=E9=80=9A=E9=81=8E=E4=BA=86=E4=B8=80=E5=80=8B=E9=8C=AF=E8=AA=
+=A4=E7=9A=84=E7=B5=90=E6=A7=8B=E3=80=82=E5=BE=8C=E4=B8=80=E7=A8=AE=E6=83=85=
+=E6=B3=81=E7=89=B9=E5=88=A5=E5=9C=B0=E6=9C=89=E7=94=A8---=E7=89=B9=E5=88=A5=
+=E6=98=AF=E7=95=B6=E4=BD=A0=E9=80=9A=E9=81=8E=E4=B8=80=E5=80=8B=E7=A9=BA=E6=
+=8C=87=E9=87=9D=E6=8C=87=E5=90=91=E7=B5=90=E6=A7=8B=E9=AB=94=E7=9A=84=E6=99=
+=82=E5=80=99=E3=80=82tty=E6=BA=90=E7=A2=BC=EF=BC=8C=E4=BE=8B=E5=A6=82=EF=BC=
+=8C=E7=B6=93=E5=B8=B8=E9=80=9A=E9=81=8E=E7=89=B9=E5=AE=9A=E9=A9=85=E5=8B=95=
+=E4=BD=BF=E7=94=A8=E9=80=99=E7=A8=AE=E6=96=B9=E6=B3=95=E4=B8=A6=E4=B8=94=E5=
+=8F=8D=E8=A6=86=E5=9C=B0=E6=8E=92=E5=88=97=E7=89=B9=E5=AE=9A=E6=96=B9=E9=9D=
+=A2=E7=9A=84=E7=B5=90=E6=A7=8B=E3=80=82
+-
+-=E4=BD=BF=E7=94=A8=E9=AD=94=E8=A1=93=E5=80=BC=E7=9A=84=E6=96=B9=E6=B3=95=
+=E6=98=AF=E5=9C=A8=E7=B5=90=E6=A7=8B=E7=9A=84=E9=96=8B=E5=A7=8B=E8=99=95=E8=
+=81=B2=E6=98=8E=E7=9A=84=EF=BC=8C=E5=A6=82=E4=B8=8B::
+-
+-        struct tty_ldisc {
+-	        int	magic;
+-        	...
+-        };
+-
+-=E7=95=B6=E4=BD=A0=E4=BB=A5=E5=BE=8C=E7=B5=A6=E5=85=A7=E6=A0=B8=E6=B7=BB=
+=E5=8A=A0=E5=A2=9E=E5=BC=B7=E5=8A=9F=E8=83=BD=E7=9A=84=E6=99=82=E5=80=99=EF=
+=BC=8C=E8=AB=8B=E9=81=B5=E5=AE=88=E9=80=99=E6=A2=9D=E8=A6=8F=E5=89=87=EF=BC=
+=81=E9=80=99=E6=A8=A3=E5=B0=B1=E6=9C=83=E7=AF=80=E7=9C=81=E6=95=B8=E4=B8=8D=
+=E6=B8=85=E7=9A=84=E8=AA=BF=E8=A9=A6=E6=99=82=E9=96=93=EF=BC=8C=E7=89=B9=E5=
+=88=A5=E6=98=AF=E4=B8=80=E4=BA=9B=E5=8F=A4=E6=80=AA=E7=9A=84=E6=83=85=E6=B3=
+=81=EF=BC=8C=E4=BE=8B=E5=A6=82=EF=BC=8C=E6=95=B8=E7=B5=84=E8=B6=85=E5=87=BA=
+=E7=AF=84=E5=9C=8D=E4=B8=A6=E4=B8=94=E9=87=8D=E6=96=B0=E5=AF=AB=E4=BA=86=E8=
+=B6=85=E5=87=BA=E9=83=A8=E5=88=86=E3=80=82=E9=81=B5=E5=AE=88=E9=80=99=E5=80=
+=8B=E8=A6=8F=E5=89=87=EF=BC=8C=E2=80=AA=E9=80=99=E4=BA=9B=E6=83=85=E6=B3=81=
+=E5=8F=AF=E4=BB=A5=E8=A2=AB=E5=BF=AB=E9=80=9F=E5=9C=B0=EF=BC=8C=E5=AE=89=E5=
+=85=A8=E5=9C=B0=E9=81=BF=E5=85=8D=E3=80=82
+-
+-		Theodore Ts'o
+-		  31 Mar 94
+-
+-=E7=B5=A6=E7=95=B6=E5=89=8D=E7=9A=84Linux 2.1.55=E6=B7=BB=E5=8A=A0=E9=AD=
+=94=E8=A1=93=E8=A1=A8=E3=80=82
+-
+-		Michael Chastain
+-		<mailto:mec@shout.net>
+-		22 Sep 1997
+-
+-=E7=8F=BE=E5=9C=A8=E6=87=89=E8=A9=B2=E6=9C=80=E6=96=B0=E7=9A=84Linux 2.1.1=
+12.=E5=9B=A0=E7=88=B2=E5=9C=A8=E7=89=B9=E6=80=A7=E5=87=8D=E7=B5=90=E6=9C=9F=
+=E9=96=93=EF=BC=8C=E4=B8=8D=E8=83=BD=E5=9C=A82.2.x=E5=89=8D=E6=94=B9=E8=AE=
+=8A=E4=BB=BB=E4=BD=95=E6=9D=B1=E8=A5=BF=E3=80=82=E9=80=99=E4=BA=9B=E6=A2=9D=
+=E7=9B=AE=E8=A2=AB=E6=95=B8=E5=9F=9F=E6=89=80=E6=8E=92=E5=BA=8F=E3=80=82
+-
+-		Krzysztof G.Baranowski
+-	        <mailto: kgb@knm.org.pl>
+-		29 Jul 1998
+-
+-=E6=9B=B4=E6=96=B0=E9=AD=94=E8=A1=93=E8=A1=A8=E5=88=B0Linux 2.5.45=E3=80=
+=82=E5=89=9B=E5=A5=BD=E8=B6=8A=E9=81=8E=E7=89=B9=E6=80=A7=E5=87=8D=E7=B5=90=
+=EF=BC=8C=E4=BD=86=E6=98=AF=E6=9C=89=E5=8F=AF=E8=83=BD=E9=82=84=E6=9C=83=E6=
+=9C=89=E4=B8=80=E4=BA=9B=E6=96=B0=E7=9A=84=E9=AD=94=E8=A1=93=E5=80=BC=E5=9C=
+=A82.6.x=E4=B9=8B=E5=89=8D=E8=9E=8D=E5=85=A5=E5=88=B0=E5=85=A7=E6=A0=B8=E4=
+=B8=AD=E3=80=82
+-
+-		Petr Baudis
+-		<pasky@ucw.cz>
+-		03 Nov 2002
+-
+-=E6=9B=B4=E6=96=B0=E9=AD=94=E8=A1=93=E8=A1=A8=E5=88=B0Linux 2.5.74=E3=80=82
+-
+-		Fabian Frederick
+-                <ffrederick@users.sourceforge.net>
+-		09 Jul 2003
+-
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
- =E9=AD=94=E8=A1=93=E6=95=B8=E5=90=8D              =E6=95=B8=E5=AD=97      =
+-=E9=AD=94=E8=A1=93=E6=95=B8=E5=90=8D              =E6=95=B8=E5=AD=97      =
        =E7=B5=90=E6=A7=8B                     =E6=96=87=E4=BB=B6
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
--CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D
-diff --git a/drivers/scsi/ncr53c8xx.c b/drivers/scsi/ncr53c8xx.c
-index 4458449c960b..928417fca495 100644
---- a/drivers/scsi/ncr53c8xx.c
-+++ b/drivers/scsi/ncr53c8xx.c
-@@ -1095,15 +1095,6 @@ typedef u32 tagmap_t;
- #define NS_WIDE		(2)
- #define NS_PPR		(4)
-=20
--/*=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
--**
--**	Misc.
--**
--**=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
--*/
--
--#define CCB_MAGIC	(0xf2691ad2)
--
- /*=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
- **
- **	Declaration of structs.
-@@ -1567,7 +1558,7 @@ struct ccb {
- 	struct ccb *	link_ccb;	/* Host adapter CCB chain	*/
- 	struct list_head link_ccbq;	/* Link to unit CCB queue	*/
- 	u32		startp;		/* Initial data pointer		*/
--	u_long		magic;		/* Free / busy  CCB flag	*/
-+	bool		busy;
- };
-=20
- #define CCB_PHYS(cp,lbl)	(cp->p_ccb + offsetof(struct ccb, lbl))
-@@ -4356,7 +4347,7 @@ static int ncr_queue_command (struct ncb *np, struct =
-scsi_cmnd *cmd)
- 	*/
-=20
- 	/* activate this job.  */
--	cp->magic		=3D CCB_MAGIC;
-+	cp->busy		=3D true;
-=20
- 	/*
- 	**	insert next CCBs into start queue.
-@@ -4667,7 +4658,7 @@ void ncr_complete (struct ncb *np, struct ccb *cp)
- 	**	Sanity check
- 	*/
-=20
--	if (!cp || cp->magic !=3D CCB_MAGIC || !cp->cmd)
-+	if (!cp || !cp->busy || !cp->cmd)
- 		return;
-=20
- 	/*
-@@ -6998,7 +6989,7 @@ static struct ccb *ncr_get_ccb(struct ncb *np, struct=
- scsi_cmnd *cmd)
- 		qp =3D ncr_list_pop(&lp->free_ccbq);
- 		if (qp) {
- 			cp =3D list_entry(qp, struct ccb, link_ccbq);
--			if (cp->magic) {
-+			if (cp->busy) {
- 				PRINT_ADDR(cmd, "ccb free list corrupted "
- 						"(@%p)\n", cp);
- 				cp =3D NULL;
-@@ -7030,17 +7021,17 @@ static struct ccb *ncr_get_ccb(struct ncb *np, stru=
-ct scsi_cmnd *cmd)
- 	**	Wait until available.
- 	*/
- #if 0
--	while (cp->magic) {
-+	while (cp->busy) {
- 		if (flags & SCSI_NOSLEEP) break;
- 		if (tsleep ((caddr_t)cp, PRIBIO|PCATCH, "ncr", 0))
- 			break;
- 	}
- #endif
-=20
--	if (cp->magic)
-+	if (cp->busy)
- 		return NULL;
-=20
--	cp->magic =3D 1;
-+	cp->busy =3D true;
-=20
- 	/*
- 	**	Move to next available tag if tag used.
-@@ -7119,7 +7110,7 @@ static void ncr_free_ccb (struct ncb *np, struct ccb =
-*cp)
- 		}
- 	}
- 	cp -> host_status =3D HS_IDLE;
--	cp -> magic =3D 0;
-+	cp -> busy =3D false;
- 	if (cp->queued) {
- 		--np->queuedccbs;
- 		cp->queued =3D 0;
 --=20
 2.30.2
 
---lizvvs3xytaebgcx
+--hshqtbvcgnylki4n
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNtogYACgkQvP0LAY0m
-WPE8zA/9H+n8iTX3GGWGL8YEY1UkTM3l+dWvbMMSaT/ZEXSf5fC0jq9zVhvW680b
-X1lOCjJdE1B0ZkRF4f6r+27VR9tMwivAwoTiuegkVHXWd5M2PaL4YLv1xbGm15DN
-wSHyKUrsjTvS0fcQt/5wx9XAOvYAYkZPCqS2UK4a8tcDRydC5L+j2ffhwC8u+2e5
-dE6zRHk3vvRdpYZz0GxSY5xA6ulbsY7fpoCPpmxM7MSaxrPk7xVNKCa9FDBwlIgP
-z9t8deN6zkNAidzTuuM+Ck0PZXCLkD4n9crf4xpeE6QlW0ZmCzLO4vAINZyKTx4Z
-2+Od8xdY3srTlWJtML+6EIpECoeGjs12NTIfmVc+FxItHImNAVcPmPscCKQYrOqv
-c2Kcsv1X8ZKfC7YIQuWO6mQeOYXWUP/atwPhMxbzDTEqqi968lr1JYKfi748RRKH
-cVARVrP28Dcx/enbK2R/uZRvy0/cLntCKzVG3eWO2S/7kbPAFLAFDcnrJX8IVV9F
-dwqr8VVuhl6mgmVqzw+WOjdHfs1O24H2OyaW/+8wVKzpvnL6IRj0bKOwQxqCoO8D
-Hzmvz+oO/pyR+5XdhCslJTpf+wFDC7U4rX8m0wrpLymW86at+cQeoRyuHCR0IK1D
-V6lZ3/Jmz4CE6kKzArUVi4+j/drAgk2PRVC9jkIsYSB48j8aqYw=
-=3YOK
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNtogsACgkQvP0LAY0m
+WPGPNA/5Ac9/im4METDeMkmip00TNsU+KJf70c7dUCcqHT34yp6c2vRFiSfN3vde
+glkZBoEBDIy7alu52lPLKZDDBCr86vCpN3SiqHyOrrsDY5lpjQwSeNdgaIEu4cEr
+1ZAIN8eKkjtbPl/HWcQo3sLpx0iV5FslkJ5BlDjia+cD6hey2gVcDAvq8xZl3BKQ
+jS7L4kCbs4NiN0nbUzyJ3o1284WpTYx1RaGr7hAvoH8DiEGvyZaDQrCHlYMK651h
+uRN4AIBCmkl6Yx7ayGWU61F3mZ3bozcnB6VdmoB4cap7SGVVuvjMefQRD6bwlTRC
+jpgyvHDesY3zRuaLuS0+G5LfXnnPocbU1ufqPo9Z/gStXnqtRYx/fOrb1i255ROk
+BNFH03zWjj1XI1sWNGEcqcsNv1e+3LPkrvfaHI1k6ph/kiAFx/hrk720B8Jf4jDa
+/ji7nMFFlcHboTlKjKMG+MlqcCAboa5K1QXT9G58dp+6kXoervIznT6HRH/J6Sl7
+DttJWaqq+wPTB96vKxbY9T5cmX19SzV6Ea4roYoecIBRqrBxtGbp8mdEaIF5H86I
+77Ny/e99PmrdJvP1JuERiOZ3i5qMeo5ZG6IcbQDDF5tjnkG9XQ621P6tnKj1ibDH
+Dh+jSILpwGnFSiK4ASJhmrnBDNiNRs/hIlekV3xAgvTEj3PvEkg=
+=cepy
 -----END PGP SIGNATURE-----
 
---lizvvs3xytaebgcx--
+--hshqtbvcgnylki4n--
