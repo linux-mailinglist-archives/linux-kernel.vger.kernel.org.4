@@ -2,114 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152A46259B5
+	by mail.lfdr.de (Postfix) with ESMTP id 600546259B6
 	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbiKKLpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 06:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S233220AbiKKLp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 06:45:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233096AbiKKLpJ (ORCPT
+        with ESMTP id S233108AbiKKLpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Nov 2022 06:45:09 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A597613F4D;
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCD113F20;
         Fri, 11 Nov 2022 03:45:07 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 61A67201A6;
-        Fri, 11 Nov 2022 11:45:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668167106;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=n0d2cMxIe4yXkl7ENjvZzfOdmNSV5L2CP6byJwDVNJE=;
-        b=pGGz3nZk3qad5q8UyU1x1a0n1py6GXptXiGHtYtZL9WttmUltzLa68impCg4+8YIiBp/oE
-        h3xzuvX+cJ4xLflMRgQRZwvXeJvKSyzmTEEU81j9ypBCpK8qFZ4FB2j6KGhEjVwT24+J88
-        kfbwNaLgkIq6KYlnDT2BNCPjUyOEXWA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668167106;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=n0d2cMxIe4yXkl7ENjvZzfOdmNSV5L2CP6byJwDVNJE=;
-        b=ViYv4XXbYUUfg0liiIS07iNndOSaIG+jfWgolxo1KJZcFJKJ2NtBpZUrzzaY36IEO8eKMJ
-        6iDMmuXzXwlbHqCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 205D713273;
-        Fri, 11 Nov 2022 11:45:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kT7zBsI1bmMxMAAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Fri, 11 Nov 2022 11:45:06 +0000
-Date:   Fri, 11 Nov 2022 12:44:42 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     dsterba@suse.cz, ChenXiaoSong <chenxiaosong2@huawei.com>,
-        clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, zhangxiaoxu5@huawei.com
-Subject: Re: [PATCH] btrfs: qgroup: fix sleep from invalid context bug in
- update_qgroup_limit_item()
-Message-ID: <20221111114442.GK5824@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20221110141342.2129475-1-chenxiaosong2@huawei.com>
- <20221110205436.GJ5824@twin.jikos.cz>
- <48ac1a74-6349-ccf5-92ef-2189037122b8@gmx.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668167108; x=1699703108;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PSNfh98I49bV8L7DfrxLC+bzZknfDJgPD+SQpUDJ/xE=;
+  b=UJLaHQM/pn60iWDT3KtqeLodYrFNAXkQvh4Xe/OAesXiLLQfb7oGDs+V
+   X+y7efy3WzrhEZ2+zVeFzWbaTq0OzCMZ0YfMw1D7By//bWJBYKPMB2Zwu
+   0SXIV6n3VkbOclgw6hL1n/QXXLFwbpJQVzAQQzeK8mX9GoblKkLGQUL7W
+   i8Y7okJZI10chIcZ0Hrz4TFWbnRF7X6Geah/CKkcOI5gb3/+kZdhrD/Hq
+   mm2uodbDGHdZ3V6u+06qDfJSYFVTt+sML8NViQqeWYVeuZt7Yl2v/gjzg
+   atBpPDUKvnwtio4eMiQ5/Kj9k9YWXj1fkEaMfjPJXHDYIkkeoXEnbVGMl
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="397877021"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="397877021"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 03:45:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="639991303"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="639991303"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 11 Nov 2022 03:45:05 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1otST1-00Ag3K-38;
+        Fri, 11 Nov 2022 13:45:03 +0200
+Date:   Fri, 11 Nov 2022 13:45:03 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: Re: [PATCH] gpiolib: of: Use correct fwnode for DT-probed chips
+Message-ID: <Y241vwu47PbjrbBQ@smile.fi.intel.com>
+References: <20221111113732.461881-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <48ac1a74-6349-ccf5-92ef-2189037122b8@gmx.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221111113732.461881-1-thierry.reding@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 07:31:22AM +0800, Qu Wenruo wrote:
+On Fri, Nov 11, 2022 at 12:37:32PM +0100, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
 > 
+> The OF node store in chip->fwnode is used to explicitly override the FW
+> node for a GPIO chip. For chips that use the default FW node (i.e. that
+> of their parent device), this will be NULL and cause the chip not to be
+> fully registered.
 > 
-> On 2022/11/11 04:54, David Sterba wrote:
-> > On Thu, Nov 10, 2022 at 10:13:42PM +0800, ChenXiaoSong wrote:
-> >> Syzkaller reported BUG as follows:
-> >>
-> >>    BUG: sleeping function called from invalid context at
-> >>         include/linux/sched/mm.h:274
-> >>    Call Trace:
-> >>     <TASK>
-> >>     dump_stack_lvl+0xcd/0x134
-> >>     __might_resched.cold+0x222/0x26b
-> >>     kmem_cache_alloc+0x2e7/0x3c0
-> >>     update_qgroup_limit_item+0xe1/0x390
-> >>     btrfs_qgroup_inherit+0x147b/0x1ee0
-> >>     create_subvol+0x4eb/0x1710
-> >>     btrfs_mksubvol+0xfe5/0x13f0
-> >>     __btrfs_ioctl_snap_create+0x2b0/0x430
-> >>     btrfs_ioctl_snap_create_v2+0x25a/0x520
-> >>     btrfs_ioctl+0x2a1c/0x5ce0
-> >>     __x64_sys_ioctl+0x193/0x200
-> >>     do_syscall_64+0x35/0x80
-> >>
-> >> Fix this by introducing __update_qgroup_limit_item() helper, allocate
-> >> memory outside of the spin lock.
-> >>
-> >> Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
-> > 
-> > Added to misc-next, thanks.
-> 
-> Please remove it for now, the patch only addressed what MM layer 
-> reports, it doesn't really solve the root cause, we're doing a tree 
-> modification (btrfs_search_slot()), under a spinlock.
+> Instead, use the GPIO device's FW node, which is set to either the node
+> of the parent device or the explicit override in chip->fwnode.
 
-Removed. As the potential sleeping under spinlock is hard to spot we
-should add might_sleep to some places.
+Thank you!
+
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+P.S.
+It's good we have this report, which means I have to reconsider the
+followup I'm cooking. In any case I will send it after v6.2-rc1 for
+broader testing.
+
+> Fixes: 8afe82550240 ("gpiolib: of: Prepare of_gpiochip_add() / of_gpiochip_remove() for fwnode")
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  drivers/gpio/gpiolib-of.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+> index 4be3c21aa718..55c3712592db 100644
+> --- a/drivers/gpio/gpiolib-of.c
+> +++ b/drivers/gpio/gpiolib-of.c
+> @@ -1067,7 +1067,7 @@ int of_gpiochip_add(struct gpio_chip *chip)
+>  	struct device_node *np;
+>  	int ret;
+>  
+> -	np = to_of_node(chip->fwnode);
+> +	np = to_of_node(dev_fwnode(&chip->gpiodev->dev));
+>  	if (!np)
+>  		return 0;
+>  
+> -- 
+> 2.38.1
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
