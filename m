@@ -2,148 +2,404 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3EBE6257A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EA86257A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233367AbiKKKJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 05:09:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
+        id S233514AbiKKKI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 05:08:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233553AbiKKKJI (ORCPT
+        with ESMTP id S233452AbiKKKIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 05:09:08 -0500
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2077.outbound.protection.outlook.com [40.107.215.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D267C8C4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 02:09:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FpR8QGh3eEc47M8LpxwZdqf5ukmHcz9cHCAUnGdUnlWDaSfSVFqQB77t7Ve0r0hnF76pYBYI/zLTbghGlNlvmWX3lkh+SV6GS6MgbtwZc5NGg5kVbqKsC2mJ6u2+tYUX+i8wqEB2sX+Z7Vq2TX2lPj1SuYnX5MYIzZ884NwwDWIxdBTI9Feb5ANp10XObBGocJzaFUkBXhN06UqEYGi7BGDM/8yYKmUtedJvh7WXi4Sd8+uFP0IiQU6NIzd4nRNIcgO90hXRWHtix0aHbTOASA5lLpAUaWnj7MCNzDM+WK5otCmM9Hj5ARDmB0xGK+WxeVXMdyUxPLg0k/lMq5Gw3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=shef+udH1+23RYxNjD9guO1Ey2dJ6Hr/P05JP2ik1qQ=;
- b=K9RGKp6ahLSBSXkvYMP0DIw60aq8894Hzo8RqRv1bZ1vKuKqDGp081xMcSuaQNgnG0ngSdsq0yLwxLP8Sp/B9UVhOzZCMFofGvFBNiA3Z08d57tk2W1ptO40FSl0BDWtqNFo25Zh/ynOC3wr7j3lKHlwXioHEaE3dKRCVvUxNFdqR6qXWjh5beoIBzTz2hGOjNb1WsYKm5XSLeymm/rVew4O3sNsfxB+ufFt71JwtiJPV27VGaMiiRcbF6umOebr6ta1B9Qf0ROgj6uQQcxgEZOJYMK54VzHmFKeFzZgKRJjP/z+6jVF7WKS96wIlV6B6IxAPkV6xlu2pWte0d5ugg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
- dkim=pass header.d=oppo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=shef+udH1+23RYxNjD9guO1Ey2dJ6Hr/P05JP2ik1qQ=;
- b=c7uk3IW4nqi7RZj4g10AC3cU6bwUTiNWQLt4d+w78Ju0kDX6CoJ90D3m+/UBuigw3LGGBRkhtFEsgwxEVf1Smsuu8oPK3pI0mbT/Dp6ggXy0BL6g18niX0+bG1JEoSvdrnUK4z9iMhZOE7TNRfOKHRZqHwOJKk8PbTi24Uy1urc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oppo.com;
-Received: from SI2PR02MB5148.apcprd02.prod.outlook.com (2603:1096:4:153::6) by
- SG2PR02MB5901.apcprd02.prod.outlook.com (2603:1096:4:1d2::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5791.27; Fri, 11 Nov 2022 10:08:58 +0000
-Received: from SI2PR02MB5148.apcprd02.prod.outlook.com
- ([fe80::2954:8e56:dcd1:452c]) by SI2PR02MB5148.apcprd02.prod.outlook.com
- ([fe80::2954:8e56:dcd1:452c%3]) with mapi id 15.20.5813.013; Fri, 11 Nov 2022
- 10:08:58 +0000
-From:   Sheng Yong <shengyong@oppo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Sheng Yong <shengyong@oppo.com>
-Subject: [PATCH v2 2/2] f2fs: move set_file_temperature into f2fs_new_inode
-Date:   Fri, 11 Nov 2022 18:08:30 +0800
-Message-Id: <20221111100830.953733-2-shengyong@oppo.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221111100830.953733-1-shengyong@oppo.com>
-References: <20221111100830.953733-1-shengyong@oppo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TYAPR01CA0135.jpnprd01.prod.outlook.com
- (2603:1096:404:2d::27) To SI2PR02MB5148.apcprd02.prod.outlook.com
- (2603:1096:4:153::6)
+        Fri, 11 Nov 2022 05:08:54 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4159D2792B;
+        Fri, 11 Nov 2022 02:08:52 -0800 (PST)
+X-UUID: 5c44a1ef77594af6ac9ceb94def301c1-20221111
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=2kPNOGOomYObpfy8Uhn469poBxSZitEQV8g7qGLyCTg=;
+        b=EoWG/X1vNE9tlNJXU3eLOYQ/b0VQn/dcpmEFIIYlZHKNgyWZW6hPmfVVWuNti6i8/HWXF7eMOJVm5KNg6taenWJUoUGa0RhLUMqlvlJfajA8EhiBxOzkdCroEUsU02rdfShSsAHjn5pqxwkgM+YukWohHkduL1Gm5obGMWSw45g=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:6ce37877-cdca-453d-9103-e8b498d82121,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.12,REQID:6ce37877-cdca-453d-9103-e8b498d82121,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:62cd327,CLOUDID:73b84b5d-100c-4555-952b-a62c895efded,B
+        ulkID:221111180849L35M876A,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 5c44a1ef77594af6ac9ceb94def301c1-20221111
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <haozhe.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 356781705; Fri, 11 Nov 2022 18:08:47 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 11 Nov 2022 18:08:45 +0800
+Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 11 Nov 2022 18:08:43 +0800
+From:   <haozhe.chang@mediatek.com>
+To:     M Chetan Kumar <m.chetan.kumar@intel.com>,
+        Intel Corporation <linuxwwan@intel.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
+        Chiranjeevi Rapolu <chiranjeevi.rapolu@linux.intel.com>,
+        Liu Haijun <haijun.liu@mediatek.com>,
+        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>,
+        haozhe chang <haozhe.chang@mediatek.com>,
+        "open list:INTEL WWAN IOSM DRIVER" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR MESSAGING (RPMSG) WWAN CONTROL..." 
+        <linux-remoteproc@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+CC:     <lambert.wang@mediatek.com>, <xiayu.zhang@mediatek.com>,
+        <hua.yang@mediatek.com>
+Subject: [PATCH v3] wwan: core: Support slicing in port TX flow of WWAN subsystem
+Date:   Fri, 11 Nov 2022 18:08:36 +0800
+Message-ID: <20221111100840.105305-1-haozhe.chang@mediatek.com>
+X-Mailer: git-send-email 2.17.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SI2PR02MB5148:EE_|SG2PR02MB5901:EE_
-X-MS-Office365-Filtering-Correlation-Id: d5863c15-af71-428b-1134-08dac3ccbfa6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YG6ZgsYbBuHgd7WV3dQXvyb9M56o8pGGPQD0Dn3Be0UouybyrbLqb5jppWrT10w7oeyY0ooqXUfwXiuEThF3r1SJyX2Khd+QF8NurcCjet2MDUZDM69TOC1WljC7zx6YxpTR5OfumzAgc3vMe9+hBilsP2rY0T0BjTH5+8OOqqHZpEWiBHJ7stsmH0T13oRC4JYBS/B2IaVhZUNnvZehnZGb1JA0mdGyjtMlkNuN5xTH0m+6Hana0LSSIWLFJoMJKC0ee5aH2iiIxbnCdrStn8/pS/EzH/Ya5GdYxapclPmhkrrNmXR6vt2Ugw2G+CHURWeWjuCioZaG45dF+M82JjlepIUCbHEjRrysEyXvO8MDKbDHmao0w/ZiIt4YZ9KRCTPoC/X9bnlZBCgavYYQFLW43raFwT+4pvhHtkZtVd9VkydBoK0q+LWqIiCxsuCdtxF+R6gBUqQ0JOjRoZ1UzgnPJ7ET6OLyf71yX30fgo7S7KDXomnI8fMM4T/1NktE1p0ue8ES3H1zE7NwMxzpb3VDfR0mirkPOUIr9z0z9mmG66c4Swt2dr/I35oPbTd2AVpi7Q9JpgW9UorW3SJ0wyRoXRc5cXlGWv+V1rugvEbEyK2nV244ArqjWWhTTT7Xdhqhyx/XiDTEYwZiTjgsssm5DxQ86THt/ux2082I20yp8+MKwh7rp4kwO4zLtxCbyTylCHexe33ovqzPrSsf9uZHy02sdKTqcDFa/PtmpYVSuWp4jF/lyKnJSAU6dQD6koC02HG1oZuNpp5vfK0I6Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR02MB5148.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(366004)(346002)(136003)(396003)(451199015)(36756003)(38350700002)(6512007)(83380400001)(86362001)(478600001)(6486002)(186003)(2906002)(38100700002)(1076003)(52116002)(26005)(6506007)(8936002)(4326008)(107886003)(66946007)(5660300002)(6666004)(316002)(66556008)(41300700001)(2616005)(66476007)(8676002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7zeBI5g3YeQPF4DF/RaXB4y48FMDk5xXozC+XwjzLChbomAYQ1vbdxHhbliD?=
- =?us-ascii?Q?d/KO2/JHeCfilj5JsYtIYDYoJNeUKmV/IOv89m82tx4wdWzzYN9ovkWKS2k9?=
- =?us-ascii?Q?AiYiBJApzVA1xsC5UlgRLzI82bXWL3oAizxRQn7y1z5eCxnsMbX+bfJq50u7?=
- =?us-ascii?Q?XTFAUvI10j1eyWxOw5YkgD+sAzdZk13lTo6umA8AUt5gdCF73e+adqVZb1kU?=
- =?us-ascii?Q?rO2yV3bHCYSOkRfpHFm1wfAEceFKrrcgrZ/ou0IIfTkfgneAHu2SPHM7ZRY3?=
- =?us-ascii?Q?b2zrGwJarl50l5mxVjV2XC3ch81r1cdXqemUe1Jgryc6bdJ7ljwcw+1f9gfS?=
- =?us-ascii?Q?yuoNjYHbjNs1tpE03xpQyICAvm63aGT0S92dIWEtcfUqpEYhnyU1+MO3RC6F?=
- =?us-ascii?Q?5crZ/1t33h+RW4hePKMeA1g9etpUjrCzDDx2icyjw1hV+Hp7MfMr2DewWUH8?=
- =?us-ascii?Q?bEuvgnIpOXqqYqZDd09aHMrfoa0r6PH9y/sFp4Ch2CkHh502GoCsrihN2Ap3?=
- =?us-ascii?Q?wIrf5fi1HKqQlcFUd5s8S1/OMg0ITzlkzUrWgnnwLyg28D4alp2Oqdp+ORlq?=
- =?us-ascii?Q?UsoU0dGd1vjKONFi6zeIFx4TfXC6phYeukrAZEFHqMJzzfkjfmOwFnGKiKUJ?=
- =?us-ascii?Q?UFWkkrgUw/xvaSx499mDhjRyRYSE16k3vscRqpSy+Z9llcH7hcv8KiwNwaQw?=
- =?us-ascii?Q?iUQg1XwY09slPDsizbCyQJFC2YleGzkr7FhImY42Yp20YqFc+wHvZPiGzXs9?=
- =?us-ascii?Q?vvUKIn7xgpJ6ZRBzmjbvuxRzfrrHMRjfbwq6IQm+xeJ2Lx542iMDnPLcHZaV?=
- =?us-ascii?Q?iQE8fJGnhDmFnmOTbCwYAS5SEgq2s2lahyTpybR6EXKXYzHHrOl7BlkWINKR?=
- =?us-ascii?Q?2nNE6lwqpCDi2pY472Tppko5hT7iS3FogFnIlh9UqbQ77Hjcq3qmtMoZc3U6?=
- =?us-ascii?Q?4TsJBLVTXaWVP+mozoSau3yCx6t92smko8JdhOJhKrIL9oI71NxihqppMU6f?=
- =?us-ascii?Q?8WsY6QJzCdIqmTdD0UpZy9j8iWgNGCWX1j9QnmzZD2DccKlLIqaw5jR+WTU8?=
- =?us-ascii?Q?GVbd7iitThxZrxOv8nui872pGjzZj2BAaDRxh3M454N2CkQ3CsycjPMk9gtL?=
- =?us-ascii?Q?mZKm1yWTB/KIA18t1/+L9a3YqxK7Ea1xXllp7hYa85AAFt2GAB4Op3DUGSrC?=
- =?us-ascii?Q?Gr220pkctZC7jDQoAj4BwmyDYbQ5p+j6VZsTZdtDaI39TiFOmEPrv9d/wtfD?=
- =?us-ascii?Q?/hdzn9mGOV8c+MVp9Qh60lntXazNehWJ9CzCXhYsH83omj07sYMcYWJhlgdT?=
- =?us-ascii?Q?YrQ94s3Q/7Ppi6LY/tvY6JIcl7am22M206e3Rf7uOYEdepelBS2aRa640Tju?=
- =?us-ascii?Q?qlmaoJxCBOQxNK7YoQnTO2WuX0cQf6A/RF9XOAugMdkBW+dgPLsp1x0bx/me?=
- =?us-ascii?Q?dTWMkJU2FBTquHGt/+qIi9C64yqX46LSIC9ADisS6Z50adH7LH1AHFiK7XFh?=
- =?us-ascii?Q?VgkNv4vfMEEiE7ty/16M3KyT0qiKMIjPQK1ydlI2VfXaXkUtBcOqcPkF18qa?=
- =?us-ascii?Q?7DPCqknJanqH0LWt8s77n2u2ZgpZWj5FuY57cDZM?=
-X-OriginatorOrg: oppo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d5863c15-af71-428b-1134-08dac3ccbfa6
-X-MS-Exchange-CrossTenant-AuthSource: SI2PR02MB5148.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 10:08:58.4922
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zQHIdZ2XP/W/pBENT11fEA535s5f9F1oy5pAQPyzcAYIeKbPhivUmpDH4nxmXVccTXSp+VDpnusRWC+dvMF/aw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR02MB5901
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the file name has already passed to f2fs_new_inode(), let's
-move set_file_temperature() into f2fs_new_inode().
+From: haozhe chang <haozhe.chang@mediatek.com>
 
-Signed-off-by: Sheng Yong <shengyong@oppo.com>
+wwan_port_fops_write inputs the SKB parameter to the TX callback of
+the WWAN device driver. However, the WWAN device (e.g., t7xx) may
+have an MTU less than the size of SKB, causing the TX buffer to be
+sliced and copied once more in the WWAN device driver.
+
+This patch implements the slicing in the WWAN subsystem and gives
+the WWAN devices driver the option to slice(by frag_len) or not. By
+doing so, the additional memory copy is reduced.
+
+Meanwhile, this patch gives WWAN devices driver the option to reserve
+headroom in fragments for the device-specific metadata.
+
+Signed-off-by: haozhe chang <haozhe.chang@mediatek.com>
+
 ---
- fs/f2fs/namei.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Changes in v2
+  -send fragments to device driver by skb frag_list.
 
-diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
-index 36e251f438568..04bc7ec5e29e9 100644
---- a/fs/f2fs/namei.c
-+++ b/fs/f2fs/namei.c
-@@ -131,6 +131,9 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
- 	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
- 		set_inode_flag(inode, FI_INLINE_DATA);
+Changes in v3
+  -move frag_len and headroom_len setting to wwan_create_port.
+---
+ drivers/net/wwan/iosm/iosm_ipc_port.c  |  3 +-
+ drivers/net/wwan/mhi_wwan_ctrl.c       |  2 +-
+ drivers/net/wwan/rpmsg_wwan_ctrl.c     |  2 +-
+ drivers/net/wwan/t7xx/t7xx_port_wwan.c | 34 +++++++--------
+ drivers/net/wwan/wwan_core.c           | 59 ++++++++++++++++++++------
+ drivers/net/wwan/wwan_hwsim.c          |  2 +-
+ drivers/usb/class/cdc-wdm.c            |  2 +-
+ include/linux/wwan.h                   |  6 ++-
+ 8 files changed, 73 insertions(+), 37 deletions(-)
+
+diff --git a/drivers/net/wwan/iosm/iosm_ipc_port.c b/drivers/net/wwan/iosm/iosm_ipc_port.c
+index b6d81c627277..dc43b8f0d1af 100644
+--- a/drivers/net/wwan/iosm/iosm_ipc_port.c
++++ b/drivers/net/wwan/iosm/iosm_ipc_port.c
+@@ -63,7 +63,8 @@ struct iosm_cdev *ipc_port_init(struct iosm_imem *ipc_imem,
+ 	ipc_port->ipc_imem = ipc_imem;
  
-+	if (name && !test_opt(sbi, DISABLE_EXT_IDENTIFY))
-+		set_file_temperature(sbi, inode, name);
-+
- 	stat_inc_inline_xattr(inode);
- 	stat_inc_inline_inode(inode);
- 	stat_inc_inline_dir(inode);
-@@ -357,9 +360,6 @@ static int f2fs_create(struct user_namespace *mnt_userns, struct inode *dir,
- 	if (IS_ERR(inode))
- 		return PTR_ERR(inode);
+ 	ipc_port->iosm_port = wwan_create_port(ipc_port->dev, port_type,
+-					       &ipc_wwan_ctrl_ops, ipc_port);
++					       &ipc_wwan_ctrl_ops, 0, 0,
++					       ipc_port);
  
--	if (!test_opt(sbi, DISABLE_EXT_IDENTIFY))
--		set_file_temperature(sbi, inode, dentry->d_name.name);
+ 	return ipc_port;
+ }
+diff --git a/drivers/net/wwan/mhi_wwan_ctrl.c b/drivers/net/wwan/mhi_wwan_ctrl.c
+index f7ca52353f40..29300838531c 100644
+--- a/drivers/net/wwan/mhi_wwan_ctrl.c
++++ b/drivers/net/wwan/mhi_wwan_ctrl.c
+@@ -237,7 +237,7 @@ static int mhi_wwan_ctrl_probe(struct mhi_device *mhi_dev,
+ 
+ 	/* Register as a wwan port, id->driver_data contains wwan port type */
+ 	port = wwan_create_port(&cntrl->mhi_dev->dev, id->driver_data,
+-				&wwan_pops, mhiwwan);
++				&wwan_pops, 0, 0, mhiwwan);
+ 	if (IS_ERR(port)) {
+ 		kfree(mhiwwan);
+ 		return PTR_ERR(port);
+diff --git a/drivers/net/wwan/rpmsg_wwan_ctrl.c b/drivers/net/wwan/rpmsg_wwan_ctrl.c
+index 31c24420ab2e..060f06072dca 100644
+--- a/drivers/net/wwan/rpmsg_wwan_ctrl.c
++++ b/drivers/net/wwan/rpmsg_wwan_ctrl.c
+@@ -129,7 +129,7 @@ static int rpmsg_wwan_ctrl_probe(struct rpmsg_device *rpdev)
+ 
+ 	/* Register as a wwan port, id.driver_data contains wwan port type */
+ 	port = wwan_create_port(parent, rpdev->id.driver_data,
+-				&rpmsg_wwan_pops, rpwwan);
++				&rpmsg_wwan_pops, 0, 0, rpwwan);
+ 	if (IS_ERR(port))
+ 		return PTR_ERR(port);
+ 
+diff --git a/drivers/net/wwan/t7xx/t7xx_port_wwan.c b/drivers/net/wwan/t7xx/t7xx_port_wwan.c
+index 33931bfd78fd..b75bb272f861 100644
+--- a/drivers/net/wwan/t7xx/t7xx_port_wwan.c
++++ b/drivers/net/wwan/t7xx/t7xx_port_wwan.c
+@@ -54,13 +54,13 @@ static void t7xx_port_ctrl_stop(struct wwan_port *port)
+ static int t7xx_port_ctrl_tx(struct wwan_port *port, struct sk_buff *skb)
+ {
+ 	struct t7xx_port *port_private = wwan_port_get_drvdata(port);
+-	size_t len, offset, chunk_len = 0, txq_mtu = CLDMA_MTU;
+ 	const struct t7xx_port_conf *port_conf;
++	struct sk_buff *cur = skb, *cloned;
+ 	struct t7xx_fsm_ctl *ctl;
+ 	enum md_state md_state;
++	int cnt = 0, ret;
+ 
+-	len = skb->len;
+-	if (!len || !port_private->chan_enable)
++	if (!port_private->chan_enable)
+ 		return -EINVAL;
+ 
+ 	port_conf = port_private->port_conf;
+@@ -72,23 +72,21 @@ static int t7xx_port_ctrl_tx(struct wwan_port *port, struct sk_buff *skb)
+ 		return -ENODEV;
+ 	}
+ 
+-	for (offset = 0; offset < len; offset += chunk_len) {
+-		struct sk_buff *skb_ccci;
+-		int ret;
 -
- 	inode->i_op = &f2fs_file_inode_operations;
- 	inode->i_fop = &f2fs_file_operations;
- 	inode->i_mapping->a_ops = &f2fs_dblock_aops;
+-		chunk_len = min(len - offset, txq_mtu - sizeof(struct ccci_header));
+-		skb_ccci = t7xx_port_alloc_skb(chunk_len);
+-		if (!skb_ccci)
+-			return -ENOMEM;
+-
+-		skb_put_data(skb_ccci, skb->data + offset, chunk_len);
+-		ret = t7xx_port_send_skb(port_private, skb_ccci, 0, 0);
++	while (cur) {
++		cloned = skb_clone(cur, GFP_KERNEL);
++		cloned->len = skb_headlen(cur);
++		ret = t7xx_port_send_skb(port_private, cloned, 0, 0);
+ 		if (ret) {
+-			dev_kfree_skb_any(skb_ccci);
++			dev_kfree_skb(cloned);
+ 			dev_err(port_private->dev, "Write error on %s port, %d\n",
+ 				port_conf->name, ret);
+-			return ret;
++			return cnt ? cnt + ret : ret;
+ 		}
++		cnt += cur->len;
++		if (cur == skb)
++			cur = skb_shinfo(skb)->frag_list;
++		else
++			cur = cur->next;
+ 	}
+ 
+ 	dev_kfree_skb(skb);
+@@ -154,13 +152,15 @@ static int t7xx_port_wwan_disable_chl(struct t7xx_port *port)
+ static void t7xx_port_wwan_md_state_notify(struct t7xx_port *port, unsigned int state)
+ {
+ 	const struct t7xx_port_conf *port_conf = port->port_conf;
++	unsigned int header_len = sizeof(struct ccci_header);
+ 
+ 	if (state != MD_STATE_READY)
+ 		return;
+ 
+ 	if (!port->wwan_port) {
+ 		port->wwan_port = wwan_create_port(port->dev, port_conf->port_type,
+-						   &wwan_ops, port);
++						   &wwan_ops, CLDMA_MTU - header_len,
++						   header_len, port);
+ 		if (IS_ERR(port->wwan_port))
+ 			dev_err(port->dev, "Unable to create WWWAN port %s", port_conf->name);
+ 	}
+diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
+index 62e9f7d6c9fe..0d466f4cc2df 100644
+--- a/drivers/net/wwan/wwan_core.c
++++ b/drivers/net/wwan/wwan_core.c
+@@ -67,6 +67,8 @@ struct wwan_device {
+  * @rxq: Buffer inbound queue
+  * @waitqueue: The waitqueue for port fops (read/write/poll)
+  * @data_lock: Port specific data access serialization
++ * @headroom_len: SKB reserved headroom size
++ * @frag_len: Length to split packet
+  * @at_data: AT port specific data
+  */
+ struct wwan_port {
+@@ -79,6 +81,8 @@ struct wwan_port {
+ 	struct sk_buff_head rxq;
+ 	wait_queue_head_t waitqueue;
+ 	struct mutex data_lock;	/* Port specific data access serialization */
++	size_t headroom_len;
++	size_t frag_len;
+ 	union {
+ 		struct {
+ 			struct ktermios termios;
+@@ -422,6 +426,8 @@ static int __wwan_port_dev_assign_name(struct wwan_port *port, const char *fmt)
+ struct wwan_port *wwan_create_port(struct device *parent,
+ 				   enum wwan_port_type type,
+ 				   const struct wwan_port_ops *ops,
++				   size_t frag_len,
++				   unsigned int headroom_len,
+ 				   void *drvdata)
+ {
+ 	struct wwan_device *wwandev;
+@@ -455,6 +461,8 @@ struct wwan_port *wwan_create_port(struct device *parent,
+ 
+ 	port->type = type;
+ 	port->ops = ops;
++	port->frag_len = frag_len ? frag_len : SIZE_MAX;
++	port->headroom_len = headroom_len;
+ 	mutex_init(&port->ops_lock);
+ 	skb_queue_head_init(&port->rxq);
+ 	init_waitqueue_head(&port->waitqueue);
+@@ -698,30 +706,53 @@ static ssize_t wwan_port_fops_read(struct file *filp, char __user *buf,
+ static ssize_t wwan_port_fops_write(struct file *filp, const char __user *buf,
+ 				    size_t count, loff_t *offp)
+ {
++	struct sk_buff *skb, *head = NULL, *tail = NULL;
+ 	struct wwan_port *port = filp->private_data;
+-	struct sk_buff *skb;
++	size_t frag_len, remain = count;
+ 	int ret;
+ 
+ 	ret = wwan_wait_tx(port, !!(filp->f_flags & O_NONBLOCK));
+ 	if (ret)
+ 		return ret;
+ 
+-	skb = alloc_skb(count, GFP_KERNEL);
+-	if (!skb)
+-		return -ENOMEM;
++	do {
++		frag_len = min(remain, port->frag_len);
++		skb = alloc_skb(frag_len + port->headroom_len, GFP_KERNEL);
++		if (!skb) {
++			ret = -ENOMEM;
++			goto freeskb;
++		}
++		skb_reserve(skb, port->headroom_len);
++
++		if (!head) {
++			head = skb;
++		} else if (!tail) {
++			skb_shinfo(head)->frag_list = skb;
++			tail = skb;
++		} else {
++			tail->next = skb;
++			tail = skb;
++		}
+ 
+-	if (copy_from_user(skb_put(skb, count), buf, count)) {
+-		kfree_skb(skb);
+-		return -EFAULT;
+-	}
++		if (copy_from_user(skb_put(skb, frag_len), buf + count - remain, frag_len)) {
++			ret = -EFAULT;
++			goto freeskb;
++		}
+ 
+-	ret = wwan_port_op_tx(port, skb, !!(filp->f_flags & O_NONBLOCK));
+-	if (ret) {
+-		kfree_skb(skb);
+-		return ret;
+-	}
++		if (skb != head) {
++			head->data_len += skb->len;
++			head->len += skb->len;
++			head->truesize += skb->truesize;
++		}
++	} while (remain -= frag_len);
++
++	ret = wwan_port_op_tx(port, head, !!(filp->f_flags & O_NONBLOCK));
++	if (!ret)
++		return count;
+ 
+-	return count;
++freeskb:
++	kfree_skb(head);
++	return ret;
+ }
+ 
+ static __poll_t wwan_port_fops_poll(struct file *filp, poll_table *wait)
+diff --git a/drivers/net/wwan/wwan_hwsim.c b/drivers/net/wwan/wwan_hwsim.c
+index ff09a8cedf93..3a02a75d4485 100644
+--- a/drivers/net/wwan/wwan_hwsim.c
++++ b/drivers/net/wwan/wwan_hwsim.c
+@@ -205,7 +205,7 @@ static struct wwan_hwsim_port *wwan_hwsim_port_new(struct wwan_hwsim_dev *dev)
+ 
+ 	port->wwan = wwan_create_port(&dev->dev, WWAN_PORT_AT,
+ 				      &wwan_hwsim_port_ops,
+-				      port);
++				      0, 0, port);
+ 	if (IS_ERR(port->wwan)) {
+ 		err = PTR_ERR(port->wwan);
+ 		goto err_free_port;
+diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+index 1f0951be15ab..ff7494635d0f 100644
+--- a/drivers/usb/class/cdc-wdm.c
++++ b/drivers/usb/class/cdc-wdm.c
+@@ -929,7 +929,7 @@ static void wdm_wwan_init(struct wdm_device *desc)
+ 		return;
+ 	}
+ 
+-	port = wwan_create_port(&intf->dev, desc->wwanp_type, &wdm_wwan_port_ops, desc);
++	port = wwan_create_port(&intf->dev, desc->wwanp_type, &wdm_wwan_port_ops, 0, 0, desc);
+ 	if (IS_ERR(port)) {
+ 		dev_err(&intf->dev, "%s: Unable to create WWAN port\n",
+ 			dev_name(intf->usb_dev));
+diff --git a/include/linux/wwan.h b/include/linux/wwan.h
+index 5ce2acf444fb..e1a6554792fc 100644
+--- a/include/linux/wwan.h
++++ b/include/linux/wwan.h
+@@ -67,6 +67,9 @@ struct wwan_port_ops {
+  * @parent: Device to use as parent and shared by all WWAN ports
+  * @type: WWAN port type
+  * @ops: WWAN port operations
++ * @frag_len: TX fragments length, if 0 is set,
++ *            the WWAN core will not split the user package.
++ * @headroom_len: TX fragments reserved headroom length
+  * @drvdata: Pointer to caller driver data
+  *
+  * Allocate and register a new WWAN port. The port will be automatically exposed
+@@ -84,6 +87,8 @@ struct wwan_port_ops {
+ struct wwan_port *wwan_create_port(struct device *parent,
+ 				   enum wwan_port_type type,
+ 				   const struct wwan_port_ops *ops,
++				   size_t frag_len,
++				   unsigned int headroom_len,
+ 				   void *drvdata);
+ 
+ /**
+@@ -112,7 +117,6 @@ void wwan_port_rx(struct wwan_port *port, struct sk_buff *skb);
+  */
+ void wwan_port_txoff(struct wwan_port *port);
+ 
+-
+ /**
+  * wwan_port_txon - Restart TX on WWAN port
+  * @port: WWAN port for which TX must be restarted
 -- 
-2.25.1
+2.17.0
 
