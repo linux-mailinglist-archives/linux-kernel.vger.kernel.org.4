@@ -2,152 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3B5625439
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B249962543A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:02:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233127AbiKKHB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 02:01:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
+        id S232732AbiKKHCe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 11 Nov 2022 02:02:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbiKKHBY (ORCPT
+        with ESMTP id S230075AbiKKHCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 02:01:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50576586F;
-        Thu, 10 Nov 2022 23:01:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8005FB823F7;
-        Fri, 11 Nov 2022 07:01:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE88FC433D6;
-        Fri, 11 Nov 2022 07:01:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668150081;
-        bh=F1W/88cKIisGvkI5jZLR7EExVe0GMTcmUxSVV6b6Azo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pnmguo4Za0NkdmYj+MvBrVGYFCN65RoinGoYH12UUjDL7vuZ5AnRny11Z1P+qNBrO
-         zvag2Z6KGFL1tHe/qO/behNdsyDOHuTkXhs6nhjcCgGsIzEQJctx0Mu3vw7HQRQvS9
-         QUO5I0XWKOP1u1NfeEgT7mqitw7kOnXoB8jRxFikV4tDrTdC1+SEtUksP4K9YF62W3
-         Ss7trMIYKoFGr8DUOyN+EqZosZzfrjH1Vv2am4TDy+3EjVrhfzaofv3j5b6tox9ZuY
-         FxCXF7fUjWQJqQzZFt1TbjkuFbE+OiMkhxXtHHzvT+zFGs3K92cL/u+IfYRNo/xmgX
-         vLHqQzuY3jrRQ==
-Date:   Fri, 11 Nov 2022 12:31:15 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com,
-        andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        quic_cang@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org,
-        dmitry.baryshkov@linaro.org, ahalaney@redhat.com
-Subject: Re: [PATCH v2 02/15] phy: qcom-qmp-ufs: Add support for configuring
- PHY in HS Series B mode
-Message-ID: <Y23zO68Bb5R0xLq/@matsya>
-References: <20221031180217.32512-1-manivannan.sadhasivam@linaro.org>
- <20221031180217.32512-3-manivannan.sadhasivam@linaro.org>
+        Fri, 11 Nov 2022 02:02:33 -0500
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C1F77220
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:02:31 -0800 (PST)
+Received: by mail-pj1-f44.google.com with SMTP id k5so3695300pjo.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:02:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fOUPI2HSi+pvD6Q+zBNwercPei7ZAzC0wrzHEy7HnN8=;
+        b=J/AAYO53yTOgQgYqkUR/68IewgUddwY+GQh8zQoJtQ/e3dFwar9vnL5rRg3nlfg1Tw
+         +IhHcF8jKtVueottYgbZAGgTf5FoFcWofyL1lgaijW+TXQCbu3icCK0V5hf7fgWJH2m4
+         yGDh4l4Gx1O8/7dvvXnqpa9+EJZmnqIWDlchAxbYZ47l8PIh6YoYOb5OLO2IBB9xgrOj
+         ngw925tiSHA3FwbLMsVxZZvwsw9Rs6uH6dN/a8wUL4WA9sOnoUImnUDjwtRirVi8rUFO
+         utqTxUSqGeSUZCvFvksm4mDGalLZda8n91ZZNM6mI6IDFKjoO/04tkAqL7tulvJXhZJE
+         Grzw==
+X-Gm-Message-State: ANoB5pk35hZv6pwj4ErE+k79+gtfSMnv6xqUvUC+IrW0Tbw2WOXmwahi
+        16nVNqXEMGS1t4MpXBYXJVeEYbBE7eUEzXU0Qq8=
+X-Google-Smtp-Source: AA0mqf44hY4oy4yK+oBHgzJpJaRLRF7tiuLNug/OgdxFe5ZpSsyu8v23Ye5hX4Sd3WmRiwNRal6WtKvNr0JAVNuhQzM=
+X-Received: by 2002:a17:902:b609:b0:186:ac81:2aa9 with SMTP id
+ b9-20020a170902b60900b00186ac812aa9mr1335007pls.95.1668150151316; Thu, 10 Nov
+ 2022 23:02:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221031180217.32512-3-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221106095106.849154-1-mailhol.vincent@wanadoo.fr>
+ <20221106095106.849154-3-mailhol.vincent@wanadoo.fr> <CAKwvOdmN2==9tG0fxRO8K-eAJudeemaKUuhJEAuGHc=P8GpGwA@mail.gmail.com>
+ <CAMZ6RqKRP3cp=FhpA6DkKNKjgRV2ak18k=Ad-mnBPkT++gARCA@mail.gmail.com> <Y23DIRG60iaei7Ft@yury-laptop>
+In-Reply-To: <Y23DIRG60iaei7Ft@yury-laptop>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Fri, 11 Nov 2022 16:02:20 +0900
+Message-ID: <CAMZ6Rq+qm=hVdWw=MSgBJ2qLbkCxG10v5yUH7hpGDOvq2QBOuA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] x86/asm/bitops: Use __builtin_clz*() to evaluate
+ constant expressions
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>, x86@kernel.org,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Borislav Petkov <bp@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31-10-22, 23:32, Manivannan Sadhasivam wrote:
-> Add separate tables_hs_b instance to allow the PHY driver to configure the
-> PHY in HS Series B mode. The individual SoC configs need to supply the
-> serdes register setting in tables_hs_b and the UFS driver can request the
-> Series B mode by calling phy_set_mode() with mode set to PHY_MODE_UFS_HS_B.
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-> index cdfda4e6d575..4c6a2b5afc9a 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-ufs.c
-> @@ -20,6 +20,8 @@
->  #include <linux/reset.h>
->  #include <linux/slab.h>
->  
-> +#include <ufs/unipro.h>
-> +
->  #include <dt-bindings/phy/phy.h>
->  
->  #include "phy-qcom-qmp.h"
-> @@ -549,6 +551,8 @@ struct qmp_phy_cfg {
->  
->  	/* Main init sequence for PHY blocks - serdes, tx, rx, pcs */
->  	const struct qmp_phy_cfg_tables tables;
-> +	/* Additional sequence for HS Series B */
-> +	const struct qmp_phy_cfg_tables tables_hs_b;
+On Fri. 11 nov. 2022 à 12:36, Yury Norov <yury.norov@gmail.com> a écrit :
+> On Fri, Nov 11, 2022 at 10:57:17AM +0900, Vincent MAILHOL wrote:
+> > On Fri. 11 Nov. 2022 at 04:01, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > > On Sun, Nov 6, 2022 at 1:51 AM Vincent Mailhol
+> > > <mailhol.vincent@wanadoo.fr> wrote:
+> > > >
+> > > >  #ifdef CONFIG_X86_64
+> > > > -static __always_inline int fls64(__u64 x)
+> > > > +static __always_inline int constant_fls64(u64 x)
+> > > > +{
+> > > > +       BUILD_BUG_ON(sizeof(unsigned long long) != sizeof(x));
+> > >
+> > > Thanks for the patches! They LGTM; but why do we need this BUILD_BUG_ON here?
+> >
+> > There is no absolute need for sure.
+> >
+> > Call this a paranoiac check and you will be correct. My reasoning for still
+> > using it is that:
+> >
+> >   1/ It is a compile time check, so no runtime penalty.
+> >   2/ Strictly speaking, the C standard doesn't guarantee 'u64' and
+> >      'unsigned long long int' to be the same (and you can argue that in clang
+> >      and gcc long long is always 64 bits on all platforms and one more time
+> >      you will be correct).
+> >   3/ It serves as a documentation to say: "hey I am using the clz long long
+> >      version on a u64 and I know what I am doing."
+> >
+> > If you want me to remove it, OK for me. Let me know.
+>
+> In fact, compiler's typecheck would be more strict than your BUG().
+> For example, your check allows pointers, but compiler will complain.
 
-what am i missing, where was tables_hs_b added?
+Here, x is a scalar, so in that specific case, it is equivalent. But
+the compiler type check is more explicit and more natural because it
+would work if ported to other contexts as you pointed. So it is a good
+idea.
 
->  
->  	/* clock ids to be requested */
->  	const char * const *clk_list;
-> @@ -582,6 +586,7 @@ struct qmp_phy_cfg {
->   * @rx2: iomapped memory space for second lane's rx (in dual lane PHYs)
->   * @pcs_misc: iomapped memory space for lane's pcs_misc
->   * @qmp: QMP phy to which this lane belongs
-> + * @mode: PHY mode configured by the UFS driver
->   */
->  struct qmp_phy {
->  	struct phy *phy;
-> @@ -594,6 +599,7 @@ struct qmp_phy {
->  	void __iomem *rx2;
->  	void __iomem *pcs_misc;
->  	struct qcom_qmp *qmp;
-> +	u32 mode;
->  };
->  
->  /**
-> @@ -983,6 +989,8 @@ static int qmp_ufs_power_on(struct phy *phy)
->  	int ret;
->  
->  	qmp_ufs_serdes_init(qphy, &cfg->tables);
-> +	if (qphy->mode == PHY_MODE_UFS_HS_B)
-> +		qmp_ufs_serdes_init(qphy, &cfg->tables_hs_b);
->  
->  	qmp_ufs_lanes_init(qphy, &cfg->tables);
->  
-> @@ -1070,6 +1078,15 @@ static int qmp_ufs_disable(struct phy *phy)
->  	return qmp_ufs_exit(phy);
->  }
->  
-> +static int qmp_ufs_set_mode(struct phy *phy, enum phy_mode mode, int submode)
-> +{
-> +	struct qmp_phy *qphy = phy_get_drvdata(phy);
-> +
-> +	qphy->mode = mode;
-> +
-> +	return 0;
-> +}
-> +
->  static int qmp_ufs_vreg_init(struct device *dev, const struct qmp_phy_cfg *cfg)
->  {
->  	struct qcom_qmp *qmp = dev_get_drvdata(dev);
-> @@ -1105,6 +1122,7 @@ static int qmp_ufs_clk_init(struct device *dev, const struct qmp_phy_cfg *cfg)
->  static const struct phy_ops qcom_qmp_ufs_ops = {
->  	.power_on	= qmp_ufs_enable,
->  	.power_off	= qmp_ufs_disable,
-> +	.set_mode	= qmp_ufs_set_mode,
->  	.owner		= THIS_MODULE,
->  };
->  
-> -- 
-> 2.25.1
+The check would become:
+        static_assert(__builtin_types_compatible_p(typeof(x),
+                                                   unsigned long long int));
 
--- 
-~Vinod
+Alternatively, we could use the assert_arg_type() macro from
+https://elixir.bootlin.com/linux/latest/source/arch/x86/include/asm/irq_stack.h#L126
+which does exactly the same thing.
+
+But in such a case, it would be better to first move assert_arg_type()
+to a more appropriate header (maybe linux/build_bug.h ?)
+
+
+Yours sincerely,
+Vincent Mailhol
