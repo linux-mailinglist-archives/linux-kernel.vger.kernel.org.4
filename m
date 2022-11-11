@@ -2,92 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB82624F04
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:39:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D59624F0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiKKAjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 19:39:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
+        id S229688AbiKKAms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 19:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiKKAjg (ORCPT
+        with ESMTP id S229932AbiKKAmr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 19:39:36 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6C311C21;
-        Thu, 10 Nov 2022 16:39:35 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1otI4k-0006Am-98; Fri, 11 Nov 2022 01:39:18 +0100
-Date:   Fri, 11 Nov 2022 00:39:15 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Richard Weinberger <richard@nod.at>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-Subject: Re: [PATCH v4 4/5] mtd_blkdevs: add option to enable scanning for
- partitions
-Message-ID: <Y22Zs7Jg0FNFHeHD@makrotopia.org>
-References: <Y2rgbfpYfpbLKHaf@makrotopia.org>
- <1691046252.219046.1668109493753.JavaMail.zimbra@nod.at>
- <Y21ZXRKJF3hZg8wk@makrotopia.org>
- <871124728.219224.1668111155161.JavaMail.zimbra@nod.at>
+        Thu, 10 Nov 2022 19:42:47 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2DA61B8E
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:42:46 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id k5so3127700pjo.5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:42:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xM5WNzI0hwRHjliP1X8vOe9pxalT6LKCbo/mWi3YSJs=;
+        b=Ks0k/pf8S/S1HZNwKLbh8GafqB1bWlwq1sI/v9pfDxFYhNglaLAjwpun9WjaZ3IP45
+         DxKlrmbh/25Er18wbqq1jIHdLjB0X+A0g0SODBnycheHV2whn6s/WYuKBA4w2Q0wG91M
+         f+mG8bvckQFAkHwQ3N385LuwERVCtA9iXj4qo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xM5WNzI0hwRHjliP1X8vOe9pxalT6LKCbo/mWi3YSJs=;
+        b=A8Gna+pFGzEkY1SIfXx2muQpL0j7D2BqKmt6xIZKO6NqUVfP/aqrEmN+7OT0BGruv4
+         uBgc/04R4dG7G8Ua8KlXWezr7sQ0dggZoz1lhaH1/UyMx4DpN/jWmI76VqTuN+6Wv9Zb
+         QkO63sXXmFbZQy6Jm77MhHxHt6DNSW/N5hWmwTEkG2z9Usb2a5mqxJcNGaNAdlhz7d1D
+         rVHrbqRfv7/2nEUfst/AA5Mv1QrdQOVBNvfmnMejOXpGjUGMKJJMqV4N1ce3FzgHUIKL
+         IzWwRDdxnmFz7TlMquyH+ifi/RO5JIRoP3YTKYIZWe7xJOtWxIP7uxvzfNjxLsUnIo81
+         tV+Q==
+X-Gm-Message-State: ANoB5pn4w0GgCdfOsPyy8r+6sYHOuzwTgsh59PW8dYqfiyAtcPSRho/6
+        QxFqrv+OCaq3AIgLvCVNZalqXA==
+X-Google-Smtp-Source: AA0mqf4lsQyzaHXXZR1h9k1dQs/5NsV//w58zMbDuUA6cVJJlf1B6++qWdvFLSorlO2Qcc0M6PwT3Q==
+X-Received: by 2002:a17:902:bd8e:b0:186:8398:350 with SMTP id q14-20020a170902bd8e00b0018683980350mr214085pls.6.1668127365713;
+        Thu, 10 Nov 2022 16:42:45 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:8d55:c60d:579d:741c])
+        by smtp.gmail.com with ESMTPSA id q90-20020a17090a756300b001faf7a88138sm375216pjk.42.2022.11.10.16.42.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 16:42:45 -0800 (PST)
+Date:   Fri, 11 Nov 2022 09:42:38 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     coverity-bot <keescook@chromium.org>
+Cc:     Alexey Romanov <avromanov@sberdevices.ru>,
+        linux-kernel@vger.kernel.org, Nick Terrell <terrelln@fb.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Nitin Gupta <ngupta@vflare.org>, Jens Axboe <axboe@kernel.dk>,
+        Nhat Pham <nphamcs@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-block@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: Coverity: zram_recompress(): OVERRUN
+Message-ID: <Y22afneyl4pZ32ig@google.com>
+References: <202211100847.388C61B3@keescook>
+ <Y22ZNtdH9s+cuL9l@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <871124728.219224.1668111155161.JavaMail.zimbra@nod.at>
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y22ZNtdH9s+cuL9l@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 09:12:35PM +0100, Richard Weinberger wrote:
-> ----- Ursprüngliche Mail -----
-> > On Thu, Nov 10, 2022 at 08:44:53PM +0100, Richard Weinberger wrote:
-> >> ----- Ursprüngliche Mail -----
-> >> > Von: "Daniel Golle" <daniel@makrotopia.org>
-> >> > +
-> >> > +		if (!IS_ENABLED(CONFIG_MTD_BLOCK_PARTITIONS) || mtd_type_is_nand(new->mtd))
-> >> > +			gd->flags |= GENHD_FL_NO_PART;
-> >> 
-> >> I know that NAND should not get used with mtdblock because lack of wearleveling
-> >> and
-> >> in general too many writes. But what exactly is the rationale to deny part
-> >> scanning for NAND?
-> > 
-> > As UBI should be used on NAND, partition scanning should be enabled for
-> > ubiblock devices to have uImage.FIT filesystem subimages mapped by the
-> > partition parser.
-> > 
-> > If not skipping partition scanning on NAND-backed mtdblock devices the
-> > scanning itself will already trigger multiple warnings which now happen
-> > every time when a NAND-backed mtdblock device is being opened since
-> > commit 96a3295c ("mtdblock: warn if opened on NAND").
+On (22/11/11 09:37), Sergey Senozhatsky wrote:
+> On (22/11/10 08:47), coverity-bot wrote:
+> [..]
+> > 1704     	class_index_old = zs_lookup_class_index(zram->mem_pool, comp_len_old);
+> > 1705     	/*
+> > 1706     	 * Iterate the secondary comp algorithms list (in order of priority)
+> > 1707     	 * and try to recompress the page.
+> > 1708     	 */
+> > 1709     	for (; prio < prio_max; prio++) {
+> > vvv     CID 1527270:    (OVERRUN)
+> > vvv     Overrunning array "zram->comps" of 4 8-byte elements at element index 4 (byte offset 39) using index "prio" (which evaluates to 4).
+> > 1710     		if (!zram->comps[prio])
+> > 1711     			continue;
+> > 1712
+> > 1713     		/*
+> > 1714     		 * Skip if the object is already re-compressed with a higher
+> > 1715     		 * priority algorithm (or same algorithm).
 > 
-> I see, you want to promote UBI. Makes sense.
-> In case you do a v5 series, please add a comment to the code.
+> prio_max is always limited and max value it can have is 4 (ZRAM_MAX_COMPS).
+> Depending on use case we can limit prio_max even to lower values.
+> 
+> So we have
+> 
+> 	for (; prio < 4; prio++) {
+> 		foo = comps[prio];
+> 	}
+> 
+> I don't see how prio can be 4 inside of this loop.
 
-Will do, I'm planning to send v5 early next week.
+Kees, if we do something like this will it make coverity happy?
 
-If we are going to have only CONFIG_MTD_BLOCK_PARTITIONS and no other
-config symbol for ubiblock devices I'd also merge the two patches for
-mtdblock and ubiblock partition scanning into a single one.
+---
 
-Thank you for reviewing!
-
-
-Daniel
+diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+index 9d33801e8ba8..e67a124f2e88 100644
+--- a/drivers/block/zram/zram_drv.c
++++ b/drivers/block/zram/zram_drv.c
+@@ -1706,6 +1706,7 @@ static int zram_recompress(struct zram *zram, u32 index, struct page *page,
+ 	 * Iterate the secondary comp algorithms list (in order of priority)
+ 	 * and try to recompress the page.
+ 	 */
++	prio_max = min(prio_max, ZRAM_MAX_COMPS);
+ 	for (; prio < prio_max; prio++) {
+ 		if (!zram->comps[prio])
+ 			continue;
