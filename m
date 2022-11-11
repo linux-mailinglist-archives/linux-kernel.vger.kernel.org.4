@@ -2,171 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6BD624EDD
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:20:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F338624EDF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbiKKAUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 19:20:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50072 "EHLO
+        id S231320AbiKKAVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 19:21:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbiKKAUh (ORCPT
+        with ESMTP id S230450AbiKKAVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 19:20:37 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD3A43865
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:20:36 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so6378134pjk.2
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:20:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rgBWPJbei+FelwuPjDXn2dCEJUPh8F3/6uN4AZp70/o=;
-        b=ETy1FVWPcrAfX01GsufjlOq61UfvWACkc/LKVL66MjfHjAL8Mvu607O5U9QmA5KaRJ
-         4iVw+0ZaYGBQeY246vJjOs+L0vrAMy1jViTZVtjzudQJ11osmTlfqAq8yJKRbW1zk8tI
-         IDdPCv9LvmwB/SAiGsanFDk7hpN2aeztYysA0=
+        Thu, 10 Nov 2022 19:21:44 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE1C60EB5
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:21:42 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id be26-20020a056602379a00b006dd80a0ba1cso2190146iob.11
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:21:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rgBWPJbei+FelwuPjDXn2dCEJUPh8F3/6uN4AZp70/o=;
-        b=cs0BSKxhT/jzcFIA9R0aX8tk4s0NVnUWgZnHAWlY29ylnshJtFlfjq5F+1OFR2fqc0
-         gPnOobz+gpBjQ7UWgMtFsKPP/Ac19vzwq+EW+ZALyQyskcdrMZpYP2YarzCy8TIxhnX4
-         aP7egMMAb1zMsQLK7i0k5eC2I8MhGIfRoALCkw/+yEmtgyo23Gnpg3P3Mikv+Pozz7nt
-         vpoDajWHkoxzKB3Hr+av14j+mpTbwXGbhLETx21LpHVIXHEJsvi2Q/xRJO6l9TAfP3JQ
-         lOgITE+s6CHB8BnC+/37CgXwrWI5x0C26hTk1VVkLWgeg5ji0EgL4emgeujizFyHH1Hx
-         XgSQ==
-X-Gm-Message-State: ACrzQf0FHfzJkx1qz8I975CkPW29B2StVrm0+aI6hs/y2r0Rf2mmgEqz
-        lssLq2Hk0DbT0axScwIxyEJzBA==
-X-Google-Smtp-Source: AMsMyM5zP6O0SX+e+k0GvFD3LtwU2AycxZU1aQrkd6tKJKqtjtOtQO0RNcPyMz97EXUWVCPAzOm6Rg==
-X-Received: by 2002:a17:90a:194b:b0:212:e521:7cbd with SMTP id 11-20020a17090a194b00b00212e5217cbdmr2767295pjh.230.1668126035895;
-        Thu, 10 Nov 2022 16:20:35 -0800 (PST)
-Received: from localhost ([2401:fa00:8f:203:729a:7662:547f:f4a3])
-        by smtp.gmail.com with ESMTPSA id u14-20020a170903124e00b001869394a372sm259473plh.201.2022.11.10.16.20.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 16:20:35 -0800 (PST)
-Date:   Fri, 11 Nov 2022 09:20:32 +0900
-From:   Hidenori Kobayashi <hidenorik@chromium.org>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Wolfram Sang <wsa@kernel.org>, Tomasz Figa <tfiga@chromium.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        stable@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/1] i2c: Restore initial power state when we are done.
-Message-ID: <20221111002032.b7j3cizpe5nbj6id@google.com>
-References: <20221109-i2c-waive-v5-0-2839667f8f6a@chromium.org>
- <20221109-i2c-waive-v5-1-2839667f8f6a@chromium.org>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qFjiEcHc5hk2bc+C1nL1+XaOhmC8v8oKdudkNiloEHw=;
+        b=CuRRje9bcehrYE2BndEousYKrp1ZMDFLX1YNS6EB8iZvREkK36i5xn0xmX5Lbgu7T+
+         n8mKYcin30T7RrAn+YIcYr2n890u/bg2gmJhHtMLYJPIdWnwTT9Ty/enfs0bN860vQp4
+         Fco4pqhmarecHmVhqFvT9+GqvWmjMWGFQwTrYy21HJHhSOm3VlRH6TviWKzymc91gsGl
+         VvzRIELc6o0+HE9UdWtKU/nSWvQd00gPjP8IVmSGi7gIINej0SatXFAms2mylMaB51Ao
+         Rj3F7XwpG1aWSRo9FQauv6JfAqJClU4tVnoJAmOMbj3LexZ5jeQpRPWjHcjUzthK3ziQ
+         oJQA==
+X-Gm-Message-State: ANoB5pmkgW8zhfVdNU6sLniO8NZaS0P6HGQsDJMWt+htwqN9YpVmJGhy
+        Rs02HFioYHfqcD5gJovWiOO0fi3cxOrjXwHlU56EdsOEd6p9
+X-Google-Smtp-Source: AA0mqf5dDtIZ8cqm/xr3DzN7RTLhn+g60LjEAjRplluaW3kzMOvs9LfdnQFF7gIb9BXW1RQl4SZ/x1Ut9C4ERNoOnxImLNuhmpZF
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109-i2c-waive-v5-1-2839667f8f6a@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1146:b0:302:38f2:3f99 with SMTP id
+ o6-20020a056e02114600b0030238f23f99mr1038798ill.271.1668126102075; Thu, 10
+ Nov 2022 16:21:42 -0800 (PST)
+Date:   Thu, 10 Nov 2022 16:21:42 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c1401205ed26df57@google.com>
+Subject: [syzbot] INFO: task hung in lookup_slow (3)
+From:   syzbot <syzbot+7cfc6a4f6b025f710423@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, broonie@kernel.org, catalin.marinas@arm.com,
+        ebiederm@xmission.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, madvenka@linux.microsoft.com,
+        mark.rutland@arm.com, scott@os.amperecomputing.com,
+        syzkaller-bugs@googlegroups.com, will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
+Hello,
 
-On Thu, Nov 10, 2022 at 05:20:39PM +0100, Ricardo Ribalda wrote:
-> A driver that supports I2C_DRV_ACPI_WAIVE_D0_PROBE is not expected to
-> power off a device that it has not powered on previously.
-> 
-> For devices operating in "full_power" mode, the first call to
-> `i2c_acpi_waive_d0_probe` will return 0, which means that the device
-> will be turned on with `dev_pm_domain_attach`.
-> 
-> If probe fails or the device is removed the second call to
-> `i2c_acpi_waive_d0_probe` will return 1, which means that the device
-> will not be turned off. This is, it will be left in a different power
-> state. Lets fix it.
-> 
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Cc: stable@vger.kernel.org
-> Fixes: b18c1ad685d9 ("i2c: Allow an ACPI driver to manage the device's power state during probe")
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+syzbot found the following issue on:
 
-It's much easier to read now. Thanks!
+HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=17ed890e880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
+dashboard link: https://syzkaller.appspot.com/bug?extid=7cfc6a4f6b025f710423
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12bb4cc6880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=119a912e880000
 
-Reviewed-by: Hidenori Kobayashi <hidenorik@chromium.org>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
 
-> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> index b4edf10e8fd0..6f4974c76404 100644
-> --- a/drivers/i2c/i2c-core-base.c
-> +++ b/drivers/i2c/i2c-core-base.c
-> @@ -467,6 +467,7 @@ static int i2c_device_probe(struct device *dev)
->  {
->  	struct i2c_client	*client = i2c_verify_client(dev);
->  	struct i2c_driver	*driver;
-> +	bool do_power_on;
->  	int status;
->  
->  	if (!client)
-> @@ -545,8 +546,8 @@ static int i2c_device_probe(struct device *dev)
->  	if (status < 0)
->  		goto err_clear_wakeup_irq;
->  
-> -	status = dev_pm_domain_attach(&client->dev,
-> -				      !i2c_acpi_waive_d0_probe(dev));
-> +	do_power_on = !i2c_acpi_waive_d0_probe(dev);
-> +	status = dev_pm_domain_attach(&client->dev, do_power_on);
->  	if (status)
->  		goto err_clear_wakeup_irq;
->  
-> @@ -580,12 +581,14 @@ static int i2c_device_probe(struct device *dev)
->  	if (status)
->  		goto err_release_driver_resources;
->  
-> +	client->power_off_on_remove = do_power_on;
-> +
->  	return 0;
->  
->  err_release_driver_resources:
->  	devres_release_group(&client->dev, client->devres_group_id);
->  err_detach_pm_domain:
-> -	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
-> +	dev_pm_domain_detach(&client->dev, do_power_on);
->  err_clear_wakeup_irq:
->  	dev_pm_clear_wake_irq(&client->dev);
->  	device_init_wakeup(&client->dev, false);
-> @@ -610,7 +613,7 @@ static void i2c_device_remove(struct device *dev)
->  
->  	devres_release_group(&client->dev, client->devres_group_id);
->  
-> -	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
-> +	dev_pm_domain_detach(&client->dev, client->power_off_on_remove);
->  
->  	dev_pm_clear_wake_irq(&client->dev);
->  	device_init_wakeup(&client->dev, false);
-> diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> index f7c49bbdb8a1..eba83bc5459e 100644
-> --- a/include/linux/i2c.h
-> +++ b/include/linux/i2c.h
-> @@ -326,6 +326,8 @@ struct i2c_driver {
->   *	calls it to pass on slave events to the slave driver.
->   * @devres_group_id: id of the devres group that will be created for resources
->   *	acquired when probing this device.
-> + * @power_off_on_remove: Record if we have turned on the device before probing
-> + *	so we can turn off the device at removal.
->   *
->   * An i2c_client identifies a single device (i.e. chip) connected to an
->   * i2c bus. The behaviour exposed to Linux is defined by the driver
-> @@ -355,6 +357,8 @@ struct i2c_client {
->  	i2c_slave_cb_t slave_cb;	/* callback for slave mode	*/
->  #endif
->  	void *devres_group_id;		/* ID of probe devres group	*/
-> +	bool power_off_on_remove;	/* if device needs to be turned	*/
-> +					/* off by framework at removal	*/
->  };
->  #define to_i2c_client(d) container_of(d, struct i2c_client, dev)
->  
-> 
-> -- 
-> b4 0.11.0-dev-d93f8
-> 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7cfc6a4f6b025f710423@syzkaller.appspotmail.com
+
+INFO: task syslogd:2546 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syslogd         state:D stack:    0 pid: 2546 ppid:     1 flags:0x00000000
+Call trace:
+ __switch_to+0x180/0x298 arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x5a0 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ rwsem_down_read_slowpath+0x228/0x444 kernel/locking/rwsem.c:1087
+ __down_read_common+0x48/0x154 kernel/locking/rwsem.c:1252
+ __down_read kernel/locking/rwsem.c:1261 [inline]
+ down_read+0x68/0x78 kernel/locking/rwsem.c:1501
+ inode_lock_shared include/linux/fs.h:766 [inline]
+ lookup_slow+0x34/0x68 fs/namei.c:1701
+ walk_component fs/namei.c:1993 [inline]
+ link_path_walk+0x474/0x628 fs/namei.c:2320
+ path_openat+0xb8/0x11c4 fs/namei.c:3687
+ do_filp_open+0xdc/0x1b8 fs/namei.c:3718
+ do_sys_openat2+0xb8/0x22c fs/open.c:1313
+ do_sys_open fs/open.c:1329 [inline]
+ __do_sys_openat fs/open.c:1345 [inline]
+ __se_sys_openat fs/open.c:1340 [inline]
+ __arm64_sys_openat+0xb0/0xe0 fs/open.c:1340
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+INFO: task syz-executor428:3073 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor428 state:D stack:    0 pid: 3073 ppid:  3071 flags:0x00000000
+Call trace:
+ __switch_to+0x180/0x298 arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x5a0 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ rwsem_down_read_slowpath+0x228/0x444 kernel/locking/rwsem.c:1087
+ __down_read_common+0x48/0x154 kernel/locking/rwsem.c:1252
+ __down_read kernel/locking/rwsem.c:1261 [inline]
+ down_read+0x68/0x78 kernel/locking/rwsem.c:1501
+ inode_lock_shared include/linux/fs.h:766 [inline]
+ lookup_slow+0x34/0x68 fs/namei.c:1701
+ walk_component fs/namei.c:1993 [inline]
+ link_path_walk+0x474/0x628 fs/namei.c:2320
+ path_openat+0xb8/0x11c4 fs/namei.c:3687
+ do_filp_open+0xdc/0x1b8 fs/namei.c:3718
+ do_sys_openat2+0xb8/0x22c fs/open.c:1313
+ do_sys_open fs/open.c:1329 [inline]
+ __do_sys_openat fs/open.c:1345 [inline]
+ __se_sys_openat fs/open.c:1340 [inline]
+ __arm64_sys_openat+0xb0/0xe0 fs/open.c:1340
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+INFO: task syz-executor428:3075 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor428 state:D stack:    0 pid: 3075 ppid:  3073 flags:0x00000001
+Call trace:
+ __switch_to+0x180/0x298 arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x5a0 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6629
+ __mutex_lock_common+0x788/0xca8 kernel/locking/mutex.c:679
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ fuse_lock_inode+0x50/0x70 fs/fuse/inode.c:468
+ fuse_lookup+0x74/0x274 fs/fuse/dir.c:432
+ __lookup_slow+0x14c/0x204 fs/namei.c:1685
+ lookup_slow+0x44/0x68 fs/namei.c:1702
+ walk_component fs/namei.c:1993 [inline]
+ link_path_walk+0x474/0x628 fs/namei.c:2320
+ path_openat+0xb8/0x11c4 fs/namei.c:3687
+ do_filp_open+0xdc/0x1b8 fs/namei.c:3718
+ do_sys_openat2+0xb8/0x22c fs/open.c:1313
+ do_sys_open fs/open.c:1329 [inline]
+ __do_sys_openat fs/open.c:1345 [inline]
+ __se_sys_openat fs/open.c:1340 [inline]
+ __arm64_sys_openat+0xb0/0xe0 fs/open.c:1340
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+INFO: task syz-executor428:3077 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor428 state:D stack:    0 pid: 3077 ppid:  3073 flags:0x00000001
+Call trace:
+ __switch_to+0x180/0x298 arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x5a0 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ rwsem_down_write_slowpath+0x258/0x468 kernel/locking/rwsem.c:1182
+ __down_write_common kernel/locking/rwsem.c:1297 [inline]
+ __down_write kernel/locking/rwsem.c:1306 [inline]
+ down_write_nested+0x90/0xd8 kernel/locking/rwsem.c:1663
+ inode_lock_nested include/linux/fs.h:791 [inline]
+ fuse_reverse_inval_entry+0x58/0x3c4 fs/fuse/dir.c:1167
+ fuse_dev_do_write+0x1208/0x1544 fs/fuse/dev.c:1872
+ fuse_dev_write+0x78/0xc0 fs/fuse/dev.c:1956
+ call_write_iter include/linux/fs.h:2187 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x2dc/0x46c fs/read_write.c:578
+ ksys_write+0xb4/0x160 fs/read_write.c:631
+ __do_sys_write fs/read_write.c:643 [inline]
+ __se_sys_write fs/read_write.c:640 [inline]
+ __arm64_sys_write+0x24/0x34 fs/read_write.c:640
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+
+Showing all locks held in the system:
+1 lock held by rcu_tasks_kthre/11:
+ #0: ffff80000d433568 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
+1 lock held by rcu_tasks_trace/12:
+ #0: ffff80000d433bb8 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
+1 lock held by khungtaskd/27:
+ #0: ffff80000d433440 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x4/0x48 include/linux/rcupdate.h:279
+1 lock held by syslogd/2546:
+ #0: ffff0000c9e48150 (&type->i_mutex_dir_key#6){++++}-{3:3}, at: inode_lock_shared include/linux/fs.h:766 [inline]
+ #0: ffff0000c9e48150 (&type->i_mutex_dir_key#6){++++}-{3:3}, at: lookup_slow+0x34/0x68 fs/namei.c:1701
+2 locks held by udevd/2561:
+ #0: ffff0000c9e48150 (&type->i_mutex_dir_key#6){++++}-{3:3}, at: inode_lock_shared include/linux/fs.h:766 [inline]
+ #0: ffff0000c9e48150 (&type->i_mutex_dir_key#6){++++}-{3:3}, at: lookup_slow+0x34/0x68 fs/namei.c:1701
+ #1: ffff0000c9e485b8 (&fi->mutex){+.+.}-{3:3}, at: fuse_lock_inode+0x50/0x70 fs/fuse/inode.c:468
+2 locks held by getty/2711:
+ #0: ffff0000c62cb898 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x28/0x58 drivers/tty/tty_ldisc.c:244
+ #1: ffff80000f6162f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x19c/0x89c drivers/tty/n_tty.c:2177
+1 lock held by syz-executor428/3073:
+ #0: ffff0000c9e48150 (&type->i_mutex_dir_key#6){++++}-{3:3}, at: inode_lock_shared include/linux/fs.h:766 [inline]
+ #0: ffff0000c9e48150 (&type->i_mutex_dir_key#6){++++}-{3:3}, at: lookup_slow+0x34/0x68 fs/namei.c:1701
+2 locks held by syz-executor428/3075:
+ #0: ffff0000c9e48150 (&type->i_mutex_dir_key#6){++++}-{3:3}, at: inode_lock_shared include/linux/fs.h:766 [inline]
+ #0: ffff0000c9e48150 (&type->i_mutex_dir_key#6){++++}-{3:3}, at: lookup_slow+0x34/0x68 fs/namei.c:1701
+ #1: ffff0000c9e485b8 (&fi->mutex){+.+.}-{3:3}, at: fuse_lock_inode+0x50/0x70 fs/fuse/inode.c:468
+2 locks held by syz-executor428/3077:
+ #0: ffff0000ca1f2738 (&fc->killsb){.+.+}-{3:3}, at: fuse_notify_delete fs/fuse/dev.c:1547 [inline]
+ #0: ffff0000ca1f2738 (&fc->killsb){.+.+}-{3:3}, at: fuse_notify fs/fuse/dev.c:1797 [inline]
+ #0: ffff0000ca1f2738 (&fc->killsb){.+.+}-{3:3}, at: fuse_dev_do_write+0x11f8/0x1544 fs/fuse/dev.c:1872
+ #1: ffff0000c9e48150 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:791 [inline]
+ #1: ffff0000c9e48150 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: fuse_reverse_inval_entry+0x58/0x3c4 fs/fuse/dir.c:1167
+
+=============================================
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
