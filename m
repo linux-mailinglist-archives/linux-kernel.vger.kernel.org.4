@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C77625C09
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26EFA625C0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:59:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234090AbiKKN7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 08:59:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
+        id S234215AbiKKN71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 08:59:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234104AbiKKN6u (ORCPT
+        with ESMTP id S234109AbiKKN6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 08:58:50 -0500
+        Fri, 11 Nov 2022 08:58:51 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3357657DE;
-        Fri, 11 Nov 2022 05:55:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18057742D2;
+        Fri, 11 Nov 2022 05:55:42 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C60566602A3F;
-        Fri, 11 Nov 2022 13:55:38 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E2ED96602A5A;
+        Fri, 11 Nov 2022 13:55:39 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668174939;
-        bh=UBkv+ig7/g4aGwYjmkedbumqTxGbFTwuxpKvSYfzEUY=;
+        s=mail; t=1668174940;
+        bh=XDujAn0ZeYKReEqH3WwrDRbPR8DoO7W2378dAKf4P6w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mnYXIgjbhdmAMH95SV4rvYPVvcfa4VDDDNGgZgdldCv1h31RsIztMeFx0uvDzqG6y
-         sZJfSQIQ3pJz+C88Req3R/NTVepKxxeDzSqH3LXJl/6IluGNxLWsoc2SFC8U2wDb7X
-         RLXXSZKQ+HKlcSSKdF8JhOX8EKd0WvR5RT2aCtPb3qzxDOSt+xYCPFtO+fNqoL9Jp2
-         xy8AGxV7Dz6/j79ZIx9nVvLDg1C3cnvtEmp2EYF05mvJFaPp10OV/PBzyrq33kn1XK
-         dz3zpvD1zGbvxtAuuBiO0ALreLdYyJDyS1u49gm721iQNiS8tdslg14a1JfQvZdIeQ
-         rutX8glEqTBJw==
+        b=hzM22CMbpHIYs4+DUMrnQ2LGSeIGTK0W+D2Ep4UKA6F4EXRzhmnSSl31+Rqrn/AcC
+         zaDhrcOdFuVXMW22Sa9JLsa3joMbb40EZjv19EC0JtZL1LD6XaJBINI8UM3JCrEAz4
+         +Sgz8gc01CRJNrUFxGgPO/2RhOhco0EaRjMKq+mmqSlQr/ymrvS6e4uUC+1i6IWGsf
+         0QIL/7MtTufaARaEameRpY/daftaQvodSUMLDtQL7KFoLNsAwDRF7vkIdlNtHvJvhe
+         SbMKsWizdNtGIekU5ue/0P1RqAW9V7J8YQJvrPA6hmVHuHriWU/AM1BdyJ5ys+qv6D
+         FsPY/ya6t96SQ==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     agross@kernel.org
@@ -46,9 +46,9 @@ Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, joro@8bytes.org,
         ~postmarketos/upstreaming@lists.sr.ht,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 2/7] iommu/qcom: Use the asid read from device-tree if specified
-Date:   Fri, 11 Nov 2022 14:55:20 +0100
-Message-Id: <20221111135525.204134-3-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 3/7] iommu/qcom: Properly reset the IOMMU context
+Date:   Fri, 11 Nov 2022 14:55:21 +0100
+Message-Id: <20221111135525.204134-4-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221111135525.204134-1-angelogioacchino.delregno@collabora.com>
 References: <20221111135525.204134-1-angelogioacchino.delregno@collabora.com>
@@ -63,70 +63,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As specified in this driver, the context banks are 0x1000 apart but
-on some SoCs the context number does not necessarily match this
-logic, hence we end up using the wrong ASID: keeping in mind that
-this IOMMU implementation relies heavily on SCM (TZ) calls, it is
-mandatory that we communicate the right context number.
-
-Since this is all about how context banks are mapped in firmware,
-which may be board dependent (as a different firmware version may
-eventually change the expected context bank numbers), introduce a
-new property "qcom,ctx-num": when found, the ASID will be forced
-as read from the devicetree.
-
-When "qcom,ctx-num" is not found, this driver retains the previous
-behavior as to avoid breaking older devicetrees or systems that do
-not require forcing ASID numbers.
+Avoid context faults by resetting the context(s) entirely at
+detach_dev() time and also do the same before programming the
+context for domain initialization.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/iommu/arm/arm-smmu/qcom_iommu.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ drivers/iommu/arm/arm-smmu/qcom_iommu.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-index bfd7b51eb5db..491a8093f3d6 100644
+index 491a8093f3d6..5b127ac41b5e 100644
 --- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
 +++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-@@ -551,7 +551,8 @@ static int qcom_iommu_of_xlate(struct device *dev, struct of_phandle_args *args)
- 	 * index into qcom_iommu->ctxs:
- 	 */
- 	if (WARN_ON(asid < 1) ||
--	    WARN_ON(asid > qcom_iommu->num_ctxs)) {
-+	    WARN_ON(asid > qcom_iommu->num_ctxs) ||
-+	    WARN_ON(qcom_iommu->ctxs[asid - 1] == NULL)) {
- 		put_device(&iommu_pdev->dev);
- 		return -EINVAL;
- 	}
-@@ -638,7 +639,8 @@ static int qcom_iommu_sec_ptbl_init(struct device *dev)
- 
- static int get_asid(const struct device_node *np)
- {
--	u32 reg;
-+	u32 reg, val;
-+	int asid;
- 
- 	/* read the "reg" property directly to get the relative address
- 	 * of the context bank, and calculate the asid from that:
-@@ -646,7 +648,17 @@ static int get_asid(const struct device_node *np)
- 	if (of_property_read_u32_index(np, "reg", 0, &reg))
- 		return -ENODEV;
- 
--	return reg / 0x1000;      /* context banks are 0x1000 apart */
-+	/*
-+	 * Context banks are 0x1000 apart but, in some cases, the ASID
-+	 * number doesn't match to this logic and needs to be passed
-+	 * from the DT configuration explicitly.
-+	 */
-+	if (of_property_read_u32(np, "qcom,ctx-num", &val))
-+		asid = reg / 0x1000;
-+	else
-+		asid = val;
-+
-+	return asid;
+@@ -223,6 +223,20 @@ static irqreturn_t qcom_iommu_fault(int irq, void *dev)
+ 	return IRQ_HANDLED;
  }
  
- static int qcom_iommu_ctx_probe(struct platform_device *pdev)
++static void qcom_iommu_reset_ctx(struct qcom_iommu_ctx *ctx)
++{
++	iommu_writel(ctx, ARM_SMMU_CB_FAR, 0);
++	iommu_writel(ctx, ARM_SMMU_CB_FSR, 0);
++	iommu_writel(ctx, ARM_SMMU_CB_S1_MAIR1, 0);
++	iommu_writel(ctx, ARM_SMMU_CB_PAR, 0);
++	iommu_writel(ctx, ARM_SMMU_CB_S1_MAIR0, 0);
++	iommu_writel(ctx, ARM_SMMU_CB_SCTLR, 0);
++	iommu_writel(ctx, ARM_SMMU_CB_TCR2, 0);
++	iommu_writel(ctx, ARM_SMMU_CB_TCR, 0);
++	iommu_writeq(ctx, ARM_SMMU_CB_TTBR0, 0);
++	iommu_writeq(ctx, ARM_SMMU_CB_TTBR1, 0);
++}
++
+ static int qcom_iommu_init_domain(struct iommu_domain *domain,
+ 				  struct qcom_iommu_dev *qcom_iommu,
+ 				  struct device *dev)
+@@ -273,6 +287,8 @@ static int qcom_iommu_init_domain(struct iommu_domain *domain,
+ 			ctx->secure_init = true;
+ 		}
+ 
++		qcom_iommu_reset_ctx(ctx);
++
+ 		/* TTBRs */
+ 		iommu_writeq(ctx, ARM_SMMU_CB_TTBR0,
+ 				pgtbl_cfg.arm_lpae_s1_cfg.ttbr |
+@@ -401,8 +417,8 @@ static void qcom_iommu_detach_dev(struct iommu_domain *domain, struct device *de
+ 	for (i = 0; i < fwspec->num_ids; i++) {
+ 		struct qcom_iommu_ctx *ctx = to_ctx(qcom_domain, fwspec->ids[i]);
+ 
+-		/* Disable the context bank: */
+-		iommu_writel(ctx, ARM_SMMU_CB_SCTLR, 0);
++		/* Disable and reset the context bank */
++		qcom_iommu_reset_ctx(ctx);
+ 
+ 		ctx->domain = NULL;
+ 	}
 -- 
 2.38.1
 
