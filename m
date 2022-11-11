@@ -2,113 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49CE625DDA
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B86625DEE
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:09:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234798AbiKKPH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 10:07:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
+        id S235007AbiKKPJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 10:09:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234809AbiKKPGS (ORCPT
+        with ESMTP id S234907AbiKKPID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 10:06:18 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A77C63B97
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:02:59 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id b3so8710363lfv.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:02:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8IDbrEeNh/TbThuT4XpNap8e1dUDmVMx+XMzxzqnSSA=;
-        b=hygw+8iLwbB0q+6Nm2nUVjSzmZb2IJlCMC7CYDRHle/pNSKT9xH/abjiNy2w1FzrKM
-         d3Mt0WJllhrLlRpRjVmmVSrW0ZiZF39Flfbfo74TGwnqBm05Tp3ErxlMC4fmIm046CWU
-         X5ZxdhVjIMwM6ZvSYurHX01uSF4d5LfN3xfO4GxnWQiklasehkYx23cSVhsSf8FjiNGL
-         SXcZDSvEITKbOzKQ8ukLkA8KI+6L7PEE0FUXy1gonxzHV3/WO4i+LUaqUPTv2ckqCUTt
-         sH7OyzyscHngt8YssbfUngJYdReVfCVyFNT0Y5cDyrAYjYB/xziMj5Z112OteA/RYSxt
-         SmSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8IDbrEeNh/TbThuT4XpNap8e1dUDmVMx+XMzxzqnSSA=;
-        b=0nsyHsiz99OdhohcQMWsAsNqsxEqM418d02dMjLgwlG/0f7Rs5ukR9788GuXafLfC2
-         oaxnv8qFPvQFF8GbvnONny2h2mgvLdf1Xt9wF7TC/52XCx6uG33xfZZsb+GjhaCTOs9g
-         wazsu2/9WdlMABH74lZigYV3LaBQfMZSdWE2MYvzzsqx258BAK0v1yskJuquCTSqS7DY
-         7MRk4DxtLwmiT3a08yYTgEvI7XckF474Z850MKzpD/d3o3sQpXYmS0LD5KIS2QDjlKMS
-         Kpa0gq3n66JdLIwhVANWVVYZcNSBPaZHlmqD4FmcOZIuSwMS3/OVUM1UXOvWese9jLw1
-         YXYA==
-X-Gm-Message-State: ANoB5pnyx3IMtAXv6paKSHhXZdsquT8Xm8+QIvGMpUsUZvmXG4Jqr5Dm
-        39XGjs4edXpdNLCSyHDyx6LF9Q==
-X-Google-Smtp-Source: AA0mqf42b4kvDiZpLvHSgqYN73z75vsx9adgnee/kAeEHRiXzrEycGZlXDDvd3Zni04Nw4TmGX1fYw==
-X-Received: by 2002:a05:6512:131c:b0:4b4:1177:a64c with SMTP id x28-20020a056512131c00b004b41177a64cmr957999lfu.647.1668178975951;
-        Fri, 11 Nov 2022 07:02:55 -0800 (PST)
-Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
-        by smtp.gmail.com with ESMTPSA id y1-20020ac24201000000b004a44ffb1023sm371686lfh.57.2022.11.11.07.02.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 07:02:54 -0800 (PST)
-Message-ID: <bd2e3b45-850c-1d95-b62c-06024b85a473@linaro.org>
-Date:   Fri, 11 Nov 2022 16:02:52 +0100
+        Fri, 11 Nov 2022 10:08:03 -0500
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E21F46A74A;
+        Fri, 11 Nov 2022 07:06:47 -0800 (PST)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1otVcD-00037d-00; Fri, 11 Nov 2022 16:06:45 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id D41D1C116A; Fri, 11 Nov 2022 16:03:35 +0100 (CET)
+Date:   Fri, 11 Nov 2022 16:03:35 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Rongwei Zhang <pudh4418@gmail.com>
+Cc:     Ralf Baechle <ralf@linux-mips.org>,
+        Maxim Uvarov <muvarov@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] MIPS: fix duplicate definitions for exported symbols
+Message-ID: <20221111150335.GA13465@alpha.franken.de>
+References: <Y2JiO+67E1NyFgca@pudh-loong.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 01/10] dt-bindings: arm-smmu: Allow up to 3 power-domains
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     patches@linaro.org, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221109111236.46003-1-konrad.dybcio@linaro.org>
- <20221109111236.46003-2-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221109111236.46003-2-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2JiO+67E1NyFgca@pudh-loong.localdomain>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/11/2022 12:12, Konrad Dybcio wrote:
-> Some SMMUs require that a vote is held on as much as 3 separate PDs
-> (hello Qualcomm). Allow it in bindings.
+On Wed, Nov 02, 2022 at 08:27:39PM +0800, Rongwei Zhang wrote:
+> Building with clang-14 fails with:
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> AS      arch/mips/kernel/relocate_kernel.o
+> <unknown>:0: error: symbol 'kexec_args' is already defined
+> <unknown>:0: error: symbol 'secondary_kexec_args' is already defined
+> <unknown>:0: error: symbol 'kexec_start_address' is already defined
+> <unknown>:0: error: symbol 'kexec_indirection_page' is already defined
+> <unknown>:0: error: symbol 'relocate_new_kernel_size' is already defined
+> 
+> It turns out EXPORT defined in asm/asm.h expands to a symbol definition,
+> so there is no need to define these symbols again. Remove duplicated
+> symbol definitions.
+> 
+> Fixes: 7aa1c8f47e7e ("MIPS: kdump: Add support")
+> Signed-off-by: Rongwei Zhang <pudh4418@gmail.com>
 > ---
->  Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
-> index 9066e6df1ba1..1897d0d4d820 100644
-> --- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
-> +++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
-> @@ -159,7 +159,7 @@ properties:
->            through the TCU's programming interface.
->  
->    power-domains:
-> -    maxItems: 1
-> +    maxItems: 3
+>  arch/mips/kernel/relocate_kernel.S | 15 +++++----------
+>  1 file changed, 5 insertions(+), 10 deletions(-)
 
-This is not correct - you now require 3 power domains everywhere. If you
-test the DTS you will notice it.
+applied to mips-fixes.
 
-You need min and max items, plus provably allOf:if:then restricting it
-per some variants (if it makes sense... depends which SMMUs need it).
+Thomas.
 
-Best regards,
-Krzysztof
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
