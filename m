@@ -2,69 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1C062558F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9116255A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233284AbiKKIoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:44:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
+        id S233382AbiKKIpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 03:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233270AbiKKIoN (ORCPT
+        with ESMTP id S233352AbiKKIpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:44:13 -0500
-Received: from domac.alu.hr (domac.alu.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F2B7830F
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 00:44:11 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id C56A1604F6;
-        Fri, 11 Nov 2022 09:44:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1668156248; bh=5Gq+pWXvlvlyukMht8Ezfdo6aGvQh8qweh+KwFXiV6E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TybZcZw3NhjGeFOC3UPjS499o3odNELvG2yQCi99tIGSV66M3+6RENQpAHVP712y5
-         2P8hx9l/EH1Q6LT9EfXar8XtBgW9tYSId7g0klYxdrb0i2T4olmRU3ESOlP8TSWzdt
-         uPpOH1EqiiBImJCJrTEaKvGqw51MVkPYgbljQofI+Dh7zIGlsSWN9+OlyPvPjQfosn
-         ++oekYdSPKxmksWA9AxDzyxwTE5CZ39D6WGwQiRiBwUJkNuuXizqZ3SjMuhGHbEcWp
-         1o37qsh09zLjmgfWgDJ1BnIOhAjxo11fSTksCLUqkW0LhzEuQ59Zm65KxI6frI68gX
-         G//+5u3zkDfTg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id lne_zQnl8vpE; Fri, 11 Nov 2022 09:44:06 +0100 (CET)
-Received: from [10.0.2.211] (grf-nat.grf.hr [161.53.83.23])
-        by domac.alu.hr (Postfix) with ESMTPSA id E7D06604F3;
-        Fri, 11 Nov 2022 09:44:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1668156246; bh=5Gq+pWXvlvlyukMht8Ezfdo6aGvQh8qweh+KwFXiV6E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hSb+uRm0CdMAX9mLm8x3yF2Jl0GSRlNb0//L2mLcE3khZ/35bDyAnNa/N1TTU3id5
-         0umA32vkw2ZmqOf+8UXnW9IomZ5xsUzF2ZGHu8TxgCT8oW1oBj2DG1wVDXziaA0yef
-         Nu89LpRVIC6TVVJFvqrqREnBbwTnmXshVnQ9E6c2jWmmtL9shqjKnCeiUqk2h5aMTI
-         ihUO+G1JsDX7Trof1Q3ZvTQabAaASHu91qSY2Pl32jtHsNOumUOWdJYgKvhTEEOOxi
-         ccO4Z+LPeoS9c9gjCUGNHdXaFBFhPHQTnCH6CUuQHp5XOi75AHPDD7PrMyK57L17kq
-         X2zpF3Jt4zPxA==
-Message-ID: <96903e75-63b4-8c59-6c78-0e641b1fc2c5@alu.unizg.hr>
-Date:   Fri, 11 Nov 2022 09:44:05 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: BUG: kworker + systemd-udevd memory leaks found in 6.1.0-rc4
-Content-Language: en-US
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        linux-kernel@vger.kernel.org
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Tejun Heo <tj@kernel.org>,
-        Florian Mickler <florian@mickler.org>,
-        systemd-devel@lists.freedesktop.org
-References: <0d9c3f6c-3948-d5d1-bcc1-baf31141beaa@alu.unizg.hr>
- <a6b76ce0-0fb3-4434-cc3e-ab6f39fb1cf9@alu.unizg.hr>
- <3f1721d6-e5d9-8861-4e3c-802a711e71da@leemhuis.info>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <3f1721d6-e5d9-8861-4e3c-802a711e71da@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        Fri, 11 Nov 2022 03:45:31 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AA382C5F;
+        Fri, 11 Nov 2022 00:45:19 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5D8965C026A;
+        Fri, 11 Nov 2022 03:45:16 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Fri, 11 Nov 2022 03:45:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1668156316; x=1668242716; bh=lImIfGrlwD
+        JCi6Gs7wYZwHzBayogHUUB/nuYnjmfvnc=; b=HSWytxZdec4Cg3qZTidPfFN7h4
+        dKWUFG6IQTt67q0WxeegvQqdFmEkyq+ZOWMs1EbcZD1SKI59RfmXhOKAU0SfSJ2X
+        vZz3bijWI1rKSEI68YPE9tX03R9A1msYYBRZekrTSrmJ4ezWM4GMJHlfbQgkZFnp
+        NgNN6rxzbCv069qVV1knx1s+mSktv5WpNZJ3r9HTNLliIaXwRG1MwnT3GUvgC8Cb
+        RgDCTfM05EIyspHj0dOf+m3HARlkTvuO1+g4wqviGbH9RZMdtePAReqXkcfQuT8y
+        4G2uh6rD36wghcRkXkitB0TF1ksN21tdFQ968FmMHDmhwACrl9re5U6YhugQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668156316; x=1668242716; bh=lImIfGrlwDJCi6Gs7wYZwHzBayog
+        HUUB/nuYnjmfvnc=; b=kXjrFlM85DqYuO+vn6R/8oP6WYWqd8Py/ODBLPOYnwMb
+        2WKRwkFnWW9GeVBYhMLA36TvLGktCUbVTcokrrDBSrSvu5PUUK39H9JMt3XS/1Xg
+        tVCtugOUpi2eipXDTAzBUJXtEVUIbDT9QHlzQLTK/ScjO0lK4J/0+0Iyx9IIjjtO
+        caIVC+gfZywncr+CdxT4vTO2U+kIb5usQOdxeou0ecGX6APDFwUaALsKgO48ilev
+        Ym73gRUoMTignVDEmHdDdyBQ5WDEbKuQvtsxVjLfSBoDMAkvyIJEN3LbIP8N5ihZ
+        dAX5Ayvg9CqX7kA+uBhNHiy4P85iEZbKazh6/Nt1Pg==
+X-ME-Sender: <xms:nAtuY4sxLQx9AsrPB1euFZIJYiThxVoq3sSLch9FdVeQqOi358355g>
+    <xme:nAtuY1cW20cdjdmycMMuFOVgIlI41gkY9sjOvOUixqK_a8qkXJT4P3m1XWahnwHxa
+    0cU7L0iH6oxf6Xa8hc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeehgdduvdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhephfdtlefhtedttedvtedvueeugedvueelueduvefhuefhuefgvddtveevvdff
+    hfdunecuffhomhgrihhnpehlihhnrghrohdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:nAtuYzwF72-3eKjOGhTHUs6mLJj9Z7Pa3c1wt4bECC3z_7Wo5qVz8g>
+    <xmx:nAtuY7OOrIf6iIHR9mN5UBh7Q_i-wxhpSQLRSgV_P4k9KUDFct39lw>
+    <xmx:nAtuY49Y9c-yaRDBoefjZNFD0mqULAm8cCmf--pm4I4RFqxyb1KZVg>
+    <xmx:nAtuY8S0mWDVP4O7xlvQ_VZRlSfGGJbl7Vw3JpOiYcuuaYImhSbXWA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 22B53B60086; Fri, 11 Nov 2022 03:45:16 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <89a8e93c-f667-4de1-972f-3d2d051bd789@app.fastmail.com>
+In-Reply-To: <CA+G9fYs_kWc1Zh=Zr4esnJYRvSMwv6k6m1eYW4PbHCYpvJPPOg@mail.gmail.com>
+References: <CA+G9fYt49jY+sAqHXYwpJtF0oa-jL8t8nArY6W1_zui0sKFipA@mail.gmail.com>
+ <29824864-f076-401f-bfb4-bc105bb2d38f@app.fastmail.com>
+ <96a99291-7caa-429c-9bbd-29721a2b5637@app.fastmail.com>
+ <CA+G9fYs_kWc1Zh=Zr4esnJYRvSMwv6k6m1eYW4PbHCYpvJPPOg@mail.gmail.com>
+Date:   Fri, 11 Nov 2022 09:44:55 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>
+Cc:     linux-stable <stable@vger.kernel.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+        lkft-triage@lists.linaro.org,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Sasha Levin" <sashal@kernel.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Liam Girdwood" <lgirdwood@gmail.com>,
+        "Ard Biesheuvel" <ardb@kernel.org>
+Subject: Re: arm: TI BeagleBoard X15 : Unable to handle kernel NULL pointer dereference
+ at virtual address 00000369 - Internal error: Oops: 5 [#1] SMP ARM
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,56 +95,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.11.2022. 9:28, Thorsten Leemhuis wrote:
-
-> This bug is confirmed in 6.1-rc4, among the "thermald" and "systemd-dev"
-> kernel memory leaks, potentially exposing race conditions or other more
-> serious bug.
->> Maybe, but that sadly is also true for a lot of other known issues, for
->> example those in this quite long list:
->> https://syzkaller.appspot.com/upstream#open
+On Fri, Nov 11, 2022, at 07:28, Naresh Kamboju wrote:
+> On Thu, 10 Nov 2022 at 03:33, Arnd Bergmann <arnd@arndb.de> wrote:
 >>
->> It would help if you could pinpoint the problem, then we know who should
->> look into this. You CCed me and the regression list, so I assume it's a
->> regression. Hence: Could you try to bisect it?
+>> One more idea I had is the unwinder: since this kernel is built
+>> with the frame-pointer unwinder, I think the stack usage per
+>> function is going to be slightly larger than with the arm unwinder.
 >>
->> Ciao, Thorsten
+>> Naresh, how hard is it to reproduce this bug intentionally?
+>> Can you try if it still happens if you change the .config to
+>> use these:?
+>>
+>> # CONFIG_FUNCTION_GRAPH_TRACER is not set
+>> # CONFIG_UNWINDER_FRAME_POINTER is not set
+>> CONFIG_UNWINDER_ARM=y
+>
+> I have done this experiment and reported crash not reproduced
+> after eight rounds of testing [1].
+>
+> https://lkft.validation.linaro.org/scheduler/job/5835922#L1993
 
-Hi, Thorsten!
+Ok, good to hear. In this case, I see three possible ways forward
+to prevent this from coming back on your system:
 
-I am taking this task, however, it might not be a relatively easy bisect 
-like the past
-two or three (probably were beginner's luck).
+a) use asynchronous probing for one or more of the drivers as
+   Dmitry suggested. This means fixing it upstream first and then
+   backporting the fix to all stable kernels. We should probably
+   do this anyway, but this will need more testing on your side.
 
-It appears to predate 4.19:
+b) Change your kernel config permanently with the options above,
+   if LKFT does not actually rely on CONFIG_FUNCTION_GRAPH_TRACER.
+   I don't know if it does.
 
-$ head -13 memleak-kwork-4.19.0-08-84df9525b0c2-memlk-menu-al.log
-unreferenced object 0xffff8ff917c79c40 (size 16):
-   comm "kworker/u12:4", pid 422, jiffies 4294672757 (age 380.342s)
-   hex dump (first 16 bytes):
-     6d 65 6d 73 74 69 63 6b 30 00 00 00 00 00 00 00 memstick0.......
-   backtrace:
-     [<000000004f7bc99c>] kobject_set_name_vargs+0x1e/0x90
-     [<00000000f00ab312>] dev_set_name+0x57/0x70
-     [<000000001fd9518e>] memstick_check+0x99/0x330 [memstick]
-     [<000000008c797991>] process_one_work+0x1a7/0x3a0
-     [<00000000405c5133>] worker_thread+0x30/0x390
-     [<0000000060a58c2e>] kthread+0x112/0x130
-     [<000000004b138871>] ret_from_fork+0x35/0x40
-     [<0000000029f3e0aa>] 0xffffffffffffffff
-$
+c) backport commit 41918ec82eb6 ("ARM: ftrace: enable the graph
+   tracer with the EABI unwinder") from 5.17. This was part of 
+   a longer series from Ard, and while the patch itself looks
+   simple enough to be backported, I suspect we'd have to
+   backport the entire series, which is probably not going to
+   be realistic. Ard, any comments on this?
 
-Cheers,
-Mirsad
-
--- 
-Mirsad Todorovac
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb
-Republic of Croatia, the European Union
---
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
+       Arnd
