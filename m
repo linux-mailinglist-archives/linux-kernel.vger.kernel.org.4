@@ -2,247 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44FD26251EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 04:50:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6DF6251EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 04:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbiKKDup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 22:50:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
+        id S232335AbiKKDvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 22:51:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiKKDui (ORCPT
+        with ESMTP id S231777AbiKKDu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 22:50:38 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED03A663D1;
-        Thu, 10 Nov 2022 19:50:36 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8BxWtiLxm1jCQAGAA--.17221S3;
-        Fri, 11 Nov 2022 11:50:35 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxmFeFxm1jXqIQAA--.27367S3;
-        Fri, 11 Nov 2022 11:50:34 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v9 2/2] dt-bindings: pinctrl: add loongson-2 pinctrl
-Date:   Fri, 11 Nov 2022 11:50:28 +0800
-Message-Id: <20221111035028.14193-2-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221111035028.14193-1-zhuyinbo@loongson.cn>
-References: <20221111035028.14193-1-zhuyinbo@loongson.cn>
+        Thu, 10 Nov 2022 22:50:56 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62A568282
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 19:50:48 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id h14so3412300pjv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 19:50:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L22YnLXpIfCHSS91ZQkw2QKtdoSPCdKoRl3pTi8eYNw=;
+        b=qAoshWpBm3OafL2uSZnaTCf9knN4RKw6Se11OSUbclBrg/NiE6hsypnKihyBdxkSj3
+         +yIBQIhf7axThTuHCgMTyCxIru14vyaZSybqh9uWhe3iUb5mVvFGsmyOYCIm2hpz8Pup
+         +g4jzzF0AwRz6OEQPlXiiv6BO1BQxPTb3xJ+KIJCTjOWM6b6ds6C+ZCZ472XQEy2TNhm
+         FfJ6LDwJsKgJhw4QBHWMBWNH2mnYkdUsyW29FujQXLtPnVzP8YCfgfxCBYnR0YOuDtMK
+         PXMayb9Krsi1KIurkFApxdAswvqF+lm+kA2vBY5Hj2dg43b/emJ/H8YU5vLb81eLI8YO
+         375w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L22YnLXpIfCHSS91ZQkw2QKtdoSPCdKoRl3pTi8eYNw=;
+        b=acVrEBV7uCMpekdaDrXn3r4b2UgH7wKFahdGHmxfO0s3hhdOTA0bIxrCzYHOhJ5iD/
+         CKPsmGT8l9cBckAfMpd/Uw9kEtb2/IF1wTlLoWJd6c5bTm49gXrJlpeVBZrvwC/kWkZA
+         Eou1DSZe46XcTXZwcjqwuNXQlRCMp7NZ+MQ9f0JYfkF4rT0Cl+VLYR5lQ0ouhyaSsbx7
+         pJVx6S4nc/wY99zB7NK0FIFRo24vQnJyLG+QWzGiQyKKbj+mf2Mlhhc9GO1AkyYVLPQm
+         +pdF7gajDrkkduBZChDP7ukRq+Sb+eGWSu9Qve7Gvpf1FqCRVhWwkLS1hxCoYaWZUY1f
+         2+cQ==
+X-Gm-Message-State: ANoB5pmywj1D9KpUbQCIIAMhfj3tBVpQvy2kAqeJwV5YEeafh3jaJG3B
+        xp667xg4BhbTTayTbb0uQM/2+w==
+X-Google-Smtp-Source: AA0mqf56cniFp4vpTrEzUKAZvDq3+BAWhIgF0Q7CVWg8vyUnN5Ejyr6L40NwcZqjYCacAONPiL3hoQ==
+X-Received: by 2002:a17:902:d2c1:b0:186:7395:e36a with SMTP id n1-20020a170902d2c100b001867395e36amr693393plc.83.1668138648177;
+        Thu, 10 Nov 2022 19:50:48 -0800 (PST)
+Received: from [10.94.58.189] ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id g2-20020aa796a2000000b0056b91044485sm441281pfk.133.2022.11.10.19.50.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 19:50:47 -0800 (PST)
+Message-ID: <0796b344-4c4d-5163-d3f2-c6bbf875b129@bytedance.com>
+Date:   Fri, 11 Nov 2022 11:50:43 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxmFeFxm1jXqIQAA--.27367S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tF4DJw47Ar45Aw45trb_yoWrCF4UpF
-        4fur93GF1jqa1fu395Ca40vw1fGan3AFZrCanFv34jqr4qq34vvay3Kwn0qrWDuF43J3y5
-        WFy5u347XF1UCw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b78Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
-        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxV
-        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
-        6r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
-        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
-        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_Gr
-        UvcSsGvfC2KfnxnUUI43ZEXa7IU1E4iUUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH] sched/fair: favor non-idle group in tick preemption
+To:     Josh Don <joshdon@google.com>, Chuyi Zhou <zhouchuyi@bytedance.com>
+Cc:     peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com,
+        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org
+References: <20221027081630.34081-1-zhouchuyi@bytedance.com>
+ <CABk29NtDny9qKZbZZ_i8Brwjtqs5GA0G4_SffzK4HzG3RrXVhQ@mail.gmail.com>
+ <64d963b6-2d9c-3f93-d427-a1ff705fb65a@bytedance.com>
+ <CABk29NsbGuMPcA8NJagMfPyHij3864F3DVQ6wpCj3UAo8tbFNQ@mail.gmail.com>
+ <5af26ac9-3bdb-32d2-77a7-6cd8feca97aa@bytedance.com>
+ <CABk29Nt38d31LnazbcSVB036jUYemC1KRpR2Dn7YgLmXkp-QBQ@mail.gmail.com>
+ <8142b5db-f543-57e6-0f68-f62274c0e379@bytedance.com>
+ <CABk29Nsnx=PfeLMEsD0qsnh5-QTHLT4xVB3HmBgGAqqmWnkmvg@mail.gmail.com>
+Content-Language: en-US
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <CABk29Nsnx=PfeLMEsD0qsnh5-QTHLT4xVB3HmBgGAqqmWnkmvg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Loongson-2 pinctrl binding with DT schema format using
-json-schema.
+On 11/2/22 7:39 AM, Josh Don wrote:
+>>> Some weirdness about this change though, is that if there is a
+>>> non-idle current entity, and the two next entities on the cfs_rq are
+>>> idle and non-idle respectively, we'll now take longer to preempt the
+>>> on-cpu non-idle entity, because the non-idle entity on the cfs_rq is
+>>> 'hidden' by the idle 'first' entity. Wakeup preemption is different
+>>> because we're always directly comparing the current entity with the
+>>> newly woken entity.
+>>>
+>> You are right, this can happen with high probability.
+>> This patch just compared the curr with the first entity in
+>> the tick, and it seems hard to consider all the other entity
+>> in cfs_rq.
+>>
+>> So, what specific negative effects this situation would cause?
+>> For example, the "hidden" non-idle entity's latency will be worse
+>> than before?
+> 
+> As Abel points out in his email, it can push out the time it'll take
+> to switch to the other non-idle entity. The change might boost some
+> benchmarks numbers, but I don't think it is conclusive enough to say
+> it is a generically beneficial improvement that should be integrated.
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
-Change in v9:
-		1. NO change, but other patch in this series patches set has
-		   change.
-Change in v8:
-		1. NO change, but other patch in this series patches set has
-		   change.
-Change in v7:
-		1. Add all change log information. 
-Change in v6:
-		1. NO change, but other patch in this series patches set has
-		   change.
-Change in v5:
-		1. Drop dependencies.
-		2. Add spaces after '='.
-		3. Replace string loongson2 with loongson-2 in title.
-Change in v4:
-		1. Replace Loongson2 with Loongson-2.
-Change in v3:
-		1. Drop the quotes in "pinctrl.yaml#".
-		2. Remove the items in function node.
-		3. Add requird node for "group" and "function" in properties.
-Change in v2: 
-                1. Add "$ref to pinctrl.yaml".
-                2. Put required after patternProperties.
-                3. Add "additionalProperties: false" after '-pins$'
-                4. Add "unevaluatedProperties: false" after 'pinmux$'
-                5. Fixup the broken indentation in patternProperties node.
-                6. Use 4 spaces for example indentation. 
+Agree.
 
- .../pinctrl/loongson,ls2k-pinctrl.yaml        | 125 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 2 files changed, 126 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
+> 
+> By the way, I'm curious if you modified any of the sched_idle_cpu()
+> and related load balancing around idle entities given that you've made
+> it so that idle entities can have arbitrary weight (since, as I
+> described in my prior email, this can otherwise cause issues there).
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
-new file mode 100644
-index 000000000000..34683a4856ad
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
-@@ -0,0 +1,125 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pinctrl/loongson,ls2k-pinctrl.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson-2 SoC Pinctrl Controller
-+
-+maintainers:
-+  - zhanghongchen <zhanghongchen@loongson.cn>
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+allOf:
-+  - $ref: pinctrl.yaml#
-+
-+properties:
-+  compatible:
-+    const: loongson,ls2k-pinctrl
-+
-+  reg:
-+    maxItems: 1
-+
-+patternProperties:
-+  '-pins$':
-+    type: object
-+
-+    additionalProperties: false
-+
-+    patternProperties:
-+      'pinmux$':
-+        type: object
-+        description: node for pinctrl.
-+        $ref: pinmux-node.yaml#
-+
-+        unevaluatedProperties: false
-+
-+        properties:
-+          groups:
-+            description:
-+              One or more groups of pins to mux to a certain function
-+            items:
-+              enum: [gpio, sdio, can1, can0, pwm3, pwm2, pwm1, pwm0, i2c1, i2c0,
-+                     nand, sata_led, lio, i2s, hda, uart2, uart1, camera, dv01,
-+                     dvo0]
-+          function:
-+            description:
-+              The function that a group of pins is muxed to
-+            enum: [gpio, sdio, can1, can0, pwm3, pwm2, pwm1, pwm0, i2c1, i2c0,
-+                   nand, sata_led, lio, i2s, hda, uart2, uart1, camera, dv01,
-+                   dvo0]
-+
-+        required:
-+          - groups
-+          - function
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    pctrl: pinctrl@1fe00420 {
-+        compatible = "loongson,ls2k-pinctrl";
-+        reg = <0x1fe00420 0x18>;
-+        sdio_pins_default: sdio-pins {
-+            sdio-pinmux {
-+                groups = "sdio";
-+                function = "sdio";
-+            };
-+
-+            sdio-det-pinmux {
-+                groups = "pwm2";
-+                function = "gpio";
-+            };
-+        };
-+
-+        pwm1_pins_default: pwm1-pins {
-+            pinmux {
-+                groups = "pwm1";
-+                function = "pwm1";
-+            };
-+        };
-+
-+        pwm0_pins_default: pwm0-pins {
-+            pinmux {
-+                groups = "pwm0";
-+                function = "pwm0";
-+            };
-+        };
-+
-+        i2c1_pins_default: i2c1-pins {
-+            pinmux {
-+                groups = "i2c1";
-+                function = "i2c1";
-+            };
-+        };
-+
-+        i2c0_pins_default: i2c0-pins {
-+            pinmux {
-+                groups = "i2c0";
-+                function = "i2c0";
-+            };
-+        };
-+
-+        nand_pins_default: nand-pins {
-+            pinmux {
-+                groups = "nand";
-+                function = "nand";
-+            };
-+        };
-+
-+        hda_pins_default: hda-pins {
-+            grp0-pinmux {
-+                groups = "hda";
-+                function = "hda";
-+            };
-+
-+            grp1-pinmux {
-+                groups = "i2s";
-+                function = "gpio";
-+            };
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f75464dadaaa..c9dc5ddbd9fe 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12038,6 +12038,7 @@ M:	zhanghongchen <zhanghongchen@loongson.cn>
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-gpio@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
- F:	drivers/pinctrl/pinctrl-loongson2.c
- 
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
--- 
-2.31.1
+Being able to change idle entities' weight can bring nothing but
+convenience, because it can also be achieved by modifying all their
+siblings' weight. Which seems not a strong reason to get merged.
 
+And I'm also thinking that, although rare, a non-idle group can also
+have a weight close or even equal to 3. I guess some users who made
+this kind of setting might only want to benefit from the preemption
+at wakeup? Nevertheless this setting is supported now :)
+
+Best,
+	Abel
