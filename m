@@ -2,85 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D90C625407
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 07:47:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1956C625420
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 07:54:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbiKKGrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 01:47:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37838 "EHLO
+        id S232607AbiKKGyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 01:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiKKGrB (ORCPT
+        with ESMTP id S229463AbiKKGyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 01:47:01 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F13D6C72A;
-        Thu, 10 Nov 2022 22:46:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=1onRt5K4sGNiVDTE/QX0/atvlrk7w1JHQuZmkOO66kQ=; b=vC8iWiMJ2a6yfnZdsjfrg1mvIi
-        4DzCFy0syaX81b0Y9rRyTc3hWyeqM6nX/8jppj9cG9exiNofjc4t3hKBPX4JuYYM44o5IhmcNfECu
-        OZ3cha1vIjTfct0dafj/ZMdzxWuwTr2CVhs2v/BWitAl1zqCj8jHfWVHiJT+bVWtABYeQBA4+CMCE
-        FUQHbg9vaM8PXGLZgQDN1uoKsahOsQD00vIW4wS1KMx+47JaKI+8nLERxw5pJhUckG4hUSl7BtMXT
-        9jvOLMuQs9k8XQMnAp1UpguzyiHaM2FAhzGzqAlIzoxtBoE7zHM7RABhFtxQahrcmxkpuZxNmPSO3
-        lB79wDoA==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1otNoP-00Dd20-HG; Fri, 11 Nov 2022 06:46:49 +0000
-Message-ID: <482cff27-2364-acbb-576c-e1d16d18334a@infradead.org>
-Date:   Thu, 10 Nov 2022 22:46:46 -0800
+        Fri, 11 Nov 2022 01:54:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699A349B45;
+        Thu, 10 Nov 2022 22:54:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F047B823E8;
+        Fri, 11 Nov 2022 06:53:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A7AEC433C1;
+        Fri, 11 Nov 2022 06:53:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668149637;
+        bh=aTTJfKh32lqRRfVziRQ6Aall3bT3N9NkQWZNacXzbGE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tk4VEkwTnRtmWCK7nl9Qcazu/uTSbTsBsLhVZsCd2y/KOFuOTv0ODNcSnAxoaS6Tg
+         bSUje45Q46fLnSwZY7UhdchQW8InONSNbtQdgVJRYNipIDVIrvHMv9d7U+DvMVwYXM
+         JnoXf4X0iw4meWgCV6cu3144YTsWWS2Hw3+Hie8nHaKVshsFJqetwgEAl9gq6V0u1J
+         2Y0m+WoJo0ymUDLccqCe3aQ6CtT+r0voeLZpAQvryImtfTIGasbLmPPHuNqnlu5m8D
+         UZ/Zp/IGos9R/XlLpY+3B79vWNhJgAlO0QDmhl1TC+jEHJAtw0LEBXN+kURnT+w47C
+         TyCTdpQMWn84A==
+Date:   Fri, 11 Nov 2022 14:53:49 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     han.xu@nxp.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
+Subject: Re: [PATCH 1/3] arm64: dts: imx8dxl: add adc0 and adc1 support
+Message-ID: <20221111065349.GN2649582@dragon>
+References: <20221104192135.1661541-1-Frank.Li@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] ext2: Fix some kernel-doc warnings
-Content-Language: en-US
-To:     Bo Liu <liubo03@inspur.com>, jack@suse.com
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221111064352.2866-1-liubo03@inspur.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20221111064352.2866-1-liubo03@inspur.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104192135.1661541-1-Frank.Li@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/10/22 22:43, Bo Liu wrote:
-> The current code provokes some kernel-doc warnings:
-> 	fs/ext2/dir.c:417: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+On Fri, Nov 04, 2022 at 03:21:25PM -0400, Frank Li wrote:
+> There are two adc controller in 8dxl.
+> Add adc node at common dma subsystem.
+> Enable adc0 at imx8dxl_evk boards dts.
 > 
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
-
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 > ---
->  fs/ext2/dir.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/ext2/dir.c b/fs/ext2/dir.c
-> index 8f597753ac12..27873733ed8c 100644
-> --- a/fs/ext2/dir.c
-> +++ b/fs/ext2/dir.c
-> @@ -413,7 +413,7 @@ struct ext2_dir_entry_2 *ext2_find_entry (struct inode *dir,
->  	return de;
->  }
->  
-> -/**
-> +/*
->   * Return the '..' directory entry and the page in which the entry was found
->   * (as a parameter - p).
->   *
+>  .../arm64/boot/dts/freescale/imx8-ss-dma.dtsi | 52 +++++++++++++++++++
+>  arch/arm64/boot/dts/freescale/imx8dxl-evk.dts | 12 +++++
 
--- 
-~Randy
+Could you make a split between board and SoC changes?
+
+Shawn
+
+>  .../boot/dts/freescale/imx8dxl-ss-adma.dtsi   |  4 ++
+>  3 files changed, 68 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi b/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
+> index d7b4229bb4a2..bdbb660c2682 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8-ss-dma.dtsi
+> @@ -156,6 +156,34 @@ i2c3: i2c@5a830000 {
+>  		status = "disabled";
+>  	};
+>  
+> +	adc0: adc@5a880000 {
+> +		compatible = "nxp,imx8qxp-adc";
+> +		reg = <0x5a880000 0x10000>;
+> +		interrupts = <GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>;
+> +		interrupt-parent = <&gic>;
+> +		clocks = <&adc0_lpcg 0>,
+> +			 <&adc0_lpcg 1>;
+> +		clock-names = "per", "ipg";
+> +		assigned-clocks = <&clk IMX_SC_R_ADC_0 IMX_SC_PM_CLK_PER>;
+> +		assigned-clock-rates = <24000000>;
+> +		power-domains = <&pd IMX_SC_R_ADC_0>;
+> +		status = "disabled";
+> +	 };
+> +
+> +	adc1: adc@5a890000 {
+> +		compatible = "nxp,imx8qxp-adc";
+> +		reg = <0x5a890000 0x10000>;
+> +		interrupts = <GIC_SPI 241 IRQ_TYPE_LEVEL_HIGH>;
+> +		interrupt-parent = <&gic>;
+> +		clocks = <&adc1_lpcg 0>,
+> +			 <&adc1_lpcg 1>;
+> +		clock-names = "per", "ipg";
+> +		assigned-clocks = <&clk IMX_SC_R_ADC_1 IMX_SC_PM_CLK_PER>;
+> +		assigned-clock-rates = <24000000>;
+> +		power-domains = <&pd IMX_SC_R_ADC_1>;
+> +		status = "disabled";
+> +	};
+> +
+>  	i2c0_lpcg: clock-controller@5ac00000 {
+>  		compatible = "fsl,imx8qxp-lpcg";
+>  		reg = <0x5ac00000 0x10000>;
+> @@ -203,4 +231,28 @@ i2c3_lpcg: clock-controller@5ac30000 {
+>  				     "i2c3_lpcg_ipg_clk";
+>  		power-domains = <&pd IMX_SC_R_I2C_3>;
+>  	};
+> +
+> +	adc0_lpcg: clock-controller@5ac80000 {
+> +		compatible = "fsl,imx8qxp-lpcg";
+> +		reg = <0x5ac80000 0x10000>;
+> +		#clock-cells = <1>;
+> +		clocks = <&clk IMX_SC_R_ADC_0 IMX_SC_PM_CLK_PER>,
+> +			 <&dma_ipg_clk>;
+> +		clock-indices = <IMX_LPCG_CLK_0>, <IMX_LPCG_CLK_4>;
+> +		clock-output-names = "adc0_lpcg_clk",
+> +				     "adc0_lpcg_ipg_clk";
+> +		power-domains = <&pd IMX_SC_R_ADC_0>;
+> +	};
+> +
+> +	adc1_lpcg: clock-controller@5ac90000 {
+> +		compatible = "fsl,imx8qxp-lpcg";
+> +		reg = <0x5ac90000 0x10000>;
+> +		#clock-cells = <1>;
+> +		clocks = <&clk IMX_SC_R_ADC_1 IMX_SC_PM_CLK_PER>,
+> +			 <&dma_ipg_clk>;
+> +		clock-indices = <IMX_LPCG_CLK_0>, <IMX_LPCG_CLK_4>;
+> +		clock-output-names = "adc1_lpcg_clk",
+> +				     "adc1_lpcg_ipg_clk";
+> +		power-domains = <&pd IMX_SC_R_ADC_1>;
+> +	};
+>  };
+> diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts b/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
+> index fc9647ea50e9..11b1ff90c06d 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8dxl-evk.dts
+> @@ -91,6 +91,13 @@ reg_usdhc2_vmmc: regulator-3 {
+>  		off-on-delay-us = <3480>;
+>  	};
+>  
+> +	reg_vref_1v8: regulator-adc-vref {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vref_1v8";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +	};
+> +
+>  	mii_select: regulator-4 {
+>  		compatible = "regulator-fixed";
+>  		regulator-name = "mii-select";
+> @@ -102,6 +109,11 @@ mii_select: regulator-4 {
+>  	};
+>  };
+>  
+> +&adc0 {
+> +	vref-supply = <&reg_vref_1v8>;
+> +	status = "okay";
+> +};
+> +
+>  &eqos {
+>  	pinctrl-names = "default";
+>  	pinctrl-0 = <&pinctrl_eqos>;
+> diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-ss-adma.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl-ss-adma.dtsi
+> index 795d1d472fae..ac3362e32811 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8dxl-ss-adma.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8dxl-ss-adma.dtsi
+> @@ -11,6 +11,10 @@ &dma_ipg_clk {
+>  	clock-frequency = <160000000>;
+>  };
+>  
+> +&adc0 {
+> +	interrupts = <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>;
+> +};
+> +
+>  &i2c0 {
+>  	compatible = "fsl,imx8dxl-lpi2c", "fsl,imx8qxp-lpi2c", "fsl,imx7ulp-lpi2c";
+>  	interrupts = <GIC_SPI 222 IRQ_TYPE_LEVEL_HIGH>;
+> -- 
+> 2.34.1
+> 
