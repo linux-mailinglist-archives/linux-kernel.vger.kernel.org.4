@@ -2,55 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217A2625FBB
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B86CE625FB9
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234306AbiKKQmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 11:42:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35714 "EHLO
+        id S234285AbiKKQmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 11:42:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234268AbiKKQmQ (ORCPT
+        with ESMTP id S234275AbiKKQmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:42:16 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC2DC845C4;
+        Fri, 11 Nov 2022 11:42:17 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B8A845D4
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:42:15 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id y16so7133472wrt.12
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:42:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jLuR2VWvIX9pMUk66TarZozpZh1wCQd9RADTJwmvxkM=;
+        b=oy6gPYB5GEObYkXtO86u2ukNIhs4ZE4MkQHohRL1Io8Jsuv79Qxy2NhphVAKjSiURu
+         bbL11/gsu2Iix8RrqLDXHp7poDVunxH1jd0u3PFZaclwSXmZwnOGp552IwB04brJSLPU
+         8A+aRMjSvDmuFsueyrhC/y8nNACHPFu1pAKNe5ez5BYcBeTFeUTxQ4X12VmgxnLWe6jz
+         X4FrfkEvdR+efUCUNi2fYFD4ZaWAL2rralFmzBf+tGIA5xh1NC/hI5RV7ZuV9RsRFaJq
+         YZ75CZJku5nVXKsRSrfxOLz64XeuO/nwXYLwaVK6n/xddJv46PZVYiwp6Riez2iw1mEc
+         q4wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jLuR2VWvIX9pMUk66TarZozpZh1wCQd9RADTJwmvxkM=;
+        b=oENTthyuLXmf1gjOpUXc2n3JobBlCR1J+D3x0T3/KmzQ69b9iUEjhIDI9+Pj8dni2C
+         6mi6jGrXOgQDbwk1Lf7vITWTjauTXeqKEDfh6FHt2VO902ngcN+m/R8WELTivj+T4hAa
+         GmedPGwKu/dUecB8E9kzu8q7AiRzpwCHqeHeQGxvtnloQTCzuFoqIIOH1UfX5MyAlhIn
+         xbSbmVh4AOsha4fhzpcTs5MGCwLpTmw9NzltytU+5DcEQ+bylQQzNnIZFwH8zkwmy9iF
+         QgRn3D4DTVzR8FZhcD2q7YfnztBV0LIjlstN5x0Q6j+V2lhdnrr+EnGZ0nC+Egm4ouxM
+         zCxg==
+X-Gm-Message-State: ANoB5pnxWCDgwtqL7Mf5QE+LrE6OPOyouIEvxgjwDn5zWILNabiyPnq6
+        UW0VwFGHwQKplkigb3vEAV2YHw==
+X-Google-Smtp-Source: AA0mqf5Hhw3d5lwAqvy2lPvMVZhb9BL560UK90bhcGji4XJfrDGDLN1s2XcJv0l2tnXnm++pw4DYSg==
+X-Received: by 2002:a5d:4cd0:0:b0:236:757c:54a1 with SMTP id c16-20020a5d4cd0000000b00236757c54a1mr1791120wrt.106.1668184934550;
         Fri, 11 Nov 2022 08:42:14 -0800 (PST)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 12 Nov 2022 01:42:13 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 0DD232059027;
-        Sat, 12 Nov 2022 01:42:13 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Sat, 12 Nov 2022 01:42:13 +0900
-Received: from [10.212.158.220] (unknown [10.212.158.220])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 6200EB62A4;
-        Sat, 12 Nov 2022 01:42:12 +0900 (JST)
-Message-ID: <3200aea8-55df-9718-01ac-e15633e13de7@socionext.com>
-Date:   Sat, 12 Nov 2022 01:42:12 +0900
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id j5-20020a05600c1c0500b003cfbbd54178sm14270442wms.2.2022.11.11.08.42.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Nov 2022 08:42:13 -0800 (PST)
+Message-ID: <c227c62e-4906-698c-fc27-11d17d6b0817@linaro.org>
+Date:   Fri, 11 Nov 2022 16:42:13 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 5/5] arm64: dts: uniphier: Add NX1 SoC and boards
- support
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 1/2] ASoC: dt-bindings: qcom,wsa883x: Use correct SD_N
+ polarity
+Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     soc@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221107103410.3443-1-hayashi.kunihiko@socionext.com>
- <20221107103410.3443-6-hayashi.kunihiko@socionext.com>
- <f8f83839-2e76-e500-a16e-5fd2985a278d@linaro.org>
- <df21cfca-67ed-0c78-7f1e-13e321edabe1@socionext.com>
- <a1e4a039-3b65-2f2b-2196-340cc754b1c1@linaro.org>
- <afdb63d2-217b-1ed5-3398-3e610bce8ecb@socionext.com>
- <36680a5e-7b0c-4d7e-f039-734e9304dc18@linaro.org>
-Content-Language: en-US
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <36680a5e-7b0c-4d7e-f039-734e9304dc18@linaro.org>
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221110133512.478831-1-krzysztof.kozlowski@linaro.org>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20221110133512.478831-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,120 +85,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/11 23:40, Krzysztof Kozlowski wrote:
-> On 11/11/2022 09:48, Kunihiko Hayashi wrote:
->> Hi Krzysztof,
->>
->> On 2022/11/09 0:11, Krzysztof Kozlowski wrote:
->>> On 08/11/2022 15:30, Kunihiko Hayashi wrote:
->>>> Hi Krzysztof,
->>>>
->>>> On 2022/11/08 20:13, Krzysztof Kozlowski wrote:
->>>>> On 07/11/2022 11:34, Kunihiko Hayashi wrote:
->>>>>> Initial version of devicetree sources for NX1 SoC and boards.
->>>>>>
->>>>>> NX1 SoC belongs to the UniPhier armv8 architecture platform, and is
->>>>>> designed for IoT and AI/ML application fields.
->>>>>>
->>>>>
->>>>>> +
->>>>>> +		soc_glue: syscon@1f800000 {
->>>>>> +			compatible = "socionext,uniphier-nx1-soc-glue",
->>>>>> +				     "simple-mfd", "syscon";
->>>>>> +			reg = <0x1f800000 0x2000>;
->>>>>> +
->>>>>> +			pinctrl: pinctrl {
->>>>>> +				compatible = "socionext,uniphier-nx1-pinctrl";
->>>>>
->>>>> So instead of documenting the hardware precisily, you have one big bag
->>>>> for everything under simple-mfd. This is not how the SoC should be
->>>>> described in DTS.
->>>>
->>>> Sorry I don't understand. This is inherited from the previous
->>>> descriptions,
->>>> but is there some example to express DTS correctly about that?
->>>
->>> I think yes, although it actually depends what is this hardware.
->>> Generally speaking, do not use simple-mfd and syscon when these are not
->>> really simple devices. There are quite many in your DTS, which got my
->>> attention. Instead - have regular device with or without children.
->>>
->>> There is no real need to have this a simple-mfd with one children
->>> without any resources (no address space, no clocks, no interrupts,
->>> nothing).
->>>
->>> Why this syscon/mfd and pinctrl is not a regular, one device?
->>
->> The mfd/syscon.yaml says:
->>     System controller node represents a register region containing a set
->>     of miscellaneous registers.
->>
->> The "soc-glue" is exactly this, it contains various register functions
->> and might be referred to the drivers.
->>
->> For example in this NX1 dts, ethernet node points to "soc-glue" node.
->>
->>       eth: ethernet@15000000 {
->>           compatible = "socionext,uniphier-nx1-ave4";
->>           ...
->>           socionext,syscon-phy-mode = <&soc_glue 0>;
->>       };
->>
->> Since such register region is not often systematically designed,
->> it is tough to cut out as specific memory region for "pinctrl".
+
+
+On 10/11/2022 13:35, Krzysztof Kozlowski wrote:
+> Use correct polarity in example and powerdown-gpios description.
 > 
-> So your choice is instead use entire address space as pinctrl - as a
-> child device without IO address space. That's also not a good solution.
-
-This structure follow the existing UniPhier SoCs, so it is necessary
-to re-think the structure of all SoCs, not just this NX1 SoC.
-
->>
->> And more, the existing pinctrl driver uses of_get_parent() and
->> syscon_node_to_regmap(), so this change breaks compatibility.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> This is a new DTS, so what compatibility is broken? With old kernel?
-> There was no compatibility with this Devicetree. Anyway using driver
-> implementation as reason for specific hardware description (DTS) is also
-> not correct.
 
-In this same area, mode selector, clock selector, phy configuration etc,
-exist together in a mixed manner. There is a kind of design issues.
-
- From this point of view, I should separate the new devicetree once
-from this patch series, and it is necessary to consider syscon DT schema
-and related drivers for existing SoCs.
-
->>>>>> +			};
->>>>>> +		};
->>>>>> +
->>>>>> +		soc-glue@1f900000 {
->>>>>> +			compatible = "simple-mfd";
->>>>>
->>>>> No, it is not allowed on its own. You need a specific compatible and
->>>>> bindings describing its children.
->>>>
->>>> I saw the definition of "simple-mfd" itself is only in mfd/mfd.txt.
->>>>
->>>> Currently there are only efuse devices as children, and this space means
->>>> nothing. I think it had better define the devices directly.
->>>
->>> You need to start describe the hardware. efuse is an efuse, not MFD.
->>> pinctrl is pinctrl not MFD + pinctrl.
->>
->> This region also has multiple functions, though, the efuse might be
->> cut out as specific region without "simple-mfd", unlike pinctrl.
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> ---
 > 
-> simple-mfd itself does not mean region has multiple functions, but that
-> children do not depend on anything from the parent device.
- >
-> You over-use syscon and simple-mfd in multiple places. of course some of
-> them will be reasonable, but now it does not.
-
-It takes more time to review existing structures, especially patch 1/5.
-
-Thank you,
-
----
-Best Regards
-Kunihiko Hayashi
+> Changes since v1:
+> 1. New patch.
+> ---
+>   Documentation/devicetree/bindings/sound/qcom,wsa883x.yaml | 8 +++++---
+>   1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/qcom,wsa883x.yaml b/Documentation/devicetree/bindings/sound/qcom,wsa883x.yaml
+> index 6113f65f2990..99f9c10bbc83 100644
+> --- a/Documentation/devicetree/bindings/sound/qcom,wsa883x.yaml
+> +++ b/Documentation/devicetree/bindings/sound/qcom,wsa883x.yaml
+> @@ -23,7 +23,7 @@ properties:
+>       maxItems: 1
+>   
+>     powerdown-gpios:
+> -    description: GPIO spec for Powerdown/Shutdown line to use
+> +    description: GPIO spec for Powerdown/Shutdown line to use (pin SD_N)
+>       maxItems: 1
+>   
+>     vdd-supply:
+> @@ -47,6 +47,8 @@ additionalProperties: false
+>   
+>   examples:
+>     - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+>       soundwire-controller@3250000 {
+>           #address-cells = <2>;
+>           #size-cells = <0>;
+> @@ -55,7 +57,7 @@ examples:
+>           speaker@0,1 {
+>               compatible = "sdw10217020200";
+>               reg = <0 1>;
+> -            powerdown-gpios = <&tlmm 1 0>;
+> +            powerdown-gpios = <&tlmm 1 GPIO_ACTIVE_LOW>;
+>               vdd-supply = <&vreg_s10b_1p8>;
+>               #thermal-sensor-cells = <0>;
+>               #sound-dai-cells = <0>;
+> @@ -64,7 +66,7 @@ examples:
+>           speaker@0,2 {
+>               compatible = "sdw10217020200";
+>               reg = <0 2>;
+> -            powerdown-gpios = <&tlmm 89 0>;
+> +            powerdown-gpios = <&tlmm 89 GPIO_ACTIVE_LOW>;
+>               vdd-supply = <&vreg_s10b_1p8>;
+>               #thermal-sensor-cells = <0>;
+>               #sound-dai-cells = <0>;
