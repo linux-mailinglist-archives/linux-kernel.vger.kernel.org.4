@@ -2,96 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8903625E7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A45625E83
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233825AbiKKPi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 10:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
+        id S233189AbiKKPjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 10:39:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233564AbiKKPiz (ORCPT
+        with ESMTP id S234012AbiKKPjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 10:38:55 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2883314D20
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:38:53 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id r81so3817650iod.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:38:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RlHsWdECQ3tv3fcWIrqXb+HedmBJAx9FZPX5VGtHlJU=;
-        b=06E4IE2EK4Xe7YJnb5xdW2QGv3nMsk7WXIBYseXjSBDuxkcOemdsx43M4AEUVfN+pp
-         S28Kq2MsoSMYF0+fp1Jghtivtd27tJ2cDQuPjWOfmrVwmTyy3GUmRdRnyDxjAZ2BdRq/
-         M26oAlxdPYxyAR2KQzFr6Ue0iAQpE9O6iKk/RL5E9QD023lfp5og0H9lT78dBrqFP5u3
-         N3aafdTe0RAreWUsJ10QjCR74pd2JBXNkbrvUkiu7YWfVXVSEcXa7nAFmxuYrtMhgXXO
-         qlUPqu+Jwz+s4kqadzjThpqgUXaB9acKCHCMgMDcXPu88NFe0IcuDY3KdPwhoPf1XFU/
-         FQMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RlHsWdECQ3tv3fcWIrqXb+HedmBJAx9FZPX5VGtHlJU=;
-        b=4d7vV4pxu9SHRQzppCud5cGf1TMx8M3z3dE+/CYkbCsV6+WQIRfE6AIjSCFYb2Ty1M
-         HPZSdM9whmRBdip+QZdKArXai8lcSOyxUPEoMlIBvBk39k8hv0ZBZOG8LpWWntB+dDDH
-         cmdDts6wXaeRxRQ2+aGf8QTyL11KuMr+LJlALPEnFIvzQNTWEp3WdCbxHgXzYFBYlpY/
-         D28PLxwooTePdLtYYELSrhnCOk86FjqXzjRZ8BsKqKGFrdj6Gz3bC3B8+Ux/Ebe5Dm5e
-         OX4rLAv4T/JqX2Eem2OceJGtyEplulHs0BsCSypgld88zMKDt+V9jGDCUkyLfw8htY1u
-         bwbw==
-X-Gm-Message-State: ANoB5pnbZF31VkbIg241ILeGO1VL9TgMbgdsMMQp16rfmUEg3PU7MeoR
-        Y4lff1Vn+B0k5J7RHANNGsXTew==
-X-Google-Smtp-Source: AA0mqf62/n8/c0Lbyw7i6gXxgtwSe5PEh/+r46m4qbOmL7CL/xHAVdWJn3E930xksqUa6ca85sInxA==
-X-Received: by 2002:a05:6602:4188:b0:6d2:da5f:304c with SMTP id bx8-20020a056602418800b006d2da5f304cmr1258091iob.17.1668181132383;
-        Fri, 11 Nov 2022 07:38:52 -0800 (PST)
-Received: from [127.0.0.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id co17-20020a0566383e1100b00349deda465asm893160jab.39.2022.11.11.07.38.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 07:38:51 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Gabriel Krisman Bertazi <krisman@suse.de>
-Cc:     Hugh Dickins <hughd@google.com>, Keith Busch <kbusch@kernel.org>,
-        Jan Kara <jack@suse.cz>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Liu Song <liusong@linux.alibaba.com>
-In-Reply-To: <20221105231055.25953-1-krisman@suse.de>
-References: <20221105231055.25953-1-krisman@suse.de>
-Subject: Re: [PATCH] sbitmap: Use single per-bitmap counting to wake up queued tags
-Message-Id: <166818113152.9209.17718783188573289588.b4-ty@kernel.dk>
-Date:   Fri, 11 Nov 2022 08:38:51 -0700
+        Fri, 11 Nov 2022 10:39:32 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DF978788;
+        Fri, 11 Nov 2022 07:39:20 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e727329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e727:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D48991EC0531;
+        Fri, 11 Nov 2022 16:39:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1668181158;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=TdG7wb8HM5MgOVAWd4BsZgaZcW/gFrUw0L4OXVxvb+U=;
+        b=NzKVxiLo2bw/ysdw5HhuMvpGG9Lg5g3HMV0ZC93TbjFNIfn8RAiAM7kPRrQ+LAletjbQEn
+        NQONnYAOX28IuSCDnv0On3Y7rYydW6SgChHr4S9nYjpl72lrdq+ysCiIG+xtcN/r3RmKcz
+        R3il+dxO0gl1sqDpFtGFgp77kv8LpP8=
+Date:   Fri, 11 Nov 2022 16:39:14 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Yupeng Li <liyupeng@zbhlos.com>,
+        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "caizp2008@163.com" <caizp2008@163.com>,
+        "smf-linux@virginmedia.com" <smf-linux@virginmedia.com>
+Subject: Re: [PATCH 1/1] platform/x86/amd: Fix pmc compile dependency errors.
+Message-ID: <Y25sohHGkdAn5OZD@zn.tnic>
+References: <20221026072531.346013-1-liyupeng@zbhlos.com>
+ <0910bcc4-d55f-6f3a-b2df-4e30d164aeeb@redhat.com>
+ <721f6a1a-1144-4fe4-e722-2ba2d7200680@amd.com>
+ <Y25m8tPTtyfHOCfK@zn.tnic>
+ <MN0PR12MB6101AB9F2AD8A41CE3EC5650E2009@MN0PR12MB6101.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-d9ed3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <MN0PR12MB6101AB9F2AD8A41CE3EC5650E2009@MN0PR12MB6101.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 5 Nov 2022 19:10:55 -0400, Gabriel Krisman Bertazi wrote:
-> sbitmap suffers from code complexity, as demonstrated by recent fixes,
-> and eventual lost wake ups on nested I/O completion.  The later happens,
-> from what I understand, due to the non-atomic nature of the updates to
-> wait_cnt, which needs to be subtracted and eventually reset when equal
-> to zero.  This two step process can eventually miss an update when a
-> nested completion happens to interrupt the CPU in between the wait_cnt
-> updates.  This is very hard to fix, as shown by the recent changes to
-> this code.
-> 
-> [...]
+On Fri, Nov 11, 2022 at 03:16:10PM +0000, Limonciello, Mario wrote:
+> I sent up a patch for it, but Hans hasn't applied it.
+> https://patchwork.kernel.org/project/platform-driver-x86/patch/20221108023323.19304-1-mario.limonciello@amd.com/
 
-Applied, thanks!
+Yap, that fixes it.
 
-[1/1] sbitmap: Use single per-bitmap counting to wake up queued tags
-      commit: 4f8126bb2308066b877859e4b5923ffb54143630
+So yeah, Hans, make sure to Cc: stable too when applying.
 
-Best regards,
+Thx.
+
 -- 
-Jens Axboe
+Regards/Gruss,
+    Boris.
 
-
+https://people.kernel.org/tglx/notes-about-netiquette
