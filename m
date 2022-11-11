@@ -2,155 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350A7625F38
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61250625F3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233015AbiKKQPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 11:15:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
+        id S233475AbiKKQQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 11:16:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232979AbiKKQPd (ORCPT
+        with ESMTP id S233883AbiKKQQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:15:33 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F74DEE8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:15:32 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id d9so2382496wrm.13
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:15:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+g7U9kSnqY5Btf1Uczn6Yzb9ePFiuOCe7hrx3U2q9eg=;
-        b=dXV1z/nLCtHcsGAbmd4/sx14M+hs3Ax/nNV5scN6gizbeIVexySlOyS5zUoS3OPt/p
-         o+zw1LKg3h2Q6D5yNE/TV7M1kr/AEnFQwoIl9pu0WrtUbTRqnMs5IAQfkSYZP8cINSSB
-         uORi5kmGGzyosszvsx/vS+4dd+HrBMnNxkwCR3yPzStI/daNQ2eWf7IvtB4dCGcWJNBR
-         LPyfGjOKIHeBUjFyiC+HdZspFxlmUEcdVi2AVVNwIx2NWWEr9B16FyGLKPiiJUZHBU9e
-         9p7Lb46FAK2V8ddFLF+FXU7BuouHtvHiH2pe/7nA6jS/yjN2c09MZ7lFM5XqOJxIsfwe
-         6Mig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+g7U9kSnqY5Btf1Uczn6Yzb9ePFiuOCe7hrx3U2q9eg=;
-        b=sF8z2sNcgmR7VyrEFgLxG+/UGETn4ch91tmLZ6vJMyk+6Fpp+5vsCs5RRw4j5wCOgm
-         uneEi8Y04W2T30WHNI16BUMOohDhbcTJduCTj4RtbGU/TMFpYnqu/370o5zoZyujSWd6
-         SaPDaaSd+LeXLTQXmsvs1CF/nD4jDuqb5PUUmPizpu+odijMRBehAXmawv1mVWXLDpQc
-         9YddvlPOMXm4mJ0qpUgifMZAj7o5SVkjR9J+V8DBCbe6mrxM49ITeiSgYvZMmnIXUjyX
-         SSKuFrjadta8h0elDgSOtZR7Q1vv0IMitTjeUz3czLtjHi+MDqDXk2hS+eWX4MNXyAq6
-         lITw==
-X-Gm-Message-State: ANoB5pkSkffoZXoGYStQE9YlDFlvr++ajxwIFlkDup4U+b8U/q/+PMyF
-        Y6U3v2a3k3HgjY2+zvkr8jd7nQ==
-X-Google-Smtp-Source: AA0mqf4GeNbz9JHTSJP5g9TLotxo4pCO0oLfJto+zxfuG6Q4IekcenT2awtAK2VZVBbh8+rY2WluwQ==
-X-Received: by 2002:a5d:5913:0:b0:236:e0d:9ad with SMTP id v19-20020a5d5913000000b002360e0d09admr1751304wrd.692.1668183330925;
-        Fri, 11 Nov 2022 08:15:30 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id j5-20020a5d5645000000b0022da3977ec5sm2183279wrw.113.2022.11.11.08.15.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 08:15:30 -0800 (PST)
-Message-ID: <06da072c-8cf0-8181-3c32-4592fe41f9c2@linaro.org>
-Date:   Fri, 11 Nov 2022 16:15:28 +0000
+        Fri, 11 Nov 2022 11:16:56 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1647A658C;
+        Fri, 11 Nov 2022 08:16:56 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e727329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e727:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 47D7E1EC042F;
+        Fri, 11 Nov 2022 17:16:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1668183414;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=eMsQDKWlL6uraJj5HUJ5zGvCAF7tvNGuIrG9jb/77bQ=;
+        b=VyMmcjUcFzrEj87XvYgjPWlJQ/nyBUi8rvS6Ssa/rQLLvz5ySP90o3+lLi470c2UGCJH4Q
+        XHMNVCYWD8K8q5Bdj+yxPeozoc4uL0Sna1f5+BEWGNiCz8qNA230r0nmeJxcwutsJB+XOh
+        w1RL933kcSGlhMUDsr4IHlBsuIY72JE=
+Date:   Fri, 11 Nov 2022 17:16:48 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jithu Joseph <jithu.joseph@intel.com>
+Cc:     hdegoede@redhat.com, markgross@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, gregkh@linuxfoundation.org, ashok.raj@intel.com,
+        tony.luck@intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
+        ravi.v.shankar@intel.com, thiago.macieira@intel.com,
+        athenas.jimenez.gonzalez@intel.com, sohil.mehta@intel.com
+Subject: Re: [PATCH v2 08/14] platform/x86/intel/ifs: Add metadata support
+Message-ID: <Y251cGhb+x7Lqk9W@zn.tnic>
+References: <20221021203413.1220137-1-jithu.joseph@intel.com>
+ <20221107225323.2733518-1-jithu.joseph@intel.com>
+ <20221107225323.2733518-9-jithu.joseph@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 00/10] ASoC: dt-bindings: Rework Qualcomm APR/GPR Sound
- nodes for SM8450
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Patrick Lai <plai@qti.qualcomm.com>,
-        Srinivasa Rao Mandadapu <srivasam@qti.qualcomm.com>
-References: <20221111113547.100442-1-krzysztof.kozlowski@linaro.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20221111113547.100442-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221107225323.2733518-9-jithu.joseph@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 07, 2022 at 02:53:17PM -0800, Jithu Joseph wrote:
+> diff --git a/drivers/platform/x86/intel/ifs/load.c b/drivers/platform/x86/intel/ifs/load.c
+> index 89ce265887ea..60ba5a057f91 100644
+> --- a/drivers/platform/x86/intel/ifs/load.c
+> +++ b/drivers/platform/x86/intel/ifs/load.c
+> @@ -44,6 +44,38 @@ static const char * const scan_authentication_status[] = {
+>  	[2] = "Chunk authentication error. The hash of chunk did not match expected value"
+>  };
+>  
+> +#define META_TYPE_END		(0)
+
+MC_HEADER_META_TYPE_END
+
+> +
+> +struct metadata_header {
+> +	unsigned int		type;
+> +	unsigned int		blk_size;
+> +};
+> +
+> +static struct metadata_header *ifs_find_meta_data(void *ucode, unsigned int meta_type)
+
+It's a static function - no need for the ifs_ prefix.
+
+> +{
+> +	struct metadata_header *meta_header;
+> +	unsigned long data_size, total_meta;
+> +	unsigned long meta_size = 0;
+> +
+> +	data_size = get_datasize(ucode);
+> +	total_meta = ((struct microcode_intel *)ucode)->hdr.metasize;
+> +
 
 
-On 11/11/2022 11:35, Krzysztof Kozlowski wrote:
-> Adding sound support for Qualcomm SM8450 SoC (and later for SC8280XP) brought
-> some changes to APR/GPR services bindings.  These bindings are part of
-> qcom,apr.yaml:
-> 
->    apr-or-gpr-device-node <- qcom,apr.yaml
->      apr-gpr-service@[0-9] <- qcom,apr.yaml
->        service-specific-components <- /schemas/sound/qcom,q6*.yaml
-> 
-> The schema for services (apr-gpr-service@[0-9]) already grows considerably and
-> is still quite not specific.  It allows several incorrect combinations, like
-> adding a clock-controller to a APM device.  Restricting it would complicate the
-> schema even more.  Bringing new support for sound on Qualcomm SM8450 and
-> SC8280XP SoC would grow it as well.
+^ Superfluous newline.
 
-Why would this grow? All the dsp services are static and they will not 
-change per SoC unless there is a total firmware change in DSP.
+> +	if (!total_meta)
+> +		return NULL;
+> +
+> +	meta_header = (ucode + MC_HEADER_SIZE + data_size) - total_meta;
+> +
+> +	while ((meta_header->type != META_TYPE_END) && meta_header->blk_size &&
 
-> 
-> Refactor the bindings before extending them for Qualcomm SM8450 SoC.
+You don't need the brackets.
 
-I dont understand this bit, what is SoC audio support to do with DSP 
-bindings. DSP bindings should be totally independent of this.
-> 
+> +	       meta_size < total_meta) {
 
---srini
+And you can align all three conditions vertically for better readability:
 
-> Best regards,
-> Krzysztof
-> 
-> Krzysztof Kozlowski (10):
->    ASoC: dt-bindings: qcom,apr: Add GLINK channel name for SM8450
->    ASoC: dt-bindings: qcom,apr: Split services to shared schema
->    ASoC: dt-bindings: qcom,q6afe: Split to separate schema
->    ASoC: dt-bindings: qcom,q6apm: Split to separate schema
->    ASoC: dt-bindings: qcom,q6adm: Split to separate schema
->    ASoC: dt-bindings: qcom,q6asm: Split to separate schema
->    ASoC: dt-bindings: qcom,q6prm: Split to separate schema
->    ASoC: dt-bindings: qcom,q6core: Split to separate schema
->    ASoC: dt-bindings: qcom,q6apm-lpass-dais: Split to separate schema
->    ASoC: dt-bindings: qcom,q6apm: Add SM8450 bedais node
-> 
->   .../bindings/soc/qcom/qcom,apr-services.yaml  |  54 ++++++++
->   .../bindings/soc/qcom/qcom,apr.yaml           | 119 ++----------------
->   .../bindings/sound/qcom,q6adm-routing.yaml    |  22 +---
->   .../devicetree/bindings/sound/qcom,q6adm.yaml |  51 ++++++++
->   .../devicetree/bindings/sound/qcom,q6afe.yaml |  69 ++++++++++
->   .../bindings/sound/qcom,q6apm-dai.yaml        |  19 +--
->   .../bindings/sound/qcom,q6apm-lpass-dais.yaml |  32 +++++
->   .../devicetree/bindings/sound/qcom,q6apm.yaml |  67 ++++++++++
->   .../bindings/sound/qcom,q6asm-dais.yaml       |  48 +++----
->   .../devicetree/bindings/sound/qcom,q6asm.yaml |  68 ++++++++++
->   .../bindings/sound/qcom,q6core.yaml           |  39 ++++++
->   .../sound/qcom,q6dsp-lpass-clocks.yaml        |  40 +-----
->   .../sound/qcom,q6dsp-lpass-ports.yaml         |  57 ++-------
->   .../devicetree/bindings/sound/qcom,q6prm.yaml |  50 ++++++++
->   MAINTAINERS                                   |   2 +-
->   15 files changed, 477 insertions(+), 260 deletions(-)
->   create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,apr-services.yaml
->   create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6adm.yaml
->   create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6afe.yaml
->   create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6apm-lpass-dais.yaml
->   create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6apm.yaml
->   create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6asm.yaml
->   create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6core.yaml
->   create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6prm.yaml
-> 
+        while (meta_header->type != META_TYPE_END && 
+               meta_header->blk_size &&
+               meta_size < total_meta) {
+
+...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
