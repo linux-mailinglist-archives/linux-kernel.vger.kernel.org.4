@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4F662645B
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 602F662645F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234598AbiKKWRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 17:17:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
+        id S234195AbiKKWRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 17:17:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234548AbiKKWRc (ORCPT
+        with ESMTP id S234540AbiKKWRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 11 Nov 2022 17:17:32 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B673253EDA
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:17:30 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id 7so3149613ilg.11
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:17:30 -0800 (PST)
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996114D5CE
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:17:31 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id m15so3177174ilq.2
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:17:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8/Lx+Pa2dFiRyEx0ifPOdZSFdKCDCLW5/FmUbDCcn+o=;
-        b=gHpllJRNYJcNVB2eV+E8j+4S+LQqxPt4l27JqgK3prZ46SKc5hn+WWl94VK3n8to5v
-         T4inCKYIozxITPtw84HPA3lfMJJumGfwdh5m1EqVAA9MENsQPgq/QvUhYrP2ABulqwqZ
-         Svl2NLH33vYSDySxAjCjCbur6z4aSHGlva40wO189QFq3N1tioiNs6HydeEgAJGABjes
-         3nN3q3O8jIC/ssTxL+ibWk1dinGBN64YngpQbJYFhq/nFE0sJiWgnezgGZA9495UNXF0
-         lMzYeNfryArIiErwM9zlXJAk4dyaoH2Of2wtpDE0ioiu3zVjzKp2sTStVRfydgMGX29Z
-         yr8w==
+        bh=aBHr2ZjMIn1S0OUBpb0FkCWEXhP52ED+leKw5VXHrf4=;
+        b=QyXa6kioC9PHuHc5q4tYYdkN+b6tLueVWsyoERUyPiCd0PsG9SIDzfqnW0VSRSs2Fc
+         4DWTWOWGjVoXHQMswU5gDQobCI6xddG7D6HfK9PqHgvZUfVa2w+JywXvLtd1/bl1oAHW
+         8cXiMtlxkRW2au2ab88MzHBxDIQD9ijHcnefZDpNJ1FVmMJKBjqOSihGR76UOBOMAgIw
+         h7Ns5CHc2tNWHsXd2f15QL93SgS9pETPRNwA1W/0+0k9VYv2s/zC3CpGcVjwBiUFZsh2
+         0k78bBgAvyIxMyY+g76x+7FUCZMMXE+3iDjHMDBI0jnb0dp3x+SbfnHLArvAQKeP4mof
+         ixaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8/Lx+Pa2dFiRyEx0ifPOdZSFdKCDCLW5/FmUbDCcn+o=;
-        b=0wBWPnhkNfK+tVdmsSTynPXwUz/+kyr+oiWOxWI9RVvochOR1rggo8DtuE8Txxdoqk
-         Ah4EC1F4yfrIMi3rQNO5XsMaQnX2ot34T3es4HC4S7lDiuKK5tuqlehmnpCGTovcue+y
-         mfECqBsQfqswLt897brSvwx5CV4frKX1XCAAGlJ1c+Cq6Id2FKyLZJqn9cdog2b5/hq7
-         KCVHMpI6sMagf0sI8Dv7jCrYqmufi8+hs4y9fO4ZVOmUBCipy1yuGCOw9ZmBY0c2Qj1k
-         KeY/qNe0Kl3MzUR/2w8FucrHPGoj6AlENgnifpUtc2sOfkLIEemUGJsfe6QBZZr/diin
-         lcUg==
-X-Gm-Message-State: ANoB5pko1SbHjifcb0MhPp77GOZTqIX0wxnoKb6G8+1Nz1XXVNn1VoQL
-        bpjJV4N1936rre7EYW4XE0MTixj1iDtRZiL7
-X-Google-Smtp-Source: AA0mqf4V6UIR9nWd3D0T6FPvRTELxE97Ao7nri/Rg7QowQy6sqit1lDf0FUhjvJblHHuBU5OpZXm5Q==
-X-Received: by 2002:a05:6e02:12a2:b0:2eb:1f07:5a7e with SMTP id f2-20020a056e0212a200b002eb1f075a7emr1993165ilr.0.1668205050060;
+        bh=aBHr2ZjMIn1S0OUBpb0FkCWEXhP52ED+leKw5VXHrf4=;
+        b=umpLFEsG8Sh8d9r5HMNnnaX9DxMCXWfB98qMh6G2v4GvVCpOQWP8Vt4MBeWPhJKfBY
+         xGDa6RjbgIOVIVGYfufcjzIh8iZdnp1g2JWDPm/hfyrXYg2qBT8GqeDc0QdLclXdxVZe
+         opRS6j+82tCc1SiTh/DbQ1xiGZJ5XdPLaMrbOu4rssHFd7ytZIEXd0PBd3R5Ft4r0NWy
+         TotA+UZpj9FcQDfEhdJzxleQd8f/+lEj5mJl8cBic+UaBNsTnSF0vQaV9P7uZwp/KW2n
+         P5q83zxws9wau409Z4/c5Fr3NgfqH9SWdyi3+AU8wyFTVnuhqiTHdsxS6F2FCDOzrcg7
+         oRtw==
+X-Gm-Message-State: ANoB5pnNfxUAi1qZKgOZJvmZ5JcUG6Acwka0XrEXwoEBaHQwVNAa6G1q
+        sZ1tWdg2oslJEhjIskzflvw=
+X-Google-Smtp-Source: AA0mqf5KWClhZgEHN2ai5TCS9VG9xOcdCROjBau0cht34TOpNu7c/ykshi7z/485jWj/REsBgqEWSA==
+X-Received: by 2002:a05:6e02:1d05:b0:2fa:b6c0:80fd with SMTP id i5-20020a056e021d0500b002fab6c080fdmr2005180ila.164.1668205050922;
         Fri, 11 Nov 2022 14:17:30 -0800 (PST)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id c5-20020a928e05000000b002f611806ae9sm1113457ild.60.2022.11.11.14.17.29
+        by smtp.googlemail.com with ESMTPSA id c5-20020a928e05000000b002f611806ae9sm1113457ild.60.2022.11.11.14.17.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 14:17:29 -0800 (PST)
+        Fri, 11 Nov 2022 14:17:30 -0800 (PST)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
         dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
@@ -58,9 +58,9 @@ To:     jbaron@akamai.com, gregkh@linuxfoundation.org,
 Cc:     daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
         linux@rasmusvillemoes.dk, joe@perches.com,
         Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH 5/7] dyndbg: fix readback value on LEVEL_NAMES interfaces
-Date:   Fri, 11 Nov 2022 15:17:13 -0700
-Message-Id: <20221111221715.563020-6-jim.cromie@gmail.com>
+Subject: [PATCH 6/7] dyndbg: clone DECLARE_DYNDBG_CLASSMAP to REFERENCE_DYNDBG_CLASSMAP
+Date:   Fri, 11 Nov 2022 15:17:14 -0700
+Message-Id: <20221111221715.563020-7-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221111221715.563020-1-jim.cromie@gmail.com>
 References: <20220912052852.1123868-1-jim.cromie@gmail.com>
@@ -77,63 +77,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since sysfs knobs should generally read-back what was just written
-(unless theres a good reason to do otherwise), this result (using
-test_dynamic_debug.ko) is suboptimal:
+DECLARE_DYNDBG_CLASSMAPs job is to allow modules to declare the debug
+classes/categories they want dyndbg to >control.  Its args name the
+class-names, and the sysfs interface style (usually a class-bitmap).
+A separate module_param_cb wires the sysfs node to the classmap.
 
-  echo L3 > p_level_names
-  cat p_level_names
-  4
+In DRM, multiple modules declare identical DRM_UT_* classmaps, so that
+they are modified across those modules in a coordinated way, by either
+explicit class DRM_UT_* queries to >control, or by writes to drm.debug
+(/sys/module/drm/parameters/debug).
 
-Fix this with a -1 offset in LEVEL_NAMES readback.
+This coordination-by-identical-declarations is weird, so this patch
+splits the macro into DECLARE and REFERENCE (USE?) flavors.  This
+distinction improves the api; DECLARE is used once to specify the
+classmap, and multiple users REFERENCE the single declaration
+explicitly.
 
-NOTE:
-
-Calling this a BUG is debatable, and the above is slightly inaccurate
-wrt "read-back"; whats written is a LEVEL_NAME (a string).  Whats read
-back is an integer, giving the 'edge' of the 'low-pass-filter'
-
-The actual test looks like:
-
-RTT: L4 -> p_level_names : 4 :: DOING: levels 4-1
-[   17.509594] dyndbg: "L4" > p_level_names:0x4
-[   17.510115] dyndbg: apply: 0x1f to: 0xf
-[   17.510506] dyndbg: query 0: "class L4 +p" mod:*
-[   17.510992] dyndbg: split into words: "class" "L4" "+p"
-[   17.511521] dyndbg: op='+'
-[   17.511811] dyndbg: flags=0x1
-[   17.512127] dyndbg: *flagsp=0x1 *maskp=0xffffffff
-[   17.512604] dyndbg: parsed: func="" file="" module="" format="" lineno=0-0 class=L4
-[   17.513414] dyndbg: applied: func="" file="" module="" format="" lineno=0-0 class=L4
-[   17.514204] dyndbg: processed 1 queries, with 1 matches, 0 errs
-[   17.514809] dyndbg: bit_4: 1 matches on class: L4 -> 0x1f
-[   17.515355] dyndbg: p_level_names: changed bit-4: "L4" f->1f
-[   17.515933] dyndbg: total matches: 1
-crap [[ 5 != 4 ]]
-
-This -1 adjustment just reports the edge consistently with its
-input-mapping.
-
-Fixes: b9400852c080 (dyndbg: add drm.debug style (drm/parameters/debug) bitmap support)
+Currently the latter just reuses the former, and still needs all the
+same args, but that can be tuned later; the DECLARE can initialize the
+(extern/global) struct classmap, and REFERENCE can, well reference
+that struct.
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- lib/dynamic_debug.c | 2 ++
- 1 file changed, 2 insertions(+)
+RFC: s/REFERENCE_/USE_/ ??
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c |  2 +-
+ drivers/gpu/drm/display/drm_dp_helper.c |  2 +-
+ drivers/gpu/drm/drm_crtc_helper.c       |  2 +-
+ drivers/gpu/drm/i915/i915_params.c      |  2 +-
+ drivers/gpu/drm/nouveau/nouveau_drm.c   |  2 +-
+ include/linux/dynamic_debug.h           | 10 ++++++++++
+ 6 files changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 009f2ead09c1..48ca1387a409 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -794,6 +794,8 @@ int param_get_dyndbg_classes(char *buffer, const struct kernel_param *kp)
- 		return scnprintf(buffer, PAGE_SIZE, "0x%lx\n", *dcp->bits);
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+index 3c9fecdd6b2f..5c733d96fe4c 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+@@ -188,7 +188,7 @@ int amdgpu_vcnfw_log;
  
- 	case DD_CLASS_TYPE_LEVEL_NAMES:
-+		return scnprintf(buffer, PAGE_SIZE, "%d\n", *dcp->lvl - 1);
+ static void amdgpu_drv_delayed_reset_work_handler(struct work_struct *work);
+ 
+-DECLARE_DYNDBG_CLASSMAP(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
++REFERENCE_DYNDBG_CLASSMAP(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
+ 			"DRM_UT_CORE",
+ 			"DRM_UT_DRIVER",
+ 			"DRM_UT_KMS",
+diff --git a/drivers/gpu/drm/display/drm_dp_helper.c b/drivers/gpu/drm/display/drm_dp_helper.c
+index 16565a0a5da6..1f20c1e721a4 100644
+--- a/drivers/gpu/drm/display/drm_dp_helper.c
++++ b/drivers/gpu/drm/display/drm_dp_helper.c
+@@ -41,7 +41,7 @@
+ 
+ #include "drm_dp_helper_internal.h"
+ 
+-DECLARE_DYNDBG_CLASSMAP(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
++REFERENCE_DYNDBG_CLASSMAP(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
+ 			"DRM_UT_CORE",
+ 			"DRM_UT_DRIVER",
+ 			"DRM_UT_KMS",
+diff --git a/drivers/gpu/drm/drm_crtc_helper.c b/drivers/gpu/drm/drm_crtc_helper.c
+index 7d86020b5244..4675c95c90b4 100644
+--- a/drivers/gpu/drm/drm_crtc_helper.c
++++ b/drivers/gpu/drm/drm_crtc_helper.c
+@@ -51,7 +51,7 @@
+ 
+ #include "drm_crtc_helper_internal.h"
+ 
+-DECLARE_DYNDBG_CLASSMAP(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
++REFERENCE_DYNDBG_CLASSMAP(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
+ 			"DRM_UT_CORE",
+ 			"DRM_UT_DRIVER",
+ 			"DRM_UT_KMS",
+diff --git a/drivers/gpu/drm/i915/i915_params.c b/drivers/gpu/drm/i915/i915_params.c
+index d1e4d528cb17..14ebbbf53821 100644
+--- a/drivers/gpu/drm/i915/i915_params.c
++++ b/drivers/gpu/drm/i915/i915_params.c
+@@ -29,7 +29,7 @@
+ #include "i915_params.h"
+ #include "i915_drv.h"
+ 
+-DECLARE_DYNDBG_CLASSMAP(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
++REFERENCE_DYNDBG_CLASSMAP(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
+ 			"DRM_UT_CORE",
+ 			"DRM_UT_DRIVER",
+ 			"DRM_UT_KMS",
+diff --git a/drivers/gpu/drm/nouveau/nouveau_drm.c b/drivers/gpu/drm/nouveau/nouveau_drm.c
+index fd99ec0f4257..b943bf2a36fe 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_drm.c
++++ b/drivers/gpu/drm/nouveau/nouveau_drm.c
+@@ -71,7 +71,7 @@
+ #include "nouveau_svm.h"
+ #include "nouveau_dmem.h"
+ 
+-DECLARE_DYNDBG_CLASSMAP(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
++REFERENCE_DYNDBG_CLASSMAP(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
+ 			"DRM_UT_CORE",
+ 			"DRM_UT_DRIVER",
+ 			"DRM_UT_KMS",
+diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
+index 41682278d2e8..76430bac7f79 100644
+--- a/include/linux/dynamic_debug.h
++++ b/include/linux/dynamic_debug.h
+@@ -111,6 +111,16 @@ struct ddebug_class_map {
+ #define NUM_TYPE_ARGS(eltype, ...)				\
+         (sizeof((eltype[]){__VA_ARGS__}) / sizeof(eltype))
+ 
++/*
++ * refer to the classmap instantiated once, by the macro above.  This
++ * distinguishes the multiple users of drm.debug from the single
++ * definition, allowing them to specialize.  ATM its a pass-thru, but
++ * it should help regularize the admittedly wierd sharing by identical
++ * definitions.
++ */
++#define REFERENCE_DYNDBG_CLASSMAP(_var, _maptype, _base, ...)		\
++	DECLARE_DYNDBG_CLASSMAP(_var, _maptype, _base, __VA_ARGS__)
 +
- 	case DD_CLASS_TYPE_LEVEL_NUM:
- 		return scnprintf(buffer, PAGE_SIZE, "%d\n", *dcp->lvl);
- 	default:
+ /* encapsulate linker provided built-in (or module) dyndbg data */
+ struct _ddebug_info {
+ 	struct _ddebug *descs;
 -- 
 2.38.1
 
