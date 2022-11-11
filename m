@@ -2,129 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C031C6259EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF5E6259EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:00:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbiKKL7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 06:59:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
+        id S233607AbiKKL77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 06:59:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233529AbiKKL67 (ORCPT
+        with ESMTP id S233317AbiKKL74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 06:58:59 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80055.outbound.protection.outlook.com [40.107.8.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE91645A1D;
-        Fri, 11 Nov 2022 03:58:58 -0800 (PST)
+        Fri, 11 Nov 2022 06:59:56 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2067.outbound.protection.outlook.com [40.107.223.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EDF5BD71;
+        Fri, 11 Nov 2022 03:59:55 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LShDTN+eU5aakB0oxG1F2UABVYnun/NgSMTJFpNzRrraVuf97noGn2qN9Q7VJECSq37B4APeSBLiQCnQpNmqPPwvLycZ/ICAYZ+yUbn+oj4ZNvTC1nBqVvIiNxd0TBtPsPi1/LKPQynhmP5To6WUdwWgoseunG7tpChBW9MGvKeC5BgyXvrEYtM79S4rQCE2DsIjMOrgpLzyJPMO4ViVoCaPAHJ88ll7jxtyLXMwsVpbH4DRNygIkn2k0Tva8R5OjhMPr9l5xuXPSZVNxSGECCs2DiR+6N+ENLEqjS0ct1aOwofyOb0YbyeG2DXzkQtB75QerF3i8ojeRPWRgDBq6w==
+ b=g7j4r+KF6doDTQuynfvVGS5k/69JxOm7/sJFQ3xbQGe1h1CfF63LLPRztM1pEekrrWs32nR2vCyLR3uK6fBphiFKiLSJ0ovAvRUgML4oQB6Rwsn+YuejREUMrIhdYp8tpWCCFqDcwClDH9Lxfv5THmL4ubruEoQoveP0nwrsLC9jSga8k5OMZuZyVLF0zKFaUxUCkJINXZV0C4MR+f1BBYrhltlRz6aFuK2Tzdo2D+Yo7GcjZTmgqIlzqQN9rRIdnrRz40ZnVUT+qRuUfDbSPLQzE0fw0aPheyG5ClFRRbyuoHgbaSDrzXIMjfe+K2FklqkD6iVpis92C7kuoeYVGA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uFUauZq1VokH0R4eU74z2zOi2AsxHPClNAg/3exCaAk=;
- b=GeaAl6u5oB28X8tAiP+6w1zvIFGH0UA5D1SDSmxGukaUsnv1tSxkZHimmnfbn1/eOHZnRnsOGiFTqpvSYn/32EGDrIos6a9QNdb75yugoI0UOTowSdzCQ9MD8MFvUOoocMpMMjXT1AhMc04wgq7BP0HRdq6FLKkxQSARP/rD2GaD03tPMSJ3DTXT/kKEFkbxXCI+G09hZYbVDoBygzu97q7zdCtPEx6F6E/5RsWAaeh5sMyTQVLhX/mD6zybVZ/hwcTYXfggtMTI4nfPzzs4c2SWT4scOlksgFPA/AZXq/q80QcsdECXtHvkNntd3p4qtd5s/RPv1/FFX8CHC95TvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
+ bh=jV1M0uoYqeTIeZMPfzYYYt0ZEvY/0CvXTkumUjpsR8Y=;
+ b=bgXd8p6keke1yuLdQAnmpj9qlkn7GasMNVndkWae4xsNoff7YUl9qQyqzX3dnhUCffnGzqBxmvj2YMt6G6gBM1wnuTqF7hj413wFqMucnrhl78RqG/LHQweJx/WlE9HSm+hjUqCdrWtfnWNCbgd9LlAD4ufEZ1jGPpqwnqxTmHnSsZjK/lvTz2SkXFXbw/LPec1aBu8vD5qbjCSQDd+4zJai0GYeo/T6jbPiLGAOSIbayIVFk31bxUQjFakxIyv6BhPRpCeQHktoB/tr4xbO0GxE8UqKLdS7yE4JTomkyFQ46zFiliMWXwdPC9teUmme6/M2/DuzQzTJ4akrMpGPNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uFUauZq1VokH0R4eU74z2zOi2AsxHPClNAg/3exCaAk=;
- b=uWXKIS7zLQOno1GlLzgyMhb8aZ/rDHZ7+XexkQACqpg8kOZX0yREGhOpzvmz5NfI/JDK5ED7CJghvcBNQ/fUTkEZb15UgDJRj+J0vzlh7KNUltWuX9vu5/RX9AEY6tCZt+tFbrkewa3VJ92++JxJT/7gZsEn7tReTPYZ1EWYAK4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
- by PA4PR08MB7386.eurprd08.prod.outlook.com (2603:10a6:102:2a1::13) with
+ bh=jV1M0uoYqeTIeZMPfzYYYt0ZEvY/0CvXTkumUjpsR8Y=;
+ b=aximb0qi4I2dd1GH9odHoIy/KR167oaSkP8rNWGWIN+fg62e664kO7lEOaSmifJpOaMqlkOVNNBRLgSVouZTBPCrOojnYK7M0q9D/PTqFrTUt0zRERdfQd6/3uH8LB4m6X0/maqIrKHl9udDwEeRWTcsXlUrDe7LRwTzyaCn+P4=
+Received: from MW3PR05CA0028.namprd05.prod.outlook.com (2603:10b6:303:2b::33)
+ by MW4PR12MB7429.namprd12.prod.outlook.com (2603:10b6:303:21b::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Fri, 11 Nov
- 2022 11:58:55 +0000
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::3643:6226:28c:e637]) by DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::3643:6226:28c:e637%2]) with mapi id 15.20.5813.011; Fri, 11 Nov 2022
- 11:58:55 +0000
-Message-ID: <42fd2eda-f25c-44c6-1f1c-80653b04bdd1@wolfvision.net>
-Date:   Fri, 11 Nov 2022 12:58:52 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [linux-next-v1 3/3] arm64: dts: rockchip: Fix ethernet reset node
- Rock 3A sbc
-Content-Language: en-US
-To:     Anand Moon <linux.amoon@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     Chukun Pan <amadeus@jmu.edu.cn>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221111094238.1640-1-linux.amoon@gmail.com>
- <20221111094238.1640-3-linux.amoon@gmail.com>
-From:   Michael Riesch <michael.riesch@wolfvision.net>
-Organization: WolfVision GmbH
-In-Reply-To: <20221111094238.1640-3-linux.amoon@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VE1PR08CA0006.eurprd08.prod.outlook.com
- (2603:10a6:803:104::19) To DU0PR08MB9155.eurprd08.prod.outlook.com
- (2603:10a6:10:416::5)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.14; Fri, 11 Nov
+ 2022 11:59:50 +0000
+Received: from CO1NAM11FT060.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:2b:cafe::57) by MW3PR05CA0028.outlook.office365.com
+ (2603:10b6:303:2b::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.9 via Frontend
+ Transport; Fri, 11 Nov 2022 11:59:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT060.mail.protection.outlook.com (10.13.175.132) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5813.12 via Frontend Transport; Fri, 11 Nov 2022 11:59:50 +0000
+Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 11 Nov
+ 2022 05:59:47 -0600
+Date:   Fri, 11 Nov 2022 12:59:45 +0100
+From:   Robert Richter <rrichter@amd.com>
+To:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>
+CC:     <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>
+Subject: Re: [PATCH v3 8/9] cxl/pci: Extend devm_cxl_port_enumerate_dports()
+ to support restricted hosts (RCH)
+Message-ID: <Y245MZXYbrgG2O8I@rric.localdomain>
+References: <20221109104059.766720-1-rrichter@amd.com>
+ <20221109104059.766720-9-rrichter@amd.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221109104059.766720-9-rrichter@amd.com>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|PA4PR08MB7386:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2080f7d4-aff5-4061-610a-08dac3dc1bf0
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT060:EE_|MW4PR12MB7429:EE_
+X-MS-Office365-Filtering-Correlation-Id: 780b5c83-b5e6-44a4-bb23-08dac3dc3cec
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: k5OOzjKLc0NEl2zJ4PMIa4TdKY9vv9+IIZf5bY3EPmJ8RnE/TeyAuXybK++78361sJ17vJqrOLSBCNcvyebEd0XNTVJRbGumL+n7m3mIfauChkpQrwT74oinLbam3MmiHTN9ip/SRTlSFjWuWfqwaADhk7ET1pRaSxivAJ/F0gtUUkQlmyiXNLH2q/9IAiesiCAtDpmfRMVRgFsYX12JCsSZ1ruwmbSkWG3AnYXovhJuXSKYn3m7b9FWoP58P+KAxKajxwKtO0v6SWY8FNiVeLQtxhXVL+FthuEwxXPAxhuApaKA0Z9o7DfblHWq3GJrC+KiP8aiZXpNohgPMcyOiAfmLwyVjYgrYiCmQz/riBfBEUt7sV97kzucudFdKRR7bNBPiOqFm9Heam9OtGYNk3Qt/6jtgeZA0AvyisimccVqkZ73RqutldGLDtd3Jnm2AJuW1yZ1fb8gy5+eXRp65dWOrR8Ekk2PM9Uwto/+2BFUFwY6qLP6Z50yK4N5sELSwAeNy3VGTcXK/nkLpwRj5hdA7rRfH9SLnltwDYinw18WH6T9J/ozjVQwN+wL0+SRAvcuAj7ZQGi8R06UGnMtNN3ebo1bF+EYd7T9NyCnz0jcuh3xQpK32nXEBBkBO7GerDRbryXTsutvu9ZrSmm4ZbNCuMHxD1tAbI4HMcHszw5M4hByEx2XdRM+bNunrC22bAuDd72Lle3fRTHODSs8Jn1xIr8tsD1EoE5fIKdndqAu4ItRKOCWhkeVZkgUVypbyfEPmdDdWvocYUhmr5PxTiD0sesfaUCoZ95FQZ+H1QFhC0DSGmD7fu7wR2jV2fJG
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39840400004)(396003)(346002)(366004)(136003)(376002)(451199015)(31686004)(36756003)(86362001)(31696002)(38100700002)(38350700002)(5660300002)(8936002)(44832011)(2906002)(2616005)(6512007)(110136005)(186003)(83380400001)(26005)(316002)(66476007)(41300700001)(66556008)(8676002)(66946007)(4326008)(52116002)(6486002)(6666004)(53546011)(36916002)(478600001)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c05WTm9DNWVINDcvazdLcDZXUjllODlsS2h1cEtYSUdMakg3YWZYbEh3TFBC?=
- =?utf-8?B?WS9nYVRwclRTSnJ3K0NrNUlYS3Z6dFZsUTZDdFpTVHFuS21NVE55dzk4ZW5l?=
- =?utf-8?B?L29HaEdxWDM3TjFOeGJseXQ5TGZSYkhON1M0d0Z4aGFOVCt6YTBCaTdZalVL?=
- =?utf-8?B?MGxPWVJRdEZlU3pIOEVxVHUyK01tY3RZZFFINDB5NGVKVnJFMGo1MHVHTFNn?=
- =?utf-8?B?R09PRjU5bjNrNzhiNGk4ZmdiUEJPUzF6ZmtocDhBRkpCcHVhNHU0Q2RDT2du?=
- =?utf-8?B?RzZYOUVXYUlRdlRMVzlqa2V5ZHdTeVdlNU5aQ0YySXBtcHhNY3dDblJDRXFK?=
- =?utf-8?B?aVAyRVhGallXb2pPQlV0UktvMnkvMDVtNEh0Z0x5cGxWc25BaGxLa3I3Nmtu?=
- =?utf-8?B?bmZjSW9hODJKYVBORGRCNHhPQVlvL0l6R280OWUzb2JoN2NYUWI1ZXErQ0s5?=
- =?utf-8?B?TDBLYW5CV25Tb0UyWW15SDNMNWgrdmNZd0htVW5UWGlsYzRabXU0UDhKNHZV?=
- =?utf-8?B?SkQxaWRBeW9GcndWWktlRVVXTjI5ZEtLeEg3QUJZVlpjSUhFM3krbWduKzRs?=
- =?utf-8?B?NHUvbGZxcW0xcWRhcHhmRnhra0FxNFFtbHdWbGh1NzBscUV3NENWdVgwM3h6?=
- =?utf-8?B?U1c3WGN1MGZrb0hIRGxOMlVVMzU3a3ZEbUJNaU4wbVFTalRZQWY1NG5qUE04?=
- =?utf-8?B?OUdtZE4xdWNyZWtYTFRQN2R5L0cwTGFHWHpVaWNCWWZyZ1Q4SFZNTjVmdnpz?=
- =?utf-8?B?TTFFYi8vaHdFSmswSXJWRU5xSjA5YktYcG1SN1d5bWRUblFYWmxPbi8xQ0xz?=
- =?utf-8?B?OEVFNEFyVm4rY3lIOGJyT29ZVUZTbGE1WUNlb3p6R1Bsb2Z6VUVWaWFQTkxV?=
- =?utf-8?B?a3dXTmJDaVFiOVZwWUZiNk1nMEZhZmFkWmc5V1pxekU1UFJ3TEY1QWxpTkZF?=
- =?utf-8?B?a3dFMHhObDZXL3lCcGh5QkNQSE9uVXBQWXVERHh6cEluam5QWEhUcDlPZTgy?=
- =?utf-8?B?czhrcmtkb0E0ZlV6a2p6dGFjYjNKbE11WTV4ZlVuYTZkNUluL2FkL0ZFdnlo?=
- =?utf-8?B?RitXZFdKL04rU2ZXOUQrMDZFR3pBaEVrc3hzN3RvVHNiYVZ2RU5mcDJYbjJk?=
- =?utf-8?B?ZlhoVUp5QitlY3ZQSFUxS2ZGZkFDM3k2d2g1aXVVKzNQWllZNG81dmZXR0tF?=
- =?utf-8?B?OUhXSFo4TTFGNm5nSm9EUUU4Nmhmc0RIVXdtbHpsblF4RVdjb09EbUxKVWc4?=
- =?utf-8?B?cWxZTTJzN1FGemQxZk45V21WWEtpYmhBMnZYOFF3bzVMK0lCdm5qdDUrWjFO?=
- =?utf-8?B?Z05neUxnRXlSOXRNYzdYQjFzaUxHVCtOTEJBNFpPUW9nTGM4aXpuQW1JN0x6?=
- =?utf-8?B?M20wbEMrVUNkTU9kckJsUkdnNHBIOHVvWlNRMEpDWEdvLzhCSFlHcUFMdlBK?=
- =?utf-8?B?bTdIZkVUdUNDdjRpc3NvbVlyeGhPUEx1bkt4cEpPK1I0NExlNXl5dlMyZzFQ?=
- =?utf-8?B?MWMvekJTSW1oYSt5enFjU25MWU81MjgxSzlNMFRQek5GUDd1RG1SMWFIWUt6?=
- =?utf-8?B?bjNpd01kcXpLYm92dUVKV0JicmNUNndoMnFiZlVsYlcwLy9rWndnRkwzdDJz?=
- =?utf-8?B?N0ZpTnhhbTdJV3hyRW1xcUdpbGFFL3I4UXdJNGZTT3RiRWlNeDJiNFQ2Qlhp?=
- =?utf-8?B?S0pJaXdaTDkzSGx6VXF1anZEalgyNFg3UzVLem5vdTBlRGd3emlUNmNUek5B?=
- =?utf-8?B?ZVU4TWt1b2piVHVBWVdSNnF5T1Jka2xrT3ZnL1VIQ1BHS0d0WWNDSUV2T0Qw?=
- =?utf-8?B?NnhYQmxkanc5R2NNbDl6cmdVUE03a2taT3VISXYwT2g2VlA3bjNHZ2ZaU043?=
- =?utf-8?B?c09YbVBQaTIvUk40ZTdWM0VsaEJhSHArV05yb3hpY2UzcmxKWXo2ekdxQ1NV?=
- =?utf-8?B?Z1FJTUw3eWxQSVNhbFRSUTFSSDJYZjlEUGFHdDdFTFl5QURYSElZSnREZWda?=
- =?utf-8?B?bXgrOGZiOFRiUytnU0xWaW1VUW1keUdkUnpSaXJzRndMMVMxTzdqYklGUnRz?=
- =?utf-8?B?dm9rS0NRYUpNc0J6RTNuNGhpVTdMaWJwbW0xSUFPaHB1c1BmVGhQK1BCMkVj?=
- =?utf-8?B?VFRqYXZwZlJFYm84TmhjYXc3SXJwWnU1TmZQRUN6clJTN2NIQW1LOFNodGhW?=
- =?utf-8?B?ZlE9PQ==?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2080f7d4-aff5-4061-610a-08dac3dc1bf0
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 11:58:55.6399
+X-Microsoft-Antispam-Message-Info: sCpsglCkl6jhJpURYHDo7PBNXDfkfL/NvUhxbaVYkM5h6z7MURhYv+2DKoTOwtR/vCZf5OumizmmqAtaPAuE4Osy9DPFgl9zSKfkusMFs0BAlID2RSXzcQZSCdaGq0wbWu4uo5laLcMxt3jA4lhGFW4ub9JryieKCQd+eVRbs+kPURNQaIO/ZOEMgLGZejeG5/IC1+oIwckDeYybw+pLrGCvhKVIonfJTovynKLdVlm6WNAxM6Pfzw23Z34Q1K3phNCWwE5O4RdQQELgm3yXeNTYZ36rXJ8s2fVwqRtDtV96gXq8wXvc8i/Y2JyVHZW3tn2V8i+ltVOy38iH9bP1aXx5u4xNKCLvgbXvV6AMWeHMjzFnTSa/ox3OJUY8NY0Zz+Aku20fmHvwZpq/rfrvsP5OtHPmjG2eIa4p/ghy7nYBdulXCDCYhBiiMsX0OsBAEzWLDDZqJTRhsrdWhw0wev71Lt1uTczCjhMoiB+Q+dTZvAMCGWt1TqYOmPKGIihv5a3CyEOSUU9GXumv6aWolcI0wX3pQDkJiQcpJ5V7ghERrRso/8nEKhY54HDN3K6whbSRBm61CKSsQh+H7TuQFOutoeL1+uEZT58Mvq6ZpxLKfYp+s0vigDNjOlTKPcAfGu6gzS4Xq+3BhDlOlEuIerAjBo2XHlpbFbryOCiaktqd5ikZP/sQevtn9qEDKnsaxaLaxeUFLCovwzVL9jLGvut8e6UCpJVRMhgubsDqUBeOVRfGSzIb2ATAOvIQ3jWM/XJAmlRF8s5hZbznR8vbmD1Ki6JEo7KW6BSjIwZbOeGfssu2t2djqRlfyOR5pWZ8
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(396003)(346002)(451199015)(36840700001)(46966006)(40470700004)(70206006)(4326008)(70586007)(8676002)(54906003)(356005)(316002)(82740400003)(81166007)(110136005)(40480700001)(41300700001)(36860700001)(5660300002)(7416002)(8936002)(83380400001)(2906002)(478600001)(40460700003)(82310400005)(186003)(336012)(426003)(26005)(7696005)(9686003)(16526019)(47076005)(53546011)(55016003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 11:59:50.7309
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0YyTurMZeRdYptQu/JUGdBzBdX+E88fw5vcWzyawh6qUmzqYgjEzjqAoCGCdmV4611hIXhaLiWLKQngCqZFu88Xz6NT73QQJtLme8jeBjgc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR08MB7386
+X-MS-Exchange-CrossTenant-Network-Message-Id: 780b5c83-b5e6-44a4-bb23-08dac3dc3cec
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT060.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7429
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -133,79 +109,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anand,
+On 09.11.22 11:40:58, Robert Richter wrote:
 
-On 11/11/22 10:42, Anand Moon wrote:
-> Add support for snps,reset-gpio reset ethernet gpio pins and
-> drop the mdio reset code.
-
-But why? Is it preferred that the MAC driver performs the reset? Or what
-does this change fix?
-
-> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> ---
->  .../boot/dts/rockchip/rk3568-rock-3a.dts      | 19 ++++++++-----------
->  1 file changed, 8 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-> index 16fff1ada195..9172cf60b867 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-> +++ b/arch/arm64/boot/dts/rockchip/rk3568-rock-3a.dts
-> @@ -258,6 +258,11 @@ &gmac1 {
->  	assigned-clocks = <&cru SCLK_GMAC1_RX_TX>, <&cru SCLK_GMAC1>;
->  	assigned-clock-parents = <&cru SCLK_GMAC1_RGMII_SPEED>, <&gmac1_clkin>;
->  	clock_in_out = "input";
-> +	snps,reset-gpio = <&gpio3 RK_PB0 GPIO_ACTIVE_LOW>;
-> +	snps,reset-active-low;
-> +	/* Reset time is 20ms, 100ms for rtl8211f */
-> +	snps,reset-delays-us = <0 20000 100000>;
-> +	phy-supply = <&vcc_3v3>;
->  	phy-handle = <&rgmii_phy1>;
->  	phy-mode = "rgmii";
->  	pinctrl-names = "default";
-> @@ -267,6 +272,9 @@ &gmac1m1_rx_bus2
->  		     &gmac1m1_rgmii_clk
->  		     &gmac1m1_clkinout
->  		     &gmac1m1_rgmii_bus>;
+> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
+> index 667de4f125f6..a6b1a1501db3 100644
+> --- a/drivers/cxl/core/pci.c
+> +++ b/drivers/cxl/core/pci.c
+> @@ -48,6 +48,37 @@ static int pci_dev_add_dport(struct pci_dev *pdev, struct cxl_port *port,
+>  	return 0;
+>  }
+>  
+> +static int restricted_host_enumerate_dport(struct cxl_port *port,
+> +					   struct pci_bus *bus)
+> +{
+> +	struct pci_dev *pdev;
+> +	bool is_restricted_host;
+> +	int rc;
 > +
-> +	tx_delay = <0x4f>;
-> +	rx_delay = <0x26>;
+> +	/* Check CXL DVSEC of dev 0 func 0 */
+> +	pdev = pci_get_slot(bus, PCI_DEVFN(0, 0));
+> +
+> +	is_restricted_host = pdev
+> +		&& (pci_pcie_type(pdev) == PCI_EXP_TYPE_RC_END)
+> +		&& pci_find_dvsec_capability(pdev,
+> +					PCI_DVSEC_VENDOR_ID_CXL,
+> +					CXL_DVSEC_PCIE_DEVICE);
+> +	if (is_restricted_host)
+> +		rc = pci_dev_add_dport(pdev, port, CXL_RESOURCE_NONE);
 
-Ah, here they are. I would say these delays should be added in patch 1/3
-along a comment why the rgmii-id approach does not work.
+See my comment in patch #6. This reads the port id from RCiEP's PCIe
+cap, but instead the RCD UP RCRB should be used for this.
+pci_dev_add_dport() needs to be updated to handle that.
 
->  	status = "okay";
->  };
->  
-> @@ -583,11 +591,6 @@ &mdio1 {
->  	rgmii_phy1: ethernet-phy@0 {
->  		compatible = "ethernet-phy-ieee802.3-c22";
->  		reg = <0x0>;
-> -		pinctrl-names = "default";
-> -		pinctrl-0 = <&eth_phy_rst>;
-> -		reset-assert-us = <20000>;
-> -		reset-deassert-us = <100000>;
-> -		reset-gpios = <&gpio3 RK_PB0 GPIO_ACTIVE_LOW>;
->  	};
->  };
->  
-> @@ -625,12 +628,6 @@ vcc_mipi_en: vcc_mipi_en {
->  		};
->  	};
->  
-> -	ethernet {
-> -		eth_phy_rst: eth_phy_rst {
-> -			rockchip,pins = <3 RK_PB0 RK_FUNC_GPIO &pcfg_pull_none>;
-> -		};
-> -	};
+-Robert
 
-I would assume the pinctrl is still required no matter whether the MAC
-driver or the PHY driver asserts the GPIO reset.
-
-Best regards,
-Michael
-
-> -
->  	hym8563 {
->  		hym8563_int: hym8563-int {
->  			rockchip,pins = <0 RK_PD3 RK_FUNC_GPIO &pcfg_pull_up>;
+> +
+> +	pci_dev_put(pdev);
+> +
+> +	if (!is_restricted_host)
+> +		return 0;
+> +
+> +	dev_dbg(bus->bridge, "CXL restricted host found\n");
+> +
+> +	if (rc)
+> +		return rc;
+> +
+> +	return 1;
+> +}
