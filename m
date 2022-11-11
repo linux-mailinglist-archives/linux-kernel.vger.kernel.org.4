@@ -2,105 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D2C625A96
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:39:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15219625AC2
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233562AbiKKMje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 07:39:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
+        id S233424AbiKKM4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 07:56:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233475AbiKKMj1 (ORCPT
+        with ESMTP id S233518AbiKKM4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 07:39:27 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6658E7B20B;
-        Fri, 11 Nov 2022 04:39:26 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N7yvD2yLsz4f3w0C;
-        Fri, 11 Nov 2022 20:39:20 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-        by APP4 (Coremail) with SMTP id gCh0CgDX+9h6Qm5j+2ZmAQ--.47155S2;
-        Fri, 11 Nov 2022 20:39:23 +0800 (CST)
-From:   Xu Kuohai <xukuohai@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: [PATCH bpf] bpf: Fix offset calculation error in __copy_map_value and zero_map_value
-Date:   Fri, 11 Nov 2022 07:56:20 -0500
-Message-Id: <20221111125620.754855-1-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 11 Nov 2022 07:56:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641B17E9B2;
+        Fri, 11 Nov 2022 04:56:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42BF261FB7;
+        Fri, 11 Nov 2022 12:56:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CA4DC433C1;
+        Fri, 11 Nov 2022 12:56:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668171402;
+        bh=GZJjoXeY92/wbEWKodrjM/CxinxDfJeWCSKEhT/weGA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EfgC7U+h3qFbloGBBqd7bP4ir8ilTncbWTxwGcjWHmekLads9w3xh4//+sotqYa2b
+         wMvM71TCvCTEySTV69a9ygtndNunJMgon2Mh4QOb0D1t/Qu/etI5vH61e1jELdSrE+
+         Bg5X9XGq7IkrZyWdAhA2lrlfQ19pDTbCOV/Mlm9h4dGgzmUgjwvaIKSvaEeLI4xLaZ
+         7rKAjXEP7boQCHRi2SPPeMbch9pQl4CQbO3FiEvu8yHfM+bHRanmHXMY0W6Y63g0LU
+         j6rRjb9zbF7VaC7yKb/O9guIeHwmK94IgsBIpFjAynIgmzguMDt1XQA3ocND+v56Og
+         2pQgwhGdMFKGw==
+Date:   Fri, 11 Nov 2022 13:56:36 +0100
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH] PCI: mvebu: Use devm_request_irq() for registering
+ interrupt handler
+Message-ID: <Y25GhJuzInbEz0vs@lpieralisi>
+References: <20220709143151.qhoa7vjcidxadrvt@pali>
+ <20220709234430.GA489657@bhelgaas>
+ <20220710000659.vxmlsvoin26tdiqw@pali>
+ <20220829165109.fzrgguchg4otbbab@pali>
+ <20220911154516.tu2b7qhsnk6mdtui@pali>
+ <Yx7nXJRHN1sWCkVq@lpieralisi>
+ <20220912084808.mmi42l7sp657dz6i@pali>
+ <Yx70E4nBtKoVVmhO@lpieralisi>
+ <20220912090306.fto5k3rj6jrbq3rj@pali>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgDX+9h6Qm5j+2ZmAQ--.47155S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFyDJFy8Kr4ktry3uFWfZrb_yoW8GF4kpF
-        Z8KFyjkr1kXrWjqrZ8Xw1xCr95Aw4qkw1UGr98CayrtF1fJrnFqryxGF42q398Gr4vvr4U
-        ZF12qFZYk3yIqrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
-        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220912090306.fto5k3rj6jrbq3rj@pali>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Kuohai <xukuohai@huawei.com>
+On Mon, Sep 12, 2022 at 11:03:06AM +0200, Pali Rohár wrote:
+> On Monday 12 September 2022 10:55:47 Lorenzo Pieralisi wrote:
+> > On Mon, Sep 12, 2022 at 10:48:08AM +0200, Pali Rohár wrote:
+> > > On Monday 12 September 2022 10:01:32 Lorenzo Pieralisi wrote:
+> > > > On Sun, Sep 11, 2022 at 05:45:16PM +0200, Pali Rohár wrote:
+> > > > > On Monday 29 August 2022 18:51:09 Pali Rohár wrote:
+> > > > > > On Sunday 10 July 2022 02:06:59 Pali Rohár wrote:
+> > > > > > > On Saturday 09 July 2022 18:44:30 Bjorn Helgaas wrote:
+> > > > > > > > [+cc Marc, since he commented on this]
+> > > > > > > > 
+> > > > > > > > On Sat, Jul 09, 2022 at 04:31:51PM +0200, Pali Rohár wrote:
+> > > > > > > > > On Friday 01 July 2022 16:29:41 Pali Rohár wrote:
+> > > > > > > > > > On Thursday 23 June 2022 11:27:47 Bjorn Helgaas wrote:
+> > > > > > > > > > > On Tue, May 24, 2022 at 02:28:17PM +0200, Pali Rohár wrote:
+> > > > > > > > > > > > Same as in commit a3b69dd0ad62 ("Revert "PCI: aardvark: Rewrite IRQ code to
+> > > > > > > > > > > > chained IRQ handler"") for pci-aardvark driver, use devm_request_irq()
+> > > > > > > > > > > > instead of chained IRQ handler in pci-mvebu.c driver.
+> > > > > > > > > > > >
+> > > > > > > > > > > > This change fixes affinity support and allows to pin interrupts from
+> > > > > > > > > > > > different PCIe controllers to different CPU cores.
+> > > > > > > > > > > 
+> > > > > > > > > > > Several other drivers use irq_set_chained_handler_and_data().  Do any
+> > > > > > > > > > > of them need similar changes?  The commit log suggests that using
+> > > > > > > > > > > chained IRQ handlers breaks affinity support.  But perhaps that's not
+> > > > > > > > > > > the case and the real culprit is some other difference between mvebu
+> > > > > > > > > > > and the other drivers.
+> > > > > > > > > > 
+> > > > > > > > > > And there is another reason to not use irq_set_chained_handler_and_data
+> > > > > > > > > > and instead use devm_request_irq(). Armada XP has some interrupts
+> > > > > > > > > > shared and it looks like that irq_set_chained_handler_and_data() API
+> > > > > > > > > > does not handle shared interrupt sources too.
+> > > > > > > > > > 
+> > > > > > > > > > I can update commit message to mention also this fact.
+> > > > > > > > > 
+> > > > > > > > > Anything needed from me to improve this fix?
+> > > > > > > > 
+> > > > > > > > My impression from Marc's response [1] was that this patch would
+> > > > > > > > "break the contract the kernel has with userspace" and he didn't think
+> > > > > > > > this was acceptable.  But maybe I'm not understanding it correctly.
+> > > > > > > 
+> > > > > > > This is argument which Marc use when he does not have any argument.
+> > > > > > > 
+> > > > > > > Support for dedicated INTx into pci-mvebu.c was introduced just recently
+> > > > > > > and I used irq_set_chained_handler_and_data() just because I thought it
+> > > > > > > is a good idea and did not know about all those issues with it. So there
+> > > > > > > cannot be any breakage by this patch.
+> > > > > > > 
+> > > > > > > I already converted other pci-aardvark.c driver to use
+> > > > > > > irq_set_chained_handler_and_data() API because wanted it... But at the
+> > > > > > > end _that conversion_ caused breakage of afinity support and so this
+> > > > > > > conversion had to be reverted:
+> > > > > > > https://lore.kernel.org/linux-pci/20220515125815.30157-1-pali@kernel.org/#t
+> > > > > > > 
+> > > > > > > Based on his past decisions, above suggestions which cause _real_
+> > > > > > > breakage and his expressions like mvebu should be put into the trash,
+> > > > > > > I'm not going to listen him anymore. The only breaking is done by him.
+> > > > > > > 
+> > > > > > > 
+> > > > > > > There are two arguments why to not use irq_set_chained_handler_and_data:
+> > > > > > > 
+> > > > > > > 1) It does not support afinity and therefore has negative performance
+> > > > > > >    impact on Armada platforms with more CPUs and more PCIe ports.
+> > > > > > > 
+> > > > > > > 2) It does not support shared interrupts and therefore it will break
+> > > > > > >    hardware on which interrupt lines are shares (mostly Armada XP).
+> > > > > > > 
+> > > > > > > So these issues have to be fixed and currently I see only option to
+> > > > > > > switch irq_set_chained_handler_and_data() to devm_request_irq() which I
+> > > > > > > did in this fixup patch.
+> > > > > > 
+> > > > > > Any progress here? This patch is waiting here since end of May and if
+> > > > > > something is going to be broken then it is this fact of ignoring reported
+> > > > > > issues and proposed patch. Do you better solution how to fix commit
+> > > > > > ec075262648f?
+> > > > > 
+> > > > > After two weeks I'm reminding this fix patch again...
+> > > > 
+> > > > There is no point complaining about something you were asked
+> > > > to change, really - there is not.
+> > > > 
+> > > > You were given feedback, feel free to ignore it, it won't help
+> > > > getting this patch upstream - it is as simple as that, sorry.
+> > > > 
+> > > > Thanks,
+> > > > Lorenzo
+> > > 
+> > > I'm not sure if I understand you, what do you mean that all patches
+> > > which depends on this are now automatically rejected or what?
+> > 
+> > I am not merging this code unless it is acked by an IRQ maintainer.
+> > 
+> > Is it clear enough ?
+> > 
+> > Thanks,
+> > Lorenzo
+> 
+> So, could you then propose a solution how to fix this issue to allow one
+> interrupt to be shared with more devices, like it is needed for some
+> Armada platforms? Because I do not see a way how to do it without
+> IRQF_SHARED and without shared interrupt it is not possible to implement
+> any other pending features.
+> 
+> I'm feeling that since May there is just conclusion that all development
+> on the mvebu must be stopped as more people here do not like this
+> hardware and trying to do remove it or at least make it orphan.
 
-Function __copy_map_value and zero_map_value miscalculated copy offset,
-resulting in possible copy of unwanted data to user or kernel.
+Marc gave you a solution - we are going round in circles, it is getting
+boring, honestly.
 
-Fix it.
+https://lore.kernel.org/linux-pci/874k0bf7f7.wl-maz@kernel.org
 
-Fixes: cc48755808c6 ("bpf: Add zero_map_value to zero map value with special fields")
-Fixes: 4d7d7f69f4b1 ("bpf: Adapt copy_map_value for multiple offset case")
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- include/linux/bpf.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Either you implement what he asks for or I drop this patch and all
+dependent ones from the PCI queue - apologies.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 74c6f449d81e..c1bd1bd10506 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -315,7 +315,7 @@ static inline void __copy_map_value(struct bpf_map *map, void *dst, void *src, b
- 		u32 next_off = map->off_arr->field_off[i];
- 
- 		memcpy(dst + curr_off, src + curr_off, next_off - curr_off);
--		curr_off += map->off_arr->field_sz[i];
-+		curr_off = next_off + map->off_arr->field_sz[i];
- 	}
- 	memcpy(dst + curr_off, src + curr_off, map->value_size - curr_off);
- }
-@@ -344,7 +344,7 @@ static inline void zero_map_value(struct bpf_map *map, void *dst)
- 		u32 next_off = map->off_arr->field_off[i];
- 
- 		memset(dst + curr_off, 0, next_off - curr_off);
--		curr_off += map->off_arr->field_sz[i];
-+		curr_off = next_off + map->off_arr->field_sz[i];
- 	}
- 	memset(dst + curr_off, 0, map->value_size - curr_off);
- }
--- 
-2.30.2
-
+Lorenzo
