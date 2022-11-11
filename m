@@ -2,50 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59EC626037
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF6C626039
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:15:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234272AbiKKRPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 12:15:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
+        id S234308AbiKKRP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:15:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234229AbiKKRPL (ORCPT
+        with ESMTP id S234271AbiKKRPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:15:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFE43C6CF
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:15:10 -0800 (PST)
+        Fri, 11 Nov 2022 12:15:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C22731FB9;
+        Fri, 11 Nov 2022 09:15:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56A5EB8267A
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 17:15:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A124AC433D7;
-        Fri, 11 Nov 2022 17:15:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08AD362042;
+        Fri, 11 Nov 2022 17:15:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16370C433C1;
+        Fri, 11 Nov 2022 17:15:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668186908;
-        bh=sRrcqdhjs5tdOOy/Xr2UWVJV5Rz1PelJ/qkJs9nCdDA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=egwJvE1ao56OyeCS9vLRbCQMQIPeqe3PdeRlk5JqGZhCOOhU7yfdKkN2kAPKCgYcR
-         +IhINWqoF6KOwI7wKaGBttKzi/tGKXhrDbNhcQFt8hVjFkqYFXd687LLUV5zZCQ8eA
-         c905apaWAldHEu7OgiVMev0rDjuAi5qQ2SUQaIsCx8r7NwAHJ4l7WGe/if28H3CHTY
-         /qevDGUcIAWWbbPPFkIIMHSoY2Pgsnk5s+nxdHxYP/mqaDcAE60jvdvkpYZzYjNadc
-         SAMaSLwCALeT0Vw8fn8uCI3dDjyQ1YeCEvNsPKmRq0FlDFd6iRvTWxse8puwdBaqGy
-         2I3ir/RiwBQ9w==
-From:   Mark Brown <broonie@kernel.org>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     misael.lopez@ti.com, bcousson@baylibre.com,
-        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
-        fparent@baylibre.com, linux-kernel@vger.kernel.org
-In-Reply-To: <20221104132213.121847-1-rf@opensource.cirrus.com>
-References: <20221104132213.121847-1-rf@opensource.cirrus.com>
-Subject: Re: [PATCH] ASoC: soc-pcm: Don't zero TDM masks in __soc_pcm_open()
-Message-Id: <166818690633.487154.17424502068366763517.b4-ty@kernel.org>
-Date:   Fri, 11 Nov 2022 17:15:06 +0000
+        s=k20201202; t=1668186917;
+        bh=1bx9F93HYg9X36w4S8EOiznrg/93OqmuLSpxdBcw5+U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MZ7zrCrXE96lgsXr7MeK88jjBPBi+NHk3Bz+boOxBUedXgnWkwxTi37pTq3bpeKe7
+         71Aa+nAMOgX26uCvfOGshihsB6qIfOn9h/4zSRTddtgz0PrW6As/5OZ2T7jXVAZIYo
+         phyiS+HtYkjfmu7r6UkyAo4Zk96JuIGGgP+A7Oj6we8C9wja26g3ysC4CCFNwIMuPs
+         Tjc6qEGqr7hPUOBzgyaiZqtip383jyPrWJm3lxK6gA2TPJYct6Yx9UXdmnartvcNyl
+         lEsAFt3QhnJR38Blp0QC/+nxwX4ua8l859gSiQ8DX/uPy/tUgC8QHQk8Rv6gOhY6EW
+         tagKprdhuaXoQ==
+Received: by pali.im (Postfix)
+        id 24D7E818; Fri, 11 Nov 2022 18:15:14 +0100 (CET)
+Date:   Fri, 11 Nov 2022 18:15:14 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Helgaas <helgaas@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: mvebu: Use devm_request_irq() for registering
+ interrupt handler
+Message-ID: <20221111171514.zw7esq4ahmefvojr@pali>
+References: <20220709143151.qhoa7vjcidxadrvt@pali>
+ <20220709234430.GA489657@bhelgaas>
+ <20220710000659.vxmlsvoin26tdiqw@pali>
+ <20220829165109.fzrgguchg4otbbab@pali>
+ <20220911154516.tu2b7qhsnk6mdtui@pali>
+ <Yx7nXJRHN1sWCkVq@lpieralisi>
+ <20220912084808.mmi42l7sp657dz6i@pali>
+ <Yx70E4nBtKoVVmhO@lpieralisi>
+ <20220912090306.fto5k3rj6jrbq3rj@pali>
+ <Y25GhJuzInbEz0vs@lpieralisi>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
+In-Reply-To: <Y25GhJuzInbEz0vs@lpieralisi>
+User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,43 +69,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Nov 2022 13:22:13 +0000, Richard Fitzgerald wrote:
-> The DAI tx_mask and rx_mask are set by snd_soc_dai_set_tdm_slot()
-> and used by later code that depends on the TDM settings. So
-> __soc_pcm_open() should not be obliterating those mask values.
+On Friday 11 November 2022 13:56:36 Lorenzo Pieralisi wrote:
+> On Mon, Sep 12, 2022 at 11:03:06AM +0200, Pali Rohár wrote:
+> > On Monday 12 September 2022 10:55:47 Lorenzo Pieralisi wrote:
+> > > On Mon, Sep 12, 2022 at 10:48:08AM +0200, Pali Rohár wrote:
+> > > > On Monday 12 September 2022 10:01:32 Lorenzo Pieralisi wrote:
+> > > > > On Sun, Sep 11, 2022 at 05:45:16PM +0200, Pali Rohár wrote:
+> > > > > > On Monday 29 August 2022 18:51:09 Pali Rohár wrote:
+> > > > > > > On Sunday 10 July 2022 02:06:59 Pali Rohár wrote:
+> > > > > > > > On Saturday 09 July 2022 18:44:30 Bjorn Helgaas wrote:
+> > > > > > > > > [+cc Marc, since he commented on this]
+> > > > > > > > > 
+> > > > > > > > > On Sat, Jul 09, 2022 at 04:31:51PM +0200, Pali Rohár wrote:
+> > > > > > > > > > On Friday 01 July 2022 16:29:41 Pali Rohár wrote:
+> > > > > > > > > > > On Thursday 23 June 2022 11:27:47 Bjorn Helgaas wrote:
+> > > > > > > > > > > > On Tue, May 24, 2022 at 02:28:17PM +0200, Pali Rohár wrote:
+> > > > > > > > > > > > > Same as in commit a3b69dd0ad62 ("Revert "PCI: aardvark: Rewrite IRQ code to
+> > > > > > > > > > > > > chained IRQ handler"") for pci-aardvark driver, use devm_request_irq()
+> > > > > > > > > > > > > instead of chained IRQ handler in pci-mvebu.c driver.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > This change fixes affinity support and allows to pin interrupts from
+> > > > > > > > > > > > > different PCIe controllers to different CPU cores.
+> > > > > > > > > > > > 
+> > > > > > > > > > > > Several other drivers use irq_set_chained_handler_and_data().  Do any
+> > > > > > > > > > > > of them need similar changes?  The commit log suggests that using
+> > > > > > > > > > > > chained IRQ handlers breaks affinity support.  But perhaps that's not
+> > > > > > > > > > > > the case and the real culprit is some other difference between mvebu
+> > > > > > > > > > > > and the other drivers.
+> > > > > > > > > > > 
+> > > > > > > > > > > And there is another reason to not use irq_set_chained_handler_and_data
+> > > > > > > > > > > and instead use devm_request_irq(). Armada XP has some interrupts
+> > > > > > > > > > > shared and it looks like that irq_set_chained_handler_and_data() API
+> > > > > > > > > > > does not handle shared interrupt sources too.
+> > > > > > > > > > > 
+> > > > > > > > > > > I can update commit message to mention also this fact.
+> > > > > > > > > > 
+> > > > > > > > > > Anything needed from me to improve this fix?
+> > > > > > > > > 
+> > > > > > > > > My impression from Marc's response [1] was that this patch would
+> > > > > > > > > "break the contract the kernel has with userspace" and he didn't think
+> > > > > > > > > this was acceptable.  But maybe I'm not understanding it correctly.
+> > > > > > > > 
+> > > > > > > > This is argument which Marc use when he does not have any argument.
+> > > > > > > > 
+> > > > > > > > Support for dedicated INTx into pci-mvebu.c was introduced just recently
+> > > > > > > > and I used irq_set_chained_handler_and_data() just because I thought it
+> > > > > > > > is a good idea and did not know about all those issues with it. So there
+> > > > > > > > cannot be any breakage by this patch.
+> > > > > > > > 
+> > > > > > > > I already converted other pci-aardvark.c driver to use
+> > > > > > > > irq_set_chained_handler_and_data() API because wanted it... But at the
+> > > > > > > > end _that conversion_ caused breakage of afinity support and so this
+> > > > > > > > conversion had to be reverted:
+> > > > > > > > https://lore.kernel.org/linux-pci/20220515125815.30157-1-pali@kernel.org/#t
+> > > > > > > > 
+> > > > > > > > Based on his past decisions, above suggestions which cause _real_
+> > > > > > > > breakage and his expressions like mvebu should be put into the trash,
+> > > > > > > > I'm not going to listen him anymore. The only breaking is done by him.
+> > > > > > > > 
+> > > > > > > > 
+> > > > > > > > There are two arguments why to not use irq_set_chained_handler_and_data:
+> > > > > > > > 
+> > > > > > > > 1) It does not support afinity and therefore has negative performance
+> > > > > > > >    impact on Armada platforms with more CPUs and more PCIe ports.
+> > > > > > > > 
+> > > > > > > > 2) It does not support shared interrupts and therefore it will break
+> > > > > > > >    hardware on which interrupt lines are shares (mostly Armada XP).
+> > > > > > > > 
+> > > > > > > > So these issues have to be fixed and currently I see only option to
+> > > > > > > > switch irq_set_chained_handler_and_data() to devm_request_irq() which I
+> > > > > > > > did in this fixup patch.
+> > > > > > > 
+> > > > > > > Any progress here? This patch is waiting here since end of May and if
+> > > > > > > something is going to be broken then it is this fact of ignoring reported
+> > > > > > > issues and proposed patch. Do you better solution how to fix commit
+> > > > > > > ec075262648f?
+> > > > > > 
+> > > > > > After two weeks I'm reminding this fix patch again...
+> > > > > 
+> > > > > There is no point complaining about something you were asked
+> > > > > to change, really - there is not.
+> > > > > 
+> > > > > You were given feedback, feel free to ignore it, it won't help
+> > > > > getting this patch upstream - it is as simple as that, sorry.
+> > > > > 
+> > > > > Thanks,
+> > > > > Lorenzo
+> > > > 
+> > > > I'm not sure if I understand you, what do you mean that all patches
+> > > > which depends on this are now automatically rejected or what?
+> > > 
+> > > I am not merging this code unless it is acked by an IRQ maintainer.
+> > > 
+> > > Is it clear enough ?
+> > > 
+> > > Thanks,
+> > > Lorenzo
+> > 
+> > So, could you then propose a solution how to fix this issue to allow one
+> > interrupt to be shared with more devices, like it is needed for some
+> > Armada platforms? Because I do not see a way how to do it without
+> > IRQF_SHARED and without shared interrupt it is not possible to implement
+> > any other pending features.
+> > 
+> > I'm feeling that since May there is just conclusion that all development
+> > on the mvebu must be stopped as more people here do not like this
+> > hardware and trying to do remove it or at least make it orphan.
 > 
-> The code in __soc_pcm_hw_params() uses these masks to calculate the
-> active channels so that only the AIF_IN/AIF_OUT widgets for the
-> active TDM slots are enabled. The zeroing of the masks in
-> __soc_pcm_open() disables this functionality so all AIF widgets
-> were enabled even for channels that are not assigned to a TDM slot.
+> Marc gave you a solution - we are going round in circles, it is getting
+> boring, honestly.
 > 
-> [...]
+> https://lore.kernel.org/linux-pci/874k0bf7f7.wl-maz@kernel.org
 
-Applied to
+This is not the solution. As this does not allow to share one interrupt
+by multiple devices / drivers, like devm_request_irq with IRQF_SHARED
+flag. irq_set_chained_handler_and_data() can be used only by one device.
+This was expressed more times in other threads, but seems it was
+ignored.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+In past I have already send patches for armada interrupt drivers and
+they were rejected by Marc, who did not wanted to talk about them. And
+in past already expressed that he is not interested in any more
+development in Armada HW as by thinks it is broken hardware and his
+devel board stopped working.
 
-Thanks!
+I'm really not going to implement anything new for people who already
+expressed that would reject my contribution. Why would I do it?
 
-[1/1] ASoC: soc-pcm: Don't zero TDM masks in __soc_pcm_open()
-      commit: 39bd801d6908900e9ab0cdc2655150f95ddd4f1a
+Anyway, here we are dealing with REGRESSION in mainline kernel. Not a
+new feature. Mainline kernel is currently broken and this my patch is
+fixing it. Exactly same fix was already applied for other pci controller
+driver.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Why it is disallowed to fix regression in kernel with exactly same
+approach and same patch which was allowed for other drivers? Because it
+really looks like that somebody is trying to ensure that Linux kernel
+should stop working on existing hardware.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+> Either you implement what he asks for or I drop this patch and all
+> dependent ones from the PCI queue - apologies.
+> 
+> Lorenzo
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+So, please if you are going to drop patch series, and you do not like my
+fix for mentioned issue, could you please fix the driver to work in
+mainline kernel?
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Do not take me wrong, but it is really problem if mainline kernel is
+broken, developers like Greg are publicly talking that vendors,
+distributors and other should update kernels to new versions and not
+stay on the old one; and then other developers are rejecting fixes to
+regression in new versions and basically are saying that people and
+vendors should not upgrade kernels to new versions as it would stop
+working on some hardware.
 
-Thanks,
-Mark
+And I'm not even mentioned that there happened lot of other development
+and cleanup in this area and everything is stopped and maybe now after
+2 years would discarded, like some developers want as they do not like
+some kind of hardware.
+
+I'm really disappointed that I have to discuss about such thing.
+
+
+If fixing regressions and bugs is not a priority for kernel and is first
+subject to rewrite other parts of code and implement couple of new
+features, then I think it is a good idea to stop being doing
+development.
