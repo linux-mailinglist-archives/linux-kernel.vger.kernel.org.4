@@ -2,88 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4B6625DC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1162B625DCA
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234921AbiKKPBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 10:01:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
+        id S234889AbiKKPC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 10:02:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234755AbiKKO7i (ORCPT
+        with ESMTP id S234933AbiKKPBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 09:59:38 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C44654D5;
-        Fri, 11 Nov 2022 06:59:37 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 588EC6602A6A;
-        Fri, 11 Nov 2022 14:59:35 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668178776;
-        bh=MdaH8KbjjoGPf2cEN4UiKaUO79dviS/rWyElqvdnnE4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=avd20eghOS5K6gOklGt3Sm3Gek5pwuQ/Aprzihhp3r8z/4UR6W7kxHJx5sNNeobr7
-         9kClPGQaLigcVaBg+USNAimBjhTtD/X6KVpD5IufbPeVEDrpeKJ30eW29jkVzFYuyf
-         6Ap7rYhLr9CnWU63kHmHTS/Vo8ez9Iph7bPpmkUV0ZcP1+EBN/NxK7aPTBvddXs6fk
-         sU7L9eoyP7DTvVKvwZ2gL8xAv/x1U4w/lGTegKMjgutPNlQWOGdxncqZ+pZAeo3zaD
-         J1s0vvFOJi/FvhDNn+LZbTm6XwM9CYcwiNaHtZE1zwy4ENckVOBuKUWuaxWYYesS7f
-         hBGGpZCQPyOYQ==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     agross@kernel.org
-Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, joro@8bytes.org,
-        will@kernel.org, robin.murphy@arm.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robdclark@gmail.com,
-        linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        marijn.suijten@somainline.org, kernel@collabora.com,
-        luca@z3ntu.xyz, a39.skl@gmail.com, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2 8/8] dt-bindings: iommu: qcom,iommu: Document MSM8976 compatible
-Date:   Fri, 11 Nov 2022 15:59:19 +0100
-Message-Id: <20221111145919.221159-9-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221111145919.221159-1-angelogioacchino.delregno@collabora.com>
-References: <20221111145919.221159-1-angelogioacchino.delregno@collabora.com>
+        Fri, 11 Nov 2022 10:01:30 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DDA729BB
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:00:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1668178834;
+  x=1699714834;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=fON7pObanRF1Uh/P00Mehvr/bi1ufQEx4XCvxOtF19o=;
+  b=W5IGUlVxAixecHeNIGOLKFiUmvIrYcA2G3L7J6BdIVgkQ56AV1X3Veg4
+   9d9sgJyjgSQK+iXWzsHMMyON/Yobcitec/gd6kMvpT0AUl0yKNlFPcoaW
+   qVTnFgLyZZKclauLZhcQxOtVfYPiDuGcXHe2J2FofwYlqJAn6dZigOHJL
+   Xa9wCyO9qopWaa2Ll+yVtLfhr8H4u5YT7ebPiwhgDMnzJdc1j8S1i2sl5
+   ojNcrIOuEgsqJZo2ryemlNfdefR/FExMIhIYwWEpVHwuBrg8YhW0VtJiK
+   4wLPoIUOBcRUrTIUHI/cMDAF8Y8iJhx/x6Uz3e7bcYfnm+phhjsagGvgw
+   g==;
+From:   =?utf-8?B?THVkdmlnIFDDpHJzc29u?= <Ludvig.Parsson@axis.com>
+To:     "sumit.garg@linaro.org" <sumit.garg@linaro.org>,
+        "sudeep.holla@arm.com" <sudeep.holla@arm.com>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "jens.wiklander@linaro.org" <jens.wiklander@linaro.org>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        =?utf-8?B?THVkdmlnIFDDpHJzc29u?= <Ludvig.Parsson@axis.com>,
+        "etienne.carriere@linaro.org" <etienne.carriere@linaro.org>,
+        "cristian.marussi@arm.com" <cristian.marussi@arm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] firmware: arm_scmi: Resolve dependency with TEE subsystem
+Thread-Topic: [PATCH] firmware: arm_scmi: Resolve dependency with TEE
+ subsystem
+Thread-Index: AQHY9bNyMyeFeP3G1keVYelAsguUwK45ujoAgAAGSIA=
+Date:   Fri, 11 Nov 2022 15:00:29 +0000
+Message-ID: <7a32a3694ffd6790e4e2a7c5896931cf8f1a7243.camel@axis.com>
+References: <20221111095313.2010815-1-sumit.garg@linaro.org>
+         <20221111143800.k7xje6g23ujefnye@bogus>
+In-Reply-To: <20221111143800.k7xje6g23ujefnye@bogus>
+Accept-Language: en-US, sv-SE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.0.5.60]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D8924B4C78786645BA9E21081AD15CAB@exhub.se.axis.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add "qcom,msm8976-iommu" to support IOMMUs on this SoC.
-
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- Documentation/devicetree/bindings/iommu/qcom,iommu.txt | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/iommu/qcom,iommu.txt b/Documentation/devicetree/bindings/iommu/qcom,iommu.txt
-index b762772f80e7..b7a5822ac00d 100644
---- a/Documentation/devicetree/bindings/iommu/qcom,iommu.txt
-+++ b/Documentation/devicetree/bindings/iommu/qcom,iommu.txt
-@@ -9,7 +9,8 @@ to non-secure vs secure interrupt line.
- 
- - compatible       : Should be one of:
- 
--                        "qcom,msm8916-iommu"
-+                        - "qcom,msm8916-iommu"
-+                        - "qcom,msm8976-iommu"
- 
-                      Followed by one of:
- 
--- 
-2.38.1
-
+T24gRnJpLCAyMDIyLTExLTExIGF0IDE0OjM4ICswMDAwLCBTdWRlZXAgSG9sbGEgd3JvdGU6DQo+
+IE9uIEZyaSwgTm92IDExLCAyMDIyIGF0IDAzOjIzOjEzUE0gKzA1MzAsIFN1bWl0IEdhcmcgd3Jv
+dGU6DQo+ID4gVGhlIE9QLVRFRSBTQ01JIHRyYW5zcG9ydCBjaGFubmVsIGlzIGRlcGVuZGVudCBv
+biBURUUgc3Vic3lzdGVtIHRvDQo+ID4gYmUNCj4gPiBpbml0aWFsaXplZCBmaXJzdC4gQnV0IGN1
+cnJlbnRseSB0aGUgQXJtIFNDTUkgc3Vic3lzdGVtIGFuZCBURUUNCj4gPiBzdWJzeXN0ZW0gYXJl
+IGludm9rZWQgb24gdGhlIHNhbWUgaW5pdGNhbGwgbGV2ZWwgYXMNCj4gPiBzdWJzeXN0ZW1faW5p
+dCgpLg0KPiA+IA0KPiA+IEl0IGlzIG9ic2VydmVkIHRoYXQgdGhlIFNDTUkgc3Vic3lzdGVtIGlu
+aXRjYWxsIGlzIGludm9rZWQgcHJpb3IgdG8NCj4gPiBURUUNCj4gPiBzdWJzeXN0ZW0gaW5pdGNh
+bGwuIFRoaXMgbGVhZHMgdG8gdW53YW50ZWQgZXJyb3IgbWVzc2FnZXMgcmVnYXJkaW5nDQo+ID4g
+VEVFDQo+ID4gYnVzIGlzIG5vdCBwcmVzZW50IHlldC4gQWx0aG91Z2gsIC1FUFJPQkVfREVGRVIg
+dHJpZXMgdG8gd29ya2Fyb3VuZA0KPiA+IHRoYXQNCj4gPiBwcm9ibGVtLg0KPiA+IA0KPiA+IExl
+dHMgdHJ5IHRvIHJlc29sdmUgaW50ZXIgc3Vic3lzdGVtIGRlcGVuZGVuY3kgcHJvYmxlbSB2aWEg
+c2hpZnRpbmcNCj4gPiBBcm0NCj4gPiBTQ01JIHN1YnN5c3RlbSB0byBzdWJzeXN0ZW1faW5pdF9z
+eW5jKCkgaW5pdGNhbGwgbGV2ZWwuDQo+ID4gDQo+IA0KPiBJIHdvdWxkIGF2b2lkIGRvaW5nIHRo
+YXQuIFdlIGFscmVhZHkgaGF2ZSBzb21lIGltcGxpY2l0IGRlcGVuZGVuY3kNCj4gd2l0aA0KPiBz
+dWJzeXNfaW5pdGNhbGwgYmVjYXVzZSB0aGlzIGRyaXZlciBjcmVhdGVzL3JlZ2lzdGVycyBidXMg
+YW5kIG5lZWQgdG8NCj4gYmUNCj4gZG9uZSBlYXJseS4gTm93IGluIG9yZGVyIHRvIHNvbHZlIHRo
+ZSBkZXBlbmRlbmN5IGJldHdlZW4gU0NNSSBhbmQNCj4gVEVFLA0KPiBib3RoIG9mIHdoaWNoIGNy
+ZWF0ZXMvcmVnaXN0ZXJzIGJ1cyBhbmQgYXJlIGF0IHNhbWUgc3Vic3lzX2luaXRjYWxsLA0KPiB3
+ZSBhcmUgcmVseWluZyBvbiBzdWJzeXNfaW5pdGNhbGxfc3luYy4NCj4gDQo+IE1lIGFuZCBMdWR2
+aWcgZGlzY3Vzc2VkIHRoaXMgaW4gcHJpdmF0ZSBhbmQgSSBzdWdnZXN0ZWQgaGltIHRvIGRvDQo+
+IHNvbWV0aGluZw0KPiBsaWtlIGJlbG93IHBhdGNoIHNuaXBwZXQuIEhlIG1lbnRpb25lZCBoZSBk
+aWQgcG9zdCBhIHBhdGNoIG9uIHRoZQ0KPiBsaXN0IGJ1dA0KPiBJIGNvdWxkbid0IGZpbmQgaXQu
+IEZvciB0aGlzIHRoZSBzY21pIG5vZGUgbXVzdCBiZSBjaGlsZCBub2RlIG9mDQo+IE9QVEVFIGFz
+DQo+IGl0IGlzIHByb3ZpZGluZyB0aGUgdHJhbnNwb3J0Lg0KPiANCj4gQEx1ZHZpZywgPw0KPiAN
+Cj4gUmVnYXJkcywNCj4gU3VkZWVwDQo+IA0KPiAtLQ0KPiBkaWZmIC0tZ2l0IGkvZHJpdmVycy90
+ZWUvb3B0ZWUvc21jX2FiaS5jDQo+IHcvZHJpdmVycy90ZWUvb3B0ZWUvc21jX2FiaS5jDQo+IGlu
+ZGV4IGExYzFmYTFhOWMyOC4uODM5ZmVjYTBkZWY0IDEwMDY0NA0KPiAtLS0gaS9kcml2ZXJzL3Rl
+ZS9vcHRlZS9zbWNfYWJpLmMNCj4gKysrIHcvZHJpdmVycy90ZWUvb3B0ZWUvc21jX2FiaS5jDQo+
+IEBAIC0xNTM0LDcgKzE1MzQsOSBAQCBzdGF0aWMgaW50IG9wdGVlX3Byb2JlKHN0cnVjdCBwbGF0
+Zm9ybV9kZXZpY2UNCj4gKnBkZXYpDQo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBn
+b3RvIGVycl9kaXNhYmxlX3NobV9jYWNoZTsNCj4gDQo+IMKgwqDCoMKgwqDCoMKgIHByX2luZm8o
+ImluaXRpYWxpemVkIGRyaXZlclxuIik7DQo+IC3CoMKgwqDCoMKgwqAgcmV0dXJuIDA7DQo+ICsN
+Cj4gK8KgwqDCoMKgwqDCoCAvKiBQb3B1bGF0ZSBhbnkgZGVwZW5kZW50IGNoaWxkIG5vZGUoaWYg
+YW55KSAqLw0KPiArwqDCoMKgwqDCoMKgIHJldHVybiBkZXZtX29mX3BsYXRmb3JtX3BvcHVsYXRl
+KCZwZGV2LT5kZXYpOw0KPiANCj4gwqBlcnJfZGlzYWJsZV9zaG1fY2FjaGU6DQo+IMKgwqDCoMKg
+wqDCoMKgIGlmICghb3B0ZWUtPnJwY19wYXJhbV9jb3VudCkNCj4gDQpJIGhhdmUgYW5zd2VyZWQg
+c29tZXRoaW5nIHNpbWlsYXIgaW4gbXkgc3VibWl0IFsxXS4gTWF5YmUgSSBzaG91bGQgaGF2ZQ0K
+Q0NlZCB5b3UsIG9yIGF0bGVhc3Qgc2VudCB5b3UgdGhpcyBsaW5rIHdoZW4gSSB0b2xkIHlvdSBJ
+IG1hZGUgdGhlDQpzdWJtaXNzaW9uLg0KDQpbMV0gaHR0cHM6Ly9sa21sLm9yZy9sa21sLzIwMjIv
+MTEvOS84MDMNCg0KQlIsDQpMdWR2aWcNCg==
