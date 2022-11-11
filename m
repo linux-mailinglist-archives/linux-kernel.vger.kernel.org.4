@@ -2,198 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DC7626395
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 22:29:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6A3626391
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 22:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234042AbiKKV30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 16:29:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
+        id S233772AbiKKV3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 16:29:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234243AbiKKV3H (ORCPT
+        with ESMTP id S234055AbiKKV3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 16:29:07 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2150E02A;
-        Fri, 11 Nov 2022 13:29:03 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ABK7gPl008799;
-        Fri, 11 Nov 2022 21:28:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=uIanU9LhbPaQaWYLWFzBHASxrX1ZhAwia93DNI3Lt5w=;
- b=Y3gxuXWG+PYMnlBIMzLOmA0h9scoDO9nm4MbliAuZ7idBe0IKK8aRC7qYID6CHIuzO2E
- nzRcJQ2A0qEcqzywwidIQT14jrFkYDAE4pknWrU8qKol+TVTYZYO6aBAjSB4vJy4uHSG
- zxGAFfGB+ULjIRSGu5hc7rSIDO7Vwdi+kBICD1u2OiRfEAU8oQ8UkxeZuAwVh1F/twN+
- zQot2cwYPEXH9RJ9TfMRLrJKF6rzAwK+PTxrjMrAPQt/nafG9yz/7P9KOLgBoodWPAXh
- kF5ueuWwkHGe4MRhwcgeY2u14dhh5dMww9NfR6CEyvSaayYkWqy+90WSR8YELyG0h0nt 8g== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ksu6tredq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 21:28:54 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ABLSroC030675
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 21:28:53 GMT
-Received: from [10.216.43.102] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 11 Nov
- 2022 13:28:47 -0800
-Message-ID: <899db0f8-7b8a-ed8f-30b8-4f630da1298d@quicinc.com>
-Date:   Sat, 12 Nov 2022 02:58:44 +0530
+        Fri, 11 Nov 2022 16:29:00 -0500
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A455F14D23;
+        Fri, 11 Nov 2022 13:28:52 -0800 (PST)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-13bef14ea06so6734648fac.3;
+        Fri, 11 Nov 2022 13:28:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0bHkUTUyhnUWblPSY7Vk1oCHAcUZEF1ZecefasIeWrk=;
+        b=vAH+upY4i5CloFUaJeof0FZLJe93FW4qtln1NCqNU0fszppmtTl2aBptQ/Mpjg1+kG
+         aSyJ23Kb6nyO34Xt3MUdAjzDejLL69n84//rxTbjBsvdj2/L3Z/ZmIsonT4+ppabfkBD
+         f1KDDNW8gBLzJ4EYYl/qIsL9V1ouBeR//D+p7TmPUNrAnSZJcvloS6bg+Qxmr6+eknXH
+         X+a6F2CYPCG1hLkRLChPksufnIpGQd/kJjhxGkhPTrWxC3xVC1tfTQrijU/aTlfT2IMV
+         HOCOImzIs3SnCgyQpbwZDq7XnbfcWr78XGNGhMj9ktKvOXH5flaQR9sNQRCfdtd8oDoH
+         UQuA==
+X-Gm-Message-State: ANoB5pk15whrH/fIocE1FBSuoIiuITaqx+TkN5LbPdyhxgIMJycBRwMM
+        YnOqZzAxBcvkFXn7cI/7mHohLGRauA==
+X-Google-Smtp-Source: AA0mqf7oOrVOnnJdeIvis7NmPa3kpHLUadgHo2lC5hsNZhiwHV9ekfCzvBUWLKJ1W0pgYxxZQ1s3eA==
+X-Received: by 2002:a05:6870:a111:b0:13d:9bde:b315 with SMTP id m17-20020a056870a11100b0013d9bdeb315mr2057022oae.141.1668202131886;
+        Fri, 11 Nov 2022 13:28:51 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c15-20020a056808138f00b0035173c2fddasm1232714oiw.51.2022.11.11.13.28.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 13:28:51 -0800 (PST)
+Received: (nullmailer pid 4104218 invoked by uid 1000);
+        Fri, 11 Nov 2022 21:28:53 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: iio: dac: adi,ad5758: Drop 'contains' from 'adi,dc-dc-mode'
+Date:   Fri, 11 Nov 2022 15:28:46 -0600
+Message-Id: <20221111212846.4104059-1-robh@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 2/2] adreno: Detect shutdown during get_param()
-Content-Language: en-US
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Rob Clark <robdclark@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Ross Zwisler <zwisler@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, Emma Anholt <emma@anholt.net>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>
-References: <20221111194957.4046771-1-joel@joelfernandes.org>
- <20221111194957.4046771-2-joel@joelfernandes.org>
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <20221111194957.4046771-2-joel@joelfernandes.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: T4aAOvsz-SnCrYaaU2dbJSwGA7soN8OB
-X-Proofpoint-ORIG-GUID: T4aAOvsz-SnCrYaaU2dbJSwGA7soN8OB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-11_11,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- mlxlogscore=999 impostorscore=0 phishscore=0 spamscore=0 malwarescore=0
- bulkscore=0 priorityscore=1501 suspectscore=0 adultscore=0 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211110145
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/12/2022 1:19 AM, Joel Fernandes (Google) wrote:
-> Even though the GPU is shut down, during kexec reboot we can have userspace
-> still running. This is especially true if KEXEC_JUMP is not enabled, because we
-> do not freeze userspace in this case.
->
-> To prevent crashes, track that the GPU is shutdown and prevent get_param() from
-> accessing GPU resources if we find it shutdown.
->
-> This fixes the following crash during kexec reboot on an ARM64 device with adreno GPU:
->
-> [  292.534314] Kernel panic - not syncing: Asynchronous SError Interrupt
-> [  292.534323] Hardware name: Google Lazor (rev3 - 8) with LTE (DT)
-> [  292.534326] Call trace:
-> [  292.534328]  dump_backtrace+0x0/0x1d4
-> [  292.534337]  show_stack+0x20/0x2c
-> [  292.534342]  dump_stack_lvl+0x60/0x78
-> [  292.534347]  dump_stack+0x18/0x38
-> [  292.534352]  panic+0x148/0x3b0
-> [  292.534357]  nmi_panic+0x80/0x94
-> [  292.534364]  arm64_serror_panic+0x70/0x7c
-> [  292.534369]  do_serror+0x0/0x7c
-> [  292.534372]  do_serror+0x54/0x7c
-> [  292.534377]  el1h_64_error_handler+0x34/0x4c
-> [  292.534381]  el1h_64_error+0x7c/0x80
-> [  292.534386]  el1_interrupt+0x20/0x58
-> [  292.534389]  el1h_64_irq_handler+0x18/0x24
-> [  292.534395]  el1h_64_irq+0x7c/0x80
-> [  292.534399]  local_daif_inherit+0x10/0x18
-> [  292.534405]  el1h_64_sync_handler+0x48/0xb4
-> [  292.534410]  el1h_64_sync+0x7c/0x80
-> [  292.534414]  a6xx_gmu_set_oob+0xbc/0x1fc
-> [  292.534422]  a6xx_get_timestamp+0x40/0xb4
-> [  292.534426]  adreno_get_param+0x12c/0x1e0
-> [  292.534433]  msm_ioctl_get_param+0x64/0x70
-> [  292.534440]  drm_ioctl_kernel+0xe8/0x158
-> [  292.534448]  drm_ioctl+0x208/0x320
-> [  292.534453]  __arm64_sys_ioctl+0x98/0xd0
-> [  292.534461]  invoke_syscall+0x4c/0x118
-> [  292.534467]  el0_svc_common+0x98/0x104
-> [  292.534473]  do_el0_svc+0x30/0x80
-> [  292.534478]  el0_svc+0x20/0x50
-> [  292.534481]  el0t_64_sync_handler+0x78/0x108
-> [  292.534485]  el0t_64_sync+0x1a4/0x1a8
-> [  292.534632] Kernel Offset: 0x1a5f800000 from 0xffffffc008000000
-> [  292.534635] PHYS_OFFSET: 0x80000000
-> [  292.534638] CPU features: 0x40018541,a3300e42
-> [  292.534644] Memory Limit: none
->
-> Cc: Rob Clark <robdclark@chromium.org>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ricardo Ribalda <ribalda@chromium.org>
-> Cc: Ross Zwisler <zwisler@kernel.org>
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->   drivers/gpu/drm/msm/adreno/adreno_device.c | 1 +
->   drivers/gpu/drm/msm/adreno/adreno_gpu.c    | 2 +-
->   drivers/gpu/drm/msm/msm_gpu.h              | 3 +++
->   3 files changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> index f0cff62812c3..03d912dc0130 100644
-> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> @@ -612,6 +612,7 @@ static void adreno_shutdown(struct platform_device *pdev)
->   {
->   	struct msm_gpu *gpu = dev_to_gpu(&pdev->dev);
->   
-> +	gpu->is_shutdown = true;
->   	WARN_ON_ONCE(adreno_system_suspend(&pdev->dev));
->   }
->   
-> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> index 382fb7f9e497..6903c6892469 100644
-> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
-> @@ -251,7 +251,7 @@ int adreno_get_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
->   	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
->   
->   	/* No pointer params yet */
-> -	if (*len != 0)
-> +	if (*len != 0 || gpu->is_shutdown)
->   		return -EINVAL;
-This will race with shutdown. Probably, propagating back the return 
-value of pm_runtime_get() in every possible ioctl call path is the right 
-thing to do.
+'contains' applies to arrays, but 'adi,dc-dc-mode' is a scalar. So drop
+'contains' from the 'if' schema.
 
-I have never thought about this scenario. Do you know why userspace is 
-not freezed before kexec?
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
--Akhil.
->   
->   	switch (param) {
-> diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-> index ff911e7305ce..f18b0a91442b 100644
-> --- a/drivers/gpu/drm/msm/msm_gpu.h
-> +++ b/drivers/gpu/drm/msm/msm_gpu.h
-> @@ -214,6 +214,9 @@ struct msm_gpu {
->   	/* does gpu need hw_init? */
->   	bool needs_hw_init;
->   
-> +	/* is the GPU shutdown? */
-> +	bool is_shutdown;
-> +
->   	/**
->   	 * global_faults: number of GPU hangs not attributed to a particular
->   	 * address space
+diff --git a/Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml b/Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml
+index e49e7556175d..4e508bfcc9d8 100644
+--- a/Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml
++++ b/Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml
+@@ -102,8 +102,7 @@ allOf:
+   - if:
+       properties:
+         adi,dc-dc-mode:
+-          contains:
+-            enum: [1, 3]
++          enum: [1, 3]
+     then:
+       properties:
+         adi,range-microvolt: false
+-- 
+2.35.1
 
