@@ -2,53 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A38046256EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:36:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 771716256F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233459AbiKKJg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:36:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
+        id S233624AbiKKJhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:37:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbiKKJgZ (ORCPT
+        with ESMTP id S232955AbiKKJhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:36:25 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DEC63C1;
-        Fri, 11 Nov 2022 01:36:24 -0800 (PST)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N7tqq2PNzz15MYX;
-        Fri, 11 Nov 2022 17:36:07 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 17:36:22 +0800
-Received: from [10.174.176.52] (10.174.176.52) by
- kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 17:36:21 +0800
-Message-ID: <c7d5700d-8080-7588-8e1f-398cc2943523@huawei.com>
-Date:   Fri, 11 Nov 2022 17:36:20 +0800
+        Fri, 11 Nov 2022 04:37:12 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62036EB41
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:37:11 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id k15so4466141pfg.2
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 01:37:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AmA/wiGTgxxSgV/ULL1vm+H9tlQ/4RzcG0V6hjmLS9I=;
+        b=XVKz1JCSIPdyUUo4gQ9rUzrRy5HmEp3kpsdg8K3eHfOkirx8584NyU5vkmNzO4M5VQ
+         LW/XMA4X6QzDnJNA0aHHUM+z0S9D68b35PtTAF2iJ6iC+FAS/QdVq7i/Yvri6cVknKVU
+         eu3bkntCNFzkROvqz92xT2UYE4op15fKXzX0Q0RedU9TkzIgRtURCeSAQmAhvVFuWvzF
+         4GLOwvr0iBJVgYi9cQU0Boxnnwnd89oJbyI+uokfQV/iyUaznyEqZ9E/2D+haC5umf7Z
+         OPoHBkFXp3Gx5H6A4YZuvUytErrRs1vaUgOSOY4Vc4VLfw62W7z5XfQOYB+aTT+FJo19
+         byIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AmA/wiGTgxxSgV/ULL1vm+H9tlQ/4RzcG0V6hjmLS9I=;
+        b=Uw9FmCtUKwym0gjESWMW3foGelbsUeziHTFQJmEGgukO7E4jbaimrtsAiPVk08H5fi
+         GGbSuURyvczL5cWm3WzbTB5LDkK8jpSqo8EanxLUd2nbWJSvLEy8JJo0ALs96pdkydIM
+         saPi+GjprP40RdaT0Lc9vgr1o0/bVt/4+RplferBu2ybp1SRjgJduMAnOPYNHB03/QJx
+         R7BvNXelmxRA11asp2AxNhVwUc3G/9CW1sCQmjssEM0KTMBySQ9EimgU80kaoeBfJCdC
+         Hi2Net3+EfQGHtyjnrK1x9Tc96fulcjSKkhiuazHODTrdSuTHcLkQ5GfJv8bB/DGd/fC
+         z44Q==
+X-Gm-Message-State: ANoB5pnTuQimBGiTMQ1ClrSzhkLQ5QalEZxWe09r+poRZTRse8wYt5yk
+        RGXJnSa7XrAZ5tp4Awwr8L79Xw==
+X-Google-Smtp-Source: AA0mqf7NcsEz6aTfOTnAD7xYlmi5Q1EjHThNEZUL3L5HAg1X1EnPe6ebwr7+D3ccxgOWoZKuAG/Zow==
+X-Received: by 2002:aa7:91d8:0:b0:56b:e5de:8b4f with SMTP id z24-20020aa791d8000000b0056be5de8b4fmr1784629pfa.67.1668159431346;
+        Fri, 11 Nov 2022 01:37:11 -0800 (PST)
+Received: from localhost.localdomain ([61.120.150.75])
+        by smtp.gmail.com with ESMTPSA id x10-20020a1709029a4a00b001886863c6absm1235641plv.97.2022.11.11.01.37.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 01:37:10 -0800 (PST)
+From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Subject: [PATCH] fuse: initialize attr_version of new fuse inodes by fc->attr_version
+Date:   Fri, 11 Nov 2022 17:37:02 +0800
+Message-Id: <20221111093702.80975-1-zhangjiachen.jaycee@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH v2] btrfs: qgroup: fix sleep from invalid context bug in
- update_qgroup_limit_item()
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>, <clm@fb.com>,
-        <josef@toxicpanda.com>, <dsterba@suse.com>
-CC:     <linux-btrfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zhangxiaoxu5@huawei.com>
-References: <20221111090212.2266807-1-chenxiaosong2@huawei.com>
- <df7ede88-86a2-1c6d-0343-c97a851b9bdf@gmx.com>
-From:   ChenXiaoSong <chenxiaosong2@huawei.com>
-In-Reply-To: <df7ede88-86a2-1c6d-0343-c97a851b9bdf@gmx.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.52]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,95 +68,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your suggestions, I will try to send a new version patch.
+The FUSE_READDIRPLUS request reply handler fuse_direntplus_link() might
+call fuse_iget() to initialize a new fuse_inode and change its attributes.
+But as the new fi->attr_version is always initialized with 0, even if the
+attr_version of the FUSE_READDIRPLUS request has become staled, staled attr
+may still be set to the new fuse_inode. This may cause file size
+inconsistency even when a filesystem backend is mounted with a single FUSE
+mountpoint.
 
-在 2022/11/11 17:09, Qu Wenruo 写道:
-> 
-> 
-> On 2022/11/11 17:02, ChenXiaoSong wrote:
->> Syzkaller reported BUG as follows:
->>
->>    BUG: sleeping function called from invalid context at
->>         include/linux/sched/mm.h:274
->>    Call Trace:
->>     <TASK>
->>     dump_stack_lvl+0xcd/0x134
->>     __might_resched.cold+0x222/0x26b
->>     kmem_cache_alloc+0x2e7/0x3c0
->>     update_qgroup_limit_item+0xe1/0x390
->>     btrfs_qgroup_inherit+0x147b/0x1ee0
->>     create_subvol+0x4eb/0x1710
->>     btrfs_mksubvol+0xfe5/0x13f0
->>     __btrfs_ioctl_snap_create+0x2b0/0x430
->>     btrfs_ioctl_snap_create_v2+0x25a/0x520
->>     btrfs_ioctl+0x2a1c/0x5ce0
->>     __x64_sys_ioctl+0x193/0x200
->>     do_syscall_64+0x35/0x80
->>
->> Fix this by delaying the limit item updates until unlock the spin lock.
-> 
-> The overall idea is way better now.
-> 
-> But sorry that I didn't immediately find out the best solution at the 
-> first glance.
-> 
-> In fact, your v2 path just lets me remember what is the correct way to 
-> handle such situation.
-> 
->>
->> Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
->> ---
->>   fs/btrfs/qgroup.c | 18 +++++++++---------
->>   1 file changed, 9 insertions(+), 9 deletions(-)
->>
->> diff --git a/fs/btrfs/qgroup.c b/fs/btrfs/qgroup.c
->> index 9334c3157c22..2792d63c0da4 100644
->> --- a/fs/btrfs/qgroup.c
->> +++ b/fs/btrfs/qgroup.c
-> [...]
->> @@ -2985,6 +2978,7 @@ int btrfs_qgroup_inherit(struct 
->> btrfs_trans_handle *trans, u64 srcid,
->>           dstgroup->max_excl = srcgroup->max_excl;
->>           dstgroup->rsv_rfer = srcgroup->rsv_rfer;
->>           dstgroup->rsv_excl = srcgroup->rsv_excl;
->> +        update_limit = true;
->>           qgroup_dirty(fs_info, dstgroup);
->>           qgroup_dirty(fs_info, srcgroup);
-> 
-> You caught the "if (srcid)" branch, which also changed the 
-> limit/rfer/excl numbers of the destination qgroup, but didn't call 
-> update_qgroup_limit_item().
-> 
-> 
-> But if you check the function qgroup_dirty() a little deeper, you can 
-> find out that, qgroup_dirty() will move the target qgroup into 
-> fs_info->dirty_qgroups list.
-> 
-> And later at btrfs_run_qgroups() (which is called during 
-> btrfs_commit_transaction(), and also after create_pending_snapshots()), 
-> we will update the quota tree to reflect the result.
-> 
-> So this means, all you need is just call qgroup_dirty() on @dstqgroup, 
-> and call it a day.
-> Everything else will be properly handled.
-> 
-> Sorry I didn't notice this earlier...
-> 
-> Thanks,
-> Qu
-> 
->> @@ -3053,6 +3047,12 @@ int btrfs_qgroup_inherit(struct 
->> btrfs_trans_handle *trans, u64 srcid,
->>   unlock:
->>       spin_unlock(&fs_info->qgroup_lock);
->> +    if (update_limit && update_qgroup_limit_item(trans, dstgroup)) {
->> +        qgroup_mark_inconsistent(fs_info);
->> +        btrfs_info(fs_info,
->> +               "unable to update quota limit for %llu",
->> +               dstgroup->qgroupid);
->> +    }
->>       if (!ret)
->>           ret = btrfs_sysfs_add_one_qgroup(fs_info, dstgroup);
->>   out:
-> 
-> .
+This commit fixes the issue by initializing new fuse_inode attr_versions by
+the global fc->attr_version. This may introduce more FUSE_GETATTR but can
+avoid weird attributes rollback being seen by users.
+
+Fixes: 19332138887c ("fuse: initialize attr_version of new fuse inodes by fc->attr_version")
+Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+---
+ fs/fuse/inode.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+index 6b3beda16c1b..145ded6b55af 100644
+--- a/fs/fuse/inode.c
++++ b/fs/fuse/inode.c
+@@ -71,6 +71,7 @@ struct fuse_forget_link *fuse_alloc_forget(void)
+ static struct inode *fuse_alloc_inode(struct super_block *sb)
+ {
+ 	struct fuse_inode *fi;
++	struct fuse_conn *fc = get_fuse_conn_super(sb);
+ 
+ 	fi = alloc_inode_sb(sb, fuse_inode_cachep, GFP_KERNEL);
+ 	if (!fi)
+@@ -80,7 +81,7 @@ static struct inode *fuse_alloc_inode(struct super_block *sb)
+ 	fi->inval_mask = 0;
+ 	fi->nodeid = 0;
+ 	fi->nlookup = 0;
+-	fi->attr_version = 0;
++	fi->attr_version = fuse_get_attr_version(fc);
+ 	fi->orig_ino = 0;
+ 	fi->state = 0;
+ 	mutex_init(&fi->mutex);
+-- 
+2.20.1
+
