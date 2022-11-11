@@ -2,47 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16442625887
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DEF262587C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 11:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233296AbiKKKkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 05:40:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45942 "EHLO
+        id S233600AbiKKKiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 05:38:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233915AbiKKKkH (ORCPT
+        with ESMTP id S233096AbiKKKiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 05:40:07 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31803654E5;
-        Fri, 11 Nov 2022 02:40:06 -0800 (PST)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N7wFN1BB9zRp1W;
-        Fri, 11 Nov 2022 18:39:52 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 18:40:04 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 18:40:04 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
-CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <chenzhongjin@huawei.com>
-Subject: [PATCH] perf: Fix possible memleak in pmu_dev_alloc()
-Date:   Fri, 11 Nov 2022 18:36:53 +0800
-Message-ID: <20221111103653.91058-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 11 Nov 2022 05:38:16 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3A512605
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 02:38:15 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id y4so3953630plb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 02:38:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WDAe46mocv8N19iUrpVAVRFXORmPxnlQIO/wxgYUTno=;
+        b=FrAUhA4rAeuVcuLA/U9mmmOErKic7EKby5f9WqhnY49RBIBvSl6wi0k9EsT2MWpAsf
+         Y/mPpF4p1/2+X5nBq580SGeo7HCGsnKW9FTZXlhybSKLv5m8EByjVlbEXJQEbO3Mi2d8
+         rdiVUha2xJT+zYkfMj9qsT/cOiSRC5pTJAjVc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WDAe46mocv8N19iUrpVAVRFXORmPxnlQIO/wxgYUTno=;
+        b=HH9ggbAcsOXWFktaA3iJcWCubUGAkJouK1ntsenkWPiOTNZ+VYvIQLnxzzlAJCGpqW
+         AX3tyCqg+6v7JK+3//Vh6Tg0OgeOv9s40b25rxRYWqsLPkHRQpBwUStRnexrKoPRmAjZ
+         3/gfcmXr80MR/LAvyq56Bo7vGL1fzvI4LeiIl0Mcx18AUtfySbz25OdyUKGUKemSgOCq
+         szDtKxk36Zgv19VbklpzHNquy2YJLwbc839Bbuesdny1amQazCDiomJdmRrQ2BWPwpqb
+         +fFqUVnYBqjMVeSB+9JKIpHaHM78Z7Ka0CCQ5QjO99d1qCFdIGTIBubEBfxTig9FJrsb
+         IOow==
+X-Gm-Message-State: ANoB5pmdkkI0lR1o2gt+RcpmjOIDr/OJXgtraGkz6qXKbz2EiTA0jwzM
+        b209vYce4oW6lZZxGUSkkNpniw==
+X-Google-Smtp-Source: AA0mqf6GcDtWuq7A6v4bBbbht/rRQxdxBbsDvTtW7j1D9USVOdygPz0XjnNVRpkaQgPZt9texwKmfA==
+X-Received: by 2002:a17:902:c3d1:b0:188:82fc:e284 with SMTP id j17-20020a170902c3d100b0018882fce284mr1927093plj.76.1668163095189;
+        Fri, 11 Nov 2022 02:38:15 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:8d55:c60d:579d:741c])
+        by smtp.gmail.com with ESMTPSA id l16-20020a170903121000b00176b84eb29asm117500plh.301.2022.11.11.02.38.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 02:38:14 -0800 (PST)
+Date:   Fri, 11 Nov 2022 19:38:10 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCHv4 2/9] zsmalloc: turn zspage order into runtime variable
+Message-ID: <Y24mEiy0pt2qSCqr@google.com>
+References: <20221031054108.541190-1-senozhatsky@chromium.org>
+ <20221031054108.541190-3-senozhatsky@chromium.org>
+ <Y210OrSgrqWPr0DT@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y210OrSgrqWPr0DT@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,62 +71,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In pmu_dev_alloc(), when dev_set_name() failed, it will goto free_dev
-and call put_device(pmu->dev) to release it.
-However pmu->dev->release is assigned after this, which makes warning
-and memleak.
-Call dev_set_name() after pmu->dev->release = pmu_dev_release to fix it.
+On (22/11/10 13:59), Minchan Kim wrote:
+[..]
+> > +#define ZS_PAGE_ORDER_2		2
+> > +#define ZS_PAGE_ORDER_4		4
+> > +
+> > +/*
+> > + * A single 'zspage' is composed of up to 2^N discontiguous 0-order (single)
+> > + * pages. ZS_MAX_PAGE_ORDER defines upper limit on N, ZS_MIN_PAGE_ORDER
+> > + * defines lower limit on N. ZS_DEFAULT_PAGE_ORDER is recommended value.
+> 
+> It gives the impression:
+> 
+>    2^2 <= the page nubmer of zspage <= 2^4
+> 
+> I think that's not what you want to describe. How about?
+> 
+> A single 'zspage' is composed of up to 2^N discontiguous 0-order (single)
+> pages and the N can be from ZS_MIN_PAGE_ORDER to ZS_MAX_PAGE_ORDER.
 
-  Device '(null)' does not have a release() function...
-  WARNING: CPU: 2 PID: 441 at drivers/base/core.c:2332 device_release+0x1b9/0x240
-  ...
-  Call Trace:
-    <TASK>
-    kobject_put+0x17f/0x460
-    put_device+0x20/0x30
-    pmu_dev_alloc+0x152/0x400
-    perf_pmu_register+0x96b/0xee0
-    ...
-  kmemleak: 1 new suspected memory leaks (see /sys/kernel/debug/kmemleak)
-  unreferenced object 0xffff888014759000 (size 2048):
-    comm "modprobe", pid 441, jiffies 4294931444 (age 38.332s)
-    backtrace:
-      [<0000000005aed3b4>] kmalloc_trace+0x27/0x110
-      [<000000006b38f9b8>] pmu_dev_alloc+0x50/0x400
-      [<00000000735f17be>] perf_pmu_register+0x96b/0xee0
-      [<00000000e38477f1>] 0xffffffffc0ad8603
-      [<000000004e162216>] do_one_initcall+0xd0/0x4e0
-      ...
+OK.
 
-Fixes: abe43400579d ("perf: Sysfs enumeration")
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- kernel/events/core.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+> > + */
+> > +#define ZS_MIN_PAGE_ORDER	ZS_PAGE_ORDER_2
+> > +#define ZS_MAX_PAGE_ORDER	ZS_PAGE_ORDER_4
+> > +#define ZS_DEFAULT_PAGE_ORDER	ZS_PAGE_ORDER_2
+> 
+> #define ZS_MIN_PAGE_ORDER	2
+> 
+> We can use the number directly instead of another wrapping at least
+> in this patch(Just in case: if you want to extent it later patch,
+> please do it in the patch)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 4ec3717003d5..baf0f33b06af 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -11148,13 +11148,15 @@ static int pmu_dev_alloc(struct pmu *pmu)
- 
- 	pmu->dev->groups = pmu->attr_groups;
- 	device_initialize(pmu->dev);
--	ret = dev_set_name(pmu->dev, "%s", pmu->name);
--	if (ret)
--		goto free_dev;
- 
- 	dev_set_drvdata(pmu->dev, pmu);
- 	pmu->dev->bus = &pmu_bus;
- 	pmu->dev->release = pmu_dev_release;
-+
-+	ret = dev_set_name(pmu->dev, "%s", pmu->name);
-+	if (ret)
-+		goto free_dev;
-+
- 	ret = device_add(pmu->dev);
- 	if (ret)
- 		goto free_dev;
--- 
-2.17.1
+OK.
 
+[..]
+> > -#define MAX(a, b) ((a) >= (b) ? (a) : (b))
+> > -/* ZS_MIN_ALLOC_SIZE must be multiple of ZS_ALIGN */
+> > -#define ZS_MIN_ALLOC_SIZE \
+> > -	MAX(32, (ZS_MAX_PAGES_PER_ZSPAGE << PAGE_SHIFT >> OBJ_INDEX_BITS))
+> > +#define ZS_MIN_ALLOC_SIZE	32U
+> 
+> Let's have some comment here to say that's not the final vaule which
+> is supposed to be pool->min_alloc_size.
+
+OK.
+
+[..]
+> >  enum fullness_group {
+> >  	ZS_EMPTY,
+> > @@ -230,12 +221,15 @@ struct link_free {
+> >  struct zs_pool {
+> >  	const char *name;
+> >  
+> > -	struct size_class *size_class[ZS_SIZE_CLASSES];
+> > +	struct size_class **size_class;
+> >  	struct kmem_cache *handle_cachep;
+> >  	struct kmem_cache *zspage_cachep;
+> >  
+> >  	atomic_long_t pages_allocated;
+> >  
+> > +	u32 num_size_classes;
+> > +	u32 min_alloc_size;
+> 
+> Please use int.
+
+OK. Any reason why we don't want u32? I thought that
+s16/u16/s32/u32/etc. is the new normal.
+
+> From this patch, I couldn't figure why we need
+> variable in the pool. Let's have the change in the patch where
+> you really need to have the usecase.
+
+Let me take a look.
+
+> > -static int get_pages_per_zspage(int class_size)
+> > +static int get_pages_per_zspage(u32 class_size, u32 num_pages)
+> 
+> Let's just use int instead of u32
+> 
+> Why do you need num_pages argument instead of using 1UL << ZS_DEFAULT_PAGE_ORDER?
+> It looks like static value.
+
+It is static right now, but in the a couple of patches it'll change to
+dynamic.
