@@ -2,291 +2,357 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9D3626138
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 19:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D55F762614F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 19:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233225AbiKKSfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 13:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
+        id S234383AbiKKSga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 13:36:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233192AbiKKSfQ (ORCPT
+        with ESMTP id S233938AbiKKSgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 13:35:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB199814CF;
-        Fri, 11 Nov 2022 10:35:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FFAE62044;
-        Fri, 11 Nov 2022 18:35:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EDA7C433D6;
-        Fri, 11 Nov 2022 18:35:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668191711;
-        bh=mzsfnpmOkwPvH5WAUBB9Y7s0LZeCSZwcfIlK0cPp8ws=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ITcqDeVNL3jTFQVkr5sWAiBLMFKKaEokjnaW14C2Tvr/jaCN2jBD0PUm3MSUSfYUY
-         uFRRI5GyqDGjkBZw0fzAxB/Gwmz5WSaTffvDEDRtA5HlUcHPjfFTYYsuNl0F7pXfcy
-         p1vNDvTza/kifGjxaR1Q26whcN7ygVNhQJhZIFjxfpLSJrikmlp5s1QstuTT/FKb7g
-         aWMtxHnpLaesYHjCjGE7AOujeaNC1+APPTOAxJKKEEbfzUEqorAfgZzN0JfH7JeuDW
-         iCI7kMoKNU72jbZb1rGX7vSgVC40VHxE52dS6MyQKb9humMowWugwM9R2QbQa4S6HJ
-         5xdRiT8P4UaVQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id CFB5D5C08D8; Fri, 11 Nov 2022 10:35:09 -0800 (PST)
-Date:   Fri, 11 Nov 2022 10:35:09 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rcu: Dump memory object info if callback is invalid
-Message-ID: <20221111183509.GW725751@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221105023519.147-1-thunder.leizhen@huawei.com>
- <20221111074538.GS725751@paulmck-ThinkPad-P17-Gen-1>
- <bccf11c7-f376-6b5b-f842-76e73bfae2cc@huawei.com>
+        Fri, 11 Nov 2022 13:36:00 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF966CA0E;
+        Fri, 11 Nov 2022 10:35:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668191755; x=1699727755;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=5xhlVwQG/KBxFjRGNP4mKqJ7NtCZV2S4HhsKxjA0yAU=;
+  b=gvcGaXs+KbymuxRzE5frapAs59Q4LgQ5WrnsZhx20d5f63X8nAgORxmW
+   5WLJhqZKD25BDMcjhi1YrU0rtEbgUmaNsFLfeSmTXg/XRxXclhhMkM4xk
+   YAeF1rGol1Z4/4+9Qlq+f1lNSxQ+wwgjajWjN+VUKuXuQSjZ88x+1r6Vy
+   6CrQOaKTdU+U7Y0/6YdHwEJs6Hu5uZnN4Yq/8KbVRujIib7CgoYbcE45K
+   /5CnjqSL1ekKbDyZ3EjxBWzhXdzK4eAb7Ym72tWBQ7Mcx9/SIIuDKbv53
+   Q9jIeaya88zax13Ipwg11VwEoxrmaXtW57XMMexzpaal+wucPmXLwe7Fc
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="292050311"
+X-IronPort-AV: E=Sophos;i="5.96,157,1665471600"; 
+   d="scan'208";a="292050311"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 10:35:49 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="640089203"
+X-IronPort-AV: E=Sophos;i="5.96,157,1665471600"; 
+   d="scan'208";a="640089203"
+Received: from hermesli-mobl.amr.corp.intel.com (HELO kcaccard-desk.amr.corp.intel.com) ([10.212.218.5])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 10:35:47 -0800
+From:   Kristen Carlson Accardi <kristen@linux.intel.com>
+To:     jarkko@kernel.org, dave.hansen@linux.kernel.org, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
+Cc:     zhiquan1.li@intel.com,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: [PATCH 05/26] x86/sgx: Track epc pages on reclaimable or unreclaimable lists
+Date:   Fri, 11 Nov 2022 10:35:10 -0800
+Message-Id: <20221111183532.3676646-6-kristen@linux.intel.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221111183532.3676646-1-kristen@linux.intel.com>
+References: <20221111183532.3676646-1-kristen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bccf11c7-f376-6b5b-f842-76e73bfae2cc@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 06:04:26PM +0800, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/11/11 15:45, Paul E. McKenney wrote:
-> > On Sat, Nov 05, 2022 at 10:35:19AM +0800, Zhen Lei wrote:
-> >> The callback rhp->func becomes NULL is usually caused by use-after-free.
-> >> So the information about 'rhp' is very useful. Unfortunately, nothing is
-> >> printed at the moment. Look at the panic output below, if no vmcore is
-> >> generated, there is almost no way to analyze it except to know that the
-> >> bug exists.
-> >>
-> >> Unable to handle kernel NULL pointer dereference at virtual address 0
-> >> ... ...
-> >> PC is at 0x0
-> >> LR is at rcu_do_batch+0x1c0/0x3b8
-> >> ... ...
-> >>  (rcu_do_batch) from (rcu_core+0x1d4/0x284)
-> >>  (rcu_core) from (__do_softirq+0x24c/0x344)
-> >>  (__do_softirq) from (__irq_exit_rcu+0x64/0x108)
-> >>  (__irq_exit_rcu) from (irq_exit+0x8/0x10)
-> >>  (irq_exit) from (__handle_domain_irq+0x74/0x9c)
-> >>  (__handle_domain_irq) from (gic_handle_irq+0x8c/0x98)
-> >>  (gic_handle_irq) from (__irq_svc+0x5c/0x94)
-> >>  (__irq_svc) from (arch_cpu_idle+0x20/0x3c)
-> >>  (arch_cpu_idle) from (default_idle_call+0x4c/0x78)
-> >>  (default_idle_call) from (do_idle+0xf8/0x150)
-> >>  (do_idle) from (cpu_startup_entry+0x18/0x20)
-> >>  (cpu_startup_entry) from (0xc01530)
-> >>
-> >> So add mem_dump_obj(rhp) to output some information, for example:
-> >>   slab kmalloc-256 start ffff410c45019900 pointer offset 0 size 256
-> >>
-> >> Now we know the size of the memory block and the offset of rcu_head. Then
-> >> we can check the code. It's going to be slow and tiring, but it's better
-> >> than no way to start.
-> >>
-> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> > 
-> > I have pulled this in with the usual wordsmithing (please check!)
-> > for review and testing, thank you!
-> 
-> Great! Thanks. Provides a lot of valuable debugging method information.
-> 
-> In the following two lines, there are a few extra spaces after the dot.
-> I will delete it in v2.
-> 
-> rhp->func to be set to NULL.  This defeats the debugging prints used by
-> locate the problem.   If the problem is reproducible, additional slab
+Replace functions sgx_mark_page_reclaimable() and
+sgx_unmark_page_reclaimable() with sgx_record_epc_page() and
+sgx_drop_epc_page(). sgx_record_epc_page() wil add the epc_page
+to the correct "reclaimable" or "unreclaimable" list in the
+sgx_epc_lru struct. sgx_drop_epc_page() will delete the page
+from the sgx_epc_lru list. Tracking pages that are not tracked by
+the reclaimer in the LRU's "unreclaimable" list allows an OOM event
+to cause all the pages in use by an enclave to be freed, regardless
+of whether they were reclaimable pages or not.
 
-Please do adjust my wordsmithing as required.
+Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kernel/cpu/sgx/encl.c  | 10 +++++++---
+ arch/x86/kernel/cpu/sgx/ioctl.c | 11 +++++++----
+ arch/x86/kernel/cpu/sgx/main.c  | 26 +++++++++++++++-----------
+ arch/x86/kernel/cpu/sgx/sgx.h   |  4 ++--
+ arch/x86/kernel/cpu/sgx/virt.c  | 28 ++++++++++++++++++++--------
+ 5 files changed, 51 insertions(+), 28 deletions(-)
 
-> > Questions include "Is 0x3 correct for functions compiled with all
-> > supported compiler options on all architectures on which the Linux
-> 
-> Sorry, I found it possible that it wouldn't work on x86. Although I had
-> no problems booting up on x86 before. I ran a script today and found that
-> there were addresses that were not 4-byte aligned.
-> 
-> I'll send v2 on your basis.
+diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+index 4eaf9d21e71b..4683da9ef4f1 100644
+--- a/arch/x86/kernel/cpu/sgx/encl.c
++++ b/arch/x86/kernel/cpu/sgx/encl.c
+@@ -252,6 +252,7 @@ static struct sgx_encl_page *__sgx_encl_load_page(struct sgx_encl *encl,
+ 		epc_page = sgx_encl_eldu(&encl->secs, NULL);
+ 		if (IS_ERR(epc_page))
+ 			return ERR_CAST(epc_page);
++		sgx_record_epc_page(epc_page, 0);
+ 	}
+ 
+ 	epc_page = sgx_encl_eldu(entry, encl->secs.epc_page);
+@@ -259,7 +260,7 @@ static struct sgx_encl_page *__sgx_encl_load_page(struct sgx_encl *encl,
+ 		return ERR_CAST(epc_page);
+ 
+ 	encl->secs_child_cnt++;
+-	sgx_mark_page_reclaimable(entry->epc_page);
++	sgx_record_epc_page(entry->epc_page, SGX_EPC_PAGE_RECLAIMER_TRACKED);
+ 
+ 	return entry;
+ }
+@@ -375,7 +376,7 @@ static vm_fault_t sgx_encl_eaug_page(struct vm_area_struct *vma,
+ 	encl_page->type = SGX_PAGE_TYPE_REG;
+ 	encl->secs_child_cnt++;
+ 
+-	sgx_mark_page_reclaimable(encl_page->epc_page);
++	sgx_record_epc_page(encl_page->epc_page, SGX_EPC_PAGE_RECLAIMER_TRACKED);
+ 
+ 	phys_addr = sgx_get_epc_phys_addr(epc_page);
+ 	/*
+@@ -687,7 +688,7 @@ void sgx_encl_release(struct kref *ref)
+ 			 * The page and its radix tree entry cannot be freed
+ 			 * if the page is being held by the reclaimer.
+ 			 */
+-			if (sgx_unmark_page_reclaimable(entry->epc_page))
++			if (sgx_drop_epc_page(entry->epc_page))
+ 				continue;
+ 
+ 			sgx_encl_free_epc_page(entry->epc_page);
+@@ -703,6 +704,7 @@ void sgx_encl_release(struct kref *ref)
+ 	xa_destroy(&encl->page_array);
+ 
+ 	if (!encl->secs_child_cnt && encl->secs.epc_page) {
++		sgx_drop_epc_page(encl->secs.epc_page);
+ 		sgx_encl_free_epc_page(encl->secs.epc_page);
+ 		encl->secs.epc_page = NULL;
+ 	}
+@@ -711,6 +713,7 @@ void sgx_encl_release(struct kref *ref)
+ 		va_page = list_first_entry(&encl->va_pages, struct sgx_va_page,
+ 					   list);
+ 		list_del(&va_page->list);
++		sgx_drop_epc_page(va_page->epc_page);
+ 		sgx_encl_free_epc_page(va_page->epc_page);
+ 		kfree(va_page);
+ 	}
+@@ -1218,6 +1221,7 @@ struct sgx_epc_page *sgx_alloc_va_page(struct sgx_encl *encl, bool reclaim)
+ 		sgx_encl_free_epc_page(epc_page);
+ 		return ERR_PTR(-EFAULT);
+ 	}
++	sgx_record_epc_page(epc_page, 0);
+ 
+ 	return epc_page;
+ }
+diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
+index 9a1bb3c3211a..aca80a3f38a1 100644
+--- a/arch/x86/kernel/cpu/sgx/ioctl.c
++++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+@@ -48,6 +48,7 @@ void sgx_encl_shrink(struct sgx_encl *encl, struct sgx_va_page *va_page)
+ 	encl->page_cnt--;
+ 
+ 	if (va_page) {
++		sgx_drop_epc_page(va_page->epc_page);
+ 		sgx_encl_free_epc_page(va_page->epc_page);
+ 		list_del(&va_page->list);
+ 		kfree(va_page);
+@@ -113,6 +114,8 @@ static int sgx_encl_create(struct sgx_encl *encl, struct sgx_secs *secs)
+ 	encl->attributes = secs->attributes;
+ 	encl->attributes_mask = SGX_ATTR_DEBUG | SGX_ATTR_MODE64BIT | SGX_ATTR_KSS;
+ 
++	sgx_record_epc_page(encl->secs.epc_page, 0);
++
+ 	/* Set only after completion, as encl->lock has not been taken. */
+ 	set_bit(SGX_ENCL_CREATED, &encl->flags);
+ 
+@@ -322,7 +325,7 @@ static int sgx_encl_add_page(struct sgx_encl *encl, unsigned long src,
+ 			goto err_out;
+ 	}
+ 
+-	sgx_mark_page_reclaimable(encl_page->epc_page);
++	sgx_record_epc_page(encl_page->epc_page, SGX_EPC_PAGE_RECLAIMER_TRACKED);
+ 	mutex_unlock(&encl->lock);
+ 	mmap_read_unlock(current->mm);
+ 	return ret;
+@@ -958,7 +961,7 @@ static long sgx_enclave_modify_types(struct sgx_encl *encl,
+ 			 * Prevent page from being reclaimed while mutex
+ 			 * is released.
+ 			 */
+-			if (sgx_unmark_page_reclaimable(entry->epc_page)) {
++			if (sgx_drop_epc_page(entry->epc_page)) {
+ 				ret = -EAGAIN;
+ 				goto out_entry_changed;
+ 			}
+@@ -973,7 +976,7 @@ static long sgx_enclave_modify_types(struct sgx_encl *encl,
+ 
+ 			mutex_lock(&encl->lock);
+ 
+-			sgx_mark_page_reclaimable(entry->epc_page);
++			sgx_record_epc_page(entry->epc_page, SGX_EPC_PAGE_RECLAIMER_TRACKED);
+ 		}
+ 
+ 		/* Change EPC type */
+@@ -1130,7 +1133,7 @@ static long sgx_encl_remove_pages(struct sgx_encl *encl,
+ 			goto out_unlock;
+ 		}
+ 
+-		if (sgx_unmark_page_reclaimable(entry->epc_page)) {
++		if (sgx_drop_epc_page(entry->epc_page)) {
+ 			ret = -EBUSY;
+ 			goto out_unlock;
+ 		}
+diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+index aa938e4d4a73..3b09433ffd85 100644
+--- a/arch/x86/kernel/cpu/sgx/main.c
++++ b/arch/x86/kernel/cpu/sgx/main.c
+@@ -262,7 +262,7 @@ static void sgx_reclaimer_write(struct sgx_epc_page *epc_page,
+ 			goto out;
+ 
+ 		sgx_encl_ewb(encl->secs.epc_page, &secs_backing);
+-
++		sgx_drop_epc_page(encl->secs.epc_page);
+ 		sgx_encl_free_epc_page(encl->secs.epc_page);
+ 		encl->secs.epc_page = NULL;
+ 
+@@ -499,31 +499,35 @@ struct sgx_epc_page *__sgx_alloc_epc_page(void)
+ }
+ 
+ /**
+- * sgx_mark_page_reclaimable() - Mark a page as reclaimable
++ * sgx_record_epc_page() - Add a page to the LRU tracking
+  * @page:	EPC page
+  *
+- * Mark a page as reclaimable and add it to the active page list. Pages
+- * are automatically removed from the active list when freed.
++ * Mark a page with the specified flags and add it to the appropriate
++ * (un)reclaimable list.
+  */
+-void sgx_mark_page_reclaimable(struct sgx_epc_page *page)
++void sgx_record_epc_page(struct sgx_epc_page *page, unsigned long flags)
+ {
+ 	spin_lock(&sgx_global_lru.lock);
+-	page->flags |= SGX_EPC_PAGE_RECLAIMER_TRACKED;
+-	sgx_epc_push_reclaimable(&sgx_global_lru, page);
++	WARN_ON(page->flags & SGX_EPC_PAGE_RECLAIMER_TRACKED);
++	page->flags |= flags;
++	if (flags & SGX_EPC_PAGE_RECLAIMER_TRACKED)
++		sgx_epc_push_reclaimable(&sgx_global_lru, page);
++	else
++		sgx_epc_push_unreclaimable(&sgx_global_lru, page);
+ 	spin_unlock(&sgx_global_lru.lock);
+ }
+ 
+ /**
+- * sgx_unmark_page_reclaimable() - Remove a page from the reclaim list
++ * sgx_drop_epc_page() - Remove a page from a LRU list
+  * @page:	EPC page
+  *
+- * Clear the reclaimable flag and remove the page from the active page list.
++ * Clear the reclaimable flag if set and remove the page from its LRU.
+  *
+  * Return:
+  *   0 on success,
+  *   -EBUSY if the page is in the process of being reclaimed
+  */
+-int sgx_unmark_page_reclaimable(struct sgx_epc_page *page)
++int sgx_drop_epc_page(struct sgx_epc_page *page)
+ {
+ 	spin_lock(&sgx_global_lru.lock);
+ 	if (page->flags & SGX_EPC_PAGE_RECLAIMER_TRACKED) {
+@@ -533,9 +537,9 @@ int sgx_unmark_page_reclaimable(struct sgx_epc_page *page)
+ 			return -EBUSY;
+ 		}
+ 
+-		list_del(&page->list);
+ 		page->flags &= ~SGX_EPC_PAGE_RECLAIMER_TRACKED;
+ 	}
++	list_del(&page->list);
+ 	spin_unlock(&sgx_global_lru.lock);
+ 
+ 	return 0;
+diff --git a/arch/x86/kernel/cpu/sgx/sgx.h b/arch/x86/kernel/cpu/sgx/sgx.h
+index aac7d4feb0fa..969606615211 100644
+--- a/arch/x86/kernel/cpu/sgx/sgx.h
++++ b/arch/x86/kernel/cpu/sgx/sgx.h
+@@ -140,8 +140,8 @@ struct sgx_epc_page *__sgx_alloc_epc_page(void);
+ void sgx_free_epc_page(struct sgx_epc_page *page);
+ 
+ void sgx_reclaim_direct(void);
+-void sgx_mark_page_reclaimable(struct sgx_epc_page *page);
+-int sgx_unmark_page_reclaimable(struct sgx_epc_page *page);
++void sgx_record_epc_page(struct sgx_epc_page *page, unsigned long flags);
++int sgx_drop_epc_page(struct sgx_epc_page *page);
+ struct sgx_epc_page *sgx_alloc_epc_page(void *owner, bool reclaim);
+ 
+ void sgx_ipi_cb(void *info);
+diff --git a/arch/x86/kernel/cpu/sgx/virt.c b/arch/x86/kernel/cpu/sgx/virt.c
+index 776ae5c1c032..0eabc4db91d0 100644
+--- a/arch/x86/kernel/cpu/sgx/virt.c
++++ b/arch/x86/kernel/cpu/sgx/virt.c
+@@ -64,6 +64,8 @@ static int __sgx_vepc_fault(struct sgx_vepc *vepc,
+ 		goto err_delete;
+ 	}
+ 
++	sgx_record_epc_page(epc_page, 0);
++
+ 	return 0;
+ 
+ err_delete:
+@@ -148,6 +150,7 @@ static int sgx_vepc_free_page(struct sgx_epc_page *epc_page)
+ 		return ret;
+ 	}
+ 
++	sgx_drop_epc_page(epc_page);
+ 	sgx_free_epc_page(epc_page);
+ 	return 0;
+ }
+@@ -220,8 +223,15 @@ static int sgx_vepc_release(struct inode *inode, struct file *file)
+ 		 * have been removed, the SECS page must have a child on
+ 		 * another instance.
+ 		 */
+-		if (sgx_vepc_free_page(epc_page))
++		if (sgx_vepc_free_page(epc_page)) {
++			/*
++			 * Drop the page before adding it to the list of SECS
++			 * pages.  Moving the page off the unreclaimable list
++			 * needs to be done under the LRU's spinlock.
++			 */
++			sgx_drop_epc_page(epc_page);
+ 			list_add_tail(&epc_page->list, &secs_pages);
++		}
+ 
+ 		xa_erase(&vepc->page_array, index);
+ 	}
+@@ -236,15 +246,17 @@ static int sgx_vepc_release(struct inode *inode, struct file *file)
+ 	mutex_lock(&zombie_secs_pages_lock);
+ 	list_for_each_entry_safe(epc_page, tmp, &zombie_secs_pages, list) {
+ 		/*
+-		 * Speculatively remove the page from the list of zombies,
+-		 * if the page is successfully EREMOVE'd it will be added to
+-		 * the list of free pages.  If EREMOVE fails, throw the page
+-		 * on the local list, which will be spliced on at the end.
++		 * If EREMOVE fails, throw the page on the local list, which
++		 * will be spliced on at the end.
++		 *
++		 * Note, this abuses sgx_drop_epc_page() to delete the page off
++		 * the list of zombies, but this is a very rare path (probably
++		 * never hit in production).  It's not worth special casing the
++		 * free path for this super rare case just to avoid taking the
++		 * LRU's spinlock.
+ 		 */
+-		list_del(&epc_page->list);
+-
+ 		if (sgx_vepc_free_page(epc_page))
+-			list_add_tail(&epc_page->list, &secs_pages);
++			list_move_tail(&epc_page->list, &secs_pages);
+ 	}
+ 
+ 	if (!list_empty(&secs_pages))
+-- 
+2.37.3
 
-x86 can be like that sometimes...
-
-I revert your current patch, and look forward to seeing your v2.
-
-> cat System.map | grep -E ' t | T ' | awk '{print substr($1,length($1),length($1))}' | sort | uniq -c
->   52521 0
->     409 1
->     394 2
->     417 3
->     404 4
->     458 5
->     405 6
->     393 7
->    1205 8
->     457 9
->     442 a
->     435 b
->     421 c
->     418 d
->     421 e
->     426 f
-
-Indeed, quite a few!  Maybe the address check can be arch-specific,
-maybe using IS_ENABLED()?
-
-> > kernel runs?", "Is this added information useful often enough for
-> > this to be pushed to mainline?", and so on.
-
-And another question is "Should this be default?"  There may be concerns
-with callback-invocation throughput during callback-flooding events.
-
-> I originally wanted to add a member in struct rcu_head and backup
-> 'func' to the previous node. This way, when the error is detected,
-> the hook function can be printed out. This will help us quickly
-> find the user of the invalid rhp. However, the size of the struct
-> page is limited and cannot be expanded.
-
-Although that information could be clobbered just as easily as could
-the ->func value, right?
-
-> Further more, we can dump the contents of mem object.
-> 
-> I have a problem that has not been resolved and has not reproduced.
-> The surrounding contents of 'rhp' have been dumped, as below.
-> You can highlight 00000024 and 00000030, you'll see that this is a
-> fixed 80-bytes structure. There is also a bidirectional linked list
-> in the structure. If I have mem_dump_obj(rhp) information, I can
-> narrow it down considerably.
-> 
-> [20220928044206]5390: 00000024 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> [20220928044206]53b0: 00000000 00000000 00000000 00000000 cfa4d580 ffff4596 00000000 00000000
-> [20220928044206]53d0: 7438f148 ffff4596 7438f148 ffff4596 00000024 00000000 0b828cfa 0f00aaf4
-> [20220928044206]53f0: 00000000 00000000 00000000 00000000 496653c0 ffff4596 00000000 00000000
-> [20220928044206]5410: 00000000 00000000 00000000 00000000 ae0769e0 ffff4596 ae0769e0 ffff4596
-> [20220928044206]5430: 00000030 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> [20220928044206]5450: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> [20220928044206]5470: ae076988 ffff4596 ae076988 ffff4596 00000024 00000000 00000000 00000000
-
-OK, I consider the "is this useful" question to be answered in the
-affirmative.
-
-							Thanx, Paul
-
-> >> ---
-> >>  kernel/rcu/rcu.h      | 7 +++++++
-> >>  kernel/rcu/srcutiny.c | 1 +
-> >>  kernel/rcu/srcutree.c | 1 +
-> >>  kernel/rcu/tasks.h    | 1 +
-> >>  kernel/rcu/tiny.c     | 1 +
-> >>  kernel/rcu/tree.c     | 1 +
-> >>  6 files changed, 12 insertions(+)
-> >>
-> >> diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
-> >> index 70c79adfdc7046c..4844dec36bddb48 100644
-> >> --- a/kernel/rcu/rcu.h
-> >> +++ b/kernel/rcu/rcu.h
-> >> @@ -10,6 +10,7 @@
-> >>  #ifndef __LINUX_RCU_H
-> >>  #define __LINUX_RCU_H
-> >>  
-> >> +#include <linux/mm.h>
-> >>  #include <trace/events/rcu.h>
-> >>  
-> >>  /*
-> >> @@ -211,6 +212,12 @@ static inline void debug_rcu_head_unqueue(struct rcu_head *head)
-> >>  }
-> >>  #endif	/* #else !CONFIG_DEBUG_OBJECTS_RCU_HEAD */
-> >>  
-> >> +static inline void debug_rcu_head_callback(struct rcu_head *rhp)
-> >> +{
-> >> +	if (unlikely(!rhp->func || (unsigned long)rhp->func & 0x3))
-> >> +		mem_dump_obj(rhp);
-> >> +}
-> >> +
-> >>  extern int rcu_cpu_stall_suppress_at_boot;
-> >>  
-> >>  static inline bool rcu_stall_is_suppressed_at_boot(void)
-> >> diff --git a/kernel/rcu/srcutiny.c b/kernel/rcu/srcutiny.c
-> >> index 33adafdad261389..5e7f336baa06ae0 100644
-> >> --- a/kernel/rcu/srcutiny.c
-> >> +++ b/kernel/rcu/srcutiny.c
-> >> @@ -138,6 +138,7 @@ void srcu_drive_gp(struct work_struct *wp)
-> >>  	while (lh) {
-> >>  		rhp = lh;
-> >>  		lh = lh->next;
-> >> +		debug_rcu_head_callback(rhp);
-> >>  		local_bh_disable();
-> >>  		rhp->func(rhp);
-> >>  		local_bh_enable();
-> >> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-> >> index ca4b5dcec675bac..294972e66b31863 100644
-> >> --- a/kernel/rcu/srcutree.c
-> >> +++ b/kernel/rcu/srcutree.c
-> >> @@ -1631,6 +1631,7 @@ static void srcu_invoke_callbacks(struct work_struct *work)
-> >>  	rhp = rcu_cblist_dequeue(&ready_cbs);
-> >>  	for (; rhp != NULL; rhp = rcu_cblist_dequeue(&ready_cbs)) {
-> >>  		debug_rcu_head_unqueue(rhp);
-> >> +		debug_rcu_head_callback(rhp);
-> >>  		local_bh_disable();
-> >>  		rhp->func(rhp);
-> >>  		local_bh_enable();
-> >> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-> >> index b0b885e071fa8dc..b7f8c67c586cdc4 100644
-> >> --- a/kernel/rcu/tasks.h
-> >> +++ b/kernel/rcu/tasks.h
-> >> @@ -478,6 +478,7 @@ static void rcu_tasks_invoke_cbs(struct rcu_tasks *rtp, struct rcu_tasks_percpu
-> >>  	raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
-> >>  	len = rcl.len;
-> >>  	for (rhp = rcu_cblist_dequeue(&rcl); rhp; rhp = rcu_cblist_dequeue(&rcl)) {
-> >> +		debug_rcu_head_callback(rhp);
-> >>  		local_bh_disable();
-> >>  		rhp->func(rhp);
-> >>  		local_bh_enable();
-> >> diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
-> >> index bb8f7d270f01747..56e9a5d91d97ec5 100644
-> >> --- a/kernel/rcu/tiny.c
-> >> +++ b/kernel/rcu/tiny.c
-> >> @@ -97,6 +97,7 @@ static inline bool rcu_reclaim_tiny(struct rcu_head *head)
-> >>  
-> >>  	trace_rcu_invoke_callback("", head);
-> >>  	f = head->func;
-> >> +	debug_rcu_head_callback(head);
-> >>  	WRITE_ONCE(head->func, (rcu_callback_t)0L);
-> >>  	f(head);
-> >>  	rcu_lock_release(&rcu_callback_map);
-> >> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> >> index 93c286b98c8f03d..3b93b9df8042a84 100644
-> >> --- a/kernel/rcu/tree.c
-> >> +++ b/kernel/rcu/tree.c
-> >> @@ -2256,6 +2256,7 @@ static void rcu_do_batch(struct rcu_data *rdp)
-> >>  		trace_rcu_invoke_callback(rcu_state.name, rhp);
-> >>  
-> >>  		f = rhp->func;
-> >> +		debug_rcu_head_callback(rhp);
-> >>  		WRITE_ONCE(rhp->func, (rcu_callback_t)0L);
-> >>  		f(rhp);
-> >>  
-> >> -- 
-> >> 2.25.1
-> >>
-> > .
-> > 
-> 
-> -- 
-> Regards,
->   Zhen Lei
