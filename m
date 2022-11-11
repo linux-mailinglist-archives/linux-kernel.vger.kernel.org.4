@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B84625716
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:43:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A9E625728
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 10:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232746AbiKKJnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 04:43:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
+        id S232182AbiKKJpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 04:45:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233637AbiKKJnP (ORCPT
+        with ESMTP id S233338AbiKKJo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 04:43:15 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DDED7018F;
-        Fri, 11 Nov 2022 01:43:14 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 453711FB;
-        Fri, 11 Nov 2022 01:43:20 -0800 (PST)
-Received: from [10.57.69.19] (unknown [10.57.69.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4D5803F73D;
-        Fri, 11 Nov 2022 01:43:12 -0800 (PST)
-Message-ID: <896a2ff0-d6c4-3695-7b01-102cd6cf040c@arm.com>
-Date:   Fri, 11 Nov 2022 09:43:10 +0000
+        Fri, 11 Nov 2022 04:44:58 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4D165C8;
+        Fri, 11 Nov 2022 01:44:50 -0800 (PST)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N7tyJ6p5QzJncW;
+        Fri, 11 Nov 2022 17:41:44 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 11 Nov 2022 17:44:48 +0800
+Received: from [10.174.176.52] (10.174.176.52) by
+ kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 11 Nov 2022 17:44:47 +0800
+Message-ID: <099a6096-b8b4-947f-681f-7176253d949e@huawei.com>
+Date:   Fri, 11 Nov 2022 17:44:46 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 10/12] perf test: Replace brstack test workload
-Content-Language: en-US
-From:   James Clark <james.clark@arm.com>
-To:     German Gomez <german.gomez@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-References: <20221110181920.84900-1-namhyung@kernel.org>
- <20221110181920.84900-11-namhyung@kernel.org>
- <1036a42b-b438-67b2-c4ca-0e440d266d6d@arm.com>
- <a9a6eabf-e102-b7f8-92b4-48c2b77e013e@arm.com>
- <a396936c-7df6-8fb7-320e-435b852d0702@arm.com>
-In-Reply-To: <a396936c-7df6-8fb7-320e-435b852d0702@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH v3] btrfs: qgroup: fix sleep from invalid context bug in
+ update_qgroup_limit_item()
+To:     <clm@fb.com>, <josef@toxicpanda.com>, <dsterba@suse.com>
+CC:     <linux-btrfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <zhangxiaoxu5@huawei.com>, <quwenruo.btrfs@gmx.com>
+References: <20221111092000.2275068-1-chenxiaosong2@huawei.com>
+From:   ChenXiaoSong <chenxiaosong2@huawei.com>
+In-Reply-To: <20221111092000.2275068-1-chenxiaosong2@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.52]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,52 +54,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Please ignore this v3 patch, I will try to send a new version patch 
+according to Qu Wenruo's suggestions: 
+https://lore.kernel.org/all/df7ede88-86a2-1c6d-0343-c97a851b9bdf@gmx.com/
 
-
-On 11/11/2022 09:39, James Clark wrote:
+在 2022/11/11 17:20, ChenXiaoSong 写道:
+> Syzkaller reported BUG as follows:
 > 
+>    BUG: sleeping function called from invalid context at
+>         include/linux/sched/mm.h:274
+>    Call Trace:
+>     <TASK>
+>     dump_stack_lvl+0xcd/0x134
+>     __might_resched.cold+0x222/0x26b
+>     kmem_cache_alloc+0x2e7/0x3c0
+>     update_qgroup_limit_item+0xe1/0x390
+>     btrfs_qgroup_inherit+0x147b/0x1ee0
+>     create_subvol+0x4eb/0x1710
+>     btrfs_mksubvol+0xfe5/0x13f0
+>     __btrfs_ioctl_snap_create+0x2b0/0x430
+>     btrfs_ioctl_snap_create_v2+0x25a/0x520
+>     btrfs_ioctl+0x2a1c/0x5ce0
+>     __x64_sys_ioctl+0x193/0x200
+>     do_syscall_64+0x35/0x80
 > 
-> On 10/11/2022 19:31, German Gomez wrote:
->>
->> On 10/11/2022 19:20, German Gomez wrote:
->>> Hi Namhyung, thanks for doing the refactor, it looks a lot cleaner
->>>
->>> On 10/11/2022 18:19, Namhyung Kim wrote:
->>>> So that it can get rid of requirement of a compiler.  Also rename the
->>>> symbols to match with the perf test workload.
->>>>
->>>> Cc: German Gomez <german.gomez@arm.com>
->>>> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
->>>> ---
->>>>  tools/perf/tests/shell/test_brstack.sh | 66 +++++---------------------
->>>>  1 file changed, 12 insertions(+), 54 deletions(-)
->>>>
->>>> diff --git a/tools/perf/tests/shell/test_brstack.sh b/tools/perf/tests/shell/test_brstack.sh
->>>> index ec801cffae6b..a8a182dea25f 100755
->>>> --- a/tools/perf/tests/shell/test_brstack.sh
->>>> +++ b/tools/perf/tests/shell/test_brstack.sh
->>>> @@ -4,18 +4,12 @@
->>>>  # SPDX-License-Identifier: GPL-2.0
->>>>  # German Gomez <german.gomez@arm.com>, 2022
->>>>  
->>>> -# we need a C compiler to build the test programs
->>>> -# so bail if none is found
->>>> -if ! [ -x "$(command -v cc)" ]; then
->>>> -	echo "failed: no compiler, install gcc"
->>>> -	exit 2
->>>> -fi
->>>> -
->>>>  # skip the test if the hardware doesn't support branch stack sampling
->>>>  # and if the architecture doesn't support filter types: any,save_type,u
->>>>  perf record -b -o- -B --branch-filter any,save_type,u true > /dev/null 2>&1 || exit 2
->>
->> Hmm I was wondering why this command was failing for me and always skipping the test. Is the -b conflicting with the --branch-filter here?
->>
+> Fix this by delaying the limit item updates until unlock the spin lock.
 > 
-> Yes, the fix is here [1], but I don't see it on git yet.
-
-Oh sorry it's on perf/urgent. I wasn't looking there.
-
+> Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+> ---
+>   fs/btrfs/qgroup.c | 23 ++++++++++++++---------
+>   1 file changed, 14 insertions(+), 9 deletions(-)
 > 
-> [1]:
-> https://lore.kernel.org/linux-perf-users/Y2rDhkyn9ta5skDm@kernel.org/T/#t
+> diff --git a/fs/btrfs/qgroup.c b/fs/btrfs/qgroup.c
+> index 9334c3157c22..0071b2be6785 100644
+> --- a/fs/btrfs/qgroup.c
+> +++ b/fs/btrfs/qgroup.c
+> @@ -2860,6 +2860,8 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
+>   	bool need_rescan = false;
+>   	u32 level_size = 0;
+>   	u64 nums;
+> +	bool update_limit = false;
+> +	int err;
+>   
+>   	/*
+>   	 * There are only two callers of this function.
+> @@ -2950,15 +2952,7 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
+>   		dstgroup->max_excl = inherit->lim.max_excl;
+>   		dstgroup->rsv_rfer = inherit->lim.rsv_rfer;
+>   		dstgroup->rsv_excl = inherit->lim.rsv_excl;
+> -
+> -		ret = update_qgroup_limit_item(trans, dstgroup);
+> -		if (ret) {
+> -			qgroup_mark_inconsistent(fs_info);
+> -			btrfs_info(fs_info,
+> -				   "unable to update quota limit for %llu",
+> -				   dstgroup->qgroupid);
+> -			goto unlock;
+> -		}
+> +		update_limit = true;
+>   	}
+>   
+>   	if (srcid) {
+> @@ -2985,6 +2979,7 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
+>   		dstgroup->max_excl = srcgroup->max_excl;
+>   		dstgroup->rsv_rfer = srcgroup->rsv_rfer;
+>   		dstgroup->rsv_excl = srcgroup->rsv_excl;
+> +		update_limit = true;
+>   
+>   		qgroup_dirty(fs_info, dstgroup);
+>   		qgroup_dirty(fs_info, srcgroup);
+> @@ -3053,6 +3048,16 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
+>   
+>   unlock:
+>   	spin_unlock(&fs_info->qgroup_lock);
+> +	if (update_limit) {
+> +		err = update_qgroup_limit_item(trans, dstgroup);
+> +		if (err) {
+> +			ret = err;
+> +			qgroup_mark_inconsistent(fs_info);
+> +			btrfs_info(fs_info,
+> +				   "unable to update quota limit for %llu",
+> +				   dstgroup->qgroupid);
+> +		}
+> +	}
+>   	if (!ret)
+>   		ret = btrfs_sysfs_add_one_qgroup(fs_info, dstgroup);
+>   out:
+> 
