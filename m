@@ -2,122 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA8B626068
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D5A626062
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:25:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233679AbiKKRa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 12:30:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
+        id S233681AbiKKRZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:25:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbiKKRa4 (ORCPT
+        with ESMTP id S232968AbiKKRZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:30:56 -0500
-X-Greylist: delayed 420 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 11 Nov 2022 09:30:54 PST
-Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EAEFAEA;
-        Fri, 11 Nov 2022 09:30:54 -0800 (PST)
-Received: from mailpool-fe-02.fibernetics.ca (mailpool-fe-02.fibernetics.ca [208.85.217.145])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id 704576F8DD;
-        Fri, 11 Nov 2022 17:23:52 +0000 (UTC)
-Received: from localhost (mailpool-mx-01.fibernetics.ca [208.85.217.140])
-        by mailpool-fe-02.fibernetics.ca (Postfix) with ESMTP id 5789B604F8;
-        Fri, 11 Nov 2022 17:23:52 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at 
-X-Spam-Score: -0.199
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Received: from mailpool-fe-02.fibernetics.ca ([208.85.217.145])
-        by localhost (mail-mx-01.fibernetics.ca [208.85.217.140]) (amavisd-new, port 10024)
-        with ESMTP id gs7efaBP5g_h; Fri, 11 Nov 2022 17:23:52 +0000 (UTC)
-Received: from [192.168.48.17] (host-45-78-203-98.dyn.295.ca [45.78.203.98])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dgilbert@interlog.com)
-        by mail.ca.inter.net (Postfix) with ESMTPSA id A788D601E4;
-        Fri, 11 Nov 2022 17:23:51 +0000 (UTC)
-Message-ID: <ffef9612-00da-43d2-caad-4f71a7ef7e44@interlog.com>
-Date:   Fri, 11 Nov 2022 12:23:51 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH] scsi: scsi_debug: Fix a warning in resp_write_scat()
-To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     error27@gmail.com, harshit.m.mogalapalli@gmail.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221111100526.1790533-1-harshit.m.mogalapalli@oracle.com>
-Content-Language: en-CA
-From:   Douglas Gilbert <dgilbert@interlog.com>
-In-Reply-To: <20221111100526.1790533-1-harshit.m.mogalapalli@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Fri, 11 Nov 2022 12:25:25 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1588510FCD
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:25:23 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id x16-20020a63b210000000b0045f5c1e18d0so2886915pge.0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:25:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=imvO8YpZD2ZcmET02WP0sV4ZEd9lENVaToBwFuzRa9k=;
+        b=pac3wqeY16mNG6biNSvoWZoA1M2mFFakQ1O2/aHt7Lg9ZdYW7R5DwwInFCqa/x9aEg
+         5AxgSlU9fIeA4u/yD5TH728ZdaghJP+K2CBkJ2uFvkU+pc+nC4eip/uILhuD4ijLNyAw
+         gB61YeQRpvaWUJe9189Sju54A6XpF2YQdnrDZPCb4K/86dMeHJCz2ElmtA/oC8OXELE0
+         1CziUg4hBDvc74U7yi6bMlVkJnbUCxTOkmEBGX0imwXn2GdXLFDTEbfvfeuUj/kVMu9+
+         95fRaGLnL6/SRguRJhLXdT9Wwk2bb4DM3fkkZdcmOJ2JawfliBIdmkZKIVD1n0o2nBnB
+         HwqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=imvO8YpZD2ZcmET02WP0sV4ZEd9lENVaToBwFuzRa9k=;
+        b=LZqySk7uJNZS18mCLlZDhOqoATqUFoAFOa/4Ul0ifpS0JJMhjWy0Hip5mXJCIOydeI
+         EJAjgwej0n9IBkgd5L8c4SHSrTqns7YHiPUEzrvzt+QQKPk6OR6+QLRFW99DIa6qzrDq
+         nLoV4/6h8A2ktihiG8AhuFZkcV++c907EF0nZ5IrmZfslIU0Zm9t8gY0LTjxL/QimC/Y
+         LEEfTmhvMoyyKsZlsAlgTpUUjk6Weyyrkx4gMkrLOPdacm7MC9LAwLxBuJ7DOkVXfk7r
+         3mK0dfyhL0hVzMhlCiB1IfbDMCR6Ufw9IpL4g6RXwzCQREsWayuNaCx9WcN7p9icVpyY
+         0d+g==
+X-Gm-Message-State: ANoB5plG6LIyDgkfEOJRyTYZ7gM6YyFSr1IJkmT0NNfn+zOSPvxwQ4rB
+        D8IQYqV4SjAftut32dqUhPEnuBE=
+X-Google-Smtp-Source: AA0mqf68OCEgtibicr7iW7xRQadmbGfWQUpWk2vQrpkeHPWsixQSs9xTua3NBVVtEOaVUTg2DuzYRUI=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a17:90a:4503:b0:200:2069:7702 with SMTP id
+ u3-20020a17090a450300b0020020697702mr2956946pjg.239.1668187522509; Fri, 11
+ Nov 2022 09:25:22 -0800 (PST)
+Date:   Fri, 11 Nov 2022 09:25:20 -0800
+In-Reply-To: <tencent_29D7ABD1744417031AA1B52C914B61158E07@qq.com>
+Mime-Version: 1.0
+References: <tencent_29D7ABD1744417031AA1B52C914B61158E07@qq.com>
+Message-ID: <Y26FgIJLR3nVKjcb@google.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix error undeclared identifier 'NF_NAT_MANIP_SRC'
+From:   sdf@google.com
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     ast@kernel.org, Rong Tao <rongtao@cestc.cn>,
+        kernel test robot <lkp@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" 
+        <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-11 05:05, Harshit Mogalapalli wrote:
-> As 'lbdof_blen' is coming from user, if the size in kzalloc()
-> is >= MAX_ORDER then we hit a warning.
-> 
-> Call trace:
-> 
-> sg_ioctl
->   sg_ioctl_common
->     scsi_ioctl
->      sg_scsi_ioctl
->       blk_execute_rq
->        blk_mq_sched_insert_request
->         blk_mq_run_hw_queue
->          __blk_mq_delay_run_hw_queue
->           __blk_mq_run_hw_queue
->            blk_mq_sched_dispatch_requests
->             __blk_mq_sched_dispatch_requests
->              blk_mq_dispatch_rq_list
->               scsi_queue_rq
->                scsi_dispatch_cmd
->                 scsi_debug_queuecommand
->                  schedule_resp
->                   resp_write_scat
-> 
-> If you try to allocate a memory larger than(>=) MAX_ORDER, then kmalloc()
-> will definitely fail.  It creates a stack trace and messes up dmesg.
-> The user controls the size here so if they specify a too large size it
-> will fail.
-> 
-> Add __GFP_NOWARN in order to avoid too large allocation warning.
-> This is detected by static analysis using smatch.
-> 
-> Fixes: 481b5e5c7949 ("scsi: scsi_debug: add resp_write_scat function")
-> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+On 11/11, Rong Tao wrote:
+> From: Rong Tao <rongtao@cestc.cn>
 
-Acked-by: Douglas Gilbert <dgilbert@interlog.com>
+> commit 472caa69183f("netfilter: nat: un-export nf_nat_used_tuple")
+> introduce NF_NAT_MANIP_SRC/DST enum in include/net/netfilter/nf_nat.h,
+> and commit b06b45e82b59("selftests/bpf: add tests for bpf_ct_set_nat_info
+> kfunc") use NF_NAT_MANIP_SRC/DST in test_bpf_nf.c. We copy enum
+> nf_nat_manip_type to test_bpf_nf.c fix this error.
 
-Thanks.
+> How to reproduce the error:
 
+>      $ make -C tools/testing/selftests/bpf/
+>      ...
+>        CLNG-BPF [test_maps] test_bpf_nf.bpf.o
+>        error: use of undeclared identifier 'NF_NAT_MANIP_SRC'
+>              bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC);
+>                                                             ^
+>        error: use of undeclared identifier 'NF_NAT_MANIP_DST'
+>              bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST);
+>                                                             ^
+>      2 errors generated.
+
+$ grep  
+NF_NAT_MANIP_SRC ./tools/testing/selftests/bpf/tools/include/vmlinux.h
+         NF_NAT_MANIP_SRC = 0,
+
+Doesn't look like your kernel config compiles netfilter nat modules?
+
+> Link: https://lore.kernel.org/lkml/202210280447.STsT1gvq-lkp@intel.com/
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
 > ---
->   drivers/scsi/scsi_debug.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-> index 697fc57bc711..273224d29ce9 100644
-> --- a/drivers/scsi/scsi_debug.c
-> +++ b/drivers/scsi/scsi_debug.c
-> @@ -3778,7 +3778,7 @@ static int resp_write_scat(struct scsi_cmnd *scp,
->   		mk_sense_buffer(scp, ILLEGAL_REQUEST, INVALID_FIELD_IN_CDB, 0);
->   		return illegal_condition_result;
->   	}
-> -	lrdp = kzalloc(lbdof_blen, GFP_ATOMIC);
-> +	lrdp = kzalloc(lbdof_blen, GFP_ATOMIC | __GFP_NOWARN);
->   	if (lrdp == NULL)
->   		return SCSI_MLQUEUE_HOST_BUSY;
->   	if (sdebug_verbose)
+>   tools/testing/selftests/bpf/progs/test_bpf_nf.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+
+> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c  
+> b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> index 227e85e85dda..307ca166ff34 100644
+> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> @@ -3,6 +3,11 @@
+>   #include <bpf/bpf_helpers.h>
+>   #include <bpf/bpf_endian.h>
+
+> +enum nf_nat_manip_type {
+> +	NF_NAT_MANIP_SRC,
+> +	NF_NAT_MANIP_DST
+> +};
+> +
+>   #define EAFNOSUPPORT 97
+>   #define EPROTO 71
+>   #define ENONET 64
+> --
+> 2.31.1
 
