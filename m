@@ -2,105 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985BB625F7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:28:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5664625F77
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234191AbiKKQ2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 11:28:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
+        id S233845AbiKKQ17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 11:27:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233814AbiKKQ2Q (ORCPT
+        with ESMTP id S232841AbiKKQ14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:28:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66407F576;
-        Fri, 11 Nov 2022 08:28:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54BDC62057;
-        Fri, 11 Nov 2022 16:28:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D30AC433D6;
-        Fri, 11 Nov 2022 16:28:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668184093;
-        bh=oskG4N4w1LS67QnYKG6094gwrkubDpJuJjbmW/oB4w8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d0NiLl1GEeTWa57ChuX+PM3JA4RphDzPJgQovxipPe8T8WUOfVPRqlIP9bEwu1m6P
-         kbXhGsYWfTVGj2RRwW+UNdCwVxmkxZPpw4BZ/pxUcu4mhAQSJMK2YLpwSycWJkD956
-         z6rNwOA6pKfXNBaggjXXuiIqkBeVqlOU4GSiMp1pt8bx3y2javGRmFDzu+LFqSHeS4
-         lkd3VTvoxRy1l6SRtx15L+djnT4sBX3LdjaBYqco1PMYwfx4AXkfiJypRPUHvR8UYp
-         6K0+LrCWUVMwbH1pFg/7F4LMpde/n5OIx9GhhNjxhALV5REPeH3V7hGimHUJ84ZZm+
-         4bJOZ9KZSIv+A==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1otWsc-0003jD-2Q; Fri, 11 Nov 2022 17:27:46 +0100
-Date:   Fri, 11 Nov 2022 17:27:46 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/9] arm64: dts: qcom: sc8280xp-crd: enable WiFi
- controller
-Message-ID: <Y254AvMKyDQ+tY0q@hovoldconsulting.com>
-References: <20221110103558.12690-1-johan+linaro@kernel.org>
- <20221110103558.12690-7-johan+linaro@kernel.org>
- <20221110113513.GA18247@thinkpad>
+        Fri, 11 Nov 2022 11:27:56 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7301977E4A;
+        Fri, 11 Nov 2022 08:27:54 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id d7so859154qkk.3;
+        Fri, 11 Nov 2022 08:27:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jwi5a4EeVLwNH8TsDU2iURs6gMBXFninZhcpZAryrJc=;
+        b=RqiU2lUFVF40jBACbBIK0c2oUL9FbFGhEyio4P/E/NRsq39HNX9c5LdWmxy1SN5X1s
+         ZKtePxySfD6aIh/7m9Rd0mdQPYgM8J89rmgKh7Rx7D3W6XTCpaFsAFBAKtnjct8xLR4J
+         FQ5bk4YoIfRyGrkHPDyHs7OntpLqagoyZgKAxV2y8QrsMRDC8+ELRS7tn83/fzw7q2rB
+         PkmKL6Qjd6envuJ9VoL1biQGw7Y/SFt6HDRpYiLybLX6U4usJmeEU2UzvVg3r6OaYDVf
+         26o8eKiP7uwi8EhFhWpVjHJ/XcOIyKMqKT2FL0jUs1RQsO9wCayOSufpFhhHTsAUW6cd
+         mn5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jwi5a4EeVLwNH8TsDU2iURs6gMBXFninZhcpZAryrJc=;
+        b=YelZG+RHLUjCdUzjIbjnXEPi1lGnUyX2OdoLrmn7oRfdgvWTWlE5Oc4ydPe5ru1xSd
+         ihpFUrxXcKMvS4AR+vgIoPSCPXnEUHYcHc4TdOsPXNx16K0JoYo6K0zyKpyU3RKi0WjB
+         jaNAeVY6Np7ku030YqWSDJfPEldz9SiYOcygNzCxQgU5yke4/MVn9zMTIG+8Em0xBfDp
+         wACcZVISWw4lP9uSXsAYIb9w0b4F8URWdf/6NLof3JG+0aPfNSnzR0u46NnKGr9ammLC
+         JwHgj0Fq0qZx3hg6ELm3QhCb0C1M5JzQDL/SXuEVuZ24swa1nd15JwM1IwJlz8tABPwj
+         iAEw==
+X-Gm-Message-State: ANoB5pkpRBW0tjb2Ir3ImU7WyfxybI2yYthGyXnoeGMCqgp+VwpGSmeV
+        LPg9M0poN3avJuznYarU+TxPVYjUiD0=
+X-Google-Smtp-Source: AA0mqf5+GBU34baLMqJL/YUHL/7dCwSejX37aBGTALP3iOTFiuFxropjjSLiOTOwYRSHnmQVQNqhaw==
+X-Received: by 2002:a05:620a:78d:b0:6fa:7d46:33ad with SMTP id 13-20020a05620a078d00b006fa7d4633admr1698559qka.278.1668184073616;
+        Fri, 11 Nov 2022 08:27:53 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 3-20020a05620a070300b006ce9e880c6fsm1589675qkc.111.2022.11.11.08.27.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 08:27:52 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 11 Nov 2022 08:27:51 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Ninad Malwade <nmalwade@nvidia.com>
+Cc:     treding@nvidia.com, jonathanh@nvidia.com, jdelvare@suse.com,
+        nicolinc@nvidia.com, rkasirajan@nvidia.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] ina3221: Fix shunt sum critical calculation
+Message-ID: <20221111162751.GA275294@roeck-us.net>
+References: <20221108044508.23463-1-nmalwade@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221110113513.GA18247@thinkpad>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221108044508.23463-1-nmalwade@nvidia.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 05:05:13PM +0530, Manivannan Sadhasivam wrote:
-> On Thu, Nov 10, 2022 at 11:35:55AM +0100, Johan Hovold wrote:
-> > Enable the Qualcomm QCNFA765 Wireless Network Adapter connected to
-> > PCIe4.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 65 +++++++++++++++++++++++
-> >  1 file changed, 65 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> > index 5b9e37a16f9f..ab5b0aadeead 100644
-> > --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-> > @@ -81,6 +81,22 @@ vreg_misc_3p3: regulator-misc-3p3 {
-> >  		regulator-always-on;
-> >  	};
-> >  
-> > +	vreg_wlan: regulator-wlan {
-> > +		compatible = "regulator-fixed";
-> > +
-> > +		regulator-name = "VCC_WLAN_3R9";
-> > +		regulator-min-microvolt = <3900000>;
-> > +		regulator-max-microvolt = <3900000>;
-> > +
-> > +		gpio = <&pmr735a_gpios 1 GPIO_ACTIVE_HIGH>;
-> > +		enable-active-high;
-> > +
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&hastings_reg_en>;
+On Tue, Nov 08, 2022 at 12:45:08PM +0800, Ninad Malwade wrote:
+> The shunt sum critical limit register value should be left shifted
+> by one bit as its LSB-0 is a reserved bit.
 > 
-> Hastings is the family name of QCA639x WLAN chipsets. I don't think it would be
-> applicable here. Please use "wlan_reg_en" as that matches the convention used
-> throughout this file.
+> Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
+> Reviewed-by: Thierry Reding <treding@nvidia.com>
 
-The pin name here comes from the schematics, which is what we should use
-for naming when we can.
+Applied.
 
-Johan
+Thanks,
+Guenter
