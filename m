@@ -2,138 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92793625E88
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AA8625E8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233860AbiKKPmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 10:42:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
+        id S233947AbiKKPmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 10:42:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233189AbiKKPmE (ORCPT
+        with ESMTP id S233189AbiKKPm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 10:42:04 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E85C7C8F0
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:41:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668181271;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uN6wTTa506SkxCujAOyPtXwdqOBElP2lQFtFf0Vat6I=;
-        b=dRkltKl+DBeW6m5VwvJBv9cXc0h2HcjfIFBGU4BKmHKGRqF2jm5jRD2m3H1Lnj7DQjZVCC
-        9xtPMGAr9JAsXFkiXlIw/ou4fjasSptJKnqdfccNX7CoFBFFfJw5IidZLjXXMMcpOBVvI+
-        il4MTrcCqHEj8vVQgB+bW91PkocKauY=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-450-bFEUO5ExOdi9p5xpDE5jMg-1; Fri, 11 Nov 2022 10:41:10 -0500
-X-MC-Unique: bFEUO5ExOdi9p5xpDE5jMg-1
-Received: by mail-pf1-f197.google.com with SMTP id u3-20020a056a00124300b0056d4ab0c7cbso2908929pfi.7
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:41:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uN6wTTa506SkxCujAOyPtXwdqOBElP2lQFtFf0Vat6I=;
-        b=oSJuxkpDMMuo9YnMEASmZSKXeWg4pBBFRs1EvmKGaMST9pvXOYvzipi6d7i2LfyCJt
-         LpZaCNp8AvPlY4UWc8s9Kch3cNTeDw81ujFgRtOCz/rDLrD4WfxAkkN7r4marUw9xcPB
-         7wrVDYNG6XmgPvqvAWnhYU6cxZhrbqXi1bY1GpxRwPhKA7ufuvMlY5TXHa7ysU4ovY0G
-         BIhk6Qz8nglDW8nAENnqU+5aHl7GsZUHO98kwTYGbEXhcFP02XgWWJYUuM8NUWPo7bIX
-         Ytpi+I78ncmYjVipgdpD6CLCaLSkWyD8gUURiiu0xe31dHUehtGZvvks0ilZTyrqV46s
-         h2IQ==
-X-Gm-Message-State: ANoB5pnIsISCTQCbOd6HDqbBBfjjo76YzWGBKKE4h6he8TO9BBQTIzOv
-        NkIOz9VFejlEhLXLZC+DyW/GK7O0yK0gF1YQzzAlMwiKP8qE4d6q/0XrI8uHYo8tx8OCmealqAg
-        tZgDpnOcReA+R/+3BJGhWGazuiowaF2FDCHKUpZvx
-X-Received: by 2002:aa7:8813:0:b0:56b:f64b:b385 with SMTP id c19-20020aa78813000000b0056bf64bb385mr3113704pfo.68.1668181269570;
-        Fri, 11 Nov 2022 07:41:09 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5/Ztr9o/kP4Ss2zsVaXZHukHwd2KWXub+hNuBAJl7E4TaWIK4ZrWUCEAj4wp0DzhTTEkf6a+n8ohFql/DY7JQ=
-X-Received: by 2002:aa7:8813:0:b0:56b:f64b:b385 with SMTP id
- c19-20020aa78813000000b0056bf64bb385mr3113688pfo.68.1668181269320; Fri, 11
- Nov 2022 07:41:09 -0800 (PST)
+        Fri, 11 Nov 2022 10:42:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCE256EC0;
+        Fri, 11 Nov 2022 07:42:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D65EAB82620;
+        Fri, 11 Nov 2022 15:42:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CA1AC433D7;
+        Fri, 11 Nov 2022 15:42:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668181345;
+        bh=GXXc/YkrgyCittXoI3dzyMhfx9G+SEtZA29qawbDu0Q=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=g42q1yfLeWX1aElcDEgHpy2fn6ocZm39/ztrtJ9/y+GN5lTLkgSAglFXN4ps/AWMp
+         WoE0ea9O8L8UeE/wFNdkUZJVkuoC6Oe0YtdQPU6HKdmjC1I/e3ykbLUN8q9P25gCYe
+         nhz9TAK6tAziLyLJ4/U6G9X1noX9NOL6tDgTWbE++OpxTcpsX0G49z4HPw4WQPBeUl
+         50GNBmxjovMovEVwYMgVzQ3vmdNTyNb22hTFyTJ+uRUbQpVeYBxzqTHcch9r2d0H+4
+         EZZvvTKGjpn46ndysZHwDiVOnsjsVsGyWBgBmTOHh7KSXRRA4gs1lIN3rdxFizERbF
+         UT2W6Fq2VDWEg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>
+In-Reply-To: <20221103195341.174972-1-krzysztof.kozlowski@linaro.org>
+References: <20221103195341.174972-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 1/2] ASoC: dt-bindings: qcom,lpass: do not hard-code clock-output-names
+Message-Id: <166818134230.428331.5344875121746787370.b4-ty@kernel.org>
+Date:   Fri, 11 Nov 2022 15:42:22 +0000
 MIME-Version: 1.0
-References: <20221110141335.62171-1-sgarzare@redhat.com>
-In-Reply-To: <20221110141335.62171-1-sgarzare@redhat.com>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Fri, 11 Nov 2022 16:40:33 +0100
-Message-ID: <CAJaqyWdvdy2QxuuyPRtfBKtuObrMg_kX_R9hdui+Oh72XtJ7Qw@mail.gmail.com>
-Subject: Re: [PATCH] vdpa_sim: fix vringh initialization in vdpasim_queue_ready()
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 3:13 PM Stefano Garzarella <sgarzare@redhat.com> wr=
-ote:
->
-> When we initialize vringh, we should pass the features and the
-> number of elements in the virtqueue negotiated with the driver,
-> otherwise operations with vringh may fail.
->
-> This was discovered in a case where the driver sets a number of
-> elements in the virtqueue different from the value returned by
-> .get_vq_num_max().
->
-> In vdpasim_vq_reset() is safe to initialize the vringh with
-> default values, since the virtqueue will not be used until
-> vdpasim_queue_ready() is called again.
->
-> Fixes: 2c53d0f64c06 ("vdpasim: vDPA device simulator")
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> ---
->  drivers/vdpa/vdpa_sim/vdpa_sim.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdp=
-a_sim.c
-> index b071f0d842fb..b20689f8fe89 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> @@ -67,8 +67,7 @@ static void vdpasim_queue_ready(struct vdpasim *vdpasim=
-, unsigned int idx)
->  {
->         struct vdpasim_virtqueue *vq =3D &vdpasim->vqs[idx];
->
-> -       vringh_init_iotlb(&vq->vring, vdpasim->dev_attr.supported_feature=
-s,
-> -                         VDPASIM_QUEUE_MAX, false,
-> +       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, false,
->                           (struct vring_desc *)(uintptr_t)vq->desc_addr,
->                           (struct vring_avail *)
->                           (uintptr_t)vq->driver_addr,
-> --
-> 2.38.1
->
+On Thu, 3 Nov 2022 15:53:39 -0400, Krzysztof Kozlowski wrote:
+> The purpose of clock-output-names is to customize desired clock name,
+> not use one, same name.
+> 
+> 
 
-I think this is definitely an improvement, but I'd say we should go a
-step further and rename VDPASIM_QUEUE_MAX to VDPASIM_QUEUE_DEFAULT. As
-you point out in the patch message it is not a max anymore.
+Applied to
 
-Another thing to note is that we don't have a way to report that
-userspace indicated a bad value for queue length. With the current
-code vringh will not initialize at all if I'm not wrong, so we should
-prevent userspace to put a bad num.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Ideally, we should repeat the tests of vring_init_kern at
-vdpasim_set_vq_num. We could either call it with NULL vring addresses
-to check for -EINVAL, or simply repeat the conditional (!num || num >
-0xffff || (num & (num - 1))). I'd say the first one is better to not
-go out of sync.
+Thanks!
 
-All of that can be done on top anyway, so for this patch:
+[1/2] ASoC: dt-bindings: qcom,lpass: do not hard-code clock-output-names
+      commit: bcdc73e167b68cb494977cdb2b92f05ab6455fc2
+[2/2] ASoC: codecs: lpass-wsa-macro: parse clock-output-names
+      commit: 9f63869a5682d5fa9bc5563577fe3270e7cbf4f2
 
-Acked-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
