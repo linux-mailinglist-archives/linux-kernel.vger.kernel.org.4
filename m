@@ -2,164 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E39BC625FA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:37:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79AEE625FA3
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233940AbiKKQg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 11:36:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59662 "EHLO
+        id S233921AbiKKQiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 11:38:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234159AbiKKQg4 (ORCPT
+        with ESMTP id S232341AbiKKQiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:36:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE1985460
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:36:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668184566;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6mlEl6qGZPqlKJRRjXwEN5bOOe171F4/1jD4DeUrkco=;
-        b=frG0aCAYx2OnbkN2jgu+taVl9VcATig8pe2L3uBa+kemTlGQYQ7AanKKjI+1KkNZdd6dhr
-        BOpz6XyT7D6EUyi0et3/7WsK6LGpkzUgguYSVoxwPdjKFky03RLsO7bZdVcBQipMYF65XD
-        MKeGJJUKVI8q5pSsNkgf0Pl221ICY6g=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-587-QDFu3gK5PPOi2ugjipi-Jw-1; Fri, 11 Nov 2022 11:36:05 -0500
-X-MC-Unique: QDFu3gK5PPOi2ugjipi-Jw-1
-Received: by mail-qk1-f199.google.com with SMTP id de43-20020a05620a372b00b006fae7e5117fso5096179qkb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:36:05 -0800 (PST)
+        Fri, 11 Nov 2022 11:38:04 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9374C836B0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:38:03 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id i131so6256979ybc.9
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:38:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kylehuey.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=K6NvtIX+Lbvb+KUOrKTR0ljTcijw4msq9rtYQAvDAUk=;
+        b=ZIV1Enf0EAuq2JCxnGrXKI8jk/7tY3he6qJy8sZcYtjGNNiLD0dUKQN26hcwcVr7g0
+         ZHSsqZwjYd/amA7hKKNWDI9b5LZ19MVL2uGtfJ2XCvRFB4DlM9Gj7XdDctYmU/Rqnvt8
+         5kasCPXeKaizIqzuDA7tWJaJx/RmSqeAsezseVn+JObhr7w+AnWOUt0cuM9yl9qdfNRo
+         NOxm7kb/aTOMFj+7vJMjknh6lMSUQl08qkuBuQHNCypelX6FicXzpCsPfN44ihrZ+VP4
+         bAaZI7hDq6zsG384dY8S0x+JWdVqUt+Z1OxRjg3HZXFn5EboRSLm6+ZTiDvpmh+RGCqg
+         LumA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6mlEl6qGZPqlKJRRjXwEN5bOOe171F4/1jD4DeUrkco=;
-        b=6QNwY0wL7VceJf9lfUzzlFarCPG8bHyVamAP4JOGxH0UiZpHWZ8VKqSCJh0q19MNd3
-         QheUGTtzubiQydQStlxZS53+BczkO6xGAhGwNwLjTe/XNUQOg8Jqs5dXlRzJ1ze7nbT6
-         0DOR61JKlxNB9F7VY8kE705GMBodSeU/0WK6Ivju2IufmAeVQQHW35kvfw5A4Luau3iJ
-         ppB5XqQ1PUA2AhfAsOG5ohq7fBBguGW10SX0XuQojjC23VaZvwYQmr3Wu/048stv8YLZ
-         SMR8ipJisKvmVoOuTQQv9x3UwnV2NxTb4i66zQ9ybfqJL7iS/oYepb9f9y8ZAeHr/WXb
-         hYEA==
-X-Gm-Message-State: ANoB5pmUBrALmw+jmiuKPa6uTuaDo4URRcrPTwy0nxcgRQqt5OIDCCTu
-        PQLWrcIW4iMU+kaYy1VYu9fR1OzHHK+hPuFyCiQLP166wYh/ONazJKKDlvANoBTBEU0i1CKsdDj
-        fSx9NETueHgHNBFwEE+f+snbA
-X-Received: by 2002:a05:620a:c98:b0:6fa:2ffe:aab0 with SMTP id q24-20020a05620a0c9800b006fa2ffeaab0mr1764857qki.567.1668184564613;
-        Fri, 11 Nov 2022 08:36:04 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6nWeiKKtbGwQyvMC7EoupUmLz8J7yWqDcAtEA6uRF4m9XzonXF3JCm2XUraHXJpty+FSLTaA==
-X-Received: by 2002:a05:620a:c98:b0:6fa:2ffe:aab0 with SMTP id q24-20020a05620a0c9800b006fa2ffeaab0mr1764835qki.567.1668184564368;
-        Fri, 11 Nov 2022 08:36:04 -0800 (PST)
-Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
-        by smtp.gmail.com with ESMTPSA id ay42-20020a05622a22aa00b0039a08c0a594sm1433589qtb.82.2022.11.11.08.35.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 08:36:03 -0800 (PST)
-Date:   Fri, 11 Nov 2022 17:35:48 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>
-Cc:     stefanha@redhat.com, mst@redhat.com, jasowang@redhat.com,
-        virtualization@lists.linux-foundation.org, arei.gonglei@huawei.com,
-        yechuan@huawei.com, huangzhichao@huawei.com,
-        linux-kernel@vger.kernel.org, xiehong@huawei.com
-Subject: Re: [PATCH] vp_vdpa: harden the logic of set status
-Message-ID: <20221111163548.x6yy2w74gk6biykw@sgarzare-redhat>
-References: <20221111145505.1232-1-longpeng2@huawei.com>
- <20221111151459.dyz42jclq26ai26q@sgarzare-redhat>
- <0f25506f-b9ca-1578-f944-cfb3936ced50@huawei.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K6NvtIX+Lbvb+KUOrKTR0ljTcijw4msq9rtYQAvDAUk=;
+        b=vImwZRugkinSd6Mkc7AZRHicPdsYbfhYEkLc+8jLR2DFuAFFbMZP5hS71A3g9JLWYc
+         v6gwoPnHb+rnM8msy+/NERbiu3qyMZAKxqrprzHA9ZNMAxJPz6612SBG+GtSmq1XNozr
+         o0OGkYFhgZXU5pfgrVxFSH62bmaK66vWlQhgKYiFY9Y4PlHy5c98jkVf2bOaGY5OsmcQ
+         bb60FvHXISoyCDi/s54bz56otc5H5aeKSIZIs2mSQfb5XlbMADzQKwu6FCc1xbETnZ9i
+         aiyps0CJHr/oSAS9/W4D89O5TDD0QizyjLHh5Wb0kfBL9hlIcVXz8OngpaMY2n04aWwf
+         2Mqg==
+X-Gm-Message-State: ANoB5pm4ik4/Fx30K0TJ1qFXVe44koiBlKts+62wXeOsRjBUGKiTCPWH
+        8pbuYWClWnmuXfeFQnfiHMoj8sOKDPIJ5QqXu4snqA==
+X-Google-Smtp-Source: AA0mqf59F1exMtt7BFu3TKN2pQsxyZEPjDy9r/NuB/KlmIuT83XtZxGvU1wIl1kHMhe4l07A5h8qeMI+Z94l5cp/ee4=
+X-Received: by 2002:a5b:38b:0:b0:6cb:75a6:3bdb with SMTP id
+ k11-20020a5b038b000000b006cb75a63bdbmr2407196ybp.96.1668184682697; Fri, 11
+ Nov 2022 08:38:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0f25506f-b9ca-1578-f944-cfb3936ced50@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221107063807.81774-1-khuey@kylehuey.com> <20221107063807.81774-2-khuey@kylehuey.com>
+ <64e62ab9-71f6-6d90-24de-402921c244e7@intel.com> <CAP045ArEuTmA6DGoVEgeSRd-F+oQCqRaeyzwgdxuCnOP0jgqWA@mail.gmail.com>
+ <b41b6a33-7fdc-bd54-8b15-02bf4e713ed7@intel.com>
+In-Reply-To: <b41b6a33-7fdc-bd54-8b15-02bf4e713ed7@intel.com>
+From:   Kyle Huey <me@kylehuey.com>
+Date:   Fri, 11 Nov 2022 08:37:49 -0800
+Message-ID: <CAP045Ar1WxzWy+fDLrDYR6EWCYtH=wPca+ixJ=9SGQiMZS1ALQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH v6 1/2] x86/fpu: Allow PKRU to be (once again)
+ written by ptrace.
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        "Robert O'Callahan" <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 11:49:10PM +0800, Longpeng (Mike, Cloud Infrastructure Service Product Dept.) wrote:
+On Thu, Nov 10, 2022 at 5:38 PM Dave Hansen <dave.hansen@intel.com> wrote:
 >
+> On 11/10/22 16:03, Kyle Huey wrote:
+> > On Tue, Nov 8, 2022 at 10:23 AM Dave Hansen <dave.hansen@intel.com> wrote:
+> ...
+> >> At a high level, this patch does a *LOT*.  Generally, it's nice when
+> >> bugfixes can be encapsulted in one patch, but I think there's too much
+> >> going on here for one patch.
+> >
+> > Ok. How about I break the first part into two pieces, one that changes the
+> > signatures of copy_uabi_from_kernel_to_xstate() and
+> > copy_sigframe_from_user_to_xstate(), and one that moves the relevant
+> > KVM code from fpu_copy_uabi_to_guest_fpstate() to copy_uabi_to_xstate()
+> > and deals with the edge case behavior of the mask?
 >
->在 2022/11/11 23:14, Stefano Garzarella 写道:
->>On Fri, Nov 11, 2022 at 10:55:05PM +0800, Longpeng(Mike) wrote:
->>>From: Longpeng <longpeng2@huawei.com>
->>>
->>>1. We should not set status to 0 when invoking vp_vdpa_set_status().
->>>
->>>2. The driver MUST wait for a read of device_status to return 0 before
->>>  reinitializing the device.
->>>
->>>Signed-off-by: Longpeng <longpeng2@huawei.com>
->>>---
->>>drivers/vdpa/virtio_pci/vp_vdpa.c | 11 ++++++++++-
->>>1 file changed, 10 insertions(+), 1 deletion(-)
->>>
->>>diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c 
->>>b/drivers/vdpa/virtio_pci/vp_vdpa.c
->>>index d448db0c4de3..d35fac5cde11 100644
->>>--- a/drivers/vdpa/virtio_pci/vp_vdpa.c
->>>+++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
->>>@@ -212,8 +212,12 @@ static void vp_vdpa_set_status(struct 
->>>vdpa_device *vdpa, u8 status)
->>>{
->>>    struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
->>>    struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
->>>-    u8 s = vp_vdpa_get_status(vdpa);
->>
->>Is this change really needed?
->>
->No need to get the status if we try to set status to 0 (trigger BUG).
+> Sounds like a good start.  My gut says there's another patch or two that
+> could be broken out, but that sounds like a reasonable next step.
+>
+> >>> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+> >>> index 3b28c5b25e12..c273669e8a00 100644
+> >>> --- a/arch/x86/kernel/fpu/core.c
+> >>> +++ b/arch/x86/kernel/fpu/core.c
+> >>> @@ -391,8 +391,6 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
+> >>>  {
+> >>>       struct fpstate *kstate = gfpu->fpstate;
+> >>>       const union fpregs_state *ustate = buf;
+> >>> -     struct pkru_state *xpkru;
+> >>> -     int ret;
+> >>>
+> >>>       if (!cpu_feature_enabled(X86_FEATURE_XSAVE)) {
+> >>>               if (ustate->xsave.header.xfeatures & ~XFEATURE_MASK_FPSSE)
+> >>> @@ -406,16 +404,16 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
+> >>>       if (ustate->xsave.header.xfeatures & ~xcr0)
+> >>>               return -EINVAL;
+> >>>
+> >>> -     ret = copy_uabi_from_kernel_to_xstate(kstate, ustate);
+> >>> -     if (ret)
+> >>> -             return ret;
+> >>> +     /*
+> >>> +      * Nullify @vpkru to preserve its current value if PKRU's bit isn't set
+> >>> +      * in the header.  KVM's odd ABI is to leave PKRU untouched in this
+> >>> +      * case (all other components are eventually re-initialized).
+> >>> +      * (Not clear that this is actually necessary for compat).
+> >>> +      */
+> >>> +     if (!(ustate->xsave.header.xfeatures & XFEATURE_MASK_PKRU))
+> >>> +             vpkru = NULL;
+> >>
+> >> I'm not a big fan of hunks that are part of bugfixes where it is not
+> >> clear that the hunk is necessary.
+> >
+> > This is necessary to avoid changing KVM's behavior at the same time
+> > that we change
+> > ptrace, since KVM doesn't want the same behavior as ptrace.
+>
+> Your "This is necessary" doesn't really match with "Not clear that this
+> is actually necessary" from the comment, right?
+>
+> Rather than claim whether it is necessary or not, maybe just say why
+> it's there: it's there to preserve wonky KVM behavior.
+>
+> BTW, I'd love to know if KVM *REALLY* depends on this.  It'd be nice to
+> kill if not.
+
+qemu didn't appear to (it treats the KVM_GET_XSAVE2/KVM_SET_XSAVE
+buffers as opaque blobs afaict) but it's of course not the only KVM
+application out there.
+
+> >> Would something like this be more clear?
+> >>
+> >>         if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
+> >>                 struct pkru_state *xpkru;
+> >>
+> >>                 xpkru = __raw_xsave_addr(xsave, XFEATURE_PKRU);
+> >>                 *pkru = xpkru->pkru;
+> >>         } else {
+> >>                 /*
+> >>                  * KVM may pass a NULL 'pkru' to indicate
+> >>                  * that it does not need PKRU updated.
+> >>                  */
+> >>                 if (pkru)
+> >>                         *pkru = 0;
+> >>         }
+> >
+> > Yeah, Sean Christopherson suggested this (with the else and if
+> > collapsed into a single level) when I submitted this previously.
+>
+> I generally agree with Sean, but he's also been guilty of an atrocity or
+> two over the years.  :)  While I generally like low levels of
+> indentation I also think my version is much more clear in this case.
 >
 
-Okay, but that's the case that should never happen, so IMHO we can leave 
-it as it is.
-
->>>+    u8 s;
->>>+
->>>+    /* We should never be setting status to 0. */
->>>+    BUG_ON(status == 0);
->>
->>IMHO panicking the kernel seems excessive in this case, please use 
->>WARN_ON and maybe return earlier.
->>
->Um...I referenced the vp_reset/vp_set_status,
-
-Ah I see, maybe it's an old code, because recently we always try to 
-avoid BUG_ON().
-
->
->>>
->>>+    s = vp_vdpa_get_status(vdpa);
->>>    if (status & VIRTIO_CONFIG_S_DRIVER_OK &&
->>>        !(s & VIRTIO_CONFIG_S_DRIVER_OK)) {
->>>        vp_vdpa_request_irq(vp_vdpa);
->>>@@ -229,6 +233,11 @@ static int vp_vdpa_reset(struct vdpa_device *vdpa)
->>>    u8 s = vp_vdpa_get_status(vdpa);
->>>
->>>    vp_modern_set_status(mdev, 0);
->>>+    /* After writing 0 to device_status, the driver MUST wait for 
->>>a read of
->>>+     * device_status to return 0 before reinitializing the device.
->>>+     */
->>>+    while (vp_modern_get_status(mdev))
->>>+        msleep(1);
->>
->>Should we set a limit after which we give up? A malfunctioning 
->>device could keep us here forever.
->>
->Yes, but the malfunctioning device maybe can not work anymore, how to 
->handle it?
-
-Maybe we should set the status to broken, but in this case we could just 
-return an error if we couldn't reset it, how about that?
-
-Thanks,
-Stefano
-
+- Kyle
