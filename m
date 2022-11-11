@@ -2,61 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E92625FF1
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 17:59:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A53CD625FF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234072AbiKKQ65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 11:58:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
+        id S234006AbiKKRAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:00:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233486AbiKKQ6s (ORCPT
+        with ESMTP id S233519AbiKKRAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 11:58:48 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758662BF4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:58:47 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id y4so4690902plb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 08:58:47 -0800 (PST)
+        Fri, 11 Nov 2022 12:00:48 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB97A1C91D
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:00:47 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id g62so5359983pfb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 09:00:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:to:from:cc:subject:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GYSSEXPwNN5u2j3n4bUYzsFQHmcrk65kX58qhVbQYMY=;
-        b=W4BhOVK2/noP8zzUmqFmtsrMiWmVnlZve2pz/mntzK8k9IoiTI5kCSGXiBzsY1z1gi
-         0BdYW/y8Ir8RCx6zAS8zqPlSZokMJU7ZeNiM5Suv4noYBKulUwfKWGpZR/iz0jf/ykiG
-         ASEDiFjRqDpHR0XNf8idDq2789NbuGvMqOtIFAgcO4SfBA/4MCsdVZBjMw5U0z+kwEM6
-         eyuTHE3+SsX/9GLSxieqAkzFFc1aGMx5n+DPjECceOtUFE66HnPMSNYrHoN3xjeHJ4lv
-         a0mr+XadDI4gBOP6CPhYe/1AF6VhVho+XTo3WZ93ruh3zePJJcQGlFS1oEizJ4bMnSbO
-         vIlw==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uQv9t+cMfRNztb2MDGSgO4oDyG4lJFnP/83dETMShPI=;
+        b=eUXi9U7rhUSr3br6rmgiaIsYp+RsvxivcSImOAntLprwvBzpzxq2snkTdeBA8QRF46
+         RXeLlcRsTKcvZJc3YTbTZylMl6Us+u9gpVr5UwcDJFNmaExFr+vmd22q2xYYFH+dtwx7
+         pLSFUZPZgU10jm+ODpk3evi02MKFS2RUChGxbenRrKzhC74MRZRYnQype4+mANvG7nAe
+         rXTJGaSyuU+BSfy99bzHO4xKYizlQyyustnK8EAYw+E6b/GaGChT8FXr+VKxGtvbNNXy
+         To2ze0rt3SWOsQvWQnRzcTH3JwXjVb09eAxaZfAsEy6avrhdbnhStjtmpg1Z/yBAl145
+         /FzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:to:from:cc:subject:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GYSSEXPwNN5u2j3n4bUYzsFQHmcrk65kX58qhVbQYMY=;
-        b=ASNDLBqP8RvjKKCVc5cabZgBK1JWa9mh5tuAakz38FMaVRou8WUUhzqD8Cr5jsSVPn
-         5F+LTCP7/wy+M7FbJedjOYdbQAB5C5DClmy2cyWJ9+A5tZ01eJqXsV+vwRKU8VNunJxM
-         RzpUR2nT6uw12tEAtSPTrfmO2hr2QujOZS3umATImARdNLCp7PB1IwjZLFcQNjHJF1su
-         8eGlN7LWhvQrGjt84zTUNG5Mv5xtP9wGqfoSzF7Y2sC69/fmRqNfmfuQagm5GyQlRa/g
-         LIMRO11cDXYGNsY4ZxlpuD3Ty0CCfDHMQnZxClocLqsmQdepCaxSYnyvH0J1LQ+1SdBR
-         tFZQ==
-X-Gm-Message-State: ANoB5plmChTZJiwT2qRCiba3SaHIQzoZbpxQueP86AuAataCowjn7hkm
-        phcGTTaORnSVfEzopTmu8MhEGQoQIi/4cQ==
-X-Google-Smtp-Source: AA0mqf46tMhNW+0g1fP7XCrL/EIuUsTpa3qmBUZ7KgocDJoJzAlT8yeqDtKQfdrDKz0vQIM1/xaKtg==
-X-Received: by 2002:a17:903:2113:b0:186:b063:339 with SMTP id o19-20020a170903211300b00186b0630339mr3388647ple.70.1668185926815;
-        Fri, 11 Nov 2022 08:58:46 -0800 (PST)
-Received: from localhost ([135.180.227.92])
-        by smtp.gmail.com with ESMTPSA id 21-20020a170902c21500b00178143a728esm1916305pll.275.2022.11.11.08.58.45
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uQv9t+cMfRNztb2MDGSgO4oDyG4lJFnP/83dETMShPI=;
+        b=R1xVQ5ZBQYkAc9usM38NCrhYFLtzhuucVFEasCfXPFTzQSufM16o0yM5Q+LWxYma5D
+         kpgZrD46eUMP6jHgrYEJqAR1Op4GUifDphK2PMFLz+0gCKjhcfz5WmsZBiBRvEY09vDp
+         Xctkbyx8ADefgghcpth9JCWWlwYbq54IFyNgEFPSMCHTfsuM34pZWZuExoGOf8W9d1bw
+         uN6AbIxKEYUIwUT4EszN27X2x2SoZjGnyX1i01BPaaGrjG0LOIAieVYoIV3X47wymMl3
+         nFGWPTPGI/JZ9s10sYnfnC3Q8RI/eSgfEhrOnwiAS/EFWKGKf4vVWAmHlfbpAsxkaLOs
+         zTMQ==
+X-Gm-Message-State: ANoB5pn0OszjGDhKUiesSjV9O+BmpWg59A2B3Y1pLFxvpwTSQI28MjoH
+        AhZfW5ONi3aOJqzl6QLNyR+Lsg==
+X-Google-Smtp-Source: AA0mqf4GWxv9k1sfQt7GDw99/UCt6cxg6CadWvuK/9pl2DShLvK1kL9WgKrNokFMXhAV/lhebQXpJA==
+X-Received: by 2002:a63:881:0:b0:46e:c7be:16fc with SMTP id 123-20020a630881000000b0046ec7be16fcmr2366257pgi.462.1668186047086;
+        Fri, 11 Nov 2022 09:00:47 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id i8-20020a170902c94800b00187197c4999sm1964530pla.167.2022.11.11.09.00.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 08:58:46 -0800 (PST)
-Date:   Fri, 11 Nov 2022 08:58:46 -0800 (PST)
-X-Google-Original-Date: Fri, 11 Nov 2022 08:48:38 PST (-0800)
-Subject: [GIT PULL] RISC-V Fixes for 6.1-rc5
-CC:         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Message-ID: <mhng-a9c9d14d-1da7-4c8d-b117-b207616f77a4@palmer-ri-x1c9>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 11 Nov 2022 09:00:46 -0800 (PST)
+Date:   Fri, 11 Nov 2022 17:00:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Kyle Huey <me@kylehuey.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org
+Subject: Re: [RESEND PATCH v6 1/2] x86/fpu: Allow PKRU to be (once again)
+ written by ptrace.
+Message-ID: <Y25/u6IlqJGYkVD/@google.com>
+References: <20221107063807.81774-1-khuey@kylehuey.com>
+ <20221107063807.81774-2-khuey@kylehuey.com>
+ <64e62ab9-71f6-6d90-24de-402921c244e7@intel.com>
+ <CAP045ArEuTmA6DGoVEgeSRd-F+oQCqRaeyzwgdxuCnOP0jgqWA@mail.gmail.com>
+ <b41b6a33-7fdc-bd54-8b15-02bf4e713ed7@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b41b6a33-7fdc-bd54-8b15-02bf4e713ed7@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,52 +88,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit d14e99bf95510fa2d6affc371ad68161afc1dc8e:
+On Thu, Nov 10, 2022, Dave Hansen wrote:
+> On 11/10/22 16:03, Kyle Huey wrote:
+> > On Tue, Nov 8, 2022 at 10:23 AM Dave Hansen <dave.hansen@intel.com> wrote:
+> BTW, I'd love to know if KVM *REALLY* depends on this.
 
-  RISC-V: Fix /proc/cpuinfo cpumask warning (2022-10-27 15:23:19 -0700)
+Unlikely, but nearly impossible to know for sure.  Copy+pasting my response[1] to
+an earlier version.
 
-are available in the Git repository at:
+ : Hrm, the current behavior has been KVM ABI for a very long time.
+ : 
+ : It's definitely odd because all other components will be initialized due to their
+ : bits being cleared in the header during kvm_load_guest_fpu(), and it probably
+ : wouldn't cause problems in practice as most VMMs likely do "all or nothing" loads.
+ : But, in theory, userspace could save/restore a subset of guest XSTATE and rely on
+ : the kernel not overwriting guest PKRU when its bit is cleared in the header.
+ : 
+ : All that said, I don't see any reason to force KVM to change at this time, it's
+ : trivial enough to handle KVM's oddities while providing sane behavior for others.
+ : Nullify the pointer in the guest path and then update copy_uabi_to_xstate() to
+ : play nice with a NULL pointer, e.g. 
+ : 
+ : 	/*
+ : 	 * Nullify @vpkru to preserve its current value if PKRU's bit isn't set
+ : 	 * in the header.  KVM's odd ABI is to leave PKRU untouched in this
+ : 	 * case (all other components are eventually re-initialized).
+ : 	 */
+ : 	if (!(kstate->regs.xsave.header.xfeatures & XFEATURE_MASK_PKRU))
+ : 		vpkru = NULL;
+ : 
+ : 	return copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.1-rc5
+> It'd be nice to kill if not.
 
-for you to fetch changes up to fcae44fd36d052e956e69a64642fc03820968d78:
+I don't disagree, my hesitation is purely that doing so might subtly break
+userspace.
 
-  RISC-V: vdso: Do not add missing symbols to version section in linker script (2022-11-10 15:06:14 -0800)
+That said, I'm 99.9% certain no traditional VMM, e.g. QEMU, is relying on this
+behavior, as doing KVM_SET_XSAVE with anything except the guest's xfeatures mask
+would corrupt guest XSAVE state for everything except PKRU.  I.e. for all intents
+and purposes, a traditional VMM must do KVM_GET_SAVE => KVM_SET_XSAVE without
+touching the xfeatures mask.
 
-----------------------------------------------------------------
-RISC-V Fixes for 6.1-rc5
+And for non-traditional usage of KVM, I would be quite surprised if any of those
+use cases utilize PKRU in the guest, let alone play games with KVM_{G,S}SET_XSAVE.
 
-* A fix to add the missing PWM LEDs into the  SiFive HiFive Unleashed
-  device tree.
-* A fix to fully clear a task's registers on creation, as they end up in
-  userspace and thus leak kernel memory.
-* A pair of VDSO-related build fixes that manifest on recent LLVM-based
-  toolchains.
-* A fix to our early init to ensure the DT is adequately processed
-  before reserved memory nodes are processed.
+So, I'm not completely opposed to "fixing" KVM's ABI, but it should be done as a
+separate patch that is tagged "KVM: x86:" and clearly states that it's changing
+KVM's ABI in a way that could theoretically break userspace.
 
-----------------------------------------------------------------
-I did get one soft lockup earlier this week, but it doesn't seem to reliably
-reproduce and happens without these patches.
+> >> Would something like this be more clear?
+> >>
+> >>         if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
+> >>                 struct pkru_state *xpkru;
+> >>
+> >>                 xpkru = __raw_xsave_addr(xsave, XFEATURE_PKRU);
+> >>                 *pkru = xpkru->pkru;
+> >>         } else {
+> >>                 /*
+> >>                  * KVM may pass a NULL 'pkru' to indicate
+> >>                  * that it does not need PKRU updated.
+> >>                  */
+> >>                 if (pkru)
+> >>                         *pkru = 0;
+> >>         }
+> > 
+> > Yeah, Sean Christopherson suggested this (with the else and if
+> > collapsed into a single level) when I submitted this previously.
+> 
+> I generally agree with Sean, but he's also been guilty of an atrocity or
+> two over the years.  :)
 
-----------------------------------------------------------------
-Conor Dooley (1):
-      riscv: fix reserved memory setup
+Heh, just one or two?  I'll call that a win.
 
-Emil Renner Berthing (1):
-      riscv: dts: sifive unleashed: Add PWM controlled LEDs
+> While I generally like low levels of indentation I also think my version is
+> much more clear in this case.
 
-Jisheng Zhang (2):
-      riscv: process: fix kernel info leakage
-      riscv: vdso: fix build with llvm
+I've no objection to a standalone if.  My suggestion[2] was in response to code
+that zeroed @pkru before the XFEATURE_MASK_PKRU check.
 
-Nathan Chancellor (1):
-      RISC-V: vdso: Do not add missing symbols to version section in linker script
+      if (pkru)
+              *pkru = 0;
 
- .../riscv/boot/dts/sifive/hifive-unleashed-a00.dts | 38 ++++++++++++++++++++++
- arch/riscv/kernel/process.c                        |  2 ++
- arch/riscv/kernel/setup.c                          |  1 +
- arch/riscv/kernel/vdso/Makefile                    |  5 ++-
- arch/riscv/kernel/vdso/vdso.lds.S                  |  2 ++
- arch/riscv/mm/init.c                               |  1 -
- 6 files changed, 47 insertions(+), 2 deletions(-)
+      if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
+              struct pkru_state *xpkru;
+              xpkru = __raw_xsave_addr(xsave, XFEATURE_PKRU);
+              *pkru = xpkru->pkru;
+      }
+
+[1] https://lore.kernel.org/all/Yv6szXuKGv75wWmm@google.com
+[2] https://lore.kernel.org/all/YxDP6jie4cwzZIHp@google.com
