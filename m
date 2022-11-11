@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA19626050
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 131D9626052
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 18:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234400AbiKKRSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 12:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
+        id S234476AbiKKRS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 12:18:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234403AbiKKRSd (ORCPT
+        with ESMTP id S234434AbiKKRSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 12:18:33 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07AE7DEAF;
-        Fri, 11 Nov 2022 09:18:29 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2ABHIKmP047612;
-        Fri, 11 Nov 2022 11:18:20 -0600
+        Fri, 11 Nov 2022 12:18:44 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E7C4D5E3;
+        Fri, 11 Nov 2022 09:18:36 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2ABHIPQZ081056;
+        Fri, 11 Nov 2022 11:18:25 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668187101;
-        bh=5A/fv0J8rGB5ugYgRHRdXdNAUkqvodydSPXq5z7C8U4=;
+        s=ti-com-17Q1; t=1668187105;
+        bh=ECDL3sZx5BUYYCI2k/6ernjy/NSdgpC69pPfs/90DWo=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=g4MwM3seJVjMB0qTfV8Gd0xcP/+oJXDG+M11Eym11vNfpMa2di4oiZXqH5rN5Ochl
-         qfon1C5zGsIpObijR8st23vZMjP3gCBOZkXZRRNnToNvaRrVBLfaFJkjV8pdyJ8IEr
-         bqX7lKygkx058unhrWwodvWtQ2mnThBllNJchB68=
+        b=scWPUFRkcjttQ6j29ThrYa7LaXXHjQJ9e9PImFPMHlWPeDihkNje3R7fIdxlhynUt
+         PkEg/PUk5pqxE0oyP9W91Ro4bJx/jndyHE070bRZ3RDTZhk8Zh6pZu/LJHuQNQwTxu
+         UZzSZcQ8V+sVYtdd7dt9hkXa0e6UCJ2nQmuSJTMs=
 Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2ABHIKSe095883
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2ABHIP7A057132
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 11 Nov 2022 11:18:20 -0600
+        Fri, 11 Nov 2022 11:18:25 -0600
 Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE112.ent.ti.com
  (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Fri, 11
- Nov 2022 11:18:16 -0600
+ Nov 2022 11:18:25 -0600
 Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
  (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Fri, 11 Nov 2022 11:18:16 -0600
+ Frontend Transport; Fri, 11 Nov 2022 11:18:25 -0600
 Received: from jti.ent.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2ABHHewa028454;
-        Fri, 11 Nov 2022 11:18:09 -0600
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2ABHHewb028454;
+        Fri, 11 Nov 2022 11:18:18 -0600
 From:   Georgi Vlaev <g-vlaev@ti.com>
 To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
         Santosh Shilimkar <ssantosh@kernel.org>,
@@ -51,9 +51,9 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Roger Quadros <rogerq@kernel.org>,
         Georgi Vlaev <g-vlaev@ti.com>
-Subject: [PATCH v3 3/5] firmware: ti_sci: Allocate memory for the LPM modes
-Date:   Fri, 11 Nov 2022 19:17:37 +0200
-Message-ID: <20221111171739.160693-4-g-vlaev@ti.com>
+Subject: [PATCH v3 4/5] firmware: ti_sci: Use dt provided fw name and address to load at suspend time
+Date:   Fri, 11 Nov 2022 19:17:38 +0200
+Message-ID: <20221111171739.160693-5-g-vlaev@ti.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221111171739.160693-1-g-vlaev@ti.com>
 References: <20221111171739.160693-1-g-vlaev@ti.com>
@@ -72,130 +72,209 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dave Gerlach <d-gerlach@ti.com>
 
-A region of memory in DDR must be used during Deep Sleep for saving
-of some system context when using the ti_sci firmware. From DM's point
-of view, this can be any contiguous region in the DDR, so can allocate
-512KB of DMA reserved memory in probe(), instead of another carveout.
+Use request_firmware_direct to load the fs stub LPM firmware to a
+provided memory region. The filename for the firmware is provided
+in the device tree as "firmware-name".
 
-Also send a TISCI_MSG_PREPARE_SUSPEND message to the firmware during
-probe to determine if system suspend is supported and if
-ti_sci_init_suspend should be called based on the response received.
+Use a pm_notifier for loading of the low power firmware during
+PM_SUSPEND_PREPARE phase so that it can be loaded from the rootfs
+before it is suspended. It is possible in the future for this
+firmware to require reload, so add a check to indicate that the
+firmware is currently loaded so it is only loaded once.
 
 Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
 Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
 Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
 Tested-by: Roger Quadros <rogerq@kernel.org>
 ---
- drivers/firmware/ti_sci.c | 55 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ drivers/firmware/ti_sci.c | 97 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 97 insertions(+)
 
 diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
-index f13cf19587e3..2434cf1ec5e6 100644
+index 2434cf1ec5e6..a961506dbbc4 100644
 --- a/drivers/firmware/ti_sci.c
 +++ b/drivers/firmware/ti_sci.c
-@@ -10,6 +10,7 @@
- 
- #include <linux/bitmap.h>
+@@ -12,6 +12,7 @@
  #include <linux/debugfs.h>
-+#include <linux/dma-mapping.h>
+ #include <linux/dma-mapping.h>
  #include <linux/export.h>
++#include <linux/firmware.h>
  #include <linux/io.h>
  #include <linux/iopoll.h>
-@@ -25,6 +26,9 @@
+ #include <linux/kernel.h>
+@@ -22,6 +23,7 @@
+ #include <linux/slab.h>
+ #include <linux/soc/ti/ti-msgmgr.h>
+ #include <linux/soc/ti/ti_sci_protocol.h>
++#include <linux/suspend.h>
+ #include <linux/reboot.h>
  
  #include "ti_sci.h"
- 
-+/* Low power mode memory context size */
-+#define LPM_CTX_MEM_SIZE 0x80000
-+
- /* List of all TI SCI devices active in system */
- static LIST_HEAD(ti_sci_list);
- /* Protection for the entire list */
-@@ -96,6 +100,8 @@ struct ti_sci_desc {
-  * @minfo:	Message info
-  * @node:	list head
-  * @host_id:	Host ID
-+ * @ctx_mem_addr: Low power context memory phys address
-+ * @ctx_mem_buf: Low power context memory buffer
+@@ -89,10 +91,13 @@ struct ti_sci_desc {
+  * @dev:	Device pointer
+  * @desc:	SoC description for this instance
+  * @nb:	Reboot Notifier block
++ * @pm_nb:	PM notifier block
+  * @d:		Debugfs file entry
+  * @debug_region: Memory region where the debug message are available
+  * @debug_region_size: Debug region size
+  * @debug_buffer: Buffer allocated to copy debug messages.
++ * @lpm_region: Memory region where the FS Stub LPM Firmware will be stored
++ * @lpm_region_size: LPM region size
+  * @handle:	Instance of TI SCI handle to send to clients.
+  * @cl:		Mailbox Client
+  * @chan_tx:	Transmit mailbox channel
+@@ -104,15 +109,20 @@ struct ti_sci_desc {
+  * @ctx_mem_buf: Low power context memory buffer
   * @users:	Number of users of this instance
   * @is_suspending: Flag set to indicate in suspend path.
++ * @lpm_firmware_loaded: Flag to indicate if LPM firmware has been loaded
++ * @lpm_firmware_name: Name of firmware binary to load from fw search path
   */
-@@ -114,6 +120,8 @@ struct ti_sci_info {
- 	struct ti_sci_xfers_info minfo;
- 	struct list_head node;
- 	u8 host_id;
-+	dma_addr_t ctx_mem_addr;
-+	void* ctx_mem_buf;
+ struct ti_sci_info {
+ 	struct device *dev;
+ 	struct notifier_block nb;
++	struct notifier_block pm_nb;
+ 	const struct ti_sci_desc *desc;
+ 	struct dentry *d;
+ 	void __iomem *debug_region;
+ 	char *debug_buffer;
+ 	size_t debug_region_size;
++	void __iomem *lpm_region;
++	size_t lpm_region_size;
+ 	struct ti_sci_handle handle;
+ 	struct mbox_client cl;
+ 	struct mbox_chan *chan_tx;
+@@ -125,11 +135,14 @@ struct ti_sci_info {
  	/* protected by ti_sci_list_mutex */
  	int users;
  	bool is_suspending;
-@@ -3486,6 +3494,41 @@ static int ti_sci_resume(struct device *dev)
++	bool lpm_firmware_loaded;
++	const char *lpm_firmware_name;
+ };
  
- static DEFINE_SIMPLE_DEV_PM_OPS(ti_sci_pm_ops, ti_sci_suspend, ti_sci_resume);
+ #define cl_to_ti_sci_info(c)	container_of(c, struct ti_sci_info, cl)
+ #define handle_to_ti_sci_info(h) container_of(h, struct ti_sci_info, handle)
+ #define reboot_to_ti_sci_info(n) container_of(n, struct ti_sci_info, nb)
++#define pm_nb_to_ti_sci_info(n) container_of(n, struct ti_sci_info, pm_nb)
  
-+static int ti_sci_init_suspend(struct platform_device *pdev,
-+			       struct ti_sci_info *info)
+ #ifdef CONFIG_DEBUG_FS
+ 
+@@ -3465,6 +3478,32 @@ static int tisci_reboot_handler(struct notifier_block *nb, unsigned long mode,
+ 	return NOTIFY_BAD;
+ }
+ 
++static int ti_sci_load_lpm_firmware(struct device *dev, struct ti_sci_info *info)
 +{
-+	struct device *dev = &pdev->dev;
-+	int ret;
++	const struct firmware *firmware;
++	int ret = 0;
 +
-+	dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
-+	info->ctx_mem_buf = dma_alloc_coherent(info->dev, LPM_CTX_MEM_SIZE,
-+					       &info->ctx_mem_addr,
-+					       GFP_KERNEL);
-+	if (!info->ctx_mem_buf) {
-+		dev_err(info->dev, "Failed to allocate LPM context memory\n");
++	/* If no firmware name is set, do not attempt to load. */
++	if (!info->lpm_firmware_name)
++		return -EINVAL;
++
++	ret = request_firmware_direct(&firmware, info->lpm_firmware_name, dev);
++	if (ret) {
++		dev_warn(dev, "Cannot load %s\n", info->lpm_firmware_name);
++		return ret;
++	}
++
++	if (firmware->size > info->lpm_region_size) {
++		release_firmware(firmware);
 +		return -ENOMEM;
 +	}
 +
-+	/*
-+	 * Attempt to call prepare_sleep, this will be NAK'd if suspend is not
-+	 * supported by firmware in use, in which case we will not attempt to
-+	 * init suspend.
-+	 */
-+	ret = ti_sci_cmd_prepare_sleep(&info->handle, 0,
-+				       (u32)(info->ctx_mem_addr & 0xffffffff) ,
-+				       (u32)((u64)info->ctx_mem_addr >> 32), 0);
++	memcpy_toio(info->lpm_region, firmware->data, firmware->size);
 +
-+	if (ret)
-+		goto err;
++	release_firmware(firmware);
 +
-+	return 0;
-+err:
-+	dma_free_coherent(info->dev, LPM_CTX_MEM_SIZE,
-+			  info->ctx_mem_buf,
-+			  info->ctx_mem_addr);
 +	return ret;
 +}
-+
- /* Description for K2G */
- static const struct ti_sci_desc ti_sci_pmmc_k2g_desc = {
- 	.default_host_id = 2,
-@@ -3638,6 +3681,14 @@ static int ti_sci_probe(struct platform_device *pdev)
- 		}
- 	}
+ static void ti_sci_set_is_suspending(struct ti_sci_info *info, bool is_suspending)
+ {
+ 	info->is_suspending = is_suspending;
+@@ -3494,10 +3533,33 @@ static int ti_sci_resume(struct device *dev)
  
-+	ret = ti_sci_init_suspend(pdev, info);
-+	if (ret)
+ static DEFINE_SIMPLE_DEV_PM_OPS(ti_sci_pm_ops, ti_sci_suspend, ti_sci_resume);
+ 
++static int tisci_pm_handler(struct notifier_block *nb, unsigned long pm_event,
++			    void *unused)
++{
++	struct ti_sci_info *info = pm_nb_to_ti_sci_info(nb);
++	int ret;
++
++	/* Load the LPM firmware on PM_SUSPEND_PREPARE if not loaded yet */
++	if (pm_event != PM_SUSPEND_PREPARE || info->lpm_firmware_loaded)
++		return NOTIFY_DONE;
++
++	ret = ti_sci_load_lpm_firmware(info->dev, info);
++	if (ret) {
++		dev_err(info->dev, "Failed to LPM firmware, suspend is disabled (%d)\n",
++			ret);
++		return NOTIFY_BAD;
++	}
++
++	info->lpm_firmware_loaded = true;
++
++	return NOTIFY_OK;
++}
++
+ static int ti_sci_init_suspend(struct platform_device *pdev,
+ 			       struct ti_sci_info *info)
+ {
+ 	struct device *dev = &pdev->dev;
++	struct resource *res;
+ 	int ret;
+ 
+ 	dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
+@@ -3521,6 +3583,38 @@ static int ti_sci_init_suspend(struct platform_device *pdev,
+ 	if (ret)
+ 		goto err;
+ 
++	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "lpm");
++	if (!res) {
 +		dev_warn(dev,
-+			 "ti_sci_init_suspend failed, mem suspend will be non-functional.\n");
++			 "lpm region is required for suspend but not provided.\n");
++		ret = -EINVAL;
++		goto err;
++	}
 +
-+	/* Suspend is an optional feature, reset return value and continue. */
-+	ret = 0;
++	info->lpm_region = devm_ioremap_resource(dev, res);
++	if (IS_ERR(info->lpm_region)) {
++		ret = PTR_ERR(info->lpm_region);
++		goto err;
++	}
++	info->lpm_region_size = resource_size(res);
 +
- 	dev_info(dev, "ABI: %d.%d (firmware rev 0x%04x '%s')\n",
- 		 info->handle.version.abi_major, info->handle.version.abi_minor,
- 		 info->handle.version.firmware_revision,
-@@ -3685,6 +3736,10 @@ static int ti_sci_remove(struct platform_device *pdev)
- 		mbox_free_channel(info->chan_rx);
- 	}
++	if (of_property_read_string(dev->of_node, "firmware-name",
++				    &info->lpm_firmware_name)) {
++		dev_warn(dev,
++			 "firmware-name is required for suspend but not provided.\n");
++		ret = -EINVAL;
++		goto err;
++	}
++
++	info->pm_nb.notifier_call = tisci_pm_handler;
++	info->pm_nb.priority = 128;
++
++	ret = register_pm_notifier(&info->pm_nb);
++	if (ret) {
++		dev_err(dev, "pm_notifier registration fail(%d)\n", ret);
++		goto err;
++	}
++
+ 	return 0;
+ err:
+ 	dma_free_coherent(info->dev, LPM_CTX_MEM_SIZE,
+@@ -3718,6 +3812,9 @@ static int ti_sci_remove(struct platform_device *pdev)
  
-+	if (info->ctx_mem_buf)
-+		dma_free_coherent(info->dev, LPM_CTX_MEM_SIZE,
-+				  info->ctx_mem_buf,
-+				  info->ctx_mem_addr);
- 	return ret;
- }
+ 	info = platform_get_drvdata(pdev);
+ 
++	if (info->pm_nb.notifier_call)
++		unregister_pm_notifier(&info->pm_nb);
++
+ 	if (info->nb.notifier_call)
+ 		unregister_restart_handler(&info->nb);
  
 -- 
 2.30.2
