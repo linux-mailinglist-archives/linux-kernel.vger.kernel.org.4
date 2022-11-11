@@ -2,72 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DECA1625482
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:41:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C98BC625489
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 08:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232949AbiKKHl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 02:41:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
+        id S233131AbiKKHmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 02:42:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230198AbiKKHlY (ORCPT
+        with ESMTP id S233051AbiKKHml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 02:41:24 -0500
-Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203C1742FD
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:41:23 -0800 (PST)
-From:   Denis Arefev <arefev@swemel.ru>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
-        t=1668152481;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=S0tk9zvEh9i3RpeDgKq2csbzg/78Ce7ScjSDjvtVy4w=;
-        b=Zhddcinakf6++7xApnMZ00jdePEv1cov2V1C+QqpTqjIFOM9JLXb5NcfnGH4hTJe8zCow5
-        bGI4g7sWqjFxa4zHnQmqWsFAgLQbXIa0c7xe+NIL/SyybXERyvAqI8Ph2r6/OsYGtpd83D
-        BID1NE0t4XvProPDAQgl5w1Y5Sn05Bw=
-To:     Alex Deucher <alexander.deucher@amd.com>
-Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        avid Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] nbio_v7_4: Add pointer check
-Date:   Fri, 11 Nov 2022 10:41:21 +0300
-Message-Id: <20221111074121.23296-1-arefev@swemel.ru>
+        Fri, 11 Nov 2022 02:42:41 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759FE742FD
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:42:40 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id m6-20020a17090a5a4600b00212f8dffec9so4083917pji.0
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 23:42:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DPlfHwSzNGfVHYFsMHE3q3XKtrEblxpPMeiSWifb33g=;
+        b=M/tZlkQud5ba+2P9ogVpn++cTNC01PLRW0GjC9txFQf7MuZhwIJCk/ePeLQDSH1jqB
+         ZN1h9AYoJriAQ8AZXELGghXus+BQgjW1r1wI5XaSaaSqgV9Av10rBZ6rbqL/RmYT/RlB
+         HiN7umoR3s7s4zWOnO8f3vI9SKPm6HA56FVSLVY7RLb5udjWmAZ2hTbpZsGqgJQR7l9w
+         ShqHDZca4tc1Hx8SLQPJnemY+17GR2xmWW0EZFAmtWXAHxTQzdnME9rwzZg2rxoDS+Oq
+         62X4GrGE08o8N+1x9ud7dP4+jAT1WQkrcKqk21higRwdUfbv4m4ikDW8iO0TPw/BipH3
+         HZ5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DPlfHwSzNGfVHYFsMHE3q3XKtrEblxpPMeiSWifb33g=;
+        b=K1KlHPxUooDVlpnp9F35PKTk3Rqhs7spnLbRPNRZHyPXnhAHkWmy36UZ7CX/IIqGBR
+         fQ1hFb69IIPIxLSJgR6U9XNs7YMbaIzNOlIee+sU3pz9KcA1T6JnPCXpi2H9Zup5/t5p
+         4ASI7qLzlMCQW4ZU+O3LDEgs8XK0IDZvt4dQqcluC20YT56WCXBfzY2r0QGWnKzk+y8q
+         3eolbmmWKxpNt9jJUjqq7oN6/XQvSupAaIRd12rIy0RuXOmbgmC7h/sQQUcLFE+w6Id9
+         x/yoSIJjRxmERvQ9/+RNs2GzhKXoq1vJ4obBm7wuDSvnMPAbhMCQfcIwyf8kiUsthn/r
+         NQIw==
+X-Gm-Message-State: ANoB5pnPfXobT1Lr3DDBOuWt5Xeb8/Qzyrk3GhG7iLxsQRmwVs6nU6qB
+        p7Bqrzl7XZ6YCntkLPelzH+Lm9JotPynSw==
+X-Google-Smtp-Source: AA0mqf75V+bKI3ndKFyRxVswKPnmqWnx1L92m9PZ4Nivy5nTo/hpytzrCxBKysGgwJDsN+cPBetHfw==
+X-Received: by 2002:a17:902:e013:b0:186:9b23:a112 with SMTP id o19-20020a170902e01300b001869b23a112mr1531311plo.15.1668152559788;
+        Thu, 10 Nov 2022 23:42:39 -0800 (PST)
+Received: from google.com ([2620:15c:2ce:200:8b77:5448:ea74:27a])
+        by smtp.gmail.com with ESMTPSA id z35-20020a631923000000b0043a1c0a0ab1sm799275pgl.83.2022.11.10.23.42.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Nov 2022 23:42:38 -0800 (PST)
+Date:   Thu, 10 Nov 2022 23:42:34 -0800
+From:   Fangrui Song <maskray@google.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Pedro Falcato <pedro.falcato@gmail.com>,
+        Rich Felker <dalias@libc.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>, sam@gentoo.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] binfmt_elf: Allow .bss in any interp PT_LOAD
+Message-ID: <20221111074234.xm5a6ota7ppdsto5@google.com>
+References: <20221111061315.gonna.703-kees@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20221111061315.gonna.703-kees@kernel.org>
+X-Spam-Status: No, score=-15.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLACK,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return value of a function 'amdgpu_ras_find_obj' is dereferenced 
-at nbio_v7_4.c:325 without checking for null
+(+ sam@gentoo.org from Pedro Falcato's patch)
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+On 2022-11-10, Kees Cook wrote:
+>Traditionally, only the final PT_LOAD for load_elf_interp() supported
+>having p_memsz > p_filesz. Recently, lld's construction of musl's
+>libc.so on PowerPC64 started having two PT_LOAD program headers with
+>p_memsz > p_filesz.
+>
+>As the least invasive change possible, check for p_memsz > p_filesz for
+>each PT_LOAD in load_elf_interp.
+>
+>Reported-by: Rich Felker <dalias@libc.org>
+>Link: https://maskray.me/blog/2022-11-05-lld-musl-powerpc64
+>Cc: Pedro Falcato <pedro.falcato@gmail.com>
+>Cc: Fangrui Song <maskray@google.com>
+>Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+>Cc: Eric Biederman <ebiederm@xmission.com>
+>Cc: linux-fsdevel@vger.kernel.org
+>Cc: linux-mm@kvack.org
+>Signed-off-by: Kees Cook <keescook@chromium.org>
+>---
+>v2: I realized we need to retain the final padding call.
+>v1: https://lore.kernel.org/linux-hardening/20221111055747.never.202-kees@kernel.org/
+>---
+> fs/binfmt_elf.c | 18 ++++++++++++++----
+> 1 file changed, 14 insertions(+), 4 deletions(-)
+>
+>diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+>index 528e2ac8931f..0a24bbbef1d6 100644
+>--- a/fs/binfmt_elf.c
+>+++ b/fs/binfmt_elf.c
+>@@ -673,15 +673,25 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
+> 				last_bss = k;
+> 				bss_prot = elf_prot;
+> 			}
+>+
+>+			/*
+>+			 * Clear any p_memsz > p_filesz area up to the end
+>+			 * of the page to wipe anything left over from the
+>+			 * loaded file contents.
+>+			 */
+>+			if (last_bss > elf_bss && padzero(elf_bss))
 
-Signed-off-by: Denis Arefev <arefev@swemel.ru>
----
- drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c | 3 +++
- 1 file changed, 3 insertions(+)
+Missing {
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c b/drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c
-index eadc9526d33f..0f2ac99de864 100644
---- a/drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c
-+++ b/drivers/gpu/drm/amd/amdgpu/nbio_v7_4.c
-@@ -304,6 +304,9 @@ static void nbio_v7_4_handle_ras_controller_intr_no_bifring(struct amdgpu_device
- 	struct ras_err_data err_data = {0, 0, 0, NULL};
- 	struct amdgpu_ras *ras = amdgpu_ras_get_context(adev);
- 
-+	if (!obj)
-+	  return;
- 
- 	bif_doorbell_intr_cntl = RREG32_SOC15(NBIO, 0, mmBIF_DOORBELL_INT_CNTL);
- 	if (REG_GET_FIELD(bif_doorbell_intr_cntl,
- 		BIF_DOORBELL_INT_CNTL, RAS_CNTLR_INTERRUPT_STATUS)) {
--- 
-2.25.1
+But after fixing this, I get a musl ld.so error.
 
+>+				error = -EFAULT;
+>+				goto out;
+>+			}
+> 		}
+> 	}
+>
+> 	/*
+>-	 * Now fill out the bss section: first pad the last page from
+>-	 * the file up to the page boundary, and zero it from elf_bss
+>-	 * up to the end of the page.
+>+	 * Finally, pad the last page from the file up to the page boundary,
+>+	 * and zero it from elf_bss up to the end of the page, if this did
+>+	 * not already happen with the last PT_LOAD.
+> 	 */
+>-	if (padzero(elf_bss)) {
+>+	if (last_bss == elf_bss && padzero(elf_bss)) {
+> 		error = -EFAULT;
+> 		goto out;
+> 	}
+>-- 
+>2.34.1
+>
+
+I added a new section to https://maskray.me/blog/2022-11-05-lld-musl-powerpc64
+Copying here:
+
+To test that the kernel ELF loader can handle more RW `PT_LOAD` program headers, we can create an executable with more RW `PT_LOAD` program headers with `p_filesz < p_memsz`.
+We can place a read-only section after `.bss` followed by a `SHT_NOBITS` `SHF_ALLOC|SHF_WRITE` section. The read-only section will form a read-only `PT_LOAD` while the RW section will form a RW `PT_LOAD`.
+
+```text
+#--- a.c
+#include <assert.h>
+#include <stdio.h>
+
+extern const char toc[];
+char nobits0[0] __attribute__((section(".nobits0")));
+char nobits1[0] __attribute__((section(".nobits1")));
+
+int main(void) {
+   assert(toc[4096-1] == 0);
+   for (int i = 0; i < 1024; i++)
+     assert(nobits0[i] == 0);
+   nobits0[0] = nobits0[1024-1] = 1;
+   for (int i = 0; i < 4096; i++)
+     assert(nobits1[i] == 0);
+   nobits1[0] = nobits1[4096-1] = 1;
+
+   puts("hello");
+}
+
+#--- toc.s
+.section .toc,"aw",@nobits
+.globl toc
+toc:
+.space 4096
+
+.section .ro0,"a"; .byte 255
+.section .nobits0,"aw",@nobits; .space 1024
+.section .ro1,"a"; .byte 255
+.section .nobits1,"aw",@nobits; .space 4096
+
+#--- a.lds
+SECTIONS { .ro0 : {} .nobits0 : {} .ro1 : {} .nobits1 : {} } INSERT AFTER .bss;
+```
+
+```sh
+split-file a.txt a
+path/to/musl-gcc -Wl,--dynamic-linker=/lib/libc.so a/a.c a/a.lds -o toy
+```
+
+split-file is a utility in llvm-project.
