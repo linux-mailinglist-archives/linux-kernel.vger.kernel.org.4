@@ -2,123 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D59624F0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C5A624F0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 01:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiKKAms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 19:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
+        id S231207AbiKKAsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 19:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiKKAmr (ORCPT
+        with ESMTP id S230303AbiKKAsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 19:42:47 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2DA61B8E
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:42:46 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id k5so3127700pjo.5
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 16:42:46 -0800 (PST)
+        Thu, 10 Nov 2022 19:48:16 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3258961B87;
+        Thu, 10 Nov 2022 16:48:15 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id k2so9321275ejr.2;
+        Thu, 10 Nov 2022 16:48:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xM5WNzI0hwRHjliP1X8vOe9pxalT6LKCbo/mWi3YSJs=;
-        b=Ks0k/pf8S/S1HZNwKLbh8GafqB1bWlwq1sI/v9pfDxFYhNglaLAjwpun9WjaZ3IP45
-         DxKlrmbh/25Er18wbqq1jIHdLjB0X+A0g0SODBnycheHV2whn6s/WYuKBA4w2Q0wG91M
-         f+mG8bvckQFAkHwQ3N385LuwERVCtA9iXj4qo=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jccwGn6yraR6ggbRcl5+kQG8NY32menh2AFqjtDH2Ns=;
+        b=P5U2OVQ/nvzFp6KeGVu5Ia7mi8o7RbKUCzp1mUSahT2VHwPbpgY9kQsBj3i2y39X9u
+         /vDBkESTrEV1jp1hEJU730zDEZ+5IU3BiSklFdqzkjQieBAiYk2zxifgADC81VEazg43
+         HSTN8GidE/16q+P66QziSy5v49F1LqNfTXz2TmqH/aoji2Pgoy2RLPgyDhXz+7X1IFcD
+         R6UYn703346kzahSS8Mppto0C1j9FENa+wsylBCbbDjEiqZbecnqRbsx5lTqxYhImLlM
+         iYfTIlgPxirtYdQQ0TIUQozBQNGt0lV14uCSVuT5k6PLeXwa1G8EGKw5TVeX/HQoDqQh
+         8oNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xM5WNzI0hwRHjliP1X8vOe9pxalT6LKCbo/mWi3YSJs=;
-        b=A8Gna+pFGzEkY1SIfXx2muQpL0j7D2BqKmt6xIZKO6NqUVfP/aqrEmN+7OT0BGruv4
-         uBgc/04R4dG7G8Ua8KlXWezr7sQ0dggZoz1lhaH1/UyMx4DpN/jWmI76VqTuN+6Wv9Zb
-         QkO63sXXmFbZQy6Jm77MhHxHt6DNSW/N5hWmwTEkG2z9Usb2a5mqxJcNGaNAdlhz7d1D
-         rVHrbqRfv7/2nEUfst/AA5Mv1QrdQOVBNvfmnMejOXpGjUGMKJJMqV4N1ce3FzgHUIKL
-         IzWwRDdxnmFz7TlMquyH+ifi/RO5JIRoP3YTKYIZWe7xJOtWxIP7uxvzfNjxLsUnIo81
-         tV+Q==
-X-Gm-Message-State: ANoB5pn4w0GgCdfOsPyy8r+6sYHOuzwTgsh59PW8dYqfiyAtcPSRho/6
-        QxFqrv+OCaq3AIgLvCVNZalqXA==
-X-Google-Smtp-Source: AA0mqf4lsQyzaHXXZR1h9k1dQs/5NsV//w58zMbDuUA6cVJJlf1B6++qWdvFLSorlO2Qcc0M6PwT3Q==
-X-Received: by 2002:a17:902:bd8e:b0:186:8398:350 with SMTP id q14-20020a170902bd8e00b0018683980350mr214085pls.6.1668127365713;
-        Thu, 10 Nov 2022 16:42:45 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:8d55:c60d:579d:741c])
-        by smtp.gmail.com with ESMTPSA id q90-20020a17090a756300b001faf7a88138sm375216pjk.42.2022.11.10.16.42.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 16:42:45 -0800 (PST)
-Date:   Fri, 11 Nov 2022 09:42:38 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     coverity-bot <keescook@chromium.org>
-Cc:     Alexey Romanov <avromanov@sberdevices.ru>,
-        linux-kernel@vger.kernel.org, Nick Terrell <terrelln@fb.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Nitin Gupta <ngupta@vflare.org>, Jens Axboe <axboe@kernel.dk>,
-        Nhat Pham <nphamcs@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-block@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: Coverity: zram_recompress(): OVERRUN
-Message-ID: <Y22afneyl4pZ32ig@google.com>
-References: <202211100847.388C61B3@keescook>
- <Y22ZNtdH9s+cuL9l@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jccwGn6yraR6ggbRcl5+kQG8NY32menh2AFqjtDH2Ns=;
+        b=F49MVUqu5Xnn8y/1JLmV+feDo1ePEjS0TEsLLX570BJIrLgLKjVSjSucj+uejbJYnX
+         1Pzxxy/n4k18y13ookwWZjyK/v85HzSPHygVOUJPTjOnDDsLE6JEXxNbZJ75d9Y4BsJI
+         nxlPMnq2oGkko/PaT9jYUAR2AZqFtxvLGS+I8L5Z1/KHfIeQn23+3+a9NMZbUbCynL5h
+         T2sqx8RZClaUTD7fPXmwPjUtNKia5fP/KyJi5upZXIE3yVSiCqbvvm5fo+uDqfFk1bsG
+         C+pi7S9yjhynEK+ORtw96nSeoIkkOF45pCGt0zyIzph8Z0G3nS+bOKFAkD+mtGbMzRNE
+         pXFA==
+X-Gm-Message-State: ANoB5pmVIPVBvu9NRqRYLOFyTShv8FrZ6qf/EYthT2mDTiecvyOBq2pH
+        2E7vH1kFLMuy1hii9MIU4iESB7z+u+oRSmgiZWU=
+X-Google-Smtp-Source: AA0mqf7+WaIbUDbHTenBcZfm6dv2gC5twOFRQs+QLb7avRwCeVzc2ICtecXSFuk0wg0gLob81C9GahjCkx9dzqOEKzQ=
+X-Received: by 2002:a17:907:2045:b0:78a:3479:ec7d with SMTP id
+ pg5-20020a170907204500b0078a3479ec7dmr49199ejb.671.1668127693508; Thu, 10 Nov
+ 2022 16:48:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y22ZNtdH9s+cuL9l@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+G9fYt49jY+sAqHXYwpJtF0oa-jL8t8nArY6W1_zui0sKFipA@mail.gmail.com>
+ <29824864-f076-401f-bfb4-bc105bb2d38f@app.fastmail.com> <96a99291-7caa-429c-9bbd-29721a2b5637@app.fastmail.com>
+In-Reply-To: <96a99291-7caa-429c-9bbd-29721a2b5637@app.fastmail.com>
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Date:   Thu, 10 Nov 2022 16:48:01 -0800
+Message-ID: <CAKdAkRTOanSFKzmDgJc9oi1CM9D5D97+_oz31-MM0ADOtY6A4Q@mail.gmail.com>
+Subject: Re: arm: TI BeagleBoard X15 : Unable to handle kernel NULL pointer
+ dereference at virtual address 00000369 - Internal error: Oops: 5 [#1] SMP ARM
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        lkft-triage@lists.linaro.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/11 09:37), Sergey Senozhatsky wrote:
-> On (22/11/10 08:47), coverity-bot wrote:
-> [..]
-> > 1704     	class_index_old = zs_lookup_class_index(zram->mem_pool, comp_len_old);
-> > 1705     	/*
-> > 1706     	 * Iterate the secondary comp algorithms list (in order of priority)
-> > 1707     	 * and try to recompress the page.
-> > 1708     	 */
-> > 1709     	for (; prio < prio_max; prio++) {
-> > vvv     CID 1527270:    (OVERRUN)
-> > vvv     Overrunning array "zram->comps" of 4 8-byte elements at element index 4 (byte offset 39) using index "prio" (which evaluates to 4).
-> > 1710     		if (!zram->comps[prio])
-> > 1711     			continue;
-> > 1712
-> > 1713     		/*
-> > 1714     		 * Skip if the object is already re-compressed with a higher
-> > 1715     		 * priority algorithm (or same algorithm).
-> 
-> prio_max is always limited and max value it can have is 4 (ZRAM_MAX_COMPS).
-> Depending on use case we can limit prio_max even to lower values.
-> 
-> So we have
-> 
-> 	for (; prio < 4; prio++) {
-> 		foo = comps[prio];
-> 	}
-> 
-> I don't see how prio can be 4 inside of this loop.
+On Wed, Nov 9, 2022 at 2:20 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Wed, Nov 9, 2022, at 13:57, Arnd Bergmann wrote:
+> >
+> > One thing that sticks out is the print_constraints_debug() function
+> > in the regulator framework, which uses a larger-than-average stack
+> > to hold a string buffer, and then calls into the low-level
+> > driver to get the actual data (regulator_get_voltage_rdev,
+> > _regulator_is_enabled). Splitting the device access out into a
+> > different function from the string handling might reduce the
+> > stack usage enough to stay just under the 8KB limit, though it's
+> > probably not a complete fix. I added the regulator maintainers
+> > to Cc for thoughts on this.
+>
+> I checked the stack usage for each of the 147 functions in the
+> backtrace, and as I was guessing print_constraints_debug() is
+> the largest, but it's still only 168 bytes, and everything else
+> is smaller, so no point hacking this.
 
-Kees, if we do something like this will it make coverity happy?
+You mentioned that we are doing probing of a device 6 levels deep.
+Could one of the parent devices be marked for an asynchronous probe
+thus breaking the chain?
 
----
+Thanks.
 
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index 9d33801e8ba8..e67a124f2e88 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -1706,6 +1706,7 @@ static int zram_recompress(struct zram *zram, u32 index, struct page *page,
- 	 * Iterate the secondary comp algorithms list (in order of priority)
- 	 * and try to recompress the page.
- 	 */
-+	prio_max = min(prio_max, ZRAM_MAX_COMPS);
- 	for (; prio < prio_max; prio++) {
- 		if (!zram->comps[prio])
- 			continue;
+-- 
+Dmitry
