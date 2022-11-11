@@ -2,148 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7537562641A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E3862641C
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 23:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234202AbiKKWBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 17:01:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
+        id S233752AbiKKWCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 17:02:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234157AbiKKWBF (ORCPT
+        with ESMTP id S234299AbiKKWBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 17:01:05 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321EA8B44C
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 13:59:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:References:Cc:To:Subject:From:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=beLHtOxF6kCxGUTEGseHfS+O7VRs82p3voVTAU84sF8=; b=msZ2/Yz8u4rU76Y8q6ZG9RDy/u
-        7eIwj4NAo98Ht1vduN9HBVABDWJRrPOOHpIJC0OLhPaqdrxmITHHcZqZqFYPGpbEw/KtQngTLuv43
-        oY+KU7edg+2JE+J2t3XnT4x7ehP0QhtwVUvT1v/zRe4IZ+3u62nvHsB2x1fRs+gb9qOXu/qYGZtCG
-        //Axo3CoxrQScDAY2vDv7GEgwjms8lvMREr+GB7vzsDD9Hp4VKvirZWVnf4CiY0G/t7F0zlulTkaB
-        ViNiYfKOkAUtaUutotnmTx9bDFK+fbCVLtgYQsNjT1VKx3eAkbbvFmoZHF66M/n67f6nRPOPQO+O0
-        dkSHsabw==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1otc3p-001OrX-1l; Fri, 11 Nov 2022 21:59:41 +0000
-Message-ID: <d81630d5-756c-4067-fc1b-47e5f56cad33@infradead.org>
-Date:   Fri, 11 Nov 2022 13:59:40 -0800
+        Fri, 11 Nov 2022 17:01:47 -0500
+Received: from mx10.gouders.net (mx10.gouders.net [202.61.206.94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2FADE9E
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 14:01:04 -0800 (PST)
+Received: from localhost (ip-109-42-177-67.web.vodafone.de [109.42.177.67])
+        (authenticated bits=0)
+        by mx10.gouders.net (8.17.1.9/8.16.1) with ESMTPSA id 2ABM0dPj001729
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Fri, 11 Nov 2022 23:00:40 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gouders.net; s=gnet;
+        t=1668204040; bh=ujTHVTN9EEhrRE5jIVBrDXu7TSySG2bEt4Gc20q+Xyo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date;
+        b=r9MlvTdQpUHHZF4+k1uGvHGugflNo/2GuCirTrekN8v0F/crpRYATZ/CcqT3zHw7v
+         lZ9AD38i/jmbJ0cPBfOojGxKDeEO62w/ML1jlb3LWkVyiuankilXHg3y6S4UwjB7r5
+         8MWHEAt454yT7fo8kN+PmzHQYzgu1gaNtOeKE9Jk=
+From:   Dirk Gouders <dirk@gouders.net>
+To:     Lyude Paul <lyude@redhat.com>
+Cc:     Linux Kernel <linux-kernel@vger.kernel.org>,
+        Wayne Lin <Wayne.Lin@amd.com>,
+        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Imre Deak <imre.deak@intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sean Paul <sean@poorly.run>
+Subject: Re: Regression bisected: drm/display/dp_mst: Move all payload info
+ into the atomic state
+In-Reply-To: <006064db584562c38ba75bff30d1b33f8995df62.camel@redhat.com>
+        (Lyude Paul's message of "Fri, 11 Nov 2022 15:50:02 -0500")
+References: <ghwn827862.fsf@gouders.net>
+        <006064db584562c38ba75bff30d1b33f8995df62.camel@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
+Date:   Fri, 11 Nov 2022 23:00:34 +0100
+Message-ID: <gh5yflw3r1.fsf@gouders.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: ld.lld: error: undefined symbol: firmware_upload_register
-To:     kernel test robot <lkp@intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Xu Yilun <yilun.xu@intel.com>
-References: <202211092004.GI7IL067-lkp@intel.com>
-Content-Language: en-US
-In-Reply-To: <202211092004.GI7IL067-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_SBL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+Thank you for the pointer.  I will see if I can produce some of the
+wanted logs but at the earliest tomorrow, it's almost sleeping time,
+here.
 
-On 11/9/22 04:30, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   f141df371335645ce29a87d9683a3f79fba7fd67
-> commit: 5cd339b370e29b04b85fbb83f40496991465318e fpga: m10bmc-sec: add max10 secure update functions
-> date:   5 months ago
-> config: mips-buildonly-randconfig-r004-20221109
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 463da45892e2d2a262277b91b96f5f8c05dc25d0)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install mips cross compiling tool for clang build
->         # apt-get install binutils-mips-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5cd339b370e29b04b85fbb83f40496991465318e
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 5cd339b370e29b04b85fbb83f40496991465318e
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> ld.lld: error: undefined symbol: firmware_upload_register
->    >>> referenced by intel-m10-bmc-sec-update.c
->    >>>               fpga/intel-m10-bmc-sec-update.o:(m10bmc_sec_probe) in archive drivers/built-in.a
-> --
->>> ld.lld: error: undefined symbol: firmware_upload_unregister
->    >>> referenced by intel-m10-bmc-sec-update.c
->    >>>               fpga/intel-m10-bmc-sec-update.o:(m10bmc_sec_remove) in archive drivers/built-in.a
+Dirk
 
+Lyude Paul <lyude@redhat.com> writes:
 
-This happens when (bool) CONFIG_FW_UPLOAD=y and CONFIG_FW_LOADER=m.
-Ah, it's the old "bool depending on a tristate" problem.
-
-There may be some Makefile fix for this - I don't know.
-
-Or the Kconfig fix works AFAICT (below). Change FW_UPLOAD to a tristate
-and modify 2 header files for exports/inlines.
-
-Luis -- how was FW_LOADER=m and FW_UPLOAD=y supposed to work?
-
-Thanks.
--- 
----
- drivers/base/firmware_loader/Kconfig |    2 +-
- drivers/base/firmware_loader/sysfs.h |    2 +-
- include/linux/firmware.h             |    2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff -- a/drivers/base/firmware_loader/Kconfig b/drivers/base/firmware_loader/Kconfig
---- a/drivers/base/firmware_loader/Kconfig
-+++ b/drivers/base/firmware_loader/Kconfig
-@@ -204,7 +204,7 @@ config FW_CACHE
- 	  If unsure, say Y.
- 
- config FW_UPLOAD
--	bool "Enable users to initiate firmware updates using sysfs"
-+	tristate "Enable users to initiate firmware updates using sysfs"
- 	select FW_LOADER_SYSFS
- 	select FW_LOADER_PAGED_BUF
- 	help
-diff -- a/drivers/base/firmware_loader/sysfs.h b/drivers/base/firmware_loader/sysfs.h
---- a/drivers/base/firmware_loader/sysfs.h
-+++ b/drivers/base/firmware_loader/sysfs.h
-@@ -99,7 +99,7 @@ struct fw_sysfs *
- fw_create_instance(struct firmware *firmware, const char *fw_name,
- 		   struct device *device, u32 opt_flags);
- 
--#ifdef CONFIG_FW_UPLOAD
-+#if IS_ENABLED(CONFIG_FW_UPLOAD)
- extern struct device_attribute dev_attr_status;
- extern struct device_attribute dev_attr_error;
- extern struct device_attribute dev_attr_cancel;
-diff -- a/include/linux/firmware.h b/include/linux/firmware.h
---- a/include/linux/firmware.h
-+++ b/include/linux/firmware.h
-@@ -170,7 +170,7 @@ static inline int request_partial_firmwa
- 
- #endif
- 
--#ifdef CONFIG_FW_UPLOAD
-+#if IS_ENABLED(CONFIG_FW_UPLOAD)
- 
- struct fw_upload *
- firmware_upload_register(struct module *module, struct device *parent,
-
-
+> Thank for letting us know! Luckily I only have good news, as we've actually
+> been looking into this issue for a bit now and have made a pretty good amount
+> of progress. There's pretty much only one issue left for us to fix I'm fairly
+> sure:
+>
+> https://gitlab.freedesktop.org/drm/amd/-/issues/2171
+>
+> If you'd like to help, there's some logs I could use someone getting to help
+> me figure out the last remaining issue here.
+>
+> On Thu, 2022-11-10 at 23:32 +0100, Dirk Gouders wrote:
+>> Hello,
+>> 
+>> I noticed a regression with Linus' current tree and bisected it to
+>> 4d07b0bc403403 (drm/display/dp_mst: Move all payload info into the atomic state):
+>> 
+>> I have two monitors connected to my laptop's USB-C port and since this
+>> patch, one of the monitors remains dark.
+>> 
+>> Please let me know if I can provide additional information that could help
+>> to investigate this problem.
+>> 
+>> Dirk
+>> 
