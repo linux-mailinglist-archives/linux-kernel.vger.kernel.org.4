@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E33E625B3A
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:30:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94509625B42
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234011AbiKKNa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 08:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
+        id S233828AbiKKNai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 08:30:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233829AbiKKNa0 (ORCPT
+        with ESMTP id S233989AbiKKNa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 08:30:26 -0500
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6395460359;
-        Fri, 11 Nov 2022 05:30:25 -0800 (PST)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-13c2cfd1126so5395096fac.10;
-        Fri, 11 Nov 2022 05:30:25 -0800 (PST)
+        Fri, 11 Nov 2022 08:30:28 -0500
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E6D6035E;
+        Fri, 11 Nov 2022 05:30:27 -0800 (PST)
+Received: by mail-ot1-f49.google.com with SMTP id j25-20020a056830015900b0066ca2cd96daso2781936otp.10;
+        Fri, 11 Nov 2022 05:30:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Lo2p58cHEgV1SDnl6XTUQGUtHBgdDU1qqKkHovtNXaI=;
-        b=49nrLbtqNjWXh0EjGzONm/Hug+gI8EVajt5pYYFtcQ82SU4evlqU7EbAYvP/3hV5vx
-         L6llixEdSWzR8IXDZa336+q9WWSviYQU+hDXGNpsy32zRbw6tVH22VpEXs071zygXXFD
-         +ThcCdJBBFJ5p8mGrZpIhHlVBgkJ+v0UCNHASWNCKVGjeTFB8jBERDRUJ+EQ/DWYtl9A
-         E5WhM+j+dEdK0JlWjY11/1WBLH9QGyc16MFBLuE983Vos56H1eMjVJUuj6SEiXEkaVg/
-         vhx6JUUgUA8BzWjpDl7fHDZjT2CzevrAVq3xEYriunrq/LnRhgT0xLTn/zwL+sh8Vpru
-         zzeg==
-X-Gm-Message-State: ANoB5pmZEmTKKuLfd6pSiJydFsFEYxoe2kRL2H5mEAG2qAxiKqeAdqu8
-        r/g/OIh3NOnBCT69W3d8hA==
-X-Google-Smtp-Source: AA0mqf71ZDnvJcVvYaHMWcT9ADtsziN74fdU+bu2Y8OC6CWAn6wtqLDgukiurl08AE4CGWhs2VIu8g==
-X-Received: by 2002:a05:6870:1708:b0:13c:59d5:3f5e with SMTP id h8-20020a056870170800b0013c59d53f5emr879353oae.129.1668173424622;
-        Fri, 11 Nov 2022 05:30:24 -0800 (PST)
+        bh=+H4vFKcVhdT5utr9Kqit7Ee08fhFyoKnskQwRap40i4=;
+        b=t/njWBcXTa8Dr+fhkIyziRfPcs94khjPZeqZpD/0IwIOarofKfEBKVLV7kW1EBVIGR
+         Lu5zJ1tG+soMxGaMzNdDKQLWSFDkQM5lxg2tQ3crX2hEHWIgcl2QySh1k9htjAQeAWXp
+         Khv3h3tc0hwkHviXpkOXExXEIKzhWaH8HyTFpFISusGxcRlmTfhzmpHcgRWrPDbrAEMK
+         pwaVEn9HMaARs+g3xeYxb6WajXVtm5QmgRhffFpI+L6qbxn34kp82F8UyEDLY8/mae3i
+         /r524jTMvqXYh7kMSwnmXBjBD+sKvu1lozc16obcmdgxD8H8NLqmRGSTlt6aHVedmacq
+         42/g==
+X-Gm-Message-State: ANoB5pnGvFUVgRCQ+ATsmrC/WJyE/foJdaMseSdafI1UWtCbdRWU7Tp3
+        /EXn6aGLlYFSYOLd5+0joQ==
+X-Google-Smtp-Source: AA0mqf5Qj3/GbhqnO2Nl2v5FMmObS8qqaAWio4R7QoQud1x66XkXmTZ4UJUHtqj+lywkDe6kiB/IQA==
+X-Received: by 2002:a05:6830:4122:b0:66c:2b2c:e7aa with SMTP id w34-20020a056830412200b0066c2b2ce7aamr1162463ott.303.1668173426609;
+        Fri, 11 Nov 2022 05:30:26 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g14-20020a4adc8e000000b004768f725b7csm798456oou.23.2022.11.11.05.30.23
+        by smtp.gmail.com with ESMTPSA id 124-20020a4a1582000000b0047f72b6988fsm766425oon.45.2022.11.11.05.30.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 05:30:24 -0800 (PST)
-Received: (nullmailer pid 3073770 invoked by uid 1000);
+        Fri, 11 Nov 2022 05:30:26 -0800 (PST)
+Received: (nullmailer pid 3073768 invoked by uid 1000);
         Fri, 11 Nov 2022 13:30:24 -0000
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Patrick Lai <plai@qti.qualcomm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Srinivasa Rao Mandadapu <srivasam@qti.qualcomm.com>,
-        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org
-In-Reply-To: <20221111113547.100442-3-krzysztof.kozlowski@linaro.org>
-References: <20221111113547.100442-1-krzysztof.kozlowski@linaro.org>
- <20221111113547.100442-3-krzysztof.kozlowski@linaro.org>
-Message-Id: <166817308876.3060199.17933327732327950670.robh@kernel.org>
-Subject: Re: [PATCH 02/10] ASoC: dt-bindings: qcom,apr: Split services to
- shared schema
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     mathias.nyman@intel.com, p.zabel@pengutronix.de,
+        jonathanh@nvidia.com, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        linux-tegra@vger.kernel.org, singhanc@nvidia.com, balbi@kernel.org,
+        linux-phy@lists.infradead.org, vkoul@kernel.org,
+        thierry.reding@gmail.com, ajayg@nvidia.com,
+        heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        treding@nvidia.com, jckuo@nvidia.com, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, linux-i2c@vger.kernel.org
+In-Reply-To: <20221111101509.999589-3-waynec@nvidia.com>
+References: <20221111101509.999589-1-waynec@nvidia.com>
+ <20221111101509.999589-3-waynec@nvidia.com>
+Message-Id: <166817308790.3060162.14990231448404857914.robh@kernel.org>
+Subject: Re: [PATCH v2 02/13] dt-bindings: usb: Add NVIDIA Tegra234 XUSB host
+ controller binding
 Date:   Fri, 11 Nov 2022 07:30:24 -0600
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -77,36 +73,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Fri, 11 Nov 2022 12:35:39 +0100, Krzysztof Kozlowski wrote:
-> The APR/GPR nodes are organized like:
+On Fri, 11 Nov 2022 18:14:58 +0800, Wayne Chang wrote:
+> Add device-tree binding documentation for the XUSB host controller present
+> on Tegra234 SoC. This controller supports the USB 3.1 specification.
 > 
->   apr-or-gpr-device-node <- qcom,apr.yaml
->     apr-gpr-service@[0-9] <- qcom,apr.yaml
->       service-specific-components <- /schemas/sound/qcom,q6*.yaml
-> 
-> The schema for services (apr-gpr-service@[0-9]) already grows
-> considerably and is still quite not specific.  It allows several
-> incorrect combinations, like adding a clock-controller to a APM device.
-> Restricting it would complicate the schema even more.  Bringing new
-> support for sound on Qualcomm SM8450 and SC8280XP SoC would grow it as
-> well.
-> 
-> Simplify the qcom,apr.yaml by splitting the services to a shared file
-> which will be:
-> 1. Referenced by qcom,apr.yaml with additionalProperties:true,
-> 2. Referenced by specific bindings for services with
->    additionalProperties:false (not yet in this commit).
-> 
-> While moving the code, add also required 'reg' and
-> 'qcom,protection-domain' to further constrain the bindings.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
 > ---
->  .../bindings/soc/qcom/qcom,apr-services.yaml  |  54 +++++++++
->  .../bindings/soc/qcom/qcom,apr.yaml           | 108 +-----------------
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 58 insertions(+), 106 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,apr-services.yaml
+> V1 -> V2: new change for adding nvidia,tegra234-xusb.yaml
+>  .../bindings/usb/nvidia,tegra234-xusb.yaml    | 159 ++++++++++++++++++
+>  1 file changed, 159 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -115,24 +91,11 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/soc/qcom/qcom,apr.example.dtb:0:0: /example-0/apr/service@3: failed to match any schema with compatible: ['qcom,q6core']
-Documentation/devicetree/bindings/soc/qcom/qcom,apr.example.dtb:0:0: /example-0/apr/service@4: failed to match any schema with compatible: ['qcom,q6afe']
-Documentation/devicetree/bindings/soc/qcom/qcom,apr.example.dtb:0:0: /example-0/apr/service@7: failed to match any schema with compatible: ['qcom,q6asm']
-Documentation/devicetree/bindings/soc/qcom/qcom,apr.example.dtb:0:0: /example-0/apr/service@8: failed to match any schema with compatible: ['qcom,q6adm']
-Documentation/devicetree/bindings/soc/qcom/qcom,apr.example.dtb:0:0: /example-1/gpr/service@1: failed to match any schema with compatible: ['qcom,q6apm']
-Documentation/devicetree/bindings/sound/qcom,q6adm-routing.example.dtb:0:0: /example-0/apr/service@8: failed to match any schema with compatible: ['qcom,q6adm']
-Documentation/devicetree/bindings/sound/qcom,q6asm-dais.example.dtb:0:0: /example-0/apr/service@7: failed to match any schema with compatible: ['qcom,q6asm']
-Documentation/devicetree/bindings/sound/qcom,q6dsp-lpass-clocks.example.dtb:0:0: /example-0/apr/service@4: failed to match any schema with compatible: ['qcom,q6afe']
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/qcom,q6dsp-lpass-clocks.example.dtb: gpr: service@2: 'qcom,protection-domain' is a required property
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
-Documentation/devicetree/bindings/sound/qcom,q6dsp-lpass-clocks.example.dtb:0:0: /example-1/gpr/service@2: failed to match any schema with compatible: ['qcom,q6prm']
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/qcom,q6apm-dai.example.dtb: gpr: service@1: 'qcom,protection-domain' is a required property
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
-Documentation/devicetree/bindings/sound/qcom,q6apm-dai.example.dtb:0:0: /example-0/gpr/service@1: failed to match any schema with compatible: ['qcom,q6apm']
-Documentation/devicetree/bindings/sound/qcom,q6dsp-lpass-ports.example.dtb:0:0: /example-0/apr/service@4: failed to match any schema with compatible: ['qcom,q6afe']
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/qcom,q6dsp-lpass-ports.example.dtb: gpr: service@1: 'qcom,protection-domain' is a required property
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
-Documentation/devicetree/bindings/sound/qcom,q6dsp-lpass-ports.example.dtb:0:0: /example-1/gpr/service@1: failed to match any schema with compatible: ['qcom,q6apm']
+Error: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dts:36.27-28 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1492: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 
