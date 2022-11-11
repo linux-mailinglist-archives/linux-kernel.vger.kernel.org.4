@@ -2,148 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DB8625AB0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CD1625AB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 13:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233689AbiKKMry convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 11 Nov 2022 07:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
+        id S233743AbiKKMtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 07:49:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232983AbiKKMrw (ORCPT
+        with ESMTP id S233714AbiKKMt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 07:47:52 -0500
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30E27BE70;
-        Fri, 11 Nov 2022 04:47:51 -0800 (PST)
-Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay07.hostedemail.com (Postfix) with ESMTP id 18DC916090C;
-        Fri, 11 Nov 2022 12:47:50 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf17.hostedemail.com (Postfix) with ESMTPA id D79DC17;
-        Fri, 11 Nov 2022 12:46:57 +0000 (UTC)
-Message-ID: <180a55b046e4659609cdfeea4fd979edab17f0c9.camel@perches.com>
-Subject: Re: [PATCH net-next] net: dcb: move getapptrust to separate function
-From:   Joe Perches <joe@perches.com>
-To:     Daniel.Machon@microchip.com, petrm@nvidia.com
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, vladimir.oltean@nxp.com,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        lkp@intel.com
-Date:   Fri, 11 Nov 2022 04:47:45 -0800
-In-Reply-To: <Y23x/PSlybLqaQIS@DEN-LT-70577>
-References: <20221110094623.3395670-1-daniel.machon@microchip.com>
-         <87eduaoj8g.fsf@nvidia.com> <Y23x/PSlybLqaQIS@DEN-LT-70577>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Fri, 11 Nov 2022 07:49:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A8F6426
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 04:48:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668170910;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l68F1qZMVvbDKVgrBPDD9FNz5sFjCB0hE8JMkh0Y524=;
+        b=I/ZrKtBbaJe2TnyQ33OFzvCHu0qduJQcHnB7k1bOf6+07G5plMPP+SfkCY/7sfGzLc4vj6
+        PNqgv9LCwJ0lDCkDe4L3uiBKzAp6jnZMwyLkl/WccSwDvuK90xkwbfu0Uqi8sp6l72V+2z
+        FxfwMuw0dy+InpIJmdgx7JMxllYbeIw=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-127-v79HUa9EMYyIB0zVW7KEuQ-1; Fri, 11 Nov 2022 07:48:29 -0500
+X-MC-Unique: v79HUa9EMYyIB0zVW7KEuQ-1
+Received: by mail-wr1-f71.google.com with SMTP id u20-20020adfc654000000b0022cc05e9119so987173wrg.16
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 04:48:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l68F1qZMVvbDKVgrBPDD9FNz5sFjCB0hE8JMkh0Y524=;
+        b=bYihIuYJFj9/7dzc7X40MjjsdyQckUVI8Rj7xApkCOp3sMHX/JQ04WuWm4+azewXaG
+         KGAUUB9Uh+u86fAOezKLSZFsC3ZOpIk7FtyZhgvenKZK35PA1m3qh7ZVkDOpXfZ9hYM1
+         LVPRTxAAIj3X58D92tGGhofoKOvXZKZZi+5ZPGLrMHCx1fFYyZzLIsP3SNekDToibbCP
+         2nEJiv/I/0G/EDybiamnjg6sqZDhmuPQJ3KWiJ2z0UjMM7zh+bBo4rVzT4EtO52mJQhE
+         eyHKcBl/pmfmQnL4Vq+U0EyW/2eKEWyUDS302X159UO4QG+QGPGip8NJZ+hmd/zxpB4U
+         4cnQ==
+X-Gm-Message-State: ANoB5plw1jiOH+rSuXKrnOWn6XuNcB2TFHIA6eN0rtfNFrrKj/EM4S1z
+        debuX61jI57gX/4EFP5jPMlsns0wMhj9dVp6hoeMcCd4tjmJ+egJcAVe5gv5XBUsCjWgZDsUqgP
+        OYdzIw68WOfsAvzRxH7xfEWu3
+X-Received: by 2002:adf:ce88:0:b0:23a:ce24:1bf0 with SMTP id r8-20020adfce88000000b0023ace241bf0mr1131544wrn.383.1668170908261;
+        Fri, 11 Nov 2022 04:48:28 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4Y976AWKnKuAOShS8jdPcXzx2Ubo9o7t+QtwJANzTT3yqsZSmwSyfrOWWbv2hMw4+jn89rQg==
+X-Received: by 2002:adf:ce88:0:b0:23a:ce24:1bf0 with SMTP id r8-20020adfce88000000b0023ace241bf0mr1131524wrn.383.1668170907991;
+        Fri, 11 Nov 2022 04:48:27 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id c5-20020adffb45000000b002366d1cc198sm1774062wrs.41.2022.11.11.04.48.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Nov 2022 04:48:27 -0800 (PST)
+Message-ID: <6fd26a70-3774-6ae7-73ea-4653aee106f0@redhat.com>
+Date:   Fri, 11 Nov 2022 13:48:26 +0100
 MIME-Version: 1.0
-X-Stat-Signature: 45hxah8w8oa9dxxcp8jqf88drre3n5n8
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: D79DC17
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+8PuF79mfpcN5vujTedb2OxrBxQBlz5eY=
-X-HE-Tag: 1668170817-134891
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [RESEND PATCH 5/6] KVM: x86/VMX: add kvm_vmx_reinject_nmi_irq()
+ for NMI/IRQ reinjection
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Li, Xin3" <xin3.li@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>
+References: <20221110061545.1531-1-xin3.li@intel.com>
+ <20221110061545.1531-6-xin3.li@intel.com>
+ <Y2y+YgBUYuUHbPtd@hirez.programming.kicks-ass.net>
+ <BN6PR1101MB2161976800EB14B74A24D9F3A8019@BN6PR1101MB2161.namprd11.prod.outlook.com>
+ <Y24SoNKZtj/NPSGy@hirez.programming.kicks-ass.net>
+ <6097036e-063f-5175-72b2-8935b12af853@redhat.com>
+ <Y24908NWCdzUNqI0@hirez.programming.kicks-ass.net>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Y24908NWCdzUNqI0@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-11-11 at 06:45 +0000, Daniel.Machon@microchip.com wrote:
-> Den Thu, Nov 10, 2022 at 05:30:43PM +0100 skrev Petr Machata:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > 
-> > Daniel Machon <daniel.machon@microchip.com> writes:
-> > 
-> > > diff --git a/net/dcb/dcbnl.c b/net/dcb/dcbnl.c
-> > > index cec0632f96db..3f4d88c1ec78 100644
-> > > --- a/net/dcb/dcbnl.c
-> > > +++ b/net/dcb/dcbnl.c
-> > > @@ -1060,11 +1060,52 @@ static int dcbnl_build_peer_app(struct net_device *netdev, struct sk_buff* skb,
-> > >       return err;
-> > >  }
-> > > 
-> > > +static int dcbnl_getapptrust(struct net_device *netdev, struct sk_buff *skb)
-> > > +{
-> > > +     const struct dcbnl_rtnl_ops *ops = netdev->dcbnl_ops;
-> > > +     int nselectors, err;
-> > > +     u8 *selectors;
-> > > +
-> > > +     selectors = kzalloc(IEEE_8021QAZ_APP_SEL_MAX + 1, GFP_KERNEL);
-> > > +     if (!selectors)
-> > > +             return -ENOMEM;
-> > > +
-> > > +     err = ops->dcbnl_getapptrust(netdev, selectors, &nselectors);
-> > > +
-> > > +     if (!err) {
-> > > +             struct nlattr *apptrust;
-> > > +             int i;
-> > 
-> > (Maybe consider moving these up to the function scope. This scope
-> > business made sense in the generic function, IMHO is not as useful with
-> > a focused function like this one.)
+On 11/11/22 13:19, Peter Zijlstra wrote:
+> On Fri, Nov 11, 2022 at 01:04:27PM +0100, Paolo Bonzini wrote:
+>> On Intel you can optionally make it hold onto IRQs, but NMIs are always
+>> eaten by the VMEXIT and have to be reinjected manually.
 > 
-> I dont mind doing that, however, this 'scope business' is just staying true
-> to the rest of the dcbnl code :-) - that said, I think I agree with your
-> point.
-> 
-> > 
-> > > +
-> > > +             err = -EMSGSIZE;
-> > > +
-> > > +             apptrust = nla_nest_start(skb, DCB_ATTR_DCB_APP_TRUST_TABLE);
-> > > +             if (!apptrust)
-> > > +                     goto nla_put_failure;
-> > > +
-> > > +             for (i = 0; i < nselectors; i++) {
-> > > +                     enum ieee_attrs_app type =
-> > > +                             dcbnl_app_attr_type_get(selectors[i]);
-> > 
-> > Doesn't checkpatch warn about this? There should be a blank line after
-> > the variable declaration block. (Even if there wasn't one there in the
-> > original code either.)
-> 
-> Nope, no warning. And I think it has something to do with the way the line
-> is split.
+> That 'optionally' thing worries me -- as in, KVM is currently
+> opting-out?
 
-yup.
+Yes, because "If the “process posted interrupts” VM-execution control is 
+1, the “acknowledge interrupt on exit” VM-exit control is 1" (SDM 
+26.2.1.1, checks on VM-Execution Control Fields).  Ipse dixit.  Posted 
+interrupts are available and used on all processors since I think Ivy 
+Bridge.
 
-And style trivia:
+(sorry about splitting the replies across two threads)
 
-I suggest adding error types after specific errors,
-reversing the test and unindenting the code too. 
-
-Something like:
-
-	err = ops->dcbnl_getapptrust(netdev, selectors, &nselectors);
-	if (err) {
-		err = 0;
-		goto out;
-	}
-
-	apptrust = nla_nest_start(skb, DCB_ATTR_DCB_APP_TRUST_TABLE);
-	if (!apptrust) {
-		err = -EMSGSIZE;
-		goto out;
-	}
-
-	for (i = 0; i < nselectors; i++) {
-		enum ieee_attrs_app type = dcbnl_app_attr_type_get(selectors[i]);
-		err = nla_put_u8(skb, type, selectors[i]);
-		if (err) {
-			nla_nest_cancel(skb, apptrust);
-			goto out;
-		}
-	}
-	nla_nest_end(skb, apptrust);
-
-	err = 0;
-
-out:
-	kfree(selectors);
-	return err;
-}
+Paolo
 
