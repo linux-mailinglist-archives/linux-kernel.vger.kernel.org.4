@@ -2,316 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337EE625B93
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2C6625B91
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 14:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232949AbiKKNyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 08:54:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
+        id S233520AbiKKNyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 08:54:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233455AbiKKNyU (ORCPT
+        with ESMTP id S232949AbiKKNyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 08:54:20 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DFB4730D;
-        Fri, 11 Nov 2022 05:54:19 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABDf521014746;
-        Fri, 11 Nov 2022 13:54:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=PiO1Nw8WNkhYqTikOaHjoasy+WqCfLTwDG9queKORd8=;
- b=i+TuiWfOVyYDkgV0fhw/3y4A5fGGi96j3p58P6WDFWdYwc9onwpUWQHI09yFV9yirnHI
- ltzYW7Ga1Ymmn60sw9ON5IjtiTO3hIxSZxvzASQHXLNSJDqfHL4v3Du/JLIhIdNT9ws+
- /oMzDGA72ow9jMa6qjFK1cOlA8i1de6v0+IzR/u5GZ39QtSA0ACAnPZpG0MrtPSP7uH1
- L/Nzvx6aVb9/xzdvq+PJnd1qio6MjFyKF438yd0igqm5Dbm6FXl3IdcVeIHKwxYtmnW/
- Cet9zf5+9YS5UqqZKzPjLf/oP8pBKl5Bz5yibjJnhMPetzrpFihTO9edY/MW3CvlzpjN 0g== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ksqg4gatc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 13:54:14 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2ABDqx1o007649;
-        Fri, 11 Nov 2022 13:54:12 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04ams.nl.ibm.com with ESMTP id 3kngqdgry9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Nov 2022 13:54:12 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2ABDs9ml721420
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Nov 2022 13:54:09 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4A6B24C04E;
-        Fri, 11 Nov 2022 13:54:09 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 07FFA4C04A;
-        Fri, 11 Nov 2022 13:54:09 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 11 Nov 2022 13:54:08 +0000 (GMT)
-From:   Thomas Richter <tmricht@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>
-Subject: [PATCH v2] perf list: Add PMU pai_ext event description for IBM z16
-Date:   Fri, 11 Nov 2022 14:54:02 +0100
-Message-Id: <20221111135402.858623-1-tmricht@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BaBJfbqCTOSGO2KySnXZUmM9ATHJUXkg
-X-Proofpoint-ORIG-GUID: BaBJfbqCTOSGO2KySnXZUmM9ATHJUXkg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-11_07,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- lowpriorityscore=0 malwarescore=0 adultscore=0 mlxscore=0
- priorityscore=1501 phishscore=0 impostorscore=0 clxscore=1011 spamscore=0
- mlxlogscore=853 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211110091
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 11 Nov 2022 08:54:19 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF602B25B;
+        Fri, 11 Nov 2022 05:54:17 -0800 (PST)
+Message-ID: <20221111120501.026511281@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668174854;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=xhd7tt5iYhuOseDykf3XQcxTHhVcl7xTwFlqd8IrPto=;
+        b=DmQ9IkLmiKdLbn4YWyKiu6yv5Mu+/J5pzCDxk4dUJL328B8EJXmr7XiCzfZ0cWgufJVs5V
+        TsiEjifWga1s/oNXmXz43ItsGAuFM5/nD+cCElBqCht2QBntwnvAQPPYtdNEPA7EhlQZGB
+        u+WlVuKGFNH2nQfb9Zg5E1QsGliZ8icKwECPobCWAi0ePwenyeFv7Whs5yBXRFmZ0FNz80
+        +evuCOcPk/9uZzOHKqdS5hL2nhn41/8sJDSBmnH8OC/TZFdkYohndFGnzHXU2r4ZP2IOqR
+        IrtUA24HuXX3qhEAu8v8nQ5FAgY7rFsc/vVck77BNtOlJ4CT6nuhgAy5M54mHQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668174854;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=xhd7tt5iYhuOseDykf3XQcxTHhVcl7xTwFlqd8IrPto=;
+        b=1yDPujhbELGZVjXIkh+KOi77aJIIbepWxtaRFHvr3ChKKnJexoCyIC/rVlRX+4Bd+JwM9w
+        FVbM33Uj6J+iPcBg==
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: [patch 00/39] genirq, PCI/MSI: Support for per device MSI and PCI/IMS
+ - Part 1 cleanups
+Date:   Fri, 11 Nov 2022 14:54:13 +0100 (CET)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the event description for the IBM z16 pai_ext PMU released with
-commit c432fefe8e62 ("s390/pai: Add support for PAI Extension 1 NNPA counters")
+Hi!
 
-The document SA22-7832-13 "z/Architecture Principles of Operation",
-published May, 2022, contains the description of the
-Processor Activity Instrumentation Facility and the NNPA counter
-set., See Pages 5-113 to 5-116.
+This is a three part series which provides support for per device MSI
+interrupt domains. This solves conceptual problems of the current PCI/MSI
+design which are in the way of providing support for PCI/MSI[-X] and
+the upcoming PCI/IMS mechanism on the same device.
 
-Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
----
- .../pmu-events/arch/s390/cf_z16/pai_ext.json  | 198 ++++++++++++++++++
- tools/perf/pmu-events/jevents.py              |   1 +
- 2 files changed, 199 insertions(+)
- create mode 100644 tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json
+IMS (Interrupt Message Store] is a new specification which allows device
+manufactures to provide implementaton defined storage for MSI messages
+contrary to the uniform and specification defined storage mechanisms for
+PCI/MSI and PCI/MSI-X. IMS not only allows to overcome the size limitions
+of the MSI-X table, but also gives the device manufacturer the freedom to
+store the message in arbitrary places, even in host memory which is shared
+with the device.
 
-diff --git a/tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json b/tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json
-new file mode 100644
-index 000000000000..8bee481f05d5
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json
-@@ -0,0 +1,198 @@
-+[
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6144",
-+		"EventName": "NNPA_ALL",
-+		"BriefDescription": "NNPA ALL",
-+		"PublicDescription": "Sum of all non zero NNPA counters"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6145",
-+		"EventName": "NNPA_ADD",
-+		"BriefDescription": "NNPA ADD",
-+		"PublicDescription": "NNPA ADD function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6146",
-+		"EventName": "NNPA_SUB",
-+		"BriefDescription": "NNPA SUB",
-+		"PublicDescription": "NNPA SUB function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6147",
-+		"EventName": "NNPA_MUL",
-+		"BriefDescription": "NNPA MUL",
-+		"PublicDescription": "NNPA MUL function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6148",
-+		"EventName": "NNPA_DIV",
-+		"BriefDescription": "NNPA DIV",
-+		"PublicDescription": "NNPA DIV function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6149",
-+		"EventName": "NNPA_MIN",
-+		"BriefDescription": "NNPA MIN",
-+		"PublicDescription": "NNPA MIN function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6150",
-+		"EventName": "NNPA_MAX",
-+		"BriefDescription": "NNPA MAX",
-+		"PublicDescription": "NNPA-MAX function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6151",
-+		"EventName": "NNPA_LOG",
-+		"BriefDescription": "NNPA LOG",
-+		"PublicDescription": "NNPA-LOG function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6152",
-+		"EventName": "NNPA_EXP",
-+		"BriefDescription": "NNPA EXP",
-+		"PublicDescription": "NNPA-EXP function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6153",
-+		"EventName": "NNPA_IBM_RESERVED_9",
-+		"BriefDescription": "Reserved for IBM use",
-+		"PublicDescription": "Reserved for IBM use"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6154",
-+		"EventName": "NNPA_RELU",
-+		"BriefDescription": "NNPA RELU",
-+		"PublicDescription": "NNPA-RELU function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6155",
-+		"EventName": "NNPA_TANH",
-+		"BriefDescription": "NNPA TANH",
-+		"PublicDescription": "NNPA-TANH function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6156",
-+		"EventName": "NNPA_SIGMOID",
-+		"BriefDescription": "NNPA SIGMOID",
-+		"PublicDescription": "NNPA-SIGMOID function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6157",
-+		"EventName": "NNPA_SOFTMAX",
-+		"BriefDescription": "NNPA SOFTMAX",
-+		"PublicDescription": "NNPA-SOFTMAX function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6158",
-+		"EventName": "NNPA_BATCHNORM",
-+		"BriefDescription": "NNPA BATCHNORM",
-+		"PublicDescription": "NNPA-BATCHNORM function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6159",
-+		"EventName": "NNPA_MAXPOOL2D",
-+		"BriefDescription": "NNPA MAXPOOL2D",
-+		"PublicDescription": "NNPA-MAXPOOL2D function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6160",
-+		"EventName": "NNPA_AVGPOOL2D",
-+		"BriefDescription": "NNPA AVGPOOL2D",
-+		"PublicDescription": "NNPA-AVGPOOL2D function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6161",
-+		"EventName": "NNPA_LSTMACT",
-+		"BriefDescription": "NNPA LSTMACT",
-+		"PublicDescription": "NNPA-LSTMACT function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6162",
-+		"EventName": "NNPA_GRUACT",
-+		"BriefDescription": "NNPA GRUACT",
-+		"PublicDescription": "NNPA-GRUACT function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6163",
-+		"EventName": "NNPA_CONVOLUTION",
-+		"BriefDescription": "NNPA CONVOLUTION",
-+		"PublicDescription": "NNPA-CONVOLUTION function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6164",
-+		"EventName": "NNPA_MATMUL_OP",
-+		"BriefDescription": "NNPA MATMUL OP",
-+		"PublicDescription": "NNPA-MATMUL-OP function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6165",
-+		"EventName": "NNPA_MATMUL_OP_BCAST23",
-+		"BriefDescription": "NNPA NNPA-MATMUL_OP_BCAST23",
-+		"PublicDescription": "NNPA-MATMUL-OP-BCAST23 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6166",
-+		"EventName": "NNPA_SMALLBATCH",
-+		"BriefDescription": "NNPA SMALLBATCH",
-+		"PublicDescription": "NNPA function with conditions as described in Common Operation"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6167",
-+		"EventName": "NNPA_LARGEDIM",
-+		"BriefDescription": "NNPA LARGEDIM",
-+		"PublicDescription": "NNPA function with conditions as described in Common Operation"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6168",
-+		"EventName": "NNPA_SMALLTENSOR",
-+		"BriefDescription": "NNPA SMALLTENSOR",
-+		"PublicDescription": "NNPA function with conditions as described in Common Operation"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6169",
-+		"EventName": "NNPA_1MFRAME",
-+		"BriefDescription": "NNPA 1MFRAME",
-+		"PublicDescription": "NNPA function with conditions as described in Common Operation"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6170",
-+		"EventName": "NNPA_2GFRAME",
-+		"BriefDescription": "NNPA 2GFRAME",
-+		"PublicDescription": "NNPA function with conditions as described in Common Operation"
-+	},
-+	{
-+		"Unit": "PAI-EXT",
-+		"EventCode": "6171",
-+		"EventName": "NNPA_ACCESSEXCEPT",
-+		"BriefDescription": "NNPA ACCESSEXCEPT",
-+		"PublicDescription": "NNPA function with conditions as described in Common Operation"
-+ 	}
-+]
-diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index 0daa3e007528..da630aab948b 100755
---- a/tools/perf/pmu-events/jevents.py
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -225,6 +225,7 @@ class JsonEvent:
-           'CPU-M-CF': 'cpum_cf',
-           'CPU-M-SF': 'cpum_sf',
-           'PAI-CRYPTO' : 'pai_crypto',
-+          'PAI-EXT' : 'pai_ext',
-           'UPI LL': 'uncore_upi',
-           'hisi_sicl,cpa': 'hisi_sicl,cpa',
-           'hisi_sccl,ddrc': 'hisi_sccl,ddrc',
--- 
-2.37.3
+There have been several attempts to glue this into the current MSI code,
+but after lengthy discussions in various threads:
 
+  https://lore.kernel.org/all/20211126230957.239391799@linutronix.de
+  https://lore.kernel.org/all/MWHPR11MB188603D0D809C1079F5817DC8C099@MWHPR11MB1886.namprd11.prod.outlook.com
+  https://lore.kernel.org/all/160408357912.912050.17005584526266191420.stgit@djiang5-desk3.ch.intel.com
+
+it turned out that there is a fundamental design problem in the current
+PCI/MSI-X implementation. This needs some historical background.
+
+When PCI/MSI[-X] support was added around 2003 interrupt management was
+completely different from what we have today in the actively developed
+architectures. Interrupt management was completely architecture specific
+and while there were attempts to create common infrastructure the
+commonalities were rudimental and just providing shared data structures and
+interfaces so that drivers could be written in an architecture agnostic
+way.
+
+The initial PCI/MSI[-X] support obviously plugged into this model which
+resulted in some basic shared infrastructure in the PCI core code for
+setting up MSI descriptors, which are a pure software construct for holding
+data relevant for a particular MSI interrupt, but the actual association to
+Linux interrupts was completely architecture specific. This model is still
+supported today to keep museum architectures and notorious stranglers
+alive.
+
+In 2013 Intel tried to add support for hotplugable IO/APICs to the kernel
+which was creating yet another architecture specific mechanism and resulted
+in an unholy mess on top of the existing horrors of x86 interrupt handling.
+The x86 interrupt management code was already an uncomprehensible maze of
+indirections between the CPU vector management, interrupt remapping and the
+actual IO/APIC and PCI/MSI[-X] implementation.
+
+At roughly the same time ARM struggled with the ever growing SoC specific
+extensions which were glued on top of the architected GIC interrupt
+controller.
+
+This resulted in a fundamental redesign of interrupt management and
+provided the today prevailing concept of hierarchical interrupt
+domains. This allows to disentangle the interactions between x86 vector
+domain and interrupt remapping and also allowed ARM to handle the zoo of
+SoC specific interrupt components in a sane way.
+
+The concept of hierarchical interrupt domains aims to encapsulate the
+functionality of particual IP blocks which are involved in interrupt
+delivery so that they become extensible and pluggable. The X86
+encapsulation looks like this:
+
+                                         |--- device 1
+     [Vector]---[Remapping]---[PCI/MSI]--|...
+                                         |--- device N
+
+where the remapping domain is an optional component and in case that it is
+not available the PCI/MSI[-X] domains have the vector domain as their
+parent. This reduced the required interaction between the domains pretty
+much to the initialization phase where it is obviously required to
+establish the proper parent relation ship in the components of the
+hierarchy.
+
+While in most cases the model is strictly representing the chain of IP
+blocks and abstracting them so they can be plugged together to form a
+hierarchy, the design stopped short on PCI/MSI[-X]. Looking at the hardware
+it's clear that the actual PCI/MSI[-X] interrupt controller is not a global
+entity, but strict a per PCI device entity.
+
+Here we took a short cut on the hierarchical model and went for the easy
+solution of providing "global" PCI/MSI domains which was possible because
+the PCI/MSI[-X] handling is uniform accross the devices. This also allowed
+to keep the existing PCI/MSI[-X] infrastructure mostly unchanged which in
+turn made it simple to keep the existing architecture specific management
+alive.
+
+A similar problem was created in the ARM world with support for IP block
+specific message storage. Instead of going all the way to stack a IP block
+specific domain on top of the generic MSI domain this ended in a construct
+which provides a "global" platform MSI domain which allows overriding the
+irq_write_msi_msg() callback per allocation.
+
+In course of the lengthy discussions we identified other abuse of the MSI
+infrastructure in wireless drivers, NTB etc. where support for
+implementation specific message storage was just mindlessly glued into the
+existing infrastructure. Some of this just works by chance on particular
+platforms but will fail in hard to diagnose ways when the driver is used
+on platforms where the underlying MSI interrupt management code does not
+expect the creative abuse.
+
+Another shortcoming of todays PCI/MSI-X support is the inability to
+allocate or free individual vectors after the initial enablement of
+MSI-X. This results in an works by chance implementation of VFIO (PCI
+passthrough) where interrupts on the host side are not set up upfront to
+avoid resource exhaustion. They are expanded at runtime when the guest
+actually tries to use them. The way how this is implemented is that the
+host disables MSI-X and the enables it with a larger number of vectors
+again. That works by chance because most device drivers set up all
+interrupts before the device actually will utilize them. But that's not
+universally true because some drivers allocate a large enough number of
+vectors but do not utilize them until it's actually required,
+e.g. acceleration support. But at that point other interrupts of the device
+might be in active use and the MSI-X disable/enable dance can just result
+in losing interrupts and therefore hard to diagnose subtle problems.
+
+Last but not least the "global" PCI/MSI-X domain approach prevents to
+utilize PCI/MSI[-X] and PCI/IMS on the same device due to the fact that IMS
+is not longer providing a uniform storage and configuration model.
+
+The solution to this is to implement the missing step and switch from
+global MSI domains to per device MSI domains. The resulting hierarchy then
+looks like this:
+
+                              |--- [PCI/MSI] device 1
+     [Vector]---[Remapping]---|...
+                              |--- [PCI/MSI] device N
+
+which in turn allows provide support for multiple domains per device:
+
+                              |--- [PCI/MSI] device 1
+                              |--- [PCI/IMS] device 1
+     [Vector]---[Remapping]---|...
+                              |--- [PCI/MSI] device N
+                              |--- [PCI/IMS] device N
+
+To achieve this and to provide solutions for the other identified issues,
+e.g. VFIO, this needs a major overhaul of the affected infrastructure.
+
+The 90+ patches series is split into three parts for submission:
+
+  1) General cleanups of the core infrastructure and the PCI/MSI code
+
+  2) Preparatory changes for per device (multiple) MSI domain support
+     including a complete replacement of the MSI core interfaces
+     switching from a domain pointer based to a domain ID based model
+     and providing support for proper range based allocation/free
+
+  3) The actual implementation for per device domains, the conversion of
+     the PCI/MSI-X infrastructure, dynamic allocation/free for MSI-X,
+     initial support for PCI/IMS and enablement for X86. Plus a demo
+     IMS driver for IDXD.
+
+The three parts are available from git:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git devmsi-v1-part1
+   git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git devmsi-v1-part2
+   git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git devmsi-v1-part3
+
+To complete the picture we went all the way and converted ARM64 including
+the platform-MSI horrors over to the new model. It's barely tested in a VM
+(at least the PCI/MSI-X) part can be validated that way. For the rest this
+just compiles and we can't do much more as we lack hardware. The reason why
+this conversion was done is to ensure that the design, the underlying data
+structures and the resulting interfaces are correct and can handle the
+requirements of ARM64. The result looks pretty good and while the initial
+support does not cover some of the oddball issues of the ARM64 zoo, it
+turned out that the extra functionality required is just extending the
+provided infrastructure but does not require any design changes. This is
+also available from git for the adventurous, but be warned that it might
+eat your harddisk, confuse your cat and make your kids miss the bus:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git devmsi-v1-arm
+
+This is not going to be posted as its work in progress. It's provided for
+reference and for Marc to play with.
+
+We did look into NTB and other places like VFIO, but did not come around to
+actually convert them over partly because of lack of time, but also because
+the code is simply incomprehensible.
+
+We tested the creation of a secondary MSI domain with a mockup driver, but
+again due to lack of hardware there is no way to validate any functionality.
+
+The dynamic allocation/free of MSI-X interrupts post MSI-X enable was
+tested by hacking up a device driver and allocating only one interrupt at
+MSI-X enable time and then allocate the rest with the new interfaces. Also
+the dynamic free was tested that way.
+
+Note, that dynamic allocation of MSI-X interrupt requires opt-in of the
+underlying MSI parent domain. It is neither supported on the legacy
+architecture specific MSI mechanism, which is still in use on ia64, sparc,
+PPC and a few subarchitectures of MIPS.
+
+The reason why this cannot be supported unconditionally is that due to the
+history of PCI/MSI support in the kernel there are many implementations
+which expect that MSI[-X] enable is a one off operation which allocates and
+associates all required interrupts right at that point. Even architectures
+which utilize hierarchical irq domains have such assumptions which are in
+some cases even enforced through the underlying hypervisor/firmware.
+
+IMS is opt-in too and it requires that the architecture/platform has been
+converted to the per device MSI model and the underlying interrupt domains
+have the necessary support in place, which might never happen for ia64 and
+some parts of MIPS, SPARC, PPC and S390.
+
+That means driver writers have to be careful about the limitiations of
+this. For dynamic MSI-X allocation/free there is a query interface. For IMS
+domains that's momentarily just the domain creation failing with an error
+code. If necessary for driver conveniance then implementing a query
+interface is trivial enough.
+
+Enough of history and theory. Here comes part 1:
+
+This is just a cleanup and a reorganisation of the PCI/MSI code which
+became quite an unreadable mess over time. There is no intentional
+functional change in this series.
+
+It's just a separate step to make the subsequent changes in the
+infrastructure easier both to implement and to review.
+
+Thanks,
+
+	tglx
+----
+ Documentation/PCI/msi-howto.rst         |   10 
+ arch/powerpc/platforms/pseries/msi.c    |    7 
+ arch/um/drivers/Kconfig                 |    1 
+ arch/um/include/asm/pci.h               |    2 
+ arch/x86/Kconfig                        |    1 
+ arch/x86/include/asm/irqdomain.h        |    4 
+ arch/x86/include/asm/pci.h              |    4 
+ arch/x86/kernel/apic/msi.c              |   11 
+ arch/x86/kernel/apic/vector.c           |    4 
+ drivers/base/Makefile                   |    2 
+ drivers/base/platform-msi.c             |    2 
+ drivers/bus/fsl-mc/Kconfig              |    2 
+ drivers/dma/Kconfig                     |    2 
+ drivers/dma/qcom/hidma.c                |    8 
+ drivers/iommu/Kconfig                   |    2 
+ drivers/iommu/amd/iommu.c               |   10 
+ drivers/iommu/intel/irq_remapping.c     |   10 
+ drivers/irqchip/Kconfig                 |    6 
+ drivers/mailbox/Kconfig                 |    2 
+ drivers/pci/Kconfig                     |    7 
+ drivers/pci/controller/Kconfig          |   30 -
+ drivers/pci/controller/dwc/Kconfig      |   48 -
+ drivers/pci/controller/mobiveil/Kconfig |    6 
+ drivers/pci/controller/pci-hyperv.c     |   15 
+ drivers/pci/msi/Makefile                |    3 
+ drivers/pci/msi/api.c                   |  336 +++++++++++
+ drivers/pci/msi/irqdomain.c             |   91 +--
+ drivers/pci/msi/msi.c                   |  949 +++++++++++---------------------
+ drivers/pci/msi/msi.h                   |  110 +++
+ drivers/pci/probe.c                     |    2 
+ drivers/perf/Kconfig                    |    2 
+ drivers/soc/ti/Kconfig                  |    2 
+ include/asm-generic/msi.h               |    4 
+ include/linux/device.h                  |    8 
+ include/linux/gpio/driver.h             |    2 
+ include/linux/irqdomain.h               |   31 -
+ include/linux/irqdomain_defs.h          |   26 
+ include/linux/msi.h                     |   85 +-
+ include/linux/pci.h                     |   17 
+ kernel/irq/Kconfig                      |    7 
+ kernel/irq/msi.c                        |   60 --
+ 41 files changed, 992 insertions(+), 939 deletions(-)
