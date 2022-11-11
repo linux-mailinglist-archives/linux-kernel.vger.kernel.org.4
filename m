@@ -2,98 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE536261D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 20:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C216261DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 20:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbiKKTZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 14:25:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
+        id S233593AbiKKT1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 14:27:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231261AbiKKTZA (ORCPT
+        with ESMTP id S231261AbiKKT1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 14:25:00 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD7967108
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 11:24:59 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so8567885pjk.2
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 11:24:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AxDp+EkD87kpMInKBl+LqOH4m+/gAkqQGadUGYz6imk=;
-        b=JrBJh1AMaFf7HysUT/6UJQF/qbl41OarMhYVo2i7ZxjMRLJP1h1K8Q5HOy9xWBmQ0D
-         5iibihGVOWSQ5Vtz5BP61jw1fAoe4i/F3UJjMQo52Lxm9nQ47LQZupdPYjztg6jMWx+H
-         T68KrUeOo8N+5w5qNvHJhMpbONZo3Rd8jjPHxSnV0lYzBfEZug9yss5TWUseTqnUGJp4
-         qNW/0FP9XXn39yTGOKFdheWOK21FMDuxjQK8Fc+5yolQqM8Ym9y/Jv/AjnFrhxV6JVpg
-         +m2QR/JMGHF5Ib8vum6EYpDkwbIpPVpFm0EWeLyfZw70mvt6plT248T+DbnNaa6sqIzP
-         nLLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AxDp+EkD87kpMInKBl+LqOH4m+/gAkqQGadUGYz6imk=;
-        b=oA/26z4Hi2Tnd34TnxRD1oCy+/LydnD+1BrYnc+ht6Y5OBiaN1i7WdqJ1l/21XvXMO
-         W0+8FHJQDJ58YwgVZb4I2cq/4qxFW92yhrH6MdXVYrHjoJVC0jCFSAs0BUpi4h2yeb3d
-         CaSN8UtvWDUSR5pneQHvvLtZr1B9VhNnciXXp7O5pQiRexGnRw/t0S1gvBaX9dh3D8qd
-         OVX9d/R6kokqp/SvBhOb6Izss0qP63o/qhDF+hRCj918PaeyU/S84mhYOJIIf3Y7eTe6
-         E2iJjqjE1NN49Bg5xfNITo0oPEWb+FtvUr4lgPcfVfPhFWT+Ycpm0xNlxv8Q5J3pYpoT
-         EZ1A==
-X-Gm-Message-State: ANoB5pnSZQnQdMOo1MkRCaz9HWNU/gfnM7CgKbeaBLT01kQvp04gXL8s
-        7vrpX+kEpzJnF5OzocwJ5x6RHUI5zQgRzw==
-X-Google-Smtp-Source: AA0mqf5ZbausSSTGDH3GxyU9FLxKQpB98WwClDgs3zQB3EW0Q+QDIUfV4z8lo4t6hYoLbkbz+nB74g==
-X-Received: by 2002:a17:90a:d70e:b0:212:f52e:55c9 with SMTP id y14-20020a17090ad70e00b00212f52e55c9mr3443412pju.56.1668194698948;
-        Fri, 11 Nov 2022 11:24:58 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id a13-20020a170902eccd00b0017f9db0236asm2103301plh.82.2022.11.11.11.24.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 11:24:58 -0800 (PST)
-Date:   Fri, 11 Nov 2022 19:24:55 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yan Zhao <yan.y.zhao@intel.com>
-Subject: Re: [PATCH 0/2] KVM: x86/mmu: Use page-track only for... page
- tracking
-Message-ID: <Y26hhw8yD96Z4eZf@google.com>
-References: <20221110014821.1548347-1-seanjc@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110014821.1548347-1-seanjc@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 11 Nov 2022 14:27:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224FE67F4F;
+        Fri, 11 Nov 2022 11:27:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADBD9620BC;
+        Fri, 11 Nov 2022 19:27:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC96DC433D6;
+        Fri, 11 Nov 2022 19:27:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1668194853;
+        bh=LO+ntQc0E3uXo6MFAX4vcf+t4RJhM/5JL5OOiHCwBxI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=COWKm3vj6cl9npbNuKbPrUnx5UMrRBXertuDg30dZNEbSJvJekEWKopjU0lQQXRkQ
+         QD56X1LMulYF1qm3Z7TpP3nE3uTKnP4JX5G/t95lYuhn6gbETrMSzJsTBSnldT+V+f
+         sT/afxaYJj1RDuzQ0lCIiXEOsNetsGWc2AgcPbkI=
+Date:   Fri, 11 Nov 2022 11:27:32 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Zhongkun He <hezhongkun.hzk@bytedance.com>
+Cc:     corbet@lwn.net, mhocko@suse.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2] mm: add new syscall pidfd_set_mempolicy().
+Message-Id: <20221111112732.30e1696bcd0d5b711c188a9a@linux-foundation.org>
+In-Reply-To: <20221111084051.2121029-1-hezhongkun.hzk@bytedance.com>
+References: <20221111084051.2121029-1-hezhongkun.hzk@bytedance.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022, Sean Christopherson wrote:
-> Don't bounce through the page-track notifier when zapping+flushing SPTEs
-> in response to memslot changes as the need to zap+flush isn't strictly
-> limited to page-tracking.  With that done, register KVM's notifier on the
-> first allocation of a shadow root, as KVM's ->track_write() hook is used
-> only to react to writes to gPTEs.
-> 
-> Aside from avoiding a RETPOLINE on emulated writes, dropping KVM's internal
-> use will allow removing ->track_flush_slot() altogether once KVM-GT moves
-> to a different hook[*].  Tracking "flushes" of slots is a poor fit for
-> KVM-GT's needs as KVM-GT needs to drop its write-protection only when a
-> memslot change is guaranteed to be committed, whereas the "flush" call is
-> speculative in the sense that KVM may abort a memslot update after flushing
-> the original memslot.
-> 
-> https://lore.kernel.org/all/20221108084416.11447-1-yan.y.zhao@intel.com
-> 
-> Sean Christopherson (2):
->   KVM: x86/mmu: Don't rely on page-track mechanism to flush on memslot
->     change
->   KVM: x86/mmu: Register page-tracker on first shadow root allocation
+On Fri, 11 Nov 2022 16:40:51 +0800 Zhongkun He <hezhongkun.hzk@bytedance.com> wrote:
 
-Don't merge this series, I'm going to (hopefully) send a (much larger) v2 that
-more aggressively cleans up the page tracker APIs, and will replace patch 2 with
-a completely different patch.
+> Page allocation usage of task or vma policy occurs in the fault
+> path where we hold the mmap_lock for read. because replacing the
+> task or vma policy requires that the mmap_lock be held for write,
+> the policy can't be freed out from under us while we're using
+> it for page allocation. But there are some corner cases(e.g.
+> alloc_pages()) which not acquire any lock for read during the
+> page allocation. For this reason, task_work is used in
+> mpol_put_async() to free mempolicy in  pidfd_set_mempolicy().
+> Thuse, it avoids into race conditions.
+
+This sounds a bit suspicious.  Please share much more detail about
+these races.  If we proced with this design then mpol_put_async()
+shouild have comments which fully describe the need for the async free.
+
+How do we *know* that these races are fully prevented with this
+approach?  How do we know that mpol_put_async() won't free the data
+until the race window has fully passed?
+
+Also, in some situations mpol_put_async() will free the data
+synchronously anyway, so aren't these races still present?
+
+
+Secondly, why was the `flags' argument added?  We might use it one day?
+For what purpose?  I mean, every syscall could have a does-nothing
+`flags' arg, but we don't do that.  What's the plan here?
+
