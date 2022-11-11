@@ -2,106 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B6A626278
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 21:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A494462627B
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 21:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234337AbiKKT74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 14:59:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
+        id S233784AbiKKUAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 15:00:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiKKT7x (ORCPT
+        with ESMTP id S230043AbiKKUAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 14:59:53 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46C78339C
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 11:59:52 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so8621279pjs.4
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 11:59:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tiOSDnaJDiv/bd6hfVEdnOGaLX+kZWWhVL356AX2InA=;
-        b=TkeO75onMN37rOHMxLyT5F2rMv2tOdJlZrq3BTAW7LyaUwnWA7XsEFvkuNxYWoquke
-         7mkmYRz9zYKcuWbugrrJlnm7+iVDndnFJOOYHKLgvbRQKN5L+CViGDPlO2sucitqGLkU
-         bNa2JUyPusiCwvZFd3vnQkniW0amRhAJIYJ3uOq1i7WBIIvmiqrGIWo0BDFxRInY6luB
-         nU+jCGLaxXQTkuDtVxIWHUOc1rbJtyfWeHsHJFAnFA2bJvf1tBeBuLWZoiinbqYqKCCS
-         nWRE+3+Byu2p5BZSp1y0IaGkU6Tg3FLIIzPrkMG5Zt/yNBDKwQxD5NN608POeObXdxFq
-         tF0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tiOSDnaJDiv/bd6hfVEdnOGaLX+kZWWhVL356AX2InA=;
-        b=FAEcax+KrwYPrtWaZog3fMRYcBmNR47XMFPI0sfdCmRGx5Wq4L72+Wo5B4Z4zJsjna
-         xcl0s6/pYI/JXHl00jR2tKtjKq0bcKVAtlN5deoXzJCYaeMh/PTzFr7IB8WfUhKPJW+S
-         WnEXB1BC9KQlqPrFW5GYMDOOndyJlv1eFmPu7jz9mjyq6WyWsB+rKf4uroxTnA9RA4At
-         paT9TPMop/poTGLFdP7cupF7KxO1p1u/rKUosGAxvXKtJ2rK0eL0cqNeAMhKb66bPExs
-         bxNNHySs4HJFttelNh7SylGVXOQYGFcdS8eUoKlcEmYWNvuWhNKwtaJvTfUambYHja/c
-         vmsA==
-X-Gm-Message-State: ANoB5plKtnFr/XQMF9y4CU+v5d5rXQfI26a8akmVpFB0cfGZdi45exrd
-        GOwuoY9uaLQS0V21+IGu8g7yAA==
-X-Google-Smtp-Source: AA0mqf6IZD60dm560FlolQXnq3OiNX/QLV4eHW8vxPqbGrcg1WXWRuX6WQ9ZzcGmcAwH+ANespCXCw==
-X-Received: by 2002:a17:90a:5294:b0:20a:7c09:7993 with SMTP id w20-20020a17090a529400b0020a7c097993mr3635460pjh.149.1668196792427;
-        Fri, 11 Nov 2022 11:59:52 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id z1-20020aa79901000000b005360da6b26bsm1954866pff.159.2022.11.11.11.59.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 11:59:51 -0800 (PST)
-From:   debug@rivosinc.com
-To:     palmer@dabbelt.com
-Cc:     jan.kiszka@siemens.com, kbingham@kernel.org,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        debug@rivosinc.com, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux@rivosinc.com
-Subject: [PATCH] gdb-script: updated lx_current for riscv
-Date:   Fri, 11 Nov 2022 11:59:38 -0800
-Message-Id: <20221111195938.1499148-2-debug@rivosinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221111195938.1499148-1-debug@rivosinc.com>
-References: <20221111195938.1499148-1-debug@rivosinc.com>
+        Fri, 11 Nov 2022 15:00:04 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1F92B1A9;
+        Fri, 11 Nov 2022 12:00:01 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ABJvAsT012293;
+        Fri, 11 Nov 2022 19:59:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=yGZJVOEkn/5ZhGcIVIIDwWtiBepp7mgPkuoc1OTiiTI=;
+ b=pWJbY73Ezp9fk9U6++vgKcB5bpO+gW/yfJsnt95YArh8y5dXIhPsoLRVqR65Vo6d8QXf
+ PBrprVDk6Nvguk0YsOZt0ul4ueuumgtPLCvytlf5MoFqQshmAnU2HXrCMCTRM0C+8lpE
+ GM9pcVW673CHDrBw21V+/Fo/jFeON9qusSywZ3XiDGpn8SvQ2UGX11tlQTHhQ6bLOqK5
+ mjWLj8abq8Gd6y1mpqfkHPDXWG0qJQgMOPkG0jX+JEzQ2ETk8KaxftoZzFeUkCaVHgi3
+ t+2jhAD/X2613Z2L/lQ2WOTP2o5xT62a8ex7AUlixRPklvQoLL0QMiWzD2ibmBV4Upd0 Mw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kstu507mx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Nov 2022 19:59:44 +0000
+Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABJxhYX012161;
+        Fri, 11 Nov 2022 19:59:43 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 3kngwmaca9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Nov 2022 19:59:43 +0000
+Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2ABJxhqq012152;
+        Fri, 11 Nov 2022 19:59:43 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 2ABJxhKQ012147
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Nov 2022 19:59:43 +0000
+Received: from [10.110.46.68] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 11 Nov
+ 2022 11:59:42 -0800
+Message-ID: <a484effb-9da3-9888-c11d-2d36ece7a342@quicinc.com>
+Date:   Fri, 11 Nov 2022 11:59:41 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH RESEND v2] wifi: ath10k: Fix return value in
+ ath10k_pci_init()
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>, <kvalo@kernel.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <rmani@qti.qualcomm.com>
+CC:     <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221110061926.18163-1-xiujianfeng@huawei.com>
+Content-Language: en-US
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <20221110061926.18163-1-xiujianfeng@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8ZwVySvqS3447jZKp55SqcvevK2DhXPE
+X-Proofpoint-ORIG-GUID: 8ZwVySvqS3447jZKp55SqcvevK2DhXPE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-11_10,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=667 impostorscore=0
+ phishscore=0 spamscore=0 mlxscore=0 adultscore=0 priorityscore=1501
+ malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211110136
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Deepak Gupta <debug@rivosinc.com>
+On 11/9/2022 10:19 PM, Xiu Jianfeng wrote:
+> This driver is attempting to register to support two different buses.
+> if either of these is successful then ath10k_pci_init() should return 0
+> so that hardware attached to the successful bus can be probed and
+> supported. only if both of these are unsuccessful should ath10k_pci_init()
+> return an errno.
+> 
+> Fixes: 0b523ced9a3c ("ath10k: add basic skeleton to support ahb")
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-lx_current python gdb command defined in scripts/gdb/cpus.py updated
-to support riscv architecture.
-
-Signed-off-by: Deepak Gupta <debug@rivosinc.com>
----
- scripts/gdb/linux/cpus.py | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/scripts/gdb/linux/cpus.py b/scripts/gdb/linux/cpus.py
-index 15fc4626d236..ce6703f1e35a 100644
---- a/scripts/gdb/linux/cpus.py
-+++ b/scripts/gdb/linux/cpus.py
-@@ -173,6 +173,14 @@ def get_current_task(cpu):
-          else:
-              raise gdb.GdbError("Sorry, obtaining the current task is not allowed "
-                                 "while running in userspace(EL0)")
-+    elif utils.is_target_arch("riscv"):
-+         current_task_addr = gdb.parse_and_eval("$tp")
-+         if((current_task_addr.cast(utils.get_long_type()) >> 63) != 0):
-+             current_task = current_task_addr.cast(task_ptr_type)
-+             return current_task.dereference()
-+         else:
-+             raise gdb.GdbError("Sorry, obtaining the current task is not allowed "
-+                                "while running in userspace")
-     else:
-         raise gdb.GdbError("Sorry, obtaining the current task is not yet "
-                            "supported with this arch")
--- 
-2.25.1
+Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>
 
