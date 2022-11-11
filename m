@@ -2,263 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802016255CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B48DB6255D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 09:56:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233400AbiKKIzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 03:55:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43142 "EHLO
+        id S233048AbiKKIz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 03:55:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233367AbiKKIze (ORCPT
+        with ESMTP id S233397AbiKKIzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 03:55:34 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F6DD2F5;
-        Fri, 11 Nov 2022 00:55:33 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id ja4-20020a05600c556400b003cf6e77f89cso5376467wmb.0;
-        Fri, 11 Nov 2022 00:55:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zj8TZH6FHZaJ1Y0eiYMLLPzwa67amSVNW3qpHCEWrZE=;
-        b=mWMLW2/uMJD573/qJJXZSTCbmxYU7kkXWZZCedNYMz/0AIVNuezCtnvD2AhJ112QsW
-         b2ie5wcZ2wFpwaRb510Kx1nTFDJj2p0T9p8eYI3TTWVnnwcRvU/Sy+LzplTHB4sThRiA
-         jtTn+J5MHQ5IoJJBhHUkEfIcBn+QTcCGEvr2TG6z/KWZAElxG1KLhGsu5UGcpQKloSzU
-         DJP+9cR57HOn6liPJC6uDbP9WyDJvh24HvzSU1kaYXxCbYRfw+48GtZuApOydYCTOdP/
-         9Luyok6bw7TjkekusjdOz8wBTqaP1nsM0D7CKVP9cQ3STDxGaQvlVcPozrQxQxCtPUYt
-         WAGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zj8TZH6FHZaJ1Y0eiYMLLPzwa67amSVNW3qpHCEWrZE=;
-        b=Pb1nM9qEqVYthfTUhMzpIhpP3t02sa9iGXzzX/jnJNQBcmz9YFni3cnXckW4v6FqDU
-         KalD/bkqaCCH8GYlf7UXdnlzSxrpHUzaWb4cjBYedQYhL5XUypJPXMz6uvxpLngymnIC
-         BI1bjRlPpNKpLTLQANVyzQ/zUnl6YLfzAwUBcaETOhbqtKuZP1JPqiQg3tV/UE6xmnzk
-         53fNBxwWiNpJ6aSV61euxNHW2TY6INJWh0lkMugblD1cMibZemCQcYcHz8Q7by5Y2aKB
-         uRwT3QL49uRssJmIBugxuREQLoZQygV8DQvewByMJ4druTU4COAae9f4GjPQ8q0SkPlB
-         l+UQ==
-X-Gm-Message-State: ANoB5pnwI5IwrHzieKAvAgYLR9MlFFE+VCagWDedoPTh4T8cC3/bniam
-        JSet/1xYb6aV0+5HHW9L/6k=
-X-Google-Smtp-Source: AA0mqf5gpxoWo3QN+NFqQyVSF9ENcnuCFFW908PzcZPm9wb9ZK9Z0PdC7xQtzbGzZyh/67SuVZ86kQ==
-X-Received: by 2002:a05:600c:2d05:b0:3b4:8603:e2ae with SMTP id x5-20020a05600c2d0500b003b48603e2aemr530274wmf.148.1668156932059;
-        Fri, 11 Nov 2022 00:55:32 -0800 (PST)
-Received: from [192.168.1.131] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id z15-20020a056000110f00b0022a3a887ceasm1327149wrw.49.2022.11.11.00.55.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 00:55:30 -0800 (PST)
-Message-ID: <d38f8b81-b62e-18c5-1bd3-d1bc1f2b98d9@gmail.com>
-Date:   Fri, 11 Nov 2022 09:55:29 +0100
+        Fri, 11 Nov 2022 03:55:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3DADFD4;
+        Fri, 11 Nov 2022 00:55:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1EB34B82473;
+        Fri, 11 Nov 2022 08:55:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0DD5C433B5;
+        Fri, 11 Nov 2022 08:55:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668156951;
+        bh=UwnQcW+DIbVM73qHx8GWpyYkzIMHZcKiFWqIze2hyRY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Pp8507HrWf8Jk/myn9ejt1xfHquBLgI59QDipZgTtByCB/o28TTut85Pagtx3u60V
+         JOhfsDu6b94aCjSsfi1sJePKXyQ+ud8Sw8HaGwi7yIdBnUc/t8AB5AmwLDcXqyBieN
+         8tudYmIWSvpEoXKy9AmGvadVsi1h8Kf9rMNGzpG+O8qPHKlUOMpDWMawYQRLbHY4Tw
+         zHttHHSU0WgPicCgn8rGaPLFi7cqXrKy5QQFFd30wFikAL7aESo33dfkd8STTqzi6Q
+         aaNpVp040u4v57UmfvkxkXyryVFd+mUPaGdKrhj704NgKv9sxZX8oIlo+QpUBQxbYe
+         ybzpFJeKvXNIQ==
+Received: by mail-lf1-f53.google.com with SMTP id r12so7424847lfp.1;
+        Fri, 11 Nov 2022 00:55:51 -0800 (PST)
+X-Gm-Message-State: ANoB5pkiL3EZ9Wa2lxgCXqnMCkCrDsLra8X9U46Pvr4qFlhJXhwxnXdK
+        3iFV14MLFcYlPkBl03o6ONjO6wvIlxiDTZNIjk4=
+X-Google-Smtp-Source: AA0mqf71xb+rTQ+RGjWOJjElNP/NJKbcHQEHO8Ea095YIB/Wp9FjUpaCoK/GGsmuVGM90XxvuvECKhKDmA5HUhyn68o=
+X-Received: by 2002:a05:6512:3ca8:b0:4a2:bfd2:b218 with SMTP id
+ h40-20020a0565123ca800b004a2bfd2b218mr433243lfv.228.1668156949779; Fri, 11
+ Nov 2022 00:55:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [RFC v3 01/11] arm64: dts: mt7986: harmonize device node order
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sam Shih <sam.shih@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-References: <20221106085034.12582-1-linux@fw-web.de>
- <20221106085034.12582-2-linux@fw-web.de>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20221106085034.12582-2-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CA+G9fYt49jY+sAqHXYwpJtF0oa-jL8t8nArY6W1_zui0sKFipA@mail.gmail.com>
+ <29824864-f076-401f-bfb4-bc105bb2d38f@app.fastmail.com> <96a99291-7caa-429c-9bbd-29721a2b5637@app.fastmail.com>
+ <CA+G9fYs_kWc1Zh=Zr4esnJYRvSMwv6k6m1eYW4PbHCYpvJPPOg@mail.gmail.com> <89a8e93c-f667-4de1-972f-3d2d051bd789@app.fastmail.com>
+In-Reply-To: <89a8e93c-f667-4de1-972f-3d2d051bd789@app.fastmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 11 Nov 2022 09:55:38 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXH994YRCZ9mYfjfN2JdJ_-6_too66bLYGYres5zfXvRCw@mail.gmail.com>
+Message-ID: <CAMj1kXH994YRCZ9mYfjfN2JdJ_-6_too66bLYGYres5zfXvRCw@mail.gmail.com>
+Subject: Re: arm: TI BeagleBoard X15 : Unable to handle kernel NULL pointer
+ dereference at virtual address 00000369 - Internal error: Oops: 5 [#1] SMP ARM
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        lkft-triage@lists.linaro.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 11 Nov 2022 at 09:45, Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Fri, Nov 11, 2022, at 07:28, Naresh Kamboju wrote:
+> > On Thu, 10 Nov 2022 at 03:33, Arnd Bergmann <arnd@arndb.de> wrote:
+> >>
+> >> One more idea I had is the unwinder: since this kernel is built
+> >> with the frame-pointer unwinder, I think the stack usage per
+> >> function is going to be slightly larger than with the arm unwinder.
+> >>
+> >> Naresh, how hard is it to reproduce this bug intentionally?
+> >> Can you try if it still happens if you change the .config to
+> >> use these:?
+> >>
+> >> # CONFIG_FUNCTION_GRAPH_TRACER is not set
+> >> # CONFIG_UNWINDER_FRAME_POINTER is not set
+> >> CONFIG_UNWINDER_ARM=y
+> >
+> > I have done this experiment and reported crash not reproduced
+> > after eight rounds of testing [1].
+> >
+> > https://lkft.validation.linaro.org/scheduler/job/5835922#L1993
+>
+> Ok, good to hear. In this case, I see three possible ways forward
+> to prevent this from coming back on your system:
+>
+> a) use asynchronous probing for one or more of the drivers as
+>    Dmitry suggested. This means fixing it upstream first and then
+>    backporting the fix to all stable kernels. We should probably
+>    do this anyway, but this will need more testing on your side.
+>
+> b) Change your kernel config permanently with the options above,
+>    if LKFT does not actually rely on CONFIG_FUNCTION_GRAPH_TRACER.
+>    I don't know if it does.
+>
+> c) backport commit 41918ec82eb6 ("ARM: ftrace: enable the graph
+>    tracer with the EABI unwinder") from 5.17. This was part of
+>    a longer series from Ard, and while the patch itself looks
+>    simple enough to be backported, I suspect we'd have to
+>    backport the entire series, which is probably not going to
+>    be realistic. Ard, any comments on this?
+>
 
+It at least needs the preceding patch, which tracks the location of LR
+on the stack when using CONFIG_UNWINDER_ARM.
 
-On 06/11/2022 09:50, Frank Wunderlich wrote:
-> From: Sam Shih <sam.shih@mediatek.com>
-> 
-> This arrange device tree nodes in alphabetical order.
-> 
-> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Applied, thanks!
-
-> ---
-> i modified sams patch
-> 
-> https://patchwork.kernel.org/project/linux-mediatek/patch/20220427124741.18245-2-sam.shih@mediatek.com/
-> 
-> by moving pio-node up instead of moving uarts down to ensure alphabetical
-> order for switch-/wifi-node.
-> 
-> And moved uart0 and wifi in mt7986b-rfb too.
-> ---
->   arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 94 ++++++++++----------
->   arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts | 22 ++---
->   2 files changed, 58 insertions(+), 58 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-> index afe37b702eef..6189436fe31d 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-> @@ -54,6 +54,53 @@ switch: switch@0 {
->   	};
->   };
->   
-> +&pio {
-> +	uart1_pins: uart1-pins {
-> +		mux {
-> +			function = "uart";
-> +			groups = "uart1";
-> +		};
-> +	};
-> +
-> +	uart2_pins: uart2-pins {
-> +		mux {
-> +			function = "uart";
-> +			groups = "uart2";
-> +		};
-> +	};
-> +
-> +	wf_2g_5g_pins: wf-2g-5g-pins {
-> +		mux {
-> +			function = "wifi";
-> +			groups = "wf_2g", "wf_5g";
-> +		};
-> +		conf {
-> +			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-> +			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-> +			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-> +			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
-> +			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
-> +			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
-> +			       "WF1_TOP_CLK", "WF1_TOP_DATA";
-> +			drive-strength = <4>;
-> +		};
-> +	};
-> +
-> +	wf_dbdc_pins: wf-dbdc-pins {
-> +		mux {
-> +			function = "wifi";
-> +			groups = "wf_dbdc";
-> +		};
-> +		conf {
-> +			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-> +			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-> +			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-> +			       "WF0_TOP_CLK", "WF0_TOP_DATA";
-> +			drive-strength = <4>;
-> +		};
-> +	};
-> +};
-> +
->   &switch {
->   	ports {
->   		#address-cells = <1>;
-> @@ -121,50 +168,3 @@ &wifi {
->   	pinctrl-0 = <&wf_2g_5g_pins>;
->   	pinctrl-1 = <&wf_dbdc_pins>;
->   };
-> -
-> -&pio {
-> -	uart1_pins: uart1-pins {
-> -		mux {
-> -			function = "uart";
-> -			groups = "uart1";
-> -		};
-> -	};
-> -
-> -	uart2_pins: uart2-pins {
-> -		mux {
-> -			function = "uart";
-> -			groups = "uart2";
-> -		};
-> -	};
-> -
-> -	wf_2g_5g_pins: wf-2g-5g-pins {
-> -		mux {
-> -			function = "wifi";
-> -			groups = "wf_2g", "wf_5g";
-> -		};
-> -		conf {
-> -			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-> -			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-> -			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-> -			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
-> -			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
-> -			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
-> -			       "WF1_TOP_CLK", "WF1_TOP_DATA";
-> -			drive-strength = <4>;
-> -		};
-> -	};
-> -
-> -	wf_dbdc_pins: wf-dbdc-pins {
-> -		mux {
-> -			function = "wifi";
-> -			groups = "wf_dbdc";
-> -		};
-> -		conf {
-> -			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-> -			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-> -			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-> -			       "WF0_TOP_CLK", "WF0_TOP_DATA";
-> -			drive-strength = <4>;
-> -		};
-> -	};
-> -};
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-> index 3443013b5971..7459ddb6b6f0 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-> @@ -25,10 +25,6 @@ memory@40000000 {
->   	};
->   };
->   
-> -&uart0 {
-> -	status = "okay";
-> -};
-> -
->   &eth {
->   	status = "okay";
->   
-> @@ -99,13 +95,6 @@ fixed-link {
->   	};
->   };
->   
-> -&wifi {
-> -	status = "okay";
-> -	pinctrl-names = "default", "dbdc";
-> -	pinctrl-0 = <&wf_2g_5g_pins>;
-> -	pinctrl-1 = <&wf_dbdc_pins>;
-> -};
-> -
->   &pio {
->   	wf_2g_5g_pins: wf-2g-5g-pins {
->   		mux {
-> @@ -138,3 +127,14 @@ conf {
->   		};
->   	};
->   };
-> +
-> +&uart0 {
-> +	status = "okay";
-> +};
-> +
-> +&wifi {
-> +	status = "okay";
-> +	pinctrl-names = "default", "dbdc";
-> +	pinctrl-0 = <&wf_2g_5g_pins>;
-> +	pinctrl-1 = <&wf_dbdc_pins>;
-> +};
+But I'd take the whole series for good measure.
