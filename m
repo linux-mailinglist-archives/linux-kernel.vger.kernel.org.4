@@ -2,76 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A467B62654B
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 00:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E5C62657E
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 00:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234195AbiKKXS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 18:18:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46376 "EHLO
+        id S234759AbiKKXVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 18:21:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233220AbiKKXS4 (ORCPT
+        with ESMTP id S234657AbiKKXU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 18:18:56 -0500
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07BD6CA3B;
-        Fri, 11 Nov 2022 15:18:55 -0800 (PST)
-Received: by mail-wr1-f48.google.com with SMTP id v1so8172518wrt.11;
-        Fri, 11 Nov 2022 15:18:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T7GYDONN9orz+Y5bEhVstkZapV2GNsj+OLAyKn1P7+U=;
-        b=o1Gwc706QC3IhbLlXqjcX9E3LAwwglUiGajQXa7A2gh5kc0c3plRDj19ixLHQNxB6e
-         sk9MHyl8cx9MvSkD1kD2T0jN+thheUbaXEj+KcYSH1ugPZbn0Fe5KA8rqTfuT8pCfaPz
-         FDfCvPgC1YlkCuUkszIECaaDhjAakdKKc2lmBlqiGj6BxXFtGlhmTP4TpvX/VyRLeLxM
-         CWfWebKQ483vXvN6ZfMSLNnrWwNyhQ0/w758iJzeC+Aoyrutlbie0qNmdYfIhylssDcU
-         gyIIm9AOPv+Rb1L3n92y4fpA4eRTD25617z5QKKb4MLDvqtFpzMjESeUEXXz5F/1VTwY
-         Omhg==
-X-Gm-Message-State: ANoB5pkrSiQgx8ZXOjs7npjwuQh83+7q4uCup6hpRxcT3+/0I2z5GBUO
-        YyLugZcQLCYGfF1arWPQN5c=
-X-Google-Smtp-Source: AA0mqf4HmGrK1n+4nxr7/xcevPeV77E/WZej4Wi+oy/cnT6R/qxy5jfsNcXsQRFYNYPmkk5MW3h5Vw==
-X-Received: by 2002:adf:e0c6:0:b0:22e:471b:c616 with SMTP id m6-20020adfe0c6000000b0022e471bc616mr2486496wri.51.1668208734320;
-        Fri, 11 Nov 2022 15:18:54 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id p10-20020a5d48ca000000b00236705daefesm2957391wrs.39.2022.11.11.15.18.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 15:18:53 -0800 (PST)
-Date:   Fri, 11 Nov 2022 23:18:51 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Olaf Hering <olaf@aepfle.de>
-Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v1] PCI: hv: update comment in x86 specific
- hv_arch_irq_unmask
-Message-ID: <Y27YWxXI1gRdKLJq@liuwe-devbox-debian-v2>
-References: <20221107171831.25283-1-olaf@aepfle.de>
+        Fri, 11 Nov 2022 18:20:28 -0500
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3158186D56;
+        Fri, 11 Nov 2022 15:19:59 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1668208797;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=r3Mxkoz9yPxl2ebLuf8V6mN46tSyBQbdzK/qJ9VV9Pc=;
+        b=QfGoQIh4mca3HDhHokOJyORl/l2YJZ4ZQgHTFgn3XROh2W7y85pZ/H3INIZgFDGVziDkjy
+        2HoloB9tqNz0+jh9eisokKhpuF0fvgoODgC78kE+xRo314fVIafoOsMfpTIoTCZUW7sumB
+        3/3YQ8glAWj0ck/SQlX/eOLmkRUW2EU=
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, Ricardo Koller <ricarkol@google.com>,
+        David Matlack <dmatlack@google.com>, kvmarm@lists.linux.dev,
+        Oliver Upton <oliver.upton@linux.dev>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] KVM: selftests: Allow >1 guest mode in access_tracking_perf_test
+Date:   Fri, 11 Nov 2022 23:19:45 +0000
+Message-Id: <20221111231946.944807-2-oliver.upton@linux.dev>
+In-Reply-To: <20221111231946.944807-1-oliver.upton@linux.dev>
+References: <20221111231946.944807-1-oliver.upton@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221107171831.25283-1-olaf@aepfle.de>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 07, 2022 at 05:18:31PM +0000, Olaf Hering wrote:
-> The function hv_set_affinity was removed in commit 831c1ae7 ("PCI: hv:
-> Make the code arch neutral by adding arch specific interfaces").
-> 
-> Signed-off-by: Olaf Hering <olaf@aepfle.de>
+As the name implies, for_each_guest_mode() will run the test case for
+all supported guest addressing modes. On x86 that doesn't amount to
+anything, but arm64 can handle 4K, 16K, and 64K page sizes on supporting
+hardware.
 
-Queued to hyperv-next. Thanks.
+Blindly attempting to run access_tracking_perf_test on arm64 stalls on
+the second test case, as the 'done' global remains set between test
+iterations. Clear it after VM teardown in anticipation of a subsequent
+test case.
+
+Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+---
+ tools/testing/selftests/kvm/access_tracking_perf_test.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+index 76c583a07ea2..4da066479e0a 100644
+--- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
++++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+@@ -326,6 +326,9 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 
+ 	perf_test_join_vcpu_threads(nr_vcpus);
+ 	perf_test_destroy_vm(vm);
++
++	/* Clear done in anticipation of testing another guest mode */
++	done = false;
+ }
+ 
+ static void help(char *name)
+-- 
+2.38.1.431.g37b22c650d-goog
+
