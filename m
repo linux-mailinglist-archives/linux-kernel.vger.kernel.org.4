@@ -2,118 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C40BE6259E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 879F56259EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 12:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233577AbiKKL51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 06:57:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
+        id S233582AbiKKL5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 06:57:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233542AbiKKL5R (ORCPT
+        with ESMTP id S233563AbiKKL5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 06:57:17 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3B572986
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 03:57:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668167837; x=1699703837;
-  h=message-id:date:mime-version:cc:to:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=Lmn4C24AWDgykOuF/NFLzvFk/w6nibxOYuugloUk8zU=;
-  b=J/I3PCqYjqfRh7nzoObfRSIOpxjHufamvUeZwrlbVxrCtrSvmu6o6b8Q
-   sWCcnFa0WNV8zHKphz3tszZhCgb7AY1mZy2O68Ue1WI/jP9NATOGIrROu
-   RvjrdRQL27z6J/vQLQMzvop9DOr0DjtyR8eutZA4UxUXtGKAW8cDla22j
-   lGEEHFbEXB7GNNcFmsMAGyypicpCSEN+T0vYVA4BrnwGkXcvOLTxrFrPz
-   YZXpuAA+4ATBMZutOrI25YH6ySacHx12+o81VGYfdw3lhk3PL/7tW6V0v
-   MC7V6kySn/oruvq7tXDAHbbgxdMaLH+l/ZygjYyCfSt4/bqBZ2Bxlyun6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="313371678"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="313371678"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 03:57:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="812422141"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="812422141"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.246]) ([10.254.215.246])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 03:57:14 -0800
-Message-ID: <804d8102-f22c-2ac3-55d8-76b85cf526af@linux.intel.com>
-Date:   Fri, 11 Nov 2022 19:57:12 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-References: <20221108073408.1005721-1-baolu.lu@linux.intel.com>
- <20221108073408.1005721-3-baolu.lu@linux.intel.com>
- <BN9PR11MB52766AB454992F154C301CB28C009@BN9PR11MB5276.namprd11.prod.outlook.com>
- <d7f72290-c11a-64f7-c8ac-b752835d182d@linux.intel.com>
- <BN9PR11MB5276C64B56A1D1C658825C0B8C009@BN9PR11MB5276.namprd11.prod.outlook.com>
+        Fri, 11 Nov 2022 06:57:31 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2086.outbound.protection.outlook.com [40.107.223.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3167F55C
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 03:57:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A4PJAeKUMdZLkLkLpav75txfM15swF3nC+hY34s22UBtv2HPLdQZlTLDI/WA3NL2WN0wFNPohA2qf2SF1mVX7LH0haAU5jtOACara/gg/YVWrVKyHEJ4By+DrV1TY6mPlsnitThfZ4uByINaZV+Ww+BkSc/V+o22Q4++hrK0zzuKz6Yeq8mNEuKKpTrPkEWAlX1iclajgASpXLPTKO05ZC5nzoaYkoTXD9kmnuQ4dx22tcCY5nXpn1uTB0LuVyXOGyBzO+UwzZJodSJR19ekAtWRdnvbQxcHTdMaQYUu9Jsv/B+XCYPPKx+ihdbn4YCCHCjYrw/xmIIpl4eAXLaSqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kpxmUgpxfK42BNijRIx00abU9v3g7X+iyfuDoOpTkTA=;
+ b=DjQ0l1XUOSECJbyjudk8Wx5W+Rt4cYggBzYumWIubcGWrvQAcdoheSpeGerG4vth9xw1OygjWCJN8r8lboMzAu7d0uci8r1x9RGkETPyO77aSUnZ3tJnHtdFb4Dyph5ANh0Ym7FJx3l1AjaDBnqNgpaQrRV8Eymu6v0ZKUdlWK3s+6VemgrwUDiPFEXdtuf76BkEIVztUxIHWYYDmOLS3Ps7vjf/M+LJt2dXnL480cL/Hwrb+PJW7l8eoH/7RiHyZQdcAIyoPjn8qAZu8ttZ6hOA41xS/OebOHHjR2h8g/5IQ6TO0n7Ld0/89Bh9P8ox6FA00b69SDzEA5WQ/btFQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kpxmUgpxfK42BNijRIx00abU9v3g7X+iyfuDoOpTkTA=;
+ b=JjXl2giIZUbO4xHu2/IE0XwcINHqam1j5+OwVMkI6urkoqyVJWcz3O26qOOQkQQujj0os8scUzWPdSFNxUlpFUR7gkHrfLJHxJX4jvDsmDmqytKSd37aY37+x+/NHIXMSPMhdCHoOKvnzGEM9velJXl0UbCKXfBFjWntZ7478Ro=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by LV2PR12MB5920.namprd12.prod.outlook.com (2603:10b6:408:172::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Fri, 11 Nov
+ 2022 11:57:28 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::7d43:3f30:4caf:7421]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::7d43:3f30:4caf:7421%7]) with mapi id 15.20.5813.013; Fri, 11 Nov 2022
+ 11:57:27 +0000
+Message-ID: <22a00fd8-2489-d803-bea4-e624c355a984@amd.com>
+Date:   Fri, 11 Nov 2022 12:57:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] drm/amdgpu: Fix memory leak in amdgpu_cs_pass1
 Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH v2 2/8] iommu/vt-d: Improve iommu_enable_pci_caps()
-In-Reply-To: <BN9PR11MB5276C64B56A1D1C658825C0B8C009@BN9PR11MB5276.namprd11.prod.outlook.com>
+To:     Dong Chenchen <dongchenchen2@huawei.com>, airlied@gmail.com,
+        daniel@ffwll.ch
+Cc:     alexander.deucher@amd.com, Xinhui.Pan@amd.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, yuehaibing@huawei.com
+References: <20221110143314.708434-1-dongchenchen2@huawei.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20221110143314.708434-1-dongchenchen2@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR3P281CA0145.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:95::8) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|LV2PR12MB5920:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4915db9c-72bf-4886-8000-08dac3dbe796
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ecR2GgbwuoC8QvqOEwsjCWd47Z1yrPL2gSeFGmMQjeJpNrV0kipUn7ibR3lU1iGr4kZlGkfBz/LU1qhnWhuEP0PTuQqCEcrjA3PvptfdX2tXiGqwEd8714rpCpMeMUfi5YXPJci6NcW+hucsDhJ/QWhodmX0LD9AI9KVp43N702dsjiY6RMRx71pjOoidRkaVwdmnLnF8k/TsuPUb088PkCFeQ179hlCqWS+NI5QV9zUjwevMJar8k14+L3FFUQM1O9MNanbE4t1a4OjGMPpxTipAyexTVxg1HZ7lwsTGnRzJimdTJsFErIwUkW0Td6zmbNkruMUMfQzM+9lGvkqXap9CkEN1RNHVYmDCDfPWZWrQNte1QDcDueda3SS3cz+gXIVEZ/ub4JpRqLzJKPU7AfuADhP4TYpWDOQzMqi2p0zD/S3qIdI0H7pnLrpL5tZFzISfFg9V2NTpsK9smecvM9MPoisvEJNFeoFdsQ2Qi0YKxHpbqLsRtlFxSjSIO3RVyXBLNCRCc0odqJdEt7DP7/fWuog8Q8H3TXspQH54vlVZcx/3p7uLR8FKVSGKR0KLI3bNbi4/gWgqzp5gE6xqHQtGVQoy9zyO+3ujsE/Ccjnn1IzAgaMbDpL/Ty+MfbdIhpnbAPn+LS3G7xnwVPTBnmWWi3rkvBYrqMy6zediA9wH2+Fh5MUy7AJluHBD04lCktfgEOToaut0koDWaDLpHeTqj7/E+1B1z+gg9NcrhNPYWw09oYODq19V1DGOkCO3x2mO5VFlAPxoP1l6t+E1SVcnlQ5Wwt3GAE2dtYDz58=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(366004)(376002)(39860400002)(136003)(451199015)(36756003)(6512007)(31686004)(31696002)(38100700002)(5660300002)(2906002)(186003)(6506007)(83380400001)(2616005)(66946007)(41300700001)(8676002)(66556008)(4326008)(6666004)(8936002)(66476007)(6486002)(478600001)(316002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dm9uUHBXaTBmZ3h5dFYyNkxCZTBMb01wWTUwQVdjcVZIYXV3QnFKa0Y0UGZq?=
+ =?utf-8?B?REZpOHh2WFR6bHRjVkE5QWFLdkJqYkQwOTVFMC9ydVBCVm1oOUlJMGhURmNN?=
+ =?utf-8?B?UjJ6RzlHNWxoNWhCczd2aHhERVk2a0VCNGF3VGNnU3VzTStiTzVHa1dXbzlX?=
+ =?utf-8?B?d25KNFhoYXUzWWlnaTFmWGdRb3VxLzAwTGNQelJtS1pyK0xEVUVTTkRYTXJU?=
+ =?utf-8?B?aVhxZ3NPdHBueHk5K0pEaXF4RkJxQUNOK1FFMGRKOXVoaTNxMlpDcEl2RzVn?=
+ =?utf-8?B?c3lyczhGcXlqdFh0NnZPbUFWT3lKUC9ZU2E0QUk4akxnRmRVaXNJMkUvTXJi?=
+ =?utf-8?B?RUZFSG1zQUlPQUVRUEJQU0M4WjRRUnM2ckdFL0RyM2VNNFNHL3QxMXBQWjha?=
+ =?utf-8?B?ZnBOUDN5eGtmTWRKQXBPOUo5dEdYem9ac01icUxiaEJSTk5sVEJCTUtzb0p6?=
+ =?utf-8?B?aXZaOUNHZ2dZYlFzTjQwbXJkeVRJNXBSK1FqNmJzdlQxaENvcm0rMFNMMjdS?=
+ =?utf-8?B?Y216NjhIcGFzNmRQVmY5RjdYS3ZMZnk4czNDcUNFNUZsekN3V0grKzFYY0Ni?=
+ =?utf-8?B?SEVDQ0h2VlF1cnoxTFQxNkZOZ0JHTDlseEx6WFgwUWdEcnE3LzBteWJUS0RQ?=
+ =?utf-8?B?enQ0SEhZKzFuN2xpOVA4MmRuK1hRM0VTWFJDQXIxd1R3OFEwZmRrR01vSVVV?=
+ =?utf-8?B?R3Q3ZFhxZmZ6aS9yUEMzeGZZOCtCalpUczlJbUpSWXBWbDlQdTczSmo5YmNy?=
+ =?utf-8?B?YXdiWmgzSUF6NytPM0RDZVBjeFV3R3V3WTFoMGs1N1RIenEyQUNLMzB1NEZa?=
+ =?utf-8?B?dGNHS0I2b3RCM3IxOHBsZ0t3NWJVcmQ3QUhpNmh2aEd1WkNjazVzWFpMcExD?=
+ =?utf-8?B?R29oRElHd2lBSThLMkh0azJ4T2FxRHI1OWhPMUFUU3IxdXp3a0xkaU13Q2ti?=
+ =?utf-8?B?djJQaXVJeThMNVlhZEpHL01FL2pERzE5dXh5cHExbVdESWEvbmxyOHYxS0Zp?=
+ =?utf-8?B?S2FXZVVRbFY0eGwwd3JLWFV4SUFPVXJjbUhTeEJjTXM4WmRsUEgvNERZOW80?=
+ =?utf-8?B?Y2hGMTl6OFVKSGlwT3FsZzVJR0ZTYmhXMktFbEFYRml4R2F0bUc4WDErUDFX?=
+ =?utf-8?B?dS9CdUtpYzF4VndBYS9HenhGZnEza0dmSmJUKytjdktuSlo3N0NVRUZFbWlj?=
+ =?utf-8?B?cUxPaTlkcUxkcTUwazlBU201Q2VIWkRxbkRFWWRDMmhaazVjNzhFWHBuc1RE?=
+ =?utf-8?B?Vi95SkloNHBNallhVTdRWExOb2JPTDhoUkI0L2RhTndtUzZWRG5Xd3FjRTRX?=
+ =?utf-8?B?WDkrNVJLQTl0dFdRbHR0UTZNZDNDTVVweXZZM2RxZEM0OVNzYmlCbFF1Mys0?=
+ =?utf-8?B?ZmlTazdTbE52NXVoSUVNd0Q3a1ZNaDM0TG9kaWZ3cDBDb051TnVWTzJUZ3VG?=
+ =?utf-8?B?ZjFjNGxwY3JuZFZDUUxiM0srWlNhd0V1RUk5ejdHaHoxVDRidWhDM0JGTy9o?=
+ =?utf-8?B?WE1yK1RuaFJnckFGSTRrZml4Q2ZweVVDYnFTbTJuRUpvcXIzTG9VZ2dicG1I?=
+ =?utf-8?B?WHpwU1RZYWpvN293MXJST3ZPR3lTYjJFc2FObXVLR3lPQXQyR3NjbjBuaEU4?=
+ =?utf-8?B?N0gzd0VQeG8wbTlEOE9QWENTRlBXM004TWQxd3JQSjBBUVlqTlJXbUt0bk4w?=
+ =?utf-8?B?cHdkbmduU29qdk0yTmxJT2RjSllWRFg0K2NnOVZwMWlpRFNLbUJYMjN0aGJZ?=
+ =?utf-8?B?UEUrMUFPMklrSGNmRVp1Q2Y4ODVFVWR1MzUvSkFYM3BxNVFBRDc5UnVhclN5?=
+ =?utf-8?B?MWZsOExaQjFwSFJHQWVkNXZNcURUMXplZmtNRDVqVVB3VlFSNnV2bkdkRHlX?=
+ =?utf-8?B?R1N6UnR1V3pnZDViSWcwUGlNemlkRGwzY1dEbTVMd0NibVgrUXJwWDAzckdx?=
+ =?utf-8?B?d0FYczNkbXFkWUZYa3JkSGp5YjNBMk04dFpPMjVVNGZKVDFhVDhYUkJWclU1?=
+ =?utf-8?B?MnVvMDVTM2h0ak1oTk42bDV4U3NBVVBaUTVheWVjbHoyajFTWGNPSkZRS1pZ?=
+ =?utf-8?B?TC9XdnJnZDl5QjA2b2pFa3Vrb2N2Z1VkODI2aG5IL3NlS1lBUHVIM0N2cWZ3?=
+ =?utf-8?B?VmZiSS9oRTF6YlBLdk9iUGw3WVZIeXg4MGs1cUJrck9wQ2lKWUJWa1dTOEdy?=
+ =?utf-8?Q?HZqd4os17wkd9NoRA9jLRZ+/MlyWqFyHFezzUZ+5zPou?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4915db9c-72bf-4886-8000-08dac3dbe796
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Nov 2022 11:57:27.8563
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +p5pecM9XUALHVHu/zoJBCsVfRNaqSxcVizvXZbPZKhCTw8GIJV9Lvyz4OgyMAxw
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5920
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/11 16:16, Tian, Kevin wrote:
->> From: Baolu Lu <baolu.lu@linux.intel.com>
->> Sent: Friday, November 11, 2022 2:59 PM
->>
->> On 2022/11/11 11:45, Tian, Kevin wrote:
->>>> From: Lu Baolu <baolu.lu@linux.intel.com>
->>>> Sent: Tuesday, November 8, 2022 3:34 PM
->>>>
->>>> The PCI subsystem triggers WARN() if a feature is repeatedly enabled.
->>>> This improves iommu_enable_pci_caps() to avoid unnecessary kernel
->>>> traces through checking and enabling. This also adds kernel messages
->>>> if any feature enabling results in failure. It is worth noting that
->>>> PRI depends on ATS. This adds a check as well.
->>>
->>> Cannot we have a helper to check whether this device has been attached
->>> to any domain? If no in the blocking path then disable PCI caps. If no
->>> in the attaching path then enable PCI caps.
->>>
->>> I just didn't get the point of leaving them enabled while the device can
->>> not do any DMA at all.
->>
->> Ideally, the kernel owns the default policy (default on or off). The
->> upper layers are able to control it over IOMMUFD uAPI or kerneld kAPI.
->> I can't see the benefits of associating these features with the
->> existence of any domain.
-> 
-> we don't have such uAPI or kAPI today.
-> 
-> the current behavior before your change is default off and then toggled
-> along with attach/detach domain. as only one domain is allowed per
-> RID it implies the capabilities are toggled along with DMA allow/block.
-> 
-> now you change it to a messy model:
-> 
->    - default off when the device is probed
->    - turn on at the 1st domain attach and never turn off until release
->    - but iommu_enable_pci_caps() is still called at every domain attach
->      with band-aid to allow re-entrant
-> 
-> this isn't like a good cleanup...
+Am 10.11.22 um 15:33 schrieb Dong Chenchen:
+> When p->gang_size equals 0, amdgpu_cs_pass1() will return directly
+> without freeing chunk_array, which will cause a memory leak issue,
+> this patch fixes it.
+>
+> Fixes: 4624459c84d7 ("drm/amdgpu: add gang submit frontend v6")
+> Signed-off-by: Dong Chenchen <dongchenchen2@huawei.com>
 
-Fair enough. We should not bury this behavior change in a cleanup
-series. Okay! I will keep the previous behavior.
+Good catch, thanks. Patch is Reviewed-by: Christian König 
+<christian.koenig@amd.com>
 
-Best regards,
-baolu
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> index 1bbd39b3b0fc..0e24d6b80e0b 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+> @@ -287,8 +287,10 @@ static int amdgpu_cs_pass1(struct amdgpu_cs_parser *p,
+>   		}
+>   	}
+>   
+> -	if (!p->gang_size)
+> -		return -EINVAL;
+> +	if (!p->gang_size) {
+> +		ret = -EINVAL;
+> +		goto free_partial_kdata;
+> +	}
+>   
+>   	for (i = 0; i < p->gang_size; ++i) {
+>   		ret = amdgpu_job_alloc(p->adev, num_ibs[i], &p->jobs[i], vm);
+
