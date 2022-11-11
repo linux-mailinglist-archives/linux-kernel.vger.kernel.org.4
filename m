@@ -2,171 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E4E625DD0
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:05:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 056AE625DCD
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 16:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234825AbiKKPEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 10:04:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35178 "EHLO
+        id S234738AbiKKPEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 10:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234900AbiKKPDz (ORCPT
+        with ESMTP id S234891AbiKKPDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 10:03:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21C87F556;
-        Fri, 11 Nov 2022 07:01:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA1F061FFF;
-        Fri, 11 Nov 2022 15:01:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86C0BC433D7;
-        Fri, 11 Nov 2022 15:01:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668178883;
-        bh=3IpjaTnl0Pjxf4MekfmGVUqIt/pNy0uUtZS+fnyoQHM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VajMEA22U/Utg14uq5jSsHUpldLMZT6ifoAgAby85B+8j8I2p5gHiuUAr5vRPPkyp
-         CzgOR6e7M9/ejoSFAPFdwsr7Y3LdB8Z9Pb2uKjDQ7siJt8kq9ZfWbIsoMfUwa3U+JA
-         A2wLVSTTeKNUthcPqZ6Vwksy3eJoJAqKGbdNa7n54F65vpPIQSCKSRv+hIqOYRAsn1
-         vNQ1Y8myyNnK2Oty8cIND0IYa49YZ/ZJPSniRpxDHWZoCNjFq4eq9m+QZrj0YehwBx
-         9TYKgpS5DuCl3giZHdUH0UR1c7sUOz2w9uFsXemYahKYP/iew+SbJHijtbtrWJWqIQ
-         bQ3SGuvKt6Oyw==
-Date:   Fri, 11 Nov 2022 16:01:15 +0100
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Shawn Guo <shawn.guo@linaro.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] PCI: histb: switch to using gpiod API
-Message-ID: <Y25juwnlU+ujvue9@lpieralisi>
-References: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
+        Fri, 11 Nov 2022 10:03:45 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0262E814FA
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:01:37 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id bp15so8640029lfb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 07:01:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XylCHjoZ7BbZOYRF4NNLct0GNll1nDPpxJnFN+swT08=;
+        b=pV15QTO2bq+nyEEes3guagA1BSoa0cGtoCex9VwWuIvj7JV/EFcjO7RDHX2r2W0Hl5
+         0jYS5ZM0HNWLEfwvrrxfSkJaRO7sT4mNLSUv2/OlRPLabpAr1aMQ8JSXHJPurEvOG6bO
+         3U5cRvquXfc4H2wZplV+grc9W2yxnNDWgXDE+obw12p7OuY7c0YsA+JagDk+8Asyoc6h
+         6qNZZ8DpurMQxPDzqlAj84U22lwmr4/V3UcwAXy6gfKvI+3QbzU4jmLR1AZ5lHRR8S7J
+         64eawYNrHp13dzAHGdKcKZHZm2laGXtAb9E1KBwLZxc4wmeShRAUU8lklj1RXeGRP/9G
+         b9pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XylCHjoZ7BbZOYRF4NNLct0GNll1nDPpxJnFN+swT08=;
+        b=0mDlfpizaL+6Igt86MZdFwRC6t4tEIkzyojqlgZiezMFWMyu9ud7Jba4bcX6dafFdE
+         xyZdBmSwkSnSb/W7MwjdavVtLx5HyWt+zOFf9ixmjL1xCpRV4JEGTTvw1U4uubCGi3Ap
+         WgIeH8cnUzu5U+YfIPKmKG8eDkdcolihdTMhhE+ZEbJtRnsp6cAJX4fu7WKpTW8ucCs4
+         FGoz0he6xyJSwooLrgEP0wSi5rJJ53z+qqwNais6zbLELk6uudUHTM47hkqIBUgA8qFf
+         K6/b/YrmcgWo24c/w2AwmHVuyLLtEr9dsdHKxWeBz5gSnjdR9Ac0BTntFRqLZGkorkPa
+         HL8A==
+X-Gm-Message-State: ANoB5pnO7+IutH+T+dhdiWJXrWAByai4J3f1QFKtBOAHEX91FH5Ns6ZK
+        NOLjdniCY2oZmABB3SIiwzoecA==
+X-Google-Smtp-Source: AA0mqf6V0Ryay+OOI9OxMnDhdsWaV5XDsXDqL5mWkQZ/WJZlYHJ9xHhR5mpN98c7L/InCaD+uwLybg==
+X-Received: by 2002:a05:6512:1398:b0:497:456d:890 with SMTP id p24-20020a056512139800b00497456d0890mr767011lfa.687.1668178882622;
+        Fri, 11 Nov 2022 07:01:22 -0800 (PST)
+Received: from [192.168.0.20] (088156142199.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.199])
+        by smtp.gmail.com with ESMTPSA id u19-20020a05651220d300b0049462af8614sm364442lfr.145.2022.11.11.07.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Nov 2022 07:01:22 -0800 (PST)
+Message-ID: <21f2dc7b-5fd6-4f28-0a66-5b044a12dd0c@linaro.org>
+Date:   Fri, 11 Nov 2022 16:01:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220906204301.3736813-1-dmitry.torokhov@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 02/10] dt-bindings: dmaengine: qcom: gpi: add compatible
+ for SM6375
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221109111236.46003-1-konrad.dybcio@linaro.org>
+ <20221109111236.46003-3-konrad.dybcio@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221109111236.46003-3-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 06, 2022 at 01:43:00PM -0700, Dmitry Torokhov wrote:
-> This patch switches the driver away from legacy gpio/of_gpio API to
-> gpiod API, and removes use of of_get_named_gpio_flags() which I want to
-> make private to gpiolib.
+On 09/11/2022 12:12, Konrad Dybcio wrote:
+> Document the compatible for GPI DMA controller on SM6375 SoC.
 > 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-
-Should I pick this up ? On patch (2/2) I am not sure we reached
-a consensus - please let me know.
-
-Thanks,
-Lorenzo
-
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  drivers/pci/controller/dwc/pcie-histb.c | 39 ++++++++++++-------------
->  1 file changed, 19 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-histb.c b/drivers/pci/controller/dwc/pcie-histb.c
-> index e2b80f10030d..43c27812dd6d 100644
-> --- a/drivers/pci/controller/dwc/pcie-histb.c
-> +++ b/drivers/pci/controller/dwc/pcie-histb.c
-> @@ -10,11 +10,11 @@
->  
->  #include <linux/clk.h>
->  #include <linux/delay.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/interrupt.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> -#include <linux/of_gpio.h>
->  #include <linux/pci.h>
->  #include <linux/phy/phy.h>
->  #include <linux/platform_device.h>
-> @@ -60,7 +60,7 @@ struct histb_pcie {
->  	struct reset_control *sys_reset;
->  	struct reset_control *bus_reset;
->  	void __iomem *ctrl;
-> -	int reset_gpio;
-> +	struct gpio_desc *reset_gpio;
->  	struct regulator *vpcie;
->  };
->  
-> @@ -212,8 +212,8 @@ static void histb_pcie_host_disable(struct histb_pcie *hipcie)
->  	clk_disable_unprepare(hipcie->sys_clk);
->  	clk_disable_unprepare(hipcie->bus_clk);
->  
-> -	if (gpio_is_valid(hipcie->reset_gpio))
-> -		gpio_set_value_cansleep(hipcie->reset_gpio, 0);
-> +	if (hipcie->reset_gpio)
-> +		gpiod_set_value_cansleep(hipcie->reset_gpio, 1);
->  
->  	if (hipcie->vpcie)
->  		regulator_disable(hipcie->vpcie);
-> @@ -235,8 +235,8 @@ static int histb_pcie_host_enable(struct dw_pcie_rp *pp)
->  		}
->  	}
->  
-> -	if (gpio_is_valid(hipcie->reset_gpio))
-> -		gpio_set_value_cansleep(hipcie->reset_gpio, 1);
-> +	if (hipcie->reset_gpio)
-> +		gpiod_set_value_cansleep(hipcie->reset_gpio, 0);
->  
->  	ret = clk_prepare_enable(hipcie->bus_clk);
->  	if (ret) {
-> @@ -298,10 +298,7 @@ static int histb_pcie_probe(struct platform_device *pdev)
->  	struct histb_pcie *hipcie;
->  	struct dw_pcie *pci;
->  	struct dw_pcie_rp *pp;
-> -	struct device_node *np = pdev->dev.of_node;
->  	struct device *dev = &pdev->dev;
-> -	enum of_gpio_flags of_flags;
-> -	unsigned long flag = GPIOF_DIR_OUT;
->  	int ret;
->  
->  	hipcie = devm_kzalloc(dev, sizeof(*hipcie), GFP_KERNEL);
-> @@ -336,17 +333,19 @@ static int histb_pcie_probe(struct platform_device *pdev)
->  		hipcie->vpcie = NULL;
->  	}
->  
-> -	hipcie->reset_gpio = of_get_named_gpio_flags(np,
-> -				"reset-gpios", 0, &of_flags);
-> -	if (of_flags & OF_GPIO_ACTIVE_LOW)
-> -		flag |= GPIOF_ACTIVE_LOW;
-> -	if (gpio_is_valid(hipcie->reset_gpio)) {
-> -		ret = devm_gpio_request_one(dev, hipcie->reset_gpio,
-> -				flag, "PCIe device power control");
-> -		if (ret) {
-> -			dev_err(dev, "unable to request gpio\n");
-> -			return ret;
-> -		}
-> +	hipcie->reset_gpio = devm_gpiod_get_optional(dev, "reset",
-> +						     GPIOD_OUT_HIGH);
-> +	ret = PTR_ERR_OR_ZERO(hipcie->reset_gpio);
-> +	if (ret) {
-> +		dev_err(dev, "unable to request reset gpio: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = gpiod_set_consumer_name(hipcie->reset_gpio,
-> +				      "PCIe device power control");
-> +	if (ret) {
-> +		dev_err(dev, "unable to set reset gpio name: %d\n", ret);
-> +		return ret;
->  	}
->  
->  	hipcie->aux_clk = devm_clk_get(dev, "aux");
-> -- 
-> 2.37.2.789.g6183377224-goog
-> 
+>  Documentation/devicetree/bindings/dma/qcom,gpi.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
