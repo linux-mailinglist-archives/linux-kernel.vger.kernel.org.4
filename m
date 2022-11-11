@@ -2,52 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 175FE624F76
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 02:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E6E624F77
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 02:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbiKKBTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 10 Nov 2022 20:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
+        id S231874AbiKKBTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 10 Nov 2022 20:19:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiKKBTV (ORCPT
+        with ESMTP id S229579AbiKKBT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 10 Nov 2022 20:19:21 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E391E4
-        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 17:19:18 -0800 (PST)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N7gkG3R4tzqSJ6;
-        Fri, 11 Nov 2022 09:15:34 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 11 Nov 2022 09:19:15 +0800
-Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Fri, 11 Nov
- 2022 09:19:15 +0800
-Message-ID: <b65fc60a-f7f6-61f9-050c-37d4df0e2433@huawei.com>
-Date:   Fri, 11 Nov 2022 09:19:00 +0800
+        Thu, 10 Nov 2022 20:19:26 -0500
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4C5BF41
+        for <linux-kernel@vger.kernel.org>; Thu, 10 Nov 2022 17:19:24 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VUUjq7h_1668129560;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VUUjq7h_1668129560)
+          by smtp.aliyun-inc.com;
+          Fri, 11 Nov 2022 09:19:21 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     bskeggs@redhat.com
+Cc:     kherbst@redhat.com, lyude@redhat.com, airlied@gmail.com,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] drm/nouveau/gr/gf100-: Remove unneeded semicolon
+Date:   Fri, 11 Nov 2022 09:19:19 +0800
+Message-Id: <20221111011919.1992-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] firmware: dmi-sysfs: Fix null-ptr-deref in
- dmi_sysfs_register_handle
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <linmq006@gmail.com>
-References: <20221017095342.2567-1-chenzhongjin@huawei.com>
- <Y205w1j7lc1a5EPS@kroah.com>
-Content-Language: en-US
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <Y205w1j7lc1a5EPS@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        TVD_SPACE_RATIO,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,77 +42,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+./drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c:423:31-32: Unneeded semicolon
 
-On 2022/11/11 1:49, Greg KH wrote:
-> On Mon, Oct 17, 2022 at 05:53:42PM +0800, Chen Zhongjin wrote:
->> KASAN reported a null-ptr-deref error:
->>
->> KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
->> CPU: 0 PID: 1373 Comm: modprobe
->> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
->> RIP: 0010:dmi_sysfs_entry_release
->> ...
->> Call Trace:
->>   <TASK>
->>   kobject_put
->>   dmi_sysfs_register_handle (drivers/firmware/dmi-sysfs.c:540) dmi_sysfs
->>   dmi_decode_table (drivers/firmware/dmi_scan.c:133)
->>   dmi_walk (drivers/firmware/dmi_scan.c:1115)
->>   dmi_sysfs_init (drivers/firmware/dmi-sysfs.c:149) dmi_sysfs
->>   do_one_initcall (init/main.c:1296)
->>   ...
->> Kernel panic - not syncing: Fatal exception
->> Kernel Offset: 0x4000000 from 0xffffffff81000000
->> ---[ end Kernel panic - not syncing: Fatal exception ]---
->>
->> It is because previous patch added kobject_put() to release the memory
->> which will call  dmi_sysfs_entry_release() and list_del().
->>
->> However, list_add_tail(entry->list) is called after the error block,
->> so the list_head is uninitialized and cannot be deleted.
->>
->> Because entry is allocated by kzalloc() so the list.prev is NULL in
->> the error path. Check it in dmi_sysfs_entry_release() to avoid
->> deleting uninitialized list_head.
->>
->> Fixes: 660ba678f999 ("firmware: dmi-sysfs: Fix memory leak in dmi_sysfs_register_handle")
->>
->> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
->> ---
->>   drivers/firmware/dmi-sysfs.c | 9 ++++++---
->>   1 file changed, 6 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/firmware/dmi-sysfs.c b/drivers/firmware/dmi-sysfs.c
->> index 66727ad3361b..f8815eeed00c 100644
->> --- a/drivers/firmware/dmi-sysfs.c
->> +++ b/drivers/firmware/dmi-sysfs.c
->> @@ -557,9 +557,12 @@ static void dmi_sysfs_entry_release(struct kobject *kobj)
->>   {
->>   	struct dmi_sysfs_entry *entry = to_entry(kobj);
->>   
->> -	spin_lock(&entry_list_lock);
->> -	list_del(&entry->list);
->> -	spin_unlock(&entry_list_lock);
->> +	if (entry->list.prev != NULL) {
-> You should not be poking around in a lock structure like this at all.
-> Also the lock isn't held, so how do you know this is going to work?
->
-> I suggest fixing up the original patch, perhaps reverting that instead?
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3013
+Fixes: 78a43c7e3b2f ("drm/nouveau/gr/gf100-: make global attrib_cb actually global")
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It makes sense, but in fact the original patch did fix the memory leak.
+diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c b/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
+index 5f20079c3660..204516891ece 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
++++ b/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
+@@ -420,7 +420,7 @@ gf100_gr_chan_new(struct nvkm_gr *base, struct nvkm_fifo_chan *fifoch,
+ 			return ret;
+ 	} else {
+ 		ret = nvkm_memory_map(gr->attrib_cb, 0, chan->vmm, chan->attrib_cb,
+-				      &args, sizeof(args));;
++				      &args, sizeof(args));
+ 		if (ret)
+ 			return ret;
+ 	}
+-- 
+2.20.1.7.g153144c
 
-I'm going to move kobject_put behind list_add_tail to keep consistency, 
-because only after that the
-entry initialization is complete.
-
-Will send v2, thanks for your review!
-
-
-Best,
-
-Chen
-
-> thanks,
->
-> greg k-h
