@@ -2,54 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B394C62628E
-	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 21:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3785626294
+	for <lists+linux-kernel@lfdr.de>; Fri, 11 Nov 2022 21:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234402AbiKKUJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 15:09:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
+        id S234252AbiKKUKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 15:10:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbiKKUJs (ORCPT
+        with ESMTP id S234139AbiKKUKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 15:09:48 -0500
+        Fri, 11 Nov 2022 15:10:19 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4CF4D5C1
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 12:09:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6AB845C1;
+        Fri, 11 Nov 2022 12:10:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 19DD5B8260C
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 20:09:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0E74C4347C;
-        Fri, 11 Nov 2022 20:09:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A36A9B82615;
+        Fri, 11 Nov 2022 20:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 41162C433D6;
+        Fri, 11 Nov 2022 20:10:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668197385;
-        bh=ldAYlErMXxSDvX7PgibGsmXAVUAab9FUHEviKO69Pww=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=TvAzMBvw+7pqMaw76pvdDAJFa8J14riKoIBBcuULFCuDgcHMntPeQNaHi1/vuZxpo
-         dGHDkc90IsyrIAM/yBdmXAXoalY23d5KREt2KGKnyo6vylFEs2h8Cjo3lyAjoXYwzm
-         2TRrH6nshedPE+VLx20LQ1yBEGwooiFbqXe+Ye68v2+r2QIDxbCKO9nXEHUiIQYA5e
-         kfe58LFa0yQTcoMTne92EKcweqN2wEJqEnpXswX1HQLIIKKRHLMj3ZckXkcUtcAiJs
-         1Y82te4gDFRW/dEtstkk9VX9wpsYRKr2JO1c2t78g0WpiDxdwvFl+4mHy8X9yu5wvN
-         er0azwE47Y0Xw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     alsa-devel@alsa-project.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        kernel test robot <lkp@intel.com>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Takashi Iwai <tiwai@suse.com>
-In-Reply-To: <20221108001829.5100-1-rdunlap@infradead.org>
-References: <20221108001829.5100-1-rdunlap@infradead.org>
-Subject: Re: [PATCH v2] ASoC: codecs: wsa883x: use correct header file
-Message-Id: <166819738332.635730.5845715184483403230.b4-ty@kernel.org>
-Date:   Fri, 11 Nov 2022 20:09:43 +0000
-MIME-Version: 1.0
+        s=k20201202; t=1668197416;
+        bh=9ZvXetzw+91Fgm1dOLURSzTHjBfK/S906d1KMXN2hSM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=iFkcPE4OEoKEVZJKYVHLfyzWLnIeyc46j24DE4NU71Pc/6KRw58QVJFo0W+tLzbDB
+         ktBhltmHAHhybo063ganPEu3aLHExuEw1+tx38yXkpr3z52+PewFJmE7frmbH0XpBP
+         sEiPvtdLvTw4TEGNadffhq+HFigik2TKJWmES9Xukyd5SeFChIQi1yb+k1DsmRISh4
+         uGmHKHle78bPN39e855xJSXT3LTmdguiYB7VIke3tF7eZhi/8gzQ0p4nAzU+dwfxm/
+         qlEZFajJACVVGcmUhrNMk2w0ufzeKbxg9AiSLC2zYmKr+6yZzAZzIYGdpuzqQIl8Mn
+         QZhM9CNwQreVA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 12306E270EF;
+        Fri, 11 Nov 2022 20:10:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
+Subject: Re: [PATCH bpf v2 0/2] Fix offset when fault occurs in
+ strncpy_from_kernel_nofault()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166819741604.18746.14256287708522363196.git-patchwork-notify@kernel.org>
+Date:   Fri, 11 Nov 2022 20:10:16 +0000
+References: <20221110085614.111213-1-albancrequy@linux.microsoft.com>
+In-Reply-To: <20221110085614.111213-1-albancrequy@linux.microsoft.com>
+To:     Alban Crequy <albancrequy@linux.microsoft.com>
+Cc:     bpf@vger.kernel.org, stable@vger.kernel.org,
+        flaniel@linux.microsoft.com, akpm@linux-foundation.org,
+        andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
+        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        martin.lau@linux.dev, mykolal@fb.com, sdf@google.com,
+        shuah@kernel.org, song@kernel.org, yhs@fb.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,43 +63,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 7 Nov 2022 16:18:29 -0800, Randy Dunlap wrote:
-> Fix build errors when GPIOLIB is not set/enabled:
+Hello:
+
+This series was applied to bpf/bpf.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Thu, 10 Nov 2022 09:56:12 +0100 you wrote:
+> Hi,
 > 
-> ../sound/soc/codecs/wsa883x.c: In function 'wsa883x_probe':
-> ../sound/soc/codecs/wsa883x.c:1394:25: error: implicit declaration of function 'devm_gpiod_get_optional'; did you mean 'devm_regulator_get_optional'? [-Werror=implicit-function-declaration]
->          wsa883x->sd_n = devm_gpiod_get_optional(&pdev->dev, "powerdown",
-> ../sound/soc/codecs/wsa883x.c:1395:49: error: 'GPIOD_FLAGS_BIT_NONEXCLUSIVE' undeclared (first use in this function)
->          GPIOD_FLAGS_BIT_NONEXCLUSIVE);
-> ../sound/soc/codecs/wsa883x.c:1414:9: error: implicit declaration of function 'gpiod_direction_output'; did you mean 'gpio_direction_output'? [-Werror=implicit-function-declaration]
->          gpiod_direction_output(wsa883x->sd_n, 1);
+> This is v2 of the fix & selftest previously sent at:
+> https://lore.kernel.org/linux-mm/20221108195211.214025-1-flaniel@linux.microsoft.com/
+> 
+> Changes v1 to v2:
+> - add 'cc:stable', 'Fixes:' and review/ack tags
+> - update commitmsg and fix my email
+> - rebase on bpf tree and tag for bpf tree
 > 
 > [...]
 
-Applied to
+Here is the summary with links:
+  - [bpf,v2,1/2] maccess: fix writing offset in case of fault in strncpy_from_kernel_nofault()
+    https://git.kernel.org/bpf/bpf/c/8678ea06852c
+  - [bpf,v2,2/2] selftests: bpf: add a test when bpf_probe_read_kernel_str() returns EFAULT
+    https://git.kernel.org/bpf/bpf/c/9cd094829dae
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Thanks!
 
-[1/1] ASoC: codecs: wsa883x: use correct header file
-      commit: 5f52ceddc40cd61b1dd2ecf735624deaf05f779f
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
