@@ -2,76 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBA162695E
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 13:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C093626976
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 13:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234820AbiKLMdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 07:33:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
+        id S231768AbiKLMni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 07:43:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbiKLMdK (ORCPT
+        with ESMTP id S234317AbiKLMnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 07:33:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76476140A3;
-        Sat, 12 Nov 2022 04:33:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0657F60BC5;
-        Sat, 12 Nov 2022 12:33:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7211C433C1;
-        Sat, 12 Nov 2022 12:33:07 +0000 (UTC)
-Date:   Sat, 12 Nov 2022 07:33:05 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-nfs@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: Files in include/trace/events
-Message-ID: <20221112073305.0346b827@rorschach.local.home>
-In-Reply-To: <20221112072742.065df70a@rorschach.local.home>
-References: <20221112072742.065df70a@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sat, 12 Nov 2022 07:43:35 -0500
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C033C1570C;
+        Sat, 12 Nov 2022 04:43:34 -0800 (PST)
+Received: by mail-wr1-f43.google.com with SMTP id g12so9679196wrs.10;
+        Sat, 12 Nov 2022 04:43:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K6Bc2gTV0O0wWaaiJt+7TbO5Q/u6dV/Zvu16eLjh5vU=;
+        b=hQtZVEPbvHQCdBCkXtM3vO+HtlC/yP//imVaZxmxiJe7eOIFnXw52ma8HNUhFgJLrP
+         2b03dnBGA4cZj9cMrZqq4btAxU3awSk/LnV+Ekp42RLNHF016l0aieVuneUuw1m/Ijxk
+         TEMUAkhoJCZ2+Do73Bt8HOGJi0MTSAvgboIlRsTdx9PItFUD6TjXeHA96quCn1e/icwI
+         tFIJPy8VI6JcGwb8doYDj3rj13RkwM9lQDHFhAO9HWPSextGnH/slbUEMSgm/IJ+62D4
+         izMzvFp6B4P995eRlyI118BCx/V/0Ui75oi4cOYgEniNA0FL8peqFZvXRNPUGZXrMoBD
+         oKGw==
+X-Gm-Message-State: ANoB5plzZBmaGdYKQMWjoqVqhmqX+2iY5pEN2vN4oNFNjmKougjNEpgC
+        6Z8Cp/uRsXS++VteXgX8rMQ=
+X-Google-Smtp-Source: AA0mqf4zlURPuVIhgKKj3JDFMpvmT0oiHzFdFH11U2vmHog8ITHC4je/qkQWvwpyUBL+wqTB5nJEmQ==
+X-Received: by 2002:adf:cf12:0:b0:236:611d:b6b9 with SMTP id o18-20020adfcf12000000b00236611db6b9mr3619896wrj.190.1668257013247;
+        Sat, 12 Nov 2022 04:43:33 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id m3-20020a5d6243000000b0023660f6cecfsm4343306wrv.80.2022.11.12.04.43.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Nov 2022 04:43:32 -0800 (PST)
+Date:   Sat, 12 Nov 2022 12:43:30 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "quic_jhugo@quicinc.com" <quic_jhugo@quicinc.com>,
+        "quic_carlv@quicinc.com" <quic_carlv@quicinc.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "sthemmin@microsoft.com" <sthemmin@microsoft.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "helgaas@kernel.org" <helgaas@kernel.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
+        Boqun Feng <Boqun.Feng@microsoft.com>
+Subject: Re: [PATCH v3] PCI: hv: Only reuse existing IRTE allocation for
+ Multi-MSI
+Message-ID: <Y2+U8tNI+tuQPlXR@liuwe-devbox-debian-v2>
+References: <20221104222953.11356-1-decui@microsoft.com>
+ <Y24cTE9+bqXtHics@lpieralisi>
+ <SA1PR21MB133572B296D53A64A1A6792FBF039@SA1PR21MB1335.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SA1PR21MB133572B296D53A64A1A6792FBF039@SA1PR21MB1335.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 12 Nov 2022 07:27:42 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Sat, Nov 12, 2022 at 12:58:33AM +0000, Dexuan Cui wrote:
+[...]
+> 
+> I discussed the issue with Hyper-V team. I believe I understood it and
+> this patch is the right thing to have.
+> 
+> @Wei, Bjorn spotted two typos in the commit message, and Lorenzo
+> suggested a change to the above "current". Can you please help
+> fix these and merge the patch? Or, let me know if it'd be easier if
+> I should send v4.
 
-> Hi Chuck,
-> 
-> I was just looking over some files in include/trace/events/ and noticed
-> that there's sunrpc_base.h, fs.h and nfs.h that are not event files.
-> 
-> The include/trace/events/ directory should only hold files that are to
-> create events, not headers that hold helper functions.
-> 
-> Can you please move them out of include/trace/events/ as that directory
-> is "special" in the creation of events.
-> 
-> Perhaps we could create a new directory include/linux/trace/ or
-> include/trace/linux/ specific for these types of files?
-> 
-
-Hi Vlastimil,
-
-I also noticed that mmflags.h is in that directory too.
-
-I'd like to keep only headers defining TRACE_EVENT() in that directory,
-as files there have special meaning.
+All fixed and patch applied to hyperv-fixes.
 
 Thanks,
+Wei.
 
--- Steve
+> 
+> Thanks,
+> Dexuan
+> 
