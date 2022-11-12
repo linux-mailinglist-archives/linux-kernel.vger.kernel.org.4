@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD68B626697
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 04:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1D0626698
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 04:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234519AbiKLDXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 22:23:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
+        id S234608AbiKLDXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 22:23:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234425AbiKLDW7 (ORCPT
+        with ESMTP id S234431AbiKLDXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 22:22:59 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9AD6CA1D;
-        Fri, 11 Nov 2022 19:22:59 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id o13so5795786pgu.7;
-        Fri, 11 Nov 2022 19:22:59 -0800 (PST)
+        Fri, 11 Nov 2022 22:23:02 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DA16BDEF;
+        Fri, 11 Nov 2022 19:23:01 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id g62so6401919pfb.10;
+        Fri, 11 Nov 2022 19:23:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mRuX+j+EX9l8i8hDmmemd16C6a6HV399XyOmvJyZheQ=;
-        b=eCmqycyV6SF4+MBfj8mZjtXU83WS4vKKwxamThMHBx5bhoGOBddHio63RFoG1x/S6q
-         dduEPCFh01zoEp6IVarbUn5JnQhJejBfO5ppqWTHXHQl5drY0pxIDRtZgdKAxuuwkIJq
-         0vUkrfCXO+f+KeIf9WJ2UCfW7T8/2RnrOGw+bBS2R+5rs6zHezmlhRPOimkiiHLdOyip
-         kTQPUFtBQJgC77VAgAxF56CH6ITFZ8hV4HWQWPJsD9rje8WvhIfmt3nWUIbx+VbpdqCc
-         JBt8x8P0CKxwmOTPf5vzF1EWE4PQxoIC6zmDQH07uOQG2SxDDFh2nWSSS5A/H55+Jy+N
-         VD8w==
+        bh=QbEusILygfyXCEYiRvFZYs6C5FIrT8mquksHXk+bSQE=;
+        b=nFWYLFCBnNJIWO0i7LwEHho/IHZxZr9ZFzjAaSJ0N103+jj0CMLjuhKLu8cWWS9oox
+         i3mEVOCCFaBd05ZpkrIjuv0ljua8sjwbR26wry1ReovQUOhTBr77hZNPPuhjuL4KqCMd
+         LaMtQPUb/BqSPJzKQvYWILGIFyHcryi4bbwM1MiGvs2oQUC8AEhxjd1awBVSRwLLKR6R
+         34kNGr/yJvQ46fN04rkxH6NuLnW8TFLcdHUacFb4MHlgczWUiw13wYvChLtfoLXQBOFs
+         +fxlDveeGlTqp6I/VPRZW6FHIoV8tAjmjF7xG1H2LOb5N7LL+Nu98j49F/kIznWdz1zb
+         kKLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=mRuX+j+EX9l8i8hDmmemd16C6a6HV399XyOmvJyZheQ=;
-        b=PfMltaOb7ltalhSghgXoEJ+krMOldG+CQfutiSaaS15SxB2BB/1ckdXtWpU+/FvgYV
-         5f4EQz+ue6nN8iPy+oYMvASEC9x49X3dhPdzJHWnPCEISgDMgt0vNjIXwQ72s3OXIIwQ
-         /mS2UZ0U+/usME12ryHmpquwZfyh3/+eVNtbJunWwTaWrO5Xv1rzWBTpudMiKqNm0kgO
-         yuBpR/qJ1FFGk97P81zur9e6Ht/LQ2QjmTGgtBc0T/or6onsYveZHIH9EnINpdXjP1ci
-         tolux5t5vRUr+pyrtJCevP3AltHjZeNw2oNmXMnFziun3jpHpxouBjjg1Ur5uvmXel8h
-         9BYQ==
-X-Gm-Message-State: ANoB5pnc2NG23EvtRy8Nyi7n8Z6/arDbbaoE1Ip2ls0rwYG3IjNN2nwO
-        YlO1OKFDHbb/ME8N7N6DENSRGlFRoXQ=
-X-Google-Smtp-Source: AA0mqf6RGm5DjGG9GMLCY75uITjGxkEM4Mqa16cxF9++STXV2UR+3A8KGDgUgmcCm1lvrQsS1KHv7w==
-X-Received: by 2002:a65:498c:0:b0:46f:918e:7338 with SMTP id r12-20020a65498c000000b0046f918e7338mr4179286pgs.8.1668223378601;
-        Fri, 11 Nov 2022 19:22:58 -0800 (PST)
+        bh=QbEusILygfyXCEYiRvFZYs6C5FIrT8mquksHXk+bSQE=;
+        b=gnF2yUYvZQ7LGprX0vSyrpFRhhnmr60i1EYV6nKEbtfE3r5BdxpaUB7X3ILGlcfK23
+         DZ+WUVpps3MvAIR1SZOHoI9ynwBWTeGacwbQpXB3Fh+WyPDeArulZ3UQaTQFyb5texsu
+         wA2EiZZXExK8SONf8wv7OBVjvOufPiUbBx0ynvutKwqUjPGlMkXJKwhiRznImcXV/vLr
+         VM1lzaVN/CHUBD7WPthkyqeSoPnmrdhOsNPYB1y3KGCop8fBX7b2OfjUclR4BMORISWN
+         K5MDsFK2YYiJmvoC3hUrAECbIWWl/d2mjoHprcsYySOsPjEE+8HhSuEuXADoZ6Lb2xW3
+         6S6w==
+X-Gm-Message-State: ANoB5pkHPmlSby5OjHPBfAULdrA9YXnZOsXMJNx2YWhZWgS4Aa070Bnu
+        yUbssFDWCZhtrWoxUDRaFSE=
+X-Google-Smtp-Source: AA0mqf4TAKxmdWaVyBAbpcpCh7pItq+ZzIqTMILvY2ViyogaqHH5IKQBfxf81ofFv/214ca8dHqVTQ==
+X-Received: by 2002:a63:e60b:0:b0:470:3fc2:2b08 with SMTP id g11-20020a63e60b000000b004703fc22b08mr4006195pgh.162.1668223380465;
+        Fri, 11 Nov 2022 19:23:00 -0800 (PST)
 Received: from balhae.roam.corp.google.com ([2607:fb90:27dc:8408:33d7:3b01:eee1:84b])
-        by smtp.gmail.com with ESMTPSA id ij25-20020a170902ab5900b00186f0f59d1esm2434552plb.192.2022.11.11.19.22.56
+        by smtp.gmail.com with ESMTPSA id ij25-20020a170902ab5900b00186f0f59d1esm2434552plb.192.2022.11.11.19.22.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 19:22:58 -0800 (PST)
+        Fri, 11 Nov 2022 19:23:00 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -63,9 +63,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Kan Liang <kan.liang@linux.intel.com>,
         Zhengjun Xing <zhengjun.xing@linux.intel.com>,
         James Clark <james.clark@arm.com>
-Subject: [PATCH 06/11] perf stat: Do not indent headers for JSON
-Date:   Fri, 11 Nov 2022 19:22:39 -0800
-Message-Id: <20221112032244.1077370-7-namhyung@kernel.org>
+Subject: [PATCH 07/11] perf stat: Add header for interval in JSON output
+Date:   Fri, 11 Nov 2022 19:22:40 -0800
+Message-Id: <20221112032244.1077370-8-namhyung@kernel.org>
 X-Mailer: git-send-email 2.38.1.493.g58b659f92b-goog
 In-Reply-To: <20221112032244.1077370-1-namhyung@kernel.org>
 References: <20221112032244.1077370-1-namhyung@kernel.org>
@@ -81,37 +81,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently --metric-only with --json indents header lines.  This is not
-needed for JSON.
+It missed to print a matching header line for intervals.
 
-  $ perf stat -aA --metric-only -j true
-        {"unit" : "GHz"}{"unit" : "insn per cycle"}{"unit" : "branch-misses of all branches"}
-  {"cpu" : "0", {"metric-value" : "0.101"}{"metric-value" : "0.86"}{"metric-value" : "1.91"}
-  {"cpu" : "1", {"metric-value" : "0.102"}{"metric-value" : "0.87"}{"metric-value" : "2.02"}
-  {"cpu" : "2", {"metric-value" : "0.085"}{"metric-value" : "1.02"}{"metric-value" : "1.69"}
-  ...
+Before:
+  # perf stat -a -e cycles,instructions --metric-only -j -I 500
+  {"unit" : "insn per cycle"}
+  {"interval" : 0.500544283}{"metric-value" : "1.96"}
+  ^C
 
-Note that the other lines are broken JSON, but it will be handled later.
+After:
+  # perf stat -a -e cycles,instructions --metric-only -j -I 500
+  {"unit" : "sec"}{"unit" : "insn per cycle"}
+  {"interval" : 0.500515681}{"metric-value" : "2.31"}
+  ^C
 
 Acked-by: Ian Rogers <irogers@google.com>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/util/stat-display.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/util/stat-display.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index 3ddc159df4b2..dbd3ba380c9f 100644
+index dbd3ba380c9f..03d58277e8d6 100644
 --- a/tools/perf/util/stat-display.c
 +++ b/tools/perf/util/stat-display.c
-@@ -851,7 +851,7 @@ static void print_metric_headers(struct perf_stat_config *config,
- 	if (prefix && !config->json_output)
- 		fprintf(config->output, "%s", prefix);
+@@ -860,6 +860,10 @@ static void print_metric_headers(struct perf_stat_config *config,
+ 		if (!config->iostat_run)
+ 			fputs(aggr_header_csv[config->aggr_mode], config->output);
+ 	}
++	if (config->json_output) {
++		if (config->interval)
++			fputs("{\"unit\" : \"sec\"}", config->output);
++	}
+ 	if (config->iostat_run)
+ 		iostat_print_header_prefix(config);
  
--	if (!config->csv_output && !no_indent)
-+	if (!config->csv_output && !config->json_output && !no_indent)
- 		fprintf(config->output, "%*s",
- 			aggr_header_lens[config->aggr_mode], "");
- 	if (config->csv_output) {
 -- 
 2.38.1.493.g58b659f92b-goog
 
