@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634F962694D
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 12:49:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574E662694F
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 13:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234942AbiKLLtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 06:49:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44410 "EHLO
+        id S234875AbiKLL6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 06:58:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232841AbiKLLto (ORCPT
+        with ESMTP id S231534AbiKLL6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 06:49:44 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1DE13E34
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 03:49:43 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id bp15so11938918lfb.13
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 03:49:43 -0800 (PST)
+        Sat, 12 Nov 2022 06:58:17 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFAD114D02
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 03:58:16 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id i10so9333121ejg.6
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 03:58:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4oNgcDzAUynKRRT1NTYmiRuAAnV2qyMqsSjvtfnRj8g=;
-        b=b2oAN9hLamT+7bUdqbVUObYzuMEXQ2KhWnDf/DTBjBcc9VXz4cSpyHSY2srgzMwHOO
-         RPCA2VE3ooPB2FfxIgti+s7moF+bcdQbx5Nx9h3gGpBRN2S2V0Oued4UK+wN9RgEJRfZ
-         GLPWlQiGu5JeY2c9T7b8cil2Czn7LdGBUWZX0EnT0mOurUEa9M7+O2b3QfYZRb/UVTkl
-         UMSxPOs/Iqe836E46UimuCF12hmjVeBDz0uJ2gftWY4Oxx7VgSNTXeLcksHArvJ/PkLO
-         JlnX/QSOv7F/YtCZa0vPU5RJiDNiVjF5wbKuiW4ge4mWxxzKgg4bhMQSSJOkXlwME6E0
-         KvRA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dr4Vea0ZgfDIrh0NgQW5X1KnTm1YYJOqCu5lHDruVuo=;
+        b=LyNePSjeGke1N99yFA9QNQES3SGpxz5Cnv1ATBzBblS+nYYvj/fhpx3erl1MIHgyXz
+         gljwcL3cUEr1/aBDJ55hdiM9mRVHOE7zShbXAIJeTUaa24ZzmJW1HmPbgCcG/HZZxXYW
+         MG1tL6bjeKzMLMVSXbqo+9EqWMO4pOcimjUDCfWEIyUvS7z0djf1MLObXOHBG7DwNRtv
+         gZBIkLTRn73yhITr6RQukRR9yylyqlHuMrO6qlSMY+oUA3V9gd0WHjznrfXdt3dMj05F
+         Vl8CXcvgmlDCmgZKfDtDPTuXXWX8w26p3WM2Ij7Q62CWqO7G8BN9gezOUYrE/vc+3Fmp
+         Hjcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4oNgcDzAUynKRRT1NTYmiRuAAnV2qyMqsSjvtfnRj8g=;
-        b=QDIUoJV95Aau4u+GSatFm7E72U63IxmZEWgGKAo5LgAh5PNwT6v8YoRQ3Zsnq3/buC
-         AcyUVndAxtC86T/p+Lr9UCTOItsDrfXFjUy+Ys4Rhx3QWhNGcizYUPSg8AB0QU0uKOYt
-         sqp138sm+UwPXdpq2Me/dQ4I2bpvPekQfbMr09NlqKnP5RDAmceotiHyLNGuuU0mGe59
-         lM74udy9KMwvnbMsKkVNk70xmDppPi4obQ5o04lMZe88BkrCz5A0jThsLyUwGRYYH17k
-         Ab0wA4oFz4aWUEHzBm+q/JpEprDUZo7lOUAWkV7ZH7n3QE0OQ9694IpJ/yF2MXhg9ppx
-         h0+A==
-X-Gm-Message-State: ANoB5pkW/mgjpf4nQSUO1B6QHdkmpYAenoMei6TOt3jwJY5xQNp73/I0
-        4ugADjwolwl9OsYyBXQL2N+gxA==
-X-Google-Smtp-Source: AA0mqf4SA4FNsJtTeK540ABTurSznwTaWEG1mn5nfaXargOpNqwuQeJlmyzdOq1CNq4tdSubS2xikw==
-X-Received: by 2002:a05:6512:298f:b0:4a4:5e83:e07d with SMTP id du15-20020a056512298f00b004a45e83e07dmr1875576lfb.409.1668253781771;
-        Sat, 12 Nov 2022 03:49:41 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id z36-20020a0565120c2400b004a47a92ff4csm836171lfu.193.2022.11.12.03.49.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Nov 2022 03:49:41 -0800 (PST)
-Message-ID: <4c3dd58e-7162-3457-c785-dbd44eab7628@linaro.org>
-Date:   Sat, 12 Nov 2022 14:49:40 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Dr4Vea0ZgfDIrh0NgQW5X1KnTm1YYJOqCu5lHDruVuo=;
+        b=XLm5RdvefX1xY8zD+BdI6MrbXgHUJhSw2TAT8g3eT+a55lhPb6x0TznKQOHAZ4RNX7
+         qdYdQanOyVa3rLCodcNsT2wtpszks1ezX4ZoFTxmhSDQQMVOSEcRAVwqUlY/MTAmgcA0
+         lSdguoHKkDI0QncMup+SHjMUE7cMmYTsTBEaBBiETrRpzqF4SBqrGHttfvu0T3Iatuec
+         VhY57g0cu4DHr5jBXemdXjhUXDsQXeFrWx5qWDGvBVpJVF5UOzeQ7Pqfa/vgzGH3C6gQ
+         VbLk4/mV5joRzQfRllNEKQ7XBGqcoRg0yY3Vuk24UKBO8oXjDAzD3YXhLZS6psIXFio0
+         R35g==
+X-Gm-Message-State: ANoB5pkTZIYGuRIf+eyNZyA0DISjlZD/zKXLl/3H4S59m2QACqD9nmoe
+        5T4YeZOPbnkHspzfOy6JQ9aQ6UuShO+7Aj4+XCLN4gIO
+X-Google-Smtp-Source: AA0mqf4CaXymmqSrv8yHZ6uYbBq+7vdvdFmirtvcTF0/8lgbemDKeM+hQrrJIcgwmUgZw6+D6fLQeiZoGMPx8e8zs0A=
+X-Received: by 2002:a17:906:f2c3:b0:78d:d762:5457 with SMTP id
+ gz3-20020a170906f2c300b0078dd7625457mr5248096ejb.67.1668254295317; Sat, 12
+ Nov 2022 03:58:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sc8280xp: drop reference-clock
- source
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221111093857.11360-1-johan+linaro@kernel.org>
- <20221111093857.11360-4-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221111093857.11360-4-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CAOM0=dbwNs1XcnD0i+SrC1S-SNFEGXM5G8QrVCqAxaz=YkAEFg@mail.gmail.com>
+ <20221112074759.GA5111@1wt.eu> <CAOM0=daopCt=LthGStL2zHYxgQ6iphLLfKZjxcPS07yCvyq42Q@mail.gmail.com>
+ <20221112113410.GA5553@1wt.eu>
+In-Reply-To: <20221112113410.GA5553@1wt.eu>
+From:   A <amit234234234234@gmail.com>
+Date:   Sat, 12 Nov 2022 17:28:04 +0530
+Message-ID: <CAOM0=dbuPP1j7MYkZCxbXQKxUsjeO0QXfE_g-xapFXYSpCAgXw@mail.gmail.com>
+Subject: Re: Setting variable NULL after freeing it.
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/11/2022 12:38, Johan Hovold wrote:
-> The source clock for the reference clock should not be described by the
-> devicetree binding and instead this relationship should be modelled in
-> the clock driver.
-> 
-> Update the USB PHY nodes to match the fixed binding.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 8 ++------
->   1 file changed, 2 insertions(+), 6 deletions(-)
+On Sat, Nov 12, 2022 at 5:04 PM Willy Tarreau <w@1wt.eu> wrote:
+>
+> On Sat, Nov 12, 2022 at 04:18:37PM +0530, A wrote:
+> > >
+> > > It depends. What's important is not to let a pointer exist to a freed
+> > > location, so if you're doing:
+> > >
+> > >     kfree(card->pool);
+> > >
+> > > then it's usually important to follow this by:
+> > >
+> > >     card->pool = NULL;
+> > >
+> >
+> > I checked in kernel but at many places this is not being done. I can
+> > change all that code. But, will the patch be accepted?
+> >
+> > So, if someone is doing -
+> >
+> > kfree(x)
+> > ._some_code_
+> > ._some_code_
+> > ._some_code_
+> >
+> > Then I can change it to -
+> >
+> > kfree(x)
+> > x = NULL;
+> > ._some_code_
+> > ._some_code_
+> > ._some_code_
+> >
+> > But, will the patch be accepted for this change?
+>
+> I don't think so, for the reasons I explained previously,
+> unless you spot real bugs there during your reviews, of
+> course. Better focus on your own driver for now in my
+> opinion.
+>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+I was just thinking that when this is good practice (where its usage
+is genuine), then why is there not a kernel wide macro that would call
+kfree(x) and then set (x) = NULL. So, this will be done automatically
+for everyone and the developer will not have to decide whether to do
+this or not.
 
--- 
-With best wishes
-Dmitry
-
+Amit
