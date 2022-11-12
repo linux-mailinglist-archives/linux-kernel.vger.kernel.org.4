@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AEB626950
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 13:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5124626951
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 13:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234910AbiKLMEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 07:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
+        id S234915AbiKLME5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 07:04:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233962AbiKLMEx (ORCPT
+        with ESMTP id S231534AbiKLMEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 12 Nov 2022 07:04:53 -0500
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F1A17895
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FBF1789F
         for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 04:04:53 -0800 (PST)
 Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id B04E65C00D7;
-        Sat, 12 Nov 2022 07:04:50 -0500 (EST)
+        by mailout.nyi.internal (Postfix) with ESMTP id ADEA55C00D9;
+        Sat, 12 Nov 2022 07:04:51 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sat, 12 Nov 2022 07:04:50 -0500
+  by compute2.internal (MEProxy); Sat, 12 Nov 2022 07:04:51 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
          h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1668254690; x=1668341090; bh=x9FizG+eL/
-        8/EI7i81TIdmOdCun6VmkRyznqPByhDis=; b=XoJPG62A97EKGbYvKLrn2BxEfc
-        /e1ug9nk80w5t0KyhMnUyameiIsYSIrwpdLZkuDnQaEZgBDP6njcMR5SYjIh8HzT
-        BcgCvKrgsv82CpZh+1WY5xaAR6VJEljFPIXVnCaiFEpvEe3xrbGEz4uDYNjMXjSF
-        oUtmb/p2IUsaNAoAYSDUsitHMYvKfKiglDrJ2wXW9mptibPaPZt+gRM6E3HM0J8E
-        TviFyiKShLo6eJ08gm6X2GYXtQ6dFqf6JBv+6SDxU3Pa4RPkZ3x1c8WlWxgeXkLX
-        hoNFE5Nb2WwVGzTiUK1z9TA9cOTaOZ5y/3LJiFTfMecCXfQGJVYiZfpTxoaA==
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1668254691; x=
+        1668341091; bh=igfPzLZ+nsYXDcd0iC5P+vvdO2NXmHjJ5YJY8H2HHmo=; b=L
+        p0a244iTn5L+2cSWaU3yOB2iYxD9pCB2533PT/bkDh9zySFlEo8jjvwXAYRrJlVb
+        cVgWam8V0IGDw3wtb9JXH4PoxKc+xaD/PRQOVMWAHiy48Tz5ks/r5C+I59WSa4JJ
+        iMKsnY1o3Svjb14Z/tBLqcSYMm0DnuT07rV9p9sejlKHn7zoU6uWXRffYIPSbxNZ
+        zhFqst9U5leIHuYj3ArewuJoUg26uyXwEiGIGXRPXfPl+6Wzp+y0PCoxJL09ZM+w
+        dPUSdnzI/yH0Voc246ZqgMR34nrF938BRr56jlq18/k+cqzDanpEq9XxpvtAojdS
+        X84WljKF7lgWxj8HDhZtg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1668254690; x=1668341090; bh=x9FizG+eL/8/EI7i81TIdmOdCun6VmkRyzn
-        qPByhDis=; b=C12n0toL5UY1BE0ooeeFIycg0oKY8VmiQyhHJ92+E+DZLWWKVB0
-        YfMPX30G4blpX0nQPB+Nz589wFlVM0ybC4K6DKTUEwcAnX+HxreUQqqN1bMXOfSz
-        nl2Mb+cAgQFno+ySIbrEHsKCRTomb+sMxUPvldwLYJghzgqq0cmcgr3T/Oo/CKW1
-        D9pbYCMMOEm/ElFK0rBig/qUHg8iWEJ15qkfDNUGLWLjjozLZ9ep9aQBztCp5TBI
-        Vj3H38w+1h2dKZdVcwMcCx8Cv8E/MraD93C8A+8yCQ1Ex9kIgP1hjP8PttTwGA+k
-        ZlFOPjvOnMcLPyNAO1q2EQlUpA6JjgyifbA==
-X-ME-Sender: <xms:4otvY9gKu-4vENtRwn7o_CAOfVd8jIq4avpGJKe23mejQFVmwPUaeg>
-    <xme:4otvYyDKd0hHhCM4M3rcg2zV-y6vEmVdwmFu6nYzUwZc_zYKpvPISV2XfvTOd_B5r
-    XcbIJO5jt7hv7iHfTM>
-X-ME-Received: <xmr:4otvY9EneofXnxZIZ_zwwrP4Dmv-IQXItNgl3sA8ai0ajscsUUQvpFD48v5kKV6jKDTPh7lqMXUnLe-1sanW3g7xf8boP53EOBhmuxYc2zODNo6O9heF30SJN-SUGw>
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1668254691; x=1668341091; bh=igfPzLZ+nsYXD
+        cd0iC5P+vvdO2NXmHjJ5YJY8H2HHmo=; b=MlbwPAFYQvSPvUgBkBkrKrZD30aXG
+        yqsg7s59OYRpOIMCVDXgwTP3OzDmBiJCyvKxe9+0CIBzIV1Jq6zCXMcj3wAKL35Q
+        XSAj91FWdufIzDZgZuAKfueaH3dOE+uTQ+iRpOpj8lFPLh9F1E/DIGFYTGgX+3Nd
+        EH+KilAD24iW0hJo+WMmU5auvRvrHPU1S/iTHJwmQnZmTRB0qV6E7r16Cf5vdhq/
+        rnBk35GJy0QltZ/o7uY/377o1Vl6hqTiU3+x67G95nw8N4abJxE9XZUAjkBCJTiJ
+        n1tGiffuCDLYTSDGqVwO3Bj2hxZvnSaq0aWSDAC/oRdRLI8kWJZnuEgdA==
+X-ME-Sender: <xms:44tvY1jJL2d5CyI20aHBajM1uUCBQp1ej4vp1Aaodiod756vhvXqJA>
+    <xme:44tvY6DmUxNIRpPe2u4ik2996rIIDFgMl1XPHnXqm-gfg9U7c2iJXyPEdHRb6kpLz
+    AFQ-DZq3oViq0KZR8Q>
+X-ME-Received: <xmr:44tvY1FKze4lTebpxl65tiGADvhQZmyJZ53kdEid5nBs0PXW2WXhjoEourgOpoFtpJBdYn7qzYs19rsr0gXETnm2SkKKt-MXi2lYK2hUP8074d4wKWY--dAFPcw0QQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeekgdefjecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
-    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
-    epleduffeiheeuvedtffevtdeuleeljeduudfgtedtvefhfeffvdfghfejhefgleelnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnse
-    hsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:4otvYyQmWKbdHrgADoqe78cHBA1kRVCrqGBL9_j25BRdQAzucwNfSQ>
-    <xmx:4otvY6xZQKMA-MPPkTbxO3_3bBP24G75EOkI4xXWgWU-nlpVc2sbXQ>
-    <xmx:4otvY45Sbaa0hiTu-DWsUi1RpLFKfyctEMnRDjX_YF4YQP1rXdhJpg>
-    <xmx:4otvY_pRmCtoMbiACaklPnFbJ0_gjZYxB3MvGQ3APTBrZ80nCt2bnA>
+    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcu
+    rfgvthgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvg
+    hrnhepjeeiheehkeegvdejhfevkeejgfdutdefhfethedtieffleekieeuudefleekjeeg
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvg
+    hnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:44tvY6TWvCOIt4Ebk4tHmfVS-zAdqX69PpSOEME6SaIySfNkRnAkSw>
+    <xmx:44tvYyyAsjNdFUEF4v31JqgOfWOjefQhZU-bQYqhLX1MoZ1qALpn7w>
+    <xmx:44tvYw63njNDnIpcbEz6OSvFU5kM3k8jsL39TQnQ72a9fE03WBSddw>
+    <xmx:44tvY3qSsuGoDEUxgpuStRzxNb8Q7guGQWm_wLl7HcNWmkbDpmDoSA>
 Feedback-ID: i51094778:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 12 Nov 2022 07:04:49 -0500 (EST)
+ 12 Nov 2022 07:04:50 -0500 (EST)
 From:   Sven Peter <sven@svenpeter.dev>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 Cc:     Sven Peter <sven@svenpeter.dev>, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] nvmem: Handle reading cells with bit offset > 8
-Date:   Sat, 12 Nov 2022 13:04:46 +0100
-Message-Id: <20221112120447.36877-1-sven@svenpeter.dev>
+Subject: [PATCH 2/2] nvmem: Handle reading nbits from cells with word_size > 8 correctly
+Date:   Sat, 12 Nov 2022 13:04:47 +0100
+Message-Id: <20221112120447.36877-2-sven@svenpeter.dev>
 X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+In-Reply-To: <20221112120447.36877-1-sven@svenpeter.dev>
+References: <20221112120447.36877-1-sven@svenpeter.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,54 +83,41 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Some nvmem controllers like Apple's eFuses or Nintendo's OTP have a cell
-size that's larger than one byte. Consumers may however still need
-access to a subset of bits that start after the first byte. Handle this
-inside nvmem_shift_read_buffer_in_place().
+word size that's larger than one byte and cannot read anything smaller.
+Round up cell->bytes correctly when accessing a subset of bits.
 
 Signed-off-by: Sven Peter <sven@svenpeter.dev>
 ---
- drivers/nvmem/core.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/nvmem/core.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index 321d7d63e068..a5b8d6989f8e 100644
+index a5b8d6989f8e..6906de15b9b8 100644
 --- a/drivers/nvmem/core.c
 +++ b/drivers/nvmem/core.c
-@@ -1379,15 +1379,23 @@ EXPORT_SYMBOL_GPL(nvmem_cell_put);
- static void nvmem_shift_read_buffer_in_place(struct nvmem_cell_entry *cell, void *buf)
- {
- 	u8 *p, *b;
--	int i, extra, bit_offset = cell->bit_offset;
-+	int i, padding, extra, bit_offset = cell->bit_offset;
-+	int bytes = cell->bytes;
+@@ -470,8 +470,8 @@ static int nvmem_cell_info_to_nvmem_cell_entry_nodup(struct nvmem_device *nvmem,
+ 	cell->np = info->np;
  
- 	p = b = buf;
- 	if (bit_offset) {
-+		padding = bit_offset/8;
-+		if (padding) {
-+			memmove(buf, buf + padding, bytes - padding);
-+			bit_offset -= BITS_PER_BYTE * padding;
-+			bytes -= padding;
-+		}
-+
- 		/* First shift */
- 		*b++ >>= bit_offset;
+ 	if (cell->nbits)
+-		cell->bytes = DIV_ROUND_UP(cell->nbits + cell->bit_offset,
+-					   BITS_PER_BYTE);
++		cell->bytes = round_up(DIV_ROUND_UP(cell->nbits + cell->bit_offset,
++					   BITS_PER_BYTE), nvmem->word_size);
  
- 		/* setup rest of the bytes if any */
--		for (i = 1; i < cell->bytes; i++) {
-+		for (i = 1; i < bytes; i++) {
- 			/* Get bits from next byte and shift them towards msb */
- 			*p |= *b << (BITS_PER_BYTE - bit_offset);
+ 	if (!IS_ALIGNED(cell->offset, nvmem->stride)) {
+ 		dev_err(&nvmem->dev,
+@@ -718,9 +718,9 @@ static int nvmem_add_cells_from_of(struct nvmem_device *nvmem)
+ 		}
  
-@@ -1400,7 +1408,7 @@ static void nvmem_shift_read_buffer_in_place(struct nvmem_cell_entry *cell, void
- 	}
+ 		if (cell->nbits)
+-			cell->bytes = DIV_ROUND_UP(
++			cell->bytes = round_up(DIV_ROUND_UP(
+ 					cell->nbits + cell->bit_offset,
+-					BITS_PER_BYTE);
++					BITS_PER_BYTE), nvmem->word_size);
  
- 	/* result fits in less bytes */
--	extra = cell->bytes - DIV_ROUND_UP(cell->nbits, BITS_PER_BYTE);
-+	extra = bytes - DIV_ROUND_UP(cell->nbits, BITS_PER_BYTE);
- 	while (--extra >= 0)
- 		*p-- = 0;
- 
+ 		if (!IS_ALIGNED(cell->offset, nvmem->stride)) {
+ 			dev_err(dev, "cell %s unaligned to nvmem stride %d\n",
 -- 
 2.25.1
 
