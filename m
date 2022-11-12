@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0DA262666B
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 03:14:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E73626678
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 03:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233940AbiKLCO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 21:14:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
+        id S234567AbiKLCWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 21:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbiKLCOZ (ORCPT
+        with ESMTP id S234074AbiKLCWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 21:14:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4422F390
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 18:14:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A104A6216B
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 02:14:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B61C433D6;
-        Sat, 12 Nov 2022 02:14:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668219263;
-        bh=+tm+xsR1tQp8oM+dXJOP/v2Bn3KbcrlSNgcjhMPwFMs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VylOaGGp5C904DyLxESWkoD7hLP1DL5i+r1idxrz9e+uKMr2H4d4Ugb2MXf6Nv+rt
-         4laYUfCy2JCmejkVXq8ZvlrawehgBcmRyDLQgA0DDW+FVptyHVZW8Gh3Oz/napcXw7
-         jwSzwTzirEdb6vV3fz92U6HdWVa8vCHntqPouIyDijF+bdGY+VO/MdP5NQ2jfXa6dC
-         dafgKjaf7Rkr2L21AdUo4MNXiLF0fWUedYOWDixtgFZ/+sZXOaOBQusL9T9zI8qhZX
-         m8oQ/Za/vMgTo5uW+efV/BdXM7SrL3V5sdDU4/IKxBAVE9UiE4qpQi4EeJip485UDf
-         ix6dvy4hN00gg==
-Date:   Sat, 12 Nov 2022 11:14:19 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Rafael Mendonca <rafaelmendsr@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: [PATCH 2/3] tracing/eprobe: Add eprobe filter support
-Message-Id: <20221112111419.10815958f6556740558ad2b9@kernel.org>
-In-Reply-To: <Y2sfkaIa4sBLuHGX@macondo>
-References: <165932112555.2850673.7704483936633223533.stgit@devnote2>
-        <165932114513.2850673.2592206685744598080.stgit@devnote2>
-        <Y2sfkaIa4sBLuHGX@macondo>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Fri, 11 Nov 2022 21:22:04 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54CA31217;
+        Fri, 11 Nov 2022 18:22:02 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N8K892mrsz15MPC;
+        Sat, 12 Nov 2022 10:21:45 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 12 Nov 2022 10:22:01 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 12 Nov 2022 10:22:00 +0800
+Subject: Re: [PATCH] rcu: Dump memory object info if callback is invalid
+To:     <paulmck@kernel.org>
+CC:     Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221105023519.147-1-thunder.leizhen@huawei.com>
+ <20221111074538.GS725751@paulmck-ThinkPad-P17-Gen-1>
+ <bccf11c7-f376-6b5b-f842-76e73bfae2cc@huawei.com>
+ <20221111183509.GW725751@paulmck-ThinkPad-P17-Gen-1>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <c50e9631-34d4-becb-2bbd-c55f982e972a@huawei.com>
+Date:   Sat, 12 Nov 2022 10:21:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <20221111183509.GW725751@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,291 +63,253 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
 
-On Wed, 9 Nov 2022 00:33:37 -0300
-Rafael Mendonca <rafaelmendsr@gmail.com> wrote:
 
-> On Mon, Aug 01, 2022 at 11:32:25AM +0900, Masami Hiramatsu (Google) wrote:
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Add the filter option to the event probe. This is useful if user wants
-> > to derive a new event based on the condition of the original event.
-> > 
-> > E.g.
-> >  echo 'e:egroup/stat_runtime_4core sched/sched_stat_runtime \
-> >         runtime=$runtime:u32 if cpu < 4' >> ../dynamic_events
-> > 
-> > Then it can filter the events only on first 4 cores.
-> > Note that the fields used for 'if' must be the fields in the original
-> > events, not eprobe events.
-> > 
-> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > ---
-> >  kernel/trace/trace_eprobe.c |  104 ++++++++++++++++++++++++++++++++++++++++---
-> >  kernel/trace/trace_probe.h  |    3 +
-> >  2 files changed, 98 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> > index 4a0e9d927443..8b32d1a3b9c7 100644
-> > --- a/kernel/trace/trace_eprobe.c
-> > +++ b/kernel/trace/trace_eprobe.c
-> > @@ -26,6 +26,9 @@ struct trace_eprobe {
-> >  	/* tracepoint event */
-> >  	const char *event_name;
-> >  
-> > +	/* filter string for the tracepoint */
-> > +	char *filter_str;
-> > +
-> >  	struct trace_event_call *event;
-> >  
-> >  	struct dyn_event	devent;
-> > @@ -589,14 +592,15 @@ static struct event_trigger_data *
-> >  new_eprobe_trigger(struct trace_eprobe *ep, struct trace_event_file *file)
-> >  {
-> >  	struct event_trigger_data *trigger;
-> > +	struct event_filter *filter = NULL;
-> >  	struct eprobe_data *edata;
-> > +	int ret;
-> >  
-> >  	edata = kzalloc(sizeof(*edata), GFP_KERNEL);
-> >  	trigger = kzalloc(sizeof(*trigger), GFP_KERNEL);
-> >  	if (!trigger || !edata) {
-> > -		kfree(edata);
-> > -		kfree(trigger);
-> > -		return ERR_PTR(-ENOMEM);
-> > +		ret = -ENOMEM;
-> > +		goto error;
-> >  	}
-> >  
-> >  	trigger->flags = EVENT_TRIGGER_FL_PROBE;
-> > @@ -611,13 +615,25 @@ new_eprobe_trigger(struct trace_eprobe *ep, struct trace_event_file *file)
-> >  	trigger->cmd_ops = &event_trigger_cmd;
-> >  
-> >  	INIT_LIST_HEAD(&trigger->list);
-> > -	RCU_INIT_POINTER(trigger->filter, NULL);
-> > +
-> > +	if (ep->filter_str) {
-> > +		ret = create_event_filter(file->tr, file->event_call,
+On 2022/11/12 2:35, Paul E. McKenney wrote:
+> On Fri, Nov 11, 2022 at 06:04:26PM +0800, Leizhen (ThunderTown) wrote:
+>>
+>>
+>> On 2022/11/11 15:45, Paul E. McKenney wrote:
+>>> On Sat, Nov 05, 2022 at 10:35:19AM +0800, Zhen Lei wrote:
+>>>> The callback rhp->func becomes NULL is usually caused by use-after-free.
+>>>> So the information about 'rhp' is very useful. Unfortunately, nothing is
+>>>> printed at the moment. Look at the panic output below, if no vmcore is
+>>>> generated, there is almost no way to analyze it except to know that the
+>>>> bug exists.
+>>>>
+>>>> Unable to handle kernel NULL pointer dereference at virtual address 0
+>>>> ... ...
+>>>> PC is at 0x0
+>>>> LR is at rcu_do_batch+0x1c0/0x3b8
+>>>> ... ...
+>>>>  (rcu_do_batch) from (rcu_core+0x1d4/0x284)
+>>>>  (rcu_core) from (__do_softirq+0x24c/0x344)
+>>>>  (__do_softirq) from (__irq_exit_rcu+0x64/0x108)
+>>>>  (__irq_exit_rcu) from (irq_exit+0x8/0x10)
+>>>>  (irq_exit) from (__handle_domain_irq+0x74/0x9c)
+>>>>  (__handle_domain_irq) from (gic_handle_irq+0x8c/0x98)
+>>>>  (gic_handle_irq) from (__irq_svc+0x5c/0x94)
+>>>>  (__irq_svc) from (arch_cpu_idle+0x20/0x3c)
+>>>>  (arch_cpu_idle) from (default_idle_call+0x4c/0x78)
+>>>>  (default_idle_call) from (do_idle+0xf8/0x150)
+>>>>  (do_idle) from (cpu_startup_entry+0x18/0x20)
+>>>>  (cpu_startup_entry) from (0xc01530)
+>>>>
+>>>> So add mem_dump_obj(rhp) to output some information, for example:
+>>>>   slab kmalloc-256 start ffff410c45019900 pointer offset 0 size 256
+>>>>
+>>>> Now we know the size of the memory block and the offset of rcu_head. Then
+>>>> we can check the code. It's going to be slow and tiring, but it's better
+>>>> than no way to start.
+>>>>
+>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>>
+>>> I have pulled this in with the usual wordsmithing (please check!)
+>>> for review and testing, thank you!
+>>
+>> Great! Thanks. Provides a lot of valuable debugging method information.
+>>
+>> In the following two lines, there are a few extra spaces after the dot.
+>> I will delete it in v2.
+>>
+>> rhp->func to be set to NULL.  This defeats the debugging prints used by
+>> locate the problem.   If the problem is reproducible, additional slab
 > 
-> Hi Masami,
-> I was playing around with the filter option and couldn't get it to work the way
-> I was expecting. For example, I'm getting the following output:
+> Please do adjust my wordsmithing as required.
 > 
-> root@localhost:/sys/kernel/tracing# echo 'e syscalls/sys_enter_openat \
-> 	flags_rename=$flags:u32 if flags < 1000' >> dynamic_events
-> root@localhost:/sys/kernel/tracing# echo 1 > events/eprobes/sys_enter_openat/enable
-> [  114.551550] event trace: Could not enable event sys_enter_openat
-> -bash: echo: write error: Invalid argument
+>>> Questions include "Is 0x3 correct for functions compiled with all
+>>> supported compiler options on all architectures on which the Linux
+>>
+>> Sorry, I found it possible that it wouldn't work on x86. Although I had
+>> no problems booting up on x86 before. I ran a script today and found that
+>> there were addresses that were not 4-byte aligned.
+>>
+>> I'll send v2 on your basis.
 > 
-> I was wondering if the trace_event_call passed to create_event_filter()
-> shouldn't be 'ep->event' instead of 'file->event_call' as such:
+> x86 can be like that sometimes...
+> 
+> I revert your current patch, and look forward to seeing your v2.
+> 
+>> cat System.map | grep -E ' t | T ' | awk '{print substr($1,length($1),length($1))}' | sort | uniq -c
+>>   52521 0
+>>     409 1
+>>     394 2
+>>     417 3
+>>     404 4
+>>     458 5
+>>     405 6
+>>     393 7
+>>    1205 8
+>>     457 9
+>>     442 a
+>>     435 b
+>>     421 c
+>>     418 d
+>>     421 e
+>>     426 f
+> 
+> Indeed, quite a few!  Maybe the address check can be arch-specific,
+> maybe using IS_ENABLED()?
 
-Oops! Good catch!
-
-> 
-> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> index e888446d80fa..123d2c0a6b68 100644
-> --- a/kernel/trace/trace_eprobe.c
-> +++ b/kernel/trace/trace_eprobe.c
-> @@ -643,7 +643,7 @@ new_eprobe_trigger(struct trace_eprobe *ep, struct
-> trace_event_file *file)
-> 	INIT_LIST_HEAD(&trigger->list);
->  
-> 	if (ep->filter_str) {
-> -               ret = create_event_filter(file->tr, file->event_call,
-> +               ret = create_event_filter(file->tr, ep->event,
-> 					ep->filter_str, false, &filter);
-> 		if (ret)
-> 			goto error;
-> 
-> Applying the above change seems to make it work the way I was expecting:
-> 
-> root@localhost:/sys/kernel/tracing# echo 'e syscalls/sys_enter_openat \
-> 	flags_rename=$flags:u32 if flags < 1000' >> dynamic_events
-> root@localhost:/sys/kernel/tracing# echo 1 > events/eprobes/sys_enter_openat/enable
-> root@localhost:/sys/kernel/tracing# tail trace
-> cat-241     [000] ...1.   266.498449: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> cat-242     [000] ...1.   266.977640: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> cat-242     [000] ...1.   266.979883: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> bash-223     [000] ...1.   272.322714: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=577
-> cat-243     [000] ...1.   273.630900: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> cat-243     [000] ...1.   273.633464: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> tail-244     [000] ...1.   300.013530: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> tail-244     [000] ...1.   300.018584: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> tail-245     [000] ...1.   301.237883: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> tail-245     [000] ...1.   301.243375: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> 
-> I'm not familiar with the eprobe code, sorry if this is nonsense.
-
-Thanks for reporting!
-Let me check what I had done on this. I thought ep->event is same as
-file->event_call, but it can be my fault.
-
-Thank you!
+There are more precise, more effective, but relatively time-consuming
+functions. Such as is_vmalloc_addr(), virt_addr_valid().
 
 > 
-> > +					ep->filter_str, false, &filter);
-> > +		if (ret)
-> > +			goto error;
-> > +	}
-> > +	RCU_INIT_POINTER(trigger->filter, filter);
-> >  
-> >  	edata->file = file;
-> >  	edata->ep = ep;
-> >  	trigger->private_data = edata;
-> >  
-> >  	return trigger;
-> > +error:
-> > +	free_event_filter(filter);
-> > +	kfree(edata);
-> > +	kfree(trigger);
-> > +	return ERR_PTR(ret);
-> >  }
-> >  
-> >  static int enable_eprobe(struct trace_eprobe *ep,
-> > @@ -651,6 +667,7 @@ static int disable_eprobe(struct trace_eprobe *ep,
-> >  {
-> >  	struct event_trigger_data *trigger = NULL, *iter;
-> >  	struct trace_event_file *file;
-> > +	struct event_filter *filter;
-> >  	struct eprobe_data *edata;
-> >  
-> >  	file = find_event_file(tr, ep->event_system, ep->event_name);
-> > @@ -677,6 +694,10 @@ static int disable_eprobe(struct trace_eprobe *ep,
-> >  	/* Make sure nothing is using the edata or trigger */
-> >  	tracepoint_synchronize_unregister();
-> >  
-> > +	filter = rcu_access_pointer(trigger->filter);
-> > +
-> > +	if (filter)
-> > +		free_event_filter(filter);
-> >  	kfree(edata);
-> >  	kfree(trigger);
-> >  
-> > @@ -848,12 +869,62 @@ static int trace_eprobe_tp_update_arg(struct trace_eprobe *ep, const char *argv[
-> >  	return ret;
-> >  }
-> >  
-> > +static int trace_eprobe_parse_filter(struct trace_eprobe *ep, int argc, const char *argv[])
-> > +{
-> > +	struct event_filter *dummy;
-> > +	int i, ret, len = 0;
-> > +	char *p;
-> > +
-> > +	if (argc == 0) {
-> > +		trace_probe_log_err(0, NO_EP_FILTER);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	/* Recover the filter string */
-> > +	for (i = 0; i < argc; i++)
-> > +		len += strlen(argv[i]) + 1;
-> > +
-> > +	ep->filter_str = kzalloc(len, GFP_KERNEL);
-> > +	if (!ep->filter_str)
-> > +		return -ENOMEM;
-> > +
-> > +	p = ep->filter_str;
-> > +	for (i = 0; i < argc; i++) {
-> > +		ret = snprintf(p, len, "%s ", argv[i]);
-> > +		if (ret < 0)
-> > +			goto error;
-> > +		if (ret > len) {
-> > +			ret = -E2BIG;
-> > +			goto error;
-> > +		}
-> > +		p += ret;
-> > +		len -= ret;
-> > +	}
-> > +	p[-1] = '\0';
-> > +
-> > +	/*
-> > +	 * Ensure the filter string can be parsed correctly. Note, this
-> > +	 * filter string is for the original event, not for the eprobe.
-> > +	 */
-> > +	ret = create_event_filter(top_trace_array(), ep->event, ep->filter_str,
-> > +				  true, &dummy);
-> > +	free_event_filter(dummy);
-> > +	if (ret)
-> > +		goto error;
-> > +
-> > +	return 0;
-> > +error:
-> > +	kfree(ep->filter_str);
-> > +	ep->filter_str = NULL;
-> > +	return ret;
-> > +}
-> > +
-> >  static int __trace_eprobe_create(int argc, const char *argv[])
-> >  {
-> >  	/*
-> >  	 * Argument syntax:
-> > -	 *      e[:[GRP/][ENAME]] SYSTEM.EVENT [FETCHARGS]
-> > -	 * Fetch args:
-> > +	 *      e[:[GRP/][ENAME]] SYSTEM.EVENT [FETCHARGS] [if FILTER]
-> > +	 * Fetch args (no space):
-> >  	 *  <name>=$<field>[:TYPE]
-> >  	 */
-> >  	const char *event = NULL, *group = EPROBE_EVENT_SYSTEM;
-> > @@ -863,8 +934,8 @@ static int __trace_eprobe_create(int argc, const char *argv[])
-> >  	char buf1[MAX_EVENT_NAME_LEN];
-> >  	char buf2[MAX_EVENT_NAME_LEN];
-> >  	char gbuf[MAX_EVENT_NAME_LEN];
-> > -	int ret = 0;
-> > -	int i;
-> > +	int ret = 0, filter_idx = 0;
-> > +	int i, filter_cnt;
-> >  
-> >  	if (argc < 2 || argv[0][0] != 'e')
-> >  		return -ECANCELED;
-> > @@ -894,6 +965,15 @@ static int __trace_eprobe_create(int argc, const char *argv[])
-> >  		event = buf1;
-> >  	}
-> >  
-> > +	for (i = 2; i < argc; i++) {
-> > +		if (!strcmp(argv[i], "if")) {
-> > +			filter_idx = i + 1;
-> > +			filter_cnt = argc - filter_idx;
-> > +			argc = i;
-> > +			break;
-> > +		}
-> > +	}
-> > +
-> >  	mutex_lock(&event_mutex);
-> >  	event_call = find_and_get_event(sys_name, sys_event);
-> >  	ep = alloc_event_probe(group, event, event_call, argc - 2);
-> > @@ -909,6 +989,14 @@ static int __trace_eprobe_create(int argc, const char *argv[])
-> >  		goto error;
-> >  	}
-> >  
-> > +	if (filter_idx) {
-> > +		trace_probe_log_set_index(filter_idx);
-> > +		ret = trace_eprobe_parse_filter(ep, filter_cnt, argv + filter_idx);
-> > +		if (ret)
-> > +			goto parse_error;
-> > +	} else
-> > +		ep->filter_str = NULL;
-> > +
-> >  	argc -= 2; argv += 2;
-> >  	/* parse arguments */
-> >  	for (i = 0; i < argc && i < MAX_TRACE_ARGS; i++) {
-> > diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-> > index 3b3869ae8cfd..de38f1c03776 100644
-> > --- a/kernel/trace/trace_probe.h
-> > +++ b/kernel/trace/trace_probe.h
-> > @@ -445,7 +445,8 @@ extern int traceprobe_define_arg_fields(struct trace_event_call *event_call,
-> >  	C(SAME_PROBE,		"There is already the exact same probe event"),\
-> >  	C(NO_EVENT_INFO,	"This requires both group and event name to attach"),\
-> >  	C(BAD_ATTACH_EVENT,	"Attached event does not exist"),\
-> > -	C(BAD_ATTACH_ARG,	"Attached event does not have this field"),
-> > +	C(BAD_ATTACH_ARG,	"Attached event does not have this field"),\
-> > +	C(NO_EP_FILTER,		"No filter rule after 'if'"),
-> >  
-> >  #undef C
-> >  #define C(a, b)		TP_ERR_##a
-> > 
+>>> kernel runs?", "Is this added information useful often enough for
+>>> this to be pushed to mainline?", and so on.
+> 
+> And another question is "Should this be default?"  There may be concerns
+> with callback-invocation throughput during callback-flooding events.
 
+The overhead of the if statement is small compared with that of
+memory freeing. However, there is a low probability that the callback
+fails, it's also wise to set it to non-default.
+
+> 
+>> I originally wanted to add a member in struct rcu_head and backup
+>> 'func' to the previous node. This way, when the error is detected,
+>> the hook function can be printed out. This will help us quickly
+>> find the user of the invalid rhp. However, the size of the struct
+>> page is limited and cannot be expanded.
+> 
+> Although that information could be clobbered just as easily as could
+> the ->func value, right?
+
+There is a low probability that the previous node and the current node
+are in the same memory area. Therefore, it is relatively reliable to
+back up ->func to the previous node. However, this method can be used
+temporarily to locate the problem. After all, the impact is too great.
+
+> 
+>> Further more, we can dump the contents of mem object.
+>>
+>> I have a problem that has not been resolved and has not reproduced.
+>> The surrounding contents of 'rhp' have been dumped, as below.
+>> You can highlight 00000024 and 00000030, you'll see that this is a
+>> fixed 80-bytes structure. There is also a bidirectional linked list
+>> in the structure. If I have mem_dump_obj(rhp) information, I can
+>> narrow it down considerably.
+>>
+>> [20220928044206]5390: 00000024 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+>> [20220928044206]53b0: 00000000 00000000 00000000 00000000 cfa4d580 ffff4596 00000000 00000000
+>> [20220928044206]53d0: 7438f148 ffff4596 7438f148 ffff4596 00000024 00000000 0b828cfa 0f00aaf4
+>> [20220928044206]53f0: 00000000 00000000 00000000 00000000 496653c0 ffff4596 00000000 00000000
+>> [20220928044206]5410: 00000000 00000000 00000000 00000000 ae0769e0 ffff4596 ae0769e0 ffff4596
+>> [20220928044206]5430: 00000030 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+>> [20220928044206]5450: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+>> [20220928044206]5470: ae076988 ffff4596 ae076988 ffff4596 00000024 00000000 00000000 00000000
+> 
+> OK, I consider the "is this useful" question to be answered in the
+> affirmative.
+> 
+> 							Thanx, Paul
+> 
+>>>> ---
+>>>>  kernel/rcu/rcu.h      | 7 +++++++
+>>>>  kernel/rcu/srcutiny.c | 1 +
+>>>>  kernel/rcu/srcutree.c | 1 +
+>>>>  kernel/rcu/tasks.h    | 1 +
+>>>>  kernel/rcu/tiny.c     | 1 +
+>>>>  kernel/rcu/tree.c     | 1 +
+>>>>  6 files changed, 12 insertions(+)
+>>>>
+>>>> diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
+>>>> index 70c79adfdc7046c..4844dec36bddb48 100644
+>>>> --- a/kernel/rcu/rcu.h
+>>>> +++ b/kernel/rcu/rcu.h
+>>>> @@ -10,6 +10,7 @@
+>>>>  #ifndef __LINUX_RCU_H
+>>>>  #define __LINUX_RCU_H
+>>>>  
+>>>> +#include <linux/mm.h>
+>>>>  #include <trace/events/rcu.h>
+>>>>  
+>>>>  /*
+>>>> @@ -211,6 +212,12 @@ static inline void debug_rcu_head_unqueue(struct rcu_head *head)
+>>>>  }
+>>>>  #endif	/* #else !CONFIG_DEBUG_OBJECTS_RCU_HEAD */
+>>>>  
+>>>> +static inline void debug_rcu_head_callback(struct rcu_head *rhp)
+>>>> +{
+>>>> +	if (unlikely(!rhp->func || (unsigned long)rhp->func & 0x3))
+>>>> +		mem_dump_obj(rhp);
+>>>> +}
+>>>> +
+>>>>  extern int rcu_cpu_stall_suppress_at_boot;
+>>>>  
+>>>>  static inline bool rcu_stall_is_suppressed_at_boot(void)
+>>>> diff --git a/kernel/rcu/srcutiny.c b/kernel/rcu/srcutiny.c
+>>>> index 33adafdad261389..5e7f336baa06ae0 100644
+>>>> --- a/kernel/rcu/srcutiny.c
+>>>> +++ b/kernel/rcu/srcutiny.c
+>>>> @@ -138,6 +138,7 @@ void srcu_drive_gp(struct work_struct *wp)
+>>>>  	while (lh) {
+>>>>  		rhp = lh;
+>>>>  		lh = lh->next;
+>>>> +		debug_rcu_head_callback(rhp);
+>>>>  		local_bh_disable();
+>>>>  		rhp->func(rhp);
+>>>>  		local_bh_enable();
+>>>> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+>>>> index ca4b5dcec675bac..294972e66b31863 100644
+>>>> --- a/kernel/rcu/srcutree.c
+>>>> +++ b/kernel/rcu/srcutree.c
+>>>> @@ -1631,6 +1631,7 @@ static void srcu_invoke_callbacks(struct work_struct *work)
+>>>>  	rhp = rcu_cblist_dequeue(&ready_cbs);
+>>>>  	for (; rhp != NULL; rhp = rcu_cblist_dequeue(&ready_cbs)) {
+>>>>  		debug_rcu_head_unqueue(rhp);
+>>>> +		debug_rcu_head_callback(rhp);
+>>>>  		local_bh_disable();
+>>>>  		rhp->func(rhp);
+>>>>  		local_bh_enable();
+>>>> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+>>>> index b0b885e071fa8dc..b7f8c67c586cdc4 100644
+>>>> --- a/kernel/rcu/tasks.h
+>>>> +++ b/kernel/rcu/tasks.h
+>>>> @@ -478,6 +478,7 @@ static void rcu_tasks_invoke_cbs(struct rcu_tasks *rtp, struct rcu_tasks_percpu
+>>>>  	raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
+>>>>  	len = rcl.len;
+>>>>  	for (rhp = rcu_cblist_dequeue(&rcl); rhp; rhp = rcu_cblist_dequeue(&rcl)) {
+>>>> +		debug_rcu_head_callback(rhp);
+>>>>  		local_bh_disable();
+>>>>  		rhp->func(rhp);
+>>>>  		local_bh_enable();
+>>>> diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
+>>>> index bb8f7d270f01747..56e9a5d91d97ec5 100644
+>>>> --- a/kernel/rcu/tiny.c
+>>>> +++ b/kernel/rcu/tiny.c
+>>>> @@ -97,6 +97,7 @@ static inline bool rcu_reclaim_tiny(struct rcu_head *head)
+>>>>  
+>>>>  	trace_rcu_invoke_callback("", head);
+>>>>  	f = head->func;
+>>>> +	debug_rcu_head_callback(head);
+>>>>  	WRITE_ONCE(head->func, (rcu_callback_t)0L);
+>>>>  	f(head);
+>>>>  	rcu_lock_release(&rcu_callback_map);
+>>>> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+>>>> index 93c286b98c8f03d..3b93b9df8042a84 100644
+>>>> --- a/kernel/rcu/tree.c
+>>>> +++ b/kernel/rcu/tree.c
+>>>> @@ -2256,6 +2256,7 @@ static void rcu_do_batch(struct rcu_data *rdp)
+>>>>  		trace_rcu_invoke_callback(rcu_state.name, rhp);
+>>>>  
+>>>>  		f = rhp->func;
+>>>> +		debug_rcu_head_callback(rhp);
+>>>>  		WRITE_ONCE(rhp->func, (rcu_callback_t)0L);
+>>>>  		f(rhp);
+>>>>  
+>>>> -- 
+>>>> 2.25.1
+>>>>
+>>> .
+>>>
+>>
+>> -- 
+>> Regards,
+>>   Zhen Lei
+> .
+> 
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Regards,
+  Zhen Lei
