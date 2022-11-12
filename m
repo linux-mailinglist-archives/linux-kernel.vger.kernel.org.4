@@ -2,123 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95512626750
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 07:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A43626752
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 07:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234540AbiKLGLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 01:11:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
+        id S234643AbiKLGLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 01:11:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiKLGLG (ORCPT
+        with ESMTP id S230043AbiKLGLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 01:11:06 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4F525E8B
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 22:11:01 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id p8so11232822lfu.11
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 22:11:01 -0800 (PST)
+        Sat, 12 Nov 2022 01:11:13 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C83C5B5BE;
+        Fri, 11 Nov 2022 22:11:12 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id d3so6720717ljl.1;
+        Fri, 11 Nov 2022 22:11:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xgEFrQxF5erS41BXftmnuJVC4f2mIZC62wulZ8QcVq4=;
-        b=unfxgYsI+Wp7KKEqj45kLKcOIMODrgTPzgRv5i2bTfxwLtr7a0DLFbTQXnQPBqNL06
-         6NTuCi4tbd0qt3IGLJVR6rUNW0G/v+4iISGtfcv104x+PBoqeyzlwVB33K2+Mszhbs81
-         90LvzuxvW8A5CNUiCw0ddj2Q7C4SFFovCnZGg4TefYPPQ0Rx84E/I5diXMwcUmhBdAg7
-         XMVG5DA3VzLSTwK3Vi3zYWBu7kvKDoo0ovYAoylyBvGzPbg72hdR2QyY1phKwUT9bc1p
-         LqLV0lhjrpeLTDbk3oBB7R8qJuHH9PLWlLAYkMx36OVpQWlYbEL7yc6e3M/TJbT1NTyb
-         z1ug==
+        d=googlemail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iiJFdVsZWeFbUIjvbGEQtUMcST9y103D3tolVec5T+c=;
+        b=i1uk5ZvqoGFGK8nZB98WC92fomQizagpq5RkWwzGaZxrUMx8Mar8RsEQ6zlflsys39
+         VEXDGMZYPBy2Pj+uY1RqAdyGuNBxjebmUN0xx+4iEOpAxKZueS7HWY2Ed+ZPPUt61uNu
+         M63Y0Wbspp8O946RiLU+4GoBetu7HM48lDHoOW+c7ehId7zndefjnqA1nws50PmN0n3X
+         NcykmvbrlZJzTYp9gDEdcc0l8ia40plvLqQlgy+Nke9jLaBpxpg0n4kI82SG+JefZQQg
+         8zAPXb9Q64PmIFGsfDf2UlwTnQI5DjRqiqUtr5EtSTjxTQkVnm2Vt7I5TIZ9TufwtfIb
+         nOjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xgEFrQxF5erS41BXftmnuJVC4f2mIZC62wulZ8QcVq4=;
-        b=Pq063rjcM3ZFBiKex4LDfFGzP7AdS/neDIVnWXIiY0rPdcQvIuqTMtkd1lV0mN7Fdk
-         0jdqINpHcKLiyADeE643m7onCy1Y7OIeGZH4s0b4Va7qTA/oFZq/d0TF0iv3FRi4Ie9w
-         LyGYigv7h8xgiyX6li7lKucL+qyQCYX6NcMgN1AgD473auUWaZAl0wad0whm6X22159T
-         EBKjdM3kL3wOZXbTsnwdzUQLAlKqNYLVHSoAf3RVH0iKR2CeYb/tHhzskqFgr3OwNcX8
-         n0ZBUDm10vPtCoJy8BkX9sTIt5IF1KtSPBRciW6ZXl/mnVGOGBvINrlgUAcMMH9N4qeF
-         Bx0w==
-X-Gm-Message-State: ANoB5plIZ6tJYBzBE2Ppx/hMPzn//zCcn6CK6Lrc/yG+gzdpYY6fzOSN
-        FI6+ir9htLeSTFj401xyfHzREg==
-X-Google-Smtp-Source: AA0mqf727C/tU8votlwq4Rgzh0ltalzyYBYUm03eCr9mgdImpS0cM3o+T9813EWmFtHd7QrWxGF3Eg==
-X-Received: by 2002:a19:dc15:0:b0:4b1:18a2:2fbd with SMTP id t21-20020a19dc15000000b004b118a22fbdmr1598550lfg.564.1668233459632;
-        Fri, 11 Nov 2022 22:10:59 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056512358700b004a2c3fd32edsm706433lfr.144.2022.11.11.22.10.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 22:10:59 -0800 (PST)
-Message-ID: <77fe7684-5ac7-a538-80a3-2654e2365a3b@linaro.org>
-Date:   Sat, 12 Nov 2022 09:10:58 +0300
+        bh=iiJFdVsZWeFbUIjvbGEQtUMcST9y103D3tolVec5T+c=;
+        b=vDs7cFDyaKVUcZSDgMgSmDECoMcFlK0zoa0RFqjsY9wRvnjn8qCgctn/zCee9pa6dc
+         1gOAcK5qUcBEGiDqIQQUC+BXLzJ9EjMcMQL3nYumqG8Ji21r7rTNIBDiop0XJ4HfRx4W
+         pJEeLRDAoTjaU4vT1MxYzVO0HOv1byDxHi1xafZ41cSGLzgkSDa5t+Ka+GpLEAVz3X0g
+         imcMrk6k/r5vwdbrNwLqToAsNSxlo4adiit0MIrpDrVtdwmSRu/gjtFzJenGamu8M/vK
+         FyT9lqq76Q5EbIlfeJ3ppWpjPnGIZJCUJuOe/htMCccqxxzIKy2lSjefWticTejfRjbx
+         S/lA==
+X-Gm-Message-State: ANoB5pmA8mx5MZSW78DyAFyOiJMAXEi8Z3xi7hxvfpKOzO9wWNs5sPZe
+        +Z2pw20/42PTU1uncvTQ2Tw=
+X-Google-Smtp-Source: AA0mqf5DMQ1ZxQn699hZeiFNPKSFjAUDJmBcQbglma+77N/i2qEdjx22sDKIZ5Bfce+GOAJMZNGrWA==
+X-Received: by 2002:a2e:6d11:0:b0:26f:c081:9aed with SMTP id i17-20020a2e6d11000000b0026fc0819aedmr1524113ljc.222.1668233470786;
+        Fri, 11 Nov 2022 22:11:10 -0800 (PST)
+Received: from thinkpad-p72 ([78.133.163.249])
+        by smtp.gmail.com with ESMTPSA id q9-20020a2e84c9000000b0026dced9840dsm736624ljh.61.2022.11.11.22.11.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Nov 2022 22:11:10 -0800 (PST)
+From:   Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>
+X-Google-Original-From: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
+Date:   Sat, 12 Nov 2022 07:11:08 +0100
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>,
+        kraxel@redhat.com, Sumit Semwal <sumit.semwal@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] udmabuf: add vmap method to udmabuf_ops
+Message-ID: <20221112061108.GA679753@thinkpad-p72>
+References: <20221111114528.608801-1-lukasz.wiecaszek@gmail.com>
+ <2ee10e0e-a347-71a5-051a-02b9bac0bbb6@amd.com>
+ <512e97ec-5d5e-4d6a-e547-13ca4036f3d1@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 1/6] phy: qcom-qmp-combo: fix out-of-bounds clock access
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20221111084255.8963-1-johan+linaro@kernel.org>
- <20221111084255.8963-2-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221111084255.8963-2-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <512e97ec-5d5e-4d6a-e547-13ca4036f3d1@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/11/2022 11:42, Johan Hovold wrote:
-> The SM8250 only uses three clocks but the DP configuration erroneously
-> described four clocks.
+On Fri, Nov 11, 2022 at 03:31:15PM +0300, Dmitry Osipenko wrote:
+> On 11/11/22 15:05, Christian König wrote:
+> > Adding Dmitry as well.
+> > 
+> > Am 11.11.22 um 12:45 schrieb Lukasz Wiecaszek:
+> >> The reason behind that patch is associated with videobuf2 subsystem
+> >> (or more genrally with v4l2 framework) and user created
+> >> dma buffers (udmabuf). In some circumstances
+> >> when dealing with V4L2_MEMORY_DMABUF buffers videobuf2 subsystem
+> >> wants to use dma_buf_vmap() method on the attached dma buffer.
+> >> As udmabuf does not have .vmap operation implemented,
+> >> such dma_buf_vmap() natually fails.
+> >>
+> >> videobuf2_common: [cap-000000003473b2f1] __vb2_queue_alloc: allocated
+> >> 3 buffers, 1 plane(s) each
+> >> videobuf2_common: [cap-000000003473b2f1] __prepare_dmabuf: buffer for
+> >> plane 0 changed
+> >> videobuf2_common: [cap-000000003473b2f1] __prepare_dmabuf: failed to
+> >> map dmabuf for plane 0
+> >> videobuf2_common: [cap-000000003473b2f1] __buf_prepare: buffer
+> >> preparation failed: -14
+> >>
+> >> The patch itself seems to be strighforward.
+> >> It adds implementation of .vmap method to 'struct dma_buf_ops
+> >> udmabuf_ops'.
+> >> .vmap method itself uses vm_map_ram() to map pages linearly
+> >> into the kernel virtual address space (only if such mapping
+> >> hasn't been created yet).
+> > 
+> > Of hand that sounds sane to me.
+> > 
+> > You should probably mention somewhere in a code comment that the cached
+> > vaddr is protected by the reservation lock being taken. That's not
+> > necessary obvious to everybody.
+> > 
+> > Apart from that looks good to me.
 > 
-> In case the DP part of the PHY is initialised before the USB part, this
-> would lead to uninitialised memory beyond the bulk-clocks array to be
-> treated as a clock pointer as the clocks are requested based on the USB
-> configuration.
-
-... because the num_clks comes from the struct qmp_phy_cfg, not from the 
-struct qcom_qmp.
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
+> Adding a comment won't hurt.
 > 
-> Fixes: aff188feb5e1 ("phy: qcom-qmp: add support for sm8250-usb3-dp phy")
-> Cc: stable@vger.kernel.org	# 5.13
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+> We have the dma_resv_assert_held() in dma_buf_vmap() that will help
+> spotting a missing lock at runtime by developers. While the
+> dmbuf_ops->vmap() shouldn't be ever used directly by importers.
 > 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> index 5e11b6a1d189..bb38b18258ca 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> @@ -1270,8 +1270,8 @@ static const struct qmp_phy_cfg sm8250_dpphy_cfg = {
->   	.swing_hbr3_hbr2	= &qmp_dp_v3_voltage_swing_hbr3_hbr2,
->   	.pre_emphasis_hbr3_hbr2 = &qmp_dp_v3_pre_emphasis_hbr3_hbr2,
->   
-> -	.clk_list		= qmp_v4_phy_clk_l,
-> -	.num_clks		= ARRAY_SIZE(qmp_v4_phy_clk_l),
-> +	.clk_list		= qmp_v4_sm8250_usbphy_clk_l,
-> +	.num_clks		= ARRAY_SIZE(qmp_v4_sm8250_usbphy_clk_l),
->   	.reset_list		= msm8996_usb3phy_reset_l,
->   	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
->   	.vreg_list		= qmp_phy_vreg_l,
+> -- 
+> Best regards,
+> Dmitry
+>
 
--- 
-With best wishes
-Dmitry
+Give me some time guys. I need to prepare patch agains 6.1. And this is
+my first time, so now it hurts. 
+
+Lukasz
 
