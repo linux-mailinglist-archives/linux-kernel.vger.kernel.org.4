@@ -2,129 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A73626931
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 12:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74347626939
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 12:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbiKLLg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 06:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
+        id S234902AbiKLLlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 06:41:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiKLLg0 (ORCPT
+        with ESMTP id S230365AbiKLLlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 06:36:26 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD7ED2EF
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 03:36:25 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id j4so12042528lfk.0
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 03:36:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kRbo22PtqHobTCeV1YZA3tYBu2AmF31nXSrL8zFUE7w=;
-        b=PxRzqdglo5xsAfV2+zPzrOeZyo8zSrbPaBOlhuS6Ei+U4ZJpP10HKAuetRzSqXQxGi
-         3NcmnZamzK6tWa5TrY752rp5ix5pYsfoPqhTgLO6qvAyfvdl2dfnSw6nGD4KaIYbl0Le
-         Uq9Gn7JIMqsBXxLjozKT41aa+GCF/Qzh0AurAxCy5xwOK0CTpgk5WwT+RXBvvgOsQAP1
-         gOS93K6POaiWagi90o+aJWNyivFFyoJrhES4i4cqSEzBdbzKGGYy/1kIq4D4CUtHuxdI
-         hNJr0jePbm1qnlIsgmfFvf4hQMq4dxJachtIvvZjNETwHwp2qJvg8tT7tY/vRExbdx3k
-         oCJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kRbo22PtqHobTCeV1YZA3tYBu2AmF31nXSrL8zFUE7w=;
-        b=n3/PCJ1DF6VV2kj5ak9tPNe8HEKUgI/3Gy3zGQQA712i61dYlwlCN9WCYL5AktFBzk
-         ovCS0HnTM0Kv4F857jVSYb78W3szUYWjHaVkAAfsRo01BHDeQSIhHjbJ7U/bH1aM50Wi
-         wz8fVERXhpAw8v9nsQyPwZQ3dsRcBhxhQOKVvOGRMy08ybG0vsifuwsvoHeNiak4VmhX
-         0iAFuvH5EznL1y72uRH3LY8FqxTeg1NKuYAgofEes724XBWzkHOKEBf7vjjtyfK5Ta6h
-         rivMaki0W6hLS800JEjnwzwid1diNHN8a0yZgkxOozWLOsLONBgBhiiLGzEjCyY/qiLl
-         XP9A==
-X-Gm-Message-State: ANoB5pk31n0NnLRbtJ4wy52MPmAngjBiCM8LB1md9/BcXT5Ebbl74XLT
-        PdOn8PZ2blFI2uBd1RkeyjxGJw==
-X-Google-Smtp-Source: AA0mqf7rj1x3q1LBG9NCbryzByD0dB+icZsVAx/s1dv6PQrlY1jKO6N36HaoBo09/p6FnElIW8TTDQ==
-X-Received: by 2002:ac2:4bd0:0:b0:4b0:1305:7039 with SMTP id o16-20020ac24bd0000000b004b013057039mr1885054lfq.543.1668252984151;
-        Sat, 12 Nov 2022 03:36:24 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id s8-20020a056512202800b004a65780e4cfsm833698lfs.106.2022.11.12.03.36.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Nov 2022 03:36:23 -0800 (PST)
-Message-ID: <ae61af60-46ef-e455-6063-e47238c608b1@linaro.org>
-Date:   Sat, 12 Nov 2022 14:36:23 +0300
+        Sat, 12 Nov 2022 06:41:19 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47236634B;
+        Sat, 12 Nov 2022 03:41:13 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id D565D5FD8A;
+        Sat, 12 Nov 2022 14:41:09 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1668253269;
+        bh=tEC8qWPcYzh5C+P7qHhW3cPWbhJ7pLhopk4AV/Opjww=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=bA9sARAhl9oZo6driejGSDil7LBmiT1wZ0FRpoJ52dicXUZGVG5cbj5cKUbCMSo+I
+         LPW3Ua96wS5wZ2O2DNyF14LdQdtvfj5DGf2p9A2TK184HH402JsJcSLx/oopM1EHXb
+         2nc/0ZB+cTepqejzo3qklvcM1LakFzTsbFwj8SvDAdFt3VMF7U+oQdRXOGRev0iFZM
+         YaQSIy/S41cu41Z8oLyLVlOaG9VeuhqmF6R1y1T2F9tfDChQORdcFgQhG4hpolKEcR
+         paxHyhYfyS0CHz2HnLL1cQ0NHZSksWV4AL3SsEXrixb4QpjBVgEw4rwgjHv/hcA2vA
+         vQ4EaA7MsbpUw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Sat, 12 Nov 2022 14:41:05 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Bobby Eshleman <bobbyeshleman@gmail.com>,
+        Stefano Garzarella <sgarzare@redhat.com>
+CC:     Krasnov Arseniy <oxffffaa@gmail.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Bobby Eshleman <bobby.eshleman@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        kernel <kernel@sberdevices.ru>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH v3 00/11] virtio/vsock: experimental zerocopy receive
+Thread-Topic: [RFC PATCH v3 00/11] virtio/vsock: experimental zerocopy receive
+Thread-Index: AQHY8hatKKTuchPoekmnGA3HAR0Si645kb6AgAB0yICAAPn8gA==
+Date:   Sat, 12 Nov 2022 11:40:59 +0000
+Message-ID: <3de0302f-bd4f-5df1-9de5-cbc3b3dd94f8@sberdevices.ru>
+References: <f60d7e94-795d-06fd-0321-6972533700c5@sberdevices.ru>
+ <20221111134715.qxgu7t4c7jse24hp@sgarzare-redhat> <Y260WSJKJXtaJQZi@bullseye>
+In-Reply-To: <Y260WSJKJXtaJQZi@bullseye>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3C62CF393163484A89D015B7E010F57A@sberdevices.ru>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 14/14] phy: qcom-qmp-combo: add support for updated
- sc8280xp binding
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221111092457.10546-1-johan+linaro@kernel.org>
- <20221111092457.10546-15-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221111092457.10546-15-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/11/12 07:44:00 #20572870
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/11/2022 12:24, Johan Hovold wrote:
-> Add support for the new SC8280XP binding.
-> 
-> Note that the binding does not try to describe every register subregion
-> and instead the driver holds the corresponding offsets.
-> 
-> Also note that (possibly) unlike on earlier platforms, the TX registers
-> are used by both the USB and DP implementation.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 143 ++++++++++++++++++++--
->   1 file changed, 133 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> index 0a4d53e6c586..544a7e55bf14 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> @@ -798,9 +798,25 @@ static const u8 qmp_dp_v5_voltage_swing_hbr_rbr[4][4] = {
->   
->   struct qmp_combo;
->   
-> +struct qmp_combo_offsets {
-> +	u16 com;
-> +	u16 txa;
-> +	u16 rxa;
-> +	u16 txb;
-> +	u16 rxb;
-
-
-Yes, txa/txb are more in spite of the vendor headers. I'd sill suggest 
-to use tx/tx2 and rx/rx2 as used everywhere in the QMP driver.
-
-
-> +	u16 usb3_serdes;
-> +	u16 usb3_pcs_misc;
-> +	u16 usb3_pcs;
-> +	u16 usb3_pcs_usb;
-> +	u16 dp_serdes;
-> +	u16 dp_dp_phy;
-> +};
-> +
--- 
-With best wishes
-Dmitry
-
+T24gMTEuMTEuMjAyMiAyMzo0NSwgQm9iYnkgRXNobGVtYW4gd3JvdGU6DQo+IE9uIEZyaSwgTm92
+IDExLCAyMDIyIGF0IDAyOjQ3OjE1UE0gKzAxMDAsIFN0ZWZhbm8gR2FyemFyZWxsYSB3cm90ZToN
+Cj4+IEhpIEFyc2VuaXksDQo+PiBtYXliZSB3ZSBzaG91bGQgc3RhcnQgcmViYXNpbmcgdGhpcyBz
+ZXJpZXMgb24gdGhlIG5ldyBzdXBwb3J0IGZvciBza2J1ZmY6IGh0dHBzOi8vbG9yZS5rZXJuZWwu
+b3JnL2xrbWwvMjAyMjExMTAxNzE3MjMuMjQyNjMtMS1ib2JieS5lc2hsZW1hbkBieXRlZGFuY2Uu
+Y29tLw0KPj4NCj4+IENDaW5nIEJvYmJ5IHRvIHNlZSBpZiBpdCdzIGVhc3kgdG8gaW50ZWdyYXRl
+IHNpbmNlIHlvdSdyZSBib3RoIGNoYW5naW5nIHRoZQ0KPj4gcGFja2V0IGFsbG9jYXRpb24uDQo+
+Pg0KPiANCj4gVGhpcyBsb29rcyBsaWtlIHRoZSBwYWNrZXQgYWxsb2NhdGlvbiBjYW4gYmUgbWFy
+cmllZCBzb21ld2hhdCBuaWNlbHkgaW4NCj4gc2luY2UgU0tCcyBtYXkgYmUgYnVpbHQgZnJvbSBw
+YWdlcyB1c2luZyBidWlsZF9za2IoKS4gVGhlcmUgbWF5IGJlIHNvbWUNCj4gdHdlYWtpbmcgbmVj
+ZXNzYXJ5IHRob3VnaCwgc2luY2UgaXQgYWxzbyB1c2VzIHRoZSB0YWlsIGNodW5rIG9mIHRoZSBw
+YWdlDQo+IHRvIGhvbGQgc3RydWN0IHNrYl9zaGFyZWRfaW5mbyBJSVJDLg0KPiANCj4gSSBsZWZ0
+IHNvbWUgY29tbWVudHMgb24gdGhlIHBhdGNoIHdpdGggdGhlIGFsbG9jYXRvciBpbiBpdC4NCkhl
+bGxvIEJvYmJ5LA0KDQp0aGFua3MgZm9yIHJldmlldy4gSSdsbCByZWJhc2UgbXkgcGF0Y2hzZXQg
+b24gWW91ciBza2J1ZmYgc3VwcG9ydC4NCj4gDQo+Pg0KPj4gTWF5YmUgdG8gYXZvaWQgaGF2aW5n
+IHRvIHJlYmFzZSBldmVyeXRoaW5nIGxhdGVyLCBpdCdzIGFscmVhZHkgd29ydGh3aGlsZSB0bw0K
+Pj4gc3RhcnQgdXNpbmcgQm9iYnkncyBwYXRjaCB3aXRoIHNrYnVmZi4NCj4+DQo+IA0KPiBJJ2xs
+IGJlIHdhaXRpbmcgdW50aWwgTW9uZGF5IHRvIHNlZSBpZiBzb21lIG1vcmUgZmVlZGJhY2sgY29t
+ZXMgaW4NCj4gYmVmb3JlIHNlbmRpbmcgb3V0IHY0LCBzbyBJIGV4cGVjdCB2NCBlYXJseSBuZXh0
+IHdlZWssIEZXSVcuDQpPbmUgcmVxdWVzdCBmcm9tIG1lLCBjb3VsZCBZb3UgcGxlYXNlIENDIG1l
+IGZvciBuZXh0IHZlcnNpb25zIG9mDQpZb3VyIHBhdGNoc2V0LCBiZWNhdXNlOg0KMSkgSSdsbCBh
+bHdheXMgaGF2ZSBsYXRlc3QgdmVyc2lvbiBvZiBza2J1ZmYgc3VwcG9ydC4NCjIpIEknbGwgc2Vl
+IHJldmlldyBwcm9jZXNzIGFsc28uDQoNCk15IGNvbnRhY3RzOg0Kb3hmZmZmYWFAZ21haWwuY29t
+DQpBVktyYXNub3ZAc2JlcmRldmljZXMucnUNCg0KVGhhbmtzLCBBcnNlbml5DQoNCj4gDQo+IEJl
+c3QsDQo+IEJvYmJ5DQoNCg==
