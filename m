@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF766267CE
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 08:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 540D66267D0
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 08:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234741AbiKLHt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 02:49:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32848 "EHLO
+        id S234750AbiKLHvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 02:51:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234515AbiKLHtw (ORCPT
+        with ESMTP id S234743AbiKLHu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 02:49:52 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DFD268
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 23:49:51 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id p8so11433572lfu.11
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 23:49:51 -0800 (PST)
+        Sat, 12 Nov 2022 02:50:56 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A63340455
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 23:50:55 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id t10so6897884ljj.0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 23:50:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=30J2drolwEdJFioQwxJ7KbRHiB97elMWssOgX7PXxuE=;
-        b=g5xU8CTsdqine+E+rnn9RW+8LBJUVXiUuYqMi/33ptmd3iwNCpi4I5Z8VsysHqkOrF
-         ZjjYqPp1lDP85m0tDpUf3Ul+SV0n+whR+X/UOwnAkBnixNM6qaquTN89EAGL2osPa3m3
-         jcMV37ipwmRaWmHoU0J4zItvolLCZghvTnKI0mXc1AF7aX3QMDtSYzJd2AsGmGUAFgsq
-         NsilbQF0zM0XFtknKaRDSs0LLAnwc/gh3JXErKPDyDNX37rvzY3oPF2MpWCNSe1fzhhA
-         Sbi3epsyozsQEh+1g+BgPR8pRDjs2ZcLW4BG7/6Nym0wNPnmGcA5w0xnZzRYzSHV9IUb
-         pUhw==
+        bh=a+UsEcMcNcwswMPlSrExlKrjtrGQnEDikWAfx7fSc14=;
+        b=F8YQav2VqC9G/pMCy1ay6dcHQpohaoCsguqJCq1ux1FKgDK6q/F8x7L1FWCoemvRJo
+         p4B7GLYT/kONcA7ztts82fMUcFTDKNdjf2u57/7xFjVSSHXxaDSWeEpkhCs3a+nu3LRt
+         h/JXAqweBzv0HygVS7IZC1Ust4XIHUoiRW8NMh7HQtdkfRwDXe17aRner4dQdACviwvC
+         jBdhbn4YqCidoONOmYigVYgDeSKfSJdPVtdPA+lo9O7a1H5cyuVgcvdSuJaDDxQ8H6E8
+         VJ6QOMGGMC71ZFFWDFc88Qoeaq9GrjMY7sCREOFSU1Ze/8mpAvfEqV5+aFYaI0IgYfo5
+         8e+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=30J2drolwEdJFioQwxJ7KbRHiB97elMWssOgX7PXxuE=;
-        b=DS30+x5l0P7QT21vbyJvEgmJROJWq99L2hEupbiXlWh1zHgcILR9YPSyXMmJns1HZm
-         04CXeVX468rY5dO1OrA3Cp0XKqLvLepc2bKZjTYngcEOB9aeD1qpYSHAvxwe16CVRj6p
-         xdApB0lCFE+1rttXLBXvCS+k+FW51OMH8L7aSRofuwQOpcC3dwJbIPt6ihm1iVvQdvlD
-         szwmuDUZQSdt5e/m1U/jfg70CoCICDgi5nFNYum/28OtpdTgqnkAHo7grLRQw9JLMdEl
-         VibN9z2CtQvA1s4VtTC/nt2eJM34KsAgbRAkiu4++c4lvYDOSfHI/Vyt9Isw/ZIDNweB
-         DnaQ==
-X-Gm-Message-State: ANoB5pkPMvms9p5X94inLxe0fLW8Gu8cUDa6bjCZXk8bZyS6HRtB63lD
-        MkAFW5OQ75cgobPAso7ytPJphA==
-X-Google-Smtp-Source: AA0mqf7ggFgwcdb+uqAvGg/978ceqJ+bPrQysT8iY12z4ezGuFl/5OQT+LEYseZJNE9JQ+ssdjXndA==
-X-Received: by 2002:a05:6512:3e20:b0:4a2:5522:d37c with SMTP id i32-20020a0565123e2000b004a25522d37cmr1677537lfv.662.1668239390374;
-        Fri, 11 Nov 2022 23:49:50 -0800 (PST)
+        bh=a+UsEcMcNcwswMPlSrExlKrjtrGQnEDikWAfx7fSc14=;
+        b=18BobTmU2N6H/6W2PmaJ8BwocH6n2J+GgyZf6+IRk7JqTLXkpd1zdNaR9gXEyKOb8/
+         e3a9rtw8aSsYCOBG3HfTMQPI49Gl6HLQNhqIkdLi/FfN2IcBX/dmo14xOk8PVdP5s9Ov
+         03wzaT7VL35K7+oPY3Bx6T+GyFoNAQPuCxgIKg+k35njAY8MPjZ0QHDrNvXrcIihzOz6
+         LVjHO1vxabCx02YQhlW7Qy0Nlt4gbdYU5TszBcrwQvvEK+ykbP23LaIhvWH29SX2Povb
+         5AZp3Tn84G43zuOJzlKiZvWV5EZeB2KA6cMR4Ug3sK2YfSel+Qba8a8XY6VJkcM4NB8z
+         Hkrw==
+X-Gm-Message-State: ANoB5pkvM29qI/NGwTPTwl6hNNHCGKw5RAE2aDB36PpIOlG3WMcNkkBO
+        EQkrXx9xfHHHfuX+mCkAmqZusKQ9qsuqN1kg
+X-Google-Smtp-Source: AA0mqf7htDhPrt3ZavGZ+yqvxoI7/xMhVWSiC+npni4LfAPjxuywVVj37dbf4XQB6kpQV5yLfR41Ug==
+X-Received: by 2002:a2e:b623:0:b0:278:f073:d3c0 with SMTP id s3-20020a2eb623000000b00278f073d3c0mr676510ljn.357.1668239453642;
+        Fri, 11 Nov 2022 23:50:53 -0800 (PST)
 Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id t10-20020a195f0a000000b0049c86ca95bfsm746128lfb.52.2022.11.11.23.49.49
+        by smtp.gmail.com with ESMTPSA id h8-20020ac24d28000000b004afac783b5esm736430lfk.238.2022.11.11.23.50.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 23:49:50 -0800 (PST)
-Message-ID: <af96cd1f-b370-c20e-980a-662acb950ef7@linaro.org>
-Date:   Sat, 12 Nov 2022 10:49:49 +0300
+        Fri, 11 Nov 2022 23:50:53 -0800 (PST)
+Message-ID: <8e211b4a-f102-5bbd-0b74-17e41734157a@linaro.org>
+Date:   Sat, 12 Nov 2022 10:50:52 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Subject: Re: [PATCH 22/22] phy: qcom-qmp-combo: clean up DP callback names
+Subject: Re: [PATCH 12/22] phy: qcom-qmp-combo: separate USB and DP devicetree
+ parsing
 Content-Language: en-GB
 To:     Johan Hovold <johan+linaro@kernel.org>,
         Vinod Koul <vkoul@kernel.org>
@@ -65,15 +66,14 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org
 References: <20221111085643.9478-1-johan+linaro@kernel.org>
- <20221111085643.9478-23-johan+linaro@kernel.org>
+ <20221111085643.9478-13-johan+linaro@kernel.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221111085643.9478-23-johan+linaro@kernel.org>
+In-Reply-To: <20221111085643.9478-13-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,15 +81,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 11/11/2022 11:56, Johan Hovold wrote:
-> Clean up and unify the DP callbacks by dropping the redundant "qcom" and
-> "phy" prefix and infix and by using a common naming scheme ("qmp" +
-> version + callback name).
+> Separate the devicetree parsing of the USB and DP child nodes in two
+> dedicated helpers in preparation for merging the driver data.
+> 
+> Note that only the USB part of the PHY has a pipe clock and that the DP
+> implementation only uses the tx/tx2 and pcs register regions.
 > 
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
->   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 82 +++++++++++------------
->   1 file changed, 41 insertions(+), 41 deletions(-)
-> 
+>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 81 ++++++++++++++++-------
+>   1 file changed, 58 insertions(+), 23 deletions(-)
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
