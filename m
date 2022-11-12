@@ -2,51 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3E36266D2
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC006266D3
 	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 05:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233445AbiKLEBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 23:01:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
+        id S233899AbiKLEFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 23:05:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiKLEB3 (ORCPT
+        with ESMTP id S229991AbiKLEE7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 23:01:29 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C264EE25
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 20:01:27 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N8MHd1XlXzJnb2;
-        Sat, 12 Nov 2022 11:58:21 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 12 Nov 2022 12:01:24 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Subject: Re: [syzbot] possible deadlock in hugetlb_fault
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        syzbot <syzbot+ca56f14c500045350f93@syzkaller.appspotmail.com>
-CC:     <akpm@linux-foundation.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <llvm@lists.linux.dev>, <nathan@kernel.org>,
-        <ndesaulniers@google.com>, <songmuchun@bytedance.com>,
-        <syzkaller-bugs@googlegroups.com>, <trix@redhat.com>
-References: <0000000000008c742d05eca72d4d@google.com>
- <Y27jxKoo1BmgbDbl@monkey>
-Message-ID: <c7646d97-c04b-7795-a6f8-a6523945f89c@huawei.com>
-Date:   Sat, 12 Nov 2022 12:01:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <Y27jxKoo1BmgbDbl@monkey>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 11 Nov 2022 23:04:59 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C57EF023
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 20:04:58 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id z125-20020a25c983000000b006dc905e6ccfso5998322ybf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 20:04:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=s3sgmVlNCJPhymcazOWxttEdW083uKMqd63z0b1pzWw=;
+        b=YWx26bIQpAnqqXnlRJ9bDLkeneEJfnzvCyvS6fyoFatJSsejPUfmU8e9QabCQQ2kMF
+         heRK7H0ZUgYrekpr+f9xMZ2DbATYsyfwX++XaM+EZzpdT0QXHzYHo7juO+OO6fuhzvEo
+         Tndb0wiaEdFajeyKCszx9Pun004j0gyxfpKDB3TET5YB3tynY/qNx3wSZvDita3RnNsV
+         LHGyG21DytY6Vcfpkx3y3+h/76zRTwo6yjplsSVfHGavoNnLOW522BZ2z2jkn6yLyxi9
+         TxoAjRb1fjC4UF9GxZznB4jZX9+D1Y1VlH78KVQG+O4sEMaRzuh7kYNuwcUILJQQpLNn
+         KkKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s3sgmVlNCJPhymcazOWxttEdW083uKMqd63z0b1pzWw=;
+        b=gbQ1WkY4H//W05vWrtjE4fjPW0ndwQlctWO3ZglYt5zqNd+1I2x62lB9RsiwQOfheo
+         p5KrF6Fa2fSzANJH+iwwICwu04jo8+ul+FaOacbrKy5iUiV8U54MzqjmRMDw7igIDl6i
+         0jlJ9X8v88mnrNV4Wq6SIUH0ItNCX5HyrodB7+eye41Jfo8lxBGu9yO7mV83cxmMCJ3H
+         l/85i9OvdR8LbKFn3PZtDLFy65ii2SYB+/XiF7yU7P1xlJjMzytL7UD+gzvZC+4Nptlz
+         KaBVh/lGmcVpKwbshqQ95j09iR7nvVNK7AtemeCRnIVkAhxKwEeFFZ4UohhIhOVZz+Kf
+         2JpA==
+X-Gm-Message-State: ACrzQf0SNpHs/17DGBh4A+c4C/gBtV9Teq6YuKcGRWTG314s2ORjpwvE
+        /tsoAOwTKS9ZyatO0iwmZch6J678pqdNTA==
+X-Google-Smtp-Source: AMsMyM5aW413wYUCK8QITgjM6Wv7c9MESFWak+wN0jT6UWWSBrvlI9bmSEF/OFOs3/KzbWZFwufBS/mRP2hw8Q==
+X-Received: from edumazet1.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:395a])
+ (user=edumazet job=sendgmr) by 2002:a81:5d7:0:b0:367:300a:b24a with SMTP id
+ 206-20020a8105d7000000b00367300ab24amr65639715ywf.128.1668225897151; Fri, 11
+ Nov 2022 20:04:57 -0800 (PST)
+Date:   Sat, 12 Nov 2022 04:04:52 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221112040452.644234-1-edumazet@google.com>
+Subject: [PATCH -next] iommu/dma: avoid expensive indirect calls for sync operations
+From:   Eric Dumazet <edumazet@google.com>
+To:     Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>, iommu@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,114 +69,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/12 8:07, Mike Kravetz wrote:
-> On 11/04/22 09:00, syzbot wrote:
->> Hello,
->>
->> syzbot found the following issue on:
->>
->> HEAD commit:    f2f32f8af2b0 Merge tag 'for-6.1-rc3-tag' of git://git.kern..
->> git tree:       upstream
->> console output: https://syzkaller.appspot.com/x/log.txt?x=137d52ca880000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=d080a4bd239918dd
->> dashboard link: https://syzkaller.appspot.com/bug?extid=ca56f14c500045350f93
->> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->> userspace arch: i386
->>
->> Unfortunately, I don't have any reproducer for this issue yet.
->>
->> Downloadable assets:
->> disk image: https://storage.googleapis.com/syzbot-assets/b4f72e7a4c11/disk-f2f32f8a.raw.xz
->> vmlinux: https://storage.googleapis.com/syzbot-assets/3f88997ad7c9/vmlinux-f2f32f8a.xz
->> kernel image: https://storage.googleapis.com/syzbot-assets/b4b5b3963e2d/bzImage-f2f32f8a.xz
->>
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+ca56f14c500045350f93@syzkaller.appspotmail.com
->>
->> ======================================================
->> WARNING: possible circular locking dependency detected
->> 6.1.0-rc3-syzkaller-00152-gf2f32f8af2b0 #0 Not tainted
->> ------------------------------------------------------
->> syz-executor.2/5665 is trying to acquire lock:
->> ffff88801c74c298 (&mm->mmap_lock#2){++++}-{3:3}, at: __might_fault+0xa1/0x170 mm/memory.c:5645
->>
->> but task is already holding lock:
->> ffff88801c4f3078 (&vma_lock->rw_sema){++++}-{3:3}, at: hugetlb_vma_lock_read mm/hugetlb.c:6816 [inline]
->> ffff88801c4f3078 (&vma_lock->rw_sema){++++}-{3:3}, at: hugetlb_fault+0x40a/0x2060 mm/hugetlb.c:5859
->>
->> which lock already depends on the new lock.
->>
->>
->> the existing dependency chain (in reverse order) is:
->>
->> -> #1 (&vma_lock->rw_sema){++++}-{3:3}:
->>        down_write+0x90/0x220 kernel/locking/rwsem.c:1562
->>        hugetlb_vma_lock_write mm/hugetlb.c:6834 [inline]
->>        __unmap_hugepage_range_final+0x97/0x340 mm/hugetlb.c:5202
->>        unmap_single_vma+0x23d/0x2a0 mm/memory.c:1690
->>        unmap_vmas+0x21e/0x370 mm/memory.c:1733
->>        exit_mmap+0x189/0x7a0 mm/mmap.c:3090
->>        __mmput+0x128/0x4c0 kernel/fork.c:1185
->>        mmput+0x5c/0x70 kernel/fork.c:1207
->>        exit_mm kernel/exit.c:516 [inline]
->>        do_exit+0xa39/0x2a20 kernel/exit.c:807
->>        do_group_exit+0xd0/0x2a0 kernel/exit.c:950
->>        get_signal+0x21a1/0x2430 kernel/signal.c:2858
->>        arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
->>        exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
->>        exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
->>        __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
->>        syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:296
->>        __do_fast_syscall_32+0x72/0xf0 arch/x86/entry/common.c:181
->>        do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
->>        entry_SYSENTER_compat_after_hwframe+0x70/0x82
->>
->> -> #0 (&mm->mmap_lock#2){++++}-{3:3}:
->>        check_prev_add kernel/locking/lockdep.c:3097 [inline]
->>        check_prevs_add kernel/locking/lockdep.c:3216 [inline]
->>        validate_chain kernel/locking/lockdep.c:3831 [inline]
->>        __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
->>        lock_acquire kernel/locking/lockdep.c:5668 [inline]
->>        lock_acquire+0x1df/0x630 kernel/locking/lockdep.c:5633
->>        __might_fault mm/memory.c:5646 [inline]
->>        __might_fault+0x104/0x170 mm/memory.c:5639
->>        _copy_from_user+0x25/0x170 lib/usercopy.c:13
->>        copy_from_user include/linux/uaccess.h:161 [inline]
->>        snd_rawmidi_kernel_write1+0x366/0x880 sound/core/rawmidi.c:1549
->>        snd_rawmidi_write+0x273/0xbb0 sound/core/rawmidi.c:1618
->>        vfs_write+0x2d7/0xdd0 fs/read_write.c:582
->>        ksys_write+0x1e8/0x250 fs/read_write.c:637
->>        do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
->>        __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
->>        do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
->>        entry_SYSENTER_compat_after_hwframe+0x70/0x82
->>
->> other info that might help us debug this:
->>
->>  Possible unsafe locking scenario:
->>
->>        CPU0                    CPU1
->>        ----                    ----
->>   lock(&vma_lock->rw_sema);
->>                                lock(&mm->mmap_lock#2);
->>                                lock(&vma_lock->rw_sema);
->>   lock(&mm->mmap_lock#2);
-> 
-> I may not be reading the report correctly, but I can not see how we acquire the
-> hugetlb vma_lock before trying to acquire mmap_lock in stack 0.  We would not
-> acquire the vma_lock until we enter hugetlb fault processing (not in the stack).
-> 
-> Adding Miaohe Lin on Cc due to previous help with vma_lock potential deadlock
-> situations.  Miaohe, does this make sense to you?
-> 
+Quite often, NIC devices do not need dma_sync operations
+on x86_64 at least.
 
-Hi Mike,
-  This doesn't make sense for me too. Stack #1 shows that syz-executor is releasing
-its address space while stack #0 shows another thread is serving the write syscall.
-In this case, mm->mm_users is 0 and all threads in this process should be serving
-do_exit()? But I could be easily wrong. Also I can't see how vma_lock is locked before
-trying to acquire mmap_lock in above stacks. Might this be a false positive?
+Indeed, when dev_is_dma_coherent(dev) is true and
+dev_use_swiotlb(dev) is false, iommu_dma_sync_single_for_cpu()
+and friends do nothing.
 
-Thanks,
-Miaohe Lin
+However, indirectly calling them when CONFIG_RETPOLINE=y
+consumes about 10% of cycles on a cpu receiving packets
+from softirq at ~100Gbit rate, as shown in [1]
+
+Even if/when CONFIG_RETPOLINE is not set, there
+is a cost of about 3%.
+
+This patch adds a copy of iommu_dma_ops structure,
+where sync_single_for_cpu, sync_single_for_device,
+sync_sg_for_cpu and sync_sg_for_device are unset.
+
+perf profile before the patch:
+
+    18.53%  [kernel]       [k] gq_rx_skb
+    14.77%  [kernel]       [k] napi_reuse_skb
+     8.95%  [kernel]       [k] skb_release_data
+     5.42%  [kernel]       [k] dev_gro_receive
+     5.37%  [kernel]       [k] memcpy
+<*>  5.26%  [kernel]       [k] iommu_dma_sync_sg_for_cpu
+     4.78%  [kernel]       [k] tcp_gro_receive
+<*>  4.42%  [kernel]       [k] iommu_dma_sync_sg_for_device
+     4.12%  [kernel]       [k] ipv6_gro_receive
+     3.65%  [kernel]       [k] gq_pool_get
+     3.25%  [kernel]       [k] skb_gro_receive
+     2.07%  [kernel]       [k] napi_gro_frags
+     1.98%  [kernel]       [k] tcp6_gro_receive
+     1.27%  [kernel]       [k] gq_rx_prep_buffers
+     1.18%  [kernel]       [k] gq_rx_napi_handler
+     0.99%  [kernel]       [k] csum_partial
+     0.74%  [kernel]       [k] csum_ipv6_magic
+     0.72%  [kernel]       [k] free_pcp_prepare
+     0.60%  [kernel]       [k] __napi_poll
+     0.58%  [kernel]       [k] net_rx_action
+     0.56%  [kernel]       [k] read_tsc
+<*>  0.50%  [kernel]       [k] __x86_indirect_thunk_r11
+     0.45%  [kernel]       [k] memset
+
+After patch, lines with <*> no longer show up, and overall
+cpu usage looks much better (~60% instead of ~72%)
+
+    25.56%  [kernel]       [k] gq_rx_skb
+     9.90%  [kernel]       [k] napi_reuse_skb
+     7.39%  [kernel]       [k] dev_gro_receive
+     6.78%  [kernel]       [k] memcpy
+     6.53%  [kernel]       [k] skb_release_data
+     6.39%  [kernel]       [k] tcp_gro_receive
+     5.71%  [kernel]       [k] ipv6_gro_receive
+     4.35%  [kernel]       [k] napi_gro_frags
+     4.34%  [kernel]       [k] skb_gro_receive
+     3.50%  [kernel]       [k] gq_pool_get
+     3.08%  [kernel]       [k] gq_rx_napi_handler
+     2.35%  [kernel]       [k] tcp6_gro_receive
+     2.06%  [kernel]       [k] gq_rx_prep_buffers
+     1.32%  [kernel]       [k] csum_partial
+     0.93%  [kernel]       [k] csum_ipv6_magic
+     0.65%  [kernel]       [k] net_rx_action
+
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: Joerg Roedel <joro@8bytes.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: iommu@lists.linux.dev
+---
+ drivers/iommu/dma-iommu.c | 67 +++++++++++++++++++++++++++------------
+ 1 file changed, 47 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index 9297b741f5e80e2408e864fc3f779410d6b04d49..976ba20a55eab5fd94e9bec2d38a2a60e0690444 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -522,6 +522,11 @@ static bool dev_use_swiotlb(struct device *dev)
+ 	return IS_ENABLED(CONFIG_SWIOTLB) && dev_is_untrusted(dev);
+ }
+ 
++static bool dev_is_dma_sync_needed(struct device *dev)
++{
++	return !dev_is_dma_coherent(dev) || dev_use_swiotlb(dev);
++}
++
+ /**
+  * iommu_dma_init_domain - Initialise a DMA mapping domain
+  * @domain: IOMMU domain previously prepared by iommu_get_dma_cookie()
+@@ -914,7 +919,7 @@ static void iommu_dma_sync_single_for_cpu(struct device *dev,
+ {
+ 	phys_addr_t phys;
+ 
+-	if (dev_is_dma_coherent(dev) && !dev_use_swiotlb(dev))
++	if (!dev_is_dma_sync_needed(dev))
+ 		return;
+ 
+ 	phys = iommu_iova_to_phys(iommu_get_dma_domain(dev), dma_handle);
+@@ -930,7 +935,7 @@ static void iommu_dma_sync_single_for_device(struct device *dev,
+ {
+ 	phys_addr_t phys;
+ 
+-	if (dev_is_dma_coherent(dev) && !dev_use_swiotlb(dev))
++	if (!dev_is_dma_sync_needed(dev))
+ 		return;
+ 
+ 	phys = iommu_iova_to_phys(iommu_get_dma_domain(dev), dma_handle);
+@@ -1544,30 +1549,51 @@ static size_t iommu_dma_opt_mapping_size(void)
+ 	return iova_rcache_range();
+ }
+ 
++#define iommu_dma_ops_common_fields \
++	.flags			= DMA_F_PCI_P2PDMA_SUPPORTED,		\
++	.alloc			= iommu_dma_alloc,			\
++	.free			= iommu_dma_free,			\
++	.alloc_pages		= dma_common_alloc_pages,		\
++	.free_pages		= dma_common_free_pages,		\
++	.alloc_noncontiguous	= iommu_dma_alloc_noncontiguous,	\
++	.free_noncontiguous	= iommu_dma_free_noncontiguous,		\
++	.mmap			= iommu_dma_mmap,			\
++	.get_sgtable		= iommu_dma_get_sgtable,		\
++	.map_page		= iommu_dma_map_page,			\
++	.unmap_page		= iommu_dma_unmap_page,			\
++	.map_sg			= iommu_dma_map_sg,			\
++	.unmap_sg		= iommu_dma_unmap_sg,			\
++	.map_resource		= iommu_dma_map_resource,		\
++	.unmap_resource		= iommu_dma_unmap_resource,		\
++	.get_merge_boundary	= iommu_dma_get_merge_boundary,		\
++	.opt_mapping_size	= iommu_dma_opt_mapping_size,
++
+ static const struct dma_map_ops iommu_dma_ops = {
+-	.flags			= DMA_F_PCI_P2PDMA_SUPPORTED,
+-	.alloc			= iommu_dma_alloc,
+-	.free			= iommu_dma_free,
+-	.alloc_pages		= dma_common_alloc_pages,
+-	.free_pages		= dma_common_free_pages,
+-	.alloc_noncontiguous	= iommu_dma_alloc_noncontiguous,
+-	.free_noncontiguous	= iommu_dma_free_noncontiguous,
+-	.mmap			= iommu_dma_mmap,
+-	.get_sgtable		= iommu_dma_get_sgtable,
+-	.map_page		= iommu_dma_map_page,
+-	.unmap_page		= iommu_dma_unmap_page,
+-	.map_sg			= iommu_dma_map_sg,
+-	.unmap_sg		= iommu_dma_unmap_sg,
++	iommu_dma_ops_common_fields
++
+ 	.sync_single_for_cpu	= iommu_dma_sync_single_for_cpu,
+ 	.sync_single_for_device	= iommu_dma_sync_single_for_device,
+ 	.sync_sg_for_cpu	= iommu_dma_sync_sg_for_cpu,
+ 	.sync_sg_for_device	= iommu_dma_sync_sg_for_device,
+-	.map_resource		= iommu_dma_map_resource,
+-	.unmap_resource		= iommu_dma_unmap_resource,
+-	.get_merge_boundary	= iommu_dma_get_merge_boundary,
+-	.opt_mapping_size	= iommu_dma_opt_mapping_size,
+ };
+ 
++/* Special instance of iommu_dma_ops for devices satisfying this condition:
++ *   !dev_is_dma_sync_needed(dev)
++ *
++ * iommu_dma_sync_single_for_cpu(), iommu_dma_sync_single_for_device(),
++ * iommu_dma_sync_sg_for_cpu(), iommu_dma_sync_sg_for_device()
++ * do nothing special and can be avoided, saving indirect calls.
++ */
++static const struct dma_map_ops iommu_nosync_dma_ops = {
++	iommu_dma_ops_common_fields
++
++	.sync_single_for_cpu	= NULL,
++	.sync_single_for_device	= NULL,
++	.sync_sg_for_cpu	= NULL,
++	.sync_sg_for_device	= NULL,
++};
++#undef iommu_dma_ops_common_fields
++
+ /*
+  * The IOMMU core code allocates the default DMA domain, which the underlying
+  * IOMMU driver needs to support via the dma-iommu layer.
+@@ -1586,7 +1612,8 @@ void iommu_setup_dma_ops(struct device *dev, u64 dma_base, u64 dma_limit)
+ 	if (iommu_is_dma_domain(domain)) {
+ 		if (iommu_dma_init_domain(domain, dma_base, dma_limit, dev))
+ 			goto out_err;
+-		dev->dma_ops = &iommu_dma_ops;
++		dev->dma_ops = dev_is_dma_sync_needed(dev) ?
++				&iommu_dma_ops : &iommu_nosync_dma_ops;
+ 	}
+ 
+ 	return;
+-- 
+2.38.1.431.g37b22c650d-goog
 
