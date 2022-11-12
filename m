@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235CB6265DD
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 01:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEB56265E3
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 01:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234477AbiKLALn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 19:11:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42322 "EHLO
+        id S234537AbiKLAOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 19:14:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234537AbiKLALh (ORCPT
+        with ESMTP id S234412AbiKLAOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 19:11:37 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052DA54B1A;
-        Fri, 11 Nov 2022 16:11:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668211896; x=1699747896;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=LiZwmYGwAznYW6wrpo4GEBOGDwQrkWj7tTELRkONMMw=;
-  b=Ny7JK8HlDrFRt5trB8P87UdEy36SRNwkKbkK5Q6HUb6MMK14SVOHUwh3
-   YwcA3jc/+4bWBtgh3ELR1LQQPAvwQPpboqLBIN5+4faSnMzEaIDsi7CTe
-   PBPo6CuEA6LRF0XCasaoKb8VbqnQCx72bVXujZA95PMZpfxDqor5pWOAR
-   QNbQFX8WCnVhcA6sqRPWokmzpDYKBpoXFP+rMJQUhONGwNck04YG8Sz62
-   2q+9vg9NIa27tBBAhpc5KETG7ui7BqMaJFac/+eskgR3slGU+1xoej/Zp
-   kNivApIiDEkX3/TwBg3GID0Bz7t/i7IadFNZge/bkB+2mz67W/VYVFyL6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="313484745"
-X-IronPort-AV: E=Sophos;i="5.96,157,1665471600"; 
-   d="scan'208";a="313484745"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 16:11:35 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10528"; a="615617910"
-X-IronPort-AV: E=Sophos;i="5.96,157,1665471600"; 
-   d="scan'208";a="615617910"
-Received: from nmpoonaw-mobl1.amr.corp.intel.com (HELO [10.252.134.46]) ([10.252.134.46])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 16:11:33 -0800
-Message-ID: <7d621ab2-6717-c6b6-5c3c-90af4c2f4afc@intel.com>
-Date:   Fri, 11 Nov 2022 16:11:32 -0800
+        Fri, 11 Nov 2022 19:14:52 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B104D14D22
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 16:14:51 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3704852322fso57368857b3.8
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 16:14:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XDKvgE4abL1LNK9A1vR3QS/HEotmvgeQVhtEiU4bCpY=;
+        b=o6ahKW4br5rBqjawkN84i9PyQeZlyu4NDHLMtdwIPBWpPNLZfcPQSzl9zHBZxKkH81
+         9lFc4rMiP0/pWx5541rX0cQJRhUOsOzpK0Gb+roLXJ2nTnL8adQhupsW/hSRSDluKq3W
+         Yw9putnEghIkFnwKHFEW7mZKWKfGYe7prfAjyXIUOVD9GOL+zs9byQ8vsPQBnIX0LHEx
+         bhQ2Iv81MRNwFXXV8kE2/oRqzIg6mScJcbYaD5+4gqgUSbRjQ1D6qE+lRPW5goOQPr9Q
+         rAmPGG+FdxOQvJM10qGCOki/l2sYW3PS+Pvtrxd0dWWlQ9nCpU6c0L9mmW+VLNL+UQo0
+         wTLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XDKvgE4abL1LNK9A1vR3QS/HEotmvgeQVhtEiU4bCpY=;
+        b=IEHi1ZfS+MILkFh8FtLIB4Fz/hnJf6wey8RahHkDDj4vanZXXRnGNFXp4FAN/BySjd
+         cfUOkKVsKfXfF2KcnCBI0S1QEBZgbRWntML8kOCiQBoY1iPL99BWQZUH/DwDx2NFeHPm
+         /zoyJuHer9mkhGbHOJZY2x+FuwUSBbrDDI6/8L6Qs6kWKMkJPkqgT/IgC9lOxv+L86+o
+         UcNeJVWt2U6n/P/Efpd7XS2Vdqf6yfY4ZYNUK/huoobO9uQdxyCc18Me6taZ2gKThFe7
+         qAlCMKlfnpApD2Iu2xzBbhWqWnddjvYdWnFNZjg24NYDIAMMsNp4+iofeCO6PkRkI6yc
+         85Sg==
+X-Gm-Message-State: ANoB5plzsS7RkkoM/takVbgRQ3HKlMCTtgxd0zqyxuz6XuJeaySPx0o5
+        SNcjYGwiZTHEzOPwgMjX30BSI3erVELUb640RkHQfQ==
+X-Google-Smtp-Source: AA0mqf6Y1guw19vg5V2gqWzMKChfMxZE3PEX1iRQHR48hbaUSEi1YGTVOhtxDfY/nSox9kf8fKhXQ4Kl4UBEJjZBvkU=
+X-Received: by 2002:a81:254a:0:b0:36c:aaa6:e571 with SMTP id
+ l71-20020a81254a000000b0036caaa6e571mr4171152ywl.467.1668212090749; Fri, 11
+ Nov 2022 16:14:50 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 01/12] x86/ioremap: Fix page aligned size calculation
- in __ioremap_caller()
-Content-Language: en-US
-To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, luto@kernel.org, peterz@infradead.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, lpieralisi@kernel.org, robh@kernel.org,
-        kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
-        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, dan.j.williams@intel.com,
-        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
-        iommu@lists.linux.dev
-References: <1668147701-4583-1-git-send-email-mikelley@microsoft.com>
- <1668147701-4583-2-git-send-email-mikelley@microsoft.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <1668147701-4583-2-git-send-email-mikelley@microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <7ccd58e8e26bcdd82e66993cbd53ff59eebe3949.1668139105.git.jamie.bainbridge@gmail.com>
+ <20221111092047.7d33bcd3@hermes.local> <CAAvyFNhkn2Zv16RMWGCtQh4SpjJX56q8gyEL3Mz6Ru+Ef=SJfA@mail.gmail.com>
+ <20221111161120.770b9db2@hermes.local>
+In-Reply-To: <20221111161120.770b9db2@hermes.local>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 11 Nov 2022 16:14:39 -0800
+Message-ID: <CANn89i+sj9w+W3Mx-UsmaWzq_GcLwr=FQkHC61_2eBbvpVQQ1g@mail.gmail.com>
+Subject: Re: [PATCH v2] tcp: Add listening address to SYN flood message
+To:     Stephen Hemminger <stephen@networkplumber.org>
+Cc:     Jamie Bainbridge <jamie.bainbridge@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,47 +75,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/10/22 22:21, Michael Kelley wrote:
-> If applying the PHYSICAL_PAGE_MASK to the phys_addr argument causes
-> upper bits to be masked out, the re-calculation of size to account for
-> page alignment is incorrect because the same bits are not masked out
-> in last_addr.
-> 
-> Fix this by masking the page aligned last_addr as well.
+On Fri, Nov 11, 2022 at 4:11 PM Stephen Hemminger
+<stephen@networkplumber.org> wrote:
+>
+> On Sat, 12 Nov 2022 10:59:52 +1100
+> Jamie Bainbridge <jamie.bainbridge@gmail.com> wrote:
+>
+> > On Sat, 12 Nov 2022 at 04:20, Stephen Hemminger
+> > <stephen@networkplumber.org> wrote:
+> > >
+> > > On Fri, 11 Nov 2022 14:59:32 +1100
+> > > Jamie Bainbridge <jamie.bainbridge@gmail.com> wrote:
+> > >
+> > > > +         xchg(&queue->synflood_warned, 1) == 0) {
+> > > > +             if (IS_ENABLED(CONFIG_IPV6) && sk->sk_family == AF_INET6) {
+> > > > +                     net_info_ratelimited("%s: Possible SYN flooding on port %pI6c.%u. %s.\n",
+> > > > +                                     proto, &sk->sk_v6_rcv_saddr,
+> > > > +                                     sk->sk_num, msg);
+> > > > +             } else {
+> > > > +                     net_info_ratelimited("%s: Possible SYN flooding on port %pI4.%u. %s.\n",
+> > > > +                                     proto, &sk->sk_rcv_saddr,
+> > > > +                                     sk->sk_num, msg);
+> > >
+> > > Minor nit, the standard format for printing addresses would be to use colon seperator before port
+> > >
+> > >                 if (IS_ENABLED(CONFIG_IPV6) && sk->sk_family == AF_INET6) {
+> > >                         net_info_ratelimited("%s: Possible SYN flooding on [%pI6c]:%u. %s.\n",
+> > >                                         proto, &sk->sk_v6_rcv_saddr, sk->sk_num, msg);
+> > >                 } else {
+> > >                         net_info_ratelimited("%s: Possible SYN flooding on %pI4:%u. %s.\n",
+> > >                                         proto, &sk->sk_rcv_saddr, sk->sk_num, msg);
+> >
+> > I considered this too, though Eric suggested "IP.port" to match tcpdump.
+>
+> That works, if it happens I doubt it matters.
 
-This makes sense at first glance.
+Note that "ss dst" really needs the [] notation for IPv6
 
-How did you notice this?  What is the impact to users?  Did the bug
-actually cause you some trouble or was it by inspection?  Do you have a
-sense of how many folks might be impacted?  Any thoughts on how it
-lasted for 14+ years?
+ss -t dst "[::1]"
+State                  Recv-Q             Send-Q
+    Local Address:Port                            Peer Address:Port
+         Process
+CLOSE-WAIT             1                  0
+            [::1]:50584                                  [::1]:ipp
 
-For the functionality of the mapping, I guess 'size' doesn't really
-matter because even a 1-byte 'size' will map a page.  The other fallout
-would be from memtype_reserve() reserving too little.  But, that's
-unlikely to matter for small mappings because even though:
+So we have inconsistency anyway...
 
-	ioremap(0x1800, 0x800);
-
-would end up just reserving 0x1000->0x1800, it still wouldn't allow
-
-	ioremap(0x1000, 0x800);
-
-to succeed because *both* of them would end up trying to reserve the
-beginning of the page.  Basically, the first caller effectively reserves
-the whole page and any second user will fail.
-
-So the other place it would matter would be for mappings that span two
-pages, say:
-
-	ioremap(0x1fff, 0x2)
-
-But I guess those aren't very common.  Most large ioremap() callers seem
-to already have base and size page-aligned.
-
-Anyway, sorry to make so much of a big deal about a one-liner.  But,
-these decade-old bugs really make me wonder how they stuck around for so
-long.
-
-I'd be curious if you thought about this too while putting together this
-fox.
+As you said, no strong opinion.
