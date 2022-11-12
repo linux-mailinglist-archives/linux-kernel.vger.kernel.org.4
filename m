@@ -2,169 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81FFD6267FD
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 09:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A76286267F0
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 09:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234321AbiKLIOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 03:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
+        id S234774AbiKLIHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 03:07:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiKLIOl (ORCPT
+        with ESMTP id S230170AbiKLIG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 03:14:41 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D751513E1F;
-        Sat, 12 Nov 2022 00:14:39 -0800 (PST)
-Received: from kwepemi500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N8Sz05Gc9zmVZs;
-        Sat, 12 Nov 2022 16:14:20 +0800 (CST)
-Received: from [10.136.108.160] (10.136.108.160) by
- kwepemi500002.china.huawei.com (7.221.188.171) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 12 Nov 2022 16:14:36 +0800
-Message-ID: <cc99f08d-4e2f-120c-fd37-03809c92e819@huawei.com>
-Date:   Sat, 12 Nov 2022 16:14:27 +0800
+        Sat, 12 Nov 2022 03:06:57 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65FA13E20;
+        Sat, 12 Nov 2022 00:06:50 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N8SpC1zZ6z4f3tq2;
+        Sat, 12 Nov 2022 16:06:43 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP1 (Coremail) with SMTP id cCh0CgD37awUVG9j5vZ7AQ--.43224S4;
+        Sat, 12 Nov 2022 16:06:46 +0800 (CST)
+From:   Ye Bin <yebin@huaweicloud.com>
+To:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     ming.lei@redhat.com, Ye Bin <yebin10@huawei.com>
+Subject: [PATCH -next] blk-mq: fix warning when unregister mq sysfs
+Date:   Sat, 12 Nov 2022 16:28:13 +0800
+Message-Id: <20221112082813.704873-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: [PATCH v2] USB: gadget: Fix use-after-free during usb config switch
-Content-Language: en-US
-References: <20221112030433.4945-1-xuetao09@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
-        <jakobkoschel@gmail.com>, <geert+renesas@glider.be>,
-        =?UTF-8?B?5byg5bu65rab?= <water.zhangjiantao@huawei.com>,
-        <colin.i.king@gmail.com>,
-        =?UTF-8?B?6Jab5rab?= <xuetao09@huawei.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     =?UTF-8?B?6JSh5Lqa5Lic?= <caiyadong@huawei.com>,
-        =?UTF-8?B?5b6Q5rW35rSL?= <xuhaiyang5@hisilicon.com>
-From:   jiantao zhang <water.zhangjiantao@huawei.com>
-In-Reply-To: <20221112030433.4945-1-xuetao09@huawei.com>
-X-Forwarded-Message-Id: <20221112030433.4945-1-xuetao09@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.136.108.160]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500002.china.huawei.com (7.221.188.171)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cCh0CgD37awUVG9j5vZ7AQ--.43224S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxZF17KrW7GF4xurW3Kw1xZrb_yoW5urW8pr
+        43Gw47CrWvgr1UZF4UAan8Xry5Ka1kA3W8ZryfXr1rt3Wjkry5Jr18JFyUJFWkJrZ7Cr4I
+        qF4DXw4rtr15WaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+        AF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s
+        0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the process of switching USB config from rndis to other config,
-if the hardware does not support the ->pullup callback, or the
-hardware encounters a low probability fault, both of them may cause
-the ->pullup callback to fail, which will then cause a system panic
-(use after free).
+From: Ye Bin <yebin10@huawei.com>
 
-The gadget drivers sometimes need to be unloaded regardless of the
-hardware's behavior.
+There's issue as follows when do fault injection test:
+------------[ cut here ]------------
+kernfs: can not remove 'nr_tags', no directory
+WARNING: CPU: 8 PID: 2308 at fs/kernfs/dir.c:1635 kernfs_remove_by_name_ns+0xdd/0x100
+Modules linked in: null_blk(-)
+CPU: 8 PID: 2308 Comm: rmmod Not tainted 6.1.0-rc4-next-20221111+ #131
+RIP: 0010:kernfs_remove_by_name_ns+0xdd/0x100
+RSP: 0018:ffff88812149fbc8 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffffffffb8137508 RCX: 0000000000000000
+RDX: 0000000000000001 RSI: ffffffffb6b49ae0 RDI: ffffed1024293f6b
+RBP: ffffffffb8137600 R08: 0000000000000001 R09: ffffed1024293f3d
+R10: ffff88812149f9e7 R11: ffffed1024293f3c R12: 0000000000000000
+R13: ffffffffb6b2d2a0 R14: ffffffffb6b2d1e0 R15: ffff88822f7f14b8
+FS:  00007f97eacb9740(0000) GS:ffff8883ace00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f97e9b72b81 CR3: 000000022fbda000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ remove_files.isra.0+0x6c/0x170
+ sysfs_remove_group+0x9b/0x180
+ sysfs_remove_groups+0x4f/0xa0
+ __kobject_del+0x7d/0x1d0
+ kobject_del+0x32/0x50
+ blk_mq_sysfs_unregister.cold+0x8/0xd
+ blk_unregister_queue+0xed/0x260
+ del_gendisk+0x27e/0x900
+ null_del_dev.part.0+0x166/0x510 [null_blk]
+ null_destroy_dev+0x37/0x5c [null_blk]
+ null_exit+0x4c/0x9d [null_blk]
+ __do_sys_delete_module.isra.0+0x2f3/0x520
+ do_syscall_64+0x3b/0x90
+ entry_SYSCALL_64_after_hwframe+0x72/0xdc
+ </TASK>
 
-Analysis as follows:
-=======================================================================
-(1) write /config/usb_gadget/g1/UDC "none"   (init.usb.configfs.rc:2)
+Fault injection context as follows:
+ kobject_add
+ blk_mq_register_hctx
+ blk_mq_sysfs_register
+ blk_register_queue
+ device_add_disk
+ null_add_dev.part.0 [null_blk]
 
-gether_disconnect+0x2c/0x1f8           (dev->port_usb = NULL)
-rndis_disable+0x4c/0x74
-composite_disconnect+0x74/0xb0
-configfs_composite_disconnect+0x60/0x7c
-usb_gadget_disconnect+0x70/0x124
-usb_gadget_unregister_driver+0xc8/0x1d8
-gadget_dev_desc_UDC_store+0xec/0x1e4
+As 'blk_mq_sysfs_register' may failed, but when unregister mq sysfs don't
+judge sysfs if registered. 'blk_mq_sysfs_register' also didn't handle
+error correctly.
+To solve above issue, if sysfs is unregstered just exit.
 
-In function usb_gadget_disconnect(),The ->disconnect() callback will
-not be called when gadget->ops->pullup() return an error, therefore,
-pointer dev->port will not be set to NULL. If pointer dev->port_usb
-is not null, it will cause an exception of use-after-free in step3.
-
-(2) rm /config/usb_gadget/g1/configs/b.1/f1   (init.usb.configfs.rc:8)
-     (f1 -> ../../../../usb_gadget/g1/functions/rndis.gs4)
-
-rndis_deregister+0x28/0x54        (kfree(params))
-rndis_free+0x44/0x7c              (kfree(rndis))
-usb_put_function+0x14/0x1c
-config_usb_cfg_unlink+0xc4/0xe0
-configfs_unlink+0x124/0x1c8
-vfs_unlink+0x114/0x1dc
-
-(3) rmdir /config/usb_gadget/g1/functions/rndis.gs4
-     (init.usb.configfs.rc:11)
-
-Call trace:
-panic+0x1fc/0x3d0
-die+0x29c/0x2a8
-do_page_fault+0xa8/0x46c
-do_mem_abort+0x3c/0xac
-el1_sync_handler+0x40/0x78
-0xffffff801138f880    (params->resp_avail is an illegal func pointer)
-rndis_close+0x28/0x34 (->rndis_indicate_status_msg->params->resp_avail)
-eth_stop+0x74/0x110   (if dev->port_usb != NULL, call rndis_close)
-__dev_close_many+0x134/0x194
-dev_close_many+0x48/0x194
-rollback_registered_many+0x118/0x814
-unregister_netdevice_queue+0xe0/0x168
-unregister_netdev+0x20/0x30
-gether_cleanup+0x1c/0x38
-rndis_free_inst+0x2c/0x58
-rndis_attr_release+0xc/0x14
-kref_put+0x74/0xb8
-config_item_put+0x14/0x1c
-configfs_rmdir+0x314/0x374
-
-In step3,function pointer params->resp_avail() is a wild pointer
-becase pointer params has been freed in step2.
-
-Free mem stack(in step2):
-     usb_put_function -> rndis_free -> rndis_deregister -> kfree(params)
-
-use-after-free stack(in step3):
-     eth_stop -> rndis_close -> rndis_signal_disconnect ->
-     rndis_indicate_status_msg -> params->resp_avail()
-
-In function eth_stop(), if pointer dev->port_usb is NULL, function
-rndis_close() will not be called.
-If gadget->ops->pullup() return an error in step1,dev->port_usb will
-not be set to null. So, a panic will be caused in step3.
-=======================================================================
-
-Fixes:<0a55187a1ec8c> (USB: gadget core: Issue ->disconnect()
-callback from usb_gadget_disconnect())
-Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
-Signed-off-by: TaoXue <xuetao09@huawei.com>
+Signed-off-by: Ye Bin <yebin10@huawei.com>
 ---
-  V1 -> V2: V1 will affect the original function, V2 just move the 
-callback after "if" statement, so that the original function will  not 
-be affected. And fixed formatting issues.
+ block/blk-mq-sysfs.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-  drivers/usb/gadget/udc/core.c | 12 ++++++------
-  1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index c63c0c2cf649..bf9878e1a72a 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -734,13 +734,13 @@ int usb_gadget_disconnect(struct usb_gadget *gadget)
-  	}
-   	ret = gadget->ops->pullup(gadget, 0);
--	if (!ret) {
-+	if (!ret)
-  		gadget->connected = 0;
--		mutex_lock(&udc_lock);
--		if (gadget->udc->driver)
--			gadget->udc->driver->disconnect(gadget);
--		mutex_unlock(&udc_lock);
--	}
-+
-+	mutex_lock(&udc_lock);
-+	if (gadget->udc->driver)
-+		gadget->udc->driver->disconnect(gadget);
-+	mutex_unlock(&udc_lock);
-   out:
-  	trace_usb_gadget_disconnect(gadget, ret);
+diff --git a/block/blk-mq-sysfs.c b/block/blk-mq-sysfs.c
+index 93997d297d42..0cda0a729f3c 100644
+--- a/block/blk-mq-sysfs.c
++++ b/block/blk-mq-sysfs.c
+@@ -185,7 +185,7 @@ static int blk_mq_register_hctx(struct blk_mq_hw_ctx *hctx)
+ {
+ 	struct request_queue *q = hctx->queue;
+ 	struct blk_mq_ctx *ctx;
+-	int i, ret;
++	int i, j, ret;
+ 
+ 	if (!hctx->nr_ctx)
+ 		return 0;
+@@ -197,9 +197,16 @@ static int blk_mq_register_hctx(struct blk_mq_hw_ctx *hctx)
+ 	hctx_for_each_ctx(hctx, ctx, i) {
+ 		ret = kobject_add(&ctx->kobj, &hctx->kobj, "cpu%u", ctx->cpu);
+ 		if (ret)
+-			break;
++			goto out;
+ 	}
+ 
++	return 0;
++out:
++	hctx_for_each_ctx(hctx, ctx, j) {
++		if (j < i)
++			kobject_del(&ctx->kobj);
++	}
++	kobject_del(&hctx->kobj);
+ 	return ret;
+ }
+ 
+@@ -278,6 +285,8 @@ void blk_mq_sysfs_unregister(struct gendisk *disk)
+ 	struct blk_mq_hw_ctx *hctx;
+ 	unsigned long i;
+ 
++	if (!q->mq_sysfs_init_done)
++		return;
+ 	lockdep_assert_held(&q->sysfs_dir_lock);
+ 
+ 	queue_for_each_hw_ctx(q, hctx, i)
 -- 
-2.17.1
+2.31.1
 
