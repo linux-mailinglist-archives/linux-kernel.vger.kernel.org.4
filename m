@@ -2,73 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D7F4626843
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 10:05:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 309AC626846
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 10:07:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234722AbiKLJF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 04:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50522 "EHLO
+        id S234387AbiKLJHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 04:07:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234684AbiKLJFW (ORCPT
+        with ESMTP id S230344AbiKLJG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 04:05:22 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765BF31FAC
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 01:05:21 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id 136so6206463pga.1
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 01:05:21 -0800 (PST)
+        Sat, 12 Nov 2022 04:06:57 -0500
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97869101C;
+        Sat, 12 Nov 2022 01:06:56 -0800 (PST)
+Received: by mail-vs1-xe32.google.com with SMTP id q127so7176763vsa.7;
+        Sat, 12 Nov 2022 01:06:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=95GT+CzPNXJHEEeCgfKVSRCFhHGq9YtSWe72aa0XfkQ=;
-        b=Zg44tReFu/Dkdm10k+vsqEyM3jv8PLAlzzlni9UD7FvfoMUyxKgEsl2ZLMuT9uXD++
-         xmGOpy8ixIQCGQ9nFY62d5zHmIyBqt9V+TmzbI1/53Qbe2RbyVIhfakd/2Q3EUGr+mlT
-         pBC2hho0J+K7Iw3HQVlLJi/tlzs9NL/yMUj0iZcPDVOkqmaadZPDX9w8/w0XzX17xsP4
-         NrfrSfV9I4EDzbfdrWYedv85qBABJlu+rPutlUauQau3af/NCEjLukPl8HmRyyZXYxWo
-         ufVNUX3bl424BRlzwMMMN6k770sGt1Xyvu4TFGeHk9M+dkLR7nZdYySbzZQ5uo2aO6MJ
-         Yrrw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mUxYaPqOaXtV1rXuDj+fyELSwZGJABYGYX7l2EP4YIU=;
+        b=KjqZeq8pi/LDTQhe+itxy53wGlYeiHwFVwML722u+71uHrSKyM7A3CTcKQfVJRsioU
+         wzMQ5tDYPGun3n+To2e9GdOnJepCOMFjTYQhT/EvpQj19leGoZFT5CV+FkC1w4qNymHX
+         dgGBYQYgey8kZGL74+BPlHyVqnQWwi8my5yeD/qYi8S9yd3Cwd5kajMqKWGJ08lBa5Dw
+         fHgzRvGeKINczUdj78ZFzTKT2vTAN6jEqQZGXmwKTsG2JmANVN8ajVDO253tQb3fJgBz
+         YWeuYRthVVRsrcS+eHoHe/cp8gOgojok2zEtRNa1ehxO8RvmM7I8NUCJYb6S+DjFU6g2
+         e6Wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=95GT+CzPNXJHEEeCgfKVSRCFhHGq9YtSWe72aa0XfkQ=;
-        b=NeBCs0QkQJ1Rida0trEh93MBFEJZ5n9xkl0oJ3X9f7Bemz7I7E6y1oZghsl+Aightv
-         69BtM9E7IoAft53QfwmXnq5qteKfyhVIRQs9lGNBpHUB3WL6XxwbIipJw/NqRMrvuaC8
-         PhKAEIF+PgEryV+0t0cFjvC7kGrOmCrdbacp6Fyt7sZClsQFN+H2Df4XOJghbKwQDSx9
-         9zIolGDiondSrx76wVghMw8uR9hlm1NRfEl86o+qYox0GbgD7TLA+4mYCf04caSW+0Yo
-         EbY8At3I+vXY8NgqcwKLBYXpb+jj0YYqKrugvWb4ziwolcNM5k78i/aAgqeZPn6kEP/4
-         UGeA==
-X-Gm-Message-State: ANoB5pnYgvjL04/5TIMnP8wwaZYHBR6Xq1viZXTKEmLHaNOTpafexaZl
-        mmt2493q3OmkGoVNSD4ZOK+ks4wBJ3xBSToT
-X-Google-Smtp-Source: AA0mqf72pC10icczFCZ6doTOF7zUy8z7B+V3YgCUju/LjZRoxaJHMltwLlS7H7wm8x8z65N0TTYqUg==
-X-Received: by 2002:a63:5063:0:b0:45f:88b2:1762 with SMTP id q35-20020a635063000000b0045f88b21762mr4553333pgl.341.1668243920882;
-        Sat, 12 Nov 2022 01:05:20 -0800 (PST)
-Received: from fedora.. ([203.220.17.21])
-        by smtp.gmail.com with ESMTPSA id oj17-20020a17090b4d9100b00212d9a06edcsm6072611pjb.42.2022.11.12.01.05.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Nov 2022 01:05:20 -0800 (PST)
-From:   Samuel Zeter <samuelzeter@gmail.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Cc:     Samuel Zeter <samuelzeter@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: [RESEND PATCH v2 2/2] arch/x86/tools/objdump_reformat.awk: Allow for spaces
-Date:   Sat, 12 Nov 2022 19:04:17 +1000
-Message-Id: <20221112090418.284656-3-samuelzeter@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221112090418.284656-1-samuelzeter@gmail.com>
-References: <20221112090418.284656-1-samuelzeter@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mUxYaPqOaXtV1rXuDj+fyELSwZGJABYGYX7l2EP4YIU=;
+        b=VDu52H05szmgoEEyacEKqUthJTtMhGXic0mG6tmCKIQgT+gvlCDqpMrnkO45VlqHtU
+         JNaKhL9W988geuP73jEqTM85jlgM+4ORusp9OOAtN1PWB4BbRifaTqH26r4W9q67BsAv
+         dTEhmNjQTMqnrpju1/QV75R/PtiNi1pSWktJ+wu5IQsTuJXwIeF1FFBK1qFQj//61HWl
+         BY0z962YhkSh0+cWalOvqcWzib/huysGAZRzI4VJp1gxXB3397Qj1RcxjQ0MNvun1TY/
+         4wuEc8upRXt51mdHFiNbicqs7b2LK8Z6XviXg26IpR7j0hkp84GZJurqoeAA4c9Hgus7
+         Z5kQ==
+X-Gm-Message-State: ANoB5pn+KaUCgzuSV9k9knDHoM+CA3Bt33yKSjhY+yKyQWcAiFnoe17F
+        4xW1ApKfCRy7ATCmYlfuyF85VOQQFRc8i25HyeM=
+X-Google-Smtp-Source: AA0mqf7a/KcwKPHvFBXWv+PfoVxCoYuXMSmzRa+YxGWQh/j1x0FRgdT6hHrdrSrv5SA+RmYFjilg3xe/OZx+pK2d1z0=
+X-Received: by 2002:a67:f1cb:0:b0:3ad:7661:a081 with SMTP id
+ v11-20020a67f1cb000000b003ad7661a081mr2631819vsm.2.1668244014142; Sat, 12 Nov
+ 2022 01:06:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221028001016.332663-1-stephen.s.brennan@oracle.com>
+ <20221111220614.991928-1-stephen.s.brennan@oracle.com> <20221111220614.991928-4-stephen.s.brennan@oracle.com>
+In-Reply-To: <20221111220614.991928-4-stephen.s.brennan@oracle.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Sat, 12 Nov 2022 11:06:42 +0200
+Message-ID: <CAOQ4uxgK6H_zaCRZG3FvUhD7-28-P79qPTTmLUD4t0XY3LakbQ@mail.gmail.com>
+Subject: Re: [PATCH v4 3/5] dnotify: move fsnotify_recalc_mask() outside spinlock
+To:     Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -79,37 +68,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-objdump and llvm-objdump have differing output formats. Specifically,
-objump will format its output as: address:<tab>hex, whereas
-llvm-objdump displays its output as address:<space>hex.
+On Sat, Nov 12, 2022 at 12:06 AM Stephen Brennan
+<stephen.s.brennan@oracle.com> wrote:
+>
+> In order to allow sleeping during fsnotify_recalc_mask(), we need to
+> ensure no callers are holding a spinlock.
+>
+> Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
 
-objdump_reformat.awk incorrectly handles this discrepancy due to
-the unexpected space and as a result insn_decoder_test fails, as
-its input is garbled.
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
 
-The instruction line being tokenized now handles a space and colon,
-or tab delimiter.
+small suggestion below.
 
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Samuel Zeter <samuelzeter@gmail.com>
----
- arch/x86/tools/objdump_reformat.awk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> ---
+>  fs/notify/dnotify/dnotify.c | 28 +++++++++++++++++++---------
+>  1 file changed, 19 insertions(+), 9 deletions(-)
+>
+> diff --git a/fs/notify/dnotify/dnotify.c b/fs/notify/dnotify/dnotify.c
+> index 190aa717fa32..a9f05b3cf5ea 100644
+> --- a/fs/notify/dnotify/dnotify.c
+> +++ b/fs/notify/dnotify/dnotify.c
+> @@ -58,10 +58,10 @@ struct dnotify_mark {
+>   * dnotify cares about for that inode may change.  This function runs the
+>   * list of everything receiving dnotify events about this directory and calculates
+>   * the set of all those events.  After it updates what dnotify is interested in
+> - * it calls the fsnotify function so it can update the set of all events relevant
+> - * to this inode.
+> + * it returns true if fsnotify_recalc_mask() should be called to update the set
+> + * of all events related to this inode.
+>   */
+> -static void dnotify_recalc_inode_mask(struct fsnotify_mark *fsn_mark)
+> +static bool dnotify_recalc_inode_mask(struct fsnotify_mark *fsn_mark)
+>  {
+>         __u32 new_mask = 0;
+>         struct dnotify_struct *dn;
+> @@ -74,10 +74,9 @@ static void dnotify_recalc_inode_mask(struct fsnotify_mark *fsn_mark)
+>         for (dn = dn_mark->dn; dn != NULL; dn = dn->dn_next)
+>                 new_mask |= (dn->dn_mask & ~FS_DN_MULTISHOT);
+>         if (fsn_mark->mask == new_mask)
+> -               return;
+> +               return false;
+>         fsn_mark->mask = new_mask;
+> -
+> -       fsnotify_recalc_mask(fsn_mark->connector);
+> +       return true;
+>  }
+>
+>  /*
+> @@ -97,6 +96,7 @@ static int dnotify_handle_event(struct fsnotify_mark *inode_mark, u32 mask,
+>         struct dnotify_struct **prev;
+>         struct fown_struct *fown;
+>         __u32 test_mask = mask & ~FS_EVENT_ON_CHILD;
+> +       bool recalc = false;
+>
+>         /* not a dir, dnotify doesn't care */
+>         if (!dir && !(mask & FS_ISDIR))
+> @@ -118,12 +118,15 @@ static int dnotify_handle_event(struct fsnotify_mark *inode_mark, u32 mask,
+>                 else {
+>                         *prev = dn->dn_next;
+>                         kmem_cache_free(dnotify_struct_cache, dn);
+> -                       dnotify_recalc_inode_mask(inode_mark);
+> +                       recalc = dnotify_recalc_inode_mask(inode_mark);
+>                 }
+>         }
+>
+>         spin_unlock(&inode_mark->lock);
+>
+> +       if (recalc)
+> +               fsnotify_recalc_mask(inode_mark->connector);
+> +
+>         return 0;
+>  }
+>
+> @@ -158,6 +161,7 @@ void dnotify_flush(struct file *filp, fl_owner_t id)
+>         struct dnotify_struct **prev;
+>         struct inode *inode;
+>         bool free = false;
+> +       bool recalc = false;
+>
+>         inode = file_inode(filp);
+>         if (!S_ISDIR(inode->i_mode))
+> @@ -176,7 +180,7 @@ void dnotify_flush(struct file *filp, fl_owner_t id)
+>                 if ((dn->dn_owner == id) && (dn->dn_filp == filp)) {
+>                         *prev = dn->dn_next;
+>                         kmem_cache_free(dnotify_struct_cache, dn);
+> -                       dnotify_recalc_inode_mask(fsn_mark);
+> +                       recalc = dnotify_recalc_inode_mask(fsn_mark);
+>                         break;
+>                 }
+>                 prev = &dn->dn_next;
+> @@ -184,6 +188,9 @@ void dnotify_flush(struct file *filp, fl_owner_t id)
+>
+>         spin_unlock(&fsn_mark->lock);
+>
+> +       if (recalc)
+> +               fsnotify_recalc_mask(fsn_mark->connector);
+> +
+>         /* nothing else could have found us thanks to the dnotify_groups
+>            mark_mutex */
+>         if (dn_mark->dn == NULL) {
+> @@ -268,6 +275,7 @@ int fcntl_dirnotify(int fd, struct file *filp, unsigned long arg)
+>         struct file *f;
+>         int destroy = 0, error = 0;
+>         __u32 mask;
+> +       bool recalc = false;
+>
+>         /* we use these to tell if we need to kfree */
+>         new_fsn_mark = NULL;
+> @@ -377,9 +385,11 @@ int fcntl_dirnotify(int fd, struct file *filp, unsigned long arg)
+>         else if (error == -EEXIST)
+>                 error = 0;
+>
+> -       dnotify_recalc_inode_mask(fsn_mark);
+> +       recalc = dnotify_recalc_inode_mask(fsn_mark);
+>  out:
+>         spin_unlock(&fsn_mark->lock);
+> +       if (recalc)
+> +               fsnotify_recalc_mask(fsn_mark->connector);
+>
+>         if (destroy)
+>                 fsnotify_detach_mark(fsn_mark);
 
-diff --git a/arch/x86/tools/objdump_reformat.awk b/arch/x86/tools/objdump_reformat.awk
-index 276e572a6f60..a4120d907277 100644
---- a/arch/x86/tools/objdump_reformat.awk
-+++ b/arch/x86/tools/objdump_reformat.awk
-@@ -22,7 +22,7 @@ BEGIN {
- }
- 
- /^ *[0-9a-f]+:/ {
--	if (split($0, field, "\t") < 3) {
-+	if (split($0, field, /: |\t/) < 3) {
- 		# This is a continuation of the same insn.
- 		prev_hex = prev_hex field[2]
- 	} else {
--- 
-2.38.1
+I'd do else if (recalc)
 
+just to emphasise that destroy and recalc are mutually exclusive.
+
+Thanks,
+Amir.
