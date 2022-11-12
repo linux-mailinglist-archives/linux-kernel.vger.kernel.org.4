@@ -2,281 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E37626727
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 06:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20315626734
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 06:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234387AbiKLFXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 00:23:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58384 "EHLO
+        id S234474AbiKLFlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 00:41:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiKLFXq (ORCPT
+        with ESMTP id S229991AbiKLFlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 00:23:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EA8B482
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 21:23:44 -0800 (PST)
+        Sat, 12 Nov 2022 00:41:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916B25B5B9;
+        Fri, 11 Nov 2022 21:41:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B475160AF2
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 05:23:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A55C433C1;
-        Sat, 12 Nov 2022 05:23:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50C58B828AD;
+        Sat, 12 Nov 2022 05:41:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CD44C433D6;
+        Sat, 12 Nov 2022 05:41:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668230623;
-        bh=2sPff8ZwIfESnXTKO5JbMAWQE6iiJImLzyqr9UKYoSU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HfQZkZyVaHeCMBKBAAmj/Gh3WF1eUua7dYYBOGKMnTJpmICUi8O2snkWQ/5XOIpLp
-         wiAeD008flOfgPJej+D+qAu3kSiHn7+x05LwfLuTsznUFb4FKo3TxUSHtMiyRd2gzp
-         7Prk53Sa9qUUJU7P1aPoKnvl33l8b+UqLKlBnRWcYYkqoyktALKF+ckvArgeMVcxrz
-         BYchZ3vta9l4KvPSwbBKR5zIALdy3nk+aOYLFtLnAybYXXjCI0pEp/omoTNPcFPsYX
-         FZNeYOKsRLUqQZ4cHlfUB6T5Uf+hvwBkDbfmQ+X1rypH3NraRbQFmbwb12pT7W5tP1
-         IqxbkS8PIJqIQ==
-Date:   Sat, 12 Nov 2022 14:23:39 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Rafael Mendonca <rafaelmendsr@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        s=k20201202; t=1668231668;
+        bh=h5v5hN9bTBwVsyIV+aYUcCjEowuSsRchhaboUL7kJ14=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rr8H0yKFVtlPtqvDoEpveRSVQnF4aBh2sd1MG1GIGa51MMEj8d+HQusslaVzpisjB
+         Lux2qPQ8vloiIxGWmR6muh565u6I+tpZr+94VaqEsmf61BPashuRFvDBUd5g5fXOiH
+         GI67VwHs60c/w6qmHHioppd4f8VJErV7SdVqjvVdlpnXstmuRJtFSYnVv8EtKZb80i
+         LSxxqM9Tlvaq6OYO8zITVOnEipskvmlE+fTCMcw7t1st8tTdpNWTZ6HTOFalv3YDh9
+         3RqfRfj4oaS+pU0BWWK8W/buNkwDIkZOjtzJwdyKbIMM5iNa1h5aHpQXNhUQDx+xue
+         NgAf6tadiCQbA==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: [PATCH 2/3] tracing/eprobe: Add eprobe filter support
-Message-Id: <20221112142339.510c01a52ae8449e21f2d343@kernel.org>
-In-Reply-To: <Y2sfkaIa4sBLuHGX@macondo>
-References: <165932112555.2850673.7704483936633223533.stgit@devnote2>
-        <165932114513.2850673.2592206685744598080.stgit@devnote2>
-        <Y2sfkaIa4sBLuHGX@macondo>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
+Subject: [PATCH] tracing/eprobe: Fix eprobe filter to make a filter correctly
+Date:   Sat, 12 Nov 2022 14:41:04 +0900
+Message-Id: <166823166395.1385292.8931770640212414483.stgit@devnote3>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+User-Agent: StGit/0.19
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Nov 2022 00:33:37 -0300
-Rafael Mendonca <rafaelmendsr@gmail.com> wrote:
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-> Hi Masami,
-> I was playing around with the filter option and couldn't get it to work the way
-> I was expecting. For example, I'm getting the following output:
-> 
-> root@localhost:/sys/kernel/tracing# echo 'e syscalls/sys_enter_openat \
-> 	flags_rename=$flags:u32 if flags < 1000' >> dynamic_events
-> root@localhost:/sys/kernel/tracing# echo 1 > events/eprobes/sys_enter_openat/enable
-> [  114.551550] event trace: Could not enable event sys_enter_openat
-> -bash: echo: write error: Invalid argument
-> 
-> I was wondering if the trace_event_call passed to create_event_filter()
-> shouldn't be 'ep->event' instead of 'file->event_call' as such:
-> 
-> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> index e888446d80fa..123d2c0a6b68 100644
-> --- a/kernel/trace/trace_eprobe.c
-> +++ b/kernel/trace/trace_eprobe.c
-> @@ -643,7 +643,7 @@ new_eprobe_trigger(struct trace_eprobe *ep, struct
-> trace_event_file *file)
-> 	INIT_LIST_HEAD(&trigger->list);
->  
-> 	if (ep->filter_str) {
-> -               ret = create_event_filter(file->tr, file->event_call,
-> +               ret = create_event_filter(file->tr, ep->event,
-> 					ep->filter_str, false, &filter);
-> 		if (ret)
-> 			goto error;
+Since the eprobe filter was defined based on the eprobe's trace event
+itself, it doesn't work correctly. Use the original trace event of
+the eprobe when making the filter so that the filter works correctly.
 
-Ah, OK. I got it. the "file->event_call" is for the eprobe's event
-itself, thus the filter doesn't work. ep->event is the event of the
-original event. Thus your fix is correct.
+Without this fix:
 
-Thank you!
+ # echo 'e syscalls/sys_enter_openat \
+	flags_rename=$flags:u32 if flags < 1000' >> dynamic_events
+ # echo 1 > events/eprobes/sys_enter_openat/enable
+[  114.551550] event trace: Could not enable event sys_enter_openat
+-bash: echo: write error: Invalid argument
 
-> 
-> Applying the above change seems to make it work the way I was expecting:
-> 
-> root@localhost:/sys/kernel/tracing# echo 'e syscalls/sys_enter_openat \
-> 	flags_rename=$flags:u32 if flags < 1000' >> dynamic_events
-> root@localhost:/sys/kernel/tracing# echo 1 > events/eprobes/sys_enter_openat/enable
-> root@localhost:/sys/kernel/tracing# tail trace
-> cat-241     [000] ...1.   266.498449: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> cat-242     [000] ...1.   266.977640: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> cat-242     [000] ...1.   266.979883: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> bash-223     [000] ...1.   272.322714: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=577
-> cat-243     [000] ...1.   273.630900: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> cat-243     [000] ...1.   273.633464: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> tail-244     [000] ...1.   300.013530: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> tail-244     [000] ...1.   300.018584: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> tail-245     [000] ...1.   301.237883: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> tail-245     [000] ...1.   301.243375: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
-> 
-> I'm not familiar with the eprobe code, sorry if this is nonsense.
-> 
-> > +					ep->filter_str, false, &filter);
-> > +		if (ret)
-> > +			goto error;
-> > +	}
-> > +	RCU_INIT_POINTER(trigger->filter, filter);
-> >  
-> >  	edata->file = file;
-> >  	edata->ep = ep;
-> >  	trigger->private_data = edata;
-> >  
-> >  	return trigger;
-> > +error:
-> > +	free_event_filter(filter);
-> > +	kfree(edata);
-> > +	kfree(trigger);
-> > +	return ERR_PTR(ret);
-> >  }
-> >  
-> >  static int enable_eprobe(struct trace_eprobe *ep,
-> > @@ -651,6 +667,7 @@ static int disable_eprobe(struct trace_eprobe *ep,
-> >  {
-> >  	struct event_trigger_data *trigger = NULL, *iter;
-> >  	struct trace_event_file *file;
-> > +	struct event_filter *filter;
-> >  	struct eprobe_data *edata;
-> >  
-> >  	file = find_event_file(tr, ep->event_system, ep->event_name);
-> > @@ -677,6 +694,10 @@ static int disable_eprobe(struct trace_eprobe *ep,
-> >  	/* Make sure nothing is using the edata or trigger */
-> >  	tracepoint_synchronize_unregister();
-> >  
-> > +	filter = rcu_access_pointer(trigger->filter);
-> > +
-> > +	if (filter)
-> > +		free_event_filter(filter);
-> >  	kfree(edata);
-> >  	kfree(trigger);
-> >  
-> > @@ -848,12 +869,62 @@ static int trace_eprobe_tp_update_arg(struct trace_eprobe *ep, const char *argv[
-> >  	return ret;
-> >  }
-> >  
-> > +static int trace_eprobe_parse_filter(struct trace_eprobe *ep, int argc, const char *argv[])
-> > +{
-> > +	struct event_filter *dummy;
-> > +	int i, ret, len = 0;
-> > +	char *p;
-> > +
-> > +	if (argc == 0) {
-> > +		trace_probe_log_err(0, NO_EP_FILTER);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	/* Recover the filter string */
-> > +	for (i = 0; i < argc; i++)
-> > +		len += strlen(argv[i]) + 1;
-> > +
-> > +	ep->filter_str = kzalloc(len, GFP_KERNEL);
-> > +	if (!ep->filter_str)
-> > +		return -ENOMEM;
-> > +
-> > +	p = ep->filter_str;
-> > +	for (i = 0; i < argc; i++) {
-> > +		ret = snprintf(p, len, "%s ", argv[i]);
-> > +		if (ret < 0)
-> > +			goto error;
-> > +		if (ret > len) {
-> > +			ret = -E2BIG;
-> > +			goto error;
-> > +		}
-> > +		p += ret;
-> > +		len -= ret;
-> > +	}
-> > +	p[-1] = '\0';
-> > +
-> > +	/*
-> > +	 * Ensure the filter string can be parsed correctly. Note, this
-> > +	 * filter string is for the original event, not for the eprobe.
-> > +	 */
-> > +	ret = create_event_filter(top_trace_array(), ep->event, ep->filter_str,
-> > +				  true, &dummy);
-> > +	free_event_filter(dummy);
-> > +	if (ret)
-> > +		goto error;
-> > +
-> > +	return 0;
-> > +error:
-> > +	kfree(ep->filter_str);
-> > +	ep->filter_str = NULL;
-> > +	return ret;
-> > +}
-> > +
-> >  static int __trace_eprobe_create(int argc, const char *argv[])
-> >  {
-> >  	/*
-> >  	 * Argument syntax:
-> > -	 *      e[:[GRP/][ENAME]] SYSTEM.EVENT [FETCHARGS]
-> > -	 * Fetch args:
-> > +	 *      e[:[GRP/][ENAME]] SYSTEM.EVENT [FETCHARGS] [if FILTER]
-> > +	 * Fetch args (no space):
-> >  	 *  <name>=$<field>[:TYPE]
-> >  	 */
-> >  	const char *event = NULL, *group = EPROBE_EVENT_SYSTEM;
-> > @@ -863,8 +934,8 @@ static int __trace_eprobe_create(int argc, const char *argv[])
-> >  	char buf1[MAX_EVENT_NAME_LEN];
-> >  	char buf2[MAX_EVENT_NAME_LEN];
-> >  	char gbuf[MAX_EVENT_NAME_LEN];
-> > -	int ret = 0;
-> > -	int i;
-> > +	int ret = 0, filter_idx = 0;
-> > +	int i, filter_cnt;
-> >  
-> >  	if (argc < 2 || argv[0][0] != 'e')
-> >  		return -ECANCELED;
-> > @@ -894,6 +965,15 @@ static int __trace_eprobe_create(int argc, const char *argv[])
-> >  		event = buf1;
-> >  	}
-> >  
-> > +	for (i = 2; i < argc; i++) {
-> > +		if (!strcmp(argv[i], "if")) {
-> > +			filter_idx = i + 1;
-> > +			filter_cnt = argc - filter_idx;
-> > +			argc = i;
-> > +			break;
-> > +		}
-> > +	}
-> > +
-> >  	mutex_lock(&event_mutex);
-> >  	event_call = find_and_get_event(sys_name, sys_event);
-> >  	ep = alloc_event_probe(group, event, event_call, argc - 2);
-> > @@ -909,6 +989,14 @@ static int __trace_eprobe_create(int argc, const char *argv[])
-> >  		goto error;
-> >  	}
-> >  
-> > +	if (filter_idx) {
-> > +		trace_probe_log_set_index(filter_idx);
-> > +		ret = trace_eprobe_parse_filter(ep, filter_cnt, argv + filter_idx);
-> > +		if (ret)
-> > +			goto parse_error;
-> > +	} else
-> > +		ep->filter_str = NULL;
-> > +
-> >  	argc -= 2; argv += 2;
-> >  	/* parse arguments */
-> >  	for (i = 0; i < argc && i < MAX_TRACE_ARGS; i++) {
-> > diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-> > index 3b3869ae8cfd..de38f1c03776 100644
-> > --- a/kernel/trace/trace_probe.h
-> > +++ b/kernel/trace/trace_probe.h
-> > @@ -445,7 +445,8 @@ extern int traceprobe_define_arg_fields(struct trace_event_call *event_call,
-> >  	C(SAME_PROBE,		"There is already the exact same probe event"),\
-> >  	C(NO_EVENT_INFO,	"This requires both group and event name to attach"),\
-> >  	C(BAD_ATTACH_EVENT,	"Attached event does not exist"),\
-> > -	C(BAD_ATTACH_ARG,	"Attached event does not have this field"),
-> > +	C(BAD_ATTACH_ARG,	"Attached event does not have this field"),\
-> > +	C(NO_EP_FILTER,		"No filter rule after 'if'"),
-> >  
-> >  #undef C
-> >  #define C(a, b)		TP_ERR_##a
-> > 
+With this fix:
+ # echo 'e syscalls/sys_enter_openat \
+	flags_rename=$flags:u32 if flags < 1000' >> dynamic_events
+ # echo 1 > events/eprobes/sys_enter_openat/enable
+ # tail trace
+cat-241     [000] ...1.   266.498449: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
+cat-242     [000] ...1.   266.977640: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
 
+Fixes: 752be5c5c910 ("tracing/eprobe: Add eprobe filter support")
+Reported-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+ kernel/trace/trace_eprobe.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+index fe4833a7b7b3..1c3096ab2fe7 100644
+--- a/kernel/trace/trace_eprobe.c
++++ b/kernel/trace/trace_eprobe.c
+@@ -643,7 +643,7 @@ new_eprobe_trigger(struct trace_eprobe *ep, struct trace_event_file *file)
+ 	INIT_LIST_HEAD(&trigger->list);
+ 
+ 	if (ep->filter_str) {
+-		ret = create_event_filter(file->tr, file->event_call,
++		ret = create_event_filter(file->tr, ep->event,
+ 					ep->filter_str, false, &filter);
+ 		if (ret)
+ 			goto error;
+
