@@ -2,95 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65F66269E8
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 15:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1B36269EE
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 15:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233681AbiKLOXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 09:23:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
+        id S234907AbiKLOar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 09:30:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiKLOXl (ORCPT
+        with ESMTP id S234884AbiKLOam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 09:23:41 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88F7CE0A
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 06:23:39 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id 4so6488542pli.0
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 06:23:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9AaCZ8WAfpjeSDQ7STKLSNV9+Kr6/3hjw3GaFvuUHO4=;
-        b=w+EQNfOU9HvsctHMxKfjHvI6LHdBV+tXm3jN/4uj+p7uD59lDpfryM+Xs11aiD5uip
-         4FkecEfcnWf2m/0QzgI05iqydkRLfZhU72lgKlW7fXNt4ZGg9DZ6Anaa1FvodTNwbzPg
-         p297axSGKmM5lYQvMCmjaPhROs+IGp/WT4/Ls/ZP0ETAiiW4ApKmEjsgjg4JQ9h/GNP4
-         3XtyjXZQ0V+DMQ3BP+OkLbjZxxePgTFGb8kdbSAWAWlY59+1WhoP+k887Xy4T9ET0sqN
-         Dz6Whq16emyyXY+FVFz16u6BG+KMo4nq6RSLSsTn6Cruio/gtqKsess+0G519p1S+cjV
-         8izg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9AaCZ8WAfpjeSDQ7STKLSNV9+Kr6/3hjw3GaFvuUHO4=;
-        b=dw6inSxlfte4/8gIU5Jrva/skW18dYBbzbI4nJNfBGOizeYm8BHGRLN66cx1Vk65qe
-         fYbFZJ0sEwotVhkWeprsjStAnAZ2aq9JmkdPvoiuxTHiDDHxtMHMkw5JUGX+YpTyMhbO
-         OeBIlFAY15sCwsfEqrX/tzsSTMuyQqF1IObgglZO5MobEPOV0gvECjlenG9XmVSF/1OE
-         0L0KIbulDLYp6k6+xGf6vO14InNRVRwFKCopxrgn01ddIIoAO26EOBtNNttGO/r1lETW
-         1klRQ+b34/1XYPEeFkxBbBJmOr/qWMXqO/Fb3jHQzTe9W2CJhLxhwQpALZJQeByyXvGc
-         QxIg==
-X-Gm-Message-State: ANoB5pnjE3PoCUhyxeEhlqdFA+/4zkDko68D2DVkp8390lt3Yx1dH68A
-        7RS5m2EP7VLKt6E6IisgAkyXTw==
-X-Google-Smtp-Source: AA0mqf7Of4uNO9Zacj/tIazdwCiwUWGFkPYUXSHNE53CmPX12vcNQJGoCT8F+yXOQVOlrPeOP1xXHA==
-X-Received: by 2002:a17:902:c142:b0:188:55f5:972f with SMTP id 2-20020a170902c14200b0018855f5972fmr6969764plj.148.1668263019381;
-        Sat, 12 Nov 2022 06:23:39 -0800 (PST)
-Received: from localhost ([2620:10d:c090:400::5:54c6])
-        by smtp.gmail.com with ESMTPSA id u2-20020a170902714200b00185402cfedesm3681172plm.246.2022.11.12.06.23.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Nov 2022 06:23:38 -0800 (PST)
-Date:   Sat, 12 Nov 2022 09:23:41 -0500
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Hongchen Zhang <zhanghongchen@loongson.cn>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Hugh Dickins <hughd@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        Yosry Ahmed <yosryahmed@google.com>
-Subject: Re: [PATCH] mm: vmscan: fix extreme overreclaim and swap floods
-Message-ID: <Y2+sbbirX11Vo+XM@cmpxchg.org>
-References: <20220802162811.39216-1-hannes@cmpxchg.org>
- <17f04d65-020e-a52d-41e8-0d540e32b475@loongson.cn>
+        Sat, 12 Nov 2022 09:30:42 -0500
+Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56F81A82E;
+        Sat, 12 Nov 2022 06:30:35 -0800 (PST)
+X-Sender-Id: dreamhost|x-authsender|ian@linux.cowan.aero
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 4F84642068;
+        Sat, 12 Nov 2022 14:30:32 +0000 (UTC)
+Received: from pdx1-sub0-mail-a218.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id D29E042075;
+        Sat, 12 Nov 2022 14:30:31 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1668263431; a=rsa-sha256;
+        cv=none;
+        b=HCL1BAe1H/pzDrmFmWsj09mX0qwNjoLNeHGTxPhDTtih2wB7n+nwok5WdmrKxHnKWk00Kl
+        S4AiNOsxpBvwFRqFZzCwhFo1hqdMKrnEuxOeXsYqke4cGTp0ummjXdYKDp90WDFrd0C0H7
+        fmRRxCpNSL62T9wRbFXFLbzC6i8HNHTFF7f4bv5ljBW0YAcrHPIoS6efGNGjhIFvMqmo6t
+        +5AgFZMwicsx6Vpy8lR6PTx9EpSPuH6JZt1ZxtEa7lTNYqcugXBBFK638mTLssv0pPB+fc
+        H73dzHX6EXWks1F9RrlOEPewTYzSV4PG33Y0s61bWtDdJ+CK6KLcFFwNkCxgUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1668263431;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:dkim-signature;
+        bh=mW17fZSHLBiDKN0vvyrLRRUmL3lhsMJhAt2HzFGSejY=;
+        b=Prz8dkb7lN8KKeeE6CkmLLZDYgSRUqtug1CtWEO7AtkvB5OVt8tWUtA9nILOt+6Eso/Xg2
+        BfPJjux0853ORrQ1RflIUhoCTotvAaCHlbLPSlnDnnBPeG0jui3LR7dy7lhoQiBk93sEGq
+        NI3ZmG5Yew1DH5orGqyvq27Bg62i6oLucpS2UHW88eqtIeTEAxAZZd/3hjhvj4DG/T5cpp
+        nk8Nl7aL/lpW7UhWTbRguTeyRs9TQgjzV1MFkHBbu7+OS0tZilab9CkEQT0v59lmuVFhLG
+        h3xSce3MUN54jugC03AXq6BvqCzLOSCItbKepd6v0gdXq8zgthvAUn7EzZiAng==
+ARC-Authentication-Results: i=1;
+        rspamd-7f9bbcf788-s7lzd;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=ian@linux.cowan.aero
+X-Sender-Id: dreamhost|x-authsender|ian@linux.cowan.aero
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|ian@linux.cowan.aero
+X-MailChannels-Auth-Id: dreamhost
+X-Lettuce-Abiding: 2c043aca72c057ef_1668263432105_2405489284
+X-MC-Loop-Signature: 1668263432105:464200031
+X-MC-Ingress-Time: 1668263432105
+Received: from pdx1-sub0-mail-a218.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.109.196.213 (trex/6.7.1);
+        Sat, 12 Nov 2022 14:30:32 +0000
+Received: from rhino.lan (dsl-50-5-144-34.fuse.net [50.5.144.34])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: ian@linux.cowan.aero)
+        by pdx1-sub0-mail-a218.dreamhost.com (Postfix) with ESMTPSA id 4N8dK31RSvz1M;
+        Sat, 12 Nov 2022 06:30:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.cowan.aero;
+        s=dreamhost; t=1668263431;
+        bh=mW17fZSHLBiDKN0vvyrLRRUmL3lhsMJhAt2HzFGSejY=;
+        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
+        b=re4lm+fkEqqzkw6hVZVtSC/qj9RJ6i2Yq1kMYFf9kxcc5qTuqRYK4+PWDQwrgvmBE
+         ZBGyX5eF/PIWZ4DyJAWXPDZvTDW2fn2anaIKs3NnAaiGx4mVdpsLVVqUzDJvojXADC
+         mJ6yO2EhGY9RH90eY7qDOG+2zFqPow7T5JZJM8ceuVxa9PRyff4gq7vHzZyInRvQvv
+         xdNjkuQunAMxqXajb2pEUlWrNgvt+uKi92pfZxLMQoc7DRBEOfwVS0paOhBkNzthOg
+         xxerRL0JRJAs6PceyhAq5AQ/Naj7dTGWbT9Q+auMA0zud32cGK1yePfAabagwNbGdN
+         KfIRRyXPdU2pA==
+From:   Ian Cowan <ian@linux.cowan.aero>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ian Cowan <ian@linux.cowan.aero>
+Subject: [PATCH 0/3] PCI: SHPC: removed unused get_mode1_ECC_cap callback
+Date:   Sat, 12 Nov 2022 09:28:56 -0500
+Message-Id: <20221112142859.319733-1-ian@linux.cowan.aero>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <17f04d65-020e-a52d-41e8-0d540e32b475@loongson.cn>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Sep 20, 2022 at 02:12:17PM +0800, Hongchen Zhang wrote:
-> On 2022/8/3 am 12:28, Johannes Weiner wrote:
-> > @@ -2988,8 +2988,6 @@ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
-> >   		nr_scanned = targets[lru] - nr[lru];
-> >   		nr[lru] = targets[lru] * (100 - percentage) / 100;
-> >   		nr[lru] -= min(nr[lru], nr_scanned);
-> We should not just remove the following line because kswapd may also call
-> this function and there is no side effect to do scan adjust for kswapd,so it
-> may be better to change like this:
-> +    if (current_is_kswapd())
-> 		scan_adjusted = true;
-> > -
-> > -		scan_adjusted = true
+In the SHPC module, the get_mode1_ECC_cap callback is never used from
+the hpc_ops struct, so this patch series removes that callback from both the
+definition of the struct and the definition of the shpchp_hps_ops
+struct. Additionally, this removes the reference in the TODO of the SHPC
+module.
 
-There is no scan_adjusted after this patch.
+Ian Cowan (3):
+  PCI: SHPC: remove unused get_mode1_ECC_cap callback declaration
+  PCI: SHPC: remove unused get_mode1_ECC_cap callback from definition
+  PCI: SHPC: update todo
 
-If you're saying that kswapd should set proportional_reclaim
-unconditionally, then no, it should not. Proportional reclaim is not
-safe at lower priority levels, as the changelog outlines in detail.
+ drivers/pci/hotplug/TODO         |  3 ---
+ drivers/pci/hotplug/shpchp.h     |  1 -
+ drivers/pci/hotplug/shpchp_hpc.c | 18 ------------------
+ 3 files changed, 22 deletions(-)
+
+-- 
+2.38.1
+
