@@ -2,99 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4954B626B7C
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 21:08:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C86626B78
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 21:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235020AbiKLUHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 15:07:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
+        id S235014AbiKLUHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 15:07:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234981AbiKLUH2 (ORCPT
+        with ESMTP id S234995AbiKLUH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 15:07:28 -0500
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F2012764
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 12:07:22 -0800 (PST)
-Received: (wp-smtpd smtp.tlen.pl 4821 invoked from network); 12 Nov 2022 21:07:16 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1668283636; bh=loH1W2wKycWcNMDjsgektwUyaNDFHlHO5th0/v6bRmw=;
-          h=Subject:To:Cc:From;
-          b=egiq0jsRFmHMDiNfMFvMUBgqj5BDQ5X+lvuVFIyXA5M/rniZMizsr4bhOjx8FAWNN
-           x6aZk2v6sI5h3RYl/cblVuoQhVgCnoq80vOEwkpxVdlz5GoMgtdppIQSjy/eXJTy4a
-           U/sC2ojO2XaPvQnNq/dTUPWoFMxtaGLR3J1wULns=
-Received: from aaey149.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.128.149])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <helgaas@kernel.org>; 12 Nov 2022 21:07:16 +0100
-Message-ID: <35cfe433-bafa-9aeb-20ad-2f275f585b6c@o2.pl>
-Date:   Sat, 12 Nov 2022 21:07:15 +0100
+        Sat, 12 Nov 2022 15:07:29 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861B614D19
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 12:07:28 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id z9so4015353ilu.10
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 12:07:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bQMtM7EzKXE7g7Q8ii/1nYLdfGgJeyG5qgm6GFG0MaY=;
+        b=Su3MklfMJY8596qFSlI2fMYVrgpgXSRkl7MDteWVnD97GFCt9qVLEfOqMen13UD9F6
+         3L5IXY1n9+ZbSmUwWZUSk20mvOdXvMdNkUsH+w22RUejchFD+p2Yhxi8TimgOVA9uTDV
+         qphlkjc96DUqQwpTxOeRh5qQb+1zmiE7wusxwDojYsckuyZSfCVemRpzqMc5T3DHrvdy
+         6FrbtLcoYBK1D3QVSGn326jqrzllaj9i/U7hZZWlP2ShmXfSa+v3c4mHsknmpTTOc8hG
+         NnmrR64LB48M3a4yu7Q5oNiLMFLjqv6cW3bSTFIvXrTlD7nUpjbr6VjwstJVQ/QDIZCT
+         2LAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bQMtM7EzKXE7g7Q8ii/1nYLdfGgJeyG5qgm6GFG0MaY=;
+        b=vlMuVSiZvZjwG7NDTr1WgVY/sf1hXnuNaw4kxzPGWkQgU33HbQOYQNx4DVOJbxg/bR
+         YkhUL8e/GpY19warBROpeneJngyuDUYKKza89VurU3vxnKll+VnXL0xpZqC9C/enthom
+         SFbjxYq6LLNiYvkdItBnFRLZQKZ2hVTC06xKvX/jTttSlKlYf/ED7wpHln0ikHYhKrMg
+         +0puswzKrYneXrsTbJYligpN3/9C2ciDWepN+QEDAxDu9IgcNu/HW4snEOW+pvetwbmb
+         7+H1pdmgXaQnK4CtPBsK9cYkaV8p1jLCuAf7v9hVHvU22JQQySB8ZESLj9og0r/TBlSs
+         szOA==
+X-Gm-Message-State: ANoB5pmvO2n7EDCMHgtvYsrnbsOsFWE5hRXO1DbGFy8cOCxQTEbMhRQY
+        EfNQczEtaldS7Nm+Vm24WhKoUQ==
+X-Google-Smtp-Source: AA0mqf6ag5/+UcMBWUwQ6saOw2KQ7ElLnsfR2uCygQZV2sMNJ+qCQmER+pkWO0tak9fKQRJva0CKXg==
+X-Received: by 2002:a92:cd0d:0:b0:300:c497:d6a0 with SMTP id z13-20020a92cd0d000000b00300c497d6a0mr3594798iln.27.1668283647907;
+        Sat, 12 Nov 2022 12:07:27 -0800 (PST)
+Received: from presto.localdomain ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id j28-20020a02cb1c000000b00363dee286edsm2036870jap.60.2022.11.12.12.07.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Nov 2022 12:07:27 -0800 (PST)
+From:   Alex Elder <elder@linaro.org>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org,
+        elder@kernel.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 4/5] dt-bindings: net: qcom,ipa: support skipping GSI firmware load
+Date:   Sat, 12 Nov 2022 14:07:16 -0600
+Message-Id: <20221112200717.1533622-5-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221112200717.1533622-1-elder@linaro.org>
+References: <20221112200717.1533622-1-elder@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] acpi,pci: handle duplicate IRQ routing entries
- returned from _PRT
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Len Brown <lenb@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Jean Delvare <jdelvare@suse.com>, linux-i2c@vger.kernel.org
-References: <20221112002023.GA764787@bhelgaas>
-Content-Language: en-GB
-From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
-In-Reply-To: <20221112002023.GA764787@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: 13e9072270332344864b56994e464f72
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [QbNF]                               
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W dniu 12.11.2022 o 01:20, Bjorn Helgaas pisze:
-> [+cc Jean, linux-i2c]
->
-> On Sat, Sep 17, 2022 at 11:09:44AM +0200, Mateusz Jończyk wrote:
->> On some platforms, the ACPI _PRT function returns duplicate interrupt
->> routing entries. Linux uses the first matching entry, but sometimes the
->> second matching entry contains the correct interrupt vector.
-> Rafael, Jean, what do you think about this?  It seems like kind of a
-> lot of infrastructure to deal with this oddness, but I'm not really
-> opposed to it.
->
-> This is in i2c-i801.c, which seems to have some support for polling;
-> maybe it could make smart enough to complain and automatically switch
-> to polling if a timeout occurs.
->
-> Or maybe we scan the entire _PRT and let the match win (instead of the
-> first as we do today).
->
-> Or ...?
->
-> Google finds a lot of hits for "i801_smbus" "timeout waiting for
-> interrupt", but I can't tell whether they're a similar _PRT issue or
-> something else.
->
->> This happens on a Dell Latitude E6500 laptop with the i2c-i801 Intel
->> SMBus controller. This controller was nonfunctional unless its interrupt
->> usage was disabled (using the "disable_features=0x10" module parameter).
+Add a new enumerated value to those defined for the qcom,gsi-loader
+property.  If the qcom,gsi-loader is "skip", the GSI firmware will
+already be loaded, so neither the AP nor modem is required to load
+GSI firmware.
 
-Hello,
+Signed-off-by: Alex Elder <elder@linaro.org>
+---
+ Documentation/devicetree/bindings/net/qcom,ipa.yaml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-I have prepared a lean patch that only prints a warning when there are
-two matching entries in the table returned from _PRT (I will send it in the
-next e-mail). Perhaps it could be merged and then after a release or two
-it will be known how widespread this problem is.
-
-Greetings,
-
-Mateusz
+diff --git a/Documentation/devicetree/bindings/net/qcom,ipa.yaml b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+index 0dfd6c721e045..3d63505d1b802 100644
+--- a/Documentation/devicetree/bindings/net/qcom,ipa.yaml
++++ b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+@@ -128,10 +128,12 @@ properties:
+     enum:
+       - self
+       - modem
++      - skip
+     description:
+       This indicates how GSI firmware should be loaded.  If the AP loads
+       and validates GSI firmware, this property has value "self".  If the
+-      modem does this, this property has value "modem".
++      modem does this, this property has value "modem".  Otherwise, "skip"
++      means GSI firmware loading is not required.
+ 
+   modem-init:
+     deprecated: true
+-- 
+2.34.1
 
