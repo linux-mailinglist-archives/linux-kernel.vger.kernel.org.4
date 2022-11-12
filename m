@@ -2,102 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB416268F4
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 11:48:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC516268FA
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 11:57:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbiKLKsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 05:48:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
+        id S233947AbiKLK5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 05:57:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234695AbiKLKsv (ORCPT
+        with ESMTP id S230170AbiKLK5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 05:48:51 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442041704A
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 02:48:50 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id a13so10916502edj.0
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 02:48:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=T1KbWBlZBhM2Kq75dZ0wOhP1yyovyscLgSDKPYowZgA=;
-        b=MHGvQpjeKWITiMA2BGsw56dD/TYI6pGz1+NBgLHUgJq1FVAFQ5BM2w59CtK2Wv3N9v
-         HPIyqB1VEQdE0otfzH2RqOd8AF+Ino/X9W700mCt/YqkQp+NomeOpmfAxTCAArA9i4ox
-         s5F9PqDrCKqvzj3GGlwToMvPRjdx1yMNdqR6yKs2Hl5h/pZfhFYtCf8FQc/TvDZErHSw
-         C9vn2PFyUPxNlgb0mJXAY/vJa4I1+zOpPlcRuh7tfXTPqrk9d6mtfkDlmhp166YNrz0P
-         V1Scwa1xSQV9TZPxbtqQY2aWZtVriT6+3Au/Jtk3UhAukFsN3ULcP55y+WdlFySvM4yy
-         aMGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T1KbWBlZBhM2Kq75dZ0wOhP1yyovyscLgSDKPYowZgA=;
-        b=DuQh9z65TQ/L5atYYHN0Akpshq55d3erq8BK6v7VuyERU4ofyXIL0ypMrRvQUD5Qtb
-         ovsxSw73/HeS0/K94sRRiNBt6IsuOEkBR3ZcCq4IV2es2NOdx5j3j3THjSsaU/rdsMvr
-         6qQO4P8aBaHtpw/41SsZAKMBXPI8kR8IEputrZJgDZcZsnFx40VVw+woSjzL1qSRGQfN
-         5cj8mQKqbejZ7fgKWjDh0NtMkrgGkeGDDdsnFRA76elQnIsB03MSknU6HJEbF5vF30qh
-         wP4vxb+VqI+E0AX5pR9lvwTTMSHarPqDuMosC/qUusjIhgoHlhJWl3S23rVoHzMkNdOx
-         9lXw==
-X-Gm-Message-State: ANoB5pk5iemWfgysFvV1NrIrKwAx3l+xx6NddHsP4izlAk5Kcp61gsVS
-        ouWOFV720/LYLzKQFZInO0L0cw4JCPFTa8AJC+tiIfvcPLk=
-X-Google-Smtp-Source: AA0mqf5Q6sNMuZbNFbbMcNPnTcBq0N+GZooXozdmjyKQRKuLsUxZEaUCTizZwzfu2OdAdBTCQKP1CvCBiDn5d7Fb3UI=
-X-Received: by 2002:a05:6402:538b:b0:461:abcc:328 with SMTP id
- ew11-20020a056402538b00b00461abcc0328mr4824003edb.318.1668250128856; Sat, 12
- Nov 2022 02:48:48 -0800 (PST)
+        Sat, 12 Nov 2022 05:57:13 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88D1B867;
+        Sat, 12 Nov 2022 02:57:11 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N8XZn6nY5z4f3jZ3;
+        Sat, 12 Nov 2022 18:57:05 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgC329gDfG9jUJSaAQ--.9600S3;
+        Sat, 12 Nov 2022 18:57:09 +0800 (CST)
+Subject: Re: [PATCH] blk-mq: only unregister sysfs when registration succeeded
+To:     Yu Kuai <yukuai1@huaweicloud.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20221112110754.1109979-1-liushixin2@huawei.com>
+ <607beb5b-8d54-b795-8a05-76352d7ed863@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <58ab3673-3e39-9ea9-1749-eebfcfb8a10f@huaweicloud.com>
+Date:   Sat, 12 Nov 2022 18:57:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <CAOM0=dbwNs1XcnD0i+SrC1S-SNFEGXM5G8QrVCqAxaz=YkAEFg@mail.gmail.com>
- <20221112074759.GA5111@1wt.eu>
-In-Reply-To: <20221112074759.GA5111@1wt.eu>
-From:   A <amit234234234234@gmail.com>
-Date:   Sat, 12 Nov 2022 16:18:37 +0530
-Message-ID: <CAOM0=daopCt=LthGStL2zHYxgQ6iphLLfKZjxcPS07yCvyq42Q@mail.gmail.com>
-Subject: Re: Setting variable NULL after freeing it.
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <607beb5b-8d54-b795-8a05-76352d7ed863@huaweicloud.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgC329gDfG9jUJSaAQ--.9600S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrury7Xr4kCr4UXw47Kry7trb_yoW3ArgEga
+        y8KFWkWa1DGFnxKw12kFZrZFyxZ3WvgFyfJayDJFWDtw18WaykGr4j9r17CrWUKw4xCrn8
+        trW0gayfGrWagjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb4AFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
+        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
+        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y
+        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1a9aP
+        UUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> It depends. What's important is not to let a pointer exist to a freed
-> location, so if you're doing:
->
->     kfree(card->pool);
->
-> then it's usually important to follow this by:
->
->     card->pool = NULL;
->
 
-I checked in kernel but at many places this is not being done. I can
-change all that code. But, will the patch be accepted?
 
-So, if someone is doing -
+在 2022/11/12 18:44, Yu Kuai 写道:
+> Hi,
+> 
+> 在 2022/11/12 19:07, Liu Shixin 写道:
+>> kobject_del() must not be called if kobject_add() has not been called.
+>> Hence only unregister sysfs when registration succeeded.
+>>
+> 
+>  From what I see, the blk_queue_registered() from caller
+> blk_unregister_queue() can already prevent that. QUEUE_FLAG_REGISTERED
+> will only be set if blk_register_queue() succeed.
 
-kfree(x)
-._some_code_
-._some_code_
-._some_code_
+I see that the return value of blk_mq_sysfs_register() is not checked
+from blk_register_queue(), there will be memleak or uaf from error path.
 
-Then I can change it to -
+Hence I think better thing to do is to handle the case that
+blk_mq_sysfs_register() faild, and clean up if blk_mq_sysfs_register()
+succeed while follow up procedures failed from blk_register_queue().
 
-kfree(x)
-x = NULL;
-._some_code_
-._some_code_
-._some_code_
-
-But, will the patch be accepted for this change?
-
-Please let me know.
-
-Amit
