@@ -2,61 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8DDF626B09
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 19:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA43626B0C
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 19:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235051AbiKLS2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 13:28:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45714 "EHLO
+        id S234063AbiKLSa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 13:30:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234695AbiKLS2K (ORCPT
+        with ESMTP id S234695AbiKLSa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 13:28:10 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5779E6561;
-        Sat, 12 Nov 2022 10:28:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=YoY1f3uFXx3aJpzKVIF9IAK+7H0am1LUMJiBdQEgnv8=; b=D1aXkW++rXD8DNmwvfp+7jV7uW
-        1vop3p2vBBY74Zo+ShgrMKWcwZjwuiR5SPqyKHG5NqCAXI9Hv6zGcKSOUy6wc0JO4yI8EID1qhYfY
-        rlEhBfaX9lBTUf8fH3XKjbYID+1C6lFEIfWVhkmmvaMZc9i6CYVeUf3OsjoiJfyp2Uas=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1otvEb-002CQS-8v; Sat, 12 Nov 2022 19:28:05 +0100
-Date:   Sat, 12 Nov 2022 19:28:05 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Hariprasad Kelam <hkelam@marvell.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kuba@kernel.org, davem@davemloft.net, pabeni@redhat.com,
-        edumazet@google.com, sgoutham@marvell.com, lcherian@marvell.com,
-        gakula@marvell.com, jerinj@marvell.com, sbhatta@marvell.com
-Subject: Re: [net-next PATCH 5/9] octeontx2-af: Add support for RPM FEC stats
-Message-ID: <Y2/ltb01fuLlOXee@lunn.ch>
-References: <20221112043141.13291-1-hkelam@marvell.com>
- <20221112043141.13291-6-hkelam@marvell.com>
+        Sat, 12 Nov 2022 13:30:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640CEBC0B;
+        Sat, 12 Nov 2022 10:30:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD7BCB80B07;
+        Sat, 12 Nov 2022 18:30:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF9ACC433C1;
+        Sat, 12 Nov 2022 18:30:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668277853;
+        bh=/O+GXvyUlwkoQhcBoaV09K+QsmakJb5S/2ONHq+t7Jg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Br4izro987cQjAoGQRGCTgisgnFw1EXBhvx2+wdFNeoeHslvo9J0M0AdPzpui4d1A
+         VhfPjnDUSkHw7ZLYnBiWq7uiJZzdQxbnM1Y5D4yzZ4oMeeCk4/BNYlJpv1svFLmiMJ
+         UVmXJAauxTs5OIL+2XAa452iqXJTu5cOwmxY4o43dgdXqye5uurs5+gsStCTu/VO9m
+         Hrcr8p45NWRdqLDUCBAqBWxhRfRrZBalmczMbpsOT3i8rvP59cwxJQYWrfFt6JeZUJ
+         5f15KooDvRp6abDdhvbK9ufl+QtsGFimRK/8/iVgPsEQ5Xq5NS+N6MbwyT+3hG8cpl
+         LBud28qkOQ8rg==
+From:   SeongJae Park <sj@kernel.org>
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     sj@kernel.org, damon@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        rongtao@cestc.cn, shuah@kernel.org, yuanchu@google.com
+Subject: Re: Re: [PATCH] selftests/damon: Fix unnecessary compilation warnings
+Date:   Sat, 12 Nov 2022 18:30:50 +0000
+Message-Id: <20221112183050.85200-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <tencent_5695C257F3D13F4417034BA1FBAC95CB3B07@qq.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221112043141.13291-6-hkelam@marvell.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 10:01:37AM +0530, Hariprasad Kelam wrote:
-> RPM/CGX blocks support both RS-FEC and BASER modes.
-> This patch adds support to display these FEC stats.
+Hi Rong,
+
+On Sat, 12 Nov 2022 13:01:04 +0800 Rong Tao <rtoax@foxmail.com> wrote:
+
+> Hi, Park, I just search on GCC source code, found GCC support
+> "-Wstringop-overread" at least gcc-11.1.0, commit d14c547abd48("Add
+> -Wstringop-overread for reading past the end by string functions.").
 > 
-> FEC stats are integrated to below file
-> cat /sys/kernel/debug/cn10k/rpm/rpmx/lmacx/stats
+> AND found a testsuite gcc/gcc/testsuite/gcc.dg/pragma-diag-10.c
+> 
+>  10 #pragma GCC diagnostic push
+>  11 #pragma GCC diagnostic ignored "-Wstringop-overflow"
+>  12 #pragma GCC diagnostic ignored "-Wstringop-overread"
+>  13   if (c != 0)
+>  14     return __builtin_memchr (s, c, (unsigned long)-1);
+>  15 #pragma GCC diagnostic pop
+> 
+> it's totally same as this PATCH.
+> 
+> I think the motivation for this patch is to eliminate the compilation
+> warning, maybe one day we will compile the kernel with "-Werror -Wall",
+> at which point this compilation warning will turn into a compilation
+> error, and in case we already know it, we should fix this error in
+> advance.
+> 
+> For old gcc, we can add this?
+> 
+>  #pragma GCC diagnostic push
+> +#if __GNUC__ >= 11 && __GNUC_MINOR__ >= 1
+>  /* Ignore read(2) overflow and write(2) overread compile warnings */
+>  #pragma GCC diagnostic ignored "-Wstringop-overread"
+>  #pragma GCC diagnostic ignored "-Wstringop-overflow"
+> +#endif
+> 
+> What do you think?
 
-And i assume also the official kernel API, ethtool get_fec_stats?
+I think it looks great!  Looking forward to your v3 patch!
 
-    Andrew
+
+Thanks,
+SJ
+
+> 
+> Good day!
+> Rong Tao
