@@ -2,97 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D73626920
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 12:19:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99242626923
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 12:20:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234711AbiKLLTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 06:19:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
+        id S234886AbiKLLUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 06:20:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiKLLTN (ORCPT
+        with ESMTP id S231463AbiKLLU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 06:19:13 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DC51570F;
-        Sat, 12 Nov 2022 03:19:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1668251925;
-        bh=rp7zYqpOsau/LPIR3QvWAmM9M3FNKxiBJ0iJkyMuijU=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=JuhM5ybwF5gc+v79eCj+IvH2l036jTI020NgkMPbe3QYZRjidKTEjW5WoGJVmsd9J
-         22oe31g+QvlOE73Xe1OpFmrkKHlYWUe5hr3vD5p5n7LoKIKEm3SsYj7ffdZPDkDbvc
-         3qRTc6DyHMVnz0UALX4Hc4Rm3uwzIW6AloSAJ9VKXJJxOQbTlDB6HA8UAhV5yqV5oY
-         sQCLMVa9TVyDf464kwnXEVBfEW4LGHKHO62EumkElDXW+y8ZQl75aQZYFWHt0LKTvr
-         g3aUU0UV1IfkwOv+v6VgApUmGejFne7/DP3Lcbu02Dh0KsJeQ8yJIZurq9oma21foN
-         tca6VycS14GiQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [157.180.227.41] ([157.180.227.41]) by web-mail.gmx.net
- (3c-app-gmx-bs18.server.lan [172.19.170.70]) (via HTTP); Sat, 12 Nov 2022
- 12:18:45 +0100
+        Sat, 12 Nov 2022 06:20:29 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38631114B
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 03:20:27 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id j16so11890686lfe.12
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 03:20:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i8kkvKEpvQ688qhJocC+3RA4wQvtZWRg4tan2qE3BcA=;
+        b=fcYEcD0sM/OTJI9qNBqy+gGNe8twjTnWTEuqeTKGKU9QcoiojoPbQjI2PGNhRbW5b/
+         EhX5y6EPa3wFGymb0RbWl0Ze5k72diijNxGzO2ejvhsvnd1WF8ChfLUdGLupb4KICMTB
+         r8rz3Uj9TtchhKTgzm09EhaqvXW/jbkG2SmCaH1XHiMKGpgSkhtfTVllNEoBvb50QcvM
+         xu+r9hOeXNT7hD3SMCk6RE3UCnGySoXgxHzYSxDE8TmVZ6uqrWqsJYBycmcRwURA0ovD
+         cdPixxFC3MMUHKZfI8MbxCBl4iYPIU98ByGh3Q8qN7zndaaeqlHWFILS7qxla7HLf1OH
+         QPLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i8kkvKEpvQ688qhJocC+3RA4wQvtZWRg4tan2qE3BcA=;
+        b=Q5F1GJECbvCSP1I+ImyqcedSlYkBM2JLuleqpcgBv000aZt6+NN8wRPoxjAi1Ge2hp
+         W43AoHLxm8XenXwPxO6tgogWCE2fSEZdrl1tzBqmuigIX+NGC8+XiMGdVE0Vo4NKO5zt
+         vE/bLlTujaZx+sgLUO+Tf3J0Tz6/68taXOqeV+ddCw31te+gvJ8yzkX5rCdpD4IQuY40
+         FPxd53vsgt2UE03Q80P6+W+UKN2lgO9Eoqh2xqbUMnprct+3wJzbm2t6Q3XkYZ+nHVbT
+         xyHmmSg6kUBR7uI3Q/5T0D9+EpYIkTuieRjANIAyHyYi8fpY65ct4GTkFYglLTlszdDs
+         b1Lw==
+X-Gm-Message-State: ANoB5pmXaU+hje4NDMHFi4zfl5yqhNh/mJ0K3swFHf/2cMclCyz/v+n3
+        L/tXaQh3c7wQQn7YKwLSPDADeA==
+X-Google-Smtp-Source: AA0mqf7CJgoDNhgsu2VpvyHNlSJ1G3FV4KeBeNUpXLaQeRnRABUCtstZ74Jcfj+ndSA5SeFd0bRG0Q==
+X-Received: by 2002:a05:6512:2983:b0:4ae:6bbc:e8af with SMTP id du3-20020a056512298300b004ae6bbce8afmr1838165lfb.411.1668252026270;
+        Sat, 12 Nov 2022 03:20:26 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id 10-20020ac25f0a000000b004a287c50c13sm826141lfq.185.2022.11.12.03.20.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Nov 2022 03:20:25 -0800 (PST)
+Message-ID: <57f3c55b-3d37-276f-8c09-ebd580ee1e37@linaro.org>
+Date:   Sat, 12 Nov 2022 14:20:25 +0300
 MIME-Version: 1.0
-Message-ID: <trinity-74ed6753-8790-4b4e-b479-8b79594deaa9-1668251925295@3c-app-gmx-bs18>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 11/14] phy: qcom-qmp-combo: clean up DP clock callbacks
+Content-Language: en-GB
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Bo Jiao <Bo.Jiao@mediatek.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: Aw: [PATCH v4 03/11] dt-bindings: usb: mtk-xhci: add support for
- mt7986
-Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 12 Nov 2022 12:18:45 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20221112091518.7846-4-linux@fw-web.de>
-References: <20221112091518.7846-1-linux@fw-web.de>
- <20221112091518.7846-4-linux@fw-web.de>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:gCRoOpkI2dmBRiFBhn0pU9g6q49HTv0O8fEgaXiLsVAXzpLqMNbIn85QOPLr3N/vBYIXH
- WTylJph/OdYJnhgtFfTamYnylP/AdKUIfBu6AqCaxy9/Yd/hyv0YV1LJ5Q+nKlR0ughGRgyazSqo
- iX4spko7QjCGGWUmkxUnA30Js5isX49SecDWSA8NbJsDVzs4foq6++Xzic6VkiAnPeH61szIVIKd
- 1ixmQGyTOgG1NnC4VmqMvyL1fzK8XnffDvuKdyQUTUng61ACp+NklnmqwPDVcOu+on19uvP9rCWT
- 5U=
-UI-OutboundReport: notjunk:1;M01:P0:lCc17Sn1yzU=;z2pK6blWRcnBHwu86+5E0PgAAkj
- xGOA5K/vmoAeepi2y/t+uUzg5F7ZYKMrqYpyrtUSqcIX93dLGw8aI7mz+F5UZpCtoSZmEytNJ
- Cq+Q2voskO1u4QaZk8KJ3e4gjBkfz4UJtyAsCm8llAAPPoBeboWDlAxZPcBIQ7UPOQiAaTUoZ
- neWMdEyzWXjFqWqy9imB3LFCk8e+/pJwEt1YJceCR++/lND+ebXaoALdMjitN5sr5QXCoiwJY
- cObwDWnPI3H+l3Xjh0XN4kgfTEKsKJcGnYh0LYLrTcM3iCAt0XkONq5Tki4w9ZlAIwRjZ0TZH
- GYQ6IVH+CGz+C0OIyNn6vwM1t9gT8KSJBMs6U17edmKsgXC+/J5bNTpCeQLOOHHf7F4iOHagK
- CAuJjbQX5VuPs+jwiRkqXURtXgcyZ4VBsVDlE1ECp1qfJj2gmMgxGpx4kgP6Rc5nou2Qr3M0Y
- t7ps4A/0s1bY+4jeSW4ydAXZL1t4fG738PdqbLUkCkUki73gaMmDAAJ5rRW79fQE7PfxQipit
- OwAyCGdDOL7vP1vLJxcSmkAZpx3fL4zsENg9IUL6QTMuAUeZicUbfJih6MhytXPJfpLR09Vrf
- VAEEEcobqD08vJl0OHPHH6cvAAt0l5m8/x7Dn0J/PJ4o5Y0WSNE8rKze0CKLg6AkD8YA3WHkb
- nqaaRon6DyZQS3yg90rLqpU8IWteOy+5Qs5h0LzVPKoaNc8KG20WW4dML2+mVPs2CNbh7yX+D
- 2Bq4xRscwlqJcV3dIijXyTkLy35P4z2kxcRERQL+j4urJf17FIosEDVtbOif85eB4PcRM14mO
- CxXIP9pwTOC4yMVfr/6rOKKNmfxnz4w1VwYmEWJMvPaPA=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221111092457.10546-1-johan+linaro@kernel.org>
+ <20221111092457.10546-12-johan+linaro@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221111092457.10546-12-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-i've noticed that i missed the Ack from Krzysztof i've got in v1 [1]
+On 11/11/2022 12:24, Johan Hovold wrote:
+> Clean up the DP clock callbacks somewhat by dropping the redundant
+> "qcom" prefix and removing line breaks after type specifiers.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 33 ++++++++++-------------
+>   1 file changed, 14 insertions(+), 19 deletions(-)
+> 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20221017104141.7338-4-linux@fw-web.de/
+-- 
+With best wishes
+Dmitry
 
-regards Frank
