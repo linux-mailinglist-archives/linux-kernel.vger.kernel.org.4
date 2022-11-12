@@ -2,106 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74347626939
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 12:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A36C862693B
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 12:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234902AbiKLLlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 06:41:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
+        id S234920AbiKLLmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 06:42:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbiKLLlT (ORCPT
+        with ESMTP id S230365AbiKLLmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 06:41:19 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47236634B;
-        Sat, 12 Nov 2022 03:41:13 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id D565D5FD8A;
-        Sat, 12 Nov 2022 14:41:09 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1668253269;
-        bh=tEC8qWPcYzh5C+P7qHhW3cPWbhJ7pLhopk4AV/Opjww=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=bA9sARAhl9oZo6driejGSDil7LBmiT1wZ0FRpoJ52dicXUZGVG5cbj5cKUbCMSo+I
-         LPW3Ua96wS5wZ2O2DNyF14LdQdtvfj5DGf2p9A2TK184HH402JsJcSLx/oopM1EHXb
-         2nc/0ZB+cTepqejzo3qklvcM1LakFzTsbFwj8SvDAdFt3VMF7U+oQdRXOGRev0iFZM
-         YaQSIy/S41cu41Z8oLyLVlOaG9VeuhqmF6R1y1T2F9tfDChQORdcFgQhG4hpolKEcR
-         paxHyhYfyS0CHz2HnLL1cQ0NHZSksWV4AL3SsEXrixb4QpjBVgEw4rwgjHv/hcA2vA
-         vQ4EaA7MsbpUw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Sat, 12 Nov 2022 14:41:05 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Bobby Eshleman <bobbyeshleman@gmail.com>,
-        Stefano Garzarella <sgarzare@redhat.com>
-CC:     Krasnov Arseniy <oxffffaa@gmail.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        kernel <kernel@sberdevices.ru>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH v3 00/11] virtio/vsock: experimental zerocopy receive
-Thread-Topic: [RFC PATCH v3 00/11] virtio/vsock: experimental zerocopy receive
-Thread-Index: AQHY8hatKKTuchPoekmnGA3HAR0Si645kb6AgAB0yICAAPn8gA==
-Date:   Sat, 12 Nov 2022 11:40:59 +0000
-Message-ID: <3de0302f-bd4f-5df1-9de5-cbc3b3dd94f8@sberdevices.ru>
-References: <f60d7e94-795d-06fd-0321-6972533700c5@sberdevices.ru>
- <20221111134715.qxgu7t4c7jse24hp@sgarzare-redhat> <Y260WSJKJXtaJQZi@bullseye>
-In-Reply-To: <Y260WSJKJXtaJQZi@bullseye>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3C62CF393163484A89D015B7E010F57A@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Sat, 12 Nov 2022 06:42:04 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7301A3AB
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 03:42:03 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id d20so6232053plr.10
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 03:42:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=omnom-net.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wUJur4eVPzA0iY2JL1ZbCoGq1dKojqTulWseoldi6uA=;
+        b=WhOUwIfGsxKfkHoG7tRINJX7dicX7/Tvb4xl7lUAkj37SLilDOnia9YuXBHa54zqaT
+         Vi14P7KPX0Kgm28u+a48bfS2LPxa3H5Yp/eSxv9HuHcRzLG2k2y9WsSmLANx1AXqnxpA
+         wBT1AU2y+KuBKnzsUlz4zOskgBxsiUWT+QC37GvEhT/BI7sFkZBiaLspmWbJCN+dIpH/
+         RTO9OPQUujoyMgXwbGlspCh8KtfNA43SbODn94XTlpindNd5mi5nRtmzv4CMD4qZq/s8
+         q85FJIwyxQZ+oSJPJ76vNuvOlwRSYEnKfga8kA0PxT3ij7p/k//QAZHsmRclExCaKwBE
+         8WcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wUJur4eVPzA0iY2JL1ZbCoGq1dKojqTulWseoldi6uA=;
+        b=yjHO4iDnkzJA8o7eUo6Y/BpQXhtvlnyTsA8cY4kScGmT/dbt2r9Sxw1bRABbQHgIbx
+         oXJsEdC+MoRStJBbRMtOfvMjjQaOZONH47NQOQxLPeoaCXlGUkCRKipPpwdIs8fgNYxw
+         CERVON0viqbBoFCZLMUjnZwiYObyxu0MtSScOpNUFou4KUFrxF7CuQPKrlixz4p8XQNw
+         J3iaGlKnQyYEXom++ztXDgl18qUeG5ULgwGVSTmzFQu9OvVa3R35dg9/PND9M87Ce2Ta
+         sIrxMxA29EN3x/9NAwTG2TcegBCTGAgfuwPWha/nHvLxdfiUkTXCyogDAQwHOUL5wR/K
+         NT1g==
+X-Gm-Message-State: ANoB5plaZknzEIRYOQ7WobKpK0p9W1NL88qSIZe6zozAq+jsCxR3J0NW
+        emK6T54nWe28JbIZu/zGXQN3rA==
+X-Google-Smtp-Source: AA0mqf5cl6ADcjWvHGgt9BQptQBABfkSpoLRYCxk+AcKUl0ZOQmJHdAjXaha43C6ssnesABN2xaTRw==
+X-Received: by 2002:a17:902:f7d1:b0:17f:8544:e0dd with SMTP id h17-20020a170902f7d100b0017f8544e0ddmr6543348plw.34.1668253322831;
+        Sat, 12 Nov 2022 03:42:02 -0800 (PST)
+Received: from astraea-lnx.home.neggl.es (119-18-16-128.771210.mel.static.aussiebb.net. [119.18.16.128])
+        by smtp.gmail.com with ESMTPSA id e2-20020aa79802000000b0056e8ce106d1sm3132091pfl.132.2022.11.12.03.41.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Nov 2022 03:42:02 -0800 (PST)
+From:   Andrew Powers-Holmes <aholmes@omnom.net>
+To:     linux-rockchip@lists.infradead.org
+Cc:     =?UTF-8?q?Ond=C5=99ej=20Jirman?= <megi@xff.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/1] arm64: dts: rockchip: rk356x: Fix PCIe register and range mappings
+Date:   Sat, 12 Nov 2022 22:41:25 +1100
+Message-Id: <20221112114125.1637543-1-aholmes@omnom.net>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/11/12 07:44:00 #20572870
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTEuMTEuMjAyMiAyMzo0NSwgQm9iYnkgRXNobGVtYW4gd3JvdGU6DQo+IE9uIEZyaSwgTm92
-IDExLCAyMDIyIGF0IDAyOjQ3OjE1UE0gKzAxMDAsIFN0ZWZhbm8gR2FyemFyZWxsYSB3cm90ZToN
-Cj4+IEhpIEFyc2VuaXksDQo+PiBtYXliZSB3ZSBzaG91bGQgc3RhcnQgcmViYXNpbmcgdGhpcyBz
-ZXJpZXMgb24gdGhlIG5ldyBzdXBwb3J0IGZvciBza2J1ZmY6IGh0dHBzOi8vbG9yZS5rZXJuZWwu
-b3JnL2xrbWwvMjAyMjExMTAxNzE3MjMuMjQyNjMtMS1ib2JieS5lc2hsZW1hbkBieXRlZGFuY2Uu
-Y29tLw0KPj4NCj4+IENDaW5nIEJvYmJ5IHRvIHNlZSBpZiBpdCdzIGVhc3kgdG8gaW50ZWdyYXRl
-IHNpbmNlIHlvdSdyZSBib3RoIGNoYW5naW5nIHRoZQ0KPj4gcGFja2V0IGFsbG9jYXRpb24uDQo+
-Pg0KPiANCj4gVGhpcyBsb29rcyBsaWtlIHRoZSBwYWNrZXQgYWxsb2NhdGlvbiBjYW4gYmUgbWFy
-cmllZCBzb21ld2hhdCBuaWNlbHkgaW4NCj4gc2luY2UgU0tCcyBtYXkgYmUgYnVpbHQgZnJvbSBw
-YWdlcyB1c2luZyBidWlsZF9za2IoKS4gVGhlcmUgbWF5IGJlIHNvbWUNCj4gdHdlYWtpbmcgbmVj
-ZXNzYXJ5IHRob3VnaCwgc2luY2UgaXQgYWxzbyB1c2VzIHRoZSB0YWlsIGNodW5rIG9mIHRoZSBw
-YWdlDQo+IHRvIGhvbGQgc3RydWN0IHNrYl9zaGFyZWRfaW5mbyBJSVJDLg0KPiANCj4gSSBsZWZ0
-IHNvbWUgY29tbWVudHMgb24gdGhlIHBhdGNoIHdpdGggdGhlIGFsbG9jYXRvciBpbiBpdC4NCkhl
-bGxvIEJvYmJ5LA0KDQp0aGFua3MgZm9yIHJldmlldy4gSSdsbCByZWJhc2UgbXkgcGF0Y2hzZXQg
-b24gWW91ciBza2J1ZmYgc3VwcG9ydC4NCj4gDQo+Pg0KPj4gTWF5YmUgdG8gYXZvaWQgaGF2aW5n
-IHRvIHJlYmFzZSBldmVyeXRoaW5nIGxhdGVyLCBpdCdzIGFscmVhZHkgd29ydGh3aGlsZSB0bw0K
-Pj4gc3RhcnQgdXNpbmcgQm9iYnkncyBwYXRjaCB3aXRoIHNrYnVmZi4NCj4+DQo+IA0KPiBJJ2xs
-IGJlIHdhaXRpbmcgdW50aWwgTW9uZGF5IHRvIHNlZSBpZiBzb21lIG1vcmUgZmVlZGJhY2sgY29t
-ZXMgaW4NCj4gYmVmb3JlIHNlbmRpbmcgb3V0IHY0LCBzbyBJIGV4cGVjdCB2NCBlYXJseSBuZXh0
-IHdlZWssIEZXSVcuDQpPbmUgcmVxdWVzdCBmcm9tIG1lLCBjb3VsZCBZb3UgcGxlYXNlIENDIG1l
-IGZvciBuZXh0IHZlcnNpb25zIG9mDQpZb3VyIHBhdGNoc2V0LCBiZWNhdXNlOg0KMSkgSSdsbCBh
-bHdheXMgaGF2ZSBsYXRlc3QgdmVyc2lvbiBvZiBza2J1ZmYgc3VwcG9ydC4NCjIpIEknbGwgc2Vl
-IHJldmlldyBwcm9jZXNzIGFsc28uDQoNCk15IGNvbnRhY3RzOg0Kb3hmZmZmYWFAZ21haWwuY29t
-DQpBVktyYXNub3ZAc2JlcmRldmljZXMucnUNCg0KVGhhbmtzLCBBcnNlbml5DQoNCj4gDQo+IEJl
-c3QsDQo+IEJvYmJ5DQoNCg==
+The Rockchip RK356x SoCs currently have incorrect, or at least sub-optimal,`reg`
+and `ranges` values in their DTS files' PCIe nodes. Ondřej Jirman sent a patch
+in [1] to resolve this, but it was not merged due to some issues discovered
+during testing (it fixed his issues with devices behind a switch, but broke
+directly connected NVMe drives, amongst others - see [2]).
+
+This patch is a reworked of that patch, using the same mappings the Rockchip BSP
+kernel uses. Peter sent these up during the discussion in [3] and they've been
+tested on his boards as well as Ondřej's, mine, and those of a few others.
+
+Ondřej also sent a patch in [4] with these fixed ranges, but without the fix
+for RK3568 as he was not able to test on that SoC. I've included the fixes for
+both SoCs as he's happy with that and the patch has not yet been merged.
+
+I have tested these ranges against devices which only map 32-bit ranges, devices
+which only map 64-bit, and devices which require both. An Intel i350-T4 NIC does
+not enumerate at all with the existing or previous patch's addresses, but works
+quite happily with these, as do NVMe drives and every other device I've been
+able to test.
+
+MSI/MSI-X has also been tested as working, but does not currently work upstream
+due to a workaround needed in the GIC driver which Rockchip are still yet to
+issue an erratum for.
+
+Thanks,
+Andrew
+
+[1] https://lore.kernel.org/linux-rockchip/20221005085439.740992-1-megi@xff.cz/
+[2] https://lore.kernel.org/linux-rockchip/CAMdYzYq3S2rR3Kb61irpV9xHYijNiJY0mkVnJwPrpXzxg_Zh9g@mail.gmail.com/
+[3] https://lore.kernel.org/linux-rockchip/CAMdYzYp6ShLqKxdiAjaRFiRF5i+wzfKiQvwPMzyQLAutWZbApg@mail.gmail.com/
+[4] https://lore.kernel.org/all/20221107130157.1425882-1-megi@xff.cz/
+
+Andrew Powers-Holmes (1):
+  arm64: dts: rockchip: rk356x: Fix PCIe register and range mappings
+
+ arch/arm64/boot/dts/rockchip/rk3568.dtsi | 14 ++++++++------
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi |  7 ++++---
+ 2 files changed, 12 insertions(+), 9 deletions(-)
+
+
+base-commit: f0c4d9fc9cc9462659728d168387191387e903cc
+--
+2.38.0
+
