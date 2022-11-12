@@ -2,83 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD08626C2F
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 23:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1522A626C30
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 23:46:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234994AbiKLWdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 17:33:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
+        id S234976AbiKLWqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 17:46:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231814AbiKLWds (ORCPT
+        with ESMTP id S230147AbiKLWqq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 17:33:48 -0500
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F47014D0B
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 14:33:47 -0800 (PST)
-Received: by mail-qv1-xf33.google.com with SMTP id j6so5710354qvn.12
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 14:33:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=digitalocean.com; s=google;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ObPzrzs7HkuXWqb/Hm/pvn03m1dpj1pmmiupPueD+24=;
-        b=P52pDzOKLqNpueol/zFYV61tVVAEOij8E4TwX/Rnt0lkrzQwo/quM5rEIXj4ssfKTX
-         zhM1j72PfhBL1z/Y6rNuejwrDLpgllop6c1ydULxJ34GHBn1AOA+kMOhH89AqMDneQrV
-         tm19w50+8zw/SGZ/HlRCQdzTgHDbM4n5E+QHY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ObPzrzs7HkuXWqb/Hm/pvn03m1dpj1pmmiupPueD+24=;
-        b=xMM9BxGlAHN/uzSoLfxf6EZ2w7rJnkh4R4Z14sb5ewGdEgWdBox3CUYDSkysnAsnJ6
-         MkBwJotxLAvn0a4eEPyjtktMftQHwhoL6g/QptDk3UDOe8z8pW6IWw19c5ruW6GsUHKr
-         2FBG3iKNblmWtS0kH11nuMWNpIp5R9t3mPxdGD2jGu3mNVSrk1AbPoqL+v0fFBPoGk+b
-         inbAjj08EPyUzRPXGJNhcoA/+NfGdZ4me84lUKZE1gHVF4THRqqa5rUiK1vFg5jK0TvZ
-         A5Vg8LpG6VvZJnRCccyIHzIpdnYLbE8LVTYzQMA9bLyZ6Y8RwRK2xrfJu7IcwHqoeK46
-         QFCA==
-X-Gm-Message-State: ANoB5pmmiS109GvCVeHswlbpDlkWr1eDQc8qFdpCNtaDjYH684t6LoN7
-        T5zIS5xHz3oiib0lmVQoXVwTsg==
-X-Google-Smtp-Source: AA0mqf7yNpnQLnSnYqU8ZZoSTinC44rbJi30aZc9yKIV2S+M8TQ14uhJMRQ3DpYYawi7th/xYOiHOw==
-X-Received: by 2002:a05:6214:428d:b0:4b3:e8bc:b06d with SMTP id og13-20020a056214428d00b004b3e8bcb06dmr7431669qvb.72.1668292426374;
-        Sat, 12 Nov 2022 14:33:46 -0800 (PST)
-Received: from [192.168.2.110] (107-142-220-210.lightspeed.wlfrct.sbcglobal.net. [107.142.220.210])
-        by smtp.gmail.com with ESMTPSA id i5-20020a05620a404500b006fb11eee465sm3913431qko.64.2022.11.12.14.33.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Nov 2022 14:33:45 -0800 (PST)
-Message-ID: <f5793630-f13d-42d3-c045-276311230682@digitalocean.com>
-Date:   Sat, 12 Nov 2022 17:33:44 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-To:     Sandipan Das <sandipan.das@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221027133511.161922-1-lyan@digtalocean.com>
- <Y1/Gvs0xkk/W0Nro@hirez.programming.kicks-ass.net>
- <a9677c3e-1f2b-a18f-97f5-9cc1a216ed9c@amd.com>
-Content-Language: en-US
-From:   Liang Yan <lyan@digitalocean.com>
-Subject: Re: [PATCH] arch/x86/events/amd/core.c: Return -ENODEV when CPU does
- not have PERFCTL_CORE bit
-In-Reply-To: <a9677c3e-1f2b-a18f-97f5-9cc1a216ed9c@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Sat, 12 Nov 2022 17:46:46 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE54D15A3C;
+        Sat, 12 Nov 2022 14:46:44 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id C949D32002D8;
+        Sat, 12 Nov 2022 17:46:41 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute2.internal (MEProxy); Sat, 12 Nov 2022 17:46:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1668293201; x=1668379601; bh=UR
+        6IZENSs9Hhv2gtReWHrfdfYMNRxyX0JgKvZaNESMM=; b=gqmiTzPVUIKICbV0rT
+        mYa/C3SOcK3X4P0ZSAxIYw5XX/9zm+iy3FRh02ISej1X6QSUGFnDkf5MJgq42UXG
+        7dsRMfcpvZoTo5s7cYmi4SHoRKzgUjVZ869jm2hUPbgG9GoCj+LDNSmYtTYfSe+F
+        UKQ2bj8VPaZTXZ2gl23zSnwtEGPg/i9DvlG3NMCzTAvUYZ0YpL1RZq347QH79ux8
+        br3Q+kzL/ufOhEV2AYUFpnTkmVGe0omDxzdfPPTgE6uPqu5DNQxZPJpLXEX+3ICA
+        zYnC+ERsPHlD6iq5Yne2ba4eAcrzuh+1FZRtd5/kMOPjYK1oQniVCLK4amVrdH5Q
+        g37Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668293201; x=1668379601; bh=UR6IZENSs9Hhv2gtReWHrfdfYMNR
+        xyX0JgKvZaNESMM=; b=QZ2bB0r3zIF4kBQgSYHmtzqd0hii9X91zrRLeLrmb/Fl
+        ro8qPsKnJ44OcHKgh+PkrSbd5je148LiMQU2dCgUIQ2W0l8gzf8GG6qo5rWde9U2
+        G4tLUH5Jd84sfniPiruyPntl7YERjnfTtfhREGVAGFzaFJ8+vnb7/mYYl5fPeXgk
+        QnulMaIi4ARTpKZnEfZGVdg7tRm2osNwGBicEt7hE6RNf5B//lhsb3k4JcRTBmRX
+        MCB66rXHgKZ9uTyFla470S5xwvDm8FCCweD6lPRk8fbKihOf7br7ts5qz1mckMdY
+        qnDV1qBqLGcjFXeEhhi118i8QwPUx/0qEjH7geZE8w==
+X-ME-Sender: <xms:UCJwYyrvkZkXszrrPN7gpZdYr7IjkREz_uMKX8yE6IY17G2r-wY9hg>
+    <xme:UCJwYwqtsK5h1Vkj8Xh9XduQVPOlwE0DkYx-YJZOs8fk7MABOVFR1LHCPZTIBwYg2
+    drdxy5GhE_eUF_h41I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeelgddtudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefghfei
+    veeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:UCJwY3MBSUUZVTvODuISst857emTpFL1HAd0hUuXDbX-lnMrsvhD0Q>
+    <xmx:UCJwYx5cSmxf4TfBTUDoAZEXxxKpMwi-VfVNaFJeNh50ARnF235QVQ>
+    <xmx:UCJwYx7xVxbSrW0o_HVQtW7Oe-XdZ6S77WNw_xD25DzHL_5eyiMRLw>
+    <xmx:USJwY00mUeXTQCvjvI47wKPthQbd75cqjXm-Pac1EVZl8OfVwbfA_w>
+Feedback-ID: i51094778:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D94A7A60084; Sat, 12 Nov 2022 17:46:40 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <f3378173-2e15-467c-b159-7d523533ffc5@app.fastmail.com>
+In-Reply-To: <1800f8ea-2dde-a420-3e99-56237bde1bb0@gmail.com>
+References: <20221112102506.34990-1-sven@svenpeter.dev>
+ <1800f8ea-2dde-a420-3e99-56237bde1bb0@gmail.com>
+Date:   Sat, 12 Nov 2022 23:46:19 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Ferry Toth" <fntoth@gmail.com>
+Cc:     "Felipe Balbi" <felipe.balbi@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+        "Thinh Nguyen" <Thinh.Nguyen@synopsys.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] usb: dwc3: core: configure PHY before initializing host in
+ dwc3_set_mode
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,102 +89,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Ferry,
 
-On 10/31/22 10:28, Sandipan Das wrote:
-> Hi Liang, Peter,
+On Sat, Nov 12, 2022, at 23:15, Ferry Toth wrote:
+> Hi Sven,
 >
-> On 10/31/2022 6:29 PM, Peter Zijlstra wrote:
->> On Thu, Oct 27, 2022 at 09:35:11AM -0400, Liang Yan wrote:
->>> After disabling cpu.perfctr_core in qemu, I noticed that the guest kernel
->>> still loads the pmu driver while the cpuid does not have perfctl_core.
->>>
->>> The test is running on an EPYC Rome machine.
->>> root@ubuntu-s-4vcpu-8gb-amd-nyc1-01:~# lscpu | grep perfctl
->>> root@ubuntu-s-4vcpu-8gb-amd-nyc1-01:~#
->>> root@ubuntu-s-4vcpu-8gb-amd-nyc1-01:~# dmesg | grep PMU
->>> [    0.732097] Performance Events: AMD PMU driver.
->>>
->>> By further looking,
->>>
->>> ==> init_hw_perf_events
->>>      ==> amd_pmu_init
->>>          ==> amd_core_pmu_init
->>>              ==>
->>>                  if (!boot_cpu_has(X86_FEATURE_PERFCTR_CORE))
->>> 			return 0;
->>>
->>> With returning 0, it will bypass amd_pmu_init and return 0 to
->>> init_hw_perf_events, and continue the initialization.
->>>
->>> I am not a perf expert and not sure if it is expected for AMD PMU,
->>> otherwise, it would be nice to return -ENODEV instead.
->>>
->>> New output after the change:
->>> root@ubuntu-s-4vcpu-8gb-amd-nyc1-01:~# dmesg | grep PMU
->>> [    0.531609] Performance Events: no PMU driver, software events only.
->>>
->>> Signed-off-by: Liang Yan <lyan@digtalocean.com>
->> Looks about right, Ravi?
->>
->>> ---
->>>   arch/x86/events/amd/core.c | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
->>> index 8b70237c33f7..34d3d2944020 100644
->>> --- a/arch/x86/events/amd/core.c
->>> +++ b/arch/x86/events/amd/core.c
->>> @@ -1335,7 +1335,7 @@ static int __init amd_core_pmu_init(void)
->>>   	int i;
->>>   
->>>   	if (!boot_cpu_has(X86_FEATURE_PERFCTR_CORE))
->>> -		return 0;
->>> +		return -ENODEV;
->>>   
-> There are four legacy counters that are always available even when PERFCTR_CORE
-> is absent. This is why the code returns 0 here. I found this to be a bit confusing
-> as well during PerfMonV2 development so I wrote the following patch but forgot to
-> send it out.
-
-
-Hi Sandipan,
-
-Thanks for the classification.
-Do these legacy counters belong to the AMD PMU property from a VM 
-perspective? I mean, if I want to disable PMU for an AMD vcpu for some 
-reason, is it possible to disable perfctr_core and the four counters, or 
-is this not logical since the four counters could not be disabled from 
-the bare-metal level?
-I asked because I saw 'pmu' could be disabled for Intel and ARM, but it 
-seems not for AMD.
-
-Also, could you please list the four legacy counters here?
-
-Thanks,
-Liang
-
-
-> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-> index 262e39a85031..d3eb7b2f4dda 100644
-> --- a/arch/x86/events/amd/core.c
-> +++ b/arch/x86/events/amd/core.c
-> @@ -1345,6 +1345,14 @@ static int __init amd_core_pmu_init(void)
->   	u64 even_ctr_mask = 0ULL;
->   	int i;
->   
-> +	/*
-> +	 * All processors support four PMCs even when X86_FEATURE_PERFCTR_CORE
-> +	 * is unavailable. They are programmable via the PERF_LEGACY_CTLx and
-> +	 * PERF_LEGACY_CTRx registers which have the same address as that of
-> +	 * MSR_K7_EVNTSELx and MSR_K7_PERFCTRx. For Family 17h+, these are
-> +	 * legacy aliases of PERF_CTLx and PERF_CTRx respectively. Hence, not
-> +	 * returning -ENODEV here.
-> +	 */
->   	if (!boot_cpu_has(X86_FEATURE_PERFCTR_CORE))
->   		return 0;
+> Op 12-11-2022 om 11:25 schreef Sven Peter:
+>> Usually, first the PHY is set to the correct mode and then the host or
+>> device side of the controller is initialized afterwards. Otherwise a PHY
+>> that's already used has to be reconfigured.
+>> dwc3_core_init_mode() does this correctly for both host and device and
+>> __dwc3_set_mode() does it correctly when switching to device mode.
+>> When setting up host mode however it first initializes xhci and only
+>> then changes the PHY's mode. Let's also do the operations in the correct
+>> order here.
+>> 
+>> Fixes: 958d1a4c40dd ("usb: dwc3: core: program PHY for proper DRD modes")
+>> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+>> ---
+>>   drivers/usb/dwc3/core.c | 9 +++++----
+>>   1 file changed, 5 insertions(+), 4 deletions(-)
+>> 
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index ad4d644e21a4..759d23d908fa 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -212,14 +212,15 @@ static void __dwc3_set_mode(struct work_struct *work)
+>>   
+>>   	switch (dwc->desired_dr_role) {
+>>   	case DWC3_GCTL_PRTCAP_HOST:
+>> +		if (dwc->usb2_phy)
+>> +			otg_set_vbus(dwc->usb2_phy->otg, true);
+>> +		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+>> +		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
+>> +
+>>   		ret = dwc3_host_init(dwc);
+>>   		if (ret) {
+>>   			dev_err(dwc->dev, "failed to initialize host\n");
+>>   		} else {
+>> -			if (dwc->usb2_phy)
+>> -				otg_set_vbus(dwc->usb2_phy->otg, true);
+>> -			phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+>> -			phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
+>>   			if (dwc->dis_split_quirk) {
+>>   				reg = dwc3_readl(dwc->regs, DWC3_GUCTL3);
+>>   				reg |= DWC3_GUCTL3_SPLITDISABLE;
+> This patch breaks usb host mode on Intel Merrifield platform. I am 
+> testing this on top of v6.0 +
+> * my 2 "usb: dwc3: core: defer probe on ulpi_read_id timeout" patches 
+> (otherwise tusb1210 will not be probed on this platform)
+> * Revert "usb: dwc3: disable USB core PHY management" (with/without this 
+> patch makes no difference)
+> * usb: dwc3: Do not get extcon device when usb-role-switch is used 
+> (with/without this patch makes no difference)
 >
+> ftrace shows tusb1210 is indeed still probed, nevertheless in host mode 
+> it seems vbus is not powered as my connected smsc95xx based hub is not 
+> active (seems not plugged).
 >
-> If this looks good to you, I will post it.
+> Flipping the switch to device mode gadgets work fine.
 >
-> - Sandipan
->
+> Could it be dwc3_host_init() needs to be called prior to otg_set_vbus()?
+
+Huh, thanks for testing!
+
+For the platform I'm working on I need to set the phy mode before dwc3_host_init()
+and then found the same code further below in dwc3_core_init_mode,
+
+static int dwc3_core_init_mode(struct dwc3 *dwc)
+{
+[...]
+	case USB_DR_MODE_HOST:
+		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+
+		if (dwc->usb2_phy)
+			otg_set_vbus(dwc->usb2_phy->otg, true);
+		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
+
+		ret = dwc3_host_init(dwc);
+		if (ret)
+			return dev_err_probe(dev, ret, "failed to initialize host\n");
+		break;
+[...]
+}
+
+so I'm quite surprised it causes issue in __dwc3_set_mode now.
+If otg_set_vbus indeed needs to happen after dwc3_host_init it should probably
+also be called afterwards in dwc3_core_init_mode as well.
+
+
+Best,
+
+
+Sven
