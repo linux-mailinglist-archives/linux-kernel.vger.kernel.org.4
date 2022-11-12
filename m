@@ -2,196 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461D1626B3F
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 20:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E447A626B40
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 20:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232663AbiKLTdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 14:33:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
+        id S233437AbiKLTfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 14:35:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiKLTdB (ORCPT
+        with ESMTP id S230257AbiKLTf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 14:33:01 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4371513FB0;
-        Sat, 12 Nov 2022 11:32:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668281575; x=1699817575;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version;
-  bh=iKpWUjfE2wCk/YUv3iPRAyY5YP+p5wS0hZqw7H3IRdY=;
-  b=K6AVvrXxQ/AsXqjBXtooaWHI7eVGAmnQWRmsY8UJxU0iCBfgf+SAEgul
-   QlnT93XVRYVpsYJHGkvXtE+pT1d5SgjWzGytJNR/8IxG53n7VOjcf1XX3
-   4hFslC4j7qz4MWt9PFgN8MkOgpwJaxKd1YO0K/n03yscWZLJ+ohNsfoqj
-   Yv9WH3cmCtA78ug3Mfa+WRCnM2rmVoAEkc7ty6/4LG/g9bGDPZRh51u+U
-   PISPEhwVvqpQ91ce4MSHm8fbS2t+fwRewcdjAuvg/634EQvZffsp2YUfQ
-   UfSHEEh/RJXld/LDuKOPnX+roj4TpOte9Eve5XxiMgi6cV28RWj0TSYFo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="313552672"
-X-IronPort-AV: E=Sophos;i="5.96,160,1665471600"; 
-   d="scan'208";a="313552672"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2022 11:32:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="701531170"
-X-IronPort-AV: E=Sophos;i="5.96,160,1665471600"; 
-   d="scan'208";a="701531170"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Nov 2022 11:32:54 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 12 Nov 2022 11:32:53 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Sat, 12 Nov 2022 11:32:53 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.169)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Sat, 12 Nov 2022 11:32:53 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hhc1RrlleSEVu0O8uuYP47NHpiQHr0kgoK0vGXAPKZW8aRtwnsHt5Ux1ovjqzQBaz2XISUAUHu6fVqEYJ0qFVkSJYBhRuXj6liCigFqdf6HrJwGC7IRnL6dQWm2eh3BIvoTQUdH5BMoqt9MPl8gm5GPUm5WdwCExUZtHsOySHsP4yiM82MqvTUcwjNNP8Zql/OVHUF4YCSe/3vV/WGO+nKo/JlHoQVNTXBo/bD5Rl+1niOFtQhyChjEUp2ZOSn3+bl5VSKvAgb/ZCLCUH+QELKMKnZT8CB8mzDvpzdvexEfRTpI3qteahXWv83zy7v6UcWy2twPc4giN3/ZCxHYDLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=luk3pIlUjrKttdOzdIxbm9MqGmggUhfRl6LXBMheQF4=;
- b=LVHvmGkyZX3709/bvNNch3FIbZopRpkEtQQF99xz8oeSTdj2+9slj1lxUjibcx2EXNIfd7/QwbK8XZU6sLc50Ds+OeTVRFriHycOktETpUnutUYkTeB4WULU3tzXxlcG0MuSbxFi8Xqalf2+sFgK1mQt8ZYHyQBIAY/e5wXfvjY2SPJeCz7ROQHq+Kw76l0mUQA2h2FcKfA12tZ2qHh12ljWLFxAl7KFQ+zgBuj4xqkqVfu+qsBkjST3N5CfG2jWeGC1vYhWWq0Wx8PhkP9q02LV2SowCaPxNPPFAx5hADr0+SdVQbe4zFVphEM5TLeos5CywNUAjNFONx0Iw3otWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MN2PR11MB4093.namprd11.prod.outlook.com (2603:10b6:208:13f::21)
- by DM6PR11MB4545.namprd11.prod.outlook.com (2603:10b6:5:2ae::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.16; Sat, 12 Nov
- 2022 19:32:46 +0000
-Received: from MN2PR11MB4093.namprd11.prod.outlook.com
- ([fe80::54fc:2e3c:ac29:58d]) by MN2PR11MB4093.namprd11.prod.outlook.com
- ([fe80::54fc:2e3c:ac29:58d%7]) with mapi id 15.20.5813.016; Sat, 12 Nov 2022
- 19:32:46 +0000
-From:   "Winkler, Tomas" <tomas.winkler@intel.com>
-To:     Michael Kelley <mikelley@microsoft.com>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/1] tpm/tpm_crb: Fix error message in
- __crb_relinquish_locality()
-Thread-Topic: [PATCH 1/1] tpm/tpm_crb: Fix error message in
- __crb_relinquish_locality()
-Thread-Index: AQHY9gVLP43QalYY0UyVn396YXCToq47ruMg
-Date:   Sat, 12 Nov 2022 19:32:46 +0000
-Message-ID: <MN2PR11MB409396A8C5CA6D4DFDF52B9AE5039@MN2PR11MB4093.namprd11.prod.outlook.com>
-References: <1668195533-16761-1-git-send-email-mikelley@microsoft.com>
-In-Reply-To: <1668195533-16761-1-git-send-email-mikelley@microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN2PR11MB4093:EE_|DM6PR11MB4545:EE_
-x-ms-office365-filtering-correlation-id: 47a696b5-274f-415b-4031-08dac4e4ad14
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7iiB9kLEDHwIc4Pjp+sVpev7x7NaTlYjpiyBxKknf7QpiDwiLW1XKnoFGCYllowr9Axen2+CLLjBXERGHqKbvk68nxFUFC53+XE/MSC9d+hcS1qkjRi1gjvDOPDCg80k/UNHLU+MY7P3njjLkP7f4Ul3Sm0CGtTliM92xvLedJ3U529JnFD9O5v9ohOMd8G0cVy560fesphZ5BgPHTieAy4uZ/KAr5LyRPXyA7iSkOdUD9hNGX6/LpddmVTYleaa7ydZUxjbH3QLnt5cuXe81frO/NM6AMkol17AqUyCut1tW4UzQwmnlcdQnSGHFWuwA8UJZrNtweKKTWCxrKvBFK/f4K7M6mzX9al5Q26QsanUXWOFtlID5V8Jij3jJfcq0ut/QQ8+M0hWMfVsSv3zL2hUtP2xLce3N8Qxxv3zYmrayDLuVcXBG31OQJOY4XpGWV+4GXy2l7lRWOqdEk/Rig/RjLSIgRSDslbbmn48Y2x1DKXgli/tOpyeRUR5QbpiPst1+PS4TlBfk+hUfmXJOEqZkkKNsRExtzpIa009uquZtfcHIv+b/DqmElutdUljqI+BdcAH3SLMCtQUNKjD0N1dDnU5NPFxrfzsx+54s0qe9U1PLSN1BPtEzehO6aO82S1NCBjjXepWRRYief9FczwbPv3PXtyg70/mEQh2Q+9jApMnINOgmuXwRZMexOTDAlRthK069MCgXrvDgvdBedE36kReGagL8R7gKP3p5KXzoU4nqIiKo3dhjjc/+TcPaRbN29RQWIIH4jBa7q6BwQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR11MB4093.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(136003)(346002)(39860400002)(366004)(376002)(451199015)(86362001)(83380400001)(122000001)(33656002)(82960400001)(38100700002)(38070700005)(478600001)(55016003)(71200400001)(52536014)(8936002)(8676002)(76116006)(66946007)(64756008)(45080400002)(66446008)(41300700001)(66476007)(110136005)(316002)(9686003)(66556008)(26005)(5660300002)(186003)(15650500001)(2906002)(53546011)(7696005)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?tXyOh9cN63eI0T0+bjYqcUMnFoGFqFh5BJmY22cgXcH/ZIZuG9y2F1rTcR+u?=
- =?us-ascii?Q?9U7Y+i2BLzOiWzAiYMdAC1TU3OM5x/ilCMzJfTUOT3vEC+L31m7KaIs5z5z8?=
- =?us-ascii?Q?yYvd9PgcuK1LU3gLkQAx6zJwcsKCrrHm7+lZuWlDiAXxzpurcHiZ2sB+GBZk?=
- =?us-ascii?Q?ZBBuKBWkUJJv36XNYsNcJ/2LB4C/P9HWHoKuzr7Ot06MWCQpB9hMIe45M1FX?=
- =?us-ascii?Q?lHdsHa+8CDxOX7bk7LQt50QyrRXKJLuK8tifvOcqcuwhnXqIHfioNSuohWOY?=
- =?us-ascii?Q?ktORPC/E10d9U4gZosvfI/4ryze66oGoM4CTC74WjGKVyjkuyT/j7JU1gbJ9?=
- =?us-ascii?Q?hxsxHjhDtjSnArRHsj5YLuPVgoc3ccihxXkX0yhNZShljuUUyUudhQuID+1k?=
- =?us-ascii?Q?VcwHBQHWeCgwJfbOguB68TvKkwqlh9jyD/g96EI9+eI4Er9MPY9BH1l0KDuj?=
- =?us-ascii?Q?HG9TDJQqaELqS6kPxAz4KsX8wJI1Q1PETqebZtmuZJ6YF+m0CRQM+0iL1g55?=
- =?us-ascii?Q?fty737DZq8KexVAO5OCrH/pppk5vTQbsB3eQKPJNih8fRuml8GI8M+o507IQ?=
- =?us-ascii?Q?KLoistsFMppgGoqrjaIWFG0dlYECaTOEA1Cpz6SQ50PrPh5RaJ05MXZt/5xZ?=
- =?us-ascii?Q?0+MBDT5K3KAM+4NIGlD3GbFydAxlxlOcEX8xAs/c1cr+r6WCRuV0R8IpO//I?=
- =?us-ascii?Q?mX56MOWy5TGbiljl1Dh/l9XNEXDDNyEvUckZRIIrzRvmzeo+bdBUj0aIgxdo?=
- =?us-ascii?Q?OYjDMxgdwHfAvStBFvzzi+qr34UR9bNR6K0exrSZAnDIGrK1ykZLBB4ueNFp?=
- =?us-ascii?Q?yQGaN1vlvNPZS5uhbqs5d4KBS2jsAkogsv6F0wUuLx1UMXQnHUQmuH9oXjgw?=
- =?us-ascii?Q?DMTzKkpPdgR1voSEcRSSPWi+AM8djyBXXnurDFuN9DdRsrf0Xb+7kUakxH87?=
- =?us-ascii?Q?BrMX5c/QS3PJffzkenwXMj2rmUrnsS2XPt6/hM2z3U5EA75BCz1a0oQQvR5b?=
- =?us-ascii?Q?ET2/9qBpXHwwLCcHDz5g1T4dzcwppIuA7MPxeGcl+Uf/agxo70W2gBPrQ9lJ?=
- =?us-ascii?Q?6FXSVboUZ6zkqq51oiKwPKgHei0Xo1FF+GF3HZlNaBUXapUu4scAlLCK9Wtl?=
- =?us-ascii?Q?At+4W4yX6UA218HZ0rXcis9GAYt/OMQgDdDDO3Y++Sx3tx53oDOYJkgc9RtW?=
- =?us-ascii?Q?OSZ6dXtiwNPvu1/ko9xyRXJxaS4uvPQpWmuiGt3KXH0Q7YZmT2uRt9nZlrfe?=
- =?us-ascii?Q?UUzv9wgmTLJfb2Zr+ddcXTEImEwd5VwvNx1lyQ/e7SKaG+iEabGY0fI2fT8D?=
- =?us-ascii?Q?EtFKlVs6eNtt1URuhbY8haQfalIn6s9XZ9s8ZvZ+WCOzv4c3X8GCGZC3Qj23?=
- =?us-ascii?Q?7YJyJyVn+MbLrNktjdkzf2Z7FJHVfC9Z3OxKgU5EJkT6TPDgCepvliMIt1Tz?=
- =?us-ascii?Q?Nv8y7DwZZzbohVTvnHvubkEGa7iXVAKXYeiJsEzAK6qXYXTtcKsdMLqXsu0V?=
- =?us-ascii?Q?LUVCkr8iXVunN0JeZjqRaH/o6/zVJ5a1gmCIANk66QbXqie9wwBoOf7BJqcM?=
- =?us-ascii?Q?UfHnbTfbklZzN1e6QUVPbTv+zbKXaL3wso4HeWro?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sat, 12 Nov 2022 14:35:28 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6192D140AF
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 11:35:26 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id v1so10643697wrt.11
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 11:35:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kSDqT7HKoa6xfAycV0dGpq11W5vUP2HfP9u/U2LDhHE=;
+        b=uQv1cACKXaw14g+DA585hYXWVJo4NPQBaWuW/t4arxuVgrVlQSMWH+C0oFGTLElTop
+         qllde0piINJ9hnp1T3vPzPdtu+F3YOLi9Z2bFfXL4CPzDs8+rAnS56i0orf3p1X0czYo
+         uNS+SrqXDZc6sOfWGvdOPNClcgcI9ppRd0599Ig/DcL1pFiZU8N/saUUDALXESUxJZ40
+         ZgBrSEsu4cO7myUqhv5kZFTUBfiwffwjR7JHmadW9tf8ngXD2t449awhDMN/sEdj3QIN
+         2pqTO+X8pwglBYvjtGUXwnpdOqQpgAtAQMPI841k1bsqyGtZovXXqfPFijKZwJZt9ebk
+         7DNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kSDqT7HKoa6xfAycV0dGpq11W5vUP2HfP9u/U2LDhHE=;
+        b=NwgJ1Xo3JUZ5V/xGTaUVxzyrsrzEbW8L11O1L0mOMM/5qb7UFBUKkH0S6oBDX4Happ
+         yVUvRUS2lsCFLgPHplTSa5ep/TAWFYpRh7yK8AxfUOsn5E+IOnNdp/qDqCLzXO2x2F02
+         seRLdUcD4wrtTl02ezTcW0TozvOTWhRKcUgwA/dZsD5UoF6OIA2mUyXRyw71mHiJrBvD
+         E49cFw2uu9+pnBWnomlWLTX7JCGamqVo9NtiAXvEEzz/Tlt7TL5SGfd7hP6LFwSx465s
+         WCC5lTVSXnlNw64Mp8Xk1pHdIAdfkkD+YzL6VRrSBJPDP2uVMeiU01Jqa8oWsYxJFyn1
+         9uBw==
+X-Gm-Message-State: ANoB5pn4+SC7DWb8JolEg1BjDLrSi8DrrhBt5/WCtoKp+nJvachy8q1O
+        XzKu+kwSByfALA/eje7dZQR8ew==
+X-Google-Smtp-Source: AA0mqf4zjbrShS0BIcSD7695IiWE9eqEowI1CPK4OBOBGQf5310aSBvruP5OZllStxWIqGUOnNSyqg==
+X-Received: by 2002:adf:f386:0:b0:234:e918:6ba2 with SMTP id m6-20020adff386000000b00234e9186ba2mr3949118wro.23.1668281724788;
+        Sat, 12 Nov 2022 11:35:24 -0800 (PST)
+Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
+        by smtp.gmail.com with ESMTPSA id s13-20020adfea8d000000b00228d67db06esm5098863wrm.21.2022.11.12.11.35.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Nov 2022 11:35:24 -0800 (PST)
+Date:   Sat, 12 Nov 2022 19:35:22 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org, Xuewen Yan <xuewen.yan94@gmail.com>,
+        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Hank <han.lin@mediatek.com>
+Subject: Re: [PATCH v2 8/9] sched/fair: Detect capacity inversion
+Message-ID: <20221112193522.g4hhpdlywndvik7r@airbuntu>
+References: <20220804143609.515789-1-qais.yousef@arm.com>
+ <20220804143609.515789-9-qais.yousef@arm.com>
+ <68f22089-b3bb-f1da-1fd8-d8a1be34654a@arm.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR11MB4093.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47a696b5-274f-415b-4031-08dac4e4ad14
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Nov 2022 19:32:46.1563
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RnO31Ru3SxxhiDy9nL5QLEQH/zccLxpOGa4yc7s+l7HBfXG+UKDdn2/x81+5DfV/um7hjfpYczVCzLjj5i1IWg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4545
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <68f22089-b3bb-f1da-1fd8-d8a1be34654a@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/09/22 11:42, Dietmar Eggemann wrote:
+
+[...]
+
+> > +	/*
+> > +	 * Detect if the performance domain is in capacity inversion state.
+> > +	 *
+> > +	 * Capacity inversion happens when another perf domain with equal or
+> > +	 * lower capacity_orig_of() ends up having higher capacity than this
+> > +	 * domain after subtracting thermal pressure.
+> > +	 *
+> > +	 * We only take into account thermal pressure in this detection as it's
+> > +	 * the only metric that actually results in *real* reduction of
+> > +	 * capacity due to performance points (OPPs) being dropped/become
+> > +	 * unreachable due to thermal throttling.
+> > +	 *
+> > +	 * We assume:
+> > +	 *   * That all cpus in a perf domain have the same capacity_orig
+> > +	 *     (same uArch).
+> > +	 *   * Thermal pressure will impact all cpus in this perf domain
+> > +	 *     equally.
+> > +	 */
+> > +	if (static_branch_unlikely(&sched_asym_cpucapacity)) {
+> 
+> This should be sched_energy_enabled(). Performance Domains (PDs) are an
+> EAS thing.
+
+Bummer. I had a version that used cpumasks only, but I thought using pds is
+cleaner and will save unnecessarily extra traversing. But I missed that it's
+conditional on sched_energy_enabled().
+
+This is not good news for CAS.
+
+> 
+> > +		unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
+> 
+> rcu_read_lock()
+> 
+> > +		struct perf_domain *pd = rcu_dereference(rq->rd->pd);
+> 
+> rcu_read_unlock()
+
+Shouldn't we continue to hold it while traversing the pd too?
+
+> 
+> It's called from build_sched_domains() too. I assume
+> static_branch_unlikely(&sched_asym_cpucapacity) hides this issue so far.
+> 
+> > +
+> > +		rq->cpu_capacity_inverted = 0;
+> > +
+> > +		for (; pd; pd = pd->next) {
+> > +			struct cpumask *pd_span = perf_domain_span(pd);
+> > +			unsigned long pd_cap_orig, pd_cap;
+> > +
+> > +			cpu = cpumask_any(pd_span);
+> > +			pd_cap_orig = arch_scale_cpu_capacity(cpu);
+> > +
+> > +			if (capacity_orig < pd_cap_orig)
+> > +				continue;
+> > +
+> > +			/*
+> > +			 * handle the case of multiple perf domains have the
+> > +			 * same capacity_orig but one of them is under higher
+> 
+> Like I said above, I'm not aware of such an EAS system.
+
+I did argue against that. But Vincent's PoV was that we shouldn't make
+assumptions and handle the case where we have big cores each on its own domain.
+
+> 
+> > +			 * thermal pressure. We record it as capacity
+> > +			 * inversion.
+> > +			 */
+> > +			if (capacity_orig == pd_cap_orig) {
+> > +				pd_cap = pd_cap_orig - thermal_load_avg(cpu_rq(cpu));
+> > +
+> > +				if (pd_cap > inv_cap) {
+> > +					rq->cpu_capacity_inverted = inv_cap;
+> > +					break;
+> > +				}
+> 
+> In case `capacity_orig == pd_cap_orig` and cpumask_test_cpu(cpu_of(rq),
+> pd_span) the code can set rq->cpu_capacity_inverted = inv_cap
+> erroneously since thermal_load_avg(rq) can return different values for
+> inv_cap and pd_cap.
+
+Good catch!
+
+> 
+> So even on a classical big little system, this condition can set
+> rq->cpu_capacity_inverted for a CPU in the little or big cluster.
+> 
+> thermal_load_avg(rq) would have to stay constant for all CPUs within the
+> PD to avoid this.
+> 
+> This is one example of the `thermal pressure` is per PD (or Frequency
+> Domain) in Thermal but per-CPU in the task scheduler.
+
+Only compile tested so far, does this patch address all your points? I should
+get hardware soon to run some tests and send the patch. I might re-write it to
+avoid using pds; though it seems cleaner this way but we miss CAS support.
+
+Thoughts?
 
 
-> -----Original Message-----
-> From: Michael Kelley <mikelley@microsoft.com>
-> Sent: Friday, November 11, 2022 21:39
-> To: peterhuewe@gmx.de; jarkko@kernel.org; jgg@ziepe.ca; Winkler, Tomas
-> <tomas.winkler@intel.com>; linux-integrity@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Cc: mikelley@microsoft.com
-> Subject: [PATCH 1/1] tpm/tpm_crb: Fix error message in
-> __crb_relinquish_locality()
->=20
-> The error message in __crb_relinquish_locality() mentions requestAccess
-> instead of Relinquish. Fix it.
->=20
-> Fixes: 888d867df441 ("tpm: cmd_ready command can be issued only after
-> granting locality")
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-Acked-by: Tomas Winkler <tomas.winkler@intel.com>=20
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 89dadaafc1ec..b01854984994 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -8856,16 +8856,24 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+         *   * Thermal pressure will impact all cpus in this perf domain
+         *     equally.
+         */
+-       if (static_branch_unlikely(&sched_asym_cpucapacity)) {
+-               unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
+-               struct perf_domain *pd = rcu_dereference(rq->rd->pd);
++       if (sched_energy_enabled()) {
++               struct perf_domain *pd;
++               unsigned long inv_cap;
++
++               rcu_read_lock();
 
-> ---
->  drivers/char/tpm/tpm_crb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c inde=
-x
-> 1860665..65f8f17 100644
-> --- a/drivers/char/tpm/tpm_crb.c
-> +++ b/drivers/char/tpm/tpm_crb.c
-> @@ -252,7 +252,7 @@ static int __crb_relinquish_locality(struct device *d=
-ev,
->  	iowrite32(CRB_LOC_CTRL_RELINQUISH, &priv->regs_h->loc_ctrl);
->  	if (!crb_wait_for_reg_32(&priv->regs_h->loc_state, mask, value,
->  				 TPM2_TIMEOUT_C)) {
-> -		dev_warn(dev, "TPM_LOC_STATE_x.requestAccess timed
-> out\n");
-> +		dev_warn(dev, "TPM_LOC_STATE_x.Relinquish timed
-> out\n");
->  		return -ETIME;
->  	}
->=20
-> --
-> 1.8.3.1
++               inv_cap = capacity_orig - thermal_load_avg(rq);
++               pd = rcu_dereference(rq->rd->pd);
+                rq->cpu_capacity_inverted = 0;
 
+                for (; pd; pd = pd->next) {
+                        struct cpumask *pd_span = perf_domain_span(pd);
+                        unsigned long pd_cap_orig, pd_cap;
+
++                       /* We can't be inverted against our own pd */
++                       if (cpumask_test_cpu(cpu_of(rq), pd_span))
++                               continue;
++
+                        cpu = cpumask_any(pd_span);
+                        pd_cap_orig = arch_scale_cpu_capacity(cpu);
+
+@@ -8890,6 +8898,8 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+                                break;
+                        }
+                }
++
++               rcu_read_unlock();
+        }
+
+
+Thanks!
+
+--
+Qais Yousef
