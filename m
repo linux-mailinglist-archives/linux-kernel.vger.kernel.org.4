@@ -2,230 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F586268A6
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 10:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 403586268AE
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 10:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234974AbiKLJmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 04:42:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
+        id S234751AbiKLJsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 04:48:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234856AbiKLJmk (ORCPT
+        with ESMTP id S230170AbiKLJsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 04:42:40 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E6956553;
-        Sat, 12 Nov 2022 01:42:24 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id t14so7203652vsr.9;
-        Sat, 12 Nov 2022 01:42:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=B1gzX8v9y+2mjgii5279K+WJr8VfcVZnEHBgjqufFMc=;
-        b=PGOECwGE2nzbnm5td+DyNfIFTZao/7MFk86HSdYj6Z8ZPQgkVWHng7OJVw1B6myPM0
-         vhoKxw8gnZMre/XGp2pOn70RKdfLXGYGCECsfQ49dFDd/mlx3cZe9zVbKy41qCaHzzrk
-         Z+BHp0NcoZ1LYqnuOmxYeNmFoJfdhQM0XuSJp+oawSGcM4SUA0GC/kb8BqadOwZToNVr
-         XN9rWcx60LHjSz2p9uwWueyrnbjROsBAWn40uXCQi+wktWc+2FJSVSxyd9csVqpAyoZy
-         ue2TZdJgoR/mLLxLzb0kuIb0B5HKah594Jccmgr6oJQcWl0CWbulpuDaCs9g8cmBHC7I
-         INnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B1gzX8v9y+2mjgii5279K+WJr8VfcVZnEHBgjqufFMc=;
-        b=3qK075CxuihKXbgDS+Jolei+BadTyY2reFuY/d/fiY2pjyRd2eipwv6FlquK3/ZUGl
-         jIKmPefSxVugFNuSquSS3isw7vyWZLGR6Ic8/GsDAv8gQJv9wrpCD/g42boFzbMobdXd
-         forLZgK4pTZfDm/mwU5Ge5LJM4HNY3Sav83BDZJmEMgn+bpP6DvtTfw5isHYnK/tl9vG
-         d8nxe/4jSVqcAGhbwfeTBgkdNjFWr9jbn0mc6x603nmKBeEJGrH1jL0654eL3XnIl/yA
-         TATauxm7CkeAIga/8psKR60a9qaBnl1X9HsJybCO6GMioLAuNyNNWsQNjTHFt1TOV38z
-         lFZw==
-X-Gm-Message-State: ANoB5pmI7eeqxL0AvT412H2k4hv9Etz+JYsQnPXwvDXIspMzXHhbhMeW
-        FU+8K/iL5jRDghzwqc8rhS+5V1OvVSo1+MLGS+o=
-X-Google-Smtp-Source: AA0mqf7LkUaNFA748NWf+1ra3/MkaLyo9MAOR3HUZwtqHtnj4EB76XkLvQplbdvTN22PogAQRTfQDsB9msQid4P6b2I=
-X-Received: by 2002:a67:f1cb:0:b0:3ad:7661:a081 with SMTP id
- v11-20020a67f1cb000000b003ad7661a081mr2657800vsm.2.1668246143158; Sat, 12 Nov
- 2022 01:42:23 -0800 (PST)
+        Sat, 12 Nov 2022 04:48:38 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF06E031;
+        Sat, 12 Nov 2022 01:48:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=aKOTb8X0RrZ73pUTzPb8AcL3BXawV6mvmfnTQpI/3cI=; b=dubaVRnZ1fySNyJ6m8N5GztbWz
+        brhbwhhQFUPXnTZNKyvfvrOk6LEfmvw+2aCqUpKdcsGwClLE+fnxPRFCGTjXiKHP1hMrx94w/Itzd
+        FJErYxzxXhyXZvS7RUDQ2KMtbnW961omQAHIKiV4odkVb6gDougTsAInCHk2dyIPgf5M3CZqrbLUZ
+        Z9+MSYQajkyJdP1n8EMnQuRCR/N6vw6feW0CQU3meVWIr5ipVPeV04GOEQdJlKi2ETRZu9cASIR8g
+        PX60poQ5D5m5+/pltlYpHSBVdICLbfSwDdIYkJcaLRMv/kKz5j3Yoo9zLZJXXEOOAW2gSWeYwOUL3
+        VCH/yXwQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1otn7I-000FpZ-HW; Sat, 12 Nov 2022 09:48:02 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9413730013F;
+        Sat, 12 Nov 2022 10:47:58 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4A6AA20831B7F; Sat, 12 Nov 2022 10:47:58 +0100 (CET)
+Date:   Sat, 12 Nov 2022 10:47:58 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     "Li, Xin3" <xin3.li@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>
+Subject: Re: [RESEND PATCH 2/6] x86/traps: add a system interrupt table for
+ system interrupt dispatch
+Message-ID: <Y29rzovA90RWZjo1@hirez.programming.kicks-ass.net>
+References: <20221110061545.1531-1-xin3.li@intel.com>
+ <20221110061545.1531-3-xin3.li@intel.com>
+ <Y2y8obdYDXo9vlH/@hirez.programming.kicks-ass.net>
+ <BN6PR1101MB21619E2092AFF048422C6311A8019@BN6PR1101MB2161.namprd11.prod.outlook.com>
+ <EA13BAB1-FD67-4145-9325-5705FEE6915A@zytor.com>
 MIME-Version: 1.0
-References: <20221028001016.332663-1-stephen.s.brennan@oracle.com>
- <20221111220614.991928-1-stephen.s.brennan@oracle.com> <20221111220614.991928-6-stephen.s.brennan@oracle.com>
-In-Reply-To: <20221111220614.991928-6-stephen.s.brennan@oracle.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Sat, 12 Nov 2022 11:42:11 +0200
-Message-ID: <CAOQ4uxiDaP1n+M6vMPP-k8pqotT=h2D_y+o3rAeZmYFP=O3DhQ@mail.gmail.com>
-Subject: Re: [PATCH v4 5/5] fsnotify: require inode lock held during child
- flag update
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <EA13BAB1-FD67-4145-9325-5705FEE6915A@zytor.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fsnotify_update_flags
+On Fri, Nov 11, 2022 at 02:07:05PM -0800, H. Peter Anvin wrote:
+> On November 10, 2022 11:55:22 AM PST, "Li, Xin3" <xin3.li@intel.com> wrote:
+> >> > Signed-off-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> >> > Signed-off-by: Xin Li <xin3.li@intel.com>
+> >> 
+> >> This is not a valid SOB, it would suggest hpa is the author, but he's not in in
+> >> From.
+> >
+> >HPA wrote the initial dispatch code for FRED, and I worked with him to
+> >refactor it for KVM/VMX NMI/IRQ dispatch.  So use SOB from both.  No?
+> >
+> >> > diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c index
+> >> > 178015a820f0..95dd917ef9ad 100644
+> >> > --- a/arch/x86/kernel/traps.c
+> >> > +++ b/arch/x86/kernel/traps.c
+> >> > @@ -1444,6 +1444,61 @@ DEFINE_IDTENTRY_SW(iret_error)  }  #endif
+> >> >
+> >> > +#define SYSV(x,y) [(x) - FIRST_SYSTEM_VECTOR] =
+> >> > +(system_interrupt_handler)y
+> >> > +
+> >> > +#pragma GCC diagnostic push
+> >> > +#pragma GCC diagnostic ignored "-Wcast-function-type"
+> >> 
+> >> How does this not break CFI ?
+> >
+> >I wasn't aware of it, will check.
+> >
+> 
+> It doesn't break CFI because the arguments passed is always a strict
+> superset of the ones expected and they are free enough that they are
+> always passed in registers.
 
-On Sat, Nov 12, 2022 at 12:06 AM Stephen Brennan
-<stephen.s.brennan@oracle.com> wrote:
->
-> With the prior changes to fsnotify, it is now possible for
-> fsnotify_recalc_mask() to return before all children flags have been
-> set. Imagine that two CPUs attempt to add a mark to an inode which would
-> require watching the children of that directory:
->
-> CPU 1:                                 CPU 2:
->
-> fsnotify_recalc_mask() {
->   spin_lock();
->   update_children = ...
->   __fsnotify_recalc_mask();
->   update_children = ...
->   spin_unlock();
->   // update_children is true!
->   fsnotify_conn_set_children_dentry_flags() {
->     // updating flags ...
->     cond_resched();
->
->                                        fsnotify_recalc_mask() {
->                                          spin_lock();
->                                          update_children = ...
->                                          __fsnotify_recalc_mask();
->                                          update_children = ...
->                                          spin_unlock();
->                                          // update_children is false
->                                        }
->                                        // returns to userspace, but
->                                        // not all children are marked
->     // continue updating flags
->    }
-> }
->
-> To prevent this situation, hold the directory inode lock. This ensures
-> that any concurrent update to the mask will block until the update is
-> complete, so that we can guarantee that child flags are set prior to
-> returning.
->
-> Since the directory inode lock is now held during iteration over
-> d_subdirs, we are guaranteed that __d_move() cannot remove the dentry we
-> hold, so we no longer need check whether we should retry iteration. We
-> also are guaranteed that no cursors are moving through the list, since
-> simple_readdir() holds the inode read lock. Simplify the iteration by
-> removing this logic.
->
-
-I very much prefer to start the series with this patch and avoid
-those details altogether.
-
-> Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
-> ---
->  fs/notify/fsnotify.c | 25 +++++++++----------------
->  fs/notify/mark.c     |  8 ++++++++
->  2 files changed, 17 insertions(+), 16 deletions(-)
->
-> diff --git a/fs/notify/fsnotify.c b/fs/notify/fsnotify.c
-> index 0ba61211456c..b5778775b88d 100644
-> --- a/fs/notify/fsnotify.c
-> +++ b/fs/notify/fsnotify.c
-> @@ -102,6 +102,8 @@ void fsnotify_sb_delete(struct super_block *sb)
->   * on a child we run all of our children and set a dentry flag saying that the
->   * parent cares.  Thus when an event happens on a child it can quickly tell
->   * if there is a need to find a parent and send the event to the parent.
-> + *
-> + * Context: inode locked exclusive
->   */
->  void fsnotify_update_children_dentry_flags(struct inode *inode, bool watched)
->  {
-> @@ -124,22 +126,16 @@ void fsnotify_update_children_dentry_flags(struct inode *inode, bool watched)
->          * over d_subdirs which will allow us to sleep.
->          */
->         spin_lock(&alias->d_lock);
-> -retry:
->         list_for_each_entry(child, &alias->d_subdirs, d_child) {
->                 /*
-> -                * We need to hold a reference while we sleep. But we cannot
-> -                * sleep holding a reference to a cursor, or we risk skipping
-> -                * through the list.
-> -                *
-> -                * When we wake, dput() could free the dentry, invalidating the
-> -                * list pointers.  We can't look at the list pointers until we
-> -                * re-lock the parent, and we can't dput() once we have the
-> -                * parent locked.  So the solution is to hold onto our reference
-> -                * and free it the *next* time we drop alias->d_lock: either at
-> -                * the end of the function, or at the time of the next sleep.
-> +                * We need to hold a reference while we sleep. When we wake,
-> +                * dput() could free the dentry, invalidating the list pointers.
-> +                * We can't look at the list pointers until we re-lock the
-> +                * parent, and we can't dput() once we have the parent locked.
-> +                * So the solution is to hold onto our reference and free it the
-> +                * *next* time we drop alias->d_lock: either at the end of the
-> +                * function, or at the time of the next sleep.
->                  */
-> -               if (child->d_flags & DCACHE_DENTRY_CURSOR)
-> -                       continue;
->                 if (need_resched()) {
->                         dget(child);
->                         spin_unlock(&alias->d_lock);
-> @@ -147,9 +143,6 @@ void fsnotify_update_children_dentry_flags(struct inode *inode, bool watched)
->                         last_ref = child;
->                         cond_resched();
->                         spin_lock(&alias->d_lock);
-> -                       /* Check for races with __d_move() */
-> -                       if (child->d_parent != alias)
-> -                               goto retry;
->                 }
->
->                 /*
-> diff --git a/fs/notify/mark.c b/fs/notify/mark.c
-> index 6797a2952f87..f39cd88ad778 100644
-> --- a/fs/notify/mark.c
-> +++ b/fs/notify/mark.c
-> @@ -203,10 +203,15 @@ static void fsnotify_conn_set_children_dentry_flags(
->  void fsnotify_recalc_mask(struct fsnotify_mark_connector *conn)
->  {
->         bool update_children;
-> +       struct inode *inode = NULL;
->
->         if (!conn)
->                 return;
->
-> +       if (conn->type == FSNOTIFY_OBJ_TYPE_INODE) {
-> +               inode = fsnotify_conn_inode(conn);
-> +               inode_lock(inode);
-> +       }
->         spin_lock(&conn->lock);
->         update_children = !fsnotify_conn_watches_children(conn);
->         __fsnotify_recalc_mask(conn);
-> @@ -219,6 +224,9 @@ void fsnotify_recalc_mask(struct fsnotify_mark_connector *conn)
->          */
->         if (update_children)
->                 fsnotify_conn_set_children_dentry_flags(conn);
-> +
-> +       if (inode)
-> +               inode_unlock(inode);
->  }
->
-
-Interesting.
-
-I was imagining inode_lock taken only inside
-fsnotify_conn_set_children_dentry_flags()
-
-The reason is that removing the parent watch does not need
-to be serialized for lazy clean up to work correctly.
-
-Maybe I am missing something or maybe it is just best practice
-to serialize all parent state changes to keep the mental model
-of the code simpler and to keep it the same as the existing upstream
-mental model.
-
-So I am NOT opposed to serializing fsnotify_recalc_mask()
-just wanted to hear opinions.
-
-Thanks,
-Amir.
+It does break CFI because the signature hash doesn't match and you'll
+trigger an explicit UD2.
