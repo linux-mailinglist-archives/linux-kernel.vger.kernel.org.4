@@ -2,48 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1857626AC6
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 18:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8054626AC9
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 18:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234981AbiKLRVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 12:21:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
+        id S234710AbiKLRZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 12:25:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiKLRVU (ORCPT
+        with ESMTP id S230257AbiKLRZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 12:21:20 -0500
+        Sat, 12 Nov 2022 12:25:36 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B3E10B77;
-        Sat, 12 Nov 2022 09:21:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 856D317068;
+        Sat, 12 Nov 2022 09:25:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 43869B808CB;
-        Sat, 12 Nov 2022 17:21:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1F53C433D6;
-        Sat, 12 Nov 2022 17:21:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F2BCB80989;
+        Sat, 12 Nov 2022 17:25:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B320C433D6;
+        Sat, 12 Nov 2022 17:25:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668273676;
-        bh=4t9mbRVCTjaSHtqUcukiOe1kyOFByC+AQf5pvZIi5yM=;
+        s=k20201202; t=1668273932;
+        bh=cMgWmOTskVM9FmMjEvsr2shVsPl9TYAtnkLphTZ0BC8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=m24E+nCp5n1dAuoIRgqPs3nokGD8I4zqLvMS/ouaqPc64BHkv9hJZ088HS7m4kHqB
-         NdgTsX64XFe/ibWoz3QcmHkBRBgEPR+/8a1bW3LuWe8R5WtQEBI/FHMcnIqB0wzSRO
-         VJdZPIochoaa6BrO2pCSsymJ/ECDld845LJf5MAwIWJxskU9lnSJcKvGSdn2SbpKvP
-         9I0zZ4/6RTsUQI/cLpYZbgF2ScA4qBxSpekPNvNYX6wGNrSrVE8eO6T4BclkDnbpf6
-         B0RtXhiF3nabXOQ4QJAQJ/ABWB1XA95ewI3KV6XVFkXz3pAOinyekroZRyPPUs10KA
-         Tur5tm+PnLRjw==
-Date:   Sat, 12 Nov 2022 17:33:30 +0000
+        b=uarGshHNITIlWc0h5kgjvtJBeWPGMPIRR2cKAgbkxkFPAx9we1ntKEwDTJ4/qxivX
+         fsl2JCSgZxqmRcwaGKa0WUB8ujkkoQx/sfZmbkOs8icOyvYmQi/xncrMhfxT0Zir1A
+         vBsDefOQ6Zwc1OyyNe6qWl/ZN7wrFa/ILYCeZpJ4ioqcynwi+wzmULjgIvu0K99Qzo
+         DZhV4o7EnNAEZFVLgMwssLtHYNuqLxeBtg8DNYd015CWOkccAyikDFtbIma9sTaVYz
+         B2LqDfd2GSMLYEO6J7QIKPU93w4fA98Tqxv5vqmwUZh+MlQbBXNnLakJk0b4fNuHOv
+         kLnL7jLezlyHA==
+Date:   Sat, 12 Nov 2022 17:37:48 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Mitja Spes <mitja@lxnav.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+To:     Paul Gazzillo <paul@pgazz.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] iio: adc: mcp3422: reduce sleep for fast sampling
- rates
-Message-ID: <20221112173330.77568785@jic23-huawei>
-In-Reply-To: <20221111112657.1521307-5-mitja@lxnav.com>
-References: <20221111112657.1521307-1-mitja@lxnav.com>
-        <20221111112657.1521307-5-mitja@lxnav.com>
+Subject: Re: [PATCH v2 1/1]: iio: light: rpr0521: add missing Kconfig
+ dependencies
+Message-ID: <20221112173748.70534b77@jic23-huawei>
+In-Reply-To: <20221111152539.srpn3ng3erutka4u@device>
+References: <20221110144448.wexu6neb67krqhla@device>
+        <20221110214729.ls5ixav5kxpeftk7@device>
+        <Y24xOvNVsuLsbBXX@smile.fi.intel.com>
+        <20221111152539.srpn3ng3erutka4u@device>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -57,60 +62,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Nov 2022 12:26:56 +0100
-Mitja Spes <mitja@lxnav.com> wrote:
+On Fri, 11 Nov 2022 10:25:39 -0500
+Paul Gazzillo <paul@pgazz.com> wrote:
 
-> - reduced sleep time for 240 & 60 sps rates
-> - minor roundup fix for sleep times
+> On 11/11/2022, Andy Shevchenko wrote:
+> > On Thu, Nov 10, 2022 at 04:47:29PM -0500, Paul Gazzillo wrote:  
+> > > Fix an implicit declaration of function error for rpr0521 under some configs
+> > > 
+> > > When CONFIG_RPR0521 is enabled without CONFIG_IIO_TRIGGERED_BUFFER,
+> > > the build results in "implicit declaration of function" errors, e.g.,
+> > >   drivers/iio/light/rpr0521.c:434:3: error: implicit declaration of function
+> > >            'iio_trigger_poll_chained' [-Werror=implicit-function-declaration]
+> > >     434 |   iio_trigger_poll_chained(data->drdy_trigger0);
+> > >         |   ^~~~~~~~~~~~~~~~~~~~~~~~
+> > > 
+> > > This fix adds select dependencies to RPR0521's configuration declaration.
+> > > 
+> > > Signed-off-by: Paul Gazzillo <paul@pgazz.com>
+> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=216678  
+> > 
+> > No need to create a bugzilla report on such tiny issues that do actually not
+> > affect the working configurations.  
 > 
-> Signed-off-by: Mitja Spes <mitja@lxnav.com>
-This patch looks fine to me.
+> Understood.  Thanks for your help!
+
+I wonder why it has taken so long for this build issue to get reported?
+
+Ah well. This is missing a fixes tag. I added
+Fixes: e12ffd241c00 ("iio: light: rpr0521 triggered buffer")
+
+Applied to the fixes-togreg branch of iio.git.
+
+Thanks,
 
 Jonathan
 
-> ---
->  drivers/iio/adc/mcp3422.c | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
+
+
 > 
-> diff --git a/drivers/iio/adc/mcp3422.c b/drivers/iio/adc/mcp3422.c
-> index eef35fb2fc22..dbcc8fe91aaa 100644
-> --- a/drivers/iio/adc/mcp3422.c
-> +++ b/drivers/iio/adc/mcp3422.c
-> @@ -70,10 +70,11 @@ static const int mcp3422_scales[MCP3422_SRATE_COUNT][MCP3422_PGA_COUNT] = {
->  
->  /* Constant msleep times for data acquisitions */
->  static const int mcp3422_read_times[MCP3422_SRATE_COUNT] = {
-> -	[MCP3422_SRATE_240] = 1000 / 240,
-> -	[MCP3422_SRATE_60] = 1000 / 60,
-> -	[MCP3422_SRATE_15] = 1000 / 15,
-> -	[MCP3422_SRATE_3] = 1000 / 3 };
-> +	[MCP3422_SRATE_240] = DIV_ROUND_UP(1000, 240),
-> +	[MCP3422_SRATE_60] = DIV_ROUND_UP(1000, 60),
-> +	[MCP3422_SRATE_15] = DIV_ROUND_UP(1000, 15),
-> +	[MCP3422_SRATE_3] = (100000 + 375 - 100) / 375 /* real rate is 3.75 sps */
-> +};
->  
->  /* sample rates to integer conversion table */
->  static const int mcp3422_sample_rates[MCP3422_SRATE_COUNT] = {
-> @@ -137,6 +138,7 @@ static int mcp3422_read_channel(struct mcp3422 *adc,
->  				struct iio_chan_spec const *channel, int *value)
->  {
->  	int ret;
-> +	int sleep_duration;
->  	u8 config;
->  	u8 req_channel = channel->channel;
->  
-> @@ -148,7 +150,11 @@ static int mcp3422_read_channel(struct mcp3422 *adc,
->  			mutex_unlock(&adc->lock);
->  			return ret;
->  		}
-> -		msleep(mcp3422_read_times[MCP3422_SAMPLE_RATE(adc->active_config)]);
-> +		sleep_duration = mcp3422_read_times[MCP3422_SAMPLE_RATE(adc->active_config)];
-> +		if (sleep_duration < 20)
-> +			usleep_range(sleep_duration * 1000, sleep_duration * 1300);
-> +		else
-> +			msleep(sleep_duration);
->  	}
->  
->  	ret = mcp3422_read(adc, value, &config);
+> > 
+> > FWIW,
+> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >   
+> > > ---
+> > > V1 -> V2: Cleaned up commit message per reviewer comments and added link
+> > >           to bug report.
+> > > 
+> > >  drivers/iio/light/Kconfig | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > > 
+> > > diff --git a/drivers/iio/light/Kconfig b/drivers/iio/light/Kconfig
+> > > index 7cf6e8490123..0d4447df7200 100644
+> > > --- a/drivers/iio/light/Kconfig
+> > > +++ b/drivers/iio/light/Kconfig
+> > > @@ -293,6 +293,8 @@ config RPR0521
+> > >  	tristate "ROHM RPR0521 ALS and proximity sensor driver"
+> > >  	depends on I2C
+> > >  	select REGMAP_I2C
+> > > +	select IIO_BUFFER
+> > > +	select IIO_TRIGGERED_BUFFER
+> > >  	help
+> > >  	  Say Y here if you want to build support for ROHM's RPR0521
+> > >  	  ambient light and proximity sensor device.
+> > > -- 
+> > > 2.25.1  
+> > 
+> > -- 
+> > With Best Regards,
+> > Andy Shevchenko  
+> 
+> Best,
+> Paul
 
