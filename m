@@ -2,166 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB914626829
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 09:33:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 224FF62682F
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 09:46:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234687AbiKLIdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 03:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
+        id S232943AbiKLIqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 03:46:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234743AbiKLIdb (ORCPT
+        with ESMTP id S230257AbiKLIqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 03:33:31 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA93F1082
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 00:33:29 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id g24so6043984plq.3
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 00:33:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HpSAL+Frp6pI5uZevffauYMAMF7An7PWhGzNk6t7irc=;
-        b=BjdmEmrRmKb1KewQe1wjYXRVdQ/+pvyafqjJ9iLoUU5lLUjrFYCLilfD2swqM8EmvL
-         Mqws98NeNcg21hJWtyVmN7Mfn4wEv911g1lJbhC9FHAyiKlzIN8W8xcG33G0FOdXn44/
-         eXS024oauWVrIh64Eg7CBLazucVLvHLol7/DzM5W1Sgk9W164p3AeqeHVonaPxZyarIJ
-         ItnN8XGiFU/3cnzMlrcYfLBv0/QzJ03AlGUKU2N7C5KuFG3zcceH64pZxHqsrCCWV3GL
-         Xrm7AlApa4KRWs0lyP0jElIJCjC8StEW4ELpufPTfBGf88QwUYsWrmOU/nogrchzfSqE
-         7DDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HpSAL+Frp6pI5uZevffauYMAMF7An7PWhGzNk6t7irc=;
-        b=go1t4X6GWoXwUQ0uutMhTt5kXzwCR9rf1VNl9BZqKH9TZTWw3akpacIN4QWivjD+HQ
-         geFb9Es7//6u4z6FdYD3CnQkqM+w7mh05zs7ArfxbMLAptAPBwoBSBRCyHUqwpHFtpp3
-         yM/6AVAXQZR1mUMZ+xyOTWg6iCECqeIo57kocaLTA0vieM2vXezD95UNkx9EKf9AiQF/
-         zxxdbvHdYKm8hoUqWiBpVwxEgOVxmL5J1L9DWubS4IVNqhNr0Xm66Dq74tsy+CYlq4Xl
-         sBI7KVIOAG7nFw8k13Q1E41QcG6oJSjRBXsZag0TDuNcD3UFBR88NfQLJaKpL3U3xA4j
-         wUfw==
-X-Gm-Message-State: ANoB5plOoZeB3QhgsWMNaVVzMlM8IqZMG+dDROeEONFUP4EV9WU2Siuo
-        NGdGEjTOQGsSAHYh0X4ixWU=
-X-Google-Smtp-Source: AA0mqf7tE2XuEywH3c3EIQLoY6KbWyTmYUek3jOnXZumk72NZnsdIP8ou5suR+4dwNG8D8yl5ormYw==
-X-Received: by 2002:a17:90b:48cd:b0:213:47:57cc with SMTP id li13-20020a17090b48cd00b00213004757ccmr5459327pjb.174.1668242009382;
-        Sat, 12 Nov 2022 00:33:29 -0800 (PST)
-Received: from VirtualBox.. ([129.227.152.6])
-        by smtp.gmail.com with ESMTPSA id i11-20020a1709026acb00b001870533c443sm3066927plt.236.2022.11.12.00.33.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Nov 2022 00:33:28 -0800 (PST)
-From:   Yuwei Guan <ssawgyw@gmail.com>
-X-Google-Original-From: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yuwei.Guan@zeekrlife.com
-Subject: [PATCH 3/3] f2fs: change type for 'sbi->readdir_ra'
-Date:   Sat, 12 Nov 2022 16:32:50 +0800
-Message-Id: <20221112083250.295700-4-Yuwei.Guan@zeekrlife.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221112083250.295700-1-Yuwei.Guan@zeekrlife.com>
-References: <20221112083250.295700-1-Yuwei.Guan@zeekrlife.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 12 Nov 2022 03:46:47 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4644C2CE3F
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 00:46:45 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D8D4022310;
+        Sat, 12 Nov 2022 08:46:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1668242803; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xMQY17H7BFjnZoOCg94vz2f65Z/QFPDjM6eSMtYUsG4=;
+        b=GKRHAElIgeK94yqtYmWY6MjQsUfYYZ2Pqe4EqeZH40pjA34oVePTRuXJLt3uwhe1JfJDV1
+        /0YA998hgmw98dTzg4Yw0AMGgCLKvYtelTEhTIQ52Dgw7lzI05dI7aSicqyDK/gACjssva
+        iykTlN5DFBBKv4j39BBVBTBeVGDCuAU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1668242803;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xMQY17H7BFjnZoOCg94vz2f65Z/QFPDjM6eSMtYUsG4=;
+        b=4PZ0XTMz2JdKxATjIqvUt3u59Cu1eSKXyNLHPeUE8BFpZFN1ouYZLYShEdo+sZDbQwIjdL
+        4o1oSr0fGNCnlMCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B90EB13A08;
+        Sat, 12 Nov 2022 08:46:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eiAvLHNdb2M3IAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sat, 12 Nov 2022 08:46:43 +0000
+Date:   Sat, 12 Nov 2022 09:46:43 +0100
+Message-ID: <87a64w7e6k.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] sound fixes for 6.1-rc5
+In-Reply-To: <CAHk-=wgSH5ubdvt76gNwa004ooZAEJL_1Q-Fyw5M2FDdqL==dg@mail.gmail.com>
+References: <87fsepx42m.wl-tiwai@suse.de>
+        <CAHk-=wgSH5ubdvt76gNwa004ooZAEJL_1Q-Fyw5M2FDdqL==dg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before this patch, the varibale 'readdir_ra' takes effect if it's equal
-to '1' or not, so we can change type for it from 'int' to 'bool'.
+On Sat, 12 Nov 2022 02:28:19 +0100,
+Linus Torvalds wrote:
+> 
+> On Fri, Nov 11, 2022 at 12:56 AM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > please pull sound fixes for v6.1-rc5 from:
+> 
+> Hmm. I don't know that this came in through this particular pull
+> request, but I don't seem to have seen it before:
+> 
+>   Nov 11 14:32:37 xps13 kernel:
+>         snd_hda_intel 0000:00:1f.3: Too many BDL entries:
+> buffer=2097152, period=65536
+> 
+> there's six of those lines in my logs (two batches of three, five
+> seconds apart).
+> 
+> I don't see any negative side effects aside from the messages, and
+> sound seems to work fine, but since I don't think I've ever seen this
+> one before I thought I'd just mention it.
+> 
+> I also haven't been using this laptop on a while - an arm64 Fedora
+> uboot update broke my M2 boot, so I'm temporarily back to using my
+> trusty old xps13.
+> 
+> So while it's new to me, the issue that introduced it may not be
+> particularly new.
+> 
+> Google does show that the message itself has been happening for others
+> for a long time. But I checked with 'journalctl', and it hasn't
+> happened on this particular machine before.
+> 
+> It might be a non-kernel change that triggers it, of course.
 
-Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
+Wooh, that must be the last change in the memalloc helper for
+non-contiguous pages :-<  Admittedly the fix was a bit premature,
+sorry for the mess.
+
+Below is the quick workaround.  I'm going to send another PR soon
+later.
+
+
+thanks,
+
+Takashi
+
+-- 8< --
+From: Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH] ALSA: memalloc: Try dma_alloc_noncontiguous() at first
+
+The latest fix for the non-contiguous memalloc helper changed the
+allocation method for a non-IOMMU system to use only the fallback
+allocator.  This should have worked, but it caused a problem sometimes
+when too many non-contiguous pages are allocated that can't be treated
+by HD-audio controller.
+
+As a quirk workaround, go back to the original strategy: use
+dma_alloc_noncontiguous() at first, and apply the fallback only when
+it fails, but only for non-IOMMU case.
+
+We'll need a better fix in the fallback code as well, but this
+workaround should paper over most cases.
+
+Fixes: 9736a325137b ("ALSA: memalloc: Don't fall back for SG-buffer with IOMMU")
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Link: https://lore.kernel.org/r/CAHk-=wgSH5ubdvt76gNwa004ooZAEJL_1Q-Fyw5M2FDdqL==dg@mail.gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- fs/f2fs/dir.c   | 7 +++----
- fs/f2fs/f2fs.h  | 2 +-
- fs/f2fs/super.c | 2 +-
- fs/f2fs/sysfs.c | 5 +++++
- 4 files changed, 10 insertions(+), 6 deletions(-)
+ sound/core/memalloc.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/fs/f2fs/dir.c b/fs/f2fs/dir.c
-index 21960a899b6a..06d9bf98f5ae 100644
---- a/fs/f2fs/dir.c
-+++ b/fs/f2fs/dir.c
-@@ -1000,13 +1000,12 @@ int f2fs_fill_dentries(struct dir_context *ctx, struct f2fs_dentry_ptr *d,
- 	struct fscrypt_str de_name = FSTR_INIT(NULL, 0);
- 	struct f2fs_sb_info *sbi = F2FS_I_SB(d->inode);
- 	struct blk_plug plug;
--	bool readdir_ra = sbi->readdir_ra == 1;
- 	bool found_valid_dirent = false;
- 	int err = 0;
+diff --git a/sound/core/memalloc.c b/sound/core/memalloc.c
+index 6a81aaab25ab..ba095558b6d1 100644
+--- a/sound/core/memalloc.c
++++ b/sound/core/memalloc.c
+@@ -542,8 +542,10 @@ static void *snd_dma_noncontig_alloc(struct snd_dma_buffer *dmab, size_t size)
+ 	struct sg_table *sgt;
+ 	void *p;
  
- 	bit_pos = ((unsigned long)ctx->pos % d->max);
- 
--	if (readdir_ra)
-+	if (sbi->readdir_ra)
- 		blk_start_plug(&plug);
- 
- 	while (bit_pos < d->max) {
-@@ -1064,14 +1063,14 @@ int f2fs_fill_dentries(struct dir_context *ctx, struct f2fs_dentry_ptr *d,
- 			goto out;
- 		}
- 
--		if (readdir_ra)
-+		if (sbi->readdir_ra)
- 			f2fs_ra_node_page(sbi, le32_to_cpu(de->ino));
- 
- 		ctx->pos = start_pos + bit_pos;
- 		found_valid_dirent = true;
++	sgt = dma_alloc_noncontiguous(dmab->dev.dev, size, dmab->dev.dir,
++				      DEFAULT_GFP, 0);
+ #ifdef CONFIG_SND_DMA_SGBUF
+-	if (!get_dma_ops(dmab->dev.dev)) {
++	if (!sgt && !get_dma_ops(dmab->dev.dev)) {
+ 		if (dmab->dev.type == SNDRV_DMA_TYPE_DEV_WC_SG)
+ 			dmab->dev.type = SNDRV_DMA_TYPE_DEV_WC_SG_FALLBACK;
+ 		else
+@@ -551,9 +553,6 @@ static void *snd_dma_noncontig_alloc(struct snd_dma_buffer *dmab, size_t size)
+ 		return snd_dma_sg_fallback_alloc(dmab, size);
  	}
- out:
--	if (readdir_ra)
-+	if (sbi->readdir_ra)
- 		blk_finish_plug(&plug);
- 	return err;
- }
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index e6355a5683b7..384840216e7f 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -1693,7 +1693,7 @@ struct f2fs_sb_info {
- 	unsigned int total_node_count;		/* total node block count */
- 	unsigned int total_valid_node_count;	/* valid node block count */
- 	int dir_level;				/* directory level */
--	int readdir_ra;				/* readahead inode in readdir */
-+	bool readdir_ra;			/* readahead inode in readdir */
- 	u64 max_io_bytes;			/* max io bytes to merge IOs */
+ #endif
+-
+-	sgt = dma_alloc_noncontiguous(dmab->dev.dev, size, dmab->dev.dir,
+-				      DEFAULT_GFP, 0);
+ 	if (!sgt)
+ 		return NULL;
  
- 	block_t user_block_count;		/* # of user blocks */
-diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-index f18ae5410b2c..da304861890f 100644
---- a/fs/f2fs/super.c
-+++ b/fs/f2fs/super.c
-@@ -2202,7 +2202,7 @@ static void f2fs_tuning_parameters(struct f2fs_sb_info *sbi, bool is_remount)
- 	}
- 
- 	if (!is_remount)
--		sbi->readdir_ra = 1;
-+		sbi->readdir_ra = true;
- }
- 
- static int f2fs_remount(struct super_block *sb, int *flags, char *data)
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index df27afd71ef4..53fbbb87dd0f 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -649,6 +649,11 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
- 		return count;
- 	}
- 
-+	if (!strcmp(a->attr.name, "readdir_ra")) {
-+		sbi->readdir_ra = !!t;
-+		return count;
-+	}
-+
- 	*ui = (unsigned int)t;
- 
- 	return count;
 -- 
-2.34.1
+2.35.3
 
