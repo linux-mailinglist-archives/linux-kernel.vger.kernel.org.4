@@ -2,132 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECDB3626BA0
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 21:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE723626BA4
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 21:38:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234941AbiKLUds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 15:33:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42684 "EHLO
+        id S234958AbiKLUis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 15:38:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234838AbiKLUdh (ORCPT
+        with ESMTP id S232759AbiKLUir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 15:33:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37505E2F;
-        Sat, 12 Nov 2022 12:33:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99D7AB80AEE;
-        Sat, 12 Nov 2022 20:33:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EA5FC433D6;
-        Sat, 12 Nov 2022 20:33:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668285212;
-        bh=x9mkEkI4TNpYNRcWCN2Z41iUCjKp0CTsuCucKloZ/Qc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MIE7fKaLooueyS7ffe/2vtQLMHa+T0yPMNEZlPv7hRikkO5Gj71D7xgU0S4qoGot5
-         jG1+9Zgqh3kwbLEIW/xLCttX+laPnX8fB99qrwEFuvp5IN9K8ZkK4Sww563so3lNKU
-         DfivKvyBM6y5YPb1CrMA/w18YrPWYeZnJsA9yl9Gf6ste8unff7Cyd8sGbdl3rbFQX
-         JL703DAxE9X/3EXH1yjNqI7yrySlUXshgpcelDzXgD148p/9li33qpOYZYfaeS1F6g
-         OSUX71HTTi/QIP8oQfV6Ct2qhiP3/fKq5quyhFSRWk5tgxIYvFjNPex3wNfAouPCMP
-         IiteRznpkjhgw==
-Date:   Sat, 12 Nov 2022 21:33:28 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Arminder Singh <arminders208@outlook.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Sven Peter <sven@svenpeter.dev>,
-        Hector Martin <marcan@marcan.st>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        asahi@lists.linux.dev
-Subject: Re: [PATCH v4] i2c/pasemi: PASemi I2C controller IRQ enablement
-Message-ID: <Y3ADGNw6iDEDTezl@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Arminder Singh <arminders208@outlook.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Sven Peter <sven@svenpeter.dev>, Hector Martin <marcan@marcan.st>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        asahi@lists.linux.dev
-References: <MN2PR01MB5358D35DEBAB82A80629EBB59F3A9@MN2PR01MB5358.prod.exchangelabs.com>
+        Sat, 12 Nov 2022 15:38:47 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C50E026;
+        Sat, 12 Nov 2022 12:38:41 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 0705E18836BD;
+        Sat, 12 Nov 2022 20:38:39 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id F28E2250030B;
+        Sat, 12 Nov 2022 20:38:38 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id E0A0491201DF; Sat, 12 Nov 2022 20:38:38 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
+        by smtp.gigahost.dk (Postfix) with ESMTPSA id 8BC4691201DF;
+        Sat, 12 Nov 2022 20:38:38 +0000 (UTC)
+From:   "Hans J. Schultz" <netdev@kapio-technology.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org,
+        "Hans J. Schultz" <netdev@kapio-technology.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v8 net-next 0/2] mv88e6xxx: Add MAB offload support
+Date:   Sat, 12 Nov 2022 21:37:46 +0100
+Message-Id: <20221112203748.68995-1-netdev@kapio-technology.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mPWs60l+c46WSwEa"
-Content-Disposition: inline
-In-Reply-To: <MN2PR01MB5358D35DEBAB82A80629EBB59F3A9@MN2PR01MB5358.prod.exchangelabs.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Organization: Westermo Network Technologies AB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patchset adds MAB [1] offload support in mv88e6xxx.
 
---mPWs60l+c46WSwEa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Patch #1: Fix a problem when reading the FID needed to get the VID.
 
-On Sat, Nov 05, 2022 at 07:56:49AM -0400, Arminder Singh wrote:
-> This patch adds IRQ support to the PASemi I2C controller driver to
-> increase the performace of I2C transactions on platforms with PASemi I2C
-> controllers. While primarily intended for Apple silicon platforms, this
-> patch should also help in enabling IRQ support for older PASemi hardware
-> as well should the need arise.
->=20
-> This version of the patch has been tested on an M1 Ultra Mac Studio,
-> as well as an M1 MacBook Pro, and userspace launches successfully
-> while using the IRQ path for I2C transactions.
->=20
-> Signed-off-by: Arminder Singh <arminders208@outlook.com>
+Patch #2: The MAB implementation for mv88e6xxx.
 
-Applied to for-next, thanks! One thing, though:
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=a35ec8e38cdd1766f29924ca391a01de20163931
 
-> +		while (!(status & SMSTA_XEN) && timeout--) {
-> +			msleep(1);
+Hans J. Schultz (2):
+  net: dsa: mv88e6xxx: allow reading FID when handling ATU violations
+  net: dsa: mv88e6xxx: mac-auth/MAB implementation
 
-Checkpatch complained about this one:
+ drivers/net/dsa/mv88e6xxx/Makefile      |  1 +
+ drivers/net/dsa/mv88e6xxx/chip.c        | 19 ++++--
+ drivers/net/dsa/mv88e6xxx/chip.h        | 10 ++++
+ drivers/net/dsa/mv88e6xxx/global1_atu.c | 70 ++++++++++++++++++++--
+ drivers/net/dsa/mv88e6xxx/port.h        |  6 ++
+ drivers/net/dsa/mv88e6xxx/switchdev.c   | 77 +++++++++++++++++++++++++
+ drivers/net/dsa/mv88e6xxx/switchdev.h   | 19 ++++++
+ 7 files changed, 190 insertions(+), 12 deletions(-)
+ create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.c
+ create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.h
 
-WARNING: msleep < 20ms can sleep for up to 20ms; see Documentation/timers/t=
-imers-howto.rst
+-- 
+2.34.1
 
-Not your issue because you were just moving this code around. But this
-might be a candidate for future improvements, thiugh.
-
-> +			status =3D reg_read(smbus, REG_SMSTA);
-> +		}
-
-
---mPWs60l+c46WSwEa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNwAxgACgkQFA3kzBSg
-KbZOVw//f61IwAT3+7pj46mSdeCMBH7jTcgwvVsjRoNpCQYTRVCwnNjdlYvK8ELR
-YNm1MwWGBSxVyEzo3Aveyv37A0JGL03Ebk254NaMLM1Uo0NNXazxu7986Uw/e8xw
-NhlzbFoSyH3/z0RjeolsfsTapWIHDG3URJwXCVFhBavB7pECzX4J9EW2a9f5la3s
-/I/82rlp5XMQ2DGQBg74V7DOikuyg9C8zjobV4ZS6bNSeR6z/NwOgPuUFigQ95W6
-RuoAcQvc+5L2chm9DTOygBapALqxzTU0UD+PYjWAOtEaUzfkJiktulRN6S2kqiET
-uP/hUmONrylPox+Uj2Cuzs4iu/NBSwM6tlVQmlSpsSGcZWIuv+Yk0/ZYZJqtrmGe
-jVM75X0IqaT2cmL4cjkmtjn5MZAV85RK0rknrvnoFan34+DzDo7k50spmotIhTql
-WuRrp6l7id8VH0I43BULUyGiQJo2rxUiaPb/dY/BFlPPXjd3AwCkxPY4/uwSqOn+
-/hOMjquEXb6kOoW18OD13MiiN0y4dcfDVPwccBp4uVEdC54VMEHFyMGwQwtYjadx
-IQHY0iSbMO33hLAQ5JLo6svDW1/DssP20QZU1r4tq0l3iVGZwuDm/ojAKsJ/jeaF
-Pqt1AqSxcJ4DCThgcLnmufmYy5xBiEV3Cb4YltmVmLJQ4g5YFUg=
-=b5o0
------END PGP SIGNATURE-----
-
---mPWs60l+c46WSwEa--
