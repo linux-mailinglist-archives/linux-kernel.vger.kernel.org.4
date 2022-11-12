@@ -2,115 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17FBE626935
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 12:37:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AEB626950
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 13:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234146AbiKLLg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 06:36:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
+        id S234910AbiKLMEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 07:04:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234957AbiKLLgr (ORCPT
+        with ESMTP id S233962AbiKLMEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 06:36:47 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA3925EBC;
-        Sat, 12 Nov 2022 03:36:39 -0800 (PST)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N8YRm6Wb0zHvZX;
-        Sat, 12 Nov 2022 19:36:04 +0800 (CST)
-Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 12 Nov 2022 19:36:19 +0800
-Received: from huawei.com (10.175.113.133) by kwepemm600001.china.huawei.com
- (7.193.23.3) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 12 Nov
- 2022 19:36:18 +0800
-From:   Wang Hai <wanghai38@huawei.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <cong.wang@bytedance.com>,
-        <f.fainelli@gmail.com>, <tom@herbertland.com>
-CC:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: [PATCH net] kcm: Fix kernel NULL pointer dereference in requeue_rx_msgs
-Date:   Sat, 12 Nov 2022 20:04:23 +0800
-Message-ID: <20221112120423.56132-1-wanghai38@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Sat, 12 Nov 2022 07:04:53 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23F1A17895
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 04:04:53 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id B04E65C00D7;
+        Sat, 12 Nov 2022 07:04:50 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Sat, 12 Nov 2022 07:04:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1668254690; x=1668341090; bh=x9FizG+eL/
+        8/EI7i81TIdmOdCun6VmkRyznqPByhDis=; b=XoJPG62A97EKGbYvKLrn2BxEfc
+        /e1ug9nk80w5t0KyhMnUyameiIsYSIrwpdLZkuDnQaEZgBDP6njcMR5SYjIh8HzT
+        BcgCvKrgsv82CpZh+1WY5xaAR6VJEljFPIXVnCaiFEpvEe3xrbGEz4uDYNjMXjSF
+        oUtmb/p2IUsaNAoAYSDUsitHMYvKfKiglDrJ2wXW9mptibPaPZt+gRM6E3HM0J8E
+        TviFyiKShLo6eJ08gm6X2GYXtQ6dFqf6JBv+6SDxU3Pa4RPkZ3x1c8WlWxgeXkLX
+        hoNFE5Nb2WwVGzTiUK1z9TA9cOTaOZ5y/3LJiFTfMecCXfQGJVYiZfpTxoaA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1668254690; x=1668341090; bh=x9FizG+eL/8/EI7i81TIdmOdCun6VmkRyzn
+        qPByhDis=; b=C12n0toL5UY1BE0ooeeFIycg0oKY8VmiQyhHJ92+E+DZLWWKVB0
+        YfMPX30G4blpX0nQPB+Nz589wFlVM0ybC4K6DKTUEwcAnX+HxreUQqqN1bMXOfSz
+        nl2Mb+cAgQFno+ySIbrEHsKCRTomb+sMxUPvldwLYJghzgqq0cmcgr3T/Oo/CKW1
+        D9pbYCMMOEm/ElFK0rBig/qUHg8iWEJ15qkfDNUGLWLjjozLZ9ep9aQBztCp5TBI
+        Vj3H38w+1h2dKZdVcwMcCx8Cv8E/MraD93C8A+8yCQ1Ex9kIgP1hjP8PttTwGA+k
+        ZlFOPjvOnMcLPyNAO1q2EQlUpA6JjgyifbA==
+X-ME-Sender: <xms:4otvY9gKu-4vENtRwn7o_CAOfVd8jIq4avpGJKe23mejQFVmwPUaeg>
+    <xme:4otvYyDKd0hHhCM4M3rcg2zV-y6vEmVdwmFu6nYzUwZc_zYKpvPISV2XfvTOd_B5r
+    XcbIJO5jt7hv7iHfTM>
+X-ME-Received: <xmr:4otvY9EneofXnxZIZ_zwwrP4Dmv-IQXItNgl3sA8ai0ajscsUUQvpFD48v5kKV6jKDTPh7lqMXUnLe-1sanW3g7xf8boP53EOBhmuxYc2zODNo6O9heF30SJN-SUGw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrfeekgdefjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
+    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
+    epleduffeiheeuvedtffevtdeuleeljeduudfgtedtvefhfeffvdfghfejhefgleelnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnse
+    hsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:4otvYyQmWKbdHrgADoqe78cHBA1kRVCrqGBL9_j25BRdQAzucwNfSQ>
+    <xmx:4otvY6xZQKMA-MPPkTbxO3_3bBP24G75EOkI4xXWgWU-nlpVc2sbXQ>
+    <xmx:4otvY45Sbaa0hiTu-DWsUi1RpLFKfyctEMnRDjX_YF4YQP1rXdhJpg>
+    <xmx:4otvY_pRmCtoMbiACaklPnFbJ0_gjZYxB3MvGQ3APTBrZ80nCt2bnA>
+Feedback-ID: i51094778:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 12 Nov 2022 07:04:49 -0500 (EST)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Sven Peter <sven@svenpeter.dev>, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] nvmem: Handle reading cells with bit offset > 8
+Date:   Sat, 12 Nov 2022 13:04:46 +0100
+Message-Id: <20221112120447.36877-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.113.133]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600001.china.huawei.com (7.193.23.3)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In kcm_rcv_strparser(), the skb is queued to the kcm that is currently
-being reserved, and if the queue is full, unreserve_rx_kcm() will be
-called. At this point, if KCM_RECV_DISABLE is set, then unreserve_rx_kcm()
-will requeue received messages for the current kcm socket to other kcm
-sockets. The kcm sock lock is not held during this time, and as long as
-someone calls kcm_recvmsg, it will concurrently unlink the same skb, which
-ill result in a null pointer reference.
+Some nvmem controllers like Apple's eFuses or Nintendo's OTP have a cell
+size that's larger than one byte. Consumers may however still need
+access to a subset of bits that start after the first byte. Handle this
+inside nvmem_shift_read_buffer_in_place().
 
-cpu0 			cpu1		        cpu2
-kcm_rcv_strparser
- reserve_rx_kcm
-                        kcm_setsockopt
-                         kcm_recv_disable
-                          kcm->rx_disabled = 1;
-  kcm_queue_rcv_skb
-  unreserve_rx_kcm
-   requeue_rx_msgs                              kcm_recvmsg
-    __skb_dequeue
-     __skb_unlink(skb)				  skb_unlink(skb)
-                                                  //double unlink skb
-
-There is no need to re-queue the received msg to other kcm when unreserve
-kcm. Remove it.
-
-The following is the error log:
-
-BUG: kernel NULL pointer dereference, address: 0000000000000008
-...
-RIP: 0010:skb_unlink+0x40/0x50
-...
-Call Trace:
- kcm_recvmsg+0x143/0x180
- ____sys_recvmsg+0x16a/0x180
- ___sys_recvmsg+0x80/0xc0
- do_recvmmsg+0xc2/0x2a0
- __sys_recvmmsg+0x10c/0x160
- __x64_sys_recvmmsg+0x25/0x40
- do_syscall_64+0x3b/0x90
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Fixes: ab7ac4eb9832 ("kcm: Kernel Connection Multiplexor module")
-Signed-off-by: Wang Hai <wanghai38@huawei.com>
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
 ---
- net/kcm/kcmsock.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/nvmem/core.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/net/kcm/kcmsock.c b/net/kcm/kcmsock.c
-index a5004228111d..691d40364b8f 100644
---- a/net/kcm/kcmsock.c
-+++ b/net/kcm/kcmsock.c
-@@ -333,9 +333,8 @@ static void unreserve_rx_kcm(struct kcm_psock *psock,
- 		return;
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 321d7d63e068..a5b8d6989f8e 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -1379,15 +1379,23 @@ EXPORT_SYMBOL_GPL(nvmem_cell_put);
+ static void nvmem_shift_read_buffer_in_place(struct nvmem_cell_entry *cell, void *buf)
+ {
+ 	u8 *p, *b;
+-	int i, extra, bit_offset = cell->bit_offset;
++	int i, padding, extra, bit_offset = cell->bit_offset;
++	int bytes = cell->bytes;
+ 
+ 	p = b = buf;
+ 	if (bit_offset) {
++		padding = bit_offset/8;
++		if (padding) {
++			memmove(buf, buf + padding, bytes - padding);
++			bit_offset -= BITS_PER_BYTE * padding;
++			bytes -= padding;
++		}
++
+ 		/* First shift */
+ 		*b++ >>= bit_offset;
+ 
+ 		/* setup rest of the bytes if any */
+-		for (i = 1; i < cell->bytes; i++) {
++		for (i = 1; i < bytes; i++) {
+ 			/* Get bits from next byte and shift them towards msb */
+ 			*p |= *b << (BITS_PER_BYTE - bit_offset);
+ 
+@@ -1400,7 +1408,7 @@ static void nvmem_shift_read_buffer_in_place(struct nvmem_cell_entry *cell, void
  	}
  
--	if (unlikely(kcm->rx_disabled)) {
--		requeue_rx_msgs(mux, &kcm->sk.sk_receive_queue);
--	} else if (rcv_ready || unlikely(!sk_rmem_alloc_get(&kcm->sk))) {
-+	if (likely(!kcm->rx_disabled) &&
-+	    (rcv_ready || unlikely(!sk_rmem_alloc_get(&kcm->sk)))) {
- 		/* Check for degenerative race with rx_wait that all
- 		 * data was dequeued (accounted for in kcm_rfree).
- 		 */
+ 	/* result fits in less bytes */
+-	extra = cell->bytes - DIV_ROUND_UP(cell->nbits, BITS_PER_BYTE);
++	extra = bytes - DIV_ROUND_UP(cell->nbits, BITS_PER_BYTE);
+ 	while (--extra >= 0)
+ 		*p-- = 0;
+ 
 -- 
-2.17.1
+2.25.1
 
