@@ -2,101 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4826268BF
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 11:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 018D16268C1
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 11:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234854AbiKLKFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 05:05:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
+        id S234786AbiKLKGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 05:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiKLKFl (ORCPT
+        with ESMTP id S234542AbiKLKG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 05:05:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA67817E02
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 02:04:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668247482;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YNPWveXNga0scY6/51aebupOAjiaIyJv8HXR04747GY=;
-        b=Sz9OM92T0p5NMjzz5llRz0IGTk0fPozFFYTT06RKVRXzkWIb0u5LDAlsXtg8/6UnkEvCjL
-        w/IybcIo4m86pf6rcamfWeWc5CUjQ9/gCYog8K6K3+bNyLhgB4jC6+wHSy5X/97uNCkW5D
-        wPld/j+dwz+sC3q9hbx6WvwtsVl/93E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-91-23T7CmQMMxq2btIs--dQOw-1; Sat, 12 Nov 2022 05:04:37 -0500
-X-MC-Unique: 23T7CmQMMxq2btIs--dQOw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 03D85101A528;
-        Sat, 12 Nov 2022 10:04:37 +0000 (UTC)
-Received: from [10.67.24.81] (unknown [10.67.24.81])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8A8B8202322E;
-        Sat, 12 Nov 2022 10:04:31 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH 2/2] KVM: selftests: Build access_tracking_perf_test for
- arm64
-To:     Oliver Upton <oliver.upton@linux.dev>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org
-References: <20221111231946.944807-1-oliver.upton@linux.dev>
- <20221111231946.944807-3-oliver.upton@linux.dev>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <8a578b9d-b2a8-a1f9-2a8c-c0109c863723@redhat.com>
-Date:   Sat, 12 Nov 2022 18:04:26 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Sat, 12 Nov 2022 05:06:28 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FF72AB
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 02:06:27 -0800 (PST)
+Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N8WN14NL4zqSLh;
+        Sat, 12 Nov 2022 18:02:41 +0800 (CST)
+Received: from dggpeml500002.china.huawei.com (7.185.36.158) by
+ dggpeml500022.china.huawei.com (7.185.36.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 12 Nov 2022 18:06:25 +0800
+Received: from [10.67.103.44] (10.67.103.44) by dggpeml500002.china.huawei.com
+ (7.185.36.158) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 12 Nov
+ 2022 18:06:24 +0800
+Subject: Re: [PATCH v12 2/2] Documentation: Add document for UltraSoc SMB
+ drivers
+To:     Yicong Yang <yangyicong@huawei.com>, <mathieu.poirier@linaro.org>,
+        <suzuki.poulose@arm.com>, <mike.leach@linaro.org>,
+        <leo.yan@linaro.org>, <jonathan.cameron@huawei.com>,
+        <john.garry@huawei.com>
+References: <20221109135008.9485-1-hejunhao3@huawei.com>
+ <20221109135008.9485-3-hejunhao3@huawei.com>
+ <13e37836-b21c-662b-89b5-518fb091c612@huawei.com>
+CC:     <yangyicong@hisilicon.com>, <coresight@lists.linaro.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <lpieralisi@kernel.org>,
+        <linuxarm@huawei.com>, <liuqi115@huawei.com>,
+        <f.fangjian@huawei.com>, <prime.zeng@hisilicon.com>
+From:   hejunhao <hejunhao3@huawei.com>
+Message-ID: <fedb61ff-13b5-ab5d-a394-d013b2bc0a6e@huawei.com>
+Date:   Sat, 12 Nov 2022 18:06:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-In-Reply-To: <20221111231946.944807-3-oliver.upton@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+In-Reply-To: <13e37836-b21c-662b-89b5-518fb091c612@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.103.44]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500002.china.huawei.com (7.185.36.158)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/12/22 7:19 AM, Oliver Upton wrote:
-> Does exactly what it says on the tin.
-> 
-> Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
-> ---
->   tools/testing/selftests/kvm/Makefile | 1 +
->   1 file changed, 1 insertion(+)
-> 
+Hi Yicong.
 
-Reviewed-by: Gavin Shan <gshan@redhat.com>
 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 0172eb6cb6ee..4c0ff91a8964 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -156,6 +156,7 @@ TEST_GEN_PROGS_aarch64 += aarch64/psci_test
->   TEST_GEN_PROGS_aarch64 += aarch64/vcpu_width_config
->   TEST_GEN_PROGS_aarch64 += aarch64/vgic_init
->   TEST_GEN_PROGS_aarch64 += aarch64/vgic_irq
-> +TEST_GEN_PROGS_aarch64 += access_tracking_perf_test
->   TEST_GEN_PROGS_aarch64 += demand_paging_test
->   TEST_GEN_PROGS_aarch64 += dirty_log_test
->   TEST_GEN_PROGS_aarch64 += dirty_log_perf_test
-> 
+On 2022/11/10 20:08, Yicong Yang wrote:
+> On 2022/11/9 21:50, Junhao He wrote:
+>> From: Qi Liu <liuqi115@huawei.com>
+>>
+>> This patch bring in documentation for UltraSoc SMB drivers.
+>> It simply describes the device, sysfs interface and the
+>> firmware bindings.
+>>
+>> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+>> Signed-off-by: Junhao He <hejunhao3@huawei.com>
+>> ---
+>>   .../sysfs-bus-coresight-devices-ultra_smb     | 31 +++++++
+>>   .../trace/coresight/ultrasoc-smb.rst          | 80 +++++++++++++++++++
+>>   2 files changed, 111 insertions(+)
+>>   create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+>>   create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
+>>
+>> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb b/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+>> new file mode 100644
+>> index 000000000000..deaefd508105
+>> --- /dev/null
+>> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+>> @@ -0,0 +1,31 @@
+>> +What:		/sys/bus/coresight/devices/ultra_smb<N>/enable_sink
+>> +Date:		November 2022
+>> +KernelVersion:	6.2
+>> +Contact:	Junhao He <hejunhao3@huawei.com>
+>> +Description:	(RW) Add/remove a SMB device from a trace path. There can be
+>> +		multiple sources for a single SMB device.
+>> +
+>> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/buf_size
+>> +Date:		November 2022
+>> +KernelVersion:	6.2
+>> +Contact:	Junhao He <hejunhao3@huawei.com>
+>> +Description:	(Read) Shows the buffer size of each UltraSoc SMB device.
+>> +
+>> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/buf_status
+>> +Date:		November 2022
+>> +KernelVersion:	6.2
+>> +Contact:	Junhao He <hejunhao3@huawei.com>
+>> +Description:	(Read) Shows the value held by UltraSoc SMB status register.
+>> +		BIT(0) is zero means buffer is empty.
+>> +
+>> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/read_pos
+>> +Date:		November 2022
+>> +KernelVersion:	6.2
+>> +Contact:	Junhao He <hejunhao3@huawei.com>
+>> +Description:	(Read) Shows the value held by UltraSoc SMB Read Pointer register.
+>> +
+>> +What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/write_pos
+>> +Date:		November 2022
+>> +KernelVersion:	6.2
+>> +Contact:	Junhao He <hejunhao3@huawei.com>
+>> +Description:	(Read) Shows the value held by UltraSoc SMB Write Pointer register.
+>> diff --git a/Documentation/trace/coresight/ultrasoc-smb.rst b/Documentation/trace/coresight/ultrasoc-smb.rst
+>> new file mode 100644
+>> index 000000000000..6d28ef0f6c88
+>> --- /dev/null
+>> +++ b/Documentation/trace/coresight/ultrasoc-smb.rst
+>> @@ -0,0 +1,80 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +
+>> +======================================
+>> +UltraSoc - HW Assisted Tracing on SoC
+>> +======================================
+>> +   :Author:   Qi Liu <liuqi115@huawei.com>
+>> +   :Date:     March 2022
+>> +
+>> +Introduction
+>> +------------
+>> +
+>> +UltraSoc SMB is a per SCCL(Super CPU Cluster) hardware, and it provides a
+>> +way to buffer and store CPU trace messages in a region of shared system
+>> +memory. SMB is plugged as a coresight sink device and the corresponding
+>> +trace generators (ETM) are plugged in as source devices.
+>> +
+>> +Sysfs files and directories
+>> +---------------------------
+>> +
+>> +The SMB devices appear on the existing coresight bus alongside the other
+>> +coresight devices::
+>> +
+>> +	$# ls /sys/bus/coresight/devices/
+>> +	ultra_smb0   ultra_smb1   ultra_smb2   ultra_smb3
+>> +
+>> +The ``ultra_smb<N>`` named SMB associated with SCCL.::
+>> +
+>> +	$# ls /sys/bus/coresight/devices/ultra_smb0
+>> +	enable_sink   mgmt
+>> +	$# ls /sys/bus/coresight/devices/ultra_smb0/mgmt
+>> +	buf_size  buf_status  read_pos  write_pos
+>> +
+>> +*Key file items are:-*
+>> +   * ``read_pos``: Shows the value held by UltraSoc SMB Read Pointer register.
+>> +   * ``write_pos``: Shows the value held by UltraSoc SMB Write Pointer register.
+>> +   * ``buf_status``: Shows the value held by UltraSoc SMB status register.
+>> +		     BIT(0) is zero means buffer is empty.
+>> +   * ``buf_size``: Shows the buffer size of each UltraSoc SMB device.
+>> +
+>> +Firmware Bindings
+>> +---------------------------
+>> +
+>> +SMB device is only supported with ACPI, and ACPI binding of SMB device
+>> +describes SMB device indentifier, resource information and graph structure.
+>> +
+>> +SMB is identified by ACPI HID "HISI03A1", resource of device is declared using
+>> +the _CRS method. Each SMB must present two base address, the first one is the
+>> +configuration base address of SMB device, the second one is the base address of
+>> +shared system memory.
+>> +
+>> +examples::
+>> +
+>> +    Device(USMB) {                                               \
+>> +      Name(_HID, "HISI03A1")                                     \
+>> +      Name(_CRS, ResourceTemplate() {                            \
+>> +          MEM_RESRC(0x95100000, 0x951FFFFF, 0x100000)            \
+>> +          MEM_RESRC(0x50000000, 0x53FFFFFF, 0x4000000)           \
+> I cannot find MEM_RESRC in ACPI Spec 6.4, any references? If it's a self defined macro just expand it here.
+>
+> btw, you need to cc linux-doc@vger.kernel.org.
+>
+> Thanks.
+"MEM_RESERVE" is a macro. will update the doc and add cc.
+Thanks for the comments!
+
+>> +      })                                                         \
+>> +      Name(_DSD, Package() {                                     \
+>> +        ToUUID("ab02a46b-74c7-45a2-bd68-f7d344ef2153"),          \
+>> +	/* Use CoreSight Graph ACPI bindings to describe connections topology */
+>> +        Package() {                                              \
+>> +          0,                                                     \
+>> +          1,                                                     \
+>> +          Package() {                                            \
+>> +            1,                                                   \
+>> +            ToUUID("3ecbc8b6-1d0e-4fb3-8107-e627f805c6cd"),      \
+>> +            8,                                                   \
+>> +            Package() {0x8, 0, \_SB.S00.SL11.CL28.F008, 0},       \
+>> +            Package() {0x9, 0, \_SB.S00.SL11.CL29.F009, 0},       \
+>> +            Package() {0xa, 0, \_SB.S00.SL11.CL2A.F010, 0},       \
+>> +            Package() {0xb, 0, \_SB.S00.SL11.CL2B.F011, 0},       \
+>> +            Package() {0xc, 0, \_SB.S00.SL11.CL2C.F012, 0},       \
+>> +            Package() {0xd, 0, \_SB.S00.SL11.CL2D.F013, 0},       \
+>> +            Package() {0xe, 0, \_SB.S00.SL11.CL2E.F014, 0},       \
+>> +            Package() {0xf, 0, \_SB.S00.SL11.CL2F.F015, 0},       \
+>> +          }                                                      \
+>> +        }                                                        \
+>> +      })                                                         \
+>> +    }
+>>
+> .
+>
+Best regards,
+Junhao.
 
