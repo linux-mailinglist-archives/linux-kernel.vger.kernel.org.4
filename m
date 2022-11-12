@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0BF62687E
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 10:27:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 577D7626887
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 10:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234617AbiKLJ1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 04:27:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
+        id S234741AbiKLJb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 04:31:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233223AbiKLJ1M (ORCPT
+        with ESMTP id S234562AbiKLJbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 04:27:12 -0500
+        Sat, 12 Nov 2022 04:31:22 -0500
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB7F389F
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 01:27:08 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N8VZd3TTqzmVkt;
-        Sat, 12 Nov 2022 17:26:49 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69D51DF3B;
+        Sat, 12 Nov 2022 01:31:21 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N8VbX4YmNzbnb0;
+        Sat, 12 Nov 2022 17:27:36 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.58) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 12 Nov 2022 17:27:06 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 12 Nov
- 2022 17:27:06 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <linux@dominikbrodowski.net>
-Subject: [PATCH] pcmcia: cs: fix possible hung task and memory leak pccardd()
-Date:   Sat, 12 Nov 2022 17:25:41 +0800
-Message-ID: <20221112092541.3605038-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+ 15.1.2375.31; Sat, 12 Nov 2022 17:31:20 +0800
+From:   Xiu Jianfeng <xiujianfeng@huawei.com>
+To:     <zohar@linux.ibm.com>, <dmitry.kasatkin@gmail.com>,
+        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+        <roberto.sassu@polito.it>
+CC:     <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <roberto.sassu@huawei.com>
+Subject: [PATCH] ima: Fix misuse of dereference of pointer in template_desc_init_fields()
+Date:   Sat, 12 Nov 2022 17:27:19 +0800
+Message-ID: <20221112092719.224888-1-xiujianfeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500007.china.huawei.com (7.185.36.183)
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.58]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -48,35 +47,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If device_register() returns error in pccardd(), it leads two issues:
+The input parameter @fields is type of struct ima_template_field ***, so
+when allocates array memory for @fields, the size of element should be
+sizeof(**field) instead of sizeof(*field).
 
-1. The socket_released has never been completed, it will block
-   pcmcia_unregister_socket(), because of waiting for completion
-   of socket_released.
-2. The device name allocated by dev_set_name() is leaked.
+Actually the original code would not cause any runtime error, but it's
+better to make it logically right.
 
-Fix this two issues by calling put_device() when device_register() fails.
-socket_released can be completed in pcmcia_release_socket(), the name can
-be freed in kobject_cleanup().
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Fixes: adf53a778a0a ("ima: new templates management mechanism")
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 ---
- drivers/pcmcia/cs.c | 1 +
- 1 file changed, 1 insertion(+)
+ security/integrity/ima/ima_template.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pcmcia/cs.c b/drivers/pcmcia/cs.c
-index f70197154a36..820cce7c8b40 100644
---- a/drivers/pcmcia/cs.c
-+++ b/drivers/pcmcia/cs.c
-@@ -605,6 +605,7 @@ static int pccardd(void *__skt)
- 		dev_warn(&skt->dev, "PCMCIA: unable to register socket\n");
- 		skt->thread = NULL;
- 		complete(&skt->thread_done);
-+		put_device(&skt->dev);
- 		return 0;
+diff --git a/security/integrity/ima/ima_template.c b/security/integrity/ima/ima_template.c
+index 49f0626928a1..04c49f05cb74 100644
+--- a/security/integrity/ima/ima_template.c
++++ b/security/integrity/ima/ima_template.c
+@@ -245,11 +245,11 @@ int template_desc_init_fields(const char *template_fmt,
  	}
- 	ret = pccard_sysfs_add_socket(&skt->dev);
+ 
+ 	if (fields && num_fields) {
+-		*fields = kmalloc_array(i, sizeof(*fields), GFP_KERNEL);
++		*fields = kmalloc_array(i, sizeof(**fields), GFP_KERNEL);
+ 		if (*fields == NULL)
+ 			return -ENOMEM;
+ 
+-		memcpy(*fields, found_fields, i * sizeof(*fields));
++		memcpy(*fields, found_fields, i * sizeof(**fields));
+ 		*num_fields = i;
+ 	}
+ 
 -- 
-2.25.1
+2.17.1
 
