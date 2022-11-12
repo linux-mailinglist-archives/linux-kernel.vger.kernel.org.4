@@ -2,100 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB683626644
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 02:52:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09469626647
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 02:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233750AbiKLBwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 20:52:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
+        id S233445AbiKLBzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 20:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiKLBwB (ORCPT
+        with ESMTP id S229991AbiKLBzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 20:52:01 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2DD6A747;
-        Fri, 11 Nov 2022 17:51:59 -0800 (PST)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N8JQF5WYdzJnfp;
-        Sat, 12 Nov 2022 09:48:53 +0800 (CST)
-Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 12 Nov 2022 09:51:56 +0800
-Received: from [10.67.103.158] (10.67.103.158) by
- kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 12 Nov 2022 09:51:56 +0800
-Subject: Re: [PATCH] crypto/hisilicon: Add null judgment to the callback
- interface
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-CC:     <wangzhou1@hisilicon.com>, <linux-crypto@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <Y1tTLAEi7ukUCCmB@gondor.apana.org.au>
- <a1229856-fbe4-9ae7-5789-332ed0af87eb@huawei.com>
- <Y2TWpyynYMyStKRX@gondor.apana.org.au>
- <d914a099-06ef-acfe-f394-f4790a821598@huawei.com>
- <Y2oodE+5us++mbSl@gondor.apana.org.au>
- <df561fbe-12eb-25b0-2173-a7ffb3bfd53a@huawei.com>
- <Y2twbHyQkTMoTz+O@gondor.apana.org.au>
- <32686c5b-04b2-7103-bf2e-113db2315ef4@huawei.com>
- <Y2xt7/6WGN+uthpL@gondor.apana.org.au>
- <40a0e7aa-362a-0de7-76c0-77381c07f254@huawei.com>
- <Y2y78USk4bXRrRun@gondor.apana.org.au>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <54c1aa3a-9e51-a90f-416a-dc65a70a1b8a@huawei.com>
-Date:   Sat, 12 Nov 2022 09:51:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 11 Nov 2022 20:55:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7302BD0
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 17:55:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8D3AB82878
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 01:55:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16D73C433D6;
+        Sat, 12 Nov 2022 01:55:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668218120;
+        bh=fgmYqNrujDVO3mYJp1YcFQWlrmMolvGD2bz9AIt6/r0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=j2OALwu9R3vpVGygcSTecpj34reTKkU+wR4SQPGT1SezuSGLiCgi4eHo2m/AsYgr9
+         z4XWlkTDsZaFbkYUefFz5H2Lt4ipKkJUTsanv1KwRconQuL0AIq5zrQjks24iiCFoU
+         wo6rZpbsLv/yYT5BNi9sy02gvlTO38/Do88+u2UtqKXksyu69hUNwtAO0FALHBp7c2
+         co+mv9SQXwHcbi7ggTro1VL+RPlgPh81DCOdibtrRthhSMGpS+l4EYNv1RQl7XJ3HR
+         3F7q8Y0z9B5VGR9aphbvZNK9bg93/3MZobX34Ix2AVVPz5ki4t+OZAcNHkmQTnOEKx
+         p0dZ+qxTq8sXw==
+Date:   Fri, 11 Nov 2022 17:55:18 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Nick Terrell <terrelln@meta.com>
+Cc:     syzbot <syzbot+40642be9b7e0bb28e0df@syzkaller.appspotmail.com>,
+        "chao@kernel.org" <chao@kernel.org>,
+        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>
+Subject: Re: [syzbot] INFO: trying to register non-static key in
+ f2fs_handle_error
+Message-ID: <Y279BqPNYAr+5OxC@sol.localdomain>
+References: <0000000000006a83e705ecea7171@google.com>
+ <E31B0CBC-F169-4C7D-9FE6-F928C0F802AF@fb.com>
 MIME-Version: 1.0
-In-Reply-To: <Y2y78USk4bXRrRun@gondor.apana.org.au>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.158]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <E31B0CBC-F169-4C7D-9FE6-F928C0F802AF@fb.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/10 16:53, Herbert Xu wrote:
-> On Thu, Nov 10, 2022 at 12:11:15PM +0800, liulongfang wrote:
->>
->> When using crypto's skcipher series interfaces for encryption and decryption
->> services, User can use synchronous mode(by adjusting some skcipher interfaces,
->> here is to remove skcipher_request_set_callback()) or asynchronous mode,
->> but when using synchronous mode and the current asynchronous mode is loaded
->> it will cause a calltrace.
->>
->> The current problem is that the interface of skcipher does not restrict users
->> to call functions in this way for encryption services.
->>
->> If the current driver doesn't handle this, there is a possibility that some users
->> deliberately create this kind of problem to cause the kernel to crash.
+On Sat, Nov 12, 2022 at 12:15:08AM +0000, 'Nick Terrell' via syzkaller-bugs wrote:
 > 
-> It sounds like your code is misusing the skcipher API.  By default
-> skcipher is always async.  You must always set a callback.
+> Not quite sure why I am CC'd here, I don't see anything related to zstd or compression in this stack.
+> Just want to check that it is likely unrelated, and that I'm not missing something.
 > 
-> The only way to legally use skcipher without setting a callback
-> is by allocating it with crypto_alloc_sync_skcipher.  In which case
+> Best,
+> Nick Terrell
 
-OK! I found in Documentation/crypto/architecture.rst the description
-that async mode must provide a callback function.
+It's because:
 
-However, what is confusing is that this document does not describe
-the synchronization mode so clearly.
+$ ./scripts/get_maintainer.pl fs/f2fs/super.c
+Jaegeuk Kim <jaegeuk@kernel.org> (maintainer:F2FS FILE SYSTEM)
+Chao Yu <chao@kernel.org> (maintainer:F2FS FILE SYSTEM)
+Nick Terrell <terrelln@fb.com> (maintainer:ZSTD)
+linux-f2fs-devel@lists.sourceforge.net (open list:F2FS FILE SYSTEM)
+linux-kernel@vger.kernel.org (open list)
 
-> unless your driver incorrectly declares itself as sync instead of
-> async, then it will never be used by such a user.
-> 
-> Cheers,
-> 
-Thanks,
-Longfang.
+Do *not* use content regexes (K: zstd) in MAINTAINERS unless you are absolutely
+sure you want to be notified about every file that contains your regex.
+
+If you do want to use a content regex anyway, you might want to look into
+changing get_maintainer.pl to make them only apply to patches that contain the
+regex, as I think that might be what people are expecting it does.
+
+- Eric
 
