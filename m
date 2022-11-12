@@ -2,96 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1C86267AA
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 08:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D126267AB
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 08:33:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234683AbiKLHdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 02:33:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
+        id S234711AbiKLHdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 02:33:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234710AbiKLHdK (ORCPT
+        with ESMTP id S234693AbiKLHdP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 02:33:10 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FA431369
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 23:33:09 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id h12so6833229ljg.9
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 23:33:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bg6YBGl/EJCtYIdndJrZk08z2YDso/H/J+GwBQ40qAY=;
-        b=urNOrd9RK3Rr5hkIX6zQEjsA8SH3ZPUsr3NfaZMmyMmIrId5/eofrpg1uiAYxrPaP1
-         GSPD8SnQfe+ALS01K+OJXWfYH5KtKpBCu54ic/zHzWRKN09BgFGhtMsApJKZDY+EWYNF
-         xvHhZ/ZOxd0jM+FliULrLaJhVWzWc3xatb+BeZxg6aYtg+2abelMnTZ2K6gnuL/Bn+pd
-         xUm1pIZLvmEeH5GEJYpgPHtxMT8SectF0w2OyFbV5wfp8hQlR/x10H/RLNliq5VlamEU
-         BKJETg1s+ZkaDfDo5roc2w3npvmJj4LzlU0oWFmGcLA+ofBlgsiP+BkSuF5XS5B8/xPz
-         rIHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bg6YBGl/EJCtYIdndJrZk08z2YDso/H/J+GwBQ40qAY=;
-        b=fVfRBYU4udCMojl12EMQdVe7DZISOAXrzdLhYzESKZ8/arHhD5VDhTL08WRzRmuWFr
-         1ZmABDk0pTYqc3OXDqFYaMwQ1YfwlL1fFBlPEvzw9DsGlanrkiOETiFgio9awKnafQj3
-         PLYKkQhWJC4sCvfSle7KxyakI1VfbO04WrUt5lVhiAOJDUyGWGkgg7IOX4Hgtb8hCFyc
-         xMfpT82ZQlET18g2LY2hATMWps4SvUVdfA5CJzqFBu4SA39ayL6M4FWQDPbURK7ae+tT
-         vvGnGgDuszhw50izqCW7DDIlhjeavMLCr+liof1Km5MfcFmoSyb9cMwjZzDhV/0/wRzH
-         08oQ==
-X-Gm-Message-State: ANoB5plJAbQnZHE6OGzfu8Xjzgwf+h0TeFz8jOjIUz+UNU9np8BxvVxL
-        tCyhtCGzF/kuVD4BDMTWDRC7KA==
-X-Google-Smtp-Source: AA0mqf7mjfElPOP51JDmcGDOKve5lmvK8KwiAOy0IxQCbfzLoON7tXup0+UMt8K0nQ14A8NFYmCdAg==
-X-Received: by 2002:a2e:8e3b:0:b0:26b:de20:ba89 with SMTP id r27-20020a2e8e3b000000b0026bde20ba89mr1616751ljk.254.1668238388113;
-        Fri, 11 Nov 2022 23:33:08 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id p11-20020a2ea4cb000000b002770473d813sm759680ljm.140.2022.11.11.23.33.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 23:33:07 -0800 (PST)
-Message-ID: <4d73a96e-ab12-6b86-ef42-8e99f67c1bab@linaro.org>
-Date:   Sat, 12 Nov 2022 10:33:07 +0300
+        Sat, 12 Nov 2022 02:33:15 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FE62FFF9
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 23:33:14 -0800 (PST)
+Received: from kwepemi100025.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N8S3D3Q8Pz15MW2;
+        Sat, 12 Nov 2022 15:32:56 +0800 (CST)
+Received: from [10.174.148.223] (10.174.148.223) by
+ kwepemi100025.china.huawei.com (7.221.188.158) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 12 Nov 2022 15:33:11 +0800
+Message-ID: <f8650844-1b28-92f0-5330-c164c95ee7ec@huawei.com>
+Date:   Sat, 12 Nov 2022 15:33:10 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 15/22] phy: qcom-qmp-combo: rename sc8280xp config
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20221111085643.9478-1-johan+linaro@kernel.org>
- <20221111085643.9478-16-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221111085643.9478-16-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] vp_vdpa: harden the logic of set status
+To:     Stefano Garzarella <sgarzare@redhat.com>
+CC:     <stefanha@redhat.com>, <mst@redhat.com>, <jasowang@redhat.com>,
+        <virtualization@lists.linux-foundation.org>,
+        <arei.gonglei@huawei.com>, <yechuan@huawei.com>,
+        <huangzhichao@huawei.com>, <linux-kernel@vger.kernel.org>,
+        <xiehong@huawei.com>
+References: <20221111145505.1232-1-longpeng2@huawei.com>
+ <20221111151459.dyz42jclq26ai26q@sgarzare-redhat>
+ <0f25506f-b9ca-1578-f944-cfb3936ced50@huawei.com>
+ <20221111163548.x6yy2w74gk6biykw@sgarzare-redhat>
+From:   "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
+        <longpeng2@huawei.com>
+In-Reply-To: <20221111163548.x6yy2w74gk6biykw@sgarzare-redhat>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.148.223]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi100025.china.huawei.com (7.221.188.158)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/11/2022 11:56, Johan Hovold wrote:
-> In preparation for merging the USB and DP configurations, drop the
-> "combo" infix from the SC8280XP combined configuration for consistency
-> with the other platforms.
+
+
+在 2022/11/12 0:35, Stefano Garzarella 写道:
+> On Fri, Nov 11, 2022 at 11:49:10PM +0800, Longpeng (Mike, Cloud 
+> Infrastructure Service Product Dept.) wrote:
+>>
+>>
+>> 在 2022/11/11 23:14, Stefano Garzarella 写道:
+>>> On Fri, Nov 11, 2022 at 10:55:05PM +0800, Longpeng(Mike) wrote:
+>>>> From: Longpeng <longpeng2@huawei.com>
+>>>>
+>>>> 1. We should not set status to 0 when invoking vp_vdpa_set_status().
+>>>>
+>>>> 2. The driver MUST wait for a read of device_status to return 0 before
+>>>>   reinitializing the device.
+>>>>
+>>>> Signed-off-by: Longpeng <longpeng2@huawei.com>
+>>>> ---
+>>>> drivers/vdpa/virtio_pci/vp_vdpa.c | 11 ++++++++++-
+>>>> 1 file changed, 10 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c 
+>>>> b/drivers/vdpa/virtio_pci/vp_vdpa.c
+>>>> index d448db0c4de3..d35fac5cde11 100644
+>>>> --- a/drivers/vdpa/virtio_pci/vp_vdpa.c
+>>>> +++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
+>>>> @@ -212,8 +212,12 @@ static void vp_vdpa_set_status(struct 
+>>>> vdpa_device *vdpa, u8 status)
+>>>> {
+>>>>     struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
+>>>>     struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
+>>>> -    u8 s = vp_vdpa_get_status(vdpa);
+>>>
+>>> Is this change really needed?
+>>>
+>> No need to get the status if we try to set status to 0 (trigger BUG).
+>>
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+> Okay, but that's the case that should never happen, so IMHO we can leave 
+> it as it is.
+> 
+OK.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>>>> +    u8 s;
+>>>> +
+>>>> +    /* We should never be setting status to 0. */
+>>>> +    BUG_ON(status == 0);
+>>>
+>>> IMHO panicking the kernel seems excessive in this case, please use 
+>>> WARN_ON and maybe return earlier.
+>>>
+>> Um...I referenced the vp_reset/vp_set_status,
+> 
+> Ah I see, maybe it's an old code, because recently we always try to 
+> avoid BUG_ON().
+> 
+OK. The checkpatch.pl script also triggered a waring about it.
+I'll use WARN_ON in next version.
 
--- 
-With best wishes
-Dmitry
+>>
+>>>>
+>>>> +    s = vp_vdpa_get_status(vdpa);
+>>>>     if (status & VIRTIO_CONFIG_S_DRIVER_OK &&
+>>>>         !(s & VIRTIO_CONFIG_S_DRIVER_OK)) {
+>>>>         vp_vdpa_request_irq(vp_vdpa);
+>>>> @@ -229,6 +233,11 @@ static int vp_vdpa_reset(struct vdpa_device *vdpa)
+>>>>     u8 s = vp_vdpa_get_status(vdpa);
+>>>>
+>>>>     vp_modern_set_status(mdev, 0);
+>>>> +    /* After writing 0 to device_status, the driver MUST wait for a 
+>>>> read of
+>>>> +     * device_status to return 0 before reinitializing the device.
+>>>> +     */
+>>>> +    while (vp_modern_get_status(mdev))
+>>>> +        msleep(1);
+>>>
+>>> Should we set a limit after which we give up? A malfunctioning device 
+>>> could keep us here forever.
+>>>
+>> Yes, but the malfunctioning device maybe can not work anymore, how to 
+>> handle it?
+> 
+> Maybe we should set the status to broken, but in this case we could just 
+> return an error if we couldn't reset it, how about that?
+> 
+It can work, but it seems to violate the specification. Maybe we can 
+also wait for other guys' suggestions and then decide how to handle the 
+exception.
 
+> Thanks,
+> Stefano
+> 
+> .
