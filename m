@@ -2,92 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07FF626A99
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 17:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5787626AAF
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 17:50:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234974AbiKLQcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 11:32:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48422 "EHLO
+        id S234992AbiKLQuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 11:50:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232663AbiKLQcH (ORCPT
+        with ESMTP id S232659AbiKLQup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 11:32:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AEC11C1C;
-        Sat, 12 Nov 2022 08:32:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A835A60C96;
-        Sat, 12 Nov 2022 16:32:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B9F7C433D6;
-        Sat, 12 Nov 2022 16:32:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668270725;
-        bh=+q9hFe8SsT/LG2vRDXuPIe1DAbLuVAEj0I00+4cCu9I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ljmGTYIe6pY/STBG/QNEZBs6zXsiJsNyJnB5D1ocAbUJbiOCjE4k/SpRY4Tp1DDlL
-         J85X60lUg9geqGmJyb3wbptGbZL7KZ7bKnsdAndnvZmFfvtWKFq0kZfYnXv2NOvRwz
-         kykHpdK1A/vCPNFTsviO5rStl05xCT70b2MRCq7tyglLzsRudFvYc8B4sqI1KAnrUK
-         spO+34cemtu4m3kEg+9kdEXyO6wJRgNfhrArW2S3mnt1GJOufDkJ0XyUPdQw6WJo0y
-         DoLon6vgrNBF9PwE5M8rlHLWjtkqloysj5Ijb+0JmRNfa/720nxdzwlMQws1ynGCtI
-         Q9LeKSVTbs3qA==
-Date:   Sat, 12 Nov 2022 16:44:18 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: iio: dac: adi,ad5758: Drop 'contains' from
- 'adi,dc-dc-mode'
-Message-ID: <20221112164418.13a446c1@jic23-huawei>
-In-Reply-To: <20221111212846.4104059-1-robh@kernel.org>
-References: <20221111212846.4104059-1-robh@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 12 Nov 2022 11:50:45 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB6565AD;
+        Sat, 12 Nov 2022 08:50:44 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id h14so6909591pjv.4;
+        Sat, 12 Nov 2022 08:50:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5YtIzIFXCd8ejP+if9R+vz9eE20Exyv5nPauR7eKIuE=;
+        b=FRKd65M1dUvUk2bFupd/DigeVgW/VgwGaOAYztLLuFlzxAcskSD4il2H1VfJhSJGS0
+         qO+PrstmLwBtYtmPsKxLqQ95eSKNARXfkTX14phinjyEhluyp5PX0QQLRrcrR2CZgi/7
+         l9kdgkO5CsbLtC2vP1CSECIJNPWhNv8/ZEoh7LYzdL27CqK6IKrEr3eXTJ+bmdTHZ8cU
+         QhgNxeo1prW3PlfF2cOKT52Vsxsu9Oz9L5qYgeA76yuFTwuCo+32n9hll4Eqg0KA2czb
+         CKouxmdVw5zV0LhVnE1VC/wTeh/UOGNys2oEYQHUbuLa/S5c9GjAzjtCxpsi+D5Ty0w8
+         3tdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5YtIzIFXCd8ejP+if9R+vz9eE20Exyv5nPauR7eKIuE=;
+        b=w3qApZtaiMn0ReUM7ech+w0tthbVKvJ+vil1aZNsiTx+sI/q9mo3Lz3bS52+CDcrgi
+         d0/YgMf8zr4wt0ze18fHuS8HXMLCEeT+LLIxZIN+hPfSyBsB6oz7AiQNBaSdOOa4HNU/
+         iQnNMCUESmWGgmQkN1MrJDva+UD88//nD/MVoY2bLeVHSwPgVgU1pDQRm+1R3DhFHuM7
+         rnPHC4SO3w1qbiodGgoRuS8nZxAgEEtkYTGeBgBLd/qGQa7bTg8ZKIQfsOGfcSMDT78v
+         x5Sz5WbA1BmOR/Aj/GxjHPfwgZTWlca+nY7GkbOHLBzMVte+PAyBtgWYWcTRqe5LVRys
+         r5ZA==
+X-Gm-Message-State: ANoB5pn9i5ZlPmOwq7SemvJzQJZa21fOty6QZ84ZKyDTOuLWjECbAn8/
+        6WQp3d/IOsYdmH/Yk0XhR8eYg2c7+vg=
+X-Google-Smtp-Source: AA0mqf6FsHvwljVx9ri2u3GHDOUK+gLojv9lJZe3XTrUeaY53rpL3qiyQk/ApJivBgmtafDHP/NsNg==
+X-Received: by 2002:a17:903:26cd:b0:17f:7ed0:2367 with SMTP id jg13-20020a17090326cd00b0017f7ed02367mr7408026plb.31.1668271843933;
+        Sat, 12 Nov 2022 08:50:43 -0800 (PST)
+Received: from [192.168.50.208] (ip68-109-79-27.oc.oc.cox.net. [68.109.79.27])
+        by smtp.gmail.com with ESMTPSA id 131-20020a621989000000b0056bc1d7816dsm3591324pfz.99.2022.11.12.08.50.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Nov 2022 08:50:43 -0800 (PST)
+Message-ID: <c2352c27-fbff-ead4-ac22-3aebf5c600f3@gmail.com>
+Date:   Sat, 12 Nov 2022 08:50:42 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH -next] scsi: lpfc: Use memset_startat() helper
+Content-Language: en-US
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221111074310.132125-1-xiujianfeng@huawei.com>
+From:   James Smart <jsmart2021@gmail.com>
+In-Reply-To: <20221111074310.132125-1-xiujianfeng@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Nov 2022 15:28:46 -0600
-Rob Herring <robh@kernel.org> wrote:
-
-> 'contains' applies to arrays, but 'adi,dc-dc-mode' is a scalar. So drop
-> 'contains' from the 'if' schema.
+On 11/10/2022 11:43 PM, Xiu Jianfeng wrote:
+> User memset_startat() helper to simplify the code, no functional
+> changes in this patch.
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-Applied to the togreg branch of iio.git and pushed out as testing for
-the autobuilders to poke at it.
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-Thanks,
+Looks good
 
-Jonathan
+Reviewed-by: James Smart <jsmart2021@gmail.com>
 
-> ---
->  Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml b/Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml
-> index e49e7556175d..4e508bfcc9d8 100644
-> --- a/Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml
-> +++ b/Documentation/devicetree/bindings/iio/dac/adi,ad5758.yaml
-> @@ -102,8 +102,7 @@ allOf:
->    - if:
->        properties:
->          adi,dc-dc-mode:
-> -          contains:
-> -            enum: [1, 3]
-> +          enum: [1, 3]
->      then:
->        properties:
->          adi,range-microvolt: false
+-- james
 
