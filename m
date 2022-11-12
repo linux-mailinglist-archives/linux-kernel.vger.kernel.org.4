@@ -2,164 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E89626834
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 09:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D28D062683D
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 09:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234410AbiKLIxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 03:53:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S234007AbiKLI7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 03:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiKLIxj (ORCPT
+        with ESMTP id S230043AbiKLI7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 03:53:39 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DED7311;
-        Sat, 12 Nov 2022 00:53:34 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id l190so7124030vsc.10;
-        Sat, 12 Nov 2022 00:53:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=T9Smjh/yGIKQ9krQ5WNJohFUdxfMO4/FTuEqmVDIdSI=;
-        b=m0MWMmsQN8OOzl7hr70mlNQQeO74sQDayjqvXlFLKw0rhM5uP7n1NrSq6sFCTybolB
-         PfPzYA6BicUZf07cXexKIjxRFL1cO9mjutjQwAwXC3oGX/Vb43o+smG76r9ilstOfnSA
-         F3jsJTeXztjPowgN/baHAbZULTqqaORr3A6rfH+DXiAPOz7brxV+s1nHxt/LB8Fe4Wf4
-         GA5PDOYTze1tXPVwDKnHO9xYHeoAhQaf0ugnbnl3DVpXvbpIHLe40y56jEUE7y8BF0KU
-         SW3pLoQYNEaD+5yzCI43aCLamxaLEmOC6uETTw6mdsu3E6MSEHCTPS6T4nFjkKAq0fKb
-         a2KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T9Smjh/yGIKQ9krQ5WNJohFUdxfMO4/FTuEqmVDIdSI=;
-        b=bvuTNZrTDyFwKeLN1zbhp058SnLGJh2M7WHrkP23BJMVdY+Z3lTaNXSNEWQcuojl9Y
-         sxVsU6rLjP0bPxh7yXnPBy8q933aUgvCEUGHGtyTZXFtICck0r0NjlAEwwtmAucneIbl
-         HRJGWkdGJMXN6VBP+TaWDLGjkdHPU7pKCA6ASy8rC++jiMvu6AG16H7px5Ix7jWpvQms
-         v4r1RxQ5p9M4lGkiMt0hHSJf4vZ+hoZEKwbwyPjgF9a6+oEoGZ7Nnh9fREllypR5ROpf
-         6ShVY4akjxCWVC3CECcQKT8xkXNAUCrgP+uSbMNQc3BZkkHJGKFjGWzCoiRijsJEkvuV
-         eA1g==
-X-Gm-Message-State: ANoB5pn+dTpcyVMEumk0bzLJPv8QGfov9OuqipU5Arn3gBlgWM3bX30l
-        ZWLbnNy0iDSbL/ai3vS2412W3rE+XtXcjZ61K/Y=
-X-Google-Smtp-Source: AA0mqf4EQiVwR1Zj92rCfrBLAefHK2cCrMOui7i5AWdjmQlmIaG/2GIw92OOD8APZtjZEimVd+spTgwU5NSTinw3ZBE=
-X-Received: by 2002:a05:6102:c03:b0:3aa:13b1:86e6 with SMTP id
- x3-20020a0561020c0300b003aa13b186e6mr2636272vss.36.1668243213045; Sat, 12 Nov
- 2022 00:53:33 -0800 (PST)
+        Sat, 12 Nov 2022 03:59:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A5F205F9
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 00:59:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25774B80025
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 08:59:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C0AC433C1;
+        Sat, 12 Nov 2022 08:59:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668243551;
+        bh=Ypk2MWBUPXJv/NWxF6HqJaH7mpCsB7DE1ZHqHg7Zn2c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mZZxpJfIVz3AC8YJOWuefWNyai5N24xOfjam+lheVm+peFLghpgxzlOwLk7rwsxh+
+         RJg4BMjBdZjI/jyA+xJXwrBBwXck4pA+vi48vzFhY9QDHaJmUfobGM4nmMmz2B2S3N
+         iYY9I9NCAapjyE4vMUm1OIz700GpVKCh/xRKnlEU=
+Date:   Sat, 12 Nov 2022 09:59:08 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Liu Shixin <liushixin2@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] genirq/irqdesc: hide illegible sysfs warning of
+ kobject_del()
+Message-ID: <Y29gXLqK2wiu7/WK@kroah.com>
+References: <20221112093939.616270-1-liushixin2@huawei.com>
 MIME-Version: 1.0
-References: <20221028001016.332663-1-stephen.s.brennan@oracle.com>
- <20221111220614.991928-1-stephen.s.brennan@oracle.com> <20221111220614.991928-3-stephen.s.brennan@oracle.com>
-In-Reply-To: <20221111220614.991928-3-stephen.s.brennan@oracle.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Sat, 12 Nov 2022 10:53:21 +0200
-Message-ID: <CAOQ4uxhXYzX=tKyY7BRp=KhuEZY6FrYsZYyD-rLiYfPJfh8WXg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] fsnotify: Use d_find_any_alias to get dentry
- associated with inode
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221112093939.616270-1-liushixin2@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 12:06 AM Stephen Brennan
-<stephen.s.brennan@oracle.com> wrote:
->
-> Rather than iterating over the inode's i_dentry (requiring holding the
-> i_lock for the entire duration of the function), we know that there
-> should be only one item in the list. Use d_find_any_alias() and no
-> longer hold i_lock.
->
-> Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
-> Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+On Sat, Nov 12, 2022 at 05:39:39PM +0800, Liu Shixin wrote:
+> If irq_sysfs_add() failed, system will report a warning but don't call
+> kobject_put() to release the descriptor.
+
+I can not parse this sentance :(
+
+> Then in irq_sysfs_del(), we continue to call kobject_del(). In such
+> situation, kobject_del() will complains about a object with no parent
+> like this:
+
+Then we should not be calling irq_sysfs_del() if the call failed.  That
+is the real fix here.
+
+> 
+>  kernfs: can not remove 'actions', no directory
+>  WARNING: CPU: 0 PID: 277 at fs/kernfs/dir.c:1615 kernfs_remove_by_name_ns+0xd5/0xe0
+> [...]
+>  Call Trace:
+>   <TASK>
+>   remove_files.isra.0+0x3f/0xb0
+>   sysfs_remove_group+0x68/0xe0
+>   sysfs_remove_groups+0x41/0x70
+>   __kobject_del+0x45/0xc0
+>   kobject_del+0x2a/0x40
+>   free_desc+0x44/0x70
+>   irq_free_descs+0x5d/0x90
+> [...]
+> 
+> Use kobj->state_in_sysfs to check whether kobject is added succeed. And
+> if not, we should not call kobject_del().
+
+That does not describe what you are doing here at all.
+
+> 
+> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
 > ---
->
-> Notes:
->     Changes in v4:
->     - Bail out if d_find_any_alias() returns NULL
->     - Rebase on Amir's patch
->     Changes in v3:
->     - Add newlines in block comment
->     - d_find_any_alias() returns a reference, which I was leaking. Add
->       a dput(alias) at the end.
->     - Add Amir's R-b
->
->  fs/notify/fsnotify.c | 46 ++++++++++++++++++++++----------------------
->  1 file changed, 23 insertions(+), 23 deletions(-)
->
-> diff --git a/fs/notify/fsnotify.c b/fs/notify/fsnotify.c
-> index 2c50e9e50d35..409d479cbbc6 100644
-> --- a/fs/notify/fsnotify.c
-> +++ b/fs/notify/fsnotify.c
-> @@ -105,35 +105,35 @@ void fsnotify_sb_delete(struct super_block *sb)
->   */
->  void fsnotify_update_children_dentry_flags(struct inode *inode, bool watched)
->  {
-> -       struct dentry *alias;
-> +       struct dentry *alias, *child;
->
->         if (!S_ISDIR(inode->i_mode))
->                 return;
->
-> -       spin_lock(&inode->i_lock);
-> -       /* run all of the dentries associated with this inode.  Since this is a
-> -        * directory, there damn well better only be one item on this list */
-> -       hlist_for_each_entry(alias, &inode->i_dentry, d_u.d_alias) {
-> -               struct dentry *child;
-> -
-> -               /* run all of the children of the original inode and fix their
-> -                * d_flags to indicate parental interest (their parent is the
-> -                * original inode) */
-> -               spin_lock(&alias->d_lock);
-> -               list_for_each_entry(child, &alias->d_subdirs, d_child) {
-> -                       if (!child->d_inode)
-> -                               continue;
-> +       /* Since this is a directory, there damn well better only be one child */
-> +       alias = d_find_any_alias(inode);
-> +       if (!alias)
-> +               return;
->
-> -                       spin_lock_nested(&child->d_lock, DENTRY_D_LOCK_NESTED);
-> -                       if (watched)
-> -                               child->d_flags |= DCACHE_FSNOTIFY_PARENT_WATCHED;
-> -                       else
-> -                               child->d_flags &= ~DCACHE_FSNOTIFY_PARENT_WATCHED;
-> -                       spin_unlock(&child->d_lock);
-> -               }
-> -               spin_unlock(&alias->d_lock);
-> +       /*
-> +        * run all of the children of the original inode and fix their
-> +        * d_flags to indicate parental interest (their parent is the
-> +        * original inode)
+>  kernel/irq/irqdesc.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+> index a91f9001103c..a820d96210d4 100644
+> --- a/kernel/irq/irqdesc.c
+> +++ b/kernel/irq/irqdesc.c
+> @@ -300,10 +300,11 @@ static void irq_sysfs_del(struct irq_desc *desc)
+>  	/*
+>  	 * If irq_sysfs_init() has not yet been invoked (early boot), then
+>  	 * irq_kobj_base is NULL and the descriptor was never added.
+> +	 * And the descriptor may be added failed.
+>  	 * kobject_del() complains about a object with no parent, so make
+>  	 * it conditional.
+>  	 */
+> -	if (irq_kobj_base)
+> +	if (irq_kobj_base && desc->kobj.parent)
 
-nit: this comment can probably fit in two nicer lines
+How would the parent be NULL?  Parent devices always stick around until
+the child is removed, otherwise something is really wrong here.  You
+should never have to look at the parent.
 
-> +        */
-> +       spin_lock(&alias->d_lock);
-> +       list_for_each_entry(child, &alias->d_subdirs, d_child) {
-> +               if (!child->d_inode)
-> +                       continue;
-> +
-> +               spin_lock_nested(&child->d_lock, DENTRY_D_LOCK_NESTED);
-> +               if (watched)
-> +                       child->d_flags |= DCACHE_FSNOTIFY_PARENT_WATCHED;
-> +               else
-> +                       child->d_flags &= ~DCACHE_FSNOTIFY_PARENT_WATCHED;
-> +               spin_unlock(&child->d_lock);
->         }
-> -       spin_unlock(&inode->i_lock);
-> +       spin_unlock(&alias->d_lock);
-> +       dput(alias);
->  }
->
->  /*
-> --
-> 2.34.1
->
+thanks,
+
+greg k-h
