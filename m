@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F8F62669B
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 04:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC8662669C
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 04:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234562AbiKLDXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 22:23:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
+        id S234518AbiKLDXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 22:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234637AbiKLDXU (ORCPT
+        with ESMTP id S234660AbiKLDX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 22:23:20 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4C3748CD;
-        Fri, 11 Nov 2022 19:23:06 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 78so5781157pgb.13;
-        Fri, 11 Nov 2022 19:23:06 -0800 (PST)
+        Fri, 11 Nov 2022 22:23:29 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C15A76FAA;
+        Fri, 11 Nov 2022 19:23:08 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id j12so5688681plj.5;
+        Fri, 11 Nov 2022 19:23:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VTFTOX/kprKoP+hImIdGvwpMnAr8GQwZEs5VpSrhOZY=;
-        b=RugQCGv9Xqv2uGNErew1QtbUd7y3ngz5R+GUbaiYIxZW+RYvuEGSw3Kk6fAiUxZJZe
-         yCiP0naoiBrkrJm+iFN3MCruAbKF4ngD20W88QHLfLQciob32aQCuKuls5lAHzISjqYL
-         zAS6aXI/UPdzpjgXErhGaw5pf30z/JcrjbsWrmpx3iGDneLxDa87rYkLyfCB/9fMTmX8
-         wFkvuTdaVXSVftpB4ty3ifxJkbqLwALdW9Xo4fgm3+kyE7zuws/pqBZazHKgZde9UmjA
-         6caTpcpBgqTLkHSNXrKv1aJXMrEhjWAaPnjJn2Nmoc2oGiYKkPybfJ6LRLofgDb7HSKk
-         XS+g==
+        bh=cbdcYDsOPafiPSVZSATOaxGNpCzEo4xQfFV4O82eayw=;
+        b=f6lJ8r26ECT6R8yo7oa+mPmSnf0+R4JS32T/9zbBThdOT5XMFIW+6NByrFFmsWgTS1
+         Q6Y0NYtG5bR2FrV8ILv91bYmzP9MTKP/948C8gEuVncwxRMqTa5fZmUzrSYZN7siQ04v
+         qI176pCpR2V5bVy5HEUXDBtBujLLF/jKHMnS7Uj6u/Cpx/GsNiF4ar5ls2fS88D0gK63
+         7ihLLuh0jOZaT0BF17sqY8w1YQuM01a3STrMQN8KBvO9WshWdxvbQQYOYJmeH7FT2b7d
+         ZxB1ZoNDWfhced6wuJbm7ip71wKogU354ovn7EMzA+qe1PkdDkx1G9l8a8P9WGs0B3Ll
+         OXYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=VTFTOX/kprKoP+hImIdGvwpMnAr8GQwZEs5VpSrhOZY=;
-        b=dz/FZLyQVpL7puluQrgD/1gipo4Yj/3d+t4mjPkpW85ykcqKcTOSh/DK+yXtRjDKFy
-         zIXzxKuWyes5elCz6N9NPa3vSf8P9lEO3eOxjCIGupY1Nw2QQr3i2tQqPlTRfvsKQ/Fd
-         RjAkoo2s7pR3O43l3P0I+ePG/5sMzDZx/NGEQns59FcWfTOF2mZdh7BiDi1aQ1sl39Op
-         dwybLF7WXI6+jL6MxtijKagy5WdNavQhCM86KOJTx86fI88hlwoXJBH9kvxUr9vSJ/bQ
-         PGPziWha4wHML5VCAZPvG4Oxbk7f1Vc1cgShpXY3mnAKk2aN10vFxk013XxyZyCmEyGY
-         KYzA==
-X-Gm-Message-State: ANoB5pnMOSpZaCbInxN5/5EVBjE0AP5Ro3b70rpYwUptERpCI5mcLWW3
-        nUG/kZzOAQavlaT6n6X3LeA=
-X-Google-Smtp-Source: AA0mqf7MGykr+gff36idH8uHk/rYBzEV+NaBMn/3OfmY/vqd8SjZDTtAgy5RPH+z57E90p0dThubaQ==
-X-Received: by 2002:a63:d057:0:b0:46e:be03:d9b2 with SMTP id s23-20020a63d057000000b0046ebe03d9b2mr3991257pgi.406.1668223385890;
-        Fri, 11 Nov 2022 19:23:05 -0800 (PST)
+        bh=cbdcYDsOPafiPSVZSATOaxGNpCzEo4xQfFV4O82eayw=;
+        b=0qL7SBX97FiTstx1paFl2ZzmdDWKmFBaBEgEQtU5acARmsDWpvD5HO7d0uM31y31yq
+         zS0T5+Umunxun/SbxSd2xSPhAl658qkVsm43zSY6inUYuttxjq5NHooNl8G/J14/a04p
+         /MslJ7OYTmnnlXfIDwPL7WZ3QUxHIB2wJEk3jz2IWasOOS4m6fffUDg4kwmgh52mudBj
+         r3xLBpNwvAmG/0lVic4QzD3LevMj6m68AOum0myC/VsZGVFjvRvQdeSl9E3UU6/ZTAYb
+         N0t+2vLJ/TXdlU8QeSp7VmaVHXlcJHZL0RZHpGytmgHSaJfZxs6QDBqnLtxL+ecOfcst
+         KfGA==
+X-Gm-Message-State: ANoB5pnzHkDqDi9SXFHc/Jz57R8VFAJdRdfCOVDD6SEtWyei/PKQHQIZ
+        xJssqW9htS5E+2dZ7i8UzZg=
+X-Google-Smtp-Source: AA0mqf61+i7dWsxeI0VjYMJSQm11smPrJi5IfQVjytbzw/XE/DkW8u3/CXChBl5Y3AioXJ10E0uPUw==
+X-Received: by 2002:a17:903:c3:b0:186:8431:ece3 with SMTP id x3-20020a17090300c300b001868431ece3mr5486622plc.8.1668223387781;
+        Fri, 11 Nov 2022 19:23:07 -0800 (PST)
 Received: from balhae.roam.corp.google.com ([2607:fb90:27dc:8408:33d7:3b01:eee1:84b])
-        by smtp.gmail.com with ESMTPSA id ij25-20020a170902ab5900b00186f0f59d1esm2434552plb.192.2022.11.11.19.23.04
+        by smtp.gmail.com with ESMTPSA id ij25-20020a170902ab5900b00186f0f59d1esm2434552plb.192.2022.11.11.19.23.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 19:23:05 -0800 (PST)
+        Fri, 11 Nov 2022 19:23:07 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -63,9 +63,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Kan Liang <kan.liang@linux.intel.com>,
         Zhengjun Xing <zhengjun.xing@linux.intel.com>,
         James Clark <james.clark@arm.com>
-Subject: [PATCH 10/11] perf stat: Fix summary output in CSV with --metric-only
-Date:   Fri, 11 Nov 2022 19:22:43 -0800
-Message-Id: <20221112032244.1077370-11-namhyung@kernel.org>
+Subject: [PATCH 11/11] perf stat: Add missing separator in the CSV header
+Date:   Fri, 11 Nov 2022 19:22:44 -0800
+Message-Id: <20221112032244.1077370-12-namhyung@kernel.org>
 X-Mailer: git-send-email 2.38.1.493.g58b659f92b-goog
 In-Reply-To: <20221112032244.1077370-1-namhyung@kernel.org>
 References: <20221112032244.1077370-1-namhyung@kernel.org>
@@ -81,54 +81,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It should not print "summary" for each event when --metric-only is set.
+It should have a comma after 'cpus' for socket and die aggregation mode.
+The output of the following command shows the issue.
+
+  $ sudo perf stat -a --per-socket -x, --metric-only -I1 true
 
 Before:
-  $ sudo perf stat -a --per-socket --summary -x, --metric-only true
+                  +--- here
+                  V
    time,socket,cpusGhz,insn per cycle,branch-misses of all branches,
-       0.000709079,S0,8,0.893,2.40,0.45,
-  S0,8,         summary,         summary,         summary,         summary,         summary,0.893,         summary,2.40,         summary,         summary,0.45,
+       0.000908461,S0,8,0.950,1.65,1.21,
 
 After:
-  $ sudo perf stat -a --per-socket --summary -x, --metric-only true
-   time,socket,cpusGHz,insn per cycle,branch-misses of all branches,
-       0.000882297,S0,8,0.598,1.64,0.64,
-           summary,S0,8,0.598,1.64,0.64,
+   time,socket,cpus,GHz,insn per cycle,branch-misses of all branches,
+       0.000683094,S0,8,0.593,2.00,0.60,
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/util/stat-display.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ tools/perf/util/stat-display.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index ce81798b5864..96bb7a42fd41 100644
+index 96bb7a42fd41..a316807255cd 100644
 --- a/tools/perf/util/stat-display.c
 +++ b/tools/perf/util/stat-display.c
-@@ -549,7 +549,7 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
- 	}
+@@ -828,8 +828,8 @@ static int aggr_header_lens[] = {
  
- 	if (!config->no_csv_summary && config->csv_output &&
--	    config->summary && !config->interval) {
-+	    config->summary && !config->interval && !config->metric_only) {
- 		fprintf(config->output, "%16s%s", "summary", config->csv_sep);
- 	}
- 
-@@ -732,8 +732,13 @@ static void print_aggr(struct perf_stat_config *config,
- 	 * Without each counter has its own line.
- 	 */
- 	for (s = 0; s < config->aggr_map->nr; s++) {
--		if (prefix && metric_only)
--			fprintf(output, "%s", prefix);
-+		if (metric_only) {
-+			if (prefix)
-+				fprintf(output, "%s", prefix);
-+			else if (config->summary && !config->no_csv_summary &&
-+				 config->csv_output && !config->interval)
-+				fprintf(output, "%16s%s", "summary", config->csv_sep);
-+		}
- 
- 		first = true;
- 		evlist__for_each_entry(evlist, counter) {
+ static const char *aggr_header_csv[] = {
+ 	[AGGR_CORE] 	= 	"core,cpus,",
+-	[AGGR_DIE] 	= 	"die,cpus",
+-	[AGGR_SOCKET] 	= 	"socket,cpus",
++	[AGGR_DIE] 	= 	"die,cpus,",
++	[AGGR_SOCKET] 	= 	"socket,cpus,",
+ 	[AGGR_NONE] 	= 	"cpu,",
+ 	[AGGR_THREAD] 	= 	"comm-pid,",
+ 	[AGGR_NODE] 	= 	"node,",
 -- 
 2.38.1.493.g58b659f92b-goog
 
