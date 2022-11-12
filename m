@@ -2,187 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F9CA626B0E
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 19:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2EE626B10
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 19:35:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235055AbiKLSeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 13:34:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
+        id S231404AbiKLSfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 13:35:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbiKLSeN (ORCPT
+        with ESMTP id S231459AbiKLSfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 13:34:13 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C92314D1D;
-        Sat, 12 Nov 2022 10:34:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668278052; x=1699814052;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=RtJQ4ZDK6GDUZoELso8j5ykg/LIA/l6B8iZnihbcmL0=;
-  b=kPKfn6AFd5mW2KfP8a4voppHu1MhPXZ0b890gtkMTOZCtflrAG4dffHh
-   wy0fp5qmwU0vHF8+qRgUEqZZslunCOqaAndEMc2K3FAnBsQcVYVi7k7V8
-   YGtkSMxyA3bEzE3Qh7siEThwqkPzVK/j7MJ04ME1D4RhYYRwnin37rGFz
-   N6C6i9ivZQlAxCy3z0C1AIZmkdx6GtBe1bSOkxwEPLTwz2EJZvBrtw7su
-   ooXjZoMtOhYhY9jPSeVS13m/mhro0u9TWEOuBUfMES+LPgq4lXkgcmSeb
-   hB5ZyoMjL4KJLTNtdJCXU5hjbQOu3oZyefAEy9h1l2eY/DlG3uJ8X+jaR
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="310460519"
-X-IronPort-AV: E=Sophos;i="5.96,160,1665471600"; 
-   d="scan'208";a="310460519"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2022 10:34:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="632309843"
-X-IronPort-AV: E=Sophos;i="5.96,160,1665471600"; 
-   d="scan'208";a="632309843"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga007.jf.intel.com with ESMTP; 12 Nov 2022 10:34:11 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 12 Nov 2022 10:34:11 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Sat, 12 Nov 2022 10:34:11 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Sat, 12 Nov 2022 10:34:10 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NzEmNjX5zbgQrwRofL6/a2SEoE/SG59SzLeNEnnKgwhX2jCbbK4az3yjJiA3azy2V0Je7O1dh+9yBSiGYKD0wdF4gAWDj0WRazsWrR2bpeHuR9VyDxklzCadHm94fyWte4JE3/nmtEXo2/MBr3bFqNdiNfdraJrPHpYD/Zhcur8vDrxiPFr9g7xEmpTO9kpG48MadWPvVcfBvW/C3udIRZKBxPbVD2rjlVg1P55HOqm7S+PioOikQPzNTzbYLRQEvxrzdiISQrcdewH24us+GB5lgyvhckTkrIu+yTU89ZSCzW+24t5UvLF45W+UOEgiM3TYeNmOgRgiSUGiyWjl9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RtJQ4ZDK6GDUZoELso8j5ykg/LIA/l6B8iZnihbcmL0=;
- b=UdGlBskC0HIs4LFBoaCChereBt+efDkQtuWvHFvmoY8A7xr1zv8UmbNYLVWQBKs6nGjRlyZduXD0xdwH+uzVOPEFkcu0FEvWwndNoJSprD9XWpBU/8U6nc3yRRZwldHkNPS3dB2odRfV7v+jR/LgpU6MkLIAWSJ/ITEtIHj05Muj8HvOAQS4B4gG+SuOixbof5fsA7NrFXnO5UuXYG+YLGgEphzMhowvTZuWU2W7lfl65mPr4tj6jGPYbQ3aKCMBjQ9I9bzAGtgxhkMYeur34YwBTYV+H3P/CrYEN+iV28Rf84+hv4egL7pwgUrw9iG0Qr6bs7god4XbcFCkjgHQVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by BL1PR11MB5320.namprd11.prod.outlook.com (2603:10b6:208:316::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.16; Sat, 12 Nov
- 2022 18:34:00 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::4eea:7bf0:e6b0:5014]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::4eea:7bf0:e6b0:5014%4]) with mapi id 15.20.5813.012; Sat, 12 Nov 2022
- 18:33:59 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Macieira, Thiago" <thiago.macieira@intel.com>,
-        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
-        "Mehta, Sohil" <sohil.mehta@intel.com>
-Subject: Re: [PATCH v2 12/14] platform/x86/intel/ifs: Add current_batch sysfs
- entry
-Thread-Topic: [PATCH v2 12/14] platform/x86/intel/ifs: Add current_batch sysfs
- entry
-Thread-Index: AQHY8vv3UouK3GalXk6mzwRA6fUNf647gQ8AgAAjoWc=
-Date:   Sat, 12 Nov 2022 18:33:58 +0000
-Message-ID: <CC3629D6-B205-4150-80E5-FC7A7A76DD25@intel.com>
-References: <20221021203413.1220137-1-jithu.joseph@intel.com>
- <20221107225323.2733518-1-jithu.joseph@intel.com>
- <20221107225323.2733518-13-jithu.joseph@intel.com> <Y2/JNAmSoYlLKq3A@zn.tnic>
-In-Reply-To: <Y2/JNAmSoYlLKq3A@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|BL1PR11MB5320:EE_
-x-ms-office365-filtering-correlation-id: 47d1da29-3e31-4509-ffe0-08dac4dc76a2
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JapcXgRZY2Nwa6txcUqBuJ73uEHRfbFdmQdpkf+Bo1D7kVm9UderNPno7HF/gFy8zE0A0VV+Iwc5uhruYCoDUvvLehb0YHqFtIH08IgT9QdNAB5d0q9hdD8ynae3zMbi2qhZwnmP8Yc4dFJ753wwtJyvlsRxFig0SZzd+cikgcsC88riU64bT2pkB5A1796Gq6H7J9DV/AcOF+JVTryha99MeMGoPyONgCKvmOX6dUTJCuuA5RL7qF2XaU7rZzTj2M7u56yBdA2OadAoauCxszeorLsJw+/GUZoqgI2fOtTmgSZow3GwT/LBs/VXTeLRV7XNxa5cBY69JOups81pEaW+l/nQUu4M7aPC7ppaXBYWD65eU+pAJjf7L5ThzddxEh+WAliVOJVjpbtAv8Hp3xarT9P4jQLuAWYbdzkGMdJZxKb00uFh+Ja9u915KrymCHHOBtNUnVAYpYR0+Nrn5EFdMfTETW4nw1uc53U4JrS3mQwYq4qmed59B0ESJw1owS+MsA5M1+Tf+ZiTK8G6sdl99CGU5kGaOPjRrC5sy8CtrGRSeYoT4WhA54Lh8RBGA9NEjbWkVrK1XJEO4B58ZfptXKO55cp1GooZHm354Ma5+8XTsXELJ8iC1Kp9cRkk8xCazyPHrYABrW/Gv9pKx8yr1OGSMa187E6vEIcUYuh0xdhZO7vo1hyawa+7mIZ2nkyxile1CwagZ2tbZPf01MB7WPNTihJ99Kq8ULEW4tkYORX4IOFBYnGCirA1nZrVvumzFfSvJNdpolP9abbWPbAT0xNH5GCEicgxcZ6MeEM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(346002)(396003)(136003)(39860400002)(451199015)(86362001)(64756008)(38100700002)(122000001)(82960400001)(38070700005)(4744005)(2906002)(7416002)(41300700001)(4326008)(8936002)(5660300002)(66476007)(66446008)(66556008)(26005)(6512007)(71200400001)(6506007)(8676002)(186003)(2616005)(316002)(54906003)(6916009)(66946007)(76116006)(478600001)(6486002)(36756003)(33656002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?emZUKzU5Y1JGeUxrSTl0WmNMWWtmMXdKdGwrOGlqdzlDMGFXck1SRkM5MWZi?=
- =?utf-8?B?Z2RhcEFCV2ZQek1Kd1BpTlhFNmxkUnM2SEJnVWk1N2hVQjY4ZzZsOGtCUis2?=
- =?utf-8?B?cElnVXVyQXFhTzFSQmRybGxyMDBCclVFUEp0Uzg5bWpqYVR1QmtzNnVDOUwz?=
- =?utf-8?B?dHJYcng2bko5UjlZMnRkcDlHejUxL0N4TzZhWllZMGYxZTFHOFoyam02enRo?=
- =?utf-8?B?RkpIT0hjNWlOSXN5Syt4TWRXSVVWeTFFd3R2VFFLS1BrZHlvVHUrWnRRY2hW?=
- =?utf-8?B?ZjI1YlFyUFM1Rk9ySFJEL3kxbkxpeHBNZFVnYmpWRFFvZmZXRHhCcjVCZ1pU?=
- =?utf-8?B?Q3BsN2dJeDEyZWJvVEQ4K3YxOWJTdURydmc1V21hSmlzRkk5djhhVzNRSGU1?=
- =?utf-8?B?VG5rVTJOVUxyZ0hPV0Y1MFpZaFVwQ1VEU1hJUWlsc2oyVHgvbjV4ZzRHVkI5?=
- =?utf-8?B?RkNYYVpESnJQajVJYkJKNU1JbjlKenFIZWVLVkFhT2JPdmdPOHg0T1hSUFR5?=
- =?utf-8?B?VTlXbmFYQTlIeTYvcW5JWHU5eVpFdzhuOVZ5Z2NxRUVMWFdEalhIK3hoNER3?=
- =?utf-8?B?M0hFbXNaUUh4dXdqZmlyTFd1blY4MXpNamdPajNwdm0wUUJxdlNkK2RBcS83?=
- =?utf-8?B?VVlBVUhYWGhGbm5tQjh4T1hSOEVpYlUreXdsRTVTUXpSUi9ndVRERHdDTkJa?=
- =?utf-8?B?Y1NpS0kvNnJ5MGJISW9ROTY2NmJRczF0aWYrMk42d3FVTk1IQUNLSGsyaUVh?=
- =?utf-8?B?V080Y0RVMVlEVmdneHNuTWlFdk44VHZpWTRVTWZRTk5vekNrL1BzVEplOTd0?=
- =?utf-8?B?SFVxNlU0S2FGMS8vek5Ca04yc0QrVlROQTVCMHhrRG9HZVZNS094WDNyek10?=
- =?utf-8?B?R0VFamNOM1BTR3NnRllubkI4djM2U01zSUpmVmsvdWtJTkhjbDJpUEJsUkFq?=
- =?utf-8?B?TXE2M1ZoSXo3WmNpN05YeG1sTlFyUVROeHE3L0txT2Z1ZERwZ1BYNm1xV0FB?=
- =?utf-8?B?U25KRlVtTHpYeU5iUzBOWGVSb0FTcUNmZys3eGVtUm5hb0RZMHFNUWxDV2xn?=
- =?utf-8?B?dCsvd1dXbzAwS1BBQnNjUUlFdVl4VXFocERNVFIydTE1RzE4ZWpSWGZvNTI0?=
- =?utf-8?B?TFhjS2JYSzROVlhaWlFZM0JObHRWQ2ludVF6S0wwNSttSGNtSjFPMlVIVHFs?=
- =?utf-8?B?UWVuZFB1Rm5WbWRYRmYvY25sTjJUazhIc2xtTTROb211SHFZY0tjajBWWXJs?=
- =?utf-8?B?RlpUTFlrTHdTTDJHa3J6Ull1TzJVZno4eFZEcWhMbWdQdkxoRUNVSHdMZ2Zl?=
- =?utf-8?B?Kyt3QkRoNi9samVqY2J4bGFyanZObWF0U0ZMNCtHZWJQeDJad2R1OE9sNUx2?=
- =?utf-8?B?QUVvc1BhT3VTZnkyWFYwQlA0NEVuaWxuQXRjcUM4bjJHdXpTM3Z2UHpNUWN1?=
- =?utf-8?B?c24rQ0szUVJ0WjNYWXNwSFUydzlvZDhpYjhsV1BUMlZJT3N6WXdoQmtQdjJ1?=
- =?utf-8?B?R1hmNmtYdkJoK0J5bVVTVE0vYTFTV3NIbUExb3UreC9YblZYSW5RZlB4TW9y?=
- =?utf-8?B?enNDU3VwdFI1Rm9HaU9CK01sNS9EamVZQWxWYS94ZFUyQWJYeTJGY1FtV0xY?=
- =?utf-8?B?Uk9SNWZvMldGdUxFRnRIcUhOQVEwT25aeHpDN25EdXhCMHl2eERwRFRyR1pD?=
- =?utf-8?B?NFBMbXkvUGw2RFQ1cDQ3UWxKc2pzeGExQmp5cWlMRzNhKzBURmNwWjl2dWg4?=
- =?utf-8?B?aWFJVVBZaGFQcTBmZkZWcGJNT2lXSGZGeEtlMUFmOTZsMFRzNWs3MVFDK2Zm?=
- =?utf-8?B?S0w0dDNnVFNMQkRHVHMxQUEzZUF1YzJDMzdFWDZ2U0lzb1NuUDh2eTQwZWNI?=
- =?utf-8?B?QUNnTnNSMHlDT05WUG0vSitBdDBjZ1dZeFF5MllmRkl2NWQ0Vlk0Vm9kYWNn?=
- =?utf-8?B?azhkcTN6TXp6UWNCdGJhNEZZeSt3UDhSci9uUGkyaGg2ckh3UHpXQnFzWUlU?=
- =?utf-8?B?TWdNNThmOXBwQ1hUcjkvRExFY2k0RVQ1Rk5zd29kWTE4UXhIakVtdU9EdkRp?=
- =?utf-8?B?bkFzZmRHVk9aSlRiaUJWelozcnhKTThSZGNjUUFxTFdUcWNXSWlLbzZmeTNI?=
- =?utf-8?Q?PJUYMxTib7Ce3KBZOYGxYVWWC?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sat, 12 Nov 2022 13:35:18 -0500
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B3314D1D;
+        Sat, 12 Nov 2022 10:35:16 -0800 (PST)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-13b103a3e5dso8643344fac.2;
+        Sat, 12 Nov 2022 10:35:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=d5vdxZQMmvxIfDHl2Grcp/dYFfXeskzhKegPBwxMsEw=;
+        b=WMYyJ01JIiVrA6qoU+cmAwDHQAzjTgPP+e5TNAlNwYPH25EIT+qq2Iq3YJCqa4HR7h
+         P+US4EuKC2Lc6+qoANk5YEraAO8vCV3pLOW/BywFENBTlApvpo3+6tfPAFe4hw9fPd2f
+         JP3ccP3sjqR0MVb9Ki8sGLHghN7OEAja1/Kvm6r3r+xCe83pfB8otrgZLSE2YkmER8O4
+         SfGSpNMC7isjUsZ4xaYNqAGMG3SiH34bXIIHOs4dD59833XVSOP2VZBwgDQ7eDTCHV8M
+         T+cLj7F/KVAkZrzq+RSIsYZWryhSwuZTjZoS5wWxCzm7tXRD+CljIsoQnLN1M5mujcjE
+         v35g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d5vdxZQMmvxIfDHl2Grcp/dYFfXeskzhKegPBwxMsEw=;
+        b=NfTHRv/0hD2sNDU+u3hRHGBxb7J+31ilOjAP7KFnBsoxwjhI0wqYk2fkf3L1LNOfef
+         n2nIYK8F1d13HqaBAMFG8qZAUf8SpDzpcbgB4IOR55Ul8GIXl6GX9bGGLy1SuTlQBFlv
+         UopnE7IYb30BmrALOUYQyRofFwe6bpUfgVE+Tvg0JGYmxnd2Hc702vMvI5NxpAc15Vk5
+         5yFi9fTlUR1Lfn8za3uFxfA91rpCp10F2Yt6aEEJEGn8y66g+7uTXbCN4qmZSIVwykTN
+         n4JFVCHsVK099Fmynvc1XXdTri6mYrQTy4YMPe3cU9spkmtPh8rRHmnjdV7ziXms884Z
+         HHYw==
+X-Gm-Message-State: ANoB5pkyv90fnl8clyW0AIg8q64NQHtqPa474/ifOB64xXcOG8LIvpqz
+        CsGTCCaShpqs9jkL6mMfu1kCnTXwPpeBnZYDN4J/h887H4c=
+X-Google-Smtp-Source: AA0mqf7kihvVpfJP9izkq0AMhaawtXqOsBkR4pGYQuWbsKt9hYS3NZYPeJiSXwblnXAMOMYFSCeQDMndtqzlyWGwVdM=
+X-Received: by 2002:a05:6870:b87:b0:13d:51fe:3404 with SMTP id
+ lg7-20020a0568700b8700b0013d51fe3404mr3682552oab.183.1668278115223; Sat, 12
+ Nov 2022 10:35:15 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47d1da29-3e31-4509-ffe0-08dac4dc76a2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Nov 2022 18:33:58.7964
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PxzdyG1IfaW9/IDcFL3Pm3RYNDYxdyFMjoScHBstFDvHCP0/Q5YO45o+ynGYGLFa4WmD+pKciVR+DfKiv8g8xw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5320
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221111194957.4046771-1-joel@joelfernandes.org>
+ <20221111194957.4046771-2-joel@joelfernandes.org> <899db0f8-7b8a-ed8f-30b8-4f630da1298d@quicinc.com>
+In-Reply-To: <899db0f8-7b8a-ed8f-30b8-4f630da1298d@quicinc.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Sat, 12 Nov 2022 10:35:35 -0800
+Message-ID: <CAF6AEGtEswqCRXkrd+tWKb_1N1UXgQ=EVMTZAgxxpNcD2vYGHQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] adreno: Detect shutdown during get_param()
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Ross Zwisler <zwisler@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        dri-devel@lists.freedesktop.org, Emma Anholt <emma@anholt.net>,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Sean Paul <sean@poorly.run>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+IER1bm5vIC0gc291bmRzIHNpbGx5IHRvIG1lLiBNZWFucyBvbmUgbmVlZHMgdG8gZ28gYW5k
-IGxvb2sgdXAgd2hpY2gNCj4gZmlsZXMgYXJlIHRoZXJlIGFuZCBlY2hvIHRob3NlIGJhdGNoIG51
-bWJlcnMgaW50byBzeXNmcyBhbmQgc28gb24uDQo+IA0KPiBXaGF0IEkgd291bGQgZG8gaXMgbWFr
-ZSBpdCByZWFsIHRyaXZpYWwgZm9yIHRoZSB1c2VyIHNvIHRoYXQgbGF0dGVyIGNhbg0KPiBzaW1w
-bHkgZG86DQo+IA0KPiBmb3IgZiBpbiAkKGxzIC9saWIvZmlybXdhcmUvaW50ZWwvaWZzXzAvKi5z
-Y2FuKTsNCj4gZG8NCj4gICAgZWNobyAkZiA+IC9zeXMvZGV2aWNlcy92aXJ0dWFsL21pc2MvaW50
-ZWxfaWZzXzAvdGVzdF9maWxlDQo+IGRvbmUNCj4gDQo+IGFuZCBzaW1wbHkgc3VwcGx5IHRoZSBm
-dWxsIGZpbGVuYW1lLg0KDQpXZSB0cmllZCB0aGUgZnVsbCBmaWxlIG5hbWUgaW4gYW4gZWFybGll
-ciB2ZXJzaW9uLiBHcmVnS0ggd2FzIHVuaW1wcmVzc2VkLiBCdXQgdGhhdCB3YXMgd2hlbiB3ZSB3
-ZXJlIHRyeWluZyB0byBvdmVybG9hZCB0aGUgbWVhbmluZyBvZiB0aGUg4oCccmVsb2Fk4oCdIGZp
-bGUuDQoNCklzIGl0IGRpZmZlcmVudCBub3c/DQoNCi1Ub255DQoNCg0K
+On Fri, Nov 11, 2022 at 1:28 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>
+> On 11/12/2022 1:19 AM, Joel Fernandes (Google) wrote:
+> > Even though the GPU is shut down, during kexec reboot we can have userspace
+> > still running. This is especially true if KEXEC_JUMP is not enabled, because we
+> > do not freeze userspace in this case.
+> >
+> > To prevent crashes, track that the GPU is shutdown and prevent get_param() from
+> > accessing GPU resources if we find it shutdown.
+> >
+> > This fixes the following crash during kexec reboot on an ARM64 device with adreno GPU:
+> >
+> > [  292.534314] Kernel panic - not syncing: Asynchronous SError Interrupt
+> > [  292.534323] Hardware name: Google Lazor (rev3 - 8) with LTE (DT)
+> > [  292.534326] Call trace:
+> > [  292.534328]  dump_backtrace+0x0/0x1d4
+> > [  292.534337]  show_stack+0x20/0x2c
+> > [  292.534342]  dump_stack_lvl+0x60/0x78
+> > [  292.534347]  dump_stack+0x18/0x38
+> > [  292.534352]  panic+0x148/0x3b0
+> > [  292.534357]  nmi_panic+0x80/0x94
+> > [  292.534364]  arm64_serror_panic+0x70/0x7c
+> > [  292.534369]  do_serror+0x0/0x7c
+> > [  292.534372]  do_serror+0x54/0x7c
+> > [  292.534377]  el1h_64_error_handler+0x34/0x4c
+> > [  292.534381]  el1h_64_error+0x7c/0x80
+> > [  292.534386]  el1_interrupt+0x20/0x58
+> > [  292.534389]  el1h_64_irq_handler+0x18/0x24
+> > [  292.534395]  el1h_64_irq+0x7c/0x80
+> > [  292.534399]  local_daif_inherit+0x10/0x18
+> > [  292.534405]  el1h_64_sync_handler+0x48/0xb4
+> > [  292.534410]  el1h_64_sync+0x7c/0x80
+> > [  292.534414]  a6xx_gmu_set_oob+0xbc/0x1fc
+> > [  292.534422]  a6xx_get_timestamp+0x40/0xb4
+> > [  292.534426]  adreno_get_param+0x12c/0x1e0
+> > [  292.534433]  msm_ioctl_get_param+0x64/0x70
+> > [  292.534440]  drm_ioctl_kernel+0xe8/0x158
+> > [  292.534448]  drm_ioctl+0x208/0x320
+> > [  292.534453]  __arm64_sys_ioctl+0x98/0xd0
+> > [  292.534461]  invoke_syscall+0x4c/0x118
+> > [  292.534467]  el0_svc_common+0x98/0x104
+> > [  292.534473]  do_el0_svc+0x30/0x80
+> > [  292.534478]  el0_svc+0x20/0x50
+> > [  292.534481]  el0t_64_sync_handler+0x78/0x108
+> > [  292.534485]  el0t_64_sync+0x1a4/0x1a8
+> > [  292.534632] Kernel Offset: 0x1a5f800000 from 0xffffffc008000000
+> > [  292.534635] PHYS_OFFSET: 0x80000000
+> > [  292.534638] CPU features: 0x40018541,a3300e42
+> > [  292.534644] Memory Limit: none
+> >
+> > Cc: Rob Clark <robdclark@chromium.org>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Cc: Ricardo Ribalda <ribalda@chromium.org>
+> > Cc: Ross Zwisler <zwisler@kernel.org>
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > ---
+> >   drivers/gpu/drm/msm/adreno/adreno_device.c | 1 +
+> >   drivers/gpu/drm/msm/adreno/adreno_gpu.c    | 2 +-
+> >   drivers/gpu/drm/msm/msm_gpu.h              | 3 +++
+> >   3 files changed, 5 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+> > index f0cff62812c3..03d912dc0130 100644
+> > --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
+> > +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+> > @@ -612,6 +612,7 @@ static void adreno_shutdown(struct platform_device *pdev)
+> >   {
+> >       struct msm_gpu *gpu = dev_to_gpu(&pdev->dev);
+> >
+> > +     gpu->is_shutdown = true;
+> >       WARN_ON_ONCE(adreno_system_suspend(&pdev->dev));
+> >   }
+> >
+> > diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> > index 382fb7f9e497..6903c6892469 100644
+> > --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> > +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> > @@ -251,7 +251,7 @@ int adreno_get_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
+> >       struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+> >
+> >       /* No pointer params yet */
+> > -     if (*len != 0)
+> > +     if (*len != 0 || gpu->is_shutdown)
+> >               return -EINVAL;
+> This will race with shutdown. Probably, propagating back the return
+> value of pm_runtime_get() in every possible ioctl call path is the right
+> thing to do.
+>
+> I have never thought about this scenario. Do you know why userspace is
+> not freezed before kexec?
+
+So userspace not being frozen seems like the root issue, and is likely
+to cause all sorts of other whack-a-mole problems.  I guess I'd like
+to know if this is the expected behavior?
+
+If so, we should probably look at
+drm_dev_is_unplugged()/drm_dev_unplug()/etc rather than trying to NIH
+that mechanism.  We would need to sprinkle drm_dev_is_unplugged()
+checks more widely, and also ensure that the scheduler kthread(s) gets
+parked.  But it would be nice to know first if we are just trying to
+paper over a kexec bug.
+
+BR,
+-R
+
+>
+> -Akhil.
+> >
+> >       switch (param) {
+> > diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
+> > index ff911e7305ce..f18b0a91442b 100644
+> > --- a/drivers/gpu/drm/msm/msm_gpu.h
+> > +++ b/drivers/gpu/drm/msm/msm_gpu.h
+> > @@ -214,6 +214,9 @@ struct msm_gpu {
+> >       /* does gpu need hw_init? */
+> >       bool needs_hw_init;
+> >
+> > +     /* is the GPU shutdown? */
+> > +     bool is_shutdown;
+> > +
+> >       /**
+> >        * global_faults: number of GPU hangs not attributed to a particular
+> >        * address space
+>
