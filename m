@@ -2,69 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 316A462668C
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 04:12:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CAE62668D
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 04:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233739AbiKLDMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 22:12:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
+        id S233972AbiKLDNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 22:13:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiKLDMI (ORCPT
+        with ESMTP id S229991AbiKLDNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 22:12:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399C863BB0;
-        Fri, 11 Nov 2022 19:12:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C64D61D21;
-        Sat, 12 Nov 2022 03:12:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B6EC433C1;
-        Sat, 12 Nov 2022 03:12:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668222723;
-        bh=MxwW5U7TdQxJ1Sydv6lxRBV2aA6sfnJ2ctEXlcKGnc0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i9HtqE1xepwA4LnmB3EVAibEyFJL75n2Id6SUoDVRP8+pzWZiQUestCBjsi6iT01l
-         +UDwk+M4/yDJhGLLCS+XPHhwwMX25lx6Ng4EWtW9WR2CLxVf0ooJrjxPM0D7EyyP9b
-         6r9gDVM6i99PzW9jopj9Mgvg7mKNdrxrl6wo6mhDCZZehbSl+dcZlGEUTOHe3+AnJ8
-         ctRWtDpnSO8e8QFw0CSoUvmQbbSWVNDpkVY5GFk4Vzyy/IVXL0EBLX4r1ZnwVFlY17
-         HcNU8lKRdSoMHRVasSamnakdQrbIIXV3HzpASUQd/jl7bp21AhpsgxdR5NrFEu6tTu
-         ihDSNoPSGKgCQ==
-Date:   Fri, 11 Nov 2022 21:11:59 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Drop type from 'cpus' property
-Message-ID: <20221112031159.cptoshbcfjdk7rs5@builder.lan>
-References: <20221111212857.4104308-1-robh@kernel.org>
+        Fri, 11 Nov 2022 22:13:00 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438E96A6AA;
+        Fri, 11 Nov 2022 19:12:56 -0800 (PST)
+Received: from kwepemi500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N8LGY1VrZzHvp6;
+        Sat, 12 Nov 2022 11:12:21 +0800 (CST)
+Received: from [10.136.108.160] (10.136.108.160) by
+ kwepemi500002.china.huawei.com (7.221.188.171) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 12 Nov 2022 11:12:47 +0800
+Subject: [PATCH v2] USB: gadget: Fix use-after-free during usb config switch
+References: <20221112030433.4945-1-xuetao09@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
+        <jakobkoschel@gmail.com>, <geert+renesas@glider.be>,
+        =?UTF-8?B?5byg5bu65rab?= <water.zhangjiantao@huawei.com>,
+        <colin.i.king@gmail.com>,
+        =?UTF-8?B?6Jab5rab?= <xuetao09@huawei.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     =?UTF-8?B?6JSh5Lqa5Lic?= <caiyadong@huawei.com>,
+        =?UTF-8?B?5b6Q5rW35rSL?= <xuhaiyang5@hisilicon.com>,
+        <suzhuangluan@hisilicon.com>
+From:   jiantao zhang <water.zhangjiantao@huawei.com>
+X-Forwarded-Message-Id: <20221112030433.4945-1-xuetao09@huawei.com>
+Message-ID: <27f1534f-a985-06e9-b94f-ba60167e74d2@huawei.com>
+Date:   Sat, 12 Nov 2022 11:12:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111212857.4104308-1-robh@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20221112030433.4945-1-xuetao09@huawei.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.136.108.160]
+X-ClientProxiedBy: dggpeml100024.china.huawei.com (7.185.36.115) To
+ kwepemi500002.china.huawei.com (7.221.188.171)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,79 +56,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 03:28:56PM -0600, Rob Herring wrote:
-> 'cpus' is a common property, and it is now defined in dtschema schemas,
-> so drop the type references in the tree.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+In the process of switching USB config from rndis to other config,
+if the hardware does not support the ->pullup callback, or the
+hardware encounters a low probability fault, both of them may cause
+the ->pullup callback to fail, which will then cause a system panic
+(use after free).
 
-Acked-by: Bjorn Andersson <andersson@kernel.org>
+The gadget drivers sometimes need to be unloaded regardless of the
+hardware's behavior.
 
-> ---
->  .../devicetree/bindings/interrupt-controller/apple,aic.yaml | 1 -
->  Documentation/devicetree/bindings/perf/arm,dsu-pmu.yaml     | 3 ---
->  Documentation/devicetree/bindings/power/renesas,apmu.yaml   | 6 ++----
->  Documentation/devicetree/bindings/thermal/qcom-lmh.yaml     | 2 +-
->  4 files changed, 3 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml b/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
-> index e18107eafe7c..698588e9aa86 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
-> @@ -90,7 +90,6 @@ properties:
->              maximum: 5
->  
->            cpus:
-> -            $ref: /schemas/types.yaml#/definitions/phandle-array
->              description:
->                Should be a list of phandles to CPU nodes (as described in
->                Documentation/devicetree/bindings/arm/cpus.yaml).
-> diff --git a/Documentation/devicetree/bindings/perf/arm,dsu-pmu.yaml b/Documentation/devicetree/bindings/perf/arm,dsu-pmu.yaml
-> index c87821be158b..a740378ed592 100644
-> --- a/Documentation/devicetree/bindings/perf/arm,dsu-pmu.yaml
-> +++ b/Documentation/devicetree/bindings/perf/arm,dsu-pmu.yaml
-> @@ -32,11 +32,8 @@ properties:
->        - description: nCLUSTERPMUIRQ interrupt
->  
->    cpus:
-> -    $ref: /schemas/types.yaml#/definitions/phandle-array
->      minItems: 1
->      maxItems: 12
-> -    items:
-> -      maxItems: 1
->      description: List of phandles for the CPUs connected to this DSU instance.
->  
->  required:
-> diff --git a/Documentation/devicetree/bindings/power/renesas,apmu.yaml b/Documentation/devicetree/bindings/power/renesas,apmu.yaml
-> index f2cc89e7f4e4..2b4d802ef4b2 100644
-> --- a/Documentation/devicetree/bindings/power/renesas,apmu.yaml
-> +++ b/Documentation/devicetree/bindings/power/renesas,apmu.yaml
-> @@ -34,10 +34,8 @@ properties:
->      maxItems: 1
->  
->    cpus:
-> -    $ref: /schemas/types.yaml#/definitions/phandle-array
-> -    items:
-> -      minItems: 1
-> -      maxItems: 4
-> +    minItems: 1
-> +    maxItems: 4
->      description: |
->        Array of phandles pointing to CPU cores, which should match the order of
->        CPU cores used by the WUPCR and PSTR registers in the Advanced Power
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-> index e1587ddf7de3..92762efc2120 100644
-> --- a/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-> @@ -37,7 +37,7 @@ properties:
->    cpus:
->      description:
->        phandle of the first cpu in the LMh cluster
-> -    $ref: /schemas/types.yaml#/definitions/phandle
-> +    maxItems: 1
->  
->    qcom,lmh-temp-arm-millicelsius:
->      description:
-> -- 
-> 2.35.1
-> 
+Analysis as follows:
+=======================================================================
+(1) write /config/usb_gadget/g1/UDC "none" (init.usb.configfs.rc:2)
+
+gether_disconnect+0x2c/0x1f8 (dev->port_usb = NULL)
+rndis_disable+0x4c/0x74
+composite_disconnect+0x74/0xb0
+configfs_composite_disconnect+0x60/0x7c
+usb_gadget_disconnect+0x70/0x124
+usb_gadget_unregister_driver+0xc8/0x1d8
+gadget_dev_desc_UDC_store+0xec/0x1e4
+
+In function usb_gadget_disconnect(),The ->disconnect() callback will
+not be called when gadget->ops->pullup() return an error, therefore,
+pointer dev->port will not be set to NULL. If pointer dev->port_usb
+is not null, it will cause an exception of use-after-free in step3.
+
+(2) rm /config/usb_gadget/g1/configs/b.1/f1 (init.usb.configfs.rc:8)
+(f1 -> ../../../../usb_gadget/g1/functions/rndis.gs4)
+
+rndis_deregister+0x28/0x54 (kfree(params))
+rndis_free+0x44/0x7c (kfree(rndis))
+usb_put_function+0x14/0x1c
+config_usb_cfg_unlink+0xc4/0xe0
+configfs_unlink+0x124/0x1c8
+vfs_unlink+0x114/0x1dc
+
+(3) rmdir /config/usb_gadget/g1/functions/rndis.gs4
+(init.usb.configfs.rc:11)
+
+Call trace:
+panic+0x1fc/0x3d0
+die+0x29c/0x2a8
+do_page_fault+0xa8/0x46c
+do_mem_abort+0x3c/0xac
+el1_sync_handler+0x40/0x78
+0xffffff801138f880 (params->resp_avail is an illegal func pointer)
+rndis_close+0x28/0x34 (->rndis_indicate_status_msg->params->resp_avail)
+eth_stop+0x74/0x110 (if dev->port_usb != NULL, call rndis_close)
+__dev_close_many+0x134/0x194
+dev_close_many+0x48/0x194
+rollback_registered_many+0x118/0x814
+unregister_netdevice_queue+0xe0/0x168
+unregister_netdev+0x20/0x30
+gether_cleanup+0x1c/0x38
+rndis_free_inst+0x2c/0x58
+rndis_attr_release+0xc/0x14
+kref_put+0x74/0xb8
+config_item_put+0x14/0x1c
+configfs_rmdir+0x314/0x374
+
+In step3,function pointer params->resp_avail() is a wild pointer
+becase pointer params has been freed in step2.
+
+Free mem stack(in step2):
+usb_put_function -> rndis_free -> rndis_deregister -> kfree(params)
+
+use-after-free stack(in step3):
+eth_stop -> rndis_close -> rndis_signal_disconnect ->
+rndis_indicate_status_msg -> params->resp_avail()
+
+In function eth_stop(), if pointer dev->port_usb is NULL, function
+rndis_close() will not be called.
+If gadget->ops->pullup() return an error in step1,dev->port_usb will
+not be set to null. So, a panic will be caused in step3.
+=======================================================================
+
+Fixes:<0a55187a1ec8c> (USB: gadget core: Issue ->disconnect()
+callback from usb_gadget_disconnect())
+Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
+Signed-off-by: TaoXue <xuetao09@huawei.com>
+---
+V1 -> V2: V1 will affect the original function, V2 just move the
+callback after "if" statement, so that the original function will not be 
+affected.
+And fixed formatting issues.
+
+drivers/usb/gadget/udc/core.c | 12 ++++++------
+1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index c63c0c2cf649..bf9878e1a72a 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -734,13 +734,13 @@ int usb_gadget_disconnect(struct usb_gadget *gadget)
+}
+ret = gadget->ops->pullup(gadget, 0);
+- if (!ret) {
++ if (!ret)
+gadget->connected = 0;
+- mutex_lock(&udc_lock);
+- if (gadget->udc->driver)
+- gadget->udc->driver->disconnect(gadget);
+- mutex_unlock(&udc_lock);
+- }
++
++ mutex_lock(&udc_lock);
++ if (gadget->udc->driver)
++ gadget->udc->driver->disconnect(gadget);
++ mutex_unlock(&udc_lock);
+out:
+trace_usb_gadget_disconnect(gadget, ret);
+
+-- 
+2.17.1
+
+.
+
