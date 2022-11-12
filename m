@@ -2,92 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A11A0626C14
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 22:52:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FCE626C18
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 22:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235021AbiKLVwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 16:52:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35332 "EHLO
+        id S235167AbiKLVyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 16:54:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiKLVwF (ORCPT
+        with ESMTP id S234946AbiKLVyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 16:52:05 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D357E03F;
-        Sat, 12 Nov 2022 13:52:05 -0800 (PST)
-Received: from pendragon.ideasonboard.com (d5152d7bc.static.telenet.be [81.82.215.188])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7D1188B;
-        Sat, 12 Nov 2022 22:52:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1668289923;
-        bh=z4by1LPPrBEvm+MnM3qkDhLKqex0JxEX/cFb063yd8Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OgEc2gwHV0e/dellfXFV6tbCzLsjJA+poCAcalC8Ys4Eex9g0/GUZmyiA1sbyqEqQ
-         L1ynVNuWlL5nXqiVitJi57aIsXAqpXbGFwkoZS1u//gD4TYBOW65hybPDS65C1W5hR
-         irT7+o6z1sK8wo7J6u5XgpedBfDMu9fG3F0Xs14I=
-Date:   Sat, 12 Nov 2022 23:51:45 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Rui Miguel Silva <rmfrfs@gmail.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] media: staging: media: imx: imx7-media-csi: Remove a
- useless include
-Message-ID: <Y3AVcTmPf9qmdS5N@pendragon.ideasonboard.com>
-References: <e60dea85ea3d91b6d8ccdfc061e1dd39dd52c17f.1668288266.git.christophe.jaillet@wanadoo.fr>
+        Sat, 12 Nov 2022 16:54:19 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5463C1FE;
+        Sat, 12 Nov 2022 13:54:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=e69G3zk0gUdq0LcFy0TDryQ6kdaJ3PoKF9Rf2f2etP0=; b=qXouuoBOybLJuRlLwC/26K4W+j
+        168l31Eg/PBKzgScJxE8deJ0PfWGEeNURIB3efMQfH+4/uOFuacUr+ectWhoMTpooMsL+6Yz/vP+B
+        +oWQ9x3hOjDwBPHvZuvy+cQOENfrMoCpxYzeT0O8xTi4XKdVK+szjQTWlUlV6Q9zLj2WvGFeuKoq5
+        DVdn1zNHfn62Dkj7AukFgTW/tAKwPzGeMIO6fG8c2OMLBM0fQZtM61Bd6kCMUvPGh55GtvgkXzQxJ
+        xqiQFo49g4eovaqaBxGE+PXYlGdJi9moRQZEveVv5LUdWld3Um2dnmsi6p+Ej9mTLZtmfIBX0i1mo
+        FFVuFKOQ==;
+Received: from [179.232.147.2] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1otyRy-00HHuA-IA; Sat, 12 Nov 2022 22:54:06 +0100
+Message-ID: <44bce9f3-365b-9592-83a9-8608b0cba20b@igalia.com>
+Date:   Sat, 12 Nov 2022 18:53:57 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e60dea85ea3d91b6d8ccdfc061e1dd39dd52c17f.1668288266.git.christophe.jaillet@wanadoo.fr>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V3 10/11] drivers/hv/vmbus, video/hyperv_fb: Untangle and
+ refactor Hyper-V panic notifiers
+Content-Language: en-US
+To:     Wei Liu <wei.liu@kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "bhe@redhat.com" <bhe@redhat.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>
+References: <20220819221731.480795-1-gpiccoli@igalia.com>
+ <20220819221731.480795-11-gpiccoli@igalia.com>
+ <BYAPR21MB16880251FC59B60542D2D996D75A9@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <ae0a1017-7ec6-9615-7154-ea34c7bd2248@igalia.com>
+ <SN6PR2101MB1693BC627B22432BA42EEBC2D7299@SN6PR2101MB1693.namprd21.prod.outlook.com>
+ <efdaf27e-753e-e84f-dd7d-965101563679@igalia.com>
+ <Y27Q9SSM6WkGFwf5@liuwe-devbox-debian-v2>
+ <Y27XsybzcgCQ3fzD@liuwe-devbox-debian-v2>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <Y27XsybzcgCQ3fzD@liuwe-devbox-debian-v2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
-
-Thank you for the patch.
-
-On Sat, Nov 12, 2022 at 10:24:34PM +0100, Christophe JAILLET wrote:
-> <linux/gcd.h> is not needed for this driver. Remove the corresponding
-> #include.
+On 11/11/2022 20:16, Wei Liu wrote:
+> On Fri, Nov 11, 2022 at 10:47:17PM +0000, Wei Liu wrote:
+>> On Thu, Nov 10, 2022 at 06:32:54PM -0300, Guilherme G. Piccoli wrote:
+>>> [Trimming long CC list]
+>>>
+>>> Hi Wei / Michael, just out of curiosity, did this (and patch 9) ended-up
+>>> being queued in hyperv-next?
+>>>
+>>
+>> No. They are not queued.
+>>
+>> I didn't notice Michael's email and thought they would be picked up by
+>> someone else while dealing with the whole series.
+>>
+>> I will pick them up later.
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> They are now queued to hyperv-next. Thanks.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
->  drivers/staging/media/imx/imx7-media-csi.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-> index e5b550ccfa22..cb7d8381f6f2 100644
-> --- a/drivers/staging/media/imx/imx7-media-csi.c
-> +++ b/drivers/staging/media/imx/imx7-media-csi.c
-> @@ -8,7 +8,6 @@
->  
->  #include <linux/clk.h>
->  #include <linux/delay.h>
-> -#include <linux/gcd.h>
->  #include <linux/interrupt.h>
->  #include <linux/mfd/syscon.h>
->  #include <linux/module.h>
-
--- 
-Regards,
-
-Laurent Pinchart
+Thanks a lot Wei and Michael, much appreciated =)
