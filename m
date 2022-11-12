@@ -2,154 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E426626890
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 10:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 353E4626898
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 10:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234820AbiKLJla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 04:41:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
+        id S234853AbiKLJmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 04:42:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiKLJl3 (ORCPT
+        with ESMTP id S234629AbiKLJl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 04:41:29 -0500
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8648E1CB12
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 01:41:27 -0800 (PST)
-Date:   Sat, 12 Nov 2022 09:41:16 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=skothe.de;
-        s=protonmail; t=1668246085; x=1668505285;
-        bh=GnKW/1y0vIT38DY810j9vefH6BQw73stCXN3unEcMok=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=XaHynQY4K+X+dNMsKhNsVIfSRNvo6VAW63XxgmZXwnfOEUMjI6sPAC37EntEE8ndl
-         QTHpXWvZSLi8dKRHDS17ONp0lvimYQewdotu89DFGfH1+akbo8lPPpBB371jBk5soL
-         rOqP9u9TReUYCB2JPe+WmKDWR2kexf27a+hrWnPMgQ1yL2rIpQoECzgKCvKzaJi8Ed
-         cb0v/uKl3Vyog4KMK7dHtyCNw4bJeucpNe9BCvOVCCgdWQFAd9MfMktzmgnWZsn7eY
-         gUqEWQizYOnYzr31Ots0vgaT5tET3ijguZKIgBPXLszWB/oFidNYkXvpW/7cnfxbr+
-         LZ9I8+hQ3yQPA==
-To:     Saravana Kannan <saravanak@google.com>
-From:   Steffen Kothe <steffen.kothe@skothe.de>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scripts: dev-needs.sh: Enforce bash usage
-Message-ID: <Y29qN1fFq4SFXCT2@p50>
-In-Reply-To: <CAGETcx9Z2_Oc-L8Y0x+zuPUEgeaDSnFSFUSU+nxcF5Rxtf6FvQ@mail.gmail.com>
-References: <20221109170341.36785-1-steffen.kothe@skothe.de> <CAGETcx9fx3TcgeD+pMyp+LuGfd=hOo5_Weeii2W1Mbd1T2Ua0Q@mail.gmail.com> <Y205W3kavB5tIDK3@p50> <CAGETcx9Z2_Oc-L8Y0x+zuPUEgeaDSnFSFUSU+nxcF5Rxtf6FvQ@mail.gmail.com>
-Feedback-ID: 55345914:user:proton
+        Sat, 12 Nov 2022 04:41:59 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4381CFCC;
+        Sat, 12 Nov 2022 01:41:54 -0800 (PST)
+X-UUID: 0d7666fb06d14e5d84afca70a82b7bb5-20221112
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=UQPfVhMRXZEQgGhN/ELTm0I/Iufk8zrbsK/zXU7Smus=;
+        b=OJeD5TyEYYhOIZ3h0Mk40T4mxU1eHL3BDRi1h7X6+5mt7EmMZz2VsDH9FzZFYPBzFidQxtoTbLvdIWC1RSU4L/Kvb07sCr4fN5CeShzH+7tuC+VoKwM84jp3ng97cDTwlybEblAfwk0eLVlOx7TkDHcBDd4uIiqsi8AeoDm4JhI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.13,REQID:de122c49-63e1-41fb-bc62-4006f6532c55,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:d12e911,CLOUDID:f0471751-b7af-492d-8b40-b1032f90ce11,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 0d7666fb06d14e5d84afca70a82b7bb5-20221112
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 953980852; Sat, 12 Nov 2022 17:41:48 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Sat, 12 Nov 2022 17:41:46 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs13n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Sat, 12 Nov 2022 17:41:45 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH 0/5] media: mediatek: vcodec: Fix decode random crash for PLT test
+Date:   Sat, 12 Nov 2022 17:41:39 +0800
+Message-ID: <20221112094144.4256-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Thu, Nov 10, 2022 at 11:32:12AM -0800 schrieb Saravana Kannan:
-> On Thu, Nov 10, 2022 at 9:48 AM Steffen Kothe <steffen.kothe@skothe.de> w=
-rote:
-> >
-> > Am Wed, Nov 09, 2022 at 02:58:15PM -0800 schrieb Saravana Kannan:
-> > > On Wed, Nov 9, 2022 at 9:04 AM Steffen Kothe <steffen.kothe@skothe.de=
-> wrote:
-> > > >
-> > > > Calling the script from a system which does not invoke bash
-> > > > by default causes a return with a syntax error like:
-> > > >
-> > > >         ./dev-needs.sh: 6: Syntax error: "(" unexpected
-> > > >
-> > > > /bin/sh invokes on most distributions a symbolic link to a
-> > > > default shell like dash (Debian) or bash (Ubuntu).
-> > > >
-> > > > Since the script depends on bash syntax, enforce the same by
-> > > > default to prevent syntax errors caused by wrong shell type usage.
-> > >
-> > > I wrote this so that it can run on an Android target that runs toybox=
-.
-> > > Sadly toybox doesn't like have /bin/bash. This will break my use case=
-.
-> > > So I'll have to Nak this.
-> >
-> > Ok, I see.
-> >
-> > > I'm open to other ideas though as I'd like to this to work in as many
-> > > cases as possible. Should we just add a wrapper that has /bin/bash an=
-d
-> > > then sources this file?
-> >
-> > I mean, we could leave at least a warning on top above the first
-> > function via a simple echo.
-> >
-> > Sth. like:
-> >
-> >         echo "Warning: $0 is only tested for following shell variants
-> >               [toybox, bash]. Other shells might be not following the
-> >               specific syntax of this script."
-> >
-> >         echo "Shell is: $(readlink /bin/sh)"
-> >
-> > I would prevent to add another wrapper to it, because its fairly easy
-> > to cp this file to a target. An embedded system with a pure POSIX compl=
-iant
-> > shell will never be compatible to this kind of syntax.
-> >
-> > What do you think about a more describing approach of the error instead
-> > of handling it with some weird logic and wrapping?
->
-> Are you suggesting we check for the shell being toybox/bash and then
-> printing this? Always printing it isn't nice because it'll mess up all
-> the script that expect the output to be just what it is today.
->
-> But if you want to add an error check, I'm okay with that.
+Decoder may decode timeout or error when PLT test, fix some error
+condition not reasonable.
 
-What about a re-write of the script in POSIX compliant style? This
-should work then in every shell derivate without weird checks.
+patch 1 fix getting dst buffer NULL.
+patch 2 fix inner racing mode fail condition.
+patch 3 fix h264 crash.
+patch 4 fix vp9 crash.
+patch 5 fix core thread empty list.
+---
+Yunfei Dong (5):
+  media: mediatek: vcodec: Fix getting NULL pointer for dst buffer
+  media: mediatek: vcodec: Can't set dst buffer to done when lat decode
+    error
+  media: mediatek: vcodec: Fix h264 set lat buffer error
+  media: mediatek: vcodec: Setting lat buf to lat_list when lat decode
+    error
+  media: mediatek: vcodec: Core thread depends on core_list
 
-This would remove for example function declarations, arrays and so on,
-targeting to the same printable output but with different logic in the
-background.
+ .../vcodec/mtk_vcodec_dec_stateless.c         | 13 +++++++----
+ .../vcodec/vdec/vdec_h264_req_multi_if.c      | 23 ++++++++++++-------
+ .../vcodec/vdec/vdec_vp9_req_lat_if.c         | 15 ++++++++----
+ .../platform/mediatek/vcodec/vdec_msg_queue.c |  2 +-
+ 4 files changed, 34 insertions(+), 19 deletions(-)
 
-> -Saravana
->
-> >
-> > Cheers,
-> >         skothe
-> >
-> > > Also looks like multiple #! lines aren't supported by bash, so we
-> > > can't add multiple lines either.
-> > >
-> > > -Saravana
-> > >
-> > > >
-> > > > Signed-off-by: Steffen Kothe <steffen.kothe@skothe.de>
-> > > > ---
-> > > >  scripts/dev-needs.sh | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/scripts/dev-needs.sh b/scripts/dev-needs.sh
-> > > > index 454cc304fb448..46537859727bc 100755
-> > > > --- a/scripts/dev-needs.sh
-> > > > +++ b/scripts/dev-needs.sh
-> > > > @@ -1,4 +1,4 @@
-> > > > -#! /bin/sh
-> > > > +#! /bin/bash
-> > > >  # SPDX-License-Identifier: GPL-2.0
-> > > >  # Copyright (c) 2020, Google LLC. All rights reserved.
-> > > >  # Author: Saravana Kannan <saravanak@google.com>
-> > > > --
-> > > > 2.30.2
-> > > >
-> > > >
-> >
-> > --
-> > Cheers,
-> >         Steffen
-> >
-
---
-Cheers,
-=09Steffen
+-- 
+2.18.0
 
