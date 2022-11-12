@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E7462675F
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 07:15:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CA7626764
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 07:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233445AbiKLGPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 01:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
+        id S234551AbiKLGRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 01:17:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234518AbiKLGPs (ORCPT
+        with ESMTP id S234058AbiKLGRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 01:15:48 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DFC5B5BE
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 22:15:46 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id c25so6718173ljr.8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 22:15:46 -0800 (PST)
+        Sat, 12 Nov 2022 01:17:34 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3827B5B5BE
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 22:17:32 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id d3so6730346ljl.1
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 22:17:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=V6HHp3kjp2Y5eg27eh7Uy6SYCKJuVG3gDdAuKss9nCY=;
-        b=e7TM8jPBMUFp+fjzQ8p+CrhgMAoc2vMhsqVLbf3TY2L56K74Ynq5gYojbu3qggnc0/
-         K5jlxFhDjn3TSYAQnE7cnibPhbGhagjkWIAoUK7ZaJW+qBAoxWiHjR6o4b+OrfMOvicN
-         0mOPiuYeBmxBvG9Bv7LYrJuHfTPbvMeHKS6w/le4Oi30Gi/LWzdlrurX4SYirFvFXLL2
-         zeALUmb0bC5dy9XCIiMue0dZz38djou+F44Wiv/WvTIt8dLi8/PkoJO1uMCz+juHdWpW
-         ylbw48SJrJg3Xx9eFrr3SDtuP4CerB5nFGTii23Fl//Zx1xonVwYHHu/kXi0w/9Xd7Ty
-         3UrA==
+        bh=pb0xzePKTvk1sIDJI6C17RlkL9caXSOtGAOsYmi0A4U=;
+        b=P1JK8356e8F/P7MiYDq+M8azjFuPmn4c3oEkM6Xlr62VxdYhGebooK27xnGI0Q0/C0
+         aW4huooHMAgUHqwCVzlCfwVycWigqVMIeRGK8f75TnHuNO0iU8O0da6zOpq6VGgaHRLD
+         S0rxsnAMKVVpUkCF/7G+vsF2WHE5eIPjucdfdYFB2YyvHU/iZVFcLEXRjzTchQjiJEKR
+         DK87WNrOjDGaaLFn8rSs8dHRrGQhyET+JVY43/AKG3Gh4+m/lZ8R7ct2v8iWJZhtDU2a
+         VmQi9lnZbwj2FHA/bOX3bIesjZ6F0KBi5RGq315/bEaw3l4xXoRx947UJCRJrEodv/aB
+         I8LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V6HHp3kjp2Y5eg27eh7Uy6SYCKJuVG3gDdAuKss9nCY=;
-        b=SyoWOhaqbKKJfdm3XQvjTcODexgK7Qr9GuDDniuhJ9n9Lz5YR9GOsXZl1sA81HnfBW
-         E5IwUd3zO4OWtETt5rWsc292xybXtcyFbdD8nCGO7z1+aANxqBYI7YfJ4cTQ4kFZ0gl2
-         9GLwe4iSVL380Tnve750Sg/iw4Z9P33iqNgKYmof31u3EP/cSroLTndEFPCg/xytoN+f
-         vH2RlhdACpnC92J/ObGsmu/a9iR38f+RDjPZpTGFnAmDZWjIh8qxjp1D7M3Ab35dp0C2
-         TdiRIhWbaxhCr58It2UuYGGWftnKM0MJrqlYswG3sNEZ2sDeHNMzkoJS6gyOE6dRTgnR
-         xptQ==
-X-Gm-Message-State: ANoB5plDd24SlwDobcV1yZLjueJcPPk4l52M1Ir0T4fqvHxdmVUxVnMm
-        T7cKzNLMg1azeaSgNDibnNY5Rw==
-X-Google-Smtp-Source: AA0mqf6A7M+SMFfpLiKhUvuklixhziPDNQLKFdS4we5IQFgEAup7ijFKwgKsLZDrnjW6I9JqyxSfxQ==
-X-Received: by 2002:a2e:6a03:0:b0:277:24b8:9bd4 with SMTP id f3-20020a2e6a03000000b0027724b89bd4mr1554878ljc.470.1668233744781;
-        Fri, 11 Nov 2022 22:15:44 -0800 (PST)
+        bh=pb0xzePKTvk1sIDJI6C17RlkL9caXSOtGAOsYmi0A4U=;
+        b=0RdMAy3r3gu5UmLZ/JtjC/QY6114EiQJsoHUwp8hz9P8j2quiDAiv2+aF9CH1isY/L
+         a/Uql08+vxs/uWjWxOqbtOsQdakHGgHpiq0agdaN2NfWi1UPaWNy4TDzbGnyxmUQnAht
+         iZXhqmkDPg6UYIQ2lNaomeat6xw9vTaJVpZTgUA4sw3SC+65CU4Z+EUfnX7f9uUAoxmU
+         FEC0fLm45p8J2G8d59kDC3bRvDfTYkw9oi4nYXTbOU4vs0PgM8gi7MhnI1i311mXrtTH
+         GmR6S3P+vpiD8YBLbknrkoRmrsa1F7z7isPffEvslra4JXGLtRdu1BVetUPfRJ/04Rgo
+         NTJQ==
+X-Gm-Message-State: ANoB5pnLZOeTbpeMdAQ87Etqk/IRPjdtVnyr1lZU3L9972VbMNZ9sF1A
+        qrIL6hdjipS+zh52PeXRsWqTYd34092A9hTz
+X-Google-Smtp-Source: AA0mqf5J3YdRUe9n4OzmClvX4Xdm3vOmLCnK3EXmHB6pS6yT+quSrtsn/e9A0DVJG4BR6ODbVqmE0w==
+X-Received: by 2002:a2e:9d85:0:b0:277:100c:db42 with SMTP id c5-20020a2e9d85000000b00277100cdb42mr1442858ljj.417.1668233850616;
+        Fri, 11 Nov 2022 22:17:30 -0800 (PST)
 Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id t23-20020a056512209700b004b0a1e77cb2sm707385lfr.137.2022.11.11.22.15.44
+        by smtp.gmail.com with ESMTPSA id u11-20020a2eb80b000000b0026dc7b59d8esm759476ljo.22.2022.11.11.22.17.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Nov 2022 22:15:44 -0800 (PST)
-Message-ID: <e4a423c6-e92d-1c40-2609-e8512bd9c03c@linaro.org>
-Date:   Sat, 12 Nov 2022 09:15:43 +0300
+        Fri, 11 Nov 2022 22:17:30 -0800 (PST)
+Message-ID: <c685cfc8-adec-31e6-c45a-f0e63d85cfcf@linaro.org>
+Date:   Sat, 12 Nov 2022 09:17:29 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Subject: Re: [PATCH 4/6] phy: qcom-qmp-combo: fix broken power on
+Subject: Re: [PATCH 5/6] phy: qcom-qmp-combo: fix runtime suspend
 Content-Language: en-GB
 To:     Johan Hovold <johan+linaro@kernel.org>,
         Vinod Koul <vkoul@kernel.org>
@@ -63,11 +63,11 @@ Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+        linux-kernel@vger.kernel.org
 References: <20221111084255.8963-1-johan+linaro@kernel.org>
- <20221111084255.8963-5-johan+linaro@kernel.org>
+ <20221111084255.8963-6-johan+linaro@kernel.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221111084255.8963-5-johan+linaro@kernel.org>
+In-Reply-To: <20221111084255.8963-6-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,86 +80,23 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 11/11/2022 11:42, Johan Hovold wrote:
-> The PHY is powered on during phy-init by setting the SW_PRWDN bit in the
+> Drop the confused runtime-suspend type check which effectively broke
+> runtime PM if the DP child node happens to be parsed before the USB
+> child node during probe (e.g. due to order of child nodes in the
+> devicetree).
+> 
+> Instead use the new driver data USB PHY pointer to access the USB
+> configuration and resources.
+> 
+> Fixes: ac0d239936bd ("phy: qcom-qmp: Add support for runtime PM")
 
-Nit: SW_PWRDN
+I belive the Fixes tag is incorrect. One can not easily backport this 
+patch on top of the original ac0d239936bd. I'd suggest to point the 
+Fixes tags to the addition of phy-qcom-qmp-combo.c
 
-> COM_POWER_DOWN_CTRL register and then setting the same bit in the in the
-> PCS_POWER_DOWN_CONTROL register that belongs to the USB part of the
-> PHY.
-> 
-> Currently, whether power on succeeds depends on probe order and having
-> the USB part of the PHY be initialised first. In case the DP part of the
-> PHY is instead initialised first, the intended power on of the USB block
-> results in a corrupted DP_PHY register (e.g. DP_PHY_AUX_CFG8).
-> 
-> Add a pointer to the USB part of the PHY to the driver data and use that
-> to power on the PHY also if the DP part of the PHY is initialised first.
-> 
-> Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
-> Cc: stable@vger.kernel.org	# 5.10
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-I can only hope that at some point in your cleanup this hack is going to 
-be removed.
-Nevertheless, I don't see a good way to do this at this moment. Thus:
-
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 11 +++++++++--
->   1 file changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> index 40c25a0ead23..17707f68d482 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> @@ -932,6 +932,7 @@ struct qcom_qmp {
->   	struct regulator_bulk_data *vregs;
->   
->   	struct qmp_phy **phys;
-> +	struct qmp_phy *usb_phy;
->   
->   	struct mutex phy_mutex;
->   	int init_count;
-> @@ -1911,7 +1912,7 @@ static int qmp_combo_com_init(struct qmp_phy *qphy)
->   {
->   	struct qcom_qmp *qmp = qphy->qmp;
->   	const struct qmp_phy_cfg *cfg = qphy->cfg;
-> -	void __iomem *pcs = qphy->pcs;
-> +	struct qmp_phy *usb_phy = qmp->usb_phy;
->   	void __iomem *dp_com = qmp->dp_com;
->   	int ret;
->   
-> @@ -1963,7 +1964,8 @@ static int qmp_combo_com_init(struct qmp_phy *qphy)
->   	qphy_clrbits(dp_com, QPHY_V3_DP_COM_SWI_CTRL, 0x03);
->   	qphy_clrbits(dp_com, QPHY_V3_DP_COM_SW_RESET, SW_RESET);
->   
-> -	qphy_setbits(pcs, cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL], SW_PWRDN);
-> +	qphy_setbits(usb_phy->pcs, usb_phy->cfg->regs[QPHY_PCS_POWER_DOWN_CONTROL],
-> +			SW_PWRDN);
->   
->   	mutex_unlock(&qmp->phy_mutex);
->   
-> @@ -2831,6 +2833,8 @@ static int qmp_combo_probe(struct platform_device *pdev)
->   				goto err_node_put;
->   			}
->   
-> +			qmp->usb_phy = qmp->phys[id];
-> +
->   			/*
->   			 * Register the pipe clock provided by phy.
->   			 * See function description to see details of this pipe clock.
-> @@ -2846,6 +2850,9 @@ static int qmp_combo_probe(struct platform_device *pdev)
->   		id++;
->   	}
->   
-> +	if (!qmp->usb_phy)
-> +		return -EINVAL;
-> +
->   	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
->   
->   	return PTR_ERR_OR_ZERO(phy_provider);
 
 -- 
 With best wishes
