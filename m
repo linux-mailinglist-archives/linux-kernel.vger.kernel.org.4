@@ -2,124 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A646268DB
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 11:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 016D16268E0
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 11:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234728AbiKLKZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 05:25:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
+        id S234843AbiKLK1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 05:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbiKLKZN (ORCPT
+        with ESMTP id S231146AbiKLK06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 05:25:13 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D672F652;
-        Sat, 12 Nov 2022 02:25:12 -0800 (PST)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N8WpP72nkzJndw;
-        Sat, 12 Nov 2022 18:22:05 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 12 Nov 2022 18:25:09 +0800
-Message-ID: <1ca2e4e8-ed7e-9174-01f6-c14539b8b8b2@huawei.com>
-Date:   Sat, 12 Nov 2022 18:25:09 +0800
+        Sat, 12 Nov 2022 05:26:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A488A17E3D;
+        Sat, 12 Nov 2022 02:26:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4201D60B91;
+        Sat, 12 Nov 2022 10:26:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EE5BC43145;
+        Sat, 12 Nov 2022 10:26:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668248816;
+        bh=xrGRndr6af8EK9Jo3B73sSAZkJjBqo9SLyX5L2AsDXo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Wk/IDTu67XbsB1Zbtg3RTLNHbPhF27kjVlysCqZeGC4WuW3iQUtT7jFcM1CgHCvG3
+         SGfTvvNi0CEVZGwHrjUpHouXi8cW0zI0iM5gs+YgsxNAoy2DTWeYpoWLxPn6cBWCNl
+         tzqCwtF3ch49/2VHJCUQBOnawM/HqS9fCGp9A0j+NGGhcndbhiVGP1HETT0r+OSM+N
+         y4d7fs0HBI1Z23KjIUoLyXao5XwEPhYrKyHB8pPZdieoz7gLtwCLBbNFpobHZ77gCq
+         FCEBJcW/tNwrPv4y2uiOqx/cDrX9zAGbiMkF6Ua3TP6o2wqBffsMYTiesJNu6foPVD
+         1YsL2di8hreTg==
+Received: by mail-ed1-f51.google.com with SMTP id s12so10795945edd.5;
+        Sat, 12 Nov 2022 02:26:56 -0800 (PST)
+X-Gm-Message-State: ANoB5pnnRve+/nUgJM1xe1+iRJ7EbtXf+MzGwRDKSBdTDu5XJBMhtIfa
+        wrXr64oky7inj0podGSpTb94f7IzK4Qtiub7/TY=
+X-Google-Smtp-Source: AA0mqf4cCb/rBaVNeOC4vccC3RXsFwpK0pA9R6rHmaDD09Q9QUoNwZ5iv4azux4dqBqbCV7wDGqTqPL3IdDKeOA1YDw=
+X-Received: by 2002:aa7:db85:0:b0:463:f3a:32ce with SMTP id
+ u5-20020aa7db85000000b004630f3a32cemr4917828edt.366.1668248814780; Sat, 12
+ Nov 2022 02:26:54 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf] bpf: Fix offset calculation error in __copy_map_value
- and zero_map_value
-Content-Language: en-US
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>, <sdf@google.com>
-CC:     Xu Kuohai <xukuohai@huaweicloud.com>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>
-References: <20221111125620.754855-1-xukuohai@huaweicloud.com>
- <Y26f4H7buQXKqQFd@google.com> <20221111204547.lyeim477afgfgkhh@apollo>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <20221111204547.lyeim477afgfgkhh@apollo>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221027125253.3458989-1-chenhuacai@loongson.cn>
+In-Reply-To: <20221027125253.3458989-1-chenhuacai@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sat, 12 Nov 2022 18:26:42 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4Y5qHSXr2uHvMYpXMgvm5fU7WQmcALB+86OYkgM1XbOg@mail.gmail.com>
+Message-ID: <CAAhV-H4Y5qHSXr2uHvMYpXMgvm5fU7WQmcALB+86OYkgM1XbOg@mail.gmail.com>
+Subject: Re: [PATCH V14 0/4] mm/sparse-vmemmap: Generalise helpers and enable
+ for LoongArch
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/12/2022 4:45 AM, Kumar Kartikeya Dwivedi wrote:
-> On Sat, Nov 12, 2022 at 12:47:52AM IST, sdf@google.com wrote:
->> On 11/11, Xu Kuohai wrote:
->>> From: Xu Kuohai <xukuohai@huawei.com>
->>
->>> Function __copy_map_value and zero_map_value miscalculated copy offset,
->>> resulting in possible copy of unwanted data to user or kernel.
->>
->>> Fix it.
->>
->>> Fixes: cc48755808c6 ("bpf: Add zero_map_value to zero map value with
->>> special fields")
->>> Fixes: 4d7d7f69f4b1 ("bpf: Adapt copy_map_value for multiple offset case")
->>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->>> ---
->>>    include/linux/bpf.h | 4 ++--
->>>    1 file changed, 2 insertions(+), 2 deletions(-)
->>
->>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->>> index 74c6f449d81e..c1bd1bd10506 100644
->>> --- a/include/linux/bpf.h
->>> +++ b/include/linux/bpf.h
->>> @@ -315,7 +315,7 @@ static inline void __copy_map_value(struct bpf_map
->>> *map, void *dst, void *src, b
->>>    		u32 next_off = map->off_arr->field_off[i];
->>
->>>    		memcpy(dst + curr_off, src + curr_off, next_off - curr_off);
->>> -		curr_off += map->off_arr->field_sz[i];
->>> +		curr_off = next_off + map->off_arr->field_sz[i];
->>>    	}
->>>    	memcpy(dst + curr_off, src + curr_off, map->value_size - curr_off);
->>>    }
->>> @@ -344,7 +344,7 @@ static inline void zero_map_value(struct bpf_map
->>> *map, void *dst)
->>>    		u32 next_off = map->off_arr->field_off[i];
->>
->>>    		memset(dst + curr_off, 0, next_off - curr_off);
->>> -		curr_off += map->off_arr->field_sz[i];
->>> +		curr_off = next_off + map->off_arr->field_sz[i];
->>>    	}
->>>    	memset(dst + curr_off, 0, map->value_size - curr_off);
->>>    }
->>
->> Hmm, does it mean that it currently works only for the cases where
->> these special fields are first/last?
->>
->> Also, what about bpf-next? The same problem seem to exist there?
->>
-> 
-> Replied with the patch in the other email.
-> 
->> Might be a good idea to have some selftest to exercise this?
->>
-> 
-> I agree, there was another bug in the same code before this, so I think we
-> should add tests for this (I should have done that with the commit being
-> fixed...).
-> 
-> Xu, if you have cycles, can you work on testing a few edge cases and make sure
-> we don't regress in the future? Otherwise I will take a look next week.
-> .
+Hi, Arnd,
 
-Ok, I'll add a few cases to test_sk_storage_map to capture this
+Just a gentle ping, is this series good enough now? I think the last
+problem (static-key.h inclusion) has also been solved.
+
+
+Huacai
+
+On Thu, Oct 27, 2022 at 8:54 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>
+> This series is in order to enable sparse-vmemmap for LoongArch. But
+> LoongArch cannot use generic helpers directly because MIPS&LoongArch
+> need to call pgd_init()/pud_init()/pmd_init() when populating page
+> tables. So we adjust the prototypes of p?d_init() to make generic
+> helpers can call them, then enable sparse-vmemmap with generic helpers,
+> and to be further, generalise vmemmap_populate_hugepages() for ARM64,
+> X86 and LoongArch.
+>
+> V1 -> V2:
+> Split ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP to a separate patch.
+>
+> V2 -> V3:
+> 1, Change the Signed-off-by order of author and committer;
+> 2, Update commit message about the build error on LoongArch.
+>
+> V3 -> V4:
+> Change pmd to pmdp for ARM64 for consistency.
+>
+> V4 -> V5:
+> Add a detailed comment for no-fallback in the altmap case.
+>
+> V5 -> V6:
+> 1, Fix build error for NIOS2;
+> 2, Fix build error for allnoconfig;
+> 3, Update comment for no-fallback in the altmap case.
+>
+> V6 -> V7:
+> Fix build warnings of "no previous prototype".
+>
+> V7 -> V8:
+> Fix build error for MIPS pud_init().
+>
+> V8 -> V9:
+> Remove redundant #include to avoid build error with latest upstream
+> kernel.
+>
+> V9 -> V10:
+> Fix build error due to VMEMMAP changes in 6.0-rc1.
+>
+> V10 -> V11:
+> Adjust context due to ARM64 changes in 6.1-rc1.
+>
+> V11 -> V12:
+> 1, Fix build error for !SPARSEMEM;
+> 2, Simplify pagetable_init() for MIPS32.
+>
+> V12 -> V13:
+> 1, Add Acked-by and Reviewed-by tags;
+> 2, Update commit message for the 4th patch.
+>
+> V13 -> V14:
+> Remove the static_key.h inclusion in the 4th patch.
+>
+> Huacai Chen and Feiyang Chen(4):
+>  MIPS&LoongArch&NIOS2: Adjust prototypes of p?d_init().
+>  LoongArch: Add sparse memory vmemmap support.
+>  mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages().
+>  LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP.
+>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+> ---
+>  arch/arm64/mm/mmu.c                    | 53 ++++++--------------
+>  arch/loongarch/Kconfig                 |  2 +
+>  arch/loongarch/include/asm/pgalloc.h   | 13 +----
+>  arch/loongarch/include/asm/pgtable.h   | 13 +++--
+>  arch/loongarch/include/asm/sparsemem.h |  8 +++
+>  arch/loongarch/kernel/numa.c           |  4 +-
+>  arch/loongarch/mm/init.c               | 44 +++++++++++++++-
+>  arch/loongarch/mm/pgtable.c            | 23 +++++----
+>  arch/mips/include/asm/pgalloc.h        |  8 +--
+>  arch/mips/include/asm/pgtable-64.h     |  8 +--
+>  arch/mips/kvm/mmu.c                    |  3 +-
+>  arch/mips/mm/pgtable-32.c              | 10 ++--
+>  arch/mips/mm/pgtable-64.c              | 18 ++++---
+>  arch/mips/mm/pgtable.c                 |  2 +-
+>  arch/x86/mm/init_64.c                  | 92 ++++++++++++----------------------
+>  include/linux/mm.h                     |  8 +++
+>  include/linux/page-flags.h             |  1 +
+>  mm/sparse-vmemmap.c                    | 64 +++++++++++++++++++++++
+>  18 files changed, 222 insertions(+), 152 deletions(-)
+> --
+> 2.27.0
+>
