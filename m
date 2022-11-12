@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309AC626846
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 10:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA406626851
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 10:15:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234387AbiKLJHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 04:07:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51016 "EHLO
+        id S234769AbiKLJPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 04:15:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbiKLJG5 (ORCPT
+        with ESMTP id S230344AbiKLJPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 04:06:57 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97869101C;
-        Sat, 12 Nov 2022 01:06:56 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id q127so7176763vsa.7;
-        Sat, 12 Nov 2022 01:06:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mUxYaPqOaXtV1rXuDj+fyELSwZGJABYGYX7l2EP4YIU=;
-        b=KjqZeq8pi/LDTQhe+itxy53wGlYeiHwFVwML722u+71uHrSKyM7A3CTcKQfVJRsioU
-         wzMQ5tDYPGun3n+To2e9GdOnJepCOMFjTYQhT/EvpQj19leGoZFT5CV+FkC1w4qNymHX
-         dgGBYQYgey8kZGL74+BPlHyVqnQWwi8my5yeD/qYi8S9yd3Cwd5kajMqKWGJ08lBa5Dw
-         fHgzRvGeKINczUdj78ZFzTKT2vTAN6jEqQZGXmwKTsG2JmANVN8ajVDO253tQb3fJgBz
-         YWeuYRthVVRsrcS+eHoHe/cp8gOgojok2zEtRNa1ehxO8RvmM7I8NUCJYb6S+DjFU6g2
-         e6Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mUxYaPqOaXtV1rXuDj+fyELSwZGJABYGYX7l2EP4YIU=;
-        b=VDu52H05szmgoEEyacEKqUthJTtMhGXic0mG6tmCKIQgT+gvlCDqpMrnkO45VlqHtU
-         JNaKhL9W988geuP73jEqTM85jlgM+4ORusp9OOAtN1PWB4BbRifaTqH26r4W9q67BsAv
-         dTEhmNjQTMqnrpju1/QV75R/PtiNi1pSWktJ+wu5IQsTuJXwIeF1FFBK1qFQj//61HWl
-         BY0z962YhkSh0+cWalOvqcWzib/huysGAZRzI4VJp1gxXB3397Qj1RcxjQ0MNvun1TY/
-         4wuEc8upRXt51mdHFiNbicqs7b2LK8Z6XviXg26IpR7j0hkp84GZJurqoeAA4c9Hgus7
-         Z5kQ==
-X-Gm-Message-State: ANoB5pn+KaUCgzuSV9k9knDHoM+CA3Bt33yKSjhY+yKyQWcAiFnoe17F
-        4xW1ApKfCRy7ATCmYlfuyF85VOQQFRc8i25HyeM=
-X-Google-Smtp-Source: AA0mqf7a/KcwKPHvFBXWv+PfoVxCoYuXMSmzRa+YxGWQh/j1x0FRgdT6hHrdrSrv5SA+RmYFjilg3xe/OZx+pK2d1z0=
-X-Received: by 2002:a67:f1cb:0:b0:3ad:7661:a081 with SMTP id
- v11-20020a67f1cb000000b003ad7661a081mr2631819vsm.2.1668244014142; Sat, 12 Nov
- 2022 01:06:54 -0800 (PST)
+        Sat, 12 Nov 2022 04:15:41 -0500
+Received: from mxout3.routing.net (mxout3.routing.net [IPv6:2a03:2900:1:a::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E958BE3A;
+        Sat, 12 Nov 2022 01:15:36 -0800 (PST)
+Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
+        by mxout3.routing.net (Postfix) with ESMTP id 10353604CC;
+        Sat, 12 Nov 2022 09:15:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1668244534;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=8h7HnuaIbJzS+1bSDsJciWFXEu36biz2822mlX20rAg=;
+        b=UPzPkiLVH4L2++lfu6zi7oUxA268Vr2ju1R+3f2m/ygukvVgXaWrE6m+bkH9cR0mcI+NIj
+        lnzjGcQHWRCJpioXY7EQkMBP+iuU+JihfHO5m48yVXDCbsOt+/N4mHMuj8+zfvQbczNNHl
+        yL747nbEtwLFdA+2JgzENhWT57d19Es=
+Received: from frank-G5.. (fttx-pool-157.180.227.41.bambit.de [157.180.227.41])
+        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id 931A4360217;
+        Sat, 12 Nov 2022 09:15:31 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Bo Jiao <Bo.Jiao@mediatek.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: [PATCH v4 00/11] Add BananaPi R3
+Date:   Sat, 12 Nov 2022 10:15:07 +0100
+Message-Id: <20221112091518.7846-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221028001016.332663-1-stephen.s.brennan@oracle.com>
- <20221111220614.991928-1-stephen.s.brennan@oracle.com> <20221111220614.991928-4-stephen.s.brennan@oracle.com>
-In-Reply-To: <20221111220614.991928-4-stephen.s.brennan@oracle.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Sat, 12 Nov 2022 11:06:42 +0200
-Message-ID: <CAOQ4uxgK6H_zaCRZG3FvUhD7-28-P79qPTTmLUD4t0XY3LakbQ@mail.gmail.com>
-Subject: Re: [PATCH v4 3/5] dnotify: move fsnotify_recalc_mask() outside spinlock
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: 0a530238-cec0-442a-b8de-6e8f0e31b058
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,130 +65,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 12:06 AM Stephen Brennan
-<stephen.s.brennan@oracle.com> wrote:
->
-> In order to allow sleeping during fsnotify_recalc_mask(), we need to
-> ensure no callers are holding a spinlock.
->
-> Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
+From: Frank Wunderlich <frank-w@public-files.de>
 
-Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+This Series adds some Nodes to mt7986 devicetree and the BananaPi R3
 
-small suggestion below.
+This version is rebased on Matthias' DTS64 next Branch from 2022/11/11.
 
-> ---
->  fs/notify/dnotify/dnotify.c | 28 +++++++++++++++++++---------
->  1 file changed, 19 insertions(+), 9 deletions(-)
->
-> diff --git a/fs/notify/dnotify/dnotify.c b/fs/notify/dnotify/dnotify.c
-> index 190aa717fa32..a9f05b3cf5ea 100644
-> --- a/fs/notify/dnotify/dnotify.c
-> +++ b/fs/notify/dnotify/dnotify.c
-> @@ -58,10 +58,10 @@ struct dnotify_mark {
->   * dnotify cares about for that inode may change.  This function runs the
->   * list of everything receiving dnotify events about this directory and calculates
->   * the set of all those events.  After it updates what dnotify is interested in
-> - * it calls the fsnotify function so it can update the set of all events relevant
-> - * to this inode.
-> + * it returns true if fsnotify_recalc_mask() should be called to update the set
-> + * of all events related to this inode.
->   */
-> -static void dnotify_recalc_inode_mask(struct fsnotify_mark *fsn_mark)
-> +static bool dnotify_recalc_inode_mask(struct fsnotify_mark *fsn_mark)
->  {
->         __u32 new_mask = 0;
->         struct dnotify_struct *dn;
-> @@ -74,10 +74,9 @@ static void dnotify_recalc_inode_mask(struct fsnotify_mark *fsn_mark)
->         for (dn = dn_mark->dn; dn != NULL; dn = dn->dn_next)
->                 new_mask |= (dn->dn_mask & ~FS_DN_MULTISHOT);
->         if (fsn_mark->mask == new_mask)
-> -               return;
-> +               return false;
->         fsn_mark->mask = new_mask;
-> -
-> -       fsnotify_recalc_mask(fsn_mark->connector);
-> +       return true;
->  }
->
->  /*
-> @@ -97,6 +96,7 @@ static int dnotify_handle_event(struct fsnotify_mark *inode_mark, u32 mask,
->         struct dnotify_struct **prev;
->         struct fown_struct *fown;
->         __u32 test_mask = mask & ~FS_EVENT_ON_CHILD;
-> +       bool recalc = false;
->
->         /* not a dir, dnotify doesn't care */
->         if (!dir && !(mask & FS_ISDIR))
-> @@ -118,12 +118,15 @@ static int dnotify_handle_event(struct fsnotify_mark *inode_mark, u32 mask,
->                 else {
->                         *prev = dn->dn_next;
->                         kmem_cache_free(dnotify_struct_cache, dn);
-> -                       dnotify_recalc_inode_mask(inode_mark);
-> +                       recalc = dnotify_recalc_inode_mask(inode_mark);
->                 }
->         }
->
->         spin_unlock(&inode_mark->lock);
->
-> +       if (recalc)
-> +               fsnotify_recalc_mask(inode_mark->connector);
-> +
->         return 0;
->  }
->
-> @@ -158,6 +161,7 @@ void dnotify_flush(struct file *filp, fl_owner_t id)
->         struct dnotify_struct **prev;
->         struct inode *inode;
->         bool free = false;
-> +       bool recalc = false;
->
->         inode = file_inode(filp);
->         if (!S_ISDIR(inode->i_mode))
-> @@ -176,7 +180,7 @@ void dnotify_flush(struct file *filp, fl_owner_t id)
->                 if ((dn->dn_owner == id) && (dn->dn_filp == filp)) {
->                         *prev = dn->dn_next;
->                         kmem_cache_free(dnotify_struct_cache, dn);
-> -                       dnotify_recalc_inode_mask(fsn_mark);
-> +                       recalc = dnotify_recalc_inode_mask(fsn_mark);
->                         break;
->                 }
->                 prev = &dn->dn_next;
-> @@ -184,6 +188,9 @@ void dnotify_flush(struct file *filp, fl_owner_t id)
->
->         spin_unlock(&fsn_mark->lock);
->
-> +       if (recalc)
-> +               fsnotify_recalc_mask(fsn_mark->connector);
-> +
->         /* nothing else could have found us thanks to the dnotify_groups
->            mark_mutex */
->         if (dn_mark->dn == NULL) {
-> @@ -268,6 +275,7 @@ int fcntl_dirnotify(int fd, struct file *filp, unsigned long arg)
->         struct file *f;
->         int destroy = 0, error = 0;
->         __u32 mask;
-> +       bool recalc = false;
->
->         /* we use these to tell if we need to kfree */
->         new_fsn_mark = NULL;
-> @@ -377,9 +385,11 @@ int fcntl_dirnotify(int fd, struct file *filp, unsigned long arg)
->         else if (error == -EEXIST)
->                 error = 0;
->
-> -       dnotify_recalc_inode_mask(fsn_mark);
-> +       recalc = dnotify_recalc_inode_mask(fsn_mark);
->  out:
->         spin_unlock(&fsn_mark->lock);
-> +       if (recalc)
-> +               fsnotify_recalc_mask(fsn_mark->connector);
->
->         if (destroy)
->                 fsnotify_detach_mark(fsn_mark);
+i included sams series for mt7986 DTS with small changes
+https://patchwork.kernel.org/project/linux-mediatek/cover/20220427124741.18245-1-sam.shih@mediatek.com/
 
-I'd do else if (recalc)
+i had run full dtbs-check but i end up with some strange warnings in
+ethernet-node that should not come up as phy-handle and sfp/managed
+properties are already defined.
 
-just to emphasise that destroy and recalc are mutually exclusive.
+phy-handle made optional
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/net/mediatek,net.yaml#n265
 
-Thanks,
-Amir.
+property sfp/managed (which is included for mac subnode in yaml above):
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/net/ethernet-controller.yaml#n137
+
+changes:
+v4:
+- dropped RFC prefix
+- rebase on matthias' mtk dts-next (for 6.2) branch
+- added author information to overlays
+- fixed sfp binding error
+- added fix for moving wed_pcie node
+- readded missing compatible patches
+v3:
+- changed mmc pull-ups
+- added patch for board binding (sent separately before)
+- added pcie node in mt7986 (not yet again in r3)
+- added dt overlays
+
+
+Frank Wunderlich (7):
+  arm64: dts: mt7986: move wed_pcie node
+  dt-bindings: phy: mediatek,tphy: add support for mt7986
+  dt-bindings: usb: mtk-xhci: add support for mt7986
+  dt-bindings: PCI: mediatek-gen3: add SoC based clock config
+  dt-bindings: PCI: mediatek-gen3: add support for mt7986
+  arm64: dts: mt7986: add Bananapi R3
+  arm64: dts: mt7986: add BPI-R3 nand/nor overlays
+
+Sam Shih (4):
+  arm64: dts: mt7986: add spi related device nodes
+  arm64: dts: mt7986: add usb related device nodes
+  arm64: dts: mt7986: add mmc related device nodes
+  arm64: dts: mt7986: add pcie related device nodes
+
+ .../bindings/pci/mediatek-pcie-gen3.yaml      |  64 ++-
+ .../bindings/phy/mediatek,tphy.yaml           |   1 +
+ .../bindings/usb/mediatek,mtk-xhci.yaml       |   1 +
+ arch/arm64/boot/dts/mediatek/Makefile         |   4 +
+ .../mediatek/mt7986a-bananapi-bpi-r3-emmc.dts |  31 ++
+ .../mediatek/mt7986a-bananapi-bpi-r3-nand.dts |  55 +++
+ .../mediatek/mt7986a-bananapi-bpi-r3-nor.dts  |  69 +++
+ .../mediatek/mt7986a-bananapi-bpi-r3-sd.dts   |  25 +
+ .../dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi | 458 ++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts  | 166 +++++++
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi     | 162 ++++++-
+ arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts  |  63 +++
+ 12 files changed, 1081 insertions(+), 18 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
+
+-- 
+2.34.1
+
