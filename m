@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0474626A1C
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 16:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB20626A1E
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 16:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234955AbiKLPTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 10:19:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
+        id S234997AbiKLPUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 10:20:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234864AbiKLPTm (ORCPT
+        with ESMTP id S234888AbiKLPTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 10:19:42 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979F410040
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 07:19:40 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so4884723wmg.2
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 07:19:40 -0800 (PST)
+        Sat, 12 Nov 2022 10:19:43 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3832FAFD
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 07:19:41 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id p16so4520778wmc.3
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 07:19:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nD6PwOw6vjJScTTxUIfc/0eVLXeaWOT/pR+rswb6rJg=;
-        b=Me8hdm6wyighrirkPUbw9VrQ6dfBl+1O/hpilRSfGYOHE72AVQF1TKd3bTlJ2uYUCB
-         A3jEIRs9nskuxmEjbTdCZ4IXAS8k91jE+IJvKk8m7O2j8kPqCioC0v52kotBvRP/05FK
-         4MJHdWMZu+rJEwjGoER64r+1nbEQjA5NjwFzYXR4op07cj6uxqGMOmTgss32WdA2zDav
-         VE9oVv8zRZt0pIq9jYYJraH1vTTkHWzdZc82mxm9De0lOZwNo5ZKmpq23gHRokZk5Od5
-         ccF1HaZbBLE+SYig33M2zUqa12pa4prerFA2OFXO63J2iYzV6gvOUyP1BF3Yem200QkB
-         HtKg==
+        bh=SyNGlKcyBDF0YXtdVE2Mo7IFCo+00jQ8YxUzSjoXa50=;
+        b=bb8Q/XHUIDCawlWjNkou8fyhAYQXwgoCWxuU2nSEBkYbxc11DdPvSJfIH4H9OT7Yzq
+         G7taxhDewqonLeJPieV4nxA/eAMT1VL5uPvNHgnvZoZRnrl07bDXYySWDnx3CJtKtfhc
+         c7WRNGwipiESSbwsKdnVpm+WRl7PmXWkjeJ1n/bfIzn1/So0onOpJuis1E4lW8cXf0Wi
+         0qEyQOe2qUhhHXi5y54DLwkW3Vwd1nyC491YlpyMxdWjUz9zNhVUjoDDPfXpRl4kpXY7
+         bajqLkBRLFMYAy2E9LzJ1AtRNAqvMEeneMKONHu40T1kqvMtUxubUnp9lNBOpZy0QWOU
+         rJ9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nD6PwOw6vjJScTTxUIfc/0eVLXeaWOT/pR+rswb6rJg=;
-        b=cjKQS8xywzkJvaTdiFKSs5hdgSJ5bJkykhtdgZYeFXVDELUjf5OcxC0ZydyORWnAGx
-         Eh4O6IdN2ztOsCg3fRtszlfnVrDGXkWEpOvba5upRfD1J1B3GQ1y6dNICEdRaSMmJZI1
-         TsEfswFzt3ZfI8l9KnPKrwH0a/9AMw8bO9ptjdlxIGvcux2dlMq+qyzZVti3eDp/+NVT
-         hcEd66u2Wp22mkVwV2oxd0bTuE11klt7eE7v5BWuV6CVfbNpFsLJj5IpwZQ/9+OYruHN
-         r0F3DErNYs9FBUcc2f7atcIShTzqCMrQehmrITlrzrT5NZN1iYVWJKCWcAia+hjX+PJo
-         g5iQ==
-X-Gm-Message-State: ANoB5pmLCP6YdRrDRoe+ZZ1p9sRFoLRTB8uB8BqxKg31QheR4iHvE4/9
-        81MBr5MCFgcJ7SotPy6Gu2g=
-X-Google-Smtp-Source: AA0mqf48o7lLpkMDzUxOkJUTi4WKlwN9mDAPsmAHUDd47sx4NrNb2/M9KnnO033o3lFPMXn+d2e5IA==
-X-Received: by 2002:a05:600c:3b08:b0:3cf:8e62:f748 with SMTP id m8-20020a05600c3b0800b003cf8e62f748mr4000740wms.175.1668266379182;
-        Sat, 12 Nov 2022 07:19:39 -0800 (PST)
+        bh=SyNGlKcyBDF0YXtdVE2Mo7IFCo+00jQ8YxUzSjoXa50=;
+        b=FvdrgPE5KChDecXE69SZ67R5OKjY5D+NZPTvpf2wVVx6aFp46Hz9Bd0iYU61etGj0M
+         wJpJoyGaDcgn84gEfgM1HLkVE8FVo32fcEJhSXRxP4FEGkMiP4lu1jiEXBz2JOvNCtmG
+         n6qTBWlbSI4LjZcAzOhKKIZVYD+cVCWdl/enVc7FwgBJO59FCHGnLL79hTOvMIbEar4u
+         LigT/XhN1BOTaOE9Z5wCvUnvwezVXXrqUOCmC8dNUsgTIjAuUohkdxLTR+62Su3n6aYv
+         85pzv+saRcrysV+71rRzOY93OWqeuE2EkDckYDd+vdMms/tiy2E6H6Q+bByJRbVnPI4d
+         g67Q==
+X-Gm-Message-State: ANoB5pl+M4e8vdF41eZwT1lU7qzQPHYuB2sXyLd+aJts3zfSDDpZYevy
+        CajUo9DhCONFJf1vjdvUrnU=
+X-Google-Smtp-Source: AA0mqf7cIbCOnxnpggHzR0NyGxhzVeR20CXRn0Ch5nLdVmRZXdJ/+/zFl2wtSttlOKmH0pW7GLYpNA==
+X-Received: by 2002:a7b:cd0e:0:b0:3cf:ca45:3b19 with SMTP id f14-20020a7bcd0e000000b003cfca453b19mr3984095wmj.179.1668266380066;
+        Sat, 12 Nov 2022 07:19:40 -0800 (PST)
 Received: from localhost (94.197.38.186.threembb.co.uk. [94.197.38.186])
-        by smtp.gmail.com with ESMTPSA id x10-20020adff64a000000b00236883f2f5csm4644777wrp.94.2022.11.12.07.19.38
+        by smtp.gmail.com with ESMTPSA id f7-20020adfe907000000b0023677081f3asm4543484wrm.42.2022.11.12.07.19.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Nov 2022 07:19:38 -0800 (PST)
+        Sat, 12 Nov 2022 07:19:39 -0800 (PST)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     lee@kernel.org
 Cc:     mani@kernel.org, cristian.ciocaltea@gmail.com, wens@csie.org,
@@ -60,9 +60,9 @@ Cc:     mani@kernel.org, cristian.ciocaltea@gmail.com, wens@csie.org,
         jernej.skrabec@gmail.com, samuel@sholland.org,
         linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH 03/18] mfd: axp20x: Replace irqchip mask_invert with unmask_base
-Date:   Sat, 12 Nov 2022 15:18:20 +0000
-Message-Id: <20221112151835.39059-4-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH 04/18] mfd: gateworks-gsc: Replace irqchip mask_invert with unmask_base
+Date:   Sat, 12 Nov 2022 15:18:21 +0000
+Message-Id: <20221112151835.39059-5-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20221112151835.39059-1-aidanmacdonald.0x0@gmail.com>
 References: <20221112151835.39059-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -83,83 +83,23 @@ directly as an unmask register.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/mfd/axp20x.c | 21 +++++++--------------
- 1 file changed, 7 insertions(+), 14 deletions(-)
+ drivers/mfd/gateworks-gsc.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
-index 88a212a8168c..6e6b5dbab098 100644
---- a/drivers/mfd/axp20x.c
-+++ b/drivers/mfd/axp20x.c
-@@ -506,8 +506,7 @@ static const struct regmap_irq_chip axp152_regmap_irq_chip = {
- 	.name			= "axp152_irq_chip",
- 	.status_base		= AXP152_IRQ1_STATE,
- 	.ack_base		= AXP152_IRQ1_STATE,
--	.mask_base		= AXP152_IRQ1_EN,
--	.mask_invert		= true,
-+	.unmask_base		= AXP152_IRQ1_EN,
- 	.init_ack_masked	= true,
- 	.irqs			= axp152_regmap_irqs,
- 	.num_irqs		= ARRAY_SIZE(axp152_regmap_irqs),
-@@ -518,8 +517,7 @@ static const struct regmap_irq_chip axp20x_regmap_irq_chip = {
- 	.name			= "axp20x_irq_chip",
- 	.status_base		= AXP20X_IRQ1_STATE,
- 	.ack_base		= AXP20X_IRQ1_STATE,
--	.mask_base		= AXP20X_IRQ1_EN,
--	.mask_invert		= true,
-+	.unmask_base		= AXP20X_IRQ1_EN,
- 	.init_ack_masked	= true,
- 	.irqs			= axp20x_regmap_irqs,
- 	.num_irqs		= ARRAY_SIZE(axp20x_regmap_irqs),
-@@ -531,8 +529,7 @@ static const struct regmap_irq_chip axp22x_regmap_irq_chip = {
- 	.name			= "axp22x_irq_chip",
- 	.status_base		= AXP20X_IRQ1_STATE,
- 	.ack_base		= AXP20X_IRQ1_STATE,
--	.mask_base		= AXP20X_IRQ1_EN,
--	.mask_invert		= true,
-+	.unmask_base		= AXP20X_IRQ1_EN,
- 	.init_ack_masked	= true,
- 	.irqs			= axp22x_regmap_irqs,
- 	.num_irqs		= ARRAY_SIZE(axp22x_regmap_irqs),
-@@ -543,8 +540,7 @@ static const struct regmap_irq_chip axp288_regmap_irq_chip = {
- 	.name			= "axp288_irq_chip",
- 	.status_base		= AXP20X_IRQ1_STATE,
- 	.ack_base		= AXP20X_IRQ1_STATE,
--	.mask_base		= AXP20X_IRQ1_EN,
--	.mask_invert		= true,
-+	.unmask_base		= AXP20X_IRQ1_EN,
- 	.init_ack_masked	= true,
- 	.irqs			= axp288_regmap_irqs,
- 	.num_irqs		= ARRAY_SIZE(axp288_regmap_irqs),
-@@ -556,8 +552,7 @@ static const struct regmap_irq_chip axp803_regmap_irq_chip = {
- 	.name			= "axp803",
- 	.status_base		= AXP20X_IRQ1_STATE,
- 	.ack_base		= AXP20X_IRQ1_STATE,
--	.mask_base		= AXP20X_IRQ1_EN,
--	.mask_invert		= true,
-+	.unmask_base		= AXP20X_IRQ1_EN,
- 	.init_ack_masked	= true,
- 	.irqs			= axp803_regmap_irqs,
- 	.num_irqs		= ARRAY_SIZE(axp803_regmap_irqs),
-@@ -568,8 +563,7 @@ static const struct regmap_irq_chip axp806_regmap_irq_chip = {
- 	.name			= "axp806",
- 	.status_base		= AXP20X_IRQ1_STATE,
- 	.ack_base		= AXP20X_IRQ1_STATE,
--	.mask_base		= AXP20X_IRQ1_EN,
--	.mask_invert		= true,
-+	.unmask_base		= AXP20X_IRQ1_EN,
- 	.init_ack_masked	= true,
- 	.irqs			= axp806_regmap_irqs,
- 	.num_irqs		= ARRAY_SIZE(axp806_regmap_irqs),
-@@ -580,8 +574,7 @@ static const struct regmap_irq_chip axp809_regmap_irq_chip = {
- 	.name			= "axp809",
- 	.status_base		= AXP20X_IRQ1_STATE,
- 	.ack_base		= AXP20X_IRQ1_STATE,
--	.mask_base		= AXP20X_IRQ1_EN,
--	.mask_invert		= true,
-+	.unmask_base		= AXP20X_IRQ1_EN,
- 	.init_ack_masked	= true,
- 	.irqs			= axp809_regmap_irqs,
- 	.num_irqs		= ARRAY_SIZE(axp809_regmap_irqs),
+diff --git a/drivers/mfd/gateworks-gsc.c b/drivers/mfd/gateworks-gsc.c
+index 9d7d870c44a8..c954ed265de8 100644
+--- a/drivers/mfd/gateworks-gsc.c
++++ b/drivers/mfd/gateworks-gsc.c
+@@ -189,8 +189,7 @@ static const struct regmap_irq_chip gsc_irq_chip = {
+ 	.num_irqs = ARRAY_SIZE(gsc_irqs),
+ 	.num_regs = 1,
+ 	.status_base = GSC_IRQ_STATUS,
+-	.mask_base = GSC_IRQ_ENABLE,
+-	.mask_invert = true,
++	.unmask_base = GSC_IRQ_ENABLE,
+ 	.ack_base = GSC_IRQ_STATUS,
+ 	.ack_invert = true,
+ };
 -- 
 2.38.1
 
