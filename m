@@ -2,89 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5787626AAF
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 17:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90365626AA3
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 17:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234992AbiKLQuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 11:50:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
+        id S234542AbiKLQil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 11:38:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232659AbiKLQup (ORCPT
+        with ESMTP id S234974AbiKLQii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 11:50:45 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB6565AD;
-        Sat, 12 Nov 2022 08:50:44 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id h14so6909591pjv.4;
-        Sat, 12 Nov 2022 08:50:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5YtIzIFXCd8ejP+if9R+vz9eE20Exyv5nPauR7eKIuE=;
-        b=FRKd65M1dUvUk2bFupd/DigeVgW/VgwGaOAYztLLuFlzxAcskSD4il2H1VfJhSJGS0
-         qO+PrstmLwBtYtmPsKxLqQ95eSKNARXfkTX14phinjyEhluyp5PX0QQLRrcrR2CZgi/7
-         l9kdgkO5CsbLtC2vP1CSECIJNPWhNv8/ZEoh7LYzdL27CqK6IKrEr3eXTJ+bmdTHZ8cU
-         QhgNxeo1prW3PlfF2cOKT52Vsxsu9Oz9L5qYgeA76yuFTwuCo+32n9hll4Eqg0KA2czb
-         CKouxmdVw5zV0LhVnE1VC/wTeh/UOGNys2oEYQHUbuLa/S5c9GjAzjtCxpsi+D5Ty0w8
-         3tdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5YtIzIFXCd8ejP+if9R+vz9eE20Exyv5nPauR7eKIuE=;
-        b=w3qApZtaiMn0ReUM7ech+w0tthbVKvJ+vil1aZNsiTx+sI/q9mo3Lz3bS52+CDcrgi
-         d0/YgMf8zr4wt0ze18fHuS8HXMLCEeT+LLIxZIN+hPfSyBsB6oz7AiQNBaSdOOa4HNU/
-         iQnNMCUESmWGgmQkN1MrJDva+UD88//nD/MVoY2bLeVHSwPgVgU1pDQRm+1R3DhFHuM7
-         rnPHC4SO3w1qbiodGgoRuS8nZxAgEEtkYTGeBgBLd/qGQa7bTg8ZKIQfsOGfcSMDT78v
-         x5Sz5WbA1BmOR/Aj/GxjHPfwgZTWlca+nY7GkbOHLBzMVte+PAyBtgWYWcTRqe5LVRys
-         r5ZA==
-X-Gm-Message-State: ANoB5pn9i5ZlPmOwq7SemvJzQJZa21fOty6QZ84ZKyDTOuLWjECbAn8/
-        6WQp3d/IOsYdmH/Yk0XhR8eYg2c7+vg=
-X-Google-Smtp-Source: AA0mqf6FsHvwljVx9ri2u3GHDOUK+gLojv9lJZe3XTrUeaY53rpL3qiyQk/ApJivBgmtafDHP/NsNg==
-X-Received: by 2002:a17:903:26cd:b0:17f:7ed0:2367 with SMTP id jg13-20020a17090326cd00b0017f7ed02367mr7408026plb.31.1668271843933;
-        Sat, 12 Nov 2022 08:50:43 -0800 (PST)
-Received: from [192.168.50.208] (ip68-109-79-27.oc.oc.cox.net. [68.109.79.27])
-        by smtp.gmail.com with ESMTPSA id 131-20020a621989000000b0056bc1d7816dsm3591324pfz.99.2022.11.12.08.50.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Nov 2022 08:50:43 -0800 (PST)
-Message-ID: <c2352c27-fbff-ead4-ac22-3aebf5c600f3@gmail.com>
-Date:   Sat, 12 Nov 2022 08:50:42 -0800
+        Sat, 12 Nov 2022 11:38:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E649E13FBD;
+        Sat, 12 Nov 2022 08:38:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 82D8860C02;
+        Sat, 12 Nov 2022 16:38:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 758F2C433C1;
+        Sat, 12 Nov 2022 16:38:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668271115;
+        bh=KEiKqzioFQGruCHYGHrlQ43igNpeASPP8FviAOa/NZM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Rr8x0S3uFDthtVzGeycWVrrgBqYy+QwCgAUyOeZb9hJisjSEHuqIcDE69dk9Tj8ku
+         Qk/fGQbT37XgGL1E5XUTpGstaTF85HGQzWn7BLe7Kfioq7H4f6YOOfcxpVbJ3yGNuS
+         NWvvR12jEB0tETWqFH+4VM9Y0/9eDr+SarieuNJqzyXMpi/oXwqnN8ebgAoagV/qPJ
+         8YPDx7wUS21Yv8sMg8ZgX7iYioZbDxVy9dpO6vtDCqatacu+VQvARvRlgk3SGkr/yC
+         6l2xr3RluoVFTR6oB7H2UOQThfkqunUgJJSJkrcvTaYLrG2JZDFwq5KIGWIZ8VBDJI
+         vQDayv/ZL1zvw==
+Date:   Sat, 12 Nov 2022 16:50:49 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/5] iio: addac: ad74413r: add spi_device_id table
+Message-ID: <20221112165049.51a5f391@jic23-huawei>
+In-Reply-To: <20221111143921.742194-2-linux@rasmusvillemoes.dk>
+References: <20221111143921.742194-1-linux@rasmusvillemoes.dk>
+        <20221111143921.742194-2-linux@rasmusvillemoes.dk>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH -next] scsi: lpfc: Use memset_startat() helper
-Content-Language: en-US
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221111074310.132125-1-xiujianfeng@huawei.com>
-From:   James Smart <jsmart2021@gmail.com>
-In-Reply-To: <20221111074310.132125-1-xiujianfeng@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/10/2022 11:43 PM, Xiu Jianfeng wrote:
-> User memset_startat() helper to simplify the code, no functional
-> changes in this patch.
+On Fri, 11 Nov 2022 15:39:17 +0100
+Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
+
+> Silence the run-time warning
 > 
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>   SPI driver ad74413r has no spi_device_id for adi,ad74412r
+> 
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> ---
+>  drivers/iio/addac/ad74413r.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
+> index 899bcd83f40b..37485be88a63 100644
+> --- a/drivers/iio/addac/ad74413r.c
+> +++ b/drivers/iio/addac/ad74413r.c
+> @@ -1457,12 +1457,20 @@ static const struct of_device_id ad74413r_dt_id[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, ad74413r_dt_id);
+>  
+> +static const struct spi_device_id ad74413r_spi_id[] = {
+> +	{ .name = "ad74412r", .driver_data = (kernel_ulong_t)&ad74412r_chip_info_data },
+> +	{ .name = "ad74413r", .driver_data = (kernel_ulong_t)&ad74413r_chip_info_data },
+> +	{},
+Trivial, but prefer not to have a comma after a "NULL" terminator like this.
+It would never make sense to add anything after it in the array.
+Now you are matching existing driver style, but I'd still rather not see more
+instances of this added.
 
-Looks good
+Also, driver_data is not currently used. It should be because adding this
+spi_id table means the driver can be probed via various routes where
+device_get_match_data() == NULL. 
 
-Reviewed-by: James Smart <jsmart2021@gmail.com>
+Hence, alongside this change you need to have a fallback to cover that case.
+Something along the lines of...
 
--- james
+	st->chip_info = device_get_match_data(..);
+	if (!st->chip_info) {
+		struct spi_device_id *id = spi_get_device_id();
+		if (!id)
+			return -EINVAL;
+
+		st->chip_info = (void *)id->driver_data;
+		//or better yet cast to the correct type I'm just too lazy to look it up ;)
+		if (!st->chip_info)
+			return -EINVAL;
+
+	}
+> +};
+> +MODULE_DEVICE_TABLE(spi, ad74413r_spi_id);
+> +
+>  static struct spi_driver ad74413r_driver = {
+>  	.driver = {
+>  		   .name = "ad74413r",
+>  		   .of_match_table = ad74413r_dt_id,
+>  	},
+>  	.probe = ad74413r_probe,
+> +	.id_table = ad74413r_spi_id,
+>  };
+>  
+>  module_driver(ad74413r_driver,
 
