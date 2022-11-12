@@ -2,74 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088C66269E7
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 15:19:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65F66269E8
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 15:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234963AbiKLOT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 09:19:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S233681AbiKLOXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 09:23:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234861AbiKLOTJ (ORCPT
+        with ESMTP id S230170AbiKLOXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 09:19:09 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5E11836A;
-        Sat, 12 Nov 2022 06:19:06 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id a13so11342504edj.0;
-        Sat, 12 Nov 2022 06:19:06 -0800 (PST)
+        Sat, 12 Nov 2022 09:23:41 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88F7CE0A
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 06:23:39 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id 4so6488542pli.0
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 06:23:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cr+7dkLsIQWkssfwSwIW2QDjIIkEwPc25TwB+Qcm5uo=;
-        b=UKsD0x/5BTuv9I4BmyFff3ZscFituJT8FVzMy4P+x8g7Wf2MoY84kUTPR8DxMkOuL1
-         H559lXZ7bzcyr8wmsTE3pMtmipu5Yfk/QjpFTk3QH97fzoy63E3zJoVwM0f8TpxVnTPm
-         Lpi63S8/Sz0jTdVKe0WrNrJWPZvq8IDjRI033hdCCTizDmJv08AFv9gvk9AcdkObd+3u
-         cHNLeRzoW2CFo8Y11wEeY5KzeknnkpeOHTgMUL3YRR7skwQIL5ac/zBMR6/eQ1iGhgGM
-         AP431ZJAhlQeMETgUt95VLv99uuTOtfVllNTBl+HMuk6MEWro6Edy+vJx31PpwjRXq4Z
-         JVjA==
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9AaCZ8WAfpjeSDQ7STKLSNV9+Kr6/3hjw3GaFvuUHO4=;
+        b=w+EQNfOU9HvsctHMxKfjHvI6LHdBV+tXm3jN/4uj+p7uD59lDpfryM+Xs11aiD5uip
+         4FkecEfcnWf2m/0QzgI05iqydkRLfZhU72lgKlW7fXNt4ZGg9DZ6Anaa1FvodTNwbzPg
+         p297axSGKmM5lYQvMCmjaPhROs+IGp/WT4/Ls/ZP0ETAiiW4ApKmEjsgjg4JQ9h/GNP4
+         3XtyjXZQ0V+DMQ3BP+OkLbjZxxePgTFGb8kdbSAWAWlY59+1WhoP+k887Xy4T9ET0sqN
+         Dz6Whq16emyyXY+FVFz16u6BG+KMo4nq6RSLSsTn6Cruio/gtqKsess+0G519p1S+cjV
+         8izg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cr+7dkLsIQWkssfwSwIW2QDjIIkEwPc25TwB+Qcm5uo=;
-        b=rIs8ju0j4wKUl7vt/bUVlX4hTRx9z1XpPm2cpai/3Nae9FUca9/YpEF/L2dGqnLfT7
-         KvQkLNcK6/eiZ/p0luo6OcR5AzCNEgpJs58j/eJ0tbujGb1OjTRjSewsfL1dt5YCVnda
-         wHdAj7pbidY7YHr7B5gCi0aEVl9QSGS8wOCV6F9wijv6hgW0h2RJFPngTl+Hg1io8BBU
-         whr2NvxQWA3CfaQE3xSyNpUCldrBmdOVp40jAszV7CeShUyXiWTmClAwBzkYdh/+Mpgj
-         gY5eJuvWGd6yAY4mg2CASicAQaA8NjMzoPhZ9zZO9NJZUB2xwZcAYvJaBvd572lGcWZN
-         CGLQ==
-X-Gm-Message-State: ANoB5plyPFKmx+ypNJG0PTNZRetkMo6v27UHjzF1uNvA/rReyJINrFZt
-        gmI471eKFhSjnnCvlV71Nxc=
-X-Google-Smtp-Source: AA0mqf4AoYvIvRXjdP+4QwIcYyifLsaVVmZlBcKGdBmBxZa/s6+zu4hpBWycYBZO2fiqpwcFBdHIcQ==
-X-Received: by 2002:aa7:d793:0:b0:460:d1f6:2917 with SMTP id s19-20020aa7d793000000b00460d1f62917mr5591021edq.207.1668262745128;
-        Sat, 12 Nov 2022 06:19:05 -0800 (PST)
-Received: from localhost.localdomain (83.31.120.236.ipv4.supernova.orange.pl. [83.31.120.236])
-        by smtp.gmail.com with ESMTPSA id g21-20020a50ee15000000b004677b1b1a70sm1050148eds.61.2022.11.12.06.19.04
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9AaCZ8WAfpjeSDQ7STKLSNV9+Kr6/3hjw3GaFvuUHO4=;
+        b=dw6inSxlfte4/8gIU5Jrva/skW18dYBbzbI4nJNfBGOizeYm8BHGRLN66cx1Vk65qe
+         fYbFZJ0sEwotVhkWeprsjStAnAZ2aq9JmkdPvoiuxTHiDDHxtMHMkw5JUGX+YpTyMhbO
+         OeBIlFAY15sCwsfEqrX/tzsSTMuyQqF1IObgglZO5MobEPOV0gvECjlenG9XmVSF/1OE
+         0L0KIbulDLYp6k6+xGf6vO14InNRVRwFKCopxrgn01ddIIoAO26EOBtNNttGO/r1lETW
+         1klRQ+b34/1XYPEeFkxBbBJmOr/qWMXqO/Fb3jHQzTe9W2CJhLxhwQpALZJQeByyXvGc
+         QxIg==
+X-Gm-Message-State: ANoB5pnjE3PoCUhyxeEhlqdFA+/4zkDko68D2DVkp8390lt3Yx1dH68A
+        7RS5m2EP7VLKt6E6IisgAkyXTw==
+X-Google-Smtp-Source: AA0mqf7Of4uNO9Zacj/tIazdwCiwUWGFkPYUXSHNE53CmPX12vcNQJGoCT8F+yXOQVOlrPeOP1xXHA==
+X-Received: by 2002:a17:902:c142:b0:188:55f5:972f with SMTP id 2-20020a170902c14200b0018855f5972fmr6969764plj.148.1668263019381;
+        Sat, 12 Nov 2022 06:23:39 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:54c6])
+        by smtp.gmail.com with ESMTPSA id u2-20020a170902714200b00185402cfedesm3681172plm.246.2022.11.12.06.23.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Nov 2022 06:19:04 -0800 (PST)
-From:   Maya Matuszczyk <maccraft123mc@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     =?UTF-8?q?Jo=C3=A3o=20H=20=2E=20Spies?= <jhlspies@gmail.com>,
-        Chris Morgan <macroalpha82@gmail.com>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] arm64: dts: rockchip: Add Anbernic RG351M
-Date:   Sat, 12 Nov 2022 15:18:41 +0100
-Message-Id: <20221112141840.516224-6-maccraft123mc@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221112141840.516224-1-maccraft123mc@gmail.com>
-References: <20221112141840.516224-1-maccraft123mc@gmail.com>
+        Sat, 12 Nov 2022 06:23:38 -0800 (PST)
+Date:   Sat, 12 Nov 2022 09:23:41 -0500
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Hongchen Zhang <zhanghongchen@loongson.cn>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Hugh Dickins <hughd@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: Re: [PATCH] mm: vmscan: fix extreme overreclaim and swap floods
+Message-ID: <Y2+sbbirX11Vo+XM@cmpxchg.org>
+References: <20220802162811.39216-1-hannes@cmpxchg.org>
+ <17f04d65-020e-a52d-41e8-0d540e32b475@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <17f04d65-020e-a52d-41e8-0d540e32b475@loongson.cn>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,98 +75,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This device is a clone of Odroid Go Advance, with added PWM motor, internal
-gamepad connected on USB instead of just having it be on GPIO + ADC, and
-missing battery shunt resistor.
+On Tue, Sep 20, 2022 at 02:12:17PM +0800, Hongchen Zhang wrote:
+> On 2022/8/3 am 12:28, Johannes Weiner wrote:
+> > @@ -2988,8 +2988,6 @@ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
+> >   		nr_scanned = targets[lru] - nr[lru];
+> >   		nr[lru] = targets[lru] * (100 - percentage) / 100;
+> >   		nr[lru] -= min(nr[lru], nr_scanned);
+> We should not just remove the following line because kswapd may also call
+> this function and there is no side effect to do scan adjust for kswapd,so it
+> may be better to change like this:
+> +    if (current_is_kswapd())
+> 		scan_adjusted = true;
+> > -
+> > -		scan_adjusted = true
 
-There's also an LED on GPIO 77(I *guess* PB5 on &gpio2), that is controlled in a weird way:
+There is no scan_adjusted after this patch.
 
-- It is set to red by setting output value to 1
-- Set to green by setting output value to 0
-- Set to yellow by setting gpio direction to input
-
-I have no idea how to describe that in DTS, without adding a custom
-driver, for now it's just left out.
-
-Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
----
- arch/arm64/boot/dts/rockchip/Makefile         |  1 +
- .../dts/rockchip/rk3326-anbernic-rg351m.dts   | 54 +++++++++++++++++++
- 2 files changed, 55 insertions(+)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts
-
-diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index 142c83d2e5aa..b379516c15eb 100644
---- a/arch/arm64/boot/dts/rockchip/Makefile
-+++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-evb.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-roc-cc.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-rock-pi-s.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3318-a95x-z2.dtb
-+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-anbernic-rg351m.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go2.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go2-v11.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go3.dtb
-diff --git a/arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts b/arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts
-new file mode 100644
-index 000000000000..7f4726d4130e
---- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts
-@@ -0,0 +1,54 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2019 Hardkernel Co., Ltd
-+ * Copyright (c) 2020 Theobroma Systems Design und Consulting GmbH
-+ * Copyright (c) 2022 Maya Matuszczyk <maccraft123mc@gmail.com>
-+ */
-+
-+/dts-v1/;
-+#include "rk3326-odroid-go.dtsi"
-+
-+/ {
-+	model = "Anbernic RG351M";
-+	compatible = "anbernic,rg351m", "rockchip,rk3326";
-+
-+	battery: battery {
-+		compatible = "simple-battery";
-+		charge-full-design-microamp-hours = <3450000>;
-+		charge-term-current-microamp = <300000>;
-+		constant-charge-current-max-microamp = <2000000>;
-+		constant-charge-voltage-max-microvolt = <4200000>;
-+		factory-internal-resistance-micro-ohms = <100000>;
-+		voltage-max-design-microvolt = <4100000>;
-+		voltage-min-design-microvolt = <3500000>;
-+
-+		ocv-capacity-celsius = <20>;
-+		ocv-capacity-table-0 =  <4046950 100>, <4001920 95>, <3967900 90>, <3919950 85>,
-+					<3888450 80>, <3861850 75>, <3831540 70>, <3799130 65>,
-+					<3768190 60>, <3745650 55>, <3726610 50>, <3711630 45>,
-+					<3696720 40>, <3685660 35>, <3674950 30>, <3663050 25>,
-+					<3649470 20>, <3635260 15>, <3616920 10>, <3592440 5>,
-+					<3574170 0>;
-+	};
-+
-+	vibrator {
-+		compatible = "pwm-vibrator";
-+		pwms = <&pwm0 0 1000000 0>;
-+		pwm-names = "enable";
-+	};
-+};
-+
-+/delete-node/ &builtin_gamepad;
-+/delete-node/ &vcc_host; /* conflicts with pwm vibration motor */
-+
-+&internal_display {
-+	compatible = "elida,kd35t133";
-+};
-+
-+&pwm0 {
-+	status = "okay";
-+};
-+
-+&rk817_charger {
-+	monitored-battery = <&battery>;
-+};
--- 
-2.38.1
-
+If you're saying that kswapd should set proportional_reclaim
+unconditionally, then no, it should not. Proportional reclaim is not
+safe at lower priority levels, as the changelog outlines in detail.
