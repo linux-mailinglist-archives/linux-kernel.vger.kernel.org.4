@@ -2,87 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE5C626958
+	by mail.lfdr.de (Postfix) with ESMTP id A7D6D626957
 	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 13:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbiKLMPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 07:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
+        id S233989AbiKLMPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 07:15:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiKLMPu (ORCPT
+        with ESMTP id S231570AbiKLMPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 07:15:50 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5552B1A386
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 04:15:47 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id x2so11050270edd.2
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 04:15:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MONdjG0schDl4h6ZHaz0uRvYs4Ys6NIRsl4cjekglXU=;
-        b=LQVLXft2/9mefrdTshjBFK7CvFYzhcZiiNJHrBpofTrDslxzqR6xJDNy66yhYyAcXQ
-         T4JDL51Vvpo4I+Xf/VsgWAf+06TW5R+6sLHERLH9FX8gIJVWrGEkWyJqrY3XpGQI92S1
-         k/uHyUtgx4BuwBEMEHb/ib9GuAioerSmvCJHKbURqwTM1SkTsGNsntc9KraCp9x/i/pm
-         0gsBjZ8SYwOD3pZlYMFDMTWxTdBbc8669gy8VB7PxwbWpuZaon4rSv9gPrzv+ohJwJhu
-         QDNtf63+kuzzNETe35VV57a4/9Mz8BvbVBNckKngSE/kxZ6jJvSUmiftiakbfDsCB+rS
-         CC/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MONdjG0schDl4h6ZHaz0uRvYs4Ys6NIRsl4cjekglXU=;
-        b=ZukHDsrPsYGFQMwRSCUpbPF2PyBQXgIe2oKCQtF8buHRx6V0WBihUCVDQYhFwpuB56
-         hR4z31GSoo4CEAnbPh2CP3uy7agkVK5DWdw2kMkbIWFE7DLoxOUBOdToMqT7Zf//YIyH
-         ZKAmK+ZUgPWQ0d0nipK7HJF+tswpV6U33iNxCEA6Q5WfATiHm0nEDjpjSEORHlfkd59B
-         rF4FVZpSnTD0L62Pzm6lJQnLa/ySIjvXVrdyoUYPFDmDe/fChzWiUtZ4DVXjQVCXACTR
-         3wl39BgGv4PQcvcr5kdASfcJ1pD2QtbfQX1863xtpcAAemvOReIPBezVWYTZyhNI+nA1
-         4Yuw==
-X-Gm-Message-State: ANoB5pkzpLfzPSdRJckqXuR6v/gmJHRl7j5b27RxHVjEI+1kPGxqKvhG
-        B+ZcmP2iz0gGvL8114H10vFavkr26n/ZOvF/huc2t6+Q
-X-Google-Smtp-Source: AA0mqf7J52WmCh65THoIoO118jTvRkhchkFFmURXZZS/maR6gUWp5P3DFkRi1x6HE+NEn4DonVl1MtbKplclv0yXpHs=
-X-Received: by 2002:a05:6402:d77:b0:459:aa70:d4fd with SMTP id
- ec55-20020a0564020d7700b00459aa70d4fdmr5015546edb.162.1668255345833; Sat, 12
- Nov 2022 04:15:45 -0800 (PST)
+        Sat, 12 Nov 2022 07:15:52 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15111A38E
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 04:15:49 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N8ZFJ1fxCzqSLh;
+        Sat, 12 Nov 2022 20:12:04 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 12 Nov 2022 20:15:47 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 12 Nov 2022 20:15:47 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Zhang Qiang1 <qiang1.zhang@intel.com>
+Subject: [PATCH] mm/vmalloc: allow mem_dump_obj() to be called in interrupt context
+Date:   Sat, 12 Nov 2022 20:15:37 +0800
+Message-ID: <20221112121537.1634-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-References: <CAOM0=dbwNs1XcnD0i+SrC1S-SNFEGXM5G8QrVCqAxaz=YkAEFg@mail.gmail.com>
- <20221112074759.GA5111@1wt.eu> <CAOM0=daopCt=LthGStL2zHYxgQ6iphLLfKZjxcPS07yCvyq42Q@mail.gmail.com>
- <20221112113410.GA5553@1wt.eu> <CAOM0=dbuPP1j7MYkZCxbXQKxUsjeO0QXfE_g-xapFXYSpCAgXw@mail.gmail.com>
- <20221112120109.GA5592@1wt.eu>
-In-Reply-To: <20221112120109.GA5592@1wt.eu>
-From:   A <amit234234234234@gmail.com>
-Date:   Sat, 12 Nov 2022 17:45:34 +0530
-Message-ID: <CAOM0=dbM_WSkPAEKtC7_h2eZ4RUBMrhW4Q+QodXkXkWVLna4Vw@mail.gmail.com>
-Subject: Re: Setting variable NULL after freeing it.
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 5:31 PM Willy Tarreau <w@1wt.eu> wrote:
->
-> On Sat, Nov 12, 2022 at 05:28:04PM +0530, A wrote:
-> > I was just thinking that when this is good practice (where its usage
-> > is genuine), then why is there not a kernel wide macro that would call
-> > kfree(x) and then set (x) = NULL. So, this will be done automatically
-> > for everyone and the developer will not have to decide whether to do
-> > this or not.
->
-> Very likely because developers want to decide.
->
-> Willy
+The function mem_dump_obj() can sometimes provide valuable debugging
+information, but it cannot be called in an interrupt context because
+spinlock vmap_area_lock has not been protected against IRQs. If the
+current task has held the lock before hard/soft interrupt handler calls
+mem_dump_obj(), simply abandoning the dump operation can avoid deadlock.
+That is, no deadlock occurs in extreme cases, and dump succeeds in most
+cases.
 
-Yeah, may be they want to save the time the kernel will spend in doing
-(x) = NULL.
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ mm/vmalloc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Amit
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index ccaa461998f3c37..cdd36c5a1aa16f8 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -4034,6 +4034,9 @@ bool vmalloc_dump_obj(void *object)
+ 	struct vm_struct *vm;
+ 	void *objp = (void *)PAGE_ALIGN((unsigned long)object);
+ 
++	if (unlikely(spin_is_locked(&vmap_area_lock)))
++		return false;
++
+ 	vm = find_vm_area(objp);
+ 	if (!vm)
+ 		return false;
+-- 
+2.25.1
+
