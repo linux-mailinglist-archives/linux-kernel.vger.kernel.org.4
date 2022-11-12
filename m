@@ -2,72 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 016D16268E0
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 11:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7D56268F8
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 11:49:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234843AbiKLK1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 05:27:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S234880AbiKLKtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 05:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiKLK06 (ORCPT
+        with ESMTP id S234802AbiKLKsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 05:26:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A488A17E3D;
-        Sat, 12 Nov 2022 02:26:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4201D60B91;
-        Sat, 12 Nov 2022 10:26:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EE5BC43145;
-        Sat, 12 Nov 2022 10:26:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668248816;
-        bh=xrGRndr6af8EK9Jo3B73sSAZkJjBqo9SLyX5L2AsDXo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Wk/IDTu67XbsB1Zbtg3RTLNHbPhF27kjVlysCqZeGC4WuW3iQUtT7jFcM1CgHCvG3
-         SGfTvvNi0CEVZGwHrjUpHouXi8cW0zI0iM5gs+YgsxNAoy2DTWeYpoWLxPn6cBWCNl
-         tzqCwtF3ch49/2VHJCUQBOnawM/HqS9fCGp9A0j+NGGhcndbhiVGP1HETT0r+OSM+N
-         y4d7fs0HBI1Z23KjIUoLyXao5XwEPhYrKyHB8pPZdieoz7gLtwCLBbNFpobHZ77gCq
-         FCEBJcW/tNwrPv4y2uiOqx/cDrX9zAGbiMkF6Ua3TP6o2wqBffsMYTiesJNu6foPVD
-         1YsL2di8hreTg==
-Received: by mail-ed1-f51.google.com with SMTP id s12so10795945edd.5;
-        Sat, 12 Nov 2022 02:26:56 -0800 (PST)
-X-Gm-Message-State: ANoB5pnnRve+/nUgJM1xe1+iRJ7EbtXf+MzGwRDKSBdTDu5XJBMhtIfa
-        wrXr64oky7inj0podGSpTb94f7IzK4Qtiub7/TY=
-X-Google-Smtp-Source: AA0mqf4cCb/rBaVNeOC4vccC3RXsFwpK0pA9R6rHmaDD09Q9QUoNwZ5iv4azux4dqBqbCV7wDGqTqPL3IdDKeOA1YDw=
-X-Received: by 2002:aa7:db85:0:b0:463:f3a:32ce with SMTP id
- u5-20020aa7db85000000b004630f3a32cemr4917828edt.366.1668248814780; Sat, 12
- Nov 2022 02:26:54 -0800 (PST)
+        Sat, 12 Nov 2022 05:48:55 -0500
+X-Greylist: delayed 94 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 12 Nov 2022 02:48:53 PST
+Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA0E1704A;
+        Sat, 12 Nov 2022 02:48:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1668249051; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=LFqAfRynvUXCUpErtnOL6NDnj4CYj8iUanwK1DI2pR+ycJNXJzAwqaHIZmzZOgUIt02nNaJBMnJmhKGlIruks6xnjLYgWeI0U4bgegcQS0Or9DXN0OOsU+fJ6BR29aBMM7qz/NUICVDPdVbsW5J5hNoQ4dphep8ZwHCZ/uLWJIQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1668249051; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=BCGeylOFJYtUpHot+ky277Ye6xqHBGluvEQQ9Xbj6Mg=; 
+        b=KNmJaKaRXLHJy2ps9hY+5dEQrg7iBmOw45HEscaazRCJAfFomGO/z3zFitv7w/OjVJjJ+W051G3AAH3Lp+rabtrQ2INaCv0/gHYL6kWKDmHOsy0Ted8tGhIMGA7fplxTjmw4YnAdviF6+UyCjf4Aiavc6a7Nuk/esNNph2AO7Wc=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1668249051;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+        bh=BCGeylOFJYtUpHot+ky277Ye6xqHBGluvEQQ9Xbj6Mg=;
+        b=PozslzT7pVPO2qvIFATO1I96o2g8GSKMsxdghJMy8CfbfKGTpVvE6px9WGHEOunY
+        HVzWfULbawSa5IR8qvhULazw3+TmhelCBIQbApNmSWHqGS3X9VbMmUiD7zzA8gBozNo
+        3SaZNtO27VhwOcopImrs34fC1d/Kje44T4HTcxTE=
+Received: from kampyooter.. (110.226.30.173 [110.226.30.173]) by mx.zoho.in
+        with SMTPS id 166824904951082.6955736246938; Sat, 12 Nov 2022 16:00:49 +0530 (IST)
+From:   Siddh Raman Pant <code@siddh.me>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        David Howells <dhowells@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     keyrings <keyrings@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <cover.1668248462.git.code@siddh.me>
+Subject: [RESEND PATCH v2 0/2] watch_queue: Clean up some code
+Date:   Sat, 12 Nov 2022 16:00:39 +0530
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221027125253.3458989-1-chenhuacai@loongson.cn>
-In-Reply-To: <20221027125253.3458989-1-chenhuacai@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sat, 12 Nov 2022 18:26:42 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4Y5qHSXr2uHvMYpXMgvm5fU7WQmcALB+86OYkgM1XbOg@mail.gmail.com>
-Message-ID: <CAAhV-H4Y5qHSXr2uHvMYpXMgvm5fU7WQmcALB+86OYkgM1XbOg@mail.gmail.com>
-Subject: Re: [PATCH V14 0/4] mm/sparse-vmemmap: Generalise helpers and enable
- for LoongArch
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,97 +66,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Arnd,
+There is a dangling reference to pipe in a watch_queue after clearing it.
+Thus, NULL that pointer while clearing.
 
-Just a gentle ping, is this series good enough now? I think the last
-problem (static-key.h inclusion) has also been solved.
+This change renders wqueue->defunct superfluous, as the latter is only used
+to check if watch_queue is cleared. With this change, the pipe is NULLed
+while clearing, so we can just check if the pipe is NULL.
+
+Extending comment for watch_queue->pipe in the definition of watch_queue
+made the comment conventionally too long (it was already past 80 chars),
+so I have changed the struct annotations to be kerneldoc-styled, so that
+I can extend the comment mentioning that the pipe is NULL when watch_queue
+is cleared. In the process, I have also hopefully improved documentation
+by documenting things which weren't documented before.
+
+Changes in v2:
+- Merged the NULLing and removing defunct patches.
+- Removed READ_ONCE barrier in lock_wqueue().
+- Improved and fixed errors in struct docs.
+- Better commit messages.
+
+Original date of posting patch: 6 Aug 2022
+
+Siddh Raman Pant (2):
+  include/linux/watch_queue: Improve documentation
+  kernel/watch_queue: NULL the dangling *pipe, and use it for clear
+    check
+
+ include/linux/watch_queue.h | 100 ++++++++++++++++++++++++++----------
+ kernel/watch_queue.c        |  12 ++---
+ 2 files changed, 79 insertions(+), 33 deletions(-)
+
+--=20
+2.35.1
 
 
-Huacai
-
-On Thu, Oct 27, 2022 at 8:54 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
->
-> This series is in order to enable sparse-vmemmap for LoongArch. But
-> LoongArch cannot use generic helpers directly because MIPS&LoongArch
-> need to call pgd_init()/pud_init()/pmd_init() when populating page
-> tables. So we adjust the prototypes of p?d_init() to make generic
-> helpers can call them, then enable sparse-vmemmap with generic helpers,
-> and to be further, generalise vmemmap_populate_hugepages() for ARM64,
-> X86 and LoongArch.
->
-> V1 -> V2:
-> Split ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP to a separate patch.
->
-> V2 -> V3:
-> 1, Change the Signed-off-by order of author and committer;
-> 2, Update commit message about the build error on LoongArch.
->
-> V3 -> V4:
-> Change pmd to pmdp for ARM64 for consistency.
->
-> V4 -> V5:
-> Add a detailed comment for no-fallback in the altmap case.
->
-> V5 -> V6:
-> 1, Fix build error for NIOS2;
-> 2, Fix build error for allnoconfig;
-> 3, Update comment for no-fallback in the altmap case.
->
-> V6 -> V7:
-> Fix build warnings of "no previous prototype".
->
-> V7 -> V8:
-> Fix build error for MIPS pud_init().
->
-> V8 -> V9:
-> Remove redundant #include to avoid build error with latest upstream
-> kernel.
->
-> V9 -> V10:
-> Fix build error due to VMEMMAP changes in 6.0-rc1.
->
-> V10 -> V11:
-> Adjust context due to ARM64 changes in 6.1-rc1.
->
-> V11 -> V12:
-> 1, Fix build error for !SPARSEMEM;
-> 2, Simplify pagetable_init() for MIPS32.
->
-> V12 -> V13:
-> 1, Add Acked-by and Reviewed-by tags;
-> 2, Update commit message for the 4th patch.
->
-> V13 -> V14:
-> Remove the static_key.h inclusion in the 4th patch.
->
-> Huacai Chen and Feiyang Chen(4):
->  MIPS&LoongArch&NIOS2: Adjust prototypes of p?d_init().
->  LoongArch: Add sparse memory vmemmap support.
->  mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages().
->  LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP.
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> ---
->  arch/arm64/mm/mmu.c                    | 53 ++++++--------------
->  arch/loongarch/Kconfig                 |  2 +
->  arch/loongarch/include/asm/pgalloc.h   | 13 +----
->  arch/loongarch/include/asm/pgtable.h   | 13 +++--
->  arch/loongarch/include/asm/sparsemem.h |  8 +++
->  arch/loongarch/kernel/numa.c           |  4 +-
->  arch/loongarch/mm/init.c               | 44 +++++++++++++++-
->  arch/loongarch/mm/pgtable.c            | 23 +++++----
->  arch/mips/include/asm/pgalloc.h        |  8 +--
->  arch/mips/include/asm/pgtable-64.h     |  8 +--
->  arch/mips/kvm/mmu.c                    |  3 +-
->  arch/mips/mm/pgtable-32.c              | 10 ++--
->  arch/mips/mm/pgtable-64.c              | 18 ++++---
->  arch/mips/mm/pgtable.c                 |  2 +-
->  arch/x86/mm/init_64.c                  | 92 ++++++++++++----------------------
->  include/linux/mm.h                     |  8 +++
->  include/linux/page-flags.h             |  1 +
->  mm/sparse-vmemmap.c                    | 64 +++++++++++++++++++++++
->  18 files changed, 222 insertions(+), 152 deletions(-)
-> --
-> 2.27.0
->
