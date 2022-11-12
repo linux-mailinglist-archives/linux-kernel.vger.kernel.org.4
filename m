@@ -2,80 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28BB3626AB3
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 17:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59017626AA9
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 17:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235029AbiKLQzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 11:55:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
+        id S234983AbiKLQom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 11:44:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232659AbiKLQzN (ORCPT
+        with ESMTP id S230170AbiKLQok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 11:55:13 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6C3E44
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 08:54:55 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id d8so1853403qki.13
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 08:54:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hraU6DavAv/OWYW8yya1aO+dvV0RLHvHKMFzF5tyCpI=;
-        b=sF14r4gr7Rfsa5jIETwbsJIHmxlLNsTNWfuqzgjtFZ7s7ATC7UZDYDjRaGHTyYJDiR
-         bnR02OUYvRftYWJh1z4SihAYjyRuWZXQjMaQ4gKDi6nKTaRyfOLAEM1rtnKewDnA1ajd
-         zUswt0Qk2++V9tyAFrJpiUkj3/BI2jp52QmSA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hraU6DavAv/OWYW8yya1aO+dvV0RLHvHKMFzF5tyCpI=;
-        b=JSTAhDQZuvcE6WpVDgxAKwBVLt1w53A32SKvviB0dYRbT+VWinRuBIf9FqEvyGPl5B
-         M5PJYLtR17s/dsBpznestcklmh9DkUgiIXbBV5HHOEnET/e0Gk8BUm/HAsO5cnMmfjoC
-         NIdaLYSpkoay22QYSF6PSMZCyqZgcNTZHNBiGtL+ziPonhG3q/9AT3HcDgK6Ue0+P/Lo
-         zd21hSY0DDJRMw7MVYwOtFDlPWUX2kJ9jGFN6f3kAMSoqUw3T5Sk+9ckthNHyuacfTsT
-         TqXBTBfPY9PRvx9RhMu5edq3zkqMSUgfUBxu0NbLhaIs4qSbN6yJ1zXFfHJKMK1bojws
-         XCOQ==
-X-Gm-Message-State: ANoB5plyZUhh739oKACiUzjwEwvfMptWSetCfi/w4Yg1iS4UFFytTR/J
-        fJ5bm9CVXQAxED4ZeoKKfYHqDQ==
-X-Google-Smtp-Source: AA0mqf40CandDrt14rDk7wWwrxjEmzJtU5tLUuJONlbA/5/IlXZfiU6q+yr38eTSOLEICUJDb1LmtA==
-X-Received: by 2002:a37:6446:0:b0:6fa:16f2:7f57 with SMTP id y67-20020a376446000000b006fa16f27f57mr5387628qkb.221.1668272094772;
-        Sat, 12 Nov 2022 08:54:54 -0800 (PST)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id v22-20020a05620a441600b006faac3c33b8sm3534120qkp.27.2022.11.12.08.54.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Nov 2022 08:54:54 -0800 (PST)
-Date:   Sat, 12 Nov 2022 16:54:53 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Connor O'Brien <connoro@google.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        John Stultz <jstultz@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: Re: [RFC PATCH 10/11] torture: support randomized shuffling for
- proxy exec testing
-Message-ID: <Y2/P3cMExRt2fUP5@google.com>
-References: <20221003214501.2050087-1-connoro@google.com>
- <20221003214501.2050087-11-connoro@google.com>
+        Sat, 12 Nov 2022 11:44:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F6DDFC3;
+        Sat, 12 Nov 2022 08:44:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 72CFEB80976;
+        Sat, 12 Nov 2022 16:44:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BFF1C433D6;
+        Sat, 12 Nov 2022 16:44:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668271476;
+        bh=E21h76Ste+R/XmnRwrw2cGPAJ76iv8Ux/9BP47v6Mr8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jnNOYgEaGy+D83UtdT3ITvAmvw+hiW1aeuAupgoO0Vygya+1Q8/3/uE9uNi5+Re84
+         4VFRH5J14tCHmu4+XIC3BJs5NaP+7fQ8vG+ZsFZwNoBurjlDGXmgd+9rIl5eP5QIff
+         EeMYFEeI+fHRXDX+fUNIpy1jVateIktbO8Q0o82zGz9+FfdAr/SINp1aj0BeWg76Or
+         OBYMiKge3bEwzQF2fcyaItSMt/fu1LJCtVvalV0Ip7EJD1FBhoeLCqTt8MDQmNHATJ
+         gTg1J4EA8SspfeIOMf93Rcrb3CpgMMCKk4GcshoEGytq1qxpm59uk61mTgEYRnoldv
+         0stLsFNTGF69A==
+Date:   Sat, 12 Nov 2022 16:56:49 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/5] iio: addac: ad74413r: implement support for
+ optional refin-supply
+Message-ID: <20221112165649.4e6c5cd3@jic23-huawei>
+In-Reply-To: <20221111143921.742194-4-linux@rasmusvillemoes.dk>
+References: <20221111143921.742194-1-linux@rasmusvillemoes.dk>
+        <20221111143921.742194-4-linux@rasmusvillemoes.dk>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221003214501.2050087-11-connoro@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,72 +59,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 03, 2022 at 09:45:00PM +0000, Connor O'Brien wrote:
-> Quick hack to better surface bugs in proxy execution.
+On Fri, 11 Nov 2022 15:39:19 +0100
+Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
+
+> The ad74412r/ad74413r has an internal 2.5V reference output, which (by
+> tying the REFOUT pin to the REFIN pin) can be used in lieu of an
+> external 2.5V input reference.
 > 
-> Shuffling sets the same cpu affinities for all tasks, which makes us
-> less likely to hit paths involving migrating blocked tasks onto a cpu
-> where they can't run. Add an element of randomness to allow affinities
-> of different writer tasks to diverge.
+> Support that case by using devm_regulator_get_optional(), and simply
+> hardcode the 2500000 uV in ad74413r_get_output_current_scale().
 > 
-> Signed-off-by: Connor O'Brien <connoro@google.com>
+> I'm not sure this is completely correct, but it's certainly better
+> than the current behaviour, where when refin-supply is not defined in
+> device tree, the regulator framework helpfully does its
+> 
+>   supply refin not found, using dummy regulator
+
+You could reasonably assume that's a bug in the firmware.. See suggestions
+in reply to patch 2.  Given external wiring is involved, I don't think
+we can assume absence of a regulator means that loop back is in place.
+We need to indicate that explicitly in the binding in some way.
+
+Jonathan
+
+
+> 
+> thing. When we then do the regulator_get_voltage(), that dummy
+> regulator of course doesn't support that operation and thus returns
+> -22 (-EINVAL) which is used without being checked.
+> 
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 > ---
->  kernel/torture.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+>  drivers/iio/addac/ad74413r.c | 31 ++++++++++++++++++++-----------
+>  1 file changed, 20 insertions(+), 11 deletions(-)
 > 
-> diff --git a/kernel/torture.c b/kernel/torture.c
-> index 789aeb0e1159..1d0dd88369e3 100644
-> --- a/kernel/torture.c
-> +++ b/kernel/torture.c
-> @@ -54,6 +54,9 @@ module_param(verbose_sleep_frequency, int, 0444);
->  static int verbose_sleep_duration = 1;
->  module_param(verbose_sleep_duration, int, 0444);
->  
-> +static int random_shuffle;
-> +module_param(random_shuffle, int, 0444);
-> +
->  static char *torture_type;
->  static int verbose;
->  
-> @@ -518,6 +521,7 @@ static void torture_shuffle_task_unregister_all(void)
->   */
->  static void torture_shuffle_tasks(void)
+> diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
+> index 37485be88a63..9f77d2f514de 100644
+> --- a/drivers/iio/addac/ad74413r.c
+> +++ b/drivers/iio/addac/ad74413r.c
+> @@ -608,7 +608,10 @@ static int ad74413r_get_output_voltage_scale(struct ad74413r_state *st,
+>  static int ad74413r_get_output_current_scale(struct ad74413r_state *st,
+>  					     int *val, int *val2)
 >  {
-> +	DEFINE_TORTURE_RANDOM(rand);
->  	struct shuffle_task *stp;
+> -	*val = regulator_get_voltage(st->refin_reg);
+> +	if (st->refin_reg)
+> +		*val = regulator_get_voltage(st->refin_reg);
+> +	else
+> +		*val = 2500000;
+>  	*val2 = st->sense_resistor_ohms * AD74413R_DAC_CODE_MAX * 1000;
 >  
->  	cpumask_setall(shuffle_tmp_mask);
-> @@ -537,8 +541,10 @@ static void torture_shuffle_tasks(void)
->  		cpumask_clear_cpu(shuffle_idle_cpu, shuffle_tmp_mask);
+>  	return IIO_VAL_FRACTIONAL;
+> @@ -1313,19 +1316,25 @@ static int ad74413r_probe(struct spi_device *spi)
+>  	if (IS_ERR(st->regmap))
+>  		return PTR_ERR(st->regmap);
 >  
->  	mutex_lock(&shuffle_task_mutex);
-> -	list_for_each_entry(stp, &shuffle_task_list, st_l)
-> -		set_cpus_allowed_ptr(stp->st_t, shuffle_tmp_mask);
-> +	list_for_each_entry(stp, &shuffle_task_list, st_l) {
-> +		if (!random_shuffle || torture_random(&rand) & 0x1)
-> +			set_cpus_allowed_ptr(stp->st_t, shuffle_tmp_mask);
+> -	st->refin_reg = devm_regulator_get(st->dev, "refin");
+> -	if (IS_ERR(st->refin_reg))
+> -		return dev_err_probe(st->dev, PTR_ERR(st->refin_reg),
+> -				     "Failed to get refin regulator\n");
+> +	st->refin_reg = devm_regulator_get_optional(st->dev, "refin");
+> +	if (IS_ERR(st->refin_reg)) {
+> +		ret = PTR_ERR(st->refin_reg);
+> +		if (ret != -ENODEV)
+> +			return dev_err_probe(st->dev, ret,
+> +					     "Failed to get refin regulator\n");
+> +		st->refin_reg = NULL;
 > +	}
->  	mutex_unlock(&shuffle_task_mutex);
-
-Instead of doing it this way, maybe another approach is to randomize the
-sleep interval in:
-
- */
-static int torture_shuffle(void *arg)
-{
-	VERBOSE_TOROUT_STRING("torture_shuffle task started");
-	do {
-		schedule_timeout_interruptible(shuffle_interval);
-		torture_shuffle_tasks();
-		...
-	} while (...)
-	...
-}
-
-Right now with this patch you still wakeup the shuffle thread when skipping
-the affinity set operation.
-
-thanks,
-
- - Joel
+>  
+> -	ret = regulator_enable(st->refin_reg);
+> -	if (ret)
+> -		return ret;
+> +	if (st->refin_reg) {
+> +		ret = regulator_enable(st->refin_reg);
+> +		if (ret)
+> +			return ret;
+>  
+> -	ret = devm_add_action_or_reset(st->dev, ad74413r_regulator_disable,
+> +		ret = devm_add_action_or_reset(st->dev, ad74413r_regulator_disable,
+>  				       st->refin_reg);
+> -	if (ret)
+> -		return ret;
+> +		if (ret)
+> +			return ret;
+> +	}
+>  
+>  	st->sense_resistor_ohms = 100000000;
+>  	device_property_read_u32(st->dev, "shunt-resistor-micro-ohms",
 
