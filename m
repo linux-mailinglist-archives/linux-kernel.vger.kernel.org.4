@@ -2,200 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C72C6268FB
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 11:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C2C626913
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 12:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234695AbiKLK62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 05:58:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
+        id S234053AbiKLLRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 06:17:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiKLK60 (ORCPT
+        with ESMTP id S234820AbiKLLR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 05:58:26 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A863DBC0C
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 02:58:22 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N8Xbz2YFmzRp3V;
-        Sat, 12 Nov 2022 18:58:07 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 12 Nov 2022 18:58:21 +0800
-Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
- (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 12 Nov
- 2022 18:58:20 +0800
-From:   Liu Shixin <liushixin2@huawei.com>
-To:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        "David Rientjes" <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Roman Gushchin" <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Liu Shixin <liushixin2@huawei.com>
-Subject: [PATCH v4 3/3] mm/slub: Fix memory leak of kobj->name in sysfs_slab_add()
-Date:   Sat, 12 Nov 2022 19:46:02 +0800
-Message-ID: <20221112114602.1268989-4-liushixin2@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221112114602.1268989-1-liushixin2@huawei.com>
-References: <20221112114602.1268989-1-liushixin2@huawei.com>
+        Sat, 12 Nov 2022 06:17:27 -0500
+Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B8F1F607;
+        Sat, 12 Nov 2022 03:17:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1668249063; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=cCExhhTFEX3QBBDEO7eNkVH64rQHEy90REKBoYaxQvgaFH4AZlKHDMn8exZuW65rmWDMbCDWK7qP/lcgLSAjbfRyY0kOOMk4oKpRZCwaINRtegcQs7I8faLFuPyOT3TqIsvcVNGkHJYMaBN8HLTXNuz3kHB8YcGSIgZBN240O0c=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1668249063; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=I7Q4D57L0Fon5Y8OnWeD+j+i4yBdJ+wVG0hPi+xhFQ8=; 
+        b=UfU5qRrr5Xw5lMpe2TXVlG5nQNLpOizm3z7ffPbOl6+m/9Isl+ejHq35iFbPL929U8npPGk76RdzEuVljTTn0CRVawlhwLF8tINjrLYmlipwi2s953+El1VLr3f1YDfuk/rqnV2x9zUIKIbeBjoc0i0vd7fd+aBAVhX3+9Kihpk=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1668249063;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+        bh=I7Q4D57L0Fon5Y8OnWeD+j+i4yBdJ+wVG0hPi+xhFQ8=;
+        b=Fi3TU3wBUF/MWae+TX25M+DpVcTzI7q7h4Re+i2nMNUP5mScOP8xWudmN6LlH7dt
+        039pWLOp6n4Wci7DwK61rRfc8d/0tHo5tYOfPWmFQ7NM310Gl6MLiX1aWuV7qcpOSYP
+        A2CKstDiMgydjb7EvzdBSv+wrUoUNDXB3WeHqtcw=
+Received: from kampyooter.. (110.226.30.173 [110.226.30.173]) by mx.zoho.in
+        with SMTPS id 1668249062205101.81942800584966; Sat, 12 Nov 2022 16:01:02 +0530 (IST)
+From:   Siddh Raman Pant <code@siddh.me>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        David Howells <dhowells@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     keyrings <keyrings@vger.kernel.org>,
+        linux-security-module <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <3cdc67df35a283c4d1a341d039d0c2251ff72930.1668248462.git.code@siddh.me>
+Subject: [RESEND PATCH v2 1/2] include/linux/watch_queue: Improve documentation
+Date:   Sat, 12 Nov 2022 16:00:40 +0530
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1668248462.git.code@siddh.me>
+References: <cover.1668248462.git.code@siddh.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.32]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf8
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a memory leak of kobj->name in sysfs_slab_add():
+Introduce kerneldoc-style comments, and document a couple of things
+explicitly.
 
- unreferenced object 0xffff88817e446440 (size 32):
-   comm "insmod", pid 4085, jiffies 4296564501 (age 126.272s)
-   hex dump (first 32 bytes):
-     75 62 69 66 73 5f 69 6e 6f 64 65 5f 73 6c 61 62  ubifs_inode_slab
-     00 65 44 7e 81 88 ff ff 00 00 00 00 00 00 00 00  .eD~............
-   backtrace:
-     [<000000005b30fbbd>] __kmalloc_node_track_caller+0x4e/0x150
-     [<000000002f70da0c>] kstrdup_const+0x4b/0x80
-     [<00000000c6712c61>] kobject_set_name_vargs+0x2f/0xb0
-     [<00000000b151218e>] kobject_init_and_add+0xb0/0x120
-     [<00000000e56a4cf5>] sysfs_slab_add+0x17d/0x220
-     [<000000009326fd57>] __kmem_cache_create+0x406/0x590
-     [<00000000dde33cff>] kmem_cache_create_usercopy+0x1fc/0x300
-     [<00000000fe90cedb>] kmem_cache_create+0x12/0x20
-     [<000000007a6531c8>] 0xffffffffa02d802d
-     [<000000000e3b13c7>] do_one_initcall+0x87/0x2a0
-     [<00000000995ecdcf>] do_init_module+0xdf/0x320
-     [<000000008821941f>] load_module+0x2f98/0x3330
-     [<00000000ef51efa4>] __do_sys_finit_module+0x113/0x1b0
-     [<000000009339fbce>] do_syscall_64+0x35/0x80
-     [<000000006b7f2033>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-Following the rules stated in the comment for kobject_init_and_add():
- If this function returns an error, kobject_put() must be called to
- properly clean up the memory associated with the object.
-
-kobject_put() is more appropriate for error handling after kobject_init().
-And we can use this function to solve this problem.
-
-For the cache created early, the related sysfs_slab_add() is called in
-slab_sysfs_init(). Skip free these kmem_cache since they are important
-for system. Keep them working without sysfs.
-
-Fixes: 80da026a8e5d ("mm/slub: fix slab double-free in case of duplicate sysfs filename")
-Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+Signed-off-by: Siddh Raman Pant <code@siddh.me>
 ---
- include/linux/slub_def.h |  4 ++--
- mm/slab_common.c         |  6 ++----
- mm/slub.c                | 21 +++++++++++++++++----
- 3 files changed, 21 insertions(+), 10 deletions(-)
+ include/linux/watch_queue.h | 102 ++++++++++++++++++++++++++----------
+ 1 file changed, 75 insertions(+), 27 deletions(-)
 
-diff --git a/include/linux/slub_def.h b/include/linux/slub_def.h
-index 26d56c4c74d1..90c3e06b77b1 100644
---- a/include/linux/slub_def.h
-+++ b/include/linux/slub_def.h
-@@ -144,11 +144,11 @@ struct kmem_cache {
- 
- #ifdef CONFIG_SYSFS
- #define SLAB_SUPPORTS_SYSFS
--int sysfs_slab_add(struct kmem_cache *);
-+int sysfs_slab_add(struct kmem_cache *, bool);
- void sysfs_slab_unlink(struct kmem_cache *);
- void sysfs_slab_release(struct kmem_cache *);
- #else
--static inline int sysfs_slab_add(struct kmem_cache *s)
-+static inline int sysfs_slab_add(struct kmem_cache *s, bool free_slab)
- {
- 	return 0;
+diff --git a/include/linux/watch_queue.h b/include/linux/watch_queue.h
+index fc6bba20273b..7f8b1f15634b 100644
+--- a/include/linux/watch_queue.h
++++ b/include/linux/watch_queue.h
+@@ -18,57 +18,103 @@
+=20
+ struct cred;
+=20
++/**
++ * struct watch_type_filter - Filter on watch type
++ *
++ * @type: Type of watch_notification
++ * @subtype_filter: Bitmask of subtypes to filter on
++ * @info_filter: Filter on watch_notification::info
++ * @info_mask: Mask of relevant bits in info_filter
++ */
+ struct watch_type_filter {
+ =09enum watch_notification_type type;
+-=09__u32=09=09subtype_filter[1];=09/* Bitmask of subtypes to filter on */
+-=09__u32=09=09info_filter;=09=09/* Filter on watch_notification::info */
+-=09__u32=09=09info_mask;=09=09/* Mask of relevant bits in info_filter */
++=09__u32=09=09subtype_filter[1];
++=09__u32=09=09info_filter;
++=09__u32=09=09info_mask;
+ };
+=20
++/**
++ * struct watch_filter - Filter on watch
++ *
++ * @rcu: RCU head (in union with type_filter)
++ * @type_filter: Bitmask of accepted types (in union with rcu)
++ * @nr_filters: Number of filters
++ * @filters: Array of watch_type_filter
++ */
+ struct watch_filter {
+ =09union {
+ =09=09struct rcu_head=09rcu;
+-=09=09/* Bitmask of accepted types */
+ =09=09DECLARE_BITMAP(type_filter, WATCH_TYPE__NR);
+ =09};
+-=09u32=09=09=09nr_filters;=09/* Number of filters */
++=09u32=09=09=09 nr_filters;
+ =09struct watch_type_filter filters[];
+ };
+=20
++/**
++ * struct watch_queue - General notification queue
++ *
++ * @rcu: RCU head
++ * @filter: Filter to use on watches
++ * @pipe: The pipe we're using as a buffer
++ * @watches: Contributory watches
++ * @notes: Preallocated notifications
++ * @notes_bitmap: Allocation bitmap for notes
++ * @usage: Object usage count
++ * @lock: To serialize accesses and removes
++ * @nr_notes: Number of notes
++ * @nr_pages: Number of pages in notes[]
++ * @defunct: True when queues closed
++ */
+ struct watch_queue {
+ =09struct rcu_head=09=09rcu;
+ =09struct watch_filter __rcu *filter;
+-=09struct pipe_inode_info=09*pipe;=09=09/* The pipe we're using as a buffe=
+r */
+-=09struct hlist_head=09watches;=09/* Contributory watches */
+-=09struct page=09=09**notes;=09/* Preallocated notifications */
+-=09unsigned long=09=09*notes_bitmap;=09/* Allocation bitmap for notes */
+-=09struct kref=09=09usage;=09=09/* Object usage count */
++=09struct pipe_inode_info=09*pipe;
++=09struct hlist_head=09watches;
++=09struct page=09=09**notes;
++=09unsigned long=09=09*notes_bitmap;
++=09struct kref=09=09usage;
+ =09spinlock_t=09=09lock;
+-=09unsigned int=09=09nr_notes;=09/* Number of notes */
+-=09unsigned int=09=09nr_pages;=09/* Number of pages in notes[] */
+-=09bool=09=09=09defunct;=09/* T when queues closed */
++=09unsigned int=09=09nr_notes;
++=09unsigned int=09=09nr_pages;
++=09bool=09=09=09defunct;
+ };
+=20
+-/*
+- * Representation of a watch on an object.
++/**
++ * struct watch - Representation of a watch on an object
++ *
++ * @rcu: RCU head (in union with info_id)
++ * @info_id: ID to be OR'd in to info field (in union with rcu)
++ * @queue: Queue to post events to
++ * @queue_node: Link in queue->watches
++ * @watch_list: Link in watch_list->watchers
++ * @list_node: The list node
++ * @cred: Creds of the owner of the watch
++ * @private: Private data for the watched object
++ * @id: Internal identifier
++ * @usage: Object usage count
+  */
+ struct watch {
+ =09union {
+ =09=09struct rcu_head=09rcu;
+-=09=09u32=09=09info_id;=09/* ID to be OR'd in to info field */
++=09=09u32=09=09info_id;
+ =09};
+-=09struct watch_queue __rcu *queue;=09/* Queue to post events to */
+-=09struct hlist_node=09queue_node;=09/* Link in queue->watches */
++=09struct watch_queue __rcu *queue;
++=09struct hlist_node=09queue_node;
+ =09struct watch_list __rcu=09*watch_list;
+-=09struct hlist_node=09list_node;=09/* Link in watch_list->watchers */
+-=09const struct cred=09*cred;=09=09/* Creds of the owner of the watch */
+-=09void=09=09=09*private;=09/* Private data for the watched object */
+-=09u64=09=09=09id;=09=09/* Internal identifier */
+-=09struct kref=09=09usage;=09=09/* Object usage count */
++=09struct hlist_node=09list_node;
++=09const struct cred=09*cred;
++=09void=09=09=09*private;
++=09u64=09=09=09id;
++=09struct kref=09=09usage;
+ };
+=20
+-/*
+- * List of watches on an object.
++/**
++ * struct watch_list - List of watches on an object
++ *
++ * @rcu: RCU head
++ * @watchers: List head
++ * @release_watch: Function to release watch
++ * @lock: To protect addition and removal of watches
+  */
+ struct watch_list {
+ =09struct rcu_head=09=09rcu;
+@@ -118,8 +164,10 @@ static inline void remove_watch_list(struct watch_list=
+ *wlist, u64 id)
  }
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 55e2cf064dfe..30808a1d1b32 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -237,11 +237,9 @@ static struct kmem_cache *create_cache(const char *name,
- #ifdef SLAB_SUPPORTS_SYSFS
- 	/* Mutex is not taken during early boot */
- 	if (slab_state >= FULL) {
--		err = sysfs_slab_add(s);
--		if (err) {
--			slab_kmem_cache_release(s);
-+		err = sysfs_slab_add(s, true);
-+		if (err)
- 			return ERR_PTR(err);
--		}
- 		debugfs_slab_add(s);
- 	}
- #endif
-diff --git a/mm/slub.c b/mm/slub.c
-index a1ad759753ce..25575bce0c3c 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -5881,7 +5881,7 @@ static char *create_unique_id(struct kmem_cache *s)
- 	return name;
- }
- 
--int sysfs_slab_add(struct kmem_cache *s)
-+int sysfs_slab_add(struct kmem_cache *s, bool free_slab)
- {
- 	int err;
- 	const char *name;
-@@ -5911,14 +5911,17 @@ int sysfs_slab_add(struct kmem_cache *s)
- 		 * for the symlinks.
- 		 */
- 		name = create_unique_id(s);
--		if (IS_ERR(name))
-+		if (IS_ERR(name)) {
-+			if (free_slab)
-+				slab_kmem_cache_release(s);
- 			return PTR_ERR(name);
-+		}
- 	}
- 
- 	s->kobj.kset = kset;
- 	err = kobject_init_and_add(&s->kobj, &slab_ktype, NULL, "%s", name);
- 	if (err)
--		goto out;
-+		goto out_put_kobj;
- 
- 	err = sysfs_create_group(&s->kobj, &slab_attr_group);
- 	if (err)
-@@ -5934,6 +5937,16 @@ int sysfs_slab_add(struct kmem_cache *s)
- 	return err;
- out_del_kobj:
- 	kobject_del(&s->kobj);
-+out_put_kobj:
-+	/*
-+	 * Skip free kmem_cache that create early since they are important
-+	 * for system. Keep them working without sysfs. Only free the name
-+	 * for early allocated kmem_cache.
-+	 */
-+	if (free_slab)
-+		kobject_put(&s->kobj);
-+	else
-+		kfree_const(s->kobj.name);
- 	goto out;
- }
- 
-@@ -6002,7 +6015,7 @@ static int __init slab_sysfs_init(void)
- 	slab_state = FULL;
- 
- 	list_for_each_entry(s, &slab_caches, list) {
--		err = sysfs_slab_add(s);
-+		err = sysfs_slab_add(s, false);
- 		if (err)
- 			pr_err("SLUB: Unable to add boot slab %s to sysfs\n",
- 			       s->name);
--- 
-2.25.1
+=20
+ /**
+- * watch_sizeof - Calculate the information part of the size of a watch re=
+cord,
+- * given the structure size.
++ * watch_sizeof() - Calculate the information part of the size of a watch
++ *=09=09    record, given the structure size.
++ *
++ * @STRUCT: The structure whose size is to be given
+  */
+ #define watch_sizeof(STRUCT) (sizeof(STRUCT) << WATCH_INFO_LENGTH__SHIFT)
+=20
+--=20
+2.35.1
+
 
