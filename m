@@ -2,37 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B27766268C7
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 11:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEDAE6268E3
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 11:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbiKLKUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 05:20:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
+        id S234199AbiKLKdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 05:33:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiKLKUQ (ORCPT
+        with ESMTP id S230257AbiKLKdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 05:20:16 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C219BC14;
-        Sat, 12 Nov 2022 02:20:15 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N8Whg27ryzJnWV;
-        Sat, 12 Nov 2022 18:17:07 +0800 (CST)
+        Sat, 12 Nov 2022 05:33:12 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E99272D1D1
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 02:33:02 -0800 (PST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N8X2h3snRz15MWp;
+        Sat, 12 Nov 2022 18:32:44 +0800 (CST)
 Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Sat, 12 Nov 2022 18:20:11 +0800
+ 15.1.2375.31; Sat, 12 Nov 2022 18:33:00 +0800
 Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
  (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sat, 12 Nov
- 2022 18:20:11 +0800
+ 2022 18:33:00 +0800
 From:   Liu Shixin <liushixin2@huawei.com>
-To:     Jens Axboe <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+To:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        "David Rientjes" <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Roman Gushchin" <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         Liu Shixin <liushixin2@huawei.com>
-Subject: [PATCH] blk-mq: only unregister sysfs when registration succeeded
-Date:   Sat, 12 Nov 2022 19:07:54 +0800
-Message-ID: <20221112110754.1109979-1-liushixin2@huawei.com>
+Subject: [PATCH v3 0/3] Refactor __kmem_cache_create() and fix memory leak
+Date:   Sat, 12 Nov 2022 19:20:52 +0800
+Message-ID: <20221112112055.1111078-1-liushixin2@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -49,27 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kobject_del() must not be called if kobject_add() has not been called.
-Hence only unregister sysfs when registration succeeded.
+I found a memory leak of kobj->name in sysfs_slab_add() which is introduced
+by 80da026a8e5d ("mm/slub: fix slab double-free in case of duplicate sysfs filename").
+Following the rules stated in the comment for kobject_init_and_add():
 
-Signed-off-by: Liu Shixin <liushixin2@huawei.com>
----
- block/blk-mq-sysfs.c | 2 ++
- 1 file changed, 2 insertions(+)
+ If this function returns an error, kobject_put() must be called to
+ properly clean up the memory associated with the object.
 
-diff --git a/block/blk-mq-sysfs.c b/block/blk-mq-sysfs.c
-index 93997d297d42..63f2df2500d9 100644
---- a/block/blk-mq-sysfs.c
-+++ b/block/blk-mq-sysfs.c
-@@ -279,6 +279,8 @@ void blk_mq_sysfs_unregister(struct gendisk *disk)
- 	unsigned long i;
- 
- 	lockdep_assert_held(&q->sysfs_dir_lock);
-+	if (!q->mq_sysfs_init_done)
-+		return;
- 
- 	queue_for_each_hw_ctx(q, hctx, i)
- 		blk_mq_unregister_hctx(hctx);
+We should use kobject_put() to free kobject.
+
+But we can't simply add kobject_put() since it will free kmem_cache too.
+If we use kobject_put(), we need to skip other release functions.
+
+In this series, We refactor the code to separate sysfs_slab_add() and
+debugfs_slab_add() from __kmem_cache_create(), and then use kobject_put()
+to free kobject in sysfs_slab_add(). This can fix the memory leak of
+kobject->name.
+
+v1->v2: Fix build error reported by kernel test robot <lkp@intel.com>.
+v2->v3: Don't free kmem_cache that create early.
+
+Liu Shixin (3):
+  mm/slab_common: Move cache_name to create_cache()
+  mm/slub: Refactor __kmem_cache_create()
+  mm/slub: Fix memory leak of kobj->name in sysfs_slab_add()
+
+ include/linux/slub_def.h | 11 +++++++
+ mm/slab_common.c         | 44 +++++++++++++++-------------
+ mm/slub.c                | 63 +++++++++++++++-------------------------
+ 3 files changed, 58 insertions(+), 60 deletions(-)
+
 -- 
 2.25.1
 
