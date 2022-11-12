@@ -2,160 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97427626914
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 12:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C60626947
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 12:46:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234857AbiKLLRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 06:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
+        id S230170AbiKLLqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 06:46:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233681AbiKLLR3 (ORCPT
+        with ESMTP id S231534AbiKLLqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 06:17:29 -0500
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9F31F9DD;
-        Sat, 12 Nov 2022 03:17:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1668249073; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=WvjIxDY9DG6YuzcAwCxhgC+1QeN+Or0Glx//RDKFYJtEKRoUf7s8ly6xpRvOkbm4JCKwyvfi36jQ9RxZGpsamB1ePt4gIVxsbGfTg3Yzoa9Vsl5IVaZjroRHh4b8gNZ6DiQDkakwI4asbsZtm2Tcgaf65o+nt1ADLspU7xnX8aQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1668249073; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=CciC0JA+1Sl6P741HLOLO7oPE18KzPzTWUnJ9g4NcCY=; 
-        b=degMBSnd9mGkKSPgdaapCdnzUPijGJ/a4MH85DcCllqX8o8cQ7EUSMFVg9m+rqFcL741P6czQkys9PXclLmJvjWnjpb4YTFGsJsBqMm3Cjy6FVgykzkQGl+i+APFF6LZHe8Frz9chLNlQlV4aSdB1t9LIhn4igYi90O7buSdj6s=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1668249073;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-        bh=CciC0JA+1Sl6P741HLOLO7oPE18KzPzTWUnJ9g4NcCY=;
-        b=KeYri2bDEYsjQ5ROrUNLIT/BtrfEBjYg5D/Aot2N09fxzzzUpkethOo9sk1RFEvl
-        y3KvB3tbeR+0Q8wdSe5EcX2+0D5TxFJX4wsOz0MK6aAPHU8MS/tJzI5zx9afafbQBfw
-        hI5vrRMIzBt/na673W7ByHSPaQoNAXhD6lCgS4hg=
-Received: from kampyooter.. (110.226.30.173 [110.226.30.173]) by mx.zoho.in
-        with SMTPS id 1668249072566411.90214034857365; Sat, 12 Nov 2022 16:01:12 +0530 (IST)
-From:   Siddh Raman Pant <code@siddh.me>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        David Howells <dhowells@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     keyrings <keyrings@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <21ea7a96018db8f140d7c68ca75665064361ad1b.1668248462.git.code@siddh.me>
-Subject: [RESEND PATCH v2 2/2] kernel/watch_queue: NULL the dangling *pipe, and use it for clear check
-Date:   Sat, 12 Nov 2022 16:00:41 +0530
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1668248462.git.code@siddh.me>
-References: <cover.1668248462.git.code@siddh.me>
+        Sat, 12 Nov 2022 06:46:43 -0500
+X-Greylist: delayed 3487 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 12 Nov 2022 03:46:41 PST
+Received: from mail-01-2.mymagenta.at (mail-01-2.mymagenta.at [80.109.253.247])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E1619026
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 03:46:41 -0800 (PST)
+Received: from [192.168.232.135] (helo=ren-mail-psmtp-mg01.)
+        by mail-01.mymagenta.at with esmtp (Exim 4.93)
+        (envelope-from <thomas.zeitlhofer+lkml@ze-it.at>)
+        id 1oto3q-003ArI-Qb
+        for linux-kernel@vger.kernel.org; Sat, 12 Nov 2022 11:48:30 +0100
+Received: from mr2 ([80.108.14.110])
+        by ren-mail-psmtp-mg01. with ESMTP
+        id to3poEhQDOG5Zto3podtXj; Sat, 12 Nov 2022 11:48:30 +0100
+X-Env-Mailfrom: thomas.zeitlhofer+lkml@ze-it.at
+X-Env-Rcptto: linux-kernel@vger.kernel.org
+X-SourceIP: 80.108.14.110
+X-CNFS-Analysis: v=2.4 cv=KJo5sHJo c=1 sm=1 tr=0 ts=636f79fe
+ a=tVdsoMYQxO1CUTS6b4mKlQ==:117 a=tVdsoMYQxO1CUTS6b4mKlQ==:17
+ a=kj9zAlcOel0A:10 a=VG87k5yWxwQ-MwjZPvcA:9 a=CjuIK1q_8ugA:10
+Date:   Sat, 12 Nov 2022 11:48:27 +0100
+From:   Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        "Denis V. Lunev" <den@openvz.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Yuwei Wang <wangyuweihx@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: neigh: decrement the family specific qlen
+Message-ID: <Y295+9+JDjqRWbwU@x1.ze-it.at>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-Content-Type: text/plain; charset=utf8
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-CMAE-Envelope: MS4xfFVWgsp8IYBGTwQJ6kSook4nMZDwx0h6hGZImeDR02IB3tnm9k1hkM6XugViv1f6IsJjWGoLVbNO6mRDcxd/p6KQNSlRHESZW0yN+nerryB5E/mlXJ6K
+ kf3ktCAFNF8Xr1SLDgLEoI9rdRb+g5MIowjvFXEglk75M/m3DggEvpDJrih9etJbWVVh+6hmPoRkMB79WoL7HDzjFkFvRoue6DW9xzBmmt3Bs0pURIBPzoz+
+ EdOJwcF+qHu0pdE8WsCPu/vV4W3XyBKQooOFXWdDdcrVbLmB5W9kgHjOghezG5Zlzj3x6xS47uCxmwRh1K/n8AcN5zM+LkzB3ERYOGkGNHv/eUnycF2lfIrx
+ il4Zec/jcxmNM2Cq9AnYsV+/R0dbvk7vnIDy7ac6aRmXFi82A8P2i1AUG9dly94RberQ04ZbQTmWgKEGWjBsz/N8W7PLaXqa4iT8Lv0F7BPBwAiccdVN7Pfs
+ YAS3++IAxvAhX1GSmWUYYhurR2LkH9gUOQVl9FgN8hKe5VAcFFexCfGL5XBHI+CGCRU9GEgWPaf63q7oMm6qZ0zHheKeO7X8FzBhhrA5QBHJrCoSdUOZfsml
+ b2D464HdZj7c886C4WgaQPYrqU/UGj+Eb+ysYHQW/hvTSA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NULL the dangling pipe reference while clearing watch_queue.
+Commit 0ff4eb3d5ebb ("neighbour: make proxy_queue.qlen limit
+per-device") introduced the length counter qlen in struct neigh_parms.
+There are separate neigh_parms instances for IPv4/ARP and IPv6/ND, and
+while the family specific qlen is incremented in pneigh_enqueue(), the
+mentioned commit decrements always the IPv4/ARP specific qlen,
+regardless of the currently processed family, in pneigh_queue_purge()
+and neigh_proxy_process().
 
-If not done, a reference to a freed pipe remains in the watch_queue,
-as this function is called before freeing a pipe in free_pipe_info()
-(see line 834 of fs/pipe.c).
+As a result, with IPv6/ND, the family specific qlen is only incremented
+(and never decremented) until it exceeds PROXY_QLEN, and then, according
+to the check in pneigh_enqueue(), neighbor solicitations are not
+answered anymore. As an example, this is noted when using the
+subnet-router anycast address to access a Linux router. After a certain
+amount of time (in the observed case, qlen exceeded PROXY_QLEN after two
+days), the Linux router stops answering neighbor solicitations for its
+subnet-router anycast address and effectively becomes unreachable.
 
-The sole use of wqueue->defunct is for checking if the watch queue has
-been cleared, but wqueue->pipe is also NULLed while clearing.
+Another result with IPv6/ND is that the IPv4/ARP specific qlen is
+decremented more often than incremented. This leads to negative qlen
+values, as a signed integer has been used for the length counter qlen,
+and potentially to an integer overflow.
 
-Thus, wqueue->defunct is superfluous, as wqueue->pipe can be checked
-for NULL. Hence, the former can be removed.
+Fix this by introducing the helper function neigh_parms_qlen_dec(),
+which decrements the family specific qlen. Thereby, make use of the
+existing helper function neigh_get_dev_parms_rcu(), whose definition
+therefore needs to be placed earlier in neighbour.c. Take the family
+member from struct neigh_table to determine the currently processed
+family and appropriately call neigh_parms_qlen_dec() from
+pneigh_queue_purge() and neigh_proxy_process().
 
-Signed-off-by: Siddh Raman Pant <code@siddh.me>
+Additionally, use an unsigned integer for the length counter qlen.
+
+Fixes: 0ff4eb3d5ebb ("neighbour: make proxy_queue.qlen limit per-device")
+Signed-off-by: Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
 ---
- include/linux/watch_queue.h |  4 +---
- kernel/watch_queue.c        | 12 ++++++------
- 2 files changed, 7 insertions(+), 9 deletions(-)
+ include/net/neighbour.h |  2 +-
+ net/core/neighbour.c    | 58 +++++++++++++++++++++--------------------
+ 2 files changed, 31 insertions(+), 29 deletions(-)
 
-diff --git a/include/linux/watch_queue.h b/include/linux/watch_queue.h
-index 7f8b1f15634b..d72ad82a4435 100644
---- a/include/linux/watch_queue.h
-+++ b/include/linux/watch_queue.h
-@@ -55,7 +55,7 @@ struct watch_filter {
-  *
-  * @rcu: RCU head
-  * @filter: Filter to use on watches
-- * @pipe: The pipe we're using as a buffer
-+ * @pipe: The pipe we're using as a buffer, NULL when queue is cleared/clo=
-sed
-  * @watches: Contributory watches
-  * @notes: Preallocated notifications
-  * @notes_bitmap: Allocation bitmap for notes
-@@ -63,7 +63,6 @@ struct watch_filter {
-  * @lock: To serialize accesses and removes
-  * @nr_notes: Number of notes
-  * @nr_pages: Number of pages in notes[]
-- * @defunct: True when queues closed
-  */
- struct watch_queue {
- =09struct rcu_head=09=09rcu;
-@@ -76,7 +75,6 @@ struct watch_queue {
- =09spinlock_t=09=09lock;
- =09unsigned int=09=09nr_notes;
- =09unsigned int=09=09nr_pages;
--=09bool=09=09=09defunct;
+diff --git a/include/net/neighbour.h b/include/net/neighbour.h
+index 20745cf7ae1a..cc0b65b7c829 100644
+--- a/include/net/neighbour.h
++++ b/include/net/neighbour.h
+@@ -83,7 +83,7 @@ struct neigh_parms {
+ 	struct rcu_head rcu_head;
+ 
+ 	int	reachable_time;
+-	int	qlen;
++	__u32	qlen;
+ 	int	data[NEIGH_VAR_DATA_MAX];
+ 	DECLARE_BITMAP(data_state, NEIGH_VAR_DATA_MAX);
  };
-=20
- /**
-diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
-index a6f9bdd956c3..a70ddfd622ee 100644
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -43,7 +43,7 @@ MODULE_LICENSE("GPL");
- static inline bool lock_wqueue(struct watch_queue *wqueue)
+diff --git a/net/core/neighbour.c b/net/core/neighbour.c
+index a77a85e357e0..952a54763358 100644
+--- a/net/core/neighbour.c
++++ b/net/core/neighbour.c
+@@ -307,7 +307,31 @@ static int neigh_del_timer(struct neighbour *n)
+ 	return 0;
+ }
+ 
+-static void pneigh_queue_purge(struct sk_buff_head *list, struct net *net)
++static struct neigh_parms *neigh_get_dev_parms_rcu(struct net_device *dev,
++						   int family)
++{
++	switch (family) {
++	case AF_INET:
++		return __in_dev_arp_parms_get_rcu(dev);
++	case AF_INET6:
++		return __in6_dev_nd_parms_get_rcu(dev);
++	}
++	return NULL;
++}
++
++static void neigh_parms_qlen_dec(struct net_device *dev, int family)
++{
++	struct neigh_parms *p;
++
++	rcu_read_lock();
++	p = neigh_get_dev_parms_rcu(dev, family);
++	if (p)
++		p->qlen--;
++	rcu_read_unlock();
++}
++
++static void pneigh_queue_purge(struct sk_buff_head *list, struct net *net,
++			       int family)
  {
- =09spin_lock_bh(&wqueue->lock);
--=09if (unlikely(wqueue->defunct)) {
-+=09if (unlikely(!wqueue->pipe)) {
- =09=09spin_unlock_bh(&wqueue->lock);
- =09=09return false;
- =09}
-@@ -105,9 +105,6 @@ static bool post_one_notification(struct watch_queue *w=
-queue,
- =09unsigned int head, tail, mask, note, offset, len;
- =09bool done =3D false;
-=20
--=09if (!pipe)
--=09=09return false;
+ 	struct sk_buff_head tmp;
+ 	unsigned long flags;
+@@ -321,13 +345,7 @@ static void pneigh_queue_purge(struct sk_buff_head *list, struct net *net)
+ 		struct net_device *dev = skb->dev;
+ 
+ 		if (net == NULL || net_eq(dev_net(dev), net)) {
+-			struct in_device *in_dev;
 -
- =09spin_lock_irq(&pipe->rd_wait.lock);
-=20
- =09mask =3D pipe->ring_size - 1;
-@@ -603,8 +600,11 @@ void watch_queue_clear(struct watch_queue *wqueue)
- =09rcu_read_lock();
- =09spin_lock_bh(&wqueue->lock);
-=20
--=09/* Prevent new notifications from being stored. */
--=09wqueue->defunct =3D true;
-+=09/*
-+=09 * This pipe will get freed by the caller free_pipe_info().
-+=09 * Removing this reference also prevents new notifications.
-+=09 */
-+=09wqueue->pipe =3D NULL;
-=20
- =09while (!hlist_empty(&wqueue->watches)) {
- =09=09watch =3D hlist_entry(wqueue->watches.first, struct watch, queue_nod=
-e);
---=20
-2.35.1
-
+-			rcu_read_lock();
+-			in_dev = __in_dev_get_rcu(dev);
+-			if (in_dev)
+-				in_dev->arp_parms->qlen--;
+-			rcu_read_unlock();
++			neigh_parms_qlen_dec(dev, family);
+ 			__skb_unlink(skb, list);
+ 			__skb_queue_tail(&tmp, skb);
+ 		}
+@@ -409,7 +427,8 @@ static int __neigh_ifdown(struct neigh_table *tbl, struct net_device *dev,
+ 	write_lock_bh(&tbl->lock);
+ 	neigh_flush_dev(tbl, dev, skip_perm);
+ 	pneigh_ifdown_and_unlock(tbl, dev);
+-	pneigh_queue_purge(&tbl->proxy_queue, dev ? dev_net(dev) : NULL);
++	pneigh_queue_purge(&tbl->proxy_queue, dev ? dev_net(dev) : NULL,
++			   tbl->family);
+ 	if (skb_queue_empty_lockless(&tbl->proxy_queue))
+ 		del_timer_sync(&tbl->proxy_timer);
+ 	return 0;
+@@ -1621,13 +1640,8 @@ static void neigh_proxy_process(struct timer_list *t)
+ 
+ 		if (tdif <= 0) {
+ 			struct net_device *dev = skb->dev;
+-			struct in_device *in_dev;
+ 
+-			rcu_read_lock();
+-			in_dev = __in_dev_get_rcu(dev);
+-			if (in_dev)
+-				in_dev->arp_parms->qlen--;
+-			rcu_read_unlock();
++			neigh_parms_qlen_dec(dev, tbl->family);
+ 			__skb_unlink(skb, &tbl->proxy_queue);
+ 
+ 			if (tbl->proxy_redo && netif_running(dev)) {
+@@ -1821,7 +1835,7 @@ int neigh_table_clear(int index, struct neigh_table *tbl)
+ 	cancel_delayed_work_sync(&tbl->managed_work);
+ 	cancel_delayed_work_sync(&tbl->gc_work);
+ 	del_timer_sync(&tbl->proxy_timer);
+-	pneigh_queue_purge(&tbl->proxy_queue, NULL);
++	pneigh_queue_purge(&tbl->proxy_queue, NULL, tbl->family);
+ 	neigh_ifdown(tbl, NULL);
+ 	if (atomic_read(&tbl->entries))
+ 		pr_crit("neighbour leakage\n");
+@@ -3539,18 +3553,6 @@ static int proc_unres_qlen(struct ctl_table *ctl, int write,
+ 	return ret;
+ }
+ 
+-static struct neigh_parms *neigh_get_dev_parms_rcu(struct net_device *dev,
+-						   int family)
+-{
+-	switch (family) {
+-	case AF_INET:
+-		return __in_dev_arp_parms_get_rcu(dev);
+-	case AF_INET6:
+-		return __in6_dev_nd_parms_get_rcu(dev);
+-	}
+-	return NULL;
+-}
+-
+ static void neigh_copy_dflt_parms(struct net *net, struct neigh_parms *p,
+ 				  int index)
+ {
+-- 
+2.30.2
 
