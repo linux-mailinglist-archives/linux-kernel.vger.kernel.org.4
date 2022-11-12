@@ -2,123 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DEB56265E3
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 01:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BAF6265E4
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 01:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234537AbiKLAOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 11 Nov 2022 19:14:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
+        id S234399AbiKLAPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 11 Nov 2022 19:15:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234412AbiKLAOw (ORCPT
+        with ESMTP id S232943AbiKLAPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 11 Nov 2022 19:14:52 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B104D14D22
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 16:14:51 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3704852322fso57368857b3.8
-        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 16:14:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XDKvgE4abL1LNK9A1vR3QS/HEotmvgeQVhtEiU4bCpY=;
-        b=o6ahKW4br5rBqjawkN84i9PyQeZlyu4NDHLMtdwIPBWpPNLZfcPQSzl9zHBZxKkH81
-         9lFc4rMiP0/pWx5541rX0cQJRhUOsOzpK0Gb+roLXJ2nTnL8adQhupsW/hSRSDluKq3W
-         Yw9putnEghIkFnwKHFEW7mZKWKfGYe7prfAjyXIUOVD9GOL+zs9byQ8vsPQBnIX0LHEx
-         bhQ2Iv81MRNwFXXV8kE2/oRqzIg6mScJcbYaD5+4gqgUSbRjQ1D6qE+lRPW5goOQPr9Q
-         rAmPGG+FdxOQvJM10qGCOki/l2sYW3PS+Pvtrxd0dWWlQ9nCpU6c0L9mmW+VLNL+UQo0
-         wTLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XDKvgE4abL1LNK9A1vR3QS/HEotmvgeQVhtEiU4bCpY=;
-        b=IEHi1ZfS+MILkFh8FtLIB4Fz/hnJf6wey8RahHkDDj4vanZXXRnGNFXp4FAN/BySjd
-         cfUOkKVsKfXfF2KcnCBI0S1QEBZgbRWntML8kOCiQBoY1iPL99BWQZUH/DwDx2NFeHPm
-         /zoyJuHer9mkhGbHOJZY2x+FuwUSBbrDDI6/8L6Qs6kWKMkJPkqgT/IgC9lOxv+L86+o
-         UcNeJVWt2U6n/P/Efpd7XS2Vdqf6yfY4ZYNUK/huoobO9uQdxyCc18Me6taZ2gKThFe7
-         qAlCMKlfnpApD2Iu2xzBbhWqWnddjvYdWnFNZjg24NYDIAMMsNp4+iofeCO6PkRkI6yc
-         85Sg==
-X-Gm-Message-State: ANoB5plzsS7RkkoM/takVbgRQ3HKlMCTtgxd0zqyxuz6XuJeaySPx0o5
-        SNcjYGwiZTHEzOPwgMjX30BSI3erVELUb640RkHQfQ==
-X-Google-Smtp-Source: AA0mqf6Y1guw19vg5V2gqWzMKChfMxZE3PEX1iRQHR48hbaUSEi1YGTVOhtxDfY/nSox9kf8fKhXQ4Kl4UBEJjZBvkU=
-X-Received: by 2002:a81:254a:0:b0:36c:aaa6:e571 with SMTP id
- l71-20020a81254a000000b0036caaa6e571mr4171152ywl.467.1668212090749; Fri, 11
- Nov 2022 16:14:50 -0800 (PST)
+        Fri, 11 Nov 2022 19:15:13 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367FB26109
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 16:15:12 -0800 (PST)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2ABJO4t1001592
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 16:15:12 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-id :
+ content-type : mime-version; s=s2048-2021-q4;
+ bh=AMV9vk3aLJfKR4C/AFf0nTOBIkSh/rOiYsbH8MAiOOw=;
+ b=LsccHcf0+EOvuMchqRrky40AyuQS+zK9zJ5ulI83jg3oNLrEYYnmjpuMYHhL26Oo4aDE
+ WD4h6OjUCY8SmvG+U8YENZGHOB2vMy01KwwiZFxVwfyh8NiVyXKo1pQIgzEA2qZLns37
+ yZyDZW36I8b2hdbwXrZPypmrDVKRkcTcX5bXAescxk8ZeaOeje96kdzKltKAq7IXCl76
+ eye4mnN/DnczOUDI4TQduwiVAA3fKkGo919Jjwev3w0JrnpVulurzBT1HyTWMkeDcDSS
+ YdyRy8NT4J/LdWq1pm5QaO9AXWqq0Pwy/KkJye95oaEyy3dkh2Bvc2jsJjqX7J551q8f QQ== 
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2109.outbound.protection.outlook.com [104.47.55.109])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ksj0hx6r9-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Fri, 11 Nov 2022 16:15:11 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GXv7kGtqOW2Lrh7rvwu/RWDvA/qZDUGL9S57Qz6beB0rM8XjhdCWTKxfRgzZ2U0FcCFrpFLSfH1k6g08I8c8dYa9WpbyOh8GOVFkXPWQ5i9TkYAiXdqJWL1CaQfmMsDTvX2s126N/R5z6RHHrZ9rdWmDqEjI4/gmBqg/7We13yXUIn8ftZpugKbVhtQsby+1OmcscjwwmlmGW4cbg7sFVQVyUV6G3cShl2oFj8kA7clJl5Vn35NybgRnz9coa/KxxA2j+I5FSpTCftZUs9CDnN6JeVDTtoGti9fHcT/iBuLupmVcrk1mq/s3Z5ZpHRXTiA7J0p438il7AXzqbHWDmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nEUYag5Iy2iHCwVERTdfy1YT63g8ESU4l5Pk7WPQ0e4=;
+ b=BMkcyo8kK0Gzam3dZl4CSllzfiUHvRUgTgKQL3Ju4dgldZanZOW+TJT121v49q2LZ1Gj91GIbPpPK9XpmO6o7Gi2K96zrsMndQ3s1GPHy6ZWhD/Eb1LzyyIg8UmbP5p7IBNLrXMmNm/8/th7i0Ec34ahuSmnZFATIhTOmUryaXxWi90l/Nao67VujNrVQJj5vF+c3Is3l87bu/d9dKAkg2B0Kex4UB1UFxg4pjyjBmtf/FGPi9hDEhIqwUGvxBN2mvFz5hdyLFtrfrvgHI8ANzvJ4omYCW+STqAFN+dkrF50i3egiferN0PYFAB2IoOSvrRwjgje+8BoRnshXF0YNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from CH2PR15MB3672.namprd15.prod.outlook.com (2603:10b6:610:5::14)
+ by MW4PR15MB5269.namprd15.prod.outlook.com (2603:10b6:303:16a::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Sat, 12 Nov
+ 2022 00:15:08 +0000
+Received: from CH2PR15MB3672.namprd15.prod.outlook.com
+ ([fe80::f2e4:890:b012:8910]) by CH2PR15MB3672.namprd15.prod.outlook.com
+ ([fe80::f2e4:890:b012:8910%4]) with mapi id 15.20.5791.022; Sat, 12 Nov 2022
+ 00:15:08 +0000
+From:   Nick Terrell <terrelln@meta.com>
+To:     syzbot <syzbot+40642be9b7e0bb28e0df@syzkaller.appspotmail.com>
+CC:     "chao@kernel.org" <chao@kernel.org>,
+        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>
+Subject: Re: [syzbot] INFO: trying to register non-static key in
+ f2fs_handle_error
+Thread-Topic: [syzbot] INFO: trying to register non-static key in
+ f2fs_handle_error
+Thread-Index: AQHY8TDGOufU10+cX0Cig6UNtwRGBq40LCQAgAZJHwA=
+Date:   Sat, 12 Nov 2022 00:15:08 +0000
+Message-ID: <E31B0CBC-F169-4C7D-9FE6-F928C0F802AF@fb.com>
+References: <0000000000006a83e705ecea7171@google.com>
+In-Reply-To: <0000000000006a83e705ecea7171@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR15MB3672:EE_|MW4PR15MB5269:EE_
+x-ms-office365-filtering-correlation-id: 7ea76d8f-ac68-4da1-cbde-08dac442f53e
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 39JepzQT6dLoz2zgPoV+112FJ91Q0gguLtRJBwTcmRJsf4dC8WXxLCOlO1agmefzhion2MexDSrrPbV2HEuFRQXw/6IlLm2Zpoj7JMLt+8Wn6S/TzypNb12Sdb7lAESL9fHzcBwWivcYVLabGjerjKu6Inw/8zuLBTfvhKPjkxHVIIu0ErMfChJi8kwo80N1zjSlcFBirfEMLzmT1XESFGNW6S83T34bW2kHG0GgJQ6QAyR4BQs7Qenr9WtKPbhcSkTu5pkilpO62b+ObCVeo0wLbG5KTiYjDp9UNLqbtJtqXZCEgbSAdW67/yD2XDERgtN+0zh1Kfx5BmB9g7ruSKK+E0Udhq2+4DIJQOW8pM18Aq5gsEJ19rq8iuweOodQ0ANo/R+4nNUick4dqd93kW07ffIzogrnRgcPdqs7k6pE4f7XqW+rmNSDBLzindNUYIfOqTrjwhT26ZFovDM5NvQey1jk7MdatF3daJSfwnaVozQwu0WLQZN6yNFLlvVDSTVrm+0RLI+QXxQPucBx6OtUYMM2EOaf/U46pLsVqNN/syk1TpgPymetc95zNVQ3DnjWtADNE/og9IxXPyO0SrcI26MQo4GWh+89nvNHk7lV9T+hI9gGDPCYkaLmARbZzjaXO9c3la4cf6DVRBYz0aO1mJ5T+KALjFnOLs8ojNOng1wniua5T41IqvQh/IYTupIdOdqndH7+NFwALE1h6IvMqqgf1xgowZEcgK2sRpYmeUQp1DukoWwZbkARL3gW5hy1TM7noSpxEcqveiopAGtq1wGHebKnCzYHE0Tkq6p/zwkyUu0wDCylO+nNxoRV
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR15MB3672.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(396003)(39860400002)(136003)(346002)(451199015)(186003)(38100700002)(478600001)(91956017)(966005)(66446008)(9686003)(6486002)(2906002)(6506007)(4326008)(53546011)(66946007)(5660300002)(66556008)(76116006)(66476007)(64756008)(8676002)(6512007)(71200400001)(86362001)(8936002)(122000001)(83380400001)(36756003)(54906003)(316002)(41300700001)(38070700005)(33656002)(99710200001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?f5OkCrRk8FUBdX6pUct05Bzl25GJvwig0hF14HEVjh5S2kClkWq0xuCS5wE3?=
+ =?us-ascii?Q?MJO9xnJ7OixV4TBFb0PvAL1lcTBKEFcyxZvPbFXiYbGo3C3mGQ6NKqCxMICM?=
+ =?us-ascii?Q?L99OWkXgWrc+0f2Gv2oRHmmw0SrK5wPh+klkzHJLRN8H3cdnlMJmw1sihC50?=
+ =?us-ascii?Q?yfOrjh/RNPuwCoYZ8OhrtesaZ7/CP/OlwHwEGFlKOy756c0heJVYQUVijbjh?=
+ =?us-ascii?Q?RAQvOU0W0gWZtmzmiI+5qldoo+c8G/WyxE1wRMBd6AmPakjvfXmw4NDnHKkn?=
+ =?us-ascii?Q?68QZIpDw2TKS6qLVddu64BVm0C38au25eSzzLql4ULZvoMzOuOR3yH5sK+eU?=
+ =?us-ascii?Q?oYdcuScAwJtby/p5JZt9UubkBE0EX8Jc6EvfVuQTNiSlguxkwfkzJHjTNMkE?=
+ =?us-ascii?Q?WZ/rDTKXg8kxFZLZfpMtywkXBT3/rmRqN6WR7KquCGwH3uFTw/OVMneq5gSZ?=
+ =?us-ascii?Q?v/WaKF7JjAPHdngdiNudlKnFEe3QmzxG5+PlBuOI8Chrh9PyeQkH+UuKDCGP?=
+ =?us-ascii?Q?6r8jrsun0MblML1swwEi6pIUJA1FUTJB2phrYpZHyMtqtR81WyFphV15KcG6?=
+ =?us-ascii?Q?GQ8EJuA+lDL1+SCM17XEsg9mw56mLrniUrY1290XUj8Ivb7z2tJz7+4m34n+?=
+ =?us-ascii?Q?sv4aDvOgKugcU3Nzym/sC5bkNfjwk85mE9nYUgRtpcc303qDARCOcK8JOkH9?=
+ =?us-ascii?Q?+K2a8GSI9hLMNNR2tLGfsV4BGGYIC+Z8xGuvQXWzFVukQRZD5pRnLnPIx2lQ?=
+ =?us-ascii?Q?MlHHd7flgE6NiWfNhwz8u/TGUiQ4x5sN/b2CcfvcDaE8kfXkqpbdTKssAg0Q?=
+ =?us-ascii?Q?q00+MMFKjAAwWpqIwWEQ7TuxEQX3WrFU4qgLJoVQ6hX9+j595xlWBz3rJIzg?=
+ =?us-ascii?Q?IkBi8I006sMTUvQrhekIdf0MCA1EcCaHw7IFjLFT9FL3MzZv8+X0TLcHzaA5?=
+ =?us-ascii?Q?EmS4ZasDuz+/OewbgYNHBn8pz89wbe94HzACRfDwNHRLAOUP0XoyrJ9i9dx5?=
+ =?us-ascii?Q?EnZkrcN1p1gUJ0qSNCeQA/0RLA0KlLfjo7QmRE+ZSeCuLVdRs51MSGxa+KuV?=
+ =?us-ascii?Q?nsRCo5GMTPBfsGxocv2/yyhHIwbkgVTR0LJUXl1LgsyZPn7H3x7s1CrMGUS/?=
+ =?us-ascii?Q?B1KMqfreCjUtfjg8H7S+f3EFpXDdOYQtElaxQHWnLH1wweOig54wFdG1UIlf?=
+ =?us-ascii?Q?TZ3COyN2JMD8ZIryoFDspjV88fJFN4rxF5fuqSSUozSItRC/EdmtYR37mt9P?=
+ =?us-ascii?Q?U2L9+HqKjPlNb3nEVcpNTvHSH2kfqhr4hLCYYNrMl+HzLBfGxniLT4wJ46Ud?=
+ =?us-ascii?Q?HaAbBBU9E2mTzm72v3urLa6gfldhISu4YnDGNkrU822gqNDPClMHH7pAb6nN?=
+ =?us-ascii?Q?j0oTTZ4mXMUtR4iGKuPS6JGx56HZwRTh8fzBZcSTcGPb4EgKF0glT+ojwsMh?=
+ =?us-ascii?Q?5igNOkYJ36ro3uHRIxMT19Ottw8OLjEoAaZnY/Qa7cOIccN0TMYEqSyvFkMZ?=
+ =?us-ascii?Q?IN/uULWNWFTtkq48G8tmQmDhZl6pDxJeEXkE4tPLLvXgh2MXjSWHs+EzJsl2?=
+ =?us-ascii?Q?WSUwdHhhT1xYmNgt3TdX7gpWzpoN89Nr6GbfArDn93Fiav1ieHHZYtqTk6Y8?=
+ =?us-ascii?Q?p830Xr+6UMSeST/ClIwA3y8=3D?=
+Content-ID: <1C956C759F7931479950C56879FF4680@namprd15.prod.outlook.com>
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR15MB3672.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ea76d8f-ac68-4da1-cbde-08dac442f53e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Nov 2022 00:15:08.7609
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: u/wa/F7APRzmqFphfxlXovyA5Z5YYLCjLOSUYbXCNwhr0+295IdHtMKaTsq3IPvvvnoWrRfoQgTzQC5a8q4k3g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR15MB5269
+X-Proofpoint-ORIG-GUID: elmMZf0Wx02lcKh3zQ9JGxoXJs-09z0P
+X-Proofpoint-GUID: elmMZf0Wx02lcKh3zQ9JGxoXJs-09z0P
+Content-Type: text/plain; charset="us-ascii"
+X-Proofpoint-UnRewURL: 10 URL's were un-rewritten
 MIME-Version: 1.0
-References: <7ccd58e8e26bcdd82e66993cbd53ff59eebe3949.1668139105.git.jamie.bainbridge@gmail.com>
- <20221111092047.7d33bcd3@hermes.local> <CAAvyFNhkn2Zv16RMWGCtQh4SpjJX56q8gyEL3Mz6Ru+Ef=SJfA@mail.gmail.com>
- <20221111161120.770b9db2@hermes.local>
-In-Reply-To: <20221111161120.770b9db2@hermes.local>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 11 Nov 2022 16:14:39 -0800
-Message-ID: <CANn89i+sj9w+W3Mx-UsmaWzq_GcLwr=FQkHC61_2eBbvpVQQ1g@mail.gmail.com>
-Subject: Re: [PATCH v2] tcp: Add listening address to SYN flood message
-To:     Stephen Hemminger <stephen@networkplumber.org>
-Cc:     Jamie Bainbridge <jamie.bainbridge@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-11_11,2022-11-11_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 4:11 PM Stephen Hemminger
-<stephen@networkplumber.org> wrote:
->
-> On Sat, 12 Nov 2022 10:59:52 +1100
-> Jamie Bainbridge <jamie.bainbridge@gmail.com> wrote:
->
-> > On Sat, 12 Nov 2022 at 04:20, Stephen Hemminger
-> > <stephen@networkplumber.org> wrote:
-> > >
-> > > On Fri, 11 Nov 2022 14:59:32 +1100
-> > > Jamie Bainbridge <jamie.bainbridge@gmail.com> wrote:
-> > >
-> > > > +         xchg(&queue->synflood_warned, 1) == 0) {
-> > > > +             if (IS_ENABLED(CONFIG_IPV6) && sk->sk_family == AF_INET6) {
-> > > > +                     net_info_ratelimited("%s: Possible SYN flooding on port %pI6c.%u. %s.\n",
-> > > > +                                     proto, &sk->sk_v6_rcv_saddr,
-> > > > +                                     sk->sk_num, msg);
-> > > > +             } else {
-> > > > +                     net_info_ratelimited("%s: Possible SYN flooding on port %pI4.%u. %s.\n",
-> > > > +                                     proto, &sk->sk_rcv_saddr,
-> > > > +                                     sk->sk_num, msg);
-> > >
-> > > Minor nit, the standard format for printing addresses would be to use colon seperator before port
-> > >
-> > >                 if (IS_ENABLED(CONFIG_IPV6) && sk->sk_family == AF_INET6) {
-> > >                         net_info_ratelimited("%s: Possible SYN flooding on [%pI6c]:%u. %s.\n",
-> > >                                         proto, &sk->sk_v6_rcv_saddr, sk->sk_num, msg);
-> > >                 } else {
-> > >                         net_info_ratelimited("%s: Possible SYN flooding on %pI4:%u. %s.\n",
-> > >                                         proto, &sk->sk_rcv_saddr, sk->sk_num, msg);
-> >
-> > I considered this too, though Eric suggested "IP.port" to match tcpdump.
->
-> That works, if it happens I doubt it matters.
 
-Note that "ss dst" really needs the [] notation for IPv6
 
-ss -t dst "[::1]"
-State                  Recv-Q             Send-Q
-    Local Address:Port                            Peer Address:Port
-         Process
-CLOSE-WAIT             1                  0
-            [::1]:50584                                  [::1]:ipp
+> On Nov 7, 2022, at 4:15 PM, syzbot <syzbot+40642be9b7e0bb28e0df@syzkaller.appspotmail.com> wrote:
+> 
+> !-------------------------------------------------------------------|
+>  This Message Is From an External Sender
+> 
+> |-------------------------------------------------------------------!
+> 
+> syzbot has found a reproducer for the following issue on:
+> 
+> HEAD commit:    f0c4d9fc9cc9 Linux 6.1-rc4
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+> console output: https://syzkaller.appspot.com/x/log.txt?x=15e494fe880000  
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=ff27f0c8b406726e  
+> dashboard link: https://syzkaller.appspot.com/bug?extid=40642be9b7e0bb28e0df  
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: arm64
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10822271880000  
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14f4cd51880000  
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/92c7e839ac32/disk-f0c4d9fc.raw.xz  
+> vmlinux: https://storage.googleapis.com/syzbot-assets/b7bedbc08fb4/vmlinux-f0c4d9fc.xz  
+> kernel image: https://storage.googleapis.com/syzbot-assets/3fe25e2dfdb7/Image-f0c4d9fc.gz.xz  
+> mounted in repro #1: https://storage.googleapis.com/syzbot-assets/1f9d740f89a9/mount_1.gz  
+> mounted in repro #2: https://storage.googleapis.com/syzbot-assets/6c6db4f39192/mount_2.gz  
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+40642be9b7e0bb28e0df@syzkaller.appspotmail.com
+> 
+> F2FS-fs (loop0): Invalid log_blocksize (16), supports only 12
+> F2FS-fs (loop0): Can't find valid F2FS filesystem in 1th superblock
+> F2FS-fs (loop0): inaccessible inode: 2, run fsck to repair
+> INFO: trying to register non-static key.
+> The code is fine but needs lockdep annotation, or maybe
+> you didn't initialize this object before use?
+> turning off the locking correctness validator.
+> CPU: 1 PID: 3141 Comm: syz-executor147 Not tainted 6.1.0-rc4-syzkaller-31833-gf0c4d9fc9cc9 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+> Call trace:
+> dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+> show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
+> __dump_stack lib/dump_stack.c:88 [inline]
+> dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+> dump_stack+0x1c/0x58 lib/dump_stack.c:113
+> assign_lock_key+0x134/0x140 kernel/locking/lockdep.c:981
+> register_lock_class+0xc4/0x2f8 kernel/locking/lockdep.c:1294
+> __lock_acquire+0xa8/0x3084 kernel/locking/lockdep.c:4934
+> lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+> __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+> _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
+> spin_lock include/linux/spinlock.h:350 [inline]
+> f2fs_save_errors fs/f2fs/super.c:3868 [inline]
+> f2fs_handle_error+0x38/0x17c fs/f2fs/super.c:3896
+> f2fs_iget+0x138/0x538 fs/f2fs/inode.c:516
+> f2fs_fill_super+0x10fc/0x1e90 fs/f2fs/super.c:4222
+> mount_bdev+0x1b8/0x210 fs/super.c:1401
+> f2fs_mount+0x44/0x58 fs/f2fs/super.c:4580
+> legacy_get_tree+0x30/0x74 fs/fs_context.c:610
+> vfs_get_tree+0x40/0x140 fs/super.c:1531
+> do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+> path_mount+0x358/0x890 fs/namespace.c:3370
+> do_mount fs/namespace.c:3383 [inline]
+> __do_sys_mount fs/namespace.c:3591 [inline]
+> __se_sys_mount fs/namespace.c:3568 [inline]
+> __arm64_sys_mount+0x2c4/0x3c4 fs/namespace.c:3568
+> __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+> invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+> el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+> do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+> el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+> el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+> el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+> F2FS-fs (loop0): Failed to read F2FS meta data inode
+> loop0: detected capacity change from 0 to 8192
+> REISERFS warning:  read_super_block: reiserfs filesystem is deprecated and scheduled to be removed from the kernel in 2025
+> REISERFS (device loop0): found reiserfs format "3.6" with non-standard journal
+> REISERFS (device loop0): using ordered data mode
+> reiserfs: using flush barriers
+> REISERFS (device loop0): journal params: device loop0, size 512, journal first block 18, max trans len 256, max batch 225, max commit age 30, max trans age 30
+> REISERFS (device loop0): checking transaction log (loop0)
+> REISERFS (device loop0): Using rupasov hash to sort names
+> REISERFS warning (device loop0): jdm-20006 create_privroot: xattrs/ACLs enabled and couldn't find/create .reiserfs_priv. Failing mount.
 
-So we have inconsistency anyway...
+Not quite sure why I am CC'd here, I don't see anything related to zstd or compression in this stack.
+Just want to check that it is likely unrelated, and that I'm not missing something.
 
-As you said, no strong opinion.
+Best,
+Nick Terrell
+
