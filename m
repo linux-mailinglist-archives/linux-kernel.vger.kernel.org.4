@@ -2,140 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95123626AEF
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 18:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 362B2626AE5
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 18:35:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234293AbiKLRrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 12:47:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
+        id S234910AbiKLRfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 12:35:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231404AbiKLRrN (ORCPT
+        with ESMTP id S232026AbiKLRfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 12:47:13 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F9D12743
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 09:47:11 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id l14so10449821wrw.2
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 09:47:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yeWm7GyGHtOmeOmHiUe2AeKpEt0z3x9o6ccodPf45EQ=;
-        b=zkocUwzIaTggBmbQU9Yj7IHmLRx08cuYh1tfWjrm5GSy/lQmcT/0jLjDDzIq8oCbS2
-         4sALrb3q7/yKJfTyXlOtpyyi52l8kOq5zlWw4jF4mZBIeV74Jjs3X66VQteoUKv0fiaS
-         AoRKqKSy62T4HmTLnXHmq0Gul6gjxJxttHAXTp3DR8MMtmvcv6Cfk5WT41nfETScV8HT
-         z6qK49MjZcRfPNBf/7oDjAwdPrdIKUaNOljNuNW1/xFYxoSXSGT1jHBRf006b2LTma6l
-         M2pxiuOuJGcYBzSfI63uxuU3W5RJBrjXhyX1PDnFnvs26nM4aBdZv0rEXb3wbY1Wx25i
-         cmbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yeWm7GyGHtOmeOmHiUe2AeKpEt0z3x9o6ccodPf45EQ=;
-        b=JaeK7mjs6/z5DlfZvXLMy7IeiSuK/Jqpv/2nCBFsQ+HGzYmvrwXeYDndaK8C89Gbx8
-         ZNGuHkjU5mjIMyKP7UW4YooSh0EmOeJ2LzMB8ywxxSeueWu7lwpfIYnLK18UD/ZLhtDD
-         dgvbaYbQVB2xyIJNXBL/egGI0ZccingN3QKmC6pAns12BoqUSbrLGqYl2kQ4G5SgYHER
-         D1kjeII47itxVdIYbQTzvCge/jdvz4eF39XmrAeNCiYAS2j7cCc/JQ4smsNZkScoprbR
-         XMq2hlyVj0YVqKf0M0d62+WMixW/opFZfvj4DAt2rGWF2eoV7m1DG/Y73Td/+FkYO201
-         6gOA==
-X-Gm-Message-State: ANoB5pkiVzulwi9KbvVIVXUwavBhTQTrDh15G7eWwugty5Eva0sQcA/J
-        fwubcsBqoxhfxmzyaooD+GINx9FUP9DoxtcV
-X-Google-Smtp-Source: AA0mqf4bdfZkRQ3PAjHyK9onZAhJYX6G5Kl2izXQ4cjWY6Dox/ldzh5wFXJ+ngneeyTK1KmWPGuhtQ==
-X-Received: by 2002:a5d:67c4:0:b0:236:2f7f:4c42 with SMTP id n4-20020a5d67c4000000b002362f7f4c42mr3804174wrw.479.1668275229790;
-        Sat, 12 Nov 2022 09:47:09 -0800 (PST)
-Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id g9-20020a05600c4ec900b003cfd10a33afsm6773819wmq.11.2022.11.12.09.47.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Nov 2022 09:47:09 -0800 (PST)
-Date:   Sat, 12 Nov 2022 17:47:05 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     oe-kbuild@lists.linux.dev, Qais Yousef <qais.yousef@arm.com>,
-        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [tip:sched/core 3/19] kernel/sched/fair.c:7263
- find_energy_efficient_cpu() error: uninitialized symbol 'util_min'.
-Message-ID: <20221112174705.pymjyzr4nqhkqfoc@airbuntu>
-References: <202211121723.P4V3w801-lkp@intel.com>
+        Sat, 12 Nov 2022 12:35:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071BABBF;
+        Sat, 12 Nov 2022 09:35:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C84360D38;
+        Sat, 12 Nov 2022 17:35:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7373C433C1;
+        Sat, 12 Nov 2022 17:35:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668274521;
+        bh=D5tNslk5Uud0NPANZ1lJaZMeLKEZFr6cIs3ciZ9ZkSI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Cjv53huAJ6qR1gLFtnPL9cV3tIuIUbBJ1K2zAfKXzGRI54DOK4KPDew2vFvJmO4WL
+         ren1ecwFejT5owb31Y3poT0XFA8LsCqYpcicpxKEuc5uQT+QbJ40sHmFtwn3dTNM2V
+         +hA6Kq5r6dzqDh6RopI+5OaumFFcPK7KDw2YEFfB4zKryClknqErdZqCFvS0IfHvbV
+         VMbqevKZubbAkparzdxE4u11qlNNYp6SPFa4howQjLu7R6JSQVKIyU4y+1/ajLxqG3
+         zltmX05iCwaY8QUHULAfhaVd2NswUjm31L5aHLooxjbQ+cj7Y6K89Lc8ISYLEvgP2P
+         tccxW8TkEOlMA==
+Date:   Sat, 12 Nov 2022 17:47:36 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Subhajit Ghosh <subhajit.ghosh@vixtechnology.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        Matt Ranostay <matt.ranostay@konsulko.com>, lars@metafoo.de,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH] iio: light: apds9960: Fix iio_event_spec structures
+Message-ID: <20221112174736.75d0b926@jic23-huawei>
+In-Reply-To: <380ae3c3-14c2-db1a-954c-caf8180746f0@vixtechnology.com>
+References: <20221110101241.10576-1-subhajit.ghosh@vixtechnology.com>
+        <CAJCx=g=qRd+WaCLOHwnEjg1Myg4Ng=PK0sxcGgEG9VT+VpondA@mail.gmail.com>
+        <b6ac2692-3152-dfc4-5388-7986042970f0@vixtechnology.com>
+        <CAJCx=g=WaGiBFYJTTjNgzrnW3We0qpuMvyy9iFAVDC8Mkbscsg@mail.gmail.com>
+        <20221111111049.0000467f@Huawei.com>
+        <380ae3c3-14c2-db1a-954c-caf8180746f0@vixtechnology.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202211121723.P4V3w801-lkp@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/12/22 13:16, Dan Carpenter wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
-> head:   52b33d87b9197c51e8ffdc61873739d90dd0a16f
-> commit: 244226035a1f9b2b6c326e55ae5188fab4f428cb [3/19] sched/uclamp: Fix fits_capacity() check in feec()
-> config: riscv-randconfig-m031-20221111
-> compiler: riscv64-linux-gcc (GCC) 12.1.0
+On Fri, 11 Nov 2022 21:44:48 +0800
+Subhajit Ghosh <subhajit.ghosh@vixtechnology.com> wrote:
+
+> > Hmm.  Given that event enables often cover a couple of different things
+> > (as done here) it isn't unknown for those to not be as easily covered
+> > as you have done.  As such, we have drivers were the ABI allows for
+> > enabling one event to end up enabling several others (even though they
+> > have separate enable attributes).  It's always been permitted for one
+> > IIO attribute write to have an effect on other attributes simply because
+> > we can't represent all dependencies.
+> > 
+> > Now the bigger complexity / surprise here is the return of the either
+> > direction in response to enabling either rising or falling. 
+> > That is going to rather surprise your average writer of userspace cod This is where the inconsistency was found. When an ALS threshold rising   
+> value was given and as soon as it was enabled, interrupts started firing
+> in low light conditions as there was some value present in the ALS falling 
+> threshold(reset value is not defined in the datasheet for this register), 
+> but falling threshold value was neither fed nor enabled!
 > 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Reported-by: Dan Carpenter <error27@gmail.com>
+> > So patch covers what we should definitely have had in the first place.
+> > Hence it's a question of risk of someone running code that will be affected
+> > by the ABI change.  One of those fingers crossed moments...  
+> I understand that breaking existing userspace applications is not the best
+> thing to do.
+
+Given the risks around this one, I'm going to apply it to the togreg
+branch of iio.git which is lined up for next merge cycle.  That should
+in theory provide more time before it hits upstream / gets back ported
+to stable releases for people to notice the change.
+
+Hopefully no one will though!
+
+Applied to the togreg branch of iio.git and pushed out initially as testing
+to let 0-day poke at it.
+
+Thanks,
+
+Jonathan
+
 > 
-> smatch warnings:
-> kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_min'.
-> kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_max'.
+> > 
+> > Jonathan  
 > 
-> vim +/util_min +7263 kernel/sched/fair.c
-
-[...]
-
-> util_min/max not initialized if uclamp_is_used() is false.  (I thought
-> I had reported this earlier but I don't see it on vger).
-
-Thanks Dan!
-
-It's harmless since util_min/max are ignored in util_fits_cpu() too;
-uclamp_is_used() is checked there as well.
-
-I couldn't reproduce, I need to get GCC 12.1.0, but the below ought to cure it.
-Let me test it a bit more and send a patch.
-
-Thanks
-
---
-Qais Yousef
-
---->8---
-
-idiff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 4cc56c91e06e..89dadaafc1ec 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -7217,10 +7217,10 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-        eenv_task_busy_time(&eenv, p, prev_cpu);
- 
-        for (; pd; pd = pd->next) {
-+               unsigned long util_min = p_util_min, util_max = p_util_max;
-                unsigned long cpu_cap, cpu_thermal_cap, util;
-                unsigned long cur_delta, max_spare_cap = 0;
-                unsigned long rq_util_min, rq_util_max;
--               unsigned long util_min, util_max;
-                unsigned long prev_spare_cap = 0;
-                int max_spare_cap_cpu = -1;
-                unsigned long base_energy;
-@@ -7258,10 +7258,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-                         * aligned with sched_cpu_util().
-                         */
-                        if (uclamp_is_used()) {
--                               if (uclamp_rq_is_idle(cpu_rq(cpu))) {
--                                       util_min = p_util_min;
--                                       util_max = p_util_max;
--                               } else {
-+                               if (!uclamp_rq_is_idle(cpu_rq(cpu))) {
-                                        /*
-                                         * Open code uclamp_rq_util_with() except for
-                                         * the clamp() part. Ie: apply max aggregation
+> Thank you for your time and comments.
+> 
+> Regards,
+> Subhajit Ghosh
+> 
 
