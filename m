@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1910F626825
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 09:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA63E626827
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 09:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234624AbiKLId0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 03:33:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
+        id S234733AbiKLIdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 03:33:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiKLIdY (ORCPT
+        with ESMTP id S234656AbiKLId1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 03:33:24 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EFEC78
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 00:33:23 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id b29so6748558pfp.13
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 00:33:22 -0800 (PST)
+        Sat, 12 Nov 2022 03:33:27 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9245FB33
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 00:33:26 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id io19so6025285plb.8
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 00:33:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4DOeqJ5SMCOeWwnjErWXkoh3b+hyZguii3t6dQS8YmY=;
-        b=IBxyvjZzoJn3lNx52hSdWnd8nch0DPIteXYXXv2nCFcZaF5Vj+cURGaTaeBSQ6OoR7
-         BUZv7yYyLphZeilhFjf7hRJ3QjCSt4azIF5y3KIh0MEgBpz7j/DwmtJBUUeDlXSEDTzk
-         wmDKnPkt4mwZCRX43AwaY3Tg/5iXPAyZZkjjv482i2mk5iic/sEx1GglPugfioauNr7I
-         6saBXb/MioFSWS1ltk1EGI5YcIYrBJz3B1tlTosE9zuZUUp5PiXnHmV7NXHlNcr6IcAh
-         97ilLSggyCO1JAKfDTyNLdsvbIRA3y40zHHVQPWkRynv0GbRx4tqZaKLXa2dSQumi1mS
-         rjLw==
+        bh=uKgNXpHSoU4bJRdAiprU+Siq+ztqOPTG6adKu9Aw2Mw=;
+        b=fBP3FX0pwml50Uh6/7TLPrlSWu4YWvKJq6zHrIeKb0qe8NHom1gBIj7oK7F129fe6y
+         aQulO3GzWYv65HSqRYzxN64wM63L70wge67TQdtKPZ0J5aojcZnDrahYEf9czVi0zdJa
+         oxcEQlq7LokErV4Z76/A1SFCNFHpcAwoCMVTDaMeNmhdSOdQNaFhXUAiUU22//JmaZmY
+         nsoVISIeSGI2ojwWXIRHMNQ4o3YKdSf6cZtJ64c6elvK+q4kuDnCZqO/XyCuW4qrC/bs
+         BfEH5RfWE1ybX/0QxNDyleXrBOMqvSJpKySj1bz+7Wl9B0KgIzyy9VgVRcfJoPrsRr9/
+         nCCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4DOeqJ5SMCOeWwnjErWXkoh3b+hyZguii3t6dQS8YmY=;
-        b=S66uZZnL8IluBuSISOyfYVwIXAtzVGXpk8Yg434SXPrN95rbGQqSuD1OEyOrOvU/Wh
-         t3nF+6asZM9Cpnk9QJB9nlcXb76KTp9zRB2zWBOEv4pg8i/E+p3qxMs9mW9IXhGja8Ew
-         CsHwhfEvWlaMSsL2UxDDminYdqZlR3jk3GsqQaOC94zRqC3n1UogFNe5dS5bbeo3IW/d
-         8otZ2Z4Hfj7vSxxueQNLyEAZqzM/h6HJM41Dmc3ZClKKKmdcIX7220lmQwKXoWXDVxPJ
-         ResnYSszI6Fxt4qTsd7Cnw4HMKp8BLDKoLVm32a0m4YMpF+ZubfgR6ePK3AX78R57dCs
-         B+TQ==
-X-Gm-Message-State: ANoB5pljqkl1SyVggEPsIDIK0vW90i1iEmVIdxIUWlE2cHDcyYs5OCQL
-        H3l6BK2BeWc0OHFVpNdZDoQ=
-X-Google-Smtp-Source: AA0mqf6nLlSW5VpkbWvYJgYo7AZz395SuqNmwQNWgO0iRN0u/qGstxBxkjaN7nkV7UaRRPRReey3gw==
-X-Received: by 2002:a63:1c61:0:b0:464:45f3:8272 with SMTP id c33-20020a631c61000000b0046445f38272mr4755995pgm.610.1668242002513;
-        Sat, 12 Nov 2022 00:33:22 -0800 (PST)
+        bh=uKgNXpHSoU4bJRdAiprU+Siq+ztqOPTG6adKu9Aw2Mw=;
+        b=izVa0XJmJlrR2LuggdPUmNU2K/6hdVNvBjn3hxJtLFG0qACav5Ao8QbdL11ZKpIaVQ
+         RNcZ4op2Gj4VnFr8qED6eQo8Xt04GPCpIYBjO4z6r1xlGb9P5xYmN5Lf1KNBueNKDl+I
+         lNPxmZ8EdMQKYHl36JMDFEnR04GWrLbdM6Eo4Pi9dMkmyAbWlcbUfQvNaHZxqb2L3jS3
+         3RcHBHsu72EnRXcpa0jKiRDct5D+ICaLC77vFxYdW82pHgJ71ot4+wPrMLdKQrZy60ZH
+         qTf6xp/4dgXO5mgXk63FyIfTN5VTUchMJtMkS2xq+zmHkyR6w5qoL0FQIx3UxLa9LEZZ
+         MVCg==
+X-Gm-Message-State: ANoB5plDxd5UiChWa12uuUrRn5EIfYwl/c77C6jVVMxnZ7GIqm7qXSmD
+        us0t+fXuWccB7tXtjIOJWeEfEIhVlDg=
+X-Google-Smtp-Source: AA0mqf4ULTYzbfuO1jXL9AwmtP2BbudfwlpLYyhMZW16sEQ+6W5t/RVYFye2WVxtIEoTh/ZopmR5Lg==
+X-Received: by 2002:a17:90a:d302:b0:20d:2f:709d with SMTP id p2-20020a17090ad30200b0020d002f709dmr5660496pju.40.1668242005943;
+        Sat, 12 Nov 2022 00:33:25 -0800 (PST)
 Received: from VirtualBox.. ([129.227.152.6])
-        by smtp.gmail.com with ESMTPSA id i11-20020a1709026acb00b001870533c443sm3066927plt.236.2022.11.12.00.33.20
+        by smtp.gmail.com with ESMTPSA id i11-20020a1709026acb00b001870533c443sm3066927plt.236.2022.11.12.00.33.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Nov 2022 00:33:22 -0800 (PST)
+        Sat, 12 Nov 2022 00:33:25 -0800 (PST)
 From:   Yuwei Guan <ssawgyw@gmail.com>
 X-Google-Original-From: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
 To:     jaegeuk@kernel.org, chao@kernel.org
 Cc:     linux-f2fs-devel@lists.sourceforge.net,
         linux-kernel@vger.kernel.org, Yuwei.Guan@zeekrlife.com
-Subject: [PATCH 1/3] f2fs: fix to alloc_mode changed after remount on a small volume device
-Date:   Sat, 12 Nov 2022 16:32:48 +0800
-Message-Id: <20221112083250.295700-2-Yuwei.Guan@zeekrlife.com>
+Subject: [PATCH 2/3] f2fs: cleanup for 'f2fs_tuning_parameters' function
+Date:   Sat, 12 Nov 2022 16:32:49 +0800
+Message-Id: <20221112083250.295700-3-Yuwei.Guan@zeekrlife.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221112083250.295700-1-Yuwei.Guan@zeekrlife.com>
 References: <20221112083250.295700-1-Yuwei.Guan@zeekrlife.com>
@@ -73,96 +73,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit 84b89e5d943d8 ("f2fs: add auto tuning for small devices") add
-tuning for small volume device, now support to tune alloce_mode to 'reuse'
-if it's small size. But the alloc_mode will change to 'default' when do
-remount on this small size dievce.
-
-The commit 4cac90d5491c9 ("f2fs: relocate readdir_ra configure
-initialization") relocates readdir_ra variable to tuning process.
-
-This patch fo fix alloc_mode changed when do remount for a small volume
-device.
-
-For a small device,
-- alloc_mode will keep 'reuse', if no alloc_mode option in remount
-  command,
-- alloc_mode will be set as remount command, if it has 'alloc_mode='.
+A cleanup patch for 'f2fs_tuning_parameters' function.
 
 Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
 ---
- fs/f2fs/super.c | 37 ++++++++++++++++++++-----------------
- 1 file changed, 20 insertions(+), 17 deletions(-)
+ fs/f2fs/super.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
 diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-index 3834ead04620..2f36824ff84b 100644
+index 2f36824ff84b..f18ae5410b2c 100644
 --- a/fs/f2fs/super.c
 +++ b/fs/f2fs/super.c
-@@ -2190,6 +2190,23 @@ static void f2fs_enable_checkpoint(struct f2fs_sb_info *sbi)
- 	f2fs_flush_ckpt_thread(sbi);
- }
+@@ -2192,14 +2192,12 @@ static void f2fs_enable_checkpoint(struct f2fs_sb_info *sbi)
  
-+static void f2fs_tuning_parameters(struct f2fs_sb_info *sbi, bool is_remount)
-+{
-+	struct f2fs_sm_info *sm_i = SM_I(sbi);
-+
-+	/* adjust parameters according to the volume size */
-+	if (sm_i->main_segments <= SMALL_VOLUME_SEGMENTS) {
-+		F2FS_OPTION(sbi).alloc_mode = ALLOC_MODE_REUSE;
-+		if (f2fs_block_unit_discard(sbi))
-+			sm_i->dcc_info->discard_granularity = 1;
-+		sm_i->ipu_policy = 1 << F2FS_IPU_FORCE |
-+					1 << F2FS_IPU_HONOR_OPU_WRITE;
-+	}
-+
-+	if (!is_remount)
-+		sbi->readdir_ra = 1;
-+}
-+
- static int f2fs_remount(struct super_block *sb, int *flags, char *data)
+ static void f2fs_tuning_parameters(struct f2fs_sb_info *sbi, bool is_remount)
  {
- 	struct f2fs_sb_info *sbi = F2FS_SB(sb);
-@@ -2248,6 +2265,8 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
- 
- 	default_options(sbi);
- 
-+	f2fs_tuning_parameters(sbi, true);
-+
- 	/* parse mount options */
- 	err = parse_options(sb, data, true);
- 	if (err)
-@@ -4054,22 +4073,6 @@ static int f2fs_setup_casefold(struct f2fs_sb_info *sbi)
- 	return 0;
- }
- 
--static void f2fs_tuning_parameters(struct f2fs_sb_info *sbi)
--{
 -	struct f2fs_sm_info *sm_i = SM_I(sbi);
 -
--	/* adjust parameters according to the volume size */
+ 	/* adjust parameters according to the volume size */
 -	if (sm_i->main_segments <= SMALL_VOLUME_SEGMENTS) {
--		F2FS_OPTION(sbi).alloc_mode = ALLOC_MODE_REUSE;
--		if (f2fs_block_unit_discard(sbi))
++	if (MAIN_SEGS(sbi) <= SMALL_VOLUME_SEGMENTS) {
+ 		F2FS_OPTION(sbi).alloc_mode = ALLOC_MODE_REUSE;
+ 		if (f2fs_block_unit_discard(sbi))
 -			sm_i->dcc_info->discard_granularity = 1;
 -		sm_i->ipu_policy = 1 << F2FS_IPU_FORCE |
--					1 << F2FS_IPU_HONOR_OPU_WRITE;
--	}
--
--	sbi->readdir_ra = 1;
--}
--
- static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
- {
- 	struct f2fs_sb_info *sbi;
-@@ -4475,7 +4478,7 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
++			SM_I(sbi)->dcc_info->discard_granularity = 1;
++		SM_I(sbi)->ipu_policy = 1 << F2FS_IPU_FORCE |
+ 					1 << F2FS_IPU_HONOR_OPU_WRITE;
+ 	}
  
- 	f2fs_join_shrinker(sbi);
- 
--	f2fs_tuning_parameters(sbi);
-+	f2fs_tuning_parameters(sbi, false);
- 
- 	f2fs_notice(sbi, "Mounted with checkpoint version = %llx",
- 		    cur_cp_version(F2FS_CKPT(sbi)));
 -- 
 2.34.1
 
