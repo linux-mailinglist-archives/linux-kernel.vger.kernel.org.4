@@ -2,174 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 077BE6269FB
-	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 15:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8019626A02
+	for <lists+linux-kernel@lfdr.de>; Sat, 12 Nov 2022 15:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234948AbiKLOes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 09:34:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
+        id S234317AbiKLOkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 09:40:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234747AbiKLOec (ORCPT
+        with ESMTP id S231377AbiKLOkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 09:34:32 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF7E1C10A;
-        Sat, 12 Nov 2022 06:34:31 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id i10so9876901ejg.6;
-        Sat, 12 Nov 2022 06:34:30 -0800 (PST)
+        Sat, 12 Nov 2022 09:40:07 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70AE1C415
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 06:40:03 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso6946776pjc.5
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 06:40:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cr+7dkLsIQWkssfwSwIW2QDjIIkEwPc25TwB+Qcm5uo=;
-        b=YKeasKflZl4c3qMzSMsz2RorOL4VRVaj8/U3xQm+eVknrGNWTSYiZkzUube5tqAEFd
-         RbXNhajc0myPH8IE0+D8K+lx3mrBlWfAihzHsZpKAXBL1zF5LSIInBLrU9dubZy1GNJB
-         78w4NlIHoq2IyA4YayFm31T36U5NEeBUTUQbDlfM+iq+GFd5gRhsc9TJTMI+tWg74t3j
-         wq4UqZIUijtea8WYvi22KWB0At0WgMhK3bCBI3195FCncgIZ6BsVKU2e5PAPJI4wQ66j
-         3hfK+eoaOwOZqZygpRn7fbHvO4wqnoqXHZD+1zFPfl8wTMtHJaLirj584lX7XAwbMxwA
-         t3hA==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=bIZDCVzPPjeVdKIk8F8Uv0L3duOYsMu0/eWhzix57vE=;
+        b=SgtHZqh9wD+qbdxjkCbxLhKl2gLUkSUxEOoQ/Yiftl9N9XRaN42vlI0WUcwXwfVXTn
+         J6E2JYQ8k4+o0ExPP46zeFzPP9gkSID52C1MH3BDWFsznZDOQ22cUReZmwSGEONfC0jr
+         CTZwDa+yLcLl/rugWxr0sFDXiAq1CrC8GZ5m01Am09CHbV6Yu0LL67moMmJdL4jX3wG3
+         yR9xJ6ITd0obGZcqR+FCEawTV3cFC1OcWkRcu4hQ+KsLl7XO+MjVPvJnrX7k6fuNitoM
+         9oEiK5THRlXDHQ1pysOPZt5UNwvGmEtyepvH59+xxN5ItKPE0WQEeGCdNOF7NbnZ6G11
+         s8mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cr+7dkLsIQWkssfwSwIW2QDjIIkEwPc25TwB+Qcm5uo=;
-        b=6b/C/Nk0UCzMsZXJdhmNLlQU5sLlkkIowUnsEBSfId5Qmnzt18gnWjJQExUZz0v3AJ
-         cGffleCys5FsSQ3z1kHz8FoDuy5gJDerf3kYUmLvmIaB2TREENn8uFzlLEAxX/IID2Ug
-         6sEJ+lR2eLoNFlEBxuEuzr1DGOqsub6pJ1pCF6m5o0T8bAYI3EnEqTg9eOKF9pT/AE9z
-         lSEqhx7e09K82/Nva0oDgF21E9RDubYG9vxzcRwd9TJ6Rk0wQTDZw7sC2qBlw2gSj5Jm
-         +KgDJ9UO2oeV4iYKMFHDPc6/V/zY4OK383nU1B9ymxBKX6LIxCzGS9TcQH5MAMImM+HU
-         4zIQ==
-X-Gm-Message-State: ANoB5pnYUY158uDCT3n6RibIiAH+yYBiQeqKcaUNHmMxVg+0Na6oRzus
-        LDiK4giLcM6NqV1mpVUVlSrLMHD/Qw7XrsLN
-X-Google-Smtp-Source: AA0mqf4+tgay/1Fy+91DYqwR3WBS4VFwoALib4pDVA8WajyUvg8mJzbTjMXXKmO4q/kjrFsAPXyDJg==
-X-Received: by 2002:a17:906:504a:b0:78d:6655:d12e with SMTP id e10-20020a170906504a00b0078d6655d12emr5328264ejk.260.1668263669639;
-        Sat, 12 Nov 2022 06:34:29 -0800 (PST)
-Received: from localhost.localdomain (83.31.120.236.ipv4.supernova.orange.pl. [83.31.120.236])
-        by smtp.gmail.com with ESMTPSA id l9-20020a1709063d2900b0077a11b79b9bsm1974668ejf.133.2022.11.12.06.34.28
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bIZDCVzPPjeVdKIk8F8Uv0L3duOYsMu0/eWhzix57vE=;
+        b=axWcVqLWIGdDJql5wZtByg5L34fieUb/8SR4VfU4SowJKdGT+2nUhx98BWxaa3lMf9
+         4+1aDNMUPvNDn41l9A+QMM0OnFA2n+FnMFZQzQFJOaznjjFirV41if1FX2Ua6taVRSch
+         lJ/LHvUSnQgptxb+1lzSMbhcwxrFxtM4y8s+l2KQHGQ1JhFXa/ajDYJo+73RLFZVV/5z
+         a5Gvd/zZh7MQEpeBop3CM7x9KKdLHl+GuC3slYFDNWgifyzrJf+A1HZsO8uVUuHo5kBo
+         zxXDNUeqMDjnViZiTg9FU8+I0WPaeEls3R/VM0OlAuG01S9l78ZtHm1mWBUklidoqScA
+         dbkg==
+X-Gm-Message-State: ANoB5pmgsLxqtbG9xSknMfUFjtFGoMWgwNXt4i6uRfgNutztsqZEN7+o
+        6CCHpM5X7SfYWyzJgoq/h89r
+X-Google-Smtp-Source: AA0mqf4V0MvKh/F4vjxhQra+NmLToI21qXSfrRqdxC8PQ11CWY9xPpq9a08b0yLlvng1AqaZ7MEfvA==
+X-Received: by 2002:a17:902:7247:b0:186:6f97:fe90 with SMTP id c7-20020a170902724700b001866f97fe90mr6684390pll.75.1668264003242;
+        Sat, 12 Nov 2022 06:40:03 -0800 (PST)
+Received: from thinkpad ([2409:4072:6d03:e3e3:883:ee9e:a771:761d])
+        by smtp.gmail.com with ESMTPSA id d187-20020a6236c4000000b0056bdb5197f4sm3386924pfa.35.2022.11.12.06.39.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Nov 2022 06:34:29 -0800 (PST)
-From:   Maya Matuszczyk <maccraft123mc@gmail.com>
-To:     linux-rockchip@lists.infradead.org,
+        Sat, 12 Nov 2022 06:40:02 -0800 (PST)
+Date:   Sat, 12 Nov 2022 20:09:55 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     =?UTF-8?q?Jo=C3=A3o=20H=20=2E=20Spies?= <jhlspies@gmail.com>,
-        Chris Morgan <macroalpha82@gmail.com>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/5] arm64: dts: rockchip: Add Anbernic RG351M
-Date:   Sat, 12 Nov 2022 15:34:11 +0100
-Message-Id: <20221112143411.517906-6-maccraft123mc@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221112143411.517906-1-maccraft123mc@gmail.com>
-References: <20221112143411.517906-1-maccraft123mc@gmail.com>
+Subject: Re: [PATCH 6/9] arm64: dts: qcom: sc8280xp-crd: enable WiFi
+ controller
+Message-ID: <20221112143537.GA140906@thinkpad>
+References: <20221110103558.12690-1-johan+linaro@kernel.org>
+ <20221110103558.12690-7-johan+linaro@kernel.org>
+ <20221110113513.GA18247@thinkpad>
+ <Y254AvMKyDQ+tY0q@hovoldconsulting.com>
+ <20221111204021.myjms5c2rntu4a76@builder.lan>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221111204021.myjms5c2rntu4a76@builder.lan>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This device is a clone of Odroid Go Advance, with added PWM motor, internal
-gamepad connected on USB instead of just having it be on GPIO + ADC, and
-missing battery shunt resistor.
+On Fri, Nov 11, 2022 at 02:40:21PM -0600, Bjorn Andersson wrote:
+> On Fri, Nov 11, 2022 at 05:27:46PM +0100, Johan Hovold wrote:
+> > On Thu, Nov 10, 2022 at 05:05:13PM +0530, Manivannan Sadhasivam wrote:
+> > > On Thu, Nov 10, 2022 at 11:35:55AM +0100, Johan Hovold wrote:
+> > > > Enable the Qualcomm QCNFA765 Wireless Network Adapter connected to
+> > > > PCIe4.
+> > > > 
+> > > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > > ---
+> > > >  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 65 +++++++++++++++++++++++
+> > > >  1 file changed, 65 insertions(+)
+> > > > 
+> > > > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> > > > index 5b9e37a16f9f..ab5b0aadeead 100644
+> > > > --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> > > > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> > > > @@ -81,6 +81,22 @@ vreg_misc_3p3: regulator-misc-3p3 {
+> > > >  		regulator-always-on;
+> > > >  	};
+> > > >  
+> > > > +	vreg_wlan: regulator-wlan {
+> > > > +		compatible = "regulator-fixed";
+> > > > +
+> > > > +		regulator-name = "VCC_WLAN_3R9";
+> > > > +		regulator-min-microvolt = <3900000>;
+> > > > +		regulator-max-microvolt = <3900000>;
+> > > > +
+> > > > +		gpio = <&pmr735a_gpios 1 GPIO_ACTIVE_HIGH>;
+> > > > +		enable-active-high;
+> > > > +
+> > > > +		pinctrl-names = "default";
+> > > > +		pinctrl-0 = <&hastings_reg_en>;
+> > > 
+> > > Hastings is the family name of QCA639x WLAN chipsets. I don't think it would be
+> > > applicable here. Please use "wlan_reg_en" as that matches the convention used
+> > > throughout this file.
+> > 
+> > The pin name here comes from the schematics, which is what we should use
+> > for naming when we can.
 
-There's also an LED on GPIO 77(I *guess* PB5 on &gpio2), that is controlled in a weird way:
+If hastings is what mentioned in the schematics then it is fine (I can see that
+now). For a moment I thought it came from downstream...
 
-- It is set to red by setting output value to 1
-- Set to green by setting output value to 0
-- Set to yellow by setting gpio direction to input
+Thanks,
+Mani
 
-I have no idea how to describe that in DTS, without adding a custom
-driver, for now it's just left out.
+> > 
+> 
+> Following the naming in the schematics is the right thing to do.
+> 
+> Regards,
+> Bjorn
 
-Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
----
- arch/arm64/boot/dts/rockchip/Makefile         |  1 +
- .../dts/rockchip/rk3326-anbernic-rg351m.dts   | 54 +++++++++++++++++++
- 2 files changed, 55 insertions(+)
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts
-
-diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index 142c83d2e5aa..b379516c15eb 100644
---- a/arch/arm64/boot/dts/rockchip/Makefile
-+++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -7,6 +7,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-evb.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-roc-cc.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3308-rock-pi-s.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3318-a95x-z2.dtb
-+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-anbernic-rg351m.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go2.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go2-v11.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-odroid-go3.dtb
-diff --git a/arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts b/arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts
-new file mode 100644
-index 000000000000..7f4726d4130e
---- /dev/null
-+++ b/arch/arm64/boot/dts/rockchip/rk3326-anbernic-rg351m.dts
-@@ -0,0 +1,54 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2019 Hardkernel Co., Ltd
-+ * Copyright (c) 2020 Theobroma Systems Design und Consulting GmbH
-+ * Copyright (c) 2022 Maya Matuszczyk <maccraft123mc@gmail.com>
-+ */
-+
-+/dts-v1/;
-+#include "rk3326-odroid-go.dtsi"
-+
-+/ {
-+	model = "Anbernic RG351M";
-+	compatible = "anbernic,rg351m", "rockchip,rk3326";
-+
-+	battery: battery {
-+		compatible = "simple-battery";
-+		charge-full-design-microamp-hours = <3450000>;
-+		charge-term-current-microamp = <300000>;
-+		constant-charge-current-max-microamp = <2000000>;
-+		constant-charge-voltage-max-microvolt = <4200000>;
-+		factory-internal-resistance-micro-ohms = <100000>;
-+		voltage-max-design-microvolt = <4100000>;
-+		voltage-min-design-microvolt = <3500000>;
-+
-+		ocv-capacity-celsius = <20>;
-+		ocv-capacity-table-0 =  <4046950 100>, <4001920 95>, <3967900 90>, <3919950 85>,
-+					<3888450 80>, <3861850 75>, <3831540 70>, <3799130 65>,
-+					<3768190 60>, <3745650 55>, <3726610 50>, <3711630 45>,
-+					<3696720 40>, <3685660 35>, <3674950 30>, <3663050 25>,
-+					<3649470 20>, <3635260 15>, <3616920 10>, <3592440 5>,
-+					<3574170 0>;
-+	};
-+
-+	vibrator {
-+		compatible = "pwm-vibrator";
-+		pwms = <&pwm0 0 1000000 0>;
-+		pwm-names = "enable";
-+	};
-+};
-+
-+/delete-node/ &builtin_gamepad;
-+/delete-node/ &vcc_host; /* conflicts with pwm vibration motor */
-+
-+&internal_display {
-+	compatible = "elida,kd35t133";
-+};
-+
-+&pwm0 {
-+	status = "okay";
-+};
-+
-+&rk817_charger {
-+	monitored-battery = <&battery>;
-+};
 -- 
-2.38.1
-
+மணிவண்ணன் சதாசிவம்
