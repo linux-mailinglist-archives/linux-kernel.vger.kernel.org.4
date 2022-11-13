@@ -2,135 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85386626E71
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 09:07:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1F3626E70
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 09:06:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235147AbiKMIHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 03:07:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40582 "EHLO
+        id S235106AbiKMIGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 03:06:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiKMIHr (ORCPT
+        with ESMTP id S231252AbiKMIGF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 03:07:47 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1853C1263A
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 00:07:47 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 2AD7rTZ8025608;
-        Sun, 13 Nov 2022 08:02:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=hLdxzrFVlJZEbaCxWDQ6zbhK4CRN1hXW8wjFLLufZ/c=;
- b=OPJ4yPEiEvRUM7sQEgubLGMj/RUsm6HbUoJDbo0qTj4LgQcfv7g8VdIpPtHGFfARtZDt
- pOa6JXsJAW4n9wENUSEop/Za0/X1nsfdd0PTsDlbflfV2Bt6F0oN2jNkR5lhhI06oQIE
- tv0X0SQ3rK0ti2Rhyjr4wj3clEV3da3zno7hPuSqxoGpus1ek29XuUGqEPtx2AZp/sCF
- gP+tpRqVVYibtxckwfnnUaI1bCNUfgrEZgiKITjOqXSeF/QL1qpckQcW3yqpPgXCeZM2
- 2jHvtaShbzZ2sTljo8M9CLiWTowLglMAjetHvWzhY1DgiIeCR6EszII10krnXZRkUFJj bA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ktvkbr4nq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 13 Nov 2022 08:02:34 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AD7t8C4029800;
-        Sun, 13 Nov 2022 08:02:33 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ktvkbr4kf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 13 Nov 2022 08:02:33 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AD7od5i023792;
-        Sun, 13 Nov 2022 08:02:26 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma05wdc.us.ibm.com with ESMTP id 3kt349exmh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 13 Nov 2022 08:02:26 +0000
-Received: from smtpav02.dal12v.mail.ibm.com ([9.208.128.128])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AD82NmD35652262
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 13 Nov 2022 08:02:24 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0E5B85805E;
-        Sun, 13 Nov 2022 08:02:25 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 656385805F;
-        Sun, 13 Nov 2022 08:02:06 +0000 (GMT)
-Received: from [9.160.60.23] (unknown [9.160.60.23])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Sun, 13 Nov 2022 08:02:06 +0000 (GMT)
-Message-ID: <d0edcb38-709f-2c29-b541-cc39d41d378c@linux.vnet.ibm.com>
-Date:   Sun, 13 Nov 2022 13:32:04 +0530
+        Sun, 13 Nov 2022 03:06:05 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D5C1006E;
+        Sun, 13 Nov 2022 00:06:05 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id q71so7786278pgq.8;
+        Sun, 13 Nov 2022 00:06:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6zM9r/sE2arMe1ziHsoXHyeiwa3rJRhwbTpoZQenkP0=;
+        b=eZ8puorRy851lsvelSzqMSeeLyZ4dV/kj02RSvfxz1CQuX7fx1TxcZtxfNmbGjMJGF
+         +ZI2oYdWVxBDMCpXj0YQrvConklIYJ02MeF8RCBnxAS/3CF2C86NQNdmSNg8FpbuIpy2
+         QKqg4xH9KvokMAZKtLksRBhc7koYM57D36C3vQFkHeYkVvxR+zriFm5Aw/SnoFFklqPV
+         2OPFS4DiqmQfxaeB/SEQpfM2Lw7erJQmU+ZqbnyJ1mWTg509s68ce3avOo5e9kzojrmQ
+         rN8MzWbATBEdqg0YAoC5NPb6ixEwkGgSxANFHOhHD6n56sS+QehH7/sDMu/Vgd9VVG6f
+         UNlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6zM9r/sE2arMe1ziHsoXHyeiwa3rJRhwbTpoZQenkP0=;
+        b=NChT5FCNlPH0XW/UQ0UiylJ+VYF1VnRI5oeqelJ0ZhZKv8lhu/UlI3m53jVf9pSFQk
+         HcMT3c8J/CVYutXY8AZOL/BFGzPHZRanB9zsH54M3OjVXp1iwGbJeExL6zgO0I2oNcka
+         aeyGz1yFlLqQ9e7SvtAygVygrvJJBB/Fa+o0yZuO1Nhr97XkKCZ1lZGEr37JxZ5VbuOi
+         gIv2N/u97gh+yUzgo3pFlKY7NESpgVGT+KrbIGRg60rSy192aJf/XH79CEPCFgi1J5Zy
+         //Ygst8R+TvFqGNKYjKJWmsVCTxZ1wluAYc1nZSZW6FJsSsgqX1fjX2EVjKW6IdGpzTQ
+         s17A==
+X-Gm-Message-State: ANoB5plngP02X9in9q8sCjpqFLyacaqSUM40uoF/WMa5JTR3aFxwmsW8
+        xKgX21cBNfOY4LAL23+j3No=
+X-Google-Smtp-Source: AA0mqf62uGra28MbBIJtSsfR0SDiKM8zckf3fK3DM9gnnUl+ck/7KxqUed0gBGcKx0jO/XbDtT/KEQ==
+X-Received: by 2002:a05:6a00:1592:b0:56b:e2db:5b88 with SMTP id u18-20020a056a00159200b0056be2db5b88mr9358474pfk.27.1668326764475;
+        Sun, 13 Nov 2022 00:06:04 -0800 (PST)
+Received: from ubuntu ([211.193.26.134])
+        by smtp.gmail.com with ESMTPSA id f193-20020a6238ca000000b0056d2797bf05sm4279947pfa.217.2022.11.13.00.06.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Nov 2022 00:06:04 -0800 (PST)
+Date:   Sun, 13 Nov 2022 00:05:58 -0800
+From:   Hyunwoo Kim <imv4bel@gmail.com>
+To:     Eli Billauer <eli.billauer@gmail.com>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, imv4bel@gmail.com
+Subject: Re: [PATCH v2] char: xillybus: Prevent use-after-free due to race
+ condition
+Message-ID: <20221113080558.GA5854@ubuntu>
+References: <20221030094209.65916-1-eli.billauer@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 5/9] sched/fair: Take into account latency priority at
- wakeup
-Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-References: <20221028093403.6673-1-vincent.guittot@linaro.org>
- <20221028093403.6673-6-vincent.guittot@linaro.org>
-From:   shrikanth suresh hegde <sshegde@linux.vnet.ibm.com>
-In-Reply-To: <20221028093403.6673-6-vincent.guittot@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: aUykjjNO4y5JlxuTcXihL3uojkl9vVPy
-X-Proofpoint-ORIG-GUID: RgB-3o6gPkAQDD03utkm-7goZ8rhhTqa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-13_05,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 suspectscore=0 mlxscore=0 mlxlogscore=999 phishscore=0
- priorityscore=1501 malwarescore=0 impostorscore=0 spamscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211130049
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221030094209.65916-1-eli.billauer@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dear,
 
->   /*
->    * Preempt the current task with a newly woken task if needed:
->    */
-> @@ -4566,7 +4568,7 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
->   {
->   	unsigned long ideal_runtime, delta_exec;
->   	struct sched_entity *se;
-> -	s64 delta;
-> +	s64 delta, offset;
->   
->   	ideal_runtime = sched_slice(cfs_rq, curr);
->   	delta_exec = curr->sum_exec_runtime - curr->prev_sum_exec_runtime;
-> @@ -4591,10 +4593,12 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
->   	se = __pick_first_entity(cfs_rq);
->   	delta = curr->vruntime - se->vruntime;
->   
-> -	if (delta < 0)
-> +	offset = wakeup_latency_gran(curr, se);
-> +	if (delta < offset)
->   		return;
->   
-> -	if (delta > ideal_runtime)
-> +	if ((delta > ideal_runtime) ||
-> +	    (delta > get_latency_max()))
->   		resched_curr(rq_of(cfs_rq));
->   }
->   
->
-Hi Vincent,
+Sorry for the late review.
 
-I am not sure if i have understood this below change correctly.
+This patch cannot prevent the UAF scenario I presented:
+```
+                cpu0                                                cpu1
+       1. xillyusb_open()
+          mutex_lock(&kref_mutex);    // unaffected lock
+          xillybus_find_inode()
+          mutex_lock(&unit_mutex);
+          unit = iter;
+          mutex_unlock(&unit_mutex);
+                                                             2. xillyusb_disconnect()
+                                                                xillybus_cleanup_chrdev()
+                                                                mutex_lock(&unit_mutex);
+                                                                kfree(unit);
+                                                                mutex_unlock(&unit_mutex);
+       3. *private_data = unit->private_data;   // UAF
 
-wakeup_latency_gran - this function returns difference in latency nice offsets.
-Hence the more negative the value, it means se has more latency requirement
-compared to current. Hence se should preempt the current here right?
-  
-we are comparing delta to get_latency_max and ideal_runtime, both of which can
-be higher positive value, hence we will not preempt. that is not what we want
-right?
+```
 
+This is a UAF for 'unit', not a UAF for 'xdev'.
+So, the added 'kref_mutex' has no effect.
+
+
+Regards,
+Hyunwoo Kim
