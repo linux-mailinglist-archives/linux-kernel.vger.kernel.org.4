@@ -2,149 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F340562739A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 00:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E5A6273A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 00:53:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235495AbiKMXvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 18:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
+        id S235517AbiKMXw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 18:52:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbiKMXvJ (ORCPT
+        with ESMTP id S229692AbiKMXw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 18:51:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9ABB1E2;
-        Sun, 13 Nov 2022 15:51:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 13 Nov 2022 18:52:56 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C95B7C1;
+        Sun, 13 Nov 2022 15:52:53 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF0E160C09;
-        Sun, 13 Nov 2022 23:51:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1385C433C1;
-        Sun, 13 Nov 2022 23:51:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668383466;
-        bh=KSPW+gb8KZq1GJgr/6V5CJJhPw275z9NwUUesDbF54I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oNpW7+e35iFlHE5dpScwvWbXnQlNJY9W6LdE7LgXvVi5ktPjMEcclIrP4GkbAdwLK
-         jqtDt/Kdje+EaKeSlAzxiZOHgbP03dZvT1BJYKLB8wHc5mcz/wvvN2UOjJBqGwsGY0
-         k/z7b8fBzWAcbfcKB1Fo6XqzGTBDeYUY8Ja13M/cFPkf6nV1KW2fWdoTdGiCzPLI7V
-         9N1L324DATQog2Ys42sRG5MHU59sn+d1f+2+yD+5Lni6EtTk+htdsylE3xwTpnidHS
-         JYllaitr+wSN8K5mZbu2661RMniVtNWrvyDIcD7ivl5M0lD67Gn6qGotroyVHtPVav
-         2ub64ZY36GTGA==
-Date:   Sun, 13 Nov 2022 15:51:04 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, jejb@linux.ibm.com,
-        Kees Cook <keescook@chromium.org>, dlunev@google.com,
-        zohar@linux.ibm.com, Matthew Garrett <mgarrett@aurora.tech>,
-        jarkko@kernel.org, linux-pm@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, axelj <axelj@axis.com>
-Subject: Re: [PATCH v5 11/11] PM: hibernate: seal the encryption key with a
- PCR policy
-Message-ID: <Y3GC6M6umF+MOu1f@sol.localdomain>
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.11.Ifce072ae1ef1ce39bd681fff55af13a054045d9f@changeid>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N9TlQ74TLz4xYV;
+        Mon, 14 Nov 2022 10:52:50 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668383571;
+        bh=pUcy/XN+scuJWHAuLv8FG4qKklNNeaoNs6lPTos5qfg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nzVKfxz/KExLltII9HC5QfcEp9++WqNqsV7ai+H4kjwA0FZZpJEIRA2bTiW/C2KzJ
+         jXxAfzXpA9M8iqOtd1xXi8AVj+LVbfY17pfyDom8wKvDFhnU594GfgGE80JfT0RBtc
+         QrRu7IU3Q4fCSt1AN6bAfIMLMfDNpK+NGltqP8ZNMy2JljRShC9a2w1vD2fEmZiO9A
+         fAZ8vfPVrcuqiKuN3RlffEn9EAd2BXypj7fmXrqML6EQY8EdkNz7wVtQ8/YVu0Wb/w
+         v9uqkGxsG6qmTNoY6o6vMW+XdelsmLxPO2u6kzU4cKx1ZToMqddO6H4V9XzpCmKEqO
+         Q0yYlhVHRemlQ==
+Date:   Mon, 14 Nov 2022 10:52:49 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>
+Subject: linux-next: manual merge of the modules tree with the net-next tree
+Message-ID: <20221114105249.4548adbc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111151451.v5.11.Ifce072ae1ef1ce39bd681fff55af13a054045d9f@changeid>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/aoFZpiC=LfG81oEsRZMBqrm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 03:16:36PM -0800, Evan Green wrote:
-> +static int tpm_setup_policy(struct tpm_chip *chip, int *session_handle)
-> +{
-> +	struct tpm_header *head;
-> +	struct tpm_buf buf;
-> +	char nonce[32] = {0x00};
-> +	int rc;
-> +
-> +	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS,
-> +			  TPM2_CC_START_AUTH_SESSION);
-> +	if (rc)
-> +		return rc;
-> +
-> +	/* Decrypt key */
-> +	tpm_buf_append_u32(&buf, TPM2_RH_NULL);
-> +
-> +	/* Auth entity */
-> +	tpm_buf_append_u32(&buf, TPM2_RH_NULL);
-> +
-> +	/* Nonce - blank is fine here */
-> +	tpm_buf_append_u16(&buf, sizeof(nonce));
-> +	tpm_buf_append(&buf, nonce, sizeof(nonce));
+--Sig_/aoFZpiC=LfG81oEsRZMBqrm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-In general, hardcoded nonces are a huge red flag.  If it's fine here, it would
-be helpful to leave a comment explaining why that is.
+Hi all,
 
-> +	rc = tpm_send(chip, buf.data, tpm_buf_length(&buf));
-> +	if (rc)
-> +		goto out;
+Today's linux-next merge of the modules tree got a conflict in:
 
-This is another instance of the bug where TPM2_RC_* codes are being returned
-from a function that is expected to return -errno values.
+  kernel/trace/ftrace.c
 
-> +	*session_handle = be32_to_cpu(*(__be32 *)&buf.data[10]);
+between commit:
 
-get_unaligned_be32, to avoid an unaligned memory access.
+  3640bf8584f4 ("ftrace: Add support to resolve module symbols in ftrace_lo=
+okup_symbols")
 
-> @@ -497,11 +602,16 @@ static int snapshot_setup_encryption_common(struct snapshot_data *data)
->  static int snapshot_create_kernel_key(struct snapshot_data *data)
->  {
->  	/* Create a key sealed by the SRK. */
-> -	char *keyinfo = "new\t32\tkeyhandle=0x81000000\tcreationpcrs=0x00800000";
-> +	const char *keytemplate =
-> +		"new\t32\tkeyhandle=0x81000000\tcreationpcrs=0x00800000\tpolicydigest=%s";
->  	const struct cred *cred = current_cred();
->  	struct tpm_digest *digests = NULL;
-> +	char policy[SHA256_DIGEST_SIZE];
-> +	char *policydigest = NULL;
-> +	int session_handle = -1;
->  	struct key *key = NULL;
->  	struct tpm_chip *chip;
-> +	char *keyinfo = NULL;
->  	int ret, i;
->  
->  	chip = tpm_default_chip();
-> @@ -534,6 +644,28 @@ static int snapshot_create_kernel_key(struct snapshot_data *data)
->  	if (ret != 0)
->  		goto out;
->  
-> +	policydigest = kmalloc(SHA256_DIGEST_SIZE * 2 + 1, GFP_KERNEL);
-> +	if (!policydigest) {
-> +		ret = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	ret = tpm_setup_policy(chip, &session_handle);
-> +	if (ret != 0)
-> +		goto out;
-> +
-> +	ret = tpm_policy_get_digest(chip, session_handle, policy);
-> +	if (ret != 0)
-> +		goto out;
-> +
-> +	bin2hex(policydigest, policy, SHA256_DIGEST_SIZE);
-> +	policydigest[SHA256_DIGEST_SIZE * 2] = '\0';
-> +	keyinfo = kasprintf(GFP_KERNEL, keytemplate, policydigest);
-> +	if (!keyinfo) {
-> +		ret = -ENOMEM;
-> +		goto out;
-> +	}
+from the net-next tree and commit:
 
-With the %*phN format specifier, there would be no need for bin2hex().
+  477f7e48d4f4 ("kallsyms: Delete an unused parameter related to kallsyms_o=
+n_each_symbol()")
 
-- Eric
+from the modules tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc kernel/trace/ftrace.c
+index 705b990d264d,7a06991624d4..000000000000
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@@ -8257,12 -8257,7 +8257,11 @@@ struct kallsyms_data=20
+  	size_t found;
+  };
+ =20
+ +/* This function gets called for all kernel and module symbols
+ + * and returns 1 in case we resolved all the requested symbols,
+ + * 0 otherwise.
+ + */
+- static int kallsyms_callback(void *data, const char *name,
+- 			     struct module *mod, unsigned long addr)
++ static int kallsyms_callback(void *data, const char *name, unsigned long =
+addr)
+  {
+  	struct kallsyms_data *args =3D data;
+  	const char **sym;
+
+--Sig_/aoFZpiC=LfG81oEsRZMBqrm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNxg1EACgkQAVBC80lX
+0GzjiAf+OOCN11Mim0zJN8O8jOjiZu7VtagWob7Hg86RyhPIoyZfbY3OqTf9cwMo
+ItM1wADuBnsph4OZlsaq6VLnvHqs7CVolmkTjagJ31uck1J0CDVoQLNYn2u8Qyxq
+XQBfU2Hhp/QsHS59HYob0gPbM4d9TnL/Alj+V6Ek9XDoMUM5Ujzld4j84jWmYBLF
+Y5daIXjxNTyB3ykbEHvGy62m8xo9BfSvdndPj0zqMxqDw8WpgNXY5vxqfEE7S9J1
+IXuYujy+KSgqRWnr/ocmQy9e9TuFn+r7VIOcInJZTcr65GABCLJb82at4qE7WHrh
++dzVUgMoPiuLuxoAIW0alrpLJoCnuQ==
+=uiQd
+-----END PGP SIGNATURE-----
+
+--Sig_/aoFZpiC=LfG81oEsRZMBqrm--
