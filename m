@@ -2,95 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB6A6272BF
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 22:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C43856272C4
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 22:48:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235431AbiKMVlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 16:41:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
+        id S233793AbiKMVsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 16:48:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiKMVk7 (ORCPT
+        with ESMTP id S229692AbiKMVsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 16:40:59 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB35510B7B;
-        Sun, 13 Nov 2022 13:40:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668375658; x=1699911658;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bNlNZseaZnMODtk6Zs2b51a6AGQxczkjf9fhjdYuBHg=;
-  b=JE6MOspZT43ya54e8BoQv18oqslVa4+6JArS2ttoFtmOBZRZ5z3Wahk6
-   d1quU2UdGCosPVVh3arsfPkreuvVm0AuOLq8EVEgVaNWgp+qSUHp8z3Ta
-   bLC7Kc+VM0ki+8RjbzBm/CIiIjiD9g3WIvIRfpfem4KKuLuBPwv8gJJGg
-   jVzRsylqIn8Cume0+dzglWClDtFmNx58F8RAkoFtUtjKKGUgzhg3TMig3
-   pgdPoq7OtWDhsXUbDiayoNtvf4ntIGbVCGp2rwstWzNZ9g2jJu6ApcDOf
-   9kEDuvpO2dCNnkfp2pBohfaihQNuTstldQQ2tD8w/nmtRLiueCPZOkAwo
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="292242024"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="292242024"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 13:40:58 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="780701274"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="780701274"
-Received: from perwin-mobl.amr.corp.intel.com (HELO tjmaciei-mobl5.localnet) ([10.212.163.208])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 13:40:57 -0800
-From:   Thiago Macieira <thiago.macieira@intel.com>
-To:     Ashok Raj <ashok.raj@intel.com>, Borislav Petkov <bp@alien8.de>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
-        "Mehta, Sohil" <sohil.mehta@intel.com>
-Subject: Re: [PATCH v2 12/14] platform/x86/intel/ifs: Add current_batch sysfs entry
-Date:   Sun, 13 Nov 2022 13:40:56 -0800
-Message-ID: <1745359.VLH7GnMWUR@tjmaciei-mobl5>
-Organization: Intel Corporation
-In-Reply-To: <Y3EUPKWDefnkeObR@zn.tnic>
-References: <20221021203413.1220137-1-jithu.joseph@intel.com> <Y3EJ93xzgC/1v0WV@a4bf019067fa.jf.intel.com> <Y3EUPKWDefnkeObR@zn.tnic>
+        Sun, 13 Nov 2022 16:48:02 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E81EA46D;
+        Sun, 13 Nov 2022 13:48:00 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N9QzG61VSz4xTg;
+        Mon, 14 Nov 2022 08:47:54 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668376075;
+        bh=HD4U+AnCjj8okPsdz3mGTeIJ6mN+zeD+duUB1sBCRnY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VcSIrR1u5CRDVzBxONeiB/XMooVlr+eXOadVppIPau5sSqZ3ZgP+5vLuJd5gZMWry
+         hWXitxnGzvYsQLvxLp3FEKqKSBOcV0H8k/cmOZ9VY5k8AHrACFFu2uNjd6eCZcdkAA
+         Ef+803jiSN/xGswITyF1IJ7pWqy1oapW9ZjjUvqbkSvnwt4GCuxzLqktNkqk39dLpy
+         G5ydVxzMx1wK5LqFtdM39NOYP+mDnCI4X8WzRbXvFqRy0hk6kPFOLkAlPjDIt3QgGJ
+         Qfi5gLrU9sG78gREgbQU9EKoSoe3f3xlo5qYQZaucrdxU/BQrUc4YflZZWlI8b+cxp
+         leYTZm5JkuLsw==
+Date:   Mon, 14 Nov 2022 08:47:38 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Colin Cross <ccross@android.com>, Olof Johansson <olof@lixom.net>,
+        Thierry Reding <treding@nvidia.com>,
+        Andy Gross <agross@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Dipen Patel <dipenp@nvidia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the tegra tree with the qcom tree
+Message-ID: <20221114084738.73dff88c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/94cGf1R+CEazeycav7fvaT9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sunday, 13 November 2022 07:58:52 PST Borislav Petkov wrote:
-> * simply try *all* files in a directory
+--Sig_/94cGf1R+CEazeycav7fvaT9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-By the way, we don't want that.
+Hi all,
 
-It's possible that different steppings of the same generation will have the 
-same test scan files, with the extended signature informing that they are valid 
-for this stepping too (see find_matching_signature())), because these files are 
-going to be pretty big, in the order of a hundred MB each. That means we will 
-either see symlinked or hardlinked files in the directory.
+Today's linux-next merge of the tegra tree got a conflict in:
 
-If you blindly try them all, you're going to spend twice or three times as 
-long as necessary to complete the scan. With the timeout in question for at 
-least Sapphire Rapids, we're talking about a difference measured in hours.
--- 
-Thiago Macieira - thiago.macieira (AT) intel.com
-  Cloud Software Architect - Intel DCAI Cloud Engineering
+  arch/arm64/configs/defconfig
 
+between commit:
 
+  c03fa428ac6e ("arm64: defconfig: build-in Qualcomm SC7180 and SM8450 inte=
+rconnects")
 
+from the qcom tree and commit:
+
+  b4c8adc40f49 ("arm64: defconfig: Enable HTE config")
+
+from the tegra tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/arm64/configs/defconfig
+index f910ccaaecf9,9ccc82e180c7..000000000000
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@@ -1312,7 -1310,10 +1316,10 @@@ CONFIG_INTERCONNECT_QCOM_SDM845=3D
+  CONFIG_INTERCONNECT_QCOM_SM8150=3Dm
+  CONFIG_INTERCONNECT_QCOM_SM8250=3Dm
+  CONFIG_INTERCONNECT_QCOM_SM8350=3Dm
+ -CONFIG_INTERCONNECT_QCOM_SM8450=3Dm
+ +CONFIG_INTERCONNECT_QCOM_SM8450=3Dy
++ CONFIG_HTE=3Dy
++ CONFIG_HTE_TEGRA194=3Dy
++ CONFIG_HTE_TEGRA194_TEST=3Dm
+  CONFIG_EXT2_FS=3Dy
+  CONFIG_EXT3_FS=3Dy
+  CONFIG_EXT4_FS_POSIX_ACL=3Dy
+
+--Sig_/94cGf1R+CEazeycav7fvaT9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNxZfoACgkQAVBC80lX
+0GwlMQf+OKbgwgXx3fLEhv137PCtFciV1b/T3tvAyDI7NUjyekObn+FC1KFqU+yl
+NeHK0RNjrR48bfzrjz8Qpu21KNUuAp4wQaEiBsNRBXZWwRgdp38XDmgMo6r1vq35
+TW2CdebOTddCfv4wUhx+sKPtCnOgCwtzAvjf/SBQzBUEXp4b9s9uvUwZ61xLAc/6
++3LLnD04R4L5dzFNim7XiiN/gjiymGJWpx9tDStbkJ87MTVjLrgJ86BKy0OcX4Z0
+cxTHWZhNukcJIgr14bFNVC/Xnucz0/E+IcoioBd8uAxTW9tubmCIn5IRlWttdBOY
+i3D5PQ+ZlDvKaC1lCfFv2o+VJrQgFQ==
+=Zxqf
+-----END PGP SIGNATURE-----
+
+--Sig_/94cGf1R+CEazeycav7fvaT9--
