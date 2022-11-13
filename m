@@ -2,85 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CF5626EFA
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 11:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7C1626ED8
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 11:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235292AbiKMKaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 05:30:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
+        id S235179AbiKMKDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 05:03:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233832AbiKMKaQ (ORCPT
+        with ESMTP id S229753AbiKMKDd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 05:30:16 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367BB12087;
-        Sun, 13 Nov 2022 02:30:15 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N97xG6qwTz4xD8;
-        Sun, 13 Nov 2022 21:30:10 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668335411;
-        bh=epb7iYIZTXLqGbxxN2Y583zmJEhodSXY+U9Amoa20fA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=AnFDWnD5vBLtFJOgshnoXyUtSYUAsKXVyWos3IR31dXrHQHToyrdwC6OSAOW0gsN5
-         mftHAZVDLaU5ApsJGm+CcG8Um5wHT0lqe/AZJjE78964nQgLqpvhurRM66h200Xr5n
-         ncDrrczbndXL36SUMP+N6kG9dctX8sYmC7EPQtsdcPI4csOUVj0HNBqp8o/cRQ8qd2
-         8C0/KFNt1+Pj5NX9NkQtEJP6qsYI1saAxsRhOKmPjoPOO1gNcZ7gL8jnHBmtl1UaBY
-         UmgdFVRLacAGvhpbz4V3CunxBFoME0NOTK0AD4WWIbtAVtJ8fgGvMa9UrE6qrPM7uS
-         5SZWRC7xBFaOw==
-Date:   Sun, 13 Nov 2022 20:57:34 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the nvmem tree
-Message-ID: <20221113205734.40500074@canb.auug.org.au>
+        Sun, 13 Nov 2022 05:03:33 -0500
+Received: from jari.cn (unknown [218.92.28.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E0735F40;
+        Sun, 13 Nov 2022 02:03:31 -0800 (PST)
+Received: by ajax-webmail-localhost.localdomain (Coremail) ; Sun, 13 Nov
+ 2022 17:58:36 +0800 (GMT+08:00)
+X-Originating-IP: [182.148.14.167]
+Date:   Sun, 13 Nov 2022 17:58:36 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   wangkailong@jari.cn
+To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH] samples/seccomp: fix array_size.cocci warning
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
+ Copyright (c) 2002-2022 www.mailtech.cn
+ mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RIxShlngNK=XA=PvDa6I73T";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <2b3f2420.130.184706d34e6.Coremail.wangkailong@jari.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAfwCnu+HMv3BjEh0DAA--.78W
+X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQAEB2FEYx0DfwAds4
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
+        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/RIxShlngNK=XA=PvDa6I73T
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-Commit
-
-  7a69ff9c9bde ("nvmem: u-boot-env: fix crc32_data_offset on redundant u-bo=
-ot-env")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/RIxShlngNK=XA=PvDa6I73T
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNwv44ACgkQAVBC80lX
-0GxcdggAgcSoGC0sEWZesj63DlBPekQlIhBeMYsvO5Qh+7UuusozsNKTx1ey6Z2X
-Zz/N0VTPLchDnKI6YS4OInMj98MOTHk2lWcKj8MlebPxqkO3gDk1LNz//7A4AMZR
-7UOLE1csDrPaQsArkwHVcYavSFr2FHnpuZYBEMNO5REVMSOhliXRLLMdoVUaX7Ur
-QAej5NQtnB2Amy2mxu7DfPDHvElLWjICmpSmJU3r0rB9N1fR3ZqdCEeRAPefsaxS
-ILtIKoUaytT8gSFO7/HEc1o2m8akR1oT41yiztIH41rXFHlRIXPWbAfYW0NMeIL7
-k5HltpbzKStGM0L0yJJo0mwGAN5AaQ==
-=9O69
------END PGP SIGNATURE-----
-
---Sig_/RIxShlngNK=XA=PvDa6I73T--
+Rml4IGZvbGxvd2luZyBjb2NjaWNoZWNrIHdhcm5pbmc6CgpzYW1wbGVzL3NlY2NvbXAvYnBmLWZh
+bmN5LmM6ODM6MzktNDA6IFdBUk5JTkc6IFVzZSBBUlJBWV9TSVpFCnNhbXBsZXMvc2VjY29tcC9i
+cGYtZmFuY3kuYzo4Njo0NC00NTogV0FSTklORzogVXNlIEFSUkFZX1NJWkUKClNpZ25lZC1vZmYt
+Ynk6IEthaUxvbmcgV2FuZyA8d2FuZ2thaWxvbmdAamFyaS5jbj4KLS0tCiBzYW1wbGVzL3NlY2Nv
+bXAvYnBmLWZhbmN5LmMgfCA0ICsrLS0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyks
+IDIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvc2FtcGxlcy9zZWNjb21wL2JwZi1mYW5jeS5j
+IGIvc2FtcGxlcy9zZWNjb21wL2JwZi1mYW5jeS5jCmluZGV4IDFjY2I0MzUwMjViNi4uNTQ4ZjAz
+ODkyNGQ2IDEwMDY0NAotLS0gYS9zYW1wbGVzL3NlY2NvbXAvYnBmLWZhbmN5LmMKKysrIGIvc2Ft
+cGxlcy9zZWNjb21wL2JwZi1mYW5jeS5jCkBAIC04MCwxMCArODAsMTAgQEAgaW50IG1haW4oaW50
+IGFyZ2MsIGNoYXIgKiphcmd2KQogCX07CiAJc3RydWN0IHNvY2tfZnByb2cgcHJvZyA9IHsKIAkJ
+LmZpbHRlciA9IGZpbHRlciwKLQkJLmxlbiA9ICh1bnNpZ25lZCBzaG9ydCkoc2l6ZW9mKGZpbHRl
+cikvc2l6ZW9mKGZpbHRlclswXSkpLAorCQkubGVuID0gKHVuc2lnbmVkIHNob3J0KShBUlJBWV9T
+SVpFKGZpbHRlcikpLAogCX07CiAJc3NpemVfdCBieXRlczsKLQlicGZfcmVzb2x2ZV9qdW1wcygm
+bCwgZmlsdGVyLCBzaXplb2YoZmlsdGVyKS9zaXplb2YoKmZpbHRlcikpOworCWJwZl9yZXNvbHZl
+X2p1bXBzKCZsLCBmaWx0ZXIsIEFSUkFZX1NJWkUoZmlsdGVyKSk7CiAKIAlpZiAocHJjdGwoUFJf
+U0VUX05PX05FV19QUklWUywgMSwgMCwgMCwgMCkpIHsKIAkJcGVycm9yKCJwcmN0bChOT19ORVdf
+UFJJVlMpIik7Ci0tIAoyLjI1LjEK
