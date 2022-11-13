@@ -2,273 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC545627048
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 16:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B95C162704C
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 16:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235298AbiKMPok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 10:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S235223AbiKMPt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 10:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235264AbiKMPoj (ORCPT
+        with ESMTP id S234264AbiKMPt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 10:44:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF68633C;
-        Sun, 13 Nov 2022 07:44:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0572F60BEE;
-        Sun, 13 Nov 2022 15:44:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB8E7C433C1;
-        Sun, 13 Nov 2022 15:44:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668354277;
-        bh=+np6BjdLB4FoW60WKA7TfzR9a9to1GXUs99jMYQqsIk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TrbpvlicUFIA2xU9R/2jl+aNgW4hg3wEHJa38nzZwIeL0ZM5PJo7mI8nVqCOUWvIY
-         U9z/n8RcC1RcR2y7OvpuXDpjp5kS81TymtITR6G5OfLy7ZXcZLsJNPQc6l88vktoVJ
-         scy+yaraNR2rjXmw0GfgEZ40TrAgQkC+wpJTKSfNyFk9UHj03R03/qNQ+JkeTJmFCb
-         kaCD5SDbmGfldhZFTFUicdVd6jVVz87DX2reLF56gt7mamyh77bpCxsRvQ6Jp/ieFt
-         6lzco2U8G6wf5lAaGezFoCms5moT/argc8/ex4FDXlF2M4Yw6koRJMqPWkJWkIopeC
-         WNUp+GfODpKqg==
-Date:   Sun, 13 Nov 2022 15:44:32 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 6/9] dt-bindings: Add RISC-V advanced PLIC bindings
-Message-ID: <Y3EQ4JU7uGbIMGiW@spud>
-References: <20221111044207.1478350-1-apatel@ventanamicro.com>
- <20221111044207.1478350-7-apatel@ventanamicro.com>
+        Sun, 13 Nov 2022 10:49:27 -0500
+Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873B5B481
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 07:49:26 -0800 (PST)
+Received: from pop-os.home ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id uFEXoEoZTXaJmuFEYoHaCh; Sun, 13 Nov 2022 16:49:24 +0100
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 13 Nov 2022 16:49:24 +0100
+X-ME-IP: 86.243.100.34
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Ping-Ke Shih <pkshih@realtek.com>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH] wifi: rtw89: Fix some error handling path in rtw89_core_sta_assoc()
+Date:   Sun, 13 Nov 2022 16:49:18 +0100
+Message-Id: <7b1d82594635e4406d3438f33d8da29eaa056c5a.1668354547.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111044207.1478350-7-apatel@ventanamicro.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Anup,
+'ret' is not updated after a function call in rtw89_core_sta_assoc().
+This prevent error handling from working.
 
-Ditto the $subject nit here.
+Add the missing assignment.
 
-On Fri, Nov 11, 2022 at 10:12:04AM +0530, Anup Patel wrote:
-> We add DT bindings document for RISC-V advanced platform level interrupt
-> controller (APLIC) defined by the RISC-V advanced interrupt architecture
-> (AIA) specification.
-> 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  .../interrupt-controller/riscv,aplic.yaml     | 136 ++++++++++++++++++
->  1 file changed, 136 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
-> new file mode 100644
-> index 000000000000..0aa48571f3bc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
-> @@ -0,0 +1,136 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interrupt-controller/riscv,aplic.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: RISC-V Advancded Platform Level Interrupt Controller (APLIC)
+Fixes: e3ec7017f6a2 ("rtw89: add Realtek 802.11ax driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/net/wireless/realtek/rtw89/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Typo: Advanced
+diff --git a/drivers/net/wireless/realtek/rtw89/core.c b/drivers/net/wireless/realtek/rtw89/core.c
+index e716b96d0f56..f30aadc41f2b 100644
+--- a/drivers/net/wireless/realtek/rtw89/core.c
++++ b/drivers/net/wireless/realtek/rtw89/core.c
+@@ -2535,7 +2535,7 @@ int rtw89_core_sta_assoc(struct rtw89_dev *rtwdev,
+ 	}
+ 
+ 	/* update cam aid mac_id net_type */
+-	rtw89_fw_h2c_cam(rtwdev, rtwvif, rtwsta, NULL);
++	ret = rtw89_fw_h2c_cam(rtwdev, rtwvif, rtwsta, NULL);
+ 	if (ret) {
+ 		rtw89_warn(rtwdev, "failed to send h2c cam\n");
+ 		return ret;
+-- 
+2.34.1
 
-> +
-> +maintainers:
-> +  - Anup Patel <anup@brainfault.org>
-> +
-> +description:
-> +  The RISC-V advanced interrupt architecture (AIA) defines advanced platform
-                                                             ^
-Missing an article here?
-
-> +  level interrupt controller (APLIC) for handling wired interrupts in a
-> +  RISC-V platform. The RISC-V AIA specification can be found at
-> +  https://github.com/riscv/riscv-aia.
-> +
-> +  The RISC-V APLIC is implemented as hierarchical APLIC domains where all
-> +  interrupt sources connect to the root domain which can further delegate
-> +  interrupts to child domains. We have one device tree node for each APLIC
-
-While I am nitpicking, s/We have/There is/ ?
-
-> +  domain.
-> +
-> +allOf:
-> +  - $ref: /schemas/interrupt-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - vendor,chip-aplic
-
-Same comment here about the validity of this placeholder.
-
-> +      - const: riscv,aplic
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupt-controller: true
-> +
-> +  "#interrupt-cells":
-> +    const: 2
-> +
-> +  interrupts-extended:
-> +    minItems: 1
-> +    maxItems: 16384
-> +    description:
-> +      The presence of this property implies that given APLIC domain directly
-                                                   ^
-Missing indefinite article here (and in msi-parent)?
-
-> +      injects external interrupts to a set of RISC-V HARTS (or CPUs). Each
-> +      node pointed to should be a riscv,cpu-intc node, which has a riscv node
-> +      (i.e. RISC-V HART) as parent.
-> +
-> +  msi-parent:
-> +    description:
-> +      The presence of this property implies that given APLIC domain forwards
-> +      wired interrupts as MSIs to a AIA incoming message signaled interrupt
-> +      controller (IMSIC). This property should be considered only when the
-> +      interrupts-extended property is absent.
-
-This mutual exclusion can be represented, can't it?
-IIRC it is some sort of oneOf thing, somewhat like below:
-oneOf:
-  - required:
-      - msi-parent
-  - required:
-      - interrupts-extended
-
-AFAIR from doing the i2c ocores binding, this will force the addition of
-one, but not both, to a node.
-
-Or is this not actually mutually exclusive & the msi-parent property is
-permitted but just left unused if interrupts-extended is present?
-
-> +  riscv,num-sources:
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
-> +    minimum: 1
-> +    maximum: 1023
-> +    description:
-> +      Specifies how many wired interrupts are supported by this APLIC domain.
-> +
-> +  riscv,children:
-> +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> +    minItems: 1
-> +    maxItems: 1024
-> +    description:
-> +      This property represents a list of child APLIC domains for the given
-> +      APLIC domain. Each child APLIC domain is assigned child index in
-> +      increasing order with the first child APLIC domain assigned child
-> +      index 0. The APLIC domain child index is used by firmware to delegate
-> +      interrupts from the given APLIC domain to a particular child APLIC
-> +      domain.
-> +
-> +  riscv,delegate:
-> +    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-> +    minItems: 1
-> +    maxItems: 1024
-> +    description:
-> +      This property represents a interrupt delegation list where each entry
-> +      is a triple consisting of child APLIC domain phandle, first interrupt
-> +      number, and last interrupt number. The firmware will configure interrupt
-> +      delegation registers based on interrupt delegation list.
-
-What is the inter dependence of the children and delegate?
-Is it valid to have a delegate property without children?
-Can the firmware delegate interrupts without the delegation list, based
-on the children property alone? Or is it effectively useless without a
-children property?
-
-In your examples, the second has msi-parent but neither of these custom
-properties. Do the children/delegate properties have a meaning in the
-msi-parent case?
-
-I think the binding should enforce whatever dependency exists there.
-Thanks,
-Conor.
-
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupt-controller
-> +  - "#interrupt-cells"
-> +  - riscv,num-sources
-> +
-> +examples:
-> +  - |
-> +    // Example 1 (APIC domain directly injecting interrupt to HARTs):
-> +
-> +    aplic0: interrupt-controller@c000000 {
-> +      compatible = "vendor,chip-aplic", "riscv,aplic";
-> +      interrupts-extended = <&cpu1_intc 11>,
-> +                            <&cpu2_intc 11>,
-> +                            <&cpu3_intc 11>,
-> +                            <&cpu4_intc 11>;
-> +      reg = <0xc000000 0x4080>;
-> +      interrupt-controller;
-> +      #interrupt-cells = <2>;
-> +      riscv,num-sources = <63>;
-> +      riscv,children = <&aplic1>;
-> +      riscv,delegate = <&aplic1 1 63>;
-> +    };
-> +
-> +    aplic1: interrupt-controller@d000000 {
-> +      compatible = "vendor,chip-aplic", "riscv,aplic";
-> +      interrupts-extended = <&cpu1_intc 9>,
-> +                            <&cpu2_intc 9>,
-> +                            <&cpu3_intc 9>,
-> +                            <&cpu4_intc 9>;
-> +      reg = <0xd000000 0x4080>;
-> +      interrupt-controller;
-> +      #interrupt-cells = <2>;
-> +      riscv,num-sources = <63>;
-> +    };
-> +
-> +  - |
-> +    // Example 2 (APIC domain forwarding interrupts as MSIs):
-> +
-> +    interrupt-controller@d000000 {
-> +      compatible = "vendor,chip-aplic", "riscv,aplic";
-> +      msi-parent = <&imsics>;
-> +      reg = <0xd000000 0x4000>;
-> +      interrupt-controller;
-> +      #interrupt-cells = <2>;
-> +      riscv,num-sources = <63>;
-> +    };
-> +...
-> -- 
-> 2.34.1
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
