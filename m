@@ -2,152 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18DAC62737F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 00:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2033627389
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 00:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235014AbiKMXeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 18:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
+        id S235418AbiKMXi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 18:38:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiKMXeR (ORCPT
+        with ESMTP id S231252AbiKMXiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 18:34:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A096154
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 15:34:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B87A60DD7
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:34:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB60DC43144
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:34:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668382454;
-        bh=qAqHRLjgH1Z78cZZXlR1l2VU3CVTYWFxyboPeadk8Lg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=USV2DdzmKvfV1pNyBC2N0uRvMMGCR8N2fGmeAeOUru9d4t8C97H8qI9g16dYC+sdF
-         N/LgIhRuXSnD2WZCoXC9PB0cziHKYJ+u6+F0p/mHZrQewruI70BdWAaJCFm4yJNLi5
-         nU37q/kFYiunlIiRCc91I8oE7nUO7SBQIOJGd9lluOgTuDn/XMtPW6zoD60p512Skl
-         VAsm1X80nyiAMGetQG+ClUMuzDetlF7NLqITiF5WuvXkikTm73mN+rn3lPZnTuRCtn
-         fzDSufB98+HUllPTjbN2yuLYxKYitA7cxDJGlUzLTaj+BnQ/e2rP1x6IlOEuFkYGym
-         09kUz8rf4nOhg==
-Received: by mail-ot1-f42.google.com with SMTP id d26-20020a05683018fa00b0066ab705617aso5794421otf.13
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 15:34:14 -0800 (PST)
-X-Gm-Message-State: ANoB5pk8W/nsX2cggfCeKQsOstjUCuLDTrHT4HtB/oFD0zzW63oqRzLE
-        PG7pvF7BtYLl9LLv29g6/W1TG2LIFDZSyDh4zA==
-X-Google-Smtp-Source: AA0mqf45+HuGE5seimLLJAfjPAwkfwMduSg/tJPjE7vi7m7eddcBfPkq/IbcnwKPOkfdj5XXlI9YM4JNrPwRFu5Jnm8=
-X-Received: by 2002:a9d:4b02:0:b0:661:b04c:41d9 with SMTP id
- q2-20020a9d4b02000000b00661b04c41d9mr5380307otf.92.1668382453776; Sun, 13 Nov
- 2022 15:34:13 -0800 (PST)
+        Sun, 13 Nov 2022 18:38:24 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB456DE9D;
+        Sun, 13 Nov 2022 15:38:22 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id g62so9529037pfb.10;
+        Sun, 13 Nov 2022 15:38:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Vnx3d3UtkT0/AOZKRIdRL+527l3FrSpUvOUpZvyUTU=;
+        b=blKoO8j4ehhHyUaUop6u8o1NYssyGklb1fBQii6ccnOuJB1GCx33PlNv2pQ6LgZI8x
+         yISfq6eaSXYTJlHY+oiMASEfAsGDtzNU9YoQHYLgcLJwkigMAo8d44e88qqINeTXFUf6
+         EY17RqbzjzSnBB/1zMS6KU+5cvHFS/NuAByEiTBwPcITmnKq+XZJJfhNmzxBj2upsOoB
+         mBBMqWpXDdFp5CF4Yg7sQCbBlpOG6ahyaKbKeSN3hasbb5HQo4Y7oq3+8Elag3oVhR8p
+         15lFmO9KRVte7WIyXLFJFlmbJHsvAxSwdpaIyAr46BEoPfbnqHAsXO2+oRB77vTpL4Hg
+         xN7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0Vnx3d3UtkT0/AOZKRIdRL+527l3FrSpUvOUpZvyUTU=;
+        b=2aHUltpcLhmBpofqMdltSn/iUIY8Vkd6O6htfuIcFpwIors7J7BUV+t9D83W6J0dJG
+         frulpG6WCyfSbRHvNSlMuVnNpnvUDBmvucGC0jysDCXzlCKZWxWSkr9pnn29581cupcd
+         4rMh1D9i6TcnSca75U0Ux//vJzyzr1CNSbbgdfz4fTrbgqYVN6BZCLPHxg3FgKXlvode
+         5XMTnu8PIkzqer9pTDpZNi4U7vIN/ftqf5BEKnfbZdUkAFzezFZECwBBcbNOCvTOyp6i
+         rxtyXuCI06I5D3HYh4PgVoCER5a4fy52Z+qGYxqlCBlfVguJyIdQUW1BEecfbslubs5W
+         BxNA==
+X-Gm-Message-State: ANoB5pnYVGYGRF5x07yXWsizPaVD/TSxnITcY1ymxq8NSk4MUFNKSDdP
+        lz8kW/dDhT1Z11TkO6CbXQU3RKyJw082uw==
+X-Google-Smtp-Source: AA0mqf5xzbKMvhosYmjeFdvvr2ztvRpv/6HUe8EXpW13Kz5dAstFCQ6bhMPlCpEcQuOEVXLI2Cfr7Q==
+X-Received: by 2002:a63:165f:0:b0:439:ac9b:37a6 with SMTP id 31-20020a63165f000000b00439ac9b37a6mr10000824pgw.591.1668382702061;
+        Sun, 13 Nov 2022 15:38:22 -0800 (PST)
+Received: from nicks-air.lan ([2601:647:5700:fdc:a9a7:4597:ad5b:e304])
+        by smtp.googlemail.com with ESMTPSA id ip4-20020a17090b314400b00212cf2fe8c3sm8890336pjb.1.2022.11.13.15.38.20
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 13 Nov 2022 15:38:21 -0800 (PST)
+From:   Nick Desaulniers <nick.desaulniers@gmail.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Nick Desaulniers <nick.desaulniers@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <git@xen0n.name>, Guo Ren <guoren@kernel.org>,
+        linux-kernel@vger.kernel.org
+Cc:     rust-for-linux@vger.kernel.org, asahi@lists.linux.dev,
+        linux-kbuild@vger.kernel.org
+Subject: [PATCH] scripts: subarch.include: fix SUBARCH on MacOS hosts
+Date:   Sun, 13 Nov 2022 15:38:09 -0800
+Message-Id: <20221113233812.36784-1-nick.desaulniers@gmail.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 MIME-Version: 1.0
-References: <1667988059-8635-1-git-send-email-xinlei.lee@mediatek.com>
-In-Reply-To: <1667988059-8635-1-git-send-email-xinlei.lee@mediatek.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 14 Nov 2022 07:33:57 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-6Y5LmmkJXL5gigwuZjAfQHOJAoy_G+NYUmfgjxuef_w@mail.gmail.com>
-Message-ID: <CAAOTY_-6Y5LmmkJXL5gigwuZjAfQHOJAoy_G+NYUmfgjxuef_w@mail.gmail.com>
-Subject: Re: [PATCH v4] drm: mediatek: Modify dpi power on/off sequence.
-To:     xinlei.lee@mediatek.com
-Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
-        daniel@ffwll.ch, matthias.bgg@gmail.com, jitao.shi@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Xinlei:
+When building the Linux kernel on an aarch64 MacOS based host, if we don't
+specify a value for ARCH when invoking make, we default to arm and thus
+multi_v7_defconfig rather than the expected arm64 and arm64's defconfig.
 
-<xinlei.lee@mediatek.com> =E6=96=BC 2022=E5=B9=B411=E6=9C=889=E6=97=A5 =E9=
-=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=886:01=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
->
-> Modify dpi power on/off sequence so that the first gpio operation will ta=
-ke effect.
+This is because subarch.include invokes `uname -m` which on MacOS hosts
+evaluates to `arm64` but on Linux hosts evaluates to `aarch64`,
 
-Applied to mediatek-drm-next [1], thanks.
+This allows us to build ARCH=arm64 natively on MacOS (as in ARCH need
+not be specified on an aarch64-based system).
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
-log/?h=3Dmediatek-drm-next
+Utilize a negative lookahead regular expression to avoid matching arm64.
 
-Regards,
-Chun-Kuang.
+Signed-off-by: Nick Desaulniers <nick.desaulniers@gmail.com>
+---
+This is only part 1 of
+https://github.com/ClangBuiltLinux/linux/commit/f06333e29addbc3d714adb340355f471c1dfe95a
+I'm still working on the rest...
 
->
-> Fixes: 6bd4763fd532 ("drm/mediatek: set dpi pin mode to gpio low to avoid=
- leakage current")
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> ---
-> change note:
-> v3: Moved pull-down pin control after mtk_dpi_power_off.
->
-> v2: Remove the empty line between Fixes: and S-o-b.
->
-> v1: Rebase on linus/master v6.1-rc1. Change nothing.
->
-> Because dpi power_on/off is protected by dpi->refcount, the first time
-> it cannot be powered on and off successfully, it will cause leakage.
-> ---
-> ---
->  drivers/gpu/drm/mediatek/mtk_dpi.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediate=
-k/mtk_dpi.c
-> index 508a6d994e83..1f5d39a4077c 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -461,9 +461,6 @@ static void mtk_dpi_power_off(struct mtk_dpi *dpi)
->         if (--dpi->refcount !=3D 0)
->                 return;
->
-> -       if (dpi->pinctrl && dpi->pins_gpio)
-> -               pinctrl_select_state(dpi->pinctrl, dpi->pins_gpio);
-> -
->         mtk_dpi_disable(dpi);
->         clk_disable_unprepare(dpi->pixel_clk);
->         clk_disable_unprepare(dpi->engine_clk);
-> @@ -488,9 +485,6 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
->                 goto err_pixel;
->         }
->
-> -       if (dpi->pinctrl && dpi->pins_dpi)
-> -               pinctrl_select_state(dpi->pinctrl, dpi->pins_dpi);
-> -
->         return 0;
->
->  err_pixel:
-> @@ -721,12 +715,18 @@ static void mtk_dpi_bridge_disable(struct drm_bridg=
-e *bridge)
->         struct mtk_dpi *dpi =3D bridge_to_dpi(bridge);
->
->         mtk_dpi_power_off(dpi);
-> +
-> +       if (dpi->pinctrl && dpi->pins_gpio)
-> +               pinctrl_select_state(dpi->pinctrl, dpi->pins_gpio);
->  }
->
->  static void mtk_dpi_bridge_enable(struct drm_bridge *bridge)
->  {
->         struct mtk_dpi *dpi =3D bridge_to_dpi(bridge);
->
-> +       if (dpi->pinctrl && dpi->pins_dpi)
-> +               pinctrl_select_state(dpi->pinctrl, dpi->pins_dpi);
-> +
->         mtk_dpi_power_on(dpi);
->         mtk_dpi_set_display_mode(dpi, &dpi->mode);
->         mtk_dpi_enable(dpi);
-> --
-> 2.18.0
->
+ scripts/subarch.include | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/subarch.include b/scripts/subarch.include
+index 4bd327d0ae42..aa130286b627 100644
+--- a/scripts/subarch.include
++++ b/scripts/subarch.include
+@@ -6,7 +6,7 @@
+ 
+ SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
+ 				  -e s/sun4u/sparc64/ \
+-				  -e s/arm.*/arm/ -e s/sa110/arm/ \
++				  -e s/arm\(?:\(?!64\).*\)/arm/ -e s/sa110/arm/ \
+ 				  -e s/s390x/s390/ \
+ 				  -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+ 				  -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
+-- 
+2.37.0 (Apple Git-136)
+
