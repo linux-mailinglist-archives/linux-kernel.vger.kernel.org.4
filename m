@@ -2,55 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B44626EFE
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 11:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE75E626F02
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 11:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235299AbiKMKdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 05:33:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
+        id S235207AbiKMKhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 05:37:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233196AbiKMKdO (ORCPT
+        with ESMTP id S235242AbiKMKhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 05:33:14 -0500
+        Sun, 13 Nov 2022 05:37:14 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485F81209B;
-        Sun, 13 Nov 2022 02:33:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A3F12767;
+        Sun, 13 Nov 2022 02:37:13 -0800 (PST)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668335590;
+        s=2020; t=1668335832;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=q4TqLSWP6GWKj5YwSytFV7lzD/9wH9qk82DCLCDjI7Q=;
-        b=ZnXT97iJfkNsEAAdWyucQS4HWpNkyk+pZRyodnTMIoiABjz3mwOMocaEanITRKUp6C/Oii
-        5OZVRp50cA9f84obyPGGqe/P21+jj+08WSCem1j2ZUVo7Qvq238VvbpA37ThNy+GHbR5zd
-        DIm+FAw9T3mPAtngkhOnIsh2gltITOu33qFs9WLo1YPhHvTrYbHURKxyNzAmhQK8pUeIJw
-        Hc3j+47noND8f7zqpUwDo0eIuZcpNbzwseT0R99Urap0qPFXFXOqncd6uaBpb9eY5LFID/
-        f+7sf1jTR/HOKJ4VtVgzZYCpFc0fmwLDywYUuhC6Xw2zGCkYMv3kx2OGThmLxA==
+        bh=6iF3n9tQ4g0XpllF0/tUEJazpwgIDBdGU1mjlOezwuI=;
+        b=oaHjeZQvwwapqIZ/3Dp+D6uV3eiiiM/7nDPKzD9wMR0oy5PhAzDRzaOkLYwrF6N8xIJw+b
+        4EbfVhIIQ1BXexSlRGRqANYL0l1yqL51pHWKh4zW+SIYvmBW+rfkuVa63YRKl0OKVjYtFw
+        DoVkJQPpyKPKa95rmzZ4jpgK9BR/BtLiCAIYMUwRZtHUwc/XxUJtDYROrmpo+Hc09unESK
+        Au4qbPx0Ku26pgxEDkSqqz9aE2Igy+WdzN8R1iTB02CE+Ae/ih/JT/N+lKI4KBiAWllwDD
+        BpZ2QyqCUmJDKlkBE3egZqdZfwsOrrHEbzOZgR4fezvGPpO+L61etNf2SYeKpA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668335590;
+        s=2020e; t=1668335832;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=q4TqLSWP6GWKj5YwSytFV7lzD/9wH9qk82DCLCDjI7Q=;
-        b=Jg9ICAyAxld4U1RxmjJXzsfgkRRnn6sFA/bzzHTHGYNCKu4bmegdakXqbLFkBVRGhnXqVR
-        LBGFAakdXwqYtgAg==
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: RE: [PATCH] clocksource/drivers/hyper-v: Include asm/hyperv-tlfs.h
- not asm/mshyperv.h
-In-Reply-To: <87wn7ztc89.ffs@tglx>
-References: <87zgcwt2qg.ffs@tglx>
- <BYAPR21MB1688C5BCDF3269BA070DB884D7039@BYAPR21MB1688.namprd21.prod.outlook.com>
- <87wn7ztc89.ffs@tglx>
-Date:   Sun, 13 Nov 2022 11:33:09 +0100
-Message-ID: <87sfinta8q.ffs@tglx>
+        bh=6iF3n9tQ4g0XpllF0/tUEJazpwgIDBdGU1mjlOezwuI=;
+        b=z12JJ0W019T8fuL++/hlssOjR1r40/yC1M09M/nKAgS+3ysheu6CN2wKTzwYHzC458sKt1
+        fs7DoaQnipRZXrDQ==
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Ashok Raj <ashok.raj@intel.com>, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        "Ahmed S. Darwish" <darwi@linutronix.de>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Subject: [patch V1A 09/20] genirq/msi: Make msi_get_virq() device domain aware
+In-Reply-To: <20221111132706.556889434@linutronix.de>
+References: <20221111131813.914374272@linutronix.de>
+ <20221111132706.556889434@linutronix.de>
+Date:   Sun, 13 Nov 2022 11:37:11 +0100
+Message-ID: <87pmdrta20.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -62,97 +69,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 13 2022 at 10:50, Thomas Gleixner wrote:
-> On Sat, Nov 12 2022 at 21:55, Michael Kelley wrote:
->> But I can see the problem with too much getting dragged into the VDSO
->> builds.  If hv_get_raw_timer() is added to hyperv_timer.h, it should
->> be under #ifdef CONFIG_X86.  Adding an #ifdef isn't ideal, and a more
->> more proper solution might be to have a separate hyperv_timer.h include
->> file under arch/x86/include/asm.  But the latter seems like overkill for just
->> hv_get_raw_timer(), so I'm OK with the #ifdef.
->
-> We surely can have asm/hyperv_timer.h but TBH:
->
->>>  static inline notrace u64
->>>  hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg, u64 *cur_tsc)
->>>  {
->
-> hv_read_tsc_page_tsc() does not look architecture agnostic either. TSC
-> is pretty x86 specific :)
+From: Ahmed S. Darwish <darwi@linutronix.de>
 
-Though the below makes sense on its own because it ensures that msr.h is
-included, which is required for making clocksource/hyperv_timer.h self
-contained.
+In preparation of the upcoming per device multi MSI domain support, change
+the interface to support lookups based on domain id and zero based index
+within the domain.
 
-Thanks,
-
-        tglx
----
-Subject: clocksource/drivers/hyper-v: Include asm/hyperv-tlfs.h not asm/mshyperv.h
-From: Thomas Gleixner <tglx@linutronix.de>
-Date: Sat, 12 Nov 2022 19:08:15 +0100
-
-clocksource/hyperv_timer.h is included into the VDSO build. It includes
-asm/mshyperv.h which in turn includes the world and some more. This worked
-so far by chance, but any subtle change in the include chain results in a
-build breakage because VDSO builds are building user space libraries.
-
-Include asm/hyperv-tlfs.h instead which contains everything what the
-VDSO build needs and move the hv_get_raw_timer() define into a separate
-header file which also includes asm/msr.h to resolve rdtsc_ordered().
-
-Fixup drivers/hv/vmbus_drv.c which relies on the indirect include of
-asm/mshyperv.h.
-
+Signed-off-by: Ahmed S. Darwish <darwi@linutronix.de>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- arch/x86/include/asm/hyperv_timer.h |    9 +++++++++
- arch/x86/include/asm/mshyperv.h     |    2 --
- drivers/hv/vmbus_drv.c              |    1 +
- include/clocksource/hyperv_timer.h  |    2 +-
- 4 files changed, 11 insertions(+), 3 deletions(-)
+V1A: Fix the locking leak and a operator precedence issue (Dan, kernel robot)
 
---- /dev/null
-+++ b/arch/x86/include/asm/hyperv_timer.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_HYPERV_TIMER_H
-+#define _ASM_X86_HYPERV_TIMER_H
+     This was reported earlier and I missed to fold the fix before
+     posting. :(
+---
+ include/linux/msi_api.h |   14 +++++++++++++-
+ kernel/irq/msi.c        |   27 +++++++++++++++++++++------
+ 2 files changed, 34 insertions(+), 7 deletions(-)
+
+--- a/include/linux/msi_api.h
++++ b/include/linux/msi_api.h
+@@ -18,6 +18,18 @@ enum msi_domain_ids {
+ 	MSI_MAX_DEVICE_IRQDOMAINS,
+ };
+ 
+-unsigned int msi_get_virq(struct device *dev, unsigned int index);
++unsigned int msi_domain_get_virq(struct device *dev, unsigned int domid, unsigned int index);
 +
-+#include <asm/msr.h>
++/**
++ * msi_get_virq - Lookup the Linux interrupt number for a MSI index on the default interrupt domain
++ * @dev:	Device for which the lookup happens
++ * @index:	The MSI index to lookup
++ *
++ * Return: The Linux interrupt number on success (> 0), 0 if not found
++ */
++static inline unsigned int msi_get_virq(struct device *dev, unsigned int index)
++{
++	return msi_domain_get_virq(dev, MSI_DEFAULT_DOMAIN, index);
++}
+ 
+ #endif
+--- a/kernel/irq/msi.c
++++ b/kernel/irq/msi.c
+@@ -351,25 +351,38 @@ struct msi_desc *msi_next_desc(struct de
+ EXPORT_SYMBOL_GPL(msi_next_desc);
+ 
+ /**
+- * msi_get_virq - Return Linux interrupt number of a MSI interrupt
++ * msi_domain_get_virq - Lookup the Linux interrupt number for a MSI index on a interrupt domain
+  * @dev:	Device to operate on
++ * @domid:	Domain ID of the interrupt domain associated to the device
+  * @index:	MSI interrupt index to look for (0-based)
+  *
+  * Return: The Linux interrupt number on success (> 0), 0 if not found
+  */
+-unsigned int msi_get_virq(struct device *dev, unsigned int index)
++unsigned int msi_domain_get_virq(struct device *dev, unsigned int domid, unsigned int index)
+ {
+ 	struct msi_desc *desc;
+ 	unsigned int ret = 0;
+-	bool pcimsi;
++	bool pcimsi = false;
++	int base;
+ 
+ 	if (!dev->msi.data)
+ 		return 0;
+ 
+-	pcimsi = dev_is_pci(dev) ? to_pci_dev(dev)->msi_enabled : false;
++	if (WARN_ON_ONCE(index >= MSI_MAX_INDEX))
++		return 0;
 +
-+#define hv_get_raw_timer() rdtsc_ordered()
++	/* This check is only valid for the PCI default MSI domain */
++	if (dev_is_pci(dev) && domid == MSI_DEFAULT_DOMAIN)
++		pcimsi = to_pci_dev(dev)->msi_enabled;
+ 
+ 	msi_lock_descs(dev);
+-	desc = xa_load(&dev->msi.data->__store, pcimsi ? 0 : index);
 +
-+#endif
---- a/arch/x86/include/asm/mshyperv.h
-+++ b/arch/x86/include/asm/mshyperv.h
-@@ -19,8 +19,6 @@ typedef int (*hyperv_fill_flush_list_fun
- 		struct hv_guest_mapping_flush_list *flush,
- 		void *data);
++	base = msi_get_domain_base_index(dev, domid);
++	if (base < 0)
++		goto unlock;
++
++	base += pcimsi ? 0 : index;
++	desc = xa_load(&dev->msi.data->__store, base);
+ 	if (desc && desc->irq) {
+ 		/*
+ 		 * PCI-MSI has only one descriptor for multiple interrupts.
+@@ -383,10 +396,12 @@ unsigned int msi_get_virq(struct device
+ 			ret = desc->irq;
+ 		}
+ 	}
++
++unlock:
+ 	msi_unlock_descs(dev);
+ 	return ret;
+ }
+-EXPORT_SYMBOL_GPL(msi_get_virq);
++EXPORT_SYMBOL_GPL(msi_domain_get_virq);
  
--#define hv_get_raw_timer() rdtsc_ordered()
--
- void hyperv_vector_handler(struct pt_regs *regs);
- 
- #if IS_ENABLED(CONFIG_HYPERV)
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -37,6 +37,7 @@
- #include <linux/dma-map-ops.h>
- #include <linux/pci.h>
- #include <clocksource/hyperv_timer.h>
-+#include <asm/mshyperv.h>
- #include "hyperv_vmbus.h"
- 
- struct vmbus_dynid {
---- a/include/clocksource/hyperv_timer.h
-+++ b/include/clocksource/hyperv_timer.h
-@@ -15,7 +15,7 @@
- 
- #include <linux/clocksource.h>
- #include <linux/math64.h>
--#include <asm/mshyperv.h>
-+#include <asm/hyperv-tlfs.h>
- 
- #define HV_MAX_MAX_DELTA_TICKS 0xffffffff
- #define HV_MIN_DELTA_TICKS 1
+ #ifdef CONFIG_SYSFS
+ static struct attribute *msi_dev_attrs[] = {
