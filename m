@@ -2,72 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52B7A626EF7
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 11:29:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B44626EFE
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 11:33:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235228AbiKMK3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 05:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
+        id S235299AbiKMKdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 05:33:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235272AbiKMK3W (ORCPT
+        with ESMTP id S233196AbiKMKdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 05:29:22 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5525811173
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 02:29:21 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id m9-20020a056e021c2900b002fadb905ddcso7350148ilh.18
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 02:29:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5kDrJku/WUtVjcDnHaQoA7m28H6P/IU8dYDts5lcCbc=;
-        b=NqI+6gMp9224qwM3yJ3JanteCh1P2tuVItDW0ARER5hUcsUuqcC1aYbydljOT25BaZ
-         5l3Ohy2z+X5pjRKiuBgnkD+dPIpuapXHJ7dIgm6oUzrunUR7GpxBfk7RdvgRy3JHWiRF
-         RjB8IVHEmnPjiHE+Bjmushc2e3c9yR3amvt5BUs0wdU4B4hBom0BB0stlemM7uPEeUEE
-         mj+/gnaUEszDjPOTOU8YdnhUQf7G6aHB1Fh5Lho/9Azz+65SrUX1e9IkkwdInMz+yvaz
-         IzQZyrH2eUuZTKfCCxVJK3v/Ciu0v8+eBS/wPQ4bapszkTMoF1OgQehJat9ZgnLX69yN
-         lizQ==
-X-Gm-Message-State: ANoB5pmTxfpj/U6wFy2/pUFLtSTDodjMNxStrWAvpRDyHe4czyiNgdmx
-        dZf7ZdaNAbysOH+0KUmOVP+Q2qpa/G7xzA9KLeIlrXl5Txug
-X-Google-Smtp-Source: AA0mqf5FBLWx0l6ZBHwrixDtm+d3SANTALLwiyRZp0Kk9vrF4k6eI0rjf8CXngMZObOBWEbGvmx0D5Ml5pyoQiZS0pm+sBPHvMz+
+        Sun, 13 Nov 2022 05:33:14 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485F81209B;
+        Sun, 13 Nov 2022 02:33:13 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668335590;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q4TqLSWP6GWKj5YwSytFV7lzD/9wH9qk82DCLCDjI7Q=;
+        b=ZnXT97iJfkNsEAAdWyucQS4HWpNkyk+pZRyodnTMIoiABjz3mwOMocaEanITRKUp6C/Oii
+        5OZVRp50cA9f84obyPGGqe/P21+jj+08WSCem1j2ZUVo7Qvq238VvbpA37ThNy+GHbR5zd
+        DIm+FAw9T3mPAtngkhOnIsh2gltITOu33qFs9WLo1YPhHvTrYbHURKxyNzAmhQK8pUeIJw
+        Hc3j+47noND8f7zqpUwDo0eIuZcpNbzwseT0R99Urap0qPFXFXOqncd6uaBpb9eY5LFID/
+        f+7sf1jTR/HOKJ4VtVgzZYCpFc0fmwLDywYUuhC6Xw2zGCkYMv3kx2OGThmLxA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668335590;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q4TqLSWP6GWKj5YwSytFV7lzD/9wH9qk82DCLCDjI7Q=;
+        b=Jg9ICAyAxld4U1RxmjJXzsfgkRRnn6sFA/bzzHTHGYNCKu4bmegdakXqbLFkBVRGhnXqVR
+        LBGFAakdXwqYtgAg==
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: RE: [PATCH] clocksource/drivers/hyper-v: Include asm/hyperv-tlfs.h
+ not asm/mshyperv.h
+In-Reply-To: <87wn7ztc89.ffs@tglx>
+References: <87zgcwt2qg.ffs@tglx>
+ <BYAPR21MB1688C5BCDF3269BA070DB884D7039@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <87wn7ztc89.ffs@tglx>
+Date:   Sun, 13 Nov 2022 11:33:09 +0100
+Message-ID: <87sfinta8q.ffs@tglx>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:6401:0:b0:6bc:a758:9546 with SMTP id
- t1-20020a6b6401000000b006bca7589546mr3879140iog.78.1668335360650; Sun, 13 Nov
- 2022 02:29:20 -0800 (PST)
-Date:   Sun, 13 Nov 2022 02:29:20 -0800
-In-Reply-To: <20221113092552.1769-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000089b8aa05ed579869@google.com>
-Subject: Re: [syzbot] BUG: soft lockup in ieee80211_tasklet_handler
-From:   syzbot <syzbot+27df43cf7ae73de7d8ee@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sun, Nov 13 2022 at 10:50, Thomas Gleixner wrote:
+> On Sat, Nov 12 2022 at 21:55, Michael Kelley wrote:
+>> But I can see the problem with too much getting dragged into the VDSO
+>> builds.  If hv_get_raw_timer() is added to hyperv_timer.h, it should
+>> be under #ifdef CONFIG_X86.  Adding an #ifdef isn't ideal, and a more
+>> more proper solution might be to have a separate hyperv_timer.h include
+>> file under arch/x86/include/asm.  But the latter seems like overkill for just
+>> hv_get_raw_timer(), so I'm OK with the #ifdef.
+>
+> We surely can have asm/hyperv_timer.h but TBH:
+>
+>>>  static inline notrace u64
+>>>  hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg, u64 *cur_tsc)
+>>>  {
+>
+> hv_read_tsc_page_tsc() does not look architecture agnostic either. TSC
+> is pretty x86 specific :)
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Though the below makes sense on its own because it ensures that msr.h is
+included, which is required for making clocksource/hyperv_timer.h self
+contained.
 
-Reported-and-tested-by: syzbot+27df43cf7ae73de7d8ee@syzkaller.appspotmail.com
+Thanks,
 
-Tested on:
+        tglx
+---
+Subject: clocksource/drivers/hyper-v: Include asm/hyperv-tlfs.h not asm/mshyperv.h
+From: Thomas Gleixner <tglx@linutronix.de>
+Date: Sat, 12 Nov 2022 19:08:15 +0100
 
-commit:         7a7fd0de Merge branch 'kmap-conversion-for-5.12' of gi..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=148ea079880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ad1d200e85d8538d
-dashboard link: https://syzkaller.appspot.com/bug?extid=27df43cf7ae73de7d8ee
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=147b763e880000
+clocksource/hyperv_timer.h is included into the VDSO build. It includes
+asm/mshyperv.h which in turn includes the world and some more. This worked
+so far by chance, but any subtle change in the include chain results in a
+build breakage because VDSO builds are building user space libraries.
 
-Note: testing is done by a robot and is best-effort only.
+Include asm/hyperv-tlfs.h instead which contains everything what the
+VDSO build needs and move the hv_get_raw_timer() define into a separate
+header file which also includes asm/msr.h to resolve rdtsc_ordered().
+
+Fixup drivers/hv/vmbus_drv.c which relies on the indirect include of
+asm/mshyperv.h.
+
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+---
+ arch/x86/include/asm/hyperv_timer.h |    9 +++++++++
+ arch/x86/include/asm/mshyperv.h     |    2 --
+ drivers/hv/vmbus_drv.c              |    1 +
+ include/clocksource/hyperv_timer.h  |    2 +-
+ 4 files changed, 11 insertions(+), 3 deletions(-)
+
+--- /dev/null
++++ b/arch/x86/include/asm/hyperv_timer.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_HYPERV_TIMER_H
++#define _ASM_X86_HYPERV_TIMER_H
++
++#include <asm/msr.h>
++
++#define hv_get_raw_timer() rdtsc_ordered()
++
++#endif
+--- a/arch/x86/include/asm/mshyperv.h
++++ b/arch/x86/include/asm/mshyperv.h
+@@ -19,8 +19,6 @@ typedef int (*hyperv_fill_flush_list_fun
+ 		struct hv_guest_mapping_flush_list *flush,
+ 		void *data);
+ 
+-#define hv_get_raw_timer() rdtsc_ordered()
+-
+ void hyperv_vector_handler(struct pt_regs *regs);
+ 
+ #if IS_ENABLED(CONFIG_HYPERV)
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -37,6 +37,7 @@
+ #include <linux/dma-map-ops.h>
+ #include <linux/pci.h>
+ #include <clocksource/hyperv_timer.h>
++#include <asm/mshyperv.h>
+ #include "hyperv_vmbus.h"
+ 
+ struct vmbus_dynid {
+--- a/include/clocksource/hyperv_timer.h
++++ b/include/clocksource/hyperv_timer.h
+@@ -15,7 +15,7 @@
+ 
+ #include <linux/clocksource.h>
+ #include <linux/math64.h>
+-#include <asm/mshyperv.h>
++#include <asm/hyperv-tlfs.h>
+ 
+ #define HV_MAX_MAX_DELTA_TICKS 0xffffffff
+ #define HV_MIN_DELTA_TICKS 1
