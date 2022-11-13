@@ -2,138 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6286272C9
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 22:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8226272CF
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 23:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235280AbiKMVwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 16:52:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        id S235381AbiKMWBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 17:01:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233930AbiKMVwU (ORCPT
+        with ESMTP id S229692AbiKMWBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 16:52:20 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECF6EE2B
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 13:52:18 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668376336;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+fLPNxn8GyPP2PzSvtJoQcItylFjq9P4TBD/5FwFVmw=;
-        b=hJaLVQxE85MqmxdR+HkXBVo2BILykOP01+Y9f3nHWHgN5eZogB9dVQj0XBmWRdgxIlOFso
-        4h3Kie5TG5M5KGd64MD3bYEqtArdNHmpSK7B0R9sk3kT8n4qt7ZTnxzY2SochBzHbr3SzR
-        uA3Oh5Hl7gJyzqyOpv9FvnspFDa4rrL0vNGgdYL9dew6AIKnrZphbp1QS7gPd/FW2AINMF
-        z4928C89xI47DZJl6gVc7nhPYRmA33lY7plh9lco2+kDIoGCqDQUT3qOsJEHFIWvAcJ8e+
-        goBbQ0s20+rkvAjvw7XS/qeCo+kpbrMN0+FEsxMc626KzmII2G3CFNvPYC4w4A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668376336;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+fLPNxn8GyPP2PzSvtJoQcItylFjq9P4TBD/5FwFVmw=;
-        b=Fx9ErtwQajmNL9ZilrstPm9jPgTcxPmIGfMohyeImER8s+RpeK6LS2cbHYuouLL/41v6lR
-        sI1haewsFgD8HmDw==
-To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>
-Subject: Re: [PATCH v6 4/6] timers: Add timer_shutdown_sync() to be called
- before freeing timers
-In-Reply-To: <20221110064147.343514404@goodmis.org>
-References: <20221110064101.429013735@goodmis.org>
- <20221110064147.343514404@goodmis.org>
-Date:   Sun, 13 Nov 2022 22:52:16 +0100
-Message-ID: <87cz9qttdb.ffs@tglx>
+        Sun, 13 Nov 2022 17:01:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1201054A;
+        Sun, 13 Nov 2022 14:01:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A051260BDE;
+        Sun, 13 Nov 2022 22:01:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35D8AC433C1;
+        Sun, 13 Nov 2022 22:01:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668376870;
+        bh=K5+D7God8Baxo1J6cPFLSl608FEFDRggQ4yke5n3xdE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YU8MQ8uMV2XGwHl63jHpURf7CVlgD2sGJcgA/Vo+inaOVcnjT5WSW2iyX72mpUFOj
+         iCKmhuiRkxg05XsVFjGnyWJGL5uoWzsT3pZRXB1kujV3uphhELxAe+ajAAF3ExVVeV
+         9JBXvRpzHaeIY2u8ld5OOK3gcoqilNy7qFC7L2MQ2uBMF/xGFsZ1PcjRdEJKjgwZ84
+         0KAwSycBi6In4UgdButVUW6xxLEIicmsTcKkaekhG9JgUWw4z+E6owDOzac7c5xUb9
+         xnuVK41dQkrLdni402swB4wKlQzm9WHn5X9dWDGhyD8koWrT6keFjwzzJmZMFmkoc4
+         FD2u3YES7Dq2Q==
+Date:   Sun, 13 Nov 2022 14:01:07 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, jejb@linux.ibm.com,
+        Kees Cook <keescook@chromium.org>, dlunev@google.com,
+        zohar@linux.ibm.com, Matthew Garrett <mgarrett@aurora.tech>,
+        jarkko@kernel.org, linux-pm@vger.kernel.org,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Ben Boeckel <linux@me.benboeckel.net>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v5 05/11] security: keys: trusted: Allow storage of PCR
+ values in creation data
+Message-ID: <Y3FpI4GHO9pHYZUH@sol.localdomain>
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+ <20221111151451.v5.5.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221111151451.v5.5.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10 2022 at 01:41, Steven Rostedt wrote:
+On Fri, Nov 11, 2022 at 03:16:30PM -0800, Evan Green wrote:
+> +       creationpcrs= hex integer representing the set of PCRs to be
+> +                     included in the creation data. For each bit set, the
+> +                     corresponding PCR will be included in the key creation
+> +                     data. Bit 0 corresponds to PCR0. Currently only the first
+> +                     PC standard 24 PCRs are supported on the currently active
+> +                     bank. Leading zeroes are optional. TPM2 only.
 
-$Subject: -ENOPARSE
+What does "currently active bank" mean?
 
- timers: Provide timer_shutdown_sync()
+> +		/* PCR bitmask */
+> +		for (i = 0; i < 3; i++) {
+> +			char tmp = 0;
+> +
+> +			for (j = 0; j < 8; j++) {
+> +				char bit = (i * 8) + j;
+> +
+> +				if (options->creation_pcrs & (1 << bit))
+> +					tmp |= (1 << j);
+> +			}
+> +			tpm_buf_append_u8(&buf, tmp);
+> +		}
 
-and then have some reasonable explanation in the change log?
+Why not just:
 
-> We are hitting a common bug were a timer is being triggered after it
-> is
+	tpm_buf_append_u8(&buf, options->creation_pcrs);
+	tpm_buf_append_u8(&buf, options->creation_pcrs >> 8);
+	tpm_buf_append_u8(&buf, options->creation_pcrs >> 16);
 
-We are hitting? Talking in pluralis majestatis by now?
+Also what if bit 24 or above is set?  Should an error be returned?
 
-> freed. This causes a corruption in the timer link list and crashes the
-> kernel. Unfortunately it is not easy to know what timer it was that was
-
-Well, that's not entirely true. debugobjects can tell you exactly what
-happens. 
-
-> freed. Looking at the code, it appears that there are several cases that
-> del_timer() is used when del_timer_sync() should have been.
-> diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-> index 717fcb9fb14a..111a3550b3f2 100644
-> --- a/kernel/time/timer.c
-> +++ b/kernel/time/timer.c
-> @@ -1017,7 +1017,8 @@ __mod_timer(struct timer_list *timer, unsigned long expires, unsigned int option
->  	unsigned int idx = UINT_MAX;
->  	int ret = 0;
->  
-> -	BUG_ON(!timer->function);
-> +	if (WARN_ON_ONCE(!timer->function))
-> +		return -EINVAL;
-
-Can you please make these BUG -> WARN conversions a separate patch?
-
-> +/**
-> + * timer_shutdown_sync - called before freeing the timer
-
-1) The sentence after the dash starts with an upper case letter as all
-   sentences do.
-
-2) "called before freeing the timer" tells us what?
-
-   See below.
-
-> + * @timer: The timer to be freed
-> + *
-> + * Shutdown the timer before freeing. This will return when all pending timers
-> + * have finished and it is safe to free the timer.
-
-   "_ALL_ pending timers have finished?"
-
-This is about exactly _ONE_ timer, i.e. the one which is handed in via
-the @timer argument.
-
-You want to educate people to do the right thing and then you go and
-provide them uncomprehensible documentation garbage. How is that
-supposed to work?
-
-Can you please stop this frenzy and get your act together?
-
-> + *
-> + * Note, after calling this, if the timer is added back to the queue
-> + * it will fail to be added and a WARNING will be triggered.
-
-There is surely a way to express this so that the average driver writer
-who does not have the background of you working on this understands this
-"note".
-
-> + *
-> + * Returns if it deactivated a pending timer or not.
-
-Please look up the kernel-doc syntax for documenting return values.
-
-Thanks,
-
-        tglx
+- Eric
