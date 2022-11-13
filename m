@@ -2,148 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5810E626D6D
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 03:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B25A626D75
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 03:35:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233863AbiKMCGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 21:06:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46932 "EHLO
+        id S229584AbiKMCfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 21:35:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233054AbiKMCGO (ORCPT
+        with ESMTP id S230170AbiKMCfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 21:06:14 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F328012A9A;
-        Sat, 12 Nov 2022 18:06:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668305172; x=1699841172;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=I/2EtdGnQR6PzOSAc1r+6SOJWRi+w2vpqpt4iSYyu08=;
-  b=RcLCD3mhS/rslJwStKbzQgDL0+e08dmwUjix5xq+wWltmjS3tVO/j728
-   u4JnH7kwXt0CyMwcB7VGGTpuZbdMdj05AZg1jVvB9Gitv32TgH9lt7Pch
-   4Zkp5JMdixcmZADocchgxa2+FhVSUUknCdnPIBtiWvPJOUabM7dWXQ5BF
-   mQ5BLcxUqcX5Tf+w4O22yzfIy5UuW7h/naVNADOnYgeNT4IuDD+0ie9OY
-   npuDM8uKEqcH8xx7hjWz5zhoj/PT4kfRc7EZXzTaeFqd2PXFfuxdKE2Se
-   CDUA6euuNiORsRPkYbWyu8qnBwN5s2vsqaO89NKvBaPmDKj+i3kNL3Kxl
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="309398179"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="309398179"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2022 18:06:12 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="701585547"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="701585547"
-Received: from fkabir-mobl.amr.corp.intel.com (HELO tjmaciei-mobl5.localnet) ([10.255.228.60])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2022 18:06:11 -0800
-From:   Thiago Macieira <thiago.macieira@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Jithu Joseph <jithu.joseph@intel.com>, hdegoede@redhat.com,
-        markgross@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        gregkh@linuxfoundation.org, ashok.raj@intel.com,
-        tony.luck@intel.com, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
-        ravi.v.shankar@intel.com, athenas.jimenez.gonzalez@intel.com,
-        sohil.mehta@intel.com
-Subject: Re: [PATCH v2 12/14] platform/x86/intel/ifs: Add current_batch sysfs entry
-Date:   Sat, 12 Nov 2022 18:06:11 -0800
-Message-ID: <1817246.Ty3P6RqcON@tjmaciei-mobl5>
-Organization: Intel Corporation
-In-Reply-To: <Y2/x/vdtE0ciuOhE@zn.tnic>
-References: <20221021203413.1220137-1-jithu.joseph@intel.com> <208647816.nNe6ejF2h0@tjmaciei-mobl5> <Y2/x/vdtE0ciuOhE@zn.tnic>
+        Sat, 12 Nov 2022 21:35:15 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8A1FD02;
+        Sat, 12 Nov 2022 18:35:14 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id 136so7476454pga.1;
+        Sat, 12 Nov 2022 18:35:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5CsSwyo4jN4ThWQ8+juXA0dRTOlHjW4IoApBU1fpU1k=;
+        b=qS+J+eeZUgXl6JfEMJ9bs3p/nlCFU2pSL08jttp3R9fh8UUVgLuz4hJztqe3WHYrDB
+         S/j5MNjdR8z5fyct9i0j7EMhII0SKn1AnuGxtSRHdEVi7B6Y2daSEEBNqku2BRkH+ES+
+         /Fgr/qfo0k6MYB/fV/ALfn87em44xKlOaXBinDSPoS/qk/tQiU4JHR+CgHljTyQ3NpW6
+         qPLOPPs9IImllpn2hQvGpHrDsKSi9E0cM0cmwu9iZLt2rvcQjX0C3OtEEeJFyawvwCSh
+         syNvZy7QsgFjtmsRCpf8k3zKVHJQQyRxjmVO0wT3iL7LF8c82zk3DL2YbouRNsExQjEu
+         IQhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5CsSwyo4jN4ThWQ8+juXA0dRTOlHjW4IoApBU1fpU1k=;
+        b=lnz37uDDpGeBe6OGFdhr3oUcA1QRvrePfHTpqWnzvmsEVorkufgBcKt2ajFD8NLbOr
+         Ztq9+/bpPyPmjAfVwa9wd0eRt0KtGS4Z4kdF7UCmsERqn11W6EI9+QjpkxKfxRitYsu1
+         DYjRSbXbOzo4E30bohH9WhlxEtz+z3ZoTXlpqLQ+k8cMPNWWafDDy/MZPtqxYkphyr5E
+         XSl8KtNKirus3ABv7NygUedMbC9/lJHaAcHl1eblyPBBx0nYN1P5I9SoPgSQZM7gNlo3
+         F77CHIdOpNSbrBMj60P6eFHBeak/d3/AoYMOLasWAeZLJj9WKOHsQHNw+RjcMsReyp2U
+         moPQ==
+X-Gm-Message-State: ANoB5pkt0UmiRO5qj1qu9lDI0TRkRPfvJkfm7eHvPiL+wz2qEbz4msnN
+        EcN6SktpPWazFZFyX2qI3ORkmhQggjOvYCEPW3M=
+X-Google-Smtp-Source: AA0mqf5xYB1jNVvvsmtjIP5m13hMa3pcOYArwr+4mt3KWllQOGUbxkiiRAclcwpNWONCavbjD87bPm5lFrWD17kLYBI=
+X-Received: by 2002:a63:5307:0:b0:45b:f8be:7402 with SMTP id
+ h7-20020a635307000000b0045bf8be7402mr6958674pgb.484.1668306914167; Sat, 12
+ Nov 2022 18:35:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221010023315.98396-1-zhouzhouyi@gmail.com> <87bkqjorez.fsf@mpe.ellerman.id.au>
+ <CAABZP2wFY19MTsDm1SH86Ms_zRRgC77oceMkJKPqawxyExJjqQ@mail.gmail.com>
+In-Reply-To: <CAABZP2wFY19MTsDm1SH86Ms_zRRgC77oceMkJKPqawxyExJjqQ@mail.gmail.com>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Sun, 13 Nov 2022 10:35:02 +0800
+Message-ID: <CAABZP2x9OBDBqPKLoCMDKZiLZYO16beCzS0VUVEjcXU-VU3REw@mail.gmail.com>
+Subject: Re: [PATCH linux-next][RFC] powerpc: fix HOTPLUG error in rcutorture
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        atrajeev@linux.vnet.ibm.com, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, lance@osuosl.org, paulmck@kernel.org,
+        rcu@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Saturday, 12 November 2022 11:20:30 PST Borislav Petkov wrote:
-> This sounds to me like there's a special order in which those batches
-> should be executed?
-> 
-> I thought they're simply collections of test sequences which can be run
-> in any order...
+Hi,
+I also reappear the same phenomenon in RISC-V:
+[  120.156380] scftorture: --- End of test: LOCK_HOTPLUG
 
-As Ashok replied, no, they are not ordered. But running them from first to last 
-is the simplest algorithm to code.
+So I guess it is not the arch's responsibility.
+I am very interested in it ;-)
 
-If we did support file names, then the directory order would be also as good as 
-any (unsorted).
+Thank you both for your guidance!
+Cheers
+Zhouyi
 
-> It is not about seeing - you simply give it the filename -
-> request_firmware* does the "seeing". Either the file's there or it
-> isn't.
-
-I meant knowing which files are there. If they don't form a specific pattern, 
-then it's impossible to know what they have been named. And if they do form a 
-specific pattern, what's the harm in just using the sequence number? It's much 
-easier for the kernel to remember a single 8-bit number than a file name.
-
-It also allows for new techniques like deploying a single cpio or tarball with 
-everything with an update to the kernel, without having userspace have to 
-update to match.
-
-> There's a reason I wrote:
-> 
-> "There will be no requirement on the naming - only on the filename
-> length and it should be in that directory /lib/firmware/intel/ifs_0/"
-> 
-> Of course the driver should load only from that directory.
-
-Thank you for that explanation. But my argument was that the application 
-driving this might be deployed as a container, as part of a container-
-orchestration and scheduling system, while the firmware files would already be 
-pre-installed on the machine and updated with the regular firmware update 
-mechanism. If the container can't see what files are there, it would have to 
-resort to the guessing I mentioned above. CSPs could avoid this by bind-
-mounting /lib/firmware into the container, but we'd prefer not to add yet 
-another constraint.
-
-> All that doesn't matter - if the CPU *must* wait 15 minutes between
-> batches, then that should be enforced by the driver and not relied upon
-> by userspace to DTRT.
-
-If's enforced by the CPU today. How it determines when a test can be run is 
-besides the point; the driver will ask it to run and the CPU will reply it 
-couldn't. That information is conveyed back to userspace by changing the 
-"status" back to "untested".
-
-> This all has nothing to do with whether you give it a number or a
-> filename. How you glue your testing around it together is a userspace
-> issue - all the kernel driver needs to be able to do is load the
-> sequence and execute it.
-> 
-> Echoing filenames into sysfs is no different from echoing numbers into
-> it - former is simpler. If the CPU says it cannot execute the sequence
-> currently, you have to think about how you retry that sequence. How you
-> specify it doesn't matter.
-
-Right, it's no different from echoing file names, but it's much simpler to 
-increment a number than do a directory listing and sort the file names, so it 
-can pick up from where it left off.
-
-I mentioned this complication to explain why the userspace won't be able to 
-simply echo each file name and expect things to have reached full coverage. 
-Unfortunately, userspace needs to cope with the fact that there will be a 
-timeout for certain generations. It's not what we'd have preferred; it's a 
-hardware constraint we have to adapt to.
-
-WIth this constraint in mind, having a single number simplifies userspace. You 
-can't do it with a three-line shell script, but we're not expecting that shell 
-scripts are the means to use this feature in the first place.
-
--- 
-Thiago Macieira - thiago.macieira (AT) intel.com
-  Cloud Software Architect - Intel DCAI Cloud Engineering
-
-
-
+On Tue, Oct 11, 2022 at 9:59 AM Zhouyi Zhou <zhouzhouyi@gmail.com> wrote:
+>
+> Thanks Michael for reviewing my patch
+>
+> On Mon, Oct 10, 2022 at 7:21 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
+> >
+> > Zhouyi Zhou <zhouzhouyi@gmail.com> writes:
+> > > I think we should avoid torture offline the cpu who do tick timer
+> > > when nohz full is running.
+> >
+> > Can you tell us what the bug you're fixing is?
+> >
+> > Did you see a crash/oops/hang etc? Or are you just proposing this as
+> > something that would be a good idea?
+> Sorry for the trouble and inconvenience that I bring to the community.
+> I haven't made myself clear in my patch.
+> The ins and outs are as follows:
+> 1) cd linux-next
+> 2) ./tools/testing/selftests/rcutorture/bin/torture.sh
+> after 19 hours ;-)
+> 3) tail  ./tools/testing/selftests/rcutorture/res/2022.09.30-01.06.22-torture/results-scftorture/NOPREEMPT/console.log
+>
+> [  121.449268][   T57] scftorture:  scf_invoked_count VER: 2415215
+> resched: 697463 single: 619512/619760 single_ofl: 255751/256554
+> single_rpc: 620692 single_rpc_ofl: 0 many: 155476/154658 all:
+> 77282/76988 onoff: 3/3:5/6 18,25:9,28 63:93 (HZ=100) ste: 0 stnmie: 0
+> stnmoe: 0 staf: 0
+> [  121.454485][   T57] scftorture: --- End of test: LOCK_HOTPLUG:
+> verbose=1 holdoff=10 longwait=0 nthreads=4 onoff_holdoff=30
+> onoff_interval=1000 shutdown_secs=1 stat_interval=15 stutter=5
+> use_cpus_read_lock=0, weight_resched=-1, weight_single=-1,
+> weight_single_rpc=-1, weight_single_wait=-1, weight_many=-1,
+> weight_many_wait=-1, weight_all=-1, weight_all_wait=-1
+> [  121.469305][   T57] reboot: Power down
+>
+> I see "End of test: LOCK_HOTPLUG", which means the function
+> torture_offline in kernel torture.c failed to bring down the cpu.
+> 4) Then I chase the reason down to tick_nohz_cpu_down:
+> if (tick_nohz_full_running && tick_do_timer_cpu == cpu)
+>       return -EBUSY;
+> 5) I create above patch
+> >
+> > > Tested on PPC VM of Open Source Lab of Oregon State University.
+> > > The test results show that after the fix, the success rate of
+> > > rcutorture is improved.
+> > > After:
+> > > Successes: 40 Failures: 9
+> > > Before:
+> > > Successes: 38 Failures: 11
+> > >
+> > > I examined the console.log and Make.out files one by one, no new
+> > > compile error or test error is introduced by above fix.
+> > >
+> > > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > > ---
+> > > Dear PPC developers
+> > >
+> > > I found this bug when trying to do rcutorture tests in ppc VM of
+> > > Open Source Lab of Oregon State University:
+> > >
+> > > ubuntu@ubuntu:~/linux-next/tools/testing/selftests/rcutorture/res/2022.09.30-01.06.22-torture$ find . -name "console.log.diags"|xargs grep HOTPLUG
+> > > ./results-scftorture/NOPREEMPT/console.log.diags:WARNING: HOTPLUG FAILURES NOPREEMPT
+> > > ./results-rcutorture/TASKS03/console.log.diags:WARNING: HOTPLUG FAILURES TASKS03
+> > > ./results-rcutorture/TREE04/console.log.diags:WARNING: HOTPLUG FAILURES TREE04
+> > > ./results-scftorture-kasan/NOPREEMPT/console.log.diags:WARNING: HOTPLUG FAILURES NOPREEMPT
+> > > ./results-rcutorture-kasan/TASKS03/console.log.diags:WARNING: HOTPLUG FAILURES TASKS03
+> > > ./results-rcutorture-kasan/TREE04/console.log.diags:WARNING: HOTPLUG FAILURES TREE04
+> > >
+> > > I tried to fix this bug.
+> > >
+> > > Thanks for your patience and guidance ;-)
+> > >
+> > > Thanks
+> > > Zhouyi
+> > > --
+> > >  arch/powerpc/kernel/sysfs.c | 8 +++++++-
+> > >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/arch/powerpc/kernel/sysfs.c b/arch/powerpc/kernel/sysfs.c
+> > > index ef9a61718940..be9c0e45337e 100644
+> > > --- a/arch/powerpc/kernel/sysfs.c
+> > > +++ b/arch/powerpc/kernel/sysfs.c
+> > > @@ -4,6 +4,7 @@
+> > >  #include <linux/smp.h>
+> > >  #include <linux/percpu.h>
+> > >  #include <linux/init.h>
+> > > +#include <linux/tick.h>
+> > >  #include <linux/sched.h>
+> > >  #include <linux/export.h>
+> > >  #include <linux/nodemask.h>
+> > > @@ -21,6 +22,7 @@
+> > >  #include <asm/firmware.h>
+> > >  #include <asm/idle.h>
+> > >  #include <asm/svm.h>
+> > > +#include "../../../kernel/time/tick-internal.h"
+> >
+> > Needing to include this internal header is a sign that we are using the
+> > wrong API or otherwise using time keeping internals we shouldn't be.
+> Yes, when I do this, I guess there is something wrong in my patch.
+> >
+> > >  #include "cacheinfo.h"
+> > >  #include "setup.h"
+> > > @@ -1151,7 +1153,11 @@ static int __init topology_init(void)
+> > >                * CPU.  For instance, the boot cpu might never be valid
+> > >                * for hotplugging.
+> > >                */
+> > > -             if (smp_ops && smp_ops->cpu_offline_self)
+> > > +             if (smp_ops && smp_ops->cpu_offline_self
+> > > +#ifdef CONFIG_NO_HZ_FULL
+> > > +                 && !(tick_nohz_full_running && tick_do_timer_cpu == cpu)
+> > > +#endif
+> > > +                 )
+> >
+> > I can't see any other arches doing anything like this. I don't think
+> > it's the arches responsibility.
+> Agree!
+>
+> X86 seems to disable CPU0's hotplug by default, while
+> tick_do_timer_cpu has a default value 0.
+>
+> 42 #ifdef CONFIG_BOOTPARAM_HOTPLUG_CPU0
+> 43 static int cpu0_hotpluggable = 1;
+> 44 #else
+> 45 static int cpu0_hotpluggable;
+> 46 static int __init enable_cpu0_hotplug(char *str)
+> 47 {
+> 48         cpu0_hotpluggable = 1;
+> 49         return 1;
+> 50 }
+> 51
+> 52 __setup("cpu0_hotplug", enable_cpu0_hotplug);
+> 53 #endif
+>
+> I need more time to make clear the relationship of X86's
+> cpu0_hotpluggable and tick_do_timer_cpu, but
+> I also intend to think it's time keeping the mechanism's responsibility.
+>
+>
+> >
+> > If the time keeping core needs a CPU to stay online to run the timer
+> > then it needs to organise that itself IMHO :)
+>
+> Um, I am going to submit a patch to time keeping community sometime
+> next month ;-)
+>
+> Thanks again
+> Cheers
+> Zhouyi
+> >
+> > cheers
+> >
+> > >                       c->hotpluggable = 1;
+> > >  #endif
+> > >
+> > > --
+> > > 2.25.1
