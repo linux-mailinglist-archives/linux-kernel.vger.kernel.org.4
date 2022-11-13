@@ -2,153 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E9662727B
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 21:31:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94465627285
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 21:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235433AbiKMUb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 15:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
+        id S235541AbiKMUeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 15:34:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbiKMUb1 (ORCPT
+        with ESMTP id S235443AbiKMUd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 15:31:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9055512608;
-        Sun, 13 Nov 2022 12:31:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C69A60BDB;
-        Sun, 13 Nov 2022 20:31:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFD59C433D6;
-        Sun, 13 Nov 2022 20:31:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668371485;
-        bh=Z3hKGPb3JVjXMwmS/Knu2xoEPDWXo+XzHB0SUKGU1MI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fq1tFo1Ks4huQqkpuAB7lbl7qnjDuhG7E+DJEFMViWMTlO/GSyicK/f0VBEUOU2+r
-         Xv0qnW7VqdvRwjmuSAF6xfR42U/FOC+OOlzbfTSa7HSBkGuWiFOZpWF3YPGU/r0EMc
-         9U1eH6aQB+pWcyGh6La4SIkI3gIon4HwQwTHFwGdr2cDHX1NI3bf3yTzMrFzpEmWhV
-         yVYlBFB85gk3tF/diWjOWSC9EAFvAL6FHYv23FJ6liOS6xhrppkWr5Bz2OLtW8vg8W
-         U9R2+Z69+u4yAfWihGILYo7IQXwV6Rit61wO7vJEbdNuhHK6P7YvNE4BQaehWZJ6q1
-         NtVR3K7q066OQ==
-Date:   Sun, 13 Nov 2022 12:31:23 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, jejb@linux.ibm.com,
-        Kees Cook <keescook@chromium.org>, dlunev@google.com,
-        zohar@linux.ibm.com, Matthew Garrett <mgarrett@aurora.tech>,
-        jarkko@kernel.org, linux-pm@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Peter Huewe <peterhuewe@gmx.de>, axelj <axelj@axis.com>
-Subject: Re: [PATCH v5 01/11] tpm: Add support for in-kernel resetting of PCRs
-Message-ID: <Y3FUGyYbpWM0uIdg@sol.localdomain>
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.1.I776854f47e3340cc2913ed4d8ecdd328048b73c3@changeid>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111151451.v5.1.I776854f47e3340cc2913ed4d8ecdd328048b73c3@changeid>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 13 Nov 2022 15:33:59 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706BBB87D;
+        Sun, 13 Nov 2022 12:33:58 -0800 (PST)
+Message-ID: <20221113201935.776707081@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668371635;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=7MxnopjDUQ1bdcA7I42+FS4FruEBgUMrTam7b1hHOfY=;
+        b=GD7AYqNO+9zs89yvH9A3kuIe3BFCbmfyUX9bM5DxoGC2/9W9NdipMWcwOhTl9Pifdc0yCX
+        EDhvw2y+NoWqtlUiYz9FJqPR9CQny0Z12KgZ1d5E+TGqMmHlGz7MsPwC8U14oZBCtfjm6E
+        REU/mFYEcZcwcS0BNroWm8KMYTtPidN5lfjTpV++dxwqsHCUccIX2hT1SqgjPzktYZ+lG4
+        iELCXsN4rAiDDZdNSxbOCmhU6ODxCoqh5FpA0V3jZkg/TqabJcXckbAakEpN9zUH++JIo7
+        t5Thzi4kcs9WVGg3Y1kptNIVVOv3RRInTTR/1b4TKFM82gG7b4uRm+PuDFV7Hw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668371635;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=7MxnopjDUQ1bdcA7I42+FS4FruEBgUMrTam7b1hHOfY=;
+        b=TOAACLZw9M5uSJ1ngz5jOUvHAmnmW+licTR7ipmgh8VxLfj/M9NIf4LtBb5fWxUDQ+jAKO
+        PNfZNRVVBs7etJCQ==
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>, Lee Jones <lee@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-ide@vger.kernel.org, James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Simon Horman <simon.horman@corigine.com>,
+        oss-drivers@corigine.com, Roy Pledge <Roy.Pledge@nxp.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>, kvm@vger.kernel.org,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev
+Subject: [patch 00/10] genirq/msi: Treewide cleanup of pointless linux/msi.h includes
+Date:   Sun, 13 Nov 2022 21:33:54 +0100 (CET)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 03:16:26PM -0800, Evan Green wrote:
-> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-> index 1621ce8187052c..886277b2654e3b 100644
-> --- a/drivers/char/tpm/tpm-interface.c
-> +++ b/drivers/char/tpm/tpm-interface.c
-> @@ -342,6 +342,53 @@ int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
->  }
->  EXPORT_SYMBOL_GPL(tpm_pcr_extend);
->  
-> +/**
-> + * tpm2_pcr_reset - Reset the specified PCR
+While working on per device MSI domains I noticed that quite some files
+include linux/msi.h just because.
 
-Should this function be in drivers/char/tpm/tpm2-cmd.c instead of here?
+The top level comment in the header file clearly says:
 
-> + * @chip: A &struct tpm_chip instance, %NULL for the default chip
-> + * @pcr_idx: The PCR to be reset
-> + *
-> + * Return: Same as with tpm_transmit_cmd(), or ENOTTY for TPM1 devices.
-> + */
-> +int tpm2_pcr_reset(struct tpm_chip *chip, u32 pcr_idx)
+  Regular device drivers have no business with any of these functions....
 
-The callers of this function assume it returns a negative errno value.  But
-actually it can return positive TPM2_RC_* error codes as well.  Probably you
-should make it only return negative errno values.
+and actually none of the drivers needs anything from msi.h.
 
-> +{
-> +	struct tpm2_null_auth_area auth_area;
-> +	struct tpm_buf buf;
-> +	int rc;
-> +
-> +	chip = tpm_find_get_ops(chip);
-> +	if (!chip)
-> +		return -ENODEV;
-> +
-> +	if (!(chip->flags & TPM_CHIP_FLAG_TPM2)) {
-> +		rc = -ENOTTY;
-> +		goto out;
-> +	}
-> +
-> +	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_PCR_RESET);
-> +	if (rc)
-> +		goto out;
-> +
-> +	tpm_buf_append_u32(&buf, pcr_idx);
-> +
-> +	auth_area.handle = cpu_to_be32(TPM2_RS_PW);
-> +	auth_area.nonce_size = 0;
-> +	auth_area.attributes = 0;
-> +	auth_area.auth_size = 0;
-> +
-> +	tpm_buf_append_u32(&buf, sizeof(struct tpm2_null_auth_area));
+The series is not depending on anything so the individual patches can be
+picked up by the relevant maintainers. I'll mop up the leftovers close to
+the merge window.
 
-sizeof(struct tpm2_null_auth_area) => sizeof(auth_area)
+Thanks,
 
-> +	tpm_buf_append(&buf, (const unsigned char *)&auth_area,
-
-unsigned char => u8
-
-Also, since the code to append a "null" authorization area appears in both
-tpm2_pcr_reset() and tpm2_pcr_extend(), perhaps it should be refactored into a
-helper function?
-
-> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index dfeb25a0362dee..70134e6551745f 100644
-> --- a/include/linux/tpm.h
-> +++ b/include/linux/tpm.h
-> @@ -219,6 +219,7 @@ enum tpm2_command_codes {
->  	TPM2_CC_HIERARCHY_CONTROL       = 0x0121,
->  	TPM2_CC_HIERARCHY_CHANGE_AUTH   = 0x0129,
->  	TPM2_CC_CREATE_PRIMARY          = 0x0131,
-> +	TPM2_CC_PCR_RESET		= 0x013D,
->  	TPM2_CC_SEQUENCE_COMPLETE       = 0x013E,
->  	TPM2_CC_SELF_TEST	        = 0x0143,
->  	TPM2_CC_STARTUP		        = 0x0144,
-> @@ -293,6 +294,13 @@ struct tpm_header {
->  	};
->  } __packed;
->  
-> +struct tpm2_null_auth_area {
-> +	__be32  handle;
-> +	__be16  nonce_size;
-> +	u8  attributes;
-> +	__be16  auth_size;
-> +} __packed;
-
-struct tpm2_null_auth_area is only used by code in drivers/char/tpm/, so should
-its declaration go in the internal header drivers/char/tpm/tpm.h instead?
-
-- Eric
+	tglx
