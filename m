@@ -2,113 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556306271F2
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 20:07:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2786271F4
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 20:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235568AbiKMTHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 14:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43852 "EHLO
+        id S235273AbiKMTKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 14:10:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235521AbiKMTHK (ORCPT
+        with ESMTP id S235317AbiKMTKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 14:07:10 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF98101FB;
-        Sun, 13 Nov 2022 11:07:10 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 130so8515793pgc.5;
-        Sun, 13 Nov 2022 11:07:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=glNV3HDqHMzCoh8Ah4WEKW8nahUdxNcLvcBYViX0gZ8=;
-        b=hSpA6O/1bAppadSdY5CwcwJXT1oMMlDyuNvNxsYN+n4RIH37EWvdtlQmIgoDfiV3rW
-         noDkWXvH9gbH7e3NzDFjD8UQa79GHmHFBATN2R+rPG4MCBAo2GweWh+7REUi2iyE9ZtB
-         f2Gd48Pjgab6FGb67Ytp2S2eoQkHydUYSo+RS2x81U6AVdSnBkaL9q4GphYEA3wSpyak
-         2XT7XfYB1APeYM8BcS9259vrfr/ZrL/ZjxCp83OTTe9//UjwAeGf0noLl7mLg49kATCN
-         QYq++ZHNxj9fRG/1K3UQK6afEGltLIsUBqVq3w71mKws/K3SkqzlMDFLy48xdvUZbHLz
-         iVMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=glNV3HDqHMzCoh8Ah4WEKW8nahUdxNcLvcBYViX0gZ8=;
-        b=sD+hph57cbBJfA6KQMFWTwKjcKbpgJZ4aRay3zEw0qJ0Ztjy2EG8Tq5b6utW/8GK7h
-         IlDO2Dafo1Feky5nf11G6Ij7s3PclUTwtSao7hmVJjhw8Sut0YoySjEt5H9jbWInyNWU
-         oD7spvlvJIch8/ZdITbw3f3wh24KAjgroa29AIBD2o1o8KdllowqtinxUqGzsI9py0W3
-         RrSrb4G4UIUzNA1Kck5lKCwxHjX3mK+rqovXLVZAdm9GiGI7kZdMR2cgY1EcbcZtgcZZ
-         g4zjv3uKbU6GJRpow0sSBL7nNXQdXcJjje+tRA7x0lCTUxkOqc3umoWJUz8vYuU3U3M0
-         Y2fg==
-X-Gm-Message-State: ANoB5pnO4txIF7uc3RnZ9t4pKpgZ1CjrxHmwuSsi/YCSMvNEBmUwGjc+
-        +qGEGUJIYhiotAlS9QRC1oc=
-X-Google-Smtp-Source: AA0mqf48KXUJPalT+LHRERflG9UpnnvyVGNnKnvdHceDMS85RRQLDUS3mYOUlkC3gzjbKKX9m9wTLA==
-X-Received: by 2002:a63:5725:0:b0:451:c1b3:2708 with SMTP id l37-20020a635725000000b00451c1b32708mr9486182pgb.233.1668366429671;
-        Sun, 13 Nov 2022 11:07:09 -0800 (PST)
-Received: from localhost.localdomain ([14.5.161.132])
-        by smtp.gmail.com with ESMTPSA id a4-20020a170902ecc400b001869f2120a5sm5549604plh.34.2022.11.13.11.07.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 11:07:09 -0800 (PST)
-From:   Kang Minchul <tegongkang@gmail.com>
-To:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kang Minchul <tegongkang@gmail.com>
-Subject: [PATCH v2 3/3] libbpf: checkpatch: Fixed code alignments in ringbuf.c
-Date:   Mon, 14 Nov 2022 04:06:48 +0900
-Message-Id: <20221113190648.38556-4-tegongkang@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221113190648.38556-1-tegongkang@gmail.com>
-References: <20221113190648.38556-1-tegongkang@gmail.com>
+        Sun, 13 Nov 2022 14:10:10 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0142213D69
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 11:10:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668366609; x=1699902609;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cXvk/lfUOGyjHOe2uztoH6XTJP4Hv46hzt35fKtKj1Q=;
+  b=QBR99jOIrBhC1rzNueF2K3gIuEGquB2c1/OBE23laSqeBYzi32rxiw0C
+   RCAw3avywWzzn2QDWkwqMrYteSU8w1UpobNgsYLOk5hZyjVSyeevFVSGy
+   qs6lQbcvFh1ydJpGi1Hpbg9slgWT+PUajtr9OGshtfWThaQU6y/gIMKxZ
+   5ke2uQeAOsEcBS5YWGgzndGjkF9EanCbwlGRt7drDRcB0usUPb/9RIJB3
+   zWAEz2L4/T3Ha3mYuZa9ztnesFqi4orBSVPCm9noXoPjcKMqOfUoKE3PQ
+   TCCxQNS4LyWZLQZZA8jOk35SoSdfJIrNcYCl5t08C/CL+FMRI8/NnG8fR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="291551679"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="291551679"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 11:10:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="743867540"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="743867540"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 13 Nov 2022 11:10:07 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id B7780F7; Sun, 13 Nov 2022 21:10:31 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Lee Jones <lee@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v1 1/1] mfd: vexpress-sysreg: Fix resource compound literal assignments
+Date:   Sun, 13 Nov 2022 21:10:27 +0200
+Message-Id: <20221113191027.2327-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed some checkpatch issues in ringbuf.c
+Since DEFINE_RES_*() macros were converted to provide a compound literal
+the user doesn't need to repeat it. Moreover, it may not be compiled.
 
-Signed-off-by: Kang Minchul <tegongkang@gmail.com>
+Fixes: 9c973ce7f9cf ("resource: Convert DEFINE_RES_NAMED() to be compound literal")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- tools/lib/bpf/ringbuf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-index d285171d4b69..51808c5f0014 100644
---- a/tools/lib/bpf/ringbuf.c
-+++ b/tools/lib/bpf/ringbuf.c
-@@ -128,7 +128,7 @@ int ring_buffer__add(struct ring_buffer *rb, int map_fd,
- 	/* Map read-only producer page and data pages. We map twice as big
- 	 * data size to allow simple reading of samples that wrap around the
- 	 * end of a ring buffer. See kernel implementation for details.
--	 * */
-+	 */
- 	tmp = mmap(NULL, rb->page_size + 2 * info.max_entries, PROT_READ,
- 		   MAP_SHARED, map_fd, rb->page_size);
- 	if (tmp == MAP_FAILED) {
-@@ -220,7 +220,7 @@ static inline int roundup_len(__u32 len)
- 	return (len + 7) / 8 * 8;
- }
+Should go via Greg's tree where ioport.h has been changed.
+
+ drivers/mfd/vexpress-sysreg.c | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/mfd/vexpress-sysreg.c b/drivers/mfd/vexpress-sysreg.c
+index aaf24af287dd..eab82619ec31 100644
+--- a/drivers/mfd/vexpress-sysreg.c
++++ b/drivers/mfd/vexpress-sysreg.c
+@@ -61,35 +61,27 @@ static struct mfd_cell vexpress_sysreg_cells[] = {
+ 		.name = "basic-mmio-gpio",
+ 		.of_compatible = "arm,vexpress-sysreg,sys_led",
+ 		.num_resources = 1,
+-		.resources = (struct resource []) {
+-			DEFINE_RES_MEM_NAMED(SYS_LED, 0x4, "dat"),
+-		},
++		.resources = &DEFINE_RES_MEM_NAMED(SYS_LED, 0x4, "dat"),
+ 		.platform_data = &vexpress_sysreg_sys_led_pdata,
+ 		.pdata_size = sizeof(vexpress_sysreg_sys_led_pdata),
+ 	}, {
+ 		.name = "basic-mmio-gpio",
+ 		.of_compatible = "arm,vexpress-sysreg,sys_mci",
+ 		.num_resources = 1,
+-		.resources = (struct resource []) {
+-			DEFINE_RES_MEM_NAMED(SYS_MCI, 0x4, "dat"),
+-		},
++		.resources = &DEFINE_RES_MEM_NAMED(SYS_MCI, 0x4, "dat"),
+ 		.platform_data = &vexpress_sysreg_sys_mci_pdata,
+ 		.pdata_size = sizeof(vexpress_sysreg_sys_mci_pdata),
+ 	}, {
+ 		.name = "basic-mmio-gpio",
+ 		.of_compatible = "arm,vexpress-sysreg,sys_flash",
+ 		.num_resources = 1,
+-		.resources = (struct resource []) {
+-			DEFINE_RES_MEM_NAMED(SYS_FLASH, 0x4, "dat"),
+-		},
++		.resources = &DEFINE_RES_MEM_NAMED(SYS_FLASH, 0x4, "dat"),
+ 		.platform_data = &vexpress_sysreg_sys_flash_pdata,
+ 		.pdata_size = sizeof(vexpress_sysreg_sys_flash_pdata),
+ 	}, {
+ 		.name = "vexpress-syscfg",
+ 		.num_resources = 1,
+-		.resources = (struct resource []) {
+-			DEFINE_RES_MEM(SYS_MISC, 0x4c),
+-		},
++		.resources = &DEFINE_RES_MEM(SYS_MISC, 0x4c),
+ 	}
+ };
  
--static int64_t ringbuf_process_ring(struct ring* r)
-+static int64_t ringbuf_process_ring(struct ring *r)
- {
- 	int *len_ptr, len, err;
- 	/* 64-bit to avoid overflow in case of extreme application behavior */
 -- 
-2.34.1
+2.35.1
 
