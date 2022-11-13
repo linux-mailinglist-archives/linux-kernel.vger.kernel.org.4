@@ -2,125 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB0C627251
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 20:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2852A627265
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 21:01:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235582AbiKMTtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 14:49:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
+        id S235377AbiKMUBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 15:01:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235474AbiKMTtM (ORCPT
+        with ESMTP id S231972AbiKMUBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 14:49:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80897F034;
-        Sun, 13 Nov 2022 11:49:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B84E60D2F;
-        Sun, 13 Nov 2022 19:49:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1EB9C433D6;
-        Sun, 13 Nov 2022 19:49:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668368950;
-        bh=yrDG2V+vcg1HVPtwi+FlRMwsR7nnH8N/b1BGzR2HGdA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bD3ZVJ9Sj+CuNd4SnlcFNNuixJYu6WW+7JkqTQFPrUFKEpqxUYVmJvr7ec9zEVuZn
-         QwTz/5HPpVvh79OKiBBxouHYwGI5wp1UPi0RpBCDtArino48OnjQgqutLOEJymzIKQ
-         XV17gaAddwx6fhFlXKnMuLk1UfRJLLSZ60Qk4Iz7sU1ey9DeD7TPRPKc/ZEsYhcv43
-         gpKCz/Sx6yIgh1nfMFfwLr0Z4SwEtJlw2NC2klgYhsDlK77ILRKQWQ7V7fOyizf7oX
-         5PTq+vWll8oU1s4dC4iDbwtS6DGxDfG2Ef2mUaskL68eI7NTX7pcoGNSOKPA85tkzR
-         sYeVSKszBlDlQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     Rong Tao <rtoax@foxmail.com>
-Cc:     sj@kernel.org, damon@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        rongtao@cestc.cn, shuah@kernel.org, yuanchu@google.com
-Subject: Re: [PATCH v3] selftests/damon: Fix unnecessary compilation warnings
-Date:   Sun, 13 Nov 2022 19:49:07 +0000
-Message-Id: <20221113194908.18554-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <tencent_51C4ACA8CB3895C2D7F35178440283602107@qq.com>
-References: 
+        Sun, 13 Nov 2022 15:01:43 -0500
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 950221005F;
+        Sun, 13 Nov 2022 12:01:41 -0800 (PST)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id 7DF7922934;
+        Sun, 13 Nov 2022 22:01:39 +0200 (EET)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id F3D112292F;
+        Sun, 13 Nov 2022 22:01:37 +0200 (EET)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id B61733C0437;
+        Sun, 13 Nov 2022 22:01:37 +0200 (EET)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 2ADK1abh076983;
+        Sun, 13 Nov 2022 22:01:37 +0200
+Date:   Sun, 13 Nov 2022 22:01:36 +0200 (EET)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
+cc:     netdev@vger.kernel.org, linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] ipv4: fix source address and gateway mismatch under
+ multiple default gateways
+In-Reply-To: <dd75da01-ef55-cd4f-4e8c-12c6b5cc4ab7@huawei.com>
+Message-ID: <dae35070-bb8b-c110-f398-7431c243c87@ssi.bg>
+References: <20221026032017.3675060-1-william.xuanziyang@huawei.com> <5e0249d-b6e1-44fa-147b-e2af65e56f64@ssi.bg> <dd75da01-ef55-cd4f-4e8c-12c6b5cc4ab7@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 13 Nov 2022 08:38:45 +0800 Rong Tao <rtoax@foxmail.com> wrote:
 
-> From: Rong Tao <rongtao@cestc.cn>
-> 
-> When testing overflow and overread, there is no need to keep unnecessary
-> compilation warnings, we should simply ignore them.
-> 
-> The motivation for this patch is to eliminate the compilation warning,
-> maybe one day we will compile the kernel with "-Werror -Wall", at which
-> point this compilation warning will turn into a compilation error, we
-> should fix this error in advance.
-> 
-> How to reproduce the problem (with gcc-11.3.1):
-> 
->     $ make -C tools/testing/selftests/
->     ...
->     warning: ‘write’ reading 4294967295 bytes from a region of size 1
->     [-Wstringop-overread]
->     warning: ‘read’ writing 4294967295 bytes into a region of size 25
->     overflows the destination [-Wstringop-overflow=]
-> 
-> "-Wno-stringop-overread" is supported at least in gcc-11.1.0.
-> 
-> Link: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=d14c547abd484d3540b692bb8048c4a6efe92c8b
-> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+	Hello,
 
-Reviewed-by: SeongJae Park <sj@kernel.org>
+On Sat, 29 Oct 2022, Ziyang Xuan (William) wrote:
 
-Thank you for fixing this old problem!
-
-
-Thanks,
-SJ
-
-> ---
->  tools/testing/selftests/damon/huge_count_read_write.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+> > On Wed, 26 Oct 2022, Ziyang Xuan wrote:
+> > 
+> >> We found a problem that source address doesn't match with selected gateway
+> >> under multiple default gateways. The reproducer is as following:
+> >>
+> >> Setup in client as following:
+> >>
+> >> $ ip link add link eth2 dev eth2.71 type vlan id 71
+> >> $ ip link add link eth2 dev eth2.72 type vlan id 72
+> >> $ ip addr add 192.168.71.41/24 dev eth2.71
+> >> $ ip addr add 192.168.72.41/24 dev eth2.72
+> >> $ ip link set eth2.71 up
+> >> $ ip link set eth2.72 up
+> >> $ route add -net default gw 192.168.71.1 dev eth2.71
+> >> $ route add -net default gw 192.168.72.1 dev eth2.72
+> > 
+> > 	Second route goes to first position due to the
+> > prepend operation for the route add command. That is
+> > why 192.168.72.41 is selected.
+> > 
+> >> Add a nameserver configuration in the following file:
+> >> $ cat /etc/resolv.conf
+> >> nameserver 8.8.8.8
+> >>
+> >> Setup in peer server as following:
+> >>
+> >> $ ip link add link eth2 dev eth2.71 type vlan id 71
+> >> $ ip link add link eth2 dev eth2.72 type vlan id 72
+> >> $ ip addr add 192.168.71.1/24 dev eth2.71
+> >> $ ip addr add 192.168.72.1/24 dev eth2.72
+> >> $ ip link set eth2.71 up
+> >> $ ip link set eth2.72 up
+> >>
+> >> Use the following command trigger DNS packet in client:
+> >> $ ping www.baidu.com
+> >>
+> >> Capture packets with tcpdump in client when ping:
+> >> $ tcpdump -i eth2 -vne
+> >> ...
+> >> 20:30:22.996044 52:54:00:20:23:a9 > 52:54:00:d2:4f:e3, ethertype 802.1Q (0x8100), length 77: vlan 71, p 0, ethertype IPv4, (tos 0x0, ttl 64, id 25407, offset 0, flags [DF], proto UDP (17), length 59)
+> >>     192.168.72.41.42666 > 8.8.8.8.domain: 58562+ A? www.baidu.com. (31)
+> >> ...
+> >>
+> >> We get the problem that IPv4 saddr "192.168.72.41" do not match with
+> >> selected VLAN device "eth2.71".
+> > 
+> > 	The problem could be that source address is selected
+> > once and later used as source address in following routing lookups.
+> > 
+> > 	And your routing rules do not express the restriction that
+> > both addresses can not be used for specific route. If you have
+> > such restriction which is common, you should use source-specific routes:
 > 
-> diff --git a/tools/testing/selftests/damon/huge_count_read_write.c b/tools/testing/selftests/damon/huge_count_read_write.c
-> index ad7a6b4cf338..a6fe0689f88d 100644
-> --- a/tools/testing/selftests/damon/huge_count_read_write.c
-> +++ b/tools/testing/selftests/damon/huge_count_read_write.c
-> @@ -8,6 +8,13 @@
->  #include <unistd.h>
->  #include <stdio.h>
->  
-> +#pragma GCC diagnostic push
-> +#if __GNUC__ >= 11 && __GNUC_MINOR__ >= 1
-> +/* Ignore read(2) overflow and write(2) overread compile warnings */
-> +#pragma GCC diagnostic ignored "-Wstringop-overread"
-> +#pragma GCC diagnostic ignored "-Wstringop-overflow"
-> +#endif
-> +
->  void write_read_with_huge_count(char *file)
->  {
->  	int filedesc = open(file, O_RDWR);
-> @@ -27,6 +34,8 @@ void write_read_with_huge_count(char *file)
->  	close(filedesc);
->  }
->  
-> +#pragma GCC diagnostic pop
-> +
->  int main(int argc, char *argv[])
->  {
->  	if (argc != 2) {
-> -- 
-> 2.31.1
+> Hi Julian,
 > 
+> Thank you for your quick reply.
 > 
+> Can we make some work to make the restriction "both addresses can not be used for specific route" in code but in consciousness?
+
+	No good idea about this. Not sure if the new 'nexthop'
+object is suitable for such policy.
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
+
