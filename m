@@ -2,98 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27343626E6B
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 09:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85386626E71
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 09:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbiKMIA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 03:00:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S235147AbiKMIHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 03:07:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234204AbiKMIAV (ORCPT
+        with ESMTP id S231252AbiKMIHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 03:00:21 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85128F002;
-        Sun, 13 Nov 2022 00:00:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1668326398;
-        bh=3acDHfn8jKJnznMLsVG0xCR20xZJ2jmq57QrDlNGNmc=;
-        h=X-UI-Sender-Class:Date:From:To:CC:Subject:Reply-to:In-Reply-To:
-         References;
-        b=IM+By4R5MXaGf8bPD/mJ57quLcj85g60ZIbuX0vfB6x12ARuOZ8NXkbwpuvNZJl+c
-         kz2QYQsuuuu5alnb0lFKMOUXY1JIml+vkdxn/jBmiQwQ2Iuu+XPjFHdvSWYPn2gQLh
-         sDOotj1Lu65K7r+8nyr5XuZwCxo7gcbkS15mmIjCuTNv4M2V22TfBfHP5N29pEvoV/
-         cRfsGN/wcCdV0jLgiqpXxEy8jUQ3emWxNMcVhLEvmcGqX8M2jHVuZ5Urz8PmlG4WMN
-         ihkvTRJ/beuUYYvi0rPzZg2DMUb/5RNk8nGq75fylfR8s1KUUCxlX87imu0AVNew91
-         DqUmSyITTX99A==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [127.0.0.1] ([80.245.74.27]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M42jK-1ou7uI0vwG-0007QC; Sun, 13
- Nov 2022 08:59:58 +0100
-Date:   Sun, 13 Nov 2022 08:59:53 +0100
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-CC:     Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Bo Jiao <Bo.Jiao@mediatek.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v4_04/11=5D_dt-bindings=3A_PCI=3A_m?= =?US-ASCII?Q?ediatek-gen3=3A_add_SoC_based_clock_config?=
-User-Agent: K-9 Mail for Android
-Reply-to: frank-w@public-files.de
-In-Reply-To: <20221112091518.7846-5-linux@fw-web.de>
-References: <20221112091518.7846-1-linux@fw-web.de> <20221112091518.7846-5-linux@fw-web.de>
-Message-ID: <F894EE66-6824-43C7-AE04-7AE6FF1C52AC@public-files.de>
+        Sun, 13 Nov 2022 03:07:47 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1853C1263A
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 00:07:47 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 2AD7rTZ8025608;
+        Sun, 13 Nov 2022 08:02:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=hLdxzrFVlJZEbaCxWDQ6zbhK4CRN1hXW8wjFLLufZ/c=;
+ b=OPJ4yPEiEvRUM7sQEgubLGMj/RUsm6HbUoJDbo0qTj4LgQcfv7g8VdIpPtHGFfARtZDt
+ pOa6JXsJAW4n9wENUSEop/Za0/X1nsfdd0PTsDlbflfV2Bt6F0oN2jNkR5lhhI06oQIE
+ tv0X0SQ3rK0ti2Rhyjr4wj3clEV3da3zno7hPuSqxoGpus1ek29XuUGqEPtx2AZp/sCF
+ gP+tpRqVVYibtxckwfnnUaI1bCNUfgrEZgiKITjOqXSeF/QL1qpckQcW3yqpPgXCeZM2
+ 2jHvtaShbzZ2sTljo8M9CLiWTowLglMAjetHvWzhY1DgiIeCR6EszII10krnXZRkUFJj bA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ktvkbr4nq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 13 Nov 2022 08:02:34 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AD7t8C4029800;
+        Sun, 13 Nov 2022 08:02:33 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ktvkbr4kf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 13 Nov 2022 08:02:33 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AD7od5i023792;
+        Sun, 13 Nov 2022 08:02:26 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma05wdc.us.ibm.com with ESMTP id 3kt349exmh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 13 Nov 2022 08:02:26 +0000
+Received: from smtpav02.dal12v.mail.ibm.com ([9.208.128.128])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AD82NmD35652262
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 13 Nov 2022 08:02:24 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0E5B85805E;
+        Sun, 13 Nov 2022 08:02:25 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 656385805F;
+        Sun, 13 Nov 2022 08:02:06 +0000 (GMT)
+Received: from [9.160.60.23] (unknown [9.160.60.23])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Sun, 13 Nov 2022 08:02:06 +0000 (GMT)
+Message-ID: <d0edcb38-709f-2c29-b541-cc39d41d378c@linux.vnet.ibm.com>
+Date:   Sun, 13 Nov 2022 13:32:04 +0530
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:GUCsNyzDalZvWOJYdXrFPJmqG2HqRf25PM8dw6TA7DzeHRVC53P
- uLC2wpK1PjOwQKyB/73jGq1NLinwFc1rN1/UFJkrLbqnpkH5NBT1nP4asPu4hqBhT3Tpilt
- urMDX2Sk1pMqFUC07KwwCBywFgrKRLck1KxsgDdiQHJ22yVfECODzaB/RG+jgJHptT3PxmZ
- 5Vlna3KMRTIB8N+Nhs7xA==
-UI-OutboundReport: notjunk:1;M01:P0:pUUva5akvIk=;DbmGJfxgnH1QL1fCq2YPuyMYNlt
- pIxwd5dNSo4z+ai0OzGHBcupfJZyt2rveBjwVPyz5o8/YKl/Ae+En/QCgE3dRQLoAG2lWqek/
- iB7CdcHTtg9NBxQ9xhI6RtyyMSBOe8rJGiTmxNBze/JMX2Ho2MXUvzhOpKGnsy5c2kz2MONX/
- OK/dqTjNzyth3cXZXU/4RNKS1aau9pC1FOfjHdsy4zp0TePszfMAold9FyC/bNxu0D7CSK/x4
- jOP4dw1UHSaJ9juq6X03BXxWF/vaxpIsiPWlbb6sRV0MuMhQI/4sWz72LLfF1OhSUHf20qIGz
- iNTS07ivBgQuRcz+yNu59z+5tQ7ZvX64CXY0rtStfUlUKKNIsZN3wQXgy5EVWWmeajRp97XkF
- aSB1tBg4e4MlamIAEEbJYkuhguo0+QoiPy09JzOoCp4qUjizaLjWVK8esh59jBUJuXtiiWJdg
- 14/KvkHiD95hgi+zoyVgiQxdkrYwlgdLcxcyqpDvCq0M7mZIA4vrgQ+A7X2ygH5J5VZac9LY/
- ikjyAjIokHQGO7FCwknlYVJUGBbqb1XP/DJES6pEbj6pPs26c8egt5X/K9czIy3FhT+oIyv68
- 13eRA61sYVKFBIv1gnXwBipiStwmp2sgypwp2ER0MSLTARh+05xqBKC8j6Id/k44GKQ/AoyyO
- 3bqOMbkKZ0TfWWQBU4OpT3dTbGiCfuiVGF0dKxSsrd+TKXQFnGr3X8dkdEQtxRBsxzxGQR6/c
- L/qbkaSFiDMgELGvWX5SXCE9CIo5rGOFS2APHgjUPbT+CkP8NtDFc7diZqkiLEB3ikCEeUZ2p
- RnFC/GdYRNlhlASqX/4wy8c/e6GI9PO8ZztyzgTyeDisxj8edULt1ozo+kDqMg0nqL5lTm9wA
- rZx0M+jtbKhZHe7hagMhXn1dFufOLaaDRmIm/meA0KcK7FNhZ+fzRI29PCB1pN8PLV0ejo4xw
- RVOhwXaqC1n8BOlcnz2aMO9W1NA=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 5/9] sched/fair: Take into account latency priority at
+ wakeup
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+References: <20221028093403.6673-1-vincent.guittot@linaro.org>
+ <20221028093403.6673-6-vincent.guittot@linaro.org>
+From:   shrikanth suresh hegde <sshegde@linux.vnet.ibm.com>
+In-Reply-To: <20221028093403.6673-6-vincent.guittot@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: aUykjjNO4y5JlxuTcXihL3uojkl9vVPy
+X-Proofpoint-ORIG-GUID: RgB-3o6gPkAQDD03utkm-7goZ8rhhTqa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-13_05,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 suspectscore=0 mlxscore=0 mlxlogscore=999 phishscore=0
+ priorityscore=1501 malwarescore=0 impostorscore=0 spamscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211130049
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I missed ack i've got here:
 
-https://patchwork=2Ekernel=2Eorg/project/linux-mediatek/patch/202210291758=
-06=2E14899-2-frank-w@public-files=2Ede/
+>   /*
+>    * Preempt the current task with a newly woken task if needed:
+>    */
+> @@ -4566,7 +4568,7 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+>   {
+>   	unsigned long ideal_runtime, delta_exec;
+>   	struct sched_entity *se;
+> -	s64 delta;
+> +	s64 delta, offset;
+>   
+>   	ideal_runtime = sched_slice(cfs_rq, curr);
+>   	delta_exec = curr->sum_exec_runtime - curr->prev_sum_exec_runtime;
+> @@ -4591,10 +4593,12 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
+>   	se = __pick_first_entity(cfs_rq);
+>   	delta = curr->vruntime - se->vruntime;
+>   
+> -	if (delta < 0)
+> +	offset = wakeup_latency_gran(curr, se);
+> +	if (delta < offset)
+>   		return;
+>   
+> -	if (delta > ideal_runtime)
+> +	if ((delta > ideal_runtime) ||
+> +	    (delta > get_latency_max()))
+>   		resched_curr(rq_of(cfs_rq));
+>   }
+>   
+>
+Hi Vincent,
 
-Acked-by: Jianjun Wang <jianjun=2Ewang@mediatek=2Ecom>
-regards Frank
+I am not sure if i have understood this below change correctly.
+
+wakeup_latency_gran - this function returns difference in latency nice offsets.
+Hence the more negative the value, it means se has more latency requirement
+compared to current. Hence se should preempt the current here right?
+  
+we are comparing delta to get_latency_max and ideal_runtime, both of which can
+be higher positive value, hence we will not preempt. that is not what we want
+right?
+
