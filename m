@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6887C62737E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 00:33:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18DAC62737F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 00:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234152AbiKMXdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 18:33:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
+        id S235014AbiKMXeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 18:34:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235014AbiKMXdI (ORCPT
+        with ESMTP id S231252AbiKMXeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 18:33:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE76FDFF4;
-        Sun, 13 Nov 2022 15:33:07 -0800 (PST)
+        Sun, 13 Nov 2022 18:34:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A096154
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 15:34:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 589E9B80C69;
-        Sun, 13 Nov 2022 23:33:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59D7CC433D6;
-        Sun, 13 Nov 2022 23:33:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B87A60DD7
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:34:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB60DC43144
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:34:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668382385;
-        bh=mecLQ1ama1BtgpOVmxEx0SclMBV8VPMmHMH/4AGpGXk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=COKK39D62EscXlO7juWhkboxSvJ+wNEciP+p2Ch3P7LzN+DoCBfRqjFMyfk8TjePu
-         KPbvFY00g5NyRmS9w3qduDNaw42XikWpMb/zI90/ejPTNrR6N+VViEssKIRBYmKeoP
-         niu28DohHggq35Ec0FgtAbD/8FZ23VZJf8IBHKZtlEse/go/anj6ugpT59TB5n8CeX
-         cxbiIazEMxs4tAVAYu539ut3hpwteY8ZLmNUCeJAtCfzpYFLQmvpAt2v6O++3w0aWc
-         BxFhdvaKZunkd1f1nWkpfFkLuSS6p2+ThGe+SXL9XjBJdqwt0kQjCW2Ybi688GiM+k
-         vxliqacseuzLQ==
-Date:   Sun, 13 Nov 2022 15:33:02 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, jejb@linux.ibm.com,
-        Kees Cook <keescook@chromium.org>, dlunev@google.com,
-        zohar@linux.ibm.com, Matthew Garrett <mgarrett@aurora.tech>,
-        jarkko@kernel.org, linux-pm@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v5 08/11] PM: hibernate: Use TPM-backed keys to encrypt
- image
-Message-ID: <Y3F+rj59Q5uzGI5i@sol.localdomain>
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.8.Ibd067e73916b9fae268a5824c2dd037416426af8@changeid>
+        s=k20201202; t=1668382454;
+        bh=qAqHRLjgH1Z78cZZXlR1l2VU3CVTYWFxyboPeadk8Lg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=USV2DdzmKvfV1pNyBC2N0uRvMMGCR8N2fGmeAeOUru9d4t8C97H8qI9g16dYC+sdF
+         N/LgIhRuXSnD2WZCoXC9PB0cziHKYJ+u6+F0p/mHZrQewruI70BdWAaJCFm4yJNLi5
+         nU37q/kFYiunlIiRCc91I8oE7nUO7SBQIOJGd9lluOgTuDn/XMtPW6zoD60p512Skl
+         VAsm1X80nyiAMGetQG+ClUMuzDetlF7NLqITiF5WuvXkikTm73mN+rn3lPZnTuRCtn
+         fzDSufB98+HUllPTjbN2yuLYxKYitA7cxDJGlUzLTaj+BnQ/e2rP1x6IlOEuFkYGym
+         09kUz8rf4nOhg==
+Received: by mail-ot1-f42.google.com with SMTP id d26-20020a05683018fa00b0066ab705617aso5794421otf.13
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 15:34:14 -0800 (PST)
+X-Gm-Message-State: ANoB5pk8W/nsX2cggfCeKQsOstjUCuLDTrHT4HtB/oFD0zzW63oqRzLE
+        PG7pvF7BtYLl9LLv29g6/W1TG2LIFDZSyDh4zA==
+X-Google-Smtp-Source: AA0mqf45+HuGE5seimLLJAfjPAwkfwMduSg/tJPjE7vi7m7eddcBfPkq/IbcnwKPOkfdj5XXlI9YM4JNrPwRFu5Jnm8=
+X-Received: by 2002:a9d:4b02:0:b0:661:b04c:41d9 with SMTP id
+ q2-20020a9d4b02000000b00661b04c41d9mr5380307otf.92.1668382453776; Sun, 13 Nov
+ 2022 15:34:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111151451.v5.8.Ibd067e73916b9fae268a5824c2dd037416426af8@changeid>
+References: <1667988059-8635-1-git-send-email-xinlei.lee@mediatek.com>
+In-Reply-To: <1667988059-8635-1-git-send-email-xinlei.lee@mediatek.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Mon, 14 Nov 2022 07:33:57 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_-6Y5LmmkJXL5gigwuZjAfQHOJAoy_G+NYUmfgjxuef_w@mail.gmail.com>
+Message-ID: <CAAOTY_-6Y5LmmkJXL5gigwuZjAfQHOJAoy_G+NYUmfgjxuef_w@mail.gmail.com>
+Subject: Re: [PATCH v4] drm: mediatek: Modify dpi power on/off sequence.
+To:     xinlei.lee@mediatek.com
+Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
+        daniel@ffwll.ch, matthias.bgg@gmail.com, jitao.shi@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,88 +66,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 03:16:33PM -0800, Evan Green wrote:
-> We'll also go through the motions of having PCR23 set to a known value at
-> the time of key creation and unsealing. Currently there's nothing that
-> enforces the contents of PCR23 as a condition to unseal the key blob,
-> that will come in a later change.
+Hi, Xinlei:
 
-This patch doesn't really make sense without the later patch
-"PM: hibernate: seal the encryption key with a PCR policy".
+<xinlei.lee@mediatek.com> =E6=96=BC 2022=E5=B9=B411=E6=9C=889=E6=97=A5 =E9=
+=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=886:01=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> From: Xinlei Lee <xinlei.lee@mediatek.com>
+>
+> Modify dpi power on/off sequence so that the first gpio operation will ta=
+ke effect.
 
-Maybe they should be merged into one patch?
+Applied to mediatek-drm-next [1], thanks.
 
-> +/* sha256("To sleep, perchance to dream") */
-> +static struct tpm_digest known_digest = { .alg_id = TPM_ALG_SHA256,
-> +	.digest = {0x92, 0x78, 0x3d, 0x79, 0x2d, 0x00, 0x31, 0xb0, 0x55, 0xf9,
-> +		   0x1e, 0x0d, 0xce, 0x83, 0xde, 0x1d, 0xc4, 0xc5, 0x8e, 0x8c,
-> +		   0xf1, 0x22, 0x38, 0x6c, 0x33, 0xb1, 0x14, 0xb7, 0xec, 0x05,
-> +		   0x5f, 0x49}};
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
+log/?h=3Dmediatek-drm-next
 
-This can be const.
+Regards,
+Chun-Kuang.
 
-> +static int snapshot_create_kernel_key(struct snapshot_data *data)
-> +{
-> +	/* Create a key sealed by the SRK. */
-> +	char *keyinfo = "new\t32\tkeyhandle=0x81000000";
-> +	const struct cred *cred = current_cred();
-> +	struct tpm_digest *digests = NULL;
-> +	struct key *key = NULL;
-> +	struct tpm_chip *chip;
-> +	int ret, i;
+>
+> Fixes: 6bd4763fd532 ("drm/mediatek: set dpi pin mode to gpio low to avoid=
+ leakage current")
+> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
+> ---
+> change note:
+> v3: Moved pull-down pin control after mtk_dpi_power_off.
+>
+> v2: Remove the empty line between Fixes: and S-o-b.
+>
+> v1: Rebase on linus/master v6.1-rc1. Change nothing.
+>
+> Because dpi power_on/off is protected by dpi->refcount, the first time
+> it cannot be powered on and off successfully, it will cause leakage.
+> ---
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dpi.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediate=
+k/mtk_dpi.c
+> index 508a6d994e83..1f5d39a4077c 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -461,9 +461,6 @@ static void mtk_dpi_power_off(struct mtk_dpi *dpi)
+>         if (--dpi->refcount !=3D 0)
+>                 return;
+>
+> -       if (dpi->pinctrl && dpi->pins_gpio)
+> -               pinctrl_select_state(dpi->pinctrl, dpi->pins_gpio);
+> -
+>         mtk_dpi_disable(dpi);
+>         clk_disable_unprepare(dpi->pixel_clk);
+>         clk_disable_unprepare(dpi->engine_clk);
+> @@ -488,9 +485,6 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+>                 goto err_pixel;
+>         }
+>
+> -       if (dpi->pinctrl && dpi->pins_dpi)
+> -               pinctrl_select_state(dpi->pinctrl, dpi->pins_dpi);
+> -
+>         return 0;
+>
+>  err_pixel:
+> @@ -721,12 +715,18 @@ static void mtk_dpi_bridge_disable(struct drm_bridg=
+e *bridge)
+>         struct mtk_dpi *dpi =3D bridge_to_dpi(bridge);
+>
+>         mtk_dpi_power_off(dpi);
 > +
-> +	chip = tpm_default_chip();
-> +	if (!chip)
-> +		return -ENODEV;
+> +       if (dpi->pinctrl && dpi->pins_gpio)
+> +               pinctrl_select_state(dpi->pinctrl, dpi->pins_gpio);
+>  }
+>
+>  static void mtk_dpi_bridge_enable(struct drm_bridge *bridge)
+>  {
+>         struct mtk_dpi *dpi =3D bridge_to_dpi(bridge);
+>
+> +       if (dpi->pinctrl && dpi->pins_dpi)
+> +               pinctrl_select_state(dpi->pinctrl, dpi->pins_dpi);
 > +
-> +	if (!(tpm_is_tpm2(chip))) {
-> +		ret = -ENODEV;
-> +		goto out_dev;
-> +	}
-
-tpm_is_tpm2() can return an error value.
-
-> +	digests = kcalloc(chip->nr_allocated_banks, sizeof(struct tpm_digest),
-> +			  GFP_KERNEL);
-> +	if (!digests) {
-> +		ret = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	for (i = 0; i < chip->nr_allocated_banks; i++) {
-> +		digests[i].alg_id = chip->allocated_banks[i].alg_id;
-> +		if (digests[i].alg_id == known_digest.alg_id)
-> +			memcpy(&digests[i], &known_digest, sizeof(known_digest));
-> +	}
-> +
-> +	ret = tpm_pcr_extend(chip, 23, digests);
-> +	if (ret != 0)
-> +		goto out;
-
-So, PCR 23 will not actually be extended properly if there is not a SHA-256
-bank?  Wouldn't it make more sense to return an error in that case?
-
-> +static int snapshot_load_kernel_key(struct snapshot_data *data,
-> +				    struct uswsusp_key_blob *blob)
-> +{
-> +
-> +	char *keytemplate = "load\t%s\tkeyhandle=0x81000000";
-
-Make this const.
-
-> +	blobstring = kmalloc(blob->blob_len * 2, GFP_KERNEL);
-> +	if (!blobstring) {
-> +		ret = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	bin2hex(blobstring, blob->blob, blob->blob_len);
-> +	keyinfo = kasprintf(GFP_KERNEL, keytemplate, blobstring);
-
-There's no need for bin2hex().  Just use the %*phN format specifier instead:
-
-	const char *keytemplate = "load\t%*phN\tkeyhandle=0x81000000";
-
-	keyinfo = kasprintf(GFP_KERNEL, keytemplate, blob->blob_len, blob->blob);
-
-- Eric
+>         mtk_dpi_power_on(dpi);
+>         mtk_dpi_set_display_mode(dpi, &dpi->mode);
+>         mtk_dpi_enable(dpi);
+> --
+> 2.18.0
+>
