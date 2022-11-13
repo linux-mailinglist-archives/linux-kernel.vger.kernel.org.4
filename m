@@ -2,144 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B1362736D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 00:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6136627372
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 00:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235381AbiKMXSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 18:18:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43438 "EHLO
+        id S235376AbiKMXXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 18:23:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233793AbiKMXS2 (ORCPT
+        with ESMTP id S229692AbiKMXXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 18:18:28 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECA5DD6
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 15:18:24 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668381501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GElb0Q0Spb4WXlQ7HhaogZlg9YgU+muEVwXfBjt/Fn0=;
-        b=DsozGNCkHgOuv5fD8ayb+j1qcJiOR9HY1MZFEQNQr4iof8vFTt7L6MXtYqWWOPqTDbWV52
-        UscAjtSYDxsUTsGQDoCT4gWIKzrixvgEFE2D5vg/bHzkucp0/C4Gmq7sLKBx+OaN42XT56
-        R2bTd2y3SBJhx6MJ/ifnjqqP5r8Fsh+YnC/mDWjw0wZCViQXwr5LhSR6Xy00YgQNnMCD4E
-        RNBJExgTz3+6zUKRyuS4pue2BRFAqyxIZzJgmbz4hMxspb1RLHCGZlpvCAYRXHo6frcVjd
-        5uzR6Ab1kSTSmjoc56ksVO+ZPbmEo+8MJUCBev1lCes01YCsX8NYqB+Bf6NRhw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668381501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GElb0Q0Spb4WXlQ7HhaogZlg9YgU+muEVwXfBjt/Fn0=;
-        b=ZWzgVCehYsrjL8a85j1mJrGJr53ogyusZqqEjwZL9imdmPwSAWqkMYb2B654SQ6SF90Lna
-        R0pxBOEYEKJMm6Bw==
-To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>
-Subject: Re: [PATCH v6 4/6] timers: Add timer_shutdown_sync() to be called
- before freeing timers
-In-Reply-To: <20221110064147.343514404@goodmis.org>
-References: <20221110064101.429013735@goodmis.org>
- <20221110064147.343514404@goodmis.org>
-Date:   Mon, 14 Nov 2022 00:18:21 +0100
-Message-ID: <875yfitpdu.ffs@tglx>
+        Sun, 13 Nov 2022 18:23:33 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D40324;
+        Sun, 13 Nov 2022 15:23:31 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N9T5X6QJRz4x1D;
+        Mon, 14 Nov 2022 10:23:28 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668381810;
+        bh=65AmNELdQUu+5ZUFxLeHt1YFNVUSiBa9NN7XJDkLfcI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bCJ6EFhmvwL+L4257L0lSgATVHywjhbm2XWZI0I8HRFQ7QlkQLi+i6xY1iTWgsKsR
+         XcM00TeNiMuhPVqo3db8u8Bgdf9OSMQJ7yICBe+R07reaz67quvS0rKNcFtE1fXny1
+         VE1JVBNp/r5Kc2qvZtenrVBbltEiWlPgwImXR/+pObGp/zBkYkvs1RcVsguk42IM+o
+         jDDZSYkHID1jV0ng02johKCkXsDKXrCHP0zjXBv3EuFRxyluqIjOdkxXyCLPRgv33k
+         Z8tSI3/IRZVWCLO7ncZuT6jktCAIyPXuadwQ4uuatBs0goApetSkzBtiVNTu6LpDMz
+         fUiLIdy9EI5wQ==
+Date:   Mon, 14 Nov 2022 10:23:27 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the drm-intel tree with Linus' tree
+Message-ID: <20221114102327.6d53341e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ZnAXSQtQ1fl=ax+EWztprCE";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10 2022 at 01:41, Steven Rostedt wrote:
-> +static inline int timer_shutdown_sync(struct timer_list *timer)
-> +{
-> +	return __del_timer_sync(timer, true);
-> +}
+--Sig_/ZnAXSQtQ1fl=ax+EWztprCE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> +static int __try_to_del_timer_sync(struct timer_list *timer, bool free)
->  {
->  	struct timer_base *base;
->  	unsigned long flags;
-> @@ -1285,11 +1281,25 @@ int try_to_del_timer_sync(struct timer_list *timer)
->  
->  	if (base->running_timer != timer)
->  		ret = detach_if_pending(timer, base, true);
-> +	if (free)
-> +		timer->function = NULL;
+Hi all,
 
-Same problem as in the timer_shutdown() case just more subtle:
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-CPU0                           		CPU1
+  drivers/gpu/drm/i915/display/intel_backlight.c
 
-                                        lock_timer(timer);
-                                        base->running_timer = timer;
-					fn = timer->function;
-					unlock_timer(timer);
-					fn(timer) {
+between commit:
 
-__try_to_del_timer_sync(timer, free=true)
-    lock_timer(timer);
-    if (base->running_timer != timer)
-       // Not taken
-    if (free)                             mod_timer(timer);
-                                            if (WARN_ON_ONCE(!timer->function))
-                                               return; // not taken
-       timer->function = NULL;
-    unlock_timer(timer);
-					    lock_timer(timer);
-                                            enqueue_timer(timer);
-					    unlock_timer(timer);
-                                        }
+  b1d36e73cc1c ("drm/i915: Don't register backlight when another backlight =
+should be used (v2)")
 
-					//timer expires
-					lock_timer(timer);
-					fn = timer->function;
-					unlock_timer(timer);
-					fn(timer); <--- NULL pointer dereference
+from Linus' tree and commit:
 
-You surely have spent a massive amount of analysis on this!
+  801543b2593b ("drm/i915: stop including i915_irq.h from i915_trace.h")
 
-Can you please explain how you came up with the brilliant idea of asking
-Linus to pull this post -rc4 without a review from the timer maintainers
-or anyone else who understands concurrency?
+from the drm-intel tree.
 
-If we really want to make this work, then this needs at least a sanity
-check of timer->function in the mod/add*_timer() path _after_ locking
-the timer.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-Though I'm not convinced that this would really be cutting it simply
-because the circular dependencies of timer scheduling work and work
-arming timer is as demonstrated above not as trivial as you might think.
+--=20
+Cheers,
+Stephen Rothwell
 
-In the worst case the concurrent code path might still end up in a UAF
-as far as I can tell.
+diff --cc drivers/gpu/drm/i915/display/intel_backlight.c
+index beba39a38c87,0438071f58cf..000000000000
+--- a/drivers/gpu/drm/i915/display/intel_backlight.c
++++ b/drivers/gpu/drm/i915/display/intel_backlight.c
+@@@ -8,8 -8,7 +8,9 @@@
+  #include <linux/pwm.h>
+  #include <linux/string_helpers.h>
+ =20
+ +#include <acpi/video.h>
+ +
++ #include "i915_reg.h"
+  #include "intel_backlight.h"
+  #include "intel_backlight_regs.h"
+  #include "intel_connector.h"
 
-But what's worse is that you try to create the illusion that
-timer_shutdown_sync() is actually preventing people from shooting
-themself into their feet.
+--Sig_/ZnAXSQtQ1fl=ax+EWztprCE
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-As implemented right now it's just a bandaid which makes it less likely,
-but does neither prevent any of the hard to debug shutdown issues nor
-the resulting holes in peoples feets.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNxfG8ACgkQAVBC80lX
+0GxEfwf/ZY8+RcMKTXCLuurxKxq3aiF7cZqDEBXsSX75DF1hJbR4HJgviZevd33o
+Xby2YRrl5W5+lGzBS7B3gbiE7fhvzHONuDFhTYBWEUZ3SozZaruwGjg/C9bzX8B6
+Ch0G1haLNoP/+VfSPh8Efn3eLgnxKv4xWcz2NRXHPzWPOLg9xa9DdDu50X0OJyn3
+vlYIaqC3doE1UyWv9alq0MBTjMu1tbxgAMy4ch47B5jA0zSrKmwQDVsvC1GOvbOJ
+S09Fzemym++0a0NBl/9/VIXpGbtNFyGDgA7a2dQA4T/q7skXJIAwjeLO2YXHiVwT
+SlKy0f/AaXHYTinLpBhpxMMyGURIag==
+=6WTA
+-----END PGP SIGNATURE-----
 
-        tglx
-
-
-
-
-
-
-
-
+--Sig_/ZnAXSQtQ1fl=ax+EWztprCE--
