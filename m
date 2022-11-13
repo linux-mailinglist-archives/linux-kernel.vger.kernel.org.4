@@ -2,153 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBFB6627145
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 18:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4335862714C
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 18:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233794AbiKMRf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 12:35:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
+        id S235281AbiKMRnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 12:43:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232884AbiKMRfW (ORCPT
+        with ESMTP id S232884AbiKMRnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 12:35:22 -0500
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73505F51
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 09:35:19 -0800 (PST)
-Received: (wp-smtpd smtp.tlen.pl 24814 invoked from network); 13 Nov 2022 18:35:15 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1668360915; bh=JOXzz5c4GDKUxSgs3Q0u7I+VwUW/4AZN5La4/sOMeOQ=;
-          h=From:To:Cc:Subject;
-          b=WC0xbcvYZ6vqfsxdP8OIhr2JqKrJ2gNa4huYRDw8R8qw+dA/sPBxOkNr21kWlSWeC
-           RlpMOPzL9TD99IY8XIMT1YIdNmTgEGdNTu9+vo6YrqxDys183yNa89aILJanTZMbIF
-           oavukyRWbzlUoQ50E+jJoW/Q7neUMThlHmKMXlXw=
-Received: from aaey149.neoplus.adsl.tpnet.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[83.4.128.149])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <linux-kernel@vger.kernel.org>; 13 Nov 2022 18:35:15 +0100
-From:   =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-To:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-i2c@vger.kernel.org
-Cc:     =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Jean Delvare <jdelvare@suse.com>
-Subject: [PATCH v2] acpi,pci: warn about duplicate IRQ routing entries returned from _PRT
-Date:   Sun, 13 Nov 2022 18:34:42 +0100
-Message-Id: <20221113173442.5770-1-mat.jonczyk@o2.pl>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221112200927.7255-1-mat.jonczyk@o2.pl>
-References: <20221112200927.7255-1-mat.jonczyk@o2.pl>
+        Sun, 13 Nov 2022 12:43:07 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A102ADF69;
+        Sun, 13 Nov 2022 09:43:06 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1ouH0Z-0000Z2-DB; Sun, 13 Nov 2022 18:43:03 +0100
+Message-ID: <456466ec-b347-2c08-1b14-f6b7726229d5@leemhuis.info>
+Date:   Sun, 13 Nov 2022 18:43:02 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [BUG] rtc-efi: Error in efi.get_time() spams dmesg with error
+ message #forregzbot
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <Y2o1hdZK9GGDVJsS@monolith.localdoman>
+ <9b1d1006-2b58-6eda-7e43-861074e9ccfa@leemhuis.info>
+In-Reply-To: <9b1d1006-2b58-6eda-7e43-861074e9ccfa@leemhuis.info>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: 934e56db77df8ec1dea79e941e558262
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [kSOl]                               
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1668361386;d8a43a48;
+X-HE-SMSGID: 1ouH0Z-0000Z2-DB
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some platforms, the ACPI _PRT function returns duplicate interrupt
-routing entries. Linux uses the first matching entry, but sometimes the
-second matching entry contains the correct interrupt vector.
+[Note: this mail is primarily send for documentation purposes and/or for
+regzbot, my Linux kernel regression tracking bot. That's why I removed
+most or all folks from the list of recipients, but left any that looked
+like a mailing lists. These mails usually contain '#forregzbot' in the
+subject, to make them easy to spot and filter out.]
 
-Print a warning to dmesg if duplicate interrupt routing entries are
-present, so that we could check how many models are affected.
+On 09.11.22 16:50, Thorsten Leemhuis wrote:
+> On 08.11.22 11:55, Alexandru Elisei wrote:
+> 
+>> Commit d3549a938b73 ("efi/arm64: libstub: avoid SetVirtualAddressMap() when
+>> possible") exposed a firmware error on an Ampere Altra machine that was
+>> causing the machine to panic. Then commit 23715a26c8d8 ("arm64: efi:
+>> Recover from synchronous exceptions occurring in firmware") made the EFI
+>> exception non-fatal, and disabled runtime services when the exception
+>> happens. The interaction between those two patches are being discussed in a
+>> separate thread [1], but that should be orthogonal to this.
+>>
+>> Now efi.get_time() fails and each time an error message is printed to
+>> dmesg, which happens several times a second and clutters dmesg
+>> unnecessarily, to the point it becomes unusable.
+> 
+> Thanks for the report. To be sure below issue doesn't fall through the
+> cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+> tracking bot:
+> 
+> #regzbot ^introduced 23715a26c8d8
+> #regzbot title arm64: efi: efi.get_time() fails and clutters dmesg
+> #regzbot ignore-activity
 
-This happens on a Dell Latitude E6500 laptop with the i2c-i801 Intel
-SMBus controller. This controller was nonfunctional unless its interrupt
-usage was disabled (using the "disable_features=0x10" module parameter).
-
-After investigation, it turned out that the driver was using an
-incorrect interrupt vector: in lspci output for this device there was:
-        Interrupt: pin B routed to IRQ 19
-but after running i2cdetect (without using any i2c-i801 module
-parameters) the following was logged to dmesg:
-
-        [...]
-        i801_smbus 0000:00:1f.3: Timeout waiting for interrupt!
-        i801_smbus 0000:00:1f.3: Transaction timeout
-        i801_smbus 0000:00:1f.3: Timeout waiting for interrupt!
-        i801_smbus 0000:00:1f.3: Transaction timeout
-        irq 17: nobody cared (try booting with the "irqpoll" option)
-
-Existence of duplicate entries in a table returned by the _PRT method
-was confirmed by disassembling the ACPI DSDT table.
-
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <lenb@kernel.org>
-Cc: Borislav Petkov <bp@suse.de>
-Cc: Jean Delvare <jdelvare@suse.com>
-
---
-v2: - add a newline at the end of the kernel log message,
-    - replace: "if (match == NULL)" -> "if (!match)"
-    - patch description tweaks.
-
-Tested on two computers, including the affected Dell Latitude E6500 laptop.
-
- drivers/acpi/pci_irq.c | 25 ++++++++++++++++++++++---
- 1 file changed, 22 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/acpi/pci_irq.c b/drivers/acpi/pci_irq.c
-index 08e15774fb9f..a4e41b7b71ed 100644
---- a/drivers/acpi/pci_irq.c
-+++ b/drivers/acpi/pci_irq.c
-@@ -203,6 +203,8 @@ static int acpi_pci_irq_find_prt_entry(struct pci_dev *dev,
- 	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
- 	struct acpi_pci_routing_table *entry;
- 	acpi_handle handle = NULL;
-+	struct acpi_prt_entry *match = NULL;
-+	const char *match_int_source = NULL;
- 
- 	if (dev->bus->bridge)
- 		handle = ACPI_HANDLE(dev->bus->bridge);
-@@ -219,13 +221,30 @@ static int acpi_pci_irq_find_prt_entry(struct pci_dev *dev,
- 
- 	entry = buffer.pointer;
- 	while (entry && (entry->length > 0)) {
--		if (!acpi_pci_irq_check_entry(handle, dev, pin,
--						 entry, entry_ptr))
--			break;
-+		struct acpi_prt_entry *curr;
-+
-+		if (!acpi_pci_irq_check_entry(handle, dev, pin, entry, &curr)) {
-+			if (!match) {
-+				match = curr;
-+				match_int_source = entry->source;
-+			} else {
-+				pr_warn(FW_BUG
-+				"ACPI _PRT returned duplicate IRQ routing entries for device "
-+					"%04x:%02x:%02x[INT%c]: %s[%d] and %s[%d].\n",
-+					curr->id.segment, curr->id.bus, curr->id.device,
-+					pin_name(curr->pin),
-+					match_int_source, match->index,
-+					entry->source, curr->index);
-+				// we use the first matching entry nonetheless
-+			}
-+		}
-+
- 		entry = (struct acpi_pci_routing_table *)
- 		    ((unsigned long)entry + entry->length);
- 	}
- 
-+	*entry_ptr = match;
-+
- 	kfree(buffer.pointer);
- 	return 0;
- }
-
-base-commit: f0c4d9fc9cc9462659728d168387191387e903cc
--- 
-2.25.1
-
+#regzbot fixed-by: 550b33cfd445296
