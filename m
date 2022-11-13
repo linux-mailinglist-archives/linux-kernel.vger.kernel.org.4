@@ -2,83 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840A562709F
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 17:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA326270E1
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 17:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235354AbiKMQf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 11:35:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
+        id S235354AbiKMQle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 11:41:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233029AbiKMQf0 (ORCPT
+        with ESMTP id S232799AbiKMQl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 11:35:26 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A13195A7;
-        Sun, 13 Nov 2022 08:35:26 -0800 (PST)
-Received: from [192.168.2.125] (109-252-117-140.nat.spd-mgts.ru [109.252.117.140])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E774366022FA;
-        Sun, 13 Nov 2022 16:35:23 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668357324;
-        bh=j9qUvJJp/X2OPgESZeNiGJ13HdOpsuZE/t5C9EOgn60=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ebnk7x7WD+IAH7GwiTF4ZSDyeIVD58Reg5mAKWo/fnoy+gMY7V+jclZpRY1qDficD
-         pSgjHK097TZP7s7QChi/ksj65ak0gf1TuSTBBnzLMYQr2qpXePth7QsDpV68dimgfC
-         4IBS8MotxvmUB9rqqKi+/OOwxxpPuaaaWgNTY5xTKMkQ5MuFHeREpQINB1SmUSvV+H
-         oYx8bQLzayLrj235JY+Bm9J2H77WkDCCZA4J860YY5yOFW5ctQqQhOgPskljYAeW3r
-         oIpTX3FjkGka81pG0yKbEvboulAw5ITN6aKfC4zjrI4Ov8ZkOg4NraWwm1MccN5Ir2
-         9s6lpcq03HDew==
-Message-ID: <50cece73-a499-eba3-7018-9e92e0791c88@collabora.com>
-Date:   Sun, 13 Nov 2022 19:35:20 +0300
+        Sun, 13 Nov 2022 11:41:29 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D061310561
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 08:41:27 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id y13so8992407pfp.7
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 08:41:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+QrikNB/GMZeY3ufdrYnFiRrHx7b40lntxGNUYf5p3U=;
+        b=DEsPXPkx4VzqvFb/BNADTLQhtFuR2MiVR6MQA/nq9lpHzO3CRtZw1rrdnZXcAUnZln
+         uNtFnG1jMSD7MbPvszAtMSvtYiQe3kVI8zn6phL6ldMUlNTajEkJT4D1jMXe7yMTQ7Uj
+         KQzJzP9UxB2sZUGQiwtB2R5J/8+uN8KUgAPkHwDfdX9d4GdcWf9xquF1Pp7DfzPMsBZq
+         LQIX1jqb3v6SFTIxFr3drmEHE4p89UB2VMtW8+u58oVfmpMxw7bq4woCtZPTaOL9uRZT
+         ebdYqvS0JiXc/02HFlybd8IU9Pp4/xcVhIg3dyEHdbuFZiNeRXLCwL8wDQtDD9W3jxsX
+         o05g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+QrikNB/GMZeY3ufdrYnFiRrHx7b40lntxGNUYf5p3U=;
+        b=1fHA07WlxEfMNzsvKASPs2bpXa7JKwW16q5bdD5aIKgQg+uc1FzpOE7UfPU5DSZMqV
+         bphEFeEjl+ABu1unkBTWIjCFBjDdPW01cuRIAxwuTz3kNpgASYWuTEJoNo/inFzyZpPc
+         8FJqfPEQOE/BmkRhFn7IXsYR9OR1YsOZeok6SImbck3LbGHRW60Dh5xNTcMBt3DmYULo
+         2Wjq53UHhu9nNKgVDfwW8R18fiRP44YI6mTzE+FgcvrQO2GTvzGlIn/Ltf1DUMnluwJe
+         kG2q+trcSWvAZPi4opI4GCPBs9zsbkT81KaP3RGxqZ6B81x2tvlEXILEXQC3WUcqf99k
+         PcWQ==
+X-Gm-Message-State: ANoB5plIi4++9SwB6qu9cz527RVdRqHKe0zZXVoEKE18rbEFVY6r8SBi
+        JkejYcMxRK0eXbrFDnHZEJteVg==
+X-Google-Smtp-Source: AA0mqf61Hhi23BxOCwNEasLV8GXX2B6mVAH7ThC0PZPXQNtBDFDI4bOxR0Hn5F0usudfIlB4j7q4SQ==
+X-Received: by 2002:a65:49c6:0:b0:46f:ed3a:ac42 with SMTP id t6-20020a6549c6000000b0046fed3aac42mr9107496pgs.617.1668357687296;
+        Sun, 13 Nov 2022 08:41:27 -0800 (PST)
+Received: from [10.4.223.134] ([139.177.225.226])
+        by smtp.gmail.com with ESMTPSA id n3-20020a17090ab80300b00210c84b8ae5sm4772471pjr.35.2022.11.13.08.41.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Nov 2022 08:41:26 -0800 (PST)
+Message-ID: <a44f794e-fe60-e261-3631-9107822d5c36@bytedance.com>
+Date:   Mon, 14 Nov 2022 00:41:21 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2] udmabuf: add vmap method to udmabuf_ops
-Content-Language: en-US
-To:     Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>
-Cc:     Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-References: <20221113150511.8878-1-lukasz.wiecaszek@gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20221113150511.8878-1-lukasz.wiecaszek@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [External] Re: [PATCH v2] mm: add new syscall
+ pidfd_set_mempolicy().
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     corbet@lwn.net, mhocko@suse.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20221111084051.2121029-1-hezhongkun.hzk@bytedance.com>
+ <20221111112732.30e1696bcd0d5b711c188a9a@linux-foundation.org>
+From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
+In-Reply-To: <20221111112732.30e1696bcd0d5b711c188a9a@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/13/22 18:05, Lukasz Wiecaszek wrote:
-> +static int vmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
-> +{
-> +	struct udmabuf *ubuf = buf->priv;
-> +
-> +	if (!ubuf->vaddr) {
-> +		ubuf->vaddr = vm_map_ram(ubuf->pages, ubuf->pagecount, -1);
-> +		if (!ubuf->vaddr)
-> +			return -EINVAL;
-> +	}
+Hi Andrew, thanks for your replay.
 
-Create a new mapping on each vmap_udmabuf() and add the corresponding
-vunmap.
+> This sounds a bit suspicious.  Please share much more detail about
+> these races.  If we proced with this design then mpol_put_async()
+> shouild have comments which fully describe the need for the async free.
+> 
+> How do we *know* that these races are fully prevented with this
+> approach?  How do we know that mpol_put_async() won't free the data
+> until the race window has fully passed?
 
-Otherwise persistent vmapping shall be released together with udmabuf.
-It doesn't look that persistent vmapping is needed for udmabufs.
+A mempolicy can be either associated with a process or with a VMA.
+All vma manipulation is somewhat protected by a down_read on
+mmap_lock.In process context there is no locking because only
+the process accesses its own state before.
 
--- 
-Best regards,
-Dmitry
+Now  we need to change the process context mempolicy specified
+in pidfd. the mempolicy may about to be freed by
+pidfd_set_mempolicy() while alloc_pages() is using it,
+the race condition appears.
 
+process context mempolicy is used in:
+alloc_pages()
+alloc_pages_bulk_array_mempolicy()
+policy_mbind_nodemask()
+mempolicy_slab_node()
+.....
+
+Say something like the following：
+
+pidfd_set_mempolicy()        target task stack:
+                                 alloc_pages:
+                                 mpol = p->mempolicy;
+task_lock(task);
+  old = task->mempolicy;
+  task->mempolicy = new;
+  task_unlock(task);
+  mpol_put(old);
+                               /*old mpol has been freed.*/
+                               policy_node(...., mpol)
+    	           __alloc_pages(mpol);
+To reduce the use of locks and atomic operations(mpol_get/put)
+in the hot path,task_work is used in mpol_put_async(),
+when the target task exit to user mode,	the process context
+mempolicy is not used anymore, mpol_free_async()
+will be called as task_work to free mempolicy in
+target context.			
+
+
+> Also, in some situations mpol_put_async() will free the data
+> synchronously anyway, so aren't these races still present?
+> If the task has run exit_task_work(),task_work_add() will fail.
+we can free the mempolicy directly because mempolicy is not used.
+
+> 
+> Secondly, why was the `flags' argument added?  We might use it one day?
+> For what purpose?  I mean, every syscall could have a does-nothing
+> `flags' arg, but we don't do that.  What's the plan here?
+> 
+I found that some functions use 'flags' for scalability, such
+as process_madvise(), set_mempolicy_home_node(). back to our case, This 
+operation has per-thread rather than per-process semantic ,we could use 
+flags to switch for future extension if any. but I'm not sure.
+
+Thanks.
