@@ -2,121 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5266272C8
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 22:52:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6286272C9
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 22:52:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235085AbiKMVwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 16:52:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
+        id S235280AbiKMVwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 16:52:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233930AbiKMVv6 (ORCPT
+        with ESMTP id S233930AbiKMVwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 16:51:58 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF7BDF81;
-        Sun, 13 Nov 2022 13:51:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668376318; x=1699912318;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Vwi5xI+ZgoQ66Zhsx8mRj2liZIMevDJUF4Ly/3/uLCg=;
-  b=C5JNhKyyIGIdqAA/Iqe+ewtaZccMU66DtlIkfqSkcpi0VZP99dxg5TNg
-   pRg0le28hf0hpGvJEBE21ntI3rCDCePNMBuurEpJDtECp2D6CO52uYZFp
-   WhgyNtR45vLizYUGC6wpNLTtG0y/DO4MxdOWMbVPB/ShAmJsILdFXpS5s
-   8HRJRMbRld85TyRQ8Eq3p5+6xDtlemAR33FnY1ZqpEZON/fk8xWR3gWeM
-   syXUyUKpIiusi1UOz8aYW4s7BCfpLi6oSDm8rw/7PiDLCnkWSuLfI8bib
-   fwdpE6AVf56sMur2n6aUPRpzMgq5jMa1G9RyYoJjPTe9Z5DsvZDOQI6MC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="299359698"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="299359698"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 13:51:57 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="780702723"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="780702723"
-Received: from perwin-mobl.amr.corp.intel.com (HELO tjmaciei-mobl5.localnet) ([10.212.163.208])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 13:51:56 -0800
-From:   Thiago Macieira <thiago.macieira@intel.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
-        "Mehta, Sohil" <sohil.mehta@intel.com>
-Subject: Re: [PATCH v2 12/14] platform/x86/intel/ifs: Add current_batch sysfs entry
-Date:   Sun, 13 Nov 2022 13:51:56 -0800
-Message-ID: <2537334.Lt9SDvczpP@tjmaciei-mobl5>
-Organization: Intel Corporation
-In-Reply-To: <Y3DZmKYV+8HBtZ+Q@zn.tnic>
-References: <20221021203413.1220137-1-jithu.joseph@intel.com> <Y3CevK2zhAmiUyG9@kroah.com> <Y3DZmKYV+8HBtZ+Q@zn.tnic>
+        Sun, 13 Nov 2022 16:52:20 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ECF6EE2B
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 13:52:18 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668376336;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+fLPNxn8GyPP2PzSvtJoQcItylFjq9P4TBD/5FwFVmw=;
+        b=hJaLVQxE85MqmxdR+HkXBVo2BILykOP01+Y9f3nHWHgN5eZogB9dVQj0XBmWRdgxIlOFso
+        4h3Kie5TG5M5KGd64MD3bYEqtArdNHmpSK7B0R9sk3kT8n4qt7ZTnxzY2SochBzHbr3SzR
+        uA3Oh5Hl7gJyzqyOpv9FvnspFDa4rrL0vNGgdYL9dew6AIKnrZphbp1QS7gPd/FW2AINMF
+        z4928C89xI47DZJl6gVc7nhPYRmA33lY7plh9lco2+kDIoGCqDQUT3qOsJEHFIWvAcJ8e+
+        goBbQ0s20+rkvAjvw7XS/qeCo+kpbrMN0+FEsxMc626KzmII2G3CFNvPYC4w4A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668376336;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+fLPNxn8GyPP2PzSvtJoQcItylFjq9P4TBD/5FwFVmw=;
+        b=Fx9ErtwQajmNL9ZilrstPm9jPgTcxPmIGfMohyeImER8s+RpeK6LS2cbHYuouLL/41v6lR
+        sI1haewsFgD8HmDw==
+To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>
+Subject: Re: [PATCH v6 4/6] timers: Add timer_shutdown_sync() to be called
+ before freeing timers
+In-Reply-To: <20221110064147.343514404@goodmis.org>
+References: <20221110064101.429013735@goodmis.org>
+ <20221110064147.343514404@goodmis.org>
+Date:   Sun, 13 Nov 2022 22:52:16 +0100
+Message-ID: <87cz9qttdb.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sunday, 13 November 2022 03:48:40 PST Borislav Petkov wrote:
-> > You can't do it with a three-line shell script, but we're not
-> > expecting that shell scripts are the means to use this feature in the
-> > first place.
-> 
-> I consider it a serious design mistake of having to have a *special*
-> tool. A special tool is *always* a burden. You need to build it, supply
-> it, make sure it is installable on the target system and so on.
-> 
-> And I'm telling you this with my Linux distributor hat on. It is always
-> a pain - trust me.
-> 
-[cut]
-> IOW, I really think that designing our interfaces with user friendliness
-> in mind should be of much more higher importance. And requiring the user
-> to remember or figure out anything she doesn't really need to, in order
-> to run the test is a burden.
+On Thu, Nov 10 2022 at 01:41, Steven Rostedt wrote:
 
-We agree that it should be operable without a tool. If nothing else, we will 
-run into situations where we need to debug what's happening and the tool is 
-not going to work for those conditions. Having a direct access to the API 
-right there in /sys is great and is one of the things that Linux excels at and 
-differentiates itself from the competition with.
+$Subject: -ENOPARSE
 
-However, I am saying that we shouldn't have to go out of our way to make the 
-extreme corner case easy if it comes to the detriment of the 99% case.
+ timers: Provide timer_shutdown_sync()
 
-Anyway, we can update the tool to print "%02x-%02x-%02x-%02x.%s" instead of 
-"%d". That's trivial to us. I just don't think it's a worthwhile change, 
-because four of the five placeholders there are enforced by the kernel and 
-therefore the kernel must check them again (maybe it does so anyway when it 
-opens and validates the file).
+and then have some reasonable explanation in the change log?
 
-What REALLY matters to me is that the current_batch file be readable and I can 
-get the last batch that was loaded, in a well-known format. Without this, we 
-go from "inconvenience" to "major design change, must talk to customers and 
-customers must adapt their workloads". Please help me out here.
+> We are hitting a common bug were a timer is being triggered after it
+> is
 
--- 
-Thiago Macieira - thiago.macieira (AT) intel.com
-  Cloud Software Architect - Intel DCAI Cloud Engineering
+We are hitting? Talking in pluralis majestatis by now?
 
+> freed. This causes a corruption in the timer link list and crashes the
+> kernel. Unfortunately it is not easy to know what timer it was that was
 
+Well, that's not entirely true. debugobjects can tell you exactly what
+happens. 
 
+> freed. Looking at the code, it appears that there are several cases that
+> del_timer() is used when del_timer_sync() should have been.
+> diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+> index 717fcb9fb14a..111a3550b3f2 100644
+> --- a/kernel/time/timer.c
+> +++ b/kernel/time/timer.c
+> @@ -1017,7 +1017,8 @@ __mod_timer(struct timer_list *timer, unsigned long expires, unsigned int option
+>  	unsigned int idx = UINT_MAX;
+>  	int ret = 0;
+>  
+> -	BUG_ON(!timer->function);
+> +	if (WARN_ON_ONCE(!timer->function))
+> +		return -EINVAL;
+
+Can you please make these BUG -> WARN conversions a separate patch?
+
+> +/**
+> + * timer_shutdown_sync - called before freeing the timer
+
+1) The sentence after the dash starts with an upper case letter as all
+   sentences do.
+
+2) "called before freeing the timer" tells us what?
+
+   See below.
+
+> + * @timer: The timer to be freed
+> + *
+> + * Shutdown the timer before freeing. This will return when all pending timers
+> + * have finished and it is safe to free the timer.
+
+   "_ALL_ pending timers have finished?"
+
+This is about exactly _ONE_ timer, i.e. the one which is handed in via
+the @timer argument.
+
+You want to educate people to do the right thing and then you go and
+provide them uncomprehensible documentation garbage. How is that
+supposed to work?
+
+Can you please stop this frenzy and get your act together?
+
+> + *
+> + * Note, after calling this, if the timer is added back to the queue
+> + * it will fail to be added and a WARNING will be triggered.
+
+There is surely a way to express this so that the average driver writer
+who does not have the background of you working on this understands this
+"note".
+
+> + *
+> + * Returns if it deactivated a pending timer or not.
+
+Please look up the kernel-doc syntax for documenting return values.
+
+Thanks,
+
+        tglx
