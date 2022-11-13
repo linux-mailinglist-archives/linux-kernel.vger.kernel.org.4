@@ -2,126 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F8D626D0E
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 01:43:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1F8626D1E
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 01:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234976AbiKMAnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 19:43:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
+        id S234995AbiKMAxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 19:53:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiKMAnu (ORCPT
+        with ESMTP id S230170AbiKMAxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 19:43:50 -0500
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9820F11172
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 16:43:49 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|ian@linux.cowan.aero
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id F0100540707;
-        Sun, 13 Nov 2022 00:43:48 +0000 (UTC)
-Received: from pdx1-sub0-mail-a294.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 72F295407D1;
-        Sun, 13 Nov 2022 00:43:48 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1668300228; a=rsa-sha256;
-        cv=none;
-        b=1vfLe76Jt0E2XJM5dfu3avAPDEISBqkcLgQNpcCeEJuPGs36pOe74kxY9Mp5Nnds0Totcp
-        MQ+pe/L1nGTstCN9ttmuxcJa9Ro+pcheDfFvHMHQaXTWv4Uo8TQm8yj9VZK81SbAEJVr4a
-        RbxuWkO3E4R+4f7U+VDfPOIWUTw9so9s6bCyGo/ToRveg18Er7KtdAAjbPo56GISKJDZ/A
-        ya9o3/gbTXz1BvrPZ7Nc4ZSbZuDcsTJyWi2+xl1Riabg0itQUfnPhCXTLb+sdUWfe51Q5C
-        xmS0CeS1EzMQmyIyTSyuKwoRrl290UsnFgLZhFelkiMtzRwIt6gZfaBmNY6ONg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1668300228;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=RY4aqpDDzvkCdwtb+i57uYm/67+sdpR3Z3/UKePDnI4=;
-        b=YlGyo+Srv7SPsXWZVXNYPtsWGUK9C7KRJ1ffKpgUs6ZZNmPJjH1uTZnIa3JRZdOyrv/r9o
-        UKhgG+rQYsODpfhrjaIoA7jrtffsFj1tuzQCAw7T5uQZNMKtrTcu1vHolkjoZrqlowDGyv
-        PaZKLltr7OoFp88cA0kwZ3bPlW48S9iY5kiKZj85Q2qbn0uJOUcYO3eEgEQ1TxD1aRUmdr
-        wKxTwNDmMh46tq/KjM2/jokL/dfGgAS2rUwhkWmZ5o0I+2BVee3tbghA/mPLUmcGNHr9rO
-        CUBfajkghiODC4asv+KmgEPt772WJlXr+PVbKBN3X4LTeRx//r092VdxnBPktA==
-ARC-Authentication-Results: i=1;
-        rspamd-5cb65d95c4-ktmnm;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=ian@linux.cowan.aero
-X-Sender-Id: dreamhost|x-authsender|ian@linux.cowan.aero
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|ian@linux.cowan.aero
-X-MailChannels-Auth-Id: dreamhost
-X-Belong-Interest: 2a9f40c60a2e6cae_1668300228771_2422924357
-X-MC-Loop-Signature: 1668300228771:2856677908
-X-MC-Ingress-Time: 1668300228771
-Received: from pdx1-sub0-mail-a294.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.126.30.12 (trex/6.7.1);
-        Sun, 13 Nov 2022 00:43:48 +0000
-Received: from rhino (dsl-50-5-144-34.fuse.net [50.5.144.34])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: ian@linux.cowan.aero)
-        by pdx1-sub0-mail-a294.dreamhost.com (Postfix) with ESMTPSA id 4N8twg38CCzP6;
-        Sat, 12 Nov 2022 16:43:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.cowan.aero;
-        s=dreamhost; t=1668300228;
-        bh=RY4aqpDDzvkCdwtb+i57uYm/67+sdpR3Z3/UKePDnI4=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=vGkMkBlcben9J/SjBmz4dbFddrzFyW2wZlSdUKLZ2JkiNgD5YFKOEjmV/DTt8o0q/
-         nzXD7D5UenZxmGSwmFfaJjquVSBRQ4enLTVJd02alBWZrnzFUl77fLiIVU4A4Gq7UF
-         2FyK8aZO2fHcFjiTKGpROHw3x1kQ/JazfMKy6jdi2m3msrCWjv2w79bJ1FzJi7jUfL
-         GucVOsEFyJcZGYbfAduOJRp9prvetndZNe1OO3dDLb3GFjHR6dRLIq3ig53UhqEJRm
-         d5L3c1buIdcwO/G1MWXSc6/6vUEE3RpHy0oErtHvzxF7c3+1yB88qTugI76qj2vZgJ
-         jPYqFChVnoF3A==
-Date:   Sat, 12 Nov 2022 19:43:45 -0500
-From:   Ian Cowan <ian@linux.cowan.aero>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     cl@linux.com, penberg@kernel.org, rientjes@google.com,
-        iamjoonsoo.kim@lge.com, roman.gushchin@linux.dev,
-        42.hyeyoo@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: include: linux: slab: kmalloc_trace undefined when compiling
- drivers
-Message-ID: <Y3A9waTkehESUyn+@rhino>
-References: <Y2/Luovqgz8O+Kqa@rhino>
- <f83aca33-3a5f-97ac-625e-aa7c72bf60ba@infradead.org>
- <Y3AXVRAoZA5YEho+@rhino>
- <1df133ef-d5e9-f323-7c67-fc9ffed04274@infradead.org>
+        Sat, 12 Nov 2022 19:53:17 -0500
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9571912D06
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 16:53:16 -0800 (PST)
+Received: by mail-vs1-xe41.google.com with SMTP id p4so8353748vsa.11
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 16:53:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jxYPr2jVW3bvT3wsD5LBdKG0AjkqDLwBFdmR5KSDtKs=;
+        b=dk4m9gYp2+itdSTm+UUcNaP17ltSbc0VtvVke/i6Jz8v6wANtR5EZb8Lmj0Pm8VhPL
+         apTDiqV1vKMIkw/sAjKFM3ig174kKffNvJavB41nX+PVKkW+uk3kejl6IkWDrpVWOdOo
+         6zpMnR6Q/KVUxxzLVA/bmqcVbBaYxLhLgKPpumdRoH59yKjgHHcotXMho7O1hDbI9tkO
+         +w1GggGyN8wS7O1P1PY2Ni5jIqqLv+jQDNXszRZREUWrYES2rlXeBFPrHwKEvRjlewBm
+         MMzDb/hmJxjpc7OQYvgsdPcMggfPlXb6j50O4oTCXvFZqtwbmWpbTmnoVm0PcpR1nA+c
+         LCKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jxYPr2jVW3bvT3wsD5LBdKG0AjkqDLwBFdmR5KSDtKs=;
+        b=kwuiHxl7dD2Xfv51Jdofam47Pr1LOnlkGwOH4S2xJh5EMKESQAr0n3aQApvUgWN8JE
+         MutCfhTOBoYaKPTTuVnlqVzxYfcfvnxmgLSulP9fbyfi/XW4fC2B/Hkzso4obaWbaq+G
+         0hlfCiyVkkSlRBMIOyGOvtDcm6eUgRmz8NgcL+uvWBGSPvwq3ugpyP1viiZzZwKnw+au
+         T5S5tnU+W3xFMRQbhpUL5JfYFShrbf/JRt4TumUHdI97IMozJQucwp07U30L6fkyXpEx
+         VVE0r1t7na/yY3uQU63s6guTYvHbCiMX1VtPIiHSoBtBKGRF9RYXK51J7K7XgGveNanP
+         yAWA==
+X-Gm-Message-State: ANoB5pnqGcGxyFnBNqnPQQiQcsFi5setTa9QNA8PmwICrhmwk66ftTzx
+        kWXTXNSfkhTRPxaRBp7HMNUtDdtxZ1AVmTYHjRA=
+X-Google-Smtp-Source: AA0mqf7t0ysKBZ3O0C4ApA0FzZpZ6HnpNvDjEukM+L2KuKhYQixiFw46r7jymnpA0LIdiq067QqaMeCAzLGthcDQ9IM=
+X-Received: by 2002:a67:2445:0:b0:3aa:eef:4109 with SMTP id
+ k66-20020a672445000000b003aa0eef4109mr3566437vsk.50.1668300795149; Sat, 12
+ Nov 2022 16:53:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1df133ef-d5e9-f323-7c67-fc9ffed04274@infradead.org>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ab0:c18:0:0:0:0:0 with HTTP; Sat, 12 Nov 2022 16:53:14 -0800 (PST)
+From:   Megan Rain <meganrain236@gmail.com>
+Date:   Sun, 13 Nov 2022 00:53:14 +0000
+Message-ID: <CABe9k1rfm5j44bd4QQpjPVHnX3KmaxHJDhgRBP8V9FQH=gtxYA@mail.gmail.com>
+Subject: My name is Mrs Lovelyn Raya from Indonesia
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.9 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_60,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_MONEY_PERCENT,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e41 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6081]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [meganrain236[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [meganrain236[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 04:34:18PM -0800, Randy Dunlap wrote:
-> 
-> 
-> On 11/12/22 13:59, Ian Cowan wrote:
-> > On Sat, Nov 12, 2022 at 09:21:34AM -0800, Randy Dunlap wrote:
-> >> Hi--
-> >>
-> >> On 11/12/22 08:37, Ian Cowan wrote:
-> >>> When compiling drivers (speficially drivers/pci/hotplug), I am receiving
-> >>> the following modpost error for both `kmalloc_trace` and
-> >>> `kmalloc_node_trace` on the staging/staging-next branch:
-> >>>
-> 
-> Ian, what do you mean by "on the staging/staging-next branch"?
-> 
-> What kernel version are you trying to build?
-> 
-> The .config that you sent is for v6.1.0-rc1.
+--=20
+--
+My name is Mrs Lovelyn Raya  from Indonesia
+,
+I know that this message might come to you as a surprise because we
+don't know each other nor have we ever met before but accept it with
+an open and positive mind. I have a Very important request that made
+me to contact you; I was diagnosed with ovarian cancer disease which
+doctors have confirmed and announced to me that i have just few days
+to leave, Now that I=E2=80=99m ending the race like this, without any famil=
+y
+members and no child, I just came across your email contact from my
+personal search.
 
-I am building from the staging repository (gregkh/staging) and my
-working branch when building is staging-next. So I am trying to build
-from staging and not a particular version. I have also run `make modules_prepare`
-and updated the .config per that script. However, when I do build
-v6.1.0-rc1 from the main repository (torvalds/linux), I run into the same problem.
+I=E2=80=99m a business woman from Indonesia dealing with gold exportation h=
+ere
+in the Republic of Burkina Faso. I have decided to hand over the sum
+of ($10.5 Million Dollar) in my account to you for the help of
+orphanage homes/the needy once in your location to fulfill my wish on
+earth. But before handing over my data=E2=80=99s to you, kindly assure me t=
+hat
+you will take only 50% of the money and share the rest to orphanage
+homes/the needy once in your country, Return to enable me forward to
+you the bank contact details now that I have access to Internet in the
+hospital to enable you contact the bank, always check your email
+always remember me for doing good.
+
+Your early response will be appreciated.
+
+Yours Faithfully,
+Mrs Lovelyn Raya
