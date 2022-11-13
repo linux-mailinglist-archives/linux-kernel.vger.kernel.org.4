@@ -2,75 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FA8627277
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 21:30:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E9662727B
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 21:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235381AbiKMUab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 15:30:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
+        id S235433AbiKMUb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 15:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230525AbiKMUa3 (ORCPT
+        with ESMTP id S230525AbiKMUb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 15:30:29 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927C912608
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 12:30:28 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id i26-20020a056e021d1a00b003025434c04eso2217481ila.13
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 12:30:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nO4A/V+XMKyBWWRWUjncAFNNvtrkiBXS4cfO5G7DtN0=;
-        b=bMh4BWt1psSCuZ/yBEJDQ4xasFkZDjVEuwD/i7IZ5AclzDE/PgHFCvXPa7f+VmSnSG
-         eLxn+atq7WcnJGXFCnGkwKqTWZbTgU8ljiNX0OOJFFDlf8m3bN/LCOm2dZwtjhP2iyjz
-         8ybPPNO9JxiObOLUPK2sode2CCL1mSCdnuBNdDBVU17xPaTMjRU7DHfGeWvWOpwbW6Uc
-         PGHsFlVCvq+brgphwuV7KWO5YektwTJIB9gt5mXVU6M2LsUkZpu5rHoyI0hY5YYpGjRG
-         YjGct/2/grKeKj+ATSr0AJyjqhvHWsCbrMQAYCr5XWUztnuUxUpHlZ9OuVTqJkyy42/R
-         obvQ==
-X-Gm-Message-State: ANoB5pnX8knZwwuAhMj7TSfqaCCyNjUFSkmlm6o2lTRJLE+S/kg5Fqs5
-        WliZ5MHGidCopLIURfen9RC9aBO+jSrKg4I5Z3bIfn6Yik+A
-X-Google-Smtp-Source: AA0mqf45xp/J1UQnDD1QjPXvWlLARkynFQLjX9shzGiRTMM2C3k2crEnTy7wkF9gxgC+OExiJYjkAqFk5P9TLLwdFiaDJ+sknAMp
+        Sun, 13 Nov 2022 15:31:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9055512608;
+        Sun, 13 Nov 2022 12:31:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C69A60BDB;
+        Sun, 13 Nov 2022 20:31:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFD59C433D6;
+        Sun, 13 Nov 2022 20:31:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668371485;
+        bh=Z3hKGPb3JVjXMwmS/Knu2xoEPDWXo+XzHB0SUKGU1MI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fq1tFo1Ks4huQqkpuAB7lbl7qnjDuhG7E+DJEFMViWMTlO/GSyicK/f0VBEUOU2+r
+         Xv0qnW7VqdvRwjmuSAF6xfR42U/FOC+OOlzbfTSa7HSBkGuWiFOZpWF3YPGU/r0EMc
+         9U1eH6aQB+pWcyGh6La4SIkI3gIon4HwQwTHFwGdr2cDHX1NI3bf3yTzMrFzpEmWhV
+         yVYlBFB85gk3tF/diWjOWSC9EAFvAL6FHYv23FJ6liOS6xhrppkWr5Bz2OLtW8vg8W
+         U9R2+Z69+u4yAfWihGILYo7IQXwV6Rit61wO7vJEbdNuhHK6P7YvNE4BQaehWZJ6q1
+         NtVR3K7q066OQ==
+Date:   Sun, 13 Nov 2022 12:31:23 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, jejb@linux.ibm.com,
+        Kees Cook <keescook@chromium.org>, dlunev@google.com,
+        zohar@linux.ibm.com, Matthew Garrett <mgarrett@aurora.tech>,
+        jarkko@kernel.org, linux-pm@vger.kernel.org,
+        Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>, axelj <axelj@axis.com>
+Subject: Re: [PATCH v5 01/11] tpm: Add support for in-kernel resetting of PCRs
+Message-ID: <Y3FUGyYbpWM0uIdg@sol.localdomain>
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+ <20221111151451.v5.1.I776854f47e3340cc2913ed4d8ecdd328048b73c3@changeid>
 MIME-Version: 1.0
-X-Received: by 2002:a02:602f:0:b0:375:13ba:6b08 with SMTP id
- i47-20020a02602f000000b0037513ba6b08mr4307455jac.283.1668371427955; Sun, 13
- Nov 2022 12:30:27 -0800 (PST)
-Date:   Sun, 13 Nov 2022 12:30:27 -0800
-In-Reply-To: <20221113115249.1845-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000511de505ed5ffe6a@google.com>
-Subject: Re: [syzbot] WARNING: locking bug in hugetlb_no_page
-From:   syzbot <syzbot+d07c65298d2c15eafcb0@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221111151451.v5.1.I776854f47e3340cc2913ed4d8ecdd328048b73c3@changeid>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Nov 11, 2022 at 03:16:26PM -0800, Evan Green wrote:
+> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+> index 1621ce8187052c..886277b2654e3b 100644
+> --- a/drivers/char/tpm/tpm-interface.c
+> +++ b/drivers/char/tpm/tpm-interface.c
+> @@ -342,6 +342,53 @@ int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+>  }
+>  EXPORT_SYMBOL_GPL(tpm_pcr_extend);
+>  
+> +/**
+> + * tpm2_pcr_reset - Reset the specified PCR
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-INFO: rcu detected stall in corrupted
+Should this function be in drivers/char/tpm/tpm2-cmd.c instead of here?
 
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P3507 } 2668 jiffies s: 2069 root: 0x0/T
-rcu: blocking rcu_node structures (internal RCU debug):
+> + * @chip: A &struct tpm_chip instance, %NULL for the default chip
+> + * @pcr_idx: The PCR to be reset
+> + *
+> + * Return: Same as with tpm_transmit_cmd(), or ENOTTY for TPM1 devices.
+> + */
+> +int tpm2_pcr_reset(struct tpm_chip *chip, u32 pcr_idx)
 
+The callers of this function assume it returns a negative errno value.  But
+actually it can return positive TPM2_RC_* error codes as well.  Probably you
+should make it only return negative errno values.
 
-Tested on:
+> +{
+> +	struct tpm2_null_auth_area auth_area;
+> +	struct tpm_buf buf;
+> +	int rc;
+> +
+> +	chip = tpm_find_get_ops(chip);
+> +	if (!chip)
+> +		return -ENODEV;
+> +
+> +	if (!(chip->flags & TPM_CHIP_FLAG_TPM2)) {
+> +		rc = -ENOTTY;
+> +		goto out;
+> +	}
+> +
+> +	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_PCR_RESET);
+> +	if (rc)
+> +		goto out;
+> +
+> +	tpm_buf_append_u32(&buf, pcr_idx);
+> +
+> +	auth_area.handle = cpu_to_be32(TPM2_RS_PW);
+> +	auth_area.nonce_size = 0;
+> +	auth_area.attributes = 0;
+> +	auth_area.auth_size = 0;
+> +
+> +	tpm_buf_append_u32(&buf, sizeof(struct tpm2_null_auth_area));
 
-commit:         1621b6ea Merge branch 'for-next/fixes' into for-kernelci
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=108ca515880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=606e57fd25c5c6cc
-dashboard link: https://syzkaller.appspot.com/bug?extid=d07c65298d2c15eafcb0
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=174f46d1880000
+sizeof(struct tpm2_null_auth_area) => sizeof(auth_area)
 
+> +	tpm_buf_append(&buf, (const unsigned char *)&auth_area,
+
+unsigned char => u8
+
+Also, since the code to append a "null" authorization area appears in both
+tpm2_pcr_reset() and tpm2_pcr_extend(), perhaps it should be refactored into a
+helper function?
+
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index dfeb25a0362dee..70134e6551745f 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -219,6 +219,7 @@ enum tpm2_command_codes {
+>  	TPM2_CC_HIERARCHY_CONTROL       = 0x0121,
+>  	TPM2_CC_HIERARCHY_CHANGE_AUTH   = 0x0129,
+>  	TPM2_CC_CREATE_PRIMARY          = 0x0131,
+> +	TPM2_CC_PCR_RESET		= 0x013D,
+>  	TPM2_CC_SEQUENCE_COMPLETE       = 0x013E,
+>  	TPM2_CC_SELF_TEST	        = 0x0143,
+>  	TPM2_CC_STARTUP		        = 0x0144,
+> @@ -293,6 +294,13 @@ struct tpm_header {
+>  	};
+>  } __packed;
+>  
+> +struct tpm2_null_auth_area {
+> +	__be32  handle;
+> +	__be16  nonce_size;
+> +	u8  attributes;
+> +	__be16  auth_size;
+> +} __packed;
+
+struct tpm2_null_auth_area is only used by code in drivers/char/tpm/, so should
+its declaration go in the internal header drivers/char/tpm/tpm.h instead?
+
+- Eric
