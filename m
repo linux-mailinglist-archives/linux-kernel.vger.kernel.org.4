@@ -2,156 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFE0627008
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 15:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA92627003
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 15:11:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235406AbiKMOOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 09:14:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
+        id S235291AbiKMOLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 09:11:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235338AbiKMOOf (ORCPT
+        with ESMTP id S231972AbiKMOLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 09:14:35 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16737B7EB
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 06:14:35 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id cg5so5474804qtb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 06:14:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DNZRFfPTIAo7WXZRG85F2W4fpqHXCOpB+6LDuGu/bak=;
-        b=sE13bnfiQEwOas5EWN/9S1zISno6RI4STkh69426YI8yjtTcFtaIM+b1VG3fFH1uei
-         BmxoJJlZJnk7ofNVYpYb8twKxJI0CPOWEa6hwK3mYYCh7zFsMGOfoz3cQHCZGrbjf3qW
-         LDFplfzUF65uFR6j0XvJE+LcxbwWgzsaUnOqvCVPN8UPX43a5ODGiiOx/L3B9+Ju05gw
-         liatH+v3lh1AiCcVrN5CdtgSbqUZwxFDkD60H9T93QZfHHri5cMFy2+ErwJXSLqsPr9I
-         bg9OtkSjjJd/TeslErekQ2cAvlYpXZlt6DM1/ZQWiF74LGs0vMY/vJeZgpxmRGKZ2CpR
-         j1og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DNZRFfPTIAo7WXZRG85F2W4fpqHXCOpB+6LDuGu/bak=;
-        b=i86dG+9MNC599ZPZzh3EAOUey1H+uP5Cl1gokPT5xD/D5nRG9qqqaR6J3HDIYX+QFA
-         BBnqmCylq2F/6LoCu3cXli9KYwB+/CakRvY20dOHmKtzQ+RCTWDuhQ7zPF1CvEoYUu7t
-         TOIaNCNSQJz1pGuW5FjLD7M5ae1kyd5l/YrvMYMAAWwLmU5xFWknk5QRvMCTMPokRe7Z
-         GMYWqnzlNGvTkg9i/QkUZixxEkkSv1MnzkVHghdKY4zipiVAecr7YsaOHLF1bAQdOHsW
-         Ybn6yxSpRtwLALvawNTdoWGOMSY7FkDOuXdUxcfhKQv4+WCotEud1MXmNoLh1Njxrr0A
-         4o9Q==
-X-Gm-Message-State: ANoB5pkxluT7Ir/UfPsYNBbXmnlIfumLhvABHjqV9r42g3ts5VeJwT5J
-        rb1SghGG+ElZQnf/jgk5JyEjfQ==
-X-Google-Smtp-Source: AA0mqf5jFx8ZESzHrdKTSEHHQzdGZFMHRNEwRptg4AxS+bZMcap9WmJ+s9unN6xGg2AkpOjKjX/h5Q==
-X-Received: by 2002:ac8:6b8f:0:b0:3a5:20b1:e390 with SMTP id z15-20020ac86b8f000000b003a520b1e390mr8754468qts.626.1668348874125;
-        Sun, 13 Nov 2022 06:14:34 -0800 (PST)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id i15-20020a05620a248f00b006fb3884e10bsm4841124qkn.24.2022.11.13.06.14.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 06:14:33 -0800 (PST)
-Date:   Sun, 13 Nov 2022 09:07:42 -0500
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michael@walle.cc, broonie@kernel.org
-Subject: Re: [PATCH v2 4/4] gpio: i8255: Migrate to regmap API
-Message-ID: <Y3D6Lji9bKeSbJaI@fedora>
-References: <cover.1668129763.git.william.gray@linaro.org>
- <61327a67cc308af413471a69a4810b2785e53e8e.1668129763.git.william.gray@linaro.org>
- <Y3Dol6rHduFNQT85@smile.fi.intel.com>
+        Sun, 13 Nov 2022 09:11:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE72BE17;
+        Sun, 13 Nov 2022 06:11:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63270B80C73;
+        Sun, 13 Nov 2022 14:11:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 297D4C433D6;
+        Sun, 13 Nov 2022 14:11:44 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="bcqpeBQw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1668348702;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1J62+ynSE9Alcf2NcxpAWpkNh4uJLuCMy3vCWo2LFjc=;
+        b=bcqpeBQwrQH1iSV9ZsrfqS/OWmG8xIh+1lu530xEfvg2szj+mcYMK1rr7Ahd57pktcvxVc
+        tDkBy01pGyqUIdTz29opxVHJpJTVhvXGVYNT61R8OAYARc41Iqw2ZvYAvTyUG6xm6uC2my
+        qBzdTlAcQXBbpTTJfBWBAv9QXdgMWRI=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 032cc457 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sun, 13 Nov 2022 14:11:41 +0000 (UTC)
+Date:   Sun, 13 Nov 2022 15:11:38 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] hw_random: use add_hwgenerator_randomness() for early
+ entropy
+Message-ID: <Y3D64rIXFfRoSCne@zx2c4.com>
+References: <20221106150243.150437-1-Jason@zx2c4.com>
+ <202211132159.cd70b1c0-oliver.sang@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="l+IjPmXaLKrbTOfD"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y3Dol6rHduFNQT85@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202211132159.cd70b1c0-oliver.sang@intel.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Nov 13, 2022 at 09:48:46PM +0800, kernel test robot wrote:
+> 
+> Greeting,
+> 
+> FYI, we noticed WARNING:at_kernel/kthread.c:#kthread_should_stop due to commit (built with gcc-11):
+> 
+> commit: cea83a6b31856293ceab2c6ebab7843322fe105e ("[PATCH v3] hw_random: use add_hwgenerator_randomness() for early entropy")
+> url: https://github.com/intel-lab-lkp/linux/commits/UPDATE-20221106-230344/Jason-A-Donenfeld/hw_random-use-add_hwgenerator_randomness-for-early-entropy/20221106-044656
+> base: https://git.kernel.org/cgit/linux/kernel/git/gregkh/char-misc.git 30a0b95b1335e12efef89dd78518ed3e4a71a763
+> patch subject: [PATCH v3] hw_random: use add_hwgenerator_randomness() for early entropy
 
---l+IjPmXaLKrbTOfD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sun, Nov 13, 2022 at 02:52:39PM +0200, Andy Shevchenko wrote:
-> On Thu, Nov 10, 2022 at 08:55:53PM -0500, William Breathitt Gray wrote:
-> > The regmap API supports IO port accessors so we can take advantage of
-> > regmap abstractions rather than handling access to the device registers
-> > directly in the driver. The 104-dio-48e and gpio-mm modules depend on
-> > the i8255 library and are thus updated accordingly.
-> >=20
-> > By leveraging the gpio_regmap API, the i8255 library is reduced to
-> > simply a devm_i8255_regmap_register() function, a configuration
-> > structure struct i8255_regmap_config, and a helper macro
-> > i8255_volatile_regmap_range() provided to simplify volatile PPI register
-> > hinting for the regmap.
->=20
-> > Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->=20
-> Suggested-by?
-> (I'm not insisting, just consider if it's appropriate to use here or in t=
-he
->  other patches)
-
-No problem, I'll make sure your Suggested-by lines are properly added
-for the patches. ;-)
-
-> > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
-> > ---
-> >  drivers/gpio/Kconfig            |   2 +
-> >  drivers/gpio/gpio-104-dio-48e.c | 397 ++++++++++-------------------
-> >  drivers/gpio/gpio-gpio-mm.c     | 151 +++--------
-> >  drivers/gpio/gpio-i8255.c       | 429 +++++++++++---------------------
-> >  drivers/gpio/gpio-i8255.h       |  80 +++---
->=20
-> Can we actually split this to a few steps:
->  - providing gpio-i8255-regmap
->  - providing gpio-mm-regmap
->  - converting the driver
->  - removing not used modules (one by one)
-> ?
->=20
-> In this case if any regression somewhere appears, we can always perform a
-> (semi-)revert for a certain driver.
-
-Sure, I can split the regmap_irq migration for 104-dio-48e into a
-separate precursor patch to reduce the amount of changes we see here and
-provide a revert path for these IRQ changes. I can do a similar change
-for 104-idi-48 as well.
-
-The rest of the changes for 104-dio-48 and gpio-mm are essentially just
-the regmap configurations, so the patch will be largely identical even
-if we migrate gpio-i8255 to regmap API first before migrating again to
-the gpio_regmap in a second patch.
-
-I believe the reason the changes look ugly in this patch is because the
-large number of lines deleted is confusing the match heuristic for diff
-so the changes aren't lining up nicely into distinct deletion/creation
-blocks. I can play around with the git diff "--break-rewrites" option to
-get it to produce a nicer diff; I think gpio-mm looks much easier to
-review as a rewrite rather than inline diffs [0].
-
-[0] https://gitlab.com/vilhelmgray/gpio/-/raw/61327a67cc308af413471a69a4810=
-b2785e53e8e/drivers/gpio/gpio-gpio-mm.c
-
-William Breathitt Gray
-
---l+IjPmXaLKrbTOfD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCY3D6LgAKCRC1SFbKvhIj
-K680AQDBglAZoOnqV+sVHlIl9/nOiibX2EdRb7qmeqg4iW9pbgEA6dBV3pWLBU1k
-hzVMUuUSwa2v+gN6LsDoz3yELg9HKws=
-=S2bd
------END PGP SIGNATURE-----
-
---l+IjPmXaLKrbTOfD--
+A bit late. v4 was posted a while ago now.
