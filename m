@@ -2,185 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F123627156
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 18:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A244E62715A
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 18:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235344AbiKMRru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 12:47:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49216 "EHLO
+        id S235354AbiKMRwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 12:52:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiKMRrs (ORCPT
+        with ESMTP id S231252AbiKMRwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 12:47:48 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2084.outbound.protection.outlook.com [40.107.237.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F429B83
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 09:47:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Avc+s86hsGgiMJhBlltP9/R+CVTvzVehY3CRGf5sgMh6TpbVN9Xdr6WDMbOjlvg/IYoUYI5GoHtl9oGgus9Ff1PMuicE0yFSaP8DusbDfrSdlz0TKH0pJEPQAiBzLmwPnKpmkGD8L5zEwFt+SYUr0IGYKK+Yaoix7OMbxYTGCkRvTrE7i5SENmMSnb1Tiznm7Np4IVQdURpC+2BrvAS/3xlfQCY0ZMOo6hBQdqcLaHhwqEXLf0PDyZCr5PA6Fy+28wO8GskdsvHJ1OV9S9X+irVWM5qNt3lFzrpTeBYWLkHSsHMXzPQ4KAnv0VPAJzczcNbE8e5PFJJoZ3H/Ghpefw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yTbxD3yVFhT7pm5zY9lIlWKSQhmlE6STZMUV42YcIeE=;
- b=M1uBDsPhtEei+MxgmsWJyfwWaqB8vZmx2/FLc4EuRxTQLzDgUcUOrVl3ouL0Zz+A2N8JwxizncMKEWUCbvXx6ag7g7RHOrdcsJz8n1tvujcPyeUU2HJ4HjJsflYSioL3xA14kR+xfopd5Ul2mCF+87f5mq1BTZDvEwLa7pclGNZE/+gHdbxqRgf8QN07bqJlFbZYxtBsUx5likHHV0v0T5SuN0q6T2UROP1MZKLFFihEIh786DfVU2o3UGBxwbpagFvsf5x/eu0u73/8lJwqnlYi6OL5HYhJJgc+k831kRp6keWgt9QlgHfWDP/sOTRJRViWladbzzKWWgoFTZl2dw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yTbxD3yVFhT7pm5zY9lIlWKSQhmlE6STZMUV42YcIeE=;
- b=gpQNeVRLffJiJRyyY1qC5c5JFi4YylgUnBjx6RRrEUECL6+NfZI9KimxCaazT6zcrXIZhdmLHKwPi03FbjLzgYHc+1wNOw7BZe5/aTCwI31uRSEOpQwO1Pn0SU34MoC2shv2EF6iAIuK3/QLDN0jjtEiNCAY94FIMy7jIAtX9k4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com (2603:10b6:208:a9::12)
- by DM6PR12MB4171.namprd12.prod.outlook.com (2603:10b6:5:21f::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Sun, 13 Nov
- 2022 17:47:40 +0000
-Received: from MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::588f:c941:4f62:9d89]) by MN2PR12MB2941.namprd12.prod.outlook.com
- ([fe80::588f:c941:4f62:9d89%3]) with mapi id 15.20.5813.017; Sun, 13 Nov 2022
- 17:47:40 +0000
-Message-ID: <b5b44445-8ec4-7d67-149f-ec51ecf1b72c@amd.com>
-Date:   Sun, 13 Nov 2022 12:48:28 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] drm/amd/display: don't enable DRM CRTC degamma property
- for DCE
-Content-Language: en-US
-To:     Melissa Wen <mwen@igalia.com>, harry.wentland@amd.com,
-        sunpeng.li@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     Nicholas.Choi@amd.com, Nicholas.Kazlauskas@amd.com,
-        kernel-dev@igalia.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221103184500.14450-1-mwen@igalia.com>
-From:   Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-In-Reply-To: <20221103184500.14450-1-mwen@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR10CA0006.namprd10.prod.outlook.com
- (2603:10b6:610:4c::16) To MN2PR12MB2941.namprd12.prod.outlook.com
- (2603:10b6:208:a9::12)
+        Sun, 13 Nov 2022 12:52:47 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F069710070;
+        Sun, 13 Nov 2022 09:52:45 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id CE34C32000D7;
+        Sun, 13 Nov 2022 12:52:41 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Sun, 13 Nov 2022 12:52:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1668361961; x=
+        1668448361; bh=to/nS/YHMoZGbUTDuWf2VM+aexKdoy83Yy01COB+YwM=; b=a
+        t2EimwiO/ysCMb22zBUjRkyV0jxhCFdV+AVDxGEcP7/Hk1nZ5W708+NRAzNxxqdz
+        p688weQVZDjjVt2Xk+z/E8mv+/XGIp/wesIKyDqhP4pOTe67pf/lDcoUUtZe8/h/
+        DKuubPgbtJUrTDhU0vWTzM77oJWJxg541UPcUJvxkL+jwC+jwq/MIqmSywGxH1V7
+        vl4oigCbtcVgNhVQ2A7LExVdOlYYPUs7WzJ2WAZn+JZgwgP8LekOSWcCWLRRum3q
+        zwfotOoIwEdYdiJg5ks1KSGPLReeBFayHo6tCMg2QoADsGTSN4SwSIZtCyTrBXdR
+        P2wHkzjuOvPCo+CveBpbQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668361961; x=
+        1668448361; bh=to/nS/YHMoZGbUTDuWf2VM+aexKdoy83Yy01COB+YwM=; b=d
+        lhvUDCOq4JE6ZuE1umxApYq0nFICgA7M0vtK36b5pzVP3IvLjhBsKBkG37Ip8Sb7
+        ZhQC+APr7SIel6RXVDXp9Haw0vVYS1M9AbdKLy4tqrmMHbbGEUJK1FXwRhWFqjsn
+        KmGMl0hTuUej0R+DNnDy13R+/nDCSoBd9cW0CJJUR3DVFzyzzKOg+iLw7PX9/EJF
+        4cu6yvgH6mexNDnInxiehM2Xjn5lA48q3tdzTXnl3Mb7WViF6a2hFTDfAFvkFiiI
+        9XyzPg4ONuNnKd64z/jX+xny7KpIPfvU2gpijcOb24yk0ofp+n7kMdIHDB9+7AVu
+        3QQka0F+paRMfVqrIBK8A==
+X-ME-Sender: <xms:6S5xY_HqUtD0dfLAbIP08fB9tnBvXBj_LpKCcFbMPy6JrWYobP4n1g>
+    <xme:6S5xY8WqhA57rpdlmcxyYFki5pXu4dSP5LdLzAVaAg2Y0izAQg-1V11ZEGN__nOg7
+    z3yIS_If20hKianuA>
+X-ME-Received: <xmr:6S5xYxIM5pq1IFTW1w911ar0_T1xcuJr_d6x6bBnCtR2WXsMwlOmN2-b_64FEIYMl-b5sUSYAjo-vw708UH-5R_Syb6dJ9EChDZ8o2199nZiZdhFeEwBv0XqEA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedtgddutdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeekjeelleefiedthfdtgfekgeehudefudeugeffvdfhudekleel
+    fedtteejhedutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:6S5xY9G7RqRmRJ6LTMe0CZ0VI3vhN0Hs28A20Nz0jsfhQihDbByceQ>
+    <xmx:6S5xY1WCyx2wETriDeKho8DBGI3kOp4fmQKl4iYFDo93v6Egb3l73w>
+    <xmx:6S5xY4N4AeQBnDn6JHcQux1907-Ial8snGe50GP2jDEzVhKUMaMhPg>
+    <xmx:6S5xY-NTm6YwlLmY1ubB8jn_Axs4zeDaXM7mGaTENvnZmfpKQ9C9hQ>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 13 Nov 2022 12:52:39 -0500 (EST)
+Message-ID: <658c5d48-e84c-9c92-84e7-b31dc8861fec@sholland.org>
+Date:   Sun, 13 Nov 2022 11:52:38 -0600
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB2941:EE_|DM6PR12MB4171:EE_
-X-MS-Office365-Filtering-Correlation-Id: 200462d9-9f41-4b71-9ac5-08dac59f28c8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xSFUgPJkGYxFY2XLW/C7H7otR2a5q/MUXG+Z5Tu+SDcyuYXxxWwCY6LNnZz16GUkeFRwKKO55tEI4njAnuGLa4vhqn/SNEqVeojFtqTp5wPDDzGLnpRzPnJilchDBES3XAsBgFV42R5edAR3P7Oo6cle2EpeF5EwqMPvMOgd0dxjODFCYZGdAGbM+w16N2GLlB4lOZAsehy9Q0cutalfc4AAcIDOGH923jZuPfhxV6V1fIxFzEPd/Z63arNjjRheK8X7eazb/HMMtE3QmfQ3Xc/RQw+EHOSLbRZvHnhSymQmwSjBTBXZbK2kG5kRigDcLmwoHaBpsU/88tnwS/LG/vULxtvvZc8KvCKkpjjgxochmMMJlUkEEJDLmidjV7Kp7R19IkK11OO3nKh3xNv7tuuHP1QqK3Os4wUiBzXEVrabbvoDVhqXAMqaphmMMlnMa0pJhBqgbxEJlSVyq2LZPK2W20xyPET6GqDZt4MEXHU3U40sd/YcUDuWzSA7uVwZEB19ymnN+M6wEjb6Zz0FMSQ+idzkOF5YiyaqwyLzSIPg92VZTHW8FDPhzBLXwtUERSO5dI3TaQxDbp5wycJqda1l1GglP+TzwtmSbPxYxfe5qmVgbTBxh7wjhtBj0WEpxWpNpQ0ckRKt/C0st8/DNyT2keAoJf6ao8288S7ucNLfVp5HlMEAUJsPrBA8LuwVknxi762VA77V3yNUVIMmHYMoPak5sMtjszBPWYcRR7TaPzWs2hbWnFkHJIKX58cxIkjqLmkfp6E7EwzQdlXAqvlLGfRFw9pMtAANAwpnttw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB2941.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(346002)(396003)(136003)(366004)(451199015)(6512007)(4326008)(8676002)(66476007)(66556008)(66946007)(186003)(5660300002)(2616005)(41300700001)(36756003)(8936002)(316002)(53546011)(31696002)(86362001)(38100700002)(83380400001)(2906002)(478600001)(6486002)(6666004)(6506007)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NGVqU3pwUFRtUEJkY1J2MU1HSHVPeDVwL2MxeVBMcStzZjVaRHphSW1XbEl6?=
- =?utf-8?B?Z3NLblJKN1JSODdJNmw4V1MxWmUrTTFZeEVrTzJ1eEtzYnZiSGk4NXRoVElE?=
- =?utf-8?B?RTdrMjdHUUtWMCtSNUFjaWY2QUNCUXo4UTdhZUlxeVlLMWM2OGQ2Y3RwbHY3?=
- =?utf-8?B?czlQNmJXUVNkS2JvMVVIbmJMTUlGU2tsWW00czJ6enQ1ZWhYUkdyR01KYUZ4?=
- =?utf-8?B?V3VSem84Y2JvSmdzS3p1eGdRMytOS21JaEVpd0EzN2FaaGFBMStmTDJMRzlF?=
- =?utf-8?B?TmVMZXREdXNNNHZ4RjdiNS82QUtPYlVMVGl1ZEYxcFFRSG1MaUZCeHdqU0N1?=
- =?utf-8?B?MUpQOEcwU2JKczBJSVdTTCtqSG8vNHV5SkYyNVpiUmFpMUV0MUlGajlvemg0?=
- =?utf-8?B?TU1vTmtRM0dCd0owbEdqblk1Y2xWRE5IV0pNUWkrTDhLUXhLNHpaNjdjVjRH?=
- =?utf-8?B?SlZTRmd2ZmFuYmZYVUVvZlBqSEJjVGFoeXdHcDJOR3NPRnZuUGZlNVpsRHd6?=
- =?utf-8?B?R3dUc3lzazVQcDZ1UmtkU1RXYzUzbHlTL1puZVpIdTZZNFR1YkVHNEdJNCt1?=
- =?utf-8?B?cHVySWxEcmlJZUo2QXdHVUJBeXd2Qldwd1dmMG1PNENhYzFteERMMVVFeGhS?=
- =?utf-8?B?dDJUWWk3Mi9TYVRiQjN1SGQvbXVHQ0xsWkZjTHU2MHY5U296VnZ0NWJDWG9S?=
- =?utf-8?B?bDhONVZKV1UrMCtVSndSTHIrenBVbXE5cWVXRDJVQTlkUEhzUENMSHRnaVIx?=
- =?utf-8?B?YkxkT3RBYzZ3RjZwSCs0YUJDVGc4SUtMU1BTZ0V6L0JaK3F3MDc3QUw2bG5B?=
- =?utf-8?B?QWJiaXZVZW95V24vZ085c3pINFBBemNHd3pjU0Flcm1lZVZmcXBMQzJDT0VQ?=
- =?utf-8?B?SnkwL2g1WjF4bGEzWnFMOFRBSVJkVy9GV05EcmdvU1RoZk9YdDVJNnUvS1Ux?=
- =?utf-8?B?T2dhTkNFbW9LZ2VlZzE5YUF1NExaRnEySE1RMWc3NWtaT2d4ZEt2MDhYKzl2?=
- =?utf-8?B?cjJVQ2k3SE8zQm5FM00vNUlhNDB3VTlyekNINjlPbldPMVlGSkRRLzJ2QXZV?=
- =?utf-8?B?cElZN2FhaVlWSXIzTzFyYUN4ZXFNcis3dEVPNVZDeTlpOVZoSzJ5MUlPZ0dP?=
- =?utf-8?B?dm1PUEY2S0pNdkFnYzJHc3ZXT1JkWWpaSlhKV05BVUs2elYzUzFPa3NqSVo0?=
- =?utf-8?B?VHduN05hMndMdkw5Q2dHU2I3NG40WTFnN0w4bzhJUGJlcjBXUGx4UnhyUGVu?=
- =?utf-8?B?dWg3UGVFUXcvdzlYdEJaV1FydjN4ZkhYMDBPMTQ0aXlEdWlTang4Q05Sdld2?=
- =?utf-8?B?REVxTVA1Q0RZc3Njb3N6d3VMNU5BSllCdThaZGJ2TDlrRXAyWnB6eTE2ZUJH?=
- =?utf-8?B?ekJrZVVSSGNrN0RFUlVHZCs0RWlLREQvT3U0eDlIVWMxaVMyanZQZVlIUktR?=
- =?utf-8?B?czE5ek9HSXYzMnY1M2pDUlVyQ2oyZHJLSjZlTUN1RlZvMUI2ZkFpTm1VSWQr?=
- =?utf-8?B?disrdkJ5cVFJaWthT2grVjFMcHFBemwrNms5QkZYcUVNVWI1RFg4VGo0ME5m?=
- =?utf-8?B?VDJjQjhrVE5nRjBhZ21wTExWU0VTL3VCMjZXREZxVG9CcHJabE5sWThvQnll?=
- =?utf-8?B?WTcwVTNGZU9jNGhMUGRYM0xaN1I4SkJoVWszUDJ4b3ArQVM2Vm4rdUp4c0Fo?=
- =?utf-8?B?OWJlVVRQbC9vSGVEdlZWcXRtY04xR0RiY0YvM2JTTkI4WDVDWk0rRGQzbXRK?=
- =?utf-8?B?UGFzSkZiakZMMkhER3RveU44anR3dnFLb2lORnhXVjRFMFlocTA3RU5taGl1?=
- =?utf-8?B?WWN6NzhBV2piNnB4YjNVUUVncVBTWWpLeFZlby9lcncwZCt5cTFrZm1MbUh2?=
- =?utf-8?B?c1Z2L1F2RGtsNE01Y1BtcE9yMk1CQ1I0TWk3SnpTTVJKb0psUmRyeExhVEVz?=
- =?utf-8?B?OXc0SEVYS3UrSEh1Y28vL2s0eU9xcFlxT2pKZ1hWS01iN1lnME8vZCtVUFk0?=
- =?utf-8?B?aytKcUtHVFg0QUJZSXBhNTFTeFRQTk5XaEIwb0hTNURoUTBEY1JSaUg4YUJs?=
- =?utf-8?B?NUlQL1Vqdjg0Vms1SmYvb0F6ZSthWTgwQjZHT3hISDVkVHBtc0QydEdQS0ZB?=
- =?utf-8?B?WDRqbkdnWFJJcXMrbWptY0xuT0pCUStvcUFiVnF0dFROTVQvSXkyQjRzK3Jz?=
- =?utf-8?Q?emKrVyqz8WCBBIXcbLsJ7Y4=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 200462d9-9f41-4b71-9ac5-08dac59f28c8
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB2941.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2022 17:47:40.3241
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nC/r2oN47rqIte3R543ntKPDbfMayHJA0hAT2PbefqkknHVag706a2iFKUmBvJO73HXWrSFoQ7SSKSO3q0UgGg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4171
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] staging: media: sunxi: cedrus: make vb2_ops struct
+ definition const
+Content-Language: en-US
+To:     Ian Cowan <ian@linux.cowan.aero>
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>
+References: <20221113014703.138717-1-ian@linux.cowan.aero>
+From:   Samuel Holland <samuel@sholland.org>
+In-Reply-To: <20221113014703.138717-1-ian@linux.cowan.aero>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/3/22 14:45, Melissa Wen wrote:
-> DM maps DRM CRTC degamma to DPP (pre-blending) degamma block, but DCE doesn't
-> support programmable degamma curve anywhere. Currently, a custom degamma is
-> accepted by DM but just ignored by DCE driver and degamma correction isn't
-> actually applied. There is no way to map custom degamma in DCE, therefore, DRM
-> CRTC degamma property shouldn't be enabled for DCE drivers.
+On 11/12/22 19:47, Ian Cowan wrote:
+> This cleans up a checkstyle warning where the vb2_ops struct definitions
+> should be const.
 > 
-> Signed-off-by: Melissa Wen <mwen@igalia.com>
+> Signed-off-by: Ian Cowan <ian@linux.cowan.aero>
 > ---
->   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c | 10 ++++++++--
->   1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-> index 9ac2805c5d63..b3eadfc61555 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-> @@ -415,7 +415,7 @@ int amdgpu_dm_crtc_init(struct amdgpu_display_manager *dm,
->   {
->   	struct amdgpu_crtc *acrtc = NULL;
->   	struct drm_plane *cursor_plane;
-> -
-> +	bool is_dcn;
->   	int res = -ENOMEM;
->   
->   	cursor_plane = kzalloc(sizeof(*cursor_plane), GFP_KERNEL);
-> @@ -453,8 +453,14 @@ int amdgpu_dm_crtc_init(struct amdgpu_display_manager *dm,
->   	acrtc->otg_inst = -1;
->   
->   	dm->adev->mode_info.crtcs[crtc_index] = acrtc;
-> -	drm_crtc_enable_color_mgmt(&acrtc->base, MAX_COLOR_LUT_ENTRIES,
-> +
-> +	/* Don't enable DRM CRTC degamma property for DCE since it doesn't
-> +	 * support programmable degamma anywhere.
-> +	 */
-> +	is_dcn = dm->adev->dm.dc->caps.color.dpp.dcn_arch;
-> +	drm_crtc_enable_color_mgmt(&acrtc->base, is_dcn ? MAX_COLOR_LUT_ENTRIES : 0,
->   				   true, MAX_COLOR_LUT_ENTRIES);
-> +
->   	drm_mode_crtc_set_gamma_size(&acrtc->base, MAX_COLOR_LEGACY_LUT_ENTRIES);
->   
->   	return 0;
+>  drivers/staging/media/sunxi/cedrus/cedrus_video.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi,
+Reviewed-by: Samuel Holland <samuel@sholland.org>
 
-I tested it in a DCE device and the patch lgtm.
-
-Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-
-and merged it into amd-staging-drm-next.
-
-Thanks
-Siqueira
