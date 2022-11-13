@@ -2,133 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368C6627063
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 17:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0590627024
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 16:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233401AbiKMQOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 11:14:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
+        id S235234AbiKMPHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 10:07:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiKMQN5 (ORCPT
+        with ESMTP id S232676AbiKMPH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 11:13:57 -0500
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929746356
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 08:13:55 -0800 (PST)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-13bef14ea06so10270663fac.3
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 08:13:55 -0800 (PST)
+        Sun, 13 Nov 2022 10:07:29 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641BBCE19;
+        Sun, 13 Nov 2022 07:07:27 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id a29so15424777lfj.9;
+        Sun, 13 Nov 2022 07:07:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rie3aJc2EdJufL+DgKGmAfwMS5IGiPxwZ8BE2w/f1TU=;
-        b=lK/RJQYpTTK0XTQPTPPXEm6cwO79eeuR/Svllm0NJbzcU5jjpJfnnkzu6nkzdQ89UP
-         oxE6yJW7wz8z1G8RH7r1W2LSZVreJFQ6Bpt8uhS4TFYtzeMXdLjjxDUlkXkBULOjvQAF
-         9VbpK1zis0t5LMN6bMkVQIblMI/CPegktj1+As1HPULKsbAKAADLiV3isGbaBFx5PwGz
-         Sl3SbbufEy9SK9BASDrYOLKGri87aeksqqYDcRQpm9m7njTNkGibIxBJSh8a6wOlNHxH
-         XEZlTLxtTm3VlV08vYN5XWbC5eDsJ5k/0o997xACFQd6ToFPoq1FTxPLQLRw71OJivsJ
-         VNxg==
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=umo/xdUlQSYAVDNNJIA7iJ7EdK6y2kGfWONuMRbs/TA=;
+        b=e9lTnIlyKgsqjF+MrXGgxFYkfUbeoadmoDhRaLkeApmUoQyroEV1yTWy4iBDU1GumZ
+         62VNSeshYUqjvZZbIHfhXRtyMracJ8xvEOAczV4BS+SEd1pi2iigs1dHU9Wxb7YtmCLx
+         xjGJM9yQZtIv/IbvoNb5hKb2yBGm3fJMxDNLcE68BXXRZQr1yfj5gAME1iZDEz+89it6
+         GrCDPrM3HbifmuqJMEfb3MKlY9t+1IJrgG+fqEJIVXBe424P41VyQoxGToyLhgwYCFNH
+         Syk3lZzZGTXghlpw64V8xD+ing6+wBvllMX82FHDHhzDUF7YjizxP5TBsHt7LGylUMwG
+         l97w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rie3aJc2EdJufL+DgKGmAfwMS5IGiPxwZ8BE2w/f1TU=;
-        b=wXUYw83W+dGGeqwSL+oObrAASKyPw6Kt3DkWRFaPI9MRl49AaE4y0OWPO6MpPKV9Kd
-         BWP2xGUgnM5004jBOXn55Y0BVYcGrSuvZGmUdZ1cqUvJv21d0i5+SKRC2Fgbpi6AByxc
-         EHTqJtOI+WT64bTAKgOJp1Ku0JbOCe7XGjRrPhWyLwUFiIBUl7cL19Bl9nv85+qUhlCQ
-         LpFQC/DnMHgKj6sfDdqN3sXYa6/RlTaPGQUg5lcrwfkxMuTU6hHi8CsClJCJzQX9V3Bq
-         ZPpLHzFaowLQWNuKoRiEI/mfaZUsIegYMMvSZHrmVwNZgPeBoYdmGJtcoB2yN1IDDYBv
-         N5rQ==
-X-Gm-Message-State: ANoB5plxOlBB1mH4Zzp6ZvQwrbp/UxK9Ax729o2tYYlY8H5Kco2YCcsJ
-        jVPvD4Rau3f2aJcOv34HeXGo+qgLDJPpPQ==
-X-Google-Smtp-Source: AA0mqf5q6u+2A+907zP4rxPzv2WmQbvMPCkOvpeg1RZBaTo13bdnAyTWIl8HolUgtH/YCDBFnhyvEg==
-X-Received: by 2002:a05:6870:7816:b0:135:1e5e:e71e with SMTP id hb22-20020a056870781600b001351e5ee71emr5086404oab.223.1668356034915;
-        Sun, 13 Nov 2022 08:13:54 -0800 (PST)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id y18-20020a056808061200b0034d8abf42f1sm2770068oih.23.2022.11.13.08.13.52
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=umo/xdUlQSYAVDNNJIA7iJ7EdK6y2kGfWONuMRbs/TA=;
+        b=pZrD6CxrZwzUiQpC125o/md6Y9DyUf6Uxgt6ttmV10BROj+aOwZxpMqOOsSUTI80IM
+         TYC/kZXSijkdR4m1dQK2sJ0RkWlmF1QgZ/027XhcGo/n0TLOpjbBGMxf04YCLYRzQ5gK
+         TG6y1yNEWCsjKRroNLjmPUQG6CPxz6T5u8NDmcOLMa57vgIGlZ603ZKKipy2LcS8PFXj
+         tw0xD9ajRnaMFaDV9PWsD6tK7bGpismHOBGHL5tJf5yIXjPUx7id1u2KUoEBe/V6LmVG
+         yFkx26CFpR1aLBTzVEAotT37XKnNA9NmS33xmzXPy1GqOvEO+gpdJflGXAGjQugdMV18
+         MfZg==
+X-Gm-Message-State: ANoB5pnKI1xFUhx9/HV5NAHmZMGxtAPeKfaDVvW3vWkiRapHflrVwtn8
+        LdnPSIW101AGrp2IN+ImcqU=
+X-Google-Smtp-Source: AA0mqf4TUvlSQjy+LPxsa8mUnyhfgrZ2+hMCJe8GBO7bMH6joUroCaeCl6wu7cYoNIms96wVInnnWw==
+X-Received: by 2002:a05:6512:2305:b0:4b1:8698:9f3e with SMTP id o5-20020a056512230500b004b186989f3emr2911401lfu.421.1668352045590;
+        Sun, 13 Nov 2022 07:07:25 -0800 (PST)
+Received: from localhost.localdomain (185-48-128-212.net.cybernetwmw.com. [185.48.128.212])
+        by smtp.googlemail.com with ESMTPSA id j26-20020ac2455a000000b004979ec19387sm1397753lfm.305.2022.11.13.07.07.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 08:13:54 -0800 (PST)
-Date:   Sun, 13 Nov 2022 09:13:34 -0500
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michael@walle.cc, broonie@kernel.org
-Subject: Re: [PATCH v2 4/4] gpio: i8255: Migrate to regmap API
-Message-ID: <Y3D7jipyk5L655AE@fedora>
-References: <cover.1668129763.git.william.gray@linaro.org>
- <61327a67cc308af413471a69a4810b2785e53e8e.1668129763.git.william.gray@linaro.org>
- <Y3Dol6rHduFNQT85@smile.fi.intel.com>
- <Y3D6Lji9bKeSbJaI@fedora>
+        Sun, 13 Nov 2022 07:07:25 -0800 (PST)
+From:   Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>
+X-Google-Original-From: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
+To:     Gerd Hoffmann <kraxel@redhat.com>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] udmabuf: add vmap method to udmabuf_ops
+Date:   Sun, 13 Nov 2022 16:05:11 +0100
+Message-Id: <20221113150511.8878-1-lukasz.wiecaszek@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oTGlfTqifU6OR20N"
-Content-Disposition: inline
-In-Reply-To: <Y3D6Lji9bKeSbJaI@fedora>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The reason behind that patch is associated with videobuf2 subsystem
+(or more genrally with v4l2 framework) and user created
+dma buffers (udmabuf). In some circumstances
+when dealing with V4L2_MEMORY_DMABUF buffers videobuf2 subsystem
+wants to use dma_buf_vmap() method on the attached dma buffer.
+As udmabuf does not have .vmap operation implemented,
+such dma_buf_vmap() natually fails.
 
---oTGlfTqifU6OR20N
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+videobuf2_common: [cap-000000003473b2f1] __vb2_queue_alloc: allocated 3 buffers, 1 plane(s) each
+videobuf2_common: [cap-000000003473b2f1] __prepare_dmabuf: buffer for plane 0 changed
+videobuf2_common: [cap-000000003473b2f1] __prepare_dmabuf: failed to map dmabuf for plane 0
+videobuf2_common: [cap-000000003473b2f1] __buf_prepare: buffer preparation failed: -14
 
-On Sun, Nov 13, 2022 at 09:07:42AM -0500, William Breathitt Gray wrote:
-> On Sun, Nov 13, 2022 at 02:52:39PM +0200, Andy Shevchenko wrote:
-> > On Thu, Nov 10, 2022 at 08:55:53PM -0500, William Breathitt Gray wrote:
-> > >  drivers/gpio/Kconfig            |   2 +
-> > >  drivers/gpio/gpio-104-dio-48e.c | 397 ++++++++++-------------------
-> > >  drivers/gpio/gpio-gpio-mm.c     | 151 +++--------
-> > >  drivers/gpio/gpio-i8255.c       | 429 +++++++++++-------------------=
---
-> > >  drivers/gpio/gpio-i8255.h       |  80 +++---
-> >=20
-> > Can we actually split this to a few steps:
-> >  - providing gpio-i8255-regmap
-> >  - providing gpio-mm-regmap
-> >  - converting the driver
-> >  - removing not used modules (one by one)
-> > ?
-> >=20
-> > In this case if any regression somewhere appears, we can always perform=
- a
-> > (semi-)revert for a certain driver.
->=20
-> Sure, I can split the regmap_irq migration for 104-dio-48e into a
-> separate precursor patch to reduce the amount of changes we see here and
-> provide a revert path for these IRQ changes. I can do a similar change
-> for 104-idi-48 as well.
->=20
-> The rest of the changes for 104-dio-48 and gpio-mm are essentially just
-> the regmap configurations, so the patch will be largely identical even
-> if we migrate gpio-i8255 to regmap API first before migrating again to
-> the gpio_regmap in a second patch.
+The patch itself seems to be strighforward.
+It adds implementation of .vmap method to 'struct dma_buf_ops udmabuf_ops'.
+.vmap method itself uses vm_map_ram() to map pages linearly
+into the kernel virtual address space (only if such mapping
+hasn't been created yet).
 
-Sorry, I realize now that you meant to split the i8255 gpio_regmap
-additions to their own patch, perform the driver migrations in the own
-respective patches, and then finally remove the dangling unused i8255
-functions and structures. Yes I think that would make for a cleaner
-patch series so I'll split it up that way.
+Signed-off-by: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+---
+v1: https://lore.kernel.org/linux-media/202211120352.G7WPASoP-lkp@intel.com/T/#t
 
-William Breathitt Gray
+v1 -> v2: Patch prepared and tested against 6.1.0-rc2+
 
---oTGlfTqifU6OR20N
-Content-Type: application/pgp-signature; name="signature.asc"
+ drivers/dma-buf/udmabuf.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
+index 2bcdb935a3ac..2ca0e3639360 100644
+--- a/drivers/dma-buf/udmabuf.c
++++ b/drivers/dma-buf/udmabuf.c
+@@ -12,6 +12,8 @@
+ #include <linux/slab.h>
+ #include <linux/udmabuf.h>
+ #include <linux/hugetlb.h>
++#include <linux/vmalloc.h>
++#include <linux/iosys-map.h>
+ 
+ static int list_limit = 1024;
+ module_param(list_limit, int, 0644);
+@@ -26,6 +28,7 @@ struct udmabuf {
+ 	struct page **pages;
+ 	struct sg_table *sg;
+ 	struct miscdevice *device;
++	void *vaddr;
+ };
+ 
+ static vm_fault_t udmabuf_vm_fault(struct vm_fault *vmf)
+@@ -57,6 +60,21 @@ static int mmap_udmabuf(struct dma_buf *buf, struct vm_area_struct *vma)
+ 	return 0;
+ }
+ 
++static int vmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
++{
++	struct udmabuf *ubuf = buf->priv;
++
++	if (!ubuf->vaddr) {
++		ubuf->vaddr = vm_map_ram(ubuf->pages, ubuf->pagecount, -1);
++		if (!ubuf->vaddr)
++			return -EINVAL;
++	}
++
++	iosys_map_set_vaddr(map, ubuf->vaddr);
++
++	return 0;
++}
++
+ static struct sg_table *get_sg_table(struct device *dev, struct dma_buf *buf,
+ 				     enum dma_data_direction direction)
+ {
+@@ -159,6 +177,7 @@ static const struct dma_buf_ops udmabuf_ops = {
+ 	.unmap_dma_buf	   = unmap_udmabuf,
+ 	.release	   = release_udmabuf,
+ 	.mmap		   = mmap_udmabuf,
++	.vmap		   = vmap_udmabuf,
+ 	.begin_cpu_access  = begin_cpu_udmabuf,
+ 	.end_cpu_access    = end_cpu_udmabuf,
+ };
+-- 
+2.25.1
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCY3D7jgAKCRC1SFbKvhIj
-K9xoAQChK9V3hkCewQu4U/YzHkR8KOf3J7N1Pl+9IK7YoX3TgwD+L7FDU83nXmWi
-g3MvYstO9i7FwtgWranyHbVBbcbCSwU=
-=bAac
------END PGP SIGNATURE-----
-
---oTGlfTqifU6OR20N--
