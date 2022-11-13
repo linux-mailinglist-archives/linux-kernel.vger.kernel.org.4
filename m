@@ -2,72 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD346271E6
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 20:04:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 297786271EC
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 20:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235442AbiKMTEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 14:04:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
+        id S235416AbiKMTG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 14:06:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232799AbiKMTEI (ORCPT
+        with ESMTP id S232799AbiKMTG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 14:04:08 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6453FC744;
-        Sun, 13 Nov 2022 11:04:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=xdAqZSVxm7Y0UeN6aDvnqxEcWxjFN6zP4RUdjTHboHw=; b=wdFlr+tVkBzJGfMDe+ohZSJYCR
-        7DGvlXDW43xCE/XPaCiFNbaeQ37R4sU1YoWdT8gWpTgBt5a5WeG7DYrHAO1Gf9E9Wvn3JIJ2B1ETE
-        dXgvmNku+hAnZV2dQwosLoK9tzmuoQctFInQ3RhlGHL3unlbz/dR/36fnQY5sOrBMfL4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ouIGx-002G7D-If; Sun, 13 Nov 2022 20:04:03 +0100
-Date:   Sun, 13 Nov 2022 20:04:03 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Hariprasad Kelam <hkelam@marvell.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        Sunil Kovvuri Goutham <sgoutham@marvell.com>,
-        Linu Cherian <lcherian@marvell.com>,
-        Geethasowjanya Akula <gakula@marvell.com>,
-        Jerin Jacob Kollanukkaran <jerinj@marvell.com>,
-        Subbaraya Sundeep Bhatta <sbhatta@marvell.com>
-Subject: Re: [net-next PATCH 0/9] CN10KB MAC block support
-Message-ID: <Y3E/o10wIZPMxPWa@lunn.ch>
-References: <20221112043141.13291-1-hkelam@marvell.com>
- <20221111211235.2e8f03c0@kernel.org>
- <Y2/nhhi2jGUSk7L/@lunn.ch>
- <PH0PR18MB4474E9CFE1E1FBF8EAF71817DE029@PH0PR18MB4474.namprd18.prod.outlook.com>
+        Sun, 13 Nov 2022 14:06:57 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255C3101D2;
+        Sun, 13 Nov 2022 11:06:57 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id k5so8563131pjo.5;
+        Sun, 13 Nov 2022 11:06:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dKFCQLLD24B5y6IQ/DPcV3YJ7iqEJopE8xQjjU2Dx+Q=;
+        b=W7Db21D9LySww5CNcPS7PzptT3j827cHszV4BBxC7SrucEulcWnEymvWvXpa8hJdxV
+         DrYjcHVW0TLzZWpBNetZx0TVSa9p+JWD6RJSTdJegUjINAMk+Wb25lnpcUl8N4Rwzx4+
+         A6zHUgRXn+zhL1unZXvum3mp2lFtvHKrykm8b7G5yeQYPsxIoBgLxu5KF/r3S4IBrsnu
+         q+XqlDrcX8ADzvnlNWX5qGKOgtodSplfi2L2+hf4skiL4pFmqmhBMxh1HWSRku2tVOYv
+         prWVViWhs0YvXbd8QHC7zG1FiCBGfkWBqSiYNgZEcU2CGn0ARomgjYCA6lZxQQ/SKjNV
+         CGoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dKFCQLLD24B5y6IQ/DPcV3YJ7iqEJopE8xQjjU2Dx+Q=;
+        b=0LILwbbUy3Cr3NHQpIZ+Mu0TARjoa24RGG49BNMmjFgPerrKWMCjHpmW4SMHYNew/f
+         hZpQwkPKckTbJnvOtGA/WzsmNWBBbQE+WK9sFib6r+9HizY8SjpbhYgkoG2BoJJ4ce0g
+         4/I0TWrwmqLk0wIuqWPKknO1oP34ap4APH5vX2Lg092Bu4o8AiGNQOzMPdj8CR8yJhta
+         dXJbJc1tLEPILLb2Uj5p6tQifdYzh9zJExmYhDpcOPxABrwNWyYka+ekX+r/SdwlvPP/
+         ZltcMaGXlixhX9WKvKUNbj6mwnMS6HwW2Nxlwv0FYqRw7JI70nnGE64nrQkgP0JL/ZsT
+         v6wA==
+X-Gm-Message-State: ANoB5pmTVtCzLCGEdtzpU+03lRFrWlWtGv5AgNU7txgLzCt/+/BIPe02
+        oyKOHS2CWtVHG/lurqoHtts=
+X-Google-Smtp-Source: AA0mqf43nr3OmWmU5p6xb7qKvMCKxGRun1xKLDD/CTr7qTD1YgD1/51GluXp5GywlDOMceRtysHdFw==
+X-Received: by 2002:a17:90a:1788:b0:209:853d:ec6 with SMTP id q8-20020a17090a178800b00209853d0ec6mr11079225pja.29.1668366416447;
+        Sun, 13 Nov 2022 11:06:56 -0800 (PST)
+Received: from localhost.localdomain ([14.5.161.132])
+        by smtp.gmail.com with ESMTPSA id a4-20020a170902ecc400b001869f2120a5sm5549604plh.34.2022.11.13.11.06.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Nov 2022 11:06:55 -0800 (PST)
+From:   Kang Minchul <tegongkang@gmail.com>
+To:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kang Minchul <tegongkang@gmail.com>
+Subject: [PATCH v2 0/3] libbpf: Fixed various checkpatch issues
+Date:   Mon, 14 Nov 2022 04:06:45 +0900
+Message-Id: <20221113190648.38556-1-tegongkang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR18MB4474E9CFE1E1FBF8EAF71817DE029@PH0PR18MB4474.namprd18.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> For  "Dropped packets by DMAC filters" did not find any equivalent APIs, so will keep it as is.
+This patch series contains various checkpatch fixes
+in btf.c, libbpf.c, ringbuf.c.
 
-Nope. Propose a generic netlink API, probably as an extension to
-ethtool, which other vendors can use as well.
+I know these are trivial but some issues are hard to ignore
+and I think these checkpatch issues are accumulating.
 
-This is exactly Jakub and my point. Is your hardware so special it
-does things which no other vendor does? Is the concept of DMAC filters
-dropping packets unique to your hardware? Is this feature so obscure
-that no other vendor will ever implement it? And if it is that
-obscure, is any user actually going to use it?
+v1 -> v2: changed cover letter message.
 
-	Andrew
+Kang Minchul (3):
+  libbpf: checkpatch: Fixed code alignments in btf.c
+  libbpf: Fixed various checkpatch issues in libbpf.c
+  libbpf: checkpatch: Fixed code alignments in ringbuf.c
+
+ tools/lib/bpf/btf.c     |  5 +++--
+ tools/lib/bpf/libbpf.c  | 45 +++++++++++++++++++++++++----------------
+ tools/lib/bpf/ringbuf.c |  4 ++--
+ 3 files changed, 33 insertions(+), 21 deletions(-)
+
+-- 
+2.34.1
+
