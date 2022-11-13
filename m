@@ -2,134 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100BA627266
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 21:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABE1627296
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 21:41:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbiKMUD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 15:03:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
+        id S233792AbiKMUlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 15:41:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235249AbiKMUD4 (ORCPT
+        with ESMTP id S229692AbiKMUlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 15:03:56 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A4D2BE0
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 12:03:54 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id d6so16131970lfs.10
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 12:03:54 -0800 (PST)
+        Sun, 13 Nov 2022 15:41:01 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE2413CFA
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 12:40:59 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id 5so6102858wmo.1
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 12:40:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FNZiPVV38BD+NXjcSGrGQb5Ha258QJwOowf6kKzcr/g=;
-        b=Na5gUfo3ZLiN0ZNYydgqfKfqVoPdWKCWW8ouk7+N7pD50cUGc1WD7bZTkcdQsX3Dh3
-         eZ85wjHbwYgnOPUKscwVFhn0ROpkHzo4GN47imxkesVyj6Xl1+Ol0J5VBoqcR2EZYJ7u
-         9HXPg7DsvCidpC8A67Dp7OIgoiFkhpJepdCak=
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:to:from:user-agent
+         :references:from:to:cc:subject:date:message-id:reply-to;
+        bh=smMBG8cth6Wetp8FRPQwBWABZlQNfxVO31AeOc5lUC8=;
+        b=JEVEeqze3UWXQn+koWcOG/UYGjm8nnam7/ZT1kq93GITnzz0svZPjyJjIbeGkrMhKY
+         f+wWDphZaY5X0RS6HDGXS098J6iKV3q5d4XFJkWcg5PhvCj17J+ajy4dZGFaEdM689ND
+         QppIbT6JM0Rq0184K0CBNc6QSBRlRiUv8N5C3M8C3nsqvJq5BYnl7dqvdVPwo5farIcH
+         uuYDpi7Eywn0wACmBjB5/XuilV++BSUH4cytjAAiRKsN34CigB2mEw91IM3mHWCsbsv3
+         3+uAe5prI0fFbgVE/T+Ree/+K70r1oRnx3/Ftv898mpo5twBX3cuJ4Nu0qDwc9VNX7NS
+         mTvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FNZiPVV38BD+NXjcSGrGQb5Ha258QJwOowf6kKzcr/g=;
-        b=WxCGMCIndDHIo0ICYfHqmo9lWpRYeDdMaovf1KvgnJ48QvJJWrTr0pUTiKaG+sQRcj
-         NacgcroT6tMlVEqPf4ayvXWniN8z7FqI4kShulQ4ANBfuyLQAKcN3pNdiHNor0PGw8bx
-         uYBH8kWCtyAQUZMvn9PvbjlL6UU4diQLaRgmcrjxk20IQjoo1roqiaXX3oUIUH+qPbVb
-         dRRfSijXQsV4NPMjx5u6t0YhWvKrYUIeHqIyS4YLIvXkEFryNvgdAJ+iPf/tAJwTFf8s
-         ZIwRTWx4Ghkjalj6rssNxZjJ0fzaBB36xHZgmoTT4A5jYgB25rfPSHCjS29usgw2eDhN
-         C1Fg==
-X-Gm-Message-State: ANoB5pnMlMvZt9kc/UZNauCaff8mtQLowVKCMz+O+k4etFlBHdZtfWDz
-        q6vE8Y2J5s91lRnK/3L8JSu8wA==
-X-Google-Smtp-Source: AA0mqf53XtKzUTXrYt9v/fnVnq2k1Cl513Z3Y1xcF8LydNg0MnQuZdmMxcBYU2Me5Jgdnr2ZGCM8bg==
-X-Received: by 2002:ac2:4d19:0:b0:4a6:ea05:73fe with SMTP id r25-20020ac24d19000000b004a6ea0573femr3146161lfi.181.1668369833088;
-        Sun, 13 Nov 2022 12:03:53 -0800 (PST)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id b6-20020a196706000000b004a4754c5db5sm1495332lfc.244.2022.11.13.12.03.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Nov 2022 12:03:52 -0800 (PST)
-Message-ID: <26d3b005-aa4e-66d3-32eb-568d3dfe6379@rasmusvillemoes.dk>
-Date:   Sun, 13 Nov 2022 21:03:52 +0100
+        h=mime-version:message-id:in-reply-to:date:subject:to:from:user-agent
+         :references:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=smMBG8cth6Wetp8FRPQwBWABZlQNfxVO31AeOc5lUC8=;
+        b=myepTE2+xEtNjqzWazUQ0pOmBksyUi+fQRVkPf72SvP2EPgYydD7f+LcjVsqKIxwjP
+         RxF4+/nWsWzIyIwfSIVRM8AzIvrVOtjeOiRyMxnh0E8T9f8Bsr0un9uCww/jxwMBSZFl
+         Vx90GFX2/zok76reivg6p3P//76n5QVQp5jqpWVQBGKXdC0GlYx7EAZ6KrZpMWfDzc7v
+         wlGa6ta6p5iqiR9j4BypVyFss3k37HYXbfXi0lkCT3S0zdtAgcH0WnIUpgp1ZoC4LJYD
+         /iXi0hhrdCbSX3NS5hYzSxXFFaJ3gzHTGIezYM+IsourmWozbYAa/trd5GqfxmmP8dYW
+         vrSg==
+X-Gm-Message-State: ANoB5pnLj8lroi8lOMTrHUUukWe69VxZj2tfHEkwIoPyi0eK6utaVo+T
+        UbmT2syWs7JgO0d1BOWBQsG5Zg==
+X-Google-Smtp-Source: AA0mqf6DKEqamvPE5yKKuqNWJTOSNf6Z6IDCyJRkxZBFiXxsNuUILEzLvjWteuvVbXn5OMMxZPkt0g==
+X-Received: by 2002:a7b:c00b:0:b0:3cf:a985:7692 with SMTP id c11-20020a7bc00b000000b003cfa9857692mr6261764wmb.104.1668372057473;
+        Sun, 13 Nov 2022 12:40:57 -0800 (PST)
+Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.gmail.com with ESMTPSA id u18-20020a05600c19d200b003c6f8d30e40sm17246093wmq.31.2022.11.13.12.40.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Nov 2022 12:40:56 -0800 (PST)
+References: <20221110150035.2824580-1-adeep@lexina.in>
+User-agent: mu4e 1.8.10; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Vyacheslav Bocharov <adeep@lexina.in>, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/4] arm64: amlogic: mmc: meson-gx: Add core, tx, rx
+Date:   Sun, 13 Nov 2022 21:06:44 +0100
+In-reply-to: <20221110150035.2824580-1-adeep@lexina.in>
+Message-ID: <1jk03y37vs.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] net: dsa: use NET_NAME_PREDICTABLE for user ports with
- name given in DT
-Content-Language: en-US, da
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221111161729.915233-1-linux@rasmusvillemoes.dk>
- <Y26B8NL3Rv2u/otG@lunn.ch>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <Y26B8NL3Rv2u/otG@lunn.ch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/11/2022 18.10, Andrew Lunn wrote:
->> diff --git a/net/dsa/slave.c b/net/dsa/slave.c
->> index a9fde48cffd4..dfefcc4a9ccf 100644
->> --- a/net/dsa/slave.c
->> +++ b/net/dsa/slave.c
->> @@ -2374,16 +2374,25 @@ int dsa_slave_create(struct dsa_port *port)
->>  {
->>  	struct net_device *master = dsa_port_to_master(port);
->>  	struct dsa_switch *ds = port->ds;
->> -	const char *name = port->name;
->>  	struct net_device *slave_dev;
->>  	struct dsa_slave_priv *p;
->> +	const char *name;
->> +	int assign_type;
->>  	int ret;
->>  
->>  	if (!ds->num_tx_queues)
->>  		ds->num_tx_queues = 1;
->>  
->> +	if (port->name) {
->> +		name = port->name;
->> +		assign_type = NET_NAME_PREDICTABLE;
->> +	} else {
->> +		name = "eth%d";
->> +		assign_type = NET_NAME_UNKNOWN;
->> +	}
-> 
-> I know it is a change in behaviour, but it seems like NET_NAME_ENUM
-> should be used, not NET_NAME_UNKNOWN. alloc_etherdev_mqs() uses
-> NET_NAME_ENUM.
 
-I don't really have any strong opinion on the case where we fall back to
-eth%d, as its not relevant to any board I've worked on.
+On Thu 10 Nov 2022 at 18:00, Vyacheslav Bocharov <adeep@lexina.in> wrote:
 
-> https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/netdevice.h#L42
-> says that NET_NAME_UNKNOWN does not get passed to user space, but i
-> assume NET_NAME_ENUM does. So maybe changing it would be an ABI
-> change?
+> The mmc driver use the same phase values (core - 180, tx/rx - 0) for all
+> meson64 platforms. However, some platforms (and even some boards) require
+> different values
 
-Well, the name_assign_type ABI is kind of silly. I mean, userspace knows
-that when one gets EINVAL trying to read the value, that really means
-that the value is NET_NAME_UNKNOWN. But I won't propose changing that.
+Where does it stops ? Trying to solve the instabilities of this
+IP/driver by tweaking the phase has proven to be dead-end.
 
-However, what I do propose here is obviously already an ABI change; I
-_want_ to expose more proper information in the case where the port has
-a label, and just kept the NET_NAME_UNKNOWN for the eth%d case to make
-the minimal change. But if people want to change that to NET_NAME_ENUM
-while we're here, I can certainly do that. I can't think of any real
-scenario where NET_NAME_ENUM would be treated differently than
-NET_NAME_UNKNOWN - in both cases, userspace don't know that the name can
-be trusted to be predictable.
+Soon, you'll end up tweaking these settings depending on the on
+particular version of the device because it ships with a different eMMC
+manufacturer. Then comes multi sourcing, sdio modules, sdcards ...
 
-Rasmus
+> (axg for example use 270 degree for core clock).
+
+Where ? Upstream linux does not
+
+u-boot does something of the sort for sm1 and I'm not entirely sure this
+appropriate either.
+
+IMO, this setting has more to do with the mode the mmc device is
+operating at - not the platform or board.
+
+We had some discussions with the HW designers at AML and they recommended
+to keep a phase shift of 180 between the Core and Tx. They also
+recommended to leave Rx alone (actually, starting from the v3, the Rx
+field has no effect. It is not even wired to actual HW)
+
+Funnily, that is not what the vendor driver does. It also does A LOT of
+extremely complex and 'debatable' things, which mostly mask how much the
+driver is unstable.
+
+With the upstream drivers, modes up to SDR50 and HS200 have been stable
+lately. SDR104 and DDR modes (DDR52 or HS400) remains problematic.
+
+Changing the settings further would require more discussion with AML.
+Blindly poking these value until you get something stablish for 1
+particular use case is a recipe for disaster.
+
+> This patch
+> transfers the values from the code to the variables in the device-tree files.
+> If not set in dts, use old default values.
+
+I think going that way is opening a big can of worms. 
+I don't think this should be applied
+
+>
+> Vyacheslav Bocharov (4):
+>   arm64: amlogic: mmc: meson-gx: Add core, tx, rx eMMC/SD/SDIO phase
+>     clock settings from devicetree data
+>   arm64: amlogic: mmc: meson-gx: Add dts binding include for core, tx,
+>     rx eMMC/SD/SDIO phase clock settings from devicetree data
+>   arm64: amlogic: dts: meson: update meson-axg device-tree for new core,
+>     tx, rx phase clock settings.
+>   arm64: dts: docs: Update mmc meson-gx documentation for new config
+>     option amlogic,mmc-phase
+>
+>  .../bindings/mmc/amlogic,meson-gx.txt         |  7 ++++
+>  arch/arm64/boot/dts/amlogic/meson-axg.dtsi    |  3 ++
+>  drivers/mmc/host/meson-gx-mmc.c               | 18 +++++++---
+>  include/dt-bindings/mmc/meson-gx-mmc.h        | 35 +++++++++++++++++++
+>  4 files changed, 58 insertions(+), 5 deletions(-)
+>  create mode 100644 include/dt-bindings/mmc/meson-gx-mmc.h
 
