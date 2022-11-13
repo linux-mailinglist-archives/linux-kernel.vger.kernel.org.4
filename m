@@ -2,122 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C43856272C4
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 22:48:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E73796272C6
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 22:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233793AbiKMVsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 16:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48444 "EHLO
+        id S235014AbiKMVsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 16:48:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiKMVsC (ORCPT
+        with ESMTP id S229692AbiKMVsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 16:48:02 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E81EA46D;
-        Sun, 13 Nov 2022 13:48:00 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Sun, 13 Nov 2022 16:48:43 -0500
+Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CF5DF78;
+        Sun, 13 Nov 2022 13:48:42 -0800 (PST)
+Received: from mailpool-fe-02.fibernetics.ca (mailpool-fe-02.fibernetics.ca [208.85.217.145])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N9QzG61VSz4xTg;
-        Mon, 14 Nov 2022 08:47:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668376075;
-        bh=HD4U+AnCjj8okPsdz3mGTeIJ6mN+zeD+duUB1sBCRnY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VcSIrR1u5CRDVzBxONeiB/XMooVlr+eXOadVppIPau5sSqZ3ZgP+5vLuJd5gZMWry
-         hWXitxnGzvYsQLvxLp3FEKqKSBOcV0H8k/cmOZ9VY5k8AHrACFFu2uNjd6eCZcdkAA
-         Ef+803jiSN/xGswITyF1IJ7pWqy1oapW9ZjjUvqbkSvnwt4GCuxzLqktNkqk39dLpy
-         G5ydVxzMx1wK5LqFtdM39NOYP+mDnCI4X8WzRbXvFqRy0hk6kPFOLkAlPjDIt3QgGJ
-         Qfi5gLrU9sG78gREgbQU9EKoSoe3f3xlo5qYQZaucrdxU/BQrUc4YflZZWlI8b+cxp
-         leYTZm5JkuLsw==
-Date:   Mon, 14 Nov 2022 08:47:38 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Colin Cross <ccross@android.com>, Olof Johansson <olof@lixom.net>,
-        Thierry Reding <treding@nvidia.com>,
-        Andy Gross <agross@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the tegra tree with the qcom tree
-Message-ID: <20221114084738.73dff88c@canb.auug.org.au>
+        by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id 3D6BA70E15;
+        Sun, 13 Nov 2022 21:48:40 +0000 (UTC)
+Received: from localhost (mailpool-mx-02.fibernetics.ca [208.85.217.141])
+        by mailpool-fe-02.fibernetics.ca (Postfix) with ESMTP id 28E9C60905;
+        Sun, 13 Nov 2022 21:48:40 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at 
+X-Spam-Score: -0.2
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: from mailpool-fe-02.fibernetics.ca ([208.85.217.145])
+        by localhost (mail-mx-02.fibernetics.ca [208.85.217.141]) (amavisd-new, port 10024)
+        with ESMTP id bPeFWq1A6s5V; Sun, 13 Nov 2022 21:48:39 +0000 (UTC)
+Received: from [192.168.5.47] (bras-base-toroon0409w-grc-44-184-147-168-78.dsl.bell.ca [184.147.168.78])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dgilbert@interlog.com)
+        by mail.ca.inter.net (Postfix) with ESMTPSA id 1A57860112;
+        Sun, 13 Nov 2022 21:48:38 +0000 (UTC)
+Message-ID: <58472d12-c1e4-59f3-bb37-a98db17ef2ba@interlog.com>
+Date:   Sun, 13 Nov 2022 16:48:35 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/94cGf1R+CEazeycav7fvaT9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Reply-To: dgilbert@interlog.com
+Subject: Re: [RFC PATCH 0/5] scsi:scsi_debug:Add error injection for single
+ lun
+To:     Wenchao Hao <haowenchao@huawei.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221109155950.3536976-1-haowenchao@huawei.com>
+Content-Language: en-CA
+From:   Douglas Gilbert <dgilbert@interlog.com>
+In-Reply-To: <20221109155950.3536976-1-haowenchao@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/94cGf1R+CEazeycav7fvaT9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2022-11-09 10:59, Wenchao Hao wrote:
+> The original error injection mechanism was based on scsi_host which
+> could not inject fault for a single SCSI device.
+> 
+> This patchset provides the ability to inject errors for a single
+> SCSI device. Now we supports inject timeout errors, queuecommand
+> errors, and hostbyte, driverbyte, statusbyte, and sense data for
+> specific SCSI Command
+> 
+> The first patch add an sysfs interface to add and inquiry single
+> device's error injection info; the second patch defined how to remove
+> an injection which has been added. The following 3 patches use the
+> injection info and generate the related error type.
+> 
+> Wenchao Hao (5):
+>    scsi:scsi_debug: Add sysfs interface to manager single devices' error inject
+>    scsi:scsi_debug: Add interface to remove injection which has been added
+>    scsi:scsi_debug: make command timeout if timeout error is injected
+>    scsi:scsi_debug: Return failed value for specific command's queuecommand
+>    scsi:scsi_debug: fail specific scsi command with result and sense data
+> 
+>   drivers/scsi/scsi_debug.c | 295 ++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 295 insertions(+)
 
-Hi all,
+Hi,
+This patchset seems to assume all scsi_debug devices will be disk (-like) SCSI
+devices. That leaves out other device types: tapes, enclosures, WLUNs, etc.
 
-Today's linux-next merge of the tegra tree got a conflict in:
+Have you considered putting these device specific additions under:
+    /sys/class/scsi_device/<hctl>/device/error_inject/
+instead of
+    /sys/block/sdb/device/error_inject/
 
-  arch/arm64/configs/defconfig
+?
 
-between commit:
+Doug Gilbert
 
-  c03fa428ac6e ("arm64: defconfig: build-in Qualcomm SC7180 and SM8450 inte=
-rconnects")
 
-from the qcom tree and commit:
 
-  b4c8adc40f49 ("arm64: defconfig: Enable HTE config")
-
-from the tegra tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/arm64/configs/defconfig
-index f910ccaaecf9,9ccc82e180c7..000000000000
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@@ -1312,7 -1310,10 +1316,10 @@@ CONFIG_INTERCONNECT_QCOM_SDM845=3D
-  CONFIG_INTERCONNECT_QCOM_SM8150=3Dm
-  CONFIG_INTERCONNECT_QCOM_SM8250=3Dm
-  CONFIG_INTERCONNECT_QCOM_SM8350=3Dm
- -CONFIG_INTERCONNECT_QCOM_SM8450=3Dm
- +CONFIG_INTERCONNECT_QCOM_SM8450=3Dy
-+ CONFIG_HTE=3Dy
-+ CONFIG_HTE_TEGRA194=3Dy
-+ CONFIG_HTE_TEGRA194_TEST=3Dm
-  CONFIG_EXT2_FS=3Dy
-  CONFIG_EXT3_FS=3Dy
-  CONFIG_EXT4_FS_POSIX_ACL=3Dy
-
---Sig_/94cGf1R+CEazeycav7fvaT9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNxZfoACgkQAVBC80lX
-0GwlMQf+OKbgwgXx3fLEhv137PCtFciV1b/T3tvAyDI7NUjyekObn+FC1KFqU+yl
-NeHK0RNjrR48bfzrjz8Qpu21KNUuAp4wQaEiBsNRBXZWwRgdp38XDmgMo6r1vq35
-TW2CdebOTddCfv4wUhx+sKPtCnOgCwtzAvjf/SBQzBUEXp4b9s9uvUwZ61xLAc/6
-+3LLnD04R4L5dzFNim7XiiN/gjiymGJWpx9tDStbkJ87MTVjLrgJ86BKy0OcX4Z0
-cxTHWZhNukcJIgr14bFNVC/Xnucz0/E+IcoioBd8uAxTW9tubmCIn5IRlWttdBOY
-i3D5PQ+ZlDvKaC1lCfFv2o+VJrQgFQ==
-=Zxqf
------END PGP SIGNATURE-----
-
---Sig_/94cGf1R+CEazeycav7fvaT9--
