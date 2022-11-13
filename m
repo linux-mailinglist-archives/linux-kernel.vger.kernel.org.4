@@ -2,130 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A60626FA2
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 14:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3BF626FA4
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 14:08:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235318AbiKMNH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 08:07:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
+        id S235329AbiKMNIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 08:08:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233794AbiKMNH4 (ORCPT
+        with ESMTP id S233794AbiKMNIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 08:07:56 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EBD2DE4;
-        Sun, 13 Nov 2022 05:07:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668344875; x=1699880875;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6w4/HuZSKBn1ULdEYMPCcnr1BIe4XuqcxBf8rpKCE70=;
-  b=S3HyHrzJ4AW5+pz7+nudTwCvRMWhAwb4QU5rZJsy/OmQyQAAy9PDn2ES
-   NiG0ypPE7llyPB3jE15f5MsONUez41nnk2I6Jlhgo7At6z8SsWfI6SlB3
-   +KR906Ni6TgAm2sRwpta5jA+rvhSdMA42yu1LimmXm+l4SKo9yF30RCis
-   FrsFwgQmaFA/FBBqByRLnfd5QAO9txfbIVlJe637VfAFAV/hwoqfH22gH
-   gMLSMozHr6vhGjj5zQh5RKy81ZOMDP31ME9O3fXEoRWm1H+y74hAleVWW
-   J9yLpzowi0gGQ+Y05pFs7YlYzGpIet994r729akVCLvFxb5oND5rsRf2U
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="310519815"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="310519815"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 05:07:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="638120509"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="638120509"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 13 Nov 2022 05:07:52 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ouCiF-00BgY5-10;
-        Sun, 13 Nov 2022 15:07:51 +0200
-Date:   Sun, 13 Nov 2022 15:07:50 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        Sun, 13 Nov 2022 08:08:46 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAE66451
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 05:08:44 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id a7-20020a056830008700b0066c82848060so5278163oto.4
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 05:08:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zyETYDiRN3VplmbENm82U2H3FCfTggZYLpOpQqSk3NE=;
+        b=cIQBkZ6n8OcicnSebegRPdcOnfQdOIpwaqsw4zQcmRNIcyrZsAYJ5gkwO7Ib7QsC5T
+         JGmSSAnoRIkOHcUnFuZabglwSnks7TdzHCMQPoRI0mtYhcGe8NdPHPMruw18+1lPcEht
+         bvWBCTZcMxB/3YVDfqVTLpw8kBgBUPlNCOUNGmuG8lCVQwEo4XT3LG1WONOUiOwd4XGF
+         1hBk3t9IgNoiwTYo1IMt/DDxiXHupTvMniix2/lv4fybpmL6EigPKgo5oMV5XR+K6fB0
+         w2Zsnowbydj/WfBr1qyPIuVcpeMecU/zIPfS98KpQKMolKZ9qbUDQoqNpvLHT6imB3II
+         V3GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zyETYDiRN3VplmbENm82U2H3FCfTggZYLpOpQqSk3NE=;
+        b=HLrkFhXRvBG88EVvhk3lmZtLJUBWR6OzIEmatI5JzwziGyEC5r+tl0+BZXwEl6o736
+         7Fx0VlzdlqRpjN/pqY6g1efy4fiWEqf4Y8H2n8Mx0svCFGTgqBJ8BjslLLF8Bkg6GLKX
+         S/w+aC5J62r8er1btlJCBKTssmL35LzgW9ojxDhc83bXWbrHm9EiJilF0FERfcSJQSgM
+         U+dsdVRh6cYPWcKvCvs9XAnba0pSOVRa2TskPHFL+vlC5KhPv1gxg8sBQ9QW8j792nlo
+         JKMtlQ2dnH1lo0VirNg6+ct8wWv7bsKNv5FuAA/9Y4mFphaPiFA6LZ2N+ohuwJ0SmN8r
+         hABQ==
+X-Gm-Message-State: ANoB5pnTP/nXdBDL8sq99oSr4EV0tJeQXDW/gQwy5Q/IjxT7wzsepHXu
+        1LvC1zP6hFpdcLXmgHLDpvAWsA==
+X-Google-Smtp-Source: AA0mqf6+2/Kf1TS6UmIUGlAGSdFVvvwScfE4w+pqp9KJrFRimpQq2T3rPLgyXgCr4sJ2ukjHhyK7hw==
+X-Received: by 2002:a05:6830:1657:b0:66c:7856:3f72 with SMTP id h23-20020a056830165700b0066c78563f72mr4607019otr.136.1668344924170;
+        Sun, 13 Nov 2022 05:08:44 -0800 (PST)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id h24-20020a9d6f98000000b00661b46cc26bsm3038805otq.9.2022.11.13.05.08.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Nov 2022 05:08:43 -0800 (PST)
+Date:   Sun, 13 Nov 2022 08:08:40 -0500
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
         linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v4 5/6] gpiolib: consolidate GPIO lookups
-Message-ID: <Y3DsJubv/t0nDCa7@smile.fi.intel.com>
-References: <20221031-gpiolib-swnode-v4-0-6c1671890027@gmail.com>
- <20221031-gpiolib-swnode-v4-5-6c1671890027@gmail.com>
+        michael@walle.cc, broonie@kernel.org
+Subject: Re: [PATCH v2 2/4] regmap-irq: Add handle_mask_sync() callback
+Message-ID: <Y3DsWFQfE3Ov8s2t@fedora>
+References: <cover.1668129763.git.william.gray@linaro.org>
+ <53e9e89cc9d7e9c20cbdfc13b360dcb43d07f832.1668129763.git.william.gray@linaro.org>
+ <Y3DmSfdG9ZeV8inu@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DjtPv7CPbqyv+G/s"
 Content-Disposition: inline
-In-Reply-To: <20221031-gpiolib-swnode-v4-5-6c1671890027@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y3DmSfdG9ZeV8inu@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 02:19:07PM -0800, Dmitry Torokhov wrote:
-> Ensure that all paths to obtain/look up GPIOD from generic
-> consumer-visible APIs go through the new gpiod_find_and_request()
-> helper, so that we can easily extend it with support for new firmware
-> mechanisms.
-> 
-> The only exception is OF-specific [devm_]gpiod_get_from_of_node() API
-> that is still being used by a couple of drivers and will be removed as
-> soon as patches converting them to use generic fwnode/device APIs are
-> accepted.
 
-...
+--DjtPv7CPbqyv+G/s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +static struct gpio_desc *gpiod_find_and_request(struct device *consumer,
-> +						struct fwnode_handle *fwnode,
-> +						const char *con_id,
-> +						unsigned int idx,
-> +						enum gpiod_flags flags,
-> +						const char *label,
-> +						bool platform_lookup_allowed)
-> +{
-> +	struct gpio_desc *desc = ERR_PTR(-ENOENT);
-> +	unsigned long lookupflags;
-> +	int ret;
+On Sun, Nov 13, 2022 at 02:42:49PM +0200, Andy Shevchenko wrote:
+> On Thu, Nov 10, 2022 at 08:55:51PM -0500, William Breathitt Gray wrote:
+> > Provide a public callback handle_mask_sync() that drivers can use when
+> > they have more complex IRQ masking logic. The default implementation is
+> > regmap_irq_handle_mask_sync(), used if the chip doesn't provide its own
+> > callback.
+>=20
+> ...
+>=20
+> > + * @handle_mask_sync: Callback used to handle IRQ mask syncs. The inde=
+x will be
+> > + *		      in the range [0, num_regs[
+>=20
+> Not sure if it's a typo ([ vs. ]), but if you want to say "not including =
+the
+> last", use mathematical notation, i.e. "[0, num_regs)".
 
-> +	if (!IS_ERR_OR_NULL(fwnode))
+I was following the convention used in the @get_irq_reg description, but
+I agree that mathematical notation would be much clearer.
 
-Just for the record. I haven't given my tag to this patch, because I think that
-the above check (and respective assignment above) are redundant. Even comment
-inside the below condition clarifies the point of the meaning of descriptor
-being not found. Besides that many of device property APIs designed the way
-that input fwnode can be invalid.
+William Breathitt Gray
 
-Nevertheless, we agreed with Dmitry that this disagreement should be solved on
-maintainer's level, while it doesn't affect code functionality.
+--DjtPv7CPbqyv+G/s
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The rest of the patch is fine.
+-----BEGIN PGP SIGNATURE-----
 
-> +		desc = gpiod_find_by_fwnode(fwnode, consumer, con_id, idx,
-> +					    &flags, &lookupflags);
-> +
-> +	if (gpiod_not_found(desc) && platform_lookup_allowed) {
-> +		/*
-> +		 * Either we are not using DT or ACPI, or their lookup did not
-> +		 * return a result. In that case, use platform lookup as a
-> +		 * fallback.
-> +		 */
-> +		dev_dbg(consumer, "using lookup tables for GPIO lookup\n");
-> +		desc = gpiod_find(consumer, con_id, idx, &lookupflags);
-> +	}
-> +
-> +	if (IS_ERR(desc)) {
-> +		dev_dbg(consumer, "No GPIO consumer %s found\n", con_id);
-> +		return desc;
-> +	}
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCY3DsWAAKCRC1SFbKvhIj
+K4pEAP4rJRoPAf6w7qKx+kurONAPY+V/0kAEK9c54tLiSI0OVwD7B1Aa7Py2Mn4V
+L7q5JQ0WfEulvWDyG9ctH9E81MOV0AM=
+=liqQ
+-----END PGP SIGNATURE-----
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--DjtPv7CPbqyv+G/s--
