@@ -2,104 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90287627390
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 00:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51596627394
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 00:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235452AbiKMXoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 18:44:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
+        id S235476AbiKMXqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 18:46:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiKMXoR (ORCPT
+        with ESMTP id S230525AbiKMXqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 18:44:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49F2EAF;
-        Sun, 13 Nov 2022 15:44:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 13 Nov 2022 18:46:39 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282CBEAF;
+        Sun, 13 Nov 2022 15:46:38 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B06BE60DE2;
-        Sun, 13 Nov 2022 23:44:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77EF9C433B5;
-        Sun, 13 Nov 2022 23:44:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668383055;
-        bh=LoWCb3lNyJ4hJnSzs3SkHUb0L90gwz2LPeVQQzyt9xg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OdcYn3Y4o07Q0rQZk0bdOGeLqiWE/K+pGGr/a4JRvy3QoDRJrtbwzEe6XQL1zI5/1
-         hpm+4swzpvVby42b7sCdmRPO32IdIy996vH7qflYIS7hp27Q8PKrPGqS+9KRAbWJT4
-         WrO2BDTS4ygusIaePN+6/kmyvyZ/J0B6GsS2NkdmiNZeLJSy5Tz2yoWeim8/IujjhG
-         IOb0e2d7kiojRlIxC+/v8woutyshA8um3EXmDzb6h/pwPtGmiGt00Ky8qwZIjL+ULP
-         oe6TSiWU0/caz8ZV4gS/vQfbdmx5THKPkLgOW8Vzwn6XBjx5uzOLS+zPPD7SeE80Q8
-         enT7FcO9wE+DA==
-Date:   Sun, 13 Nov 2022 15:44:12 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, jejb@linux.ibm.com,
-        Kees Cook <keescook@chromium.org>, dlunev@google.com,
-        zohar@linux.ibm.com, Matthew Garrett <mgarrett@aurora.tech>,
-        jarkko@kernel.org, linux-pm@vger.kernel.org,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v5 09/11] PM: hibernate: Mix user key in encrypted
- hibernate
-Message-ID: <Y3GBTCwcRcI0oGQO@sol.localdomain>
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.9.I87952411cf83f2199ff7a4cc8c828d357b8c8ce3@changeid>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N9TcC1KJNz4x1V;
+        Mon, 14 Nov 2022 10:46:35 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668383196;
+        bh=p9cwpJgX7TeFvxg8QIGt1dTdDdRe10v7vFZ2y90vuDE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=I0xFcgKAjNfAM+idvtTyKbowjW1pDEnKaBOn3YeTpO/Czwe11EbNmuDkF8N1xiAvl
+         ltWsIevL+XtgjziYN2+c00WSmu7xruBxmKy2B6kQ14+XGpi3BkLl++1UhWZqCtjgeJ
+         HCZ9eVe1YlSARgqV922MOtgJwE3KPuvWvlkZWyt1OiCsetrc3go3wY/ZCNc2BDpob/
+         hXFWTtmT1pe1VQcoEr+Fn7D3007OZY6gWkHbT8/1JZxcoDsLoyssAYQlS89a4a44HT
+         hbxfzZNWbsiVrUzXXejs3p8bXEFMXRk1UammIvTAWKC1vsNAF5VymRmbUwZYdqMIfg
+         pmBOMPBh05Wgw==
+Date:   Mon, 14 Nov 2022 10:46:33 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>
+Subject: linux-next: manual merge of the modules tree with the net-next tree
+Message-ID: <20221114104633.4961d175@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111151451.v5.9.I87952411cf83f2199ff7a4cc8c828d357b8c8ce3@changeid>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/bq2TEQpZj0Py2YhvVmkgUAU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 03:16:34PM -0800, Evan Green wrote:
-> Limiting this to the data portion allows the kernel to receive the page
-> map and prepare its giant allocation even if this user key is not yet
-> available (ie the user has not yet finished typing in their password).
+--Sig_/bq2TEQpZj0Py2YhvVmkgUAU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-What is meant by the "data portion"?
+Hi all,
 
-> +int snapshot_set_user_key(struct snapshot_data *data,
-> +	struct uswsusp_user_key __user *key)
-> +{
-> +	struct uswsusp_user_key user_key;
-> +	unsigned int key_len;
-> +	int rc;
-> +	loff_t size;
-> +
-> +	/*
-> +	 * Return the metadata size, the number of bytes that can be fed in before
-> +	 * the user data key is needed at resume time.
-> +	 */
-> +	size = snapshot_get_meta_data_size();
-> +	rc = put_user(size, &key->meta_size);
-> +	if (rc)
-> +		return rc;
-> +
-> +	rc = copy_from_user(&user_key, key, sizeof(struct uswsusp_user_key));
-> +	if (rc)
-> +		return rc;
+Today's linux-next merge of the modules tree got conflicts in:
 
-This isn't correctly checking the return value of copy_from_user().
+  include/linux/module.h
+  kernel/module/kallsyms.c
 
-> +
-> +	BUILD_BUG_ON(sizeof(data->user_key) < sizeof(user_key.key));
-> +
-> +	key_len = min_t(__u32, user_key.key_len, sizeof(data->user_key));
-> +	if (key_len < 8)
-> +		return -EINVAL;
+between commit:
 
-Shouldn't -EINVAL also be returned if key_len is too large?
+  73feb8d5fa3b ("kallsyms: Make module_kallsyms_on_each_symbol generally av=
+ailable")
 
-- Eric
+from the net-next tree and commit:
+
+  90de88426f3c ("livepatch: Improve the search performance of module_kallsy=
+ms_on_each_symbol()")
+
+from the modules tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/module.h
+index 35876e89eb93,3b312a1fcf59..000000000000
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@@ -879,17 -878,8 +878,17 @@@ static inline bool module_sig_ok(struc
+  }
+  #endif	/* CONFIG_MODULE_SIG */
+ =20
+ +#if defined(CONFIG_MODULES) && defined(CONFIG_KALLSYMS)
+- int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+- 					     struct module *, unsigned long),
++ int module_kallsyms_on_each_symbol(const char *modname,
++ 				   int (*fn)(void *, const char *, unsigned long),
+  				   void *data);
+ +#else
+- static inline int module_kallsyms_on_each_symbol(int (*fn)(void *, const =
+char *,
+- 						 struct module *, unsigned long),
+- 						 void *data)
+++static inline int module_kallsyms_on_each_symbol(const char *modname,
+++						 int (*fn)(void *, const char *, unsigned long),
+++						 void *data);
+ +{
+ +	return -EOPNOTSUPP;
+ +}
+ +#endif  /* CONFIG_MODULES && CONFIG_KALLSYMS */
+ =20
+  #endif /* _LINUX_MODULE_H */
+diff --cc kernel/module/kallsyms.c
+index 4523f99b0358,329cef573675..000000000000
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@@ -494,8 -494,9 +494,8 @@@ unsigned long module_kallsyms_lookup_na
+  	return ret;
+  }
+ =20
+- int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+- 					     struct module *, unsigned long),
+ -#ifdef CONFIG_LIVEPATCH
++ int module_kallsyms_on_each_symbol(const char *modname,
++ 				   int (*fn)(void *, const char *, unsigned long),
+  				   void *data)
+  {
+  	struct module *mod;
+
+--Sig_/bq2TEQpZj0Py2YhvVmkgUAU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNxgdkACgkQAVBC80lX
+0GzG4wf/TSAkdLTYlfJm3PL0crKjP0MFUpbC7F0GvWio0p52eC6XDkKub2dGpUIQ
+ua54ZzLlXu5emhODl1doR9flyYe2Gj/nBa6KUTsZ4XTj9L2UFlxLZKw/Cbhudjxk
+6Qpr6i8Ho7ob1aaGqBvZnf4wS3CNJ9xMA7PLZWThIOdt36H3Ynl2oTBnFDRBt3TZ
+zz9819TTJJEfJTodkFDKAf05sF7DiOL7lWlaRaIVuQDzt1RvsGixgQgmw+pmeOAV
+j4UF91nEzK21WyKatEcVNhq3aR+O/u7LIrliUAQJs1tPOuLXkFUpGoxgOW8McGNz
+O1k1kLVI3mmQC7PwCRQehV15AykTQQ==
+=mYNi
+-----END PGP SIGNATURE-----
+
+--Sig_/bq2TEQpZj0Py2YhvVmkgUAU--
