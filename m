@@ -2,178 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 996F26273A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 00:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8604F6273A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 00:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235529AbiKMXxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 18:53:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
+        id S235541AbiKMX5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 18:57:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiKMXxr (ORCPT
+        with ESMTP id S235539AbiKMX53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 18:53:47 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E476965C6;
-        Sun, 13 Nov 2022 15:53:45 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668383623;
+        Sun, 13 Nov 2022 18:57:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7913A65C6
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 15:56:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668383794;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=usu1Jbl/QfHlQ4fwbl7hFFCitKurN4NTivq3m52aG2s=;
-        b=ymtWyICczNuomXRJQ/Q/kZ87F4kDt4okvuIclCOx4AT1zQPD2qJ/nPgRwvKzrzKDgC46lr
-        coSENk6hS0q1APGUuXwq3xuKJTnr/XBD6O11HN0A5DTT1ygR3wErmWL1pMAv6XXGXiPLdF
-        WjySVV1KwVve19jxWBfdsjJZUgcfcV/93iO3sjCUk+Wvie5rj6nkUpTPh8gam4Ma9VtRdw
-        cHa7dGRZ2MliXuIptYx/TmiBIsdlYXjWpYDQUHq5ZNWQfmZncrdCwGU6GVxCZ/Kpuav/mW
-        BsLx7HCYBGLihMYvxpl0kspBuvKj1wZ6Qt5YocQLPY/PStlQpRnKiN/fyt2zMA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668383623;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=usu1Jbl/QfHlQ4fwbl7hFFCitKurN4NTivq3m52aG2s=;
-        b=+UXbGF8aBfdcAUFCu9uPwKTjI17fHs8XYFAuvvZSfD91Z+RtzQLH9SuawluCjv0+fXJWKL
-        hBoPHg0WDViTfiBA==
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Sven van Ashbrook <svenva@chromium.org>,
-        Rafael J Wysocki <rafael@kernel.org>,
-        linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        John Stultz <jstultz@google.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        rrangel@chromium.org, Rajat Jain <rajatja@google.com>,
-        David E Box <david.e.box@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [RFC v2 1/3] PM: Add a sysfs files to represent sleep duration
-In-Reply-To: <20221110064723.8882-2-mario.limonciello@amd.com>
-References: <20221110064723.8882-1-mario.limonciello@amd.com>
- <20221110064723.8882-2-mario.limonciello@amd.com>
-Date:   Mon, 14 Nov 2022 00:53:42 +0100
-Message-ID: <871qq6tnqx.ffs@tglx>
+        bh=EZbvZ1avvMufEpFcdH/nIpwHKdM0wHX6sD3CBlfSiEs=;
+        b=Iq/QnngSGIGZkxR0hVbMJ+16SSb60g8qz04QJqNIqTtQ96gh5PATwaIGZbBCkFlG3mJDZE
+        IFBLk30vyF+vVKCWQjmGnkfGoA6YT/EmQvUI9xdp/Lp2JldiuH1tieJ7x1B+FJzd3+E+jA
+        gIArL72CGse5CKXyoihfGEaA3V5dbho=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-615-AhaoIhLGMh26HFrKyiJ18Q-1; Sun, 13 Nov 2022 18:56:33 -0500
+X-MC-Unique: AhaoIhLGMh26HFrKyiJ18Q-1
+Received: by mail-qk1-f198.google.com with SMTP id u5-20020a05620a0c4500b006fb30780443so7583356qki.22
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 15:56:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EZbvZ1avvMufEpFcdH/nIpwHKdM0wHX6sD3CBlfSiEs=;
+        b=PExgr40ipn0IP+VjJx16/LjFOZdwlMhH1MHL4/vmFYoGNrnZyxObUv35OHeX5GH202
+         Mn/wVvgwboEtvGIIUNjoIbxVHfb0WmIDeftiU+n8zpb2lQWBnztBVrKuQHUHp0hph+Sq
+         Pe12BAhXI27RAWYukfEoPBNGpgKK1ZQBZdx7i+rNbtKAPfxWS7ZIwMpKINW+ybRbmwvK
+         QYBM6OkDiIly1maG1z6wXKKZxH6TCa5BU4r5B8T58p9QQivKW+t+hsGTZK5bx2KJZUME
+         2SRklbc1ZEhCCR81cs6bEsP2gFUMUURw0ymPq4h5ZejOJuVLQPUhz+Ic2DgHXRVxthip
+         lO5A==
+X-Gm-Message-State: ANoB5pkz42K06ZkFGlK/Arn6xF9QvxfwLgGMt2bseWO+ll2IgPOq0KiZ
+        XxvnsRckw/xY6tawWl4aokDe4CLZJjCQ86EglEkzybyR0nB/HhHGVlxe5p8jrtoJ/QkSxoISaut
+        U/9HAPOuz1onOeuqDdTIRegRj
+X-Received: by 2002:ae9:c10c:0:b0:6fa:3cb1:da73 with SMTP id z12-20020ae9c10c000000b006fa3cb1da73mr9400840qki.175.1668383792777;
+        Sun, 13 Nov 2022 15:56:32 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6EsFagGxYt6hjzxI1lLzrGvIO37GXjcoHtfxyk0egSnoJxB+naPS2mbwEdZSVGxZw83Gaq9A==
+X-Received: by 2002:ae9:c10c:0:b0:6fa:3cb1:da73 with SMTP id z12-20020ae9c10c000000b006fa3cb1da73mr9400831qki.175.1668383792546;
+        Sun, 13 Nov 2022 15:56:32 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id b18-20020ac87552000000b003a5d7b54894sm2781261qtr.31.2022.11.13.15.56.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Nov 2022 15:56:31 -0800 (PST)
+Date:   Sun, 13 Nov 2022 18:56:30 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Alistair Popple <apopple@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ives van Hoorne <ives@codesandbox.io>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mm/migrate: Fix read-only page got writable when
+ recover pte
+Message-ID: <Y3GELocAJ+p+gKpc@x1n>
+References: <20221110203132.1498183-1-peterx@redhat.com>
+ <20221110203132.1498183-2-peterx@redhat.com>
+ <87tu36icej.fsf@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,TVD_PH_BODY_ACCOUNTS_PRE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87tu36icej.fsf@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10 2022 at 00:47, Mario Limonciello wrote:
+On Fri, Nov 11, 2022 at 10:42:13AM +1100, Alistair Popple wrote:
+> Hi Peter, for the patch feel free to add:
+> 
+> Reviewed-by: Alistair Popple <apopple@nvidia.com>
 
-'Add a sysfs files'?
+Will do, thanks.
 
-Can you please decide whether that's 'a file' or 'multiple files'?
+> 
+> I did wonder if this should be backported further for migrate_vma as
+> well given that a migration failure there might lead a shmem read-only
+> PTE to become read-write. I couldn't think of an obvious reason why that
+> would cause an actual problem though.
+> 
+> I think folio_mkclean() will wrprotect the pte for writeback to swap,
+> but it holds the page lock which prevents migrate_vma installing
+> migration entries in the first place.
+> 
+> I suppose there is a small window there because migrate_vma will unlock
+> the page before removing the migration entries. So to be safe we could
+> consider going back to 8763cb45ab96 ("mm/migrate: new memory migration
+> helper for use with device memory") but I doubt in practice it's a real
+> problem.
 
-> Both AMD and Intel SoCs have a concept of reporting whether the hardware
-> reached a hardware sleep state over s2idle as well as how much
-> time was spent in such a state.
+IIRC migrate_vma API only supports anonymous memory, then it's not
+affected by this issue?
 
-Nice, but ...
+One thing reminded me is I thought mprotect could be affected but I think
+it's actually not, because mprotect is vma-based, and that should always be
+fine with current mk_pte().  I'll remove the paragraph on mprotect in the
+commit message; that could be slightly misleading.
 
-> This information is valuable to both chip designers and system designers
-> as it helps to identify when there are problems with power consumption
-> over an s2idle cycle.
->
-> To make the information discoverable, create a new sysfs file and a symbol
-> that drivers from supported manufacturers can use to advertise this
-> information. This file will only be exported when the system supports low
-> power idle in the ACPI table.
->
-> In order to effectively use this information you will ideally want to
-> compare against the total duration of sleep, so export a second sysfs file
-> that will show total time. This file will be exported on all systems and
-> used both for s2idle and s3.
+-- 
+Peter Xu
 
-The above is incomprehensible word salad. Can you come up with some
-coherent explanation of what you are trying to achieve please?
-
-> +void pm_set_hw_state_residency(u64 duration)
-> +{
-> +	suspend_stats.last_hw_state_residency = duration;
-> +}
-> +EXPORT_SYMBOL_GPL(pm_set_hw_state_residency);
-> +
-> +void pm_account_suspend_type(const struct timespec64 *t)
-> +{
-> +	suspend_stats.last_suspend_total += (s64)t->tv_sec * USEC_PER_SEC +
-> +						 t->tv_nsec / NSEC_PER_USEC;
-
-Conversion functions for timespecs to scalar nanoseconds exist for a
-reason. Why does this need special treatment and open code it?
-
-> +}
-> +EXPORT_SYMBOL_GPL(pm_account_suspend_type);
-
-So none of these functions has any kind of documentation. kernel-doc
-exists for a reason especially for exported functions.
-
-That said, what's the justification to export any of these functions at
-all? AFAICT pm_account_suspend_type() is only used by builtin code...
-
-> +static umode_t suspend_attr_is_visible(struct kobject *kobj, struct attribute *attr, int idx)
-> +{
-> +	if (attr != &last_hw_state_residency.attr)
-> +		return 0444;
-> +#ifdef CONFIG_ACPI
-> +	if (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)
-> +		return 0444;
-> +#endif
-> +	return 0;
-> +}
-> +
->  static const struct attribute_group suspend_attr_group = {
->  	.name = "suspend_stats",
->  	.attrs = suspend_attrs,
-> +	.is_visible = suspend_attr_is_visible,
-
-How is this change related to the changelog above? We are not hiding
-subtle changes to the existing code in some conglomorate patch. See
-Documentation/process/...
-
-> --- a/kernel/time/timekeeping.c
-> +++ b/kernel/time/timekeeping.c
-> @@ -24,6 +24,7 @@
->  #include <linux/compiler.h>
->  #include <linux/audit.h>
->  #include <linux/random.h>
-> +#include <linux/suspend.h>
->  
->  #include "tick-internal.h"
->  #include "ntp_internal.h"
-> @@ -1698,6 +1699,7 @@ static void __timekeeping_inject_sleeptime(struct timekeeper *tk,
->  	tk_set_wall_to_mono(tk, timespec64_sub(tk->wall_to_monotonic, *delta));
->  	tk_update_sleep_time(tk, timespec64_to_ktime(*delta));
->  	tk_debug_account_sleep_time(delta);
-> +	pm_account_suspend_type(delta);
-
-That function name is really self explaining - NOT !
-
-     pm_account_suspend_type(delta);
-
-So this will account a suspend type depending on the time spent in
-suspend, right?
-
-It's totally obvious that the suspend type (whatever it is) depends on
-the time delta argument... especially when the function at hand has
-absolutely nothing to do with a type:
-
-> +void pm_account_suspend_type(const struct timespec64 *t)
-> +{
-> +	suspend_stats.last_suspend_total += (s64)t->tv_sec * USEC_PER_SEC +
-> +						 t->tv_nsec / NSEC_PER_USEC;
-> +}
-
-Sigh....
-
-Thanks,
-
-        tglx
