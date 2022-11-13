@@ -2,84 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05153626ECD
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 10:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E11E626ED4
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 10:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235210AbiKMJuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 04:50:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
+        id S235174AbiKMJzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 04:55:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiKMJuS (ORCPT
+        with ESMTP id S229753AbiKMJzk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 04:50:18 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D35D2C3;
-        Sun, 13 Nov 2022 01:50:17 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668333015;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YlpxTB8EHPiNnFnVviBDcUW+dBVdWWO+DIWc3aDwBl4=;
-        b=MlzZA6tGnlYRKqXGQ00KD+ZANePxc1jW/TwxBgRF9gM245wy6U8f9wbtFn8bqDSQ/Znh86
-        XOx+DB3oGMpe87jgLOJj+fNs1LBL6btacJCSkjO5IUlwKOlTu1G3RzWzZkDtEgAR/NqkhR
-        LZuKXrRg7daqN2UaKqWTA7ZiXxf/Xh2lrLZ6kuThFlQWLTYyiYYeYNEnsTqlhepQJEzpUt
-        pOoZNgUza/LBW0dMF1m//scQc58qVrj9m0VBHgSWL8zowJfQcWdxyPy7o+6DYVts5l/g4o
-        QfWfZlxa8/SiZUJ7+n86M9uS+s7lk3eh3JD6khCFV7LJbCwxNwYcIyYoG0viWA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668333015;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YlpxTB8EHPiNnFnVviBDcUW+dBVdWWO+DIWc3aDwBl4=;
-        b=6cIfDVijgQwXBJbTm3IRMdqGbUKWKSVjgO1NVAM3ouVGRJNHB6lzzuGZz8rfsdAGv1N6B1
-        4NVnjpuj3INR8XAg==
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: RE: [PATCH] clocksource/drivers/hyper-v: Include asm/hyperv-tlfs.h
- not asm/mshyperv.h
-In-Reply-To: <BYAPR21MB1688C5BCDF3269BA070DB884D7039@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <87zgcwt2qg.ffs@tglx>
- <BYAPR21MB1688C5BCDF3269BA070DB884D7039@BYAPR21MB1688.namprd21.prod.outlook.com>
-Date:   Sun, 13 Nov 2022 10:50:14 +0100
-Message-ID: <87wn7ztc89.ffs@tglx>
+        Sun, 13 Nov 2022 04:55:40 -0500
+Received: from jari.cn (unknown [218.92.28.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7B23E009;
+        Sun, 13 Nov 2022 01:55:39 -0800 (PST)
+Received: by ajax-webmail-localhost.localdomain (Coremail) ; Sun, 13 Nov
+ 2022 17:50:30 +0800 (GMT+08:00)
+X-Originating-IP: [182.148.14.167]
+Date:   Sun, 13 Nov 2022 17:50:30 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   wangkailong@jari.cn
+To:     robert.moore@intel.com, rafael.j.wysocki@intel.com, lenb@kernel.org
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-kernel@vger.kernel.org
+Subject:  [PATCH] ACPICA: fix array_size.cocci warning
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
+ Copyright (c) 2002-2022 www.mailtech.cn
+ mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <3701ca18.12f.1847065cd7e.Coremail.wangkailong@jari.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAfwD3C+LmvXBj4BsDAA--.83W
+X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQAEB2FEYx0DfwAZs8
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
+        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12 2022 at 21:55, Michael Kelley wrote:
-> But I can see the problem with too much getting dragged into the VDSO
-> builds.  If hv_get_raw_timer() is added to hyperv_timer.h, it should
-> be under #ifdef CONFIG_X86.  Adding an #ifdef isn't ideal, and a more
-> more proper solution might be to have a separate hyperv_timer.h include
-> file under arch/x86/include/asm.  But the latter seems like overkill for just
-> hv_get_raw_timer(), so I'm OK with the #ifdef.
-
-We surely can have asm/hyperv_timer.h but TBH:
-
->>  static inline notrace u64
->>  hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg, u64 *cur_tsc)
->>  {
-
-hv_read_tsc_page_tsc() does not look architecture agnostic either. TSC
-is pretty x86 specific :)
-
-Thanks,
-
-        tglx
-
-
+Rml4IGZvbGxvd2luZyBjb2NjaWNoZWNrIHdhcm5pbmc6Cgpkcml2ZXJzL2FjcGkvYWNwaWNhL3Ri
+ZmFkdC5jOjEwNzoyNy0yODogV0FSTklORzogVXNlIEFSUkFZX1NJWkUKZHJpdmVycy9hY3BpL2Fj
+cGljYS90YmZhZHQuYzoxMzc6MzAtMzE6IFdBUk5JTkc6IFVzZSBBUlJBWV9TSVpFCgpTaWduZWQt
+b2ZmLWJ5OiBLYWlMb25nIFdhbmcgPHdhbmdrYWlsb25nQGphcmkuY24+Ci0tLQogZHJpdmVycy9h
+Y3BpL2FjcGljYS90YmZhZHQuYyB8IDggKystLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2Vy
+dGlvbnMoKyksIDYgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9hY3BpL2FjcGlj
+YS90YmZhZHQuYyBiL2RyaXZlcnMvYWNwaS9hY3BpY2EvdGJmYWR0LmMKaW5kZXggMzFkN2VhODRh
+MzYwLi42MzdmY2Q3NGYzMGUgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvYWNwaS9hY3BpY2EvdGJmYWR0
+LmMKKysrIGIvZHJpdmVycy9hY3BpL2FjcGljYS90YmZhZHQuYwpAQCAtMTAzLDkgKzEwMyw3IEBA
+IHN0YXRpYyBzdHJ1Y3QgYWNwaV9mYWR0X2luZm8gZmFkdF9pbmZvX3RhYmxlW10gPSB7CiAJIEFD
+UElfRkFEVF9TRVBBUkFURV9MRU5HVEggfCBBQ1BJX0ZBRFRfR1BFX1JFR0lTVEVSfQogfTsKIAot
+I2RlZmluZSBBQ1BJX0ZBRFRfSU5GT19FTlRSSUVTIFwKLQkJCShzaXplb2YgKGZhZHRfaW5mb190
+YWJsZSkgLyBzaXplb2YgKHN0cnVjdCBhY3BpX2ZhZHRfaW5mbykpCi0KKyNkZWZpbmUgQUNQSV9G
+QURUX0lORk9fRU5UUklFUyAoQVJSQVlfU0laRShmYWR0X2luZm9fdGFibGUpKQogLyogVGFibGUg
+dXNlZCB0byBzcGxpdCBFdmVudCBCbG9ja3MgaW50byBzZXBhcmF0ZSBzdGF0dXMvZW5hYmxlIHJl
+Z2lzdGVycyAqLwogCiB0eXBlZGVmIHN0cnVjdCBhY3BpX2ZhZHRfcG1faW5mbyB7CkBAIC0xMzMs
+OSArMTMxLDcgQEAgc3RhdGljIHN0cnVjdCBhY3BpX2ZhZHRfcG1faW5mbyBmYWR0X3BtX2luZm9f
+dGFibGVbXSA9IHsKIAkgMX0KIH07CiAKLSNkZWZpbmUgQUNQSV9GQURUX1BNX0lORk9fRU5UUklF
+UyBcCi0JCQkoc2l6ZW9mIChmYWR0X3BtX2luZm9fdGFibGUpIC8gc2l6ZW9mIChzdHJ1Y3QgYWNw
+aV9mYWR0X3BtX2luZm8pKQotCisjZGVmaW5lIEFDUElfRkFEVF9QTV9JTkZPX0VOVFJJRVMgKEFS
+UkFZX1NJWkUoZmFkdF9wbV9pbmZvX3RhYmxlKSkKIC8qKioqKioqKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqCiAg
+KgogICogRlVOQ1RJT046ICAgIGFjcGlfdGJfaW5pdF9nZW5lcmljX2FkZHJlc3MKLS0gCjIuMjUu
+MQo=
