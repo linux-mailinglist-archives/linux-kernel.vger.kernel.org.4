@@ -2,122 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC568626F80
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 13:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7BE626F82
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 13:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235260AbiKMMk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 07:40:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
+        id S235287AbiKMMkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 07:40:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232884AbiKMMkX (ORCPT
+        with ESMTP id S232884AbiKMMky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 07:40:23 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76BA1115D;
-        Sun, 13 Nov 2022 04:40:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668343221; x=1699879221;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pjNiMa1Cy/F/7GAAO42rp/m2JLQqPKP6EMEtoOQqGQ0=;
-  b=cQlImT4HYpjdFBdqe99mm6DDD08JhSHGxb6WaYCixRmqynJbp66WA9mN
-   mmUe4tZyo344BTrGFn9iJVVKQuod1lZzKUJiX+TF1POgU2U9QY/5JuL8U
-   uuD3fj5I2x796Qi0LXIbuZP2EidmVuUGrSqlHZncUlnlm70cj5AeQ5O1W
-   odzw5OYHBRFso8+kXQ52b+NGTyvIx45hnTjYja1eqppsl1VEwszKGUV/i
-   nKqPaH7UNQxm3IPDcedqgKovq8nDwU5UOPGCKzZmUnDyNXPaijWHOs4G8
-   ksErjHmko49PsWcx71iIYHyo1BTYD9+jEoVh+v8Og7BsjSIxDesPlGDUX
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="295169330"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="295169330"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 04:40:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="640451724"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="640451724"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Nov 2022 04:40:19 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ouCHZ-00Bg3n-0t;
-        Sun, 13 Nov 2022 14:40:17 +0200
-Date:   Sun, 13 Nov 2022 14:40:17 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michael@walle.cc, broonie@kernel.org
-Subject: Re: [PATCH v2 1/4] gpio: regmap: Always set gpio_chip get_direction
-Message-ID: <Y3DlsTAQMi6kKObJ@smile.fi.intel.com>
-References: <cover.1668129763.git.william.gray@linaro.org>
- <1805d1ddb5bbce8e86164e66421ddde481cce4f9.1668129763.git.william.gray@linaro.org>
+        Sun, 13 Nov 2022 07:40:54 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0C41115D;
+        Sun, 13 Nov 2022 04:40:51 -0800 (PST)
+Message-ID: <b7f0b853-5c87-4a1f-4089-29d7e1f4e3e2@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1668343250;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0TtCNVir8qcE5vf5e8nFQhKvJOQBBq1bDagQs8uQJQ0=;
+        b=AzuS/FTLl5+qMWKnVoEch6xLDyhShOcINOjp6K3djh7Lfs+aUG3XeVIVMP5f3FNBsBoUWm
+        xqGmmjqeoAJ9R2L7aAzAMrY3vObzYjRTn9duDv5w4pxwdawl/N91D7Ok+NSa7xzZaCAJCw
+        5lX8hOM6XvwUZ37kBzDNhe9/emPmN7o=
+Date:   Sun, 13 Nov 2022 20:40:43 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1805d1ddb5bbce8e86164e66421ddde481cce4f9.1668129763.git.william.gray@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH for-next v2] RDMA/rxe: Fix mr->map double free
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>
+Cc:     Bob Pearson <rpearsonhpe@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+References: <1667099073-2-1-git-send-email-lizhijian@fujitsu.com>
+ <6a3ba62e-6116-7f09-b314-d6823671aaa9@fujitsu.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Yanjun Zhu <yanjun.zhu@linux.dev>
+In-Reply-To: <6a3ba62e-6116-7f09-b314-d6823671aaa9@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 08:55:50PM -0500, William Breathitt Gray wrote:
-> If you only have reg_dat_base set, then it is input-only; if you only
-> have reg_set_base set, then it is output-only. Thus, we can always set
-> gpio_chip get_direction to gpio_regmap_get_direction and return
-> GPIO_LINE_DIRECTION_IN/GPIO_LINE_DIRECTION_OUT given the respective
-> register base addresses configuration.
+在 2022/11/12 11:29, lizhijian@fujitsu.com 写道:
+> ping...
+Hi, Zhijian
 
-Seems legit to me. Have you checked if we have any gpio-regmap drivers that
-have something like this in their configuration already? In such cases we need
-to be sure they behave as expected.
+The changes are too much. I need time to delve into it.
 
-From the code perspective:
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Zhu Yanjun
 
-> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
-> ---
->  drivers/gpio/gpio-regmap.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/gpio/gpio-regmap.c b/drivers/gpio/gpio-regmap.c
-> index 6383136cbe59..f907c9c19fce 100644
-> --- a/drivers/gpio/gpio-regmap.c
-> +++ b/drivers/gpio/gpio-regmap.c
-> @@ -111,6 +111,11 @@ static int gpio_regmap_get_direction(struct gpio_chip *chip,
->  	unsigned int base, val, reg, mask;
->  	int invert, ret;
->  
-> +	if (gpio->reg_dat_base && !gpio->reg_set_base)
-> +		return GPIO_LINE_DIRECTION_IN;
-> +	if (gpio->reg_set_base && !gpio->reg_dat_base)
-> +		return GPIO_LINE_DIRECTION_OUT;
-> +
->  	if (gpio->reg_dir_out_base) {
->  		base = gpio_regmap_addr(gpio->reg_dir_out_base);
->  		invert = 0;
-> @@ -265,8 +270,8 @@ struct gpio_regmap *gpio_regmap_register(const struct gpio_regmap_config *config
->  	else if (gpio->reg_set_base)
->  		chip->set = gpio_regmap_set;
->  
-> +	chip->get_direction = gpio_regmap_get_direction;
->  	if (gpio->reg_dir_in_base || gpio->reg_dir_out_base) {
-> -		chip->get_direction = gpio_regmap_get_direction;
->  		chip->direction_input = gpio_regmap_direction_input;
->  		chip->direction_output = gpio_regmap_direction_output;
->  	}
-> -- 
-> 2.38.1
+> Hi Yanjun
 > 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+> 
+> I hope you could take a look to this bug fix more earlier.
+> 
+> 
+> Thanks
+> Zhijian
+> 
+> 
+> 
+> On 30/10/2022 11:04, Li Zhijian wrote:
+>> rxe_mr_cleanup() which tries to free mr->map again will be called
+>> when rxe_mr_init_user() fails.
+>>
+>> [43895.939883] CPU: 0 PID: 4917 Comm: rdma_flush_serv Kdump: loaded Not tainted 6.1.0-rc1-roce-flush+ #25
+>> [43895.942341] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+>> [43895.945208] Call Trace:
+>> [43895.946130]  <TASK>
+>> [43895.946931]  dump_stack_lvl+0x45/0x5d
+>> [43895.948049]  panic+0x19e/0x349
+>> [43895.949010]  ? panic_print_sys_info.part.0+0x77/0x77
+>> [43895.950356]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
+>> [43895.952589]  ? preempt_count_sub+0x14/0xc0
+>> [43895.953809]  end_report.part.0+0x54/0x7c
+>> [43895.954993]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
+>> [43895.956406]  kasan_report.cold+0xa/0xf
+>> [43895.957668]  ? rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
+>> [43895.959090]  rxe_mr_cleanup+0x9d/0xf0 [rdma_rxe]
+>> [43895.960502]  __rxe_cleanup+0x10a/0x1e0 [rdma_rxe]
+>> [43895.961983]  rxe_reg_user_mr+0xb7/0xd0 [rdma_rxe]
+>> [43895.963456]  ib_uverbs_reg_mr+0x26a/0x480 [ib_uverbs]
+>> [43895.964921]  ? __lock_acquire+0x876/0x31e0
+>> [43895.966182]  ? ib_uverbs_ex_create_wq+0x630/0x630 [ib_uverbs]
+>> [43895.967739]  ? uverbs_fill_udata+0x1c6/0x330 [ib_uverbs]
+>> [43895.969204]  ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0x1a2/0x250 [ib_uverbs]
+>> [43895.971126]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
+>> [43895.973094]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
+>> [43895.975096]  ? uverbs_fill_udata+0x25f/0x330 [ib_uverbs]
+>> [43895.976466]  ib_uverbs_cmd_verbs+0x1397/0x15a0 [ib_uverbs]
+>> [43895.977930]  ? ib_uverbs_handler_UVERBS_METHOD_QUERY_CONTEXT+0x1a0/0x1a0 [ib_uverbs]
+>> [43895.979937]  ? uverbs_fill_udata+0x330/0x330 [ib_uverbs]
+>>
+>> This issue was fistrly exposed since
+>> commit: b18c7da63fcb ("RDMA/rxe: Fix memory leak in error path code")
+>> and then we fixed it in
+>> commit: 8ff5f5d9d8cf ("RDMA/rxe: Prevent double freeing rxe_map_set()")
+>> but this fix was reverted together at last by
+>> commit: 1e75550648da (Revert "RDMA/rxe: Create duplicate mapping tables for FMRs")
+>>
+>> Fixes: 1e75550648da (Revert "RDMA/rxe: Create duplicate mapping tables for FMRs")
+>> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+>> ---
+>>    drivers/infiniband/sw/rxe/rxe_mr.c | 9 ++-------
+>>    1 file changed, 2 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
+>> index d4f10c2d1aa7..7c99d1591580 100644
+>> --- a/drivers/infiniband/sw/rxe/rxe_mr.c
+>> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+>> @@ -99,6 +99,7 @@ static int rxe_mr_alloc(struct rxe_mr *mr, int num_buf)
+>>    		kfree(mr->map[i]);
+>>    
+>>    	kfree(mr->map);
+>> +	mr->map = NULL;
+>>    err1:
+>>    	return -ENOMEM;
+>>    }
+>> @@ -122,7 +123,6 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
+>>    	int			num_buf;
+>>    	void			*vaddr;
+>>    	int err;
+>> -	int i;
+>>    
+>>    	umem = ib_umem_get(&rxe->ib_dev, start, length, access);
+>>    	if (IS_ERR(umem)) {
+>> @@ -163,9 +163,8 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
+>>    				pr_warn("%s: Unable to get virtual address\n",
+>>    						__func__);
+>>    				err = -ENOMEM;
+>> -				goto err_cleanup_map;
+>> +				goto err_release_umem;
+>>    			}
+>> -
+>>    			buf->addr = (uintptr_t)vaddr;
+>>    			buf->size = PAGE_SIZE;
+>>    			num_buf++;
+>> @@ -182,10 +181,6 @@ int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
+>>    
+>>    	return 0;
+>>    
+>> -err_cleanup_map:
+>> -	for (i = 0; i < mr->num_map; i++)
+>> -		kfree(mr->map[i]);
+>> -	kfree(mr->map);
+>>    err_release_umem:
+>>    	ib_umem_release(umem);
+>>    err_out:
 
