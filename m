@@ -2,151 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC25627183
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 19:11:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06130627185
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 19:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235214AbiKMSL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 13:11:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
+        id S235465AbiKMSMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 13:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235400AbiKMSL4 (ORCPT
+        with ESMTP id S235405AbiKMSMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 13:11:56 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F5C21B2
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 10:11:55 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id a5so14265923edb.11
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 10:11:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uVJeOgU1MIdsaRRuNRXfWkoor1WXWdAlm1t56aPqLUQ=;
-        b=ZeE7sehyqyO8yEGseHk2i8Alz+UA6NHE4c0cFh7YkV/8NlpSx2RpWD4vMfON3omgrB
-         lMRk0aYkM8yi9B5gWpTacPadQ85MRiQorRk9YokTWE7FPEcTJoP9fO6AdmGdhw0YrOxG
-         0OLBu3M43F13pPkadkbKJ/bHckw/gai77fgps=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uVJeOgU1MIdsaRRuNRXfWkoor1WXWdAlm1t56aPqLUQ=;
-        b=KHSnBUxAZhTxqVu534dlTrI/sbXmuJ7d5SKEN4Ojzm/DqDUN+aPTmnGqVZ06/d/NWU
-         P7zEQb97V65BnxqkbiBlhP9GSLWGx/uktBK/e2RtxDCLONGBtKH/cUQ3hIvifFcrGkKz
-         j+vbYergzCrLCT7SmukMIjxT1DMKbuVeEpmtllwXyhQ8GETuRqv9U8HfBf+EhXXpUq2Y
-         oeH80KA9N0mVRIAaUsV+j3bcPkGlmzVplKgB3Nc22dALIOHEfpfHfA6bUGCPrXp3Fmsl
-         zsWAK7ZQkYjNWLK/Sj0qK/YM0Z9EmemsEc2yRmJU7aNx6UzLBhT5IgBIGG2k+jlKcFHt
-         QU1Q==
-X-Gm-Message-State: ANoB5plElN4wdbZwowVvbiSZw19ERfkk4KMpsGyXhqUfTUFJBXqCLjc1
-        3qd2NEkBvGsf10hRfC8MoHtl5CpsHkh1lA==
-X-Google-Smtp-Source: AA0mqf5ezW1G+OZ8sWz55+aS7bofz0kd9bhX7jV4sX3OArkjBj2ZqzWGEEuR0nCjDcBecItFzHS4WA==
-X-Received: by 2002:a05:6402:291e:b0:45c:98a9:7bbf with SMTP id ee30-20020a056402291e00b0045c98a97bbfmr8617406edb.372.1668363113421;
-        Sun, 13 Nov 2022 10:11:53 -0800 (PST)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-79-40-103-33.business.telecomitalia.it. [79.40.103.33])
-        by smtp.gmail.com with ESMTPSA id i20-20020a50fd14000000b004618a89d273sm3753534eds.36.2022.11.13.10.11.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 10:11:53 -0800 (PST)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        michael@amarulasolutions.com,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        kernel test robot <lkp@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Lindgren <tony@atomide.com>, linux-clk@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: [PATCH v4 2/2] clk: ti: dra7-atl: don't allocate `parent_names' variable
-Date:   Sun, 13 Nov 2022 19:11:47 +0100
-Message-Id: <20221113181147.1626585-2-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20221113181147.1626585-1-dario.binacchi@amarulasolutions.com>
-References: <20221113181147.1626585-1-dario.binacchi@amarulasolutions.com>
+        Sun, 13 Nov 2022 13:12:51 -0500
+Received: from moc6.cz (hosting.moc6.cz [IPv6:2a02:c60:c70:8900::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CB629D
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 10:12:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=moc6.cz;
+        s=mail20201116; h=In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Reply-To;
+        bh=vQeGh/SrZTNyLD8BDYwInUVZOX/h82HGv8KTzhAyvnE=; b=h9usAkRcgpMx/K4rRfwFHeDvY4
+        ORQcdLwNGYtYAheXA2rgPnuypeB+lJXVZipHKeu6RlmSxnYRgXXJYatlJIGL6Q8+406F4p3BOdIeU
+        nGkFyTb5py7i6KayZZDblC7FVhFcFCOfW5d5XDNCHNrIRd8Ka/m7azUJt5Ur1jY7rwwvqeWb4dNm9
+        3SennpJIBznq2p6KjTN4prmeH47KkVHxLM4QIV2oq36rkb3tUxpWpAKFZs7pz6lCnTruaCCAwSPA4
+        nqROTZ0TTmmV61D5TWpp0hUa/hNLxxhbDum5lhpV3Oq2NkPJEqsA4C+YvKeQZIEWGpoEbFySHHl6u
+        aVrY6ER6ubFzVdFPXiAvtxYkKaRGP1oHG1b3/v/3xGwH9aVrmaI97cX3L1l7u7DXijZ1S5S56HUMZ
+        CNPW16yFoJnnY/xAfH6Na63GRzBAejGnt+AbJRkZVCyXTgNDsq/qHpKDTKqK3q5nNUkGn9JG+NT+R
+        goQsJ2fH6HqLSg1Tyc68tJjWABcctJNhFP0Mvyt1YzBs9DEcndiXOguzHmlkWJLKdfc3jsuITEArY
+        n4+z0dUK+m7rSaTMGMqaNCQ91T0PyDxFyL3+X45Oee5ZV9jszfQBnkPY98ap/qgVG6LsybMZc8zO7
+        1ED33jQvT5hQw6m4G2c1zwx8xYqAtdORiqnnUvg8g=;
+Received: from Debian-exim by moc6.cz with local (Exim 4.94.2)
+        (envelope-from <Debian-exim@moc6.cz>)
+         authenticated: Debian-exim
+        id 1ouHTD-001ipw-8b; Sun, 13 Nov 2022 19:12:39 +0100
+Date:   Sun, 13 Nov 2022 19:12:39 +0100
+From:   Filip Moc <dev@moc6.cz>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Subject: Re: [PATCH] drm/amd/display: add parameter backlight_min
+Message-ID: <Y3Ezl+u9dK+Z0iMV@moc6.cz>
+References: <Y117XNaSP6/8bH+3@moc6.cz>
+ <CADnq5_Muegi+dvmrg5U=Cau_oeXQFjv_h2Pdn_j9AG0mRgE4=g@mail.gmail.com>
+ <Y2E+XUEPbQn2tMt+@moc6.cz>
+ <CADnq5_PmwiOecVqfpy17V4viYA5wt8WbEDOFPo70VSdmGTjOew@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADnq5_PmwiOecVqfpy17V4viYA5wt8WbEDOFPo70VSdmGTjOew@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The `parent_names' variable was freed also in case of kzalloc() error.
-Instead of modifying the code to perform a proper memory release, I
-decided to fix the bug by not allocating memory.
-Since only one parent name is referenced, it is not necessary to
-allocate this variable at runtime and therefore you can avoid calling
-the kzalloc() function. This simplifies the code (even calls to kfree
-can be removed) and improves the performance of the routine.
+On Tue, Nov 01, 2022 at 12:06:55PM -0400, Alex Deucher wrote:
+> On Tue, Nov 1, 2022 at 11:42 AM Filip Moc <dev@moc6.cz> wrote:
+> >
+> > Hello Alex,
+> >
+> > thank you for your response.
+> >
+> > Yes, I have HP ENVY x360 Convertible 13-ay1xxx, and backlight_min=2
+> > seems to work the best in my case.
+> >
+> > I added a dmi based quirk table. So far with support only for display 0
+> > to make it simple. Support for more displays in quirk table can be added
+> > later if ever needed.
+> >
+> > According to [1] HP ENVY x360 Convertible 13-ag0xxx also needs a quirk
+> > so I'm going to use this to cover both:
+> > DMI_EXACT_MATCH(DMI_SYS_VENDOR, "HP")
+> > DMI_MATCH(DMI_PRODUCT_NAME, "HP ENVY x360 Convertible 13-")
+> 
+> You might want to add an additional check for the panel name/vendor
+> from the EDID as well in case HP uses multiple panels from different
+> vendors on that system.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Reported-by: kernel test robot <lkp@intel.com>
+Hello,
 
----
+thank you for this feedback.
 
-(no changes since v3)
+I agree it would be nice to have this additional check but I'm not sure
+if there is an easy way to do this.
 
-Changes in v3:
-- Add the "clk: ti: add of_ti_clk_register() helper" patch to the series.
-- Use a variable of type struct clk_parent_data to furthermore simplify
-  the code.
-- Update the commit message.
+I don't think we can add this to the EDID quirk table in drm_edid.c as
+we also need to store the value for backlight min_input_signal.
+There might also be different laptop manufacturers using the same panel
+which only one of them needs a quirk or both of them might need a quirk
+but with different value. Or there also might be more devices with the
+same DMI but different panels where each panel needs a quirk with
+different value.
 
-Changes in v2:
-- Fix compiling error
-- Add kernel test robot's Reported-by tag.
+So it seems if we want to cover all possible situations we need a nested
+quirk tables for this. One main table for DMI matches where each record
+would contain another table for EDID matches.
 
- drivers/clk/ti/clk-dra7-atl.c | 14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
+Then there's also a question of how to obtain the EDID.
+The most simple and straightforward approach seems to be getting the
+EDID vendor/product identification from dc_edid_caps. But this seems to
+be going completely against the goal 10. in display/TODO.
 
-diff --git a/drivers/clk/ti/clk-dra7-atl.c b/drivers/clk/ti/clk-dra7-atl.c
-index 1c576599f6db..d964e3affd42 100644
---- a/drivers/clk/ti/clk-dra7-atl.c
-+++ b/drivers/clk/ti/clk-dra7-atl.c
-@@ -163,8 +163,8 @@ static const struct clk_ops atl_clk_ops = {
- static void __init of_dra7_atl_clock_setup(struct device_node *node)
- {
- 	struct dra7_atl_desc *clk_hw = NULL;
-+	struct clk_parent_data pdata = { .index = 0 };
- 	struct clk_init_data init = { NULL };
--	const char **parent_names = NULL;
- 	const char *name;
- 	struct clk *clk;
- 
-@@ -188,24 +188,14 @@ static void __init of_dra7_atl_clock_setup(struct device_node *node)
- 		goto cleanup;
- 	}
- 
--	parent_names = kzalloc(sizeof(char *), GFP_KERNEL);
--
--	if (!parent_names)
--		goto cleanup;
--
--	parent_names[0] = of_clk_get_parent_name(node, 0);
--
--	init.parent_names = parent_names;
--
-+	init.parent_data = &pdata;
- 	clk = of_ti_clk_register(node, &clk_hw->hw, name);
- 
- 	if (!IS_ERR(clk)) {
- 		of_clk_add_provider(node, of_clk_src_simple_get, clk);
--		kfree(parent_names);
- 		return;
- 	}
- cleanup:
--	kfree(parent_names);
- 	kfree(clk_hw);
- }
- CLK_OF_DECLARE(dra7_atl_clock, "ti,dra7-atl-clock", of_dra7_atl_clock_setup);
--- 
-2.32.0
+So another approach I'm considering is to use drm_edid_get_panel_id but
+for that we would need a pointer to i2c_adapter for the corresponding
+backlight_link. Which I think is currently only available via
+amdgpu_dm_connector which from dc_link is only accessible via void
+*priv. Which seems like something that shouldn't be touched here.
 
+So overall I don't know what would be the best way to implement this.
+It also seems too complex I'm not even sure if it's worth the trouble
+and maybe just hoping there won't be any two devices with the same DMI
+but different EDID which only one of them would need a quirk while the
+other would break with it might seem more reasonable.
+
+Or maybe I'm missing something?
+Please let me know what you think.
+
+Filip
+
+> 
+> Alex
+> 
+> >
+> > So far it seems to be working fine.
+> > I'll send this in v2 once I do some final tweaks and do more tests.
+> >
+> > [1] https://bugzilla.kernel.org/show_bug.cgi?id=203439#c5
+> >
+> > Filip
+> >
+> >
+> > V Mon, Oct 31, 2022 at 11:36:09AM -0400, Alex Deucher napsal(a):
+> > > On Sun, Oct 30, 2022 at 5:26 AM Filip Moc <dev@moc6.cz> wrote:
+> > > >
+> > > > There are some devices on which amdgpu won't allow user to set brightness
+> > > > to sufficiently low values even though the hardware would support it just
+> > > > fine.
+> > > >
+> > > > This usually happens in two cases when either configuration of brightness
+> > > > levels via ACPI/ATIF is not available and amdgpu falls back to defaults
+> > > > (currently 12 for minimum level) which may be too high for some devices or
+> > > > even the configuration via ATIF is available but the minimum brightness
+> > > > level provided by the manufacturer is set to unreasonably high value.
+> > > >
+> > > > In either case user can use this new module parameter to adjust the
+> > > > minimum allowed backlight brightness level.
+> > > >
+> > > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=203439
+> > > > Signed-off-by: Filip Moc <dev@moc6.cz>
+> > >
+> > > Does your system require an override and if so, what is it?  It would
+> > > be good to add a quirk for your system as well so that other users of
+> > > the same system wouldn't need to manually figure out an apply the
+> > > settings.
+> > >
+> > > Alex
+> > >
+> > >
+> > > > ---
+> > > >  drivers/gpu/drm/amd/amdgpu/amdgpu.h               |  3 +++
+> > > >  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c           | 15 +++++++++++++++
+> > > >  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 15 +++++++++++++++
+> > > >  3 files changed, 33 insertions(+)
+> > > >
+> > > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> > > > index 0e6ddf05c23c..c5445402c49d 100644
+> > > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> > > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> > > > @@ -200,6 +200,9 @@ extern uint amdgpu_dc_debug_mask;
+> > > >  extern uint amdgpu_dc_visual_confirm;
+> > > >  extern uint amdgpu_dm_abm_level;
+> > > >  extern int amdgpu_backlight;
+> > > > +#ifdef CONFIG_DRM_AMD_DC
+> > > > +extern int amdgpu_backlight_override_min[];
+> > > > +#endif
+> > > >  extern struct amdgpu_mgpu_info mgpu_info;
+> > > >  extern int amdgpu_ras_enable;
+> > > >  extern uint amdgpu_ras_mask;
+> > > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> > > > index 16f6a313335e..f2fb549ac52f 100644
+> > > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> > > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> > > > @@ -43,6 +43,7 @@
+> > > >  #include "amdgpu_irq.h"
+> > > >  #include "amdgpu_dma_buf.h"
+> > > >  #include "amdgpu_sched.h"
+> > > > +#include "amdgpu_dm.h"
+> > > >  #include "amdgpu_fdinfo.h"
+> > > >  #include "amdgpu_amdkfd.h"
+> > > >
+> > > > @@ -853,6 +854,20 @@ int amdgpu_backlight = -1;
+> > > >  MODULE_PARM_DESC(backlight, "Backlight control (0 = pwm, 1 = aux, -1 auto (default))");
+> > > >  module_param_named(backlight, amdgpu_backlight, bint, 0444);
+> > > >
+> > > > +/**
+> > > > + * DOC: backlight_min (array of int)
+> > > > + * Override minimum allowed backlight brightness signal (per display).
+> > > > + * Must be less than the maximum brightness signal.
+> > > > + * Negative value means no override.
+> > > > + *
+> > > > + * Defaults to all -1 (no override on any display).
+> > > > + */
+> > > > +#ifdef CONFIG_DRM_AMD_DC
+> > > > +int amdgpu_backlight_override_min[AMDGPU_DM_MAX_NUM_EDP] = {[0 ... (AMDGPU_DM_MAX_NUM_EDP-1)] = -1};
+> > > > +MODULE_PARM_DESC(backlight_min, "Override minimum backlight brightness signal (0..max-1, -1 = no override (default))");
+> > > > +module_param_array_named(backlight_min, amdgpu_backlight_override_min, int, NULL, 0444);
+> > > > +#endif
+> > > > +
+> > > >  /**
+> > > >   * DOC: tmz (int)
+> > > >   * Trusted Memory Zone (TMZ) is a method to protect data being written
+> > > > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > > > index eb4ce7216104..e2c36ba93d05 100644
+> > > > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > > > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > > > @@ -3911,6 +3911,21 @@ static void amdgpu_dm_update_backlight_caps(struct amdgpu_display_manager *dm,
+> > > >         dm->backlight_caps[bl_idx].min_input_signal = AMDGPU_DM_DEFAULT_MIN_BACKLIGHT;
+> > > >         dm->backlight_caps[bl_idx].max_input_signal = AMDGPU_DM_DEFAULT_MAX_BACKLIGHT;
+> > > >  #endif
+> > > > +
+> > > > +       if (amdgpu_backlight_override_min[bl_idx] >= 0) {
+> > > > +               if (amdgpu_backlight_override_min[bl_idx] < dm->backlight_caps[bl_idx].max_input_signal) {
+> > > > +                       DRM_INFO("amdgpu: backlight[%i]: overriding minimum brightness from %i to %i\n",
+> > > > +                                 bl_idx,
+> > > > +                                 dm->backlight_caps[bl_idx].min_input_signal,
+> > > > +                                 amdgpu_backlight_override_min[bl_idx]);
+> > > > +                       dm->backlight_caps[bl_idx].min_input_signal = amdgpu_backlight_override_min[bl_idx];
+> > > > +               } else {
+> > > > +                       DRM_ERROR("amdgpu: backlight[%i]: minimum brightness override (%i) is not below maximum (%i)\n",
+> > > > +                                 bl_idx,
+> > > > +                                 amdgpu_backlight_override_min[bl_idx],
+> > > > +                                 dm->backlight_caps[bl_idx].max_input_signal);
+> > > > +               }
+> > > > +       }
+> > > >  }
+> > > >
+> > > >  static int get_brightness_range(const struct amdgpu_dm_backlight_caps *caps,
+> > > >
+> > > > base-commit: d8c03bfe146fd5e081a252cd34f3f12ca0255357
+> > > > --
+> > > > 2.30.2
+> > > >
