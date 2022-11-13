@@ -2,155 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C296272AF
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 22:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC26D6272B1
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 22:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235291AbiKMVVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 16:21:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43272 "EHLO
+        id S235351AbiKMVVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 16:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234152AbiKMVVS (ORCPT
+        with ESMTP id S232799AbiKMVVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 16:21:18 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F17C6556;
-        Sun, 13 Nov 2022 13:21:17 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668374476;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WqA9eQpqg/Hiw5ww9rnS051/wTFYpXZ9ePTy08MS9E0=;
-        b=CnQ6NWad4KySG53EzK9w8HVjWcU9MBKDbHBXvpVhHzu03lruTcG4QS7bSTNuXvsxKXwXcz
-        549hdVOxTevATh1QHxvUfuqabEXCCXGMmQr0YM+xMFj0xyIGIjhPJbEVaON3rBCzetaRrX
-        lyxQuHzBkpK9tCtfxVaF1B/7G4n6Y7gNQP1w3vsdJUu8aLs3T5eF+23DrX9FCVuzVzf6Lc
-        Q+xzs2FhOWDJ2mPcLeBrCNU9GZ1JCyuEdtDjlhMw4EDhG5jQgUGo+SXRKbNr/qr5oonD4l
-        77fgr0iHm+m/YhdKseH859aZBzBexqRl3rUaPQpyVCjpgqRiLlIpC5pLWGgWiA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668374476;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WqA9eQpqg/Hiw5ww9rnS051/wTFYpXZ9ePTy08MS9E0=;
-        b=Xmk/TudIVbnwagakcUpIVMgdZRuT9ezMSJRfzWC57xPb8aGp0CO342lbi9TEHJcb1Ls/Ms
-        V+tUzDxO8IleM5DA==
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: RE: [PATCH] clocksource/drivers/hyper-v: Include asm/hyperv-tlfs.h
- not asm/mshyperv.h
-In-Reply-To: <87leoft9w1.ffs@tglx>
-References: <87zgcwt2qg.ffs@tglx>
- <BYAPR21MB1688C5BCDF3269BA070DB884D7039@BYAPR21MB1688.namprd21.prod.outlook.com>
- <87wn7ztc89.ffs@tglx> <87sfinta8q.ffs@tglx> <87leoft9w1.ffs@tglx>
-Date:   Sun, 13 Nov 2022 22:21:15 +0100
-Message-ID: <87fsemtut0.ffs@tglx>
+        Sun, 13 Nov 2022 16:21:50 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8487FD19;
+        Sun, 13 Nov 2022 13:21:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668374509; x=1699910509;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8I6vKZArkiJeRn6HbKXPPaIQ6La44IOkt0n5HuZBRNs=;
+  b=cEFGu+goS6HiIHkDjwOsuyiMAOi7EFzVTmNGiASMdu31OBxrnRsYw7vC
+   hIPJALpslvqaplXjS15eoyFkJVmEUzvDq1Sov6l4Bf1H/g1jmO80VieWA
+   /Wmfw3+GuOUo7Gx5729YwAa757JxzBcCkDIVwlAUFvkIfey2p/BzuULKz
+   qqZBrY9vJMryB2mZ589/AcLJrqr0kJsjQ3H/9pc6EuNNkcoBrXJoLY1qn
+   Dr1kVm9lEawn28jhDXZP8RMuVUgCslz6R9GQcsVatG/2NPX0d7+01Owzq
+   B930CxitxSQ37u7g5WzZoUT7YWx6Q99W94DFwhzfXn4xoOqE6pmGThIqH
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="292240956"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="292240956"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 13:21:49 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="883308898"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="883308898"
+Received: from perwin-mobl.amr.corp.intel.com (HELO tjmaciei-mobl5.localnet) ([10.212.163.208])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 13:21:49 -0800
+From:   Thiago Macieira <thiago.macieira@intel.com>
+To:     "Joseph, Jithu" <jithu.joseph@intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
+        "Mehta, Sohil" <sohil.mehta@intel.com>
+Subject: Re: [PATCH v2 12/14] platform/x86/intel/ifs: Add current_batch sysfs entry
+Date:   Sun, 13 Nov 2022 13:21:41 -0800
+Message-ID: <2206677.iZASKD2KPV@tjmaciei-mobl5>
+Organization: Intel Corporation
+In-Reply-To: <Y3EiKUzpShqwzEf6@zn.tnic>
+References: <20221021203413.1220137-1-jithu.joseph@intel.com> <5e65889d-d68c-b29d-6cea-7b4ce4c87b4a@intel.com> <Y3EiKUzpShqwzEf6@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 13 2022 at 11:40, Thomas Gleixner wrote:
-> Bah, that obviously wants to include the new header...
->
-> --- a/include/clocksource/hyperv_timer.h
-> +++ b/include/clocksource/hyperv_timer.h
-> @@ -15,7 +15,8 @@
->  
->  #include <linux/clocksource.h>
->  #include <linux/math64.h>
-> -#include <asm/mshyperv.h>
-> +#include <asm/hyperv_timer.h>
+On Sunday, 13 November 2022 08:58:17 PST Borislav Petkov wrote:
+> * if f/m/s matches, you execute
+> 
+>     if still within the timeout, you return -EAGAIN from
+>     current_batch_store() to tell userspace, take a nap and try again.
+> 
+> * if the f/m/s doesn't match you return -EINVAL to say, wrong filename,
+> try the next one.
 
-and that breaks when CONFIG_HYPERV_TIMER=n and compiled for ARM64.
+But if it matches but is corrupt or the HW fails to accept it, you also get an 
+error. So you now need to differentiate a failure to load a candidate file and 
+an attempt to load a non-candidate.
 
-Sigh...
+I'm assuming that the kernel would provide different error conditions for 
+those. But handling those in shell scripting is very difficult: you'd need to 
+start a subshell and parse stderr. It's MUCH easier in C, of course, but 
+incrementing a number is magnitudes easier in C than performing a globbing.
 
----
-Subject: clocksource/drivers/hyper-v: Include asm/hyperv-tlfs.h not asm/mshyperv.h
-From: Thomas Gleixner <tglx@linutronix.de>
-Date: Sat, 12 Nov 2022 19:08:15 +0100
+Either way, incrementing a number in shell is pretty easy too. The simplest 
+script with just the numbers would be:
 
-clocksource/hyperv_timer.h is included into the VDSO build. It includes
-asm/mshyperv.h which in turn includes the world and some more. This worked
-so far by chance, but any subtle change in the include chain results in a
-build breakage because VDSO builds are building user space libraries.
+i=0
+while echo $i > /sys/devices/virtual/misc/intel_ifs_0/current_batch; do
+    test_all_cpus
+done
 
-Include asm/hyperv-tlfs.h instead which contains everything what the VDSO
-build needs and move the hv_get_raw_timer() define into the header file.
+It's four lines and does not need to know about where the scan files are 
+located, how they're named and if some files it may find are not to be used. But 
+I've hidden a lot of complexity in the test_all_cpus shell function, which 
+would be common to either solution of how we specify the batch to be loaded.
 
-Fixup drivers/hv/vmbus_drv.c which relies on the indirect include of
-asm/mshyperv.h.
+And this is part of my argument of why it's unlikely people will use their 
+shells to do this. That shell function is easily another 10 lines of 
+scripting, if it's meant to do its job properly. To make that easier, we've 
+developed two tools, one of them the OpenDCDiag tool I linked to, but both 
+just happen to be written in C and C++ instead of shell.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- arch/x86/include/asm/hyperv_timer.h |    9 +++++++++
- arch/x86/include/asm/mshyperv.h     |    2 --
- drivers/hv/vmbus_drv.c              |    1 +
- include/clocksource/hyperv_timer.h  |    4 +++-
- 4 files changed, 13 insertions(+), 3 deletions(-)
+> For all Intel employees here on the thread, there's a world outside
+> Intel and people do not talk (family model stepping) tuples like we do.
+> All they wanna do is run their damn tests.
 
---- /dev/null
-+++ b/arch/x86/include/asm/hyperv_timer.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_HYPERV_TIMER_H
-+#define _ASM_X86_HYPERV_TIMER_H
-+
-+#include <asm/msr.h>
-+
-+#define hv_get_raw_timer() rdtsc_ordered()
-+
-+#endif
---- a/arch/x86/include/asm/mshyperv.h
-+++ b/arch/x86/include/asm/mshyperv.h
-@@ -19,8 +19,6 @@ typedef int (*hyperv_fill_flush_list_fun
- 		struct hv_guest_mapping_flush_list *flush,
- 		void *data);
- 
--#define hv_get_raw_timer() rdtsc_ordered()
--
- void hyperv_vector_handler(struct pt_regs *regs);
- 
- #if IS_ENABLED(CONFIG_HYPERV)
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -37,6 +37,7 @@
- #include <linux/dma-map-ops.h>
- #include <linux/pci.h>
- #include <clocksource/hyperv_timer.h>
-+#include <asm/mshyperv.h>
- #include "hyperv_vmbus.h"
- 
- struct vmbus_dynid {
---- a/include/clocksource/hyperv_timer.h
-+++ b/include/clocksource/hyperv_timer.h
-@@ -15,13 +15,15 @@
- 
- #include <linux/clocksource.h>
- #include <linux/math64.h>
--#include <asm/mshyperv.h>
-+#include <asm/hyperv-tlfs.h>
- 
- #define HV_MAX_MAX_DELTA_TICKS 0xffffffff
- #define HV_MIN_DELTA_TICKS 1
- 
- #ifdef CONFIG_HYPERV_TIMER
- 
-+#include <asm/hyperv_timer.h>
-+
- /* Routines called by the VMbus driver */
- extern int hv_stimer_alloc(bool have_percpu_irqs);
- extern int hv_stimer_cleanup(unsigned int cpu);
+Indeed they do. I have personally been in contact with the few that will 
+represent over 90% of the deployment of this feature for the next few years. 
+They want this functionality to integrate with their existing health-check 
+scanning methodology. This is where OpenDCDiag comes in, because it does 
+integrate with their workflows, like logging. For another example, it obeys the 
+cpuset that the parent process may have set with sched_setaffinity() or alike 
+tools (taskset(1) or schedtool(8)). I have zero clue how to do that with shell 
+scripting.
+
+Which actually means I am the maintainer of the tool that is going to be 
+driving 99% or more of all scans (that's why I was cc'ed in the submission). I 
+am your user.
+
+I'm not saying I am the only user. I definitely want to see the best interface 
+so that others could write tools too if they want to. And I don't want there 
+to be a kludge that we need to keep compatibility with for a decade, or to set 
+a bad precedent. But I am giving you the constraints that I need to work under 
+and the kernel interface to support me. I am telling you this is very good 
+right now and your proposal makes it worse for me, not better, for little 
+apparent gain.
+
+-- 
+Thiago Macieira - thiago.macieira (AT) intel.com
+  Cloud Software Architect - Intel DCAI Cloud Engineering
+
+
+
