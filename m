@@ -2,74 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA92627003
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 15:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5AF627005
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 15:14:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235291AbiKMOLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 09:11:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60194 "EHLO
+        id S235311AbiKMOOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 09:14:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231972AbiKMOLt (ORCPT
+        with ESMTP id S231252AbiKMOON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 09:11:49 -0500
+        Sun, 13 Nov 2022 09:14:13 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE72BE17;
-        Sun, 13 Nov 2022 06:11:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA328BE17
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 06:14:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63270B80C73;
-        Sun, 13 Nov 2022 14:11:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 297D4C433D6;
-        Sun, 13 Nov 2022 14:11:44 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="bcqpeBQw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1668348702;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1J62+ynSE9Alcf2NcxpAWpkNh4uJLuCMy3vCWo2LFjc=;
-        b=bcqpeBQwrQH1iSV9ZsrfqS/OWmG8xIh+1lu530xEfvg2szj+mcYMK1rr7Ahd57pktcvxVc
-        tDkBy01pGyqUIdTz29opxVHJpJTVhvXGVYNT61R8OAYARc41Iqw2ZvYAvTyUG6xm6uC2my
-        qBzdTlAcQXBbpTTJfBWBAv9QXdgMWRI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 032cc457 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Sun, 13 Nov 2022 14:11:41 +0000 (UTC)
-Date:   Sun, 13 Nov 2022 15:11:38 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] hw_random: use add_hwgenerator_randomness() for early
- entropy
-Message-ID: <Y3D64rIXFfRoSCne@zx2c4.com>
-References: <20221106150243.150437-1-Jason@zx2c4.com>
- <202211132159.cd70b1c0-oliver.sang@intel.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74F38B80C73
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 14:14:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 460F7C433C1;
+        Sun, 13 Nov 2022 14:14:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668348849;
+        bh=0N0faY7nLSbLb2KNcD5w20O8mhRpdTYXbjsNeB1Wlt8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NFEcQYM9Q52ZQjb9z3Sbl6pkgL6/Qid2n6rVNELB/BJX+fiDscq/7oV3zt25Fbf4C
+         6QjMw91fuBwzG5LKeHiTCzGvLXMR56+xHvHQntXP9v/5TADr/0hnm/27nizNFfMbr9
+         RiAyqAGeaJKsTzIVLCmFte1UdCVyt6Da25rb4m/P9PwU3V4GYCT+JbtYH9SdWGDxPU
+         gwxgal1qIJbIbpL3dJ0w5ObhU6ToxJysx5bCurH9iqc3jRlVJysOCICMmr9CKHG1Jd
+         HIn0DGhpf9T+SNlzWXX/zIJBbyr9TqBI2qLr7AmUa+njOTDTQm4n/uLbMYoSmT8617
+         iadKYky65LMCw==
+Date:   Sun, 13 Nov 2022 14:14:04 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     debug@rivosinc.com
+Cc:     palmer@dabbelt.com, jan.kiszka@siemens.com, kbingham@kernel.org,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux@rivosinc.com
+Subject: Re: [PATCH] gdb-script: updated lx_current for riscv
+Message-ID: <Y3D7rF34CAI+bZQx@spud>
+References: <20221111195938.1499148-1-debug@rivosinc.com>
+ <20221111195938.1499148-2-debug@rivosinc.com>
+ <Y3A2tPFbqcf1DPr5@spud>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202211132159.cd70b1c0-oliver.sang@intel.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y3A2tPFbqcf1DPr5@spud>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 13, 2022 at 09:48:46PM +0800, kernel test robot wrote:
+On Sun, Nov 13, 2022 at 12:13:40AM +0000, Conor Dooley wrote:
+> On Fri, Nov 11, 2022 at 11:59:38AM -0800, debug@rivosinc.com wrote:
+> > From: Deepak Gupta <debug@rivosinc.com>
+> > 
+> > lx_current python gdb command defined in scripts/gdb/cpus.py updated
+> > to support riscv architecture.
 > 
-> Greeting,
+> The commit which added support for arm64 gave an explanation of why
+> SP_EL0 needed to be checked. Would be nice if you could do the same here
+> for RISC-V. See 526940e39626 ("scripts/gdb: add lx_current support for
+> arm64") for what I mean.
 > 
-> FYI, we noticed WARNING:at_kernel/kthread.c:#kthread_should_stop due to commit (built with gcc-11):
-> 
-> commit: cea83a6b31856293ceab2c6ebab7843322fe105e ("[PATCH v3] hw_random: use add_hwgenerator_randomness() for early entropy")
-> url: https://github.com/intel-lab-lkp/linux/commits/UPDATE-20221106-230344/Jason-A-Donenfeld/hw_random-use-add_hwgenerator_randomness-for-early-entropy/20221106-044656
-> base: https://git.kernel.org/cgit/linux/kernel/git/gregkh/char-misc.git 30a0b95b1335e12efef89dd78518ed3e4a71a763
-> patch subject: [PATCH v3] hw_random: use add_hwgenerator_randomness() for early entropy
+> While you're at it, "scripts/gdb: add support for RISC-V" would appear
 
-A bit late. v4 was posted a while ago now.
+Realised I omitted a word there, sorry: s/add support/add lx_current support/
+
+> to be a more standard $subject for this file.
+> 
+> Thanks,
+> Conor.
+> 
+> > 
+> > Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> > ---
+> >  scripts/gdb/linux/cpus.py | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/scripts/gdb/linux/cpus.py b/scripts/gdb/linux/cpus.py
+> > index 15fc4626d236..ce6703f1e35a 100644
+> > --- a/scripts/gdb/linux/cpus.py
+> > +++ b/scripts/gdb/linux/cpus.py
+> > @@ -173,6 +173,14 @@ def get_current_task(cpu):
+> >           else:
+> >               raise gdb.GdbError("Sorry, obtaining the current task is not allowed "
+> >                                  "while running in userspace(EL0)")
+> > +    elif utils.is_target_arch("riscv"):
+> > +         current_task_addr = gdb.parse_and_eval("$tp")
+> > +         if((current_task_addr.cast(utils.get_long_type()) >> 63) != 0):
+> > +             current_task = current_task_addr.cast(task_ptr_type)
+> > +             return current_task.dereference()
+> > +         else:
+> > +             raise gdb.GdbError("Sorry, obtaining the current task is not allowed "
+> > +                                "while running in userspace")
+> >      else:
+> >          raise gdb.GdbError("Sorry, obtaining the current task is not yet "
+> >                             "supported with this arch")
+> > -- 
+> > 2.25.1
+> > 
