@@ -2,120 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D940E6272D7
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 23:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9916272DB
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 23:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235447AbiKMWN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 17:13:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
+        id S235447AbiKMWUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 17:20:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiKMWN1 (ORCPT
+        with ESMTP id S229692AbiKMWUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 17:13:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5182993;
-        Sun, 13 Nov 2022 14:13:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E075860C0A;
-        Sun, 13 Nov 2022 22:13:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A110C433D6;
-        Sun, 13 Nov 2022 22:13:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668377602;
-        bh=U2ikFT6APnNMIjqmwVyd0zK7pPxr9s3HsJ5ryDClCZI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sa508lT3frr4RDqVpbXRhF0rZhhOCKgRoIwGz0c5TFPEjyqwT7RVUb7+gQ8KC3H+v
-         hBOBKeCj0VFPv/HvwF+ASUxsDFjLJtTTzg+gr+0AultOmcMECBR8L6E/G+0Pa5g31z
-         Pn46Lh+Z6aL9KsK8la+0fi7T6etk1d6jl18gMFVGTgNxmMt+odueFN80jh0/TxB8xW
-         U48ZUddUVrKuq8UZyFnuHE0fBAmryLm6uiZFg0I7m6t3pDW1c5gFyLc3SR+LM04Y2P
-         2GUEvg44W3ZQSXjFzn4TOiM0KuAMj5JvaZEtBZSAjecTfu2CxeAKbAQPH27hr11DjZ
-         dRfsS1NK8ERog==
-Date:   Sun, 13 Nov 2022 14:13:19 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, jejb@linux.ibm.com,
-        Kees Cook <keescook@chromium.org>, dlunev@google.com,
-        zohar@linux.ibm.com, Matthew Garrett <mgarrett@aurora.tech>,
-        jarkko@kernel.org, linux-pm@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v5 06/11] security: keys: trusted: Verify creation data
-Message-ID: <Y3Fr//gNYls25Ug3@sol.localdomain>
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.6.I6cdb522cb5ea28fcd1e35b4cd92cbd067f99269a@changeid>
+        Sun, 13 Nov 2022 17:20:34 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD70EE0C8
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 14:20:33 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668378032;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EFuhDtI5E596clgtvdQHNPXYyvIgW5iwp/YHGywCpts=;
+        b=byDq0bIQ9u99fuRPJlc3gY02GidmLCRGFnohb1gpX50S9n8MyXhwrwRzaWEeUBxsCKyufT
+        BeJRStFWEmi6+Ix/CR5afdF8d/UfgE3Mvv72+mHs01erjoCCMuBjvO3h9UPthUVXpt1GjY
+        MEgho1g+ucfG33Y2OG3DaGmGkLRlDNpzFs1LWMiI2e71wHLww1wGuuGv/AYxGEDY98Vg/P
+        TJFn8bUlmD4aHh2x9+69M08ceMf62boRvO0UeB6T1NpRavVSoV5ie1+sDFDmkj1CfoLkYR
+        gjIieybtiWZDc88J9l8fMJb2GG2T+XlTCb8x5xClKewh5+FVHSLoxT7Z5aeRdQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668378032;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EFuhDtI5E596clgtvdQHNPXYyvIgW5iwp/YHGywCpts=;
+        b=f3eZRMahdQyVAO1pbGBZ1MOZg9Ps/OpJJ7MyT7JJwt9mR9RfQVi6G8FHxgQDP0UgRZBhGL
+        MmMCD1hhKAZzDjCQ==
+To:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>
+Subject: Re: [PATCH v6 5/6] timers: Add timer_shutdown() to be called before
+ freeing timers
+In-Reply-To: <20221110064147.529154710@goodmis.org>
+References: <20221110064101.429013735@goodmis.org>
+ <20221110064147.529154710@goodmis.org>
+Date:   Sun, 13 Nov 2022 23:20:31 +0100
+Message-ID: <87a64uts28.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111151451.v5.6.I6cdb522cb5ea28fcd1e35b4cd92cbd067f99269a@changeid>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 03:16:31PM -0800, Evan Green wrote:
-> security: keys: trusted: Verify creation data
+On Thu, Nov 10 2022 at 01:41, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+
+$Subject: !!@*&^*&^@!
+
+> Before a timer is to be freed, it must be shutdown. But there are some
+> locations were timer_shutdown_sync() can not be called due to the context
+> the object that holds the timer is in when it is freed.
+
+locations? This is not about locations, it's about contexts. And please
+provide a proper example for such a context.
+
+> For cases where the logic should keep the timer from being re-armed but
+> still needs to be shutdown with a sync, a new API of timer_shutdown() is
+> available.
+
+"Needs to shutdown with a sync"? "is available"? Try again with
+comprehensible explanations.
+
+> This is the same as del_timer() except that after it is called, the
+> timer can not be re-armed. If it is, a WARN_ON_ONCE() will be
+> triggered.
 >
-> If a loaded key contains creation data, ask the TPM to verify that
-> creation data. This allows users like encrypted hibernate to know that
-> the loaded and parsed creation data has not been tampered with.
+> The implementation of timer_shutdown() follows the timer_shutdown_sync()
+> method of using the same code as del_timer() but will pass in a boolean
+> that the timer is about to be freed, in which case the timer->function is
+> set to NULL, just like timer_shutdown_sync().
 
-I don't understand what the purpose of this is.
+That's complete useless information for a changelog. We can see that
+from the patch itself, no?
 
-I thought that the way to "seal" a key to a TPM PCR is to include the PCR in the
-"policy".
+Changelogs are about context and the problem the patch tries to solve,
+not about implementation details.
 
-Are you doing that too?  What is the purpose of using the "creation data"?
+> +/**
+> + * del_timer - deactivate a timer.
+> + * @timer: the timer to be deactivated
 
-> +	/* Auth */
-> +	tpm_buf_append_u32(&buf, 9);
-> +	tpm_buf_append_u32(&buf, TPM2_RS_PW);
-> +	tpm_buf_append_u16(&buf, 0);
-> +	tpm_buf_append_u8(&buf, 0);
-> +	tpm_buf_append_u16(&buf, 0);
+See previous comments about uppercase.
 
-This is struct tpm2_null_auth_area, so this is another place that could take
-advantage of a new helper function to append it.
+> + * del_timer() deactivates a timer - this works on both active and inactive
+> + * timers.
 
-> +	/* Creation data hash */
-> +	if (payload->creation_hash_len < 2) {
-> +		rc = -EINVAL;
-> +		goto out;
-> +	}
+How so? What "works"? What's the work done on an inactive timer? Also
+this lacks documentation that this function is fundamentally racy
+against a concurrent rearm.
+
+> + * The function returns whether it has deactivated a pending timer or not.
+> + * (ie. del_timer() of an inactive timer returns 0, del_timer() of an
+> + * active timer returns 1.)
+
+See previous comment about return value documentation.
+
+> + */
+> +static inline int del_timer(struct timer_list *timer)
+> +{
+> +	return __del_timer(timer, false);
+> +}
 > +
-> +	tpm_buf_append_u16(&buf, payload->creation_hash_len - 2);
-> +	tpm_buf_append(&buf, payload->creation_hash + 2,
-> +		       payload->creation_hash_len - 2);
+> +/**
+> + * timer_shutdown - deactivate a timer and shut it down
+> + * @timer: the timer to be deactivated
+> + *
+> + * timer_shutdown() deactivates a timer - this works on both active
+> + * and inactive timers, and will prevent it from being rearmed.
 
-So the first two bytes of creation_hash are a redundant length field that needs
-to be ignored here?  Perhaps tpm2_key_encode() shouldn't include that redundant
-length field?
+This needs some further explanation especially vs. the function pointer
+being set to NULL. Which means that in case that the timer is not freed
+and reused later on it needs to be initialized again. Which is btw
+lacking from timer_shutdown_sync() too.
 
+> + * The function returns whether it has deactivated a pending timer or not.
+> + * (ie. timer_shutdown() of an inactive timer returns 0,
+> + *   timer_shutdown() of an active timer returns 1.)
+> + */
+> +static inline int timer_shutdown(struct timer_list *timer)
+> +{
+> +	return __del_timer(timer, true);
+> +}
 > +
-> +	/* signature scheme */
-> +	tpm_buf_append_u16(&buf, TPM_ALG_NULL);
-> +
-> +	/* creation ticket */
-> +	tpm_buf_append(&buf, payload->tk, payload->tk_len);
-> +
-> +	rc = tpm_transmit_cmd(chip, &buf, 6, "certifying creation data");
-> +	if (rc)
-> +		goto out;
+>  /*
+>   * The jiffies value which is added to now, when there is no timer
+>   * in the timer wheel:
+> diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+> index 111a3550b3f2..7c224766065e 100644
+> --- a/kernel/time/timer.c
+> +++ b/kernel/time/timer.c
+> @@ -1240,18 +1240,7 @@ void add_timer_on(struct timer_list *timer, int cpu)
+>  }
+>  EXPORT_SYMBOL_GPL(add_timer_on);
+>  
+> -/**
+> - * del_timer - deactivate a timer.
+> - * @timer: the timer to be deactivated
+> - *
+> - * del_timer() deactivates a timer - this works on both active and inactive
+> - * timers.
+> - *
+> - * The function returns whether it has deactivated a pending timer or not.
+> - * (ie. del_timer() of an inactive timer returns 0, del_timer() of an
+> - * active timer returns 1.)
+> - */
 
-This is another instance of the bug where a positive TPM2_RC_* code is being
-returned from a function that is supposed to return a negative errno value.
+Instead of blurbing about invoking __del_timer() with free=true in the
+changelog you could have kept the kernel doc here and/or added some
+useful comment to the code below.
 
-- Eric
+But...
+
+> -int del_timer(struct timer_list *timer)
+> +int __del_timer(struct timer_list *timer, bool free)
+>  {
+>  	struct timer_base *base;
+>  	unsigned long flags;
+> @@ -1262,12 +1251,18 @@ int del_timer(struct timer_list *timer)
+>  	if (timer_pending(timer)) {
+>  		base = lock_timer_base(timer, &flags);
+>  		ret = detach_if_pending(timer, base, true);
+> +		if (free)
+> +			timer->function = NULL;
+> +		raw_spin_unlock_irqrestore(&base->lock, flags);
+> +	} else if (free) {
+> +		base = lock_timer_base(timer, &flags);
+> +		timer->function = NULL;
+>  		raw_spin_unlock_irqrestore(&base->lock, flags);
+>  	}
+
+... this function is a concurrency disaster:
+
+CPU0                           		CPU1
+
+timer_shutdown(timer)
+  __del_timer(timer, free=true)
+    // timer is not pending
+    ....
+    } else if (free)                    mod_timer()
+                                          lock_timer(timer);
+      lock_timer(timer)                   enqueue_timer(timer);
+                                          unlock_timer(timer);
+      timer->function = NULL;
+      unlock_timer(timer);
+                                        //timer expires
+                                        lock_timer(timer);
+                                        fn = timer->function;
+                                        unlock_timer(timer);
+                                        fn(timer); <--- NULL pointer dereference
+
+So you "solve" the existing problem by introducing one which is even
+more horrible to debug, right?
+
+Let me go back to the timer_shutdown_sync() variant and figure out
+whether that one is at least not borked in the same way.
+
+Thanks,
+
+        tglx
