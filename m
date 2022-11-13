@@ -2,65 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7C1626ED8
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 11:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B716626EDB
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 11:04:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235179AbiKMKDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 05:03:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
+        id S233029AbiKMKEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 05:04:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiKMKDd (ORCPT
+        with ESMTP id S229753AbiKMKEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 05:03:33 -0500
-Received: from jari.cn (unknown [218.92.28.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E0735F40;
-        Sun, 13 Nov 2022 02:03:31 -0800 (PST)
-Received: by ajax-webmail-localhost.localdomain (Coremail) ; Sun, 13 Nov
- 2022 17:58:36 +0800 (GMT+08:00)
-X-Originating-IP: [182.148.14.167]
-Date:   Sun, 13 Nov 2022 17:58:36 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   wangkailong@jari.cn
-To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH] samples/seccomp: fix array_size.cocci warning
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
+        Sun, 13 Nov 2022 05:04:45 -0500
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D375F40;
+        Sun, 13 Nov 2022 02:04:42 -0800 (PST)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id DD2D25FD20;
+        Sun, 13 Nov 2022 13:04:38 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1668333878;
+        bh=9rOROH2iebzLRkDA8NLvRPT2sy7/Kmmx1bzHXtL+1do=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=CdMPwgCnQ/YOIoUpFWj/vOdlIPUHT83RZeDLR+6+fiWC6UTjrd7O9juBsfMj9e0me
+         7VLWg5lVcdm5NUmpSK6Bf6MtskHPskZ+y/WreimzhPEhxWsVq7Dy17NiwXTN2jQ79g
+         i2XtYSCyNWt34uM4p98xcryCiP5Qy/jbF1/mCJSOCkUgAT38ZJIaxqOn627PAWDPjR
+         22DPApo4qdRpNjhH3qVZEmDU5/fwv7zfL149APKERzBriqmtzYVzlS8Hyj4fLCjzLG
+         mB473yJznuFEiJonTvTlrXUeZj1zY8sYLS8Sobysk0v7Tv1rs/OE7u2bOmx2/oLYzZ
+         znz1ygF9I43Bw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Sun, 13 Nov 2022 13:04:36 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Bobby Eshleman <bobbyeshleman@gmail.com>,
+        Stefano Garzarella <sgarzare@redhat.com>
+CC:     Krasnov Arseniy <oxffffaa@gmail.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Bobby Eshleman <bobby.eshleman@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        kernel <kernel@sberdevices.ru>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [RFC PATCH v3 00/11] virtio/vsock: experimental zerocopy receive
+Thread-Topic: [RFC PATCH v3 00/11] virtio/vsock: experimental zerocopy receive
+Thread-Index: AQHY8hatKKTuchPoekmnGA3HAR0Si645kb6AgAB0yICAAPn8gIABd2GA
+Date:   Sun, 13 Nov 2022 10:04:22 +0000
+Message-ID: <d4c3afcc-e8f3-d81c-597a-5311280e8e51@sberdevices.ru>
+References: <f60d7e94-795d-06fd-0321-6972533700c5@sberdevices.ru>
+ <20221111134715.qxgu7t4c7jse24hp@sgarzare-redhat> <Y260WSJKJXtaJQZi@bullseye>
+ <3de0302f-bd4f-5df1-9de5-cbc3b3dd94f8@sberdevices.ru>
+In-Reply-To: <3de0302f-bd4f-5df1-9de5-cbc3b3dd94f8@sberdevices.ru>
+Accept-Language: en-US, ru-RU
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <CAE0D643183BAB419460FB3C6014DF3C@sberdevices.ru>
 Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Message-ID: <2b3f2420.130.184706d34e6.Coremail.wangkailong@jari.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAfwCnu+HMv3BjEh0DAA--.78W
-X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQAEB2FEYx0DfwAds4
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
-        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/11/13 04:55:00 #20572880
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rml4IGZvbGxvd2luZyBjb2NjaWNoZWNrIHdhcm5pbmc6CgpzYW1wbGVzL3NlY2NvbXAvYnBmLWZh
-bmN5LmM6ODM6MzktNDA6IFdBUk5JTkc6IFVzZSBBUlJBWV9TSVpFCnNhbXBsZXMvc2VjY29tcC9i
-cGYtZmFuY3kuYzo4Njo0NC00NTogV0FSTklORzogVXNlIEFSUkFZX1NJWkUKClNpZ25lZC1vZmYt
-Ynk6IEthaUxvbmcgV2FuZyA8d2FuZ2thaWxvbmdAamFyaS5jbj4KLS0tCiBzYW1wbGVzL3NlY2Nv
-bXAvYnBmLWZhbmN5LmMgfCA0ICsrLS0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyks
-IDIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvc2FtcGxlcy9zZWNjb21wL2JwZi1mYW5jeS5j
-IGIvc2FtcGxlcy9zZWNjb21wL2JwZi1mYW5jeS5jCmluZGV4IDFjY2I0MzUwMjViNi4uNTQ4ZjAz
-ODkyNGQ2IDEwMDY0NAotLS0gYS9zYW1wbGVzL3NlY2NvbXAvYnBmLWZhbmN5LmMKKysrIGIvc2Ft
-cGxlcy9zZWNjb21wL2JwZi1mYW5jeS5jCkBAIC04MCwxMCArODAsMTAgQEAgaW50IG1haW4oaW50
-IGFyZ2MsIGNoYXIgKiphcmd2KQogCX07CiAJc3RydWN0IHNvY2tfZnByb2cgcHJvZyA9IHsKIAkJ
-LmZpbHRlciA9IGZpbHRlciwKLQkJLmxlbiA9ICh1bnNpZ25lZCBzaG9ydCkoc2l6ZW9mKGZpbHRl
-cikvc2l6ZW9mKGZpbHRlclswXSkpLAorCQkubGVuID0gKHVuc2lnbmVkIHNob3J0KShBUlJBWV9T
-SVpFKGZpbHRlcikpLAogCX07CiAJc3NpemVfdCBieXRlczsKLQlicGZfcmVzb2x2ZV9qdW1wcygm
-bCwgZmlsdGVyLCBzaXplb2YoZmlsdGVyKS9zaXplb2YoKmZpbHRlcikpOworCWJwZl9yZXNvbHZl
-X2p1bXBzKCZsLCBmaWx0ZXIsIEFSUkFZX1NJWkUoZmlsdGVyKSk7CiAKIAlpZiAocHJjdGwoUFJf
-U0VUX05PX05FV19QUklWUywgMSwgMCwgMCwgMCkpIHsKIAkJcGVycm9yKCJwcmN0bChOT19ORVdf
-UFJJVlMpIik7Ci0tIAoyLjI1LjEK
+T24gMTIuMTEuMjAyMiAxNDo0MCwgQXJzZW5peSBLcmFzbm92IHdyb3RlOg0KDQpIZWxsbyBhZ2Fp
+biBCb2JieSwNCg0KaSB3YXNuJ3QgQ0NlZCBpbiBZb3VyIHBhdGNoc2V0LCBidXQgSSByZXZpZXcg
+aXQgYW55d2F5IGFuZCB3cml0ZSBjb21tZW50cyBoZXJlIGluIHRoaXMNCm1hbm5lcjopIEkgZm91
+bmQgc3RyYW5nZSB0aGluZzoNCg0KSW4gJ3ZpcnRpb190cmFuc3BvcnRfcmVjdl9lbnF1ZXVlKCkn
+IG5ldyBwYWNrZXQgY291bGQgYmUgY29waWVkIHRvIHRoZSBsYXN0IHBhY2tldCBpbg0KcnggcXVl
+dWUoc2tiIGluIGN1cnJlbnQgdmVyc2lvbikuIER1cmluZyBjb3B5IFlvdSB1cGRhdGUgbGFzdCBz
+a2IgbGVuZ3RoIGJ5IGNhbGwNCidza2JfcHV0KGxhc3Rfc2tiLCBza2ItPmxlbiknIGluc2lkZSAn
+bWVtY3B5KCknLiBTbyAnbGFzdF9za2InIG5vdyBoYXZlIG5ldyBsZW5ndGgsDQpidXQgaGVhZGVy
+IG9mIHBhY2tldCBpcyBub3QgdXBkYXRlZC4NCg0KTm93IGxldCdzIGxvb2sgdG8gJ3ZpcnRpb190
+cmFuc3BvcnRfc2VxcGFja2V0X2RvX2RlcXVldWUoKScsIGl0IHVzZXMgdmFsdWUgZnJvbSBwYWNr
+ZXQncw0KaGVhZGVyIGFzICdwa3RfbGVuJywgbm90IGZyb20gc2tiOg0KDQpwa3RfbGVuID0gKHNp
+emVfdClsZTMyX3RvX2NwdShoZHItPmxlbik7DQoNCkkgdGhpbmsgd2UgbmVlZCB0byB1cGRhdGUg
+bGFzdCBwYWNrZXQncyBoZWFkZXIgZHVyaW5nIG1lcmdpbmcgbmV3IHBhY2tldCB0byBsYXN0IHBh
+Y2tldA0Kb2YgcnggcXVldWUuDQoNClRoYW5rcywgQXJzZW5peQ0KDQoNCj4gT24gMTEuMTEuMjAy
+MiAyMzo0NSwgQm9iYnkgRXNobGVtYW4gd3JvdGU6DQo+PiBPbiBGcmksIE5vdiAxMSwgMjAyMiBh
+dCAwMjo0NzoxNVBNICswMTAwLCBTdGVmYW5vIEdhcnphcmVsbGEgd3JvdGU6DQo+Pj4gSGkgQXJz
+ZW5peSwNCj4+PiBtYXliZSB3ZSBzaG91bGQgc3RhcnQgcmViYXNpbmcgdGhpcyBzZXJpZXMgb24g
+dGhlIG5ldyBzdXBwb3J0IGZvciBza2J1ZmY6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xrbWwv
+MjAyMjExMTAxNzE3MjMuMjQyNjMtMS1ib2JieS5lc2hsZW1hbkBieXRlZGFuY2UuY29tLw0KPj4+
+DQo+Pj4gQ0NpbmcgQm9iYnkgdG8gc2VlIGlmIGl0J3MgZWFzeSB0byBpbnRlZ3JhdGUgc2luY2Ug
+eW91J3JlIGJvdGggY2hhbmdpbmcgdGhlDQo+Pj4gcGFja2V0IGFsbG9jYXRpb24uDQo+Pj4NCj4+
+DQo+PiBUaGlzIGxvb2tzIGxpa2UgdGhlIHBhY2tldCBhbGxvY2F0aW9uIGNhbiBiZSBtYXJyaWVk
+IHNvbWV3aGF0IG5pY2VseSBpbg0KPj4gc2luY2UgU0tCcyBtYXkgYmUgYnVpbHQgZnJvbSBwYWdl
+cyB1c2luZyBidWlsZF9za2IoKS4gVGhlcmUgbWF5IGJlIHNvbWUNCj4+IHR3ZWFraW5nIG5lY2Vz
+c2FyeSB0aG91Z2gsIHNpbmNlIGl0IGFsc28gdXNlcyB0aGUgdGFpbCBjaHVuayBvZiB0aGUgcGFn
+ZQ0KPj4gdG8gaG9sZCBzdHJ1Y3Qgc2tiX3NoYXJlZF9pbmZvIElJUkMuDQo+Pg0KPj4gSSBsZWZ0
+IHNvbWUgY29tbWVudHMgb24gdGhlIHBhdGNoIHdpdGggdGhlIGFsbG9jYXRvciBpbiBpdC4NCj4g
+SGVsbG8gQm9iYnksDQo+IA0KPiB0aGFua3MgZm9yIHJldmlldy4gSSdsbCByZWJhc2UgbXkgcGF0
+Y2hzZXQgb24gWW91ciBza2J1ZmYgc3VwcG9ydC4NCj4+DQo+Pj4NCj4+PiBNYXliZSB0byBhdm9p
+ZCBoYXZpbmcgdG8gcmViYXNlIGV2ZXJ5dGhpbmcgbGF0ZXIsIGl0J3MgYWxyZWFkeSB3b3J0aHdo
+aWxlIHRvDQo+Pj4gc3RhcnQgdXNpbmcgQm9iYnkncyBwYXRjaCB3aXRoIHNrYnVmZi4NCj4+Pg0K
+Pj4NCj4+IEknbGwgYmUgd2FpdGluZyB1bnRpbCBNb25kYXkgdG8gc2VlIGlmIHNvbWUgbW9yZSBm
+ZWVkYmFjayBjb21lcyBpbg0KPj4gYmVmb3JlIHNlbmRpbmcgb3V0IHY0LCBzbyBJIGV4cGVjdCB2
+NCBlYXJseSBuZXh0IHdlZWssIEZXSVcuDQo+IE9uZSByZXF1ZXN0IGZyb20gbWUsIGNvdWxkIFlv
+dSBwbGVhc2UgQ0MgbWUgZm9yIG5leHQgdmVyc2lvbnMgb2YNCj4gWW91ciBwYXRjaHNldCwgYmVj
+YXVzZToNCj4gMSkgSSdsbCBhbHdheXMgaGF2ZSBsYXRlc3QgdmVyc2lvbiBvZiBza2J1ZmYgc3Vw
+cG9ydC4NCj4gMikgSSdsbCBzZWUgcmV2aWV3IHByb2Nlc3MgYWxzby4NCj4gDQo+IE15IGNvbnRh
+Y3RzOg0KPiBveGZmZmZhYUBnbWFpbC5jb20NCj4gQVZLcmFzbm92QHNiZXJkZXZpY2VzLnJ1DQo+
+IA0KPiBUaGFua3MsIEFyc2VuaXkNCj4gDQo+Pg0KPj4gQmVzdCwNCj4+IEJvYmJ5DQo+IA0KDQo=
