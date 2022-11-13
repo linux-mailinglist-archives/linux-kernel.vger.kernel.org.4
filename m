@@ -2,80 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E90E626F1C
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 12:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0406626F21
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 12:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235289AbiKMLAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 06:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
+        id S235106AbiKMLJI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 13 Nov 2022 06:09:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235243AbiKMK7z (ORCPT
+        with ESMTP id S231252AbiKMLJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 05:59:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8029EE05;
-        Sun, 13 Nov 2022 02:59:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F2BA60B7E;
-        Sun, 13 Nov 2022 10:59:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27B27C433D7;
-        Sun, 13 Nov 2022 10:59:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668337193;
-        bh=A7FQti5m/wYHdPhKdMyiYjVn1oIvpGLNd4xV582l6p4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CUodnP3ESQ4gJfqqJtLjdowamhxWOjPQ4lW6AEbCVfnICp/2AW5Pqn7Yh2UjdmrNr
-         uS8x1U/V2ZZ6yWFLqUOkGg/rp3wGy6TbOCk5LZLXixIzIZ4ipoSlhLikpzobMt/BA6
-         vf6zJuD1zSuOWceDRRc+dR/HUYfmO3DRDoj3lxwcbaWhQwRXyp0bmczKqWoN62QylH
-         ZYc/k6yV8GTueLW2Swre0IIAYLDhRQP7GvX1I0H8iRJJZ7RKuJvsD1ryGAsCWwFEvH
-         LJGncv35xsPyevOXRfF/LBBzIc808Tn98X8khsZ6nXNiAZrD5NAZlm13EeY2qUrReO
-         tfxFEbcLfY3hw==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] kconfig: remove redundant (void *) cast in search_conf()
-Date:   Sun, 13 Nov 2022 19:59:43 +0900
-Message-Id: <20221113105943.3753945-3-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221113105943.3753945-1-masahiroy@kernel.org>
-References: <20221113105943.3753945-1-masahiroy@kernel.org>
+        Sun, 13 Nov 2022 06:09:06 -0500
+Received: from webmail.reint.mg.gov.br (webmail.reint.mg.gov.br [200.198.34.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9B1B494
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 03:09:04 -0800 (PST)
+Received: from webmail.reint.mg.gov.br (localhost.localdomain [127.0.0.1])
+        by webmail.reint.mg.gov.br (Postfix) with ESMTPS id CF24260CCBA28;
+        Sun, 13 Nov 2022 07:45:52 -0200 (BRST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by webmail.reint.mg.gov.br (Postfix) with ESMTP id C195F60908C67;
+        Sun, 13 Nov 2022 06:28:31 -0200 (BRST)
+X-Virus-Scanned: amavisd-new at reint.mg.gov.br
+Received: from webmail.reint.mg.gov.br ([127.0.0.1])
+        by localhost (webmail.reint.mg.gov.br [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id xTvh8-Dcc5Gi; Sun, 13 Nov 2022 06:28:31 -0200 (BRST)
+Received: from [10.2.0.2] (unknown [138.199.5.97])
+        by webmail.reint.mg.gov.br (Postfix) with ESMTPSA id 9CA0A60A7F2CE;
+        Sun, 13 Nov 2022 06:28:24 -0200 (BRST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Darlehen aktualisieren
+To:     Recipients <6bpm.pesquisa@reint.mg.gov.br>
+From:   "Darlehen" <6bpm.pesquisa@reint.mg.gov.br>
+Date:   Sun, 13 Nov 2022 00:28:10 -0800
+Reply-To: creditor@zoho.com
+Message-Id: <20221113082824.9CA0A60A7F2CE@webmail.reint.mg.gov.br>
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_80,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.9172]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [200.198.34.6 listed in wl.mailspike.net]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The (void *) cast is redundant because the last argument of
-show_textbox_ext() is an opaque pointer.
+Hallo, brauchen Sie einen Kredit?
+Beantragen Sie online einen (Gold Bouncers Ltd) Privatkredit zu den niedrigsten Zinssätzen mit schneller Auszahlung. Rückzahlung von Krediten mit Leichtigkeit und flexiblen Laufzeiten von 12 bis 60 Monaten.
+Bitte kontaktieren Sie uns mit den folgenden Anwendungsdetails.
+Ihren Namen:
+Ihre Wohn- und Geschäftsadresse:
+gewünschte Kreditsumme:
+Laufzeit Ihres Darlehens:
+deine Telefonnummer:
+Ihr monatliches Einkommen:
+unser Kundendienstmitarbeiter antwortet schnell.
+Private E-Mail des Administrators: gb_f@aol.com
+Administrator WhatsApp: +1(424)208-0892
+die Geschäftsführung der GB LTD.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- scripts/kconfig/mconf.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/scripts/kconfig/mconf.c b/scripts/kconfig/mconf.c
-index d7f7e1bf7dd4..9c549683c627 100644
---- a/scripts/kconfig/mconf.c
-+++ b/scripts/kconfig/mconf.c
-@@ -441,8 +441,7 @@ static void search_conf(void)
- 		res = get_relations_str(sym_arr, &head);
- 		set_subtitle();
- 		dres = show_textbox_ext("Search Results", str_get(&res), 0, 0,
--					keys, &vscroll,
--					&hscroll, &update_text, (void *)
-+					keys, &vscroll, &hscroll, &update_text,
- 					&data);
- 		again = false;
- 		for (i = 0; i < JUMP_NB && keys[i]; i++)
--- 
-2.34.1
 
