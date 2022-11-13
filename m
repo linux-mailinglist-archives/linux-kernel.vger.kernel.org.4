@@ -2,178 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6D4626F6C
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 13:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1A92626F68
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 13:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235330AbiKMMVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 07:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        id S235258AbiKMMVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 07:21:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235156AbiKMMV2 (ORCPT
+        with ESMTP id S233792AbiKMMU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 07:21:28 -0500
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51527DF93;
-        Sun, 13 Nov 2022 04:21:27 -0800 (PST)
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 2ADCKpCI013379;
-        Sun, 13 Nov 2022 21:20:51 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2ADCKpCI013379
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1668342052;
-        bh=KQYMcQ8jyCMguJ5gunXZ5HdXL7ZJ1Kcn3ixoiC6kUSQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=yhqpitGJQ8FQwYg9kz0GRzkATS45oGtEerUKlTpvXagoEVXFjFhaR3Cgi8s8SSkdZ
-         1RJPdtiq5Zfg6DdNHD9eMDsw5hfZRffCB+jmaiz3Cgod6bdlVb70uODD6U2MmTTyqX
-         +NORRfrywCVy77nm8tBjq8uC23HCENwQay7IQrmRxZ+S7RSd5U4gq0erkdXx/et5HZ
-         1ck16MBW05e6wf9Apr/n94mg+zMG8pA6teQlltimHwWyxHDMeC7obCtgbE4py5egQ3
-         G1EbTvpXKigretY9fvy5PzAiTpPqioZBy6EJi2hUqrnIYtYAtAQQm6qcRpopbpTsDA
-         4VB5n558ZDHWQ==
-X-Nifty-SrcIP: [209.85.210.41]
-Received: by mail-ot1-f41.google.com with SMTP id p8-20020a056830130800b0066bb73cf3bcso5229188otq.11;
-        Sun, 13 Nov 2022 04:20:51 -0800 (PST)
-X-Gm-Message-State: ANoB5pkt4UcIeQj7qK+RShRka/wZAu8VrzmNSYx8t06nGc9uGoizg08+
-        ZeDXHKIcjmsiavOSNmyWTUAa+wKEeE/MZB+AAbQ=
-X-Google-Smtp-Source: AA0mqf7Ak1td9ZHTtIIvy5gbQpT6D9VV2glo01Ebzq37Ls700skUqQzE+cxSwsEqe5ri6T8fVlzXTVrPkBnh2QaKiMA=
-X-Received: by 2002:a05:6830:109:b0:661:8d9e:1959 with SMTP id
- i9-20020a056830010900b006618d9e1959mr4762382otp.225.1668342050599; Sun, 13
- Nov 2022 04:20:50 -0800 (PST)
-MIME-Version: 1.0
-References: <20221113111525.3762483-1-masahiroy@kernel.org> <20221113111525.3762483-3-masahiroy@kernel.org>
-In-Reply-To: <20221113111525.3762483-3-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 13 Nov 2022 21:20:14 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQiwNB6GQ1kt9ig7TCDJkZBd5M=8PWkd0xM6KjHj0W9PA@mail.gmail.com>
-Message-ID: <CAK7LNAQiwNB6GQ1kt9ig7TCDJkZBd5M=8PWkd0xM6KjHj0W9PA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kbuild: warn objects shared among multiple modules
-To:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Sun, 13 Nov 2022 07:20:58 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74901DF93;
+        Sun, 13 Nov 2022 04:20:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668342056; x=1699878056;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O9v7vVxN4raPpuVeniWD+75Gm4EvYuxE8XEu0qEGfuk=;
+  b=DOggXvVLy+/3DrVtE7HcwZy9vd48tdo3phl4cSRUyNjtdEVl/7zAm5SB
+   SHced2KOnyylwyWO6a3rC2BlHIQ/hO4aH8V4nmaZtCozS0qik3jqceCZZ
+   UyUZDVUFKCPNexSu7v6hfjzHf5Rp1IWGmhUcjMF22UDhrbcCeaaKjduCz
+   WR+RDnF+3IzPHOJKyc6cvaSscSlxzIQF/zU6u+9adlZtxzBqXUg8eE6F/
+   AfJTp1tbDedkNp9Ikdpuk1UBIXWZHWAPy4pc9ZMV5sZ2XGRuFX6k//E/x
+   l0qJ/wGMPG6z+P+FwtS4z5K3QVUMG5H+FWx4ddDAD8xBIIzCORyyfYydG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="291525116"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="291525116"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 04:20:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="671233762"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="671233762"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 13 Nov 2022 04:20:51 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1ouByi-00BfhA-2j;
+        Sun, 13 Nov 2022 14:20:48 +0200
+Date:   Sun, 13 Nov 2022 14:20:48 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Andrew Davis <afd@ti.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] Rename DTB overlay source files
+Message-ID: <Y3DhIO7H9mfRpe3z@smile.fi.intel.com>
+References: <20221024173434.32518-1-afd@ti.com>
+ <CAL_JsqJxgVwsjKnkCEkZeoSsDgaRD+DVPkHRBc2SrcSq69PBNw@mail.gmail.com>
+ <Y26lDEtiG4KFzc91@smile.fi.intel.com>
+ <e5ce57b2-4557-2dcb-fb3a-71e2acae4502@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e5ce57b2-4557-2dcb-fb3a-71e2acae4502@ti.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 13, 2022 at 8:15 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> If an object is shared among multiple modules, some of them are
-> configured as 'm', but the others as 'y', the shared object is
-> linked to the modules and vmlinux. This is a potential issue because
-> the expected CFLAGS are different between modules and builtins.
->
-> Commit 637a642f5ca5 ("zstd: Fixing mixed module-builtin objects")
-> reported that this could be even more fatal in some cases such as
-> Clang LTO.
->
-> That commit fixed lib/zlib/zstd_{compress,decompress}, but there are
-> still more instances of breakage.
->
-> This commit adds a W=1 warning for shared objects, so that the kbuild
-> test robot, which provides build tests with W=1, will avoid a new
-> breakage slipping in.
->
-> Quick compile tests on v6.1-rc4 detected the following:
->
+On Fri, Nov 11, 2022 at 03:05:20PM -0600, Andrew Davis wrote:
+> On 11/11/22 1:39 PM, Andy Shevchenko wrote:
+> > On Wed, Oct 26, 2022 at 09:11:21AM -0500, Rob Herring wrote:
+> > > On Mon, Oct 24, 2022 at 12:34 PM Andrew Davis <afd@ti.com> wrote:
+> > > > 
+> > > > Hello all,
+> > > > 
+> > > > This is a series based on my patch here[0]. As suggested by Rob
+> > > > I've resurrected Frank's patch and appended it to mine as a series.
+> > > > 
+> > > > First patch here is my original patch, 3rd is Frank's patch but with
+> > > > the unittest changes pulled out into the 2nd patch. That was re-worked
+> > > > moving the source building macro into scripts/Makefile.lib.
+> > > > 
+> > > > Patches 4, 5, and 6 are an attempt at renaming all the existing DTB
+> > > > overlays. Split out by platform so they could be taken by platform
+> > > > maintainers or if easier ACK'd here and taken all together.
+> > > > 
+> > > > This should cover all the DTB overlays so we can remove the old .dts
+> > > > rule for overlays and make .dtso the only supported way, let me know
+> > > > if we want that this cycle and I can post that too.
+> > > > 
+> > > > Thanks,
+> > > > Andrew
+> > > > 
+> > > > Changes from v1[1]:
+> > > >   - Added patch to rename pi433 overlay.
+> > > >   - Cleaned wording on patch 4-6.
+> > > >   - Collected some ACKs
+> > > > 
+> > > > [0] https://www.spinics.net/lists/kernel/msg4548509.html
+> > > > [1] https://www.spinics.net/lists/arm-kernel/msg1020165.html
+> > > > 
+> > > > Andrew Davis (6):
+> > > >    kbuild: Allow DTB overlays to built from .dtso named source files
+> > > >    kbuild: Allow DTB overlays to built into .dtso.S files
+> > > >    arm64: dts: freescale: Rename DTB overlay source files from .dts to
+> > > >      .dtso
+> > > >    arm64: dts: renesas: Rename DTB overlay source files from .dts to
+> > > >      .dtso
+> > > >    arm64: dts: xilinx: Rename DTB overlay source files from .dts to .dtso
+> > > >    staging: pi433: overlay: Rename overlay source file from .dts to .dtso
+> > > > 
+> > > > Frank Rowand (1):
+> > > >    of: overlay: rename overlay source files from .dts to .dtso
+> > > 
+> > > I've applied patches 1-3 and 7. I'll send a PR for the branch to the
+> > > platform maintainers after a few days in linux-next.
+> > 
+> > The patch
+> > 
+> > commit 941214a512d8c80d47e720c17ec17e8539175e93
+> > Author: Andrew Davis <afd@ti.com>
+> > Date:   Mon Oct 24 12:34:29 2022 -0500
+> > 
+> >      kbuild: Allow DTB overlays to built into .dtbo.S files
+> > 
+> > broke the build reproducibility / no-op builds.
+> > 
+> > Before:
+> >    2+ execution of `make` on non-changed tree did nothing
+> > 
+> > Now:
+> >    Each run of `make` (even without a single bit changed) restarts vmlinux
+> >    rebuild.
+> > 
+> > Please, revert or fix.
+> > 
+> 
+> I do not see this behavior. What config are you using?
+> 
+> Not sure how this patch could be the root cause, it only adds
+> a build target/rule, but doesn't actually use it anywhere yet..
 
-Also
+For your reference I started with this one [1].
 
-    scripts/Makefile.build:252: ./drivers/block/rnbd/Makefile:
-rnbd-common.o is added to multiple modules: rnbd-client rnbd-server
+When I bisected, I just answered with defaults on whatever `make` told me at
+the configuration stage.
 
+The actual `make` command I used:
 
+	make O=/path/to/the/result W=1 C=1 CF=-D__CHECK_ENDIAN__ -j64
 
-> scripts/Makefile.build:252: ./drivers/crypto/marvell/octeontx2/Makefile: cn10k_cpt.o is added to multiple modules: rvu_cptpf rvu_cptvf
-> scripts/Makefile.build:252: ./drivers/crypto/marvell/octeontx2/Makefile: otx2_cptlf.o is added to multiple modules: rvu_cptpf rvu_cptvf
-> scripts/Makefile.build:252: ./drivers/crypto/marvell/octeontx2/Makefile: otx2_cpt_mbox_common.o is added to multiple modules: rvu_cptpf rvu_cptvf
-> scripts/Makefile.build:252: ./drivers/edac/Makefile: skx_common.o is added to multiple modules: i10nm_edac skx_edac
-> scripts/Makefile.build:252: ./drivers/gpu/drm/bridge/imx/Makefile: imx-ldb-helper.o is added to multiple modules: imx8qm-ldb imx8qxp-ldb
-> scripts/Makefile.build:252: ./drivers/mfd/Makefile: rsmu_core.o is added to multiple modules: rsmu-i2c rsmu-spi
-> scripts/Makefile.build:252: ./drivers/mtd/tests/Makefile: mtd_test.o is added to multiple modules: mtd_nandbiterrs mtd_oobtest mtd_pagetest mtd_readtest mtd_speedtest mtd_stresstest mtd_subpagetest mtd_torturetest
-> scripts/Makefile.build:252: ./drivers/net/dsa/ocelot/Makefile: felix.o is added to multiple modules: mscc_felix mscc_seville
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: cn23xx_pf_device.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: cn23xx_vf_device.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: cn66xx_device.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: cn68xx_device.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: lio_core.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: lio_ethtool.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: octeon_device.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: octeon_droq.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: octeon_mailbox.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: octeon_mem_ops.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: octeon_nic.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: request_manager.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/cavium/liquidio/Makefile: response_manager.o is added to multiple modules: liquidio liquidio_vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/dpaa2/Makefile: dpaa2-mac.o is added to multiple modules: fsl-dpaa2-eth fsl-dpaa2-switch
-> scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/dpaa2/Makefile: dpmac.o is added to multiple modules: fsl-dpaa2-eth fsl-dpaa2-switch
-> scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/enetc/Makefile: enetc_cbdr.o is added to multiple modules: fsl-enetc fsl-enetc-vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/enetc/Makefile: enetc_ethtool.o is added to multiple modules: fsl-enetc fsl-enetc-vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/freescale/enetc/Makefile: enetc.o is added to multiple modules: fsl-enetc fsl-enetc-vf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/hisilicon/hns3/Makefile: hns3_common/hclge_comm_cmd.o is added to multiple modules: hclge hclgevf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/hisilicon/hns3/Makefile: hns3_common/hclge_comm_rss.o is added to multiple modules: hclge hclgevf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/hisilicon/hns3/Makefile: hns3_common/hclge_comm_tqp_stats.o is added to multiple modules: hclge hclgevf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/marvell/octeontx2/nic/Makefile: otx2_dcbnl.o is added to multiple modules: rvu_nicpf rvu_nicvf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/marvell/octeontx2/nic/Makefile: otx2_devlink.o is added to multiple modules: rvu_nicpf rvu_nicvf
-> scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_ale.o is added to multiple modules: keystone_netcp keystone_netcp_ethss ti_cpsw ti_cpsw_new
-> scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_ethtool.o is added to multiple modules: ti_cpsw ti_cpsw_new
-> scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_priv.o is added to multiple modules: ti_cpsw ti_cpsw_new
-> scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: cpsw_sl.o is added to multiple modules: ti_cpsw ti_cpsw_new
-> scripts/Makefile.build:252: ./drivers/net/ethernet/ti/Makefile: davinci_cpdma.o is added to multiple modules: ti_cpsw ti_cpsw_new ti_davinci_emac
-> scripts/Makefile.build:252: ./drivers/platform/x86/intel/int3472/Makefile: common.o is added to multiple modules: intel_skl_int3472_discrete intel_skl_int3472_tps68470
-> scripts/Makefile.build:252: ./sound/soc/codecs/Makefile: wcd-clsh-v2.o is added to multiple modules: snd-soc-wcd9335 snd-soc-wcd934x snd-soc-wcd938x
->
-> Once all the warnings are fixed, it can become an error irrespective of
-> W= option.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  scripts/Makefile.build | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index 37cf88d076e8..799df12b53f3 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -222,6 +222,10 @@ endif
->
->  cmd_check_local_export = $(srctree)/scripts/check-local-export $@
->
-> +ifneq ($(findstring 1, $(KBUILD_EXTRA_WARN)),)
-> +cmd_warn_shared_object = $(if $(word 2, $(modname-multi)),$(warning $(kbuild-file): $*.o is added to multiple modules: $(modname-multi)))
-> +endif
-> +
->  define rule_cc_o_c
->         $(call cmd_and_fixdep,cc_o_c)
->         $(call cmd,gen_ksymdeps)
-> @@ -231,6 +235,7 @@ define rule_cc_o_c
->         $(call cmd,gen_objtooldep)
->         $(call cmd,gen_symversions_c)
->         $(call cmd,record_mcount)
-> +       $(call cmd,warn_shared_object)
->  endef
->
->  define rule_as_o_S
-> @@ -239,6 +244,7 @@ define rule_as_o_S
->         $(call cmd,check_local_export)
->         $(call cmd,gen_objtooldep)
->         $(call cmd,gen_symversions_S)
-> +       $(call cmd,warn_shared_object)
->  endef
->
->  # Built-in and composite module parts
-> --
-> 2.34.1
->
+But there is nothing that can affect the described issue.
 
+[1]: https://p.defau.lt/?ZSOdGnNxF9v9AQtrfDo_KQ
 
 -- 
-Best Regards
-Masahiro Yamada
+With Best Regards,
+Andy Shevchenko
+
+
