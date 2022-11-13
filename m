@@ -2,79 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD03626F7E
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 13:36:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC568626F80
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 13:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235223AbiKMMgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 07:36:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35362 "EHLO
+        id S235260AbiKMMk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 07:40:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232884AbiKMMgl (ORCPT
+        with ESMTP id S232884AbiKMMkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 07:36:41 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DCCFCE3;
-        Sun, 13 Nov 2022 04:36:40 -0800 (PST)
+        Sun, 13 Nov 2022 07:40:23 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76BA1115D;
+        Sun, 13 Nov 2022 04:40:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668343000; x=1699879000;
+  t=1668343221; x=1699879221;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=tXxNoJ4p40NbDu6Pg1fz6lrpeT1kuob3UG5D0fgt2iE=;
-  b=mUe+O9R/P5NPzbu60fYjQhCx5ATrF+vmakHBufEnZSkoANTQEKwoDGgw
-   5YEYlXk4BvVX9indhORoKE78alibfyFLvQOBa3js5JrJfvowB0lIq8h1H
-   EANWgBCv5d1TwE5qRgf+F2ZeWc2WToUdEy21EeC2rUV8julZECl9anYk6
-   BoOupdOSO4NoMGwmb75hXyacCB8h/tg5INXvF55kDtgUy1BK8ZKoPHS/h
-   cjJ57qsXUtKca6svZumXhoXxE4pHAczNOOWyQJfKXwcHvggfN+ehtYPSg
-   c1hNw3J3gsWDcuEwf/dXiUbEWGTqSFcK8bsnedLWw0cPUypdMv0uyMJ7B
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="338588356"
+  bh=pjNiMa1Cy/F/7GAAO42rp/m2JLQqPKP6EMEtoOQqGQ0=;
+  b=cQlImT4HYpjdFBdqe99mm6DDD08JhSHGxb6WaYCixRmqynJbp66WA9mN
+   mmUe4tZyo344BTrGFn9iJVVKQuod1lZzKUJiX+TF1POgU2U9QY/5JuL8U
+   uuD3fj5I2x796Qi0LXIbuZP2EidmVuUGrSqlHZncUlnlm70cj5AeQ5O1W
+   odzw5OYHBRFso8+kXQ52b+NGTyvIx45hnTjYja1eqppsl1VEwszKGUV/i
+   nKqPaH7UNQxm3IPDcedqgKovq8nDwU5UOPGCKzZmUnDyNXPaijWHOs4G8
+   ksErjHmko49PsWcx71iIYHyo1BTYD9+jEoVh+v8Og7BsjSIxDesPlGDUX
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="295169330"
 X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="338588356"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 04:36:40 -0800
+   d="scan'208";a="295169330"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 04:40:21 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="615963179"
+X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="640451724"
 X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="615963179"
+   d="scan'208";a="640451724"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 13 Nov 2022 04:36:35 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 13 Nov 2022 04:40:19 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1ouCDx-00Bfz5-0E;
-        Sun, 13 Nov 2022 14:36:33 +0200
-Date:   Sun, 13 Nov 2022 14:36:32 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Andrew Davis <afd@ti.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Li Yang <leoyang.li@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] Rename DTB overlay source files
-Message-ID: <Y3Dk0HJAPuq64tKe@smile.fi.intel.com>
-References: <20221024173434.32518-1-afd@ti.com>
- <CAL_JsqJxgVwsjKnkCEkZeoSsDgaRD+DVPkHRBc2SrcSq69PBNw@mail.gmail.com>
- <Y26lDEtiG4KFzc91@smile.fi.intel.com>
- <e5ce57b2-4557-2dcb-fb3a-71e2acae4502@ti.com>
- <Y3DhIO7H9mfRpe3z@smile.fi.intel.com>
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ouCHZ-00Bg3n-0t;
+        Sun, 13 Nov 2022 14:40:17 +0200
+Date:   Sun, 13 Nov 2022 14:40:17 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        michael@walle.cc, broonie@kernel.org
+Subject: Re: [PATCH v2 1/4] gpio: regmap: Always set gpio_chip get_direction
+Message-ID: <Y3DlsTAQMi6kKObJ@smile.fi.intel.com>
+References: <cover.1668129763.git.william.gray@linaro.org>
+ <1805d1ddb5bbce8e86164e66421ddde481cce4f9.1668129763.git.william.gray@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3DhIO7H9mfRpe3z@smile.fi.intel.com>
+In-Reply-To: <1805d1ddb5bbce8e86164e66421ddde481cce4f9.1668129763.git.william.gray@linaro.org>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,96 +67,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 13, 2022 at 02:20:48PM +0200, Andy Shevchenko wrote:
-> On Fri, Nov 11, 2022 at 03:05:20PM -0600, Andrew Davis wrote:
-> > On 11/11/22 1:39 PM, Andy Shevchenko wrote:
-> > > On Wed, Oct 26, 2022 at 09:11:21AM -0500, Rob Herring wrote:
-> > > > On Mon, Oct 24, 2022 at 12:34 PM Andrew Davis <afd@ti.com> wrote:
-> > > > > 
-> > > > > Hello all,
-> > > > > 
-> > > > > This is a series based on my patch here[0]. As suggested by Rob
-> > > > > I've resurrected Frank's patch and appended it to mine as a series.
-> > > > > 
-> > > > > First patch here is my original patch, 3rd is Frank's patch but with
-> > > > > the unittest changes pulled out into the 2nd patch. That was re-worked
-> > > > > moving the source building macro into scripts/Makefile.lib.
-> > > > > 
-> > > > > Patches 4, 5, and 6 are an attempt at renaming all the existing DTB
-> > > > > overlays. Split out by platform so they could be taken by platform
-> > > > > maintainers or if easier ACK'd here and taken all together.
-> > > > > 
-> > > > > This should cover all the DTB overlays so we can remove the old .dts
-> > > > > rule for overlays and make .dtso the only supported way, let me know
-> > > > > if we want that this cycle and I can post that too.
-> > > > > 
-> > > > > Thanks,
-> > > > > Andrew
-> > > > > 
-> > > > > Changes from v1[1]:
-> > > > >   - Added patch to rename pi433 overlay.
-> > > > >   - Cleaned wording on patch 4-6.
-> > > > >   - Collected some ACKs
-> > > > > 
-> > > > > [0] https://www.spinics.net/lists/kernel/msg4548509.html
-> > > > > [1] https://www.spinics.net/lists/arm-kernel/msg1020165.html
-> > > > > 
-> > > > > Andrew Davis (6):
-> > > > >    kbuild: Allow DTB overlays to built from .dtso named source files
-> > > > >    kbuild: Allow DTB overlays to built into .dtso.S files
-> > > > >    arm64: dts: freescale: Rename DTB overlay source files from .dts to
-> > > > >      .dtso
-> > > > >    arm64: dts: renesas: Rename DTB overlay source files from .dts to
-> > > > >      .dtso
-> > > > >    arm64: dts: xilinx: Rename DTB overlay source files from .dts to .dtso
-> > > > >    staging: pi433: overlay: Rename overlay source file from .dts to .dtso
-> > > > > 
-> > > > > Frank Rowand (1):
-> > > > >    of: overlay: rename overlay source files from .dts to .dtso
-> > > > 
-> > > > I've applied patches 1-3 and 7. I'll send a PR for the branch to the
-> > > > platform maintainers after a few days in linux-next.
-> > > 
-> > > The patch
-> > > 
-> > > commit 941214a512d8c80d47e720c17ec17e8539175e93
-> > > Author: Andrew Davis <afd@ti.com>
-> > > Date:   Mon Oct 24 12:34:29 2022 -0500
-> > > 
-> > >      kbuild: Allow DTB overlays to built into .dtbo.S files
-> > > 
-> > > broke the build reproducibility / no-op builds.
-> > > 
-> > > Before:
-> > >    2+ execution of `make` on non-changed tree did nothing
-> > > 
-> > > Now:
-> > >    Each run of `make` (even without a single bit changed) restarts vmlinux
-> > >    rebuild.
-> > > 
-> > > Please, revert or fix.
-> > > 
-> > 
-> > I do not see this behavior. What config are you using?
-> > 
-> > Not sure how this patch could be the root cause, it only adds
-> > a build target/rule, but doesn't actually use it anywhere yet..
-> 
-> For your reference I started with this one [1].
-> 
-> When I bisected, I just answered with defaults on whatever `make` told me at
-> the configuration stage.
-> 
-> The actual `make` command I used:
-> 
-> 	make O=/path/to/the/result W=1 C=1 CF=-D__CHECK_ENDIAN__ -j64
-> 
-> But there is nothing that can affect the described issue.
+On Thu, Nov 10, 2022 at 08:55:50PM -0500, William Breathitt Gray wrote:
+> If you only have reg_dat_base set, then it is input-only; if you only
+> have reg_set_base set, then it is output-only. Thus, we can always set
+> gpio_chip get_direction to gpio_regmap_get_direction and return
+> GPIO_LINE_DIRECTION_IN/GPIO_LINE_DIRECTION_OUT given the respective
+> register base addresses configuration.
 
-Actually, O= might affect which Makefile is used and how.
-The C=, CF= are sparse flags, W= is just warning level.
+Seems legit to me. Have you checked if we have any gpio-regmap drivers that
+have something like this in their configuration already? In such cases we need
+to be sure they behave as expected.
 
-> [1]: https://p.defau.lt/?ZSOdGnNxF9v9AQtrfDo_KQ
+From the code perspective:
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+> ---
+>  drivers/gpio/gpio-regmap.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpio/gpio-regmap.c b/drivers/gpio/gpio-regmap.c
+> index 6383136cbe59..f907c9c19fce 100644
+> --- a/drivers/gpio/gpio-regmap.c
+> +++ b/drivers/gpio/gpio-regmap.c
+> @@ -111,6 +111,11 @@ static int gpio_regmap_get_direction(struct gpio_chip *chip,
+>  	unsigned int base, val, reg, mask;
+>  	int invert, ret;
+>  
+> +	if (gpio->reg_dat_base && !gpio->reg_set_base)
+> +		return GPIO_LINE_DIRECTION_IN;
+> +	if (gpio->reg_set_base && !gpio->reg_dat_base)
+> +		return GPIO_LINE_DIRECTION_OUT;
+> +
+>  	if (gpio->reg_dir_out_base) {
+>  		base = gpio_regmap_addr(gpio->reg_dir_out_base);
+>  		invert = 0;
+> @@ -265,8 +270,8 @@ struct gpio_regmap *gpio_regmap_register(const struct gpio_regmap_config *config
+>  	else if (gpio->reg_set_base)
+>  		chip->set = gpio_regmap_set;
+>  
+> +	chip->get_direction = gpio_regmap_get_direction;
+>  	if (gpio->reg_dir_in_base || gpio->reg_dir_out_base) {
+> -		chip->get_direction = gpio_regmap_get_direction;
+>  		chip->direction_input = gpio_regmap_direction_input;
+>  		chip->direction_output = gpio_regmap_direction_output;
+>  	}
+> -- 
+> 2.38.1
+> 
 
 -- 
 With Best Regards,
