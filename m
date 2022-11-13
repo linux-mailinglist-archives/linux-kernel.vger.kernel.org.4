@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8B7626DB6
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 05:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18253626DB7
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 05:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235258AbiKMEhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 12 Nov 2022 23:37:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38408 "EHLO
+        id S235229AbiKMEhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 12 Nov 2022 23:37:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235173AbiKMEg2 (ORCPT
+        with ESMTP id S235225AbiKMEge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 12 Nov 2022 23:36:28 -0500
+        Sat, 12 Nov 2022 23:36:34 -0500
 Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2133213FB7
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 20:36:06 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id y16so11599523wrt.12
-        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 20:36:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E887912D18
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 20:36:11 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id y16so11599681wrt.12
+        for <linux-kernel@vger.kernel.org>; Sat, 12 Nov 2022 20:36:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0CokBU8cM6zI23zkNc1rZIn7Gnc44VkzGzRrbVO49/Q=;
-        b=U3y1e8ofpG+p/2Fof4nkCA84Kmk8Txxo7ss37NzUscGzy4tDhsZyTkITx17JbkDMp1
-         rQyupLV99RKeSq/2ZE3PkQExgHDp9/qpAe9C7sdAbzT3ANamC0HSC/GQZ4VdRvCYS/PT
-         uerTCxNlq7yDCs8pNjqQufxP4r/igz6lPACweEJGkfcXgcF3Rhly9pCWUIgyocRAO4ih
-         wNzIyzY5YTeCJ136iEbXYVXBzYaXV3jWJaD6bAmNYBiWfu2o4VzUQzfNElxHnol7hYF+
-         YMwxidL/tdZu9+PhciPz9WO4btuWvHxlF7VQ2WV/526AhivUwLNTfGAWEy5DmqeYOxzX
-         jAIA==
+        bh=6Waj2wVmJ6VIMUK7fVeeqwrsUbV46YA2aMojAJKw2kw=;
+        b=jAAncIEP9n9rJ2pamz3EV6edyGp/ejCVX6op+UL3/q6bf7W5nucjG7Ur3/JaWTHPuI
+         ijwKa7d67fjHAp9VIg9WFWifdzX535UqLbNjZI9ooseVITX7qTLqmwFbnK4rqUzTcSoP
+         zC+ES5BLt0G2/KNBxoKYTeQQI9ewHK0hG8fFeu1OXelPkXCka+wdWcikYKcPIBoEiO9m
+         uHLyawXlTrUEb5skzPAMffmPe8V5ph+jyAPMae9/I86iq3yG2o0IJzcPxEeY7tIFkmD8
+         JYgLkzVhfbTkUnox+glZPd+2048yf5zk0trhRwrLNKRaeDgXCw9erjBUc+ki0gtOY972
+         Lfpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0CokBU8cM6zI23zkNc1rZIn7Gnc44VkzGzRrbVO49/Q=;
-        b=6EWbaALRZexX+OHJOkKlCgzVgCBbM7hyp+foF14X7063in3POWI5DtSP+e3UpqOnHC
-         t12WIgy83SU11MmcpyQIIW9y+fslAvd2J/zdF+xOBOZm0p8FAiWQhNy8t+IV0pL2Z/n4
-         3U3hafzu54qntaQYkTktkRbNnA0o/R5g2vdxFPckA0K+B9hRJ5muXA1siWeUA4OjC2PF
-         L/17mCYgDZF2jRA4b122UjcQuWrQXnvXMnYJqIiH6+AhNjHyrRa2BE+nnLApgXw8IG5C
-         7WapVQZSsz/titUlEUV/BHa/I+bbU/l1cuVw24DZZOywuj//2L8NbdwT+QDPnyj2yt+G
-         UAhQ==
-X-Gm-Message-State: ANoB5pm8qS5Jzy5t17IiPvFPLQzi69WK/yfDtjm2hGGXvwBPoOY02Yef
-        PJTf0vOXeCJ+wBtUVc2ImFzC/l4E4yo=
-X-Google-Smtp-Source: AA0mqf7Wb6/YTEZwuift2xUZSLB3DsxioGINWXNBzLhaF8M5t4rnJEimZSpREiOz3EwHfOXuu+LXng==
-X-Received: by 2002:adf:efc3:0:b0:23a:2311:b35 with SMTP id i3-20020adfefc3000000b0023a23110b35mr4395814wrp.183.1668314164584;
-        Sat, 12 Nov 2022 20:36:04 -0800 (PST)
+        bh=6Waj2wVmJ6VIMUK7fVeeqwrsUbV46YA2aMojAJKw2kw=;
+        b=goTUuwF0xfgOYjxv4MmMoN6SpiLFPbqxfwNxT07aGj3tQrP02YQgWGA/QPigk+meup
+         2EpwlnNICmkPfT+/snDW8+A+ypEZGZL7HeVItPBePS2LFg+5xM2tKpgMf0mqNk3Hq4Z0
+         fV7vdUsb93EwrClXHlDXHWu0GuwNVsuNkQuOB45Z7Wzt3h6P0cJu3pKC/CpmCPHeDi8e
+         M16A7MpnvCAjH53OOD5JZJPFCYlR1KHvkj4vCbWdf5RVYoQNFqfxTzO/CQvgB2n1o5ge
+         JtGBUyoZ9JazN7YzCo3BUaBlYPTp8dgx7x8lORP+nqDV7QsWJq4rPO3lhHvl1H0O5KHX
+         NdQQ==
+X-Gm-Message-State: ANoB5plFwN3qCFMzF70CYaw9K44qh6PqslSO4ggU+B0WzUKbie2PBE2T
+        nclID3liG8n0OPy8Ga76ep8=
+X-Google-Smtp-Source: AA0mqf6DhB+2BZOgiK2HVr1gVinRB4aH7sc2Kmdz8/0CIUyXHC9GLAxQ0JKAwTCk0tAwy+jxzbGEfA==
+X-Received: by 2002:a5d:6e0d:0:b0:236:71c3:bf36 with SMTP id h13-20020a5d6e0d000000b0023671c3bf36mr4353232wrz.184.1668314171252;
+        Sat, 12 Nov 2022 20:36:11 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p54a07888.dip0.t-ipconnect.de. [84.160.120.136])
-        by smtp.gmail.com with ESMTPSA id o15-20020a05600c510f00b003c6d21a19a0sm9121807wms.29.2022.11.12.20.36.03
+        by smtp.gmail.com with ESMTPSA id m9-20020a05600c4f4900b003b3307fb98fsm9086747wmq.24.2022.11.12.20.36.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Nov 2022 20:36:04 -0800 (PST)
-Date:   Sun, 13 Nov 2022 05:36:02 +0100
+        Sat, 12 Nov 2022 20:36:10 -0800 (PST)
+Date:   Sun, 13 Nov 2022 05:36:09 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 08/10] staging: rtl8192e: Rename bFilterSour..,
- CCKPresentAt.. and ResetProg..
-Message-ID: <25ab52350a4a3249a1f76b28eea10c44e2f9552d.1668313325.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 09/10] staging: rtl8192e: Rename InterruptLog, RxCounter and
+ bHwRfOffAction
+Message-ID: <82ea07ddd894ac9b863ce90ddb9ba78065bd1f4e.1668313325.git.philipp.g.hortmann@gmail.com>
 References: <cover.1668313325.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,331 +71,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename variable bFilterSourceStationFrame to fltr_src_sta_frame,
-CCKPresentAttentuation to cck_present_attn and ResetProgress to
-rst_progress to avoid CamelCase which is not accepted by checkpatch.
+Rename variable InterruptLog to int_log, RxCounter to rx_ctr and
+bHwRfOffAction to hw_rf_off_action to avoid CamelCase which is not
+accepted by checkpatch.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- .../staging/rtl8192e/rtl8192e/r8192E_dev.c    | 12 +++++------
- .../staging/rtl8192e/rtl8192e/r8192E_phy.c    | 20 +++++++++----------
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c  | 14 ++++++-------
- drivers/staging/rtl8192e/rtl8192e/rtl_core.h  |  4 ++--
- drivers/staging/rtl8192e/rtl8192e/rtl_dm.c    | 20 +++++++++----------
- drivers/staging/rtl8192e/rtl8192e/rtl_wx.c    | 12 +++++------
- drivers/staging/rtl8192e/rtllib.h             |  2 +-
- drivers/staging/rtl8192e/rtllib_rx.c          |  2 +-
- 8 files changed, 43 insertions(+), 43 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c | 6 +++---
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c | 4 ++--
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.c   | 8 ++++----
+ drivers/staging/rtl8192e/rtl8192e/rtl_core.h   | 6 +++---
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c     | 2 +-
+ 5 files changed, 13 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-index 2ccd1e0542c2..0eeb9b2daefc 100644
+index 0eeb9b2daefc..e530f917fd23 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_dev.c
-@@ -617,7 +617,7 @@ bool rtl92e_start_adapter(struct net_device *dev)
- start:
- 	rtl92e_reset_desc_ring(dev);
- 	priv->Rf_Mode = RF_OP_By_SW_3wire;
--	if (priv->ResetProgress == RESET_TYPE_NORESET) {
-+	if (priv->rst_progress == RESET_TYPE_NORESET) {
- 		rtl92e_writeb(dev, ANAPAR, 0x37);
- 		mdelay(500);
- 	}
-@@ -650,7 +650,7 @@ bool rtl92e_start_adapter(struct net_device *dev)
- 	}
+@@ -1928,7 +1928,7 @@ void rtl92e_stop_adapter(struct net_device *dev, bool reset)
+ 	if (!reset) {
+ 		mdelay(150);
  
- 	priv->LoopbackMode = RTL819X_NO_LOOPBACK;
--	if (priv->ResetProgress == RESET_TYPE_NORESET) {
-+	if (priv->rst_progress == RESET_TYPE_NORESET) {
- 		ulRegRead = rtl92e_readl(dev, CPU_GEN);
- 		if (priv->LoopbackMode == RTL819X_NO_LOOPBACK)
- 			ulRegRead = (ulRegRead & CPU_GEN_NO_LOOPBACK_MSK) |
-@@ -699,7 +699,7 @@ bool rtl92e_start_adapter(struct net_device *dev)
+-		priv->bHwRfOffAction = 2;
++		priv->hw_rf_off_action = 2;
  
- 	rtl92e_writeb(dev, ACK_TIMEOUT, 0x30);
+ 		if (!priv->rtllib->bSupportRemoteWakeUp) {
+ 			rtl92e_set_rf_off(dev);
+@@ -2129,7 +2129,7 @@ bool rtl92e_is_rx_stuck(struct net_device *dev)
  
--	if (priv->ResetProgress == RESET_TYPE_NORESET)
-+	if (priv->rst_progress == RESET_TYPE_NORESET)
- 		rtl92e_set_wireless_mode(dev, priv->rtllib->mode);
- 	rtl92e_cam_reset(dev);
- 	{
-@@ -739,7 +739,7 @@ bool rtl92e_start_adapter(struct net_device *dev)
- 		}
+ 	SlotIndex = (priv->SilentResetRxSlotIndex++)%SilentResetRxSoltNum;
+ 
+-	if (priv->RxCounter == RegRxCounter) {
++	if (priv->rx_ctr == RegRxCounter) {
+ 		priv->SilentResetRxStuckEvent[SlotIndex] = 1;
+ 
+ 		for (i = 0; i < SilentResetRxSoltNum; i++)
+@@ -2147,7 +2147,7 @@ bool rtl92e_is_rx_stuck(struct net_device *dev)
+ 		priv->SilentResetRxStuckEvent[SlotIndex] = 0;
  	}
  
--	if (priv->ResetProgress == RESET_TYPE_NORESET) {
-+	if (priv->rst_progress == RESET_TYPE_NORESET) {
- 		rtStatus = rtl92e_config_phy(dev);
- 		if (!rtStatus) {
- 			netdev_info(dev, "RF Config failed\n");
-@@ -766,7 +766,7 @@ bool rtl92e_start_adapter(struct net_device *dev)
- 	else
- 		priv->Rf_Mode = RF_OP_By_SW_3wire;
+-	priv->RxCounter = RegRxCounter;
++	priv->rx_ctr = RegRxCounter;
  
--	if (priv->ResetProgress == RESET_TYPE_NORESET) {
-+	if (priv->rst_progress == RESET_TYPE_NORESET) {
- 		rtl92e_dm_init_txpower_tracking(dev);
- 
- 		if (priv->IC_Cut >= IC_VersionCut_D) {
-@@ -795,7 +795,7 @@ bool rtl92e_start_adapter(struct net_device *dev)
- 			}
- 			priv->CCKPresentAttentuation_40Mdefault = 0;
- 			priv->CCKPresentAttentuation_difference = 0;
--			priv->CCKPresentAttentuation =
-+			priv->cck_present_attn =
- 				  priv->CCKPresentAttentuation_20Mdefault;
- 			priv->btxpower_tracking = false;
- 		}
+ 	return bStuck;
+ }
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-index c357adf95a3d..ac3c7f047ca2 100644
+index ac3c7f047ca2..a813eded4cb3 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-@@ -1008,16 +1008,16 @@ static void _rtl92e_cck_tx_power_track_bw_switch_tssi(struct net_device *dev)
+@@ -1342,7 +1342,7 @@ static bool _rtl92e_set_rf_power_state(struct net_device *dev,
+ 				mdelay(1);
+ 				rtl92e_set_bb_reg(dev, rFPGA0_AnalogParameter1,
+ 						 0x4, 0x1);
+-				priv->bHwRfOffAction = 0;
++				priv->hw_rf_off_action = 0;
  
- 	switch (priv->CurrentChannelBW) {
- 	case HT_CHANNEL_WIDTH_20:
--		priv->CCKPresentAttentuation =
-+		priv->cck_present_attn =
- 			priv->CCKPresentAttentuation_20Mdefault +
- 			    priv->CCKPresentAttentuation_difference;
+ 				rtl92e_set_bb_reg(dev, rFPGA0_XA_RFInterfaceOE,
+ 						  BIT4, 0x1);
+@@ -1450,7 +1450,7 @@ bool rtl92e_set_rf_power_state(struct net_device *dev,
+ 	bool bResult = false;
  
--		if (priv->CCKPresentAttentuation >
-+		if (priv->cck_present_attn >
- 		    (CCKTxBBGainTableLength-1))
--			priv->CCKPresentAttentuation =
-+			priv->cck_present_attn =
- 					 CCKTxBBGainTableLength-1;
--		if (priv->CCKPresentAttentuation < 0)
--			priv->CCKPresentAttentuation = 0;
-+		if (priv->cck_present_attn < 0)
-+			priv->cck_present_attn = 0;
+ 	if (rf_power_state == priv->rtllib->rf_power_state &&
+-	    priv->bHwRfOffAction == 0) {
++	    priv->hw_rf_off_action == 0) {
+ 		return bResult;
+ 	}
  
- 		if (priv->rtllib->current_network.channel == 14 &&
- 		    !priv->bcck_in_ch14) {
-@@ -1033,16 +1033,16 @@ static void _rtl92e_cck_tx_power_track_bw_switch_tssi(struct net_device *dev)
- 		break;
- 
- 	case HT_CHANNEL_WIDTH_20_40:
--		priv->CCKPresentAttentuation =
-+		priv->cck_present_attn =
- 			priv->CCKPresentAttentuation_40Mdefault +
- 			priv->CCKPresentAttentuation_difference;
- 
--		if (priv->CCKPresentAttentuation >
-+		if (priv->cck_present_attn >
- 		    (CCKTxBBGainTableLength - 1))
--			priv->CCKPresentAttentuation =
-+			priv->cck_present_attn =
- 					 CCKTxBBGainTableLength-1;
--		if (priv->CCKPresentAttentuation < 0)
--			priv->CCKPresentAttentuation = 0;
-+		if (priv->cck_present_attn < 0)
-+			priv->cck_present_attn = 0;
- 
- 		if (priv->rtllib->current_network.channel == 14 &&
- 		    !priv->bcck_in_ch14) {
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index 94b8ed2e3489..1c4985dcc5eb 100644
+index 1c4985dcc5eb..43601ec8d903 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -850,7 +850,7 @@ static void _rtl92e_init_priv_variable(struct net_device *dev)
- 	priv->rtllib->iw_mode = IW_MODE_INFRA;
- 	priv->rtllib->net_promiscuous_md = false;
- 	priv->rtllib->intel_promiscuous_md_info.promiscuous_on = false;
--	priv->rtllib->intel_promiscuous_md_info.bFilterSourceStationFrame =
-+	priv->rtllib->intel_promiscuous_md_info.fltr_src_sta_frame =
- 								 false;
- 	priv->rtllib->ieee_up = 0;
- 	priv->retry_rts = DEFAULT_RETRY_RTS;
-@@ -861,11 +861,11 @@ static void _rtl92e_init_priv_variable(struct net_device *dev)
- 	priv->promisc = (dev->flags & IFF_PROMISC) ? 1 : 0;
- 	priv->bcck_in_ch14 = false;
- 	priv->bfsync_processing  = false;
--	priv->CCKPresentAttentuation = 0;
-+	priv->cck_present_attn = 0;
- 	priv->rfa_txpowertrackingindex = 0;
- 	priv->rfc_txpowertrackingindex = 0;
- 	priv->CckPwEnl = 6;
--	priv->ResetProgress = RESET_TYPE_NORESET;
-+	priv->rst_progress = RESET_TYPE_NORESET;
+@@ -869,13 +869,13 @@ static void _rtl92e_init_priv_variable(struct net_device *dev)
  	priv->force_reset = false;
  	memset(priv->rtllib->swcamtable, 0, sizeof(struct sw_cam_table) * 32);
  
-@@ -1135,8 +1135,8 @@ static void _rtl92e_if_silent_reset(struct net_device *dev)
- 	struct rtllib_device *ieee = priv->rtllib;
- 	unsigned long flag;
+-	memset(&priv->InterruptLog, 0, sizeof(struct log_int_8190));
+-	priv->RxCounter = 0;
++	memset(&priv->int_log, 0, sizeof(struct log_int_8190));
++	priv->rx_ctr = 0;
+ 	priv->rtllib->wx_set_enc = 0;
+ 	priv->hw_radio_off = false;
+ 	priv->rtllib->rf_off_reason = 0;
+ 	priv->rf_change_in_progress = false;
+-	priv->bHwRfOffAction = 0;
++	priv->hw_rf_off_action = 0;
+ 	priv->SetRFPowerStateInProgress = false;
+ 	priv->rtllib->pwr_save_ctrl.bLeisurePs = true;
+ 	priv->rtllib->LPSDelayCnt = 0;
+@@ -2189,7 +2189,7 @@ static irqreturn_t _rtl92e_irq(int irq, void *netdev)
  
--	if (priv->ResetProgress == RESET_TYPE_NORESET) {
--		priv->ResetProgress = RESET_TYPE_SILENT;
-+	if (priv->rst_progress == RESET_TYPE_NORESET) {
-+		priv->rst_progress = RESET_TYPE_SILENT;
- 
- 		spin_lock_irqsave(&priv->rf_ps_lock, flag);
- 		if (priv->rf_change_in_progress) {
-@@ -1233,7 +1233,7 @@ static void _rtl92e_if_silent_reset(struct net_device *dev)
- 		rtl92e_cam_restore(dev);
- 		rtl92e_dm_restore_state(dev);
- END:
--		priv->ResetProgress = RESET_TYPE_NORESET;
-+		priv->rst_progress = RESET_TYPE_NORESET;
- 		priv->reset_count++;
- 		priv->bResetInProgress = false;
- 
-@@ -1396,7 +1396,7 @@ static void _rtl92e_watchdog_wq_cb(void *data)
- 	spin_unlock_irqrestore(&priv->tx_lock, flags);
- 
- 	if (ResetType == RESET_TYPE_NORMAL) {
--		priv->ResetProgress = RESET_TYPE_NORMAL;
-+		priv->rst_progress = RESET_TYPE_NORMAL;
- 		return;
+ 	if (inta & IMR_ROK) {
+ 		priv->stats.rxint++;
+-		priv->InterruptLog.nIMR_ROK++;
++		priv->int_log.nIMR_ROK++;
+ 		tasklet_schedule(&priv->irq_rx_tasklet);
  	}
  
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-index 98c750730f87..dfbc9fbcc129 100644
+index dfbc9fbcc129..b1656d4ecbad 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.h
-@@ -483,7 +483,7 @@ struct r8192_priv {
- 	u8 CCKPresentAttentuation_20Mdefault;
- 	u8 CCKPresentAttentuation_40Mdefault;
- 	s8 CCKPresentAttentuation_difference;
--	s8 CCKPresentAttentuation;
-+	s8 cck_present_attn;
- 	long undecorated_smoothed_pwdb;
+@@ -330,7 +330,7 @@ struct r8192_priv {
  
- 	u32 MCSTxPowerLevelOriginalOffset[6];
-@@ -536,7 +536,7 @@ struct r8192_priv {
+ 	struct work_struct				reset_wq;
  
- 	u32		reset_count;
+-	struct log_int_8190 InterruptLog;
++	struct log_int_8190 int_log;
  
--	enum reset_type ResetProgress;
-+	enum reset_type rst_progress;
+ 	enum rt_customer_id CustomerID;
+ 
+@@ -469,7 +469,7 @@ struct r8192_priv {
+ 
+ 	u16 reg_chnl_plan;
+ 	u16 ChannelPlan;
+-	u8 bHwRfOffAction;
++	u8 hw_rf_off_action;
+ 
+ 	bool rf_change_in_progress;
+ 	bool SetRFPowerStateInProgress;
+@@ -538,7 +538,7 @@ struct r8192_priv {
+ 
+ 	enum reset_type rst_progress;
  	u16		TxCounter;
- 	u16		RxCounter;
+-	u16		RxCounter;
++	u16		rx_ctr;
  	bool		bResetInProgress;
+ 	bool		force_reset;
+ 	bool		force_lps;
 diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-index 767c746fc73d..234e85a25d45 100644
+index 234e85a25d45..e0f6f1405c17 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_dm.c
-@@ -267,7 +267,7 @@ static void _rtl92e_dm_check_ac_dc_power(struct net_device *dev)
- 			"PATH=/usr/bin:/bin",
- 			 NULL};
+@@ -1693,7 +1693,7 @@ static void _rtl92e_dm_check_rf_ctrl_gpio(void *data)
  
--	if (priv->ResetProgress == RESET_TYPE_SILENT)
-+	if (priv->rst_progress == RESET_TYPE_SILENT)
- 		return;
- 	if (priv->rtllib->state != RTLLIB_LINKED)
- 		return;
-@@ -716,21 +716,21 @@ static void _rtl92e_dm_tx_power_tracking_callback_tssi(struct net_device *dev)
- 			}
- 
- 			if (priv->CurrentChannelBW == HT_CHANNEL_WIDTH_20)
--				priv->CCKPresentAttentuation =
-+				priv->cck_present_attn =
- 					 priv->CCKPresentAttentuation_20Mdefault +
- 					 priv->CCKPresentAttentuation_difference;
- 			else
--				priv->CCKPresentAttentuation =
-+				priv->cck_present_attn =
- 					 priv->CCKPresentAttentuation_40Mdefault +
- 					 priv->CCKPresentAttentuation_difference;
- 
--			if (priv->CCKPresentAttentuation > (CCKTxBBGainTableLength-1))
--				priv->CCKPresentAttentuation = CCKTxBBGainTableLength-1;
--			if (priv->CCKPresentAttentuation < 0)
--				priv->CCKPresentAttentuation = 0;
-+			if (priv->cck_present_attn > (CCKTxBBGainTableLength-1))
-+				priv->cck_present_attn = CCKTxBBGainTableLength-1;
-+			if (priv->cck_present_attn < 0)
-+				priv->cck_present_attn = 0;
- 
--			if (priv->CCKPresentAttentuation > -1 &&
--			    priv->CCKPresentAttentuation < CCKTxBBGainTableLength) {
-+			if (priv->cck_present_attn > -1 &&
-+			    priv->cck_present_attn < CCKTxBBGainTableLength) {
- 				if (priv->rtllib->current_network.channel == 14 &&
- 				    !priv->bcck_in_ch14) {
- 					priv->bcck_in_ch14 = true;
-@@ -963,7 +963,7 @@ static void _rtl92e_dm_cck_tx_power_adjust_tssi(struct net_device *dev,
- {
- 	u32 TempVal;
- 	struct r8192_priv *priv = rtllib_priv(dev);
--	u8 attenuation = priv->CCKPresentAttentuation;
-+	u8 attenuation = priv->cck_present_attn;
- 
- 	TempVal = 0;
- 	if (!bInCH14) {
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c b/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
-index c31e5b572e9e..7ff14aa9f476 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_wx.c
-@@ -1015,20 +1015,20 @@ static int _rtl92e_wx_set_promisc_mode(struct net_device *dev,
- 
- 	u32 oid;
- 	u32 promiscuous_on;
--	u32 bFilterSourceStationFrame;
-+	u32 fltr_src_sta_frame;
- 
- 	if (copy_from_user(info_buf, wrqu->data.pointer, sizeof(info_buf)))
- 		return -EFAULT;
- 
- 	oid = info_buf[0];
- 	promiscuous_on = info_buf[1];
--	bFilterSourceStationFrame = info_buf[2];
-+	fltr_src_sta_frame = info_buf[2];
- 
- 	if (oid == OID_RT_INTEL_PROMISCUOUS_MODE) {
- 		ieee->intel_promiscuous_md_info.promiscuous_on =
- 					(promiscuous_on) ? (true) : (false);
--		ieee->intel_promiscuous_md_info.bFilterSourceStationFrame =
--			(bFilterSourceStationFrame) ? (true) : (false);
-+		ieee->intel_promiscuous_md_info.fltr_src_sta_frame =
-+			(fltr_src_sta_frame) ? (true) : (false);
- 		(promiscuous_on) ?
- 		(rtllib_EnableIntelPromiscuousMode(dev, false)) :
- 		(rtllib_DisableIntelPromiscuousMode(dev, false));
-@@ -1036,7 +1036,7 @@ static int _rtl92e_wx_set_promisc_mode(struct net_device *dev,
- 		netdev_info(dev,
- 			    "=======>%s(), on = %d, filter src sta = %d\n",
- 			    __func__, promiscuous_on,
--			    bFilterSourceStationFrame);
-+			    fltr_src_sta_frame);
- 	} else {
- 		return -1;
- 	}
-@@ -1055,7 +1055,7 @@ static int _rtl92e_wx_get_promisc_mode(struct net_device *dev,
- 
- 	snprintf(extra, 45, "PromiscuousMode:%d, FilterSrcSTAFrame:%d",
- 		 ieee->intel_promiscuous_md_info.promiscuous_on,
--		 ieee->intel_promiscuous_md_info.bFilterSourceStationFrame);
-+		 ieee->intel_promiscuous_md_info.fltr_src_sta_frame);
- 	wrqu->data.length = strlen(extra) + 1;
- 
- 	mutex_unlock(&priv->wx_mutex);
-diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-index 493759cc6ccf..9c81ca38f4b1 100644
---- a/drivers/staging/rtl8192e/rtllib.h
-+++ b/drivers/staging/rtl8192e/rtllib.h
-@@ -1385,7 +1385,7 @@ struct rt_pmkid_list {
- 
- struct rt_intel_promisc_mode {
- 	bool promiscuous_on;
--	bool bFilterSourceStationFrame;
-+	bool fltr_src_sta_frame;
- };
- 
- 
-diff --git a/drivers/staging/rtl8192e/rtllib_rx.c b/drivers/staging/rtl8192e/rtllib_rx.c
-index ccb61d8decd3..75190c389ccf 100644
---- a/drivers/staging/rtl8192e/rtllib_rx.c
-+++ b/drivers/staging/rtl8192e/rtllib_rx.c
-@@ -1000,7 +1000,7 @@ static int rtllib_rx_data_filter(struct rtllib_device *ieee, u16 fc,
- 
- 	/* Filter packets sent by an STA that will be forwarded by AP */
- 	if (ieee->intel_promiscuous_md_info.promiscuous_on  &&
--		ieee->intel_promiscuous_md_info.bFilterSourceStationFrame) {
-+		ieee->intel_promiscuous_md_info.fltr_src_sta_frame) {
- 		if ((fc & RTLLIB_FCTL_TODS) && !(fc & RTLLIB_FCTL_FROMDS) &&
- 		    !ether_addr_equal(dst, ieee->current_network.bssid) &&
- 		    ether_addr_equal(bssid, ieee->current_network.bssid)) {
+ 	if (bActuallySet) {
+ 		mdelay(1000);
+-		priv->bHwRfOffAction = 1;
++		priv->hw_rf_off_action = 1;
+ 		rtl92e_set_rf_state(dev, rf_power_state_to_set, RF_CHANGE_BY_HW);
+ 		if (priv->hw_radio_off)
+ 			argv[1] = "RFOFF";
 -- 
 2.37.3
 
