@@ -2,292 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15CC06272AD
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 22:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C296272AF
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 22:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234149AbiKMVUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 16:20:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
+        id S235291AbiKMVVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 16:21:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234152AbiKMVUM (ORCPT
+        with ESMTP id S234152AbiKMVVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 16:20:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BF7FD1C;
-        Sun, 13 Nov 2022 13:20:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C17360C55;
-        Sun, 13 Nov 2022 21:20:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02104C433C1;
-        Sun, 13 Nov 2022 21:20:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668374408;
-        bh=e4x8dm158+t01HeZwuDAJkMqiJRA7iQ9G4cpg0AnyJY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bDN1NhCaF35rwiGhPls7DeRrVTe5FprK11yZl19ww0Qw5uVbl1tsPLzATms6kxcCD
-         IUrgSL8aw0iGLA8UBkkIuDPzJLz6/V6PwO/Q9zZNW59RzxTe3jizt9zU/1NyxA0Uig
-         HifF3t4PGRKvCNFxFs078dnuguUeQ9x/KPsfSAlz2cFYn6a/eJjmb0pA58MQzRxvdp
-         YpTPvv1K8zPIB4EFpFqO+Dzt5ycO40z6qpBokTstfa/7QEw2GwZ2RiacgaTj3bVeqK
-         3Z7z7fwz1Mzcn9ypcL2bJfVfb+9cHsWvi+z0tOEz2maE02kSAh+ngYlAxzCANCtCMd
-         /NADXDVw8ghow==
-Date:   Sun, 13 Nov 2022 13:20:06 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, jejb@linux.ibm.com,
-        Kees Cook <keescook@chromium.org>, dlunev@google.com,
-        zohar@linux.ibm.com, Matthew Garrett <mgarrett@aurora.tech>,
-        jarkko@kernel.org, linux-pm@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v5 04/11] security: keys: trusted: Include TPM2 creation
- data
-Message-ID: <Y3FfhrgvBNey6T7V@sol.localdomain>
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
+        Sun, 13 Nov 2022 16:21:18 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F17C6556;
+        Sun, 13 Nov 2022 13:21:17 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668374476;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WqA9eQpqg/Hiw5ww9rnS051/wTFYpXZ9ePTy08MS9E0=;
+        b=CnQ6NWad4KySG53EzK9w8HVjWcU9MBKDbHBXvpVhHzu03lruTcG4QS7bSTNuXvsxKXwXcz
+        549hdVOxTevATh1QHxvUfuqabEXCCXGMmQr0YM+xMFj0xyIGIjhPJbEVaON3rBCzetaRrX
+        lyxQuHzBkpK9tCtfxVaF1B/7G4n6Y7gNQP1w3vsdJUu8aLs3T5eF+23DrX9FCVuzVzf6Lc
+        Q+xzs2FhOWDJ2mPcLeBrCNU9GZ1JCyuEdtDjlhMw4EDhG5jQgUGo+SXRKbNr/qr5oonD4l
+        77fgr0iHm+m/YhdKseH859aZBzBexqRl3rUaPQpyVCjpgqRiLlIpC5pLWGgWiA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668374476;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WqA9eQpqg/Hiw5ww9rnS051/wTFYpXZ9ePTy08MS9E0=;
+        b=Xmk/TudIVbnwagakcUpIVMgdZRuT9ezMSJRfzWC57xPb8aGp0CO342lbi9TEHJcb1Ls/Ms
+        V+tUzDxO8IleM5DA==
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: RE: [PATCH] clocksource/drivers/hyper-v: Include asm/hyperv-tlfs.h
+ not asm/mshyperv.h
+In-Reply-To: <87leoft9w1.ffs@tglx>
+References: <87zgcwt2qg.ffs@tglx>
+ <BYAPR21MB1688C5BCDF3269BA070DB884D7039@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <87wn7ztc89.ffs@tglx> <87sfinta8q.ffs@tglx> <87leoft9w1.ffs@tglx>
+Date:   Sun, 13 Nov 2022 22:21:15 +0100
+Message-ID: <87fsemtut0.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111151451.v5.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 03:16:29PM -0800, Evan Green wrote:
-> diff --git a/security/keys/trusted-keys/tpm2key.asn1 b/security/keys/trusted-keys/tpm2key.asn1
-> index f57f869ad60068..608f8d9ca95fa8 100644
-> --- a/security/keys/trusted-keys/tpm2key.asn1
-> +++ b/security/keys/trusted-keys/tpm2key.asn1
-> @@ -7,5 +7,18 @@ TPMKey ::= SEQUENCE {
->  	emptyAuth	[0] EXPLICIT BOOLEAN OPTIONAL,
->  	parent		INTEGER ({tpm2_key_parent}),
->  	pubkey		OCTET STRING ({tpm2_key_pub}),
-> -	privkey		OCTET STRING ({tpm2_key_priv})
-> +	privkey		OCTET STRING ({tpm2_key_priv}),
-> +	---
-> +	--- A TPM2B_CREATION_DATA struct as returned from the TPM2_Create command.
-> +	---
-> +	creationData	[1] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_creation_data}),
-> +	---
-> +	--- A TPM2B_DIGEST of the creationHash as returned from the TPM2_Create
-> +	--- command.
-> +	---
-> +	creationHash	[2] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_creation_hash}),
-> +	---
-> +	--- A TPMT_TK_CREATION ticket as returned from the TPM2_Create command.
-> +	---
-> +	creationTk	[3] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_creation_tk})
->  	}
-
-The commit that added this file claimed:
-
-	"The benefit of the ASN.1 format is that it's a standard and thus the
-	exported key can be used by userspace tools (openssl_tpm2_engine,
-	openconnect and tpm2-tss-engine"
-
-Are these new fields in compliance with whatever standard that was referring to?
-
-Or was that just referring to ASN.1 itself?
-
-> +/* Helper function to advance past a __be16 length + buffer safely */
-> +static const u8 *get_sized_section(const u8 *src, const u8 *end, u16 *len)
-> +{
-> +	u32 length;
-> +
-> +	if (src + sizeof(u16) > end)
-> +		return NULL;
-
-'end - src < sizeof(u16)', so the pointer isn't advanced past the end.
-
-> +
-> +	/* Include the size field in the returned section length. */
-> +	length = get_unaligned_be16(src) + sizeof(u16);
-> +	*len = length;
-> +	if (*len != length)
-> +		return NULL;
-> +
-> +	src += *len;
-> +	if (src > end)
-> +		return NULL;
-> +
-> +	return src;
-
-Similarly:
-
-	if (end - src < *len)
-		return NULL;
-
-	return src + *len;
-
-> +		/*
-> +		 * The creation ticket (TPMT_TK_CREATION) consists of a 2 byte
-> +		 * tag, 4 byte handle, and then a TPM2B_DIGEST, which is a 2
-> +		 * byte length followed by data.
-> +		 */
-> +		if (src + 8 > end)
-
-end - src < 8
-
-And actually it really should be 6 instead of 8, to match the code below.
-get_sized_section() already validates that there are at least 2 more bytes.
-
-> +			return -EINVAL;
-> +
-> +		creation_tk = src;
-> +		src = get_sized_section(src + 6, end, &creation_tk_len);
-> +		if (!src)
-> +			return -EINVAL;
-> +
-> +		creation_tk_len += 6;
-> +
-> +	} else {
-> +		creation_data_len = 0;
-> +		creation_data = NULL;
-> +	}
+On Sun, Nov 13 2022 at 11:40, Thomas Gleixner wrote:
+> Bah, that obviously wants to include the new header...
+>
+> --- a/include/clocksource/hyperv_timer.h
+> +++ b/include/clocksource/hyperv_timer.h
+> @@ -15,7 +15,8 @@
 >  
->  	if (!scratch)
->  		return -ENOMEM;
-> @@ -63,26 +125,81 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
->  	}
->  
->  	/*
-> -	 * Assume both octet strings will encode to a 2 byte definite length
-> +	 * Assume each octet string will encode to a 2 byte definite length.
-> +	 * Each optional octet string consumes one extra byte.
->  	 *
-> -	 * Note: For a well behaved TPM, this warning should never
-> -	 * trigger, so if it does there's something nefarious going on
-> +	 * Note: For a well behaved TPM, this warning should never trigger, so
-> +	 * if it does there's something nefarious going on
->  	 */
-> -	if (WARN(work - scratch + pub_len + priv_len + 14 > SCRATCH_SIZE,
-> -		 "BUG: scratch buffer is too small"))
-> -		return -EINVAL;
-> +	if (WARN(work - scratch + pub_len + priv_len + creation_data_len +
-> +		 creation_hash_len + creation_tk_len + (7 * 5) + 3 >
-> +		 SCRATCH_SIZE,
-> +		 "BUG: scratch buffer is too small")) {
-> +		rc = -EINVAL;
-> +		goto err;
-> +	}
+>  #include <linux/clocksource.h>
+>  #include <linux/math64.h>
+> -#include <asm/mshyperv.h>
+> +#include <asm/hyperv_timer.h>
 
-This appears to be fixing a memory leak in the error case.
+and that breaks when CONFIG_HYPERV_TIMER=n and compiled for ARM64.
 
-The same memory leak also still appears above in:
+Sigh...
 
-	if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
-		return PTR_ERR(w);
+---
+Subject: clocksource/drivers/hyper-v: Include asm/hyperv-tlfs.h not asm/mshyperv.h
+From: Thomas Gleixner <tglx@linutronix.de>
+Date: Sat, 12 Nov 2022 19:08:15 +0100
 
-Maybe both should be fixed in a separate patch.
+clocksource/hyperv_timer.h is included into the VDSO build. It includes
+asm/mshyperv.h which in turn includes the world and some more. This worked
+so far by chance, but any subtle change in the include chain results in a
+build breakage because VDSO builds are building user space libraries.
 
-> +		work2 = asn1_encode_octet_string(scratch2,
-> +						 end_work2,
-> +						 creation_data,
-> +						 creation_data_len);
-> +
-> +		work = asn1_encode_tag(work,
-> +				       end_work,
-> +				       1,
-> +				       scratch2,
-> +				       work2 - scratch2);
+Include asm/hyperv-tlfs.h instead which contains everything what the VDSO
+build needs and move the hv_get_raw_timer() define into the header file.
 
-There's no helper function to do these two steps together?
+Fixup drivers/hv/vmbus_drv.c which relies on the indirect include of
+asm/mshyperv.h.
 
-> +
-> -	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed"))
-> -		return PTR_ERR(work1);
-> +	if (WARN(IS_ERR(work1), "BUG: ASN.1 encoder failed")) {
-> +		rc = PTR_ERR(work1);
-> +		goto err;
-> +	}
->  
->  	return work1 - payload->blob;
-> +err:
-> +	kfree(scratch);
-> +	return rc;
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+---
+ arch/x86/include/asm/hyperv_timer.h |    9 +++++++++
+ arch/x86/include/asm/mshyperv.h     |    2 --
+ drivers/hv/vmbus_drv.c              |    1 +
+ include/clocksource/hyperv_timer.h  |    4 +++-
+ 4 files changed, 13 insertions(+), 3 deletions(-)
 
-Is this another memory leak fix that is unrelated to the functionality added by
-this patch?
-
-Also, isn't 'scratch' still being leaked in the success case?
-
->  static int tpm2_key_decode(struct trusted_key_payload *payload,
-> -			   struct trusted_key_options *options,
-> -			   u8 **buf)
-> +			   struct trusted_key_options *options)
->  {
-> +	u64 data_len;
->  	int ret;
->  	struct tpm2_key_context ctx;
-> -	u8 *blob;
-> +	u8 *blob, *buf;
->  
->  	memset(&ctx, 0, sizeof(ctx));
->  
-> @@ -108,21 +231,57 @@ static int tpm2_key_decode(struct trusted_key_payload *payload,
->  	if (ret < 0)
->  		return ret;
->  
-> -	if (ctx.priv_len + ctx.pub_len > MAX_BLOB_SIZE)
-> +	data_len = ctx.priv_len + ctx.pub_len + ctx.creation_data_len +
-> +		   ctx.creation_hash_len + ctx.creation_tk_len;
-
-It's unclear why 'data_len' is a u64, given that the value assigned to it always
-fits in a u32.  Perhaps you intended to do the additions with 64-bit numbers so
-that they can't overflow.
-
-But shouldn't the lengths already be bounded by size of the ASN.1 blob before
-even reaching here, anyway?
-
-> +
-> +	if (data_len > MAX_BLOB_SIZE)
->  		return -EINVAL;
->  
-> -	blob = kmalloc(ctx.priv_len + ctx.pub_len + 4, GFP_KERNEL);
-> -	if (!blob)
-> +	buf = kmalloc(data_len + 4, GFP_KERNEL);
-> +	if (!buf)
->  		return -ENOMEM;
-
-It's unclear what the '+ 4' is for.
-
-> @@ -229,6 +424,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
->  		      struct trusted_key_options *options)
->  {
->  	int blob_len = 0;
-> +	unsigned int offset;
->  	struct tpm_buf buf;
->  	u32 hash;
->  	u32 flags;
-> @@ -317,13 +513,14 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
->  		rc = -E2BIG;
->  		goto out;
->  	}
-> -	if (tpm_buf_length(&buf) < TPM_HEADER_SIZE + 4 + blob_len) {
-> +	offset = TPM_HEADER_SIZE + 4;
-> +	if (tpm_buf_length(&buf) < offset + blob_len) {
->  		rc = -EFAULT;
->  		goto out;
->  	}
->  
->  	blob_len = tpm2_key_encode(payload, options,
-> -				   &buf.data[TPM_HEADER_SIZE + 4],
-> +				   &buf.data[offset],
->  				   blob_len);
-
-This hunk of the patch doesn't seem to serve any purpose.
-
-- Eric
+--- /dev/null
++++ b/arch/x86/include/asm/hyperv_timer.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_HYPERV_TIMER_H
++#define _ASM_X86_HYPERV_TIMER_H
++
++#include <asm/msr.h>
++
++#define hv_get_raw_timer() rdtsc_ordered()
++
++#endif
+--- a/arch/x86/include/asm/mshyperv.h
++++ b/arch/x86/include/asm/mshyperv.h
+@@ -19,8 +19,6 @@ typedef int (*hyperv_fill_flush_list_fun
+ 		struct hv_guest_mapping_flush_list *flush,
+ 		void *data);
+ 
+-#define hv_get_raw_timer() rdtsc_ordered()
+-
+ void hyperv_vector_handler(struct pt_regs *regs);
+ 
+ #if IS_ENABLED(CONFIG_HYPERV)
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -37,6 +37,7 @@
+ #include <linux/dma-map-ops.h>
+ #include <linux/pci.h>
+ #include <clocksource/hyperv_timer.h>
++#include <asm/mshyperv.h>
+ #include "hyperv_vmbus.h"
+ 
+ struct vmbus_dynid {
+--- a/include/clocksource/hyperv_timer.h
++++ b/include/clocksource/hyperv_timer.h
+@@ -15,13 +15,15 @@
+ 
+ #include <linux/clocksource.h>
+ #include <linux/math64.h>
+-#include <asm/mshyperv.h>
++#include <asm/hyperv-tlfs.h>
+ 
+ #define HV_MAX_MAX_DELTA_TICKS 0xffffffff
+ #define HV_MIN_DELTA_TICKS 1
+ 
+ #ifdef CONFIG_HYPERV_TIMER
+ 
++#include <asm/hyperv_timer.h>
++
+ /* Routines called by the VMbus driver */
+ extern int hv_stimer_alloc(bool have_percpu_irqs);
+ extern int hv_stimer_cleanup(unsigned int cpu);
