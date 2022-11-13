@@ -2,201 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C59B626F6B
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 13:21:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD03626F7E
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 13:36:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235242AbiKMMVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 07:21:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32820 "EHLO
+        id S235223AbiKMMgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 07:36:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233792AbiKMMV2 (ORCPT
+        with ESMTP id S232884AbiKMMgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 07:21:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA82EE3D;
-        Sun, 13 Nov 2022 04:21:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2C34B80B86;
-        Sun, 13 Nov 2022 12:21:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F236C433D6;
-        Sun, 13 Nov 2022 12:21:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668342083;
-        bh=ljl9zDJlpRxVWK4mjDQBtQIeBXs0GrVWogCMwAilnL8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CY/sHeNmlD5o1SGmWou1L/acB1x6PudgStUawcfkgVGqeSD+AXRZiPdfEYiIMqDJ1
-         fp7pnenS0vpeW4U0w5mCKdwkHm5n1VTeeT7/FGq8Db/FsL+0m7ATt495zktSuRg7XB
-         K+EbVrD+GviemTVHaPkI6h1qFg5Dzcrc9Hj3gmJnJXhujuVoSC1XR2qaHYnQTK30Ox
-         9vmjjI/sTvW4FSNquPQb4dbI6PkCf/wYOWTXD6+8iW5J78JrZcgOJMQZ0LT0fS7mN0
-         8TFpyRU5u2RxMhAnNGaRdupG/vOF8Wgs41+xFSXoF19W+UoL3EAEEogCbgGKsbDVLQ
-         07C6CNRagtMDA==
-Date:   Sun, 13 Nov 2022 12:33:38 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Mitja =?UTF-8?B?xaBwZXM=?= <mitja@lxnav.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Angelo Compagnucci <angelo.compagnucci@gmail.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] iio: adc: mcp3422: add hardware gain attribute
-Message-ID: <20221113123338.5b3848df@jic23-huawei>
-In-Reply-To: <CACbQKWe5xGT80_ZcQmTYrGThtFyw6xKD_OmGLi8XGi0pvR1RBA@mail.gmail.com>
-References: <20221111112657.1521307-1-mitja@lxnav.com>
-        <20221111112657.1521307-4-mitja@lxnav.com>
-        <20221112173222.0ca56017@jic23-huawei>
-        <CACbQKWe5xGT80_ZcQmTYrGThtFyw6xKD_OmGLi8XGi0pvR1RBA@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sun, 13 Nov 2022 07:36:41 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DCCFCE3;
+        Sun, 13 Nov 2022 04:36:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668343000; x=1699879000;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tXxNoJ4p40NbDu6Pg1fz6lrpeT1kuob3UG5D0fgt2iE=;
+  b=mUe+O9R/P5NPzbu60fYjQhCx5ATrF+vmakHBufEnZSkoANTQEKwoDGgw
+   5YEYlXk4BvVX9indhORoKE78alibfyFLvQOBa3js5JrJfvowB0lIq8h1H
+   EANWgBCv5d1TwE5qRgf+F2ZeWc2WToUdEy21EeC2rUV8julZECl9anYk6
+   BoOupdOSO4NoMGwmb75hXyacCB8h/tg5INXvF55kDtgUy1BK8ZKoPHS/h
+   cjJ57qsXUtKca6svZumXhoXxE4pHAczNOOWyQJfKXwcHvggfN+ehtYPSg
+   c1hNw3J3gsWDcuEwf/dXiUbEWGTqSFcK8bsnedLWw0cPUypdMv0uyMJ7B
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="338588356"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="338588356"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 04:36:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10529"; a="615963179"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="615963179"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 13 Nov 2022 04:36:35 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1ouCDx-00Bfz5-0E;
+        Sun, 13 Nov 2022 14:36:33 +0200
+Date:   Sun, 13 Nov 2022 14:36:32 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Andrew Davis <afd@ti.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] Rename DTB overlay source files
+Message-ID: <Y3Dk0HJAPuq64tKe@smile.fi.intel.com>
+References: <20221024173434.32518-1-afd@ti.com>
+ <CAL_JsqJxgVwsjKnkCEkZeoSsDgaRD+DVPkHRBc2SrcSq69PBNw@mail.gmail.com>
+ <Y26lDEtiG4KFzc91@smile.fi.intel.com>
+ <e5ce57b2-4557-2dcb-fb3a-71e2acae4502@ti.com>
+ <Y3DhIO7H9mfRpe3z@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3DhIO7H9mfRpe3z@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 12 Nov 2022 22:19:07 +0100
-Mitja =C5=A0pes <mitja@lxnav.com> wrote:
+On Sun, Nov 13, 2022 at 02:20:48PM +0200, Andy Shevchenko wrote:
+> On Fri, Nov 11, 2022 at 03:05:20PM -0600, Andrew Davis wrote:
+> > On 11/11/22 1:39 PM, Andy Shevchenko wrote:
+> > > On Wed, Oct 26, 2022 at 09:11:21AM -0500, Rob Herring wrote:
+> > > > On Mon, Oct 24, 2022 at 12:34 PM Andrew Davis <afd@ti.com> wrote:
+> > > > > 
+> > > > > Hello all,
+> > > > > 
+> > > > > This is a series based on my patch here[0]. As suggested by Rob
+> > > > > I've resurrected Frank's patch and appended it to mine as a series.
+> > > > > 
+> > > > > First patch here is my original patch, 3rd is Frank's patch but with
+> > > > > the unittest changes pulled out into the 2nd patch. That was re-worked
+> > > > > moving the source building macro into scripts/Makefile.lib.
+> > > > > 
+> > > > > Patches 4, 5, and 6 are an attempt at renaming all the existing DTB
+> > > > > overlays. Split out by platform so they could be taken by platform
+> > > > > maintainers or if easier ACK'd here and taken all together.
+> > > > > 
+> > > > > This should cover all the DTB overlays so we can remove the old .dts
+> > > > > rule for overlays and make .dtso the only supported way, let me know
+> > > > > if we want that this cycle and I can post that too.
+> > > > > 
+> > > > > Thanks,
+> > > > > Andrew
+> > > > > 
+> > > > > Changes from v1[1]:
+> > > > >   - Added patch to rename pi433 overlay.
+> > > > >   - Cleaned wording on patch 4-6.
+> > > > >   - Collected some ACKs
+> > > > > 
+> > > > > [0] https://www.spinics.net/lists/kernel/msg4548509.html
+> > > > > [1] https://www.spinics.net/lists/arm-kernel/msg1020165.html
+> > > > > 
+> > > > > Andrew Davis (6):
+> > > > >    kbuild: Allow DTB overlays to built from .dtso named source files
+> > > > >    kbuild: Allow DTB overlays to built into .dtso.S files
+> > > > >    arm64: dts: freescale: Rename DTB overlay source files from .dts to
+> > > > >      .dtso
+> > > > >    arm64: dts: renesas: Rename DTB overlay source files from .dts to
+> > > > >      .dtso
+> > > > >    arm64: dts: xilinx: Rename DTB overlay source files from .dts to .dtso
+> > > > >    staging: pi433: overlay: Rename overlay source file from .dts to .dtso
+> > > > > 
+> > > > > Frank Rowand (1):
+> > > > >    of: overlay: rename overlay source files from .dts to .dtso
+> > > > 
+> > > > I've applied patches 1-3 and 7. I'll send a PR for the branch to the
+> > > > platform maintainers after a few days in linux-next.
+> > > 
+> > > The patch
+> > > 
+> > > commit 941214a512d8c80d47e720c17ec17e8539175e93
+> > > Author: Andrew Davis <afd@ti.com>
+> > > Date:   Mon Oct 24 12:34:29 2022 -0500
+> > > 
+> > >      kbuild: Allow DTB overlays to built into .dtbo.S files
+> > > 
+> > > broke the build reproducibility / no-op builds.
+> > > 
+> > > Before:
+> > >    2+ execution of `make` on non-changed tree did nothing
+> > > 
+> > > Now:
+> > >    Each run of `make` (even without a single bit changed) restarts vmlinux
+> > >    rebuild.
+> > > 
+> > > Please, revert or fix.
+> > > 
+> > 
+> > I do not see this behavior. What config are you using?
+> > 
+> > Not sure how this patch could be the root cause, it only adds
+> > a build target/rule, but doesn't actually use it anywhere yet..
+> 
+> For your reference I started with this one [1].
+> 
+> When I bisected, I just answered with defaults on whatever `make` told me at
+> the configuration stage.
+> 
+> The actual `make` command I used:
+> 
+> 	make O=/path/to/the/result W=1 C=1 CF=-D__CHECK_ENDIAN__ -j64
+> 
+> But there is nothing that can affect the described issue.
 
-> Hi Jonathan,
->=20
-> On Sat, Nov 12, 2022 at 6:20 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> > How are the separate?  We normally only use hardwaregain if
-> > changing it has no input on the scale that we need to apply in userspace
-> > to raw channels.  This normally happens for two reasons
-> > 1) There is a micro controller on the sensor that is doing a bunch of
-> >    maths so whilst changing the PGA value changes the range measurable =
-it
-> >    doesn't affect the representation when we read from the device.
-> > 2) The hardware gain is controlling say the sensitivity of a light sens=
-or
-> >    in a time of flight device - it affects if we can get a measurement,=
- but
-> >    not the measurement itself.
-> >
-> > Any of that true here? =20
-> No. I see I misunderstood the hardwaregain attribute. For me this is a us=
-er
-> friendly way of setting the gain and subsequently scale.
->=20
-> What I don't understand is why set scale at all?=20
+Actually, O= might affect which Makefile is used and how.
+The C=, CF= are sparse flags, W= is just warning level.
 
-Key issue here is the ABI is not designed against one part. It is designed =
-against
-many. Also it is inherently biased in favour of the parts that were around =
-when
-we originally created it - I'll note that at that time the trade off of res=
-olution
-against sampling period (oversampling or cutting off the measurement) was n=
-ot common.
+> [1]: https://p.defau.lt/?ZSOdGnNxF9v9AQtrfDo_KQ
 
-That means userspace code has been written that assumes a certain set of at=
-tributes.
-The cost of starting to use new attributes is high because no userspace cod=
-e knows
-about them.  Hence we put a lot of effort into avoiding doing so.  I agree =
-that your
-argument makes sense for your particular device - it doesn't for many other=
- ADCs.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Many ADCs (I'd go as far as to say most though I could be wrong on that) do=
- not
-couple scale and sampling frequency at all.=20
-
-> It's a result of sampling
-> rate and gain settings. Using it as a setting, for which input value rang=
-e also
-> changes depending on another attribute is quite cumbersome.
-> To use a sensor the program has to do this:
-> 1. set the sampling rate
-> 2. read available scales for this sampling rate
-> 3. set the scale according to desired gain
-> or know the scales for each sampling rate in advance...which makes availa=
-ble
-> scales attribute quite useless.
-
-For this last point, I think trying to match against previous scale makes a=
- lot of
-sense as there is considerable overlap available here between the different=
- rates.
-I think that would be an improvement.  Another improvement would be to at l=
-east
-expose the current resolution - that can be done by providing and _available
-for the raw reading.  Not an idea way to undestand what is going on but it =
-would
-make more data available to userspace.  (_raw_available(max) * scale would =
-give
-the range of the device and allow an adjustment of the scale to achieve wha=
-t the
-user wants).
-
-ABI design is hard.  We don't always get it right and often there is no rig=
-ht answer.
-Reality is that sometimes userspace code needs to search the space if it is=
- trying
-to get as close as possible to a particular set of constraints.  However le=
-ts assume
-in most cases the code has limits of:
-
-1) A minimum data rate with which it is happy (controls
-the sampling frequency - higher is normally fine, but wastes power etc).
-To get best possible power usage (and in case of this device resolution) it=
- will pick
-the lowest sampling frequency to meet this constraint.
-
-2) A range of values it is interested in (here related to the PGA settings =
-but not
-   the sampling frequency).  Adding _raw_avail would help it to have visibi=
-lity of
-   what the range is.
-
-3) A resolution it cares about getting data at (scale)
-
-We have to present 'scale' because that's necessary to allow userspace to c=
-alculate the
-actual voltage.  That adds a constraint to the ABI design.  We also don't w=
-ant to provide
-more overlapping controls than absolutely necessary as that makes it hard f=
-or userspace
-to know which one to use.
-
-So upshot is that userspace has to search to find a value that works for it.
-
-In this particular case the set of ranges at all sampling frequencies are t=
-he same.
-So if we assume a constraint on how often data is wanted is more important =
-than the
-resolution (have to pick one or the other to be more important) then we set=
- that
-first to the minimum value to meet the requirement.  Then scale is tweaked =
-to set
-the PGA to match the range desired.  Sure, not super clean but consistent w=
-ith the
-ABI as it stands (and we can't change that other than very very carefully).
-
-As a fun side note, if the device (or driver) had justified the lower resol=
-utions the other way
-(so the zeros ended up in least significant bits) a common solution would h=
-ave been
-to just present that to userspace as is, thus the scale would have been dec=
-oupled from
-the sampling frequency.  Not this is what oversampling devices normally do.=
-..
-We obviously could fake that now, but the issue would then be that it was a=
- major
-driver ABI change. So we can't.
-
-Jonathan
-
-
-
-
-
-
->=20
-> Kind regards,
-> Mitja
 
