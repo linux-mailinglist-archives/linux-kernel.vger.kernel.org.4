@@ -2,79 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5916A626F4E
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 12:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A99AC626F53
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 12:39:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235300AbiKMLgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 06:36:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
+        id S235323AbiKMLjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 06:39:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiKMLgO (ORCPT
+        with ESMTP id S231252AbiKMLjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 06:36:14 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440E81144F;
-        Sun, 13 Nov 2022 03:36:13 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id 5so5498746wmo.1;
-        Sun, 13 Nov 2022 03:36:13 -0800 (PST)
+        Sun, 13 Nov 2022 06:39:11 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602B811C34;
+        Sun, 13 Nov 2022 03:39:10 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id 13so22186643ejn.3;
+        Sun, 13 Nov 2022 03:39:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zEdIkkHvKR4gk0w43HK5snq1259xyuy3gybMfLvW/jU=;
-        b=qFsk+k23otSyWR8OV9N0jUvbyfP/DHR7vbI7sW+v9FFuMn5UVHyMXiGDDvtzR1oeWc
-         A1MtxYxQUeNcYyK+jStIBgXVCC6a+/eQjwSDm1jCUjpw1yeTV54MryGZmnHeZ0N8oFIv
-         1HJhXyvop1bsrcnExO4q0q7C1zeo1BKHna4604/IoTKyzoiz/Frc4qMs3v86Q+eo2iV7
-         0djE5sHI0PfXrygHfyGbX1gJDJxPkm8PBdV1VjJwIQnyqYmS2DJh9R9vRIeZTkCg5GAZ
-         o+ADsRpZZ2cEFxeTOHPHwJUweZMwlGmz4u+5ze3FsH0JC4/z4PMlejJCTInwztVqXvFq
-         i0rw==
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nLs2TAH/QuzR93RizayFXReGTRS2ZHOOTjuVGeiE3ZU=;
+        b=b0lgGV+stDy1Yn3DUjR+TeGQQslgWTBJK4v19ISg2hQMH4eadmYztCqZLDknM8hwKw
+         3wzWBvOaAEiX9Q7ZUOTPUz21Wr1TG0MCM4dJXdwXKl/jzG2Ra89v1FR1jYFtnu3AefLa
+         YNtCycDjHnYJbxWleV+s2QmNEBbkAmaP/PORXevExjT0bVxTAAyKDuQLHsvRnUVOTLGH
+         4i9zie9VX1aNZZ3cVLu8YG30ALVwIkuWN4khpEkoigccki3T4PRSKqkjyJatcxwf5F4w
+         QyNiDufA4rmD/f7+I3IpVVh1Kaea1c22prrp0ngU/Pkqej45pkDkL1ND+eZyHRTAmjgF
+         txmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zEdIkkHvKR4gk0w43HK5snq1259xyuy3gybMfLvW/jU=;
-        b=hRSA7V8BmC8cus3uM1esDWU7RIaDl1Gge5JOC+h1/uERNgu02Is47RtIIZw5nAutEC
-         emaTtuX4z7MX2fsNIDuz5VoLYyND07lcKm3xByC1WMon/M5FLOP+mhgBN/smomPrrVUn
-         UgNtBSYnBz8jZH+X2Ml61K/ylM9Y/zeTLESJzojjqyYp2CGEFGx+sK0X6gwYiUJJuHlR
-         Y3uvlBstw5nkxDUxUXmPQObPSQ+zoHd82Pyk5y4dfWZ4iLor5ZkGotkaN2JQjI3iri6y
-         /I4WJU2LxfV1pnER3+iqlfJxV0LAC6zl043+GLABbWTvt/nKrnc/5fMHXv/QjIn3zpbk
-         p0ng==
-X-Gm-Message-State: ANoB5pnijEy3nEAjax0PSgXJsqfd9r6KalCPMA2DQ1VKoSwB0oPatnjy
-        zR5ZSVGFaZ0XePHXaLtU6y6fI1RQhZnXSA==
-X-Google-Smtp-Source: AA0mqf6v83xFeQorrHGS00vmZtoIGJoI9v14LcidKcxRQVIb4h3B0fzLCom7ZPmlbWvGz9up3mBhtQ==
-X-Received: by 2002:a05:600c:4e4d:b0:3cf:81b1:bc7b with SMTP id e13-20020a05600c4e4d00b003cf81b1bc7bmr5486284wmq.121.1668339371702;
-        Sun, 13 Nov 2022 03:36:11 -0800 (PST)
-Received: from [89.138.235.186] (89-138-235-186.bb.netvision.net.il. [89.138.235.186])
-        by smtp.gmail.com with ESMTPSA id z8-20020adfec88000000b00236722ebe66sm6775658wrn.75.2022.11.13.03.36.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Nov 2022 03:36:11 -0800 (PST)
-Message-ID: <100ff22d-8aab-e07a-9aba-0608a05e02a6@gmail.com>
-Date:   Sun, 13 Nov 2022 13:36:08 +0200
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nLs2TAH/QuzR93RizayFXReGTRS2ZHOOTjuVGeiE3ZU=;
+        b=IGLeIKSjMvmWwHkuB/rViOEXcLFTYm9GNppoMmRxFCcnn6JHbSFOfb9tuhep0R96gl
+         7UJ8pNKnLP8+EMbaASBEPMmUz20aC7Y5ruBelhDr37dLYlH3AHUJEQp5zP+miC3Cq7Kd
+         TvUynuZYjZ8nzzeow8wvodaZFjIh7DnFjZR86EfEb+0/7PXFY6LceJn0MD4tBtOC3S4E
+         KejSiuzlApFi94K72Ccjpt+jGMEKi9LGi2iv9xyotAKi00krQyNHV3n6CSJBcjomf0Rt
+         YW5vrruNNQQQWDw8O0jUfW1FI2Q+CoBMeJxDAJmcEvUrNJsohzfQW7eON8WrjcTlPp9S
+         c7FQ==
+X-Gm-Message-State: ANoB5pnOM1PHv9493ILPpG+kVIaBGqhpdAxL9Znt8meCseBqz1Zru1FU
+        Os4wgy2tx9DA0rwq2Ty5QcXPfcV6vxHJ/xGz5hkBtQjNb4Q=
+X-Google-Smtp-Source: AA0mqf4GBN5NiBSCinefezWHA2mnLOACbi/xZR2eSfEitPrAjEjgC6YhnTLLZmM5GvmeO40zBHorUx/W1P9VImpNzaM=
+X-Received: by 2002:a17:906:9453:b0:78d:88c7:c1bf with SMTP id
+ z19-20020a170906945300b0078d88c7c1bfmr7352645ejx.299.1668339548669; Sun, 13
+ Nov 2022 03:39:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] char: xillybus: Prevent use-after-free due to race
- condition
-Content-Language: en-US
-To:     Hyunwoo Kim <imv4bel@gmail.com>
-Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu
-References: <20221030094209.65916-1-eli.billauer@gmail.com>
- <20221113080558.GA5854@ubuntu>
- <2a8f59ac-9d49-ffa3-b035-809f2fac38ec@gmail.com>
- <20221113084740.GA6458@ubuntu>
- <c9a03f08-8117-cd24-b4e3-9e097e3069f2@gmail.com>
- <20221113091415.GA8314@ubuntu>
-From:   Eli Billauer <eli.billauer@gmail.com>
-In-Reply-To: <20221113091415.GA8314@ubuntu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+From:   Wei Chen <harperchen1110@gmail.com>
+Date:   Sun, 13 Nov 2022 19:38:32 +0800
+Message-ID: <CAO4mrfdLsMZT1ytmTCK4m0xXezxskTUbQjqZoGobMVhnZgdfmw@mail.gmail.com>
+Subject: WARNING in _btrfs_ioctl_set_received_subvol
+To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,14 +63,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/11/2022 11:14, Hyunwoo Kim wrote:
-> 
-> It seems that you only need to move the location of unit_mutex
-> in xillybus_find_inode().
-> 
+Dear Linux Developer,
 
-Agreed. I'll prepare a follow-up patch to fix this issue as well.
+Recently when using our tool to fuzz kernel, the following crash was
+triggered. The bug persists in Linux 6.0.
 
-Thanks a lot for drawing my attention to this.
+HEAD commit:  4f5365f77018  Linux 5.15.76
+git tree: stable
+compiler: gcc 7.5.0
+console output:
+https://drive.google.com/file/d/1wkzu8jz6edriSP6TpsCGYD5AzkLajIEv/view?usp=share_link
+kernel config: https://drive.google.com/file/d/1flhc33savDkmYN6PRU5C2vXDX0LAKMvM/view?usp=share_link
+C reproducer: https://drive.google.com/file/d/1zKWsWAOcaHfPKewTG6P3pnnVfwH_WXa9/view?usp=share_link
+Syz reproducer:
+https://drive.google.com/file/d/1jUR8_6Re4xpJhyLdXqPiiV72WT-Tk8A-/view?usp=share_link
 
-   Eli
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: Wei Chen <harperchen1110@gmail.com>
+
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
+R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd3c817900
+ </TASK>
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 29222 at fs/btrfs/ioctl.c:4521
+_btrfs_ioctl_set_received_subvol+0x221/0x430 fs/btrfs/ioctl.c:4521
+Modules linked in:
+CPU: 1 PID: 29222 Comm: syz-executor.0 Not tainted 5.15.76 #5
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+RIP: 0010:_btrfs_ioctl_set_received_subvol+0x221/0x430 fs/btrfs/ioctl.c:4521
+Code: e8 74 34 44 ff 83 fb fb 0f 84 de 01 00 00 83 fb e2 0f 84 d5 01
+00 00 e8 5d 34 44 ff 89 de 48 c7 c7 c0 f8 39 85 e8 9f dc 2e ff <0f> 0b
+e8 48 34 44 ff 89 d9 ba a9 11 00 00 e9 45 01 00 00 49 8b 4f
+RSP: 0018:ffffc9000aecfd40 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: fffffffffffffff4 RCX: ffffc900013ed000
+RDX: 0000000000040000 RSI: ffffffff812d935c RDI: 00000000ffffffff
+RBP: ffffc9000aecfda0 R08: 0000000000000000 R09: 0000000000000001
+R10: ffffc9000aecfbe0 R11: 0000000000000003 R12: ffff888014210400
+R13: ffff8880208d2000 R14: ffff88810c4f21c0 R15: ffff88810f37b600
+FS:  00007f41ffc27700(0000) GS:ffff88813dc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fab915f7008 CR3: 000000002096e000 CR4: 00000000003526e0
+Call Trace:
+ <TASK>
+ btrfs_ioctl_set_received_subvol_32 fs/btrfs/ioctl.c:4584 [inline]
+ btrfs_ioctl+0x2154/0x3d50 fs/btrfs/ioctl.c:5007
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ __se_sys_ioctl fs/ioctl.c:860 [inline]
+ __x64_sys_ioctl+0xb6/0x100 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x34/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x61/0xcb
+RIP: 0033:0x4697f9
+Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f41ffc26c48 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 000000000077bf80 RCX: 00000000004697f9
+RDX: 0000000020072c40 RSI: 00000000c0c09425 RDI: 0000000000000005
+RBP: 00007f41ffc26c80 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
+R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd3c817900
+ </TASK>
+
+Best,
+Wei
