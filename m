@@ -2,130 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A99AC626F53
-	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 12:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CADB4626F56
+	for <lists+linux-kernel@lfdr.de>; Sun, 13 Nov 2022 12:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235323AbiKMLjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 06:39:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
+        id S235218AbiKMLqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 06:46:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiKMLjL (ORCPT
+        with ESMTP id S231252AbiKMLqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 06:39:11 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602B811C34;
-        Sun, 13 Nov 2022 03:39:10 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id 13so22186643ejn.3;
-        Sun, 13 Nov 2022 03:39:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nLs2TAH/QuzR93RizayFXReGTRS2ZHOOTjuVGeiE3ZU=;
-        b=b0lgGV+stDy1Yn3DUjR+TeGQQslgWTBJK4v19ISg2hQMH4eadmYztCqZLDknM8hwKw
-         3wzWBvOaAEiX9Q7ZUOTPUz21Wr1TG0MCM4dJXdwXKl/jzG2Ra89v1FR1jYFtnu3AefLa
-         YNtCycDjHnYJbxWleV+s2QmNEBbkAmaP/PORXevExjT0bVxTAAyKDuQLHsvRnUVOTLGH
-         4i9zie9VX1aNZZ3cVLu8YG30ALVwIkuWN4khpEkoigccki3T4PRSKqkjyJatcxwf5F4w
-         QyNiDufA4rmD/f7+I3IpVVh1Kaea1c22prrp0ngU/Pkqej45pkDkL1ND+eZyHRTAmjgF
-         txmw==
+        Sun, 13 Nov 2022 06:46:45 -0500
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5792B1FE;
+        Sun, 13 Nov 2022 03:46:43 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id ja4-20020a05600c556400b003cf6e77f89cso7630296wmb.0;
+        Sun, 13 Nov 2022 03:46:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nLs2TAH/QuzR93RizayFXReGTRS2ZHOOTjuVGeiE3ZU=;
-        b=IGLeIKSjMvmWwHkuB/rViOEXcLFTYm9GNppoMmRxFCcnn6JHbSFOfb9tuhep0R96gl
-         7UJ8pNKnLP8+EMbaASBEPMmUz20aC7Y5ruBelhDr37dLYlH3AHUJEQp5zP+miC3Cq7Kd
-         TvUynuZYjZ8nzzeow8wvodaZFjIh7DnFjZR86EfEb+0/7PXFY6LceJn0MD4tBtOC3S4E
-         KejSiuzlApFi94K72Ccjpt+jGMEKi9LGi2iv9xyotAKi00krQyNHV3n6CSJBcjomf0Rt
-         YW5vrruNNQQQWDw8O0jUfW1FI2Q+CoBMeJxDAJmcEvUrNJsohzfQW7eON8WrjcTlPp9S
-         c7FQ==
-X-Gm-Message-State: ANoB5pnOM1PHv9493ILPpG+kVIaBGqhpdAxL9Znt8meCseBqz1Zru1FU
-        Os4wgy2tx9DA0rwq2Ty5QcXPfcV6vxHJ/xGz5hkBtQjNb4Q=
-X-Google-Smtp-Source: AA0mqf4GBN5NiBSCinefezWHA2mnLOACbi/xZR2eSfEitPrAjEjgC6YhnTLLZmM5GvmeO40zBHorUx/W1P9VImpNzaM=
-X-Received: by 2002:a17:906:9453:b0:78d:88c7:c1bf with SMTP id
- z19-20020a170906945300b0078d88c7c1bfmr7352645ejx.299.1668339548669; Sun, 13
- Nov 2022 03:39:08 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SgLDEPBAsaqSd32xdssMnO2SIr7s6T8Rai6MM1Udg1w=;
+        b=zA8lqqBDAQp4F662bQitbN5nT5/Rc5iUKJtXbiojzeTVgisPcK/WYeTHKpjEvSzVek
+         WzvDGvVOn186miUfxpMy4dJ+IGsaBolVrYhg/DzZ5mr08lh6VKGMUH8shZfEM/7Bejzj
+         i+TxkqryPvZUnkLdiUqhxH+BX6TTzsGiv1H6P1ALYYDYc6YhRT7EaV6P/LXCqjel9V6z
+         /37Gg1n51rRoLybQ0mJCauKxWBj2xO1wQLmb90vavCk3GgfUrSGxf5w3m0nlruMYItfS
+         1E01Ko+3ofMqMTMft6+YzpsUzBwiBSZaGqZknTDoTtvFDJAqhTpGgOKxf1B5k3+Mgmla
+         jXzw==
+X-Gm-Message-State: ANoB5pnLL0Mn2iljztFTUuCVjoQ0k771PoBJykE8ZMsiSjzFgjYvuvGS
+        6js64SI1/kUGQXutNMYXknc=
+X-Google-Smtp-Source: AA0mqf5B1N6a18eU383YCZU1EaWR5KFenAxcLsdu6//CnAXFKk60213F0hAbvbglyCCqTm2vXIJtHQ==
+X-Received: by 2002:a05:600c:4b07:b0:3cf:7267:5b40 with SMTP id i7-20020a05600c4b0700b003cf72675b40mr5661772wmp.164.1668340002304;
+        Sun, 13 Nov 2022 03:46:42 -0800 (PST)
+Received: from localhost ([2a00:23c8:6c0c:ff01:8fbf:89fd:a697:2959])
+        by smtp.gmail.com with ESMTPSA id o37-20020a05600c512500b003cf54b77bfesm15808803wms.28.2022.11.13.03.46.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Nov 2022 03:46:41 -0800 (PST)
+From:   Breno Leitao <leitao@debian.org>
+To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        shuah@kernel.org, cgroups@vger.kernel.org
+Cc:     leit@meta.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kselftest/cgroup: Fix gathering number of CPUs
+Date:   Sun, 13 Nov 2022 11:44:49 +0000
+Message-Id: <20221113114449.18693-1-leitao@debian.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-From:   Wei Chen <harperchen1110@gmail.com>
-Date:   Sun, 13 Nov 2022 19:38:32 +0800
-Message-ID: <CAO4mrfdLsMZT1ytmTCK4m0xXezxskTUbQjqZoGobMVhnZgdfmw@mail.gmail.com>
-Subject: WARNING in _btrfs_ioctl_set_received_subvol
-To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Linux Developer,
+test_cpuset_prs.sh is failing with the following error:
 
-Recently when using our tool to fuzz kernel, the following crash was
-triggered. The bug persists in Linux 6.0.
+	test_cpuset_prs.sh: line 29: [[: 8
+	57%: syntax error in expression (error token is "57%")
 
-HEAD commit:  4f5365f77018  Linux 5.15.76
-git tree: stable
-compiler: gcc 7.5.0
-console output:
-https://drive.google.com/file/d/1wkzu8jz6edriSP6TpsCGYD5AzkLajIEv/view?usp=share_link
-kernel config: https://drive.google.com/file/d/1flhc33savDkmYN6PRU5C2vXDX0LAKMvM/view?usp=share_link
-C reproducer: https://drive.google.com/file/d/1zKWsWAOcaHfPKewTG6P3pnnVfwH_WXa9/view?usp=share_link
-Syz reproducer:
-https://drive.google.com/file/d/1jUR8_6Re4xpJhyLdXqPiiV72WT-Tk8A-/view?usp=share_link
+This is happening because `lscpu | grep "^CPU(s)"` returns two lines in
+some systems (such as Debian unstable):
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: Wei Chen <harperchen1110@gmail.com>
+	# lscpu | grep "^CPU(s)"
+	CPU(s):                          8
+	CPU(s) scaling MHz:              55%
 
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
-R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd3c817900
- </TASK>
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 29222 at fs/btrfs/ioctl.c:4521
-_btrfs_ioctl_set_received_subvol+0x221/0x430 fs/btrfs/ioctl.c:4521
-Modules linked in:
-CPU: 1 PID: 29222 Comm: syz-executor.0 Not tainted 5.15.76 #5
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
-RIP: 0010:_btrfs_ioctl_set_received_subvol+0x221/0x430 fs/btrfs/ioctl.c:4521
-Code: e8 74 34 44 ff 83 fb fb 0f 84 de 01 00 00 83 fb e2 0f 84 d5 01
-00 00 e8 5d 34 44 ff 89 de 48 c7 c7 c0 f8 39 85 e8 9f dc 2e ff <0f> 0b
-e8 48 34 44 ff 89 d9 ba a9 11 00 00 e9 45 01 00 00 49 8b 4f
-RSP: 0018:ffffc9000aecfd40 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: fffffffffffffff4 RCX: ffffc900013ed000
-RDX: 0000000000040000 RSI: ffffffff812d935c RDI: 00000000ffffffff
-RBP: ffffc9000aecfda0 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffc9000aecfbe0 R11: 0000000000000003 R12: ffff888014210400
-R13: ffff8880208d2000 R14: ffff88810c4f21c0 R15: ffff88810f37b600
-FS:  00007f41ffc27700(0000) GS:ffff88813dc00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fab915f7008 CR3: 000000002096e000 CR4: 00000000003526e0
-Call Trace:
- <TASK>
- btrfs_ioctl_set_received_subvol_32 fs/btrfs/ioctl.c:4584 [inline]
- btrfs_ioctl+0x2154/0x3d50 fs/btrfs/ioctl.c:5007
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0xb6/0x100 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x34/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x61/0xcb
-RIP: 0033:0x4697f9
-Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f41ffc26c48 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 000000000077bf80 RCX: 00000000004697f9
-RDX: 0000000020072c40 RSI: 00000000c0c09425 RDI: 0000000000000005
-RBP: 00007f41ffc26c80 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
-R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd3c817900
- </TASK>
+This is a simple fix that discard the second line.
 
-Best,
-Wei
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ tools/testing/selftests/cgroup/test_cpuset_prs.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index 526d2c42d870..564ca8c33035 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -25,7 +25,7 @@ WAIT_INOTIFY=$(cd $(dirname $0); pwd)/wait_inotify
+ CGROUP2=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
+ [[ -n "$CGROUP2" ]] || skip_test "Cgroup v2 mount point not found!"
+ 
+-CPUS=$(lscpu | grep "^CPU(s)" | sed -e "s/.*:[[:space:]]*//")
++CPUS=$(lscpu | grep "^CPU(s):" | sed -e "s/.*:[[:space:]]*//")
+ [[ $CPUS -lt 8 ]] && skip_test "Test needs at least 8 cpus available!"
+ 
+ # Set verbose flag and delay factor
+-- 
+2.38.1
+
