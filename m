@@ -2,195 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B769C6285BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 643176285C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237928AbiKNQnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:43:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
+        id S237871AbiKNQpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:45:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237895AbiKNQnG (ORCPT
+        with ESMTP id S237882AbiKNQp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:43:06 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACF760C3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:43:04 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id q21so8588863iod.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:43:04 -0800 (PST)
+        Mon, 14 Nov 2022 11:45:28 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A522F02C
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:45:26 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id a15so13953132ljb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:45:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zvshJTPFOLi1aFoI1m6FADH65pEihkNnlKNCxyRQXF8=;
-        b=fAlfBnaauJUubAYqzd76iEPVeYlf+a2YCNUYymAu8x3YSsqq5hN4QIUjFHXClJBh4R
-         gFhzftsJ4juWm4E1ALYLopzEqaQwcuPnFwnfbO/w0SUncCL98bZfCGmcljYK+MuS8ubP
-         RfPU82MHCSc9TaPPCsAeoT+2GKOhUo0mWc2vRAITLDCYh30AYOXOuC95gBE6xYboXJAW
-         yZUqj7x9sQ8iW4kWvhcvwJfVrYsWy4Po4p7JzizW5QWxHEjkaZcSqmxliVwm4G3uk3Tx
-         SGWH35IPTfMSicFl5bmEScDNExnxzwgdxgmDBXy32XcdDvR24pAskeX0+peeT7cGpJL0
-         PqSg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y9dc45aT/JX/FTR0wgHvwdtMlLaHpziOS1SHGLUZmJo=;
+        b=RsAuOQaCs1ObI5owjuNOo6L6z9OgvX+6gWIi7MrN0PtqC6XS0mYLk6jf+i7vRPaSVB
+         WrKmgFF39r7PbiwVZrxykzO4DmP4m7JWdogkMC7cJO1wy4WhvVNseFVRL26o4YCKWWir
+         iJimBjkv4CObcYKaRwzkj/ciCIs8lYeJ1GYwz/VnnGbC6+igomma3XFhHd9vuIimbR14
+         YtGnc4GW4NvFOvrwSR8JE+BO3KPjhbalvLQGRKTWDASynwP6pL7lhRYCbEEwwbxnQmXb
+         NY0BuNHIXevHkjUbGPZ0fnfWo3MtMboTwHdTqKxOucHRhDo7cuQiNkTC19JM+yYJjcYk
+         wCig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zvshJTPFOLi1aFoI1m6FADH65pEihkNnlKNCxyRQXF8=;
-        b=w+gxRKlzWOQ3zoXAyXvKBrw1x2MLfWNfl3i9UGabI9Ja+AR++MiukFVWOehWS+QGT3
-         yGE0FUDsv6y5+yWG6KFAk2qicjVB/lXqMc0oPsYSQk2y+MsrkycV72lzwpKFQD+jAepo
-         vToS+DYusDu9cxZqFHKc9unu3b3Bet4JEv7zz061R11xv4eWhMMoF9OikDV8OrzCBH7V
-         OT70nxtsumD23jeDKAL6/yN+r7v6k8hcp1vqxxImnjQ1rxD5t9nzX9Au55vPGeG/+BXG
-         4f55mU5dnpVozVlnWxqsmiqKA1tk2N8HHxdHgG3aQ5G7MNm77saQYgc01rXSk4rd3uJu
-         dBvg==
-X-Gm-Message-State: ANoB5pneD6o7P7RiXx1NCm4/4y2y8CdB5+33JL1MLmKE7ZaI9LNInLI5
-        QymYWm3E9P8Ip4Nb/gJWdQdk583H/KjULrQpDtxc0A==
-X-Google-Smtp-Source: AA0mqf6m7E+6JeWfvUfKBnctexkkE7MxtSJi4yAHAILTr547yVqcrT5wsiTIlji22bp773FKPUAUhNvK+u/JuO8//JM=
-X-Received: by 2002:a05:6638:15c7:b0:375:2ce7:e2b5 with SMTP id
- i7-20020a05663815c700b003752ce7e2b5mr6115801jat.120.1668444183592; Mon, 14
- Nov 2022 08:43:03 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y9dc45aT/JX/FTR0wgHvwdtMlLaHpziOS1SHGLUZmJo=;
+        b=n0yN+/t9IWqUokH7X1c1MoTfCR59PDvak4k4PTwMOqRPxsFvAfiHhGQbVVFuc3Gf7A
+         NpwR9t9ZdMC1Je+J5vrR8rC4HF2QDv53lIZAUw2SfEDDAuOlWtxTT2vlPTj3H25tF2YJ
+         QUWcSK/YOmYyzTthTeDdAQK/lrCA2TzFzOzIrwRO2AuJcQFotYyIrhuwWid8MxTrozXy
+         IQLqOfoLZh1VpgE3YH8huEGW0f6bNe337Hz7d+fF8ELyq+RpVxDld/kU/7ln39kRMgKT
+         kTS0N7Go18uKa1kf7g0aqHzntek45A3+LeilONZyvgxMT86yB0Wcrky7x2cK5EJEjRFX
+         8CxQ==
+X-Gm-Message-State: ANoB5pk9V4rRQ3r0OsQP0h1JuwmmhIRCWf8Qa1CaETAj+f9SITALv95z
+        kiULlplYBTzkcP/xH3+sickgVA==
+X-Google-Smtp-Source: AA0mqf5oWsRFwI4o8EBhGbnJXOfSWE3mB6JPvEc2qERcM73WyXLi5uBVbcg+Z1b5VccvhXZ/XqHVIg==
+X-Received: by 2002:a2e:940f:0:b0:277:2f7f:a14c with SMTP id i15-20020a2e940f000000b002772f7fa14cmr4209836ljh.96.1668444324898;
+        Mon, 14 Nov 2022 08:45:24 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id s8-20020a05651c200800b00277522fc29bsm2086012ljo.3.2022.11.14.08.45.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 08:45:24 -0800 (PST)
+Message-ID: <ea17f523-a21f-6af8-7aec-db0a5825f6b2@linaro.org>
+Date:   Mon, 14 Nov 2022 17:45:22 +0100
 MIME-Version: 1.0
-References: <20221102035301.512892-1-zhangsong34@huawei.com>
- <CAKfTPtCcYySw2ZC_pr8=3KFPmAAVN=1h8=5jWkW5YXyy11sehg@mail.gmail.com>
- <b45f96b6-e0b2-22bb-eda1-2468d6fbe104@huawei.com> <CAKfTPtDrWCenxtVcunjS3pGD81TdLf2EkhO_YcdfxnUHXpVF3w@mail.gmail.com>
- <4bad43c0-40a4-dc39-7214-f2c3321a47ee@huawei.com> <CAKfTPtCwUvkqnzs9n0G+cyE5h5QdgwoKF-gNu+4A5g4NHNRe9w@mail.gmail.com>
- <7d887171-491a-1d36-0926-d0486aacc9c2@huawei.com>
-In-Reply-To: <7d887171-491a-1d36-0926-d0486aacc9c2@huawei.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 14 Nov 2022 17:42:52 +0100
-Message-ID: <CAKfTPtCHZm2AKemnpE1UvQPsgpB5ycFdjkJa1pHQS-=DYJ2-KA@mail.gmail.com>
-Subject: Re: [PATCH] sched/fair: Introduce priority load balance for CFS
-To:     Song Zhang <zhangsong34@huawei.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v15 8/8] arm64: dts: qcom: sm8250: Add tpdm mm/prng
+Content-Language: en-US
+To:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20221114144027.14365-1-quic_jinlmao@quicinc.com>
+ <20221114144027.14365-9-quic_jinlmao@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221114144027.14365-9-quic_jinlmao@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 12 Nov 2022 at 03:51, Song Zhang <zhangsong34@huawei.com> wrote:
->
-> Hi, Vincent
->
-> On 2022/11/3 17:22, Vincent Guittot wrote:
-> > On Thu, 3 Nov 2022 at 10:20, Song Zhang <zhangsong34@huawei.com> wrote:
-> >>
-> >>
-> >>
-> >> On 2022/11/3 16:33, Vincent Guittot wrote:
-> >>> On Thu, 3 Nov 2022 at 04:01, Song Zhang <zhangsong34@huawei.com> wrote:
-> >>>>
-> >>>> Thanks for your reply!
-> >>>>
-> >>>> On 2022/11/3 2:01, Vincent Guittot wrote:
-> >>>>> On Wed, 2 Nov 2022 at 04:54, Song Zhang <zhangsong34@huawei.com> wrote:
-> >>>>>>
-> >>>>>
-> >>>>> This really looks like a v3 of
-> >>>>> https://lore.kernel.org/all/20220810015636.3865248-1-zhangsong34@huawei.com/
-> >>>>>
-> >>>>> Please keep versioning.
-> >>>>>
-> >>>>>> Add a new sysctl interface:
-> >>>>>> /proc/sys/kernel/sched_prio_load_balance_enabled
-> >>>>>
-> >>>>> We don't want to add more sysctl knobs for the scheduler, we even
-> >>>>> removed some. Knob usually means that you want to fix your use case
-> >>>>> but the solution doesn't make sense for all cases.
-> >>>>>
-> >>>>
-> >>>> OK, I will remove this knobs later.
-> >>>>
-> >>>>>>
-> >>>>>> 0: default behavior
-> >>>>>> 1: enable priority load balance for CFS
-> >>>>>>
-> >>>>>> For co-location with idle and non-idle tasks, when CFS do load balance,
-> >>>>>> it is reasonable to prefer migrating non-idle tasks and migrating idle
-> >>>>>> tasks lastly. This will reduce the interference by SCHED_IDLE tasks
-> >>>>>> as much as possible.
-> >>>>>
-> >>>>> I don't agree that it's always the best choice to migrate a non-idle task 1st.
-> >>>>>
-> >>>>> CPU0 has 1 non idle task and CPU1 has 1 non idle task and hundreds of
-> >>>>> idle task and there is an imbalance between the 2 CPUS: migrating the
-> >>>>> non idle task from CPU1 to CPU0 is not the best choice
-> >>>>>
-> >>>>
-> >>>> If the non idle task on CPU1 is running or cache hot, it cannot be
-> >>>> migrated and idle tasks can also be migrated from CPU1 to CPU0. So I
-> >>>> think it does not matter.
-> >>>
-> >>> What I mean is that migrating non idle tasks first is not a universal
-> >>> win and not always what we want.
-> >>>
-> >>
-> >> But migrating online tasks first is mostly a trade-off that
-> >> non-idle(Latency Sensitive) tasks can obtain more CPU time and minimize
-> >> the interference caused by IDLE tasks. I think this makes sense in most
-> >> cases, or you can point out what else I need to think about it ?
-> >>
-> >> Best regards.
-> >>
-> >>>>
-> >>>>>>
-> >>>>>> Testcase:
-> >>>>>> - Spawn large number of idle(SCHED_IDLE) tasks occupy CPUs
-> >>>>>
-> >>>>> What do you mean by a large number ?
-> >>>>>
-> >>>>>> - Let non-idle tasks compete with idle tasks for CPU time.
-> >>>>>>
-> >>>>>> Using schbench to test non-idle tasks latency:
-> >>>>>> $ ./schbench -m 1 -t 10 -r 30 -R 200
-> >>>>>
-> >>>>> How many CPUs do you have ?
-> >>>>>
-> >>>>
-> >>>> OK, some details may not be mentioned.
-> >>>> My virtual machine has 8 CPUs running with a schbench process and 5000
-> >>>> idle tasks. The idle task is a while dead loop process below:
-> >>>
-> >>> How can you care about latency when you start 10 workers on 8 vCPUs
-> >>> with 5000 non idle threads ?
-> >>>
-> >>
-> >> No no no... spawn 5000 idle(SCHED_IDLE) processes not 5000 non-idle
-> >> threads, and with 10 non-idle schbench workers on 8 vCPUs.
-> >
-> > yes spawn 5000 idle tasks but my point remains the same
-> >
->
-> I am so sorry that I have not received your reply for a long time, and I
-> am still waiting for it anxiously. In fact, migrating non-idle tasks 1st
-> works well in most scenarios, so it maybe possible to add a
-> sched_feat(LB_PRIO) to enable or disable that. Finally, I really hope
-> you can give me some better advice.
+On 14/11/2022 15:40, Mao Jinlong wrote:
+> Add tpdm mm and tpdm prng for sm8250.
+> 
+> +---------------+                +-------------+
+> |  tpdm@6c08000 |                |tpdm@684C000 |
+> +-------|-------+                +------|------+
+>         |                               |
+> +-------|-------+                       |
+> | funnel@6c0b000|                       |
+> +-------|-------+                       |
+>         |                               |
+> +-------|-------+                       |
+> |funnel@6c2d000 |                       |
+> +-------|-------+                       |
+>         |                               |
+>         |    +---------------+          |
+>         +----- tpda@6004000  -----------+
+>              +-------|-------+
+>                      |
+>              +-------|-------+
+>              |funnel@6005000 |
+>              +---------------+
+> 
+> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sm8250.dtsi | 173 +++++++++++++++++++++++++++
+>  1 file changed, 173 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> index 80193bb3c478..0914b4b9c862 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> @@ -2746,6 +2746,76 @@
+>  			};
+>  		};
+>  
+> +		tpda@6004000 {
+> +			compatible = "arm,primecell";
 
-I have seen that you posted a v4 5 days ago which is on my list to be reviewed.
+Does not look like you tested the DTS against bindings. Please run `make
+dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+for instructions).
 
-My concern here remains that selecting non idle task 1st is not always
-the best choices as for example when you have 1 non idle task per cpu
-and thousands of idle tasks moving around. Then regarding your use
-case, the weight of the 5000 idle threads is around twice more than
-the weight of your non idle bench: sum weight of idle threads is 15k
-whereas the weight of your bench is around 6k IIUC how RPS run. This
-also means that the idle threads will take a significant times of the
-system: 5000 / 7000 ticks. I don't understand how you can care about
-latency in such extreme case and I'm interested to get the real use
-case where you can have such situation.
+I don't think your bindings allow this to be alone...
 
-All that to say that idle task remains cfs task with a small but not
-null weight and we should not make them special other than by not
-preempting at wakeup.
+Beside, your patch does not apply. Is it based on Bjorn's tree?
 
->
-> Best regards.
->
-> Song Zhang
+> +			reg = <0 0x06004000 0 0x1000>;
+> +			reg-names = "tpda-base";
+> +
+> +			clocks = <&aoss_qmp>;
+> +			clock-names = "apb_pclk";
+> +
+> +			out-ports {
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +
+> +				port@0 {
+> +					reg = <0>;
+> +					tpda_out_funnel_qatb: endpoint {
+> +						remote-endpoint = <&funnel_qatb_in_tpda>;
+> +					};
+> +				};
+> +			};
+> +
+> +			in-ports {
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +
+> +				port@9 {
+> +					reg = <9>;
+> +					tpda_9_in_tpdm_mm: endpoint {
+> +						remote-endpoint = <&tpdm_mm_out_tpda9>;
+> +					};
+> +				};
+> +
+> +				port@17 {
+> +					reg = <23>;
+> +					tpda_23_in_tpdm_prng: endpoint {
+> +						remote-endpoint = <&tpdm_prng_out_tpda_23>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+> +		funnel@6005000 {
+> +			compatible = "arm,primecell";
+
+Same problem, I guess.
+
+
+Best regards,
+Krzysztof
+
