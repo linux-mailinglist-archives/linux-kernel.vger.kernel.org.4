@@ -2,108 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F7762898A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:41:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53999628953
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:29:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237079AbiKNTlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 14:41:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44200 "EHLO
+        id S236947AbiKNT3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 14:29:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiKNTlL (ORCPT
+        with ESMTP id S236525AbiKNT3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 14:41:11 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEE01A38B;
-        Mon, 14 Nov 2022 11:41:10 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id q9so12007303pfg.5;
-        Mon, 14 Nov 2022 11:41:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3XrI4nxvGHUCxoc8HuMbGJ+vNpFCW7F3PwRmwEeEnBE=;
-        b=gppJTB4ThxkXJZLbWfSW4pZ121wwq072YhQUh+SzfkcvR94GOYRlkaQZg7dO7+yQNN
-         5k3gNK8L1xS3vged5EKsB/9a71x2UreuBfs7GFBWV2mE+xY9TTS16jvL7ki0RpsXfaJV
-         Fn3lgL3+mHi9IE5wNArMI0w7WgUEH2JE4OjytDywiWxE+1stkdv2Cul5CrgXn6Szpt6z
-         7jarednJ9M0GUC0dprQE4/2rcI04RCTEcgUkUfki2i9QZPbhAxvP1RrdSiIWznaI7VRa
-         0N4RaT5hz1BpQw8R4j91f9AxlSovfy1IUhd/99Xnb4TxVGlPSo9zlNgObRNYNcjTmOyA
-         pDxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3XrI4nxvGHUCxoc8HuMbGJ+vNpFCW7F3PwRmwEeEnBE=;
-        b=x4+SM8CKue60fFAzDrRnAKQS43R9ZiDi/Pa5LX44sxsY+3cDpvKnXI+I8mLSBKDan6
-         sIsfssffL+K0kpazCztnqWXrCUYN0g1pxSL0JkW+8GTfn5VUTvMgpIR4u431o18qxqQw
-         ffdQ0tqomTi9izv1i+iLjW7EIYqt23Y3RzN6BxWeax414pndx2XQQyG9+Nab/n8Px0tJ
-         z/sQafdMdmw+4CFZtEANwVMOYWjwQWbvBqGKORXWJePOWWYdEQuow9KTNDeo5KX4QrS3
-         Kj9VHlhpLI0i5GAF/GXRCuW5ZVUApw9+EoGwFRgQaz31iOcb63gMZHWAcKk0WF+hVDD6
-         BwvQ==
-X-Gm-Message-State: ANoB5pl3eYvIp036UFz7/6Uoq4kOUwQfP50OI88FhLZ8EXaVhb0gh8BM
-        25NLkcDARkRfGkuAlFoIusI=
-X-Google-Smtp-Source: AA0mqf7ozzAVNmQ0762Wdq2RaoUHGyy3f7FD4K4fw0PZKL9JZzpVniJ6TDAEWGe0OS68Bc54J/2JBw==
-X-Received: by 2002:a63:5206:0:b0:41a:5a80:5f20 with SMTP id g6-20020a635206000000b0041a5a805f20mr12701044pgb.442.1668454870081;
-        Mon, 14 Nov 2022 11:41:10 -0800 (PST)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id gk9-20020a17090b118900b00205db4ff6dfsm6841481pjb.46.2022.11.14.11.41.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 11:41:09 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/msm/a6xx: Fix speed-bin detection vs probe-defer
-Date:   Mon, 14 Nov 2022 11:41:31 -0800
-Message-Id: <20221114194133.1535178-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Mon, 14 Nov 2022 14:29:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4255D20F66;
+        Mon, 14 Nov 2022 11:29:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2BF6613EA;
+        Mon, 14 Nov 2022 19:29:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94FC8C43470;
+        Mon, 14 Nov 2022 19:29:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668454181;
+        bh=7gDJJ7UtURCtpGUPxQT2lSB4H0lh3qa/bxjfMajltOo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=D6QdqWUzROR+yvuHACC6wdqq9feKbVHR+SQfEc/8HLszF532JSVdCCsE5EYNBiSwk
+         nmotoHZm/Qc07H2/yhTgplTNbAH+qsslxVybUxWhiRllTiuRrZpHEMBM36UY8g9pBa
+         mncQT6QDY6kuMUYTGwNXZqUFt7BiciiCBX0JH8/1Wloa/qvZYAHxP0GUWu/MNtHtfh
+         PTZfRlxd3Y5+p6s1P9WnQbWn3q/S0hfi2MH4a3iY3AE83tnblffmklHosmuHc1fe7R
+         Y+duGYbhmVusGkNThbH/vjdsrr4nIhyAnssuazfoEA2On4RA2VderhjKFoqGHzVmHl
+         jdzBVHZaHGv+g==
+Date:   Mon, 14 Nov 2022 19:41:57 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/5] iio: addac: ad74413r: add support for reset-gpio
+Message-ID: <20221114194157.1d03588a@jic23-huawei>
+In-Reply-To: <ccb148b2-c669-0317-e2b5-c59e595e4299@rasmusvillemoes.dk>
+References: <20221111143921.742194-1-linux@rasmusvillemoes.dk>
+        <20221111143921.742194-6-linux@rasmusvillemoes.dk>
+        <20221112170705.7efe1673@jic23-huawei>
+        <ccb148b2-c669-0317-e2b5-c59e595e4299@rasmusvillemoes.dk>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Mon, 14 Nov 2022 09:37:59 +0100
+Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
 
-If we get an error (other than -ENOENT) we need to propagate that up the
-stack.  Otherwise if the nvmem driver hasn't probed yet, we'll end up with
-whatever OPP(s) are represented by bit zero.
+> On 12/11/2022 18.07, Jonathan Cameron wrote:
+> > On Fri, 11 Nov 2022 15:39:21 +0100
+> > Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
+> >   
+> >> We have a board where the reset pin of the ad74412 is connected to a
+> >> gpio, but also pulled low by default. Hence to get the chip out of
+> >> reset, the driver needs to know about that gpio and set it high before
+> >> attempting to communicate with it.  
+> > 
+> > I'm a little confused on polarity here.  The pin is a !reset so
+> > we need to drive it low briefly to trigger a reset.
+> > I'm guessing for your board the pin is set to active low? (an example
+> > in the dt would have made that clearer) Hence the pulse
+> > in here to 1 is actually briefly driving it low before restoring to high?  
+> 
+> Yes. I actually thought that was pretty standard. I do indeed have
+> something like
+> 
+>   reset-gpios = <&gpio1 3 GPIO_ACTIVE_LOW>;
+> 
+> in my .dts, so setting the gpio value to 1 (logically asserting its
+> function) will end up driving the signal low, and setting it to 0
+> (de-asserting reset) will set the signal high. I will add that line to
+> the example in the binding.
+> 
+> > For a pin documented as !reset that seems backwards   
+> 
+> Well, it depends on where the knowledge of the pin being active low
+> belongs. In this case, the driver itself handles the gpio so it could be
+> done both ways.
+> 
+> But if, for example, the iio framework would handle an optional
+> reset-gpio for each device, it couldn't possibly know whether to set it
+> to 1 or 0 for a given device, it could only set it logic 1 to assert
+> reset and then rely on DT gpio descriptor to include the active low/high
+> info.
+> 
+> Also, see the "The active low and open drain semantics" section in
+> Documentation/driver-api/gpio/consumer.rst.
 
-Fixed: fe7952c629da ("drm/msm: Add speed-bin support to a618 gpu")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Throw in an example in the dt-binding and I'm fine with this as it
+stands.
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index 7fe60c65a1eb..96de2202c86c 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -1956,7 +1956,7 @@ static int a6xx_set_supported_hw(struct device *dev, struct adreno_rev rev)
- 		DRM_DEV_ERROR(dev,
- 			      "failed to read speed-bin (%d). Some OPPs may not be supported by hardware",
- 			      ret);
--		goto done;
-+		return ret;
- 	}
- 
- 	supp_hw = fuse_to_supp_hw(dev, rev, speedbin);
--- 
-2.38.1
+Jonathan
+
+> 
+> Rasmus
+> 
 
