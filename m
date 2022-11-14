@@ -2,101 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49EE6627C97
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1ECD627C96
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:44:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236457AbiKNLoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:44:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40588 "EHLO
+        id S236428AbiKNLoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:44:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233300AbiKNLoD (ORCPT
+        with ESMTP id S236427AbiKNLoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:44:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4ACFD2
+        Mon, 14 Nov 2022 06:44:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EA317079
         for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:44:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA6F3B80E3E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:43:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7732C433D6;
-        Mon, 14 Nov 2022 11:43:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9867D61029
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:44:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15CD5C4314F;
+        Mon, 14 Nov 2022 11:43:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668426238;
-        bh=iD4SRt0ZX//1elKcCadrZysU+86x0awGGwlfpKQ4OmY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JdcQDNm0WuMwymkafzY3K6Cvb972fEIvDDKv33aUyHMFTHtmLvFpukUFOsF6eue3+
-         k/nTaaDEvOjzwu0Cd7UCY+DboAueX3OQ9ZSJZbW/nW942gp3Uco5LgvJvyi1fSNIp8
-         VqbeUjaKzIvH47tddROIAfcfyaOE3nOsuoWcBF7yJX1BEQ8zSrdyEoGdJ1+awBfRDt
-         PO865dp0KPyysbBJDjWWoSUWAoa9OQ5qWxM2h9+p2C4vtBAOJKj5CRUZD7GSh4xlAd
-         3XsgMOPWWQCQkt98IZVV/hFRZWdY4qV9TWa8DWVGarDg1jobjJKkHNKCJ+E5EaB/00
-         IzKjxW4DdhtVQ==
+        s=k20201202; t=1668426240;
+        bh=fqd76LHS4zm9yigkSD8GcXuhYRdtL6d9jVg6IEleNpk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=X+HiDymiRneMmutFCHHvvrzFAnxG9Dq0+mCVxsufGjfUTGM/YEFWmQkgjxDWf1mL6
+         ShTjzuG7e9ij94oNB8sexozmUuT8PeNan6720Nwi3Zrf9bY/g3p+aITf2OEv0IBwBR
+         ninnop3pWqIQ1ZcNpA+PrmSMAY4lx9rE3hIPHzl4zfWhsQ2Rnt9EL3OJXqef9aut72
+         V/YMZP1R0ltq3rg9sJABcAgRfxwQA+UhVteLabRAlscyHksSeRVfxVNa/Xu6zy+6vr
+         jKv25Vh7nS+lZp8KqvAbUdVw/M3iorTIGV0Ch4ydgD6tULMsb1fh7DXvMF9gmuNvhF
+         UwqHB7wWMMNWg==
 From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Don Zickus <dzickus@redhat.com>, Hao Luo <haoluo@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Huang Rui <ray.huang@amd.com>,
-        Ingo Molnar <mingo@redhat.com>, Jan Hubicka <jh@suse.de>,
-        Jason Baron <jbaron@akamai.com>,
-        Jiri Kosina <jikos@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Martin Liska <mliska@suse.cz>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Mel Gorman <mgorman@suse.de>, Miguel Ojeda <ojeda@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Richard Biener <RGuenther@suse.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Song Liu <song@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Yonghong Song <yhs@fb.com>
-Subject: [PATCH 00/46] gcc-LTO support for the kernel
-Date:   Mon, 14 Nov 2022 12:42:58 +0100
-Message-Id: <20221114114344.18650-1-jirislaby@kernel.org>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: [PATCH 01/46] x86/boot: robustify calling startup_{32,64}() from the decompressor code
+Date:   Mon, 14 Nov 2022 12:42:59 +0100
+Message-Id: <20221114114344.18650-2-jirislaby@kernel.org>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221114114344.18650-1-jirislaby@kernel.org>
+References: <20221114114344.18650-1-jirislaby@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -107,204 +53,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-this is the first call for comments (and kbuild complaints) for this
-support of gcc (full) LTO in the kernel. Most of the patches come from
-Andi. Me and Martin rebased them to new kernels and fixed the to-use
-known issues. Also I updated most of the commit logs and reordered the
-patches to groups of patches with similar intent.
+After commit ce697ccee1a8 ("kbuild: remove head-y syntax"), I
+started digging whether x86 is ready for removing this old cruft.
+Removing its objects from the list makes the kernel unbootable.
+This applies only to bzImage, vmlinux still works correctly.
+The reason is that with no strict object order determined by the
+linker arguments, not the linker script, startup_64 can be placed
+not right at the beginning of the kernel.
+Here's vmlinux.map's beginning before removing:
 
-The very first patch comes from Alexander and is pending on some x86
-queue already (I believe). I am attaching it only for completeness.
-Without that, the kernel does not boot (LTO reorders a lot).
+ffffffff81000000         vmlinux.o:(.head.text)
+ffffffff81000000                 startup_64
+ffffffff81000070                 secondary_startup_64
+ffffffff81000075                 secondary_startup_64_no_verify
+ffffffff81000160                 verify_cpu
 
-In our measurements, the performance differences are negligible.
+and after:
 
-The kernel is bigger with gcc LTO due to more inlining. The next step
-might be to play with non-static functions as we export everything, so
-the compiler cannot actually drop anything (esp. inlined and no longer
-needed functions).
+ffffffff81000000         vmlinux.o:(.head.text)
+ffffffff81000000                 pvh_start_xen
+ffffffff81000080                 startup_64
+ffffffff810000f0                 secondary_startup_64
+ffffffff810000f5                 secondary_startup_64_no_verify
 
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Alexey Makhalov <amakhalov@vmware.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Ben Segall <bsegall@google.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: Don Zickus <dzickus@redhat.com>
-Cc: Hao Luo <haoluo@google.com>
-Cc: H.J. Lu <hjl.tools@gmail.com>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Huang Rui <ray.huang@amd.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jan Hubicka <jh@suse.de>
-Cc: Jason Baron <jbaron@akamai.com>
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Joe Lawrence <joe.lawrence@redhat.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Juergen Gross <jgross@suse.com>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Martin Liska <mliska@suse.cz>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Miguel Ojeda <ojeda@kernel.org>
-Cc: Michal Marek <michal.lkml@markovi.net>
-Cc: Miroslav Benes <mbenes@suse.cz>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Richard Biener <RGuenther@suse.com>
-Cc: Sedat Dilek <sedat.dilek@gmail.com>
-Cc: Song Liu <song@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Stefano Stabellini <sstabellini@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Valentin Schneider <vschneid@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
-Cc: Yonghong Song <yhs@fb.com>
+Not a problem itself, but the self-extractor code has the address of
+that function hardcoded the beginning, not looking onto the ELF
+header, which always contains the address of startup_{32,64}().
 
-Alexander Lobakin (1):
-  x86/boot: robustify calling startup_{32,64}() from the decompressor
-    code
+So, instead of doing an "act of blind faith", just take the address
+from the ELF header and extract a relative offset to the entry
+point. The decompressor function already returns a pointer to the
+beginning of the kernel to the Asm code, which then jumps to it,
+so add that offset to the return value.
+This doesn't change anything for now, but allows to resign from the
+"head object list" for x86 and makes sure valid Kbuild or any other
+improvements won't break anything here in general.
 
-Andi Kleen (36):
-  Compiler Attributes, lto: introduce __noreorder
-  tracepoint, lto: Mark static call functions as __visible
-  static_call, lto: Mark static keys as __visible
-  static_call, lto: Mark static_call_return0() as __visible
-  static_call, lto: Mark func_a() as __visible_on_lto
-  x86/alternative, lto: Mark int3_*() as global and __visible
-  x86/paravirt, lto: Mark native_steal_clock() as __visible_on_lto
-  x86/preempt, lto: Mark preempt_schedule_*thunk() as __visible
-  x86/xen, lto: Mark xen_vcpu_stolen() as __visible
-  x86, lto: Mark gdt_page and native_sched_clock() as __visible
-  amd, lto: Mark amd pmu and pstate functions as __visible_on_lto
-  entry, lto: Mark raw_irqentry_exit_cond_resched() as __visible
-  export, lto: Mark __kstrtab* in EXPORT_SYMBOL() as global and
-    __visible
-  softirq, lto: Mark irq_enter/exit_rcu() as __visible
-  btf, lto: Make all BTF IDs global on LTO
-  init.h, lto: mark initcalls as __noreorder
-  bpf, lto: mark interpreter jump table as __noreorder
-  sched, lto: mark sched classes as __noreorder
-  linkage, lto: use C version for SYSCALL_ALIAS() / cond_syscall()
-  scripts, lto: re-add gcc-ld
-  scripts, lto: use CONFIG_LTO for many LTO specific actions
-  Kbuild, lto: Add Link Time Optimization support
-  x86/purgatory, lto: Disable gcc LTO for purgatory
-  x86/realmode, lto: Disable gcc LTO for real mode code
-  x86/vdso, lto: Disable gcc LTO for the vdso
-  scripts, lto: disable gcc LTO for some mod sources
-  Kbuild, lto: disable gcc LTO for bounds+asm-offsets
-  lib/string, lto: disable gcc LTO for string.o
-  Compiler attributes, lto: disable __flatten with LTO
-  Kbuild, lto: don't include weak source file symbols in System.map
-  x86, lto: Disable relative init pointers with gcc LTO
-  x86/livepatch, lto: Disable live patching with gcc LTO
-  x86/lib, lto: Mark 32bit mem{cpy,move,set} as __used
-  scripts, lto: check C symbols for modversions
-  scripts/bloat-o-meter, lto: handle gcc LTO
-  x86, lto: Finally enable gcc LTO for x86
+Tested-by: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+---
+ arch/x86/boot/compressed/head_32.S |  2 +-
+ arch/x86/boot/compressed/head_64.S |  2 +-
+ arch/x86/boot/compressed/misc.c    | 16 ++++++++++------
+ 3 files changed, 12 insertions(+), 8 deletions(-)
 
-Jiri Slaby (5):
-  kbuild: pass jobserver to cmd_ld_vmlinux.o
-  compiler.h: introduce __visible_on_lto
-  compiler.h: introduce __global_on_lto
-  btf, lto: pass scope as strings
-  x86/apic, lto: Mark apic_driver*() as __noreorder
-
-Martin Liska (4):
-  kbuild: lto: preserve MAKEFLAGS for module linking
-  x86/sev, lto: Mark cpuid_table_copy as __visible_on_lto
-  mm/kasan, lto: Mark kasan mem{cpy,move,set} as __used
-  kasan, lto: remove extra BUILD_BUG() in memory_is_poisoned
-
- Documentation/kbuild/index.rst      |  2 +
- Documentation/kbuild/lto-build.rst  | 76 +++++++++++++++++++++++++++++
- Kbuild                              |  3 ++
- Makefile                            |  6 ++-
- arch/Kconfig                        | 52 ++++++++++++++++++++
- arch/x86/Kconfig                    |  5 +-
- arch/x86/boot/compressed/head_32.S  |  2 +-
- arch/x86/boot/compressed/head_64.S  |  2 +-
- arch/x86/boot/compressed/misc.c     | 16 +++---
- arch/x86/entry/vdso/Makefile        |  2 +
- arch/x86/events/amd/core.c          |  2 +-
- arch/x86/include/asm/apic.h         |  4 +-
- arch/x86/include/asm/preempt.h      |  4 +-
- arch/x86/kernel/alternative.c       |  5 +-
- arch/x86/kernel/cpu/common.c        |  2 +-
- arch/x86/kernel/paravirt.c          |  2 +-
- arch/x86/kernel/sev-shared.c        |  2 +-
- arch/x86/kernel/tsc.c               |  2 +-
- arch/x86/lib/memcpy_32.c            |  6 +--
- arch/x86/purgatory/Makefile         |  2 +
- arch/x86/realmode/Makefile          |  1 +
- drivers/cpufreq/amd-pstate.c        | 15 +++---
- drivers/xen/time.c                  |  2 +-
- include/asm-generic/vmlinux.lds.h   |  2 +-
- include/linux/btf_ids.h             | 24 ++++-----
- include/linux/compiler.h            |  8 +++
- include/linux/compiler_attributes.h | 15 ++++++
- include/linux/export.h              |  6 ++-
- include/linux/init.h                |  2 +-
- include/linux/linkage.h             | 16 +++---
- include/linux/static_call.h         | 12 ++---
- include/linux/tracepoint.h          |  4 +-
- kernel/bpf/core.c                   |  2 +-
- kernel/entry/common.c               |  2 +-
- kernel/kallsyms.c                   |  2 +-
- kernel/livepatch/Kconfig            |  1 +
- kernel/sched/sched.h                |  1 +
- kernel/softirq.c                    |  4 +-
- kernel/static_call.c                |  2 +-
- kernel/static_call_inline.c         |  6 +--
- kernel/time/posix-stubs.c           | 19 +++++++-
- lib/Makefile                        |  2 +
- mm/kasan/generic.c                  |  2 +-
- mm/kasan/shadow.c                   |  6 +--
- scripts/Makefile.build              | 17 ++++---
- scripts/Makefile.lib                |  2 +-
- scripts/Makefile.lto                | 43 ++++++++++++++++
- scripts/Makefile.modfinal           |  2 +-
- scripts/Makefile.vmlinux            |  3 +-
- scripts/Makefile.vmlinux_o          |  6 +--
- scripts/bloat-o-meter               |  2 +-
- scripts/gcc-ld                      | 40 +++++++++++++++
- scripts/link-vmlinux.sh             |  9 ++--
- scripts/mksysmap                    |  2 +
- scripts/mod/Makefile                |  3 ++
- scripts/module.lds.S                |  2 +-
- 56 files changed, 384 insertions(+), 100 deletions(-)
- create mode 100644 Documentation/kbuild/lto-build.rst
- create mode 100644 scripts/Makefile.lto
- create mode 100755 scripts/gcc-ld
-
+diff --git a/arch/x86/boot/compressed/head_32.S b/arch/x86/boot/compressed/head_32.S
+index 3b354eb9516d..56f9847e208b 100644
+--- a/arch/x86/boot/compressed/head_32.S
++++ b/arch/x86/boot/compressed/head_32.S
+@@ -187,7 +187,7 @@ SYM_FUNC_START_LOCAL_NOALIGN(.Lrelocated)
+ 	leal	boot_heap@GOTOFF(%ebx), %eax
+ 	pushl	%eax			/* heap area */
+ 	pushl	%esi			/* real mode pointer */
+-	call	extract_kernel		/* returns kernel location in %eax */
++	call	extract_kernel		/* returns kernel entry point in %eax */
+ 	addl	$24, %esp
+ 
+ /*
+diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+index d33f060900d2..aeba5aa3d26c 100644
+--- a/arch/x86/boot/compressed/head_64.S
++++ b/arch/x86/boot/compressed/head_64.S
+@@ -593,7 +593,7 @@ SYM_FUNC_START_LOCAL_NOALIGN(.Lrelocated)
+ 	movl	input_len(%rip), %ecx	/* input_len */
+ 	movq	%rbp, %r8		/* output target address */
+ 	movl	output_len(%rip), %r9d	/* decompressed length, end of relocs */
+-	call	extract_kernel		/* returns kernel location in %rax */
++	call	extract_kernel		/* returns kernel entry point in %rax */
+ 	popq	%rsi
+ 
+ /*
+diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
+index cf690d8712f4..2548d7fb243e 100644
+--- a/arch/x86/boot/compressed/misc.c
++++ b/arch/x86/boot/compressed/misc.c
+@@ -277,7 +277,7 @@ static inline void handle_relocations(void *output, unsigned long output_len,
+ { }
+ #endif
+ 
+-static void parse_elf(void *output)
++static size_t parse_elf(void *output)
+ {
+ #ifdef CONFIG_X86_64
+ 	Elf64_Ehdr ehdr;
+@@ -287,16 +287,15 @@ static void parse_elf(void *output)
+ 	Elf32_Phdr *phdrs, *phdr;
+ #endif
+ 	void *dest;
++	size_t off;
+ 	int i;
+ 
+ 	memcpy(&ehdr, output, sizeof(ehdr));
+ 	if (ehdr.e_ident[EI_MAG0] != ELFMAG0 ||
+ 	   ehdr.e_ident[EI_MAG1] != ELFMAG1 ||
+ 	   ehdr.e_ident[EI_MAG2] != ELFMAG2 ||
+-	   ehdr.e_ident[EI_MAG3] != ELFMAG3) {
++	   ehdr.e_ident[EI_MAG3] != ELFMAG3)
+ 		error("Kernel is not a valid ELF file");
+-		return;
+-	}
+ 
+ 	debug_putstr("Parsing ELF... ");
+ 
+@@ -305,6 +304,7 @@ static void parse_elf(void *output)
+ 		error("Failed to allocate space for phdrs");
+ 
+ 	memcpy(phdrs, output + ehdr.e_phoff, sizeof(*phdrs) * ehdr.e_phnum);
++	off = ehdr.e_entry - phdrs->p_paddr;
+ 
+ 	for (i = 0; i < ehdr.e_phnum; i++) {
+ 		phdr = &phdrs[i];
+@@ -328,6 +328,8 @@ static void parse_elf(void *output)
+ 	}
+ 
+ 	free(phdrs);
++
++	return off;
+ }
+ 
+ /*
+@@ -356,6 +358,7 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
+ 	const unsigned long kernel_total_size = VO__end - VO__text;
+ 	unsigned long virt_addr = LOAD_PHYSICAL_ADDR;
+ 	unsigned long needed_size;
++	size_t off;
+ 
+ 	/* Retain x86 boot parameters pointer passed from startup_32/64. */
+ 	boot_params = rmode;
+@@ -456,14 +459,15 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
+ 	debug_putstr("\nDecompressing Linux... ");
+ 	__decompress(input_data, input_len, NULL, NULL, output, output_len,
+ 			NULL, error);
+-	parse_elf(output);
++	off = parse_elf(output);
++	debug_putaddr(off);
+ 	handle_relocations(output, output_len, virt_addr);
+ 	debug_putstr("done.\nBooting the kernel.\n");
+ 
+ 	/* Disable exception handling before booting the kernel */
+ 	cleanup_exception_handling();
+ 
+-	return output;
++	return output + off;
+ }
+ 
+ void fortify_panic(const char *name)
 -- 
 2.38.1
 
