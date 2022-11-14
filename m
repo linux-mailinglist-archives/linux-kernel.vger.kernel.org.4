@@ -2,372 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4AB628A48
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C859628A4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235917AbiKNUQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 15:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
+        id S237390AbiKNURS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 15:17:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235738AbiKNUQe (ORCPT
+        with ESMTP id S237515AbiKNURG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:16:34 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9282D1D651;
-        Mon, 14 Nov 2022 12:16:33 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id m22so31043095eji.10;
-        Mon, 14 Nov 2022 12:16:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0XtB1GTgCbXIVhkUFEv6RFkFZjFfuR9WhDeufS5GqYE=;
-        b=h5HB7+gVHvD98HDXoOoaWWNYO5Aq5i2TzUNycl0y7zT6yxsC/LSi8gcL9McdpcK52D
-         SmR69d5wyr0TFYMdwgj02cpDwCyBIhEncG1qr3j3TheE8x3sl5Fmw/FVrsMGAJ8j4DV7
-         hfMuTHiZh9pqZA/+JP9eJkpIfACDacCuFjOB1MWewowpMNc2HMWPogG8u42ZYnl2YKoU
-         KfnrLEQmrd+R21N6d+7K7qQTkSvIPnafmcviO6MOqTXi0ullk9edLhG+RC7chBULAPkf
-         01DPdONb3OjkRK4IOT4HjjKfdvgimhC/UhrhfVC36GOlWeLjKNO+RDizWxySEEaWZV7W
-         KnRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0XtB1GTgCbXIVhkUFEv6RFkFZjFfuR9WhDeufS5GqYE=;
-        b=RbDWwzz97WccDPoyCOuUUUuwfMIIOh1nOsiIlabGANyYI4fsEeMEzVtbbQ/LPMCwuf
-         GpYadBG6Zla3au3iC0Mq6tRXn61CfUqAHgvc8iB/wr3eSKlgfUrucweEiMOuFl6tZ3Ul
-         D4IK7gCQlbT77aKkxbft9qe98ITUoKZ6ZwvgvdztEU1MK1rrfY6oc0Jg+WfuUn4tlhL/
-         kW0fO02ZQYD3YEgALg6mS6UlPgyAeHboQrltY02G1EwJZsRKuWqfSYPI0u6FFSkTyya6
-         00Qemt20vMYj3UIx2KW6DuxzbReVmQ92NxXxfxLSFHcol62nFs6gIjwkIouq7Gi+NINP
-         C+eA==
-X-Gm-Message-State: ANoB5pnEvy2YiBDPonOjGbTFR8/ZsErHIMWqe9xoknhz6DBxfXIyc3Bf
-        YpEGSbFWYFTo9SB1oGa0ML4=
-X-Google-Smtp-Source: AA0mqf7Oa3B+rbyAi/yf5ix4bq19mgy8IvNw9oyW62pgaYAt3hGdkgXC7/162t7LRBiHy6t/7PvSqg==
-X-Received: by 2002:a17:906:16d6:b0:7ae:c45b:98fb with SMTP id t22-20020a17090616d600b007aec45b98fbmr11421585ejd.478.1668456991929;
-        Mon, 14 Nov 2022 12:16:31 -0800 (PST)
-Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id kx7-20020a170907774700b00787f91a6b16sm4595520ejc.26.2022.11.14.12.16.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 12:16:31 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     martin.botka1@gmail.com, Martin Botka <martin.botka@somainline.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Yenda <jtrmal@gmail.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Conley Lee <conleylee@foxmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 2/2] arm64: dts: Add basic support for BIQU CB1
-Date:   Mon, 14 Nov 2022 21:16:29 +0100
-Message-ID: <3191151.oiGErgHkdL@jernej-laptop>
-In-Reply-To: <20221114172018.1876608-2-martin.botka@somainline.org>
-References: <20221114172018.1876608-1-martin.botka@somainline.org> <20221114172018.1876608-2-martin.botka@somainline.org>
+        Mon, 14 Nov 2022 15:17:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1EED80;
+        Mon, 14 Nov 2022 12:17:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BCA09B81250;
+        Mon, 14 Nov 2022 20:17:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23131C433D6;
+        Mon, 14 Nov 2022 20:17:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668457020;
+        bh=lArEVRhnhBStJg8lVysI0AXQxfySf17f2xZUNA8QEFA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qtTVz014n8NvY6nbqwwKhoZ2xNVIXYJFixHk1bHFUjMNV99l+ImUDlMSKp2NbDpP6
+         HkwTpHs3t0bDyPSHeTYbZuhfQ5ZP4d3BANOPOl2UWGAGOUHZrIs96mwoQ/X5VEKiAo
+         a2eSjLo3SvEmNr3D5jNGR9rBabqwWEtrKv0PmNuFq4ICnoZLi3jtZ5tlkupUTdKsWC
+         MAGSwZzhyAhturAJCh8CRFq6lBSOXsiA0d8wWKrHs+6KrWL5FjqXjU+MzpXmd2i59D
+         LMR+/bYNBmlMsqYBtOSfpBnU3gN4Ax86RrqNeRSUC7ruqQ4RygiAp+IUK43KN9NTmn
+         M1utTd37W/ixA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id A96E44034E; Mon, 14 Nov 2022 17:16:57 -0300 (-03)
+Date:   Mon, 14 Nov 2022 17:16:57 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v2 00/14] Fix perf tools/lib includes
+Message-ID: <Y3KiOU/bYokRSENk@kernel.org>
+References: <20221109184914.1357295-1-irogers@google.com>
+ <CAM9d7ciPe-uR5MdayhUEEK8a-j1QDm50qPffsod9BHdUF5Z-TA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAM9d7ciPe-uR5MdayhUEEK8a-j1QDm50qPffsod9BHdUF5Z-TA@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
-
-Dne ponedeljek, 14. november 2022 ob 18:20:16 CET je Martin Botka napisal(a):
-> CB1 is Compute Module style board that plugs into Rpi board style adapter or
-> Manta 3D printer boards (M4P/M8P).
+Em Thu, Nov 10, 2022 at 10:10:18AM -0800, Namhyung Kim escreveu:
+> Hi Ian,
 > 
-> The board has:
-> 	H616 SoC
-> 	1GB of RAM
-> 	AXP313A PMIC
+> On Wed, Nov 9, 2022 at 10:49 AM Ian Rogers <irogers@google.com> wrote:
+> >
+> > The previous build would add -Itools/lib and get dependencies for
+> > libtraceevent, libsubcmd, libsymbol, libapi and libbpf meaning that
+> > overriding these libraries would change the link time dependency but
+> > the headers would erroneously come from tools/lib. Fix the build to
+> > install headers and then depend on these. To reduce exposing internal
+> > headers/APIs some clean up is performed. tools/lib/symbol has a
+> > Makefile added, while tools/lib/api and tools/lib/subcmd have install
+> > targets added. The pattern used for the dependencies in Makefile.perf
+> > is modelled on libbpf.
+> >
+> > The problem and solution were motivated by this issue and discussion:
+> > https://lore.kernel.org/lkml/CAEf4BzbbOHQZUAe6iWaehKCPQAf3VC=hq657buqe2_yRKxaK-A@mail.gmail.com/
+> >
+> > v2. Fix a MANIFEST issue for the source tar ball. Add dependencies for
+> >     the installed header files so that the build doesn't overtake
+> >     building these dependencies. Both issues reported by Arnaldo
+> >     Carvalho de Melo <acme@kernel.org>.
+> >
+> > Ian Rogers (14):
+> >   tools lib api: Add install target
+> >   tools lib subcmd: Add install target
+> >   perf build: Install libsubcmd locally when building
+> >   perf build: Install libapi locally when building
+> >   perf build: Install libperf locally when building
+> >   perf build: Install libtraceevent locally when building
+> >   tools lib api: Add missing install headers
+> >   tools lib perf: Add missing install headers
+> >   tool lib symbol: Add Makefile/Build
+> >   perf build: Install libsymbol locally when building
+> >   perf expr: Tidy hashmap dependency
+> >   perf thread_map: Reduce exposure of libperf internal API
+> >   perf cpumap: Tidy libperf includes
+> >   perf build: Use tools/lib headers from install path
 > 
-> And the actual boards that CB1 plugs in are just extension to it with ports
-> and thus are not split in DT.
-> 
-> Boards have:
-> 	4x (3x for Manta boards) USB and 1 USB OTG.
-> 	SDcard slot for loading images.
-> 	Ethernet port wired to the internal PHY.
-> 	2x HDMI 2.0.
-> 	Power and Status LEDs.
-> 
-> Currently working:
-> 	Booting
-> 	USB
-> 	UART
-> 
-> Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> ---
-> Changes in V2:
-> Add proper board compatible
-> Add regulator prefix for vcc5v
-> Drop okay status from PMIC
-> Drop standby_param
->  arch/arm64/boot/dts/allwinner/Makefile        |   1 +
->  .../dts/allwinner/sun50i-h616-biqu-cb1.dts    | 186 ++++++++++++++++++
->  2 files changed, 187 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
-> 
-> diff --git a/arch/arm64/boot/dts/allwinner/Makefile
-> b/arch/arm64/boot/dts/allwinner/Makefile index 6a96494a2e0a..223f1be73541
-> 100644
-> --- a/arch/arm64/boot/dts/allwinner/Makefile
-> +++ b/arch/arm64/boot/dts/allwinner/Makefile
-> @@ -38,5 +38,6 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64-model-b.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6-mini.dtb
-> +dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-biqu-cb1.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-orangepi-zero2.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-x96-mate.dtb
-> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
-> b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts new file mode
-> 100644
-> index 000000000000..297536d7629a
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
-> @@ -0,0 +1,186 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-> +/*
-> + * Copyright (C) 2022 Arm Ltd.
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-I suppose Arm Ltd. has nothing to do with this board? Put yours copyrights 
-there.
+'make -C tools/perf build-test' is failing, looks like parallelization
+woes again:
 
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "sun50i-h616.dtsi"
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/leds/common.h>
-> +
-> +/ {
-> +	model = "BIQU CB1";
-> +	compatible = "biqu,cb1", "allwinner,sun50i-h616";
-> +
-> +	aliases {
-> +		serial0 = &uart0;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		led-0 {
-> +			function = LED_FUNCTION_POWER;
-> +			color = <LED_COLOR_ID_RED>;
-> +			gpios = <&pio 2 12 GPIO_ACTIVE_HIGH>; /* 
-PC12 */
-> +			default-state = "on";
-> +		};
-> +
-> +		led-1 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			gpios = <&pio 2 13 GPIO_ACTIVE_HIGH>; /* 
-PC13 */
-> +		};
-> +	};
-> +
-> +	reg_vcc5v: regulator_vcc5v {
-> +		/* board wide 5V supply directly from the USB-C socket 
-*/
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc-5v";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	reg_usb1_vbus: regulator-usb1-vbus {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "usb1-vbus";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&reg_vcc5v>;
-> +		enable-active-high;
-> +		gpio = <&pio 2 16 GPIO_ACTIVE_HIGH>; /* PC16 */
-> +	};
-> +};
-> +
-> +&ehci0 {
-> +	status = "okay";
-> +};
-> +
-> +&ehci1 {
-> +	status = "okay";
-> +};
-> +
-> +&ehci2 {
-> +	status = "okay";
-> +};
-> +
-> +&ehci3 {
-> +	status = "okay";
-> +};
-> +
-> +&mmc0 {
-> +	vmmc-supply = <&reg_dldo1>;
-> +	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;	/* PF6 */
-> +	no-1-8-v;
-> +	bus-width = <4>;
-> +	status = "disabled";
-> +};
-> +
-> +&ohci0 {
-> +	status = "okay";
-> +};
-> +
-> +&ohci1 {
-> +	status = "okay";
-> +};
-> +
-> +&ohci2 {
-> +	status = "okay";
-> +};
-> +
-> +&ohci3 {
-> +	status = "okay";
-> +};
-> +
-> +&r_i2c {
-> +	status = "okay";
-> +
-> +	axp1530: pmic@36 {
-> +		compatible = "x-powers,axp1530";
+⬢[acme@toolbox perf]$ getconf _NPROCESSORS_ONLN
+32
+⬢[acme@toolbox perf]$
 
-I see that you send driver for this PMIC separately. Next time please mention 
-that this series depends on another, otherwise checks will fail. Ping us here 
-once PMIC driver is merged to unblock this.
+⬢[acme@toolbox perf]$ git log --oneline -1 ; time make -C tools/perf build-test
+9f22d36a1dd0297a (HEAD -> perf/core) perf build: Use tools/lib headers from install path
+make: Entering directory '/var/home/acme/git/perf/tools/perf'
+- tarpkg: ./tests/perf-targz-src-pkg .
+                 make_static: cd . && make LDFLAGS=-static NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 NO_JVMTI=1 -j32  DESTDIR=/tmp/tmp.i0kUDsiQbV
+              make_with_gtk2: cd . && make GTK2=1 -j32  DESTDIR=/tmp/tmp.MNcgfeG07c
+cd . && make GTK2=1 -j32 DESTDIR=/tmp/tmp.MNcgfeG07c
+  BUILD:   Doing 'make -j32' parallel build
+  HOSTCC  fixdep.o
+  HOSTLD  fixdep-in.o
+  LINK    fixdep
+Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/perf_regs.h' differs from latest version at 'arch/arm64/include/uapi/asm/perf_regs.h'
+diff -u tools/arch/arm64/include/uapi/asm/perf_regs.h arch/arm64/include/uapi/asm/perf_regs.h
+Warning: Kernel ABI header at 'tools/arch/arm64/include/asm/cputype.h' differs from latest version at 'arch/arm64/include/asm/cputype.h'
+diff -u tools/arch/arm64/include/asm/cputype.h arch/arm64/include/asm/cputype.h
+Warning: Kernel ABI header at 'tools/perf/arch/powerpc/entry/syscalls/syscall.tbl' differs from latest version at 'arch/powerpc/kernel/syscalls/syscall.tbl'
+diff -u tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/powerpc/kernel/syscalls/syscall.tbl
 
-Anyway, RSB is prefered. Can you switch to it?
+Auto-detecting system features:
+...                                   dwarf: [ on  ]
+...                      dwarf_getlocations: [ on  ]
+...                                   glibc: [ on  ]
+...                                  libbfd: [ on  ]
+...                          libbfd-buildid: [ on  ]
+...                                  libcap: [ on  ]
+...                                  libelf: [ on  ]
+...                                 libnuma: [ on  ]
+...                  numa_num_possible_cpus: [ on  ]
+...                                 libperl: [ on  ]
+...                               libpython: [ on  ]
+...                               libcrypto: [ on  ]
+...                               libunwind: [ on  ]
+...                      libdw-dwarf-unwind: [ on  ]
+...                                    zlib: [ on  ]
+...                                    lzma: [ on  ]
+...                               get_cpuid: [ on  ]
+...                                     bpf: [ on  ]
+...                                  libaio: [ on  ]
+...                                 libzstd: [ on  ]
 
-> +		reg = <0x36>;
-> +		wakeup-source;
-> +
-> +		regulators{
-> +			reg_dcdc1: dcdc1 {
-> +				regulator-name = "axp1530-dcdc1";
-> +				regulator-min-microvolt = 
-<500000>;
-> +				regulator-max-microvolt = 
-<3400000>;
-> +				regulator-step-delay-us = <25>;
-> +				regulator-final-delay-us = <50>;
-> +				regulator-always-on;
-> +			};
-> +
-> +			reg_dcdc2: dcdc2 {
-> +				regulator-name = "axp1530-dcdc2";
-> +				regulator-min-microvolt = 
-<500000>;
-> +				regulator-max-microvolt = 
-<1540000>;
-> +				regulator-step-delay-us = <25>;
-> +				regulator-final-delay-us = <50>;
-> +				regulator-ramp-delay = <200>;
-> +				regulator-always-on;
-> +			};
-> +
-> +			reg_dcdc3: dcdc3 {
-> +				regulator-name = "axp1530-dcdc3";
-> +				regulator-min-microvolt = 
-<500000>;
-> +				regulator-max-microvolt = 
-<1840000>;
-> +				regulator-step-delay-us = <25>;
-> +				regulator-final-delay-us = <50>;
-> +				regulator-always-on;
-> +			};
-> +
-> +			reg_aldo1: ldo1 {
-> +				regulator-name = "axp1530-aldo1";
-> +				regulator-min-microvolt = 
-<1800000>;
-> +				regulator-max-microvolt = 
-<1800000>;
-> +				regulator-step-delay-us = <25>;
-> +				regulator-final-delay-us = <50>;
-> +				regulator-always-on;
-> +			};
-> +
-> +			reg_dldo1: ldo2 {
-> +				regulator-name = "axp1530-dldo1";
-> +				regulator-min-microvolt = 
-<3300000>;
-> +				regulator-max-microvolt = 
-<3300000>;
-> +				regulator-step-delay-us = <25>;
-> +				regulator-final-delay-us = <50>;
-> +				regulator-always-on;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&uart0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&uart0_ph_pins>;
-> +	status = "okay";
-> +};
-> +
-> +&usbotg {
-> +	/*
-> +	 * PHY0 pins are connected to a USB-C socket, but a role switch
-> +	 * is not implemented: both CC pins are pulled to GND.
-> +	 * The VBUS pins power the device, so a fixed peripheral mode
-> +	 * is the best choice.
-> +	 * The board can be powered via GPIOs, in this case port0 *can*
-> +	 * act as a host (with a cable/adapter ignoring CC), as VBUS is
-> +	 * then provided by the GPIOs. Any user of this setup would
-> +	 * need to adjust the DT accordingly: dr_mode set to "host",
-> +	 * enabling OHCI0 and EHCI0.
-> +	 */
-
-Above text is verbatim copy from OrangePi Zero2 and I'm not sure if it is 
-fully accurate for this board too. Looking at board photo, it surely looks 
-like this board has same USB design as Zero2. But if that's true, you 
-shouldn't enable OHCI0 and EHCI0 nodes.
-
-Is there any board schematic publicly available for this board?
-
-Best regards,
-Jernej
-
-> +	dr_mode = "peripheral";
-> +	status = "okay";
-> +};
-> +
-> +&usbphy {
-> +	usb1_vbus-supply = <&reg_usb1_vbus>;
-> +	status = "okay";
-> +};
-
-
-
-
+  GEN     common-cmds.h
+  CC      perf-read-vdso32
+  CC      dlfilters/dlfilter-test-api-v0.o
+  CC      dlfilters/dlfilter-show-cycles.o
+  CC      jvmti/libjvmti.o
+  CC      jvmti/jvmti_agent.o
+  CC      jvmti/libstring.o
+  CC      jvmti/libctype.o
+  CC      ui/gtk/browser.o
+  CC      ui/gtk/hists.o
+  CC      ui/gtk/setup.o
+  CC      ui/gtk/util.o
+  GEN     pmu-events/pmu-events.c
+  CC      ui/gtk/helpline.o
+  LINK    dlfilters/dlfilter-show-cycles.so
+  CC      ui/gtk/progress.o
+  CC      ui/gtk/annotate.o
+  CC      ui/gtk/zalloc.o
+  LINK    dlfilters/dlfilter-test-api-v0.so
+  INSTALL headers
+  CC      /var/home/acme/git/perf/tools/perf/libsubcmd/exec-cmd.o
+  CC      /var/home/acme/git/perf/tools/perf/libsubcmd/help.o
+  CC      /var/home/acme/git/perf/tools/perf/libsubcmd/pager.o
+  CC      /var/home/acme/git/perf/tools/perf/libsubcmd/parse-options.o
+  CC      /var/home/acme/git/perf/tools/perf/libsubcmd/run-command.o
+In file included from ui/gtk/hists.c:2:
+/var/home/acme/git/perf/tools/perf/util/include/../evlist.h:9:10: fatal error: api/fd/array.h: No such file or directory
+    9 | #include <api/fd/array.h>
+      |          ^~~~~~~~~~~~~~~~
+compilation terminated.
+make[6]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:97: ui/gtk/hists.o] Error 1
+make[6]: *** Waiting for unfinished jobs....
+  CC      /var/home/acme/git/perf/tools/perf/libsubcmd/sigchain.o
+make -f /var/home/acme/git/perf/tools/build/Makefile.build dir=. obj=libsymbol V=1
+In file included from ui/gtk/browser.c:2:
+/var/home/acme/git/perf/tools/perf/util/include/../evsel.h:10:10: fatal error: internal/evsel.h: No such file or directory
+   10 | #include <internal/evsel.h>
+      |          ^~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[6]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:97: ui/gtk/browser.o] Error 1
+  INSTALL headers
+  CC      /var/home/acme/git/perf/tools/perf/libtraceevent/event-parse.o
