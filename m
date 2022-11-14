@@ -2,143 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08331627C5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DAC627C59
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:30:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234803AbiKNLax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:30:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57832 "EHLO
+        id S236394AbiKNLan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236446AbiKNLaV (ORCPT
+        with ESMTP id S235911AbiKNLaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:30:21 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6579E1F9E6;
+        Mon, 14 Nov 2022 06:30:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3952F5F4D;
         Mon, 14 Nov 2022 03:30:19 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N9n7q4jPzzqSRM;
-        Mon, 14 Nov 2022 19:26:31 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 19:30:17 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 19:30:16 +0800
-Subject: Re: [PATCH v8 7/9] livepatch: Improve the search performance of
- module_kallsyms_on_each_symbol()
-To:     Jiri Olsa <olsajiri@gmail.com>
-CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Laight <David.Laight@aculab.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
- <20221102084921.1615-8-thunder.leizhen@huawei.com> <Y3HyrIwlZPYM8zYd@krava>
- <050b7513-4a20-75c7-0574-185004770329@huawei.com> <Y3IJ5GjrXBYDbfnA@krava>
- <ad637488-930e-33c1-558c-fc03d848afa8@huawei.com> <Y3IY6gzDtk1ze3u7@krava>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <955eebae-0b36-d13f-0199-2f1b32af7da6@huawei.com>
-Date:   Mon, 14 Nov 2022 19:30:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <Y3IY6gzDtk1ze3u7@krava>
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0B8FB80E2A;
+        Mon, 14 Nov 2022 11:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 377FFC4347C;
+        Mon, 14 Nov 2022 11:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668425416;
+        bh=aOH4MGwvdLyzHucsaBj3VMD/VmEWnedOzoLnOdLon8o=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mIirX1OgKvi6T/devwH44uESM+66TxhXSA+4S58HqQ463LlQ2AR6VcN8NS16+yo2h
+         nSpq/jPwRFmUz9Yb16SxFVGQyLBW5X+id06p9+hKRHphbnzPzjUF+LoiGWkynqPPCz
+         koi3vwpaP/jEOKe/AX9mZnOZG1Tx2pqIuIpnDluHq0KsRJHXict+rzy1uTXdH3l8lG
+         OdXG+XKYFCtYovlLualIyh67pcKXd5NO4CTUjV7A1KAP43wFbKx98LueJ/qcd2sv3C
+         D/nX/jQHZuM3xc4MZ9BOWfDAnnlE8mqK/grxQyYq9beK84Ed2CMrgJUUJ8AFWkz5mF
+         qRcjg1iDwod1Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1760DC395FE;
+        Mon, 14 Nov 2022 11:30:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH linux-next] ipasdv4/tcp_ipv4: remove redundant assignment
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166842541609.32199.16555388041801965552.git-patchwork-notify@kernel.org>
+Date:   Mon, 14 Nov 2022 11:30:16 +0000
+References: <20221111090419.494633-1-xu.xin16@zte.com.cn>
+In-Reply-To: <20221111090419.494633-1-xu.xin16@zte.com.cn>
+To:     xu xin <xu.xin.sc@gmail.com>
+Cc:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xu.xin16@zte.com.cn
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-On 2022/11/14 18:31, Jiri Olsa wrote:
-> On Mon, Nov 14, 2022 at 06:00:38PM +0800, Leizhen (ThunderTown) wrote:
->>
->>
->> On 2022/11/14 17:27, Jiri Olsa wrote:
->>> On Mon, Nov 14, 2022 at 04:50:25PM +0800, Leizhen (ThunderTown) wrote:
->>>>
->>>> On 2022/11/14 15:47, Jiri Olsa wrote:
->>>>> On Wed, Nov 02, 2022 at 04:49:19PM +0800, Zhen Lei wrote:
->>>>>> Currently we traverse all symbols of all modules to find the specified
->>>>>> function for the specified module. But in reality, we just need to find
->>>>>> the given module and then traverse all the symbols in it.
->>>>> hi,
->>>>> sorry for delayed answer, I did not notice this until Stephen's email
->>>>> about merge issue with recent bpf change [1]
->>>>>
->>>>>> Let's add a new parameter 'const char *modname' to function
->>>>>> module_kallsyms_on_each_symbol(), then we can compare the module names
->>>>> we have use case for iterating all modules and their symbols when we
->>>>> want to resolve passed addresses for tracing
->>>>>
->>>>> we don't have 'modname' that we could pass, we need to iterate all modules
->>>>>
->>>>> so perhaps this could be made optional like with passing NULL for modname?
->>>> The deletion of modname was suggested by Petr Mladek. The reason is that
->>>> everyone passes modname as NULL, there was no actual demand at the time.
->>>> https://lkml.org/lkml/2022/9/20/682
->>>>
->>>>>> directly in this function and call hook 'fn' after matching. And the
->>>>>> parameter 'struct module *' in the hook 'fn' can also be deleted.
->>>>> we need 'struct module *' argument in the callback as well because we are
->>>>> taking the module reference if we trace function in it, so it wont get
->>>>> unloaded
->>>>>
->>>>> please let me know if I should do the change or can help in any way
->>>> It seems that we should take the module reference before invoking callback
->>>> and put it after it is called, without passing modname.
->>> we take the module ref only if we (callback) find the traced address in
->>> the module, we don't have the module object before
->>>
->>> jirka
->>>
->>
->> Do it in function module_kallsyms_on_each_symbol()?
->>
->> But I just saw that mutex_lock(&module_mutex) protection is already
->> provided in this function. So reference counting protection may not
->> be required.
+On Fri, 11 Nov 2022 09:04:20 +0000 you wrote:
+> From: xu xin <xu.xin16@zte.com.cn>
 > 
-> we take the module ref so it won't unload even outside of the
-> module_kallsyms_on_each_symbol function
-
-There's another way to do it, but it's more time consuming.
-
-struct module *__module_text_address(unsigned long addr);
-struct module *__module_address(unsigned long addr);
-
-Which way do you think is more appropriate?
-
-
+> The value of 'st->state' has been verified as "TCP_SEQ_STATE_LISTENING",
+> it's unnecessary to assign TCP_SEQ_STATE_LISTENING to it, so we can remove it.
 > 
-> jirka
-> .
+> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
 > 
+> [...]
 
+Here is the summary with links:
+  - [linux-next] ipasdv4/tcp_ipv4: remove redundant assignment
+    https://git.kernel.org/netdev/net-next/c/2fd450cd83e3
+
+You are awesome, thank you!
 -- 
-Regards,
-  Zhen Lei
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
