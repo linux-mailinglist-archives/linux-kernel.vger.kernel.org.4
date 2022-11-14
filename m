@@ -2,78 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F33627C66
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24110627C68
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235941AbiKNLcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:32:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
+        id S236119AbiKNLeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:34:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236158AbiKNLcg (ORCPT
+        with ESMTP id S234295AbiKNLeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:32:36 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16BB266D;
-        Mon, 14 Nov 2022 03:32:35 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Mon, 14 Nov 2022 06:34:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1710CE09E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:34:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EFE45660231C;
-        Mon, 14 Nov 2022 11:32:33 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668425554;
-        bh=Seg+J/REXMKHgoEGjmRDEeF/wX05uAJ/2q6GwLx9/5Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gq1gpDLBjMXZfYvpTd0gyUQfbajVu/iFeHkeX6M/FyrXIvYKdOs086toHnmY1QDUC
-         IoEjHd+Lc8GbngCu7gNgs+m3N9qbBSi3yu9jZJQHq4IjccSSNAld09GtyWjRnxPjce
-         SqD/2IJt6n7Fq9960THjFNITuJK5mvs7BhWGEDweEpABZBgNpw8gEp7B79G+rRpjn6
-         axHVSkWJOfxo+O1eEOghgrUotReG/aBdVhPte3KcdsPog2nOiP5WdimGv68VsojVQn
-         jq74Z8C3UnEm2L74Q/qI1aJ9LA8gZSCHe1dqh9OVNNVbz+Kj8+DyEM7THmXZrhVWv4
-         x56A0pUw/aqmQ==
-Message-ID: <081238de-77cd-5d95-abba-8f2f3117506e@collabora.com>
-Date:   Mon, 14 Nov 2022 12:32:31 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7387B80E04
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:34:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7B84C433C1;
+        Mon, 14 Nov 2022 11:33:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668425640;
+        bh=MunztYmjYzSwPB7BJisv1LFGgh+doIRNYlMHEkJPVTw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UEU7/PRuHPugtaXjvj9Yex5i8zVN24TMzd1lXWXEZpREuC54HnYAPpyAcp7rTGdmO
+         IYWdnb3v6exS6yh1wHVHWROBbhFxspKd22x7hvRIR9VgJ4LcptSUjt/4bKaSY9GxSo
+         yJhIxFWoNdIO3Ie7mcTPZ/NH1Gh8RR6OJgqbVHKg=
+Date:   Mon, 14 Nov 2022 12:33:56 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     cuigaosheng <cuigaosheng1@huawei.com>
+Cc:     dinguyen@kernel.org, richard.gong@intel.com, atull@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] firmware: stratix10-svc: Fix IS_ERR() vs NULL check in
+ stratix10_svc_drv_probe()
+Message-ID: <Y3InpOKpj9qD8pYL@kroah.com>
+References: <20221114025921.1194834-1-cuigaosheng1@huawei.com>
+ <Y3HtGbqAvb15Sa9a@kroah.com>
+ <4cb8207d-e2c1-b459-e456-d8998f8180c8@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2] spi: spi-mtk-nor: Optimize timeout for dma read
-Content-Language: en-US
-To:     Bayi Cheng <bayi.cheng@mediatek.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ikjoon Jang <ikjn@chromium.org>
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20221114081327.25750-1-bayi.cheng@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221114081327.25750-1-bayi.cheng@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4cb8207d-e2c1-b459-e456-d8998f8180c8@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 14/11/22 09:13, Bayi Cheng ha scritto:
-> From: bayi cheng <bayi.cheng@mediatek.com>
+On Mon, Nov 14, 2022 at 07:11:16PM +0800, cuigaosheng wrote:
+> > How was this found and tested?
 > 
-> The timeout value of the current dma read is unreasonable. For example,
-> If the spi flash clock is 26Mhz, It will takes about 1.3ms to read a
-> 4KB data in spi mode. But the actual measurement exceeds 50s when a
-> dma read timeout is encountered.
-> 
-> In order to be more accurately, It is necessary to use usecs_to_jiffies,
-> After modification, the measured timeout value is about 130ms.
-> 
-> Signed-off-by: bayi cheng <bayi.cheng@mediatek.com>
+> Thanks for taking time to review this patch.
+> I found this through the cocci script, I made the patch based on the code logic,
+> but I have not tested it due to the lack of hardware devices.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+As per our documentation, you have to explain how stuff like this is
+found and tested.
 
+thanks,
 
+greg k-h
