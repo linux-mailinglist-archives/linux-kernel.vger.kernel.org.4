@@ -2,217 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E4F627D2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42551627CD8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236659AbiKNL5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:57:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58840 "EHLO
+        id S235540AbiKNLss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:48:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237159AbiKNL5L (ORCPT
+        with ESMTP id S236804AbiKNLsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:57:11 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3B821264
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:54:13 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id 5so7309301wmo.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:54:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UFrv/gZh3M5M+GHa7rgQfMzZBcJfOT6Htd7GIwYXDjY=;
-        b=EUoeLavTVlHYdJZCNph9EHvSI+oEmosznJ6f/upKgsdxBCVKAD+wKTTxF2HefZF4aJ
-         +voBzLkimQpEK0QSkfAiC1ct7gmCt04TDRoYbiQk2+ZrURn8qyzn7B8NaLHEY4CnDGm6
-         2jfadRSEAwkAURqUwVqJzHS0olixUeaFGq8/b2tw1FpYy5tfyimf03hvtmiBkAGD8Dwl
-         b0COvNcSFazcgu2nDWFiq0ZFNQbDFye/UqRwXqYAyjzv+ihl5HvLX0qY0nWmYQKPF5Em
-         ZwJAftOJ9dK9vLfL3ce4f68mG7VbwAJZ0JD+C1zsDfb08VanEK8T+D9r6Jo/S49b7wiV
-         j91A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UFrv/gZh3M5M+GHa7rgQfMzZBcJfOT6Htd7GIwYXDjY=;
-        b=xcg4U2TWUppgi8xZOptXHBXFocVcucycHdQT4ND3zcGNG4KVwj7bUMD/2nGTA//MOC
-         mv/QCqNlxVeKfZLJbdUVQG+LM4ubO0IUOsBr8pfP591JydVXGGpn9jBUvmpA+iS0JrtM
-         nt+P2Ub+0hrFS2/ZFiHrxmG9pbKeI8b2KTpoghF41iocuMbcbR1+51pyhM2NMFiUa0N4
-         OFSfYYSMZziURl97GcTBSYrsOPTlP3tQvBM0BnJIZeSjnZGaENG2qWrqF59ZtXo9/t5n
-         nAQPQy0WzYcE/sqEhubY6Dz7Pvy7quAyQcLsYEABMNyTW+JSh7eDwfWpIxWlmTBqMDmr
-         /nmw==
-X-Gm-Message-State: ANoB5pm+u1IljqN3Z2BTbLvzo2hKHbueXpqCsFPGvLj4i0QqEZVD9FYB
-        U5T9wmmW5U/C312OCdMc7SmNuQ==
-X-Google-Smtp-Source: AA0mqf403V0vwqaE+mnyncg76u8ir3wUv9Nm7KTIlaElnQNtqjHebbBnqedRs9sCRLI9w2BMk0/32Q==
-X-Received: by 2002:a05:600c:2315:b0:3cf:ae53:918f with SMTP id 21-20020a05600c231500b003cfae53918fmr7727329wmo.131.1668426851811;
-        Mon, 14 Nov 2022 03:54:11 -0800 (PST)
-Received: from zen.linaroharston ([185.81.254.11])
-        by smtp.gmail.com with ESMTPSA id c17-20020adffb11000000b002417f35767asm6097766wrr.40.2022.11.14.03.54.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 03:54:11 -0800 (PST)
-Received: from zen (localhost [127.0.0.1])
-        by zen.linaroharston (Postfix) with ESMTP id 5E6971FFB7;
-        Mon, 14 Nov 2022 11:54:10 +0000 (GMT)
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
-User-agent: mu4e 1.9.2; emacs 28.2.50
-From:   Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        AKASHI Takahiro <takahiro.akashi@linaro.org>
-Subject: Re: [PATCH v9 0/8] KVM: mm: fd-based approach for supporting KVM
-Date:   Mon, 14 Nov 2022 11:43:37 +0000
-In-reply-to: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
-Message-ID: <87k03xbvkt.fsf@linaro.org>
+        Mon, 14 Nov 2022 06:48:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735442252F;
+        Mon, 14 Nov 2022 03:45:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10D0D61045;
+        Mon, 14 Nov 2022 11:45:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2416DC433C1;
+        Mon, 14 Nov 2022 11:45:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668426334;
+        bh=E5uKKkSwNTVS2fkyiUTAmxhhGrPiE6X9sXCDPf3qXro=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=lKwgXStSf5BKGYokF2vP5wwXHZ8kyH6GC/7CZR735e0tt2uwibnhyjRwidpNrhuRE
+         7wuYoAIM8NIoLhYgNKKhSlEpLOC/wLxgTmxgY8cwmO7xq+/ybN6O7NLZPiuWVMnCQ8
+         n4+5Kt1SqPDbdFIdpVt6Jo7l8QuHjozrEkB2L0nO5sylYBZasNhS4FMUoWA5OV687r
+         7PENiN1LQelH6MSTfsfI+cV9z3s3l/tJn1FdHWODV5Ho42JMu8/L6I0LAn55fU2a/f
+         PKdOKJM1aAPdAnxda4OdISiVeDjVBHrkOyOMeuiHuD661PbY2u5nzkadl/hRLPd3dM
+         mVTEojYb5NrqQ==
+From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andi Kleen <andi@firstfloor.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
+        Martin Liska <mliska@suse.cz>, Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 40/46] x86/livepatch, lto: Disable live patching with gcc LTO
+Date:   Mon, 14 Nov 2022 12:43:38 +0100
+Message-Id: <20221114114344.18650-41-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221114114344.18650-1-jirislaby@kernel.org>
+References: <20221114114344.18650-1-jirislaby@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Andi Kleen <andi@firstfloor.org>
 
-Chao Peng <chao.p.peng@linux.intel.com> writes:
+It is not supported by gcc 12 so far, so it causes compiler "sorry"
+messages.
 
-<snip>
-> Introduction
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> KVM userspace being able to crash the host is horrible. Under current
-> KVM architecture, all guest memory is inherently accessible from KVM
-> userspace and is exposed to the mentioned crash issue. The goal of this
-> series is to provide a solution to align mm and KVM, on a userspace
-> inaccessible approach of exposing guest memory.=20
->
-> Normally, KVM populates secondary page table (e.g. EPT) by using a host
-> virtual address (hva) from core mm page table (e.g. x86 userspace page
-> table). This requires guest memory being mmaped into KVM userspace, but
-> this is also the source where the mentioned crash issue can happen. In
-> theory, apart from those 'shared' memory for device emulation etc, guest
-> memory doesn't have to be mmaped into KVM userspace.
->
-> This series introduces fd-based guest memory which will not be mmaped
-> into KVM userspace. KVM populates secondary page table by using a
-> fd/offset pair backed by a memory file system. The fd can be created
-> from a supported memory filesystem like tmpfs/hugetlbfs and KVM can
-> directly interact with them with newly introduced in-kernel interface,
-> therefore remove the KVM userspace from the path of accessing/mmaping
-> the guest memory.=20
->
-> Kirill had a patch [2] to address the same issue in a different way. It
-> tracks guest encrypted memory at the 'struct page' level and relies on
-> HWPOISON to reject the userspace access. The patch has been discussed in
-> several online and offline threads and resulted in a design document [3]
-> which is also the original proposal for this series. Later this patch
-> series evolved as more comments received in community but the major
-> concepts in [3] still hold true so recommend reading.
->
-> The patch series may also be useful for other usages, for example, pure
-> software approach may use it to harden itself against unintentional
-> access to guest memory. This series is designed with these usages in
-> mind but doesn't have code directly support them and extension might be
-> needed.
+Other than the compiler support, there shouldn't be any barriers for
+live patching LTOed kernels, although it might be more difficult to
+create patches for larger functions.
 
-There are a couple of additional use cases where having a consistent
-memory interface with the kernel would be useful.
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Miroslav Benes <mbenes@suse.cz>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Joe Lawrence <joe.lawrence@redhat.com>
+Cc: live-patching@vger.kernel.org
+Signed-off-by: Andi Kleen <ak@linux.intel.com>
+Signed-off-by: Martin Liska <mliska@suse.cz>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+---
+ kernel/livepatch/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-  - Xen DomU guests providing other domains with VirtIO backends
+diff --git a/kernel/livepatch/Kconfig b/kernel/livepatch/Kconfig
+index 53d51ed619a3..22699adc39a6 100644
+--- a/kernel/livepatch/Kconfig
++++ b/kernel/livepatch/Kconfig
+@@ -12,6 +12,7 @@ config LIVEPATCH
+ 	depends on KALLSYMS_ALL
+ 	depends on HAVE_LIVEPATCH
+ 	depends on !TRIM_UNUSED_KSYMS
++	depends on !LTO_GCC # not supported in gcc
+ 	help
+ 	  Say Y here if you want to support kernel live patching.
+ 	  This option has no runtime impact until a kernel "patch"
+-- 
+2.38.1
 
-  Xen by default doesn't give other domains special access to a domains
-  memory. The guest can grant access to regions of its memory to other
-  domains for this purpose.=20
-
-  - pKVM on ARM
-
-  Similar to Xen, pKVM moves the management of the page tables into the
-  hypervisor and again doesn't allow those domains to share memory by
-  default.
-
-  - VirtIO loopback
-
-  This allows for VirtIO devices for the host kernel to be serviced by
-  backends running in userspace. Obviously the memory userspace is
-  allowed to access is strictly limited to the buffers and queues
-  because giving userspace unrestricted access to the host kernel would
-  have consequences.
-
-All of these VirtIO backends work with vhost-user which uses memfds to
-pass references to guest memory from the VMM to the backend
-implementation.
-
-> mm change
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D
-> Introduces a new memfd_restricted system call which can create memory
-> file that is restricted from userspace access via normal MMU operations
-> like read(), write() or mmap() etc and the only way to use it is
-> passing it to a third kernel module like KVM and relying on it to
-> access the fd through the newly added restrictedmem kernel interface.
-> The restrictedmem interface bridges the memory file subsystems
-> (tmpfs/hugetlbfs etc) and their users (KVM in this case) and provides
-> bi-directional communication between them.=20
->
->
-> KVM change
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> Extends the KVM memslot to provide guest private (encrypted) memory from
-> a fd. With this extension, a single memslot can maintain both private
-> memory through private fd (restricted_fd/restricted_offset) and shared
-> (unencrypted) memory through userspace mmaped host virtual address
-> (userspace_addr). For a particular guest page, the corresponding page in
-> KVM memslot can be only either private or shared and only one of the
-> shared/private parts of the memslot is visible to guest. For how this
-> new extension is used in QEMU, please refer to kvm_set_phys_mem() in
-> below TDX-enabled QEMU repo.
->
-> Introduces new KVM_EXIT_MEMORY_FAULT exit to allow userspace to get the
-> chance on decision-making for shared <-> private memory conversion. The
-> exit can be an implicit conversion in KVM page fault handler or an
-> explicit conversion from guest OS.
->
-> Extends existing SEV ioctls KVM_MEMORY_ENCRYPT_{UN,}REG_REGION to
-> convert a guest page between private <-> shared. The data maintained in
-> these ioctls tells the truth whether a guest page is private or shared
-> and this information will be used in KVM page fault handler to decide
-> whether the private or the shared part of the memslot is visible to
-> guest.
->
-<snip>
-
---=20
-Alex Benn=C3=A9e
