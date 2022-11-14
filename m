@@ -2,223 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C59627823
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F1F627826
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:52:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236296AbiKNIvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
+        id S236366AbiKNIwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:52:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233166AbiKNIv3 (ORCPT
+        with ESMTP id S236540AbiKNIvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:51:29 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA36719C35;
-        Mon, 14 Nov 2022 00:51:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668415888; x=1699951888;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xFTYNBP+TcEy3dDL/kF6xEoY/vWH2jxHcttCdo+RdSg=;
-  b=PSsQGYoKxMTwLQfmrxDc9OYL8M63IHfwHURc6kCiM6k4MxS9Qw+/jXjh
-   96tc1zL4hYMJoyzDNKldQZCg1ZEZ/W96Me0YKlPiuWqlO4BPXrVDglSH1
-   C48mqQXzBlFRSF7XACKsMJmA12tx8Gs5DnLa2F/eorFExn+3etFbOZ26K
-   DmUGu0uqwqrsrKeTILPKfSyugEZDcw6yNO5oPv9TzmuIFxhrzsAaDpG8c
-   4Yar/q7VKq+EQTqsPSDcB2I1qissYE15QVVjXUC7KdopgTn82yU4fhaCD
-   myGAqmXw2scTqwCgKcJb3dETxPNrDzEtTBNZQRnK1p2nnGONDJjVT/CiO
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="374046209"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="374046209"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 00:51:28 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="669562754"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="669562754"
-Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.254.211.184]) ([10.254.211.184])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 00:51:22 -0800
-Message-ID: <63b7b6d5-f441-7ebc-fd3f-9d5f36d2938d@linux.intel.com>
-Date:   Mon, 14 Nov 2022 16:51:20 +0800
+        Mon, 14 Nov 2022 03:51:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378B919C35
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:51:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC752B80D3D
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:51:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96004C43144
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:51:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668415911;
+        bh=uZ6+oZTLze1RKQfy58a8amMFqHnw789Td23AGSCHtXM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lCF1l6R0QHqHBEgAwkFs41Mq8X/5pmSYwjf4HHSKyGR2mHcUV3d6IlqmJtKb/LI9E
+         3Ad6WcTeAG1FhluiLkN2udUwDM0rYfTFP5Z03i7DrAcKaEcdicUWapLmfjIx0K7FJ+
+         hispusMGc5BcZZev8VVgV94ZFbwud756X6FMyvpviaqOvJoLDEg6t4Ij+CHDSW9NO0
+         RiS/itbKQLSLhQOHT7zYvUJ/8D5siRGUvagWI/AI3bv07BbeQYWAbyc0tcvj/a5+gE
+         TAeuoTvL5kkxehigYKhHkhsp8sJaaKp7C+d6pc23+agcVtXjD/QlXkQU2ERCa0ZDaI
+         orNj7TpkCdpig==
+Received: by mail-ed1-f53.google.com with SMTP id u24so16188589edd.13
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:51:51 -0800 (PST)
+X-Gm-Message-State: ANoB5pkcxxqhuawzBrr5HzQtpyr9DIWvy371WV/r0/Iulgo7PbWyj9RP
+        eSMNFYCOfiX4lme7ZIR5W1VJweS8bFvakzGiu+s=
+X-Google-Smtp-Source: AA0mqf7qhwODcSzEnMktD1O+POdwX3zA8dKEBfwBToLtnxi5yPWlk99CR/lzZf1vCg2j4ALp32CgXdpN/jcQxT0zyY4=
+X-Received: by 2002:a05:6402:3715:b0:462:32bf:613a with SMTP id
+ ek21-20020a056402371500b0046232bf613amr10033261edb.78.1668415909711; Mon, 14
+ Nov 2022 00:51:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 4/9] perf list: Generalize limiting to a PMU name
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Xin Gao <gaoxin@cdjrlc.com>, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>
-References: <20221114075127.2650315-1-irogers@google.com>
- <20221114075127.2650315-5-irogers@google.com>
-From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
-In-Reply-To: <20221114075127.2650315-5-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <1664326209-13995-1-git-send-email-yangtiezhu@loongson.cn>
+ <1664326209-13995-4-git-send-email-yangtiezhu@loongson.cn>
+ <CAAhV-H7N-N2400ivdczJrfJ9Ht12JUbOADxExF87wVPFEj_c_g@mail.gmail.com>
+ <dd3fc4ab-6bbb-2fa5-8d5e-b8206b42518c@loongson.cn> <CAAhV-H4ok2r2FarFszwYJ6Hah4m7ieNf6egnXyZhUf1ESDUhXg@mail.gmail.com>
+ <a528e970-29ac-2fcb-b749-cfae3fbe5a18@loongson.cn>
+In-Reply-To: <a528e970-29ac-2fcb-b749-cfae3fbe5a18@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 14 Nov 2022 16:51:36 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7uaFeND1-iSHmLXMFJonRTbiu81EnFGjyHZ0uN9bVXZw@mail.gmail.com>
+Message-ID: <CAAhV-H7uaFeND1-iSHmLXMFJonRTbiu81EnFGjyHZ0uN9bVXZw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] LoongArch: Add kretprobe support
+To:     Jinyang He <hejinyang@loongson.cn>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 14, 2022 at 4:32 PM Jinyang He <hejinyang@loongson.cn> wrote:
+>
+> On 2022/11/14 =E4=B8=8B=E5=8D=882:50, Huacai Chen wrote:
+>
+> > On Mon, Nov 14, 2022 at 2:11 PM Jinyang He <hejinyang@loongson.cn> wrot=
+e:
+> >> On 2022/11/14 =E4=B8=8B=E5=8D=8812:43, Huacai Chen wrote:
+> >>
+> >>> Hi, Tiezhu and Jinyang,
+> >>>
+> >>> On Wed, Sep 28, 2022 at 8:50 AM Tiezhu Yang <yangtiezhu@loongson.cn> =
+wrote:
+> >>>> Use the generic kretprobe trampoline handler to add kretprobe
+> >>>> support for LoongArch.
+> >>>>
+> >>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> >>>> ---
+> >>>>    arch/loongarch/Kconfig                     |  1 +
+> >>>>    arch/loongarch/kernel/Makefile             |  2 +-
+> >>>>    arch/loongarch/kernel/kprobes.c            | 24 ++++++++
+> >>>>    arch/loongarch/kernel/kprobes_trampoline.S | 97 +++++++++++++++++=
++++++++++++++
+> >>>>    4 files changed, 123 insertions(+), 1 deletion(-)
+> >>>>    create mode 100644 arch/loongarch/kernel/kprobes_trampoline.S
+> >>>>
+> >>>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> >>>> index 8debd70..877be6a 100644
+> >>>> --- a/arch/loongarch/Kconfig
+> >>>> +++ b/arch/loongarch/Kconfig
+> >>>> @@ -95,6 +95,7 @@ config LOONGARCH
+> >>>>           select HAVE_IRQ_EXIT_ON_IRQ_STACK
+> >>>>           select HAVE_IRQ_TIME_ACCOUNTING
+> >>>>           select HAVE_KPROBES
+> >>>> +       select HAVE_KRETPROBES
+> >>>>           select HAVE_MOD_ARCH_SPECIFIC
+> >>>>           select HAVE_NMI
+> >>>>           select HAVE_PCI
+> >>>> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/=
+Makefile
+> >>>> index ff98d8a..48f50607 100644
+> >>>> --- a/arch/loongarch/kernel/Makefile
+> >>>> +++ b/arch/loongarch/kernel/Makefile
+> >>>> @@ -33,6 +33,6 @@ obj-$(CONFIG_UNWINDER_PROLOGUE) +=3D unwind_prolog=
+ue.o
+> >>>>
+> >>>>    obj-$(CONFIG_PERF_EVENTS)      +=3D perf_event.o perf_regs.o
+> >>>>
+> >>>> -obj-$(CONFIG_KPROBES)          +=3D kprobes.o
+> >>>> +obj-$(CONFIG_KPROBES)          +=3D kprobes.o kprobes_trampoline.o
+> >>>>
+> >>>>    CPPFLAGS_vmlinux.lds           :=3D $(KBUILD_CFLAGS)
+> >>>> diff --git a/arch/loongarch/kernel/kprobes.c b/arch/loongarch/kernel=
+/kprobes.c
+> >>>> index c11f6e0..ca3f1dc 100644
+> >>>> --- a/arch/loongarch/kernel/kprobes.c
+> >>>> +++ b/arch/loongarch/kernel/kprobes.c
+> >>>> @@ -306,6 +306,30 @@ int __init arch_populate_kprobe_blacklist(void)
+> >>>>                                            (unsigned long)__irqentry=
+_text_end);
+> >>>>    }
+> >>>>
+> >>>> +/* Called from __kretprobe_trampoline */
+> >>>> +void __used *trampoline_probe_handler(struct pt_regs *regs)
+> >>>> +{
+> >>>> +       return (void *)kretprobe_trampoline_handler(regs, NULL);
+> >>>> +}
+> >>>> +NOKPROBE_SYMBOL(trampoline_probe_handler);
+> >>>> +
+> >>>> +void arch_prepare_kretprobe(struct kretprobe_instance *ri,
+> >>>> +                           struct pt_regs *regs)
+> >>>> +{
+> >>>> +       ri->ret_addr =3D (kprobe_opcode_t *)regs->regs[1];
+> >>>> +       ri->fp =3D NULL;
+> >>>> +
+> >>>> +       /* Replace the return addr with trampoline addr */
+> >>>> +       regs->regs[1] =3D (unsigned long)&__kretprobe_trampoline;
+> >>>> +}
+> >>>> +NOKPROBE_SYMBOL(arch_prepare_kretprobe);
+> >>>> +
+> >>>> +int arch_trampoline_kprobe(struct kprobe *p)
+> >>>> +{
+> >>>> +       return 0;
+> >>>> +}
+> >>>> +NOKPROBE_SYMBOL(arch_trampoline_kprobe);
+> >>>> +
+> >>>>    int __init arch_init_kprobes(void)
+> >>>>    {
+> >>>>           return 0;
+> >>>> diff --git a/arch/loongarch/kernel/kprobes_trampoline.S b/arch/loong=
+arch/kernel/kprobes_trampoline.S
+> >>>> new file mode 100644
+> >>>> index 0000000..9888ab8
+> >>>> --- /dev/null
+> >>>> +++ b/arch/loongarch/kernel/kprobes_trampoline.S
+> >>>> @@ -0,0 +1,97 @@
+> >>>> +/* SPDX-License-Identifier: GPL-2.0+ */
+> >>>> +#include <linux/linkage.h>
+> >>>> +#include <asm/stackframe.h>
+> >>>> +
+> >>>> +       .text
+> >>>> +
+> >>>> +       .macro save_all_base_regs
+> >>>> +       cfi_st  zero, PT_R0
+> >>>> +       cfi_st  ra, PT_R1
+> >>>> +       cfi_st  tp, PT_R2
+> >>>> +       cfi_st  a0, PT_R4
+> >>>> +       cfi_st  a1, PT_R5
+> >>>> +       cfi_st  a2, PT_R6
+> >>>> +       cfi_st  a3, PT_R7
+> >>>> +       cfi_st  a4, PT_R8
+> >>>> +       cfi_st  a5, PT_R9
+> >>>> +       cfi_st  a6, PT_R10
+> >>>> +       cfi_st  a7, PT_R11
+> >>>> +       cfi_st  t0, PT_R12
+> >>>> +       cfi_st  t1, PT_R13
+> >>>> +       cfi_st  t2, PT_R14
+> >>>> +       cfi_st  t3, PT_R15
+> >>>> +       cfi_st  t4, PT_R16
+> >>>> +       cfi_st  t5, PT_R17
+> >>>> +       cfi_st  t6, PT_R18
+> >>>> +       cfi_st  t7, PT_R19
+> >>>> +       cfi_st  t8, PT_R20
+> >>>> +       cfi_st  u0, PT_R21
+> >>>> +       cfi_st  fp, PT_R22
+> >>>> +       cfi_st  s0, PT_R23
+> >>>> +       cfi_st  s1, PT_R24
+> >>>> +       cfi_st  s2, PT_R25
+> >>>> +       cfi_st  s3, PT_R26
+> >>>> +       cfi_st  s4, PT_R27
+> >>>> +       cfi_st  s5, PT_R28
+> >>>> +       cfi_st  s6, PT_R29
+> >>>> +       cfi_st  s7, PT_R30
+> >>>> +       cfi_st  s8, PT_R31
+> >>>> +       addi.d  t0, sp, PT_SIZE
+> >>>> +       LONG_S  t0, sp, PT_R3
+> >>>> +       csrrd   t0, LOONGARCH_CSR_CRMD
+> >>>> +       andi    t0, t0, 0x7 /* extract bit[1:0] PLV, bit[2] IE */
+> >>>> +       LONG_S  t0, sp, PT_PRMD
+> >>>> +       .endm
+> >>>> +
+> >>>> +       .macro restore_all_base_regs
+> >>>> +       cfi_ld  zero, PT_R0
+> >>>> +       cfi_ld  tp, PT_R2
+> >>>> +       cfi_ld  a0, PT_R4
+> >>>> +       cfi_ld  a1, PT_R5
+> >>>> +       cfi_ld  a2, PT_R6
+> >>>> +       cfi_ld  a3, PT_R7
+> >>>> +       cfi_ld  a4, PT_R8
+> >>>> +       cfi_ld  a5, PT_R9
+> >>>> +       cfi_ld  a6, PT_R10
+> >>>> +       cfi_ld  a7, PT_R11
+> >>>> +       cfi_ld  t0, PT_R12
+> >>>> +       cfi_ld  t1, PT_R13
+> >>>> +       cfi_ld  t2, PT_R14
+> >>>> +       cfi_ld  t3, PT_R15
+> >>>> +       cfi_ld  t4, PT_R16
+> >>>> +       cfi_ld  t5, PT_R17
+> >>>> +       cfi_ld  t6, PT_R18
+> >>>> +       cfi_ld  t7, PT_R19
+> >>>> +       cfi_ld  t8, PT_R20
+> >>>> +       cfi_ld  u0, PT_R21
+> >>>> +       cfi_ld  fp, PT_R22
+> >>>> +       cfi_ld  s0, PT_R23
+> >>>> +       cfi_ld  s1, PT_R24
+> >>>> +       cfi_ld  s2, PT_R25
+> >>>> +       cfi_ld  s3, PT_R26
+> >>>> +       cfi_ld  s4, PT_R27
+> >>>> +       cfi_ld  s5, PT_R28
+> >>>> +       cfi_ld  s6, PT_R29
+> >>>> +       cfi_ld  s7, PT_R30
+> >>>> +       cfi_ld  s8, PT_R31
+> >>>> +       LONG_L  t0, sp, PT_PRMD
+> >>>> +       li.d    t1, 0x7 /* mask bit[1:0] PLV, bit[2] IE */
+> >>>> +       csrxchg t0, t1, LOONGARCH_CSR_CRMD
+> >>>> +       .endm
+> >>> Do you think we need to save and restore all regs here?
+> >>>
+> >>> Huacai
+> >> Hi, Huacai,
+> >>
+> >>
+> >> Note that it is not function context. In the original kprobe design, i=
+t is
+> >> triggered by 'break' and then trap into exception with all pt_regs sav=
+ed.
+> >> The all pt_regs will be visible to the user. So I think in this versio=
+n
+> >> we should also support all regs to user. BTW, due to all exceptions is
+> >> trapped by 'break' something in pt_regs is not needed, like estat,
+> >> badvaddr and so on.
+> > OK, but I still have some questions:
+> > 1, Why $r0 need save/restore?
+>
+> Surely $r0 can be not saved, as now we do not have strange purpose
+> to make PT_R0 as a flag.
+>
+>
+> > 2, Why save $r1 but not restore?
+> My wrong idea is $r1 should be saved at CSR_ERA, to plays it like
+> exception happened. But its value always equal the address of
+> __kretprobe_trampoline. The kretprobe is something like fgraph. The real
+> return address is returned by trampoline_probe_handler. And at present,
+> the real return address is replaced in pt_regs->csr_era in
+> __kretprobe_trampoline_handler(). So the $r1 saved in CSR_ERA will
+> be destroied at __kretprobe_trampoline_handler() actually.
+> That's why $r1 saved also is not needed.
+>
+> And both way to get return address from return value or get return addres=
+s
+>
+> from pt_regs is same on LoongArch because arch_kretprobe_fixup_return()
+>
+> does nothing. But I think get return address from pt_regs is more reliabl=
+e.
+>
+>
+> > 3, What is the purpose of CRMD magic?
+>
+> PT_CRMD magic is just exception context. It gives us a chance e.g.
+> set ie off at func head, and ie on at func return.
+ARM64 and RISC-V don't have such magics, so maybe they are unneeded?
 
-
-On 11/14/2022 3:51 PM, Ian Rogers wrote:
-> Deprecate the --cputype option and add a --unit option where '--unit
-> cpu_atom' behaves like '--cputype atom'. The --unit option can be used
-> with arbitrary PMUs, for example:
-> 
-> ```
-> $ perf list --unit msr pmu
-> 
-> List of pre-defined events (to be used in -e or -M):
-> 
->    msr/aperf/                                         [Kernel PMU event]
->    msr/cpu_thermal_margin/                            [Kernel PMU event]
->    msr/mperf/                                         [Kernel PMU event]
->    msr/pperf/                                         [Kernel PMU event]
->    msr/smi/                                           [Kernel PMU event]
->    msr/tsc/                                           [Kernel PMU event]
-> ```
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->   tools/perf/Documentation/perf-list.txt |  6 +++---
->   tools/perf/builtin-list.c              | 18 ++++++++++++------
->   tools/perf/util/metricgroup.c          |  3 ++-
->   tools/perf/util/pmu.c                  |  4 +---
->   4 files changed, 18 insertions(+), 13 deletions(-)
-> 
-> diff --git a/tools/perf/Documentation/perf-list.txt b/tools/perf/Documentation/perf-list.txt
-> index 57384a97c04f..44a819af573d 100644
-> --- a/tools/perf/Documentation/perf-list.txt
-> +++ b/tools/perf/Documentation/perf-list.txt
-> @@ -39,9 +39,9 @@ any extra expressions computed by perf stat.
->   --deprecated::
->   Print deprecated events. By default the deprecated events are hidden.
->   
-> ---cputype::
-> -Print events applying cpu with this type for hybrid platform
-> -(e.g. --cputype core or --cputype atom)
-> +--unit::
-> +Print PMU events and metrics limited to the specific PMU name.
-> +(e.g. --unit cpu, --unit msr, --unit cpu_core, --unit cpu_atom)
->   
->   [[EVENT_MODIFIERS]]
->   EVENT MODIFIERS
-> diff --git a/tools/perf/builtin-list.c b/tools/perf/builtin-list.c
-> index 58e1ec1654ef..cc84ced6da26 100644
-> --- a/tools/perf/builtin-list.c
-> +++ b/tools/perf/builtin-list.c
-> @@ -21,7 +21,6 @@
->   
->   static bool desc_flag = true;
->   static bool details_flag;
-> -static const char *hybrid_type;
->   
->   int cmd_list(int argc, const char **argv)
->   {
-> @@ -30,6 +29,8 @@ int cmd_list(int argc, const char **argv)
->   	bool long_desc_flag = false;
->   	bool deprecated = false;
->   	char *pmu_name = NULL;
-> +	const char *hybrid_name = NULL;
-> +	const char *unit_name = NULL;
->   	struct option list_options[] = {
->   		OPT_BOOLEAN(0, "raw-dump", &raw_dump, "Dump raw events"),
->   		OPT_BOOLEAN('d', "desc", &desc_flag,
-> @@ -40,9 +41,10 @@ int cmd_list(int argc, const char **argv)
->   			    "Print information on the perf event names and expressions used internally by events."),
->   		OPT_BOOLEAN(0, "deprecated", &deprecated,
->   			    "Print deprecated events."),
-> -		OPT_STRING(0, "cputype", &hybrid_type, "hybrid cpu type",
-> -			   "Print events applying cpu with this type for hybrid platform "
-> -			   "(e.g. core or atom)"),
-> +		OPT_STRING(0, "cputype", &hybrid_name, "hybrid cpu type",
-> +			   "Limit PMU or metric printing to the given hybrid PMU (e.g. core or atom)."),
-> +		OPT_STRING(0, "unit", &unit_name, "PMU name",
-> +			   "Limit PMU or metric printing to the specified PMU."),
->   		OPT_INCR(0, "debug", &verbose,
->   			     "Enable debugging output"),
->   		OPT_END()
-> @@ -53,6 +55,8 @@ int cmd_list(int argc, const char **argv)
->   	};
->   
->   	set_option_flag(list_options, 0, "raw-dump", PARSE_OPT_HIDDEN);
-> +	/* Hide hybrid flag for the more generic 'unit' flag. */
-> +	set_option_flag(list_options, 0, "cputype", PARSE_OPT_HIDDEN);
->   
->   	argc = parse_options(argc, argv, list_options, list_usage,
->   			     PARSE_OPT_STOP_AT_NON_OPTION);
-> @@ -62,8 +66,10 @@ int cmd_list(int argc, const char **argv)
->   	if (!raw_dump && pager_in_use())
->   		printf("\nList of pre-defined events (to be used in -e or -M):\n\n");
->   
-> -	if (hybrid_type) {
-> -		pmu_name = perf_pmu__hybrid_type_to_pmu(hybrid_type);
-> +	if (unit_name)
-> +		pmu_name = strdup(unit_name);
-> +	else if (hybrid_name) {
-> +		pmu_name = perf_pmu__hybrid_type_to_pmu(hybrid_name);
->   		if (!pmu_name)
->   			pr_warning("WARNING: hybrid cputype is not supported!\n");
->   	}
-> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-> index 4c98ac29ee13..1943fed9b6d9 100644
-> --- a/tools/perf/util/metricgroup.c
-> +++ b/tools/perf/util/metricgroup.c
-> @@ -556,11 +556,12 @@ static int metricgroup__print_callback(const struct pmu_event *pe,
->   				       void *vdata)
->   {
->   	struct metricgroup_print_data *data = vdata;
-> +	const char *pmu = pe->pmu ?: "cpu";
->   
->   	if (!pe->metric_expr)
->   		return 0;
->   
-> -	if (data->pmu_name && perf_pmu__is_hybrid(pe->pmu) && strcmp(data->pmu_name, pe->pmu))
-> +	if (data->pmu_name && strcmp(data->pmu_name, pmu))
->   		return 0;
->   
->   	return metricgroup__print_pmu_event(pe, data->metricgroups, data->filter,
-> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-> index a8f9f47c6ed9..9c771f136b81 100644
-> --- a/tools/perf/util/pmu.c
-> +++ b/tools/perf/util/pmu.c
-> @@ -1694,10 +1694,8 @@ void print_pmu_events(const char *event_glob, bool name_only, bool quiet_flag,
->   	pmu = NULL;
->   	j = 0;
->   	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
-> -		if (pmu_name && perf_pmu__is_hybrid(pmu->name) &&
-> -		    strcmp(pmu_name, pmu->name)) {
-> +		if (pmu_name && pmu->name && strcmp(pmu_name, pmu->name))
-
-Why remove perf_pmu__is_hybrid check?
-
->   			continue;
-> -		}
->   
->   		list_for_each_entry(alias, &pmu->aliases, list) {
->   			char *name = alias->desc ? alias->name :
-
--- 
-Zhengjun Xing
+Huacai
+>
+>
+> Thanks,
+>
+> Jinyang
+>
+> >
+> >>>> +
+> >>>> +SYM_CODE_START(__kretprobe_trampoline)
+> >>>> +       addi.d  sp, sp, -PT_SIZE
+> >>>> +       save_all_base_regs
+> >>>> +
+> >>>> +       move a0, sp /* pt_regs */
+> >>>> +
+> >>>> +       bl trampoline_probe_handler
+> >>>> +
+> >>>> +       /* use the result as the return-address */
+> >>>> +       move ra, a0
+> >>>> +
+> >>>> +       restore_all_base_regs
+> >>>> +       addi.d  sp, sp, PT_SIZE
+> >>>> +
+> >>>> +       jr ra
+> >>>> +SYM_CODE_END(__kretprobe_trampoline)
+> >>>> --
+> >>>> 2.1.0
+> >>>>
+> >>>>
+>
