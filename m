@@ -2,81 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612F0628794
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6BE628797
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237475AbiKNRzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:55:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
+        id S237464AbiKNR4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:56:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237453AbiKNRza (ORCPT
+        with ESMTP id S237915AbiKNR4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:55:30 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942C319C21;
-        Mon, 14 Nov 2022 09:55:27 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 155DE1C0005;
-        Mon, 14 Nov 2022 17:55:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668448526;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dvgdbptEBFaoI+KNbWE1FHlBiXtddFaf4Y6qrWDfLWA=;
-        b=YnaRIgVZg3e4CdZwTwSrRI21mpeIftV3ebF3Bix542KIoJIIDonadeI8sZwQ/ZzeVaImU5
-        LwnA21psi51oFbwranIha8Njy6CxpNN1Q1rtQ4fBTkciT2kG6+YUheSD4ADoaK/2jyt4Qe
-        yq3PpB/o2H5gmszR29aVtaENgEwdrejcJJ27IUG66/r+CCzSpLBZfWNYdbSZsuBoqpNEed
-        55Wf7vzl5uEA4YtRx+bIXu/Kw1kLR9rXSjpAXtaOJVJATPttl75NjmxJnXl4wMPe/SZMml
-        AtuUgtgGsgMjPhydi3eWdDNSREL/jgVejhKiXEHbZeQ5cOr8h3EUTYR7E6oJsg==
-Date:   Mon, 14 Nov 2022 18:55:24 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>
-Cc:     linux-rtc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/2] arm: qcom: mdm9615: first round of bindings and
- DT fixes
-Message-ID: <166844849467.2094007.7044257062869034432.b4-ty@bootlin.com>
-References: <20220928-mdm9615-dt-schema-fixes-v5-0-bbb120c6766a@linaro.org>
+        Mon, 14 Nov 2022 12:56:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C7926491;
+        Mon, 14 Nov 2022 09:56:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B025061330;
+        Mon, 14 Nov 2022 17:56:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D419C433D6;
+        Mon, 14 Nov 2022 17:56:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668448567;
+        bh=N9oaQLJ/H/5suT+aYI93l3SxuUN2llh0pwyp5hPH95A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VPDdph3yhsmenWyM2ySHp62SlHm6XzYCbqg2d1pxHnfje1jIwGLxYu2frpBwU/nvv
+         5Ui5rUT3h+R+z09f7+AANzOfImaER/8vsVLX1byqpZTOiFwcaXJlApgw/NEQ4AKlV9
+         d0nieJodBldt1DrEzIqgF0TWy84OU+1TOUQKT3kxCVyYv/qLY9B16oALt6fCtTKftU
+         K2sGh53Z/khfGI3Q1pDzQhtJ85pUAARMyQvRgsz6HRzmEKsZWxvGFcY0iMynrYOtlc
+         LVAh3/+wJvhoQYCSylKolVcBiIguTtHib9pp5QliaSzQRTGTX7h9KPQzsBDhsEcLDN
+         epRYjoRIEvLdQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>, damon@lists.linux.dev,
+        linux-mm@kvack.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/damon/sysfs-schemes: skip stats update if the scheme directory is removed
+Date:   Mon, 14 Nov 2022 17:55:52 +0000
+Message-Id: <20221114175552.1951-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v5-0-bbb120c6766a@linaro.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 08 Nov 2022 13:02:52 +0100, Neil Armstrong wrote:
-> This is a first round of trivial bindings & DT fixes for the MDM9615 platform.
-> 
-> This first round focuses on trivial changes, the remaining work will
-> mainly be .txt to .yaml transition of old qcom pmic & co device bindings.
-> 
-> 
+A DAMON sysfs interface user can start DAMON with a scheme, remove the
+sysfs directory for the scheme, and then ask update of the scheme's
+stats.  Because the schemes stats update logic doesn't aware of the
+situation, it results in an invalid memory access.  Fix the bug by
+checking if the scheme sysfs directory exists.
 
-Applied, thanks!
+Fixes: 0ac32b8affb5 ("mm/damon/sysfs: support DAMOS stats")
+Cc: <stable@vger.kernel.org> # v5.18
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
 
-[1/2] dt-bindings: rtc: qcom-pm8xxx: document qcom,pm8921-rtc as fallback of qcom,pm8018-rtc
-      commit: 44b4bf1c7d8ffc398c69bbbb86e058d57f515563
-[2/2] rtc: pm8xxx: drop unused pm8018 compatible
-      commit: 56da3826fd9fcafc79b83d03922924fc2118a49c
+Note: There are DAMON code refactoring patches in mm-stable.  As the
+refactoring changes the code that this fix is touching, while this fix
+is for v6.1 hotfix, this patch is based on the latest mainline, not the
+mm-unstable.  In other words, this patch cannot cleanly applied on
+mm-unstable.  You could get this patch based on latest mm-unstable via
+damon/next tree[1], though.
 
-Best regards,
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git/tree/?h=damon/next
 
+ mm/damon/sysfs.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
+index 9f1219a67e3f..9701ef178a4d 100644
+--- a/mm/damon/sysfs.c
++++ b/mm/damon/sysfs.c
+@@ -2339,6 +2339,10 @@ static int damon_sysfs_upd_schemes_stats(struct damon_sysfs_kdamond *kdamond)
+ 	damon_for_each_scheme(scheme, ctx) {
+ 		struct damon_sysfs_stats *sysfs_stats;
+ 
++		/* user could removed the scheme sysfs dir */
++		if (schemes_idx >= sysfs_schemes->nr)
++			break;
++
+ 		sysfs_stats = sysfs_schemes->schemes_arr[schemes_idx++]->stats;
+ 		sysfs_stats->nr_tried = scheme->stat.nr_tried;
+ 		sysfs_stats->sz_tried = scheme->stat.sz_tried;
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
+
