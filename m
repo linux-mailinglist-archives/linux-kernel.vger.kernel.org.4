@@ -2,115 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9FF6283F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A53166283FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236774AbiKNPdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 10:33:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
+        id S236856AbiKNPdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 10:33:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234803AbiKNPdW (ORCPT
+        with ESMTP id S234803AbiKNPdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 10:33:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D652B27E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:32:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668439941;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=riRMqi77jXEYSwfnt37XFg/WulJLMHf4DMWhEmN9Kr4=;
-        b=Oy7iWQWpB3kjO1yVZSv7Tp/eUhl9PcRdIfsZRJrdG00ACaNXXbK6LntPQb/BfPfDM2ZzOD
-        3SyavfJExXP4TOK0FV4/5b4QLEZV8n1MSlPUezT4VQwdffaWOJdVP3w7Splmnhj1tmJfFC
-        5Vu+G/wj2ATEethRu2DcTadcd4WgIwY=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-396-g742J41EMzC5tQA_7Pgang-1; Mon, 14 Nov 2022 10:32:19 -0500
-X-MC-Unique: g742J41EMzC5tQA_7Pgang-1
-Received: by mail-il1-f198.google.com with SMTP id a15-20020a056e0208af00b00300806a52b6so9554981ilt.22
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:32:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=riRMqi77jXEYSwfnt37XFg/WulJLMHf4DMWhEmN9Kr4=;
-        b=xpHUE+bOlYMMdkA5legIM99246/2EYnxJ1Ay+V2REXvsNQGLV/bNAWUjOnYUS95gTC
-         DuhKz2G02v+MzUlv0eUKCpXEeD6ry3mD+K3F9ezUo9lsI9osg2mECLTBZeCzDMicBcQS
-         bPWRfrv3rzU+Q/WWjzcRyYRBPpWl/rU1Vdl36GnSyGbNUQa2R4svxcWrgL+iNuFt9NSq
-         65SPNWFzuK6igTqxK2yz8S+Nwr5d/814qtmFsSub7//QpNWaWkzhySVrG6Z67hXzvayS
-         5pn8kZCylhpJblzZ4oFN3kqb7eP7vnzudD8/mA0SG6AJ0RyXphJhWAsoFgopScEuNqA8
-         1kqg==
-X-Gm-Message-State: ANoB5pl5Ih0nCgkEVYzZayrbzhmElJFtITFZD1FDK/5Zm1zYw5+Nh1ts
-        P4VSOgbsSYl7wopEpEP+Yhpnm8Chj15z1V/SOd00k/BEUarrUPp4jgFxRbk5eAYlx2W8Gv9qF/p
-        MmkcJbmVP+jQpZ5YmpkIv7Dju
-X-Received: by 2002:a92:910:0:b0:300:d7db:639e with SMTP id y16-20020a920910000000b00300d7db639emr6700786ilg.264.1668439939174;
-        Mon, 14 Nov 2022 07:32:19 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6CM2CxN7w5a40B6iTPwNYm9GQh8Aq0Gcp57lphosvBVmUj0l1rXR9qaKJSWIDFve4s4sKTcw==
-X-Received: by 2002:a92:910:0:b0:300:d7db:639e with SMTP id y16-20020a920910000000b00300d7db639emr6700769ilg.264.1668439938905;
-        Mon, 14 Nov 2022 07:32:18 -0800 (PST)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id j15-20020a0566022ccf00b006ce94d987a3sm4027515iow.30.2022.11.14.07.32.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 07:32:17 -0800 (PST)
-Date:   Mon, 14 Nov 2022 08:32:07 -0700
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Anthony DeRossi <ajderossi@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the iommufd tree with the
- vfio-fixes tree
-Message-ID: <20221114083207.49d2274f.alex.williamson@redhat.com>
-In-Reply-To: <Y3JEK376qqpBcYAq@nvidia.com>
-References: <20221111153735.07a2bee1@canb.auug.org.au>
-        <Y3JEK376qqpBcYAq@nvidia.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Mon, 14 Nov 2022 10:33:44 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B46262CD;
+        Mon, 14 Nov 2022 07:33:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668440023; x=1699976023;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XsLpyqom0Ng9wFWrYB4Wm5KxBEufr/zzcnGuXMOFcws=;
+  b=iduqp5RQdCCuiiCVNCV8cwLymvxuEg/RyM6p4Ub4Y6LwpJk9uI8j5cWA
+   iuqYPgUKlaaRjwY5HV6CuQViJus20Bx49EbNUpC+uY6tG/erF3levxMKk
+   qkAfCDpI1uqKBjfjdw3iZXqcx26UxpYF+9yE4CiGmUEml0Ad+XKF8qekX
+   zMvwxWa0uY0tKcXc5vP+tZgsBeekP3KrLQlV6vokzpARRrcGAgIcnoQVZ
+   XeDrbk4hsHtT/Bp/70JsbUWMKu9weki+qzG/3ELmRDhQteRhg7YL+djdb
+   Av4atXMDBPt11AUEBVLnFPQ7cb3bnkoU/QrT4PUaSnfwQzGiyrkEBG17P
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="309626609"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="309626609"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 07:33:43 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="669697768"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="669697768"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 07:33:42 -0800
+Date:   Mon, 14 Nov 2022 07:33:40 -0800
+From:   Tony Luck <tony.luck@intel.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Thiago Macieira <thiago.macieira@intel.com>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
+        "Mehta, Sohil" <sohil.mehta@intel.com>
+Subject: Re: [PATCH v2 12/14] platform/x86/intel/ifs: Add current_batch sysfs
+ entry
+Message-ID: <Y3Jf1GmQKy3Dnz6V@agluck-desk3.sc.intel.com>
+References: <20221021203413.1220137-1-jithu.joseph@intel.com>
+ <20221107225323.2733518-1-jithu.joseph@intel.com>
+ <20221107225323.2733518-13-jithu.joseph@intel.com>
+ <Y2/JNAmSoYlLKq3A@zn.tnic>
+ <CC3629D6-B205-4150-80E5-FC7A7A76DD25@intel.com>
+ <Y3CevK2zhAmiUyG9@kroah.com>
+ <Y3DZmKYV+8HBtZ+Q@zn.tnic>
+ <Y3HrLpTdxqUPWW3F@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3HrLpTdxqUPWW3F@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 09:35:39 -0400
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+On Mon, Nov 14, 2022 at 08:15:58AM +0100, gregkh@linuxfoundation.org wrote:
+> On Sun, Nov 13, 2022 at 12:48:40PM +0100, Borislav Petkov wrote:
+> > Replying to both with one mail because it still feels like there's a
+> > misunderstanding.
+> > 
+> > On Sun, Nov 13, 2022 at 08:37:32AM +0100, gregkh@linuxfoundation.org wrote:
+> > > No, please do not force the driver to resolve a filename path in the
+> > > kernel.
+> > 
+> > No, I don't mean to do any filename path resolving - all I suggest is to
+> > echo into sysfs the full filename instead of the number. I.e., this:
+> > 
+> > for i in $(ls /lib/firmware/intel/ifs_0/*.scan);
+> > do
+> > 	echo $i /sys/devices/virtual/misc/intel_ifs_0/current_batch
 
-> On Fri, Nov 11, 2022 at 03:37:35PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Today's linux-next merge of the iommufd tree got a conflict in:
-> > 
-> >   drivers/vfio/vfio_main.c
-> > 
-> > between commit:
-> > 
-> >   7fdba0011157 ("vfio: Fix container device registration life cycle")
-> > 
-> > from the vfio-fixes tree and commit:
-> > 
-> >   55e16a188913 ("vfio: Move vfio_device driver open/close code to a function")
-> > 
-> > from the iommufd tree.
-> > 
-> > I fixed it up (I just used the latter version since it seems to
-> > incorporate the former change) and can carry the fix as necessary.   
+Bug ... $i is a full path here. I think Boris meant:
+
+	echo ${i##*/} > /sys/devices/virtual/misc/intel_ifs_0/current_batch
+
+> > done
 > 
-> Yes, that is right, it is as Alex and I discussed
+> Sorry, yes, that is fine, I was objecting to the previous "write any
+> path/file to the sysfs entry and the kernel will parse it" that was
+> happening in the original series.  A filename, without a path, that
+> always loads from the existing in-kernel firmware path locations is
+> fine.
 
-My plan is to merge back my fixes branch after it gets pulled into
-v6.1-rc so the vfio-iommufd support can be re-based to avoid this for
-v6.2.  Thanks,
+Just to set the record straight, the previous patch did *not* allow any
+path/file. It seems that you misread that original patch.
 
-Alex
+Whole thing is here:
 
+https://lore.kernel.org/all/20220708151938.986530-1-jithu.joseph@intel.com/
+
+But the important bits are in the commit comment:
+
+  Change the semantics of the "reload" file. Writing "1" keeps the legacy
+  behavior to reload from the default "ff-mm-ss.scan" file, but now interpret
+  other strings as a filename to be loaded from the /lib/firmware/intel/ifs
+  directory.
+
+and the code:
+
++		if (strchr(file_name, '/'))
++			goto done;
+
+Is there some other function/macro that we should have used to check
+that user input was a filename and not a pathname that would have made
+this clearer?
+
+I do agree that overloading semantics of the "reload" was icky. Changing
+the name of the sysfs file and dropping the "1" means reload default has
+made this a better interface.
+
+-Tony
