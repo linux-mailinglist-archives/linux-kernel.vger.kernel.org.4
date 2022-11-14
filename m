@@ -2,217 +2,578 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3C6628B44
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19476628B4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237714AbiKNVW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 16:22:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
+        id S237754AbiKNVZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 16:25:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237699AbiKNVWY (ORCPT
+        with ESMTP id S236505AbiKNVZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 16:22:24 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2138.outbound.protection.outlook.com [40.107.94.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3491838D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:22:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Vi+8KnV94aNhRp0vliEc9KCid9A+467yEMqddFeep6QDEznQf9+RY6JJBzfu+qA9BAWoi7EEROg3wGFe7ZlGAtfi8QQ3gLVK7+VACYTB4uC2Pp0vmJ+Q9JA9mtEYEE4M0XtPfvtU1e6sOc60Yg65QV6085JOy0tfeSx971mHx7VMm8JvkFPBlQwtAkWgOR9/J7CLZmhsPwm8eUuB45BlE2wXjBn89/FD15vkvOSwsES+LDLc6BhN/hzjEg+8EfEWD11XZuxk/xBfaUduGSZFIMY5Eo9TKPEO0ROjsn3bRDsLt8NC+FdaDUd8sXYbgWL3K/oJ38Il2x7c8bRxGWBXRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dH8A+1gqy1jb3HGugI28RnU1rHFaW9kH6j/2+B4d1Cs=;
- b=NrwtJbnjOHM7vojl0Z14y9RLakmO/6JHB9EsHFYRIOr56XC2fIck+yuD86362n09XF9vougns2VDIJu80Zztbmvtsn8HcXjPNu7akw0xcJXusuPHzlTeTrItYuJUkarlCeg0EfJpS3fFxyAZdrRi6Ucuq9S1A9ccPIyhnfAk0aYOi+nF8QFTm6DNiKDdOHRFhbH11Up2hAr1sU2jQw+j/rkbmz8dgPU9eK8Xp9H86GXIFwJzcF4hA4R5PFmcolp1kpRILlyBR4tjgPzP8xxlxAVKUollO5kLw77VYJ8xVfHHS61A37oMbWhwK3ecf2w8s+I9aKFHTKnBnFKfGSOPfA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
- header.from=os.amperecomputing.com; dkim=pass
- header.d=os.amperecomputing.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=os.amperecomputing.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dH8A+1gqy1jb3HGugI28RnU1rHFaW9kH6j/2+B4d1Cs=;
- b=ZS4SLDgiVq7w8MX4KxOxDo50fkzUb2ci03OoKU1hNRI+3VGQf/uuzezqoSvi5a+07JHOrwG8Dty/lPxKCgMygqZ+kwtDjj7ReuDGErvQvksi5CiFNoIh2DOj6Bm/Z/7xE9mN5x1b65f1tH5+Y6WKBwML3oDDmBgW8GDgUuCmigA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
-Received: from MWHPR0101MB2893.prod.exchangelabs.com (2603:10b6:301:33::25) by
- BL0PR01MB4290.prod.exchangelabs.com (2603:10b6:208:40::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5813.13; Mon, 14 Nov 2022 21:22:15 +0000
-Received: from MWHPR0101MB2893.prod.exchangelabs.com
- ([fe80::cc4b:db2e:5a6f:c4cd]) by MWHPR0101MB2893.prod.exchangelabs.com
- ([fe80::cc4b:db2e:5a6f:c4cd%6]) with mapi id 15.20.5813.012; Mon, 14 Nov 2022
- 21:22:15 +0000
-From:   D Scott Phillips <scott@os.amperecomputing.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Darren Hart <darren@os.amperecomputing.com>,
-        D Scott Phillips <scott@os.amperecomputing.com>,
-        patches@amperecomputing.com
-Subject: [PATCH v2 RESEND] char: misc: Increase the maximum number of dynamic misc devices to 1048448
-Date:   Mon, 14 Nov 2022 13:22:12 -0800
-Message-Id: <20221114212212.9279-1-scott@os.amperecomputing.com>
-X-Mailer: git-send-email 2.37.3
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: CH2PR18CA0013.namprd18.prod.outlook.com
- (2603:10b6:610:4f::23) To MWHPR0101MB2893.prod.exchangelabs.com
- (2603:10b6:301:33::25)
+        Mon, 14 Nov 2022 16:25:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDE218B2B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:24:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668461083;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xDnusRIn1gwb/arvCmVktYq22Wn9qjpGcuRUfMAU1qg=;
+        b=dDExtGJ+hm91TRzEb84Xrd4/fJYyROpW+XiWKou0JF5ZorE+rE1Aclus0VoZPNk5vCtY+z
+        UZ+N+SLP6kB6G6ky2zd4pEGK53F3TCzAK2alSdeA4pM3RTHMJf4lR3wTS7VI827jEirpaI
+        55CqZDQ1IVHoTqugmtye55yF+Ync1xs=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-93-zWSbTkYfMPK-frEaMqf17A-1; Mon, 14 Nov 2022 16:24:42 -0500
+X-MC-Unique: zWSbTkYfMPK-frEaMqf17A-1
+Received: by mail-qk1-f197.google.com with SMTP id ay43-20020a05620a17ab00b006fa30ed61fdso11965192qkb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:24:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xDnusRIn1gwb/arvCmVktYq22Wn9qjpGcuRUfMAU1qg=;
+        b=F7D0velHobeYmtoGTbI5E7nplyoyP12D1tmmiwkYu8iRAwfxdAWqAw0Jw9FEh8dmN9
+         PYsdDD/MJsX29F3Czrvvv6JfXaofv/Kf2ySQSktT5aIccp/vbNiAL7m7dkQ+Etqu8FS8
+         GKPVbLpkviAw+xDyA5fL8cqoJ/YPUrse4uRhH/xD8wXd5EiOE9pAkFNB5KFv6NwZWWa2
+         d1WkhejDRjqJuBlYAAMz9by0mwZKV7beKHQOSigfEHDrpxpeXASHWNLyVDK+Y/ESQu2p
+         CIO7oHXPCTO45cdvJbetqiQGRvgHb8mway8YFzVl9/O4CzeXryLym4eCj5a6r2KtZ1ZU
+         7t+Q==
+X-Gm-Message-State: ANoB5pkCb8/CCy+aJKuRSABYCoexfMWFJu7gMKeoaOS/DRRrLP8fp6CZ
+        sca3vv1zyPR6pAnElo/jGN/nAT+AotLevXIw1hgeATM3GHsPtga1pKenXfKe/qtXnUxJwd58+Ry
+        xSKr6+aVPJZWhVR19QI6iy5Xc
+X-Received: by 2002:a0c:f651:0:b0:4be:e978:85ef with SMTP id s17-20020a0cf651000000b004bee97885efmr14849280qvm.73.1668461081557;
+        Mon, 14 Nov 2022 13:24:41 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5GNTjomZKeQU8K0N7e6L6IEbF77v169VGiaCnEzqll4vJffwyeMd34x3R3Xa9EMa7JSAft+w==
+X-Received: by 2002:a0c:f651:0:b0:4be:e978:85ef with SMTP id s17-20020a0cf651000000b004bee97885efmr14849261qvm.73.1668461081305;
+        Mon, 14 Nov 2022 13:24:41 -0800 (PST)
+Received: from ?IPv6:2600:4040:5c6c:9200::feb? ([2600:4040:5c6c:9200::feb])
+        by smtp.gmail.com with ESMTPSA id u6-20020a37ab06000000b006b615cd8c13sm6945223qke.106.2022.11.14.13.24.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 13:24:39 -0800 (PST)
+Message-ID: <ac1abf6b0e525160b91b75042b678c515b5780cd.camel@redhat.com>
+Subject: Re: [PATCH 1/2] drm/amdgpu/mst: Stop ignoring error codes and
+ deadlocking
+From:   Lyude Paul <lyude@redhat.com>
+To:     "Lin, Wayne" <Wayne.Lin@amd.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
+Cc:     "Wentland, Harry" <Harry.Wentland@amd.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Kazlauskas, Nicholas" <Nicholas.Kazlauskas@amd.com>,
+        "Pillai, Aurabindo" <Aurabindo.Pillai@amd.com>,
+        "Li, Roman" <Roman.Li@amd.com>, "Zuo, Jerry" <Jerry.Zuo@amd.com>,
+        "Wu, Hersen" <hersenxs.wu@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "Mahfooz, Hamza" <Hamza.Mahfooz@amd.com>,
+        "Hung, Alex" <Alex.Hung@amd.com>,
+        "Francis, David" <David.Francis@amd.com>,
+        Mikita Lipski <mikita.lipski@amd.com>,
+        "Liu, Wenjing" <Wenjing.Liu@amd.com>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Mon, 14 Nov 2022 16:24:38 -0500
+In-Reply-To: <CO6PR12MB5489E3850FE3C9FBDA7BAC29FC3E9@CO6PR12MB5489.namprd12.prod.outlook.com>
+References: <20221104235926.302883-1-lyude@redhat.com>
+         <20221104235926.302883-2-lyude@redhat.com>
+         <CO6PR12MB5489E3850FE3C9FBDA7BAC29FC3E9@CO6PR12MB5489.namprd12.prod.outlook.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR0101MB2893:EE_|BL0PR01MB4290:EE_
-X-MS-Office365-Filtering-Correlation-Id: 994d19fd-1d98-43d2-d04c-08dac6864d3d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: prCl7wB6GHPGYZP8mBxMdlbNBnH9lo4hjnzvC4tVwhDF5MsM6HAGw+Bg+NXKlIZv7yirgMUR3mJd8cBnC+qBhbgLVrbIbKqYt/zb1o9nw5z5rzT2ztqmm7KgRaPd+G7lEDFTf2+wz51bYEF/+KmCZ7NZaSAqB3Bg40112xrV+7S/rgBoDJoBMunJIYjJrvF3lwS5rUekATmnDvgXzFr4G9WBQi68WfCsC76R069A2xYj4xP/7r0BEo1XXCwFWgQssFNyG6FJuoTvAhj7wntX0/uyh9DkiB3yl2uXuUqsAAYp3yaDQLF8euWLLfKa2Jq2wDjwRf4adPBYzmh7ECGs1+OkC1gJajlE8I+OMU8dC/hmlbCuVkgO8n5Dtno86qPXNiqZK1sfkAj8N77zlFcMn8AQrOYfrEbP43jG2+SnmZ9q8T8o2I7zC4Q1/ccIWN4A7NGBHf+HMrlHH8kMZATifwM9foY/4z9jY+zVooz2i1XB3zISy8MRqjS5Yo5m6Xg6gj3yyZ0Jxn4IgHcSEHV+eqANjqsux0Sjq/m8W6YFHnv2GNVKpCuh86y+V9HEEHvDXvlJ23fQ5reqTA54kUBu0WqnnpbN1O4ziNcVo5FoPDf2547a2AR4OeaiZDHgwlhBhs7qpyypk1FACW3kehU1HdLCzc3yg6q/tW+XNVSCZDy0nITskgdHk722lVVQvSZ/tMDzz5sooR1POFqBHiCvlwcnz/ahpFUZpjJ6kE3QDUjQwmjG4uzFdNOxd42Hlyc7vnm952viqFtoPL4q9zIR0oonrkpH7AWPBrof8jF4umE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR0101MB2893.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39850400004)(396003)(346002)(136003)(376002)(451199015)(52116002)(6512007)(6506007)(6666004)(26005)(107886003)(6486002)(110136005)(316002)(54906003)(478600001)(83380400001)(38100700002)(38350700002)(1076003)(86362001)(2906002)(2616005)(186003)(8936002)(41300700001)(66946007)(66556008)(66476007)(8676002)(4326008)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Xv94dBKRTu7zHQadDS23a1f19JI+vZJCHGTvvr4dPxCWdoYHDk/dkGsD1ndp?=
- =?us-ascii?Q?fJKXbBNUjrCAUMN8avf8/UUZUaIUNrz2AvwoeCsBekPeXXxT6yOWMBGnOUgF?=
- =?us-ascii?Q?hoiVZal1e0cwEEia7rlisyc1vjUc6dURs6mUA69mj/sJFzXf1lBZ+ms7ovNs?=
- =?us-ascii?Q?J0Obtg/ux3qCu/YAYeKL0YQb3l/9w524o85y3yOwQXOEuOLt31qi4PzIL9EO?=
- =?us-ascii?Q?JnRFakLiHmAXisEnJRbnp9TzoNrumnzqoFYPhvIsFkclKaxv0Ex5Ph4gUr35?=
- =?us-ascii?Q?jnyX3ckgeYU1kQqVV9IxgpTTFsXWf1h9FNPvi4gT1QFlmayc6cWc4YdwoEZX?=
- =?us-ascii?Q?VBuJfzIWYggz54vgT1zRuuKLM9WgS9PzeS5aLTJTzYFyskbRnJjZTSgyeWIW?=
- =?us-ascii?Q?kCkoTVHDqNmASARXWCUXn5RL0SyxB/2jEB30M2zxbCjW4PjM12DJZG/i8vUz?=
- =?us-ascii?Q?+8Hp3u1AOb8nKEMirkaHnwN4xNmdPZcapBXiYaBmPRE8yd9NiIWRvMG9CBA+?=
- =?us-ascii?Q?hz7DJ53IHWUu0Cp7H0sCbWFNGczYV/NUrygOpwLKfny+6oaRKbu+3gk65n4Q?=
- =?us-ascii?Q?6h3dSZs5LbRID6F/GxzZ5MhOU7MvtmkDOLx3R9Xi9lbCSrdGMT2QTOzhWFyK?=
- =?us-ascii?Q?BU5fBe0jshV1z9mSjQ08dUbj2iWi7f6dNTAF0/bC/6Y2CO/kC29EUzfJzQeY?=
- =?us-ascii?Q?qhX/tvAHJBCcrH3qG16e0/135cu7P9AUle785qWorbVAumkP+p794VRMHdvf?=
- =?us-ascii?Q?5EQTvoOrrQlsuLjBL4/zuqBMMJjOwf5yHTPOHI2rPFVc8TB0zuiK93n/AOtu?=
- =?us-ascii?Q?srjr+qz1DJlYvhv3pZ2Wr6sfmG0znltBXHzJwJzKBJrMPp4FTgwKU6VlICP0?=
- =?us-ascii?Q?p7YtmdPnH5hyVa4yuMxeiSRkHiZp6LT2EeyAtZSoQv2rsCFo7CEkBPaw9Br9?=
- =?us-ascii?Q?/8CUTPy22Lf4sRYcjG/kGOcTvr/B637M5o/QaQKHMlGPk6g+52qaUUJHTP4G?=
- =?us-ascii?Q?VNLVDZ76LyNKYWi7pe9r6kp5wDvqdV4oeyrGYZutdLGkjRP/jZA5t9XArRes?=
- =?us-ascii?Q?vP0XWksuA9GlpR/UtgAGS9DXph9xbSPT7UHiri4ZudPx0DIhnYe34FG3OMOq?=
- =?us-ascii?Q?2Tvxqi/jo5pWSaktOSELUzTgmXXcEDywfOMomUe7zTCGECiUKpRB7t+QnmIA?=
- =?us-ascii?Q?hORG2D6OTDa12w487abdSFkYwhvgg+yePYN/KbitG1ehDpqvhY8+Th+p1MH+?=
- =?us-ascii?Q?0+8KKOfCn255FCxvzzp2Lo0yefjrit4ognw09GciiRxlZMqm9KekydAl3Fub?=
- =?us-ascii?Q?vENtzWPGcbHLDaeuLKjhEqyoXWsOHMo9be9j5uradPWuBAYhUZ2aI2Nj0ZIl?=
- =?us-ascii?Q?3vjlwVZhoKxg7QAQnUwy4H/uCFr5UZZGrzCGPi5o4OJUfrxNpHu4lHZ6lgX0?=
- =?us-ascii?Q?vT+Xf4lEVtVXvlpxn3BrXe9ZCJWzh9e05/OvrVNVMl7gaqWA9lfEQ42NTspt?=
- =?us-ascii?Q?2CyhXBBiw89CEoQq+KziJZ4Mf+9Gt1w/w9CeGaH4c8j9FROgIu/8DQOovAgj?=
- =?us-ascii?Q?RFy80skKKa1LMAWYGP3qpQdE7gmVFrczMUiDZMirJX0EvOnQ2mZ/Cw8SYjvC?=
- =?us-ascii?Q?9Q=3D=3D?=
-X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 994d19fd-1d98-43d2-d04c-08dac6864d3d
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR0101MB2893.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 21:22:15.3753
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TKyZ1HZ4xhxRT2yU1Mcs94OMqIKX49NI4dVlqrRVXwepkWQG+R3bsUgRk5rIzHdYOlj4H+wYaha1ELgBlp2PJR+BTm5UghMNrphY6bQD1ZjnNfi7nFlrB4pIk+46srip
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR01MB4290
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On AmpereOne, 128 dynamic misc devices is not enough for the per-cpu
-coresight_tmc devices.  Switch the dynamic minors allocator to an ida and
-add logic to allocate in the ranges [0..127] and [256..1048575], leaving
-[128..255] for static misc devices.  Dynamic allocations start from 127
-growing downwards and then increasing from 256, so device numbering for the
-first 128 devices remain the same as before.
+On Wed, 2022-11-09 at 09:48 +0000, Lin, Wayne wrote:
+> [Public]
+> 
+> Thanks, Lyude!
+> Comments inline.
+> 
+> > -----Original Message-----
+> > From: Lyude Paul <lyude@redhat.com>
+> > Sent: Saturday, November 5, 2022 7:59 AM
+> > To: amd-gfx@lists.freedesktop.org
+> > Cc: Wentland, Harry <Harry.Wentland@amd.com>; stable@vger.kernel.org;
+> > Li, Sun peng (Leo) <Sunpeng.Li@amd.com>; Siqueira, Rodrigo
+> > <Rodrigo.Siqueira@amd.com>; Deucher, Alexander
+> > <Alexander.Deucher@amd.com>; Koenig, Christian
+> > <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; David
+> > Airlie <airlied@gmail.com>; Daniel Vetter <daniel@ffwll.ch>; Kazlauskas,
+> > Nicholas <Nicholas.Kazlauskas@amd.com>; Pillai, Aurabindo
+> > <Aurabindo.Pillai@amd.com>; Li, Roman <Roman.Li@amd.com>; Zuo, Jerry
+> > <Jerry.Zuo@amd.com>; Wu, Hersen <hersenxs.wu@amd.com>; Lin, Wayne
+> > <Wayne.Lin@amd.com>; Thomas Zimmermann <tzimmermann@suse.de>;
+> > Mahfooz, Hamza <Hamza.Mahfooz@amd.com>; Hung, Alex
+> > <Alex.Hung@amd.com>; Francis, David <David.Francis@amd.com>; Mikita
+> > Lipski <mikita.lipski@amd.com>; Liu, Wenjing <Wenjing.Liu@amd.com>;
+> > open list:DRM DRIVERS <dri-devel@lists.freedesktop.org>; open list <linux-
+> > kernel@vger.kernel.org>
+> > Subject: [PATCH 1/2] drm/amdgpu/mst: Stop ignoring error codes and
+> > deadlocking
+> > 
+> > It appears that amdgpu makes the mistake of completely ignoring the return
+> > values from the DP MST helpers, and instead just returns a simple true/false.
+> > In this case, it seems to have come back to bite us because as a result of
+> > simply returning false from compute_mst_dsc_configs_for_state(), amdgpu
+> > had no way of telling when a deadlock happened from these helpers. This
+> > could definitely result in some kernel splats.
+> > 
+> > Signed-off-by: Lyude Paul <lyude@redhat.com>
+> > Fixes: 8c20a1ed9b4f ("drm/amd/display: MST DSC compute fair share")
+> > Cc: Harry Wentland <harry.wentland@amd.com>
+> > Cc: <stable@vger.kernel.org> # v5.6+
+> > ---
+> >  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  18 +--
+> >  .../display/amdgpu_dm/amdgpu_dm_mst_types.c   | 107 ++++++++++------
+> > --
+> >  .../display/amdgpu_dm/amdgpu_dm_mst_types.h   |  12 +-
+> >  3 files changed, 73 insertions(+), 64 deletions(-)
+> > 
+> > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > index 0db2a88cd4d7b..6f76b2c84cdb5 100644
+> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > @@ -6462,7 +6462,7 @@ static int
+> > dm_update_mst_vcpi_slots_for_dsc(struct drm_atomic_state *state,
+> >  	struct drm_connector_state *new_con_state;
+> >  	struct amdgpu_dm_connector *aconnector;
+> >  	struct dm_connector_state *dm_conn_state;
+> > -	int i, j;
+> > +	int i, j, ret;
+> >  	int vcpi, pbn_div, pbn, slot_num = 0;
+> > 
+> >  	for_each_new_connector_in_state(state, connector,
+> > new_con_state, i) { @@ -6509,8 +6509,11 @@ static int
+> > dm_update_mst_vcpi_slots_for_dsc(struct drm_atomic_state *state,
+> >  			dm_conn_state->pbn = pbn;
+> >  			dm_conn_state->vcpi_slots = slot_num;
+> > 
+> > -			drm_dp_mst_atomic_enable_dsc(state, aconnector-
+> > > port, dm_conn_state->pbn,
+> > -						     false);
+> > +			ret = drm_dp_mst_atomic_enable_dsc(state,
+> > aconnector->port,
+> > +							   dm_conn_state-
+> > > pbn, false);
+> > +			if (ret != 0)
+> > +				return ret;
+> > +
+> >  			continue;
+> >  		}
+> > 
+> > @@ -9523,10 +9526,9 @@ static int amdgpu_dm_atomic_check(struct
+> > drm_device *dev,
+> > 
+> >  #if defined(CONFIG_DRM_AMD_DC_DCN)
+> >  	if (dc_resource_is_dsc_encoding_supported(dc)) {
+> > -		if (!pre_validate_dsc(state, &dm_state, vars)) {
+> > -			ret = -EINVAL;
+> > +		ret = pre_validate_dsc(state, &dm_state, vars);
+> > +		if (ret != 0)
+> >  			goto fail;
+> > -		}
+> >  	}
+> >  #endif
+> > 
+> > @@ -9621,9 +9623,9 @@ static int amdgpu_dm_atomic_check(struct
+> > drm_device *dev,
+> >  		}
+> > 
+> >  #if defined(CONFIG_DRM_AMD_DC_DCN)
+> > -		if (!compute_mst_dsc_configs_for_state(state, dm_state-
+> > > context, vars)) {
+> > +		ret = compute_mst_dsc_configs_for_state(state, dm_state-
+> > > context, vars);
+> > +		if (ret) {
+> > 
+> > 	DRM_DEBUG_DRIVER("compute_mst_dsc_configs_for_state()
+> > failed\n");
+> > -			ret = -EINVAL;
+> >  			goto fail;
+> >  		}
+> > 
+> > diff --git
+> > a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> > index 6ff96b4bdda5c..30bc2e5058b70 100644
+> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> > +++
+> > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+> > @@ -864,25 +864,25 @@ static bool try_disable_dsc(struct
+> > drm_atomic_state *state,
+> >  	return true;
+> >  }
+> > 
+> > -static bool compute_mst_dsc_configs_for_link(struct drm_atomic_state
+> > *state,
+> > -					     struct dc_state *dc_state,
+> > -					     struct dc_link *dc_link,
+> > -					     struct dsc_mst_fairness_vars *vars,
+> > -					     struct drm_dp_mst_topology_mgr
+> > *mgr,
+> > -					     int *link_vars_start_index)
+> > +static int compute_mst_dsc_configs_for_link(struct drm_atomic_state
+> > *state,
+> > +					    struct dc_state *dc_state,
+> > +					    struct dc_link *dc_link,
+> > +					    struct dsc_mst_fairness_vars *vars,
+> > +					    struct drm_dp_mst_topology_mgr
+> > *mgr,
+> > +					    int *link_vars_start_index)
+> >  {
+> >  	struct dc_stream_state *stream;
+> >  	struct dsc_mst_fairness_params params[MAX_PIPES];
+> >  	struct amdgpu_dm_connector *aconnector;
+> >  	struct drm_dp_mst_topology_state *mst_state =
+> > drm_atomic_get_mst_topology_state(state, mgr);
+> >  	int count = 0;
+> > -	int i, k;
+> > +	int i, k, ret;
+> >  	bool debugfs_overwrite = false;
+> > 
+> >  	memset(params, 0, sizeof(params));
+> > 
+> >  	if (IS_ERR(mst_state))
+> > -		return false;
+> > +		return PTR_ERR(mst_state);
+> > 
+> >  	mst_state->pbn_div = dm_mst_get_pbn_divider(dc_link);  #if
+> > defined(CONFIG_DRM_AMD_DC_DCN) @@ -933,7 +933,7 @@ static bool
+> > compute_mst_dsc_configs_for_link(struct drm_atomic_state *state,
+> > 
+> >  	if (count == 0) {
+> >  		ASSERT(0);
+> > -		return true;
+> > +		return 0;
+> >  	}
+> > 
+> >  	/* k is start index of vars for current phy link used by mst hub */ @@
+> > -949,11 +949,14 @@ static bool compute_mst_dsc_configs_for_link(struct
+> > drm_atomic_state *state,
+> >  		vars[i + k].bpp_x16 = 0;
+> >  		if (drm_dp_atomic_find_time_slots(state, params[i].port-
+> > > mgr, params[i].port,
+> >  						  vars[i + k].pbn) < 0)
+> > -			return false;
+> > +			return -EINVAL;
+> 
+> Should we also return the error code get from drm_dp_atomic_find_time_slots() rather than 
+> assigning a new one here?
 
-Signed-off-by: D Scott Phillips <scott@os.amperecomputing.com>
----
-Changes since v1 (https://lore.kernel.org/lkml/20220906195213.2370775-1-scott@os.amperecomputing.com/)
- - Update the commit message to better express the intent.
+Yes we should, nice catch!
 
- drivers/char/misc.c | 41 ++++++++++++++++++++++++++++-------------
- 1 file changed, 28 insertions(+), 13 deletions(-)
+> 
+> >  	}
+> > -	if (!drm_dp_mst_atomic_check(state) && !debugfs_overwrite) {
+> > +	ret = drm_dp_mst_atomic_check(state);
+> > +	if (ret == 0 && !debugfs_overwrite) {
+> >  		set_dsc_configs_from_fairness_vars(params, vars, count, k);
+> > -		return true;
+> > +		return 0;
+> > +	} else if (ret == -EDEADLK) {
+> > +		return ret;
+> 
+> I think we should return here whenever there is an error. Not just for EDEADLK case. 
 
-diff --git a/drivers/char/misc.c b/drivers/char/misc.c
-index cba19bfdc44d..05727f0daa6b 100644
---- a/drivers/char/misc.c
-+++ b/drivers/char/misc.c
-@@ -61,7 +61,29 @@ static DEFINE_MUTEX(misc_mtx);
-  * Assigned numbers, used for dynamic minors
-  */
- #define DYNAMIC_MINORS 128 /* like dynamic majors */
--static DECLARE_BITMAP(misc_minors, DYNAMIC_MINORS);
-+static DEFINE_IDA(misc_minors_ida);
-+
-+static int misc_minor_alloc(void)
-+{
-+	int ret;
-+
-+	ret = ida_alloc_max(&misc_minors_ida, DYNAMIC_MINORS - 1, GFP_KERNEL);
-+	if (ret >= 0) {
-+		ret = DYNAMIC_MINORS - ret - 1;
-+	} else {
-+		ret = ida_alloc_range(&misc_minors_ida, MISC_DYNAMIC_MINOR + 1,
-+				      MINORMASK, GFP_KERNEL);
-+	}
-+	return ret;
-+}
-+
-+static void misc_minor_free(int minor)
-+{
-+	if (minor < DYNAMIC_MINORS)
-+		ida_free(&misc_minors_ida, DYNAMIC_MINORS - minor - 1);
-+	else if (minor > MISC_DYNAMIC_MINOR)
-+		ida_free(&misc_minors_ida, minor);
-+}
- 
- #ifdef CONFIG_PROC_FS
- static void *misc_seq_start(struct seq_file *seq, loff_t *pos)
-@@ -183,14 +205,13 @@ int misc_register(struct miscdevice *misc)
- 	mutex_lock(&misc_mtx);
- 
- 	if (is_dynamic) {
--		int i = find_first_zero_bit(misc_minors, DYNAMIC_MINORS);
-+		int i = misc_minor_alloc();
- 
--		if (i >= DYNAMIC_MINORS) {
-+		if (i < 0) {
- 			err = -EBUSY;
- 			goto out;
- 		}
--		misc->minor = DYNAMIC_MINORS - i - 1;
--		set_bit(i, misc_minors);
-+		misc->minor = i;
- 	} else {
- 		struct miscdevice *c;
- 
-@@ -209,10 +230,7 @@ int misc_register(struct miscdevice *misc)
- 					  misc, misc->groups, "%s", misc->name);
- 	if (IS_ERR(misc->this_device)) {
- 		if (is_dynamic) {
--			int i = DYNAMIC_MINORS - misc->minor - 1;
--
--			if (i < DYNAMIC_MINORS && i >= 0)
--				clear_bit(i, misc_minors);
-+			misc_minor_free(misc->minor);
- 			misc->minor = MISC_DYNAMIC_MINOR;
- 		}
- 		err = PTR_ERR(misc->this_device);
-@@ -240,16 +258,13 @@ EXPORT_SYMBOL(misc_register);
- 
- void misc_deregister(struct miscdevice *misc)
- {
--	int i = DYNAMIC_MINORS - misc->minor - 1;
--
- 	if (WARN_ON(list_empty(&misc->list)))
- 		return;
- 
- 	mutex_lock(&misc_mtx);
- 	list_del(&misc->list);
- 	device_destroy(misc_class, MKDEV(MISC_MAJOR, misc->minor));
--	if (i < DYNAMIC_MINORS && i >= 0)
--		clear_bit(i, misc_minors);
-+	misc_minor_free(misc->minor);
- 	mutex_unlock(&misc_mtx);
- }
- EXPORT_SYMBOL(misc_deregister);
+sgtm
+
+
+> 
+> >  	}
+> > 
+> >  	/* Try max compression */
+> > @@ -964,29 +967,30 @@ static bool
+> > compute_mst_dsc_configs_for_link(struct drm_atomic_state *state,
+> >  			vars[i + k].bpp_x16 =
+> > params[i].bw_range.min_target_bpp_x16;
+> >  			if (drm_dp_atomic_find_time_slots(state,
+> > params[i].port->mgr,
+> >  							  params[i].port, vars[i
+> > + k].pbn) < 0)
+> > -				return false;
+> > +				return -EINVAL;
+> 
+> Same as above.
+> 
+> >  		} else {
+> >  			vars[i + k].pbn =
+> > kbps_to_peak_pbn(params[i].bw_range.stream_kbps);
+> >  			vars[i + k].dsc_enabled = false;
+> >  			vars[i + k].bpp_x16 = 0;
+> >  			if (drm_dp_atomic_find_time_slots(state,
+> > params[i].port->mgr,
+> >  							  params[i].port, vars[i
+> > + k].pbn) < 0)
+> > -				return false;
+> > +				return -EINVAL;
+> 
+> Same as above.
+> 
+> >  		}
+> >  	}
+> > -	if (drm_dp_mst_atomic_check(state))
+> > -		return false;
+> > +	ret = drm_dp_mst_atomic_check(state);
+> > +	if (ret != 0)
+> > +		return ret;
+> > 
+> >  	/* Optimize degree of compression */
+> >  	if (!increase_dsc_bpp(state, mst_state, dc_link, params, vars, count,
+> > k))
+> > -		return false;
+> > +		return -ENOSPC;
+> > 
+> >  	if (!try_disable_dsc(state, dc_link, params, vars, count, k))
+> > -		return false;
+> > +		return -ENOSPC;
+> > 
+> >  	set_dsc_configs_from_fairness_vars(params, vars, count, k);
+> > 
+> > -	return true;
+> > +	return 0;
+> >  }
+> > 
+> >  static bool is_dsc_need_re_compute(
+> > @@ -1087,15 +1091,16 @@ static bool is_dsc_need_re_compute(
+> >  	return is_dsc_need_re_compute;
+> >  }
+> > 
+> > -bool compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
+> > -				       struct dc_state *dc_state,
+> > -				       struct dsc_mst_fairness_vars *vars)
+> > +int compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
+> > +				      struct dc_state *dc_state,
+> > +				      struct dsc_mst_fairness_vars *vars)
+> >  {
+> >  	int i, j;
+> >  	struct dc_stream_state *stream;
+> >  	bool computed_streams[MAX_PIPES];
+> >  	struct amdgpu_dm_connector *aconnector;
+> >  	int link_vars_start_index = 0;
+> > +	int ret = 0;
+> > 
+> >  	for (i = 0; i < dc_state->stream_count; i++)
+> >  		computed_streams[i] = false;
+> > @@ -1118,17 +1123,19 @@ bool compute_mst_dsc_configs_for_state(struct
+> > drm_atomic_state *state,
+> >  			continue;
+> > 
+> >  		if (dcn20_remove_stream_from_ctx(stream->ctx->dc,
+> > dc_state, stream) != DC_OK)
+> > -			return false;
+> > +			return -EINVAL;
+> > 
+> >  		if (!is_dsc_need_re_compute(state, dc_state, stream->link))
+> >  			continue;
+> > 
+> >  		mutex_lock(&aconnector->mst_mgr.lock);
+> > -		if (!compute_mst_dsc_configs_for_link(state, dc_state,
+> > stream->link, vars,
+> > -						      &aconnector->mst_mgr,
+> > -						      &link_vars_start_index)) {
+> > +
+> > +		ret = compute_mst_dsc_configs_for_link(state, dc_state,
+> > stream->link, vars,
+> > +						       &aconnector->mst_mgr,
+> > +						       &link_vars_start_index);
+> > +		if (ret != 0) {
+> >  			mutex_unlock(&aconnector->mst_mgr.lock);
+> > -			return false;
+> > +			return ret;
+> >  		}
+> >  		mutex_unlock(&aconnector->mst_mgr.lock);
+> > 
+> > @@ -1143,22 +1150,22 @@ bool compute_mst_dsc_configs_for_state(struct
+> > drm_atomic_state *state,
+> > 
+> >  		if (stream->timing.flags.DSC == 1)
+> >  			if (dc_stream_add_dsc_to_resource(stream->ctx-
+> > > dc, dc_state, stream) != DC_OK)
+> > -				return false;
+> > +				return -EINVAL;
+> >  	}
+> > 
+> > -	return true;
+> > +	return ret;
+> >  }
+> > 
+> > -static bool
+> > -	pre_compute_mst_dsc_configs_for_state(struct drm_atomic_state
+> > *state,
+> > -					      struct dc_state *dc_state,
+> > -					      struct dsc_mst_fairness_vars
+> > *vars)
+> > +static int pre_compute_mst_dsc_configs_for_state(struct
+> > drm_atomic_state *state,
+> > +						 struct dc_state *dc_state,
+> > +						 struct dsc_mst_fairness_vars
+> > *vars)
+> >  {
+> >  	int i, j;
+> >  	struct dc_stream_state *stream;
+> >  	bool computed_streams[MAX_PIPES];
+> >  	struct amdgpu_dm_connector *aconnector;
+> >  	int link_vars_start_index = 0;
+> > +	int ret;
+> > 
+> >  	for (i = 0; i < dc_state->stream_count; i++)
+> >  		computed_streams[i] = false;
+> > @@ -1184,13 +1191,12 @@ static bool
+> >  			continue;
+> > 
+> >  		mutex_lock(&aconnector->mst_mgr.lock);
+> > -		if (!compute_mst_dsc_configs_for_link(state, dc_state,
+> > stream->link, vars,
+> > -						      &aconnector->mst_mgr,
+> > -						      &link_vars_start_index)) {
+> > -			mutex_unlock(&aconnector->mst_mgr.lock);
+> > -			return false;
+> > -		}
+> > +		ret = compute_mst_dsc_configs_for_link(state, dc_state,
+> > stream->link, vars,
+> > +						       &aconnector->mst_mgr,
+> > +						       &link_vars_start_index);
+> >  		mutex_unlock(&aconnector->mst_mgr.lock);
+> > +		if (ret != 0)
+> > +			return ret;
+> > 
+> >  		for (j = 0; j < dc_state->stream_count; j++) {
+> >  			if (dc_state->streams[j]->link == stream->link) @@ -
+> > 1198,7 +1204,7 @@ static bool
+> >  		}
+> >  	}
+> > 
+> > -	return true;
+> > +	return ret;
+> >  }
+> > 
+> >  static int find_crtc_index_in_state_by_stream(struct drm_atomic_state
+> > *state, @@ -1253,9 +1259,9 @@ static bool
+> > is_dsc_precompute_needed(struct drm_atomic_state *state)
+> >  	return ret;
+> >  }
+> > 
+> > -bool pre_validate_dsc(struct drm_atomic_state *state,
+> > -		      struct dm_atomic_state **dm_state_ptr,
+> > -		      struct dsc_mst_fairness_vars *vars)
+> > +int pre_validate_dsc(struct drm_atomic_state *state,
+> > +		     struct dm_atomic_state **dm_state_ptr,
+> > +		     struct dsc_mst_fairness_vars *vars)
+> >  {
+> >  	int i;
+> >  	struct dm_atomic_state *dm_state;
+> > @@ -1264,11 +1270,12 @@ bool pre_validate_dsc(struct drm_atomic_state
+> > *state,
+> > 
+> >  	if (!is_dsc_precompute_needed(state)) {
+> >  		DRM_INFO_ONCE("DSC precompute is not needed.\n");
+> > -		return true;
+> > +		return 0;
+> >  	}
+> > -	if (dm_atomic_get_state(state, dm_state_ptr)) {
+> > +	ret = dm_atomic_get_state(state, dm_state_ptr);
+> > +	if (ret != 0) {
+> >  		DRM_INFO_ONCE("dm_atomic_get_state() failed\n");
+> > -		return false;
+> > +		return ret;
+> >  	}
+> >  	dm_state = *dm_state_ptr;
+> > 
+> > @@ -1280,7 +1287,7 @@ bool pre_validate_dsc(struct drm_atomic_state
+> > *state,
+> > 
+> >  	local_dc_state = kmemdup(dm_state->context, sizeof(struct
+> > dc_state), GFP_KERNEL);
+> >  	if (!local_dc_state)
+> > -		return false;
+> > +		return -ENOMEM;
+> > 
+> >  	for (i = 0; i < local_dc_state->stream_count; i++) {
+> >  		struct dc_stream_state *stream = dm_state->context-
+> > > streams[i]; @@ -1316,9 +1323,9 @@ bool pre_validate_dsc(struct
+> > drm_atomic_state *state,
+> >  	if (ret != 0)
+> >  		goto clean_exit;
+> > 
+> > -	if (!pre_compute_mst_dsc_configs_for_state(state, local_dc_state,
+> > vars)) {
+> > +	ret = pre_compute_mst_dsc_configs_for_state(state, local_dc_state,
+> > vars);
+> > +	if (ret != 0) {
+> > 
+> > 	DRM_INFO_ONCE("pre_compute_mst_dsc_configs_for_state()
+> > failed\n");
+> > -		ret = -EINVAL;
+> >  		goto clean_exit;
+> >  	}
+> > 
+> > @@ -1349,7 +1356,7 @@ bool pre_validate_dsc(struct drm_atomic_state
+> > *state,
+> > 
+> >  	kfree(local_dc_state);
+> > 
+> > -	return (ret == 0);
+> > +	return ret;
+> >  }
+> > 
+> >  static unsigned int kbps_from_pbn(unsigned int pbn) diff --git
+> > a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.h
+> > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.h
+> > index b92a7c5671aa2..97fd70df531bf 100644
+> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.h
+> > +++
+> > b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.h
+> > @@ -53,15 +53,15 @@ struct dsc_mst_fairness_vars {
+> >  	struct amdgpu_dm_connector *aconnector;  };
+> > 
+> > -bool compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
+> > -				       struct dc_state *dc_state,
+> > -				       struct dsc_mst_fairness_vars *vars);
+> > +int compute_mst_dsc_configs_for_state(struct drm_atomic_state *state,
+> > +				      struct dc_state *dc_state,
+> > +				      struct dsc_mst_fairness_vars *vars);
+> > 
+> >  bool needs_dsc_aux_workaround(struct dc_link *link);
+> > 
+> > -bool pre_validate_dsc(struct drm_atomic_state *state,
+> > -		      struct dm_atomic_state **dm_state_ptr,
+> > -		      struct dsc_mst_fairness_vars *vars);
+> > +int pre_validate_dsc(struct drm_atomic_state *state,
+> > +		     struct dm_atomic_state **dm_state_ptr,
+> > +		     struct dsc_mst_fairness_vars *vars);
+> > 
+> >  enum dc_status dm_dp_mst_is_port_support_mode(
+> >  	struct amdgpu_dm_connector *aconnector,
+> > --
+> > 2.37.3
+> ---
+> Regards,
+> Wayne Lin
+> 
+
 -- 
-2.37.3
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
