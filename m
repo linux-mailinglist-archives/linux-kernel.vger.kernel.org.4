@@ -2,187 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDEA762760C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 07:44:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B03CF62760F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 07:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235756AbiKNGog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 01:44:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
+        id S235805AbiKNGqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 01:46:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235561AbiKNGoc (ORCPT
+        with ESMTP id S235485AbiKNGq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 01:44:32 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2087.outbound.protection.outlook.com [40.107.212.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA173E58
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 22:44:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Noii4WB29oxcB+cVPK+rk7CtzSPHeNVtz8RJfjZaAvGBpAJP+6EA5AztThGiHuy+Gh201q4gcUrRR5HM1eCfliL0Iga/TEqmk4TwJL/CsiSOsCpFq72l9SdfpSJnqU+ijOqQmF40YeWjAIEw7ZVG+KKtyfRs7+V56ONyBF92cEZxKvezvTpbHToDt0LPwhsjn9JPAaMNsQJ2AjMJzScDZqymyMoPji+PmrOzet3OQK6pw9aFtMNDH9/61t7HhVfyFAU13qCIcJwZf6VDxufzVNaE44df4e1xGQGSbstcQ+HjclNL4UnK84I0qsNzqKcVrqhMCSwlemCXm39ka/9I/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p3GyKhO0/esqKTAQvVo+T5VYrU/n5+Oh/7bUNJrRQZo=;
- b=IwGRzI49WjR97wFStlEuHagInBqksRc4Mo6b6GiH3FrPbemunWtpyhVZ72wDlUa6Xj5K/JA4BkLCCtOcRpQbGzHcq0mwwOxNgIKpEjnE42sAD9Q+cE7t3dEIVpPif/jiW8RA+u2V6r7HwHYosaEICI97itSiIxTutmxu7sz67h7e0Wslqtn5NmEbe/2b11uOSL7bXBOayCr4ddf9MSCryVEjduLXaHAZY5oZyuF7Yg8nTMCbriw35KggvGeKl2bz/2sm5VK9uikCPn2ZfRbNE2LW7MJYOahoBq1eJyTaUAzrXRK2Vg4tJNAR1Lqy2z0sVrMP6f9M+yO+jbI4y2owXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p3GyKhO0/esqKTAQvVo+T5VYrU/n5+Oh/7bUNJrRQZo=;
- b=Yx7/oBf/MnnRMjJwV91gAewVbCi0+HjNNgsDY8ijC0fGwOx6+emZYNJJ1AxKF1D+b/y/pz35iDq2ESEbsiBFfZQK/sSJrdzUmeB8c8CGsIWoNf/hap5PM5m3P5KIl33iVF5idwtQt1qjXgpzE4i64Lt3zLnEjETTh5CcQUqvFb4tBbW9XOad9rOveuJARLaee2kIJNErctPp6WEp11Lp/C8kOlgkksN2IUPQeOF7+q4E/hRnLcSjR+DtV9+Ey8bw1or3WgHLD/V/3eULHPxOt5idYfqjn0+bKSXJGyZ8mImR3LOeNTNFcGY6tP6HYLtca1bXBaQVwFdGMkyp8K7C2A==
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com (2603:10b6:8:3b::12) by
- DM4PR12MB5231.namprd12.prod.outlook.com (2603:10b6:5:39b::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5813.17; Mon, 14 Nov 2022 06:44:30 +0000
-Received: from DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::dd38:ea25:225c:bd6]) by DM8PR12MB5400.namprd12.prod.outlook.com
- ([fe80::dd38:ea25:225c:bd6%6]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
- 06:44:30 +0000
-From:   Eli Cohen <elic@nvidia.com>
-To:     Jason Wang <jasowang@redhat.com>
-CC:     "mst@redhat.com" <mst@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "si-wei.liu@oracle.com" <si-wei.liu@oracle.com>,
-        "eperezma@redhat.com" <eperezma@redhat.com>,
-        "lulu@redhat.com" <lulu@redhat.com>
-Subject: RE: [PATCH 1/7] vdpa/mlx5: Fix rule forwarding VLAN to TIR
-Thread-Topic: [PATCH 1/7] vdpa/mlx5: Fix rule forwarding VLAN to TIR
-Thread-Index: AQHY92Yko8iGoP1kJUuMoxi80YSfj6491zQAgAAi87A=
-Date:   Mon, 14 Nov 2022 06:44:30 +0000
-Message-ID: <DM8PR12MB54006C35F5CDB250CA757108AB059@DM8PR12MB5400.namprd12.prod.outlook.com>
-References: <20221113134442.152695-1-elic@nvidia.com>
- <20221113134442.152695-2-elic@nvidia.com>
- <CACGkMEssbrOaYJDrHb1e_brjteKk4Xfw+sVogeiRbYE0RiMgRA@mail.gmail.com>
-In-Reply-To: <CACGkMEssbrOaYJDrHb1e_brjteKk4Xfw+sVogeiRbYE0RiMgRA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM8PR12MB5400:EE_|DM4PR12MB5231:EE_
-x-ms-office365-filtering-correlation-id: fcdb586a-f6f3-4c87-c769-08dac60baeba
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: f8zS6G1/PfGvgImknCvRzJ+0rmgyYuulPHW+9FX9VDWBaUQbrFU7OVC0G+Jzp289psPJPMl3imdx0/HYS7UJUMT9222zO4XEWeCu8Q4H4P1JvRrHymOIITfI6EEzmJD/r25haLclnwzHpffZoYCT3S87Ufx1C95CqF/H7/7HWH3enNk1TQF8JROLajsRTwM87zqElc2tkrEXQ05L/o3a/D7hVvR1kSF7fsZGSyST3aiuV2Ozp9Go8GAyTTnwcR9pae5cVTbBAq3imY78VKBjfYJHcGnY8sNDUznIYah0V9AkS/VI66xejP9Djbc0R4i7tW507tXqf3+csaexSXSApjyQpBTj3iE7BydiAD1jBsNFf6NL4BN7IrnCNtUV7UMNHS142dqEJxmXgsnqpy23bPlaMFPArjkur+iecvR+ha+ohysmRfFJdWedJmd6Eam93OeyECP2+ki5B/81qhJeGVg676+pWTOJnfvk40JgOpZhqq/LyHTQlOc6rqr6BbGyRkIFhMH/Y4GNZILCeA1wZhyfqhrKl1eI2yVdcShO7fDqZwlvSO92HwTYpGfudKHtnUNDLUA2m/a1MXpTO8Cr+iT1oQtiWixkmERBvLPvHnQbF+h9keV3G24ndLHOcFnDvcM7gslcG5YF/yH/PhDnMfaBFhO9cgnj0LX2Uw3WTUzCI+0kVgWZMGxEJ+ooy3NpgP3H2TTiDUtjREm9oFVavipdXZTg3EqbjOxJDClm2ukEYjaFyaNg5//Fx3uRvsUNl5gP1vsndPTDQ/GuEMvHnQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5400.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(39860400002)(346002)(376002)(136003)(451199015)(55016003)(83380400001)(9686003)(53546011)(6506007)(26005)(38100700002)(186003)(7696005)(122000001)(8936002)(2906002)(5660300002)(52536014)(71200400001)(478600001)(8676002)(66476007)(64756008)(66946007)(66556008)(66446008)(76116006)(4326008)(54906003)(41300700001)(316002)(6916009)(86362001)(38070700005)(33656002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MjF6SHRyeXhjSmtuSHJqTWp1aEx5NEtYUEtPcWt1cjBCT3pZaWpjZXlaaVZR?=
- =?utf-8?B?RGNUQWlQaFNCRE5VZUlYWXM1MVhSN1BVM2JoRWdmclN6bk5xQjkxY2ZDOVdB?=
- =?utf-8?B?Rk9jL0ZISVJoT1Ixd1VDWlRrWWljNFBzajFVK0JOMWZwL1RoU1Noa0VrbG1D?=
- =?utf-8?B?MlRsZGJHUFN3SmFmd3J0SU9vQlIwSDAvcWg4YUpYNmYzbG5TM3F6QkNTU2hX?=
- =?utf-8?B?NlpnMG1FUGUrNyt5MFhmcGJ1VzY5SS9TY0VYaDdGZkludCtRb1B1UEpnZHFo?=
- =?utf-8?B?TXIxL3NVcDVTaHJwQkxMNVRNeVFaM1hUTGt6aVVGYkZZbTdnQ21QVjEwWHdM?=
- =?utf-8?B?b3FEQXRiWU4vWkVpV2N0K3dvMU9LVTRQMXRaL3o1UmpLRTZLeFkxOFcrS3c2?=
- =?utf-8?B?QkhWdVlaNlhDMWI5ZjZmMjV4cWdvN2pFYVQ4TXNBc2RseXJlbDl0QXBXR25q?=
- =?utf-8?B?NDNnQVVZTHBKeW1iUlZ4M3VUVFFnMUxXTkVHeU1USGZsTEU3Z2xZM2l0OTZh?=
- =?utf-8?B?Z0NEcTlESnArZDRObk9obVVRVFVya1cwZUVVSXgyb0NxT09qQmcycWx2R2Zz?=
- =?utf-8?B?VXpOb1hMMWtRTkZHWVhlLzk0SXAyNTc5YUpsTFgyVWpRV2VwTzliMlNuWm1G?=
- =?utf-8?B?N3F6WlJJcXhFUSs4RGdNZ0Q4RTc0WEpSeFZIbE9rdGVMVXV3YWcrdVM3RHBK?=
- =?utf-8?B?dFNxbGVVNmVkM2V1R0ZwMU94ZnpCVUdPZkh5eVRjOVJ0WGRMMEVQams5ODho?=
- =?utf-8?B?UWpQUjB6V043ZGgyMlRzaE1pcTRjZTBpaEtDRVZrOTFFNC9IQnBGTE9kQ1Ur?=
- =?utf-8?B?MGhqODlDRXhhTHBmVm1wM3F3bjgzaWZiQ1ZrdC8yZ1pWejlPWCsyYXQvb3ov?=
- =?utf-8?B?TnVxZGN1RzkyN1VwbTFHdmtlSnJXR08rblIvcmIyVjBreUtUVEFCM1RReTRk?=
- =?utf-8?B?RVpxcGFzYUxHUUNnVGlMODBDZitNSTJYelRnOU0rczBZU2ZGY3ROQ1IzM3pm?=
- =?utf-8?B?YXhXQWVkV210MFN6KzBpZTVyNjJIcmZDUGQxdUV6bXlkak5IbUlDUVE3NDVn?=
- =?utf-8?B?MGZEWE1DM2w4anNRa2oxeCtMYXJ3VkNNZkwxQWVhK0NjOTBrOG9QOHdyaU5z?=
- =?utf-8?B?em10eFdBTTMyOUQ2dTRzMXZhRHNoOUd4cXA3c1lsRmo5bHBxbThYM29RQ25k?=
- =?utf-8?B?VFJyeVRkcUZITmpYdExMQVFjdk9jU29keXNvcDhISXJzaThCdXpORE5ZUmEv?=
- =?utf-8?B?cXRpQ3ZRYzBocktpbWQ0MHQ2MXhPd0tlYUVMWWEwTmovVEpXa3NCV1lWYzdh?=
- =?utf-8?B?NDZJVnliWjBZNElkSCtEZExhSWRxL0psOEpiVHV1RlZFSDhOZkdybnJjalps?=
- =?utf-8?B?cUxtZ1VQTklIR2tMOWI3SVFramNQaUdneUc2NFg3T25KWXdzK2EyVnU0NUtL?=
- =?utf-8?B?U3dXQmtCa0RPa2hkL2Z6ck1ETytqN2svbzlWY29BNWJISlp1a1NOOXN1NWVl?=
- =?utf-8?B?NUo1bFlJZDhMaHduK3NSdkxPK3Y4WjlZa0lWMW5Sa1BGYk5hU1B3RUV1clBT?=
- =?utf-8?B?VWZKcWpkRGVTODRaWHl4cSswVXk1OC9rd0dkQ3pzcnBCaFBSL3BMcDhsazJx?=
- =?utf-8?B?RHZRYTJTUFFFZlFSNUM1OG5JYWRVbzFYeU9XdTNTQTh4NEhPenA3RHF3RlRF?=
- =?utf-8?B?R0lMSi9WaUxpNzY3eE5xT3RNNGdLU0dRWjlYRzZ3VDNuZVYvQlN3ZXdzSXVQ?=
- =?utf-8?B?THdTZ2liNG83aGNWL3pkRWNwUXg1RUVtV0RRK2tRWUZHRU81N0ZEcFBvaXlx?=
- =?utf-8?B?ZFpLeUVQem1rNlIrSnVxV21xQ1lFWGVhdTZVdEprcWtrbkFKb0R6K1BCUjFI?=
- =?utf-8?B?aFZmRHBvdmJxWXl5Ykl0V1l4bEZwMm9Zamttc0MranZzRkNGb24zdjJHNk4z?=
- =?utf-8?B?dkVNOWdzYVpydTJvaFhLZXRNZHU4T2tDRmNsNjdOdjBJL3N2ZmZTVWY3ZzFX?=
- =?utf-8?B?azVnMlNTMElLTHdNVkUyNFN5d3lNMDZtQUd4Q3NxTkdGQVdkTUt6eUJFTGhJ?=
- =?utf-8?B?aFdJZFBGSEp5R2NIZ1A4L3JGMjBJSnBmcW9tNGZ2ckIyWFRublhxSHY1dGNl?=
- =?utf-8?Q?gfhc=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 14 Nov 2022 01:46:27 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDA8E58;
+        Sun, 13 Nov 2022 22:46:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668408386; x=1699944386;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4YuEMuxqRZMl4EsAy8BXQ7H18OoBIm9Gv2nGqdy9xN4=;
+  b=BMlh0LEGdJzM4CxhKEn3SGzqRMXhAnRoNtFttpW0g9+o2BCoRxhRVRDq
+   eknKthjF9nv1xgyZzMuxCY1rKlnPYB408Z6ZQ5gSGo3XHXfWzoK3e2aj9
+   0RMpMbU5aj21jsKUZmBZlNzSop+JWZLpacB0jX+pCFjz3vnLoBJV+Fhkj
+   BIjWFe2EfS1ZOpYggPzJjMqDyqeZr1doiwecTfdr6i93QLuHH4h2w6mLW
+   dxTbIlA1obGmRuvOxlqEl9roPsjpp+u3PNvS4pc+rcKkhDzn+U2bIAp1A
+   ZTYy1g9aJ6b5CtTSa7bAUNgHvxHPFePq7emT053lldnF3y+P1PWfODcdg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="338680178"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="338680178"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 22:46:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="763365843"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="763365843"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by orsmga004.jf.intel.com with ESMTP; 13 Nov 2022 22:46:23 -0800
+Date:   Mon, 14 Nov 2022 14:46:22 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v10 024/108] KVM: TDX: allocate/free TDX vcpu structure
+Message-ID: <20221114064622.k42nnrypr77lrmek@yy-desk-7060>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+ <ba773a3f779d4d9df24c03874462410d8ee9c955.1667110240.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5400.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fcdb586a-f6f3-4c87-c769-08dac60baeba
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2022 06:44:30.4137
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WpfNFOlu+/QirgETMBBYhqadofZmy5tOwW58mEAAM4B9llMZB5j2smfpXCa3EO2i
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5231
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ba773a3f779d4d9df24c03874462410d8ee9c955.1667110240.git.isaku.yamahata@intel.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBKYXNvbiBXYW5nIDxqYXNvd2FuZ0ByZWRoYXQuY29tPg0KPiBTZW50OiBNb25kYXks
-IDE0IE5vdmVtYmVyIDIwMjIgNjozOQ0KPiBUbzogRWxpIENvaGVuIDxlbGljQG52aWRpYS5jb20+
-DQo+IENjOiBtc3RAcmVkaGF0LmNvbTsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgdmly
-dHVhbGl6YXRpb25AbGlzdHMubGludXgtDQo+IGZvdW5kYXRpb24ub3JnOyBzaS13ZWkubGl1QG9y
-YWNsZS5jb207IGVwZXJlem1hQHJlZGhhdC5jb207DQo+IGx1bHVAcmVkaGF0LmNvbQ0KPiBTdWJq
-ZWN0OiBSZTogW1BBVENIIDEvN10gdmRwYS9tbHg1OiBGaXggcnVsZSBmb3J3YXJkaW5nIFZMQU4g
-dG8gVElSDQo+IA0KPiBPbiBTdW4sIE5vdiAxMywgMjAyMiBhdCA5OjQ1IFBNIEVsaSBDb2hlbiA8
-ZWxpY0BudmlkaWEuY29tPiB3cm90ZToNCj4gPg0KPiA+IFNldCB0aGUgVkxBTiBpZCB0byB0aGUg
-aGVhZGVyIHZhbHVlcyBmaWVsZCBpbnN0ZWFkIG9mIG92ZXJ3cml0aW5nIHRoZQ0KPiA+IGhlYWRl
-cnMgY3JpdGVyaWEgZmllbGQuDQo+ID4NCj4gPiBCZWZvcmUgdGhpcyBmaXgsIFZMQU4gZmlsdGVy
-aW5nIHdvdWxkIG5vdCByZWFsbHkgd29yayBhbmQgdGFnZ2VkIHBhY2tldHMNCj4gPiB3b3VsZCBi
-ZSBmb3J3YXJkZWQgdW5maWx0ZXJlZCB0byB0aGUgVElSLg0KPiA+DQo+ID4gSW4gYWRkaXRpb24g
-bW9kaWZ5IHRoZSBsb2dpYyBzbyB0aGF0IFZMQU4gZmlsdGVyaW5nIGlzIGVuZm9yY2VkIG9ubHkN
-Cj4gPiB3aGVuIFZJUlRJT19ORVRfRl9DVFJMX1ZMQU4gaXMgbmVnb3RpYXRlZC4gV2hlbiBub3Qg
-bmVnb3RpYXRlZCwgYWxsDQo+ID4gaW5jb21pbmcgdHJhZmZpYyBpcyBhY2NlcHRlZCBhcyBsb25n
-IGFzIGl0IGlzIHRhcmdldGluZyB0aGUgbmV0IGRldmljZSdzDQo+ID4gTUFDIGFkZHJlc3MuDQo+
-ID4NCj4gPiBGaXhlczogYmFmMmFkM2Y2YTk4ICgidmRwYS9tbHg1OiBBZGQgUlggTUFDIFZMQU4g
-ZmlsdGVyIHN1cHBvcnQiKQ0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogRWxpIENvaGVuIDxlbGlj
-QG52aWRpYS5jb20+DQo+ID4gLS0tDQo+ID4gIGRyaXZlcnMvdmRwYS9tbHg1L25ldC9tbHg1X3Zu
-ZXQuYyB8IDExICsrKysrKysrLS0tDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA4IGluc2VydGlvbnMo
-KyksIDMgZGVsZXRpb25zKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy92ZHBhL21s
-eDUvbmV0L21seDVfdm5ldC5jDQo+IGIvZHJpdmVycy92ZHBhL21seDUvbmV0L21seDVfdm5ldC5j
-DQo+ID4gaW5kZXggOTA5MTMzNjVkZWY0Li5lYTk1MDgxZWNhMGMgMTAwNjQ0DQo+ID4gLS0tIGEv
-ZHJpdmVycy92ZHBhL21seDUvbmV0L21seDVfdm5ldC5jDQo+ID4gKysrIGIvZHJpdmVycy92ZHBh
-L21seDUvbmV0L21seDVfdm5ldC5jDQo+ID4gQEAgLTE0NjgsMTEgKzE0NjgsMTMgQEAgc3RhdGlj
-IGludCBtbHg1X3ZkcGFfYWRkX21hY192bGFuX3J1bGVzKHN0cnVjdA0KPiBtbHg1X3ZkcGFfbmV0
-ICpuZGV2LCB1OCAqbWFjLA0KPiA+ICAgICAgICAgZG1hY192ID0gTUxYNV9BRERSX09GKGZ0ZV9t
-YXRjaF9wYXJhbSwgaGVhZGVyc192LA0KPiBvdXRlcl9oZWFkZXJzLmRtYWNfNDdfMTYpOw0KPiA+
-ICAgICAgICAgZXRoX2Jyb2FkY2FzdF9hZGRyKGRtYWNfYyk7DQo+ID4gICAgICAgICBldGhlcl9h
-ZGRyX2NvcHkoZG1hY192LCBtYWMpOw0KPiA+IC0gICAgICAgTUxYNV9TRVQoZnRlX21hdGNoX3Nl
-dF9seXJfMl80LCBoZWFkZXJzX2MsIGN2bGFuX3RhZywgMSk7DQo+ID4gKyAgICAgICBpZiAobmRl
-di0+bXZkZXYuYWN0dWFsX2ZlYXR1cmVzICYgVklSVElPX05FVF9GX0NUUkxfVkxBTikgew0KPiA+
-ICsgICAgICAgICAgICAgICBNTFg1X1NFVChmdGVfbWF0Y2hfc2V0X2x5cl8yXzQsIGhlYWRlcnNf
-YywgY3ZsYW5fdGFnLCAxKTsNCj4gPiArICAgICAgICAgICAgICAgTUxYNV9TRVRfVE9fT05FUyhm
-dGVfbWF0Y2hfc2V0X2x5cl8yXzQsIGhlYWRlcnNfYywgZmlyc3RfdmlkKTsNCj4gPiArICAgICAg
-IH0NCj4gPiAgICAgICAgIGlmICh0YWdnZWQpIHsNCj4gPiAgICAgICAgICAgICAgICAgTUxYNV9T
-RVQoZnRlX21hdGNoX3NldF9seXJfMl80LCBoZWFkZXJzX3YsIGN2bGFuX3RhZywgMSk7DQo+ID4g
-LSAgICAgICAgICAgICAgIE1MWDVfU0VUX1RPX09ORVMoZnRlX21hdGNoX3NldF9seXJfMl80LCBo
-ZWFkZXJzX2MsIGZpcnN0X3ZpZCk7DQo+ID4gLSAgICAgICAgICAgICAgIE1MWDVfU0VUKGZ0ZV9t
-YXRjaF9zZXRfbHlyXzJfNCwgaGVhZGVyc19jLCBmaXJzdF92aWQsIHZpZCk7DQo+ID4gKyAgICAg
-ICAgICAgICAgIE1MWDVfU0VUKGZ0ZV9tYXRjaF9zZXRfbHlyXzJfNCwgaGVhZGVyc192LCBmaXJz
-dF92aWQsIHZpZCk7DQo+ID4gICAgICAgICB9DQo+ID4gICAgICAgICBmbG93X2FjdC5hY3Rpb24g
-PSBNTFg1X0ZMT1dfQ09OVEVYVF9BQ1RJT05fRldEX0RFU1Q7DQo+ID4gICAgICAgICBkZXN0LnR5
-cGUgPSBNTFg1X0ZMT1dfREVTVElOQVRJT05fVFlQRV9USVI7DQo+ID4gQEAgLTE4MjEsNiArMTgy
-Myw5IEBAIHN0YXRpYyB2aXJ0aW9fbmV0X2N0cmxfYWNrIGhhbmRsZV9jdHJsX3ZsYW4oc3RydWN0
-DQo+IG1seDVfdmRwYV9kZXYgKm12ZGV2LCB1OCBjbWQpDQo+ID4gICAgICAgICBzaXplX3QgcmVh
-ZDsNCj4gPiAgICAgICAgIHUxNiBpZDsNCj4gPg0KPiA+ICsgICAgICAgaWYgKCEobmRldi0+bXZk
-ZXYuYWN0dWFsX2ZlYXR1cmVzICYNCj4gQklUX1VMTChWSVJUSU9fTkVUX0ZfQ1RSTF9WTEFOKSkp
-DQo+ID4gKyAgICAgICAgICAgICAgIHJldHVybiBzdGF0dXM7DQo+IA0KPiBOaXQ6IHRoaXMgc2Vl
-bXMgdW5yZWxhdGVkIHRvIHRoZSBwYXRjaC4NCj4gDQpXaWxsIHB1dCBpbiBhbm90aGVyIHBhdGNo
-DQoNCj4gT3RoZXIgdGhhbiB0aGlzLg0KPiANCj4gQWNrZWQtYnk6IEphc29uIFdhbmcgPGphc293
-YW5nQHJlZGhhdC5jb20+DQo+IA0KPiA+ICsNCj4gPiAgICAgICAgIHN3aXRjaCAoY21kKSB7DQo+
-ID4gICAgICAgICBjYXNlIFZJUlRJT19ORVRfQ1RSTF9WTEFOX0FERDoNCj4gPiAgICAgICAgICAg
-ICAgICAgcmVhZCA9IHZyaW5naF9pb3ZfcHVsbF9pb3RsYigmY3ZxLT52cmluZywgJmN2cS0+cmlv
-diwgJnZsYW4sDQo+IHNpemVvZih2bGFuKSk7DQo+ID4gLS0NCj4gPiAyLjM4LjENCj4gPg0KDQo=
+On Sat, Oct 29, 2022 at 11:22:25PM -0700, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>
+> The next step of TDX guest creation is to create vcpu.  Allocate TDX vcpu
+> structures, initialize it.  Allocate pages of TDX vcpu for the TDX module.
+>
+> In the case of the conventional case, cpuid is empty at the initialization.
+> and cpuid is configured after the vcpu initialization.  Because TDX
+> supports only X2APIC mode, cpuid is forcibly initialized to support X2APIC
+> on the vcpu initialization.
+>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>  arch/x86/kvm/vmx/main.c    |  40 +++++++++--
+>  arch/x86/kvm/vmx/tdx.c     | 138 +++++++++++++++++++++++++++++++++++++
+>  arch/x86/kvm/vmx/x86_ops.h |   8 +++
+>  3 files changed, 182 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> index b4e4c6c677f6..c125b2e3e8b4 100644
+> --- a/arch/x86/kvm/vmx/main.c
+> +++ b/arch/x86/kvm/vmx/main.c
+> @@ -63,6 +63,38 @@ static void vt_vm_free(struct kvm *kvm)
+>  		return tdx_vm_free(kvm);
+>  }
+>
+> +static int vt_vcpu_precreate(struct kvm *kvm)
+> +{
+> +	if (is_td(kvm))
+> +		return 0;
+> +
+> +	return vmx_vcpu_precreate(kvm);
+> +}
+> +
+> +static int vt_vcpu_create(struct kvm_vcpu *vcpu)
+> +{
+> +	if (is_td_vcpu(vcpu))
+> +		return tdx_vcpu_create(vcpu);
+> +
+> +	return vmx_vcpu_create(vcpu);
+> +}
+> +
+> +static void vt_vcpu_free(struct kvm_vcpu *vcpu)
+> +{
+> +	if (is_td_vcpu(vcpu))
+> +		return tdx_vcpu_free(vcpu);
+> +
+> +	return vmx_vcpu_free(vcpu);
+> +}
+> +
+> +static void vt_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+> +{
+> +	if (is_td_vcpu(vcpu))
+> +		return tdx_vcpu_reset(vcpu, init_event);
+> +
+> +	return vmx_vcpu_reset(vcpu, init_event);
+> +}
+> +
+>  static int vt_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
+>  {
+>  	if (!is_td(kvm))
+> @@ -89,10 +121,10 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+>  	.vm_destroy = vt_vm_destroy,
+>  	.vm_free = vt_vm_free,
+>
+> -	.vcpu_precreate = vmx_vcpu_precreate,
+> -	.vcpu_create = vmx_vcpu_create,
+> -	.vcpu_free = vmx_vcpu_free,
+> -	.vcpu_reset = vmx_vcpu_reset,
+> +	.vcpu_precreate = vt_vcpu_precreate,
+> +	.vcpu_create = vt_vcpu_create,
+> +	.vcpu_free = vt_vcpu_free,
+> +	.vcpu_reset = vt_vcpu_reset,
+>
+>  	.prepare_switch_to_guest = vmx_prepare_switch_to_guest,
+>  	.vcpu_load = vmx_vcpu_load,
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index 54045e0576e7..0625c354b341 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -49,6 +49,11 @@ static __always_inline hpa_t set_hkid_to_hpa(hpa_t pa, u16 hkid)
+>  	return pa | ((hpa_t)hkid << boot_cpu_data.x86_phys_bits);
+>  }
+>
+> +static inline bool is_td_vcpu_created(struct vcpu_tdx *tdx)
+> +{
+> +	return tdx->tdvpr.added;
+> +}
+> +
+>  static inline bool is_td_created(struct kvm_tdx *kvm_tdx)
+>  {
+>  	return kvm_tdx->tdr.added;
+> @@ -296,6 +301,139 @@ int tdx_vm_init(struct kvm *kvm)
+>  	return 0;
+>  }
+>
+> +int tdx_vcpu_create(struct kvm_vcpu *vcpu)
+> +{
+> +	struct vcpu_tdx *tdx = to_tdx(vcpu);
+> +	int ret, i;
+> +
+> +	/* TDX only supports x2APIC, which requires an in-kernel local APIC. */
+> +	if (!vcpu->arch.apic)
+> +		return -EINVAL;
+> +
+> +	fpstate_set_confidential(&vcpu->arch.guest_fpu);
+> +
+> +	ret = tdx_alloc_td_page(&tdx->tdvpr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	tdx->tdvpx = kcalloc(tdx_caps.tdvpx_nr_pages, sizeof(*tdx->tdvpx),
+> +			GFP_KERNEL_ACCOUNT);
+> +	if (!tdx->tdvpx) {
+> +		ret = -ENOMEM;
+> +		goto free_tdvpr;
+> +	}
+> +	for (i = 0; i < tdx_caps.tdvpx_nr_pages; i++) {
+> +		ret = tdx_alloc_td_page(&tdx->tdvpx[i]);
+> +		if (ret)
+> +			goto free_tdvpx;
+> +	}
+> +
+> +	vcpu->arch.efer = EFER_SCE | EFER_LME | EFER_LMA | EFER_NX;
+> +
+> +	vcpu->arch.cr0_guest_owned_bits = -1ul;
+> +	vcpu->arch.cr4_guest_owned_bits = -1ul;
+> +
+> +	vcpu->arch.tsc_offset = to_kvm_tdx(vcpu->kvm)->tsc_offset;
+> +	vcpu->arch.l1_tsc_offset = vcpu->arch.tsc_offset;
+> +	vcpu->arch.guest_state_protected =
+> +		!(to_kvm_tdx(vcpu->kvm)->attributes & TDX_TD_ATTRIBUTE_DEBUG);
+> +
+> +	return 0;
+> +
+> +free_tdvpx:
+> +	/* @i points at the TDVPX page that failed allocation. */
+> +	for (--i; i >= 0; i--)
+> +		free_page(tdx->tdvpx[i].va);
+> +	kfree(tdx->tdvpx);
+> +	tdx->tdvpx = NULL;
+> +free_tdvpr:
+> +	free_page(tdx->tdvpr.va);
+> +
+> +	return ret;
+> +}
+> +
+> +void tdx_vcpu_free(struct kvm_vcpu *vcpu)
+> +{
+> +	struct vcpu_tdx *tdx = to_tdx(vcpu);
+> +	int i;
+> +
+> +	/* Can't reclaim or free pages if teardown failed. */
+> +	if (is_hkid_assigned(to_kvm_tdx(vcpu->kvm)))
+> +		return;
+> +
+> +	if (tdx->tdvpx) {
+> +		for (i = 0; i < tdx_caps.tdvpx_nr_pages; i++)
+> +			tdx_reclaim_td_page(&tdx->tdvpx[i]);
+> +		kfree(tdx->tdvpx);
+> +		tdx->tdvpx = NULL;
+> +	}
+> +	tdx_reclaim_td_page(&tdx->tdvpr);
+> +}
+> +
+> +void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+> +{
+> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(vcpu->kvm);
+> +	struct vcpu_tdx *tdx = to_tdx(vcpu);
+> +	struct msr_data apic_base_msr;
+> +	u64 err;
+> +	int i;
+> +
+> +	/* TDX doesn't support INIT event. */
+> +	if (WARN_ON_ONCE(init_event))
+> +		goto td_bugged;
+> +	if (WARN_ON_ONCE(is_td_vcpu_created(tdx)))
+> +		goto td_bugged;
+> +
+> +	err = tdh_vp_create(kvm_tdx->tdr.pa, tdx->tdvpr.pa);
+> +	if (WARN_ON_ONCE(err)) {
+> +		pr_tdx_error(TDH_VP_CREATE, err, NULL);
+> +		goto td_bugged;
+> +	}
+> +	tdx_mark_td_page_added(&tdx->tdvpr);
+> +
+> +	for (i = 0; i < tdx_caps.tdvpx_nr_pages; i++) {
+> +		err = tdh_vp_addcx(tdx->tdvpr.pa, tdx->tdvpx[i].pa);
+> +		if (WARN_ON_ONCE(err)) {
+> +			pr_tdx_error(TDH_VP_ADDCX, err, NULL);
+> +			goto td_bugged;
+> +		}
+> +		tdx_mark_td_page_added(&tdx->tdvpx[i]);
+> +	}
+> +
+> +	if (!vcpu->arch.cpuid_entries) {
+> +		/*
+> +		 * On cpu creation, cpuid entry is blank.  Forcibly enable
+> +		 * X2APIC feature to allow X2APIC.
+> +		 */
+> +		struct kvm_cpuid_entry2 *e;
+> +
+> +		e = kvmalloc_array(1, sizeof(*e), GFP_KERNEL_ACCOUNT);
+
+NULL checking is necessary for kvmalloc_array.
+
+> +		*e  = (struct kvm_cpuid_entry2) {
+> +			.function = 1,	/* Features for X2APIC */
+> +			.index = 0,
+> +			.eax = 0,
+> +			.ebx = 0,
+> +			.ecx = 1ULL << 21,	/* X2APIC */
+> +			.edx = 0,
+> +		};
+> +		vcpu->arch.cpuid_entries = e;
+> +		vcpu->arch.cpuid_nent = 1;
+> +	}
+> +	apic_base_msr.data = APIC_DEFAULT_PHYS_BASE | LAPIC_MODE_X2APIC;
+> +	if (kvm_vcpu_is_reset_bsp(vcpu))
+> +		apic_base_msr.data |= MSR_IA32_APICBASE_BSP;
+> +	apic_base_msr.host_initiated = true;
+> +	if (WARN_ON_ONCE(kvm_set_apic_base(vcpu, &apic_base_msr)))
+> +		goto td_bugged;
+> +
+> +	vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
+> +
+> +	return;
+> +
+> +td_bugged:
+> +	vcpu->kvm->vm_bugged = true;
+> +}
+> +
+>  int tdx_dev_ioctl(void __user *argp)
+>  {
+>  	struct kvm_tdx_capabilities __user *user_caps;
+> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
+> index 93ffe2deb8e8..f6841c3dd12d 100644
+> --- a/arch/x86/kvm/vmx/x86_ops.h
+> +++ b/arch/x86/kvm/vmx/x86_ops.h
+> @@ -141,6 +141,10 @@ int tdx_vm_init(struct kvm *kvm);
+>  void tdx_mmu_release_hkid(struct kvm *kvm);
+>  void tdx_vm_free(struct kvm *kvm);
+>
+> +int tdx_vcpu_create(struct kvm_vcpu *vcpu);
+> +void tdx_vcpu_free(struct kvm_vcpu *vcpu);
+> +void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event);
+> +
+>  int tdx_vm_ioctl(struct kvm *kvm, void __user *argp);
+>  #else
+>  static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return 0; }
+> @@ -154,6 +158,10 @@ static inline void tdx_mmu_release_hkid(struct kvm *kvm) {}
+>  static inline void tdx_flush_shadow_all_private(struct kvm *kvm) {}
+>  static inline void tdx_vm_free(struct kvm *kvm) {}
+>
+> +static inline int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+> +static inline void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+> +static inline void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+> +
+>  static inline int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+>  #endif
+>
+> --
+> 2.25.1
+>
