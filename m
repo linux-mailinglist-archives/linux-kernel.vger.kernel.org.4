@@ -2,103 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666DE6274FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 04:34:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 481E0627500
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 04:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235713AbiKNDeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 22:34:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
+        id S235719AbiKNDer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 22:34:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235348AbiKNDe3 (ORCPT
+        with ESMTP id S235348AbiKNDep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 22:34:29 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB9330D
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:34:29 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id n205so10303616oib.1
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:34:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:sender:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fusFIcCpb+Y7vuLDJAT9v6AmZkAUfgzc9tjnC7J5mB4=;
-        b=Af2rg0ZPGm8C0x/mbGcm+fiPRUbPxgOM2EfrVZjEQ/Bvx4XiJdedk0WGYible9xi6h
-         VUSjsKZ13aCp3vqmn9RQy5VsNh8NSE6X4ZFvscaMLsQfcqtjjtFgisNE+G6MDQyy+h+J
-         qtcOtnBnOOFSlnqPmOiHoBNrrjDhVicK3nR+ZckkWDoN9zd0UwDIHfXhCIVFnLUWtkjK
-         0xpNJaGOCjFMN+RWgfG+2Z9azku3b2FuAbH/r2oh83r/W7/izr9SLOA/2Zbgcx8iPan1
-         d2R75fJxprg8h+0y+9IVwsEoEa22yqKBh4oqHs7OjILvNlR0FB+8bM4z6nsL4/6C4l+K
-         /wpQ==
+        Sun, 13 Nov 2022 22:34:45 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C4515A0E
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:34:44 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id q6-20020a056e020c2600b00302664fc72cso405082ilg.14
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:34:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:sender:x-gm-message-state
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=fusFIcCpb+Y7vuLDJAT9v6AmZkAUfgzc9tjnC7J5mB4=;
-        b=3SDOCqT1cscMVOgTf50uNkpvEGcRmQd1RszYUWD2yTqvutCUmnmPUUuqIvSnhh7IAO
-         bhdstWReU95SaGmQNH1u7DyTVmb++GQZhiijdwDtsV2SVH9j7nqm/QPsMGhdpcEDifd/
-         qSFPC69ECdal+to0B4HRJFhG+EkrnFgoRJUd+CJAtYL2f1kLrfSl0tTuZwz2/L5TmCBT
-         bl+buiB1+rLcNMT0P77xWRzxttSdTzTwSE1bay44r1MrOa4ciUCWxbesWTgn/nyiJTNM
-         z+3CpRsF/lqKDrBCetWdm4A6g4kNm0QEbDoWap5CRqCcbbnutSDZfZkXZohU9ickEjp5
-         kDjg==
-X-Gm-Message-State: ANoB5plOYR8iUeE4p1M57ViGd7e30lsiBDkvP8U37F856A81+yXWVq2I
-        WxRNVJpNxZ1uJX+XQwWMNMdpd48wdvI=
-X-Google-Smtp-Source: AA0mqf5S1w5vWRoh84RrU0s/PvnALOKJVTtk7tRR8xW2pyPimt6X6v72AwoZFci8U1j9DlSW06bQEA==
-X-Received: by 2002:a05:6808:48f:b0:345:d571:88c8 with SMTP id z15-20020a056808048f00b00345d57188c8mr5121036oid.133.1668396868338;
-        Sun, 13 Nov 2022 19:34:28 -0800 (PST)
-Received: from [192.168.1.119] ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id q127-20020a4a3385000000b0049ef7712ee5sm3190034ooq.11.2022.11.13.19.34.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Nov 2022 19:34:27 -0800 (PST)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <97819315-bdbd-147a-f178-71860f00679b@lwfinger.net>
-Date:   Sun, 13 Nov 2022 21:34:27 -0600
+        bh=kAMMFntmaYX8HHHcoBR1z0jYIUhesZs9GrMDen8+P0I=;
+        b=14moN0B+T1AJ7bMTVR0zQsaBj97E7529j7H0wKIizg7bvijtOzPS5fBrCt4lKN+ZrK
+         zTWL6AyXwvQsoYYD+AyqsDTv3C9zggkQJNZtbIYyRtuOoVXfGzJcdtzN1h5t7W5XS0zH
+         DgHnS59rhzQsgBjAHX7jjmY2/GbJ7ERW/XQc0abPnMHinMI4o/R0/vwyX5uLCjO3LYQd
+         c9OJI7W9BXCEk02iUUKs8+cmFP4Ch22FJAPtP1+JFonOVFruVr9ryXXtgOI3hze85V0/
+         bYn4UCtY0x44xFFLiASHq/yA/nQo+QpAz/VUI48o/4gijLCBESS7C2RjPToqTCvFvCR1
+         FL8w==
+X-Gm-Message-State: ANoB5pmjiv5THXDRv+htuL2q59bK9d9ZYJPHWEsiv1I9nshd74zTTUsf
+        IW8Stsm8qPqAegQ4rctxETuWwxFSQvyp530Mfz5C6+x2WH3J
+X-Google-Smtp-Source: AA0mqf5ZNiwfE/qRoN4DEHPzmEsXTgglP5piaGa+wS3V+hQ7UOF8GnQWE+XvY52m4Q4ovF1VlXDu2dWE7tcgmaS4T02wmJWaLeQv
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     LKML <linux-kernel@vger.kernel.org>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-Subject: Help with YASM
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:ef0e:0:b0:6c0:3ade:1c3e with SMTP id
+ k14-20020a6bef0e000000b006c03ade1c3emr4723664ioh.63.1668396884194; Sun, 13
+ Nov 2022 19:34:44 -0800 (PST)
+Date:   Sun, 13 Nov 2022 19:34:44 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a078ac05ed65eb00@google.com>
+Subject: [syzbot] UBSAN: array-index-out-of-bounds in xtTruncate
+From:   syzbot <syzbot+75c177aa1291e7fe423d@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        shaggy@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-I am the openSUSE maintainer for VirtualBox. A portion of the code is written in 
-yasm assembler. There are two sections of the code that refer to external 
-globals that now need to be referenced in a position-independent manner. After 
-much web searching, I have not found a method that works.
+syzbot found the following issue on:
 
-The first code snippet is a jump to an external location. The original code is
+HEAD commit:    f67dd6ce0723 Merge tag 'slab-for-6.1-rc4-fixes' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=102b0615880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=771b06c41e08f95b
+dashboard link: https://syzkaller.appspot.com/bug?extid=75c177aa1291e7fe423d
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-     jmp     NAME(dtrace_probe)
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Based on a reference that I found, I changed this to
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/0ddcda4f997e/disk-f67dd6ce.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ced709971cf5/vmlinux-f67dd6ce.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d35fb69a1976/bzImage-f67dd6ce.xz
 
-     jmp     [rel dtrace_probe wrt ..got]
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+75c177aa1291e7fe423d@syzkaller.appspotmail.com
 
-This compiles without error, but I have no idea if it would work.
+================================================================================
+UBSAN: array-index-out-of-bounds in fs/jfs/jfs_xtree.c:2304:9
+index 19 is out of range for type 'xad_t [18]'
+CPU: 0 PID: 4605 Comm: syz-executor.4 Not tainted 6.1.0-rc4-syzkaller-00020-gf67dd6ce0723 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:151 [inline]
+ __ubsan_handle_out_of_bounds+0xdb/0x130 lib/ubsan.c:283
+ xtTruncate+0x2778/0x32d0 fs/jfs/jfs_xtree.c:2304
+ jfs_truncate_nolock+0x192/0x390 fs/jfs/inode.c:393
+ jfs_truncate+0xc6/0x140 fs/jfs/inode.c:417
+ jfs_direct_IO+0x1b0/0x1e0 fs/jfs/inode.c:347
+ generic_file_direct_write+0x294/0x610 mm/filemap.c:3677
+ __generic_file_write_iter+0x1c4/0x400 mm/filemap.c:3837
+ generic_file_write_iter+0xab/0x310 mm/filemap.c:3913
+ do_iter_write+0x6c2/0xc20 fs/read_write.c:861
+ iter_file_splice_write+0x7fc/0xfc0 fs/splice.c:686
+ do_splice_from fs/splice.c:764 [inline]
+ direct_splice_actor+0xe6/0x1c0 fs/splice.c:931
+ splice_direct_to_actor+0x4e4/0xc00 fs/splice.c:886
+ do_splice_direct+0x279/0x3d0 fs/splice.c:974
+ do_sendfile+0x5fb/0xf80 fs/read_write.c:1255
+ __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ __se_sys_sendfile64+0x14f/0x1b0 fs/read_write.c:1309
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f22df88b639
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f22e0602168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 00007f22df9abf80 RCX: 00007f22df88b639
+RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000003
+RBP: 00007f22df8e67e1 R08: 0000000000000000 R09: 0000000000000000
+R10: 000080001d00c0d0 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc01280fbf R14: 00007f22e0602300 R15: 0000000000022000
+ </TASK>
+================================================================================
 
-The second reference to an external variable is
 
-     lea     T2, [NAME(g_afParity) wrt rip]
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Trying to emulate the above change, I replaced this with
-
-     lea     T2, [rel NAME(g_afParity) wrt rip ..got]
-
-This one generates a compile error that there is a missing "]".
-
-Thanks for any help, or pointers to reference works that I can read.
-
-Larry
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
