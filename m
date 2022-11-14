@@ -2,122 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A046276B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E1D6276BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:51:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236024AbiKNHu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 02:50:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44116 "EHLO
+        id S236061AbiKNHvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 02:51:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233548AbiKNHu4 (ORCPT
+        with ESMTP id S236042AbiKNHvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 02:50:56 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0035318B38
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:50:54 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id d3so12096341ljl.1
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:50:54 -0800 (PST)
+        Mon, 14 Nov 2022 02:51:43 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C3718E1C
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:51:43 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id 36-20020a17090a0fa700b00213d5296e13so5407701pjz.6
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:51:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ejuyrcblCIc+DA+Y9MJJ0elKPSaTlB2puhNpw1wAFpY=;
-        b=uV0kXK7zyhCXc/awUViecK+PWOpiz8TvjrMGJdFZc97waGz1Fwx1wPojyhOYyPhNHb
-         AqzKnD9xT4j7dB/5cr0HjbVADQR8hCLA7ulv/bkX3Qc1NEH/tXSE3gQFkMKEYdutSuYa
-         uzvZhoUp+VZnt+7Lox4FOhNOjCck/zeh82FRGHD7ZAwkyLgVec2eum2YHk9D67f40/J+
-         XXOchsjl7y5Nt20q8xoRNpFBg34Ka0aURIAxQtwWkVW20SoEBzXKFT3K1rlkB+T6ayg2
-         SOd5kbDblRMmRd76h7IiP6WEBNGMq1uVZb2aFc1o2oU8bRWGis/ywucfNqt5CrYBV94T
-         3e1Q==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=G6SAmxX7apXJc1sZ6rk+vGVz5JqMggUrClmeEtAw6v8=;
+        b=bQwfvaqnGgw3iau0Mqw9WIaSEQ3ScV4gxhh1hWdcHbvItifG7Lgv4sbWAj9/Nvv4hx
+         O/BTIUqD6HoaIQqaPYVVgL2NwGzTO8oNGQNSQxroakZnguud1K7UqJC/QbXwLUH6U5Cy
+         O/0y4jVcpZHLW9fpNt7kx5BpZuOl1Ne1BLvJIvFHI6lUDgWcS2NTrUympRPdB40vmzA8
+         4c1VRCNc2W6oAwMAo2DtDDy+diH0NqDkRe7UUo//EVafVgJCZfjprVhdeopeU23gTCxS
+         CFFIoHiXogb+9ZvcHksfSuamruT3nJTlM9g8P8PLWMD59AzMAOBQZxmeS6Pc/5ACjFpb
+         ADKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ejuyrcblCIc+DA+Y9MJJ0elKPSaTlB2puhNpw1wAFpY=;
-        b=eNYosfaXvGW7JmpHd7pZcuCPVU9oY6IMJKQG0S/PJQtR/sL2Ma3OKpkRAILnvVwNqr
-         OBRtDNW+Sewy5N3lkAvdQgc+1zOjMcwo4hKdvzT4wnAjNAjMTyUw+WV+XO9YHakf2+h8
-         UwQzzB1MoyLQ8IDX8ydoz8xFzW563WaIirbooazAzKofp0cfAtCG/c/p6VB5V8XI6BaW
-         9zq6fbVSgd+XMskNylXxFB8K+Q4XdFDy3U19kDuJUWFLn0L2kKCgRkwegKk4wOopir6Z
-         6tKWowGtt17pP4ZO2jUHrW6tT9V9y4Cy/UvsCn14D/vgnuVCMdGxhDf8TZFIbgq2p7ZK
-         CvFg==
-X-Gm-Message-State: ANoB5pnteci55k6lk9wuPUmo9r/gP1VzINdf3YjdqrNrcAu2iwFTk6Kw
-        9GAit9l/QpWmUfEyZ9gmiqjE9g==
-X-Google-Smtp-Source: AA0mqf4o92ZfJ4LcSRVKeS86gOBmeR7ZaUQh9v72f0dNgb7rMY+YAVjMXIo0m5B6nH1mdCGSe2F1Jg==
-X-Received: by 2002:a05:651c:904:b0:277:1d64:f21c with SMTP id e4-20020a05651c090400b002771d64f21cmr3909296ljq.373.1668412253385;
-        Sun, 13 Nov 2022 23:50:53 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id z13-20020a056512370d00b004994117b0fdsm1711355lfr.281.2022.11.13.23.50.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Nov 2022 23:50:53 -0800 (PST)
-Message-ID: <451069cd-9e8f-055e-5711-fbae9e2799e8@linaro.org>
-Date:   Mon, 14 Nov 2022 08:50:51 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [Patch v4 3/3] ARM: dts: exynos: Add new SoC specific compatible
- string for Exynos3250 SoC
-Content-Language: en-US
-To:     Aakarsh Jain <aakarsh.jain@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, krzysztof.kozlowski+dt@linaro.org,
-        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
-        david.plowman@raspberrypi.com, mark.rutland@arm.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
-        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
-        pankaj.dubey@samsung.com, smitha.t@samsung.com
-References: <20221114054655.68090-1-aakarsh.jain@samsung.com>
- <CGME20221114054053epcas5p1f88b41bce65d54f0f26d0b562e88f7d6@epcas5p1.samsung.com>
- <20221114054655.68090-4-aakarsh.jain@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221114054655.68090-4-aakarsh.jain@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G6SAmxX7apXJc1sZ6rk+vGVz5JqMggUrClmeEtAw6v8=;
+        b=b4ZICZOgxhBc2dsS0U72Z4xX6k94GpEZM+tfUiPv68WmNvaDAb3QgzpooWxwGMPBe1
+         PwSsUbLs1Sd9GAZ4idiDJTvf8BGtiU2aZUzz0LUUfrW04jdXohFOvNdD8kHCrRfD5QEP
+         lQSD2Z5lnAWuJijLmXR/jjdJW576EM7GGKlxaLY5W5EKsLwxi/vcoMutXo/CVlOYd0n3
+         /pvCymla0GlYLaPedqGYZP26u9UqUWhsI2ghM4eT/q+ZY0BON8TTmFLcg8eRRb3XX3W4
+         R1EXe1ZUqRCZeT3KpB2XueaVq/H1mrMqBWvwaRt5c62J7QmSaxKTWeSHUxKk5famwg3A
+         nCKQ==
+X-Gm-Message-State: ANoB5pnhvZ1h5JXpB+HSVGFtDdwEWZ3015xP6OyfbD+FRN8SKiin/tb/
+        8IGruZ3xEOrBZMT7Vu79K9RvK0xY8KUp
+X-Google-Smtp-Source: AA0mqf6yrRvPV60i0ASJWQGSbHOO4Xlx2AzyaU1Rn44gk+Qrajc3HzCqBUk4zZ0pL/SPC7wYPWWY7pT0o58h
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:cba6:8279:98e6:3d6e])
+ (user=irogers job=sendgmr) by 2002:a17:902:f80a:b0:186:8376:209f with SMTP id
+ ix10-20020a170902f80a00b001868376209fmr12625608plb.161.1668412302667; Sun, 13
+ Nov 2022 23:51:42 -0800 (PST)
+Date:   Sun, 13 Nov 2022 23:51:18 -0800
+Message-Id: <20221114075127.2650315-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Subject: [PATCH v1 0/9] Restructure perf list and add json output
+From:   Ian Rogers <irogers@google.com>
+To:     Weilin Wang <weilin.wang@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xin Gao <gaoxin@cdjrlc.com>, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/11/2022 06:46, Aakarsh Jain wrote:
-> commit "752d3a23d1f68de87e3c" which adds MFC codec device node
+Restructure perf list so that it uses callbacks to print events and
+metrics. Use the callbacks to implement json output. In the process
+add documentation to pmu.h, avoid some sorting of events, fix some
+command line and output bugs.
 
-Please run scripts/checkpatch.pl and fix reported warnings.
+Ian Rogers (9):
+  perf pmu: Add documentation
+  tools lib api fs tracing_path: Add scandir alphasort
+  perf tracepoint: Sort events in iterator
+  perf list: Generalize limiting to a PMU name
+  perf list: Simplify cache event printing
+  perf list: Simplify symbol event printing
+  perf pmu: Restructure print_pmu_events
+  perf list: Reorganize to use callbacks
+  perf list: Add json output option
 
-> for exynos3250 SoC. Since exynos3250.dtsi and exynos5420.dtsi are
-> using same compatible string as "samsung,mfc-v7" but their node
-> properties are different. As both SoCs have MFC v7 hardware module
-> but with different clock hierarchy and complexity.
-> Add new compatible string followed by mfc-v7 fallback for Exynos3250
-> SoC.
-> 
-> Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-> Suggested-by: Alim Akhtar <alim.akhtar@samsung.com>
-> Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
-> ---
->  arch/arm/boot/dts/exynos3250.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/exynos3250.dtsi b/arch/arm/boot/dts/exynos3250.dtsi
-> index 326b9e0ed8d3..1a29993fca0b 100644
-> --- a/arch/arm/boot/dts/exynos3250.dtsi
-> +++ b/arch/arm/boot/dts/exynos3250.dtsi
-> @@ -485,7 +485,7 @@
->  		};
->  
->  		mfc: codec@13400000 {
-> -			compatible = "samsung,mfc-v7";
-> +			compatible = "samsung,exynos3250-mfc","samsung,mfc-v7";
+ tools/lib/api/fs/tracing_path.c        |  16 +
+ tools/lib/api/fs/tracing_path.h        |   1 +
+ tools/perf/Documentation/perf-list.txt |  10 +-
+ tools/perf/builtin-list.c              | 503 +++++++++++++++++---
+ tools/perf/util/metricgroup.c          | 238 +++-------
+ tools/perf/util/metricgroup.h          |   4 +-
+ tools/perf/util/pmu.c                  | 277 +++++------
+ tools/perf/util/pmu.h                  | 110 ++++-
+ tools/perf/util/print-events.c         | 630 ++++++++++---------------
+ tools/perf/util/print-events.h         |  40 +-
+ 10 files changed, 1034 insertions(+), 795 deletions(-)
 
-Missing space.
-
-Best regards,
-Krzysztof
+-- 
+2.38.1.431.g37b22c650d-goog
 
