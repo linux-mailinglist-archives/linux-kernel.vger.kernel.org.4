@@ -2,320 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F1F627826
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:52:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D947627825
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236366AbiKNIwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:52:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
+        id S235633AbiKNIwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:52:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236540AbiKNIvz (ORCPT
+        with ESMTP id S236445AbiKNIvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:51:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378B919C35
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:51:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC752B80D3D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:51:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96004C43144
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:51:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668415911;
-        bh=uZ6+oZTLze1RKQfy58a8amMFqHnw789Td23AGSCHtXM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lCF1l6R0QHqHBEgAwkFs41Mq8X/5pmSYwjf4HHSKyGR2mHcUV3d6IlqmJtKb/LI9E
-         3Ad6WcTeAG1FhluiLkN2udUwDM0rYfTFP5Z03i7DrAcKaEcdicUWapLmfjIx0K7FJ+
-         hispusMGc5BcZZev8VVgV94ZFbwud756X6FMyvpviaqOvJoLDEg6t4Ij+CHDSW9NO0
-         RiS/itbKQLSLhQOHT7zYvUJ/8D5siRGUvagWI/AI3bv07BbeQYWAbyc0tcvj/a5+gE
-         TAeuoTvL5kkxehigYKhHkhsp8sJaaKp7C+d6pc23+agcVtXjD/QlXkQU2ERCa0ZDaI
-         orNj7TpkCdpig==
-Received: by mail-ed1-f53.google.com with SMTP id u24so16188589edd.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:51:51 -0800 (PST)
-X-Gm-Message-State: ANoB5pkcxxqhuawzBrr5HzQtpyr9DIWvy371WV/r0/Iulgo7PbWyj9RP
-        eSMNFYCOfiX4lme7ZIR5W1VJweS8bFvakzGiu+s=
-X-Google-Smtp-Source: AA0mqf7qhwODcSzEnMktD1O+POdwX3zA8dKEBfwBToLtnxi5yPWlk99CR/lzZf1vCg2j4ALp32CgXdpN/jcQxT0zyY4=
-X-Received: by 2002:a05:6402:3715:b0:462:32bf:613a with SMTP id
- ek21-20020a056402371500b0046232bf613amr10033261edb.78.1668415909711; Mon, 14
- Nov 2022 00:51:49 -0800 (PST)
+        Mon, 14 Nov 2022 03:51:54 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2066.outbound.protection.outlook.com [40.107.223.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C3B1C915
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:51:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HZMLVlaFwvSokNw9uq8jVH/dgULSwWiXX3r8ajLWkHqHE/DhfE1Cdf5WW9d6Rtk0LZtQ8EzURv6i7Lsgphc30LpQfSBqgOiJyzy/sgZ+EbYypTxAOHgRGUjkWRcss7bXRbbAAkH0qB9YBHDPI5RD0ZFV3YZvjJ2OdLFtyRbv/UWzVYjG62C2Q5qwX028S+XRwLTFa4tZEdL2wcpymQb55/DxhtYrNA7zCGO0lk7UXrPqiTPaJKbCxfSlohOgm1L/hx9CPkjt15CH75nrk71bUlEwy3KHbfVSvYcSGqTgp89qwHdgDeAtfB67kzQ6yIPr9db2vEMv/civ33+crKPbuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gxdL+YIRqoCeJEXguKSbx8yeuAfMVOwryJcmea5MyFM=;
+ b=L32P/z8HcxWtr6s3+i/36T8aUy0gRqwcA3khprONQqe/T2jMnN9xXcjb9I9WCdiq4pgDOzoFpQ5Jj8tC/IqW0f4qhieGWeL0agmqBB2Q97SHvJ5yECCpojVK1quqerXFDqb15K3rEzD8jCv/jcAAguZEX1FWYEJsFgenQbcjkajEFhb/pnGsZ8zAJSABMvO2LyexSSWMeT1q0qNDVj7QFgy/2V3ZNfiwkPTELJNbroJ/CaSTMN0tS+eY8B1n5aczeVytBrjSUOxiCV3TXx/okvkyZeu9qXy5uIy9Z+jYFNKfVEqb6YLTFKIPxYKg4KCCrIu9TFyB3WZb5t9fpf5aNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gxdL+YIRqoCeJEXguKSbx8yeuAfMVOwryJcmea5MyFM=;
+ b=E/OgwnVakNAabyWrgapqNrYqLAk+yvcbt3pNqm7OuPks/81bpcGAxoVLx1A2meo0sQMvYRyYstL45bBipNi5jHiJiJP8HYlpo1e8vbXjVqxmoWjBkGbnG5k8M4DQOkRvk9A1JRE7vSP2LgKb2Jiyz8+2ZyJwD5NlgdPqf1We2dRMG7nWUiUsaUvepesqiz39pJU6zE3EaigTwxde1KxPCZaroTIDRPoKbRadOsIoFFNZjO3GHyVzRVfejwJWA89z4+dAC7nCkXO8r51roRhefbSQnlnynV3UJvg4u4cumeJOEqKXGmqEneYggvu4PfdbE0pADzQVR58NDbuBMY7oSA==
+Received: from DM8PR12MB5400.namprd12.prod.outlook.com (2603:10b6:8:3b::12) by
+ MN0PR12MB5860.namprd12.prod.outlook.com (2603:10b6:208:37b::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5813.17; Mon, 14 Nov 2022 08:51:51 +0000
+Received: from DM8PR12MB5400.namprd12.prod.outlook.com
+ ([fe80::dd38:ea25:225c:bd6]) by DM8PR12MB5400.namprd12.prod.outlook.com
+ ([fe80::dd38:ea25:225c:bd6%6]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
+ 08:51:50 +0000
+From:   Eli Cohen <elic@nvidia.com>
+To:     Jason Wang <jasowang@redhat.com>
+CC:     "mst@redhat.com" <mst@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "si-wei.liu@oracle.com" <si-wei.liu@oracle.com>,
+        "eperezma@redhat.com" <eperezma@redhat.com>,
+        "lulu@redhat.com" <lulu@redhat.com>
+Subject: RE: [PATCH 5/7] vdpa/mlx5: Add RX counters to debugfs
+Thread-Topic: [PATCH 5/7] vdpa/mlx5: Add RX counters to debugfs
+Thread-Index: AQHY92YqsUnL2XgtVk6gf0puegqTZa4+BhoAgAAXrfA=
+Date:   Mon, 14 Nov 2022 08:51:50 +0000
+Message-ID: <DM8PR12MB54001B5DA44D89A0948378A9AB059@DM8PR12MB5400.namprd12.prod.outlook.com>
+References: <20221113134442.152695-1-elic@nvidia.com>
+ <20221113134442.152695-6-elic@nvidia.com>
+ <CACGkMEs4YpUUtkW-rWkQpYQY4vFLh2YcwY6bSqUGTd60Xq37_w@mail.gmail.com>
+In-Reply-To: <CACGkMEs4YpUUtkW-rWkQpYQY4vFLh2YcwY6bSqUGTd60Xq37_w@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM8PR12MB5400:EE_|MN0PR12MB5860:EE_
+x-ms-office365-filtering-correlation-id: b2145902-8778-4feb-1c7f-08dac61d78c3
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: gaSOpHqSRzgH4HuHA++plUhMf574CdYUsYeeGK/i2X1yGSlOwTu+SnNjukNXYQLWq5NO6hbYc5GvUbC82yRp5XV+HK6AsxBkkaGpwMc9y/WRZU6XZbr7oYfnZgYVTJmkXlpIWsVvFYwTWztmDyqGZQphrsR5szpx6nU74zdwJf6DI59CEisUA/SCEF1+1LXZYo/Flfx/KUi5Aquls6d8gy1Y1Q4d/uHEd6QcVO8q9vUuiTdUB9ELk6Ekkr+B/pLjzhr3JhikGVrTpIyaHjVDWp+bzP/PX3hGh4D10RYltoAWFu8ITw7hRhX94N/heor3s6Hx3zqkgFo2dOYxYIqSWn+RBQMxSZUfJ4JCxFyOiCfoRD1hm6otP6ZR3xQCksoFbf6DeCeKOUcrRZP5KBS79FuJxJdFGzjOiazvi5vbUAdunTBmaEJdn8AYecWliUHKbv7ZQLh5hlBdsl7gABWKv3GGgTGpT+7T+khcODjKopr9mUCkqWRlYNSnirP/+Ss4NwotOP7F8WIDNb4N4C49KQ+ylprizn0Fi605CPgTezkbhBFFkrG/28SuHfb5wYDiUuqLM0Ok0oKgBajZLFkgT7DpVuUL4r9jKu1QH6vZLoW1/N+iCZIlU4//yvlkW0SIVAr/FzTpUvN2xBVTlHIyaBCjJM/tvpMgLgaqunOrfKrujUV1ku0YMfHeBhIvDDUW8iqEctzxjPBCg3TgZ7BRX8mp2S03nPUPBuwPW1m78Aqgm2jD8iaoExpxolbasHrT9ZEoaGPJyAmStpR8da9YRQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5400.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(39860400002)(396003)(366004)(451199015)(26005)(316002)(9686003)(53546011)(2906002)(33656002)(83380400001)(38070700005)(41300700001)(66476007)(66946007)(66556008)(66446008)(4326008)(64756008)(186003)(76116006)(5660300002)(55016003)(8676002)(8936002)(52536014)(86362001)(38100700002)(71200400001)(478600001)(7696005)(6506007)(6916009)(54906003)(122000001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?R1J4MWlTVWMrMmh5VjdMWXlzYU01WTAwckg4aDdsQ3JuUUtxOTNrVWFLUG1w?=
+ =?utf-8?B?M2hpSEhIUER1blBpbEFGcFJaYzNQUjBRQVVJdTBMVTJEWEt1ZkNQSGg3WXhH?=
+ =?utf-8?B?enZUS081NVNTSkE2TVVKU0V1d0VwRE4wS0JlL0l1VUkyeXBCb0UzaWtYblVP?=
+ =?utf-8?B?YnVPZkhyR3pabjRaTDQ2Ykp2VUZFYkxhSlYwZ2RPV21iRVo2U2ZrYTdISTZl?=
+ =?utf-8?B?MlpWMzR2LzVwMXdBRlQ1VlNRN01jNnFUeGFhRi81ZUZWSHZSRmE5b3lwUXJ5?=
+ =?utf-8?B?eHR3R3FZc3Q2M3VZL2UrNFlWSndXdE5SVVl6MDVESmM5cEpqWnpGUy94RFRG?=
+ =?utf-8?B?MXFEMmt1OFJNSSs2NmYvcGpVVldkaERRcGJER0p0UGdlU3pJa0VnbVM0SUZP?=
+ =?utf-8?B?RnZDYnRBUUZaLzFma2I2dWNPTjU1cFRTQTN1VUY5RzVpME05bkc1WlVnQU1x?=
+ =?utf-8?B?RHJoUDRic1ZNQ2gwWHhFTld3M0dBL2JNMUd6SStrMGsvVXArM1grZDFJM1Mw?=
+ =?utf-8?B?aWFhTWVwVjArMlQvYW54M1k0eFVXSGQ4K2JNdDIyY3hTUllpWVdIM2pvTFl3?=
+ =?utf-8?B?ek9PTlE0S3JOanNZR2hwOVRMaFg1UzhMSEd3U2xaemlLTGZCRWh6NlEwT0dF?=
+ =?utf-8?B?d3VlMklZK1hZVWlrUU8xR0pjSm1wc2RBTk1zTHFKV2orenQ4ekRyVDcvS3Zs?=
+ =?utf-8?B?U3JoM1o3cDlCM2pobldKa2c5ZVg1ZkR6OVlkN0czTjZlOTcrMjRYV2dmbGpN?=
+ =?utf-8?B?Nm5GT25COUVqbUlEUTJPWEpQZE9JdFRYOWRFRngyOWNSQVFUUUFyKzVzZGgv?=
+ =?utf-8?B?UVJSNkhxYnNhM2t2YmtSUlhjdSthcTExVEVmT0lmTm92SUUyWC9uellzQUlB?=
+ =?utf-8?B?VVUzYTZkcUY1S1V2aitRekp2U1B6ZzBCcEpiOWV2NklaaDBmb0NhTHZsRjVw?=
+ =?utf-8?B?dGZIbFJlaTBEelJTVit4VXNYbXJwUjZ1bExvRVB1aGM0bG01L0YrbVp2dEwx?=
+ =?utf-8?B?TlpmUm9INXB2ZG5YOExIVm9KZm5BdEQ2MGRvaVMrditSNm91LzJFYU4xS29P?=
+ =?utf-8?B?bytmdjFlbUhiSWFNM1hVSFU1RjhySk5mMjI1aEYwaFFGa1IzR1JYZktsYnFx?=
+ =?utf-8?B?TU01SXhIb2IzY3p5WFNOL28zbWRpMWMzK0s0dlBETXRrcUs0aDR1bXgxVU1w?=
+ =?utf-8?B?UWM4SnBvMHZxYzJBRk80bDR0ajNQRVo2SzlMNnBhQUlBVkJKQkJUejkrd0Vh?=
+ =?utf-8?B?TU5RN3JicEplRVc3a2Q2NEFaNUc3RHZ0bnl0TXVVQUZrL2FWczBCc1NpVGFu?=
+ =?utf-8?B?SVh6N1ZVK1lTdnhjZm4vb3k1V1dSTklVWnlCWmpaNDEyRHY0TWZMUUIxL1Fi?=
+ =?utf-8?B?T1p6TjNRMEFkMnl5d0M0VmRlMGUrM3N1MmM5M3hrT0dkTEFJRXdLTERkYlB3?=
+ =?utf-8?B?dzNkV1J4d1JwVURXbmh5Nm1hWE5pSVlxRWFxcjVRYWhKVHhXSVBoMVhNeGE3?=
+ =?utf-8?B?eUpQV3VNaEpXbnhDNWxON3VBMlM1MWl0UXYzbjd1ejNyWFh0TTJRQXFnRUVm?=
+ =?utf-8?B?SW9VeGFRakViSDk5VlNOQWtCOVI1TWp1ZTk2Q0hhS3VTTDlUUDAzUk9oeXA1?=
+ =?utf-8?B?RzJVekVNVXJJQ1JxVVJKRTJsSWMzdCsveTRCVFY1R1ppdk42aWVpYk9xTGNK?=
+ =?utf-8?B?L2xZYStkcDIyQUFOVTVBeHZtS0NSZ2JUZ0VPUUNhSDBXYmJneSt4azRvakZG?=
+ =?utf-8?B?ZFBkcTFDTFE0NDU1Y1RDWWViVi9ocTNBTlRxalpqckVmYldoYmk5U0pvSEdx?=
+ =?utf-8?B?UU1tMXczeG5QUEFxVXR6bExkTXhrb08xRXlvWjVyRDJZVG5pcGVUN1FIeUNy?=
+ =?utf-8?B?ZTFwK1pVejI3bkNid3R0bnJJZkdqaXRaYTB6MzlZdmlTT3Y1L2YzYVpMSnFC?=
+ =?utf-8?B?MnJTeTN4UVZUWlZ0MzRGKzdMaG5xaC9pTVNFNDFuYmd6Zmh1Ty8vYnlaclNq?=
+ =?utf-8?B?dlRWcG5YaVlYcmRVOXV3dnYwT2hxV2czY3BrTmJhV205SFNudVpCNXZpL21o?=
+ =?utf-8?B?WVlETXJLaW95ZVRXazNKNWgySnY5OEIvYVJST3BjWlNwOWhjTkpsUktDaVNQ?=
+ =?utf-8?Q?rJXE=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <1664326209-13995-1-git-send-email-yangtiezhu@loongson.cn>
- <1664326209-13995-4-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H7N-N2400ivdczJrfJ9Ht12JUbOADxExF87wVPFEj_c_g@mail.gmail.com>
- <dd3fc4ab-6bbb-2fa5-8d5e-b8206b42518c@loongson.cn> <CAAhV-H4ok2r2FarFszwYJ6Hah4m7ieNf6egnXyZhUf1ESDUhXg@mail.gmail.com>
- <a528e970-29ac-2fcb-b749-cfae3fbe5a18@loongson.cn>
-In-Reply-To: <a528e970-29ac-2fcb-b749-cfae3fbe5a18@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 14 Nov 2022 16:51:36 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7uaFeND1-iSHmLXMFJonRTbiu81EnFGjyHZ0uN9bVXZw@mail.gmail.com>
-Message-ID: <CAAhV-H7uaFeND1-iSHmLXMFJonRTbiu81EnFGjyHZ0uN9bVXZw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] LoongArch: Add kretprobe support
-To:     Jinyang He <hejinyang@loongson.cn>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5400.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2145902-8778-4feb-1c7f-08dac61d78c3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2022 08:51:50.8112
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Ln9i2jmvN0VSIuYXG1Wmv8ygdJVGgHBcDWOYDX8sQyiU8fVG8h2IVqCuwwinQPL+
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5860
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 4:32 PM Jinyang He <hejinyang@loongson.cn> wrote:
->
-> On 2022/11/14 =E4=B8=8B=E5=8D=882:50, Huacai Chen wrote:
->
-> > On Mon, Nov 14, 2022 at 2:11 PM Jinyang He <hejinyang@loongson.cn> wrot=
-e:
-> >> On 2022/11/14 =E4=B8=8B=E5=8D=8812:43, Huacai Chen wrote:
-> >>
-> >>> Hi, Tiezhu and Jinyang,
-> >>>
-> >>> On Wed, Sep 28, 2022 at 8:50 AM Tiezhu Yang <yangtiezhu@loongson.cn> =
-wrote:
-> >>>> Use the generic kretprobe trampoline handler to add kretprobe
-> >>>> support for LoongArch.
-> >>>>
-> >>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> >>>> ---
-> >>>>    arch/loongarch/Kconfig                     |  1 +
-> >>>>    arch/loongarch/kernel/Makefile             |  2 +-
-> >>>>    arch/loongarch/kernel/kprobes.c            | 24 ++++++++
-> >>>>    arch/loongarch/kernel/kprobes_trampoline.S | 97 +++++++++++++++++=
-+++++++++++++
-> >>>>    4 files changed, 123 insertions(+), 1 deletion(-)
-> >>>>    create mode 100644 arch/loongarch/kernel/kprobes_trampoline.S
-> >>>>
-> >>>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> >>>> index 8debd70..877be6a 100644
-> >>>> --- a/arch/loongarch/Kconfig
-> >>>> +++ b/arch/loongarch/Kconfig
-> >>>> @@ -95,6 +95,7 @@ config LOONGARCH
-> >>>>           select HAVE_IRQ_EXIT_ON_IRQ_STACK
-> >>>>           select HAVE_IRQ_TIME_ACCOUNTING
-> >>>>           select HAVE_KPROBES
-> >>>> +       select HAVE_KRETPROBES
-> >>>>           select HAVE_MOD_ARCH_SPECIFIC
-> >>>>           select HAVE_NMI
-> >>>>           select HAVE_PCI
-> >>>> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/=
-Makefile
-> >>>> index ff98d8a..48f50607 100644
-> >>>> --- a/arch/loongarch/kernel/Makefile
-> >>>> +++ b/arch/loongarch/kernel/Makefile
-> >>>> @@ -33,6 +33,6 @@ obj-$(CONFIG_UNWINDER_PROLOGUE) +=3D unwind_prolog=
-ue.o
-> >>>>
-> >>>>    obj-$(CONFIG_PERF_EVENTS)      +=3D perf_event.o perf_regs.o
-> >>>>
-> >>>> -obj-$(CONFIG_KPROBES)          +=3D kprobes.o
-> >>>> +obj-$(CONFIG_KPROBES)          +=3D kprobes.o kprobes_trampoline.o
-> >>>>
-> >>>>    CPPFLAGS_vmlinux.lds           :=3D $(KBUILD_CFLAGS)
-> >>>> diff --git a/arch/loongarch/kernel/kprobes.c b/arch/loongarch/kernel=
-/kprobes.c
-> >>>> index c11f6e0..ca3f1dc 100644
-> >>>> --- a/arch/loongarch/kernel/kprobes.c
-> >>>> +++ b/arch/loongarch/kernel/kprobes.c
-> >>>> @@ -306,6 +306,30 @@ int __init arch_populate_kprobe_blacklist(void)
-> >>>>                                            (unsigned long)__irqentry=
-_text_end);
-> >>>>    }
-> >>>>
-> >>>> +/* Called from __kretprobe_trampoline */
-> >>>> +void __used *trampoline_probe_handler(struct pt_regs *regs)
-> >>>> +{
-> >>>> +       return (void *)kretprobe_trampoline_handler(regs, NULL);
-> >>>> +}
-> >>>> +NOKPROBE_SYMBOL(trampoline_probe_handler);
-> >>>> +
-> >>>> +void arch_prepare_kretprobe(struct kretprobe_instance *ri,
-> >>>> +                           struct pt_regs *regs)
-> >>>> +{
-> >>>> +       ri->ret_addr =3D (kprobe_opcode_t *)regs->regs[1];
-> >>>> +       ri->fp =3D NULL;
-> >>>> +
-> >>>> +       /* Replace the return addr with trampoline addr */
-> >>>> +       regs->regs[1] =3D (unsigned long)&__kretprobe_trampoline;
-> >>>> +}
-> >>>> +NOKPROBE_SYMBOL(arch_prepare_kretprobe);
-> >>>> +
-> >>>> +int arch_trampoline_kprobe(struct kprobe *p)
-> >>>> +{
-> >>>> +       return 0;
-> >>>> +}
-> >>>> +NOKPROBE_SYMBOL(arch_trampoline_kprobe);
-> >>>> +
-> >>>>    int __init arch_init_kprobes(void)
-> >>>>    {
-> >>>>           return 0;
-> >>>> diff --git a/arch/loongarch/kernel/kprobes_trampoline.S b/arch/loong=
-arch/kernel/kprobes_trampoline.S
-> >>>> new file mode 100644
-> >>>> index 0000000..9888ab8
-> >>>> --- /dev/null
-> >>>> +++ b/arch/loongarch/kernel/kprobes_trampoline.S
-> >>>> @@ -0,0 +1,97 @@
-> >>>> +/* SPDX-License-Identifier: GPL-2.0+ */
-> >>>> +#include <linux/linkage.h>
-> >>>> +#include <asm/stackframe.h>
-> >>>> +
-> >>>> +       .text
-> >>>> +
-> >>>> +       .macro save_all_base_regs
-> >>>> +       cfi_st  zero, PT_R0
-> >>>> +       cfi_st  ra, PT_R1
-> >>>> +       cfi_st  tp, PT_R2
-> >>>> +       cfi_st  a0, PT_R4
-> >>>> +       cfi_st  a1, PT_R5
-> >>>> +       cfi_st  a2, PT_R6
-> >>>> +       cfi_st  a3, PT_R7
-> >>>> +       cfi_st  a4, PT_R8
-> >>>> +       cfi_st  a5, PT_R9
-> >>>> +       cfi_st  a6, PT_R10
-> >>>> +       cfi_st  a7, PT_R11
-> >>>> +       cfi_st  t0, PT_R12
-> >>>> +       cfi_st  t1, PT_R13
-> >>>> +       cfi_st  t2, PT_R14
-> >>>> +       cfi_st  t3, PT_R15
-> >>>> +       cfi_st  t4, PT_R16
-> >>>> +       cfi_st  t5, PT_R17
-> >>>> +       cfi_st  t6, PT_R18
-> >>>> +       cfi_st  t7, PT_R19
-> >>>> +       cfi_st  t8, PT_R20
-> >>>> +       cfi_st  u0, PT_R21
-> >>>> +       cfi_st  fp, PT_R22
-> >>>> +       cfi_st  s0, PT_R23
-> >>>> +       cfi_st  s1, PT_R24
-> >>>> +       cfi_st  s2, PT_R25
-> >>>> +       cfi_st  s3, PT_R26
-> >>>> +       cfi_st  s4, PT_R27
-> >>>> +       cfi_st  s5, PT_R28
-> >>>> +       cfi_st  s6, PT_R29
-> >>>> +       cfi_st  s7, PT_R30
-> >>>> +       cfi_st  s8, PT_R31
-> >>>> +       addi.d  t0, sp, PT_SIZE
-> >>>> +       LONG_S  t0, sp, PT_R3
-> >>>> +       csrrd   t0, LOONGARCH_CSR_CRMD
-> >>>> +       andi    t0, t0, 0x7 /* extract bit[1:0] PLV, bit[2] IE */
-> >>>> +       LONG_S  t0, sp, PT_PRMD
-> >>>> +       .endm
-> >>>> +
-> >>>> +       .macro restore_all_base_regs
-> >>>> +       cfi_ld  zero, PT_R0
-> >>>> +       cfi_ld  tp, PT_R2
-> >>>> +       cfi_ld  a0, PT_R4
-> >>>> +       cfi_ld  a1, PT_R5
-> >>>> +       cfi_ld  a2, PT_R6
-> >>>> +       cfi_ld  a3, PT_R7
-> >>>> +       cfi_ld  a4, PT_R8
-> >>>> +       cfi_ld  a5, PT_R9
-> >>>> +       cfi_ld  a6, PT_R10
-> >>>> +       cfi_ld  a7, PT_R11
-> >>>> +       cfi_ld  t0, PT_R12
-> >>>> +       cfi_ld  t1, PT_R13
-> >>>> +       cfi_ld  t2, PT_R14
-> >>>> +       cfi_ld  t3, PT_R15
-> >>>> +       cfi_ld  t4, PT_R16
-> >>>> +       cfi_ld  t5, PT_R17
-> >>>> +       cfi_ld  t6, PT_R18
-> >>>> +       cfi_ld  t7, PT_R19
-> >>>> +       cfi_ld  t8, PT_R20
-> >>>> +       cfi_ld  u0, PT_R21
-> >>>> +       cfi_ld  fp, PT_R22
-> >>>> +       cfi_ld  s0, PT_R23
-> >>>> +       cfi_ld  s1, PT_R24
-> >>>> +       cfi_ld  s2, PT_R25
-> >>>> +       cfi_ld  s3, PT_R26
-> >>>> +       cfi_ld  s4, PT_R27
-> >>>> +       cfi_ld  s5, PT_R28
-> >>>> +       cfi_ld  s6, PT_R29
-> >>>> +       cfi_ld  s7, PT_R30
-> >>>> +       cfi_ld  s8, PT_R31
-> >>>> +       LONG_L  t0, sp, PT_PRMD
-> >>>> +       li.d    t1, 0x7 /* mask bit[1:0] PLV, bit[2] IE */
-> >>>> +       csrxchg t0, t1, LOONGARCH_CSR_CRMD
-> >>>> +       .endm
-> >>> Do you think we need to save and restore all regs here?
-> >>>
-> >>> Huacai
-> >> Hi, Huacai,
-> >>
-> >>
-> >> Note that it is not function context. In the original kprobe design, i=
-t is
-> >> triggered by 'break' and then trap into exception with all pt_regs sav=
-ed.
-> >> The all pt_regs will be visible to the user. So I think in this versio=
-n
-> >> we should also support all regs to user. BTW, due to all exceptions is
-> >> trapped by 'break' something in pt_regs is not needed, like estat,
-> >> badvaddr and so on.
-> > OK, but I still have some questions:
-> > 1, Why $r0 need save/restore?
->
-> Surely $r0 can be not saved, as now we do not have strange purpose
-> to make PT_R0 as a flag.
->
->
-> > 2, Why save $r1 but not restore?
-> My wrong idea is $r1 should be saved at CSR_ERA, to plays it like
-> exception happened. But its value always equal the address of
-> __kretprobe_trampoline. The kretprobe is something like fgraph. The real
-> return address is returned by trampoline_probe_handler. And at present,
-> the real return address is replaced in pt_regs->csr_era in
-> __kretprobe_trampoline_handler(). So the $r1 saved in CSR_ERA will
-> be destroied at __kretprobe_trampoline_handler() actually.
-> That's why $r1 saved also is not needed.
->
-> And both way to get return address from return value or get return addres=
-s
->
-> from pt_regs is same on LoongArch because arch_kretprobe_fixup_return()
->
-> does nothing. But I think get return address from pt_regs is more reliabl=
-e.
->
->
-> > 3, What is the purpose of CRMD magic?
->
-> PT_CRMD magic is just exception context. It gives us a chance e.g.
-> set ie off at func head, and ie on at func return.
-ARM64 and RISC-V don't have such magics, so maybe they are unneeded?
-
-Huacai
->
->
-> Thanks,
->
-> Jinyang
->
-> >
-> >>>> +
-> >>>> +SYM_CODE_START(__kretprobe_trampoline)
-> >>>> +       addi.d  sp, sp, -PT_SIZE
-> >>>> +       save_all_base_regs
-> >>>> +
-> >>>> +       move a0, sp /* pt_regs */
-> >>>> +
-> >>>> +       bl trampoline_probe_handler
-> >>>> +
-> >>>> +       /* use the result as the return-address */
-> >>>> +       move ra, a0
-> >>>> +
-> >>>> +       restore_all_base_regs
-> >>>> +       addi.d  sp, sp, PT_SIZE
-> >>>> +
-> >>>> +       jr ra
-> >>>> +SYM_CODE_END(__kretprobe_trampoline)
-> >>>> --
-> >>>> 2.1.0
-> >>>>
-> >>>>
->
+PiBGcm9tOiBKYXNvbiBXYW5nIDxqYXNvd2FuZ0ByZWRoYXQuY29tPg0KPiBTZW50OiBNb25kYXks
+IDE0IE5vdmVtYmVyIDIwMjIgOToyNw0KPiBUbzogRWxpIENvaGVuIDxlbGljQG52aWRpYS5jb20+
+DQo+IENjOiBtc3RAcmVkaGF0LmNvbTsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgdmly
+dHVhbGl6YXRpb25AbGlzdHMubGludXgtDQo+IGZvdW5kYXRpb24ub3JnOyBzaS13ZWkubGl1QG9y
+YWNsZS5jb207IGVwZXJlem1hQHJlZGhhdC5jb207DQo+IGx1bHVAcmVkaGF0LmNvbQ0KPiBTdWJq
+ZWN0OiBSZTogW1BBVENIIDUvN10gdmRwYS9tbHg1OiBBZGQgUlggY291bnRlcnMgdG8gZGVidWdm
+cw0KPiANCj4gT24gU3VuLCBOb3YgMTMsIDIwMjIgYXQgOTo0NSBQTSBFbGkgQ29oZW4gPGVsaWNA
+bnZpZGlhLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBGb3IgZWFjaCBpbnRlcmZhY2UsIGVpdGhlciBW
+TEFOIHRhZ2dlZCBvciB1bnRhZ2dlZCwgYWRkIHR3byBoYXJkd2FyZQ0KPiA+IGNvdW50ZXJzOiBv
+bmUgZm9yIHVuaWNhc3QgYW5kIGFub3RoZXIgZm9yIG11bHRpY2FzdC4gVGhlIGNvdW50ZXJzIGNv
+dW50DQo+ID4gUlggcGFja2V0cyBhbmQgYnl0ZXMgYW5kIGNhbiBiZSByZWFkIHRocm91Z2ggZGVi
+dWdmczoNCj4gPg0KPiA+ICQgY2F0IC9zeXMva2VybmVsL2RlYnVnL21seDUvbWx4NV9jb3JlLnNm
+LjEvdmRwYS0NCj4gMC9yeC91bnRhZ2dlZC9tY2FzdC9wYWNrZXRzDQo+ID4gJCBjYXQgL3N5cy9r
+ZXJuZWwvZGVidWcvbWx4NS9tbHg1X2NvcmUuc2YuMS92ZHBhLQ0KPiAwL3J4L3VudGFnZ2VkL3Vj
+YXN0L2J5dGVzDQo+ID4NCj4gPiBUaGlzIGZlYXR1cmUgaXMgY29udHJvbGxlZCB2aWEgdGhlIGNv
+bmZpZyBvcHRpb24NCj4gPiBNTFg1X1ZEUEFfU1RFRVJJTkdfREVCVUcuIEl0IGlzIG9mZiBieSBk
+ZWZhdWx0IGFzIGl0IG1heSBoYXZlIHNvbWUNCj4gPiBpbXBhY3Qgb24gcGVyZm9ybWFuY2UuDQo+
+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBFbGkgQ29oZW4gPGVsaWNAbnZpZGlhLmNvbT4NCj4gPiAt
+LS0NCj4gPiAgZHJpdmVycy92ZHBhL0tjb25maWcgICAgICAgICAgICAgIHwgIDEyICsrKw0KPiA+
+ICBkcml2ZXJzL3ZkcGEvbWx4NS9uZXQvZGVidWcuYyAgICAgfCAgODYgKysrKysrKysrKysrKysr
+KysrKysrKw0KPiA+ICBkcml2ZXJzL3ZkcGEvbWx4NS9uZXQvbWx4NV92bmV0LmMgfCAxMTggKysr
+KysrKysrKysrKysrKysrKysrKystLS0tLS0tDQo+ID4gIGRyaXZlcnMvdmRwYS9tbHg1L25ldC9t
+bHg1X3ZuZXQuaCB8ICAzMCArKysrKysrKw0KPiA+ICA0IGZpbGVzIGNoYW5nZWQsIDIxOCBpbnNl
+cnRpb25zKCspLCAyOCBkZWxldGlvbnMoLSkNCj4gPg0KPiANCj4gWy4uLl0NCj4gDQo+ID4gKyAg
+ICAgICB2aWQgPSBrZXkydmlkKG5vZGUtPm1hY3ZsYW4pOw0KPiA+ICAgICAgICAgc3BlYy0+bWF0
+Y2hfY3JpdGVyaWFfZW5hYmxlID0gTUxYNV9NQVRDSF9PVVRFUl9IRUFERVJTOw0KPiA+ICAgICAg
+ICAgaGVhZGVyc19jID0gTUxYNV9BRERSX09GKGZ0ZV9tYXRjaF9wYXJhbSwgc3BlYy0+bWF0Y2hf
+Y3JpdGVyaWEsDQo+IG91dGVyX2hlYWRlcnMpOw0KPiA+ICAgICAgICAgaGVhZGVyc192ID0gTUxY
+NV9BRERSX09GKGZ0ZV9tYXRjaF9wYXJhbSwgc3BlYy0+bWF0Y2hfdmFsdWUsDQo+IG91dGVyX2hl
+YWRlcnMpOw0KPiA+IEBAIC0xNDMwLDQ4ICsxNDc1LDYyIEBAIHN0YXRpYyBpbnQgbWx4NV92ZHBh
+X2FkZF9tYWNfdmxhbl9ydWxlcyhzdHJ1Y3QNCj4gbWx4NV92ZHBhX25ldCAqbmRldiwgdTggKm1h
+YywNCj4gPiAgICAgICAgIGRtYWNfdiA9IE1MWDVfQUREUl9PRihmdGVfbWF0Y2hfcGFyYW0sIGhl
+YWRlcnNfdiwNCj4gb3V0ZXJfaGVhZGVycy5kbWFjXzQ3XzE2KTsNCj4gPiAgICAgICAgIGV0aF9i
+cm9hZGNhc3RfYWRkcihkbWFjX2MpOw0KPiA+ICAgICAgICAgZXRoZXJfYWRkcl9jb3B5KGRtYWNf
+diwgbWFjKTsNCj4gPiAtICAgICAgIGlmIChuZGV2LT5tdmRldi5hY3R1YWxfZmVhdHVyZXMgJiBW
+SVJUSU9fTkVUX0ZfQ1RSTF9WTEFOKSB7DQo+ID4gKyAgICAgICBpZiAobmRldi0+bXZkZXYuYWN0
+dWFsX2ZlYXR1cmVzICYNCj4gQklUX1VMTChWSVJUSU9fTkVUX0ZfQ1RSTF9WTEFOKSkgew0KPiAN
+Cj4gDQo+IFRoaXMgc2VlbXMgbGlrZSBhIGZpeCBmb3IgcGF0Y2ggMT8gSWYgeWVzLCBsZXQncyBq
+dXN0IHNxdWFzaCB0aGlzLg0KU3VyZSwgdGhhbmtzLg0KPiANCj4gVGhhbmtzDQoNCg==
