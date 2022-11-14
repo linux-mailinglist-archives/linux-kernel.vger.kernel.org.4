@@ -2,126 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4A1628D5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:24:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8E7628D67
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:28:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbiKNXYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 18:24:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
+        id S235813AbiKNX2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 18:28:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbiKNXYW (ORCPT
+        with ESMTP id S230212AbiKNX2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 18:24:22 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EE5F0B
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 15:24:21 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id f3so5212977pgc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 15:24:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=isFHkEsP4U7bls6+qnM9Ylr3wjVvZ13ykkMwbt8BoQw=;
-        b=LWOYZLNMNZwSReaa3uSIz6jrXnI/Rr2JJojN/mxQAoov+trhlXXYow2KlUgLSLOQNt
-         ZW2OzsnCNJyIe0jqPWkR9ZzyTPJEWIuEna29fGERlsILjuqFaWuvNMHAjBfyj/8J2iTM
-         av9glh1vpo4WQkSfE8gZuaPFZM3yC2lp28zgCrtZ9GLYBz/baZLGQ+SDS0GELJmvch6x
-         WUA4myeaVI/WzyMRmE3H5TzBhk+lbhbRX2wdPrutAyFLrnIQfpM4spqXksL3d5D3RkA8
-         ycNQkoQXFwg5TBGtWGPeaFxxPJnx1ytnsmzeovhKe8r1LjJuWhWeI0/MgHAJeRpY+EsW
-         4pYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=isFHkEsP4U7bls6+qnM9Ylr3wjVvZ13ykkMwbt8BoQw=;
-        b=LyYZVXWLp3rnlatz4+mwhtSLssyetTHF+HvgpzjHvJpNROwF9QXNe0xr4n6awhPiy2
-         QQJQQd4PyUAF1K9rXhAbSj+q7iTmWpY/A+DDvgAvATOaBBWE9AhtQrKvo9fHhZA1ziRc
-         wCpfaPlxUVg2iovEunuJtTueGqyGh7OInXRqVHeS/E5Xuo8vYka21DLo/w3vV9y6CcwC
-         i1aRMLoKNXSLbWjVKRBLEkVt5m/KYLysXNfobmxWXpKg3PqZpdnd3db+WpfBCrwDu+oA
-         WbKN/nNWTQ9WCayMYurM4axLV6NB18WWmwq0izHXT4iI2FSbZrPE+ap5RJulHjMxe6wN
-         7X1w==
-X-Gm-Message-State: ANoB5pniAEzLMiSMyf1M/pwM2Uc2gFRwQfnfFsQvoM2QEYxFAvzxSQON
-        5sJpw+zzgll5xExcybwy0synKQ==
-X-Google-Smtp-Source: AA0mqf4XwefhBFMM95veTWx+1D5wJMGN873P83ISTzdr6a1eJB1Sel9VSsLR59mWLNxeNAm/G0SBYg==
-X-Received: by 2002:a63:1801:0:b0:470:7886:e200 with SMTP id y1-20020a631801000000b004707886e200mr13714841pgl.111.1668468260709;
-        Mon, 14 Nov 2022 15:24:20 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id v5-20020a622f05000000b00571f66721aesm4132497pfv.42.2022.11.14.15.24.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 15:24:20 -0800 (PST)
-Date:   Mon, 14 Nov 2022 23:24:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org, zhenyuw@linux.intel.com
-Subject: Re: [PATCH v2 1/3] KVM: x86: add a new page track hook
- track_remove_slot
-Message-ID: <Y3LOIKueyTUoJ00B@google.com>
-References: <20221111103247.22275-1-yan.y.zhao@intel.com>
- <20221111103350.22326-1-yan.y.zhao@intel.com>
- <Y26SI3uh8JV0vvO6@google.com>
- <Y27ivXea5SjR5lat@yzhao56-desk.sh.intel.com>
- <Y27sG3AqVX8yLUgR@google.com>
- <Y3GUdqxnPJvc6SPI@yzhao56-desk.sh.intel.com>
- <Y3JtonYdDYOhbmfG@google.com>
- <Y3LEZXWqk6ztuf7x@yzhao56-desk.sh.intel.com>
+        Mon, 14 Nov 2022 18:28:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D290F0B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 15:28:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CCAAD614B1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:28:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CFCCC433C1;
+        Mon, 14 Nov 2022 23:28:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668468488;
+        bh=1FW+G4TwrbSlGabM9+WKmnumD94d0xrskPEMNyCwnLA=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=bdOCF8oimotk8J50F+VkpGQh3TBSUO5URCTzEM/Iw/N/YJiXd2kQncXPrDv/AytwN
+         wJFN0JEh2z+XtOqj/PNgiCvL1byae5VfqhfMlN2QcPWE/ssWck+DnkaTMoAgRVdsZR
+         Ibt6/kC/c7VBmVEL3ipdZ+LlWW4ozKHCYri+iGB/iEczaOdvc1S6OkFgWAVZHcVP87
+         t7gdj15lnfLcV87X/az/BXdQBXDOQ5daDsu2Q7AxRo9p//slSTSbaRIV+SGoarOutB
+         4I9rc0+qer1b1nxbvJK5sNbuUNZu7eEoZq4Sy6AzEZBh638cEqWKG2OvBp1leXCAgS
+         A+U2s/8/Dy4GQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BF90C5C14FC; Mon, 14 Nov 2022 15:28:07 -0800 (PST)
+Date:   Mon, 14 Nov 2022 15:28:07 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     tglx@linutronix.de
+Cc:     linux-kernel@vger.kernel.org, john.stultz@linaro.org,
+        sboyd@kernel.org, corbet@lwn.net, Mark.Rutland@arm.com,
+        maz@kernel.org, kernel-team@meta.com, neeraju@codeaurora.org,
+        ak@linux.intel.com, feng.tang@intel.com, zhengjun.xing@intel.com
+Subject: [PATCH clocksource 0/3] Reject bogus watchdog clocksource
+ measurements
+Message-ID: <20221114232807.GA834337@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y3LEZXWqk6ztuf7x@yzhao56-desk.sh.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022, Yan Zhao wrote:
-> On Mon, Nov 14, 2022 at 04:32:34PM +0000, Sean Christopherson wrote:
-> > On Mon, Nov 14, 2022, Yan Zhao wrote:
-> > > On Sat, Nov 12, 2022 at 12:43:07AM +0000, Sean Christopherson wrote:
-> > > > On Sat, Nov 12, 2022, Yan Zhao wrote:
-> > > > > And I'm also not sure if a slots_arch_lock is required for
-> > > > > kvm_slot_page_track_add_page() and kvm_slot_page_track_remove_page().
-> > > > 
-> > > > It's not required.  slots_arch_lock protects interaction between memslot updates
-> > > In kvm_slot_page_track_add_page() and kvm_slot_page_track_remove_page(),
-> > > slot->arch.gfn_track[mode][index] is updated in update_gfn_track(),
-> > > do you know which lock is used to protect it?
-> > 
-> > mmu_lock protects the count, kvm->srcu protects the slot, and shadow_root_allocated
-> > protects that validity of gfn_track, i.e. shadow_root_allocated ensures that KVM
-> > allocates gfn_track for all memslots when shadow paging is activated.
-> Hmm, thanks for the reply.
-> but in direct_page_fault(),
-> if (page_fault_handle_page_track(vcpu, fault))
-> 	return RET_PF_EMULATE;
-> 
-> slot->arch.gfn_track is read without any mmu_lock is held.
+Hello!
 
-That's a fast path that deliberately reads out of mmu_lock.  A false positive
-only results in unnecessary emulation, and any false positive is inherently prone
-to races anyways, e.g. fault racing with zap.
+This series adds comments classifying bogus measurements and adds capped
+exponential backoff for messages that are likely caused by overly busy
+systems.
 
-> > arch/x86/kvm/mmu/page_track.c-void __kvm_write_track_remove_gfn(struct kvm *kvm,
-> > arch/x86/kvm/mmu/page_track.c-                            struct kvm_memory_slot *slot, gfn_t gfn)
-> > arch/x86/kvm/mmu/page_track.c-{
-> > arch/x86/kvm/mmu/page_track.c-  lockdep_assert_held_write(&kvm->mmu_lock);
-> > arch/x86/kvm/mmu/page_track.c-
-> > arch/x86/kvm/mmu/page_track.c-  if (KVM_BUG_ON(!kvm_page_track_write_tracking_enabled(kvm), kvm))
-> > arch/x86/kvm/mmu/page_track.c-          return;
-> > arch/x86/kvm/mmu/page_track.c-
-> > arch/x86/kvm/mmu/page_track.c:  update_gfn_write_track(slot, gfn, -1);
-> yes, it will be helpful.
-> 
-> Besides, will WRITE_ONCE or atomic_add in update_gfn_write_track() to
-> update slot->arch.gfn_track be better?
+1.	Reject bogus watchdog clocksource measurements.
 
-WRITE_ONCE() won't suffice, it needs to be atomic.  Switching to atomic_inc/dec
-isn't worth it so long as KVM's shadow MMU takes mmu_lock for write, i.e. while
-the accounting is mutually exclusive for other reasons in both KVM and KVMGT.
+2.	Add comments to classify bogus measurements.
+
+3.	Exponential backoff for load-induced bogus watchdog reads.
+
+Changes since v1:
+
+o	Merge the "Reject bogus watchdog clocksource measurements" [1] series
+	with the "Clocksource-watchdog classification and backoff" [2] series.
+
+o	Updated messages to indicate timer bug for too-short watchdog
+	intervals based on Feng Tang feedback.
+
+o	Added explanatory comments before error messages based on Feng
+	Tang feedback.
+
+o	Check both the reference clocksource and the clocksource under
+	test to handle clocksource-internal counter wrap, based on Feng
+	Tang feedback.
+
+o	Reversed the order of the checks, so that the too-long check
+	preceeds the too-short check.  This avoids too-short false
+	positives due to counter wrap.
+
+o	Simplified exponential-backoff time checks based on feedback
+	from Waiman Long.
+
+o	Updated the exponentially backed off messages to more clearly
+	indicate that the counts are instances since the last printed
+	message.
+
+o	Applied Reviewed-by tags.
+
+[1] https://lore.kernel.org/all/20221019230904.GA2502730@paulmck-ThinkPad-P17-Gen-1
+[2] https://lore.kernel.org/all/20221102184001.GA1306489@paulmck-ThinkPad-P17-Gen-1/
+
+						Thanx, Paul
+
+------------------------------------------------------------------------
+
+ b/include/linux/clocksource.h |    3 +++
+ b/kernel/time/clocksource.c   |   13 ++++++++++++-
+ kernel/time/clocksource.c     |   33 +++++++++++++++++++++++++++------
+ 3 files changed, 42 insertions(+), 7 deletions(-)
