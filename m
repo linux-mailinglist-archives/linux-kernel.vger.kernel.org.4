@@ -2,73 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42A9628056
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:05:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDAD628043
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237785AbiKNNFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:05:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
+        id S237753AbiKNNE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:04:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237766AbiKNNFF (ORCPT
+        with ESMTP id S237750AbiKNNEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:05:05 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0132A273;
-        Mon, 14 Nov 2022 05:05:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=2y401i8RHooQYJjpyKGYLxQ8w5xfHy0k3TPsSzf0CGA=; b=eSL/pC96cN8kEPu5RWSDqWXolS
-        ST7oY5KrZkL2r7mOdgFqhzgx/uS9F9A9dNr4lmTkKfc7oKEGyI0Sb3SLFo52pQe7K0h+4v3M0NSn1
-        rjM81IGwTY4dd2Ou+T4OuSLdIc7Uk+5aJgTc82sSRD3LDwoZ2EXnuuG233yCEUihuYXo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ouZ7i-002Kls-44; Mon, 14 Nov 2022 14:03:38 +0100
-Date:   Mon, 14 Nov 2022 14:03:38 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Xiaolei Wang <xiaolei.wang@windriver.com>
-Cc:     qiangqing.zhang@nxp.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, richardcochran@gmail.com,
-        lgirdwood@gmail.com, broonie@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH] net: fec: Create device link between fec0 and fec1
-Message-ID: <Y3I8qnNj1EUmPDmd@lunn.ch>
-References: <20221114041143.2189624-1-xiaolei.wang@windriver.com>
+        Mon, 14 Nov 2022 08:04:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C50727DDA;
+        Mon, 14 Nov 2022 05:04:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09A936117E;
+        Mon, 14 Nov 2022 13:04:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CA3BC433C1;
+        Mon, 14 Nov 2022 13:04:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668431063;
+        bh=B8vw6qZp1pAdTc0xkFcFrwXOTcOIyVYrxMXbsKmlHSo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iLyerZK1InQ8OyNqlEdaHZAmAzfxqIrN+EaSobimUtA3S5xPZA06hIatGXMCGJvAn
+         3hLPt6LNZayKDMC6tLu05P/PtJ1RH7LiTHN+IjNAk2e3/H24n2UBcQgdxmg0506egE
+         hl7LQmKcsKsll7LActV8R++9ndv2PZvCPdrgvxbGv8H1SlAyIzP9nigHw4jzyNZTOh
+         4ryeEF/WSdauM1I8BMdZ62bZrgdTwmuHTrRCdt7dpZtXxF/6scgNP/PnXv8D6ylDFy
+         t5EFVSIS28TUWR4ixRa38Ty6sGSW6Uo/NqH6jhmU9CLO123ZPTZDrjL75nxldHpD7I
+         IKKWUNY5Ucaag==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ouZ7v-0002Yl-Ig; Mon, 14 Nov 2022 14:03:51 +0100
+Date:   Mon, 14 Nov 2022 14:03:51 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/14] phy: qcom-qmp-combo: drop v4 reference-clock source
+Message-ID: <Y3I8t6it7DN0Id1G@hovoldconsulting.com>
+References: <20221111092457.10546-1-johan+linaro@kernel.org>
+ <20221111092457.10546-4-johan+linaro@kernel.org>
+ <14f01c33-dada-b66a-f81a-74b9028de18b@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221114041143.2189624-1-xiaolei.wang@windriver.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <14f01c33-dada-b66a-f81a-74b9028de18b@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 12:11:43PM +0800, Xiaolei Wang wrote:
-> On imx6sx, there are two fec interfaces, but the external
-> phys can only be configured by fec0 mii_bus. That means
-> the fec1 can't work independently, it only work when the
-> fec0 is active. It is alright in the normal boot since the
-> fec0 will be probed first. But then the fec0 maybe moved
-> behind of fec1 in the dpm_list due to various device link.
-> So in system suspend and resume, we would get the following
-> warning when configuring the external phy of fec1 via the
-> fec0 mii_bus due to the inactive of fec0. In order to fix
-> this issue, we create a device link between fec0 and fec1.
-> This will make sure that fec0 is always active when fec1
-> is in active mode.
+On Sat, Nov 12, 2022 at 02:43:38PM +0300, Dmitry Baryshkov wrote:
+> On 11/11/2022 12:24, Johan Hovold wrote:
+> > The source clock for the reference clock should not be described by the
+> > devicetree and instead this relationship should be modelled in the clock
+> > driver.
+> 
+> Do we have a fix for the gcc driver?
 
-I'm wondering if this should be more generic? I have seen this setup
-more frequently on the FEC, but there are other dual MAC SoCs which
-can have a similar setup, two PHYs sharing one MDIO bus.
+Bjorn is preparing one, but there's no need to wait for that to be
+merged in this case (we have a ton of references on CXO, we need to get
+the binding fixed in 6.2, and some other reasons which Bjorn may be able
+to share soon).
 
-Can this be pushed into phylib?
-
-    Andrew
+Johan
