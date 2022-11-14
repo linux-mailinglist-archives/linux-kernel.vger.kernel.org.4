@@ -2,172 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 161736278E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 148DF627906
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235873AbiKNJTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:19:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33810 "EHLO
+        id S236361AbiKNJbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:31:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236352AbiKNJTf (ORCPT
+        with ESMTP id S235933AbiKNJbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:19:35 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC403E0E0;
-        Mon, 14 Nov 2022 01:19:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1668417574; x=1699953574;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tj5P+zXbOOesl3lSAdcCPziPUfeUV9ZWH1wNdH5xCyY=;
-  b=bRKm9XN0W2O9Kvlv6fImqmhUekEelr17FtuepIgNXKTzhC0FLGPdCIaJ
-   zQ9e3N7eHViRqMy6D+EGxEek+1P8RX1BtJrrWPCAP6IAtZBlLpdI8Af4j
-   YdZm1pcx3Pv2OsxWZCZ+XycZFuTz7bBd8XIsZsGn7wZox0Uieh75FMWxQ
-   6fO2u6qwH+qWgfoypElbaqAA86EoPxX9k9WoRVcBl2pwYZnbEr2ZbFQwY
-   T1zC8n6iLCdkdlVBu1Tr+EKJl3Hm+nJOyVvdJuqo3dIDBpgS9iF3pBMtk
-   xBhlXxSI3/yQgEpFT1gP45/00oMIRhGkZqY3w9wOf3ODOPCUmeh5QhBGE
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="199672163"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Nov 2022 02:19:33 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 14 Nov 2022 02:19:33 -0700
-Received: from DEN-LT-70577.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Mon, 14 Nov 2022 02:19:31 -0700
-From:   Daniel Machon <daniel.machon@microchip.com>
-To:     <netdev@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <joe@perches.com>,
-        <daniel.machon@microchip.com>, <vladimir.oltean@nxp.com>,
-        <petrm@nvidia.com>, <linux-kernel@vger.kernel.org>,
-        <UNGLinuxDriver@microchip.com>, "kernel test robot" <lkp@intel.com>
-Subject: [PATCH net-next v2 1/1] net: dcb: move getapptrust to separate function
-Date:   Mon, 14 Nov 2022 10:29:50 +0100
-Message-ID: <20221114092950.2490451-1-daniel.machon@microchip.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 14 Nov 2022 04:31:12 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36433A1A9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:31:10 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ouVny-0006Sz-7y; Mon, 14 Nov 2022 10:31:02 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ouVnv-004D8f-IL; Mon, 14 Nov 2022 10:31:00 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ouVnv-00GVUS-P7; Mon, 14 Nov 2022 10:30:59 +0100
+Date:   Mon, 14 Nov 2022 10:30:59 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Hui Tang <tanghui20@huawei.com>
+Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        weiyongjun1@huawei.com, yusongping@huawei.com
+Subject: Re: [PATCH v2] mtd: lpddr2_nvm: Fix possible null-ptr-deref
+Message-ID: <20221114093059.bbmefffkkcmygvye@pengutronix.de>
+References: <20221114090240.244172-1-tanghui20@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="m7dizcf5p7ztwwln"
+Content-Disposition: inline
+In-Reply-To: <20221114090240.244172-1-tanghui20@huawei.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes a frame size warning, reported by kernel test robot.
 
->> net/dcb/dcbnl.c:1230:1: warning: the frame size of 1244 bytes is
->> larger than 1024 bytes [-Wframe-larger-than=]
+--m7dizcf5p7ztwwln
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The getapptrust part of dcbnl_ieee_fill is moved to a separate function,
-and the selector array is now dynamically allocated, instead of stack
-allocated.
+On Mon, Nov 14, 2022 at 05:02:40PM +0800, Hui Tang wrote:
+> It will cause null-ptr-deref when resource_size(add_range) invoked,
+> if platform_get_resource() returns NULL.
+>=20
+> Fixes: 96ba9dd65788 ("mtd: lpddr: add driver for LPDDR2-NVM PCM memories")
+> Signed-off-by: Hui Tang <tanghui20@huawei.com>
 
-Tested on microchip sparx5 driver.
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-Fixes: 6182d5875c33 ("net: dcb: add new apptrust attribute")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
----
- net/dcb/dcbnl.c | 65 ++++++++++++++++++++++++++++++++-----------------
- 1 file changed, 43 insertions(+), 22 deletions(-)
+Thanks
+Uwe
 
-diff --git a/net/dcb/dcbnl.c b/net/dcb/dcbnl.c
-index cec0632f96db..f9949e051f49 100644
---- a/net/dcb/dcbnl.c
-+++ b/net/dcb/dcbnl.c
-@@ -1060,11 +1060,50 @@ static int dcbnl_build_peer_app(struct net_device *netdev, struct sk_buff* skb,
- 	return err;
- }
- 
-+static int dcbnl_getapptrust(struct net_device *netdev, struct sk_buff *skb)
-+{
-+	const struct dcbnl_rtnl_ops *ops = netdev->dcbnl_ops;
-+	enum ieee_attrs_app type;
-+	struct nlattr *apptrust;
-+	int nselectors, err, i;
-+	u8 *selectors;
-+
-+	selectors = kzalloc(IEEE_8021QAZ_APP_SEL_MAX + 1, GFP_KERNEL);
-+	if (!selectors)
-+		return -ENOMEM;
-+
-+	err = ops->dcbnl_getapptrust(netdev, selectors, &nselectors);
-+	if (err) {
-+		err = 0;
-+		goto out;
-+	}
-+
-+	apptrust = nla_nest_start(skb, DCB_ATTR_DCB_APP_TRUST_TABLE);
-+	if (!apptrust) {
-+		err = -EMSGSIZE;
-+		goto out;
-+	}
-+
-+	for (i = 0; i < nselectors; i++) {
-+		type = dcbnl_app_attr_type_get(selectors[i]);
-+		err = nla_put_u8(skb, type, selectors[i]);
-+		if (err) {
-+			nla_nest_cancel(skb, apptrust);
-+			goto out;
-+		}
-+	}
-+	nla_nest_end(skb, apptrust);
-+
-+out:
-+	kfree(selectors);
-+	return err;
-+}
-+
- /* Handle IEEE 802.1Qaz/802.1Qau/802.1Qbb GET commands. */
- static int dcbnl_ieee_fill(struct sk_buff *skb, struct net_device *netdev)
- {
- 	const struct dcbnl_rtnl_ops *ops = netdev->dcbnl_ops;
--	struct nlattr *ieee, *app, *apptrust;
-+	struct nlattr *ieee, *app;
- 	struct dcb_app_type *itr;
- 	int dcbx;
- 	int err;
-@@ -1168,27 +1207,9 @@ static int dcbnl_ieee_fill(struct sk_buff *skb, struct net_device *netdev)
- 	nla_nest_end(skb, app);
- 
- 	if (ops->dcbnl_getapptrust) {
--		u8 selectors[IEEE_8021QAZ_APP_SEL_MAX + 1] = {0};
--		int nselectors, i;
--
--		apptrust = nla_nest_start(skb, DCB_ATTR_DCB_APP_TRUST_TABLE);
--		if (!apptrust)
--			return -EMSGSIZE;
--
--		err = ops->dcbnl_getapptrust(netdev, selectors, &nselectors);
--		if (!err) {
--			for (i = 0; i < nselectors; i++) {
--				enum ieee_attrs_app type =
--					dcbnl_app_attr_type_get(selectors[i]);
--				err = nla_put_u8(skb, type, selectors[i]);
--				if (err) {
--					nla_nest_cancel(skb, apptrust);
--					return err;
--				}
--			}
--		}
--
--		nla_nest_end(skb, apptrust);
-+		err = dcbnl_getapptrust(netdev, skb);
-+		if (err)
-+			return err;
- 	}
- 
- 	/* get peer info if available */
--- 
-2.34.1
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--m7dizcf5p7ztwwln
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNyCtAACgkQwfwUeK3K
+7AnL0Qf9GGiXuVY0Pw3AI7AtmvG6E34XsI28qAbN4u+PGF57LIrJKUoFBP1tneJZ
+uKFAlm1j1d6BBlXMXknz1K/kBw7ojoYA2N8Tv9A3ja6jQ8RmI8AkgM+NtssvG6K8
+l1mJdpjhP/xWiVBSbH6lb9VZDDvVlH7cglE6HHuLIOX4TpXBUSMgEobSwJgHBNpE
+EUh23sbP22orwrIW9LWmptVT3JJ/sOsR2qyaGS1skqOaU+jpshNNWw4fVuXfORte
+KtySmHYpCDB3JxjQaNYHdhCaU0Wyjf/eR/HlAWfEimj560BP2gDrsDVIyh0cwGS1
+MZ8AOvLzDMoAQ05Mf7Frp4JWJ9svKQ==
+=MAEr
+-----END PGP SIGNATURE-----
+
+--m7dizcf5p7ztwwln--
