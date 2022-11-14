@@ -2,106 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 162B9628D30
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF6D628D32
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237940AbiKNXJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 18:09:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
+        id S231896AbiKNXKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 18:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237881AbiKNXJk (ORCPT
+        with ESMTP id S231627AbiKNXKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 18:09:40 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D5326CB
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 15:08:30 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id l2so11485520pld.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 15:08:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CisNQEoZieHBjHrIOAEKT6bP8SOhHtD3MgeZveaDbsM=;
-        b=XViVBFm4z6epk3o4pHV8XrOzPHzY3Ni+wN2DxOy8w8eOkxgfNUqKFaTYf6Xa+5H3vd
-         tLJIoirtxKZfX+6dgRcRtQU0QFK9MDn5eMwHd40Jz/UIHSBTGAkPFPAzNuynVrrPdHyV
-         QmUXaeJK5HCuAig7wigPLW1O7Ndu3a7SMxTiZrquTv5NJCbb+MWbLWrR0Z6hR7s0u9Ea
-         ySkGTJkZh9SHs8+40vaGUerd342xEaLleZE7kxO9UJzMv4trEsIJQxUmTMamMuY9bICS
-         08h2EqoF+fxnO36n7/YCBq2bp8R/rGb02wdVCwVEgl6/2ipVOGd4Emq2R1wjZ6B7xO1h
-         ULew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CisNQEoZieHBjHrIOAEKT6bP8SOhHtD3MgeZveaDbsM=;
-        b=oyHlaZesuz6tBVWKq/EqkhEW7PAz0rR8y1xqaE0Ck2Pncdi8cHjVyhRnLn6Xmw+m8x
-         VCXKPiLGPqd47fM1JEsnI+QymTm+tThwh9kjb1mamP2VoQx+ew9gmdAKInun2k1ved0v
-         cx4GZBLxYnQa9N4S4mOPurINVUIZoRMtmkNq1cQPqZhHKoHfPI400x8fsplwdI0lOh+n
-         itvJNbch1TBEIvRk76x16VtQ1A9d86xO7BTxYQsiALKowZ/8vOprBnLoMe1g4hT5Ume/
-         1QcBEVrRWhbJFR50xZPXbRu5fBzyRQXj8vWV+DqxjFrqujonjxUEukW/BNjcbEBPKqc9
-         AwgQ==
-X-Gm-Message-State: ANoB5pll2lMEQJOgoLVoCVKhoII+NQyRcrAAbPd3wXstvm199aZF/zV4
-        aquaWIZESzn3yCSQ0T71Jub5rxKnoPI=
-X-Google-Smtp-Source: AA0mqf7krqPWFiLieSSGV06bgmxON2Lj6yIyT2W3WBz0xN9NBRgsXaAv7Y/6RDW5t2O+Z4CT6sH+Rg==
-X-Received: by 2002:a17:902:f790:b0:186:6180:fb89 with SMTP id q16-20020a170902f79000b001866180fb89mr1232864pln.142.1668467310198;
-        Mon, 14 Nov 2022 15:08:30 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n9-20020a17090a394900b0021282014066sm10339647pjf.9.2022.11.14.15.08.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 15:08:29 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 14 Nov 2022 15:08:28 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 6.1-rc5
-Message-ID: <20221114230828.GA2089561@roeck-us.net>
-References: <CAHk-=wicGu7PD25w7BCdvxRcs6Yvo-BPwCkzSYjM2CYtDjz2kg@mail.gmail.com>
+        Mon, 14 Nov 2022 18:10:15 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E0B22C;
+        Mon, 14 Nov 2022 15:10:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668467414; x=1700003414;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=xegt7ptKTtdJNW416eZFU2xzyfbyFyg07lD2i0oq41Q=;
+  b=bEarSPNZtvx1T83GZvW9m36KNUTrCZAKbbqhkMxfty356n6/Sl2glriy
+   s8HHrq8+b31UNMmxw4/wMm8M7Q1mW5aT0BotXqqV8dv0Xz/+PBkVeKACy
+   NnpgxT3rwFcOr/T1NYhWl6ePQZjtacz3YpzZltz/J+918Bs1jOQRGA8Xr
+   42ZElt3RY0EUThXsa+Dv/dc9CSB5NLp0QdV8wmfL9RrT9cB5pXaw3K1EB
+   s8H6X4Ue94zJJXjii4nuZwqv80PDCURgL2DYGKGQF4mdQU8lcYKTLLq/f
+   yOKwTR4xf8tf+IYPhpYLZ+IneqxdAwx5Ved1ZI8wl56w2vGGwarnQZ8nR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="312109889"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="312109889"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 15:10:14 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="702198648"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="702198648"
+Received: from tmacfarl-mobl1.amr.corp.intel.com (HELO [10.209.82.47]) ([10.209.82.47])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 15:10:13 -0800
+Message-ID: <6f7afaa6811cbda30d12c38d73d4b261ab733a9f.camel@linux.intel.com>
+Subject: Re: [PATCH 17/26] cgroup/misc: Add notifier block list support for
+ css events
+From:   Kristen Carlson Accardi <kristen@linux.intel.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     jarkko@kernel.org, dave.hansen@linux.intel.com,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, zhiquan1.li@intel.com
+Date:   Mon, 14 Nov 2022 15:10:05 -0800
+In-Reply-To: <Y3LES3rUIZ/PtwzV@slm.duckdns.org>
+References: <20221111183532.3676646-1-kristen@linux.intel.com>
+         <20221111183532.3676646-18-kristen@linux.intel.com>
+         <Y3LES3rUIZ/PtwzV@slm.duckdns.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wicGu7PD25w7BCdvxRcs6Yvo-BPwCkzSYjM2CYtDjz2kg@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 13, 2022 at 01:29:20PM -0800, Linus Torvalds wrote:
-> Another week, another rc.
-> 
-> Did things calm down and shrink this week? No. We've got about as many
-> commits in rc5 as we had in rc4. It's not outrageously big, but it's
-> certainly on the bigger side for this timeframe.
-> 
-> Am I getting worried? Not yet. There's nothing particularly worrisome
-> in here, and the rc5 changes are just a little bit of everything, so
-> I'm hoping it's just that it's one of those timing things and all the
-> pull requests came in this week, and it's going to calm down now.
-> 
-> But we'll see. If things don't start calming down, this may be one of
-> those releases that need an extra week. It wasn't a particularly big
-> merge window, but I don't particularly like how the rc's keep being on
-> the bigger side.
-> 
-> Anyway, lots of small fixes, fairly spread out (the diffstat looks
-> fairly flat apart from some maple tree tests moving to the testing
-> subdirectory). Nothing really stands out, the stats all look normal
-> apart from the "just slightly more than usual". Drivers, networking,
-> architecture fixes, with some smattering of noise elsewhere.
-> 
+On Mon, 2022-11-14 at 12:42 -1000, Tejun Heo wrote:
+> Hello,
+>=20
+> On Fri, Nov 11, 2022 at 10:35:22AM -0800, Kristen Carlson Accardi
+> wrote:
+> > +/**
+> > + * register_misc_cg_notifier() - Register for css callback events
+> > + * @nb: notifier_block to register
+> > + *
+> > + * Context: Any context.
+> > + */
+> > +int register_misc_cg_notifier(struct notifier_block *nb)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return
+> > blocking_notifier_chain_register(&misc_cg_notify_list, nb);
+> > +}
+> > +EXPORT_SYMBOL_GPL(register_misc_cg_notifier);
+> > +
+> > +/**
+> > + * unregister_misc_cg_notifier() - unregister for css callback
+> > events
+> > + * @nb: notifier_block to unregister
+> > + *
+> > + * Context: Any context.
+> > + */
+> > +int unregister_misc_cg_notifier(struct notifier_block *nb)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return
+> > blocking_notifier_chain_unregister(&misc_cg_notify_list, nb);
+> > +}
+> > +EXPORT_SYMBOL_GPL(unregister_misc_cg_notifier);
+>=20
+> So, I'm not necessarily against this but wonder whether it'd be more
+> straightforward to add sth like struct misc_res_ops which contains
+> the
+> optional callbacks and then have an array of pointers to the structs
+> which
+> are initialized / registered somehow. What do you think?
+>=20
+> Thanks.
+>=20
 
-Nothing to report from my side.
+Makes no difference to me TBH - I believe they will be functionally
+equivalent and from a downstream user perspective equally as easy to
+use, so whatever you think is easiest for you to maintain.
 
-Build results:
-	total: 152 pass: 152 fail: 0
-Qemu test results:
-	total: 500 pass: 500 fail: 0
-
-Guenter
