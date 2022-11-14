@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF9A6284F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEBA96284F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:21:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236360AbiKNQUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:20:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
+        id S236620AbiKNQVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:21:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235995AbiKNQUc (ORCPT
+        with ESMTP id S236458AbiKNQUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:20:32 -0500
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB16B21
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:20:31 -0800 (PST)
-Received: by mail-wr1-f41.google.com with SMTP id cl5so19194207wrb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:20:30 -0800 (PST)
+        Mon, 14 Nov 2022 11:20:55 -0500
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9A965C6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:20:54 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso11055756wme.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:20:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KA9Cqqpconpun6OrI6kW9ZiN+AtmOmJQh1MCCxtYmaI=;
-        b=JFNx/oetTYrZ7cNS1te5ZvNBEzgnwgEjVIN/a6zwG7W5gy4gMWNJ/YvutIP161s3pc
-         tHGTM6FHpOTm2ood+WNZeTlCfiqWHUCk7I/MBgj8HytZZmXQpK4R70thoKU9aV7RGPPR
-         nxjUg9IfjwjYKHQv3N0i7eZsuuhO9UqEs8Tjg92mhfpTsk2COTyyZjZ3CSgdD4Pc0niV
-         RRLvwfyUZry6+G071ELS30GZLEep/90npCjk140dgVGAT9NIYqTwUd0W6m5+HNCgQp7k
-         vQ5G4lmd3Es5NpV9K248sqdlDBjg3RDSCq4/tjM6EbC0C1TdzddYN9KV54aZRuUOSJBB
-         Izyw==
-X-Gm-Message-State: ANoB5plKkZmGyG95MaIppSzs35LUeFOX0pAcE3LLj4EW0vYzh72TznlW
-        r6QIdsbGv5B3yl/5MFCf9X8=
-X-Google-Smtp-Source: AA0mqf7+TN54xSe9LmWylYugTOIKnX+CszNB8roApTrxToIqrSBS0p87x1YVGP/xlWtkGNqsuUX+gA==
-X-Received: by 2002:adf:a1cf:0:b0:235:83aa:a6f0 with SMTP id v15-20020adfa1cf000000b0023583aaa6f0mr7815751wrv.623.1668442828846;
-        Mon, 14 Nov 2022 08:20:28 -0800 (PST)
+        bh=aimDqY0RjB+gPNJoEJ+Cxlak9hzcynx+8kIMR7cwNXg=;
+        b=Oo1TZik5Yj/kSw42mUBhFqikMRXd0ud4/4zhVo3uhtZ6ssIQqpo6qeQ5iC7lZ3SuLX
+         d59ww4b711eFEncJL1DYyULng3v4+utn8uBxJ/4ieZwx2soFY5zUXF3aSNEIL955qlcs
+         n/ewbjNWe2LLJXnKzzamwL3K45yMD3JiqZ1kQQ/2yfugS/urM1Cd+vdtHRGUVR6JvwJC
+         Tz1GNHWL1YhWt2Q6nxQj1SLT6p2jufyXfGUMOCkYblDf+l25ZFXRSG4lONLO1Z2K7taz
+         BPndwrHSsT5hPKQ5d5fWsYL8kP9UIUlVK43tV/QB+SzsDctB4vkynyO1bh2Wb6CHEGCP
+         5P0w==
+X-Gm-Message-State: ANoB5pmQJK1ZXKs32/P0nvtZx9aD+C2cR1B0dxFAmtuzt7RASqSy2AXt
+        5Up2Ktlc0uTTJBWxdxJ3H74=
+X-Google-Smtp-Source: AA0mqf4ZHpEl09T5pIhdlQgRtZ6B5N9kvCzDfoD4OqCmANtXgjpE2X3W8cWsDk92VrkNn24KbhGe8Q==
+X-Received: by 2002:a05:600c:3516:b0:3cf:8952:300c with SMTP id h22-20020a05600c351600b003cf8952300cmr8666627wmq.51.1668442852457;
+        Mon, 14 Nov 2022 08:20:52 -0800 (PST)
 Received: from google.com ([51.154.17.58])
-        by smtp.gmail.com with ESMTPSA id e24-20020a05600c219800b003cfd42821dasm9968080wme.3.2022.11.14.08.20.27
+        by smtp.gmail.com with ESMTPSA id p13-20020adfe60d000000b00236e9755c02sm10062259wrm.111.2022.11.14.08.20.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 08:20:28 -0800 (PST)
-Date:   Mon, 14 Nov 2022 17:20:26 +0100
+        Mon, 14 Nov 2022 08:20:52 -0800 (PST)
+Date:   Mon, 14 Nov 2022 17:20:50 +0100
 From:   Patrick Bellasi <patrick.bellasi@matbug.net>
 To:     Vincent Guittot <vincent.guittot@linaro.org>
 Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
@@ -51,15 +51,14 @@ Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
         joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
         yu.c.chen@intel.com, youssefesmat@chromium.org,
         joel@joelfernandes.org
-Subject: Re: [PATCH v8 5/9] sched/fair: Take into account latency priority at
- wakeup
-Message-ID: <Y3JqygejPxrtTFgP@google.com>
+Subject: Re: [PATCH v8 6/9] sched/fair: Add sched group latency support
+Message-ID: <Y3Jq4gBB5+Qg67u7@google.com>
 References: <20221110175009.18458-1-vincent.guittot@linaro.org>
- <20221110175009.18458-6-vincent.guittot@linaro.org>
+ <20221110175009.18458-7-vincent.guittot@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221110175009.18458-6-vincent.guittot@linaro.org>
+In-Reply-To: <20221110175009.18458-7-vincent.guittot@linaro.org>
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -76,52 +75,55 @@ On 10-Nov 18:50, Vincent Guittot wrote:
 
 [...]
 
-> diff --git a/init/init_task.c b/init/init_task.c
-> index 7dd71dd2d261..b8ddf403bc62 100644
-> --- a/init/init_task.c
-> +++ b/init/init_task.c
-> @@ -78,7 +78,7 @@ struct task_struct init_task
->  	.prio		= MAX_PRIO - 20,
->  	.static_prio	= MAX_PRIO - 20,
->  	.normal_prio	= MAX_PRIO - 20,
-> -	.latency_nice	= DEFAULT_LATENCY_NICE,
-> +	.latency_prio	= NICE_WIDTH - 20,
-                    ^^^^^^^^^^
-
-For robustness/consistency, shoudln't this be LATENCY_NICE_WIDTH?
-
-[...]
-
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index b2accc9da4fe..caf54e54a74f 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -1284,6 +1284,16 @@ static void set_load_weight(struct task_struct *p, bool update_load)
->  	}
->  }
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index be4a77baf784..a4866cd4e58c 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -1095,6 +1095,16 @@ All time durations are in microseconds.
+>          values similar to the sched_setattr(2). This maximum utilization
+>          value is used to clamp the task specific maximum utilization clamp.
 >  
-> +static void set_latency_offset(struct task_struct *p)
-> +{
-> +	long weight = sched_latency_to_weight[p->latency_prio];
-> +	s64 offset;
+> +  cpu.latency.nice
+> +	A read-write single value file which exists on non-root
+> +	cgroups.  The default is "0".
 > +
-> +	offset = weight * get_sched_latency(false);
-                      ^^^^^^^^^^^^^^^^^^^^^^^^
-As per my comment in patch 1, we almost always (but one time) call this with
-"false" and that's not returning the sysctl_sched_latency but a possibly
-discounted value in case of feat(GENTLE_FAIR_SLEEPERS).
+> +	The nice value is in the range [-20, 19].
+> +
+> +	This interface file allows reading and setting latency using the
+> +	same values used by sched_setattr(2). The latency_nice of a group is
+> + used to limit the impact of the latency_nice of a task outside the
+> + group.
 
-Just to avoid confusion (this could be not the sched_latency) and to better
-document the code, what about using a accessor define something like e.g.
+This control model is not clear to me.
 
-   #define max_wakeup_latency get_wakeup_latency(false)
+It does not seem matching what we have for uclamp, where the cgroup values are
+used to restrict how much a task can ask or give (in terms of latency here).
 
-?
+in the uclamp's requested-vs-effective values model:
 
-[...]
+A) a task can "request" (or give up) latency as much as it likes
+
+B) the cgroup in which the task is in any moment limits wthe maximum
+   latency a task can "request" (or give up)
+
+C) the system wide knob set the "request" limit for the root cgroup an any task
+   not in a cgroup.
+
+This model seems to be what we should use here too.
+
+IOW, for each task compute an "effective" latency_nice value which is defined
+starting for a task "requested" latency value and by restricting this value
+based on the (B) cgroup value and the (C) system wide value.
+
+That's what we do in uclamp_eff_get():
+   https://elixir.bootlin.com/linux/v6.0/source/kernel/sched/core.c#L1484
+
+Why such a model cannot be used for latency_nice too?
+Am I missing something?
+
 
 Best,
-Patrick
+patrick
 
 -- 
 #include <best/regards.h>
