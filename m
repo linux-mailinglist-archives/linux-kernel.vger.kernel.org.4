@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBA5627862
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E25627866
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:00:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236658AbiKNJAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
+        id S236248AbiKNJAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:00:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236633AbiKNJA1 (ORCPT
+        with ESMTP id S236688AbiKNJAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:00:27 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BD81CFEE
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:00:26 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id k5so9735551pjo.5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:00:26 -0800 (PST)
+        Mon, 14 Nov 2022 04:00:33 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB98F1CB0E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:00:30 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id bp15so18114210lfb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:00:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=OHVvZDZbyEogVtk3XYqfqyWzOeOsXZdmYG4Vsfr4Pzs=;
-        b=IGlH+a/boVb7i6zolSK0zEvoMEddtxxH2nmc93lCCFV08bOZCNlgJxgFDpF0/JPDHu
-         ckYIGRfz/EA6eMc0VzdGQD4o1oB48QASsZlQIPKQ4BQlDOc3hHV4plz+jza1GFZ/VVjc
-         nTf+60GJLFAy4UVqpFpMpYwATK9woaMgfDBav2fX9dc2oUUVytTfnDZm2POJF9JsXFEU
-         RuMh+Tb5gNg6/ehHkMlHXQhE2ZGSs+MeqRjBBsUWLunO9jpHkixaOind7phxwkQxktl5
-         5SwJCZ9A4LQ2zUWuwMDqrLaHDIfzIDda+5BUT9byEbOAV899p/9dGl5MLl6kQ7TOJQR4
-         CAsw==
+        bh=jSB6TW51XM2yvmI8chRE/GRF+Jj8yKiNsELalSRirxc=;
+        b=sfsu+KoYe6/zZLJaWJ7gyMm2qpwZjyJUWiGTBNqyez7nf3ybJZ2AD/8kXVC4DAy2bs
+         EDeIqXfzEb65abG7P+/KkPfndbrgrDh48zIMqShZu242Z3IOW+ySq2/dxxn53cs9/0y8
+         W19FHMtfA5OgIeOICx6RsS9Pkq9GatkyFC3n8WvsDdw8CtVoCiZG1cNa9hgTx0yJGK/J
+         jNpFhqpFtQAh2fOdUtBZ26VM13zFbBCtOB88g6wMxKPCaK/FyifjSSAHWmR9be9KTfRP
+         i0voL+wqb+z1SDjp33lba3aLleeZPmXJoy48LMaLt9wXxI3RGDQMFGr6olRAIF+NZTWx
+         aEvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OHVvZDZbyEogVtk3XYqfqyWzOeOsXZdmYG4Vsfr4Pzs=;
-        b=g6mK8AEQLwmUuB9x1Eil42M0hcBME1k2hGroubEQaCd7X8umDDKaOVIpdULehkKhaS
-         BFvk+b3zCU/kMY8TQfMepEIAW4Ix3UFNDUijIh8SBnhCzHQLJ7jbEKG+USXFw7URC3aS
-         wLmMxoHkKTj69vlqIq7xwm74UXbMAC2p2qZH2kA88m5zDlCXXHKzsZcmEzUmUuoYEAle
-         OM1JY9agKphYX0r9iKd76USgPeH5K06tsBvahXrwt12bqb2yO4HOAT7jx8laR5CeSEsk
-         nRBpxQpvCIV1+x8rluP2eb98PJkfHmA1ip3Jy1Q+jfEAvFHGtWDeRSFo4OIFjALIBmTA
-         dErA==
-X-Gm-Message-State: ANoB5pnQVb1ObGy/DcAvOpflcthxnBxXHAZ8h9gk0wWG2bEzLCFOijQP
-        noo1CtoMi79LUFL7VhCGGcWDzlvRhx90VA==
-X-Google-Smtp-Source: AA0mqf5cZNQj8u+ZxbCaroI0Pmri5Pe5JqwutWZDxOXw61J8pMLqk/LVBKLC6XaybdNpMOnMuMHJrg==
-X-Received: by 2002:a17:903:1009:b0:17f:72a4:30a1 with SMTP id a9-20020a170903100900b0017f72a430a1mr12980922plb.124.1668416426378;
-        Mon, 14 Nov 2022 01:00:26 -0800 (PST)
-Received: from [10.94.58.189] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id q13-20020aa7960d000000b0056a7486da77sm6371684pfg.13.2022.11.14.01.00.20
+        bh=jSB6TW51XM2yvmI8chRE/GRF+Jj8yKiNsELalSRirxc=;
+        b=UBn3G71sgWpBHDOYjw6mEANWP4NYYlbvj/Qrzb4l2PtXkR5rOFM/K+yyo5/V+kukLw
+         r8ylNaXW99O/xux+MZLQmVW3aAjmT+vbPVgYLqP5NHuB8NpfFo/aezY5DKWJFAdvnYrE
+         tw9WiDtvGWgEElsYRI68JWKMpZdmoGIwzhWObzCZ09pnO4VGNwy6il8s0HpfLjb7BLpg
+         8XosxAaJolurBpbJZUEomDWzCJ74jUCS+TiOhqgIpN7AR7fiZDDBqzraUXl2XvStMSbc
+         GbOc7ZkZJTNvTTaFSEGHhZG800gBHQea7GNfO4487sH6vEBgEVkbY49b63iP0QU9zA0Z
+         NTbQ==
+X-Gm-Message-State: ANoB5plGIVedqha6nW0I8XerJZdPjOsB0+KsETZiUkKkJ6wnvFD6CDbn
+        lOaHU82dYzzmhyYbRP7A38+tMw==
+X-Google-Smtp-Source: AA0mqf4amsE2iSGKFTVIso6JQHxz9emYnEPwgoWzceVcXofHyqdeIEb56vf8UZ90yTT2opK6yaAxmw==
+X-Received: by 2002:ac2:4db6:0:b0:4a2:2c4b:8138 with SMTP id h22-20020ac24db6000000b004a22c4b8138mr3683454lfe.14.1668416429100;
+        Mon, 14 Nov 2022 01:00:29 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 24-20020ac24838000000b004a2550db9ddsm1729475lft.245.2022.11.14.01.00.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 01:00:26 -0800 (PST)
-Message-ID: <e57733cd-364d-84e0-cfe0-fd41de14f434@bytedance.com>
-Date:   Mon, 14 Nov 2022 17:00:18 +0800
+        Mon, 14 Nov 2022 01:00:28 -0800 (PST)
+Message-ID: <cf9e261b-dbf8-bce0-ecc8-c2aec659aa18@linaro.org>
+Date:   Mon, 14 Nov 2022 10:00:27 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
-To:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org
-Cc:     Dave Chinner <david@fromorbit.com>, Theodore Ts'o <tytso@mit.edu>,
-        Karel Zak <kzak@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        LSM <linux-security-module@vger.kernel.org>,
-        Ian Kent <raven@themaw.net>,
-        David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        Amir Goldstein <amir73il@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>
-References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 3/6] dt-bindings: sdhci-fujitsu: Add compatible string
+ for F_SDH30_E51
 Content-Language: en-US
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jassi Brar <jaswinder.singh@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221111081033.3813-1-hayashi.kunihiko@socionext.com>
+ <20221111081033.3813-4-hayashi.kunihiko@socionext.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221111081033.3813-4-hayashi.kunihiko@socionext.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miklos and anyone interested in this proposal, is there any update on
-this? Sorry that I didn't find any..
+On 11/11/2022 09:10, Kunihiko Hayashi wrote:
+> Add a compatible string for F_SDH30_E51 IP to the documentation.
+> Since this IP is transferred to Socionext, so append it as vendor name.
+> 
+> Cc: devicetree@vger.kernel.org
 
-Thanks & Best regards,
-	Abel
+No need to keep list-cc in commit log. If you really need such, keep
+them under '---'.
 
-On 5/3/22 8:23 PM, Miklos Szeredi wrote:
-> This is a simplification of the getvalues(2) prototype and moving it to the
-> getxattr(2) interface, as suggested by Dave.
-> 
-> The patch itself just adds the possibility to retrieve a single line of
-> /proc/$$/mountinfo (which was the basic requirement from which the fsinfo
-> patchset grew out of).
-> 
-> But this should be able to serve Amir's per-sb iostats, as well as a host of
-> other cases where some statistic needs to be retrieved from some object.  Note:
-> a filesystem object often represents other kinds of objects (such as processes
-> in /proc) so this is not limited to fs attributes.
-> 
-> This also opens up the interface to setting attributes via setxattr(2).
-> 
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> ---
+>  .../devicetree/bindings/mmc/fujitsu,sdhci-fujitsu.yaml      | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof
+
