@@ -2,61 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D923762878C
+	by mail.lfdr.de (Postfix) with ESMTP id 071CD62878B
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237335AbiKNRyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:54:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
+        id S237133AbiKNRyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237378AbiKNRxt (ORCPT
+        with ESMTP id S237828AbiKNRxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:53:49 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34C1D51;
-        Mon, 14 Nov 2022 09:53:30 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2AEHr3it015824
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 12:53:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1668448387; bh=0oY2FHq6aam4ViqDXvERuEDXT+lWMYAi0k7t0ceXGtY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=T9jIyOKT6a9ZXBo5B45dK908bfA8wWFMu1z6LujbTJTlNSMlBf8ZzOQ+et6xCQ6x0
-         xTzBiiWDsrbYShdtJ3r4k6VkH2LITjVbkBSGaa2kDDJqKgnt7HI5TaouvAvBwOpLI0
-         CFD41/h4aBfC9r6k77/89pKxwDzXc4lyZfo4uzvnMKmgICxhgWMTDSiCBYThAyuOLF
-         JneBERVwGpadBtlN0oncGjkfbXJLpIzXxH0hTiCrKcbB2fMO8IcQLLtDWERVg3VpRH
-         HTjy5zGARrPldeCwcFuRuhNxGDCsamEAZ2ZTb/qWl+R9wducW5cOLKcH7JrjlF792k
-         3YxI3FaICDjNQ==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id C5C4615C34C3; Mon, 14 Nov 2022 12:53:03 -0500 (EST)
-Date:   Mon, 14 Nov 2022 12:53:03 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Waiman Long <longman@redhat.com>
-Cc:     syzbot <syzbot+ea70429cd5cf47ba8937@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ext4_enable_quotas
-Message-ID: <Y3KAfyQOf6GvEo/x@mit.edu>
-References: <0000000000006a74dd05e9931449@google.com>
- <000000000000073a4a05ed620676@google.com>
- <Y3Jb1Wcs/mQlZP32@mit.edu>
- <8c3757ae-1aeb-49a4-47af-598d1d4737ea@redhat.com>
+        Mon, 14 Nov 2022 12:53:51 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 164231E729
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:53:48 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id q1so10869269pgl.11
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:53:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=knbOKZDiFpA41kgl5NgFlIeuBQLx4K+3AhrI93TxZQE=;
+        b=hqx/0/7R+bJR0IOIafym/21OQWxfwNQzRGNB0Kinu+XIYdEefaCjNlOF4QHpAloJJQ
+         f7kIzL9Sd8gHCTPYAQSTbXrhjohG7r4tgpcb0uQBvhbuUdtiz5NPPQ6mNArz61XzxgSX
+         HW1/N+gg8XD5wLghZ5eNkaM7wmgCLD4qfdDVPd12mwTexkkg+KQOTiVtLT37aJl8hB2t
+         UQUf6rWZoZY2HFyXnkEgSpecVhRPMU/s4Ylg52WOJLmueoSuE21pekW906FVPDgEhUde
+         Hdt0faQlG2UtRjlykbPvpcPCST5YjJxlSHDCkMDOu7HakSl2tXXJstbPbxPqUUzNVo0K
+         +77g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=knbOKZDiFpA41kgl5NgFlIeuBQLx4K+3AhrI93TxZQE=;
+        b=n7XAuO8vkI4pIZZLOe4pc4rV3xMC5AugijBT5gTmiJyhYKrJfM9FFRlcwJAdyLyCpo
+         xATO1+A0D/ncwvRRsIA4Vnw/O4ER4w2GUvz/nJbHfPxdvlrhCDkxHBNh+4mVEQXOc1C6
+         sDuO8jqOYbeFYw19nBsrfBdUI+/OiFPR6wLhBYdwN4/vN+tfLS2ncSiQab2mUmlEftky
+         ZyNNmEeuwkCqIVNT5kmVj1s5QEJrqC+W6xzBqcxbSBccR/ikBsGNjijEbTR+jzlhTOWC
+         vMisdMKI9g5+4yKtSMpizqAPe8Lc9MqkcU/oNnT0Zk8kJ3ul4+6k3uwXkgcAZKdObk8e
+         hdew==
+X-Gm-Message-State: ANoB5pkaEuFUInXjdUXxLCSVZCT7630Gk6oDRaKc+pUdiNgSi4pXg6u9
+        MAfo6c4Ewhj6S0GCnpKtgSva3g==
+X-Google-Smtp-Source: AA0mqf4pzNpvaqo3upyfzzheke1niLgWWYav6mAFBWd41t4r71IgB2i+eUKaif1z6SYdoz8cP2tUDw==
+X-Received: by 2002:a63:1720:0:b0:46f:f93b:ddc8 with SMTP id x32-20020a631720000000b0046ff93bddc8mr12199883pgl.389.1668448427350;
+        Mon, 14 Nov 2022 09:53:47 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id x2-20020a170902b40200b0018685257c0dsm7763635plr.58.2022.11.14.09.53.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 09:53:46 -0800 (PST)
+Date:   Mon, 14 Nov 2022 17:53:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com,
+        syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2 5/5] x86/kasan: Populate shadow for shared chunk of
+ the CPU entry area
+Message-ID: <Y3KAp+yNQ54IKvTn@google.com>
+References: <20221110203504.1985010-1-seanjc@google.com>
+ <20221110203504.1985010-6-seanjc@google.com>
+ <3b7a841d-bbbd-6018-556f-d2414a5f02b2@gmail.com>
+ <Y3Ja33LyShqjvmQZ@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8c3757ae-1aeb-49a4-47af-598d1d4737ea@redhat.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <Y3Ja33LyShqjvmQZ@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,43 +87,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 11:21:33AM -0500, Waiman Long wrote:
+On Mon, Nov 14, 2022, Peter Zijlstra wrote:
+> On Mon, Nov 14, 2022 at 05:44:00PM +0300, Andrey Ryabinin wrote:
+> > Going back kasan_populate_shadow() seems like safer and easier choice.
+> > The only disadvantage of it that we might waste 1 page, which is not
+> > much compared to the KASAN memory overhead.
 > 
-> lockdep_set_subclass() should be translated into a call to
-> lockdep_init_map_type():
+> So the below delta?
 > 
-> #define lockdep_set_subclass(lock, sub)                                 \
->         lockdep_init_map_type(&(lock)->dep_map, #lock, (lock)->dep_map.key,
-> sub,\
-> (lock)->dep_map.wait_type_inner,          \
-> (lock)->dep_map.wait_type_outer,          \
->                               (lock)->dep_map.lock_type)
-> 
-> All memory access should be within the bound of the given "&ei->i_data_sem".
-> Also lockdep_init_map_type() is not in the stack trace. So it is not a
-> problem within this lockdep_init_map_type() function. So is it possible that
-> the given inode pointer is invalid?
+> ---
+> --- a/arch/x86/mm/kasan_init_64.c
+> +++ b/arch/x86/mm/kasan_init_64.c
+> @@ -388,7 +388,7 @@ void __init kasan_init(void)
+>  	shadow_cea_end = kasan_mem_to_shadow_align_up(CPU_ENTRY_AREA_BASE +
+>  						      CPU_ENTRY_AREA_MAP_SIZE);
+>  
+> -	kasan_populate_early_shadow(
+> +	kasan_populate_shadow(
+>  		kasan_mem_to_shadow((void *)PAGE_OFFSET + MAXMEM),
+>  		kasan_mem_to_shadow((void *)VMALLOC_START));
 
-Well, the inode pointer would be coming from iget().  And since this
-is coming from ext4 mount operation, we would be getting a fresh inode
-that should be freshly allocated.  So the possibilities which comes to
-mind is some kind of use-after-free (probbly in f2fs) that was
-smashing the inode itself, such that ei->i_data_sem was pointing off
-into la-la-land, or in the inode cache's internal data srtuctures.
+Wrong one, that's the existing mapping.  To get back to v1:
 
-The reason why I would assume it would be in f2fs is I *assume*
-syzkaller would have pruned down the test case enough to remove the
-messing around with mounting the invalid f2fs file system.  But the
-other mystery here is why didn't KASAN report the use-after-free (if
-that it is what it was) in the thousands of f2fs mount and
-unmount operations before it finally triggered?
-
-Anyway, I plan to ignore this Syzkaller unless report Syzkaller (or
-someone else) can come up with a more minimal/reliable reproducer.  (I
-mean, we could open a bug, but with kind of reproducer, it would get
-prioritized P3 or P4 and ignored for years until it finally got closed
-in a buganizer bankruptcy, so I figured I would just skip a few steps.  :-)
-
-Cheers,
-
-						- Ted
+diff --git a/arch/x86/mm/kasan_init_64.c b/arch/x86/mm/kasan_init_64.c
+index af82046348a0..0302491d799d 100644
+--- a/arch/x86/mm/kasan_init_64.c
++++ b/arch/x86/mm/kasan_init_64.c
+@@ -416,8 +416,8 @@ void __init kasan_init(void)
+         * area is randomly placed somewhere in the 512GiB range and mapping
+         * the entire 512GiB range is prohibitively expensive.
+         */
+-       kasan_populate_early_shadow((void *)shadow_cea_begin,
+-                                   (void *)shadow_cea_per_cpu_begin);
++       kasan_populate_shadow(shadow_cea_begin,
++                             shadow_cea_per_cpu_begin, 0);
+ 
+        kasan_populate_early_shadow((void *)shadow_cea_end,
+                        kasan_mem_to_shadow((void *)__START_KERNEL_map));
