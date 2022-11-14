@@ -2,114 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 603E76282B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A756282CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236768AbiKNOhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:37:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45036 "EHLO
+        id S236823AbiKNOil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:38:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236976AbiKNOhV (ORCPT
+        with ESMTP id S236608AbiKNOi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:37:21 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4F82A720
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:37:13 -0800 (PST)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id 63D1140002;
-        Mon, 14 Nov 2022 14:37:10 +0000 (UTC)
-Message-ID: <b82f4580-76a0-e02b-05c8-4a89e576da0c@ghiti.fr>
-Date:   Mon, 14 Nov 2022 15:37:10 +0100
+        Mon, 14 Nov 2022 09:38:29 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24F95F4E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:38:27 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id 94-20020a9d0067000000b0066c8d13a33dso6722116ota.12
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:38:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tiAlNaz5lTJwnYCelBGX08b8+sUElNWbgFxFjc6KPlw=;
+        b=x8KFv1A5lU7NRkxneKmqgLZcmC4tP4chHibNMKrrnlaINMGlFlP/5dK/1GsN9zT010
+         +RKef96BhSFt30UprdR+ytvPxv1ACCGP5mOFANPLRtpJQNq8W1QANv/65bJd9PQqfqOi
+         3yjODOq8gB7np91YFIga17VbO299DdJ0Yyl5+Ij3ALoSNhrANJvaZ4isLw7VHy8JgYeA
+         sc890Ejp0Krg6+mNMddUV+BBoQZUXojDSvJBEeNry+sE/L68nIpxsXcMnUiaHu9DQc3R
+         IxSn3VDjToVI/ep2OeBOIKrHX4b7veXiOczxA3pK9cZukTrRJN3gY2sIByHtHn715nOp
+         ydxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tiAlNaz5lTJwnYCelBGX08b8+sUElNWbgFxFjc6KPlw=;
+        b=Jgi2IJMAj/L4BD+eatdZP70/8XMdalU6V+5agOPxoo4+wpTnxrJ3JzHFuo+JJdf8Es
+         HjptyPsK0GKRIkFQEJ+gX79bH6E3sVZKs7vv/WDzwf+nH1sV9kAIm0Rch4BleYM4HxEr
+         IVItgFqKPzfPwXKdOEM4v2ssFHczdzRWht19AOjwiNHVZckunzLQhHqJurC4ff23JnEx
+         xwdZhgUFqNOyLjsP/lY1Xn+snZQpUYOYfFh3+QMmzuhoNRevLeA+UFIzIc+KCLs2wUv4
+         fQVhUoWcdKKyshGHRxJxWdJ8L7Kp81x3L00qDcN3Fm7O37V4tdh/W3dYULoX+di+MvUE
+         ISiQ==
+X-Gm-Message-State: ANoB5pm7EOLMHViX1ZbToAIbuy1Fi0F8Wev7Ry9uCJld1248zCxwQiqk
+        8s/WFg93wG0E23gZuXkqYCLz17lrmoTapx/XZRzycg==
+X-Google-Smtp-Source: AA0mqf7uZJKdD5qLhn0hnWez9AuzG4xyabmQImeUbZvRjgumYkGgUyiSl1nVAzcmR+SwE2CbdKSe9HeH7b74FjrPIQ0=
+X-Received: by 2002:a05:6830:6486:b0:66d:65a5:b0b3 with SMTP id
+ ck6-20020a056830648600b0066d65a5b0b3mr5854433otb.170.1668436707187; Mon, 14
+ Nov 2022 06:38:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] riscv: mm: Proper page permissions after initmem free
-Content-Language: en-US
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        linux-kernel@vger.kernel.org
-References: <20221112113543.3165646-1-bjorn@kernel.org>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20221112113543.3165646-1-bjorn@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221103170210.464155-1-peter.griffin@linaro.org> <CAJfpeguUEb++huEOdtVMgC2hbqh4f5+7iOomJ=fin-RE=pu8jQ@mail.gmail.com>
+In-Reply-To: <CAJfpeguUEb++huEOdtVMgC2hbqh4f5+7iOomJ=fin-RE=pu8jQ@mail.gmail.com>
+From:   Peter Griffin <peter.griffin@linaro.org>
+Date:   Mon, 14 Nov 2022 14:38:15 +0000
+Message-ID: <CADrjBPotAaBMpPjaVZ_aXQMt-RF6wiYpeYZT=5dZS_E=vGv2eg@mail.gmail.com>
+Subject: Re: [PATCH] vfs: vfs_tmpfile: ensure O_EXCL flag is enforced
+To:     Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     Miklos Szeredi <mszeredi@redhat.com>, stable@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Will McVicker <willmcvicker@google.com>,
+        Peter Griffin <gpeter@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Björn,
+Hi Alexander,
 
-On 12/11/2022 12:35, Björn Töpel wrote:
-> From: Björn Töpel <bjorn@rivosinc.com>
+On Thu, 3 Nov 2022 at 19:12, Miklos Szeredi <miklos@szeredi.hu> wrote:
 >
-> 64-bit RISC-V kernels have the kernel image mapped separately, and in
-> addition to the linear map. When the kernel is loaded, the linear map
-> of kernel image is set to PAGE_READ permission, and the kernel map is
-> set to PAGE_READ and PAGE_EXEC.
+> On Thu, 3 Nov 2022 at 18:04, Peter Griffin <peter.griffin@linaro.org> wrote:
+> >
+> > If O_EXCL is *not* specified, then linkat() can be
+> > used to link the temporary file into the filesystem.
+> > If O_EXCL is specified then linkat() should fail (-1).
+> >
+> > After commit 863f144f12ad ("vfs: open inside ->tmpfile()")
+> > the O_EXCL flag is no longer honored by the vfs layer for
+> > tmpfile, which means the file can be linked even if O_EXCL
+> > flag is specified, which is a change in behaviour for
+> > userspace!
+> >
+> > The open flags was previously passed as a parameter, so it
+> > was uneffected by the changes to file->f_flags caused by
+> > finish_open(). This patch fixes the issue by storing
+> > file->f_flags in a local variable so the O_EXCL test
+> > logic is restored.
+> >
+> > This regression was detected by Android CTS Bionic fcntl()
+> > tests running on android-mainline [1].
+> >
+> > [1] https://android.googlesource.com/platform/bionic/+/
+> >     refs/heads/master/tests/fcntl_test.cpp#352
 >
-> When the initmem is freed, the corresponding pages in the linear map
-> should be restored to PAGE_READ and PAGE_WRITE. The corresponding
-> pages in the kernel map should also be restored to PAGE_READ and
-> PAGE_WRITE, by removing the PAGE_EXEC permission, and adding
-> PAGE_WRITE.
+> Looks good.
 >
-> This is not the case. For 64-bit kernels, only the linear map is
-> restored to its proper page permissions at initmem free, and not the
-> kernelmap.
->
-> In practise this results in that the kernel can potentially jump to
-> dead __init code, and start executing invalid 0xcc instructions,
-> without getting an exception.
->
-> Restore the freed initmem properly, by setting both the alias (kernel
-> map) and the linear map to the correct permissions.
->
-> Fixes: e5c35fa04019 ("riscv: Map the kernel with correct permissions the first time")
-> Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
-> ---
->   arch/riscv/kernel/setup.c | 10 ++++++----
->   1 file changed, 6 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> index ad76bb59b059..361e635070fe 100644
-> --- a/arch/riscv/kernel/setup.c
-> +++ b/arch/riscv/kernel/setup.c
-> @@ -321,10 +321,12 @@ subsys_initcall(topology_init);
->   
->   void free_initmem(void)
->   {
-> -	if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
-> -		set_kernel_memory(lm_alias(__init_begin), lm_alias(__init_end),
-> -				  IS_ENABLED(CONFIG_64BIT) ?
-> -					set_memory_rw : set_memory_rw_nx);
-> +	if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX)) {
-> +		if (IS_ENABLED(CONFIG_64BIT))
-> +			set_kernel_memory(lm_alias(__init_begin), lm_alias(__init_end),
-> +					  set_memory_rw);
-> +		set_kernel_memory(__init_begin, __init_end, set_memory_rw_nx);
+> Acked-by: Miklos Szeredi <mszeredi@redhat.com>
 
+As this patch now has an Acked-by the original author of the
+commit that reworked the tmpfile vfs logic and introduced the
+regression. Can you pick up this commit and send it onto Linus
+for inclusion into the next v6.1-rc release?
 
-That's nits but for 64-bit kernels, do we really want to make the kernel 
-mapping writable? I think catching a write access here would be better 
-because IMO that should not happen.
+Note, it fixes a regression for userspace introduced in this merge
+window so I was hoping to get the fix into the next -rc so that the
+v6.1 release does not contain this bug.
 
-Thanks,
+Many thanks,
 
-Alex
-
-
-> +	}
->   
->   	free_initmem_default(POISON_FREE_INITMEM);
->   }
->
-> base-commit: 442bcbfd2c5401587b983e34bed0b407214735c3
+Peter
