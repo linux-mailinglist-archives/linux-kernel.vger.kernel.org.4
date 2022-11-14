@@ -2,279 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1554A62768B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D5B627672
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235985AbiKNHny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 02:43:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
+        id S235617AbiKNHge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 02:36:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235983AbiKNHng (ORCPT
+        with ESMTP id S230030AbiKNHgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 02:43:36 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19E71A066;
-        Sun, 13 Nov 2022 23:43:14 -0800 (PST)
+        Mon, 14 Nov 2022 02:36:33 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31DB95B0;
+        Sun, 13 Nov 2022 23:36:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668411794; x=1699947794;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=xqcegeMZPyeSg/or0q5hsQy5hMh4CkZ2K4fwhd1mk5o=;
-  b=N7ZrHl+DNo766Ojpsss023megAHGLKDkps6JaKyUmOD+kUEO7KIMJoA0
-   7qcQoVRyuHugmGO5N/eisxq26mLa77ZoKsbjiIFf6qCNmr13BmwdrL1Iw
-   cWccHzqGZfbTKUgXeXrd4QAyyaLO5cB+iR/2qGFH9EUHH1yF8Yu3YOQpc
-   /iobogdKThhC8Diyp/w2JoFhUasaHF34sjo+zuUyyAYrISyaLU95oxp7c
-   FRUOEnTtE2WoCuKIrbugG6hguPDKjDEx6aqydxFtYUoKYh/l2fiRWpvZy
-   mxUQwPYHVpV9Je8l43xgmvC1U6KmPZpP2HEuBK5Wb4p+ECxOWUeqiqQ1y
+  t=1668411392; x=1699947392;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iwseW+ufoMzA9Lw682rdq9CJ9jtdE8JEhKRFHlYDiow=;
+  b=Cyofp+qBzT036jX0LuA0lD/yGKfAiV6O+2W74t5+6jgCfjwfyvi+ea7b
+   Pdawh0zccavGfrzFA4/ZKz3Lde5mV8em4IqYA5FYZD1wvxqhkcOJWN8Sg
+   t7kYipiKmkA0V61SyizbNeRAypwJkTAb3xSRKHEoBDF56C9WWNDuOKvo3
+   NFXb7cohOk69m6Zmuh1v0/7CXF+cWb/f62QgNY6S3iOmM5oPy3sI8iPzz
+   rfg/M7JbYxpGneaH5/t4RB16SWIZ6fE5ABDHurIZLG/T+IXaV5cu7BLl2
+   jvtKHYPosQObu7lBKpbcONqnRJtmm7TdNY7VauDgzhBbjBpz/CjiB37X8
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="310613978"
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="338688468"
 X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="310613978"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 23:43:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="701901429"
+   d="scan'208";a="338688468"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 23:36:32 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="669537840"
 X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="701901429"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Nov 2022 23:43:11 -0800
-Date:   Mon, 14 Nov 2022 15:33:48 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 07/12] mfd: intel-m10-bmc: Downscope SPI related defines
-Message-ID: <Y3HvXFhtH/OPbSGu@yilunxu-OptiPlex-7050>
-References: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com>
- <20221108144305.45424-8-ilpo.jarvinen@linux.intel.com>
- <Y24WDyIPO7NRa8Vg@yilunxu-OptiPlex-7050>
- <93a358e-d590-ae2b-32bc-bdefb58c6bac@linux.intel.com>
+   d="scan'208";a="669537840"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.249.173.21]) ([10.249.173.21])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 23:36:29 -0800
+Message-ID: <8584a9c7-0ec1-db36-bb32-d508a091ea09@linux.intel.com>
+Date:   Mon, 14 Nov 2022 15:36:27 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <93a358e-d590-ae2b-32bc-bdefb58c6bac@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v10 071/108] KVM: x86: Allow to update cached values in
+ kvm_user_return_msrs w/o wrmsr
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Chao Gao <chao.gao@intel.com>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+ <238ab2d9a9d2ea71ecacb25203b91abbaf6fbcb4.1667110240.git.isaku.yamahata@intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <238ab2d9a9d2ea71ecacb25203b91abbaf6fbcb4.1667110240.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-11 at 13:20:18 +0200, Ilpo Järvinen wrote:
-> On Fri, 11 Nov 2022, Xu Yilun wrote:
-> 
-> > On 2022-11-08 at 16:43:00 +0200, Ilpo Järvinen wrote:
-> > > Move SPI related defines to per interface from the global header. This
-> > 
-> > These definitions are not for SPI, maybe more precisely like "SPI based
-> > board definitions".
-> > 
-> > > makes it harder to shoot oneself into foot.
-> > 
-> > Maybe better to use plain text in commit message.
-> 
-> Ok, I'll try to incorporate your suggestions.
-> 
-> > > Some bitfield defs are also moved to intel-m10-bmc-core which seems
-> > > more appropriate for them.
-> > 
-> > I'm still not clear about the motivation of these movements. For example:
-> > 
-> > We move the MAC registers in core, then should we also move sec update
-> > registers in sec update driver?
-> 
-> I'd actually prefer to do exactly as you suggest for sec update defines 
-> too but it didn't feel like their move would fit well into this patch 
-> series.
 
-It's good to me.
+On 10/30/2022 2:23 PM, isaku.yamahata@intel.com wrote:
+> From: Chao Gao <chao.gao@intel.com>
+>
+> Several MSRs are constant and only used in userspace(ring 3).  But VMs may
+> have different values.  KVM uses kvm_set_user_return_msr() to switch to
+> guest's values and leverages user return notifier to restore them when the
+> kernel is to return to userspace.  To eliminate unnecessary wrmsr, KVM also
+> caches the value it wrote to an MSR last time.
+>
+> TDX module unconditionally resets some of these MSRs to architectural INIT
+> state on TD exit.  It makes the cached values in kvm_user_return_msrs are
+> inconsistent with values in hardware.  This inconsistency needs to be
+> fixed.  Otherwise, it may mislead kvm_on_user_return() to skip restoring
+> some MSRs to the host's values.  kvm_set_user_return_msr() can help correct
+> this case, but it is not optimal as it always does a wrmsr.  So, introduce
+> a variation of kvm_set_user_return_msr() to update cached values and skip
+> that wrmsr.
+>
+> Signed-off-by: Chao Gao <chao.gao@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>   arch/x86/include/asm/kvm_host.h |  1 +
+>   arch/x86/kvm/x86.c              | 26 +++++++++++++++++++++-----
+>   2 files changed, 22 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index b225cdfac4bc..fdb00d96e954 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -2082,6 +2082,7 @@ int kvm_add_user_return_msr(u32 msr);
+>   int kvm_find_user_return_msr(u32 msr);
+>   void kvm_user_return_msr_init_cpu(void);
+>   int kvm_set_user_return_msr(unsigned index, u64 val, u64 mask);
+> +void kvm_user_return_update_cache(unsigned int index, u64 val);
+>   
+>   static inline bool kvm_is_supported_user_return_msr(u32 msr)
+>   {
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 65541bfebb37..4d4b71c4cdb1 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -440,6 +440,15 @@ void kvm_user_return_msr_init_cpu(void)
+>   }
+>   EXPORT_SYMBOL_GPL(kvm_user_return_msr_init_cpu);
+>   
+> +static void kvm_user_return_register_notifier(struct kvm_user_return_msrs *msrs)
+> +{
+> +	if (!msrs->registered) {
+> +		msrs->urn.on_user_return = kvm_on_user_return;
+> +		user_return_notifier_register(&msrs->urn);
+> +		msrs->registered = true;
+> +	}
+> +}
+> +
+>   int kvm_set_user_return_msr(unsigned slot, u64 value, u64 mask)
+>   {
+>   	struct kvm_user_return_msrs *msrs = this_cpu_ptr(user_return_msrs);
+> @@ -455,15 +464,22 @@ int kvm_set_user_return_msr(unsigned slot, u64 value, u64 mask)
+>   		return 1;
+>   
+>   	msrs->values[slot].curr = value;
+> -	if (!msrs->registered) {
+> -		msrs->urn.on_user_return = kvm_on_user_return;
+> -		user_return_notifier_register(&msrs->urn);
+> -		msrs->registered = true;
+> -	}
+> +	kvm_user_return_register_notifier(msrs);
+>   	return 0;
+>   }
+>   EXPORT_SYMBOL_GPL(kvm_set_user_return_msr);
+>   
+> +/* Update the cache, "curr", and register the notifier */
+> +void kvm_user_return_update_cache(unsigned int slot, u64 value)
+> +{
+> +	struct kvm_user_return_msrs *msrs = this_cpu_ptr(user_return_msrs);
+> +
+> +	WARN_ON_ONCE(!msrs->initialized);
+> +	msrs->values[slot].curr = value;
 
-> 
-> > We move the DOORBELL reg addr out, but keep DOORBELL reg fields in
-> > header file, seems make harder for people to get the whole picture.
-> 
-> Those reg fields are common between boards, no? Unlike the DOORBELL reg 
-> addr whose value depends on which interface the board is based on?
-> 
-> The point of this move is that this header file would without this split
-> give a _wrong_ "whole picture" if it keeps the defines that are not
-> shared for all boards but vary per interface.
+If the value is the same as the cached one, can it just skip notifier 
+registration?
 
-Fine, it's good to me.
 
-Thanks,
-Yilun
-
-> 
-> But if you still insist, I can of course drop this patch. It's in no way
-> absolutely necessary even if I personnally think it's useful to downscope
-> defines (but I can understand there might be different opinions such as 
-> the one you stated above).
-> 
-> -- 
->  i.
-> 
-> 
-> > > Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > > ---
-> > >  drivers/mfd/intel-m10-bmc-core.c  | 11 ++++++++
-> > >  drivers/mfd/intel-m10-bmc-spi.c   | 39 +++++++++++++++++++++++++
-> > >  include/linux/mfd/intel-m10-bmc.h | 47 -------------------------------
-> > >  3 files changed, 50 insertions(+), 47 deletions(-)
-> > > 
-> > > diff --git a/drivers/mfd/intel-m10-bmc-core.c b/drivers/mfd/intel-m10-bmc-core.c
-> > > index 51b78b868235..50a4ec758bdb 100644
-> > > --- a/drivers/mfd/intel-m10-bmc-core.c
-> > > +++ b/drivers/mfd/intel-m10-bmc-core.c
-> > > @@ -12,6 +12,17 @@
-> > >  #include <linux/mfd/intel-m10-bmc.h>
-> > >  #include <linux/module.h>
-> > >  
-> > > +/* Register fields of system registers */
-> > > +#define M10BMC_MAC_BYTE4		GENMASK(7, 0)
-> > > +#define M10BMC_MAC_BYTE3		GENMASK(15, 8)
-> > > +#define M10BMC_MAC_BYTE2		GENMASK(23, 16)
-> > > +#define M10BMC_MAC_BYTE1		GENMASK(31, 24)
-> > > +#define M10BMC_MAC_BYTE6		GENMASK(7, 0)
-> > > +#define M10BMC_MAC_BYTE5		GENMASK(15, 8)
-> > > +#define M10BMC_MAC_COUNT		GENMASK(23, 16)
-> > > +#define M10BMC_VER_MAJOR_MSK		GENMASK(23, 16)
-> > > +#define M10BMC_VER_PCB_INFO_MSK		GENMASK(31, 24)
-> > > +
-> > >  static ssize_t bmc_version_show(struct device *dev,
-> > >  				struct device_attribute *attr, char *buf)
-> > >  {
-> > > diff --git a/drivers/mfd/intel-m10-bmc-spi.c b/drivers/mfd/intel-m10-bmc-spi.c
-> > > index e3b2edb8bc07..4a7a16d9f8d6 100644
-> > > --- a/drivers/mfd/intel-m10-bmc-spi.c
-> > > +++ b/drivers/mfd/intel-m10-bmc-spi.c
-> > > @@ -13,6 +13,45 @@
-> > >  #include <linux/regmap.h>
-> > >  #include <linux/spi/spi.h>
-> > >  
-> > > +#define M10BMC_LEGACY_BUILD_VER		0x300468
-> > > +#define M10BMC_SYS_BASE			0x300800
-> > > +#define M10BMC_SYS_END			0x300fff
-> > > +#define M10BMC_FLASH_BASE		0x10000000
-> > > +#define M10BMC_FLASH_END		0x1fffffff
-> > > +#define M10BMC_MEM_END			M10BMC_FLASH_END
-> > > +
-> > > +#define M10BMC_STAGING_BASE		0x18000000
-> > > +
-> > > +/* Register offset of system registers */
-> > > +#define NIOS2_FW_VERSION		0x0
-> > > +#define M10BMC_MAC_LOW			0x10
-> > > +#define M10BMC_MAC_HIGH			0x14
-> > > +#define M10BMC_TEST_REG			0x3c
-> > > +#define M10BMC_BUILD_VER		0x68
-> > > +#define M10BMC_VER_LEGACY_INVALID	0xffffffff
-> > > +
-> > > +/* Secure update doorbell register, in system register region */
-> > > +#define M10BMC_DOORBELL			0x400
-> > > +
-> > > +/* Authorization Result register, in system register region */
-> > > +#define M10BMC_AUTH_RESULT		0x404
-> > > +
-> > > +/* Addresses for security related data in FLASH */
-> > > +#define BMC_REH_ADDR	0x17ffc004
-> > > +#define BMC_PROG_ADDR	0x17ffc000
-> > > +#define BMC_PROG_MAGIC	0x5746
-> > > +
-> > > +#define SR_REH_ADDR	0x17ffd004
-> > > +#define SR_PROG_ADDR	0x17ffd000
-> > > +#define SR_PROG_MAGIC	0x5253
-> > > +
-> > > +#define PR_REH_ADDR	0x17ffe004
-> > > +#define PR_PROG_ADDR	0x17ffe000
-> > > +#define PR_PROG_MAGIC	0x5250
-> > > +
-> > > +/* Address of 4KB inverted bit vector containing staging area FLASH count */
-> > > +#define STAGING_FLASH_COUNT	0x17ffb000
-> > > +
-> > >  static const struct regmap_range m10bmc_regmap_range[] = {
-> > >  	regmap_reg_range(M10BMC_LEGACY_BUILD_VER, M10BMC_LEGACY_BUILD_VER),
-> > >  	regmap_reg_range(M10BMC_SYS_BASE, M10BMC_SYS_END),
-> > > diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
-> > > index 860408aa8db3..ed920f76d3c8 100644
-> > > --- a/include/linux/mfd/intel-m10-bmc.h
-> > > +++ b/include/linux/mfd/intel-m10-bmc.h
-> > > @@ -15,39 +15,8 @@ enum m10bmc_type {
-> > >  	M10_N5010,
-> > >  };
-> > >  
-> > > -#define M10BMC_LEGACY_BUILD_VER		0x300468
-> > > -#define M10BMC_SYS_BASE			0x300800
-> > > -#define M10BMC_SYS_END			0x300fff
-> > > -#define M10BMC_FLASH_BASE		0x10000000
-> > > -#define M10BMC_FLASH_END		0x1fffffff
-> > > -#define M10BMC_MEM_END			M10BMC_FLASH_END
-> > > -
-> > > -#define M10BMC_STAGING_BASE		0x18000000
-> > >  #define M10BMC_STAGING_SIZE		0x3800000
-> > >  
-> > > -/* Register offset of system registers */
-> > > -#define NIOS2_FW_VERSION		0x0
-> > > -#define M10BMC_MAC_LOW			0x10
-> > > -#define M10BMC_MAC_BYTE4		GENMASK(7, 0)
-> > > -#define M10BMC_MAC_BYTE3		GENMASK(15, 8)
-> > > -#define M10BMC_MAC_BYTE2		GENMASK(23, 16)
-> > > -#define M10BMC_MAC_BYTE1		GENMASK(31, 24)
-> > > -#define M10BMC_MAC_HIGH			0x14
-> > > -#define M10BMC_MAC_BYTE6		GENMASK(7, 0)
-> > > -#define M10BMC_MAC_BYTE5		GENMASK(15, 8)
-> > > -#define M10BMC_MAC_COUNT		GENMASK(23, 16)
-> > > -#define M10BMC_TEST_REG			0x3c
-> > > -#define M10BMC_BUILD_VER		0x68
-> > > -#define M10BMC_VER_MAJOR_MSK		GENMASK(23, 16)
-> > > -#define M10BMC_VER_PCB_INFO_MSK		GENMASK(31, 24)
-> > > -#define M10BMC_VER_LEGACY_INVALID	0xffffffff
-> > > -
-> > > -/* Secure update doorbell register, in system register region */
-> > > -#define M10BMC_DOORBELL			0x400
-> > > -
-> > > -/* Authorization Result register, in system register region */
-> > > -#define M10BMC_AUTH_RESULT		0x404
-> > > -
-> > >  /* Doorbell register fields */
-> > >  #define DRBL_RSU_REQUEST		BIT(0)
-> > >  #define DRBL_RSU_PROGRESS		GENMASK(7, 4)
-> > > @@ -108,22 +77,6 @@ enum m10bmc_type {
-> > >  #define RSU_COMPLETE_INTERVAL_MS	1000
-> > >  #define RSU_COMPLETE_TIMEOUT_MS		(40 * 60 * 1000)
-> > >  
-> > > -/* Addresses for security related data in FLASH */
-> > > -#define BMC_REH_ADDR	0x17ffc004
-> > > -#define BMC_PROG_ADDR	0x17ffc000
-> > > -#define BMC_PROG_MAGIC	0x5746
-> > > -
-> > > -#define SR_REH_ADDR	0x17ffd004
-> > > -#define SR_PROG_ADDR	0x17ffd000
-> > > -#define SR_PROG_MAGIC	0x5253
-> > > -
-> > > -#define PR_REH_ADDR	0x17ffe004
-> > > -#define PR_PROG_ADDR	0x17ffe000
-> > > -#define PR_PROG_MAGIC	0x5250
-> > > -
-> > > -/* Address of 4KB inverted bit vector containing staging area FLASH count */
-> > > -#define STAGING_FLASH_COUNT	0x17ffb000
-> > > -
-> > >  /**
-> > >   * struct m10bmc_csr_map - Intel MAX 10 BMC CSR register map
-> > >   */
-> > > -- 
-> > > 2.30.2
-> > > 
-> > 
-
+> +	kvm_user_return_register_notifier(msrs);
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_user_return_update_cache);
+> +
+>   static void drop_user_return_notifiers(void)
+>   {
+>   	struct kvm_user_return_msrs *msrs = this_cpu_ptr(user_return_msrs);
