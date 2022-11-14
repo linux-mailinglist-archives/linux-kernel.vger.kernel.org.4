@@ -2,288 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8185628755
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:44:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF416628758
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237418AbiKNRoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:44:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
+        id S237403AbiKNRoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:44:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237340AbiKNRn4 (ORCPT
+        with ESMTP id S237435AbiKNRoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:43:56 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E05DC768
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:43:49 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id q10-20020a056e0220ea00b00300f474693aso9810662ilv.23
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:43:49 -0800 (PST)
+        Mon, 14 Nov 2022 12:44:20 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816C120372
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:44:06 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso11364725pjc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:44:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MeB9KIeorRlixL8XK3tg5BcUFWGpkh0d9PY4NprEDPs=;
+        b=KYrsWy+wucAjvuhZX9uHUMtOkfqkqzRzUrLr7Pfsn3bdnEePoP2tc0zpr4I4TpVMll
+         mGXbcFJ10cwho779cCkH5dM2uZKKvGNE7L3e5UFHFQQt0NRafv1cm0RJ1Nq+Qg7L505g
+         RTWmoLBgMLCylQcEa6ALxEP8oE2lSkRO6p2Gf38VJwzZP6/eO7aByIG3kCcUPG7Ue5QH
+         uQtdQnd289NFmlYGtwCeUURetV6F18A4D+SwnZWy7FN4D+rxHfOeOCkASjrLOnHtJZen
+         lNxpJJXOkhBzB6MebcsXJiRAueQbskdUwv8SNz0pQGEoheReC3AY8WJhid8gJdKOoFQY
+         CdFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PTl6Rg3r2JPqIeyzl389/JCuDD3vbaKP46h/MG4AT/o=;
-        b=YicJ4bP7DXl/dIM35AKFQH7LMv1CM8+di3lSs/JlAvzMfi6S5teOfwoeMcXRfTQ7Mo
-         9YH2Flw6pgtEWnvzX5BkT83hMc7+dKm+PgTVo4vuIwyJUStQAp91ijlRfNSUZbfJ+cZK
-         KD6xT7IPwaNkhksqaRZSt1cVppL0h0LJqJDJTEuZtfIqGM/OAHVJCgf6mo4e3VzcOtR0
-         2yp1cfu/G/EBRdy/DCIrlwdy47Kl220noFPJhHgNSZEAFcIbLYsqNrw5pzH+/FMVbR8k
-         Iay6u9lS905yvwMwsq73Z+q6T+0fdeGwr/H9QemCl7GCtq79fTa4o1uHLzCHzZsBhgbh
-         +Qow==
-X-Gm-Message-State: ANoB5pkgHcN1V7X5DTqy6HXRQWzM2sgUjAKK9Llbe8XMi7GFNOtQwkK1
-        ifDvrNh52RPzq9NyJ2qMsslbRWW/HJdgqoLt62YOpoYyXbvT
-X-Google-Smtp-Source: AA0mqf4DJzO8d3XrkY2cYx9fUiO+ueVKZ1LqPmER/A3bI/87Xc/lNVeqlhj+ksBwwi+trIK8cfyA9UbAaS46p3SvlqxLrxVekyx5
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MeB9KIeorRlixL8XK3tg5BcUFWGpkh0d9PY4NprEDPs=;
+        b=pkc9NOETuvJ92FMn/2RknHIzs+7euF+2tfLO1KJliDgx7bEoWbzdJ6/75334JIjuyr
+         woq02+pbmmA05i11sS/EV7Xrljg4mp3WT48SUelURQlb6nxeTioqZQWg8Wg825CrEXBX
+         EXt8x1+y4lFc6N4krKNVE3VmjaN0qgEhKF8newFY7R4qgvh8OnyPzvGgbp7WHsAiBDEM
+         yb+Sn4XU88aiq8/yjEJ9zLWoVTb969sVGYIMPku6fLAQ7iTbZqmuI3s0/Dn4JGZhym2q
+         GI/pM2dRaCNg52eQdFYPvCYHvVdWido5XQNBwtkCkMzf/MqISvvag7kfgysN/ax6B+h1
+         0ZDw==
+X-Gm-Message-State: ANoB5pnad77k6AQbxW2Ifw5cn7u++mZOXjWaOzoLJukWw4wD1e4FsiH+
+        50J3pytDna/1RdxWvIsCB4UzqPgvNmKNkHJFid+QDA==
+X-Google-Smtp-Source: AA0mqf7+5yEM8rsOyk/T9vkrhUx7kBkYpnXVDXEL6ePoieKEPUVFRYG/0MTLadfmlZFW5VxZh4JQOCHyQyZauj5Rhsk=
+X-Received: by 2002:a17:90a:4e8c:b0:213:d7cc:39cb with SMTP id
+ o12-20020a17090a4e8c00b00213d7cc39cbmr14629908pjh.144.1668447845530; Mon, 14
+ Nov 2022 09:44:05 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:dc0c:0:b0:300:ece2:e3b8 with SMTP id
- t12-20020a92dc0c000000b00300ece2e3b8mr6529994iln.255.1668447828383; Mon, 14
- Nov 2022 09:43:48 -0800 (PST)
-Date:   Mon, 14 Nov 2022 09:43:48 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000023209305ed71c833@google.com>
-Subject: [syzbot] possible deadlock in nci_set_local_general_bytes
-From:   syzbot <syzbot+8768e9ec924b08e63f82@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com,
-        krzysztof.kozlowski@linaro.org, kuba@kernel.org, linma@zju.edu.cn,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+References: <20221113152439.2821942-1-feldsherov@google.com> <20221114104653.sosohdhkxry6xkuc@quack3>
+In-Reply-To: <20221114104653.sosohdhkxry6xkuc@quack3>
+From:   Svyatoslav Feldsherov <feldsherov@google.com>
+Date:   Mon, 14 Nov 2022 19:43:54 +0200
+Message-ID: <CACgs1VBy6Mww_iOgtY7Brryi_ofbrAO1yud8zyBer59hhSAUGg@mail.gmail.com>
+Subject: Re: [PATCH] fs: do not push freeing inode to b_dirty_time list
+To:     Jan Kara <jack@suse.cz>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Lukas Czerner <lczerner@redhat.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        syzbot+6ba92bd00d5093f7e371@syzkaller.appspotmail.com,
+        oferz@google.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Thank you for looking into this!
 
-syzbot found the following issue on:
+On Mon, Nov 14, 2022 at 12:46 PM Jan Kara <jack@suse.cz> wrote:
+>
+> On Sun 13-11-22 17:24:39, Svyatoslav Feldsherov wrote:
+> > After commit cbfecb927f42 ("fs: record I_DIRTY_TIME even if inode
+> > already has I_DIRTY_INODE") writeiback_single_inode can push inode with
+> > I_DIRTY_TIME set to b_dirty_time list. In case of freeing inode with
+> > I_DIRTY_TIME set this can happened after deletion of inode io_list at
+> > evict. Stack trace is following.
+> >
+> > evict
+> > fat_evict_inode
+> > fat_truncate_blocks
+> > fat_flush_inodes
+> > writeback_inode
+> > sync_inode_metadata
+> > writeback_single_inode
+> >
+> > This will lead to use after free in flusher thread.
+> >
+> > Fixes: cbfecb927f42 ("fs: record I_DIRTY_TIME even if inode already has I_DIRTY_INODE")
+> > Reported-by: syzbot+6ba92bd00d5093f7e371@syzkaller.appspotmail.com
+> > Signed-off-by: Svyatoslav Feldsherov <feldsherov@google.com>
+>
+> Thanks for the analysis! I was scratching my head over this syzbot report
+> for a while and it didn't occur to me somebody could be calling
+> writeback_single_inode() from the .evict callback.
+>
+> Also what contributes to the problem is that FAT calls
+> sync_inode_metadata(inode, 0) so it is not marking this final flush as data
+> integrity sync and so we happily leave the I_DIRTY_TIME bit set.
+>
+> > diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+> > index 443f83382b9b..31c93cbdb3fe 100644
+> > --- a/fs/fs-writeback.c
+> > +++ b/fs/fs-writeback.c
+> > @@ -1718,7 +1718,7 @@ static int writeback_single_inode(struct inode *inode,
+> >        */
+> >       if (!(inode->i_state & I_DIRTY_ALL))
+> >               inode_cgwb_move_to_attached(inode, wb);
+> > -     else if (!(inode->i_state & I_SYNC_QUEUED)) {
+> > +     else if (!(inode->i_state & (I_SYNC_QUEUED | I_FREEING))) {
+> >               if ((inode->i_state & I_DIRTY))
+> >                       redirty_tail_locked(inode, wb);
+> >               else if (inode->i_state & I_DIRTY_TIME) {
+>
+> So even calling inode_cgwb_move_to_attached() is not safe when I_FREEING is
+> already set. So I belive the I_FREEING bit check needs to be before this
+> whole if block.
 
-HEAD commit:    1621b6eaebf7 Merge branch 'for-next/fixes' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=119413e1880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=606e57fd25c5c6cc
-dashboard link: https://syzkaller.appspot.com/bug?extid=8768e9ec924b08e63f82
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1097e935880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177b5b15880000
+Agree, let me move the I_FREEING check before this if block.
+The commit I am fixing didn't change this codepath, so I suspect there is an
+implicit invariant which keeps inode_cgwb_move_to_attached call safe.
+But I am 100% in favor of making I_FREEING check explicitly.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/82aa7741098d/disk-1621b6ea.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f6be08c4e4c2/vmlinux-1621b6ea.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/296b6946258a/Image-1621b6ea.gz.xz
+>
+> I also think we should add some assertions into i_io_list handling
+> functions to complain if I_FREEING bit is set to catch these problems
+> earlier which means to be also more careful in __mark_inode_dirty(). But
+> this is for a separate cleanup.
+>
+>                                                                 Honza
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8768e9ec924b08e63f82@syzkaller.appspotmail.com
+Sounds reasonable. Will look into that afterwards.
 
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc4-syzkaller-31872-g1621b6eaebf7 #0 Not tainted
-------------------------------------------------------
-syz-executor402/3146 is trying to acquire lock:
-ffff0000cad76350 (&ndev->req_lock){+.+.}-{3:3}, at: nci_request net/nfc/nci/core.c:148 [inline]
-ffff0000cad76350 (&ndev->req_lock){+.+.}-{3:3}, at: nci_set_local_general_bytes+0xbc/0x480 net/nfc/nci/core.c:774
+> --
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
 
-but task is already holding lock:
-ffff0000cad73d18 (&genl_data->genl_data_mutex){+.+.}-{3:3}, at: nfc_genl_start_poll+0xc4/0x174 net/nfc/netlink.c:826
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #3 (&genl_data->genl_data_mutex){+.+.}-{3:3}:
-       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
-       nfc_urelease_event_work+0x88/0x16c net/nfc/netlink.c:1811
-       process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
-       worker_thread+0x340/0x610 kernel/workqueue.c:2436
-       kthread+0x12c/0x158 kernel/kthread.c:376
-       ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
-
--> #2 (nfc_devlist_mutex){+.+.}-{3:3}:
-       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
-       nfc_register_device+0x34/0x208 net/nfc/core.c:1116
-       nci_register_device+0x338/0x3b0 net/nfc/nci/core.c:1256
-       virtual_ncidev_open+0x6c/0xd8 drivers/nfc/virtual_ncidev.c:146
-       misc_open+0x1b8/0x200 drivers/char/misc.c:143
-       chrdev_open+0x2b4/0x2e8 fs/char_dev.c:414
-       do_dentry_open+0x364/0x748 fs/open.c:882
-       vfs_open+0x38/0x48 fs/open.c:1013
-       do_open fs/namei.c:3557 [inline]
-       path_openat+0xe34/0x11c4 fs/namei.c:3713
-       do_filp_open+0xdc/0x1b8 fs/namei.c:3740
-       do_sys_openat2+0xb8/0x22c fs/open.c:1310
-       do_sys_open fs/open.c:1326 [inline]
-       __do_sys_openat fs/open.c:1342 [inline]
-       __se_sys_openat fs/open.c:1337 [inline]
-       __arm64_sys_openat+0xb0/0xe0 fs/open.c:1337
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
--> #1 (nci_mutex){+.+.}-{3:3}:
-       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
-       virtual_nci_close+0x28/0x58 drivers/nfc/virtual_ncidev.c:44
-       nci_open_device+0x414/0x518 net/nfc/nci/core.c:544
-       nci_dev_up+0x20/0x30 net/nfc/nci/core.c:631
-       nfc_dev_up+0xcc/0x1b0 net/nfc/core.c:118
-       nfc_genl_dev_up+0x40/0x78 net/nfc/netlink.c:770
-       genl_family_rcv_msg_doit net/netlink/genetlink.c:756 [inline]
-       genl_family_rcv_msg net/netlink/genetlink.c:833 [inline]
-       genl_rcv_msg+0x458/0x4f4 net/netlink/genetlink.c:850
-       netlink_rcv_skb+0xe8/0x1d4 net/netlink/af_netlink.c:2540
-       genl_rcv+0x38/0x50 net/netlink/genetlink.c:861
-       netlink_unicast_kernel+0xfc/0x1dc net/netlink/af_netlink.c:1319
-       netlink_unicast+0x164/0x248 net/netlink/af_netlink.c:1345
-       netlink_sendmsg+0x484/0x584 net/netlink/af_netlink.c:1921
-       sock_sendmsg_nosec net/socket.c:714 [inline]
-       sock_sendmsg net/socket.c:734 [inline]
-       ____sys_sendmsg+0x2f8/0x440 net/socket.c:2482
-       ___sys_sendmsg net/socket.c:2536 [inline]
-       __sys_sendmsg+0x1ac/0x228 net/socket.c:2565
-       __do_sys_sendmsg net/socket.c:2574 [inline]
-       __se_sys_sendmsg net/socket.c:2572 [inline]
-       __arm64_sys_sendmsg+0x2c/0x3c net/socket.c:2572
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
--> #0 (&ndev->req_lock){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain kernel/locking/lockdep.c:3831 [inline]
-       __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
-       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
-       nci_request net/nfc/nci/core.c:148 [inline]
-       nci_set_local_general_bytes+0xbc/0x480 net/nfc/nci/core.c:774
-       nci_start_poll+0x1e8/0x474 net/nfc/nci/core.c:838
-       nfc_start_poll+0xfc/0x170 net/nfc/core.c:225
-       nfc_genl_start_poll+0xd4/0x174 net/nfc/netlink.c:828
-       genl_family_rcv_msg_doit net/netlink/genetlink.c:756 [inline]
-       genl_family_rcv_msg net/netlink/genetlink.c:833 [inline]
-       genl_rcv_msg+0x458/0x4f4 net/netlink/genetlink.c:850
-       netlink_rcv_skb+0xe8/0x1d4 net/netlink/af_netlink.c:2540
-       genl_rcv+0x38/0x50 net/netlink/genetlink.c:861
-       netlink_unicast_kernel+0xfc/0x1dc net/netlink/af_netlink.c:1319
-       netlink_unicast+0x164/0x248 net/netlink/af_netlink.c:1345
-       netlink_sendmsg+0x484/0x584 net/netlink/af_netlink.c:1921
-       sock_sendmsg_nosec net/socket.c:714 [inline]
-       sock_sendmsg net/socket.c:734 [inline]
-       ____sys_sendmsg+0x2f8/0x440 net/socket.c:2482
-       ___sys_sendmsg net/socket.c:2536 [inline]
-       __sys_sendmsg+0x1ac/0x228 net/socket.c:2565
-       __do_sys_sendmsg net/socket.c:2574 [inline]
-       __se_sys_sendmsg net/socket.c:2572 [inline]
-       __arm64_sys_sendmsg+0x2c/0x3c net/socket.c:2572
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
-other info that might help us debug this:
-
-Chain exists of:
-  &ndev->req_lock --> nfc_devlist_mutex --> &genl_data->genl_data_mutex
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&genl_data->genl_data_mutex);
-                               lock(nfc_devlist_mutex);
-                               lock(&genl_data->genl_data_mutex);
-  lock(&ndev->req_lock);
-
- *** DEADLOCK ***
-
-4 locks held by syz-executor402/3146:
- #0: ffff80000d7c9268 (cb_lock){++++}-{3:3}, at: genl_rcv+0x28/0x50 net/netlink/genetlink.c:860
- #1: ffff80000d7c9178 (genl_mutex){+.+.}-{3:3}, at: genl_lock net/netlink/genetlink.c:33 [inline]
- #1: ffff80000d7c9178 (genl_mutex){+.+.}-{3:3}, at: genl_rcv_msg+0x80/0x4f4 net/netlink/genetlink.c:848
- #2: ffff0000cad73d18 (&genl_data->genl_data_mutex){+.+.}-{3:3}, at: nfc_genl_start_poll+0xc4/0x174 net/nfc/netlink.c:826
- #3: ffff0000cad73900 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
- #3: ffff0000cad73900 (&dev->mutex){....}-{3:3}, at: nfc_start_poll+0x5c/0x170 net/nfc/core.c:208
-
-stack backtrace:
-CPU: 0 PID: 3146 Comm: syz-executor402 Not tainted 6.1.0-rc4-syzkaller-31872-g1621b6eaebf7 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2055
- check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain kernel/locking/lockdep.c:3831 [inline]
- __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
- __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
- nci_request net/nfc/nci/core.c:148 [inline]
- nci_set_local_general_bytes+0xbc/0x480 net/nfc/nci/core.c:774
- nci_start_poll+0x1e8/0x474 net/nfc/nci/core.c:838
- nfc_start_poll+0xfc/0x170 net/nfc/core.c:225
- nfc_genl_start_poll+0xd4/0x174 net/nfc/netlink.c:828
- genl_family_rcv_msg_doit net/netlink/genetlink.c:756 [inline]
- genl_family_rcv_msg net/netlink/genetlink.c:833 [inline]
- genl_rcv_msg+0x458/0x4f4 net/netlink/genetlink.c:850
- netlink_rcv_skb+0xe8/0x1d4 net/netlink/af_netlink.c:2540
- genl_rcv+0x38/0x50 net/netlink/genetlink.c:861
- netlink_unicast_kernel+0xfc/0x1dc net/netlink/af_netlink.c:1319
- netlink_unicast+0x164/0x248 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x484/0x584 net/netlink/af_netlink.c:1921
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg net/socket.c:734 [inline]
- ____sys_sendmsg+0x2f8/0x440 net/socket.c:2482
- ___sys_sendmsg net/socket.c:2536 [inline]
- __sys_sendmsg+0x1ac/0x228 net/socket.c:2565
- __do_sys_sendmsg net/socket.c:2574 [inline]
- __se_sys_sendmsg net/socket.c:2572 [inline]
- __arm64_sys_sendmsg+0x2c/0x3c net/socket.c:2572
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-nci: __nci_request: wait_for_completion_interruptible_timeout failed -512
-nci: nci_start_poll: failed to set local general bytes
-nci: __nci_request: wait_for_completion_interruptible_timeout failed 0
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+--
+Slava
