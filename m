@@ -2,128 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A021628AFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:02:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 050C9628AFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237447AbiKNVCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 16:02:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
+        id S237465AbiKNVCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 16:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237268AbiKNVCR (ORCPT
+        with ESMTP id S237427AbiKNVCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 16:02:17 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17E8B4A7;
-        Mon, 14 Nov 2022 13:02:15 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id n20so10788456ejh.0;
-        Mon, 14 Nov 2022 13:02:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TzzsYr3QBaUTVu5kumkFsbRVJbtcn69A/lItbi1zU98=;
-        b=bojHQRtx6KhmuPEwvS6vokOwrOP4UUSsInITgCjLbtci2sWccS1NQ3IBggtobrbZan
-         a/DE0f7eJ6SrCJmepFpJfRyZZAbhpYX9/hC7gaa39gPY78WqWta518lYjhXbVzG1i9Vq
-         xyrz920zssclK67meKsPP4rTz+a0mTOT19jBOsWogfCaw0BnG9xfsRBVswbODWVdQ7PN
-         qzT0AsUgSgEcw/PbJ8DeaeYtwoOIxAFBKo5HFM1hxPQ4qHppx3v2jlzl/jdyoEE3uzX2
-         JdbSkmxETArx0MEIfJ0ApbMwn84Q3VsxW6qNXf45s1NXFIjqt5/TfAmDbnsqiaU3PXv5
-         RUcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TzzsYr3QBaUTVu5kumkFsbRVJbtcn69A/lItbi1zU98=;
-        b=saFI7LGX+1PX8zSQvt0LWBlmx2CdfvA7nOt1tiIRTySjCeuUmpnmsVYZgYgXLq+VzD
-         cL9iuvvaZ64O5R9wfDn+VJZjlhD2XoZ6B5DXYsxBqBpCbg9I1pAwLpBjM9Bn7PfedjqN
-         7nj/b3rKBU9uWDiqdbFAdAoPWyUxNNlJ+Q8XF6tT806q9gfSko9T1cxl9LMqJjjopYvb
-         voQpyRrdct3EOQI5oWbg5ZPMRsioRxu/wstPx5UZZS0rzF93fjp80waj1Rnn8ddxWaqT
-         xSHQyALZFn5VX9uooDzjexCg8TGECPlLmOlUhRRG6qAwZtY0puSjfGvboIDlPozMZYTP
-         pYCA==
-X-Gm-Message-State: ANoB5pkOGC5ih6SzaAGEeRMia/VaIGHmmTlFW4WLa4q5gNiagxHn/i7H
-        cXwhfSUHeKylDiF3EMnwCdQ=
-X-Google-Smtp-Source: AA0mqf4romJpJ696KN+fPZmMnIrPunyW+McWEUlAOPIcwTtZicCYdIFczAT2Nw/U1Ct4Zm/p43lNmg==
-X-Received: by 2002:a17:906:c185:b0:7ad:84d1:5b56 with SMTP id g5-20020a170906c18500b007ad84d15b56mr12214793ejz.205.1668459734207;
-        Mon, 14 Nov 2022 13:02:14 -0800 (PST)
-Received: from [192.168.3.32] (dh207-97-48.xnet.hr. [88.207.97.48])
-        by smtp.gmail.com with ESMTPSA id x16-20020a170906135000b0073d84a321c8sm4587847ejb.166.2022.11.14.13.02.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 13:02:13 -0800 (PST)
-Message-ID: <b3860cbd-0967-0b8d-3d67-f2a09f1e0042@gmail.com>
-Date:   Mon, 14 Nov 2022 22:02:11 +0100
+        Mon, 14 Nov 2022 16:02:41 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D914CB858;
+        Mon, 14 Nov 2022 13:02:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668459760; x=1699995760;
+  h=from:to:subject:date:message-id:mime-version;
+  bh=WYQvyMe/Ouee8sxJJTDtOaNpVScXhdHxAJng8cTkrss=;
+  b=e1AOgbpCEkyqeP6eEPY0o4owQP71MKOT7q215I/oyh9yVj84TeLieOMr
+   ZItv1ts6qg2FS7VYNEHPhPujfFzP7D/o8Flbi0fEFfzrkLCKCC+UKfRxL
+   h+l2qpfaZIWh3k3/IyUg4MHOfFWfTZt3khTzqsZ5IkM/VgQN+PoBeAci2
+   EGQvkAxGCPHHdxbn6r/1OghhAC9/sLe03QNb6/paJv430Z011CHrHndar
+   YHbyqkntUEaBz947Ui2xAzGDcdZEVQIAeXkm4imLbY/vOyBE1wEf6X8gk
+   cE3B1+eFQSo9HhNVSJRcfVlQt/jwNSntd6mXOviUd0cdauq/j/Oc1PFf3
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="123384986"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Nov 2022 14:02:37 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 14 Nov 2022 14:02:37 -0700
+Received: from AUS-LT-C33025.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Mon, 14 Nov 2022 14:02:35 -0700
+From:   Jerry Ray <jerry.ray@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [net-next][PATCH] dsa: lan9303: Changed ethtool stats
+Date:   Mon, 14 Nov 2022 15:02:33 -0600
+Message-ID: <20221114210233.27225-1-jerry.ray@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH RFC] gpiolib: ensure that fwnode is properly set
-To:     Brian Masney <bmasney@redhat.com>, linus.walleij@linaro.org,
-        brgl@bgdev.pl
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, psodagud@quicinc.com,
-        quic_shazhuss@quicinc.com, quic_ppareek@quicinc.com,
-        ahalaney@redhat.com, echanude@redhat.com,
-        nicolas.dechesne@linaro.org
-References: <20221114202943.2389489-1-bmasney@redhat.com>
-Content-Language: en-US
-From:   Robert Marko <robimarko@gmail.com>
-In-Reply-To: <20221114202943.2389489-1-bmasney@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch changes the reported ethtool statistics for the lan9303
+family of parts covered by this driver.
 
-On 14. 11. 2022. 21:29, Brian Masney wrote:
-> Note that this is a RFC patch and not meant to be merged. I looked into
-> a problem with linux-next-20221110 on the Qualcomm SA8540P automotive
-> board (sc8280xp) where the UFS host controller would fail to probe due
-> to repeated probe deferrals when trying to get reset-gpios via
-> devm_gpiod_get_optional().
->
-> of_get_named_gpiod_flags() returns -EPROBE_DEFER, which is caused by
-> of_gpiochip_match_node_and_xlate() returning 0 since the of_xlate function
-> pointer is not set for the qcom,sc8280xp-tlmm pinctrl driver. The
-> pinctrl driver doesn't define one, so of_gpiochip_add() should
-> automatically setup of_gpio_simple_xlate() on it's behalf. This doesn't
-> happen since the fwnode member on the struct gpiochip is set to null
-> when of_gpiochip_add() is called. Let's work around this by ensuring
-> that it's set if available.
->
-> Note that this broke sometime within the last few weeks within
-> linux-next and I haven't bisected this. I'm posting this in the hopes
-> that someone may know offhand which patch(es) may have broken this.
+The TxUnderRun statistic label is renamed to RxShort to accurately
+reflect what stat the device is reporting.  I did not reorder the
+statistics as that might cause problems with existing user code that
+are expecting the stats at a certain offset.
 
-Hi, the following patch should fix it for you, I have hit the same issue on
-IPQ8074.
+Added RxDropped and TxDropped counters to the reported statistics.
+As these stats are kept by the switch rather than the port
+instance, they are indexed differently.
 
-https://patchwork.ozlabs.org/project/linux-gpio/patch/20221111113732.461881-1-thierry.reding@gmail.com/
+Added a version number to the module.
 
-Regards,
-Robert
+Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
+---
+ drivers/net/dsa/lan9303-core.c | 41 ++++++++++++++++++++++++++++------
+ 1 file changed, 34 insertions(+), 7 deletions(-)
 
->
-> Signed-off-by: Brian Masney <bmasney@redhat.com>
-> ---
->   drivers/gpio/gpiolib.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index 11fb7ec883e9..8bec66008869 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -678,7 +678,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
->   	 * Assign fwnode depending on the result of the previous calls,
->   	 * if none of them succeed, assign it to the parent's one.
->   	 */
-> -	gdev->dev.fwnode = dev_fwnode(&gdev->dev) ?: fwnode;
-> +	gc->fwnode = gdev->dev.fwnode = dev_fwnode(&gdev->dev) ?: fwnode;
->   
->   	gdev->id = ida_alloc(&gpio_ida, GFP_KERNEL);
->   	if (gdev->id < 0) {
+diff --git a/drivers/net/dsa/lan9303-core.c b/drivers/net/dsa/lan9303-core.c
+index 438e46af03e9..8c6daddde105 100644
+--- a/drivers/net/dsa/lan9303-core.c
++++ b/drivers/net/dsa/lan9303-core.c
+@@ -177,10 +177,12 @@
+ #define LAN9303_SWE_INGRESS_PORT_TYPE 0x1847
+ #define  LAN9303_SWE_INGRESS_PORT_TYPE_VLAN 3
+ #define LAN9303_BM_CFG 0x1c00
++#define LAN9303_BM_DRP_CNT_SRC_0 0x1c05
+ #define LAN9303_BM_EGRSS_PORT_TYPE 0x1c0c
+ # define LAN9303_BM_EGRSS_PORT_TYPE_SPECIAL_TAG_PORT2 (BIT(17) | BIT(16))
+ # define LAN9303_BM_EGRSS_PORT_TYPE_SPECIAL_TAG_PORT1 (BIT(9) | BIT(8))
+ # define LAN9303_BM_EGRSS_PORT_TYPE_SPECIAL_TAG_PORT0 (BIT(1) | BIT(0))
++#define LAN9303_BM_RATE_DRP_CNT_SRC_0 0x1c16
+ 
+ #define LAN9303_SWITCH_PORT_REG(port, reg0) (0x400 * (port) + (reg0))
+ 
+@@ -961,7 +963,7 @@ static const struct lan9303_mib_desc lan9303_mib[] = {
+ 	{ .offset = LAN9303_MAC_TX_BRDCST_CNT_0, .name = "TxBroad", },
+ 	{ .offset = LAN9303_MAC_TX_PAUSE_CNT_0, .name = "TxPause", },
+ 	{ .offset = LAN9303_MAC_TX_MULCST_CNT_0, .name = "TxMulti", },
+-	{ .offset = LAN9303_MAC_RX_UNDSZE_CNT_0, .name = "TxUnderRun", },
++	{ .offset = LAN9303_MAC_RX_UNDSZE_CNT_0, .name = "RxShort", },
+ 	{ .offset = LAN9303_MAC_TX_64_CNT_0, .name = "Tx64Byte", },
+ 	{ .offset = LAN9303_MAC_TX_127_CNT_0, .name = "Tx128Byte", },
+ 	{ .offset = LAN9303_MAC_TX_255_CNT_0, .name = "Tx256Byte", },
+@@ -978,10 +980,16 @@ static const struct lan9303_mib_desc lan9303_mib[] = {
+ 	{ .offset = LAN9303_MAC_TX_LATECOL_0, .name = "TxLateCol", },
+ };
+ 
++/* Buffer Management Statistics (indexed by port) */
++static const struct lan9303_mib_desc lan9303_switch_mib[] = {
++	{ .offset = LAN9303_BM_RATE_DRP_CNT_SRC_0, .name = "RxDropped", },
++	{ .offset = LAN9303_BM_DRP_CNT_SRC_0, .name = "TxDropped", },
++};
++
+ static void lan9303_get_strings(struct dsa_switch *ds, int port,
+ 				u32 stringset, uint8_t *data)
+ {
+-	unsigned int u;
++	unsigned int i, u;
+ 
+ 	if (stringset != ETH_SS_STATS)
+ 		return;
+@@ -990,26 +998,44 @@ static void lan9303_get_strings(struct dsa_switch *ds, int port,
+ 		strncpy(data + u * ETH_GSTRING_LEN, lan9303_mib[u].name,
+ 			ETH_GSTRING_LEN);
+ 	}
++	for (i = 0; i < ARRAY_SIZE(lan9303_switch_mib); i++) {
++		strncpy(data + (u + i) * ETH_GSTRING_LEN,
++			lan9303_switch_mib[i].name, ETH_GSTRING_LEN);
++	}
+ }
+ 
+ static void lan9303_get_ethtool_stats(struct dsa_switch *ds, int port,
+ 				      uint64_t *data)
+ {
+ 	struct lan9303 *chip = ds->priv;
+-	unsigned int u;
++	unsigned int i, u;
+ 
+ 	for (u = 0; u < ARRAY_SIZE(lan9303_mib); u++) {
+ 		u32 reg;
+ 		int ret;
+ 
+-		ret = lan9303_read_switch_port(
+-			chip, port, lan9303_mib[u].offset, &reg);
+-
++		/* Read Port-based MIB stats. */
++		ret = lan9303_read_switch_port(chip, port,
++					       lan9303_mib[u].offset,
++					       &reg);
+ 		if (ret)
+ 			dev_warn(chip->dev, "Reading status port %d reg %u failed\n",
+ 				 port, lan9303_mib[u].offset);
+ 		data[u] = reg;
+ 	}
++	for (i = 0; i < ARRAY_SIZE(lan9303_switch_mib); i++) {
++		u32 reg;
++		int ret;
++
++		/* Read Switch stats indexed by port. */
++		ret = lan9303_read_switch_reg(chip,
++					      (lan9303_switch_mib[i].offset +
++					       port), &reg);
++		if (ret)
++			dev_warn(chip->dev, "Reading status port %d reg %u failed\n",
++				 port, lan9303_switch_mib[i].offset);
++		data[i + u] = reg;
++	}
+ }
+ 
+ static int lan9303_get_sset_count(struct dsa_switch *ds, int port, int sset)
+@@ -1017,7 +1043,7 @@ static int lan9303_get_sset_count(struct dsa_switch *ds, int port, int sset)
+ 	if (sset != ETH_SS_STATS)
+ 		return 0;
+ 
+-	return ARRAY_SIZE(lan9303_mib);
++	return ARRAY_SIZE(lan9303_mib) + ARRAY_SIZE(lan9303_switch_mib);
+ }
+ 
+ static int lan9303_phy_read(struct dsa_switch *ds, int phy, int regnum)
+@@ -1414,5 +1440,6 @@ void lan9303_shutdown(struct lan9303 *chip)
+ EXPORT_SYMBOL(lan9303_shutdown);
+ 
+ MODULE_AUTHOR("Juergen Borleis <kernel@pengutronix.de>");
++MODULE_VERSION("1.1");
+ MODULE_DESCRIPTION("Core driver for SMSC/Microchip LAN9303 three port ethernet switch");
+ MODULE_LICENSE("GPL v2");
+-- 
+2.17.1
+
