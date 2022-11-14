@@ -2,136 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14386627D58
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74446627D5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236908AbiKNMHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 07:07:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
+        id S236928AbiKNMIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 07:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236748AbiKNMHi (ORCPT
+        with ESMTP id S236993AbiKNMIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 07:07:38 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A016CE34
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 04:07:34 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0175C2273D;
-        Mon, 14 Nov 2022 12:07:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668427653; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jruMgBY5bV0IXTFQWV3qYvuLQLTE5ZFImlMF2xpEA5Y=;
-        b=sEfZ7E1DbAUbXgkCZIRMQBKYjhXWPZLUTuP/QJOjUKZ38ukEIIqjuSLbFf+nP6Y/uXC3YO
-        g3tVfmjTroj0w1pKMIu7IF8FibtgDEr7Rvhzu0SiTWLwINV/PSdqjydbOq8WMaeh8R247G
-        ouDPiCuQFhNJiz7rutSmXtsi3z6Md4s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668427653;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jruMgBY5bV0IXTFQWV3qYvuLQLTE5ZFImlMF2xpEA5Y=;
-        b=Zwz2Ev7xCTDiFs9XtgZx8PRSSNNW90giG+TDpHPMY98qrn+h7ZxAWYXGyDto3tuhPD9fiJ
-        +oVfU9bvluhFWJCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E3FAC13A92;
-        Mon, 14 Nov 2022 12:07:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xF6kN4QvcmMaEQAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 14 Nov 2022 12:07:32 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 7089EA0709; Mon, 14 Nov 2022 13:07:32 +0100 (CET)
-Date:   Mon, 14 Nov 2022 13:07:32 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     "liaochang (A)" <liaochang1@huawei.com>
-Cc:     Jan Kara <jack@suse.cz>, willy@infradead.org,
-        damien.lemoal@opensource.wdc.com, akpm@linux-foundation.org,
-        qhjin.dev@gmail.com, songmuchun@bytedance.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs: Fix UBSAN detected shift-out-bounds error for bad
- superblock
-Message-ID: <20221114120732.vephphzzpdkv2zam@quack3>
-References: <20221114024957.60916-1-liaochang1@huawei.com>
- <20221114110459.x7yb6rhgwpi6kyjj@quack3>
- <90ca400b-050a-ec3e-b052-2cf1cd34c020@huawei.com>
+        Mon, 14 Nov 2022 07:08:00 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA036544
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 04:07:51 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id y16so17810295wrt.12
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 04:07:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v0Chla6FrbvsRj/V7o93Jwb0K9dJDq2Z+82QL/7CPMc=;
+        b=NU0DJYEl7x+p33l8H4eTIkVmbzTGMYwmrBWF0JqU20kwNL3WwShZM0I+Zt9PxTbTpV
+         pIzqiwqouRIu55CvOpCYY1aM0/IozRM8SfvVIwNwHc73WpvVU4lM+MSKKCz7bd5cP1c1
+         1J2aZ498vCXxcvDy82NnXgOWozRCNxPNIpAjePwdF9RrvS0dsx3s/k2OqhjTdFL3R2Jc
+         GKTrAgzquYBlo++pdyHo2Y0aith7l0OsWRkdAt+/Nys9a6+NLSiLqFt8BN9aG2XmbIJd
+         mSaWVfkytWAL8DZ5/GSE9+MLJB2sHKciVe1yRPCPmfgLKFhX6Ksm2TP9PhMqS0jlnEc5
+         9cEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v0Chla6FrbvsRj/V7o93Jwb0K9dJDq2Z+82QL/7CPMc=;
+        b=REPT5fzXXaBLnl06P537wf8H/s1qY7c3A5Hb330MlU65qZCZyb0ztMj1u3eizzlbXY
+         YLWGgcSeivywziDlWxa9bi4NQ8r8H7Vz+KOKKLnmdRu7ug7kiwjU7cL07Y71QDW0OQfW
+         NG03HDURfe71UmimBZvgurQmpbcAudUPYtsOfNJiLFtXeh/bqhhO5NRfE2AQOVooFRnZ
+         0YL1MFMtfXtPunz9nnZXcwg0yPghMtp/W4R8o04uBuSofH0NrsZhu8/MnA9aO6dxRb6F
+         x8J9wQKW3leNWXFsDdy6UQLwGNPEKIXYR234nBqJ+XFDe85gDpAm0Ss1DQ7qgQNPigVZ
+         zAWQ==
+X-Gm-Message-State: ANoB5pmqt1BoqoEbAhW8zf4DHXvkllMpJvY7MxSrw+B8qMdsRFYOg0XF
+        fUTKHBAu/kS76kXUkBK+n9M=
+X-Google-Smtp-Source: AA0mqf48iZU6uRKsDDAM/vO3CslLT70Dh+24sB8ylByYPvNix4AxyR3/oAJb9j7gwCPlcvP+hZYcPw==
+X-Received: by 2002:a5d:4110:0:b0:236:7cdb:3c8b with SMTP id l16-20020a5d4110000000b002367cdb3c8bmr7165739wrp.280.1668427670067;
+        Mon, 14 Nov 2022 04:07:50 -0800 (PST)
+Received: from [192.168.1.131] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id o15-20020a05600c510f00b003c6d21a19a0sm13684389wms.29.2022.11.14.04.07.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 04:07:48 -0800 (PST)
+Message-ID: <7d674c0c-4cff-d142-225d-80c3309a57ec@gmail.com>
+Date:   Mon, 14 Nov 2022 13:07:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <90ca400b-050a-ec3e-b052-2cf1cd34c020@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] soc: mediatek: Add deprecated compatible to mmsys
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, matthias.bgg@kernel.org,
+        nancy.lin@mediatek.com
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221111082912.14557-1-matthias.bgg@kernel.org>
+ <46c17d4b-d130-86a7-b5f8-73c30d7fdfdd@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <46c17d4b-d130-86a7-b5f8-73c30d7fdfdd@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 14-11-22 19:59:03, liaochang (A) wrote:
-> 
-> 
-> 在 2022/11/14 19:04, Jan Kara 写道:
-> > On Mon 14-11-22 10:49:57, Liao Chang wrote:
-> >> UBSAN: shift-out-of-bounds in fs/minix/bitmap.c:103:3
-> >> shift exponent 8192 is too large for 32-bit type 'unsigned int'
-> >> CPU: 1 PID: 32273 Comm: syz-executor.0 Tainted: G        W
-> >> 6.1.0-rc4-dirty #11
-> >> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-> >> BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
-> >> Call Trace:
-> >>  <TASK>
-> >>  dump_stack_lvl+0xcd/0x134
-> >>  ubsan_epilogue+0xb/0x50
-> >>  __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x18d
-> >>  minix_count_free_blocks.cold+0x16/0x1b
-> >>  minix_statfs+0x22a/0x490
-> >>  statfs_by_dentry+0x133/0x210
-> >>  user_statfs+0xa9/0x160
-> >>  __do_sys_statfs+0x7a/0xf0
-> >>  do_syscall_64+0x35/0x80
-> >>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >>
-> >> The superblock stores on disk contains the size of a data zone, which is
-> >> too large to used as the shift when kernel try to calculate the total
-> >> size of zones, so it needs to check the superblock when kernel mounts
-> >> MINIX-FS.
-> >>
-> >> Signed-off-by: Liao Chang <liaochang1@huawei.com>
-> > 
-> > Thanks for the patch. Just one nit:
-> > 
-> >> diff --git a/fs/minix/inode.c b/fs/minix/inode.c
-> >> index da8bdd1712a7..f1d1c2312817 100644
-> >> --- a/fs/minix/inode.c
-> >> +++ b/fs/minix/inode.c
-> >> @@ -166,6 +166,12 @@ static bool minix_check_superblock(struct super_block *sb)
-> >>  	    sb->s_maxbytes > (7 + 512 + 512*512) * BLOCK_SIZE)
-> >>  		return false;
-> >>  
-> >> +	/* the total size of zones must no exceed the limitation of U32_MAX. */
-> >> +	if (sbi->s_log_zone_size && (sbi->s_nzones - sbi->s_firstdatazone) &&
-> >> +	    (__builtin_clzl((__u32)(sbi->s_nzones - sbi->s_firstdatazone)) <=
-> > 
-> > Why this strange __builtin_clzl() function? We have a ffs() function in
-> > the kernel for this :)
-> 
-> Great suggestion, i should use a compiler neutral API to caclulate leading zero count,
-> what about count_leading_zeros()?
 
-Yeah, that would work as well.
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+On 14/11/2022 12:58, AngeloGioacchino Del Regno wrote:
+> Il 11/11/22 09:29, matthias.bgg@kernel.org ha scritto:
+>> From: Matthias Brugger <matthias.bgg@gmail.com>
+>>
+>> For backward compatibility we add the deprecated compatible.
+>>
+>> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+> 
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> 
+> ...And tested on MT8195 Cherry Chromebook.
+> 
+
+Applied, thanks for testing!
