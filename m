@@ -2,331 +2,366 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03CF62760F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 07:46:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7EF627612
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 07:47:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235805AbiKNGqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 01:46:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
+        id S235824AbiKNGrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 01:47:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235485AbiKNGq1 (ORCPT
+        with ESMTP id S234803AbiKNGrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 01:46:27 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDA8E58;
-        Sun, 13 Nov 2022 22:46:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668408386; x=1699944386;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4YuEMuxqRZMl4EsAy8BXQ7H18OoBIm9Gv2nGqdy9xN4=;
-  b=BMlh0LEGdJzM4CxhKEn3SGzqRMXhAnRoNtFttpW0g9+o2BCoRxhRVRDq
-   eknKthjF9nv1xgyZzMuxCY1rKlnPYB408Z6ZQ5gSGo3XHXfWzoK3e2aj9
-   0RMpMbU5aj21jsKUZmBZlNzSop+JWZLpacB0jX+pCFjz3vnLoBJV+Fhkj
-   BIjWFe2EfS1ZOpYggPzJjMqDyqeZr1doiwecTfdr6i93QLuHH4h2w6mLW
-   dxTbIlA1obGmRuvOxlqEl9roPsjpp+u3PNvS4pc+rcKkhDzn+U2bIAp1A
-   ZTYy1g9aJ6b5CtTSa7bAUNgHvxHPFePq7emT053lldnF3y+P1PWfODcdg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="338680178"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="338680178"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 22:46:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="763365843"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="763365843"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by orsmga004.jf.intel.com with ESMTP; 13 Nov 2022 22:46:23 -0800
-Date:   Mon, 14 Nov 2022 14:46:22 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     isaku.yamahata@intel.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH v10 024/108] KVM: TDX: allocate/free TDX vcpu structure
-Message-ID: <20221114064622.k42nnrypr77lrmek@yy-desk-7060>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <ba773a3f779d4d9df24c03874462410d8ee9c955.1667110240.git.isaku.yamahata@intel.com>
+        Mon, 14 Nov 2022 01:47:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44EF64D1;
+        Sun, 13 Nov 2022 22:47:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59E9EB80D22;
+        Mon, 14 Nov 2022 06:47:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F6CBC433D6;
+        Mon, 14 Nov 2022 06:46:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668408425;
+        bh=nGkXAbiksNr/IhUnct5oFWftIT89bB6FxYQx+j/zWB0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TTKm1wq+1/HYjQ2y1FBPZIX8D6LncyyFN/2lZEEsbUE+Xjj9ULe2DdgQ/YDQFGCaK
+         LgfEtqSwj+JqcrQ1Dp/njlCFtgLrnvPmclRJMIpXxZham+jvitBB0d0jdDgIWwEcTV
+         XzwR6pYW++r4p28fPOWcyZAM7lYb4L9OYz20RLu/y497bxx/8QECdM4s4ZNkpL3/Te
+         zdA5S3sKDLWJAOSeZIStlSDEvppDFp5oqn2AP8/4hkLj6qSes97JyjzuKEGXhgxpUV
+         01X4ZVk/NhL1ynzSgSYB/xdYiGPXAeuNmWqEgcASBvaQ9M2aOZcN/H3wfC2u42k8TR
+         lUWYvSxGUScKQ==
+Date:   Mon, 14 Nov 2022 12:16:54 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        caihuoqing <caihuoqing@baidu.com>, Vinod Koul <vkoul@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 17/20] PCI: dwc: Introduce generic resources getter
+Message-ID: <20221114064654.GE3869@thinkpad>
+References: <20221113191301.5526-1-Sergey.Semin@baikalelectronics.ru>
+ <20221113191301.5526-18-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ba773a3f779d4d9df24c03874462410d8ee9c955.1667110240.git.isaku.yamahata@intel.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221113191301.5526-18-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 11:22:25PM -0700, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
->
-> The next step of TDX guest creation is to create vcpu.  Allocate TDX vcpu
-> structures, initialize it.  Allocate pages of TDX vcpu for the TDX module.
->
-> In the case of the conventional case, cpuid is empty at the initialization.
-> and cpuid is configured after the vcpu initialization.  Because TDX
-> supports only X2APIC mode, cpuid is forcibly initialized to support X2APIC
-> on the vcpu initialization.
->
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+On Sun, Nov 13, 2022 at 10:12:58PM +0300, Serge Semin wrote:
+> Currently the DW PCIe Root Port and Endpoint CSR spaces are retrieved in
+> the separate parts of the DW PCIe core driver. It doesn't really make
+> sense since the both controller types have identical set of the core CSR
+> regions: DBI, DBI CS2 and iATU/eDMA. Thus we can simplify the DW PCIe Host
+> and EP initialization methods by moving the platform-specific registers
+> space getting and mapping into a common method. It gets to be even more
+> justified seeing the CSRs base address pointers are preserved in the
+> common DW PCIe descriptor. Note all the OF-based common DW PCIe settings
+> initialization will be moved to the new method too in order to have a
+> single function for all the generic platform properties handling in single
+> place.
+> 
+> A nice side-effect of this change is that the pcie-designware-host.c and
+> pcie-designware-ep.c drivers are cleaned up from all the direct dw_pcie
+> storage modification, which makes the DW PCIe core, Root Port and Endpoint
+> modules more coherent.
+> 
+
+You have clubbed both generic resource API and introducing CDM_CHECK flag.
+Please split them into separate patches.
+
+Thanks,
+Mani
+
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> 
 > ---
->  arch/x86/kvm/vmx/main.c    |  40 +++++++++--
->  arch/x86/kvm/vmx/tdx.c     | 138 +++++++++++++++++++++++++++++++++++++
->  arch/x86/kvm/vmx/x86_ops.h |   8 +++
->  3 files changed, 182 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> index b4e4c6c677f6..c125b2e3e8b4 100644
-> --- a/arch/x86/kvm/vmx/main.c
-> +++ b/arch/x86/kvm/vmx/main.c
-> @@ -63,6 +63,38 @@ static void vt_vm_free(struct kvm *kvm)
->  		return tdx_vm_free(kvm);
->  }
->
-> +static int vt_vcpu_precreate(struct kvm *kvm)
-> +{
-> +	if (is_td(kvm))
-> +		return 0;
-> +
-> +	return vmx_vcpu_precreate(kvm);
-> +}
-> +
-> +static int vt_vcpu_create(struct kvm_vcpu *vcpu)
-> +{
-> +	if (is_td_vcpu(vcpu))
-> +		return tdx_vcpu_create(vcpu);
-> +
-> +	return vmx_vcpu_create(vcpu);
-> +}
-> +
-> +static void vt_vcpu_free(struct kvm_vcpu *vcpu)
-> +{
-> +	if (is_td_vcpu(vcpu))
-> +		return tdx_vcpu_free(vcpu);
-> +
-> +	return vmx_vcpu_free(vcpu);
-> +}
-> +
-> +static void vt_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
-> +{
-> +	if (is_td_vcpu(vcpu))
-> +		return tdx_vcpu_reset(vcpu, init_event);
-> +
-> +	return vmx_vcpu_reset(vcpu, init_event);
-> +}
-> +
->  static int vt_mem_enc_ioctl(struct kvm *kvm, void __user *argp)
+> 
+> Changelog v3:
+> - This is a new patch created on v3 lap of the series.
+> 
+> Changelog v4:
+> - Convert the method name from dw_pcie_get_res() to
+>   dw_pcie_get_resources(). (@Bjorn)
+> 
+> Changelog v7:
+> - Get back device.of_node pointer to the dw_pcie_ep_init() method.
+>   (@Yoshihiro)
+> ---
+>  .../pci/controller/dwc/pcie-designware-ep.c   | 25 +------
+>  .../pci/controller/dwc/pcie-designware-host.c | 15 +---
+>  drivers/pci/controller/dwc/pcie-designware.c  | 75 ++++++++++++++-----
+>  drivers/pci/controller/dwc/pcie-designware.h  |  3 +
+>  4 files changed, 65 insertions(+), 53 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> index 237bb01d7852..f68d1ab83bb3 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
+> @@ -13,8 +13,6 @@
+>  #include <linux/pci-epc.h>
+>  #include <linux/pci-epf.h>
+>  
+> -#include "../../pci.h"
+> -
+>  void dw_pcie_ep_linkup(struct dw_pcie_ep *ep)
 >  {
->  	if (!is_td(kvm))
-> @@ -89,10 +121,10 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
->  	.vm_destroy = vt_vm_destroy,
->  	.vm_free = vt_vm_free,
->
-> -	.vcpu_precreate = vmx_vcpu_precreate,
-> -	.vcpu_create = vmx_vcpu_create,
-> -	.vcpu_free = vmx_vcpu_free,
-> -	.vcpu_reset = vmx_vcpu_reset,
-> +	.vcpu_precreate = vt_vcpu_precreate,
-> +	.vcpu_create = vt_vcpu_create,
-> +	.vcpu_free = vt_vcpu_free,
-> +	.vcpu_reset = vt_vcpu_reset,
->
->  	.prepare_switch_to_guest = vmx_prepare_switch_to_guest,
->  	.vcpu_load = vmx_vcpu_load,
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index 54045e0576e7..0625c354b341 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -49,6 +49,11 @@ static __always_inline hpa_t set_hkid_to_hpa(hpa_t pa, u16 hkid)
->  	return pa | ((hpa_t)hkid << boot_cpu_data.x86_phys_bits);
->  }
->
-> +static inline bool is_td_vcpu_created(struct vcpu_tdx *tdx)
-> +{
-> +	return tdx->tdvpr.added;
-> +}
-> +
->  static inline bool is_td_created(struct kvm_tdx *kvm_tdx)
->  {
->  	return kvm_tdx->tdr.added;
-> @@ -296,6 +301,139 @@ int tdx_vm_init(struct kvm *kvm)
->  	return 0;
->  }
->
-> +int tdx_vcpu_create(struct kvm_vcpu *vcpu)
-> +{
-> +	struct vcpu_tdx *tdx = to_tdx(vcpu);
-> +	int ret, i;
-> +
-> +	/* TDX only supports x2APIC, which requires an in-kernel local APIC. */
-> +	if (!vcpu->arch.apic)
-> +		return -EINVAL;
-> +
-> +	fpstate_set_confidential(&vcpu->arch.guest_fpu);
-> +
-> +	ret = tdx_alloc_td_page(&tdx->tdvpr);
+>  	struct pci_epc *epc = ep->epc;
+> @@ -694,23 +692,9 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>  
+>  	INIT_LIST_HEAD(&ep->func_list);
+>  
+> -	if (!pci->dbi_base) {
+> -		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dbi");
+> -		pci->dbi_base = devm_pci_remap_cfg_resource(dev, res);
+> -		if (IS_ERR(pci->dbi_base))
+> -			return PTR_ERR(pci->dbi_base);
+> -	}
+> -
+> -	if (!pci->dbi_base2) {
+> -		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dbi2");
+> -		if (!res) {
+> -			pci->dbi_base2 = pci->dbi_base + SZ_4K;
+> -		} else {
+> -			pci->dbi_base2 = devm_pci_remap_cfg_resource(dev, res);
+> -			if (IS_ERR(pci->dbi_base2))
+> -				return PTR_ERR(pci->dbi_base2);
+> -		}
+> -	}
+> +	ret = dw_pcie_get_resources(pci);
+> +	if (ret)
+> +		return ret;
+>  
+>  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "addr_space");
+>  	if (!res)
+> @@ -739,9 +723,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
+>  		return -ENOMEM;
+>  	ep->outbound_addr = addr;
+>  
+> -	if (pci->link_gen < 1)
+> -		pci->link_gen = of_pci_get_max_link_speed(np);
+> -
+>  	epc = devm_pci_epc_create(dev, &epc_ops);
+>  	if (IS_ERR(epc)) {
+>  		dev_err(dev, "Failed to create epc device\n");
+> diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> index ea923c25e12d..3ab6ae3712c4 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> @@ -16,7 +16,6 @@
+>  #include <linux/pci_regs.h>
+>  #include <linux/platform_device.h>
+>  
+> -#include "../../pci.h"
+>  #include "pcie-designware.h"
+>  
+>  static struct pci_ops dw_pcie_ops;
+> @@ -395,6 +394,10 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
+>  
+>  	raw_spin_lock_init(&pp->lock);
+>  
+> +	ret = dw_pcie_get_resources(pci);
 > +	if (ret)
 > +		return ret;
 > +
-> +	tdx->tdvpx = kcalloc(tdx_caps.tdvpx_nr_pages, sizeof(*tdx->tdvpx),
-> +			GFP_KERNEL_ACCOUNT);
-> +	if (!tdx->tdvpx) {
-> +		ret = -ENOMEM;
-> +		goto free_tdvpr;
+>  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "config");
+>  	if (res) {
+>  		pp->cfg0_size = resource_size(res);
+> @@ -408,13 +411,6 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
+>  		return -ENODEV;
+>  	}
+>  
+> -	if (!pci->dbi_base) {
+> -		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dbi");
+> -		pci->dbi_base = devm_pci_remap_cfg_resource(dev, res);
+> -		if (IS_ERR(pci->dbi_base))
+> -			return PTR_ERR(pci->dbi_base);
+> -	}
+> -
+>  	bridge = devm_pci_alloc_host_bridge(dev, 0);
+>  	if (!bridge)
+>  		return -ENOMEM;
+> @@ -429,9 +425,6 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
+>  		pp->io_base = pci_pio_to_address(win->res->start);
+>  	}
+>  
+> -	if (pci->link_gen < 1)
+> -		pci->link_gen = of_pci_get_max_link_speed(np);
+> -
+>  	/* Set default bus ops */
+>  	bridge->ops = &dw_pcie_ops;
+>  	bridge->child_ops = &dw_child_pcie_ops;
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index 9d78e7ca61e1..a8436027434d 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/align.h>
+>  #include <linux/bitops.h>
+>  #include <linux/delay.h>
+> +#include <linux/ioport.h>
+>  #include <linux/of.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/sizes.h>
+> @@ -19,6 +20,59 @@
+>  #include "../../pci.h"
+>  #include "pcie-designware.h"
+>  
+> +int dw_pcie_get_resources(struct dw_pcie *pci)
+> +{
+> +	struct platform_device *pdev = to_platform_device(pci->dev);
+> +	struct device_node *np = dev_of_node(pci->dev);
+> +	struct resource *res;
+> +
+> +	if (!pci->dbi_base) {
+> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dbi");
+> +		pci->dbi_base = devm_pci_remap_cfg_resource(pci->dev, res);
+> +		if (IS_ERR(pci->dbi_base))
+> +			return PTR_ERR(pci->dbi_base);
 > +	}
-> +	for (i = 0; i < tdx_caps.tdvpx_nr_pages; i++) {
-> +		ret = tdx_alloc_td_page(&tdx->tdvpx[i]);
-> +		if (ret)
-> +			goto free_tdvpx;
+> +
+> +	/* DBI2 is mainly useful for the endpoint controller */
+> +	if (!pci->dbi_base2) {
+> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dbi2");
+> +		if (res) {
+> +			pci->dbi_base2 = devm_pci_remap_cfg_resource(pci->dev, res);
+> +			if (IS_ERR(pci->dbi_base2))
+> +				return PTR_ERR(pci->dbi_base2);
+> +		} else {
+> +			pci->dbi_base2 = pci->dbi_base + SZ_4K;
+> +		}
 > +	}
 > +
-> +	vcpu->arch.efer = EFER_SCE | EFER_LME | EFER_LMA | EFER_NX;
+> +	/* For non-unrolled iATU/eDMA platforms this range will be ignored */
+> +	if (!pci->atu_base) {
+> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "atu");
+> +		if (res) {
+> +			pci->atu_size = resource_size(res);
+> +			pci->atu_base = devm_ioremap_resource(pci->dev, res);
+> +			if (IS_ERR(pci->atu_base))
+> +				return PTR_ERR(pci->atu_base);
+> +		} else {
+> +			pci->atu_base = pci->dbi_base + DEFAULT_DBI_ATU_OFFSET;
+> +		}
+> +	}
 > +
-> +	vcpu->arch.cr0_guest_owned_bits = -1ul;
-> +	vcpu->arch.cr4_guest_owned_bits = -1ul;
+> +	/* Set a default value suitable for at most 8 in and 8 out windows */
+> +	if (!pci->atu_size)
+> +		pci->atu_size = SZ_4K;
 > +
-> +	vcpu->arch.tsc_offset = to_kvm_tdx(vcpu->kvm)->tsc_offset;
-> +	vcpu->arch.l1_tsc_offset = vcpu->arch.tsc_offset;
-> +	vcpu->arch.guest_state_protected =
-> +		!(to_kvm_tdx(vcpu->kvm)->attributes & TDX_TD_ATTRIBUTE_DEBUG);
+> +	if (pci->link_gen < 1)
+> +		pci->link_gen = of_pci_get_max_link_speed(np);
+> +
+> +	of_property_read_u32(np, "num-lanes", &pci->num_lanes);
+> +
+> +	if (of_property_read_bool(np, "snps,enable-cdm-check"))
+> +		dw_pcie_cap_set(pci, CDM_CHECK);
 > +
 > +	return 0;
-> +
-> +free_tdvpx:
-> +	/* @i points at the TDVPX page that failed allocation. */
-> +	for (--i; i >= 0; i--)
-> +		free_page(tdx->tdvpx[i].va);
-> +	kfree(tdx->tdvpx);
-> +	tdx->tdvpx = NULL;
-> +free_tdvpr:
-> +	free_page(tdx->tdvpr.va);
-> +
-> +	return ret;
 > +}
 > +
-> +void tdx_vcpu_free(struct kvm_vcpu *vcpu)
-> +{
-> +	struct vcpu_tdx *tdx = to_tdx(vcpu);
-> +	int i;
-> +
-> +	/* Can't reclaim or free pages if teardown failed. */
-> +	if (is_hkid_assigned(to_kvm_tdx(vcpu->kvm)))
-> +		return;
-> +
-> +	if (tdx->tdvpx) {
-> +		for (i = 0; i < tdx_caps.tdvpx_nr_pages; i++)
-> +			tdx_reclaim_td_page(&tdx->tdvpx[i]);
-> +		kfree(tdx->tdvpx);
-> +		tdx->tdvpx = NULL;
-> +	}
-> +	tdx_reclaim_td_page(&tdx->tdvpr);
-> +}
-> +
-> +void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
-> +{
-> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(vcpu->kvm);
-> +	struct vcpu_tdx *tdx = to_tdx(vcpu);
-> +	struct msr_data apic_base_msr;
-> +	u64 err;
-> +	int i;
-> +
-> +	/* TDX doesn't support INIT event. */
-> +	if (WARN_ON_ONCE(init_event))
-> +		goto td_bugged;
-> +	if (WARN_ON_ONCE(is_td_vcpu_created(tdx)))
-> +		goto td_bugged;
-> +
-> +	err = tdh_vp_create(kvm_tdx->tdr.pa, tdx->tdvpr.pa);
-> +	if (WARN_ON_ONCE(err)) {
-> +		pr_tdx_error(TDH_VP_CREATE, err, NULL);
-> +		goto td_bugged;
-> +	}
-> +	tdx_mark_td_page_added(&tdx->tdvpr);
-> +
-> +	for (i = 0; i < tdx_caps.tdvpx_nr_pages; i++) {
-> +		err = tdh_vp_addcx(tdx->tdvpr.pa, tdx->tdvpx[i].pa);
-> +		if (WARN_ON_ONCE(err)) {
-> +			pr_tdx_error(TDH_VP_ADDCX, err, NULL);
-> +			goto td_bugged;
-> +		}
-> +		tdx_mark_td_page_added(&tdx->tdvpx[i]);
-> +	}
-> +
-> +	if (!vcpu->arch.cpuid_entries) {
-> +		/*
-> +		 * On cpu creation, cpuid entry is blank.  Forcibly enable
-> +		 * X2APIC feature to allow X2APIC.
-> +		 */
-> +		struct kvm_cpuid_entry2 *e;
-> +
-> +		e = kvmalloc_array(1, sizeof(*e), GFP_KERNEL_ACCOUNT);
-
-NULL checking is necessary for kvmalloc_array.
-
-> +		*e  = (struct kvm_cpuid_entry2) {
-> +			.function = 1,	/* Features for X2APIC */
-> +			.index = 0,
-> +			.eax = 0,
-> +			.ebx = 0,
-> +			.ecx = 1ULL << 21,	/* X2APIC */
-> +			.edx = 0,
-> +		};
-> +		vcpu->arch.cpuid_entries = e;
-> +		vcpu->arch.cpuid_nent = 1;
-> +	}
-> +	apic_base_msr.data = APIC_DEFAULT_PHYS_BASE | LAPIC_MODE_X2APIC;
-> +	if (kvm_vcpu_is_reset_bsp(vcpu))
-> +		apic_base_msr.data |= MSR_IA32_APICBASE_BSP;
-> +	apic_base_msr.host_initiated = true;
-> +	if (WARN_ON_ONCE(kvm_set_apic_base(vcpu, &apic_base_msr)))
-> +		goto td_bugged;
-> +
-> +	vcpu->arch.mp_state = KVM_MP_STATE_RUNNABLE;
-> +
-> +	return;
-> +
-> +td_bugged:
-> +	vcpu->kvm->vm_bugged = true;
-> +}
-> +
->  int tdx_dev_ioctl(void __user *argp)
+>  void dw_pcie_version_detect(struct dw_pcie *pci)
 >  {
->  	struct kvm_tdx_capabilities __user *user_caps;
-> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-> index 93ffe2deb8e8..f6841c3dd12d 100644
-> --- a/arch/x86/kvm/vmx/x86_ops.h
-> +++ b/arch/x86/kvm/vmx/x86_ops.h
-> @@ -141,6 +141,10 @@ int tdx_vm_init(struct kvm *kvm);
->  void tdx_mmu_release_hkid(struct kvm *kvm);
->  void tdx_vm_free(struct kvm *kvm);
->
-> +int tdx_vcpu_create(struct kvm_vcpu *vcpu);
-> +void tdx_vcpu_free(struct kvm_vcpu *vcpu);
-> +void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event);
+>  	u32 ver;
+> @@ -639,25 +693,8 @@ static void dw_pcie_iatu_detect_regions(struct dw_pcie *pci)
+>  
+>  void dw_pcie_iatu_detect(struct dw_pcie *pci)
+>  {
+> -	struct platform_device *pdev = to_platform_device(pci->dev);
+> -
+>  	if (dw_pcie_iatu_unroll_enabled(pci)) {
+>  		dw_pcie_cap_set(pci, IATU_UNROLL);
+> -
+> -		if (!pci->atu_base) {
+> -			struct resource *res =
+> -				platform_get_resource_byname(pdev, IORESOURCE_MEM, "atu");
+> -			if (res) {
+> -				pci->atu_size = resource_size(res);
+> -				pci->atu_base = devm_ioremap_resource(pci->dev, res);
+> -			}
+> -			if (!pci->atu_base || IS_ERR(pci->atu_base))
+> -				pci->atu_base = pci->dbi_base + DEFAULT_DBI_ATU_OFFSET;
+> -		}
+> -
+> -		if (!pci->atu_size)
+> -			/* Pick a minimal default, enough for 8 in and 8 out windows */
+> -			pci->atu_size = SZ_4K;
+>  	} else {
+>  		pci->atu_base = pci->dbi_base + PCIE_ATU_VIEWPORT_BASE;
+>  		pci->atu_size = PCIE_ATU_VIEWPORT_SIZE;
+> @@ -675,7 +712,6 @@ void dw_pcie_iatu_detect(struct dw_pcie *pci)
+>  
+>  void dw_pcie_setup(struct dw_pcie *pci)
+>  {
+> -	struct device_node *np = pci->dev->of_node;
+>  	u32 val;
+>  
+>  	if (pci->link_gen > 0)
+> @@ -703,14 +739,13 @@ void dw_pcie_setup(struct dw_pcie *pci)
+>  	val |= PORT_LINK_DLL_LINK_EN;
+>  	dw_pcie_writel_dbi(pci, PCIE_PORT_LINK_CONTROL, val);
+>  
+> -	if (of_property_read_bool(np, "snps,enable-cdm-check")) {
+> +	if (dw_pcie_cap_is(pci, CDM_CHECK)) {
+>  		val = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS);
+>  		val |= PCIE_PL_CHK_REG_CHK_REG_CONTINUOUS |
+>  		       PCIE_PL_CHK_REG_CHK_REG_START;
+>  		dw_pcie_writel_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS, val);
+>  	}
+>  
+> -	of_property_read_u32(np, "num-lanes", &pci->num_lanes);
+>  	if (!pci->num_lanes) {
+>  		dev_dbg(pci->dev, "Using h/w default number of lanes\n");
+>  		return;
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
+> index c6dddacee3b1..081f169e6021 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.h
+> +++ b/drivers/pci/controller/dwc/pcie-designware.h
+> @@ -46,6 +46,7 @@
+>  
+>  /* DWC PCIe controller capabilities */
+>  #define DW_PCIE_CAP_IATU_UNROLL		1
+> +#define DW_PCIE_CAP_CDM_CHECK		2
+>  
+>  #define dw_pcie_cap_is(_pci, _cap) \
+>  	test_bit(DW_PCIE_CAP_ ## _cap, &(_pci)->caps)
+> @@ -338,6 +339,8 @@ struct dw_pcie {
+>  #define to_dw_pcie_from_ep(endpoint)   \
+>  		container_of((endpoint), struct dw_pcie, ep)
+>  
+> +int dw_pcie_get_resources(struct dw_pcie *pci);
 > +
->  int tdx_vm_ioctl(struct kvm *kvm, void __user *argp);
->  #else
->  static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return 0; }
-> @@ -154,6 +158,10 @@ static inline void tdx_mmu_release_hkid(struct kvm *kvm) {}
->  static inline void tdx_flush_shadow_all_private(struct kvm *kvm) {}
->  static inline void tdx_vm_free(struct kvm *kvm) {}
->
-> +static inline int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
-> +static inline void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
-> +static inline void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
-> +
->  static inline int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
->  #endif
->
-> --
-> 2.25.1
->
+>  void dw_pcie_version_detect(struct dw_pcie *pci);
+>  
+>  u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap);
+> -- 
+> 2.38.1
+> 
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
