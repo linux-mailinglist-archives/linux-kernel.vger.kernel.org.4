@@ -2,90 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC49E627D88
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9808627D8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237087AbiKNMTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 07:19:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
+        id S237095AbiKNMUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 07:20:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237092AbiKNMTt (ORCPT
+        with ESMTP id S229647AbiKNMUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 07:19:49 -0500
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83B6222A0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 04:19:47 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R561e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VUmtJD9_1668428383;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VUmtJD9_1668428383)
-          by smtp.aliyun-inc.com;
-          Mon, 14 Nov 2022 20:19:44 +0800
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     xiang@kernel.org, chao@kernel.org, yinxin.x@bytedance.com,
-        linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, dhowells@redhat.com
-Subject: [PATCH v2] erofs: fix missing xas_retry() in fscache mode
-Date:   Mon, 14 Nov 2022 20:19:43 +0800
-Message-Id: <20221114121943.29987-1-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
+        Mon, 14 Nov 2022 07:20:43 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3483222A0;
+        Mon, 14 Nov 2022 04:20:42 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id d20so12895033ljc.12;
+        Mon, 14 Nov 2022 04:20:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QbjuoRrIf4yoLtJPrfhCjpRfUTSXH41VEourASZkn8s=;
+        b=Xpf3GvnjHi39RV0QhlmLV4yQfSnW6zSwPOneEsYhjx1wEbp5a7FVesMP1t6wPvJmFE
+         kDgKulspLcq8BAm8DeAGhy4u+flrdJDGpBbWxYYSHXNhu9PhO4I7CXMgslryiD7iuKpe
+         ryYYtRrL1HdCeD3WLoJj1w/rPQgbNVwc68Ly49cFKMOrXpgin2yCgB9TGyGb7aievrkT
+         6J2xjPnb75z1NcV0Rvmw8dwj/Prw9Fag8nLDU5h2L9ot8nFUh2vPSkTW2x2maswdwIk4
+         LWBrcxjQAz90xUqX7aq9aYizbEEJrUZRHrpj0+YGqp1ffNX0gKXQAxjJAUL+f+UPhRiK
+         6zpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QbjuoRrIf4yoLtJPrfhCjpRfUTSXH41VEourASZkn8s=;
+        b=pdutFUMM1T731gynn7FOEymB0/3GpbJZwCBD+ucMuFoFMlftXbE191RgojyX5yVxNE
+         CHwVzxalFkLJI8noq1aB4jEUubMmZMsA7NB8dwMW+6IjAWmViSQLRNyMaUJMBbOXLyru
+         +/3LVw5NCrlcGCuWzuFarHCdEJMg4qFQVOGtMJhZUDIAINVu3lN2soeCPD1+N7b/OSEb
+         Xocfo4FZHhowgCi5SQAa67+r4cU2XrX2vNieyvXSZk0pZjxgITfblj9ES6U0OCD8rM47
+         mPPfwjUlVziNXf87yA6AAo75sR+VD5QMw57yTLKHUEjFjJxa2RqEyuUEUv7WSdLJFqlf
+         JjhQ==
+X-Gm-Message-State: ANoB5pl2CmXOi+r85gecEqyJNnOf6KPS2GYbS4ZukOa2vM83xKv7DzQA
+        Ml5MZHjZOpfN0kSdtKV/tOE=
+X-Google-Smtp-Source: AA0mqf4833AUvChkJiWEpwTbUqxdkz6TLgKXEjTln2tusy7MpI9LMpfy5HfaOWW1q7fD8lO9YFNzdQ==
+X-Received: by 2002:a2e:7219:0:b0:277:5e9d:508a with SMTP id n25-20020a2e7219000000b002775e9d508amr4309942ljc.191.1668428440816;
+        Mon, 14 Nov 2022 04:20:40 -0800 (PST)
+Received: from pc636 (host-90-235-0-38.mobileonline.telia.com. [90.235.0.38])
+        by smtp.gmail.com with ESMTPSA id p21-20020a056512235500b00498fc3d4d15sm1809497lfu.190.2022.11.14.04.20.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 04:20:40 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Mon, 14 Nov 2022 13:20:33 +0100
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-kernel@vger.kernel.org,
+        paulmck@kernel.org, rcu@vger.kernel.org
+Subject: Re: [PATCH v2] rcu/kfree: Do not request RCU when not needed
+Message-ID: <Y3Iyka86FlUh9D1P@pc636>
+References: <20221109024758.2644936-1-joel@joelfernandes.org>
+ <Y2z3Mb3u8bFZ12wY@pc636>
+ <CAEXW_YSq89xzgyQ9Tdt1tCqz8VAfzb7kSXVZmnxDuJ65U0UZ3w@mail.gmail.com>
+ <Y20EOinwcLSZHmXg@pc638.lan>
+ <Y22ry4Q2OY2zovco@google.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y22ry4Q2OY2zovco@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The xarray iteration only holds the RCU read lock and thus may encounter
-XA_RETRY_ENTRY if there's process modifying the xarray concurrently.
-This will cause oops when referring to the invalid entry.
+> On Thu, Nov 10, 2022 at 03:01:30PM +0100, Uladzislau Rezki wrote:
+> > > Hi,
+> > > 
+> > > On Thu, Nov 10, 2022 at 8:05 AM Uladzislau Rezki <urezki@gmail.com> wrote:
+> > > 
+> > > > > On ChromeOS, using this with the increased timeout, we see that we
+> > > > almost always
+> > > > > never need to initiate a new grace period. Testing also shows this frees
+> > > > large
+> > > > > amounts of unreclaimed memory, under intense kfree_rcu() pressure.
+> > > > >
+> > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > > > ---
+> > > > > v1->v2: Same logic but use polled grace periods instead of sampling
+> > > > gp_seq.
+> > > > >
+> > > > >  kernel/rcu/tree.c | 8 +++++++-
+> > > > >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > > > index 591187b6352e..ed41243f7a49 100644
+> > > > > --- a/kernel/rcu/tree.c
+> > > > > +++ b/kernel/rcu/tree.c
+> > > > > @@ -2935,6 +2935,7 @@ struct kfree_rcu_cpu_work {
+> > > > >
+> > > > >  /**
+> > > > >   * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace
+> > > > period
+> > > > > + * @gp_snap: The GP snapshot recorded at the last scheduling of monitor
+> > > > work.
+> > > > >   * @head: List of kfree_rcu() objects not yet waiting for a grace period
+> > > > >   * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiting for a
+> > > > grace period
+> > > > >   * @krw_arr: Array of batches of kfree_rcu() objects waiting for a
+> > > > grace period
+> > > > > @@ -2964,6 +2965,7 @@ struct kfree_rcu_cpu {
+> > > > >       struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
+> > > > >       raw_spinlock_t lock;
+> > > > >       struct delayed_work monitor_work;
+> > > > > +     unsigned long gp_snap;
+> > > > >       bool initialized;
+> > > > >       int count;
+> > > > >
+> > > > > @@ -3167,6 +3169,7 @@ schedule_delayed_monitor_work(struct kfree_rcu_cpu
+> > > > *krcp)
+> > > > >                       mod_delayed_work(system_wq, &krcp->monitor_work,
+> > > > delay);
+> > > > >               return;
+> > > > >       }
+> > > > > +     krcp->gp_snap = get_state_synchronize_rcu();
+> > > > >       queue_delayed_work(system_wq, &krcp->monitor_work, delay);
+> > > > >  }
+> > > > >
+> > > > How do you guarantee a full grace period for objects which proceed
+> > > > to be placed into an input stream that is not yet detached?
+> > > 
+> > > 
+> > > Just replying from phone as I’m OOO today.
+> > > 
+> > > Hmm, so you’re saying that objects can be queued after the delayed work has
+> > > been queued, but processed when the delayed work is run? I’m looking at
+> > > this code after few years so I may have missed something.
+> > > 
+> > > That’s a good point and I think I missed that. I think your version did too
+> > > but I’ll have to double check.
+> > > 
+> > > The fix then is to sample the clock for the latest object queued, not for
+> > > when the delayed work is queued.
+> > > 
+> > The patch i sent gurantee it. Just in case see v2:
+> 
+> You are right and thank you! CBs can be queued while the monitor timer is in
+> progress. So we need to sample unconditionally. I think my approach is still
+> better since I take advantage of multiple seconds (I update snapshot on every
+> CB queue monitor and sample in the monitor handler).
+> 
+> Whereas your patch is snapshotting before queuing the regular work and when
+> the work is executed (This is a much shorter duration and I bet you would be
+> blocking in cond_synchronize..() more often).
+> 
+There is a performance test that measures a taken time and memory
+footprint, so you can do a quick comparison. A "rcutorture" can be
+run with various parameters to figure out if a patch that is in question
+makes any difference.
 
-Fix this by adding the missing xas_retry(), which will make the
-iteration wind back to the root node if XA_RETRY_ENTRY is encountered.
+Usually i run it as:
 
-Fixes: d435d53228dd ("erofs: change to use asynchronous io for fscache readpage/readahead")
-Suggested-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-Reviewed-by: Jia Zhu <zhujia.zj@bytedance.com>
-Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
----
-v2:
-- update the commit message suggested by David
-- add "Suggested-by" tag, as this patch actually fixes the same issue
-  as that fixed by David's patch [1]. Sorry I forgot in v1 ;-\
-- add "Reviewed-by" tags
+<snip>
+#! /usr/bin/env bash
 
-[1] https://lore.kernel.org/lkml/084d78a4-6052-f2ec-72f2-af9c4979f5dc@linux.alibaba.com/T/#m036d0221dacde491a1bcf2f4428e8b1450179df9
----
- fs/erofs/fscache.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+LOOPS=10
 
-diff --git a/fs/erofs/fscache.c b/fs/erofs/fscache.c
-index fe05bc51f9f2..458c1c70ef30 100644
---- a/fs/erofs/fscache.c
-+++ b/fs/erofs/fscache.c
-@@ -75,11 +75,15 @@ static void erofs_fscache_rreq_unlock_folios(struct netfs_io_request *rreq)
- 
- 	rcu_read_lock();
- 	xas_for_each(&xas, folio, last_page) {
--		unsigned int pgpos =
--			(folio_index(folio) - start_page) * PAGE_SIZE;
--		unsigned int pgend = pgpos + folio_size(folio);
-+		unsigned int pgpos, pgend;
- 		bool pg_failed = false;
- 
-+		if (xas_retry(&xas, folio))
-+			continue;
-+
-+		pgpos = (folio_index(folio) - start_page) * PAGE_SIZE;
-+		pgend = pgpos + folio_size(folio);
-+
- 		for (;;) {
- 			if (!subreq) {
- 				pg_failed = true;
--- 
-2.19.1.6.gb485710b
+for (( i=0; i<$LOOPS; i++ )); do
+        tools/testing/selftests/rcutorture/bin/kvm.sh --memory 10G --torture rcuscale --allcpus --duration 1 \
+        --kconfig CONFIG_NR_CPUS=64 \
+        --kconfig CONFIG_RCU_NOCB_CPU=y \
+        --kconfig CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y \
+        --kconfig CONFIG_RCU_LAZY=n \
+        --bootargs "rcuscale.kfree_rcu_test=1 rcuscale.kfree_nthreads=16 rcuscale.holdoff=20 rcuscale.kfree_loops=10000 torture.disable_onoff_at_boot" --trust-make
+        echo "Done $i"
+done
+<snip>
 
+just run it from your linux sandbox.
+
+--
+Uladzislau Rezki
