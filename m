@@ -2,128 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A6B627E63
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:47:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C22627E65
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237253AbiKNMre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 07:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
+        id S237269AbiKNMrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 07:47:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237358AbiKNMrM (ORCPT
+        with ESMTP id S237362AbiKNMrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Nov 2022 07:47:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3545B21A6;
-        Mon, 14 Nov 2022 04:46:53 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BF0B2D;
+        Mon, 14 Nov 2022 04:47:04 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF6276113D;
-        Mon, 14 Nov 2022 12:46:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A04CC433C1;
-        Mon, 14 Nov 2022 12:46:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84782B80EAE;
+        Mon, 14 Nov 2022 12:47:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDE62C433C1;
+        Mon, 14 Nov 2022 12:47:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668430012;
-        bh=F+epNH5SqnmIUoQlpP4BNK1fKsgfSdgaSzTkz1qX9+Y=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FH3AayK7SudHPtg1lwDrbn+jpO8Bl0MC6LshCNF58ACEbunH/kMoTZDUts4sL+WRw
-         W7XHnIqozrdswPQfccJfK3zp2M2MQjUn3i2YJiM3Fwq2GR2cY7V6sMR8SxdcqkD0Op
-         eVRqNiUInmXPl24zRyXl4iYTvYdoluPNtqGMg2tTdozB6bqn1taHnqIyQ4QXVXGq+n
-         Be5pTy2PbyhPrO9oZOTzQt6dl3wWm+md6+N9u3du86HlSvbtXTNYBy0+fEiC9NSB4W
-         xun6ZHaxdysW1EXmMnk89QBfODp3w4IatMGgluOFzQ1bU5xioe9rk93AawaJcM23Ff
-         XZmqcY7ni3EfA==
-Date:   Mon, 14 Nov 2022 21:46:49 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Zheng Yejian <zhengyejian1@huawei.com>
-Cc:     <rostedt@goodmis.org>, <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tracing: Fix potential null-pointer-access of entry in
- list 'tr->err_log'
-Message-Id: <20221114214649.ecc18c3ee3f74377ce80e66d@kernel.org>
-In-Reply-To: <20221114104632.3547266-1-zhengyejian1@huawei.com>
-References: <20221114104632.3547266-1-zhengyejian1@huawei.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        s=k20201202; t=1668430022;
+        bh=saKhemVd1aOV0PdiOGoeabJGk2c8od3DuuLOsAVNbo8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jbddwzQZEm1hVjcV0/Qmp6egyTC2kkyWfkt2WTZt/4Rd38GmRxsB/JSeRPhiv6uxW
+         tMTHXv3ssVbOTvVe1S4y3qNVsdMYpbBLqt5LWT0/BBaQrN7DgduNZh2AYwibqu0ZYE
+         JsmvWs306v+ot7GEOJjZ5L79kZ0W+syxF2z/6R1T30a6vbWmn5Y81TRMGNQRMFylws
+         VorTvz+Vm+D0VoVj7rZhXkRQALrbqjStJh/VLunoc5HcKYEX1mG4xIulYIt1J043Jb
+         hS6gDP8/Reo4xgkfCxYVSfl/e8XoOEFPkNfJS3YmYEwEmkrYche8lVTXVPgcuCVUgo
+         MC2k5wSzjaXzA==
+Date:   Mon, 14 Nov 2022 13:46:59 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Robert Elliott <elliott@hpe.com>
+Subject: Re: [PATCH v7 4/6] rcu: Add RCU stall diagnosis information
+Message-ID: <20221114124659.GE590078@lothringen>
+References: <20221111130709.247-1-thunder.leizhen@huawei.com>
+ <20221111130709.247-5-thunder.leizhen@huawei.com>
+ <20221114112438.GA472998@lothringen>
+ <5f73bb77-e334-d604-d0cd-0ce7af45f209@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5f73bb77-e334-d604-d0cd-0ce7af45f209@huawei.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 18:46:32 +0800
-Zheng Yejian <zhengyejian1@huawei.com> wrote:
-
-> Entries in list 'tr->err_log' will be reused after entry number
-> exceed TRACING_LOG_ERRS_MAX.
+On Mon, Nov 14, 2022 at 08:32:19PM +0800, Leizhen (ThunderTown) wrote:
+> >> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> >> index ed93ddb8203d42c..3921aacfd421ba9 100644
+> >> --- a/kernel/rcu/tree.c
+> >> +++ b/kernel/rcu/tree.c
+> >> @@ -866,6 +866,24 @@ static int rcu_implicit_dynticks_qs(struct rcu_data *rdp)
+> >>  			rdp->rcu_iw_gp_seq = rnp->gp_seq;
+> >>  			irq_work_queue_on(&rdp->rcu_iw, rdp->cpu);
+> >>  		}
+> >> +
+> >> +		if (rcu_cpu_stall_cputime && rdp->snap_record.gp_seq != rdp->gp_seq) {
+> >> +			int cpu = rdp->cpu;
+> >> +			struct rcu_snap_record *rsrp;
+> >> +			struct kernel_cpustat *kcsp;
+> >> +
+> >> +			kcsp = &kcpustat_cpu(cpu);
+> >> +
+> >> +			rsrp = &rdp->snap_record;
+> >> +			rsrp->cputime_irq     = kcpustat_field(kcsp, CPUTIME_IRQ, cpu);
+> >> +			rsrp->cputime_softirq = kcpustat_field(kcsp, CPUTIME_SOFTIRQ, cpu);
+> >> +			rsrp->cputime_system  = kcpustat_field(kcsp, CPUTIME_SYSTEM, cpu);
+> >> +			rsrp->nr_hardirqs = kstat_cpu_irqs_sum(rdp->cpu);
+> >> +			rsrp->nr_softirqs = kstat_cpu_softirqs_sum(rdp->cpu);
+> > 
+> > Getting the sum of all CPU's IRQs, with even two iterations on all of them, look
+> > costly. So I have to ask: why is this information useful and why can't we deduce
+> > it from other CPUs stall reports?
 > 
-> The cmd string of the to be reused entry will be freed first then
-> allocated a new one. If the allocation failed, then the entry will
-> still be in list 'tr->err_log' but its 'cmd' field is set to be NULL,
-> later access of 'cmd' is risky.
-> 
-> Currently above problem can cause the loss of 'cmd' information of first
-> entry in 'tr->err_log'. When execute `cat /sys/kernel/tracing/error_log`,
-> reproduce logs like:
->   [   37.495100] trace_kprobe: error: Maxactive is not for kprobe(null) ^
->   [   38.412517] trace_kprobe: error: Maxactive is not for kprobe
->     Command: p4:myprobe2 do_sys_openat2
->             ^
+> Only the RCU stalled CPUs are recorded. Why all CPUs?
 
-This looks good to me.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-BTW, I'm interested in how did you reproduce it. Did you inject a memory
-allocation failure to reproduce it?
-
-Thank you,
-
-> 
-> Fixes: 1581a884b7ca ("tracing: Remove size restriction on tracing_log_err cmd strings")
-> Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
-> ---
->  kernel/trace/trace.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index 47a44b055a1d..5ae776598106 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -7802,6 +7802,7 @@ static struct tracing_log_err *get_tracing_log_err(struct trace_array *tr,
->  						   int len)
->  {
->  	struct tracing_log_err *err;
-> +	char *cmd;
->  
->  	if (tr->n_err_log_entries < TRACING_LOG_ERRS_MAX) {
->  		err = alloc_tracing_log_err(len);
-> @@ -7810,12 +7811,12 @@ static struct tracing_log_err *get_tracing_log_err(struct trace_array *tr,
->  
->  		return err;
->  	}
-> -
-> +	cmd = kzalloc(len, GFP_KERNEL);
-> +	if (!cmd)
-> +		return ERR_PTR(-ENOMEM);
->  	err = list_first_entry(&tr->err_log, struct tracing_log_err, list);
->  	kfree(err->cmd);
-> -	err->cmd = kzalloc(len, GFP_KERNEL);
-> -	if (!err->cmd)
-> -		return ERR_PTR(-ENOMEM);
-> +	err->cmd = cmd;
->  	list_del(&err->list);
->  
->  	return err;
-> -- 
-> 2.25.1
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Bah, I misread kstat_cpu_softirqs_sum() kstat_cpu_irqs_sum() content. Sorry
+about that, my brainfart... :-)
