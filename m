@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32ADC62811F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5507628121
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237981AbiKNNS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:18:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
+        id S236525AbiKNNTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237501AbiKNNS2 (ORCPT
+        with ESMTP id S237598AbiKNNSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:18:28 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2071.outbound.protection.outlook.com [40.107.94.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17729DFD
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:18:27 -0800 (PST)
+        Mon, 14 Nov 2022 08:18:31 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2050.outbound.protection.outlook.com [40.107.243.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6262BF6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:18:29 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HSQLruxwDXnI9B8PJzp6ljAoHcMVVsy8nXzS9eYsqvFRZxGs5k8PrSpwIILFmz1IqRDo+52O2qDDNZFu3OydVwU734j/nJa5c33KeSfk/e5H+9+isGx4V+P44ZddCOneSORAQpn9e6SiCZNReh2gmsltlcH79u3W+QDTkLS6KwltdED/OCP9k82dycBEvWzN6iyzI65d+yobNmWPoZ9ShXyU/792Bt0plWVBKZz8nWk0NqFB920wxiHdafossQH0J0YCcS9CHZUwGHz7PadywoO+k8uRPcApJSy7/ovOvmlJhvtjfiNbZANE3JF2gvKCYoEQW+ZHoDrD4p6H7rGkuQ==
+ b=gD5dUasCC3Kzm8hL3TT8K41OZ41UxmeDEXU6g1ewCH6ltAE8lbzv1ozzRyeH78MTIc1PUKIzCq1MgjgCrK3rnRLzG4uoRisZ0wEDhCtA4gvYWQK/2Ek7ofZwCXuTD0BoKfGGbQ0USz3ylfVtLzitkA9imqXc6b4+XfWgais1UIzu6y2oUvGKzsidbtkzdEQRb/R/EtLwc6xRgXY0zBTsmlphVR96G/gZC0SF1Sa0qWqvnolCMMaRM7qQTdc15oeE92LVFLwgvK8jXf9Cu472SW7C1Xi35WERUcOeQ7upas3DrirouhwKWdFjW6CJ0x0fqfBiVSlMuJvOdMuZRQE52A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OtMQ29h7Lk9QzHwCmJLYeJ799q5fNEMHc8rySqMW+Ac=;
- b=nWq1hsuH+W1wJAiajLLhabUsE5yW9rw3JgogqYc9RZfrxGGlCsC20Vhts7/n/R8qrY5wq4Nw45POGwyNjLhsjPP0b2Ywr4gzS9EMsGmLAW9Ue7B+Xc4zDeikLyqxoP7sPokS9gUwxXFVRfXqpb1jVmTJw46sIcXO22ULj290q7HKOTMgWa7Ek8X+mcLDYRwsyGtwSM9q82tQxmE1Kb+4lkMFezRrNL9k/ktLHEjbywXgy/8wtKfMG7OcWOCEJa8ZfS22fWlqfad3B6U86aI5XD3L6VQmtOjdNLiDXWZC31TDnDmmms7E3GsCFja0z9ZP0nMXmFtsRYvsVoQxJJDsNA==
+ bh=BQO7N62TbSgGDFzRVqbZ/fjSQmCq2j5uGvweKCC16L4=;
+ b=b4rc77ym+ItroNQYCpqHiIkzILK0m1YSl+Tm9LklwdUDkYNOYwSrRa2qY3CuNJPG2CBfTDym02dN2460h7BVuHdjEF+YKRZsfeQZFobwZb2s5p+rt7I17m8Y/dL3Pmy/WEfmpEg/Nri40MMC2+Ujvu6CEVwzXJtg7qkyIrgkwGXgLOANchHUyOtMq3Q9tB1aFFbaWYMaLhgjEaRPeN96fDoOI21KFmzlAyErnj2mO8kKZSIBAgck5cm/E4C+T1PzFLxvTZyaP1E4+7fRzdhAOHoHiCNeJZrJG8QiXxEpw1ZHnrtr244aiTITvhEk+tPAHrIwAOTbHwMEqWTDv5k+lg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.118.233) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -29,17 +29,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OtMQ29h7Lk9QzHwCmJLYeJ799q5fNEMHc8rySqMW+Ac=;
- b=Zb/qEBETTCSUIkkPV9FQk8DpFzgIIoI598uBAZ06TOmITLtMKSOtOd8fcR/v4WE05cbZgF3BC88TvB/tNEGW+Ii+Zt/P9D2Q0nfCkNJVhFuu8DuOeeOUR/qyzDiosWtgk+Cdp7/aejM4qMHzx5ID/XdBMCSz/Tj5y/lIvI7f6l1b3/Cw4L6+l6QgxotAhOs5hTcqStDLgSb+8Rdn+lnubEUDy6+uUnwFkoPbFL560iEQBsaD1B0DoL7dBtvCIhwuaPf5NVkwcM1ofeU+UZSGr4KXCN7g0Xe0REZgpEthWFgwAIXWg5UpiVj1xZQgPCeuYg9AijQS3fYzqSnhgMkr3A==
-Received: from DM6PR06CA0004.namprd06.prod.outlook.com (2603:10b6:5:120::17)
- by DM4PR12MB6615.namprd12.prod.outlook.com (2603:10b6:8:8d::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5813.13; Mon, 14 Nov 2022 13:18:25 +0000
+ bh=BQO7N62TbSgGDFzRVqbZ/fjSQmCq2j5uGvweKCC16L4=;
+ b=uFfgrjazdjbpENuMPnRxReB0xU5/udrv+emfUK7ZyuUgc9xLSyYWZaA/Q0PIXFw/1jEB2ONIME/19klSRi7Oc8T7UqCCOF7oXpCLA+KHWoPiqFt4uuMLAjNM4M6FxjtVCtDwm9Y1lR5bfk6fmptLWc9n4OCdub5qQyFuJiP3qutea2UgfEJ7AwQMe36WgzRIycLWxHmRW359DCH3YZWISyba/7Y61vMsTZ+ALs7ai2q+vd7bOVVbtrB22REsjSWm1a4wbMb8mZXagPheHw09ez/+O23uVgKFy7GkxoYqh7DSwybe5tRO2jZQOBDpT4YSRbEoSyQKdPv+yZ49cw6hfw==
+Received: from DM6PR06CA0013.namprd06.prod.outlook.com (2603:10b6:5:120::26)
+ by DM4PR12MB5136.namprd12.prod.outlook.com (2603:10b6:5:393::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
+ 2022 13:18:28 +0000
 Received: from DM6NAM11FT009.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:120:cafe::a0) by DM6PR06CA0004.outlook.office365.com
- (2603:10b6:5:120::17) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:5:120:cafe::ca) by DM6PR06CA0013.outlook.office365.com
+ (2603:10b6:5:120::26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17 via Frontend
- Transport; Mon, 14 Nov 2022 13:18:25 +0000
+ Transport; Mon, 14 Nov 2022 13:18:28 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -49,52 +50,52 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
 Received: from mail.nvidia.com (216.228.118.233) by
  DM6NAM11FT009.mail.protection.outlook.com (10.13.173.20) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5813.12 via Frontend Transport; Mon, 14 Nov 2022 13:18:25 +0000
+ 15.20.5813.12 via Frontend Transport; Mon, 14 Nov 2022 13:18:28 +0000
 Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
  (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 14 Nov
- 2022 05:18:18 -0800
+ 2022 05:18:20 -0800
 Received: from drhqmail203.nvidia.com (10.126.190.182) by
  drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 14 Nov 2022 05:18:17 -0800
+ 15.2.986.36; Mon, 14 Nov 2022 05:18:20 -0800
 Received: from vdi.nvidia.com (10.127.8.13) by mail.nvidia.com
  (10.126.190.182) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Mon, 14 Nov 2022 05:18:15 -0800
+ Transport; Mon, 14 Nov 2022 05:18:18 -0800
 From:   Eli Cohen <elic@nvidia.com>
 To:     <mst@redhat.com>, <jasowang@redhat.com>,
         <linux-kernel@vger.kernel.org>,
         <virtualization@lists.linux-foundation.org>
 CC:     <si-wei.liu@oracle.com>, <eperezma@redhat.com>, <lulu@redhat.com>,
         "Eli Cohen" <elic@nvidia.com>
-Subject: [PATH v2 5/8] vdpa/mlx5: Avoid overwriting CVQ iotlb
-Date:   Mon, 14 Nov 2022 15:17:56 +0200
-Message-ID: <20221114131759.57883-6-elic@nvidia.com>
+Subject: [PATH v2 6/8] vdpa/mlx5: Move some definitions to a new header file
+Date:   Mon, 14 Nov 2022 15:17:57 +0200
+Message-ID: <20221114131759.57883-7-elic@nvidia.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221114131759.57883-1-elic@nvidia.com>
 References: <20221114131759.57883-1-elic@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT009:EE_|DM4PR12MB6615:EE_
-X-MS-Office365-Filtering-Correlation-Id: 72a29b43-bd70-4481-79a6-08dac642b674
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT009:EE_|DM4PR12MB5136:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6a43e812-7506-4929-9d90-08dac642b7e3
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: A1AP4VzRd+1BQzCfrxMTwd23/tWR1iOYlj3/zBBhj9hO9rcwiOgwvLZl5YQZLk/PPJkdbTMc4L+zfE6LJDIbeMyJWeJPLCCxZaTEHEOfv5/TE7tJGhV496tXRxT0mMB/l26GkDIL3ZhSvNqa5Fj+Dj9WKJYiHyKqASCTXPzsKqxYSA5jKNAJN0IhEsxSGoMmZ2eqlekKewP/EhFHqfQicHlzTpDbLP7OULFWqAgKGa9dkx0vn4vBRzl7hQB9AhYZWl3oVwd1KoaJ2HmfjFHEb2oMgbUIEsPPykM4ssCca93kJ5eluVUBS8EMpYU4urfiFRK/yoNhVqWbRA65k4/YfASnFUyN6IzNgYehcPKaOAxu56CSgnZP2sgyl2KpNXhvqDJu7ncIDRsmn8ExEUIOK1weuwq43W+jRDSBIve+0/+Evj4+wbkUtK85DmJtC1nXGYSAgYMx72OoP0tp7Dzy7VtUCx1korDQpX7KsXXLGt5IXX2IwXFl0+5BBTBkBepRVNq037KlUjbI9R0AOCamyJdX7nvwc3SokGRs9PmFqxz3buU0lUX+jmfqD6+9cfSyb9BGqdnYb4YyF8TMPXU0xYJvPTRyeJvxzgUAxobCI+x++qgUzBWOrqGunv8kInrVIpL2UAI9iK0Er8l1JwGiR0HVl85rWOjwNK2tFsIVF926nP65UqfaghGbViwjFXJFeJXINzjzeULzSaN1gMfETspr76gGG3lrZF5N6xl0XGn1+6hpouRgClfVWHa4CpaVC5gConXxXqMWZy4afg94Rg==
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(136003)(396003)(451199015)(46966006)(36840700001)(40470700004)(41300700001)(478600001)(8936002)(107886003)(356005)(7696005)(6666004)(83380400001)(26005)(82740400003)(5660300002)(36756003)(86362001)(36860700001)(110136005)(316002)(54906003)(336012)(70206006)(7636003)(2906002)(8676002)(4326008)(70586007)(186003)(1076003)(2616005)(40480700001)(426003)(66574015)(82310400005)(47076005)(40460700003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: VkMQlrCLM771n7FDFFqw2HmIa7yC6uCQehPihE904ZHj0sQgpou4iFbdoHDDgs7VIYWIA2CBv89474kn8b7vGyAhUVjvL5NrU/wT8a6f1VP+yEvfnQnpFLBPmQdcK8FN55P93ZPv/ph223zoHYFLYcqv4f5Vcg79ZeCWlo1NAluioz9prQUQzF1EMu8/zHO6YUAB4blOteDOg6MSYi+5ozbujbIetsZIPHCoarOqyaOk8696aJJ53mwho9SYprtDhwXnI29+t30t7mza6+PUpU4bcWK0skzVYUY5zFO4f7MIebi5wE7Zl5keNqIKeg+Ms2LwC8qE8zaeIPnDH4bNWbjZXgM5L/k9qtUIztywCJdLFVTzlkrnp6D9sgXiSSdiKoSsKhwOsx1v5FJrOpJkKkHrGnpYCHkWYP43nz+GL5i35xHPsND8CGLpUObI1QrEllpbNb+AqAx3yEBA4PXKRf8rF3LamnwBu3ktThgDmAGiUspkdQnhSEREh+oij+0/orl47m6DfbX+QGn8sFpowKv8BUisyISTVNzZcSQDt09Vy473ihtiBhaK8rOZPpsEP9EHe8b0a61xxuh+IWygY+EW9mpuoaJDnSDQNcG2H2tVvuGKTbvwHq9/tKsivNdfro0ugpAXKOtoYdlsFrefHPLoljZIyHuzubnjaalXpgijonLVByIS5bHqKqRVuGPsf9oysb+0RxRkmlPH9yaaOVGSp41JMMeGCOWPcqdgjBlhm3kIt2sdSQvQ6pIYotSqqaxkzBSEK4MNDDY3nEaVrA==
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(346002)(39860400002)(376002)(451199015)(40470700004)(36840700001)(46966006)(41300700001)(6666004)(7696005)(26005)(70586007)(2906002)(1076003)(54906003)(336012)(186003)(110136005)(316002)(426003)(86362001)(36860700001)(478600001)(47076005)(82740400003)(83380400001)(4326008)(40460700003)(5660300002)(8936002)(8676002)(7636003)(356005)(70206006)(2616005)(82310400005)(40480700001)(36756003)(107886003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 13:18:25.6011
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 13:18:28.0229
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 72a29b43-bd70-4481-79a6-08dac642b674
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a43e812-7506-4929-9d90-08dac642b7e3
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT009.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6615
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5136
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -105,231 +106,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When qemu uses different address spaces for data and control virtqueues,
-the current code would overwrite the control virtqueue iotlb through the
-dup_iotlb call. Fix this by referring to the address space identifier
-and the group to asid mapping to determine which mapping needs to be
-updated. We also move the address space logic from mlx5 net to core
-directory.
+Move some definitions from mlx5_vnet.c to newly added header file
+mlx5_vnet.h. We need these definitions for the following patches that
+add debugfs tree to expose information vital for debug.
 
-Reported-by: Eugenio Pérez <eperezma@redhat.com>
+Reviewed-by: Si-Wei Liu <si-wei.liu@oracle.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
 Signed-off-by: Eli Cohen <elic@nvidia.com>
 ---
- drivers/vdpa/mlx5/core/mlx5_vdpa.h |  5 +--
- drivers/vdpa/mlx5/core/mr.c        | 44 ++++++++++++++++-----------
- drivers/vdpa/mlx5/net/mlx5_vnet.c  | 49 ++++++------------------------
- 3 files changed, 39 insertions(+), 59 deletions(-)
+ drivers/vdpa/mlx5/net/mlx5_vnet.c | 45 +------------------------
+ drivers/vdpa/mlx5/net/mlx5_vnet.h | 55 +++++++++++++++++++++++++++++++
+ 2 files changed, 56 insertions(+), 44 deletions(-)
+ create mode 100644 drivers/vdpa/mlx5/net/mlx5_vnet.h
 
-diff --git a/drivers/vdpa/mlx5/core/mlx5_vdpa.h b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
-index 6af9fdbb86b7..058fbe28107e 100644
---- a/drivers/vdpa/mlx5/core/mlx5_vdpa.h
-+++ b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
-@@ -116,8 +116,9 @@ int mlx5_vdpa_create_mkey(struct mlx5_vdpa_dev *mvdev, u32 *mkey, u32 *in,
- 			  int inlen);
- int mlx5_vdpa_destroy_mkey(struct mlx5_vdpa_dev *mvdev, u32 mkey);
- int mlx5_vdpa_handle_set_map(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb *iotlb,
--			     bool *change_map);
--int mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb *iotlb);
-+			     bool *change_map, unsigned int asid);
-+int mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb *iotlb,
-+			unsigned int asid);
- void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev);
- 
- #define mlx5_vdpa_warn(__dev, format, ...)                                                         \
-diff --git a/drivers/vdpa/mlx5/core/mr.c b/drivers/vdpa/mlx5/core/mr.c
-index a639b9208d41..a4d7ee2339fa 100644
---- a/drivers/vdpa/mlx5/core/mr.c
-+++ b/drivers/vdpa/mlx5/core/mr.c
-@@ -511,7 +511,8 @@ void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev)
- 	mutex_unlock(&mr->mkey_mtx);
- }
- 
--static int _mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb *iotlb)
-+static int _mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev,
-+				struct vhost_iotlb *iotlb, unsigned int asid)
- {
- 	struct mlx5_vdpa_mr *mr = &mvdev->mr;
- 	int err;
-@@ -519,42 +520,49 @@ static int _mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb
- 	if (mr->initialized)
- 		return 0;
- 
--	if (iotlb)
--		err = create_user_mr(mvdev, iotlb);
--	else
--		err = create_dma_mr(mvdev, mr);
-+	if (mvdev->group2asid[MLX5_VDPA_DATAVQ_GROUP] == asid) {
-+		if (iotlb)
-+			err = create_user_mr(mvdev, iotlb);
-+		else
-+			err = create_dma_mr(mvdev, mr);
- 
--	if (err)
--		return err;
-+		if (err)
-+			return err;
-+	}
- 
--	err = dup_iotlb(mvdev, iotlb);
--	if (err)
--		goto out_err;
-+	if (mvdev->group2asid[MLX5_VDPA_CVQ_GROUP] == asid) {
-+		err = dup_iotlb(mvdev, iotlb);
-+		if (err)
-+			goto out_err;
-+	}
- 
- 	mr->initialized = true;
- 	return 0;
- 
- out_err:
--	if (iotlb)
--		destroy_user_mr(mvdev, mr);
--	else
--		destroy_dma_mr(mvdev, mr);
-+	if (mvdev->group2asid[MLX5_VDPA_DATAVQ_GROUP] == asid) {
-+		if (iotlb)
-+			destroy_user_mr(mvdev, mr);
-+		else
-+			destroy_dma_mr(mvdev, mr);
-+	}
- 
- 	return err;
- }
- 
--int mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb *iotlb)
-+int mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb *iotlb,
-+			unsigned int asid)
- {
- 	int err;
- 
- 	mutex_lock(&mvdev->mr.mkey_mtx);
--	err = _mlx5_vdpa_create_mr(mvdev, iotlb);
-+	err = _mlx5_vdpa_create_mr(mvdev, iotlb, asid);
- 	mutex_unlock(&mvdev->mr.mkey_mtx);
- 	return err;
- }
- 
- int mlx5_vdpa_handle_set_map(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb *iotlb,
--			     bool *change_map)
-+			     bool *change_map, unsigned int asid)
- {
- 	struct mlx5_vdpa_mr *mr = &mvdev->mr;
- 	int err = 0;
-@@ -566,7 +574,7 @@ int mlx5_vdpa_handle_set_map(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb *io
- 		*change_map = true;
- 	}
- 	if (!*change_map)
--		err = _mlx5_vdpa_create_mr(mvdev, iotlb);
-+		err = _mlx5_vdpa_create_mr(mvdev, iotlb, asid);
- 	mutex_unlock(&mr->mkey_mtx);
- 
- 	return err;
 diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-index 98dd8ce8af26..3a6dbbc6440d 100644
+index 3a6dbbc6440d..da54a188077d 100644
 --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
 +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-@@ -2394,7 +2394,8 @@ static void restore_channels_info(struct mlx5_vdpa_net *ndev)
- 	}
+@@ -18,15 +18,12 @@
+ #include <linux/mlx5/mlx5_ifc_vdpa.h>
+ #include <linux/mlx5/mpfs.h>
+ #include "mlx5_vdpa.h"
++#include "mlx5_vnet.h"
+ 
+ MODULE_AUTHOR("Eli Cohen <eli@mellanox.com>");
+ MODULE_DESCRIPTION("Mellanox VDPA driver");
+ MODULE_LICENSE("Dual BSD/GPL");
+ 
+-#define to_mlx5_vdpa_ndev(__mvdev)                                             \
+-	container_of(__mvdev, struct mlx5_vdpa_net, mvdev)
+-#define to_mvdev(__vdev) container_of((__vdev), struct mlx5_vdpa_dev, vdev)
+-
+ #define VALID_FEATURES_MASK                                                                        \
+ 	(BIT_ULL(VIRTIO_NET_F_CSUM) | BIT_ULL(VIRTIO_NET_F_GUEST_CSUM) |                                   \
+ 	 BIT_ULL(VIRTIO_NET_F_CTRL_GUEST_OFFLOADS) | BIT_ULL(VIRTIO_NET_F_MTU) | BIT_ULL(VIRTIO_NET_F_MAC) |   \
+@@ -50,14 +47,6 @@ MODULE_LICENSE("Dual BSD/GPL");
+ 
+ #define MLX5V_UNTAGGED 0x1000
+ 
+-struct mlx5_vdpa_net_resources {
+-	u32 tisn;
+-	u32 tdn;
+-	u32 tirn;
+-	u32 rqtn;
+-	bool valid;
+-};
+-
+ struct mlx5_vdpa_cq_buf {
+ 	struct mlx5_frag_buf_ctrl fbc;
+ 	struct mlx5_frag_buf frag_buf;
+@@ -146,38 +135,6 @@ static bool is_index_valid(struct mlx5_vdpa_dev *mvdev, u16 idx)
+ 	return idx <= mvdev->max_idx;
  }
  
--static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb *iotlb)
-+static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev,
-+				struct vhost_iotlb *iotlb, unsigned int asid)
- {
- 	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
- 	int err;
-@@ -2406,7 +2407,7 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb
- 
- 	teardown_driver(ndev);
- 	mlx5_vdpa_destroy_mr(mvdev);
--	err = mlx5_vdpa_create_mr(mvdev, iotlb);
-+	err = mlx5_vdpa_create_mr(mvdev, iotlb, asid);
- 	if (err)
- 		goto err_mr;
- 
-@@ -2587,7 +2588,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev)
- 	++mvdev->generation;
- 
- 	if (MLX5_CAP_GEN(mvdev->mdev, umem_uid_0)) {
--		if (mlx5_vdpa_create_mr(mvdev, NULL))
-+		if (mlx5_vdpa_create_mr(mvdev, NULL, 0))
- 			mlx5_vdpa_warn(mvdev, "create MR failed\n");
- 	}
- 	up_write(&ndev->reslock);
-@@ -2623,41 +2624,20 @@ static u32 mlx5_vdpa_get_generation(struct vdpa_device *vdev)
- 	return mvdev->generation;
- }
- 
--static int set_map_control(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb *iotlb)
--{
--	u64 start = 0ULL, last = 0ULL - 1;
--	struct vhost_iotlb_map *map;
--	int err = 0;
+-#define MLX5V_MACVLAN_SIZE 256
 -
--	spin_lock(&mvdev->cvq.iommu_lock);
--	vhost_iotlb_reset(mvdev->cvq.iotlb);
+-struct mlx5_vdpa_net {
+-	struct mlx5_vdpa_dev mvdev;
+-	struct mlx5_vdpa_net_resources res;
+-	struct virtio_net_config config;
+-	struct mlx5_vdpa_virtqueue *vqs;
+-	struct vdpa_callback *event_cbs;
 -
--	for (map = vhost_iotlb_itree_first(iotlb, start, last); map;
--	     map = vhost_iotlb_itree_next(map, start, last)) {
--		err = vhost_iotlb_add_range(mvdev->cvq.iotlb, map->start,
--					    map->last, map->addr, map->perm);
--		if (err)
--			goto out;
--	}
+-	/* Serialize vq resources creation and destruction. This is required
+-	 * since memory map might change and we need to destroy and create
+-	 * resources while driver in operational.
+-	 */
+-	struct rw_semaphore reslock;
+-	struct mlx5_flow_table *rxft;
+-	bool setup;
+-	u32 cur_num_vqs;
+-	u32 rqt_size;
+-	bool nb_registered;
+-	struct notifier_block nb;
+-	struct vdpa_callback config_cb;
+-	struct mlx5_vdpa_wq_ent cvq_ent;
+-	struct hlist_head macvlan_hash[MLX5V_MACVLAN_SIZE];
+-};
 -
--out:
--	spin_unlock(&mvdev->cvq.iommu_lock);
--	return err;
--}
+-struct macvlan_node {
+-	struct hlist_node hlist;
+-	struct mlx5_flow_handle *ucast_rule;
+-	struct mlx5_flow_handle *mcast_rule;
+-	u64 macvlan;
+-};
 -
--static int set_map_data(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb *iotlb)
-+static int set_map_data(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb *iotlb,
-+			unsigned int asid)
- {
- 	bool change_map;
- 	int err;
- 
--	err = mlx5_vdpa_handle_set_map(mvdev, iotlb, &change_map);
-+	err = mlx5_vdpa_handle_set_map(mvdev, iotlb, &change_map, asid);
- 	if (err) {
- 		mlx5_vdpa_warn(mvdev, "set map failed(%d)\n", err);
- 		return err;
- 	}
- 
- 	if (change_map)
--		err = mlx5_vdpa_change_map(mvdev, iotlb);
-+		err = mlx5_vdpa_change_map(mvdev, iotlb, asid);
- 
- 	return err;
- }
-@@ -2670,16 +2650,7 @@ static int mlx5_vdpa_set_map(struct vdpa_device *vdev, unsigned int asid,
- 	int err = -EINVAL;
- 
- 	down_write(&ndev->reslock);
--	if (mvdev->group2asid[MLX5_VDPA_DATAVQ_GROUP] == asid) {
--		err = set_map_data(mvdev, iotlb);
--		if (err)
--			goto out;
--	}
--
--	if (mvdev->group2asid[MLX5_VDPA_CVQ_GROUP] == asid)
--		err = set_map_control(mvdev, iotlb);
--
--out:
-+	err = set_map_data(mvdev, iotlb, asid);
- 	up_write(&ndev->reslock);
- 	return err;
- }
-@@ -3182,7 +3153,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
- 		goto err_mpfs;
- 
- 	if (MLX5_CAP_GEN(mvdev->mdev, umem_uid_0)) {
--		err = mlx5_vdpa_create_mr(mvdev, NULL);
-+		err = mlx5_vdpa_create_mr(mvdev, NULL, 0);
- 		if (err)
- 			goto err_res;
- 	}
+ static void free_resources(struct mlx5_vdpa_net *ndev);
+ static void init_mvqs(struct mlx5_vdpa_net *ndev);
+ static int setup_driver(struct mlx5_vdpa_dev *mvdev);
+diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.h b/drivers/vdpa/mlx5/net/mlx5_vnet.h
+new file mode 100644
+index 000000000000..6691c879a6ca
+--- /dev/null
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.h
+@@ -0,0 +1,55 @@
++/* SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB */
++/* Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved. */
++
++#ifndef __MLX5_VNET_H__
++#define __MLX5_VNET_H__
++
++#include "mlx5_vdpa.h"
++
++#define to_mlx5_vdpa_ndev(__mvdev)                                             \
++	container_of(__mvdev, struct mlx5_vdpa_net, mvdev)
++#define to_mvdev(__vdev) container_of((__vdev), struct mlx5_vdpa_dev, vdev)
++
++struct mlx5_vdpa_net_resources {
++	u32 tisn;
++	u32 tdn;
++	u32 tirn;
++	u32 rqtn;
++	bool valid;
++};
++
++#define MLX5V_MACVLAN_SIZE 256
++
++struct mlx5_vdpa_net {
++	struct mlx5_vdpa_dev mvdev;
++	struct mlx5_vdpa_net_resources res;
++	struct virtio_net_config config;
++	struct mlx5_vdpa_virtqueue *vqs;
++	struct vdpa_callback *event_cbs;
++
++	/* Serialize vq resources creation and destruction. This is required
++	 * since memory map might change and we need to destroy and create
++	 * resources while driver in operational.
++	 */
++	struct rw_semaphore reslock;
++	struct mlx5_flow_table *rxft;
++	struct dentry *rx_dent;
++	struct dentry *rx_table_dent;
++	bool setup;
++	u32 cur_num_vqs;
++	u32 rqt_size;
++	bool nb_registered;
++	struct notifier_block nb;
++	struct vdpa_callback config_cb;
++	struct mlx5_vdpa_wq_ent cvq_ent;
++	struct hlist_head macvlan_hash[MLX5V_MACVLAN_SIZE];
++};
++
++struct macvlan_node {
++	struct hlist_node hlist;
++	struct mlx5_flow_handle *ucast_rule;
++	struct mlx5_flow_handle *mcast_rule;
++	u64 macvlan;
++};
++
++#endif /* __MLX5_VNET_H__ */
 -- 
 2.38.1
 
