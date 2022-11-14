@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C37627C44
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:28:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E029C627C47
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235985AbiKNL2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:28:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
+        id S236158AbiKNL2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:28:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236838AbiKNL1K (ORCPT
+        with ESMTP id S236284AbiKNL1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:27:10 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F52F12D35;
-        Mon, 14 Nov 2022 03:26:46 -0800 (PST)
+        Mon, 14 Nov 2022 06:27:49 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36467E0F2;
+        Mon, 14 Nov 2022 03:27:18 -0800 (PST)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B80E6660231A;
-        Mon, 14 Nov 2022 11:26:43 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0803D660231A;
+        Mon, 14 Nov 2022 11:27:15 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668425204;
-        bh=XifCq/axZLBlXf4U0/opeUK0341SCz1UOz+Nkb9EfVg=;
+        s=mail; t=1668425237;
+        bh=W/eMVrR11Od7JZQCct4/zNx543YpRujvCd1hkqUVrto=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aDUvkxXsUxmHSLgh1elCk9KmlE2qa5h/iiL5HMRv+CEd0pihqpgJuEIN+EhABBEXA
-         zWkRKkrbNNWCS8YkUzgkuRncYJBO1tPi70p8I430FopA2p1xEObQJQd8lkFPknre+B
-         p5869i/ddLmyvysVN3eA51JM79Ruol7+7YsTCLnHVOtmzCfyKFVUnFQAA43/OWQmZe
-         2KLSOZrWh67v0Rva6eJH6+UPQQuoCS55O9+6WQo6LoOndsHvawzTMCtsIh+voBnbAC
-         P5Ti8ukVINdsGdorg5KvZonlU7dhCa7IUJQmqyt9N3Kb/V2bBRrYrHbk+1PHqFjd4w
-         mY7ZHo+D/M4Zg==
-Message-ID: <11a5fbb6-f462-bdc5-1592-32e8f2664a48@collabora.com>
-Date:   Mon, 14 Nov 2022 12:26:41 +0100
+        b=YH7HOET2OGDnH9Ejq5lOpu8GEWIY+WF+wgZubX3ZPpImi67vzoJ/ja3VorAQX6yZ+
+         xiYXXOpWOh9xBIev1mj1JAY6kMrRwZwYlZMhu1FhYCIqbnAmtsVq84bwrlqjNqnOqP
+         XGXW8g4gr/b55rrs1GUKxxgPZwCltj4H0UWuSWPjLSp4n5/bUJRH3hSImI0d1/4yks
+         PtZ3g8UpZYoXd46cEF6l53gE6bO3j5MTRjkGDmIeKWYwBGSisPMr/g1Ch87OrsERIB
+         JYdS0z9Uzn/9CfVmvbuAUAFxl6zkfF7BbsOh2tgJb/fZtDCLIpfTHuVjekQWgkRZEw
+         aP9ckstRxlLSw==
+Message-ID: <f809c518-a1e1-40e2-2f52-176ed08da701@collabora.com>
+Date:   Mon, 14 Nov 2022 12:27:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.3
-Subject: Re: [PATCH 3/5] media: mediatek: vcodec: Fix h264 set lat buffer
- error
+Subject: Re: [PATCH 5/5] media: mediatek: vcodec: Core thread depends on
+ core_list
 Content-Language: en-US
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Chen-Yu Tsai <wenst@chromium.org>,
@@ -59,10 +59,10 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-mediatek@lists.infradead.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20221112094144.4256-1-yunfei.dong@mediatek.com>
- <20221112094144.4256-4-yunfei.dong@mediatek.com>
+ <20221112094144.4256-6-yunfei.dong@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221112094144.4256-4-yunfei.dong@mediatek.com>
+In-Reply-To: <20221112094144.4256-6-yunfei.dong@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,39 +75,12 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 12/11/22 10:41, Yunfei Dong ha scritto:
-> Will set lat buffer to lat_list two times when lat decode timeout for
-> inner racing mode.
+> Core thread will continue to work when core_list is not empty, not
+> depends on lat_list.
 > 
-> If core thread can't get frame buffer, need to return error value.
-> 
-> Fixes: 59fba9eed5a7 ("media: mediatek: vcodec: support stateless H.264 decoding for mt8192")
+> Fixes: 365e4ba01df4 ("media: mtk-vcodec: Add work queue for core hardware decode")
 > Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
->   .../vcodec/vdec/vdec_h264_req_multi_if.c      | 23 ++++++++++++-------
->   1 file changed, 15 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-> index 4cc92700692b..2b7576265f48 100644
-> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-> @@ -471,6 +471,12 @@ static int vdec_h264_slice_core_decode(struct vdec_lat_buf *lat_buf)
->   	       sizeof(share_info->h264_slice_params));
->   
->   	fb = ctx->dev->vdec_pdata->get_cap_buffer(ctx);
-> +	if (!fb) {
-> +		err = -EBUSY;
-> +		mtk_vcodec_err(inst, "fb buffer is NULL");
-> +		goto vdec_dec_end;
-> +	}
-> +
->   	y_fb_dma = fb ? (u64)fb->base_y.dma_addr : 0;
 
-If you're jumping to vdec_dec_end, this check becomes pointless as y_fb_dma
-will never be set to 0, so you can remove the conditional on assigning
-the dma address to `y_fb_dma`.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Same comment a few lines later for `c_fb_dma`.
-
-Regards,
-Angelo
 
