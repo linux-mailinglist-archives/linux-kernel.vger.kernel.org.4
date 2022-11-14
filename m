@@ -2,129 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F676284DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECF56284C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:14:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237043AbiKNQRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:17:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        id S236730AbiKNQOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:14:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237378AbiKNQQn (ORCPT
+        with ESMTP id S237367AbiKNQOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:16:43 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE3925E9C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:16:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668442602; x=1699978602;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=4xdTAPskJ9KY571YA+uOu9WW5TOZgcfRAB7ZQZa82Ac=;
-  b=cqHzzSICXJ16iX+KbDozDh/dt3DPTaGqrPDDIe7O4aoThGEJS/ZZlvEg
-   9ZpmsNZUOyEYj3Trleat25i9MJCZA9PtTjJkgCWjfJ5/VBR+rDkLJ2ix0
-   FN0Kawa+WTQ7jOlEMR3mZMqWRzA4w2V4tyC62f6DhVuILLCvwBKbDih2G
-   NKfCgwcuCGIJTA5RyPexdI8EviOijGc4xjHIciBvW5vcUHXHdePZ+m4DV
-   JmL9mBBVLtpqKWcecfA1dKb8Q8/dPiN5XcIHLoBKF1IIMsY4Tbj4HoNEz
-   liUk0ojhChMGnVeTzZpifHFl3c3D+KDQ5aOxVoEfIbfODvj5vl+vNHvWP
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="295373437"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="295373437"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 08:16:42 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="638542600"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="638542600"
-Received: from scewbso01.amr.corp.intel.com (HELO [10.212.76.77]) ([10.212.76.77])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 08:16:41 -0800
-Message-ID: <bbc432e7-c52f-7e35-03d1-401cb68501cb@linux.intel.com>
-Date:   Mon, 14 Nov 2022 10:14:19 -0600
+        Mon, 14 Nov 2022 11:14:52 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8CEC7B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:14:50 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id h12so13835844ljg.9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:14:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b6wTsoEqnWNCo+xLotcVL4lHOc4APMKma952G03jZA0=;
+        b=xbKjKIjyIM+dukGJQt2smut7cqu9mbiXPsmLQizdri/lnUIqTbDIrFLV7iFsNHqy3D
+         01pctG0PwRPw+sAIHWGIcJlTATI9mmhkfvUECE7k9yn550PtmqartHzQOaw+sk2vgV5B
+         cGZfINyThuePrkhwwX8UnxGvKcRP5WXhc6fLgs/ZuG8K/gQNVEu97s6zMXInDV9cKUus
+         pkALnXz1zPTE6EXbZk4DBX09AVjU8cIKbUYU/s7ijeHmS3+kuM8Gr6Ozj4qwdX9oiT22
+         9dmqv5n+zPP3+Oa6dRakTjtfFfPEtzcbHyx35VGUUCHpi69SVAHu77M21HdO+m4LS4JL
+         3UIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b6wTsoEqnWNCo+xLotcVL4lHOc4APMKma952G03jZA0=;
+        b=8EF8Cg+yyi08LkBLhv7rMxBDZPRfKaBvBkFnSpi2GTYF/7jlwAMj2EOs7cT9j3QN7P
+         QSzwH8HIaqmgdEaCiEdm0QcIuJp947rugaBCD1MNiJhwC3hn3iQiFb6SpMYGi5uztTP6
+         OCfprm4ps+aYsjKXJok1TIOnqbcxBqpqNux0SQLJLVRousGXV8xjbQQZfdRqWlRRZJ1o
+         DmUrVX3Tx3N+MqsZvT2+fv7lEFF3moSi0UCc1nluzPHv/HSspN+QxfG+YSLxnFBvyyRf
+         cR7KadPCPo6mkg7+VdKiQONSTYEU8/iYlJcCHgNWfrfjUMQr2nBGS/uYxCR0F8qGJlBS
+         SW+g==
+X-Gm-Message-State: ANoB5pmm6GWgF8+Vw9oIcGb3T9rcbrhcfM2z25xdJAulgdtxsp1Ld4Mg
+        +8//vNtkH+POqz8apq06oPh87g==
+X-Google-Smtp-Source: AA0mqf4RlZ5Ep2WoSFwSpBUgtUqa42n8p2HqsbNIqQqAWZpJtUoN6gfm3iQnIWeex21qOCaZ7GKQTA==
+X-Received: by 2002:a2e:99d5:0:b0:277:7714:3fca with SMTP id l21-20020a2e99d5000000b0027777143fcamr4306897ljj.529.1668442489070;
+        Mon, 14 Nov 2022 08:14:49 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id a1-20020a19ca01000000b004a03d5c2140sm1867981lfg.136.2022.11.14.08.14.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 08:14:48 -0800 (PST)
+Message-ID: <bcc327b6-c38b-86a9-34cb-440ad33df210@linaro.org>
+Date:   Mon, 14 Nov 2022 19:14:48 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: Re: [PATCH 3/4] soundwire: debugfs: Switch to sdw_read_no_pm
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>, vkoul@kernel.org
-Cc:     yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-References: <20221114102956.914468-1-ckeepax@opensource.cirrus.com>
- <20221114102956.914468-4-ckeepax@opensource.cirrus.com>
-Content-Language: en-US
-In-Reply-To: <20221114102956.914468-4-ckeepax@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 02/14] dt-bindings: phy: qcom,qmp-usb3-dp: fix sc8280xp
+ bindings
+Content-Language: en-GB
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221111092457.10546-1-johan+linaro@kernel.org>
+ <20221111092457.10546-3-johan+linaro@kernel.org>
+ <a22888cd-34cb-3453-0dc2-096da208564c@linaro.org>
+ <Y3JCVzJ74YsfcDz4@hovoldconsulting.com>
+ <de3a426a-03e8-ed15-a9a1-bb300e776e5f@linaro.org>
+ <Y3JOO0kNnaNhnW3K@hovoldconsulting.com>
+ <78cda6f8-849c-219a-8dbb-966c283c1a92@linaro.org>
+ <Y3Jg/qmMW3rC5Okc@hovoldconsulting.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <Y3Jg/qmMW3rC5Okc@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 14/11/2022 18:38, Johan Hovold wrote:
+> On Mon, Nov 14, 2022 at 06:19:25PM +0300, Dmitry Baryshkov wrote:
+>> On 14/11/2022 17:18, Johan Hovold wrote:
+>>> On Mon, Nov 14, 2022 at 03:07:41PM +0100, Krzysztof Kozlowski wrote:
+>>>> On 14/11/2022 14:27, Johan Hovold wrote:
+>>>>> On Fri, Nov 11, 2022 at 04:17:29PM +0100, Krzysztof Kozlowski wrote:
+>>>>>> On 11/11/2022 10:24, Johan Hovold wrote:
+> 
+>>>>> I noticed that several bindings leave the clock indexes unspecified, or
+>>>>> have header files defining some or all of them. I first added a QMP
+>>>>> header but that seemed like overkill, especially if we'd end up with
+>>>>> one header per SoC (cf. the GCC headers) due to (known and potential)
+>>>>> platform differences.
+> 
+>>>>> Shall I add back a shared header for all PHYs handled by this driver
+>>>>> (another implementation detail) even if this could eventually lead to
+>>>>> describing clocks not supported by a particular SoC (so such constraints
+>>>>> would still need to be described by the binding somehow):
+>>>>>
+>>>>> 	/* QMP clocks */
+>>>>> 	#define QMP_USB3_PIPE_CLK	0
+>>>>> 	#define QMP_DP_LINK_CLK		1
+>>>>> 	#define QMP_DP_VCO_DIV_CLK	2
+>>
+>> Maybe QMP_COMBO_USB3_PIPE_CLK, QMP_COMBO_DP_LINK_CLK,
+>> QMP_COMBO_DP_VCO_DIV_CLK?
+> 
+> "COMBO" is just the name of the Linux driver and does not belong in the
+> binding.
 
+We do not have any standard (iow, coming from the docs) name, so we can 
+invent it on our own.
 
-On 11/14/22 04:29, Charles Keepax wrote:
-> It is rather inefficient to be constantly enabling/disabling the PM
-> runtime as we print out each individual register, switch to holding a PM
-> runtime reference across the whole register output.
+>   
+>> I'll then extend this header with QMP_UFS_RX_SYMBOL_0_CLK
+>> QMP_UFS_RX_SYMBOL_1_CLK and QMP_UFS_TX_SYMBOL_0_CLK.
+> 
+> Yeah, I had those in mind when creating the header and using a generic
+> QMP prefix (even if I didn't end up using the header in v1).
+> 
+> This could just be mapping of (arbitrary) QMP indexes to clocks and we
+> use it for USB3, DP, UFS and later also USB4.
+> 
+> This will however mean that the indexes are not necessarily zero-based
+> and consecutive for a specific SoC and PHY. But that's perhaps a
+> non-issue (cf. the PHY_TYPE defines).
 
-the change is good, but technically the pm_runtime resume happens for
-the first read and suspend with a delay if use_autosuspend() is enabled,
-so presumably we'll see the same number of resume/suspend with the
-existing code and the suggested change.
-
-Maybe update the commit message to mention that we constantly change
-reference counts, as you did in the next patch?
+Ugh. Please, no. We have symbol clocks for UFS PHY, USB+DP clocks for 
+USB+DP PHY, but let's not go for the unified clocks index definition.
 
 > 
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-> ---
->  drivers/soundwire/debugfs.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
+> We'd still need to describe which clocks are available on a particular
+> SoC and PHY, and that's partly why I used 'clock-output-names' to fix
+> the mapping in the binding. Guess we can just list the valid defines in
+> the property description as I did for #phy-cells.
 > 
-> diff --git a/drivers/soundwire/debugfs.c b/drivers/soundwire/debugfs.c
-> index 49900cd207bc7..0718e9cda138a 100644
-> --- a/drivers/soundwire/debugfs.c
-> +++ b/drivers/soundwire/debugfs.c
-> @@ -4,6 +4,7 @@
->  #include <linux/device.h>
->  #include <linux/debugfs.h>
->  #include <linux/mod_devicetable.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/slab.h>
->  #include <linux/soundwire/sdw.h>
->  #include <linux/soundwire/sdw_registers.h>
-> @@ -35,7 +36,7 @@ static ssize_t sdw_sprintf(struct sdw_slave *slave,
->  {
->  	int value;
->  
-> -	value = sdw_read(slave, reg);
-> +	value = sdw_read_no_pm(slave, reg);
->  
->  	if (value < 0)
->  		return scnprintf(buf + pos, RD_BUF - pos, "%3x\tXX\n", reg);
-> @@ -55,6 +56,10 @@ static int sdw_slave_reg_show(struct seq_file *s_file, void *data)
->  	if (!buf)
->  		return -ENOMEM;
->  
-> +	ret = pm_runtime_resume_and_get(&slave->dev);
-> +	if (ret < 0 && ret != -EACCES)
-> +		return ret;
-> +
->  	ret = scnprintf(buf, RD_BUF, "Register  Value\n");
->  
->  	/* DP0 non-banked registers */
-> @@ -112,6 +117,10 @@ static int sdw_slave_reg_show(struct seq_file *s_file, void *data)
->  	}
->  
->  	seq_printf(s_file, "%s", buf);
-> +
-> +	pm_runtime_mark_last_busy(&slave->dev);
-> +	pm_runtime_put(&slave->dev);
-> +
->  	kfree(buf);
->  
->  	return 0;
+> Johan
+
+-- 
+With best wishes
+Dmitry
+
