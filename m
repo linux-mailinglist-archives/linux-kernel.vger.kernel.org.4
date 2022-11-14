@@ -2,70 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951AC628491
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:03:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE95628519
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:23:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237307AbiKNQDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:03:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
+        id S237511AbiKNQX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:23:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237281AbiKNQDi (ORCPT
+        with ESMTP id S237160AbiKNQXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:03:38 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAF5657F;
-        Mon, 14 Nov 2022 08:03:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668441817; x=1699977817;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5AaiXYz+1RmM1Bf9NQ6qqraB4/QAJtAVIge5ln1rEd0=;
-  b=S1ekmnVt8P7b0ccg7GqlI9SF/shuOesKIe516upJ5UkbCSpFy1FQwbT8
-   N0LUN+Pu0CvTn8pJbO7cClsgHuVE6AE4n2o+rA+bLjPqrOhAtkKCzWfnl
-   pVz5jfcfAG32V9zz1z3QFRjuXMgiTmgeV5Zw6tI1k7vwY5VLxw6ZIHzTS
-   PGrPPKhoRxl80rS+YZbr2Ul2EoirVUuX1A19v++YDajlS9tp2L5q0ecKE
-   TfxQrW4cZQ82CNHE5pU4TBD4v3oaFZDGW5rFTNOHScOuTFg+Oq3scdmW0
-   D45cLnJpYH/U+TQW5XD5JXEebujtTJhxBTa+7ZGBhnSnoXjsoPJMH1AFd
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="313153252"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="313153252"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 08:03:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="763532024"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="763532024"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 14 Nov 2022 08:03:02 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oubvI-00CEus-2T;
-        Mon, 14 Nov 2022 18:03:00 +0200
-Date:   Mon, 14 Nov 2022 18:03:00 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        oe-kbuild-all@lists.linux.dev, Kevin Cernekee <cernekee@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH v1 1/4] list: Introduce list_count() to count existing
- nodes
-Message-ID: <Y3JmtNExJulq2CEE@smile.fi.intel.com>
-References: <20221114112842.38565-1-andriy.shevchenko@linux.intel.com>
- <202211142350.i0ngTfIl-lkp@intel.com>
+        Mon, 14 Nov 2022 11:23:46 -0500
+X-Greylist: delayed 1193 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Nov 2022 08:23:44 PST
+Received: from smtpout1.mo529.mail-out.ovh.net (smtpout1.mo529.mail-out.ovh.net [178.32.125.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79289D9F
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:23:42 -0800 (PST)
+Received: from mxplan5.mail.ovh.net (unknown [10.109.146.239])
+        by mo529.mail-out.ovh.net (Postfix) with ESMTPS id DAC6313E67D75;
+        Mon, 14 Nov 2022 17:03:46 +0100 (CET)
+Received: from kaod.org (37.59.142.103) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 14 Nov
+ 2022 17:03:46 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-103G0055e59692f-5941-4c88-b1d4-5a7efb311b0d,
+                    75464F94774268435EE9F43A7981E45EBBD3EAE1) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <b0503354-2d1e-a93d-a6a5-6f6a1f55f0e2@kaod.org>
+Date:   Mon, 14 Nov 2022 17:03:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202211142350.i0ngTfIl-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] virtio_console: Use an atomic to allocate virtual console
+ numbers
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221114080752.1900699-1-clg@kaod.org>
+ <Y3IC3miVoiMROwaE@kroah.com>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <Y3IC3miVoiMROwaE@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.103]
+X-ClientProxiedBy: DAG8EX1.mxp5.local (172.16.2.71) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: 9113379b-40f4-4936-9eff-5b69c87971a3
+X-Ovh-Tracer-Id: 7413487939237088163
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvgedrgedvgdehiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitgcunfgvucfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepffdufeeliedujeeffffhjeffiefghffhhfdvkeeijeehledvueffhfejtdehgeegnecukfhppeduvdejrddtrddtrddupdefjedrheelrddugedvrddutdefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeotghlgheskhgrohgurdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprghmihhtsehkvghrnhgvlhdrohhrghdprghrnhgusegrrhhnuggsrdguvgdpvhhirhhtuhgrlhhiiigrthhiohhnsehlihhsthhsrdhlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehvdelpdhmohguvgepshhmthhpohhuth
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,41 +61,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 11:38:04PM +0800, kernel test robot wrote:
-> Hi Andy,
+On 11/14/22 09:57, Greg Kroah-Hartman wrote:
+> On Mon, Nov 14, 2022 at 09:07:52AM +0100, Cédric Le Goater wrote:
+>> When a virtio console port is initialized, it is registered as an hvc
+>> console using a virtual console number. If a KVM guest is started with
+>> multiple virtio console devices, the same vtermno (or virtual console
+>> number) can be used to allocate different hvc consoles, which leads to
+>> various communication problems later on.
+>>
+>> This is also reported in debugfs :
+>>
+>>    # grep vtermno /sys/kernel/debug/virtio-ports/*
+>>    /sys/kernel/debug/virtio-ports/vport1p1:console_vtermno: 1
+>>    /sys/kernel/debug/virtio-ports/vport2p1:console_vtermno: 1
+>>    /sys/kernel/debug/virtio-ports/vport3p1:console_vtermno: 2
+>>    /sys/kernel/debug/virtio-ports/vport4p1:console_vtermno: 3
+>>
+>> Fix the issue with an atomic variable and start the first console
+>> number at 1 as it is today.
+>>
+>> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+>> ---
+>>   drivers/char/virtio_console.c | 8 ++++----
+>>   1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
+>> index 9fa3c76a267f..253574f41e57 100644
+>> --- a/drivers/char/virtio_console.c
+>> +++ b/drivers/char/virtio_console.c
+>> @@ -58,12 +58,13 @@ struct ports_driver_data {
+>>   	 * We also just assume the first console being initialised was
+>>   	 * the first one that got used as the initial console.
+>>   	 */
+>> -	unsigned int next_vtermno;
+>> +	atomic_t next_vtermno;
+>>   
+>>   	/* All the console devices handled by this driver */
+>>   	struct list_head consoles;
+>>   };
+>> -static struct ports_driver_data pdrvdata = { .next_vtermno = 1};
+>> +
+>> +static struct ports_driver_data pdrvdata = { .next_vtermno = ATOMIC_INIT(0) };
+>>   
+>>   static DEFINE_SPINLOCK(pdrvdata_lock);
+>>   static DECLARE_COMPLETION(early_console_added);
+>> @@ -1244,7 +1245,7 @@ static int init_port_console(struct port *port)
+>>   	 * pointers.  The final argument is the output buffer size: we
+>>   	 * can do any size, so we put PAGE_SIZE here.
+>>   	 */
+>> -	port->cons.vtermno = pdrvdata.next_vtermno;
+>> +	port->cons.vtermno = atomic_inc_return(&pdrvdata.next_vtermno);
 > 
-> I love your patch! Yet something to improve:
-> 
-> [auto build test ERROR on usb/usb-testing]
-> [also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.1-rc5 next-20221114]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/list-Introduce-list_count-to-count-existing-nodes/20221114-193023
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> patch link:    https://lore.kernel.org/r/20221114112842.38565-1-andriy.shevchenko%40linux.intel.com
-> patch subject: [PATCH v1 1/4] list: Introduce list_count() to count existing nodes
-> config: x86_64-rhel-8.3-func
-> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-> reproduce (this is a W=1 build):
->         # https://github.com/intel-lab-lkp/linux/commit/124813c325e31e99580c2aaef85bb3943e55c36e
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Andy-Shevchenko/list-Introduce-list_count-to-count-existing-nodes/20221114-193023
->         git checkout 124813c325e31e99580c2aaef85bb3943e55c36e
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/i915/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
+> Why not use a normal ida/idr structure here?
 
-Oh, nice! I will fix this for v2.
+yes that works.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> And why is this never decremented?
 
+The driver would then need to track the id allocation ...
+
+> and finally, why not use the value that created the "vportN" number
+> instead?
+
+yes. we could also encode the tuple (vdev->index, port) using a bitmask,
+possibly using 'max_nr_ports' to reduce the port width. VIRTCONS_MAX_PORTS
+seems a bit big for this device and QEMU sets the #ports to 31.
+
+An ida might be simpler. One drawback is that an id can be reused for a
+different device/port tuple in case of an (unlikely) unplug/plug sequence.
+
+Thanks,
+C.
+
+> 
+> thanks,
+> 
+> greg k-h
 
