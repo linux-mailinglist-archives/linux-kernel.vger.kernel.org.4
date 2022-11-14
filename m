@@ -2,96 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDAD6288A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A31176288BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236281AbiKNS5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 13:57:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43714 "EHLO
+        id S236700AbiKNS6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 13:58:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiKNS5W (ORCPT
+        with ESMTP id S235836AbiKNS6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 13:57:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3DA1C405
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 10:57:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A66B61366
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 18:57:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6249C433D6;
-        Mon, 14 Nov 2022 18:57:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668452241;
-        bh=dqtnDCRCSgBFtivgXi8hVlUMz8eeEw/iDCweBbGxILw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YNAtHG/ZFiR8hnpoTpbNMdeN+M4V9GjLLoaPwkRom6Nre+4ygMdJjhTnExj7Rs2Rl
-         wJXdMdzTNJW/G543NcBc3VQkihuM/uCC5C243Xk+aZzcMi+LuQkfRo68toaUGP/dak
-         k0KLGvAJImJH2F5UewQc03uEw6wwCpjLELUDuGTdn8trtkzRycIIXsBSh/CnIAZuRF
-         DAFQ7lYx2SsgMhKlqPOFCzXv17NyFMvWpLxrnWlD0vqlcD/WJHuQmMDEZQJLTxCMgC
-         jGtsWZwQzdr5x5lpAYi/bOu/8aN92FOsWp9Yx5p5wyeMujzlGn3CUWhhJB9lFKZG2Q
-         cIPoBsd4ZttnA==
-Date:   Mon, 14 Nov 2022 10:57:18 -0800
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Andi Kleen <andi@firstfloor.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Martin Liska <mliska@suse.cz>, Jiri Slaby <jslaby@suse.cz>
-Subject: Re: [PATCH 08/46] static_call, lto: Mark static keys as __visible
-Message-ID: <20221114185718.kladzjm4ulcnq7bj@treble>
-References: <20221114114344.18650-1-jirislaby@kernel.org>
- <20221114114344.18650-9-jirislaby@kernel.org>
+        Mon, 14 Nov 2022 13:58:11 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3816F1D33D;
+        Mon, 14 Nov 2022 10:58:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668452290; x=1699988290;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=x6ggnXnghcO12tbT4wtQfhiqCsVpusNaj/2IGyQVVxI=;
+  b=i3uF8urp3pCu/Df8JGxRDJ/iY/G6MQwQDC0b2ezYdPXiSn/faE7m3dE/
+   7UlImdTQyyY9dtNs1UxJ+0iGkc3ntR2KDgJvWZvpF1Y0YsVnUzyLsWy3H
+   RMrGMyiYAoJMG6H1eXy2jLO+49h3I5aw9bRAd5xINCcQ6c/j7bPZEH1mh
+   RRXhXAIzA2PnMXDPAjieUhgzyrpbAGwrPDVQ+sghzgMYOGOv8MqJVu4Ym
+   mgDvhoIttGDlYwvUVaR9hYRNYS8gzh7PYMPXn6XtszEKQT+jz+k4gisSd
+   el7iJT2+jocapLWGSWzQwx4GHfTB8xxUTfZZkUvsS+Y+r7oq/ww3V4Hxe
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="338843412"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="338843412"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 10:58:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="638607285"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="638607285"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 14 Nov 2022 10:58:00 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id BAA212F3; Mon, 14 Nov 2022 20:58:24 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
+        linux-pci@vger.kernel.org, xen-devel@lists.xenproject.org
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: [PATCH v3 0/4] PCI: Add pci_dev_for_each_resource() helper and
+Date:   Mon, 14 Nov 2022 20:58:18 +0200
+Message-Id: <20221114185822.65038-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221114114344.18650-9-jirislaby@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 12:43:06PM +0100, Jiri Slaby (SUSE) wrote:
-> From: Andi Kleen <andi@firstfloor.org>
-> 
-> Symbols referenced from assembler (either directly or e.f. from
-> DEFINE_STATIC_KEY()) need to be global and visible in gcc LTO because
-> they could end up in a different object file than the assembler. This
-> can lead to linker errors without this patch.
-> 
-> So mark static call functions as __visible, namely static keys here.
-> 
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-> Cc: Jason Baron <jbaron@akamai.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Andi Kleen <andi@firstfloor.org>
-> Signed-off-by: Martin Liska <mliska@suse.cz>
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> ---
->  include/linux/static_call.h | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/linux/static_call.h b/include/linux/static_call.h
-> index df53bed9d71f..e629ab0c4ca3 100644
-> --- a/include/linux/static_call.h
-> +++ b/include/linux/static_call.h
-> @@ -182,7 +182,7 @@ extern long __static_call_return0(void);
->  
->  #define DEFINE_STATIC_CALL(name, _func)					\
->  	DECLARE_STATIC_CALL(name, _func);				\
-> -	struct static_call_key STATIC_CALL_KEY(name) = {		\
-> +	__visible struct static_call_key STATIC_CALL_KEY(name) = {		\
+Provide two new helper macros to iterate over PCI device resources and
+convert users.
 
-Why not __visible_on_lto?
+Looking at it, refactor existing pci_bus_for_each_resource() and convert
+users accordingly.
+
+This applies on top of this patch Mika sent out earlier:
+https://lore.kernel.org/r/20221114115953.40236-1-mika.westerberg@linux.intel.com
+
+Changelog v3:
+- rebased on top of v2 by Mika, see above
+- added tag to pcmcia patch (Dominik)
+
+Changelog v2:
+- refactor to have two macros
+- refactor existing pci_bus_for_each_resource() in the same way and
+  convert users
+
+Andy Shevchenko (3):
+  PCI: Split pci_bus_for_each_resource_p() out of
+    pci_bus_for_each_resource()
+  EISA: Convert to use pci_bus_for_each_resource_p()
+  pcmcia: Convert to use pci_bus_for_each_resource_p()
+
+Mika Westerberg (1):
+  PCI: Introduce pci_dev_for_each_resource()
+
+ .clang-format                      |  3 +++
+ arch/alpha/kernel/pci.c            |  5 ++---
+ arch/arm/kernel/bios32.c           | 16 ++++++-------
+ arch/mips/pci/pci-legacy.c         |  3 +--
+ arch/powerpc/kernel/pci-common.c   |  5 ++---
+ arch/sparc/kernel/leon_pci.c       |  5 ++---
+ arch/sparc/kernel/pci.c            | 10 ++++-----
+ arch/sparc/kernel/pcic.c           |  5 ++---
+ drivers/eisa/pci_eisa.c            |  4 ++--
+ drivers/pci/bus.c                  |  7 +++---
+ drivers/pci/hotplug/shpchp_sysfs.c |  8 +++----
+ drivers/pci/pci.c                  |  5 ++---
+ drivers/pci/probe.c                |  2 +-
+ drivers/pci/remove.c               |  5 ++---
+ drivers/pci/setup-bus.c            | 36 ++++++++++++------------------
+ drivers/pci/setup-res.c            |  4 +---
+ drivers/pci/xen-pcifront.c         |  4 +---
+ drivers/pcmcia/rsrc_nonstatic.c    |  9 +++-----
+ drivers/pcmcia/yenta_socket.c      |  3 +--
+ include/linux/pci.h                | 25 +++++++++++++++++----
+ 20 files changed, 78 insertions(+), 86 deletions(-)
 
 -- 
-Josh
+2.35.1
+
