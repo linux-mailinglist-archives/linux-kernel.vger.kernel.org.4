@@ -2,150 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1C5627E2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AAB6627E47
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237388AbiKNMmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 07:42:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59090 "EHLO
+        id S237444AbiKNMne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 07:43:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237307AbiKNMmL (ORCPT
+        with ESMTP id S237269AbiKNMnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 07:42:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979DC252A6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 04:41:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32A8561146
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:41:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC72EC4347C;
-        Mon, 14 Nov 2022 12:41:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668429714;
-        bh=ROHcpC/nKLxTl8eOQBxhF5rqrx9+B1Spb6cN+ewIOYM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pRbwAOb4tOZ4brHaU+bnOXX6UlNTXkV85DPjU8WeLz86Zg+bja92UBVWz1qPvrel1
-         mA0XhVeRTDHS+fw4BkToX5sQjQqSfKunk2ZVNfeiyNY8lRoN8k6PPNM6zruBeYk9iF
-         WFVUMv+Q7LawCIo+vqOFkQ22kaORIWHSdwJSHXgAi/mOEM/6IAefpqlGxIOyBv9f48
-         gypkvQanr9jOqgp5VDWf7F3XwHlIhk655vpNu6y2azzoVO2Jp2p99FTuVijn5isjdY
-         lKrs9u07Bh9XPki4RJvkdFAGCoNzibESPWBycvTWqkgb3IBK786oEgDRT60TBG9tYu
-         0eJYzCUR5Md0A==
-Date:   Mon, 14 Nov 2022 12:41:48 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Waiman Long <longman@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: Re: Crash with PREEMPT_RT on aarch64 machine
-Message-ID: <20221114124147.GA30263@willie-the-truck>
-References: <20221103115444.m2rjglbkubydidts@quack3>
- <Y2U+Je+LICO2HkNY@linutronix.de>
- <20221107135636.biouna36osqc4rik@quack3>
- <Y2kf6tcX47Cl7q0W@linutronix.de>
- <359cc93a-fce0-5af2-0fd5-81999fad186b@redhat.com>
- <20221109125756.GA24388@willie-the-truck>
- <20221109154023.cx2d4y3e7zqnuo35@quack3>
- <20221111142742.rh677sdwu55aeeno@quack3>
+        Mon, 14 Nov 2022 07:43:00 -0500
+Received: from nbd.name (nbd.name [46.4.11.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41CA25EB2;
+        Mon, 14 Nov 2022 04:42:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+        s=20160729; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=9y7P2AOYEluuMvwNtI2JOIUn32WWK6gjZOLBZl08Qkc=; b=Rsxs0CSLozVk4T+Vh6ToJXMrqc
+        a/Szhu4OowHDqFGX+GA9yfyX55AGqmiflGsEPVhlHYOS/mxG01nN/GLArXNfjbGEdwdzYIjeAhUXK
+        LFiCSF7jwaP2ljFYPmx15HbCeFUEBujiKLVRa4owzAtjI89g3y1bOYRqWLPinjhucmWI=;
+Received: from p54ae9c3f.dip0.t-ipconnect.de ([84.174.156.63] helo=Maecks.lan)
+        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+        (Exim 4.94.2)
+        (envelope-from <nbd@nbd.name>)
+        id 1ouYn7-0021wc-IT; Mon, 14 Nov 2022 13:42:21 +0100
+From:   Felix Fietkau <nbd@nbd.name>
+To:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v4 1/4] net: dsa: add support for DSA rx offloading via metadata dst
+Date:   Mon, 14 Nov 2022 13:42:11 +0100
+Message-Id: <20221114124214.58199-2-nbd@nbd.name>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221114124214.58199-1-nbd@nbd.name>
+References: <20221114124214.58199-1-nbd@nbd.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221111142742.rh677sdwu55aeeno@quack3>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 03:27:42PM +0100, Jan Kara wrote:
-> On Wed 09-11-22 16:40:23, Jan Kara wrote:
-> > On Wed 09-11-22 12:57:57, Will Deacon wrote:
-> > > On Mon, Nov 07, 2022 at 11:49:01AM -0500, Waiman Long wrote:
-> > > > On 11/7/22 10:10, Sebastian Andrzej Siewior wrote:
-> > > > > + locking, arm64
-> > > > > 
-> > > > > On 2022-11-07 14:56:36 [+0100], Jan Kara wrote:
-> > > > > > > spinlock_t and raw_spinlock_t differ slightly in terms of locking.
-> > > > > > > rt_spin_lock() has the fast path via try_cmpxchg_acquire(). If you
-> > > > > > > enable CONFIG_DEBUG_RT_MUTEXES then you would force the slow path which
-> > > > > > > always acquires the rt_mutex_base::wait_lock (which is a raw_spinlock_t)
-> > > > > > > while the actual lock is modified via cmpxchg.
-> > > > > > So I've tried enabling CONFIG_DEBUG_RT_MUTEXES and indeed the corruption
-> > > > > > stops happening as well. So do you suspect some bug in the CPU itself?
-> > > > > If it is only enabling CONFIG_DEBUG_RT_MUTEXES (and not whole lockdep)
-> > > > > then it looks very suspicious.
-> > > > > CONFIG_DEBUG_RT_MUTEXES enables a few additional checks but the main
-> > > > > part is that rt_mutex_cmpxchg_acquire() + rt_mutex_cmpxchg_release()
-> > > > > always fail (and so the slowpath under a raw_spinlock_t is done).
-> > > > > 
-> > > > > So if it is really the fast path (rt_mutex_cmpxchg_acquire()) then it
-> > > > > somehow smells like the CPU is misbehaving.
-> > > > > 
-> > > > > Could someone from the locking/arm64 department check if the locking in
-> > > > > RT-mutex (rtlock_lock()) is correct?
-> > > > > 
-> > > > > rtmutex locking uses try_cmpxchg_acquire(, ptr, ptr) for the fastpath
-> > > > > (and try_cmpxchg_release(, ptr, ptr) for unlock).
-> > > > > Now looking at it again, I don't see much difference compared to what
-> > > > > queued_spin_trylock() does except the latter always operates on 32bit
-> > > > > value instead a pointer.
-> > > > 
-> > > > Both the fast path of queued spinlock and rt_spin_lock are using
-> > > > try_cmpxchg_acquire(), the only difference I saw is the size of the data to
-> > > > be cmpxchg'ed. qspinlock uses 32-bit integer whereas rt_spin_lock uses
-> > > > 64-bit pointer. So I believe it is more on how the arm64 does cmpxchg. I
-> > > > believe there are two different ways of doing it depending on whether LSE
-> > > > atomics is available in the platform. So exactly what arm64 system is being
-> > > > used here and what hardware capability does it have?
-> > > 
-> > > I'd be more inclined to be suspicious of the slowpath tbh, as we need to
-> > > make sure that we have acquire semantics on all paths where the lock can
-> > > be taken. Looking at the rtmutex code, this really isn't obvious to me --
-> > > for example, try_to_take_rt_mutex() appears to be able to return via the
-> > > 'takeit' label without acquire semantics and it looks like we might be
-> > > relying on the caller's subsequent _unlock_ of the wait_lock for ordering,
-> > > but that will give us release semantics which aren't correct.
-> > > 
-> > > As a quick hack, can you try chucking a barrier into rt_mutex_set_owner()?
-> > 
-> > Bingo! This patch fixes the crashes for me.
-> 
-> So I suppose this is not an official fix, is it? Sebastian, it appears to
-> be a bug in rtmutex implementation in the end AFAIU ;)
+If a metadata dst is present with the type METADATA_HW_PORT_MUX on a dsa cpu
+port netdev, assume that it carries the port number and that there is no DSA
+tag present in the skb data.
 
-Right, somebody needs to go audit all the acquisition paths on the slow-path
-and make sure they all have acquire semantics. The trick is doing that
-without incurring unnecessary overhead, e.g. by making use of dependency
-ordering where it already exists.
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+---
+ net/core/flow_dissector.c |  4 +++-
+ net/dsa/dsa.c             | 19 ++++++++++++++++++-
+ 2 files changed, 21 insertions(+), 2 deletions(-)
 
-Will
+diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
+index 25cd35f5922e..3e81798ed3e0 100644
+--- a/net/core/flow_dissector.c
++++ b/net/core/flow_dissector.c
+@@ -971,12 +971,14 @@ bool __skb_flow_dissect(const struct net *net,
+ #if IS_ENABLED(CONFIG_NET_DSA)
+ 		if (unlikely(skb->dev && netdev_uses_dsa(skb->dev) &&
+ 			     proto == htons(ETH_P_XDSA))) {
++			struct metadata_dst *md_dst = skb_metadata_dst(skb);
+ 			const struct dsa_device_ops *ops;
+ 			int offset = 0;
+ 
+ 			ops = skb->dev->dsa_ptr->tag_ops;
+ 			/* Only DSA header taggers break flow dissection */
+-			if (ops->needed_headroom) {
++			if (ops->needed_headroom &&
++			    (!md_dst || md_dst->type != METADATA_HW_PORT_MUX)) {
+ 				if (ops->flow_dissect)
+ 					ops->flow_dissect(skb, &proto, &offset);
+ 				else
+diff --git a/net/dsa/dsa.c b/net/dsa/dsa.c
+index 64b14f655b23..6caf2ec648fd 100644
+--- a/net/dsa/dsa.c
++++ b/net/dsa/dsa.c
+@@ -11,6 +11,7 @@
+ #include <linux/netdevice.h>
+ #include <linux/sysfs.h>
+ #include <linux/ptp_classify.h>
++#include <net/dst_metadata.h>
+ 
+ #include "dsa_priv.h"
+ 
+@@ -216,6 +217,7 @@ static bool dsa_skb_defer_rx_timestamp(struct dsa_slave_priv *p,
+ static int dsa_switch_rcv(struct sk_buff *skb, struct net_device *dev,
+ 			  struct packet_type *pt, struct net_device *unused)
+ {
++	struct metadata_dst *md_dst = skb_metadata_dst(skb);
+ 	struct dsa_port *cpu_dp = dev->dsa_ptr;
+ 	struct sk_buff *nskb = NULL;
+ 	struct dsa_slave_priv *p;
+@@ -229,7 +231,22 @@ static int dsa_switch_rcv(struct sk_buff *skb, struct net_device *dev,
+ 	if (!skb)
+ 		return 0;
+ 
+-	nskb = cpu_dp->rcv(skb, dev);
++	if (md_dst && md_dst->type == METADATA_HW_PORT_MUX) {
++		unsigned int port = md_dst->u.port_info.port_id;
++
++		skb_dst_drop(skb);
++		if (!skb_has_extensions(skb))
++			skb->slow_gro = 0;
++
++		skb->dev = dsa_master_find_slave(dev, 0, port);
++		if (likely(skb->dev)) {
++			dsa_default_offload_fwd_mark(skb);
++			nskb = skb;
++		}
++	} else {
++		nskb = cpu_dp->rcv(skb, dev);
++	}
++
+ 	if (!nskb) {
+ 		kfree_skb(skb);
+ 		return 0;
+-- 
+2.38.1
 
-> 
-> > > diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-> > > index 7779ee8abc2a..dd6a66c90f53 100644
-> > > --- a/kernel/locking/rtmutex.c
-> > > +++ b/kernel/locking/rtmutex.c
-> > > @@ -98,6 +98,7 @@ rt_mutex_set_owner(struct rt_mutex_base *lock, struct task_struct *owner)
-> > >                 val |= RT_MUTEX_HAS_WAITERS;
-> > >  
-> > >         WRITE_ONCE(lock->owner, (struct task_struct *)val);
-> > > +       smp_mb();
-> > >  }
-> > >  
-> > >  static __always_inline void clear_rt_mutex_waiters(struct rt_mutex_base *lock)
-> 
-> 								Honza
-> -- 
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
