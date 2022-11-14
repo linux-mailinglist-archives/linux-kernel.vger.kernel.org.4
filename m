@@ -2,147 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 645D9628825
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 315E8628826
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236268AbiKNSSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 13:18:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
+        id S236723AbiKNSS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 13:18:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237885AbiKNSSA (ORCPT
+        with ESMTP id S238356AbiKNSSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 13:18:00 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C9A2CE29;
-        Mon, 14 Nov 2022 10:16:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668449808; x=1699985808;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=CzoicXuGrMHCvCBrOI2reAemuWJvq/7bOC+oizxyPpQ=;
-  b=cl2D44H8ivgAZi2GLVAZTN1nGo+QnvWcdnUgpke4yA4z20ZNR3HnehVR
-   jkWdUVBaUBVW2QUc8NJTlrexFvcOoSkGr4MngFnSg2vD5HSlXvCo4RZik
-   vqpzWmH57vI1YpOBsCV8yvL5wimtMTiGf+fxCYG54Lnp5XaOwhw54NdZv
-   5IieyilS+HrC8QoQ5SG6k2zfMUA3M2pO5xqd5k1s/7Ez6IejxrL+dP+ox
-   kWWiws3LLR1PePecA35CQKWQ6AHv0RH9f85gQ+Q7L8I0lCVJw5MNUdfaL
-   dcphhNAg89VRT3N0iCeJVwU9PZ5v2eoHToFQWFPh1scqq98ZVvrSlz0o2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="310752624"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="310752624"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 10:16:48 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="727628100"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="727628100"
-Received: from gkammela-mobl.amr.corp.intel.com (HELO [10.212.119.125]) ([10.212.119.125])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 10:16:47 -0800
-Message-ID: <cc5cce78-9fc9-714a-12bc-237b3c4f0ae6@linux.intel.com>
-Date:   Mon, 14 Nov 2022 10:16:36 -0800
+        Mon, 14 Nov 2022 13:18:07 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9392DA9B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 10:17:36 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id z14so19662572wrn.7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 10:17:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ReBzsBimdpveLsy+Lkg8Fji3O2Fl/6cfbARc8AiQfvs=;
+        b=NMN/xH8R+SLKUOKCqztbFprqD4QQFBZBIMsn2qSQwp5gh0JsF10UlcY1OBJC4qgOlW
+         7ximjAX4ZJ6Gj3x9e/4ZiPRTdZteuQiDYVTKAPoRSJO5XhpPfT626xd3g1n5IOx29b5G
+         V16b2eg/y3XsLMUg53LRs8XdHewdUHf5ujP23Dt2kscw4jNXyTBimpkdCIdGUC+IF3sW
+         z76Zt86/kfvLdSld/bSODvQbEnDL+6WEm5YCP1QdfBEyNj4hxsglk82oU0B3cpRRX9UW
+         Ytipd0OsoPd+NuUHeMKLd2xmztnyptsPnSkC18B0ZMYosLJcWXTYo+yI9FHGXZJ/jxaZ
+         rkdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ReBzsBimdpveLsy+Lkg8Fji3O2Fl/6cfbARc8AiQfvs=;
+        b=rEI1QcOWtfOwSvXnnnXr9mLkqgF94QMpIMUYYoNGg5ujSUfNZCgmD37/q5IGbSACzU
+         Lx4up6lyYNCEYjGSi2hVAWDbOAdQyAP3Wp5fjAQtZNIHmVqRN1QpN2+j30yEpUGd9y9F
+         6CMuk/3e9Fo5OrGE/IaeNrTGr2cZSiPhfQ3BvumO2mfUOhGe8Qx5SGbAhYRhQmaomZ7m
+         IX683mCLXa8mlLUSBd7i1O9Z9vPDrkhSylzpV0T02AB1Aw1Ne0thlpFdvOTyxXuNyrTR
+         ITNQnMwLiM1GCDD7nUyJ5619wlRmOWepoubZssaJblQxOyTOsIyhumnXm7vGuwU/uhGk
+         ourQ==
+X-Gm-Message-State: ANoB5pmar9h0WrGytIsPOJtH2n4+OKQRBt7JXL9O+dCN0+A7K6OWmX26
+        oJrG4BJF+1btLr7pFk6CbAQgSXqrxq791qZMnT7TdA==
+X-Google-Smtp-Source: AA0mqf4j2XZu4W7wXvD7hTiCUa5tk5anNfQoyv5Q23/o/kY8GrZvi3Lo4Tpw1PP0IkdLpHg/OlFk8Nyg865KgGd6n1k=
+X-Received: by 2002:adf:a492:0:b0:22d:d4c:e99c with SMTP id
+ g18-20020adfa492000000b0022d0d4ce99cmr8270139wrb.582.1668449854955; Mon, 14
+ Nov 2022 10:17:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 0/8] Redesign the pmc core driver
-To:     hdegoede@redhat.com
-Cc:     irenic.rajneesh@gmail.com, markgross@kernel.org,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        sukumar.ghorai@intel.com, xi.pardee@intel.com,
-        rajvi.jingar@intel.com,
-        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
-        David E Box <david.e.box@linux.intel.com>
-References: <20221114181207.2062901-1-gayatri.kammela@linux.intel.com>
-Content-Language: en-US
-From:   "Kammela, Gayatri" <gayatri.kammela@linux.intel.com>
-In-Reply-To: <20221114181207.2062901-1-gayatri.kammela@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221112032244.1077370-1-namhyung@kernel.org> <20221112032244.1077370-2-namhyung@kernel.org>
+In-Reply-To: <20221112032244.1077370-2-namhyung@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 14 Nov 2022 10:17:22 -0800
+Message-ID: <CAP-5=fWwnnRDDyf+DknFYU4aYeagXeemXOK9X-yP9Tax+bVnNA@mail.gmail.com>
+Subject: Re: [PATCH 01/11] perf stat: Fix crash with --per-node --metric-only
+ in CSV mode
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Nov 11, 2022 at 7:22 PM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> The following command will get segfault due to missing aggr_header_csv
+> for AGGR_NODE:
+>
+>   $ sudo perf stat -a --per-node -x, --metric-only true
+>
+> Fixes: 86895b480a2f ("perf stat: Add --per-node agregation support")
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-On 11/14/2022 10:11 AM, Gayatri Kammela wrote:
-> This patch series focuses on redesigning the PMC core driver for
-> maintainability and readability. Moving PCH specific structures and
-> functions to separate c files, simplifies core.c file and makes it
-> easier to add new platforms in future. The series includes two
-> preparatory patches that lays the ground work for the redesign. The
-> patch series also adds legacy support for Meteor Lake.
->
-> This redesign adds following c files to support different PCHs. There
-> are no functional changes involved for the already supported platforms.
->
-> spt.c: Sunrise Point PCH supports: Sky Lake, Sky Lake L, Kaby Lake,
-> Kaby Lake L
-> cnp.c: Cannon Lake Point PCH supports: Cannon Lake L, Comet Lake,
-> Comet Lake L
-> icl.c: Ice Lake PCH supports: Ice Lake L, Ice Lake NNPI, Jasper Lake
-> tgl.c: Tiger Lake PCH supports: Tiger Lake, Tiger Lake L, Alder Lake L,
-> Alder Lake N, Rocket Lake, Raptor Lake P, Elkhart Lake
-> adl.c: Alder Lake PCH supports: Alder Lake, Raptor Lake, Raptor Lake S
-> mtl.c: Meteor Lake PCH supports: Meteor Lake
->
-> Patch 1: platform/x86: intel/pmc: Replace all the reg_map with init
-> functions
-> Patch 2: platform/x86: intel/pmc: Move variable declarations and
-> definitions to header and core.c
-> Patch 3: platform/x86: intel/pmc: Relocate Sunrise Point PCH support
-> Patch 4: platform/x86: intel/pmc: Relocate Cannon Lake Point PCH
-> support
-> Patch 5: platform/x86: intel/pmc: Relocate Ice Lake PCH support
-> Patch 6: platform/x86: intel/pmc: Relocate Tiger Lake PCH support
-> Patch 7: platform/x86: intel/pmc: Relocate Alder Lake PCH support
-> Patch 8: platform/x86: intel/pmc: Add Meteor Lake support to pmc core
-> driver
->
-> Gayatri Kammela (4):
->    platform/x86: intel/pmc: Replace all the reg_map with init functions
->    platform/x86: intel/pmc: Relocate Tiger Lake PCH support
->    platform/x86: intel/pmc: Relocate Alder Lake PCH support
->    platform/x86: intel/pmc/core: Add Meteor Lake support to pmc core
->      driver
->
-> Rajvi Jingar (1):
->    platform/x86: intel/pmc: Relocate Sunrise Point PCH support
->
-> Xi Pardee (3):
->    platform/x86: intel/pmc: Move variable declarations and definitions to
->      header and core.c
->    platform/x86: intel/pmc: Relocate Cannon Lake Point PCH support
->    platform/x86: intel/pmc: Relocate Ice Lake PCH support
->
->   drivers/platform/x86/intel/pmc/Makefile |   3 +-
->   drivers/platform/x86/intel/pmc/adl.c    | 325 ++++++++
->   drivers/platform/x86/intel/pmc/cnp.c    | 210 +++++
->   drivers/platform/x86/intel/pmc/core.c   | 994 ++----------------------
->   drivers/platform/x86/intel/pmc/core.h   |  89 ++-
->   drivers/platform/x86/intel/pmc/icl.c    |  56 ++
->   drivers/platform/x86/intel/pmc/mtl.c    |  52 ++
->   drivers/platform/x86/intel/pmc/spt.c    | 140 ++++
->   drivers/platform/x86/intel/pmc/tgl.c    | 269 +++++++
->   9 files changed, 1183 insertions(+), 955 deletions(-)
->   create mode 100644 drivers/platform/x86/intel/pmc/adl.c
->   create mode 100644 drivers/platform/x86/intel/pmc/cnp.c
->   create mode 100644 drivers/platform/x86/intel/pmc/icl.c
->   create mode 100644 drivers/platform/x86/intel/pmc/mtl.c
->   create mode 100644 drivers/platform/x86/intel/pmc/spt.c
->   create mode 100644 drivers/platform/x86/intel/pmc/tgl.c
->
->
-> base-commit: 309e0a6ed6e3fdb4febacc3e91aeb268500b90c6
->
-> Cc: Xi Pardee <xi.pardee@intel.com>
-> Cc: Rajvi Jingar <rajvi.jingar@linux.intel.com>
-> Cc: David E Box <david.e.box@linux.intel.com>
+Acked-by: Ian Rogers <irogers@google.com>
 
-Hi All,
+Thanks,
+Ian
 
-Sorry, this is v1 and not v3. Please ignore this series. I will resend 
-the v1 to avoid confusion.
-
+> ---
+>  tools/perf/util/stat-display.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+> index 657434cd29ee..ea41e6308c50 100644
+> --- a/tools/perf/util/stat-display.c
+> +++ b/tools/perf/util/stat-display.c
+> @@ -534,7 +534,7 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
+>                         [AGGR_CORE] = 2,
+>                         [AGGR_THREAD] = 1,
+>                         [AGGR_UNSET] = 0,
+> -                       [AGGR_NODE] = 0,
+> +                       [AGGR_NODE] = 1,
+>                 };
+>
+>                 pm = config->metric_only ? print_metric_only_csv : print_metric_csv;
+> @@ -819,6 +819,7 @@ static int aggr_header_lens[] = {
+>         [AGGR_SOCKET] = 12,
+>         [AGGR_NONE] = 6,
+>         [AGGR_THREAD] = 24,
+> +       [AGGR_NODE] = 6,
+>         [AGGR_GLOBAL] = 0,
+>  };
+>
+> @@ -828,6 +829,7 @@ static const char *aggr_header_csv[] = {
+>         [AGGR_SOCKET]   =       "socket,cpus",
+>         [AGGR_NONE]     =       "cpu,",
+>         [AGGR_THREAD]   =       "comm-pid,",
+> +       [AGGR_NODE]     =       "node,",
+>         [AGGR_GLOBAL]   =       ""
+>  };
+>
+> --
+> 2.38.1.493.g58b659f92b-goog
+>
