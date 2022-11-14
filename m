@@ -2,85 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739C5628AB3
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8824B628AB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237583AbiKNUpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 15:45:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
+        id S237528AbiKNUpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 15:45:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237434AbiKNUp2 (ORCPT
+        with ESMTP id S236281AbiKNUp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:45:28 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D0421A7
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:45:28 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id lf15so8520707qvb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:45:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TUwKHRYK0ZG7ZgA3acGxt/xOF3M5aPiHgNvK4K3ic3c=;
-        b=7LuqZO4Ew6q0JLCrGJ4RxwGWrFy04wH2lHhzgHKNjUB5lmOHNcpIZxOdWBByCSP0Jb
-         kv6GwcnIgg1eFF8WOpdYTY5XN6BnUScUyhtQNxiGTijCMwlofnx0i5/LCSr2yjE5pNys
-         Jb3TZpS1u0QEMddWuBKcLj/YBzuK5K2V0iiCdSs01AINzguU9wczECrkK0tc52W+IPdA
-         FxOfpPXL6nZ7C6pKALde4DWot2xPmuxS6K/DG876eoorTNRVBMIpNg44irOuj7CHr1U/
-         ZeTC98JM2wXMgNh0jh6vq04sM+QQc6QJ/MFbFBvpp3++jggb9rLbAMplhJUExHBbNHly
-         Rx2w==
+        Mon, 14 Nov 2022 15:45:27 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E88210A3
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:45:27 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id l4-20020a056e021aa400b00300ad9535c8so10000365ilv.1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:45:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TUwKHRYK0ZG7ZgA3acGxt/xOF3M5aPiHgNvK4K3ic3c=;
-        b=iIWzq6X2jOemfVlJNv6fN+lH8f9LqWKvrBk1Jwh71w4N81XruNYOX1m2flW0+2bPJk
-         jJMFGU1A3UCV5CVPathjf0mzNdBovXQ/bl4DdmPM9ORj3gUiNNzEArevHbTC1Z9twa18
-         166rBKppHV5KCGs0qY5LibXy8Rv4sbEhrW8Vcp15Hi9H2E4+7+8rqNqKGRRQbXahQtvb
-         AH/18RffZOwj+KHGOEaxnJyicxoRBxmmzt1RpFj/witaIk8lseDuwXuSEqGycHl0v2T7
-         41WgOwprTNhIXnD7K6MLUwc7MtQ+Q1BlGhGyjLjS4h0FYKEUGAok/O1Ujkczbf24yH9I
-         IU3A==
-X-Gm-Message-State: ANoB5pnR3CNA45L9+Vr1ytF3Rshd1lLcBZxcbHpA1psgjqDxCT4gKJ5T
-        pLAl8sOwpkr/WIqKrxaWAv2cy3z9c2oCLeCBmj+xrA==
-X-Google-Smtp-Source: AA0mqf6ThKbg4i9U/XgGipXb5NTpSFAnHTW1JEAoobiWhBx5c0Bg4pMFt6P30L3+xtr/EP1oIeHk0oPB1Tgg/n5husY=
-X-Received: by 2002:a05:6214:5c87:b0:4af:af9d:fdc9 with SMTP id
- lj7-20020a0562145c8700b004afaf9dfdc9mr14101807qvb.60.1668458727306; Mon, 14
- Nov 2022 12:45:27 -0800 (PST)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UiNIXMC9PLeAhbtNxDuXY7NkP6nv73/Hn2iICKpHFto=;
+        b=DLW60xfpM2MlpuKATb70tckpt9OhXNsEKThXTU580O32Jefnll8jDq8U7fIxPPHF8Y
+         KxscuOyEdrU7FKo1VSo353Zx33inGuBu3E3VpkrcaOEYCsaoW6kluiWGKWbGst+DG8DW
+         2K8qx3SWIuGDcvRRZCJhaBJS0UBPcuBsX3EQjcJzfSTgKf/F2rs3fYHbSrHBH6BZzFK0
+         g5VXkbnYOcUS2T40ACqeP3DJmhyn3g4U8emtF5jDL9vNFp3f0yzUkg+otj4reZ+UdJrD
+         FrRzH+7OgJRVg/Zxzs1GSyYSJN1c0wIVdDlJ0jhTir/wP2RVo7B47Z0fNOzzFwuZW0+q
+         dbSg==
+X-Gm-Message-State: ANoB5pmda/pHtOFIah3jo1KKKweWv5MK8hFnbsI5h6Crs8JQCEoB/PPx
+        6Qyz5aTpGaYfR7Cv381DXU6xeM6IU1/MTxPGm+lhZtLUmljc
+X-Google-Smtp-Source: AA0mqf5FHZ4zPQ7MyRu/TuWa+lI+C45pQvITg3EFD1bDOaKUEHiGNsIPr9HsAK4OS0fcKw9JTl01GW4w6NSOvOpK8brRXn+cL+5m
 MIME-Version: 1.0
-References: <1668396484-4596-1-git-send-email-yangtiezhu@loongson.cn>
- <1668396484-4596-2-git-send-email-yangtiezhu@loongson.cn> <Y3J6AXOFcoGg7p8/@google.com>
-In-Reply-To: <Y3J6AXOFcoGg7p8/@google.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-Date:   Mon, 14 Nov 2022 20:45:16 +0000
-Message-ID: <CACdoK4LXDmN9L4we00017vs+HkFCgucHYf0kLEWCDSxFF9tqBg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpftool: Use strcmp() instead of is_prefix()
- to check parameters
-To:     sdf@google.com
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+X-Received: by 2002:a05:6e02:100c:b0:300:d5a7:4503 with SMTP id
+ n12-20020a056e02100c00b00300d5a74503mr7305850ilj.294.1668458726643; Mon, 14
+ Nov 2022 12:45:26 -0800 (PST)
+Date:   Mon, 14 Nov 2022 12:45:26 -0800
+In-Reply-To: <20221114131927.2159-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b95fa705ed7451ba@google.com>
+Subject: Re: [syzbot] WARNING in anon_vma_name
+From:   syzbot <syzbot+62ed954113bf02c79f74@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 at 17:25, <sdf@google.com> wrote:
->
-> On 11/14, Tiezhu Yang wrote:
-> > In the current code, the parameters check of bpftool seems not correct,
-> > for example, "bpftool batch file FILE" is the expected command format,
-> > but "bpftool b f FILE" is recognized as valid, so use strcmp() instead
-> > of is_prefix() to check parameters.
->
-> That's by design and is similar to what iproute2 commands are doing.
+Hello,
 
-Agreed with Stanislav, all bpftool commands support argument prefixing
-and it's helpful, I see no reason to remove it for the batch command.
-But thanks anyway for reporting
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+
+Reported-and-tested-by: syzbot+62ed954113bf02c79f74@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         f8f60f32 Add linux-next specific files for 20221111
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=175b0e35880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=85ba52c07cd97289
+dashboard link: https://syzkaller.appspot.com/bug?extid=62ed954113bf02c79f74
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1751b9d1880000
+
+Note: testing is done by a robot and is best-effort only.
