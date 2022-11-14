@@ -2,104 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB09627D55
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:07:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14386627D58
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236063AbiKNMHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 07:07:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
+        id S236908AbiKNMHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 07:07:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237088AbiKNMHB (ORCPT
+        with ESMTP id S236748AbiKNMHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 07:07:01 -0500
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B13E59;
-        Mon, 14 Nov 2022 04:06:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:From
-        :References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=zMu0HTKg3FuUP4Nz5uxf9TpO0N2V/XYeubVj5LZJiTY=; b=JRKiJ4nDH44Lp8lZYuuQJ0FbUx
-        RAciPYCaHXxkO43oTLTNwpYvq+d7+2LFSo9Z4Orj5x0H1xIOcnkK6bmI+QoljvlP/p4GeLH4fZKfq
-        rMf0b5zps6wzl+BdBxQ8nT9pNF5GuZrR8yZREkvcrGhtwFPpKpkdVssXKRPqpQwF+4So=;
-Received: from p54ae9c3f.dip0.t-ipconnect.de ([84.174.156.63] helo=nf.local)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1ouYEe-0021Go-GC; Mon, 14 Nov 2022 13:06:44 +0100
-Message-ID: <8faa9c5d-960c-849b-e6af-a847bb1fd12f@nbd.name>
-Date:   Mon, 14 Nov 2022 13:06:42 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        Mon, 14 Nov 2022 07:07:38 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A016CE34
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 04:07:34 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0175C2273D;
+        Mon, 14 Nov 2022 12:07:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668427653; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jruMgBY5bV0IXTFQWV3qYvuLQLTE5ZFImlMF2xpEA5Y=;
+        b=sEfZ7E1DbAUbXgkCZIRMQBKYjhXWPZLUTuP/QJOjUKZ38ukEIIqjuSLbFf+nP6Y/uXC3YO
+        g3tVfmjTroj0w1pKMIu7IF8FibtgDEr7Rvhzu0SiTWLwINV/PSdqjydbOq8WMaeh8R247G
+        ouDPiCuQFhNJiz7rutSmXtsi3z6Md4s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668427653;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jruMgBY5bV0IXTFQWV3qYvuLQLTE5ZFImlMF2xpEA5Y=;
+        b=Zwz2Ev7xCTDiFs9XtgZx8PRSSNNW90giG+TDpHPMY98qrn+h7ZxAWYXGyDto3tuhPD9fiJ
+        +oVfU9bvluhFWJCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E3FAC13A92;
+        Mon, 14 Nov 2022 12:07:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xF6kN4QvcmMaEQAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 14 Nov 2022 12:07:32 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 7089EA0709; Mon, 14 Nov 2022 13:07:32 +0100 (CET)
+Date:   Mon, 14 Nov 2022 13:07:32 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     "liaochang (A)" <liaochang1@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, willy@infradead.org,
+        damien.lemoal@opensource.wdc.com, akpm@linux-foundation.org,
+        qhjin.dev@gmail.com, songmuchun@bytedance.com,
         linux-kernel@vger.kernel.org
-References: <20221110212212.96825-1-nbd@nbd.name>
- <20221110212212.96825-2-nbd@nbd.name> <20221111233714.pmbc5qvq3g3hemhr@skbuf>
- <20221111204059.17b8ce95@kernel.org>
- <bcb33ba7-b2a3-1fe7-64b2-1e15203e2cce@nbd.name>
- <20221114115559.wl7efrgxphijqz4o@skbuf>
-From:   Felix Fietkau <nbd@nbd.name>
-Subject: Re: [PATCH net-next v3 1/4] net: dsa: add support for DSA rx
- offloading via metadata dst
-In-Reply-To: <20221114115559.wl7efrgxphijqz4o@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] fs: Fix UBSAN detected shift-out-bounds error for bad
+ superblock
+Message-ID: <20221114120732.vephphzzpdkv2zam@quack3>
+References: <20221114024957.60916-1-liaochang1@huawei.com>
+ <20221114110459.x7yb6rhgwpi6kyjj@quack3>
+ <90ca400b-050a-ec3e-b052-2cf1cd34c020@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <90ca400b-050a-ec3e-b052-2cf1cd34c020@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.11.22 12:55, Vladimir Oltean wrote:
-> On Sat, Nov 12, 2022 at 12:13:15PM +0100, Felix Fietkau wrote:
->> On 12.11.22 05:40, Jakub Kicinski wrote:
->> I don't really see a valid use case in running generic XDP, TC and NFT on a
->> DSA master dealing with packets before the tag receive function has been
->> run. And after the tag has been processed, the metadata DST is cleared from
->> the skb.
+On Mon 14-11-22 19:59:03, liaochang (A) wrote:
 > 
-> Oh, there are potentially many use cases, the problem is that maybe
-> there aren't as many actual implementations as ideas? At least XDP is,
-> I think, expected to be able to deal with DSA tags if run on a DSA
-> master (not sure how that applies when RX DSA tag is offloaded, but
-> whatever). Marek Behun had a prototype with Marvell tags, not sure how
-> far that went in the end:
-> https://www.mail-archive.com/netdev@vger.kernel.org/msg381018.html
-> In general, forwarding a packet to another switch port belonging to the
-> same master via XDP_TX should be relatively efficient.
-In that case it likely makes sense to disable DSA tag offloading 
-whenever driver XDP is being used.
-Generic XDP probably doesn't matter much. Last time I tried to use it 
-and ran into performance issues, I was told that it's only usable for 
-testing anyway and there was no interest in fixing the cases that I ran 
-into.
-
->> How about this: I send a v4 which uses skb_dst_drop instead of skb_dst_set,
->> so that other drivers can use refcounting if it makes sense for them. For
->> mtk_eth_soc, I prefer to leave out refcounting for performance reasons.
->> Is that acceptable to you guys?
 > 
-> I don't think you can mix refcounting at consumer side with no-refcounting
-> at producer side, no?
-skb_dst_drop checks if refcounting was used for the skb dst pointer.
+> 在 2022/11/14 19:04, Jan Kara 写道:
+> > On Mon 14-11-22 10:49:57, Liao Chang wrote:
+> >> UBSAN: shift-out-of-bounds in fs/minix/bitmap.c:103:3
+> >> shift exponent 8192 is too large for 32-bit type 'unsigned int'
+> >> CPU: 1 PID: 32273 Comm: syz-executor.0 Tainted: G        W
+> >> 6.1.0-rc4-dirty #11
+> >> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+> >> BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
+> >> Call Trace:
+> >>  <TASK>
+> >>  dump_stack_lvl+0xcd/0x134
+> >>  ubsan_epilogue+0xb/0x50
+> >>  __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x18d
+> >>  minix_count_free_blocks.cold+0x16/0x1b
+> >>  minix_statfs+0x22a/0x490
+> >>  statfs_by_dentry+0x133/0x210
+> >>  user_statfs+0xa9/0x160
+> >>  __do_sys_statfs+0x7a/0xf0
+> >>  do_syscall_64+0x35/0x80
+> >>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >>
+> >> The superblock stores on disk contains the size of a data zone, which is
+> >> too large to used as the shift when kernel try to calculate the total
+> >> size of zones, so it needs to check the superblock when kernel mounts
+> >> MINIX-FS.
+> >>
+> >> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> > 
+> > Thanks for the patch. Just one nit:
+> > 
+> >> diff --git a/fs/minix/inode.c b/fs/minix/inode.c
+> >> index da8bdd1712a7..f1d1c2312817 100644
+> >> --- a/fs/minix/inode.c
+> >> +++ b/fs/minix/inode.c
+> >> @@ -166,6 +166,12 @@ static bool minix_check_superblock(struct super_block *sb)
+> >>  	    sb->s_maxbytes > (7 + 512 + 512*512) * BLOCK_SIZE)
+> >>  		return false;
+> >>  
+> >> +	/* the total size of zones must no exceed the limitation of U32_MAX. */
+> >> +	if (sbi->s_log_zone_size && (sbi->s_nzones - sbi->s_firstdatazone) &&
+> >> +	    (__builtin_clzl((__u32)(sbi->s_nzones - sbi->s_firstdatazone)) <=
+> > 
+> > Why this strange __builtin_clzl() function? We have a ffs() function in
+> > the kernel for this :)
+> 
+> Great suggestion, i should use a compiler neutral API to caclulate leading zero count,
+> what about count_leading_zeros()?
 
-> I suppose that we could leave refcounting out for now, and bug you if
-> someone comes with a real need later and complains. Right now it's a bit
-> hard for me to imagine all the possibilities. How does that sound?
-Sounds good. I think I'll send v4 anyway to deal with the XDP case and 
-to switch to skb_dst_drop.
+Yeah, that would work as well.
 
-- Felix
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
