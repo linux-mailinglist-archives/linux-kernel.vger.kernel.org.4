@@ -2,72 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8824B628AB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0271F628AB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237528AbiKNUpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 15:45:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
+        id S237553AbiKNUqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 15:46:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236281AbiKNUp1 (ORCPT
+        with ESMTP id S237062AbiKNUqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:45:27 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E88210A3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:45:27 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id l4-20020a056e021aa400b00300ad9535c8so10000365ilv.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:45:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UiNIXMC9PLeAhbtNxDuXY7NkP6nv73/Hn2iICKpHFto=;
-        b=DLW60xfpM2MlpuKATb70tckpt9OhXNsEKThXTU580O32Jefnll8jDq8U7fIxPPHF8Y
-         KxscuOyEdrU7FKo1VSo353Zx33inGuBu3E3VpkrcaOEYCsaoW6kluiWGKWbGst+DG8DW
-         2K8qx3SWIuGDcvRRZCJhaBJS0UBPcuBsX3EQjcJzfSTgKf/F2rs3fYHbSrHBH6BZzFK0
-         g5VXkbnYOcUS2T40ACqeP3DJmhyn3g4U8emtF5jDL9vNFp3f0yzUkg+otj4reZ+UdJrD
-         FrRzH+7OgJRVg/Zxzs1GSyYSJN1c0wIVdDlJ0jhTir/wP2RVo7B47Z0fNOzzFwuZW0+q
-         dbSg==
-X-Gm-Message-State: ANoB5pmda/pHtOFIah3jo1KKKweWv5MK8hFnbsI5h6Crs8JQCEoB/PPx
-        6Qyz5aTpGaYfR7Cv381DXU6xeM6IU1/MTxPGm+lhZtLUmljc
-X-Google-Smtp-Source: AA0mqf5FHZ4zPQ7MyRu/TuWa+lI+C45pQvITg3EFD1bDOaKUEHiGNsIPr9HsAK4OS0fcKw9JTl01GW4w6NSOvOpK8brRXn+cL+5m
+        Mon, 14 Nov 2022 15:46:13 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B0C21A7;
+        Mon, 14 Nov 2022 12:46:12 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 969AF202CF;
+        Mon, 14 Nov 2022 20:46:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668458771;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wb4O7lLXD9XIPmsq/fgChivZD1DA6NsEAi7ItoReySI=;
+        b=zV5n/LJkrjMApj9pcYixvHtBQxMhgst7PvBJhFMosUSFekJO3P93V557ZUEXHiNCeMp+tA
+        a10oMsgDSNVLmKhNbiZngufxZqPiKw4b83sqPEk5ue9rbZOwPJ9EqaIyhaVepiNG76ukoJ
+        Z5eq9SQAjr0T2HamFZViIhEvX9at2sQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668458771;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wb4O7lLXD9XIPmsq/fgChivZD1DA6NsEAi7ItoReySI=;
+        b=KYC+LG7lwwa2agl/O+HdnbT1z24eFyUEJlZRIOmLHuTBubf7Eb3ArF/5lQLNMP3+5ELS0t
+        GHmThhdyBf1XMJDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4B57E13A92;
+        Mon, 14 Nov 2022 20:46:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id q3laEROpcmMzOwAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Mon, 14 Nov 2022 20:46:11 +0000
+Date:   Mon, 14 Nov 2022 21:45:45 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
+Cc:     Li zeming <zeming@nfschina.com>, clm@fb.com, josef@toxicpanda.com,
+        dsterba@suse.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] btrfs: volumes: Increase bioc pointer check
+Message-ID: <20221114204545.GB5824@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <20221026013611.2900-1-zeming@nfschina.com>
+ <26b65420-2609-26a5-9cc2-c12cabd310e0@gmx.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:100c:b0:300:d5a7:4503 with SMTP id
- n12-20020a056e02100c00b00300d5a74503mr7305850ilj.294.1668458726643; Mon, 14
- Nov 2022 12:45:26 -0800 (PST)
-Date:   Mon, 14 Nov 2022 12:45:26 -0800
-In-Reply-To: <20221114131927.2159-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b95fa705ed7451ba@google.com>
-Subject: Re: [syzbot] WARNING in anon_vma_name
-From:   syzbot <syzbot+62ed954113bf02c79f74@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <26b65420-2609-26a5-9cc2-c12cabd310e0@gmx.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Oct 26, 2022 at 02:42:51PM +0800, Qu Wenruo wrote:
+> On 2022/10/26 09:36, Li zeming wrote:
+> > The __GFP_NOFAIL flag will cause memory to be allocated an infinite
+> > number of times until the allocation is successful, but it is best to
+> > use it only for very necessary code, and try not to use it.
+> >
+> > The alloc_btrfs_io_context function looks a little closer to normal
+> > (excuse my analysis), but I think we can remove __GFP_NOFAIL from it and
+> > add a bioc pointer allocation check that returns NULL if the allocation
+> > fails.
+> >
+> > Signed-off-by: Li zeming <zeming@nfschina.com>
+> > ---
+> >   v2: Add annotation vocabulary modify, remove __GFP_NOFAIL flag.
+> >   v3: Modifying the Description.
+> >
+> >   fs/btrfs/volumes.c | 6 ++++--
+> >   1 file changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
+> > index 064ab2a79c80..b8d901f58995 100644
+> > --- a/fs/btrfs/volumes.c
+> > +++ b/fs/btrfs/volumes.c
+> > @@ -5891,7 +5891,9 @@ static struct btrfs_io_context *alloc_btrfs_io_context(struct btrfs_fs_info *fs_
+> >   		 * and the stripes.
+> >   		 */
+> >   		sizeof(u64) * (total_stripes),
+> > -		GFP_NOFS|__GFP_NOFAIL);
+> > +		GFP_NOFS);
+> > +	if (!bioc)
+> > +		return NULL;
+> >
+> >   	atomic_set(&bioc->error, 0);
+> >   	refcount_set(&bioc->refs, 1);
+> > @@ -6071,7 +6073,7 @@ struct btrfs_discard_stripe *btrfs_map_discard(struct btrfs_fs_info *fs_info,
+> >    * array of stripes.
+> >    * For READ, it also needs to be supported using the same mirror number.
+> >    *
+> > - * If the requested block is not left of the left cursor, EIO is returned. This
+> > + * If the requested block is not left of the left cursor, EIO should be returned. This
+> 
+> Is there any need for this change?
+> 
+> I don't think your patch has even touched the call chain of
+> get_extra_mirror_from_replace().
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-
-Reported-and-tested-by: syzbot+62ed954113bf02c79f74@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         f8f60f32 Add linux-next specific files for 20221111
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=175b0e35880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=85ba52c07cd97289
-dashboard link: https://syzkaller.appspot.com/bug?extid=62ed954113bf02c79f74
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1751b9d1880000
-
-Note: testing is done by a robot and is best-effort only.
+That's maybe an accidental change, not relevant to the NOFAIL removal.
