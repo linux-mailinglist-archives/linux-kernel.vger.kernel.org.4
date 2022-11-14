@@ -2,129 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5186276A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC536276AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236008AbiKNHsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 02:48:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+        id S236021AbiKNHtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 02:49:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235848AbiKNHsV (ORCPT
+        with ESMTP id S235733AbiKNHth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 02:48:21 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB361011
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:48:20 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id d6so17899964lfs.10
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:48:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RtaXBhnGo8MVscIrQnKGheYkcw3Kx7+UsbUghToyCVI=;
-        b=SMH/wDR0ipSJQ9BUzSRMG2RWykZI8v94NQ6rQnIPL3+Oq+ZKPi/veswxkIv+yEMztD
-         2QmI0HH5GldekYzi2aGpmm2oQ8bYqWvWukggo1oah2jteXry9sKr9hhszaCUNhe7JaZB
-         wtQ2IWfLRze8qnIqqOUGV270budQ2QuruVB/5jdcg93GlDmIcmNOQ93VZ2dwFWHN/cNM
-         JLIE+7LyCVT068CkPRhtyAPK3R1eNs1lvDXpLB6AOz3Qp4VaXNsJRRW7UsnXmx6847Yu
-         TDymNZOPJZcegB76FHBGkSFkdBDkb9j47VZng4bShYGV0+c1jYTr0NOza+VNBooBqfle
-         LnBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RtaXBhnGo8MVscIrQnKGheYkcw3Kx7+UsbUghToyCVI=;
-        b=nr9BWdOkg3GgZRA6GNMf0HO8Huo61pmmkejk03hvWvorS+qIVt43myV62oPVGbgKFo
-         c+PSujbiXrMYQ0j3liOMzWR9B6R6EHFa128NE8BzQJBmYPrH/Wjdy+Kdh+eCEKa42KEi
-         7FoRYfssxvI/fhzjtdrN9vzr/PiNBk3kf8F2VXnHSJJUCvKnP4vL71h09e2Vh2IdghD5
-         f64gC3KX5SF11sSNZZ0CrvMVs4mrCVeEwBwzoONa0ZENFaTLHQSrRI+6BbyGM7HEP3OS
-         +p31xsnY6L8BYhpMsErLBt4VyeO2ecSRe9OIlNq4622oN7T4G313Q9HgBuVlzuiYd63b
-         Bzqg==
-X-Gm-Message-State: ANoB5pkRhDgiJpbeCsyo7uLAlr+8VG4QcocA9QNtB6Nj/SXYSxfUWz0N
-        iEHnBNliAXtjPL0/zJyG4iAidQ==
-X-Google-Smtp-Source: AA0mqf4L855tMQ/hmtg1Tuny5MoKVDR9pzpMX2tlC4Cl8NJCd/Q5ZQSx1O0gm5QI6BjibY6zuXXH2w==
-X-Received: by 2002:a05:6512:6d5:b0:4a9:6659:40d5 with SMTP id u21-20020a05651206d500b004a9665940d5mr4232367lff.516.1668412098837;
-        Sun, 13 Nov 2022 23:48:18 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id k20-20020a2eb754000000b0026b2094f6fcsm1899097ljo.73.2022.11.13.23.48.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Nov 2022 23:48:18 -0800 (PST)
-Message-ID: <0ee5db9e-d80c-947d-73d6-6214e9299b23@linaro.org>
-Date:   Mon, 14 Nov 2022 08:48:17 +0100
+        Mon, 14 Nov 2022 02:49:37 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12685C2F;
+        Sun, 13 Nov 2022 23:49:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668412177; x=1699948177;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OAma0AQcRYfh/Iefxk+hEiI+He8Dtgk0YGypPF8trQs=;
+  b=g4nGvvP0r0Z0mxdWPNW/uwHCNmbrCkDp/eWx4+JXdFgu8aDqgKadcJdD
+   iFOzyi4SRLzoJADAmNQK/nbjl+rRmfLuyGLPnHbaICVuXDasuomuIZqxA
+   plVXCjVbpre2hBb5phb1QBVGV1m24/ylkiwRAdXdRrkE5lBu6epZ78e75
+   pMC7UmuxS7CucgPuVpSDbyB2Z4skoy1d9RARH4o2qBITLw2r6OV8OzJKN
+   MrO1bcBR58iCzWbROm8muNQWoa/ywdIMqicHHuKXi1M2xoXMmn/VgCfrO
+   y7RmfT2l2gyr3WJc71UlfDNVpackVucpOz2DoW0Zw5zJAe+N3nnO5sM3F
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="299424995"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="299424995"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 23:49:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="967467391"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="967467391"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.249.173.21]) ([10.249.173.21])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 23:49:34 -0800
+Message-ID: <de9b844f-c70b-bce7-9723-25f61e4f696f@linux.intel.com>
+Date:   Mon, 14 Nov 2022 15:49:32 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 00/10] ASoC: dt-bindings: Rework Qualcomm APR/GPR Sound
- nodes for SM8450
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+Subject: Re: [PATCH v10 072/108] KVM: TDX: restore user ret MSRs
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Patrick Lai <plai@qti.qualcomm.com>,
-        Srinivasa Rao Mandadapu <srivasam@qti.qualcomm.com>
-References: <20221111113547.100442-1-krzysztof.kozlowski@linaro.org>
- <06da072c-8cf0-8181-3c32-4592fe41f9c2@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <06da072c-8cf0-8181-3c32-4592fe41f9c2@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+ <3260994f3d9a036795c81bf06842558afabeeef7.1667110240.git.isaku.yamahata@intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <3260994f3d9a036795c81bf06842558afabeeef7.1667110240.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/11/2022 17:15, Srinivas Kandagatla wrote:
-> 
-> 
-> On 11/11/2022 11:35, Krzysztof Kozlowski wrote:
->> Adding sound support for Qualcomm SM8450 SoC (and later for SC8280XP) brought
->> some changes to APR/GPR services bindings.  These bindings are part of
->> qcom,apr.yaml:
->>
->>    apr-or-gpr-device-node <- qcom,apr.yaml
->>      apr-gpr-service@[0-9] <- qcom,apr.yaml
->>        service-specific-components <- /schemas/sound/qcom,q6*.yaml
->>
->> The schema for services (apr-gpr-service@[0-9]) already grows considerably and
->> is still quite not specific.  It allows several incorrect combinations, like
->> adding a clock-controller to a APM device.  Restricting it would complicate the
->> schema even more.  Bringing new support for sound on Qualcomm SM8450 and
->> SC8280XP SoC would grow it as well.
-> 
-> Why would this grow? All the dsp services are static and they will not 
-> change per SoC unless there is a total firmware change in DSP.
 
-They grow now with SM8450 which requires changes there. Otherwise DTS
-does not pass with current bindings. The bindings before my fixing in
-2022 were really incomplete. Now they are complete, but:
-1. Not for SM8450 - this will bring new things,
-2. Very unspecific as they allow multiple invalid configurations.
+On 10/30/2022 2:23 PM, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>
+> Several user ret MSRs are clobbered on TD exit.  Restore those values on
+> TD exit and before returning to ring 3.
+>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>   arch/x86/kvm/vmx/tdx.c | 43 ++++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 43 insertions(+)
+>
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index 3ec465cbaeef..f35ccf2b502d 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -456,6 +456,28 @@ void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>   	vcpu->kvm->vm_bugged = true;
+>   }
+>   
+> +struct tdx_uret_msr {
+> +	u32 msr;
+> +	unsigned int slot;
+> +	u64 defval;
+> +};
+> +
+> +static struct tdx_uret_msr tdx_uret_msrs[] = {
+> +	{.msr = MSR_SYSCALL_MASK,},
+> +	{.msr = MSR_STAR,},
+> +	{.msr = MSR_LSTAR,},
+> +	{.msr = MSR_TSC_AUX,},
+> +};
+> +
+> +static void tdx_user_return_update_cache(void)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(tdx_uret_msrs); i++)
+> +		kvm_user_return_update_cache(tdx_uret_msrs[i].slot,
+> +					     tdx_uret_msrs[i].defval);
+> +}
+> +
+>   static void tdx_restore_host_xsave_state(struct kvm_vcpu *vcpu)
+>   {
+>   	struct kvm_tdx *kvm_tdx = to_kvm_tdx(vcpu->kvm);
+> @@ -495,6 +517,7 @@ fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu)
+>   
+>   	tdx_vcpu_enter_exit(vcpu, tdx);
+>   
+> +	tdx_user_return_update_cache();
+>   	tdx_restore_host_xsave_state(vcpu);
+>   	tdx->host_state_need_restore = true;
+>   
+> @@ -1558,6 +1581,26 @@ int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
+>   		return -ENODEV;
+>   	}
+>   
+> +	for (i = 0; i < ARRAY_SIZE(tdx_uret_msrs); i++) {
+> +		/*
+> +		 * Here it checks if MSRs (tdx_uret_msrs) can be saved/restored
+> +		 * before returning to user space.
+> +		 *
+> +		 * this_cpu_ptr(user_return_msrs)->registered isn't checked
+> +		 * because the registration is done at vcpu runtime by
+> +		 * kvm_set_user_return_msr().
+> +		 * Here is setting up cpu feature before running vcpu,
+> +		 * registered is alreays
 
-> 
->>
->> Refactor the bindings before extending them for Qualcomm SM8450 SoC.
-> 
-> I dont understand this bit, what is SoC audio support to do with DSP 
-> bindings. DSP bindings should be totally independent of this.
+typo, already or always?
 
-APR/GPR bindings are for SoC audio, so while adding SoC audio the first
-are affected. If you went through the commits here, you would notice the
-changes.
 
-Best regards,
-Krzysztof
 
+>   false.
+> +		 */
+> +		tdx_uret_msrs[i].slot = kvm_find_user_return_msr(tdx_uret_msrs[i].msr);
+> +		if (tdx_uret_msrs[i].slot == -1) {
+> +			/* If any MSR isn't supported, it is a KVM bug */
+> +			pr_err("MSR %x isn't included by kvm_find_user_return_msr\n",
+> +				tdx_uret_msrs[i].msr);
+> +			return -EIO;
+> +		}
+> +	}
+> +
+>   	max_pkgs = topology_max_packages();
+>   	tdx_mng_key_config_lock = kcalloc(max_pkgs, sizeof(*tdx_mng_key_config_lock),
+>   				   GFP_KERNEL);
