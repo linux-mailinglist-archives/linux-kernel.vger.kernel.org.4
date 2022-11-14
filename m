@@ -2,264 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A530A628D29
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E30EF628D25
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237795AbiKNXHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 18:07:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
+        id S238123AbiKNXG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 18:06:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238180AbiKNXGr (ORCPT
+        with ESMTP id S238151AbiKNXGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 18:06:47 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E2520F66;
-        Mon, 14 Nov 2022 15:04:35 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AEMhhSi027321;
-        Mon, 14 Nov 2022 23:03:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=r2fzDqWsStLA1xUQ8hFm6TfQBbcyzJkCztYXsu/2swA=;
- b=Sm/Lp2TX1gppX2Z5a9Mns5MPvNGLBnKFMG0y1Olw/g8Em+og+eRJLS9LWumlXbmUovqU
- dkrtXwZGaaMchdsWqRkNnVvxkIAXUhbfhAMwzrxPN/0oBwNpRw06WPn+IcofHjWhUF5P
- /2AgtoudXJDAEu0XaHjQz295RoCJPAy6t46Hn5ze6mFsb2gIkqA9t+6KSx7lbCqQEg0h
- 7KArhQC/f9HjMxnoCnGtjPM58zSMDutYS530qmb+KPD3kfuC9ATqjoEHWB6m5VRD0gXJ
- gTyUpWZXwbF0MgWKkEqxzVKadK6hTK+VTyJQ2L8uV2s9Iw9jsm+jzxQlxzP8zV0f9jL/ VQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kuxqnrbk2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 23:03:48 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AEN07xD012744;
-        Mon, 14 Nov 2022 23:03:48 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kuxqnrbjd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 23:03:48 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AEMpLxM017257;
-        Mon, 14 Nov 2022 23:03:47 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma04dal.us.ibm.com with ESMTP id 3kt349ms1c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 23:03:47 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com ([9.208.128.116])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AEN3jIF1835724
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Nov 2022 23:03:45 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3582D5807D;
-        Mon, 14 Nov 2022 23:03:45 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 753D35808C;
-        Mon, 14 Nov 2022 23:03:43 +0000 (GMT)
-Received: from [9.163.46.135] (unknown [9.163.46.135])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Nov 2022 23:03:43 +0000 (GMT)
-Message-ID: <44191f02-7360-bca3-be8f-7809c1562e68@linux.vnet.ibm.com>
-Date:   Mon, 14 Nov 2022 18:03:43 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/4] fs: define a firmware security filesystem named
- fwsecurityfs
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Nayna Jain <nayna@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-fsdevel@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, Dov Murik <dovmurik@linux.ibm.com>,
-        George Wilson <gcwilson@linux.ibm.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Russell Currey <ruscur@russell.cc>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Stefan Berger <stefanb@linux.ibm.com>
-References: <20221106210744.603240-1-nayna@linux.ibm.com>
- <20221106210744.603240-3-nayna@linux.ibm.com> <Y2uvUFQ9S2oaefSY@kroah.com>
- <8447a726-c45d-8ebb-2a74-a4d759631e64@linux.vnet.ibm.com>
- <Y2zLRw/TzV/sWgqO@kroah.com>
-From:   Nayna <nayna@linux.vnet.ibm.com>
-In-Reply-To: <Y2zLRw/TzV/sWgqO@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: cMTICiR-Ic39zShUHbdlZAJATSRcqSOJ
-X-Proofpoint-ORIG-GUID: Ruez-Aie2yvxjHXtRL2XCcyi2xuMRRAi
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 14 Nov 2022 18:06:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642871C423
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 15:04:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD17C613F9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:04:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 088ACC433D6;
+        Mon, 14 Nov 2022 23:04:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668467047;
+        bh=2cCl0d0X5lX4NyOcKC03ekrQxlEEtlWIMktN+6wfhGQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n5UDekhFXY3RNOQNPnk3IvUjt6maPNGK+bfTKS7NT71+TB/hAbdaAPHpASDP4VLKN
+         NrvEjiczoJu3+9BG7rGkXEbVKevxjas2+AwLZhKOHW0NXioa2ZkqVHuGW4P1qQwnj/
+         CkJea26p+rBQahQqWmtybMubg0iNz3tBho5vAz2it90EwH/AdmUqGw8/WFftAd6gGB
+         1Z0H+HQVnFavk0j4YP39o7sS+5k952j2AqrYFLD7whSW+YKnROBtXAgk8jdnyLkL+4
+         FaOS4yJKWa0XpGbsemejhYdKMDQNwTxPsdaMXmumhTtvFv4uXPb1IrDFbbac/Evrch
+         IBrn4etskqfhQ==
+Date:   Mon, 14 Nov 2022 15:04:05 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] f2fs: add proc entry to show discard_plist info
+Message-ID: <Y3LJZZjKgxzq9ZU8@google.com>
+References: <20221111153921.55694-1-frank.li@vivo.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-14_15,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 phishscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0
- priorityscore=1501 impostorscore=0 mlxscore=0 spamscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211140162
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221111153921.55694-1-frank.li@vivo.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/11, Yangtao Li wrote:
+> This patch adds a new proc entry to show discard_plist
+> information in more detail, which is very helpful to
+> know the discard pend list count clearly.
+> 
+> Such as:
+> 
+> Discard pending list(Show diacrd command count on each entry):
+> 0                4943         138          66          29          21           9           8          12
+> 8                   4           7           4           6           3           2           0           1
+> 16                  1           2           2           0           0           1           0           0
+> 24                  0           1           1           0           0           1           1           0
+> 32                  0           1           0           0           0           0           0           0
+> ......
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  fs/f2fs/f2fs.h    |  1 +
+>  fs/f2fs/segment.c | 22 ++++++++++++++++------
+>  fs/f2fs/sysfs.c   | 29 +++++++++++++++++++++++++++++
+>  3 files changed, 46 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 04ef4cce3d7f..a0226c970cbc 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -405,6 +405,7 @@ struct discard_cmd_control {
+>  	wait_queue_head_t discard_wait_queue;	/* waiting queue for wake-up */
+>  	unsigned int discard_wake;		/* to wake up discard thread */
+>  	struct mutex cmd_lock;
+> +	unsigned int nr_pending[MAX_PLIST_NUM];	/* # of pending discards */
+>  	unsigned int nr_discards;		/* # of discards in the list */
+>  	unsigned int max_discards;		/* max. discards to be issued */
+>  	unsigned int max_discard_request;	/* max. discard request per round */
+> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> index aa4be7f25963..72e60d5ee70f 100644
+> --- a/fs/f2fs/segment.c
+> +++ b/fs/f2fs/segment.c
+> @@ -921,6 +921,7 @@ static struct discard_cmd *__create_discard_cmd(struct f2fs_sb_info *sbi,
+>  	dc->bio_ref = 0;
+>  	atomic_inc(&dcc->discard_cmd_cnt);
+>  	dcc->undiscard_blks += len;
+> +	dcc->nr_pending[plist_idx(len)]++;
+>  
+>  	return dc;
+>  }
+> @@ -1169,6 +1170,7 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
+>  		submit_bio(bio);
+>  
+>  		atomic_inc(&dcc->issued_discard);
+> +		dcc->nr_pending[plist_idx(len)]--;
+>  
+>  		f2fs_update_iostat(sbi, NULL, FS_DISCARD, 1);
+>  
+> @@ -1210,9 +1212,11 @@ static void __insert_discard_tree(struct f2fs_sb_info *sbi,
+>  }
+>  
+>  static void __relocate_discard_cmd(struct discard_cmd_control *dcc,
+> -						struct discard_cmd *dc)
+> +						struct discard_cmd *dc, unsigned int index)
 
-On 11/10/22 04:58, Greg Kroah-Hartman wrote:
-> On Wed, Nov 09, 2022 at 03:10:37PM -0500, Nayna wrote:
->> On 11/9/22 08:46, Greg Kroah-Hartman wrote:
->>> On Sun, Nov 06, 2022 at 04:07:42PM -0500, Nayna Jain wrote:
->>>> securityfs is meant for Linux security subsystems to expose policies/logs
->>>> or any other information. However, there are various firmware security
->>>> features which expose their variables for user management via the kernel.
->>>> There is currently no single place to expose these variables. Different
->>>> platforms use sysfs/platform specific filesystem(efivarfs)/securityfs
->>>> interface as they find it appropriate. Thus, there is a gap in kernel
->>>> interfaces to expose variables for security features.
->>>>
->>>> Define a firmware security filesystem (fwsecurityfs) to be used by
->>>> security features enabled by the firmware. These variables are platform
->>>> specific. This filesystem provides platforms a way to implement their
->>>>    own underlying semantics by defining own inode and file operations.
->>>>
->>>> Similar to securityfs, the firmware security filesystem is recommended
->>>> to be exposed on a well known mount point /sys/firmware/security.
->>>> Platforms can define their own directory or file structure under this path.
->>>>
->>>> Example:
->>>>
->>>> # mount -t fwsecurityfs fwsecurityfs /sys/firmware/security
->>> Why not juset use securityfs in /sys/security/firmware/ instead?  Then
->>> you don't have to create a new filesystem and convince userspace to
->>> mount it in a specific location?
->>  From man 5 sysfs page:
->>
->> /sys/firmware: This subdirectory contains interfaces for viewing and
->> manipulating firmware-specific objects and attributes.
->>
->> /sys/kernel: This subdirectory contains various files and subdirectories
->> that provide information about the running kernel.
->>
->> The security variables which are being exposed via fwsecurityfs are managed
->> by firmware, stored in firmware managed space and also often consumed by
->> firmware for enabling various security features.
-> Ok, then just use the normal sysfs interface for /sys/firmware, why do
-> you need a whole new filesystem type?
->
->>  From git commit b67dbf9d4c1987c370fd18fdc4cf9d8aaea604c2, the purpose of
->> securityfs(/sys/kernel/security) is to provide a common place for all kernel
->> LSMs. The idea of
->> fwsecurityfs(/sys/firmware/security) is to similarly provide a common place
->> for all firmware security objects.
->>
->> /sys/firmware already exists. The patch now defines a new /security
->> directory in it for firmware security features. Using /sys/kernel/security
->> would mean scattering firmware objects in multiple places and confusing the
->> purpose of /sys/kernel and /sys/firmware.
-> sysfs is confusing already, no problem with making it more confusing :)
->
-> Just document where you add things and all should be fine.
->
->> Even though fwsecurityfs code is based on securityfs, since the two
->> filesystems expose different types of objects and have different
->> requirements, there are distinctions:
->>
->> 1. fwsecurityfs lets users create files in userspace, securityfs only allows
->> kernel subsystems to create files.
-> Wait, why would a user ever create a file in this filesystem?  If you
-> need that, why not use configfs?  That's what that is for, right?
+How about getting all the info?
 
-The purpose of fwsecurityfs is not to expose configuration items but 
-rather security objects used for firmware security features. I think 
-these are more comparable to EFI variables, which are exposed via an 
-EFI-specific filesystem, efivarfs, rather than configfs.
+static void __relocate_discard_cmd(dcc, dc, new_lstart, new_start, new_len)
+{
+	dcc->nr_pending[plist_idx(dc->len)]--;
 
->
->> 2. firmware and kernel objects may have different requirements. For example,
->> consideration of namespacing. As per my understanding, namespacing is
->> applied to kernel resources and not firmware resources. That's why it makes
->> sense to add support for namespacing in securityfs, but we concluded that
->> fwsecurityfs currently doesn't need it. Another but similar example of it
->> is: TPM space, which is exposed from hardware. For containers, the TPM would
->> be made as virtual/software TPM. Similarly for firmware space for
->> containers, it would have to be something virtualized/software version of
->> it.
-> I do not understand, sorry.  What does namespaces have to do with this?
-> sysfs can already handle namespaces just fine, why not use that?
+	if (new_lstart)
+		dc->lstart = new_lstart;
+	if (new_start)
+		dc->start = new_start;
+	dc->len = new_len;
+	dcc->undiscard_blks += dc->len;
+	dcc->nr_pending[plist_idx(dc->len)]++;
+  	list_move_tail(&dc->list, &dcc->pend_list[plist_idx(dc->len)]);
+}
 
-Firmware objects are not namespaced. I mentioned it here as an example 
-of the difference between firmware and kernel objects. It is also in 
-response to the feedback from James Bottomley in RFC v2 
-[https://lore.kernel.org/linuxppc-dev/41ca51e8db9907d9060cc38adb59a66dcae4c59b.camel@HansenPartnership.com/].
+>  {
+>  	list_move_tail(&dc->list, &dcc->pend_list[plist_idx(dc->len)]);
+> +	dcc->nr_pending[plist_idx(dc->len)]++;
+> +	dcc->nr_pending[index]--;
+>  }
+>  
+>  static void __punch_discard_cmd(struct f2fs_sb_info *sbi,
+> @@ -1230,9 +1234,10 @@ static void __punch_discard_cmd(struct f2fs_sb_info *sbi,
+>  	dcc->undiscard_blks -= di.len;
+>  
+>  	if (blkaddr > di.lstart) {
+> +		block_t old_len = dc->len;
+>  		dc->len = blkaddr - dc->lstart;
+>  		dcc->undiscard_blks += dc->len;
+> -		__relocate_discard_cmd(dcc, dc);
+> +		__relocate_discard_cmd(dcc, dc, plist_idx(old_len));
 
->
->> 3. firmware objects are persistent and read at boot time by interaction with
->> firmware, unlike kernel objects which are not persistent.
-> That doesn't matter, sysfs exports what the hardware provides, and that
-> might persist over boot.
->
-> So I don't see why a new filesystem is needed.
->
-> You didn't explain why sysfs, or securitfs (except for the location in
-> the tree) does not work at all for your needs.  The location really
-> doesn't matter all that much as you are creating a brand new location
-> anyway so we can just declare "this is where this stuff goes" and be ok.
+		__relocate_discard_cmd(dcc, dc, 0, 0, blkaddr - dc->lstart);
 
-For rest of the questions, here is the summarized response.
+>  		modified = true;
+>  	}
+>  
+> @@ -1243,11 +1248,12 @@ static void __punch_discard_cmd(struct f2fs_sb_info *sbi,
+>  					di.lstart + di.len - 1 - blkaddr,
+>  					NULL, NULL);
+>  		} else {
+> +			block_t old_len = dc->len;
+>  			dc->lstart++;
+>  			dc->len--;
+>  			dc->start++;
+>  			dcc->undiscard_blks += dc->len;
+> -			__relocate_discard_cmd(dcc, dc);
+> +			__relocate_discard_cmd(dcc, dc, plist_idx(old_len));
 
-Based on mailing list previous discussions [1][2][3] and considering 
-various firmware security use cases, our fwsecurityfs proposal seemed to 
-be a reasonable and acceptable approach based on the feedback [4].
+		__relocate_discard_cmd(dcc, dc, dc->lstart + 1, dc->start + 1, dc->len - 1);
 
-[1] https://lore.kernel.org/linuxppc-dev/YeuyUVVdFADCuDr4@kroah.com/#t
-[2] https://lore.kernel.org/linuxppc-dev/Yfk6gucNmJuR%2Fegi@kroah.com/
-[3] 
-https://lore.kernel.org/all/Yfo%2F5gYgb9Sv24YB@kroah.com/t/#m40250fdb3fddaafe502ab06e329e63381b00582d
-[4] https://lore.kernel.org/linuxppc-dev/YrQqPhi4+jHZ1WJc@kroah.com/
+>  		}
+>  	}
+>  }
+> @@ -1306,9 +1312,10 @@ static void __update_discard_tree_range(struct f2fs_sb_info *sbi,
+>  			prev_dc->bdev == bdev &&
+>  			__is_discard_back_mergeable(&di, &prev_dc->di,
+>  							max_discard_blocks)) {
+> +			block_t old_len = prev_dc->di.len;
+>  			prev_dc->di.len += di.len;
+>  			dcc->undiscard_blks += di.len;
+> -			__relocate_discard_cmd(dcc, prev_dc);
+> +			__relocate_discard_cmd(dcc, prev_dc, plist_idx(old_len));
 
-RFC v1 was using sysfs. After considering feedback[1][2][3], the 
-following are design considerations for unification via fwsecurityfs:
+			__relocate_discard_cmd(dcc, prev_dc, 0, 0, di.len);
 
-1. Unify the location: Defining a security directory under /sys/firmware 
-facilitates exposing objects related to firmware security features in a 
-single place. Different platforms can create their respective directory 
-structures within /sys/firmware/security.
+>  			di = prev_dc->di;
+>  			tdc = prev_dc;
+>  			merged = true;
+> @@ -1318,13 +1325,16 @@ static void __update_discard_tree_range(struct f2fs_sb_info *sbi,
+>  			next_dc->bdev == bdev &&
+>  			__is_discard_front_mergeable(&di, &next_dc->di,
+>  							max_discard_blocks)) {
+> +			block_t old_len = next_dc->di.len;
+>  			next_dc->di.lstart = di.lstart;
+>  			next_dc->di.len += di.len;
+>  			next_dc->di.start = di.start;
+>  			dcc->undiscard_blks += di.len;
+> -			__relocate_discard_cmd(dcc, next_dc);
 
-2. Unify the code:  To support unification, having the fwsecurityfs 
-filesystem API allows different platforms to define the inode and file 
-operations they need. fwsecurityfs provides a common API that can be 
-used by each platform-specific implementation to support its particular 
-requirements and interaction with firmware. Initializing 
-platform-specific functions is the purpose of the 
-fwsecurityfs_arch_init() function that is called on mount. Patch 3/4 
-implements fwsecurityfs_arch_init() for powerpc.
+			__relocate_discard_cmd(dcc, next_dc, di.lstart, di.start, di.len);
 
-Similar to the common place securityfs provides for LSMs to interact 
-with kernel security objects, fwsecurityfs would provide a common place 
-for all firmware security objects, which interact with the firmware 
-rather than the kernel. Although at the API level, the two filesystem 
-look similar, the requirements for firmware and kernel objects are 
-different. Therefore, reusing securityfs wasn't a good fit for the 
-firmware use case and we are proposing a similar but different 
-filesystem -  fwsecurityfs - focused for firmware security.
-
->
-> And again, how are you going to get all Linux distros to now mount your
-> new filesystem?
-
-It would be analogous to the way securityfs is mounted.
-
-Thanks & Regards,
-
-     - Nayna
-
->
-> thanks,
->
-> greg k-h
+> -			if (tdc)
+> +			__relocate_discard_cmd(dcc, next_dc, plist_idx(old_len));
+> +			if (tdc) {
+> +				dcc->nr_pending[plist_idx(tdc->len)]--;
+>  				__remove_discard_cmd(sbi, tdc);
+> +			}
+>  			merged = true;
+>  		}
+>  
+> diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+> index 032c03e09580..2176553f97c9 100644
+> --- a/fs/f2fs/sysfs.c
+> +++ b/fs/f2fs/sysfs.c
+> @@ -1252,6 +1252,32 @@ static int __maybe_unused victim_bits_seq_show(struct seq_file *seq,
+>  	return 0;
+>  }
+>  
+> +static int __maybe_unused discard_plist_seq_show(struct seq_file *seq,
+> +						void *offset)
+> +{
+> +	struct super_block *sb = seq->private;
+> +	struct f2fs_sb_info *sbi = F2FS_SB(sb);
+> +	struct discard_cmd_control *dcc = SM_I(sbi)->dcc_info;
+> +	int i;
+> +
+> +	seq_puts(seq, "Discard pending list(Show diacrd command count on each entry):\n");
+> +	if (!f2fs_realtime_discard_enable(sbi))
+> +		return 0;
+> +
+> +	for (i = 0; i < MAX_PLIST_NUM; i++) {
+> +		if (i % 8 == 0)
+> +			seq_printf(seq, "%-10d", i);
+> +		seq_printf(seq, " %10d", dcc->nr_pending[i]);
+> +		if (i % 8 == 7)
+> +			seq_putc(seq, '\n');
+> +		else
+> +			seq_putc(seq, ' ');
+> +	}
+> +	seq_putc(seq, '\n');
+> +
+> +	return 0;
+> +}
+> +
+>  int __init f2fs_init_sysfs(void)
+>  {
+>  	int ret;
+> @@ -1322,6 +1348,8 @@ int f2fs_register_sysfs(struct f2fs_sb_info *sbi)
+>  #endif
+>  		proc_create_single_data("victim_bits", 0444, sbi->s_proc,
+>  				victim_bits_seq_show, sb);
+> +		proc_create_single_data("discard_plist", 0444, sbi->s_proc,
+> +				discard_plist_seq_show, sb);
+>  	}
+>  	return 0;
+>  put_feature_list_kobj:
+> @@ -1345,6 +1373,7 @@ void f2fs_unregister_sysfs(struct f2fs_sb_info *sbi)
+>  		remove_proc_entry("segment_info", sbi->s_proc);
+>  		remove_proc_entry("segment_bits", sbi->s_proc);
+>  		remove_proc_entry("victim_bits", sbi->s_proc);
+> +		remove_proc_entry("discard_plist", sbi->s_proc);
+>  		remove_proc_entry(sbi->sb->s_id, f2fs_proc_root);
+>  	}
+>  
+> -- 
+> 2.25.1
