@@ -2,91 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B186274E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 04:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FBA6274E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 04:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235665AbiKNDRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 22:17:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
+        id S235624AbiKNDSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 22:18:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235642AbiKNDRE (ORCPT
+        with ESMTP id S235681AbiKNDSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 22:17:04 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F5FBF59
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:17:03 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id g24so8927155plq.3
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:17:03 -0800 (PST)
+        Sun, 13 Nov 2022 22:18:13 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C8DA46C;
+        Sun, 13 Nov 2022 19:18:12 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id 129-20020a1c0287000000b003cfe48519a6so7344wmc.0;
+        Sun, 13 Nov 2022 19:18:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=arl5DPKy7ubpsRwNKHJrZ2xSjvtK9FsvSBfMFAAwi5E=;
-        b=hcstPjpr6RxzTkFOHx6blSWxyeQNpfzvlfr3yFhMxcskbqck08zZIJxQGwQj/1LX6f
-         E5dlzD+zfByDJyS0szqT/RXVaOLE0FHwm//ZphJOIBGrH/Mi1NRxlAqZ3Y8SyBNBmokp
-         K9nkQjpfTQniIcfNqkhlz1/GWlQNPmS0PG70jDuLhTYoyod2GoPF8B0UPUp/unmPKaXN
-         XrJE69s83aEJQnAOnhUr2+2DOY+w899Pe3MOX6toDDINqVyxjGj1v6lKik3NyHTFfqrX
-         D4JTwD1Gwhrviy6Dkk5rchW18LboUyzZT865GK8jHZx6z380xs+UmpV5FcBL5AbdeU5x
-         Y4ew==
+        d=jms.id.au; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=t+Q9KbaAFZbygPhp1KCWuuQ4gItXhxtl0NMQHmTaOdw=;
+        b=a50T9z7I5pSuCMHx89AB7d56tCRC9n8y9OABNi1nOQBK+Gpr3QPBCzHiiq8LWZvouS
+         ASZ+1kZJAJcF6msYKlN3bHle2qFVZPourEwZYeCncc8wpwtPzo43MIOPbNiaiEMJW6uB
+         k1f5nSS2E88yDb/5DnjDWMSGFD9LJ81LZn1kY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=arl5DPKy7ubpsRwNKHJrZ2xSjvtK9FsvSBfMFAAwi5E=;
-        b=T3m3DOSJpk2hD459mS5VSNuuwWkCFRshNIaYZlnqh6Wmx/Ced2Zf2IJtt+J9x7Z6U1
-         F9++T3QWQl/2nvNMLQzutKhG8RMkzvGWRUHxIJCo+i4rFt7dkBFCM81jJh3MP+QaNr7Q
-         s2j6BOw0ABn8MDNoEF25tZGCBJpx1PZpNdU1Jx6ItQrWsvKtWCYb+L0ipyKPXHAIGyW8
-         CsRglEfR0KcU3QBA8xOWXBmPdxPrGmuc4QTpEcDCx6oLwLGyhv/G0bEs+RwaFimHKKM5
-         lU/bhfv9mOFeVp7L4p5SfHKW5Khzr9Nx6reCf2NE01laz5hN78OPFcuFtBOjiSlO8Odc
-         ihoA==
-X-Gm-Message-State: ANoB5pm5csIjzAlu/IIaK+kE6ASC8Pp8p8gWBz15FljBwjc6Jv8l+Un4
-        8iE3141ZmJhwBeiPbCF/cdMh2w==
-X-Google-Smtp-Source: AA0mqf7UcJdYf59h0jPLowDqt7YG8RjzpRGZ/TP3MKw3KQnpPKB6peGXnBDlpgfnDVm2nQtIqoNmeQ==
-X-Received: by 2002:a17:90b:394d:b0:213:caaf:411 with SMTP id oe13-20020a17090b394d00b00213caaf0411mr12396509pjb.74.1668395822640;
-        Sun, 13 Nov 2022 19:17:02 -0800 (PST)
-Received: from localhost ([122.172.85.60])
-        by smtp.gmail.com with ESMTPSA id j9-20020a170903024900b00188b63f0782sm3844440plh.288.2022.11.13.19.16.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 19:17:00 -0800 (PST)
-Date:   Mon, 14 Nov 2022 08:46:58 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
-        robh+dt@kernel.org, johan@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] cpufreq: qcom-hw: Add CPU clock provider support
-Message-ID: <20221114031658.pnbf7uiqqgiq3uk7@vireshk-i7>
-References: <20221108154037.111794-1-manivannan.sadhasivam@linaro.org>
- <20221108154037.111794-4-manivannan.sadhasivam@linaro.org>
- <20221108155717.srlnabls5ze2resx@bogus>
- <20221109074908.GC4651@thinkpad>
- <20221109110831.lngwmwyjqp4qj73r@bogus>
- <20221109123526.GA29805@thinkpad>
- <20221109164719.d7kowdu7wskyzjsc@bogus>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t+Q9KbaAFZbygPhp1KCWuuQ4gItXhxtl0NMQHmTaOdw=;
+        b=3vCAUwsOGoQHgJvFlbrsIu3tGIbsHRJCoxlige7Mp6M2fJjNHuA6MTmSCJui54ZAV8
+         FMswdok9VjeToNTDKx3hJtZuk0eKi8f4cF9eVVTL8geO3q73Ku7PeI4+vLFlt74fMlA1
+         f9APHb7bspSZYTU7rEaQYo2KwkrBmBvSoUWh6H5BszS25FftFZVgWTjbGNVD8okuz2Ec
+         AcZMvWydkki6BwEz6N7knjqj9k7dbuS7b7n17Bbeclo5ckJXmXJVJVeLxGSELkYuQSA9
+         A1k2am5lVm85JC/xdMa848462dfFdT7E8UakcMyRTIv2bdeR2mvQRkpwkkzWNgnInF8X
+         1USw==
+X-Gm-Message-State: ANoB5pnY+M9Q30jCzQgkBI23qi+7i4VsEc9XjSwXKb9N+lrM6oqR7QsB
+        /Xvpm6fLEulQ4crY2nRYFU1iq+02AwN8ZxciGXo=
+X-Google-Smtp-Source: AA0mqf6mARp2ng8/zCN9z2scsVJkIOl1oyP9Pa9mnl0kSupm89CiPVlO3FFj3w7pz7Zcfh3YbtjiMjiMbyW5l6Ro/wI=
+X-Received: by 2002:a05:600c:21cc:b0:3cf:8b32:a52 with SMTP id
+ x12-20020a05600c21cc00b003cf8b320a52mr6824596wmj.72.1668395890511; Sun, 13
+ Nov 2022 19:18:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109164719.d7kowdu7wskyzjsc@bogus>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221107171423.51019-1-eajames@linux.ibm.com>
+In-Reply-To: <20221107171423.51019-1-eajames@linux.ibm.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Mon, 14 Nov 2022 03:17:59 +0000
+Message-ID: <CACPK8XeiVs4Nq=gXTWmZCs7unk--NXCNJZQKG2vUiL6iWFwTFA@mail.gmail.com>
+Subject: Re: [PATCH v2] tpm: Add flag to use default cancellation policy
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09-11-22, 16:47, Sudeep Holla wrote:
-> Is the cpufreq_get() API expected
-> to return something close to what was set or is it expected to return the
-> real set h/w value if and when possible.
+On Mon, 7 Nov 2022 at 17:14, Eddie James <eajames@linux.ibm.com> wrote:
+>
+> The check for cancelled request depends on the VID of the chip, but
+> some chips share VID which shouldn't share their cancellation
+> behavior. This is the case for the Nuvoton NPCT75X, which should use
+> the default cancellation check, not the Winbond one.
+> To avoid changing the existing behavior, add a new flag to indicate
+> that the chip should use the default cancellation check and set it
+> for the I2C TPM2 TIS driver.
+>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 
-The real frequency the hardware is running at.
+Tested-by: Joel Stanley <joel@jms.id.au>
+Fixes: bbc23a07b072 ("tpm: Add tpm_tis_i2c backend for tpm_tis_core")
 
--- 
-viresh
+With this patch, and "tpm: tis_i2c: Fix sanity check interrupt enable
+mask", and the extra compatible strings the driver correctly probes on
+boot with the Nuvoton part.
+
+
+> ---
+> Changes since v1:
+>  - Update switch statement with default: break;
+>
+>  drivers/char/tpm/tpm_tis_core.c | 20 ++++++++++++--------
+>  drivers/char/tpm/tpm_tis_core.h |  1 +
+>  drivers/char/tpm/tpm_tis_i2c.c  |  1 +
+>  3 files changed, 14 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index 757623bacfd5..3f98e587b3e8 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -682,15 +682,19 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
+>  {
+>         struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+>
+> -       switch (priv->manufacturer_id) {
+> -       case TPM_VID_WINBOND:
+> -               return ((status == TPM_STS_VALID) ||
+> -                       (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
+> -       case TPM_VID_STM:
+> -               return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
+> -       default:
+> -               return (status == TPM_STS_COMMAND_READY);
+> +       if (!test_bit(TPM_TIS_DEFAULT_CANCELLATION, &priv->flags)) {
+> +               switch (priv->manufacturer_id) {
+> +               case TPM_VID_WINBOND:
+> +                       return ((status == TPM_STS_VALID) ||
+> +                               (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY)));
+> +               case TPM_VID_STM:
+> +                       return (status == (TPM_STS_VALID | TPM_STS_COMMAND_READY));
+> +               default:
+> +                       break;
+> +               }
+>         }
+> +
+> +       return status == TPM_STS_COMMAND_READY;
+>  }
+>
+>  static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+> index 66a5a13cd1df..b68479e0de10 100644
+> --- a/drivers/char/tpm/tpm_tis_core.h
+> +++ b/drivers/char/tpm/tpm_tis_core.h
+> @@ -86,6 +86,7 @@ enum tis_defaults {
+>  enum tpm_tis_flags {
+>         TPM_TIS_ITPM_WORKAROUND         = BIT(0),
+>         TPM_TIS_INVALID_STATUS          = BIT(1),
+> +       TPM_TIS_DEFAULT_CANCELLATION    = BIT(2),
+>  };
+>
+>  struct tpm_tis_data {
+> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+> index 45f388127f4b..91451ee1ef8d 100644
+> --- a/drivers/char/tpm/tpm_tis_i2c.c
+> +++ b/drivers/char/tpm/tpm_tis_i2c.c
+> @@ -329,6 +329,7 @@ static int tpm_tis_i2c_probe(struct i2c_client *dev,
+>         if (!phy->io_buf)
+>                 return -ENOMEM;
+>
+> +       set_bit(TPM_TIS_DEFAULT_CANCELLATION, &phy->priv.flags);
+>         phy->i2c_client = dev;
+>
+>         /* must precede all communication with the tpm */
+> --
+> 2.31.1
+>
