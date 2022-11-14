@@ -2,107 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A13628132
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F11628134
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:23:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235903AbiKNNXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
+        id S233548AbiKNNXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:23:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiKNNXI (ORCPT
+        with ESMTP id S230030AbiKNNXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:23:08 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFB6289
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:23:07 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id l11so17287174edb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:23:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HdjlbixNksyWUmSwVA0oszzukvQJyBdRdSXeK1Q7UgM=;
-        b=Voqp3oaFTueqHJ5jpTyX8MHk0ZEQn9jwK4nyyO0uhP+iTVeqdQKo/TXXxQmvVEBdPs
-         Sw+iGKIUvtqYYOgR8ZFhVsWwU9c9UGAn2jVLOADgMynXMR9S8b55F+Hkl9Ak5nDgDDQb
-         hJH08eEp53gOqcf5QzZ4w3yVVyoXcmy20HWIx+cpcyirc0MmNzXD0yYHFTR9kmEwebUR
-         OSI6EFp7MGMenJBOhgzAZ5DaRe1oI04e5wFHP3YWiQHPQCoQ7aIyiBmnPK3Btvjos1Bf
-         uKXhcGKHVb8TZSBpaqBIKbV9T7qsGpFfQneHeBnmnRoyFVs273eVwMDtRCpo2P8pQLpu
-         frfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HdjlbixNksyWUmSwVA0oszzukvQJyBdRdSXeK1Q7UgM=;
-        b=7KNuOXHo93nYGnKrpsYa7OiLeatQL9gDdSDEY4EofTzJb7e51OUREBDBE+WUxYG09Y
-         ugRfAza1zaZ75+l/0a9hZZWV4KL0xtAtKqAaTbi8inYVVQJPQZQs6j5Kbp+b21tS4zoO
-         jlYR52SWgkNTMK0eggnRcRoDz3MabfGNJS6pCCRZ1jpfojRORc4dpeLk2ieYud9dEtov
-         AHOrhnF+jdNQ5EVKFn62ixgCkXG9ON4dVAFPLmDOq7R2EUQe1obVo/qediPI7GAZ96Fa
-         6nR/URE076s4BeAA+0D51ZokRaRec0iBiBW+bLI9NrcZtOUyMxzcRulYiUaOCnuA+zs4
-         7bzw==
-X-Gm-Message-State: ANoB5pk8yDd2SDZiw6OPl1TR4VciyHf0BA+d3daqsK0KGR+ZVYGbVXg8
-        tgl00+qVDw5ruI970EsvUZQALNzceh55+p9iAQQH1Q==
-X-Google-Smtp-Source: AA0mqf6K9UdLNkuoM1yV47dlYKLSc/9xdfJA+YA8IMuwuRw1bt7cE7J5tOY7mfFjmQ/o8fEmPNLBHZ7WiHiycebyGkQ=
-X-Received: by 2002:a05:6402:2931:b0:463:ce05:c00e with SMTP id
- ee49-20020a056402293100b00463ce05c00emr11088202edb.46.1668432185632; Mon, 14
- Nov 2022 05:23:05 -0800 (PST)
+        Mon, 14 Nov 2022 08:23:16 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB4D289;
+        Mon, 14 Nov 2022 05:23:15 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7B4CA1FFC2;
+        Mon, 14 Nov 2022 13:23:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668432194; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xgngAVDEPp8EfnFAkGovAM0IoAOtRXmUhxn9JytQBRU=;
+        b=QaX1bmsOwlS7n+JHBoAG9LGcDphDpD6JHyPsfBZnTZpRnkwPy50oc94lQX93JkzCUOIR7c
+        XlyIR6OmEG0zGvAo/0TItE9ToCl/wB3Y/aCe0pi1TsHVxnJj3YiFcQ8BfwL73jBd3nXQGr
+        QUEqg5/YToKNWcVxX7xTt9KOIpHWcvo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668432194;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xgngAVDEPp8EfnFAkGovAM0IoAOtRXmUhxn9JytQBRU=;
+        b=h7dIhAmyLiiT2zNqT0H+llkwqR1qNlDpSX2CWc2v2sGymNc9ER0iOkQCKPIPSGfFtPN/QW
+        5xMO/d3cfy0ISCBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F07D13A8C;
+        Mon, 14 Nov 2022 13:23:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VWYrF0JBcmN0RQAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 14 Nov 2022 13:23:14 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 8FFDDA0709; Mon, 14 Nov 2022 14:23:13 +0100 (CET)
+Date:   Mon, 14 Nov 2022 14:23:13 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Gabriel Krisman Bertazi <krisman@suse.de>
+Cc:     axboe@kernel.dk, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Liu Song <liusong@linux.alibaba.com>, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH] sbitmap: Use single per-bitmap counting to wake up
+ queued tags
+Message-ID: <20221114132313.5cqhvzxarm7rwvmt@quack3>
+References: <20221105231055.25953-1-krisman@suse.de>
 MIME-Version: 1.0
-References: <20221111094106.18486-1-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221111094106.18486-1-angelogioacchino.delregno@collabora.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 14 Nov 2022 14:22:54 +0100
-Message-ID: <CACRpkdZ_FYHBn+d9Q4w3U4=CzCaC0U81n3kJeCDKwKtSi9+RPQ@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: mediatek: Fix EINT pins input debounce time configuration
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     sean.wang@kernel.org, matthias.bgg@gmail.com,
-        nfraprado@collabora.com, marijn.suijten@somainline.org,
-        jami.kettunen@somainline.org, linux-mediatek@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221105231055.25953-1-krisman@suse.de>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 10:41 AM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
+Gabriel, when looking through this patch, I've noticed we can loose wakeups
+after your latest simplifications. See below for details:
 
-> The External Interrupt Controller (EINTC) on all of the supported
-> MediaTek SoCs does support input debouncing, but not all of them
-> index the debounce time values (DBNC_SETTING registers) the same way.
->
-> Before this change, in some cases, as an example, requesting a debounce
-> time of 16 milliseconds would mistakenly set the relative DBNC_SETTING
-> register to 0x2, resulting in a way shorter debounce time of 500uS.
->
-> To fix the aforementioned issue, define three different debounce_time
-> arrays, reflecting the correct register index for each value and for
-> each register index variant, and make sure that each SoC pinctrl
-> driver uses the right one.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On Sat 05-11-22 19:10:55, Gabriel Krisman Bertazi wrote:
+> @@ -587,7 +571,7 @@ static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue *sbq)
+>  	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
+>  		struct sbq_wait_state *ws = &sbq->ws[wake_index];
+>  
+> -		if (waitqueue_active(&ws->wait) && atomic_read(&ws->wait_cnt)) {
+> +		if (waitqueue_active(&ws->wait)) {
+>  			if (wake_index != atomic_read(&sbq->wake_index))
+>  				atomic_set(&sbq->wake_index, wake_index);
+>  			return ws;
 
-Patch applied for v6.1 fixes.
+Neither sbq_wake_ptr() nor sbitmap_queue_wake_up() now increment the
+wake_index after performing the wakeup. Thus we would effectively keep
+waking tasks from a single waitqueue until it becomes empty and only then
+go for the next waitqueue. This creates unnecessary unfairness in task
+wakeups and even possible starvation issues. So I think we need to advance
+wake_index somewhere. Perhaps here before returning waitqueue.
 
-> I know, this commit is a good candidate to get a Fixes tag, but I
-> couldn't find a way to actually do that cleanly...
+> @@ -599,83 +583,31 @@ static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue *sbq)
+>  	return NULL;
+>  }
+>  
+> -static bool __sbq_wake_up(struct sbitmap_queue *sbq, int *nr)
+> +void sbitmap_queue_wake_up(struct sbitmap_queue *sbq, int nr)
+>  {
+> +	unsigned int wake_batch = READ_ONCE(sbq->wake_batch);
+> +	struct sbq_wait_state *ws = NULL;
+> +	unsigned int wakeups;
+>  
+> +	if (!atomic_read(&sbq->ws_active))
+> +		return;
+>  
+> +	atomic_add(nr, &sbq->completion_cnt);
+> +	wakeups = atomic_read(&sbq->wakeup_cnt);
+>  
+>  	do {
+> +		if (atomic_read(&sbq->completion_cnt) - wakeups < wake_batch)
+> +			return;
+>  
+> +		if (!ws) {
+> +			ws = sbq_wake_ptr(sbq);
+> +			if (!ws)
+> +				return;
+> +		}
+> +	} while (!atomic_try_cmpxchg(&sbq->wakeup_cnt,
+> +				     &wakeups, wakeups + wake_batch));
+>  
+>  	wake_up_nr(&ws->wait, wake_batch);
 
-I don't super much care. If you need this backported to stable,
-suggest it to linux-stable once it hits Torvalds' tree.
+Now this may be also problematic - when we were checking the number of woken
+waiters in the older version of the patch (for others: internal version of
+the patch) this was fine but now it may happen that the 'ws' we have
+selected has no waiters anymore. And in that case we need to find another
+waitqueue because otherwise we'd be loosing too many wakeups and we could
+deadlock. So I think this rather needs to be something like:
 
-> The only way would be to split this in one commit for each pinctrl
-> driver, but that would result in a series containing 21 commits, of
-> which 20 are one-liners... and that didn't look right.
+	do {
+		if (atomic_read(&sbq->completion_cnt) - wakeups < wake_batch)
+			return;
+	} while (!atomic_try_cmpxchg(&sbq->wakeup_cnt,
+				     &wakeups, wakeups + wake_batch));
 
-Ugh no this is way better.
+	do {
+		ws = sbq_wake_ptr(sbq);
+		if (!ws)
+			return;
+	} while (!wake_up_nr(&ws->wait, wake_batch));
 
-Thanks for fixing this!
+with our original version of wake_up_nr() returning number of woken
+waiters. What do you think?
 
-Yours,
-Linus Walleij
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
