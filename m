@@ -2,173 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FEB627461
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 02:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0020762746E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 03:08:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235576AbiKNB6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 20:58:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
+        id S235592AbiKNCIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 21:08:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235589AbiKNB57 (ORCPT
+        with ESMTP id S229692AbiKNCIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 20:57:59 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0ECB86F
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 17:57:58 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id ACDC8320091A;
-        Sun, 13 Nov 2022 20:57:57 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sun, 13 Nov 2022 20:57:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1668391077; x=1668477477; bh=zX
-        +HYuy4GvidniLAd+lpqew4/s4ii686Qj3H9Jd2qG0=; b=rXsRbMYFTaUdR2U+Mk
-        VNvxUrkjZXlEk44QuPfO3v95apqzkYDbTcuAIKi3cFSmP1R5I36syDaXMzUiRXV5
-        ZUG23SwDwoYqTOgIQt7vg0VHxW/GFVMDFVeoQSX5WU3iAAln+nsR8Q5Bni10xOaX
-        B9M+OAK5vMjbNdi7pRHiBVwVvw7y1j0WyajuPvNXe7Zz4PPjTQEaLOnmvpLChWLW
-        5Qk/M3W2QI0t99TuVFL04WYT5ysYIs4q5r/B1QuF3lVUzgOjhm3yJoFDmy1aepYi
-        jVupkZ6508nbFlesKkfDqFbbhzMzUE3O6HnCuo3dGPf7m1foGPbVFgxwxm4j0ana
-        TIqw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1668391077; x=1668477477; bh=zX+HYuy4Gvidn
-        iLAd+lpqew4/s4ii686Qj3H9Jd2qG0=; b=MH1Dg8+TQL2ERs5dtT00JLdXcQfB6
-        c2fJd7iyyNYKiV/keuHUtO6s2q1mAAs6HS9VQfpUKkBh/fzKgWvN3c3XMfGqpLoX
-        IQqwXXVRlCKH08XEQswZG0lmo8pkgPjSYIa6qxzlanDSmxgWxSE1bVCDRvj0Ya/j
-        NCtIEjGEjLozLrclr0QJIcrAPF9XoQjw+Z3YTnPiOmjimezhLNMWUalzf7c1jF/o
-        G6jTQOKLHpk2TEMvbpSxskt+xPzUJbh5Ri0sfmfdMOmUSGyTQlbqSloJo1lL7MQ/
-        l6OFLXUZTm1jtwlWJwRzZFyvTgu19aeGBsM+ciohTPYAFEQrIpP6ClF1w==
-X-ME-Sender: <xms:paBxYwzFzBpsmYA5G3d8_mdiQ5Rp9N1A74OMDdOLtxX2cusov1IEVg>
-    <xme:paBxY0TKPrle0i3DLAcjyf1VGiLiHt35tyo2Um1x6kqNg_9GMxe9xBVnf_JurIhif
-    7kPPvORqZA3yDjkTw>
-X-ME-Received: <xmr:paBxYyWPha9XnSmkJHXJgmw8GvDXF4tA3lpT_I5y-SEppvRyT7eYInOX2cZMbcUc9DLpECB1gvTLoqm_9vwwTtkU62ndZoffwBNkZNItBoWvlc9vfIwACuyL1_zDBb99ynqm1Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedugdegtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
-    feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:paBxY-iceAsZOzFz5ixstXpEwbG4H_4jWxADGwbtl8vDPr-SVoN3Uw>
-    <xmx:paBxYyADd1F0DtuiYWLGr2rwjJGyNPRYnuh22E9bD4PjxR-wULLfcg>
-    <xmx:paBxY_Kw4b4jj1WmI9RqoFrFSJo-ShX6XSAnMUIC-H5VWiDohh1dNQ>
-    <xmx:paBxY02FZdzNDgWMItFs0hdh2CaUWFJYHKbI7YmymrC5UaWFapnLFA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 13 Nov 2022 20:57:56 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev,
-        Andre Przywara <andre.przywara@arm.com>,
-        Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v3 3/3] bus: sunxi-rsb: Clear interrupt status before each transfer
-Date:   Sun, 13 Nov 2022 19:57:49 -0600
-Message-Id: <20221114015749.28490-4-samuel@sholland.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221114015749.28490-1-samuel@sholland.org>
-References: <20221114015749.28490-1-samuel@sholland.org>
+        Sun, 13 Nov 2022 21:08:21 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDEAE00B;
+        Sun, 13 Nov 2022 18:08:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668391700; x=1699927700;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=NKqfqlFULkV8Q2z4VRHX+tuirm9OvbwAxEukolp0ARU=;
+  b=kqNqfXo19VCPZJRNbzF0s2nVgZAw10WsiJIZ1AP2awyIQ5WqAYsECEBv
+   ov3wBs/XzY1AbWLZ6pfpuDosD+6tJjUybU0xYQArCCpPpXG/f9EZxrnvs
+   QPdMb4q6ZKvtoxxoPnw0vCfSLezRufb9bB2lqVpo7mvrntYcnH/VRYFXh
+   lDt9w6SRNHoINQyCRDmEyC0bFGmDRqY80F3LXI+TpLskPaNAAA+XZhksl
+   OKjNpOccqJxXDrDInfVoTGoa3w7jHZHODAYdjzR9Plp+k9t+z7owDkEEZ
+   6vp/7wb1tJtIWiWhI5v7RX3Fcqr3I5ibpx5hGllERunUbGZtb5OFrRy3h
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="338645836"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="338645836"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 18:08:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="671380952"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="671380952"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga001.jf.intel.com with ESMTP; 13 Nov 2022 18:08:14 -0800
+Date:   Mon, 14 Nov 2022 09:58:51 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 02/12] mfd: intel-m10-bmc: Create m10bmc_platform_info
+ for type specific info
+Message-ID: <Y3Gg29pGm4DwjOgI@yilunxu-OptiPlex-7050>
+References: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com>
+ <20221108144305.45424-3-ilpo.jarvinen@linux.intel.com>
+ <Y24gJ7fIsUPmhzY2@yilunxu-OptiPlex-7050>
+ <752a1dc-fae6-4431-41cf-a6deaf157ad3@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <752a1dc-fae6-4431-41cf-a6deaf157ad3@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the driver clears the interrupt status bits after anything
-could have set them. However, this requires duplicating the same logic
-in several places.
+On 2022-11-11 at 13:49:38 +0200, Ilpo Järvinen wrote:
+> On Fri, 11 Nov 2022, Xu Yilun wrote:
+> 
+> > On 2022-11-08 at 16:42:55 +0200, Ilpo Järvinen wrote:
+> > > BMC type specific info is currently set by a switch/case block. The
+> > > size of this info is expected to grow as more dev types and features
+> > > are added which would have made the switch block bloaty.
+> > > 
+> > > Store type specific info into struct and place them into .driver_data
+> > > instead because it makes things a bit cleaner.
+> > > 
+> > > Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > > ---
+> > >  drivers/mfd/intel-m10-bmc.c       | 50 +++++++++++++++++--------------
+> > >  include/linux/mfd/intel-m10-bmc.h | 14 +++++++++
+> > >  2 files changed, 41 insertions(+), 23 deletions(-)
+> > > 
+> > > diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
+> > > index ee167c5dcd29..762808906380 100644
+> > > --- a/drivers/mfd/intel-m10-bmc.c
+> > > +++ b/drivers/mfd/intel-m10-bmc.c
+> > > @@ -156,15 +156,17 @@ static int check_m10bmc_version(struct intel_m10bmc *ddata)
+> > >  static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> > >  {
+> > >  	const struct spi_device_id *id = spi_get_device_id(spi);
+> > > +	const struct intel_m10bmc_platform_info *info;
+> > >  	struct device *dev = &spi->dev;
+> > > -	struct mfd_cell *cells;
+> > >  	struct intel_m10bmc *ddata;
+> > > -	int ret, n_cell;
+> > > +	int ret;
+> > >  
+> > >  	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
+> > >  	if (!ddata)
+> > >  		return -ENOMEM;
+> > >  
+> > > +	info = (struct intel_m10bmc_platform_info *)id->driver_data;
+> > > +	ddata->info = info;
+> > 
+> > Where to use the ddata->info?
+> 
+> In patch 5/12 there are many these constructs:
+> const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+> 
+> Now that I look though, this particular line is altered by the split patch 
+> 4/12 so it would be not strictly necessary to do it here. I'd prefer, 
+> however, still to add it here even if it's technically not used until 
+> after the split 5/12 patch because it very much logically belongs to this 
+> change.
 
-Instead of clearing the status flags in the interrupt handler, disable
-all further interrupts by clearing the RSB_CTRL_GLOBAL_INT_ENB bit.
-Then we can delay the status register write until the start of the next
-transfer, so it only has to be done in one place.
+It's good to me.
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+> 
+> > >  	ddata->dev = dev;
+> > >  
+> > >  	ddata->regmap =
+> > > @@ -183,24 +185,8 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> > >  		return ret;
+> > >  	}
+> > >  
+> > > -	switch (id->driver_data) {
+> > > -	case M10_N3000:
+> > > -		cells = m10bmc_pacn3000_subdevs;
+> > > -		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
+> > > -		break;
+> > > -	case M10_D5005:
+> > > -		cells = m10bmc_d5005_subdevs;
+> > > -		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
+> > > -		break;
+> > > -	case M10_N5010:
+> > > -		cells = m10bmc_n5010_subdevs;
+> > > -		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
+> > > -		break;
+> > > -	default:
+> > > -		return -ENODEV;
+> > > -	}
+> > > -
+> > > -	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, cells, n_cell,
+> > > +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
+> > > +				   info->cells, info->n_cells,
+> > >  				   NULL, 0, NULL);
+> > >  	if (ret)
+> > >  		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
+> > > @@ -208,10 +194,28 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> > >  	return ret;
+> > >  }
+> > >  
+> > > +static const struct intel_m10bmc_platform_info m10bmc_m10_n3000 = {
+> > > +	.type = M10_N3000,
+> > 
+> > Is the type enum still useful? Found no usage.
+> 
+> There's no use within context of this patch series. However, I think there 
+> might have been something depending on it in the changes that are not part 
+> of this series so I left it in place for now.
 
-Changes in v3:
- - Add a patch refactoring how the status bits are cleared
+I'm not sure how it would be used later. This patch is to eliminate the
+"switch (board type) case" block, but similar code is still to be added
+later?
 
- drivers/bus/sunxi-rsb.c | 20 +++++---------------
- 1 file changed, 5 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/bus/sunxi-rsb.c b/drivers/bus/sunxi-rsb.c
-index 3aa91aed3bf7..cb622e60897b 100644
---- a/drivers/bus/sunxi-rsb.c
-+++ b/drivers/bus/sunxi-rsb.c
-@@ -279,6 +279,7 @@ static int _sunxi_rsb_run_xfer(struct sunxi_rsb *rsb)
- 
- 	int_mask = RSB_INTS_LOAD_BSY | RSB_INTS_TRANS_ERR | RSB_INTS_TRANS_OVER;
- 	writel(int_mask, rsb->regs + RSB_INTE);
-+	writel(int_mask, rsb->regs + RSB_INTS);
- 	writel(RSB_CTRL_START_TRANS | RSB_CTRL_GLOBAL_INT_ENB,
- 	       rsb->regs + RSB_CTRL);
- 
-@@ -286,7 +287,6 @@ static int _sunxi_rsb_run_xfer(struct sunxi_rsb *rsb)
- 		timeout = readl_poll_timeout_atomic(rsb->regs + RSB_INTS,
- 						    status, (status & int_mask),
- 						    10, 100000);
--		writel(status, rsb->regs + RSB_INTS);
- 	} else {
- 		timeout = !wait_for_completion_io_timeout(&rsb->complete,
- 							  msecs_to_jiffies(100));
-@@ -296,12 +296,9 @@ static int _sunxi_rsb_run_xfer(struct sunxi_rsb *rsb)
- 	if (timeout) {
- 		dev_dbg(rsb->dev, "RSB timeout\n");
- 
--		/* abort the transfer */
-+		/* abort the transfer and disable interrupts */
- 		writel(RSB_CTRL_ABORT_TRANS, rsb->regs + RSB_CTRL);
- 
--		/* clear any interrupt flags */
--		writel(readl(rsb->regs + RSB_INTS), rsb->regs + RSB_INTS);
--
- 		return -ETIMEDOUT;
- 	}
- 
-@@ -503,15 +500,11 @@ EXPORT_SYMBOL_GPL(__devm_regmap_init_sunxi_rsb);
- static irqreturn_t sunxi_rsb_irq(int irq, void *dev_id)
- {
- 	struct sunxi_rsb *rsb = dev_id;
--	u32 status;
- 
--	status = readl(rsb->regs + RSB_INTS);
--	rsb->status = status;
-+	/* disable interrupts */
-+	writel(0, rsb->regs + RSB_CTRL);
- 
--	/* Clear interrupts */
--	status &= (RSB_INTS_LOAD_BSY | RSB_INTS_TRANS_ERR |
--		   RSB_INTS_TRANS_OVER);
--	writel(status, rsb->regs + RSB_INTS);
-+	rsb->status = readl(rsb->regs + RSB_INTS);
- 
- 	complete(&rsb->complete);
- 
-@@ -532,9 +525,6 @@ static int sunxi_rsb_init_device_mode(struct sunxi_rsb *rsb)
- 	if (reg & RSB_DMCR_DEVICE_START)
- 		ret = -ETIMEDOUT;
- 
--	/* clear interrupt status bits */
--	writel(readl(rsb->regs + RSB_INTS), rsb->regs + RSB_INTS);
--
- 	return ret;
- }
- 
--- 
-2.37.3
-
+Thanks,
+Yilun
