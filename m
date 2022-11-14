@@ -2,133 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602A6627598
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 06:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2C562759A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 06:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235617AbiKNFlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 00:41:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
+        id S235485AbiKNFof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 00:44:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235338AbiKNFlV (ORCPT
+        with ESMTP id S230441AbiKNFoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 00:41:21 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2058.outbound.protection.outlook.com [40.107.101.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC691659D;
-        Sun, 13 Nov 2022 21:41:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CyNq4W25DOREWO3lxE0X2nz84oFdyMATR9JQKy3deM2JTFqe7lRY3PKCn59Lm2l6ILgKlh3EoQn0VstUY2gIKhqlS9ECDd+Y7Tniey8EjzIWT2x8rBD9ZJEyHciCXebcnYaxpmtbxYpbp7JWKji7B1LdPzIyIKElm+5gJd4+GW35uEf1GqVspYzgajDwNttKSLzg5rZfzMPMCbXSw4knZjMdql1jC/6E6glSlTG6hVyQf/IGLnxAXTRAcI4ovzltOVavDmiJ8uL6uB2c2L+TcjtZylhlJepgb3OHa6pwMvqaocH6XpnaAzOGV4H6W//uS5Z6CMYI2+0aLomUxu3dzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qg8LHW1a1gmMbxTUjSBPVVzIGSUhuO9nq0XXzrz1gEM=;
- b=AU0feHxOJ9frKbIuwCxYlVHIa2Mkvprdzy7IVF3exVQrH+2Tv/uQm0fuBjIqmy+ynWwYkFMmOxyg02tZFy6GfgSfLDuHFXXMAHFBTg9f4sfsfQZKMX4l+1Wz1ZK046+V5us+XiptIY3A1dugNhQAhmHhzZB4iT/nz4jESjQmW4nTe8dYNUW0Aw2lRhHSow4ScgNnQ2UNkgvS/FRYaj3gvGEnS1+L9QD34E6nyKPOa93zIaoIQc047ycThSj4WwEZvVBdwWuibAMRmA58K4b1vvQAJXQTAS/MZXEGDqKnLeD9/oD22e1qb33ipaqyABaCTFqTx14SHSDYdPWvUgx+wQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qg8LHW1a1gmMbxTUjSBPVVzIGSUhuO9nq0XXzrz1gEM=;
- b=Qx4M97jU5FqWut60yQLA2ZF9de3sqXOrBqKBTB9/KDVDRBlksWChX9I9Ys+zK+b1FZ/FtQ1MRi9/i/C5XpYnzbrrBgq2cLRsJ/VKTrT0FQfPZaicr2IP18MsfYcyFf+5fQ9Vf61z7KW88yHJ9t4S7bO+ZhB5LqUgYGtM7qQ4Wpc=
-Received: from MW4PR03CA0324.namprd03.prod.outlook.com (2603:10b6:303:dd::29)
- by MN0PR12MB5978.namprd12.prod.outlook.com (2603:10b6:208:37d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
- 2022 05:41:18 +0000
-Received: from CO1NAM11FT061.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:dd:cafe::e4) by MW4PR03CA0324.outlook.office365.com
- (2603:10b6:303:dd::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17 via Frontend
- Transport; Mon, 14 Nov 2022 05:41:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT061.mail.protection.outlook.com (10.13.175.200) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5813.12 via Frontend Transport; Mon, 14 Nov 2022 05:41:17 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Sun, 13 Nov
- 2022 23:41:12 -0600
-From:   Meng Li <li.meng@amd.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Huang Rui <ray.huang@amd.com>,
-        <linux-kselftest@vger.kernel.org>
-CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        "Alex Deucher" <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        "Perry Yuan" <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
-        Meng Li <li.meng@amd.com>, kernel test robot <lkp@intel.com>
-Subject: [PATCH] cpufreq: amd-pstate: fix spdxcheck warnings for amd-pstate-ut.c
-Date:   Mon, 14 Nov 2022 13:40:37 +0800
-Message-ID: <20221114054037.2962372-1-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 14 Nov 2022 00:44:34 -0500
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1C5167D5
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 21:44:33 -0800 (PST)
+Received: by mail-wr1-f44.google.com with SMTP id y16so16085835wrt.12
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 21:44:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eahHoyYY2/MA8pX352vot2tyai1ojMXDBKok48YZJLI=;
+        b=eKXSSjy+TIdqTD4B/Z69fqT9zIeDuUSJ+/fIhx+lcLmPhhg/S6AixTVZar3WmstrCF
+         NQZFsK95xu2hidcKIzhcS0fUjOe9Pw2VqFbJD5fenLJ92Emevhff2eDHejAX9wN+5eBz
+         GK8fOozzunxWbm7kCqdW7mN/O7gEWwiabn6W261Ir/SUjT4P5blrXhlXwbUmHUqi2Muv
+         ik/a5zP1R/SgjGVMFkuslwIdxxqc3aGpaXFjNAAetIMDWHXyOOVefVkttQ8gB/TgUnm9
+         +fDqe6ONB6CrXxvziY0IHhLajEMVs1B4tN8sJTB6efuGfyfzLf/A8WC8zD2Y08DUlG06
+         wngg==
+X-Gm-Message-State: ANoB5pkIbw1gIZejmrfc9vLgLZeORnUx7UKLjhatGP2IGOK2f3yyTxk+
+        j5Aqy8AfX4JYPN4Cq0NGV5o=
+X-Google-Smtp-Source: AA0mqf6Ye/k0Iru+IohDyksDVsPSSjtFPeeXH3+W+z6/WybcP+wQwrUU7HnUtAcYgT0rdSW/TLCe4w==
+X-Received: by 2002:a5d:4704:0:b0:234:d11b:5f7a with SMTP id y4-20020a5d4704000000b00234d11b5f7amr6624244wrq.311.1668404671582;
+        Sun, 13 Nov 2022 21:44:31 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id fc18-20020a05600c525200b003b49bd61b19sm18262140wmb.15.2022.11.13.21.44.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Nov 2022 21:44:31 -0800 (PST)
+Message-ID: <70fe0136-87ab-ed6c-8d65-d57ecbdcdf2f@kernel.org>
+Date:   Mon, 14 Nov 2022 06:44:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT061:EE_|MN0PR12MB5978:EE_
-X-MS-Office365-Filtering-Correlation-Id: a0797486-e112-4274-8325-08dac602d9ef
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3+CFI8mIyfWex1MYNvtHBxhsawkQ8yQNkA1GPZHG3Un8tVhe8ArH5fBGixJAQIuhFFX0FYgnNaOSA69euEhgMi6zEICGqpO8O69UzD4qLTiNM1hfozWrBTzWU9+1Oq7o8xlx7oL67afrbtyXTTkrN6KgnSN6E0QJEc22W1p4aEWdzopBVqBM0bIrZ3JVX8e2Iuk0Sv8vJTewdhMCOR7JSi1HT0F9w4YZQtsugYcIzQyQ/+5t8KsWWoFLsuF5VQchMvg9ZJb1scIYkMqRvXrXCxfAYBjFCWICg+2mzSm3aCMpS26L+1WGhuaMtGHrnUAbWT8uJzdlv1WjBFl2EIG0dEeVhgYlNcOLEOAjXo+fTIkV+x142110Fqtnd/DB1mUaG3c4XQSg2SbegByBWA/tvL6doU6o+BECD7qtk4y3dOxmLX0s7KWcvrneLW0hzyAtQi6h69orIPdnv+Buir6bSdf9b7abnPJeOAqiM4XQ0yVheBCVTSa35Lf+DOivFUUBjir8pr6mfXxhPjmKVOgwm0gPvViXgdyPTNFAIsGiljBGmTW9mA+peYudZcQNiQZXWL80s6mGHAy6QiaZ2r9gGQHcojb8y2jaLtX4Tlr1Co0ZNK3h8j/9QtOzrzFULjyfEtB88CNfROEdcyIlQIf4iYl7BWXpbXhljZv7K0YEAne4nQBwUU3RpU5M+BtvTs4/dDJFynXjNYfMigJY1euowBZaiXmw+qrKmzcnT073B0YofqFDF4xRN7dEMY9ZxRrPC6FMWxJubXQ6MjWBw0tyz56p4oJSHJFcaeMgXR0a/jg=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(136003)(376002)(39860400002)(451199015)(36840700001)(40470700004)(46966006)(86362001)(8936002)(82310400005)(40460700003)(36756003)(2616005)(40480700001)(41300700001)(70206006)(70586007)(8676002)(336012)(47076005)(4326008)(426003)(4744005)(5660300002)(16526019)(1076003)(186003)(6666004)(478600001)(26005)(110136005)(54906003)(7696005)(316002)(82740400003)(81166007)(356005)(83380400001)(2906002)(36860700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 05:41:17.3370
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0797486-e112-4274-8325-08dac602d9ef
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT061.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5978
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] tty: synclink_gt: release resources when synclink_gt
+ driver open failed
+Content-Language: en-US
+To:     Zhengchao Shao <shaozhengchao@huawei.com>,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org
+Cc:     akpm@linux-foundation.org, paulkf@microgate.com,
+        weiyongjun1@huawei.com, yuehaibing@huawei.com
+References: <20221114010734.314910-1-shaozhengchao@huawei.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20221114010734.314910-1-shaozhengchao@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-spdxcheck warnings: (new ones prefixed by >>)
->> drivers/cpufreq/amd-pstate-ut.c: 1:28 Invalid License ID:
-GPL-1.0-or-later
-   drivers/spi/spi-gxp.c: 1:35 Invalid token: =or-later
+On 14. 11. 22, 2:07, Zhengchao Shao wrote:
+> When synclink_gt driver open failed, it doesn't release resources.
 
-Signed-off-by: Meng Li <li.meng@amd.com>
-Reported-by: kernel test robot <lkp@intel.com>
----
- drivers/cpufreq/amd-pstate-ut.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+But hdlc_close() does. Now, you call it (apart from the TTY layer) too.
 
-diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
-index e4a5b4d90f83..7f3fe2048981 100644
---- a/drivers/cpufreq/amd-pstate-ut.c
-+++ b/drivers/cpufreq/amd-pstate-ut.c
-@@ -1,4 +1,4 @@
--// SPDX-License-Identifier: GPL-1.0-or-later
-+// SPDX-License-Identifier: GPL-2.0-or-later
- /*
-  * AMD Processor P-state Frequency Driver Unit Test
-  *
+> Compile tested only.
+
+Hmm, NACK.
+
+> Fixes: d4c63b7c7450 ("synclink_gt fix module reference")
+> Fixes: 705b6c7b34f2 ("[PATCH] new driver synclink_gt")
+> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> ---
+>   drivers/tty/synclink_gt.c | 13 ++++++++++---
+>   1 file changed, 10 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
+> index 25e9befdda3a..4dea52486410 100644
+> --- a/drivers/tty/synclink_gt.c
+> +++ b/drivers/tty/synclink_gt.c
+> @@ -1441,14 +1441,15 @@ static int hdlcdev_open(struct net_device *dev)
+>   	/* generic HDLC layer open processing */
+>   	rc = hdlc_open(dev);
+>   	if (rc)
+> -		return rc;
+> +		goto err_open;
+>   
+>   	/* arbitrate between network and tty opens */
+>   	spin_lock_irqsave(&info->netlock, flags);
+>   	if (info->port.count != 0 || info->netcount != 0) {
+>   		DBGINFO(("%s hdlc_open busy\n", dev->name));
+>   		spin_unlock_irqrestore(&info->netlock, flags);
+> -		return -EBUSY;
+> +		rc = -EBUSY;
+> +		goto err_open_busy;
+>   	}
+>   	info->netcount=1;
+>   	spin_unlock_irqrestore(&info->netlock, flags);
+> @@ -1458,7 +1459,7 @@ static int hdlcdev_open(struct net_device *dev)
+>   		spin_lock_irqsave(&info->netlock, flags);
+>   		info->netcount=0;
+>   		spin_unlock_irqrestore(&info->netlock, flags);
+> -		return rc;
+> +		goto err_open_busy;
+>   	}
+>   
+>   	/* assert RTS and DTR, apply hardware settings */
+> @@ -1478,6 +1479,12 @@ static int hdlcdev_open(struct net_device *dev)
+>   	else
+>   		netif_carrier_off(dev);
+>   	return 0;
+> +
+> +err_open_busy:
+> +	hdlc_close(dev);
+> +err_open:
+> +	module_put(THIS_MODULE);
+> +	return rc;
+>   }
+>   
+>   /**
+
 -- 
-2.34.1
+js
+suse labs
 
