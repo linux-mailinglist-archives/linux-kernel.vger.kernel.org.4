@@ -2,130 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEBA96284F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEFC62850F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236620AbiKNQVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:21:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
+        id S236816AbiKNQW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:22:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236458AbiKNQUz (ORCPT
+        with ESMTP id S237477AbiKNQWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:20:55 -0500
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9A965C6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:20:54 -0800 (PST)
-Received: by mail-wm1-f42.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso11055756wme.5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:20:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aimDqY0RjB+gPNJoEJ+Cxlak9hzcynx+8kIMR7cwNXg=;
-        b=Oo1TZik5Yj/kSw42mUBhFqikMRXd0ud4/4zhVo3uhtZ6ssIQqpo6qeQ5iC7lZ3SuLX
-         d59ww4b711eFEncJL1DYyULng3v4+utn8uBxJ/4ieZwx2soFY5zUXF3aSNEIL955qlcs
-         n/ewbjNWe2LLJXnKzzamwL3K45yMD3JiqZ1kQQ/2yfugS/urM1Cd+vdtHRGUVR6JvwJC
-         Tz1GNHWL1YhWt2Q6nxQj1SLT6p2jufyXfGUMOCkYblDf+l25ZFXRSG4lONLO1Z2K7taz
-         BPndwrHSsT5hPKQ5d5fWsYL8kP9UIUlVK43tV/QB+SzsDctB4vkynyO1bh2Wb6CHEGCP
-         5P0w==
-X-Gm-Message-State: ANoB5pmQJK1ZXKs32/P0nvtZx9aD+C2cR1B0dxFAmtuzt7RASqSy2AXt
-        5Up2Ktlc0uTTJBWxdxJ3H74=
-X-Google-Smtp-Source: AA0mqf4ZHpEl09T5pIhdlQgRtZ6B5N9kvCzDfoD4OqCmANtXgjpE2X3W8cWsDk92VrkNn24KbhGe8Q==
-X-Received: by 2002:a05:600c:3516:b0:3cf:8952:300c with SMTP id h22-20020a05600c351600b003cf8952300cmr8666627wmq.51.1668442852457;
-        Mon, 14 Nov 2022 08:20:52 -0800 (PST)
-Received: from google.com ([51.154.17.58])
-        by smtp.gmail.com with ESMTPSA id p13-20020adfe60d000000b00236e9755c02sm10062259wrm.111.2022.11.14.08.20.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 08:20:52 -0800 (PST)
-Date:   Mon, 14 Nov 2022 17:20:50 +0100
-From:   Patrick Bellasi <patrick.bellasi@matbug.net>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
-        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
-        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
-        yu.c.chen@intel.com, youssefesmat@chromium.org,
-        joel@joelfernandes.org
-Subject: Re: [PATCH v8 6/9] sched/fair: Add sched group latency support
-Message-ID: <Y3Jq4gBB5+Qg67u7@google.com>
-References: <20221110175009.18458-1-vincent.guittot@linaro.org>
- <20221110175009.18458-7-vincent.guittot@linaro.org>
+        Mon, 14 Nov 2022 11:22:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E44C5F77
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:21:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668442901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=b5pWgKtpfIELeX1FxEhoLqe/KwJwZ2Jjvji8hMgQLg8=;
+        b=eSx1B9XLc3iGxR9XT17jj0sDP82OZ+B830ywqWgXfmvS1v+Vm9T8Z4McJ8Sic+A8vx5KTe
+        +1UtWiJDdi3Ib6f9PLs6aYC64tLGFUAfi2tkADVpIpc54PCtKkL/QFOwuKTaXz4dAGrU7g
+        zUCW4umzAe5NXa6zff9xISOIQn8s0tE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-336-3lcizJ8QMdWmUZcdYS_JTg-1; Mon, 14 Nov 2022 11:21:37 -0500
+X-MC-Unique: 3lcizJ8QMdWmUZcdYS_JTg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6C9A029AA3B2;
+        Mon, 14 Nov 2022 16:21:36 +0000 (UTC)
+Received: from [10.22.9.229] (unknown [10.22.9.229])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CC55AC15BB3;
+        Mon, 14 Nov 2022 16:21:35 +0000 (UTC)
+Message-ID: <8c3757ae-1aeb-49a4-47af-598d1d4737ea@redhat.com>
+Date:   Mon, 14 Nov 2022 11:21:33 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110175009.18458-7-vincent.guittot@linaro.org>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ext4_enable_quotas
+Content-Language: en-US
+To:     Theodore Ts'o <tytso@mit.edu>,
+        syzbot <syzbot+ea70429cd5cf47ba8937@syzkaller.appspotmail.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com,
+        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+References: <0000000000006a74dd05e9931449@google.com>
+ <000000000000073a4a05ed620676@google.com> <Y3Jb1Wcs/mQlZP32@mit.edu>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Y3Jb1Wcs/mQlZP32@mit.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent,
+On 11/14/22 10:16, Theodore Ts'o wrote:
+> +jaeguk,chao,peterz,mingo,longman,boqun.feng (F2FS and Lockdep maintainers)
+>
+> On Sun, Nov 13, 2022 at 02:55:47PM -0800, syzbot wrote:
+>> syzbot has found a reproducer for the following issue on:
+>>
+>> HEAD commit:    af7a05689189 Merge tag 'mips-fixes_6.1_1' of git://git.ker..
+>> git tree:       upstream
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=175bb059880000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=cbbe7c32024f5b72
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=ea70429cd5cf47ba8937
+>> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10930249880000
+>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11af96ae880000
+> This looks like it's either a f2fs or lockdep bug.  To trigger the
+> crash, the reproducer is mounting and unmounting the f2fs file system
+> a huge number of times, and then ext4 calls lockdep_set_subclass which
+> then triggers a KASAN report:
+>
+> BUG: KASAN: slab-out-of-bounds in lockdep_set_quota_inode fs/ext4/super.c:6803 [inline]
+>
+> On fs/ext4/super.c:6803 is the call to lockdep_set_subclass:
+>
+> 	lockdep_set_subclass(&ei->i_data_sem, subclass);
+>
+> So the KASAN failure is coming from some kind of out-of-bounds pointer
+> dereference inside lockdep's internal data structures:
+>
+>   kasan_report+0xcd/0x100 mm/kasan/report.c:495
+>   lockdep_set_quota_inode fs/ext4/super.c:6803 [inline]
+>   ext4_quota_enable fs/ext4/super.c:6913 [inline]
+>   ext4_enable_quotas+0x577/0xcf0 fs/ext4/super.c:6940
+>   __ext4_fill_super fs/ext4/super.c:5500 [inline]
+>   ext4_fill_super+0x7ee4/0x8610 fs/ext4/super.c:5643
+>   get_tree_bdev+0x400/0x620 fs/super.c:1324
+>   vfs_get_tree+0x88/0x270 fs/super.c:1531
+>   do_new_mount+0x289/0xad0 fs/namespace.c:3040
+>   do_mount fs/namespace.c:3383 [inline]
 
-On 10-Nov 18:50, Vincent Guittot wrote:
+lockdep_set_subclass() should be translated into a call to 
+lockdep_init_map_type():
 
-[...]
+#define lockdep_set_subclass(lock, sub)                                 \
+         lockdep_init_map_type(&(lock)->dep_map, #lock, 
+(lock)->dep_map.key, sub,\
+(lock)->dep_map.wait_type_inner,          \
+(lock)->dep_map.wait_type_outer,          \
+                               (lock)->dep_map.lock_type)
 
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index be4a77baf784..a4866cd4e58c 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -1095,6 +1095,16 @@ All time durations are in microseconds.
->          values similar to the sched_setattr(2). This maximum utilization
->          value is used to clamp the task specific maximum utilization clamp.
->  
-> +  cpu.latency.nice
-> +	A read-write single value file which exists on non-root
-> +	cgroups.  The default is "0".
-> +
-> +	The nice value is in the range [-20, 19].
-> +
-> +	This interface file allows reading and setting latency using the
-> +	same values used by sched_setattr(2). The latency_nice of a group is
-> + used to limit the impact of the latency_nice of a task outside the
-> + group.
+All memory access should be within the bound of the given 
+"&ei->i_data_sem". Also lockdep_init_map_type() is not in the stack 
+trace. So it is not a problem within this lockdep_init_map_type() 
+function. So is it possible that the given inode pointer is invalid?
 
-This control model is not clear to me.
-
-It does not seem matching what we have for uclamp, where the cgroup values are
-used to restrict how much a task can ask or give (in terms of latency here).
-
-in the uclamp's requested-vs-effective values model:
-
-A) a task can "request" (or give up) latency as much as it likes
-
-B) the cgroup in which the task is in any moment limits wthe maximum
-   latency a task can "request" (or give up)
-
-C) the system wide knob set the "request" limit for the root cgroup an any task
-   not in a cgroup.
-
-This model seems to be what we should use here too.
-
-IOW, for each task compute an "effective" latency_nice value which is defined
-starting for a task "requested" latency value and by restricting this value
-based on the (B) cgroup value and the (C) system wide value.
-
-That's what we do in uclamp_eff_get():
-   https://elixir.bootlin.com/linux/v6.0/source/kernel/sched/core.c#L1484
-
-Why such a model cannot be used for latency_nice too?
-Am I missing something?
+Cheers,
+Longman
 
 
-Best,
-patrick
-
--- 
-#include <best/regards.h>
-
-Patrick Bellasi
