@@ -2,86 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBBB6282A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:33:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B26556282A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:34:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237084AbiKNOdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:33:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
+        id S236788AbiKNOeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:34:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237135AbiKNOcs (ORCPT
+        with ESMTP id S235948AbiKNOeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:32:48 -0500
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842032A712;
-        Mon, 14 Nov 2022 06:32:47 -0800 (PST)
-Received: by mail-wr1-f52.google.com with SMTP id w14so18584808wru.8;
-        Mon, 14 Nov 2022 06:32:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YCY5hqYU1SfTXWjQyYMV6/iKq7L1yppgMWYjdS1kJoY=;
-        b=zUd/BDFZ6QSuYffmaraR6cXXQGnPRFJpP9ZLqdGBz00W6pm97vWTOYiovBgt0Gs38a
-         xcgfqfdoK9N96zTTE+SS4ARAGfbRBURBIsVroLTBtMzzxcfSqy+plOGinVHV8ByRXjXk
-         ZpbOtrGK1cFEjEGAqpLLfC+zneFixUZQPH70aPVitCD2FsaTBPu4weRIafrF7HL3+yHZ
-         szu4mWHBkOk+Utx2k6J6oYOeJWtK+42eB6j4OHVALSTb5qOHIzn/qQX4aWrvFrEQeFvz
-         QOIbTvk9j911zVSClnIIP5e4XRR6lBtreD6FUmdFZo94y8t/X9j0lneCK4Lug4I1zWvy
-         xJ7g==
-X-Gm-Message-State: ANoB5pnJ8k7u4bXxs/ggEFoWiVhNgSGsv4npNGdzfJOU7QJlLDvpnzgF
-        XdaCedlXJWc3HoEq/+ONzUQ=
-X-Google-Smtp-Source: AA0mqf44IOc5pBuohngXoHzggcsR7YAaWDyqU68BandfFZcF4YWXfAEJc2IF2+LorP2JCqRjywxesA==
-X-Received: by 2002:adf:f342:0:b0:236:57cf:1b6f with SMTP id e2-20020adff342000000b0023657cf1b6fmr7859753wrp.153.1668436365814;
-        Mon, 14 Nov 2022 06:32:45 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id g4-20020a5d4884000000b002383e977920sm9651659wrq.110.2022.11.14.06.32.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 06:32:45 -0800 (PST)
-Date:   Mon, 14 Nov 2022 14:32:43 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Wei Liu <wei.liu@kernel.org>
-Subject: Re: [PATCH v1 27/28] rust: types: add `Either` type
-Message-ID: <Y3JRi2cn77rzunaW@liuwe-devbox-debian-v2>
-References: <20221110164152.26136-1-ojeda@kernel.org>
- <20221110164152.26136-28-ojeda@kernel.org>
+        Mon, 14 Nov 2022 09:34:07 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F3028D;
+        Mon, 14 Nov 2022 06:34:06 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 09BD92007A;
+        Mon, 14 Nov 2022 14:34:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668436445; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bvn13rfdfmvV1YQvbwuoN+ga+7VR2YZHLfDOkPJnpKQ=;
+        b=Dg9oJu3a7HlQzF2fqyGJ0iU2JonKmI5Ux35yTs50cmGX8PQi3huYmg1RLQwTSi4+lCeY6h
+        VCPhbwi8HFf2Qg1RGvhfePPU3OnOySTI/sc4OpEeg3cPMXBq0KPsL5tG6+rvrscPVaudby
+        tocqHcpgVjB0cXh10ywW6ydZRThYcLY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668436445;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bvn13rfdfmvV1YQvbwuoN+ga+7VR2YZHLfDOkPJnpKQ=;
+        b=d463NL2mlAxK5hgLZJgILG0wG9v64ivh4KNOHjQ/dmeZ4zfSySJvzi/0QKBX6qAMuPVUhj
+        FIXAG/td0NOeOACA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EFCA913A92;
+        Mon, 14 Nov 2022 14:34:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3/+LOtxRcmOPcAAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 14 Nov 2022 14:34:04 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 8119AA0709; Mon, 14 Nov 2022 15:34:04 +0100 (CET)
+Date:   Mon, 14 Nov 2022 15:34:04 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Gabriel Krisman Bertazi <krisman@suse.de>
+Cc:     Jan Kara <jack@suse.cz>, axboe@kernel.dk,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Liu Song <liusong@linux.alibaba.com>
+Subject: Re: [PATCH] sbitmap: Advance the queue index before waking up the
+ queue
+Message-ID: <20221114143404.c47lvnbfihz5tdj5@quack3>
+References: <20221105231055.25953-1-krisman@suse.de>
+ <20221114132313.5cqhvzxarm7rwvmt@quack3>
+ <87wn7xk46u.fsf_-_@gbertazi.udp.ovpn1.prg.suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221110164152.26136-28-ojeda@kernel.org>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <87wn7xk46u.fsf_-_@gbertazi.udp.ovpn1.prg.suse.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 05:41:39PM +0100, Miguel Ojeda wrote:
-> From: Wedson Almeida Filho <wedsonaf@gmail.com>
+On Mon 14-11-22 09:20:57, Gabriel Krisman Bertazi wrote:
+> Jan Kara <jack@suse.cz> writes:
 > 
-> Introduce the new `types` module of the `kernel` crate with
-> `Either` as its first type.
+> > Gabriel, when looking through this patch, I've noticed we can loose wakeups
+> > after your latest simplifications. See below for details:
+> >
+> > On Sat 05-11-22 19:10:55, Gabriel Krisman Bertazi wrote:
+> >> @@ -587,7 +571,7 @@ static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue *sbq)
+> >>  	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
+> >>  		struct sbq_wait_state *ws = &sbq->ws[wake_index];
+> >>  
+> >> -		if (waitqueue_active(&ws->wait) && atomic_read(&ws->wait_cnt)) {
+> >> +		if (waitqueue_active(&ws->wait)) {
+> >>  			if (wake_index != atomic_read(&sbq->wake_index))
+> >>  				atomic_set(&sbq->wake_index, wake_index);
+> >>  			return ws;
+> >
+> > Neither sbq_wake_ptr() nor sbitmap_queue_wake_up() now increment the
+> > wake_index after performing the wakeup. Thus we would effectively keep
+> > waking tasks from a single waitqueue until it becomes empty and only then
+> > go for the next waitqueue. This creates unnecessary unfairness in task
+> > wakeups and even possible starvation issues. So I think we need to advance
+> > wake_index somewhere. Perhaps here before returning waitqueue.
 > 
-> `Either<L, R>` is a sum type that always holds either a value
-> of type `L` (`Left` variant) or `R` (`Right` variant).
+> right. This is indeed a problem.  what do you think of the patch below?
 > 
-> For instance:
+> > Now this may be also problematic - when we were checking the number of woken
+> > waiters in the older version of the patch (for others: internal version of
+> > the patch) this was fine but now it may happen that the 'ws' we have
+> > selected has no waiters anymore. And in that case we need to find another
+> > waitqueue because otherwise we'd be loosing too many wakeups and we could
+> > deadlock. So I think this rather needs to be something like:
+> >
+> > 	do {
+> > 		if (atomic_read(&sbq->completion_cnt) - wakeups < wake_batch)
+> > 			return;
+> > 	} while (!atomic_try_cmpxchg(&sbq->wakeup_cnt,
+> > 				     &wakeups, wakeups + wake_batch));
+> >
+> > 	do {
+> > 		ws = sbq_wake_ptr(sbq);
+> > 		if (!ws)
+> > 			return;
+> > 	} while (!wake_up_nr(&ws->wait, wake_batch));
+> >
+> > with our original version of wake_up_nr() returning number of woken
+> > waiters. What do you think?
 > 
->     struct Executor {
->         queue: Either<BoxedQueue, &'static Queue>,
->     }
-> 
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> [Reworded, adapted for upstream and applied latest changes]
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> I agree, and it wouldn't happen with the wake_up_nr patch we had before.
+> I will revive it quickly and follow up.  But, in this case, I want to be
+> cautious with benchmarking, so I will follow up still today, but as soon
+> as the new round of tests complete.
 
-Reviewed-by: Wei Liu <wei.liu@kernel.org>
+Sure.
+
+> -- >8 --
+> Subject: [PATCH] sbitmap: Advance the queue index before waking up the queue
+> 
+> When a queue is awaken, the wake_index written by sbq_wake_ptr currently
+> keeps pointing to the same queue.  On the next wake up, it will thus
+> retry the same queue, which is unfair to other queues, and can lead to
+> starvation.  This patch, moves the index update to happen before the
+> queue is returned, such that it will now try a different queue first on
+> the next wake up, improving fairness.
+> 
+> Reported-by: Jan Kara <jack@suse.cz>
+> Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
+
+Yes, nice. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  lib/sbitmap.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/lib/sbitmap.c b/lib/sbitmap.c
+> index eca462cba398..bea7984f7987 100644
+> --- a/lib/sbitmap.c
+> +++ b/lib/sbitmap.c
+> @@ -571,13 +571,19 @@ static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue *sbq)
+>  	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
+>  		struct sbq_wait_state *ws = &sbq->ws[wake_index];
+>  
+> +		/*
+> +		 * Advance the index before checking the current queue.
+> +		 * It improves fairness, by ensuring the queue doesn't
+> +		 * need to be fully emptied before trying to wake up
+> +		 * from the next one.
+> +		 */
+> +		wake_index = sbq_index_inc(wake_index);
+> +
+>  		if (waitqueue_active(&ws->wait)) {
+>  			if (wake_index != atomic_read(&sbq->wake_index))
+>  				atomic_set(&sbq->wake_index, wake_index);
+>  			return ws;
+>  		}
+> -
+> -		wake_index = sbq_index_inc(wake_index);
+>  	}
+>  
+>  	return NULL;
+> -- 
+> 2.35.3
+> 
+> 
+> 
+> 
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
