@@ -2,79 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED3062866C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD4B62866D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:00:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238098AbiKNRAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:00:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
+        id S238141AbiKNRAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:00:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238108AbiKNRAN (ORCPT
+        with ESMTP id S238116AbiKNRAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:00:13 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4F8317CF;
-        Mon, 14 Nov 2022 08:59:35 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 17FDC5C0197;
-        Mon, 14 Nov 2022 11:59:32 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 14 Nov 2022 11:59:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1668445172; x=1668531572; bh=yKRgGvprbc
-        oIqEkAWWNc2PNyMEcpae3Af/heeqEz8UQ=; b=iOsUoNfHwTvT0XulboXuoSXg/k
-        2G1WgarGXIWbdDvh/mz+3P4qmXmoXgVrmXE3irKW3Ev8dr+6TX2DCyCkT1Uw4Pn5
-        pnyhGdLUQ+PBbVonXW/d9u6F2Hi0XaQP0FwV0k2s+70ADMhhChA6w/qBqWUnlb0l
-        nhXTy1V1K/99LvkwzsddgtCZGCswmA+uLopbmfqt2bfGtggfwrDUDE6UUL0ck2aQ
-        juUX49UKP7//5Rxa+caLYLuku+taXmO7iUohrrHdfckmsakiRPSs7NJrnE1CULoG
-        IgBZ251kA9cA38NKqVTQWRd1N7iXuy4Z34AtDWkToVyjljVpCGln5i1ykArw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1668445172; x=1668531572; bh=yKRgGvprbcoIqEkAWWNc2PNyMEcpae3Af/h
-        eeqEz8UQ=; b=T32XE8s2ywBn+GqAV1ujFSrQIje1n1zhqOEAD/4bABuM9CfpPF8
-        EQBEkT0yoEJ6KsaSfTTrJHW4Wz9j+JvQu1r/IVBiyKT/RGVh4F/zB4Tq46sJ8kRG
-        PsJtvoOQTdyJwwEPtNFGXZJzMuGOd00i6D4lKKcgUE1u9KU6lVE1xRliyNE9/VSR
-        SuNRjynMHSsCNHg6bIL6mR07Tal97PVXmhR2Ucj60e+n/D+nBIPIlsvd/Px/GqNn
-        TvzxZqEe2aZBHcdGiB5eyVofd5fqJQSzZhNqkLCLN7dhztizfeH1Fja1cHX6YuhE
-        jPbUlpx2WGqigMS0SiB5uOzKr0xBcB0LzyQ==
-X-ME-Sender: <xms:83NyY6vfb1bUjeof0I70mLX2b6zF9tXYGkrmOcQb5wIaxWQi3YLJWw>
-    <xme:83NyY_f5LxREFsWGIbm6Hx249Xl-GHX3JqU4Dk0Vucw60cNRQ0O-z9RONt_BR--Ya
-    jqa1rPkHWCNhHOEfhg>
-X-ME-Received: <xmr:83NyY1ywFUw4MfCiAn4_Lvnjpyhjw5_exALQbaYEoeswwXWIY-J4fu5xetikz0EtQWxFgyoE7XhooxFPRhnncG12gS8VPqahr7szK1w5moOdzGM6GMk-6bzIpXJ9pg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedvgdeikecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
-    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
-    epleduffeiheeuvedtffevtdeuleeljeduudfgtedtvefhfeffvdfghfejhefgleelnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnse
-    hsvhgvnhhpvghtvghrrdguvghv
-X-ME-Proxy: <xmx:83NyY1MrYoPAtbm6nDzuAzXqcV-8qqrPQvfteyDmhD7U6yyKskYnZg>
-    <xmx:83NyY6_IgEoU_VwHvctKI148NJRHRtqvfdXOxZLTnqv-vKCr3MTeYQ>
-    <xmx:83NyY9VIXbGpiPlycWcQwd5NOhw_LkxjN3emDmuM3UWdGxFBcl9x6g>
-    <xmx:9HNyYxYUtIQJLJ_bSSdSbXrX37p6CVuSvCMCq0U5KeqpteBckaH63Q>
-Feedback-ID: i51094778:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 14 Nov 2022 11:59:31 -0500 (EST)
-From:   Sven Peter <sven@svenpeter.dev>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Sven Peter <sven@svenpeter.dev>, linux-usb@vger.kernel.org,
+        Mon, 14 Nov 2022 12:00:16 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A516B31DE7;
+        Mon, 14 Nov 2022 08:59:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668445184; x=1699981184;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=B3cccWBw0rMFOaKNnRwHvr376JFvt2Uj98KrwSkBaa8=;
+  b=RWmd5IFZxSSLu3KpR4NPOjs0IiqHO+JbMH2N9ovQTSHeYdHXoxkMiBn3
+   uIOq7Elm+ptOkkKxyb0HFT+1Lz7aIG8ddgd74v2vUyJlQ/11M+zmGwzJy
+   e/mottGIogrIf1ratkBzwyIXxHbfSh+P6BH9ddRggqxupWFoo9n6aterX
+   4cjNzFGQjneHoQ8hxBxx4VbTkL4LYLch+rqnKHysYpPfrYI59EkDNlMZh
+   neUBtCgibp4435Z2krXvQDgz6iJoT81VRR5zwtrzi/6laKo8x8ibvpUMw
+   ltKTZMPKNPu5LE3DoHsqIewkUYz8CBXD14gCbyUheTTfDx+YEVOiPMpOc
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="313168848"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="313168848"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 08:59:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="727595259"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="727595259"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 14 Nov 2022 08:59:42 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id E9D382F3; Mon, 14 Nov 2022 19:00:06 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: typec: Check for ops->exit instead of ops->enter in altmode_exit
-Date:   Mon, 14 Nov 2022 17:59:24 +0100
-Message-Id: <20221114165924.33487-1-sven@svenpeter.dev>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/2] pwm: core: Refactor pwmchip_add() to avoid extra checks
+Date:   Mon, 14 Nov 2022 19:00:04 +0200
+Message-Id: <20221114170006.61751-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,29 +63,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-typec_altmode_exit checks if ops->enter is not NULL but then calls
-ops->exit a few lines below. Fix that and check for the function
-pointer it's about to call instead.
+When we already know that everything is fine there is no need
+to use ret variable. Refactor code accordingly.
 
-Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
-Signed-off-by: Sven Peter <sven@svenpeter.dev>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/usb/typec/bus.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2: rebased with dropped wrong patch (LKP)
+ drivers/pwm/core.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
-index 26ea2fdec17d..31c2a3130cad 100644
---- a/drivers/usb/typec/bus.c
-+++ b/drivers/usb/typec/bus.c
-@@ -134,7 +134,7 @@ int typec_altmode_exit(struct typec_altmode *adev)
- 	if (!adev || !adev->active)
- 		return 0;
+diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
+index d333e7422f4a..855abd0a776f 100644
+--- a/drivers/pwm/core.c
++++ b/drivers/pwm/core.c
+@@ -296,16 +296,16 @@ int pwmchip_add(struct pwm_chip *chip)
+ 	INIT_LIST_HEAD(&chip->list);
+ 	list_add(&chip->list, &pwm_chips);
  
--	if (!pdev->ops || !pdev->ops->enter)
-+	if (!pdev->ops || !pdev->ops->exit)
- 		return -EOPNOTSUPP;
+-	ret = 0;
+-
+ 	if (IS_ENABLED(CONFIG_OF))
+ 		of_pwmchip_add(chip);
  
- 	/* Moving to USB Safe State */
+-out:
+ 	mutex_unlock(&pwm_lock);
+ 
+-	if (!ret)
+-		pwmchip_sysfs_export(chip);
++	pwmchip_sysfs_export(chip);
++
++	return 0;
++out:
++	mutex_unlock(&pwm_lock);
+ 
+ 	return ret;
+ }
 -- 
-2.25.1
+2.35.1
 
