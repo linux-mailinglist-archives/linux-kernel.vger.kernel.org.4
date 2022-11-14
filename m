@@ -2,83 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230AD627C85
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:41:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA86627C8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236343AbiKNLlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:41:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37374 "EHLO
+        id S236320AbiKNLlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:41:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236322AbiKNLky (ORCPT
+        with ESMTP id S233300AbiKNLlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:40:54 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE941A3A8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:40:53 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id a14so17696321wru.5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:40:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HD1FJFbm4qiZjnfWZv0nv02BdZLPwZIxvvXLBcQxcA0=;
-        b=QmW79Pi/kv1ijN/1fegsnzJHDHy3kLhMK5xERnfBLW2M0pZRGeAj1t27J/Oitxj/7g
-         SG4XgfHWHcYusKaWxzs8mbsyMyfKVyFe0rim95+XX5d9lj4SBjwRUG4vspeAn/Vw96bY
-         /5oy1I22lKS0ag4QNAyM6CfxxyYrOAG2JgyF4f1uepWaW5gL1lw1V/46Zziglr4Iv4LT
-         gn4UPpVWv5WeJXmDfwWgOJ8KQTBmhnOBjwc88b8/YvtKuy4cnImwecsto9d9Haovdvrq
-         1WCMRLaGdNwVNcWxjeSGjndiK2bcshHuqv+WzxrzMLB4j6c1/1a3oqB4eiSDGjpJ050x
-         IPtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HD1FJFbm4qiZjnfWZv0nv02BdZLPwZIxvvXLBcQxcA0=;
-        b=3fbOVC+08eURaJKKjmWeyUqdm3JVelIk8iovQDz0OL4ErGIFvZsmdIVbBEBbMXwT19
-         HzcWMKoB8zttyjgS/NQWPa5SUDS5rFypBrTR5ZPL+7stCG63SZHc/jK3CAsnNBMpmV56
-         m0UDgVB376uNMN9sKqVz4bG+upmRqmx8iN8ZI/cG/mmQe6t+3GJS4H9Qpm9PW50MdOom
-         Aj0l8Z76zaiyKU2iRQGjOmny5mGa8qgFuDCHmI2Ks2xjMK7y5HDXAMoXEEkqpwYf5v4b
-         alUchBCeVsVW3NzUNqXpxGEcxSrCy6MXmBSSmPo7eqFejD4xp2FM04QZ3xHs2sJ8gpp/
-         lffQ==
-X-Gm-Message-State: ANoB5pkTKq43xt655bp/P7ctWUE7LGsnLvQXGbGtK7uCO48gUVHy5Ayi
-        gO0fvv0uzAwlwB2GCAnp1ZN6RQ==
-X-Google-Smtp-Source: AA0mqf7w6FsqMHPLvaGe1VAW4QNqBhCJzebNX55AWaprvEM0JnmljxZjn1eeQRgPy1WX1yhoGrB/fQ==
-X-Received: by 2002:adf:cd91:0:b0:241:695c:4eec with SMTP id q17-20020adfcd91000000b00241695c4eecmr7437995wrj.174.1668426052149;
-        Mon, 14 Nov 2022 03:40:52 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id z15-20020a056000110f00b0022a3a887ceasm9327509wrw.49.2022.11.14.03.40.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 03:40:51 -0800 (PST)
-Message-ID: <cf66aa8f-4bf7-d9c0-e2ae-b6fced7e4948@linaro.org>
-Date:   Mon, 14 Nov 2022 11:40:50 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 10/10] ASoC: dt-bindings: qcom,q6apm: Add SM8450 bedais
- node
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
+        Mon, 14 Nov 2022 06:41:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EF955A3;
+        Mon, 14 Nov 2022 03:41:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E492B80E6E;
+        Mon, 14 Nov 2022 11:41:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77942C433B5;
+        Mon, 14 Nov 2022 11:41:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668426098;
+        bh=6D6hVNiZU/7ohRvqBuzhJil3F0K7wsJf9shuuz0C8mY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l8RMPVQphsi+/fPvPr9IrVDIsMPl//vBLf9NcA6X3/XOxJojhCVkdF2dtyB8K/lfM
+         JcKrg9YNEMLhjqHUoaf48h4lwpthX8yNJct4MML0FydlurOis/xXInTPNnpCFvac8Q
+         3pyHAC04Y6v48EI+N7spU5Arf+W9b7FyrNbelo9/RSfwWpOhvEZF+ybQsgkHPz8Fvx
+         sy0La28rWToC+HUMKWQGuv7qLidhktM8MPsiiCaeNAGlw2e3G4fPTB4OnX/LQtMYe+
+         8KwHeABAicXCXDvTMKgRKiqO6LzF8Sm+U8ESE8JPDL/5IXRBaeJYtPeHv7sCBwkqM+
+         OXwBVl8HYginQ==
+Date:   Mon, 14 Nov 2022 19:41:04 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Tsahee Zidenberg <tsahee@annapurnalabs.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Brijesh Singh <brijeshkumar.singh@amd.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        William Zhang <william.zhang@broadcom.com>,
+        Anand Gore <anand.gore@broadcom.com>,
+        Kursad Oney <kursad.oney@broadcom.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Chester Lin <clin@suse.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Matthias Brugger <mbrugger@suse.com>,
+        NXP S32 Linux Team <s32@nxp.com>,
+        Wei Xu <xuwei5@hisilicon.com>, Chanho Min <chanho.min@lge.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        UNGLinuxDriver@microchip.com, Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Patrick Lai <plai@qti.qualcomm.com>,
-        Srinivasa Rao Mandadapu <srivasam@qti.qualcomm.com>
-References: <20221111113547.100442-1-krzysztof.kozlowski@linaro.org>
- <20221111113547.100442-11-krzysztof.kozlowski@linaro.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20221111113547.100442-11-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Shijie Qin <shijie.qin@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Adam Ford <aford173@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Tim Harvey <tharvey@gateworks.com>, Li Jun <jun.li@nxp.com>,
+        Richard Zhu <hongxing.zhu@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
+        Marek Vasut <marex@denx.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Martin Kepplinger <martink@posteo.de>,
+        David Heidelberg <david@ixit.cz>,
+        Liu Ying <victor.liu@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Zhou Peng <eagle.zhou@nxp.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Vadym Kochan <vadym.kochan@plvision.eu>,
+        Sameer Pujar <spujar@nvidia.com>,
+        Prathamesh Shete <pshete@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Akhil R <akhilrajeev@nvidia.com>,
+        Sumit Gupta <sumitg@nvidia.com>,
+        Diogo Ivo <diogo.ivo@tecnico.ulisboa.pt>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Ashish Mhetre <amhetre@nvidia.com>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Christopher Obbard <chris.obbard@collabora.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Aswani Reddy <aswani.reddy@samsung.com>,
+        Shashank Prashar <s.prashar@samsung.com>,
+        Ajay Kumar <ajaykumar.rs@samsung.com>,
+        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, openbmc@lists.ozlabs.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-realtek-soc@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH v2 08/23] arm64: dts: Update cache properties for
+ freescale
+Message-ID: <20221114114104.GX2649582@dragon>
+References: <20221107155825.1644604-1-pierre.gondois@arm.com>
+ <20221107155825.1644604-9-pierre.gondois@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107155825.1644604-9-pierre.gondois@arm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,72 +161,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/11/2022 11:35, Krzysztof Kozlowski wrote:
-> On SM8450 and SC8280XP, the Q6APM is a bit different:
-
-This is not specific to SM8450 or SC8280XP its part of AudioReach apm 
-which deals with both backends and pcm.
-
-In old Elite architecture we had a dedicated service AFE to deal with 
-Backend dais, now APM does all.
-
-Thanks,
-Srini
-
-> 1. It is used as a platform DAI link, so it needs #sound-dai-cells.
-> 2. It has two DAI children, so add new "bedais" node.
+On Mon, Nov 07, 2022 at 04:57:01PM +0100, Pierre Gondois wrote:
+> The DeviceTree Specification v0.3 specifies that the cache node
+> 'compatible' and 'cache-level' properties are 'required'. Cf.
+> s3.8 Multi-level and Shared Cache Nodes
+> The 'cache-unified' property should be present if one of the
+> properties for unified cache is present ('cache-size', ...).
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   .../devicetree/bindings/sound/qcom,q6apm.yaml    | 16 ++++++++++++++++
->   1 file changed, 16 insertions(+)
+> Update the Device Trees accordingly.
 > 
-> diff --git a/Documentation/devicetree/bindings/sound/qcom,q6apm.yaml b/Documentation/devicetree/bindings/sound/qcom,q6apm.yaml
-> index 7acb832aa557..cd434e8268ce 100644
-> --- a/Documentation/devicetree/bindings/sound/qcom,q6apm.yaml
-> +++ b/Documentation/devicetree/bindings/sound/qcom,q6apm.yaml
-> @@ -18,14 +18,24 @@ properties:
->       enum:
->         - qcom,q6apm
->   
-> +  bedais:
-> +    type: object
-> +    $ref: /schemas/sound/qcom,q6apm-lpass-dais.yaml#
-> +    unevaluatedProperties: false
-> +    description: Qualcomm DSP audio ports
-> +
->     dais:
->       type: object
->       $ref: /schemas/sound/qcom,q6apm-dai.yaml#
->       unevaluatedProperties: false
->       description: Qualcomm DSP audio ports
->   
-> +  '#sound-dai-cells':
-> +    const: 0
-> +
->   required:
->     - compatible
-> +  - bedais
->     - dais
->   
->   unevaluatedProperties: false
-> @@ -41,11 +51,17 @@ examples:
->           service@1 {
->               reg = <GPR_APM_MODULE_IID>;
->               compatible = "qcom,q6apm";
-> +            #sound-dai-cells = <0>;
->               qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
->   
->               dais {
->                   compatible = "qcom,q6apm-dais";
->                   iommus = <&apps_smmu 0x1801 0x0>;
->               };
-> +
-> +            bedais {
-> +                compatible = "qcom,q6apm-lpass-dais";
-> +                #sound-dai-cells = <1>;
-> +            };
->           };
->       };
+> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+
+Applied, thanks!
