@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4982F628D00
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E95628D01
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237902AbiKNXDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 18:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
+        id S238010AbiKNXDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 18:03:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237885AbiKNXCi (ORCPT
+        with ESMTP id S237904AbiKNXCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 18:02:38 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E9A1BE88;
-        Mon, 14 Nov 2022 15:02:35 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 6so11574808pgm.6;
-        Mon, 14 Nov 2022 15:02:35 -0800 (PST)
+        Mon, 14 Nov 2022 18:02:44 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9975519025;
+        Mon, 14 Nov 2022 15:02:36 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id 62so3234502pgb.13;
+        Mon, 14 Nov 2022 15:02:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mLjySvlGPKnVQ41FH3ZyjLNiZRwop922hNhTc7oubmw=;
-        b=FaZabm5DuOJ6hbUuo766RDOgcgo+o1/sjEMrbcLhz4lgO60PfZOSeQsv/uyZZeNGLp
-         EvRuZ2zhPm7Nrcrvl1v6cCUtBw1np5SvUWPBvalBi8pX5RrMI4jORhKZ2z264EvbOqxa
-         EYvnyGHmiVUOTOISIRVqEJ5GqpoauJabnPWNYHVa5o6pj7sbgX0ANgmz60x3I5Z1YPoM
-         95OnMYnisQii8xJQ5UDcXi7fMBs9L15T83Ri22X77SBThVFJ9q6D9iH3AlJfq80y2s3w
-         2vttHGPNs+IqEpUHuC3aP5qtINeLHOMRq9ga8tKwyRufIlOJe7Euk+kR2Kr6I1XmFPxh
-         CeDA==
+        bh=nd5GkeCeE0yxKOMovgVohdgD8iFx/xVnrv4/oHPrZuI=;
+        b=R9Jluqc3uYSYzKHR1fx/DQAfhMUewFc9fiC60GFBxnsjXYZkyw27kmZxriO1IPJEyG
+         4e+CztJ/pkBanz8uQhHc5ZYf3wPQb+H+NfCf5EXu/ZYroj3hs5NM9BaXzsl74zxFuo6P
+         QUEw43FDRea5+HjJG0Jcj4Hvk5D7McLUPVRo9n0t78TfDN3OtQa8DWIetDNZJn5FvqQw
+         z6MjJhqvXl2W4ZG1ORqTp6VDgzllTvfeDP56yHVB09PiL+b57k2cJ31Alr0srHUTCrnZ
+         gdB4DbQYSq3CSECBSNk2MxLkogktK+VOSo8R+zvEQdFIPdPNTOCmcwRTwTFJ+2eBvbr8
+         gSvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=mLjySvlGPKnVQ41FH3ZyjLNiZRwop922hNhTc7oubmw=;
-        b=3o0zkLHzcQX2QclwK01TeSUlaHAS2VLXs+dgNU6pzYi5Ajj7bXBhJTLiOJXXrPgPhb
-         Bb5Rnt8jt5M0UlndRFtyK0sakr04fh4f2KG2gABe4QRmY2VQqgosCPTc/rgfM9zxTizF
-         K20eXL+xpY4yTHDj4Zg3fPoH1PnPJy2UiHZvwb475d+YyvbIQjY3gArF5U3bZr3xyvTt
-         Pz7D/GusU5JChaU/UE/Bsw8yrMHAjGW7fZSB2yoyxdYS/+NbF5LiQmHie0PwgVK/bnFa
-         OE4OE9Wmb0ZxWvWyinzKHJYiAVpUGLf2iTtAi5rCxy5hN/ivGdZhoyaElsewRKMnKBGz
-         7hKA==
-X-Gm-Message-State: ANoB5plB8TQZCe/4rSV83dVCNqy0mLaKW4RNqOU87d4uDivFREOcVXLQ
-        dTA6535Hd14m5DIpUkZnPm4=
-X-Google-Smtp-Source: AA0mqf7Bu1Oc5MTf/iTmHgxsalOIz/2Ge//af4EOwZTu0AWWWH3MT1vIpcU2O+zuvhuVFPqJPqDPMA==
-X-Received: by 2002:a63:2243:0:b0:457:f843:ffcd with SMTP id t3-20020a632243000000b00457f843ffcdmr13400685pgm.101.1668466954619;
-        Mon, 14 Nov 2022 15:02:34 -0800 (PST)
+        bh=nd5GkeCeE0yxKOMovgVohdgD8iFx/xVnrv4/oHPrZuI=;
+        b=fz+8AvgpflIzVwencr46DblQV5RF4HKFpBYASRGhNYo45MthjTgnJLyOJ3Imbzxbje
+         Bz1WbDyxIWet23c7xoeNLAPK39g6gT/y8pZ1gAAyUOGKM1qRWjkMyZltX7DfF3bq0Xkb
+         QGjbrr7558MYaTUXVyiGFPlyy2zTzXpIHnEL7wUC3mK4j3lBBD/bReQ6jLs9813ppyU5
+         hm891Uw+HObcyqO0F121MAn6spW+ch1Ep5id4evubM+mmPpFlusgjz8ii2n6ZTT5RNwS
+         n7+21LmnjYE9rF15nzDBrJ+IDLDr6i9tpHgd1tEXyXLan0bpJ+rvQHXYxX65SPCek+YF
+         G5oQ==
+X-Gm-Message-State: ANoB5plBcDihdRWkT/sOSDr0pGdyVRVkO08NZ1Ojatk4giaxwJIYB/PT
+        SNT7spFELdJDgkpRRswya1LvC/aZ99g=
+X-Google-Smtp-Source: AA0mqf7OP9dojr16cGBTHkCZ+Hv6y6Eosc1LsmryTspfVc5G6F5LDBkolGXcJQAgMZoJBnas3JvU9w==
+X-Received: by 2002:a63:ce04:0:b0:46b:2493:14ad with SMTP id y4-20020a63ce04000000b0046b249314admr13671274pgf.274.1668466956065;
+        Mon, 14 Nov 2022 15:02:36 -0800 (PST)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:a80:cf9f:e038:c19b:797e])
-        by smtp.gmail.com with ESMTPSA id 132-20020a62148a000000b0056c814a501dsm7534724pfu.10.2022.11.14.15.02.33
+        by smtp.gmail.com with ESMTPSA id 132-20020a62148a000000b0056c814a501dsm7534724pfu.10.2022.11.14.15.02.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 15:02:34 -0800 (PST)
+        Mon, 14 Nov 2022 15:02:35 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -64,9 +64,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Zhengjun Xing <zhengjun.xing@linux.intel.com>,
         James Clark <james.clark@arm.com>,
         Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-Subject: [PATCH 03/19] perf stat: Split print_noise_pct() function
-Date:   Mon, 14 Nov 2022 15:02:11 -0800
-Message-Id: <20221114230227.1255976-4-namhyung@kernel.org>
+Subject: [PATCH 04/19] perf stat: Split print_cgroup() function
+Date:   Mon, 14 Nov 2022 15:02:12 -0800
+Message-Id: <20221114230227.1255976-5-namhyung@kernel.org>
 X-Mailer: git-send-email 2.38.1.493.g58b659f92b-goog
 In-Reply-To: <20221114230227.1255976-1-namhyung@kernel.org>
 References: <20221114230227.1255976-1-namhyung@kernel.org>
@@ -82,60 +82,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Likewise, split print_noise_pct() for each output mode.  Although it's
-a tiny function, more logic will be added soon so it'd be better split
-it and treat it in the same way.
+Likewise, split print_cgroup() for each output mode.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/util/stat-display.c | 27 +++++++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
+ tools/perf/util/stat-display.c | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
 
 diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index 281b811f8574..a230f65efa62 100644
+index a230f65efa62..af2a561eb20c 100644
 --- a/tools/perf/util/stat-display.c
 +++ b/tools/perf/util/stat-display.c
-@@ -62,17 +62,36 @@ static void print_running(struct perf_stat_config *config,
- 		print_running_std(config, run, ena);
+@@ -106,15 +106,32 @@ static void print_noise(struct perf_stat_config *config,
+ 	print_noise_pct(config, stddev_stats(&ps->res_stats), avg);
  }
  
-+static void print_noise_pct_std(struct perf_stat_config *config,
-+				double pct)
++static void print_cgroup_std(struct perf_stat_config *config, const char *cgrp_name)
 +{
-+	if (pct)
-+		fprintf(config->output, "  ( +-%6.2f%% )", pct);
++	fprintf(config->output, " %s", cgrp_name);
 +}
 +
-+static void print_noise_pct_csv(struct perf_stat_config *config,
-+				double pct)
++static void print_cgroup_csv(struct perf_stat_config *config, const char *cgrp_name)
 +{
-+	fprintf(config->output, "%s%.2f%%", config->csv_sep, pct);
++	fprintf(config->output, "%s%s", config->csv_sep, cgrp_name);
 +}
 +
-+static void print_noise_pct_json(struct perf_stat_config *config,
-+				 double pct)
++static void print_cgroup_json(struct perf_stat_config *config, const char *cgrp_name)
 +{
-+	fprintf(config->output, "\"variance\" : %.2f, ", pct);
++	fprintf(config->output, "\"cgroup\" : \"%s\", ", cgrp_name);
 +}
 +
- static void print_noise_pct(struct perf_stat_config *config,
- 			    double total, double avg)
+ static void print_cgroup(struct perf_stat_config *config, struct evsel *evsel)
  {
- 	double pct = rel_stddev_stats(total, avg);
+ 	if (nr_cgroups) {
+ 		const char *cgrp_name = evsel->cgrp ? evsel->cgrp->name  : "";
  
- 	if (config->json_output)
--		fprintf(config->output, "\"variance\" : %.2f, ", pct);
-+		print_noise_pct_json(config, pct);
- 	else if (config->csv_output)
--		fprintf(config->output, "%s%.2f%%", config->csv_sep, pct);
--	else if (pct)
--		fprintf(config->output, "  ( +-%6.2f%% )", pct);
-+		print_noise_pct_csv(config, pct);
-+	else
-+		print_noise_pct_std(config, pct);
+ 		if (config->json_output)
+-			fprintf(config->output, "\"cgroup\" : \"%s\", ", cgrp_name);
++			print_cgroup_json(config, cgrp_name);
++		if (config->csv_output)
++			print_cgroup_csv(config, cgrp_name);
+ 		else
+-			fprintf(config->output, "%s%s", config->csv_sep, cgrp_name);
++			print_cgroup_std(config, cgrp_name);
+ 	}
  }
  
- static void print_noise(struct perf_stat_config *config,
 -- 
 2.38.1.493.g58b659f92b-goog
 
