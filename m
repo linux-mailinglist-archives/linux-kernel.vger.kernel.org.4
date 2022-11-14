@@ -2,140 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F4462776B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:21:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EB8627770
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:22:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236388AbiKNIVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40252 "EHLO
+        id S236433AbiKNIWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:22:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236352AbiKNIVO (ORCPT
+        with ESMTP id S236473AbiKNIV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:21:14 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D451AF03;
-        Mon, 14 Nov 2022 00:21:10 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id p21so9398220plr.7;
-        Mon, 14 Nov 2022 00:21:10 -0800 (PST)
+        Mon, 14 Nov 2022 03:21:57 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD3B1AF02
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:21:41 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id l12so18033854lfp.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:21:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=WDpwxLGYQHucsjbGGxsVmJprs34jMYlaaLdB2Tw2WYk=;
-        b=e2vJRow3dF2A/9HFreVhoneMvppmyICDUnFXXVJwhbM7Ztoc7/m7YVnv4Qon7fFe96
-         FQk7Kl27px0mDAh3kOYwZzuHglRCUG0RrrLH6UWJWDA2EJmwY82+Qhn73WAuevRSl5Nf
-         QCyTDZu6x4NYxo21NjMeWoYwP2Y7qkBwaOfM7rlD/Yj48ey7CPXKreBr4afOMRGNIXBP
-         Ypj0hfAGn3ZUIcehmxIxu8Reqh5aBjiftXIoyiOC4eZ6kCOiHjoQKjRv+OvpiQ2VD3ym
-         226r3d5xJRT1Gi+0Hb0W/Ca1VGXhxUnjFDBvAFj1RSmO6V3peovIH5rvTLJd4HKi2Cri
-         sPCw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yXwjJ+1nVh+Y0hu+zDgKARF1kxSAIVcPOIQgVlBh1rM=;
+        b=L6rcOJEJ6KxeK+6HFTOUO+edq2uyaRuVyLohWHZIRH8JhNZ5V9zcK1resxFa/SG75O
+         6ZikG7ZgaRRPQXJp9EP4B7P12vl73uQ7cYQD3OSn6sXd4Hd3eq3I0mJzTNTD4o5u9+84
+         Mt42lAHR0uChZbOi0snfti+LoVhjQD7/g4Y424tEHJZNtmfWGlua0yDy8kr3oK2mctVW
+         aw9nPS7CpOwlb/yX8ayJ7n643XBvpOq8Et4FdS0/xTTYo6IA+iS/MFlWc7oi1bRSnhQw
+         E6+mGqxsfz9Hsq/xVZAS4JaGjaTdWw8/RJvD8dGeT1F4qmDkgXWKM4sTtCl9OTJJh2w6
+         KX3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WDpwxLGYQHucsjbGGxsVmJprs34jMYlaaLdB2Tw2WYk=;
-        b=Z/o2olfzACmQIQJTpwRZpjYstJ25JHgFvjnNe4LnT3CJn30mugSpWgz5QA6LEJ05rw
-         k+hApP0d0sv4/v/oa+K88sEJO7px9YSGpZiEeuPvMV1mfddTFPv8kK/wwvXxVtX4X/0S
-         VEDbtyfqACjKW1D+uJULxldaMfgRXPshkNsJA+GsrXXTrNHqbZYUPiefmS7axMpBc5sM
-         97nWA6KI2Ae+vOfL3O9+W5nfGmP9P65syoU5iJTEa2OUPx8GmwjCnF01RpHsOxAk5KcF
-         yRDjUYA3HhkKxQObP6M9FvasJp5BvZz0GpjHq09q0W/hfjg4cR/2b7ZEzCIPqaqUfu/x
-         ik5g==
-X-Gm-Message-State: ANoB5pkxhUJ2U7Ju2N2DLinRvmN76QcwMqzHYfBaL56GQHIa15IPGYQb
-        gu9ZFkISgikoJqUNSbqCAfc=
-X-Google-Smtp-Source: AA0mqf4vIsAcwVQGuuoCr6Xd/nbzYQ970mN3lftmnrqu4v69NOKt6qWtTYWiJSUCIQ6perPcFYyADg==
-X-Received: by 2002:a17:902:9a4a:b0:188:8e14:b4df with SMTP id x10-20020a1709029a4a00b001888e14b4dfmr12327323plv.136.1668414069875;
-        Mon, 14 Nov 2022 00:21:09 -0800 (PST)
-Received: from localhost.localdomain ([2402:7500:487:fe99:8803:61a2:a857:2b40])
-        by smtp.gmail.com with ESMTPSA id o38-20020a634e66000000b004639c772878sm5419997pgl.48.2022.11.14.00.21.06
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 14 Nov 2022 00:21:09 -0800 (PST)
-From:   cy_huang <u0084500@gmail.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        sre@kernel.org
-Cc:     cy_huang@richtek.com, allen_chiang@richtek.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] Documentation: power: rt9759: Document exported sysfs entries
-Date:   Mon, 14 Nov 2022 16:20:53 +0800
-Message-Id: <1668414053-32728-4-git-send-email-u0084500@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1668414053-32728-1-git-send-email-u0084500@gmail.com>
-References: <1668414053-32728-1-git-send-email-u0084500@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        bh=yXwjJ+1nVh+Y0hu+zDgKARF1kxSAIVcPOIQgVlBh1rM=;
+        b=ZEG0cOG4BuhvUscIxwk08BrzHNCtIxZgCKvnWkEcQebnG3bUBqyolzVb2H7TOKdIK/
+         HVrBdX0glwjYT6FTN/4jjaTvRnSNPPZXjIu0B9nUPHT3XRfzyv6jLXCh8TQs7aX9883g
+         YZi+Qy74TSlMe9VNrOhNeF9u+j8yJJg3cuG1odVCEQY0IXWB7xlazWp6FQoOW/LanLGi
+         imElySPQ2rL/Ij2ae2sRjuF7MoekZBhQMXUmuKzCQenOcLiWO8a52uWw2kJLpxds7EA+
+         0Y4ZpnbZPqRfjA9U6P2GKbZxsDdFIz3atqOiIlHUskrQoVIKBE+OBdg/4N6ZkeAicN9w
+         7Ubg==
+X-Gm-Message-State: ANoB5plrh80Dkzh7Kx/aEc5GufJJo5yBo98v5n8xUrCifY/e73KiKyYX
+        VmUb3O0omZ5JQqrMFHFgFE8GmQ==
+X-Google-Smtp-Source: AA0mqf4A6WdbunwRNdha5WmvtyEql8FV7Dy8+u6gVw7amCTsBnHAfoke633t1VDZkTsfbVQj0kl8hA==
+X-Received: by 2002:ac2:4c55:0:b0:4a2:3d81:8aed with SMTP id o21-20020ac24c55000000b004a23d818aedmr3584098lfk.500.1668414099846;
+        Mon, 14 Nov 2022 00:21:39 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id o20-20020ac25e34000000b004b40c2fccfdsm1734650lfg.59.2022.11.14.00.21.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 00:21:39 -0800 (PST)
+Message-ID: <5441bcee-2735-eea6-8d33-58226632b80d@linaro.org>
+Date:   Mon, 14 Nov 2022 09:21:37 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 6/8] dt-bindings: iommu: qcom,iommu: Document QSMMU v2
+ compatibles
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, agross@kernel.org
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, joro@8bytes.org,
+        will@kernel.org, robin.murphy@arm.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robdclark@gmail.com,
+        linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        marijn.suijten@somainline.org, kernel@collabora.com,
+        luca@z3ntu.xyz, a39.skl@gmail.com, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20221111145919.221159-1-angelogioacchino.delregno@collabora.com>
+ <20221111145919.221159-7-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221111145919.221159-7-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+On 11/11/2022 15:59, AngeloGioacchino Del Regno wrote:
+> Add compatible strings for "qcom,msm-iommu-v2" for the inner node,
+> "qcom,msm-iommu-v2-ns" and "qcom,msm-iommu-v2-sec" for the context
+> bank nodes to support Qualcomm's secure fw "SMMU v2" implementation.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  Documentation/devicetree/bindings/iommu/qcom,iommu.txt | 7 ++++++-
 
-Document the settings exported by rt9759 charger driver through sysfs
-entries:
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-- watchdog_timer
-- battery_voltage
-- battery_current
-
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
-Since v3:
-No change
-
-Since v2:
-- Change ABI document date from Oct 2022 to Nov 2022 and KernelVersion
-  from 6.1 to 6.2
-
----
- Documentation/ABI/testing/sysfs-class-power-rt9759 | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9759
-
-diff --git a/Documentation/ABI/testing/sysfs-class-power-rt9759 b/Documentation/ABI/testing/sysfs-class-power-rt9759
-new file mode 100644
-index 00000000..8a7258f
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-class-power-rt9759
-@@ -0,0 +1,37 @@
-+What:		/sys/class/power_supply/rt9759-*/watchdog_timer
-+Date:		Nov 2022
-+KernelVersion:	6.2
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		This entry shows and sets the watchdog timer when rt9759 charger
-+		operates in charging mode. When the timer expires, the device
-+		will disable the charging. To prevent the timer expires, any
-+		host communication can make the timer restarted.
-+
-+		Access: Read, Write
-+
-+		Valid values:
-+		- 500, 1000, 5000 or 30000 (milliseconds),
-+		- 0: disabled
-+
-+What:		/sys/class/power_supply/rt9759-*/battery_voltage
-+Date:		Nov 2022
-+KernelVersion:	6.2
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		Reports the current BAT voltage.
-+
-+		Access: Read-Only
-+
-+		Valid values: Represented in microvolts
-+
-+What:		/sys/class/power_supply/rt9759-*/battery_current
-+Date:		Nov 2022
-+KernelVersion:	6.2
-+Contact:	ChiYuan Huang <cy_huang@richtek.com>
-+Description:
-+		Reports the current BAT current.
-+
-+		Access: Read-Only
-+
-+		Valid values: Represented in microamps
--- 
-2.7.4
+Best regards,
+Krzysztof
 
