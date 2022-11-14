@@ -2,196 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEC26627524
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 05:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5333627527
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 05:03:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235763AbiKNEDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 23:03:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
+        id S235781AbiKNEDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 23:03:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235560AbiKNEC6 (ORCPT
+        with ESMTP id S235772AbiKNED3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 23:02:58 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8408012D3D
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 20:02:57 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id m6so9942728pfb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 20:02:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AZVouTJdT6m/9WEf41/GvLl8YStUJpgeqkaMfyjFk98=;
-        b=bPhj18ns1d9UqFc4xmE6cjMX7LPa5LT1Hs30thmFJRKAZ2UZU4MVVJU3qTa3O+g93+
-         T50wxxrdI2E77j4L26SXMiuGz6X5hbZvhKxq6vctBd/7aWw5tV1Z5dL862gA6LY/D3Gy
-         GivwAD995KjW4xNlyqwcyKFrZU9dKwrb+FIao=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AZVouTJdT6m/9WEf41/GvLl8YStUJpgeqkaMfyjFk98=;
-        b=a5Ebdo/Z1InHTlva9bcLw0b3n61kgnd8jKxLXRX5A/bljvGwTafs1GLFOvaoHYccf9
-         DgkvfhAJmnXLdpydd96lzadQYYt2VhWx78vrERYQZ1Td0GtP7D9Dm6GmEn5gntRPQnoH
-         M/S7ItCIMKnomVYCaPJrDgzpf+BdneH4GCfqLUpqgT6c4YUmJDXnP2ajFv8qMEwJ9D21
-         1h4VJL7zLdhJiNucyMUw3WKQarlffmYBNJiph31EvHhkhr7cTFLw4d+U2HHqnL68usZe
-         Jv3AWU25zcPPEv4FvrWA854y5CRh2CNlNB4C4pTUF/eHa97Y8sAURm3J1/oMYkPRtNm7
-         W58g==
-X-Gm-Message-State: ANoB5pnqchXgV3DAstkQJqZ7UEkU4tnZvNV5qU4WxRUXEpnXuXGIBfsB
-        Ol/HTrkOmQ/SNzvtuyHCCmSjjQ==
-X-Google-Smtp-Source: AA0mqf7dHYQAXiJUo77CJ3XYezvkEz26h0Kg4ieqiv54LqBBcz84X6DKscefko4d01n0uAd/dzDWoQ==
-X-Received: by 2002:a63:4e13:0:b0:46f:c465:5848 with SMTP id c19-20020a634e13000000b0046fc4655848mr10330801pgb.148.1668398577047;
-        Sun, 13 Nov 2022 20:02:57 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:68f5:86c0:dcaa:df5])
-        by smtp.gmail.com with ESMTPSA id t184-20020a625fc1000000b00562ef28aac6sm5476625pfb.185.2022.11.13.20.02.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 20:02:56 -0800 (PST)
-Date:   Mon, 14 Nov 2022 13:02:51 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     yang.yang29@zte.com.cn
-Cc:     Andrew Morton <akpm@linux-foundation.org>, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, axboe@kernel.dk,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        xu.panda@zte.com.cn
-Subject: Re: [PATCH linux-next] zram: use sysfs_emit() to instead of
- scnprintf()
-Message-ID: <Y3G9649G6j99N/F2@google.com>
-References: <202211141141400847357@zte.com.cn>
+        Sun, 13 Nov 2022 23:03:29 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07169185;
+        Sun, 13 Nov 2022 20:03:24 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.77])
+        by gateway (Coremail) with SMTP id _____8DxOdgLvnFjbcsGAA--.18764S3;
+        Mon, 14 Nov 2022 12:03:23 +0800 (CST)
+Received: from [10.20.42.77] (unknown [10.20.42.77])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axf+AJvnFjX0ISAA--.49417S3;
+        Mon, 14 Nov 2022 12:03:21 +0800 (CST)
+Subject: Re: [PATCH V4] PCI: loongson: Skip scanning unavailable child devices
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20221110231351.GA681551@bhelgaas>
+ <dfd408ed-5c2c-c73a-b901-6641ae7aae5f@flygoat.com>
+From:   Liu Peibao <liupeibao@loongson.cn>
+Message-ID: <855be31e-d3fe-bd7f-3abf-f07413973bd5@loongson.cn>
+Date:   Mon, 14 Nov 2022 12:03:21 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202211141141400847357@zte.com.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <dfd408ed-5c2c-c73a-b901-6641ae7aae5f@flygoat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Axf+AJvnFjX0ISAA--.49417S3
+X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQAKCmNw3mQJaAAAsJ
+X-Coremail-Antispam: 1Uk129KBjvJXoWxZw45tr18JFyDZw1UZrW7twb_yoWrXF45pF
+        95JFWakFZ5Kr18Kw1qqw18ZFy2yr4kJayDXrn5GF12krnIvr1jgry0vF1q9ry3Jr4kJF1j
+        vF1jga47ZF45ZaUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8HKZJUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/14 11:41), yang.yang29@zte.com.cn wrote:
-[..]
->  static ssize_t max_comp_streams_store(struct device *dev,
-> @@ -1191,8 +1191,7 @@ static ssize_t io_stat_show(struct device *dev,
->  	ssize_t ret;
+On 11/12/22 12:06 AM, Jiaxun Yang wrote:
 > 
->  	down_read(&zram->init_lock);
-> -	ret = scnprintf(buf, PAGE_SIZE,
-> -			"%8llu %8llu %8llu %8llu\n",
-> +	ret = sysfs_emit(buf, "%8llu %8llu %8llu %8llu\n",
->  			(u64)atomic64_read(&zram->stats.failed_reads),
->  			(u64)atomic64_read(&zram->stats.failed_writes),
->  			(u64)atomic64_read(&zram->stats.invalid_io),
-
-sysfs_emit() params need to be realigned to match (.
-
-> @@ -1222,8 +1221,7 @@ static ssize_t mm_stat_show(struct device *dev,
->  	orig_size = atomic64_read(&zram->stats.pages_stored);
->  	max_used = atomic_long_read(&zram->stats.max_used_pages);
 > 
-> -	ret = scnprintf(buf, PAGE_SIZE,
-> -			"%8llu %8llu %8llu %8lu %8ld %8llu %8lu %8llu %8llu\n",
-> +	ret = sysfs_emit(buf, "%8llu %8llu %8llu %8lu %8ld %8llu %8lu %8llu %8llu\n",
->  			orig_size << PAGE_SHIFT,
->  			(u64)atomic64_read(&zram->stats.compr_data_size),
->  			mem_used << PAGE_SHIFT,
-
-Ditto.
-
-> @@ -1247,8 +1245,7 @@ static ssize_t bd_stat_show(struct device *dev,
->  	ssize_t ret;
+> 在 2022/11/10 23:13, Bjorn Helgaas 写道:
+>> On Thu, Nov 10, 2022 at 11:00:45PM +0000, Jiaxun Yang wrote:
+>>> 在2022年11月10日十一月 下午9:07，Bjorn Helgaas写道：
+>>>> On Tue, Nov 08, 2022 at 02:42:40PM +0800, Liu Peibao wrote:
+>>>>> The PCI Controller of 2k1000 could not mask devices by setting vender ID or
+>>>>> device ID in configuration space header as invalid values. When there are
+>>>>> pins shareable between the platform device and PCI device, if the platform
+>>>>> device is preferred, we should not scan this PCI device. In the above
+>>>>> scene, add `status = "disabled"` property in DT node of this PCI device.
+>>>>>
+>>>>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+>>>>> ---
+>>>>> V3 -> V4: 1. get rid of the masklist and search the status property
+>>>>>       directly.
+>>>>>            2. check the status property only when accessing the vendor ID.
+>>>>> V2 -> V3: 1. use list_for_each_entry() for more clearly.
+>>>>>            2. fix wrong use of sizeof().
+>>>>> V1 -> V2: use existing property "status" instead of adding new property.
+>>>>>
+>>>>>   drivers/pci/controller/pci-loongson.c | 11 +++++++++++
+>>>>>   1 file changed, 11 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
+>>>>> index 05c50408f13b..efca0b3b5a29 100644
+>>>>> --- a/drivers/pci/controller/pci-loongson.c
+>>>>> +++ b/drivers/pci/controller/pci-loongson.c
+>>>>> @@ -194,6 +194,17 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
+>>>>>               return NULL;
+>>>>>       }
+>>>>>   +#ifdef CONFIG_OF
+>>>>> +    /* Don't access disabled devices. */
+>>>>> +    if (pci_is_root_bus(bus) && where == PCI_VENDOR_ID) {
+>>>>> +        struct device_node *dn;
+>>>>> +
+>>>>> +        dn = of_pci_find_child_device(bus->dev.of_node, devfn);
+>>>>> +        if (dn && !of_device_is_available(dn))
+>>>>> +            return NULL;
+>>>>> +    }
+>>>>> +#endif
+>>>> Looks nice and simple, thanks for trying this out.
+>>> Should we make this into common PCI code?
+>>> I guess Loongson won’t be the last platform having such problem.
+>> I think we should wait until somebody else has this problem.
+>>
+>> It's not a completely trivial situation because if the device uses PCI
+>> memory or I/O space, we have to worry about how that space is handled.
+>> Does the BIOS assign that space?  Is it included in the host bridge
+>> _CRS or "ranges" properties?  If the device is below any PCI bridges
+>> (I don't think that's the case in your situation), how does the space
+>> it requires get routed through the bridges?
 > 
->  	down_read(&zram->init_lock);
-> -	ret = scnprintf(buf, PAGE_SIZE,
-> -		"%8llu %8llu %8llu\n",
-> +	ret = sysfs_emit(buf, "%8llu %8llu %8llu\n",
->  			FOUR_K((u64)atomic64_read(&zram->stats.bd_count)),
->  			FOUR_K((u64)atomic64_read(&zram->stats.bd_reads)),
->  			FOUR_K((u64)atomic64_read(&zram->stats.bd_writes)));
-
-Ditto.
-
-> @@ -1266,9 +1263,7 @@ static ssize_t debug_stat_show(struct device *dev,
->  	ssize_t ret;
+> I believe in this case the address is assigned by BIOS and they are out of ranges
+> properties of host bridge. Those are all on chip devices so there won't be any
+> bridges.
 > 
->  	down_read(&zram->init_lock);
-> -	ret = scnprintf(buf, PAGE_SIZE,
-> -			"version: %d\n%8llu %8llu\n",
-> -			version,
-> +	ret = sysfs_emit(buf, "version: %d\n%8llu %8llu\n", version,
->  			(u64)atomic64_read(&zram->stats.writestall),
->  			(u64)atomic64_read(&zram->stats.miss_free));
+> @Peibao, can you please confirm this? I was never able to boot mainline kernel
+> on my LS2K board.
+> 
+> Thanks.
+> - Jiaxun
+> 
 
-Ditto.
+@Jiaxun,
 
----
+Yes, the same as you said totally.
 
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index 01ab32f2897e..430933b73c1b 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -1192,10 +1192,10 @@ static ssize_t io_stat_show(struct device *dev,
- 
- 	down_read(&zram->init_lock);
- 	ret = sysfs_emit(buf, "%8llu %8llu %8llu %8llu\n",
--			(u64)atomic64_read(&zram->stats.failed_reads),
--			(u64)atomic64_read(&zram->stats.failed_writes),
--			(u64)atomic64_read(&zram->stats.invalid_io),
--			(u64)atomic64_read(&zram->stats.notify_free));
-+			 (u64)atomic64_read(&zram->stats.failed_reads),
-+			 (u64)atomic64_read(&zram->stats.failed_writes),
-+			 (u64)atomic64_read(&zram->stats.invalid_io),
-+			 (u64)atomic64_read(&zram->stats.notify_free));
- 	up_read(&zram->init_lock);
- 
- 	return ret;
-@@ -1222,15 +1222,15 @@ static ssize_t mm_stat_show(struct device *dev,
- 	max_used = atomic_long_read(&zram->stats.max_used_pages);
- 
- 	ret = sysfs_emit(buf, "%8llu %8llu %8llu %8lu %8ld %8llu %8lu %8llu %8llu\n",
--			orig_size << PAGE_SHIFT,
--			(u64)atomic64_read(&zram->stats.compr_data_size),
--			mem_used << PAGE_SHIFT,
--			zram->limit_pages << PAGE_SHIFT,
--			max_used << PAGE_SHIFT,
--			(u64)atomic64_read(&zram->stats.same_pages),
--			atomic_long_read(&pool_stats.pages_compacted),
--			(u64)atomic64_read(&zram->stats.huge_pages),
--			(u64)atomic64_read(&zram->stats.huge_pages_since));
-+			 orig_size << PAGE_SHIFT,
-+			 (u64)atomic64_read(&zram->stats.compr_data_size),
-+			 mem_used << PAGE_SHIFT,
-+			 zram->limit_pages << PAGE_SHIFT,
-+			 max_used << PAGE_SHIFT,
-+			 (u64)atomic64_read(&zram->stats.same_pages),
-+			 atomic_long_read(&pool_stats.pages_compacted),
-+			 (u64)atomic64_read(&zram->stats.huge_pages),
-+			 (u64)atomic64_read(&zram->stats.huge_pages_since));
- 	up_read(&zram->init_lock);
- 
- 	return ret;
-@@ -1246,9 +1246,9 @@ static ssize_t bd_stat_show(struct device *dev,
- 
- 	down_read(&zram->init_lock);
- 	ret = sysfs_emit(buf, "%8llu %8llu %8llu\n",
--			FOUR_K((u64)atomic64_read(&zram->stats.bd_count)),
--			FOUR_K((u64)atomic64_read(&zram->stats.bd_reads)),
--			FOUR_K((u64)atomic64_read(&zram->stats.bd_writes)));
-+			 FOUR_K((u64)atomic64_read(&zram->stats.bd_count)),
-+			 FOUR_K((u64)atomic64_read(&zram->stats.bd_reads)),
-+			 FOUR_K((u64)atomic64_read(&zram->stats.bd_writes)));
- 	up_read(&zram->init_lock);
- 
- 	return ret;
-@@ -1264,8 +1264,8 @@ static ssize_t debug_stat_show(struct device *dev,
- 
- 	down_read(&zram->init_lock);
- 	ret = sysfs_emit(buf, "version: %d\n%8llu %8llu\n", version,
--			(u64)atomic64_read(&zram->stats.writestall),
--			(u64)atomic64_read(&zram->stats.miss_free));
-+			 (u64)atomic64_read(&zram->stats.writestall),
-+			 (u64)atomic64_read(&zram->stats.miss_free));
- 	up_read(&zram->init_lock);
- 
- 	return ret;
+Did you notice the following patch? The liointc of LS2K can't work after
+commit b2c4c3969fd7 ("irqchip/loongson-liointc: irqchip add 2.0 version"),
+which may cause the booting failure. 
+https://lore.kernel.org/all/20221104110712.23300-1-liupeibao@loongson.cn/
+
+In fact, I am developing this on the LoongArch compatible board LS2K1000LA.
+I boot the mainline kernel basing my FDT supporting patch set for LoongArch
+and the BIOS following current LoongArch booting protocol :).
+
+BR,
+Peibao
+
+> 
+>>
+>> It would be nice to say something in this commit log about whether
+>> these are issues on your platform.
+>>
+
+@Bjorn,
+
+Thanks!
+
+I will update commit log in the next patch to clear the issue on our platform,
+which is absolutely what Jiaxun has described above.
+
+BR,
+Peibao
+
