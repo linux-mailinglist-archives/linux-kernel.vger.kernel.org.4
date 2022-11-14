@@ -2,126 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB086288D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:04:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C616288D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:04:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236537AbiKNTEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 14:04:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        id S236807AbiKNTEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 14:04:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbiKNTEA (ORCPT
+        with ESMTP id S231757AbiKNTED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 14:04:00 -0500
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58481839D;
-        Mon, 14 Nov 2022 11:03:57 -0800 (PST)
-Received: by mail-qk1-f169.google.com with SMTP id z17so8031232qki.11;
-        Mon, 14 Nov 2022 11:03:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LbBWqu7EwIcfg7tWgn9JDFpx91torOus7W6SwljXq88=;
-        b=lJ9Q4uee/HzkRxjbvCwPm2xFBpCmpFCUeaYw++l41pM0WDT53fCUsI1AccI/L3Y0y1
-         9ktg2NfapBhW3Y1PCyo2oZr05V+xN/P28tlQsI30uHV4PH/lfvwjXVHK4oQTycqO7AHu
-         b9HV1GTlJ+KciSXmYdZ3IVel1Ota0N0nOEdGFhbCoUjL0+zapFWvHMYMnqjMcedvNDCF
-         /1jMwrS2rHfBBR1sa3uj2ObU9InIyUPxKTz/c2xQCLI+KD8QSx5iTLb0QgOFmRfREq5L
-         9UoBnA1vWHacJGAkX3KUVXATwNUvETFX8jKvr6WZXJgDK2ytEHolnQ4zWRf2y+wY/N1C
-         4CVQ==
-X-Gm-Message-State: ANoB5pk174GhQCCYGtVSlwtdhGsPOOjymjlVbe3LAO+rPDQYmvLhBJoO
-        zH5G+xaMQ6Z+R2VL0guCSXAXZpwnIZ7dsQ==
-X-Google-Smtp-Source: AA0mqf4ITEjo6jQO8XKELHrzCh2INu8TYfVF/goDiWs0XnbDf4C6bNnCy8cjhGGDd+3lbJL8q7Ui2A==
-X-Received: by 2002:a37:89c4:0:b0:6f8:1e94:ffbd with SMTP id l187-20020a3789c4000000b006f81e94ffbdmr12587445qkd.539.1668452636605;
-        Mon, 14 Nov 2022 11:03:56 -0800 (PST)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id r17-20020ae9d611000000b006ee7e223bb8sm6967561qkk.39.2022.11.14.11.03.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 11:03:55 -0800 (PST)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-376596ae449so115854177b3.5;
-        Mon, 14 Nov 2022 11:03:55 -0800 (PST)
-X-Received: by 2002:a81:4dc3:0:b0:370:61f5:b19e with SMTP id
- a186-20020a814dc3000000b0037061f5b19emr13890254ywb.316.1668452635372; Mon, 14
- Nov 2022 11:03:55 -0800 (PST)
-MIME-Version: 1.0
-References: <20221114180843.1125308-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <OS0PR01MB5922DDCE24ED6F6DD44B4B3F86059@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB5922DDCE24ED6F6DD44B4B3F86059@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 14 Nov 2022 20:03:43 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUFsOktkVG0T9yGoVSKZ=JP1bdWnhpyQ5rKFt545JYnHg@mail.gmail.com>
-Message-ID: <CAMuHMdUFsOktkVG0T9yGoVSKZ=JP1bdWnhpyQ5rKFt545JYnHg@mail.gmail.com>
-Subject: Re: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we put the PM clocks
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Prabhakar <prabhakar.csengg@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        Mon, 14 Nov 2022 14:04:03 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC29615E;
+        Mon, 14 Nov 2022 11:04:01 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e773329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e773:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BC03B1EC0304;
+        Mon, 14 Nov 2022 20:03:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1668452639;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=TvJ+UE/GU6N+bzHIS1Z6JgJ7axC3eCCZB2aZePqwuuI=;
+        b=RSiC2bcdmaneRJBumhyokJqDZ5FMfLhBifoRh+KV4gXUWcR9RO/dCmkaDZbroPB1uzbspL
+        BX826okxjtSp99mkPwxnC/NSkWqw95qyDYUfOlMNFuAGr5npe9PM3kSoCPlPRLkVmq9Ss6
+        OVKXrhj62SlXtiRATftf8Ai1zJytkKc=
+Date:   Mon, 14 Nov 2022 20:03:55 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Ashok Raj <ashok.raj@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Thiago Macieira <thiago.macieira@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
+        "Mehta, Sohil" <sohil.mehta@intel.com>
+Subject: Re: [PATCH v2 12/14] platform/x86/intel/ifs: Add current_batch sysfs
+ entry
+Message-ID: <Y3KRGx/yNfS78zQ2@zn.tnic>
+References: <20221021203413.1220137-1-jithu.joseph@intel.com>
+ <20221107225323.2733518-1-jithu.joseph@intel.com>
+ <20221107225323.2733518-13-jithu.joseph@intel.com>
+ <Y2/JNAmSoYlLKq3A@zn.tnic>
+ <CC3629D6-B205-4150-80E5-FC7A7A76DD25@intel.com>
+ <Y3CevK2zhAmiUyG9@kroah.com>
+ <Y3DZmKYV+8HBtZ+Q@zn.tnic>
+ <Y3EJ93xzgC/1v0WV@a4bf019067fa.jf.intel.com>
+ <Y3EUPKWDefnkeObR@zn.tnic>
+ <45aa0f69-2523-3cba-8f41-b1351f16b78f@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <45aa0f69-2523-3cba-8f41-b1351f16b78f@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Biju,
+On Mon, Nov 14, 2022 at 10:13:44AM -0800, Dave Hansen wrote:
+> So, what's the point of the sscanf() to check the *filename* other than
+> saving some potentially expensive request_firmware() calls?
 
-On Mon, Nov 14, 2022 at 7:42 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
-> > -----Original Message-----
-> > From: Prabhakar <prabhakar.csengg@gmail.com>
-> > Sent: 14 November 2022 18:09
-> > To: Geert Uytterhoeven <geert+renesas@glider.be>; Wim Van Sebroeck
-> > <wim@linux-watchdog.org>; Guenter Roeck <linux@roeck-us.net>; Philipp Zabel
-> > <p.zabel@pengutronix.de>; linux-watchdog@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org; linux-renesas-soc@vger.kernel.org;
-> > Prabhakar <prabhakar.csengg@gmail.com>; Biju Das
-> > <biju.das.jz@bp.renesas.com>; Fabrizio Castro
-> > <fabrizio.castro.jz@renesas.com>; Prabhakar Mahadev Lad <prabhakar.mahadev-
-> > lad.rj@bp.renesas.com>
-> > Subject: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we put the PM
-> > clocks
-> >
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > On RZ/Five SoC it was observed that setting timeout (to say 1 sec) wouldn't
-> > reset the system. To fix this we make sure we issue a reset before putting
-> > the PM clocks to make sure the registers have been cleared.
-> >
-> > While at it re-used rzg2l_wdt_stop() in rzg2l_wdt_set_timeout() as we were
-> > calling the same functions here.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > Note,
-> > - This patch has been tested on RZ/G2L, RZ/V2M and RZ/Five.
-> > - My initial investigation showed adding the delay after
-> > pm_runtime_get_sync()
-> >   also fixed this issue.
-> > - Do I need add the fixes tag ? what should be the operation PUT-
-> > >RESET/RESET->PUT?
->
-> It looks like timing issue, None of the previous devices are affected by this.
+The point is to do a first sanity check. The other tests are of course
+mandatory.
 
-To me it looks like the device must be clocked for the reset signal
-to be propagated?
+Which brings me to another bastardly idea:
 
-Gr{oetje,eeting}s,
+Let's say you have sequence numbers 0-6.
 
-                        Geert
+Now someone comes along and changes them all to x-y, where both x and y
+are > 6. Or removes the sequence numbers completely.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Now you go and echo your sequence number into current_batch and nothing
+happens. But the sequences *are* there - just not named in a magic way.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Now *my* idea would work because you don't care what the filenames are.
+But you don't want that and you want do some silly sequence numbers
+which the user has to go and connect with what's in the directory.
+
+If this were microcode and arch/x86/, I would've never accepted it.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
