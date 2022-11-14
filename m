@@ -2,99 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962F562815D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A7462815F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236520AbiKNNdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:33:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
+        id S236559AbiKNNd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235560AbiKNNdv (ORCPT
+        with ESMTP id S235560AbiKNNdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:33:51 -0500
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D85ECD8;
-        Mon, 14 Nov 2022 05:33:51 -0800 (PST)
-Received: by mail-qt1-f176.google.com with SMTP id cg5so6699167qtb.12;
-        Mon, 14 Nov 2022 05:33:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1K/wuMBtmfV3gngJ5qtvyvpnfAjWydRqLmTe3lIS7S8=;
-        b=IdANzP57iWzICsvJI92LTL/urEpvQK4GuADfaS5MtfjSuhXWVi4yRYXTAf0vxEv6em
-         jGYs4ZnVtsuL86NikVs2AiEI7EfbkJmlnuSEi1LMKdJwlBwJfk54q+O8vOHaRc8Xdjmn
-         dd7Sar2Rp+mIBes0Rbc3xQEUBo5kfpljJaXK0Lckk2YIVGhJtgA/KIXbngpp4TqZnaTu
-         5r7zw993um0NjMr2gULPqHIUeSm0CLVlqr3K+p9Rq24X/Ti8TJWpErQTEICVbRKuJjHL
-         ys3MiCVCfdMs0tZEBdDlwU9Qh70zfZftqb1HvJc/Q4YY4k5D/whR8cOST5hrl+DQ2yF6
-         QoMQ==
-X-Gm-Message-State: ANoB5pn9BS1HjtyWWgWzQKshDr4b9qu4dq2CRF/gD4Q5F2ln2ZQwRG9j
-        l9k3Nh9Yp0QgLgXD2QunCrSCIn4qOqGKDQ==
-X-Google-Smtp-Source: AA0mqf6csCsBmTaEFyC3aPDjKb6/ISphKzgLVaUtaIefJT76E4ZMPlWNYmPPNGkN+OzU4kyzg7ZgIQ==
-X-Received: by 2002:ac8:4445:0:b0:3a5:2c7c:c915 with SMTP id m5-20020ac84445000000b003a52c7cc915mr12369558qtn.499.1668432830094;
-        Mon, 14 Nov 2022 05:33:50 -0800 (PST)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id 188-20020a370bc5000000b006bbc09af9f5sm6331435qkl.101.2022.11.14.05.33.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 05:33:49 -0800 (PST)
-Received: by mail-yb1-f171.google.com with SMTP id f201so12199629yba.12;
-        Mon, 14 Nov 2022 05:33:49 -0800 (PST)
-X-Received: by 2002:a25:ba4c:0:b0:6dc:dc81:aaf4 with SMTP id
- z12-20020a25ba4c000000b006dcdc81aaf4mr11261269ybj.365.1668432829380; Mon, 14
- Nov 2022 05:33:49 -0800 (PST)
+        Mon, 14 Nov 2022 08:33:55 -0500
+Received: from nbd.name (nbd.name [46.4.11.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C26AFAF4;
+        Mon, 14 Nov 2022 05:33:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:From
+        :References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=60PRZUikRdqopFokv/DkHEVCSO7RX3hL4yVs/FGe6Rc=; b=HUVTOszrTxynyiRnYJm5pvd8ow
+        TJPoXYl2hqn3xaz+DaOzXARw6hlgG4We+kTUhEOq3Wowgn0jDQDw10uMdhv5v1uauhJjjEQ9VEvww
+        zyX5OBOA0wBPickHMe325P/C2S6y7JnTfMz/1ZgiJST7FIW0ckqsTMFVwG0O9NFO72Sk=;
+Received: from p54ae9c3f.dip0.t-ipconnect.de ([84.174.156.63] helo=nf.local)
+        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <nbd@nbd.name>)
+        id 1ouZas-0022vj-0a; Mon, 14 Nov 2022 14:33:46 +0100
+Message-ID: <9c9efca9-8c10-8ac9-6fe8-a18708571ece@nbd.name>
+Date:   Mon, 14 Nov 2022 14:33:45 +0100
 MIME-Version: 1.0
-References: <20221114111513.1436165-1-herve.codina@bootlin.com> <20221114111513.1436165-2-herve.codina@bootlin.com>
-In-Reply-To: <20221114111513.1436165-2-herve.codina@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 14 Nov 2022 14:33:37 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWQD8pXLpuFH3O4_odUpPu3sZXpoHxkS=qopXit3OQVrA@mail.gmail.com>
-Message-ID: <CAMuHMdWQD8pXLpuFH3O4_odUpPu3sZXpoHxkS=qopXit3OQVrA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] soc: renesas: r9a06g032-sysctrl: Export function
- to get the usb role
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Content-Language: en-US
+To:     Dave Taht <dave.taht@gmail.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <20221110212212.96825-1-nbd@nbd.name>
+ <20221110212212.96825-2-nbd@nbd.name> <20221111233714.pmbc5qvq3g3hemhr@skbuf>
+ <20221111204059.17b8ce95@kernel.org>
+ <bcb33ba7-b2a3-1fe7-64b2-1e15203e2cce@nbd.name>
+ <20221114115559.wl7efrgxphijqz4o@skbuf>
+ <8faa9c5d-960c-849b-e6af-a847bb1fd12f@nbd.name>
+ <CAA93jw4Z-fz_6gTxrjwsifcMy=oAcF0mPT6s=_aGdDU3UgCgcg@mail.gmail.com>
+From:   Felix Fietkau <nbd@nbd.name>
+Subject: Re: [PATCH net-next v3 1/4] net: dsa: add support for DSA rx
+ offloading via metadata dst
+In-Reply-To: <CAA93jw4Z-fz_6gTxrjwsifcMy=oAcF0mPT6s=_aGdDU3UgCgcg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 12:15 PM Herve Codina <herve.codina@bootlin.com> wrote:
-> The usb role retrieved is determined from the CFG_USB[H2MODE]
-> value. The CFG_USB register is located within the system
-> controller.
->
-> We need a helper to get the usb role based on H2MODE value from
-> the CFG_USB register without syscon.
->
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+On 14.11.22 14:18, Dave Taht wrote:
+> On Mon, Nov 14, 2022 at 4:21 AM Felix Fietkau <nbd@nbd.name> wrote:
+>>
+>> On 14.11.22 12:55, Vladimir Oltean wrote:
+>> > On Sat, Nov 12, 2022 at 12:13:15PM +0100, Felix Fietkau wrote:
+>> >> On 12.11.22 05:40, Jakub Kicinski wrote:
+>> >> I don't really see a valid use case in running generic XDP, TC and NFT on a
+>> >> DSA master dealing with packets before the tag receive function has been
+>> >> run. And after the tag has been processed, the metadata DST is cleared from
+>> >> the skb.
+>> >
+>> > Oh, there are potentially many use cases, the problem is that maybe
+>> > there aren't as many actual implementations as ideas? At least XDP is,
+>> > I think, expected to be able to deal with DSA tags if run on a DSA
+>> > master (not sure how that applies when RX DSA tag is offloaded, but
+>> > whatever). Marek Behun had a prototype with Marvell tags, not sure how
+>> > far that went in the end:
+>> > https://www.mail-archive.com/netdev@vger.kernel.org/msg381018.html
+>> > In general, forwarding a packet to another switch port belonging to the
+>> > same master via XDP_TX should be relatively efficient.
+>> In that case it likely makes sense to disable DSA tag offloading
+>> whenever driver XDP is being used.
+>> Generic XDP probably doesn't matter much. Last time I tried to use it
+>> and ran into performance issues, I was told that it's only usable for
+>> testing anyway and there was no interest in fixing the cases that I ran
+>> into.
+> 
+> XDP continues to evolve rapidly, as do its use cases. ( ex:
+> ttps://github.com/thebracket/cpumap-pping#readme )
+> 
+> What cases did you run into?
+My issue was the fact that XDP in general (including generic XDP) 
+assumes that packets have 256 bytes of headroom, which is usually only 
+true for drivers that already have proper driver or hardware XDP support.
+That makes generic XDP pretty much useless for normal use, since on XDP 
+capable drivers you should use driver/hardware XDP anyway, and on 
+everything else you get the significant performance penalty of an extra 
+pskb_expand_head call.
+I ended up abandoning XDP for my stuff and used tc instead.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+- Felix
