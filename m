@@ -2,299 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCCE6286E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1864B6286DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236176AbiKNRVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:21:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56398 "EHLO
+        id S237515AbiKNRUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237980AbiKNRUg (ORCPT
+        with ESMTP id S238113AbiKNRUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:20:36 -0500
-Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E181F2C8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:20:35 -0800 (PST)
-Received: from TimeMachine.lan (bband-dyn193.178-41-216.t-com.sk [178.41.216.193])
-        by m-r1.th.seeweb.it (Postfix) with ESMTPA id CA7681F68A;
-        Mon, 14 Nov 2022 18:20:33 +0100 (CET)
-From:   Martin Botka <martin.botka@somainline.org>
-To:     martin.botka1@gmail.com
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Yenda <jtrmal@gmail.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Conley Lee <conleylee@foxmail.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 2/2] arm64: dts: Add basic support for BIQU CB1
-Date:   Mon, 14 Nov 2022 18:20:16 +0100
-Message-Id: <20221114172018.1876608-2-martin.botka@somainline.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221114172018.1876608-1-martin.botka@somainline.org>
-References: <20221114172018.1876608-1-martin.botka@somainline.org>
+        Mon, 14 Nov 2022 12:20:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038821F9D0;
+        Mon, 14 Nov 2022 09:20:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 944B661306;
+        Mon, 14 Nov 2022 17:20:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11F97C4347C;
+        Mon, 14 Nov 2022 17:19:58 +0000 (UTC)
+Date:   Mon, 14 Nov 2022 12:20:40 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jianlin Lv <iecedge@gmail.com>
+Cc:     alison.schofield@intel.com, davidgow@google.com,
+        thunder.leizhen@huawei.com, jianlv@ebay.com,
+        linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tracepoint: Allow livepatch module add trace event
+Message-ID: <20221114122040.59ac8265@gandalf.local.home>
+In-Reply-To: <20221102160236.11696-1-iecedge@gmail.com>
+References: <20221102160236.11696-1-iecedge@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CB1 is Compute Module style board that plugs into Rpi board style adapter or
-Manta 3D printer boards (M4P/M8P).
+On Wed,  2 Nov 2022 16:02:36 +0000
+Jianlin Lv <iecedge@gmail.com> wrote:
 
-The board has:
-	H616 SoC
-	1GB of RAM
-	AXP313A PMIC
+> In the case of keeping the system running, the preferred method for
+> tracing the kernel is dynamic tracing (kprobe), but the drawback of
+> this method is that events are lost, especially when tracing packages
+> in the network stack.
+> 
+> Livepatching provides a potential solution, which is to reimplement the
+> function you want to replace and insert a static tracepoint.
+> In such a way, custom stable static tracepoints can be expanded without
+> rebooting the system.
 
-And the actual boards that CB1 plugs in are just extension to it with ports and
-thus are not split in DT.
+Well that's definitely one way to implement dynamic trace events! :-D
 
-Boards have:
-	4x (3x for Manta boards) USB and 1 USB OTG.
-	SDcard slot for loading images.
-	Ethernet port wired to the internal PHY.
-	2x HDMI 2.0.
-	Power and Status LEDs.
+-- Steve
 
-Currently working:
-	Booting
-	USB
-	UART
-
-Signed-off-by: Martin Botka <martin.botka@somainline.org>
----
-Changes in V2:
-Add proper board compatible
-Add regulator prefix for vcc5v
-Drop okay status from PMIC
-Drop standby_param
- arch/arm64/boot/dts/allwinner/Makefile        |   1 +
- .../dts/allwinner/sun50i-h616-biqu-cb1.dts    | 186 ++++++++++++++++++
- 2 files changed, 187 insertions(+)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
-
-diff --git a/arch/arm64/boot/dts/allwinner/Makefile b/arch/arm64/boot/dts/allwinner/Makefile
-index 6a96494a2e0a..223f1be73541 100644
---- a/arch/arm64/boot/dts/allwinner/Makefile
-+++ b/arch/arm64/boot/dts/allwinner/Makefile
-@@ -38,5 +38,6 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64-model-b.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6-mini.dtb
-+dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-biqu-cb1.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-orangepi-zero2.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-x96-mate.dtb
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
-new file mode 100644
-index 000000000000..297536d7629a
---- /dev/null
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
-@@ -0,0 +1,186 @@
-+// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-+/*
-+ * Copyright (C) 2022 Arm Ltd.
-+ */
-+
-+/dts-v1/;
-+
-+#include "sun50i-h616.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/leds/common.h>
-+
-+/ {
-+	model = "BIQU CB1";
-+	compatible = "biqu,cb1", "allwinner,sun50i-h616";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-0 {
-+			function = LED_FUNCTION_POWER;
-+			color = <LED_COLOR_ID_RED>;
-+			gpios = <&pio 2 12 GPIO_ACTIVE_HIGH>; /* PC12 */
-+			default-state = "on";
-+		};
-+
-+		led-1 {
-+			function = LED_FUNCTION_STATUS;
-+			color = <LED_COLOR_ID_GREEN>;
-+			gpios = <&pio 2 13 GPIO_ACTIVE_HIGH>; /* PC13 */
-+		};
-+	};
-+
-+	reg_vcc5v: regulator_vcc5v {
-+		/* board wide 5V supply directly from the USB-C socket */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc-5v";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+	};
-+
-+	reg_usb1_vbus: regulator-usb1-vbus {
-+		compatible = "regulator-fixed";
-+		regulator-name = "usb1-vbus";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		vin-supply = <&reg_vcc5v>;
-+		enable-active-high;
-+		gpio = <&pio 2 16 GPIO_ACTIVE_HIGH>; /* PC16 */
-+	};
-+};
-+
-+&ehci0 {
-+	status = "okay";
-+};
-+
-+&ehci1 {
-+	status = "okay";
-+};
-+
-+&ehci2 {
-+	status = "okay";
-+};
-+
-+&ehci3 {
-+	status = "okay";
-+};
-+
-+&mmc0 {
-+	vmmc-supply = <&reg_dldo1>;
-+	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;	/* PF6 */
-+	no-1-8-v;
-+	bus-width = <4>;
-+	status = "disabled";
-+};
-+
-+&ohci0 {
-+	status = "okay";
-+};
-+
-+&ohci1 {
-+	status = "okay";
-+};
-+
-+&ohci2 {
-+	status = "okay";
-+};
-+
-+&ohci3 {
-+	status = "okay";
-+};
-+
-+&r_i2c {
-+	status = "okay";
-+
-+	axp1530: pmic@36 {
-+		compatible = "x-powers,axp1530";
-+		reg = <0x36>;
-+		wakeup-source;
-+
-+		regulators{
-+			reg_dcdc1: dcdc1 {
-+				regulator-name = "axp1530-dcdc1";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <3400000>;
-+				regulator-step-delay-us = <25>;
-+				regulator-final-delay-us = <50>;
-+				regulator-always-on;
-+			};
-+
-+			reg_dcdc2: dcdc2 {
-+				regulator-name = "axp1530-dcdc2";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1540000>;
-+				regulator-step-delay-us = <25>;
-+				regulator-final-delay-us = <50>;
-+				regulator-ramp-delay = <200>;
-+				regulator-always-on;
-+			};
-+
-+			reg_dcdc3: dcdc3 {
-+				regulator-name = "axp1530-dcdc3";
-+				regulator-min-microvolt = <500000>;
-+				regulator-max-microvolt = <1840000>;
-+				regulator-step-delay-us = <25>;
-+				regulator-final-delay-us = <50>;
-+				regulator-always-on;
-+			};
-+
-+			reg_aldo1: ldo1 {
-+				regulator-name = "axp1530-aldo1";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-step-delay-us = <25>;
-+				regulator-final-delay-us = <50>;
-+				regulator-always-on;
-+			};
-+
-+			reg_dldo1: ldo2 {
-+				regulator-name = "axp1530-dldo1";
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-step-delay-us = <25>;
-+				regulator-final-delay-us = <50>;
-+				regulator-always-on;
-+			};
-+		};
-+	};
-+};
-+
-+&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_ph_pins>;
-+	status = "okay";
-+};
-+
-+&usbotg {
-+	/*
-+	 * PHY0 pins are connected to a USB-C socket, but a role switch
-+	 * is not implemented: both CC pins are pulled to GND.
-+	 * The VBUS pins power the device, so a fixed peripheral mode
-+	 * is the best choice.
-+	 * The board can be powered via GPIOs, in this case port0 *can*
-+	 * act as a host (with a cable/adapter ignoring CC), as VBUS is
-+	 * then provided by the GPIOs. Any user of this setup would
-+	 * need to adjust the DT accordingly: dr_mode set to "host",
-+	 * enabling OHCI0 and EHCI0.
-+	 */
-+	dr_mode = "peripheral";
-+	status = "okay";
-+};
-+
-+&usbphy {
-+	usb1_vbus-supply = <&reg_usb1_vbus>;
-+	status = "okay";
-+};
--- 
-2.38.1
+> 
+> Signed-off-by: Jianlin Lv <iecedge@gmail.com>
+> ---
+>  kernel/tracepoint.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
+> index f23144af5743..8d1507dd0724 100644
+> --- a/kernel/tracepoint.c
+> +++ b/kernel/tracepoint.c
+> @@ -571,8 +571,8 @@ static void for_each_tracepoint_range(
+>  bool trace_module_has_bad_taint(struct module *mod)
+>  {
+>  	return mod->taints & ~((1 << TAINT_OOT_MODULE) | (1 << TAINT_CRAP) |
+> -			       (1 << TAINT_UNSIGNED_MODULE) |
+> -			       (1 << TAINT_TEST));
+> +				(1 << TAINT_UNSIGNED_MODULE) | (1 << TAINT_TEST) |
+> +				(1 << TAINT_LIVEPATCH));
+>  }
+>  
+>  static BLOCKING_NOTIFIER_HEAD(tracepoint_notify_list);
 
