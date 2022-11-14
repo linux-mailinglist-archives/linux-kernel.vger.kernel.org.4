@@ -2,64 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90D156277C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8716277C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236507AbiKNIc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:32:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
+        id S236514AbiKNIdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:33:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236428AbiKNIcs (ORCPT
+        with ESMTP id S236510AbiKNIc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:32:48 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01A171BE99
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:32:43 -0800 (PST)
-Received: from loongson.cn (unknown [111.9.175.10])
-        by gateway (Coremail) with SMTP id _____8Dx_7cp_XFjLNgGAA--.19057S3;
-        Mon, 14 Nov 2022 16:32:41 +0800 (CST)
-Received: from [10.136.12.12] (unknown [111.9.175.10])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxHuIo_XFjYG4SAA--.49861S3;
-        Mon, 14 Nov 2022 16:32:41 +0800 (CST)
-Subject: Re: [PATCH v2 3/5] LoongArch: Add kretprobe support
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <1664326209-13995-1-git-send-email-yangtiezhu@loongson.cn>
- <1664326209-13995-4-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H7N-N2400ivdczJrfJ9Ht12JUbOADxExF87wVPFEj_c_g@mail.gmail.com>
- <dd3fc4ab-6bbb-2fa5-8d5e-b8206b42518c@loongson.cn>
- <CAAhV-H4ok2r2FarFszwYJ6Hah4m7ieNf6egnXyZhUf1ESDUhXg@mail.gmail.com>
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <a528e970-29ac-2fcb-b749-cfae3fbe5a18@loongson.cn>
-Date:   Mon, 14 Nov 2022 16:32:40 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <CAAhV-H4ok2r2FarFszwYJ6Hah4m7ieNf6egnXyZhUf1ESDUhXg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Mon, 14 Nov 2022 03:32:58 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2062.outbound.protection.outlook.com [40.107.21.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373F217E2E;
+        Mon, 14 Nov 2022 00:32:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S/6tuj3gln6Tr9Mdu5QiRZ60+RMxZG7wsx2pOLFBmRe+CSZgLeBluw182eLexwYOyEYHlB2U0okaspJrvWJqcswelMQnP78MWhPfS31Qn1f9G8ujdC7bFH410wUfX/RuebV+LxD30InyQCq+cm+kLv4pW27aJxpdDwkIWpPRh9I9jZ4zm+UEJ4LcaZbtC6mjeXwrLH7NkcjBhjGOkP+Ys9ZMG9kX73uPAfW18Q9jMROnR61DsALDFo6rRj2ZilzoKn2XIjlojif6NvdlZe3qskjoKGh5y0kEZI6s4/IgowraswTn8QBjdBwvGHUep6PKrgf9TrABnjWFMwVM5gN+cg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DJqzAKbhLR6no+FBGgKK+TDW1LX6ciwSF26u5NmQBqc=;
+ b=f1eYZ4+uU3X8zdOWEQGfbbSXy3kLx98zLmvvF+S1FZXZ6dTCv4Zmvf8khPaSe82I51VM9R61Kx0jHOeuBN8BUoxoqCw74Ul033ptVzR7aUkPH3xpkm9PHdDLghAtxL+JYojM535IfUdwVS+YYmY+c0GJr8rkGfpE8kx8KccbCqHgSQ3XHOZVVnBglBKKUVCXtN9cPLbfjLrYLm1A3P+ZzwF+juV/Gj0doM4gJkG9TnOR8aCt/8cD8CQe0Lc4Ynf1P6e2aql+sbuF32G9yDsroK5LOEhXqva7Jdqw5gPmaZW6995J4UukpgqIbp/Ib18p9bpiw3+0ELNmqqjwI0Xqrw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in.bosch.com; dmarc=pass action=none header.from=in.bosch.com;
+ dkim=pass header.d=in.bosch.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.bosch.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DJqzAKbhLR6no+FBGgKK+TDW1LX6ciwSF26u5NmQBqc=;
+ b=ELElOGdIstJnN7vgvlXI8lRL0S8Yluk1ywk0Zvwc7Y5qXd744hzdcOeNoVRJz8i6t0ZulyryXSmep/qDLdPveMgPbDZcqSXvJHljWURrdq6w/aA14pQx7GCVpKXTM1AqfkerzbLrMUZwF/xpGh6Kbkou6M3MtFDIY0oMnP3AUmA=
+Received: from AM6PR10MB2325.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:44::33)
+ by AM0PR10MB3473.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:151::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
+ 2022 08:32:52 +0000
+Received: from AM6PR10MB2325.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::aa91:54f9:d074:b8b]) by AM6PR10MB2325.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::aa91:54f9:d074:b8b%4]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
+ 08:32:52 +0000
+From:   "Arunachalam Santhanam (MS/ETA-ETAS)" 
+        <Arunachalam.Santhanam@in.bosch.com>
+To:     Zhang Changzhong <zhangchangzhong@huawei.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "EXTERNAL Kleine-Budde Marc (Pengutronix, XC-CT/ECP2)" 
+        <mkl@pengutronix.de>, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2] can: etas_es58x: free netdev when register_candev()
+ failed in es58x_init_netdev()
+Thread-Topic: [PATCH v2] can: etas_es58x: free netdev when register_candev()
+ failed in es58x_init_netdev()
+Thread-Index: AQHY9/5Vp33phWcsf02Yanf1AaJBUa4+FjJw
+Date:   Mon, 14 Nov 2022 08:32:52 +0000
+Message-ID: <AM6PR10MB232575E04F886D1B9341DD21C7059@AM6PR10MB2325.EURPRD10.PROD.OUTLOOK.COM>
+References: <1668413685-23354-1-git-send-email-zhangchangzhong@huawei.com>
+In-Reply-To: <1668413685-23354-1-git-send-email-zhangchangzhong@huawei.com>
+Accept-Language: en-US
 Content-Language: en-US
-X-CM-TRANSID: AQAAf8BxHuIo_XFjYG4SAA--.49861S3
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3XFykGF1UCw1DZFWfAw13Jwb_yoW3Gr18pr
-        WkAFn5ur48Zrn2yr9Iq3sYqF92vr1kXan3WFyxJr4rKr4qgr17Xr15Ar9ruF1fKr4DXr40
-        qr1rGrWa9FW3J37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
-        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
-        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwI
-        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
-        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
-        C2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7XTmDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in.bosch.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM6PR10MB2325:EE_|AM0PR10MB3473:EE_
+x-ms-office365-filtering-correlation-id: 22f2b716-35a7-44c3-93ef-08dac61ad256
+x-ld-processed: 0ae51e19-07c8-4e4b-bb6d-648ee58410f4,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: LsU0wqaWleX94xHWzM4TgQfMUI3AQPJ2zkWx+B+JaU7uI7md9Yw2oUub3AG9OKJ8TtmsymWro57VB2IQCHfBUzU3p6LjkcgXJ3huQ1fQiJqxwkXiPL2ymZBrGJ1q2IVss+yle8IYVK9Pp/ZWkwJOw7BOjrgj/nk8QfKY8h4gVAFKyQVw27AMz2DSp0+obvIwbSZ6UR+3qF7fJk4uPZRgstCbh/erc1TwaQEIBF6PHBvLl6hAeM6rliID40P3mdtBPLjA2fF4PuRRIMQTL/EJaaRr+j93WNv0CUXy5DOdIXbbxNziHc6Wtcsx/Gqb1WNtyq0aB1uKxff63QC3uC6II7syBO2tlQBqMNiGTv+41/Y4TRBu9iiQhM4crpws2nPQv1sN1PRH+JUo0ddkNDpoAfvPQT14hPfd2faSEZ8FKztda7iFxNQ8tC7pUguxspUMelBw5Zj0gu3CEJ382JwN3M9EpqhDif0bzoqhEYIu++GOXPqTSbLuQuYm/pkJcDru4AWLZiPolZ596hgjWWvY+3J4L39J5mBBeFQNHZlhmKcJoNJSUpEbldMqJj65Yxb09w4BO2vcImn/16XhCgoINac4T/sRz6/3J4jJGfhsRGREY1Ms9uZkYDxFOnL9inHAHih7xYR3zmRr0Ssvc1WtCi/1JXS1A6w19Sw1rX0MzLZOwQDOWfLy6DxxJLLDnDEgrQxV6x9FQlr9BnytPWfsFaQSI/VzpAbbQ+b9x0BGb2/bgHS2SokQDIWMCCjfTkPVtZxUUu2tJnH8MKqJIO6Z8Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR10MB2325.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(366004)(376002)(136003)(396003)(451199015)(83380400001)(55016003)(7696005)(53546011)(6506007)(9686003)(26005)(38100700002)(186003)(122000001)(82960400001)(2906002)(5660300002)(7416002)(8936002)(71200400001)(110136005)(478600001)(8676002)(66446008)(66556008)(4326008)(66946007)(76116006)(64756008)(66476007)(52536014)(41300700001)(316002)(54906003)(86362001)(38070700005)(33656002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uIK4YFWfqoEFD3JOV4Jcfn6y2DhfefgAv8YKwZ6UEYRic4j8A/w1ciqGy2++?=
+ =?us-ascii?Q?vXprgBzwkFEVxM5E6l3aybZnvaX2Xna0gtMP7YllxsBtPlmPr9rZ+e03FmUA?=
+ =?us-ascii?Q?5B/Y2ih9UqwODzv3LV461MlixpRcMRNrA5v0J7mF2bh1pylRppwxm3k0HPjl?=
+ =?us-ascii?Q?1jJCL7xJH4E8+9xP+bIHrdJXVvCJmODo8HI1uoSvAAPNKmkCz9aD2WnExHVd?=
+ =?us-ascii?Q?FQVd74fN9D2s55w5pwncaGG59lF8k03BKvgDzOZNagZ450jz3mxcAUn8cEZ2?=
+ =?us-ascii?Q?DI4pv2wZ9LL8fkgQ0OHFvMMBeZfH074VHEm4KGDi7tHyLVf+SSoZrVvxOopo?=
+ =?us-ascii?Q?uijVTNCNQVfoxNAZYPqfic1SCop6krMentpI4YLLuGcmjHvf3H29G7TwtFA3?=
+ =?us-ascii?Q?H9CzlE1H5ydPT2BWFFkKv7RGQS3imbqZHcgtIsaV6lSCjnrZwlOnZ2tSsNnt?=
+ =?us-ascii?Q?5tyHsgnMcqK8B5EO6i7zNSF+y1g2VeCHnvW+UHGxTKEO3N/rQVGFRUkSAD0h?=
+ =?us-ascii?Q?69XjoF+jIL4PTfaTxAF+aW+4chSQ7NX1/EsKh0nFdsMeI8eMIcPnn8rWu4PN?=
+ =?us-ascii?Q?AEhvOQ0ZKkArQvCO5vQ3x55cmfJljjx+dO/8YygxkOy85/p4brxyc3OahQ3u?=
+ =?us-ascii?Q?mQ0cQ0l4/PoMUPfDWEbByhW/v/2qwyZs68cqfHhagEBYzBtsEztgJaclFQgK?=
+ =?us-ascii?Q?nEAaD/eRa17M4zAI+NmXXUbjlKWmVOKvvBcsoK5hGPlEoZkASg+LOp9R7e1/?=
+ =?us-ascii?Q?BkSJQGBjOrOVTNlvYmBuZjarkfJhoefNhieUE+WWssYJmTKvtJI078Z0vd19?=
+ =?us-ascii?Q?UWhWt3wekVGHf7iVBJW/aHbKFPOk1NNqR42XBXFBW5qRXYr+Bt45fDcGyr5m?=
+ =?us-ascii?Q?N1Hf3yVQGyvVG3NRJAF/xo22oYL0WDWSDBgazRFrezn6uC+WxIA7Zl9iRZ8D?=
+ =?us-ascii?Q?/7XCw54RNpeBLCjpSqTl6xuzkYWOJ8mepmYXNrFczPzIvBHpwI/vsEBFTznF?=
+ =?us-ascii?Q?t7Atie6Rv2VPl/kETNrQQhpM56LGXWQGk8CmtPfyNRKvuUP4WSUaEH/Uj0+u?=
+ =?us-ascii?Q?NOLLg6UxV6OAwM4/3rsbUtE+6jhQ+l3+W+hV0HACzB9myUFaM+jXFsOZGG+j?=
+ =?us-ascii?Q?Qhjnd2tElIdNGliPSXIc2rfQz9mioKUL5gA4pWDc4h84gJGubx2wfVikO6db?=
+ =?us-ascii?Q?Q2Q+oU/IEJM3Be9xShRUmHcj6nw8wWq9Hl/9w+zOaI3ulTbrIAjjfs4+yPvR?=
+ =?us-ascii?Q?oC6DmSdJ+pNf3u3vynq9OtfGzGjeOgIpP2WNBM9W35qpeQb+lij/5tUWyZok?=
+ =?us-ascii?Q?oBCSFjk5c+TA1brk1BC1nWVSc8L9WXbnBgHT4+Y9xxDwrmbOc8ipZ/ltNXIR?=
+ =?us-ascii?Q?L7KGYRtbMWVTRNW9tEmA0ccc+3WAiRuzgEBpehsMZ09XAOEdTWmUheh9Zwck?=
+ =?us-ascii?Q?nhrfBJ2SVNrJCg2DuSngqxQA5xJRp1ejEsUEXLuDRhHtKXwpV8CrGzHfqkAv?=
+ =?us-ascii?Q?iUuI6x0NbYXfb6V8gHtXSxSEp+x1GkQSl2WNHIgPPWkEBL9XyIMnNK5lP8R+?=
+ =?us-ascii?Q?B0PWBRQeKYzUAPV8OBs=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: in.bosch.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR10MB2325.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 22f2b716-35a7-44c3-93ef-08dac61ad256
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2022 08:32:52.6216
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 0ae51e19-07c8-4e4b-bb6d-648ee58410f4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RCnGI6dUo2cKKmrG/QwVoSgehpieztgrQopn4buhDod/HgGYcO3oFKhIOtjaB4eJZOKxfPJAVGV1KNjG4RtYUQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB3473
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
         SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,237 +127,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/14 下午2:50, Huacai Chen wrote:
+Hi Zhang,
 
-> On Mon, Nov 14, 2022 at 2:11 PM Jinyang He <hejinyang@loongson.cn> wrote:
->> On 2022/11/14 下午12:43, Huacai Chen wrote:
->>
->>> Hi, Tiezhu and Jinyang,
->>>
->>> On Wed, Sep 28, 2022 at 8:50 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->>>> Use the generic kretprobe trampoline handler to add kretprobe
->>>> support for LoongArch.
->>>>
->>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->>>> ---
->>>>    arch/loongarch/Kconfig                     |  1 +
->>>>    arch/loongarch/kernel/Makefile             |  2 +-
->>>>    arch/loongarch/kernel/kprobes.c            | 24 ++++++++
->>>>    arch/loongarch/kernel/kprobes_trampoline.S | 97 ++++++++++++++++++++++++++++++
->>>>    4 files changed, 123 insertions(+), 1 deletion(-)
->>>>    create mode 100644 arch/loongarch/kernel/kprobes_trampoline.S
->>>>
->>>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
->>>> index 8debd70..877be6a 100644
->>>> --- a/arch/loongarch/Kconfig
->>>> +++ b/arch/loongarch/Kconfig
->>>> @@ -95,6 +95,7 @@ config LOONGARCH
->>>>           select HAVE_IRQ_EXIT_ON_IRQ_STACK
->>>>           select HAVE_IRQ_TIME_ACCOUNTING
->>>>           select HAVE_KPROBES
->>>> +       select HAVE_KRETPROBES
->>>>           select HAVE_MOD_ARCH_SPECIFIC
->>>>           select HAVE_NMI
->>>>           select HAVE_PCI
->>>> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
->>>> index ff98d8a..48f50607 100644
->>>> --- a/arch/loongarch/kernel/Makefile
->>>> +++ b/arch/loongarch/kernel/Makefile
->>>> @@ -33,6 +33,6 @@ obj-$(CONFIG_UNWINDER_PROLOGUE) += unwind_prologue.o
->>>>
->>>>    obj-$(CONFIG_PERF_EVENTS)      += perf_event.o perf_regs.o
->>>>
->>>> -obj-$(CONFIG_KPROBES)          += kprobes.o
->>>> +obj-$(CONFIG_KPROBES)          += kprobes.o kprobes_trampoline.o
->>>>
->>>>    CPPFLAGS_vmlinux.lds           := $(KBUILD_CFLAGS)
->>>> diff --git a/arch/loongarch/kernel/kprobes.c b/arch/loongarch/kernel/kprobes.c
->>>> index c11f6e0..ca3f1dc 100644
->>>> --- a/arch/loongarch/kernel/kprobes.c
->>>> +++ b/arch/loongarch/kernel/kprobes.c
->>>> @@ -306,6 +306,30 @@ int __init arch_populate_kprobe_blacklist(void)
->>>>                                            (unsigned long)__irqentry_text_end);
->>>>    }
->>>>
->>>> +/* Called from __kretprobe_trampoline */
->>>> +void __used *trampoline_probe_handler(struct pt_regs *regs)
->>>> +{
->>>> +       return (void *)kretprobe_trampoline_handler(regs, NULL);
->>>> +}
->>>> +NOKPROBE_SYMBOL(trampoline_probe_handler);
->>>> +
->>>> +void arch_prepare_kretprobe(struct kretprobe_instance *ri,
->>>> +                           struct pt_regs *regs)
->>>> +{
->>>> +       ri->ret_addr = (kprobe_opcode_t *)regs->regs[1];
->>>> +       ri->fp = NULL;
->>>> +
->>>> +       /* Replace the return addr with trampoline addr */
->>>> +       regs->regs[1] = (unsigned long)&__kretprobe_trampoline;
->>>> +}
->>>> +NOKPROBE_SYMBOL(arch_prepare_kretprobe);
->>>> +
->>>> +int arch_trampoline_kprobe(struct kprobe *p)
->>>> +{
->>>> +       return 0;
->>>> +}
->>>> +NOKPROBE_SYMBOL(arch_trampoline_kprobe);
->>>> +
->>>>    int __init arch_init_kprobes(void)
->>>>    {
->>>>           return 0;
->>>> diff --git a/arch/loongarch/kernel/kprobes_trampoline.S b/arch/loongarch/kernel/kprobes_trampoline.S
->>>> new file mode 100644
->>>> index 0000000..9888ab8
->>>> --- /dev/null
->>>> +++ b/arch/loongarch/kernel/kprobes_trampoline.S
->>>> @@ -0,0 +1,97 @@
->>>> +/* SPDX-License-Identifier: GPL-2.0+ */
->>>> +#include <linux/linkage.h>
->>>> +#include <asm/stackframe.h>
->>>> +
->>>> +       .text
->>>> +
->>>> +       .macro save_all_base_regs
->>>> +       cfi_st  zero, PT_R0
->>>> +       cfi_st  ra, PT_R1
->>>> +       cfi_st  tp, PT_R2
->>>> +       cfi_st  a0, PT_R4
->>>> +       cfi_st  a1, PT_R5
->>>> +       cfi_st  a2, PT_R6
->>>> +       cfi_st  a3, PT_R7
->>>> +       cfi_st  a4, PT_R8
->>>> +       cfi_st  a5, PT_R9
->>>> +       cfi_st  a6, PT_R10
->>>> +       cfi_st  a7, PT_R11
->>>> +       cfi_st  t0, PT_R12
->>>> +       cfi_st  t1, PT_R13
->>>> +       cfi_st  t2, PT_R14
->>>> +       cfi_st  t3, PT_R15
->>>> +       cfi_st  t4, PT_R16
->>>> +       cfi_st  t5, PT_R17
->>>> +       cfi_st  t6, PT_R18
->>>> +       cfi_st  t7, PT_R19
->>>> +       cfi_st  t8, PT_R20
->>>> +       cfi_st  u0, PT_R21
->>>> +       cfi_st  fp, PT_R22
->>>> +       cfi_st  s0, PT_R23
->>>> +       cfi_st  s1, PT_R24
->>>> +       cfi_st  s2, PT_R25
->>>> +       cfi_st  s3, PT_R26
->>>> +       cfi_st  s4, PT_R27
->>>> +       cfi_st  s5, PT_R28
->>>> +       cfi_st  s6, PT_R29
->>>> +       cfi_st  s7, PT_R30
->>>> +       cfi_st  s8, PT_R31
->>>> +       addi.d  t0, sp, PT_SIZE
->>>> +       LONG_S  t0, sp, PT_R3
->>>> +       csrrd   t0, LOONGARCH_CSR_CRMD
->>>> +       andi    t0, t0, 0x7 /* extract bit[1:0] PLV, bit[2] IE */
->>>> +       LONG_S  t0, sp, PT_PRMD
->>>> +       .endm
->>>> +
->>>> +       .macro restore_all_base_regs
->>>> +       cfi_ld  zero, PT_R0
->>>> +       cfi_ld  tp, PT_R2
->>>> +       cfi_ld  a0, PT_R4
->>>> +       cfi_ld  a1, PT_R5
->>>> +       cfi_ld  a2, PT_R6
->>>> +       cfi_ld  a3, PT_R7
->>>> +       cfi_ld  a4, PT_R8
->>>> +       cfi_ld  a5, PT_R9
->>>> +       cfi_ld  a6, PT_R10
->>>> +       cfi_ld  a7, PT_R11
->>>> +       cfi_ld  t0, PT_R12
->>>> +       cfi_ld  t1, PT_R13
->>>> +       cfi_ld  t2, PT_R14
->>>> +       cfi_ld  t3, PT_R15
->>>> +       cfi_ld  t4, PT_R16
->>>> +       cfi_ld  t5, PT_R17
->>>> +       cfi_ld  t6, PT_R18
->>>> +       cfi_ld  t7, PT_R19
->>>> +       cfi_ld  t8, PT_R20
->>>> +       cfi_ld  u0, PT_R21
->>>> +       cfi_ld  fp, PT_R22
->>>> +       cfi_ld  s0, PT_R23
->>>> +       cfi_ld  s1, PT_R24
->>>> +       cfi_ld  s2, PT_R25
->>>> +       cfi_ld  s3, PT_R26
->>>> +       cfi_ld  s4, PT_R27
->>>> +       cfi_ld  s5, PT_R28
->>>> +       cfi_ld  s6, PT_R29
->>>> +       cfi_ld  s7, PT_R30
->>>> +       cfi_ld  s8, PT_R31
->>>> +       LONG_L  t0, sp, PT_PRMD
->>>> +       li.d    t1, 0x7 /* mask bit[1:0] PLV, bit[2] IE */
->>>> +       csrxchg t0, t1, LOONGARCH_CSR_CRMD
->>>> +       .endm
->>> Do you think we need to save and restore all regs here?
->>>
->>> Huacai
->> Hi, Huacai,
->>
->>
->> Note that it is not function context. In the original kprobe design, it is
->> triggered by 'break' and then trap into exception with all pt_regs saved.
->> The all pt_regs will be visible to the user. So I think in this version
->> we should also support all regs to user. BTW, due to all exceptions is
->> trapped by 'break' something in pt_regs is not needed, like estat,
->> badvaddr and so on.
-> OK, but I still have some questions:
-> 1, Why $r0 need save/restore?
+Thank you for the update and patch.
 
-Surely $r0 can be not saved, as now we do not have strange purpose
-to make PT_R0 as a flag.
+-----Original Message-----
+From: Zhang Changzhong <zhangchangzhong@huawei.com>=20
+Sent: 14 November 2022 13:45
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>; Wolfgang Grandegger <wg@g=
+randegger.com>; EXTERNAL Kleine-Budde Marc (Pengutronix, XC-CT/ECP2) <mkl@p=
+engutronix.de>; David S. Miller <davem@davemloft.net>; Eric Dumazet <edumaz=
+et@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redha=
+t.com>; Arunachalam Santhanam (MS/ETA-ETAS) <arunachalam.santhanam@in.bosch=
+.com>
+Cc: Zhang Changzhong <zhangchangzhong@huawei.com>; linux-can@vger.kernel.or=
+g; netdev@vger.kernel.org; linux-kernel@vger.kernel.org
+Subject: [PATCH v2] can: etas_es58x: free netdev when register_candev() fai=
+led in es58x_init_netdev()
 
+In case of register_candev() fails, clear es58x_dev->netdev[channel_idx] an=
+d add free_candev(). Otherwise es58x_free_netdevs() will unregister the net=
+dev that has never been registered.
 
-> 2, Why save $r1 but not restore?
-My wrong idea is $r1 should be saved at CSR_ERA, to plays it like
-exception happened. But its value always equal the address of
-__kretprobe_trampoline. The kretprobe is something like fgraph. The real
-return address is returned by trampoline_probe_handler. And at present,
-the real return address is replaced in pt_regs->csr_era in
-__kretprobe_trampoline_handler(). So the $r1 saved in CSR_ERA will
-be destroied at __kretprobe_trampoline_handler() actually.
-That's why $r1 saved also is not needed.
+Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CAN =
+USB interfaces")
+Signed-off-by: Zhang Changzhong <mailto:zhangchangzhong@huawei.com>
+---
+v1 -> v2: change to the correct 'Fixes' tag according to Vincent Mailhol
 
-And both way to get return address from return value or get return address
+Acked-by: <arunachalam.santhanam@in.bosch.com>
 
-from pt_regs is same on LoongArch because arch_kretprobe_fixup_return()
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-does nothing. But I think get return address from pt_regs is more reliable.
-
-
-> 3, What is the purpose of CRMD magic?
-
-PT_CRMD magic is just exception context. It gives us a chance e.g.
-set ie off at func head, and ie on at func return.
-
-
-Thanks,
-
-Jinyang
-
->
->>>> +
->>>> +SYM_CODE_START(__kretprobe_trampoline)
->>>> +       addi.d  sp, sp, -PT_SIZE
->>>> +       save_all_base_regs
->>>> +
->>>> +       move a0, sp /* pt_regs */
->>>> +
->>>> +       bl trampoline_probe_handler
->>>> +
->>>> +       /* use the result as the return-address */
->>>> +       move ra, a0
->>>> +
->>>> +       restore_all_base_regs
->>>> +       addi.d  sp, sp, PT_SIZE
->>>> +
->>>> +       jr ra
->>>> +SYM_CODE_END(__kretprobe_trampoline)
->>>> --
->>>> 2.1.0
->>>>
->>>>
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/=
+usb/etas_es58x/es58x_core.c
+index 25f863b..ddb7c57 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_core.c
++++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+@@ -2091,8 +2091,11 @@ static int es58x_init_netdev(struct es58x_device *es=
+58x_dev, int channel_idx)
+ 	netdev->dev_port =3D channel_idx;
+=20
+ 	ret =3D register_candev(netdev);
+-	if (ret)
++	if (ret) {
++		es58x_dev->netdev[channel_idx] =3D NULL;
++		free_candev(netdev);
+ 		return ret;
++	}
+=20
+ 	netdev_queue_set_dql_min_limit(netdev_get_tx_queue(netdev, 0),
+ 				       es58x_dev->param->dql_min_limit);
+--
+2.9.5
 
