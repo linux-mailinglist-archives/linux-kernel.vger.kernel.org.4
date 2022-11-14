@@ -2,104 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D41627C50
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2298F627C53
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236007AbiKNL3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:29:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52530 "EHLO
+        id S236152AbiKNLaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:30:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236479AbiKNL2s (ORCPT
+        with ESMTP id S236500AbiKNL35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:28:48 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA43DB20;
-        Mon, 14 Nov 2022 03:28:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668425305; x=1699961305;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=CqSmXEq7rTgzGo2eyXNCXdiASe9v+/RyQA11rBsovD0=;
-  b=CdI13GfWjfQQufzb6yMfsxLpUUzBGJfQ/jo5r4Dfy1lBBXAWRezYMoXv
-   bNC4dFZBUPmxU/TVz1WrAizZYa8rwHO4iB69CJO4fTZZYV5gz5GNvK7FC
-   zkbdkDDSappICXhsJ1ojWUeAYz7sniRhTBA3DGaVyA1X8Tja+phml7sGa
-   YYAtb9zVremT12VR1T0RinxZbLcSRrXZmIu29P/f3N8udoJjkqW0SNCnD
-   5C7aJVafaLUoANmQkEC7ofF3rBDzUFDgrf9JCG3g8nyM2JwL6UXvpJbct
-   fbOUtUOTdgPnWptKuQJ/L+iYWTS/WUl/aHHF4/NwTozoggZ2PSrOaj5SL
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="374074729"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="374074729"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 03:28:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="616278552"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="616278552"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 14 Nov 2022 03:28:19 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 48FA6339; Mon, 14 Nov 2022 13:28:44 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jakob Koschel <jakobkoschel@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Kevin Cernekee <cernekee@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v1 4/4] xhci: Convert to use list_count()
-Date:   Mon, 14 Nov 2022 13:28:42 +0200
-Message-Id: <20221114112842.38565-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221114112842.38565-1-andriy.shevchenko@linux.intel.com>
-References: <20221114112842.38565-1-andriy.shevchenko@linux.intel.com>
+        Mon, 14 Nov 2022 06:29:57 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E601266B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:29:41 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id 130so10690119pfu.8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:29:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vBETPaJHyzocIStNZA3XfRFN7+BKiuVhfugdBUV5gm8=;
+        b=L+KDN2Q5Uk4aDBsQTOW5tWjZBjXJJ2wTXTQIgtV+4APaRoJIkxZtPcYpnub4DahZTx
+         DhR0T+lzvEdxppO4bB/YLHSCAwlxRQWExF15i1If/zqfvxHfqRAilpBkYdFy24ILAhIU
+         KEeWnhJdkpgnNYoVx3n+DC5tqB3ojoecuauugUny/PhjdjtnNE5O+8sG/NPbpFDkrH4b
+         taXYkIBuPOMc9SYvuiOclrsfut0NkKCoZ7r0+rR0+nIgK5E+nkhhTKaJGF735r8zc6rD
+         cdzcl4JvhzPcPj+sj9i8CW+JNiLHklRxt0Of3TJv1nFI5HXQDjrIgAbL7nkx5hjPhQHN
+         SZiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vBETPaJHyzocIStNZA3XfRFN7+BKiuVhfugdBUV5gm8=;
+        b=Gc1XqIeZl+vkWH60CKsFm5GXOcKUapr5sOMJfBRhBM3kpf+Fka2j1Rv+RCW/q7Rd+g
+         S81oKW/U3USps/f/1e11Z8Y64iF5N/Fka0SIsCkrcwoScsipqTogbOmyd4TAebz+H2Im
+         r4k0wS0CqD79iDUdOfLeTiVOjLmuEz7z1dD57+ISgXes6ks5YbtNkr+x7Bij9RnxS/Tg
+         106hTLepSBayZ4ean8u7h3Sc/mh5WukKB2Iy6eea+6e4mDAlH+Gc1n0SjTQeoVlZ9o9l
+         XvaCeZVgWwvI3zsP1d8OHi33YK06ecuTzov2lErMayPMPytn8LIZd+vXG0T1SkIA3DId
+         ON2w==
+X-Gm-Message-State: ANoB5pmdueCEPvtVyisf28wHrQYxGbCOqUC+KlRGfQT8GFR2uHcoH9th
+        eE1IlbjSEmOH6tQjQnG9YtG9kDGLT+Pb
+X-Google-Smtp-Source: AA0mqf7nx//U/UsojXgnxUtDKs7dhMT6vYkpeXEky7IF7vO4Fa2jid90q/5RiZyw4vUtN7u11puPkA==
+X-Received: by 2002:a63:54a:0:b0:46f:fc9c:eb5 with SMTP id 71-20020a63054a000000b0046ffc9c0eb5mr11097737pgf.521.1668425381040;
+        Mon, 14 Nov 2022 03:29:41 -0800 (PST)
+Received: from thinkpad ([117.248.0.54])
+        by smtp.gmail.com with ESMTPSA id gk9-20020a17090b118900b00205db4ff6dfsm6245427pjb.46.2022.11.14.03.29.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 03:29:40 -0800 (PST)
+Date:   Mon, 14 Nov 2022 16:59:35 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     catalin.marinas@arm.com, will@kernel.org
+Cc:     robin.murphy@arm.com, amit.pundir@linaro.org, andersson@kernel.org,
+        quic_sibis@quicinc.com, sumit.semwal@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Revert "arm64: dma: Drop cache invalidation from
+ arch_dma_prep_coherent()"
+Message-ID: <20221114112935.GN3869@thinkpad>
+References: <20221114110329.68413-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221114110329.68413-1-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The list API now provides the list_count() to help with counting
-existing nodes in the list. Uilise it.
+On Mon, Nov 14, 2022 at 04:33:29PM +0530, Manivannan Sadhasivam wrote:
+> This reverts commit c44094eee32f32f175aadc0efcac449d99b1bbf7.
+> 
+> As reported by Amit [1], dropping cache invalidation from
+> arch_dma_prep_coherent() triggers a crash on the Qualcomm SM8250 platform
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/usb/host/xhci-ring.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+s/SM8250/SDM845/g
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index ad81e9a508b1..817c31e3b0c8 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2532,7 +2532,6 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	union xhci_trb *ep_trb;
- 	int status = -EINPROGRESS;
- 	struct xhci_ep_ctx *ep_ctx;
--	struct list_head *tmp;
- 	u32 trb_comp_code;
- 	int td_num = 0;
- 	bool handling_skipped_tds = false;
-@@ -2580,10 +2579,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	}
- 
- 	/* Count current td numbers if ep->skip is set */
--	if (ep->skip) {
--		list_for_each(tmp, &ep_ring->td_list)
--			td_num++;
--	}
-+	if (ep->skip)
-+		td_num += list_count(&ep_ring->td_list);
- 
- 	/* Look for common error cases */
- 	switch (trb_comp_code) {
+Sorry for the confusion.
+
+Thanks,
+Mani
+
+> (most probably on other Qcom platforms too). The reason is, Qcom
+> qcom_q6v5_mss driver copies the firmware metadata and shares it with modem
+> for validation. The modem has a secure block (XPU) that will trigger a
+> whole system crash if the shared memory is accessed by the CPU while modem
+> is poking at it.
+> 
+> To avoid this issue, the qcom_q6v5_mss driver allocates a chunk of memory
+> with no kernel mapping, vmap's it, copies the firmware metadata and
+> unvmap's it. Finally the address is then shared with modem for metadata
+> validation [2].
+> 
+> Now because of the removal of cache invalidation from
+> arch_dma_prep_coherent(), there will be cache lines associated with this
+> memory even after sharing with modem. So when the CPU accesses it, the XPU
+> violation gets triggered.
+> 
+> So let's revert this commit to get remoteproc's working (thereby avoiding
+> full system crash) on Qcom platforms.
+> 
+> [1] https://lore.kernel.org/linux-arm-kernel/CAMi1Hd1VBCFhf7+EXWHQWcGy4k=tcyLa7RGiFdprtRnegSG0Mw@mail.gmail.com/
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/remoteproc/qcom_q6v5_mss.c#n933
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+> 
+> Will, Catalin: Please share if you have any other suggestions to handle the
+> resource sharing in the remoteproc driver that could avoid this revert.
+> 
+>  arch/arm64/mm/dma-mapping.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/mm/dma-mapping.c b/arch/arm64/mm/dma-mapping.c
+> index 3cb101e8cb29..7d7e9a046305 100644
+> --- a/arch/arm64/mm/dma-mapping.c
+> +++ b/arch/arm64/mm/dma-mapping.c
+> @@ -36,7 +36,7 @@ void arch_dma_prep_coherent(struct page *page, size_t size)
+>  {
+>  	unsigned long start = (unsigned long)page_address(page);
+>  
+> -	dcache_clean_poc(start, start + size);
+> +	dcache_clean_inval_poc(start, start + size);
+>  }
+>  
+>  #ifdef CONFIG_IOMMU_DMA
+> -- 
+> 2.25.1
+> 
+
 -- 
-2.35.1
-
+மணிவண்ணன் சதாசிவம்
