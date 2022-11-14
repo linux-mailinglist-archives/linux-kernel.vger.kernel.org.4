@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6DA3628A42
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE8F628A45
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237307AbiKNUQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 15:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
+        id S237416AbiKNUQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 15:16:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236205AbiKNUQG (ORCPT
+        with ESMTP id S237116AbiKNUQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:16:06 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6471E1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:16:04 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id r76so12587143oie.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:16:04 -0800 (PST)
+        Mon, 14 Nov 2022 15:16:07 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD2ECE3A
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:16:05 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id v27so18990024eda.1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:16:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZZ4DceovIvniI/E7qgKtkp+mPXifQZS21MtlnZ7xnPs=;
-        b=KI63xJmFi3GEaRs6lSZAeHLr3CTF5DF8CLWsAwCOawP3h7eLV/aX5rkfqg7SAI7yrz
-         Ytj/i10DoFbe1O9NHtwb8fhHuQ8Rl5lBNhb/5YkETrkzowz2e7tPzbnlvmC8S4Rihiqc
-         0l2/lBQqKE+xGmfodZxaZss5DIaG2oPE9kNDWYb3kO0MEGrVX0FYy+m5R29ZMb/JsHCE
-         sd4t5RJI0LFRECpwAguxhiHpjLHIN0VeTZV1CYEQkvhxdN2oHMdav8JAVpdFl4Ap8wN/
-         /BKrHDBDbwZSObmHC5OuMKyn29KXmX0SsZxl/eU+XaTdPL5H6Ts5HGQKgJ3i0WK8Na26
-         V68A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+ayX5aus8Qib+D+2MKrpRvM0X9XTvNaRwPjPBDhpP9Y=;
+        b=a73JV+5UjKY8XE9O/5gFQ561cnrFK4OWe7wpT3HXrcpsuBwdmW2UIkPsV9hEAXGme9
+         LPsjW6KF+9/y/XWltLywDaczMj1W/Dunn8qS66ofyfjlIjiZsM83xoDCjZ9j0JFjDG1e
+         AZ478DJDVB9bCyh7/DCmIc6y+x0gb2kohoDF2fRiVc5msSPT63Us2kOS4iexgpXrsEPQ
+         3ligYIBqTu6aBa09ac6FHAVA4as1877NqcnSrI5UWc3Cbuw0tkOcQJ248vl4lUnpp3M5
+         z8Kkoim+jGWhbAZOrPV9Upscy9/8rkFC7sGSjAcCVl/oYAyUCSULW9t1nb5ELLNItjLF
+         xWGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZZ4DceovIvniI/E7qgKtkp+mPXifQZS21MtlnZ7xnPs=;
-        b=JJLkLTj1aGC+cAP43xsNosR8IT0Demp9cd2ksIuNo8VYe9YUh/dTq0SaKCOSHgg63o
-         Opni3tsBXGxbMdIh9s2mdVZ3RBa+KFLQ/adW7JnIrmrfL+C28AyThU3xU8bHG2AnR35J
-         qDV52H2z4zqmbNnXRBoppZt4Rl/j5H/ZyyOgy/R8BKFHM1eulL7g0UmSFc7ikiZfgUQl
-         FC7PGQpIT56A1EWXs/Edb0Ekq+MUbHuNphjd1xR/dDgP6izfzAaxgj/kF5wJ2r6Htg1H
-         k0oKih1EmLkpgpIsvl99szi+PLFYXWUfPKvA9WPAzxe4ERLPq0wnXTRDW/NSZKXjnuX6
-         pgIg==
-X-Gm-Message-State: ANoB5pmJdVHBMxNtFolhpTGQVgHB1aQ8O06vMZ5ng65YKFNYY7OI7Kpw
-        QPEpQCp02Kw8+xu5ARHHEv3uyZRFMVJxfGVVFHChfw==
-X-Google-Smtp-Source: AA0mqf6NXAYFJNCUyD3mZ+1ZXmQUxVXXOwtemxrUobtj0DML/MLAUW5C9IeaYdL6bdRlxky7GuvlEVrQHrNwjleHB3k=
-X-Received: by 2002:a05:6808:3011:b0:35a:7e1d:3d72 with SMTP id
- ay17-20020a056808301100b0035a7e1d3d72mr6809975oib.233.1668456963311; Mon, 14
- Nov 2022 12:16:03 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ayX5aus8Qib+D+2MKrpRvM0X9XTvNaRwPjPBDhpP9Y=;
+        b=gvcTGN4k0lkdddO+NI4JflPW4FYI4KxEzJZfjebFJzJWkbgYSRutFbK35/q0nZghiT
+         lm/k+9X/lcbRXTHOzxJi5PKpEFsIl9VA/DKtk53HgD4ClXAuGSADzO2OjIyYWEPW7hz3
+         v1u54b1Zolrb42v506Ha62u/SjmXw3SZKNkzRX2NruAEvFhXoEFi9jc0aG3WmG6rYqYe
+         pzZrGv6Qw5TR7gx2HWhl9F88OV7Q5A3pTmvjIpq3OM9OK1cF0G88KvO/M/sET3NcMQfM
+         QZlBEGO8euBTVRcA5TDZHjsypB8fHtY2fo/kRTeXsaEFLtycvRnRYN5QPMEIujEqFtcY
+         1t8g==
+X-Gm-Message-State: ANoB5pmdcP7fesTJA/sf3fcoyIaRjpSnjMEITXd/+xmRLsyU37vbXZwW
+        ORZHQT1HxAF8kHiGJGNEnck=
+X-Google-Smtp-Source: AA0mqf6GJsG1zGJPfS7H1GC1IxuXAlw38EaODlieMZb4TEC1Ne03cwzrzZd8W4Mz0i6GrcWBRDUdLA==
+X-Received: by 2002:a50:9e43:0:b0:461:8dc1:10b with SMTP id z61-20020a509e43000000b004618dc1010bmr12561959ede.113.1668456964075;
+        Mon, 14 Nov 2022 12:16:04 -0800 (PST)
+Received: from ?IPV6:2003:c7:8f35:4b62:6623:1f88:59ad:8b23? (p200300c78f354b6266231f8859ad8b23.dip0.t-ipconnect.de. [2003:c7:8f35:4b62:6623:1f88:59ad:8b23])
+        by smtp.gmail.com with ESMTPSA id f7-20020a1709063f4700b0078d0981516esm4652283ejj.38.2022.11.14.12.16.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 12:16:03 -0800 (PST)
+Message-ID: <1a95a72e-85b9-a03c-51ad-d5ca4b5d0e0e@gmail.com>
+Date:   Mon, 14 Nov 2022 21:16:02 +0100
 MIME-Version: 1.0
-References: <00000000000061fe2205ed6300fa@google.com> <Y3KU5kwa2XGS9gyy@hoboy.vegasvil.org>
-In-Reply-To: <Y3KU5kwa2XGS9gyy@hoboy.vegasvil.org>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 14 Nov 2022 21:15:51 +0100
-Message-ID: <CACT4Y+ZqTQ1gy7Vu8Hsy8tmXa+EC43jYaNxG40biNy3d-rmMmg@mail.gmail.com>
-Subject: Re: [syzbot] BUG: unable to handle kernel NULL pointer dereference in smack_inode_permission
-To:     Richard Cochran <richardcochran@gmail.com>,
-        syzkaller <syzkaller@googlegroups.com>
-Cc:     syzbot <syzbot+0f89bd13eaceccc0e126@syzkaller.appspotmail.com>,
-        casey@schaufler-ca.com, jmorris@namei.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        paul@paul-moore.com, serge@hallyn.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] staging: vt6655: change the function name
+ s_vGenerateTxParameter
+Content-Language: en-US
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+References: <Y3KN+kVLZ8gRzccm@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <Y3KN+kVLZ8gRzccm@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,42 +77,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 at 20:20, Richard Cochran <richardcochran@gmail.com> wrote:
->
-> On Sun, Nov 13, 2022 at 04:05:47PM -0800, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    56751c56c2a2 Merge branch 'for-next/fixes' into for-kernelci
-> > git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=11fc8b0e880000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=606e57fd25c5c6cc
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=0f89bd13eaceccc0e126
-> > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> > userspace arch: arm64
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10a691fa880000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1733c5b9880000
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/cf4668c75dea/disk-56751c56.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/e1ef82e91ef7/vmlinux-56751c56.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/3dabe076170f/Image-56751c56.gz.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+0f89bd13eaceccc0e126@syzkaller.appspotmail.com
->
-> Why was this email addressed to me?
+On 11/14/22 19:50, Tanjuate Brunostar wrote:
+> Remove the use of Hungarian notation, which is not used in the Linux
+> kernel. Reported by checkpatch
+> Add indentation to the affected function to follow the Linux kernel
+> coding style. This improves code visibility
+> 
+> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+> ---
+> 
+> v2: removed unnecessary function prototype
+> 
+>   drivers/staging/vt6655/rxtx.c | 44 +++++++++++------------------------
+>   1 file changed, 14 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> index 715b323cd2a8..341e23054817 100644
+> --- a/drivers/staging/vt6655/rxtx.c
+> +++ b/drivers/staging/vt6655/rxtx.c
+> @@ -10,7 +10,7 @@
+>    * Date: May 20, 2003
+>    *
+>    * Functions:
+> - *      s_vGenerateTxParameter - Generate tx dma required parameter.
+> + *      generate_tx_parameter - Generate tx dma required parameter.
+>    *      vGenerateMACHeader - Translate 802.3 to 802.11 header
+>    *      cbGetFragCount - Calculate fragment number count
+>    *      csBeacon_xmit - beacon tx function
+> @@ -85,18 +85,6 @@ static const unsigned short fb_opt1[2][5] = {
+>   #define DATADUR_A_F1    13
+>   
+>   /*---------------------  Static Functions  --------------------------*/
+> -static void s_vGenerateTxParameter(struct vnt_private *pDevice,
+> -				   unsigned char byPktType,
+> -				   struct vnt_tx_fifo_head *,
+> -				   void *pvRrvTime,
+> -				   void *pvRTS,
+> -				   void *pvCTS,
+> -				   unsigned int	cbFrameSize,
+> -				   bool bNeedACK,
+> -				   unsigned int	uDMAIdx,
+> -				   void *psEthHeader,
+> -				   unsigned short wCurrentRate);
+> -
+>   static unsigned int
+>   s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
+>   		  unsigned char *pbyTxBufferAddr,
+> @@ -854,21 +842,17 @@ s_vFillCTSHead(
+>    -
+>    * unsigned int cbFrameSize, Hdr+Payload+FCS
+>    */
+> -static
+> -void
+> -s_vGenerateTxParameter(
+> -	struct vnt_private *pDevice,
+> -	unsigned char byPktType,
+> -	struct vnt_tx_fifo_head *tx_buffer_head,
+> -	void *pvRrvTime,
+> -	void *pvRTS,
+> -	void *pvCTS,
+> -	unsigned int cbFrameSize,
+> -	bool bNeedACK,
+> -	unsigned int uDMAIdx,
+> -	void *psEthHeader,
+> -	unsigned short wCurrentRate
+> -)
+> +static void generate_tx_parameter(struct vnt_private *pDevice,
+> +				  unsigned char byPktType,
+> +				  struct vnt_tx_fifo_head *tx_buffer_head,
+> +				  void *pvRrvTime,
+> +				  void *pvRTS,
+> +				  void *pvCTS,
+> +				  unsigned int cbFrameSize,
+> +				  bool bNeedACK,
+> +				  unsigned int uDMAIdx,
+> +				  void *psEthHeader,
+> +				  unsigned short wCurrentRate)
+>   {
+>   	u16 fifo_ctl = le16_to_cpu(tx_buffer_head->fifo_ctl);
+>   	bool bDisCRC = false;
+> @@ -1097,8 +1081,8 @@ s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
+>   	memset((void *)(pbyTxBufferAddr + wTxBufSize), 0, (cbHeaderLength - wTxBufSize));
+>   
+>   	/* Fill FIFO,RrvTime,RTS,and CTS */
+> -	s_vGenerateTxParameter(pDevice, byPktType, tx_buffer_head, pvRrvTime, pvRTS, pvCTS,
+> -			       cbFrameSize, bNeedACK, uDMAIdx, hdr, pDevice->wCurrentRate);
+> +	generate_tx_parameter(pDevice, byPktType, tx_buffer_head, pvRrvTime, pvRTS, pvCTS,
+> +			      cbFrameSize, bNeedACK, uDMAIdx, hdr, pDevice->wCurrentRate);
+>   	/* Fill DataHead */
+>   	uDuration = s_uFillDataHead(pDevice, byPktType, pvTxDataHd, cbFrameSize, uDMAIdx, bNeedACK,
+>   				    0, 0, uMACfragNum, byFBOption, pDevice->wCurrentRate, is_pspoll);
 
-Hi Richard,
+I cannot apply your patch.
 
-You are listed as maintainer for the file this crash was attributed to:
-
-$ ./scripts/get_maintainer.pl -f security/smack/smack_lsm.c
-...
-Richard Cochran <richardcochran@gmail.com> (maintainer:PTP HARDWARE
-CLOCK SUPPORT)
-...
-
-Also see:
-https://lore.kernel.org/all/Y279BqPNYAr+5OxC@sol.localdomain/
+Bye Philipp
