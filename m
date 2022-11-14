@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F90A62784A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 577C562784D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236681AbiKNI5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:57:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
+        id S236284AbiKNI5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:57:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236625AbiKNI5O (ORCPT
+        with ESMTP id S236649AbiKNI5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:57:14 -0500
+        Mon, 14 Nov 2022 03:57:15 -0500
 Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4671CB0A;
-        Mon, 14 Nov 2022 00:57:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157B21CFE7;
+        Mon, 14 Nov 2022 00:57:12 -0800 (PST)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 940C010000C;
-        Mon, 14 Nov 2022 08:57:08 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 145B910000A;
+        Mon, 14 Nov 2022 08:57:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668416229;
+        t=1668416231;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BikeLvIio/JhCmemxXGK6Tb6BR276xdjdIvpKahReNo=;
-        b=YgayJyWyPZfnFptl1bLMKNITwUQ25vhC/3TGcCwAe0psbOYG5CFVBeATP2+0RMaTRlZKLF
-        DO7aYXY1gguBDzioOOMQNXgXubUsLA7GpfehuEvb7jQr9TGbT7QsJuz580UzSpC9cPYygJ
-        EJtjZozHNpvGkY/kB77Hk2D4UxZJVnY/0JdJ+EIygIZvzDyoAUrTQvNvps79wHlQ/F432C
-        dsG1Q1AegM4+zo4ZS1yZmccdeEyEhuc2DPXjb+GE45D3uaXsyOKWpVp6qewgSXaynEv75d
-        n7i7NzrlL/7XQIuk72Gkhs0gZ6P/go8nksf2tzDpTv/BHwgE+jiM5/rq+fKOSw==
+        bh=PH1TaWI18OK/TWX9eI82Zyj07sQxLoh1aLVV4ESIk3Q=;
+        b=FV57343RzuyqV9ECyUhRuzb68q4wvUf5r1ZryMT9Dt7M4PUKQkEeIDh+jygW8G/vs+L7QC
+        /MCMF3ryQ7SkLtfi8WU3GFEUiuF+ttd2DiNkzcZnaJe1rr64eopFLMmcNqgrT0Mh4M8Fsl
+        sxeJPEAKqUIR7zy6xKBzvnvLz02BlBH83RwK5zZS/6WDD4As/SWh5pRpU/tr00/4bt2kVw
+        68POKZpO+svRrphqzjVmvslf+x0vdIyw1VxZoFKBji+LzKIw8thflRaroEmPJpncQo7Vdf
+        YAUVytnUYt2sC6gMmmNt7ywjJNBrl5Gr839gQOyFgp11F2Kbj0wnmobsB7BChA==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -41,14 +41,16 @@ Cc:     Robert Marko <robert.marko@sartura.hr>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         <linux-kernel@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v4 3/5] dt-bindings: nvmem: add YAML schema for the sl28 vpd layout
-Date:   Mon, 14 Nov 2022 09:56:57 +0100
-Message-Id: <20221114085659.847611-4-miquel.raynal@bootlin.com>
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v4 4/5] dt-bindings: vendor-prefixes: Add ONIE
+Date:   Mon, 14 Nov 2022 09:56:58 +0100
+Message-Id: <20221114085659.847611-5-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221114085659.847611-1-miquel.raynal@bootlin.com>
 References: <20221114085659.847611-1-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -59,100 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+As described on their website (see link below),
 
-Add a schema for the NVMEM layout on Kontron's sl28 boards.
+   "The Open Network Install Environment (ONIE) is an open source
+    initiative that defines an open “install environment” for modern
+    networking hardware."
 
-Signed-off-by: Michael Walle <michael@walle.cc>
+It is not a proper corporation per-se but rather more a group which
+tries to spread the use of open source standards in the networking
+hardware world.
+
+Link: https://opencomputeproject.github.io/onie/
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
- .../nvmem/layouts/kontron,sl28-vpd.yaml       | 62 +++++++++++++++++++
- .../bindings/nvmem/layouts/nvmem-layout.yaml  |  3 +
- 2 files changed, 65 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml b/Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
-new file mode 100644
-index 000000000000..fef795e79c36
---- /dev/null
-+++ b/Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
-@@ -0,0 +1,62 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/nvmem/layouts/kontron,sl28-vpd.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: NVMEM layout of the Kontron SMARC-sAL28 vital product data
-+
-+maintainers:
-+  - Michael Walle <michael@walle.cc>
-+
-+description:
-+  The vital product data (VPD) of the sl28 boards contains a serial
-+  number and a base MAC address. The actual MAC addresses for the
-+  on-board ethernet devices are derived from this base MAC address by
-+  adding an offset.
-+
-+select: false
-+
-+properties:
-+  compatible:
-+    const: kontron,sl28-vpd
-+
-+  serial-number:
-+    type: object
-+    description: The board's serial number
-+
-+  base-mac-address:
-+    type: object
-+    description:
-+      Base MAC address for all on-module network interfaces. The first
-+      argument of the phandle will be treated as an offset.
-+
-+    properties:
-+      "#nvmem-cell-cells":
-+        const: 1
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+      otp-1 {
-+          compatible = "user-otp";
-+
-+          nvmem-layout {
-+              compatible = "kontron,sl28-vpd";
-+
-+              serial_number: serial-number {
-+              };
-+
-+              base_mac_address: base-mac-address {
-+                  #nvmem-cell-cells = <1>;
-+              };
-+          };
-+      };
-+
-+...
-diff --git a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
-index ecc7c37cbc1f..f64ea2fa362d 100644
---- a/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/layouts/nvmem-layout.yaml
-@@ -17,6 +17,9 @@ description: |
-   define and might require dynamic reading of the NVMEM device in order to
-   perform their parsing. The nvmem-layout container is here to describe these.
- 
-+oneOf:
-+  - $ref: kontron,sl28-vpd.yaml
-+
- properties:
-   compatible: true
- 
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 6e323a380294..65a74026cf2b 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -927,6 +927,8 @@ patternProperties:
+     description: One Laptop Per Child
+   "^oneplus,.*":
+     description: OnePlus Technology (Shenzhen) Co., Ltd.
++  "^onie,.*":
++    description: Open Network Install Environment group
+   "^onion,.*":
+     description: Onion Corporation
+   "^onnn,.*":
 -- 
 2.34.1
 
