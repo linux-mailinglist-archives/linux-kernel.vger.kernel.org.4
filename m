@@ -2,106 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32977627754
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B24762775C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236289AbiKNITk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
+        id S236318AbiKNIVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:21:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235846AbiKNITi (ORCPT
+        with ESMTP id S236326AbiKNIU4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:19:38 -0500
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952772DD8;
-        Mon, 14 Nov 2022 00:19:37 -0800 (PST)
-Received: by mail-qv1-f51.google.com with SMTP id h10so7368151qvq.7;
-        Mon, 14 Nov 2022 00:19:37 -0800 (PST)
+        Mon, 14 Nov 2022 03:20:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BBE2DD8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:19:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668413996;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+Yxpc0+M0IPWKSXHEyC3cyneUXB0jkXapCGIc8Lc3oY=;
+        b=gj2HOp32vgeqSjpAvwAajLUvnNJUke4xPoH+vzCcgK2ESmLy4JRvq1S3qhBXbKebUsJEqq
+        pFk5GsqUyz/+NFhoe/m50IEGwattOnD/khiUzaYKp0ggI8NtrKIxtPU+5lfIgJ9P2mrfQH
+        AJhY8CYBg4Ju/+c+79xl7CQhkYkJqV8=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-464-RCQkLe4FOVCYQa0JoJ8LDA-1; Mon, 14 Nov 2022 03:19:48 -0500
+X-MC-Unique: RCQkLe4FOVCYQa0JoJ8LDA-1
+Received: by mail-ej1-f69.google.com with SMTP id qa14-20020a170907868e00b007ae24f77742so4960863ejc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:19:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1f6hcexQwRSjpPtI2b6I+pAA5eVX0oLT0ZXtJfpdDAY=;
-        b=q26T2PjvHvqj3Rnj5sDwXsG4pVQxNyUa1R12sYMmxxmfYdUiELkR3/4WeeSHSVjfN+
-         GnSnFi5XeNQRJPdS46wGOh7ORO+AyVBKUO0zFawS4HaNLh5+hvFqTgcgDo7os29+4oDY
-         9hG1tP9b6j//2SLAyYZuw4pPwJywZG8Bwu8gPZ/iCWxhX2hQoMWUI2wdqeD1Qt3raoX8
-         iJsS9KwAWjYDP/Rcqtf9R047nNRbf1Z9UMQY6AbUR1ni0dsJezjFAuIoVK2axC5C1Fau
-         5y7NtH0nFsVEGdCdvhObYVR/hHhk6n0+wKjy5WPPLLHiwZYwHl/8v38xju71iUknl/k+
-         L/tg==
-X-Gm-Message-State: ANoB5pmc4LImhEWTvIHaA2RfK6rOhxmGTuruwHnQ3lkuagezHaoma+30
-        DmL412zKfGAYc4ZMZkkTZogsXwnPqcqfKw==
-X-Google-Smtp-Source: AA0mqf7QYK0OC4H8/Mw2w7H/+IuvIJwGK6s5kDIZ+o4lozpfmFr1tpvmiWpgEm6b/AjtY0i7rcA4FQ==
-X-Received: by 2002:ad4:43e2:0:b0:4bb:701b:f217 with SMTP id f2-20020ad443e2000000b004bb701bf217mr11417677qvu.46.1668413976620;
-        Mon, 14 Nov 2022 00:19:36 -0800 (PST)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id br38-20020a05620a462600b006cfc01b4461sm6153472qkb.118.2022.11.14.00.19.35
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Yxpc0+M0IPWKSXHEyC3cyneUXB0jkXapCGIc8Lc3oY=;
+        b=bECJcnx0jqiwnXJ7bcB7gAufI0Y1cPzreH0ILCeQ4UuB7p1lL/5k6pbuLZpjQaPJxZ
+         jAv2SEJifO5nQLwzJnTBTs3DGeooDzTnnJ7l+xfTrAm4RdwZOTCn8OCToOjPwJnvpv1X
+         vg15In8Yj/sH4yZ7tc9PPZ0utZt/CZLhyLWvPu/BETxYxSyJda0MBP+vrJVs8KJzYk7E
+         w4tgut21qLiIDdQSyxvkgFaYupuviRjAaKuKiIdRI7JZJ/oUDXntVmx+t4yQeF+Rojnk
+         GL47SREvBh9JhJaM2lCTchBUklZLsoaQ+KN8XOGh3IgMOQsFMRG/P8kE+VQmgfkmzyXA
+         e6XA==
+X-Gm-Message-State: ANoB5pldnsHl7BwDAZXkOIsF55f4eGcHUjnEWL57z+ihsAfnsNlPOEIm
+        Thc54Wm4GiGKs/KdWsZWrnHXZvx4m5eKw/jJnrVSl1/MmDO78WT0va4RN+2v7CxJ2y3GVzFHfj4
+        w6w77N8RYPp26nPhjxom1mPUl
+X-Received: by 2002:a17:906:5a6f:b0:7ad:8bd5:b7df with SMTP id my47-20020a1709065a6f00b007ad8bd5b7dfmr9198461ejc.57.1668413986798;
+        Mon, 14 Nov 2022 00:19:46 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf51p2NOcFiZ3Q4gnFIwqjGdYGaCfgTUB0YvTQf/RWWvsQXFVt45qefdd8RjE0Fo2ogYIQGtEA==
+X-Received: by 2002:a17:906:5a6f:b0:7ad:8bd5:b7df with SMTP id my47-20020a1709065a6f00b007ad8bd5b7dfmr9198451ejc.57.1668413986549;
+        Mon, 14 Nov 2022 00:19:46 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id o6-20020a170906768600b007a6c25819f1sm3897632ejm.145.2022.11.14.00.19.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 00:19:35 -0800 (PST)
-Received: by mail-yb1-f181.google.com with SMTP id r3so12556666yba.5;
-        Mon, 14 Nov 2022 00:19:35 -0800 (PST)
-X-Received: by 2002:a25:cb4a:0:b0:6dd:b521:a8f2 with SMTP id
- b71-20020a25cb4a000000b006ddb521a8f2mr11133712ybg.380.1668413975373; Mon, 14
- Nov 2022 00:19:35 -0800 (PST)
+        Mon, 14 Nov 2022 00:19:45 -0800 (PST)
+Message-ID: <33ef1207-aad7-b7cd-61ac-327e9afb0699@redhat.com>
+Date:   Mon, 14 Nov 2022 09:19:44 +0100
 MIME-Version: 1.0
-References: <20221111212857.4104308-1-robh@kernel.org>
-In-Reply-To: <20221111212857.4104308-1-robh@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 14 Nov 2022 09:19:23 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXT_+_afxBW6=dku+Y1ea8GTaWznM5vzXO7bYQ1Z8sRwQ@mail.gmail.com>
-Message-ID: <CAMuHMdXT_+_afxBW6=dku+Y1ea8GTaWznM5vzXO7bYQ1Z8sRwQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Drop type from 'cpus' property
-To:     Rob Herring <robh@kernel.org>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: linux-next: manual merge of the drm-intel tree with Linus' tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20221114102327.6d53341e@canb.auug.org.au>
+Content-Language: en-US
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221114102327.6d53341e@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 10:29 PM Rob Herring <robh@kernel.org> wrote:
-> 'cpus' is a common property, and it is now defined in dtschema schemas,
-> so drop the type references in the tree.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+Hi,
 
->  Documentation/devicetree/bindings/power/renesas,apmu.yaml   | 6 ++----
+On 11/14/22 00:23, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the drm-intel tree got a conflict in:
+> 
+>   drivers/gpu/drm/i915/display/intel_backlight.c
+> 
+> between commit:
+> 
+>   b1d36e73cc1c ("drm/i915: Don't register backlight when another backlight should be used (v2)")
+> 
+> from Linus' tree and commit:
+> 
+>   801543b2593b ("drm/i915: stop including i915_irq.h from i915_trace.h")
+> 
+> from the drm-intel tree.
 
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+This is weird, because the:
 
-Gr{oetje,eeting}s,
+   b1d36e73cc1c ("drm/i915: Don't register backlight when another backlight should be used (v2)")
 
-                        Geert
+commit is in 6.1-rc1, so there can only be a conflict it 6.1-rc1 has not
+been back-merged into drm-intel yet ?
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Regards,
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Hans
+
