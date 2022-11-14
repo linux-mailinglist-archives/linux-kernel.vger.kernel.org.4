@@ -2,91 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F0F629044
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 03:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FC2629104
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 05:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237315AbiKOC7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 21:59:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
+        id S232332AbiKOEB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 23:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237857AbiKOC7O (ORCPT
+        with ESMTP id S230080AbiKOEBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 21:59:14 -0500
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C651C930
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 18:56:37 -0800 (PST)
-Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AF2lArQ011244;
-        Mon, 14 Nov 2022 18:56:17 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PPS06212021;
- bh=/CxmLvqUQR8gZR78/D1hy1TINRUon8HR8i5+i5W8Dyc=;
- b=FRvgyFuXhxVXQldYGTynxaFhRNDnTFHAm4XTLZnXDCfBYN2jcZ7e+G6DjskFp/BXG5IJ
- T3PDmZ6d+ieYqIkW6ZJbhaalYiPNFcCT8dHM9pLmcAIIduwzeZF34Ub3ngC4cz278I9S
- jMBD+XHF+Ymz77UZuMqrhGaM5YPvBgry2573O/Kymypc2upetFGxxA7K3WSB32rwFnDZ
- V7fqblmz38UCZf7FSEi4z5Bk9CgtqQnMDz/qsr2uZXtTycdzbESv2t8YeeXI4kyniC5x
- 1bWNOQZeQh3OJEjYYh14XCbLClUn+TcQG79swzjcw0K90suiRjRnwpOtsc5R1HwTo4Wt 2g== 
-Received: from ala-exchng02.corp.ad.wrs.com (unknown-82-254.windriver.com [147.11.82.254])
-        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3ktbvr9tst-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 14 Nov 2022 18:56:16 -0800
-Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
- ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 14 Nov 2022 18:56:16 -0800
-Received: from pek-lpd-ccm3.wrs.com (147.11.136.210) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
- 15.1.2242.12 via Frontend Transport; Mon, 14 Nov 2022 18:56:15 -0800
-From:   Yun Zhou <yun.zhou@windriver.com>
-To:     <jstultz@google.com>, <tglx@linutronix.de>, <sboyd@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>
-Subject: [PATCH] timers: fix LVL_START macro
-Date:   Tue, 15 Nov 2022 10:56:14 +0800
-Message-ID: <20221115025614.79537-1-yun.zhou@windriver.com>
-X-Mailer: git-send-email 2.35.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: ldBEMTSq4fIAaL-TbuTO3fRTgJBvaDEm
-X-Proofpoint-GUID: ldBEMTSq4fIAaL-TbuTO3fRTgJBvaDEm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-14_15,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 lowpriorityscore=0 suspectscore=0 mlxscore=0
- clxscore=1011 spamscore=0 bulkscore=0 malwarescore=0 mlxlogscore=825
- impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211150020
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Nov 2022 23:01:24 -0500
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703CB15A38
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 20:01:19 -0800 (PST)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20221115040115epoutp02715b8fc384e183c4c186057f1788adee~npieAoTJJ3196831968epoutp02_
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:01:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20221115040115epoutp02715b8fc384e183c4c186057f1788adee~npieAoTJJ3196831968epoutp02_
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1668484875;
+        bh=d8Xl6EjuL+PS10RNXALSyi8Let8EDmXKT2SZQyPLmDA=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=OoeuTyiuAv9Bgzt2AePPLDJM6URkaXh0Z++uBWvDqtbgC46ZgBAdCm2ovSS0uXkhs
+         XREz5VGYSpwGXYxpNKlWaA4XUkOBTFhZgQksDCyUxDRxseFMTSOpcOhVJnR23xxUhv
+         V1qTves+g1E4khcF0efWvrk7jH5eKAycj9Zj3AUs=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20221115040114epcas5p24cc22620272232357f8d6202602e8d09~npiddgC1O1038710387epcas5p21;
+        Tue, 15 Nov 2022 04:01:14 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.178]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4NBCCY1gX6z4x9Pt; Tue, 15 Nov
+        2022 04:01:13 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        92.ED.56352.90F03736; Tue, 15 Nov 2022 13:01:13 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20221114114402epcas5p31aade118059c242bd77835da5470afdb~ncNP_sYL72215322153epcas5p38;
+        Mon, 14 Nov 2022 11:44:02 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221114114402epsmtrp1402c33dc60c117c3ec601360f4b52379~ncNP9Zmkc0315803158epsmtrp1I;
+        Mon, 14 Nov 2022 11:44:02 +0000 (GMT)
+X-AuditID: b6c32a4b-5f7fe7000001dc20-10-63730f09ab4a
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        61.E4.14392.20A22736; Mon, 14 Nov 2022 20:44:02 +0900 (KST)
+Received: from cheetah.sa.corp.samsungelectronics.net (unknown
+        [107.109.115.53]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20221114114359epsmtip24f545f59093f0b032ad0b234b7628ba3~ncNM1cUKo1393413934epsmtip2E;
+        Mon, 14 Nov 2022 11:43:59 +0000 (GMT)
+From:   Aakarsh Jain <aakarsh.jain@samsung.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, krzysztof.kozlowski+dt@linaro.org,
+        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
+        david.plowman@raspberrypi.com, mark.rutland@arm.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
+        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
+        pankaj.dubey@samsung.com, smitha.t@samsung.com,
+        aakarsh.jain@samsung.com
+Subject: [Patch v5 0/3] Add new compatible for Exynos3250
+Date:   Mon, 14 Nov 2022 17:20:21 +0530
+Message-Id: <20221114115024.69591-1-aakarsh.jain@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA0VTfVSTVRzuvu8+XvBM31CPN5KkFRoEuMmYdyXaUfK8YhEn//AcqkNzvAxi
+        X+4dYRwLOIXmlCmpmciXfGgBogwGS7ADYwYRSiQNAlHkayw5oQw4BpFtDOq/5/c8v9/9Pee5
+        9xK4TyfHl0hS6WitSqrgc7xZdS2BgSFeqxiZIEdPoFHzeTYaLKjjoJIndgzdL3GykKXGxEW1
+        3RdwdLm1iY0KrbfZqL55iIWqx11q1/kBFrIXVgHkyL3HQYbxBzgyDtvY6M71PA46cc3ERles
+        A1xU1tOFoUvGvzFUbJrmoqwbVi4aaKwD6IsjVuwNSFUWVALKPFAKqJ7SKZz6PneAS5U0OjDK
+        WH6MQ921NXKomtJ0KuvmHIsy1JYDSm/t4VBO4wtU+4yTG8OLTd6WSEvjaa0/rZKp45NU8gj+
+        3n1xu+LCxQJhiFCCtvL9VVIlHcGPfCsmZHeSwhUB3/9jqSLFRcVIGYa/efs2rTpFR/snqhld
+        BJ/WxCs0Ik0oI1UyKSp5qIrWvSYUCLaEuxo/TE402CeB5qtVh5onirkZYH6FHngRkBTBvgwb
+        rgfehA/ZAOD44Bm2p5gC8LvOsyxPMQtgpu0KWB6ZN9zieIQbAOb/amK7BR8yC4PFHQo9IAgO
+        GQJv1Svc9BoyE8DhL3XufpzMYcF+wzjuFlaTEpj/y+ziLIsMgD+2/MNxYx4ZATOy7Lhn2QZY
+        ca1p0R8kJwj408VLXI8QCU/lHl9ytBr+0Vq7xPtCx8kjS1gGh4sdSwcp4NXGMywP3gGbuvNY
+        bqM4GQivXt/sof3g2fYqzI1xciXMnh/BPDwPmguW8UaYd/cJ24PXw5aKsiULFJw2zWCeHD6A
+        T52T3FPAL/f/DUUAlIPnaA2jlNNMuCZMRaf+d1EytdIIFl920F4zGBp8FGoBGAEsABI4fw2v
+        YL1a5sOLl36SRmvVcdoUBc1YQLgrsxzcd61M7foaKl2cUCQRiMRisUgSJhby1/FKvgmS+ZBy
+        qY5OpmkNrV2ewwgv3wyM0vc+3NEbdaDo0djBkYVuMvpOV2Uw23Tg3oa1HeYH9ORfQ7qnQ45N
+        jPVQiVzUFx31+ruO0iJlRerjb2teudl+7OW6TbOnVZb7xzPPRZUzO0/KF8RhR8V9rS/68lco
+        33EWBnVaJ8Y74UjqQn/+55MSQazfY+Oe38dA9/73f/A+ePGlPetqX3VWR2VPXC6LDQto69ha
+        bx77LMEYPHoUPDzcnO39aQxf8lFwQFWjIdiecCL6GZNt+znNnyYKL33PuOv216NzdSMzh6tl
+        pp/hm7ExDc/vbks4/Zu9t7ufaN+fOT81/Xb6SiBKS7dFNnHntqA0nSXIC2WxTAvahiPDFwRt
+        z+7byGcxiVJhEK5lpP8CJfgjVGIEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrDLMWRmVeSWpSXmKPExsWy7bCSvC6TVlGywYVnyhZPd8xktXgwbxub
+        xeIfz5ks7i/+zGJxaPNWdostV2YzWyw/foDVYv6Rc6wW2w8+YrHY+AIoe3HmXRaL5/PXMVq8
+        nHWPzaLvxUNmi02Pr7FaXN41h82iZ8NWVou1R+6yWyy9fpHJYtmmP0wWi7Z+Ybdo3XuE3eLu
+        nm2MFi1tR5gcJDzWzFvD6LHj7hJGj+tLPjF77Jx1l91j8Z6XTB6bVnWyedy5tofNY/OSeo/W
+        o79YPPq2rGL06Dpync3j8yY5j1NfP7MH8EZx2aSk5mSWpRbp2yVwZfQ9f89YMIm/4uCbRewN
+        jL+5uxg5OSQETCR+951l62Lk4hAS2M0ocW/TB2aIhIzE/7Zj7BC2sMTKf8/ZIYqamSQ2n+5n
+        7WLk4GAT0JU4uz0HJC4i0MoocX1lJxOIwyywkkXi9sYeJpBuYQFLibkXvrGC2CwCqhLHDv9j
+        A7F5BWwlGlqfQ22Tl1i94QDzBEaeBYwMqxglUwuKc9Nziw0LDPNSy/WKE3OLS/PS9ZLzczcx
+        giNIS3MH4/ZVH/QOMTJxMB5ilOBgVhLhnSeTnyzEm5JYWZValB9fVJqTWnyIUZqDRUmc90LX
+        yXghgfTEktTs1NSC1CKYLBMHp1QDk77vgv2aHyZ/kjtwz2brW8Zo5ii9Pt+iWxNOTpoRMcvD
+        gZ013/vYDmPF3OCCcg+u5VoZzL0bN4feXLon+IT5sq1XIy4X5p9dkVz0PZDNcL65x/ZfV7V5
+        Fq78c0bbNSX4oa98u7Xxn5D5p/zThRUaz59/fXN54atNHJrHvzSq3SneYdHB8mmpreIhb3vx
+        DQcOn9Oos/SumHKQ8cDvrapBsVt9rv6/qvP94SHr6aerHV9Nldm35FFA8Jd32xR3RNfclCwK
+        fbhqtns4++uyzIl7RAOYBFb0yUbvnTv7yped+579Wf2j0Lhww7OtajpRMyb9VeaNWPFD6vb8
+        vYq3PU48z507jS9Bq76P0+PZrXMSE9cosRRnJBpqMRcVJwIA9YUXxA8DAAA=
+X-CMS-MailID: 20221114114402epcas5p31aade118059c242bd77835da5470afdb
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221114114402epcas5p31aade118059c242bd77835da5470afdb
+References: <CGME20221114114402epcas5p31aade118059c242bd77835da5470afdb@epcas5p3.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The number of buckets per level should be LVL_SIZE, not LVL_SIZE-1.
+Since MFC v7 support was added for Exynos5420 and Exynos3250
+SoC with same compatible string "samsung,mfc-v7". As both SoCs
+having different hardware properties and having same compatible
+string for both SoCs doesn't seems to be correct.
+Add a new compatible to differentiate the two SoC's MFC IP, at 
+the same time to keep git bisect happy, add a fallback to mfc-v7
+for Exynos3250.
 
-Signed-off-by: Yun Zhou <yun.zhou@windriver.com>
----
- kernel/time/timer.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes since v4:
+ - Addressed review comments from Krzysztof Kozlowski.
+   - Fixed syntax in commit body,dropped quotes and corrected proper
+     commit title as per submitting-patches.rst.
 
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 717fcb9fb14a..1116b208093e 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -161,7 +161,7 @@ EXPORT_SYMBOL(jiffies_64);
-  * time. We start from the last possible delta of the previous level
-  * so that we can later add an extra LVL_GRAN(n) to n (see calc_index()).
-  */
--#define LVL_START(n)	((LVL_SIZE - 1) << (((n) - 1) * LVL_CLK_SHIFT))
-+#define LVL_START(n)	(LVL_SIZE << (((n) - 1) * LVL_CLK_SHIFT))
- 
- /* Size of each clock level */
- #define LVL_BITS	6
+Changes since v3:
+ - Addressed review comments from Krzysztof Kozlowski.
+   - Added new compatible string for Exynos3250 followed by mfc-v7 fallback.
+
+Changes since v2:
+ - Addressed review comments from Krzysztof Kozlowski.
+   - Changed subject prefixes matching the subsystem.
+
+Changes since v1:
+ - Addressed review comments from Marek Szyprowski.
+   - Changed subject prefix from arm64 to arm.
+
+ - Addressed review comments from Krzysztof Kozlowski.
+   - Changed subject prefixes matching the subsystem.
+   - Added new compatible string for Exynos3250 followed by mfc-v7 fallback.
+   - Removed checkpatch warnings from s5p_mfc.c.Sent separate patch
+     series for the same.
+
+ - Addressed review comments from Tommaso Merciai.
+   - Change in commit message body from used to use in Patch-2.
+
+Aakarsh Jain (3):
+  media: dt-bindings: s5p-mfc: Add new compatible string for Exynos3250
+    SoC
+  media: s5p-mfc: Add variant data for MFC v7 hardware for Exynos 3250
+    SoC
+  ARM: dts: exynos: Add new SoC specific compatible string for
+    Exynos3250 SoC
+
+ .../devicetree/bindings/media/s5p-mfc.txt       | 10 ++++++----
+ arch/arm/boot/dts/exynos3250.dtsi               |  2 +-
+ .../media/platform/samsung/s5p-mfc/s5p_mfc.c    | 17 +++++++++++++++--
+ 3 files changed, 22 insertions(+), 7 deletions(-)
+
 -- 
-2.35.2
+2.17.1
 
