@@ -2,211 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6E5628181
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE7C628182
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236845AbiKNNjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:39:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
+        id S236858AbiKNNk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:40:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235560AbiKNNjb (ORCPT
+        with ESMTP id S235560AbiKNNkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:39:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12B620BEE;
-        Mon, 14 Nov 2022 05:39:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 14 Nov 2022 08:40:23 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7951F2D0;
+        Mon, 14 Nov 2022 05:40:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668433222; x=1699969222;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=sn+BVRD719enYHls8iG1p906iTBmNSnWJWJ7q80LPN4=;
+  b=M1jRXo9+6PKmOglh9EmCu4dK7MjqM4oy0cvJCF4ERFhlTDqEtwogBtR8
+   eDd4I/dBJyH85LhAqtgks5S9RiR6zObJHrqs89VWa353vXVHweySi8Eee
+   B+fzJRBEbxw2UPHloaWos0XBr4nzRRgcZ8ZgE18VCu/nLo0gtxB7W6Lc6
+   JtjqVquGM2SKuUsXyyh4qm3CJFLJlwoaADQ+FER1EJea+JTOnJ8jcn9DQ
+   wELXyKNdVetibiv9FixGGE968BI6BOdKuuwBC6SzaGBbYPdUf5UbAbBqT
+   Su8isq+f8/tzUm1KmS/G+3VROnsNer2Qj+2hRvxghGkWUcKHLoUzYT/wL
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="310677459"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="310677459"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 05:40:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="669656094"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="669656094"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga008.jf.intel.com with ESMTP; 14 Nov 2022 05:40:21 -0800
+Received: from [10.252.208.163] (kliang2-mobl1.ccr.corp.intel.com [10.252.208.163])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 903FC611A1;
-        Mon, 14 Nov 2022 13:39:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 080DFC433C1;
-        Mon, 14 Nov 2022 13:39:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668433168;
-        bh=cyGUgtr2otkWYH4TggRInQa0UWTOM8gl47QGyy1GPeA=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=DUcibMCxl++eFiZqJXhMFYb29mqFPqHvNRh58OzPhZiV4YRrQTXmxJgJf+FjFaj2y
-         emk6C+Aw2QJR8nnUTvTCN3eoOCs7me8g8itS+fBk0KWrBrqXHPFr1knknFYfopWF/G
-         Jx41eMhe3CVg76x1A5B9Bq6lEaKa5MbymSnC9UVT6P/iUGiIMYlGDgrTLWui+aft1c
-         wvjSmSmXpAzlf7RODX0YQgcKtB5ucJLauLlJ7twUFEoceaBE/9MhmF4r18349gh2lS
-         OJ6UvgJ8FamyRJOFWYoE6aVqJS6XSjIheRrqBMEEaznf5ONVIbymJT71kX3a/Qvj0o
-         1pp8kzGh6onkg==
-Message-ID: <46a1398be032ee6d06aef7df5e336b6ce2ba8f53.camel@kernel.org>
-Subject: Re: [PATCH 2/2 v2] ceph: use a xarray to record all the opened
- files for each inode
-From:   Jeff Layton <jlayton@kernel.org>
-To:     xiubli@redhat.com, ceph-devel@vger.kernel.org, idryomov@gmail.com,
-        viro@zeniv.linux.org.uk
-Cc:     lhenriques@suse.de, mchangir@redhat.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        stable@vger.kernel.org
-Date:   Mon, 14 Nov 2022 08:39:26 -0500
-In-Reply-To: <20221114051901.15371-3-xiubli@redhat.com>
-References: <20221114051901.15371-1-xiubli@redhat.com>
-         <20221114051901.15371-3-xiubli@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        by linux.intel.com (Postfix) with ESMTPS id 77A8A580A5F;
+        Mon, 14 Nov 2022 05:40:18 -0800 (PST)
+Message-ID: <bbb73e4b-a73e-6ce5-db1f-e54d1bb19c2c@linux.intel.com>
+Date:   Mon, 14 Nov 2022 08:40:17 -0500
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 1/9] perf pmu: Add documentation
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xin Gao <gaoxin@cdjrlc.com>, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
+References: <20221114075127.2650315-1-irogers@google.com>
+ <20221114075127.2650315-2-irogers@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20221114075127.2650315-2-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-11-14 at 13:19 +0800, xiubli@redhat.com wrote:
-> From: Xiubo Li <xiubli@redhat.com>
->=20
-> When releasing the file locks the fl->fl_file memory could be
-> already released by another thread in filp_close(), so we couldn't
-> depend on fl->fl_file to get the inode. Just use a xarray to record
-> the opened files for each inode.
->=20
-> Cc: stable@vger.kernel.org
-> URL: https://tracker.ceph.com/issues/57986
-> Signed-off-by: Xiubo Li <xiubli@redhat.com>
+
+
+On 2022-11-14 2:51 a.m., Ian Rogers wrote:
+> Add documentation to struct perf_pmu and the associated structs of
+> perf_pmu_alias and perf_pmu_format.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->  fs/ceph/file.c  |  9 +++++++++
->  fs/ceph/inode.c |  4 ++++
->  fs/ceph/locks.c | 17 ++++++++++++++++-
->  fs/ceph/super.h |  4 ++++
->  4 files changed, 33 insertions(+), 1 deletion(-)
->=20
-> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-> index 85afcbbb5648..cb4a9c52df27 100644
-> --- a/fs/ceph/file.c
-> +++ b/fs/ceph/file.c
-> @@ -231,6 +231,13 @@ static int ceph_init_file_info(struct inode *inode, =
-struct file *file,
->  			fi->flags |=3D CEPH_F_SYNC;
-> =20
->  		file->private_data =3D fi;
-> +
-> +		ret =3D xa_insert(&ci->i_opened_files, (unsigned long)file,
-> +				CEPH_FILP_AVAILABLE, GFP_KERNEL);
-> +		if (ret) {
-> +			kmem_cache_free(ceph_file_cachep, fi);
-> +			return ret;
-> +		}
->  	}
-> =20
->  	ceph_get_fmode(ci, fmode, 1);
-> @@ -932,6 +939,8 @@ int ceph_release(struct inode *inode, struct file *fi=
-le)
->  		dout("release inode %p regular file %p\n", inode, file);
->  		WARN_ON(!list_empty(&fi->rw_contexts));
-> =20
-> +		xa_erase(&ci->i_opened_files, (unsigned long)file);
-> +
->  		ceph_fscache_unuse_cookie(inode, file->f_mode & FMODE_WRITE);
->  		ceph_put_fmode(ci, fi->fmode, 1);
-> =20
-> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
-> index 77b0cd9af370..554450838e44 100644
-> --- a/fs/ceph/inode.c
-> +++ b/fs/ceph/inode.c
-> @@ -619,6 +619,8 @@ struct inode *ceph_alloc_inode(struct super_block *sb=
-)
->  	INIT_LIST_HEAD(&ci->i_unsafe_iops);
->  	spin_lock_init(&ci->i_unsafe_lock);
-> =20
-> +	xa_init(&ci->i_opened_files);
-> +
->  	ci->i_snap_realm =3D NULL;
->  	INIT_LIST_HEAD(&ci->i_snap_realm_item);
->  	INIT_LIST_HEAD(&ci->i_snap_flush_item);
-> @@ -637,6 +639,8 @@ void ceph_free_inode(struct inode *inode)
->  {
->  	struct ceph_inode_info *ci =3D ceph_inode(inode);
-> =20
-> +	xa_destroy(&ci->i_opened_files);
-> +
->  	kfree(ci->i_symlink);
->  #ifdef CONFIG_FS_ENCRYPTION
->  	kfree(ci->fscrypt_auth);
-> diff --git a/fs/ceph/locks.c b/fs/ceph/locks.c
-> index d8385dd0076e..a176a30badd0 100644
-> --- a/fs/ceph/locks.c
-> +++ b/fs/ceph/locks.c
-> @@ -42,9 +42,10 @@ static void ceph_fl_copy_lock(struct file_lock *dst, s=
-truct file_lock *src)
-> =20
->  static void ceph_fl_release_lock(struct file_lock *fl)
->  {
-> -	struct ceph_file_info *fi =3D fl->fl_file->private_data;
->  	struct inode *inode =3D fl->fl_u.ceph_fl.fl_inode;
->  	struct ceph_inode_info *ci;
-> +	struct ceph_file_info *fi;
-> +	void *val;
-> =20
->  	/*
->  	 * If inode is NULL it should be a request file_lock,
-> @@ -54,6 +55,20 @@ static void ceph_fl_release_lock(struct file_lock *fl)
->  		return;
-> =20
->  	ci =3D ceph_inode(inode);
-> +
-> +	/*
-> +	 * For Posix-style locks, it may race between filp_close()s,
-> +	 * and it's possible that the 'file' memory pointed by
-> +	 * 'fl->fl_file' has been released. If so just skip it.
+>  tools/perf/util/pmu.c |  14 ++++++
+>  tools/perf/util/pmu.h | 105 +++++++++++++++++++++++++++++++++++++++---
+>  2 files changed, 113 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> index 6a86e6af0903..a8f9f47c6ed9 100644
+> --- a/tools/perf/util/pmu.c
+> +++ b/tools/perf/util/pmu.c
+> @@ -31,10 +31,24 @@
+>  
+>  struct perf_pmu perf_pmu__fake;
+>  
+> +/**
+> + * Values from a format file read from <sysfs>/devices/cpu/format/ held in
+> + * struct perf_pmu. For example, the contents of
+> + * <sysfs>/devices/cpu/format/event may be "config:0-7" and will be represented
+> + * here as name="event", value=PERF_PMU_FORMAT_VALUE_CONFIG and bits 0 to 7 will
+> + * be set.
+> + */
+>  struct perf_pmu_format {
+> +	/** The modifier/file name. */
+>  	char *name;
+> +	/**
+> +	 * Which config value the format relates to. Supported values are from
+> +	 * PERF_PMU_FORMAT_VALUE_CONFIG to PERF_PMU_FORMAT_VALUE_CONFIG_END.
 > +	 */
-> +	rcu_read_lock();
-> +	val =3D xa_load(&ci->i_opened_files, (unsigned long)fl->fl_file);
-> +	if (val =3D=3D CEPH_FILP_AVAILABLE) {
-> +		fi =3D fl->fl_file->private_data;
-> +		atomic_dec(&fi->num_locks);
-
-Don't you need to remove the old atomic_dec from this function if you
-move it here?
-
-> +	}
-> +	rcu_read_unlock();
-> +
->  	if (atomic_dec_and_test(&ci->i_filelock_ref)) {
->  		/* clear error when all locks are released */
->  		spin_lock(&ci->i_ceph_lock);
-> diff --git a/fs/ceph/super.h b/fs/ceph/super.h
-> index 7b75a84ba48d..b3e89192cbec 100644
-> --- a/fs/ceph/super.h
-> +++ b/fs/ceph/super.h
-> @@ -329,6 +329,8 @@ struct ceph_inode_xattrs_info {
->  	u64 version, index_version;
+>  	int value;
+> +	/** Which config bits are set by this format value. */
+>  	DECLARE_BITMAP(bits, PERF_PMU_FORMAT_BITS);
+> +	/** Element on list within struct perf_pmu. */
+>  	struct list_head list;
 >  };
-> =20
-> +#define CEPH_FILP_AVAILABLE         xa_mk_value(1)
-> +
->  /*
->   * Ceph inode.
->   */
-> @@ -434,6 +436,8 @@ struct ceph_inode_info {
->  	struct list_head i_unsafe_iops;   /* uncommitted mds inode ops */
->  	spinlock_t i_unsafe_lock;
-> =20
-> +	struct xarray		i_opened_files;
-> +
->  	union {
->  		struct ceph_snap_realm *i_snap_realm; /* snap realm (if caps) */
->  		struct ceph_snapid_map *i_snapid_map; /* snapid -> dev_t */
+>  
+> diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+> index 68e15c38ae71..29571c0f9d15 100644
+> --- a/tools/perf/util/pmu.h
+> +++ b/tools/perf/util/pmu.h
+> @@ -34,30 +34,91 @@ struct perf_pmu_caps {
+>  };
+>  
+>  struct perf_pmu {
+> +	/** The name of the PMU such as "cpu". */
+>  	char *name;
+> +	/**
+> +	 * Optional alternate name for the PMU determined in architecture
+> +	 * specific code.
+> +	 */
+>  	char *alias_name;
+> +	/**
+> +	 * Optional PMU identifier read from
+> +	 * <sysfs>/bus/event_source/devices/<name>/identifier.
+> +	 */
+>  	char *id;
+> +	/**
+> +	 * Perf event attributed type value, read from
+> +	 * <sysfs>/bus/event_source/devices/<name>/type.
+> +	 */
+>  	__u32 type;
+> +	/**
+> +	 * Can the PMU name be selected as if it were an event?
+> +	 */
+>  	bool selectable;
+> +	/**
+> +	 * Is the PMU not within the CPU core? Determined by the presence of
+> +	 * <sysfs>/bus/event_source/devices/<name>/cpumask.
+> +	 */
+>  	bool is_uncore;
+> +	/** Is the PMU name either cpu_core or cpu_atom. */
 
-This looks like it'll work, but it's a lot of extra work, having to
-track this extra xarray just on the off chance that one of these fd's
-might have file locks. The num_locks field is only checked in one place
-in ceph_get_caps.
+I don't think we want to limit the hybrid names only to cpu_core or
+cpu_atom. Maybe something as below?
+/* Is a hybrid CPU PMU, e.g., cpu_core, cpu_atom. */
 
-Here's what I'd recommend instead:
+Thanks,
+Kan
 
-Have ceph_get_caps look at the lists in inode->i_flctx and see whether
-any of its locks have an fl_file that matches the @filp argument in that
-function. Most inodes never get any file locks, so in most cases  this
-will turn out to just be a NULL pointer check for i_flctx anyway.
-
-Then you can just remove the num_locks field and call the new helper
-from ceph_get_caps instead. I'll send along a proposed patch for the
-helper in a bit.
---=20
-Jeff Layton <jlayton@kernel.org>
+>  	bool is_hybrid;
+> +	/**
+> +	 * Are events auxiliary events? Determined in architecture specific
+> +	 * code.
+> +	 */
+>  	bool auxtrace;
+> +	/**
+> +	 * Number of levels of :ppp precision supported by the PMU, read from
+> +	 * <sysfs>/bus/event_source/devices/<name>/caps/max_precise.
+> +	 */
+>  	int max_precise;
+> +	/**
+> +	 * Optional default perf_event_attr determined in architecture specific
+> +	 * code.
+> +	 */
+>  	struct perf_event_attr *default_config;
+> +	/**
+> +	 * Empty or the contents of either of:
+> +	 * <sysfs>/bus/event_source/devices/<name>/cpumask.
+> +	 * <sysfs>/bus/event_source/devices/<cpu>/cpus.
+> +	 */
+>  	struct perf_cpu_map *cpus;
+> -	struct list_head format;  /* HEAD struct perf_pmu_format -> list */
+> -	struct list_head aliases; /* HEAD struct perf_pmu_alias -> list */
+> +	/**
+> +	 * Holds the contents of files read from
+> +	 * <sysfs>/bus/event_source/devices/<name>/format/. The contents specify
+> +	 * which event parameter changes what config, config1 or config2 bits.
+> +	 */
+> +	struct list_head format;
+> +	/**
+> +	 * List of struct perf_pmu_alias. Each alias corresponds to an event
+> +	 * read from <sysfs>/bus/event_source/devices/<name>/events/ or from
+> +	 * json events in pmu-events.c.
+> +	 */
+> +	struct list_head aliases;
+> +	/** Has the list caps been initialized? */
+>  	bool caps_initialized;
+> +	/** The length of the list caps. */
+>  	u32 nr_caps;
+> -	struct list_head caps;    /* HEAD struct perf_pmu_caps -> list */
+> -	struct list_head list;    /* ELEM */
+> +	/**
+> +	 * Holds the contents of files read from
+> +	 * <sysfs>/bus/event_source/devices/<name>/caps/. The contents are pairs
+> +	 * of the filename with the value of its contents, for example,
+> +	 * max_precise (see above) may have a value of 3.
+> +	 */
+> +	struct list_head caps;
+> +	/** Element on pmus list in pmu.c. */
+> +	struct list_head list;
+> +	/** Element on perf_pmu__hybrid_pmus. */
+>  	struct list_head hybrid_list;
+>  
+> +	/** Features to inhibit when events on this PMU are opened. */
+>  	struct {
+> +		/** Disables perf_event_attr exclude_guest and exclude_host. */
+>  		bool exclude_guest;
+>  	} missing_features;
+>  };
+>  
+> +/** A special global PMU used for testing. */
+>  extern struct perf_pmu perf_pmu__fake;
+>  
+>  struct perf_pmu_info {
+> @@ -71,21 +132,53 @@ struct perf_pmu_info {
+>  
+>  #define UNIT_MAX_LEN	31 /* max length for event unit name */
+>  
+> +/**
+> + * An event either read from sysfs or builtin in pmu-events.c, created by
+> + * parsing the pmu-events json files.
+> + */
+>  struct perf_pmu_alias {
+>  	char *name;
+> +	/** Optional short description of the event. */
+>  	char *desc;
+> +	/** Optional long description. */
+>  	char *long_desc;
+> +	/**
+> +	 * Optional topic such as cache or pipeline, particularly for json
+> +	 * events.
+> +	 */
+>  	char *topic;
+> +	/** Comma separated parameter list. */
+>  	char *str;
+> -	struct list_head terms; /* HEAD struct parse_events_term -> list */
+> -	struct list_head list;  /* ELEM */
+> +	/** Owned list of the original parsed parameters. */
+> +	struct list_head terms;
+> +	/** List element of struct perf_pmu aliases. */
+> +	struct list_head list;
+> +	/** Units for the event, such as bytes or cache lines. */
+>  	char unit[UNIT_MAX_LEN+1];
+> +	/** Value to scale read counter values by. */
+>  	double scale;
+> +	/**
+> +	 * Does the file
+> +	 * <sysfs>/bus/event_source/devices/<pmu_name>/events/<name>.per-pkg or
+> +	 * equivalent json value exist and have the value 1.
+> +	 */
+>  	bool per_pkg;
+> +	/**
+> +	 * Does the file
+> +	 * <sysfs>/bus/event_source/devices/<pmu_name>/events/<name>.snapshot
+> +	 * exist and have the value 1.
+> +	 */
+>  	bool snapshot;
+> +	/** Is the event hidden and so not shown in perf list by default. */
+>  	bool deprecated;
+> +	/**
+> +	 * A metric expression associated with an event. Doing this makes little
+> +	 * sense due to scale and unit applying to both.
+> +	 */
+>  	char *metric_expr;
+> +	/** A name for the metric. unit applying to both. */
+>  	char *metric_name;
+> +	/** The name copied from struct perf_pmu. */
+>  	char *pmu_name;
+>  };
+>  
