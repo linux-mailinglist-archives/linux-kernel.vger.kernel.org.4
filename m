@@ -2,69 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0763D627BC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6085C627BBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236041AbiKNLME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:12:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
+        id S236147AbiKNLLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:11:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236619AbiKNLLg (ORCPT
+        with ESMTP id S236748AbiKNLKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:11:36 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52831248E3;
-        Mon, 14 Nov 2022 03:08:45 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A1066660035A;
-        Mon, 14 Nov 2022 11:08:40 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668424121;
-        bh=WSZBBTuHZl7i5QeHJkZThtLqJACixahwu9l9LESefbA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oHySW+J8hVuJ7x6PI24Y90yrAp822hL2yetyUUbeIhY1OmfW2+SXasFB0RzCVKCKk
-         4PEkbXvmLBOtcG3Ppj7ZAVn06lona6ffEshFTBBzX3QDkAU6qVoF3wcZaFqUGyQMKU
-         zDk+gT7GhMcJTyWAZ+rjPCr1ZOP+PNAA8FvV3XWJZTTtLl8nBdOw5kZz1y0uw7mDjY
-         VZrkoC12Yj9Wr+Y/09+zvKHs3mrjYwGk6rcgRyU4IZNkMsoJaln0F/0daKkFHBS/HE
-         O6gCjOIJDdo/Vulo7AJGIkkCKdqUvmJpN5PE417zZI1ITorN9tzHbZWGuzMBwVxYBV
-         XGIsXxzvo0s8w==
-Message-ID: <f301a43a-5d55-1607-b8d3-5cd057977397@collabora.com>
-Date:   Mon, 14 Nov 2022 12:08:37 +0100
+        Mon, 14 Nov 2022 06:10:46 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27AC22BF8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:08:21 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N9mkm05LVz4f3m6n
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 19:08:16 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.102.38])
+        by APP4 (Coremail) with SMTP id gCh0CgAnmdaiIXJjjUwLAg--.26174S4;
+        Mon, 14 Nov 2022 19:08:19 +0800 (CST)
+From:   Wei Yongjun <weiyongjun@huaweicloud.com>
+To:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Wei Yongjun <weiyongjun1@huawei.com>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] irqchip/wpcm450: fix memory leak in ap_init_qci_info()
+Date:   Mon, 14 Nov 2022 11:08:54 +0000
+Message-Id: <20221114110854.554220-1-weiyongjun@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2] media: mediatek: vcodec: fix h264 cavlc bitstream fail
-Content-Language: en-US
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20221018114122.26785-1-yunfei.dong@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221018114122.26785-1-yunfei.dong@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgAnmdaiIXJjjUwLAg--.26174S4
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gw4fXw4kAFy5Ar4ftryxXwb_yoW3tFb_u3
+        yUWr9xXFs2kFWrJ347uF45X34qyF1kWrnYg3WIyry5ZFW2qws3Grn7Z3s8tF47WF4xtrn3
+        Cr97ZFyxZryxGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUboxYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+        AF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+        IxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVW8JVW3Jw
+        CI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnI
+        WIevJa73UjIFyTuYvjxUrku4UUUUU
+X-CM-SenderInfo: 5zhl50pqjm3046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,57 +59,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 18/10/22 13:41, Yunfei Dong ha scritto:
-> Some cavlc bistream will decode fail when the frame size is small than
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-s/small/smaller/g
+If of_iomap() failed, 'aic' should be freed before return. Otherwise
+there is a memory leak.
 
-> 20 bytes. Need to add pending data at the end of the bitstream.
-> 
-> For the minimum size of mapped memory is 256 bytes(16x16), adding four bytes data
-> won't lead to access unknown virtual memory.
-> 
-> Fixes: 59fba9eed5a7 ("media: mediatek: vcodec: support stateless H.264 decoding for mt8192")
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
-> compared with v1:
-> - add detail comments for function: vdec_h264_insert_startcode.
-> - re-write commit message.
-> ---
->   .../vcodec/vdec/vdec_h264_req_multi_if.c      | 32 +++++++++++++++++--
->   1 file changed, 29 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-> index 4cc92700692b..18e048755d11 100644
-> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.c
-> @@ -539,6 +539,29 @@ static int vdec_h264_slice_core_decode(struct vdec_lat_buf *lat_buf)
->   	return 0;
->   }
->   
-> +static void vdec_h264_insert_startcode(struct mtk_vcodec_dev *vcodec_dev, unsigned char *buf,
-> +				       size_t *bs_size, struct mtk_h264_pps_param *pps)
-> +{
-> +	struct device *dev = &vcodec_dev->plat_dev->dev;
-> +
-> +	/* Need to add pending data at the end of bitstream when bs_sz is small than
-> +	 * 20 bytes for cavlc bitstream, or lat will decode fail. This pending data is
-> +	 * useful for mt8192 and mt8195 platform.
+Fixes: fead4dd49663 ("irqchip: Add driver for WPCM450 interrupt controller")
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+---
+ drivers/irqchip/irq-wpcm450-aic.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-What is the reason why other SoCs don't need this?
-
-> +	 *
-> +	 * cavlc bitstream when entropy_coding_mode_flag is false.
-> +	 */
-> +	if (pps->entropy_coding_mode_flag || *bs_size > 20 ||
-> +	    !(of_device_is_compatible(dev->of_node, "mediatek,mt8192-vcodec-dec") ||
-> +	    of_device_is_compatible(dev->of_node, "mediatek,mt8195-vcodec-dec")))
-
-I'm not comfortable seeing of_device_is_compatible... this list will grow whenever
-a new SoC needing this appears.
-Please think about a good name for a flag/quirk, or a bool, in the platform data
-for these two SoCs and use it.
-
-Regards,
-Angelo
+diff --git a/drivers/irqchip/irq-wpcm450-aic.c b/drivers/irqchip/irq-wpcm450-aic.c
+index 0dcbeb1a05a1..91df62a64cd9 100644
+--- a/drivers/irqchip/irq-wpcm450-aic.c
++++ b/drivers/irqchip/irq-wpcm450-aic.c
+@@ -146,6 +146,7 @@ static int __init wpcm450_aic_of_init(struct device_node *node,
+ 	aic->regs = of_iomap(node, 0);
+ 	if (!aic->regs) {
+ 		pr_err("Failed to map WPCM450 AIC registers\n");
++		kfree(aic);
+ 		return -ENOMEM;
+ 	}
+ 
+-- 
+2.34.1
 
