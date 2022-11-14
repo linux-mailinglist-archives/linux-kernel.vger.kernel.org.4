@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3C5628B0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:08:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E73BF628B0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237511AbiKNVIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 16:08:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
+        id S237633AbiKNVIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 16:08:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237333AbiKNVI1 (ORCPT
+        with ESMTP id S237606AbiKNVIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 16:08:27 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449D7B5D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:08:24 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id i19-20020a63e913000000b004705d1506a6so6390324pgh.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:08:24 -0800 (PST)
+        Mon, 14 Nov 2022 16:08:35 -0500
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1C6B5D
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:08:33 -0800 (PST)
+Received: by mail-pj1-x1049.google.com with SMTP id pj8-20020a17090b4f4800b002140219b2b3so50324pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:08:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FAjkIdGz/j9kJ1xDL5dYREJTueL8AT+RXQYxwRGY3ak=;
-        b=FQaZu3Cbsd2gHnYi5Gx+2DWoUegFSW+qx8oogpEOsCl0/itsxpNpL6S4L435rIus3u
-         q6b3Ob2ArneyTeF0HA+YgEFmbvuDtumr1ySUmpoIIs10e/TfKb/wxXOvpbDlrTyhbOhq
-         XHOyWp/5FngUxk72sQjlstVXlwRWYDUyo3omNZgRnkD0XaUi4OGDXcIMbYfJjvKLlzGe
-         ymzdCAvMa9dZG53WnXm49bUsYWPufMfzD355LyDc/gdh2TuDHlhuiUwmEjUjeeYOijs2
-         1HIlBxJy6UzLN9xOmiR/Hyk0xKXUFEsAbmRtdqoOUfJSCQkucg8x5AqsWJXJhRpCRS/q
-         HPUQ==
+        bh=xTvigGR2TZpPyDR4wvE6cl7h65F616i4JiHpM7NGI4g=;
+        b=qh+bQXa8qXtlPKafIbt/qub27YV/6bwdGsur0mog3yFgqhnOu8lpu+FinXZBNRnkh8
+         GRYVjsVviqHBLQJJwqIK5e/d05fGmLi3qoC4eDX0QINmKP2TbRxN/xi9z+WgVa4hSuPh
+         2oefMp99D68M0gjQB58HPclQ3d5RjmtPh66ZPEzzu5fyyMUIq+fIS9rNVBebAz4bc514
+         dqaSAVg6Yz3rc6Xku+nHmKDCCXboQIck5vwSPw35NGGOhHqjLbsdGiIGY+mo5dIP4alF
+         Ug8q0wkajQ4pQsQmCWaDYHDmVW7lgpFJLpc1Da12UF79YVnYy+YCIknYU5uVlDifNew+
+         fBNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FAjkIdGz/j9kJ1xDL5dYREJTueL8AT+RXQYxwRGY3ak=;
-        b=WJ59a0rcHtY+LEuB0YdDCY6CjoNKQ3cPnZRyRK4Sjgj7iCNgusisvZOtXsQe8pwJlg
-         IWB3uBigYm6TpCAU+jCIJ1NVJ4ytCxA5KDPOW1qGSeQH5sgK8j1AreI2FwjOv3gzyoN4
-         a6IXSEKCxEntvsrVYkYVcf+ZY0A39IK/5IyX8RzV4F6V7imVpamXcXDoyvFiJL3A7hzq
-         K9Iin48My5n7zYBMlzIu0Y1AqeILXh076zLWrqoSv6hQ4j8UURCkgAawToygSETUNqD+
-         63FVOXqgapAzBS0kZuerKSbPFA25s4oO+z/5+Yjy0GZ73zosrOWD86/knSoxQbxoNVaS
-         V9DA==
-X-Gm-Message-State: ANoB5pm/0qZXlrojApMiw9f/PottB/WKzNQoYmIVCZwazqnbBfxmtSev
-        JH9cyPEpRWG/R9Q2fkBhVbWSUpWy/yht
-X-Google-Smtp-Source: AA0mqf6QC+uDVb70Ja2JWAOwMKIY4s1K9yHM1jmnHAtZGlRo7JIauPQOl9tuqc43FoffxWFIbjbvw08OzAag
+        bh=xTvigGR2TZpPyDR4wvE6cl7h65F616i4JiHpM7NGI4g=;
+        b=ZTlLdNQl3roLE/QbyxR193gtnscZxvv6Wd/3KT0G0txF3N0JvdM4BiUnSR+WYsBQUn
+         n2EgA9ftSOK8uXfH//fmXngJp37kO9beMl/dZukic0zJwzXqJaELUeT5GNIKl/b9k8qU
+         fDf1hCdE/NhS13R3ipkVeGz4N+vF2NZSidFGJapbqN4jYGVieSLskD/wBgnDbRysbotS
+         gfJWekIPSoh6iUSzDWTYaZm+NMyWSkuBbmDoG9jSd6D/K5EjHHrWqJW0DzL0cScC2nms
+         IJCAKk+0uGWGvkiIE5nkL8MhlbgaZKfE/kxbxK9RRrAzQ+z2yEPN3Aafhmt4eKlDKIXr
+         J7dQ==
+X-Gm-Message-State: ANoB5pnbr1a+usgu2PHJkHaqkHi5Xpl/vnjQq/rAjs2BJkPvhSwQ0ijG
+        R2n9oF1+0Kc3140hBShLW3Z4JtbxZ8oB
+X-Google-Smtp-Source: AA0mqf7RcItl+6JEAoD9l+pvnFWhCZiCtWk8U6jOG63njbUTz3DuRQc/WEBDfkDPcydmXrqBtv5NfPD3zWTY
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:553:438f:b86a:87f])
- (user=irogers job=sendgmr) by 2002:a17:90b:2415:b0:212:cf2e:2b0b with SMTP id
- nr21-20020a17090b241500b00212cf2e2b0bmr15213568pjb.169.1668460104133; Mon, 14
- Nov 2022 13:08:24 -0800 (PST)
-Date:   Mon, 14 Nov 2022 13:07:17 -0800
+ (user=irogers job=sendgmr) by 2002:aa7:86d5:0:b0:56d:3de3:c401 with SMTP id
+ h21-20020aa786d5000000b0056d3de3c401mr15620037pfo.6.1668460113210; Mon, 14
+ Nov 2022 13:08:33 -0800 (PST)
+Date:   Mon, 14 Nov 2022 13:07:18 -0800
 In-Reply-To: <20221114210723.2749751-1-irogers@google.com>
-Message-Id: <20221114210723.2749751-5-irogers@google.com>
+Message-Id: <20221114210723.2749751-6-irogers@google.com>
 Mime-Version: 1.0
 References: <20221114210723.2749751-1-irogers@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH v3 04/10] perf tracepoint: Sort events in iterator
+Subject: [PATCH v3 05/10] perf list: Generalize limiting to a PMU name
 From:   Ian Rogers <irogers@google.com>
 To:     Weilin Wang <weilin.wang@intel.com>,
         Perry Taylor <perry.taylor@intel.com>,
@@ -86,172 +86,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In print_tracepoint_events use tracing_events__scandir_alphasort and
-scandir alphasort so that the subsystem and events are sorted and
-don't need a secondary qsort. Locally this results in the following
-change:
+Deprecate the --cputype option and add a --unit option where '--unit
+cpu_atom' behaves like '--cputype atom'. The --unit option can be used
+with arbitrary PMUs, for example:
 
-...
-   ext4:ext4_zero_range                               [Tracepoint event]
--  fib6:fib6_table_lookup                             [Tracepoint event]
-   fib:fib_table_lookup                               [Tracepoint event]
-+  fib6:fib6_table_lookup                             [Tracepoint event]
-   filelock:break_lease_block                         [Tracepoint event]
-...
+```
+$ perf list --unit msr pmu
 
-ie fib6 now is after fib and not before it. This is more consistent
-with how numbers are more generally sorted, such as:
+List of pre-defined events (to be used in -e or -M):
 
-...
-  syscalls:sys_enter_renameat                        [Tracepoint event]
-  syscalls:sys_enter_renameat2                       [Tracepoint event]
-...
-
-and so an improvement over the qsort approach.
+  msr/aperf/                                         [Kernel PMU event]
+  msr/cpu_thermal_margin/                            [Kernel PMU event]
+  msr/mperf/                                         [Kernel PMU event]
+  msr/pperf/                                         [Kernel PMU event]
+  msr/smi/                                           [Kernel PMU event]
+  msr/tsc/                                           [Kernel PMU event]
+```
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/print-events.c | 108 +++++++++++----------------------
- 1 file changed, 37 insertions(+), 71 deletions(-)
+ tools/perf/Documentation/perf-list.txt |  6 +++---
+ tools/perf/builtin-list.c              | 18 ++++++++++++------
+ tools/perf/util/metricgroup.c          |  3 ++-
+ tools/perf/util/pmu.c                  |  4 +---
+ 4 files changed, 18 insertions(+), 13 deletions(-)
 
-diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
-index c4d5d87fae2f..fefc025bc259 100644
---- a/tools/perf/util/print-events.c
-+++ b/tools/perf/util/print-events.c
-@@ -66,26 +66,21 @@ static int cmp_string(const void *a, const void *b)
- void print_tracepoint_events(const char *subsys_glob,
- 			     const char *event_glob, bool name_only)
+diff --git a/tools/perf/Documentation/perf-list.txt b/tools/perf/Documentation/perf-list.txt
+index 57384a97c04f..44a819af573d 100644
+--- a/tools/perf/Documentation/perf-list.txt
++++ b/tools/perf/Documentation/perf-list.txt
+@@ -39,9 +39,9 @@ any extra expressions computed by perf stat.
+ --deprecated::
+ Print deprecated events. By default the deprecated events are hidden.
+ 
+---cputype::
+-Print events applying cpu with this type for hybrid platform
+-(e.g. --cputype core or --cputype atom)
++--unit::
++Print PMU events and metrics limited to the specific PMU name.
++(e.g. --unit cpu, --unit msr, --unit cpu_core, --unit cpu_atom)
+ 
+ [[EVENT_MODIFIERS]]
+ EVENT MODIFIERS
+diff --git a/tools/perf/builtin-list.c b/tools/perf/builtin-list.c
+index 58e1ec1654ef..cc84ced6da26 100644
+--- a/tools/perf/builtin-list.c
++++ b/tools/perf/builtin-list.c
+@@ -21,7 +21,6 @@
+ 
+ static bool desc_flag = true;
+ static bool details_flag;
+-static const char *hybrid_type;
+ 
+ int cmd_list(int argc, const char **argv)
  {
--	DIR *sys_dir, *evt_dir;
--	struct dirent *sys_dirent, *evt_dirent;
--	char evt_path[MAXPATHLEN];
--	char *dir_path;
--	char **evt_list = NULL;
--	unsigned int evt_i = 0, evt_num = 0;
--	bool evt_num_known = false;
--
--restart:
--	sys_dir = tracing_events__opendir();
--	if (!sys_dir)
--		return;
--
--	if (evt_num_known) {
--		evt_list = zalloc(sizeof(char *) * evt_num);
--		if (!evt_list)
--			goto out_close_sys_dir;
--	}
-+	struct dirent **sys_namelist = NULL;
-+	bool printed = false;
-+	int sys_items = tracing_events__scandir_alphasort(&sys_namelist);
-+
-+	for (int i = 0; i < sys_items; i++) {
-+		struct dirent *sys_dirent = sys_namelist[i];
-+		struct dirent **evt_namelist = NULL;
-+		char *dir_path;
-+		int evt_items;
-+
-+		if (sys_dirent->d_type != DT_DIR ||
-+		    !strcmp(sys_dirent->d_name, ".") ||
-+		    !strcmp(sys_dirent->d_name, ".."))
-+			continue;
+@@ -30,6 +29,8 @@ int cmd_list(int argc, const char **argv)
+ 	bool long_desc_flag = false;
+ 	bool deprecated = false;
+ 	char *pmu_name = NULL;
++	const char *hybrid_name = NULL;
++	const char *unit_name = NULL;
+ 	struct option list_options[] = {
+ 		OPT_BOOLEAN(0, "raw-dump", &raw_dump, "Dump raw events"),
+ 		OPT_BOOLEAN('d', "desc", &desc_flag,
+@@ -40,9 +41,10 @@ int cmd_list(int argc, const char **argv)
+ 			    "Print information on the perf event names and expressions used internally by events."),
+ 		OPT_BOOLEAN(0, "deprecated", &deprecated,
+ 			    "Print deprecated events."),
+-		OPT_STRING(0, "cputype", &hybrid_type, "hybrid cpu type",
+-			   "Print events applying cpu with this type for hybrid platform "
+-			   "(e.g. core or atom)"),
++		OPT_STRING(0, "cputype", &hybrid_name, "hybrid cpu type",
++			   "Limit PMU or metric printing to the given hybrid PMU (e.g. core or atom)."),
++		OPT_STRING(0, "unit", &unit_name, "PMU name",
++			   "Limit PMU or metric printing to the specified PMU."),
+ 		OPT_INCR(0, "debug", &verbose,
+ 			     "Enable debugging output"),
+ 		OPT_END()
+@@ -53,6 +55,8 @@ int cmd_list(int argc, const char **argv)
+ 	};
  
--	for_each_subsystem(sys_dir, sys_dirent) {
- 		if (subsys_glob != NULL &&
- 		    !strglobmatch(sys_dirent->d_name, subsys_glob))
- 			continue;
-@@ -93,69 +88,40 @@ void print_tracepoint_events(const char *subsys_glob,
- 		dir_path = get_events_file(sys_dirent->d_name);
- 		if (!dir_path)
- 			continue;
--		evt_dir = opendir(dir_path);
--		if (!evt_dir)
--			goto next;
+ 	set_option_flag(list_options, 0, "raw-dump", PARSE_OPT_HIDDEN);
++	/* Hide hybrid flag for the more generic 'unit' flag. */
++	set_option_flag(list_options, 0, "cputype", PARSE_OPT_HIDDEN);
  
--		for_each_event(dir_path, evt_dir, evt_dirent) {
--			if (event_glob != NULL &&
--			    !strglobmatch(evt_dirent->d_name, event_glob))
-+		evt_items = scandir(dir_path, &evt_namelist, NULL, alphasort);
-+		for (int j = 0; j < evt_items; j++) {
-+			struct dirent *evt_dirent = evt_namelist[j];
-+			char evt_path[MAXPATHLEN];
-+
-+			if (evt_dirent->d_type != DT_DIR ||
-+			    !strcmp(evt_dirent->d_name, ".") ||
-+			    !strcmp(evt_dirent->d_name, ".."))
- 				continue;
+ 	argc = parse_options(argc, argv, list_options, list_usage,
+ 			     PARSE_OPT_STOP_AT_NON_OPTION);
+@@ -62,8 +66,10 @@ int cmd_list(int argc, const char **argv)
+ 	if (!raw_dump && pager_in_use())
+ 		printf("\nList of pre-defined events (to be used in -e or -M):\n\n");
  
--			if (!evt_num_known) {
--				evt_num++;
-+			if (tp_event_has_id(dir_path, evt_dirent) != 0)
-+				continue;
-+
-+			if (event_glob != NULL &&
-+			    !strglobmatch(evt_dirent->d_name, event_glob))
- 				continue;
--			}
- 
- 			snprintf(evt_path, MAXPATHLEN, "%s:%s",
- 				 sys_dirent->d_name, evt_dirent->d_name);
--
--			evt_list[evt_i] = strdup(evt_path);
--			if (evt_list[evt_i] == NULL) {
--				put_events_file(dir_path);
--				goto out_close_evt_dir;
-+			if (name_only)
-+				printf("%s ", evt_path);
-+			else {
-+				printf("  %-50s [%s]\n", evt_path,
-+				       event_type_descriptors[PERF_TYPE_TRACEPOINT]);
- 			}
--			evt_i++;
-+			printed = true;
- 		}
--		closedir(evt_dir);
--next:
--		put_events_file(dir_path);
-+		free(dir_path);
-+		free(evt_namelist);
+-	if (hybrid_type) {
+-		pmu_name = perf_pmu__hybrid_type_to_pmu(hybrid_type);
++	if (unit_name)
++		pmu_name = strdup(unit_name);
++	else if (hybrid_name) {
++		pmu_name = perf_pmu__hybrid_type_to_pmu(hybrid_name);
+ 		if (!pmu_name)
+ 			pr_warning("WARNING: hybrid cputype is not supported!\n");
  	}
--	closedir(sys_dir);
--
--	if (!evt_num_known) {
--		evt_num_known = true;
--		goto restart;
--	}
--	qsort(evt_list, evt_num, sizeof(char *), cmp_string);
--	evt_i = 0;
--	while (evt_i < evt_num) {
--		if (name_only) {
--			printf("%s ", evt_list[evt_i++]);
--			continue;
--		}
--		printf("  %-50s [%s]\n", evt_list[evt_i++],
--				event_type_descriptors[PERF_TYPE_TRACEPOINT]);
--	}
--	if (evt_num && pager_in_use())
-+	free(sys_namelist);
-+	if (printed && pager_in_use())
- 		printf("\n");
--
--out_free:
--	evt_num = evt_i;
--	for (evt_i = 0; evt_i < evt_num; evt_i++)
--		zfree(&evt_list[evt_i]);
--	zfree(&evt_list);
--	return;
--
--out_close_evt_dir:
--	closedir(evt_dir);
--out_close_sys_dir:
--	closedir(sys_dir);
--
--	printf("FATAL: not enough memory to print %s\n",
--			event_type_descriptors[PERF_TYPE_TRACEPOINT]);
--	if (evt_list)
--		goto out_free;
- }
+diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
+index 4c98ac29ee13..1943fed9b6d9 100644
+--- a/tools/perf/util/metricgroup.c
++++ b/tools/perf/util/metricgroup.c
+@@ -556,11 +556,12 @@ static int metricgroup__print_callback(const struct pmu_event *pe,
+ 				       void *vdata)
+ {
+ 	struct metricgroup_print_data *data = vdata;
++	const char *pmu = pe->pmu ?: "cpu";
  
- void print_sdt_events(const char *subsys_glob, const char *event_glob,
+ 	if (!pe->metric_expr)
+ 		return 0;
+ 
+-	if (data->pmu_name && perf_pmu__is_hybrid(pe->pmu) && strcmp(data->pmu_name, pe->pmu))
++	if (data->pmu_name && strcmp(data->pmu_name, pmu))
+ 		return 0;
+ 
+ 	return metricgroup__print_pmu_event(pe, data->metricgroups, data->filter,
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index 057e1528c32f..e6790175307b 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -1695,10 +1695,8 @@ void print_pmu_events(const char *event_glob, bool name_only, bool quiet_flag,
+ 	pmu = NULL;
+ 	j = 0;
+ 	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
+-		if (pmu_name && perf_pmu__is_hybrid(pmu->name) &&
+-		    strcmp(pmu_name, pmu->name)) {
++		if (pmu_name && pmu->name && strcmp(pmu_name, pmu->name))
+ 			continue;
+-		}
+ 
+ 		list_for_each_entry(alias, &pmu->aliases, list) {
+ 			char *name = alias->desc ? alias->name :
 -- 
 2.38.1.431.g37b22c650d-goog
 
