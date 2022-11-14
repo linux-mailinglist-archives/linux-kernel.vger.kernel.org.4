@@ -2,234 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7A5628C11
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 23:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C69A0628C15
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 23:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237315AbiKNWYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 17:24:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58146 "EHLO
+        id S237438AbiKNW1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 17:27:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237266AbiKNWYp (ORCPT
+        with ESMTP id S236156AbiKNW1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 17:24:45 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582DF17E28;
-        Mon, 14 Nov 2022 14:24:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5zvK4A/3b3sb4CLf5RZydU6DNS9ZjkNiDzZm6RENhIc=; b=OMYZGsmUt+liz9HAuSBKl8M2TZ
-        bMAUenEkBY249GcxJDtWxLyigyV0uX0oS+OLilugs67xokCPzUx6I54daWAKw7h4Z33k0DMfp9uYE
-        YhvtQnc2a/zlhnMp61DzpLrbeI+wY3wvDVmBUVJRqdek14s+JZsRmVay76TiInF3Qn7zZ/t5CY3Hb
-        9D99sYB/ZaS2Ljzt5YMTYdncVIhhefG7nyubsCTteTs36UJton49SuSalT67c6j2ziQrDZD9Fh1aW
-        QhGyezEdwwcBoyFVrDLHtAXiMjdDdNUm39Sk0EvX6q5QkCvx5VBzqipA0rzlwcGByo1uYJ8I3yBCS
-        f8Kv5LgQ==;
-Received: from [205.251.233.106] (helo=u3832b3a9db3152.ant.amazon.com)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ouhsf-00FpUP-6F; Mon, 14 Nov 2022 22:24:41 +0000
-Message-ID: <fde14caa0cf774b2b46f1124644a3b326a0a8f09.camel@infradead.org>
-Subject: Re: [PATCH] KVM: x86/xen: Make number of event channels defines
- less magical
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Durrant <paul@xen.org>
-Date:   Mon, 14 Nov 2022 14:24:32 -0800
-In-Reply-To: <Y3KZVUCCH+YQDbqu@google.com>
-References: <20221114181632.3279119-1-seanjc@google.com>
-         <629d6d90ce95b9db74f0101a4428be1119c4bfc7.camel@infradead.org>
-         <Y3KZVUCCH+YQDbqu@google.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-w1Qxjn7ruFH1U2x8yMNo"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 14 Nov 2022 17:27:52 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0595FADC
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 14:27:50 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id z15-20020a5e860f000000b006c09237cc06so6526854ioj.21
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 14:27:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aJ/h9f/SR3FMr32V5ylk9Tgs538zn39F2L+7bE0Uazk=;
+        b=wFZ9Y7ocNYlVnNnDbRa7+3tUddedtfcolF0bFz4H16Q6AEcfozIvyC2JTTNZR6WmZD
+         IoVj6Nm4xMQwwO3UGVyApJ8hWZdSJh1bWxBZlBow8S5uZYJshhDWRIyhVmjfpw+MtVxv
+         JdQskSyTRUb0gPVy3amfcI62mMJso0B1kn4FqYh9zNOAi9Rns5R4fpVeN1pMt8dDy/Bi
+         9DY5hr2+BHgSSzqUvIrwCpqD38y5LGaGE4UORD0BE7/Zn0fy36aJPJmcwJY6DFN1fN+E
+         67xTOs870aIGGz0d0wraV67V1s4vishvEWtJEFv6CMSK8CmzPiOsf4AHd8jMIB5+5bg/
+         5bvw==
+X-Gm-Message-State: ANoB5pmogBQkIzbTo9BfxcMyq0/PPFM3DPhowqPFg/8gBB8HRpCsA9lO
+        dtgcvtHyDPlAAIszUkEx/kmTCAAg5fwDTfJ1VaI/CC6XrXf/
+X-Google-Smtp-Source: AA0mqf5oXl1fhtVxnwMrgO0Adlf459j/Re3133B4rkm2F8080aS/E71zyq03UTGtVLNAy/MIy+e7G2Eu+wrjJ8HXpoEaQzLps9Xz
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:c648:0:b0:375:cea:3c38 with SMTP id
+ k8-20020a02c648000000b003750cea3c38mr6551600jan.87.1668464870225; Mon, 14 Nov
+ 2022 14:27:50 -0800 (PST)
+Date:   Mon, 14 Nov 2022 14:27:50 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e8fd1f05ed75bf20@google.com>
+Subject: [syzbot] possible deadlock in nci_start_poll
+From:   syzbot <syzbot+f1f36887d202cea1446d@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com,
+        krzysztof.kozlowski@linaro.org, kuba@kernel.org, linma@zju.edu.cn,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---=-w1Qxjn7ruFH1U2x8yMNo
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-On Mon, 2022-11-14 at 19:39 +0000, Sean Christopherson wrote:
-> Ugh.  I worried that might be the case.  An alternative approach to help =
-document
-> things from a KVM perspective would be something like:
->=20
-> diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-> index 93c628d3e3a9..7769f3b98af0 100644
-> --- a/arch/x86/kvm/xen.c
-> +++ b/arch/x86/kvm/xen.c
-> @@ -1300,6 +1300,9 @@ int kvm_xen_hypercall(struct kvm_vcpu *vcpu)
-> =20
->  static inline int max_evtchn_port(struct kvm *kvm)
->  {
-> +       BUILD_BUG_ON(EVTCHN_2L_NR_CHANNELS !=3D
-> +                    (sizeof_field(struct shared_info, evtchn_pending) * =
-BITS_PER_BYTE));
-> +
->         if (IS_ENABLED(CONFIG_64BIT) && kvm->arch.xen.long_mode)
->                 return EVTCHN_2L_NR_CHANNELS;
->         else
+HEAD commit:    094226ad94f4 Linux 6.1-rc5
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=13efcb56880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=31242cbb858881d2
+dashboard link: https://syzkaller.appspot.com/bug?extid=f1f36887d202cea1446d
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=177ba9ae880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17458169880000
 
-Not really sure I see the point of that.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ae9c102f9e6a/disk-094226ad.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c933a51b8e7e/vmlinux-094226ad.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/c2b6acadd6e4/bzImage-094226ad.xz
 
-There are two main reasons for that kind of BUILD_BUG_ON(). I've added
-a few of them asserting that the size of the structure and its compat
-variant are identical, and thus documenting *why* the code lacks compat
-handling. For example...
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f1f36887d202cea1446d@syzkaller.appspotmail.com
 
-	/*
-	 * Next, write the new runstate. This is in the *same* place
-	 * for 32-bit and 64-bit guests, asserted here for paranoia.
-	 */
-	BUILD_BUG_ON(offsetof(struct vcpu_runstate_info, state) !=3D
-		     offsetof(struct compat_vcpu_runstate_info, state));
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-rc5-syzkaller #0 Not tainted
+------------------------------------------------------
+syz-executor297/3623 is trying to acquire lock:
+ffff88801fc74350 (&ndev->req_lock){+.+.}-{3:3}, at: nci_request net/nfc/nci/core.c:148 [inline]
+ffff88801fc74350 (&ndev->req_lock){+.+.}-{3:3}, at: nci_set_local_general_bytes net/nfc/nci/core.c:774 [inline]
+ffff88801fc74350 (&ndev->req_lock){+.+.}-{3:3}, at: nci_start_poll+0x57a/0xef0 net/nfc/nci/core.c:838
 
-The second reason is to prevent accidental screwups where our local
-definition of a structure varies from the official ABI. Like these:
+but task is already holding lock:
+ffff888017e0d508 (&genl_data->genl_data_mutex){+.+.}-{3:3}, at: nfc_genl_start_poll+0x1d2/0x340 net/nfc/netlink.c:826
 
-	/* Paranoia checks on the 32-bit struct layout */
-	BUILD_BUG_ON(offsetof(struct compat_shared_info, wc) !=3D 0x900);
-	BUILD_BUG_ON(offsetof(struct compat_shared_info, arch.wc_sec_hi) !=3D 0x92=
-4);
-	BUILD_BUG_ON(offsetof(struct pvclock_vcpu_time_info, version) !=3D 0);
-
-I don't really see the above fulfilling either of those use cases.
-Given that the definition of the evtchn_pending field is:
-
-        xen_ulong_t evtchn_pending[sizeof(xen_ulong_t) * 8];
-
-It's fairly tautological that the number of event channels supported is
-BITS_PER_ULONG * BITS_PER_ULONG. Which is sizeof(xen_ulong_t)=C2=B2 * 64 as
-defined in the official Xen headers.
-
-I don't know that we really need to add our own sanity check on the
-headers we imported from Xen. It doesn't seem to add much.
-
-No objection to cleaning up the COMPAT one though, as in your original
-patch.
+which lock already depends on the new lock.
 
 
---=-w1Qxjn7ruFH1U2x8yMNo
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+the existing dependency chain (in reverse order) is:
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjIxMTE0MjIyNDMyWjAvBgkqhkiG9w0BCQQxIgQgGRtLxaBi
-u+K5e2nTGDzW9eiRjRhJffQ8PHdDgzKd9qcwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAPqOF7ajAvlf2Mz+T70GGy26IvA1HCbIxt
-YDMoB4wu/Fqv+bAWvLqtHvO7zHU+BdVcQV+n0JjLmSaSxCLYKTaMwcXBkioOrOw0Z0m9909dONN+
-kE9WEtQchZHP5aaUV4nD6dZzbN+Mfu2dPfrhY3YFMlYHHP1tAgvjYDt6jmxUrdZCgUN/GnaXAaxW
-7GZ7ykVCUK87ySYRJ5rCfCRK0IyOAxWdcI8DbX7pTYWTJVEP9PU9QNBMEpV34SuZzIcGo2mEE0OX
-GkL2Zf+UP98SfGIoOhbP7AKdO5+BGOuOOAGVcRJfmKWNSYUMrQzqHxGNEWRPBbTzBLaRujdUupMV
-zrIqp+5p7t9VI+MbQdifAmAgdFu7ApzJNDhMayF7+Hp+HqCwslUFT/PFPAuRdI2d0vlJtSzAGbkg
-525JIDyEks2hzbB4ZBmqA05RqGb/wGsKHt/XZ8AhW3NuPXg6O1O9mcThcBjHgvs4QoXk8iq6LhWO
-mcDpW2/1y1d14tBromPnWIt1O4tAiwo7y23H/rgIdnFr1fZGeL9Dh8Yky/TFI+xgIeckocM8ytbe
-4LMXkwzy4DL0LDYV8hntcR/ugELUH3tH/kcogfoFFDoxMofly1gROvYCdDBhhxZ345aYHeDJnhfb
-z79V5cTVR4aGmHDKoYJfH8OnIsP4+FhjMiFK8PJEZQAAAAAAAA==
+-> #3 (&genl_data->genl_data_mutex){+.+.}-{3:3}:
+       lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1de/0x26c0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       nfc_urelease_event_work+0x10a/0x300 net/nfc/netlink.c:1811
+       process_one_work+0x81c/0xd10 kernel/workqueue.c:2289
+       worker_thread+0xb14/0x1330 kernel/workqueue.c:2436
+       kthread+0x266/0x300 kernel/kthread.c:376
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+
+-> #2 (nfc_devlist_mutex){+.+.}-{3:3}:
+       lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1de/0x26c0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       nfc_register_device+0x33/0x320 net/nfc/core.c:1116
+       nci_register_device+0x7c7/0x900 net/nfc/nci/core.c:1256
+       virtual_ncidev_open+0x55/0xc0 drivers/nfc/virtual_ncidev.c:146
+       misc_open+0x346/0x3c0 drivers/char/misc.c:143
+       chrdev_open+0x5fb/0x680 fs/char_dev.c:414
+       do_dentry_open+0x85f/0x11b0 fs/open.c:882
+       do_open fs/namei.c:3557 [inline]
+       path_openat+0x260e/0x2e00 fs/namei.c:3713
+       do_filp_open+0x275/0x500 fs/namei.c:3740
+       do_sys_openat2+0x13b/0x500 fs/open.c:1310
+       do_sys_open fs/open.c:1326 [inline]
+       __do_sys_openat fs/open.c:1342 [inline]
+       __se_sys_openat fs/open.c:1337 [inline]
+       __x64_sys_openat+0x243/0x290 fs/open.c:1337
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #1 (nci_mutex){+.+.}-{3:3}:
+       lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1de/0x26c0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       virtual_nci_close+0x13/0x40 drivers/nfc/virtual_ncidev.c:44
+       nci_open_device+0x918/0xd00 net/nfc/nci/core.c:544
+       nfc_dev_up+0x17d/0x320 net/nfc/core.c:118
+       nfc_genl_dev_up+0x7f/0xc0 net/nfc/netlink.c:770
+       genl_family_rcv_msg_doit net/netlink/genetlink.c:756 [inline]
+       genl_family_rcv_msg net/netlink/genetlink.c:833 [inline]
+       genl_rcv_msg+0xc02/0xf60 net/netlink/genetlink.c:850
+       netlink_rcv_skb+0x1f0/0x460 net/netlink/af_netlink.c:2540
+       genl_rcv+0x24/0x40 net/netlink/genetlink.c:861
+       netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+       netlink_unicast+0x7e7/0x9c0 net/netlink/af_netlink.c:1345
+       netlink_sendmsg+0x9b3/0xcd0 net/netlink/af_netlink.c:1921
+       sock_sendmsg_nosec net/socket.c:714 [inline]
+       sock_sendmsg net/socket.c:734 [inline]
+       ____sys_sendmsg+0x597/0x8e0 net/socket.c:2482
+       ___sys_sendmsg net/socket.c:2536 [inline]
+       __sys_sendmsg+0x28e/0x390 net/socket.c:2565
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&ndev->req_lock){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain+0x184a/0x6470 kernel/locking/lockdep.c:3831
+       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+       lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1de/0x26c0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       nci_request net/nfc/nci/core.c:148 [inline]
+       nci_set_local_general_bytes net/nfc/nci/core.c:774 [inline]
+       nci_start_poll+0x57a/0xef0 net/nfc/nci/core.c:838
+       nfc_start_poll+0x185/0x2f0 net/nfc/core.c:225
+       nfc_genl_start_poll+0x1df/0x340 net/nfc/netlink.c:828
+       genl_family_rcv_msg_doit net/netlink/genetlink.c:756 [inline]
+       genl_family_rcv_msg net/netlink/genetlink.c:833 [inline]
+       genl_rcv_msg+0xc02/0xf60 net/netlink/genetlink.c:850
+       netlink_rcv_skb+0x1f0/0x460 net/netlink/af_netlink.c:2540
+       genl_rcv+0x24/0x40 net/netlink/genetlink.c:861
+       netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+       netlink_unicast+0x7e7/0x9c0 net/netlink/af_netlink.c:1345
+       netlink_sendmsg+0x9b3/0xcd0 net/netlink/af_netlink.c:1921
+       sock_sendmsg_nosec net/socket.c:714 [inline]
+       sock_sendmsg net/socket.c:734 [inline]
+       ____sys_sendmsg+0x597/0x8e0 net/socket.c:2482
+       ___sys_sendmsg net/socket.c:2536 [inline]
+       __sys_sendmsg+0x28e/0x390 net/socket.c:2565
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  &ndev->req_lock --> nfc_devlist_mutex --> &genl_data->genl_data_mutex
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&genl_data->genl_data_mutex);
+                               lock(nfc_devlist_mutex);
+                               lock(&genl_data->genl_data_mutex);
+  lock(&ndev->req_lock);
+
+ *** DEADLOCK ***
+
+4 locks held by syz-executor297/3623:
+ #0: ffffffff8de415d0 (cb_lock){++++}-{3:3}, at: genl_rcv+0x15/0x40 net/netlink/genetlink.c:860
+ #1: ffffffff8de41488 (genl_mutex){+.+.}-{3:3}, at: genl_lock net/netlink/genetlink.c:33 [inline]
+ #1: ffffffff8de41488 (genl_mutex){+.+.}-{3:3}, at: genl_rcv_msg+0x123/0xf60 net/netlink/genetlink.c:848
+ #2: ffff888017e0d508 (&genl_data->genl_data_mutex){+.+.}-{3:3}, at: nfc_genl_start_poll+0x1d2/0x340 net/nfc/netlink.c:826
+ #3: ffff888017e0d100 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #3: ffff888017e0d100 (&dev->mutex){....}-{3:3}, at: nfc_start_poll+0x61/0x2f0 net/nfc/core.c:208
+
+stack backtrace:
+CPU: 0 PID: 3623 Comm: syz-executor297 Not tainted 6.1.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
+ check_noncircular+0x2f9/0x3b0 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain+0x184a/0x6470 kernel/locking/lockdep.c:3831
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+ lock_acquire+0x1a7/0x400 kernel/locking/lockdep.c:5668
+ __mutex_lock_common+0x1de/0x26c0 kernel/locking/mutex.c:603
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ nci_request net/nfc/nci/core.c:148 [inline]
+ nci_set_local_general_bytes net/nfc/nci/core.c:774 [inline]
+ nci_start_poll+0x57a/0xef0 net/nfc/nci/core.c:838
+ nfc_start_poll+0x185/0x2f0 net/nfc/core.c:225
+ nfc_genl_start_poll+0x1df/0x340 net/nfc/netlink.c:828
+ genl_family_rcv_msg_doit net/netlink/genetlink.c:756 [inline]
+ genl_family_rcv_msg net/netlink/genetlink.c:833 [inline]
+ genl_rcv_msg+0xc02/0xf60 net/netlink/genetlink.c:850
+ netlink_rcv_skb+0x1f0/0x460 net/netlink/af_netlink.c:2540
+ genl_rcv+0x24/0x40 net/netlink/genetlink.c:861
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x7e7/0x9c0 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x9b3/0xcd0 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg net/socket.c:734 [inline]
+ ____sys_sendmsg+0x597/0x8e0 net/socket.c:2482
+ ___sys_sendmsg net/socket.c:2536 [inline]
+ __sys_sendmsg+0x28e/0x390 net/socket.c:2565
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7ff50a3c2639
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ff50a373318 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007ff50a44a428 RCX: 00007ff50a3c2639
+RDX: 0000000000000000 RSI: 0000000020000440 RDI: 0000000000000004
+RBP: 00007ff50a44a420 R08: 0000000000000003 R09: 0000000000000000
+R10: 0000000000000008 R11: 0000000000000246 R12: 00007ff50a418064
+R13: 00007ffeeffb422f R14: 00007ff50a373400 R15: 0000000000022000
+ </TASK>
+nci: __nci_request: wait_for_completion_interruptible_timeout failed -512
+nci: nci_start_poll: failed to set local general bytes
+nci: __nci_request: wait_for_completion_interruptible_timeout failed 0
 
 
---=-w1Qxjn7ruFH1U2x8yMNo--
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
