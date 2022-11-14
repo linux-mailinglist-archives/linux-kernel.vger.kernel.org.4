@@ -2,112 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B856280DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B886280FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:13:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236758AbiKNNL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:11:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
+        id S237278AbiKNNNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:13:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237909AbiKNNLz (ORCPT
+        with ESMTP id S237956AbiKNNM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:11:55 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54F317899;
-        Mon, 14 Nov 2022 05:11:51 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id b62so10246449pgc.0;
-        Mon, 14 Nov 2022 05:11:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=itwylVtul7Z49JKkp9kyK5X/B4iweq+ayVxXXotYQJw=;
-        b=MhmYxowk5DwtJgYGp8dCt9DBse6IZR1/QsPRPK0Xelm6pisV3yfUoD4CTsa+dinrge
-         cCwlff3pZMlBTXU/UMzhdVbGftM/n1A+azTXLAt99AkOPpb+rroZ08Ko+CHLI6wTBD0g
-         CqJ1fh8ASbfN7E9l6t16+7WPeuQtR9z1doqXcgOJGx7US+/u/QOWhMEQ4PTraMy9rIZM
-         jDorNtoXLX31vjleS9m/c6D1DGyOB0aiJTBy0B3zYzpUPupsd6hHueIH8UwBSU8Uc43z
-         SK0ofefxNq21dBXovbGvssLeytLO6I4d3VPth8zh+RIBcFDwPQVXdZCgraPo/25mYkxw
-         e9Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=itwylVtul7Z49JKkp9kyK5X/B4iweq+ayVxXXotYQJw=;
-        b=fgqEtajlm9Kr/M8KZtgausdwJiRnHPqUXKT5NQwzu/NoMksYaBJSomaCWYvCSS62QS
-         jcPnGjyfVPz1zRt1do3akyDtbo1rpMnyha00N4ZaEq/BD51Vc5eoGG2bjtVBTqFidHWB
-         cnkosmDH930M1/c6J1hCN+UJr+9yxTUOLS2yJ5N1lNnflmnf+/oXAVMYCiEbfPuyUVVq
-         jmmki2JH6unaFbA3VoxUF/9lOWTbwX4ibIfQSXKebJ7DEtLacLdf86q7JbeMCrY5b9iT
-         LfX2n/Iwp7zYG4RRaBHmE53n2bwGVpvy0ARMMz51AMUfeEHb5IU8poZVAtNi+APLMEse
-         sc6Q==
-X-Gm-Message-State: ANoB5pklesqQZHn9ZRQVgXtBcHVv5aeDcvdENu/oq1tcmRE8zL8R7Rge
-        3+FqojWnitHPaSexyeY+8RA=
-X-Google-Smtp-Source: AA0mqf4BFVRB9+AMFDzK0Shf5FC49MuYofaTxw1/kzlGKOh8F5lY9AHUO8LwfsFYia6t7oYj5cP+1A==
-X-Received: by 2002:a05:6a00:d78:b0:56c:8dbc:f83e with SMTP id n56-20020a056a000d7800b0056c8dbcf83emr13675256pfv.41.1668431511318;
-        Mon, 14 Nov 2022 05:11:51 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-86.three.co.id. [180.214.232.86])
-        by smtp.gmail.com with ESMTPSA id y28-20020aa793dc000000b0056c0d129edfsm6617533pff.121.2022.11.14.05.11.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 05:11:50 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 326211042EC; Mon, 14 Nov 2022 20:11:46 +0700 (WIB)
-Date:   Mon, 14 Nov 2022 20:11:45 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Junhao He <hejunhao3@huawei.com>
-Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
-        mike.leach@linaro.org, leo.yan@linaro.org,
-        jonathan.cameron@huawei.com, john.garry@huawei.com,
-        coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        lpieralisi@kernel.org, linuxarm@huawei.com, yangyicong@huawei.com,
-        liuqi115@huawei.com, f.fangjian@huawei.com,
-        prime.zeng@hisilicon.com
-Subject: Re: [PATCH v13 0/2] Add support for UltraSoc System Memory Buffer
-Message-ID: <Y3I+kaZOe4TPNsd/@debian.me>
-References: <20221114090316.63157-1-hejunhao3@huawei.com>
+        Mon, 14 Nov 2022 08:12:59 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1234028E3B;
+        Mon, 14 Nov 2022 05:12:54 -0800 (PST)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AE9XhTu007380;
+        Mon, 14 Nov 2022 14:12:23 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=hbffMJzz+D/Of/1FLXDm6mYFbbw4YsWQLicJfJxuiDk=;
+ b=LkFnIMTnOo8zdx7Th17lovNc7GntRC53jHryNYtyefqdEfrCrj5KnKoY6hGRhT7nkOQJ
+ 4/CXx/kC+d8MbNEL7jQJVf6+BirkayjJCqr/8YR1ZsS9WwlorX5v2Sru+k+KUCEZ3NMs
+ Yh9sSFeQqDt8aZO+07LjvgNg3SDaNg5rbY/gXay0Oj4vGgH123n+81lnXfwPj7SFPxvm
+ tHHCZ0HJtDfUZzI4pBqeos9HGKnx6c3/0O1iIjd3AdWDVRoTr+2vowt73tEWAn34/dy6
+ /O1BlwRm+b9shrIQ5jElHiK+S0pJe6hV5HCOFTfa611ji3cVP1gexGujYPcWKEFXT/Eg fQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ktq2yfgdb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 14:12:23 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 207EE10002A;
+        Mon, 14 Nov 2022 14:12:16 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4CB4622A6EF;
+        Mon, 14 Nov 2022 14:12:16 +0100 (CET)
+Received: from [10.129.167.233] (10.129.167.233) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.32; Mon, 14 Nov
+ 2022 14:12:15 +0100
+Message-ID: <ad2009b0-01be-76d9-ba02-e38a9ba87894@foss.st.com>
+Date:   Mon, 14 Nov 2022 14:12:15 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="v3CYsDSexBSkad/c"
-Content-Disposition: inline
-In-Reply-To: <20221114090316.63157-1-hejunhao3@huawei.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: Coverity: vgxy61_tx_from_ep(): Memory - corruptions
+To:     coverity-bot <keescook@chromium.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
+        Shawn Tu <shawnx.tu@intel.com>, <linux-media@vger.kernel.org>,
+        Sylvain Petinot <sylvain.petinot@foss.st.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        <linux-next@vger.kernel.org>, <linux-hardening@vger.kernel.org>
+References: <202211100827.8A08F58A@keescook>
+Content-Language: en-US
+From:   Benjamin MUGNIER <benjamin.mugnier@foss.st.com>
+In-Reply-To: <202211100827.8A08F58A@keescook>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.129.167.233]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-14_12,2022-11-11_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---v3CYsDSexBSkad/c
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for your report.
 
-On Mon, Nov 14, 2022 at 05:03:14PM +0800, Junhao He wrote:
-> Add support for UltraSoc System Memory Buffer.
->=20
+On 11/10/22 17:27, coverity-bot wrote:
+> Hello!
+> 
+> This is an experimental semi-automated report about issues detected by
+> Coverity from a scan of next-20221110 as part of the linux-next scan project:
+> https://scan.coverity.com/projects/linux-next-weekly-scan
+> 
+> You're getting this email because you were associated with the identified
+> lines of code (noted below) that were touched by commits:
+> 
+>   Thu Oct 27 14:37:38 2022 +0300
+>     153e4ad44d60 ("media: i2c: Add driver for ST VGXY61 camera sensor")
+> 
+> Coverity reported the following:
+> 
+> *** CID 1527258:  Memory - corruptions  (OVERRUN)
+> drivers/media/i2c/st-vgxy61.c:1528 in vgxy61_tx_from_ep()
+> 1522     	 * valid for hardware stuff.
+> 1523     	 */
+> 1524     	for (p = 0; p < VGXY61_NB_POLARITIES; p++) {
+> 1525     		if (phy2log[p] != ~0)
+> 1526     			continue;
+> 1527     		phy2log[p] = l;
+> vvv     CID 1527258:  Memory - corruptions  (OVERRUN)
+> vvv     Overrunning array "log2phy" of 5 4-byte elements at element index 5 (byte offset 23) using index "l" (which evaluates to 5).
+> 1528     		log2phy[l] = p;
+> 1529     		l++;
+> 1530     	}
+> 1531     	for (l = 0; l < l_nb + 1; l++)
+> 1532     		polarities[l] = ep.bus.mipi_csi2.lane_polarities[l];
+> 1533
+> 
+> If this is a false positive, please let us know so we can mark it as
+> such, or teach the Coverity rules to be smarter. If not, please make
+> sure fixes get into linux-next. :) For patches fixing this, please
+> include these lines (but double-check the "Fixes" first):
+> 
+> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> Addresses-Coverity-ID: 1527258 ("Memory - corruptions")
+> Fixes: 153e4ad44d60 ("media: i2c: Add driver for ST VGXY61 camera sensor")
+> 
+> Note that l starts at 1, 2, or 4, so line 1529 could push it to 5, which
+> is out of bounds, etc...
 
-The cover letter message (aside changelogs) is short but LGTM. However,
-for individual patches description, please write in imperative mood
-(that is, no "This patch/commit does foo" but "Do foo" instead).
+This 'for' loop is tied with the previous one.
+The first loop fills log2phy with provided data, and the second one
+fills slots that were not provided with hardware valid data. You can see
+in the second loop:
+  if (phy2log[p] != ~0)
+    continue;
+which prevents this loop from filling slots that were already filled,
+and at the same time prevents 'l' to be incremented when this is the case.
+As 'l' was incremented for each provided data by the first loop, and
+incremented for each not provided data by the second loop. At the end of
+the second loop l == VGXY61_NB_POLARITIES == 5 (because of the last
+'l++'), but will never be used as an index for 'log2phy' because the
+loop will end right after.
 
-Thanks.
 
---=20
-An old man doll... just what I always wanted! - Clara
+So if I'm not mistaken, and while hard to catch by tools this could be
+understood as a false positive.
 
---v3CYsDSexBSkad/c
-Content-Type: application/pgp-signature; name="signature.asc"
+I could guard it with to make the checker happy with:
+  if (p != VGXY61_NB_POLARITIES - 1) l++;
+and it would be exactly the same, but I find this kind of unnecessary.
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY3I+igAKCRD2uYlJVVFO
-o1UsAQC84UBCE7LcNm7rlFcJmsg5bIyUFwl1f5xkMLKP1kpS3AEAmqD8k+1nTJGa
-gxmYpWJx+6+dp8zsZXEhYNNQMUgYSAY=
-=xa7E
------END PGP SIGNATURE-----
+Any thoughts?
 
---v3CYsDSexBSkad/c--
+Thank you.
+
+> 
+> Thanks for your attention!
+> 
+
+-- 
+Regards,
+
+Benjamin
