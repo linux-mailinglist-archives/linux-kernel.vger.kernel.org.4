@@ -2,160 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8681C62740F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 02:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7187C627410
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 02:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235742AbiKNBHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 20:07:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43144 "EHLO
+        id S235657AbiKNBKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 20:10:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235693AbiKNBG7 (ORCPT
+        with ESMTP id S235541AbiKNBKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 20:06:59 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41D811A30;
-        Sun, 13 Nov 2022 17:06:50 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id A225A32002E8;
-        Sun, 13 Nov 2022 20:06:49 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sun, 13 Nov 2022 20:06:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1668388009; x=1668474409; bh=5S
-        hl8P/p16p52VEaYrOLrE4C4Kh9jE5qf4TZfI1iPJA=; b=J/hYq+Q1XLL33aztHV
-        IkwPZbm+eFTuTfQVt0tWim0blUm2Y631DutB07mWSOUW4q8AlLPCyuSD0OZ8HaJ9
-        BtCYKqN7gLrx95FSvfIyJE4+wo9ZLOMKPiUpq5Km3HyxVwA5FHHlManxRiqFpu7y
-        0rkIMZXHzSzC0szEHhp7qVN/Wpv5bvB1Qe6mwb+V5i11l48Qr8s1VuZF0BywqZyh
-        Tf2Nv6LTM6iV6scptuLiYx7OwivJUxfj5EiGsheljVqbduiUn7eK2Xyu2tDv0vFI
-        8Pq2nQKzkHYDVjpkTxp1ctatKVs7tL05VnJnAc6C4XmVSVlCC088EFTQ0W0Dhg99
-        aLyg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1668388009; x=1668474409; bh=5Shl8P/p16p52
-        VEaYrOLrE4C4Kh9jE5qf4TZfI1iPJA=; b=hUKjdFkZYMMP0Dh2cX6N8S1X1N+lq
-        Q5H8n/J0RsBSbY3SW60hPsrgmOcZD6p0b1tICXzpfdfOuogcHiFYa2AIFwGcNY8W
-        5+ewT6yQApXH0XM9k+VY+yEFahkg3/aY1KWfsVOxbpPsX0Jwn8k/NhHtD5VKE4O1
-        EeU5Sy+shqxqVbPZ55pHBeHQMtNrZ37VCs4e7rAiA4i8/ExMwEhkjlctCqjnYaG0
-        6/uf0Jwjdzt80TWLa/fdFwSLBXo4KoD1FAuh8LEP3SdTc/rccBA262wf3wtimmjh
-        JyD+aufeLdeXmPBnBLCEKiNglTJmUQmekjrFd0pRP9TIJYCbRysN4IoiQ==
-X-ME-Sender: <xms:qZRxYyTFCYU_lpfS0S7yAkKqFBnoZ1bwRlLJk7KlLoTgEDOKuzUJdg>
-    <xme:qZRxY3xkbakOqIai3R0nOFAa9E3Y6Yr9gvDLHRJzXSMJ2czSRQ8UWVfclg-9TmjIH
-    qz-PkxsmYWHCSfOOg>
-X-ME-Received: <xmr:qZRxY_2Ii40q8E74hqCkYzMO42sIQyIXbY5yqdJOe29dfBOoIE-i_LkciSKglp1-8Dgvpb6c5FUBq0ZYsUy0u208YpX2Bhzi_ssgVP4fu7IMNg7SBcW7-WqiDWD8RC8r1k3NFQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedugdeftdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeehgfdu
-    feeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:qZRxY-ANnJUDyxY3GTzl9Z6HxzRjqPVvlhL0h4oul7IGWiC2PX7uzg>
-    <xmx:qZRxY7jsrC7B2xmAIXfMI__sWEXiWuhjLjGlldAF0332Cv9c9vGOEg>
-    <xmx:qZRxY6q21IZlIX8dheiOj7CCn-GAflsmLDhSb1Agya5mfKPegjWaaA>
-    <xmx:qZRxY7gFKdoRLs2K3XdqoeMqX2F0XT4p0G32XDRAj0UIgMIo4U8caQ>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 13 Nov 2022 20:06:48 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v7 5/5] riscv: dts: allwinner: d1: Add RGB LEDs to boards
-Date:   Sun, 13 Nov 2022 19:06:36 -0600
-Message-Id: <20221114010636.33052-6-samuel@sholland.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221114010636.33052-1-samuel@sholland.org>
-References: <20221114010636.33052-1-samuel@sholland.org>
+        Sun, 13 Nov 2022 20:10:06 -0500
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB8B510067
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 17:10:04 -0800 (PST)
+Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
+  by mx.socionext.com with ESMTP; 14 Nov 2022 10:09:48 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id B1D2A2059027;
+        Mon, 14 Nov 2022 10:09:48 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Mon, 14 Nov 2022 10:09:48 +0900
+Received: from [10.212.157.40] (unknown [10.212.157.40])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 071D8B62AE;
+        Mon, 14 Nov 2022 10:09:48 +0900 (JST)
+Message-ID: <32291d3a-25f8-ff5f-d149-180fbb82278d@socionext.com>
+Date:   Mon, 14 Nov 2022 10:09:47 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] reset: uniphier-glue: Fix possible null-ptr-deref
+To:     Hui Tang <tanghui20@huawei.com>, p.zabel@pengutronix.de,
+        mhiramat@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        weiyongjun1@huawei.com
+References: <20221114004958.258513-1-tanghui20@huawei.com>
+Content-Language: en-US
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+In-Reply-To: <20221114004958.258513-1-tanghui20@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some D1-based boards feature an onboard RGB LED. Enable them.
+On 2022/11/14 9:49, Hui Tang wrote:
+> It will cause null-ptr-deref when resource_size(res) invoked,
+> if platform_get_resource() returns NULL.
+> 
+> Fixes: 499fef09a323 ("reset: uniphier: add USB3 core reset control")
+> Signed-off-by: Hui Tang <tanghui20@huawei.com>
+> ---
+>   drivers/reset/reset-uniphier-glue.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/reset/reset-uniphier-glue.c
+> b/drivers/reset/reset-uniphier-glue.c
+> index 146fd5d45e99..15abac9fc72c 100644
+> --- a/drivers/reset/reset-uniphier-glue.c
+> +++ b/drivers/reset/reset-uniphier-glue.c
+> @@ -47,7 +47,6 @@ static int uniphier_glue_reset_probe(struct
+> platform_device *pdev)
+>   	struct device *dev = &pdev->dev;
+>   	struct uniphier_glue_reset_priv *priv;
+>   	struct resource *res;
+> -	resource_size_t size;
+>   	int i, ret;
+>   
+>   	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> @@ -60,7 +59,6 @@ static int uniphier_glue_reset_probe(struct
+> platform_device *pdev)
+>   		return -EINVAL;
+>   
+>   	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	size = resource_size(res);
+>   	priv->rdata.membase = devm_ioremap_resource(dev, res);
+>   	if (IS_ERR(priv->rdata.membase))
+>   		return PTR_ERR(priv->rdata.membase);
+> @@ -96,7 +94,7 @@ static int uniphier_glue_reset_probe(struct
+> platform_device *pdev)
+>   
+>   	spin_lock_init(&priv->rdata.lock);
+>   	priv->rdata.rcdev.owner = THIS_MODULE;
+> -	priv->rdata.rcdev.nr_resets = size * BITS_PER_BYTE;
+> +	priv->rdata.rcdev.nr_resets = resource_size(res) * BITS_PER_BYTE;
+>   	priv->rdata.rcdev.ops = &reset_simple_ops;
+>   	priv->rdata.rcdev.of_node = dev->of_node;
+>   	priv->rdata.active_low = true;
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
+Good catch! resource_size() should refer to res after the check.
+
+Reviewed-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+
+Thank you,
+
 ---
-
-(no changes since v5)
-
-Changes in v5:
- - New patch for v5
-
- .../boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts | 12 ++++++++++++
- arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts   | 13 +++++++++++++
- 2 files changed, 25 insertions(+)
-
-diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts b/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts
-index ca36a5d75a7f..02d13e987e02 100644
---- a/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts
-+++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts
-@@ -25,6 +25,18 @@ &ehci1 {
- 	status = "okay";
- };
- 
-+&ledc {
-+	pinctrl-0 = <&ledc_pc0_pin>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+
-+	multi-led@0 {
-+		reg = <0x0>;
-+		color = <LED_COLOR_ID_RGB>;
-+		function = LED_FUNCTION_STATUS;
-+	};
-+};
-+
- &lradc {
- 	status = "okay";
- 
-diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts b/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
-index df865ee15fcf..099075462998 100644
---- a/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
-+++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
-@@ -5,6 +5,7 @@
- 
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
- 
- #include "sun20i-d1.dtsi"
- #include "sun20i-d1-common-regulators.dtsi"
-@@ -90,6 +91,18 @@ pcf8574a: gpio@38 {
- 	};
- };
- 
-+&ledc {
-+	pinctrl-0 = <&ledc_pc0_pin>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+
-+	multi-led@0 {
-+		reg = <0x0>;
-+		color = <LED_COLOR_ID_RGB>;
-+		function = LED_FUNCTION_STATUS;
-+	};
-+};
-+
- &lradc {
- 	status = "okay";
- 
--- 
-2.37.3
-
+Best Regards
+Kunihiko Hayashi
