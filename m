@@ -2,114 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7204F627D34
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A16627D37
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236080AbiKNL7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:59:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
+        id S235655AbiKNL7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:59:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237061AbiKNL6a (ORCPT
+        with ESMTP id S235990AbiKNL6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:58:30 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D229E2316A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:56:19 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id l14so17762444wrw.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:56:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yZzVXeLEbKgHa6xp58UZhxK35gPXXnr/yFWcfifNddw=;
-        b=aIrxBLd9mh3Jks/mVTwXGWwCXJi6VCMKyER79zwl1PW7VMbBAMJFVe3xmXSq9ZGZTG
-         b3LBlbweXerNfxewWGkhez5ZNi7us5k4HiSI5IO4E8Zxmj8KBPW17sOa/pwEca50L+XL
-         roIp9/Umrcw7lXuCaDC9GBPdKOvQ8Ibk+4ZPQXkClXdN3jQAEB5FfOQsgmlONJNLH4Cz
-         jUB9dCV+PtSdRtjrHfNtB5NKNxuchCP1bNafYNIBviv9ZJ4hU8eSls5YV5VHP9aXoUtq
-         ZkIpwz1f/rJnjkOpWYynJxitAhy6cL1TX1j6hO13ns8XZt5iuXVYC2L0qVT4XFHDZbxP
-         EyVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yZzVXeLEbKgHa6xp58UZhxK35gPXXnr/yFWcfifNddw=;
-        b=PJjsCAJFhRbYhYJ1zH5TaZ9XriH89/v1yR1pF59PdtT02CBNRtipJDwDemnmcMz+Wq
-         BuuAdVUd6ZEmUVR1aWQ0kfuPxJMLNHzpfNUu9NDG3hEKMb+anRZXSVrDtrxvzmQAU1VK
-         Ntk5xbI8om6110ARb3HAw4npq0yO7T+YP6k4Hy8k79S2UZJmYoz1h4aSLcoCjprzTD8a
-         jQ/+vBZ4cH3RylU5/5AP+W0R/rLWAg3fZG6kyFMUjtJsWuTFpCk5Dd+Ho/arnbbGOx7N
-         XOzoeeF+wGfzTsSCujtHhPTeFBruAM3sszTsdbMywx6F7OrIT+FV/8ruwNUPrtnOze+u
-         /luA==
-X-Gm-Message-State: ANoB5plWsqVu/LLPFMwDpMdLdHHCGvbUIFu/HtbNLuAJBnStdLkZUtJu
-        raZZk7eHjtO/jYJV1D2C6jk+EA==
-X-Google-Smtp-Source: AA0mqf76BLqAYFKGQYMG5sSElZP2p1NEEMR0KLF0sGMAL2NYI0BNSqBr+C0009FLgl/Tokj3RlDfbQ==
-X-Received: by 2002:a5d:4522:0:b0:236:5f1c:bedf with SMTP id j2-20020a5d4522000000b002365f1cbedfmr7478499wra.367.1668426978469;
-        Mon, 14 Nov 2022 03:56:18 -0800 (PST)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id x10-20020adff64a000000b00236883f2f5csm9520658wrp.94.2022.11.14.03.56.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 03:56:18 -0800 (PST)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     wsa@kernel.org, jdelvare@suse.de
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH v2] i2c: smbus: add DDR support for SPD
-Date:   Mon, 14 Nov 2022 11:56:06 +0000
-Message-Id: <20221114115606.1967080-1-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 14 Nov 2022 06:58:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226061EC70;
+        Mon, 14 Nov 2022 03:56:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC3D0B80E76;
+        Mon, 14 Nov 2022 11:56:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20809C433C1;
+        Mon, 14 Nov 2022 11:56:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668426996;
+        bh=iEuhISiKu9TyOYC1q42LdxS2ugKsD/1nYpC0/lFEspM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=awn9M8Ha3m+1PM+hnLVyJDH9rvb/bfA5YlwPpGee/rTCatnakvBELNt50JNC+xdhZ
+         j6Y/0o3+X6qrgMytd1xErEmvQo50hjh8r6J259u9Mcdgz9O60gmucT62xwSjb1gUU1
+         eChAnNc0X5XSCnx8dKiT0kIJi/YH5Cmd4FtzpYTFDfWJsnxTRtGRTt5LjbMJgvA5QW
+         RJLV+IOEDIMGmGCqIVUiuLeyVkr4Gk0gs9aS9jn2Y6T9WEUeuSLhyUmSBJrtGiE4ln
+         n4QPHbc0/nWSDX2Gq2WRNqviw2nFWY7Vr7y185ck/fqgpmpqg9HuXJomIgFOU632be
+         m4QfJjU7Dyg1g==
+Date:   Mon, 14 Nov 2022 12:56:27 +0100
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, kishon@ti.com,
+        vkoul@kernel.org, mani@kernel.org,
+        Sergey.Semin@baikalelectronics.ru, ffclaire1224@gmail.com,
+        linux-pci@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
+Subject: Re: [PATCH V3 11/21] PCI: tegra194: Remove IRQF_ONESHOT flag during
+ Endpoint interrupt registration
+Message-ID: <Y3Is61WPyzLCjlKK@lpieralisi>
+References: <20221013183854.21087-1-vidyas@nvidia.com>
+ <20221013183854.21087-12-vidyas@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221013183854.21087-12-vidyas@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On my x05 laptop I got:
-Memory type 0x12 not supported yet, not instantiating SPD
+On Fri, Oct 14, 2022 at 12:08:44AM +0530, Vidya Sagar wrote:
+> Tegra PCIe endpoint has a common interrupt that notifies hardware events
+> like link up, LTR send, etc. DMA completion event is also notified over
+> this interrupt. Remove IRQF_ONESHOT flag from interrupt registration and
+> allow DMA driver to share this interrupt.
 
-Adding the 0x12 case lead to a successful instantiated SPD AT24 EEPROM.
-i801_smbus 0000:00:1f.3: SMBus using polling
-i2c i2c-6: 2/2 memory slots populated (from DMI)
-at24 6-0050: 256 byte spd EEPROM, read-only
-i2c i2c-6: Successfully instantiated SPD at 0x50
-at24 6-0051: 256 byte spd EEPROM, read-only
+Please give a clearer explanation of why this is safe and the reasoning
+behind this change.
 
-And then, I decoded it successfully via decode-dimms.
+Lorenzo
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
-Changes since v1:
-- Added memory type document link
-- Added case for LPDDR
-
- drivers/i2c/i2c-smbus.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-index 07c92c8495a3..c85710ed9548 100644
---- a/drivers/i2c/i2c-smbus.c
-+++ b/drivers/i2c/i2c-smbus.c
-@@ -361,9 +361,15 @@ void i2c_register_spd(struct i2c_adapter *adap)
- 		return;
- 	}
- 
-+	/*
-+	 * Memory types could be found at section 7.18.2 (Memory Device — Type), table 78
-+	 * https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_3.6.0.pdf
-+	 */
- 	switch (common_mem_type) {
-+	case 0x12:	/* DDR */
- 	case 0x13:	/* DDR2 */
- 	case 0x18:	/* DDR3 */
-+	case 0x1B:	/* LPDDR */
- 	case 0x1C:	/* LPDDR2 */
- 	case 0x1D:	/* LPDDR3 */
- 		name = "spd";
--- 
-2.37.4
-
+> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> ---
+> V3:
+> * This is a new patch in this series
+> 
+>  drivers/pci/controller/dwc/pcie-tegra194.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
+> index 7820bf4b9786..786e5d5f43b9 100644
+> --- a/drivers/pci/controller/dwc/pcie-tegra194.c
+> +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
+> @@ -2354,7 +2354,7 @@ static int tegra_pcie_dw_probe(struct platform_device *pdev)
+>  		ret = devm_request_threaded_irq(dev, pp->irq,
+>  						tegra_pcie_ep_hard_irq,
+>  						tegra_pcie_ep_irq_thread,
+> -						IRQF_SHARED | IRQF_ONESHOT,
+> +						IRQF_SHARED,
+>  						"tegra-pcie-ep-intr", pcie);
+>  		if (ret) {
+>  			dev_err(dev, "Failed to request IRQ %d: %d\n", pp->irq,
+> -- 
+> 2.17.1
+> 
+> 
+> -- 
+> linux-phy mailing list
+> linux-phy@lists.infradead.org
+> https://lists.infradead.org/mailman/listinfo/linux-phy
