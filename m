@@ -2,97 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F44628165
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C51F62818E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236830AbiKNNeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56892 "EHLO
+        id S236754AbiKNNpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:45:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236779AbiKNNeM (ORCPT
+        with ESMTP id S229762AbiKNNpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:34:12 -0500
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622A5193F4;
-        Mon, 14 Nov 2022 05:34:11 -0800 (PST)
-Received: by mail-qt1-f172.google.com with SMTP id cg5so6699759qtb.12;
-        Mon, 14 Nov 2022 05:34:11 -0800 (PST)
+        Mon, 14 Nov 2022 08:45:16 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31EF23E9A
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:45:14 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id h9so18363640wrt.0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:45:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :references:from:to:cc:subject:date:message-id:reply-to;
+        bh=QlaQ+5L6ISjl1Quqoe6Zjc/8uHOtFVdW/GdcCpp/E/Q=;
+        b=jSCYGC5OOaP6wUoO8qDSxyvxYcDe1o8zBe8FkfWoFAjWSsikhUAtNoMBmNwFeq3uhI
+         G32ZWxouIGIydr0MRB9Py4ixg/z42dGJg9X3xVAoWk12hPfQEaNinSiqp34K6y+SQ+iY
+         XAHHzVH+RkkSRuTNC9lGBtDX2pacFYyCNwmOOJPgLFOA4nU8UyGPUpGxeHPDvVChT8Oa
+         U7WGPpTpSh9yPgOa8AOpqwwv6cLCWiKgJqiqk9m82By7kvu171l8969qwArbJxs+66N0
+         WP+Mr33C3tQ6IQaS1TkZIpp2QgXt+NE+dcRr4s5aRbbi+eBghyuQtoYo9k6XbuSKJQ4d
+         b3qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :references:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0enCl3aA3oSehDqOarw87aM8R6LctgbZ471ws/S8kmA=;
-        b=IiJXQRlYJNA+c1htr+QvDVftp/julRl8ORMkAYgCNh1oeTszNvexwKDJsEWc/91rCL
-         kLwX5XHtT2O6P31Ur+1Vp+yVbLFnqnfbHv0vA6nTacYnkkspJMFUfGZTcJQrhZ0js/Y6
-         7mVd6DLS8DIQgzLk3LcKn8oorFrF3Y9RmPSfIl6DTHkw3+UBU9S4u8F76Frl06jK0T2I
-         z3wkjoqD9AkQimKbtw0WlQpNj7Yw3S9Yd08v/WGkdiDicxPtRdqVFeAC/HEupDvpi/8M
-         i6k/e44hr/xwGCYZF+0fYbQGu+1omE5MHB5Zzj6sfRLCRdU9oEwS9CWjRZBMnwvtShOL
-         pWaw==
-X-Gm-Message-State: ANoB5pkrsyEXLXGnljjJBX+zuyGw+d2E0+5KIi0vp5ntOFdTcMSvSDm3
-        is4T+loJsKuwlaWFJtH1AZZ85zy46J8GSg==
-X-Google-Smtp-Source: AA0mqf7nS7nPiTEBoRNcCLh3vSlXK2loevcYGefNVeNypOeDiRV1ZyjihrKfxF8JkmF9BQe0i1CvCA==
-X-Received: by 2002:ac8:474b:0:b0:3a5:177d:d9cb with SMTP id k11-20020ac8474b000000b003a5177dd9cbmr12196423qtp.64.1668432849301;
-        Mon, 14 Nov 2022 05:34:09 -0800 (PST)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id v11-20020ac8728b000000b003a526675c07sm5598118qto.52.2022.11.14.05.34.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 05:34:08 -0800 (PST)
-Received: by mail-yb1-f181.google.com with SMTP id j2so13412870ybb.6;
-        Mon, 14 Nov 2022 05:34:08 -0800 (PST)
-X-Received: by 2002:a25:844b:0:b0:6de:6c43:3991 with SMTP id
- r11-20020a25844b000000b006de6c433991mr11541758ybm.604.1668432848711; Mon, 14
- Nov 2022 05:34:08 -0800 (PST)
+        bh=QlaQ+5L6ISjl1Quqoe6Zjc/8uHOtFVdW/GdcCpp/E/Q=;
+        b=OLtg7HkCTEFVBL1xbiTTlkGP05P3JrgyzNp1yTNy8N+ZARkjFJlmQ5NWVIb/hMNxhR
+         aXGEP5ypeTjF3Xv3h9E+eKJXVbJuCTphlyTrPiJ1Xw7VKFmHJJTAAV+Zh5DUrlyzt8h1
+         j4QffvVS0i015Ux7l/CL/beF9ncKfcOuUUrAoR0FKhkjqUHJCqgv5jyGShP5Cp2CCDVW
+         TkVmuP7NOe2F/sy9KDWWv/+KhYLk+x/kzKrhk0qWNdzm75+LAt32yqjxzr2mh5ggpNAI
+         b2mdD+v67PDd35k4g6QuHJvPGgorMteYtDZI5cEUkBcuLvPaAQw9o2j7/3Tcihd5z/0c
+         yMHg==
+X-Gm-Message-State: ANoB5pl3jE5UF5hpBvD14vkeI4wJ+xohzF0Y19yzQENHS4WeXzSQZFoo
+        a+aYn0COEREPeFNpbpoFBwY=
+X-Google-Smtp-Source: AA0mqf6t6wgbEYsEROt1KuQTFtTIDd5a+5nbKAjINA0i+aNpO23kv16iWfHV1aCU/yGepWTsRNrKrA==
+X-Received: by 2002:adf:bb43:0:b0:22e:6f0d:d69 with SMTP id x3-20020adfbb43000000b0022e6f0d0d69mr7759486wrg.134.1668433513466;
+        Mon, 14 Nov 2022 05:45:13 -0800 (PST)
+Received: from localhost (94.197.10.112.threembb.co.uk. [94.197.10.112])
+        by smtp.gmail.com with ESMTPSA id r11-20020a5d694b000000b0023691d62cffsm9536367wrw.70.2022.11.14.05.45.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 05:45:13 -0800 (PST)
+References: <20221112151835.39059-1-aidanmacdonald.0x0@gmail.com>
+ <20221112151835.39059-6-aidanmacdonald.0x0@gmail.com>
+ <03b94d20-05a6-71fb-61e4-00889f5aa64d@linaro.org>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     lee@kernel.org, mani@kernel.org, cristian.ciocaltea@gmail.com,
+        wens@csie.org, tharvey@gateworks.com, cw00.choi@samsung.com,
+        brgl@bgdev.pl, mazziesaccount@gmail.com, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 05/18] mfd: max14577: Replace irqchip mask_invert with
+ unmask_base
+Date:   Mon, 14 Nov 2022 13:34:10 +0000
+In-reply-to: <03b94d20-05a6-71fb-61e4-00889f5aa64d@linaro.org>
+Message-ID: <KGy5eAsJh4YwYjYVTvnohmym61EBqJX5@localhost>
 MIME-Version: 1.0
-References: <20221114111513.1436165-1-herve.codina@bootlin.com> <20221114111513.1436165-3-herve.codina@bootlin.com>
-In-Reply-To: <20221114111513.1436165-3-herve.codina@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 14 Nov 2022 14:33:57 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUy8mG-=NXP_+kC-QWyy06E=epVQd6kYQRyRauf87jO0w@mail.gmail.com>
-Message-ID: <CAMuHMdUy8mG-=NXP_+kC-QWyy06E=epVQd6kYQRyRauf87jO0w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl: Add
- h2mode property
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 12:15 PM Herve Codina <herve.codina@bootlin.com> wrote:
-> Add the h2mode property to force the USBs mode ie:
->  - 2 hosts
-> or
->  - 1 host and 1 device
+
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
+
+> On 12/11/2022 16:18, Aidan MacDonald wrote:
+>> Remove use of the deprecated mask_invert flag. Inverted mask
+>> registers (where a '1' bit enables an IRQ) can be described more
+>> directly as an unmask register.
+>>
+>> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>> ---
+>>  drivers/mfd/max14577.c | 7 ++-----
+>>  1 file changed, 2 insertions(+), 5 deletions(-)
 >
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> Mention this is a resend or provide a changelog for v2.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Most of these patches are resends, but they're so trivial it seems
+pointless to mention that fact. There are no changes from v1.
 
-Gr{oetje,eeting}s,
+Regards,
+Aidan
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> Best regards,
+> Krzysztof
