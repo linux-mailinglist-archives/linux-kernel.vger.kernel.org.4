@@ -2,219 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 901A7628193
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:46:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76CEA628198
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236608AbiKNNqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:46:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
+        id S236432AbiKNNr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:47:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiKNNqC (ORCPT
+        with ESMTP id S235973AbiKNNr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:46:02 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC7523E9A;
-        Mon, 14 Nov 2022 05:46:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668433561; x=1699969561;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=pZsDOJH7YZVEvK7c5X8wY11sJ+2Kq256SCE5sNiG6QI=;
-  b=Ei9YJVFxeYu2WNTxpX0ySz2HC1RKn37SIcW5aVyrUUdG2MwWAxZb8URC
-   aCfPpyDA/D4Z7V6ZJR3PxoJp4Pv7G34FP6RboA9NStJ9c6LEpeH/mNCVK
-   wYUiwJcmgNNN7bl2TIy0AUp2Sep6YDSYJCtSmABO4JuVtSdYYgJ5VpMnl
-   W37r3/ZJLD4qJMRlG/BshL8hewS+7N61txQU7mz//lPYY5rWA1jZIyjgp
-   f+5vBdFvEEa7/ivAun9IAG9vbSiIq98jT/1O9sGH/aXJoKShjpEW4hwuz
-   iydNJzb+szvSwufCUIOZvJA6s2JBz2zZPhtP3KUoBwlO2rq1lNWSJqhMD
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="295332361"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="295332361"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 05:46:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="638480160"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="638480160"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga002.jf.intel.com with ESMTP; 14 Nov 2022 05:45:57 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2AEDjupb006363;
-        Mon, 14 Nov 2022 13:45:56 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Wei Fang <wei.fang@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, imx@lists.linux.dev,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3 1/1] net: fec: add xdp and page pool statistics
-Date:   Mon, 14 Nov 2022 14:45:42 +0100
-Message-Id: <20221114134542.697174-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221111153505.434398-1-shenwei.wang@nxp.com>
-References: <20221111153505.434398-1-shenwei.wang@nxp.com>
+        Mon, 14 Nov 2022 08:47:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB392408A
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:46:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668433592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=J1BcN/QO1Azbk1K0nDSLQnjoAEd5nt0uvBoLhgjnJtw=;
+        b=UuvVMbZMlqAGeyD8Hg56p8RkOPpYsclhSLQuTlxAqcDL68drI5jg+O088RDJZg52z+h21J
+        B7E96NgIlJN5fdbxVWn1aHEI2QtV2EGKBmnIDfbC1EaiqasihRkEMbidCie2/WShHuGf6z
+        MtirjFBLlGif/ohFN0QFHQw011Lfs0E=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-444-tAJ8m3z4OdK8LSwOr-jnqw-1; Mon, 14 Nov 2022 08:46:30 -0500
+X-MC-Unique: tAJ8m3z4OdK8LSwOr-jnqw-1
+Received: by mail-pl1-f200.google.com with SMTP id l4-20020a170903244400b00188c393fff1so2517810pls.7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:46:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J1BcN/QO1Azbk1K0nDSLQnjoAEd5nt0uvBoLhgjnJtw=;
+        b=vj8hk4eKB8HwaDrWcEt5aU3Dngzou0+0iWqr1Wto6+SP11N1NNGVZio77CBMsu09za
+         msyIZrOyIcfKbT8vdZwyVVUmM+W8MNWbFcO03MfCbm1/dbn2JmpetVMGIa92JRUy6WyE
+         lERhMBh3TrTPsttByo4Is2KvgXnWgHK91AQSZlrx7R8KdywwcIhJLid2m1ZstvosHV3Y
+         7zI34TahHzWTvrA8ZeNR4DzbQBo04BoDZyBE+hlA6MfSr/BONlbX/7gfywAw7QYXW3tl
+         xewnlthtrMWOKj8Tbm63ES9A+tpsdSC17UOHpmjjKzujX5YbOUjHiTc2AaENrhiX1H5R
+         t8+Q==
+X-Gm-Message-State: ANoB5pn26seWbnMVyFMar7+Wr8Te/vOV115XegPn2gg9pDxF5r+pTTuK
+        Ruwp2KJz+ZffnIv2VszynAzTD2m7Dnl4CF8raaCBuEmFc51aNTsPFLyF9UOHguQ5C2w3guGesiZ
+        oJUf+9yidw+Y9SDdhbeVonVIe
+X-Received: by 2002:a17:90b:3c8f:b0:212:9b3f:dee5 with SMTP id pv15-20020a17090b3c8f00b002129b3fdee5mr13647443pjb.62.1668433589051;
+        Mon, 14 Nov 2022 05:46:29 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6ynxQTk5xe3X2zCMgFBN2EARpkH5K8+lbjAioDd32BscJZFicJ8pwOxc68lDhHNmzsMO+UJg==
+X-Received: by 2002:a17:90b:3c8f:b0:212:9b3f:dee5 with SMTP id pv15-20020a17090b3c8f00b002129b3fdee5mr13647417pjb.62.1668433588622;
+        Mon, 14 Nov 2022 05:46:28 -0800 (PST)
+Received: from [10.72.12.148] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id b13-20020aa78ecd000000b0056cee8af3a6sm6463020pfr.54.2022.11.14.05.46.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 05:46:28 -0800 (PST)
+Subject: Re: [PATCH 2/2 v2] ceph: use a xarray to record all the opened files
+ for each inode
+To:     Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        idryomov@gmail.com, viro@zeniv.linux.org.uk
+Cc:     lhenriques@suse.de, mchangir@redhat.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20221114051901.15371-1-xiubli@redhat.com>
+ <20221114051901.15371-3-xiubli@redhat.com>
+ <46a1398be032ee6d06aef7df5e336b6ce2ba8f53.camel@kernel.org>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <99686926-542d-d558-ce22-e4d5c883b838@redhat.com>
+Date:   Mon, 14 Nov 2022 21:46:21 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <46a1398be032ee6d06aef7df5e336b6ce2ba8f53.camel@kernel.org>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shenwei Wang <shenwei.wang@nxp.com>
-Date: Fri, 11 Nov 2022 09:35:05 -0600
 
-> Added xdp and page pool statistics.
-> In order to make the implementation simple and compatible, the patch
-> uses the 32bit integer to record the XDP statistics.
-> 
-> Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
-> Reported-by: kernel test robot <lkp@intel.com>
+On 14/11/2022 21:39, Jeff Layton wrote:
+> On Mon, 2022-11-14 at 13:19 +0800, xiubli@redhat.com wrote:
+>> From: Xiubo Li <xiubli@redhat.com>
+>>
+>> When releasing the file locks the fl->fl_file memory could be
+>> already released by another thread in filp_close(), so we couldn't
+>> depend on fl->fl_file to get the inode. Just use a xarray to record
+>> the opened files for each inode.
+>>
+>> Cc: stable@vger.kernel.org
+>> URL: https://tracker.ceph.com/issues/57986
+>> Signed-off-by: Xiubo Li <xiubli@redhat.com>
+>> ---
+>>   fs/ceph/file.c  |  9 +++++++++
+>>   fs/ceph/inode.c |  4 ++++
+>>   fs/ceph/locks.c | 17 ++++++++++++++++-
+>>   fs/ceph/super.h |  4 ++++
+>>   4 files changed, 33 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+>> index 85afcbbb5648..cb4a9c52df27 100644
+>> --- a/fs/ceph/file.c
+>> +++ b/fs/ceph/file.c
+>> @@ -231,6 +231,13 @@ static int ceph_init_file_info(struct inode *inode, struct file *file,
+>>   			fi->flags |= CEPH_F_SYNC;
+>>   
+>>   		file->private_data = fi;
+>> +
+>> +		ret = xa_insert(&ci->i_opened_files, (unsigned long)file,
+>> +				CEPH_FILP_AVAILABLE, GFP_KERNEL);
+>> +		if (ret) {
+>> +			kmem_cache_free(ceph_file_cachep, fi);
+>> +			return ret;
+>> +		}
+>>   	}
+>>   
+>>   	ceph_get_fmode(ci, fmode, 1);
+>> @@ -932,6 +939,8 @@ int ceph_release(struct inode *inode, struct file *file)
+>>   		dout("release inode %p regular file %p\n", inode, file);
+>>   		WARN_ON(!list_empty(&fi->rw_contexts));
+>>   
+>> +		xa_erase(&ci->i_opened_files, (unsigned long)file);
+>> +
+>>   		ceph_fscache_unuse_cookie(inode, file->f_mode & FMODE_WRITE);
+>>   		ceph_put_fmode(ci, fi->fmode, 1);
+>>   
+>> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+>> index 77b0cd9af370..554450838e44 100644
+>> --- a/fs/ceph/inode.c
+>> +++ b/fs/ceph/inode.c
+>> @@ -619,6 +619,8 @@ struct inode *ceph_alloc_inode(struct super_block *sb)
+>>   	INIT_LIST_HEAD(&ci->i_unsafe_iops);
+>>   	spin_lock_init(&ci->i_unsafe_lock);
+>>   
+>> +	xa_init(&ci->i_opened_files);
+>> +
+>>   	ci->i_snap_realm = NULL;
+>>   	INIT_LIST_HEAD(&ci->i_snap_realm_item);
+>>   	INIT_LIST_HEAD(&ci->i_snap_flush_item);
+>> @@ -637,6 +639,8 @@ void ceph_free_inode(struct inode *inode)
+>>   {
+>>   	struct ceph_inode_info *ci = ceph_inode(inode);
+>>   
+>> +	xa_destroy(&ci->i_opened_files);
+>> +
+>>   	kfree(ci->i_symlink);
+>>   #ifdef CONFIG_FS_ENCRYPTION
+>>   	kfree(ci->fscrypt_auth);
+>> diff --git a/fs/ceph/locks.c b/fs/ceph/locks.c
+>> index d8385dd0076e..a176a30badd0 100644
+>> --- a/fs/ceph/locks.c
+>> +++ b/fs/ceph/locks.c
+>> @@ -42,9 +42,10 @@ static void ceph_fl_copy_lock(struct file_lock *dst, struct file_lock *src)
+>>   
+>>   static void ceph_fl_release_lock(struct file_lock *fl)
+>>   {
+>> -	struct ceph_file_info *fi = fl->fl_file->private_data;
+>>   	struct inode *inode = fl->fl_u.ceph_fl.fl_inode;
+>>   	struct ceph_inode_info *ci;
+>> +	struct ceph_file_info *fi;
+>> +	void *val;
+>>   
+>>   	/*
+>>   	 * If inode is NULL it should be a request file_lock,
+>> @@ -54,6 +55,20 @@ static void ceph_fl_release_lock(struct file_lock *fl)
+>>   		return;
+>>   
+>>   	ci = ceph_inode(inode);
+>> +
+>> +	/*
+>> +	 * For Posix-style locks, it may race between filp_close()s,
+>> +	 * and it's possible that the 'file' memory pointed by
+>> +	 * 'fl->fl_file' has been released. If so just skip it.
+>> +	 */
+>> +	rcu_read_lock();
+>> +	val = xa_load(&ci->i_opened_files, (unsigned long)fl->fl_file);
+>> +	if (val == CEPH_FILP_AVAILABLE) {
+>> +		fi = fl->fl_file->private_data;
+>> +		atomic_dec(&fi->num_locks);
+> Don't you need to remove the old atomic_dec from this function if you
+> move it here?
 
-I was this went upstream[0], I think it was quite premature.
-First of all, there was a non-acked reply to me in the v2 thread,
-but okay, I can live with that. More serious issues in the inline
-comments below.
+Yeah, I thought I have removed that. Not sure why I added it back.
 
-> ---
->  Changes in v3:
->  - change memcpy to strncpy to fix the warning reported by Paolo Abeni
->  - fix the compile errors on powerpc
-> 
->  Changes in v2:
->  - clean up and restructure the codes per Andrew Lunn's review comments
->  - clear the statistics when the adaptor is down
-> 
->  drivers/net/ethernet/freescale/Kconfig    |  1 +
->  drivers/net/ethernet/freescale/fec.h      | 14 ++++
->  drivers/net/ethernet/freescale/fec_main.c | 85 +++++++++++++++++++++--
->  3 files changed, 95 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/freescale/Kconfig b/drivers/net/ethernet/freescale/Kconfig
-> index ce866ae3df03..f1e80d6996ef 100644
-> --- a/drivers/net/ethernet/freescale/Kconfig
-> +++ b/drivers/net/ethernet/freescale/Kconfig
-> @@ -29,6 +29,7 @@ config FEC
->  	select CRC32
->  	select PHYLIB
->  	select PAGE_POOL
-> +	select PAGE_POOL_STATS
+>
+>> +	}
+>> +	rcu_read_unlock();
+>> +
+>>   	if (atomic_dec_and_test(&ci->i_filelock_ref)) {
+>>   		/* clear error when all locks are released */
+>>   		spin_lock(&ci->i_ceph_lock);
+>> diff --git a/fs/ceph/super.h b/fs/ceph/super.h
+>> index 7b75a84ba48d..b3e89192cbec 100644
+>> --- a/fs/ceph/super.h
+>> +++ b/fs/ceph/super.h
+>> @@ -329,6 +329,8 @@ struct ceph_inode_xattrs_info {
+>>   	u64 version, index_version;
+>>   };
+>>   
+>> +#define CEPH_FILP_AVAILABLE         xa_mk_value(1)
+>> +
+>>   /*
+>>    * Ceph inode.
+>>    */
+>> @@ -434,6 +436,8 @@ struct ceph_inode_info {
+>>   	struct list_head i_unsafe_iops;   /* uncommitted mds inode ops */
+>>   	spinlock_t i_unsafe_lock;
+>>   
+>> +	struct xarray		i_opened_files;
+>> +
+>>   	union {
+>>   		struct ceph_snap_realm *i_snap_realm; /* snap realm (if caps) */
+>>   		struct ceph_snapid_map *i_snapid_map; /* snapid -> dev_t */
+> This looks like it'll work, but it's a lot of extra work, having to
+> track this extra xarray just on the off chance that one of these fd's
+> might have file locks. The num_locks field is only checked in one place
+> in ceph_get_caps.
+>
+> Here's what I'd recommend instead:
+>
+> Have ceph_get_caps look at the lists in inode->i_flctx and see whether
+> any of its locks have an fl_file that matches the @filp argument in that
+> function. Most inodes never get any file locks, so in most cases  this
+> will turn out to just be a NULL pointer check for i_flctx anyway.
+>
+> Then you can just remove the num_locks field and call the new helper
+> from ceph_get_caps instead. I'll send along a proposed patch for the
+> helper in a bit.
 
-Drivers should never select PAGE_POOL_STATS. This Kconfig option was
-made to allow user to choose whether he wants stats or better
-performance on slower systems. It's pure user choice, if something
-doesn't build or link, it must be guarded with
-IS_ENABLED(CONFIG_PAGE_POOL_STATS).
+Sure, Thanks Jeff.
 
->  	imply NET_SELFTESTS
->  	help
->  	  Say Y here if you want to use the built-in 10/100 Fast ethernet
-> diff --git a/drivers/net/ethernet/freescale/fec.h b/drivers/net/ethernet/freescale/fec.h
-> index 61e847b18343..5ba1e0d71c68 100644
-> --- a/drivers/net/ethernet/freescale/fec.h
-> +++ b/drivers/net/ethernet/freescale/fec.h
-> @@ -526,6 +526,19 @@ struct fec_enet_priv_txrx_info {
->  	struct  sk_buff *skb;
->  };
-> 
-> +enum {
-> +	RX_XDP_REDIRECT = 0,
-> +	RX_XDP_PASS,
-> +	RX_XDP_DROP,
-> +	RX_XDP_TX,
-> +	RX_XDP_TX_ERRORS,
-> +	TX_XDP_XMIT,
-> +	TX_XDP_XMIT_ERRORS,
-> +
-> +	/* The following must be the last one */
-> +	XDP_STATS_TOTAL,
-> +};
-> +
->  struct fec_enet_priv_tx_q {
->  	struct bufdesc_prop bd;
->  	unsigned char *tx_bounce[TX_RING_SIZE];
-> @@ -546,6 +559,7 @@ struct fec_enet_priv_rx_q {
->  	/* page_pool */
->  	struct page_pool *page_pool;
->  	struct xdp_rxq_info xdp_rxq;
-> +	u32 stats[XDP_STATS_TOTAL];
+- Xiubo
 
-Still not convinced it is okay to deliberately provoke overflows
-here, maybe we need some more reviewers to help us agree on what is
-better?
 
-> 
->  	/* rx queue number, in the range 0-7 */
->  	u8 id;
-
-[...]
-
->  	case ETH_SS_STATS:
-> -		for (i = 0; i < ARRAY_SIZE(fec_stats); i++)
-> -			memcpy(data + i * ETH_GSTRING_LEN,
-> -				fec_stats[i].name, ETH_GSTRING_LEN);
-> +		for (i = 0; i < ARRAY_SIZE(fec_stats); i++) {
-> +			memcpy(data, fec_stats[i].name, ETH_GSTRING_LEN);
-> +			data += ETH_GSTRING_LEN;
-> +		}
-> +		for (i = 0; i < ARRAY_SIZE(fec_xdp_stat_strs); i++) {
-> +			strncpy(data, fec_xdp_stat_strs[i], ETH_GSTRING_LEN);
-
-strncpy() is deprecated in favor of strscpy(), there were tons of
-commits which replace the former with the latter across the whole
-tree.
-
-> +			data += ETH_GSTRING_LEN;
-> +		}
-> +		page_pool_ethtool_stats_get_strings(data);
-> +
->  		break;
->  	case ETH_SS_TEST:
->  		net_selftest_get_strings(data);
-
-[...]
-
-> +	for (i = fep->num_rx_queues - 1; i >= 0; i--) {
-> +		rxq = fep->rx_queue[i];
-> +		for (j = 0; j < XDP_STATS_TOTAL; j++)
-> +			rxq->stats[j] = 0;
-
-(not critical) Just memset(&rxq->stats)?
-
-> +	}
-> +
->  	/* Don't disable MIB statistics counters */
->  	writel(0, fep->hwp + FEC_MIB_CTRLSTAT);
->  }
-> @@ -3084,6 +3156,9 @@ static void fec_enet_free_buffers(struct net_device *ndev)
->  		for (i = 0; i < rxq->bd.ring_size; i++)
->  			page_pool_release_page(rxq->page_pool, rxq->rx_skb_info[i].page);
-> 
-> +		for (i = 0; i < XDP_STATS_TOTAL; i++)
-> +			rxq->stats[i] = 0;
-> +
->  		if (xdp_rxq_info_is_reg(&rxq->xdp_rxq))
->  			xdp_rxq_info_unreg(&rxq->xdp_rxq);
->  		page_pool_destroy(rxq->page_pool);
-> --
-> 2.34.1
-
-Could you please send a follow-up maybe, fixing at least that
-PAGE_POOL_STATS select and strncpy()?
-
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?h=main&id=6970ef27ff7fd1ce3455b2c696081503d0c0f8ac
-
-Thanks,
-Olek
