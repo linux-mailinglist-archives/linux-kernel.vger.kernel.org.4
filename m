@@ -2,153 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C11628C6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 23:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB69A628C72
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 23:58:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237481AbiKNW5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 17:57:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
+        id S237752AbiKNW6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 17:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237808AbiKNW5Q (ORCPT
+        with ESMTP id S237504AbiKNW6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 17:57:16 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBEE1B7A3;
-        Mon, 14 Nov 2022 14:57:12 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 06BD5240003;
-        Mon, 14 Nov 2022 22:57:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668466631;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M3hQEMxlrNK+06eeO3xPT9LuLj4yjY7yvIvmM3pxtPo=;
-        b=bj9eV86lzO2PB1EMaUD1jpebxgmKDCSQHfN4vnk2N7CP9Sp0BntWcEb+LscO0TFl27SYbq
-        huthOt1QjAWLQOuK0MIdUHuitTti2lkheZnVDX42rOeEYo5Sm8oZ0DuvabkKthMx+xwbcF
-        kCAvB1k8/torNFRFnIY9JZHj8HWVEhjl7HceyIKCpMQrFwIMYKAH7oUxmmcYVPDWsFwvO2
-        FBjK1SdraumjMSx5Q5n3Qtrx1IUB6h6/TZ/+qh3zrAlZgZIRDPdDN6e+W4Kn/gm8idNiFP
-        ia/ECYj9ZldDZoWIuYzpmRzn0N89TSslCE+21uX6IQiQclrzRGWOLvTwmEjnFg==
-Date:   Mon, 14 Nov 2022 23:57:08 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Pavel Machek <pavel@ucw.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-rtc@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Subject: Re: [PATCH v4 2/9] dt-bindings: rtc: mediatek: convert MT6397 rtc
- documentation
-Message-ID: <Y3LHxDIzfZWhnQJN@mail.local>
-References: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
- <20221005-mt6357-support-v4-2-5d2bb58e6087@baylibre.com>
- <20221109222916.GA2985917-robh@kernel.org>
- <Y2wwUOJ0KZdt1tZ6@mail.local>
- <adf8bc44-4cbc-af2a-4ec8-1859a98146d7@linaro.org>
+        Mon, 14 Nov 2022 17:58:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183021ADAC
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 14:58:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3EF1B81250
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:58:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B89B1C433D7;
+        Mon, 14 Nov 2022 22:58:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668466693;
+        bh=z2liwwd8gcod1sLF+wz7lbOEfJTIH9wHoEzy8NzIIsM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AKx2hahilaGrxP4DvrTV2cksv2YTL451RIIVe4TPwQNuRQNToNnmAD/6IGKdD6xgf
+         0la3A6xBrkIUxsEZZqAq0G6fJvHFpGzIJXXMOv+stAYqzhT39X0vwEmL07MGVpfTuk
+         Bo4mgE7kkGm4MBneTTs8sfh6BbnqC+gLDaH+MSq713UGThuaX9DtwHa9oisvK65GZt
+         KR1b2JiYMX64t5GlL1AEwJ5UVbAMXUoobSbmyidWlZe4rZgpGttkkHxcdO6So7CyBV
+         MB8kv3zy0iec/liBKZpJUP9QKtrH59MeyAeuzCUHmKRp+QU/It6BAWfE7mAGh7B3Mj
+         fw39e10Nro/Gg==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Russell King <linux@armlinux.org.uk>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Ard Biesheuvel <ardb@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>,
+        "kernelci.org bot" <bot@kernelci.org>
+Subject: [PATCH] ARM: Drop '-mthumb' from AFLAGS_ISA
+Date:   Mon, 14 Nov 2022 15:57:20 -0700
+Message-Id: <20221114225719.1657174-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <adf8bc44-4cbc-af2a-4ec8-1859a98146d7@linaro.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/2022 15:14:01+0100, Krzysztof Kozlowski wrote:
-> On 09/11/2022 23:57, Alexandre Belloni wrote:
-> > On 09/11/2022 16:29:16-0600, Rob Herring wrote:
-> >> On Tue, Nov 08, 2022 at 07:43:37PM +0100, Alexandre Mergnat wrote:
-> >>> - Convert rtc/rtc-mt6397.txt to rtc/mt6397-rtc.yaml
-> >>> - Add mediatek,mt6357-rtc compatible.
-> >>> - Add maintainer
-> >>> - Remove the .txt binding file
-> >>>
-> >>> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> >>> ---
-> >>>  Documentation/devicetree/bindings/mfd/mt6397.txt   |  2 +-
-> >>>  .../bindings/rtc/mediatek,mt6397-rtc.yaml          | 40 ++++++++++++++++++++++
-> >>>  .../devicetree/bindings/rtc/rtc-mt6397.txt         | 31 -----------------
-> >>>  3 files changed, 41 insertions(+), 32 deletions(-)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> >>> index 0088442efca1..79aaf21af8e9 100644
-> >>> --- a/Documentation/devicetree/bindings/mfd/mt6397.txt
-> >>> +++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
-> >>> @@ -33,7 +33,7 @@ Optional subnodes:
-> >>>  		- compatible: "mediatek,mt6331-rtc"
-> >>>  		- compatible: "mediatek,mt6358-rtc"
-> >>>  		- compatible: "mediatek,mt6397-rtc"
-> >>> -	For details, see ../rtc/rtc-mt6397.txt
-> >>> +	For details, see ../rtc/mediatek,mt6397-rtc.yaml
-> >>>  - regulators
-> >>>  	Required properties:
-> >>>  		- compatible: "mediatek,mt6323-regulator"
-> >>> diff --git a/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
-> >>> new file mode 100644
-> >>> index 000000000000..bb48c0150f95
-> >>> --- /dev/null
-> >>> +++ b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
-> >>> @@ -0,0 +1,40 @@
-> >>> + # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> >>> +%YAML 1.2
-> >>> +---
-> >>> +$id: http://devicetree.org/schemas/rtc/mediatek,mt6397-rtc.yaml#
-> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>> +
-> >>> +title: MediaTek MT6397/MT6366/MT6358/MT6357/MT6323 RTC
-> >>> +
-> >>> +maintainers:
-> >>> +  - Alexandre Mergnat <amergnat@baylibre.com>
-> >>> +
-> >>> +description: |
-> >>> +  MediaTek PMIC based RTC is an independent function of MediaTek PMIC that works
-> >>> +  as a type of multi-function device (MFD). The RTC can be configured and set up
-> >>> +  with PMIC wrapper bus which is a common resource shared with the other
-> >>> +  functions found on the same PMIC.
-> >>> +
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    enum:
-> >>> +      - mediatek,mt6323-rtc
-> >>> +      - mediatek,mt6357-rtc
-> >>> +      - mediatek,mt6358-rtc
-> >>> +      - mediatek,mt6366-rtc
-> >>> +      - mediatek,mt6397-rtc
-> >>
-> >> As this is only a compatible string, just fold this into the MFD schema 
-> >> doc.
-> > 
-> > Actually, it probably also supports the start-year property
-> 
+When building with CONFIG_THUMB2_KERNEL=y + a version of clang from
+Debian, the following warning occurs frequently:
 
-I checked and it doesn't support it but this needs to be fixed.
+  <built-in>:383:9: warning: '__thumb2__' macro redefined [-Wmacro-redefined]
+  #define __thumb2__ 2
+          ^
+  <built-in>:353:9: note: previous definition is here
+  #define __thumb2__ 1
+          ^
+  1 warning generated.
 
-> What about rest of rtc.yaml schema?
-> 
+Debian carries a downstream patch that changes the default CPU of the
+arm-linux-gnueabihf target from 'arm1176jzf-s' (v6) to 'cortex-a7' (v7).
+As a result, '-mthumb' defines both '__thumb__' and '__thumb2__'. The
+define of '__thumb2__' via the command line was purposefully added to
+catch a situation like this.
 
-wakeup-source would make sense but the driver doesn't support it yet.
+In a similar vein as commit 26b12e084bce ("ARM: 9264/1: only use
+-mtp=cp15 for the compiler"), do not add '-mthumb' to AFLAGS_ISA, as it
+is already passed to the assembler via '-Wa,-mthumb' and '__thumb2__' is
+already defined for preprocessing.
 
+Fixes: 1d2e9b67b001 ("ARM: 9265/1: pass -march= only to compiler")
+Link: htps://salsa.debian.org/pkg-llvm-team/llvm-toolchain/-/blob/17354b030ac4252ff6c5e9d01f4eba28bd406b2d/debian/patches/930008-arm.diff
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/arm/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+index 357f0d9b8607..d1ebb746ff40 100644
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -131,8 +131,9 @@ endif
+ AFLAGS_NOWARN	:=$(call as-option,-Wa$(comma)-mno-warn-deprecated,-Wa$(comma)-W)
+ 
+ ifeq ($(CONFIG_THUMB2_KERNEL),y)
+-CFLAGS_ISA	:=-mthumb -Wa,-mimplicit-it=always $(AFLAGS_NOWARN)
++CFLAGS_ISA	:=-Wa,-mimplicit-it=always $(AFLAGS_NOWARN)
+ AFLAGS_ISA	:=$(CFLAGS_ISA) -Wa$(comma)-mthumb -D__thumb2__=2
++CFLAGS_ISA	+=-mthumb
+ else
+ CFLAGS_ISA	:=$(call cc-option,-marm,) $(AFLAGS_NOWARN)
+ AFLAGS_ISA	:=$(CFLAGS_ISA)
+
+base-commit: 0c52591d22e99759da3793f19249bbf45ad742bd
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.38.1
+
