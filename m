@@ -2,60 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B990627F19
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4980627F25
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237515AbiKNMzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 07:55:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
+        id S237537AbiKNMzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 07:55:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237510AbiKNMzV (ORCPT
+        with ESMTP id S237521AbiKNMzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 07:55:21 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479A42790F;
-        Mon, 14 Nov 2022 04:55:21 -0800 (PST)
+        Mon, 14 Nov 2022 07:55:50 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3DB2792B;
+        Mon, 14 Nov 2022 04:55:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A8B32CE0FEE;
-        Mon, 14 Nov 2022 12:55:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB4F9C433D6;
-        Mon, 14 Nov 2022 12:55:17 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A780ACE1017;
+        Mon, 14 Nov 2022 12:55:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD622C4347C;
+        Mon, 14 Nov 2022 12:55:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668430518;
-        bh=Y9y2PP3dM3aiSA0/EAu5FI2WtvutiNqnsGRh3fAAYKs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JT7GVlQcKaoFspCF0Vi/SNKgAgvJvHP4XchNVWu2eWfohcMUBpjEZhzu6frXmim3T
-         k0+elV1VjXnF5OEaMOfpTp5PbvsXAF7ByKuD5V+6GOGIRboRZA4EUoqq4AjXEPaTZm
-         sS4dKt+/cWk8Y5poG289Z8uuUdLX2KNQy3ye7ht/aJ+u+ekX4rB5jolOtA5MuzvaTy
-         VboHuB1znUQFhL5YXTlCqIuuNr2Ep2ochgjjh5c2IW3g86yeodVM92r4bSW/wHcLlj
-         CxkVlfWEn/8IMia/ZJCwuDVHzIXdfjHb1HwzDj04F1bXPyJZQaKVqJpW03q4Vg3ZXF
-         w52/SsQs8+FaA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ouYz6-0002SD-TR; Mon, 14 Nov 2022 13:54:45 +0100
-Date:   Mon, 14 Nov 2022 13:54:44 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 12/14] phy: qcom-qmp-combo: rename common-register
- pointers
-Message-ID: <Y3I6lN6UTHg2ozNP@hovoldconsulting.com>
-References: <20221111092457.10546-1-johan+linaro@kernel.org>
- <20221111092457.10546-13-johan+linaro@kernel.org>
- <f3ae781b-2046-e1be-564f-9de74107f000@linaro.org>
+        s=k20201202; t=1668430545;
+        bh=PVNoHXT6G+m3J7WFKNR3wufjyq6Oy9PAVmaeUdCeTxg=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=pYBEmBfSRlzwPUHnSnUfqnxfV1Jud0g5HpfzScA/n6n1vexy5S0yM/mr0yayzGnnT
+         2gjaWMHg6TBQq17l0OevXkSz7YVBwG8k6EEK6BY0Y6qerVAMY3ETyoI1SrX2j4jzEG
+         dmnMAESVE+LrnOFnoEdJ+/mrEpoqJMM9l/4oBjqAj9ER9l3kv++05oe9AgMSijJVRP
+         AJxiS+PSSoaxa9C9sU0n28GsjzZGQNpmNAqg5Jp24XQvur9EWB6PByeTj++8oPBEnj
+         2IL++wabmRdoYiwLgz/OG9KgIn5vaxAHknz0IQpizhN4uF549GSWG8xVvyCecQ0Iv9
+         IpakIFwcnavgw==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] ARM: OMAP2+: pdata-quirks: stop including wl12xx.h
+In-Reply-To: <Y2yknekcTus8CB2J@atomide.com> (Tony Lindgren's message of "Thu,
+        10 Nov 2022 09:13:33 +0200")
+References: <20221109224250.2885119-1-dmitry.torokhov@gmail.com>
+        <Y2yknekcTus8CB2J@atomide.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Date:   Mon, 14 Nov 2022 14:55:40 +0200
+Message-ID: <87mt8tbsqb.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f3ae781b-2046-e1be-564f-9de74107f000@linaro.org>
+Content-Type: text/plain
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,41 +56,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 02:31:27PM +0300, Dmitry Baryshkov wrote:
-> On 11/11/2022 12:24, Johan Hovold wrote:
-> > The common registers are shared by the USB and DP parts of the PHY so
-> > drop the misleading "dp" prefix from the corresponding pointers.
-> > 
-> > Note that the "DP" prefix could also be dropped from the corresponding
-> > defines, but leave that in place for now.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 24 +++++++++++------------
-> >   1 file changed, 12 insertions(+), 12 deletions(-)
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> 
-> Note regarding the last phrase: I'd suggest leaving the DP prefix in 
-> register names, it makes it easier to visually note & verify the 
-> register block.
+Tony Lindgren <tony@atomide.com> writes:
 
-My point is that "DP" was never part of the COM register block name. The
-confusion likely comes from the vendor driver naming these defines along
-the lines of
+> * Dmitry Torokhov <dmitry.torokhov@gmail.com> [221109 22:33]:
+>> As of commit 2398c41d6432 ("omap: pdata-quirks: remove openpandora
+>> quirks for mmc3 and wl1251") the code no longer creates an instance of
+>> wl1251_platform_data, so there is no need for including this header.
+>
+> Best to merge this together with the rest of the series:
+>
+> Acked-by: Tony Lindgren <tony@atomide.com>
 
-	USB3_DP_COM_POWER_DOWN_CTRL
+Ok, so I'll plan to take the full series to wireless-next. Please let me
+know if I misunderstood.
 
-Here "USB3_DP" is the common prefix for all defines that apply to both
-"parts" of the PHY so the corresponding Linux define
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-	QPHY_V3_DP_COM_POWER_DOWN_CTRL
-
-should either include "USB3" or drop "DP".
-
-This becomes more apparent on SC8280XP where the corresponding define
-is:
-
-	USB43DP_COM_POWER_DOWN_CTRL
-
-Johan
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
