@@ -2,201 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BA9627709
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE6F627705
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:04:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236178AbiKNIEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:04:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
+        id S236105AbiKNIEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:04:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236188AbiKNIEk (ORCPT
+        with ESMTP id S235782AbiKNIEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:04:40 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D572B2FC
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:04:38 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id b185so10277092pfb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:04:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RbTvIBQr/qxVFcQN0vUy2BZfbem/T4A3R/H1WrAy9X8=;
-        b=jGbdhn8I3v4YDqdQ0NU7bffKSgQelS1ujvoH/Lga6Y/dEqgfCWcFNnPLbaJl8uXU1l
-         of3qRWQZkgxt7NL09AYdUoA48BcjDZf1eDwDxsz3SV+9mfCaXlRfSvH19eiAjve5G5T6
-         t2HZOHsaz0a/WFsCLoq6XAc5UDdzqwbIB10oY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RbTvIBQr/qxVFcQN0vUy2BZfbem/T4A3R/H1WrAy9X8=;
-        b=MKf18YtnMuPbfcJTYghoNDmKMp0NLXWJXmAy6Je7n/93BVCoWqGEIEnxvZPrt+G9Zw
-         uMdvKosUyBCDGLeNG+5/uMEgNUGZxRnKYEgjCNy5LJlWzHhyV8cv4tY+VTNpaRz3C+nR
-         kshD+q7mIYFx+K/0UBm0jb5ZFv/I7m8AfGYsH2WWdbUQUCJ2AFDBnCMl/jd++jAgBugF
-         uqXVSyR54A6+nGa91ILCxAH0v0LTHQaAzzxtm4FojmCbvp8vHdrm3oW1MzprxpaWgSoJ
-         7HrRYAxociPps5f7VoIar5PAhWRL2OFlsggphUMiLwh/cIZBnxCKwjxlNqch4QXCqzVO
-         lnNA==
-X-Gm-Message-State: ANoB5pl2Ww6Fyg6C1JxxpkHozu6pH6VTqsiKYtPhKdKjEXREanC47vT6
-        KmPC2q104sCq1YITWiMVSwesdA==
-X-Google-Smtp-Source: AA0mqf51IUqAlI13ifmb78QDXjJPbpHxxIX6SJ9zB+92kvbxGJ2PgI7mKlHTr/DR3263ue1bSbhA7Q==
-X-Received: by 2002:a65:6945:0:b0:476:91d6:e15e with SMTP id w5-20020a656945000000b0047691d6e15emr1932218pgq.455.1668413078295;
-        Mon, 14 Nov 2022 00:04:38 -0800 (PST)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:40f1:682:170b:f25a])
-        by smtp.gmail.com with ESMTPSA id u16-20020a170902e5d000b00186fb8f931asm6696799plf.206.2022.11.14.00.04.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 00:04:38 -0800 (PST)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Sean Paul <seanpaul@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Allen Chen <allen.chen@ite.com.tw>,
-        David Airlie <airlied@gmail.com>
-Subject: [PATCH v4 3/3] drm/bridge: it6505: handle HDCP request
-Date:   Mon, 14 Nov 2022 16:04:07 +0800
-Message-Id: <20221114080405.2426999-3-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-In-Reply-To: <20221114080405.2426999-1-hsinyi@chromium.org>
-References: <20221114080405.2426999-1-hsinyi@chromium.org>
+        Mon, 14 Nov 2022 03:04:15 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADD6220
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:04:13 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 54E31240010;
+        Mon, 14 Nov 2022 08:04:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668413052;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cvKVGnbTF4i/qSpcUrTjr5cPePLfjlEgnVYVKtrHHPM=;
+        b=TqDNsDAceBd8e2E8Jea/mSZZE3E50Rt2olFVg+yu/1KrHOvo4YNL5Kk9COOL/bv9tyJxHC
+        1FXTDCr+U6OeBv4quKeO4+nYYpOTv1789rOqQr5kM7TFivHBYlj5KyrHizQaIB9FFcp3Hy
+        JDZmsjseXSgJFbr/HMQxqzpIxtWkGdIF9LYj6emoL7fSgBBEfUdCZMSrcKbTX069fU7M4D
+        zv0xFEcgCbWotA8E5xtcFRKGt/F1f0YUvnRR9WvOwIIrEQlL4LGkIJ8C2rfJvM75mhS4t/
+        U1Vxdvb2tRS6L55D3imCZRjHo3EYuoMQOyjv2K5vDDF+NjZWyJd1bOOLhF49tg==
+Date:   Mon, 14 Nov 2022 09:04:08 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Hui Tang <tanghui20@huawei.com>
+Cc:     <richard@nod.at>, <vigneshr@ti.com>,
+        <u.kleine-koenig@pengutronix.de>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <weiyongjun1@huawei.com>,
+        <yusongping@huawei.com>
+Subject: Re: [PATCH] mtd: lpddr2_nvm: i2c: mux: reg: Fix possible
+ null-ptr-deref
+Message-ID: <20221114090408.7ed0e7c1@xps-13>
+In-Reply-To: <20221114020141.28138-1-tanghui20@huawei.com>
+References: <20221114020141.28138-1-tanghui20@huawei.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-it6505 supports HDCP 1.3, but current implementation lacks the update of
-HDCP status through drm_hdcp_update_content_protection(). it6505 default
-enables the HDCP. If user set it to undesired then the driver will stop
-HDCP.
+Hi Hui,
 
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
----
-Include it6505[1] to the series.
+tanghui20@huawei.com wrote on Mon, 14 Nov 2022 10:01:41 +0800:
 
-[1] https://patchwork.kernel.org/project/dri-devel/patch/20221101112009.1067681-1-hsinyi@chromium.org/
----
- drivers/gpu/drm/bridge/ite-it6505.c | 55 +++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+> It will cause null-ptr-deref when resource_size(add_range) invoked,
+> if platform_get_resource() returns NULL.
+>=20
+> Fixes: 96ba9dd65788 ("mtd: lpddr: add driver for LPDDR2-NVM PCM memories")
+> Signed-off-by: Hui Tang <tanghui20@huawei.com>
+> ---
+>  drivers/mtd/lpddr/lpddr2_nvm.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/mtd/lpddr/lpddr2_nvm.c b/drivers/mtd/lpddr/lpddr2_nv=
+m.c
+> index 367e2d906de0..cf8e86eb4b2c 100644
+> --- a/drivers/mtd/lpddr/lpddr2_nvm.c
+> +++ b/drivers/mtd/lpddr/lpddr2_nvm.c
+> @@ -433,6 +433,8 @@ static int lpddr2_nvm_probe(struct platform_device *p=
+dev)
+> =20
+>  	/* lpddr2_nvm address range */
+>  	add_range =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (IS_ERR(add_range))
 
-diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-index 21a9b8422bda..be08b42de4ea 100644
---- a/drivers/gpu/drm/bridge/ite-it6505.c
-+++ b/drivers/gpu/drm/bridge/ite-it6505.c
-@@ -423,6 +423,7 @@ struct it6505 {
- 	struct extcon_dev *extcon;
- 	struct work_struct extcon_wq;
- 	int extcon_state;
-+	struct drm_connector *connector;
- 	enum drm_connector_status connector_status;
- 	enum link_train_status link_state;
- 	struct work_struct link_works;
-@@ -2399,6 +2400,14 @@ static void it6505_irq_hdcp_done(struct it6505 *it6505)
- 
- 	DRM_DEV_DEBUG_DRIVER(dev, "hdcp done interrupt");
- 	it6505->hdcp_status = HDCP_AUTH_DONE;
-+	if (it6505->connector) {
-+		struct drm_device *drm_dev = it6505->connector->dev;
-+
-+		drm_modeset_lock(&drm_dev->mode_config.connection_mutex, NULL);
-+		drm_hdcp_update_content_protection(it6505->connector,
-+						   DRM_MODE_CONTENT_PROTECTION_ENABLED);
-+		drm_modeset_unlock(&drm_dev->mode_config.connection_mutex);
-+	}
- 	it6505_show_hdcp_info(it6505);
- }
- 
-@@ -2931,6 +2940,7 @@ static void it6505_bridge_atomic_enable(struct drm_bridge *bridge,
- 	if (WARN_ON(!connector))
- 		return;
- 
-+	it6505->connector = connector;
- 	conn_state = drm_atomic_get_new_connector_state(state, connector);
- 
- 	if (WARN_ON(!conn_state))
-@@ -2974,6 +2984,7 @@ static void it6505_bridge_atomic_disable(struct drm_bridge *bridge,
- 
- 	DRM_DEV_DEBUG_DRIVER(dev, "start");
- 
-+	it6505->connector = NULL;
- 	if (it6505->powered) {
- 		it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
- 					     DP_SET_POWER_D3);
-@@ -3028,6 +3039,48 @@ static struct edid *it6505_bridge_get_edid(struct drm_bridge *bridge,
- 	return edid;
- }
- 
-+static int it6505_connector_atomic_check(struct it6505 *it6505,
-+					 struct drm_connector_state *state)
-+{
-+	struct device *dev = &it6505->client->dev;
-+	int cp = state->content_protection;
-+
-+	DRM_DEV_DEBUG_DRIVER(dev, "hdcp connector state:%d, curr hdcp state:%d",
-+			     cp, it6505->hdcp_status);
-+
-+	if (!it6505->hdcp_desired) {
-+		DRM_DEV_DEBUG_DRIVER(dev, "sink not support hdcp");
-+		return 0;
-+	}
-+
-+	if (it6505->hdcp_status == HDCP_AUTH_GOING)
-+		return -EINVAL;
-+
-+	if (cp == DRM_MODE_CONTENT_PROTECTION_UNDESIRED) {
-+		if (it6505->hdcp_status == HDCP_AUTH_DONE)
-+			it6505_stop_hdcp(it6505);
-+	} else if (cp == DRM_MODE_CONTENT_PROTECTION_DESIRED) {
-+		if (it6505->hdcp_status == HDCP_AUTH_IDLE &&
-+		    it6505->link_state == LINK_OK)
-+			it6505_start_hdcp(it6505);
-+	} else {
-+		DRM_DEV_DEBUG_DRIVER(dev, "invalid to set hdcp enabled");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int it6505_bridge_atomic_check(struct drm_bridge *bridge,
-+				      struct drm_bridge_state *bridge_state,
-+				      struct drm_crtc_state *crtc_state,
-+				      struct drm_connector_state *conn_state)
-+{
-+	struct it6505 *it6505 = bridge_to_it6505(bridge);
-+
-+	return it6505_connector_atomic_check(it6505, conn_state);
-+}
-+
- static const struct drm_bridge_funcs it6505_bridge_funcs = {
- 	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
- 	.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
-@@ -3035,6 +3088,7 @@ static const struct drm_bridge_funcs it6505_bridge_funcs = {
- 	.attach = it6505_bridge_attach,
- 	.detach = it6505_bridge_detach,
- 	.mode_valid = it6505_bridge_mode_valid,
-+	.atomic_check = it6505_bridge_atomic_check,
- 	.atomic_enable = it6505_bridge_atomic_enable,
- 	.atomic_disable = it6505_bridge_atomic_disable,
- 	.atomic_pre_enable = it6505_bridge_atomic_pre_enable,
-@@ -3354,6 +3408,7 @@ static int it6505_i2c_probe(struct i2c_client *client,
- 	it6505->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
- 	it6505->bridge.ops = DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID |
- 			     DRM_BRIDGE_OP_HPD;
-+	it6505->bridge.support_hdcp = true;
- 	drm_bridge_add(&it6505->bridge);
- 
- 	return 0;
--- 
-2.38.1.431.g37b22c650d-goog
+platform_get_resource() just returns NULL upon error.
 
+> +		return -ENODEV;
+> =20
+>  	/* Populate map_info data structure */
+>  	*map =3D (struct map_info) {
+
+
+Thanks,
+Miqu=C3=A8l
