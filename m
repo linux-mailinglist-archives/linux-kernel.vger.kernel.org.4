@@ -2,158 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97008627DF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32AD6627DF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237193AbiKNMkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 07:40:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
+        id S237201AbiKNMlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 07:41:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236176AbiKNMj7 (ORCPT
+        with ESMTP id S236154AbiKNMlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 07:39:59 -0500
-Received: from poodle.tulip.relay.mailchannels.net (poodle.tulip.relay.mailchannels.net [23.83.218.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2508AD122
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 04:39:57 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|ian@linux.cowan.aero
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id A6D4A3C2015;
-        Mon, 14 Nov 2022 12:39:53 +0000 (UTC)
-Received: from pdx1-sub0-mail-a224.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 18D7A3C21A2;
-        Mon, 14 Nov 2022 12:39:53 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1668429593; a=rsa-sha256;
-        cv=none;
-        b=OQcP6hpN2JDTJRCf63lvjPFJ+KfciYfTRe7TMVSBz0iqXMcwwT0GUX48O6VrAXNSukzeYI
-        7lTmC3FsFkKVO1WURNjE2wYfxbit/1qSzHgR1XrjB/Lc/+/8QeOo4MFQGuDyKcTdS3lmny
-        S9Nft/strnv9kWLESlYG3Jw4D9bClklj5bWKYqRfISOhn5phawVN9qQjZl/jtP2P9t8TVx
-        +PxYT37NPBgv7mRdwnd/FRh5jjLIPCWjDuJboaoX7Yus8SA6qfMnz+/w9Nf7+3lNctsemN
-        9aWXKvAGaq/K/v0uhd/CdFe+P2I+gtcLxL6ZyakeZli4FKrHDaD36x+3aBo/Rw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1668429593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=V2ivCcpdDwhgU+m05c5VMXcyKM/5Jve0hQofmv5JAVY=;
-        b=3xnCevwpfj6eIqO4t4pxfLmYohZAyilQE/2aWo9ICi31Y248Q1pYapeUSEFMxC34dWpDLz
-        ae3RxNYn3dMhSZYCFWl0kjz0u7wkLjbV7VUamAU+/dVHAbOdqaC8iZF+NkP5B61aoORUhm
-        xmIrPtIx0aV6rRzXHy5YfTdgdsuqx2emr74NCDPzMMHEcXNaP0q4HYC5Ts/ryaLMVSHO4D
-        OYVN6fLDg2yZUgaK8ayQpFEUcXGcRW8U/QxlZ68JJNIdZZQM5DKcMN0PoVS1GvZ6vLJw1R
-        iqoqrolegy1x3rLoBf84n8oZXJaUqJaL1WgqSwBV4KlRRcIJssl8cCvwUT60Og==
-ARC-Authentication-Results: i=1;
-        rspamd-7f9bbcf788-7kz28;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=ian@linux.cowan.aero
-X-Sender-Id: dreamhost|x-authsender|ian@linux.cowan.aero
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|ian@linux.cowan.aero
-X-MailChannels-Auth-Id: dreamhost
-X-Versed-Society: 26234432670b8ce8_1668429593459_1843617815
-X-MC-Loop-Signature: 1668429593459:849872635
-X-MC-Ingress-Time: 1668429593459
-Received: from pdx1-sub0-mail-a224.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.116.179.71 (trex/6.7.1);
-        Mon, 14 Nov 2022 12:39:53 +0000
-Received: from rhino (dsl-50-5-144-34.fuse.net [50.5.144.34])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: ian@linux.cowan.aero)
-        by pdx1-sub0-mail-a224.dreamhost.com (Postfix) with ESMTPSA id 4N9pmS0svGz74;
-        Mon, 14 Nov 2022 04:39:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.cowan.aero;
-        s=dreamhost; t=1668429592;
-        bh=V2ivCcpdDwhgU+m05c5VMXcyKM/5Jve0hQofmv5JAVY=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=aFc4+FMj0dABX2ArrTUonSPSsG93UEBBpZn5RE66neKhy5kNHrVwJJWvyrw1JTiKs
-         7ImXFZTasv4srnNxaFEpvWu5hCOPaPtJ+p8vkmQoNRUAqAAGyrQjjxWVnkPA714P3i
-         3nOATVlWSdI6mx7p7/FPjwhJT5N/JKjCFmIp0wmlUoWOYTnj3IP9V92Wei1gt7w2vk
-         usMjL5JRKGlAeBDwiDRD6x0+TBHzyHRPSrkY5c108qDrObYuiONB3QBBLjWzPVzq73
-         MW1KbOWZj3xYhH04zVRKj3FQE/BrpXcSRsj4tt8Np1qk+pLVGiWoFUX2UfO62CNKUj
-         A7edm0Nbg1ulg==
-Date:   Mon, 14 Nov 2022 07:39:50 -0500
-From:   Ian Cowan <ian@linux.cowan.aero>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, cl@linux.com,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        roman.gushchin@linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: include: linux: slab: kmalloc_trace undefined when compiling
- drivers
-Message-ID: <Y3I3FnPfHObfdIUb@rhino>
-References: <Y2/Luovqgz8O+Kqa@rhino>
- <f83aca33-3a5f-97ac-625e-aa7c72bf60ba@infradead.org>
- <Y3AXVRAoZA5YEho+@rhino>
- <1df133ef-d5e9-f323-7c67-fc9ffed04274@infradead.org>
- <Y3A9waTkehESUyn+@rhino>
- <abdb1b8d-859d-669b-6bbf-604febb643b2@infradead.org>
- <Y3BGimp2LmRqV9oy@rhino>
- <Y3IDWt9vINpCtXjP@hyeyoo>
+        Mon, 14 Nov 2022 07:41:20 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2056.outbound.protection.outlook.com [40.107.94.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8CDE0DA;
+        Mon, 14 Nov 2022 04:41:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q7Vscf+MFzZwDVt+BTGKDCNdCiWo2vEcKobvodUxuhDCqrxu5+tksfqRucAra7f7EyGza84AXLaECC/DMg2hRK1OPuzoTZEhZxIUmHgIL4+Bwkq7UOWCIWhKKI53ANr3oEeEh013VU6jvII36gk4R4v33qKbY+D+SrhN6aiDcL3bD8Ud8+QHPfjbNlgeXXYwVbML0z7Z1Lx6PuT+ZuVAWZo7B4KBqnTnIPqOCcwfj7ecaELDWgCZWlcNUF+STbeiy74U/nN7KVJQTdlJQ1HwciX7ecfvjeljPEvlLvOybm0aO9Qwh6aOPr+aFykUbZBO7DM4RCAFcW1OceUkgwj/Zg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=J0ZQZ2J4ZCZ+q9t9NeKfke1u9CPG6vht03r6vW6WcO0=;
+ b=LAs9twgdE4k+IV0tfW/vmXlfsV23sKXQlgRcCZGlftO2sG5WAVLwEaMg24MuB+NT2YgO6bOfoFz4iTgYV6Gc4zuYRxnFNuPu1OelqlXX11ug1lnqltwnfQzYu+B2R6uKU5oZTQv1lgkFuHEg0fLBFgEusXiVdrgGrEXfKZR347OMVmIJCjzam+UHvngmxj6j/Xkni7kv5Tivo6UZtSEzu6RC2h7FglzYEpbz4GkJkjsrjbLQCBKFcM2yx5HUPZKkZa2BLHgIIEJQgnRnaOLqHlwoe1+0fcO6oTus2/orGdsW1JXoMeOq4DbCIyceNb373NC6W4jf1ynqhlKXKcje8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=J0ZQZ2J4ZCZ+q9t9NeKfke1u9CPG6vht03r6vW6WcO0=;
+ b=Jps1dGqyh8tgvYK1vM95oBZnmygHEibWze+ZJkkyrvLA5VZPNja/c7XO1DnP8Dzj2oK9WgUX1Uyqqp88UpsxHkld/VMfHKb5WYykyz2pyT6P3TRsf2rp1L/V88/E04iYP1/yh0e+l6ltQvcVq5mtMbztdJzZjyQp5RR6Ux+i5/5Fx7dOy0i+sZnyn8Ej8iJNgcCXWru3RoKWG1KIaTOGC63pA1K1MySIDZ7BxnGYBp9VYuhVmA67oHUmCOANRGXR+I2JTFRDwtZN2CpmUurGZxgxoMYckFaK+Zsoul3DcoRxIsfbhrdwsGx5Wnye7zzNFnutVHhlcIqirwN/Kv/HUA==
+Received: from BN9PR03CA0248.namprd03.prod.outlook.com (2603:10b6:408:ff::13)
+ by SJ0PR12MB6944.namprd12.prod.outlook.com (2603:10b6:a03:47b::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
+ 2022 12:41:17 +0000
+Received: from BL02EPF0000EE3C.namprd05.prod.outlook.com
+ (2603:10b6:408:ff:cafe::48) by BN9PR03CA0248.outlook.office365.com
+ (2603:10b6:408:ff::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17 via Frontend
+ Transport; Mon, 14 Nov 2022 12:41:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BL02EPF0000EE3C.mail.protection.outlook.com (10.167.241.132) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5813.11 via Frontend Transport; Mon, 14 Nov 2022 12:41:16 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 14 Nov
+ 2022 04:40:59 -0800
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 14 Nov
+ 2022 04:40:59 -0800
+Received: from waynec-Precision-5760.nvidia.com (10.127.8.13) by
+ mail.nvidia.com (10.129.68.7) with Microsoft SMTP Server id 15.2.986.36 via
+ Frontend Transport; Mon, 14 Nov 2022 04:40:55 -0800
+From:   Wayne Chang <waynec@nvidia.com>
+To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <treding@nvidia.com>,
+        <jonathanh@nvidia.com>, <thierry.reding@gmail.com>,
+        <heikki.krogerus@linux.intel.com>, <ajayg@nvidia.com>,
+        <vkoul@kernel.org>, <p.zabel@pengutronix.de>, <balbi@kernel.org>,
+        <mathias.nyman@intel.com>, <jckuo@nvidia.com>
+CC:     <waynec@nvidia.com>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <singhanc@nvidia.com>, <linux-i2c@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-tegra@vger.kernel.org>
+Subject: [PATCH v3 00/13] Enable USB host and device functions on Jetson
+Date:   Mon, 14 Nov 2022 20:40:40 +0800
+Message-ID: <20221114124053.1873316-1-waynec@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3IDWt9vINpCtXjP@hyeyoo>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0000EE3C:EE_|SJ0PR12MB6944:EE_
+X-MS-Office365-Filtering-Correlation-Id: 52f8c09f-e25e-45a7-7378-08dac63d85e1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pcnPuaKZZSpUKWbNz/ejS2sF8R4R1Jb4mQRbcc/nySaL5BA8wdZ413ILhGx/OwJAg6RZrIvj6VVw4vjYf9KbgzgM9b+8zae5vKJOB8+JilpFZx+tUt8aNSLAXkGSj+vPmngKRXvstgfsqqWTKtv2pzoHGxz0PU/raFkZyD+xjkjtG7A73vdaFayJJhB39FPU3SdD1622bRWfMKWXRqskdvcagCuGyssyevw8s0/2P7nh/b2TAaCUTGXAIJSfuxFXKhYOhizFXzNsicknwXN1j69uQ5NTaMzZ7B5T1qr0YkG/JhkD2/+/wzW5hbJbXaIx4+Dc/WKqsmHk6OIP+KX+oWVL0KmTuqmhNrd7YmGV/9ZRqvNAyWqVQPNfWksvvkepYFXYa4Ik2g85E/5T0QX8Ga2J8EBlxMZ+48ZSw3IuFrVRx+pwk6GyBMZI3YhiDBk3DNDf5XipjJFUX3CBRKpAme7Gf3aCWafukbGGZQQI/wYnGCiiQigSh5lHPHn6e0bGkaPMIT4ZnT651aH1bKmR6DbOrDfsek62DA7iBdklHhzcZ+iRpsmSpWcCuFnPZPvw2zqSbk7fhuHcpGu1U3m+IvKJU1o2ihBe6ykEWmz3Ga3dkCOLaRqv+qrG5Pcg5+par8w69OYHVGhRHVrYEQldbt97Om4M8WsZ5R55op2N2EL3StOqdE6rrCFcwOPU5a91ZsS586btuuYdbrByCrpGb+hMAImvMEkjfQgDBCjG1r66+d0uWQI3w38WYg9iGvpsrAoLFf6b7oKRT4jGmNL9TB7bso25gsIm3Ab/9vhe6RQDXoI3L/gpH5yioKURmZ/O7EjqUfJidTUKnuTZJoosKQDK671AsM64bUESKGPQUcWqoloRb7AQ2DFsYgG+mrVp
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(346002)(396003)(451199015)(40470700004)(46966006)(36840700001)(6666004)(478600001)(36860700001)(40480700001)(54906003)(6636002)(110136005)(966005)(186003)(426003)(2616005)(7416002)(8936002)(36756003)(41300700001)(336012)(2906002)(26005)(7696005)(5660300002)(47076005)(70586007)(70206006)(316002)(4326008)(8676002)(40460700003)(921005)(83380400001)(1076003)(86362001)(82740400003)(356005)(7636003)(82310400005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 12:41:16.5764
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 52f8c09f-e25e-45a7-7378-08dac63d85e1
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000EE3C.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6944
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 05:59:06PM +0900, Hyeonggon Yoo wrote:
-> On Sat, Nov 12, 2022 at 08:21:14PM -0500, Ian Cowan wrote:
-> > On Sat, Nov 12, 2022 at 05:11:27PM -0800, Randy Dunlap wrote:
-> > > 
-> > > 
-> > > On 11/12/22 16:43, Ian Cowan wrote:
-> > > > On Sat, Nov 12, 2022 at 04:34:18PM -0800, Randy Dunlap wrote:
-> > > >>
-> > > >>
-> > > >> On 11/12/22 13:59, Ian Cowan wrote:
-> > > >>> On Sat, Nov 12, 2022 at 09:21:34AM -0800, Randy Dunlap wrote:
-> > > >>>> Hi--
-> > > >>>>
-> > > >>>> On 11/12/22 08:37, Ian Cowan wrote:
-> > > >>>>> When compiling drivers (speficially drivers/pci/hotplug), I am receiving
-> > > >>>>> the following modpost error for both `kmalloc_trace` and
-> > > >>>>> `kmalloc_node_trace` on the staging/staging-next branch:
-> > > >>>>>
-> > > >>
-> > > >> Ian, what do you mean by "on the staging/staging-next branch"?
-> > > >>
-> > > >> What kernel version are you trying to build?
-> > > >>
-> > > >> The .config that you sent is for v6.1.0-rc1.
-> > > > 
-> > > > I am building from the staging repository (gregkh/staging) and my
-> > > > working branch when building is staging-next. So I am trying to build
-> > > > from staging and not a particular version. I have also run `make modules_prepare`
-> > > > and updated the .config per that script. However, when I do build
-> > > > v6.1.0-rc1 from the main repository (torvalds/linux), I run into the same problem.
-> > > 
-> > > Have you built the entire kernel already and then you are trying to build
-> > > only drivers/pci/hotplug?
-> > Yes, I did build the entire kernel already and then I'm just trying to
-> > rebuild that module.
-> > 
-> > In `include/linux/slab.h` if I remove the lines between `#ifdef
-> > CONFIG_TRACING` and `#else` (lines 473-480) and then the corresponding
-> > `#endif` and leave lines 481-499, I'm able to compile that module
-> > without issue.
-> 
-> I don't get what the problem is.
-> In case kmalloc[_node]_trace() is undefined, it's replaced with kmem_cache_alloc[_node]. 
-> 
-> Is the kernel built with same config on tree?
+The patch series enable the USB host and devie functions on Jetson AGX Orin
+and depend on the following change
+https://lore.kernel.org/all/20221003125141.123759-1-jonathanh@nvidia.com/
 
-Yes, the same config on tree with no errors or warnings. I was able to
-trace it back to this commit - building on the commit immediately prior
-builds without error or warning. It looks like this commit does some
-refactoring of the kmem_cache_alloc[_node] and kmalloc[_node]_trace.
+Sing-Han Chen (3):
+  phy: tegra: xusb: Add Tegra234 support
+  usb: host: xhci-tegra: Add Tegra234 XHCI support
+  usb: gadget: tegra-xudc: Add Tegra234 support
 
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?h=staging-next&id=26a40990ba052
+Wayne Chang (10):
+  dt-bindings: usb: tegra-xudc: Add Tegra234 XUSB controller support
+  dt-bindings: usb: Add NVIDIA Tegra234 XUSB host controller binding
+  dt-bindings: usb: Add binding for Cypress cypd4226 I2C driver
+  arm64: tegra: Enable XUSB host and device on Jetson AGX Orin
+  usb: typec: ucsi_ccg: Add OF support
+  usb: typec: ucsi_ccg: Add cypress,firmware-build as a well-known regex
+  i2c: nvidia-gpu: Add cypress,firmware-build as a well-known regex
+  usb: typec: ucsi_ccg: Remove ccgx,firmware-build property
+  i2c: nvidia-gpu: Remove ccgx,firmware-build property
+  phy: tegra: xusb: Disable trk clk when not in use
+
+ .../bindings/usb/cypress,cypd4226.yaml        |  86 ++++++
+ .../bindings/usb/nvidia,tegra-xudc.yaml       |  24 +-
+ .../bindings/usb/nvidia,tegra234-xusb.yaml    | 159 +++++++++++
+ .../boot/dts/nvidia/tegra234-p3701-0000.dtsi  |  48 ++++
+ .../nvidia/tegra234-p3737-0000+p3701-0000.dts | 175 ++++++++++++
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi      | 170 +++++++++++
+ drivers/i2c/busses/i2c-nvidia-gpu.c           |   4 +-
+ drivers/phy/tegra/Makefile                    |   1 +
+ drivers/phy/tegra/xusb-tegra186.c             |  64 ++++-
+ drivers/phy/tegra/xusb.c                      |   6 +
+ drivers/phy/tegra/xusb.h                      |  22 ++
+ drivers/usb/gadget/udc/tegra-xudc.c           |  17 ++
+ drivers/usb/host/xhci-tegra.c                 | 270 +++++++++++++++---
+ drivers/usb/typec/ucsi/ucsi_ccg.c             |  22 +-
+ 14 files changed, 1014 insertions(+), 54 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra234-xusb.yaml
+
+
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
+-- 
+2.25.1
+
