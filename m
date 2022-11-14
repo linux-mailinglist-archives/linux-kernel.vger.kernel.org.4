@@ -2,51 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74AF56287E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:09:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 243A26287E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237940AbiKNSJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 13:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
+        id S238131AbiKNSJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 13:09:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238139AbiKNSJE (ORCPT
+        with ESMTP id S238186AbiKNSJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 13:09:04 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041D023E96;
-        Mon, 14 Nov 2022 10:09:00 -0800 (PST)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DA2E1240006;
-        Mon, 14 Nov 2022 18:08:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668449339;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UUN6mlrt1JVfIdtNRt5aQaJHhuHU/mNoXeqpisyr50Q=;
-        b=kDmADc4j0TZXhV/24fc3nz5YIr3zFsnsVNOoHs+tgaz6L7k5OA09O4qrq/lCvUANpILSl3
-        QZO8YE7J15KjXdZS4rA4it9thxwpgcs41FjqEmnWgTlg6YLWqCNWsAPuEjObQM6h5OL6zn
-        IqxM0EPnbqiJmD72VaRqOF79IZfE29SwhfDk8z8goKPI80jmKGkLinja0mYIsf0CdD+bhV
-        HcnVF20y5LLtB330DFPvJdtlReaG1XlrssRLoe7zuQpSPJkKBuNKNDREtnAO8fv117K1q1
-        rNnYJJ632gnOb6kSG7QviDTaRDKnJSt1zyy1u9769ahjYS5NEsPyg80bOyoZzg==
-Date:   Mon, 14 Nov 2022 19:08:58 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-rtc@vger.kernel.org, chrome-platform@lists.linux.dev,
-        Brian Norris <briannorris@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
-Message-ID: <166844930556.2096270.4852750255133310041.b4-ty@bootlin.com>
-References: <20221029005400.2712577-1-linux@roeck-us.net>
+        Mon, 14 Nov 2022 13:09:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C4DDF55;
+        Mon, 14 Nov 2022 10:09:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DDA26B810FB;
+        Mon, 14 Nov 2022 18:09:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8B53C433D6;
+        Mon, 14 Nov 2022 18:09:47 +0000 (UTC)
+Date:   Mon, 14 Nov 2022 13:10:28 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Yipeng Zou <zouyipeng@huawei.com>, <shuah@kernel.org>,
+        <rdunlap@infradead.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] selftests/ftrace: event_triggers: wait longer for
+ test_event_enable
+Message-ID: <20221114131028.110a91c4@gandalf.local.home>
+In-Reply-To: <20221105175241.858bbd5b5337fc2b8a075ee9@kernel.org>
+References: <20221104020931.231090-1-zouyipeng@huawei.com>
+        <20221105175241.858bbd5b5337fc2b8a075ee9@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221029005400.2712577-1-linux@roeck-us.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,28 +48,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 17:54:00 -0700, Guenter Roeck wrote:
-> RTC chips on some older Chromebooks can only handle alarms less than 24
-> hours in the future. Attempts to set an alarm beyond that range fails.
-> The most severe impact of this limitation is that suspend requests fail
-> if alarmtimer_suspend() tries to set an alarm for more than 24 hours
-> in the future.
+On Sat, 5 Nov 2022 17:52:41 +0900
+Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+
+> Hi Yipeng,
 > 
-> Try to set the real-time alarm to just below 24 hours if setting it to
-> a larger value fails to work around the problem. While not perfect, it
-> is better than just failing the call. A similar workaround is already
-> implemented in the rtc-tps6586x driver.
+> On Fri, 4 Nov 2022 10:09:31 +0800
+> Yipeng Zou <zouyipeng@huawei.com> wrote:
 > 
-> [...]
+> > In some platform, the schedule event may came slowly, delay 100ms can't
+> > cover it.
+> > 
+> > I was notice that on my board which running in low cpu_freq,and this
+> > selftests allways gose fail.  
+> 
+> This looks good to me, since this can just extend the waiting time to 1 sec.
+> (and most of the platforms have no effect)
+> 
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
 
-Applied, thanks!
+Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-[1/1] rtc: cros-ec: Limit RTC alarm range if needed
-      commit: a78590c82c501c53b6f30a5ee10e4261e8b377f7
+Shuah,
 
-Best regards,
+Care to take this through your tree?
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks,
+
+-- Steve
+
+
+> Thank you!
+> 
+> > 
+> > So maybe we can check more times here to wait longer.
+> > 
+> > Fixes: 43bb45da82f9 ("selftests: ftrace: Add a selftest to test event enable/disable func trigger")
+> > Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
+> > ---
+> >  .../ftrace/test.d/ftrace/func_event_triggers.tc   | 15 +++++++++++----
+> >  1 file changed, 11 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
+> > index 8d26d5505808..3eea2abf68f9 100644
+> > --- a/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
+> > +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_event_triggers.tc
+> > @@ -38,11 +38,18 @@ cnt_trace() {
+> >  
+> >  test_event_enabled() {
+> >      val=$1
+> > +    check_times=10		# wait for 10 * SLEEP_TIME at most
+> >  
+> > -    e=`cat $EVENT_ENABLE`
+> > -    if [ "$e" != $val ]; then
+> > -	fail "Expected $val but found $e"
+> > -    fi
+> > +    while [ $check_times -ne 0 ]; do
+> > +	e=`cat $EVENT_ENABLE`
+> > +	if [ "$e" == $val ]; then
+> > +	    return 0
+> > +	fi
+> > +	sleep $SLEEP_TIME
+> > +	check_times=$((check_times - 1))
+> > +    done
+> > +
+> > +    fail "Expected $val but found $e"
+> >  }
+> >  
+> >  run_enable_disable() {
+> > -- 
+> > 2.17.1
+> >   
+> 
+> 
+
