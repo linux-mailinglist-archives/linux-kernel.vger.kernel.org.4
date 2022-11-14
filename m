@@ -2,146 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D67628A3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2608C628A36
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237515AbiKNUMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 15:12:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37906 "EHLO
+        id S237545AbiKNULw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 15:11:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237578AbiKNUL4 (ORCPT
+        with ESMTP id S237459AbiKNULo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:11:56 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226FF1D33D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:11:53 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id d13-20020a17090a3b0d00b00213519dfe4aso11815914pjc.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:11:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=F8YJKTEaSjeWZUEi+lCVZoSmHdKaA45O5/BX7Jv9leE=;
-        b=Bo4ud/9wy/hrzT1vvhDfzIZliKL3nHdYeO1xarp/GBtmeBMu1ebHsicCRbtzgA4VvD
-         zhsCLmYqXAuFGyZ2iJDfrGzsRIfcQNJ7Y4Wg6aOgZKxatMr/2V88oS2o+LK3CFByBcAy
-         wPb3b62Csfvpo/22qIFNqV1MXqzfNfF9PWmixTMiZGauBYITr61tA5ZtWXU0rBHMRt+H
-         rygyifAQLrP0osA+HOHDhYKOu+XXlcDQhf9PYuaDl2rTJuKTkVqI1fM6Q/EJI0xF8DiD
-         QAJzD0uRu4y39bHmuiGEqt4gnA0rEpUbR25D9M0CqdA/+2RCiSSO7Y43j5t+1rl9FcgD
-         swGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F8YJKTEaSjeWZUEi+lCVZoSmHdKaA45O5/BX7Jv9leE=;
-        b=oWFevNVdK4jjzorhl/e4n1iZZ3V7Iw3Zhr4CehPIwoI5LiHIprarW4XLa93SZPU3mC
-         4scNGl0RTrMk99FqFn9KCdJ0n+UWfbA9ufocYFRSIrdxSBVhVLPeUGFa0JmLRPg6nUNe
-         4msaTqoim6aiwI+rDNTTZE2SN856wqYjTW5KL63xmdJy4VTRKht1lDPibMhPTffTkmiY
-         FS5pO81gMTLcZx/XfVSBElQkk9/LmSk6hhhrQ9GJQuVR9nUVKGAa96+Dhkp8goT61SL2
-         1B4NTjWbzOJEgPCqJ2ber963BEQ+8WYtQE+LfpH7ojraZDw0OBmQPbzY0yuKwabbs0iY
-         autw==
-X-Gm-Message-State: ANoB5pkbptsZxA+8b+7btnJiiKU8Z5vOLvmfZxdHLEMiHqWA+EGjS8eR
-        gaZhyFcc07XLTK/e3QYF8jAl/xGD9AsJjQXbow4lsg==
-X-Google-Smtp-Source: AA0mqf67zLfaITSHy+eAhqfQdT/uWKph5nU4Nbw6RfC1+A1fyleHLDtSWtGzZ6dKgqVm0q4ZyoONgDwQ/zFsYrOeAlo=
-X-Received: by 2002:a17:90a:e64b:b0:20d:b124:33b1 with SMTP id
- ep11-20020a17090ae64b00b0020db12433b1mr14918522pjb.202.1668456713336; Mon, 14
- Nov 2022 12:11:53 -0800 (PST)
+        Mon, 14 Nov 2022 15:11:44 -0500
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9E91BEB3;
+        Mon, 14 Nov 2022 12:11:42 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1668456701;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mglCJONHjZaMkBoIgcjixSkCCSFrzRBKYTMx418wVb4=;
+        b=oja4AWIi6mYdgYeWVFJ67Cqf9vP4TIUr4x/wU74OS60f/fSGWh3gGuvD4GPrnpZnx90l/i
+        VttLBxAj+U4AeyZ91bChgEKiB0+OiIzyb2uhL8ZQ+9QFn96jNJQx0u/v6/1iAHZ/62fWMD
+        c/OEw66RkQ10zTcxDtKRoUdPA010VyQ=
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] KVM: arm64: Use a separate function for hyp stage-1 walks
+Date:   Mon, 14 Nov 2022 20:11:27 +0000
+Message-Id: <20221114201127.1814794-2-oliver.upton@linux.dev>
+In-Reply-To: <20221114201127.1814794-1-oliver.upton@linux.dev>
+References: <20221114201127.1814794-1-oliver.upton@linux.dev>
 MIME-Version: 1.0
-References: <20221101233421.997149-1-swboyd@chromium.org> <CAD=FV=XkhtgL_4-cpj-Xi3uH6FAtmWhk5u6sfakXABTnv5eYvw@mail.gmail.com>
- <CAE-0n539akxzrof5nZXb1=8tM9=A7NKaB98LjkQ4tWJmSbWm_A@mail.gmail.com>
-In-Reply-To: <CAE-0n539akxzrof5nZXb1=8tM9=A7NKaB98LjkQ4tWJmSbWm_A@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 14 Nov 2022 21:11:16 +0100
-Message-ID: <CAPDyKFqLx8rnjN0=ysdE7=1osiug1Si13ywJPan9jCM=nrxYVA@mail.gmail.com>
-Subject: Re: [PATCH] clk: qcom: gdsc: Remove direct runtime PM calls
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, patches@lists.linux.dev,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,GUARANTEED_100_PERCENT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Nov 2022 at 04:16, Stephen Boyd <swboyd@chromium.org> wrote:
->
-> Quoting Doug Anderson (2022-11-01 17:45:03)
-> >
-> > One small nit is that the kernel doc for "@dev" in "struct gdsc" is
-> > incorrect after your patch. It still says this even though we're not
-> > using it for pm_runtime calls anymore:
-> >
-> >  * @dev: the device holding the GDSC, used for pm_runtime calls
->
-> Good catch! I can remove the part after the comma.
->
-> >
-> > Other than that, this seems OK to me. I don't feel like I have a lot
-> > of good intuition around PM Clocks and genpd and all the topics talked
-> > about here, but I tried to look at the diff from before all the
-> > "recent" patches to "drivers/clk/qcom/gdsc.c" till the state after
-> > your patch. In other words the combined diff of these 4 patches:
-> >
-> > clk: qcom: gdsc: Remove direct runtime PM calls
-> > clk: qcom: gdsc: add missing error handling
-> > clk: qcom: gdsc: Bump parent usage count when GDSC is found enabled
-> > clk: qcom: gdsc: enable optional power domain support
-> >
-> > That basically shows a combined change that does two things:
-> >
-> > a) Adds error handling if pm_genpd_init() returns an error.
-> >
-> > b) Says that if "scs[i]->parent" wasn't provided that we can imply a
-> > parent from "dev->pm_domain".
-> >
-> > That seems to make sense, but one thing I'm wondering about for "b)"
-> > is how you know that "dev->pm_domain" can be safely upcast to a genpd.
-> > In other words, I'm hesitant about the "pd_to_genpd(dev->pm_domain)"
-> > call. I'll assume that "dev->pm_domain" isn't 100% guaranteed to be a
-> > genpd or else (presumably) we would have stored a genpd. Is there
-> > something about the "dev" that's passed in with "struct gdsc_desc"
-> > that gives the stronger guarantee about this being a genpd?
->
-> Not really any stronger guarantee. The guarantee is pretty strong
-> already though. You can look at the callers of dev_pm_domain_set() and
-> see that nothing is calling that really besides the genpd attachment
-> logic when a driver is bound to a device (follow dev_pm_domain_attach()
-> from platform_probe()). The dev->pm_domain is going to be assigned to a
-> genpd assuming the 'dev' pointer is a platform device and has
-> 'power-domains' in DT.
->
-> It's not great, but it works for now. Certainly if we ever want to
-> replace the pm_domain with something that isn't a genpd then we'll be in
-> trouble. I'm not sure it will ever happen. Ulf, can you provide more
-> assurances here?
+A subsequent change to the page table walkers adds RCU protection for
+walking stage-2 page tables. KVM uses a global lock to serialize hyp
+stage-1 walks, meaning RCU protection is quite meaningless for
+protecting hyp stage-1 walkers.
 
-I think the call to pd_to_genpd() should be considered as safe, as
-long as the call is made in a controlled way from within a genpd
-provider.
+Add a new helper, kvm_pgtable_hyp_walk(), for use when walking hyp
+stage-1 tables. Call directly into __kvm_pgtable_walk() as table
+concatenation is not a supported feature at stage-1.
 
-However, in some cases, we want to pick up a genpd from the
-dev->pm_domain, that isn't a genpd provider. Internally in genpd we
-use dev_to_genpd_safe(). Is that something that would be valuable to
-use here? If so, I don't see any issues with exporting that as a new
-genpd helper function.
+No functional change intended.
 
-[...]
+Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+---
+ arch/arm64/include/asm/kvm_pgtable.h | 24 ++++++++++++++++++++++++
+ arch/arm64/kvm/hyp/nvhe/setup.c      |  2 +-
+ arch/arm64/kvm/hyp/pgtable.c         | 18 +++++++++++++++---
+ 3 files changed, 40 insertions(+), 4 deletions(-)
 
-Kind regards
-Uffe
+diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+index a874ce0ce7b5..43b2f1882e11 100644
+--- a/arch/arm64/include/asm/kvm_pgtable.h
++++ b/arch/arm64/include/asm/kvm_pgtable.h
+@@ -596,6 +596,30 @@ int kvm_pgtable_stage2_flush(struct kvm_pgtable *pgt, u64 addr, u64 size);
+ int kvm_pgtable_walk(struct kvm_pgtable *pgt, u64 addr, u64 size,
+ 		     struct kvm_pgtable_walker *walker);
+ 
++/**
++ * kvm_pgtable_hyp_walk() - Walk a hyp stage-1 page-table.
++ * @pgt:	Page-table structure initialized by kvm_pgtable_hyp_init().
++ * @addr:	Input address for the start of the walk.
++ * @size:	Size of the range to walk.
++ * @walker:	Walker callback description.
++ *
++ * The offset of @addr within a page is ignored and @size is rounded-up to
++ * the next page boundary.
++ *
++ * The walker will walk the page-table entries corresponding to the input
++ * address range specified, visiting entries according to the walker flags.
++ * Invalid entries are treated as leaf entries. Leaf entries are reloaded
++ * after invoking the walker callback, allowing the walker to descend into
++ * a newly installed table.
++ *
++ * Returning a negative error code from the walker callback function will
++ * terminate the walk immediately with the same error code.
++ *
++ * Return: 0 on success, negative error code on failure.
++ */
++int kvm_pgtable_hyp_walk(struct kvm_pgtable *pgt, u64 addr, u64 size,
++			 struct kvm_pgtable_walker *walker);
++
+ /**
+  * kvm_pgtable_get_leaf() - Walk a page-table and retrieve the leaf entry
+  *			    with its level.
+diff --git a/arch/arm64/kvm/hyp/nvhe/setup.c b/arch/arm64/kvm/hyp/nvhe/setup.c
+index 1068338d77f3..55eeb3ed1891 100644
+--- a/arch/arm64/kvm/hyp/nvhe/setup.c
++++ b/arch/arm64/kvm/hyp/nvhe/setup.c
+@@ -246,7 +246,7 @@ static int finalize_host_mappings(void)
+ 		struct memblock_region *reg = &hyp_memory[i];
+ 		u64 start = (u64)hyp_phys_to_virt(reg->base);
+ 
+-		ret = kvm_pgtable_walk(&pkvm_pgtable, start, reg->size, &walker);
++		ret = kvm_pgtable_hyp_walk(&pkvm_pgtable, start, reg->size, &walker);
+ 		if (ret)
+ 			return ret;
+ 	}
+diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+index 5bca9610d040..385fa1051b5d 100644
+--- a/arch/arm64/kvm/hyp/pgtable.c
++++ b/arch/arm64/kvm/hyp/pgtable.c
+@@ -335,6 +335,18 @@ int kvm_pgtable_get_leaf(struct kvm_pgtable *pgt, u64 addr,
+ 	return ret;
+ }
+ 
++int kvm_pgtable_hyp_walk(struct kvm_pgtable *pgt, u64 addr, u64 size,
++			 struct kvm_pgtable_walker *walker)
++{
++	struct kvm_pgtable_walk_data data = {
++		.walker	= walker,
++		.addr	= ALIGN_DOWN(addr, PAGE_SIZE),
++		.end	= PAGE_ALIGN(addr + size),
++	};
++
++	return __kvm_pgtable_walk(&data, pgt->mm_ops, pgt->pgd, pgt->start_level);
++}
++
+ struct hyp_map_data {
+ 	u64				phys;
+ 	kvm_pte_t			attr;
+@@ -454,7 +466,7 @@ int kvm_pgtable_hyp_map(struct kvm_pgtable *pgt, u64 addr, u64 size, u64 phys,
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = kvm_pgtable_walk(pgt, addr, size, &walker);
++	ret = kvm_pgtable_hyp_walk(pgt, addr, size, &walker);
+ 	dsb(ishst);
+ 	isb();
+ 	return ret;
+@@ -512,7 +524,7 @@ u64 kvm_pgtable_hyp_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
+ 	if (!pgt->mm_ops->page_count)
+ 		return 0;
+ 
+-	kvm_pgtable_walk(pgt, addr, size, &walker);
++	kvm_pgtable_hyp_walk(pgt, addr, size, &walker);
+ 	return unmapped;
+ }
+ 
+@@ -557,7 +569,7 @@ void kvm_pgtable_hyp_destroy(struct kvm_pgtable *pgt)
+ 		.flags	= KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_TABLE_POST,
+ 	};
+ 
+-	WARN_ON(kvm_pgtable_walk(pgt, 0, BIT(pgt->ia_bits), &walker));
++	WARN_ON(kvm_pgtable_hyp_walk(pgt, 0, BIT(pgt->ia_bits), &walker));
+ 	pgt->mm_ops->put_page(kvm_dereference_pteref(pgt->pgd, false));
+ 	pgt->pgd = NULL;
+ }
+-- 
+2.38.1.431.g37b22c650d-goog
+
