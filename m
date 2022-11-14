@@ -2,105 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7146277FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2853B6277D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236017AbiKNIoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:44:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
+        id S235750AbiKNIfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:35:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235830AbiKNIoO (ORCPT
+        with ESMTP id S236394AbiKNIfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:44:14 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65A81A80B;
-        Mon, 14 Nov 2022 00:44:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668415453; x=1699951453;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=20z4hjjoPZCyj4x4M9p7no1rjwPWwV6NdfTwt72mSys=;
-  b=ZTS/HCho9aV+Yg/Zpp0WQMEA52uWza3trG0GcQyW8YD9nyW0yvCenEdP
-   EIn5YgbSRm4ErD4RpiHXcXU8c+574PM6SmgvAB/FH87q+tZyukGxyorZA
-   r2uSF0vmNhyX4W1Xr2CMRDm00Pk9wncGdOdMi9gIbJz0Wq3EsZ+VDKn1t
-   7UxRgOXI79cYbQi/Gy3xcYLhAH6aMMdAy/W6zL5XuvYgVhyj4hdPod7AI
-   j5JvuNCEDV1/Hl/gOcDBE7bYFWYoxOJR4JrEtTIDbBtGaNwhGcvoyr57a
-   iUckja/rn/dnVlzAb7fKtmI4++jPe4/KszzyNEAFgeKlLM4tH1PAPJF5G
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="338700156"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="338700156"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 00:44:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="632723420"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="632723420"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga007.jf.intel.com with ESMTP; 14 Nov 2022 00:44:10 -0800
-Date:   Mon, 14 Nov 2022 16:34:47 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     ye.xingchen@zte.com.cn
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chi.minghao@zte.com.cn
-Subject: Re: [PATCH] fpga-manager: use
- devm_platform_get_and_ioremap_resource()
-Message-ID: <Y3H9p38pzqvpjkID@yilunxu-OptiPlex-7050>
-References: <202211111441162412524@zte.com.cn>
+        Mon, 14 Nov 2022 03:35:03 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18746B20;
+        Mon, 14 Nov 2022 00:35:01 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.77])
+        by gateway (Coremail) with SMTP id _____8AxSti1_XFjdtgGAA--.18915S3;
+        Mon, 14 Nov 2022 16:35:01 +0800 (CST)
+Received: from [10.20.42.77] (unknown [10.20.42.77])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxFle0_XFj3m4SAA--.31378S3;
+        Mon, 14 Nov 2022 16:35:00 +0800 (CST)
+Subject: Re: [PATCH V5] PCI: loongson: Skip scanning unavailable child devices
+To:     =?UTF-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        wanghongliang <wanghongliang@loongson.cn>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221114074346.23008-1-liupeibao@loongson.cn>
+ <3eb09d86.900e.1847534872f.Coremail.chenhuacai@loongson.cn>
+From:   Liu Peibao <liupeibao@loongson.cn>
+Message-ID: <091d18b8-fe7c-bdeb-351c-85607c82a9d6@loongson.cn>
+Date:   Mon, 14 Nov 2022 16:35:00 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202211111441162412524@zte.com.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <3eb09d86.900e.1847534872f.Coremail.chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxFle0_XFj3m4SAA--.31378S3
+X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQAKCmNw3mQO9QAAsT
+X-Coremail-Antispam: 1Uk129KBjvJXoW7uFyxWF43ur4DJryUWF47CFg_yoW8JFy3p3
+        4ay3Wqkr1UCryUGws5Wry7CFy3X398G3s3JFWDKa4vk34DZwn8Xas5uF4jkrWqvFWFqa4j
+        9r4UurnYgayUt3DanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
+        07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
+        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
+        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
+        1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
+        YxBIdaVFxhVjvjDU0xZFpf9x07jFa0PUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-11 at 14:41:16 +0800, ye.xingchen@zte.com.cn wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On 11/14/22 4:14 PM, 陈华才 wrote:
+> Hi, Peibao,
 > 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-
-Please add your own SoB.
-
-> ---
->  drivers/fpga/socfpga-a10.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>> -----原始邮件-----
+>> 发件人: "Liu Peibao" <liupeibao@loongson.cn>
+>> 发送时间:2022-11-14 15:43:46 (星期一)
+>> 收件人: "Bjorn Helgaas" <bhelgaas@google.com>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Lorenzo Pieralisi" <lpieralisi@kernel.org>, "Krzysztof Wilczyński" <kw@linux.com>, "Jiaxun Yang" <jiaxun.yang@flygoat.com>, "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>
+>> 抄送: "Huacai Chen" <chenhuacai@loongson.cn>, "Jianmin Lv" <lvjianmin@loongson.cn>, "Yinbo Zhu" <zhuyinbo@loongson.cn>, wanghongliang <wanghongliang@loongson.cn>, "Liu Peibao" <liupeibao@loongson.cn>, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+>> 主题: [PATCH V5] PCI: loongson: Skip scanning unavailable child devices
+>>
+>> The PCI Controller of 2K1000 could not mask devices by setting vender ID or
+> I think this patch is needed by both LS2K500 and LS2K1000, so replace 2K1000 with "LS2K" or "Loongson-2K" or "LS2K500/LS2K1000" maybe better. If new version is needed, please change this, thanks.
 > 
-> diff --git a/drivers/fpga/socfpga-a10.c b/drivers/fpga/socfpga-a10.c
-> index ac8e89b8a5cc..dde2cb49e95d 100644
-> --- a/drivers/fpga/socfpga-a10.c
-> +++ b/drivers/fpga/socfpga-a10.c
-> @@ -479,8 +479,7 @@ static int socfpga_a10_fpga_probe(struct platform_device *pdev)
->  		return -ENOMEM;
-> 
->  	/* First mmio base is for register access */
-> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	reg_base = devm_ioremap_resource(dev, res);
-> +	reg_base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
 
-Why keep the variable res?
+LS2K500 does not need this as there are no on chip PCI devices.
 
->  	if (IS_ERR(reg_base))
->  		return PTR_ERR(reg_base);
+BR,
+Peibao
 
-And please make all related changes, at least in driver/fpga.
-
-Thanks,
-Yilun
-
-> 
-> -- 
-> 2.25.1
