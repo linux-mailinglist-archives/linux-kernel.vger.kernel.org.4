@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CEC56281CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:00:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B22B16281C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236454AbiKNOAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:00:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
+        id S236238AbiKNOA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:00:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiKNOAZ (ORCPT
+        with ESMTP id S234803AbiKNOAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:00:25 -0500
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064519FD6;
-        Mon, 14 Nov 2022 06:00:25 -0800 (PST)
-Received: by mail-qv1-f46.google.com with SMTP id x13so7794645qvn.6;
-        Mon, 14 Nov 2022 06:00:24 -0800 (PST)
+        Mon, 14 Nov 2022 09:00:23 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26287222BE
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:00:22 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id p8so19385697lfu.11
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:00:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VxPQ8pboaPVF2sJHi52Vka5fwCNauq6OSSF8aRmq/H0=;
+        b=S4znJaczEK246Yzk+YOpXjq34r7eQ7lk7NgLbFfJDA410Mvfpv6ffI++LTktx1dHF+
+         8jfleCZ+jpUDe/bTfK8uw1mHSSkibeoMxh62i/llK/sqs4AL67zMxQIkfgw5Dwi64DO1
+         l2x3OF62WEGgdBEspccGmA7jlxAgBNgannoeKbVSC/fIN3yG8toZQqB0sOQ5pPklVTw5
+         31URTGvzgReJaSyOBmZj8roWHKqR57hxGK1MkaoFydXe7Fh5Rr+ao/MSLkNffuJv/E5N
+         KbPitKZjk4N4DndOq9HyXiBUwLIjt3X/DyI3KNXMoz2roQOEggp0y5WnMl+UpBetQ78n
+         pNVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jgcb91s2dt67CNb/h/jC4e6cUIsKNgCDgXmKk0U/nWQ=;
-        b=hwEuzU5J8yikUD8aJRnMHJb0QP7apmleFcbSGAkONwiLwhoFarXI9lzXY90JHSDVdQ
-         1M2nQNaG6HydNU/kh/L1J//erwNMNHDysBhuuPcRcSV6MYQ41RHPm0cm+mH91Tvhlk2H
-         NN8tBSf2It8cGMwWchdsBHstuvMFam7eEjH2Er8XCg2V7ksahYHH7K/0rxErYfHOiuXS
-         tj6fu8nvJZh4l5tFrty6RIf5sqi1I13KaQ7/tdC/qdwgdPJqoSQKRfCip7471nMuTPwh
-         eYfZT8JI/WK6lMqZ3n0pp2YSYZJWWpDAKOseZQqugZXIjUgu/wpDCoOr+KPRA+zXD5Pa
-         23tg==
-X-Gm-Message-State: ANoB5pmAtByWgdzETmdxJc5WjZs7+9Io/NGHAtW49aOXjexG1jzUf1Ic
-        3MLQ4ZymBjG96xETRJxY33MmKkQjOHahYg==
-X-Google-Smtp-Source: AA0mqf7po8+D17d3cgqFPr/Jzw0wrIfeQpZXmYk1MeWxqSbJsQ2az3XIUyQPrfTrBLzNmK5LZANlSQ==
-X-Received: by 2002:a0c:fa0f:0:b0:4b4:7ac1:aa38 with SMTP id q15-20020a0cfa0f000000b004b47ac1aa38mr12632722qvn.84.1668434423609;
-        Mon, 14 Nov 2022 06:00:23 -0800 (PST)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id az17-20020a05620a171100b006f3e6933bacsm6387130qkb.113.2022.11.14.06.00.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 06:00:23 -0800 (PST)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-37063f855e5so106876007b3.3;
-        Mon, 14 Nov 2022 06:00:23 -0800 (PST)
-X-Received: by 2002:a81:a085:0:b0:37e:6806:a5f9 with SMTP id
- x127-20020a81a085000000b0037e6806a5f9mr7816378ywg.47.1668434409494; Mon, 14
- Nov 2022 06:00:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20221103223956.50575-1-fabrizio.castro.jz@renesas.com> <20221103223956.50575-2-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20221103223956.50575-2-fabrizio.castro.jz@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 14 Nov 2022 14:59:58 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUWbT6VArm9B56VE0yUYWCTm=3vMGrrONSv9cdsQQnhpg@mail.gmail.com>
-Message-ID: <CAMuHMdUWbT6VArm9B56VE0yUYWCTm=3vMGrrONSv9cdsQQnhpg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] watchdog: rzg2l_wdt: Fix reboot for RZ/V2M
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        bh=VxPQ8pboaPVF2sJHi52Vka5fwCNauq6OSSF8aRmq/H0=;
+        b=irVkUw1REz4R/MfgqLoqhFocU+E6XmLVgYkMhmcmSDyiKk/0ruxMRDqx1vRPDAw7WS
+         rZzU0EJqvbMhqYpZrAua8k7HrCQ/CMZOoRtsbno/qJlmfxUcUuJmPII8QXXfM4oK5nPB
+         3ZONB7lJ5pR25Oi5M6nNdOsWoB8fng6WWltMd4d+rsl2Y+gUE6Z4sxTBAXYve/cFw0gL
+         e6NtvV2g9iA6UQ6j2YX/klahX7fb9MxFetVYULVI6u0F53C73jvVAOn7D03kncjDVAp/
+         6IeC3C0naO/ERmZxxbodkKW67h1FmRFsvoVQIFbxaol9+rSHzze4om08HISy3FPS2Ea9
+         fIug==
+X-Gm-Message-State: ANoB5pkshe/7QN3CAV895F0vXH8MVHcKz9pwmkij3UzZqzyN35Qogzgv
+        yyu9ETKkwGfFx/vEeNs0XRsVyw==
+X-Google-Smtp-Source: AA0mqf4/a/jJiXWvPvOe2T+QxBTrvQcAuvmN52Dp5+4lky3TG8hR1K4ZgfQ+zays2OXB58zZRVfGxA==
+X-Received: by 2002:ac2:46fc:0:b0:4a2:22cf:f44d with SMTP id q28-20020ac246fc000000b004a222cff44dmr4369084lfo.118.1668434420376;
+        Mon, 14 Nov 2022 06:00:20 -0800 (PST)
+Received: from localhost.localdomain ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id z8-20020a2eb528000000b0027628240ff7sm2017813ljm.135.2022.11.14.06.00.19
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 14 Nov 2022 06:00:19 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: sdm845-polaris: Don't duplicate DMA assignment
+Date:   Mon, 14 Nov 2022 15:00:11 +0100
+Message-Id: <20221114140011.43442-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 11:40 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
-> The setting for the RZ/V2M watchdog cannot be changed once
-> the watchdog has been enabled, unless the IP gets reset.
-> The current implementation of the restart callback assumes
-> that the watchdog is not enabled, but that's not always the
-> case, and it leads to longer than necessary reboot times if
-> the watchdog is already running.
->
-> Always reset the RZ/V2M watchdog first, so that we can always
-> restart quickly.
->
-> Fixes: ec122fd94eeb ("watchdog: rzg2l_wdt: Add rzv2m support")
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+The DMA properties in this DT are identical to the ones already
+defined in sdm845.dtsi. Remove them.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Gr{oetje,eeting}s,
+diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+index fc189f7caaa4..38ba809a95cd 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
++++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
+@@ -456,9 +456,6 @@ &ipa {
+ 
+ &i2c14 {
+ 	clock-frequency = <400000>;
+-	dmas = <&gpi_dma1 0 6 QCOM_GPI_I2C>,
+-		   <&gpi_dma1 1 6 QCOM_GPI_I2C>;
+-	dma-names = "tx", "rx";
+ 	status = "okay";
+ 
+ 	touchscreen@20 {
+-- 
+2.38.1
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
