@@ -2,124 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB7F628AD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5967C628ADC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236201AbiKNUv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 15:51:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34760 "EHLO
+        id S236375AbiKNUxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 15:53:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237289AbiKNUvy (ORCPT
+        with ESMTP id S236399AbiKNUxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:51:54 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD6C1571A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:51:53 -0800 (PST)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DF61D6602995;
-        Mon, 14 Nov 2022 20:51:51 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668459112;
-        bh=bMpyH+/4FiYoqWgMqdnS697JNiSHBwCg9saHH1+OGgc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cZSHR6LlBuC8X76x5C/QlMLMqIQdpbT1ACX18rdzkVctnSnoHCmC7f8l2IiD3TAEh
-         FmumjikOpnpbT9U2MAvh/Bo1QMCnIJmjoXRS3p5Yb/poV7yj8ItQMX6J9PCahhq1+i
-         ZEIiNJ6nwzCHlUca/6XuUhZimJcXNQBdSVs6UXMjBLb5oeG0EHNvLGAgeBYSoZBKuQ
-         ZOYO6YX96tCyulNElBviEBLGfkss0bJqtdoAEXK1p8qXavZO4k3cDq57y4BXIBVkaG
-         L/wgcduQc8lY3r7eOHK5QM8fvnHjNzOItKRWVl6R1H+J9p0Rs7KHiX81Io72TQ1JTP
-         YfIfw0Nktk5rQ==
-Received: by mercury (Postfix, from userid 1000)
-        id F1BEE106D188; Mon, 14 Nov 2022 21:51:48 +0100 (CET)
-Date:   Mon, 14 Nov 2022 21:51:48 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH] HSI: ssi_protocol: Fix return type of ssip_pn_xmit()
-Message-ID: <20221114205148.etcmhrzzqymmawfv@mercury.elektranox.org>
-References: <20221102160233.4042756-1-nathan@kernel.org>
- <202211021207.8F7604C860@keescook>
+        Mon, 14 Nov 2022 15:53:34 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10AF641F
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:53:32 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id h21so7594245qtu.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:53:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ngVb8uJJUhIWa/AElJ6h2291IQqLZ5chCdSoy/INKDE=;
+        b=PhXFGiSsGmxHsfpNFJxPmpLKMrwuwOxrIoNKgXS8yxdt4zZ+zQocDot/VAmBZRcRwd
+         +Er9IKtxkd5b4yBV1FZXD6hYoB8djT1LpbXoAABCHnXp639/rjrEM+Ga7L29L0dvBfq7
+         HVavIgkX0TOX0bpYkUFxCHeywmLEhwiUkZAeD9iSAVoRKkac5zqzcSpUCRJ0BY/PFEkJ
+         vr7oSrENMmtwEE6kGOFo9VuDjDTqaTSPF8YeVWtuO/04qIsM2xWApVCNaNgiVok/H9z2
+         tHqU/UZdUPAq7FEfBuJJ3W0GHFDierX0shummOoBdytqhPnu08YPaIOtvp5ZVg0n4uJT
+         YFVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ngVb8uJJUhIWa/AElJ6h2291IQqLZ5chCdSoy/INKDE=;
+        b=Zdqqwje24kO13EvWNlDhXtlWl3OgxOx1NJ/ooJW+/uD0EN9Ze/XfNtsY7k5ouVHWI2
+         BSB5UNSC5VavtSI+JVpsibJyeU2yKGJD0iGmFPYYKRpUU0tHvb/832xe4GVSH0umFHXv
+         aJuf/tCPvXxsmHQk5IFUr493cTIkOFLXi3fmE3gCD2twktIMsRvBKXwN+mSxY+XXIHJL
+         ScF7LlpShy3lk1KOZshsMj7PJ1BcNY69l/sg5jpVFA9d5qK9Q7Xh8Abc8j4ePW0DZ3Gs
+         6eQR2inHn97Ou67YNrw1XM6yIxgdzc0/fpfBrVvHNuGYq6j3FVn/aGr9HBb/y/sSu3xy
+         EkKA==
+X-Gm-Message-State: ANoB5pnDpqfuzVUpBCQD5Jtf3PzcupwVQq3tJlHa9V8seY9lLRAP3cT0
+        0giquXWaJqVlFyeeDtyiqxaC6/IZAPA6SCmf4l8RyA==
+X-Google-Smtp-Source: AA0mqf6ZpX+mewvYmqni2zCZ+IZNgjxtvuLekIvqhVROT8s8B9nU/CXu3Tp34Ctxu1ZQuBcF9tfK5QcKTEmOcA28D8M=
+X-Received: by 2002:ac8:67c4:0:b0:3a5:2e13:bd82 with SMTP id
+ r4-20020ac867c4000000b003a52e13bd82mr14080023qtp.480.1668459211981; Mon, 14
+ Nov 2022 12:53:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pj6hpsbh2linlpg5"
-Content-Disposition: inline
-In-Reply-To: <202211021207.8F7604C860@keescook>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1668396484-4596-1-git-send-email-yangtiezhu@loongson.cn>
+ <1668396484-4596-3-git-send-email-yangtiezhu@loongson.cn> <Y3J7KW1xQc7aO18/@google.com>
+In-Reply-To: <Y3J7KW1xQc7aO18/@google.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+Date:   Mon, 14 Nov 2022 20:53:20 +0000
+Message-ID: <CACdoK4LhwrGqYHrOV6a42wHkX1=jqMWVhFa-b3QZ8P=1kMxcSw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] bpftool: Check argc first before "file" in do_batch()
+To:     sdf@google.com
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 14 Nov 2022 at 17:30, <sdf@google.com> wrote:
+>
+> On 11/14, Tiezhu Yang wrote:
+> > If the parameters for batch are more than 2, check argc first can
+> > return immediately, no need to use strcmp() to check "file" with
+> > a little overhead and then check argc, it is better to check "file"
+> > only when the parameters for batch are 2.
 
---pj6hpsbh2linlpg5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for the patch
 
-Hi,
+> Seems fine if you respin with is_prefix instead of strcmp.
+> Has the potential of breaking some buggy users which pass
+> more than one file, but I don't think it's a good justification
+> no to do the fix? Quentin?
 
-On Wed, Nov 02, 2022 at 12:07:02PM -0700, Kees Cook wrote:
-> On Wed, Nov 02, 2022 at 09:02:33AM -0700, Nathan Chancellor wrote:
-> > With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> > indirect call targets are validated against the expected function
-> > pointer prototype to make sure the call target is valid to help mitigate
-> > ROP attacks. If they are not identical, there is a failure at run time,
-> > which manifests as either a kernel panic or thread getting killed. A
-> > proposed warning in clang aims to catch these at compile time, which
-> > reveals:
-> >=20
-> >   drivers/hsi/clients/ssi_protocol.c:1053:20: error: incompatible funct=
-ion pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct ne=
-t_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *=
-)') with an expression of type 'int (struct sk_buff *, struct net_device *)=
-' [-Werror,-Wincompatible-function-pointer-types-strict]
-> >           .ndo_start_xmit =3D ssip_pn_xmit,
-> >                             ^~~~~~~~~~~~
-> >   1 error generated.
-> >=20
-> > ->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-> > 'netdev_tx_t', not 'int'. Adjust the return type of ssip_pn_xmit() to
-> > match the prototype's to resolve the warning and CFI failure.
-> > Additionally, use the enum 'NETDEV_TX_OK' instead of a raw '0' for the
-> > return value of ssip_pn_xmit().
-> >=20
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->=20
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-
-Thanks, queued.
-
--- Sebastian
-
---pj6hpsbh2linlpg5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNyqmIACgkQ2O7X88g7
-+prqchAAnhtz4Nq2PI78VktAGNUPjJE+daFB1pq6E71I0v1cQ0AasXAAxbZ3kxcr
-ZQzYpL8bmXudJDFZ+hGPllVvA/7KWCbKGPnpJjhEQea0guQdfiShrlKLUd+dNaGV
-kMeUlCtlaxUWSqVlNGn05JHKjM50A9oucVKiVNSc2sEIhq1Tzq2608AqDter0Vag
-pB2Fjx5ZcjI5bvNQQCm2Vvz2rCDpoXu1QkmXVgRDDJrE89OLfqXGml1T+i2Zzco2
-ph9saPL7XhOlULcT/1mIbdOahhuXxvp2lmpWbWEGpVjZPJduAUmefUp55eFmOhUH
-2RRl0M0SBaOP2sCuiHzSHlDabpk+oVrzgXX2fBlB0u8rDFnDki31HDxAKCDzuBCQ
-nlF1CGPXUvRpPZe7/9r7/Y/Sy+DLwDgQnIxA9wn3Og/fJ24biuX6SUgzHP+1H1wy
-x/1UPrIwbI3tmVS706FaxCRT3votE7rIjFpWXBm+uQIf1F1NqmqbsRgbTprWugZT
-JMIEWrJjsvm02FUFedabo3sD7DEn0gKIWT4FYpD16vIDvWA8D07MMKmgKCLP9ybw
-rkc3FFR+j47QDyVxCXYJn+b5trhSMAy+nsTzAhl+YDBmMtyElhucK9tBXeFaH+wU
-DY9paVnnu0+sqGvdl2Rh8jpqrrmAC7m+cLDq+nvXCMq93yiKDQU=
-=qxFt
------END PGP SIGNATURE-----
-
---pj6hpsbh2linlpg5--
+I don't think it could break, the argc check is already enforced
+(currently after the check on "file") and no more than one batch file
+can be passed. I'm not sure it's super useful to swap the checks
+either, because you can similarly argue that there's no need to check
+argc is <= 2 if the first arg for "bpftool batch" is different from
+"file" (or a prefix). The argc check is faster than the is_prefix()
+comparison, but that's a minor optimization for one specific error
+case. I don't really see the point, but I'm not opposed to the patch
+either if you repost with is_prefix() as suggested by Stanislav.
