@@ -2,134 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B893627AA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:37:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF13627ADC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236080AbiKNKhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 05:37:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35956 "EHLO
+        id S236238AbiKNKoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 05:44:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235941AbiKNKhK (ORCPT
+        with ESMTP id S236615AbiKNKoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 05:37:10 -0500
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929B01DDC2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:37:06 -0800 (PST)
-Received: by mail-il1-x133.google.com with SMTP id r2so5493914ilg.8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:37:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kUfZpgyT1aXwhu6NA1BbyyvFD5NqbthpSkv4Q+l4OA8=;
-        b=oUGODufunBtb8c8mH3rQb9Wx+RvO55bpVkl8eb7+3fbojnnIJdbHIOXZMBMC3Xu9Za
-         wAu8ocwg5VAP9PP+Wcx2iIJzgExBVcJ0QevN14MqQLRpafDwpDlMWHrnSUwyTeQfbHyG
-         ubZh4EzfcuYWrpX9fY2MZjVXF8iAfpfBdetsPx/RAkEzRTW/JItz4mLFwDZLBqILI1QU
-         DauXdQ30QadQsP3/0CYTm6Yhl3cOx+hGLzmSmoJOKVVV6PmCxJlDx+f5Kdax3LQKO+Ps
-         clIyHZBfBFnwhXsmNQ0IWRfzznGWA410D/Q11FRbhVh0EtXsQ9OHtru0VjYwXI+Y8Jd+
-         4EDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kUfZpgyT1aXwhu6NA1BbyyvFD5NqbthpSkv4Q+l4OA8=;
-        b=kdFQ6X+e+NUvSQ/n8gNSwLnUFV6QrZRjSGb9aDCCm+BfnX5m06w4UQcekeUwgoH0fn
-         bKZ3TctJioOlvP0GvOk6IcAzgY46hc7W7Z7k/fn4BHPkIpal53vltcHc14e/SXO8FKTz
-         TW8F9ypd3f0EcnfmuEkxCumXCi4mrGyE+ldA/qqGqpvN3aau5d5b/4OXyhS0aCtR9xRf
-         sYyggba0smyX4WDezGPC/aBgC9PjQ5FKUIfss6ZYNBmg1DnFJdd24r/1sh2n3ba6Mo74
-         AvDy046kE8+TJKLHZ46IDfLg1G2MBZEE/Hwi9tDiExdmi9786S99JD2RyeajDBgVX2M1
-         ddsA==
-X-Gm-Message-State: ANoB5pmztBqR5nO8NN5UFumi2Qx/PsNJkM0KmgEJqZCWryauLzFJed8T
-        fGHU4xRLEuUqqAEtDA0lpnFn9JhKzg80vdlnhoTKHA==
-X-Google-Smtp-Source: AA0mqf7flPzb5Zj/eQlu7L+vqCycSWHuRxGckQCi/bOssCCHcJ1enUhjf97ctWlLvjd/sPjBDPvbPydPzaBOJCYa0fE=
-X-Received: by 2002:a92:6c0b:0:b0:2fa:f47:d960 with SMTP id
- h11-20020a926c0b000000b002fa0f47d960mr5805051ilc.19.1668422225948; Mon, 14
- Nov 2022 02:37:05 -0800 (PST)
+        Mon, 14 Nov 2022 05:44:18 -0500
+X-Greylist: delayed 200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Nov 2022 02:44:04 PST
+Received: from violet.fr.zoreil.com (violet.fr.zoreil.com [IPv6:2001:4b98:dc0:41:216:3eff:fe56:8398])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D5C2BD
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:44:04 -0800 (PST)
+Received: from violet.fr.zoreil.com ([127.0.0.1])
+        by violet.fr.zoreil.com (8.17.1/8.17.1) with ESMTP id 2AEAe5Uf820655;
+        Mon, 14 Nov 2022 11:40:05 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 violet.fr.zoreil.com 2AEAe5Uf820655
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fr.zoreil.com;
+        s=v20220413; t=1668422406;
+        bh=ruWxN85n8k29Oly4aD/onyXwm+G1dWEBNEhULwlWsj8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MNdO/JPQFntF+lJh71QYeQvRSnzPu2iIdkEZFKzTecVnv9ySF5yMUZRnlhLszeD40
+         RXnLdCfCGSFXL4iVD79orRyWYf82BhNmZ5ErPLwa2HpA1BLLM6tyQXoFJ+W+e5GcU7
+         i2PWMXF3YHSvgxGyuu6IE3ys4rETYBVou2LGGV6M=
+Received: (from romieu@localhost)
+        by violet.fr.zoreil.com (8.17.1/8.17.1/Submit) id 2AEAe4Hp820654;
+        Mon, 14 Nov 2022 11:40:04 +0100
+Date:   Mon, 14 Nov 2022 11:40:04 +0100
+From:   Francois Romieu <romieu@fr.zoreil.com>
+To:     Zhang Changzhong <zhangchangzhong@huawei.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net: nixge: fix potential memory leak in
+ nixge_start_xmit()
+Message-ID: <Y3IbBCioK1Clt/3a@electric-eye.fr.zoreil.com>
+References: <1668416136-33530-1-git-send-email-zhangchangzhong@huawei.com>
 MIME-Version: 1.0
-References: <20221028093403.6673-1-vincent.guittot@linaro.org>
- <20221028093403.6673-6-vincent.guittot@linaro.org> <dbdb2a45-5e81-7cb8-04c6-e10c0e1a3184@linux.vnet.ibm.com>
-In-Reply-To: <dbdb2a45-5e81-7cb8-04c6-e10c0e1a3184@linux.vnet.ibm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 14 Nov 2022 11:36:54 +0100
-Message-ID: <CAKfTPtBTd61tcDbVkm=3a8+xwHCbn5QHCkdmqWcvudzZND1AFQ@mail.gmail.com>
-Subject: Re: [PATCH v7 5/9] sched/fair: Take into account latency priority at wakeup
-To:     shrikanth suresh hegde <sshegde@linux.vnet.ibm.com>
-Cc:     qais.yousef@arm.com, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org,
-        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1668416136-33530-1-git-send-email-zhangchangzhong@huawei.com>
+X-Organisation: Land of Sunshine Inc.
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 13 Nov 2022 at 09:51, shrikanth suresh hegde
-<sshegde@linux.vnet.ibm.com> wrote:
->
->
-> >   /*
-> >    * Preempt the current task with a newly woken task if needed:
-> >    */
-> > @@ -4566,7 +4568,7 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
-> >   {
-> >       unsigned long ideal_runtime, delta_exec;
-> >       struct sched_entity *se;
-> > -     s64 delta;
-> > +     s64 delta, offset;
-> >
-> >       ideal_runtime = sched_slice(cfs_rq, curr);
-> >       delta_exec = curr->sum_exec_runtime - curr->prev_sum_exec_runtime;
-> > @@ -4591,10 +4593,12 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr)
-> >       se = __pick_first_entity(cfs_rq);
-> >       delta = curr->vruntime - se->vruntime;
-> >
-> > -     if (delta < 0)
-> > +     offset = wakeup_latency_gran(curr, se);
-> > +     if (delta < offset)
-> >               return;
-> >
-> > -     if (delta > ideal_runtime)
-> > +     if ((delta > ideal_runtime) ||
-> > +         (delta > get_latency_max()))
-> >               resched_curr(rq_of(cfs_rq));
-> >   }
-> >
-> >
-> Hi Vincent,
->
-> I am not sure if i have understood this below change correctly.
+Zhang Changzhong <zhangchangzhong@huawei.com> :
+> The nixge_start_xmit() returns NETDEV_TX_OK but does not free skb on two
+> error handling cases, which can lead to memory leak.
+> 
+> To fix this, return NETDEV_TX_BUSY in case of nixge_check_tx_bd_space()
+> fails and add dev_kfree_skb_any() in case of dma_map_single() fails.
 
-I assume you wanted to say above as you removed the end of the patch
+This patch merge two unrelated changes. Please split.
 
->
-> wakeup_latency_gran - this function returns difference in latency nice offsets.
-> Hence the more negative the value, it means se has more latency requirement
-> compared to current. Hence se should preempt the current here right?
+> Fixes: 492caffa8a1a ("net: ethernet: nixge: Add support for National Instruments XGE netdev")
+> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+> ---
+>  drivers/net/ethernet/ni/nixge.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/ni/nixge.c b/drivers/net/ethernet/ni/nixge.c
+> index 19d043b593cc..b9091f9bbc77 100644
+> --- a/drivers/net/ethernet/ni/nixge.c
+> +++ b/drivers/net/ethernet/ni/nixge.c
+> @@ -521,13 +521,15 @@ static netdev_tx_t nixge_start_xmit(struct sk_buff *skb,
+>  	if (nixge_check_tx_bd_space(priv, num_frag)) {
+>  		if (!netif_queue_stopped(ndev))
+>  			netif_stop_queue(ndev);
+> -		return NETDEV_TX_OK;
+> +		return NETDEV_TX_BUSY;
+>  	}
 
-yes. the latency nice offset can add a offset in the comparison of (delta < 0)
+The driver should probably check the available room before returning
+from hard_start_xmit and turn the check above unlikely().
 
+Btw there is no lock and the Tx completion is irq driven: the driver
+is racy. :o(
 
->
-> we are comparing delta to get_latency_max and ideal_runtime, both of which can
-> be higher positive value, hence we will not preempt. that is not what we want
-> right?
-
-Here we are in the tick and not in the wakeup path. So the wakeup
-preemption, if any, should have already happened and we now have to
-make sure that if current has not been preempted at wakeup, it will
-not get too much run time that will move waiting tasks out of the
-sched_latency period
-
->
+-- 
+Ueimor
