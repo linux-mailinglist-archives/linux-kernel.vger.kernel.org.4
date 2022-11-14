@@ -2,108 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD27627B62
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E315627B64
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236503AbiKNLCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:02:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57486 "EHLO
+        id S236457AbiKNLC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:02:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236297AbiKNLCh (ORCPT
+        with ESMTP id S236444AbiKNLCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:02:37 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2AD20999;
-        Mon, 14 Nov 2022 03:02:35 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2F8A26601E4C;
-        Mon, 14 Nov 2022 11:02:33 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668423753;
-        bh=Vdfc8dY/vI6TMkcQxnexuBFAvBXuoQ1lTIkgbdeds7Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=SOzYkjV4PcS+7Fp5HVYXPg5UfEmPi5X/LU0D7bnQqtw8C05Bxa5hoojhVeu+6buoO
-         lbV+ff1Oc0eAyBYzSbYYGo32GimqE5r1AdKNOLi9H80htfVqhfGCds6nsIUkJpw1d5
-         AMG4HzseXAZovbHUWS2fNr8+wVcR9biVT1ZxawcZ6l97/ov9H1m+LEt0MK7GR3IsLh
-         1CP2etsIE5oLM+jIvK5sD1oc3MttCb/hDd+UMbNeSeo5S4Cosox/K7JXHR1vaM3Dw0
-         HESmvu3OhtOaXQVcdh4+7xza1vaGPSyPFxH9SGyo5dlHRikq0KfZoJPq/ySMIZr4gB
-         QAZJvHQUSzoCw==
-Message-ID: <1683603c-8486-b7a7-e9d7-bddd28c1cd8c@collabora.com>
-Date:   Mon, 14 Nov 2022 12:02:30 +0100
+        Mon, 14 Nov 2022 06:02:54 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596CF1E73D;
+        Mon, 14 Nov 2022 03:02:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668423772; x=1699959772;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=/FDzgq0LlS6mMw/MubQxFSGMoNYe/6uINUBW5zC8k2A=;
+  b=XFUHwklUZHe+5XeBUKMxHwEokcpccI/3wWiPSVnFoZDGJhpoh/UI61mE
+   BwJQOSq60yfjHYsXjNyz+TpdGI4D53rznVWrOkRXKq5BqnfKyHXjnT/IE
+   046VfgVGjnncu6fU3MfPAsJ/kD7dpphP7BZ/eU/rd+A4F+PzCYgdfClzf
+   1E3YQyXqq3D4ixyKNs0/jD0Tk+P0hQkW8Fq1AqcDfxrhYCxLNYr7w63/C
+   5kPwi62OpthIYvn+M8Hl8II86ktNq6mravQnrN91UOZWnSqv2G2hd8mHb
+   TpfxS/o1ojMMHwCbooE/vX0Y00uxBRtQvMPXOBYBzGLQew+eG49x93xor
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="313087650"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="313087650"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 03:02:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="763436230"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="763436230"
+Received: from dsmahang-mobl.ger.corp.intel.com (HELO localhost) ([10.252.59.240])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 03:02:49 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the drm-intel tree with Linus' tree
+In-Reply-To: <57f57c29-cf48-67c1-b6b3-0e50e7105031@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20221114102327.6d53341e@canb.auug.org.au>
+ <33ef1207-aad7-b7cd-61ac-327e9afb0699@redhat.com>
+ <87cz9p4zj6.fsf@intel.com>
+ <57f57c29-cf48-67c1-b6b3-0e50e7105031@redhat.com>
+Date:   Mon, 14 Nov 2022 13:02:46 +0200
+Message-ID: <878rkd4x49.fsf@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH] arm64: dts: mediatek: mt7986: Add SoC compatible
-Content-Language: en-US
-To:     matthias.bgg@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        frank-w@public-files.de
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <mbrugger@suse.com>
-References: <20221111113635.4603-1-matthias.bgg@kernel.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221111113635.4603-1-matthias.bgg@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 11/11/22 12:36, matthias.bgg@kernel.org ha scritto:
-> From: Matthias Brugger <mbrugger@suse.com>
-> 
-> Missing SoC compatible in the board file causes dt bindings check.
-> 
-> Signed-off-by: Matthias Brugger <mbrugger@suse.com>
-> ---
->   arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 2 +-
->   arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 2 ++
->   2 files changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-> index afe37b702eef9..0e3b603159477 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-> @@ -9,7 +9,7 @@
->   
->   / {
->   	model = "MediaTek MT7986a RFB";
-> -	compatible = "mediatek,mt7986a-rfb";
-> +	compatible = "mediatek,mt7986a-rfb", "mediatek,mt7986a";
->   
->   	aliases {
->   		serial0 = &uart0;
-> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-> index 72e0d9722e07a..1191ecf345a7d 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-> @@ -14,6 +14,8 @@ / {
->   	#address-cells = <2>;
->   	#size-cells = <2>;
->   
-> +	compatible = "mediatek,mt7986a";
-> +
+On Mon, 14 Nov 2022, Hans de Goede <hdegoede@redhat.com> wrote:
+> Hi,
+>
+> On 11/14/22 11:10, Jani Nikula wrote:
+>> On Mon, 14 Nov 2022, Hans de Goede <hdegoede@redhat.com> wrote:
+>>> Hi,
+>>>
+>>> On 11/14/22 00:23, Stephen Rothwell wrote:
+>>>> Hi all,
+>>>>
+>>>> Today's linux-next merge of the drm-intel tree got a conflict in:
+>>>>
+>>>>   drivers/gpu/drm/i915/display/intel_backlight.c
+>>>>
+>>>> between commit:
+>>>>
+>>>>   b1d36e73cc1c ("drm/i915: Don't register backlight when another backlight should be used (v2)")
+>>>>
+>>>> from Linus' tree and commit:
+>>>>
+>>>>   801543b2593b ("drm/i915: stop including i915_irq.h from i915_trace.h")
+>>>>
+>>>> from the drm-intel tree.
+>>>
+>>> This is weird, because the:
+>>>
+>>>    b1d36e73cc1c ("drm/i915: Don't register backlight when another backlight should be used (v2)")
+>>>
+>>> commit is in 6.1-rc1, so there can only be a conflict it 6.1-rc1 has not
+>>> been back-merged into drm-intel yet ?
+>> 
+>> That's the reason it *is* a conflict, right?
+>
+> Right what I was trying to say is that I am surprised that 6.1-rc1 has not
+> been back-merged into drm-intel yet even though it has been released
+> 4 weeks ago.
 
-It's DTS that shall declare the machine compatible and it's expected that they
-all declare their own, so please drop this one.
+Right, -ENOCOFFEE at my end.
 
-Also, while at it, the same should happen with mt7986b-rfb.dts: can you fix that
-one too?
+> I thought it was more or less standard process to backmerge rc1 soon after
+> it is released ?
 
-	compatible = "mediatek,mt7986b-rfb", "mediatek,mt7986b";
+The delay may be because v6.1-rc1 brought in more regressions for us
+than any other -rc1 in recent memory. Our CI's been suffering, and our
+folks have been spending a lot of time debugging, bisecting and
+reporting. (And before you ask, yes, we're going to be more proactive in
+reporting issues we find in linux-next.)
 
-Cheers,
-Angelo
+That said, Rodrigo's been in charge of drm-intel-next this cycle, maybe
+it's time to backmerge drm-next?
 
 
+BR,
+Jani.
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
