@@ -2,141 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77959627510
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 04:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C24627513
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 04:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235746AbiKNDte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 22:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33668 "EHLO
+        id S235750AbiKNDyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 22:54:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235462AbiKNDtc (ORCPT
+        with ESMTP id S235592AbiKNDyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 22:49:32 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF151116A
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:49:32 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 2AE3UAAF007246;
-        Mon, 14 Nov 2022 03:48:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=fOPRTCVq/gTMWLKyEkuVYoSabDVF/6GqURdh668LRog=;
- b=QtibTekgyqmJlpkbREEDwDHZhqIApCApGAyH/s+cZxPJOO45/4d0sRQP+HxwZUdIvb52
- 6m4usGtjQ8Ei1984cclb0mxob9GQxpY3Wu/Ps/wszki1ofqTHDMKNbkOjFEUACh+kgZi
- VmAQwNU5JtnFT2OOiEIJ37wLMf6o22NvpaGKi0l+HRqFdixnlDTfz7MdILmfHCqcIZRs
- JYux1rrtj3wVCwUR1PdnRgxD2ZuDR4uV5g+sayBgCkL/1wHLOWgviB9ALKwKQLiZxb+6
- 7+wmFsgJ52JZ1bxg6zsVWBX37JDSWqv7nzLt6MQbdQ8BhGjHSRDFH+OqqObIEgVLzcn1 Xw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kudtp0867-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 03:48:57 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AE3cJNw001146;
-        Mon, 14 Nov 2022 03:48:57 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kudtp085j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 03:48:57 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AE3bDWX029350;
-        Mon, 14 Nov 2022 03:48:55 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04fra.de.ibm.com with ESMTP id 3kt3499d8k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 03:48:54 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AE3mqnQ27787850
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Nov 2022 03:48:52 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 87DB411C04A;
-        Mon, 14 Nov 2022 03:48:52 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C83E11C04C;
-        Mon, 14 Nov 2022 03:48:49 +0000 (GMT)
-Received: from [9.43.84.159] (unknown [9.43.84.159])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Nov 2022 03:48:49 +0000 (GMT)
-Message-ID: <278ef11d-f85d-512e-e7e8-0685653a2e45@linux.ibm.com>
-Date:   Mon, 14 Nov 2022 09:18:48 +0530
+        Sun, 13 Nov 2022 22:54:03 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A4E1582C
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:54:02 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id d13-20020a17090a3b0d00b00213519dfe4aso9486305pjc.2
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:54:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FRyIj1MI3rmaawWYnnr5ja9VnpreYf1sG1U947nTn4o=;
+        b=lcy26kABmjAshodrK6IQSNh3Ghr5HjgEbLqJnzqRCR1aPYx8KDUmpGeHBqMO0wfAhr
+         4rOszfyUJfuv3dp00XXf7ofnfjrvDr/3OKK2uYbppomN1o4V8lN3Ehpbrp1cLhDxk5Sa
+         LHtIC9Bx+28iBLYe8RveQPFQ1ccEodOBvb/lU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FRyIj1MI3rmaawWYnnr5ja9VnpreYf1sG1U947nTn4o=;
+        b=0/LAGU0VgNgIgbFY4ijduH5g0/X0wAgVBr7+O6HwsNQ8kqZlhBmGnQYT6OFrwrBj8Q
+         I0d0pYkPBNzEupq9F4382RMqVmJDJmXPu+6Oc/QhzJFInbTv7nrwbmgSK87R6tSoBnf4
+         uWngGPNJYq+K1WKZjXMoAGzhPsGLO4siORN4HCbHG66Hjhf6uIutl173mcwqlMirXuYK
+         bjcjyM866YhCza713Y8rsrlS1T3riXn5hU8HfiKame/+1lIGcMRsyVXhhSy4zfT82ecg
+         CPBN7cvGkM4DZySCY03EwOldeOqMgyqaU6v75v5pm/9XTDpPB4v6gLu/tF30F+uWzPfh
+         LD8g==
+X-Gm-Message-State: ANoB5plYQU2F6nijTSuJ0CSM+SNetstw04Vt8bs158B2ULzI0kkCJBeE
+        UdFw7i27qjPN5Z6oJH/AjcEejV9SvwIa9Q==
+X-Google-Smtp-Source: AA0mqf7PQz7Uo3RVn3xY7oynSbjLV2Ah51DsuBl4biGSr5ADhekePcKR5tqnJeXFtq1ku1CEu8Vh9Q==
+X-Received: by 2002:a17:903:3303:b0:180:e685:2db5 with SMTP id jk3-20020a170903330300b00180e6852db5mr12220628plb.112.1668398042215;
+        Sun, 13 Nov 2022 19:54:02 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:68f5:86c0:dcaa:df5])
+        by smtp.gmail.com with ESMTPSA id m3-20020a170902db0300b00176acd80f69sm6059916plx.102.2022.11.13.19.53.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Nov 2022 19:54:01 -0800 (PST)
+Date:   Mon, 14 Nov 2022 12:53:57 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCHv4 0/9] zsmalloc/zram: configurable zspage size
+Message-ID: <Y3G71RFFZ/HL+yXN@google.com>
+References: <20221031054108.541190-1-senozhatsky@chromium.org>
+ <Y21+xp52OQYi/qjQ@google.com>
+ <Y22dxEcs2g5mjuQ7@google.com>
+ <Y26AbHxhPBJdWZQE@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v5 02/16] powerpc: Override __ALIGN and __ALIGN_STR macros
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-References: <20221028143346.183569-1-sv@linux.ibm.com>
- <20221028143346.183569-3-sv@linux.ibm.com>
- <327c371a-a8f4-1676-3da8-f454612b5c58@csgroup.eu>
- <Y2OAdHBIGXVnN5Ud@hirez.programming.kicks-ass.net>
-From:   Sathvika Vasireddy <sv@linux.ibm.com>
-In-Reply-To: <Y2OAdHBIGXVnN5Ud@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: YCP34-w-7o1cFQ_eCzZv-J0pBgYGEWSy
-X-Proofpoint-GUID: _MyTUPw9BeN567E8kZwIhGuJEFX6MUVX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-14_02,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 mlxlogscore=999 mlxscore=0 adultscore=0 lowpriorityscore=0
- bulkscore=0 spamscore=0 phishscore=0 impostorscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211140024
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y26AbHxhPBJdWZQE@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+Hi Minchan,
 
-On 03/11/22 14:18, Peter Zijlstra wrote:
-> On Wed, Nov 02, 2022 at 12:35:07PM +0000, Christophe Leroy wrote:
->>
->> Le 28/10/2022 à 16:33, Sathvika Vasireddy a écrit :
->>> In a subsequent patch, we would want to annotate powerpc assembly functions
->>> with SYM_FUNC_START_LOCAL macro. This macro depends on __ALIGN macro.
->>>
->>> The default expansion of __ALIGN macro is:
->>>           #define __ALIGN      .align 4,0x90
->>>
->>> So, override __ALIGN and __ALIGN_STR macros to use the same alignment as
->>> that of the existing _GLOBAL macro. Also, do not pad with 0x90, because
->>> repeated 0x90s are not a nop or trap on powerpc.
->> By the way, do we know what the instruction 0x90909090 is on powerpc ?
->> Is that something valid or not ?
-> Please also look at the version that's in tip/x86/core (and next). This
-> stuff should be gone now.
->
-> include/linux/linkage.h now reads like:
->
-> #ifndef __ALIGN
-> #define __ALIGN                 .balign CONFIG_FUNCTION_ALIGNMENT
-> #define __ALIGN_STR             __stringify(__ALIGN)
-> #endif
+On (22/11/11 09:03), Minchan Kim wrote:
+> > Sorry, not sure I'm following. So you want a .config value
+> > for zspage limit? I really like the sysfs knob, because then
+> > one may set values on per-device basis (if they have multiple
+> > zram devices in a system with different data patterns):
+> 
+> Yes, I wanted to have just a global policy to drive zsmalloc smarter
+> without needing user's big effort to decide right tune value(I thought
+> the decision process would be quite painful for normal user who don't
+> have enough resources) since zsmalloc's design makes it possible.
+> But for the interim solution until we prove no regression, just
+> provide config and then remove the config later when we add aggressive
+> zpage compaction(if necessary, please see below) since it's easier to
+> deprecate syfs knob.
 
-Since the above mentioned changes are not a part of powerpc/merge branch 
-yet, I am retaining this patch for this merge cycle and will post a 
-cleanup patch (to move to using FUNCTION_ALIGNMENT_4B) after the next -rc1.
+[..]
 
-Thanks,
-Sathvika
+> I understand what you want to achieve with per-pool config with exposing
+> the knob to user but my worry is still how user could decide best fit
+> since workload is so dynamic. Some groups have enough resouces to practice
+> under fleet experimental while many others don't so if we really need the
+> per-pool config step, at least, I'd like to provide default guide to user
+> in the documentation along with the tunable knobs for experimental.
+> Maybe, we can suggest 4 for swap case and 8 for fs case.
+> 
+> I don't disagree the sysfs knobs for use cases but can't we deal with the
+> issue better way?
+
+[..]
+
+> with *aggressive zpage compaction*. Now, we are relying on shrinker
+> (it might be already enough) to trigger but we could change the policy 
+> wasted memory in the class size crossed a threshold we defind for zram fs
+> usecase since it would be used without memory pressure.
+> 
+> What do you think about?
+
+This is tricky. I didn't want us to come up with any sort of policies
+based on assumptions. For instance, we know that SUSE uses zram with fs
+under severe memory pressure (so severe that they immediately noticed
+when we removed zsmalloc handle allocation slow path and reported a
+regression), so assumption that fs zram use-case is not memory sensitive
+does not always hold.
+
+There are too many variables. We have different data patterns, yes, but
+even same data patterns have different characteristics when compressed
+with different algorithms; then we also have different host states
+(memory pressure, etc.) and so on.
+
+I think that it'll be safer for us to execute it the other way.
+We can (that's what I was going to do) reach out to people (Android,
+SUSE, Meta, ChromeOS, Google cloud, WebOS, Tizen) and ask them to run
+experiments (try out various numbers). Then (several months later) we
+can take a look at the data - what numbers work for which workloads,
+and then we can introduce/change policies, based on evidence and real
+use cases. Who knows, maybe zspage_chain_size of 6 can be the new
+default and then we can add .config policy, maybe 7 or 8. Or maybe we
+won't find a single number that works equally well for everyone (even
+in similar use cases).
+
+This is where sysfs knob is very useful. Unlike .config, which has no
+flexibility especially when your entire fleet uses same .config for all
+builds, sysfs knob lets people run numerous A/B tests simultaneously
+(not to mention that some setups have many zram devices which can have
+different zspage_chain_size-s). And we don't even need to deprecate it,
+if we introduce a generic one like allocator_tunables, which will
+support tuples `key=val`. Then we can just deprecate a specific `key`.
