@@ -2,120 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A436E627A5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:24:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71186627A6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236007AbiKNKYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 05:24:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
+        id S236156AbiKNK0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 05:26:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235798AbiKNKYW (ORCPT
+        with ESMTP id S235809AbiKNK0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 05:24:22 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233AA1D0EE
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:24:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668421461; x=1699957461;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MvTTp8g0BzZqb9lW89EYw8zYqh0h4Ytuqndp2GiUR8Y=;
-  b=N7vLPerwgvo7em74+YipsQe8xXEnvvwj7+Ntmw5lHNFBRKUqjU/eP+Jy
-   aMWr1UIHcIog5yN/QD7LRkLe2ZuWMZGAnlkX1BOkIhUPlfxi9hGtZ6lWI
-   dLRJBAypic41wpZiLW5fN/T8BXsspf8v1BQ0VzpOXR34XSeIIg/sRQAJ1
-   buBchN/WSR1tNJM0YrN4yPBJWJblXUMSyH4akUqh+UuZKbOzU0iajsO0M
-   E4y/5OTa6PAZrkOJQbkKjhH6XBR6Al2lNfr0aUWhJLwyaAvY+Ft38rsf/
-   ArTaqxewHAJRBS9bGIWY0y9eABEcCjJT/V8xw8sSCMQ4d4/hvFm1trAuU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="309561475"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="309561475"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 02:24:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="883486152"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="883486152"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Nov 2022 02:24:18 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ouWdU-00C7Tl-1X;
-        Mon, 14 Nov 2022 12:24:16 +0200
-Date:   Mon, 14 Nov 2022 12:24:16 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rahul Tanwar <rtanwar@maxlinear.com>
-Cc:     "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-lgm-soc <linux-lgm-soc@maxlinear.com>
-Subject: Re: [PATCH RESEND 1/1] x86/of: Add support for boot time interrupt
- mode config
-Message-ID: <Y3IXUN5ETBfrSXRW@smile.fi.intel.com>
-References: <cover.1668403214.git.rtanwar@maxlinear.com>
- <37cc31242d0edda1bb0900cc62bba87954a7e892.1668403214.git.rtanwar@maxlinear.com>
- <Y3IOEFTZ1e/7uWJ4@smile.fi.intel.com>
- <00ce811f-2ec8-802d-d032-8ac2c65d06ff@maxlinear.com>
+        Mon, 14 Nov 2022 05:26:46 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2067.outbound.protection.outlook.com [40.107.244.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBDAB7EF
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:26:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eFJhiiLNAYUcZqqIlqO4DAWKts6GnZ4WdebbTsizcUVxse6J/fAUn4Y1kjHz2tXyIh9hBjW7ki7Vr5OAnRIaE2p+xkROGhvusbqgC48+ywph4NbrtAhpSwNxosLWlLY0ngDIkXtD8PLlSKTMxqZWFbPk+E8ya8IQ4/0ZcFZIIN92CTr6aJ4y/y5Wgl1b+nEWpI7gvDlM1KIpFP102W9YB+apsmDuGpC+WvVdGV0ZMEyCEjBnpTl8Czum1NbsOwNXmbwwN1icJL/5BpE7+N4YGrG6WvNxszYNzhyMSRdlv9z4xAIHIHs0O53x2/g6gYmBKcrtOoaw5e64gaMBj+1Jdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KnSN8s4reMCh2tTlls3OzoN32l9QfEpgoEAc/cYfFs4=;
+ b=dG3iCTA4Fe3hAJxqZRaTfcOHctz5Chf7Mkzdn0w27prCep6wIAQj3WU4M6dNh0fW8vJrBJyar293EcKaISObt0nqHutO+JZ5yo3MJ43qMFeBDp7UUYHVsn0DWAPfAFXq7zlKyICVw2JJ3GOwWsCyM4IIsOhdoCJ/adibTp9sys6CRqWwnhTRgOAljS+RiSsfXpPLCfVSbWunfio68cfXR8mXdL6WlBOwQWf1fD0LTNkd6Rb0qBuoK1NjRtf2cZzeSq4zG/0ZT2IPQCsJWcPbVf/Ysn4TbADUwZ3j/Aq4fCeuKgJ2/0lm78YitPul3/AcB2agb0nYm4rUS48dahd07g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KnSN8s4reMCh2tTlls3OzoN32l9QfEpgoEAc/cYfFs4=;
+ b=M7K6YYdK6j7ULQvmvoD7HVwwXYncDNxz/et72Qb60sgtu+d2dDxOXBLGeye5n40zdOAkWCbTGnAicECvMy1BxPHmqXD7uhxduPiEK0vtm3lxjyrDfL+DWq9HsdftODEn37JwBGner/nOPuzxiulmIeW6/ZhW+Y+aWeiEYiGORPM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by BL3PR12MB6571.namprd12.prod.outlook.com (2603:10b6:208:38e::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
+ 2022 10:26:42 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::7d43:3f30:4caf:7421]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::7d43:3f30:4caf:7421%7]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
+ 10:26:42 +0000
+Message-ID: <45eee340-8806-f0cc-9a93-02f2b776b284@amd.com>
+Date:   Mon, 14 Nov 2022 11:26:35 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] drm/radeon: fix potential racing issue due to mmap_lock
+Content-Language: en-US
+To:     Dawei Li <set_pte_at@outlook.com>, alexander.deucher@amd.com,
+        Xinhui.Pan@amd.com
+Cc:     airlied@gmail.com, daniel@ffwll.ch, jglisse@redhat.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <TYCP286MB232339970F7009B962E2F1BECA029@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <TYCP286MB232339970F7009B962E2F1BECA029@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0063.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:49::11) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00ce811f-2ec8-802d-d032-8ac2c65d06ff@maxlinear.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|BL3PR12MB6571:EE_
+X-MS-Office365-Filtering-Correlation-Id: dde5a3e3-592a-4099-aa37-08dac62ab92e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0IXeSCAdHa1UgT0EctwuXYRmMjiO1EiZnDOMAYK6cEywE54DLx6/BOtPQwbJxy3Vo/4hNlqNKnrMPO+oSmAPT31FccCIkho6ofPhvDCQwQL+BlV5gEEDpKX+lkzIwT9j0T5eZm6acTCLNz04hTG+382BJI2Sm8zKdJ32QaFp9W58xSWnRuhsgqGp7R9CY5D3XH54E6tnmOdGPgp3fFovKFCvEBb21+FEY+W4RASlVXc4d6IGjG6YUiJf4EfPLoW2JownuL6X/Oy+a/Ef7eHT602X6LmMgWs9SlpqG2PMpIhhNyhIQMpsI/LdIMc+OyNBsOg8RetsMvSkQcQJ7dJt321qnC9rsFwoIroTqZvMYeLrnmx7t75fvcHmzLAJ4d7CxtA8jBPEkZ1/WVw/6SJAPllKiCbdRFKQCItCNieybVZnz5qHEAp/RY3fqLdIuuZifG7OCxA+IRVQpDrHQwpCjSZU3g0vz/u6lpOtl9PEskQxqkWaTZ1JOKCMJheoKTD8MDCUQyEcDUzGFQyxVWgYuTLLzv3qPv+ZfEzqJiAmnqP0yOF2pLcyIyZ1HcOg6n2L9tth6k1QpFanUTOQJMEomUtVmrFi0440O8vEef99AIWzpsOSWB/jBZy1Hjaqg+MPlst3lLD/bVTCXo5fjT+sJrEKTKJsHj77MXjy1jeewEGsNx5Deo5UbGOpXfqnpVHBWzZPvf+WbnpCSB+tzvb+0h2hf1CBlioyEQwp5UgR2mK23wMmRoF4UfcMzdj2K6MLkS7hnlJBtVUl4IukaIB26dS9VDc+jfWaFOri6TUHxH0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(39860400002)(366004)(396003)(136003)(451199015)(6512007)(26005)(66556008)(66946007)(86362001)(31696002)(316002)(66476007)(83380400001)(2906002)(41300700001)(8676002)(4326008)(38100700002)(186003)(5660300002)(36756003)(8936002)(2616005)(6486002)(478600001)(31686004)(6506007)(6636002)(6666004)(45080400002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OUZsOVlRUVpWNHZyUkRmUlYxZm0yVHY4ckpGWGs3bS9hamJZdVlZbDJmUUJP?=
+ =?utf-8?B?NzdPMzc4cVl6SitUOXh4ZlkxbkVUN2JkWjIvZ0hPQ3dxV1ZvOTdpaTNIcDE3?=
+ =?utf-8?B?MFR4OXhzd1Naa3BTSFVJK3B5cHdQKzd6cERqa21rOVBCZGV3MzI2MHRrK0pa?=
+ =?utf-8?B?dGhGQWc1QjZ0TmVHbVpyeG9lTXUvT0NqRUsyclRxbmIyTEhFdy84bjVLbU9Y?=
+ =?utf-8?B?N3l4MlVPZjNPSlpjU3NwRDh1YWJLRVcrZzlpUmFvTjcrQUJqZDFyc2crN1k0?=
+ =?utf-8?B?MTgxa2xpWlhLVDk2RzR1a1VmQVF5RkkxTmNOWGpNY3dzWkkxVG9lWlhVY0Zx?=
+ =?utf-8?B?NGVSbFl6QXhkUGJwSkZyRjRDMHV4NlpjQ1pWcFNDYklxVGhnVGhJbVp5dnBY?=
+ =?utf-8?B?OGMwSVA1UnIrRnY0QkdxY0taVEhoNHRzdk95MHVQUk8wcStGaGxFNTZzZFFC?=
+ =?utf-8?B?Wkt4TmltaTN5em00YzlCeW9WMnhBVU5YelNuNG5vUGNuQnd6Wm55M2Y5WHdl?=
+ =?utf-8?B?d2RnUzdRSEswR1ZBQUFnZ1V1cHV3L1RxanptVDhJNkFsZTd3UGI5eG9qcERh?=
+ =?utf-8?B?QmVJeGIrYVFOeXRpU3pUOVRxeVRPMUh6dlhoSktzb0RqNERBamE0Y05JaGI2?=
+ =?utf-8?B?c2JZT25hY1B0TzRHWW1ySHpUT3pQWmtCMkNVNm5QQThDbndnRzR4V1JLNGNU?=
+ =?utf-8?B?eWRwS2VpS2VhQWVZdTdxaE04am1VRWNweVlDMlczTWl1VkFiZmZDUG93dFJY?=
+ =?utf-8?B?MlowbTdVaW5jdVA0bTB4dnZ3KzJmY0RnV2F0TzVyaFVKWXlEN3FCY09GSTkz?=
+ =?utf-8?B?bUxhTU9zODVvWE81aFhncjVicXl4bXdyc2oxeHJ2a1JWUE92SVQ0aEdmZDl0?=
+ =?utf-8?B?L2lobld0QVc5dm5VNUhPSnNwVnVMQ0huTG8wSVlNRE1yZkU1MVhidXY2ckV2?=
+ =?utf-8?B?bGdiLzFHejZjV0VXbm5Fa2EzekVFOTNFWi9Ka3k4akRXMjV2TGtVV25wSDVY?=
+ =?utf-8?B?VC9oRGhkbEhmaDB4OU4xeC9lanNCblBmSUZoQ1IycWdWS0lhanpHY0FYUmxS?=
+ =?utf-8?B?K0cxWmJERzd4SnZ4eG9nWmdpb3hpeFMwbktNdnNqWUQrNmFQdklnbm1iUlA1?=
+ =?utf-8?B?T0o4R2p0WUZkTStLS3Z2K3E1SnhWZGZTMjVGQ2RnMXJMSVIyRnRIbW8vdXFi?=
+ =?utf-8?B?K0UyYUQ2dW45RFR2dDcxYnBvZzFiUlhFZ0YrN2JQVmhYYU4reXBUVzlTN0kw?=
+ =?utf-8?B?MFpJR3R1QmVKMkw2OHUyRkYwT1FpR05RTVdVN2p6dTdHaUhrMGJpRG9xQTlJ?=
+ =?utf-8?B?QkZveERqYmp1YXRDQlNQTUpwQXdWbG5ZWGhxNWx3dlROQ3lNa0JRdjJCZEds?=
+ =?utf-8?B?ZThmT1pIYy92dVB2SUd4eFFnVFlWWWthYVptWk83S2pKbXNzaVhnRkYwSHpL?=
+ =?utf-8?B?T0cvZ2dHcGVSUnR5alp0K0hqajk4UEVlblVkTWVmK29vTmhyUWVKeEhER3U4?=
+ =?utf-8?B?SE9iemlaNDExRE9CM3NiWGtCYlVXeGtZU042Yy95UVE4S2xnV3pHUTMzb0Nx?=
+ =?utf-8?B?Qnk2M1lPUWdJRnN1dEJtUDVxRzV1ZzQvNkpia211OERBYWlBM3RkRlFBSk1u?=
+ =?utf-8?B?TjErLzIwRE5kUWhCcmpWUi9neVpFUU1xS21Tc01INUFJbzQrSDNTU3BOUmR5?=
+ =?utf-8?B?TVFIMDJBNHh6RXhuVGJRQWVFWVlSMldxTHhhTjVtdUdGVmxKK0FUMEh1blJZ?=
+ =?utf-8?B?RW8xTDY2bXdMeVY5WWdjUy9zSU1DSlNDZXpqYkJHUlFUemdaS2s5Zm03MlNp?=
+ =?utf-8?B?a2pRWTN4OHJSemxETFQ4M1pTejV4R01CeE9ZOStkdjl3NXFmR1NFV3RaNFUz?=
+ =?utf-8?B?NFNCcHYrUkt0YzdmY3Y0S0dMbFdVc2sxbjdMd25GM0FlUmhCUEpqRWpOd0Rl?=
+ =?utf-8?B?S2kxYXhkMWdDeDhFdWdYTmpnUGtWRm5XenY0dnBPcjlmV3J5WEdsYVlwUGNS?=
+ =?utf-8?B?cWxLaVdra3d1TURaaWliOGtmdXhXWHdsYjFDdWpwWjFPTVE5NUlsYmhVQW5s?=
+ =?utf-8?B?NGgybnNtVUErbnFpL0VlSDRqN0NuZ05nekhDSGwwemFWVlE1QnNONFdMNmpB?=
+ =?utf-8?Q?i/noB3Kf2LKJv3dPQadq1GBeX?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dde5a3e3-592a-4099-aa37-08dac62ab92e
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 10:26:42.6615
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: X2Y/RqfJZE6/sTBp7/xLDZz0l48X9AOuSdPZvnKZIhlKn58eIo5UaS4dxR3Y1ph+
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6571
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 10:00:02AM +0000, Rahul Tanwar wrote:
-> On 14/11/2022 5:45 pm, Andy Shevchenko wrote:
-> > On Mon, Nov 14, 2022 at 05:20:06PM +0800, Rahul Tanwar wrote:
+Am 13.11.22 um 13:42 schrieb Dawei Li:
+> Both find_vma() and get_user_pages() need explicit protection of
+> mmap lock, fix them by mmap_lock and get_user_pages_fast().
 
-...
+NAK, the MM read lock should already be taken when we reach this function.
 
-> >> +     if (of_property_read_bool(dn, "intel,no-imcr")) {
-> > 
-> > I can't find this property in the Documentation/devicetree/bindings.
-> > 
-> > Moreover, I prefer to see positive one, something like:
-> > 
-> >          intel,virtual-wire-bla-bla-bla
-> > 
-> > Please consult with DT people on how properly name it.
-> 
-> 
-> Yes, agree. Need to add it in bindings doc after finalizing the property 
-> name. I chose "intel,no-imcr" to have a direct correlation with the MPS
-> spec defined data field for the same purpose.
+Could be that this is buggy and the function is called without holding 
+the lock, but trying to grab it while holding the reservation lock is 
+also forbidden.
 
-The problems with it are:
-- it's negative
-- it's too cryptic to one who doesn't know area well enough
+Christian.
 
-> It reads below bit in 
-> mpparse code to detect PIC mode or virtual wire mode.
-> 
-> Bit 7: IMCRP. When the IMCR presence bit is set, the IMCR is present and 
-> PIC Mode is implemented; otherwise, Virtual Wire Mode is implemented.
-> 
-> Please refer [1]
-> 
-> [1] https://www.manualslib.com/manual/77733/Intel 
-> Multiprocessor.html?page=40#manual
-
-This is good reference for DT people to suggest you a better name.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+>
+> Fixes: ddd00e33e17a ("drm/radeon: add userptr flag to limit it to anonymous memory v2")
+> Fixes: f72a113a71ab ("drm/radeon: add userptr support v8")
+> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+> ---
+>   drivers/gpu/drm/radeon/radeon_ttm.c | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/radeon/radeon_ttm.c b/drivers/gpu/drm/radeon/radeon_ttm.c
+> index d33fec488713..741ea64b9402 100644
+> --- a/drivers/gpu/drm/radeon/radeon_ttm.c
+> +++ b/drivers/gpu/drm/radeon/radeon_ttm.c
+> @@ -351,7 +351,10 @@ static int radeon_ttm_tt_pin_userptr(struct ttm_device *bdev, struct ttm_tt *ttm
+>   		   to prevent problems with writeback */
+>   		unsigned long end = gtt->userptr + (u64)ttm->num_pages * PAGE_SIZE;
+>   		struct vm_area_struct *vma;
+> +
+> +		mmap_read_lock(gtt->usermm);
+>   		vma = find_vma(gtt->usermm, gtt->userptr);
+> +		mmap_read_unlock(gtt->usermm);
+>   		if (!vma || vma->vm_file || vma->vm_end < end)
+>   			return -EPERM;
+>   	}
+> @@ -361,8 +364,7 @@ static int radeon_ttm_tt_pin_userptr(struct ttm_device *bdev, struct ttm_tt *ttm
+>   		uint64_t userptr = gtt->userptr + pinned * PAGE_SIZE;
+>   		struct page **pages = ttm->pages + pinned;
+>   
+> -		r = get_user_pages(userptr, num_pages, write ? FOLL_WRITE : 0,
+> -				   pages, NULL);
+> +		r = get_user_pages_fast(userptr, num_pages, write ? FOLL_WRITE : 0, pages);
+>   		if (r < 0)
+>   			goto release_pages;
+>   
 
