@@ -2,333 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8DE628A40
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C33628901
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237086AbiKNUOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 15:14:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
+        id S235636AbiKNTQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 14:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236205AbiKNUO3 (ORCPT
+        with ESMTP id S236124AbiKNTPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:14:29 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FD81E1;
-        Mon, 14 Nov 2022 12:14:23 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id bj12so31003811ejb.13;
-        Mon, 14 Nov 2022 12:14:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aB7D80CH8cdnLZm/7P85TJstRm3skUAzIKd4hpiZ7CM=;
-        b=AwroikXUJBvGijxNsh6Gyvm9r4vqrTGpk8hO66t5QX44Ia2w47wA3y3zEq8/7uJ/kO
-         CGHlgHt4qfQHPI7xeGijLLSZHYaSnZILlQJqiPaP1ang1PrN6Atan5O4Mji4F8/0tIjR
-         vwGlFCCfajWjT/YGScTNSOVDF9BCfRspFexpHqHoQuVWlVTdv4vL2Ye7raIdf5nVjQqi
-         nRMX2kQH88+jnOC+tnT3zr8bzXDaRIvIAb3iyykFG4eJQjY48Mcho5j5w2Xb6yVtcEcC
-         bHYJT5CxVn7jjEwpNF4KkdEGiaWVZrrSHtil7gryBYdwlcCRLp2QDQ3pBl7qXa0pw/H3
-         FOPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aB7D80CH8cdnLZm/7P85TJstRm3skUAzIKd4hpiZ7CM=;
-        b=nACpQ9NtTdNlhmdeysYGaVTKzogKvnneNYDpDuQYaUePzpOWBeAjMpoTTqbuK9fL3T
-         oKKaQ1f/dbljzFM2Bt15/9/W+mJeGTDXXQ1XACoGdmM6jIEOQR+2lwc3Rc7YdB/HU8Cm
-         WDAjS8D0F2+eMfsF+w43hhfp35eUJV6eb7NiP8MzzMo/DxgzSDk2c8//gCa2QdPtRJHF
-         4PhhuD0YVqySMUWlIP71bnk+2AtRgxRLP/4hd0s8hNU1SxJ0lnI1WfayAyrmHnfE/yan
-         YCWqkOnSLOJSPcVQvYZhHR5YrUu9UVAYeSj0LkZ1sU5SmKASkS3w9G1F8GcrIE7J0m84
-         mimg==
-X-Gm-Message-State: ANoB5plUuEVKc5HcuUepMYald+jtNyPq0qdgu7u6tpTHAR/fDqI2pDWT
-        Ojlxdz7O8ILQjVptUK4iIw9qbLZ3V4Eu3aIhjZE=
-X-Google-Smtp-Source: AA0mqf4wBFZ1d0lWU2xsAABrG0uAML4bUGOpWsEwAykL63iuG8KCuj3fnEHe1Cc6fUO0kUSg6H0v2HYKoiEKdpgYbog=
-X-Received: by 2002:a17:906:3ac3:b0:7af:da0:aebe with SMTP id
- z3-20020a1709063ac300b007af0da0aebemr2741054ejd.723.1668456861854; Mon, 14
- Nov 2022 12:14:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20221110164152.26136-1-ojeda@kernel.org> <20221110164152.26136-7-ojeda@kernel.org>
-In-Reply-To: <20221110164152.26136-7-ojeda@kernel.org>
-From:   =?UTF-8?Q?Sergio_Gonz=C3=A1lez_Collado?= <sergio.collado@gmail.com>
-Date:   Mon, 14 Nov 2022 10:06:32 -0500
-Message-ID: <CAA76j92rwioWC9j5+O-ekkz_p1Afp3m2zGMTtPF_4wip+T2iuw@mail.gmail.com>
-Subject: Re: [PATCH v1 06/28] rust: macros: add `#[vtable]` proc macro
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 14 Nov 2022 14:15:53 -0500
+X-Greylist: delayed 3909 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Nov 2022 11:15:51 PST
+Received: from mx0a-00007101.pphosted.com (mx0a-00007101.pphosted.com [148.163.135.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBD7264B2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:15:50 -0800 (PST)
+Received: from pps.filterd (m0166256.ppops.net [127.0.0.1])
+        by mx0a-00007101.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AEI8BsC005247;
+        Mon, 14 Nov 2022 18:10:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=illinois.edu; h=from : to : subject
+ : date : message-id : content-type : content-id :
+ content-transfer-encoding : mime-version; s=campusrelays;
+ bh=8/xjAcKJ26v0RyTE/HbDhXqsdTUPdqHhlZ0ALvp3q7s=;
+ b=fQASbBm+Bp6Ci6Ls7hekV+wopRdCBZqVefFMw+mkvy6TTESXtJ9vgwga4kCAUW8Mu01T
+ UunZVseVed7/5UhQLsCCUeqiRPVcfg0zJoWvOgNoujYo5Ve5dLsaKOeapJWt9BaUvMgW
+ ZSJY1VokqE2r+ibT7nrxytnHZ+T7AIoBQRjpNQEygZRqF4aQ/bjXNkLHViuewbTa/qFX
+ Cl58nSz4FC56HPcw7yefiuxub1b8R/dz9uAMm5Gy/DIpT0YbCKA5Q6j2ZCSDpLTRbIIa
+ AFIIXAMvEg1jti6pglPOZI6ugXukaxwyoV4i/JWdoqcR7GbJ6GlG+sIbVyLtjedt2Sit uA== 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2170.outbound.protection.outlook.com [104.47.56.170])
+        by mx0a-00007101.pphosted.com (PPS) with ESMTPS id 3kt90very4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 18:10:41 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jdl8PGlBK/jxC/lROwKPjLM3w8zxnHuf+GoB/QrWDUiH0JQ+baAW7XoDrjdts7cXpU7678Po4vEXeMStk9AVFGWH6ZSzjz/kARwVKonsjf7WNsZYB07AhI6A+GENwIgm4H1slS4WKY1j6WyEpqwKZGILZfaJ7KFTow0x2QepsO+FnhoS+YbGZ55l+pvFH77BKHzQy6ey5u4ilxqWmeZI75xZ1AmDQ8ROz+zSJRzFwdTsRYsLncJi28QzoZbvgVXLEbdBDNRUERsrUtKD4zxOV2jQfDIfr6rf0wPGOgxOy92GfFlpGf8n4sBLro3aJrhpBkowsTHgLDbOeqr1Aw9sYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8/xjAcKJ26v0RyTE/HbDhXqsdTUPdqHhlZ0ALvp3q7s=;
+ b=Ea/cRXXTAIrLbvWKGm4GUrhpQ4rjHRdxByCZXFYz06DNSVEXZBSPug2uKgtkU5B0W4vP2PnD2n7XbdHqA7iiTBl3E3OE/oaAcgl90OOQ1rboIJh0ptCapcmwx/wgE1xJkt5glgOphiOnByrJ8cOpj0y/YND67eBz7Zzs9ndJT6WI440VvXxrYgWxEzgneekWP5pTsYQ7qHNc4IAGpGHdQd0y2g7UwzIs++Z4Z01reCh704uKBTTQAWXCTsYuPSA3gJ2DFV5vS2ifoah/qK/iD4U12j18SzsJZC2F4LDbkn2aroV/VQe6MQvpK4huuHmUc16Si9bRj8p4gLdZmuAG0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=illinois.edu; dmarc=pass action=none header.from=illinois.edu;
+ dkim=pass header.d=illinois.edu; arc=none
+Received: from SJ0PR11MB5919.namprd11.prod.outlook.com (2603:10b6:a03:42d::15)
+ by SA2PR11MB5177.namprd11.prod.outlook.com (2603:10b6:806:11c::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
+ 2022 18:10:39 +0000
+Received: from SJ0PR11MB5919.namprd11.prod.outlook.com
+ ([fe80::b129:820e:4c47:f662]) by SJ0PR11MB5919.namprd11.prod.outlook.com
+ ([fe80::b129:820e:4c47:f662%2]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
+ 18:10:38 +0000
+From:   "Rawat, Arnav" <arnavr3@illinois.edu>
+To:     "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Fwd: [PATCH v2] platform/x86: ideapad-laptop: Fix fn-lock LED on Yoga
+ 14ITL5 laptops
+Thread-Topic: [PATCH v2] platform/x86: ideapad-laptop: Fix fn-lock LED on Yoga
+ 14ITL5 laptops
+Thread-Index: AQHY+FRm82Res3hQu0aWaSFCgIB+0w==
+Date:   Mon, 14 Nov 2022 18:10:38 +0000
+Message-ID: <2655386.mvXUDI8C0e@wirelessprv-10-193-125-189.near.illinois.edu>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ0PR11MB5919:EE_|SA2PR11MB5177:EE_
+x-ms-office365-filtering-correlation-id: afb60f22-d9b7-421c-c387-08dac66b8906
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: hd472KXsSpZrxHrlcI4/1/eUrJRCQc5CFE56YmfpUuysgxyb3rPc1ke1oy97iKXBa1WWfjN1DcT7OGn0QH+ecSRwKKODIJYfSLtLt0cFJNCswNdoOLzNanEqTd2dnRqPaZJzHQ/ksbK/M8+iKoJHSQXsuP2kntaucX1keY3eTniOrOtJPSi67yS/wI0DEINOyQFxHnZ5TY2fHMvd1KpEQ9+k023KIgL/EaePA9s7Zz9upN84qApzJZYQQgIsxkS5IOwtJBaCbggP7TFUTufxLTUVCaiBBh38qLz7NW6moguTEkff3DwsQ/maAGv3cmZBh9XdoE+w6qzIHmL0fzeusrtqrYnoTopkRFg01Do65p4BQ+DkoUyJwKZkAHDigy/OBu1AaKt7YrXRJ4l1B7qfarejuMjYrWs/WjGhU5oIxReXO2i0fJwzZtQN+1xuXh0WGNk5gfsMzesjv69NUfoe2BCWgmVmE3du25xU4sO4mNevUrumbw+BF1QqCKOd1/U+cXb9RFu6gGhWrThN6lO5Rzknq8+vmHFgVOS/ijQwJPIBorAOZG6scMtE2y48TMxT2Gb86g8lq9VOwGNNf/OLkEP0ANKqCEjGCbh9xbZMEF5nhYH/8jlt749kvrXVNfd74EWsTR2Hqd3lUq5w2JslyuFRz2eKqK2jIkOXJIdr709altrWGFjCq+hqMbxxVXvEDQFW+jaI+bGrXJeF1W7umth7UQLp21ba2HG7QbxLwdfEhAE3BZAlOp3zvGwwgkdHxVHY3W/iaR4F/nC+IdGZv6Y1wI/zji//LEP06+du9zJNGT4tJgflmtxRi23JHQXX
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5919.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(366004)(346002)(396003)(39860400002)(451199015)(6486002)(71200400001)(66476007)(450100002)(786003)(316002)(76116006)(66556008)(66946007)(66446008)(64756008)(122000001)(75432002)(86362001)(38070700005)(38100700002)(91956017)(478600001)(6512007)(26005)(53546011)(6506007)(186003)(41300700001)(2906002)(8676002)(41320700001)(5660300002)(110136005)(83380400001)(8936002)(39026012)(102196002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?sUOGeLZLf87q/s0MkGyMS/hHTJ5zPtDRP+UWRhbiNlzBDlDPMaizT2ICRTQk?=
+ =?us-ascii?Q?r9CPWoAnty9aDoNAZrRTif2rFFZiah6CSHmcTRl+hdleMkLoXWsW3MxaMFK2?=
+ =?us-ascii?Q?+3bG/mgFbdIOmAfys/RTSv2G6Ly79QuDVQEqummk+KBCiOWX18lCFWVH5GdO?=
+ =?us-ascii?Q?BfdxYN58BoNnvxFcx7wxhu2O85aiOHtf+AkMPVN+wI9IHI1iNCvDrTTeuJ+8?=
+ =?us-ascii?Q?XNOQPgi9Z/cqdpZmg7QPiG7piUikI0KROs7HTR6FdYTYNvu8SApSYmPfAHlK?=
+ =?us-ascii?Q?tFYUz0KTm057pcSBlNu9X+8f4kJqxN6JimOjC5qFAMEutKzuGwVRXov00KKO?=
+ =?us-ascii?Q?7mBNHQDzRe34XV36HrhYmww5OPY6JMn5mr+vjpF2IxCvNZjdDf9VrTlsXbZL?=
+ =?us-ascii?Q?KcXmZJfmz6E7fX1ChnT+XNXWuxuLm9PNFeZFDHOfsG4b7TOy7GMguw9Yfgt0?=
+ =?us-ascii?Q?nb9bTnchsF3Lx0gQDuK1dUCYakhIXv6C61Fq5x9a9KrB/GiyIbSQeEVamJH8?=
+ =?us-ascii?Q?hFPQl2oJiT0tI8ttikhsiGG587DrLVFElP9rCuDzPk1IgL93PNb+74GtaoNn?=
+ =?us-ascii?Q?UDhYft9areGG36dS6ypjwJMmTtb/bzFuwwu44E4U+uioaxUhjuEvajU0lLjC?=
+ =?us-ascii?Q?MfM8vByq+xUN0bOuyp1G7HOVn797IFQSQGl4YbSsH9AXaQH86xO+MiQXTwH6?=
+ =?us-ascii?Q?+NON2xf8F5TV3M1RzJMl5UTpv4fRg+HXXkJbsV8FL0WuK8/dnXK+20iChoX6?=
+ =?us-ascii?Q?lpt7H8twl//mxIA07rB7+pO1aaS1R9jZDr863j9uyx/2UINg1lBriDbbhKEe?=
+ =?us-ascii?Q?UU8MTFRGTWOqC7wlFPjMsIchJ+YpgZ5P3b4dLH9pLCHZ6PlZHRkHXNT9IPRB?=
+ =?us-ascii?Q?Pn6l6Xdto70GyxzQUhd+KOfTteJGl0vjce+k2vSKe0n436t18A8tfTYVD5cY?=
+ =?us-ascii?Q?O2J70EIIf2tsGOty9lhGUAOwen6p3ju4zrLQ8Nc0ZGuM3BYMnFJrkdIs8nCa?=
+ =?us-ascii?Q?VfU0iESJyMMnkn3KTMA6sw7AseXo6PsHnbU0DPrghjALvm5Y2J/MGogtIVjZ?=
+ =?us-ascii?Q?vwksqbJgJzzGozc4Te0fi8e1vZID16SwLmTYyvFFhW0G8dDYhTJb5pElMFPf?=
+ =?us-ascii?Q?/r6vUb+yMV/ftdQdFzSKr1Xbi3hsx4sZ/C8vUv3iTup5I5QN3DW8KwtDTn4g?=
+ =?us-ascii?Q?hCGcpNOXd45CYJaYWaC3vJVOjN06Oec7Hrnr7rO6rBgudFfGce+fiTUj1kIe?=
+ =?us-ascii?Q?ODCjyrRLZfJIQEV8xCyp4PjJfHqBxR1DhEDX5k6dZ9GDTMiTiHjBGGe1tzPn?=
+ =?us-ascii?Q?lT+KkFfHBd/jWptCGW6EhTfRCZi7xU53UdlMnYED7dXGt2NO6UVpRPstC5j+?=
+ =?us-ascii?Q?DFMr/o7+LB3r2gjWorlwiEs7gUnyNlammhxh8Q+W5V01T15NP8K9ngT4BErn?=
+ =?us-ascii?Q?9DfApaQ6PzhfBZ6Wdez2RsAHhnKGxLFpRwP3nwLbt1ilp3zLwlf3ef5xyFMV?=
+ =?us-ascii?Q?aqjXVj6iz45VXa2OXo39d7v5vN3bf2/4/SDJhHrv22fwWz/Lu9oR5nMJvEdV?=
+ =?us-ascii?Q?Or2RxNUZj3sdE6bq2H7YbKhCsa7VBI2cTf029wCru+61fx/uGTHCj+F/J8jn?=
+ =?us-ascii?Q?ZQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <C7A26BBD8375CD49A0568089705C9609@namprd11.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: illinois.edu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5919.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: afb60f22-d9b7-421c-c387-08dac66b8906
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2022 18:10:38.8912
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 44467e6f-462c-4ea2-823f-7800de5434e3
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vB8cMo/46M5nk+OQCNRXrFl+lIh6/hV0Ax5yvGPKnwRtqWnwo8LlGLjo64y8wlE14YSd0AwLC3PW3ortV9zQaQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5177
+X-Proofpoint-GUID: AzKNDyI9dtrp80MBLNUpPORuD54XnBBj
+X-Proofpoint-ORIG-GUID: AzKNDyI9dtrp80MBLNUpPORuD54XnBBj
+X-Spam-Details: rule=cautious_plus_nq_notspam policy=cautious_plus_nq score=0
+ impostorscore=0 malwarescore=0 clxscore=1015 adultscore=0 bulkscore=0
+ suspectscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0 mlxlogscore=999
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211140130
+X-Spam-Score: 0
+X-Spam-OrigSender: arnavr3@illinois.edu
+X-Spam-Bar: 
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Nov 2022 at 11:43, Miguel Ojeda <ojeda@kernel.org> wrote:
->
-> From: Gary Guo <gary@garyguo.net>
->
-> This procedural macro attribute provides a simple way to declare
-> a trait with a set of operations that later users can partially
-> implement, providing compile-time `HAS_*` boolean associated
-> constants that indicate whether a particular operation was overridden.
->
-> This is useful as the Rust counterpart to structs like
-> `file_operations` where some pointers may be `NULL`, indicating
-> an operation is not provided.
->
-> For instance:
->
->     #[vtable]
->     trait Operations {
->         fn read(...) -> Result<usize> {
->             Err(EINVAL)
->         }
->
->         fn write(...) -> Result<usize> {
->             Err(EINVAL)
->         }
->     }
->
->     #[vtable]
->     impl Operations for S {
->         fn read(...) -> Result<usize> {
->             ...
->         }
->     }
->
->     assert_eq!(<S as Operations>::HAS_READ, true);
->     assert_eq!(<S as Operations>::HAS_WRITE, false);
->
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> [Reworded, adapted for upstream and applied latest changes]
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  rust/kernel/prelude.rs |  2 +-
->  rust/macros/lib.rs     | 52 +++++++++++++++++++++++
->  rust/macros/vtable.rs  | 95 ++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 148 insertions(+), 1 deletion(-)
->  create mode 100644 rust/macros/vtable.rs
->
-> diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
-> index 6a1c6b38327f..7c4c35bf3c66 100644
-> --- a/rust/kernel/prelude.rs
-> +++ b/rust/kernel/prelude.rs
-> @@ -15,7 +15,7 @@ pub use core::pin::Pin;
->
->  pub use alloc::{boxed::Box, vec::Vec};
->
-> -pub use macros::module;
-> +pub use macros::{module, vtable};
->
->  pub use super::{pr_alert, pr_crit, pr_debug, pr_emerg, pr_err, pr_info, =
-pr_notice, pr_warn};
->
-> diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-> index 15555e7ff487..e40caaf0a656 100644
-> --- a/rust/macros/lib.rs
-> +++ b/rust/macros/lib.rs
-> @@ -5,6 +5,7 @@
->  mod concat_idents;
->  mod helpers;
->  mod module;
-> +mod vtable;
->
->  use proc_macro::TokenStream;
->
-> @@ -72,6 +73,57 @@ pub fn module(ts: TokenStream) -> TokenStream {
->      module::module(ts)
->  }
->
-> +/// Declares or implements a vtable trait.
-> +///
-> +/// Linux's use of pure vtables is very close to Rust traits, but they d=
-iffer
-> +/// in how unimplemented functions are represented. In Rust, traits can =
-provide
-> +/// default implementation for all non-required methods (and the default
-> +/// implementation could just return `Error::EINVAL`); Linux typically u=
-se C
-> +/// `NULL` pointers to represent these functions.
-> +///
-> +/// This attribute is intended to close the gap. Traits can be declared =
-and
-> +/// implemented with the `#[vtable]` attribute, and a `HAS_*` associated=
- constant
-> +/// will be generated for each method in the trait, indicating if the im=
-plementor
-> +/// has overridden a method.
-> +///
-> +/// This attribute is not needed if all methods are required.
-> +///
-> +/// # Examples
-> +///
-> +/// ```ignore
-> +/// use kernel::prelude::*;
-> +///
-> +/// // Declares a `#[vtable]` trait
-> +/// #[vtable]
-> +/// pub trait Operations: Send + Sync + Sized {
-> +///     fn foo(&self) -> Result<()> {
-> +///         Err(EINVAL)
-> +///     }
-> +///
-> +///     fn bar(&self) -> Result<()> {
-> +///         Err(EINVAL)
-> +///     }
-> +/// }
-> +///
-> +/// struct Foo;
-> +///
-> +/// // Implements the `#[vtable]` trait
-> +/// #[vtable]
-> +/// impl Operations for Foo {
-> +///     fn foo(&self) -> Result<()> {
-> +/// #        Err(EINVAL)
-> +///         // ...
-> +///     }
-> +/// }
-> +///
-> +/// assert_eq!(<Foo as Operations>::HAS_FOO, true);
-> +/// assert_eq!(<Foo as Operations>::HAS_BAR, false);
-> +/// ```
-> +#[proc_macro_attribute]
-> +pub fn vtable(attr: TokenStream, ts: TokenStream) -> TokenStream {
-> +    vtable::vtable(attr, ts)
-> +}
-> +
->  /// Concatenate two identifiers.
->  ///
->  /// This is useful in macros that need to declare or reference items wit=
-h names
-> diff --git a/rust/macros/vtable.rs b/rust/macros/vtable.rs
-> new file mode 100644
-> index 000000000000..34d5e7fb5768
-> --- /dev/null
-> +++ b/rust/macros/vtable.rs
-> @@ -0,0 +1,95 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +use proc_macro::{Delimiter, Group, TokenStream, TokenTree};
-> +use std::collections::HashSet;
-> +use std::fmt::Write;
-> +
-> +pub(crate) fn vtable(_attr: TokenStream, ts: TokenStream) -> TokenStream=
- {
-> +    let mut tokens: Vec<_> =3D ts.into_iter().collect();
-> +
-> +    // Scan for the `trait` or `impl` keyword.
-> +    let is_trait =3D tokens
-> +        .iter()
-> +        .find_map(|token| match token {
-> +            TokenTree::Ident(ident) =3D> match ident.to_string().as_str(=
-) {
-> +                "trait" =3D> Some(true),
-> +                "impl" =3D> Some(false),
-> +                _ =3D> None,
-> +            },
-> +            _ =3D> None,
-> +        })
-> +        .expect("#[vtable] attribute should only be applied to trait or =
-impl block");
-> +
-> +    // Retrieve the main body. The main body should be the last token tr=
-ee.
-> +    let body =3D match tokens.pop() {
-> +        Some(TokenTree::Group(group)) if group.delimiter() =3D=3D Delimi=
-ter::Brace =3D> group,
-> +        _ =3D> panic!("cannot locate main body of trait or impl block"),
-> +    };
-> +
-> +    let mut body_it =3D body.stream().into_iter();
-> +    let mut functions =3D Vec::new();
-> +    let mut consts =3D HashSet::new();
-> +    while let Some(token) =3D body_it.next() {
-> +        match token {
-> +            TokenTree::Ident(ident) if ident.to_string() =3D=3D "fn" =3D=
-> {
-> +                let fn_name =3D match body_it.next() {
-> +                    Some(TokenTree::Ident(ident)) =3D> ident.to_string()=
-,
-> +                    // Possibly we've encountered a fn pointer type inst=
-ead.
-> +                    _ =3D> continue,
-> +                };
-> +                functions.push(fn_name);
-> +            }
-> +            TokenTree::Ident(ident) if ident.to_string() =3D=3D "const" =
-=3D> {
-> +                let const_name =3D match body_it.next() {
-> +                    Some(TokenTree::Ident(ident)) =3D> ident.to_string()=
-,
-> +                    // Possibly we've encountered an inline const block =
-instead.
-> +                    _ =3D> continue,
-> +                };
-> +                consts.insert(const_name);
-> +            }
-> +            _ =3D> (),
-> +        }
-> +    }
-> +
-> +    let mut const_items;
-> +    if is_trait {
-> +        const_items =3D "
-> +                /// A marker to prevent implementors from forgetting to =
-use [`#[vtable]`](vtable)
-> +                /// attribute when implementing this trait.
-> +                const USE_VTABLE_ATTR: ();
-> +        "
-> +        .to_owned();
-> +
-> +        for f in functions {
-> +            let gen_const_name =3D format!("HAS_{}", f.to_uppercase());
-> +            // Skip if it's declared already -- this allows user overrid=
-e.
-> +            if consts.contains(&gen_const_name) {
-> +                continue;
-> +            }
-> +            // We don't know on the implementation-site whether a method=
- is required or provided
-> +            // so we have to generate a const for all methods.
-> +            write!(
-> +                const_items,
-> +                "/// Indicates if the `{f}` method is overridden by the =
-implementor.
-> +                const {gen_const_name}: bool =3D false;",
-> +            )
-> +            .unwrap();
-> +        }
-> +    } else {
-> +        const_items =3D "const USE_VTABLE_ATTR: () =3D ();".to_owned();
-> +
-> +        for f in functions {
-> +            let gen_const_name =3D format!("HAS_{}", f.to_uppercase());
-> +            if consts.contains(&gen_const_name) {
-> +                continue;
-> +            }
-> +            write!(const_items, "const {gen_const_name}: bool =3D true;"=
-).unwrap();
-> +        }
-> +    }
-> +
-> +    let new_body =3D vec![const_items.parse().unwrap(), body.stream()]
-> +        .into_iter()
-> +        .collect();
-> +    tokens.push(TokenTree::Group(Group::new(Delimiter::Brace, new_body))=
-);
-> +    tokens.into_iter().collect()
-> +}
-> --
-> 2.38.1
->
-Reviewed-by: Sergio Gonz=C3=A1lez Collado <sergio.collado@gmail.com>
+Subject: [PATCH v2] platform/x86: ideapad-laptop: Fix fn-lock LED on Yoga =
+=0A=
+14ITL5 laptops=0A=
+Date: Friday, November 11, 2022, 8:32:09 AM CST=0A=
+From: Rawat, Arnav <arnavr3@illinois.edu>=0A=
+To: Ike Panhc <ike.pan@canonical.com>, hdegoede@redhat.com =0A=
+<hdegoede@redhat.com>, markgross@kernel.org <markgross@kernel.org>=0A=
+CC: Rawat, Arnav <arnavr3@illinois.edu>=0A=
+=0A=
+From 90832a9a373570db2a62c3edf00cf129b59b0ba3 Mon Sep 17 00:00:00 2001=0A=
+From: arawat <rawat.arnav@gmail.com>=0A=
+Date: Thu, 10 Nov 2022 13:13:11 -0600=0A=
+Subject: [PATCH v2] platform/x86: ideapad-laptop: Fix fn-lock LED on Yoga =
+=0A=
+14ITL5=0A=
+ laptops=0A=
+=0A=
+The commit 3ae86d2d4704796ee658a34245cb86e68c40c5d7: Fix Legion 5 Fnlock LE=
+D=0A=
+set the WMI id for the fn-lock event on some Legion 5 laptops. However,=0A=
+the same WMI ID is also sent on some Yoga laptops. Here, setting the fn-loc=
+k=0A=
+state is not valid behavior, and causes the ec to spam interrupts until the=
+=0A=
+laptop is rebooted, so include a check for this line of laptops.=0A=
+=0A=
+Signed-off-by: Arnav Rawat <arnavr3@illinois.edu>=0A=
+---=0A=
+ drivers/platform/x86/ideapad-laptop.c | 14 ++++++++++++-=0A=
+ 1 file changed, 12 insertions(+), 1 deletion(-)=0A=
+=0A=
+diff --git a/drivers/platform/x86/ideapad-laptop.c b/drivers/platform/x86/=
+=0A=
+ideapad-laptop.c=0A=
+index abd0c81d62c4..d1dcf57ce596 100644=0A=
+--- a/drivers/platform/x86/ideapad-laptop.c=0A=
++++ b/drivers/platform/x86/ideapad-laptop.c=0A=
+@@ -1491,6 +1492,17 @@ static void ideapad_acpi_notify(acpi_handle handle, =
+u32 =0A=
+event, void *data)=0A=
+ }=0A=
+ =0A=
+ #if IS_ENABLED(CONFIG_ACPI_WMI)=0A=
++// Set fnesc state only on certain ideapads=0A=
++static const struct dmi_system_id ideapad_fnesc_allow_list[] =3D {=0A=
++	{=0A=
++		.matches =3D {=0A=
++			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),=0A=
++			DMI_MATCH(DMI_PRODUCT_VERSION, "Lenovo Legion =0A=
+R7000P2020H"),=0A=
++			DMI_MATCH(DMI_PRODUCT_NAME, "82GR")=0A=
++		}=0A=
++	}=0A=
++};=0A=
++=0A=
+ static void ideapad_wmi_notify(u32 value, void *context)=0A=
+ {=0A=
+ 	struct ideapad_private *priv =3D context;=0A=
+@@ -1501,7 +1513,7 @@ static void ideapad_wmi_notify(u32 value, void *conte=
+xt)=0A=
+ 		ideapad_input_report(priv, value);=0A=
+ 		break;=0A=
+ 	case 208:=0A=
+-		if (!eval_hals(priv->adev->handle, &result)) {=0A=
++		if (!eval_hals(priv->adev->handle, &result) && =0A=
+dmi_check_system(ideapad_fnesc_allow_list)) {=0A=
+ 			bool state =3D test_bit(HALS_FNLOCK_STATE_BIT, =0A=
+&result);=0A=
+ =0A=
+ 			exec_sals(priv->adev->handle, state ? =0A=
+SALS_FNLOCK_ON : SALS_FNLOCK_OFF);=0A=
+-- =0A=
+2.37.3=0A=
+=0A=
+=0A=
+=0A=
+-----------------------------------------=
