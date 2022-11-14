@@ -2,57 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96121628AF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A021628AFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237408AbiKNVCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 16:02:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
+        id S237447AbiKNVCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 16:02:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237268AbiKNVCB (ORCPT
+        with ESMTP id S237268AbiKNVCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 16:02:01 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B022622;
-        Mon, 14 Nov 2022 13:01:59 -0800 (PST)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 75DFC660299E;
-        Mon, 14 Nov 2022 21:01:58 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668459718;
-        bh=Wr8DXJaBzIXXYYSptkp/QmPu4ccApmtbSiLsb9qIdzw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O4IN7hgCTJ5r2JnO4b3HCT6jlBrdLSBiLI5PLKTiAm693sETo8J8W5/gKAvX60xev
-         h0Nhu5BE1wf1gT9xkKRUuaj00OIZZYGYaP9ZvI/QxfuS2hd4N1zlAHP06tuakdqPI1
-         ign24mrx5OgcEQoJCHVdxzoojquW/TOmzXOeKC1bCQcCz0/xpT16gcMqMmpzA5zhB1
-         mwXPPMgRU8l8spKK2KXNMsu/nwXoiTkWpvkt1w85iyKk9hgJYYdTxPFWE189scmXZe
-         n8hTDszPbC6ylGc6ZII2iVKigHL2hCItsROxGtvHdKJYUX1jLPVFejlWjfrYU8fCS4
-         bO7Ip/UrV6ZYw==
-Received: by mercury (Postfix, from userid 1000)
-        id 0BE12106D194; Mon, 14 Nov 2022 22:01:56 +0100 (CET)
-Date:   Mon, 14 Nov 2022 22:01:55 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Subject: Re: [PATCH] headers: Remove some left-over license text in
- include/uapi/linux/hsi/
-Message-ID: <20221114210155.anq5gkggfrvj6nki@mercury.elektranox.org>
-References: <4919073b3dee8ca7612989659d31b12f9c5491ba.1662897400.git.christophe.jaillet@wanadoo.fr>
+        Mon, 14 Nov 2022 16:02:17 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17E8B4A7;
+        Mon, 14 Nov 2022 13:02:15 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id n20so10788456ejh.0;
+        Mon, 14 Nov 2022 13:02:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TzzsYr3QBaUTVu5kumkFsbRVJbtcn69A/lItbi1zU98=;
+        b=bojHQRtx6KhmuPEwvS6vokOwrOP4UUSsInITgCjLbtci2sWccS1NQ3IBggtobrbZan
+         a/DE0f7eJ6SrCJmepFpJfRyZZAbhpYX9/hC7gaa39gPY78WqWta518lYjhXbVzG1i9Vq
+         xyrz920zssclK67meKsPP4rTz+a0mTOT19jBOsWogfCaw0BnG9xfsRBVswbODWVdQ7PN
+         qzT0AsUgSgEcw/PbJ8DeaeYtwoOIxAFBKo5HFM1hxPQ4qHppx3v2jlzl/jdyoEE3uzX2
+         JdbSkmxETArx0MEIfJ0ApbMwn84Q3VsxW6qNXf45s1NXFIjqt5/TfAmDbnsqiaU3PXv5
+         RUcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TzzsYr3QBaUTVu5kumkFsbRVJbtcn69A/lItbi1zU98=;
+        b=saFI7LGX+1PX8zSQvt0LWBlmx2CdfvA7nOt1tiIRTySjCeuUmpnmsVYZgYgXLq+VzD
+         cL9iuvvaZ64O5R9wfDn+VJZjlhD2XoZ6B5DXYsxBqBpCbg9I1pAwLpBjM9Bn7PfedjqN
+         7nj/b3rKBU9uWDiqdbFAdAoPWyUxNNlJ+Q8XF6tT806q9gfSko9T1cxl9LMqJjjopYvb
+         voQpyRrdct3EOQI5oWbg5ZPMRsioRxu/wstPx5UZZS0rzF93fjp80waj1Rnn8ddxWaqT
+         xSHQyALZFn5VX9uooDzjexCg8TGECPlLmOlUhRRG6qAwZtY0puSjfGvboIDlPozMZYTP
+         pYCA==
+X-Gm-Message-State: ANoB5pkOGC5ih6SzaAGEeRMia/VaIGHmmTlFW4WLa4q5gNiagxHn/i7H
+        cXwhfSUHeKylDiF3EMnwCdQ=
+X-Google-Smtp-Source: AA0mqf4romJpJ696KN+fPZmMnIrPunyW+McWEUlAOPIcwTtZicCYdIFczAT2Nw/U1Ct4Zm/p43lNmg==
+X-Received: by 2002:a17:906:c185:b0:7ad:84d1:5b56 with SMTP id g5-20020a170906c18500b007ad84d15b56mr12214793ejz.205.1668459734207;
+        Mon, 14 Nov 2022 13:02:14 -0800 (PST)
+Received: from [192.168.3.32] (dh207-97-48.xnet.hr. [88.207.97.48])
+        by smtp.gmail.com with ESMTPSA id x16-20020a170906135000b0073d84a321c8sm4587847ejb.166.2022.11.14.13.02.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 13:02:13 -0800 (PST)
+Message-ID: <b3860cbd-0967-0b8d-3d67-f2a09f1e0042@gmail.com>
+Date:   Mon, 14 Nov 2022 22:02:11 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3n3g2mza2t5gm3ai"
-Content-Disposition: inline
-In-Reply-To: <4919073b3dee8ca7612989659d31b12f9c5491ba.1662897400.git.christophe.jaillet@wanadoo.fr>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH RFC] gpiolib: ensure that fwnode is properly set
+To:     Brian Masney <bmasney@redhat.com>, linus.walleij@linaro.org,
+        brgl@bgdev.pl
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, psodagud@quicinc.com,
+        quic_shazhuss@quicinc.com, quic_ppareek@quicinc.com,
+        ahalaney@redhat.com, echanude@redhat.com,
+        nicolas.dechesne@linaro.org
+References: <20221114202943.2389489-1-bmasney@redhat.com>
+Content-Language: en-US
+From:   Robert Marko <robimarko@gmail.com>
+In-Reply-To: <20221114202943.2389489-1-bmasney@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,108 +80,50 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---3n3g2mza2t5gm3ai
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 14. 11. 2022. 21:29, Brian Masney wrote:
+> Note that this is a RFC patch and not meant to be merged. I looked into
+> a problem with linux-next-20221110 on the Qualcomm SA8540P automotive
+> board (sc8280xp) where the UFS host controller would fail to probe due
+> to repeated probe deferrals when trying to get reset-gpios via
+> devm_gpiod_get_optional().
+>
+> of_get_named_gpiod_flags() returns -EPROBE_DEFER, which is caused by
+> of_gpiochip_match_node_and_xlate() returning 0 since the of_xlate function
+> pointer is not set for the qcom,sc8280xp-tlmm pinctrl driver. The
+> pinctrl driver doesn't define one, so of_gpiochip_add() should
+> automatically setup of_gpio_simple_xlate() on it's behalf. This doesn't
+> happen since the fwnode member on the struct gpiochip is set to null
+> when of_gpiochip_add() is called. Let's work around this by ensuring
+> that it's set if available.
+>
+> Note that this broke sometime within the last few weeks within
+> linux-next and I haven't bisected this. I'm posting this in the hopes
+> that someone may know offhand which patch(es) may have broken this.
 
-Hi,
+Hi, the following patch should fix it for you, I have hit the same issue on
+IPQ8074.
 
-On Sun, Sep 11, 2022 at 01:56:59PM +0200, Christophe JAILLET wrote:
-> Remove some left-over from commit e2be04c7f995 ("License cleanup: add SPDX
-> license identifier to uapi header files with a license")
->=20
-> When the SPDX-License-Identifier tag has been added, the corresponding
-> license text has not been removed.
->=20
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+https://patchwork.ozlabs.org/project/linux-gpio/patch/20221111113732.461881-1-thierry.reding@gmail.com/
+
+Regards,
+Robert
+
+>
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
 > ---
-
-IIRC that was intentional, since the plan was to seek for an
-explicit Ack from the copyright holder when removing the text.
-I've added Greg for clarification and hopefully the latest
-mail address from Kai and Peter.
-
--- Sebastian
-
->  include/uapi/linux/hsi/cs-protocol.h | 14 --------------
->  include/uapi/linux/hsi/hsi_char.h    | 14 --------------
->  2 files changed, 28 deletions(-)
->=20
-> diff --git a/include/uapi/linux/hsi/cs-protocol.h b/include/uapi/linux/hs=
-i/cs-protocol.h
-> index c7f6e7672cb5..07c3bfb67463 100644
-> --- a/include/uapi/linux/hsi/cs-protocol.h
-> +++ b/include/uapi/linux/hsi/cs-protocol.h
-> @@ -6,20 +6,6 @@
->   *
->   * Contact: Kai Vehmanen <kai.vehmanen@nokia.com>
->   * Original author: Peter Ujfalusi <peter.ujfalusi@nokia.com>
-> - *
-> - * This program is free software; you can redistribute it and/or
-> - * modify it under the terms of the GNU General Public License
-> - * version 2 as published by the Free Software Foundation.
-> - *
-> - * This program is distributed in the hope that it will be useful, but
-> - * WITHOUT ANY WARRANTY; without even the implied warranty of
-> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> - * General Public License for more details.
-> - *
-> - * You should have received a copy of the GNU General Public License
-> - * along with this program; if not, write to the Free Software
-> - * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-> - * 02110-1301 USA
->   */
-> =20
->  #ifndef _CS_PROTOCOL_H
-> diff --git a/include/uapi/linux/hsi/hsi_char.h b/include/uapi/linux/hsi/h=
-si_char.h
-> index 91623b0398b1..5ef72f0daf94 100644
-> --- a/include/uapi/linux/hsi/hsi_char.h
-> +++ b/include/uapi/linux/hsi/hsi_char.h
-> @@ -5,20 +5,6 @@
->   * Copyright (C) 2010 Nokia Corporation. All rights reserved.
->   *
->   * Contact: Andras Domokos <andras.domokos at nokia.com>
-> - *
-> - * This program is free software; you can redistribute it and/or
-> - * modify it under the terms of the GNU General Public License
-> - * version 2 as published by the Free Software Foundation.
-> - *
-> - * This program is distributed in the hope that it will be useful, but
-> - * WITHOUT ANY WARRANTY; without even the implied warranty of
-> - * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-> - * General Public License for more details.
-> - *
-> - * You should have received a copy of the GNU General Public License
-> - * along with this program; if not, write to the Free Software
-> - * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-> - * 02110-1301 USA
->   */
-> =20
->  #ifndef __HSI_CHAR_H
-> --=20
-> 2.34.1
->=20
-
---3n3g2mza2t5gm3ai
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNyrLsACgkQ2O7X88g7
-+prmNw//VOkEp8ZlcxfkiNuIqGZAzDKkT7pG+L24GMvuJ/aj/8Tt4owlMwih9Cbq
-FX+EaZVyroTRh8IjSmkexENMCpavULqgeRYO1N1lOXNeTanwYLc1/DkIzRgo2C6w
-0Hiap2hiWN4rM5KCUkeDUZPIx2kWr2wdvhidj1Fy2ex6IdRWKgob3TY9+M2mW8QM
-whmHsEPcVcuL2Kwuk7ZmmuhVIpKtP3waciYoMzQgHnaaIpg99x0I/TB28sN8ZXsr
-KPZ7/y87WWH3Il7WyNPMmenFDq89QBH66UgMI/cdUIbwOut5lWVgWpEUBF/WENUt
-KirnUTOHM9gX2+WLsN/8+svKCIDv2c2NcCK+TEqJa2APaYUanTZs85HWC+gJ138l
-y47hddk1MrJAK2hov7q4MOJqsL/CFeXA0WFo37SVpVhfMiZrQ/JVsWMUTRHXqqhc
-N+y4RQapZ/yDuCaNTSXkubIC/LENa+a/hNxmf8luOG9Cpc0/a3lG2SESkYKSz677
-ctYjycPTPWZSLKbp836lXrG3BXzysrfctpvBcaUDPWXy7vc9JFoO5r0Pwwi2qWtL
-1VkzEfuqMhBc9c90pq4EzFKC6AxAFfm9aOOng4NdAAG9P/iU9pRRvr4d1BvlCeHm
-lDhyWpLEp+sk8+T2myZ/CvCuUm4aG0m1o4Za2BDC98P7DKvnVeE=
-=ZL4q
------END PGP SIGNATURE-----
-
---3n3g2mza2t5gm3ai--
+>   drivers/gpio/gpiolib.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index 11fb7ec883e9..8bec66008869 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -678,7 +678,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+>   	 * Assign fwnode depending on the result of the previous calls,
+>   	 * if none of them succeed, assign it to the parent's one.
+>   	 */
+> -	gdev->dev.fwnode = dev_fwnode(&gdev->dev) ?: fwnode;
+> +	gc->fwnode = gdev->dev.fwnode = dev_fwnode(&gdev->dev) ?: fwnode;
+>   
+>   	gdev->id = ida_alloc(&gpio_ida, GFP_KERNEL);
+>   	if (gdev->id < 0) {
