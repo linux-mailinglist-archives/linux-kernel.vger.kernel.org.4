@@ -2,123 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D88262772E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB7D62773A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236243AbiKNIOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:14:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        id S236269AbiKNIOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:14:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236242AbiKNIOI (ORCPT
+        with ESMTP id S236241AbiKNIOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:14:08 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1131A210;
-        Mon, 14 Nov 2022 00:14:02 -0800 (PST)
-X-UUID: 06a3de3d523242739635f57692033022-20221114
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=16ql8s7UXjz7QayRZm19LzIg6ERRvCYLZDA5lHE/kUI=;
-        b=ttFZPNcKo29ZvIlbZeKZbUTxeLqC1lGuSef9jhMhrtqKci8yvLH9AmeG0C/PDbLO1gdII++uOiwrGDiLudRfrcAFh2KDqYpDh61FioWL6CMcL/KjNcGekQRVRBBFNiSbapWwancHy0lhFejaW1YuSYd0cU1ftHTUdFx6c6+tTgc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:765fbccd-046a-427d-9090-c6728bf52381,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:62cd327,CLOUDID:2010df29-8055-4e28-ab7d-2959ba08645e,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 06a3de3d523242739635f57692033022-20221114
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <bayi.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2735173; Mon, 14 Nov 2022 16:13:54 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 14 Nov 2022 16:13:52 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 14 Nov 2022 16:13:46 +0800
-From:   Bayi Cheng <bayi.cheng@mediatek.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ikjoon Jang <ikjn@chromium.org>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        bayi cheng <bayi.cheng@mediatek.com>
-Subject: [PATCH v2] spi: spi-mtk-nor: Optimize timeout for dma read
-Date:   Mon, 14 Nov 2022 16:13:27 +0800
-Message-ID: <20221114081327.25750-1-bayi.cheng@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 14 Nov 2022 03:14:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 275A7193C1;
+        Mon, 14 Nov 2022 00:14:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B820F60F01;
+        Mon, 14 Nov 2022 08:14:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1223BC43470;
+        Mon, 14 Nov 2022 08:14:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668413669;
+        bh=qDF+eKEgYeIWIuYOTHuW90RHV71R/0BtAdQ8fI4yF7k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OebRd7n24E+f0cy2n0mYUSYAguNjvlYU1hYbzoXL6i9XXtvDzw509o/nAsrmn5kn+
+         /CRNubYGwxeKLwUr9HjTk6suUQrBmiy0DAL3jrj/s1wIXI3beC24bSa6haar2oqTah
+         pHV5974jL8i1dDbKiDQVH3+1RFezAlPMkVf6yhjGg7MRqpBkTpccAWo9lIffTjQV7o
+         r0g44/kqc3BQ9U8jFrKIizSExY8xakB6AXYtxmunIjoWujFtn9gE9W4zvi7iVP0NJZ
+         DanXWs6hIe9KxXDfNwLop315iJjh1vfqul890QreKrC0t7Vld+wDfmj4yI9gshPabR
+         1y3i2KF4pduNw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1ouUbM-0001Kw-Hf; Mon, 14 Nov 2022 09:13:56 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH v2 0/6] phy: qcom-qmp-combo: preparatory fixes (set 1/3)
+Date:   Mon, 14 Nov 2022 09:13:40 +0100
+Message-Id: <20221114081346.5116-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
-        SPF_HELO_PASS,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: bayi cheng <bayi.cheng@mediatek.com>
+Here's a set of fixes for bugs founds while fixing the devicetree
+binding and adding (proper) support for SC8280XP to the combo driver.
 
-The timeout value of the current dma read is unreasonable. For example,
-If the spi flash clock is 26Mhz, It will takes about 1.3ms to read a
-4KB data in spi mode. But the actual measurement exceeds 50s when a
-dma read timeout is encountered.
+The full series is over forty patches and I'll be posting these in three
+parts of which this is the first. In an effort to get all of these into
+6.2, I'll also be submitting all three series before waiting for the
+previous ones to be applied.
 
-In order to be more accurately, It is necessary to use usecs_to_jiffies,
-After modification, the measured timeout value is about 130ms.
+The first fix below could possibly be considered 6.1-rc material, but I
+believe it's be fine to take all of these for 6.2.
 
-Signed-off-by: bayi cheng <bayi.cheng@mediatek.com>
----
-Change in v2:
-  -Change the type of "timeout" from ulong to u32.
-  -Replace max_t with max.
-  -Replace msecs_to_jiffies with usecs_to_jiffies.
----
----
- drivers/spi/spi-mtk-nor.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Note that the next part of the series will do away with some of problems
+with this driver that led to the issues being fixed here (e.g. the split
+driver data and configuration).
 
-diff --git a/drivers/spi/spi-mtk-nor.c b/drivers/spi/spi-mtk-nor.c
-index d167699a1a96..58eca18b28b0 100644
---- a/drivers/spi/spi-mtk-nor.c
-+++ b/drivers/spi/spi-mtk-nor.c
-@@ -354,7 +354,7 @@ static int mtk_nor_dma_exec(struct mtk_nor *sp, u32 from, unsigned int length,
- 			    dma_addr_t dma_addr)
- {
- 	int ret = 0;
--	ulong delay;
-+	u32 delay, timeout;
- 	u32 reg;
- 
- 	writel(from, sp->base + MTK_NOR_REG_DMA_FADR);
-@@ -376,15 +376,16 @@ static int mtk_nor_dma_exec(struct mtk_nor *sp, u32 from, unsigned int length,
- 	mtk_nor_rmw(sp, MTK_NOR_REG_DMA_CTL, MTK_NOR_DMA_START, 0);
- 
- 	delay = CLK_TO_US(sp, (length + 5) * BITS_PER_BYTE);
-+	timeout = (delay + 1) * 100;
- 
- 	if (sp->has_irq) {
- 		if (!wait_for_completion_timeout(&sp->op_done,
--						 (delay + 1) * 100))
-+		    usecs_to_jiffies(max(timeout, 10000U))))
- 			ret = -ETIMEDOUT;
- 	} else {
- 		ret = readl_poll_timeout(sp->base + MTK_NOR_REG_DMA_CTL, reg,
- 					 !(reg & MTK_NOR_DMA_START), delay / 3,
--					 (delay + 1) * 100);
-+					 timeout);
- 	}
- 
- 	if (ret < 0)
+Johan
+
+
+Changes in v2
+ - fix SW_PWRDN typo in commit message (Dmitry)
+ - use the right commit for the runtime PM Fixes tag (Dmitry)
+
+
+Johan Hovold (6):
+  phy: qcom-qmp-combo: fix out-of-bounds clock access
+  phy: qcom-qmp-combo: fix sdm845 reset
+  phy: qcom-qmp-combo: fix sc8180x reset
+  phy: qcom-qmp-combo: fix broken power on
+  phy: qcom-qmp-combo: fix runtime suspend
+  phy: qcom-qmp-combo: clean up common initialisation
+
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 91 +++++++++++------------
+ 1 file changed, 44 insertions(+), 47 deletions(-)
+
 -- 
-2.25.1
+2.37.4
 
