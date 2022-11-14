@@ -2,85 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5606278D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:17:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFCD6278DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236247AbiKNJRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:17:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60722 "EHLO
+        id S236460AbiKNJSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235832AbiKNJRQ (ORCPT
+        with ESMTP id S235832AbiKNJSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:17:16 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15DA64EB;
-        Mon, 14 Nov 2022 01:17:15 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id E4007320029B;
-        Mon, 14 Nov 2022 04:17:14 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Mon, 14 Nov 2022 04:17:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1668417434; x=1668503834; bh=Nbszh6yKWt
-        PS+eiCWoyZeWj6ob3Ps/hY4GNNusxcFgI=; b=OWN2i4uWyQhbTciMs9PbzmT/0L
-        0LM5iETi8C2bWOYXtBYs1VScxZyhYFqiL/sXqLkeAVtTqnAtLZlLLv2nnT8Ldq0f
-        TqxuHAIjjVdVRZ5zXEuI2RPJ5flVFhhVj0bc8R9qlsl93L1Yaq+/Nnj2fUTKXroB
-        Q+tJbJXtuY4G2d2jXuAyHMoryNAXvbFsJHOG2+48hjYVvOAMQvFrZYIfxTUKN4XX
-        iOyABUuvbW7IrvN9k9axNqvwKv6NKCMCB+ll1Lbn0IF1/SSY7kebUqBikUKmDt6m
-        TW7AOyXGPJc5ZVbcjz/Q4ZxGTVKlx2H/kcU9wlih+OjyY7ZfZgaiz6T7R62w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668417434; x=1668503834; bh=Nbszh6yKWtPS+eiCWoyZeWj6ob3P
-        s/hY4GNNusxcFgI=; b=nmufghBSWlgMbkFlPpJtmPplJcRoFHdTCD/kip6GyH0H
-        yRV4Na5TOE79NAX3QKyWa14zgK6XLc/EXn7H4J9xN7ooDrmdo6Aa24Ho7geUSOEj
-        NGT1INXcdDWX7/Gz1uwH7lbI90GFwoUJvWVX0aGoUf8AuarMXbqAL1GYbZyGijg7
-        nZGUhycZHP05gNhvvM3r7dCtP2XDKTgPRTAk6vf3gc0utQSZP8ZJNm1vXs/g7Ln/
-        9MiNVy8ZMGPdYmFMlZlpFc5AbOLM4Jfu4fG/EXHeABcKiStmM9k44t+1SL8aVHCW
-        fYFNS4cm8YwrD4lkb+NNtD0QKUlez/nsG1KXqLmE3w==
-X-ME-Sender: <xms:mQdyY8oZ9A7GuGZza6fNY-cUfJNN7GDXccqDpNGpL8rlIkCeW6bCwA>
-    <xme:mQdyYyqTSOc4HKTS40L2zw01bf-EKCHj7vkUMzhYjxQJN8JOFrpb9tfF1RWXsyXeZ
-    2fSQa6EKIsM3kydsWA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedugddufeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:mQdyYxO9NryolxJAg04Qm2kFejU4gE2Nkb9vBGOhqGYZyUyzM8DGDg>
-    <xmx:mQdyYz7_lF1fCRiNdRS0x_qV_ghL5ImEoMEus8WjHePvku3jvhr0ew>
-    <xmx:mQdyY74lLgP1NyH_dfogpslGaKnDqUqlEqapGNtwcE4EjLBYKjLxYw>
-    <xmx:mgdyY9nWCpQfp9z6v6SeNWzCqenlc3GgEGkA4tyY0wTvai1hgNpzHg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id CEB17B60086; Mon, 14 Nov 2022 04:17:13 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <1481d53e-9fe3-4605-8776-587a44fdc0ce@app.fastmail.com>
-In-Reply-To: <23be5d9c69ae758602b9de97d47f787fa104961d.camel@nxp.com>
-References: <20221114181752.08a850f0@canb.auug.org.au>
- <02828ff7-c734-4b55-b86e-5cc777e1a35b@app.fastmail.com>
- <23be5d9c69ae758602b9de97d47f787fa104961d.camel@nxp.com>
-Date:   Mon, 14 Nov 2022 10:16:53 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Liu Ying" <victor.liu@nxp.com>,
-        "Stephen Rothwell" <sfr@canb.auug.org.au>,
-        "Greg KH" <greg@kroah.com>
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the char-misc tree
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Mon, 14 Nov 2022 04:18:02 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B1F1DA4B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:18:00 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so10178524wmb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:17:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=W3b//FjMS4rYYJ7oM3rSzlRHPMsqyV/xeMF8hoPwJfw=;
+        b=GHNzWSMw2xUVtaFE/cz5B7bbo0NOd8jx56sPoYFujgt7gLXf4U3mr622kiQa0M81Ce
+         FCR3osuBna4mdy1KnYKDTo5hLVCK29pM3eUa2tRVwf3TiZhmf6TW0uPB65GafDW/woY1
+         uRlmWdOLvvpO4yLA0Vz8UfNPImBffnALVFM3VAKIMtynNtZ7JGy701vy9ni809A00AIM
+         zUoPcqNCv5muyLWFcJoMVm7jHQiL1al8cVnmaS7P0qrykh10d9EAbJ+SM6TzB5Hwrr4q
+         vhQoNoHpcWPtRSsS4299G+qTzl2itDpq/BO1SFc4Rkke6KNMtZtMlnthgoUuFWz+RhEz
+         kBnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W3b//FjMS4rYYJ7oM3rSzlRHPMsqyV/xeMF8hoPwJfw=;
+        b=gGGBNBH3OAzlAw+Iw9YXUhKBSc0Jm/9+X7d8CO0ZMI6SX6S3zuzEbaQeXLH7DqRhqs
+         Jv1PeF+g467vbdegXg5tYI/ug9dUr5xIYa19LxOytdUpc+Tuu+YUh0AYLCYuzsikKysi
+         Ws5i1fmP85QtZxDtVZuR2pPZZBuxO2PURMCEaD/q4QjSHTB1xo4jQn7D7hInTgJNyO2F
+         b0AilvIhmc2zdcLdH6SIreyM6KZtV2McJjObM8/EyDJhAk449RZ3w0ZDrWYVJ1tleNIL
+         /V0JrylBXQGi2yYbDto0OApRDe0cxNrY2jhIiIs9UZJsJURt3jse6Z89Td2HaPraRxa+
+         be+A==
+X-Gm-Message-State: ANoB5plpdxn/vorX3WLS9VI92WyaneHhM/H1N114mpeJhJnVHHd0JfGi
+        db0HKZ8p2DvNdpL8bScvSFHd1A==
+X-Google-Smtp-Source: AA0mqf4dTfVHmiL7wpiXIz4RgBRxSZJ+C/K8Hysdg8u+Ul3idSSDXjlIweJkTxrx1B2fqRed19tr3A==
+X-Received: by 2002:a05:600c:1e11:b0:3cf:84e9:e705 with SMTP id ay17-20020a05600c1e1100b003cf84e9e705mr7385922wmb.28.1668417478546;
+        Mon, 14 Nov 2022 01:17:58 -0800 (PST)
+Received: from Red ([2a01:cb1d:3d5:a100:4a02:2aff:fe07:1efc])
+        by smtp.googlemail.com with ESMTPSA id u12-20020adfdb8c000000b002417ed67bfdsm5900809wri.5.2022.11.14.01.17.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 01:17:58 -0800 (PST)
+Date:   Mon, 14 Nov 2022 10:17:54 +0100
+From:   Corentin LABBE <clabbe@baylibre.com>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: smbus: support new RAM variant for SPD
+Message-ID: <Y3IHwug3UmTzb2wq@Red>
+References: <20221107160602.1912225-1-clabbe@baylibre.com>
+ <20221108114851.4436c3cb@endymion.delvare>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221108114851.4436c3cb@endymion.delvare>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,48 +73,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022, at 10:03, Liu Ying wrote:
-> On Mon, 2022-11-14 at 08:33 +0100, Arnd Bergmann wrote:
->> On Mon, Nov 14, 2022, at 08:17, Stephen Rothwell wrote:
->> > Hi all,
->> > 
->> > After merging the char-misc tree, today's linux-next build (powerpc
->> > allnoconfig) produced these warnings:
->> > 
->> > drivers/bus/simple-pm-bus.c:96:12: warning: 
->> > 'simple_pm_bus_runtime_resume' defined but not used [-Wunused-function]
->> >    96 | static int simple_pm_bus_runtime_resume(struct device *dev)
->> >       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> > drivers/bus/simple-pm-bus.c:87:12: warning: 
->> > 'simple_pm_bus_runtime_suspend' defined but not used [-Wunused-function]
->> >    87 | static int simple_pm_bus_runtime_suspend(struct device *dev)
->> >       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> > 
->> > Introduced by commit
->> > 
->> >   882cf4c913d7 ("drivers: bus: simple-pm-bus: Use clocks")
->> 
->> I see that this is caused by the patch using the old-style
->> SET_RUNTIME_PM_OPS/SET_NOIRQ_SYSTEM_SLEEP_PM_OPS macros
->> instead of the correct SYSTEM_SLEEP_PM_OPS/NOIRQ_SYSTEM_SLEEP_PM_OPS
->> versions.
->> 
->
-> You meant RUNTIME_PM_OPS/NOIRQ_SYSTEM_SLEEP_PM_OPS macros should be
-> used, right?
+Le Tue, Nov 08, 2022 at 11:48:51AM +0100, Jean Delvare a écrit :
+> Hi Corentin,
+> 
+> On Mon,  7 Nov 2022 16:06:02 +0000, Corentin Labbe wrote:
+> > On my x05 laptop I got:
+> > Memory type 0x12 not supported yet, not instantiating SPD
+> 
+> 
+> Oh, that one must be old.
+> 
+> > Adding the 0x12 case lead to a successful instantiated SPD AT24 EEPROM.
+> > i801_smbus 0000:00:1f.3: SMBus using polling
+> > i2c i2c-6: 2/2 memory slots populated (from DMI)
+> > at24 6-0050: 256 byte spd EEPROM, read-only
+> > i2c i2c-6: Successfully instantiated SPD at 0x50
+> > at24 6-0051: 256 byte spd EEPROM, read-only
+> > i2c i2c-6: Successfully instantiated SPD at 0x51
+> > 
+> > And then, I decoded it successfully via decode-dimms.
+> > 
+> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> > ---
+> > The result of decode-dimms could be found at http://kernel.montjoie.ovh/zoo/x05/decode-dimms.txt
+> > Since RAM is DDR, I wanted to add '/* DDR */' comment, but I didnt find any document with
+> > proof that this 0x12 is for DDR.
+> 
+> It is. The document you are looking for is:
+> https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_3.6.0.pdf
+> 
+> and specifically section 7.18.2 (Memory Device — Type), table 78
+> (Memory Device: Type).
+> 
 
-Right, sorry for mixing up the runtime ones.
+Hello
 
-> Why not add __maybe_unused to the callbacks like below snippet instead?
-> This way, the old-style macros may determine those callbacks are NULL
-> or non-NULL according to CONFIG_PM_SLEEP and CONFIG_PM.
+Thanks for the link, I will add it also as comment.
 
-That was the old way of doing it before 1a3c7bb08826 ("PM: core: Add
-new *_PM_OPS macros, deprecate old ones"), we are slowly moving to
-the new ones instead to avoid having to add __maybe_unused annotations.
+> > 
+> >  drivers/i2c/i2c-smbus.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
+> > index 07c92c8495a3..6dca19c994db 100644
+> > --- a/drivers/i2c/i2c-smbus.c
+> > +++ b/drivers/i2c/i2c-smbus.c
+> > @@ -362,6 +362,7 @@ void i2c_register_spd(struct i2c_adapter *adap)
+> >  	}
+> >  
+> >  	switch (common_mem_type) {
+> > +	case 0x12:
+> >  	case 0x13:	/* DDR2 */
+> >  	case 0x18:	/* DDR3 */
+> >  	case 0x1C:	/* LPDDR2 */
+> 
+> Please also add LPDDR (0x1B) for consistency.
 
-You may however want to use ".pm = pm_ptr(&simple_pm_bus_pm_ops)" if
-you care about the space savings for configurations with CONFIG_PM
-disabled.
 
-      Arnd
+Will do it.
+
+Thanks
+Regards
