@@ -2,63 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D47C9628621
+	by mail.lfdr.de (Postfix) with ESMTP id 885CA628620
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237384AbiKNQzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:55:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35460 "EHLO
+        id S237469AbiKNQzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238010AbiKNQzL (ORCPT
+        with ESMTP id S237434AbiKNQzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:55:11 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80E652F66C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:55:01 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4DD4923A;
-        Mon, 14 Nov 2022 08:55:07 -0800 (PST)
-Received: from [10.57.84.113] (unknown [10.57.84.113])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C696E3F663;
-        Mon, 14 Nov 2022 08:54:55 -0800 (PST)
-Message-ID: <41c4d78c-cb47-d06f-f6af-e827dd56b857@arm.com>
-Date:   Mon, 14 Nov 2022 16:54:57 +0000
+        Mon, 14 Nov 2022 11:55:14 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D37623155
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:55:11 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id l12so20261926lfp.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:55:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jF4OEMg7hvxESynrdb7E7hlSL43JmsocPVZddDgOiFo=;
+        b=WPSMFOwi31MUOeiJ+cTpsjM6/C8lQSMPFHbPZidZM4PyIy4mYN6toDVXotHbjJ1BMS
+         RfXfJYsMMwYyQ3B4BfrrpntdrA2TE5rrEWiCLGSqrbQHAnIu1R97zU02lxfmrORIFQdf
+         qP5sNq0M2msLGA5nV6fPTD7iEOpIbuJj98kFQo48IN5vdeXoBasVqygOG0xNWW2NCg10
+         Eq1NvhRkwZileB83g6k4q0j/9MsKlVOYlwPxQWXCJGfUr1EtCAcx1WT9Kt8DtCgb8Xcf
+         V9xaicQ6d3cGr8Mv356ed7ukt5s/GTkjgO8H1Ydn7N+wXz0EH3t11PI9jKJZN0tP5v1G
+         Trow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jF4OEMg7hvxESynrdb7E7hlSL43JmsocPVZddDgOiFo=;
+        b=ePwRzsH/7RCLJjTiv1lQEdS+8v/+69c0YLZP1DP4zbVeojiEJsIqIUgkcZUOj+pO18
+         V2HOqrfXD+9BqdTsSWk4tXggNzKplAsN0o1aKtV9XVQQW75Q0BZr5aylXLhok5VoXFSg
+         ekfl8RpCpPttpGaRixMT1EHZ1wE+fgzWE1afvilk2G0Ee7us2WDRrlb+Lxl3FvEHvxAB
+         raGCJclq459qEQqpUDLILx1cUZXmKZsICHGb5BX0d5tEXRvQ1Snwme1X1tpGwTeTuCnY
+         yqlQddP78o0520sSjm+7o11nDFhcAUq5cX9OrrDTGKr5OZ9KSg7u7doptqcJaJaJaLkq
+         qFvg==
+X-Gm-Message-State: ANoB5pltFP/esd9yn7CxS1lhcslMc8FwNYKh8pqBCxiee5SwWQNeFsH9
+        zng74FfIASJSvKs+a4ke42c=
+X-Google-Smtp-Source: AA0mqf4K2zCpjFD9TxbzRAt0ef7UbBn+a4/pF5tiqZWrNz6kkC2bEPdlzX9anp13FqgtVhMKYrDOzw==
+X-Received: by 2002:a19:6548:0:b0:4b4:107e:368 with SMTP id c8-20020a196548000000b004b4107e0368mr5143542lfj.370.1668444909709;
+        Mon, 14 Nov 2022 08:55:09 -0800 (PST)
+Received: from pc636 (host-90-235-25-77.mobileonline.telia.com. [90.235.25.77])
+        by smtp.gmail.com with ESMTPSA id s5-20020a056512214500b0048b26d4bb64sm1881632lfr.40.2022.11.14.08.55.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 08:55:09 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Mon, 14 Nov 2022 17:55:06 +0100
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH v2 1/7] mm: vmalloc: Add alloc_vmap_area trace event
+Message-ID: <Y3Jy6rSAiHco5q7v@pc636>
+References: <20221018181053.434508-1-urezki@gmail.com>
+ <20221018181053.434508-2-urezki@gmail.com>
+ <20221114105325.57d27b6f@gandalf.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v8 7/7] drm/panfrost: Switch to generic memory shrinker
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, kernel@collabora.com,
-        virtualization@lists.linux-foundation.org
-References: <20221105232719.302619-1-dmitry.osipenko@collabora.com>
- <20221105232719.302619-8-dmitry.osipenko@collabora.com>
-Content-Language: en-GB
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <20221105232719.302619-8-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221114105325.57d27b6f@gandalf.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,408 +79,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/11/2022 23:27, Dmitry Osipenko wrote:
-> Replace Panfrost's custom memory shrinker with a common drm-shmem
-> memory shrinker.
+> On Tue, 18 Oct 2022 20:10:47 +0200
+> "Uladzislau Rezki (Sony)" <urezki@gmail.com> wrote:
 > 
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-
-Sadly this triggers GPU faults under memory pressure - it looks
-suspiciously like mappings are being freed while the jobs are still running.
-
-I'm not sure I understand how the generic shrinker replicates the
-"gpu_usecount" atomic that Panfrost currently has, and I'm wondering if
-that's the cause?
-
-Also just reverting this commit (so just patches 1-6) I can't actually
-get Panfrost to purge any memory. So I don't think the changes (most
-likely in patch 4) are quite right either.
-
-At the moment I don't have the time to investigate in detail. But if
-you've any ideas for something specific I should look at I can run more
-testing.
-
-Steve
-
-> ---
->  drivers/gpu/drm/panfrost/Makefile             |   1 -
->  drivers/gpu/drm/panfrost/panfrost_device.h    |   4 -
->  drivers/gpu/drm/panfrost/panfrost_drv.c       |  19 +--
->  drivers/gpu/drm/panfrost/panfrost_gem.c       |  33 +++--
->  drivers/gpu/drm/panfrost/panfrost_gem.h       |   9 --
->  .../gpu/drm/panfrost/panfrost_gem_shrinker.c  | 129 ------------------
->  drivers/gpu/drm/panfrost/panfrost_job.c       |  18 ++-
->  7 files changed, 42 insertions(+), 171 deletions(-)
->  delete mode 100644 drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+> > It is for a debug purpose and for validation of passed parameters.
+> > 
+> > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > ---
+> >  include/trace/events/vmalloc.h | 56 ++++++++++++++++++++++++++++++++++
+> >  1 file changed, 56 insertions(+)
+> >  create mode 100644 include/trace/events/vmalloc.h
+> > 
+> > diff --git a/include/trace/events/vmalloc.h b/include/trace/events/vmalloc.h
+> > new file mode 100644
+> > index 000000000000..39fbd77c91e7
+> > --- /dev/null
+> > +++ b/include/trace/events/vmalloc.h
+> > @@ -0,0 +1,56 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#undef TRACE_SYSTEM
+> > +#define TRACE_SYSTEM vmalloc
+> > +
+> > +#if !defined(_TRACE_VMALLOC_H) || defined(TRACE_HEADER_MULTI_READ)
+> > +#define _TRACE_VMALLOC_H
+> > +
+> > +#include <linux/tracepoint.h>
+> > +
+> > +/**
+> > + * alloc_vmap_area - called when a new vmap allocation occurs
+> > + * @addr:	an allocated address
+> > + * @size:	a requested size
+> > + * @align:	a requested alignment
+> > + * @vstart:	a requested start range
+> > + * @vend:	a requested end range
+> > + * @failed:	an allocation failed or not
+> > + *
+> > + * This event is used for a debug purpose, it can give an extra
+> > + * information for a developer about how often it occurs and which
+> > + * parameters are passed for further validation.
+> > + */
+> > +TRACE_EVENT(alloc_vmap_area,
+> > +
+> > +	TP_PROTO(unsigned long addr, unsigned long size, unsigned long align,
+> > +		unsigned long vstart, unsigned long vend, int failed),
+> > +
+> > +	TP_ARGS(addr, size, align, vstart, vend, failed),
 > 
-> diff --git a/drivers/gpu/drm/panfrost/Makefile b/drivers/gpu/drm/panfrost/Makefile
-> index 7da2b3f02ed9..11622e22cf15 100644
-> --- a/drivers/gpu/drm/panfrost/Makefile
-> +++ b/drivers/gpu/drm/panfrost/Makefile
-> @@ -5,7 +5,6 @@ panfrost-y := \
->  	panfrost_device.o \
->  	panfrost_devfreq.o \
->  	panfrost_gem.o \
-> -	panfrost_gem_shrinker.o \
->  	panfrost_gpu.o \
->  	panfrost_job.o \
->  	panfrost_mmu.o \
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_device.h b/drivers/gpu/drm/panfrost/panfrost_device.h
-> index 8b25278f34c8..fe04b21fc044 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_device.h
-> +++ b/drivers/gpu/drm/panfrost/panfrost_device.h
-> @@ -115,10 +115,6 @@ struct panfrost_device {
->  		atomic_t pending;
->  	} reset;
+> The above is passed in via (from patch 4):
+> 
+> 
+> @@ -1621,6 +1624,8 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
+>  		size, align, vstart, vend);
+>  	spin_unlock(&free_vmap_area_lock);
 >  
-> -	struct mutex shrinker_lock;
-> -	struct list_head shrinker_list;
-> -	struct shrinker shrinker;
-> -
->  	struct panfrost_devfreq pfdevfreq;
->  };
->  
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
-> index 94b8e6de34b8..fe78d5c75abf 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
-> @@ -160,7 +160,6 @@ panfrost_lookup_bos(struct drm_device *dev,
->  			break;
->  		}
->  
-> -		atomic_inc(&bo->gpu_usecount);
->  		job->mappings[i] = mapping;
->  	}
->  
-> @@ -392,7 +391,6 @@ static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
->  {
->  	struct panfrost_file_priv *priv = file_priv->driver_priv;
->  	struct drm_panfrost_madvise *args = data;
-> -	struct panfrost_device *pfdev = dev->dev_private;
->  	struct drm_gem_object *gem_obj;
->  	struct panfrost_gem_object *bo;
->  	int ret = 0;
-> @@ -409,7 +407,6 @@ static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
->  	if (ret)
->  		goto out_put_object;
->  
-> -	mutex_lock(&pfdev->shrinker_lock);
->  	mutex_lock(&bo->mappings.lock);
->  	if (args->madv == PANFROST_MADV_DONTNEED) {
->  		struct panfrost_gem_mapping *first;
-> @@ -435,17 +432,8 @@ static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
->  
->  	args->retained = drm_gem_shmem_madvise(&bo->base, args->madv);
->  
-> -	if (args->retained) {
-> -		if (args->madv == PANFROST_MADV_DONTNEED)
-> -			list_move_tail(&bo->base.madv_list,
-> -				       &pfdev->shrinker_list);
-> -		else if (args->madv == PANFROST_MADV_WILLNEED)
-> -			list_del_init(&bo->base.madv_list);
-> -	}
-> -
->  out_unlock_mappings:
->  	mutex_unlock(&bo->mappings.lock);
-> -	mutex_unlock(&pfdev->shrinker_lock);
->  	dma_resv_unlock(bo->base.base.resv);
->  out_put_object:
->  	drm_gem_object_put(gem_obj);
-> @@ -577,9 +565,6 @@ static int panfrost_probe(struct platform_device *pdev)
->  	ddev->dev_private = pfdev;
->  	pfdev->ddev = ddev;
->  
-> -	mutex_init(&pfdev->shrinker_lock);
-> -	INIT_LIST_HEAD(&pfdev->shrinker_list);
-> -
->  	err = panfrost_device_init(pfdev);
->  	if (err) {
->  		if (err != -EPROBE_DEFER)
-> @@ -601,7 +586,7 @@ static int panfrost_probe(struct platform_device *pdev)
->  	if (err < 0)
->  		goto err_out1;
->  
-> -	panfrost_gem_shrinker_init(ddev);
-> +	drm_gem_shmem_shrinker_register(ddev, "panfrost-shrinker");
->  
->  	return 0;
->  
-> @@ -619,8 +604,8 @@ static int panfrost_remove(struct platform_device *pdev)
->  	struct panfrost_device *pfdev = platform_get_drvdata(pdev);
->  	struct drm_device *ddev = pfdev->ddev;
->  
-> +	drm_gem_shmem_shrinker_unregister(ddev);
->  	drm_dev_unregister(ddev);
-> -	panfrost_gem_shrinker_cleanup(ddev);
->  
->  	pm_runtime_get_sync(pfdev->dev);
->  	pm_runtime_disable(pfdev->dev);
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.c b/drivers/gpu/drm/panfrost/panfrost_gem.c
-> index 293e799e2fe8..f1436405e3a0 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_gem.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_gem.c
-> @@ -19,16 +19,6 @@ static void panfrost_gem_free_object(struct drm_gem_object *obj)
->  	struct panfrost_gem_object *bo = to_panfrost_bo(obj);
->  	struct panfrost_device *pfdev = obj->dev->dev_private;
->  
-> -	/*
-> -	 * Make sure the BO is no longer inserted in the shrinker list before
-> -	 * taking care of the destruction itself. If we don't do that we have a
-> -	 * race condition between this function and what's done in
-> -	 * panfrost_gem_shrinker_scan().
-> -	 */
-> -	mutex_lock(&pfdev->shrinker_lock);
-> -	list_del_init(&bo->base.madv_list);
-> -	mutex_unlock(&pfdev->shrinker_lock);
-> -
+> +	trace_alloc_vmap_area(addr, size, align, vstart, vend, addr == vend);
+> +
 >  	/*
->  	 * If we still have mappings attached to the BO, there's a problem in
->  	 * our refcounting.
-> @@ -209,6 +199,25 @@ static const struct drm_gem_object_funcs panfrost_gem_funcs = {
->  	.vm_ops = &drm_gem_shmem_vm_ops,
->  };
->  
-> +static int panfrost_shmem_evict(struct drm_gem_shmem_object *shmem)
-> +{
-> +	struct panfrost_gem_object *bo = to_panfrost_bo(&shmem->base);
-> +
-> +	if (!drm_gem_shmem_is_purgeable(shmem))
-> +		return -EOPNOTSUPP;
-> +
-> +	if (!mutex_trylock(&bo->mappings.lock))
-> +		return -EBUSY;
-> +
-> +	panfrost_gem_teardown_mappings_locked(bo);
-> +
-> +	drm_gem_shmem_purge(shmem);
-> +
-> +	mutex_unlock(&bo->mappings.lock);
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * panfrost_gem_create_object - Implementation of driver->gem_create_object.
->   * @dev: DRM device
-> @@ -230,6 +239,7 @@ struct drm_gem_object *panfrost_gem_create_object(struct drm_device *dev, size_t
->  	mutex_init(&obj->mappings.lock);
->  	obj->base.base.funcs = &panfrost_gem_funcs;
->  	obj->base.map_wc = !pfdev->coherent;
-> +	obj->base.evict = panfrost_shmem_evict;
->  
->  	return &obj->base.base;
->  }
-> @@ -266,6 +276,9 @@ panfrost_gem_create_with_handle(struct drm_file *file_priv,
->  	if (ret)
->  		return ERR_PTR(ret);
->  
-> +	if (!bo->is_heap)
-> +		drm_gem_shmem_set_purgeable(shmem);
-> +
->  	return bo;
->  }
->  
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.h b/drivers/gpu/drm/panfrost/panfrost_gem.h
-> index 8088d5fd8480..09da064f1c07 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_gem.h
-> +++ b/drivers/gpu/drm/panfrost/panfrost_gem.h
-> @@ -30,12 +30,6 @@ struct panfrost_gem_object {
->  		struct mutex lock;
->  	} mappings;
->  
-> -	/*
-> -	 * Count the number of jobs referencing this BO so we don't let the
-> -	 * shrinker reclaim this object prematurely.
-> -	 */
-> -	atomic_t gpu_usecount;
-> -
->  	bool noexec		:1;
->  	bool is_heap		:1;
->  };
-> @@ -84,7 +78,4 @@ panfrost_gem_mapping_get(struct panfrost_gem_object *bo,
->  void panfrost_gem_mapping_put(struct panfrost_gem_mapping *mapping);
->  void panfrost_gem_teardown_mappings_locked(struct panfrost_gem_object *bo);
->  
-> -void panfrost_gem_shrinker_init(struct drm_device *dev);
-> -void panfrost_gem_shrinker_cleanup(struct drm_device *dev);
-> -
->  #endif /* __PANFROST_GEM_H__ */
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
-> deleted file mode 100644
-> index 865a989d67c8..000000000000
-> --- a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
-> +++ /dev/null
-> @@ -1,129 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -/* Copyright (C) 2019 Arm Ltd.
-> - *
-> - * Based on msm_gem_freedreno.c:
-> - * Copyright (C) 2016 Red Hat
-> - * Author: Rob Clark <robdclark@gmail.com>
-> - */
-> -
-> -#include <linux/list.h>
-> -
-> -#include <drm/drm_device.h>
-> -#include <drm/drm_gem_shmem_helper.h>
-> -
-> -#include "panfrost_device.h"
-> -#include "panfrost_gem.h"
-> -#include "panfrost_mmu.h"
-> -
-> -static bool panfrost_gem_shmem_is_purgeable(struct drm_gem_shmem_object *shmem)
-> -{
-> -	return (shmem->madv > 0) &&
-> -		!shmem->pages_pin_count && shmem->sgt &&
-> -		!shmem->base.dma_buf && !shmem->base.import_attach;
-> -}
-> -
-> -static unsigned long
-> -panfrost_gem_shrinker_count(struct shrinker *shrinker, struct shrink_control *sc)
-> -{
-> -	struct panfrost_device *pfdev =
-> -		container_of(shrinker, struct panfrost_device, shrinker);
-> -	struct drm_gem_shmem_object *shmem;
-> -	unsigned long count = 0;
-> -
-> -	if (!mutex_trylock(&pfdev->shrinker_lock))
-> -		return 0;
-> -
-> -	list_for_each_entry(shmem, &pfdev->shrinker_list, madv_list) {
-> -		if (panfrost_gem_shmem_is_purgeable(shmem))
-> -			count += shmem->base.size >> PAGE_SHIFT;
-> -	}
-> -
-> -	mutex_unlock(&pfdev->shrinker_lock);
-> -
-> -	return count;
-> -}
-> -
-> -static bool panfrost_gem_purge(struct drm_gem_object *obj)
-> -{
-> -	struct drm_gem_shmem_object *shmem = to_drm_gem_shmem_obj(obj);
-> -	struct panfrost_gem_object *bo = to_panfrost_bo(obj);
-> -	bool ret = false;
-> -
-> -	if (atomic_read(&bo->gpu_usecount))
-> -		return false;
-> -
-> -	if (!mutex_trylock(&bo->mappings.lock))
-> -		return false;
-> -
-> -	if (!dma_resv_trylock(shmem->base.resv))
-> -		goto unlock_mappings;
-> -
-> -	panfrost_gem_teardown_mappings_locked(bo);
-> -	drm_gem_shmem_purge(&bo->base);
-> -	ret = true;
-> -
-> -	dma_resv_unlock(shmem->base.resv);
-> -
-> -unlock_mappings:
-> -	mutex_unlock(&bo->mappings.lock);
-> -	return ret;
-> -}
-> -
-> -static unsigned long
-> -panfrost_gem_shrinker_scan(struct shrinker *shrinker, struct shrink_control *sc)
-> -{
-> -	struct panfrost_device *pfdev =
-> -		container_of(shrinker, struct panfrost_device, shrinker);
-> -	struct drm_gem_shmem_object *shmem, *tmp;
-> -	unsigned long freed = 0;
-> -
-> -	if (!mutex_trylock(&pfdev->shrinker_lock))
-> -		return SHRINK_STOP;
-> -
-> -	list_for_each_entry_safe(shmem, tmp, &pfdev->shrinker_list, madv_list) {
-> -		if (freed >= sc->nr_to_scan)
-> -			break;
-> -		if (drm_gem_shmem_is_purgeable(shmem) &&
-> -		    panfrost_gem_purge(&shmem->base)) {
-> -			freed += shmem->base.size >> PAGE_SHIFT;
-> -			list_del_init(&shmem->madv_list);
-> -		}
-> -	}
-> -
-> -	mutex_unlock(&pfdev->shrinker_lock);
-> -
-> -	if (freed > 0)
-> -		pr_info_ratelimited("Purging %lu bytes\n", freed << PAGE_SHIFT);
-> -
-> -	return freed;
-> -}
-> -
-> -/**
-> - * panfrost_gem_shrinker_init - Initialize panfrost shrinker
-> - * @dev: DRM device
-> - *
-> - * This function registers and sets up the panfrost shrinker.
-> - */
-> -void panfrost_gem_shrinker_init(struct drm_device *dev)
-> -{
-> -	struct panfrost_device *pfdev = dev->dev_private;
-> -	pfdev->shrinker.count_objects = panfrost_gem_shrinker_count;
-> -	pfdev->shrinker.scan_objects = panfrost_gem_shrinker_scan;
-> -	pfdev->shrinker.seeks = DEFAULT_SEEKS;
-> -	WARN_ON(register_shrinker(&pfdev->shrinker, "drm-panfrost"));
-> -}
-> -
-> -/**
-> - * panfrost_gem_shrinker_cleanup - Clean up panfrost shrinker
-> - * @dev: DRM device
-> - *
-> - * This function unregisters the panfrost shrinker.
-> - */
-> -void panfrost_gem_shrinker_cleanup(struct drm_device *dev)
-> -{
-> -	struct panfrost_device *pfdev = dev->dev_private;
-> -
-> -	if (pfdev->shrinker.nr_deferred) {
-> -		unregister_shrinker(&pfdev->shrinker);
-> -	}
-> -}
-> diff --git a/drivers/gpu/drm/panfrost/panfrost_job.c b/drivers/gpu/drm/panfrost/panfrost_job.c
-> index dbc597ab46fb..98d9751d2b2c 100644
-> --- a/drivers/gpu/drm/panfrost/panfrost_job.c
-> +++ b/drivers/gpu/drm/panfrost/panfrost_job.c
-> @@ -272,6 +272,19 @@ static void panfrost_attach_object_fences(struct drm_gem_object **bos,
->  		dma_resv_add_fence(bos[i]->resv, fence, DMA_RESV_USAGE_WRITE);
->  }
->  
-> +static int panfrost_objects_prepare(struct drm_gem_object **bos, int bo_count)
-> +{
-> +	struct panfrost_gem_object *bo;
-> +	int ret = 0;
-> +
-> +	while (!ret && bo_count--) {
-> +		bo = to_panfrost_bo(bos[bo_count]);
-> +		ret = bo->base.madv ? -ENOMEM : 0;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  int panfrost_job_push(struct panfrost_job *job)
->  {
->  	struct panfrost_device *pfdev = job->pfdev;
-> @@ -283,6 +296,10 @@ int panfrost_job_push(struct panfrost_job *job)
->  	if (ret)
->  		return ret;
->  
-> +	ret = panfrost_objects_prepare(job->bos, job->bo_count);
-> +	if (ret)
-> +		goto unlock;
-> +
->  	mutex_lock(&pfdev->sched_lock);
->  	drm_sched_job_arm(&job->base);
->  
-> @@ -324,7 +341,6 @@ static void panfrost_job_cleanup(struct kref *ref)
->  			if (!job->mappings[i])
->  				break;
->  
-> -			atomic_dec(&job->mappings[i]->obj->gpu_usecount);
->  			panfrost_gem_mapping_put(job->mappings[i]);
->  		}
->  		kvfree(job->mappings);
+>  	 * If an allocation fails, the "vend" address is
+>  	 * returned. Therefore trigger the overflow path.
+> 
+> > +
+> > +	TP_STRUCT__entry(
+> > +		__field(unsigned long, addr)
+> > +		__field(unsigned long, size)
+> > +		__field(unsigned long, align)
+> > +		__field(unsigned long, vstart)
+> > +		__field(unsigned long, vend)
+> 
+> > +		__field(int, failed)
+> 
+> I would drop the failed field...
+> 
+> > +	),
+> > +
+> > +	TP_fast_assign(
+> > +		__entry->addr = addr;
+> > +		__entry->size = size;
+> > +		__entry->align = align;
+> > +		__entry->vstart = vstart;
+> > +		__entry->vend = vend;
+> 
+> And instead have:
+> 
+> 		__entry->failed = addr == vend;
+> 
+> Why pass in a parameter that can be calculated in the trace event logic?
+>
+It can be. A condition about when it is failed or not is taken on upper
+level because it might be changed afterwards. So a trace event is not
+aware about it thus no need in adaptation.
 
+But i do not have a strong opinion here. I can prepare a patch to
+eliminate it.
+
+What is your preference?
+
+--
+Uladzislau Rezki
