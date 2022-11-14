@@ -2,119 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5377B6273DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 01:34:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA806273E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 01:34:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbiKNAeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 19:34:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
+        id S235584AbiKNAek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 19:34:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234264AbiKNAeG (ORCPT
+        with ESMTP id S234264AbiKNAei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 19:34:06 -0500
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C85DE090
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 16:34:05 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|ian@linux.cowan.aero
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 45CDD6C0C58;
-        Mon, 14 Nov 2022 00:34:04 +0000 (UTC)
-Received: from pdx1-sub0-mail-a299.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 981176C09C2;
-        Mon, 14 Nov 2022 00:34:03 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1668386043; a=rsa-sha256;
-        cv=none;
-        b=sXr3lZKSBd3gA/9CTRjW3deFnYx8CEljjsndKRhYRwz29hkxbdZUAuwFpBMBKh/wbOoa67
-        rpGXR5T/aV3tg5lQndo+CXF9tsDuSBihCvo0nJ6d21hgd7SkC07sDG0XMNpk+B3ZKTeqTl
-        RCFSPzKSZ5gVRnpzekhTGVwYd9t50t0BQlYhzDPO/GYs858m1nKhKE7xgwYrI8A5wkylks
-        43fqaPjwQI0sBm5egMkpxCNqvdsgbG/J4o6ZShURRMH2bIRUJK+tlzgsGKMWiNZDUNVVMp
-        tvqLzH483rDKHeqoNB6EwDqJGhRkz/V8mREbgCODUxgUN3jbhjykpNSLsj2Ubg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1668386043;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:dkim-signature;
-        bh=iEeLb2Txom9s2JPgG9LZpQszQ2eBr1flUZDsnu9gutw=;
-        b=ISuW8yJfYu2XuhIrvFOxjYeZifYrQNin4O25k2om2JPXP9Fj1Y811oBN0HPc1yaB0bh64u
-        OFKza5m7jmdCvf9sY+d7pq2RE8IBrjTIVofqR5+F+Il1aryEC1xadCUL8g2a79oMe5mHY3
-        Q2+8VhUaZ4/LAO/dQZP1W4IbX1BColpIhtzlfp4k4rZEj6PbC42zGIcMyqTn77FXvSE8LU
-        BbAn2gJuflDTWaqTK7S8MQ7ZDWbBp1eCJJ+NeGcI9LGRueY46vMOf2/WEFGYdwgKUWbOWE
-        85v+bOvH8uPpAcEhrIIKAxNvnBL8z3elfG6E2Cp505hPMPq8AfNKdKkDDHr71Q==
-ARC-Authentication-Results: i=1;
-        rspamd-5cb65d95c4-bvckr;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=ian@linux.cowan.aero
-X-Sender-Id: dreamhost|x-authsender|ian@linux.cowan.aero
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|ian@linux.cowan.aero
-X-MailChannels-Auth-Id: dreamhost
-X-Spill-Minister: 2ad575ce2edc83af_1668386043869_836292686
-X-MC-Loop-Signature: 1668386043869:2075585772
-X-MC-Ingress-Time: 1668386043868
-Received: from pdx1-sub0-mail-a299.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.103.24.86 (trex/6.7.1);
-        Mon, 14 Nov 2022 00:34:03 +0000
-Received: from rhino.lan (dsl-50-5-144-34.fuse.net [50.5.144.34])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: ian@linux.cowan.aero)
-        by pdx1-sub0-mail-a299.dreamhost.com (Postfix) with ESMTPSA id 4N9Vfy3TbLz3B;
-        Sun, 13 Nov 2022 16:34:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.cowan.aero;
-        s=dreamhost; t=1668386043;
-        bh=iEeLb2Txom9s2JPgG9LZpQszQ2eBr1flUZDsnu9gutw=;
-        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=pkZYl7rZWL4HG3hvMxHoTwtHsrmDzG1kp6MOFrSPpMkdEPzqofIfe1Yb5PdzM0sdu
-         c/eHxxroPeisOFjG56h+xwOEjMD6Fdl+iUiJU4P2uNXubMaTqFhJOfnrFDVeOL+Bjz
-         CSVOtBk3yfQjQgrFW0KkNAfPfbQn+xGVWyAlpPd6GZ0osOaCbRPFENxEnm8nl4yKae
-         gyevAgCOonTY3HldRB1R11bJauFA0YPP/Jpbf3LWKfZsLQ13mGn+ye++0uQcduQwwF
-         AmyAZ7RCMM6YtZiUq10LOMnKLLwbGfXj7GTJSzjam9KR53bPwwPG7HEfPG+44eL/MY
-         B+yd1D5ts8Eyg==
-From:   Ian Cowan <ian@linux.cowan.aero>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Ian Cowan <ian@linux.cowan.aero>
-Subject: [PATCH] mm: mmap: fix documentation for vma_mas_szero
-Date:   Sun, 13 Nov 2022 19:33:49 -0500
-Message-Id: <20221114003349.41235-1-ian@linux.cowan.aero>
-X-Mailer: git-send-email 2.38.1
+        Sun, 13 Nov 2022 19:34:38 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3BCE093
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 16:34:38 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 73892320090B;
+        Sun, 13 Nov 2022 19:34:34 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sun, 13 Nov 2022 19:34:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1668386074; x=
+        1668472474; bh=JWCaNPNku2WcRjI/vXx0mmk36Axrc/QAZnO/9E8Yb7w=; b=y
+        y22+SBeTE7NzkvoXCyHhjM6xpNFCWAvcSNd7siC+iuQK1hQ4ib7ndqvq7aQ93RuZ
+        vaxIQukHGGc8/k438DT8lYuCMpbAW3SbBEjpYd/MXl2bHDtpWZi66EFKqxxptUAY
+        3SdYyYXrso+ps7tWXUk8kGz0+g0AOWODdk6RpdKvIIY0gUbIIBVxjA4uN1oeHPJY
+        MDNgt1MoKZF1YLfeiMDHn0YMqAQeWWBMX4o5wd8H/yEJUMu+LzC7ol1WLg/ZtoQ5
+        FdAWhQPiKSL0Q3LeERpjFygM0TL30WBDKO/9OjFxOd0mA/YI7DkSF5Lp/HGKVbxE
+        FESRdYk5foVfDSGVkcabA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668386074; x=
+        1668472474; bh=JWCaNPNku2WcRjI/vXx0mmk36Axrc/QAZnO/9E8Yb7w=; b=n
+        Eno6uAakEAYLLVaDHC0LEFNZrsvt7InkYfGKW02JsZNoB5NYmYHcpzxjkGEkUJOC
+        usJ1qC7bxoei3mN//citsERdGVUMDKuKAdT3Ax24CWCvDsJzTUgdyUmbIWUNO7/m
+        FJrUxQTpqpg5tF95DcIP3KFH099V2Y7gxv9mNrxreCPtEM3Bs6/yQw7isDE1T4tO
+        WqnaL3pVj1F7JPL++G0eRFSxJk8+LeTq+gCYnKa6mhiu45IjZ7X0kcIRqZDX+AdN
+        5kCodwAIrd/c9849xAx3lG3ZhQZkXBaLOo0AAJlw0e2ilqWWMaEqvMmALbDcHOOg
+        y0qUNIBa4wr9ZXDaMJ88w==
+X-ME-Sender: <xms:GY1xYyaNF6NDggmi_3DifoUnlfwV4I6jULPz-Qh27t3_30yH2ZK_DA>
+    <xme:GY1xY1ZZ1fSgKXsI1lizha-HCdDNChZNe3FT0kn0-Cs9rR4CAot1Z8y4Pf8PcOQJD
+    n99cpV7olspEjSg1A>
+X-ME-Received: <xmr:GY1xY8-lwtN8I2jZhb-n2YEzNwcKxcteXbMu2clAfJa-o4Ziz-uRWLMTjrDr_wTsD0PhTuA2bb_dMLchpyHQrK9IL-mnEAIGtC5S8rtRh6fLOM2G_B-jeiU6eg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedugddvfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepkeejleelfeeitdfhtdfgkeeghedufeduueegffdvhfdukeelleef
+    tdetjeehuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:GY1xY0r_j6w2S0xGO5los7x39XP_Kk5v2-pOaGdTyDJ_imH7FyT5Nw>
+    <xmx:GY1xY9ryJ5mbbNHysbNscHlyIVJ9XypKCs901i7SfJTRl-cw4olKdA>
+    <xmx:GY1xYyTfEIhVfFoyUMrxtWUiPei6J5QeeAIQinB9Cpqid9jLCFuh6g>
+    <xmx:Go1xY6jvOI51jgUTtVrqrARqAYXuX0AB3vFDsCmRPBLIaG_8kQTIkg>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 13 Nov 2022 19:34:32 -0500 (EST)
+Message-ID: <22ca0f6f-1e2e-3dc0-46f8-8399889c240c@sholland.org>
+Date:   Sun, 13 Nov 2022 18:34:31 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 06/26] drm: sun4i: Use the dev_pm_ops provided by modeset
+ helper
+Content-Language: en-US
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+References: <20221107175106.360578-1-paul@crapouillou.net>
+ <20221107175106.360578-7-paul@crapouillou.net>
+From:   Samuel Holland <samuel@sholland.org>
+In-Reply-To: <20221107175106.360578-7-paul@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the struct_mm input, mm, was changed to a struct ma_state, mas, the
-documentation for the function was never updated. This updates that
-documentation reference.
+On 11/7/22 11:50, Paul Cercueil wrote:
+> Use the drm_mode_config_pm_ops structure exported by
+> drm_modeset_helper.c, which provides the exact same PM callbacks.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
+> Cc: Samuel Holland <samuel@sholland.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-sunxi@lists.linux.dev
+> ---
+>  drivers/gpu/drm/sun4i/sun4i_drv.c | 24 ++----------------------
+>  1 file changed, 2 insertions(+), 22 deletions(-)
 
-Signed-off-by: Ian Cowan <ian@linux.cowan.aero>
----
- mm/mmap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/mmap.c b/mm/mmap.c
-index bf2122af94e7..7ffd562c57a0 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -456,7 +456,7 @@ void vma_mas_remove(struct vm_area_struct *vma, struct ma_state *mas)
-  * vma_mas_szero() - Set a given range to zero.  Used when modifying a
-  * vm_area_struct start or end.
-  *
-- * @mm: The struct_mm
-+ * @mas: The maple tree ma_state
-  * @start: The start address to zero
-  * @end: The end address to zero.
-  */
--- 
-2.38.1
+Reviewed-by: Samuel Holland <samuel@sholland.org>
 
