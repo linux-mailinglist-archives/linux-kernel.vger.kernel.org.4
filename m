@@ -2,107 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5453462758E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 06:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F98627594
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 06:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235338AbiKNF3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 00:29:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
+        id S235564AbiKNFju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 00:39:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiKNF3u (ORCPT
+        with ESMTP id S235484AbiKNFjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 00:29:50 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E26212D0E;
-        Sun, 13 Nov 2022 21:29:49 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id j16so17521521lfe.12;
-        Sun, 13 Nov 2022 21:29:49 -0800 (PST)
+        Mon, 14 Nov 2022 00:39:45 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F32416589;
+        Sun, 13 Nov 2022 21:39:45 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso9602608pjc.5;
+        Sun, 13 Nov 2022 21:39:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ShWkmDDgnIz8JEqHGHDUzJovR/KTvgrYk+MdmxwWEAI=;
-        b=M6oFjAb9H7upWMZ1gY9NJ/kc+g+erCu4WoGXXCT5lXPWnl/RXxHPBTyV1KLUAIHk/A
-         Rh1Uu5LoghwGvCVeRw6EUkrnlIddm8KAzSiHZmjCvXNysfvrnd0qW6TX1wnYEj0+Ntg1
-         dMdGYWp12oCxRSDO9/tGsx7Ss9JIR5Ot2vM5zHDsYGR5kuiTHiJGcThUFil0RkgluNJe
-         T6KHP0I9HC28qUedf9RlDsPxpzClAF20mdHbH+PTwn8hzN+CgKep+SNR+WgTHUhlvM2t
-         AB/NU2n/Gd7pApevS+qZtZM+UtC6drf1StNYHKztiToLi01hC8obboH3EOyekflc0NxH
-         FHCg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hlwMTpTYCyZp/WYWlkzARk2edXg5YSk1kRs4+wjiJ78=;
+        b=gYJf99H6t5oshYPBHt5OZfJzTgPJyH6QKNcodLlTZdpxgJ2R8S4he+OGuEAxMsR9y5
+         ASZs+iU7f6pSl27s9vA29p5di3ZuVw+mc2c6PRgQDv+omZot903R3/7/+vlj1O5aM6Jp
+         mHqF0l66+4Bq6uq7XsXJ7JWqqhoKs0Q+2A7E2hvxDPPQP0EfMF/c0KukZNbgmZ5qkptC
+         veD0g3hTUtkdEeQq/A6HXV9DeczZsoObu5eoTogYZf9hiId88KEi1E7DM9BJRErxldQu
+         P0xmiFxjc3l+co53nOijCSljb/BQI2Rj4GP8T1VOg8S3DW1bwhJOqBrMe7fk5dCmepkn
+         YwrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ShWkmDDgnIz8JEqHGHDUzJovR/KTvgrYk+MdmxwWEAI=;
-        b=nqmOyZuXaXyF7RINPXnXWZyN0x8diKZp0aPDRzJGjo6rJxBRQ9iCfG+rcXCSRSEs4H
-         a3HsahI+neRz2sFoDASETXT60a/rffRy8MedL12/JHHcQ+m4Z6f629iShhMzUZn65J5u
-         /Y/pCEUCGUueg2HB9lX5Fakr1q/dapYBcQcHzfdSGDLwI7NVc1HBgOEBha5g6o/me9CL
-         TWlvl/Fk1MesE2Yn+1EH9Q2kUYEr8TQGvEwrxn/udr8Uc8Zh2Ye1yC7nIQyDFsboSU7W
-         70+LIP1nZd82jWi7bokmhcC8Vw3ySmksre9Utd3mOkZhtCLqRtacPZacyUJxSlCBTsc1
-         Fzsg==
-X-Gm-Message-State: ANoB5pm/yF4kAK6W73ycWJzuw60H9Cy5t1kjeRGkjWTwNP2D6zLkml+0
-        JG3snTB+HXSDkrkAzMgPo9A=
-X-Google-Smtp-Source: AA0mqf5TWJtZdRvaHwV/5KDeT3EQPkceXrM7vRnjgc+TPA5daxKBhc5Fe7Yu+19sY5q2HEPVall2CA==
-X-Received: by 2002:a05:6512:3b0c:b0:4a0:13b:6618 with SMTP id f12-20020a0565123b0c00b004a0013b6618mr3442388lfv.15.1668403787592;
-        Sun, 13 Nov 2022 21:29:47 -0800 (PST)
-Received: from thinkpad-p72 ([78.133.163.249])
-        by smtp.gmail.com with ESMTPSA id p7-20020a2eb107000000b0026de0c8098csm1853693ljl.26.2022.11.13.21.29.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 21:29:47 -0800 (PST)
-From:   Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>
-X-Google-Original-From: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
-Date:   Mon, 14 Nov 2022 06:29:44 +0100
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        kernel test robot <lkp@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] udmabuf: add vmap method to udmabuf_ops
-Message-ID: <20221114052944.GA7264@thinkpad-p72>
-References: <20221113150511.8878-1-lukasz.wiecaszek@gmail.com>
- <50cece73-a499-eba3-7018-9e92e0791c88@collabora.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hlwMTpTYCyZp/WYWlkzARk2edXg5YSk1kRs4+wjiJ78=;
+        b=OEY56gSW/vNRHb1PlXGHrYs0uwh36usq2MzHt8nTwOeVZdKLyStYzp+PPTE84EjxPh
+         yJPPNE46FTvKFQgBYIiWMSfOxJ1YIz1IgSgllUNkn3MYzbIEnMUVt68POHn9ziDxv8q5
+         rbeHjREpR1jyJNirR3ur+ofqlXZlmisE1s+s4qoe5vI8Nyoju4xltbXPNvpNBA29/z7v
+         799mxu+r2s5eQQw1lua4sv8tCo9X/WaXVwR2gIl2yK/5rxePkJtM07+L1XuOn5HzV8fP
+         xDQl9VU6hqeBSd+U0KWlvUcuGBeAovsLhJn2GA7V6dgO+aUNImzTGYSUkPN/PGIXVx2E
+         kP/g==
+X-Gm-Message-State: ANoB5pnFqlPy1WKRdQ5G8HMQ+ZQVDSTsIhN7WQFT1jXO0wl2tvM2YcKL
+        tYgiBpwFe2V0pMS6e0403GU=
+X-Google-Smtp-Source: AA0mqf7hpuSDaZLMZByg2bX3Oe1xjlWimmLZjjYML3nU4TBu74nnsDZ1JREyHaURZUvI0mubJ5Nf1A==
+X-Received: by 2002:a17:902:b491:b0:179:fe08:48da with SMTP id y17-20020a170902b49100b00179fe0848damr12083430plr.154.1668404384605;
+        Sun, 13 Nov 2022 21:39:44 -0800 (PST)
+Received: from [192.168.50.208] (ip68-109-79-27.oc.oc.cox.net. [68.109.79.27])
+        by smtp.gmail.com with ESMTPSA id u10-20020a170902e5ca00b0017f64ab80e5sm6272341plf.179.2022.11.13.21.39.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Nov 2022 21:39:44 -0800 (PST)
+Message-ID: <a15fbbb9-1f1e-c368-267d-5bcad5ce41c6@gmail.com>
+Date:   Sun, 13 Nov 2022 21:39:42 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <50cece73-a499-eba3-7018-9e92e0791c88@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [patch 03/10] scsi: lpfc: Remove linux/msi.h include
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+References: <20221113201935.776707081@linutronix.de>
+ <20221113202428.436270297@linutronix.de>
+From:   James Smart <jsmart2021@gmail.com>
+In-Reply-To: <20221113202428.436270297@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 13, 2022 at 07:35:20PM +0300, Dmitry Osipenko wrote:
-> On 11/13/22 18:05, Lukasz Wiecaszek wrote:
-> > +static int vmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
-> > +{
-> > +	struct udmabuf *ubuf = buf->priv;
-> > +
-> > +	if (!ubuf->vaddr) {
-> > +		ubuf->vaddr = vm_map_ram(ubuf->pages, ubuf->pagecount, -1);
-> > +		if (!ubuf->vaddr)
-> > +			return -EINVAL;
-> > +	}
+On 11/13/2022 12:33 PM, Thomas Gleixner wrote:
+> Nothing in this file needs anything from linux/msi.h
 > 
-> Create a new mapping on each vmap_udmabuf() and add the corresponding
-> vunmap.
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: James Smart <james.smart@broadcom.com>
+> Cc: Dick Kennedy <dick.kennedy@broadcom.com>
+> Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+> Cc: linux-scsi@vger.kernel.org
+> ---
+>   drivers/scsi/lpfc/lpfc_init.c |    1 -
+>   1 file changed, 1 deletion(-)
 > 
-> Otherwise persistent vmapping shall be released together with udmabuf.
-> It doesn't look that persistent vmapping is needed for udmabufs.
+> --- a/drivers/scsi/lpfc/lpfc_init.c
+> +++ b/drivers/scsi/lpfc/lpfc_init.c
+> @@ -36,7 +36,6 @@
+>   #include <linux/firmware.h>
+>   #include <linux/miscdevice.h>
+>   #include <linux/percpu.h>
+> -#include <linux/msi.h>
+>   #include <linux/irq.h>
+>   #include <linux/bitops.h>
+>   #include <linux/crash_dump.h>
 > 
-> -- 
-> Best regards,
-> Dmitry
 
-Right. Thanks for review and remarks. Adding vunmap sounds reasonable to
-me. Will add it somehow this week.
+yep - agree.
 
-Regards,
-Lukasz
+Reviewed-by: James Smart <jsmart2021@gmail.com>
 
+-- james
