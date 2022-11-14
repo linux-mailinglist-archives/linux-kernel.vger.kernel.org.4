@@ -2,154 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5F962772B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:13:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E62762773F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236231AbiKNIN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:13:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
+        id S236304AbiKNIOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:14:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235902AbiKNINz (ORCPT
+        with ESMTP id S236258AbiKNIOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:13:55 -0500
-Received: from ironport.ite.com.tw (60-251-196-230.hinet-ip.hinet.net [60.251.196.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F238819287
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:13:51 -0800 (PST)
-Received: from unknown (HELO mse.ite.com.tw) ([192.168.35.30])
-  by ironport.ite.com.tw with ESMTP; 14 Nov 2022 16:13:49 +0800
-Received: from CSBMAIL1.internal.ite.com.tw (CSBMAIL1.internal.ite.com.tw [192.168.65.58])
-        by mse.ite.com.tw with ESMTP id 2AE8Dh44067510;
-        Mon, 14 Nov 2022 16:13:43 +0800 (GMT-8)
-        (envelope-from allen.chen@ite.com.tw)
-Received: from CSBMAIL1.internal.ite.com.tw (192.168.65.58) by
- CSBMAIL1.internal.ite.com.tw (192.168.65.58) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.14; Mon, 14 Nov 2022 16:13:42 +0800
-Received: from CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7]) by
- CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7%18]) with mapi id
- 15.01.2176.014; Mon, 14 Nov 2022 16:13:42 +0800
-From:   <allen.chen@ite.com.tw>
-To:     <hsinyi@chromium.org>, <seanpaul@chromium.org>,
-        <dianders@chromium.org>, <robert.foss@linaro.org>
-CC:     <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <daniel@ffwll.ch>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <airlied@gmail.com>
-Subject: RE: [PATCH v4 3/3] drm/bridge: it6505: handle HDCP request
-Thread-Topic: [PATCH v4 3/3] drm/bridge: it6505: handle HDCP request
-Thread-Index: AQHY9//Ca260JAfXwkyDVowEfwt7KK4+EYlg
-Date:   Mon, 14 Nov 2022 08:13:42 +0000
-Message-ID: <6dfdd23e24a243dabb0f8691c0cb60b4@ite.com.tw>
-References: <20221114080405.2426999-1-hsinyi@chromium.org>
- <20221114080405.2426999-3-hsinyi@chromium.org>
-In-Reply-To: <20221114080405.2426999-3-hsinyi@chromium.org>
-Accept-Language: en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [192.168.70.46]
-x-tm-snts-smtp: 197601AEF1738EE1266B66F3F93C9C7AEEFBFECFEEC870CAB7A49CED4E322A5C2002:8
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        Mon, 14 Nov 2022 03:14:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C83192A6;
+        Mon, 14 Nov 2022 00:14:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73097B80D3B;
+        Mon, 14 Nov 2022 08:14:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01F37C433D6;
+        Mon, 14 Nov 2022 08:14:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668413669;
+        bh=IHFLp839t6wrDbrE/w7CcDSU1XWQfM/BgeoUJmtCdPQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ODGK87TO4Kb+6AjqtgTWH3OXfyp38/dR17p3O4ntsFWXrjw2Pt6NZZdLLvsKQcnhB
+         XskAig3EVczgzeo3Z3JwPsJkEcZhqUivMOgOOPi+ZbY6Nc3qX+UZ+DbEfJx3xFYKI0
+         ujOhwweSk+K9BpwItH0ExG5RnkncVuiyD4P65vRjjEJBgDY2BTgUwjmTUJkCKCmBv5
+         s4xpp2xFCUhXi47+wU6R1BxnRlcHmrPKo+siGj/CL/x9yyLC6G2esQREdfPSjN6iSB
+         un2nd5IHjfZWNRdEP14GRiITvTYbtazw0LmQnWEZT4tYwu3g37mQm4LDhuFeefXqXg
+         2PRKcZIEgeIgA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1ouUbM-0001L2-RJ; Mon, 14 Nov 2022 09:13:56 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
+Subject: [PATCH v2 3/6] phy: qcom-qmp-combo: fix sc8180x reset
+Date:   Mon, 14 Nov 2022 09:13:43 +0100
+Message-Id: <20221114081346.5116-4-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.37.4
+In-Reply-To: <20221114081346.5116-1-johan+linaro@kernel.org>
+References: <20221114081346.5116-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-X-MAIL: mse.ite.com.tw 2AE8Dh44067510
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkNCg0KcmV2aWV3ZWQtYnk6IGFsbGVuIGNoZW4gPGFsbGVuLmNoZW5AaXRlLmNvbS50dz4NCg0K
-LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IEhzaW4tWWkgV2FuZyA8aHNpbnlpQGNo
-cm9taXVtLm9yZz4gDQpTZW50OiBNb25kYXksIE5vdmVtYmVyIDE0LCAyMDIyIDQ6MDQgUE0NClRv
-OiBTZWFuIFBhdWwgPHNlYW5wYXVsQGNocm9taXVtLm9yZz47IERvdWdsYXMgQW5kZXJzb24gPGRp
-YW5kZXJzQGNocm9taXVtLm9yZz47IFJvYmVydCBGb3NzIDxyb2JlcnQuZm9zc0BsaW5hcm8ub3Jn
-Pg0KQ2M6IE1hYXJ0ZW4gTGFua2hvcnN0IDxtYWFydGVuLmxhbmtob3JzdEBsaW51eC5pbnRlbC5j
-b20+OyBNYXhpbWUgUmlwYXJkIDxtcmlwYXJkQGtlcm5lbC5vcmc+OyBUaG9tYXMgWmltbWVybWFu
-biA8dHppbW1lcm1hbm5Ac3VzZS5kZT47IERhbmllbCBWZXR0ZXIgPGRhbmllbEBmZndsbC5jaD47
-IGRyaS1kZXZlbEBsaXN0cy5mcmVlZGVza3RvcC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5l
-bC5vcmc7IEFsbGVuIENoZW4gKLOvrGamdCkgPGFsbGVuLmNoZW5AaXRlLmNvbS50dz47IERhdmlk
-IEFpcmxpZSA8YWlybGllZEBnbWFpbC5jb20+DQpTdWJqZWN0OiBbUEFUQ0ggdjQgMy8zXSBkcm0v
-YnJpZGdlOiBpdDY1MDU6IGhhbmRsZSBIRENQIHJlcXVlc3QNCg0KaXQ2NTA1IHN1cHBvcnRzIEhE
-Q1AgMS4zLCBidXQgY3VycmVudCBpbXBsZW1lbnRhdGlvbiBsYWNrcyB0aGUgdXBkYXRlIG9mIEhE
-Q1Agc3RhdHVzIHRocm91Z2ggZHJtX2hkY3BfdXBkYXRlX2NvbnRlbnRfcHJvdGVjdGlvbigpLiBp
-dDY1MDUgZGVmYXVsdCBlbmFibGVzIHRoZSBIRENQLiBJZiB1c2VyIHNldCBpdCB0byB1bmRlc2ly
-ZWQgdGhlbiB0aGUgZHJpdmVyIHdpbGwgc3RvcCBIRENQLg0KDQpTaWduZWQtb2ZmLWJ5OiBIc2lu
-LVlpIFdhbmcgPGhzaW55aUBjaHJvbWl1bS5vcmc+DQotLS0NCkluY2x1ZGUgaXQ2NTA1WzFdIHRv
-IHRoZSBzZXJpZXMuDQoNClsxXSBodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3Byb2plY3Qv
-ZHJpLWRldmVsL3BhdGNoLzIwMjIxMTAxMTEyMDA5LjEwNjc2ODEtMS1oc2lueWlAY2hyb21pdW0u
-b3JnLw0KLS0tDQogZHJpdmVycy9ncHUvZHJtL2JyaWRnZS9pdGUtaXQ2NTA1LmMgfCA1NSArKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKw0KIDEgZmlsZSBjaGFuZ2VkLCA1NSBpbnNlcnRpb25z
-KCspDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vYnJpZGdlL2l0ZS1pdDY1MDUuYyBi
-L2RyaXZlcnMvZ3B1L2RybS9icmlkZ2UvaXRlLWl0NjUwNS5jDQppbmRleCAyMWE5Yjg0MjJiZGEu
-LmJlMDhiNDJkZTRlYSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvZ3B1L2RybS9icmlkZ2UvaXRlLWl0
-NjUwNS5jDQorKysgYi9kcml2ZXJzL2dwdS9kcm0vYnJpZGdlL2l0ZS1pdDY1MDUuYw0KQEAgLTQy
-Myw2ICs0MjMsNyBAQCBzdHJ1Y3QgaXQ2NTA1IHsNCiAJc3RydWN0IGV4dGNvbl9kZXYgKmV4dGNv
-bjsNCiAJc3RydWN0IHdvcmtfc3RydWN0IGV4dGNvbl93cTsNCiAJaW50IGV4dGNvbl9zdGF0ZTsN
-CisJc3RydWN0IGRybV9jb25uZWN0b3IgKmNvbm5lY3RvcjsNCiAJZW51bSBkcm1fY29ubmVjdG9y
-X3N0YXR1cyBjb25uZWN0b3Jfc3RhdHVzOw0KIAllbnVtIGxpbmtfdHJhaW5fc3RhdHVzIGxpbmtf
-c3RhdGU7DQogCXN0cnVjdCB3b3JrX3N0cnVjdCBsaW5rX3dvcmtzOw0KQEAgLTIzOTksNiArMjQw
-MCwxNCBAQCBzdGF0aWMgdm9pZCBpdDY1MDVfaXJxX2hkY3BfZG9uZShzdHJ1Y3QgaXQ2NTA1ICpp
-dDY1MDUpDQogDQogCURSTV9ERVZfREVCVUdfRFJJVkVSKGRldiwgImhkY3AgZG9uZSBpbnRlcnJ1
-cHQiKTsNCiAJaXQ2NTA1LT5oZGNwX3N0YXR1cyA9IEhEQ1BfQVVUSF9ET05FOw0KKwlpZiAoaXQ2
-NTA1LT5jb25uZWN0b3IpIHsNCisJCXN0cnVjdCBkcm1fZGV2aWNlICpkcm1fZGV2ID0gaXQ2NTA1
-LT5jb25uZWN0b3ItPmRldjsNCisNCisJCWRybV9tb2Rlc2V0X2xvY2soJmRybV9kZXYtPm1vZGVf
-Y29uZmlnLmNvbm5lY3Rpb25fbXV0ZXgsIE5VTEwpOw0KKwkJZHJtX2hkY3BfdXBkYXRlX2NvbnRl
-bnRfcHJvdGVjdGlvbihpdDY1MDUtPmNvbm5lY3RvciwNCisJCQkJCQkgICBEUk1fTU9ERV9DT05U
-RU5UX1BST1RFQ1RJT05fRU5BQkxFRCk7DQorCQlkcm1fbW9kZXNldF91bmxvY2soJmRybV9kZXYt
-Pm1vZGVfY29uZmlnLmNvbm5lY3Rpb25fbXV0ZXgpOw0KKwl9DQogCWl0NjUwNV9zaG93X2hkY3Bf
-aW5mbyhpdDY1MDUpOw0KIH0NCiANCkBAIC0yOTMxLDYgKzI5NDAsNyBAQCBzdGF0aWMgdm9pZCBp
-dDY1MDVfYnJpZGdlX2F0b21pY19lbmFibGUoc3RydWN0IGRybV9icmlkZ2UgKmJyaWRnZSwNCiAJ
-aWYgKFdBUk5fT04oIWNvbm5lY3RvcikpDQogCQlyZXR1cm47DQogDQorCWl0NjUwNS0+Y29ubmVj
-dG9yID0gY29ubmVjdG9yOw0KIAljb25uX3N0YXRlID0gZHJtX2F0b21pY19nZXRfbmV3X2Nvbm5l
-Y3Rvcl9zdGF0ZShzdGF0ZSwgY29ubmVjdG9yKTsNCiANCiAJaWYgKFdBUk5fT04oIWNvbm5fc3Rh
-dGUpKQ0KQEAgLTI5NzQsNiArMjk4NCw3IEBAIHN0YXRpYyB2b2lkIGl0NjUwNV9icmlkZ2VfYXRv
-bWljX2Rpc2FibGUoc3RydWN0IGRybV9icmlkZ2UgKmJyaWRnZSwNCiANCiAJRFJNX0RFVl9ERUJV
-R19EUklWRVIoZGV2LCAic3RhcnQiKTsNCiANCisJaXQ2NTA1LT5jb25uZWN0b3IgPSBOVUxMOw0K
-IAlpZiAoaXQ2NTA1LT5wb3dlcmVkKSB7DQogCQlpdDY1MDVfZHJtX2RwX2xpbmtfc2V0X3Bvd2Vy
-KCZpdDY1MDUtPmF1eCwgJml0NjUwNS0+bGluaywNCiAJCQkJCSAgICAgRFBfU0VUX1BPV0VSX0Qz
-KTsNCkBAIC0zMDI4LDYgKzMwMzksNDggQEAgc3RhdGljIHN0cnVjdCBlZGlkICppdDY1MDVfYnJp
-ZGdlX2dldF9lZGlkKHN0cnVjdCBkcm1fYnJpZGdlICpicmlkZ2UsDQogCXJldHVybiBlZGlkOw0K
-IH0NCiANCitzdGF0aWMgaW50IGl0NjUwNV9jb25uZWN0b3JfYXRvbWljX2NoZWNrKHN0cnVjdCBp
-dDY1MDUgKml0NjUwNSwNCisJCQkJCSBzdHJ1Y3QgZHJtX2Nvbm5lY3Rvcl9zdGF0ZSAqc3RhdGUp
-IHsNCisJc3RydWN0IGRldmljZSAqZGV2ID0gJml0NjUwNS0+Y2xpZW50LT5kZXY7DQorCWludCBj
-cCA9IHN0YXRlLT5jb250ZW50X3Byb3RlY3Rpb247DQorDQorCURSTV9ERVZfREVCVUdfRFJJVkVS
-KGRldiwgImhkY3AgY29ubmVjdG9yIHN0YXRlOiVkLCBjdXJyIGhkY3Agc3RhdGU6JWQiLA0KKwkJ
-CSAgICAgY3AsIGl0NjUwNS0+aGRjcF9zdGF0dXMpOw0KKw0KKwlpZiAoIWl0NjUwNS0+aGRjcF9k
-ZXNpcmVkKSB7DQorCQlEUk1fREVWX0RFQlVHX0RSSVZFUihkZXYsICJzaW5rIG5vdCBzdXBwb3J0
-IGhkY3AiKTsNCisJCXJldHVybiAwOw0KKwl9DQorDQorCWlmIChpdDY1MDUtPmhkY3Bfc3RhdHVz
-ID09IEhEQ1BfQVVUSF9HT0lORykNCisJCXJldHVybiAtRUlOVkFMOw0KKw0KKwlpZiAoY3AgPT0g
-RFJNX01PREVfQ09OVEVOVF9QUk9URUNUSU9OX1VOREVTSVJFRCkgew0KKwkJaWYgKGl0NjUwNS0+
-aGRjcF9zdGF0dXMgPT0gSERDUF9BVVRIX0RPTkUpDQorCQkJaXQ2NTA1X3N0b3BfaGRjcChpdDY1
-MDUpOw0KKwl9IGVsc2UgaWYgKGNwID09IERSTV9NT0RFX0NPTlRFTlRfUFJPVEVDVElPTl9ERVNJ
-UkVEKSB7DQorCQlpZiAoaXQ2NTA1LT5oZGNwX3N0YXR1cyA9PSBIRENQX0FVVEhfSURMRSAmJg0K
-KwkJICAgIGl0NjUwNS0+bGlua19zdGF0ZSA9PSBMSU5LX09LKQ0KKwkJCWl0NjUwNV9zdGFydF9o
-ZGNwKGl0NjUwNSk7DQorCX0gZWxzZSB7DQorCQlEUk1fREVWX0RFQlVHX0RSSVZFUihkZXYsICJp
-bnZhbGlkIHRvIHNldCBoZGNwIGVuYWJsZWQiKTsNCisJCXJldHVybiAtRUlOVkFMOw0KKwl9DQor
-DQorCXJldHVybiAwOw0KK30NCisNCitzdGF0aWMgaW50IGl0NjUwNV9icmlkZ2VfYXRvbWljX2No
-ZWNrKHN0cnVjdCBkcm1fYnJpZGdlICpicmlkZ2UsDQorCQkJCSAgICAgIHN0cnVjdCBkcm1fYnJp
-ZGdlX3N0YXRlICpicmlkZ2Vfc3RhdGUsDQorCQkJCSAgICAgIHN0cnVjdCBkcm1fY3J0Y19zdGF0
-ZSAqY3J0Y19zdGF0ZSwNCisJCQkJICAgICAgc3RydWN0IGRybV9jb25uZWN0b3Jfc3RhdGUgKmNv
-bm5fc3RhdGUpIHsNCisJc3RydWN0IGl0NjUwNSAqaXQ2NTA1ID0gYnJpZGdlX3RvX2l0NjUwNShi
-cmlkZ2UpOw0KKw0KKwlyZXR1cm4gaXQ2NTA1X2Nvbm5lY3Rvcl9hdG9taWNfY2hlY2soaXQ2NTA1
-LCBjb25uX3N0YXRlKTsgfQ0KKw0KIHN0YXRpYyBjb25zdCBzdHJ1Y3QgZHJtX2JyaWRnZV9mdW5j
-cyBpdDY1MDVfYnJpZGdlX2Z1bmNzID0gew0KIAkuYXRvbWljX2R1cGxpY2F0ZV9zdGF0ZSA9IGRy
-bV9hdG9taWNfaGVscGVyX2JyaWRnZV9kdXBsaWNhdGVfc3RhdGUsDQogCS5hdG9taWNfZGVzdHJv
-eV9zdGF0ZSA9IGRybV9hdG9taWNfaGVscGVyX2JyaWRnZV9kZXN0cm95X3N0YXRlLA0KQEAgLTMw
-MzUsNiArMzA4OCw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgZHJtX2JyaWRnZV9mdW5jcyBpdDY1
-MDVfYnJpZGdlX2Z1bmNzID0gew0KIAkuYXR0YWNoID0gaXQ2NTA1X2JyaWRnZV9hdHRhY2gsDQog
-CS5kZXRhY2ggPSBpdDY1MDVfYnJpZGdlX2RldGFjaCwNCiAJLm1vZGVfdmFsaWQgPSBpdDY1MDVf
-YnJpZGdlX21vZGVfdmFsaWQsDQorCS5hdG9taWNfY2hlY2sgPSBpdDY1MDVfYnJpZGdlX2F0b21p
-Y19jaGVjaywNCiAJLmF0b21pY19lbmFibGUgPSBpdDY1MDVfYnJpZGdlX2F0b21pY19lbmFibGUs
-DQogCS5hdG9taWNfZGlzYWJsZSA9IGl0NjUwNV9icmlkZ2VfYXRvbWljX2Rpc2FibGUsDQogCS5h
-dG9taWNfcHJlX2VuYWJsZSA9IGl0NjUwNV9icmlkZ2VfYXRvbWljX3ByZV9lbmFibGUsIEBAIC0z
-MzU0LDYgKzM0MDgsNyBAQCBzdGF0aWMgaW50IGl0NjUwNV9pMmNfcHJvYmUoc3RydWN0IGkyY19j
-bGllbnQgKmNsaWVudCwNCiAJaXQ2NTA1LT5icmlkZ2UudHlwZSA9IERSTV9NT0RFX0NPTk5FQ1RP
-Ul9EaXNwbGF5UG9ydDsNCiAJaXQ2NTA1LT5icmlkZ2Uub3BzID0gRFJNX0JSSURHRV9PUF9ERVRF
-Q1QgfCBEUk1fQlJJREdFX09QX0VESUQgfA0KIAkJCSAgICAgRFJNX0JSSURHRV9PUF9IUEQ7DQor
-CWl0NjUwNS0+YnJpZGdlLnN1cHBvcnRfaGRjcCA9IHRydWU7DQogCWRybV9icmlkZ2VfYWRkKCZp
-dDY1MDUtPmJyaWRnZSk7DQogDQogCXJldHVybiAwOw0KLS0NCjIuMzguMS40MzEuZzM3YjIyYzY1
-MGQtZ29vZw0KDQo=
+The SC8180X has two resets but the DP configuration erroneously
+described only one.
+
+In case the DP part of the PHY is initialised before the USB part (e.g.
+depending on probe order), then only the first reset would be asserted.
+
+Fixes: 1633802cd4ac ("phy: qcom: qmp: Add SC8180x USB/DP combo")
+Cc: stable@vger.kernel.org	# 5.15
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+index cc53e2f99121..40c25a0ead23 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
+@@ -1177,8 +1177,8 @@ static const struct qmp_phy_cfg sc8180x_dpphy_cfg = {
+ 
+ 	.clk_list		= qmp_v3_phy_clk_l,
+ 	.num_clks		= ARRAY_SIZE(qmp_v3_phy_clk_l),
+-	.reset_list		= sc7180_usb3phy_reset_l,
+-	.num_resets		= ARRAY_SIZE(sc7180_usb3phy_reset_l),
++	.reset_list		= msm8996_usb3phy_reset_l,
++	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
+ 	.vreg_list		= qmp_phy_vreg_l,
+ 	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
+ 	.regs			= qmp_v3_usb3phy_regs_layout,
+-- 
+2.37.4
+
