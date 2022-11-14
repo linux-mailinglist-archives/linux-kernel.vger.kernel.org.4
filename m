@@ -2,85 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B4D627CBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:46:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD23627C95
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236634AbiKNLqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:46:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
+        id S236433AbiKNLnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:43:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235965AbiKNLpb (ORCPT
+        with ESMTP id S236229AbiKNLnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:45:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848DC1570A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:44:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 074546108D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:44:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6153DC43140;
-        Mon, 14 Nov 2022 11:44:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668426291;
-        bh=/HH4N07B4q93OKd/c3IEVtwZviuWBVpZ7Lrl4/tVzls=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QOe6gD++KNbRrpH/tH10C/6YEBj1n3J5mggy9+veKODvGhC60VJNojDNuQF0/wSjU
-         A623zDV6xncmUth8UAG/d0CukPjOSCgIvJzELhFve6+UeasNUQ56hpyZoP/TdCqc+X
-         B0S32pILO2Z17YIIhj7l7qhl3P2DXW/k63JJdKovmTldqBM4mBHBxt/K123TlKmZ9T
-         M3IYzuBv2DF8pGr5r2fqEfMyHOa2gMTg6IgltR0c4rp3AEfEaS8KIxfvwSG69CzkXq
-         5JC++VcI5YEICiiQzcBxgIUEoxQ0g8QE5L2E4LgDADV4VqlUtHuwQTeAv24U96IESN
-         9oWv1mXsKgP5A==
-From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andi Kleen <ak@linux.intel.com>, Martin Liska <mliska@suse.cz>,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 23/46] init.h, lto: mark initcalls as __noreorder
-Date:   Mon, 14 Nov 2022 12:43:21 +0100
-Message-Id: <20221114114344.18650-24-jirislaby@kernel.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221114114344.18650-1-jirislaby@kernel.org>
-References: <20221114114344.18650-1-jirislaby@kernel.org>
+        Mon, 14 Nov 2022 06:43:31 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5044A247;
+        Mon, 14 Nov 2022 03:43:26 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id k19so12809706lji.2;
+        Mon, 14 Nov 2022 03:43:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1xnVkVYt6NjXq2U10H+GjcZriFeppA49EKxZL4u1ETg=;
+        b=DJYPWegol9Mp+1bBiyC6kheikgEvnJnOVLlM56Ma2GdT+L4kHpqtLxdqoJS24ZT5Kx
+         9PIQgwfK5ZVi/V2CUpvBZb6Ga0zgQK2ABH7cFZ5/LdW56zYq8oUfgPdxwSOOgzbvkO14
+         ufmIiDp2SBsuSqL6co4532zebqLlkVNfFhMWESDA5YFBGq8pWuFzDtHtaIYkM7vB2fCd
+         UeZZ4jaghHRxjxVxe+mt5YHjOgTYqN11bjGoo5erCApseMko7oXuhj3Rt2PpsCtyzqcy
+         KZ8tBKEUXljtyf9SMCUC12kBv4/scKdLuINUKdA6ZdnCzJ62N2+1vgo4h+pimP2A7aVS
+         wvdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1xnVkVYt6NjXq2U10H+GjcZriFeppA49EKxZL4u1ETg=;
+        b=FmDt9yH75d7d/yF2Senm3kR6LxpM7oGa/gzAYD6lOZ6+PcYWDfcZvNyYiC0pXdaONl
+         zbQAzYv/x3focnQFQBJQcztZdPuAzcZXbEViTt2FKv+pGJcsD213OeKxvlvxrjd3Ic4V
+         ZQtkwOLbh0+2WOqbpewmOwMFpCPjCrxcHuanBJEwg9lXKT4LWguau/PG+RlDmjV+zjzy
+         r3drI3xTSKere6c/GDZobvG3oaSmruLejR+g8SG4V2WkLt/sqLuzSnFVVTDLQ0NZ88eX
+         67flCVfwSszOk0VVYEUYOJmxpAunan8kWrIBeMRUOF34UO97OB9+5W9HFhxDj+YGnhqh
+         ExhA==
+X-Gm-Message-State: ANoB5pnWgqdAWpeG8pdys4u/AomVDUKBw+MmU0C1hMEkZTTSqD/yjVdN
+        H4tR9b7AlrtL6j+8Qrq6eOZtH+kUzsE=
+X-Google-Smtp-Source: AA0mqf4dfqmYZ1FjH1UgobSbvCvX8bwQXhiu0h+VQoHba7Wk2f0YpqJTU83M4MTmIQhSNHpV9VVXVw==
+X-Received: by 2002:a05:651c:88a:b0:277:2:1efc with SMTP id d10-20020a05651c088a00b0027700021efcmr4389600ljq.77.1668426204721;
+        Mon, 14 Nov 2022 03:43:24 -0800 (PST)
+Received: from [192.168.1.103] ([178.176.74.221])
+        by smtp.gmail.com with ESMTPSA id v26-20020ac2593a000000b00492b494c4e8sm1793818lfi.298.2022.11.14.03.43.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 03:43:24 -0800 (PST)
+Subject: Re: [net] net: usb: smsc95xx: fix external PHY reset
+To:     Alexandru Tachici <alexandru.tachici@analog.com>,
+        linux-kernel@vger.kernel.org
+Cc:     andrew@lunn.ch, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, steve.glendinning@shawell.net,
+        UNGLinuxDriver@microchip.com, andre.edich@microchip.com,
+        linux-usb@vger.kernel.org
+References: <20221114131643.19450-1-alexandru.tachici@analog.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <adb2dc3c-fd1e-53ea-ca64-5c1600058890@gmail.com>
+Date:   Mon, 14 Nov 2022 14:43:22 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221114131643.19450-1-alexandru.tachici@analog.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andi Kleen <ak@linux.intel.com>
+Hello!
 
-Kernels don't like any reordering of initcalls between files, as several
-initcalls depend on each other. LTO is allowed to reorder as it wishes
-and previously needed to use -fno-toplevel-reordering to prevent boot
-failures. Now we can use __noreorder per symbol. So mark initcall
-functions as such.
+On 11/14/22 4:16 PM, Alexandru Tachici wrote:
 
-Signed-off-by: Andi Kleen <ak@linux.intel.com>
-Signed-off-by: Martin Liska <mliska@suse.cz>
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
- include/linux/init.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> An external PHY needs settling time after power up or reser.
 
-diff --git a/include/linux/init.h b/include/linux/init.h
-index 077d7f93b402..ca827e2fb0da 100644
---- a/include/linux/init.h
-+++ b/include/linux/init.h
-@@ -246,7 +246,7 @@ extern bool initcall_debug;
- 	static_assert(__same_type(initcall_t, &fn));
- #else
- #define ____define_initcall(fn, __unused, __name, __sec)	\
--	static initcall_t __name __used 			\
-+	static initcall_t __name __used __noreorder 		\
- 		__attribute__((__section__(__sec))) = fn;
- #endif
- 
--- 
-2.38.1
+   Reset? :-)
 
+> In the bind() function an mdio bus is registered. If at this point
+> the external PHY is still initialising, no valid PHY ID will be
+> read and on phy_find_first() the bind() function will fail.
+> 
+> If an external PHY is present, wait the maximum time specified
+> in 802.3 45.2.7.1.1.
+> 
+> Fixes: 05b35e7eb9a1 ("smsc95xx: add phylib support")
+> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+
+[...]
+
+MBR, Sergey
