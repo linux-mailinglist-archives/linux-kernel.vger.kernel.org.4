@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EDB8627B06
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:51:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 289C6627B07
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235954AbiKNKu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 05:50:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
+        id S236275AbiKNKvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 05:51:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236247AbiKNKuy (ORCPT
+        with ESMTP id S236031AbiKNKuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Nov 2022 05:50:54 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4521A3B1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:50:52 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id 13so27354504ejn.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:50:52 -0800 (PST)
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2BE1D673
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:50:54 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id v17so16655120edc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:50:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WJ+8qImc7VzRHMuYxKRoIhoSQ+nTJCDRXzPuvxgENI8=;
-        b=yMYRVak0EffYvJtukQ4qPOso/BXa5clD6zcUa5wrnF+iDrfM/fgzGMYvYS56pFHYEu
-         Iy1bdVimPLjF6xnrzGmudswQ7JfTg40YfIQ4Accaxb7MhG3fqzyw6pzXXMpnUYW8Clks
-         /vBQtMG+LwiXxKAQgzGDni7lek1nYW2Ya7njVXPaMyOMfxEjS5kIzG9V6BsvnktSG2Rr
-         SbZNvpw7uLfGAU73vFbA1nAqogmXoXbPqENP380nr4GS9E8hcDEtWPjJyq7XtChrUZ+n
-         wrjmAA3Atbf6a6wlMGFvZ4xtaB43cg844ZBI4e9z8FNghA1ciqOAJD4zLzthDNEpCfHf
-         PJ4g==
+        bh=2J8KU6i0LNpVXOzmIjyZny4wFnncJ84RnmJbirPKtLU=;
+        b=Gj/BMvG7+x8u7dhkNTvuxgnGSfDtbLaVdu/ZEtxLq+SUs9TR2afJqm1midawP/WeBk
+         0srL4kRvIxO05ufvSYlzzFnSDJIptJraXepcrXfFt3KQkP5yQQfpTXOCR5dEDM89CvzV
+         Aa66/8wg2D8cyD7kuez+BvmXJao69cPwRC+cgzb9QhU/PnerOqWxGSLHnZRakBFoZPSa
+         eQuLY2CGIIfqmKUiCLGeWe0znuTIrtCEgMKkQo5me082oVfPI+CERPSKkVHDbzAfQm19
+         DrsxKjCyaQWaXYkFO6byxL4/raXX0PnuXuc39ujO2POSgn6fSJ3Y3rapK3sSJejsxpG1
+         EjVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WJ+8qImc7VzRHMuYxKRoIhoSQ+nTJCDRXzPuvxgENI8=;
-        b=4GNc5hYVHBvgaucNucVBRA3Orqkgho1tRcFJfIzMNtOA0dABVozkZmY2J86Pf5U0SF
-         ePzb5+DgecMW4BBDhbTGQD7nVHM1a1DwV7XcBT89NXpOE0DHn/cRfwvv9iDwKff5gVlB
-         d9y5U9Y0TT5YO96XdWbckDTRcg2GaRRRwD8FTYmEP32JEfXLFT9l/IJPObCulj5y/Wu/
-         IViMVouKeVTHBoYv0ZKsWoHkmgFwIShMPTG6lPtopv7bCeIiFKrEz//wSNn2/HOlDq2W
-         7eGrVE/Sh7p8D9wdJr4WpfBRndzSQJa5wF5w35W9G82DX7g4tNoJ+jfyWH/XMzxAbrN1
-         dvaQ==
-X-Gm-Message-State: ANoB5plgqIDHyemxcBBdeX0IzRXCAwxJdK4EBBkerofPaC8sKVxliBXv
-        SM0UjkcrGfkxwC8i9ebwRyUPcg==
-X-Google-Smtp-Source: AA0mqf7oMpyGyhlUtonXRddkhSHR7uQyQONRkbr79ZCqq4C8/hmBAGJDhqh3J4U/Sig3iZfeG7gUcA==
-X-Received: by 2002:a17:906:4e54:b0:78d:a30f:3f3a with SMTP id g20-20020a1709064e5400b0078da30f3f3amr9820547ejw.386.1668423051146;
-        Mon, 14 Nov 2022 02:50:51 -0800 (PST)
+        bh=2J8KU6i0LNpVXOzmIjyZny4wFnncJ84RnmJbirPKtLU=;
+        b=xvka6GXRWDEy7I+atpdJNvaKKJykgPLJoCaBMrF5yV5XNhB8VIAVQRgfTZZTfNXN5R
+         fAN+PKuXA1jO223dJaM5OinLjuuZ6V9oe5ofYdor4ybfMBdqNSOIe+lGGiZmmX8XNt1O
+         rcLA/Mrz2/nE5O8YdA0MDaq9xMjzkZRZ+JA2YJL4Ua5YHo/+Rq9NpH3aY5yS7mLHplRH
+         RtYr7aejLesHy8yj7C8CRIxW8aHIxxO2UkmFbVaDvN5g7At1p+1O/zv4Smp5zQ8/5Tpn
+         gBPiAe3diANzre2LwueVqzXxXKi35W3d0kY2OsNUxzE5S2m7FkEct5a17YMc6rkBaCGy
+         FDIg==
+X-Gm-Message-State: ANoB5pnabvim2WFuLqviwi1oRk6S5upLlKlTBXUm2thxr7+KdbDYlQQY
+        zTTqsVJb9S1MEic/CLsvn0YMQg==
+X-Google-Smtp-Source: AA0mqf4NKLcFeoeapWbT6WEQi+0wjo9kRUUJ2n04xVSr7ZdUU7IxsQK2Snd7zeDzKSFDXc04hqyaQg==
+X-Received: by 2002:aa7:ccc2:0:b0:461:bff7:9783 with SMTP id y2-20020aa7ccc2000000b00461bff79783mr10817601edt.200.1668423052646;
+        Mon, 14 Nov 2022 02:50:52 -0800 (PST)
 Received: from localhost.localdomain ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id kv20-20020a17090778d400b007402796f065sm4037053ejc.132.2022.11.14.02.50.49
+        by smtp.gmail.com with ESMTPSA id kv20-20020a17090778d400b007402796f065sm4037053ejc.132.2022.11.14.02.50.51
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 14 Nov 2022 02:50:50 -0800 (PST)
+        Mon, 14 Nov 2022 02:50:52 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
@@ -58,9 +58,9 @@ Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/3] arm64: dts: qcom: sm6375: Add SDHCI2
-Date:   Mon, 14 Nov 2022 11:50:42 +0100
-Message-Id: <20221114105043.36698-3-konrad.dybcio@linaro.org>
+Subject: [PATCH v3 3/3] arm64: dts: qcom: sm6375-pdx225: Enable SD card slot
+Date:   Mon, 14 Nov 2022 11:50:43 +0100
+Message-Id: <20221114105043.36698-4-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 In-Reply-To: <20221114105043.36698-1-konrad.dybcio@linaro.org>
 References: <20221114105043.36698-1-konrad.dybcio@linaro.org>
@@ -68,129 +68,88 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Configure the second SDHCI bus controller, which usually the
-interface used for SD cards.
+Set SDHCI VMMC/VQMMC to <=2v96 and allow load setting by the SDHCI
+driver, as required by this use case.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Configure the SD Card Detect pin, enable the SDHCI2 controller and
+assign it the aforementioned regulators.
+
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Changes in v3:
-- pick up rb
+No changes in v3.
 
 Changes in v2:
-- use mmc@ node name instead of sdhci@
+- remove stray newline
+- pick up r-b
 
- arch/arm64/boot/dts/qcom/sm6375.dtsi | 82 ++++++++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
+ .../qcom/sm6375-sony-xperia-murray-pdx225.dts | 33 +++++++++++++++++--
+ 1 file changed, 31 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6375.dtsi b/arch/arm64/boot/dts/qcom/sm6375.dtsi
-index 6adffd927a8e..08587c8681b2 100644
---- a/arch/arm64/boot/dts/qcom/sm6375.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6375.dtsi
-@@ -540,6 +540,46 @@ tlmm: pinctrl@500000 {
- 			#interrupt-cells = <2>;
- 			#gpio-cells = <2>;
+diff --git a/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts b/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
+index d18167bcb41f..4741b9120aa2 100644
+--- a/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
++++ b/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
+@@ -164,7 +164,8 @@ pm6125_l4: l4 {
  
-+			sdc2_off_state: sdc2-off-state {
-+				clk-pins {
-+					pins = "sdc2_clk";
-+					drive-strength = <2>;
-+					bias-disable;
-+				};
-+
-+				cmd-pins {
-+					pins = "sdc2_cmd";
-+					drive-strength = <2>;
-+					bias-pull-up;
-+				};
-+
-+				data-pins {
-+					pins = "sdc2_data";
-+					drive-strength = <2>;
-+					bias-pull-up;
-+				};
-+			};
-+
-+			sdc2_on_state: sdc2-on-state {
-+				clk-pins {
-+					pins = "sdc2_clk";
-+					drive-strength = <16>;
-+					bias-disable;
-+				};
-+
-+				cmd-pins {
-+					pins = "sdc2_cmd";
-+					drive-strength = <10>;
-+					bias-pull-up;
-+				};
-+
-+				data-pins {
-+					pins = "sdc2_data";
-+					drive-strength = <10>;
-+					bias-pull-up;
-+				};
-+			};
-+
- 			qup_i2c0_default: qup-i2c0-default-state {
- 				pins = "gpio0", "gpio1";
- 				function = "qup00";
-@@ -630,6 +670,48 @@ rpm_msg_ram: sram@45f0000 {
- 			reg = <0 0x045f0000 0 0x7000>;
+ 		pm6125_l5: l5 {
+ 			regulator-min-microvolt = <1650000>;
+-			regulator-max-microvolt = <3050000>;
++			regulator-max-microvolt = <2960000>;
++			regulator-allow-set-load;
  		};
  
-+		sdhc_2: mmc@4784000 {
-+			compatible = "qcom,sm6375-sdhci", "qcom,sdhci-msm-v5";
-+			reg = <0 0x04784000 0 0x1000>;
+ 		pm6125_l6: l6 {
+@@ -246,7 +247,8 @@ pm6125_l21: l21 {
+ 
+ 		pm6125_l22: l22 {
+ 			regulator-min-microvolt = <2704000>;
+-			regulator-max-microvolt = <3544000>;
++			regulator-max-microvolt = <2960000>;
++			regulator-allow-set-load;
+ 		};
+ 
+ 		pm6125_l23: l23 {
+@@ -305,6 +307,33 @@ pmr735a_l7: l7 {
+ 	};
+ };
+ 
++&sdc2_off_state {
++	sd-cd-pins {
++		pins = "gpio94";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++	};
++};
 +
-+			interrupts = <GIC_SPI 350 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 353 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "hc_irq", "pwr_irq";
++&sdc2_on_state {
++	sd-cd-pins {
++		pins = "gpio94";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-pull-up;
++	};
++};
 +
-+			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
-+				 <&gcc GCC_SDCC2_APPS_CLK>,
-+				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
-+			clock-names = "iface", "core", "xo";
-+			resets = <&gcc GCC_SDCC2_BCR>;
-+			iommus = <&apps_smmu 0x40 0x0>;
++&sdhc_2 {
++	status = "okay";
 +
-+			pinctrl-0 = <&sdc2_on_state>;
-+			pinctrl-1 = <&sdc2_off_state>;
-+			pinctrl-names = "default", "sleep";
++	vmmc-supply = <&pm6125_l22>;
++	vqmmc-supply = <&pm6125_l5>;
 +
-+			qcom,dll-config = <0x0007642c>;
-+			qcom,ddr-config = <0x80040868>;
-+			power-domains = <&rpmpd SM6375_VDDCX>;
-+			operating-points-v2 = <&sdhc2_opp_table>;
-+			bus-width = <4>;
++	cd-gpios = <&tlmm 94 GPIO_ACTIVE_HIGH>;
++};
 +
-+			status = "disabled";
-+
-+			sdhc2_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-100000000 {
-+					opp-hz = /bits/ 64 <100000000>;
-+					required-opps = <&rpmpd_opp_low_svs>;
-+				};
-+
-+				opp-202000000 {
-+					opp-hz = /bits/ 64 <202000000>;
-+					required-opps = <&rpmpd_opp_svs_plus>;
-+				};
-+			};
-+		};
-+
- 		gpi_dma0: dma-controller@4a00000 {
- 			compatible = "qcom,sm6375-gpi-dma", "qcom,sm6350-gpi-dma";
- 			reg = <0 0x04a00000 0 0x60000>;
+ &tlmm {
+ 	gpio-reserved-ranges = <13 4>;
+ 
 -- 
 2.38.1
 
