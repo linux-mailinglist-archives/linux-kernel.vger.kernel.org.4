@@ -2,61 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A036362879C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4737C6287A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:59:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237825AbiKNR6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:58:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S237828AbiKNR7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:59:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237783AbiKNR5j (ORCPT
+        with ESMTP id S237886AbiKNR6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:57:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C1525EBA;
-        Mon, 14 Nov 2022 09:57:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 452E76131B;
-        Mon, 14 Nov 2022 17:57:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A05C433C1;
-        Mon, 14 Nov 2022 17:57:30 +0000 (UTC)
-Date:   Mon, 14 Nov 2022 23:27:21 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>, caihuoqing <caihuoqing@baidu.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 15/20] PCI: dwc: Introduce dma-ranges property support
- for RC-host
-Message-ID: <20221114175721.GA5305@thinkpad>
-References: <20221113191301.5526-1-Sergey.Semin@baikalelectronics.ru>
- <20221113191301.5526-16-Sergey.Semin@baikalelectronics.ru>
- <20221114063915.GC3869@thinkpad>
- <20221114083227.j4ynx6wjwfwseqqy@mobilestation>
+        Mon, 14 Nov 2022 12:58:52 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842DB24BC7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:58:51 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 2AEGTYnf014192;
+        Mon, 14 Nov 2022 17:58:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=lt0LzME4yHuzeeFSemhEFnHnurbITRdro2viUsMDfQw=;
+ b=Swijqf/hm6Y0WET46NogKDIoIcUDh5NNPWIYygp7Af7lE5U+eD+QJr9nbftDNjLX6pUX
+ JWzg6fR4gcIetdyqtzL6ujA4PLfRnoB45ns3b1C935kngQhdt2jMLNAFWgCOSZsWhX6C
+ M3+q92BJR20o0Uj6y1cNlRe3u2HB1j8SnYzvwPDIzwveNwdAfFLkq+GW/T6aF5qOI+D4
+ bqylTaLBr+dHFdvf4uYSExi0SrvAEtz08JGH0PrYMbvmV9cBeakobdixd/22qYDhgTrh
+ llUcIf50LA3S5My370CV+jQsjDbCWFskd735ws+POyPP4cWbrTlCBLOpty21ePg+odtW xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kus88j86b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 17:58:23 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AEHlWAk009668;
+        Mon, 14 Nov 2022 17:58:23 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kus88j85a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 17:58:22 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AEHpcUc009567;
+        Mon, 14 Nov 2022 17:58:21 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 3kt348txub-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 17:58:21 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AEHwIOe8192274
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Nov 2022 17:58:18 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AF6A611C04C;
+        Mon, 14 Nov 2022 17:58:18 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9B68011C04A;
+        Mon, 14 Nov 2022 17:58:13 +0000 (GMT)
+Received: from li-c3569c4c-1ef8-11b2-a85c-ee139cda3133.ibm.com.com (unknown [9.43.116.246])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 14 Nov 2022 17:58:13 +0000 (GMT)
+From:   Sathvika Vasireddy <sv@linux.ibm.com>
+To:     linuxppc-dev@lists.ozlabs.org
+Cc:     jpoimboe@redhat.com, peterz@infradead.org,
+        linux-kernel@vger.kernel.org, aik@ozlabs.ru, mpe@ellerman.id.au,
+        mingo@redhat.com, christophe.leroy@csgroup.eu, rostedt@goodmis.org,
+        mbenes@suse.cz, npiggin@gmail.com, chenzhongjin@huawei.com,
+        naveen.n.rao@linux.vnet.ibm.com, sv@linux.ibm.com
+Subject: [PATCH v6 00/16] objtool: Enable and implement --mcount option on powerpc
+Date:   Mon, 14 Nov 2022 23:27:38 +0530
+Message-Id: <20221114175754.1131267-1-sv@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221114083227.j4ynx6wjwfwseqqy@mobilestation>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: boPTZKOD5SKdC4P2Idutvbiy0YCfHnl4
+X-Proofpoint-GUID: uUuF3t6nchN4O_OxyGh5ZQumj6D8Jmjs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-14_13,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ mlxlogscore=999 spamscore=0 impostorscore=0 phishscore=0 clxscore=1015
+ suspectscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211140125
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,255 +90,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 11:32:27AM +0300, Serge Semin wrote:
-> On Mon, Nov 14, 2022 at 12:09:15PM +0530, Manivannan Sadhasivam wrote:
-> > On Sun, Nov 13, 2022 at 10:12:56PM +0300, Serge Semin wrote:
-> > > In accordance with the generic PCIe Root Port DT-bindings the "dma-ranges"
-> > > property has the same format as the "ranges" property. The only difference
-> > > is in their semantics. The "dma-ranges" property describes the PCIe-to-CPU
-> > > memory mapping in opposite to the CPU-to-PCIe mapping of the "ranges"
-> > > property. Even though the DW PCIe controllers are normally equipped with
-> > > the internal Address Translation Unit which inbound and outbound tables
-> > > can be used to implement both properties semantics, it was surprising for
-> > > me to discover that the host-related part of the DW PCIe driver currently
-> > > supports the "ranges" property only while the "dma-ranges" windows are
-> > > just ignored. Having the "dma-ranges" supported in the driver would be
-> > > very handy for the platforms, that don't tolerate the 1:1 CPU-PCIe memory
-> > > mapping and require a customized PCIe memory layout. So let's fix that by
-> > > introducing the "dma-ranges" property support.
-> > > 
-> > > First of all we suggest to rename the dw_pcie_prog_inbound_atu() method to
-> > > dw_pcie_prog_ep_inbound_atu() and create a new version of the
-> > > dw_pcie_prog_inbound_atu() function. Thus we'll have two methods for the
-> > > RC and EP controllers respectively in the same way as it has been
-> > > developed for the outbound ATU setup methods.
-> > > 
-> > 
-> 
-> > I think you should split the function renaming part into a separate patch.
-> 
-> Don't see this necessary especially at the current stage of the
-> patchset. Without this modification the renaming isn't required. So
-> should a revert-patch is applied both of the updates will be undone.
-> 
+This patchset enables and implements objtool --mcount
+option on powerpc. This applies atop powerpc/merge branch.
 
-There is no necessity for both API renaming and dma-ranges implementation to be
-in the same patch as long as first one is functionally independent. But I'll
-defer it to you.
+Changelog:
 
-> > 
-> > > Secondly aside with the memory window index and type the new
-> > > dw_pcie_prog_inbound_atu() function will accept CPU address, PCIe address
-> > > and size as its arguments. These parameters define the PCIe and CPU memory
-> > > ranges which will be used to setup the respective inbound ATU mapping. The
-> > > passed parameters need to be verified against the ATU ranges constraints
-> > > in the same way as it is done for the outbound ranges.
-> > > 
-> > > Finally the DMA-ranges detected for the PCIe controller need to be
-> > > converted to the inbound ATU entries during the host controller
-> > > initialization procedure. It will be done in the framework of the
-> > > dw_pcie_iatu_setup() method. Note before setting the inbound ranges up we
-> > > need to disable all the inbound ATU entries in order to prevent unexpected
-> > > PCIe TLPs translations defined by some third party software like
-> > > bootloaders.
-> > > 
-> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > 
-> > > ---
-> > > 
-> > > Changelog v3:
-> > > - Drop inbound iATU window size alignment constraint. (@Manivannan)
-> > > ---
-> > >  .../pci/controller/dwc/pcie-designware-ep.c   |  4 +-
-> > >  .../pci/controller/dwc/pcie-designware-host.c | 32 ++++++++++-
-> > >  drivers/pci/controller/dwc/pcie-designware.c  | 56 ++++++++++++++++++-
-> > >  drivers/pci/controller/dwc/pcie-designware.h  |  6 +-
-> > >  4 files changed, 89 insertions(+), 9 deletions(-)
-> > > 
-> > > diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > > index 83ddb190292e..237bb01d7852 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > > @@ -171,8 +171,8 @@ static int dw_pcie_ep_inbound_atu(struct dw_pcie_ep *ep, u8 func_no, int type,
-> > >  		return -EINVAL;
-> > >  	}
-> > >  
-> > > -	ret = dw_pcie_prog_inbound_atu(pci, func_no, free_win, type,
-> > > -				       cpu_addr, bar);
-> > > +	ret = dw_pcie_prog_ep_inbound_atu(pci, func_no, free_win, type,
-> > > +					  cpu_addr, bar);
-> > >  	if (ret < 0) {
-> > >  		dev_err(pci->dev, "Failed to program IB window\n");
-> > >  		return ret;
-> > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > index 39f3b37d4033..ea923c25e12d 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > @@ -643,12 +643,15 @@ static int dw_pcie_iatu_setup(struct dw_pcie_rp *pp)
-> > >  	}
-> > >  
-> > >  	/*
-> > > -	 * Ensure all outbound windows are disabled before proceeding with
-> > > -	 * the MEM/IO ranges setups.
-> > > +	 * Ensure all out/inbound windows are disabled before proceeding with
-> > > +	 * the MEM/IO (dma-)ranges setups.
-> > >  	 */
-> > >  	for (i = 0; i < pci->num_ob_windows; i++)
-> > >  		dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_OB, i);
-> > >  
-> > > +	for (i = 0; i < pci->num_ib_windows; i++)
-> > > +		dw_pcie_disable_atu(pci, PCIE_ATU_REGION_DIR_IB, i);
-> > > +
-> > >  	i = 0;
-> > >  	resource_list_for_each_entry(entry, &pp->bridge->windows) {
-> > >  		if (resource_type(entry->res) != IORESOURCE_MEM)
-> > > @@ -685,9 +688,32 @@ static int dw_pcie_iatu_setup(struct dw_pcie_rp *pp)
-> > >  	}
-> > >  
-> > >  	if (pci->num_ob_windows <= i)
-> > > -		dev_warn(pci->dev, "Resources exceed number of ATU entries (%d)\n",
-> > > +		dev_warn(pci->dev, "Ranges exceed outbound iATU size (%d)\n",
-> > >  			 pci->num_ob_windows);
-> > >  
-> > > +	i = 0;
-> > > +	resource_list_for_each_entry(entry, &pp->bridge->dma_ranges) {
-> > > +		if (resource_type(entry->res) != IORESOURCE_MEM)
-> > > +			continue;
-> > > +
-> > > +		if (pci->num_ib_windows <= i)
-> > > +			break;
-> > > +
-> > > +		ret = dw_pcie_prog_inbound_atu(pci, i++, PCIE_ATU_TYPE_MEM,
-> > > +					       entry->res->start,
-> > > +					       entry->res->start - entry->offset,
-> > > +					       resource_size(entry->res));
-> > > +		if (ret) {
-> > > +			dev_err(pci->dev, "Failed to set DMA range %pr\n",
-> > > +				entry->res);
-> > > +			return ret;
-> > > +		}
-> > > +	}
-> > > +
-> > > +	if (pci->num_ib_windows <= i)
-> > > +		dev_warn(pci->dev, "Dma-ranges exceed inbound iATU size (%u)\n",
-> > 
-> 
-> > s/Dma/dma
-> 
-> Well, I could also make it like DMA-ranges. It depends on what you
-> imply by the message. I've made it looking like the Ranges-related
-> counterpart.
-> 
+----
+v6:
 
-Either "DMA" or "dma" looks good. I haven't seen "Dma" mostly.
+* Patch 06/16 - Add annotations to assembly files
+		arch/powerpc/kernel/cpu_setup_e500.S and arch/powerpc/kernel/head_85xx.S
+----
+v5:
 
-Thanks,
-Mani
+* Patch 02/16 - Add Reviewed-by tag from Christophe Leroy
 
-> -Sergey
-> 
-> > 
-> > Thanks,
-> > Mani
-> > 
-> > > +			 pci->num_ib_windows);
-> > > +
-> > >  	return 0;
-> > >  }
-> > >  
-> > > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> > > index c6725c519a47..ca830ee794a7 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-designware.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> > > @@ -393,8 +393,60 @@ static inline void dw_pcie_writel_atu_ib(struct dw_pcie *pci, u32 index, u32 reg
-> > >  	dw_pcie_writel_atu(pci, PCIE_ATU_REGION_DIR_IB, index, reg, val);
-> > >  }
-> > >  
-> > > -int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-> > > -			     int type, u64 cpu_addr, u8 bar)
-> > > +int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, int index, int type,
-> > > +			     u64 cpu_addr, u64 pci_addr, u64 size)
-> > > +{
-> > > +	u64 limit_addr = pci_addr + size - 1;
-> > > +	u32 retries, val;
-> > > +
-> > > +	if ((limit_addr & ~pci->region_limit) != (pci_addr & ~pci->region_limit) ||
-> > > +	    !IS_ALIGNED(cpu_addr, pci->region_align) ||
-> > > +	    !IS_ALIGNED(pci_addr, pci->region_align) || !size) {
-> > > +		return -EINVAL;
-> > > +	}
-> > > +
-> > > +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_LOWER_BASE,
-> > > +			      lower_32_bits(pci_addr));
-> > > +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_UPPER_BASE,
-> > > +			      upper_32_bits(pci_addr));
-> > > +
-> > > +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_LIMIT,
-> > > +			      lower_32_bits(limit_addr));
-> > > +	if (dw_pcie_ver_is_ge(pci, 460A))
-> > > +		dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_UPPER_LIMIT,
-> > > +				      upper_32_bits(limit_addr));
-> > > +
-> > > +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_LOWER_TARGET,
-> > > +			      lower_32_bits(cpu_addr));
-> > > +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_UPPER_TARGET,
-> > > +			      upper_32_bits(cpu_addr));
-> > > +
-> > > +	val = type;
-> > > +	if (upper_32_bits(limit_addr) > upper_32_bits(pci_addr) &&
-> > > +	    dw_pcie_ver_is_ge(pci, 460A))
-> > > +		val |= PCIE_ATU_INCREASE_REGION_SIZE;
-> > > +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_REGION_CTRL1, val);
-> > > +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_REGION_CTRL2, PCIE_ATU_ENABLE);
-> > > +
-> > > +	/*
-> > > +	 * Make sure ATU enable takes effect before any subsequent config
-> > > +	 * and I/O accesses.
-> > > +	 */
-> > > +	for (retries = 0; retries < LINK_WAIT_MAX_IATU_RETRIES; retries++) {
-> > > +		val = dw_pcie_readl_atu_ib(pci, index, PCIE_ATU_REGION_CTRL2);
-> > > +		if (val & PCIE_ATU_ENABLE)
-> > > +			return 0;
-> > > +
-> > > +		mdelay(LINK_WAIT_IATU);
-> > > +	}
-> > > +
-> > > +	dev_err(pci->dev, "Inbound iATU is not being enabled\n");
-> > > +
-> > > +	return -ETIMEDOUT;
-> > > +}
-> > > +
-> > > +int dw_pcie_prog_ep_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-> > > +				int type, u64 cpu_addr, u8 bar)
-> > >  {
-> > >  	u32 retries, val;
-> > >  
-> > > diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-> > > index a871ae7eb59e..37801bbce854 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-designware.h
-> > > +++ b/drivers/pci/controller/dwc/pcie-designware.h
-> > > @@ -346,8 +346,10 @@ int dw_pcie_prog_outbound_atu(struct dw_pcie *pci, int index, int type,
-> > >  			      u64 cpu_addr, u64 pci_addr, u64 size);
-> > >  int dw_pcie_prog_ep_outbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-> > >  				 int type, u64 cpu_addr, u64 pci_addr, u64 size);
-> > > -int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-> > > -			     int type, u64 cpu_addr, u8 bar);
-> > > +int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, int index, int type,
-> > > +			     u64 cpu_addr, u64 pci_addr, u64 size);
-> > > +int dw_pcie_prog_ep_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-> > > +				int type, u64 cpu_addr, u8 bar);
-> > >  void dw_pcie_disable_atu(struct dw_pcie *pci, u32 dir, int index);
-> > >  void dw_pcie_setup(struct dw_pcie *pci);
-> > >  void dw_pcie_iatu_detect(struct dw_pcie *pci);
-> > > -- 
-> > > 2.38.1
-> > > 
-> > > 
-> > 
-> > -- 
-> > மணிவண்ணன் சதாசிவம்
+* Patch 03/16 - Fix merge conflicts with latest powerpc/merge branch
+
+* Patch 06/16 - Files arch/powerpc/kernel/cpu_setup_fsl_booke.S and
+		arch/powerpc/kernel/head_fsl_booke.S are not present
+		today. Removed annotations in those assembly files.
+
+* Patch 11/16 - Add Reviewed-by tag from Christophe Leroy
+	      - Changed scripts/Makefile.lib file to make
+	        CONFIG_HAVE_OBJTOOL_NOP_MCOUNT depend on
+		CONFIG_FTRACE_MCOUNT_USE_OBJTOOL.
+
+* Patch 12/16 - Add Reviewed-by tag from Christophe Leroy
+
+* Patch 16/16 - Add Reviewed-by tag from Christophe Leroy 
+
+* For this series - Add Acked-by tag from Josh Poimboeuf
+		  - Add Tested-by tag from Naveen N. Rao
+		  - Add Reviewed-by tag from Naveen N. Rao
+----
+v4:
+
+* Patch 11/16 - Introduce a new config option
+                CONFIG_HAVE_OBJTOOL_NOP_MCOUNT as a means for
+                architectures to enable nop'ing ftrace locations.
+
+              - Remove Acked-by tag from Peter Zijlstra (Intel),
+                and Reviewed-by tag from Christophe Leroy.
+                [This is done because I reworked the patch to add
+                a new config option to objtool. Please let me know
+                if you want me to retain the tags. Thanks!]
+
+* Patch 16/16 - Rework the patch to handle only 'bl' instruction
+                decoding.
+
+----
+v3:
+
+* Patch 01/16 - Rework patch subject.
+              - Rework changelog.
+              - Add Reviewed-by tag from Christophe Leroy.
+
+* Patch 02/16 - Rework changelog to update details based on feedback
+                from Nicholas Piggin and Michael Ellerman.
+              - Use quotes instead of __stringify macro, based on
+                suggestion from Christophe Leroy.
+
+* Patch 03/16 - Add Reviewed-by tag from Christophe Leroy.
+              - Based on Christophe's suggestion, keep all <linux/...>
+                before <asm/...>.
+              - Rework changelog.
+
+* Patch 04/16 - Add Reviewed-by tag from Christophe Leroy.
+
+* Patch 05/16 - Add Reviewed-by tag from Christophe Leroy.
+
+* Patch 06/16 - No change.
+
+* Patch 07/16 - Add Reviewed-by tag from Christophe Leroy.
+
+* Patch 08/16 - Add Acked-by tag from Peter Zijlstra.
+
+* Patch 09/16 - Add Acked-by tag from Peter Zijlstra.
+
+* Patch 10/16 - Reorder local variable declarations to use reverse
+                xmas tree format.
+              - Add Signed-off-by tag from Sathvika Vasireddy indicating
+                changes done.
+              - Add Acked-by tag from Peter Zijlstra.
+
+* Patch 11/16 - Update changelog to indicate that powerpc kernel does
+                not support nop'ed out ftrace locations.
+              - Add Acked-by tag from Peter Zijlstra.
+              - Add Reviewed-by tag from Christophe Leroy.
+
+* Patch 12/16 - Per Christophe's comment, rework changelog.
+
+* Patch 13/16 - Add Acked-by tag from Peter Zijlstra.
+              - Add Reviewed-by tag from Christophe Leroy.
+
+* Patch 14/16 - Simplify arch_ftrace_match() function, based on
+                Christophe's suggestion.
+              - Add Reviewed-by tag from Christophe Leroy.
+
+* Patch 15/16 - Include code from Christophe Leroy to use local vars for
+                type and imm, and to adapt len for prefixed
+                instructions.
+
+* Patch 16/16 - Based on suggestion from Christophe Leroy, setup
+                immediate value calculation outside the check for
+                specific instruction under case 18.
+              - Set instruction type to INSN_CALL for 'bla'
+                instruction as well.
+
+----
+v2:
+
+* Change subject of patch 01/16
+* As suggested by Christophe Leroy, add barrier_before_unreachable()
+before __builtin_unreachable() to work around a gcc problem.
+* Fix issues reported by Kernel Test Robot.
+* Include suggestions from Christophe Leroy, and change commit
+messages for patches 01/16, 02/16, 03/16, 05/16.
+
+----
+
+Christophe Leroy (4):
+  objtool: Fix SEGFAULT
+  objtool: Use target file endianness instead of a compiled constant
+  objtool: Use target file class size instead of a compiled constant
+  powerpc: Fix objtool unannotated intra-function call warnings on PPC32
+
+Sathvika Vasireddy (12):
+  powerpc: Fix __WARN_FLAGS() for use with Objtool
+  powerpc: Override __ALIGN and __ALIGN_STR macros
+  powerpc: Fix objtool unannotated intra-function call warnings
+  powerpc: Curb objtool unannotated intra-function warnings
+  powerpc: Skip objtool from running on drivers/crypto/vmx/aesp8-ppc.o
+  powerpc: Skip objtool from running on VDSO files
+  objtool: Add --mnop as an option to --mcount
+  objtool: Read special sections with alts only when specific options are selected
+  objtool: Use macros to define arch specific reloc types
+  objtool: Add arch specific function arch_ftrace_match()
+  objtool/powerpc: Enable objtool to be built on ppc
+  objtool/powerpc: Add --mcount specific implementation
+
+ Makefile                                      |   4 +-
+ arch/powerpc/Kconfig                          |   2 +
+ arch/powerpc/include/asm/asm.h                |   7 ++
+ arch/powerpc/include/asm/bug.h                |   3 +-
+ arch/powerpc/include/asm/linkage.h            |   3 +
+ arch/powerpc/kernel/cpu_setup_6xx.S           |  26 +++--
+ arch/powerpc/kernel/cpu_setup_e500.S          |   8 +-
+ arch/powerpc/kernel/entry_32.S                |   9 +-
+ arch/powerpc/kernel/entry_64.S                |   2 +
+ arch/powerpc/kernel/exceptions-64s.S          |   4 +-
+ arch/powerpc/kernel/head_40x.S                |   5 +-
+ arch/powerpc/kernel/head_64.S                 |   7 +-
+ arch/powerpc/kernel/head_85xx.S               |   5 +-
+ arch/powerpc/kernel/head_8xx.S                |   5 +-
+ arch/powerpc/kernel/head_book3s_32.S          |  29 +++--
+ arch/powerpc/kernel/misc_64.S                 |   4 +-
+ arch/powerpc/kernel/swsusp_32.S               |   5 +-
+ arch/powerpc/kernel/vdso/Makefile             |   2 +
+ arch/powerpc/kernel/vector.S                  |   4 +-
+ arch/powerpc/kvm/book3s_hv_interrupts.S       |   4 +-
+ arch/powerpc/kvm/book3s_hv_rmhandlers.S       |  25 +++--
+ arch/powerpc/kvm/fpu.S                        |  17 ++-
+ arch/powerpc/platforms/52xx/lite5200_sleep.S  |  15 ++-
+ arch/x86/Kconfig                              |   1 +
+ drivers/crypto/vmx/Makefile                   |   2 +
+ kernel/trace/Kconfig                          |   7 ++
+ scripts/Makefile.lib                          |   3 +
+ tools/objtool/arch/powerpc/Build              |   2 +
+ tools/objtool/arch/powerpc/decode.c           | 101 ++++++++++++++++++
+ .../arch/powerpc/include/arch/cfi_regs.h      |  11 ++
+ tools/objtool/arch/powerpc/include/arch/elf.h |  10 ++
+ .../arch/powerpc/include/arch/special.h       |  21 ++++
+ tools/objtool/arch/powerpc/special.c          |  19 ++++
+ tools/objtool/arch/x86/decode.c               |   5 +
+ tools/objtool/arch/x86/include/arch/elf.h     |   2 +
+ .../arch/x86/include/arch/endianness.h        |   9 --
+ tools/objtool/builtin-check.c                 |  14 +++
+ tools/objtool/check.c                         |  53 ++++-----
+ tools/objtool/elf.c                           |   8 +-
+ tools/objtool/include/objtool/arch.h          |   2 +
+ tools/objtool/include/objtool/builtin.h       |   1 +
+ tools/objtool/include/objtool/elf.h           |   8 ++
+ tools/objtool/include/objtool/endianness.h    |  32 +++---
+ tools/objtool/orc_dump.c                      |  11 +-
+ tools/objtool/orc_gen.c                       |   4 +-
+ tools/objtool/special.c                       |   3 +-
+ 46 files changed, 418 insertions(+), 106 deletions(-)
+ create mode 100644 arch/powerpc/include/asm/asm.h
+ create mode 100644 tools/objtool/arch/powerpc/Build
+ create mode 100644 tools/objtool/arch/powerpc/decode.c
+ create mode 100644 tools/objtool/arch/powerpc/include/arch/cfi_regs.h
+ create mode 100644 tools/objtool/arch/powerpc/include/arch/elf.h
+ create mode 100644 tools/objtool/arch/powerpc/include/arch/special.h
+ create mode 100644 tools/objtool/arch/powerpc/special.c
+ delete mode 100644 tools/objtool/arch/x86/include/arch/endianness.h
 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.31.1
+
