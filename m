@@ -2,151 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD4AC628935
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:21:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A4C62893A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:22:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237153AbiKNTVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 14:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32882 "EHLO
+        id S237183AbiKNTWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 14:22:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237013AbiKNTVc (ORCPT
+        with ESMTP id S237013AbiKNTWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 14:21:32 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA29121260;
-        Mon, 14 Nov 2022 11:21:31 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 326572035B;
-        Mon, 14 Nov 2022 19:21:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668453690; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C3HKNfIulCdNS1yQDFyfWz7VJTvWWLP9//PNa+endtE=;
-        b=RbiaIxhg1yFpl8RL+Gw8VX/OPzc611xquNEAigt4T2+XihdOyMj/wTWECiWmCa2c8nfX67
-        ggL2he6j8+mGt0BDWbtRXxa2Tg4QKDNIXS1fbWQUiROKSAVUDCwGOp1NEsVQsJmEGa8q9D
-        BXTPmBj5Sth7Za+gSKGfNTslApbZGys=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668453690;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C3HKNfIulCdNS1yQDFyfWz7VJTvWWLP9//PNa+endtE=;
-        b=/7+SXQH37A3xGS+F+/m2/T2qHxVAJKRRVUYXvJiFGnIKXac0Z/pAjP9L9lzOPGKksGdzvn
-        aDzix1l1y8WX6JAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2431B13A92;
-        Mon, 14 Nov 2022 19:21:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6sbMCDqVcmNLFAAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 14 Nov 2022 19:21:30 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 9B345A0709; Mon, 14 Nov 2022 20:21:29 +0100 (CET)
-Date:   Mon, 14 Nov 2022 20:21:29 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Svyatoslav Feldsherov <feldsherov@google.com>
-Cc:     Jan Kara <jack@suse.cz>, Alexander Viro <viro@zeniv.linux.org.uk>,
-        Lukas Czerner <lczerner@redhat.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        syzbot+6ba92bd00d5093f7e371@syzkaller.appspotmail.com,
-        oferz@google.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs: do not push freeing inode to b_dirty_time list
-Message-ID: <20221114192129.zkmubc6pmruuzkc7@quack3>
-References: <20221113152439.2821942-1-feldsherov@google.com>
- <20221114104653.sosohdhkxry6xkuc@quack3>
- <CACgs1VBy6Mww_iOgtY7Brryi_ofbrAO1yud8zyBer59hhSAUGg@mail.gmail.com>
+        Mon, 14 Nov 2022 14:22:08 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A364127CCE;
+        Mon, 14 Nov 2022 11:22:07 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so14764987pji.1;
+        Mon, 14 Nov 2022 11:22:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=53BI+CPgUrrzTQEc/6H5DDbmcd2GnS4RSmYFxg2h73o=;
+        b=bAcRs7viz+6dG+r2Qu2aT/3RiAh1ih9NOmQow9TLGfBYw2XU5my/PiKQztmx5tIQWX
+         G1uqdX+tzNcKZFjFTWfKRWGw3B/8fhE77fVGDuetJ/h9tmyMbyHTEQ16GuMPo5yZq5n7
+         gZSQQBvHOYcqhjwBqB5ILERA/wG5GD7Q5KrlvUzQy7EuZWFsI/MRo4SY0qVy55ibQevX
+         CQaCoPac/qiVzLzoNLf/Wxte0WHfLDtay18MCC3ZlpUWoTfSBC4UP1I2TD15a+qu1Vd1
+         GLwpAIbVhGsX/RxoGS5Mb64jBPcMxgcmqrQLD0MtAMulTa+ZxzOhb4pqDVvW23BOmknw
+         xSQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=53BI+CPgUrrzTQEc/6H5DDbmcd2GnS4RSmYFxg2h73o=;
+        b=Cyl6WtHbIMSngaAbPeGLEUuxHY0YcTgJTCP2aWK+45uXZDuugZ0zMixXM+ZeOVsDjr
+         H6Kq8xfCZq6l/t+shWE5RVWWhBH6G4aoBgxgnJeyiZDrwPoA9Mj5OVpwM+S5Cv8o5+G7
+         eQ68k3jVQR2XF+dDXpCkXE1ylowUqqtJkcUrkTTdORZgKNM/+E1TNlnpWr8W1blxt0XV
+         3ej2mA4/nhIM5yxtPXINCmZQCkcnEAOyV45xpSO1XrvD6eamxCA9iC6qtrxPlqIfOr7p
+         RsIDW230PuLPlb/QHVqjXaEfe2jkXy6/qD/jo7cUYVjWCbEHr3zKY/WHE3f5mC2a2o/y
+         8s6w==
+X-Gm-Message-State: ANoB5pkPjoBIZkmFSfe0W1nzrR63GUM9+QE0tuUe+p+EhcW9fa3tMYqa
+        OH1r7FqLCJSeciMy309TBKA2q+ZkhyU=
+X-Google-Smtp-Source: AA0mqf4LeWk4H0EeCXGHY/cn7Tf3Q83UN2Pdgjs0z8sPYbOXY+bzXBjpubvi7XRZFIaayb1CH1XtGg==
+X-Received: by 2002:a17:902:b609:b0:17f:6758:6904 with SMTP id b9-20020a170902b60900b0017f67586904mr672927pls.61.1668453727035;
+        Mon, 14 Nov 2022 11:22:07 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:718:95ee:2678:497])
+        by smtp.gmail.com with ESMTPSA id s19-20020a17090a441300b0020af2bab83fsm6904059pjg.23.2022.11.14.11.22.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 11:22:06 -0800 (PST)
+Date:   Mon, 14 Nov 2022 11:22:03 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2 1/2] gpiolib: of: Prepare of_mm_gpiochip_add_data()
+ for fwnode
+Message-ID: <Y3KVW7OLedkdsVhC@google.com>
+References: <20221114184626.64214-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACgs1VBy6Mww_iOgtY7Brryi_ofbrAO1yud8zyBer59hhSAUGg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221114184626.64214-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 14-11-22 19:43:54, Svyatoslav Feldsherov wrote:
-> Thank you for looking into this!
+On Mon, Nov 14, 2022 at 08:46:25PM +0200, Andy Shevchenko wrote:
+> GPIO library is getting rid of of_node, fwnode should be utilized instead.
+> Prepare of_mm_gpiochip_add_data() for fwnode.
 > 
-> On Mon, Nov 14, 2022 at 12:46 PM Jan Kara <jack@suse.cz> wrote:
-> >
-> > On Sun 13-11-22 17:24:39, Svyatoslav Feldsherov wrote:
-> > > After commit cbfecb927f42 ("fs: record I_DIRTY_TIME even if inode
-> > > already has I_DIRTY_INODE") writeiback_single_inode can push inode with
-> > > I_DIRTY_TIME set to b_dirty_time list. In case of freeing inode with
-> > > I_DIRTY_TIME set this can happened after deletion of inode io_list at
-> > > evict. Stack trace is following.
-> > >
-> > > evict
-> > > fat_evict_inode
-> > > fat_truncate_blocks
-> > > fat_flush_inodes
-> > > writeback_inode
-> > > sync_inode_metadata
-> > > writeback_single_inode
-> > >
-> > > This will lead to use after free in flusher thread.
-> > >
-> > > Fixes: cbfecb927f42 ("fs: record I_DIRTY_TIME even if inode already has I_DIRTY_INODE")
-> > > Reported-by: syzbot+6ba92bd00d5093f7e371@syzkaller.appspotmail.com
-> > > Signed-off-by: Svyatoslav Feldsherov <feldsherov@google.com>
-> >
-> > Thanks for the analysis! I was scratching my head over this syzbot report
-> > for a while and it didn't occur to me somebody could be calling
-> > writeback_single_inode() from the .evict callback.
-> >
-> > Also what contributes to the problem is that FAT calls
-> > sync_inode_metadata(inode, 0) so it is not marking this final flush as data
-> > integrity sync and so we happily leave the I_DIRTY_TIME bit set.
-> >
-> > > diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-> > > index 443f83382b9b..31c93cbdb3fe 100644
-> > > --- a/fs/fs-writeback.c
-> > > +++ b/fs/fs-writeback.c
-> > > @@ -1718,7 +1718,7 @@ static int writeback_single_inode(struct inode *inode,
-> > >        */
-> > >       if (!(inode->i_state & I_DIRTY_ALL))
-> > >               inode_cgwb_move_to_attached(inode, wb);
-> > > -     else if (!(inode->i_state & I_SYNC_QUEUED)) {
-> > > +     else if (!(inode->i_state & (I_SYNC_QUEUED | I_FREEING))) {
-> > >               if ((inode->i_state & I_DIRTY))
-> > >                       redirty_tail_locked(inode, wb);
-> > >               else if (inode->i_state & I_DIRTY_TIME) {
-> >
-> > So even calling inode_cgwb_move_to_attached() is not safe when I_FREEING is
-> > already set. So I belive the I_FREEING bit check needs to be before this
-> > whole if block.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+
+Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+
+> ---
+> v2: added tag (Linus), modified according to Dmitry's suggestion
+>  drivers/gpio/gpiolib-of.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Agree, let me move the I_FREEING check before this if block.
-> The commit I am fixing didn't change this codepath, so I suspect there is an
-> implicit invariant which keeps inode_cgwb_move_to_attached call safe.
-> But I am 100% in favor of making I_FREEING check explicitly.
-
-Actually, as I've looked into fat_evict_inode() I don't see anything making
-that safe except for the fact that it may be more difficult for syzbot to
-excercise the per-memcg writeback path...
-
-> > I also think we should add some assertions into i_io_list handling
-> > functions to complain if I_FREEING bit is set to catch these problems
-> > earlier which means to be also more careful in __mark_inode_dirty(). But
-> > this is for a separate cleanup.
+> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+> index 4be3c21aa718..d30a5210dfdd 100644
+> --- a/drivers/gpio/gpiolib-of.c
+> +++ b/drivers/gpio/gpiolib-of.c
+> @@ -935,8 +935,8 @@ int of_mm_gpiochip_add_data(struct device_node *np,
+>  	if (mm_gc->save_regs)
+>  		mm_gc->save_regs(mm_gc);
+>  
+> -	of_node_put(mm_gc->gc.of_node);
+> -	mm_gc->gc.of_node = of_node_get(np);
+> +	fwnode_handle_put(mm_gc->gc.fwnode);
+> +	mm_gc->gc.fwnode = fwnode_handle_get(of_fwnode_handle(np));
+>  
+>  	ret = gpiochip_add_data(gc, data);
+>  	if (ret)
 > 
-> Sounds reasonable. Will look into that afterwards.
+> base-commit: 8dab99c9eab3162bfb4326c35579a3388dbf68f2
+> -- 
+> 2.35.1
+> 
 
-Thanks!
+Thanks.
 
-								Honza
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Dmitry
