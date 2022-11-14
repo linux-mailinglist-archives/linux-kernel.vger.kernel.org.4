@@ -2,117 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD81628101
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0376D628117
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237024AbiKNNPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:15:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
+        id S236882AbiKNNRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:17:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236006AbiKNNPD (ORCPT
+        with ESMTP id S238088AbiKNNRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:15:03 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE6863B3;
-        Mon, 14 Nov 2022 05:15:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668431702; x=1699967702;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ya4IJduoXapA85hp2rSgUfdmDE9v4JyPdYLuxuYPiSc=;
-  b=nriKFfI56UInivaLLaFOH2BGzw6AbFwQdOnaQBZNuWzSVHIdYiD5e8rm
-   TA9iUYKxF/Dv4wqkkicZuGbUinjeHAnxLFrn+A438xrL99cF31PE2hocG
-   G/4lb3nEx3Tx+F7F596J8G4xo1lkeP4it1BAOpw/PRQnU6rYpQ2NLUV80
-   ju2lLK7nYAL7+LNTUPDqRePbF7q8nE3pm3q9j8jvRj7SrzUpiLgT3fhYh
-   Dlb+G0ENwT4ly2hpAgcj8EDW6WNVZj7iokyiJHavL6novD/8tIOR8ShuJ
-   sh7ADz5JCCiICP+AWK0+YhCT2xkLiT4KVnTmDFp9Le9nFVylbJqUyJ8L/
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="299482303"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="299482303"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 05:15:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="780919340"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="780919340"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Nov 2022 05:15:00 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ouZIg-00CBDR-1h;
-        Mon, 14 Nov 2022 15:14:58 +0200
-Date:   Mon, 14 Nov 2022 15:14:58 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        michael@walle.cc, broonie@kernel.org
-Subject: Re: [PATCH v2 4/4] gpio: i8255: Migrate to regmap API
-Message-ID: <Y3I/UsI2wyNSybux@smile.fi.intel.com>
-References: <cover.1668129763.git.william.gray@linaro.org>
- <61327a67cc308af413471a69a4810b2785e53e8e.1668129763.git.william.gray@linaro.org>
- <Y3Dol6rHduFNQT85@smile.fi.intel.com>
- <Y3D6Lji9bKeSbJaI@fedora>
- <Y3D7jipyk5L655AE@fedora>
+        Mon, 14 Nov 2022 08:17:07 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417BADE2;
+        Mon, 14 Nov 2022 05:17:06 -0800 (PST)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AE9XjP5004653;
+        Mon, 14 Nov 2022 14:16:36 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=12xhdvhfGdlmnPHqB8ap3RlA4mK9WjDTkrMLlKf/Ybo=;
+ b=vu4NHQO24koGmLk5G/i80+OITsx6HaHWxcGzEIS8lE8Q+dlkQPo2gk4Axk1Xs721xOhz
+ 5QvNI72uJVB3iCKlgpOW3i+DxPdLpGFddF8x6s/MMCp2yz1wUkdlttJ3mynPNVSc6GLM
+ c7fBQRH8DhvMoXpDKrj35Joe5sObLDJONe2xXEM71RAN1Kfq+R9tmDXrhAwAttzjyLYo
+ JD/rIikqa6+GfRLYO9ai+XWbKIuaMKo8fKHjMqPuNHDr6ME0Lb0lL8tULkj3WZdRYsew
+ 5+y3egJBn1RmBLUG/7md1uCWiivkfVnLEAxVWxDcA9ucWFtyRDRF/CFDazF6DU1tEeVb Mg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kudxqk1ra-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 14:16:36 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 223BF10002A;
+        Mon, 14 Nov 2022 14:16:31 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1B90E21B536;
+        Mon, 14 Nov 2022 14:16:31 +0100 (CET)
+Received: from [10.129.167.233] (10.129.167.233) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.32; Mon, 14 Nov
+ 2022 14:16:30 +0100
+Message-ID: <d651b9bf-dbf5-8737-175f-454335aaef2b@foss.st.com>
+Date:   Mon, 14 Nov 2022 14:16:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3D7jipyk5L655AE@fedora>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: Coverity: vgxy61_detect(): Control flow issues
+Content-Language: en-US
+To:     coverity-bot <keescook@chromium.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
+        Shawn Tu <shawnx.tu@intel.com>, <linux-media@vger.kernel.org>,
+        Sylvain Petinot <sylvain.petinot@foss.st.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        <linux-next@vger.kernel.org>, <linux-hardening@vger.kernel.org>
+References: <202211100828.FEDCDE7@keescook>
+From:   Benjamin MUGNIER <benjamin.mugnier@foss.st.com>
+In-Reply-To: <202211100828.FEDCDE7@keescook>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.129.167.233]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-14_12,2022-11-11_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 13, 2022 at 09:13:34AM -0500, William Breathitt Gray wrote:
-> On Sun, Nov 13, 2022 at 09:07:42AM -0500, William Breathitt Gray wrote:
-> > On Sun, Nov 13, 2022 at 02:52:39PM +0200, Andy Shevchenko wrote:
-> > > On Thu, Nov 10, 2022 at 08:55:53PM -0500, William Breathitt Gray wrote:
+Hello,
 
-...
+Thank you for your report.
 
-> > > >  drivers/gpio/gpio-104-dio-48e.c | 397 ++++++++++-------------------
-> > > >  drivers/gpio/gpio-gpio-mm.c     | 151 +++--------
-> > > >  drivers/gpio/gpio-i8255.c       | 429 +++++++++++---------------------
-> > > >  drivers/gpio/gpio-i8255.h       |  80 +++---
-> > > 
-> > > Can we actually split this to a few steps:
-> > >  - providing gpio-i8255-regmap
-> > >  - providing gpio-mm-regmap
-> > >  - converting the driver
-> > >  - removing not used modules (one by one)
-> > > ?
-> > > 
-> > > In this case if any regression somewhere appears, we can always perform a
-> > > (semi-)revert for a certain driver.
-> > 
-> > Sure, I can split the regmap_irq migration for 104-dio-48e into a
-> > separate precursor patch to reduce the amount of changes we see here and
-> > provide a revert path for these IRQ changes. I can do a similar change
-> > for 104-idi-48 as well.
-> > 
-> > The rest of the changes for 104-dio-48 and gpio-mm are essentially just
-> > the regmap configurations, so the patch will be largely identical even
-> > if we migrate gpio-i8255 to regmap API first before migrating again to
-> > the gpio_regmap in a second patch.
+This issue, and all other reported control flow issues, are fixed in the
+following patch: 'media: i2c: st-vgxy61: Fix smatch warnings'.
+https://lore.kernel.org/linux-media/20221110134102.64990-1-benjamin.mugnier@foss.st.com/
+
+On 11/10/22 17:28, coverity-bot wrote:
+> Hello!
 > 
-> Sorry, I realize now that you meant to split the i8255 gpio_regmap
-> additions to their own patch, perform the driver migrations in the own
-> respective patches, and then finally remove the dangling unused i8255
-> functions and structures. Yes I think that would make for a cleaner
-> patch series so I'll split it up that way.
-
-Yes, that's what I meant. Thank you!
+> This is an experimental semi-automated report about issues detected by
+> Coverity from a scan of next-20221110 as part of the linux-next scan project:
+> https://scan.coverity.com/projects/linux-next-weekly-scan
+> 
+> You're getting this email because you were associated with the identified
+> lines of code (noted below) that were touched by commits:
+> 
+>   Thu Oct 27 14:37:38 2022 +0300
+>     153e4ad44d60 ("media: i2c: Add driver for ST VGXY61 camera sensor")
+> 
+> Coverity reported the following:
+> 
+> *** CID 1527257:  Control flow issues  (NO_EFFECT)
+> drivers/media/i2c/st-vgxy61.c:1679 in vgxy61_detect()
+> 1673     	struct i2c_client *client = sensor->i2c_client;
+> 1674     	u16 id = 0;
+> 1675     	int ret;
+> 1676     	u8 st;
+> 1677
+> 1678     	id = vgxy61_read_reg(sensor, VGXY61_REG_MODEL_ID);
+> vvv     CID 1527257:  Control flow issues  (NO_EFFECT)
+> vvv     This less-than-zero comparison of an unsigned value is never true. "id < 0".
+> 1679     	if (id < 0)
+> 1680     		return id;
+> 1681     	if (id != VG5661_MODEL_ID && id != VG5761_MODEL_ID) {
+> 1682     		dev_warn(&client->dev, "Unsupported sensor id %x\n", id);
+> 1683     		return -ENODEV;
+> 1684     	}
+> 
+> If this is a false positive, please let us know so we can mark it as
+> such, or teach the Coverity rules to be smarter. If not, please make
+> sure fixes get into linux-next. :) For patches fixing this, please
+> include these lines (but double-check the "Fixes" first):
+> 
+> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> Addresses-Coverity-ID: 1527257 ("Control flow issues")
+> Fixes: 153e4ad44d60 ("media: i2c: Add driver for ST VGXY61 camera sensor")
+> 
+> Thanks for your attention!
+> 
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards,
 
-
+Benjamin
