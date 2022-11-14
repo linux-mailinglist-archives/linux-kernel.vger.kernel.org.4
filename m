@@ -2,109 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5876F627579
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 06:15:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F16E627585
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 06:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234043AbiKNFO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 00:14:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
+        id S235399AbiKNFVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 00:21:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiKNFOv (ORCPT
+        with ESMTP id S230030AbiKNFVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 00:14:51 -0500
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C2415FEB;
-        Sun, 13 Nov 2022 21:14:48 -0800 (PST)
-Received: by mail-pf1-f178.google.com with SMTP id z26so10026868pff.1;
-        Sun, 13 Nov 2022 21:14:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0v0laWrBsQpIC77havxoVIJOK4/6x29MDLsM2aZBDvw=;
-        b=0SmGWlpTZVWNl5K3j32dJusKyOvo+4SPDrkT6/WvrAPkJ1pr0wRs5bZ1kYxie6l/0h
-         wJAq7OD4VVy7rHejkd46umvSAGzat3z4Jdp2MnZ4CTmYjzcrjhb4C98nst1RIc2xfqkP
-         QShh8WgoVOxcpdz2wplQi/wpkEorpS5ouBAe/TKpEu0bF9kGZ2OVK4PXWLBAgPHS/CpG
-         Wgg1nX0WiXukxf5ANgGiUH3B13vKgIRXZTsntavafTRLHBzkEopW8wnL5j3hRWdXs/be
-         UIDQcmmZDqVYKzpJLLs/RXOQ44MgpTypItwWyR7emNyA5xKHv2hbYHu6waG3J5gDeSZF
-         yMqg==
-X-Gm-Message-State: ANoB5pmZ+XB+46DXD1YyUWc36WzRW0Tc+aEurZ72Lwgv/0MVTMBjXVtl
-        QyqNcH7vlDPIYS9adWrPC4BJlIvjd0snreIsiig=
-X-Google-Smtp-Source: AA0mqf7FQ2jPez4Z+q5QCZHlD15+hW94EsQ5njMmML7hpjCTDfQ8q8HFUvYZFAm85LQqYgXWRmFQwUyaW1uTUS2rIdI=
-X-Received: by 2002:a63:4e53:0:b0:473:f7fb:d2c7 with SMTP id
- o19-20020a634e53000000b00473f7fbd2c7mr10516376pgl.535.1668402888118; Sun, 13
- Nov 2022 21:14:48 -0800 (PST)
+        Mon, 14 Nov 2022 00:21:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1DF1658E
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 21:19:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668403176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=tPCih+fFucBD04N2ze9Ac2gJMHrR+hhC//UJa4VjJH8=;
+        b=MC+kCMEjv5bsibivImjcGJz2K+aN00uBjccgOH2q2/OWIH3onZOa43MtSWgeaNe4AhydPq
+        hCiYHC3Wg0nv8uiefkRxVfTFT96r4eVdpG5zybpxq2pQGKAbTGos124mwedy4Bb4LHv7Vy
+        a7Z0mUB87OsLDMkZ2JANuMMn+L/LnZI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-553-Uoc03cbuNqyzvNpwhJSkZQ-1; Mon, 14 Nov 2022 00:19:23 -0500
+X-MC-Unique: Uoc03cbuNqyzvNpwhJSkZQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 19443833A0E;
+        Mon, 14 Nov 2022 05:19:23 +0000 (UTC)
+Received: from lxbceph1.gsslab.pek2.redhat.com (unknown [10.72.47.117])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 786FC2024CC5;
+        Mon, 14 Nov 2022 05:19:19 +0000 (UTC)
+From:   xiubli@redhat.com
+To:     ceph-devel@vger.kernel.org, jlayton@kernel.org, idryomov@gmail.com,
+        viro@zeniv.linux.org.uk
+Cc:     lhenriques@suse.de, mchangir@redhat.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Xiubo Li <xiubli@redhat.com>
+Subject: [PATCH 0/2 v2] ceph: fix the use-after-free bug for file_lock
+Date:   Mon, 14 Nov 2022 13:18:59 +0800
+Message-Id: <20221114051901.15371-1-xiubli@redhat.com>
 MIME-Version: 1.0
-References: <1668396306-47940-1-git-send-email-zhangchangzhong@huawei.com>
-In-Reply-To: <1668396306-47940-1-git-send-email-zhangchangzhong@huawei.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 14 Nov 2022 14:14:36 +0900
-Message-ID: <CAMZ6RqJNXr9S83o_YgofXsTh7pqtP9iGy_kTrgL69F=_BNqu2A@mail.gmail.com>
-Subject: Re: [PATCH] can: etas_es58x: free netdev when register_candev()
- failed in es58x_init_netdev()
-To:     Zhang Changzhong <zhangchangzhong@huawei.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhang,
+From: Xiubo Li <xiubli@redhat.com>
 
-Thank you for the patch.
+Changed in V2:
+- switch to file_lock.fl_u to fix the race bug
+- and the most code will be in the ceph layer
 
-On Mon. 14 nov. 2022 at 12:13, Zhang Changzhong
-<zhangchangzhong@huawei.com> wrote:
-> In case of register_candev() fails, clear es58x_dev->netdev[channel_idx]
-> and add free_candev(). Otherwise es58x_free_netdevs() will unregister
-> the netdev that has never been registered.
->
-> Fixes: 1dfb6005a60b ("can: etas_es58x: add support for ETAS ES581.4 CAN USB interface")
+Xiubo Li (2):
+  ceph: add ceph_lock_info support for file_lock
+  ceph: use a xarray to record all the opened files for each inode
 
-Nitpick, the correct fix tag is:
-Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X
-CAN USB interfaces")
+ fs/ceph/file.c                  |  9 +++++++++
+ fs/ceph/inode.c                 |  4 ++++
+ fs/ceph/locks.c                 | 35 +++++++++++++++++++++++++++++----
+ fs/ceph/super.h                 |  4 ++++
+ include/linux/ceph/ceph_fs_fl.h | 26 ++++++++++++++++++++++++
+ include/linux/fs.h              |  2 ++
+ 6 files changed, 76 insertions(+), 4 deletions(-)
+ create mode 100644 include/linux/ceph/ceph_fs_fl.h
 
-Aside of that,
-Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+-- 
+2.31.1
 
-> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
-> ---
->  drivers/net/can/usb/etas_es58x/es58x_core.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
-> index 25f863b..ddb7c57 100644
-> --- a/drivers/net/can/usb/etas_es58x/es58x_core.c
-> +++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
-> @@ -2091,8 +2091,11 @@ static int es58x_init_netdev(struct es58x_device *es58x_dev, int channel_idx)
->         netdev->dev_port = channel_idx;
->
->         ret = register_candev(netdev);
-> -       if (ret)
-> +       if (ret) {
-> +               es58x_dev->netdev[channel_idx] = NULL;
-> +               free_candev(netdev);
->                 return ret;
-> +       }
->
->         netdev_queue_set_dql_min_limit(netdev_get_tx_queue(netdev, 0),
->                                        es58x_dev->param->dql_min_limit);
-> --
-> 2.9.5
->
