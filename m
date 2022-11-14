@@ -2,318 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 995BE6287A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F846287A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237855AbiKNR6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:58:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55144 "EHLO
+        id S237900AbiKNR7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:59:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237957AbiKNR61 (ORCPT
+        with ESMTP id S237881AbiKNR7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:58:27 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D8838B3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:58:25 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id v28so11705566pfi.12
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:58:25 -0800 (PST)
+        Mon, 14 Nov 2022 12:59:16 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC47D2793E;
+        Mon, 14 Nov 2022 09:59:14 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id h14so11015866pjv.4;
+        Mon, 14 Nov 2022 09:59:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KM6+24y8Nx3+npt1PEW0fItw8sDTfZ+qONmMgpVZl5A=;
-        b=H1AMWfgOmUXklUoGpLcyUuiDFNdK9NWhlBr2OEuVs518AU/1QltaKC5OXiRcehIJ+L
-         7FAmo/zgqVfOBmvHeyvG+iMeI9I4quYcwz7HxWsroRthizOTg+frkHZ53dxDfpwdcisO
-         TuV442iBqSExcZzGz+XefGAhGPWAw1Endr/fa7MvgPyNvAcSSKhvqoTePSXbKYYpokJi
-         e0hMAtDkCq5mAutKNQMwBtrRlcyrOUSPNigYq2srS9Iu0sn/yy9Vi25aKipT+O34WZz+
-         bsf+DcQspiSBIEjUulnhdJtvQjGDRTFQnhZF74hUt62IQm78bjSaUWUH8IYuz5cLI1Pt
-         t0sQ==
+        bh=XFhHePacexOmBw7Tz/K0F1TGsvHM9Xi3kq9mowYg3II=;
+        b=mKGYb4c/KOkdbR+XBJPlya/hmWVHCFNnV61CSqtAIHvWeoCN5McZl69AJpgMp0+q8/
+         fEXNvpXDd/6IofiSotqtr5Gq5jg8ej3CwK3NEk3QV/BG68LzUK8sR7++HtE1ufyp1YrD
+         PkkuUfsxivFGh28S60h7jCDJcE2QTgn+e1O2c4WPWPwKveFDlUQRjur7KbC80ytF2PD+
+         vulsUFqJlas28ZtR8Jyi3cOQDBtP2AxZV37sJsNX+s64+J8wubJjNSMwTFB5nspve8Pi
+         i0Pd7ccGRB5PnroJArQ9CfINbDVVmiUhbA4+0M8Y9MCHNTXvMI6PZYHEAZZlbRAKTNpW
+         z+sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KM6+24y8Nx3+npt1PEW0fItw8sDTfZ+qONmMgpVZl5A=;
-        b=2EDY8UZdWToUnmBTAmCs2wLfRD3PLKEZClkC0FyC5apJPbk96TGBt/r0XW3WUZoG83
-         Dp61pQzNN6jUi5ct6MbeNoCFg9CH/oWNMSl1wDxIJ2IBOSNeVyi0MJ0glN5ZlFtk+Bje
-         neCNSA9n4O0r+3Ydp+7lzk6Yua7O+sUuTCVXNFX6fG3D2GDNhqK6MyhAx4CUyubMbsEQ
-         rW1LJ9GTh1kH0DiMyw8SZ8eU4k42JfK+VpZidh1tBX0kC0PFZFT+Usm1EyygDkUZjbVv
-         quVZszpQkEH8NwOujfLeyVAPlms4JidMW6gjSSh6te9mus62biGYTVuEJWZ5T2aXFkUF
-         lYGQ==
-X-Gm-Message-State: ANoB5pnXiyeSCJ+pxYbdBEoViaocVp4W7tCJP83ukxf49a7IQXsTj23Z
-        /tdh3yXp1sjNyqx2CXjmq6N8Lw==
-X-Google-Smtp-Source: AA0mqf54BjCniGJIMYLtI7O1hO+BWbvCMtZQ7exEQKMlm38GqyDvLxaIt7Y/hS857rv+Y/u+L5PpEg==
-X-Received: by 2002:a63:ce04:0:b0:46f:1081:f517 with SMTP id y4-20020a63ce04000000b0046f1081f517mr12869227pgf.297.1668448704779;
-        Mon, 14 Nov 2022 09:58:24 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:da6a:d4a2:1253:adfc:370? ([2405:201:d02f:da6a:d4a2:1253:adfc:370])
-        by smtp.gmail.com with ESMTPSA id v1-20020a17090a7c0100b001f94d25bfabsm9933621pjf.28.2022.11.14.09.58.21
+        bh=XFhHePacexOmBw7Tz/K0F1TGsvHM9Xi3kq9mowYg3II=;
+        b=R1JwJBULtxPvIElQlUJHut0SNn63b5X4Db8Eo54NiXCXqfS0IlKzIbIJx4O4TBhsjm
+         jUso35Lz5OpqYHe8dUpNlSIkEa8bWLZDjvdlAkt82IDmPR66sYHsBSvpExIvUvqdDIc5
+         WGoZsFiTqS5ctSJe5RKVfXI/AetZ+WFwGPnjuP/PCraBoBT+QAIbPO6bxI2ZsLmJA8WP
+         F426H+36j7KjrkMrkQxBq5TJrieLsI/ZHoepI8vekBQFkFhkBsXap+oXw+8SgwK+YNAC
+         ZEO1jPrYgVS8FYTpc0Ht1zFBPrIvniFFhjMNlV2RSTPwl3+FPgqPbEnzk79Lt0UCTBR4
+         jvSg==
+X-Gm-Message-State: ANoB5pkKS8lDvJ5wsSDjdRiHwHMrvm5e1sCcxMw8D7mIVCIrHftNJGik
+        6YBFIYY+j4Iz/zreZUfpptZJwY4PFZwYeA==
+X-Google-Smtp-Source: AA0mqf4qOQgyYkQt4HJdG7WX760vY2rDxoj0gyCABd6ax+im8jnAJmNq3aPTBjrkbclUabgelS+j2w==
+X-Received: by 2002:a17:902:bb8a:b0:17f:7f7e:70c7 with SMTP id m10-20020a170902bb8a00b0017f7f7e70c7mr337841pls.107.1668448754213;
+        Mon, 14 Nov 2022 09:59:14 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id y28-20020aa793dc000000b0056c0d129edfsm6962689pff.121.2022.11.14.09.59.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 09:58:24 -0800 (PST)
-Message-ID: <19c2513f-4a6f-ba20-b8f0-b97e14d36053@9elements.com>
-Date:   Mon, 14 Nov 2022 23:28:20 +0530
+        Mon, 14 Nov 2022 09:59:13 -0800 (PST)
+Message-ID: <50a9e9c1-68d6-4edd-42e2-c5b8a9ac7e8a@gmail.com>
+Date:   Mon, 14 Nov 2022 09:59:09 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v9 1/2] dt-bindings: mfd: Add dt-schema MAX5970 and
- MAX5978
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Marcello Sylvester Bauer <sylv@sylv.io>
-References: <20221114075739.4117439-1-Naresh.Solanki@9elements.com>
- <20221114075739.4117439-2-Naresh.Solanki@9elements.com>
- <3fd5b40f-25eb-7ce3-0e23-84c35962e6e1@linaro.org>
+Subject: Re: [PATCH net-next v4 1/4] net: dsa: add support for DSA rx
+ offloading via metadata dst
 Content-Language: en-US
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <3fd5b40f-25eb-7ce3-0e23-84c35962e6e1@linaro.org>
+To:     Felix Fietkau <nbd@nbd.name>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <olteanv@gmail.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <20221114124214.58199-1-nbd@nbd.name>
+ <20221114124214.58199-2-nbd@nbd.name>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221114124214.58199-2-nbd@nbd.name>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On 11/14/22 04:42, Felix Fietkau wrote:
+> If a metadata dst is present with the type METADATA_HW_PORT_MUX on a dsa cpu
+> port netdev, assume that it carries the port number and that there is no DSA
+> tag present in the skb data.
+> 
+> Signed-off-by: Felix Fietkau <nbd@nbd.name>
 
-On 14-11-2022 01:40 pm, Krzysztof Kozlowski wrote:
-> On 14/11/2022 08:57, Naresh Solanki wrote:
->> From: Marcello Sylvester Bauer <sylv@sylv.io>
-> 
-> Subject: I asked to drop the redundant words, but you re-added now in
-> different form. So again, drop "dt-schema".
-Sure
-> 
->>
->> The MAX597x is a hot swap controller with configurable fault protection.
->> It also has 10bit ADC for current & voltage measurements.
->>
->> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ---
->>   .../bindings/mfd/maxim,max5970.yaml           | 172 ++++++++++++++++++
->>   1 file changed, 172 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml b/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
->> new file mode 100644
->> index 000000000000..a93b6e009b9a
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
->> @@ -0,0 +1,172 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/mfd/maxim,max5970.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Regulator for MAX5970 smart switch from Maxim Integrated.
->> +
->> +maintainers:
->> +  - Patrick Rudolph <patrick.rudolph@9elements.com>
->> +
->> +description: |
->> +  The smart switch provides no output regulation, but independent fault protection
->> +  and voltage and current sensing.
->> +  Programming is done through I2C bus.
->> +
->> +  Datasheets:
->> +    https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
->> +    https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - maxim,max5970
->> +      - maxim,max5978
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  leds:
->> +    type: object
->> +    description:
->> +      Properties for four LEDS.
->> +
->> +    properties:
->> +      "#address-cells":
->> +        const: 1
->> +
->> +      "#size-cells":
->> +        const: 0
->> +
->> +    patternProperties:
->> +      "^led@[0-3]$":
->> +        $ref: /schemas/leds/common.yaml#
->> +        type: object
->> +
->> +    additionalProperties: false
->> +
->> +  vss1-supply:
->> +    description: Supply of the first channel.
->> +
->> +  vss2-supply:
->> +    description: Supply of the second channel.
->> +
->> +  "#io-channel-cells":
->> +    const: 1
->> +
->> +  regulators:
->> +    type: object
->> +    description:
->> +      Properties for regulator.
-> 
-> That's not correct description. This is not one regulator.
-Sure. Will add description something like:
-Properties for both regulators. Also specify value for shunt resistor 
-used for current sense.
-> 
->> +
->> +    patternProperties:
->> +      "^sw[0-1]$":
->> +        $ref: /schemas/regulator/regulator.yaml#
->> +        type: object
-> 
-> unevaluatedProperties: false
-Sure will add this.
-> 
->> +        properties:
->> +          shunt-resistor-micro-ohms:
->> +            description: |
->> +              The value of curent sense resistor in microohms.
-> 
-> Typo: current
-Sure. will fix this.
-> 
->> +
->> +        required:
->> +          - shunt-resistor-micro-ohms
->> +
->> +    additionalProperties: false
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - regulators
->> +  - vss1-supply
->> +
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          enum:
->> +            - maxim,max5970
->> +    then:
->> +      properties:
->> +        io-channels:
->> +          items:
->> +            - description: voltage first channel
->> +            - description: current first channel
->> +            - description: voltage second channel
->> +            - description: current second channel
->> +          description: |
->> +            Voltage and current for first and second channel.
->> +      required:
->> +        - vss2-supply
-> 
-> This is a friendly reminder during the review process.
-> 
-> It seems my previous comments were not fully addressed. Maybe my
-> feedback got lost between the quotes, maybe you just forgot to apply it.
-> Please go back to the previous discussion and either implement all
-> requested changes or keep discussing them.
-> 
-> Comment was:
-> "Also, add it in the existing example."
-This property isn't used. hence will remove in next version.
-> 
->> +    else:
->> +      properties:
->> +        io-channels:
->> +          items:
->> +            - description: voltage first channel
->> +            - description: current first channel
->> +          description: |
->> +            Voltage and current for first channel.
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    i2c {
->> +        #address-cells = <1>;
->> +        #size-cells = <0>;
->> +        regulator@3a {
->> +           compatible = "maxim,max5978";
->> +           reg = <0x3a>;
->> +           vss1-supply = <&p3v3>;
->> +
->> +           regulators {
->> +               sw0_ref_0: sw0 {
->> +                      regulator-compatible = "SW0";
-> 
-> Use 4 spaces for example indentation.
-Yeah. some place have 3 spaces instead. Will fix in next version for sure.
-> 
->> +                      shunt-resistor-micro-ohms = <12000>;
->> +               };
->> +           };
->> +
->> +           leds {
->> +               #address-cells = <1>;
->> +               #size-cells = <0>;
->> +               led@0 {
->> +                   reg = <0>;
->> +                   label = "led0";
->> +                   default-state = "on";
->> +               };
->> +               led@1 {
->> +                   reg = <1>;
->> +                   label = "led1";
->> +                   default-state = "on";
->> +               };
->> +           };
->> +        };
->> +    };
->> +
->> +  - |
->> +    i2c {
->> +        #address-cells = <1>;
->> +        #size-cells = <0>;
->> +
->> +        regulator@3a {
->> +            compatible = "maxim,max5970";
->> +            reg = <0x3a>;
->> +            vss1-supply = <&p3v3>;
->> +            vss2-supply = <&p5v>;
->> +
->> +            regulators {
->> +                sw0_ref_1: sw0 {
->> +                    regulator-compatible = "SW0";
->> +                    shunt-resistor-micro-ohms = <12000>;
->> +                };
->> +                sw1_ref_1: sw1 {
->> +                    regulator-compatible = "SW1";
->> +                    shunt-resistor-micro-ohms = <10000>;
->> +                };
->> +            };
->> +        };
->> +    };
->> +...
-> 
-> Best regards,
-> Krzysztof
-> 
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Regards,
-Naresh
+Is the plan to use the lwoer bits of the 32-bit port_id as the port 
+number for now, and we can use the remaining 24 or so bits for passing 
+classification (reason why we forward the packet, QoS etc. ) information 
+in the future?
+
+Might be time for me to revive the systemport patches supporting 
+Broadcom tags in the the DMA descriptor.
+
+Thanks!
+-- 
+Florian
+
