@@ -2,193 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3D2628752
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8185628755
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237331AbiKNRnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:43:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43468 "EHLO
+        id S237418AbiKNRoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:44:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237267AbiKNRno (ORCPT
+        with ESMTP id S237340AbiKNRn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:43:44 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101B3190
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:43:42 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id f27so30222139eje.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:43:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dFbOq8KvPfyqv8Tvmztn6miVwXV7s2YCAIN0rDZgKn8=;
-        b=kZAUj86IXe75dnl5U1/0XlxZ6WiVvz4JF/MFnWu5WfrqUcHIfpIwloMIqexqEiyr6V
-         K/9kWKkJfuHr15e10x1+ONoUzzBsMmZYVXI/2yoTq+2rhQtzN9nD2QPPLoO00VQgpHyF
-         NTtevwQQPEukJ10Av1iiOWVTKuNvLTl68r8Ks=
+        Mon, 14 Nov 2022 12:43:56 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E05DC768
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:43:49 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id q10-20020a056e0220ea00b00300f474693aso9810662ilv.23
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:43:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dFbOq8KvPfyqv8Tvmztn6miVwXV7s2YCAIN0rDZgKn8=;
-        b=BAzV5CMdldZ8J6oQ4CSG5ukCcWLBurTRkz/agMtG4ja+EOZSDo5+50omaiBTv5TA+W
-         4mef56sknfg0CloCnfWYHdUZtguVXX4oCWRNavHnpKchQp8o3tCRioTydv3SELMfhVEc
-         O0oqB5CtcE4BlGneYQ4WV4dr14L700Jg54TXYXtTdWEHRfrwLG5TBndyFWgyes60kavA
-         ZZ0gtM9Ah1LCK9Kbk5C80B5Vu8KLOBtsTaTWgY6GX6wP/bn0Wlyw6DNocPrnNT/u1V1v
-         5hyifl2yg1G4hMwBVvS1mA/8cBOP9IeaAS6pzNZ+zg46RxmWR5VDS0zU1qJB6w/128If
-         3JJg==
-X-Gm-Message-State: ANoB5pniC9FCU53d+CWYZC544tp/kIdT+MPMG4BLUtd5uJNLRDDvnT+3
-        7+h0k+zue/IwMWua9PRmZdrSypERPv27rA==
-X-Google-Smtp-Source: AA0mqf5lcFET82XgUbXT8gi/xRA7gZf3EfawneN8DLCn82vynIViEzKaRTtw/kTjHzdOBwgB5whfhA==
-X-Received: by 2002:a17:906:4a8b:b0:7ad:ba48:7e7c with SMTP id x11-20020a1709064a8b00b007adba487e7cmr11114437eju.443.1668447820309;
-        Mon, 14 Nov 2022 09:43:40 -0800 (PST)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
-        by smtp.gmail.com with ESMTPSA id b19-20020aa7df93000000b004587f9d3ce8sm5008405edy.56.2022.11.14.09.43.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 09:43:39 -0800 (PST)
-Received: by mail-wr1-f48.google.com with SMTP id j15so19657665wrq.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:43:39 -0800 (PST)
-X-Received: by 2002:adf:f10a:0:b0:236:863c:22d with SMTP id
- r10-20020adff10a000000b00236863c022dmr8382325wro.590.1668447818962; Mon, 14
- Nov 2022 09:43:38 -0800 (PST)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PTl6Rg3r2JPqIeyzl389/JCuDD3vbaKP46h/MG4AT/o=;
+        b=YicJ4bP7DXl/dIM35AKFQH7LMv1CM8+di3lSs/JlAvzMfi6S5teOfwoeMcXRfTQ7Mo
+         9YH2Flw6pgtEWnvzX5BkT83hMc7+dKm+PgTVo4vuIwyJUStQAp91ijlRfNSUZbfJ+cZK
+         KD6xT7IPwaNkhksqaRZSt1cVppL0h0LJqJDJTEuZtfIqGM/OAHVJCgf6mo4e3VzcOtR0
+         2yp1cfu/G/EBRdy/DCIrlwdy47Kl220noFPJhHgNSZEAFcIbLYsqNrw5pzH+/FMVbR8k
+         Iay6u9lS905yvwMwsq73Z+q6T+0fdeGwr/H9QemCl7GCtq79fTa4o1uHLzCHzZsBhgbh
+         +Qow==
+X-Gm-Message-State: ANoB5pkgHcN1V7X5DTqy6HXRQWzM2sgUjAKK9Llbe8XMi7GFNOtQwkK1
+        ifDvrNh52RPzq9NyJ2qMsslbRWW/HJdgqoLt62YOpoYyXbvT
+X-Google-Smtp-Source: AA0mqf4DJzO8d3XrkY2cYx9fUiO+ueVKZ1LqPmER/A3bI/87Xc/lNVeqlhj+ksBwwi+trIK8cfyA9UbAaS46p3SvlqxLrxVekyx5
 MIME-Version: 1.0
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
- <Y3FfhrgvBNey6T7V@sol.localdomain> <ff23b4e24222037959c2a784496c7ee91024e6c5.camel@linux.ibm.com>
- <CAE=gft63-jdKqKmepB+LXPm6WUWSnz+CMWcWWnyN1y-EnS4kVg@mail.gmail.com> <c31d1a3af53515f2a9d3f53eb27ce698e796f9b9.camel@linux.ibm.com>
-In-Reply-To: <c31d1a3af53515f2a9d3f53eb27ce698e796f9b9.camel@linux.ibm.com>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Mon, 14 Nov 2022 09:43:02 -0800
-X-Gmail-Original-Message-ID: <CAE=gft6L6bMtzbqUfH_NAsFz2r0Nw7kkbCPXcr2nYj5n31FYQg@mail.gmail.com>
-Message-ID: <CAE=gft6L6bMtzbqUfH_NAsFz2r0Nw7kkbCPXcr2nYj5n31FYQg@mail.gmail.com>
-Subject: Re: [PATCH v5 04/11] security: keys: trusted: Include TPM2 creation data
-To:     jejb@linux.ibm.com
-Cc:     Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, linux-integrity@vger.kernel.org,
-        gwendal@chromium.org, dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com,
-        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
-        linux-pm@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        Paul Moore <paul@paul-moore.com>,
-        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org
+X-Received: by 2002:a92:dc0c:0:b0:300:ece2:e3b8 with SMTP id
+ t12-20020a92dc0c000000b00300ece2e3b8mr6529994iln.255.1668447828383; Mon, 14
+ Nov 2022 09:43:48 -0800 (PST)
+Date:   Mon, 14 Nov 2022 09:43:48 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000023209305ed71c833@google.com>
+Subject: [syzbot] possible deadlock in nci_set_local_general_bytes
+From:   syzbot <syzbot+8768e9ec924b08e63f82@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com,
+        krzysztof.kozlowski@linaro.org, kuba@kernel.org, linma@zju.edu.cn,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 8:56 AM James Bottomley <jejb@linux.ibm.com> wrote:
->
-> On Mon, 2022-11-14 at 08:32 -0800, Evan Green wrote:
-> > On Sun, Nov 13, 2022 at 7:32 PM James Bottomley <jejb@linux.ibm.com>
-> > wrote:
-> > >
-> > > On Sun, 2022-11-13 at 13:20 -0800, Eric Biggers wrote:
-> > > > On Fri, Nov 11, 2022 at 03:16:29PM -0800, Evan Green wrote:
-> > > > > diff --git a/security/keys/trusted-keys/tpm2key.asn1
-> > > > > b/security/keys/trusted-keys/tpm2key.asn1
-> > > > > index f57f869ad60068..608f8d9ca95fa8 100644
-> > > > > --- a/security/keys/trusted-keys/tpm2key.asn1
-> > > > > +++ b/security/keys/trusted-keys/tpm2key.asn1
-> > > > > @@ -7,5 +7,18 @@ TPMKey ::= SEQUENCE {
-> > > > >         emptyAuth       [0] EXPLICIT BOOLEAN OPTIONAL,
-> > > > >         parent          INTEGER ({tpm2_key_parent}),
-> > > > >         pubkey          OCTET STRING ({tpm2_key_pub}),
-> > > > > -       privkey         OCTET STRING ({tpm2_key_priv})
-> > > > > +       privkey         OCTET STRING ({tpm2_key_priv}),
-> > > > > +       ---
-> > > > > +       --- A TPM2B_CREATION_DATA struct as returned from the
-> > > > > TPM2_Create command.
-> > > > > +       ---
-> > > > > +       creationData    [1] EXPLICIT OCTET STRING OPTIONAL
-> > > > > ({tpm2_key_creation_data}),
-> > > > > +       ---
-> > > > > +       --- A TPM2B_DIGEST of the creationHash as returned from
-> > > > > the
-> > > > > TPM2_Create
-> > > > > +       --- command.
-> > > > > +       ---
-> > > > > +       creationHash    [2] EXPLICIT OCTET STRING OPTIONAL
-> > > > > ({tpm2_key_creation_hash}),
-> > > > > +       ---
-> > > > > +       --- A TPMT_TK_CREATION ticket as returned from the
-> > > > > TPM2_Create command.
-> > > > > +       ---
-> > > > > +       creationTk      [3] EXPLICIT OCTET STRING OPTIONAL
-> > > > > ({tpm2_key_creation_tk})
-> > > > >         }
-> > > >
-> > > > The commit that added this file claimed:
-> > > >
-> > > >         "The benefit of the ASN.1 format is that it's a standard
-> > > > and thus the
-> > > >         exported key can be used by userspace tools
-> > > > (openssl_tpm2_engine,
-> > > >         openconnect and tpm2-tss-engine"
-> > > >
-> > > > Are these new fields in compliance with whatever standard that
-> > > > was referring to?
-> > >
-> > > Not really, no.  The current use case (and draft standard) is
-> > > already using [1] for policies and [2] for importable keys:
-> > >
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/jejb/openssl_tpm2_engine.git/tree/doc/draft-bottomley-tpm2-keys.xml
-> > >
-> > > I'm actually planning to use [3] for signed policies.  There's no
-> > > reason why you can't use [4] though.  Since the creation data, hash
-> > > and ticket are likely used as a job lot, it strikes me they should
-> > > be a single numbered optional sequence instead of individually
-> > > numbered, since you're unlikely to have one without the others.
-> >
-> > Thanks, I was hoping James might pipe up and tell me what to do.
-> > Grouping them as a single numbered optional sequence sounds
-> > reasonable to me. Is your draft too far along to squeeze this in?
->
-> Not at all.  The draft only becomes frozen once I submit it to the IETF
-> which, so far thanks to lack of any reviewers I haven't done (That's
-> why I was also thinking of adding signed policies).
->
-> >  If it is and I'm on my own to draft up and submit this, I would
-> > definitely appreciate any pointers on getting started you might have.
-> >
-> > I notice the draft and the code seem to be out of alignment.
->
-> The kernel code is out of alignment just because development moves a
-> bit slowly.  Policy based keys were submitted a long time ago as part
-> of the original move to interoperable sealed keys based on ASN.1:
->
-> https://lore.kernel.org/all/20200616160229.8018-7-James.Bottomley@HansenPartnership.com/
->
-> But eventually the policy part was split out and forgotten about.  I
-> think the only complete implementation of the draft standard is the
-> openssl_tpm2_engine.
->
-> >  I'm unfamiliar with this process, is the idea to get through all the
-> > iterations and land the standard, then fix up the code? What happens
-> > to existing data handed out in the old format?
->
-> No, it doesn't matter at all.  That's the whole point of using ASN.1
-> explicit optionals: the ASN.1 is always backwards compatible.  If I
-> ever submit the draft, there'll have to be a new RFC to add new
-> explicit optionals, but keys conforming to the old RFC will still be
-> valid under the new one.
+Hello,
 
-Ah I see, with the optionals in mind things do line up again.
+syzbot found the following issue on:
 
->
-> Of course, since openssl_tpm2_engine is the complete reference
-> implementation that means I'll have to add the creation PCRs
-> implementation to it ... unless you'd like to do it?
+HEAD commit:    1621b6eaebf7 Merge branch 'for-next/fixes' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=119413e1880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=606e57fd25c5c6cc
+dashboard link: https://syzkaller.appspot.com/bug?extid=8768e9ec924b08e63f82
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1097e935880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177b5b15880000
 
-I am willing to help as I'm the one making the mess. How does it
-sequence along with your draft submission (before, after,
-simultaneous)?
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/82aa7741098d/disk-1621b6ea.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f6be08c4e4c2/vmlinux-1621b6ea.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/296b6946258a/Image-1621b6ea.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8768e9ec924b08e63f82@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-rc4-syzkaller-31872-g1621b6eaebf7 #0 Not tainted
+------------------------------------------------------
+syz-executor402/3146 is trying to acquire lock:
+ffff0000cad76350 (&ndev->req_lock){+.+.}-{3:3}, at: nci_request net/nfc/nci/core.c:148 [inline]
+ffff0000cad76350 (&ndev->req_lock){+.+.}-{3:3}, at: nci_set_local_general_bytes+0xbc/0x480 net/nfc/nci/core.c:774
+
+but task is already holding lock:
+ffff0000cad73d18 (&genl_data->genl_data_mutex){+.+.}-{3:3}, at: nfc_genl_start_poll+0xc4/0x174 net/nfc/netlink.c:826
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #3 (&genl_data->genl_data_mutex){+.+.}-{3:3}:
+       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+       nfc_urelease_event_work+0x88/0x16c net/nfc/netlink.c:1811
+       process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+       worker_thread+0x340/0x610 kernel/workqueue.c:2436
+       kthread+0x12c/0x158 kernel/kthread.c:376
+       ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
+
+-> #2 (nfc_devlist_mutex){+.+.}-{3:3}:
+       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+       nfc_register_device+0x34/0x208 net/nfc/core.c:1116
+       nci_register_device+0x338/0x3b0 net/nfc/nci/core.c:1256
+       virtual_ncidev_open+0x6c/0xd8 drivers/nfc/virtual_ncidev.c:146
+       misc_open+0x1b8/0x200 drivers/char/misc.c:143
+       chrdev_open+0x2b4/0x2e8 fs/char_dev.c:414
+       do_dentry_open+0x364/0x748 fs/open.c:882
+       vfs_open+0x38/0x48 fs/open.c:1013
+       do_open fs/namei.c:3557 [inline]
+       path_openat+0xe34/0x11c4 fs/namei.c:3713
+       do_filp_open+0xdc/0x1b8 fs/namei.c:3740
+       do_sys_openat2+0xb8/0x22c fs/open.c:1310
+       do_sys_open fs/open.c:1326 [inline]
+       __do_sys_openat fs/open.c:1342 [inline]
+       __se_sys_openat fs/open.c:1337 [inline]
+       __arm64_sys_openat+0xb0/0xe0 fs/open.c:1337
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+-> #1 (nci_mutex){+.+.}-{3:3}:
+       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+       virtual_nci_close+0x28/0x58 drivers/nfc/virtual_ncidev.c:44
+       nci_open_device+0x414/0x518 net/nfc/nci/core.c:544
+       nci_dev_up+0x20/0x30 net/nfc/nci/core.c:631
+       nfc_dev_up+0xcc/0x1b0 net/nfc/core.c:118
+       nfc_genl_dev_up+0x40/0x78 net/nfc/netlink.c:770
+       genl_family_rcv_msg_doit net/netlink/genetlink.c:756 [inline]
+       genl_family_rcv_msg net/netlink/genetlink.c:833 [inline]
+       genl_rcv_msg+0x458/0x4f4 net/netlink/genetlink.c:850
+       netlink_rcv_skb+0xe8/0x1d4 net/netlink/af_netlink.c:2540
+       genl_rcv+0x38/0x50 net/netlink/genetlink.c:861
+       netlink_unicast_kernel+0xfc/0x1dc net/netlink/af_netlink.c:1319
+       netlink_unicast+0x164/0x248 net/netlink/af_netlink.c:1345
+       netlink_sendmsg+0x484/0x584 net/netlink/af_netlink.c:1921
+       sock_sendmsg_nosec net/socket.c:714 [inline]
+       sock_sendmsg net/socket.c:734 [inline]
+       ____sys_sendmsg+0x2f8/0x440 net/socket.c:2482
+       ___sys_sendmsg net/socket.c:2536 [inline]
+       __sys_sendmsg+0x1ac/0x228 net/socket.c:2565
+       __do_sys_sendmsg net/socket.c:2574 [inline]
+       __se_sys_sendmsg net/socket.c:2572 [inline]
+       __arm64_sys_sendmsg+0x2c/0x3c net/socket.c:2572
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+-> #0 (&ndev->req_lock){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain kernel/locking/lockdep.c:3831 [inline]
+       __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
+       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+       nci_request net/nfc/nci/core.c:148 [inline]
+       nci_set_local_general_bytes+0xbc/0x480 net/nfc/nci/core.c:774
+       nci_start_poll+0x1e8/0x474 net/nfc/nci/core.c:838
+       nfc_start_poll+0xfc/0x170 net/nfc/core.c:225
+       nfc_genl_start_poll+0xd4/0x174 net/nfc/netlink.c:828
+       genl_family_rcv_msg_doit net/netlink/genetlink.c:756 [inline]
+       genl_family_rcv_msg net/netlink/genetlink.c:833 [inline]
+       genl_rcv_msg+0x458/0x4f4 net/netlink/genetlink.c:850
+       netlink_rcv_skb+0xe8/0x1d4 net/netlink/af_netlink.c:2540
+       genl_rcv+0x38/0x50 net/netlink/genetlink.c:861
+       netlink_unicast_kernel+0xfc/0x1dc net/netlink/af_netlink.c:1319
+       netlink_unicast+0x164/0x248 net/netlink/af_netlink.c:1345
+       netlink_sendmsg+0x484/0x584 net/netlink/af_netlink.c:1921
+       sock_sendmsg_nosec net/socket.c:714 [inline]
+       sock_sendmsg net/socket.c:734 [inline]
+       ____sys_sendmsg+0x2f8/0x440 net/socket.c:2482
+       ___sys_sendmsg net/socket.c:2536 [inline]
+       __sys_sendmsg+0x1ac/0x228 net/socket.c:2565
+       __do_sys_sendmsg net/socket.c:2574 [inline]
+       __se_sys_sendmsg net/socket.c:2572 [inline]
+       __arm64_sys_sendmsg+0x2c/0x3c net/socket.c:2572
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+other info that might help us debug this:
+
+Chain exists of:
+  &ndev->req_lock --> nfc_devlist_mutex --> &genl_data->genl_data_mutex
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&genl_data->genl_data_mutex);
+                               lock(nfc_devlist_mutex);
+                               lock(&genl_data->genl_data_mutex);
+  lock(&ndev->req_lock);
+
+ *** DEADLOCK ***
+
+4 locks held by syz-executor402/3146:
+ #0: ffff80000d7c9268 (cb_lock){++++}-{3:3}, at: genl_rcv+0x28/0x50 net/netlink/genetlink.c:860
+ #1: ffff80000d7c9178 (genl_mutex){+.+.}-{3:3}, at: genl_lock net/netlink/genetlink.c:33 [inline]
+ #1: ffff80000d7c9178 (genl_mutex){+.+.}-{3:3}, at: genl_rcv_msg+0x80/0x4f4 net/netlink/genetlink.c:848
+ #2: ffff0000cad73d18 (&genl_data->genl_data_mutex){+.+.}-{3:3}, at: nfc_genl_start_poll+0xc4/0x174 net/nfc/netlink.c:826
+ #3: ffff0000cad73900 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:835 [inline]
+ #3: ffff0000cad73900 (&dev->mutex){....}-{3:3}, at: nfc_start_poll+0x5c/0x170 net/nfc/core.c:208
+
+stack backtrace:
+CPU: 0 PID: 3146 Comm: syz-executor402 Not tainted 6.1.0-rc4-syzkaller-31872-g1621b6eaebf7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Call trace:
+ dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+ show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+ dump_stack+0x1c/0x58 lib/dump_stack.c:113
+ print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2055
+ check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain kernel/locking/lockdep.c:3831 [inline]
+ __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
+ lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+ __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ nci_request net/nfc/nci/core.c:148 [inline]
+ nci_set_local_general_bytes+0xbc/0x480 net/nfc/nci/core.c:774
+ nci_start_poll+0x1e8/0x474 net/nfc/nci/core.c:838
+ nfc_start_poll+0xfc/0x170 net/nfc/core.c:225
+ nfc_genl_start_poll+0xd4/0x174 net/nfc/netlink.c:828
+ genl_family_rcv_msg_doit net/netlink/genetlink.c:756 [inline]
+ genl_family_rcv_msg net/netlink/genetlink.c:833 [inline]
+ genl_rcv_msg+0x458/0x4f4 net/netlink/genetlink.c:850
+ netlink_rcv_skb+0xe8/0x1d4 net/netlink/af_netlink.c:2540
+ genl_rcv+0x38/0x50 net/netlink/genetlink.c:861
+ netlink_unicast_kernel+0xfc/0x1dc net/netlink/af_netlink.c:1319
+ netlink_unicast+0x164/0x248 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x484/0x584 net/netlink/af_netlink.c:1921
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg net/socket.c:734 [inline]
+ ____sys_sendmsg+0x2f8/0x440 net/socket.c:2482
+ ___sys_sendmsg net/socket.c:2536 [inline]
+ __sys_sendmsg+0x1ac/0x228 net/socket.c:2565
+ __do_sys_sendmsg net/socket.c:2574 [inline]
+ __se_sys_sendmsg net/socket.c:2572 [inline]
+ __arm64_sys_sendmsg+0x2c/0x3c net/socket.c:2572
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+nci: __nci_request: wait_for_completion_interruptible_timeout failed -512
+nci: nci_start_poll: failed to set local general bytes
+nci: __nci_request: wait_for_completion_interruptible_timeout failed 0
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
