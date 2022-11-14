@@ -2,109 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACBD06277E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:38:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0C16277E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236571AbiKNIiD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 14 Nov 2022 03:38:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
+        id S236573AbiKNIiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:38:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235750AbiKNIiC (ORCPT
+        with ESMTP id S236567AbiKNIiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:38:02 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743401C10E;
+        Mon, 14 Nov 2022 03:38:04 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7A11C130
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:38:02 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id s8so972489lfc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:38:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F65D6wP7x5X052MyNJlEyUIkEOJA9df83maNEAxoFlA=;
+        b=SLmbNisfEZa220qEeUcjMkOX0OV5NIOEAYcv6i8c2pEfdzWPz1IYCjzmOV5S7AEv0z
+         E3Zkiqc1yNufmA6OcAvnrrVehhgRO68E22W/FMgZytjQddxngoW8+mC9Dh14GuCm8eBh
+         lX9RU8d3O5TmkRHRTg9NlYpD8dUi/EVl4ZyVU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F65D6wP7x5X052MyNJlEyUIkEOJA9df83maNEAxoFlA=;
+        b=K/zuiQwsvTCrvb5mVhspNIvC1KSI/BRwfuSmM035ZpCtrFAxLolOoeKVouO4pgpcUJ
+         g36oQ/wH7iijOPkMuQFc+VjEGP8oEDWQXnRgJPnRgFnkUyyu/nImoj1ZsfHM8vagSiYr
+         Vw4JQNPqhkkSGezuQCWEuTq/xgpuvcHgCIhhQfpxmoYjFW5Zrhuj/fhJ3eLhFgG5bMWO
+         smEFXczdc1NBo7mrbRcxTfsByIUlthU26023Icbb0sIBPI6eMXrsXrqecJygKxEvX8hq
+         tzuiErHwSl8oxmbhnrceEFlQapRQSDpfLX4iStjXLiLKtpKzS463JvyqxepntEyGRMYf
+         txUw==
+X-Gm-Message-State: ANoB5ploxep/9ioiAUiyKPmqlaVcT6M2rGJZA1Me/znC+Mq9L8KjpwL8
+        i0FVZetXZr5cHyeOii7RS60hQw==
+X-Google-Smtp-Source: AA0mqf6BieLBmgmKxdr1DOtVQ9Pm/TUzJkqgRC+co3AriPY3/f4R/0+Lym0jwfizY+BzVMwF/EaqdQ==
+X-Received: by 2002:a05:6512:3f9:b0:4af:baf9:7d4 with SMTP id n25-20020a05651203f900b004afbaf907d4mr3584746lfq.460.1668415081088;
         Mon, 14 Nov 2022 00:38:01 -0800 (PST)
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N9jNp58WtzHvwM;
-        Mon, 14 Nov 2022 16:37:30 +0800 (CST)
-Received: from frapeml500005.china.huawei.com (7.182.85.13) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 16:37:58 +0800
-Received: from frapeml500005.china.huawei.com ([7.182.85.13]) by
- frapeml500005.china.huawei.com ([7.182.85.13]) with mapi id 15.01.2375.031;
- Mon, 14 Nov 2022 09:37:57 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Xiujianfeng <xiujianfeng@huawei.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "roberto.sassu@polito.it" <roberto.sassu@polito.it>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] ima: Fix misuse of dereference of pointer in
- template_desc_init_fields()
-Thread-Topic: [PATCH] ima: Fix misuse of dereference of pointer in
- template_desc_init_fields()
-Thread-Index: AQHY9nmHvrnDarYK/E2x2ibr+a0VfK4+GPqQ
-Date:   Mon, 14 Nov 2022 08:37:57 +0000
-Message-ID: <55100c2e550b4649b5a751ca4596fe7c@huawei.com>
-References: <20221112092719.224888-1-xiujianfeng@huawei.com>
-In-Reply-To: <20221112092719.224888-1-xiujianfeng@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.153]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id bu42-20020a05651216aa00b004aac3944314sm1732284lfb.249.2022.11.14.00.37.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 00:38:00 -0800 (PST)
+Message-ID: <ccb148b2-c669-0317-e2b5-c59e595e4299@rasmusvillemoes.dk>
+Date:   Mon, 14 Nov 2022 09:37:59 +0100
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 5/5] iio: addac: ad74413r: add support for reset-gpio
+Content-Language: en-US, da
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221111143921.742194-1-linux@rasmusvillemoes.dk>
+ <20221111143921.742194-6-linux@rasmusvillemoes.dk>
+ <20221112170705.7efe1673@jic23-huawei>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20221112170705.7efe1673@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Xiujianfeng
-> Sent: Saturday, November 12, 2022 10:27 AM
-> The input parameter @fields is type of struct ima_template_field ***, so
-> when allocates array memory for @fields, the size of element should be
-> sizeof(**field) instead of sizeof(*field).
+On 12/11/2022 18.07, Jonathan Cameron wrote:
+> On Fri, 11 Nov 2022 15:39:21 +0100
+> Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
 > 
-> Actually the original code would not cause any runtime error, but it's
-> better to make it logically right.
+>> We have a board where the reset pin of the ad74412 is connected to a
+>> gpio, but also pulled low by default. Hence to get the chip out of
+>> reset, the driver needs to know about that gpio and set it high before
+>> attempting to communicate with it.
 > 
-> Fixes: adf53a778a0a ("ima: new templates management mechanism")
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> I'm a little confused on polarity here.  The pin is a !reset so
+> we need to drive it low briefly to trigger a reset.
+> I'm guessing for your board the pin is set to active low? (an example
+> in the dt would have made that clearer) Hence the pulse
+> in here to 1 is actually briefly driving it low before restoring to high?
 
-Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+Yes. I actually thought that was pretty standard. I do indeed have
+something like
 
-Thanks
+  reset-gpios = <&gpio1 3 GPIO_ACTIVE_LOW>;
 
-Roberto
+in my .dts, so setting the gpio value to 1 (logically asserting its
+function) will end up driving the signal low, and setting it to 0
+(de-asserting reset) will set the signal high. I will add that line to
+the example in the binding.
 
-> ---
->  security/integrity/ima/ima_template.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/security/integrity/ima/ima_template.c
-> b/security/integrity/ima/ima_template.c
-> index 49f0626928a1..04c49f05cb74 100644
-> --- a/security/integrity/ima/ima_template.c
-> +++ b/security/integrity/ima/ima_template.c
-> @@ -245,11 +245,11 @@ int template_desc_init_fields(const char
-> *template_fmt,
->  	}
-> 
->  	if (fields && num_fields) {
-> -		*fields = kmalloc_array(i, sizeof(*fields), GFP_KERNEL);
-> +		*fields = kmalloc_array(i, sizeof(**fields), GFP_KERNEL);
->  		if (*fields == NULL)
->  			return -ENOMEM;
-> 
-> -		memcpy(*fields, found_fields, i * sizeof(*fields));
-> +		memcpy(*fields, found_fields, i * sizeof(**fields));
->  		*num_fields = i;
->  	}
-> 
-> --
-> 2.17.1
+> For a pin documented as !reset that seems backwards 
+
+Well, it depends on where the knowledge of the pin being active low
+belongs. In this case, the driver itself handles the gpio so it could be
+done both ways.
+
+But if, for example, the iio framework would handle an optional
+reset-gpio for each device, it couldn't possibly know whether to set it
+to 1 or 0 for a given device, it could only set it logic 1 to assert
+reset and then rely on DT gpio descriptor to include the active low/high
+info.
+
+Also, see the "The active low and open drain semantics" section in
+Documentation/driver-api/gpio/consumer.rst.
+
+Rasmus
 
