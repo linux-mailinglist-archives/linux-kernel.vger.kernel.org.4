@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3014D6273B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 01:05:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6276273B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 01:06:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235566AbiKNAFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 19:05:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
+        id S235400AbiKNAF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 19:05:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiKNAFs (ORCPT
+        with ESMTP id S235415AbiKNAFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 19:05:48 -0500
+        Sun, 13 Nov 2022 19:05:49 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B302D2C3
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 16:04:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC190DE86
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 16:04:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668384293;
+        s=mimecast20190719; t=1668384295;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=E/uqXcWNCa1p19zapYQ5e7dpPK5NM6V2qbPw5ZdKILA=;
-        b=VCcfQZabfHrzrM/jtpQ5dyInD7YpWIN1QynGU1eie023bo7vmFn2x1ms+47pfqv2NaSQYQ
-        xo+I77aK4B2+JxE2VFGBOPoM4BZA7PEwISd8wo+NCdyEBpzITv7NJrjX3Yp2wXd8N5oINT
-        sR3lYVJsBkzLsCo4H2nFOau5dKCywD0=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=vuiiwLAN7I1THL57m13Ion7pO7eyRCignS0WdOlLecg=;
+        b=IPXcjSQYbS+MXcWY1MD4DN+6sgEkg6BCqxpeBaVMeL9sDu/uIUcuktc8NwMnHRow+CW1Mk
+        ivyM40Ohz9HZsWmuT4JktuB5vuMe969auy3VIvqbGowb2XzRsr5uShpsWcWJ9rsXCbTrtN
+        ArJObzZ32htRj5OKERlDPXLQvzvFzeo=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-507-7Zf8Fmx3PMCYGNb_SmPxHg-1; Sun, 13 Nov 2022 19:04:52 -0500
-X-MC-Unique: 7Zf8Fmx3PMCYGNb_SmPxHg-1
-Received: by mail-qk1-f198.google.com with SMTP id h13-20020a05620a244d00b006fb713618b8so1685253qkn.0
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 16:04:52 -0800 (PST)
+ us-mta-307-Ce3JMMc4Ph2Xyi0NjQBi4w-1; Sun, 13 Nov 2022 19:04:54 -0500
+X-MC-Unique: Ce3JMMc4Ph2Xyi0NjQBi4w-1
+Received: by mail-qv1-f72.google.com with SMTP id 71-20020a0c804d000000b004b2fb260447so7572669qva.10
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 16:04:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=E/uqXcWNCa1p19zapYQ5e7dpPK5NM6V2qbPw5ZdKILA=;
-        b=QsJRbHdfUX1UMCLDU1+gB30eMrk0y5vsWk1u2ifaqWiiKyDIQG/KtKi3cdPFlq/7cE
-         gt+6mWvi4Xpxtzu/2jOQLGwGH+hZSCkCp2cJBPDBlAIg6/z2DzmPYTC4b5RYI/dAFc0m
-         E4yZ0YFYK9expH/6eIasLEXlCDpKiUiPkIw42xfMNGLilluHMOMP7zxPoKhnt25RYPYt
-         lh8mm4cvc2ppKaMM2szLxIavCivzvPaKaF51gP5WhyX+EcMLnlZW/AJZVvopkW1Sfo82
-         14I2kCD3jgURL6R1U/UpXE62nz3Q7y29gQQTppilBDD5n6w2OkLSOcUNebcxvO5SiHtt
-         13nA==
-X-Gm-Message-State: ANoB5pmiZg9xVX77oEvSssayiZhd/IrXwA0qbSIm/G0t1SRnjU0ulxWl
-        EntfUdTc5yfLSmLSYlKGB37Nxuhay9bfUf5IPLJ0ZvcOVMbj64YBzD/3KTG8Za/ddEx1huN6KzV
-        JOCTDJVjmTPYntCDvnABQT78HitBlCYBoQUrdWNnoFt0wiupGNSeUcQG0e0EPFUQgcofoW2y0wA
+        bh=vuiiwLAN7I1THL57m13Ion7pO7eyRCignS0WdOlLecg=;
+        b=lWBVSMuGjPve9Kuxd0OcuuJD7UTd8iS7B37RgpVQ1irDyZTNrSAA7nIZg5KXqc/ijW
+         cAQYcALvOUNl+ObPJ31TEn/7QEcUAkGclVhRx7uQwqylRTdFqW+RvILZ8aWMK77mGj7D
+         gHJIRB6/NJReH5oKvqrvQTSAerKtUDht8r2xO6CFf9Fx9la+En58/q+b5yoyValhVzOT
+         mlt8BsCwQLFLAJ2Vke+NVB9PiYjh3KzSNbAQ5APIhei+tFDbALEuYXXhrho2TJGo16bL
+         1MrFcec/IAHpUR9EETi5zKDP8O0oawKr9FpwnfDLvaoehuia3KO+uDhdiHgZo/rsY8tZ
+         cbAw==
+X-Gm-Message-State: ANoB5pmONyNiOlP5ADFsUz4VDPr3sct0t+gYw9Nj7PVBTfMpf+TidsVE
+        1VGffgI+qJd8RqIwDeq/lULNWAv4sNO+CGsgcctAUIi18QhGgmtmgH5zboJTRI4C0py9CsWVg9V
+        hR+n7AWVviZFwUOMOE3o6+/yHSe/FyWA+VZef3FM4rqzg7QDZkpnlR1wVw7eLUDxLLBpuX5go9A
         ==
-X-Received: by 2002:a05:622a:1c0f:b0:3a5:47c8:3889 with SMTP id bq15-20020a05622a1c0f00b003a547c83889mr10331823qtb.66.1668384291141;
-        Sun, 13 Nov 2022 16:04:51 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5ZtobJluPZe3x25WvxetiEo/+Q4VROUb9doo/lcY8V74Jq3aR59GmxR6sHKMymg4q34UwP4A==
-X-Received: by 2002:a05:622a:1c0f:b0:3a5:47c8:3889 with SMTP id bq15-20020a05622a1c0f00b003a547c83889mr10331790qtb.66.1668384290766;
-        Sun, 13 Nov 2022 16:04:50 -0800 (PST)
+X-Received: by 2002:ae9:e302:0:b0:6fa:6cb1:8965 with SMTP id v2-20020ae9e302000000b006fa6cb18965mr9424185qkf.541.1668384293245;
+        Sun, 13 Nov 2022 16:04:53 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5V1BslIfV280V95tlOvqubbpsxPQtv1YGg6N+bmjUfNbr1J4Ku+Hat5/cU0tUkSD60e2vKIw==
+X-Received: by 2002:ae9:e302:0:b0:6fa:6cb1:8965 with SMTP id v2-20020ae9e302000000b006fa6cb18965mr9424139qkf.541.1668384292663;
+        Sun, 13 Nov 2022 16:04:52 -0800 (PST)
 Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id cb5-20020a05622a1f8500b0039cc0fbdb61sm4870380qtb.53.2022.11.13.16.04.49
+        by smtp.gmail.com with ESMTPSA id cb5-20020a05622a1f8500b0039cc0fbdb61sm4870380qtb.53.2022.11.13.16.04.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 16:04:50 -0800 (PST)
+        Sun, 13 Nov 2022 16:04:52 -0800 (PST)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Mike Rapoport <rppt@linux.vnet.ibm.com>,
@@ -65,10 +65,10 @@ Cc:     Mike Rapoport <rppt@linux.vnet.ibm.com>,
         Andrea Arcangeli <aarcange@redhat.com>,
         Ives van Hoorne <ives@codesandbox.io>,
         Axel Rasmussen <axelrasmussen@google.com>,
-        Alistair Popple <apopple@nvidia.com>, stable@vger.kernel.org
-Subject: [PATCH v3 1/2] mm/migrate: Fix read-only page got writable when recover pte
-Date:   Sun, 13 Nov 2022 19:04:46 -0500
-Message-Id: <20221114000447.1681003-2-peterx@redhat.com>
+        Alistair Popple <apopple@nvidia.com>
+Subject: [PATCH v3 2/2] mm/uffd: Sanity check write bit for uffd-wp protected ptes
+Date:   Sun, 13 Nov 2022 19:04:47 -0500
+Message-Id: <20221114000447.1681003-3-peterx@redhat.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221114000447.1681003-1-peterx@redhat.com>
 References: <20221114000447.1681003-1-peterx@redhat.com>
@@ -85,62 +85,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ives van Hoorne from codesandbox.io reported an issue regarding possible
-data loss of uffd-wp when applied to memfds on heavily loaded systems.  The
-symptom is some read page got data mismatch from the snapshot child VMs.
-
-Here I can also reproduce with a Rust reproducer that was provided by Ives
-that keeps taking snapshot of a 256MB VM, on a 32G system when I initiate
-80 instances I can trigger the issues in ten minutes.
-
-It turns out that we got some pages write-through even if uffd-wp is
-applied to the pte.
-
-The problem is, when removing migration entries, we didn't really worry
-about write bit as long as we know it's not a write migration entry.  That
-may not be true, for some memory types (e.g. writable shmem) mk_pte can
-return a pte with write bit set, then to recover the migration entry to its
-original state we need to explicit wr-protect the pte or it'll has the
-write bit set if it's a read migration entry.  For uffd it can cause
-write-through.
-
-The relevant code on uffd was introduced in the anon support, which is
-commit f45ec5ff16a7 ("userfaultfd: wp: support swap and page migration",
-2020-04-07).  However anon shouldn't suffer from this problem because anon
-should already have the write bit cleared always, so that may not be a
-proper Fixes target, while I'm adding the Fixes to be uffd shmem support.
+Let's add one sanity check for CONFIG_DEBUG_VM on the write bit in whatever
+chance we have when walking through the pgtables.  It can bring the error
+earlier even before the app notices the data was corrupted on the snapshot.
+Also it helps us to identify this is a wrong pgtable setup, so hopefully a
+great information to have for debugging too.
 
 Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: stable@vger.kernel.org
-Fixes: b1f9e876862d ("mm/uffd: enable write protection for shmem & hugetlbfs")
-Reported-by: Ives van Hoorne <ives@codesandbox.io>
-Reviewed-by: Alistair Popple <apopple@nvidia.com>
-Tested-by: Ives van Hoorne <ives@codesandbox.io>
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- mm/migrate.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/pgtable.h | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/mm/migrate.c b/mm/migrate.c
-index dff333593a8a..8b6351c08c78 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -213,8 +213,14 @@ static bool remove_migration_pte(struct folio *folio,
- 			pte = pte_mkdirty(pte);
- 		if (is_writable_migration_entry(entry))
- 			pte = maybe_mkwrite(pte, vma);
--		else if (pte_swp_uffd_wp(*pvmw.pte))
-+		else
-+			/* NOTE: mk_pte can have write bit set */
-+			pte = pte_wrprotect(pte);
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 5059799bebe3..63bdbb0f989e 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -291,7 +291,23 @@ static inline pte_t pte_clear_flags(pte_t pte, pteval_t clear)
+ #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_WP
+ static inline int pte_uffd_wp(pte_t pte)
+ {
+-	return pte_flags(pte) & _PAGE_UFFD_WP;
++	bool wp = pte_flags(pte) & _PAGE_UFFD_WP;
 +
-+		if (pte_swp_uffd_wp(*pvmw.pte)) {
-+			WARN_ON_ONCE(pte_write(pte));
- 			pte = pte_mkuffd_wp(pte);
-+		}
++#ifdef CONFIG_DEBUG_VM
++	/*
++	 * Having write bit for wr-protect-marked present ptes is fatal,
++	 * because it means the uffd-wp bit will be ignored and write will
++	 * just go through.
++	 *
++	 * Use any chance of pgtable walking to verify this (e.g., when
++	 * page swapped out or being migrated for all purposes). It means
++	 * something is already wrong.  Tell the admin even before the
++	 * process crashes. We also nail it with wrong pgtable setup.
++	 */
++	WARN_ON_ONCE(wp && pte_write(pte));
++#endif
++
++	return wp;
+ }
  
- 		if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
- 			rmap_flags |= RMAP_EXCLUSIVE;
+ static inline pte_t pte_mkuffd_wp(pte_t pte)
 -- 
 2.37.3
 
