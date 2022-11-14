@@ -2,96 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0326278BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B33926278C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235617AbiKNJJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:09:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
+        id S235826AbiKNJKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235826AbiKNJJQ (ORCPT
+        with ESMTP id S235953AbiKNJKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:09:16 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D865330A;
-        Mon, 14 Nov 2022 01:09:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CmCkVP6XVasiawMWAc2MfoRTytUQFHnWEyNdl8YOQ2s=; b=sJPpFzwZM45thglm1Lcdyxo+hB
-        /kqvQJXKkVETWLF3wT7rXwfO8CE/lwpxaayg0f9hTslmteCjyVriq71W1GMQrgyWKxT9p1tjrfzlX
-        h8aN9mrCczTIN1mqdShxKbMeaJ3uPsgFeQliRvSUvmPeZwh4j32mfhRHIl98JloUN4FcvsTs6nL7Q
-        yy6zxw1NnYlE93wllagjvtdqocPe+2BrzVqXwF/O+yr/xCpZHq8Y2fgQPqcPbrEXvrF1fRvsaJNr0
-        8alPAyIVFlxo9FTNHezy+JCEeN5Ln2onNVxA6C/vukjgqFqk5CLClrecLboV9ogydeVMV0oyYTywu
-        0ExVDnwg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ouVSd-00FNEY-ER; Mon, 14 Nov 2022 09:08:59 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B08F2300282;
-        Mon, 14 Nov 2022 10:08:51 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 7BF392C8037C6; Mon, 14 Nov 2022 10:08:51 +0100 (CET)
-Date:   Mon, 14 Nov 2022 10:08:51 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Li, Xin3" <xin3.li@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>
-Subject: Re: [RESEND PATCH 5/6] KVM: x86/VMX: add kvm_vmx_reinject_nmi_irq()
- for NMI/IRQ reinjection
-Message-ID: <Y3IFo9NrAcYalBzM@hirez.programming.kicks-ass.net>
-References: <Y2y+YgBUYuUHbPtd@hirez.programming.kicks-ass.net>
- <BN6PR1101MB2161976800EB14B74A24D9F3A8019@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <Y24SoNKZtj/NPSGy@hirez.programming.kicks-ass.net>
- <6097036e-063f-5175-72b2-8935b12af853@redhat.com>
- <Y24908NWCdzUNqI0@hirez.programming.kicks-ass.net>
- <6fd26a70-3774-6ae7-73ea-4653aee106f0@redhat.com>
- <Y25a0Z2tOMWYZs4j@hirez.programming.kicks-ass.net>
- <BN6PR1101MB216141A21353AB84CEA541DFA8009@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <Y26jkHfK9INwU7Yy@hirez.programming.kicks-ass.net>
- <BN6PR1101MB2161E8217F50D18C56E5864EA8059@BN6PR1101MB2161.namprd11.prod.outlook.com>
+        Mon, 14 Nov 2022 04:10:19 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F14614E;
+        Mon, 14 Nov 2022 01:10:17 -0800 (PST)
+Date:   Mon, 14 Nov 2022 09:10:14 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668417015;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y49qs12nsxt1d/LMV8DSpp4/FrBjPgi64qdyTM5CjJ8=;
+        b=CSRrCbw8iunTbgSOicinysJ0A9phuWnbNqQLntaxcZtU7tPu/yDuTCVC3M/5FhRGKCf89C
+        a4dN7tsaqq5kQvEEmOawg9tib+nlFuKxXuGw+EezpwNhphyx6FZiXcjFDzlEU7/iUgIb0o
+        DRZQDvfs757Ky+378XAXjpMqovex/CRkzK7IG7LKAQv6N6Zqm5G4HRkqelxwSx0rT3/6Rm
+        4JgRr5Njz8DXOUn97Vfcyvtba0/vLyyzwO6kYVLUssmWHbZyheuOAfiqNM4fcNnExvgYfV
+        0sHieNALN7H/yu2hlUv6AyQAybopcc+p10cW/Gb97WTseLAAwjWQQD+DQMIXjw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668417015;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y49qs12nsxt1d/LMV8DSpp4/FrBjPgi64qdyTM5CjJ8=;
+        b=ItGYM00/IdR7RzwrgpVPptt1lZthHmdX6KFwphtYuGSfSpItnTRQXBbqro/BcfKtJmO+ft
+        V6gAwtQF+T9OXdDA==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/urgent] sched: Fix race in task_call_func()
+Cc:     ville.syrjala@linux.intel.com,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <Y1kdRNNfUeAU+FNl@hirez.programming.kicks-ass.net>
+References: <Y1kdRNNfUeAU+FNl@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN6PR1101MB2161E8217F50D18C56E5864EA8059@BN6PR1101MB2161.namprd11.prod.outlook.com>
+Message-ID: <166841701431.4906.7873933542030208235.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 04:39:40AM +0000, Li, Xin3 wrote:
+The following commit has been merged into the sched/urgent branch of tip:
 
-> > But what about NMIs, afaict this is all horribly broken for NMIs.
-> > 
-> > So the whole VMX thing latches the NMI (which stops NMI recursion), right?
-> > 
-> > But then you drop out of noinstr code, which means any random exception can
-> > happen (kprobes #BP, hw_breakpoint #DB, or even #PF due to random
-> > nonsense like *SAN). This exception will do IRET and clear the NMI latch, all
-> > before you get to run any of the NMI code.
-> 
-> What you said here implies that we have this problem in the existing code.
-> Because a fake iret stack is created to call the NMI handler in the IDT NMI
-> descriptor, which lastly executes the IRET instruction.
+Commit-ID:     91dabf33ae5df271da63e87ad7833e5fdb4a44b9
+Gitweb:        https://git.kernel.org/tip/91dabf33ae5df271da63e87ad7833e5fdb4=
+a44b9
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Wed, 26 Oct 2022 13:43:00 +02:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Mon, 14 Nov 2022 09:58:32 +01:00
 
-I can't follow; of course the IDT handler terminates with IRET, it has
-to no?
+sched: Fix race in task_call_func()
 
-And yes, the current code appears to suffer the same defect.
+There is a very narrow race between schedule() and task_call_func().
+
+  CPU0						CPU1
+
+  __schedule()
+    rq_lock();
+    prev_state =3D READ_ONCE(prev->__state);
+    if (... && prev_state) {
+      deactivate_tasl(rq, prev, ...)
+        prev->on_rq =3D 0;
+
+						task_call_func()
+						  raw_spin_lock_irqsave(p->pi_lock);
+						  state =3D READ_ONCE(p->__state);
+						  smp_rmb();
+						  if (... || p->on_rq) // false!!!
+						    rq =3D __task_rq_lock()
+
+						  ret =3D func();
+
+    next =3D pick_next_task();
+    rq =3D context_switch(prev, next)
+      prepare_lock_switch()
+        spin_release(&__rq_lockp(rq)->dep_map...)
+
+So while the task is on it's way out, it still holds rq->lock for a
+little while, and right then task_call_func() comes in and figures it
+doesn't need rq->lock anymore (because the task is already dequeued --
+but still running there) and then the __set_task_frozen() thing observes
+it's holding rq->lock and yells murder.
+
+Avoid this by waiting for p->on_cpu to get cleared, which guarantees
+the task is fully finished on the old CPU.
+
+( While arguably the fixes tag is 'wrong' -- none of the previous
+  task_call_func() users appears to care for this case. )
+
+Fixes: f5d39b020809 ("freezer,sched: Rewrite core freezer logic")
+Reported-by: Ville Syrj=C3=A4l=C3=A4 <ville.syrjala@linux.intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Ville Syrj=C3=A4l=C3=A4 <ville.syrjala@linux.intel.com>
+Link: https://lkml.kernel.org/r/Y1kdRNNfUeAU+FNl@hirez.programming.kicks-ass.=
+net
+---
+ kernel/sched/core.c | 52 +++++++++++++++++++++++++++++---------------
+ 1 file changed, 35 insertions(+), 17 deletions(-)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index cb2aa2b..daff72f 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -4200,6 +4200,40 @@ out:
+ 	return success;
+ }
+=20
++static bool __task_needs_rq_lock(struct task_struct *p)
++{
++	unsigned int state =3D READ_ONCE(p->__state);
++
++	/*
++	 * Since pi->lock blocks try_to_wake_up(), we don't need rq->lock when
++	 * the task is blocked. Make sure to check @state since ttwu() can drop
++	 * locks at the end, see ttwu_queue_wakelist().
++	 */
++	if (state =3D=3D TASK_RUNNING || state =3D=3D TASK_WAKING)
++		return true;
++
++	/*
++	 * Ensure we load p->on_rq after p->__state, otherwise it would be
++	 * possible to, falsely, observe p->on_rq =3D=3D 0.
++	 *
++	 * See try_to_wake_up() for a longer comment.
++	 */
++	smp_rmb();
++	if (p->on_rq)
++		return true;
++
++#ifdef CONFIG_SMP
++	/*
++	 * Ensure the task has finished __schedule() and will not be referenced
++	 * anymore. Again, see try_to_wake_up() for a longer comment.
++	 */
++	smp_rmb();
++	smp_cond_load_acquire(&p->on_cpu, !VAL);
++#endif
++
++	return false;
++}
++
+ /**
+  * task_call_func - Invoke a function on task in fixed state
+  * @p: Process for which the function is to be invoked, can be @current.
+@@ -4217,28 +4251,12 @@ out:
+ int task_call_func(struct task_struct *p, task_call_f func, void *arg)
+ {
+ 	struct rq *rq =3D NULL;
+-	unsigned int state;
+ 	struct rq_flags rf;
+ 	int ret;
+=20
+ 	raw_spin_lock_irqsave(&p->pi_lock, rf.flags);
+=20
+-	state =3D READ_ONCE(p->__state);
+-
+-	/*
+-	 * Ensure we load p->on_rq after p->__state, otherwise it would be
+-	 * possible to, falsely, observe p->on_rq =3D=3D 0.
+-	 *
+-	 * See try_to_wake_up() for a longer comment.
+-	 */
+-	smp_rmb();
+-
+-	/*
+-	 * Since pi->lock blocks try_to_wake_up(), we don't need rq->lock when
+-	 * the task is blocked. Make sure to check @state since ttwu() can drop
+-	 * locks at the end, see ttwu_queue_wakelist().
+-	 */
+-	if (state =3D=3D TASK_RUNNING || state =3D=3D TASK_WAKING || p->on_rq)
++	if (__task_needs_rq_lock(p))
+ 		rq =3D __task_rq_lock(p, &rf);
+=20
+ 	/*
