@@ -2,94 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6BE628797
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E04A62879F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237464AbiKNR4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:56:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53226 "EHLO
+        id S237829AbiKNR6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:58:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237915AbiKNR4I (ORCPT
+        with ESMTP id S236681AbiKNR6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:56:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C7926491;
-        Mon, 14 Nov 2022 09:56:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B025061330;
-        Mon, 14 Nov 2022 17:56:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D419C433D6;
-        Mon, 14 Nov 2022 17:56:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668448567;
-        bh=N9oaQLJ/H/5suT+aYI93l3SxuUN2llh0pwyp5hPH95A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VPDdph3yhsmenWyM2ySHp62SlHm6XzYCbqg2d1pxHnfje1jIwGLxYu2frpBwU/nvv
-         5Ui5rUT3h+R+z09f7+AANzOfImaER/8vsVLX1byqpZTOiFwcaXJlApgw/NEQ4AKlV9
-         d0nieJodBldt1DrEzIqgF0TWy84OU+1TOUQKT3kxCVyYv/qLY9B16oALt6fCtTKftU
-         K2sGh53Z/khfGI3Q1pDzQhtJ85pUAARMyQvRgsz6HRzmEKsZWxvGFcY0iMynrYOtlc
-         LVAh3/+wJvhoQYCSylKolVcBiIguTtHib9pp5QliaSzQRTGTX7h9KPQzsBDhsEcLDN
-         epRYjoRIEvLdQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     SeongJae Park <sj@kernel.org>, damon@lists.linux.dev,
-        linux-mm@kvack.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mm/damon/sysfs-schemes: skip stats update if the scheme directory is removed
-Date:   Mon, 14 Nov 2022 17:55:52 +0000
-Message-Id: <20221114175552.1951-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 14 Nov 2022 12:58:19 -0500
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA3326546
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:58:18 -0800 (PST)
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 2AEHvrm4025921
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:57:54 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2AEHvrm4025921
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1668448674;
+        bh=FKc3qcfec+gHgboywrJ09NkfRlIxD8LBocwjtxNj3MI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BFK0rqzKhnpaGMVMVqwXYJ7mxovyV+PnOXS9BW9alLw8HkOLpbX4fR4b8LrOJGQ5x
+         jBx1d/tCyytWKKnVaYBHYhQ+79vIe90KopUz04btzWmbmWKKtAqDp0Xzh2xgmeG2ql
+         nNQqiu1Fj6BUivFzYZt1RKS88U3OgPc0P4587fjWeA3sjRvitatvjf8TqS3A2nLqb2
+         5N6UjIt7Fw3EhTzzic9qUKEqtIFnivRs1Dhiiamrff9BhLskzJaOa5EWk3AXqbvlIo
+         qEIs/c3VW5EUrHQ750m7HP/OBjvoi/DzS8SAF+ubqy8p3SmGavnjGcTmHtdRpaBHi0
+         pIdgr+aOoO53A==
+X-Nifty-SrcIP: [209.85.160.44]
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-13ae8117023so13318941fac.9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:57:54 -0800 (PST)
+X-Gm-Message-State: ANoB5plfW9ZhfECeN2HSKv+z39o7EdjvUBU4PkP6Twwb68sKjyIDAwVx
+        exddF2jWSp6HqRrtSs4L1bdMMH16B08Sr/nHuFA=
+X-Google-Smtp-Source: AA0mqf6lEFOoTSBPcrvmWZXNTd+o3OKLVL8/4ph0XLc06G+xgD66Gi8in+JQaCMGx+wJF5BW7gNoJ2sC+cGi+2/o544=
+X-Received: by 2002:a05:6870:4b4a:b0:13b:5d72:d2c6 with SMTP id
+ ls10-20020a0568704b4a00b0013b5d72d2c6mr7243528oab.287.1668448672780; Mon, 14
+ Nov 2022 09:57:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114114344.18650-1-jirislaby@kernel.org> <20221114114344.18650-3-jirislaby@kernel.org>
+In-Reply-To: <20221114114344.18650-3-jirislaby@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 15 Nov 2022 02:57:16 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASUb0PLiZahw46c0qBUn_caMWm2SrtY1Hb8Vd7RzsAwzg@mail.gmail.com>
+Message-ID: <CAK7LNASUb0PLiZahw46c0qBUn_caMWm2SrtY1Hb8Vd7RzsAwzg@mail.gmail.com>
+Subject: Re: [PATCH 02/46] kbuild: pass jobserver to cmd_ld_vmlinux.o
+To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Martin Liska <mliska@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A DAMON sysfs interface user can start DAMON with a scheme, remove the
-sysfs directory for the scheme, and then ask update of the scheme's
-stats.  Because the schemes stats update logic doesn't aware of the
-situation, it results in an invalid memory access.  Fix the bug by
-checking if the scheme sysfs directory exists.
+On Mon, Nov 14, 2022 at 8:44 PM Jiri Slaby (SUSE) <jirislaby@kernel.org> wrote:
+>
+> From: Jiri Slaby <jslaby@suse.cz>
+>
+> Until the link-vmlinux.sh split (cf. the commit below), the linker was
+> run with jobserver set in MAKEFLAGS. After the split, the command in
+> Makefile.vmlinux_o is not prefixed by "+" anymore, so this information
+> is lost.
+>
+> Restore it as linkers working in parallel (namely gcc LTO) make a use of
+> it. Actually, they complain, if jobserver is not set:
+>   lto-wrapper: warning: jobserver is not available: '--jobserver-auth=' is not present in 'MAKEFLAGS'
+>
+> Fixes: 5d45950dfbb1 (kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o)
 
-Fixes: 0ac32b8affb5 ("mm/damon/sysfs: support DAMOS stats")
-Cc: <stable@vger.kernel.org> # v5.18
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
 
-Note: There are DAMON code refactoring patches in mm-stable.  As the
-refactoring changes the code that this fix is touching, while this fix
-is for v6.1 hotfix, this patch is based on the latest mainline, not the
-mm-unstable.  In other words, this patch cannot cleanly applied on
-mm-unstable.  You could get this patch based on latest mm-unstable via
-damon/next tree[1], though.
+This Fixes is wrong since GCC LTO is not in upstream code.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git/tree/?h=damon/next
 
- mm/damon/sysfs.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-index 9f1219a67e3f..9701ef178a4d 100644
---- a/mm/damon/sysfs.c
-+++ b/mm/damon/sysfs.c
-@@ -2339,6 +2339,10 @@ static int damon_sysfs_upd_schemes_stats(struct damon_sysfs_kdamond *kdamond)
- 	damon_for_each_scheme(scheme, ctx) {
- 		struct damon_sysfs_stats *sysfs_stats;
- 
-+		/* user could removed the scheme sysfs dir */
-+		if (schemes_idx >= sysfs_schemes->nr)
-+			break;
-+
- 		sysfs_stats = sysfs_schemes->schemes_arr[schemes_idx++]->stats;
- 		sysfs_stats->nr_tried = scheme->stat.nr_tried;
- 		sysfs_stats->sz_tried = scheme->stat.sz_tried;
+
+
+
+> Cc: Sedat Dilek <sedat.dilek@gmail.com>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Michal Marek <michal.lkml@markovi.net>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Martin Liska <mliska@suse.cz>
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> ---
+>  scripts/Makefile.vmlinux_o | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
+> index 0edfdb40364b..1c86895cfcf8 100644
+> --- a/scripts/Makefile.vmlinux_o
+> +++ b/scripts/Makefile.vmlinux_o
+> @@ -58,7 +58,7 @@ define rule_ld_vmlinux.o
+>  endef
+>
+>  vmlinux.o: $(initcalls-lds) vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
+> -       $(call if_changed_rule,ld_vmlinux.o)
+> +       +$(call if_changed_rule,ld_vmlinux.o)
+>
+>  targets += vmlinux.o
+>
+> --
+> 2.38.1
+>
+
+
 -- 
-2.25.1
-
+Best Regards
+Masahiro Yamada
