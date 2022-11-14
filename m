@@ -2,606 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5D56278CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D05B6278CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236245AbiKNJNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:13:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
+        id S236320AbiKNJPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235804AbiKNJNf (ORCPT
+        with ESMTP id S235832AbiKNJP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:13:35 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CBF1155;
-        Mon, 14 Nov 2022 01:13:32 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AE9D9Pk030157;
-        Mon, 14 Nov 2022 09:13:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=3PynDyf8dfvrOGliKw0TsE/8jsSmkuwI399UrbVjh9k=;
- b=Wa5nBsaI0FW/XVJlZHOIzhHMPqnpNGftGDd5HuNfrvK/7fV8QBq1CkACnOhkxyZ82Il9
- FIvC2G8g2e+3UzJEFK9ma4cWDkjnkk9lSncqjT4KzaUPzwqoLeSz8pStUw2Jp+wY85SS
- x75t9jO1O13iftqIxjDvZgTf+aPDjK4BSPBHFY0yPJfea+pI5CrMyYSLdOGC6GGA1zjJ
- +yD4WCVThdbJsZpyQdOpUekI71tpaWeAA8CAwrhX5qu0Y/qjL7WOcEzAklvKqaSUuIvs
- PzfSFtJvO3H/ZtsBhZ/1CgCBYzw6sY1cWRpebBvIVEyagOQDma0/E5CHP4CXxpF9R7Vc rg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kufhcgddm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 09:13:13 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AE9DCFd017933
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 09:13:12 GMT
-Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 14 Nov 2022 01:13:08 -0800
-From:   Mao Jinlong <quic_jinlmao@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "Mike Leach" <mike.leach@linaro.org>
-CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <coresight@lists.linaro.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>
-Subject: [PATCH] arm64: dts: qcom: sm8250: Add coresight components
-Date:   Mon, 14 Nov 2022 17:12:51 +0800
-Message-ID: <20221114091251.13939-1-quic_jinlmao@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 14 Nov 2022 04:15:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B9764EB
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:14:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668417270;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5hofss//ywoRNQpOC2hnRbrd17v1Z4Ke0Sn/QHTSNDA=;
+        b=F33jSbHMhEN21tkWRItyGwjXo3BjvhxakrY3L6A54lg2CSYSpkTc/RMU9y/2QaxDwTMJsc
+        kSeemLmsxUTVSo2A1n1YcwaSvTVMwV/tw8BkNRsrdsFyNH+j9QEWSMjBQxJXRsqeZWCHBO
+        ch33ztSQK99w8xOx+Kczo3fdiD5dDi4=
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
+ [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-168-deKax_B9P_WTDSU-3Im1Lg-1; Mon, 14 Nov 2022 04:14:29 -0500
+X-MC-Unique: deKax_B9P_WTDSU-3Im1Lg-1
+Received: by mail-pg1-f200.google.com with SMTP id k16-20020a635a50000000b0042986056df6so5551772pgm.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:14:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5hofss//ywoRNQpOC2hnRbrd17v1Z4Ke0Sn/QHTSNDA=;
+        b=xXapzN8Z7zCsjYHG+R5fB6hZrXCJKHL9FkL41aJOgkD6gHl9DA24KMINF9p+fQxcEz
+         lfiVO8v6e6A4OID12/NGhXUHZuiz3B0vLY5Z2GoHWWfZKtf4WmxwRRDOHtCBEOMLPZWm
+         g5WQk/3TMbGu0vcBb/DdFC4cMM6gKUJGfURDazlh1Fx1koVQc5w6qijZm0Goazh06XbP
+         3Z/oxCXv7CnzfjdlIoAPG034sOD+e1tOGX4mAmtWRpU50Ctj5elQoY+hzYjyaH61EnBG
+         0X5qDU5+uo7T2GbJFvfQutpX5Dv3gkUC1eZeMBM4k7Ra2UV9/WrXsB9nZJIvhF7nulDC
+         koQQ==
+X-Gm-Message-State: ANoB5plMsSkFAeR+wyiuIKLfvspE4kFITalsZzDixfVfCVuQNttWVg9b
+        A3Z0WRw+Ttwr4G1UmOOcMootB867LPKvSu/fkxFev8mAnSvIBnpTgHTEtHaDlaycBRoJAnGDwmt
+        o9vGcAgRnYFT1JQGxjpLU5jGoUS1veCvA8njAtxew
+X-Received: by 2002:a17:902:d708:b0:186:5ce5:8022 with SMTP id w8-20020a170902d70800b001865ce58022mr12448092ply.62.1668417268341;
+        Mon, 14 Nov 2022 01:14:28 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4uO4nzhKMggeTT26a72aOVoPNbqhtrc2BIEVlMFyRN31zZBc0rw4X7Ojkw+dhSiJdJC0duVUo5tp3z0w2bohI=
+X-Received: by 2002:a17:902:d708:b0:186:5ce5:8022 with SMTP id
+ w8-20020a170902d70800b001865ce58022mr12448076ply.62.1668417268052; Mon, 14
+ Nov 2022 01:14:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: u08j0Ziwc5TOnKtNTehCnd77TWfowy1F
-X-Proofpoint-GUID: u08j0Ziwc5TOnKtNTehCnd77TWfowy1F
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-14_07,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1011 impostorscore=0 adultscore=3 phishscore=0 lowpriorityscore=0
- bulkscore=0 suspectscore=0 malwarescore=0 mlxscore=0 spamscore=0
- mlxlogscore=790 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211140068
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221110141335.62171-1-sgarzare@redhat.com> <CAJaqyWdvdy2QxuuyPRtfBKtuObrMg_kX_R9hdui+Oh72XtJ7Qw@mail.gmail.com>
+ <20221111163007.35kvkodvk6zpimmu@sgarzare-redhat>
+In-Reply-To: <20221111163007.35kvkodvk6zpimmu@sgarzare-redhat>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Mon, 14 Nov 2022 10:13:51 +0100
+Message-ID: <CAJaqyWfYx+63-hOp0K8fznkyjkScKu6-r8CUPd3eD96oKCHu9A@mail.gmail.com>
+Subject: Re: [PATCH] vdpa_sim: fix vringh initialization in vdpasim_queue_ready()
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add coresight components for sm8250. STM/ETM are added.
+On Fri, Nov 11, 2022 at 5:30 PM Stefano Garzarella <sgarzare@redhat.com> wr=
+ote:
+>
+> On Fri, Nov 11, 2022 at 04:40:33PM +0100, Eugenio Perez Martin wrote:
+> >On Thu, Nov 10, 2022 at 3:13 PM Stefano Garzarella <sgarzare@redhat.com>=
+ wrote:
+> >>
+> >> When we initialize vringh, we should pass the features and the
+> >> number of elements in the virtqueue negotiated with the driver,
+> >> otherwise operations with vringh may fail.
+> >>
+> >> This was discovered in a case where the driver sets a number of
+> >> elements in the virtqueue different from the value returned by
+> >> .get_vq_num_max().
+> >>
+> >> In vdpasim_vq_reset() is safe to initialize the vringh with
+> >> default values, since the virtqueue will not be used until
+> >> vdpasim_queue_ready() is called again.
+> >>
+> >> Fixes: 2c53d0f64c06 ("vdpasim: vDPA device simulator")
+> >> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> >> ---
+> >>  drivers/vdpa/vdpa_sim/vdpa_sim.c | 3 +--
+> >>  1 file changed, 1 insertion(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/=
+vdpa_sim.c
+> >> index b071f0d842fb..b20689f8fe89 100644
+> >> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> >> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> >> @@ -67,8 +67,7 @@ static void vdpasim_queue_ready(struct vdpasim *vdpa=
+sim, unsigned int idx)
+> >>  {
+> >>         struct vdpasim_virtqueue *vq =3D &vdpasim->vqs[idx];
+> >>
+> >> -       vringh_init_iotlb(&vq->vring, vdpasim->dev_attr.supported_feat=
+ures,
+> >> -                         VDPASIM_QUEUE_MAX, false,
+> >> +       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, fals=
+e,
+> >>                           (struct vring_desc *)(uintptr_t)vq->desc_add=
+r,
+> >>                           (struct vring_avail *)
+> >>                           (uintptr_t)vq->driver_addr,
+> >> --
+> >> 2.38.1
+> >>
+> >
+> >I think this is definitely an improvement, but I'd say we should go a
+> >step further and rename VDPASIM_QUEUE_MAX to VDPASIM_QUEUE_DEFAULT. As
+> >you point out in the patch message it is not a max anymore.
+>
+> I'm not sure about renaming since it is the value returned by
+> vdpasim_get_vq_num_max, so IMHO the _MAX suffix is fine.
 
-Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 498 +++++++++++++++++++++++++++
- 1 file changed, 498 insertions(+)
+Oh that's a very good point. But then I guess a conformant driver
+should never set more descriptors than that.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index a5b62cadb129..80193bb3c478 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2729,6 +2729,504 @@
- 			};
- 		};
- 
-+		stm@6002000 {
-+			compatible = "arm,coresight-stm", "arm,primecell";
-+			reg = <0 0x06002000 0 0x1000>, <0 0x16280000 0 0x180000>;
-+			reg-names = "stm-base", "stm-stimulus-base";
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					stm_out: endpoint {
-+						remote-endpoint = <&funnel0_in7>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@6041000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x06041000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					funnel_in0_out_funnel_merg: endpoint {
-+						remote-endpoint = <&funnel_merg_in_funnel_in0>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@7 {
-+					reg = <7>;
-+					funnel0_in7: endpoint {
-+						remote-endpoint = <&stm_out>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@6042000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x06042000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					funnel_in1_out_funnel_merg: endpoint {
-+						remote-endpoint = <&funnel_merg_in_funnel_in1>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@4 {
-+					reg = <4>;
-+					funnel_in1_in_funnel_apss_merg: endpoint {
-+					remote-endpoint = <&funnel_apss_merg_out_funnel_in1>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@6045000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x06045000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					funnel_merg_out_funnel_swao: endpoint {
-+					remote-endpoint = <&funnel_swao_in_funnel_merg>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					funnel_merg_in_funnel_in0: endpoint {
-+					remote-endpoint = <&funnel_in0_out_funnel_merg>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+					funnel_merg_in_funnel_in1: endpoint {
-+					remote-endpoint = <&funnel_in1_out_funnel_merg>;
-+					};
-+				};
-+			};
-+		};
-+
-+		replicator@6046000 {
-+			compatible = "arm,coresight-dynamic-replicator", "arm,primecell";
-+			reg = <0 0x06046000 0 0x1000>;
-+
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					replicator_out: endpoint {
-+						remote-endpoint = <&etr_in>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				port {
-+					replicator_cx_in_swao_out: endpoint {
-+						remote-endpoint = <&replicator_swao_out_cx_in>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etr@6048000 {
-+			compatible = "arm,coresight-tmc", "arm,primecell";
-+			reg = <0 0x06048000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,scatter-gather;
-+
-+			in-ports {
-+				port {
-+					etr_in: endpoint {
-+						remote-endpoint = <&replicator_out>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@6b04000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			arm,primecell-periphid = <0x000bb908>;
-+
-+			reg = <0 0x06b04000 0 0x1000>;
-+			reg-names = "funnel-base";
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					funnel_swao_out_etf: endpoint {
-+						remote-endpoint = <&etf_in_funnel_swao_out>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@7 {
-+					reg = <7>;
-+					funnel_swao_in_funnel_merg: endpoint {
-+						remote-endpoint= <&funnel_merg_out_funnel_swao>;
-+					};
-+				};
-+			};
-+
-+		};
-+
-+		etf@6b05000 {
-+			compatible = "arm,coresight-tmc", "arm,primecell";
-+			reg = <0 0x06b05000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					etf_out: endpoint {
-+						remote-endpoint = <&replicator_in>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					etf_in_funnel_swao_out: endpoint {
-+						remote-endpoint = <&funnel_swao_out_etf>;
-+					};
-+				};
-+			};
-+		};
-+
-+		replicator@6b06000 {
-+			compatible = "arm,coresight-dynamic-replicator", "arm,primecell";
-+			reg = <0 0x06b06000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					replicator_swao_out_cx_in: endpoint {
-+						remote-endpoint = <&replicator_cx_in_swao_out>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				port {
-+					replicator_in: endpoint {
-+						remote-endpoint = <&etf_out>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm@7040000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07040000 0 0x1000>;
-+
-+			cpu = <&CPU0>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
-+
-+			out-ports {
-+				port {
-+					etm0_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in0>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm@7140000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07140000 0 0x1000>;
-+
-+			cpu = <&CPU1>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
-+
-+			out-ports {
-+				port {
-+					etm1_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in1>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm@7240000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07240000 0 0x1000>;
-+
-+			cpu = <&CPU2>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
-+
-+			out-ports {
-+				port {
-+					etm2_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in2>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm@7340000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07340000 0 0x1000>;
-+
-+			cpu = <&CPU3>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
-+
-+			out-ports {
-+				port {
-+					etm3_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in3>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm@7440000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07440000 0 0x1000>;
-+
-+			cpu = <&CPU4>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
-+
-+			out-ports {
-+				port {
-+					etm4_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in4>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm@7540000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07540000 0 0x1000>;
-+
-+			cpu = <&CPU5>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
-+
-+			out-ports {
-+				port {
-+					etm5_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in5>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm@7640000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07640000 0 0x1000>;
-+
-+			cpu = <&CPU6>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
-+
-+			out-ports {
-+				port {
-+					etm6_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in6>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm@7740000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0 0x07740000 0 0x1000>;
-+
-+			cpu = <&CPU7>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+			arm,coresight-loses-context-with-cpu;
-+
-+			out-ports {
-+				port {
-+					etm7_out: endpoint {
-+						remote-endpoint = <&apss_funnel_in7>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@7800000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x07800000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					funnel_apss_out_funnel_apss_merg: endpoint {
-+					remote-endpoint = <&funnel_apss_merg_in_funnel_apss>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					apss_funnel_in0: endpoint {
-+						remote-endpoint = <&etm0_out>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+					apss_funnel_in1: endpoint {
-+						remote-endpoint = <&etm1_out>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+					apss_funnel_in2: endpoint {
-+						remote-endpoint = <&etm2_out>;
-+					};
-+				};
-+
-+				port@3 {
-+					reg = <3>;
-+					apss_funnel_in3: endpoint {
-+						remote-endpoint = <&etm3_out>;
-+					};
-+				};
-+
-+				port@4 {
-+					reg = <4>;
-+					apss_funnel_in4: endpoint {
-+						remote-endpoint = <&etm4_out>;
-+					};
-+				};
-+
-+				port@5 {
-+					reg = <5>;
-+					apss_funnel_in5: endpoint {
-+						remote-endpoint = <&etm5_out>;
-+					};
-+				};
-+
-+				port@6 {
-+					reg = <6>;
-+					apss_funnel_in6: endpoint {
-+						remote-endpoint = <&etm6_out>;
-+					};
-+				};
-+
-+				port@7 {
-+					reg = <7>;
-+					apss_funnel_in7: endpoint {
-+						remote-endpoint = <&etm7_out>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@7810000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0 0x07810000 0 0x1000>;
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port {
-+					funnel_apss_merg_out_funnel_in1: endpoint {
-+					remote-endpoint = <&funnel_in1_in_funnel_apss_merg>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					funnel_apss_merg_in_funnel_apss: endpoint {
-+					remote-endpoint = <&funnel_apss_out_funnel_apss_merg>;
-+					};
-+				};
-+			};
-+		};
-+
- 		cdsp: remoteproc@8300000 {
- 			compatible = "qcom,sm8250-cdsp-pas";
- 			reg = <0 0x08300000 0 0x10000>;
--- 
-2.17.1
+Would it be convenient to make the default queue size of 32768 and let
+the guest specify less descriptors than that? Default configuration
+will consume more memory then.
+
+> But I admit that initially I didn't understand whether it's the maximum
+> number of queues or elements, so maybe VDPASIM_VQ_NUM_MAX is better.
+>
+> >
+> >Another thing to note is that we don't have a way to report that
+> >userspace indicated a bad value for queue length. With the current
+> >code vringh will not initialize at all if I'm not wrong, so we should
+> >prevent userspace to put a bad num.
+>
+> Right!
+>
+> >
+> >Ideally, we should repeat the tests of vring_init_kern at
+> >vdpasim_set_vq_num. We could either call it with NULL vring addresses
+> >to check for -EINVAL, or simply repeat the conditional (!num || num >
+> >0xffff || (num & (num - 1))). I'd say the first one is better to not
+> >go out of sync.
+>
+> Or we could do the check in vdpasim_set_vq_ready() and set it not ready
+> if the vq_num is wrong.
+>
+
+Maybe it is the right place to do it, but the device is initiated at
+that point so the driver needs to perform a full reset.
+
+As a reference, qemu will retain the last valid size set to a vq, or
+the default. This is because it ignores the bad values systematically.
+Not sure what is more conformant actually :).
+
+
+> >
+> >All of that can be done on top anyway, so for this patch:
+> >
+> >Acked-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> >
+>
+> Thanks for the review,
+> Stefano
+>
 
