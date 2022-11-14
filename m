@@ -2,80 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5161628868
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:35:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9328B62886B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:38:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233300AbiKNSfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 13:35:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
+        id S235636AbiKNSiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 13:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235733AbiKNSfZ (ORCPT
+        with ESMTP id S235782AbiKNSig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 13:35:25 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F7A1B7A8;
-        Mon, 14 Nov 2022 10:35:22 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 5FC141C09F6; Mon, 14 Nov 2022 19:35:20 +0100 (CET)
-Date:   Mon, 14 Nov 2022 19:35:19 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 00/95] 5.10.155-rc1 review
-Message-ID: <Y3KKZ+63nLQRD9wb@duo.ucw.cz>
-References: <20221114124442.530286937@linuxfoundation.org>
+        Mon, 14 Nov 2022 13:38:36 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15C610A1;
+        Mon, 14 Nov 2022 10:38:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id F0E4ECE125E;
+        Mon, 14 Nov 2022 18:38:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64680C433C1;
+        Mon, 14 Nov 2022 18:38:29 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hWgqPtZi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1668451107;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uKUJi9cbk9TdF0FmuLuGLjhTZmnTZ6dC4XWfVqw8Lws=;
+        b=hWgqPtZiUEhZyt77/C1ccAVG7AIRCO0qyMkSGT6GXzYETYqyBz45dMxCaE1jy50qU85XlP
+        jxLhj+LIL+iOAN11uBWJsvQ6A+Sh+pEjoqC6CMnG/cM6wZ/YtxMC5J77NNG/8lnMthdOXC
+        2akCyIEFMlGhHMqw5fXGAGGIT1mu9yA=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 2cc5e0b3 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 14 Nov 2022 18:38:26 +0000 (UTC)
+Date:   Mon, 14 Nov 2022 19:38:23 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Yann Droneaud <ydroneaud@opteya.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Theodore Ts'o <tytso@mit.edu>, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/5] random: add helpers for random numbers with given
+ floor or range
+Message-ID: <Y3KLH4FqFbJ7bfY0@zx2c4.com>
+References: <20221022014403.3881893-1-Jason@zx2c4.com>
+ <20221022014403.3881893-4-Jason@zx2c4.com>
+ <60574e8f-20ff-0996-5558-e9bd35e42681@opteya.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="S9a7drjU8mvpDO5z"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221114124442.530286937@linuxfoundation.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <60574e8f-20ff-0996-5558-e9bd35e42681@opteya.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 14, 2022 at 07:04:13PM +0100, Yann Droneaud wrote:
+> I have a bad feeling about this one, and can't help but thinking it's going
+> to bite someone: when asked to pick a number *between* 0 and 10,
+> I usually think I'm allowed to pick 10 (even if I'm going to answer 7 as it should).
 
---S9a7drjU8mvpDO5z
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is one of those bikeshed things you see all over the place, like
+whether slices in a language should be [start index, end index] or
+[start index, length], or whether arrays should be 0-based or 1-based.
+We'll never settle this variety of dispute here.
 
-Hi!
+But in this case, there are some particular reasons why it must be this
+way. Firstly, usage of it this way matches most of the ways the function
+is actually used in the kernel, and fits existing semantics. This alone
+I find compelling. But also, having all of these functions use half-open
+intervals means that each function can take care of its entire range,
+without having to resort to using 64-bit arithmetic, and no function is
+a complete subset of any other function. So doing it this way makes
+these maximally useful too.
 
-> This is the start of the stable review cycle for the 5.10.155 release.
-> There are 95 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+So anyway I think the function has to be defined like this. If you'd
+like to bikeshed over a different name than "between", though, be my
+guest. Maybe you'd like "from" better. But probably "between" is fine,
+and with enough good examples (as my conversion patch does) and the
+clear succinct documentation comment, we should be good.
 
-CIP testing did not find any problems here:
-
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-5.10.y
-
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
-
-Best regards,
-                                                                Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---S9a7drjU8mvpDO5z
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY3KKZwAKCRAw5/Bqldv6
-8tAcAJ92NKRESoFXCtbG+5nFouH+kTCmsACgkmMjvsmN04Xl63xIrC7thwhFlOI=
-=QQMS
------END PGP SIGNATURE-----
-
---S9a7drjU8mvpDO5z--
+Jason
