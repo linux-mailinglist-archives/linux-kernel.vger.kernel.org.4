@@ -2,79 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDAD628043
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C4C62807C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:06:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237753AbiKNNE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:04:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
+        id S237814AbiKNNGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:06:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237750AbiKNNEY (ORCPT
+        with ESMTP id S237808AbiKNNGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:04:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C50727DDA;
-        Mon, 14 Nov 2022 05:04:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09A936117E;
-        Mon, 14 Nov 2022 13:04:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CA3BC433C1;
-        Mon, 14 Nov 2022 13:04:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668431063;
-        bh=B8vw6qZp1pAdTc0xkFcFrwXOTcOIyVYrxMXbsKmlHSo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iLyerZK1InQ8OyNqlEdaHZAmAzfxqIrN+EaSobimUtA3S5xPZA06hIatGXMCGJvAn
-         3hLPt6LNZayKDMC6tLu05P/PtJ1RH7LiTHN+IjNAk2e3/H24n2UBcQgdxmg0506egE
-         hl7LQmKcsKsll7LActV8R++9ndv2PZvCPdrgvxbGv8H1SlAyIzP9nigHw4jzyNZTOh
-         4ryeEF/WSdauM1I8BMdZ62bZrgdTwmuHTrRCdt7dpZtXxF/6scgNP/PnXv8D6ylDFy
-         t5EFVSIS28TUWR4ixRa38Ty6sGSW6Uo/NqH6jhmU9CLO123ZPTZDrjL75nxldHpD7I
-         IKKWUNY5Ucaag==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ouZ7v-0002Yl-Ig; Mon, 14 Nov 2022 14:03:51 +0100
-Date:   Mon, 14 Nov 2022 14:03:51 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/14] phy: qcom-qmp-combo: drop v4 reference-clock source
-Message-ID: <Y3I8t6it7DN0Id1G@hovoldconsulting.com>
-References: <20221111092457.10546-1-johan+linaro@kernel.org>
- <20221111092457.10546-4-johan+linaro@kernel.org>
- <14f01c33-dada-b66a-f81a-74b9028de18b@linaro.org>
+        Mon, 14 Nov 2022 08:06:12 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDD02A944
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:06:11 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id CD4325C0118;
+        Mon, 14 Nov 2022 08:06:10 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 14 Nov 2022 08:06:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1668431170; x=1668517570; bh=hTwfEL8WhY
+        8IR4P7vKxZDyu4A7kRyCha3szkP5Ui2Og=; b=XFdwPJCq6MfipI6W6CxCjWujM8
+        qKW6zvR1ZYsCyx1+cyr+9dTvnTFdKJeITINg8GhcyYFH+1se7R+lIW8Gd+sasxD0
+        ZfYKHqQ6Pf9RpD/fWYkuNKD/zp0S2XYwAmrbrkuf5PMuR5Z3N1GvdtZ7PobEpwF0
+        uqWybooDrC+1g7pGlO0DgALC/38dzu+zuJkxDljXmM0qAHNl51/209zYxq6HXNer
+        ZIj8z+z3ERT2tmEu5FcuRAAtfvGISvOipkJalfF9jrrp9W6axuPukAgk9FK6C84M
+        21m3GtwN+YqGK8mqIwyWgTEFjBlkCmUZPB+p+XUZze/eVQEdDW3kvb+lusvw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668431170; x=1668517570; bh=hTwfEL8WhY8IR4P7vKxZDyu4A7kR
+        yCha3szkP5Ui2Og=; b=JuZeLjuR+w22RCnq0vwKBm6Xad6BN6Fubtp5SqLmo688
+        qWoban8NACaUVRV91919czkb3Lv/5e4t2yUYxwQBV82XvRZQsUoqCEyys+n62F32
+        YmN8uIXGkusTXYYrnzPoFEukN0G3XGHkYmZMfTXRKFYz3m5c6AZAoUhzYGGa+mKW
+        BiDs/jjFTY14j1C33siqSK6SVzFrMnf4FvrrPPGxoSmNOoiBRML1ypO1HpzmK3u9
+        16//z3TVW8s2Scj/XUcupuBESaiQNROuwGDSZ4Bxwlm5tCGlB5QDrQ2G7m0j2JeR
+        LIUosup1G476E8dfTf3bU7LVlYIKuUbIhgIoTYHUeA==
+X-ME-Sender: <xms:Qj1yY9cok38ROpNvFFdd4RXK-4OPSKfC8-DgImY8CZF3mnrB4IT2tA>
+    <xme:Qj1yY7Opg-gLExeq8lrK7ERV1dPmsZc7K6u8MZfq6IcA7-WNiSUzRxd5vLrVdHcdh
+    DmRoXwHzafaRfT1npU>
+X-ME-Received: <xmr:Qj1yY2hr6uy3_Yv_Ofct-6fME9fQK223nVPYdSp60mBNPxo6f0TkXQfQibQAu5os8yzwzPCXOeXMbSVPOOH8e3k40YCeCwpdxUfD7M-jU2QMSQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedvgddvudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleejuefggeevteelveekteffgeduveeiteeiueegueegiedvtdejjedvfeef
+    tefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:Qj1yY2-XEvWxG9h7ZB34iMtixqf404DtbTQWcK9P8-TsTv0VfP_JmA>
+    <xmx:Qj1yY5v4jyUghn1q2YBfcsAUSKUWxx50meyv0GfcaWp2_S6vE_kBhA>
+    <xmx:Qj1yY1G4cnHMTnEjbLjrlpVXigtgVb-VsC_NEUxRv4FvH3ZSYHrzyQ>
+    <xmx:Qj1yYy82mZ2iCYsrdDXr5sqcRgAE8JOoyyaajeBiCM6_FxazEYjAAQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 14 Nov 2022 08:06:09 -0500 (EST)
+Date:   Mon, 14 Nov 2022 14:06:08 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Emma Anholt <emma@anholt.net>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: Re: [PATCH 1/2] drm/vc4: hdmi: Enforce the minimum rate at
+ runtime_resume
+Message-ID: <20221114130608.kqxhorlee25rvrc7@houat>
+References: <20220929-rpi-pi3-unplugged-fixes-v1-0-cd22e962296c@cerno.tech>
+ <20220929-rpi-pi3-unplugged-fixes-v1-1-cd22e962296c@cerno.tech>
+ <737e7e23-1bc5-eaf3-2d15-5498fc5b0415@i2se.com>
+ <b49a242f-dc85-171d-1f0c-93b9099712a3@i2se.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zvzqn4wjbzjl3o27"
 Content-Disposition: inline
-In-Reply-To: <14f01c33-dada-b66a-f81a-74b9028de18b@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b49a242f-dc85-171d-1f0c-93b9099712a3@i2se.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 02:43:38PM +0300, Dmitry Baryshkov wrote:
-> On 11/11/2022 12:24, Johan Hovold wrote:
-> > The source clock for the reference clock should not be described by the
-> > devicetree and instead this relationship should be modelled in the clock
-> > driver.
-> 
-> Do we have a fix for the gcc driver?
 
-Bjorn is preparing one, but there's no need to wait for that to be
-merged in this case (we have a ton of references on CXO, we need to get
-the binding fixed in 6.2, and some other reasons which Bjorn may be able
-to share soon).
+--zvzqn4wjbzjl3o27
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Johan
+Hi Stefan,
+
+On Mon, Nov 14, 2022 at 01:48:14AM +0100, Stefan Wahren wrote:
+> Am 11.11.22 um 22:08 schrieb Stefan Wahren:
+> > Hi Maxime,
+> >=20
+> > Am 29.09.22 um 11:21 schrieb Maxime Ripard:
+> > > This is a revert of commit fd5894fa2413 ("drm/vc4: hdmi: Remove clock
+> > > rate initialization"), with the code slightly moved around.
+> > >=20
+> > > It turns out that we can't downright remove that code from the driver,
+> > > since the Pi0-3 and Pi4 are in different cases, and it only works for
+> > > the Pi4.
+> > >=20
+> > > Indeed, the commit mentioned above was relying on the RaspberryPi
+> > > firmware clocks driver to initialize the rate if it wasn't done by the
+> > > firmware. However, the Pi0-3 are using the clk-bcm2835 clock driver t=
+hat
+> > > wasn't doing this initialization. We therefore end up with the clock =
+not
+> > > being assigned a rate, and the CPU stalling when trying to access a
+> > > register.
+> > >=20
+> > > We can't move that initialization in the clk-bcm2835 driver, since the
+> > > HSM clock we depend on is actually part of the HDMI power domain, so =
+any
+> > > rate setup is only valid when the power domain is enabled. Thus, we
+> > > reinstated the minimum rate setup at runtime_suspend, which should
+> > > address both issues.
+> > >=20
+> > > Link: https://lore.kernel.org/dri-devel/20220922145448.w3xfywkn5ecak2=
+et@pengutronix.de/
+> > > Fixes: fd5894fa2413 ("drm/vc4: hdmi: Remove clock rate initialization=
+")
+> > > Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> > > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> > > ---
+> > > =A0 drivers/gpu/drm/vc4/vc4_hdmi.c | 9 +++++++++
+> > > =A0 1 file changed, 9 insertions(+)
+> > >=20
+> > > diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > > b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > > index 199bc398817f..2e28fe16ed5e 100644
+> > > --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > > +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > > @@ -2891,6 +2891,15 @@ static int vc4_hdmi_runtime_resume(struct
+> > > device *dev)
+> > > =A0=A0=A0=A0=A0 u32 __maybe_unused value;
+> > > =A0=A0=A0=A0=A0 int ret;
+> > > =A0 +=A0=A0=A0 /*
+> > > +=A0=A0=A0=A0 * The HSM clock is in the HDMI power domain, so we need=
+ to set
+> > > +=A0=A0=A0=A0 * its frequency while the power domain is active so tha=
+t it
+> > > +=A0=A0=A0=A0 * keeps its rate.
+> > > +=A0=A0=A0=A0 */
+> > > +=A0=A0=A0 ret =3D clk_set_min_rate(vc4_hdmi->hsm_clock, HSM_MIN_CLOC=
+K_FREQ);
+> > > +=A0=A0=A0 if (ret)
+> > > +=A0=A0=A0=A0=A0=A0=A0 return ret;
+> > > +
+> >=20
+> > unfortunately this breaks X on Raspberry Pi 4 in Linux 6.0.5
+> > (multi_v7_defconfig + LPAE). Today i saw this report [1] and bisected
+> > the issue down to this patch. Shame on me that i only tested this patch
+> > with Rpi 3B+ :-(
+>
+> Looks like "drm/vc4: hdmi: Fix HSM clock too low on Pi4" addresses this
+> issue ...
+
+Yes, indeed. The fix should be on its way to -stable already
+
+Maxime
+
+--zvzqn4wjbzjl3o27
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY3I9QAAKCRDj7w1vZxhR
+xQKtAP4+zlNIn7+r6XxtuDBvv0Eo4QlHEDhlHIQWW069FlLORAD+LiRnVQRFYCRX
+sJL1ElqKtlXEsrhB6Q2bUqMfY9W+Lww=
+=9ceS
+-----END PGP SIGNATURE-----
+
+--zvzqn4wjbzjl3o27--
