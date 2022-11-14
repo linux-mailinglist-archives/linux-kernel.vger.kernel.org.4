@@ -2,86 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 442BA62789B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC1E627873
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236902AbiKNJFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:05:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47588 "EHLO
+        id S236708AbiKNJC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:02:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236783AbiKNJEd (ORCPT
+        with ESMTP id S236706AbiKNJCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:04:33 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC071DDE8;
-        Mon, 14 Nov 2022 01:04:00 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E3ABAFF815;
-        Mon, 14 Nov 2022 09:03:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668416639;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=p+yDyoG2qKYEY8YhhZqOq33UNeQMIcC6DN9z91vnmHU=;
-        b=LQh96YYntByQyxcKe0JCkWkS0OBc9b4DSahCT3qaQVd4HHXBCF5JEigiffOB1NdU7CKNQE
-        B2KsJZGfIfN64kE6pRicJdFc80adinWRe8rA9qOvcgb5BIN5zpmzCln1CPOPwlHTfx8ftN
-        lhpTbjbNfTD/FbbIzjM5I7IFnFfEyfKpcpFhqeB6acxVAoZVpkKnUV8hvWchYdk/XPrTzV
-        +Lz1vNcZN64sRFDknCQwl6u/L465ERep2a4NU4RHTffkMh7JSb6bPX9tf4rDy9gm9Uqm9L
-        YdAlmnMpSSS8PINpLmw31Kuv22Pi7+4qVpHsfVdiK/m0MUDRkoMwPvefKiY9QA==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tudor Ambarus <Tudor.Ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        <linux-mtd@lists.infradead.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        <linux-kernel@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 16/17] dt-bindings: mtd: Drop object types when referencing other files
-Date:   Mon, 14 Nov 2022 10:03:14 +0100
-Message-Id: <20221114090315.848208-17-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221114090315.848208-1-miquel.raynal@bootlin.com>
-References: <20221114090315.848208-1-miquel.raynal@bootlin.com>
+        Mon, 14 Nov 2022 04:02:54 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A921109;
+        Mon, 14 Nov 2022 01:02:52 -0800 (PST)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N9jxf6wqqzmVyd;
+        Mon, 14 Nov 2022 17:02:30 +0800 (CST)
+Received: from dggpeml500002.china.huawei.com (7.185.36.158) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 14 Nov 2022 17:02:50 +0800
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpeml500002.china.huawei.com (7.185.36.158) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 14 Nov 2022 17:02:50 +0800
+From:   Junhao He <hejunhao3@huawei.com>
+To:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
+        <jonathan.cameron@huawei.com>, <john.garry@huawei.com>
+CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <lpieralisi@kernel.org>,
+        <linuxarm@huawei.com>, <yangyicong@huawei.com>,
+        <liuqi115@huawei.com>, <f.fangjian@huawei.com>,
+        <prime.zeng@hisilicon.com>, <hejunhao3@huawei.com>
+Subject: [PATCH v13 0/2] Add support for UltraSoc System Memory Buffer
+Date:   Mon, 14 Nov 2022 17:03:14 +0800
+Message-ID: <20221114090316.63157-1-hejunhao3@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500002.china.huawei.com (7.185.36.158)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Setting an object type is redundant when a reference is made, so drop
-these useless lines.
+Add support for UltraSoc System Memory Buffer.
 
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/mtd/mtd.yaml | 1 -
- 1 file changed, 1 deletion(-)
+Change since v12:
+- Modify the code style and add "#ifdef CONFIG_ACPI" according to Jonathan's comment.
+- Address the comments from Yicong.
+- Link: https://lore.kernel.org/lkml/20221109135008.9485-1-hejunhao3@huawei.com/
 
-diff --git a/Documentation/devicetree/bindings/mtd/mtd.yaml b/Documentation/devicetree/bindings/mtd/mtd.yaml
-index 9ee285b7d162..78da129e9985 100644
---- a/Documentation/devicetree/bindings/mtd/mtd.yaml
-+++ b/Documentation/devicetree/bindings/mtd/mtd.yaml
-@@ -43,7 +43,6 @@ patternProperties:
-     deprecated: true
- 
-   "^otp(-[0-9]+)?$":
--    type: object
-     $ref: ../nvmem/nvmem.yaml#
- 
-     description: |
+Change since v11:
+- Modify the code style and rename the macro according to Jonathan's comment.
+- Link: https://lore.kernel.org/lkml/20221107130624.59886-1-hejunhao3@huawei.com/
+
+Change since v10:
+- Rebase onto v6.1-rc4, included similar sysfs register accessors (as same as James's patch)
+- Link: https://lore.kernel.org/lkml/20221022115929.7503-1-hejunhao3@huawei.com/
+
+Change since v9:
+- Update the Contact tag in SMB document. 
+- Replace the spinlock with mutex.
+- Do some clean-ups in "smb_enable()" and "smb_release()".
+- Use classic memory mapped interface.
+- Link: https://lore.kernel.org/linux-arm-kernel/20220818132231.28240-1-hejunhao3@huawei.com/
+
+Change since v8:
+- Insert a blank line at the end of the config tag in Kconfig according to Randy's comment.
+- Link: https://lore.kernel.org/linux-arm-kernel/20220816131634.38195-1-hejunhao3@huawei.com/
+
+Change since v7:
+- Use the macros for register bit flags and numbers of resource.
+- Cleanup punctuation.
+- Update the Date tag and the KernelVersion tag in the document.
+- Link: https://lore.kernel.org/lkml/20220712091353.34540-1-hejunhao3@huawei.com/
+
+Change since v6:
+- Modify the code style and driver description according to Suzuki's comment.
+- Modify configuration of "drvdata->reading", to void problems in open/read
+  concurrency scenario.
+- Rename the macro of "SMB_FLOW_MASK".
+- Use the "handle->head" to determine the page number and offset.
+- Link: https://lore.kernel.org/linux-arm-kernel/20220606130223.57354-1-liuqi115@huawei.com/
+
+  Change since v5:
+- Address the comments from Suzuki, add some comments in SMB document, and modify
+  configuration of "drvdata->reading", to void problems in multi-core concurrency scenario
+- Link: https://lore.kernel.org/linux-arm-kernel/20220416083953.52610-1-liuqi115@huawei.com/
+
+Change since v4:
+- Add a simple document of SMB driver according to Suzuki's comment.
+- Address the comments from Suzuki.
+- Link: https://lore.kernel.org/linux-arm-kernel/20220128061755.31909-1-liuqi115@huawei.com/
+
+Change since v3:
+- Modify the file header according to community specifications.
+- Address the comments from Mathieu.
+- Link: https://lore.kernel.org/linux-arm-kernel/20211118110016.40398-1-liuqi115@huawei.com/
+
+Change since v2:
+- Move ultrasoc driver to drivers/hwtracing/coresight by Mathieu's comment.
+- Link: https://lists.linaro.org/pipermail/coresight/2021-November/007310.html
+
+Change since v1:
+- Drop the document of UltraSoc according to Mathieu's comment.
+- Add comments to explain some private hardware settings.
+- Address the comments from Mathieu.
+- Link: https://lists.linaro.org/pipermail/coresight/2021-August/006842.html
+
+Change since RFC:
+- Move driver to drivers/hwtracing/coresight/ultrasoc.
+- Remove ultrasoc-axi-com.c, as AXI-COM doesn't need to be configured in
+  basic tracing function.
+- Remove ultrasoc.c as SMB does not need to register with the ultrasoc core.
+- Address the comments from Mathieu and Suzuki.
+- Link: https://lists.linaro.org/pipermail/coresight/2021-June/006535.html
+
+Qi Liu (2):
+  drivers/coresight: Add UltraSoc System Memory Buffer driver
+  Documentation: Add document for UltraSoc SMB drivers
+
+ .../sysfs-bus-coresight-devices-ultra_smb     |  31 +
+ .../trace/coresight/ultrasoc-smb.rst          |  82 +++
+ drivers/hwtracing/coresight/Kconfig           |  11 +
+ drivers/hwtracing/coresight/Makefile          |   1 +
+ drivers/hwtracing/coresight/ultrasoc-smb.c    | 646 ++++++++++++++++++
+ drivers/hwtracing/coresight/ultrasoc-smb.h    | 120 ++++
+ 6 files changed, 891 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+ create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
+ create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.c
+ create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.h
+
 -- 
-2.34.1
+2.33.0
 
