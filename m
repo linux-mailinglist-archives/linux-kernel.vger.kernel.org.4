@@ -2,94 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F79628454
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32EE6628456
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:49:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237244AbiKNPsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 10:48:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
+        id S236785AbiKNPtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 10:49:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237224AbiKNPsB (ORCPT
+        with ESMTP id S236963AbiKNPtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 10:48:01 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF42713EB9;
-        Mon, 14 Nov 2022 07:48:00 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e773329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e773:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 638511EC0391;
-        Mon, 14 Nov 2022 16:47:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1668440879;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=aZfrPRU7cJWa0FklhcMR2UCGDD460EKBf2AZ+Suhhv0=;
-        b=kh9zAtI0xHAL3dMgwKRzWDHAwjw6ER+syTn9ug6wcAUCDi7l8ZKFERNwLWsknsJFZNVQ+7
-        +sxUe2Dg+6qFdrJ6by6hAVmzV+APRc7a3Ni/dXZEEVKmltEcQUs3rvpRaXcwA5ASJv+E4F
-        vSFs1rxW3SW54379QAS1Xc2Sl2QbcjI=
-Date:   Mon, 14 Nov 2022 16:47:55 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Thiago Macieira <thiago.macieira@intel.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
-        "Mehta, Sohil" <sohil.mehta@intel.com>
-Subject: Re: [PATCH v2 12/14] platform/x86/intel/ifs: Add current_batch sysfs
- entry
-Message-ID: <Y3JjK2G8ZFyTk1hv@zn.tnic>
-References: <20221021203413.1220137-1-jithu.joseph@intel.com>
- <20221107225323.2733518-1-jithu.joseph@intel.com>
- <20221107225323.2733518-13-jithu.joseph@intel.com>
- <Y2/JNAmSoYlLKq3A@zn.tnic>
- <CC3629D6-B205-4150-80E5-FC7A7A76DD25@intel.com>
- <Y3CevK2zhAmiUyG9@kroah.com>
- <Y3DZmKYV+8HBtZ+Q@zn.tnic>
- <Y3HrLpTdxqUPWW3F@kroah.com>
- <Y3Jf1GmQKy3Dnz6V@agluck-desk3.sc.intel.com>
+        Mon, 14 Nov 2022 10:49:11 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840301E715
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:49:09 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id bs21so19032321wrb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:49:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ywjhlDr3qfSyUxeJZo0qqvUEFKwVEcvvAGR/9wCuiFo=;
+        b=EMlfXctXb6UH4qvddvDUSBU9aGzxsh0rX7JsphvAl3seKmu/4es6TR6hfgD3amF13V
+         I2Og48ux6Mr0TL320f3Pu3QS+dPILmXcefzpwfLN6DgoUmts9gWsOX6SFB1N418wP37/
+         dOFATnxYOCNk0ZUKzfK7mHrT/A0mLDnY6gTHD0ViL1ESKG3i2chU/f1uBAcaedi1JjPt
+         RWr2KcoEGb+uB99BJabp7hHp+CML2xRHIToP8QSBfXSM2k0L+Vk9ESj9YktIykK6kFCF
+         gZ/MfMrtYXTDB8dIWjS9Doc358bOw7vxjvFUaL5LI/Ec+punGnMNB7RkHETkEYd7MFGr
+         /HRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ywjhlDr3qfSyUxeJZo0qqvUEFKwVEcvvAGR/9wCuiFo=;
+        b=sQOhbvvOv8sh6eokE3dX+QYxeT3Hl5LCMskwwTgvBgKEy0Y75f4OvWsEIP8Piez9E8
+         w6wtb22OfEKqy8xt28MMAJ9gXlYTpM6ecivQTkTcIr53iahFd/muXbqGltwcdlY/mL85
+         usK/0BBzyLKnpsJzHims8FucXfISk3hxM0OeN6ikDhPD4HG8zYN6DBrzlIMjU4HdDXKF
+         dBK/a8MmRlusAvGaqxFskU+Zx0Z9/1CRRZvqoUWN3m6asFr36Yn3pvQOIu9o2ew+cOPC
+         I79/2hbFVyzCh4pJ+HDIy6gwE3MZT0MrHUNea2KloJ2s1cpfyQER0ha4smSKzkSDOsE2
+         4IbQ==
+X-Gm-Message-State: ANoB5pmdbwagTlQjLpyDacyup1nl8lMAX8hK0+xXlhWhomIT5CgRxfSn
+        Ym1IGQ28/1gh4xyztgAaxeIkqA==
+X-Google-Smtp-Source: AA0mqf7GTPVsskyrC0ob8SZncUMQxrPW6gbYd/2tEK7bso2W0kN5SljB7f1nR9F9AEtEjkO3IOxdPQ==
+X-Received: by 2002:a05:6000:12d0:b0:22e:2c8b:993d with SMTP id l16-20020a05600012d000b0022e2c8b993dmr7676620wrx.523.1668440948030;
+        Mon, 14 Nov 2022 07:49:08 -0800 (PST)
+Received: from Red ([2a01:cb1d:3d5:a100:4a02:2aff:fe07:1efc])
+        by smtp.googlemail.com with ESMTPSA id o3-20020a5d58c3000000b00241727795c4sm11069871wrf.63.2022.11.14.07.49.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 07:49:07 -0800 (PST)
+Date:   Mon, 14 Nov 2022 16:49:05 +0100
+From:   Corentin LABBE <clabbe@baylibre.com>
+To:     linusw@kernel.org, kaloz@openwrt.org, khalasa@piap.pl
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: add related dts to IXP4xx
+Message-ID: <Y3JjcUol46DTb/7S@Red>
+References: <20221005105734.3513581-1-clabbe@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Y3Jf1GmQKy3Dnz6V@agluck-desk3.sc.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221005105734.3513581-1-clabbe@baylibre.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 07:33:40AM -0800, Tony Luck wrote:
-> Bug ... $i is a full path here. I think Boris meant:
+Le Wed, Oct 05, 2022 at 10:57:34AM +0000, Corentin Labbe a écrit :
+> get_maintainer.pl currently give no maintainer on all IXP4xx DTS files.
+> Add them to the set of files handled by IXP4xx maintainers.
+> 
+> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+> ---
 
-Kinda.
+Hello
 
-I meant:
+Gentle ping
 
-for i in $(ls /lib/firmware/intel/ifs_0/) ...
-
-initially. Note the missing glob at the end. This gives the filenames
-only, without the path. But then I added "*.scan" without testing it.
-The "*.scan" thing would've been redundant too if we did what I was
-suggesting...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Regards
