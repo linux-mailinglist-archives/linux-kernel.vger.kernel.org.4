@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE4162823E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:19:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0754B628244
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236154AbiKNOTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59580 "EHLO
+        id S236128AbiKNOUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:20:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237020AbiKNOTd (ORCPT
+        with ESMTP id S236898AbiKNOT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:19:33 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BBA72656C;
-        Mon, 14 Nov 2022 06:19:31 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71CAB23A;
-        Mon, 14 Nov 2022 06:19:37 -0800 (PST)
-Received: from [192.168.0.110] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 61C753F73D;
-        Mon, 14 Nov 2022 06:19:21 -0800 (PST)
-Message-ID: <40f1b5ad-2165-bb81-1ff5-89786373fa14@arm.com>
-Date:   Mon, 14 Nov 2022 19:49:13 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v5 2/2] arm64: support batched/deferred tlb shootdown
- during page reclamation
-Content-Language: en-US
-To:     Yicong Yang <yangyicong@huawei.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        linux-doc@vger.kernel.org
-Cc:     yangyicong@hisilicon.com, corbet@lwn.net, peterz@infradead.org,
-        arnd@arndb.de, punit.agrawal@bytedance.com,
-        linux-kernel@vger.kernel.org, darren@os.amperecomputing.com,
-        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
-        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        Barry Song <21cnbao@gmail.com>, wangkefeng.wang@huawei.com,
-        xhao@linux.alibaba.com, prime.zeng@hisilicon.com,
-        Barry Song <v-songbaohua@oppo.com>,
-        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
-References: <20221028081255.19157-1-yangyicong@huawei.com>
- <20221028081255.19157-3-yangyicong@huawei.com>
- <86fbdc8c-0dcb-9b8f-d843-63460d8b1d6a@arm.com>
- <9982dac0-9f2e-112a-d440-467c8e8f8aa4@huawei.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <9982dac0-9f2e-112a-d440-467c8e8f8aa4@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+        Mon, 14 Nov 2022 09:19:57 -0500
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8229B26563;
+        Mon, 14 Nov 2022 06:19:56 -0800 (PST)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-13ba86b5ac0so12629702fac.1;
+        Mon, 14 Nov 2022 06:19:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=T363VWdQ5ocnDSQ5x4Cz3XrYjoogVZHJUwppT1WNaYs=;
+        b=fPC7iIMJGuU1X4mMWkcTFVHs+WXS4aXNtMie5HaniXUltcXU0rIa/bdKaIo88gRKI6
+         ELVeftegAMTj4qk6xGN6Hnp6rLjimeHv8L/ujO8YvJzg8V5TictttbUlqoX2QF/DGibR
+         tTT2MZiSIP9xOxE1hUDeXYxxQj8T7rD62eRdeWusD6yozuo/6Ql6oO5ldTERq9jHSv3V
+         z6iM3iHlQVA8uLOTTnS19Y4yFfsdGrCCJBMAkiz3jhecboe4jmMJzAtGBPGgaAcdcavk
+         hvt07XTAPFK3zwaJv5GBpjCBwOxfgQJ0oH499eVGSTbTkhNkjtMbntxLboavfrwskneA
+         Xbvg==
+X-Gm-Message-State: ANoB5pncwS1bjXX2pbXiD98gAwyBeDC30Am1X5vEYx2CkEBJJGk8hJ6D
+        yF0EncHityHCRYjeE25RCHUC0r0ksg==
+X-Google-Smtp-Source: AA0mqf5YD2ya3ZXS0A73Y8ieA+ETvdMBfmcetHL50rNO1AXEo7hvIHk3FznZiOxaGoOQxPiD6GLxBg==
+X-Received: by 2002:a05:6870:8dc3:b0:13b:b3b7:1082 with SMTP id lq3-20020a0568708dc300b0013bb3b71082mr7186742oab.71.1668435595440;
+        Mon, 14 Nov 2022 06:19:55 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h3-20020a9d7983000000b0063b24357269sm4138272otm.13.2022.11.14.06.19.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 06:19:54 -0800 (PST)
+Received: (nullmailer pid 2686451 invoked by uid 1000);
+        Mon, 14 Nov 2022 14:19:56 -0000
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, patches@linaro.org,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski@linaro.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        andersson@kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev
+In-Reply-To: <20221114104222.36329-2-konrad.dybcio@linaro.org>
+References: <20221114104222.36329-1-konrad.dybcio@linaro.org>
+ <20221114104222.36329-2-konrad.dybcio@linaro.org>
+Message-Id: <166843545485.2679805.16057396300948126713.robh@kernel.org>
+Subject: Re: [PATCH v2 1/9] dt-bindings: arm-smmu: Allow up to 3 power-domains
+Date:   Mon, 14 Nov 2022 08:19:56 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -62,55 +71,51 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 11/14/22 14:16, Yicong Yang wrote:
-> On 2022/11/14 11:29, Anshuman Khandual wrote:
->>
->> On 10/28/22 13:42, Yicong Yang wrote:
->>> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
->>> +{
->>> +	/*
->>> +	 * TLB batched flush is proved to be beneficial for systems with large
->>> +	 * number of CPUs, especially system with more than 8 CPUs. TLB shutdown
->>> +	 * is cheap on small systems which may not need this feature. So use
->>> +	 * a threshold for enabling this to avoid potential side effects on
->>> +	 * these platforms.
->>> +	 */
->>> +	if (num_online_cpus() <= CONFIG_ARM64_NR_CPUS_FOR_BATCHED_TLB)
->>> +		return false;
->>> +
->>> +#ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
->>> +	if (unlikely(this_cpu_has_cap(ARM64_WORKAROUND_REPEAT_TLBI)))
->>> +		return false;
->>> +#endif
->> should_defer_flush() is immediately followed by set_tlb_ubc_flush_pending() which calls
->> arch_tlbbatch_add_mm(), triggering the actual TLBI flush via __flush_tlb_page_nosync().
->> It should be okay to check capability with this_cpu_has_cap() as the entire call chain
->> here is executed on the same cpu. But just wondering if cpus_have_const_cap() would be
->> simpler, consistent, and also cost effective ?
->>
-> ok. Checked cpus_have_const_cap() I think it matches your words.
+On Mon, 14 Nov 2022 11:42:14 +0100, Konrad Dybcio wrote:
+> Some SMMUs require that a vote is held on as much as 3 separate PDs
+> (hello Qualcomm). Allow it in bindings.
 > 
->> Regardless, a comment is needed before the #ifdef block explaining why it does not make
->> sense to defer/batch when __tlbi()/__tlbi_user() implementation will execute 'dsb(ish)'
->> between two TLBI instructions to workaround the errata.
->>
-> The workaround for the errata mentioned the affected platforms need the tlbi+dsb to be done
-> twice, so I'm not sure if we defer the final dsb will cause any problem so I think the judgement
-> here is used for safety. I have no such platform to test if it's ok to defer the last dsb.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+> Changes since v1:
+> - Add minItems
+> 
+>  Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
 
-We should not defer TLB flush on such systems, as ensured by the above test and 'false'
-return afterwards. The only question is whether this decision should be taken at a CPU
-level (which is affected by the errata) or the whole system level.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-What is required now
+yamllint warnings/errors:
 
-- Replace this_cpu_has_cap() with cpus_have_const_cap ?
-- Add the following comment before the #ifdef check
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iommu/arm,smmu.yaml: properties:power-domains:minItems: 0 is less than the minimum of 1
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iommu/arm,smmu.yaml: properties:power-domains: 'anyOf' conditional failed, one must be fixed:
+	'minItems' is not one of ['maxItems', 'description', 'deprecated']
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	'minItems' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref', 'oneOf']
+	'maxItems' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref', 'oneOf']
+	1 was expected
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	0 is less than the minimum of 1
+		hint: Arrays must be described with a combination of minItems/maxItems/items
+	hint: cell array properties must define how many entries and what the entries are when there is more than one entry.
+	from schema $id: http://devicetree.org/meta-schemas/power-domain.yaml#
 
-/*
- * TLB flush deferral is not required on systems, which are affected with
- * ARM64_WORKAROUND_REPEAT_TLBI, as __tlbi()/__tlbi_user() implementation
- * will have two consecutive TLBI instructions with a dsb(ish) in between
- * defeating the purpose (i.e save overall 'dsb ish' cost).
- */
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
