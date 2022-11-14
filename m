@@ -2,158 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C59462845E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C866628460
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236389AbiKNPwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 10:52:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
+        id S236357AbiKNPxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 10:53:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiKNPws (ORCPT
+        with ESMTP id S230079AbiKNPxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 10:52:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB612D1E6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:52:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D304AB81076
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 15:52:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B262FC433D6;
-        Mon, 14 Nov 2022 15:52:43 +0000 (UTC)
-Date:   Mon, 14 Nov 2022 10:53:25 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH v2 1/7] mm: vmalloc: Add alloc_vmap_area trace event
-Message-ID: <20221114105325.57d27b6f@gandalf.local.home>
-In-Reply-To: <20221018181053.434508-2-urezki@gmail.com>
-References: <20221018181053.434508-1-urezki@gmail.com>
-        <20221018181053.434508-2-urezki@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 14 Nov 2022 10:53:31 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2ED10F1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:53:29 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id r12so19988998lfp.1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:53:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ql7BbfjZhi9PUKex4VtigUx0q+x0JH+qcMLmXxKcm9A=;
+        b=B6RXSrmcloy8u6hww8BgiAqFD6lcgsmVusw5HA8LMyLb3k7XTt65oyuat6B3WJSLjE
+         0WAopbgePqczDLA2XSyO2OMPuyq+m9jZTtNAcKmMPm97TjdNVuSthc7DD2cBqm0DUPH+
+         49s3nTx2N9CuB2eapMLAD2qmaA8ESM6ZJHk8bGUMKEB4RzlZqA4+qFxsUyaWKrCbvuyN
+         TmkJdndOYYEFqjhZLpf1B2aZwHWHQp3UMwVoakPWAZAkUcDCVAOYxf1bGf1majwRo08+
+         WzZuHoZI3+jSSKbWzVALSzlhj1jo2MbvtkqlKKRNEDHyYFkDowiUSs4W6kdAZoPwhfm0
+         tNhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ql7BbfjZhi9PUKex4VtigUx0q+x0JH+qcMLmXxKcm9A=;
+        b=ktw+/A+x89EyjZ2bK/3nC39w3sKgI7JTBX0gQEF6Kd0OpnZ48//WU3UbrjycwpaMVF
+         ZqsYfDwnsJVCUNxVuRwmVrQaLMzIYQ3bBccUiLPh9qn6bkTfotHEWNYA0A7BL3iC6jVr
+         6PeGxZPxW7yqwxnpwKBBQSpIBMsTauSdKjhZ6aLi3D0duyb9hToCtNGmR89nOF5uhKcT
+         +OZbCjIumOedis9hFSkzU07i/1fnIbP5qccExd+GkduEy75Rnkk618wCq+qxj74UbZmn
+         jgz1cgCHDtf3PTftw1cYyaal/ZIBKeQtDQLrd+j4+IVldgq4JRO1Y00yfCzEBVRksuya
+         7Ekg==
+X-Gm-Message-State: ANoB5pkuqrlpyjIf81G00hzjmx0LctlvyePJYhf3qJKwoA7Q0mpwk5IG
+        R59Cr3t54LgV21iRpUm82mqFe/rGvYWuakxr
+X-Google-Smtp-Source: AA0mqf4LOVfsXdJpid8qCBFEZKOX1+gwsm7JoP/gdBWrJumjJEp6xqZ9ZpFEUBbr2IbTJX74ohz6Qg==
+X-Received: by 2002:a05:6512:3e14:b0:4aa:7eed:f70c with SMTP id i20-20020a0565123e1400b004aa7eedf70cmr4871674lfv.630.1668441207703;
+        Mon, 14 Nov 2022 07:53:27 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 2-20020a2e1542000000b0026c3ecf9a39sm2072160ljv.38.2022.11.14.07.53.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 07:53:27 -0800 (PST)
+Message-ID: <6df463da-1065-025f-b104-dea5c0bd0dcd@linaro.org>
+Date:   Mon, 14 Nov 2022 16:53:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 2/2] drivers: arm-smmu-impl: Add QDU1000 and QRU1000
+ iommu implementation
+Content-Language: en-US
+To:     Will Deacon <will@kernel.org>
+Cc:     Melody Olvera <quic_molvera@quicinc.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221026190534.4004945-1-quic_molvera@quicinc.com>
+ <20221026190534.4004945-3-quic_molvera@quicinc.com>
+ <0ae09be0-cb1b-dc27-943b-db64ca97b8c7@linaro.org>
+ <20221114144220.GA31043@willie-the-truck>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221114144220.GA31043@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 20:10:47 +0200
-"Uladzislau Rezki (Sony)" <urezki@gmail.com> wrote:
-
-> It is for a debug purpose and for validation of passed parameters.
+On 14/11/2022 15:42, Will Deacon wrote:
+> On Mon, Nov 14, 2022 at 03:28:15PM +0100, Krzysztof Kozlowski wrote:
+>> On 26/10/2022 21:05, Melody Olvera wrote:
+>>> Add compatible for Qualcomm QDU1000 and QRU1000 SoCs to add iommu
+>>> support for them.
+>>>
+>>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>>> ---
+>>>  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 1 +
+>>>  1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+>>> index b2708de25ea3..0580a381a04b 100644
+>>> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+>>> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
+>>> @@ -426,6 +426,7 @@ static struct arm_smmu_device *qcom_smmu_create(struct arm_smmu_device *smmu,
+>>>  static const struct of_device_id __maybe_unused qcom_smmu_impl_of_match[] = {
+>>>  	{ .compatible = "qcom,msm8998-smmu-v2" },
+>>>  	{ .compatible = "qcom,qcm2290-smmu-500" },
+>>> +	{ .compatible = "qcom,qdu1000-smmu-500" },
+>>
+>> The patch was applied but it contradicts work here:
+>> https://lore.kernel.org/all/20221102184420.534094-12-dmitry.baryshkov@linaro.org/
+>> which explicitly asks not to add such compatibles...
 > 
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> ---
->  include/trace/events/vmalloc.h | 56 ++++++++++++++++++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 include/trace/events/vmalloc.h
+> Sure, but we've been adding new compatibles for years so I don't mind
+> picking up the last few now before we stop accepting new ones.
 > 
-> diff --git a/include/trace/events/vmalloc.h b/include/trace/events/vmalloc.h
-> new file mode 100644
-> index 000000000000..39fbd77c91e7
-> --- /dev/null
-> +++ b/include/trace/events/vmalloc.h
-> @@ -0,0 +1,56 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM vmalloc
-> +
-> +#if !defined(_TRACE_VMALLOC_H) || defined(TRACE_HEADER_MULTI_READ)
-> +#define _TRACE_VMALLOC_H
-> +
-> +#include <linux/tracepoint.h>
-> +
-> +/**
-> + * alloc_vmap_area - called when a new vmap allocation occurs
-> + * @addr:	an allocated address
-> + * @size:	a requested size
-> + * @align:	a requested alignment
-> + * @vstart:	a requested start range
-> + * @vend:	a requested end range
-> + * @failed:	an allocation failed or not
-> + *
-> + * This event is used for a debug purpose, it can give an extra
-> + * information for a developer about how often it occurs and which
-> + * parameters are passed for further validation.
-> + */
-> +TRACE_EVENT(alloc_vmap_area,
-> +
-> +	TP_PROTO(unsigned long addr, unsigned long size, unsigned long align,
-> +		unsigned long vstart, unsigned long vend, int failed),
-> +
-> +	TP_ARGS(addr, size, align, vstart, vend, failed),
+> I already asked Dmitry to respin his series as there are some open comments
+> from others anyway.
 
-The above is passed in via (from patch 4):
+OK. This also solves my other comment for other patch.
 
-
-@@ -1621,6 +1624,8 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
- 		size, align, vstart, vend);
- 	spin_unlock(&free_vmap_area_lock);
- 
-+	trace_alloc_vmap_area(addr, size, align, vstart, vend, addr == vend);
-+
- 	/*
- 	 * If an allocation fails, the "vend" address is
- 	 * returned. Therefore trigger the overflow path.
-
-> +
-> +	TP_STRUCT__entry(
-> +		__field(unsigned long, addr)
-> +		__field(unsigned long, size)
-> +		__field(unsigned long, align)
-> +		__field(unsigned long, vstart)
-> +		__field(unsigned long, vend)
-
-> +		__field(int, failed)
-
-I would drop the failed field...
-
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->addr = addr;
-> +		__entry->size = size;
-> +		__entry->align = align;
-> +		__entry->vstart = vstart;
-> +		__entry->vend = vend;
-
-And instead have:
-
-		__entry->failed = addr == vend;
-
-Why pass in a parameter that can be calculated in the trace event logic?
-
-Other than that, from a tracing perspective:
-
-  Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-for the series.
-
--- Steve
-
-
-> +		__entry->failed = failed;
-> +	),
-> +
-> +	TP_printk("va_start: %lu size=%lu align=%lu vstart=0x%lx vend=0x%lx failed=%d",
-> +		__entry->addr, __entry->size, __entry->align,
-> +		__entry->vstart, __entry->vend, __entry->failed)
-> +);
-> +
-> +#endif /*  _TRACE_VMALLOC_H */
-> +
-> +/* This part must be outside protection */
-> +#include <trace/define_trace.h>
+Best regards,
+Krzysztof
 
