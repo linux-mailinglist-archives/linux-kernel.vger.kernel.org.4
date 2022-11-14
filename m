@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F054628577
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA305628579
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237858AbiKNQbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
+        id S237874AbiKNQb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:31:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237709AbiKNQaw (ORCPT
+        with ESMTP id S237715AbiKNQaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Nov 2022 11:30:52 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F412F3A0;
-        Mon, 14 Nov 2022 08:29:51 -0800 (PST)
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A682F3B0;
+        Mon, 14 Nov 2022 08:29:52 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668443390;
+        s=2020; t=1668443391;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ekc6YsdvItEWqTtBsALAxHEjpl5Na6n2oyZUMYkLTB4=;
-        b=yLTA3smRSwZAzo0WodrUiCw7R5e475OFiwy+MWrPjH2XP7ogPwQVMS/zXU+LhKNp3eKpXA
-        KGtD1o1+JZmtwdaVIy0gg29vMf6kvK9rm2vrsZyonpaDUUTb5Sp/mH9T0OWeMIm1fw0CNZ
-        yVxqCP1JkAW2TE0usGB3mIL6COdrOyYk7TGKh3uCK6ZEoKV1rsr8JN2AswuXWtLRch8B/g
-        h9RBqzV3HRHCpEuRiQzw7NorZv1XRz1MTdoruSZvLqfVBLUkSQNCGeokFeJYuRRdnl1ChN
-        gpVIJdkzBvjKIPQNYUsMfwB2OouUp3eQQlkvIZcwWD6vHw7JrG+3vaFv+Ovqvg==
+        bh=R9VqGyF+glKoWbwrATKZGXQP3ZfoC2SELt3pYx7i6e4=;
+        b=DacyzsBcp752j0f06x6Q5nIQ3Y5gHBQvOHj6L2Z1z+kRtb13uwnRXYW37qeBlA7kgq5U5n
+        OaG76pGwOCwmTLoNnu/ZsGzwldP/gJxxLG3s06WbdxVYr9g1JXPqk0nThtOkMIKl8nD9ZC
+        J5NDzg7I6YeBPhNNt11xV2oCLyep6w6l3sQDsNbw86SZHUUGw3Z7L59dKKhdvveul7RcQw
+        gTAN2eDqhT8DvmFpCl3VGyA+CLcij+AIKpEnvnW1Y2ot2Pkpr7hjHH5KLAm7Due/1vwzjr
+        AB7lVHWHuwghLHNLPcTikzz1Xbjg9af9IqHrb2u8wSXUTwh+qQgOKXTfbaCX7Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668443390;
+        s=2020e; t=1668443391;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ekc6YsdvItEWqTtBsALAxHEjpl5Na6n2oyZUMYkLTB4=;
-        b=cu2GY0TtUc+v5tINvlKDlxbO+i9OxziAYNewzqmSMu9L8Im8ozqk0RzFdYXxlRic6fMIZq
-        zx1LlYZGgEzZ0FCA==
+        bh=R9VqGyF+glKoWbwrATKZGXQP3ZfoC2SELt3pYx7i6e4=;
+        b=5U/0tNMtf/1+xSx/qQ15ry4JRyEwzML/OTxzN7u46NDdwk8a6TlIBlnh67P6RTs4qrLo08
+        vYO+POSL/MrszBCw==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
@@ -48,9 +48,9 @@ Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
         kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
-Subject: [PATCH printk v4 36/39] tty: serial: kgdboc: synchronize tty_find_polling_driver() and register_console()
-Date:   Mon, 14 Nov 2022 17:35:29 +0106
-Message-Id: <20221114162932.141883-37-john.ogness@linutronix.de>
+Subject: [PATCH printk v4 37/39] tty: serial: kgdboc: use console_list_lock to trap exit
+Date:   Mon, 14 Nov 2022 17:35:30 +0106
+Message-Id: <20221114162932.141883-38-john.ogness@linutronix.de>
 In-Reply-To: <20221114162932.141883-1-john.ogness@linutronix.de>
 References: <20221114162932.141883-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -65,51 +65,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Calling tty_find_polling_driver() can lead to uart_set_options() being
-called (via the poll_init() callback of tty_operations) to configure the
-uart. But uart_set_options() can also be called by register_console()
-(via the setup() callback of console).
-
-Take the console_list_lock to synchronize against register_console() and
-also use it for console list traversal. This also ensures the console list
-cannot change until the polling console has been chosen.
+kgdboc_earlycon_init() uses the console_lock to ensure that no consoles
+are unregistered until the kgdboc_earlycon is setup. The console_list_lock
+should be used instead because list synchronization responsibility will
+be removed from the console_lock in a later change.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 Reviewed-by: Petr Mladek <pmladek@suse.com>
 ---
- drivers/tty/serial/kgdboc.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ drivers/tty/serial/kgdboc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-index 82b4b4d67823..8c2b7ccdfebf 100644
+index 8c2b7ccdfebf..a3ed9b34e2ab 100644
 --- a/drivers/tty/serial/kgdboc.c
 +++ b/drivers/tty/serial/kgdboc.c
-@@ -189,12 +189,20 @@ static int configure_kgdboc(void)
- 	if (kgdboc_register_kbd(&cptr))
- 		goto do_register;
- 
-+	/*
-+	 * tty_find_polling_driver() can call uart_set_options()
-+	 * (via poll_init) to configure the uart. Take the console_list_lock
-+	 * in order to synchronize against register_console(), which can also
-+	 * configure the uart via uart_set_options(). This also allows safe
-+	 * traversal of the console list.
-+	 */
-+	console_list_lock();
-+
- 	p = tty_find_polling_driver(cptr, &tty_line);
--	if (!p)
-+	if (!p) {
-+		console_list_unlock();
- 		goto noconfig;
--
--	/* For safe traversal of the console list. */
--	console_list_lock();
-+	}
+@@ -558,13 +558,13 @@ static int __init kgdboc_earlycon_init(char *opt)
+ 	 */
  
  	/*
- 	 * Take console_lock to serialize device() callback with
+-	 * Hold the console_lock to guarantee that no consoles are
++	 * Hold the console_list_lock to guarantee that no consoles are
+ 	 * unregistered until the kgdboc_earlycon setup is complete.
+ 	 * Trapping the exit() callback relies on exit() not being
+ 	 * called until the trap is setup. This also allows safe
+ 	 * traversal of the console list and race-free reading of @flags.
+ 	 */
+-	console_lock();
++	console_list_lock();
+ 	for_each_console(con) {
+ 		if (con->write && con->read &&
+ 		    (con->flags & (CON_BOOT | CON_ENABLED)) &&
+@@ -606,7 +606,7 @@ static int __init kgdboc_earlycon_init(char *opt)
+ 	}
+ 
+ unlock:
+-	console_unlock();
++	console_list_unlock();
+ 
+ 	/* Non-zero means malformed option so we always return zero */
+ 	return 0;
 -- 
 2.30.2
 
