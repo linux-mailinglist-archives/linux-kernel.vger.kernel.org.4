@@ -2,66 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EEBB627D32
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78CC9627D31
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237046AbiKNL7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59294 "EHLO
+        id S237014AbiKNL6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:58:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237085AbiKNL45 (ORCPT
+        with ESMTP id S236975AbiKNL6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:56:57 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D69C1A3AA
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:53:35 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id p21so9838545plr.7
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:53:35 -0800 (PST)
+        Mon, 14 Nov 2022 06:58:18 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E762655C;
+        Mon, 14 Nov 2022 03:56:03 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id k2so27734946ejr.2;
+        Mon, 14 Nov 2022 03:56:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hk+Ng6HzdEIcxEdrVoC5xdXSCCrpPQX/sVOx2Fc1RIU=;
-        b=XSsHqQQFR8a+jzglZGxrXAFL9CywFjxS/ReTLiwH6YBiTS4TZcDe60UCsGDeSSmFoz
-         /WGYg9BAcVn9Ndl0EcjAiPgjot0FOIB/o/4N8SJEjNA1mQddh93SbRNfGxsOQgOozsFD
-         E18Ch1DrCYA92fARFXicfyxie5L6+hsQ/F2p6uDe9R1bpEPDBoo6UtVCgZzs3juahDPa
-         OkCGZCRdUUQ8rQAypKWsERASJNPyKtM5X9BohXZ2E3XYIHfuzJwmDJCiCHrJE5cNx3Ra
-         nE98MaN7VB55HtQBLUSQqEpilE0hKSY5MfbPDIdklhLd8q+c8rkDlP60Qyi/3bQTHIni
-         Di9g==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sx1dIYFjLrvxTaKKCGmsahHaqyYCMsIk3QD22Jj4IE0=;
+        b=ap3IIP6kYwzR8zTi0n666gkZBfrgYRUQ728UeXT7gyKEFhHHA8WIviHv+pSrUpZCmy
+         U9c7LsnOhtqmc7Yt8dL1/n79XMb+SR82LZQF63qTm8yPm8TNesPkk/rgy6gcdgDYi2xl
+         f/d4uNjdsgotlMhhYW7uUOce1uKqBPm4Tj7otJe43bcK07tpuj1MAqmSA4jYOVNXvxY3
+         6z6iiFW3vsA7//cBGJwkfcLW1y3fmT390GkDSE7zKizafDBGBpX0ixL7Vl2c+QEKJ+3o
+         TS8bxrpiwFTcIA1rNguWk2/0FCOmr3ztq/m1sD4Qpu5xI2MCSUQxBPqfpPk1vyEINyrO
+         Hc3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hk+Ng6HzdEIcxEdrVoC5xdXSCCrpPQX/sVOx2Fc1RIU=;
-        b=MU2f5RR9f7fPbKwxW3s0+wFIF1ttjE3HRe2z60p8mCZ1qT+Mlc/zLfi4oU5YwrGBRw
-         mdvQ8zhFRQ+mL0tdV6aIYDxHMlhCgvbpAwGZBOiyuCCDjdj6dFOpQoKbkoXOXfhwZNb6
-         gb5LDRjrKE75ZL9fV+kTZVhfwmvt9J76V5mjxZTgE83+mc9kO5UXa6LB6fbp8/ZiNJDb
-         rp42GbM7NcxJDIrr/Dz+3niXhtA45ri0f5MnNH3f3h9n7EJofIJaDGoimfMLP+dZJSWe
-         fAdiFh/10xj+Xn5M6sOTKtZHiFtEVGO9/y+fXJZSt3HKPaT2WT2qekai3sZKjRfHhMBv
-         OKNA==
-X-Gm-Message-State: ANoB5pn/PBBQC1KXWvIbFm09dVBzyn86BckM1XsZy44osDKI6CaXmh9P
-        u6MHPHaJCqi3QeCP8OJOmj4=
-X-Google-Smtp-Source: AA0mqf59B2DO9ZPDLarWALVCW0QEKktkW/UTpAJO53Bv+6cCEY7rNVHY9Wxfvns5lFF5/ZGBg8dXtg==
-X-Received: by 2002:a17:90a:a391:b0:212:fe4a:c378 with SMTP id x17-20020a17090aa39100b00212fe4ac378mr13592444pjp.82.1668426814474;
-        Mon, 14 Nov 2022 03:53:34 -0800 (PST)
-Received: from localhost.localdomain ([103.158.43.16])
-        by smtp.googlemail.com with ESMTPSA id d4-20020a170902654400b00188a23098aasm7248907pln.69.2022.11.14.03.53.30
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sx1dIYFjLrvxTaKKCGmsahHaqyYCMsIk3QD22Jj4IE0=;
+        b=tfNFQ/zBHVNMciU5jh2sXDkABGRQFSRJ1yWbXW/BCt1wEIN6zYkg7wKGssECIYMOxk
+         ZHSjedYKsXKlaYHzXipcjbYcUauHIvuck+atWxNAsDZ/EDRilU8T1T01M//sfLaDU1kQ
+         +wmSbM3nRFhPmolxIdZiZ+reUlCQMq6N5L8F+DPxB4x8tbLp4BuhyE2il5LNet2dxZMz
+         qFtUgzha2XM6bxve1+8GQRzSti0OACLKcnAG4AXxEZ9NNG7bKH9F/lb+OSJCG05dxQCl
+         5Ol1UnXO6Z1Qzx3dEU/XxTfUQ18YFQ8exFmkchinrFeU4yFIiAifWhbP5iko3wHmBJsO
+         t9aA==
+X-Gm-Message-State: ANoB5pmQkCtmMan6OmD7RXeuIwExZEmRll3R8XCZ+SywjkU+oIPcEx1m
+        utCPz6LVNmdrJjuZfn9m4lg=
+X-Google-Smtp-Source: AA0mqf7anyq6y3fe5I40Jv8ZCBds9MHfDeO5Q+krop4LkNYAtufB24bzRTtp6c5c06vEkZmXy0QNpg==
+X-Received: by 2002:a17:906:94d9:b0:7ac:a2b7:6c97 with SMTP id d25-20020a17090694d900b007aca2b76c97mr9459842ejy.497.1668426962111;
+        Mon, 14 Nov 2022 03:56:02 -0800 (PST)
+Received: from skbuf ([188.27.184.37])
+        by smtp.gmail.com with ESMTPSA id r18-20020a1709061bb200b0077d37a5d401sm4126402ejg.33.2022.11.14.03.56.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 03:53:33 -0800 (PST)
-From:   Abdun Nihaal <abdun.nihaal@gmail.com>
-To:     almaz.alexandrovich@paragon-software.com
-Cc:     ntfs3@lists.linux.dev, linux-kernel@vger.kernel.org,
-        skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Abdun Nihaal <abdun.nihaal@gmail.com>,
-        syzbot+fa4648a5446460b7b963@syzkaller.appspotmail.com
-Subject: [PATCH v2] fs/ntfs3: Validate attribute data and valid sizes
-Date:   Mon, 14 Nov 2022 17:23:14 +0530
-Message-Id: <20221114115314.183818-1-abdun.nihaal@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Mon, 14 Nov 2022 03:56:01 -0800 (PST)
+Date:   Mon, 14 Nov 2022 13:55:59 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Felix Fietkau <nbd@nbd.name>
+Cc:     Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3 1/4] net: dsa: add support for DSA rx
+ offloading via metadata dst
+Message-ID: <20221114115559.wl7efrgxphijqz4o@skbuf>
+References: <20221110212212.96825-1-nbd@nbd.name>
+ <20221110212212.96825-2-nbd@nbd.name>
+ <20221111233714.pmbc5qvq3g3hemhr@skbuf>
+ <20221111204059.17b8ce95@kernel.org>
+ <bcb33ba7-b2a3-1fe7-64b2-1e15203e2cce@nbd.name>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bcb33ba7-b2a3-1fe7-64b2-1e15203e2cce@nbd.name>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -72,49 +81,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The data_size and valid_size fields of non resident attributes should be
-less than the its alloc_size field, but this is not checked in
-ntfs_read_mft function.
+On Sat, Nov 12, 2022 at 12:13:15PM +0100, Felix Fietkau wrote:
+> On 12.11.22 05:40, Jakub Kicinski wrote:
+> I don't really see a valid use case in running generic XDP, TC and NFT on a
+> DSA master dealing with packets before the tag receive function has been
+> run. And after the tag has been processed, the metadata DST is cleared from
+> the skb.
 
-Syzbot reports a allocation order warning due to a large unchecked value
-of data_size getting assigned to inode->i_size which is then passed to
-kcalloc.
+Oh, there are potentially many use cases, the problem is that maybe
+there aren't as many actual implementations as ideas? At least XDP is,
+I think, expected to be able to deal with DSA tags if run on a DSA
+master (not sure how that applies when RX DSA tag is offloaded, but
+whatever). Marek Behun had a prototype with Marvell tags, not sure how
+far that went in the end:
+https://www.mail-archive.com/netdev@vger.kernel.org/msg381018.html
+In general, forwarding a packet to another switch port belonging to the
+same master via XDP_TX should be relatively efficient.
 
-Add sanity check for ensuring that the data_size and valid_size fields
-are not larger than alloc_size field.
+> How about this: I send a v4 which uses skb_dst_drop instead of skb_dst_set,
+> so that other drivers can use refcounting if it makes sense for them. For
+> mtk_eth_soc, I prefer to leave out refcounting for performance reasons.
+> Is that acceptable to you guys?
 
-Link: https://syzkaller.appspot.com/bug?extid=fa4648a5446460b7b963
-Reported-and-tested-by: syzbot+fa4648a5446460b7b963@syzkaller.appspotmail.com
-Fixes: 82cae269cfa9 ("fs/ntfs3: Add initialization of super block")
-Signed-off-by: Abdun Nihaal <abdun.nihaal@gmail.com>
----
+I don't think you can mix refcounting at consumer side with no-refcounting
+at producer side, no?
 
-Please apply this instead of my previous patch.
-
-Changes in v2:
- Correct the format used for the Fixes tag.
-
- fs/ntfs3/inode.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
-index 970bb7c357c7..763dd982a43a 100644
---- a/fs/ntfs3/inode.c
-+++ b/fs/ntfs3/inode.c
-@@ -132,6 +132,13 @@ static struct inode *ntfs_read_mft(struct inode *inode,
- 	if (le16_to_cpu(attr->name_off) + attr->name_len > asize)
- 		goto out;
- 
-+	if (attr->non_res) {
-+		t64 = le64_to_cpu(attr->nres.alloc_size);
-+		if (le64_to_cpu(attr->nres.data_size) > t64 ||
-+		    le64_to_cpu(attr->nres.valid_size) > t64)
-+			goto out;
-+	}
-+
- 	switch (attr->type) {
- 	case ATTR_STD:
- 		if (attr->non_res ||
--- 
-2.37.3
-
+I suppose that we could leave refcounting out for now, and bug you if
+someone comes with a real need later and complains. Right now it's a bit
+hard for me to imagine all the possibilities. How does that sound?
