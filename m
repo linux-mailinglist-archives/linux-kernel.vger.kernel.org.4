@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4826284CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4676284E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236515AbiKNQPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:15:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
+        id S235905AbiKNQSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:18:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237378AbiKNQO7 (ORCPT
+        with ESMTP id S237458AbiKNQRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:14:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EAF1A3A9;
-        Mon, 14 Nov 2022 08:14:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C284612AC;
-        Mon, 14 Nov 2022 16:14:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38AEDC43140;
-        Mon, 14 Nov 2022 16:14:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668442495;
-        bh=Cc1eIBz+pYCTV16m3BvnLaFad44tEe0/JnnWJhh/Rio=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=URAeiTMm0IcYD22EXJiZXkkdOFvgMbSmD3fMChOhN+3OPYPbN8phjZAoLMafs0wk8
-         doUgosGROeI4M1+yQber/QXxEmC6xkK+wrBlZ5N15xPLt2VzaGUh0omvry+pxHPaVN
-         jdW47tAz1MyY90O8yAtHBszi342x7Do7tO2D+gCY=
-Date:   Mon, 14 Nov 2022 17:14:52 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Cc:     sre@kernel.org, orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
-        zhang.lyra@gmail.com, felipe.balbi@linux.intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com, linux-usb@vger.kernel.org,
-        tony@atomide.com
-Subject: Re: [PATCH] usb: phy: add dedicated notifier for charger events
-Message-ID: <Y3JpfDU7T2Ks/H4m@kroah.com>
-References: <1668430562-27114-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
+        Mon, 14 Nov 2022 11:17:45 -0500
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3E62ED63;
+        Mon, 14 Nov 2022 08:17:16 -0800 (PST)
+Received: by mail-qt1-f171.google.com with SMTP id a27so7033567qtw.10;
+        Mon, 14 Nov 2022 08:17:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MG2DwBbr5dqsaW3mK7dHyLfa8FobjN2Nv6cl+aBJihI=;
+        b=IuBBeZv4T/VFSqIlKlzqrzBGs3PC4LBj/H8tnI2boma8ku0MO9PtFi36v92WQexVg0
+         aBq9mY2a3cjMP1pIrOu5Kfn0HVh5fjhWZPtH2L1XWK8an8OO1R2v2LsBarR9afLPDBht
+         AVHGZvC8qU0qpI0XO7n/Gh6xhOhe1Rw7555UOPBduitgTxQlkU235HIWMEd7NE9WGuKd
+         IEDUGBPX3dHX8/3NaJ1UdEqVx4TyqkHjroHBAScKRSnm1jPFLIvaTtIKcCslPXbVScEE
+         rHLSdjkZUx8MGbbcvAJh2ajKrgYG4hQmrW861GfrNfgtOO4OWWj859YDS+DCzZtb11wj
+         Of2A==
+X-Gm-Message-State: ANoB5pmH4OqpKMvBhbNn+vop5LHGNqOZO1qhlOvl8eaISKZRB3UbhE8l
+        PRz5nNhivouqZs0qHeaZheFDz6bJRsT00K3GF8A=
+X-Google-Smtp-Source: AA0mqf5sZdpMhkd0wSOTKDrCn1eXwtNpTjnqcyf1w5SxwNQFnlr2SV7SIPNwFVaytbUhruPMS0Tc9i7h5fIr+T1l9R0=
+X-Received: by 2002:a05:622a:8cc:b0:3a5:5987:42c6 with SMTP id
+ i12-20020a05622a08cc00b003a5598742c6mr12559271qte.147.1668442635838; Mon, 14
+ Nov 2022 08:17:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1668430562-27114-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221109174720.203723-1-jeremy.linton@arm.com> <20221114161206.5sspq25v57ddco4o@bogus>
+In-Reply-To: <20221114161206.5sspq25v57ddco4o@bogus>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 14 Nov 2022 17:16:59 +0100
+Message-ID: <CAJZ5v0jHk9eEj0EnH-hWnRsabAs+E3LiudTPE+KFhcsZARaw5Q@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: Enable FPDT on arm64
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Jeremy Linton <jeremy.linton@arm.com>, rafael@kernel.org,
+        linux-acpi@vger.kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, corbet@lwn.net, lenb@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 02:56:02PM +0200, Ivaylo Dimitrov wrote:
-> usb_phy::notifier is already used by various PHY drivers (including
-> phy_generic) to report VBUS status changes and its usage conflicts with
-> charger current limit changes reporting.
+On Mon, Nov 14, 2022 at 5:12 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Wed, Nov 09, 2022 at 11:47:20AM -0600, Jeremy Linton wrote:
+> > FPDT provides some boot timing records useful for analyzing
+> > parts of the UEFI boot stack. Given the existing code works
+> > on arm64, and allows reading the values without utilizing
+> > /dev/mem it seems like a good idea to turn it on.
+> >
+>
+> FWIW, this looks good to me.
+>
+> Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+>
+> Hi Rafael,
+>
+> Just saw this marked as "Handled Elsewhere", do you prefer to be merged
+> via arm64 or other tree ? This doesn't have any arm64 changes, just Kconfig
+> and doc changes. Let us know.
 
-How exactly does it conflict?
-
-> Fix that by introducing a second notifier that is dedicated to usb charger
-> notifications. Add usb_charger_XXX_notifier functions. Fix charger drivers
-> that currently (ab)use usb_XXX_notifier() to use the new API.
-
-Why not just set the notifier type to be a new one instead of adding a
-whole new notifier list?  Or use a real callback?  notifier lists are
-really horrid and should be avoided whenever possible.
-
-> Fixes: a9081a008f84 ("usb: phy: Add USB charger support")
-> 
-> Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-
-You can't have a blank line between there, checkpatch.pl should have
-complained.
-
-thanks,
-
-greg k-h
+There is arm64 in the subject, though, so I think it belongs there.
