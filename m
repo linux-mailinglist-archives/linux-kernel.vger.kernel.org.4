@@ -2,66 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 484DD62764E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:18:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C41627650
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:18:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235928AbiKNHSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 02:18:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
+        id S235338AbiKNHS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 02:18:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235925AbiKNHSQ (ORCPT
+        with ESMTP id S235933AbiKNHS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 02:18:16 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670F617590;
-        Sun, 13 Nov 2022 23:18:13 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N9gYh676czJnkw;
-        Mon, 14 Nov 2022 15:15:04 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 15:18:11 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 15:18:10 +0800
-Subject: Re: [PATCH v2] rcu: Dump memory object info if callback function is
- invalid
-To:     <paulmck@kernel.org>
-CC:     "Zhang, Qiang1" <qiang1.zhang@intel.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        "Josh Triplett" <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221111102822.224-1-thunder.leizhen@huawei.com>
- <PH0PR11MB5880E3A11437CD0402941F4DDA009@PH0PR11MB5880.namprd11.prod.outlook.com>
- <ed264f0e-bc13-5662-1a71-1458952ffd71@huawei.com>
- <PH0PR11MB5880FEAD72BAE59185256195DA009@PH0PR11MB5880.namprd11.prod.outlook.com>
- <20221111184238.GX725751@paulmck-ThinkPad-P17-Gen-1>
- <abff0a08-d5a0-6cea-ef69-c74a9aff8731@huawei.com>
- <20221112060815.GC725751@paulmck-ThinkPad-P17-Gen-1>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <f056db41-daa4-0697-1baa-99121f2a43e2@huawei.com>
-Date:   Mon, 14 Nov 2022 15:18:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <20221112060815.GC725751@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 14 Nov 2022 02:18:26 -0500
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90071.outbound.protection.outlook.com [40.107.9.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D680D18390;
+        Sun, 13 Nov 2022 23:18:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aYDDO4P0DDBGwKgLi+vYF5wdSg8mCp3Qg9CCnF2U/VFRyb/4pVAY5X7rkazVcv3SZAxOUkBHO8UKT8BHFfCw6eHp4BYAN04vKG4loa0h6CBDNNTDII/CMTSsbBQ8g8E/ZixWGd9kSn+vDWCnXzlNgobXpCv1z6gLrOo2yQDz1WTLT8dIO6B9BvIHcn9EAcslan2NhZ12JCq26HQqzhlDiM73ADJcK2gOyKhopV6c/ohzeROA/I2PIx6oIaNzdDsQTHCUPk1ArYYOYJU6th3pd6BPBd6DaDuez9nZW7imDmGVE0OJKhYz/ageYl9Vtv0hhDipqdq6tE98pq1QedfF4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KLBh/4bjado1+2fUI5AbES2IDADLyixGWVyZD/ySN7M=;
+ b=GmcP2dvjLievEznCe7CJX+SkN7P+sZZY2YmP3RC0vDCwH1ITYtP4iJLBH9TdtOrstZ8O3OSJ5H9XzVGKtsBKn41Ab/wLLLpBzm4d/moknFILU/hJ/F2N+yGABzpK69yauapjUcY/BVih8C/MjU74HdfG+ftAIRUwExPkJBfnWacVq8+tFcMc8YJ2ANI9DdXFuEB9lArOG9ZPVrtXKMU44CPzbiuqQHa/x70sqHita4x7e7xXO0T7RdD02/UEPPsO773tHxFePTSCS/rxaB5NcDQ1ktumiN5ZwI0JPqG1MDNjI2GxBgOia7QzbyzWqOIExFvwjtZSM64T5pA/LzJtKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KLBh/4bjado1+2fUI5AbES2IDADLyixGWVyZD/ySN7M=;
+ b=b+haXvwxjsclNiw57N4eiQnMq5BilA9or48Kq6yn9RnTNBoNDqu13Xqxl1I84YfyXeF4OwyeVoThWO1qbYWDTH4D2qUxtWYt710aSYWrI8a1kvW7bQtnYMJ8urq6VqKMisi8Zk8IqSJuAVsL4dq7BDL1lOy33lmEcAIow2Ed5DsPOIrWQD2SfNmIUJaaMw8ZKWtXMHFaXihg2MwD2vd9y3/DpAmuOz76Rv4fl+QyGFk1nVQ2YRo+g2w99v7g+oMoOt/7rgYeabX0BIR3CYI275kSf6gnOu/zKHxDD5P2z5M3GTCXzWMrKO2s5dvZkkg077UaNT4mUQ/jHu1MeAELBg==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by MR1P264MB1521.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:15::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
+ 2022 07:18:18 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::a85b:a9b6:cb36:fa6]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::a85b:a9b6:cb36:fa6%9]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
+ 07:18:18 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     "yang.yang29@zte.com.cn" <yang.yang29@zte.com.cn>,
+        "tyreld@linux.ibm.com" <tyreld@linux.ibm.com>
+CC:     "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "xu.panda@zte.com.cn" <xu.panda@zte.com.cn>
+Subject: Re: [PATCH linux next v2] scsi: ibmvfc: use sysfs_emit() to instead
+ of scnprintf()
+Thread-Topic: [PATCH linux next v2] scsi: ibmvfc: use sysfs_emit() to instead
+ of scnprintf()
+Thread-Index: AQHY99qU61sgNRAiMEaYuxh9yzaR3K4+AtQA
+Date:   Mon, 14 Nov 2022 07:18:18 +0000
+Message-ID: <b6d8577f-cabf-797d-69d9-68664dd6d56b@csgroup.eu>
+References: <202211141138288877199@zte.com.cn>
+In-Reply-To: <202211141138288877199@zte.com.cn>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|MR1P264MB1521:EE_
+x-ms-office365-filtering-correlation-id: 1f1e21a7-73d1-45e9-a9df-08dac61067b0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3lp/1HsBRFdmtrHLYVfXhgytQfS9ED+YsAQ5TvR1jtMtDcTHrUNBdK0wP6FWUVY8AU6DjKqe48DAwDjcRhyty68OAYOiRHxV0qqHDP8ZX6BhAj6Kyg1V8VmjMgZwUeGi+c4mbCL3iymEib/vMVrqK32OjKgfWnVIRaquEtXolYm8eP9PpqPNLgyvS182zX3xP4XR86Yj5D/gCBUuoPous1CkEMCN73qQALA4Z4H7HqNpt/HB19g6fKlPAMjzu+QdpHjbEn2shU9EdoTfrDNv4o/oTOcfhmK87x6FiIIWbWg7GqCQgnEZ3NQuIrgCm8m50OPwJhiAKhYDGU/QdXqnuUARX2MVGNwv3lpvSnMdfJtQl0nwuU//qsrZicdieqPXuePSRhXF8+KLiB5XejSAhO5v3N+apTMEtoxMpBNnpW2fYwzNdzGTkf1sZxawY0xsl4BhPL+7Z75FQ6q+1CaHHxm6MoJ1otXVaiSRxVUXxzSwJa/mPuEio9mnj0VmY5CAzEUep2i5AFxaEyGqXXFDkG2B9NbV21I661i8zqwylZIQiMnUjcqlpBTUPcTCgknUhvvxuJNJ+LqKB9bDK/4rNv27waShRHlGMz74iPFJ0s3a4Nqb82Md8NoZMTtVYNo+C8sZqu7qg1UyctHiIDx4MhgkfU7EA7CXp+opsBSTZ53/Wcp8jTRjLXC1i+snc+ci1mV3To2QAWIrFAFDV2C83aIB5sMZKeEosHNqhU1uEzt2sYibbNcsxDj4g9gXF6l1XiqXYlPJqJOk5Q5bBe83aCmK3TFM6bXQ+qSmAd1BZ764+zxvVNil16uY3pB0fvyJmbQXnKqMjERKrQ/6OoqHdA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(39850400004)(366004)(346002)(451199015)(31686004)(66946007)(8936002)(36756003)(6506007)(86362001)(38070700005)(31696002)(2616005)(38100700002)(122000001)(41300700001)(2906002)(71200400001)(66574015)(83380400001)(7416002)(44832011)(5660300002)(26005)(6512007)(966005)(186003)(8676002)(6486002)(66556008)(4326008)(478600001)(110136005)(91956017)(64756008)(316002)(54906003)(66446008)(76116006)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aExwbTVCRUJXWDlnY2Nrc05YMG9Gc1V4YXlPbTZDdnNjWmN4L3BDRk1IVEt2?=
+ =?utf-8?B?NWwxK1lUQlkraVVsYXlZRlJta3RYU3ZKWUdYVkttWWwxSU5oN2t2bDBjSEhu?=
+ =?utf-8?B?M1h0aDhUenFsNCtsb2hEbHlTTG1DNE5KdnB2d053SkZvSmRyOTZhcDFFbzRQ?=
+ =?utf-8?B?MHJzNWVwYzVmc1V4Q2o4Y3pNamZVSjVlOVpwRUFmUS9pUDg1TnVKVTNBUWZo?=
+ =?utf-8?B?TlJzdFZDN3E4ME95cit4WVhPMTlna0ptektXMGxPQkM0b013KzVFVzVCYTR1?=
+ =?utf-8?B?RE01MW9rZ1pzVUdFd2hsSmdYZ1d1QmVuY1B4Y1NGdnovNWxIdTBGcGFEWHU3?=
+ =?utf-8?B?SjBubFMrbmZOa21FaG9wS2V2c2E3MTF3emhQWWV0dkppVmVZcVJtSnNaOWNK?=
+ =?utf-8?B?L1laRWpxU1pZNllLSUxVSGZFcng3ZFJNUk9GbGdoYUpodXU1WmRtMERYalk1?=
+ =?utf-8?B?TWtUQUVnRGRzVGVSY0tWWkNTTWhtSGErQ1RZazI3eUwzMVZmblAxWkJUOFly?=
+ =?utf-8?B?NGNRbnVkSG15NHNpbGdIQzdEaWZ5NlVkdlBTYzNzU3gwQVZXWVY3bTR3M1Rj?=
+ =?utf-8?B?SDVxb0FXQXdiekxhYk14WjhmaU14K0xJdWl1ZW9hUVRhUjNsaVQwbnIvMUxy?=
+ =?utf-8?B?TVJON1N3cnFMMHlQdjQ3cDRFTWR2V0xJOE0zVHNJL2JjY3o2ZnQxdlRCNUdV?=
+ =?utf-8?B?bUJhWHRNNzMrdlFHYUdpU1FXMVM0cFNyT3IzWXVnSGRUSW00a0M2L0dBdGJT?=
+ =?utf-8?B?YUg2NHRpT242UzF2aDB5UFVkb2plSHdEVzh1R2NGKyszbG9ta241TTNVKysx?=
+ =?utf-8?B?MmRvN2cyVlRxK2s4dkNxWkw0c1JyYVhJZlhtd0k4NGxYSnFpNTZBdktaRS9W?=
+ =?utf-8?B?SGtQQm9GUisvL1loRk9GZ2paUFNhMXU3SldwZkM0N0hhZWpRcUk3bDJtY29N?=
+ =?utf-8?B?RjBOR3RKc3k0ZkJuVXdTOENkdTFWWGk0bTljRGMyK0VVcmhkQ2FnQnVBM3Nw?=
+ =?utf-8?B?aUgzY3RqWi93VzhHVHJPNFdzNGc1clFqc2JtRnltL056cm9melF3NitNVWJh?=
+ =?utf-8?B?NWVUaTVlcDFCTkMyQ2xxd2ttKzNkMEY4bCthMGFXbmYvSGRKOCtVN3JwRkhD?=
+ =?utf-8?B?Rk85Q1RMVTNTQ0N5YWhVWW5PcmlBVWdqNnpYQkpOT3RxQjI4VFg5YUtMd29a?=
+ =?utf-8?B?ZzREb2RVWHI1bHZiaFNYVy8xZjN2d0xLRURCYnA5T1FKa2dIZ1I2NDVINDRU?=
+ =?utf-8?B?OUNjdG8yYmdMcGFmSXppMkM2NTBUU3FVWHAyTDhvQTgrRXR2dHo5bmo1eXpE?=
+ =?utf-8?B?dmdwZVdVdXBoK3d6NDR6NHpXelVDN1dMRTRmdEUwNnJDUFVEQUhuOEhRS0M3?=
+ =?utf-8?B?WnpDakRYYklRQTgrYW9IdHNNK0tJSDZuSDFqcEtuaWk2aDdXMmMrN2F4Q3Qy?=
+ =?utf-8?B?MVpDV25NeEpia2I5ZlRnUVpPRmI5RkVUUWVhRTBKY3JCVEtmRVJ2Vm4wc3dH?=
+ =?utf-8?B?Q1ZrSWxRQ2VGMG5zTnpQaTE3blVieXRTK0hUbUtHZTRkVWowdjRyRERrMThT?=
+ =?utf-8?B?MmdaU01naWVhUkxySkZJZC9KaDBsZi9QMXJsd0ZNa0ZhTUpvWndxRnFEYity?=
+ =?utf-8?B?RnMvRGJZTTdDdXoxUDRFY2Y5ZkdNQUdYODJyYVRXajNNRzVFM3R1NWMvZWdk?=
+ =?utf-8?B?NjdwbUVoQk01Wmt4ZHhobGxqb0w2UHJsTklkbUJXRDBoaFhGclJLWXBUdGps?=
+ =?utf-8?B?RWYyZXY1M3RHWkdCa3J3eTkra2N2QTg2NmN0MGVaWnpGTUVhY0d1bWJGZUdq?=
+ =?utf-8?B?SVo4Vm5pZy8zRHRtU0RqU1Z6ZW1WbDRwS1NJQVJpOXpiSmpvRkkrcGlDcmRK?=
+ =?utf-8?B?Q0VVUEcxVFhnNVMrYVhTSU80a0E3N1dMaXBwbTJ5TDhWWld4YmdiR2wzL3Nw?=
+ =?utf-8?B?Zm9MamFsbm5TNTdlUGpCN0xtdTNubDJWR3JuSXVZQW0yZnRyNE53UVpSYU9Q?=
+ =?utf-8?B?d2tEZ04yTFRWVmdoS1BnRThWd1JoT2Q2TFBPZ2FRZGdOQ1lkaU93cEJ1Skwz?=
+ =?utf-8?B?Skp4VitVNjRDOTlpek1EMDYyajc3cTM1UGQrZGxXR28zcERkcmtrbmVRQTdR?=
+ =?utf-8?B?ODhSSHpxWUxqWjczN0pTWElMbDQ1UlVaRVhmUURDWkZzOUJFNHJvTXBlN2dn?=
+ =?utf-8?B?Snc9PQ==?=
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-ID: <E6B7A0CAA200494AA1FA7B8DFFA01D93@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1f1e21a7-73d1-45e9-a9df-08dac61067b0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2022 07:18:18.7598
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: TVol8gntex1OZ1ZnDy1oLw+PbhsPY14M7s6AsPc+PEsevnpHz92TcSizzwnkQtE9K4gezrVQl1c6BXjbEpco6W3ozOPpBc+Ra6lh8fDQUk0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MR1P264MB1521
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,285 +138,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/11/12 14:08, Paul E. McKenney wrote:
-> On Sat, Nov 12, 2022 at 10:32:32AM +0800, Leizhen (ThunderTown) wrote:
->> On 2022/11/12 2:42, Paul E. McKenney wrote:
->>> On Fri, Nov 11, 2022 at 01:05:56PM +0000, Zhang, Qiang1 wrote:
->>>> On 2022/11/11 19:54, Zhang, Qiang1 wrote:
->>>>>> When a structure containing an RCU callback rhp is (incorrectly) 
->>>>>> freed and reallocated after rhp is passed to call_rcu(), it is not 
->>>>>> unusual for
->>>>>> rhp->func to be set to NULL. This defeats the debugging prints used 
->>>>>> rhp->by
->>>>>> __call_rcu_common() in kernels built with 
->>>>>> CONFIG_DEBUG_OBJECTS_RCU_HEAD=y, which expect to identify the 
->>>>>> offending code using the identity of this function.
->>>>>>
->>>>>> And in kernels build without CONFIG_DEBUG_OBJECTS_RCU_HEAD=y, things 
->>>>>> are even worse, as can be seen from this splat:
->>>>>>
->>>>>> Unable to handle kernel NULL pointer dereference at virtual address 0 
->>>>>> ... ...
->>>>>> PC is at 0x0
->>>>>> LR is at rcu_do_batch+0x1c0/0x3b8
->>>>>> ... ...
->>>>>> (rcu_do_batch) from (rcu_core+0x1d4/0x284)
->>>>>> (rcu_core) from (__do_softirq+0x24c/0x344)
->>>>>> (__do_softirq) from (__irq_exit_rcu+0x64/0x108)
->>>>>> (__irq_exit_rcu) from (irq_exit+0x8/0x10)
->>>>>> (irq_exit) from (__handle_domain_irq+0x74/0x9c)
->>>>>> (__handle_domain_irq) from (gic_handle_irq+0x8c/0x98)
->>>>>> (gic_handle_irq) from (__irq_svc+0x5c/0x94)
->>>>>> (__irq_svc) from (arch_cpu_idle+0x20/0x3c)
->>>>>> (arch_cpu_idle) from (default_idle_call+0x4c/0x78)
->>>>>> (default_idle_call) from (do_idle+0xf8/0x150)
->>>>>> (do_idle) from (cpu_startup_entry+0x18/0x20)
->>>>>> (cpu_startup_entry) from (0xc01530)
->>>>>>
->>>>>> This commit therefore adds calls to mem_dump_obj(rhp) to output some 
->>>>>> information, for example:
->>>>>>
->>>>>>  slab kmalloc-256 start ffff410c45019900 pointer offset 0 size 256
->>>>>>
->>>>>> This provides the rough size of the memory block and the offset of 
->>>>>> the rcu_head structure, which as least provides at least a few clues 
->>>>>> to help locate the problem. If the problem is reproducible, 
->>>>>> additional slab debugging can be enabled, for example, 
->>>>>> CONFIG_DEBUG_SLAB=y, which can provide significantly more information.
->>>>>>
->>>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->>>>>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->>>>>> ---
->>>>>> kernel/rcu/rcu.h      | 7 +++++++
->>>>>> kernel/rcu/srcutiny.c | 1 +
->>>>>> kernel/rcu/srcutree.c | 1 +
->>>>>> kernel/rcu/tasks.h    | 1 +
->>>>>> kernel/rcu/tiny.c     | 1 +
->>>>>> kernel/rcu/tree.c     | 1 +
->>>>>> 6 files changed, 12 insertions(+)
->>>>>>
->>>>>> v1 --> v2:
->>>>>> 1. Remove condition "(unsigned long)rhp->func & 0x3", it have problems on x86.
->>>>>> 2. Paul E. McKenney helped me update the commit message, thanks.
->>>>>>
->>>>>
->>>>> Hi, Zhen Lei
->>>>>
->>>>> Maybe the following scenarios should be considered:
->>>>>
->>>>>                 CPU 0
->>>>> tasks context
->>>>>    spin_lock(&vmap_area_lock)
->>>>>           Interrupt 
->>>>> 	 RCU softirq
->>>>> 	      rcu_do_batch
->>>>> 		mem_dump_obj
->>>>>                                   vmalloc_dump_obj
->>>>>                                        spin_lock(&vmap_area_lock)   <--  deadlock     
->>>>
->>>>> Right, thanks. I just saw the robot's report. So this patch should be dropped.
->>>>> I'll try to add an helper in mm, where I can check whether the lock has been held, and dump the content of memory object.
->>>>
->>>> This is a workaround, or maybe try a modification like the following, 
->>>> of course, need to ask Paul's opinion.
->>>
->>> Another approach is to schedule a workqueue handler to do the
->>> mem_dump_obj().  This would allow mem_dump_obj() to run in a clean
->>> environment.
->>
->> It's about to panic, so no chance to schedule.
-> 
-> It won't panic if you drop the callback on the floor.
-> 
-> Though to your point, the ->next pointer is likely also trashed.  So you
-> could just drop the remainder of the callback list on the floor.  That
-> might provide a good (though not perfect) chance of getting decent output.
-
-OK, I think I understand what you mean.
-if (!f)
-	schedule_work(&work);
-else
-	f(rhp)
-
-> 
->>> This would allow vmalloc_dump_obj() to be called unconditionally.
->>>
->>> Other thoughts?
->>
->> locked = spin_is_locked(&vmap_area_lock);
->> if (!locked)
->>     spin_lock(&vmap_area_lock)
->>
->> Careful analysis is required, which may cause other problems.
->>
->> Or in new function:
->> if (locked)
->>     return;
->> spin_lock(&vmap_area_lock);
->>
->> If there is a chance to dump the data, dump the data. If there is no
->> chance to dump the data, do not dump the data. This is the fate of
->> debugging information.
-> 
-> My concern is that there will be increasing numbers of special cases
-> over time.
-
-OK, I got it.
-
-> 
-> 							Thanx, Paul
-> 
->>>> diff --git a/mm/util.c b/mm/util.c
->>>> index 12984e76767e..86da0739fe5d 100644
->>>> --- a/mm/util.c
->>>> +++ b/mm/util.c
->>>> @@ -1119,14 +1119,18 @@ void mem_dump_obj(void *object)
->>>>  {
->>>>         const char *type;
->>>>
->>>> +       if (is_vmalloc_addr(object)) {
->>>> +               if (in_task() && vmalloc_dump_obj(object))
->>>> +                       return;
->>>> +               type = "vmalloc memory";
->>>> +               goto end;
->>>> +       }
->>>> +
->>>>         if (kmem_valid_obj(object)) {
->>>>                 kmem_dump_obj(object);
->>>>                 return;
->>>>         }
->>>>
->>>> -       if (vmalloc_dump_obj(object))
->>>> -               return;
->>>> -
->>>>         if (virt_addr_valid(object))
->>>>                 type = "non-slab/vmalloc memory";
->>>>         else if (object == NULL)
->>>> @@ -1135,7 +1139,7 @@ void mem_dump_obj(void *object)
->>>>                 type = "zero-size pointer";
->>>>         else
->>>>                 type = "non-paged memory";
->>>> -
->>>> +end:
->>>>         pr_cont(" %s\n", type);
->>>>  }
->>>>  EXPORT_SYMBOL_GPL(mem_dump_obj);
->>>>
->>>> Thanks
->>>> Zqiang
->>>>
->>>>
->>>>>
->>>>> Thanks
->>>>> Zqiang
->>>>>
->>>>>
->>>>>> diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h index 
->>>>>> 65704cbc9df7b3d..32ab45fabf8eebf 100644
->>>>>> --- a/kernel/rcu/rcu.h
->>>>>> +++ b/kernel/rcu/rcu.h
->>>>>> @@ -10,6 +10,7 @@
->>>>>> #ifndef __LINUX_RCU_H
->>>>>> #define __LINUX_RCU_H
->>>>>>
->>>>>> +#include <linux/mm.h>
->>>>>> #include <trace/events/rcu.h>
->>>>>>
->>>>>> /*
->>>>>> @@ -211,6 +212,12 @@ static inline void debug_rcu_head_unqueue(struct 
->>>>>> rcu_head *head) }
->>>>>> #endif	/* #else !CONFIG_DEBUG_OBJECTS_RCU_HEAD */
->>>>>>
->>>>>> +static inline void debug_rcu_head_callback(struct rcu_head *rhp) {
->>>>>> +	if (unlikely(!rhp->func))
->>>>>> +		mem_dump_obj(rhp);
->>>>>> +}
->>>>>> +
->>>>>> extern int rcu_cpu_stall_suppress_at_boot;
->>>>>>
->>>>>> static inline bool rcu_stall_is_suppressed_at_boot(void)
->>>>>> diff --git a/kernel/rcu/srcutiny.c b/kernel/rcu/srcutiny.c index 
->>>>>> 33adafdad261389..5e7f336baa06ae0 100644
->>>>>> --- a/kernel/rcu/srcutiny.c
->>>>>> +++ b/kernel/rcu/srcutiny.c
->>>>>> @@ -138,6 +138,7 @@ void srcu_drive_gp(struct work_struct *wp)
->>>>>> 	while (lh) {
->>>>>> 		rhp = lh;
->>>>>> 		lh = lh->next;
->>>>>> +		debug_rcu_head_callback(rhp);
->>>>>> 		local_bh_disable();
->>>>>> 		rhp->func(rhp);
->>>>>> 		local_bh_enable();
->>>>>> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c index 
->>>>>> ca4b5dcec675bac..294972e66b31863 100644
->>>>>> --- a/kernel/rcu/srcutree.c
->>>>>> +++ b/kernel/rcu/srcutree.c
->>>>>> @@ -1631,6 +1631,7 @@ static void srcu_invoke_callbacks(struct work_struct *work)
->>>>>> 	rhp = rcu_cblist_dequeue(&ready_cbs);
->>>>>> 	for (; rhp != NULL; rhp = rcu_cblist_dequeue(&ready_cbs)) {
->>>>>> 		debug_rcu_head_unqueue(rhp);
->>>>>> +		debug_rcu_head_callback(rhp);
->>>>>> 		local_bh_disable();
->>>>>> 		rhp->func(rhp);
->>>>>> 		local_bh_enable();
->>>>>> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h index 
->>>>>> b0b885e071fa8dc..b7f8c67c586cdc4 100644
->>>>>> --- a/kernel/rcu/tasks.h
->>>>>> +++ b/kernel/rcu/tasks.h
->>>>>> @@ -478,6 +478,7 @@ static void rcu_tasks_invoke_cbs(struct rcu_tasks *rtp, struct rcu_tasks_percpu
->>>>>> 	raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
->>>>>> 	len = rcl.len;
->>>>>> 	for (rhp = rcu_cblist_dequeue(&rcl); rhp; rhp = 
->>>>>> rcu_cblist_dequeue(&rcl)) {
->>>>>> +		debug_rcu_head_callback(rhp);
->>>>>> 		local_bh_disable();
->>>>>> 		rhp->func(rhp);
->>>>>> 		local_bh_enable();
->>>>>> diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c index 
->>>>>> bb8f7d270f01747..56e9a5d91d97ec5 100644
->>>>>> --- a/kernel/rcu/tiny.c
->>>>>> +++ b/kernel/rcu/tiny.c
->>>>>> @@ -97,6 +97,7 @@ static inline bool rcu_reclaim_tiny(struct rcu_head 
->>>>>> *head)
->>>>>>
->>>>>> 	trace_rcu_invoke_callback("", head);
->>>>>> 	f = head->func;
->>>>>> +	debug_rcu_head_callback(head);
->>>>>> 	WRITE_ONCE(head->func, (rcu_callback_t)0L);
->>>>>> 	f(head);
->>>>>> 	rcu_lock_release(&rcu_callback_map);
->>>>>> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c index 
->>>>>> 15aaff3203bf2d0..ed93ddb8203d42c 100644
->>>>>> --- a/kernel/rcu/tree.c
->>>>>> +++ b/kernel/rcu/tree.c
->>>>>> @@ -2088,6 +2088,7 @@ static void rcu_do_batch(struct rcu_data *rdp)
->>>>>> 		trace_rcu_invoke_callback(rcu_state.name, rhp);
->>>>>>
->>>>>> 		f = rhp->func;
->>>>>> +		debug_rcu_head_callback(rhp);
->>>>>> 		WRITE_ONCE(rhp->func, (rcu_callback_t)0L);
->>>>>> 		f(rhp);
->>>>>>
->>>>>> --
->>>>>> 2.25.1
->>>>>
->>>>> .
->>>>>
->>>>
->>>> --
->>>> Regards,
->>>>   Zhen Lei
->>> .
->>>
->>
->> -- 
->> Regards,
->>   Zhen Lei
-> .
-> 
-
--- 
-Regards,
-  Zhen Lei
+DQoNCkxlIDE0LzExLzIwMjIgw6AgMDQ6MzgsIHlhbmcueWFuZzI5QHp0ZS5jb20uY24gYSDDqWNy
+aXTCoDoNCj4gW1ZvdXMgbmUgcmVjZXZleiBwYXMgc291dmVudCBkZSBjb3VycmllcnMgZGUgeWFu
+Zy55YW5nMjlAenRlLmNvbS5jbi4gRMOpY291dnJleiBwb3VycXVvaSBjZWNpIGVzdCBpbXBvcnRh
+bnQgw6AgaHR0cHM6Ly9ha2EubXMvTGVhcm5BYm91dFNlbmRlcklkZW50aWZpY2F0aW9uIF0NCj4g
+DQo+IEZyb206IFh1IFBhbmRhIDx4dS5wYW5kYUB6dGUuY29tLmNuPg0KPiANCj4gUmVwbGFjZSB0
+aGUgb3Blbi1jb2RlIHdpdGggc3lzZnNfZW1pdCgpIHRvIHNpbXBsaWZ5IHRoZSBjb2RlLg0KPiAN
+Cj4gLS0tDQo+IGNoYW5nZSBmb3IgdjINCj4gICAtIGFsaWduIGNvZGUNCj4gLS0tDQo+IFNpZ25l
+ZC1vZmYtYnk6IFh1IFBhbmRhIDx4dS5wYW5kYUB6dGUuY29tLmNuPg0KPiBTaWduZWQtb2ZmLWJ5
+OiBZYW5nIFlhbmcgPHlhbmcueWFuZzI5QHp0ZS5jb20+DQoNClJldmlld2VkLWJ5OiBDaHJpc3Rv
+cGhlIExlcm95IDxjaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+DQoNCj4gLS0tDQo+ICAgZHJp
+dmVycy9zY3NpL2libXZzY3NpL2libXZmYy5jIHwgMjAgKysrKysrKystLS0tLS0tLS0tLS0NCj4g
+ICAxIGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCAxMiBkZWxldGlvbnMoLSkNCj4gDQo+
+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3Njc2kvaWJtdnNjc2kvaWJtdmZjLmMgYi9kcml2ZXJzL3Nj
+c2kvaWJtdnNjc2kvaWJtdmZjLmMNCj4gaW5kZXggMWEwYzBiNzI4OWQyLi44NDFlNDdjOTRiMTIg
+MTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvc2NzaS9pYm12c2NzaS9pYm12ZmMuYw0KPiArKysgYi9k
+cml2ZXJzL3Njc2kvaWJtdnNjc2kvaWJtdmZjLmMNCj4gQEAgLTM0MTEsOCArMzQxMSw3IEBAIHN0
+YXRpYyBzc2l6ZV90IGlibXZmY19zaG93X2hvc3RfcGFydGl0aW9uX25hbWUoc3RydWN0IGRldmlj
+ZSAqZGV2LA0KPiAgICAgICAgICBzdHJ1Y3QgU2NzaV9Ib3N0ICpzaG9zdCA9IGNsYXNzX3RvX3No
+b3N0KGRldik7DQo+ICAgICAgICAgIHN0cnVjdCBpYm12ZmNfaG9zdCAqdmhvc3QgPSBzaG9zdF9w
+cml2KHNob3N0KTsNCj4gDQo+IC0gICAgICAgcmV0dXJuIHNucHJpbnRmKGJ1ZiwgUEFHRV9TSVpF
+LCAiJXNcbiIsDQo+IC0gICAgICAgICAgICAgICAgICAgICAgIHZob3N0LT5sb2dpbl9idWYtPnJl
+c3AucGFydGl0aW9uX25hbWUpOw0KPiArICAgICAgIHJldHVybiBzeXNmc19lbWl0KGJ1ZiwgIiVz
+XG4iLCB2aG9zdC0+bG9naW5fYnVmLT5yZXNwLnBhcnRpdGlvbl9uYW1lKTsNCj4gICB9DQo+IA0K
+PiAgIHN0YXRpYyBzc2l6ZV90IGlibXZmY19zaG93X2hvc3RfZGV2aWNlX25hbWUoc3RydWN0IGRl
+dmljZSAqZGV2LA0KPiBAQCAtMzQyMSw4ICszNDIwLDcgQEAgc3RhdGljIHNzaXplX3QgaWJtdmZj
+X3Nob3dfaG9zdF9kZXZpY2VfbmFtZShzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+ICAgICAgICAgIHN0
+cnVjdCBTY3NpX0hvc3QgKnNob3N0ID0gY2xhc3NfdG9fc2hvc3QoZGV2KTsNCj4gICAgICAgICAg
+c3RydWN0IGlibXZmY19ob3N0ICp2aG9zdCA9IHNob3N0X3ByaXYoc2hvc3QpOw0KPiANCj4gLSAg
+ICAgICByZXR1cm4gc25wcmludGYoYnVmLCBQQUdFX1NJWkUsICIlc1xuIiwNCj4gLSAgICAgICAg
+ICAgICAgICAgICAgICAgdmhvc3QtPmxvZ2luX2J1Zi0+cmVzcC5kZXZpY2VfbmFtZSk7DQo+ICsg
+ICAgICAgcmV0dXJuIHN5c2ZzX2VtaXQoYnVmLCAiJXNcbiIsIHZob3N0LT5sb2dpbl9idWYtPnJl
+c3AuZGV2aWNlX25hbWUpOw0KPiAgIH0NCj4gDQo+ICAgc3RhdGljIHNzaXplX3QgaWJtdmZjX3No
+b3dfaG9zdF9sb2NfY29kZShzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+IEBAIC0zNDMxLDggKzM0Mjks
+NyBAQCBzdGF0aWMgc3NpemVfdCBpYm12ZmNfc2hvd19ob3N0X2xvY19jb2RlKHN0cnVjdCBkZXZp
+Y2UgKmRldiwNCj4gICAgICAgICAgc3RydWN0IFNjc2lfSG9zdCAqc2hvc3QgPSBjbGFzc190b19z
+aG9zdChkZXYpOw0KPiAgICAgICAgICBzdHJ1Y3QgaWJtdmZjX2hvc3QgKnZob3N0ID0gc2hvc3Rf
+cHJpdihzaG9zdCk7DQo+IA0KPiAtICAgICAgIHJldHVybiBzbnByaW50ZihidWYsIFBBR0VfU0la
+RSwgIiVzXG4iLA0KPiAtICAgICAgICAgICAgICAgICAgICAgICB2aG9zdC0+bG9naW5fYnVmLT5y
+ZXNwLnBvcnRfbG9jX2NvZGUpOw0KPiArICAgICAgIHJldHVybiBzeXNmc19lbWl0KGJ1ZiwgIiVz
+XG4iLCB2aG9zdC0+bG9naW5fYnVmLT5yZXNwLnBvcnRfbG9jX2NvZGUpOw0KPiAgIH0NCj4gDQo+
+ICAgc3RhdGljIHNzaXplX3QgaWJtdmZjX3Nob3dfaG9zdF9kcmNfbmFtZShzdHJ1Y3QgZGV2aWNl
+ICpkZXYsDQo+IEBAIC0zNDQxLDggKzM0MzgsNyBAQCBzdGF0aWMgc3NpemVfdCBpYm12ZmNfc2hv
+d19ob3N0X2RyY19uYW1lKHN0cnVjdCBkZXZpY2UgKmRldiwNCj4gICAgICAgICAgc3RydWN0IFNj
+c2lfSG9zdCAqc2hvc3QgPSBjbGFzc190b19zaG9zdChkZXYpOw0KPiAgICAgICAgICBzdHJ1Y3Qg
+aWJtdmZjX2hvc3QgKnZob3N0ID0gc2hvc3RfcHJpdihzaG9zdCk7DQo+IA0KPiAtICAgICAgIHJl
+dHVybiBzbnByaW50ZihidWYsIFBBR0VfU0laRSwgIiVzXG4iLA0KPiAtICAgICAgICAgICAgICAg
+ICAgICAgICB2aG9zdC0+bG9naW5fYnVmLT5yZXNwLmRyY19uYW1lKTsNCj4gKyAgICAgICByZXR1
+cm4gc3lzZnNfZW1pdChidWYsICIlc1xuIiwgdmhvc3QtPmxvZ2luX2J1Zi0+cmVzcC5kcmNfbmFt
+ZSk7DQo+ICAgfQ0KPiANCj4gICBzdGF0aWMgc3NpemVfdCBpYm12ZmNfc2hvd19ob3N0X25waXZf
+dmVyc2lvbihzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+IEBAIC0zNDUwLDcgKzM0NDYsNyBAQCBzdGF0
+aWMgc3NpemVfdCBpYm12ZmNfc2hvd19ob3N0X25waXZfdmVyc2lvbihzdHJ1Y3QgZGV2aWNlICpk
+ZXYsDQo+ICAgew0KPiAgICAgICAgICBzdHJ1Y3QgU2NzaV9Ib3N0ICpzaG9zdCA9IGNsYXNzX3Rv
+X3Nob3N0KGRldik7DQo+ICAgICAgICAgIHN0cnVjdCBpYm12ZmNfaG9zdCAqdmhvc3QgPSBzaG9z
+dF9wcml2KHNob3N0KTsNCj4gLSAgICAgICByZXR1cm4gc25wcmludGYoYnVmLCBQQUdFX1NJWkUs
+ICIlZFxuIiwgYmUzMl90b19jcHUodmhvc3QtPmxvZ2luX2J1Zi0+cmVzcC52ZXJzaW9uKSk7DQo+
+ICsgICAgICAgcmV0dXJuIHN5c2ZzX2VtaXQoYnVmLCAiJWRcbiIsIGJlMzJfdG9fY3B1KHZob3N0
+LT5sb2dpbl9idWYtPnJlc3AudmVyc2lvbikpOw0KPiAgIH0NCj4gDQo+ICAgc3RhdGljIHNzaXpl
+X3QgaWJtdmZjX3Nob3dfaG9zdF9jYXBhYmlsaXRpZXMoc3RydWN0IGRldmljZSAqZGV2LA0KPiBA
+QCAtMzQ1OCw3ICszNDU0LDcgQEAgc3RhdGljIHNzaXplX3QgaWJtdmZjX3Nob3dfaG9zdF9jYXBh
+YmlsaXRpZXMoc3RydWN0IGRldmljZSAqZGV2LA0KPiAgIHsNCj4gICAgICAgICAgc3RydWN0IFNj
+c2lfSG9zdCAqc2hvc3QgPSBjbGFzc190b19zaG9zdChkZXYpOw0KPiAgICAgICAgICBzdHJ1Y3Qg
+aWJtdmZjX2hvc3QgKnZob3N0ID0gc2hvc3RfcHJpdihzaG9zdCk7DQo+IC0gICAgICAgcmV0dXJu
+IHNucHJpbnRmKGJ1ZiwgUEFHRV9TSVpFLCAiJWxseFxuIiwgYmU2NF90b19jcHUodmhvc3QtPmxv
+Z2luX2J1Zi0+cmVzcC5jYXBhYmlsaXRpZXMpKTsNCj4gKyAgICAgICByZXR1cm4gc3lzZnNfZW1p
+dChidWYsICIlbGx4XG4iLCBiZTY0X3RvX2NwdSh2aG9zdC0+bG9naW5fYnVmLT5yZXNwLmNhcGFi
+aWxpdGllcykpOw0KPiAgIH0NCj4gDQo+ICAgLyoqDQo+IEBAIC0zNDc5LDcgKzM0NzUsNyBAQCBz
+dGF0aWMgc3NpemVfdCBpYm12ZmNfc2hvd19sb2dfbGV2ZWwoc3RydWN0IGRldmljZSAqZGV2LA0K
+PiAgICAgICAgICBpbnQgbGVuOw0KPiANCj4gICAgICAgICAgc3Bpbl9sb2NrX2lycXNhdmUoc2hv
+c3QtPmhvc3RfbG9jaywgZmxhZ3MpOw0KPiAtICAgICAgIGxlbiA9IHNucHJpbnRmKGJ1ZiwgUEFH
+RV9TSVpFLCAiJWRcbiIsIHZob3N0LT5sb2dfbGV2ZWwpOw0KPiArICAgICAgIGxlbiA9IHN5c2Zz
+X2VtaXQoYnVmLCAiJWRcbiIsIHZob3N0LT5sb2dfbGV2ZWwpOw0KPiAgICAgICAgICBzcGluX3Vu
+bG9ja19pcnFyZXN0b3JlKHNob3N0LT5ob3N0X2xvY2ssIGZsYWdzKTsNCj4gICAgICAgICAgcmV0
+dXJuIGxlbjsNCj4gICB9DQo+IEBAIC0zNTE3LDcgKzM1MTMsNyBAQCBzdGF0aWMgc3NpemVfdCBp
+Ym12ZmNfc2hvd19zY3NpX2NoYW5uZWxzKHN0cnVjdCBkZXZpY2UgKmRldiwNCj4gICAgICAgICAg
+aW50IGxlbjsNCj4gDQo+ICAgICAgICAgIHNwaW5fbG9ja19pcnFzYXZlKHNob3N0LT5ob3N0X2xv
+Y2ssIGZsYWdzKTsNCj4gLSAgICAgICBsZW4gPSBzbnByaW50ZihidWYsIFBBR0VfU0laRSwgIiVk
+XG4iLCB2aG9zdC0+Y2xpZW50X3Njc2lfY2hhbm5lbHMpOw0KPiArICAgICAgIGxlbiA9IHN5c2Zz
+X2VtaXQoYnVmLCAiJWRcbiIsIHZob3N0LT5jbGllbnRfc2NzaV9jaGFubmVscyk7DQo+ICAgICAg
+ICAgIHNwaW5fdW5sb2NrX2lycXJlc3RvcmUoc2hvc3QtPmhvc3RfbG9jaywgZmxhZ3MpOw0KPiAg
+ICAgICAgICByZXR1cm4gbGVuOw0KPiAgIH0NCj4gLS0NCj4gMi4xNS4yDQo=
