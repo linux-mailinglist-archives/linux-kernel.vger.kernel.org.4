@@ -2,160 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6178862766C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EBAD627670
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235756AbiKNHd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 02:33:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
+        id S235885AbiKNHeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 02:34:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235115AbiKNHd0 (ORCPT
+        with ESMTP id S235115AbiKNHeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 02:33:26 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E6DC5
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:33:23 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id o13so9539553pgu.7
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:33:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ci7EEHbshcFehJfZ1vhA/3zbDhlLQ5SlERB0/duNlh8=;
-        b=y3sTF4hmY4khAQzxD5W0lpR+G1orJovJ5WNYYWsHTSyjMcgBjhMkaiOKdjckMTBiSh
-         vh2JE+gHWRkYtjJoGRqNcDFThmcgZ3HDTXz4t768hG1xHySziZr6AG6FeEXAHrWsdLcY
-         SoFCnu7xK8reZ4yDWPnDrdBf/SDCBNPE+xlm3Qsz/JZglETSwzmQ5uRroMSLDpE3gk/e
-         Qt9aUnUTI21HApCAfmG9Ea0xI5FsXzBMCinDKk0fGzcoHt1oqpAXXut11zfY0T/wZcol
-         5gaB+iO7F/tNZyVlMi2ANbPrZljhp4bUCyrGnGb4yq2dlMZhj3TYphO8NvVFGWUy0HW7
-         gB4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ci7EEHbshcFehJfZ1vhA/3zbDhlLQ5SlERB0/duNlh8=;
-        b=MH9F/pUTRYdDHZNx6Xxi8DnBf+wqyg9lnopTUbXzXicYd9m4hGkP2xPHPvZxguwNbU
-         PadAm+XMWJ22wciHeVrGjjVjIfbrDNxkRR9L/5/cGcoGiT7z4OKRNVTqN7NeA1M3B6Ft
-         /DoiCPrLmqBW9uAiqDwn8fZfkalZf/iF8hIytNWIq6qMqoiY4p7oToilZ2tvC0OI8jFz
-         kSuaqSYx96mv2b5Oex2HCja/Ug4hrxGNjwsXs/Ygv0tFQZQbh3OnQQc7Rszop0zrVXN7
-         gBZbCDqUfi3chAS1twacXNv5Uls+jzhvv8Kg3893IJ5Bf1zqSWlxDTRt1B78q3vq5qE6
-         4WMg==
-X-Gm-Message-State: ANoB5pki7R0E18rEmTNdifu5vdc/aR7Oj91uPzsWTJQ+caMA52V4aK7t
-        3eHFrelaSHuGcGgW7zDoGV3F
-X-Google-Smtp-Source: AA0mqf7pnXSPJUmcLy5E7oq1swZ5WkTvgCA6ttdHUuKrnr9k9Qhvivs0XObyuY2+UptCt2a0b/0dqg==
-X-Received: by 2002:aa7:8813:0:b0:56b:f64b:b385 with SMTP id c19-20020aa78813000000b0056bf64bb385mr12648979pfo.68.1668411202990;
-        Sun, 13 Nov 2022 23:33:22 -0800 (PST)
-Received: from thinkpad ([117.248.0.54])
-        by smtp.gmail.com with ESMTPSA id w7-20020a654107000000b0043ae1797e2bsm5215425pgp.63.2022.11.13.23.33.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 23:33:21 -0800 (PST)
-Date:   Mon, 14 Nov 2022 13:03:16 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     lpieralisi@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kw@linux.com, robh@kernel.org, vidyas@nvidia.com, vigneshr@ti.com,
-        kishon@kernel.org, bhelgaas@google.com
-Subject: Re: [PATCH v4 0/5] PCI: endpoint: Rework the EPC to EPF notification
-Message-ID: <20221114073316.GI3869@thinkpad>
-References: <20221025145101.116393-1-manivannan.sadhasivam@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221025145101.116393-1-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 14 Nov 2022 02:34:04 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE12C2ACF;
+        Sun, 13 Nov 2022 23:34:03 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 996C8320090C;
+        Mon, 14 Nov 2022 02:34:02 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 14 Nov 2022 02:34:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1668411242; x=1668497642; bh=tg5u0gr/GF
+        HeI84as/hj5YvgUNQOQ5UK5W+kE67Zre4=; b=YP8E2ZwJSSGN0rUdiTQ+Kdr4lZ
+        NQygbLTRMlYT+QohBzqNeDfU53BoaWEO9x45BicXoU8kl4Q6/26Wa4T26/dQgjvb
+        vG78n820nnyje7eNM1Xv76OzB3O4MF6YkB7FtPlISDubhMLiXfL6p050QWohjIiE
+        FiwPPkv18h6w1rRTcg9awUZHt9t70xNZ9P1omA3Qpxm0ReRsDG5fEeCmLBgkTYHe
+        p8sO4gD095+nMEmVJS+IjvaS+5rMyi+ZBizOA0fQrXRWLyLFSaOaS1+h2m9NAR4+
+        0FjaFtxA0ZEkf3h4+JKJlf80LRzK+G6miISPQhxKe7OmjWbHh5e7q/d0fK7g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668411242; x=1668497642; bh=tg5u0gr/GFHeI84as/hj5YvgUNQO
+        Q5UK5W+kE67Zre4=; b=C1yMFrux8xuyGuUlY/gjSlHDztT4/Vdccn0ZLI2v3TJq
+        z4pDe68yfFfl7t0WLWTyceNy28VPbAe13Mv3iAFkxcTXv9xCCfiSaZOtqieEGxGl
+        dRrg5kiyF2ZxjQAZLH1g5Jjpw+V3AT1oJie72zk0sCZXqVUekc0notrOI9x5UsO5
+        00QXMx2kS0gskD4N8QAtK69wpnMiS8gMTCsXIuCnrD9nqJyMz9b+TD07nnKEI4na
+        sqSVyqAZRYUBkWNQBiH1B+dTqNVlRp3hYEIIBjFLlKEDEPfsjmDWD1TFZ2jk5/hZ
+        dh2D90kMz0wq6b8KWpz1G6KJlS0zUzloD1rONc9a/w==
+X-ME-Sender: <xms:ae9xY-lzcX8B1p-DuG0avR6MGl2-tLaad-QOBLBIFXdwAe3d74ryCw>
+    <xme:ae9xY13MM2LizqU5iFZNiciEcSGFp2-px8PYxsazXZPtULx_Us3baT1laWj8IaH2c
+    WfF4VjCCeaQXiS4umg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedugddutdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:ae9xY8rpxVwLm422m8eBnyqQqJiAvYHBknGngwh9Ne8fbly0Nerf1A>
+    <xmx:ae9xYylza0dDketpbSNvhSqAPIofsraBxfHJ17zYrz-48zMpBD1RnQ>
+    <xmx:ae9xY82iRubFENNzfSKg78qmKvELr8M8mMohFj-edc39y6XJNBupzg>
+    <xmx:au9xY5w5suR1IEIUyCclwSFp3l2bD4y3b44zi5JYLMsHpzR5abq_dw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B0299B60086; Mon, 14 Nov 2022 02:34:01 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <02828ff7-c734-4b55-b86e-5cc777e1a35b@app.fastmail.com>
+In-Reply-To: <20221114181752.08a850f0@canb.auug.org.au>
+References: <20221114181752.08a850f0@canb.auug.org.au>
+Date:   Mon, 14 Nov 2022 08:33:41 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Stephen Rothwell" <sfr@canb.auug.org.au>,
+        "Greg KH" <greg@kroah.com>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Liu Ying" <victor.liu@nxp.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the char-misc tree
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 08:20:56PM +0530, Manivannan Sadhasivam wrote:
-> Hello,
-> 
-> During the review of the patch that fixes DBI access in PCI EP, Rob
-> suggested [1] using a fixed interface for passing the events from EPC to
-> EPF instead of the in-kernel notifiers.
-> 
-> This series introduces a simple callback based mechanism for passing the
-> events from EPC to EPF. This interface is chosen for satisfying the below
-> requirements:
-> 
-> 1. The notification has to reach the EPF drivers without any additional
-> latency.
-> 2. The context of the caller (EPC) needs to be preserved while passing the
-> notifications.
-> 
-> With the existing notifier mechanism, the 1st case can be satisfied since
-> notifiers aren't adding any huge overhead. But the 2nd case is clearly not
-> satisfied, because the current atomic notifiers forces the EPF
-> notification context to be atomic even though the caller (EPC) may not be
-> in atomic context. In the notification function, the EPF drivers are
-> required to call several EPC APIs that might sleep and this triggers a
-> sleeping in atomic bug during runtime.
-> 
-> The above issue could be fixed by using a blocking notifier instead of
-> atomic, but that proposal was not accepted either [2].
-> 
-> So instead of working around the issues within the notifiers, let's get rid
-> of it and use the callback mechanism.
-> 
-> NOTE: DRA7xx and TEGRA194 drivers are only compile tested. Testing this series
-> on the real platforms is greatly appreciated.
-> 
+On Mon, Nov 14, 2022, at 08:17, Stephen Rothwell wrote:
+> Hi all,
+>
+> After merging the char-misc tree, today's linux-next build (powerpc
+> allnoconfig) produced these warnings:
+>
+> drivers/bus/simple-pm-bus.c:96:12: warning: 
+> 'simple_pm_bus_runtime_resume' defined but not used [-Wunused-function]
+>    96 | static int simple_pm_bus_runtime_resume(struct device *dev)
+>       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/bus/simple-pm-bus.c:87:12: warning: 
+> 'simple_pm_bus_runtime_suspend' defined but not used [-Wunused-function]
+>    87 | static int simple_pm_bus_runtime_suspend(struct device *dev)
+>       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Introduced by commit
+>
+>   882cf4c913d7 ("drivers: bus: simple-pm-bus: Use clocks")
 
-Lorenzo, can this series be merged for v6.2 since all the patches are reviewed
-now?
+I see that this is caused by the patch using the old-style
+SET_RUNTIME_PM_OPS/SET_NOIRQ_SYSTEM_SLEEP_PM_OPS macros
+instead of the correct SYSTEM_SLEEP_PM_OPS/NOIRQ_SYSTEM_SLEEP_PM_OPS
+versions.
 
-Thanks,
-Mani
-
-> Thanks,
-> Mani
-> 
-> [1] https://lore.kernel.org/all/20220802072426.GA2494@thinkpad/T/#mfa3a5b3a9694798a562c36b228f595b6a571477d
-> [2] https://lore.kernel.org/all/20220228055240.24774-1-manivannan.sadhasivam@linaro.org
-> 
-> Changes in v4:
-> 
-> * Added check for the presence of event_ops before involing the callbacks (Kishon)
-> * Added return with IRQ_WAKE_THREAD when link_up event is found in the hard irq
->   handler of tegra194 driver (Vidya)
-> * Collected review tags
-> 
-> Changes in v3:
-> 
-> * As Kishon spotted, fixed the DRA7xx driver and also the TEGRA194 driver to
->   call the LINK_UP callback in threaded IRQ handler.
-> 
-> Changes in v2:
-> 
-> * Introduced a new "list_lock" for protecting the epc->pci_epf list and
->   used it in the callback mechanism.
-> 
-> Manivannan Sadhasivam (5):
->   PCI: dra7xx: Use threaded IRQ handler for "dra7xx-pcie-main" IRQ
->   PCI: tegra194: Move dw_pcie_ep_linkup() to threaded IRQ handler
->   PCI: endpoint: Use a separate lock for protecting epc->pci_epf list
->   PCI: endpoint: Use callback mechanism for passing events from EPC to
->     EPF
->   PCI: endpoint: Use link_up() callback in place of LINK_UP notifier
-> 
->  drivers/pci/controller/dwc/pci-dra7xx.c       |  2 +-
->  drivers/pci/controller/dwc/pcie-tegra194.c    |  9 ++++-
->  drivers/pci/endpoint/functions/pci-epf-test.c | 38 ++++++-------------
->  drivers/pci/endpoint/pci-epc-core.c           | 32 ++++++++++++----
->  include/linux/pci-epc.h                       | 10 +----
->  include/linux/pci-epf.h                       | 19 ++++++----
->  6 files changed, 59 insertions(+), 51 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+     Arnd
