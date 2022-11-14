@@ -2,60 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D19D628179
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF6E5628181
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236755AbiKNNhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:37:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
+        id S236845AbiKNNjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:39:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236197AbiKNNhp (ORCPT
+        with ESMTP id S235560AbiKNNjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:37:45 -0500
+        Mon, 14 Nov 2022 08:39:31 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E790818355;
-        Mon, 14 Nov 2022 05:37:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12B620BEE;
+        Mon, 14 Nov 2022 05:39:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84AC26109A;
-        Mon, 14 Nov 2022 13:37:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF3F5C433D7;
-        Mon, 14 Nov 2022 13:37:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 903FC611A1;
+        Mon, 14 Nov 2022 13:39:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 080DFC433C1;
+        Mon, 14 Nov 2022 13:39:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668433063;
-        bh=8xlvfxt+WaMoXb0PloFzlKYuUCFDJMFOMn18gRmNUkc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RFsIXnztJNWhDOQjelLnWyBCH0WcRnDeGD6wUW8Mh0APpIY5LGZd/esWLNNA8iZ2H
-         qbC1aBChs6QEDaIwkOpjTEftm4L2VrfmR/tOdURHzgpNN9hV3hBA9HOgstID2w7/xI
-         ziGZOuWPz2DtKrkrq1tBgvl3kmDTGhrDoA0TjTOR4PeYYw0beeMWXE1Es64Ay/v7WG
-         ojd8+mh6sZyIKGGMUWzGJ/VokWlsjCjWpTKs2FuCdD7+5KYEQ+WEOw+q/ymWI6St54
-         rFptWZ9E91BCX4sfEOLDDH04PxasjKhDzsmBzma4kksRPJY7tSH3c8k2K+Aa7QQPu8
-         jt7RBMnSRe3/w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ouZeB-0002y2-B7; Mon, 14 Nov 2022 14:37:12 +0100
-Date:   Mon, 14 Nov 2022 14:37:11 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/14] dt-bindings: phy: qcom,qmp-usb3-dp: fix sc8280xp
- bindings
-Message-ID: <Y3JEh7wO394kepXq@hovoldconsulting.com>
-References: <20221111092457.10546-1-johan+linaro@kernel.org>
- <20221111092457.10546-3-johan+linaro@kernel.org>
- <ace91d8b-9a14-5569-7c59-344e9751fa96@linaro.org>
+        s=k20201202; t=1668433168;
+        bh=cyGUgtr2otkWYH4TggRInQa0UWTOM8gl47QGyy1GPeA=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=DUcibMCxl++eFiZqJXhMFYb29mqFPqHvNRh58OzPhZiV4YRrQTXmxJgJf+FjFaj2y
+         emk6C+Aw2QJR8nnUTvTCN3eoOCs7me8g8itS+fBk0KWrBrqXHPFr1knknFYfopWF/G
+         Jx41eMhe3CVg76x1A5B9Bq6lEaKa5MbymSnC9UVT6P/iUGiIMYlGDgrTLWui+aft1c
+         wvjSmSmXpAzlf7RODX0YQgcKtB5ucJLauLlJ7twUFEoceaBE/9MhmF4r18349gh2lS
+         OJ6UvgJ8FamyRJOFWYoE6aVqJS6XSjIheRrqBMEEaznf5ONVIbymJT71kX3a/Qvj0o
+         1pp8kzGh6onkg==
+Message-ID: <46a1398be032ee6d06aef7df5e336b6ce2ba8f53.camel@kernel.org>
+Subject: Re: [PATCH 2/2 v2] ceph: use a xarray to record all the opened
+ files for each inode
+From:   Jeff Layton <jlayton@kernel.org>
+To:     xiubli@redhat.com, ceph-devel@vger.kernel.org, idryomov@gmail.com,
+        viro@zeniv.linux.org.uk
+Cc:     lhenriques@suse.de, mchangir@redhat.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        stable@vger.kernel.org
+Date:   Mon, 14 Nov 2022 08:39:26 -0500
+In-Reply-To: <20221114051901.15371-3-xiubli@redhat.com>
+References: <20221114051901.15371-1-xiubli@redhat.com>
+         <20221114051901.15371-3-xiubli@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ace91d8b-9a14-5569-7c59-344e9751fa96@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,82 +58,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 02:43:03PM +0300, Dmitry Baryshkov wrote:
-> On 11/11/2022 12:24, Johan Hovold wrote:
-> > The current QMP USB3-DP PHY bindings are based on the original MSM8996
-> > binding which provided multiple PHYs per IP block and these in turn were
-> > described by child nodes.
-> > 
-> > The QMP USB3-DP PHY block provides a single multi-protocol PHY and even
-> > if some resources are only used by either the USB or DP part of the
-> > device there is no real benefit in describing these resources in child
-> > nodes.
-> > 
-> > The original MSM8996 binding also ended up describing the individual
-> > register blocks as belonging to either the wrapper node or the PHY child
-> > nodes.
-> > 
-> > This is an unnecessary level of detail which has lead to problems when
-> > later IP blocks using different register layouts have been forced to fit
-> > the original mould rather than updating the binding. The bindings are
-> > arguable also incomplete as they only the describe register blocks used
-> > by the current Linux drivers (e.g. does not include the PCS LANE
-> > registers).
-> > 
-> > This is specifically true for later USB4-USB3-DP QMP PHYs where the TX
-> > registers are used by both the USB3 and DP parts of the PHY (and where
-> > the USB4 part of the PHY was not covered by the binding at all). Notably
-> > there are also no DP "RX" (sic) registers as described by the current
-> > bindings and the DP "PCS" region is really a set of DP_PHY registers.
-> > 
-> > Add a new binding for the USB4-USB3-DP QMP PHYs found on SC8280XP which
-> > further bindings can be based on.
-> > 
-> > Note that the binding uses a PHY type index to access either the USB3 or
-> > DP part of the PHY and that this can later be used also for the USB4
-> > part if needed.
-> > 
-> > Similarly, the clock inputs and outputs can later be extended to support
-> > USB4.
-> > 
-> > Also note that the current binding is simply removed instead of being
-> > deprecated as it was only recently merged and would not allow for
-> > supporting DP mode.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
+On Mon, 2022-11-14 at 13:19 +0800, xiubli@redhat.com wrote:
+> From: Xiubo Li <xiubli@redhat.com>
+>=20
+> When releasing the file locks the fl->fl_file memory could be
+> already released by another thread in filp_close(), so we couldn't
+> depend on fl->fl_file to get the inode. Just use a xarray to record
+> the opened files for each inode.
+>=20
+> Cc: stable@vger.kernel.org
+> URL: https://tracker.ceph.com/issues/57986
+> Signed-off-by: Xiubo Li <xiubli@redhat.com>
+> ---
+>  fs/ceph/file.c  |  9 +++++++++
+>  fs/ceph/inode.c |  4 ++++
+>  fs/ceph/locks.c | 17 ++++++++++++++++-
+>  fs/ceph/super.h |  4 ++++
+>  4 files changed, 33 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> index 85afcbbb5648..cb4a9c52df27 100644
+> --- a/fs/ceph/file.c
+> +++ b/fs/ceph/file.c
+> @@ -231,6 +231,13 @@ static int ceph_init_file_info(struct inode *inode, =
+struct file *file,
+>  			fi->flags |=3D CEPH_F_SYNC;
+> =20
+>  		file->private_data =3D fi;
+> +
+> +		ret =3D xa_insert(&ci->i_opened_files, (unsigned long)file,
+> +				CEPH_FILP_AVAILABLE, GFP_KERNEL);
+> +		if (ret) {
+> +			kmem_cache_free(ceph_file_cachep, fi);
+> +			return ret;
+> +		}
+>  	}
+> =20
+>  	ceph_get_fmode(ci, fmode, 1);
+> @@ -932,6 +939,8 @@ int ceph_release(struct inode *inode, struct file *fi=
+le)
+>  		dout("release inode %p regular file %p\n", inode, file);
+>  		WARN_ON(!list_empty(&fi->rw_contexts));
+> =20
+> +		xa_erase(&ci->i_opened_files, (unsigned long)file);
+> +
+>  		ceph_fscache_unuse_cookie(inode, file->f_mode & FMODE_WRITE);
+>  		ceph_put_fmode(ci, fi->fmode, 1);
+> =20
+> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+> index 77b0cd9af370..554450838e44 100644
+> --- a/fs/ceph/inode.c
+> +++ b/fs/ceph/inode.c
+> @@ -619,6 +619,8 @@ struct inode *ceph_alloc_inode(struct super_block *sb=
+)
+>  	INIT_LIST_HEAD(&ci->i_unsafe_iops);
+>  	spin_lock_init(&ci->i_unsafe_lock);
+> =20
+> +	xa_init(&ci->i_opened_files);
+> +
+>  	ci->i_snap_realm =3D NULL;
+>  	INIT_LIST_HEAD(&ci->i_snap_realm_item);
+>  	INIT_LIST_HEAD(&ci->i_snap_flush_item);
+> @@ -637,6 +639,8 @@ void ceph_free_inode(struct inode *inode)
+>  {
+>  	struct ceph_inode_info *ci =3D ceph_inode(inode);
+> =20
+> +	xa_destroy(&ci->i_opened_files);
+> +
+>  	kfree(ci->i_symlink);
+>  #ifdef CONFIG_FS_ENCRYPTION
+>  	kfree(ci->fscrypt_auth);
+> diff --git a/fs/ceph/locks.c b/fs/ceph/locks.c
+> index d8385dd0076e..a176a30badd0 100644
+> --- a/fs/ceph/locks.c
+> +++ b/fs/ceph/locks.c
+> @@ -42,9 +42,10 @@ static void ceph_fl_copy_lock(struct file_lock *dst, s=
+truct file_lock *src)
+> =20
+>  static void ceph_fl_release_lock(struct file_lock *fl)
+>  {
+> -	struct ceph_file_info *fi =3D fl->fl_file->private_data;
+>  	struct inode *inode =3D fl->fl_u.ceph_fl.fl_inode;
+>  	struct ceph_inode_info *ci;
+> +	struct ceph_file_info *fi;
+> +	void *val;
+> =20
+>  	/*
+>  	 * If inode is NULL it should be a request file_lock,
+> @@ -54,6 +55,20 @@ static void ceph_fl_release_lock(struct file_lock *fl)
+>  		return;
+> =20
+>  	ci =3D ceph_inode(inode);
+> +
+> +	/*
+> +	 * For Posix-style locks, it may race between filp_close()s,
+> +	 * and it's possible that the 'file' memory pointed by
+> +	 * 'fl->fl_file' has been released. If so just skip it.
+> +	 */
+> +	rcu_read_lock();
+> +	val =3D xa_load(&ci->i_opened_files, (unsigned long)fl->fl_file);
+> +	if (val =3D=3D CEPH_FILP_AVAILABLE) {
+> +		fi =3D fl->fl_file->private_data;
+> +		atomic_dec(&fi->num_locks);
 
-> > +  "#clock-cells":
-> > +    const: 1
-> > +
-> > +  clock-output-names:
-> > +    items:
-> > +      - const: usb3_pipe
-> > +      - const: dp_link
-> > +      - const: dp_vco_div
-> > +
-> > +  "#phy-cells":
-> > +    const: 1
-> > +    description: |
-> > +      PHY index
-> > +        - PHY_TYPE_USB3
-> > +        - PHY_TYPE_DP
-> 
-> I'm stepping on Rob's and Krzysztof's ground here, but it might be more 
-> logical and future proof to use indices instead of phy types.
+Don't you need to remove the old atomic_dec from this function if you
+move it here?
 
-Why would that be more future-proof?
+> +	}
+> +	rcu_read_unlock();
+> +
+>  	if (atomic_dec_and_test(&ci->i_filelock_ref)) {
+>  		/* clear error when all locks are released */
+>  		spin_lock(&ci->i_ceph_lock);
+> diff --git a/fs/ceph/super.h b/fs/ceph/super.h
+> index 7b75a84ba48d..b3e89192cbec 100644
+> --- a/fs/ceph/super.h
+> +++ b/fs/ceph/super.h
+> @@ -329,6 +329,8 @@ struct ceph_inode_xattrs_info {
+>  	u64 version, index_version;
+>  };
+> =20
+> +#define CEPH_FILP_AVAILABLE         xa_mk_value(1)
+> +
+>  /*
+>   * Ceph inode.
+>   */
+> @@ -434,6 +436,8 @@ struct ceph_inode_info {
+>  	struct list_head i_unsafe_iops;   /* uncommitted mds inode ops */
+>  	spinlock_t i_unsafe_lock;
+> =20
+> +	struct xarray		i_opened_files;
+> +
+>  	union {
+>  		struct ceph_snap_realm *i_snap_realm; /* snap realm (if caps) */
+>  		struct ceph_snapid_map *i_snapid_map; /* snapid -> dev_t */
 
-I initially added defines for these indexes to a QMP header, but noticed
-that we already have PHY drivers that use the PHY types for this. So
-there's already a precedent for this and I didn't see any real benefit
-to adding multiple per-SoC defines for the same thing.
+This looks like it'll work, but it's a lot of extra work, having to
+track this extra xarray just on the off chance that one of these fd's
+might have file locks. The num_locks field is only checked in one place
+in ceph_get_caps.
 
-> Just for my understanding, would USB4 support add another qserdes+tx/rx 
-> construct or would it be the same USB3 register space?
+Here's what I'd recommend instead:
 
-The TX/RX registers are shared by the all three parts of the PHY (USB4,
-USB3, DP), while USB4 has two dedicated sets of PLL (serdes) and PCS
-registers.
+Have ceph_get_caps look at the lists in inode->i_flctx and see whether
+any of its locks have an fl_file that matches the @filp argument in that
+function. Most inodes never get any file locks, so in most cases  this
+will turn out to just be a NULL pointer check for i_flctx anyway.
 
-Johan
+Then you can just remove the num_locks field and call the new helper
+from ceph_get_caps instead. I'll send along a proposed patch for the
+helper in a bit.
+--=20
+Jeff Layton <jlayton@kernel.org>
