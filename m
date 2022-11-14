@@ -2,278 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA246283EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3A56283EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:31:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236825AbiKNPb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 10:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
+        id S236809AbiKNPbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 10:31:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236774AbiKNPbT (ORCPT
+        with ESMTP id S236700AbiKNPbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 10:31:19 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DCF2A429
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:31:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1668439876; x=1699975876;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+z7vhMLu3yh8zpZfl0R8/tbQ1mKg/DE0MiKRhJ26irU=;
-  b=ypCOojXZNdgW9BEE3+RGlymS8Myl4IfgS4M0qtpqrAZ6c7v8iDoBBilK
-   Cyxx8Zv8ZGl3heg0Fmm0wXuxN0VhY6la4chv3vS1kOy/7Hu2cPiEQ4QzT
-   ktbfK+3BeyvEV8yTwyAgzJIFS2Qm1EbG+u9dwBrPt+D6ZBbZYAbdaOsgK
-   RuYJBUA4uxaJZYn/fsW7P8s0uK98yifzIZA2bGfjfU5Hd/J68j1+XkTVK
-   R02KM1Ujy9YRBhycK7GZhm8xx9bPm8iPQqIspVGE0WoVaI0szMjO6jjgc
-   0Z7GerLZ6iIJ1Kpod0+zJAzpnr+/tjHhDXq5Ua/IEGwC3gbGfVvfrnrY2
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="123323299"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Nov 2022 08:31:15 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 14 Nov 2022 08:31:12 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Mon, 14 Nov 2022 08:31:11 -0700
-Date:   Mon, 14 Nov 2022 15:30:54 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Andrew Bresticker <abrestic@rivosinc.com>
-CC:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@rivosinc.com>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] RISC-V: Fix unannoted hardirqs-on in return to userspace
- slow-path
-Message-ID: <Y3JfLuRYF/jdjbOY@wendy>
-References: <20221111223108.1976562-1-abrestic@rivosinc.com>
- <CAJF2gTRbcocqkmkLVmfYO-8ae-kY0bJwZ+sE-WDXfbF0Y_ZkWg@mail.gmail.com>
- <CALE4mHo9uojGyhLo6Sci9VbES1GG=XcEZY-EyY6nkjyWhe2e5A@mail.gmail.com>
+        Mon, 14 Nov 2022 10:31:08 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D0327B28
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:31:05 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id l12so19855113lfp.6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:31:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z+APgoteAuoO9mTtV8vV2XOtx8Kwbf4hasGLOR8qZ8g=;
+        b=SmEB42jxy4krB5JX6BEkkRMQiM9SlqtbFGemcikWQQZLBssxu7SPbe5Y1GbzVFYo+7
+         1jA9Ltt814b8gr3ULe0d1nr7tpNRWXP9plxF7wymjAzwC/XwG7aMtzkXW0gFcFcz/LZF
+         aRGKAjimGtp5l4H7QbGp1fOLyXrybsnkDXNBH8eRoTYu0IEGEhqzNSnM4H4aSg/wR+vO
+         0vh/2p6oPVoQkGhPmxKvCcVgFNpqF3rb3ClnttXkS1xl7R/MeEK/UyyUQDiCaqT3DHfa
+         jmig5MLNLskqJYTNV2Ey9BA0lLRdKjhyuw7lrGbK6gJ3COQrYiGZBUgbzCwNF73mH74L
+         argA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z+APgoteAuoO9mTtV8vV2XOtx8Kwbf4hasGLOR8qZ8g=;
+        b=2Lyr+2CBSIL4wIF4694twQFhIJcQqvHJxDm8QHVUryYppwY7m2CYIZDu6iBtwe4lMP
+         TXkwabk40r97e2qJKPJiuHm/ttjGEYUa/vJBXEidBpWXwlzPpimaUwNKxz6Mr9HP37Md
+         AME7A5/wHwE+RW1YdHPVvELCobQEzCfLF8OZNwch/Crf1g8W4HRji82ELMkWoAeLLDOP
+         udRgTiHgZEQZKEJ4yeE9+XntbwuQz5Oy+TsJzndwgeif9IkUfeUJF5LOVniME8oiAV1V
+         idXQMcW2YgIDW93ihoKfGm+sqWXiZ+hFoZDJ5mHtolDTTZ5lyADSB+AGj4FBBfH/hZN0
+         B5hQ==
+X-Gm-Message-State: ANoB5pk7o0FIQJ1Uo/Is4btKfYXTed68cF3bekjoS+EKyazSC8u/h7l8
+        0DFlWE0zhfkry93eXnbt6a2HW+1fFnVtrQ==
+X-Google-Smtp-Source: AA0mqf5sZWN0bwnuk52AgLtN24jImYplJsDYfbprTaBDktg4nm08CK729SR/ymyuDx00Wh2odDmBlA==
+X-Received: by 2002:ac2:4f13:0:b0:4a2:25b1:10ff with SMTP id k19-20020ac24f13000000b004a225b110ffmr4912341lfr.274.1668439863459;
+        Mon, 14 Nov 2022 07:31:03 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id a3-20020a2e8303000000b002770e531535sm2062990ljh.55.2022.11.14.07.31.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 07:31:03 -0800 (PST)
+Message-ID: <42ae9612-43da-5f3a-534d-d30b9f399f90@linaro.org>
+Date:   Mon, 14 Nov 2022 18:31:02 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CALE4mHo9uojGyhLo6Sci9VbES1GG=XcEZY-EyY6nkjyWhe2e5A@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 02/14] dt-bindings: phy: qcom,qmp-usb3-dp: fix sc8280xp
+ bindings
+Content-Language: en-GB
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221111092457.10546-1-johan+linaro@kernel.org>
+ <20221111092457.10546-3-johan+linaro@kernel.org>
+ <ace91d8b-9a14-5569-7c59-344e9751fa96@linaro.org>
+ <Y3JEh7wO394kepXq@hovoldconsulting.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <Y3JEh7wO394kepXq@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 10:20:30AM -0500, Andrew Bresticker wrote:
-> On Mon, Nov 14, 2022 at 9:43 AM Guo Ren <guoren@kernel.org> wrote:
-> >
-> > On Sat, Nov 12, 2022 at 6:31 AM Andrew Bresticker <abrestic@rivosinc.com> wrote:
-> > >
-> > > The return to userspace path in entry.S may enable interrupts without the
-> > > corresponding lockdep annotation, producing a splat[0] when DEBUG_LOCKDEP
-> > > is enabled. Simply calling __trace_hardirqs_on() here gets a bit messy
-> > > due to the use of RA to point back to ret_from_exception, so just move
-> > > the whole slow-path loop into C. It's more readable and it lets us use
-> > > local_irq_{enable,disable}(), avoiding the need for manual annotations
-> > > altogether.
-> > Could generic_entry solve your problem? please try:
-> > https://lore.kernel.org/linux-riscv/20221103075047.1634923-1-guoren@kernel.org/
+On 14/11/2022 16:37, Johan Hovold wrote:
+> On Sat, Nov 12, 2022 at 02:43:03PM +0300, Dmitry Baryshkov wrote:
+>> On 11/11/2022 12:24, Johan Hovold wrote:
+>>> The current QMP USB3-DP PHY bindings are based on the original MSM8996
+>>> binding which provided multiple PHYs per IP block and these in turn were
+>>> described by child nodes.
+>>>
+>>> The QMP USB3-DP PHY block provides a single multi-protocol PHY and even
+>>> if some resources are only used by either the USB or DP part of the
+>>> device there is no real benefit in describing these resources in child
+>>> nodes.
+>>>
+>>> The original MSM8996 binding also ended up describing the individual
+>>> register blocks as belonging to either the wrapper node or the PHY child
+>>> nodes.
+>>>
+>>> This is an unnecessary level of detail which has lead to problems when
+>>> later IP blocks using different register layouts have been forced to fit
+>>> the original mould rather than updating the binding. The bindings are
+>>> arguable also incomplete as they only the describe register blocks used
+>>> by the current Linux drivers (e.g. does not include the PCS LANE
+>>> registers).
+>>>
+>>> This is specifically true for later USB4-USB3-DP QMP PHYs where the TX
+>>> registers are used by both the USB3 and DP parts of the PHY (and where
+>>> the USB4 part of the PHY was not covered by the binding at all). Notably
+>>> there are also no DP "RX" (sic) registers as described by the current
+>>> bindings and the DP "PCS" region is really a set of DP_PHY registers.
+>>>
+>>> Add a new binding for the USB4-USB3-DP QMP PHYs found on SC8280XP which
+>>> further bindings can be based on.
+>>>
+>>> Note that the binding uses a PHY type index to access either the USB3 or
+>>> DP part of the PHY and that this can later be used also for the USB4
+>>> part if needed.
+>>>
+>>> Similarly, the clock inputs and outputs can later be extended to support
+>>> USB4.
+>>>
+>>> Also note that the current binding is simply removed instead of being
+>>> deprecated as it was only recently merged and would not allow for
+>>> supporting DP mode.
+>>>
+>>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+>>> ---
 > 
-> Indeed it does, as I mentioned below, however it wasn't clear to me
-> how close your series was to landing so I'v emailed this small fix for
-> the existing bug in case your series does not make it into 6.2
+>>> +  "#clock-cells":
+>>> +    const: 1
+>>> +
+>>> +  clock-output-names:
+>>> +    items:
+>>> +      - const: usb3_pipe
+>>> +      - const: dp_link
+>>> +      - const: dp_vco_div
+>>> +
+>>> +  "#phy-cells":
+>>> +    const: 1
+>>> +    description: |
+>>> +      PHY index
+>>> +        - PHY_TYPE_USB3
+>>> +        - PHY_TYPE_DP
+>>
+>> I'm stepping on Rob's and Krzysztof's ground here, but it might be more
+>> logical and future proof to use indices instead of phy types.
+> 
+> Why would that be more future-proof?
+> 
+> I initially added defines for these indexes to a QMP header, but noticed
+> that we already have PHY drivers that use the PHY types for this. So
+> there's already a precedent for this and I didn't see any real benefit
+> to adding multiple per-SoC defines for the same thing.
 
-The backportablilty of this 26+, 26- change has to be considered too.
-The generic entry patchset has 20x the changes and would not ordinarily
-be stable material. How much of that series would be required to solve
-the problem?
- 
-> >
-> > >
-> > > [0]:
-> > >   ------------[ cut here ]------------
-> > >   DEBUG_LOCKS_WARN_ON(!lockdep_hardirqs_enabled())
-> > >   WARNING: CPU: 2 PID: 1 at kernel/locking/lockdep.c:5512 check_flags+0x10a/0x1e0
-> > >   Modules linked in:
-> > >   CPU: 2 PID: 1 Comm: init Not tainted 6.1.0-rc4-00160-gb56b6e2b4f31 #53
-> > >   Hardware name: riscv-virtio,qemu (DT)
-> > >   epc : check_flags+0x10a/0x1e0
-> > >   ra : check_flags+0x10a/0x1e0
-> > >   <snip>
-> > >    status: 0000000200000100 badaddr: 0000000000000000 cause: 0000000000000003
-> > >   [<ffffffff808edb90>] lock_is_held_type+0x78/0x14e
-> > >   [<ffffffff8003dae2>] __might_resched+0x26/0x22c
-> > >   [<ffffffff8003dd24>] __might_sleep+0x3c/0x66
-> > >   [<ffffffff80022c60>] get_signal+0x9e/0xa70
-> > >   [<ffffffff800054a2>] do_notify_resume+0x6e/0x422
-> > >   [<ffffffff80003c68>] ret_from_exception+0x0/0x10
-> > >   irq event stamp: 44512
-> > >   hardirqs last  enabled at (44511): [<ffffffff808f901c>] _raw_spin_unlock_irqrestore+0x54/0x62
-> > >   hardirqs last disabled at (44512): [<ffffffff80008200>] __trace_hardirqs_off+0xc/0x14
-> > >   softirqs last  enabled at (44472): [<ffffffff808f9fbe>] __do_softirq+0x3de/0x51e
-> > >   softirqs last disabled at (44467): [<ffffffff80017760>] irq_exit+0xd6/0x104
-> > >   ---[ end trace 0000000000000000 ]---
-> > >   possible reason: unannotated irqs-on.
-> > >
-> > > Signed-off-by: Andrew Bresticker <abrestic@rivosinc.com>
-> > > ---
-> > > This should also theoretically be fixed by the conversion to generic entry,
-> > > but it's not clear how far away that series is from landing.
-> > > ---
-> > >  arch/riscv/kernel/entry.S  | 18 +++++-------------
-> > >  arch/riscv/kernel/signal.c | 34 +++++++++++++++++++++-------------
-> > >  2 files changed, 26 insertions(+), 26 deletions(-)
-> > >
-> > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > > index b9eda3fcbd6d..58dfa8595e19 100644
-> > > --- a/arch/riscv/kernel/entry.S
-> > > +++ b/arch/riscv/kernel/entry.S
-> > > @@ -263,12 +263,11 @@ ret_from_exception:
-> > >  #endif
-> > >         bnez s0, resume_kernel
-> > >
-> > > -resume_userspace:
-> > >         /* Interrupts must be disabled here so flags are checked atomically */
-> > >         REG_L s0, TASK_TI_FLAGS(tp) /* current_thread_info->flags */
-> > >         andi s1, s0, _TIF_WORK_MASK
-> > > -       bnez s1, work_pending
-> > > -
-> > > +       bnez s1, resume_userspace_slow
-> > > +resume_userspace:
-> > >  #ifdef CONFIG_CONTEXT_TRACKING_USER
-> > >         call user_enter_callable
-> > >  #endif
-> > > @@ -368,19 +367,12 @@ resume_kernel:
-> > >         j restore_all
-> > >  #endif
-> > >
-> > > -work_pending:
-> > > +resume_userspace_slow:
-> > >         /* Enter slow path for supplementary processing */
-> > > -       la ra, ret_from_exception
-> > > -       andi s1, s0, _TIF_NEED_RESCHED
-> > > -       bnez s1, work_resched
-> > > -work_notifysig:
-> > > -       /* Handle pending signals and notify-resume requests */
-> > > -       csrs CSR_STATUS, SR_IE /* Enable interrupts for do_notify_resume() */
-> > >         move a0, sp /* pt_regs */
-> > >         move a1, s0 /* current_thread_info->flags */
-> > > -       tail do_notify_resume
-> > > -work_resched:
-> > > -       tail schedule
-> > > +       call do_work_pending
-> > > +       j resume_userspace
-> > >
-> > >  /* Slow paths for ptrace. */
-> > >  handle_syscall_trace_enter:
-> > > diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
-> > > index 5c591123c440..bfb2afa4135f 100644
-> > > --- a/arch/riscv/kernel/signal.c
-> > > +++ b/arch/riscv/kernel/signal.c
-> > > @@ -313,19 +313,27 @@ static void do_signal(struct pt_regs *regs)
-> > >  }
-> > >
-> > >  /*
-> > > - * notification of userspace execution resumption
-> > > - * - triggered by the _TIF_WORK_MASK flags
-> > > + * Handle any pending work on the resume-to-userspace path, as indicated by
-> > > + * _TIF_WORK_MASK. Entered from assembly with IRQs off.
-> > >   */
-> > > -asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
-> > > -                                          unsigned long thread_info_flags)
-> > > +asmlinkage __visible void do_work_pending(struct pt_regs *regs,
-> > > +                                         unsigned long thread_info_flags)
-> > >  {
-> > > -       if (thread_info_flags & _TIF_UPROBE)
-> > > -               uprobe_notify_resume(regs);
-> > > -
-> > > -       /* Handle pending signal delivery */
-> > > -       if (thread_info_flags & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
-> > > -               do_signal(regs);
-> > > -
-> > > -       if (thread_info_flags & _TIF_NOTIFY_RESUME)
-> > > -               resume_user_mode_work(regs);
-> > > +       do {
-> > > +               if (thread_info_flags & _TIF_NEED_RESCHED) {
-> > > +                       schedule();
-> > > +               } else {
-> > > +                       local_irq_enable();
-> > > +                       if (thread_info_flags & _TIF_UPROBE)
-> > > +                               uprobe_notify_resume(regs);
-> > > +                       /* Handle pending signal delivery */
-> > > +                       if (thread_info_flags & (_TIF_SIGPENDING |
-> > > +                                                _TIF_NOTIFY_SIGNAL))
-> > > +                               do_signal(regs);
-> > > +                       if (thread_info_flags & _TIF_NOTIFY_RESUME)
-> > > +                               resume_user_mode_work(regs);
-> > > +               }
-> > > +               local_irq_disable();
-> > > +               thread_info_flags = read_thread_flags();
-> > > +       } while (thread_info_flags & _TIF_WORK_MASK);
-> > >  }
-> > The more graceful code has been written in kernel/entry/common.c.
-> > Let's base it on that:
-> >
-> > static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
-> >                                             unsigned long ti_work)
-> > {
-> >         /*
-> >          * Before returning to user space ensure that all pending work
-> >          * items have been completed.
-> >          */
-> >         while (ti_work & EXIT_TO_USER_MODE_WORK) {
-> >
-> >                 local_irq_enable_exit_to_user(ti_work);
-> >
-> >                 if (ti_work & _TIF_NEED_RESCHED)
-> >                         schedule();
-> >
-> >                 if (ti_work & _TIF_UPROBE)
-> >                         uprobe_notify_resume(regs);
-> >
-> >                 if (ti_work & _TIF_PATCH_PENDING)
-> >                         klp_update_patch_state(current);
-> >
-> >                 if (ti_work & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
-> >                         arch_do_signal_or_restart(regs);
-> >
-> >                 if (ti_work & _TIF_NOTIFY_RESUME)
-> >                         resume_user_mode_work(regs);
-> >
-> >                 /* Architecture specific TIF work */
-> >                 arch_exit_to_user_mode_work(regs, ti_work);
-> >
-> >                 /*
-> >                  * Disable interrupts and reevaluate the work flags as they
-> >                  * might have changed while interrupts and preemption was
-> >                  * enabled above.
-> >                  */
-> >                 local_irq_disable_exit_to_user();
-> >
-> >                 /* Check if any of the above work has queued a
-> > deferred wakeup */
-> >                 tick_nohz_user_enter_prepare();
-> >
-> >                 ti_work = read_thread_flags();
-> >         }
-> >
-> >         /* Return the latest work state for arch_exit_to_user_mode() */
-> >         return ti_work;
-> > }
-> >
-> > > --
-> > > 2.25.1
-> > >
-> >
-> >
-> > --
-> > Best Regards
-> >  Guo Ren
+As you guessed from my question, I was thinking about USB4 (for which we 
+do not have a separate PHY_TYPE, but that probably shouldn't matter). 
+Would it be a separate PHY here, or would it be a combo UBS3+USB4 plus 
+separate DP phy?
+
+Yes, we have other PHYs, which use types as an index, however it's 
+slightly more common to have indices instead.
+
+Anyway, this is a minor issue. It might be just that I'm more common to 
+using indices everywhere (in other words, I have preference here, but 
+it's not a strong requirement from my side).
+
+
+>> Just for my understanding, would USB4 support add another qserdes+tx/rx
+>> construct or would it be the same USB3 register space?
 > 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> The TX/RX registers are shared by the all three parts of the PHY (USB4,
+> USB3, DP), while USB4 has two dedicated sets of PLL (serdes) and PCS
+> registers.
+
+Ack, thanks.
+
+-- 
+With best wishes
+Dmitry
+
