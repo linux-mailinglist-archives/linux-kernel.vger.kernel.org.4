@@ -2,162 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28247627C0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A21627BEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234078AbiKNLSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:18:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42134 "EHLO
+        id S236271AbiKNLRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:17:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236973AbiKNLR2 (ORCPT
+        with ESMTP id S236179AbiKNLQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:17:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBA822B3E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:13:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668424399;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PbzB3Do9hchyukoNcrfWbxKENZKnp4VNTslba0IU/uA=;
-        b=K+islHkrVqzjvla9HNLLvpIXCjQlPUM+BBixvKIbhEpVtDRWQaP7qZKxO4KEtlNuJLNYC7
-        3QQ5W9GUfoAdDrDc/rSgWjWHi7uOgWp/eoMXFqv5t7Gw7fwBTWcUZcIUK+gihFuJVulT/L
-        G9tZhenzeHteIwU42mnv9jb1zP6n1uU=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-528-72JTf4ftPgSugdqM7ixLAQ-1; Mon, 14 Nov 2022 06:13:18 -0500
-X-MC-Unique: 72JTf4ftPgSugdqM7ixLAQ-1
-Received: by mail-wr1-f69.google.com with SMTP id u13-20020adfa18d000000b00236566b5b40so1867608wru.9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:13:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PbzB3Do9hchyukoNcrfWbxKENZKnp4VNTslba0IU/uA=;
-        b=D08rlZC7UTYxieYBJEi4/UZIV0xlCkljOysNmsS+r+4zVDBOP9C5ygEZiFlPhqtC03
-         rQkVZrApqh13qI7LBNDDLVi6Xs3zIS+bs+QbQ8tsOTh7a3fP9vIalhBOIRwOCupXjrnz
-         zvJOwTvCfTxlIP4vfGZlDSBUaLaIaXHCzQj9lMmdavtHggv+HjntOVzO+nJT8Coa6aan
-         UxIOqOsfA8yDhud8pq+zpZPZcDdL//eyiJMok9ieW1PdXtZhaK/zUW+KQzD2HjgSib5h
-         hOV1qandqSMkILcXpPVfOK+iYVRxR/EXOUUD8mx3iNDafHrH3ywXJUViSEAEgL31k8Bd
-         B2bA==
-X-Gm-Message-State: ANoB5pk7HPHjCjabH+8YT0DMeWubDxtVvUqwexf8STiKWffALjHCGKO8
-        E6aokXisiNDmh82JAUrYouu4BK99N4zsFQMlZcYvmmqwdPmgFfZoVL7hKiHrvFcqVW2If7vK2BL
-        6bOw0Vqo3sx1gZMHOuSTeuk8U
-X-Received: by 2002:a05:600c:358e:b0:3cf:6a4c:af8b with SMTP id p14-20020a05600c358e00b003cf6a4caf8bmr7826357wmq.115.1668424396789;
-        Mon, 14 Nov 2022 03:13:16 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5SnBq9f8LQoQTVPB1Cy9WLBO+DAbfC5qXOSP1fGSvEj0DqvYgJ51U16zg2nmtGs/cEbl9Cpw==
-X-Received: by 2002:a05:600c:358e:b0:3cf:6a4c:af8b with SMTP id p14-20020a05600c358e00b003cf6a4caf8bmr7826341wmq.115.1668424396576;
-        Mon, 14 Nov 2022 03:13:16 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id m16-20020a05600c3b1000b003a3170a7af9sm13160967wms.4.2022.11.14.03.13.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 03:13:16 -0800 (PST)
-Message-ID: <354820e8-939c-781a-0d76-c1574c43b7f3@redhat.com>
-Date:   Mon, 14 Nov 2022 12:13:15 +0100
+        Mon, 14 Nov 2022 06:16:50 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F421518E10;
+        Mon, 14 Nov 2022 03:14:09 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7634F23A;
+        Mon, 14 Nov 2022 03:14:15 -0800 (PST)
+Received: from [10.57.70.83] (unknown [10.57.70.83])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0AFE83F73D;
+        Mon, 14 Nov 2022 03:14:06 -0800 (PST)
+Message-ID: <4be2b6bf-eb60-511d-dfd1-90d91c02c105@arm.com>
+Date:   Mon, 14 Nov 2022 11:14:05 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] driver core: Disable driver deferred probe timeout by
- default
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 10/12] perf test: Replace brstack test workload
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Saravana Kannan <saravanak@google.com>,
-        Peter Robinson <pbrobinson@redhat.com>,
-        Steev Klimaszewski <steev@kali.org>,
-        Rob Herring <robh@kernel.org>,
-        Sergio Lopez Pascual <slp@redhat.com>,
-        Enric Balletbo i Serra <eballetbo@redhat.com>,
-        John Stultz <jstultz@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20221114104333.3695531-1-javierm@redhat.com>
- <Y3IeUADalX6WDnuO@kroah.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <Y3IeUADalX6WDnuO@kroah.com>
+To:     German Gomez <german.gomez@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+References: <20221110181920.84900-1-namhyung@kernel.org>
+ <20221110181920.84900-11-namhyung@kernel.org>
+ <1036a42b-b438-67b2-c4ca-0e440d266d6d@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <1036a42b-b438-67b2-c4ca-0e440d266d6d@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
 
-Thanks a lot for your feedback.
 
-On 11/14/22 11:54, Greg Kroah-Hartman wrote:
-
-[...]
-
->>
->> This default value of 0 was reverted again by commit f516d01b9df2 ("Revert
->> "driver core: Set default deferred_probe_timeout back to 0."") and set to
->> 10 seconds instead. Which was still less than the 30 seconds that was set
->> at some point to allow systems with drivers built as modules and loaded by
->> user-land to probe drivers that were previously deferred.
->>
->> The 10 seconds timeout isn't enough for the mentioned systems, for example
->> general purpose distributions attempt to build all the possible drivers as
->> a module to keep the Linux kernel image small. But that means that in very
->> likely that the probe deferral mechanism will timeout and drivers won't be
->> probed correctly.
+On 10/11/2022 19:20, German Gomez wrote:
+> Hi Namhyung, thanks for doing the refactor, it looks a lot cleaner
 > 
-> What specific "mentioned systems" have deferred probe drivers that are
+> On 10/11/2022 18:19, Namhyung Kim wrote:
+>> So that it can get rid of requirement of a compiler.  Also rename the
+>> symbols to match with the perf test workload.
+>>
+>> Cc: German Gomez <german.gomez@arm.com>
+>> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+>> ---
+>>  tools/perf/tests/shell/test_brstack.sh | 66 +++++---------------------
+>>  1 file changed, 12 insertions(+), 54 deletions(-)
+>>
+>> diff --git a/tools/perf/tests/shell/test_brstack.sh b/tools/perf/tests/shell/test_brstack.sh
+>> index ec801cffae6b..a8a182dea25f 100755
+>> --- a/tools/perf/tests/shell/test_brstack.sh
+>> +++ b/tools/perf/tests/shell/test_brstack.sh
+>> @@ -4,18 +4,12 @@
+>>  # SPDX-License-Identifier: GPL-2.0
+>>  # German Gomez <german.gomez@arm.com>, 2022
+>>  
+>> -# we need a C compiler to build the test programs
+>> -# so bail if none is found
+>> -if ! [ -x "$(command -v cc)" ]; then
+>> -	echo "failed: no compiler, install gcc"
+>> -	exit 2
+>> -fi
+>> -
+>>  # skip the test if the hardware doesn't support branch stack sampling
+>>  # and if the architecture doesn't support filter types: any,save_type,u
+>>  perf record -b -o- -B --branch-filter any,save_type,u true > /dev/null 2>&1 || exit 2
+>>  
+>>  TMPDIR=$(mktemp -d /tmp/__perf_test.program.XXXXX)
+>> +TESTPROG="perf test -w brstack"
+>>  
+>>  cleanup() {
+>>  	rm -rf $TMPDIR
+>> @@ -23,57 +17,24 @@ cleanup() {
+>>  
+>>  trap cleanup exit term int
+>>  
+>> -gen_test_program() {
+>> -	# generate test program
+>> -	cat << EOF > $1
+>> -#define BENCH_RUNS 999999
+>> -int cnt;
+>> -void bar(void) {
+>> -}			/* return */
+>> -void foo(void) {
+>> -	bar();		/* call */
+>> -}			/* return */
+>> -void bench(void) {
+>> -  void (*foo_ind)(void) = foo;
+>> -  if ((cnt++) % 3)	/* branch (cond) */
+>> -    foo();		/* call */
+>> -  bar();		/* call */
+>> -  foo_ind();		/* call (ind) */
+>> -}
+>> -int main(void)
+>> -{
+>> -  int cnt = 0;
+>> -  while (1) {
+>> -    if ((cnt++) > BENCH_RUNS)
+>> -      break;
+>> -    bench();		/* call */
+>> -  }			/* branch (uncond) */
+>> -  return 0;
+>> -}
+>> -EOF
+>> -}
+>> -
+>>  test_user_branches() {
+>>  	echo "Testing user branch stack sampling"
+>>  
+>> -	gen_test_program "$TEMPDIR/program.c"
+>> -	cc -fno-inline -g "$TEMPDIR/program.c" -o $TMPDIR/a.out
+>> -
+>> -	perf record -o $TMPDIR/perf.data --branch-filter any,save_type,u -- $TMPDIR/a.out > /dev/null 2>&1
+>> +	perf record -o $TMPDIR/perf.data --branch-filter any,save_type,u -- ${TESTPROG} > /dev/null 2>&1
+>>  	perf script -i $TMPDIR/perf.data --fields brstacksym | xargs -n1 > $TMPDIR/perf.script
+>>  
+>>  	# example of branch entries:
+>> -	# 	foo+0x14/bar+0x40/P/-/-/0/CALL
+>> +	# 	brstack_foo+0x14/brstack_bar+0x40/P/-/-/0/CALL
+>>  
+>>  	set -x
+>> -	egrep -m1 "^bench\+[^ ]*/foo\+[^ ]*/IND_CALL$"	$TMPDIR/perf.script
+>> -	egrep -m1 "^foo\+[^ ]*/bar\+[^ ]*/CALL$"	$TMPDIR/perf.script
+>> -	egrep -m1 "^bench\+[^ ]*/foo\+[^ ]*/CALL$"	$TMPDIR/perf.script
+>> -	egrep -m1 "^bench\+[^ ]*/bar\+[^ ]*/CALL$"	$TMPDIR/perf.script
+>> -	egrep -m1 "^bar\+[^ ]*/foo\+[^ ]*/RET$"		$TMPDIR/perf.script
+>> -	egrep -m1 "^foo\+[^ ]*/bench\+[^ ]*/RET$"	$TMPDIR/perf.script
+>> -	egrep -m1 "^bench\+[^ ]*/bench\+[^ ]*/COND$"	$TMPDIR/perf.script
+>> -	egrep -m1 "^main\+[^ ]*/main\+[^ ]*/UNCOND$"	$TMPDIR/perf.script
+>> +	egrep -m1 "^brstack_bench\+[^ ]*/brstack_foo\+[^ ]*/IND_CALL$"	$TMPDIR/perf.script
+>> +	egrep -m1 "^brstack_foo\+[^ ]*/brstack_bar\+[^ ]*/CALL$"	$TMPDIR/perf.script
+>> +	egrep -m1 "^brstack_bench\+[^ ]*/brstack_foo\+[^ ]*/CALL$"	$TMPDIR/perf.script
+>> +	egrep -m1 "^brstack_bench\+[^ ]*/brstack_bar\+[^ ]*/CALL$"	$TMPDIR/perf.script
+>> +	egrep -m1 "^brstack_bar\+[^ ]*/brstack_foo\+[^ ]*/RET$"		$TMPDIR/perf.script
+>> +	egrep -m1 "^brstack_foo\+[^ ]*/brstsack_bench\+[^ ]*/RET$"	$TMPDIR/perf.script
+> 
+> Small typo here s/brstsack_bench/brstack_bench
 
-The "mentioned systems" are the ones mentioned in the paragraph above:
+With this typo fixed and with the other "-b" fix mentioned:
 
-"to allow systems with drivers built as modules and loaded by user-land to
-probe drivers that were previously deferred."
+Tested-by: James Clark <james.clark@arm.com>
 
-I even gave an example about general purpose distributions that build as
-much as possible as a module. What more info do you think that is missing?
 
-> failing on the current value?  What drivers are causing the long delay
-> here?  No one should be having to wait 10 seconds for a deferred delay
-> on a real system as that feels really wrong.
->
-
-Not really, it depends if the drivers are built-in, built as modules, in
-the initramfs or in the rootfs. A 10 seconds might not be enough if these
-modules are in the root partition and need to wait for this to be mounted
-and udev to load the modules, etc.
-
-Also, it may even be that the module alias is not correct and then users
-have to load them by explicitly have /etc/modules-load.d/ configs and so
-on.
- 
-> Why not fix the drivers that are causing this delay and maybe move them
-> to be async so as to not slow down the whole boot process?
->
-
-Yes, these drivers could be fixed to report a proper module alias or the
-dependencies can be built-in or added to the initramfs and that does not
-change the fact that by default the kernel shouldn't make assumptions
-about when is safe to just timeout instead of -EPROBE_DEFER.
-
-Because with modules the kernel has no way to know when all the modules
-have been already been loaded by user-space or more drivers are going to
-be registered in the future.
-
-Also, that's how probe deferral always worked since the mechanism was
-introduced. It's just recently that the behavior was changed to timeout.
-
-A nice feature of the probe deferral mechanism is that it was simple and
-reliable. Adding a timeout makes it non-deterministic and more fragile IMO.
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+> 
+> I think James was doing some BRBE work here, so probably best if he also gives his review/test tag.
+> 
+> Acked-by: German Gomez <german.gomez@arm.com>
+> 
+>> +	egrep -m1 "^brstack_bench\+[^ ]*/brstack_bench\+[^ ]*/COND$"	$TMPDIR/perf.script
+>> +	egrep -m1 "^brstack\+[^ ]*/brstack\+[^ ]*/UNCOND$"		$TMPDIR/perf.script
+>>  	set +x
+>>  
+>>  	# some branch types are still not being tested:
+>> @@ -88,10 +49,7 @@ test_filter() {
+>>  
+>>  	echo "Testing branch stack filtering permutation ($filter,$expect)"
+>>  
+>> -	gen_test_program "$TEMPDIR/program.c"
+>> -	cc -fno-inline -g "$TEMPDIR/program.c" -o $TMPDIR/a.out
+>> -
+>> -	perf record -o $TMPDIR/perf.data --branch-filter $filter,save_type,u -- $TMPDIR/a.out > /dev/null 2>&1
+>> +	perf record -o $TMPDIR/perf.data --branch-filter $filter,save_type,u -- ${TESTPROG} > /dev/null 2>&1
+>>  	perf script -i $TMPDIR/perf.data --fields brstack | xargs -n1 > $TMPDIR/perf.script
+>>  
+>>  	# fail if we find any branch type that doesn't match any of the expected ones
