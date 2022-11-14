@@ -2,101 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4865A628140
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 474E4628144
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:28:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235969AbiKNN1G convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 14 Nov 2022 08:27:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
+        id S236252AbiKNN21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:28:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236779AbiKNN07 (ORCPT
+        with ESMTP id S235655AbiKNN2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:26:59 -0500
-Received: from mail3.swissbit.com (mail3.swissbit.com [176.95.1.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D732183BD;
-        Mon, 14 Nov 2022 05:26:58 -0800 (PST)
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 410E546276B;
-        Mon, 14 Nov 2022 14:26:56 +0100 (CET)
-Received: from mail3.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 31338460D69;
-        Mon, 14 Nov 2022 14:26:56 +0100 (CET)
-X-TM-AS-ERS: 10.149.2.42-127.5.254.253
-X-TM-AS-SMTP: 1.0 ZXguc3dpc3NiaXQuY29t Y2xvZWhsZUBoeXBlcnN0b25lLmNvbQ==
-X-DDEI-TLS-USAGE: Used
-Received: from ex.swissbit.com (unknown [10.149.2.42])
-        by mail3.swissbit.com (Postfix) with ESMTPS;
-        Mon, 14 Nov 2022 14:26:56 +0100 (CET)
-Received: from sbdeex04.sbitdom.lan (10.149.2.42) by sbdeex04.sbitdom.lan
- (10.149.2.42) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Mon, 14 Nov
- 2022 14:26:55 +0100
-Received: from sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818]) by
- sbdeex04.sbitdom.lan ([fe80::2047:4968:b5a0:1818%9]) with mapi id
- 15.02.1118.009; Mon, 14 Nov 2022 14:26:55 +0100
-From:   =?iso-8859-1?Q?Christian_L=F6hle?= <CLoehle@hyperstone.com>
-To:     "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>
-Subject: [PATCH] mmc: core: Do not require secure trim for discard
-Thread-Topic: [PATCH] mmc: core: Do not require secure trim for discard
-Thread-Index: Adj4LIgVOpRmRBFwTaCe3El9cMIWVQ==
-Date:   Mon, 14 Nov 2022 13:26:55 +0000
-Message-ID: <8a17ed3e0eea4aaa82afd0af3b45bcaf@hyperstone.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.153.3.46]
-Content-Type: text/plain;
-        charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        Mon, 14 Nov 2022 08:28:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEEF6FE3;
+        Mon, 14 Nov 2022 05:28:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65C236109A;
+        Mon, 14 Nov 2022 13:28:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0049C433C1;
+        Mon, 14 Nov 2022 13:28:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668432503;
+        bh=nNGW2Iswzw1r+ZrdtLgk9X55bimO0kAAwJsujwLckSE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pzSzze975EcOZvvpsghnV1MIb+1kUOQwwsRIidu+qX1ykxtU9KmtV+YhZlsuLyq8t
+         LPbR4mCmuTTcAkqenp9lp64RpkqWcybV9TjPEr7LyPewO+/LjjzG4n5gcVUL+RVii9
+         Qh3/rb8Rh5NkI6Iglhyzm7Kn6JHbu74uUpxPzY+9TYPa4Hpbn0qQ85ISaUZHMxJOsU
+         60cfOt+rS3GI2MYFZXtx/mhVJkhrEx7q5xtJb4Ew1q8mTO9xDPowfgv8F2KkISanuu
+         xrfemjeLBOp7Oqqfry6BtNacnS1Ibjfcx9oM4U5CIZ/wvEJFdYVPqS2+mwrK5YIsgf
+         M5TuHmY+sIsmQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ouZV9-0002p3-Mu; Mon, 14 Nov 2022 14:27:51 +0100
+Date:   Mon, 14 Nov 2022 14:27:51 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/14] dt-bindings: phy: qcom,qmp-usb3-dp: fix sc8280xp
+ bindings
+Message-ID: <Y3JCVzJ74YsfcDz4@hovoldconsulting.com>
+References: <20221111092457.10546-1-johan+linaro@kernel.org>
+ <20221111092457.10546-3-johan+linaro@kernel.org>
+ <a22888cd-34cb-3453-0dc2-096da208564c@linaro.org>
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-9.0.1002-27262.007
-X-TMASE-Result: 10--0.573600-10.000000
-X-TMASE-MatchedRID: Pcf9tAO75fBRwtmwuQ5dzvgWrMZvbmeHBGvINcfHqhfkwMCV+cVEaj3v
-        MQJZlrWjIvrftAIhWmLy9zcRSkKatcjCU69DpYLpngIgpj8eDcCEYGTT/umyEtmzcdRxL+xwKra
-        uXd3MZDX4MO0bTOAtKBaUydMlh6GObMc5a0vSadwUWclmpgd+aDrGjyLONApp
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: 34a5a68c-7831-4420-8b3d-899f1a779185-0-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a22888cd-34cb-3453-0dc2-096da208564c@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Discard feature is independent of security features.
-The support check for all trims and discard falsely checked
-for secure trim/discard, but in the discard case this is not
-mandated by the spec.
+On Fri, Nov 11, 2022 at 04:17:29PM +0100, Krzysztof Kozlowski wrote:
+> On 11/11/2022 10:24, Johan Hovold wrote:
+> > The current QMP USB3-DP PHY bindings are based on the original MSM8996
+> > binding which provided multiple PHYs per IP block and these in turn were
+> > described by child nodes.
+> > 
+> 
+> Thank you for your patch. There is something to discuss/improve.
+> 
+> 
+> > +
+> > +maintainers:
+> > +  - Vinod Koul <vkoul@kernel.org>
+> 
+> Maybe you want to add also yourself?
 
-Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
----
- drivers/mmc/core/core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Due to the lack of public documentation for these platforms and the
+amount of work involved in effectively reverse-engineering the
+corresponding details from random vendor-kernel trees, it's probably
+best to leave maintainence with Vinod who at least has access to some
+documentation.
 
-diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-index 95fa8fb1d45f..507005211529 100644
---- a/drivers/mmc/core/core.c
-+++ b/drivers/mmc/core/core.c
-@@ -1761,7 +1761,8 @@ int mmc_erase(struct mmc_card *card, unsigned int from, unsigned int nr,
- 		return -EOPNOTSUPP;
- 
- 	if (mmc_card_mmc(card) && (arg & MMC_TRIM_ARGS) &&
--	    !(card->ext_csd.sec_feature_support & EXT_CSD_SEC_GB_CL_EN))
-+	    !(card->ext_csd.sec_feature_support & EXT_CSD_SEC_GB_CL_EN) &&
-+	    arg != MMC_DISCARD_ARG)
- 		return -EOPNOTSUPP;
- 
- 	if (arg == MMC_SECURE_ERASE_ARG) {
--- 
-2.37.3
+> > +
+> > +description:
+> > +  The QMP PHY controller supports physical layer functionality for a number of
+> > +  controllers on Qualcomm chipsets, such as, PCIe, UFS and USB.
+> > +
+> > +  See also:
+> > +    - include/dt-bindings/dt-bindings/phy/phy.h
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - qcom,sc8280xp-qmp-usb43dp-phy
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 4
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: aux
+> > +      - const: ref
+> > +      - const: com_aux
+> > +      - const: usb3_pipe
+> > +
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> > +  resets:
+> > +    maxItems: 2
+> > +
+> > +  reset-names:
+> > +    items:
+> > +      - const: phy
+> > +      - const: common
+> > +
+> > +  vdda-phy-supply: true
+> > +
+> > +  vdda-pll-supply: true
+> > +
+> > +  "#clock-cells":
+> > +    const: 1
+> > +
+> > +  clock-output-names:
+> > +    items:
+> > +      - const: usb3_pipe
+> > +      - const: dp_link
+> > +      - const: dp_vco_div
+> 
+> Why defining here fixed names? The purpose of this field is to actually
+> allow customizing these - at least in most cases. If these have to be
+> fixed, then driver should just instantiate these clocks with such names,
+> right?
 
-Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
-Managing Director: Dr. Jan Peter Berns.
-Commercial register of local courts: Freiburg HRB381782
+I'm only using these names as documentation of the indexes. The driver
+doesn't use these names, but that's a Linux-specific implementation
+detail.
 
+I noticed that several bindings leave the clock indexes unspecified, or
+have header files defining some or all of them. I first added a QMP
+header but that seemed like overkill, especially if we'd end up with
+one header per SoC (cf. the GCC headers) due to (known and potential)
+platform differences.
+
+On the other hand reproducing this list in each node is admittedly a bit
+redundant.
+
+Shall I add back a shared header for all PHYs handled by this driver
+(another implementation detail) even if this could eventually lead to
+describing clocks not supported by a particular SoC (so such constraints
+would still need to be described by the binding somehow):
+
+	/* QMP clocks */
+	#define QMP_USB3_PIPE_CLK	0
+	#define QMP_DP_LINK_CLK		1
+	#define QMP_DP_VCO_DIV_CLK	2
+
+Note that for SC8280XP this list may later get extended with clocks for
+USB4 (once we understand how to use them), but those would not apply to
+the older USB3-DP PHYs, so we'd still need to describe that in the
+binding somehow.
+
+Johan
