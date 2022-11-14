@@ -2,199 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2460628498
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4956284A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236464AbiKNQFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:05:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
+        id S237319AbiKNQHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:07:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233300AbiKNQFE (ORCPT
+        with ESMTP id S237310AbiKNQHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:05:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AE19FD8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:05:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A087E61162
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 16:05:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51A9DC433D6;
-        Mon, 14 Nov 2022 16:05:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668441902;
-        bh=WrMAiJWAGjL/5kxc67SHz6ZQmpO1PjsLIpr9WTxGv88=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=qeTsKhN70k17i1CzzIWPTVnTfEhhwZWla/47uJoZCXzwrPj82Qmcl48kGlN8xRgdy
-         bBzac62KJil7qgkrWD3KfleMj4Ltawu9hw+oHfR+4fuYY1uofG/pY4ZMn36MOYlwQd
-         BDtVh1DNJc9OUiX1DP/VkWNDUHv65RW6HyEbg71GzmF7m5taS/k0zlo67fGCrLtWbA
-         FQFJngvaP99NXgqybyJuKCdxn7hiHqnYoBloDnoW+il9n/+lheIde4U8cxcA81UtHW
-         444pZzcs3CauxpPAy94w0HVoANCMjTTYj2GMbxB9FMtzWWBp8VWNObTAeYIXhArBbu
-         w39uNQdkWqb5A==
-Message-ID: <ce324279-bd2e-1595-0cdd-f1fdaf549549@kernel.org>
-Date:   Tue, 15 Nov 2022 00:05:00 +0800
+        Mon, 14 Nov 2022 11:07:01 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E57E21E27;
+        Mon, 14 Nov 2022 08:06:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668442019; x=1699978019;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kTFRt27GKYH3jdgFcHIV7XHhic+olXeSBwmXgyprWgo=;
+  b=Q4tS7jIJY+YGswb6lNn1NMSRKaD/zYiRJ6/LYTj5dThJQgEE7podpZiP
+   7NF9gjKZzIgjxo9kZH4i0LWdVT2H/WotRlO4YVOX9t23nLWjcO8rZo70h
+   ZisBG1YW6Snor7Vr89brFyPywk8dueB3m23x5Jp+bJ439KoNLSbud7px2
+   mKIHl+f43HCJGqjf853s05u99qK2E/UtxrHrZlfkJt5m+EDfs1tMTK4/F
+   lcC1bkbliP5OWL8qqlYN3/CDKBh2u7wMDwe3EotvVyG2oTrwmldix4zdC
+   Z/Bpgtf6wM2gpeSDQh+XVUB90yLT4r1ePEym9NpoWgUX/vvUIC0hxmjaZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="299526216"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="299526216"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 08:06:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="669709474"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="669709474"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 14 Nov 2022 08:06:24 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oubyX-00CEzk-2t;
+        Mon, 14 Nov 2022 18:06:21 +0200
+Date:   Mon, 14 Nov 2022 18:06:21 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Andrew Davis <afd@ti.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] Rename DTB overlay source files
+Message-ID: <Y3JnfSUpBfATkD69@smile.fi.intel.com>
+References: <20221024173434.32518-1-afd@ti.com>
+ <CAL_JsqJxgVwsjKnkCEkZeoSsDgaRD+DVPkHRBc2SrcSq69PBNw@mail.gmail.com>
+ <Y26lDEtiG4KFzc91@smile.fi.intel.com>
+ <e5ce57b2-4557-2dcb-fb3a-71e2acae4502@ti.com>
+ <Y3DhIO7H9mfRpe3z@smile.fi.intel.com>
+ <Y3Dk0HJAPuq64tKe@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2 1/2] f2fs: fix to enable compress for newly created
- file if extension matches
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Sheng Yong <shengyong@oppo.com>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20221111100830.953733-1-shengyong@oppo.com>
- <Y272nVjzr6CynmyQ@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Y272nVjzr6CynmyQ@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3Dk0HJAPuq64tKe@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/12 9:27, Jaegeuk Kim wrote:
-> Does thes make sense?
-
-Jaegeuk,
-
-Could you please send modified patches to mailing list, otherwise,
-I can not add comments on specified line.
-
-Thanks,
-
+On Sun, Nov 13, 2022 at 02:36:33PM +0200, Andy Shevchenko wrote:
+> On Sun, Nov 13, 2022 at 02:20:48PM +0200, Andy Shevchenko wrote:
+> > On Fri, Nov 11, 2022 at 03:05:20PM -0600, Andrew Davis wrote:
+> > > On 11/11/22 1:39 PM, Andy Shevchenko wrote:
+> > > > On Wed, Oct 26, 2022 at 09:11:21AM -0500, Rob Herring wrote:
+> > > > > On Mon, Oct 24, 2022 at 12:34 PM Andrew Davis <afd@ti.com> wrote:
+> > > > > > 
+> > > > > > Hello all,
+> > > > > > 
+> > > > > > This is a series based on my patch here[0]. As suggested by Rob
+> > > > > > I've resurrected Frank's patch and appended it to mine as a series.
+> > > > > > 
+> > > > > > First patch here is my original patch, 3rd is Frank's patch but with
+> > > > > > the unittest changes pulled out into the 2nd patch. That was re-worked
+> > > > > > moving the source building macro into scripts/Makefile.lib.
+> > > > > > 
+> > > > > > Patches 4, 5, and 6 are an attempt at renaming all the existing DTB
+> > > > > > overlays. Split out by platform so they could be taken by platform
+> > > > > > maintainers or if easier ACK'd here and taken all together.
+> > > > > > 
+> > > > > > This should cover all the DTB overlays so we can remove the old .dts
+> > > > > > rule for overlays and make .dtso the only supported way, let me know
+> > > > > > if we want that this cycle and I can post that too.
+> > > > > > 
+> > > > > > Thanks,
+> > > > > > Andrew
+> > > > > > 
+> > > > > > Changes from v1[1]:
+> > > > > >   - Added patch to rename pi433 overlay.
+> > > > > >   - Cleaned wording on patch 4-6.
+> > > > > >   - Collected some ACKs
+> > > > > > 
+> > > > > > [0] https://www.spinics.net/lists/kernel/msg4548509.html
+> > > > > > [1] https://www.spinics.net/lists/arm-kernel/msg1020165.html
+> > > > > > 
+> > > > > > Andrew Davis (6):
+> > > > > >    kbuild: Allow DTB overlays to built from .dtso named source files
+> > > > > >    kbuild: Allow DTB overlays to built into .dtso.S files
+> > > > > >    arm64: dts: freescale: Rename DTB overlay source files from .dts to
+> > > > > >      .dtso
+> > > > > >    arm64: dts: renesas: Rename DTB overlay source files from .dts to
+> > > > > >      .dtso
+> > > > > >    arm64: dts: xilinx: Rename DTB overlay source files from .dts to .dtso
+> > > > > >    staging: pi433: overlay: Rename overlay source file from .dts to .dtso
+> > > > > > 
+> > > > > > Frank Rowand (1):
+> > > > > >    of: overlay: rename overlay source files from .dts to .dtso
+> > > > > 
+> > > > > I've applied patches 1-3 and 7. I'll send a PR for the branch to the
+> > > > > platform maintainers after a few days in linux-next.
+> > > > 
+> > > > The patch
+> > > > 
+> > > > commit 941214a512d8c80d47e720c17ec17e8539175e93
+> > > > Author: Andrew Davis <afd@ti.com>
+> > > > Date:   Mon Oct 24 12:34:29 2022 -0500
+> > > > 
+> > > >      kbuild: Allow DTB overlays to built into .dtbo.S files
+> > > > 
+> > > > broke the build reproducibility / no-op builds.
+> > > > 
+> > > > Before:
+> > > >    2+ execution of `make` on non-changed tree did nothing
+> > > > 
+> > > > Now:
+> > > >    Each run of `make` (even without a single bit changed) restarts vmlinux
+> > > >    rebuild.
+> > > > 
+> > > > Please, revert or fix.
+> > > > 
+> > > 
+> > > I do not see this behavior. What config are you using?
+> > > 
+> > > Not sure how this patch could be the root cause, it only adds
+> > > a build target/rule, but doesn't actually use it anywhere yet..
+> > 
+> > For your reference I started with this one [1].
+> > 
+> > When I bisected, I just answered with defaults on whatever `make` told me at
+> > the configuration stage.
+> > 
+> > The actual `make` command I used:
+> > 
+> > 	make O=/path/to/the/result W=1 C=1 CF=-D__CHECK_ENDIAN__ -j64
+> > 
+> > But there is nothing that can affect the described issue.
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev-test&id=608460dfae20b9d23aa222f7448710a086778222
-> https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev-test&id=962379487b5cb9f3b85ea367b130c2c6ca584edf
-> 
-> Second one is needed to address build error.
-> 
-> On 11/11, Sheng Yong wrote:
->> If compress_extension is set, and a newly created file matches the
->> extension, the file could be marked as compression file. However,
->> if inline_data is also enabled, there is no chance to check its
->> extension since f2fs_should_compress() always returns false.
->>
->> This patch moves set_compress_inode(), which do extension check, in
->> f2fs_should_compress() to check extensions before setting inline
->> data flag.
->>
->> Fixes: 7165841d578e ("f2fs: fix to check inline_data during compressed inode conversion")
->> Signed-off-by: Sheng Yong <shengyong@oppo.com>
->> ---
->>   fs/f2fs/namei.c | 27 +++++++++++++--------------
->>   1 file changed, 13 insertions(+), 14 deletions(-)
->>
->> ---
->> v1->v2: add filename parameter for f2fs_new_inode, and move
->>          set_compress_inode into f2fs_new_inode
->>
->> diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
->> index e104409c3a0e5..36e251f438568 100644
->> --- a/fs/f2fs/namei.c
->> +++ b/fs/f2fs/namei.c
->> @@ -22,8 +22,12 @@
->>   #include "acl.h"
->>   #include <trace/events/f2fs.h>
->>   
->> +static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
->> +						const unsigned char *name);
->> +
->>   static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
->> -						struct inode *dir, umode_t mode)
->> +						struct inode *dir, umode_t mode,
->> +						const char *name)
->>   {
->>   	struct f2fs_sb_info *sbi = F2FS_I_SB(dir);
->>   	nid_t ino;
->> @@ -119,6 +123,8 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
->>   		if ((F2FS_I(dir)->i_flags & F2FS_COMPR_FL) &&
->>   					f2fs_may_compress(inode))
->>   			set_compress_context(inode);
->> +		if (name)
->> +			set_compress_inode(sbi, inode, name);
->>   	}
->>   
->>   	/* Should enable inline_data after compression set */
->> @@ -293,8 +299,7 @@ static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
->>   	unsigned char noext_cnt = F2FS_OPTION(sbi).nocompress_ext_cnt;
->>   	int i, cold_count, hot_count;
->>   
->> -	if (!f2fs_sb_has_compression(sbi) ||
->> -			F2FS_I(inode)->i_flags & F2FS_NOCOMP_FL ||
->> +	if (F2FS_I(inode)->i_flags & F2FS_NOCOMP_FL ||
->>   			!f2fs_may_compress(inode) ||
->>   			(!ext_cnt && !noext_cnt))
->>   		return;
->> @@ -326,10 +331,6 @@ static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
->>   	for (i = 0; i < ext_cnt; i++) {
->>   		if (!is_extension_exist(name, ext[i], false))
->>   			continue;
->> -
->> -		/* Do not use inline_data with compression */
->> -		stat_dec_inline_inode(inode);
->> -		clear_inode_flag(inode, FI_INLINE_DATA);
->>   		set_compress_context(inode);
->>   		return;
->>   	}
->> @@ -352,15 +353,13 @@ static int f2fs_create(struct user_namespace *mnt_userns, struct inode *dir,
->>   	if (err)
->>   		return err;
->>   
->> -	inode = f2fs_new_inode(mnt_userns, dir, mode);
->> +	inode = f2fs_new_inode(mnt_userns, dir, mode, dentry->d_name.name);
->>   	if (IS_ERR(inode))
->>   		return PTR_ERR(inode);
->>   
->>   	if (!test_opt(sbi, DISABLE_EXT_IDENTIFY))
->>   		set_file_temperature(sbi, inode, dentry->d_name.name);
->>   
->> -	set_compress_inode(sbi, inode, dentry->d_name.name);
->> -
->>   	inode->i_op = &f2fs_file_inode_operations;
->>   	inode->i_fop = &f2fs_file_operations;
->>   	inode->i_mapping->a_ops = &f2fs_dblock_aops;
->> @@ -689,7 +688,7 @@ static int f2fs_symlink(struct user_namespace *mnt_userns, struct inode *dir,
->>   	if (err)
->>   		return err;
->>   
->> -	inode = f2fs_new_inode(mnt_userns, dir, S_IFLNK | S_IRWXUGO);
->> +	inode = f2fs_new_inode(mnt_userns, dir, S_IFLNK | S_IRWXUGO, NULL);
->>   	if (IS_ERR(inode))
->>   		return PTR_ERR(inode);
->>   
->> @@ -760,7 +759,7 @@ static int f2fs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
->>   	if (err)
->>   		return err;
->>   
->> -	inode = f2fs_new_inode(mnt_userns, dir, S_IFDIR | mode);
->> +	inode = f2fs_new_inode(mnt_userns, dir, S_IFDIR | mode, NULL);
->>   	if (IS_ERR(inode))
->>   		return PTR_ERR(inode);
->>   
->> @@ -817,7 +816,7 @@ static int f2fs_mknod(struct user_namespace *mnt_userns, struct inode *dir,
->>   	if (err)
->>   		return err;
->>   
->> -	inode = f2fs_new_inode(mnt_userns, dir, mode);
->> +	inode = f2fs_new_inode(mnt_userns, dir, mode, NULL);
->>   	if (IS_ERR(inode))
->>   		return PTR_ERR(inode);
->>   
->> @@ -856,7 +855,7 @@ static int __f2fs_tmpfile(struct user_namespace *mnt_userns, struct inode *dir,
->>   	if (err)
->>   		return err;
->>   
->> -	inode = f2fs_new_inode(mnt_userns, dir, mode);
->> +	inode = f2fs_new_inode(mnt_userns, dir, mode, NULL);
->>   	if (IS_ERR(inode))
->>   		return PTR_ERR(inode);
->>   
->> -- 
->> 2.25.1
+> Actually, O= might affect which Makefile is used and how.
+> The C=, CF= are sparse flags, W= is just warning level.
+
+As far as I can tell right now it's the OF_UNITTEST on x86_64 that makes the
+above mentioned patch to be a culprit. Not sure if on ARM / ARM64 you can
+reproduce that. And it's really strange nobody reported this for a week+.
+
+Whatever, I'm open for the suggestions and material to test.
+
+> > [1]: https://p.defau.lt/?ZSOdGnNxF9v9AQtrfDo_KQ
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
