@@ -2,196 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1246275C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 07:06:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2926275C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 07:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235750AbiKNGGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 01:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
+        id S233598AbiKNGLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 01:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235376AbiKNGGg (ORCPT
+        with ESMTP id S235376AbiKNGLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 01:06:36 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D76C646F;
-        Sun, 13 Nov 2022 22:06:33 -0800 (PST)
-X-UUID: ce2fa89a4ba345e88277f7cf2f37af5c-20221114
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=o0s5vKCmfifkTZFvoESF62jgP/ZALk06Zen4Sv72Z3U=;
-        b=HWDg7yZFdqg/RDTgfCs1Vm7JqP6DBm6GwmEPpDcnpMqpPMYUF2B9P6aMTuZ6yUrfSGmBxAgL2uAIjvd+N8UMdxKMuoNCwaXBDKDEwpnW7zJM+/UtZE//oghyZ0W/RL2P337M7uKq0p94cIk9re/ZEV5nF1tu9XN2CzLxKmMR/NU=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.13,REQID:91df90b7-4dbf-41f4-b1ae-5e62d65af3c7,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:d12e911,CLOUDID:1a916b73-e2f1-446d-b75e-e1f2a8186d19,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: ce2fa89a4ba345e88277f7cf2f37af5c-20221114
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 382519668; Mon, 14 Nov 2022 14:06:28 +0800
-Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 14 Nov 2022 14:06:27 +0800
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (172.21.101.239)
- by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Mon, 14 Nov 2022 14:06:27 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lD8HNk+tWvrh/WUl/WZTjANvWtOxRbqrt4dBC6dDiaEjxbScYjcXWiphBtjdBJw8h/l3dHHtBIpQn5BknPVjCc9DrgzLyyi0sIo5VHp1ZJ9DrX9gxIvVbCwoFEkcLCIf56nfwopIj14FyzLDfiLF41wnM1fsdyHB0B5BnGfuOkO7cgxW3F8VNSt4eSeMA+45DvWv4OF7238GhRH0W/6zNDa31F049gzgrmdI7DBUDa+SsmOW4W8UBMYltAx4mtb0RMnFFJxIwt5PwUhS0rMt3ofQb31FZVZX5LJjYy3PL1WdPdhqrAf78GWRBTOZgbQLXczsFBT+82MvFYZEv7ebFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o0s5vKCmfifkTZFvoESF62jgP/ZALk06Zen4Sv72Z3U=;
- b=lJG/b2MwxMiQIVRXr8IMiEz8iC53jrw3WCSHmDZ0pmNehZNV8ZGMXraP1MhT+7WMSEPKYFLt7alDAN5jnjcohyuDu1KxnwdI2yrRyksEsY8es5WGZe6UuiZORZMtMLPaiXmO9y3LL54QFs/1Be9xVCrbBesjsVBS2wd3di6nlzt4IdkYtW2YniOwRrucl8W+PFgRYBn019lqrMD9wRFBOWChFLqzU8ESi0IqXi/7U8kCs3lfeTA2mZBJdC1f1bEEq9LpxCNWbljfyNuQEwXJO45a8bcZALP07FZS0tk8xuesYiR5rAeZ4xEaRLlvOz/JvwN1P9jynnJ9qvfBHMuo5Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o0s5vKCmfifkTZFvoESF62jgP/ZALk06Zen4Sv72Z3U=;
- b=gdfHA0vEIMtjOW+6ZofoUiWTsL3VRMhv1wz/xZ89+r9Ttr3Qd6qm+DSGg0pvjLZSL6lyY7rUbWRUKb4V0+FdYehaD6zW5S4xuFh/0P3dEo+mNS60S2C4SIC2soTfp2V+36vsYdaChyjlA+IrDQSO9dVVvsP5ug+i9oO3oQ1gfTs=
-Received: from KL1PR03MB5062.apcprd03.prod.outlook.com (2603:1096:820:1a::22)
- by SI2PR03MB5514.apcprd03.prod.outlook.com (2603:1096:4:125::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
- 2022 06:06:25 +0000
-Received: from KL1PR03MB5062.apcprd03.prod.outlook.com
- ([fe80::9585:3a04:b796:b696]) by KL1PR03MB5062.apcprd03.prod.outlook.com
- ([fe80::9585:3a04:b796:b696%5]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
- 06:06:25 +0000
-From:   =?utf-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= 
-        <Chunfeng.Yun@mediatek.com>
-To:     "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux@fw-web.de" <linux@fw-web.de>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "kishon@ti.com" <kishon@ti.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "lorenzo@kernel.org" <lorenzo@kernel.org>,
-        "frank-w@public-files.de" <frank-w@public-files.de>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        =?utf-8?B?Smlhbmp1biBXYW5nICjnjovlu7rlhpsp?= 
-        <Jianjun.Wang@mediatek.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        Ryder Lee <Ryder.Lee@mediatek.com>,
-        =?utf-8?B?Qm8gSmlhbyAo54Sm5rOiKQ==?= <Bo.Jiao@mediatek.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH v4 03/11] dt-bindings: usb: mtk-xhci: add support for
- mt7986
-Thread-Topic: [PATCH v4 03/11] dt-bindings: usb: mtk-xhci: add support for
- mt7986
-Thread-Index: AQHY9ndewXwhorL9bUuTO8J9g7ABbK498YQA
-Date:   Mon, 14 Nov 2022 06:06:25 +0000
-Message-ID: <dc8975241d4c20743417d94e871f90425da06035.camel@mediatek.com>
-References: <20221112091518.7846-1-linux@fw-web.de>
-         <20221112091518.7846-4-linux@fw-web.de>
-In-Reply-To: <20221112091518.7846-4-linux@fw-web.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: KL1PR03MB5062:EE_|SI2PR03MB5514:EE_
-x-ms-office365-filtering-correlation-id: 355db9f5-54ad-4159-661e-08dac6065cd0
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: s0SNjRQaVGGbPELFDO3p229B+Yj1PutRZ5LfGSX5oQo7c59LQgnxb8i7jtQrgwnrLAZxYHbBDRAnoXswiNN2+2Jv4lHTGcDfml1Rldlz4gdtST7m8KY9XCCmct7u71iLn5yx5EAGrH5w931WYwKaN27+NWEPGWXilicL8dKOYiyck8+CCqvW/zlsNKJJcQvCvXO/RuoN1LviqvpoFgtZ7MJG3p/yppW7oHqwj0H9t10tO/k+rFecRX6KIA9e8v2/wMczuo9xBEJOo+pSxXLJiCAOWcGcZTSkP3FE8XyEMFu0pP4oo/XwBbVUBfAtSH4P98ANZbmOtQC2ilZiAoC9hPvwwH/JWtF2jSeBQO/z0ofhfpkwlC7d6IZRXnxWuyS/igzzOq+YisIW5fnJSz8gIFBE1RT79HERZzLu3DjjkAiWeF6ZeYaclReO1fbwNS184Jm3Nk2WFiBf5BwptWO4SjIzc1qRvjnAJ4H5GJ+SvecrdAipMNNlZ8iwliYr7zbVIhkoYjbMuYKoVeoclDc1fiFA9pyK06wDv1tLKi63l7wSuUXN2Z9X5bYb4Wg/xXfq2gHX9oz33dzDT6ayWiVPvfsqB86Joi2jQNnsFSc9v2roqJudDe6mmgNuGNIYYAicxhsbWVYlfKfzQ5f5xbKmwJ2A0bxVXCEu7JVH1bSvAl4WuiPZfDvfQC/ZOYz4C+QT5+fyUYwUpvGF7lNYjWP35IdyBTvyRt3tWpNhSjOLrVAwvuauHFSMTliZ4aC1IpaGOoR2KsBTRW33yb6TVk4kyrsy4RACHfUn91lFOlioTuvOeh339Ak1qAlVS7uBV73/x7jp3CfMKm1VMf8lTAUOMw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR03MB5062.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(366004)(346002)(376002)(451199015)(2616005)(8936002)(4744005)(38070700005)(478600001)(6486002)(5660300002)(110136005)(54906003)(2906002)(122000001)(316002)(85182001)(71200400001)(36756003)(7416002)(86362001)(66446008)(186003)(76116006)(66476007)(66946007)(66556008)(41300700001)(4326008)(8676002)(91956017)(64756008)(26005)(6512007)(38100700002)(4001150100001)(6506007)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?d0RkdS94R0NWeEY2RXNOazhnUnFGUHczdHg5VGxGNmVsbmdTUUp6OXJDaHE2?=
- =?utf-8?B?bzcxVUw0aTkyU1VwOFRUWUJUVCtOK2lQbHZOZk9MVkNwTWhRRzRKejJobWJS?=
- =?utf-8?B?Ujdqb1VQSkRjN0I0eE1TL21sNy9LZXNHMnp2S3ZsdDZXUWlvbWpGamxKQ0VF?=
- =?utf-8?B?RkFmZVJmNmltNlNBZ1o1dUJNTnAzWTdkcXp4aTF6UE5MbER5UHIwZiswZmtE?=
- =?utf-8?B?amtlOVY2TlhKRnlGSERQRHpGdE5yRzZUbkFTRHgzQkE4VGZyc3A0RkxGWlRn?=
- =?utf-8?B?ajE5ZHFlYitIMk9jTXUzN2JRYVVybzFMNXhLZHNhSXZHcFFmeWVicWl5bEU5?=
- =?utf-8?B?Rm9zVUtRaFdCV0ZrRVpJMGhXQUN2M25CRlEybkV6czZUU20rQnJRWTQ2MHVI?=
- =?utf-8?B?czlxZlQzUmZydTUzeDJFR1N2NFhIdkxFbzNKa1NMS2Q1RjgyMzRKVGFWZnMw?=
- =?utf-8?B?YlJFTXg0blNjVGE3TDZwd2p1d0RFVDV5cHljRW1lNS9BTmlqTUhIdnBYRHNj?=
- =?utf-8?B?ZER3RVZrdlJEcGRDRVQybDViUm4vQ0ZrSHRzOXdxUFgrWGlwNE5tMlNnOG8r?=
- =?utf-8?B?T0VEMDNoM2dKcXNyUEhRSzErQzErTXd6S3VMK1lGZUV5RG1STThBRWVDWGxv?=
- =?utf-8?B?VXdEays0M2NCazBSK0tmazBXYllkWE00eTd5dk8wS3JFVWZCV1J5T1QycU9U?=
- =?utf-8?B?RHBObEFYMDV3WExhQVI4d3JQY05CVUVsdzFWWDZvdWR3ZVAveWFEcWI0STY1?=
- =?utf-8?B?SVFET21XSFdNYzRvQ1VEc1I1VG1xU3psNTk5ZE44aWwwSTBZMjcvM05NOHdp?=
- =?utf-8?B?dG5jQllpblRoNnZ2QUx6Z1h1Q1lxUWFJS09DWkNiaEZ3Qkl5UUUzcTdCL3cr?=
- =?utf-8?B?dDhUOXRLaWNxcjlXbnlycUJUZlhXa0czUS9CcWg5dmJGRXBSVzZvdHlZZnhD?=
- =?utf-8?B?dUFSNUdUbFo5bHorTjN3d1kxcUpXcllJZ3ljVGxQaG5ib3pIOUtydm44WFk3?=
- =?utf-8?B?SVBlMmk2ZXdWaG85cjRvOVNWTW1kRnU0TG1BNDRDMlAxcXZwVXl0Y3MxUG9y?=
- =?utf-8?B?UytJb2EyTXlBUUd6VnBlWEVGUzByT1RIZklOYWpNYjRzV1dOMU4rNGR1ZTRN?=
- =?utf-8?B?b0FWZ2dLZXlYVXJYZk5MVG1QNk1tSm5KU1grTHVOem5vU2R4d21UUTd3NkVK?=
- =?utf-8?B?MzZKbkZhUWxNME01Q0F1NGIvaWFCWWJ1ckkyem5NWjQ2d05OT0hjNWtiTGt6?=
- =?utf-8?B?R3I2SEFodlIzb3JZMGg3WmR5MjJ4bmFHZFYzcE9vMWJVcHczUGpHZHFUYVlO?=
- =?utf-8?B?dXRXa1dYUHV6YTdvcS8yRjBwOEFpZDl2eDl2ZGVqclNZcEIxRUg5aVVZR2tm?=
- =?utf-8?B?ckRkd1BnVnNXSzczS3NkTlRCeHBoT1hKZDEva054aHJiU2dsMzhnUllueW0r?=
- =?utf-8?B?K2hhVlZScXQ2K1hBOVBSeWZjdW9FUjg1ays3QW5lUUJINDJoSlRCM3loSCsx?=
- =?utf-8?B?Ync1aW9GMUFFenpQaVNIY3RpTjBSOHFLQ3BhYmdjTm1OSFhIK2p5YWhPZEZW?=
- =?utf-8?B?em95NG13TnNtazRsWFJja3hlRis2Q0Q2aGM3dm9qQU1lTnhOL0lqTGM4NW84?=
- =?utf-8?B?Z0lLOGRYZmtzSWtFUVM2VEJ1bHRRVzJ3NnF4T3I0SGxvdHhlelprbk10SnhL?=
- =?utf-8?B?eDdnUFRQL2FqdDJZN1lweDhQdG4xUGEvQ2xNekJFWTk4Y2Q5MFAycG0wejJx?=
- =?utf-8?B?cFZ3TkVWRmViQmtuSUR1SUJ4dnJiQUo2TGd2cC9GRGhaVW1xaUdxZE4wVHhv?=
- =?utf-8?B?Q1BaR0VNOEdSTWtDZXJmdnNWVHlwWWl0djEyK1ZhbUpnTXBZRXN5TktNckVK?=
- =?utf-8?B?dVZsTjBQTGxjYTV1OUxZSWp4UjFBN1NYNUNiRHl0TnBFT1lTNHB4NHJtZnpv?=
- =?utf-8?B?b3hQNWZ5S3k1ZVkyUHFrZ2NOanRWMXB5YitXV3BJVFBBbnlqbGJIM0JsQ1BX?=
- =?utf-8?B?T0lxdEV6RVBHeTF1YlhadFZSQXYvVTUzUlhHKzZlMExrM3c5aitrQ2JvYkhZ?=
- =?utf-8?B?dnJUZDFJaVJGUmNCN1JtZHhUWUxWaU5RRVA1SVlleUNYdk02N3hMNk80akFy?=
- =?utf-8?B?VkhTTDl3bHV2UUdGbS9pV0h2dlM4alV6R2d5MFUrbERoVFhFempKanRzT1ND?=
- =?utf-8?B?RUE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6CFC0C2D2D24A54389A430E32D095F0E@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 14 Nov 2022 01:11:19 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3250CB03
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 22:11:16 -0800 (PST)
+Received: from loongson.cn (unknown [111.9.175.10])
+        by gateway (Coremail) with SMTP id _____8DxvrcD3HFjatAGAA--.15738S3;
+        Mon, 14 Nov 2022 14:11:15 +0800 (CST)
+Received: from [10.136.12.12] (unknown [111.9.175.10])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxn+AB3HFj500SAA--.49591S3;
+        Mon, 14 Nov 2022 14:11:15 +0800 (CST)
+Subject: Re: [PATCH v2 3/5] LoongArch: Add kretprobe support
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <1664326209-13995-1-git-send-email-yangtiezhu@loongson.cn>
+ <1664326209-13995-4-git-send-email-yangtiezhu@loongson.cn>
+ <CAAhV-H7N-N2400ivdczJrfJ9Ht12JUbOADxExF87wVPFEj_c_g@mail.gmail.com>
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <dd3fc4ab-6bbb-2fa5-8d5e-b8206b42518c@loongson.cn>
+Date:   Mon, 14 Nov 2022 14:11:13 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR03MB5062.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 355db9f5-54ad-4159-661e-08dac6065cd0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2022 06:06:25.5455
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MsH/uV2jKicTnuUR+6hvGcpgHSwGtyrYWHY1HsSk0B5WSdfohlmiuAeF/I4alzr+GbI8dgfkXkeBZ2W9r+oIfdRBN3QxmeKPlRX536grV8Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR03MB5514
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAAhV-H7N-N2400ivdczJrfJ9Ht12JUbOADxExF87wVPFEj_c_g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8Cxn+AB3HFj500SAA--.49591S3
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3XFy5GrWkXFW3Xr1xArykuFg_yoW7ur45pF
+        WkArn5ur409rn2vr93t3yFgFyFqr1kXanxWFyxJrWrKrWUWr18Xr1fCr9rJF4fKw45Xr40
+        qr1rGrWakFZxJ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
+        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
+        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwI
+        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
+        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
+        C2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU25EfUUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU2F0LCAyMDIyLTExLTEyIGF0IDEwOjE1ICswMTAwLCBGcmFuayBXdW5kZXJsaWNoIHdyb3Rl
-Og0KPiBGcm9tOiBGcmFuayBXdW5kZXJsaWNoIDxmcmFuay13QHB1YmxpYy1maWxlcy5kZT4NCj4g
-DQo+IEFkZCBjb21wYXRpYmxlIHN0cmluZyBmb3IgbXQ3OTg2Lg0KPiANCj4gU2lnbmVkLW9mZi1i
-eTogRnJhbmsgV3VuZGVybGljaCA8ZnJhbmstd0BwdWJsaWMtZmlsZXMuZGU+DQo+IC0tLQ0KPiAg
-RG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9tZWRpYXRlayxtdGsteGhjaS55
-YW1sIHwgMSArDQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykNCj4gDQo+IGRpZmYg
-LS1naXQgYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL21lZGlhdGVrLG10
-ay0NCj4geGhjaS55YW1sIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9t
-ZWRpYXRlayxtdGstDQo+IHhoY2kueWFtbA0KPiBpbmRleCA5Mzk2MjM4NjdhNjQuLmEzYzM3OTQ0
-YzYzMCAxMDA2NDQNCj4gLS0tIGEvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Vz
-Yi9tZWRpYXRlayxtdGsteGhjaS55YW1sDQo+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
-ZS9iaW5kaW5ncy91c2IvbWVkaWF0ZWssbXRrLXhoY2kueWFtbA0KPiBAQCAtMjgsNiArMjgsNyBA
-QCBwcm9wZXJ0aWVzOg0KPiAgICAgICAgICAgIC0gbWVkaWF0ZWssbXQ3NjIyLXhoY2kNCj4gICAg
-ICAgICAgICAtIG1lZGlhdGVrLG10NzYyMy14aGNpDQo+ICAgICAgICAgICAgLSBtZWRpYXRlayxt
-dDc2MjkteGhjaQ0KPiArICAgICAgICAgIC0gbWVkaWF0ZWssbXQ3OTg2LXhoY2kNCj4gICAgICAg
-ICAgICAtIG1lZGlhdGVrLG10ODE3My14aGNpDQo+ICAgICAgICAgICAgLSBtZWRpYXRlayxtdDgx
-ODMteGhjaQ0KPiAgICAgICAgICAgIC0gbWVkaWF0ZWssbXQ4MTg2LXhoY2kNCg0KUmV2aWV3ZWQt
-Ynk6IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCg0KVGhhbmtzDQo=
+On 2022/11/14 下午12:43, Huacai Chen wrote:
+
+> Hi, Tiezhu and Jinyang,
+>
+> On Wed, Sep 28, 2022 at 8:50 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>> Use the generic kretprobe trampoline handler to add kretprobe
+>> support for LoongArch.
+>>
+>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>> ---
+>>   arch/loongarch/Kconfig                     |  1 +
+>>   arch/loongarch/kernel/Makefile             |  2 +-
+>>   arch/loongarch/kernel/kprobes.c            | 24 ++++++++
+>>   arch/loongarch/kernel/kprobes_trampoline.S | 97 ++++++++++++++++++++++++++++++
+>>   4 files changed, 123 insertions(+), 1 deletion(-)
+>>   create mode 100644 arch/loongarch/kernel/kprobes_trampoline.S
+>>
+>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+>> index 8debd70..877be6a 100644
+>> --- a/arch/loongarch/Kconfig
+>> +++ b/arch/loongarch/Kconfig
+>> @@ -95,6 +95,7 @@ config LOONGARCH
+>>          select HAVE_IRQ_EXIT_ON_IRQ_STACK
+>>          select HAVE_IRQ_TIME_ACCOUNTING
+>>          select HAVE_KPROBES
+>> +       select HAVE_KRETPROBES
+>>          select HAVE_MOD_ARCH_SPECIFIC
+>>          select HAVE_NMI
+>>          select HAVE_PCI
+>> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+>> index ff98d8a..48f50607 100644
+>> --- a/arch/loongarch/kernel/Makefile
+>> +++ b/arch/loongarch/kernel/Makefile
+>> @@ -33,6 +33,6 @@ obj-$(CONFIG_UNWINDER_PROLOGUE) += unwind_prologue.o
+>>
+>>   obj-$(CONFIG_PERF_EVENTS)      += perf_event.o perf_regs.o
+>>
+>> -obj-$(CONFIG_KPROBES)          += kprobes.o
+>> +obj-$(CONFIG_KPROBES)          += kprobes.o kprobes_trampoline.o
+>>
+>>   CPPFLAGS_vmlinux.lds           := $(KBUILD_CFLAGS)
+>> diff --git a/arch/loongarch/kernel/kprobes.c b/arch/loongarch/kernel/kprobes.c
+>> index c11f6e0..ca3f1dc 100644
+>> --- a/arch/loongarch/kernel/kprobes.c
+>> +++ b/arch/loongarch/kernel/kprobes.c
+>> @@ -306,6 +306,30 @@ int __init arch_populate_kprobe_blacklist(void)
+>>                                           (unsigned long)__irqentry_text_end);
+>>   }
+>>
+>> +/* Called from __kretprobe_trampoline */
+>> +void __used *trampoline_probe_handler(struct pt_regs *regs)
+>> +{
+>> +       return (void *)kretprobe_trampoline_handler(regs, NULL);
+>> +}
+>> +NOKPROBE_SYMBOL(trampoline_probe_handler);
+>> +
+>> +void arch_prepare_kretprobe(struct kretprobe_instance *ri,
+>> +                           struct pt_regs *regs)
+>> +{
+>> +       ri->ret_addr = (kprobe_opcode_t *)regs->regs[1];
+>> +       ri->fp = NULL;
+>> +
+>> +       /* Replace the return addr with trampoline addr */
+>> +       regs->regs[1] = (unsigned long)&__kretprobe_trampoline;
+>> +}
+>> +NOKPROBE_SYMBOL(arch_prepare_kretprobe);
+>> +
+>> +int arch_trampoline_kprobe(struct kprobe *p)
+>> +{
+>> +       return 0;
+>> +}
+>> +NOKPROBE_SYMBOL(arch_trampoline_kprobe);
+>> +
+>>   int __init arch_init_kprobes(void)
+>>   {
+>>          return 0;
+>> diff --git a/arch/loongarch/kernel/kprobes_trampoline.S b/arch/loongarch/kernel/kprobes_trampoline.S
+>> new file mode 100644
+>> index 0000000..9888ab8
+>> --- /dev/null
+>> +++ b/arch/loongarch/kernel/kprobes_trampoline.S
+>> @@ -0,0 +1,97 @@
+>> +/* SPDX-License-Identifier: GPL-2.0+ */
+>> +#include <linux/linkage.h>
+>> +#include <asm/stackframe.h>
+>> +
+>> +       .text
+>> +
+>> +       .macro save_all_base_regs
+>> +       cfi_st  zero, PT_R0
+>> +       cfi_st  ra, PT_R1
+>> +       cfi_st  tp, PT_R2
+>> +       cfi_st  a0, PT_R4
+>> +       cfi_st  a1, PT_R5
+>> +       cfi_st  a2, PT_R6
+>> +       cfi_st  a3, PT_R7
+>> +       cfi_st  a4, PT_R8
+>> +       cfi_st  a5, PT_R9
+>> +       cfi_st  a6, PT_R10
+>> +       cfi_st  a7, PT_R11
+>> +       cfi_st  t0, PT_R12
+>> +       cfi_st  t1, PT_R13
+>> +       cfi_st  t2, PT_R14
+>> +       cfi_st  t3, PT_R15
+>> +       cfi_st  t4, PT_R16
+>> +       cfi_st  t5, PT_R17
+>> +       cfi_st  t6, PT_R18
+>> +       cfi_st  t7, PT_R19
+>> +       cfi_st  t8, PT_R20
+>> +       cfi_st  u0, PT_R21
+>> +       cfi_st  fp, PT_R22
+>> +       cfi_st  s0, PT_R23
+>> +       cfi_st  s1, PT_R24
+>> +       cfi_st  s2, PT_R25
+>> +       cfi_st  s3, PT_R26
+>> +       cfi_st  s4, PT_R27
+>> +       cfi_st  s5, PT_R28
+>> +       cfi_st  s6, PT_R29
+>> +       cfi_st  s7, PT_R30
+>> +       cfi_st  s8, PT_R31
+>> +       addi.d  t0, sp, PT_SIZE
+>> +       LONG_S  t0, sp, PT_R3
+>> +       csrrd   t0, LOONGARCH_CSR_CRMD
+>> +       andi    t0, t0, 0x7 /* extract bit[1:0] PLV, bit[2] IE */
+>> +       LONG_S  t0, sp, PT_PRMD
+>> +       .endm
+>> +
+>> +       .macro restore_all_base_regs
+>> +       cfi_ld  zero, PT_R0
+>> +       cfi_ld  tp, PT_R2
+>> +       cfi_ld  a0, PT_R4
+>> +       cfi_ld  a1, PT_R5
+>> +       cfi_ld  a2, PT_R6
+>> +       cfi_ld  a3, PT_R7
+>> +       cfi_ld  a4, PT_R8
+>> +       cfi_ld  a5, PT_R9
+>> +       cfi_ld  a6, PT_R10
+>> +       cfi_ld  a7, PT_R11
+>> +       cfi_ld  t0, PT_R12
+>> +       cfi_ld  t1, PT_R13
+>> +       cfi_ld  t2, PT_R14
+>> +       cfi_ld  t3, PT_R15
+>> +       cfi_ld  t4, PT_R16
+>> +       cfi_ld  t5, PT_R17
+>> +       cfi_ld  t6, PT_R18
+>> +       cfi_ld  t7, PT_R19
+>> +       cfi_ld  t8, PT_R20
+>> +       cfi_ld  u0, PT_R21
+>> +       cfi_ld  fp, PT_R22
+>> +       cfi_ld  s0, PT_R23
+>> +       cfi_ld  s1, PT_R24
+>> +       cfi_ld  s2, PT_R25
+>> +       cfi_ld  s3, PT_R26
+>> +       cfi_ld  s4, PT_R27
+>> +       cfi_ld  s5, PT_R28
+>> +       cfi_ld  s6, PT_R29
+>> +       cfi_ld  s7, PT_R30
+>> +       cfi_ld  s8, PT_R31
+>> +       LONG_L  t0, sp, PT_PRMD
+>> +       li.d    t1, 0x7 /* mask bit[1:0] PLV, bit[2] IE */
+>> +       csrxchg t0, t1, LOONGARCH_CSR_CRMD
+>> +       .endm
+> Do you think we need to save and restore all regs here?
+>
+> Huacai
+
+Hi, Huacai,
+
+
+Note that it is not function context. In the original kprobe design, it is
+triggered by 'break' and then trap into exception with all pt_regs saved.
+The all pt_regs will be visible to the user. So I think in this version
+we should also support all regs to user. BTW, due to all exceptions is
+trapped by 'break' something in pt_regs is not needed, like estat,
+badvaddr and so on.
+
+
+Thanks,
+
+Jinyang
+
+>> +
+>> +SYM_CODE_START(__kretprobe_trampoline)
+>> +       addi.d  sp, sp, -PT_SIZE
+>> +       save_all_base_regs
+>> +
+>> +       move a0, sp /* pt_regs */
+>> +
+>> +       bl trampoline_probe_handler
+>> +
+>> +       /* use the result as the return-address */
+>> +       move ra, a0
+>> +
+>> +       restore_all_base_regs
+>> +       addi.d  sp, sp, PT_SIZE
+>> +
+>> +       jr ra
+>> +SYM_CODE_END(__kretprobe_trampoline)
+>> --
+>> 2.1.0
+>>
+>>
+
