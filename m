@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD23627C95
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA0DC627CBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236433AbiKNLnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:43:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
+        id S236135AbiKNLqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:46:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236229AbiKNLnb (ORCPT
+        with ESMTP id S236722AbiKNLpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:43:31 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5044A247;
-        Mon, 14 Nov 2022 03:43:26 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id k19so12809706lji.2;
-        Mon, 14 Nov 2022 03:43:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1xnVkVYt6NjXq2U10H+GjcZriFeppA49EKxZL4u1ETg=;
-        b=DJYPWegol9Mp+1bBiyC6kheikgEvnJnOVLlM56Ma2GdT+L4kHpqtLxdqoJS24ZT5Kx
-         9PIQgwfK5ZVi/V2CUpvBZb6Ga0zgQK2ABH7cFZ5/LdW56zYq8oUfgPdxwSOOgzbvkO14
-         ufmIiDp2SBsuSqL6co4532zebqLlkVNfFhMWESDA5YFBGq8pWuFzDtHtaIYkM7vB2fCd
-         UeZZ4jaghHRxjxVxe+mt5YHjOgTYqN11bjGoo5erCApseMko7oXuhj3Rt2PpsCtyzqcy
-         KZ8tBKEUXljtyf9SMCUC12kBv4/scKdLuINUKdA6ZdnCzJ62N2+1vgo4h+pimP2A7aVS
-         wvdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1xnVkVYt6NjXq2U10H+GjcZriFeppA49EKxZL4u1ETg=;
-        b=FmDt9yH75d7d/yF2Senm3kR6LxpM7oGa/gzAYD6lOZ6+PcYWDfcZvNyYiC0pXdaONl
-         zbQAzYv/x3focnQFQBJQcztZdPuAzcZXbEViTt2FKv+pGJcsD213OeKxvlvxrjd3Ic4V
-         ZQtkwOLbh0+2WOqbpewmOwMFpCPjCrxcHuanBJEwg9lXKT4LWguau/PG+RlDmjV+zjzy
-         r3drI3xTSKere6c/GDZobvG3oaSmruLejR+g8SG4V2WkLt/sqLuzSnFVVTDLQ0NZ88eX
-         67flCVfwSszOk0VVYEUYOJmxpAunan8kWrIBeMRUOF34UO97OB9+5W9HFhxDj+YGnhqh
-         ExhA==
-X-Gm-Message-State: ANoB5pnWgqdAWpeG8pdys4u/AomVDUKBw+MmU0C1hMEkZTTSqD/yjVdN
-        H4tR9b7AlrtL6j+8Qrq6eOZtH+kUzsE=
-X-Google-Smtp-Source: AA0mqf4dfqmYZ1FjH1UgobSbvCvX8bwQXhiu0h+VQoHba7Wk2f0YpqJTU83M4MTmIQhSNHpV9VVXVw==
-X-Received: by 2002:a05:651c:88a:b0:277:2:1efc with SMTP id d10-20020a05651c088a00b0027700021efcmr4389600ljq.77.1668426204721;
-        Mon, 14 Nov 2022 03:43:24 -0800 (PST)
-Received: from [192.168.1.103] ([178.176.74.221])
-        by smtp.gmail.com with ESMTPSA id v26-20020ac2593a000000b00492b494c4e8sm1793818lfi.298.2022.11.14.03.43.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 03:43:24 -0800 (PST)
-Subject: Re: [net] net: usb: smsc95xx: fix external PHY reset
-To:     Alexandru Tachici <alexandru.tachici@analog.com>,
-        linux-kernel@vger.kernel.org
-Cc:     andrew@lunn.ch, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, steve.glendinning@shawell.net,
-        UNGLinuxDriver@microchip.com, andre.edich@microchip.com,
-        linux-usb@vger.kernel.org
-References: <20221114131643.19450-1-alexandru.tachici@analog.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <adb2dc3c-fd1e-53ea-ca64-5c1600058890@gmail.com>
-Date:   Mon, 14 Nov 2022 14:43:22 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mon, 14 Nov 2022 06:45:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793FF22B3A;
+        Mon, 14 Nov 2022 03:44:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5ACC6106E;
+        Mon, 14 Nov 2022 11:44:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9126C433D7;
+        Mon, 14 Nov 2022 11:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668426295;
+        bh=OSbGEYnUhjKa2m71ScF7KvfTEC1ATHNDn1CpUx6Hw/0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DJ8z/7CedpLvc+/MF3CZmnF65KarkQtOfm1yX5IFr/LmkkXS8OyiGK5D6LzuK4Mwa
+         XoMpS5SsUhiHN8EntCQVS0aMN3JXNLtGIGn9JmXD9vi5XxwcfKeGIiS4xH7MxNI8t6
+         vH7kjHjE20tVD8aibkNSy3K52KyjWCH1iFbLzFn+bajePCfLOF8m0ZCazRzy7geM3l
+         IVhKr+7koeeO6NdvAEFD6DO/3P47xTvTqcxey6Tldepdy+3IUwRzfAoFgp+p+ZpuSn
+         FXWWZL6zaWeuMoxWy0bf01evM34QctoIH3I0saRBNn4hX3uT+AVmaq7no+BRMbr/1H
+         tJh/RQSG7pzBA==
+From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, Martin Liska <mliska@suse.cz>,
+        Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 24/46] bpf, lto: mark interpreter jump table as __noreorder
+Date:   Mon, 14 Nov 2022 12:43:22 +0100
+Message-Id: <20221114114344.18650-25-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221114114344.18650-1-jirislaby@kernel.org>
+References: <20221114114344.18650-1-jirislaby@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20221114131643.19450-1-alexandru.tachici@analog.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+From: Andi Kleen <ak@linux.intel.com>
 
-On 11/14/22 4:16 PM, Alexandru Tachici wrote:
+gcc LTO has a problem that can cause static variables containing &&
+labels to be put into a different LTO partition and then fail the build.
+This can happen with the jump table in the BPF interprer.
 
-> An external PHY needs settling time after power up or reser.
+Mark the interpreter function and the jump table as __noreorder, this
+guarantees they both end up in the first partition.
 
-   Reset? :-)
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Song Liu <song@kernel.org>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Stanislav Fomichev <sdf@google.com>
+Cc: Hao Luo <haoluo@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+Signed-off-by: Andi Kleen <ak@linux.intel.com>
+Signed-off-by: Martin Liska <mliska@suse.cz>
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+---
+ kernel/bpf/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> In the bind() function an mdio bus is registered. If at this point
-> the external PHY is still initialising, no valid PHY ID will be
-> read and on phy_find_first() the bind() function will fail.
-> 
-> If an external PHY is present, wait the maximum time specified
-> in 802.3 45.2.7.1.1.
-> 
-> Fixes: 05b35e7eb9a1 ("smsc95xx: add phylib support")
-> Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 25a54e04560e..d40ce00622f6 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1640,7 +1640,7 @@ u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
+  *
+  * Return: whatever value is in %BPF_R0 at program exit
+  */
+-static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
++static u64 __noreorder ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+ {
+ #define BPF_INSN_2_LBL(x, y)    [BPF_##x | BPF_##y] = &&x##_##y
+ #define BPF_INSN_3_LBL(x, y, z) [BPF_##x | BPF_##y | BPF_##z] = &&x##_##y##_##z
+-- 
+2.38.1
 
-[...]
-
-MBR, Sergey
