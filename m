@@ -2,117 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E04A62879F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA90628799
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237829AbiKNR6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:58:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54728 "EHLO
+        id S237766AbiKNR5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:57:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236681AbiKNR6T (ORCPT
+        with ESMTP id S237844AbiKNR5Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:58:19 -0500
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA3326546
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:58:18 -0800 (PST)
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 2AEHvrm4025921
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:57:54 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2AEHvrm4025921
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1668448674;
-        bh=FKc3qcfec+gHgboywrJ09NkfRlIxD8LBocwjtxNj3MI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BFK0rqzKhnpaGMVMVqwXYJ7mxovyV+PnOXS9BW9alLw8HkOLpbX4fR4b8LrOJGQ5x
-         jBx1d/tCyytWKKnVaYBHYhQ+79vIe90KopUz04btzWmbmWKKtAqDp0Xzh2xgmeG2ql
-         nNQqiu1Fj6BUivFzYZt1RKS88U3OgPc0P4587fjWeA3sjRvitatvjf8TqS3A2nLqb2
-         5N6UjIt7Fw3EhTzzic9qUKEqtIFnivRs1Dhiiamrff9BhLskzJaOa5EWk3AXqbvlIo
-         qEIs/c3VW5EUrHQ750m7HP/OBjvoi/DzS8SAF+ubqy8p3SmGavnjGcTmHtdRpaBHi0
-         pIdgr+aOoO53A==
-X-Nifty-SrcIP: [209.85.160.44]
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-13ae8117023so13318941fac.9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:57:54 -0800 (PST)
-X-Gm-Message-State: ANoB5plfW9ZhfECeN2HSKv+z39o7EdjvUBU4PkP6Twwb68sKjyIDAwVx
-        exddF2jWSp6HqRrtSs4L1bdMMH16B08Sr/nHuFA=
-X-Google-Smtp-Source: AA0mqf6lEFOoTSBPcrvmWZXNTd+o3OKLVL8/4ph0XLc06G+xgD66Gi8in+JQaCMGx+wJF5BW7gNoJ2sC+cGi+2/o544=
-X-Received: by 2002:a05:6870:4b4a:b0:13b:5d72:d2c6 with SMTP id
- ls10-20020a0568704b4a00b0013b5d72d2c6mr7243528oab.287.1668448672780; Mon, 14
- Nov 2022 09:57:52 -0800 (PST)
+        Mon, 14 Nov 2022 12:57:24 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC0B25EBA;
+        Mon, 14 Nov 2022 09:57:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668448643; x=1699984643;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Cc3hg2VIM6L+Sab51F6eBaTWDmyo6t4XvJHG+xF3G0U=;
+  b=KtdNY1sXkyV/Xc+Avm4b9uu2Czba0SM3YPIdhar0OrgbmTTB0SgSsTj7
+   qMEvdIzC8gyL+wP9XlioFMIzlRXsxEkuEGxYOYySNW2sHt/U1GmqwAKTT
+   OTPE5uMJYrqD89mak15ydH6W76eucLfJfG6vJ4tYuWQ4AcsEmDOzUtkJ5
+   jzK7lgaNyaO7QwFahmemv5Upj0WoFNUOdNfeVh+mG1YkpMxafzxtIVsxm
+   J3Jj4jU5AwyiPcfa/VwrRTUXMkINGBHz0iLyb0wP1mzJKKnrcpj92/c1U
+   x0e9K9c+XdefShCr66OFa5bCrsJQbNWo9YBmQe8caZktpb6M9mdiBM3GC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="310746983"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="310746983"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 09:57:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="671657096"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="671657096"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 14 Nov 2022 09:57:19 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oudhs-00CHlc-2X;
+        Mon, 14 Nov 2022 19:57:16 +0200
+Date:   Mon, 14 Nov 2022 19:57:16 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        oe-kbuild-all@lists.linux.dev, Kevin Cernekee <cernekee@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH v1 1/4] list: Introduce list_count() to count existing
+ nodes
+Message-ID: <Y3KBfLLyQZ7Q95bG@smile.fi.intel.com>
+References: <20221114112842.38565-1-andriy.shevchenko@linux.intel.com>
+ <202211142350.i0ngTfIl-lkp@intel.com>
+ <Y3JmtNExJulq2CEE@smile.fi.intel.com>
+ <Y3J/KUBu3adGPiwT@casper.infradead.org>
 MIME-Version: 1.0
-References: <20221114114344.18650-1-jirislaby@kernel.org> <20221114114344.18650-3-jirislaby@kernel.org>
-In-Reply-To: <20221114114344.18650-3-jirislaby@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 15 Nov 2022 02:57:16 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASUb0PLiZahw46c0qBUn_caMWm2SrtY1Hb8Vd7RzsAwzg@mail.gmail.com>
-Message-ID: <CAK7LNASUb0PLiZahw46c0qBUn_caMWm2SrtY1Hb8Vd7RzsAwzg@mail.gmail.com>
-Subject: Re: [PATCH 02/46] kbuild: pass jobserver to cmd_ld_vmlinux.o
-To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Martin Liska <mliska@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3J/KUBu3adGPiwT@casper.infradead.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 8:44 PM Jiri Slaby (SUSE) <jirislaby@kernel.org> wrote:
->
-> From: Jiri Slaby <jslaby@suse.cz>
->
-> Until the link-vmlinux.sh split (cf. the commit below), the linker was
-> run with jobserver set in MAKEFLAGS. After the split, the command in
-> Makefile.vmlinux_o is not prefixed by "+" anymore, so this information
-> is lost.
->
-> Restore it as linkers working in parallel (namely gcc LTO) make a use of
-> it. Actually, they complain, if jobserver is not set:
->   lto-wrapper: warning: jobserver is not available: '--jobserver-auth=' is not present in 'MAKEFLAGS'
->
-> Fixes: 5d45950dfbb1 (kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o)
+On Mon, Nov 14, 2022 at 05:47:21PM +0000, Matthew Wilcox wrote:
+> On Mon, Nov 14, 2022 at 06:03:00PM +0200, Andy Shevchenko wrote:
+> > Oh, nice! I will fix this for v2.
+> 
+> list_count() is an antipattern.  I don't have any of the patches in
+> my inbox, so maybe there's a great reason for doing this, but my
+> immediate response is: NAK.
 
-
-This Fixes is wrong since GCC LTO is not in upstream code.
-
-
-
-
-
-
-> Cc: Sedat Dilek <sedat.dilek@gmail.com>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Michal Marek <michal.lkml@markovi.net>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Martin Liska <mliska@suse.cz>
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> ---
->  scripts/Makefile.vmlinux_o | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-> index 0edfdb40364b..1c86895cfcf8 100644
-> --- a/scripts/Makefile.vmlinux_o
-> +++ b/scripts/Makefile.vmlinux_o
-> @@ -58,7 +58,7 @@ define rule_ld_vmlinux.o
->  endef
->
->  vmlinux.o: $(initcalls-lds) vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
-> -       $(call if_changed_rule,ld_vmlinux.o)
-> +       +$(call if_changed_rule,ld_vmlinux.o)
->
->  targets += vmlinux.o
->
-> --
-> 2.38.1
->
-
+When we are trying to hide iterator variable in many cases, leaving the current
+code alive will allow explicit access to it. If it's not a problem, why to
+bother with the other list APIs then?
 
 -- 
-Best Regards
-Masahiro Yamada
+With Best Regards,
+Andy Shevchenko
+
+
