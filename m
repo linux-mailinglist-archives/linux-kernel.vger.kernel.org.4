@@ -2,135 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFCD6278DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8675B6278E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236460AbiKNJSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:18:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
+        id S236568AbiKNJVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:21:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235832AbiKNJSC (ORCPT
+        with ESMTP id S236421AbiKNJVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:18:02 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B1F1DA4B
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:18:00 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so10178524wmb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:17:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=W3b//FjMS4rYYJ7oM3rSzlRHPMsqyV/xeMF8hoPwJfw=;
-        b=GHNzWSMw2xUVtaFE/cz5B7bbo0NOd8jx56sPoYFujgt7gLXf4U3mr622kiQa0M81Ce
-         FCR3osuBna4mdy1KnYKDTo5hLVCK29pM3eUa2tRVwf3TiZhmf6TW0uPB65GafDW/woY1
-         uRlmWdOLvvpO4yLA0Vz8UfNPImBffnALVFM3VAKIMtynNtZ7JGy701vy9ni809A00AIM
-         zUoPcqNCv5muyLWFcJoMVm7jHQiL1al8cVnmaS7P0qrykh10d9EAbJ+SM6TzB5Hwrr4q
-         vhQoNoHpcWPtRSsS4299G+qTzl2itDpq/BO1SFc4Rkke6KNMtZtMlnthgoUuFWz+RhEz
-         kBnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W3b//FjMS4rYYJ7oM3rSzlRHPMsqyV/xeMF8hoPwJfw=;
-        b=gGGBNBH3OAzlAw+Iw9YXUhKBSc0Jm/9+X7d8CO0ZMI6SX6S3zuzEbaQeXLH7DqRhqs
-         Jv1PeF+g467vbdegXg5tYI/ug9dUr5xIYa19LxOytdUpc+Tuu+YUh0AYLCYuzsikKysi
-         Ws5i1fmP85QtZxDtVZuR2pPZZBuxO2PURMCEaD/q4QjSHTB1xo4jQn7D7hInTgJNyO2F
-         b0AilvIhmc2zdcLdH6SIreyM6KZtV2McJjObM8/EyDJhAk449RZ3w0ZDrWYVJ1tleNIL
-         /V0JrylBXQGi2yYbDto0OApRDe0cxNrY2jhIiIs9UZJsJURt3jse6Z89Td2HaPraRxa+
-         be+A==
-X-Gm-Message-State: ANoB5plpdxn/vorX3WLS9VI92WyaneHhM/H1N114mpeJhJnVHHd0JfGi
-        db0HKZ8p2DvNdpL8bScvSFHd1A==
-X-Google-Smtp-Source: AA0mqf4dTfVHmiL7wpiXIz4RgBRxSZJ+C/K8Hysdg8u+Ul3idSSDXjlIweJkTxrx1B2fqRed19tr3A==
-X-Received: by 2002:a05:600c:1e11:b0:3cf:84e9:e705 with SMTP id ay17-20020a05600c1e1100b003cf84e9e705mr7385922wmb.28.1668417478546;
-        Mon, 14 Nov 2022 01:17:58 -0800 (PST)
-Received: from Red ([2a01:cb1d:3d5:a100:4a02:2aff:fe07:1efc])
-        by smtp.googlemail.com with ESMTPSA id u12-20020adfdb8c000000b002417ed67bfdsm5900809wri.5.2022.11.14.01.17.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 01:17:58 -0800 (PST)
-Date:   Mon, 14 Nov 2022 10:17:54 +0100
-From:   Corentin LABBE <clabbe@baylibre.com>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: smbus: support new RAM variant for SPD
-Message-ID: <Y3IHwug3UmTzb2wq@Red>
-References: <20221107160602.1912225-1-clabbe@baylibre.com>
- <20221108114851.4436c3cb@endymion.delvare>
+        Mon, 14 Nov 2022 04:21:18 -0500
+Received: from us-smtp-delivery-115.mimecast.com (us-smtp-delivery-115.mimecast.com [170.10.133.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA1EE0F2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:20:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxlinear.com;
+        s=selector; t=1668417616;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1ESBhBNDD5fApVjeRdESCYkNiIVfilpMQwEp5vVBlw8=;
+        b=DFRx6oco1gw1zIpPLSMvUh1khe1ps33RhOls+eDgXoGwBNahI7/gJnT0kWC59g42J87AYr
+        JgedfZW5HGiEwyl8Y46cGh0oKbYG9RyWSMa7yM9V3RE6exdm4qobEn0yHWNt3dEtoxNEG4
+        jBFHtICAcA0gtU9CqTAWuXQqYw3VYyA9UJt3i3ZUfnyVGwpsY6oU3CFjbFm6Q7wv4LJiFF
+        ucrQCUMxryn5i5fYD0inV+USieIJUiDpZVwCnC8gDsWlmp7PPvL3JLcFHN1rhf+cHSj/Kc
+        gVCbzmxxYXklCOb9R35+9Wvh0gtybOSRWUasY868bZpU0vEJcjLWgtHXOE5uLA==
+Received: from mail.maxlinear.com (174-47-1-83.static.ctl.one [174.47.1.83])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ us-mta-98-Wj5cdgjdOHCIAqnlGi2ZIw-1; Mon, 14 Nov 2022 04:20:14 -0500
+X-MC-Unique: Wj5cdgjdOHCIAqnlGi2ZIw-1
+Received: from sgsxdev001.isng.phoenix.local (10.226.81.111) by
+ mail.maxlinear.com (10.23.38.120) with Microsoft SMTP Server id 15.1.2375.24;
+ Mon, 14 Nov 2022 01:20:09 -0800
+From:   Rahul Tanwar <rtanwar@maxlinear.com>
+To:     <bigeasy@linutronix.de>, <robh@kernel.org>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <bp@alien8.de>, <x86@kernel.org>,
+        <hpa@zytor.com>
+CC:     <andriy.shevchenko@linux.intel.com>, <dave.hansen@linux.intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-lgm-soc@maxlinear.com>,
+        Rahul Tanwar <rtanwar@maxlinear.com>
+Subject: [PATCH RESEND 0/1] x86/of: Fix a bug in x86 arch OF support
+Date:   Mon, 14 Nov 2022 17:20:05 +0800
+Message-ID: <cover.1668403214.git.rtanwar@maxlinear.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221108114851.4436c3cb@endymion.delvare>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: maxlinear.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, Nov 08, 2022 at 11:48:51AM +0100, Jean Delvare a écrit :
-> Hi Corentin,
-> 
-> On Mon,  7 Nov 2022 16:06:02 +0000, Corentin Labbe wrote:
-> > On my x05 laptop I got:
-> > Memory type 0x12 not supported yet, not instantiating SPD
-> 
-> 
-> Oh, that one must be old.
-> 
-> > Adding the 0x12 case lead to a successful instantiated SPD AT24 EEPROM.
-> > i801_smbus 0000:00:1f.3: SMBus using polling
-> > i2c i2c-6: 2/2 memory slots populated (from DMI)
-> > at24 6-0050: 256 byte spd EEPROM, read-only
-> > i2c i2c-6: Successfully instantiated SPD at 0x50
-> > at24 6-0051: 256 byte spd EEPROM, read-only
-> > i2c i2c-6: Successfully instantiated SPD at 0x51
-> > 
-> > And then, I decoded it successfully via decode-dimms.
-> > 
-> > Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> > ---
-> > The result of decode-dimms could be found at http://kernel.montjoie.ovh/zoo/x05/decode-dimms.txt
-> > Since RAM is DDR, I wanted to add '/* DDR */' comment, but I didnt find any document with
-> > proof that this 0x12 is for DDR.
-> 
-> It is. The document you are looking for is:
-> https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_3.6.0.pdf
-> 
-> and specifically section 7.18.2 (Memory Device — Type), table 78
-> (Memory Device: Type).
-> 
+Hi Sebastian Andrzej Siewior, Rob, Thomas, Ingo, Boris, Andy, Dave=20
+& all x86@kernel.org maintainers,=20
 
-Hello
+I sent this patch 3 times but for some reasons, never got any response or
+attention from anybody so far. Hence, resending with a cover letter to
+explain the rationale behind it in detail & to justify the need to add
+this fix. Also, hoping to get some feedback in-case i am mistaken in my
+understanding which might be the reason why i never got any response.
 
-Thanks for the link, I will add it also as comment.
+Background (baseline understanding - pls correct if mistaken anywhere):
 
-> > 
-> >  drivers/i2c/i2c-smbus.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-> > index 07c92c8495a3..6dca19c994db 100644
-> > --- a/drivers/i2c/i2c-smbus.c
-> > +++ b/drivers/i2c/i2c-smbus.c
-> > @@ -362,6 +362,7 @@ void i2c_register_spd(struct i2c_adapter *adap)
-> >  	}
-> >  
-> >  	switch (common_mem_type) {
-> > +	case 0x12:
-> >  	case 0x13:	/* DDR2 */
-> >  	case 0x18:	/* DDR3 */
-> >  	case 0x1C:	/* LPDDR2 */
-> 
-> Please also add LPDDR (0x1B) for consistency.
+References [1], [2] & [6]
 
+For SMP systems, Intel defines three (logically four) interrupt modes
+during boot/init time while BIOS/bootloader boots & switches to linux
+kernel.
 
-Will do it.
+  1. PIC mode - Legacy 8259 PIC interrupt controller.
+  2. Virtual wire mode via Local APIC - uses local APIC as virtual wire
+  3. Virtual wire mode via I/O APIC - uses I/O APIC as virtual wire
+  4. Symmetric I/O mode - final one used by linux for SMP systems.=20
 
-Thanks
-Regards
+BIOS/bootloaders are supposed to boot in either #1 or #2 or #3 and then
+switch to #4 in linux for SMP systems.
+
+For our platform, we use #2.
+
+Detection of which interrupt mode the system is booting in is made by using
+below global variable in apic.c
+
+int pic_mode __ro_after_init;=20
+
+Here pic_mode =3D 1 means #1 (PIC mode) above.
+And pic_mode =3D 0 means #2 or #3 (basically virtual wire mode via apic).
+
+And apic.c while doing setup_local_APIC() uses below code [3]:
+
+        value =3D apic_read(APIC_LVT0) & APIC_LVT_MASKED;
+        if (!cpu && (pic_mode || !value || skip_ioapic_setup)) {
+                value =3D APIC_DM_EXTINT;
+                apic_printk(APIC_VERBOSE, "enabled ExtINT on CPU#%d\n", cpu=
+);
+        } else {
+                value =3D APIC_DM_EXTINT | APIC_LVT_MASKED;
+                apic_printk(APIC_VERBOSE, "masked ExtINT on CPU#%d\n", cpu)=
+;
+        }
+        apic_write(APIC_LVT0, value);
+
+What i understand from above is that if at this point of time, as long as
+it is cpu0 & pic_mode=3D1, it will set delivery mode to ExtINT (causes the
+processor to respond to the interrupt as if the interrupt originated in an
+externally connected (8259A-compatible) interrupt controller) and enables/
+unmask the interrupts.
+
+pic_mode is presently set/populated/initialized at only two places:
+ 1. In  mpparse.c [4]
+ 2. In devicetree.c [7]
+
+For #1 MPPARSE Kconfig definition is as below:
+
+=09config X86_MPPARSE
+        =09bool "Enable MPS table" if ACPI
+        =09default y
+        =09depends on X86_LOCAL_APIC
+        =09help
+          =09For old smp systems that do not have proper acpi support. Newe=
+r systems
+          =09(esp with 64bit cpus) with acpi support, MADT and DSDT will ov=
+erride it
+
+As seen above, if ACPI is not enabled, then mpparse by default is always
+enabled. Presently, there is no way to disable MPPARSE (if ACPI is not
+enabled). This to me appears to be another bug which needs fixing. As per
+theory, MPPARSE was to support MPS spec [1] as a temporary solution to
+support SMP systems until a final ACPI standard was added. But now if ACPI
+is not enabled, it will rely on MPPARSE driver to read MP floating pointer
+structure's IMCRP Bit 7 of MP feature info byte 2 [5] to figure out if it
+supports PIC mode or virtual wire mode and initialize pic_mode variable
+accordingly. If ACPI is enabled, the ACPI code overrides it by using the
+MADT table spec'ed in ACPI spec [2].=20
+
+For #2 devicetree.c presently hardcodes pic_mode =3D 1 (PIC Mode). There is
+no support to configure virtual wire mode via devicetree path for OF based
+systems.
+
+Now we have a platform which is OF based & does not use legacy 8259 PIC
+interrupt controller. Non ACPI compliant as well as non MPPARSE compliant.
+
+For such platforms, it appears to me that hardcoding pic_mode =3D 1 (PIC Mo=
+de)
+and giving no other choice to choose virtual wire mode is a bug for OF
+based x86 platforms.=20
+
+Just like mpparse relies on IMCRP bit 7 of MP feature info byte2 [5] to
+select pic_mode to PIC mode or virtual wire mode. arch/x86/kernel/devicetre=
+e.c
+should also provide some similar configurability to choose interrupt
+delivery mode & not hardcode it to PIC mode.
+
+This patch is to fix above explained bug in x86/of support for interrupt
+delivery mode configuration. Please let me know if you find any mistake
+in above understanding or if you have a alternative better suggestion to
+solve it or if you find anything odd here in our platform/system. TIA.
+
+The patch is baselined on below git tree:
+git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/core
+
+[1] https://pdos.csail.mit.edu/6.828/2008/readings/ia32/MPspec.pdf
+[2] https://uefi.org/sites/default/files/resources/ACPI_6_3_final_Jan30.pdf
+[3] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/apic/a=
+pic.c#L1691
+[4] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/mppars=
+e.c#L517
+[5] https://www.manualslib.com/manual/77733/Intel-Multiprocessor.html?page=
+=3D40#manual
+[6] https://www.intel.com/content/www/us/en/developer/articles/technical/in=
+tel-sdm.html
+[7] https://elixir.bootlin.com/linux/v6.1-rc5/source/arch/x86/kernel/device=
+tree.c#L170
+
+Rahul Tanwar (1):
+  x86/of: Add support for boot time interrupt mode config
+
+ arch/x86/kernel/devicetree.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+--=20
+2.17.1
+
