@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B22B16281C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D896281D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236238AbiKNOA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:00:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
+        id S236505AbiKNOA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:00:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234803AbiKNOAX (ORCPT
+        with ESMTP id S229740AbiKNOAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:00:23 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26287222BE
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:00:22 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id p8so19385697lfu.11
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:00:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VxPQ8pboaPVF2sJHi52Vka5fwCNauq6OSSF8aRmq/H0=;
-        b=S4znJaczEK246Yzk+YOpXjq34r7eQ7lk7NgLbFfJDA410Mvfpv6ffI++LTktx1dHF+
-         8jfleCZ+jpUDe/bTfK8uw1mHSSkibeoMxh62i/llK/sqs4AL67zMxQIkfgw5Dwi64DO1
-         l2x3OF62WEGgdBEspccGmA7jlxAgBNgannoeKbVSC/fIN3yG8toZQqB0sOQ5pPklVTw5
-         31URTGvzgReJaSyOBmZj8roWHKqR57hxGK1MkaoFydXe7Fh5Rr+ao/MSLkNffuJv/E5N
-         KbPitKZjk4N4DndOq9HyXiBUwLIjt3X/DyI3KNXMoz2roQOEggp0y5WnMl+UpBetQ78n
-         pNVQ==
+        Mon, 14 Nov 2022 09:00:54 -0500
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF43B84C;
+        Mon, 14 Nov 2022 06:00:54 -0800 (PST)
+Received: by mail-qk1-f172.google.com with SMTP id g10so7382901qkl.6;
+        Mon, 14 Nov 2022 06:00:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VxPQ8pboaPVF2sJHi52Vka5fwCNauq6OSSF8aRmq/H0=;
-        b=irVkUw1REz4R/MfgqLoqhFocU+E6XmLVgYkMhmcmSDyiKk/0ruxMRDqx1vRPDAw7WS
-         rZzU0EJqvbMhqYpZrAua8k7HrCQ/CMZOoRtsbno/qJlmfxUcUuJmPII8QXXfM4oK5nPB
-         3ZONB7lJ5pR25Oi5M6nNdOsWoB8fng6WWltMd4d+rsl2Y+gUE6Z4sxTBAXYve/cFw0gL
-         e6NtvV2g9iA6UQ6j2YX/klahX7fb9MxFetVYULVI6u0F53C73jvVAOn7D03kncjDVAp/
-         6IeC3C0naO/ERmZxxbodkKW67h1FmRFsvoVQIFbxaol9+rSHzze4om08HISy3FPS2Ea9
-         fIug==
-X-Gm-Message-State: ANoB5pkshe/7QN3CAV895F0vXH8MVHcKz9pwmkij3UzZqzyN35Qogzgv
-        yyu9ETKkwGfFx/vEeNs0XRsVyw==
-X-Google-Smtp-Source: AA0mqf4/a/jJiXWvPvOe2T+QxBTrvQcAuvmN52Dp5+4lky3TG8hR1K4ZgfQ+zays2OXB58zZRVfGxA==
-X-Received: by 2002:ac2:46fc:0:b0:4a2:22cf:f44d with SMTP id q28-20020ac246fc000000b004a222cff44dmr4369084lfo.118.1668434420376;
-        Mon, 14 Nov 2022 06:00:20 -0800 (PST)
-Received: from localhost.localdomain ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id z8-20020a2eb528000000b0027628240ff7sm2017813ljm.135.2022.11.14.06.00.19
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 14 Nov 2022 06:00:19 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: sdm845-polaris: Don't duplicate DMA assignment
-Date:   Mon, 14 Nov 2022 15:00:11 +0100
-Message-Id: <20221114140011.43442-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        bh=1GhVSMgJR05/nAScHpCfHzFiRHojqTKjgS5bregNYrM=;
+        b=oZt6SNNR2JVdG0WUps+/5y0yRjlgcQcVZKKig3os2WuyzwJpLq8ADOZcHppiWx4jpa
+         7e+Ybh2x+jNAcgoRBGuScJpL4ADbNpK+4IC+cnas/PAr5bHtbY2nbb5b23VIYb4LKbXD
+         KmbL20ZLdVCzkmLAQPMz2eA3DGbWO4/iwWvjroz+AUuwutqoSuwFeUgdEHmyWoorUv9o
+         FnC/b0BG6+HZqgRD2mSTcoCLG/FZujZE9R+ApnJ8zHHALNWq00BCcfxXW8KMMo9sKPKI
+         nMt8hf3phMzhPQcy1PVD4MFsTo7iAiPY+MUjWmftIkC3sLN4YkAfqL6K0D27dfGQOqgv
+         08iA==
+X-Gm-Message-State: ANoB5pmCjzBqOlMKgB0YUKR1oKqr4PusbCd2z7iLnp8XIzZQruaEITDj
+        t71zLH9HRzl7C+DZS4jJByzobNfdC0PFjA==
+X-Google-Smtp-Source: AA0mqf7kyg2yt2du1i1VWRbXpFV/pAefSSBk0uDGh7E2+LrP0m9bTur8j7xD5IzrF8JQGJWVOp+Npg==
+X-Received: by 2002:a05:620a:459f:b0:6ba:e9c7:a54f with SMTP id bp31-20020a05620a459f00b006bae9c7a54fmr11338194qkb.218.1668434453036;
+        Mon, 14 Nov 2022 06:00:53 -0800 (PST)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id g11-20020ac87f4b000000b0039a9b55b829sm5738812qtk.29.2022.11.14.06.00.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 06:00:52 -0800 (PST)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-369426664f9so106705827b3.12;
+        Mon, 14 Nov 2022 06:00:52 -0800 (PST)
+X-Received: by 2002:a0d:f6c6:0:b0:373:5c0c:9b37 with SMTP id
+ g189-20020a0df6c6000000b003735c0c9b37mr12937943ywf.358.1668434452343; Mon, 14
+ Nov 2022 06:00:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221103223956.50575-1-fabrizio.castro.jz@renesas.com> <20221103223956.50575-3-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20221103223956.50575-3-fabrizio.castro.jz@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 14 Nov 2022 15:00:41 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV4XaXDMEUCar9i1mLxKcTHwDSE04EQAyUSQBG9S6V5KQ@mail.gmail.com>
+Message-ID: <CAMuHMdV4XaXDMEUCar9i1mLxKcTHwDSE04EQAyUSQBG9S6V5KQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] arm64: dts: renesas: r9a09g011: Add watchdog node
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DMA properties in this DT are identical to the ones already
-defined in sdm845.dtsi. Remove them.
+On Thu, Nov 3, 2022 at 11:40 PM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+> The r9a09g011 (a.k.a. RZ/V2M) comes with two watchdog IPs,
+> but Linux is only allowed one.
+>
+> Add a node for the watchdog allowed to Linux to the SoC
+> specific dtsi.
+>
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts | 3 ---
- 1 file changed, 3 deletions(-)
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.2.
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-index fc189f7caaa4..38ba809a95cd 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-polaris.dts
-@@ -456,9 +456,6 @@ &ipa {
- 
- &i2c14 {
- 	clock-frequency = <400000>;
--	dmas = <&gpi_dma1 0 6 QCOM_GPI_I2C>,
--		   <&gpi_dma1 1 6 QCOM_GPI_I2C>;
--	dma-names = "tx", "rx";
- 	status = "okay";
- 
- 	touchscreen@20 {
--- 
-2.38.1
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
