@@ -2,246 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF6FB62769D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6526276A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235996AbiKNHsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 02:48:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41828 "EHLO
+        id S235561AbiKNHsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 02:48:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235249AbiKNHsE (ORCPT
+        with ESMTP id S235924AbiKNHsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 02:48:04 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640311005;
-        Sun, 13 Nov 2022 23:48:01 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id a14so16559156wru.5;
-        Sun, 13 Nov 2022 23:48:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=t1MHXxvThUgXXyb0egWola/eMGGv9yof+Xa0zQ63x9c=;
-        b=Bo82vFvZmfCnjdoKFBGXFTe01zoBluyqCNN+yCKVjS2ckX20KvlRZYW903nnh1t7yY
-         I2oQ7kcgcBAzgAJFt4eeiucgfhl2yw7OlSfVnPR0UHLwyvHMR7uYtjh/BOUYp9Drjct4
-         qitiHqn0Rux0m/Lb5VGBZUALEiZaLaa1h26+EwgZuv9YABAUAvEuW95hDLVEw/cgKza7
-         tstH80aqitvmUQJ2xmP/X2V8IdBlxda7Q/TmgQwkCt50TtYcjeOkmITKN16+8Fx/njYd
-         4PIZslY2LM88fwYxPOlW/LP6bAkNqmw/Nj6SchGWzQosoBN5n4GRZ94528Apv8FD0hla
-         I+TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t1MHXxvThUgXXyb0egWola/eMGGv9yof+Xa0zQ63x9c=;
-        b=qeLNiayNT088BRuec0xXqq8BPF08ukW2VtTZVGZPCoaBKr28L2TtJ34wSDDnwJfott
-         XnYaxEj0SXrMapqpChsYD4LYsfFjDOY+ryoMttcM3x8S1WUH+lQEGel9K5vvrGxpU3WE
-         w4BLyAqIuzm+grdcK8/9oBgL8Zyxz0yqlqmvwrZQN7nhcXrKHNhco/a7YBv4mE/+hE2T
-         wiVEsrYQ5os8XylWATdwcQLgpG+SFvGIL8dZFWZs9r50UhLKOFohouUzNrb7v+Ig9xAn
-         EWyPJ9J1DRL8CE6N0mO+cB2R2PMjrQAw5+ez4dEN/UQ5WlOYVUURh0Cplh3wVqc1AEM5
-         3srw==
-X-Gm-Message-State: ANoB5pkHp+ZNBYsYDMcZRZn/evRsQaF4RTBhIa3IcjgefJiUhgxshmsj
-        SLhQo9puZyR5FPrjbLBtw0g=
-X-Google-Smtp-Source: AA0mqf5pvWGoHI82ti8rvbbAgkufHCAEr4ScPYxhGL040XQHpuB7IwpC4vosFR+tjBGCWFpFvEPH7Q==
-X-Received: by 2002:adf:aa44:0:b0:236:651d:60d4 with SMTP id q4-20020adfaa44000000b00236651d60d4mr6590864wrd.609.1668412079734;
-        Sun, 13 Nov 2022 23:47:59 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-8b88-53b7-c55c-8535.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:8b88:53b7:c55c:8535])
-        by smtp.gmail.com with ESMTPSA id n10-20020adff08a000000b002368f6b56desm10444960wro.18.2022.11.13.23.47.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 23:47:59 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 14 Nov 2022 08:47:56 +0100
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Laight <David.Laight@aculab.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH v8 7/9] livepatch: Improve the search performance of
- module_kallsyms_on_each_symbol()
-Message-ID: <Y3HyrIwlZPYM8zYd@krava>
-References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
- <20221102084921.1615-8-thunder.leizhen@huawei.com>
+        Mon, 14 Nov 2022 02:48:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989A7226;
+        Sun, 13 Nov 2022 23:48:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FD71B80D38;
+        Mon, 14 Nov 2022 07:48:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC9FDC433C1;
+        Mon, 14 Nov 2022 07:48:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668412119;
+        bh=Wty1q4Vw3osxbeKih7YgwVKV3K20oBfY1RvNlNBfyTc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XV2xyRy02RLWFX8vCuoAdVTHmGApf/7E3ZgGGyR0QpZUjMZ9OU5Rs/yxQku5rLCSm
+         NgjR/XvqkY2RIpsV4MAw9bW/mBhN4UhQOZ4ARfwZKEeQZ9Cuf7IaGJ2ABifeAyHCvL
+         XHgFXy8ZYCFk5ip148gjawUVwbBjTaVeUm+kC+i+tXo4IRTZzOUjpewr1hkkM6Tyot
+         vYqPMaQ+Zz7gzDW8O/A8Sz6twLufWVt4r9st7jTyeY/qvrip+dqfggYy8+ixuLtuCe
+         vVrakk4xzBEGLmmVAUyxzVaOxddw4OyggtHuEK2aoUgQDWTjhA7CRMe2ItBkSD79lH
+         dvCFWzY9fCujQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ouUCN-0000oU-6n; Mon, 14 Nov 2022 08:48:07 +0100
+Date:   Mon, 14 Nov 2022 08:48:07 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 4/6] phy: qcom-qmp-combo: fix broken power on
+Message-ID: <Y3Hyt9xNQEjifDUY@hovoldconsulting.com>
+References: <20221111084255.8963-1-johan+linaro@kernel.org>
+ <20221111084255.8963-5-johan+linaro@kernel.org>
+ <e4a423c6-e92d-1c40-2609-e8512bd9c03c@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221102084921.1615-8-thunder.leizhen@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e4a423c6-e92d-1c40-2609-e8512bd9c03c@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 04:49:19PM +0800, Zhen Lei wrote:
-> Currently we traverse all symbols of all modules to find the specified
-> function for the specified module. But in reality, we just need to find
-> the given module and then traverse all the symbols in it.
-
-hi,
-sorry for delayed answer, I did not notice this until Stephen's email
-about merge issue with recent bpf change [1]
-
+On Sat, Nov 12, 2022 at 09:15:43AM +0300, Dmitry Baryshkov wrote:
+> On 11/11/2022 11:42, Johan Hovold wrote:
+> > The PHY is powered on during phy-init by setting the SW_PRWDN bit in the
 > 
-> Let's add a new parameter 'const char *modname' to function
-> module_kallsyms_on_each_symbol(), then we can compare the module names
-
-we have use case for iterating all modules and their symbols when we
-want to resolve passed addresses for tracing
-
-we don't have 'modname' that we could pass, we need to iterate all modules
-
-so perhaps this could be made optional like with passing NULL for modname?
-
-> directly in this function and call hook 'fn' after matching. And the
-> parameter 'struct module *' in the hook 'fn' can also be deleted.
-
-we need 'struct module *' argument in the callback as well because we are
-taking the module reference if we trace function in it, so it wont get
-unloaded
-
-please let me know if I should do the change or can help in any way
-
-thanks,
-jirka
-
-[1] https://lore.kernel.org/lkml/20221114111350.38e44eec@canb.auug.org.au/
-
+> Nit: SW_PWRDN
 > 
-> Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
->                 |
-> Phase2:          -->f1-->f2-->f3
+> > COM_POWER_DOWN_CTRL register and then setting the same bit in the in the
+> > PCS_POWER_DOWN_CONTROL register that belongs to the USB part of the
+> > PHY.
+> > 
+> > Currently, whether power on succeeds depends on probe order and having
+> > the USB part of the PHY be initialised first. In case the DP part of the
+> > PHY is instead initialised first, the intended power on of the USB block
+> > results in a corrupted DP_PHY register (e.g. DP_PHY_AUX_CFG8).
+> > 
+> > Add a pointer to the USB part of the PHY to the driver data and use that
+> > to power on the PHY also if the DP part of the PHY is initialised first.
+> > 
+> > Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
+> > Cc: stable@vger.kernel.org	# 5.10
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 > 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->  include/linux/module.h   |  4 ++--
->  kernel/livepatch/core.c  | 13 ++-----------
->  kernel/module/kallsyms.c | 15 ++++++++++++---
->  3 files changed, 16 insertions(+), 16 deletions(-)
-> 
-> diff --git a/include/linux/module.h b/include/linux/module.h
-> index ec61fb53979a92a..0a3b44ff885a48c 100644
-> --- a/include/linux/module.h
-> +++ b/include/linux/module.h
-> @@ -879,8 +879,8 @@ static inline bool module_sig_ok(struct module *module)
->  }
->  #endif	/* CONFIG_MODULE_SIG */
->  
-> -int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
-> -					     struct module *, unsigned long),
-> +int module_kallsyms_on_each_symbol(const char *modname,
-> +				   int (*fn)(void *, const char *, unsigned long),
->  				   void *data);
->  
->  #endif /* _LINUX_MODULE_H */
-> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-> index 50bfc3481a4ee38..d4fe2d1b0e562bc 100644
-> --- a/kernel/livepatch/core.c
-> +++ b/kernel/livepatch/core.c
-> @@ -118,27 +118,19 @@ static struct klp_object *klp_find_object(struct klp_patch *patch,
->  }
->  
->  struct klp_find_arg {
-> -	const char *objname;
->  	const char *name;
->  	unsigned long addr;
->  	unsigned long count;
->  	unsigned long pos;
->  };
->  
-> -static int klp_find_callback(void *data, const char *name,
-> -			     struct module *mod, unsigned long addr)
-> +static int klp_find_callback(void *data, const char *name, unsigned long addr)
->  {
->  	struct klp_find_arg *args = data;
->  
-> -	if ((mod && !args->objname) || (!mod && args->objname))
-> -		return 0;
-> -
->  	if (strcmp(args->name, name))
->  		return 0;
->  
-> -	if (args->objname && strcmp(args->objname, mod->name))
-> -		return 0;
-> -
->  	args->addr = addr;
->  	args->count++;
->  
-> @@ -175,7 +167,6 @@ static int klp_find_object_symbol(const char *objname, const char *name,
->  				  unsigned long sympos, unsigned long *addr)
->  {
->  	struct klp_find_arg args = {
-> -		.objname = objname,
->  		.name = name,
->  		.addr = 0,
->  		.count = 0,
-> @@ -183,7 +174,7 @@ static int klp_find_object_symbol(const char *objname, const char *name,
->  	};
->  
->  	if (objname)
-> -		module_kallsyms_on_each_symbol(klp_find_callback, &args);
-> +		module_kallsyms_on_each_symbol(objname, klp_find_callback, &args);
->  	else
->  		kallsyms_on_each_match_symbol(klp_match_callback, name, &args);
->  
-> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
-> index f5c5c9175333df7..329cef573675d49 100644
-> --- a/kernel/module/kallsyms.c
-> +++ b/kernel/module/kallsyms.c
-> @@ -495,8 +495,8 @@ unsigned long module_kallsyms_lookup_name(const char *name)
->  }
->  
->  #ifdef CONFIG_LIVEPATCH
-> -int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
-> -					     struct module *, unsigned long),
-> +int module_kallsyms_on_each_symbol(const char *modname,
-> +				   int (*fn)(void *, const char *, unsigned long),
->  				   void *data)
->  {
->  	struct module *mod;
-> @@ -510,6 +510,9 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
->  		if (mod->state == MODULE_STATE_UNFORMED)
->  			continue;
->  
-> +		if (strcmp(modname, mod->name))
-> +			continue;
-> +
->  		/* Use rcu_dereference_sched() to remain compliant with the sparse tool */
->  		preempt_disable();
->  		kallsyms = rcu_dereference_sched(mod->kallsyms);
-> @@ -522,10 +525,16 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
->  				continue;
->  
->  			ret = fn(data, kallsyms_symbol_name(kallsyms, i),
-> -				 mod, kallsyms_symbol_value(sym));
-> +				 kallsyms_symbol_value(sym));
->  			if (ret != 0)
->  				goto out;
->  		}
-> +
-> +		/*
-> +		 * The given module is found, the subsequent modules do not
-> +		 * need to be compared.
-> +		 */
-> +		break;
->  	}
->  out:
->  	mutex_unlock(&module_mutex);
-> -- 
-> 2.25.1
-> 
+> I can only hope that at some point in your cleanup this hack is going to 
+> be removed.
+> Nevertheless, I don't see a good way to do this at this moment. Thus:
+
+Not sure why you're calling this a hack. This is how the hardware works
+and pretending that this PHY is some kind of MFD with completely
+independent components is partly what resulted in this mess.
+
+Accessing the USB registers by means of a hard-coded index in the PHY
+array as is done in the runtime PM callbacks is a hack (see patch 5/6),
+adding a dedicated pointer is not.
+
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+Johan
