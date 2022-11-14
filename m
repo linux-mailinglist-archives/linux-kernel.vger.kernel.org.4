@@ -2,183 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3A56283EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:31:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF09D6283F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236809AbiKNPbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 10:31:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
+        id S236870AbiKNPbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 10:31:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236700AbiKNPbI (ORCPT
+        with ESMTP id S236700AbiKNPb1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 10:31:08 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D0327B28
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:31:05 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id l12so19855113lfp.6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:31:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z+APgoteAuoO9mTtV8vV2XOtx8Kwbf4hasGLOR8qZ8g=;
-        b=SmEB42jxy4krB5JX6BEkkRMQiM9SlqtbFGemcikWQQZLBssxu7SPbe5Y1GbzVFYo+7
-         1jA9Ltt814b8gr3ULe0d1nr7tpNRWXP9plxF7wymjAzwC/XwG7aMtzkXW0gFcFcz/LZF
-         aRGKAjimGtp5l4H7QbGp1fOLyXrybsnkDXNBH8eRoTYu0IEGEhqzNSnM4H4aSg/wR+vO
-         0vh/2p6oPVoQkGhPmxKvCcVgFNpqF3rb3ClnttXkS1xl7R/MeEK/UyyUQDiCaqT3DHfa
-         jmig5MLNLskqJYTNV2Ey9BA0lLRdKjhyuw7lrGbK6gJ3COQrYiGZBUgbzCwNF73mH74L
-         argA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z+APgoteAuoO9mTtV8vV2XOtx8Kwbf4hasGLOR8qZ8g=;
-        b=2Lyr+2CBSIL4wIF4694twQFhIJcQqvHJxDm8QHVUryYppwY7m2CYIZDu6iBtwe4lMP
-         TXkwabk40r97e2qJKPJiuHm/ttjGEYUa/vJBXEidBpWXwlzPpimaUwNKxz6Mr9HP37Md
-         AME7A5/wHwE+RW1YdHPVvELCobQEzCfLF8OZNwch/Crf1g8W4HRji82ELMkWoAeLLDOP
-         udRgTiHgZEQZKEJ4yeE9+XntbwuQz5Oy+TsJzndwgeif9IkUfeUJF5LOVniME8oiAV1V
-         idXQMcW2YgIDW93ihoKfGm+sqWXiZ+hFoZDJ5mHtolDTTZ5lyADSB+AGj4FBBfH/hZN0
-         B5hQ==
-X-Gm-Message-State: ANoB5pk7o0FIQJ1Uo/Is4btKfYXTed68cF3bekjoS+EKyazSC8u/h7l8
-        0DFlWE0zhfkry93eXnbt6a2HW+1fFnVtrQ==
-X-Google-Smtp-Source: AA0mqf5sZWN0bwnuk52AgLtN24jImYplJsDYfbprTaBDktg4nm08CK729SR/ymyuDx00Wh2odDmBlA==
-X-Received: by 2002:ac2:4f13:0:b0:4a2:25b1:10ff with SMTP id k19-20020ac24f13000000b004a225b110ffmr4912341lfr.274.1668439863459;
-        Mon, 14 Nov 2022 07:31:03 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id a3-20020a2e8303000000b002770e531535sm2062990ljh.55.2022.11.14.07.31.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 07:31:03 -0800 (PST)
-Message-ID: <42ae9612-43da-5f3a-534d-d30b9f399f90@linaro.org>
-Date:   Mon, 14 Nov 2022 18:31:02 +0300
+        Mon, 14 Nov 2022 10:31:27 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2081.outbound.protection.outlook.com [40.107.20.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB9A2497A;
+        Mon, 14 Nov 2022 07:31:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XvmoSlVofKqv4iO9EjO+qelSzJ90fC99R6Q6B5ToZ02Twzde7u/9pComYm3aSwM7y4E0bzOSuwFZtd6u4NVHL6NHJNGUTb2TdWsy6tgQRFHj7EvDVqEUGGUOetYYSyZ7BjjoM9MyG+EljqkhuMmOCsl4OZyfrlnn1JmEvn6QeKJM+lfhUNfChgr3E/Hz+0Zgyo3ZfO9LnHigV5wirXkc8iLCg3kfqu/95zWD36VufGLkpQrml2EgYI2X0klL0xeRIdhF3DhnIZvFhoZROp9Ny8rKwQ3FCykcbyESnTxHp0kowZjTeAfTWQSW/Q19n9gYtzaJG1kxsHmsmIo8J0o96g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=onNZqgODvoS7N/S0k0vEvZp0az7Jfny1lAfVnqyMmFU=;
+ b=VyfX8W7FkW6bGiOxbW4cJr2qjPiX+uQ5G1bLjWpqN3dbFZ6fQZMRWnMHXoEaJ9iEtx0kdmasKVcHm4I8wxkYxhHzir6Pm+MYbgsdh8SGIBnBA+3rqt7r9PHkVPtCPGFgta74t/jiE6Dw92kbKNqdLzNuaEp6UaNFljfwmYVRsxj67RMOmX2hACLCaAFZkyIxaPBmZYGXWJIPc59xu1MJKfZwapE+/n1VIh4KAA9iB0PRvKv6pBMXqJN2NhjrB3swNZOWfmGYxAdxJIOm6V+m9f6t7FUMEiLzbf18g2TZpTykcN1XlAAVCy8enwVTh429cF1NxvuoVSE3Vy2Qg/gmoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=onNZqgODvoS7N/S0k0vEvZp0az7Jfny1lAfVnqyMmFU=;
+ b=QIbiHq4JUOZavQYsAlvJD6OS2U+63r8vgGcYq1Sav65UJAhDzDcETJIVMaYQjuAyaGvJ+uWp37pcPN2fBj4hFNGzESN+cVMXWgkANiByWtePliwT2w3eLUF6GxrSlJJ56hCtYHr48K7Fy7JI0Uq0bmNoHb+CGzNxpuWCO52CwrE=
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
+ by PA4PR04MB7744.eurprd04.prod.outlook.com (2603:10a6:102:c9::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
+ 2022 15:31:21 +0000
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::6b44:4677:ad1d:b33a]) by PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::6b44:4677:ad1d:b33a%6]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
+ 15:31:21 +0000
+From:   Shenwei Wang <shenwei.wang@nxp.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Wei Fang <wei.fang@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        kernel test robot <lkp@intel.com>
+Subject: RE: [EXT] Re: [PATCH v3 1/1] net: fec: add xdp and page pool
+ statistics
+Thread-Topic: [EXT] Re: [PATCH v3 1/1] net: fec: add xdp and page pool
+ statistics
+Thread-Index: AQHY9eM2DcCGX+tMv0uN92sufUZdVq4+cwAAgAAQvXCAAAu7AIAAAHJg
+Date:   Mon, 14 Nov 2022 15:31:20 +0000
+Message-ID: <PAXPR04MB91858E0EEBE5D22EF6974E3C89059@PAXPR04MB9185.eurprd04.prod.outlook.com>
+References: <20221111153505.434398-1-shenwei.wang@nxp.com>
+ <20221114134542.697174-1-alexandr.lobakin@intel.com>
+ <PAXPR04MB918591AA3C3A41AE794DB41489059@PAXPR04MB9185.eurprd04.prod.outlook.com>
+ <20221114152736.702858-1-alexandr.lobakin@intel.com>
+In-Reply-To: <20221114152736.702858-1-alexandr.lobakin@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR04MB9185:EE_|PA4PR04MB7744:EE_
+x-ms-office365-filtering-correlation-id: 4ab8b58d-0ab7-4e75-5edf-08dac655480d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rAcNxajY+j084WOVlZ6sbs+TKkvs4I8LE9volHg7Q4zT8mlAqIqZja5cwr6whqu4NA0WM6yFejMHjw2s1gOZS69y7NaVC02bXB/SMmOHCRH1XFi6NAzlx4pgPZLYsKrYPJ7ZQ9zlshoJYqtCJxjAlgWhyeOpaiYYbsag/yHwFIYisVjKyibWBSSJ6via20eqD5FxC06KicJr1c28Q2q94UMtpEINP+SWhILLpBuRZZgItox+iZMYasBqcvxINIQORyEz0smMvQDmhsyVfEu1r6neVGy5/35VAARqO0/EIx47hB1MKtNuEY20zIjp6meFN7/2qyiaK/ys/68QPFDum/CnUj0XimPteiUKGUwcw4qxbTWQy75RkSGZy4FZW7yyipiOdQQlbKFgm0WkyOy/Nog0tI7MxNaavi7PxlZlOmOuf2TbJMZotDdSeSLFw0MEtPavmkHenj5WaFjVsWfpWSEundGSWQz0+myD/Pc8y/jytuNsJah2jmDzjHIMA1J02UTjZLj6EnaqUyisyoeT44bznZpJeWLwcjq4eX/BuHWFWs1LJ6zhbEnp2i+VV9/SL6CXMYFrdCW18leXxkoD1O7KJKbO2ryrmUnFeT7iYv5JkFJ/PwFpduunOpTp+vpg2QNLr4hh5G3VsNP+IsSXJf2TEH4XA6sDiC2Ktz59NtuyTgwjWYoRgt/vgF462onBTuiLcNTXPyURBXlZMUCGWTqG86Hne47M7/BuPN6Vwc7iA9nNPeFDXBOQESvYArPQkC+K44AIuPRZ7W4E+kDP4w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(346002)(366004)(39860400002)(136003)(451199015)(9686003)(7696005)(71200400001)(26005)(6506007)(478600001)(53546011)(55236004)(66446008)(66476007)(54906003)(41300700001)(66556008)(4326008)(66946007)(8676002)(64756008)(76116006)(6916009)(186003)(44832011)(316002)(83380400001)(7416002)(52536014)(55016003)(8936002)(33656002)(5660300002)(38100700002)(38070700005)(86362001)(122000001)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8hidr3wck9agXqKOY0PeWPPBbSovXSLQNjHBvXC5uz7ut4LnJ+VWxpicrZ9U?=
+ =?us-ascii?Q?wDpbwxmBxYuq9F/crZNYK1Lm8v76uhnCCVpRbODBIkuU/2LkvtxRUj0sLpQH?=
+ =?us-ascii?Q?RGKEE6JMaKC+00UcoOXm/zTf/sgR+bNoJkhUgPXNcL48+PKPvb2hP6xMLzFf?=
+ =?us-ascii?Q?sdrIlM4tw1p2qt/k6Rxem5iSBSiKfNf61FXi6TskO2jOs/72yyWjSBh138Sz?=
+ =?us-ascii?Q?k6SHS6N/xxvMstok4kpnYMO7plcPSmj6T1VBM69wuUK2XiwJLIN0TdDhzwHo?=
+ =?us-ascii?Q?j6zmak+/KDZrZWBkhe153pqJjeUaoNV/02wjgD9yv/LyrUfmVULxcuF1cqDu?=
+ =?us-ascii?Q?bk4HVyQKb0gXDDFI2Boz9jXk7fig7xAyQkKIIJBrpL/alRl7bT0o7m8BsKap?=
+ =?us-ascii?Q?bkYfdCUyFQgNiJ2BrtqKANgHWkCmyu9+nZzTnj4rgQyCeMiJu9wEqhE0avvp?=
+ =?us-ascii?Q?05m3R5tvZyMl4QxhIM5VIpdgnTOHUqSQ1KnBzpfYpOum6oSicKHEAKodp3nv?=
+ =?us-ascii?Q?t06KAl9spO+p2kM7u8Xa2sUfe6+VgZhYP1u2ushlQOK1RQZejXllcR3ikm5f?=
+ =?us-ascii?Q?guZVlCvQrhpg0xyBZ8V56v6FrUTzCJx+vRO5GJjBaFEohPYGG5oqQyeVWL+r?=
+ =?us-ascii?Q?0aqWoM/uj+xQnB2pXhmlm8dH7xu+cyei7841TSP4YmbAtywPeyTCAgOdhnpE?=
+ =?us-ascii?Q?ZWKW5rigTeS/uNuHU0MlikPcfyjB4O7nEXLfxdQllzQAVNTsDPsROSDGS6iK?=
+ =?us-ascii?Q?EiKgR1VsDOs+6f6CFyg58TNoGpaF+nw2dKV0bRlUwQ6YUA5XSHvR5a6GQrvf?=
+ =?us-ascii?Q?6p16RTakulBvuPG6gkYUcavvjWBmxPJjV5rScPI7VjNppI8SlFgyFMn0lW/n?=
+ =?us-ascii?Q?GVjXg6e/d+uMNEmvFRzaUTorYRwDT03xE5ePh4r4WZfw2PhfgSmiNgOSBRGf?=
+ =?us-ascii?Q?w2yoV2WYo2xRAZ85TXEwmUkYc8+y/Si70eyacE335Gh39rM4KeO7DJ0p64hF?=
+ =?us-ascii?Q?a/TFSny4aGyaJJHtUzoqMEFcknGaLq4RYRIon/XaN34J+C1rNTl7vAx9YeBC?=
+ =?us-ascii?Q?f1au2dmZ4CM98WtUhRKycmWCuaJrXSBPmKfL7CB/P4eVBjak5Zn0vVYJgC6Q?=
+ =?us-ascii?Q?GswBpdQJ8UFa8xcgkzBK/gcF7U/n5EKfGFUKUOYVuaT8CMb2NGwD8yDwtTAj?=
+ =?us-ascii?Q?LUyCdmJycKAXp9rXVZTkuySmzjbQxBfVBW1GDCRfVC+JMxCwthFrhWXKWvvI?=
+ =?us-ascii?Q?0jPzT/V7yAJA4GZSOijt2kiREQ7kDwVJcWtGg+05Q+PR+CJaGVt8f53tIbLx?=
+ =?us-ascii?Q?lQ6F0ZZg/twE+2Jnj+7jzzfzgNsyij3+60C7gKQ2nBFiYz4hrTzLeSKmIscQ?=
+ =?us-ascii?Q?UwiorEP8U0eggPMSGxrrMNXhCLBj/xMEzAuo2g/10zEtL93YNfK5Z1BPAPPZ?=
+ =?us-ascii?Q?M7PVxkCCyi/UxGEaNpTDdbB62efG+Eb6wI443xXs4I81A5rkWD2aLCEeUBY+?=
+ =?us-ascii?Q?2MCgbFKAjCFu+G5+NvC8r2fuUQPTJ1xM6+sdp6SEJE0a9eYSKoF8VSvhqgNE?=
+ =?us-ascii?Q?GwbeCYQu27IQW/gDl85h2NUPs1UuU+hTbyS6ysqZ?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 02/14] dt-bindings: phy: qcom,qmp-usb3-dp: fix sc8280xp
- bindings
-Content-Language: en-GB
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221111092457.10546-1-johan+linaro@kernel.org>
- <20221111092457.10546-3-johan+linaro@kernel.org>
- <ace91d8b-9a14-5569-7c59-344e9751fa96@linaro.org>
- <Y3JEh7wO394kepXq@hovoldconsulting.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <Y3JEh7wO394kepXq@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ab8b58d-0ab7-4e75-5edf-08dac655480d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2022 15:31:20.9077
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Jz8TnW7+A1e9MlM+KpXfXwz1gCskdlA3p6nT1HQLAK8IfP/lNqBe+TMoOz8r7Bo+OKhF1EOUNc00xceiaN6BAg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7744
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/11/2022 16:37, Johan Hovold wrote:
-> On Sat, Nov 12, 2022 at 02:43:03PM +0300, Dmitry Baryshkov wrote:
->> On 11/11/2022 12:24, Johan Hovold wrote:
->>> The current QMP USB3-DP PHY bindings are based on the original MSM8996
->>> binding which provided multiple PHYs per IP block and these in turn were
->>> described by child nodes.
->>>
->>> The QMP USB3-DP PHY block provides a single multi-protocol PHY and even
->>> if some resources are only used by either the USB or DP part of the
->>> device there is no real benefit in describing these resources in child
->>> nodes.
->>>
->>> The original MSM8996 binding also ended up describing the individual
->>> register blocks as belonging to either the wrapper node or the PHY child
->>> nodes.
->>>
->>> This is an unnecessary level of detail which has lead to problems when
->>> later IP blocks using different register layouts have been forced to fit
->>> the original mould rather than updating the binding. The bindings are
->>> arguable also incomplete as they only the describe register blocks used
->>> by the current Linux drivers (e.g. does not include the PCS LANE
->>> registers).
->>>
->>> This is specifically true for later USB4-USB3-DP QMP PHYs where the TX
->>> registers are used by both the USB3 and DP parts of the PHY (and where
->>> the USB4 part of the PHY was not covered by the binding at all). Notably
->>> there are also no DP "RX" (sic) registers as described by the current
->>> bindings and the DP "PCS" region is really a set of DP_PHY registers.
->>>
->>> Add a new binding for the USB4-USB3-DP QMP PHYs found on SC8280XP which
->>> further bindings can be based on.
->>>
->>> Note that the binding uses a PHY type index to access either the USB3 or
->>> DP part of the PHY and that this can later be used also for the USB4
->>> part if needed.
->>>
->>> Similarly, the clock inputs and outputs can later be extended to support
->>> USB4.
->>>
->>> Also note that the current binding is simply removed instead of being
->>> deprecated as it was only recently merged and would not allow for
->>> supporting DP mode.
->>>
->>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
->>> ---
-> 
->>> +  "#clock-cells":
->>> +    const: 1
->>> +
->>> +  clock-output-names:
->>> +    items:
->>> +      - const: usb3_pipe
->>> +      - const: dp_link
->>> +      - const: dp_vco_div
->>> +
->>> +  "#phy-cells":
->>> +    const: 1
->>> +    description: |
->>> +      PHY index
->>> +        - PHY_TYPE_USB3
->>> +        - PHY_TYPE_DP
->>
->> I'm stepping on Rob's and Krzysztof's ground here, but it might be more
->> logical and future proof to use indices instead of phy types.
-> 
-> Why would that be more future-proof?
-> 
-> I initially added defines for these indexes to a QMP header, but noticed
-> that we already have PHY drivers that use the PHY types for this. So
-> there's already a precedent for this and I didn't see any real benefit
-> to adding multiple per-SoC defines for the same thing.
-
-As you guessed from my question, I was thinking about USB4 (for which we 
-do not have a separate PHY_TYPE, but that probably shouldn't matter). 
-Would it be a separate PHY here, or would it be a combo UBS3+USB4 plus 
-separate DP phy?
-
-Yes, we have other PHYs, which use types as an index, however it's 
-slightly more common to have indices instead.
-
-Anyway, this is a minor issue. It might be just that I'm more common to 
-using indices everywhere (in other words, I have preference here, but 
-it's not a strong requirement from my side).
 
 
->> Just for my understanding, would USB4 support add another qserdes+tx/rx
->> construct or would it be the same USB3 register space?
-> 
-> The TX/RX registers are shared by the all three parts of the PHY (USB4,
-> USB3, DP), while USB4 has two dedicated sets of PLL (serdes) and PCS
-> registers.
+> -----Original Message-----
+> From: Alexander Lobakin <alexandr.lobakin@intel.com>
+> Sent: Monday, November 14, 2022 9:28 AM
+> To: Shenwei Wang <shenwei.wang@nxp.com>
+> Cc: Alexander Lobakin <alexandr.lobakin@intel.com>; David S. Miller
+> <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>; Jakub
+> Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; Alexei
+> Starovoitov <ast@kernel.org>; Daniel Borkmann <daniel@iogearbox.net>;
+> Jesper Dangaard Brouer <hawk@kernel.org>; John Fastabend
+> <john.fastabend@gmail.com>; Wei Fang <wei.fang@nxp.com>;
+> netdev@vger.kernel.org; linux-kernel@vger.kernel.org; imx@lists.linux.dev=
+;
+> kernel test robot <lkp@intel.com>
+> > > <daniel@iogearbox.net>;
+> > >> @@ -29,6 +29,7 @@ config FEC
+> > >>       select CRC32
+> > >>       select PHYLIB
+> > >>       select PAGE_POOL
+> > >> +     select PAGE_POOL_STATS
+> > >
+> > > Drivers should never select PAGE_POOL_STATS. This Kconfig option was
+> > > made to allow user to choose whether he wants stats or better
+> > > performance on slower systems. It's pure user choice, if something
+> > > doesn't build or link, it must be guarded with
+> IS_ENABLED(CONFIG_PAGE_POOL_STATS).
+> >
+> > As the PAGE_POOL_STATS is becoming the infrastructure codes for many
+> > drivers, it is redundant for every driver to implement the stub
+> > function in case it is not selected. These stub functions should be pro=
+vided by
+> PAGE_POOL_STATS itself if the option is not selected.
+>=20
+> Correct, but I think you added 'select PAGE_POOL_STATS' due to some build
+> issues on PPC64, or not? So if there are any when !PAGE_POOL_STATS, it's
+> always better to handle this at the Page Pool API level in a separate pat=
+ch.
 
-Ack, thanks.
+Yes, the 'select PAGE_POOL_STATS' was added because of the building failure
+found on PPC64 platform.
 
--- 
-With best wishes
-Dmitry
+Thanks,
+Shenwei
 
+>=20
+> >
+> > >
+> > >>       imply NET_SELFTESTS
+> > >>       help
+> > >>         Say Y here if you want to use the built-in 10/100 Fast
+>=20
+> Thanks,
+> Olek
