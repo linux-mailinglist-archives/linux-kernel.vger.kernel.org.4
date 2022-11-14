@@ -2,120 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283C3628828
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 473C8628727
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236856AbiKNSSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 13:18:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
+        id S237700AbiKNRdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:33:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238388AbiKNSSL (ORCPT
+        with ESMTP id S237797AbiKNRdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 13:18:11 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D6362F019;
-        Mon, 14 Nov 2022 10:18:05 -0800 (PST)
-Received: from skinsburskii.localdomain (c-67-170-100-148.hsd1.wa.comcast.net [67.170.100.148])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9CA0720B717A;
-        Mon, 14 Nov 2022 10:18:04 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9CA0720B717A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1668449884;
-        bh=KRO/TqGp4x1anSCsu7IgV88Z9AUtXq8bdapPCe4k3bE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HwJcOTiX0CJurxpdLC+rWT0os26XIouCyWM9brJ0xd2i2lEpi8SgiOipAr2NaiFMC
-         ep3DpGLk9AEnqJSWkNMND+7mmlWRMJdouHEHzgML/FwjIZEXOyCJWloZlrmSK6Kbs8
-         C6drVwwC4ByD6bCaxIXGzRQrO6s7bPWmDZEQnULA=
-Date:   Thu, 10 Nov 2022 05:41:52 -0800
-From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, mikelley@microsoft.com,
-        sunilmut@microsoft.com, wei.liu@kernel.org, kys@microsoft.com,
-        Tianyu.Lan@microsoft.com, haiyangz@microsoft.com,
-        decui@microsoft.com, dwmw2@infradead.org, joro@8bytes.org,
-        will@kernel.org
-Subject: Re: [PATCH] iommu/hyper-v: Allow hyperv irq remapping without x2apic
-Message-ID: <20221110134152.GA27026@skinsburskii.localdomain>
-References: <1668020853-23950-1-git-send-email-nunodasneves@linux.microsoft.com>
+        Mon, 14 Nov 2022 12:33:33 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44648626A;
+        Mon, 14 Nov 2022 09:33:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+woNkKK6JSXdy4mqNbD3Tr9quE3pzUwSQqKVI1X/BPE=; b=fHomstRuFLzlEHSxV4ihy4uUn6
+        YvJdVaKHoB+i1x8XYxSv3RpRMcxe61Xrh62ZbL1CwCk6Pr8pRA6a6ruyE4XUevOmmP1GYaM65Z6JE
+        bOs796MYabZLN6vCCZ9sEuLMIP+GK74A4IDH6h6GgoM2T2TCVkv4bqNOB46QIKMbv3kMzG6iaxEOg
+        pHlajUP6vBPH3+6JbTx45ahU1qwxFpmhRL9js5GtDZ5T0wRN+UWRLztFD5QIVIyKnOHnHuhg4YRWN
+        mi6C8iRL5EJHP5lJNaT83bcrM0VpC2TN3hRJ2yLArQUrQZpqP4/DDgnFeA9JBgWRiI31OER4LkS3e
+        HQ33BaAA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oudKt-00FbcY-M8; Mon, 14 Nov 2022 17:33:31 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3B3EC300348;
+        Mon, 14 Nov 2022 13:46:27 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 24AF320242906; Mon, 14 Nov 2022 13:46:27 +0100 (CET)
+Date:   Mon, 14 Nov 2022 13:46:27 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: Re: [PATCH v3 3/3] perf/x86/intel: Expose EPT-friendly PEBS for SPR
+ and future models
+Message-ID: <Y3I4o4Y/TcqidyJT@hirez.programming.kicks-ass.net>
+References: <20221109082802.27543-1-likexu@tencent.com>
+ <20221109082802.27543-4-likexu@tencent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1668020853-23950-1-git-send-email-nunodasneves@linux.microsoft.com>
-X-Spam-Status: No, score=-16.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221109082802.27543-4-likexu@tencent.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 11:07:33AM -0800, Nuno Das Neves wrote:
-> If x2apic is not available, hyperv-iommu skips remapping
-> irqs. This breaks root partition which always needs irqs
-> remapped.
+On Wed, Nov 09, 2022 at 04:28:02PM +0800, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> Fix this by allowing irq remapping regardless of x2apic,
-> and change hyperv_enable_irq_remapping() to return
-> IRQ_REMAP_XAPIC_MODE in case x2apic is missing.
+> According to Intel SDM, the EPT-friendly PEBS is supported by all the
+> platforms after ICX, ADL and the future platforms with PEBS format 5.
 > 
-> Tested with root and non-root hyperv partitions.
-> 
-> Signed-off-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
-> ---
->  drivers/iommu/Kconfig        | 6 +++---
->  drivers/iommu/hyperv-iommu.c | 7 ++++---
->  2 files changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
-> index dc5f7a156ff5..cf7433652db0 100644
-> --- a/drivers/iommu/Kconfig
-> +++ b/drivers/iommu/Kconfig
-> @@ -474,13 +474,13 @@ config QCOM_IOMMU
->  	  Support for IOMMU on certain Qualcomm SoCs.
->  
->  config HYPERV_IOMMU
-> -	bool "Hyper-V x2APIC IRQ Handling"
-> +	bool "Hyper-V IRQ Handling"
->  	depends on HYPERV && X86
->  	select IOMMU_API
->  	default HYPERV
->  	help
-> -	  Stub IOMMU driver to handle IRQs as to allow Hyper-V Linux
-> -	  guests to run with x2APIC mode enabled.
-> +	  Stub IOMMU driver to handle IRQs to support Hyper-V Linux
-> +	  guest and root partitions.
->  
->  config VIRTIO_IOMMU
->  	tristate "Virtio IOMMU driver"
-> diff --git a/drivers/iommu/hyperv-iommu.c b/drivers/iommu/hyperv-iommu.c
-> index e190bb8c225c..abd1826a9e63 100644
-> --- a/drivers/iommu/hyperv-iommu.c
-> +++ b/drivers/iommu/hyperv-iommu.c
-> @@ -123,8 +123,7 @@ static int __init hyperv_prepare_irq_remapping(void)
->  	const struct irq_domain_ops *ops;
->  
->  	if (!hypervisor_is_type(X86_HYPER_MS_HYPERV) ||
-> -	    x86_init.hyper.msi_ext_dest_id() ||
-> -	    !x2apic_supported())
-> +	    x86_init.hyper.msi_ext_dest_id())
->  		return -ENODEV;
->  
->  	if (hv_root_partition) {
-> @@ -170,7 +169,9 @@ static int __init hyperv_prepare_irq_remapping(void)
->  
->  static int __init hyperv_enable_irq_remapping(void)
->  {
-> -	return IRQ_REMAP_X2APIC_MODE;
-> +	if (x2apic_supported())
-> +		return IRQ_REMAP_X2APIC_MODE;
-> +	return IRQ_REMAP_XAPIC_MODE;
->  }
->  
->  struct irq_remap_ops hyperv_irq_remap_ops = {
-> -- 
-> 2.25.1
+> Currently the only in-kernel user of this capability is KVM, which has
+> very limited support for hybrid core pmu, so ADL and its successors do
+> not currently expose this capability. When both hybrid core and PEBS
+> format 5 are present, KVM will decide on its own merits.
 
-Reviewed-by: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+Oh right; the whole ADL KVM trainwreck :/ What's the plan there?
+
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: linux-perf-users@vger.kernel.org
+> Suggested-by: Kan Liang <kan.liang@linux.intel.com>
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+> ---
+> Nit: This change is proposed to be applied via the KVM tree.
+
+Works for me;
+
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
