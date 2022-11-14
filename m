@@ -2,61 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91108627A13
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A30D1627A1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236480AbiKNKJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 05:09:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42236 "EHLO
+        id S236444AbiKNKLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 05:11:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236536AbiKNKIZ (ORCPT
+        with ESMTP id S236234AbiKNKJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 05:08:25 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 400932DEA
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:08:04 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 594BC23A;
-        Mon, 14 Nov 2022 02:08:10 -0800 (PST)
-Received: from bogus (unknown [10.57.6.137])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 22D023F534;
-        Mon, 14 Nov 2022 02:08:01 -0800 (PST)
-Date:   Mon, 14 Nov 2022 10:07:59 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Lee Jones <lee@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v1 1/1] mfd: vexpress-sysreg: Fix resource compound
- literal assignments
-Message-ID: <20221114100759.oxrob7ulnbw4yw2p@bogus>
-References: <20221113191027.2327-1-andriy.shevchenko@linux.intel.com>
+        Mon, 14 Nov 2022 05:09:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4161F2EE;
+        Mon, 14 Nov 2022 02:09:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0910C60FB5;
+        Mon, 14 Nov 2022 10:09:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A904C433D6;
+        Mon, 14 Nov 2022 10:09:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668420555;
+        bh=jWQkzrzEHBtTNOGM5l+RElQaev9hEMU5V7XbVXjmqM4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qjj99Y7S2QmHjq+3RQfpzc40SRg/ZArOulfuP6gdyGI3m1ne2tjRYEKc6rSMzOgi4
+         hNg9fDP8RGYWT02tEoe8MZaqCFI4jaI8wZ0cXnsmrAbujPTE4oWXRfr+yeR/CVKY4h
+         1jsDph3a11z4Gcbjq0H7pWcG+qKldq/EZsnpY5L3IEKNn39F1abncrtUkN0exPfuxd
+         K922FPqt2kW+NujKxRtq58mlOH4+IoNKAziX5jVy+P/rWvrhW2t1NLzauSwCCK6aGF
+         w2K36xoCmrD4ySVu07v49qx484xUEkkIkZrm+mA8IgrkRdvlbu82PqQgimd58q5civ
+         1Kcm/Voz8Lh6g==
+Date:   Mon, 14 Nov 2022 10:09:08 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     Larry Lai <larry.lai@yunjingtech.com>,
+        chengwei <foxfly.lai.tw@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "GaryWang@aaeon.com.tw" <GaryWang@aaeon.com.tw>,
+        Musa Lin <musa.lin@yunjingtech.com>,
+        Jack Chang <jack.chang@yunjingtech.com>,
+        Javier Arteaga <javier@emutex.com>,
+        Nicola Lunghi <nicola.lunghi@emutex.com>
+Subject: Re: =?utf-8?B?5Zue6KaG?= =?utf-8?Q?=3A?= [PATCH 1/5] mfd: Add
+ support for UP board CPLD/FPGA
+Message-ID: <Y3ITxA+rkl2ma3Lg@google.com>
+References: <20221019022450.16851-1-larry.lai@yunjingtech.com>
+ <20221019022450.16851-2-larry.lai@yunjingtech.com>
+ <Y1/ik4XGNWsOg5KH@google.com>
+ <SG2PR06MB3742D3714B6A255914DC73E4F93F9@SG2PR06MB3742.apcprd06.prod.outlook.com>
+ <Y2qQ5fq1kJBdlUYi@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221113191027.2327-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y2qQ5fq1kJBdlUYi@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 13, 2022 at 09:10:27PM +0200, Andy Shevchenko wrote:
-> Since DEFINE_RES_*() macros were converted to provide a compound literal
-> the user doesn't need to repeat it. Moreover, it may not be compiled.
+On Tue, 08 Nov 2022, gregkh@linuxfoundation.org wrote:
+
+> On Tue, Nov 08, 2022 at 04:31:17PM +0000, Larry Lai wrote:
+> > Send again with Text only.
 > 
-> Fixes: 9c973ce7f9cf ("resource: Convert DEFINE_RES_NAMED() to be compound literal")
-> Reported-by: kernel test robot <lkp@intel.com>
+> Sorry, was in HTML format :(
 
-If not too late,
-
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+Not sure what Greg is replying to here, but it's not in my inbox.
 
 -- 
-Regards,
-Sudeep
+Lee Jones [李琼斯]
