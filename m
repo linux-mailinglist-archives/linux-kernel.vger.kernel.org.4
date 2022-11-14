@@ -2,114 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D74628B78
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6023B628B79
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237477AbiKNVmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 16:42:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
+        id S237577AbiKNVnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 16:43:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235836AbiKNVmu (ORCPT
+        with ESMTP id S235836AbiKNVnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 16:42:50 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C1819001
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:42:50 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id r18so11380466pgr.12
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:42:49 -0800 (PST)
+        Mon, 14 Nov 2022 16:43:21 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17A819001
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:43:19 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id w26-20020a056830061a00b0066c320f5b49so7476718oti.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:43:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kPn/wfFTp3jxDOdfQANEH8KPamufk9IhmkNP8DK3lpI=;
-        b=CSSVtIIsW/hqYyvPfSqEPJm2HNU//6Yy6iuKqDGypiUHEpC5hdnv/fz0XPNei8kXIc
-         Q/r3cO1NeJdoeCbrws0o9sfCyj3RzaMcCcm7T7qED/owqurw4rEJsKvNgyakjQ4TQgXL
-         Iq6XQPwOsumHT7Uykbutg3+EIJUhkZfBITabFPnQhQyqu7WWvy4s7tDlbRx+0BiyNqJU
-         nvqV4EJqVVdOsURr6aHrR6uqIzAR8ySvtGz91Hd0GgluCutekS4r5m5T/usgw9TIO4bI
-         skDq6KgXRn3rZ5DfXLBj2e/PCIi/cD1fe+vrke8lZSEV0zb97DhLKJVuHuOmHswAXGmX
-         OkTg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mcMQ6oGt3lHEFdYvtNKrgWQbO0ZWYUaaXk4OdmcSKAE=;
+        b=QNOvJtZ4MGSV5OFgY1M95uPa5H3x0A1t60/APstJgzlgAftcS9kToQVWqUvcrnfKBv
+         IMsm+flXQZ3ig1u0qNIcRhCOXCNpp6BjStn5MjpKU/+okoXqVFfAFN4GaR0W8r/7/RJB
+         4dlJ9DxHtj/obYPTYH4iV0pCFUTLaUmix6Emnkwq9ixOVkzyWEah8HUoxS8xZ+/Uda1J
+         aAg7ZsHwJrjmJWSgaxy9+EgqGzX22ZiVvVau4UKLWISV/Ty3uLZG5TViyQx5UlXRMa1d
+         YwZnu9YRiaWgMBIAbfakmd+b2y7K2qj6cYBjjG3QOfw3OjPyuPk9RmLj/r3hk0by0B9V
+         MdRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kPn/wfFTp3jxDOdfQANEH8KPamufk9IhmkNP8DK3lpI=;
-        b=WtfrnxK5Feh45vNN3z2rZs0EMvHISUagoIfAaDoY4RKq2+TIeQrbrazzEQ2vmVpnaQ
-         3CTYO1k+ova1+jjViPiN+NRzOrSN21aqEkzZ5DFDsY8AAvQbQ87SZvSvMzaUDmuzfIf3
-         Jo3Aqvqy5kyOUCPfRDvFs9pNW40ePXTycymGH5fteZ00OJUTLaYDwt+4RtFfuAUooPRO
-         0B5FTVqJoLIuILSG/k9nw+r0ODCUVpMi3bK4kvmpiQFhJpf9KQyA+X6XsRTl6TpF3IAv
-         IGo/693Vymv225O4tJ/6EWqlu+o0DwOI+a8NnI8MSNbeP9Gt32iUXAuI6vt6ZJ5nH/oY
-         2zgA==
-X-Gm-Message-State: ANoB5pnqEfOMe82lC57nysyHp2ATShmjTFl+TAOh5aIWxVmpFhm0aRiV
-        /6rT9QdmXZ8CdORFiPhaRrM=
-X-Google-Smtp-Source: AA0mqf72URkOJZc6q2SP76lLrr6c4u/NI5Mu958Mevg4rt7O3UYYUIPRbnyllWd+MNTHzpMUM2GhhA==
-X-Received: by 2002:a62:c546:0:b0:56b:d03d:fdb4 with SMTP id j67-20020a62c546000000b0056bd03dfdb4mr15242062pfg.79.1668462169254;
-        Mon, 14 Nov 2022 13:42:49 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id 5-20020a170902c20500b0017f36638010sm7944272pll.276.2022.11.14.13.42.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 13:42:48 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 14 Nov 2022 11:42:47 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     syzbot <syzbot+782984d6f1701b526edb@syzkaller.appspotmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: use-after-free Read in kernfs_activate (2)
-Message-ID: <Y3K2V6hwifLlBDfA@slm.duckdns.org>
-References: <000000000000e4e4fe05ed5bf2b0@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mcMQ6oGt3lHEFdYvtNKrgWQbO0ZWYUaaXk4OdmcSKAE=;
+        b=BH1Wrkn4aD+8q/xbhnFncvMI4lSH6yLzyBY7j1uhZuXdw343fo/g/m2lVQC9b1r4YM
+         VnqZGiRoFBVIFClqOoAXFNvNcIYXCZwX5yRh9ZjKKt5QOevwW7VTeragTjSbUIL2/wBs
+         DQaOlmBiCMtZqEVvaCgOjuGDUGlMU2Q8PN3x3+3qCCgsMSRHSS2+zloicbfcE6MC1AOQ
+         u/I1epNwDhrUjbrvXi5yheZOugN4s5HsUO53ht0b2Zx09UU2yxhhKUmQPN72PIbCYKQV
+         BFOay2Cc9pE7YatlebP35qO9x9snpOLkSKfQ2GA0Ukoa/esP1PZyeFRXImbFH3hV/h6W
+         jsIw==
+X-Gm-Message-State: ANoB5pl/CUAkylMdT2ubaB/fQVOj4PQ81wtM9AsQ43AW2wNtsH9W9Nzv
+        V5YzUfg8C8K8duwRrWpBLg1z34YqNBwBRhatXw==
+X-Google-Smtp-Source: AA0mqf5cINxhF0nQ0dK1Dkdpn4TIndWcrqQGBWG6NOnneUuIsKbQzBXlyZ/VV68zqpn61tC4C30qAneWLKNqnhVAzbY=
+X-Received: by 2002:a9d:7752:0:b0:66c:49c4:39a with SMTP id
+ t18-20020a9d7752000000b0066c49c4039amr7400288otl.81.1668462199286; Mon, 14
+ Nov 2022 13:43:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000e4e4fe05ed5bf2b0@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1613243844.git.luto@kernel.org> <c0ff7dba14041c7e5d1cae5d4df052f03759bef3.1613243844.git.luto@kernel.org>
+ <YzWj9zjTJI3RCDf2@smile.fi.intel.com> <YzWpob6MOf1SJr5I@smile.fi.intel.com>
+ <c554f363-05db-b185-1a7d-ce8ae27890da@gmail.com> <d1f76ef7-2d91-2be2-285c-8dbd208239a2@gmail.com>
+ <Y2u+J5EEyxRuusSr@smile.fi.intel.com> <CAMzpN2iEQVQWsPX58ONxaH=gkUACtq1t2OpozZ55+f=Ub+AwyQ@mail.gmail.com>
+ <d0d8d5ea-a752-d082-d8fe-68ff888afb59@gmail.com>
+In-Reply-To: <d0d8d5ea-a752-d082-d8fe-68ff888afb59@gmail.com>
+From:   Brian Gerst <brgerst@gmail.com>
+Date:   Mon, 14 Nov 2022 16:43:07 -0500
+Message-ID: <CAMzpN2gYdwLmeqh+=MAkA2ALaB1PK_YD_5tpZMA09M6NCrvOjg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] x86/stackprotector/32: Make the canary into a
+ regular percpu variable
+To:     Ferry Toth <fntoth@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Joerg Roedel <jroedel@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 13, 2022 at 07:40:56AM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    59f2f4b8a757 fs/userfaultfd: Fix maple tree iterator in us..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14e836fa880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=480ba0fb2fd243ac
-> dashboard link: https://syzkaller.appspot.com/bug?extid=782984d6f1701b526edb
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/619de907b82c/disk-59f2f4b8.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/bcd0dc7d69ef/vmlinux-59f2f4b8.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/a8dbe0bc7228/bzImage-59f2f4b8.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+782984d6f1701b526edb@syzkaller.appspotmail.com
-> 
-> usb 4-1: Direct firmware load for ueagle-atm/eagleII.fw failed with error -2
-> usb 4-1: Falling back to sysfs fallback for: ueagle-atm/eagleII.fw
-> ==================================================================
-> BUG: KASAN: use-after-free in kernfs_root fs/kernfs/kernfs-internal.h:66 [inline]
-> BUG: KASAN: use-after-free in kernfs_next_descendant_post fs/kernfs/dir.c:1289 [inline]
-> BUG: KASAN: use-after-free in kernfs_activate+0xd0/0x3a0 fs/kernfs/dir.c:1344
-> Read of size 8 at addr ffff888079194b10 by task kworker/1:12/5383
+On Thu, Nov 10, 2022 at 2:36 PM Ferry Toth <fntoth@gmail.com> wrote:
+>
+> Hi,
+>
+> Op 09-11-2022 om 23:33 schreef Brian Gerst:
+> > On Wed, Nov 9, 2022 at 9:50 AM Andy Shevchenko
+> > <andriy.shevchenko@intel.com> wrote:
+> >> On Fri, Sep 30, 2022 at 11:18:51PM +0200, Ferry Toth wrote:
+> >>> Op 30-09-2022 om 22:30 schreef Ferry Toth:
+> >>>> Op 29-09-2022 om 16:20 schreef Andy Shevchenko:
+> >>>>> On Thu, Sep 29, 2022 at 04:56:07PM +0300, Andy Shevchenko wrote:
+> >>>>>> On Sat, Feb 13, 2021 at 11:19:44AM -0800, Andy Lutomirski wrote:
+> >>>>>>> On 32-bit kernels, the stackprotector canary is quite nasty -- it is
+> >>>>>>> stored at %gs:(20), which is nasty because 32-bit kernels use %fs for
+> >>>>>>> percpu storage.  It's even nastier because it means that whether %gs
+> >>>>>>> contains userspace state or kernel state while running kernel code
+> >>>>>>> depends on whether stackprotector is enabled (this is
+> >>>>>>> CONFIG_X86_32_LAZY_GS), and this setting radically changes the way
+> >>>>>>> that segment selectors work.  Supporting both variants is a
+> >>>>>>> maintenance and testing mess.
+> >>>>>>>
+> >>>>>>> Merely rearranging so that percpu and the stack canary
+> >>>>>>> share the same segment would be messy as the 32-bit percpu address
+> >>>>>>> layout isn't currently compatible with putting a variable at a fixed
+> >>>>>>> offset.
+> >>>>>>>
+> >>>>>>> Fortunately, GCC 8.1 added options that allow the stack canary to be
+> >>>>>>> accessed as %fs:__stack_chk_guard, effectively turning it
+> >>>>>>> into an ordinary
+> >>>>>>> percpu variable.  This lets us get rid of all of the code to
+> >>>>>>> manage the
+> >>>>>>> stack canary GDT descriptor and the CONFIG_X86_32_LAZY_GS mess.
+> >>>>>>>
+> >>>>>>> (That name is special.  We could use any symbol we want for the
+> >>>>>>>    %fs-relative mode, but for CONFIG_SMP=n, gcc refuses to
+> >>>>>>> let us use any
+> >>>>>>>    name other than __stack_chk_guard.)
+> >>>>>>>
+> >>>>>>> This patch forcibly disables stackprotector on older compilers that
+> >>>>>>> don't support the new options and makes the stack canary into a
+> >>>>>>> percpu variable.  The "lazy GS" approach is now used for all 32-bit
+> >>>>>>> configurations.
+> >>>>>>>
+> >>>>>>> This patch also makes load_gs_index() work on 32-bit kernels.  On
+> >>>>>>> 64-bit kernels, it loads the GS selector and updates the user
+> >>>>>>> GSBASE accordingly.  (This is unchanged.)  On 32-bit kernels,
+> >>>>>>> it loads the GS selector and updates GSBASE, which is now
+> >>>>>>> always the user base.  This means that the overall effect is
+> >>>>>>> the same on 32-bit and 64-bit, which avoids some ifdeffery.
+> >>>>>> This patch broke 32-bit boot on Intel Merrifield
+> >>>>>>
+> >>>>>> git bisect start
+> >>>>>> # good: [9f4ad9e425a1d3b6a34617b8ea226d56a119a717] Linux 5.12
+> >>>>>> git bisect good 9f4ad9e425a1d3b6a34617b8ea226d56a119a717
+> >>>>>> # bad: [62fb9874f5da54fdb243003b386128037319b219] Linux 5.13
+> >>>>>> git bisect bad 62fb9874f5da54fdb243003b386128037319b219
+> >>>>>> # bad: [85f3f17b5db2dd9f8a094a0ddc665555135afd22] Merge branch
+> >>>>>> 'md-fixes' of
+> >>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/song/md into
+> >>>>>> block-5.13
+> >>>>>> git bisect bad 85f3f17b5db2dd9f8a094a0ddc665555135afd22
+> >>>>>> # good: [ca62e9090d229926f43f20291bb44d67897baab7] Merge tag
+> >>>>>> 'regulator-v5.13' of
+> >>>>>> git://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator
+> >>>>>> git bisect good ca62e9090d229926f43f20291bb44d67897baab7
+> >>>>>> # bad: [68a32ba14177d4a21c4a9a941cf1d7aea86d436f] Merge tag
+> >>>>>> 'drm-next-2021-04-28' of git://anongit.freedesktop.org/drm/drm
+> >>>>>> git bisect bad 68a32ba14177d4a21c4a9a941cf1d7aea86d436f
+> >>>>>> # good: [49c70ece54b0d1c51bc31b2b0c1070777c992c26]
+> >>>>>> drm/amd/display: Change input parameter for set_drr
+> >>>>>> git bisect good 49c70ece54b0d1c51bc31b2b0c1070777c992c26
+> >>>>>> # good: [0b276e470a4d43e1365d3eb53c608a3d208cabd4] media: coda:
+> >>>>>> fix macroblocks count control usage
+> >>>>>> git bisect good 0b276e470a4d43e1365d3eb53c608a3d208cabd4
+> >>>>>> # bad: [c6536676c7fe3f572ba55842e59c3c71c01e7fb3] Merge tag
+> >>>>>> 'x86_core_for_v5.13' of
+> >>>>>> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+> >>>>>> git bisect bad c6536676c7fe3f572ba55842e59c3c71c01e7fb3
+> >>>>>> # good: [d1466bc583a81830cef2399a4b8a514398351b40] Merge branch
+> >>>>>> 'work.inode-type-fixes' of
+> >>>>>> git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs
+> >>>>>> git bisect good d1466bc583a81830cef2399a4b8a514398351b40
+> >>>>>> # good: [fafe1e39ed213221c0bce6b0b31669334368dc97] Merge tag
+> >>>>>> 'afs-netfs-lib-20210426' of
+> >>>>>> git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs
+> >>>>>> git bisect good fafe1e39ed213221c0bce6b0b31669334368dc97
+> >>>>>> # bad: [b1f480bc0686e65d5413c035bd13af2ea4888784] Merge branch
+> >>>>>> 'x86/cpu' into WIP.x86/core, to merge the NOP changes & resolve
+> >>>>>> a semantic conflict
+> >>>>>> git bisect bad b1f480bc0686e65d5413c035bd13af2ea4888784
+> >>>>>> # bad: [0c925c61dae18ee3cb93a61cc9dd9562a066034d]
+> >>>>>> x86/tools/insn_decoder_test: Convert to insn_decode()
+> >>>>>> git bisect bad 0c925c61dae18ee3cb93a61cc9dd9562a066034d
+> >>>>>> # bad: [514ef77607b9ff184c11b88e8f100bc27f07460d]
+> >>>>>> x86/boot/compressed/sev-es: Convert to insn_decode()
+> >>>>>> git bisect bad 514ef77607b9ff184c11b88e8f100bc27f07460d
+> >>>>>> # bad: [9e761296c52dcdb1aaa151b65bd39accb05740d9] x86/insn:
+> >>>>>> Rename insn_decode() to insn_decode_from_regs()
+> >>>>>> git bisect bad 9e761296c52dcdb1aaa151b65bd39accb05740d9
+> >>>>>> # bad: [d0962f2b24c99889a386f0658c71535f56358f77] x86/entry/32:
+> >>>>>> Remove leftover macros after stackprotector cleanups
+> >>>>>> git bisect bad d0962f2b24c99889a386f0658c71535f56358f77
+> >>>>>> # bad: [3fb0fdb3bbe7aed495109b3296b06c2409734023]
+> >>>>>> x86/stackprotector/32: Make the canary into a regular percpu
+> >>>>>> variable
+> >>>>>> git bisect bad 3fb0fdb3bbe7aed495109b3296b06c2409734023
+> >>>>>> # first bad commit: [3fb0fdb3bbe7aed495109b3296b06c2409734023]
+> >>>>>> x86/stackprotector/32: Make the canary into a regular percpu
+> >>>>>> variable
+> >>>> With the bad commit the last words in dmesg are:
+> >>>>
+> >>>> mem auto-init: stack:off, heap alloc:off, heap free:off
+> >>>> Initializing HighMem for node 0 (00036ffe:0003f500)
+> >>>> Initializing Movable for node 0 (00000000:00000000)
+> >>>> Checking if this processor honours the WP bit even in supervisor
+> >>>> mode...Ok.
+> >>>> Memory: 948444K/1004124K available (12430K kernel code, 2167K rwdata,
+> >>>> 4948K rodata, 716K init, 716K bss, 55680K reserved, 0K cma-reserved,
+> >>>> 136200K highmem)
+> >>>> SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
+> >>>> trace event string verifier disabled
+> >>>> Dynamic Preempt: voluntary
+> >>>> rcu: Preemptible hierarchical RCU implementation.
+> >>>> rcu:     RCU event tracing is enabled.
+> >>>> rcu:     RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=2.
+> >>>>   Trampoline variant of Tasks RCU enabled.
+> >>>>   Tracing variant of Tasks RCU enabled.
+> >>>> rcu: RCU calculated value of scheduler-enlistment delay is 100 jiffies.
+> >>>> rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=2
+> >>>> NR_IRQS: 2304, nr_irqs: 512, preallocated irqs: 0
+> >>>>
+> >>>> without the bad commit dmesg continues:
+> >>>>
+> >>>> random: get_random_bytes called from start_kernel+0x492/0x65a with
+> >>>> crng_init=0
+> >>>> Console: colour dummy device 80x25
+> >>>> printk: console [tty0] enabled
+> >>>> printk: bootconsole [uart0] disabled
+> >>>>
+> >>>> ....
+> >>>>
+> >>>>>> Any suggestions how to fix are welcome!
+> >>>>>>
+> >>> Interesting. I added the following fragment to the kernel config:
+> >>>
+> >>> # CONFIG_STACKPROTECTOR is not set
+> >>>
+> >>> And this resolves the boot issue (tested with v5.17 i686 on Intel
+> >>> Merrifield)
+> >> I'm not sure that's the correct approach.
+> I didn't intend as a resolution, merely as a workaround. And since
+> revert was not possible, as proof issue is localized in stack protector.
+> >> Any answer from the Andy Lutomirski?
+> >>
+> >> And in general to x86 maintainers, do we support all features on x86 32-bit? If
+> >> no, can it be said explicitly, please?
+> > What compiler version are you using?
+>
+> I built with Yocto Honister which builds it's own cross-compiler gcc
+> 11.2. For completeness:
+>
+> root@yuna:~# uname -a
+> Linux yuna 5.17.0-edison-acpi-standard #1 SMP PREEMPT Sun Mar 20
+> 20:14:17 UTC 2022 i686 i686 i386 GNU/Linux
+>
+> root@yuna:~# cat /proc/version
+> Linux version 5.17.0-edison-acpi-standard (oe-user@oe-host)
+> (i686-poky-linux-gcc (GCC) 11.2.0, GNU ld (GNU Binutils) 2.37.20210721)
+> #1 SMP PREEMPT Sun Mar 20 20:14:17 UTC 2022
+>
+> root@yuna:~# cat /etc/os-release
+> ID=poky-edison
+> NAME="Poky (Yocto Project Reference Distro)"
+> VERSION="3.4.4 (honister)"
+> VERSION_ID=3.4.4
+> PRETTY_NAME="Poky (Yocto Project Reference Distro) 3.4.4 (honister)"
+>
+> > --
+> > Brian Gerst
 
-Likely the same one as:
+What exactly happens when it fails (hang/reboot/oops)?
 
- http://lkml.kernel.org/r/0000000000003a95ce05cd867417@google.com
+Does removing the call to boot_init_stack_canary() in init/main.c fix
+the problem?
 
-This is a bug on the firmware loader side.
-
-Thanks.
-
--- 
-tejun
+--
+Brian Gerst
