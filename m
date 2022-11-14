@@ -2,86 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6475A628217
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:10:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DB162821A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236983AbiKNOK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:10:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
+        id S237001AbiKNOK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236760AbiKNOKY (ORCPT
+        with ESMTP id S236992AbiKNOKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:10:24 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBBDDECB
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:10:21 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id d3so13347336ljl.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:10:21 -0800 (PST)
+        Mon, 14 Nov 2022 09:10:52 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A4224BF1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:10:51 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id bs21so18483574wrb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:10:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=d2+SnyYb9w1A47HblbxnZ451UEd8FYwse9lGeC9APAQ=;
-        b=cFFhslt4x+TI+fB7/1OSSCnEyatVRx3mUWuKPZINS3zuAroWUSX0oar87m+ClCb51T
-         oPK787j+PUmUdmUC6oaPGyNbj8MbQUXSQ7grBL7SpTlJv/zmSY+XrgGpQZBu0tOjOJ8E
-         QLOlJxardsYMgbBpXB9cLl5Qy7ecELhIoYTPEyu6JvkZQwUsQSFr8gH26lGZ+R5ZGDzr
-         gBhM8Kf7v5MgRWpRWOl01caNxNskXRaTdP9M+rHI/BzO6ozc6ump/uiSonLxi7rN9+3O
-         u37yfHkNiIw1KCXc9EkFdUjz7kTpKzZoGl1Cxcf+VXvYt4xbHQS//rS9goDSj0SH95qZ
-         WW4A==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rFv86mLduUjZD4Ir7B85b9X3A/QgnGw8k4ISAkiGULg=;
+        b=WUKiYL7PQ07V/pQKq0VIxVYNnk9YrBPnJhgyepUUM45Zz7YUF0MGu2jyX4H5yj5reK
+         0xmfuY/q73pVCXtARzRv2CNWOOkVrI9/gFQgKneQryD/aQ6Jx5815P1AkncyL1JC6Oyv
+         v07W2C+GuHYtLy8YhIiEaeMXtnujxEpCpTADYlzknH4OPBmR3z16zZElUZ88oyfeHzqK
+         8LgDpXaViu3VLHc/eEPvgOj7a64WMH9RmQRE1HKPKnvolBueCGaq1z6EAVVHZJ5A7PSt
+         E/fvoujPWoztvzf2U5lrirs30WjVlqSDi7NJH1Nb3AmNhUsDsMywk/S59aPwA91hOSyF
+         nHqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d2+SnyYb9w1A47HblbxnZ451UEd8FYwse9lGeC9APAQ=;
-        b=E64RnIE5DBHECSk3uLWqY9TNi3PUFoFsSwctE6FrMDn7MjaQe1KdGfyPllrpzI8crL
-         u1sPW5sWRUlYhJuNceRNex4SvyEYqtYFY619hSz8MeLZrc4S2AppVUwg1jhDoW9n68Nf
-         PaKU103TI+17XxN/hmLy0o9OqXRuPBH0+UGHx2fU+dIfgJlSLZxiffG8A35YNrcTRk/6
-         T0rklKGu9XXWg/AqoKh0DdI9LsNGIJoS/zmviHIJ0F4nBHITcVkQ4nlPuW8L5/RABuPg
-         h+czihsARqtcSNXG5wcjDRHuYkeQnaOKgNojrux/fyIKIG8NkXYH9Er2IlJ+VWQjT68X
-         AqfA==
-X-Gm-Message-State: ANoB5plyxdAzoznsFGWd2MNJMwQKulU5d96ObAwlN0J9Wg4vig9jSKFp
-        1a06lc/qW75EpubEikNF/oI=
-X-Google-Smtp-Source: AA0mqf5EfE9zdGhyJyNB9LnqlnCvfYtxSfqYCZhBJMgqkZVlNFxTqwdeWieOlvWSl/s0c4wb6yxufA==
-X-Received: by 2002:a2e:b16d:0:b0:26d:d603:8df2 with SMTP id a13-20020a2eb16d000000b0026dd6038df2mr3840546ljm.189.1668435020281;
-        Mon, 14 Nov 2022 06:10:20 -0800 (PST)
-Received: from ?IPV6:2a02:6b8:0:107:3e85:844d:5b1d:60a? ([2a02:6b8:0:107:3e85:844d:5b1d:60a])
-        by smtp.gmail.com with ESMTPSA id u12-20020ac258cc000000b0049f87fb416dsm1848415lfo.12.2022.11.14.06.10.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 06:10:19 -0800 (PST)
-Message-ID: <21c89067-7112-dc62-6fb3-d83e265eebd5@gmail.com>
-Date:   Mon, 14 Nov 2022 17:10:20 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rFv86mLduUjZD4Ir7B85b9X3A/QgnGw8k4ISAkiGULg=;
+        b=lbZiB4zo1iFU+92+5Abs/9PB+W38+9glYQVfKFK586ZzolUCPholIm8d11toVrp1zi
+         Sdp8xBI4Sc1YvXdclkwlCko5oMlccLhRzW3YIy0VX9aC8FtSX4ymcGMGrTPpiX8MJwrM
+         y9lV+P99Z6XJDuGp6pkwkLgL17YMKbxFVXhZGuny+o5u1q8dZdFL72ZsBrA7Nopu0Pw2
+         zhNP9tVvhe48wIo0Myfd001c8hfjPV7FUudWW+itasguRPqlQHANrf2IbKYrtzNPZUKH
+         J5kXAFpgTCo7zCH3yzMyzwcp0lN6Q4PIZeB/M8Arcz7r/WHuPnFLKEQhfAhhRp2/Tk5C
+         JdjQ==
+X-Gm-Message-State: ANoB5pk6jEnHWFdHVdHGifVtXCwBJrwzl9q5IwUKi+Wbq+1y+UjCBQsn
+        /P7bYTc5zvxn0fW4rBjpU1X6eO3N4K4GXPpVbuaG3w==
+X-Google-Smtp-Source: AA0mqf7bRf2STkWy1G3U1PeXjFIldYJw9UqKgTKmXbWtKIWmnYZqu/ECe6DVeenka1xwYXTXWQP23hF3fJ9W1aXKTo4=
+X-Received: by 2002:a05:6000:1241:b0:236:d8f8:b87d with SMTP id
+ j1-20020a056000124100b00236d8f8b87dmr7372533wrx.343.1668435049383; Mon, 14
+ Nov 2022 06:10:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 2/5] x86/mm: Populate KASAN shadow for entire per-CPU
- range of CPU entry area
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
+References: <20221114075127.2650315-1-irogers@google.com> <20221114075127.2650315-2-irogers@google.com>
+ <0a54d2bc-142f-f62d-978c-70f97332fdfc@intel.com>
+In-Reply-To: <0a54d2bc-142f-f62d-978c-70f97332fdfc@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 14 Nov 2022 06:10:35 -0800
+Message-ID: <CAP-5=fUzW6BrkbkX76SA+vBJzvYrxY2pJRe8yBATYdB0Gn3z+A@mail.gmail.com>
+Subject: Re: [PATCH v1 1/9] perf pmu: Add documentation
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Weilin Wang <weilin.wang@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com,
-        syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com
-References: <20221110203504.1985010-1-seanjc@google.com>
- <20221110203504.1985010-3-seanjc@google.com>
-From:   Andrey Ryabinin <ryabinin.a.a@gmail.com>
-In-Reply-To: <20221110203504.1985010-3-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xin Gao <gaoxin@cdjrlc.com>, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,81 +86,220 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 14, 2022 at 12:56 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> On 14/11/22 09:51, Ian Rogers wrote:
+> > Add documentation to struct perf_pmu and the associated structs of
+> > perf_pmu_alias and perf_pmu_format.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+>
+> Should this be kernel-doc format?
+>
+> $ ./scripts/kernel-doc -man tools/perf/util/pmu.* > /tmp/manout
+> tools/perf/util/pmu.c:35: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>  * Values from a format file read from <sysfs>/devices/cpu/format/ held in
+> tools/perf/util/pmu.c:1: warning: no structured comments found
+> tools/perf/util/pmu.h:140: warning: cannot understand function prototype: 'struct perf_pmu_alias '
+> tools/perf/util/pmu.h:1: warning: no structured comments found
+> tools/perf/util/pmu.l:1: warning: no structured comments found
+> tools/perf/util/pmu.o:1: warning: no structured comments found
+> tools/perf/util/pmu.y:1: warning: no structured comments found
+> $ man -l /tmp/manout | cat
+> $
 
+Thanks, I'll take a look into fixing this.
 
-On 11/10/22 23:35, Sean Christopherson wrote:
-> Populate a KASAN shadow for the entire possible per-CPU range of the CPU
-> entry area instead of requiring that each individual chunk map a shadow.
-> Mapping shadows individually is error prone, e.g. the per-CPU GDT mapping
-> was left behind, which can lead to not-present page faults during KASAN
-> validation if the kernel performs a software lookup into the GDT.  The DS
-> buffer is also likely affected.
-> 
-> The motivation for mapping the per-CPU areas on-demand was to avoid
-> mapping the entire 512GiB range that's reserved for the CPU entry area,
-> shaving a few bytes by not creating shadows for potentially unused memory
-> was not a goal.
-> 
-> The bug is most easily reproduced by doing a sigreturn with a garbage
-> CS in the sigcontext, e.g.
-> 
->   int main(void)
->   {
->     struct sigcontext regs;
-> 
->     syscall(__NR_mmap, 0x1ffff000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
->     syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 7ul, 0x32ul, -1, 0ul);
->     syscall(__NR_mmap, 0x21000000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
-> 
->     memset(&regs, 0, sizeof(regs));
->     regs.cs = 0x1d0;
->     syscall(__NR_rt_sigreturn);
->     return 0;
->   }
-> 
-> to coerce the kernel into doing a GDT lookup to compute CS.base when
-> reading the instruction bytes on the subsequent #GP to determine whether
-> or not the #GP is something the kernel should handle, e.g. to fixup UMIP
-> violations or to emulate CLI/STI for IOPL=3 applications.
-> 
->   BUG: unable to handle page fault for address: fffffbc8379ace00
->   #PF: supervisor read access in kernel mode
->   #PF: error_code(0x0000) - not-present page
->   PGD 16c03a067 P4D 16c03a067 PUD 15b990067 PMD 15b98f067 PTE 0
->   Oops: 0000 [#1] PREEMPT SMP KASAN
->   CPU: 3 PID: 851 Comm: r2 Not tainted 6.1.0-rc3-next-20221103+ #432
->   Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
->   RIP: 0010:kasan_check_range+0xdf/0x190
->   Call Trace:
->    <TASK>
->    get_desc+0xb0/0x1d0
->    insn_get_seg_base+0x104/0x270
->    insn_fetch_from_user+0x66/0x80
->    fixup_umip_exception+0xb1/0x530
->    exc_general_protection+0x181/0x210
->    asm_exc_general_protection+0x22/0x30
->   RIP: 0003:0x0
->   Code: Unable to access opcode bytes at 0xffffffffffffffd6.
->   RSP: 0003:0000000000000000 EFLAGS: 00000202
->   RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00000000000001d0
->   RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
->   RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
->   R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
->   R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
->    </TASK>
-> 
-> Fixes: 9fd429c28073 ("x86/kasan: Map shadow for percpu pages on demand")
-> Reported-by: syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com
-> Suggested-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-> Cc: Alexander Potapenko <glider@google.com>
-> Cc: Andrey Konovalov <andreyknvl@gmail.com>
-> Cc: Dmitry Vyukov <dvyukov@google.com>
-> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> Cc: kasan-dev@googlegroups.com
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/mm/cpu_entry_area.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
+Ian
 
-Reviewed-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> > ---
+> >  tools/perf/util/pmu.c |  14 ++++++
+> >  tools/perf/util/pmu.h | 105 +++++++++++++++++++++++++++++++++++++++---
+> >  2 files changed, 113 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> > index 6a86e6af0903..a8f9f47c6ed9 100644
+> > --- a/tools/perf/util/pmu.c
+> > +++ b/tools/perf/util/pmu.c
+> > @@ -31,10 +31,24 @@
+> >
+> >  struct perf_pmu perf_pmu__fake;
+> >
+> > +/**
+> > + * Values from a format file read from <sysfs>/devices/cpu/format/ held in
+> > + * struct perf_pmu. For example, the contents of
+> > + * <sysfs>/devices/cpu/format/event may be "config:0-7" and will be represented
+> > + * here as name="event", value=PERF_PMU_FORMAT_VALUE_CONFIG and bits 0 to 7 will
+> > + * be set.
+> > + */
+> >  struct perf_pmu_format {
+> > +     /** The modifier/file name. */
+> >       char *name;
+> > +     /**
+> > +      * Which config value the format relates to. Supported values are from
+> > +      * PERF_PMU_FORMAT_VALUE_CONFIG to PERF_PMU_FORMAT_VALUE_CONFIG_END.
+> > +      */
+> >       int value;
+> > +     /** Which config bits are set by this format value. */
+> >       DECLARE_BITMAP(bits, PERF_PMU_FORMAT_BITS);
+> > +     /** Element on list within struct perf_pmu. */
+> >       struct list_head list;
+> >  };
+> >
+> > diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+> > index 68e15c38ae71..29571c0f9d15 100644
+> > --- a/tools/perf/util/pmu.h
+> > +++ b/tools/perf/util/pmu.h
+> > @@ -34,30 +34,91 @@ struct perf_pmu_caps {
+> >  };
+> >
+> >  struct perf_pmu {
+> > +     /** The name of the PMU such as "cpu". */
+> >       char *name;
+> > +     /**
+> > +      * Optional alternate name for the PMU determined in architecture
+> > +      * specific code.
+> > +      */
+> >       char *alias_name;
+> > +     /**
+> > +      * Optional PMU identifier read from
+> > +      * <sysfs>/bus/event_source/devices/<name>/identifier.
+> > +      */
+> >       char *id;
+> > +     /**
+> > +      * Perf event attributed type value, read from
+> > +      * <sysfs>/bus/event_source/devices/<name>/type.
+> > +      */
+> >       __u32 type;
+> > +     /**
+> > +      * Can the PMU name be selected as if it were an event?
+> > +      */
+> >       bool selectable;
+> > +     /**
+> > +      * Is the PMU not within the CPU core? Determined by the presence of
+> > +      * <sysfs>/bus/event_source/devices/<name>/cpumask.
+> > +      */
+> >       bool is_uncore;
+> > +     /** Is the PMU name either cpu_core or cpu_atom. */
+> >       bool is_hybrid;
+> > +     /**
+> > +      * Are events auxiliary events? Determined in architecture specific
+> > +      * code.
+> > +      */
+> >       bool auxtrace;
+> > +     /**
+> > +      * Number of levels of :ppp precision supported by the PMU, read from
+> > +      * <sysfs>/bus/event_source/devices/<name>/caps/max_precise.
+> > +      */
+> >       int max_precise;
+> > +     /**
+> > +      * Optional default perf_event_attr determined in architecture specific
+> > +      * code.
+> > +      */
+> >       struct perf_event_attr *default_config;
+> > +     /**
+> > +      * Empty or the contents of either of:
+> > +      * <sysfs>/bus/event_source/devices/<name>/cpumask.
+> > +      * <sysfs>/bus/event_source/devices/<cpu>/cpus.
+> > +      */
+> >       struct perf_cpu_map *cpus;
+> > -     struct list_head format;  /* HEAD struct perf_pmu_format -> list */
+> > -     struct list_head aliases; /* HEAD struct perf_pmu_alias -> list */
+> > +     /**
+> > +      * Holds the contents of files read from
+> > +      * <sysfs>/bus/event_source/devices/<name>/format/. The contents specify
+> > +      * which event parameter changes what config, config1 or config2 bits.
+> > +      */
+> > +     struct list_head format;
+> > +     /**
+> > +      * List of struct perf_pmu_alias. Each alias corresponds to an event
+> > +      * read from <sysfs>/bus/event_source/devices/<name>/events/ or from
+> > +      * json events in pmu-events.c.
+> > +      */
+> > +     struct list_head aliases;
+> > +     /** Has the list caps been initialized? */
+> >       bool caps_initialized;
+> > +     /** The length of the list caps. */
+> >       u32 nr_caps;
+> > -     struct list_head caps;    /* HEAD struct perf_pmu_caps -> list */
+> > -     struct list_head list;    /* ELEM */
+> > +     /**
+> > +      * Holds the contents of files read from
+> > +      * <sysfs>/bus/event_source/devices/<name>/caps/. The contents are pairs
+> > +      * of the filename with the value of its contents, for example,
+> > +      * max_precise (see above) may have a value of 3.
+> > +      */
+> > +     struct list_head caps;
+> > +     /** Element on pmus list in pmu.c. */
+> > +     struct list_head list;
+> > +     /** Element on perf_pmu__hybrid_pmus. */
+> >       struct list_head hybrid_list;
+> >
+> > +     /** Features to inhibit when events on this PMU are opened. */
+> >       struct {
+> > +             /** Disables perf_event_attr exclude_guest and exclude_host. */
+> >               bool exclude_guest;
+> >       } missing_features;
+> >  };
+> >
+> > +/** A special global PMU used for testing. */
+> >  extern struct perf_pmu perf_pmu__fake;
+> >
+> >  struct perf_pmu_info {
+> > @@ -71,21 +132,53 @@ struct perf_pmu_info {
+> >
+> >  #define UNIT_MAX_LEN 31 /* max length for event unit name */
+> >
+> > +/**
+> > + * An event either read from sysfs or builtin in pmu-events.c, created by
+> > + * parsing the pmu-events json files.
+> > + */
+> >  struct perf_pmu_alias {
+> >       char *name;
+> > +     /** Optional short description of the event. */
+> >       char *desc;
+> > +     /** Optional long description. */
+> >       char *long_desc;
+> > +     /**
+> > +      * Optional topic such as cache or pipeline, particularly for json
+> > +      * events.
+> > +      */
+> >       char *topic;
+> > +     /** Comma separated parameter list. */
+> >       char *str;
+> > -     struct list_head terms; /* HEAD struct parse_events_term -> list */
+> > -     struct list_head list;  /* ELEM */
+> > +     /** Owned list of the original parsed parameters. */
+> > +     struct list_head terms;
+> > +     /** List element of struct perf_pmu aliases. */
+> > +     struct list_head list;
+> > +     /** Units for the event, such as bytes or cache lines. */
+> >       char unit[UNIT_MAX_LEN+1];
+> > +     /** Value to scale read counter values by. */
+> >       double scale;
+> > +     /**
+> > +      * Does the file
+> > +      * <sysfs>/bus/event_source/devices/<pmu_name>/events/<name>.per-pkg or
+> > +      * equivalent json value exist and have the value 1.
+> > +      */
+> >       bool per_pkg;
+> > +     /**
+> > +      * Does the file
+> > +      * <sysfs>/bus/event_source/devices/<pmu_name>/events/<name>.snapshot
+> > +      * exist and have the value 1.
+> > +      */
+> >       bool snapshot;
+> > +     /** Is the event hidden and so not shown in perf list by default. */
+> >       bool deprecated;
+> > +     /**
+> > +      * A metric expression associated with an event. Doing this makes little
+> > +      * sense due to scale and unit applying to both.
+> > +      */
+> >       char *metric_expr;
+> > +     /** A name for the metric. unit applying to both. */
+> >       char *metric_name;
+> > +     /** The name copied from struct perf_pmu. */
+> >       char *pmu_name;
+> >  };
+> >
+>
