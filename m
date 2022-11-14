@@ -2,159 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD0E6275A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 06:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8CB86275AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 06:48:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235807AbiKNFpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 00:45:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56410 "EHLO
+        id S235628AbiKNFss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 00:48:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235665AbiKNFpA (ORCPT
+        with ESMTP id S233166AbiKNFsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 00:45:00 -0500
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55914175A5
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 21:44:49 -0800 (PST)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20221114054447epoutp0276d44c3b1711d245cf1364de316100e3~nXTlFuEO90439604396epoutp028
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:44:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20221114054447epoutp0276d44c3b1711d245cf1364de316100e3~nXTlFuEO90439604396epoutp028
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1668404687;
-        bh=VUPNyPP65Q8amq2++YTPnc2vQJAOUVPlJkAD/OQoUfU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sq1fZjxREUnDsLoaYzr+5FbOh1O5o57K+ctas3UOlbl3q38VabqK9iwsMnEVFmMgl
-         i9MUbPIVLC8BGv0g5UH+RRDMysMhxKgASXCF+kTSjAlo3yDd9d3uzTbt0+JcNP6QH+
-         c/53H3+TOdwGuUA+xWt18WK/4ZI90SxTev9waiiE=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20221114054446epcas5p15bd51a449819ab9af6eb10c8d646e085~nXTkfPt-j1379513795epcas5p1Q;
-        Mon, 14 Nov 2022 05:44:46 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.176]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4N9dYQ2jx3z4x9Q6; Mon, 14 Nov
-        2022 05:44:42 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B3.CD.01710.AC5D1736; Mon, 14 Nov 2022 14:44:42 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20221114054053epcas5p1f88b41bce65d54f0f26d0b562e88f7d6~nXQLFMQno0126401264epcas5p1i;
-        Mon, 14 Nov 2022 05:40:53 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221114054053epsmtrp2c298815cafcfcbe1281022b7c78f8b5f~nXQLD6xEQ2028920289epsmtrp2U;
-        Mon, 14 Nov 2022 05:40:53 +0000 (GMT)
-X-AuditID: b6c32a49-c9ffa700000006ae-eb-6371d5ca3046
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8D.A6.18644.5E4D1736; Mon, 14 Nov 2022 14:40:53 +0900 (KST)
-Received: from cheetah.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.53]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20221114054049epsmtip20959451eee51877cbc97d0f06c258799~nXQHMqWrx2101521015epsmtip2O;
-        Mon, 14 Nov 2022 05:40:49 +0000 (GMT)
-From:   Aakarsh Jain <aakarsh.jain@samsung.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
-        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
-        benjamin.gaignard@collabora.com, krzysztof.kozlowski+dt@linaro.org,
-        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
-        david.plowman@raspberrypi.com, mark.rutland@arm.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
-        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
-        pankaj.dubey@samsung.com, smitha.t@samsung.com,
-        aakarsh.jain@samsung.com
-Subject: [Patch v4 3/3] ARM: dts: exynos: Add new SoC specific compatible
- string for Exynos3250 SoC
-Date:   Mon, 14 Nov 2022 11:16:55 +0530
-Message-Id: <20221114054655.68090-4-aakarsh.jain@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221114054655.68090-1-aakarsh.jain@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0VTfUxbVRzN7Xvta1lq3sqWXbrJWCMYYECrpd4aPhZl+PYRQ1w00cWUZ3kC
-        obSlLeAWnVPHpmTgYEPlY92k4DIYMFpgHSsblCLKAsiAMZHqgHW0xI8N1IAC2tKi/53fOefe
-        3++eey8XE0xxhNxstYHRqWmViBOEd/RGPh0zMJ6nFJvPC5DLWslG940dHGRammOhn0yLOLJb
-        2gnUNlaNoUv93Wx0wTHERtd6ZnDU6vaqI5VOHM1daAbIU/UjB5W6pzFknr3LRqOdNRx0+mo7
-        GzU5nASqnxhhoa/MKyxU2/47gYq6HARy2joAOnHSwdoDqSvGK4CyOusANVG3gFHXq5wEZbJ5
-        WJS54RMONXXXxqEsde9TRX1/4VRpWwOgih0THGrRHEoN/LFIpPHfyEnIYugMRhfGqJWajGx1
-        ZqLowCHFi4p4mVgSI5Gj50RhajqXSRSlHEyLSc1WeSMQhRXQqnwvlUbr9aK4pASdJt/AhGVp
-        9IZEEaPNUGml2lg9navPV2fGqhnD8xKx+Jl4rzE9J8uzUodry3nv3Lp1EjsOnEQx4HEhKYXD
-        tx+DYhDEFZA3ABysrQ4UC97i1BzhLxYBXJk8wdlY8qWrB/cLnQA+7B5l+wQBWcSC9ZMRxYDL
-        5ZAxcPCaykdvIT8AcPZjg8+PkWU4/KHUjfmEYJKBjpJP1zFOhsOKkg+BD/PJRLg2UQn8zXbC
-        xqvd6x4emQSnqmcw30aQ/IgH++sXAodIgTdvXMT8OBjO97cFeCFc/LUrMLUSztZ6Ah4VbLGd
-        w/04GXaP1eC+oTEyErZ0xvnpJ2HFQDPLhzHyCVjy9wOWn+dDq3EDR8CaqSW2H++AvY31gZkp
-        eLbVyfYHVOaNsWWSOANCq/5vcRGABhDCaPW5mYw+XitRM4X/3ZpSk2sG6888ap8VOO8/irUD
-        FhfYAeRioi184w6NUsDPoI8cZXQahS5fxejtIN4bYBkm3KrUeP+J2qCQSOViqUwmk8qflUlE
-        2/imL6KUAjKTNjA5DKNldBvrWFye8Dhr2zSWd5OT/Oe9n8/cGXKsvTBYM7/n3L7x15qHR2bG
-        3hKeN94OH/7t0JtBo0O2gVcvDaVbyvq+d6eWe1xj4cc+u1xyirbKV8x1Ed8e2TUjn78jn1Y8
-        csFfgsJthbs2xXh4xpyCioTop+TwZbdYtnR9+ii4nJLqwpaFzOFI65LLzUuezROtraqmHu9u
-        61n9513Y5znYa7JUxH1OLUd8Q2inFT2NWPYm9bJ9PKN76wFL+cKx9NaQuaaRoAfvRdecJXTB
-        hLbe/vZ8KP3daqNrc+/c16+EWbZvP12wv6ms9LApa2/RS/s3R7vCGZJ+uHcpoYgBhc07Xw8p
-        r12hpfe64jqTdotwfRYticJ0evpfgtnVsW8EAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAAzWRfSzUcRzH+/6e7ndXp9+QvlFst5WmEWr2XUUp1W9WVn/UWg/LxW8Ux3XX
-        CcvD0tkyWWr+cHI9HOouFceJnKfrMC1h5LQ69IDOpkTloZtyqf9en/fDPp/tQ+PONwl3+mzC
-        BU6WII4XUQKi5rnIy3ek73yU/6B2FRqpLSTRsLqGQprZMQwNaaYJZKoy8FB1XxGO7rc3k+i2
-        +RWJnrZ8IFDl50W3p9BKoLHbjwGyqQYplPf5PY70H/tJ1PvsFoVyKwwkemS28lCppQdDZXo7
-        hu4ZvvOQssHMQ1ZjDUBXss3YLsiWq8sBW2stAaylZApn61RWHqsx2jBWr7tKse/6jRRbVZLB
-        KlvnCTavWgfYHLOFYqf1nuyLH9O8Q8Ljgh3RXPzZJE62OSRSEGuzlxDSG/zkpqZsPBNYeTmA
-        T0NmK7w70kI42JmpBXC0Ubqkr4W/s9v+ZVygdmFskQWLmSwMmm1ziwWaphhf2Pk03qG7MkoA
-        LdqrmGPAGS0B31bmYo62CxMFc8frSAcTzHpYcO0ycLCQCYYLlkKwtMELPqxoxh3MZ0Lgu6IP
-        +NJFwfBG9wPiOnC6A5bpwBpOKpfESOQB0sAE7qKfXCyRKxJi/KISJXrw928+PrXAqJv0MwGM
-        BiYAaVzkKlSvTYxyFkaLU1I5WeJpmSKek5uAB02IVgu7czpOOzMx4gtcHMdJOdl/F6P57plY
-        yMw6xalQxlRfKklKP+ePwZ3ZE41lQSm9zedPunR12EcPHxo5UJYRuk25POtTW4bKT/AtLbTg
-        5+C+iLdHvtjICI1xcoW3/PKbg10p96eVH1tUNeM/wzy3ux3Ndz86tPLYie+Vcb3Xkns6R6vt
-        c27PkvcuTxKEMsXkxOupZu9L3ht+ZJFtD+bte4tnMqvr/V2nPObT9rwH/IaTmwt+L4RZfFce
-        qXLpwfOHi6IV9ar9hk1x2qAzBmFdQPDB2WjDgKxPuSpvrH/OS52XM2rWmgLTX/4KfwJ3T8q2
-        6MjOjanJxelMZMN4ROvXyDqPGUVR+ADVbtQMpDiVDovCVwhbzR1vRIQ8Vhzgg8vk4j/2GgaX
-        JgMAAA==
-X-CMS-MailID: 20221114054053epcas5p1f88b41bce65d54f0f26d0b562e88f7d6
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221114054053epcas5p1f88b41bce65d54f0f26d0b562e88f7d6
-References: <20221114054655.68090-1-aakarsh.jain@samsung.com>
-        <CGME20221114054053epcas5p1f88b41bce65d54f0f26d0b562e88f7d6@epcas5p1.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 14 Nov 2022 00:48:45 -0500
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C8B15732
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 21:48:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1668404923; x=1699940923;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=v1sR2mwFH9dmYdHzu0koJ50qxkQ0XF8GxeWMZxBQMlk=;
+  b=EDr+TqkqJW2ooW7yADe8MLzU/RdM+freQMPq6imSGruYhZV0YCuyTBOD
+   aSB3mlZKp+df4W5zbVd9UREPCFROmjq2o+rg274VJalXkXo6pbno42asr
+   fYuXsKrJSgq2iQmkrwV9VB1oj0ePeGTJf4OorYoI2s4/C3NaTNLRcmf7t
+   +Kt1qsiRwkgW4MqcuuDqTjEbv8ALAtFJajEENadERonsC8Kf97KPUB5LA
+   M835529BvYcWDw83Mjxuc1Q9BR4UBkVI+clhIpTEqv+O9Pkb+TfjRH5+4
+   A2/INtGzgkpPLsGqBeqZ8N1ConIBsQWuwP863nmg8x/ZDB+EjQN9gGHsY
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,161,1665417600"; 
+   d="scan'208";a="320535393"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 14 Nov 2022 13:48:38 +0800
+IronPort-SDR: oqObsUuMEPmwgWaURRjwbkW6qLJINxFFlC+LC7DnUsFgbW5G3GSOqdXam7jHbEaK1A2KeG+O1m
+ l5hvSyqZAJWKB1mt5E0609JmnGY80YW8vVe9LFeRDzYPE+eY5dpO4nINATJfokKvH7/0zEFVAJ
+ h11YOtPVRxgSlque0TuTQsDtEwyubE/93utF6Ge67YRjnYmydNJ3JTmsklxGCe9S8dVPFm0Mm5
+ MFvpGcR+vtjmtmldMVNFQ9ThcMXTADokneKdDIcDewFh96MGynVKKIaSML+Y1Kz1mO1kmYHrvD
+ tGE=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Nov 2022 21:01:52 -0800
+IronPort-SDR: /UHzO+QBlXQEp8ZYUN0ehMrKlRetz5aNadWKGyxjRU5G9Vrm7zpooXQdZWokRGveiYp45+Nxeg
+ 5Ayj2hftxkd7wAnrXDRUKiJRABsoZihe48mtpqNtmWw76YHw4/sxSeYBmQ9IVTQ6OP2ucr2oe2
+ YNEKll84HsvwVHeU4OTO4I4muiC5rF7dpaTjnVFuF90COORkds0rhfuWJnoBj5JQmvgzHMIi+m
+ Zcr8sx2x4fmAFf0iAzr/BfewUQKLvyIYfTKGV53upSLU3bRR1g84CMBp+LjGTLoMzLWNgijz/1
+ Zyo=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Nov 2022 21:48:39 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4N9ddx6tf1z1RvTp
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 21:48:37 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:references:to:from:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1668404916; x=1670996917; bh=v1sR2mwFH9dmYdHzu0koJ50qxkQ0XF8GxeW
+        MZxBQMlk=; b=rutv4KCi7M1XNlfMkfPzY2SpJEPEarCExPjjAQg1a3KAjHnhK94
+        trp1G8GWC5pRuCQv0tsgeAXq5uvuxcPjJd9Cx0MAwarnFJLiH7gVn5CR79lAGZ1Z
+        AcPRc3qyda2iR5HANJTIe5KLAgmK+8KyBy/yqNckoRhNQKsLGE1H0iQesm2nfqA8
+        8HY8zXzj0qILcdTi8YssJxMqozJdMYudpIwBN32TQOoOCnFXdri8Makww4uhn6De
+        2uJX6l3qsifBFkCOZ0GogE+1zWy8Oaqo8DhTIhc6H6CBJrXbEzWo99uaHjNH1KVb
+        0RgREcX1ffQYZv2mTbD7CJl/Y2vfYjj1Gtw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id NeO2-WWVPphr for <linux-kernel@vger.kernel.org>;
+        Sun, 13 Nov 2022 21:48:36 -0800 (PST)
+Received: from [10.225.163.46] (unknown [10.225.163.46])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4N9ddp5cqHz1RvLy;
+        Sun, 13 Nov 2022 21:48:30 -0800 (PST)
+Message-ID: <93079aba-362e-5d1e-e9b4-dfe3a84da750@opensource.wdc.com>
+Date:   Mon, 14 Nov 2022 14:48:29 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: Deprecating and removing SLOB
+Content-Language: en-US
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+To:     Conor Dooley <conor@kernel.org>, Vlastimil Babka <vbabka@suse.cz>
+Cc:     Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Rustam Kovhaev <rkovhaev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        openrisc@lists.librecores.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Conor.Dooley@microchip.com, Paul Cercueil <paul@crapouillou.net>
+References: <b35c3f82-f67b-2103-7d82-7a7ba7521439@suse.cz>
+ <CA+CK2bD-uVGJ0=9uc7Lt5zwY+2PM2RTcfOhxEd65S7TvTrJULA@mail.gmail.com>
+ <c1caa5ce-eeaf-8038-2dea-051c98aade45@suse.cz> <Y260tkNHc2vFITJ3@spud>
+ <a5bba3ca-da19-293c-c01b-a28291533466@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <a5bba3ca-da19-293c-c01b-a28291533466@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit "752d3a23d1f68de87e3c" which adds MFC codec device node
-for exynos3250 SoC. Since exynos3250.dtsi and exynos5420.dtsi are
-using same compatible string as "samsung,mfc-v7" but their node
-properties are different. As both SoCs have MFC v7 hardware module
-but with different clock hierarchy and complexity.
-Add new compatible string followed by mfc-v7 fallback for Exynos3250
-SoC.
+On 11/14/22 10:55, Damien Le Moal wrote:
+> On 11/12/22 05:46, Conor Dooley wrote:
+>> On Fri, Nov 11, 2022 at 11:33:30AM +0100, Vlastimil Babka wrote:
+>>> On 11/8/22 22:44, Pasha Tatashin wrote:
+>>>> On Tue, Nov 8, 2022 at 10:55 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+>>>>>
+>>>>> Hi,
+>>>>>
+>>>>> as we all know, we currently have three slab allocators. As we discussed
+>>>>> at LPC [1], it is my hope that one of these allocators has a future, and
+>>>>> two of them do not.
+>>>>>
+>>>>> The unsurprising reasons include code maintenance burden, other features
+>>>>> compatible with only a subset of allocators (or more effort spent on the
+>>>>> features), blocking API improvements (more on that below), and my
+>>>>> inability to pronounce SLAB and SLUB in a properly distinguishable way,
+>>>>> without resorting to spelling out the letters.
+>>>>>
+>>>>> I think (but may be proven wrong) that SLOB is the easier target of the
+>>>>> two to be removed, so I'd like to focus on it first.
+>>>>>
+>>>>> I believe SLOB can be removed because:
+>>>>>
+>>>>> - AFAIK nobody really uses it? It strives for minimal memory footprint
+>>>>> by putting all objects together, which has its CPU performance costs
+>>>>> (locking, lack of percpu caching, searching for free space...). I'm not
+>>>>> aware of any "tiny linux" deployment that opts for this. For example,
+>>>>> OpenWRT seems to use SLUB and the devices these days have e.g. 128MB
+>>>>> RAM, not up to 16 MB anymore. I've heard anecdotes that the performance
+>>>>> SLOB impact is too much for those who tried. Googling for
+>>>>> "CONFIG_SLOB=y" yielded nothing useful.
+>>>>
+>>>> I am all for removing SLOB.
+>>>>
+>>>> There are some devices with configs where SLOB is enabled by default.
+>>>> Perhaps, the owners/maintainers of those devices/configs should be
+>>>> included into this thread:
+>>>>
+>>>> tatashin@soleen:~/x/linux$ git grep SLOB=y
+>>
+>>>> arch/riscv/configs/nommu_k210_defconfig:CONFIG_SLOB=y
+>>>> arch/riscv/configs/nommu_k210_sdcard_defconfig:CONFIG_SLOB=y
+>>>> arch/riscv/configs/nommu_virt_defconfig:CONFIG_SLOB=y
+>>
+>>>
+>>> Turns out that since SLOB depends on EXPERT, many of those lack it so
+>>> running make defconfig ends up with SLUB anyway, unless I miss something.
+>>> Only a subset has both SLOB and EXPERT:
+>>>
+>>>> git grep CONFIG_EXPERT `git grep -l "CONFIG_SLOB=y"`
+>>
+>>> arch/riscv/configs/nommu_virt_defconfig:CONFIG_EXPERT=y
+>>
+>> I suppose there's not really a concern with the virt defconfig, but I
+>> did check the output of `make nommu_k210_defconfig" and despite not
+>> having expert it seems to end up CONFIG_SLOB=y in the generated .config.
+>>
+>> I do have a board with a k210 so I checked with s/SLOB/SLUB and it still
+>> boots etc, but I have no workloads or w/e to run on it.
+> 
+> I sent a patch to change the k210 defconfig to using SLUB. However...
+> 
+> The current default config using SLOB gives about 630 free memory pages
+> after boot (cat /proc/vmstat). Switching to SLUB, this is down to about
+> 400 free memory pages (CONFIG_SLUB_CPU_PARTIAL is off).
+> 
+> This is with a buildroot kernel 5.19 build including a shell and sd-card
+> boot. With SLUB, I get clean boots and a shell prompt as expected. But I
+> definitely see more errors with shell commands failing due to allocation
+> failures for the shell process fork. So as far as the K210 is concerned,
+> switching to SLUB is not ideal.
+> 
+> I would not want to hold on kernel mm improvements because of this toy
+> k210 though, so I am not going to prevent SLOB deprecation. I just wish
+> SLUB itself used less memory :)
 
-Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Suggested-by: Alim Akhtar <alim.akhtar@samsung.com>
-Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
----
- arch/arm/boot/dts/exynos3250.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Did further tests with kernel 6.0.1:
+* SLOB: 630 free pages after boot, shell working (occasional shell fork
+failure happen though)
+* SLAB: getting memory allocation for order 7 failures on boot already
+(init process). Shell barely working (high frequency of shell command fork
+failures)
+* SLUB: getting memory allocation for order 7 failures on boot. I do get a
+shell prompt but cannot run any shell command that involves forking a new
+process.
 
-diff --git a/arch/arm/boot/dts/exynos3250.dtsi b/arch/arm/boot/dts/exynos3250.dtsi
-index 326b9e0ed8d3..1a29993fca0b 100644
---- a/arch/arm/boot/dts/exynos3250.dtsi
-+++ b/arch/arm/boot/dts/exynos3250.dtsi
-@@ -485,7 +485,7 @@
- 		};
- 
- 		mfc: codec@13400000 {
--			compatible = "samsung,mfc-v7";
-+			compatible = "samsung,exynos3250-mfc","samsung,mfc-v7";
- 			reg = <0x13400000 0x10000>;
- 			interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
- 			clock-names = "mfc", "sclk_mfc";
+So if we want to keep the k210 support functional with a shell, we need
+slob. If we reduce that board support to only one application started as
+the init process, then I guess anything is OK.
+
 -- 
-2.17.1
+Damien Le Moal
+Western Digital Research
 
