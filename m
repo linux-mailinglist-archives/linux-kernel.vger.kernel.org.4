@@ -2,182 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C0F62750C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 04:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77959627510
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 04:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235734AbiKNDl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 22:41:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
+        id S235746AbiKNDte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 22:49:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235249AbiKNDlz (ORCPT
+        with ESMTP id S235462AbiKNDtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 22:41:55 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CA9DFD5;
-        Sun, 13 Nov 2022 19:41:54 -0800 (PST)
-Received: from mxde.zte.com.cn (unknown [10.35.20.121])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4N9Zqh2y7zz1DF1;
-        Mon, 14 Nov 2022 11:41:52 +0800 (CST)
-Received: from mxus.zte.com.cn (unknown [10.207.168.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxde.zte.com.cn (FangMail) with ESMTPS id 4N9Zqc4tQLz9vSpk;
-        Mon, 14 Nov 2022 11:41:48 +0800 (CST)
-Received: from mxhk.zte.com.cn (unknown [192.168.250.138])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxus.zte.com.cn (FangMail) with ESMTPS id 4N9ZqY18v1zdmYkm;
-        Mon, 14 Nov 2022 11:41:45 +0800 (CST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4N9ZqT4Xpsz4xVnZ;
-        Mon, 14 Nov 2022 11:41:41 +0800 (CST)
-Received: from szxlzmapp05.zte.com.cn ([10.5.230.85])
-        by mse-fl2.zte.com.cn with SMTP id 2AE3fcEJ087398;
-        Mon, 14 Nov 2022 11:41:38 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp04[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Mon, 14 Nov 2022 11:41:40 +0800 (CST)
-Date:   Mon, 14 Nov 2022 11:41:40 +0800 (CST)
-X-Zmail-TransId: 2b066371b8f4ffffffff83808b3c
-X-Mailer: Zmail v1.0
-Message-ID: <202211141141400847357@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <minchan@kernel.org>
-Cc:     <ngupta@vflare.org>, <senozhatsky@chromium.org>, <axboe@kernel.dk>,
-        <linux-kernel@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <xu.panda@zte.com.cn>, <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHpyYW06IHVzZSBzeXNmc19lbWl0KCkgdG8gaW5zdGVhZCBvZiBzY25wcmludGYoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AE3fcEJ087398
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.14.novalocal with ID 6371B8FF.000 by FangMail milter!
-X-FangMail-Envelope: 1668397312/4N9Zqh2y7zz1DF1/6371B8FF.000/10.35.20.121/[10.35.20.121]/mxde.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6371B8FF.000/4N9Zqh2y7zz1DF1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 13 Nov 2022 22:49:32 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF151116A
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:49:32 -0800 (PST)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 2AE3UAAF007246;
+        Mon, 14 Nov 2022 03:48:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=fOPRTCVq/gTMWLKyEkuVYoSabDVF/6GqURdh668LRog=;
+ b=QtibTekgyqmJlpkbREEDwDHZhqIApCApGAyH/s+cZxPJOO45/4d0sRQP+HxwZUdIvb52
+ 6m4usGtjQ8Ei1984cclb0mxob9GQxpY3Wu/Ps/wszki1ofqTHDMKNbkOjFEUACh+kgZi
+ VmAQwNU5JtnFT2OOiEIJ37wLMf6o22NvpaGKi0l+HRqFdixnlDTfz7MdILmfHCqcIZRs
+ JYux1rrtj3wVCwUR1PdnRgxD2ZuDR4uV5g+sayBgCkL/1wHLOWgviB9ALKwKQLiZxb+6
+ 7+wmFsgJ52JZ1bxg6zsVWBX37JDSWqv7nzLt6MQbdQ8BhGjHSRDFH+OqqObIEgVLzcn1 Xw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kudtp0867-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 03:48:57 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AE3cJNw001146;
+        Mon, 14 Nov 2022 03:48:57 GMT
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kudtp085j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 03:48:57 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AE3bDWX029350;
+        Mon, 14 Nov 2022 03:48:55 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04fra.de.ibm.com with ESMTP id 3kt3499d8k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 03:48:54 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AE3mqnQ27787850
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Nov 2022 03:48:52 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 87DB411C04A;
+        Mon, 14 Nov 2022 03:48:52 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C83E11C04C;
+        Mon, 14 Nov 2022 03:48:49 +0000 (GMT)
+Received: from [9.43.84.159] (unknown [9.43.84.159])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 14 Nov 2022 03:48:49 +0000 (GMT)
+Message-ID: <278ef11d-f85d-512e-e7e8-0685653a2e45@linux.ibm.com>
+Date:   Mon, 14 Nov 2022 09:18:48 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v5 02/16] powerpc: Override __ALIGN and __ALIGN_STR macros
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+References: <20221028143346.183569-1-sv@linux.ibm.com>
+ <20221028143346.183569-3-sv@linux.ibm.com>
+ <327c371a-a8f4-1676-3da8-f454612b5c58@csgroup.eu>
+ <Y2OAdHBIGXVnN5Ud@hirez.programming.kicks-ass.net>
+From:   Sathvika Vasireddy <sv@linux.ibm.com>
+In-Reply-To: <Y2OAdHBIGXVnN5Ud@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: YCP34-w-7o1cFQ_eCzZv-J0pBgYGEWSy
+X-Proofpoint-GUID: _MyTUPw9BeN567E8kZwIhGuJEFX6MUVX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-14_02,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 mlxlogscore=999 mlxscore=0 adultscore=0 lowpriorityscore=0
+ bulkscore=0 spamscore=0 phishscore=0 impostorscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211140024
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+Hi Peter,
 
-Replace the open-code with sysfs_emit() to simplify the code.
+On 03/11/22 14:18, Peter Zijlstra wrote:
+> On Wed, Nov 02, 2022 at 12:35:07PM +0000, Christophe Leroy wrote:
+>>
+>> Le 28/10/2022 à 16:33, Sathvika Vasireddy a écrit :
+>>> In a subsequent patch, we would want to annotate powerpc assembly functions
+>>> with SYM_FUNC_START_LOCAL macro. This macro depends on __ALIGN macro.
+>>>
+>>> The default expansion of __ALIGN macro is:
+>>>           #define __ALIGN      .align 4,0x90
+>>>
+>>> So, override __ALIGN and __ALIGN_STR macros to use the same alignment as
+>>> that of the existing _GLOBAL macro. Also, do not pad with 0x90, because
+>>> repeated 0x90s are not a nop or trap on powerpc.
+>> By the way, do we know what the instruction 0x90909090 is on powerpc ?
+>> Is that something valid or not ?
+> Please also look at the version that's in tip/x86/core (and next). This
+> stuff should be gone now.
+>
+> include/linux/linkage.h now reads like:
+>
+> #ifndef __ALIGN
+> #define __ALIGN                 .balign CONFIG_FUNCTION_ALIGNMENT
+> #define __ALIGN_STR             __stringify(__ALIGN)
+> #endif
 
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com>
----
- drivers/block/zram/zram_drv.c | 25 ++++++++++---------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
+Since the above mentioned changes are not a part of powerpc/merge branch 
+yet, I am retaining this patch for this merge cycle and will post a 
+cleanup patch (to move to using FUNCTION_ALIGNMENT_4B) after the next -rc1.
 
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index 171eccc2249d..67aeb668f623 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -255,7 +255,7 @@ static ssize_t initstate_show(struct device *dev,
- 	val = init_done(zram);
- 	up_read(&zram->init_lock);
-
--	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
-+	return sysfs_emit(buf, "%u\n", val);
- }
-
- static ssize_t disksize_show(struct device *dev,
-@@ -263,7 +263,7 @@ static ssize_t disksize_show(struct device *dev,
- {
- 	struct zram *zram = dev_to_zram(dev);
-
--	return scnprintf(buf, PAGE_SIZE, "%llu\n", zram->disksize);
-+	return sysfs_emit(buf, "%llu\n", zram->disksize);
- }
-
- static ssize_t mem_limit_store(struct device *dev,
-@@ -404,7 +404,7 @@ static ssize_t writeback_limit_enable_show(struct device *dev,
- 	spin_unlock(&zram->wb_limit_lock);
- 	up_read(&zram->init_lock);
-
--	return scnprintf(buf, PAGE_SIZE, "%d\n", val);
-+	return sysfs_emit(buf, "%d\n", val);
- }
-
- static ssize_t writeback_limit_store(struct device *dev,
-@@ -439,7 +439,7 @@ static ssize_t writeback_limit_show(struct device *dev,
- 	spin_unlock(&zram->wb_limit_lock);
- 	up_read(&zram->init_lock);
-
--	return scnprintf(buf, PAGE_SIZE, "%llu\n", val);
-+	return sysfs_emit(buf, "%llu\n", val);
- }
-
- static void reset_bdev(struct zram *zram)
-@@ -1020,7 +1020,7 @@ static void zram_debugfs_unregister(struct zram *zram) {};
- static ssize_t max_comp_streams_show(struct device *dev,
- 		struct device_attribute *attr, char *buf)
- {
--	return scnprintf(buf, PAGE_SIZE, "%d\n", num_online_cpus());
-+	return sysfs_emit(buf, "%d\n", num_online_cpus());
- }
-
- static ssize_t max_comp_streams_store(struct device *dev,
-@@ -1191,8 +1191,7 @@ static ssize_t io_stat_show(struct device *dev,
- 	ssize_t ret;
-
- 	down_read(&zram->init_lock);
--	ret = scnprintf(buf, PAGE_SIZE,
--			"%8llu %8llu %8llu %8llu\n",
-+	ret = sysfs_emit(buf, "%8llu %8llu %8llu %8llu\n",
- 			(u64)atomic64_read(&zram->stats.failed_reads),
- 			(u64)atomic64_read(&zram->stats.failed_writes),
- 			(u64)atomic64_read(&zram->stats.invalid_io),
-@@ -1222,8 +1221,7 @@ static ssize_t mm_stat_show(struct device *dev,
- 	orig_size = atomic64_read(&zram->stats.pages_stored);
- 	max_used = atomic_long_read(&zram->stats.max_used_pages);
-
--	ret = scnprintf(buf, PAGE_SIZE,
--			"%8llu %8llu %8llu %8lu %8ld %8llu %8lu %8llu %8llu\n",
-+	ret = sysfs_emit(buf, "%8llu %8llu %8llu %8lu %8ld %8llu %8lu %8llu %8llu\n",
- 			orig_size << PAGE_SHIFT,
- 			(u64)atomic64_read(&zram->stats.compr_data_size),
- 			mem_used << PAGE_SHIFT,
-@@ -1247,8 +1245,7 @@ static ssize_t bd_stat_show(struct device *dev,
- 	ssize_t ret;
-
- 	down_read(&zram->init_lock);
--	ret = scnprintf(buf, PAGE_SIZE,
--		"%8llu %8llu %8llu\n",
-+	ret = sysfs_emit(buf, "%8llu %8llu %8llu\n",
- 			FOUR_K((u64)atomic64_read(&zram->stats.bd_count)),
- 			FOUR_K((u64)atomic64_read(&zram->stats.bd_reads)),
- 			FOUR_K((u64)atomic64_read(&zram->stats.bd_writes)));
-@@ -1266,9 +1263,7 @@ static ssize_t debug_stat_show(struct device *dev,
- 	ssize_t ret;
-
- 	down_read(&zram->init_lock);
--	ret = scnprintf(buf, PAGE_SIZE,
--			"version: %d\n%8llu %8llu\n",
--			version,
-+	ret = sysfs_emit(buf, "version: %d\n%8llu %8llu\n", version,
- 			(u64)atomic64_read(&zram->stats.writestall),
- 			(u64)atomic64_read(&zram->stats.miss_free));
- 	up_read(&zram->init_lock);
-@@ -2504,7 +2499,7 @@ static ssize_t hot_add_show(struct class *class,
-
- 	if (ret < 0)
- 		return ret;
--	return scnprintf(buf, PAGE_SIZE, "%d\n", ret);
-+	return sysfs_emit(buf, "%d\n", ret);
- }
- static struct class_attribute class_attr_hot_add =
- 	__ATTR(hot_add, 0400, hot_add_show, NULL);
--- 
-2.15.2
+Thanks,
+Sathvika
