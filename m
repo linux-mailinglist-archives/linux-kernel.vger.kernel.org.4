@@ -2,116 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255F5628A21
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C18628A31
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237460AbiKNUJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 15:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
+        id S236771AbiKNULl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 15:11:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237527AbiKNUJj (ORCPT
+        with ESMTP id S237446AbiKNULb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:09:39 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A701A380;
-        Mon, 14 Nov 2022 12:09:39 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9B0CA5C01C0;
-        Mon, 14 Nov 2022 15:09:38 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Mon, 14 Nov 2022 15:09:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1668456578; x=1668542978; bh=LR9Oot9dV3
-        p/sGrwT31gG+j2rSTcoLkSED15p73795Q=; b=RUB0ESW0+BaX89e0krEsUsA8CK
-        AtInxoM2OwKTrBQgSoo5CfTbwvoUSqrj7Ymk5AYhFFZsKP6LQ8i+meOKeqnHLnzD
-        0QPRCcHTe6yetyDdVOApBAV5sHyI2D5Yfgc9sBtmts6qkui+tHWYEOGq8ZgxmyC0
-        NK3hve5GjiHRruNtrBkPAPsQinOf/VlwqoGOnbyEtPtuDsQMCZ0kqHw/GxRn8AVN
-        gYcl2BgrV7/hQtPns4X7RCQIYPbLKEYXSjcJypnaJ/1ZR1uxsBbZITuXQmcbPJlj
-        BRRkTft6f9xDzmoMgfEAYl9KJ1DMxrsBqBYAQKMLIE/ecz/lnjuJhWNleekg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668456578; x=1668542978; bh=LR9Oot9dV3p/sGrwT31gG+j2rSTc
-        oLkSED15p73795Q=; b=kYinAXvfb+bPRrjG7hkwa9rTdjFzIj9MOLKIheleg5zx
-        doSjGVh9eCju4S4p/HNIxH4RYpCshd6tJvUpT+1cr3nfmDVZhbrtWSOMCVnl6adM
-        ZYkAarikNUPtlET21y7dZkUHRIIQK1denE39eBNhX9zBMwyAMZDs0yEaCGBtuQDK
-        Cl25Dm/wdRgiaVApo7ySyrU/BeDgT4ng5AE51/iOBKbQMC18JGeXKw2CiHi9zVjn
-        2CC2JwuUqH8KYwPb7+OEneUFzqCcpkWG9X8ZSOwzkG+2U6AfCI1ao0fx5nUtD/vj
-        4JaBnMB34YjIq17SLXH0kG695nryUoO3e6qVqDVisA==
-X-ME-Sender: <xms:gKByYym7c_GDr5IHfpqCH2cI1U9lt0Hr98AdbpVG2oy1uyNr1kzl7w>
-    <xme:gKByY52iLygN_eOjANO3Oyzv2nl99rEkyBVHDzTqzMonAvBpxWZzdWkvKQcJxG2wK
-    9XbjhLe7R2FUi2gBS8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedvgddutdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:gaByYwqjfe79TcWGfeLK01KCJg-5_ksdvP5rBoMGSNgASwWJz9GSAg>
-    <xmx:gaByY2nTFKoumcd73d_Clr3Z7bbaSaax-UFKgenDelwPQGvAjlT-yw>
-    <xmx:gaByYw0e3k_0RYin8FvbOrTcgUnSzaxFivvpxISivdV6cuwayNp2Hw>
-    <xmx:gqByY3s31fBP0SRr3lSBoFnh1H8PTix3wNenZJ8w3h6CMb-9lnPpfw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id EB13DB60086; Mon, 14 Nov 2022 15:09:36 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <b9c0711c-6efc-4d84-af4e-62e585ac2fa6@app.fastmail.com>
-In-Reply-To: <CAAhV-H4Y5qHSXr2uHvMYpXMgvm5fU7WQmcALB+86OYkgM1XbOg@mail.gmail.com>
-References: <20221027125253.3458989-1-chenhuacai@loongson.cn>
- <CAAhV-H4Y5qHSXr2uHvMYpXMgvm5fU7WQmcALB+86OYkgM1XbOg@mail.gmail.com>
-Date:   Mon, 14 Nov 2022 21:09:16 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Huacai Chen" <chenhuacai@kernel.org>,
-        "Huacai Chen" <chenhuacai@loongson.cn>
-Cc:     "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Dinh Nguyen" <dinguyen@kernel.org>, loongarch@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "Xuefeng Li" <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
-        "WANG Xuerui" <kernel@xen0n.name>,
-        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        "Feiyang Chen" <chenfeiyang@loongson.cn>
-Subject: Re: [PATCH V14 0/4] mm/sparse-vmemmap: Generalise helpers and enable for
- LoongArch
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Nov 2022 15:11:31 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5DA1A236;
+        Mon, 14 Nov 2022 12:11:30 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id hh9so7493632qtb.13;
+        Mon, 14 Nov 2022 12:11:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xE0dAKpBGmBo+dBYwNKS7hwOOhYBUTGgAYlVMA/0mbo=;
+        b=ThjPT5EvDOWBr9mZ93WgcLDfbqyiAv7qXsCgX4Gg1S1TFJhZ1WX2HklyiZ592z62Bv
+         s5vRkhmso5rYIrvQZznEV+XZSDg4pM+jXmCdUejX7us2cfPsXhKSLMGF929Y/Z7n+vAT
+         cbZHqoK7JXlwrbluX8d39FJRwHcW5WU4Ynm/5eXdOHoyDXKzbnCHl1XoRcEzct4UCPLD
+         WxqRKwbL25i8Le7pTksgTRX44ibuuta5Ci/tzehz+Y//qp5luIWgmsaXeE+jw1woqUHe
+         3bkUqmP7XdCxklZOVFLIMzMGQ8zMywG/MO/dBFjEI9gPVMzmkNlzTsNKr6lVIcY03tFj
+         D4Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xE0dAKpBGmBo+dBYwNKS7hwOOhYBUTGgAYlVMA/0mbo=;
+        b=x1rRGmTo8xjQ3HYZobQr5nL7SAR+y8jGbPNJ43d1BYuqD7eB6BdCLigAnMdS6JKN0u
+         PcRbu6bPfkrssbLV3peLX3fKuC8SxL8T+OnhNDa07lAMJT01VTz5EKVutt8xsHwr19Eb
+         LKCzEb9sdM9lILnY1FevRm1B3ZEjtr7XV3ChQrZgtagUV2xziURLyVmueQ3esEeCwZoY
+         TLDVx7fSUyXsR6IyPdu4HXIGSV+HD1ldPt3349A7QtnI2+YqBjb6/XoIEUssPEC/c7+A
+         l0KE0IpBkd9bHN+clChG7UAG/BT6J/mPTMBQlJNH3qeQy0GEB2p1Wq5LjmM/8oki2mjt
+         RZFA==
+X-Gm-Message-State: ANoB5pk5wKm+NC8eHJ8LWMtXcHAG3D5mK2cSeR4O22rS90V4Aibuu26d
+        1S3fqry0aJ9He/xmk2+18Jm84Fxi56iaKy/55l0=
+X-Google-Smtp-Source: AA0mqf6agftU0LXb4mGusoE3Lvd4A4QQye3B8Mr4cMMKYc8ZKGxyACdrMpVm47bvuM8TEkMeK7ILwyt2yKk1RfqLrnE=
+X-Received: by 2002:ac8:13c3:0:b0:3a5:27b2:c1ce with SMTP id
+ i3-20020ac813c3000000b003a527b2c1cemr13626725qtj.458.1668456689530; Mon, 14
+ Nov 2022 12:11:29 -0800 (PST)
+MIME-Version: 1.0
+References: <20221114180843.1125308-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <OS0PR01MB5922DDCE24ED6F6DD44B4B3F86059@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+ <CAMuHMdUFsOktkVG0T9yGoVSKZ=JP1bdWnhpyQ5rKFt545JYnHg@mail.gmail.com>
+In-Reply-To: <CAMuHMdUFsOktkVG0T9yGoVSKZ=JP1bdWnhpyQ5rKFt545JYnHg@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 14 Nov 2022 20:11:02 +0000
+Message-ID: <CA+V-a8v65ruNJYETXTMW0K56ODc0mAUdTLcs7SWCLy-gKSL4Ww@mail.gmail.com>
+Subject: Re: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we put the PM clocks
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022, at 11:26, Huacai Chen wrote:
-> Hi, Arnd,
+Hi Geert,
+
+On Mon, Nov 14, 2022 at 7:03 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
-> Just a gentle ping, is this series good enough now? I think the last
-> problem (static-key.h inclusion) has also been solved.
+> Hi Biju,
+>
+> On Mon, Nov 14, 2022 at 7:42 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > > -----Original Message-----
+> > > From: Prabhakar <prabhakar.csengg@gmail.com>
+> > > Sent: 14 November 2022 18:09
+> > > To: Geert Uytterhoeven <geert+renesas@glider.be>; Wim Van Sebroeck
+> > > <wim@linux-watchdog.org>; Guenter Roeck <linux@roeck-us.net>; Philipp Zabel
+> > > <p.zabel@pengutronix.de>; linux-watchdog@vger.kernel.org
+> > > Cc: linux-kernel@vger.kernel.org; linux-renesas-soc@vger.kernel.org;
+> > > Prabhakar <prabhakar.csengg@gmail.com>; Biju Das
+> > > <biju.das.jz@bp.renesas.com>; Fabrizio Castro
+> > > <fabrizio.castro.jz@renesas.com>; Prabhakar Mahadev Lad <prabhakar.mahadev-
+> > > lad.rj@bp.renesas.com>
+> > > Subject: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we put the PM
+> > > clocks
+> > >
+> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > On RZ/Five SoC it was observed that setting timeout (to say 1 sec) wouldn't
+> > > reset the system. To fix this we make sure we issue a reset before putting
+> > > the PM clocks to make sure the registers have been cleared.
+> > >
+> > > While at it re-used rzg2l_wdt_stop() in rzg2l_wdt_set_timeout() as we were
+> > > calling the same functions here.
+> > >
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > ---
+> > > Note,
+> > > - This patch has been tested on RZ/G2L, RZ/V2M and RZ/Five.
+> > > - My initial investigation showed adding the delay after
+> > > pm_runtime_get_sync()
+> > >   also fixed this issue.
+> > > - Do I need add the fixes tag ? what should be the operation PUT-
+> > > >RESET/RESET->PUT?
+> >
+> > It looks like timing issue, None of the previous devices are affected by this.
+>
+> To me it looks like the device must be clocked for the reset signal
+> to be propagated?
+>
+In the HW manual (7.4.3 Procedure for Activating Modules) it does
+state the below before applying the reset signal,
 
-Yes, this looks fine to me. Sorry I didn't have this on my
-radar any more.
+Set up the clock control register for the clock signal connected to
+the target module to start the supply of the clock.
+Note that the PLL for the clock should be started before the clock if
+the PLL is stopped.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+So maybe I can add the fixes tag in v2.
 
-I guess the series should be merged through Andrew's linux-mm
-tree. Let me know if for some reason I should pick it up into
-the asm-generic tree instead.
-
-     Arnd
+Cheers,
+Prabhakar
