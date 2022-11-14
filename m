@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEFBF627822
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C59627823
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:51:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236164AbiKNIuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:50:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
+        id S236296AbiKNIvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:51:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233166AbiKNIua (ORCPT
+        with ESMTP id S233166AbiKNIv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:50:30 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB7313FAF;
-        Mon, 14 Nov 2022 00:50:28 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N9jg94gWSzHw04;
-        Mon, 14 Nov 2022 16:49:57 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 16:50:26 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 16:50:25 +0800
-Subject: Re: [PATCH v8 7/9] livepatch: Improve the search performance of
- module_kallsyms_on_each_symbol()
-To:     Jiri Olsa <olsajiri@gmail.com>
-CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Laight <David.Laight@aculab.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
- <20221102084921.1615-8-thunder.leizhen@huawei.com> <Y3HyrIwlZPYM8zYd@krava>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <050b7513-4a20-75c7-0574-185004770329@huawei.com>
-Date:   Mon, 14 Nov 2022 16:50:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Mon, 14 Nov 2022 03:51:29 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA36719C35;
+        Mon, 14 Nov 2022 00:51:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668415888; x=1699951888;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xFTYNBP+TcEy3dDL/kF6xEoY/vWH2jxHcttCdo+RdSg=;
+  b=PSsQGYoKxMTwLQfmrxDc9OYL8M63IHfwHURc6kCiM6k4MxS9Qw+/jXjh
+   96tc1zL4hYMJoyzDNKldQZCg1ZEZ/W96Me0YKlPiuWqlO4BPXrVDglSH1
+   C48mqQXzBlFRSF7XACKsMJmA12tx8Gs5DnLa2F/eorFExn+3etFbOZ26K
+   DmUGu0uqwqrsrKeTILPKfSyugEZDcw6yNO5oPv9TzmuIFxhrzsAaDpG8c
+   4Yar/q7VKq+EQTqsPSDcB2I1qissYE15QVVjXUC7KdopgTn82yU4fhaCD
+   myGAqmXw2scTqwCgKcJb3dETxPNrDzEtTBNZQRnK1p2nnGONDJjVT/CiO
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="374046209"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="374046209"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 00:51:28 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="669562754"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="669562754"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.254.211.184]) ([10.254.211.184])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 00:51:22 -0800
+Message-ID: <63b7b6d5-f441-7ebc-fd3f-9d5f36d2938d@linux.intel.com>
+Date:   Mon, 14 Nov 2022 16:51:20 +0800
 MIME-Version: 1.0
-In-Reply-To: <Y3HyrIwlZPYM8zYd@krava>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 4/9] perf list: Generalize limiting to a PMU name
 Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xin Gao <gaoxin@cdjrlc.com>, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
+References: <20221114075127.2650315-1-irogers@google.com>
+ <20221114075127.2650315-5-irogers@google.com>
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+In-Reply-To: <20221114075127.2650315-5-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,176 +82,143 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022/11/14 15:47, Jiri Olsa wrote:
-> On Wed, Nov 02, 2022 at 04:49:19PM +0800, Zhen Lei wrote:
->> Currently we traverse all symbols of all modules to find the specified
->> function for the specified module. But in reality, we just need to find
->> the given module and then traverse all the symbols in it.
+On 11/14/2022 3:51 PM, Ian Rogers wrote:
+> Deprecate the --cputype option and add a --unit option where '--unit
+> cpu_atom' behaves like '--cputype atom'. The --unit option can be used
+> with arbitrary PMUs, for example:
 > 
-> hi,
-> sorry for delayed answer, I did not notice this until Stephen's email
-> about merge issue with recent bpf change [1]
+> ```
+> $ perf list --unit msr pmu
 > 
->>
->> Let's add a new parameter 'const char *modname' to function
->> module_kallsyms_on_each_symbol(), then we can compare the module names
+> List of pre-defined events (to be used in -e or -M):
 > 
-> we have use case for iterating all modules and their symbols when we
-> want to resolve passed addresses for tracing
+>    msr/aperf/                                         [Kernel PMU event]
+>    msr/cpu_thermal_margin/                            [Kernel PMU event]
+>    msr/mperf/                                         [Kernel PMU event]
+>    msr/pperf/                                         [Kernel PMU event]
+>    msr/smi/                                           [Kernel PMU event]
+>    msr/tsc/                                           [Kernel PMU event]
+> ```
 > 
-> we don't have 'modname' that we could pass, we need to iterate all modules
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>   tools/perf/Documentation/perf-list.txt |  6 +++---
+>   tools/perf/builtin-list.c              | 18 ++++++++++++------
+>   tools/perf/util/metricgroup.c          |  3 ++-
+>   tools/perf/util/pmu.c                  |  4 +---
+>   4 files changed, 18 insertions(+), 13 deletions(-)
 > 
-> so perhaps this could be made optional like with passing NULL for modname?
+> diff --git a/tools/perf/Documentation/perf-list.txt b/tools/perf/Documentation/perf-list.txt
+> index 57384a97c04f..44a819af573d 100644
+> --- a/tools/perf/Documentation/perf-list.txt
+> +++ b/tools/perf/Documentation/perf-list.txt
+> @@ -39,9 +39,9 @@ any extra expressions computed by perf stat.
+>   --deprecated::
+>   Print deprecated events. By default the deprecated events are hidden.
+>   
+> ---cputype::
+> -Print events applying cpu with this type for hybrid platform
+> -(e.g. --cputype core or --cputype atom)
+> +--unit::
+> +Print PMU events and metrics limited to the specific PMU name.
+> +(e.g. --unit cpu, --unit msr, --unit cpu_core, --unit cpu_atom)
+>   
+>   [[EVENT_MODIFIERS]]
+>   EVENT MODIFIERS
+> diff --git a/tools/perf/builtin-list.c b/tools/perf/builtin-list.c
+> index 58e1ec1654ef..cc84ced6da26 100644
+> --- a/tools/perf/builtin-list.c
+> +++ b/tools/perf/builtin-list.c
+> @@ -21,7 +21,6 @@
+>   
+>   static bool desc_flag = true;
+>   static bool details_flag;
+> -static const char *hybrid_type;
+>   
+>   int cmd_list(int argc, const char **argv)
+>   {
+> @@ -30,6 +29,8 @@ int cmd_list(int argc, const char **argv)
+>   	bool long_desc_flag = false;
+>   	bool deprecated = false;
+>   	char *pmu_name = NULL;
+> +	const char *hybrid_name = NULL;
+> +	const char *unit_name = NULL;
+>   	struct option list_options[] = {
+>   		OPT_BOOLEAN(0, "raw-dump", &raw_dump, "Dump raw events"),
+>   		OPT_BOOLEAN('d', "desc", &desc_flag,
+> @@ -40,9 +41,10 @@ int cmd_list(int argc, const char **argv)
+>   			    "Print information on the perf event names and expressions used internally by events."),
+>   		OPT_BOOLEAN(0, "deprecated", &deprecated,
+>   			    "Print deprecated events."),
+> -		OPT_STRING(0, "cputype", &hybrid_type, "hybrid cpu type",
+> -			   "Print events applying cpu with this type for hybrid platform "
+> -			   "(e.g. core or atom)"),
+> +		OPT_STRING(0, "cputype", &hybrid_name, "hybrid cpu type",
+> +			   "Limit PMU or metric printing to the given hybrid PMU (e.g. core or atom)."),
+> +		OPT_STRING(0, "unit", &unit_name, "PMU name",
+> +			   "Limit PMU or metric printing to the specified PMU."),
+>   		OPT_INCR(0, "debug", &verbose,
+>   			     "Enable debugging output"),
+>   		OPT_END()
+> @@ -53,6 +55,8 @@ int cmd_list(int argc, const char **argv)
+>   	};
+>   
+>   	set_option_flag(list_options, 0, "raw-dump", PARSE_OPT_HIDDEN);
+> +	/* Hide hybrid flag for the more generic 'unit' flag. */
+> +	set_option_flag(list_options, 0, "cputype", PARSE_OPT_HIDDEN);
+>   
+>   	argc = parse_options(argc, argv, list_options, list_usage,
+>   			     PARSE_OPT_STOP_AT_NON_OPTION);
+> @@ -62,8 +66,10 @@ int cmd_list(int argc, const char **argv)
+>   	if (!raw_dump && pager_in_use())
+>   		printf("\nList of pre-defined events (to be used in -e or -M):\n\n");
+>   
+> -	if (hybrid_type) {
+> -		pmu_name = perf_pmu__hybrid_type_to_pmu(hybrid_type);
+> +	if (unit_name)
+> +		pmu_name = strdup(unit_name);
+> +	else if (hybrid_name) {
+> +		pmu_name = perf_pmu__hybrid_type_to_pmu(hybrid_name);
+>   		if (!pmu_name)
+>   			pr_warning("WARNING: hybrid cputype is not supported!\n");
+>   	}
+> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
+> index 4c98ac29ee13..1943fed9b6d9 100644
+> --- a/tools/perf/util/metricgroup.c
+> +++ b/tools/perf/util/metricgroup.c
+> @@ -556,11 +556,12 @@ static int metricgroup__print_callback(const struct pmu_event *pe,
+>   				       void *vdata)
+>   {
+>   	struct metricgroup_print_data *data = vdata;
+> +	const char *pmu = pe->pmu ?: "cpu";
+>   
+>   	if (!pe->metric_expr)
+>   		return 0;
+>   
+> -	if (data->pmu_name && perf_pmu__is_hybrid(pe->pmu) && strcmp(data->pmu_name, pe->pmu))
+> +	if (data->pmu_name && strcmp(data->pmu_name, pmu))
+>   		return 0;
+>   
+>   	return metricgroup__print_pmu_event(pe, data->metricgroups, data->filter,
+> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> index a8f9f47c6ed9..9c771f136b81 100644
+> --- a/tools/perf/util/pmu.c
+> +++ b/tools/perf/util/pmu.c
+> @@ -1694,10 +1694,8 @@ void print_pmu_events(const char *event_glob, bool name_only, bool quiet_flag,
+>   	pmu = NULL;
+>   	j = 0;
+>   	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
+> -		if (pmu_name && perf_pmu__is_hybrid(pmu->name) &&
+> -		    strcmp(pmu_name, pmu->name)) {
+> +		if (pmu_name && pmu->name && strcmp(pmu_name, pmu->name))
 
-The deletion of modname was suggested by Petr Mladek. The reason is that
-everyone passes modname as NULL, there was no actual demand at the time.
-https://lkml.org/lkml/2022/9/20/682
+Why remove perf_pmu__is_hybrid check?
 
-> 
->> directly in this function and call hook 'fn' after matching. And the
->> parameter 'struct module *' in the hook 'fn' can also be deleted.
-> 
-> we need 'struct module *' argument in the callback as well because we are
-> taking the module reference if we trace function in it, so it wont get
-> unloaded
-> 
-> please let me know if I should do the change or can help in any way
-
-It seems that we should take the module reference before invoking callback
-and put it after it is called, without passing modname.
-
-> 
-> thanks,
-> jirka
-> 
-> [1] https://lore.kernel.org/lkml/20221114111350.38e44eec@canb.auug.org.au/
-> 
->>
->> Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
->>                 |
->> Phase2:          -->f1-->f2-->f3
->>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->>  include/linux/module.h   |  4 ++--
->>  kernel/livepatch/core.c  | 13 ++-----------
->>  kernel/module/kallsyms.c | 15 ++++++++++++---
->>  3 files changed, 16 insertions(+), 16 deletions(-)
->>
->> diff --git a/include/linux/module.h b/include/linux/module.h
->> index ec61fb53979a92a..0a3b44ff885a48c 100644
->> --- a/include/linux/module.h
->> +++ b/include/linux/module.h
->> @@ -879,8 +879,8 @@ static inline bool module_sig_ok(struct module *module)
->>  }
->>  #endif	/* CONFIG_MODULE_SIG */
->>  
->> -int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
->> -					     struct module *, unsigned long),
->> +int module_kallsyms_on_each_symbol(const char *modname,
->> +				   int (*fn)(void *, const char *, unsigned long),
->>  				   void *data);
->>  
->>  #endif /* _LINUX_MODULE_H */
->> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
->> index 50bfc3481a4ee38..d4fe2d1b0e562bc 100644
->> --- a/kernel/livepatch/core.c
->> +++ b/kernel/livepatch/core.c
->> @@ -118,27 +118,19 @@ static struct klp_object *klp_find_object(struct klp_patch *patch,
->>  }
->>  
->>  struct klp_find_arg {
->> -	const char *objname;
->>  	const char *name;
->>  	unsigned long addr;
->>  	unsigned long count;
->>  	unsigned long pos;
->>  };
->>  
->> -static int klp_find_callback(void *data, const char *name,
->> -			     struct module *mod, unsigned long addr)
->> +static int klp_find_callback(void *data, const char *name, unsigned long addr)
->>  {
->>  	struct klp_find_arg *args = data;
->>  
->> -	if ((mod && !args->objname) || (!mod && args->objname))
->> -		return 0;
->> -
->>  	if (strcmp(args->name, name))
->>  		return 0;
->>  
->> -	if (args->objname && strcmp(args->objname, mod->name))
->> -		return 0;
->> -
->>  	args->addr = addr;
->>  	args->count++;
->>  
->> @@ -175,7 +167,6 @@ static int klp_find_object_symbol(const char *objname, const char *name,
->>  				  unsigned long sympos, unsigned long *addr)
->>  {
->>  	struct klp_find_arg args = {
->> -		.objname = objname,
->>  		.name = name,
->>  		.addr = 0,
->>  		.count = 0,
->> @@ -183,7 +174,7 @@ static int klp_find_object_symbol(const char *objname, const char *name,
->>  	};
->>  
->>  	if (objname)
->> -		module_kallsyms_on_each_symbol(klp_find_callback, &args);
->> +		module_kallsyms_on_each_symbol(objname, klp_find_callback, &args);
->>  	else
->>  		kallsyms_on_each_match_symbol(klp_match_callback, name, &args);
->>  
->> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
->> index f5c5c9175333df7..329cef573675d49 100644
->> --- a/kernel/module/kallsyms.c
->> +++ b/kernel/module/kallsyms.c
->> @@ -495,8 +495,8 @@ unsigned long module_kallsyms_lookup_name(const char *name)
->>  }
->>  
->>  #ifdef CONFIG_LIVEPATCH
->> -int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
->> -					     struct module *, unsigned long),
->> +int module_kallsyms_on_each_symbol(const char *modname,
->> +				   int (*fn)(void *, const char *, unsigned long),
->>  				   void *data)
->>  {
->>  	struct module *mod;
->> @@ -510,6 +510,9 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
->>  		if (mod->state == MODULE_STATE_UNFORMED)
->>  			continue;
->>  
->> +		if (strcmp(modname, mod->name))
->> +			continue;
->> +
->>  		/* Use rcu_dereference_sched() to remain compliant with the sparse tool */
->>  		preempt_disable();
->>  		kallsyms = rcu_dereference_sched(mod->kallsyms);
->> @@ -522,10 +525,16 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
->>  				continue;
->>  
->>  			ret = fn(data, kallsyms_symbol_name(kallsyms, i),
->> -				 mod, kallsyms_symbol_value(sym));
->> +				 kallsyms_symbol_value(sym));
->>  			if (ret != 0)
->>  				goto out;
->>  		}
->> +
->> +		/*
->> +		 * The given module is found, the subsequent modules do not
->> +		 * need to be compared.
->> +		 */
->> +		break;
->>  	}
->>  out:
->>  	mutex_unlock(&module_mutex);
->> -- 
->> 2.25.1
->>
-> .
-> 
+>   			continue;
+> -		}
+>   
+>   		list_for_each_entry(alias, &pmu->aliases, list) {
+>   			char *name = alias->desc ? alias->name :
 
 -- 
-Regards,
-  Zhen Lei
+Zhengjun Xing
