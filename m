@@ -2,311 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5D56278F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A35A6278FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236533AbiKNJ1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:27:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38546 "EHLO
+        id S236033AbiKNJ1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236760AbiKNJ1A (ORCPT
+        with ESMTP id S236174AbiKNJ1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:27:00 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 69FC8231
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:26:58 -0800 (PST)
-Received: from loongson.cn (unknown [111.9.175.10])
-        by gateway (Coremail) with SMTP id _____8BxWtjhCXJjq9sGAA--.18977S3;
-        Mon, 14 Nov 2022 17:26:57 +0800 (CST)
-Received: from [10.136.12.12] (unknown [111.9.175.10])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxNlfeCXJjBnsSAA--.31671S3;
-        Mon, 14 Nov 2022 17:26:56 +0800 (CST)
-Subject: Re: [PATCH v2 3/5] LoongArch: Add kretprobe support
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <1664326209-13995-1-git-send-email-yangtiezhu@loongson.cn>
- <1664326209-13995-4-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H7N-N2400ivdczJrfJ9Ht12JUbOADxExF87wVPFEj_c_g@mail.gmail.com>
- <dd3fc4ab-6bbb-2fa5-8d5e-b8206b42518c@loongson.cn>
- <CAAhV-H4ok2r2FarFszwYJ6Hah4m7ieNf6egnXyZhUf1ESDUhXg@mail.gmail.com>
- <a528e970-29ac-2fcb-b749-cfae3fbe5a18@loongson.cn>
- <CAAhV-H7uaFeND1-iSHmLXMFJonRTbiu81EnFGjyHZ0uN9bVXZw@mail.gmail.com>
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <80db649d-ea12-796c-b76c-49933953e9a8@loongson.cn>
-Date:   Mon, 14 Nov 2022 17:26:54 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 14 Nov 2022 04:27:06 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC891D31D;
+        Mon, 14 Nov 2022 01:27:05 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id w14so16978261wru.8;
+        Mon, 14 Nov 2022 01:27:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fvWu08XzkXkZhpj7JNv2DfEXbFQhdIZI5jbEYBna98g=;
+        b=jTTMyAH5v5m2HPu0gotkwsSXiApjzz9/T66MmOBfij+6Qrr8vBujig/csxgnR9fyfA
+         EQ1nJ4hBRXlfbn7q7gEa4/tyGSDDnR1QkUwGMekc/DKpNvNLkshHn9zl5JP0bHv6qn6z
+         rQbBxmFq3wi6+sIgNZ2S/Qvw/WHq+BjhOW14B2iKUezln7ZOrcm/y7n83BDhJYCNAsFW
+         YQ8PoEzk+B5yBfA2s0pgNUQNbxhBmDJUJgdxKet3/CexQlXdit3WrvbXUxBhyxh2Mvet
+         uNkHr9rqHUK2TMJk6qv8SZVTgaWIjoxVhMlHnQlLvJuWp/bhatplAu/hyoWrH6pA5Cnw
+         hynA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fvWu08XzkXkZhpj7JNv2DfEXbFQhdIZI5jbEYBna98g=;
+        b=PumFYOXjWX99WLMM69lvBeoZll43AkxmlEvnpFvx6GWhnchWVpl93XFTi5W1YcUKYa
+         9Fr/SBebWsKiJLlPc/gu+2TyjF1Ku+dxSoVx9ER+2S1IlVFwa8lhSVx21nk37X5BD+us
+         vBiB8XYJoJ3qLLBOqo4lDaViOytWpeLRBdgN8YGlG2uyst8xZg2Je9YHeOxh2EgvQ6s4
+         8qLTo2qlOVVGZOAwb2IyUKBWtA2bh3i786jr/zY3QE3XhRaGlKTRHrFR0Nk0BZhHgniD
+         LbtGoiM8LGR2K2wu2EaMR0NfqyWlI/V/SUgICSc1zfjRezV+IeasBTIuP0j5EWFzAAMQ
+         +Vaw==
+X-Gm-Message-State: ANoB5pl0wmBjYHfr14tZFT+zwlrGSCpdWeFPgVBSsrBs6KX+9G4yOpIu
+        iGFfx1BGJFWh/XbMCGQhxemkvZvlRMhJBg==
+X-Google-Smtp-Source: AA0mqf6jx8+75LK4ui7ms84kmtUu6kXg0iAmFRcdoiI/Uxd9byoRYZ9gRFfrl+eLHRPNUn7kjsBOtA==
+X-Received: by 2002:adf:f18c:0:b0:236:862b:c457 with SMTP id h12-20020adff18c000000b00236862bc457mr6674563wro.154.1668418023707;
+        Mon, 14 Nov 2022 01:27:03 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id j17-20020a5d6191000000b0023657e1b980sm9045363wru.53.2022.11.14.01.27.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 01:27:03 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 14 Nov 2022 10:27:00 +0100
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Laight <David.Laight@aculab.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH v8 7/9] livepatch: Improve the search performance of
+ module_kallsyms_on_each_symbol()
+Message-ID: <Y3IJ5GjrXBYDbfnA@krava>
+References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
+ <20221102084921.1615-8-thunder.leizhen@huawei.com>
+ <Y3HyrIwlZPYM8zYd@krava>
+ <050b7513-4a20-75c7-0574-185004770329@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H7uaFeND1-iSHmLXMFJonRTbiu81EnFGjyHZ0uN9bVXZw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf8DxNlfeCXJjBnsSAA--.31671S3
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxuw1kJw4xCr4DWF4fWw4rKrg_yoW3tryUpr
-        WkAFn8Zr4UZrnFyr90q34Fqr97tr1kXr17WFy8Jr48Kr4qgr17Jr1UAr17CF1xGr1UJr10
-        qr1rGrW3uFy5J37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bakYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
-        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17
-        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
-        AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
-        cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z2
-        80aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIF
-        yTuYvjxUclApUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <050b7513-4a20-75c7-0574-185004770329@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/14 下午4:51, Huacai Chen wrote:
+On Mon, Nov 14, 2022 at 04:50:25PM +0800, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2022/11/14 15:47, Jiri Olsa wrote:
+> > On Wed, Nov 02, 2022 at 04:49:19PM +0800, Zhen Lei wrote:
+> >> Currently we traverse all symbols of all modules to find the specified
+> >> function for the specified module. But in reality, we just need to find
+> >> the given module and then traverse all the symbols in it.
+> > 
+> > hi,
+> > sorry for delayed answer, I did not notice this until Stephen's email
+> > about merge issue with recent bpf change [1]
+> > 
+> >>
+> >> Let's add a new parameter 'const char *modname' to function
+> >> module_kallsyms_on_each_symbol(), then we can compare the module names
+> > 
+> > we have use case for iterating all modules and their symbols when we
+> > want to resolve passed addresses for tracing
+> > 
+> > we don't have 'modname' that we could pass, we need to iterate all modules
+> > 
+> > so perhaps this could be made optional like with passing NULL for modname?
+> 
+> The deletion of modname was suggested by Petr Mladek. The reason is that
+> everyone passes modname as NULL, there was no actual demand at the time.
+> https://lkml.org/lkml/2022/9/20/682
+> 
+> > 
+> >> directly in this function and call hook 'fn' after matching. And the
+> >> parameter 'struct module *' in the hook 'fn' can also be deleted.
+> > 
+> > we need 'struct module *' argument in the callback as well because we are
+> > taking the module reference if we trace function in it, so it wont get
+> > unloaded
+> > 
+> > please let me know if I should do the change or can help in any way
+> 
+> It seems that we should take the module reference before invoking callback
+> and put it after it is called, without passing modname.
 
-> On Mon, Nov 14, 2022 at 4:32 PM Jinyang He <hejinyang@loongson.cn> wrote:
->> On 2022/11/14 下午2:50, Huacai Chen wrote:
->>
->>> On Mon, Nov 14, 2022 at 2:11 PM Jinyang He <hejinyang@loongson.cn> wrote:
->>>> On 2022/11/14 下午12:43, Huacai Chen wrote:
->>>>
->>>>> Hi, Tiezhu and Jinyang,
->>>>>
->>>>> On Wed, Sep 28, 2022 at 8:50 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->>>>>> Use the generic kretprobe trampoline handler to add kretprobe
->>>>>> support for LoongArch.
->>>>>>
->>>>>> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->>>>>> ---
->>>>>>     arch/loongarch/Kconfig                     |  1 +
->>>>>>     arch/loongarch/kernel/Makefile             |  2 +-
->>>>>>     arch/loongarch/kernel/kprobes.c            | 24 ++++++++
->>>>>>     arch/loongarch/kernel/kprobes_trampoline.S | 97 ++++++++++++++++++++++++++++++
->>>>>>     4 files changed, 123 insertions(+), 1 deletion(-)
->>>>>>     create mode 100644 arch/loongarch/kernel/kprobes_trampoline.S
->>>>>>
->>>>>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
->>>>>> index 8debd70..877be6a 100644
->>>>>> --- a/arch/loongarch/Kconfig
->>>>>> +++ b/arch/loongarch/Kconfig
->>>>>> @@ -95,6 +95,7 @@ config LOONGARCH
->>>>>>            select HAVE_IRQ_EXIT_ON_IRQ_STACK
->>>>>>            select HAVE_IRQ_TIME_ACCOUNTING
->>>>>>            select HAVE_KPROBES
->>>>>> +       select HAVE_KRETPROBES
->>>>>>            select HAVE_MOD_ARCH_SPECIFIC
->>>>>>            select HAVE_NMI
->>>>>>            select HAVE_PCI
->>>>>> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
->>>>>> index ff98d8a..48f50607 100644
->>>>>> --- a/arch/loongarch/kernel/Makefile
->>>>>> +++ b/arch/loongarch/kernel/Makefile
->>>>>> @@ -33,6 +33,6 @@ obj-$(CONFIG_UNWINDER_PROLOGUE) += unwind_prologue.o
->>>>>>
->>>>>>     obj-$(CONFIG_PERF_EVENTS)      += perf_event.o perf_regs.o
->>>>>>
->>>>>> -obj-$(CONFIG_KPROBES)          += kprobes.o
->>>>>> +obj-$(CONFIG_KPROBES)          += kprobes.o kprobes_trampoline.o
->>>>>>
->>>>>>     CPPFLAGS_vmlinux.lds           := $(KBUILD_CFLAGS)
->>>>>> diff --git a/arch/loongarch/kernel/kprobes.c b/arch/loongarch/kernel/kprobes.c
->>>>>> index c11f6e0..ca3f1dc 100644
->>>>>> --- a/arch/loongarch/kernel/kprobes.c
->>>>>> +++ b/arch/loongarch/kernel/kprobes.c
->>>>>> @@ -306,6 +306,30 @@ int __init arch_populate_kprobe_blacklist(void)
->>>>>>                                             (unsigned long)__irqentry_text_end);
->>>>>>     }
->>>>>>
->>>>>> +/* Called from __kretprobe_trampoline */
->>>>>> +void __used *trampoline_probe_handler(struct pt_regs *regs)
->>>>>> +{
->>>>>> +       return (void *)kretprobe_trampoline_handler(regs, NULL);
->>>>>> +}
->>>>>> +NOKPROBE_SYMBOL(trampoline_probe_handler);
->>>>>> +
->>>>>> +void arch_prepare_kretprobe(struct kretprobe_instance *ri,
->>>>>> +                           struct pt_regs *regs)
->>>>>> +{
->>>>>> +       ri->ret_addr = (kprobe_opcode_t *)regs->regs[1];
->>>>>> +       ri->fp = NULL;
->>>>>> +
->>>>>> +       /* Replace the return addr with trampoline addr */
->>>>>> +       regs->regs[1] = (unsigned long)&__kretprobe_trampoline;
->>>>>> +}
->>>>>> +NOKPROBE_SYMBOL(arch_prepare_kretprobe);
->>>>>> +
->>>>>> +int arch_trampoline_kprobe(struct kprobe *p)
->>>>>> +{
->>>>>> +       return 0;
->>>>>> +}
->>>>>> +NOKPROBE_SYMBOL(arch_trampoline_kprobe);
->>>>>> +
->>>>>>     int __init arch_init_kprobes(void)
->>>>>>     {
->>>>>>            return 0;
->>>>>> diff --git a/arch/loongarch/kernel/kprobes_trampoline.S b/arch/loongarch/kernel/kprobes_trampoline.S
->>>>>> new file mode 100644
->>>>>> index 0000000..9888ab8
->>>>>> --- /dev/null
->>>>>> +++ b/arch/loongarch/kernel/kprobes_trampoline.S
->>>>>> @@ -0,0 +1,97 @@
->>>>>> +/* SPDX-License-Identifier: GPL-2.0+ */
->>>>>> +#include <linux/linkage.h>
->>>>>> +#include <asm/stackframe.h>
->>>>>> +
->>>>>> +       .text
->>>>>> +
->>>>>> +       .macro save_all_base_regs
->>>>>> +       cfi_st  zero, PT_R0
->>>>>> +       cfi_st  ra, PT_R1
->>>>>> +       cfi_st  tp, PT_R2
->>>>>> +       cfi_st  a0, PT_R4
->>>>>> +       cfi_st  a1, PT_R5
->>>>>> +       cfi_st  a2, PT_R6
->>>>>> +       cfi_st  a3, PT_R7
->>>>>> +       cfi_st  a4, PT_R8
->>>>>> +       cfi_st  a5, PT_R9
->>>>>> +       cfi_st  a6, PT_R10
->>>>>> +       cfi_st  a7, PT_R11
->>>>>> +       cfi_st  t0, PT_R12
->>>>>> +       cfi_st  t1, PT_R13
->>>>>> +       cfi_st  t2, PT_R14
->>>>>> +       cfi_st  t3, PT_R15
->>>>>> +       cfi_st  t4, PT_R16
->>>>>> +       cfi_st  t5, PT_R17
->>>>>> +       cfi_st  t6, PT_R18
->>>>>> +       cfi_st  t7, PT_R19
->>>>>> +       cfi_st  t8, PT_R20
->>>>>> +       cfi_st  u0, PT_R21
->>>>>> +       cfi_st  fp, PT_R22
->>>>>> +       cfi_st  s0, PT_R23
->>>>>> +       cfi_st  s1, PT_R24
->>>>>> +       cfi_st  s2, PT_R25
->>>>>> +       cfi_st  s3, PT_R26
->>>>>> +       cfi_st  s4, PT_R27
->>>>>> +       cfi_st  s5, PT_R28
->>>>>> +       cfi_st  s6, PT_R29
->>>>>> +       cfi_st  s7, PT_R30
->>>>>> +       cfi_st  s8, PT_R31
->>>>>> +       addi.d  t0, sp, PT_SIZE
->>>>>> +       LONG_S  t0, sp, PT_R3
->>>>>> +       csrrd   t0, LOONGARCH_CSR_CRMD
->>>>>> +       andi    t0, t0, 0x7 /* extract bit[1:0] PLV, bit[2] IE */
->>>>>> +       LONG_S  t0, sp, PT_PRMD
->>>>>> +       .endm
->>>>>> +
->>>>>> +       .macro restore_all_base_regs
->>>>>> +       cfi_ld  zero, PT_R0
->>>>>> +       cfi_ld  tp, PT_R2
->>>>>> +       cfi_ld  a0, PT_R4
->>>>>> +       cfi_ld  a1, PT_R5
->>>>>> +       cfi_ld  a2, PT_R6
->>>>>> +       cfi_ld  a3, PT_R7
->>>>>> +       cfi_ld  a4, PT_R8
->>>>>> +       cfi_ld  a5, PT_R9
->>>>>> +       cfi_ld  a6, PT_R10
->>>>>> +       cfi_ld  a7, PT_R11
->>>>>> +       cfi_ld  t0, PT_R12
->>>>>> +       cfi_ld  t1, PT_R13
->>>>>> +       cfi_ld  t2, PT_R14
->>>>>> +       cfi_ld  t3, PT_R15
->>>>>> +       cfi_ld  t4, PT_R16
->>>>>> +       cfi_ld  t5, PT_R17
->>>>>> +       cfi_ld  t6, PT_R18
->>>>>> +       cfi_ld  t7, PT_R19
->>>>>> +       cfi_ld  t8, PT_R20
->>>>>> +       cfi_ld  u0, PT_R21
->>>>>> +       cfi_ld  fp, PT_R22
->>>>>> +       cfi_ld  s0, PT_R23
->>>>>> +       cfi_ld  s1, PT_R24
->>>>>> +       cfi_ld  s2, PT_R25
->>>>>> +       cfi_ld  s3, PT_R26
->>>>>> +       cfi_ld  s4, PT_R27
->>>>>> +       cfi_ld  s5, PT_R28
->>>>>> +       cfi_ld  s6, PT_R29
->>>>>> +       cfi_ld  s7, PT_R30
->>>>>> +       cfi_ld  s8, PT_R31
->>>>>> +       LONG_L  t0, sp, PT_PRMD
->>>>>> +       li.d    t1, 0x7 /* mask bit[1:0] PLV, bit[2] IE */
->>>>>> +       csrxchg t0, t1, LOONGARCH_CSR_CRMD
->>>>>> +       .endm
->>>>> Do you think we need to save and restore all regs here?
->>>>>
->>>>> Huacai
->>>> Hi, Huacai,
->>>>
->>>>
->>>> Note that it is not function context. In the original kprobe design, it is
->>>> triggered by 'break' and then trap into exception with all pt_regs saved.
->>>> The all pt_regs will be visible to the user. So I think in this version
->>>> we should also support all regs to user. BTW, due to all exceptions is
->>>> trapped by 'break' something in pt_regs is not needed, like estat,
->>>> badvaddr and so on.
->>> OK, but I still have some questions:
->>> 1, Why $r0 need save/restore?
->> Surely $r0 can be not saved, as now we do not have strange purpose
->> to make PT_R0 as a flag.
->>
->>
->>> 2, Why save $r1 but not restore?
->> My wrong idea is $r1 should be saved at CSR_ERA, to plays it like
->> exception happened. But its value always equal the address of
->> __kretprobe_trampoline. The kretprobe is something like fgraph. The real
->> return address is returned by trampoline_probe_handler. And at present,
->> the real return address is replaced in pt_regs->csr_era in
->> __kretprobe_trampoline_handler(). So the $r1 saved in CSR_ERA will
->> be destroied at __kretprobe_trampoline_handler() actually.
->> That's why $r1 saved also is not needed.
->>
->> And both way to get return address from return value or get return address
->>
->> from pt_regs is same on LoongArch because arch_kretprobe_fixup_return()
->>
->> does nothing. But I think get return address from pt_regs is more reliable.
->>
->>
->>> 3, What is the purpose of CRMD magic?
->> PT_CRMD magic is just exception context. It gives us a chance e.g.
->> set ie off at func head, and ie on at func return.
-> ARM64 and RISC-V don't have such magics, so maybe they are unneeded?
->
-ARM64 have noted "Construct a useful saved PSTATE" in kprobes_trampoline.S.
+we take the module ref only if we (callback) find the traced address in
+the module, we don't have the module object before
 
-And it seems we provide more interfaces than RISC-V. ?
+jirka
 
-
-Thanks,
-
-Jinyang
-
-
->>>>>> +
->>>>>> +SYM_CODE_START(__kretprobe_trampoline)
->>>>>> +       addi.d  sp, sp, -PT_SIZE
->>>>>> +       save_all_base_regs
->>>>>> +
->>>>>> +       move a0, sp /* pt_regs */
->>>>>> +
->>>>>> +       bl trampoline_probe_handler
->>>>>> +
->>>>>> +       /* use the result as the return-address */
->>>>>> +       move ra, a0
->>>>>> +
->>>>>> +       restore_all_base_regs
->>>>>> +       addi.d  sp, sp, PT_SIZE
->>>>>> +
->>>>>> +       jr ra
->>>>>> +SYM_CODE_END(__kretprobe_trampoline)
->>>>>> --
->>>>>> 2.1.0
->>>>>>
->>>>>>
-
+> 
+> > 
+> > thanks,
+> > jirka
+> > 
+> > [1] https://lore.kernel.org/lkml/20221114111350.38e44eec@canb.auug.org.au/
+> > 
+> >>
+> >> Phase1: mod1-->mod2..(subsequent modules do not need to be compared)
+> >>                 |
+> >> Phase2:          -->f1-->f2-->f3
+> >>
+> >> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> >> ---
+> >>  include/linux/module.h   |  4 ++--
+> >>  kernel/livepatch/core.c  | 13 ++-----------
+> >>  kernel/module/kallsyms.c | 15 ++++++++++++---
+> >>  3 files changed, 16 insertions(+), 16 deletions(-)
+> >>
+> >> diff --git a/include/linux/module.h b/include/linux/module.h
+> >> index ec61fb53979a92a..0a3b44ff885a48c 100644
+> >> --- a/include/linux/module.h
+> >> +++ b/include/linux/module.h
+> >> @@ -879,8 +879,8 @@ static inline bool module_sig_ok(struct module *module)
+> >>  }
+> >>  #endif	/* CONFIG_MODULE_SIG */
+> >>  
+> >> -int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+> >> -					     struct module *, unsigned long),
+> >> +int module_kallsyms_on_each_symbol(const char *modname,
+> >> +				   int (*fn)(void *, const char *, unsigned long),
+> >>  				   void *data);
+> >>  
+> >>  #endif /* _LINUX_MODULE_H */
+> >> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+> >> index 50bfc3481a4ee38..d4fe2d1b0e562bc 100644
+> >> --- a/kernel/livepatch/core.c
+> >> +++ b/kernel/livepatch/core.c
+> >> @@ -118,27 +118,19 @@ static struct klp_object *klp_find_object(struct klp_patch *patch,
+> >>  }
+> >>  
+> >>  struct klp_find_arg {
+> >> -	const char *objname;
+> >>  	const char *name;
+> >>  	unsigned long addr;
+> >>  	unsigned long count;
+> >>  	unsigned long pos;
+> >>  };
+> >>  
+> >> -static int klp_find_callback(void *data, const char *name,
+> >> -			     struct module *mod, unsigned long addr)
+> >> +static int klp_find_callback(void *data, const char *name, unsigned long addr)
+> >>  {
+> >>  	struct klp_find_arg *args = data;
+> >>  
+> >> -	if ((mod && !args->objname) || (!mod && args->objname))
+> >> -		return 0;
+> >> -
+> >>  	if (strcmp(args->name, name))
+> >>  		return 0;
+> >>  
+> >> -	if (args->objname && strcmp(args->objname, mod->name))
+> >> -		return 0;
+> >> -
+> >>  	args->addr = addr;
+> >>  	args->count++;
+> >>  
+> >> @@ -175,7 +167,6 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+> >>  				  unsigned long sympos, unsigned long *addr)
+> >>  {
+> >>  	struct klp_find_arg args = {
+> >> -		.objname = objname,
+> >>  		.name = name,
+> >>  		.addr = 0,
+> >>  		.count = 0,
+> >> @@ -183,7 +174,7 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+> >>  	};
+> >>  
+> >>  	if (objname)
+> >> -		module_kallsyms_on_each_symbol(klp_find_callback, &args);
+> >> +		module_kallsyms_on_each_symbol(objname, klp_find_callback, &args);
+> >>  	else
+> >>  		kallsyms_on_each_match_symbol(klp_match_callback, name, &args);
+> >>  
+> >> diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+> >> index f5c5c9175333df7..329cef573675d49 100644
+> >> --- a/kernel/module/kallsyms.c
+> >> +++ b/kernel/module/kallsyms.c
+> >> @@ -495,8 +495,8 @@ unsigned long module_kallsyms_lookup_name(const char *name)
+> >>  }
+> >>  
+> >>  #ifdef CONFIG_LIVEPATCH
+> >> -int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+> >> -					     struct module *, unsigned long),
+> >> +int module_kallsyms_on_each_symbol(const char *modname,
+> >> +				   int (*fn)(void *, const char *, unsigned long),
+> >>  				   void *data)
+> >>  {
+> >>  	struct module *mod;
+> >> @@ -510,6 +510,9 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+> >>  		if (mod->state == MODULE_STATE_UNFORMED)
+> >>  			continue;
+> >>  
+> >> +		if (strcmp(modname, mod->name))
+> >> +			continue;
+> >> +
+> >>  		/* Use rcu_dereference_sched() to remain compliant with the sparse tool */
+> >>  		preempt_disable();
+> >>  		kallsyms = rcu_dereference_sched(mod->kallsyms);
+> >> @@ -522,10 +525,16 @@ int module_kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+> >>  				continue;
+> >>  
+> >>  			ret = fn(data, kallsyms_symbol_name(kallsyms, i),
+> >> -				 mod, kallsyms_symbol_value(sym));
+> >> +				 kallsyms_symbol_value(sym));
+> >>  			if (ret != 0)
+> >>  				goto out;
+> >>  		}
+> >> +
+> >> +		/*
+> >> +		 * The given module is found, the subsequent modules do not
+> >> +		 * need to be compared.
+> >> +		 */
+> >> +		break;
+> >>  	}
+> >>  out:
+> >>  	mutex_unlock(&module_mutex);
+> >> -- 
+> >> 2.25.1
+> >>
+> > .
+> > 
+> 
+> -- 
+> Regards,
+>   Zhen Lei
