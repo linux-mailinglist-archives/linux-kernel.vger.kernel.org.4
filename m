@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 547D8627B8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA753627B8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233300AbiKNLHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:07:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
+        id S235948AbiKNLHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:07:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236608AbiKNLHS (ORCPT
+        with ESMTP id S236626AbiKNLHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:07:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2DF20BC3;
+        Mon, 14 Nov 2022 06:07:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B716209AE;
         Mon, 14 Nov 2022 03:07:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F042C61016;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F031261001;
         Mon, 14 Nov 2022 11:07:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5D00C4315D;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2E3EC43155;
         Mon, 14 Nov 2022 11:07:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1668424033;
-        bh=3oKBVvbim8AnILN7ovfk5Q/WICjkxryDGKgk86VJ0wQ=;
+        bh=GWWGPUKPa7D/bftHKUkTMDy0KmAGhBAfx6Kwm0ESm4s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ow1nNeFOTv3yxZwqzIwbFSZ3b+zPr4r2YVn82VeWPXR6Rmy895qmA6/1A5cxC3pBs
-         bC1q4c9+sT9ddKSJnaRWUXikKOlQRig+vklMqugzLH1765+us6wbfF/WHgjG3NQgHG
-         wo544QdP5RJ4oeIwIzkRUr388n51+G6crOM6btDgGj/XCGqEXGBTgeqHcnv4Vdo9SS
-         v+dAlJgoS/i1lq73FiqgYcDqcAJPLkBCkcPiB9Vyt+1Uc7+w3FCILG3O2sXXUSDe+I
-         2eI/0483wWhUadZWp9UdDlCijogTYLDB8VMIM/pxGB3c9p2wrc5pd1cd100wTPpVkn
-         sxLEIVV0GvDYQ==
+        b=ObwY/TLolRbC8Gi0GzoqtGIK2fICxgc+t4euQThTUGIAmPi0tAh5kBukaf6wXubj1
+         vfkbBgpNcpjtmfZUtYdLDkuP/15E+zvfI6Nby69pM0Kgrkgyh6MBunHdSQ2hUcG+ce
+         2TD7bUhHQHakrjzLGu07Thw39tC03dqysP9lDjx0pSC3ejI1VWwYwVgp5hDGoayvHc
+         /1U0liulquK6Y5YA9IFvGlAoH9ItSjyKLDHzTUQNXeG3czmxk2OWmoiIRHff5IcBfP
+         Rez42ZIZOJqT7BJ1QIEsfMOPBuU/j8uPoIl+/s5nIzJ+yt8V5MNYVI3PwopY3+unNj
+         UHZNVcLTQaPwQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1ouXIY-0001Ed-8E; Mon, 14 Nov 2022 12:06:42 +0100
+        id 1ouXIY-0001Eg-AU; Mon, 14 Nov 2022 12:06:42 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -44,9 +44,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 06/22] phy: qcom-qmp-combo: rename USB PHY ops
-Date:   Mon, 14 Nov 2022 12:06:05 +0100
-Message-Id: <20221114110621.4639-7-johan+linaro@kernel.org>
+Subject: [PATCH v2 07/22] phy: qcom-qmp-combo: drop unnecessary debug message
+Date:   Mon, 14 Nov 2022 12:06:06 +0100
+Message-Id: <20221114110621.4639-8-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221114110621.4639-1-johan+linaro@kernel.org>
 References: <20221114110621.4639-1-johan+linaro@kernel.org>
@@ -61,59 +61,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a "usb" infix to the USB PHY operation functions and name them
-after the corresponding operations (e.g. "init" rather than "enable").
+Drop the unnecessary (verbose) debug message from the init PHY op.
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index cec487560fd7..bf0874d22d91 100644
+index bf0874d22d91..ae04f6219fd2 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -2084,7 +2084,7 @@ static int qmp_combo_exit(struct phy *phy)
- 	return 0;
- }
- 
--static int qmp_combo_enable(struct phy *phy)
-+static int qmp_combo_usb_init(struct phy *phy)
- {
- 	int ret;
- 
-@@ -2099,7 +2099,7 @@ static int qmp_combo_enable(struct phy *phy)
- 	return ret;
- }
- 
--static int qmp_combo_disable(struct phy *phy)
-+static int qmp_combo_usb_exit(struct phy *phy)
- {
- 	int ret;
- 
-@@ -2109,7 +2109,7 @@ static int qmp_combo_disable(struct phy *phy)
- 	return qmp_combo_exit(phy);
- }
- 
--static int qmp_combo_set_mode(struct phy *phy, enum phy_mode mode, int submode)
-+static int qmp_combo_usb_set_mode(struct phy *phy, enum phy_mode mode, int submode)
+@@ -1967,10 +1967,8 @@ static int qmp_combo_com_exit(struct qmp_phy *qphy)
+ static int qmp_combo_init(struct phy *phy)
  {
  	struct qmp_phy *qphy = phy_get_drvdata(phy);
+-	struct qcom_qmp *qmp = qphy->qmp;
+ 	const struct qmp_phy_cfg *cfg = qphy->cfg;
+ 	int ret;
+-	dev_vdbg(qmp->dev, "Initializing QMP phy\n");
  
-@@ -2119,9 +2119,9 @@ static int qmp_combo_set_mode(struct phy *phy, enum phy_mode mode, int submode)
- }
- 
- static const struct phy_ops qmp_combo_usb_phy_ops = {
--	.init		= qmp_combo_enable,
--	.exit		= qmp_combo_disable,
--	.set_mode	= qmp_combo_set_mode,
-+	.init		= qmp_combo_usb_init,
-+	.exit		= qmp_combo_usb_exit,
-+	.set_mode	= qmp_combo_usb_set_mode,
- 	.owner		= THIS_MODULE,
- };
- 
+ 	ret = qmp_combo_com_init(qphy);
+ 	if (ret)
 -- 
 2.37.4
 
