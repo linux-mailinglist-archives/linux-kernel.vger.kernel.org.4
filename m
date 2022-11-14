@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8A7628AC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A12628AC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:50:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235813AbiKNUt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 15:49:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
+        id S236957AbiKNUuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 15:50:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236205AbiKNUt0 (ORCPT
+        with ESMTP id S235800AbiKNUuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:49:26 -0500
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F3D1583C;
-        Mon, 14 Nov 2022 12:49:26 -0800 (PST)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-13ba86b5ac0so13918952fac.1;
-        Mon, 14 Nov 2022 12:49:26 -0800 (PST)
+        Mon, 14 Nov 2022 15:50:03 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C23A62C7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:50:02 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id v17so19063821edc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:50:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/zs5GFS4zX5I6/Faq+e+SUg4iVEYXlwxarNYXij8AkM=;
-        b=ImPaTYpH20pxonMgoWCi8i5Qs38yYeoMefN7Ur6gCETa7/kYYYRJoRy4jpTu1Vpzn3
-         hWLLOgAeDNUPVTO+5huo0TYVcwfWujK0Aw1JE/wJwtx//tDBo9QX57HtwqowqYi+65MH
-         3v3CO/F0ngn4sRyzWvOXMehFGzagpS0FBLRlphqddJCIOtVf0miMSb3Qsx6VfbltPPPz
-         rwAVxmLlrArcsS97jBiWyztSuCfBFEehxgy0Ck+9LbqJHYbe//kCtwbRZsJQNO6veN/7
-         J3DXqrlpMQxiGuUN9aDF4KMoC6Ld18+V4aHI/oXi83S5KpWO/sq5NJt+6H9JILlgOhOk
-         3a/g==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vbXFOKeTUlYXn2Mg9KmKqBvEsVbH8a0lnnF+t/CHaYg=;
+        b=My3IJzngB/YmGua1bnDr4KRu/psqtSBrjcP49Gz4NDfNxNbefC/yBb47pIj8h7ry+d
+         VcFJX5+pYd3EpAtPYndWLxoXJDJaexmUGaosAK5p/GlJ4yQx1UeiTy/YMnFKS1UJuyC+
+         0/M4iZ1nNABU8xtIkYFKEmtSMHwEov1KmDNEMd9xQnRmPod+cI9oBGtONSfsdN7WNU/7
+         8EWNotEOdHHEMk48RzK2XJUJ1CKWhLs+Mh9x+ChVOo8xnON1Rh0/5RCHEqCIyOvDS2rD
+         S93dH2Fi0lNvMHUne65iYpnZkIsXaePGmIgAraHs2vi1qzrqZUnCemkTrNb9rRQdfri0
+         WjMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/zs5GFS4zX5I6/Faq+e+SUg4iVEYXlwxarNYXij8AkM=;
-        b=UrcSgWLc7UQBi2DM6ormDDgYFtFxg6V8WZMSXGXQehwxcEg42cLkZsR7AbsTqizDwz
-         HZWopCOffr72dYrTh202HYdS+WFtzPtaoRTmTPLWd0j40u++ZRbRpnLx7wqLs3sWCTa/
-         NGUJ1GrHDwUhHv+kcOHJlCI9uyYRvbEbOsrIW0ew6WuA62m1DDIKDlq3EN04XnxHiC+w
-         vYT6oah4cclVpninIAWPSE6AD0iYVemYp6VKHfFRmABLWKedDacdnNzoUzA0W1Ftliun
-         37co6w7oKtAJd7CB7hw77Qye0oePUD6IkazFKOM8nt8h631Wuc3iBjiqg0pceyFIF79v
-         4Sng==
-X-Gm-Message-State: ANoB5pmTx+dVi3CUCfv2EU2amXJW8l1dj1EC/VQQqo8ChUtJFD2L0j79
-        wYYa41Lol2y1hSVhvj6Q8ek8/8CuF1GEIk0eSuk=
-X-Google-Smtp-Source: AA0mqf5Oo2AzjTceHKiJk2Mi+Kzjn7EOsa7GoBX8c8TdPP3ULdrZxu7oElvFZNnKbpBB817J/M/OWPoG7FxpTmV9EYw=
-X-Received: by 2002:a05:6870:b87:b0:13d:51fe:3404 with SMTP id
- lg7-20020a0568700b8700b0013d51fe3404mr7667561oab.183.1668458965345; Mon, 14
- Nov 2022 12:49:25 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vbXFOKeTUlYXn2Mg9KmKqBvEsVbH8a0lnnF+t/CHaYg=;
+        b=diFXXKhfUCB7ytFvw34WUZOkoc4bn18w+FuL6bdtKbcrf2w5km9hAwjyhXL/IhtGue
+         U3CEhJz7H024yfac9gUCBi7+4e+zjBieJZ7n+PeBE/iOxkQ5BZlELentRbkx1x4wymUJ
+         E5Kor2z0MpnGveuphWnlZIaPN5ZxVuxDezOIoOVvRHPzQ57uO2MR+KRRvp13BIv4fXz5
+         mYaNnNbUkg/PLegt4echA5FYOT47+xTAo8TpBjzz/OCz/Qe3nDrDOaCqcraIIOZ8U60N
+         JVeyEVUbXM/8rn2i3/6xc43BybSbxsGDB00fqWM9LspgaheLQNiqzJ0n6+Pb1bUS8VVE
+         uQuA==
+X-Gm-Message-State: ANoB5pkBIcxqLV2j2kvi2yvZ/R8tux2rlYYtJYwDsWGwaCCWX3eg052Z
+        ePmyH3Bknrr5tPXvTKStQcg=
+X-Google-Smtp-Source: AA0mqf7JKyTLxwyn9ebdI2jJKDOugaX3DChyW0LE9ULhC7qV0de1AoKqcbD5HjYp/rHBaR/CC5pqlw==
+X-Received: by 2002:aa7:c446:0:b0:468:74:9820 with SMTP id n6-20020aa7c446000000b0046800749820mr3304216edr.288.1668459000719;
+        Mon, 14 Nov 2022 12:50:00 -0800 (PST)
+Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id v2-20020a170906292200b007aacfce2a91sm4605452ejd.27.2022.11.14.12.49.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 12:50:00 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
+Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev,
+        Andre Przywara <andre.przywara@arm.com>,
+        Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v3 2/3] bus: sunxi-rsb: Support atomic transfers
+Date:   Mon, 14 Nov 2022 21:49:58 +0100
+Message-ID: <3506150.LM0AJKV5NW@jernej-laptop>
+In-Reply-To: <20221114015749.28490-3-samuel@sholland.org>
+References: <20221114015749.28490-1-samuel@sholland.org> <20221114015749.28490-3-samuel@sholland.org>
 MIME-Version: 1.0
-References: <20221114194133.1535178-1-robdclark@gmail.com> <97429a67-e763-4226-828c-8381a2abe9f9@quicinc.com>
-In-Reply-To: <97429a67-e763-4226-828c-8381a2abe9f9@quicinc.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Mon, 14 Nov 2022 12:49:45 -0800
-Message-ID: <CAF6AEGu2soY3Xm_obivcLKqgJ0HVj0H90C7zN5YOTFK0RmRbdA@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/a6xx: Fix speed-bin detection vs probe-defer
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Chia-I Wu <olvaffe@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,49 +75,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 11:59 AM Akhil P Oommen
-<quic_akhilpo@quicinc.com> wrote:
->
-> On 11/15/2022 1:11 AM, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > If we get an error (other than -ENOENT) we need to propagate that up the
-> > stack.  Otherwise if the nvmem driver hasn't probed yet, we'll end up with
-> > whatever OPP(s) are represented by bit zero.
-> >
-> > Fixed: fe7952c629da ("drm/msm: Add speed-bin support to a618 gpu")
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> >   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> > index 7fe60c65a1eb..96de2202c86c 100644
-> > --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> > +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> > @@ -1956,7 +1956,7 @@ static int a6xx_set_supported_hw(struct device *dev, struct adreno_rev rev)
-> >               DRM_DEV_ERROR(dev,
-> >                             "failed to read speed-bin (%d). Some OPPs may not be supported by hardware",
-> I just noticed and was going to send a similar fix. We should remove ".
-> Some OPPs may not be supported by hardware" here.
->
-> Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
->
-> Btw, on msm-next-external-fixes + this fix,  I still see boot up issue
-> in herobrine due to drm_dev_alloc() failure with -ENOSPC error.
+Dne ponedeljek, 14. november 2022 ob 02:57:48 CET je Samuel Holland 
+napisal(a):
+> When communicating with a PMIC during system poweroff (pm_power_off()),
+> IRQs are disabled and we are in a RCU read-side critical section, so we
+> cannot use wait_for_completion_io_timeout(). Instead, poll the status
+> register for transfer completion.
+> 
+> Fixes: d787dcdb9c8f ("bus: sunxi-rsb: Add driver for Allwinner Reduced
+> Serial Bus") Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-Could you track it down one level deeper? I wonder if there is some
-missing cleanup in the probe-defer path and we end up failing in
-drm_minor_alloc() or something along those lines
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-BR,
--R
+Best regards,
+Jernej
 
-> -Akhil.
-> >                             ret);
-> > -             goto done;
-> > +             return ret;
-> >       }
-> >
-> >       supp_hw = fuse_to_supp_hw(dev, rev, speedbin);
->
+
