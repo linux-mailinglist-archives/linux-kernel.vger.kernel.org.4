@@ -2,126 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC47628C1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 23:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B56E628C1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 23:30:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237250AbiKNWaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 17:30:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
+        id S237592AbiKNWa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 17:30:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237153AbiKNWaU (ORCPT
+        with ESMTP id S235772AbiKNWaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 17:30:20 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2060.outbound.protection.outlook.com [40.107.223.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EB21570E;
+        Mon, 14 Nov 2022 17:30:24 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAC815A05;
+        Mon, 14 Nov 2022 14:30:21 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id t25so31823783ejb.8;
+        Mon, 14 Nov 2022 14:30:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LtL2HZVK+P0c30MAByLL8r0VKNh+zbkLo486TTYNu+g=;
+        b=Sw0ck92xCMstWkQ6ZvwZKX74xCkixNSvsUCpnI83uIw3rNplJk656XAl9UgdJjkHIN
+         HtpE7OULt2bArRwHCQFYA6oW5gU+fNLhKIjKquJw6RBHfkFn2+st97M92Kwe96ZtFE/3
+         FRtn18gbg72uITYrqioYrV9/eWr2nflQm1HgQpktbZSYEV05uatfbGQJwUQ86On7EvEW
+         TTmyJzUU+PgTi4pYrkGZgBAAqFMK4nMzio2QM3QNd7b7TOC/cNnFkhe1t8ab9K+h0Nih
+         HsVhlYdNS1MA+/2Xdy1IWwtzsQRio9jkvm9D+ngyARcm+0njdi+hzmSKn6wlShE1amL9
+         d9lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LtL2HZVK+P0c30MAByLL8r0VKNh+zbkLo486TTYNu+g=;
+        b=GS1ByPUF9U1ECtHO+6qXIMrE7M56emZDlEz+Guf7QVKnOlrhD8bvn8gyqQL4OQV4hJ
+         Rf7ML1daatBM8KgzIlAwq8m9F/tEKOhZG46G8U0hb1qn9HZbbe0KkVF/0/rOocKr90ZG
+         8VwC/zDqLrwj28XPDdvmcsYuZzkcmVEp6SE/HFHvbrD1JeF/eCz+c31l9Tc55bqSiDsW
+         6oQF7f7oWa6K3a5L2ulMbKqliGzVtp1CE5A7djhhmtz8hzBn6wnDd2hQf97ObYuiR3GA
+         MSxjnLjv7eTNAaFERtXbPiyx6TquAPeO3wJSrUZHeX8h6en3oC5r2xS10lV+qfr1+Kqo
+         1OoQ==
+X-Gm-Message-State: ANoB5pko1R/V/ZzU4UG1zX5SxH4wrZpGtJalGPSGBS6sluUAbUCygGON
+        qIgAzOtmwNJwFt5gmqSja0J8bQ+ijucNEg==
+X-Google-Smtp-Source: AA0mqf4TGTvWfgxEPSZfs4RGCpC+rf0Br7Kx1H7Aii142ZmLCwU5k1xTOjgsNnMB8uHgkQE9j8GGBg==
+X-Received: by 2002:a17:906:7e4a:b0:78d:a136:732b with SMTP id z10-20020a1709067e4a00b0078da136732bmr11425814ejr.135.1668465020148;
+        Mon, 14 Nov 2022 14:30:20 -0800 (PST)
+Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id ky4-20020a170907778400b0077b523d309asm4668183ejc.185.2022.11.14.14.30.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 14 Nov 2022 14:30:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jJUIwBybi94fEjUF/dTzsy3JFnCtUtF/c2l9gnfYX9wjubMEnOZtd/He+zZNBloL1K98tpFtsyMvFPHmIpYMpy2egX2yxm/FwhmwdnjkNBMR7MA25uvgk1IZf+ff+h5e0oOCH9VcfqWb0Bnf/t5CTOcPDen51xc+8NaIfi+Qt+ievX0qE/gxpzMviOWr2Nd1iYBuxdy96EyitssflCNVi4UyYsTBDx2Fn1k7p2aK58lLcA5zMGWX7Rcks/zU484kIIlJ9QEpHl947ro4kgnJGa+f56KKaFcS5uFh9Kzua3Q1d1eUhqnMYTnbMOxHW0mIbpVA2abkpZEGvyVlrCS96Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9IYQ6WWjF/Wb4s6XrIXiuWhHpQNPzt6dh2pvZiJi8CE=;
- b=gH95JjUmiOVTamUUjv9xTTN/F7yhfbhZkTAsu2qx8QKXMM4vWan3EuI8lrZTVEMlY9fRSNSz4/afmauQVhr4RXgU41kR3uFg40Sg54netTdUUT/BuCfdQNDWY2A/Csd93sPty72DWNvjNLcGS5pBEizSVP6qhNpPZezrjGEFEvP1ZE9yw/DW/THJQbvAYsoWNQZWm6XWg0dQKuLmrW5qv/UwsQfrr6I6CzINLP446EUntldfARJJZuVSEJTJd6rPaijO3tyeRfZ665+SKp+KrRjHekwDm/XCRXmOnyCrdsPDE/e+4dTvIP9/9vA8h41Quq51UzV5VZtNTiAjr/erog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9IYQ6WWjF/Wb4s6XrIXiuWhHpQNPzt6dh2pvZiJi8CE=;
- b=G2yz9hT+fJM+bh6th+0Llu5Cxg8nPvKK+OlujPXUuONEgexIydBztPL2MC82Zw1FqFV5k5yZNYFAISqpfi7E38n6+Yor+gWvhtFV8aYQzZlz4eysNNvcdKQYaCBMHwU7B6v4HxFMaN8kHWzpA11dvNArI7xhsLAyxzhLZrYwInU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by IA1PR12MB7494.namprd12.prod.outlook.com (2603:10b6:208:41a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
- 2022 22:30:14 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::44a:a337:ac31:d657]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::44a:a337:ac31:d657%4]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
- 22:30:14 +0000
-Message-ID: <873c17ad-0a7f-f3a3-0bad-952739d9b394@amd.com>
-Date:   Mon, 14 Nov 2022 16:30:11 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v4 8/9] cpufreq: amd_pstate: add driver working mode
- status sysfs entry
-Content-Language: en-US
-To:     Perry Yuan <Perry.Yuan@amd.com>, rafael.j.wysocki@intel.com,
-        ray.huang@amd.com, viresh.kumar@linaro.org
-Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
-        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
-        Xiaojian.Du@amd.com, Li.Meng@amd.com, wyes.karny@amd.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221110175847.3098728-1-Perry.Yuan@amd.com>
- <20221110175847.3098728-9-Perry.Yuan@amd.com>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <20221110175847.3098728-9-Perry.Yuan@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR04CA0042.namprd04.prod.outlook.com
- (2603:10b6:610:77::17) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     martin.botka1@gmail.com, Martin Botka <martin.botka@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jami Kettunen <jamipkettunen@somainline.org>,
+        Paul Bouchara <paul.bouchara@somainline.org>,
+        Jan Trmal <jtrmal@gmail.com>, Tom <takuya@takuya.tech>,
+        Martin Botka <martin.botka@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Conley Lee <conleylee@foxmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] arm64: dts: Add basic support for BIQU CB1
+Date:   Mon, 14 Nov 2022 23:30:17 +0100
+Message-ID: <4534857.CvnuH1ECHv@jernej-laptop>
+In-Reply-To: <20221114214452.1993744-2-martin.botka@somainline.org>
+References: <20221114214452.1993744-1-martin.botka@somainline.org> <20221114214452.1993744-2-martin.botka@somainline.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|IA1PR12MB7494:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7b6c3961-787f-4fd2-ac57-08dac68fccab
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UFZGMX3gwqL7xmO1FUurx9G6ufhvY1us79MEKjgW7YskKbCu+wg68F5sa6U+8wNFJqz/h1z0iSxfbN5zoGswCxPoAQsmh2CRWFBCyfeilGAi8eSQTvbxMUtds51/3b8gmQMcaiB1oEhelEaqPQshIfnVZnWYyhm76oe5vp0CvpgtlVrIrSOqxv3TN+daCLfufB8droe2AWGnKl6jy2UDl+cY+YSkawPSs/CNGKNB1J7ZG4Q1Oym+OKpykRacSRR9CQ2AzjAHVZF3vv92yUtmnOatSXdKJ6Q9pomuhu5Z7scWsuQhrI6TuverBWch1FTyeOljlaX3F58aKZyO1m+KAUFFRslcHJPonZc/jHl528PiycQ8kILelinUOaCoFbTkFymoaIEJyVvSwl4BcDZBNl4sPB9gLFoy2cOagRV7PVLasTRAayXPt/nhswe3Xee91a0lQnuGcyT40txXT8oUrtQsRaNkIT2+Butp/bbeORPBe7vzvQjqBF+G4QdzmpnH0ThEPcwUNJRmrbSfCB3u4D9Mf6XkEkeIzOTeSzaFN96Ms3oO73tc6DpqAU4rikZmxEatHFGX+90/F7qqzjybTdkOIFRQLjM9BQJx3ua6WYijUnu0mw+BbtanL0K4kkc4oIOjvMlSkhWaeEhD+KOHByxSB6fzDYYuN2S/vs9WVmAofR38jAM5t9WLmjpqmOGiaZ4sGD1oxVI7gFtBu3FXBcSpGBsFSc21HHMzJeTWXtjjJNXr0VLkdEnXGNwY3b/om69pb3wM00tmrFIzq3KFA6KySwh3kkPlOI1fdsCApgg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(136003)(346002)(366004)(376002)(451199015)(5660300002)(2906002)(41300700001)(8936002)(66556008)(4326008)(66476007)(66946007)(8676002)(316002)(36756003)(6506007)(53546011)(6666004)(478600001)(6486002)(31686004)(86362001)(186003)(31696002)(26005)(38100700002)(6512007)(83380400001)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VXdBN1VxYTh4RS9xNWtNZUZpbFVOT3RaTWJMK2lpZHdCalVhOEtYMXVkL2gz?=
- =?utf-8?B?N2tONmh4TG1MMjZFdXo1SzZndS96Vm5CaUpQNlRscjN4dU50RVNWTWZNWm5m?=
- =?utf-8?B?azdIVFdnS0MyLzNPem1DOUkrdnFWb1pHT0F2Z0d6eGhtSmdJb2xidzZhSlRx?=
- =?utf-8?B?QmJJYWpWYnliTHVsZmJoZm1TdGxvWlpnRERablIyeFQzcy8rS3Q2enVHZkJG?=
- =?utf-8?B?bTJSZmNPY2tacElQRjVPY2w2MnNjbFRSOXF4Q3ZCd1Z6c0l4bE9qZUgxVndF?=
- =?utf-8?B?UHZLMkhPYVdYMDZFR09yd1V4eU5lZ3lZaTlYMHp5YWFrZ2pTRnAwVHd3ZjJ3?=
- =?utf-8?B?cnVFcENnWmhTbzVTUFV2MHhGbjdjQnd0SmhiU3pCbWtpL1JmbWlUNGMxTHhD?=
- =?utf-8?B?ckNmWiswZGlQRTIvcURkcEo1NFpnanAzdjN0T0tzcTU3aE9WRHJlZjJ1K2FL?=
- =?utf-8?B?SXZDM0hqYnRJUWRuL1Z2ZmhkRkhlRitudWlTZ3BxUjZiWWFDZVdGMDQ4SGlS?=
- =?utf-8?B?Mm5wTU00VnZaSStTNEdOSDlHZXZ0TW9QZWs1ajBDcmMrblZtWWx6UjRhS3cz?=
- =?utf-8?B?MU41NFFpdXlzS1MxZXhLV1JYSFl3NDQwNGFnZjZ2T2tIOXlJQmFMTFVrZlVM?=
- =?utf-8?B?U1pBV0kxbTd1NG5SOVVmaUQxamROOS8xSlBmMGkyMGoreWJ2MlhBeTNaM0hY?=
- =?utf-8?B?MDR1a0RmSzhIbFYyZkZROWZEd2lxaGpNSWU3bVVFbEVGNGgxbjR3eklJaGdp?=
- =?utf-8?B?czhTbnozRnBHS1J4NUNINXg4K05JSXFvRXpXQThSSmNORVFWS2VIbEU2TVhH?=
- =?utf-8?B?eDlhQXpqQWVaUFZIcXJlc2E2eTRMR1hLTmJmNG5iREN3VnYrYzZtc3JUVVAw?=
- =?utf-8?B?R045NzZwMC9ZNVdrU1FvTDQ4Q2YrSHl0Slg3VHlDUHZRcjY1VlJZSXJHVjB3?=
- =?utf-8?B?dHRWcWZiSUx2NWZDRWxpYWJsL3A5dThTVEF5aXdhNVVuZUZvZkt2MGRMTmo3?=
- =?utf-8?B?R0ViK1BPbXo2R2lOSkdWK2xkVHpWL2x0T3FyL0ExT09rQW9ndE1nRWpvVUwy?=
- =?utf-8?B?ZDMvNm1QSWlMWmlEZmc2dlhRZFBWTlhwcU5HakljdEFFZ0JabVREUC9kZVhO?=
- =?utf-8?B?ZEFOSHpPWnhNS09IVWpseGtBL3UveGxTdlhFalJGWnlNakxVK0JDVGRaNDF0?=
- =?utf-8?B?ZW9kcWMyUkQ4dHlPK3kyM2RPc1BqUE1jUTRDbktmcE5sOWxHbDdlT0ZsMHZI?=
- =?utf-8?B?aDVJLzQyekVFRnZkM0hqWUhveXo0eFYzYXdJRFJTSmczM09VYTUrRnFQY0N5?=
- =?utf-8?B?ZHA4YnZLNG1Hd01PQzZqbGlrRERXakk2a1pGdWJZOCsvblZ5L0crTlk4bk9Y?=
- =?utf-8?B?WmF2cjNHdWM3WTFMQkJoTG9yWWxzblB0Z0lXODdLTjZVODI3Sy9hNENWOWxx?=
- =?utf-8?B?QWcvZGtJUFB1RjF3WGFjYjZiQXBNSTVzNDVLWUNMdTFCb21ick5SY3I3Q2M4?=
- =?utf-8?B?MlR2MkcwbVdsTXR2VjBQb3R2OEFCcWlFcEhVeCtTTTlOc1IzSk1XblhmenJI?=
- =?utf-8?B?YWl1bkRvamtoZzJpWmhRd1hjS3MzTVI5LzZIbHBZNjlNREhkUWJ4MFJCT0Ns?=
- =?utf-8?B?M0lRbU9BRVE3V1hFb1FuVnVtYTBKbDhMWGxVMWxNcXhxRVA3RTB1QnpXanln?=
- =?utf-8?B?Q3lIMTBvOWEvREc3Z0RicUtkczI3TDdwZTdoa2JqYnBHYlF2cXFjZUlzYWR6?=
- =?utf-8?B?RDRuMUFZb0wxZEVwRTdYVkdIU2tJZWNNelBEbzUzTDZCdG1KSlNSNmd1aXpN?=
- =?utf-8?B?TG0raTRmcE5CVk5oTVhxcnVlcUkrT2RVSzY4emkvY3Q4K296N3NEekt1eFMx?=
- =?utf-8?B?c1dnU21RVzN3YThYSW15NzJnalZ4N0ErM3Flb0RPRGdRZGxhSWZtNHRxeVJm?=
- =?utf-8?B?T1I5aEQxUVl2NWFQc2VIY2dKYytWcjAwdEFBalk0ZnUvVkRnK0ZkMzBQNFkv?=
- =?utf-8?B?WVF6clBMdjZSL0lseGZITUtoalB3UGhnMUZZR2tYbXdKcXBkb05rRjlkVC9h?=
- =?utf-8?B?NkJEK1dYVXlJZzY0ZGhHOFNuWXFJSmgrTzREd0tUbWRvc29GU0Z1UDhGb21X?=
- =?utf-8?Q?bsq49mwr8fXQ5BdEo7hmG5xmD?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b6c3961-787f-4fd2-ac57-08dac68fccab
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 22:30:14.4022
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lwPx5ZWU14HLR/mbkSY5DOmeQ7CNYaXKteuNJm7GCTrT4KFaKTo5/1Etu0QAahz4PgEV0Rh+0ONkO7UHU2f/ww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7494
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,96 +89,319 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/10/2022 11:58, Perry Yuan wrote:
-> While amd-pstate driver was loaded with specific driver mode, it will
-> need to check which mode is enabled for the pstate driver,add this sysfs
-> entry to show the current status
+Hi Martin,
+
+I was just writing new e-mail as response to v2. You should wait at least a 
+day or two, usually more, before sending new version. Others will likely have 
+some more comments. And there is also no rush. Until PMIC series is merged, 
+this will not go anywhere. Since there is only this week until cut off date for 
+DT updates for kernel 6.2, it's most likely that this will land in 6.3. And 
+that gives as a few weeks (month) more. 
+
+See comments below.
+
+Dne ponedeljek, 14. november 2022 ob 22:44:49 CET je Martin Botka napisal(a):
+> CB1 is Compute Module style board that plugs into Rpi board style adapter or
+> Manta 3D printer boards (M4P/M8P).
 > 
-> $ cat /sys/devices/system/cpu/amd-pstate/status
-> active
+> The board has:
+> 	H616 SoC
+> 	1GB of RAM
+> 	AXP313A PMIC
 > 
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> And the actual boards that CB1 plugs in are just extension to it with ports
+> and thus are not split in DT.
+> 
+> Boards have:
+> 	4x (3x for Manta boards) USB and 1 USB OTG.
+> 	SDcard slot for loading images.
+> 	Ethernet port wired to the internal PHY.
+> 	2x HDMI 2.0.
+
+H616 has only one HDMI output. Unless there is some additional chip for some 
+conversion, only one HDMI port can work.
+
+> 	Power and Status LEDs.
+> 
+> Currently working:
+> 	Booting
+> 	USB
+> 	UART
+> 
+> Signed-off-by: Martin Botka <martin.botka@somainline.org>
 > ---
->   drivers/cpufreq/amd-pstate.c | 44 ++++++++++++++++++++++++++++++++++++
->   1 file changed, 44 insertions(+)
+> Changes in V2:
+> Add proper board compatible
+> Add regulator prefix for vcc5v
+> Drop okay status from PMIC
+> Drop standby_param
+> Changes in V3:
+> Change copyright to me
+> regulator_vcc5v to regulator-vcc5v
+> Drop ehci0 and ohci0
+>  arch/arm64/boot/dts/allwinner/Makefile        |   1 +
+>  .../dts/allwinner/sun50i-h616-biqu-cb1.dts    | 178 ++++++++++++++++++
+>  2 files changed, 179 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
 > 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index b71bfbbb7639..6a3b610cb084 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -65,6 +65,8 @@ static int cppc_load __initdata;
->   static int epp_off __initdata;
->   
->   static struct cpufreq_driver *default_pstate_driver;
-> +static struct cpufreq_driver amd_pstate_epp_driver;
-> +static struct cpufreq_driver amd_pstate_driver;
->   static struct amd_cpudata **all_cpu_data;
->   
->   static struct amd_pstate_params global_params;
-> @@ -798,6 +800,46 @@ static ssize_t store_boost(struct kobject *a,
->   	return count;
->   }
->   
-> +static ssize_t amd_pstate_show_status(char *buf)
-> +{
-> +	if (!default_pstate_driver)
-> +		return sprintf(buf, "off\n");
+> diff --git a/arch/arm64/boot/dts/allwinner/Makefile
+> b/arch/arm64/boot/dts/allwinner/Makefile index 6a96494a2e0a..223f1be73541
+> 100644
+> --- a/arch/arm64/boot/dts/allwinner/Makefile
+> +++ b/arch/arm64/boot/dts/allwinner/Makefile
+> @@ -38,5 +38,6 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64.dtb
+>  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64-model-b.dtb
+>  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6.dtb
+>  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6-mini.dtb
+> +dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-biqu-cb1.dtb
+>  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-orangepi-zero2.dtb
+>  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-x96-mate.dtb
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
+> b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts new file mode
+> 100644
+> index 000000000000..86b5aca9b53e
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
+> @@ -0,0 +1,178 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+> +/*
+> + * Copyright (C) 2022 Martin Botka <martin.botka@somainline.org>.
+> + */
 > +
-> +	return sprintf(buf, "%s\n", default_pstate_driver == &amd_pstate_epp_driver ?
-> +					"active" : "passive");
-> +}
+> +/dts-v1/;
+> +
+> +#include "sun50i-h616.dtsi"
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/leds/common.h>
+> +
+> +/ {
+> +	model = "BIQU CB1";
+> +	compatible = "biqu,cb1", "allwinner,sun50i-h616";
+> +
+> +	aliases {
+> +		serial0 = &uart0;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +
+> +		led-0 {
+> +			function = LED_FUNCTION_POWER;
+> +			color = <LED_COLOR_ID_RED>;
+> +			gpios = <&pio 2 12 GPIO_ACTIVE_HIGH>; /* 
+PC12 */
+> +			default-state = "on";
+> +		};
+> +
+> +		led-1 {
+> +			function = LED_FUNCTION_STATUS;
+> +			color = <LED_COLOR_ID_GREEN>;
+> +			gpios = <&pio 2 13 GPIO_ACTIVE_HIGH>; /* 
+PC13 */
+> +		};
+> +	};
+> +
+> +	reg_vcc5v: regulator-vcc5v {
+> +		/* board wide 5V supply directly from the USB-C socket 
+*/
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc-5v";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	reg_usb1_vbus: regulator-usb1-vbus {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "usb1-vbus";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		vin-supply = <&reg_vcc5v>;
+> +		enable-active-high;
+> +		gpio = <&pio 2 16 GPIO_ACTIVE_HIGH>; /* PC16 */
+> +	};
+> +};
+> +
+> +&ehci1 {
+> +	status = "okay";
+> +};
+> +
+> +&ehci2 {
+> +	status = "okay";
+> +};
+> +
+> +&ehci3 {
+> +	status = "okay";
+> +};
+> +
+> +&mmc0 {
+> +	vmmc-supply = <&reg_dldo1>;
+> +	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;	/* PF6 */
+> +	no-1-8-v;
 
-For new code I believe you should use the new helper sysfs_emit() instead.
+Above property is not needed. If you don't provide vqmmc-supply with 1.8 V 
+regulator, it won't be used.
 
+> +	bus-width = <4>;
+> +	status = "disabled";
+
+Why is set to disabled? If it's not a typo, remove whole node. It could be 
+added later when it works.
+
+> +};
 > +
-> +static int amd_pstate_update_status(const char *buf, size_t size)
-> +{
-> +	/* FIXME! */
-> +	return -EOPNOTSUPP;
-> +}
+> +&ohci1 {
+> +	status = "okay";
+> +};
 > +
-> +static ssize_t show_status(struct kobject *kobj,
-> +			   struct kobj_attribute *attr, char *buf)
-> +{
-> +	ssize_t ret;
+> +&ohci2 {
+> +	status = "okay";
+> +};
 > +
-> +	mutex_lock(&amd_pstate_driver_lock);
-> +	ret = amd_pstate_show_status(buf);
-> +	mutex_unlock(&amd_pstate_driver_lock);
+> +&ohci3 {
+> +	status = "okay";
+> +};
 > +
-> +	return ret;
-> +}
+> +&r_i2c {
+> +	status = "okay";
 > +
-> +static ssize_t store_status(struct kobject *a, struct kobj_attribute *b,
-> +			    const char *buf, size_t count)
-> +{
-> +	char *p = memchr(buf, '\n', count);
-> +	int ret;
+> +	axp1530: pmic@36 {
+> +		compatible = "x-powers,axp1530";
+
+I just checked datasheet and it really seems that it supports only I2C. 
+Anyway, rather than using axp1530 compatible, introduce axp313a compatible 
+instead.
+
+> +		reg = <0x36>;
+> +		wakeup-source;
 > +
-> +	mutex_lock(&amd_pstate_driver_lock);
-> +	ret = amd_pstate_update_status(buf, p ? p - buf : count);
-> +	mutex_unlock(&amd_pstate_driver_lock);
+> +		regulators{
+> +			reg_dcdc1: dcdc1 {
+> +				regulator-name = "axp1530-dcdc1";
+> +				regulator-min-microvolt = 
+<500000>;
+> +				regulator-max-microvolt = 
+<3400000>;
+
+This one is most likely used by CPU. If so, you should set appropriate range 
+according to CPU needs, which are 810 - 1100 mV.
+
+> +				regulator-step-delay-us = <25>;
+> +				regulator-final-delay-us = <50>;
+> +				regulator-always-on;
+> +			};
 > +
-> +	return ret < 0 ? ret : count;
-> +}
+> +			reg_dcdc2: dcdc2 {
+> +				regulator-name = "axp1530-dcdc2";
+> +				regulator-min-microvolt = 
+<500000>;
+> +				regulator-max-microvolt = 
+<1540000>;
+
+This one is most likely used by GPU. Its range must also be adjusted to GPU 
+needs.
+
+> +				regulator-step-delay-us = <25>;
+> +				regulator-final-delay-us = <50>;
+> +				regulator-ramp-delay = <200>;
+> +				regulator-always-on;
+> +			};
 > +
->   cpufreq_freq_attr_ro(amd_pstate_max_freq);
->   cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
->   
-> @@ -805,6 +847,7 @@ cpufreq_freq_attr_ro(amd_pstate_highest_perf);
->   cpufreq_freq_attr_rw(energy_performance_preference);
->   cpufreq_freq_attr_ro(energy_performance_available_preferences);
->   define_one_global_rw(boost);
-> +define_one_global_rw(status);
->   
->   static struct freq_attr *amd_pstate_attr[] = {
->   	&amd_pstate_max_freq,
-> @@ -824,6 +867,7 @@ static struct freq_attr *amd_pstate_epp_attr[] = {
->   
->   static struct attribute *pstate_global_attributes[] = {
->   	&boost.attr,
-> +	&status.attr,
->   	NULL
->   };
->   
+> +			reg_dcdc3: dcdc3 {
+> +				regulator-name = "axp1530-dcdc3";
+> +				regulator-min-microvolt = 
+<500000>;
+> +				regulator-max-microvolt = 
+<1840000>;
+
+This one looks like it supplies DRAM. You should set both min and max to 
+actual DRAM needs.
+
+> +				regulator-step-delay-us = <25>;
+> +				regulator-final-delay-us = <50>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			reg_aldo1: ldo1 {
+
+ldo1 -> aldo1
+
+> +				regulator-name = "axp1530-aldo1";
+> +				regulator-min-microvolt = 
+<1800000>;
+> +				regulator-max-microvolt = 
+<1800000>;
+> +				regulator-step-delay-us = <25>;
+> +				regulator-final-delay-us = <50>;
+> +				regulator-always-on;
+> +			};
+> +
+> +			reg_dldo1: ldo2 {
+
+ldo2 -> dldo1
+
+Another issue I see is that you marked all regulators with regulator-always-
+on; While this works, I don't think this faithfully represent HW. For example, 
+GPU regulator will be enabled by GPU driver when needed, so it shouldn't be 
+marked with always on.
+
+There is also RTCLDO, but without schematic it's impossible to say if it is 
+used or not.
+
+There are at least a few clues in AXP313A datasheet about which regulator is 
+used for what. See chapter 7.5 in https://github.com/bigtreetech/CB1-Kernel/
+blob/kernel-5.16/docs/AXP313A%20datasheet%20V0.1%20-
+%2020201105_draft%20version.pdf 
+
+Best regards,
+Jernej
+
+> +				regulator-name = "axp1530-dldo1";
+> +				regulator-min-microvolt = 
+<3300000>;
+> +				regulator-max-microvolt = 
+<3300000>;
+> +				regulator-step-delay-us = <25>;
+> +				regulator-final-delay-us = <50>;
+> +				regulator-always-on;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&uart0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&uart0_ph_pins>;
+> +	status = "okay";
+> +};
+> +
+> +&usbotg {
+> +	/*
+> +	 * PHY0 pins are connected to a USB-C socket, but a role switch
+> +	 * is not implemented: both CC pins are pulled to GND.
+> +	 * The VBUS pins power the device, so a fixed peripheral mode
+> +	 * is the best choice.
+> +	 * The board can be powered via GPIOs, in this case port0 *can*
+> +	 * act as a host (with a cable/adapter ignoring CC), as VBUS is
+> +	 * then provided by the GPIOs. Any user of this setup would
+> +	 * need to adjust the DT accordingly: dr_mode set to "host",
+> +	 * enabling OHCI0 and EHCI0.
+> +	 */
+> +	dr_mode = "peripheral";
+> +	status = "okay";
+> +};
+> +
+> +&usbphy {
+> +	usb1_vbus-supply = <&reg_usb1_vbus>;
+> +	status = "okay";
+> +};
+
+
+
 
