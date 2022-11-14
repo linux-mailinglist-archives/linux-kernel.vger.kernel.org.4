@@ -2,167 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF6162882A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:19:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A56628671
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235905AbiKNSS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 13:18:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
+        id S236687AbiKNRCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:02:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236993AbiKNSRs (ORCPT
+        with ESMTP id S238251AbiKNRCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 13:17:48 -0500
-Received: from 2.mo552.mail-out.ovh.net (2.mo552.mail-out.ovh.net [178.33.105.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB22D45084
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 10:16:12 -0800 (PST)
-Received: from mxplan5.mail.ovh.net (unknown [10.108.4.47])
-        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 304A426EE3;
-        Mon, 14 Nov 2022 17:00:21 +0000 (UTC)
-Received: from kaod.org (37.59.142.96) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 14 Nov
- 2022 18:00:20 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-96R001ba274e76-cd36-414b-a769-8a95de005f05,
-                    75464F94774268435EE9F43A7981E45EBBD3EAE1) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <ccf27ac3-c1de-aea6-689b-989781691de3@kaod.org>
-Date:   Mon, 14 Nov 2022 18:00:13 +0100
+        Mon, 14 Nov 2022 12:02:08 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8EF32061
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:01:22 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id b131so13485134yba.11
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:01:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MJESMyQuA0vUoDJ+3W7NryXxAelgBmnrtfU7OLazAI4=;
+        b=Z2LZSIvg3dPD3623GIVeFDIFg0YEgOCiMx/WnpO4MuRFNwy7DAH2Mn0aqV9kPSBahq
+         VyIcxfqQHBdwThhe5oT7gsnYWS6XXZWFmln9xmA56F2ycm+m7QYb96otlDZT1wVQxvNy
+         oGZeDIQqioSERHPEAVKNdrNfYIrpvO/E0Z+rMYrlJj49F8Uimo9e1EUXARVtAo1x+L4z
+         c7uGvQJo/hhrChlTjW2Q7urOao0zTjHG1PFCrcuPgVr4b/PRL2uSbeya9O/UCE+xzQtm
+         sbYcAimvpeWYReqnIM4d9L/QEiOPIGBtEE2g2hZ2FL8j5xZe1jzMhh0u5NiEwtH7QHSM
+         cSuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MJESMyQuA0vUoDJ+3W7NryXxAelgBmnrtfU7OLazAI4=;
+        b=iLwO9TKvtUv7OarLKQkFMjKjuknmqXWDNpL5eBhEh2JLPCnJi0D0pYeTr24Z+S3dOg
+         +8q2hqHx4Nv6hu6CQnpDU5Pc24CHpN/vXJ9ddapuhj/2fVn3e6hmMg1Q+mP1XIV2FqFJ
+         4ASqs2F6ywiQJR0qUAzIqYGKrO8geC5QFsm76IdmjovpSgfNdz7Ka7TaRvfGJrfaQYB3
+         psD12SMbyGhTlsidIz71IE8sPafzxBLpx9Ru+KEByRpwvXbeS4I/VVVgdYgQ7Os5s4ZF
+         Bk33X/ywPcBHKZApT6HqZ8UC3/qw1Y73fvKMnfAzPHxNl/daSH4p3O3iytPCIoKzevF1
+         nU6w==
+X-Gm-Message-State: ANoB5pn6CbI0e+Aso1mt5NHb+HM/sM1x6dge9lOtBBJUB6t3whjfn/Lc
+        IA+5cenFn53uwluq7I8/fQLR0OzaXcF/Tin1LAc=
+X-Google-Smtp-Source: AA0mqf6Ye+t5Dvd+X7n7eEFsve6okwlaJ2BCfgjIo60QDU4qMi7BpGAE6eK/XdhSLUipCCakAjdqMzumXbmH6qkMGrY=
+X-Received: by 2002:a25:8503:0:b0:6be:9368:4bcd with SMTP id
+ w3-20020a258503000000b006be93684bcdmr13042662ybk.632.1668445281712; Mon, 14
+ Nov 2022 09:01:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] virtio_console: Use an atomic to allocate virtual console
- numbers
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221114080752.1900699-1-clg@kaod.org>
- <Y3IC3miVoiMROwaE@kroah.com> <b0503354-2d1e-a93d-a6a5-6f6a1f55f0e2@kaod.org>
- <Y3JqThFr67DJnGJL@kroah.com>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <Y3JqThFr67DJnGJL@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.96]
-X-ClientProxiedBy: DAG8EX1.mxp5.local (172.16.2.71) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: baa3eead-db12-4207-b471-6daf20ed2d35
-X-Ovh-Tracer-Id: 8369095486717004707
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvgedrgedvgdeikecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitgcunfgvucfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepffdufeeliedujeeffffhjeffiefghffhhfdvkeeijeehledvueffhfejtdehgeegnecukfhppeduvdejrddtrddtrddupdefjedrheelrddugedvrdelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoegtlhhgsehkrghougdrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdgrmhhitheskhgvrhhnvghlrdhorhhgpdgrrhhnugesrghrnhgusgdruggvpdhvihhrthhurghlihiirghtihhonheslhhishhtshdrlhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheehvddpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114114344.18650-1-jirislaby@kernel.org> <20221114114344.18650-38-jirislaby@kernel.org>
+In-Reply-To: <20221114114344.18650-38-jirislaby@kernel.org>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 14 Nov 2022 18:01:10 +0100
+Message-ID: <CANiq72nWnFpC5JWv7Z1Fmg9vLoQoMbGG+wwFJm0GW81Pw0Me2w@mail.gmail.com>
+Subject: Re: [PATCH 37/46] Compiler attributes, lto: disable __flatten with LTO
+To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Andi Kleen <andi@firstfloor.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Martin Liska <mliska@suse.cz>, Jiri Slaby <jslaby@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/14/22 17:18, Greg Kroah-Hartman wrote:
-> On Mon, Nov 14, 2022 at 05:03:40PM +0100, Cédric Le Goater wrote:
->> On 11/14/22 09:57, Greg Kroah-Hartman wrote:
->>> On Mon, Nov 14, 2022 at 09:07:52AM +0100, Cédric Le Goater wrote:
->>>> When a virtio console port is initialized, it is registered as an hvc
->>>> console using a virtual console number. If a KVM guest is started with
->>>> multiple virtio console devices, the same vtermno (or virtual console
->>>> number) can be used to allocate different hvc consoles, which leads to
->>>> various communication problems later on.
->>>>
->>>> This is also reported in debugfs :
->>>>
->>>>     # grep vtermno /sys/kernel/debug/virtio-ports/*
->>>>     /sys/kernel/debug/virtio-ports/vport1p1:console_vtermno: 1
->>>>     /sys/kernel/debug/virtio-ports/vport2p1:console_vtermno: 1
->>>>     /sys/kernel/debug/virtio-ports/vport3p1:console_vtermno: 2
->>>>     /sys/kernel/debug/virtio-ports/vport4p1:console_vtermno: 3
->>>>
->>>> Fix the issue with an atomic variable and start the first console
->>>> number at 1 as it is today.
->>>>
->>>> Signed-off-by: Cédric Le Goater <clg@kaod.org>
->>>> ---
->>>>    drivers/char/virtio_console.c | 8 ++++----
->>>>    1 file changed, 4 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
->>>> index 9fa3c76a267f..253574f41e57 100644
->>>> --- a/drivers/char/virtio_console.c
->>>> +++ b/drivers/char/virtio_console.c
->>>> @@ -58,12 +58,13 @@ struct ports_driver_data {
->>>>    	 * We also just assume the first console being initialised was
->>>>    	 * the first one that got used as the initial console.
->>>>    	 */
->>>> -	unsigned int next_vtermno;
->>>> +	atomic_t next_vtermno;
->>>>    	/* All the console devices handled by this driver */
->>>>    	struct list_head consoles;
->>>>    };
->>>> -static struct ports_driver_data pdrvdata = { .next_vtermno = 1};
->>>> +
->>>> +static struct ports_driver_data pdrvdata = { .next_vtermno = ATOMIC_INIT(0) };
->>>>    static DEFINE_SPINLOCK(pdrvdata_lock);
->>>>    static DECLARE_COMPLETION(early_console_added);
->>>> @@ -1244,7 +1245,7 @@ static int init_port_console(struct port *port)
->>>>    	 * pointers.  The final argument is the output buffer size: we
->>>>    	 * can do any size, so we put PAGE_SIZE here.
->>>>    	 */
->>>> -	port->cons.vtermno = pdrvdata.next_vtermno;
->>>> +	port->cons.vtermno = atomic_inc_return(&pdrvdata.next_vtermno);
->>>
->>> Why not use a normal ida/idr structure here?
->>
->> yes that works.
->>
->>> And why is this never decremented?
->>
->> The driver would then need to track the id allocation ...
-> 
-> That's what an ida/idr does.
-> 
->>> and finally, why not use the value that created the "vportN" number
->>> instead?
->>
->> yes. we could also encode the tuple (vdev->index, port) using a bitmask,
-> 
-> No need for that, you already have a unique number in the name above,
-> why not use that?
-> 
->> possibly using 'max_nr_ports' to reduce the port width.
-> 
-> Why is that an issue?  Maybe I am confused as to what this magic
-> "vtermno" is here.  Who uses it and why is the vportN number not 
-> sufficient?
+On Mon, Nov 14, 2022 at 12:45 PM Jiri Slaby (SUSE) <jirislaby@kernel.org> wrote:
+>
+> +#ifndef CONFIG_LTO_GCC
+>  # define __flatten                     __attribute__((flatten))
+> +#else
+> +/* Causes very large memory use with gcc in LTO mode */
+> +# define __flatten
+> +#endif
 
-A virtio console device can have multiple ports each being a /dev/hvcX
-exposed in the guest OS. The "vportN" prefix identifies the virtio
-device :
+Currently, this header avoids attributes that depend on configuration
+options on purpose (see the comment at the top), so it would be best
+to move it elsewhere, e.g. `compiler_types.h`.
 
-   # grep vtermno /sys/kernel/debug/virtio-ports/*
-   /sys/kernel/debug/virtio-ports/vport1p0:console_vtermno: 2
-   /sys/kernel/debug/virtio-ports/vport1p1:console_vtermno: 3
-   /sys/kernel/debug/virtio-ports/vport1p2:console_vtermno: 4
-   /sys/kernel/debug/virtio-ports/vport1p3:console_vtermno: 5
-   /sys/kernel/debug/virtio-ports/vport2p0:console_vtermno: 1
-   /sys/kernel/debug/virtio-ports/vport2p1:console_vtermno: 6
-   /sys/kernel/debug/virtio-ports/vport2p2:console_vtermno: 7
-   /sys/kernel/debug/virtio-ports/vport2p3:console_vtermno: 8
+Though I feel bad about having to move this attribute out since it is
+just that config option compared to other more involved bits in
+`compiler_types.h`... :(
 
-and "pX" the port within in the device. The naming is a bit confusing.
-
->> VIRTCONS_MAX_PORTS
->> seems a bit big for this device and QEMU sets the #ports to 31.
->>
->> An ida might be simpler. One drawback is that an id can be reused for a
->> different device/port tuple in case of an (unlikely) unplug/plug sequence.
-> 
-> What's wrong with that?  We do not have persistent device names from
-> within the kernel.
-
-Let's go with the ida then.
-
-Thanks,
-C.
-
+Cheers,
+Miguel
