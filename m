@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8E7628D67
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:28:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B07628D68
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235813AbiKNX2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 18:28:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S236724AbiKNX2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 18:28:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbiKNX2L (ORCPT
+        with ESMTP id S236173AbiKNX2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 18:28:11 -0500
+        Mon, 14 Nov 2022 18:28:33 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D290F0B
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 15:28:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0691157
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 15:28:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCAAD614B1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:28:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CFCCC433C1;
-        Mon, 14 Nov 2022 23:28:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E4EB614B9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:28:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE716C433D7;
+        Mon, 14 Nov 2022 23:28:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668468488;
-        bh=1FW+G4TwrbSlGabM9+WKmnumD94d0xrskPEMNyCwnLA=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=bdOCF8oimotk8J50F+VkpGQh3TBSUO5URCTzEM/Iw/N/YJiXd2kQncXPrDv/AytwN
-         wJFN0JEh2z+XtOqj/PNgiCvL1byae5VfqhfMlN2QcPWE/ssWck+DnkaTMoAgRVdsZR
-         Ibt6/kC/c7VBmVEL3ipdZ+LlWW4ozKHCYri+iGB/iEczaOdvc1S6OkFgWAVZHcVP87
-         t7gdj15lnfLcV87X/az/BXdQBXDOQ5daDsu2Q7AxRo9p//slSTSbaRIV+SGoarOutB
-         4I9rc0+qer1b1nxbvJK5sNbuUNZu7eEoZq4Sy6AzEZBh638cEqWKG2OvBp1leXCAgS
-         A+U2s/8/Dy4GQ==
+        s=k20201202; t=1668468508;
+        bh=KYiqFd5L+cDLkyT6epEDOfkYEWTRr614tu/0hHbUz6U=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=A/X+O8aXEOSxP8x3DYS+35d+nm6T3IXGs6J4bGbc9VfVQJy6ELwhDCbAljCbdcbW+
+         Ya5GV1QLglrEjUrSTQZIv6iqQxhsq0oyu7YU/sNFM7Gw+9kVv/ShrNhJoovoAOcZH0
+         5uDZXAVidcgeYyG2M8Ey/jRi0JwE4Pmjk9a46yFg6Cj+6EHyfMYQJFxKiArml6sDHY
+         TQAeKK6DnJnLxNRN5rUd+GHXuMV7vRPOyMhCZ/utvlTHSTX5aBElinuRp/lAQLkaO7
+         YeySi0M0Dlq8AeCCEeZtOjQXttBbN3owtuSf7eOnLeTrmeqPViADFlD4VDtkTAsIXa
+         N9YdWvJoIzvKQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id BF90C5C14FC; Mon, 14 Nov 2022 15:28:07 -0800 (PST)
-Date:   Mon, 14 Nov 2022 15:28:07 -0800
+        id 8F9315C14FC; Mon, 14 Nov 2022 15:28:28 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     tglx@linutronix.de
 Cc:     linux-kernel@vger.kernel.org, john.stultz@linaro.org,
         sboyd@kernel.org, corbet@lwn.net, Mark.Rutland@arm.com,
         maz@kernel.org, kernel-team@meta.com, neeraju@codeaurora.org,
-        ak@linux.intel.com, feng.tang@intel.com, zhengjun.xing@intel.com
-Subject: [PATCH clocksource 0/3] Reject bogus watchdog clocksource
- measurements
-Message-ID: <20221114232807.GA834337@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        ak@linux.intel.com, feng.tang@intel.com, zhengjun.xing@intel.com,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Chris Mason <clm@meta.com>, John Stultz <jstultz@google.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH clocksource 1/3] clocksource: Reject bogus watchdog clocksource measurements
+Date:   Mon, 14 Nov 2022 15:28:24 -0800
+Message-Id: <20221114232827.835599-1-paulmck@kernel.org>
+X-Mailer: git-send-email 2.31.1.189.g2e36527f23
+In-Reply-To: <20221114232807.GA834337@paulmck-ThinkPad-P17-Gen-1>
+References: <20221114232807.GA834337@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,54 +60,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+One remaining clocksource-skew issue involves extreme CPU overcommit,
+which can cause the clocksource watchdog measurements to be delayed by
+tens of seconds.  This in turn means that a clock-skew criterion that
+is appropriate for a 500-millisecond interval will instead give lots of
+false positives.
 
-This series adds comments classifying bogus measurements and adds capped
-exponential backoff for messages that are likely caused by overly busy
-systems.
+Therefore, check for the watchdog clocksource reporting much larger or
+much less than the time specified by WATCHDOG_INTERVAL.  In these cases,
+print a pr_warn() warning and refrain from marking the clocksource under
+test as being unstable.
 
-1.	Reject bogus watchdog clocksource measurements.
+Reported-by: Chris Mason <clm@meta.com>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: John Stultz <jstultz@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Feng Tang <feng.tang@intel.com>
+Cc: Waiman Long <longman@redhat.com>
+---
+ kernel/time/clocksource.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-2.	Add comments to classify bogus measurements.
+diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
+index 8058bec87acee..dcaf38c062161 100644
+--- a/kernel/time/clocksource.c
++++ b/kernel/time/clocksource.c
+@@ -386,7 +386,7 @@ EXPORT_SYMBOL_GPL(clocksource_verify_percpu);
+ 
+ static void clocksource_watchdog(struct timer_list *unused)
+ {
+-	u64 csnow, wdnow, cslast, wdlast, delta;
++	u64 csnow, wdnow, cslast, wdlast, delta, wdi;
+ 	int next_cpu, reset_pending;
+ 	int64_t wd_nsec, cs_nsec;
+ 	struct clocksource *cs;
+@@ -440,6 +440,17 @@ static void clocksource_watchdog(struct timer_list *unused)
+ 		if (atomic_read(&watchdog_reset_pending))
+ 			continue;
+ 
++		/* Check for bogus measurements. */
++		wdi = jiffies_to_nsecs(WATCHDOG_INTERVAL);
++		if (wd_nsec < (wdi >> 2)) {
++			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced only %lld ns during %d-jiffy time interval, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
++			continue;
++		}
++		if (wd_nsec > (wdi << 2)) {
++			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced an excessive %lld ns during %d-jiffy time interval, probable CPU overutilization, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
++			continue;
++		}
++
+ 		/* Check the deviation from the watchdog clocksource. */
+ 		md = cs->uncertainty_margin + watchdog->uncertainty_margin;
+ 		if (abs(cs_nsec - wd_nsec) > md) {
+-- 
+2.31.1.189.g2e36527f23
 
-3.	Exponential backoff for load-induced bogus watchdog reads.
-
-Changes since v1:
-
-o	Merge the "Reject bogus watchdog clocksource measurements" [1] series
-	with the "Clocksource-watchdog classification and backoff" [2] series.
-
-o	Updated messages to indicate timer bug for too-short watchdog
-	intervals based on Feng Tang feedback.
-
-o	Added explanatory comments before error messages based on Feng
-	Tang feedback.
-
-o	Check both the reference clocksource and the clocksource under
-	test to handle clocksource-internal counter wrap, based on Feng
-	Tang feedback.
-
-o	Reversed the order of the checks, so that the too-long check
-	preceeds the too-short check.  This avoids too-short false
-	positives due to counter wrap.
-
-o	Simplified exponential-backoff time checks based on feedback
-	from Waiman Long.
-
-o	Updated the exponentially backed off messages to more clearly
-	indicate that the counts are instances since the last printed
-	message.
-
-o	Applied Reviewed-by tags.
-
-[1] https://lore.kernel.org/all/20221019230904.GA2502730@paulmck-ThinkPad-P17-Gen-1
-[2] https://lore.kernel.org/all/20221102184001.GA1306489@paulmck-ThinkPad-P17-Gen-1/
-
-						Thanx, Paul
-
-------------------------------------------------------------------------
-
- b/include/linux/clocksource.h |    3 +++
- b/kernel/time/clocksource.c   |   13 ++++++++++++-
- kernel/time/clocksource.c     |   33 +++++++++++++++++++++++++++------
- 3 files changed, 42 insertions(+), 7 deletions(-)
