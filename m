@@ -2,64 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E577628429
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF394628438
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:39:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237086AbiKNPiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 10:38:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
+        id S237139AbiKNPjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 10:39:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236986AbiKNPil (ORCPT
+        with ESMTP id S237119AbiKNPjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 10:38:41 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECB9630B
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:38:38 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id s8so2770649lfc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:38:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mOEG1//p1argvxLaN4lEBl+c5SYhnpTC5Y7qXDI3ncw=;
-        b=qTlwph1jEH3KELFPFwz1JXAbic1+PYa+nVKg7gi0wwHS8yEv8VHdj0TKmytCtvVxEy
-         yBBJxvXe01l6hFpQ00zZLU/XWyiV01dmUXXLu7lCnoSbjZyb2HeB9adFfUvaRNE/G4S2
-         v6w97ze9QKb+QHuRSmMt53gvwN39T3latGxLYfHl8O2a1E7DpRzi+Wp1CAOyhYpkhJ7S
-         0Sf17VlXIxT0pXYPGVkm6MoqVcoAeFTmFXbc7dbZG/JcnbukDG0UdoWMXApPnnOGpDeZ
-         zOkQhlzBGZQ7NSm8brURS78jfPDZzlWj23bDsWaJvlKUBN4LKdsVn7TuqrMQj6XjZbZl
-         XiWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mOEG1//p1argvxLaN4lEBl+c5SYhnpTC5Y7qXDI3ncw=;
-        b=nExzJ7ZFFIL+pvOzi/Dizry9jabV82XMqCDOr6g5d87iawQQfqay/i8oEmuPpIWpmO
-         udr4YsiLBV0/ZSz/K0JwHLDAsUTYXOt1TmaVSxFBXpyUk7ExDDRZJHj5/zMXQoDJvmTC
-         PS1rf6mEelcBNio/cj3dTuIx6NgVaSGf1xjxUZ0hTo+aq5cmd6gJSiwxZNh2FqpZIV0L
-         ccxa2x5xvFcGwIx6yw3ceTYEDNG84m/8RWCZsfeQGqiBz7oD7b3Coejbb/pq8sr/7w+G
-         KuKX7GZLM/eUlq2DAItyRhFnpae8wzQ0wmscOOf7ucSNlLxFewMZ4Omi5KRqec1/FlnJ
-         dBvQ==
-X-Gm-Message-State: ANoB5plnFKPrfmK4YgrjsfB7dqVt2TDr4aWRrrDx3oG+9CmBdJWxcg7t
-        zCyKPpoZQn2SBvNCx5T+3b9mHw==
-X-Google-Smtp-Source: AA0mqf7+3xN1f8t+uzuu1OEu7CQSB8unLeS83Qd0QmP57uok3EDsdUSFFPnirNUlE1gFGiJMveKDxg==
-X-Received: by 2002:a05:6512:2097:b0:4a9:39f4:5790 with SMTP id t23-20020a056512209700b004a939f45790mr4584562lfr.192.1668440316948;
-        Mon, 14 Nov 2022 07:38:36 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id s8-20020a056512202800b00498f32ae907sm1872273lfs.95.2022.11.14.07.38.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 07:38:36 -0800 (PST)
-Message-ID: <e1140358-b693-c23e-68dc-787bf6aa2422@linaro.org>
-Date:   Mon, 14 Nov 2022 18:38:36 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 12/14] phy: qcom-qmp-combo: rename common-register
- pointers
-Content-Language: en-GB
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Mon, 14 Nov 2022 10:39:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC10F26;
+        Mon, 14 Nov 2022 07:39:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E238B81058;
+        Mon, 14 Nov 2022 15:39:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D6E3C433C1;
+        Mon, 14 Nov 2022 15:39:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668440351;
+        bh=mA1KjzPbfAQAfbaA1//CTR8f6auD5NBTZPXJkdjuph0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e+GIgsB99NI6a1guMLfwim6sPGuWTbYWG70mGVUecec1A59sE+3Jf8PZBYQl3p35h
+         tAOnLGlAiZbkV2ZeXsCeN6hsZJcZtr5ON6okWWjQufi+dk5sehYm90VYknr6kOeFnQ
+         emiGZdIzwl71nmeMc5ReFFJp3iRpSthweREHPzVymNmuXzPq/SKIAQV0LLN5BAjG5F
+         cGUs6WEOsHFZKQ65c26ZYKAlbvlfXwkcm4wZJO+aM6p7QL2h03HcejFyfgK1pee75N
+         kNELUZlZ9ZteHmeAbk11n5hl27ZhZ47/I7ZSdqDjdp75xVkq4TRcgGOxaCP/Ukzwd4
+         lqaDT/CdV7viA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oubXi-0004Jr-IE; Mon, 14 Nov 2022 16:38:39 +0100
+Date:   Mon, 14 Nov 2022 16:38:38 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
         Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
@@ -67,75 +47,74 @@ Cc:     Johan Hovold <johan+linaro@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/14] dt-bindings: phy: qcom,qmp-usb3-dp: fix sc8280xp
+ bindings
+Message-ID: <Y3Jg/qmMW3rC5Okc@hovoldconsulting.com>
 References: <20221111092457.10546-1-johan+linaro@kernel.org>
- <20221111092457.10546-13-johan+linaro@kernel.org>
- <f3ae781b-2046-e1be-564f-9de74107f000@linaro.org>
- <Y3I6lN6UTHg2ozNP@hovoldconsulting.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <Y3I6lN6UTHg2ozNP@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ <20221111092457.10546-3-johan+linaro@kernel.org>
+ <a22888cd-34cb-3453-0dc2-096da208564c@linaro.org>
+ <Y3JCVzJ74YsfcDz4@hovoldconsulting.com>
+ <de3a426a-03e8-ed15-a9a1-bb300e776e5f@linaro.org>
+ <Y3JOO0kNnaNhnW3K@hovoldconsulting.com>
+ <78cda6f8-849c-219a-8dbb-966c283c1a92@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <78cda6f8-849c-219a-8dbb-966c283c1a92@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/11/2022 15:54, Johan Hovold wrote:
-> On Sat, Nov 12, 2022 at 02:31:27PM +0300, Dmitry Baryshkov wrote:
->> On 11/11/2022 12:24, Johan Hovold wrote:
->>> The common registers are shared by the USB and DP parts of the PHY so
->>> drop the misleading "dp" prefix from the corresponding pointers.
->>>
->>> Note that the "DP" prefix could also be dropped from the corresponding
->>> defines, but leave that in place for now.
->>>
->>> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
->>> ---
->>>    drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 24 +++++++++++------------
->>>    1 file changed, 12 insertions(+), 12 deletions(-)
->>
->> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>
->> Note regarding the last phrase: I'd suggest leaving the DP prefix in
->> register names, it makes it easier to visually note & verify the
->> register block.
-> 
-> My point is that "DP" was never part of the COM register block name. The
-> confusion likely comes from the vendor driver naming these defines along
-> the lines of
-> 
-> 	USB3_DP_COM_POWER_DOWN_CTRL
-> 
-> Here "USB3_DP" is the common prefix for all defines that apply to both
-> "parts" of the PHY so the corresponding Linux define
-> 
-> 	QPHY_V3_DP_COM_POWER_DOWN_CTRL
-> 
-> should either include "USB3" or drop "DP".
+On Mon, Nov 14, 2022 at 06:19:25PM +0300, Dmitry Baryshkov wrote:
+> On 14/11/2022 17:18, Johan Hovold wrote:
+> > On Mon, Nov 14, 2022 at 03:07:41PM +0100, Krzysztof Kozlowski wrote:
+> >> On 14/11/2022 14:27, Johan Hovold wrote:
+> >>> On Fri, Nov 11, 2022 at 04:17:29PM +0100, Krzysztof Kozlowski wrote:
+> >>>> On 11/11/2022 10:24, Johan Hovold wrote:
 
-My thought was that we already have too many _COM_ defines in the qmp 
-headers. Having QPHY_Vn_COM_something would make it too easy to mix it 
-with QSERDES_Vn_COM_foo. Thus I'd vote to leave DP_COM prefix in place. 
-While it might be not fully accurate, it serves the point of identifying 
-the register block.
+> >>> I noticed that several bindings leave the clock indexes unspecified, or
+> >>> have header files defining some or all of them. I first added a QMP
+> >>> header but that seemed like overkill, especially if we'd end up with
+> >>> one header per SoC (cf. the GCC headers) due to (known and potential)
+> >>> platform differences.
 
+> >>> Shall I add back a shared header for all PHYs handled by this driver
+> >>> (another implementation detail) even if this could eventually lead to
+> >>> describing clocks not supported by a particular SoC (so such constraints
+> >>> would still need to be described by the binding somehow):
+> >>>
+> >>> 	/* QMP clocks */
+> >>> 	#define QMP_USB3_PIPE_CLK	0
+> >>> 	#define QMP_DP_LINK_CLK		1
+> >>> 	#define QMP_DP_VCO_DIV_CLK	2
 > 
-> This becomes more apparent on SC8280XP where the corresponding define
-> is:
-> 
-> 	USB43DP_COM_POWER_DOWN_CTRL
+> Maybe QMP_COMBO_USB3_PIPE_CLK, QMP_COMBO_DP_LINK_CLK, 
+> QMP_COMBO_DP_VCO_DIV_CLK?
 
-I'd still use something like QPHY_V10_DP_COM_POWER_DOWN_CTRL here.
+"COMBO" is just the name of the Linux driver and does not belong in the
+binding.
+ 
+> I'll then extend this header with QMP_UFS_RX_SYMBOL_0_CLK 
+> QMP_UFS_RX_SYMBOL_1_CLK and QMP_UFS_TX_SYMBOL_0_CLK.
 
-> 
-> Johan
+Yeah, I had those in mind when creating the header and using a generic
+QMP prefix (even if I didn't end up using the header in v1).
 
--- 
-With best wishes
-Dmitry
+This could just be mapping of (arbitrary) QMP indexes to clocks and we
+use it for USB3, DP, UFS and later also USB4.
 
+This will however mean that the indexes are not necessarily zero-based
+and consecutive for a specific SoC and PHY. But that's perhaps a
+non-issue (cf. the PHY_TYPE defines).
+
+We'd still need to describe which clocks are available on a particular
+SoC and PHY, and that's partly why I used 'clock-output-names' to fix
+the mapping in the binding. Guess we can just list the valid defines in
+the property description as I did for #phy-cells.
+
+Johan
