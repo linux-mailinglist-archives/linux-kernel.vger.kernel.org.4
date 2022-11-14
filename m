@@ -2,131 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEFC62850F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4566462850E
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:22:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236816AbiKNQW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:22:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
+        id S237186AbiKNQWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:22:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237477AbiKNQWl (ORCPT
+        with ESMTP id S237472AbiKNQWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:22:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E44C5F77
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:21:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668442901;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=b5pWgKtpfIELeX1FxEhoLqe/KwJwZ2Jjvji8hMgQLg8=;
-        b=eSx1B9XLc3iGxR9XT17jj0sDP82OZ+B830ywqWgXfmvS1v+Vm9T8Z4McJ8Sic+A8vx5KTe
-        +1UtWiJDdi3Ib6f9PLs6aYC64tLGFUAfi2tkADVpIpc54PCtKkL/QFOwuKTaXz4dAGrU7g
-        zUCW4umzAe5NXa6zff9xISOIQn8s0tE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-336-3lcizJ8QMdWmUZcdYS_JTg-1; Mon, 14 Nov 2022 11:21:37 -0500
-X-MC-Unique: 3lcizJ8QMdWmUZcdYS_JTg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 14 Nov 2022 11:22:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C3F2FC07;
+        Mon, 14 Nov 2022 08:22:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6C9A029AA3B2;
-        Mon, 14 Nov 2022 16:21:36 +0000 (UTC)
-Received: from [10.22.9.229] (unknown [10.22.9.229])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CC55AC15BB3;
-        Mon, 14 Nov 2022 16:21:35 +0000 (UTC)
-Message-ID: <8c3757ae-1aeb-49a4-47af-598d1d4737ea@redhat.com>
-Date:   Mon, 14 Nov 2022 11:21:33 -0500
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 398C0612BE;
+        Mon, 14 Nov 2022 16:22:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84DBAC433D7;
+        Mon, 14 Nov 2022 16:22:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668442944;
+        bh=1qhbjtrf4OBeymlcd5IJ17ytL34jXMNYYy2ti/5wf+8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WdZE0bgMsqEaxuR8BIVcBnFO5zLpsGWoIXXW/zhOzAXRvB+DMNeSsElwiNjTSLVkX
+         MMQipvVKqO0F43RZCVFC9+Gc63TaDYzRUjuKMKd4p7+LnTPFVMsGfPqkgrHNfOQ4n6
+         +R8fggl04sAK1uWDIfwvNMmOKpITUZREPUfWb5MnfeXjYI4/8JgFH8x87ceYVRThqR
+         60CZYene5AsbkxfhAFhuOuUdLfwNkXZUfo6eU5PVMh01sIpyTqBaXZab7N0bFgw4JJ
+         6gXqdZPDgJd1VLMGxJzOu7X1jTpD/8KyJrxfiRSyyYbZ/Gy5QnbcTQU/zz2j313h8k
+         3J9e3QH9vCpsQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oucDX-0004vF-Tb; Mon, 14 Nov 2022 17:21:52 +0100
+Date:   Mon, 14 Nov 2022 17:21:51 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/14] dt-bindings: phy: qcom,qmp-usb3-dp: fix sc8280xp
+ bindings
+Message-ID: <Y3JrH+Om8qRV8JPJ@hovoldconsulting.com>
+References: <20221111092457.10546-1-johan+linaro@kernel.org>
+ <20221111092457.10546-3-johan+linaro@kernel.org>
+ <ace91d8b-9a14-5569-7c59-344e9751fa96@linaro.org>
+ <Y3JEh7wO394kepXq@hovoldconsulting.com>
+ <42ae9612-43da-5f3a-534d-d30b9f399f90@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ext4_enable_quotas
-Content-Language: en-US
-To:     Theodore Ts'o <tytso@mit.edu>,
-        syzbot <syzbot+ea70429cd5cf47ba8937@syzkaller.appspotmail.com>
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-References: <0000000000006a74dd05e9931449@google.com>
- <000000000000073a4a05ed620676@google.com> <Y3Jb1Wcs/mQlZP32@mit.edu>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y3Jb1Wcs/mQlZP32@mit.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <42ae9612-43da-5f3a-534d-d30b9f399f90@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/14/22 10:16, Theodore Ts'o wrote:
-> +jaeguk,chao,peterz,mingo,longman,boqun.feng (F2FS and Lockdep maintainers)
->
-> On Sun, Nov 13, 2022 at 02:55:47PM -0800, syzbot wrote:
->> syzbot has found a reproducer for the following issue on:
->>
->> HEAD commit:    af7a05689189 Merge tag 'mips-fixes_6.1_1' of git://git.ker..
->> git tree:       upstream
->> console output: https://syzkaller.appspot.com/x/log.txt?x=175bb059880000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=cbbe7c32024f5b72
->> dashboard link: https://syzkaller.appspot.com/bug?extid=ea70429cd5cf47ba8937
->> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10930249880000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11af96ae880000
-> This looks like it's either a f2fs or lockdep bug.  To trigger the
-> crash, the reproducer is mounting and unmounting the f2fs file system
-> a huge number of times, and then ext4 calls lockdep_set_subclass which
-> then triggers a KASAN report:
->
-> BUG: KASAN: slab-out-of-bounds in lockdep_set_quota_inode fs/ext4/super.c:6803 [inline]
->
-> On fs/ext4/super.c:6803 is the call to lockdep_set_subclass:
->
-> 	lockdep_set_subclass(&ei->i_data_sem, subclass);
->
-> So the KASAN failure is coming from some kind of out-of-bounds pointer
-> dereference inside lockdep's internal data structures:
->
->   kasan_report+0xcd/0x100 mm/kasan/report.c:495
->   lockdep_set_quota_inode fs/ext4/super.c:6803 [inline]
->   ext4_quota_enable fs/ext4/super.c:6913 [inline]
->   ext4_enable_quotas+0x577/0xcf0 fs/ext4/super.c:6940
->   __ext4_fill_super fs/ext4/super.c:5500 [inline]
->   ext4_fill_super+0x7ee4/0x8610 fs/ext4/super.c:5643
->   get_tree_bdev+0x400/0x620 fs/super.c:1324
->   vfs_get_tree+0x88/0x270 fs/super.c:1531
->   do_new_mount+0x289/0xad0 fs/namespace.c:3040
->   do_mount fs/namespace.c:3383 [inline]
+On Mon, Nov 14, 2022 at 06:31:02PM +0300, Dmitry Baryshkov wrote:
+> On 14/11/2022 16:37, Johan Hovold wrote:
+> > On Sat, Nov 12, 2022 at 02:43:03PM +0300, Dmitry Baryshkov wrote:
+> >> On 11/11/2022 12:24, Johan Hovold wrote:
 
-lockdep_set_subclass() should be translated into a call to 
-lockdep_init_map_type():
+> >>> +  "#clock-cells":
+> >>> +    const: 1
+> >>> +
+> >>> +  clock-output-names:
+> >>> +    items:
+> >>> +      - const: usb3_pipe
+> >>> +      - const: dp_link
+> >>> +      - const: dp_vco_div
+> >>> +
+> >>> +  "#phy-cells":
+> >>> +    const: 1
+> >>> +    description: |
+> >>> +      PHY index
+> >>> +        - PHY_TYPE_USB3
+> >>> +        - PHY_TYPE_DP
+> >>
+> >> I'm stepping on Rob's and Krzysztof's ground here, but it might be more
+> >> logical and future proof to use indices instead of phy types.
+> > 
+> > Why would that be more future-proof?
+> > 
+> > I initially added defines for these indexes to a QMP header, but noticed
+> > that we already have PHY drivers that use the PHY types for this. So
+> > there's already a precedent for this and I didn't see any real benefit
+> > to adding multiple per-SoC defines for the same thing.
+> 
+> As you guessed from my question, I was thinking about USB4 (for which we 
+> do not have a separate PHY_TYPE, but that probably shouldn't matter). 
 
-#define lockdep_set_subclass(lock, sub)                                 \
-         lockdep_init_map_type(&(lock)->dep_map, #lock, 
-(lock)->dep_map.key, sub,\
-(lock)->dep_map.wait_type_inner,          \
-(lock)->dep_map.wait_type_outer,          \
-                               (lock)->dep_map.lock_type)
+Yeah, that's easy enough to add.
 
-All memory access should be within the bound of the given 
-"&ei->i_data_sem". Also lockdep_init_map_type() is not in the stack 
-trace. So it is not a problem within this lockdep_init_map_type() 
-function. So is it possible that the given inode pointer is invalid?
+> Would it be a separate PHY here, or would it be a combo UBS3+USB4 plus 
+> separate DP phy?
 
-Cheers,
-Longman
+We don't know yet.
 
+> Yes, we have other PHYs, which use types as an index, however it's 
+> slightly more common to have indices instead.
 
+If you look at (yaml) bindings using a single phy-cell, the majority
+simply ignores describing what the index is used for and which values
+are valid. Of the few that do describe it, the cell index is either used
+for something which does not allow itself for mapping to PHY_TYPE or
+PHY_TYPE is used.
+
+> Anyway, this is a minor issue. It might be just that I'm more common to 
+> using indices everywhere (in other words, I have preference here, but 
+> it's not a strong requirement from my side).
+
+I don't have a strong preference here either. Let's see what Krzysztof
+and Rob says.
+
+Johan
