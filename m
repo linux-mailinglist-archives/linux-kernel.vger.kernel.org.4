@@ -2,159 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BA06284F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3316284F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:20:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235865AbiKNQUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:20:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
+        id S236740AbiKNQUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:20:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiKNQUC (ORCPT
+        with ESMTP id S235954AbiKNQUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:20:02 -0500
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 385B52F6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:20:01 -0800 (PST)
-Received: by mail-wr1-f52.google.com with SMTP id d9so14513622wrm.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:20:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2s+c8+8/YBoK8BFLCw0RrIgotfd+DpUu9sfN/WyWsOk=;
-        b=Mba4iCYN1RV93ftTZxUIdhbeihGiw3tcj1GqPiSoYFGTVKF+iPF3JTVst7k1D5ts+Y
-         xhYS1rCDuyIxRRw34oldB3zfS7LXoR6KxODw4AIWQv7xZw+GTmm7ovRtibP9UW738Vuh
-         M6X6RgGwtWmlXxDPcfrk3dHVyYDx87TozqxFh6Uw3zwnF/q1Go4p84Al7fWzlnp2OQqV
-         FL26hZvULFRflCVQIQIv1qfvEa+Ow8/DR9darBHH3pLhYxNfHlu9nqSX1RVCDNKd9G60
-         yotPHJa1z7CT47LM/eGsFCS1ACJ57UMvFrI1QWB/4bcw1Ve+zEg+C1F6HO53hZfmVrkr
-         fsvg==
-X-Gm-Message-State: ANoB5pnHwH5hP7QR5nG0aoUkrCiK+QdrjDSrS0Jt9vcsxVFgy6e6Velr
-        L9mlxPOwvXL4Ec3Vl/2W/I0=
-X-Google-Smtp-Source: AA0mqf559DCSezNJKos84NDssoZ/HRRlTX9OuTy8pFRWi0RoEj4DMcjA/M0XKaqAbeDgaCzsQ5YnJQ==
-X-Received: by 2002:a5d:4b0c:0:b0:236:6101:7b7d with SMTP id v12-20020a5d4b0c000000b0023661017b7dmr7890393wrq.484.1668442799544;
-        Mon, 14 Nov 2022 08:19:59 -0800 (PST)
-Received: from google.com ([51.154.17.58])
-        by smtp.gmail.com with ESMTPSA id l16-20020a1c7910000000b003cfd4e6400csm8956822wme.19.2022.11.14.08.19.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 08:19:59 -0800 (PST)
-Date:   Mon, 14 Nov 2022 17:19:57 +0100
-From:   Patrick Bellasi <patrick.bellasi@matbug.net>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
-        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
-        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
-        yu.c.chen@intel.com, youssefesmat@chromium.org,
-        joel@joelfernandes.org
-Subject: Re: [PATCH v8 1/9] sched/fair: fix unfairness at wakeup
-Message-ID: <Y3JqrQJWOyHMY+G2@google.com>
-References: <20221110175009.18458-1-vincent.guittot@linaro.org>
- <20221110175009.18458-2-vincent.guittot@linaro.org>
+        Mon, 14 Nov 2022 11:20:32 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDEA32F6;
+        Mon, 14 Nov 2022 08:20:30 -0800 (PST)
+Received: from pendragon.ideasonboard.com (unknown [46.183.103.8])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1F1FE891;
+        Mon, 14 Nov 2022 17:20:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1668442828;
+        bh=bsJLde+lEx0AtdQ4007vP+gZJnhejTWkkwvxQxA7Wwg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T891eZdwVB2V/LLdjtMfPFDIMKRWUeSP/FnU+0PlDbRhdt7ctE+2RIaCIjyYmdwBJ
+         jpkDCgZemKpcx6bZkFhyxUEN1iADQoeukpPWnFmU1EMsAvyPD4O7ySiws4hmR+L9qZ
+         YRhc8Mc8VsakTyW7qHBUUhC7UDZ63mvHncN4RNDU=
+Date:   Mon, 14 Nov 2022 18:20:07 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ian Cowan <ian@linux.cowan.aero>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: media: omap4iss: remove cacheflush import
+Message-ID: <Y3Jqt2NX4j9LdCni@pendragon.ideasonboard.com>
+References: <20221114161700.14378-1-ian@linux.cowan.aero>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221110175009.18458-2-vincent.guittot@linaro.org>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221114161700.14378-1-ian@linux.cowan.aero>
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent!
+Hi Ian,
 
-On 10-Nov 18:50, Vincent Guittot wrote:
+Thank you for the patch.
 
-[...]
-  
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index 1fc198be1ffd..14879d429919 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -2432,9 +2432,9 @@ extern void check_preempt_curr(struct rq *rq, struct task_struct *p, int flags);
->  extern const_debug unsigned int sysctl_sched_nr_migrate;
->  extern const_debug unsigned int sysctl_sched_migration_cost;
+On Mon, Nov 14, 2022 at 11:17:00AM -0500, Ian Cowan wrote:
+> The cacheflush import is never used, so it is safe to remove it as an
+> import.
+> 
+> Signed-off-by: Ian Cowan <ian@linux.cowan.aero>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+>  drivers/staging/media/omap4iss/iss_video.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/staging/media/omap4iss/iss_video.c b/drivers/staging/media/omap4iss/iss_video.c
+> index 842509dcfedf..e732f08fad26 100644
+> --- a/drivers/staging/media/omap4iss/iss_video.c
+> +++ b/drivers/staging/media/omap4iss/iss_video.c
+> @@ -19,8 +19,6 @@
+>  #include <media/v4l2-ioctl.h>
+>  #include <media/v4l2-mc.h>
 >  
-> -#ifdef CONFIG_SCHED_DEBUG
->  extern unsigned int sysctl_sched_latency;
->  extern unsigned int sysctl_sched_min_granularity;
-> +#ifdef CONFIG_SCHED_DEBUG
->  extern unsigned int sysctl_sched_idle_min_granularity;
->  extern unsigned int sysctl_sched_wakeup_granularity;
->  extern int sysctl_resched_latency_warn_ms;
-> @@ -2448,6 +2448,34 @@ extern unsigned int sysctl_numa_balancing_scan_period_max;
->  extern unsigned int sysctl_numa_balancing_scan_size;
->  #endif
+> -#include <asm/cacheflush.h>
+> -
+>  #include "iss_video.h"
+>  #include "iss.h"
 >  
-> +static inline unsigned long  get_sched_latency(bool idle)
-                                ^^^^^^^^^^^^^^^^^
-
-This can be confusing since it's not always returning the sysctl_sched_latency
-value. It's also being used to tune the vruntime at wakeup time.
-
-Thus, what about renaming this to something more close to what's used for, e.g.
-   get_wakeup_latency(se)
-?
-
-Also, in the following patches we call this always with a false parametr.
-Thus, perhaps in a following patch, we can better add something like:
-   #define max_wakeup_latency get_wakeup_latency(false)
-?
-
-> +{
-> +	unsigned long thresh;
-> +
-> +	if (idle)
-> +		thresh = sysctl_sched_min_granularity;
-> +	else
-> +		thresh = sysctl_sched_latency;
-> +
-> +	/*
-> +	 * Halve their sleep time's effect, to allow
-> +	 * for a gentler effect of sleepers:
-> +	 */
-> +	if (sched_feat(GENTLE_FAIR_SLEEPERS))
-> +		thresh >>= 1;
-> +
-> +	return thresh;
-> +}
-> +
-> +static inline unsigned long  get_latency_max(void)
-                                ^^^^^^^^^^^^^^^
-
-This is always used to cap some form of vruntime deltas in:
- - check_preempt_tick()
- - wakeup_latency_gran()
- - wakeup_preempt_entity()
-It's always smaller then the max_wakeup_latency (as defined above).
-
-Thus, does not seems something like:
-   wakeup_latency_threshold()
-a better documenting naming?
-
-> +{
-> +	unsigned long thresh = get_sched_latency(false);
-> +
-> +	thresh -= sysctl_sched_min_granularity;
-> +
-> +	return thresh;
-> +}
-
-[...]
-
-Best,
-Patrick
 
 -- 
-#include <best/regards.h>
+Regards,
 
-Patrick Bellasi
-
+Laurent Pinchart
