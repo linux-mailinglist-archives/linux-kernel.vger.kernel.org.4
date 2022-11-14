@@ -2,43 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3ACA627CB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD02627CB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235905AbiKNLpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:45:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41176 "EHLO
+        id S236224AbiKNLqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:46:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236069AbiKNLpS (ORCPT
+        with ESMTP id S236672AbiKNLp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:45:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C3823158
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:44:43 -0800 (PST)
+        Mon, 14 Nov 2022 06:45:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1D1222BF;
+        Mon, 14 Nov 2022 03:44:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A2946106E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:44:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FE15C433C1;
-        Mon, 14 Nov 2022 11:44:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDD5C61045;
+        Mon, 14 Nov 2022 11:44:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F566C433D6;
+        Mon, 14 Nov 2022 11:44:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668426282;
-        bh=EmZ2uX2gI3bbUDmWCTMpWHApcz7gKOlAwlCJ75sHcrw=;
+        s=k20201202; t=1668426286;
+        bh=l68sB4NnR3/f4L7VL19WvqH6Dh8yt/aVZ1uJVefQMtI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rXbgHJtsiDuv0sPyHOGdWkcq8w522U/y0OQB4TPexKtwC6oYufrIMP+/qxIDlYWk7
-         y1TlsjFwRaS2LaJ+1uyhtVefA2TVGcMbApsz8lszDYncpAAkdGAAbGwc8xb0gYl+Hi
-         XAgx5aC86ODFPR6LrCi/vGM9Ms8+wdHeOXhQNXiAvhaBBAeaz4yyONF2qErsOLFJZ8
-         +PWMTtuOxKG/O09KLA3gBJS3DPdhq+ZmNLPI1wccXLRNAxJ/WfNa7F6pVV+DLIEM6m
-         k/gXsKrOGrMh/KX68S47Z2mr1wnI/NN+epgXaNLFiUkewr5enPvFpD4TYT/dWcmP7i
-         xITP5aobDF4Wg==
+        b=XtUJF22t1vMETfxkDkDoQaLgCdasT1mX3SAV8kKRXx4VF8SppR8kmCPcKMKny+Dbh
+         +R5/4ermD/vAqhbI6Jfl2IqEnpgRKohqOPuvB4Lr0fp79bgVEMQTN7nYEURG2V56sP
+         uAL+oq9za5RvSqWqnegWHtzmApX55dYD+0jXvOKiYAaATRPll3qAZUolXRKuXdwIp3
+         tZijCM3cQmnJskEoxRP80Y42UARhTetm5DtR4MNQJ6vgwf4jlfGRFsTa01Fyg8IIcV
+         8YhXFJHgBjabJP8rmmWYRTzNu549Kt7BxT7QTjZNordAq51h+KaB/RMfFHwsvewfck
+         BMu5d6NEToxzA==
 From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Andi Kleen <andi@firstfloor.org>, Martin Liska <mliska@suse.cz>,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 20/46] softirq, lto: Mark irq_enter/exit_rcu() as __visible
-Date:   Mon, 14 Nov 2022 12:43:18 +0100
-Message-Id: <20221114114344.18650-21-jirislaby@kernel.org>
+Cc:     Jiri Slaby <jslaby@suse.cz>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, Martin Liska <mliska@suse.cz>
+Subject: [PATCH 21/46] btf, lto: pass scope as strings
+Date:   Mon, 14 Nov 2022 12:43:19 +0100
+Message-Id: <20221114114344.18650-22-jirislaby@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221114114344.18650-1-jirislaby@kernel.org>
 References: <20221114114344.18650-1-jirislaby@kernel.org>
@@ -53,44 +61,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andi Kleen <andi@firstfloor.org>
+From: Jiri Slaby <jslaby@suse.cz>
 
-Symbols referenced from assembler (either directly or e.f. from
-DEFINE_STATIC_KEY()) need to be global and visible in gcc LTO because
-they could end up in a different object file than the assembler. This
-can lead to linker errors without this patch.
+gcc LTO can put assembler top level statements into other assembler
+files. The BTF IDs assumed that they are in the same file. We need to
+make all BTF IDs global to work around this.
 
-So mark irq_enter_rcu() and irq_exit_rcu() as __visible.
+This is a preparation for that, as we will pass __global_on_lto as
+scope. That is macro that expands either to "globl" or "local" depending
+whether LTO is enabled.
 
-Signed-off-by: Andi Kleen <andi@firstfloor.org>
-Signed-off-by: Martin Liska <mliska@suse.cz>
+That wouldn't work without this patch as we stringify scope at the
+moment.
+
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Song Liu <song@kernel.org>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Stanislav Fomichev <sdf@google.com>
+Cc: Hao Luo <haoluo@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org
+Cc: Martin Liska <mliska@suse.cz>
 Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 ---
- kernel/softirq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ include/linux/btf_ids.h | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index c8a6913c067d..9d62e09c9581 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -604,7 +604,7 @@ asmlinkage __visible void __softirq_entry __do_softirq(void)
- /**
-  * irq_enter_rcu - Enter an interrupt context with RCU watching
-  */
--void irq_enter_rcu(void)
-+__visible void irq_enter_rcu(void)
- {
- 	__irq_enter_raw();
+diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+index 2aea877d644f..3011757a48ef 100644
+--- a/include/linux/btf_ids.h
++++ b/include/linux/btf_ids.h
+@@ -83,16 +83,16 @@ word							\
+ #define __BTF_ID_LIST(name, scope)			\
+ asm(							\
+ ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
+-"." #scope " " #name ";                        \n"	\
++"." scope " " #name ";                         \n"	\
+ #name ":;                                      \n"	\
+ ".popsection;                                  \n");
  
-@@ -657,7 +657,7 @@ static inline void __irq_exit_rcu(void)
-  *
-  * Also processes softirqs if needed and possible.
-  */
--void irq_exit_rcu(void)
-+__visible void irq_exit_rcu(void)
- {
- 	__irq_exit_rcu();
- 	 /* must be last! */
+ #define BTF_ID_LIST(name)				\
+-__BTF_ID_LIST(name, local)				\
++__BTF_ID_LIST(name, "local")				\
+ extern u32 name[];
+ 
+ #define BTF_ID_LIST_GLOBAL(name, n)			\
+-__BTF_ID_LIST(name, globl)
++__BTF_ID_LIST(name, "globl")
+ 
+ /* The BTF_ID_LIST_SINGLE macro defines a BTF_ID_LIST with
+  * a single entry.
+@@ -142,18 +142,18 @@ asm(							\
+ #define __BTF_SET_START(name, scope)			\
+ asm(							\
+ ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
+-"." #scope " __BTF_ID__set__" #name ";         \n"	\
++"." scope " __BTF_ID__set__" #name ";          \n"	\
+ "__BTF_ID__set__" #name ":;                    \n"	\
+ ".zero 4                                       \n"	\
+ ".popsection;                                  \n");
+ 
+ #define BTF_SET_START(name)				\
+-__BTF_ID_LIST(name, local)				\
+-__BTF_SET_START(name, local)
++__BTF_ID_LIST(name, "local")				\
++__BTF_SET_START(name, "local")
+ 
+ #define BTF_SET_START_GLOBAL(name)			\
+-__BTF_ID_LIST(name, globl)				\
+-__BTF_SET_START(name, globl)
++__BTF_ID_LIST(name, "globl")				\
++__BTF_SET_START(name, "globl")
+ 
+ #define BTF_SET_END(name)				\
+ asm(							\
+@@ -186,14 +186,14 @@ extern struct btf_id_set name;
+ #define __BTF_SET8_START(name, scope)			\
+ asm(							\
+ ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
+-"." #scope " __BTF_ID__set8__" #name ";        \n"	\
++"." scope " __BTF_ID__set8__" #name ";         \n"	\
+ "__BTF_ID__set8__" #name ":;                   \n"	\
+ ".zero 8                                       \n"	\
+ ".popsection;                                  \n");
+ 
+ #define BTF_SET8_START(name)				\
+-__BTF_ID_LIST(name, local)				\
+-__BTF_SET8_START(name, local)
++__BTF_ID_LIST(name, "local")				\
++__BTF_SET8_START(name, "local")
+ 
+ #define BTF_SET8_END(name)				\
+ asm(							\
 -- 
 2.38.1
 
