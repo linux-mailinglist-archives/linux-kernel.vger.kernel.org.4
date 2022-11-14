@@ -2,130 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BAD2627F91
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7904627C23
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237644AbiKNNAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:00:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
+        id S236233AbiKNLV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:21:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237645AbiKNNA1 (ORCPT
+        with ESMTP id S236146AbiKNLVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:00:27 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E241B27B23
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:00:25 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id bp15so19073775lfb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:00:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=n2v6dXeivccfrn+WhZzJKqoLRW18Q+k95BcJxS2Nft8=;
-        b=rl4Z7TiqBNvWPnhXh20wrOVuEE0wnCeMX6CSjyrdR3T1EEkoA1NKS/aVGWZYFtAZcr
-         vLqkdcGuxLaLEfazCkIBb0gwRhCTBZD6F4IBBXheK5Re9GoiZ7Eut6vScYrrLU6W5ZgI
-         EJEbQ54BV70qZwc6xuX3tq+j1Yuhtu6kON4IfDpQMB+cxsn9s2fYUW4V1LHvDj1b/eE9
-         FCIWE5HsPKK8+Vmfo75AUev7GvEUZxC+HIVVbxw9fGbCgKY30b59b77YmaraD+v+SF+t
-         odwE8AjsyIp5yRnRZ8V7oFyVtnOJVBH/941y61HKOBBsU1wLO9iOPs85TX4GnJbOvOnT
-         0AhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n2v6dXeivccfrn+WhZzJKqoLRW18Q+k95BcJxS2Nft8=;
-        b=ovMIIeY6H+9pCRDkLAYd19qnn9D+tiYFpSuARw2Jg9q4v1zxAhN98ipXTbEcsEnodV
-         s8iuwFgvOdRywgUwQHjC5ccZAzyU7PzDpfW6mIlgC95NoCk/wS+zavB1CSG8dgyldkuP
-         q8xVZ+ZPuQbct9YgJD7EavIBAzkcPkXnf9w0z21mvhmf3uVtrwCyZ+s7Lb+iZEs4Atwg
-         l8z2VcvdkkCkRLmJIWr6HFX0P4kmUekdfRwLG96ITeVILrd+nyXadcUNbqCVT6zBgEtX
-         diDLZoCXz31DBWtZ7F8PV6bBJogRikvVyO0POVhNE0fB8GcNljWlNHC9mlxYJlfq9irt
-         iJsw==
-X-Gm-Message-State: ANoB5pkxIfEbQnAGYQeFcHwRwBhCc/9kTm+EPzFmAeX7MlLXNv+8rC5q
-        fjOu4aNEqLTVYZi18SO8/ZThRg==
-X-Google-Smtp-Source: AA0mqf6Y/jRSNo3kplGT/QnTrZAPtMxVjojG2hI/OrS5/UtbcwQzGqM++6h36xwYu9aPAcYHLeGkkg==
-X-Received: by 2002:ac2:5b9d:0:b0:4a2:19e0:1266 with SMTP id o29-20020ac25b9d000000b004a219e01266mr3679582lfn.264.1668430824179;
-        Mon, 14 Nov 2022 05:00:24 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056512110a00b004948b667d95sm1814784lfg.265.2022.11.14.05.00.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 05:00:23 -0800 (PST)
-Message-ID: <0121fc03-b027-7659-5e6e-b42089c9888d@linaro.org>
-Date:   Mon, 14 Nov 2022 14:00:22 +0100
+        Mon, 14 Nov 2022 06:21:01 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528C66475;
+        Mon, 14 Nov 2022 03:17:35 -0800 (PST)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AEA5lcD016147;
+        Mon, 14 Nov 2022 06:17:09 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3ktwrrp6ck-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 06:17:09 -0500
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2AEBH7Jm006008
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 14 Nov 2022 06:17:07 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Mon, 14 Nov
+ 2022 06:17:07 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Mon, 14 Nov 2022 06:17:06 -0500
+Received: from tachici-Precision-5530.ad.analog.com ([10.48.65.157])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2AEBGh5h031805;
+        Mon, 14 Nov 2022 06:16:45 -0500
+From:   Alexandru Tachici <alexandru.tachici@analog.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <andrew@lunn.ch>, <linux@armlinux.org.uk>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <steve.glendinning@shawell.net>,
+        <UNGLinuxDriver@microchip.com>, <andre.edich@microchip.com>,
+        <linux-usb@vger.kernel.org>
+Subject: [net] net: usb: smsc95xx: fix external PHY reset
+Date:   Mon, 14 Nov 2022 15:16:43 +0200
+Message-ID: <20221114131643.19450-1-alexandru.tachici@analog.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/9] dt-bindings: arm-smmu: Allow up to 3 power-domains
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     patches@linaro.org, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221114104222.36329-1-konrad.dybcio@linaro.org>
- <20221114104222.36329-2-konrad.dybcio@linaro.org>
- <6fa8e3ea-2113-d930-96bc-3726d53e5bcd@linaro.org>
- <a4b160d8-0faa-3f4c-a925-0beaf6ace721@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a4b160d8-0faa-3f4c-a925-0beaf6ace721@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: 4Fuyddp9qQM8wFjQvmTtI4D4ho-JUD95
+X-Proofpoint-GUID: 4Fuyddp9qQM8wFjQvmTtI4D4ho-JUD95
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-14_10,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ priorityscore=1501 clxscore=1011 bulkscore=0 mlxlogscore=759
+ malwarescore=0 impostorscore=0 mlxscore=0 suspectscore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211140082
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/11/2022 12:17, Konrad Dybcio wrote:
-> 
-> On 14/11/2022 12:01, Krzysztof Kozlowski wrote:
->> On 14/11/2022 11:42, Konrad Dybcio wrote:
->>> Some SMMUs require that a vote is held on as much as 3 separate PDs
->>> (hello Qualcomm). Allow it in bindings.
->>>
->>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>> ---
->>> Changes since v1:
->>> - Add minItems
->>>
->>>   Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 3 ++-
->>>   1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->>> index 9066e6df1ba1..82bc696de662 100644
->>> --- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->>> +++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->>> @@ -159,7 +159,8 @@ properties:
->>>             through the TCU's programming interface.
->>>   
->>>     power-domains:
->>> -    maxItems: 1
->>> +    minItems: 0
->> It cannot be 0.
->>
->> minItems: 1
->>
->> Anyway you still need to restrict it per variant, as I said in previous
->> version.
-> 
-> Hm.. I'm not entirely sure what you mean.. Should I add a list of 
-> compatibles
+An external PHY needs settling time after power up or reser.
+In the bind() function an mdio bus is registered. If at this point
+the external PHY is still initialising, no valid PHY ID will be
+read and on phy_find_first() the bind() function will fail.
 
-Yes and limit it to maxItems: 1 for "else".
+If an external PHY is present, wait the maximum time specified
+in 802.3 45.2.7.1.1.
 
-> that are allowed to have 3 power-domains and leave it as it was before 
-> in the
-> 'else' case?
+Fixes: 05b35e7eb9a1 ("smsc95xx: add phylib support")
+Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+---
+ drivers/net/usb/smsc95xx.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
+index bfb58c91db04..5ed001c0cd56 100644
+--- a/drivers/net/usb/smsc95xx.c
++++ b/drivers/net/usb/smsc95xx.c
+@@ -1134,8 +1134,15 @@ static int smsc95xx_bind(struct usbnet *dev, struct usb_interface *intf)
+ 		goto free_mdio;
+ 
+ 	is_internal_phy = !(val & HW_CFG_PSEL_);
+-	if (is_internal_phy)
++	if (is_internal_phy) {
+ 		pdata->mdiobus->phy_mask = ~(1u << SMSC95XX_INTERNAL_PHY_ID);
++	} else {
++		/* Driver has no knowledge at this point about the external PHY.
++		 * The 802.3 specifies that the reset process shall
++		 * be completed within 0.5 s.
++		 */
++		fsleep(500000);
++	}
+ 
+ 	pdata->mdiobus->priv = dev;
+ 	pdata->mdiobus->read = smsc95xx_mdiobus_read;
+-- 
+2.34.1
 
