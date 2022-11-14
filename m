@@ -2,304 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6DB162821A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B37628274
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237001AbiKNOK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:10:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
+        id S235826AbiKNOZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236992AbiKNOKw (ORCPT
+        with ESMTP id S229647AbiKNOZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:10:52 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A4224BF1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:10:51 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id bs21so18483574wrb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:10:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rFv86mLduUjZD4Ir7B85b9X3A/QgnGw8k4ISAkiGULg=;
-        b=WUKiYL7PQ07V/pQKq0VIxVYNnk9YrBPnJhgyepUUM45Zz7YUF0MGu2jyX4H5yj5reK
-         0xmfuY/q73pVCXtARzRv2CNWOOkVrI9/gFQgKneQryD/aQ6Jx5815P1AkncyL1JC6Oyv
-         v07W2C+GuHYtLy8YhIiEaeMXtnujxEpCpTADYlzknH4OPBmR3z16zZElUZ88oyfeHzqK
-         8LgDpXaViu3VLHc/eEPvgOj7a64WMH9RmQRE1HKPKnvolBueCGaq1z6EAVVHZJ5A7PSt
-         E/fvoujPWoztvzf2U5lrirs30WjVlqSDi7NJH1Nb3AmNhUsDsMywk/S59aPwA91hOSyF
-         nHqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rFv86mLduUjZD4Ir7B85b9X3A/QgnGw8k4ISAkiGULg=;
-        b=lbZiB4zo1iFU+92+5Abs/9PB+W38+9glYQVfKFK586ZzolUCPholIm8d11toVrp1zi
-         Sdp8xBI4Sc1YvXdclkwlCko5oMlccLhRzW3YIy0VX9aC8FtSX4ymcGMGrTPpiX8MJwrM
-         y9lV+P99Z6XJDuGp6pkwkLgL17YMKbxFVXhZGuny+o5u1q8dZdFL72ZsBrA7Nopu0Pw2
-         zhNP9tVvhe48wIo0Myfd001c8hfjPV7FUudWW+itasguRPqlQHANrf2IbKYrtzNPZUKH
-         J5kXAFpgTCo7zCH3yzMyzwcp0lN6Q4PIZeB/M8Arcz7r/WHuPnFLKEQhfAhhRp2/Tk5C
-         JdjQ==
-X-Gm-Message-State: ANoB5pk6jEnHWFdHVdHGifVtXCwBJrwzl9q5IwUKi+Wbq+1y+UjCBQsn
-        /P7bYTc5zvxn0fW4rBjpU1X6eO3N4K4GXPpVbuaG3w==
-X-Google-Smtp-Source: AA0mqf7bRf2STkWy1G3U1PeXjFIldYJw9UqKgTKmXbWtKIWmnYZqu/ECe6DVeenka1xwYXTXWQP23hF3fJ9W1aXKTo4=
-X-Received: by 2002:a05:6000:1241:b0:236:d8f8:b87d with SMTP id
- j1-20020a056000124100b00236d8f8b87dmr7372533wrx.343.1668435049383; Mon, 14
- Nov 2022 06:10:49 -0800 (PST)
+        Mon, 14 Nov 2022 09:25:51 -0500
+X-Greylist: delayed 905 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Nov 2022 06:25:50 PST
+Received: from sender4-of-o54.zoho.com (sender4-of-o54.zoho.com [136.143.188.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8097C332;
+        Mon, 14 Nov 2022 06:25:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1668435040; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=apHDiiwYXYvUFTkgwJPwrDjZkNQQhU5pRiqQzE0P654pbcKIQIxavf6mnse8OtdS1Y23dX3VkSc7ig46Uo3C0ka+VQJ4FCzYE4SCWwRaFonmyK7TUF0J4lxLQ6YqkJRTDmGC7lvDb+BuKDAcXQAKu16732aED+2nlJ3dqQ30xxw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1668435040; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=Obamzi7+h416URfz7TCOzXR/hOBh/eTAtx+Zw3J7MNk=; 
+        b=fa7qkLlgeEvgoiwJzHaMiUiv1o1VZgA2BGxmSmP+VrTShLD/tzeUG5AWUme7LQZ4UtN4OuGsogYnRrsgWWPxl4MQFWe8TIsEU0fQ01HodgXBSdrf0TflJy6wj46BNZcCikztU/1ivhrpVE4f08ZZ7pKiNlffIo0zzpG2OYtR75A=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        spf=pass  smtp.mailfrom=business@elijahpepe.com;
+        dmarc=pass header.from=<business@elijahpepe.com>
+Received: from mail.zoho.com by mx.zohomail.com
+        with SMTP id 1668435038060533.7770069828593; Mon, 14 Nov 2022 06:10:38 -0800 (PST)
+Date:   Mon, 14 Nov 2022 06:10:38 -0800
+From:   Elijah Conners <business@elijahpepe.com>
+To:     "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "linux-pm" <linux-pm@vger.kernel.org>
+Cc:     "mszyprowski" <m.szyprowski@samsung.com>
+Message-ID: <184767a4f60.d9a0c3da334147.3171681720569322283@elijahpepe.com>
+In-Reply-To: 
+Subject: [PATCH] drivers: undo simplify POWER_SUPPLY_PROP_ONLINE
 MIME-Version: 1.0
-References: <20221114075127.2650315-1-irogers@google.com> <20221114075127.2650315-2-irogers@google.com>
- <0a54d2bc-142f-f62d-978c-70f97332fdfc@intel.com>
-In-Reply-To: <0a54d2bc-142f-f62d-978c-70f97332fdfc@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 14 Nov 2022 06:10:35 -0800
-Message-ID: <CAP-5=fUzW6BrkbkX76SA+vBJzvYrxY2pJRe8yBATYdB0Gn3z+A@mail.gmail.com>
-Subject: Re: [PATCH v1 1/9] perf pmu: Add documentation
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Weilin Wang <weilin.wang@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Xin Gao <gaoxin@cdjrlc.com>, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 12:56 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 14/11/22 09:51, Ian Rogers wrote:
-> > Add documentation to struct perf_pmu and the associated structs of
-> > perf_pmu_alias and perf_pmu_format.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
->
-> Should this be kernel-doc format?
->
-> $ ./scripts/kernel-doc -man tools/perf/util/pmu.* > /tmp/manout
-> tools/perf/util/pmu.c:35: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
->  * Values from a format file read from <sysfs>/devices/cpu/format/ held in
-> tools/perf/util/pmu.c:1: warning: no structured comments found
-> tools/perf/util/pmu.h:140: warning: cannot understand function prototype: 'struct perf_pmu_alias '
-> tools/perf/util/pmu.h:1: warning: no structured comments found
-> tools/perf/util/pmu.l:1: warning: no structured comments found
-> tools/perf/util/pmu.o:1: warning: no structured comments found
-> tools/perf/util/pmu.y:1: warning: no structured comments found
-> $ man -l /tmp/manout | cat
-> $
+Per the work done by arturo182, the value of max17040() with LiPo
+batteries will always be 1, even if it's not connected. This is
+ambiguous and setting the return value to 1 presents complications for
+anyone working with LiPo batteries, and does not result in significant
+overhead.
 
-Thanks, I'll take a look into fixing this.
+Signed-off-by: Elijah Conners <business@elijahpepe.com>
+---
+ drivers/power/supply/max17040_battery.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Ian
-
-> > ---
-> >  tools/perf/util/pmu.c |  14 ++++++
-> >  tools/perf/util/pmu.h | 105 +++++++++++++++++++++++++++++++++++++++---
-> >  2 files changed, 113 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-> > index 6a86e6af0903..a8f9f47c6ed9 100644
-> > --- a/tools/perf/util/pmu.c
-> > +++ b/tools/perf/util/pmu.c
-> > @@ -31,10 +31,24 @@
-> >
-> >  struct perf_pmu perf_pmu__fake;
-> >
-> > +/**
-> > + * Values from a format file read from <sysfs>/devices/cpu/format/ held in
-> > + * struct perf_pmu. For example, the contents of
-> > + * <sysfs>/devices/cpu/format/event may be "config:0-7" and will be represented
-> > + * here as name="event", value=PERF_PMU_FORMAT_VALUE_CONFIG and bits 0 to 7 will
-> > + * be set.
-> > + */
-> >  struct perf_pmu_format {
-> > +     /** The modifier/file name. */
-> >       char *name;
-> > +     /**
-> > +      * Which config value the format relates to. Supported values are from
-> > +      * PERF_PMU_FORMAT_VALUE_CONFIG to PERF_PMU_FORMAT_VALUE_CONFIG_END.
-> > +      */
-> >       int value;
-> > +     /** Which config bits are set by this format value. */
-> >       DECLARE_BITMAP(bits, PERF_PMU_FORMAT_BITS);
-> > +     /** Element on list within struct perf_pmu. */
-> >       struct list_head list;
-> >  };
-> >
-> > diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
-> > index 68e15c38ae71..29571c0f9d15 100644
-> > --- a/tools/perf/util/pmu.h
-> > +++ b/tools/perf/util/pmu.h
-> > @@ -34,30 +34,91 @@ struct perf_pmu_caps {
-> >  };
-> >
-> >  struct perf_pmu {
-> > +     /** The name of the PMU such as "cpu". */
-> >       char *name;
-> > +     /**
-> > +      * Optional alternate name for the PMU determined in architecture
-> > +      * specific code.
-> > +      */
-> >       char *alias_name;
-> > +     /**
-> > +      * Optional PMU identifier read from
-> > +      * <sysfs>/bus/event_source/devices/<name>/identifier.
-> > +      */
-> >       char *id;
-> > +     /**
-> > +      * Perf event attributed type value, read from
-> > +      * <sysfs>/bus/event_source/devices/<name>/type.
-> > +      */
-> >       __u32 type;
-> > +     /**
-> > +      * Can the PMU name be selected as if it were an event?
-> > +      */
-> >       bool selectable;
-> > +     /**
-> > +      * Is the PMU not within the CPU core? Determined by the presence of
-> > +      * <sysfs>/bus/event_source/devices/<name>/cpumask.
-> > +      */
-> >       bool is_uncore;
-> > +     /** Is the PMU name either cpu_core or cpu_atom. */
-> >       bool is_hybrid;
-> > +     /**
-> > +      * Are events auxiliary events? Determined in architecture specific
-> > +      * code.
-> > +      */
-> >       bool auxtrace;
-> > +     /**
-> > +      * Number of levels of :ppp precision supported by the PMU, read from
-> > +      * <sysfs>/bus/event_source/devices/<name>/caps/max_precise.
-> > +      */
-> >       int max_precise;
-> > +     /**
-> > +      * Optional default perf_event_attr determined in architecture specific
-> > +      * code.
-> > +      */
-> >       struct perf_event_attr *default_config;
-> > +     /**
-> > +      * Empty or the contents of either of:
-> > +      * <sysfs>/bus/event_source/devices/<name>/cpumask.
-> > +      * <sysfs>/bus/event_source/devices/<cpu>/cpus.
-> > +      */
-> >       struct perf_cpu_map *cpus;
-> > -     struct list_head format;  /* HEAD struct perf_pmu_format -> list */
-> > -     struct list_head aliases; /* HEAD struct perf_pmu_alias -> list */
-> > +     /**
-> > +      * Holds the contents of files read from
-> > +      * <sysfs>/bus/event_source/devices/<name>/format/. The contents specify
-> > +      * which event parameter changes what config, config1 or config2 bits.
-> > +      */
-> > +     struct list_head format;
-> > +     /**
-> > +      * List of struct perf_pmu_alias. Each alias corresponds to an event
-> > +      * read from <sysfs>/bus/event_source/devices/<name>/events/ or from
-> > +      * json events in pmu-events.c.
-> > +      */
-> > +     struct list_head aliases;
-> > +     /** Has the list caps been initialized? */
-> >       bool caps_initialized;
-> > +     /** The length of the list caps. */
-> >       u32 nr_caps;
-> > -     struct list_head caps;    /* HEAD struct perf_pmu_caps -> list */
-> > -     struct list_head list;    /* ELEM */
-> > +     /**
-> > +      * Holds the contents of files read from
-> > +      * <sysfs>/bus/event_source/devices/<name>/caps/. The contents are pairs
-> > +      * of the filename with the value of its contents, for example,
-> > +      * max_precise (see above) may have a value of 3.
-> > +      */
-> > +     struct list_head caps;
-> > +     /** Element on pmus list in pmu.c. */
-> > +     struct list_head list;
-> > +     /** Element on perf_pmu__hybrid_pmus. */
-> >       struct list_head hybrid_list;
-> >
-> > +     /** Features to inhibit when events on this PMU are opened. */
-> >       struct {
-> > +             /** Disables perf_event_attr exclude_guest and exclude_host. */
-> >               bool exclude_guest;
-> >       } missing_features;
-> >  };
-> >
-> > +/** A special global PMU used for testing. */
-> >  extern struct perf_pmu perf_pmu__fake;
-> >
-> >  struct perf_pmu_info {
-> > @@ -71,21 +132,53 @@ struct perf_pmu_info {
-> >
-> >  #define UNIT_MAX_LEN 31 /* max length for event unit name */
-> >
-> > +/**
-> > + * An event either read from sysfs or builtin in pmu-events.c, created by
-> > + * parsing the pmu-events json files.
-> > + */
-> >  struct perf_pmu_alias {
-> >       char *name;
-> > +     /** Optional short description of the event. */
-> >       char *desc;
-> > +     /** Optional long description. */
-> >       char *long_desc;
-> > +     /**
-> > +      * Optional topic such as cache or pipeline, particularly for json
-> > +      * events.
-> > +      */
-> >       char *topic;
-> > +     /** Comma separated parameter list. */
-> >       char *str;
-> > -     struct list_head terms; /* HEAD struct parse_events_term -> list */
-> > -     struct list_head list;  /* ELEM */
-> > +     /** Owned list of the original parsed parameters. */
-> > +     struct list_head terms;
-> > +     /** List element of struct perf_pmu aliases. */
-> > +     struct list_head list;
-> > +     /** Units for the event, such as bytes or cache lines. */
-> >       char unit[UNIT_MAX_LEN+1];
-> > +     /** Value to scale read counter values by. */
-> >       double scale;
-> > +     /**
-> > +      * Does the file
-> > +      * <sysfs>/bus/event_source/devices/<pmu_name>/events/<name>.per-pkg or
-> > +      * equivalent json value exist and have the value 1.
-> > +      */
-> >       bool per_pkg;
-> > +     /**
-> > +      * Does the file
-> > +      * <sysfs>/bus/event_source/devices/<pmu_name>/events/<name>.snapshot
-> > +      * exist and have the value 1.
-> > +      */
-> >       bool snapshot;
-> > +     /** Is the event hidden and so not shown in perf list by default. */
-> >       bool deprecated;
-> > +     /**
-> > +      * A metric expression associated with an event. Doing this makes little
-> > +      * sense due to scale and unit applying to both.
-> > +      */
-> >       char *metric_expr;
-> > +     /** A name for the metric. unit applying to both. */
-> >       char *metric_name;
-> > +     /** The name copied from struct perf_pmu. */
-> >       char *pmu_name;
-> >  };
-> >
->
+diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
+index a9aef1e8b186..5284f2bf735c 100644
+--- a/drivers/power/supply/max17040_battery.c
++++ b/drivers/power/supply/max17040_battery.c
+@@ -217,7 +217,8 @@ static int max17040_get_version(struct max17040_chip *chip)
+ 
+ static int max17040_get_online(struct max17040_chip *chip)
+ {
+-	return 1;
++	return chip->pdata && chip->pdata->battery_online ?
++		chip->pdata->battery_online() : 1;
+ }
+ 
+ static int max17040_get_of_data(struct max17040_chip *chip)
+-- 
+2.29.2.windows.2
