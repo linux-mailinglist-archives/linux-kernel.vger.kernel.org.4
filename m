@@ -2,121 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9D86289DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7E36289E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:53:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236724AbiKNTxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 14:53:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
+        id S237187AbiKNTxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 14:53:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236900AbiKNTx2 (ORCPT
+        with ESMTP id S237062AbiKNTxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 14:53:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44693B49;
+        Mon, 14 Nov 2022 14:53:31 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D81419F;
         Mon, 14 Nov 2022 11:53:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6C24B8121B;
-        Mon, 14 Nov 2022 19:53:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D879AC433C1;
-        Mon, 14 Nov 2022 19:53:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668455603;
-        bh=USGNMT7eLqrliFumb6hvigVcUYCVRR/D6RMI4vwCgGk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ovVbA+b16cn1+LhsXZ392oeDpR88SLThXQzjLKlhIYAyISZ4GICcJZLI5iDKmr8TM
-         7456lyOjZn4eE/RX6OAtWd9Zt7HeZyp8gvLpuDRJsacj1OAOeNq5QGQDnRe0CjAUxD
-         pLlNLa484GnXMDy39eJeD2w53KPFpdwoNle8WfQOA9uI3DaUhwVZ6vMwyIUlF1Q0GB
-         oXK0U+N/1EKk2BRNXjBjWV33E1WbjvouZzLo0JDz8n7wH9f/nR7qurhA2lj+u7kTXh
-         ojEVysFDIgbVqhTn5eDVL8kv5NDUDIHNMYcvzb9OFALlt0rSz21PCsinwHqPhN+UfP
-         mUcxihfUW2V6w==
-Date:   Mon, 14 Nov 2022 20:53:20 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>
-Cc:     linux-iio@vger.kernel.org,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-kernel@vger.kernel.org,
-        Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] i2c: core: Introduce i2c_client_get_device_id
- helper function
-Message-ID: <Y3KcsJbE2bxWBjqF@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>, linux-iio@vger.kernel.org,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-i2c@vger.kernel.org
-References: <cover.1668361368.git.ang.iglesiasg@gmail.com>
- <a844cc7c85898b40abbdcb1f068338619c6010eb.1668361368.git.ang.iglesiasg@gmail.com>
+Received: by mail-ej1-x62e.google.com with SMTP id y14so30964653ejd.9;
+        Mon, 14 Nov 2022 11:53:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xgkgU+XJK79fNtmiiykE65yOYhyetkrTOcQMcl/CZJ8=;
+        b=dDYVgHhmha1NxtiYQrt/rWBs0feFsx2LKpDZacWco2+/xjuJ4i9EdLPZYJrls6b6hE
+         JOsOMx9dQU5J7msJp3jJetYQxd3p2PuK7qyVYct893G8pZfSzcuZ9SoEjZvdqwxFJ0Zv
+         dST309VowM/mHEKLOFPG03JI+Wvh+CLiFP/HzNoYFvStwCBLjavOVujZOME86uio4LTS
+         P9EmujlrnSVtl7H3DWpzSLSWl4SCreFHTQNBAwGkUKhIlZnNLyewd7wkvIeEYFgGFiNz
+         cFV1w/AiZGZguTCqwVDomg9EUuxkLFfsEkek4XqKvB9C8FjQHqSZKVEiFv1L+OEag6X0
+         9B8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xgkgU+XJK79fNtmiiykE65yOYhyetkrTOcQMcl/CZJ8=;
+        b=6SkEHo0f2nBDOR87Exr/4hQ6Fd8ExrTvZS53pdvTYJWDgvDfHwwkZyKmeis/bij8Qx
+         QLnMbmJVkmvddcRQZfGp2KTT/loZd+GVdelLYAvY2cbMWSR6PgnbFfW+n3JEQdCYyEDH
+         OhrdtpXV/IXajWFOririw+eRfEuR0K1fg0kpuVj6MqtyNvN34PxMeqNU+PE+xC1gazwZ
+         YPRZpnyfFDgO1Nbsw1YdD36NecYnVDuHhx0CHONLA0WMRs8hjcooTY3suCbehvgngWBZ
+         N2m3Fb42OmH1KMn3V3xMPtlxVnyeSIHJYyk6QPv2Ehl+06zW5MbMRy5TM0GSCmNLawev
+         tWTA==
+X-Gm-Message-State: ANoB5pmC62IUsYN9k8f0qSgnJatzAD5tw1gZJsmvXp9Etj2410McuYGc
+        /fNa6OiG6SC8nl8BrCXdqYE=
+X-Google-Smtp-Source: AA0mqf5NrXQC9j3yvaQxmK6T+GZXv6adycdupZEpJskbybTG3KPOSJYuASy86evhxQ7UbgdKGMG3IA==
+X-Received: by 2002:a17:906:c00c:b0:7ae:e6ac:2427 with SMTP id e12-20020a170906c00c00b007aee6ac2427mr7498440ejz.345.1668455604968;
+        Mon, 14 Nov 2022 11:53:24 -0800 (PST)
+Received: from skbuf ([188.25.170.202])
+        by smtp.gmail.com with ESMTPSA id v17-20020a1709067d9100b0074134543f82sm4614809ejo.90.2022.11.14.11.53.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 11:53:24 -0800 (PST)
+Date:   Mon, 14 Nov 2022 21:53:21 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Madalin Bucur <madalin.bucur@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Leo Li <leoyang.li@nxp.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Arnd Bergmann <arnd@arndb.de>, Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH net-next v2 00/11] net: pcs: Add support for devices
+ probed in the "usual" manner
+Message-ID: <20221114195321.uludij5x747uzcxr@skbuf>
+References: <20221103210650.2325784-1-sean.anderson@seco.com>
+ <20221109224110.erfaftzja4fybdbc@skbuf>
+ <bcb87445-d80d-fea0-82f2-a15b20baaf06@seco.com>
+ <20221110152925.3gkkp5opf74oqrxb@skbuf>
+ <7b4fb14f-1ca0-e4f8-46ca-3884392627c2@seco.com>
+ <20221110160008.6t53ouoxqeu7w7qr@skbuf>
+ <ce6d6a26-4867-6385-8c64-0f374d027754@seco.com>
+ <20221114172357.hdzua4xo7wixtbgs@skbuf>
+ <209a0d25-f109-601f-d6f6-1adc44103aee@seco.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wT/OxVyU1qtsOtS5"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a844cc7c85898b40abbdcb1f068338619c6010eb.1668361368.git.ang.iglesiasg@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <209a0d25-f109-601f-d6f6-1adc44103aee@seco.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 14, 2022 at 01:08:03PM -0500, Sean Anderson wrote:
+> On 11/14/22 12:23, Vladimir Oltean wrote:
+> > On Thu, Nov 10, 2022 at 11:56:15AM -0500, Sean Anderson wrote:
+> >> these will probably be in device trees for a year before the kernel
+> >> starts using them. But once that is done, we are free to require them.
+> > 
+> > Sorry, you need to propose something that is not "we can break compatibility
+> > with today's device trees one year from now".
+> 
+> But only if the kernel gets updated and not the device tree. When can
+> such a situation occur? Are we stuck with this for the next 10 years all
+> because someone may have a device tree which they compiled in 2017, and
+> *insist* on using the latest kernel with? Is this how you run your
+> systems?
 
---wT/OxVyU1qtsOtS5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm a developer (and I work on other platforms than the ones you're
+planning to break), so the answer to this question doesn't mean a thing.
 
-On Sun, Nov 13, 2022 at 06:46:30PM +0100, Angel Iglesias wrote:
-> Introduces new helper function to aid in .probe_new() refactors. In order
-> to use existing i2c_get_device_id() on the probe callback, the device
-> match table needs to be accessible in that function, which would require
-> bigger refactors in some drivers using the deprecated .probe callback.
->=20
-> This issue was discussed in more detail in the IIO mailing list.
->=20
-> Link: https://lore.kernel.org/all/20221023132302.911644-11-u.kleine-koeni=
-g@pengutronix.de/
-> Suggested-by: Nuno S=C3=A1 <noname.nuno@gmail.com>
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Suggested-by: Jonathan Cameron <jic23@kernel.org>
-> Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> We don't get the device tree from firmware on this platform; usually it
+> is bundled with the kernel in a FIT or loaded from the same disk
+> partition as the kernel. I can imagine that they might not always be
+> updated at exactly the same time, but this is nuts.
 
-Immutable branch here:
+What does "this" platform mean exactly? There are many platforms to
+which you've added compatible strings to keep things working assuming a
+dtb update, many of them very old. And those to which you did are not by
+far all that exist. There is no requirement that all platform device
+trees are upstreamed to the Linux kernel.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client_devi=
-ce_id_helper-immutable
+> The original device tree is broken because it doesn't include compatible
+> strings for devices on a generic bus. There's no way to fix that other
+> than hard-coding the driver. This can be done for some buses, but this
+> is an MDIO bus and we already assume devices without compatibles are
+> PHYs.
 
-I merged this branch also into i2c/for-mergewindow.
+Let's be clear about this. It's "broken" in the sense that you don't like
+the way in which it works, not in the sense that it results in a system
+that doesn't work. And not having a compatible string is just as broken
+as it is for other devices with detectable device IDs, like Ethernet
+PHYs in general, PCI devices, etc.
 
-Thank you, everyone!
+The way in which that works here, specifically, is that a generic PHY driver
+is bound to the Lynx PCS devices, driver which does nothing since nobody
+calls phy_attach_direct() to it. Then, using fwnode_mdio_find_device(),
+you follow the pcsphy-handle and you get a reference to the mdio_device
+(parent class of phy_device) object that resulted from the generic PHY
+driver probing on the PCS, and you program the PCS to do what you want.
 
+The PHY core does assume that mdio_devices without compatible strings
+are phy_devices, but also makes exceptions (and warns about it) - see
+commit ae461131960b ("of: of_mdio: Add a whitelist of PHY compatibilities.").
+Maybe the reverse exception could also be made, and a warning for that
+be added as well.
 
---wT/OxVyU1qtsOtS5
-Content-Type: application/pgp-signature; name="signature.asc"
+> In the next version of this series, I will include a compatibility
+> function which can bind a driver automatically if one is missing when
+> looking up a phy. But I would really like to have an exit strategy.
 
------BEGIN PGP SIGNATURE-----
+You'll have to get agreement from higher level maintainers than me that
+the strategy "wait one year, break old device trees" is okay. Generally
+we wouldn't have answers to this kind of questions that depend on whom
+you ask. Otherwise.. we would all know whom to ask and whom not to ;)
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNynLAACgkQFA3kzBSg
-KbZjbA/8C3D3AspW3MOT09t4afYUQB0G7EeVSJ2Ixv8xNLt0H0Xbp8mSBHn8E20f
-09R95tXkKzEkU6Cn6ZmDTkcTHGd0knsyPGyy08CFXbdDsQM84+Tx+oVVzB/iqW9S
-SRyRuf9PuF5esCejY4znIccqxN5LaUWWyY5rM4XnOvp2Mcu+V6bsS4EjDPj0zYGe
-o829SfDNwiHjiA7Oqbz4sjbCTCeyYa3emwpZ8xG/LevoiVBh5SRJGaeWgm5W6MjN
-C3uYOjj4MeY2J+AUHtBMMVzaujAaTN9O4fIXuWNJfIQG0mwfLAPfa3yZPsZ4hYB9
-IINBlBM8AWwb74WPX7AEnSnDCuJTyFVtu8ChVqAKXmtVVrpjIhvlucEwNiBUA3et
-pnZZRBeZ1opGrycM9pi4x0OMjYLBJqSGEXCWZcTKVLjQZ0lBM6o6qgRKNQcrpyvx
-uW91mTy9fpqHxw00WmrOnUZCjSkDpVPOb557b0IHo93Rav5gdF16mPX56zfU4jD6
-kQJRR4ktJb5uNQ6yMCM6vyD6ymSJ0tukIs8u2pSpsN/NfrzRIXfnDt8zT0jqVrEE
-1V8zwmK5OzNXSPj0eR8ErGjm25s7adoes3Qzc7/V5WJmH/MTsB/xq/VvVRs3dd/Q
-5ptOAvxgD+e11c2dSLR2iR4rFVOroLdWcaVy3a7k/Ov2AYWuHss=
-=np0W
------END PGP SIGNATURE-----
+Sadly I haven't found anything "official" in either Documentation/devicetree/usage-model.rst
+or Documentation/process/submitting-patches.rst. Maybe I missed it?
 
---wT/OxVyU1qtsOtS5--
+I've added Arnd Bergmann for an ack, and also Marc Zyngier, not because
+of any particular connection to what's being changed here, but because
+I happen to know that he might have strong opinions on the topic :)
+
+Full context here:
+https://patchwork.kernel.org/project/netdevbpf/cover/20221103210650.2325784-1-sean.anderson@seco.com/
+
+If I'm the only one opposing this, I guess I'll look elsewhere.
