@@ -2,100 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5490C628BA6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C496E628BA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237136AbiKNVz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 16:55:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
+        id S237743AbiKNVzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 16:55:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237344AbiKNVzx (ORCPT
+        with ESMTP id S236128AbiKNVzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 16:55:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6B2F5A0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:55:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668462901;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qpc2eQF4OVRCR9vIz7961ylczQfdMl7P3OUcWUSapU0=;
-        b=HuCaI4wDVF939S4gDPijaNf1dXE8+wHY75I7jYLzALrWMmX0qOcnGzfDRhy9CVBvIymaTn
-        j/e8w198V3dxjSzYiKR6oir/R1m1yYm7ql128ypBPh+gNI0B9WLeIu5A89fc6cy6GNUmHd
-        Q4uAJDZ74tCSbAxkj3xwXJOMihWyPs0=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-97-Dz53I3UePSyrzSqKsOG5bw-1; Mon, 14 Nov 2022 16:54:59 -0500
-X-MC-Unique: Dz53I3UePSyrzSqKsOG5bw-1
-Received: by mail-qt1-f199.google.com with SMTP id w27-20020a05622a191b00b003a56c0e1cd0so8892880qtc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:54:59 -0800 (PST)
+        Mon, 14 Nov 2022 16:55:41 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D79E089;
+        Mon, 14 Nov 2022 13:55:40 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id bj12so31592422ejb.13;
+        Mon, 14 Nov 2022 13:55:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F6ROxNTXIADOvvm1oDqKgevEgxWpoOw7xcRSJwQ0+mw=;
+        b=Y8pQ6J8w5ocpEEHFcgYQqZiDcc+1KD6NeLV93RRdX3NtQFxjm9EJH/7e4lo7b1C4PW
+         9LnLtaoUYZxBqTOwyvRCIu7irVtaSh3tpFAqDBqYNgqPYYR/4KVL26H4ZrmlZcqhr6+S
+         rAt0OotrJQDNgW3qaQSxrdrl6tSyUnagSfG6mdrJ64YUi26XhH1OoABNGSU3GSncsAWC
+         D8UTa+fE4Hs5FqRIl9P4h7UHAvr5Me3KwWUR8QUsE81ejBeIjr9SHfesAxk3Af7M/G1r
+         S47n493zIVvZrs1gJ+Rp1ay41xCA9b2hpZ+eAHifefYNDzEL4U9F1QLHJuXoRVg459F1
+         0XeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:organization
-         :references:in-reply-to:date:cc:to:from:subject:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qpc2eQF4OVRCR9vIz7961ylczQfdMl7P3OUcWUSapU0=;
-        b=iESNpJuBSzVUBfDlYyX3Ztnqhw+6yCCgWjh0kvlaAsymJppEZI72p8MS/ZUbf5I6Ue
-         RJ3QBNI3Lz/PrlPwkSIFhm/86M/lYA6jaDblwTaiU1mhm75zR9AoSzuzXQ7bG8pCRVYp
-         4siFEbXug0i3yqQnlJydyv+iQHBv/Rab62dwEECHGCi9wOYceriQisXH/Ep3HMUqLgH6
-         F77grdnaXuji6kG7BwLDu1f9m+MxlGb8jIHO8E66pOU6d3dv6pke26bEJF9qpw7qDP8F
-         D0zY//UpD8IOH/EDyO5FvuznfEzmHc6dPZPiqIPAv2kTWhHzVF4oDqWqcX2lchjMlPPk
-         aX4Q==
-X-Gm-Message-State: ANoB5plfYgeZMbm9KCXfYxQ5hirysvkJ1omauF1SRr065V86ocNQFrqn
-        vdM49iif1BbdIVjmICQ70jlSqyxT84dY960pBH3eBQMDwS1MNfX8g2/gXj44F8O0eNiDIr5mSc7
-        Dnz1M4TcS68fZOGGZvZIh1Hj6
-X-Received: by 2002:a05:6214:1902:b0:4a4:474a:1394 with SMTP id er2-20020a056214190200b004a4474a1394mr14177468qvb.36.1668462898904;
-        Mon, 14 Nov 2022 13:54:58 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4JgH34ZSNeRxluqCoega8kEsCXijBbz2npC1p8GEG2x4oKXtEevNQk4JgOUn038jyPFgODag==
-X-Received: by 2002:a05:6214:1902:b0:4a4:474a:1394 with SMTP id er2-20020a056214190200b004a4474a1394mr14177451qvb.36.1668462898651;
-        Mon, 14 Nov 2022 13:54:58 -0800 (PST)
-Received: from ?IPv6:2600:4040:5c6c:9200::feb? ([2600:4040:5c6c:9200::feb])
-        by smtp.gmail.com with ESMTPSA id i19-20020a05620a249300b006fb38ff190bsm7023557qkn.34.2022.11.14.13.54.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 13:54:57 -0800 (PST)
-Message-ID: <4482e7de979cc6673162b7aac0fcbfddb5d2d906.camel@redhat.com>
-Subject: Re: [PATCH 1/2] drm/amdgpu/mst: Stop ignoring error codes and
- deadlocking
-From:   Lyude Paul <lyude@redhat.com>
-To:     "Lin, Wayne" <Wayne.Lin@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
-Cc:     "Wentland, Harry" <Harry.Wentland@amd.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Kazlauskas, Nicholas" <Nicholas.Kazlauskas@amd.com>,
-        "Pillai, Aurabindo" <Aurabindo.Pillai@amd.com>,
-        "Li, Roman" <Roman.Li@amd.com>, "Zuo, Jerry" <Jerry.Zuo@amd.com>,
-        "Wu, Hersen" <hersenxs.wu@amd.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        "Mahfooz, Hamza" <Hamza.Mahfooz@amd.com>,
-        "Hung, Alex" <Alex.Hung@amd.com>,
-        "Francis, David" <David.Francis@amd.com>,
-        Mikita Lipski <mikita.lipski@amd.com>,
-        "Liu, Wenjing" <Wenjing.Liu@amd.com>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Mon, 14 Nov 2022 16:54:55 -0500
-In-Reply-To: <CO6PR12MB5489E3850FE3C9FBDA7BAC29FC3E9@CO6PR12MB5489.namprd12.prod.outlook.com>
-References: <20221104235926.302883-1-lyude@redhat.com>
-         <20221104235926.302883-2-lyude@redhat.com>
-         <CO6PR12MB5489E3850FE3C9FBDA7BAC29FC3E9@CO6PR12MB5489.namprd12.prod.outlook.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        bh=F6ROxNTXIADOvvm1oDqKgevEgxWpoOw7xcRSJwQ0+mw=;
+        b=YjtOJuQlRN1m4YcmZl/zqDls8Y6Krq0WbqB1FKiYQgHvXnib11biDVfbQ2GZMoyZ7/
+         XlPXGij2XErDVY/Dhjwpt5J3W/6XGcoTYD6i+Ur2wtZjNw+uKsQ0v13gnMnIByuJQ+3W
+         LS9sLTJnHTooeno4dCi7jp8HGPvEHWCAMDjUePVhfy+/CZHDoqsNKB2vr+vfRt4sTQba
+         3Aj+GfobhFrBY+jCRoZ2hB20L+msxK+SIZ+w67vJ6M4bC62X3PaIBbe1ISEEp8fT1PJf
+         c/UBlr1QDgZBG85nH7EpfMWq8k5eF1aPYO/I1Srn2N3CoWIi567eH19aL68siodRmhXp
+         mQFA==
+X-Gm-Message-State: ANoB5pl1mOhfOi/bslSHMfdLiDk53b9ZHLLsqPvny+fTrEOjOF9koawP
+        0+4jTkSRtXh/yxJOAldM6MU=
+X-Google-Smtp-Source: AA0mqf6g4N78DzMRMt8k0FPC6+XJqpf4AkBqvvdvoB8Ha8UYqCfQFrpHs3k/qaLqZnexIG0KpUDuxw==
+X-Received: by 2002:a17:906:7b4f:b0:78d:f40b:42f8 with SMTP id n15-20020a1709067b4f00b0078df40b42f8mr11866540ejo.129.1668462939255;
+        Mon, 14 Nov 2022 13:55:39 -0800 (PST)
+Received: from ?IPV6:2a02:a466:68ed:1:dc32:99d6:97a8:f82? (2a02-a466-68ed-1-dc32-99d6-97a8-f82.fixed6.kpn.net. [2a02:a466:68ed:1:dc32:99d6:97a8:f82])
+        by smtp.gmail.com with ESMTPSA id r2-20020a1709061ba200b0074136cac2e7sm4629085ejg.81.2022.11.14.13.55.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 13:55:38 -0800 (PST)
+Message-ID: <b8fb2ead-6177-ea22-4d5c-a10a994eda2d@gmail.com>
+Date:   Mon, 14 Nov 2022 22:55:38 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/2] usb: ulpi: defer ulpi_register on ulpi_read_id
+ timeout
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ferry Toth <ftoth@exalondelft.nl>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Stephen Boyd <swboyd@chromium.org>
+References: <20221110211132.297512-1-ftoth@exalondelft.nl>
+ <20221110211132.297512-2-ftoth@exalondelft.nl> <Y23m5H5zRbv5fwcF@kroah.com>
+Content-Language: en-US
+From:   Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <Y23m5H5zRbv5fwcF@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,30 +84,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-11-09 at 09:48 +0000, Lin, Wayne wrote:
-> >   	}
-> > -	if (!drm_dp_mst_atomic_check(state) && !debugfs_overwrite) {
-> > +	ret = drm_dp_mst_atomic_check(state);
-> > +	if (ret == 0 && !debugfs_overwrite) {
-> >   		set_dsc_configs_from_fairness_vars(params, vars, count,
-> > k);
-> > -		return true;
-> > +		return 0;
-> > +	} else if (ret == -EDEADLK) {
-> > +		return ret;
+Op 11-11-2022 om 07:08 schreef Greg Kroah-Hartman:
+> On Thu, Nov 10, 2022 at 10:11:31PM +0100, Ferry Toth wrote:
+>> Since commit 0f010171
+>> Dual Role support on Intel Merrifield platform broke due to rearranging
+>> the call to dwc3_get_extcon().
 > 
-> I think we should return here whenever there is an error. Not just for
-> EDEADLK case. 
+> Please see the kernel documentation for how to refer to commits.  This
+> should be written as:
+> 
+> 	Since commit 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral if
+> 	extcon is present"), Dual role....
 
-Are we sure about this one? I think we may actually want to make this so it
-returns on ret != -ENOSPC, since we want the function to continue if there's
-no space in the atomic state available so it can try recomputing things with
-compression enabled. On ret == 0 it should return early without doing
-compression, and on ret == -ENOSPC it should just continue the function from
-there
+Thanks I'll fix that in v3.
 
--- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+>> It appears to be caused by ulpi_read_id() on the first test write failing
+>> with -ETIMEDOUT. Currently ulpi_read_id() expects to discover the phy via
+>> DT when the test write fails and returns 0 in that case even if DT does not
+>> provide the phy. As a result usb probe completes without phy.
+>>
+>> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
+> 
+> What commit does this fix?
+
+It's complicated, not sure how to explain this clearly:
+ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT") started to 
+hide -ETIMEDOUT by returning 0. That problem was hidden due to another
+problem causing dwc3 to be deferred. But not properly, causing an 
+infinite probe loop. This was fixed for quite some time by an out of 
+tree patch. Now 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral 
+if extcon is present") accidentally fixes the probe loop, makes the out 
+tree patch obsolete, but exposes the initial problem.
+
+In short this patch fixes ef6a7bcfb01c ("usb: ulpi: Support device 
+discovery via DT") by returning -ETIMEDOUT to its user, who should 
+handle it appropriately. In case of dwc3 probe it sets -EPROBE_DEFER and 
+bails out.
+
+I'll add the short fixes: in v3.
+
+> Should this also get a cc: stable?
+
+I will add.
+
+> thanks,
+> 
+> greg k-h
 
