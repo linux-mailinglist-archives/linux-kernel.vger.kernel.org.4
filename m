@@ -2,126 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9AD6628C4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 23:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20738628C4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 23:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237662AbiKNWqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 17:46:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41896 "EHLO
+        id S232124AbiKNWri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 17:47:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237621AbiKNWqO (ORCPT
+        with ESMTP id S230109AbiKNWre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 17:46:14 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2085.outbound.protection.outlook.com [40.107.237.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE24218B37;
-        Mon, 14 Nov 2022 14:46:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LvAQiqgfm+T8oB7p+z6UaMPtWTJc5+ERvuWJux1LVQbS9fk1OOakDiIwNDfbFUYiFksaL7mRGKGmZNMKVYQ2xRaWzyYULyW0bRmaThc2Ur0VmzcZMAOPU9+FkQ2W+vMu5naxuIBb8SNDJf54f1sMvL2PcIsL8ujad/mODO/JmbvX8Dptz5q1L72nJXJPbyuF7pgoD6RcwxrN55f02I0G4o+e6CBidKeK7zJeMzbClH7P0Jjqwr6FtpNuiFq8rafrKhfVcMYxTrZMTFf9dENI6kaSOqbfiuiTqTu0y4Y8Ed8fhKLUVMit5qXxQndlN/fWZYBGuE0hrlJsVf0DVA5bCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Uso129n2WusZA1Gpykn7NuukkfJ77/ftzXkXlO0rLvQ=;
- b=eCwZo8Uk+UwYY3JP5zeAKTSyj/V0U1+XB6mvBrVGN908K/BLN80Z9ni0IB0GWTZgCGcywJCkxyX8d/jjiFDei0gO15UJvKql3rjLy2Tjab5ckC8KdfD6ZQl0y/7rO/laALqg89YgArgvr5ArhWihyQ1A6TJsMbkbdU7drXAmavli6h3dbLDbqvxuD38/QfUfee9RfOwmDGe2139s8sGOHks80VFnxrC94NivX1T5ATpNQj0tCBW5H2kkOa5PSRZevYeQS8TUtWK80/YOvig5S2B9ZlJmRx3hmcpxi1cOn/aijINqRNxSyabhym1ieG6S1nCQ532GryKwTgZRpYtu2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Uso129n2WusZA1Gpykn7NuukkfJ77/ftzXkXlO0rLvQ=;
- b=mG7DXtPEb6NlgKIXV1ZZjeYkCq7jur6mQ8Ga3wf0EuRIiHZCaHxhXcJm2nPad6f1MoXAB7yXScVwIxKf1AHGvkPXeX6AEIHb63HH9GywK6Gb85MKf+GOHyPkqpIz4M8GepHsgl7Q30/OJgibVswl6xNJ/EYWxWR4JDiGOJfrm3M=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by CH2PR12MB5003.namprd12.prod.outlook.com (2603:10b6:610:68::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.16; Mon, 14 Nov
- 2022 22:46:07 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::44a:a337:ac31:d657]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::44a:a337:ac31:d657%4]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
- 22:46:06 +0000
-Message-ID: <7cdf6256-d0be-0037-4ec1-405ad10f90fe@amd.com>
-Date:   Mon, 14 Nov 2022 16:46:03 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v4 3/9] cpufreq: amd-pstate: change amd-pstate driver to
- be built-in type
-Content-Language: en-US
-To:     Perry Yuan <Perry.Yuan@amd.com>, rafael.j.wysocki@intel.com,
-        ray.huang@amd.com, viresh.kumar@linaro.org
-Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
-        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
-        Xiaojian.Du@amd.com, Li.Meng@amd.com, wyes.karny@amd.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221110175847.3098728-1-Perry.Yuan@amd.com>
- <20221110175847.3098728-4-Perry.Yuan@amd.com>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <20221110175847.3098728-4-Perry.Yuan@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0310.namprd13.prod.outlook.com
- (2603:10b6:208:2c1::15) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Mon, 14 Nov 2022 17:47:34 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A7BB01;
+        Mon, 14 Nov 2022 14:47:33 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id 21so19495099edv.3;
+        Mon, 14 Nov 2022 14:47:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=YRpXjigSA6S9AC3Lngm4CS5iIc21JFxrd9jxpbKiyFo=;
+        b=qQlu/50q2eaLTmF5Xae0/byivtFLNJU6Brcyr6ABbMSgmxtRvhvUSl43qJXDQJIC2y
+         pZcw5AIooIu+KpFdIzdiVFOPUZy/SGttwPUSu7Y+UV0RE7huOq3KoPue2Xh/iI0eX5Xl
+         bmTpLlKZZg4keJL09mYxlH2IZXYBLy3GQpOhfcDoruLDrmKn7szuv/tNqMCQoPNxutjU
+         3YhbzFmbO683Ag4c1KYmG0G9VCzEeJiAk2xHKr5brPlf4MTqK1L6/0h0paVhKs9ifFxE
+         2AJvU18ZWUsPW1oGvwAIMHNARxJ8Z1XhFebwBuxZgdgSDLDJ1wdXP7tVYjoJbqWKC9lz
+         CUzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YRpXjigSA6S9AC3Lngm4CS5iIc21JFxrd9jxpbKiyFo=;
+        b=Yq6wox3FKXHbNmI/KOsTXO6sURbVFc3yzauro397lrm17Mu9wYezBpzaEWxbkkbdo6
+         kylvCNGFREV+7ZalYTUInIEW4MKElfr/zIw/VrWpjuXgAVdIvMOFvMGVrBh2A6SC7SeO
+         6eM1uNh4EeLpMH9N7MYSfeuuyul0HQ7ddsDcP4MHAi0fxEz0c/goC5yf0HdY+X7X5XLF
+         tfaRmZxiRPQYwuX7nuxjOMydq60q5KUCoZJxnIY2b2oA78lFP5+c0ZEC5bkl0z2Ygu1b
+         86cpUikjqvmXb0wJKJIgVqgYRA2O7fRmsfcIKmK1lJIlBcTAYNpveFfg25LwuDIEhii8
+         bSEg==
+X-Gm-Message-State: ANoB5pl17VMRli2JOEr0I4+GO4JVvKbWL/hJ0mQ7aNPY1T6qg4OWlzzz
+        u1eHp+mMB/BeYLrYF+FJq6w=
+X-Google-Smtp-Source: AA0mqf6mJV9B6VlF/2SKTHDgmgh4C7Nb0abdAo4vgieewXfCZ6S7IAYj9h+FpIZf5EMog7zrKS8qkQ==
+X-Received: by 2002:a05:6402:883:b0:467:b8c9:a7fa with SMTP id e3-20020a056402088300b00467b8c9a7famr6899087edy.25.1668466052017;
+        Mon, 14 Nov 2022 14:47:32 -0800 (PST)
+Received: from krava ([83.240.62.198])
+        by smtp.gmail.com with ESMTPSA id et19-20020a170907295300b007ad2da5668csm4691858ejc.112.2022.11.14.14.47.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 14:47:31 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 14 Nov 2022 23:47:28 +0100
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Hao Sun <sunhao.th@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Stanislav Fomichev <sdf@google.com>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>
+Subject: Re: WARNING in bpf_bprintf_prepare
+Message-ID: <Y3LFgI6mmC0SKiFw@krava>
+References: <CACkBjsbP-iw-gpnYN=Ormcu2zXAeOgjeptjGAFXNNJRRVhRAag@mail.gmail.com>
+ <Y2J+n7SqmtfyA7ZM@krava>
+ <Y2j6ivTwFmA0FtvY@krava>
+ <CAADnVQKXcdVa-gDj2_QTrBuVea+KMuFUdabR--HCf7x6Vo6uXg@mail.gmail.com>
+ <Y2uv/GjnSdr/ujOj@krava>
+ <CAADnVQJp0ZrodRu8ZtvvtXk6KAbjxmwqD-nXgFAxNpNxN6JM=g@mail.gmail.com>
+ <Y2w9bNhVlAs/PcNV@krava>
+ <Y25gFdliV7XqdUnN@krava>
+ <CACkBjsaCsTovQHFfkqJKto6S4Z8d02ud1D7MPESrHa1cVNNTrw@mail.gmail.com>
+ <Y3H2qayW0hKlzBkK@krava>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CH2PR12MB5003:EE_
-X-MS-Office365-Filtering-Correlation-Id: d651e76b-cc39-458a-593d-08dac6920453
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8AIILpJ8iHIDJ3fD1fINeJmVrJpHizi5NRsKB4kw0Qd6daV6JHkqKuI4rgU4thRiPj6yj5Fq3HvhlscDuLZMbUZRgOsCBXx94TuLojCGLssYADn7+0c6lPTga2LgMvLwErjM9DazhokBA4JRjvCURMd/wCCzC7muLb/Y8mwz+jKbDMRUeuVd+HD7a+HvOYfKI5ef+BEBA+dM7DKC8kHDgNQ6/5x0e0fCf4lPcEc2ZqtPw0wAF6+ppSQcNiiSYDKBpU132b1A2OoSeloS4fkkTsr8PQh5CkW8jFclR9hR9eGbKaLns+LMMjC8S/x7c8lvIMMtRuv8jAz5Y42FSGCjwoieYMy0fTa79FPSlupJXJK71ZGXq6yG1Cpjiea/bGX9Il9FlmdAslPFixFSaqbpbIgFXK4GsrDB0mhSKzuJlDtTVstsDq5HI+B0Uq6CpHXbHi47Qv0LfjxBtI8s1B/nMcrmbnADsCZTf94JOJ7aEst4EcPhTPAgPUZ7ddIooInlakDh5jtKF4SdqP6KzsGJEMQ6fMt3Z0jSMxj2+4HDU6fXSAbVeykLwBWEzEGrFCklrrlq5B2kl9MVcLO4NJOtCu9PGG5HZVxbMqW27W73Pq6OxiA6S4Crr/dSiMMK4/EPRPfU7HKnvAmIgWz/10wzdjyWNK7IylK4PCh5Aro3TaAKffAD37prgIengn1X6PliSujUqidUfsUwBCRnICCIlhpMISMY4Uoa48XVmwzClJOHyEX5bb2OD3JD54kQkc2XcM8WRQ1rJlzuLGEIoccOmcManCl8XZrp6LrGpn7AvAY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(396003)(136003)(346002)(39860400002)(451199015)(38100700002)(31696002)(86362001)(6506007)(26005)(66476007)(6512007)(6666004)(2616005)(478600001)(186003)(4326008)(316002)(66556008)(8676002)(6486002)(66946007)(2906002)(5660300002)(41300700001)(83380400001)(53546011)(31686004)(36756003)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T1RJMnRkUTZGaFB3TER6UDVzMDVIYjRZdmEyaE92dnJka3ZOV3hUVVlWa3VW?=
- =?utf-8?B?eDdqUmpXT04vODdyWE5sUnV3d2Z6RXJQMC9Uamt3NDJFdTROaGdaVWFuL0VV?=
- =?utf-8?B?QXdGWFFTNUNCaTFBcHVjMFBnVWE3aUZlWFhLK2F2Y3dEMzhObnNId1Fpbk1v?=
- =?utf-8?B?OEUvRjc5eHRzNjhNQWhpTmNpT01oMXJpL1hnN2NVL2FhV2pPeEd1NE9qb2w3?=
- =?utf-8?B?aFZsblBoWkIzN1RQVm1OdDRwemlmZCs0S2FaWEVpNGdZNndMWG52cnBxZmht?=
- =?utf-8?B?RU1LZzlHVEtmbUNKQVVOVEJsNGhqNkJsMHdSWFZmYTVjVkcxWXJRMTRUY0xC?=
- =?utf-8?B?KzNuU1pXbVRLK3YxMisxWXNJVUVvbkpDRWgvTFhKTHU3aFdxTUhGNkUrTE1s?=
- =?utf-8?B?VCsrSGNQNEptczNXRDJLNDBNT3k0TU01ZUFpMXFTUGdVTDF5RVJpRnV1ZXB1?=
- =?utf-8?B?dUdpTUtZMnZFZmJRUS94Rk92eENoaWtNRitqWHppSktPQVp3VU5GbFBlSDlr?=
- =?utf-8?B?VTg5QXByRzVVOGhzamVhZW9GNHk1YUt1Z2prRGNRbjlvbU4vTnVBS0ZCZFNO?=
- =?utf-8?B?R3VuVUt3eEJpNnQ5NWkxYzV4VVluUUdQNDRKdVpENy82djBoSlVJYmlGRnBJ?=
- =?utf-8?B?Y0RmbU1RaXdzcFVCaVB0eVN4djhKdXR4YXhLV05IbjU1MFNSRHZsNzVaSW5w?=
- =?utf-8?B?NzFKc2VKK1cvODc4N25KR3lIL3BCYzM4TlVRTkVMVThsbHBFdVA3Y3lac0Jo?=
- =?utf-8?B?TnVaTXU2NEdoQVRpb3pVR2xURW5kbVBXVjBFdGFHTXpJWFlIWGxrOG5XZDVJ?=
- =?utf-8?B?SzQzdEFKMUZXWWdDeHlTUlhuODFDUndvVUt4ZGVldndwZHJNVDF6ay9uck5G?=
- =?utf-8?B?a0ppUUFTc1hDWWNUU2hYZXhBbkk1cjVVS0dGaDkwZG9ZK0l1dnI2WkJLMFJE?=
- =?utf-8?B?Sk9MTC9kcUNoZFg2T1Jaby9Ia1BVS0k0L3RFalY0SGo2WjF3NXZjUzMvRnJE?=
- =?utf-8?B?ZFFkSDZ4M1dsSXdieHZMNjJldzdER0RkUEswQWtZci9Nc3BDdnpXVXFUamRT?=
- =?utf-8?B?TDdrWVNBZ21pUkEwQU9Bci9IU0gxUWFNNG5JTGNZbDc0MGkweEJ3ek5kWVB1?=
- =?utf-8?B?dWp2OXpDT013cWYzcmhFaFlXVkF4WFBsSTZKbThKRTRGQlNvbEZ0K2RCMGRM?=
- =?utf-8?B?MjFzVnlYUTlPSmY1K1Jta0FrVW1WT2xFYktOblQzOVEyMUxGV2F5b1pGQ091?=
- =?utf-8?B?SUk0UWx5amhCR0xvVUhuOGJoTVd5Ylg3SiswZERHQUF4RzJlelFBM1VIblp0?=
- =?utf-8?B?dEllcG5Hc1dGRDV5RDF0Q2xkUFRNWjFERE5IRVZLYTgrKzhXU2FNNE9nTU4v?=
- =?utf-8?B?NmI4Z1BwUkZYUnFJTTVnZTY2ZWg5RTZqNS9WKzZKZlJDM1IzYXQ3OHcwWEJ1?=
- =?utf-8?B?RkUxVVZaTnFKaHV3MG42NEtTeHo0LzgwaU5iSHRRcDVrUlZsNk13TzJRcnFT?=
- =?utf-8?B?dW5Ub3oySVZwcy95bFdGOFlpYkFQWmYybGc1VjRLRzJUQTQ2bmlVdWFxeWcx?=
- =?utf-8?B?UVA4RVNPRDZUT0ZhYmFYTy9CTytCMklmSlNYRXV4bFpTNXVyS3VJa09XNVZU?=
- =?utf-8?B?bndaQnZ1UDVYZWNQUEVicHhmNE0zZ2tQdTZCSTk4REVPU1pnMVVuZitzWUVR?=
- =?utf-8?B?YW5VSzFkc1BxNXIxN1Nud1FkeVg1a0tuRW5iWk4vTW9ESC9xdENzVG9PS1BV?=
- =?utf-8?B?Q2hkNnpCR3pEN0lQTEsvVHkwWW0zcVNMMDhqUjlWczRBc0h4bjkxR21GeHFz?=
- =?utf-8?B?VC84TVZrMDZXUDRBSlRvWVRuWktBUVlUYXBWUVlxWUtoaHYyeGR3amNyQ1lI?=
- =?utf-8?B?UVZ3NGhOTHdncGFTalN4Y0pnN3B3QlcxTDB0SjljcmdsWndzekN3TStnVExk?=
- =?utf-8?B?OVUxVUxYWmptTTZWblFwY3JhcEIvMDVFZzAwNFk4RmFKWjM5MDdjcEhKTjRX?=
- =?utf-8?B?d2doYkZxSlJ1bGtxSHZjbWUvNDlWaWdqYkVKbDlKaWxHWXdMTm1rSnJqY2F6?=
- =?utf-8?B?Q0NvOWpaTWJJQjFnZStNZG1DbksxV0k1akJXT3p6dWFQTlFHMVZCcnppNTNB?=
- =?utf-8?Q?bgeOcFAXy743XtbxgCHatGL54?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d651e76b-cc39-458a-593d-08dac6920453
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 22:46:06.7380
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gKXg3bciPSDAw3o+WP/49uSAL86xWDNtmq6Tu+JVI7D7Nm9sFW9PI60Epka5xH118UbYncYg/k5btVq8gZswtA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5003
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y3H2qayW0hKlzBkK@krava>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -129,88 +93,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/10/2022 11:58, Perry Yuan wrote:
-> Change the `amd-pstate` driver as the built-in type which can help to
-> load the driver before the acpi_cpufreq driver as the default pstate
-> driver for the AMD processors.
+On Mon, Nov 14, 2022 at 09:04:57AM +0100, Jiri Olsa wrote:
+> On Sat, Nov 12, 2022 at 12:02:50AM +0800, Hao Sun wrote:
+> > Jiri Olsa <olsajiri@gmail.com> 于2022年11月11日周五 22:45写道：
+> > >
+> > > On Thu, Nov 10, 2022 at 12:53:16AM +0100, Jiri Olsa wrote:
+> > >
+> > > SNIP
+> > >
+> > > > > > > > ---
+> > > > > > > > diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
+> > > > > > > > index 6a13220d2d27..5a354ae096e5 100644
+> > > > > > > > --- a/include/trace/bpf_probe.h
+> > > > > > > > +++ b/include/trace/bpf_probe.h
+> > > > > > > > @@ -78,11 +78,15 @@
+> > > > > > > >  #define CAST_TO_U64(...) CONCATENATE(__CAST, COUNT_ARGS(__VA_ARGS__))(__VA_ARGS__)
+> > > > > > > >
+> > > > > > > >  #define __BPF_DECLARE_TRACE(call, proto, args)                         \
+> > > > > > > > +static DEFINE_PER_CPU(int, __bpf_trace_tp_active_##call);              \
+> > > > > > > >  static notrace void                                                    \
+> > > > > > > >  __bpf_trace_##call(void *__data, proto)                                        \
+> > > > > > > >  {                                                                      \
+> > > > > > > >         struct bpf_prog *prog = __data;                                 \
+> > > > > > > > -       CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(prog, CAST_TO_U64(args));  \
+> > > > > > > > +                                                                       \
+> > > > > > > > +       if (likely(this_cpu_inc_return(__bpf_trace_tp_active_##call) == 1))             \
+> > > > > > > > +               CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(prog, CAST_TO_U64(args));  \
+> > > > > > > > +       this_cpu_dec(__bpf_trace_tp_active_##call);                                     \
+> > > > > > > >  }
+> > > > > > >
+> > > > > > > This approach will hurt real use cases where
+> > > > > > > multiple and different raw_tp progs run on the same cpu.
+> > > > > >
+> > > > > > would the 2 levels of nesting help in here?
+> > > > > >
+> > > > > > I can imagine the change above would break use case where we want to
+> > > > > > trigger tracepoints in irq context that interrupted task that's already
+> > > > > > in the same tracepoint
+> > > > > >
+> > > > > > with 2 levels of nesting we would trigger that tracepoint from irq and
+> > > > > > would still be safe with bpf_bprintf_prepare buffer
+> > > > >
+> > > > > How would these 2 levels work?
+> > > >
+> > > > just using the active counter like below, but I haven't tested it yet
+> > > >
+> > > > jirka
+> > >
+> > > seems to be working
+> > > Hao Sun, could you please test this patch?
+> > >
+> > 
+> > Hi Jirka,
+> > 
+> > I've tested the proposed patch, the warning from bpf_bprintf_prepare will not
+> > be triggered with the patch, but the reproducer can still trigger the following
+> > warning. My test was conducted on:
+> > 
+> > commit:  f67dd6ce0723 Merge tag 'slab-for-6.1-rc4-fixes'
+> > git tree:   upstream
+> > kernel config: https://pastebin.com/raw/sE5QK5HL
+> > C reproducer: https://pastebin.com/raw/X96ASi27
+> > console log *before* the patch: https://pastebin.com/raw/eSCUNFrd
+> > console log *after* the patch: https://pastebin.com/raw/tzcmdWZt
 > 
-> for the processors do not have the dedicated MSR functions, add
-> `amd-pstate=legacy_cppc` to grub which enable shared memory interface
-> to communicate with cppc_acpi module to control pstate hints.
-
-Did you sync with Wyes already as I had suggested?  Was this the outcome?
-
-I was a bit surprised to see this still as legacy_cppc when reviewing v4.
-
+> thanks for testing.. I can't reproduce this for some reason
 > 
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-> ---
->   drivers/cpufreq/Kconfig.x86  |  2 +-
->   drivers/cpufreq/amd-pstate.c | 25 +++++++++++++++----------
->   2 files changed, 16 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
-> index 310779b07daf..00476e94db90 100644
-> --- a/drivers/cpufreq/Kconfig.x86
-> +++ b/drivers/cpufreq/Kconfig.x86
-> @@ -35,7 +35,7 @@ config X86_PCC_CPUFREQ
->   	  If in doubt, say N.
->   
->   config X86_AMD_PSTATE
-> -	tristate "AMD Processor P-State driver"
-> +	bool "AMD Processor P-State driver"
->   	depends on X86 && ACPI
->   	select ACPI_PROCESSOR
->   	select ACPI_CPPC_LIB if X86_64
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index ace7d50cf2ac..85a0b3fb56c2 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -59,10 +59,7 @@
->    * we disable it by default to go acpi-cpufreq on these processors and add a
->    * module parameter to be able to enable it manually for debugging.
->    */
-> -static bool shared_mem = false;
-> -module_param(shared_mem, bool, 0444);
-> -MODULE_PARM_DESC(shared_mem,
-> -		 "enable amd-pstate on processors with shared memory solution (false = disabled (default), true = enabled)");
-> +static bool shared_mem __read_mostly;
->   
->   static struct cpufreq_driver amd_pstate_driver;
->   
-> @@ -653,16 +650,24 @@ static int __init amd_pstate_init(void)
->   
->   	return ret;
->   }
-> +device_initcall(amd_pstate_init);
->   
-> -static void __exit amd_pstate_exit(void)
-> +static int __init amd_pstate_param(char *str)
->   {
-> -	cpufreq_unregister_driver(&amd_pstate_driver);
-> +	if (!str)
-> +		return -EINVAL;
->   
-> -	amd_pstate_enable(false);
-> -}
-> +	/*
-> +	 * support shared memory type CPPC which has no MSR function.
-> +	 * enable amd-pstate on processors with shared memory solution
-> +	 * (amd-pstate=legacy_cppc enabled), it is disabled by default.
-> +	 */
-> +	if (!strcmp(str, "legacy_cppc"))
-> +		shared_mem = true;
->   
-> -module_init(amd_pstate_init);
-> -module_exit(amd_pstate_exit);
-> +	return 0;
-> +}
-> +early_param("amd-pstate", amd_pstate_param);
+> I'll check some more and perhaps go with denying bpf attachment
+> for this tracepoint as Alexei suggeste
 
-Documentation/kernel-parameters.txt needs to be updated for this early 
-parameter support.
+the change below won't allow to attach bpf program with any printk
+helper in contention_begin and bpf_trace_printk tracepoints
 
->   
->   MODULE_AUTHOR("Huang Rui <ray.huang@amd.com>");
->   MODULE_DESCRIPTION("AMD Processor P-state Frequency Driver");
+I still need to test it on the machine that reproduced the issue
+for me.. meanwhile any feedback is appreciated
 
+thanks,
+jirka
+
+---
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 798aec816970..d88e0741b381 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1257,7 +1257,8 @@ struct bpf_prog {
+ 				enforce_expected_attach_type:1, /* Enforce expected_attach_type checking at attach time */
+ 				call_get_stack:1, /* Do we call bpf_get_stack() or bpf_get_stackid() */
+ 				call_get_func_ip:1, /* Do we call get_func_ip() */
+-				tstamp_type_access:1; /* Accessed __sk_buff->tstamp_type */
++				tstamp_type_access:1, /* Accessed __sk_buff->tstamp_type */
++				call_printk:1; /* Do we call trace_printk/trace_vprintk  */
+ 	enum bpf_prog_type	type;		/* Type of BPF program */
+ 	enum bpf_attach_type	expected_attach_type; /* For some prog types */
+ 	u32			len;		/* Number of filter blocks */
+diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+index 20749bd9db71..fd2725624fed 100644
+--- a/include/linux/trace_events.h
++++ b/include/linux/trace_events.h
+@@ -742,7 +742,7 @@ void perf_event_detach_bpf_prog(struct perf_event *event);
+ int perf_event_query_prog_array(struct perf_event *event, void __user *info);
+ int bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_prog *prog);
+ int bpf_probe_unregister(struct bpf_raw_event_map *btp, struct bpf_prog *prog);
+-struct bpf_raw_event_map *bpf_get_raw_tracepoint(const char *name);
++struct bpf_raw_event_map *bpf_get_raw_tracepoint(const char *name, struct bpf_prog *prog);
+ void bpf_put_raw_tracepoint(struct bpf_raw_event_map *btp);
+ int bpf_get_perf_event_info(const struct perf_event *event, u32 *prog_id,
+ 			    u32 *fd_type, const char **buf,
+@@ -775,7 +775,8 @@ static inline int bpf_probe_unregister(struct bpf_raw_event_map *btp, struct bpf
+ {
+ 	return -EOPNOTSUPP;
+ }
+-static inline struct bpf_raw_event_map *bpf_get_raw_tracepoint(const char *name)
++static inline struct bpf_raw_event_map *bpf_get_raw_tracepoint(const char *name,
++							       struct bpf_prog *prog)
+ {
+ 	return NULL;
+ }
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 85532d301124..d6081e8336c6 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3281,7 +3281,7 @@ static int bpf_raw_tp_link_attach(struct bpf_prog *prog,
+ 		return -EINVAL;
+ 	}
+ 
+-	btp = bpf_get_raw_tracepoint(tp_name);
++	btp = bpf_get_raw_tracepoint(tp_name, prog);
+ 	if (!btp)
+ 		return -ENOENT;
+ 
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 07c0259dfc1a..9862345d9249 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7572,6 +7572,10 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		err = __check_func_call(env, insn, insn_idx_p, meta.subprogno,
+ 					set_user_ringbuf_callback_state);
+ 		break;
++	case BPF_FUNC_trace_printk:
++	case BPF_FUNC_trace_vprintk:
++		env->prog->call_printk = 1;
++		break;
+ 	}
+ 
+ 	if (err)
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index f2d8d070d024..9a4652a05690 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -2229,10 +2229,32 @@ int perf_event_query_prog_array(struct perf_event *event, void __user *info)
+ extern struct bpf_raw_event_map __start__bpf_raw_tp[];
+ extern struct bpf_raw_event_map __stop__bpf_raw_tp[];
+ 
+-struct bpf_raw_event_map *bpf_get_raw_tracepoint(const char *name)
++static int check_printk_denylist(const char *name, struct bpf_prog *prog)
++{
++	static const char *denylist[] = {
++		"contention_begin",
++		"bpf_trace_printk",
++	};
++	int i;
++
++	if (!prog->call_printk)
++		return 0;
++
++	for (i = 0; i < ARRAY_SIZE(denylist); i++) {
++		if (!strcmp(denylist[i], name))
++			return 1;
++	}
++	return 0;
++}
++
++struct bpf_raw_event_map *bpf_get_raw_tracepoint(const char *name,
++						 struct bpf_prog *prog)
+ {
+ 	struct bpf_raw_event_map *btp = __start__bpf_raw_tp;
+ 
++	if (check_printk_denylist(name, prog))
++		return NULL;
++
+ 	for (; btp < __stop__bpf_raw_tp; btp++) {
+ 		if (!strcmp(btp->tp->name, name))
+ 			return btp;
