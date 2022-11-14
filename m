@@ -2,106 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A984628221
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 024D3628229
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236575AbiKNONP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:13:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
+        id S236936AbiKNOQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:16:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiKNONN (ORCPT
+        with ESMTP id S230030AbiKNOQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:13:13 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDCF24F19
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:13:12 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id s8so2345833lfc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:13:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jUVeOBnyNFqKWpHwwbHrMkJUKp2z+BJ7NRt5LPL2W8s=;
-        b=PnNB2vRQgdQoXeozyrUyiyiR2rVAFNOhg0UmPiHR76OSu3Ue5RkktMixU8FFLt+66o
-         4uc1gnXj3q/CYl5eOZaPWUx0z3YzbZIX3vAVJgjLG7IJeRk3toQFo1C6SkGX8jME8rVn
-         YkCoUQNwFQT2Muaz5IDoBEeWqZl/trB0uJdNnAWt2bsJbKROxy99OfHeremDThll+cJX
-         Br3jeFjwW6gpwXcqSy4zQdh+ad3zuGqoO9u0L1IcTwR1KoLljony38b8kMNHaPZz9M8L
-         yOWxrBHPUF26GHgOLYPaWGCB4isVKofSLM4SkUVvggHiOuXMa3FBYbcjTYGcw8l6y6vK
-         JIpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jUVeOBnyNFqKWpHwwbHrMkJUKp2z+BJ7NRt5LPL2W8s=;
-        b=JOYz239Kb54jBsY8jjynUMNcXTfkZbaYxniaJ1j3D8yBRZ+azHHphH50Ta8O4g+HIl
-         jqEpauPAuNvpszrTsCwxupCiZcEhZPplFh07f2NIkqGoqH3+23ydCOgZehGHrboUyjrU
-         UUpSnqPA9nxnWDMA7iuS/2ExybB+P2D+GleluIs1oR5KqEsFulxiGrURTJH42hvNmbRf
-         xc7biuSMngcjGRtFyvsyZVQSa+/01N6QbQNucZVpg82vroJ0JcXFhfQIAvEl2N984C85
-         Sgv6NCB6sjus1e/Y0S88jz/V6XpvXIbikVixnIyMoRzhodGKmaxuZjBSxqXm1cV9H+D5
-         vQLA==
-X-Gm-Message-State: ANoB5pl3a33LOpUjdJn+G+C9rFpSe9uWpV63aI5f/x5tLdy8vWjoVkuE
-        DNwZt0Z1OhaGv3LmyUcYDdc=
-X-Google-Smtp-Source: AA0mqf5agIjQnp+wdt/U4ARfYbRQAR3FTljKwRVah8RQcD4CQdNSEplxhDI+FPWf8V8U9W0Um6bdSQ==
-X-Received: by 2002:ac2:4d2c:0:b0:4b1:2447:6971 with SMTP id h12-20020ac24d2c000000b004b124476971mr4039755lfk.83.1668435190240;
-        Mon, 14 Nov 2022 06:13:10 -0800 (PST)
-Received: from ?IPV6:2a02:6b8:0:107:3e85:844d:5b1d:60a? ([2a02:6b8:0:107:3e85:844d:5b1d:60a])
-        by smtp.gmail.com with ESMTPSA id k2-20020ac257c2000000b004b4930d53b5sm1271041lfo.134.2022.11.14.06.13.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 06:13:09 -0800 (PST)
-Message-ID: <a501e1e7-f6ec-6b8b-e7de-cf79d7646de6@gmail.com>
-Date:   Mon, 14 Nov 2022 17:13:10 +0300
+        Mon, 14 Nov 2022 09:16:50 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EED24F19;
+        Mon, 14 Nov 2022 06:16:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668435409; x=1699971409;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=VWZRwieL0MnAqoIr5PqiCwKsEkjOEOCAdig3LNLeXLs=;
+  b=JInJL6fHxfszv6AIfgcM+yVBL9NrJyJD+ELjabrUwctUT9YV94hK4jjG
+   rdmT+DShEDCxc+h9i8OZ6mLtCaN/FzKYKuOX/lvnr2qjKA1Qm2JId0LSe
+   TV6uNGY4fGQF41iuoln8BR3gICXAXKfYJAG8O0I7ZVTzfPpDHUqrYVPSI
+   Pcxks7ISMZD96XBLVSICsHfzzKwQZsdregvV1xRlokcY/cJ4JU2E4VAqV
+   V4GFdX9VpJrNNxPuZiDKkU8uxhsthrdahxNB4+qN3LcDpqMvVKRaBk+SR
+   6Snen+Vx1EWoq0musqDu/W7iZQybhlTmeZAg9cj2yC0mMTbb9My9GKrRl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="299494588"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="299494588"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 06:16:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="671573894"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="671573894"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga001.jf.intel.com with ESMTP; 14 Nov 2022 06:16:46 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2AEEGiQ8012563;
+        Mon, 14 Nov 2022 14:16:44 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net-next 1/5] net: lan966x: Add XDP_PACKET_HEADROOM
+Date:   Mon, 14 Nov 2022 15:16:33 +0100
+Message-Id: <20221114141633.699268-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221113111559.1028030-2-horatiu.vultur@microchip.com>
+References: <20221113111559.1028030-1-horatiu.vultur@microchip.com> <20221113111559.1028030-2-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 4/5] x86/kasan: Add helpers to align shadow addresses
- up and down
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com,
-        syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com
-References: <20221110203504.1985010-1-seanjc@google.com>
- <20221110203504.1985010-5-seanjc@google.com>
-From:   Andrey Ryabinin <ryabinin.a.a@gmail.com>
-In-Reply-To: <20221110203504.1985010-5-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
+Date: Sun, 13 Nov 2022 12:15:55 +0100
 
-
-On 11/10/22 23:35, Sean Christopherson wrote:
-> Add helpers to dedup code for aligning shadow address up/down to page
-> boundaries when translating an address to its shadow.
+> Update the page_pool params to allocate XDP_PACKET_HEADROOM space as
+> headroom for all received frames.
+> This is needed for when the XDP_TX and XDP_REDIRECT are implemented.
 > 
-> No functional change intended.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 > ---
->  arch/x86/mm/kasan_init_64.c | 40 ++++++++++++++++++++-----------------
->  1 file changed, 22 insertions(+), 18 deletions(-)
-> 
 
+[...]
 
-Reviewed-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> @@ -466,7 +472,8 @@ static struct sk_buff *lan966x_fdma_rx_get_frame(struct lan966x_rx *rx,
+>  
+>  	skb_mark_for_recycle(skb);
+>  
+> -	skb_put(skb, FDMA_DCB_STATUS_BLOCKL(db->status));
+> +	skb_put(skb, FDMA_DCB_STATUS_BLOCKL(db->status) + XDP_PACKET_HEADROOM);
+> +	skb_pull(skb, XDP_PACKET_HEADROOM);
+
+These two must be:
+
++	skb_reserve(skb, XDP_PACKET_HEADROOM);
+ 	skb_put(skb, FDMA_DCB_STATUS_BLOCKL(db->status));
+
+i.e. you only need to add reserve, and that's it. It's not only
+faster, but also moves ::tail, which is essential.
+
+>  
+>  	lan966x_ifh_get_timestamp(skb->data, &timestamp);
+>  
+
+[...]
+
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c
+> @@ -44,8 +44,9 @@ int lan966x_xdp_run(struct lan966x_port *port, struct page *page, u32 data_len)
+>  
+>  	xdp_init_buff(&xdp, PAGE_SIZE << lan966x->rx.page_order,
+>  		      &port->xdp_rxq);
+> -	xdp_prepare_buff(&xdp, page_address(page), IFH_LEN_BYTES,
+> -			 data_len - IFH_LEN_BYTES, false);
+> +	xdp_prepare_buff(&xdp, page_address(page),
+> +			 IFH_LEN_BYTES + XDP_PACKET_HEADROOM,
+> +			 data_len - IFH_LEN_BYTES - XDP_PACKET_HEADROOM, false);
+
+Are you sure you need to substract %XDP_PACKET_HEADROOM from
+@data_len? I think @data_len is the frame length, so headroom is not
+included?
+
+>  	act = bpf_prog_run_xdp(xdp_prog, &xdp);
+>  	switch (act) {
+>  	case XDP_PASS:
+> -- 
+> 2.38.0
+
+Thanks,
+Olek
