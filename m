@@ -2,69 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA4D627BE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A6D627BE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236463AbiKNLPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
+        id S236056AbiKNLPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:15:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236706AbiKNLOl (ORCPT
+        with ESMTP id S236758AbiKNLO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:14:41 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3818627CC9;
-        Mon, 14 Nov 2022 03:10:08 -0800 (PST)
+        Mon, 14 Nov 2022 06:14:58 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B9E21804;
+        Mon, 14 Nov 2022 03:10:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668424208; x=1699960208;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nGEqhrhCRjraU9msMAtVay4bIhxuQjiyK7exgf1cV2E=;
-  b=G7vgQKDb3RPaQbI2LPzodooX62fsRpRtOgsJMlPHs4jCxUBVqMTC6xRK
-   RlvnvREnKWNtrNDHnzW+g8eM245DfXFx0jeEdogC5krax4e05ja8TBK0R
-   K8m7Dw+1BXA4FL2/ijgrh5O6J2nuFDMjXatp1aluq9ofoQvtkKapHYojF
-   PvR8QybFVok863EL0DLz06tp590wocHfk4eqpMTWFCisk0cBrPaOlj4Ym
-   HsWRPXOB296JAgLfR1thVQHOLCgHwDbtjbYNM0VyTWfgi+Yef3ElRfU3y
-   hkTA16QXE0JvlWRDlKO0G/zVMhbvEPStgO6DmSqFj+YeuAGhUej9w8dh7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="310650886"
+  t=1668424244; x=1699960244;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2Ej8ZqKGhtg6fCWt9IDlcrUqusBuzvWifpdUzrFtTFE=;
+  b=nJeYsI4shML2w/Ju1v1Y0sbrICNz2wW7+Dl3PzeHyK/fMzlyxyLNE5y8
+   D6iFbLARjbPbxhsyZO3UHLPoKSO49wt6rQnZgjKE03lFGHzxyEaTI5/MV
+   p4hVV3Ek3INcJ2TcMb2YpWuRlJUqfepRkokwbg5jkUEQH0fdLwwIfKkla
+   /vu3bG1E7mejhbMcnoXYRCAFipFxGYkB60ZB4dCo8/CYRcwjfmcGZzD7+
+   twzs0pNvmRk5mZmK/u6rfvHG6I8Wl8L3FIcLvafo+LE6Xos3aZ4oOJmZk
+   xrOKjv//V3heoxARMt6i5iAAnb2ucRciwkbOe6lKDnqDEcrHGdb3XslPd
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="313088906"
 X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="310650886"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 03:10:08 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="707272970"
+   d="scan'208";a="313088906"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 03:10:44 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="640730133"
 X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="707272970"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 03:10:05 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id A559C20225;
-        Mon, 14 Nov 2022 13:10:02 +0200 (EET)
-Date:   Mon, 14 Nov 2022 11:10:02 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Hidenori Kobayashi <hidenorik@google.com>,
-        stable@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/1] i2c: Restore initial power state when we are done.
-Message-ID: <Y3IiCmrw4BNjgVKx@paasikivi.fi.intel.com>
-References: <20221109-i2c-waive-v5-0-2839667f8f6a@chromium.org>
- <20221109-i2c-waive-v5-1-2839667f8f6a@chromium.org>
- <Y3AA7hZFvoI9+2fF@shikoro>
- <Y3IZdrwwfiolSjB4@black.fi.intel.com>
- <CANiDSCvmcZ32PBZbrLWfZXvEjSPdxYJcWn6V00wR+W2stThBdg@mail.gmail.com>
+   d="scan'208";a="640730133"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.58.157])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 03:10:42 -0800
+Message-ID: <dfbeecdb-c97c-993f-da03-5f3d1f141c61@intel.com>
+Date:   Mon, 14 Nov 2022 13:10:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANiDSCvmcZ32PBZbrLWfZXvEjSPdxYJcWn6V00wR+W2stThBdg@mail.gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH] perf/x86/intel/pt: Fix sampling using single range output
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        linux-perf-users@vger.kernel.org
+References: <20221112151508.13768-1-adrian.hunter@intel.com>
+ <Y3IdnRgEPq2FN/ZX@hirez.programming.kicks-ass.net>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <Y3IdnRgEPq2FN/ZX@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,113 +67,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo, Mika,
-
-On Mon, Nov 14, 2022 at 11:51:24AM +0100, Ricardo Ribalda wrote:
-> Hi Mika
+On 14/11/22 12:51, Peter Zijlstra wrote:
+> On Sat, Nov 12, 2022 at 05:15:08PM +0200, Adrian Hunter wrote:
+>> Deal with errata TGL052, ADL037 and RPL017 "Trace May Contain Incorrect
+>> Data When Configured With Single Range Output Larger Than 4KB" by
+>> disabling single range output whenever larger than 4KB.
+>>
+>> Fixes: 670638477aed ("perf/x86/intel/pt: Opportunistically use single range output mode")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>> ---
+>>  arch/x86/events/intel/pt.c | 9 +++++++++
+>>  1 file changed, 9 insertions(+)
+>>
+>> diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
+>> index 82ef87e9a897..42a55794004a 100644
+>> --- a/arch/x86/events/intel/pt.c
+>> +++ b/arch/x86/events/intel/pt.c
+>> @@ -1263,6 +1263,15 @@ static int pt_buffer_try_single(struct pt_buffer *buf, int nr_pages)
+>>  	if (1 << order != nr_pages)
+>>  		goto out;
+>>  
+>> +	/*
+>> +	 * Some processors cannot always support single range for more than
+>> +	 * 4KB - refer errata TGL052, ADL037 and RPL017. Future processors might
+>> +	 * also be affected, so for now rather than trying to keep track of
+>> +	 * which ones, just disable it for all.
+>> +	 */
+>> +	if (nr_pages > 1)
+>> +		goto out;
 > 
-> Thanks for your review!
-> 
-> On Mon, 14 Nov 2022 at 11:33, Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > Hi,
-> >
-> > On Sat, Nov 12, 2022 at 09:24:14PM +0100, Wolfram Sang wrote:
-> > > On Thu, Nov 10, 2022 at 05:20:39PM +0100, Ricardo Ribalda wrote:
-> > > > A driver that supports I2C_DRV_ACPI_WAIVE_D0_PROBE is not expected to
-> > > > power off a device that it has not powered on previously.
-> > > >
-> > > > For devices operating in "full_power" mode, the first call to
-> > > > `i2c_acpi_waive_d0_probe` will return 0, which means that the device
-> > > > will be turned on with `dev_pm_domain_attach`.
-> > > >
-> > > > If probe fails or the device is removed the second call to
-> > > > `i2c_acpi_waive_d0_probe` will return 1, which means that the device
-> > > > will not be turned off. This is, it will be left in a different power
-> > > > state. Lets fix it.
-> > > >
-> > > > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > > Cc: stable@vger.kernel.org
-> > > > Fixes: b18c1ad685d9 ("i2c: Allow an ACPI driver to manage the device's power state during probe")
-> > > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > >
-> > > Adding I2C ACPI maintainer to CC. Mika, could you please help
-> > > reviewing?
-> >
-> > Sure.
-> >
-> > > > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> > > > index b4edf10e8fd0..6f4974c76404 100644
-> > > > --- a/drivers/i2c/i2c-core-base.c
-> > > > +++ b/drivers/i2c/i2c-core-base.c
-> > > > @@ -467,6 +467,7 @@ static int i2c_device_probe(struct device *dev)
-> > > >  {
-> > > >     struct i2c_client       *client = i2c_verify_client(dev);
-> > > >     struct i2c_driver       *driver;
-> > > > +   bool do_power_on;
-> > > >     int status;
-> > > >
-> > > >     if (!client)
-> > > > @@ -545,8 +546,8 @@ static int i2c_device_probe(struct device *dev)
-> > > >     if (status < 0)
-> > > >             goto err_clear_wakeup_irq;
-> > > >
-> > > > -   status = dev_pm_domain_attach(&client->dev,
-> > > > -                                 !i2c_acpi_waive_d0_probe(dev));
-> > > > +   do_power_on = !i2c_acpi_waive_d0_probe(dev);
-> > > > +   status = dev_pm_domain_attach(&client->dev, do_power_on);
-> >
-> > I think this is fine as the driver says it is OK to see the device in
-> > whatever power state (I assume this is what the
-> > i2c_acpi_waive_d0_probe() is supposed to be doing but there is no
-> > kernel-doc, though).
-> >
-> > > >     if (status)
-> > > >             goto err_clear_wakeup_irq;
-> > > >
-> > > > @@ -580,12 +581,14 @@ static int i2c_device_probe(struct device *dev)
-> > > >     if (status)
-> > > >             goto err_release_driver_resources;
-> > > >
-> > > > +   client->power_off_on_remove = do_power_on;
-> > > > +
-> > > >     return 0;
-> > > >
-> > > >  err_release_driver_resources:
-> > > >     devres_release_group(&client->dev, client->devres_group_id);
-> > > >  err_detach_pm_domain:
-> > > > -   dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
-> > > > +   dev_pm_domain_detach(&client->dev, do_power_on);
-> > > >  err_clear_wakeup_irq:
-> > > >     dev_pm_clear_wake_irq(&client->dev);
-> > > >     device_init_wakeup(&client->dev, false);
-> > > > @@ -610,7 +613,7 @@ static void i2c_device_remove(struct device *dev)
-> > > >
-> > > >     devres_release_group(&client->dev, client->devres_group_id);
-> > > >
-> > > > -   dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
-> > > > +   dev_pm_domain_detach(&client->dev, client->power_off_on_remove);
-> >
-> > However, on the remove path I think we should not call
-> > i2c_acpi_waive_d0_probe() at all as that has nothing to do with remove
-> > (it is for whether the driver accepts any power state on probe AFAICT)
-> > so this should stil be "true" here. Unless I'm missing something.
-> 
-> I guess the problem is that we would be undoing something (power-off),
-> that we did not do.
-> 
-> 
-> Sakari, can you think of a use-case where this can break something? If
-> not I can send a v6.
+> This effectively declares single-output-mode dead? Because I don't think
+> anybody uses PT with a single 4K buffer.
 
-I don't think there's any harm from powering the device off here. The
-driver should have done it but there could be bugs...
+4K is the default size for "sample mode" i.e. stuffing 4KB of Intel PT trace
+data into a PERF_RECORD_SAMPLE record that has sample_type bit PERF_SAMPLE_AUX
 
-The genpd equivalent doesn't even use the argument but powers off the
-domain in any case.
+e.g.
 
--- 
-Kind regards,
+$ perf record -vv --aux-sample -e '{intel_pt//u,cycles:u}' uname 2>err.txt
+Linux
+$ grep aux_sample_size err.txt
+  aux_sample_size                  4096
+$ 
 
-Sakari Ailus
