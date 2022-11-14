@@ -2,87 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B728D627E54
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:45:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD97627E44
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237211AbiKNMo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 07:44:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
+        id S237340AbiKNMn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 07:43:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237086AbiKNMoi (ORCPT
+        with ESMTP id S237336AbiKNMm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 07:44:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA6C24F31;
-        Mon, 14 Nov 2022 04:43:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 676EEB80EAF;
-        Mon, 14 Nov 2022 12:43:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 036A9C433D6;
-        Mon, 14 Nov 2022 12:43:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668429789;
-        bh=SjB3OqbdMsh6d4Hu5GyXmdkPniVNdvUIeA6TIRfqTzI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W0TYITlLU7S8TIhSwP1y4nLqbB5OqjV67/eAW3xwPilR/Dwjh7Nvx6W2xgLftgc8b
-         mPhfgPQ+W33tobxRiqd7QMR9aBzpOFdEdGyfxsD6y5d4ZlYTrWXcBUtCAPvVHhmhWC
-         M2IKj/XzytJiw4FNCrJsPCSxgoKtzuwOnPNpJ53p5AnmEfycBu7jd/QA6eiTCip4Gv
-         /CF/FTN1yyPK/iRgS5pvR4ZcBYojiqqvUx814uidhSbXkK0knuK8Uam2B9MOxu4kV4
-         L4zMdrH4G3t9Q8uvW03urk3icV3ir71OGi53N2lUA5nRCVmHpvNDUi2yZPWEy35GMQ
-         BFNmDRDoECNIQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ouYnN-0002Hw-0l; Mon, 14 Nov 2022 13:42:37 +0100
-Date:   Mon, 14 Nov 2022 13:42:37 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/14] phy: qcom-qmp-combo: drop redundant clock
- allocation
-Message-ID: <Y3I3vec+9Ob1dPhW@hovoldconsulting.com>
-References: <20221111092457.10546-1-johan+linaro@kernel.org>
- <20221111092457.10546-9-johan+linaro@kernel.org>
- <75e188ce-99ea-7511-a561-5b0fef9feeaf@linaro.org>
+        Mon, 14 Nov 2022 07:42:57 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701992529B;
+        Mon, 14 Nov 2022 04:42:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668429748; x=1699965748;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zlCVnIAt0eSoa3vWacjfa7YOK1wBDFoeeswj2A/hKh0=;
+  b=kyLfCswaSWpycqhGSUKxKc/O8eCXsHsOiySeodRW6ImT66Nz+7BXuUSP
+   CMPaYsGSGuDCJh+swc6Nt/RNg3oDga513dOgidSqDmWTJvgILMCYlYjIf
+   nXjEJ+IY/ZHTl0ncdL1tzsiZW7Dq0OgkbEVSv7PzIMwEXX3qZv0kkQy1i
+   n47VY2MEOAoL1RrxCV9zFrve/4jTfJ0GbzRaTKJ7slmm42FVi38xITQC8
+   oHIHBq71DUtLCkQ0u6dGevrElV3s1eRiQK9rUuvneCgIVX3qGOWxxjQuY
+   uZ6QW5TH4HQ8ktGb62w4pD3MYo0HltuBL6h6+tgZ2pjXLEENtX0gfuDgX
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="398249310"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="398249310"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 04:42:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="813244077"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="813244077"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 14 Nov 2022 04:42:24 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 4929D32E; Mon, 14 Nov 2022 14:42:49 +0200 (EET)
+Date:   Mon, 14 Nov 2022 14:42:49 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Hidenori Kobayashi <hidenorik@chromium.org>,
+        stable@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Hidenori Kobayashi <hidenorik@google.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v6 1/1] i2c: Restore initial power state if probe fails
+Message-ID: <Y3I3yYDjbSBHDJtY@black.fi.intel.com>
+References: <20221109-i2c-waive-v6-0-bc059fb7e8fa@chromium.org>
+ <20221109-i2c-waive-v6-1-bc059fb7e8fa@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <75e188ce-99ea-7511-a561-5b0fef9feeaf@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221109-i2c-waive-v6-1-bc059fb7e8fa@chromium.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 02:17:44PM +0300, Dmitry Baryshkov wrote:
-> On 11/11/2022 12:24, Johan Hovold wrote:
-> > Since the QMP driver split, there is no reason to allocate the
-> > fixed-rate pipe clock structure separately from the driver data.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 7 ++-----
-> >   1 file changed, 2 insertions(+), 5 deletions(-)
-> > 
+On Mon, Nov 14, 2022 at 01:20:34PM +0100, Ricardo Ribalda wrote:
+> A driver that supports I2C_DRV_ACPI_WAIVE_D0_PROBE is not expected to
+> power off a device that it has not powered on previously.
 > 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> For devices operating in "full_power" mode, the first call to
+> `i2c_acpi_waive_d0_probe` will return 0, which means that the device
+> will be turned on with `dev_pm_domain_attach`.
 > 
-> Note: it would be nice to port these two patches to USB & PCIe QMP PHY 
-> drivers.
+> If probe fails the second call to `i2c_acpi_waive_d0_probe` will
+> return 1, which means that the device will not be turned off.
+> This is, it will be left in a different power state. Lets fix it.
+> 
+> Reviewed-by: Hidenori Kobayashi <hidenorik@chromium.org>
+> Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-Already done:
-
-	https://lore.kernel.org/lkml/20221111094239.11547-1-johan+linaro@kernel.org/
-
-Johan
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
