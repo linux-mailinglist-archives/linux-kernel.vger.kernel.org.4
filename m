@@ -2,85 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654006275F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 07:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D366275FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 07:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235795AbiKNGed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 01:34:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41270 "EHLO
+        id S235813AbiKNGia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 01:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235615AbiKNGea (ORCPT
+        with ESMTP id S235615AbiKNGi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 01:34:30 -0500
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C22211150
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 22:34:29 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R281e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VUiKOlR_1668407663;
-Received: from 30.97.48.62(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VUiKOlR_1668407663)
-          by smtp.aliyun-inc.com;
-          Mon, 14 Nov 2022 14:34:25 +0800
-Message-ID: <5699ed28-bdad-f9ab-44b6-e957c00745f9@linux.alibaba.com>
-Date:   Mon, 14 Nov 2022 14:34:27 +0800
+        Mon, 14 Nov 2022 01:38:28 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A43B92
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 22:38:27 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id y4so9229779plb.2
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 22:38:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/nDx7KtSQ67Z6YH9mVmBsIDEMrVyzlgtcOk21cgdaMQ=;
+        b=gQekpeAW0ywzEgh5crhnDBFu9TZwRqjCv1Gx2X+rhEq5HKXr6JPRK03ygiWz5ufKub
+         3ENSroRbKSqWTTMc4VzSFVF2MY4Ih57NAUcNlwqVRrsHF4VzUkrDTyjJrNR80FruPqeU
+         +aNRJaHidLrRiE3YZPPZplJwVOm0tMw/jc0NOraeoZp2wR3db0z6G7ZxSmwYvIQ5ZxbL
+         v/eEhDS+rHtAticu8mVokWjRr/B4cte6bWtfs2A8ROe81PQgBjJEYLOyMGKovDuLg3kh
+         BSelLrWQr64jFzA7F+VPAT5DI7JJe6fdE3RONVlJ8E3JbwaK0A5Quw2y1+xlclU6kW1G
+         7wPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/nDx7KtSQ67Z6YH9mVmBsIDEMrVyzlgtcOk21cgdaMQ=;
+        b=0851T4JEwxdGXNm5ZcGJTg5xfDMrqCTanJR8Ks9PPpxMNE7c9gvdmNLQKldaaN+Pko
+         pfExui7k8MvYeL8kuKrJMktHyIScaaoUQrCEdll/lcFkYrMq/tpA4pYY1+W9hV/UC4FN
+         Xb1VwMKp5k1/pWQRkHWumJkXfXoNmTucTndUY1oNaasq/PLEInwDxbCkBCBxddQcP9HJ
+         o3efD+Qm1Bz9uVeuKmMlpdc/LtPhbS/ecrzHQvKZvTnrRPKN4ExpaBwM7n1Oi159sSEa
+         OJ331tF6kW63hNtVZkScfVcEzsJwUJWGAALyNJX944whzykaRs39kyHB03lxl3DJgBJB
+         lYVw==
+X-Gm-Message-State: ANoB5pnSN7I1z0A8TmsK2LunJTwvBVAnLIhh9CKMuJcQNSaAhKCZj5aC
+        1rmWLdbcpHsx/RmhNXVIJGuZPYqQMcMSfUsNJeWcjppBZCQQ5g==
+X-Google-Smtp-Source: AA0mqf5FDuEl0xSQvls5eYj+NtCulVu0oTk/RDwUUBlWukvbTG1EiSLWh4I10VxQODUPCOCmb8D6XljnfykJylBdM8k=
+X-Received: by 2002:a17:902:ab92:b0:188:b0db:cd5d with SMTP id
+ f18-20020a170902ab9200b00188b0dbcd5dmr10590873plr.104.1668407907075; Sun, 13
+ Nov 2022 22:38:27 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 14/18] mfd: sprd-sc27xx-spi: Replace irqchip mask_invert
- with unmask_base
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, lee@kernel.org
-Cc:     mani@kernel.org, cristian.ciocaltea@gmail.com, wens@csie.org,
-        tharvey@gateworks.com, cw00.choi@samsung.com,
-        krzysztof.kozlowski@linaro.org, brgl@bgdev.pl,
-        mazziesaccount@gmail.com, orsonzhai@gmail.com,
-        zhang.lyra@gmail.com, jernej.skrabec@gmail.com,
-        samuel@sholland.org, linux-kernel@vger.kernel.org,
-        linux-actions@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-References: <20221112151835.39059-1-aidanmacdonald.0x0@gmail.com>
- <20221112151835.39059-15-aidanmacdonald.0x0@gmail.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20221112151835.39059-15-aidanmacdonald.0x0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <20221109160708.507481-1-ludvig.parsson@axis.com> <20221111161336.msozo7l632jvbwcn@bogus>
+In-Reply-To: <20221111161336.msozo7l632jvbwcn@bogus>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Mon, 14 Nov 2022 12:08:15 +0530
+Message-ID: <CAFA6WYNwgr6_TA03W4cYfZkOvbdF0DO44_CnAsdZbLcuDHur6w@mail.gmail.com>
+Subject: Re: [PATCH] tee: optee: Populate child nodes in probe function
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     =?UTF-8?Q?Ludvig_P=C3=A4rsson?= <ludvig.parsson@axis.com>,
+        Jens Wiklander <jens.wiklander@linaro.org>, kernel@axis.com,
+        op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 11 Nov 2022 at 21:43, Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Wed, Nov 09, 2022 at 05:07:08PM +0100, Ludvig P=C3=A4rsson wrote:
+> > Currently there is no dependency between the "linaro,scmi-optee" driver
+> > and the tee_core. If the scmi-optee driver gets probed before the
+> > tee_bus_type is initialized, then we will get an unwanted error print.
+> >
+> > This patch enables putting scmi-optee nodes as children to the optee
+> > node in devicetree, which indirectly creates the missing dependency.
+> >
+> > Signed-off-by: Ludvig P=C3=A4rsson <ludvig.parsson@axis.com>
+> > ---
+> >  drivers/tee/optee/smc_abi.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+> > index a1c1fa1a9c28..be6f02fd5a7f 100644
+> > --- a/drivers/tee/optee/smc_abi.c
+> > +++ b/drivers/tee/optee/smc_abi.c
+> > @@ -1533,6 +1533,11 @@ static int optee_probe(struct platform_device *p=
+dev)
+> >       if (rc)
+> >               goto err_disable_shm_cache;
+> >
+> > +     /* Populate any dependent child node (if any) */
+> > +     rc =3D devm_of_platform_populate(&pdev->dev);
+> > +     if (rc)
+> > +             goto err_disable_shm_cache;
+> > +
+>
+> While I agree with idea of populating dependent child nodes from here,
+> I am not sure if it is OK to give error if that fails or to just continue
+> as there may be other users(like the user-space) for the OPTEE in general=
+.
+>
 
+This uncertainty is simply because the inter subsystem dependency
+issue can't be resolved by this. See my comment regarding FF-A ABI on
+the other thread [1]
 
-On 11/12/2022 11:18 PM, Aidan MacDonald wrote:
-> Remove use of the deprecated mask_invert flag. Inverted mask
-> registers (where a '1' bit enables an IRQ) can be described more
-> directly as an unmask register.
-> 
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+[1] https://lkml.org/lkml/2022/11/14/29
 
-LGTM. Thanks.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+-Sumit
 
-> ---
->   drivers/mfd/sprd-sc27xx-spi.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/mfd/sprd-sc27xx-spi.c b/drivers/mfd/sprd-sc27xx-spi.c
-> index d05a47c5187f..a4a9b81a952b 100644
-> --- a/drivers/mfd/sprd-sc27xx-spi.c
-> +++ b/drivers/mfd/sprd-sc27xx-spi.c
-> @@ -181,11 +181,10 @@ static int sprd_pmic_probe(struct spi_device *spi)
->   	ddata->irq_chip.name = dev_name(&spi->dev);
->   	ddata->irq_chip.status_base =
->   		pdata->irq_base + SPRD_PMIC_INT_MASK_STATUS;
-> -	ddata->irq_chip.mask_base = pdata->irq_base + SPRD_PMIC_INT_EN;
-> +	ddata->irq_chip.unmask_base = pdata->irq_base + SPRD_PMIC_INT_EN;
->   	ddata->irq_chip.ack_base = 0;
->   	ddata->irq_chip.num_regs = 1;
->   	ddata->irq_chip.num_irqs = pdata->num_irqs;
-> -	ddata->irq_chip.mask_invert = true;
->   
->   	ddata->irqs = devm_kcalloc(&spi->dev,
->   				   pdata->num_irqs, sizeof(struct regmap_irq),
+> --
+> Regards,
+> Sudeep
