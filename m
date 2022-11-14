@@ -2,94 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4869A628306
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E507762830D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236538AbiKNOnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:43:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50376 "EHLO
+        id S236970AbiKNOoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:44:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236730AbiKNOm2 (ORCPT
+        with ESMTP id S236642AbiKNOn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:42:28 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10412C117;
-        Mon, 14 Nov 2022 06:42:27 -0800 (PST)
+        Mon, 14 Nov 2022 09:43:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9541E707
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:43:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E03A61211;
-        Mon, 14 Nov 2022 14:42:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DABE7C433D6;
-        Mon, 14 Nov 2022 14:42:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3943C6121B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 14:43:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A3EC433D7;
+        Mon, 14 Nov 2022 14:42:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668436946;
-        bh=zsPHg2CbneKaAfSvj9WkPgYa0y7b09xQojV5FYHP5sk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e5Qy7Rlxxzy9JFuT/hsrGD7f4hcJbO+ae6+Z61L2DEEAQC8FLT8AzwxSGnRYkjM1L
-         JXl7B816rveuzs3L556r6NgStq28YHhw9aR3ouMRpSOfV7M+4blTngit83vE/8cV8J
-         lF4oqxRF2Zpj3r1LLNx0YVeJZdQ1J1mFbOYFMPhwfA07JK8qs7jNlfMQSUduK/CVii
-         R0XwReJzXGRWDzqx9BGNEPMzg8F8LCpNxP83h/yoVp4tFpJyJp2xY2QKy3KOZYnWTO
-         nu0Nb4qLpiFVTOtyQmLtwu55ms6fwZb5cc3ZIn4Gx58AYlv0PLaOHN/sAWctoQRWZ2
-         lUA80vWx3Wrow==
-Date:   Mon, 14 Nov 2022 14:42:21 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Melody Olvera <quic_molvera@quicinc.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] drivers: arm-smmu-impl: Add QDU1000 and QRU1000
- iommu implementation
-Message-ID: <20221114144220.GA31043@willie-the-truck>
-References: <20221026190534.4004945-1-quic_molvera@quicinc.com>
- <20221026190534.4004945-3-quic_molvera@quicinc.com>
- <0ae09be0-cb1b-dc27-943b-db64ca97b8c7@linaro.org>
+        s=k20201202; t=1668436979;
+        bh=w4GrNzhovrN80KKmTP2OEJZe9pNiPh8tGOWQIrUQZus=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ncvG4DeWFq6xXs+ZW79xASuvQr7k2XuWyvfIPei5CXCWhpdppn3qUlKZq2OpObWy1
+         snozfaLE4xN5Bnn4j96gNbHbIw8zOmmScXzdCsPNuCntlT7SCdr66IP66CgX+XvuAl
+         psqFTm4OKPWDYN/La0sU9No1J3NRL0r22KrS/dvI3TMeLyGXDLlIVXtIsCw/OjVLTY
+         xW4GaZz6xe4AeNcrt+dpTsmZEZaaJQ2YIUwnwdXg83JpUg0F7Z1riWjpJuf43Qf4iY
+         +AoOgpUfFKFLj5qxJlNELviCCkL02L57/LzUI7FKNz5rw5J+mdJzumS88TVlULreGR
+         021NfSwdR2pwg==
+Message-ID: <983de611-a9e7-56d0-d375-f2b54e1f4d05@kernel.org>
+Date:   Mon, 14 Nov 2022 22:42:56 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0ae09be0-cb1b-dc27-943b-db64ca97b8c7@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 1/3] f2fs: fix to alloc_mode changed after remount on a
+ small volume device
+To:     Yuwei Guan <ssawgyw@gmail.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yuwei.Guan@zeekrlife.com
+References: <20221112083250.295700-1-Yuwei.Guan@zeekrlife.com>
+ <20221112083250.295700-2-Yuwei.Guan@zeekrlife.com>
+Content-Language: en-US
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20221112083250.295700-2-Yuwei.Guan@zeekrlife.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 03:28:15PM +0100, Krzysztof Kozlowski wrote:
-> On 26/10/2022 21:05, Melody Olvera wrote:
-> > Add compatible for Qualcomm QDU1000 and QRU1000 SoCs to add iommu
-> > support for them.
-> > 
-> > Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> > ---
-> >  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> > index b2708de25ea3..0580a381a04b 100644
-> > --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> > +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> > @@ -426,6 +426,7 @@ static struct arm_smmu_device *qcom_smmu_create(struct arm_smmu_device *smmu,
-> >  static const struct of_device_id __maybe_unused qcom_smmu_impl_of_match[] = {
-> >  	{ .compatible = "qcom,msm8998-smmu-v2" },
-> >  	{ .compatible = "qcom,qcm2290-smmu-500" },
-> > +	{ .compatible = "qcom,qdu1000-smmu-500" },
+On 2022/11/12 16:32, Yuwei Guan wrote:
+> The commit 84b89e5d943d8 ("f2fs: add auto tuning for small devices") add
+> tuning for small volume device, now support to tune alloce_mode to 'reuse'
+> if it's small size. But the alloc_mode will change to 'default' when do
+> remount on this small size dievce.
 > 
-> The patch was applied but it contradicts work here:
-> https://lore.kernel.org/all/20221102184420.534094-12-dmitry.baryshkov@linaro.org/
-> which explicitly asks not to add such compatibles...
+> The commit 4cac90d5491c9 ("f2fs: relocate readdir_ra configure
+> initialization") relocates readdir_ra variable to tuning process.
+> 
+> This patch fo fix alloc_mode changed when do remount for a small volume
+> device.
+> 
+> For a small device,
+> - alloc_mode will keep 'reuse', if no alloc_mode option in remount
+>    command,
+> - alloc_mode will be set as remount command, if it has 'alloc_mode='.
+> 
+> Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
+> ---
+>   fs/f2fs/super.c | 37 ++++++++++++++++++++-----------------
+>   1 file changed, 20 insertions(+), 17 deletions(-)
+> 
+> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> index 3834ead04620..2f36824ff84b 100644
+> --- a/fs/f2fs/super.c
+> +++ b/fs/f2fs/super.c
+> @@ -2190,6 +2190,23 @@ static void f2fs_enable_checkpoint(struct f2fs_sb_info *sbi)
+>   	f2fs_flush_ckpt_thread(sbi);
+>   }
+>   
+> +static void f2fs_tuning_parameters(struct f2fs_sb_info *sbi, bool is_remount)
+> +{
+> +	struct f2fs_sm_info *sm_i = SM_I(sbi);
+> +
+> +	/* adjust parameters according to the volume size */
+> +	if (sm_i->main_segments <= SMALL_VOLUME_SEGMENTS) {
+> +		F2FS_OPTION(sbi).alloc_mode = ALLOC_MODE_REUSE;
 
-Sure, but we've been adding new compatibles for years so I don't mind
-picking up the last few now before we stop accepting new ones.
+How about moving above logic into default_options()?
 
-I already asked Dmitry to respin his series as there are some open comments
-from others anyway.
+Thanks,
 
-Will
+> +		if (f2fs_block_unit_discard(sbi))
+> +			sm_i->dcc_info->discard_granularity = 1;
+> +		sm_i->ipu_policy = 1 << F2FS_IPU_FORCE |
+> +					1 << F2FS_IPU_HONOR_OPU_WRITE;
+> +	}
+> +
+> +	if (!is_remount)
+> +		sbi->readdir_ra = 1;
+> +}
+> +
+>   static int f2fs_remount(struct super_block *sb, int *flags, char *data)
+>   {
+>   	struct f2fs_sb_info *sbi = F2FS_SB(sb);
+> @@ -2248,6 +2265,8 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
+>   
+>   	default_options(sbi);
+>   
+> +	f2fs_tuning_parameters(sbi, true);
+> +
+>   	/* parse mount options */
+>   	err = parse_options(sb, data, true);
+>   	if (err)
+> @@ -4054,22 +4073,6 @@ static int f2fs_setup_casefold(struct f2fs_sb_info *sbi)
+>   	return 0;
+>   }
+>   
+> -static void f2fs_tuning_parameters(struct f2fs_sb_info *sbi)
+> -{
+> -	struct f2fs_sm_info *sm_i = SM_I(sbi);
+> -
+> -	/* adjust parameters according to the volume size */
+> -	if (sm_i->main_segments <= SMALL_VOLUME_SEGMENTS) {
+> -		F2FS_OPTION(sbi).alloc_mode = ALLOC_MODE_REUSE;
+> -		if (f2fs_block_unit_discard(sbi))
+> -			sm_i->dcc_info->discard_granularity = 1;
+> -		sm_i->ipu_policy = 1 << F2FS_IPU_FORCE |
+> -					1 << F2FS_IPU_HONOR_OPU_WRITE;
+> -	}
+> -
+> -	sbi->readdir_ra = 1;
+> -}
+> -
+>   static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
+>   {
+>   	struct f2fs_sb_info *sbi;
+> @@ -4475,7 +4478,7 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
+>   
+>   	f2fs_join_shrinker(sbi);
+>   
+> -	f2fs_tuning_parameters(sbi);
+> +	f2fs_tuning_parameters(sbi, false);
+>   
+>   	f2fs_notice(sbi, "Mounted with checkpoint version = %llx",
+>   		    cur_cp_version(F2FS_CKPT(sbi)));
