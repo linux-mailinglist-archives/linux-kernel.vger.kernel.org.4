@@ -2,89 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C4C62807C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C9562809B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237814AbiKNNGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:06:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
+        id S237857AbiKNNHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:07:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237808AbiKNNGM (ORCPT
+        with ESMTP id S237864AbiKNNHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:06:12 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDD02A944
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:06:11 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id CD4325C0118;
-        Mon, 14 Nov 2022 08:06:10 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 14 Nov 2022 08:06:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1668431170; x=1668517570; bh=hTwfEL8WhY
-        8IR4P7vKxZDyu4A7kRyCha3szkP5Ui2Og=; b=XFdwPJCq6MfipI6W6CxCjWujM8
-        qKW6zvR1ZYsCyx1+cyr+9dTvnTFdKJeITINg8GhcyYFH+1se7R+lIW8Gd+sasxD0
-        ZfYKHqQ6Pf9RpD/fWYkuNKD/zp0S2XYwAmrbrkuf5PMuR5Z3N1GvdtZ7PobEpwF0
-        uqWybooDrC+1g7pGlO0DgALC/38dzu+zuJkxDljXmM0qAHNl51/209zYxq6HXNer
-        ZIj8z+z3ERT2tmEu5FcuRAAtfvGISvOipkJalfF9jrrp9W6axuPukAgk9FK6C84M
-        21m3GtwN+YqGK8mqIwyWgTEFjBlkCmUZPB+p+XUZze/eVQEdDW3kvb+lusvw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668431170; x=1668517570; bh=hTwfEL8WhY8IR4P7vKxZDyu4A7kR
-        yCha3szkP5Ui2Og=; b=JuZeLjuR+w22RCnq0vwKBm6Xad6BN6Fubtp5SqLmo688
-        qWoban8NACaUVRV91919czkb3Lv/5e4t2yUYxwQBV82XvRZQsUoqCEyys+n62F32
-        YmN8uIXGkusTXYYrnzPoFEukN0G3XGHkYmZMfTXRKFYz3m5c6AZAoUhzYGGa+mKW
-        BiDs/jjFTY14j1C33siqSK6SVzFrMnf4FvrrPPGxoSmNOoiBRML1ypO1HpzmK3u9
-        16//z3TVW8s2Scj/XUcupuBESaiQNROuwGDSZ4Bxwlm5tCGlB5QDrQ2G7m0j2JeR
-        LIUosup1G476E8dfTf3bU7LVlYIKuUbIhgIoTYHUeA==
-X-ME-Sender: <xms:Qj1yY9cok38ROpNvFFdd4RXK-4OPSKfC8-DgImY8CZF3mnrB4IT2tA>
-    <xme:Qj1yY7Opg-gLExeq8lrK7ERV1dPmsZc7K6u8MZfq6IcA7-WNiSUzRxd5vLrVdHcdh
-    DmRoXwHzafaRfT1npU>
-X-ME-Received: <xmr:Qj1yY2hr6uy3_Yv_Ofct-6fME9fQK223nVPYdSp60mBNPxo6f0TkXQfQibQAu5os8yzwzPCXOeXMbSVPOOH8e3k40YCeCwpdxUfD7M-jU2QMSQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedvgddvudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleejuefggeevteelveekteffgeduveeiteeiueegueegiedvtdejjedvfeef
-    tefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:Qj1yY2-XEvWxG9h7ZB34iMtixqf404DtbTQWcK9P8-TsTv0VfP_JmA>
-    <xmx:Qj1yY5v4jyUghn1q2YBfcsAUSKUWxx50meyv0GfcaWp2_S6vE_kBhA>
-    <xmx:Qj1yY1G4cnHMTnEjbLjrlpVXigtgVb-VsC_NEUxRv4FvH3ZSYHrzyQ>
-    <xmx:Qj1yYy82mZ2iCYsrdDXr5sqcRgAE8JOoyyaajeBiCM6_FxazEYjAAQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 14 Nov 2022 08:06:09 -0500 (EST)
-Date:   Mon, 14 Nov 2022 14:06:08 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Emma Anholt <emma@anholt.net>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: Re: [PATCH 1/2] drm/vc4: hdmi: Enforce the minimum rate at
- runtime_resume
-Message-ID: <20221114130608.kqxhorlee25rvrc7@houat>
-References: <20220929-rpi-pi3-unplugged-fixes-v1-0-cd22e962296c@cerno.tech>
- <20220929-rpi-pi3-unplugged-fixes-v1-1-cd22e962296c@cerno.tech>
- <737e7e23-1bc5-eaf3-2d15-5498fc5b0415@i2se.com>
- <b49a242f-dc85-171d-1f0c-93b9099712a3@i2se.com>
+        Mon, 14 Nov 2022 08:07:17 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED5D2AE3B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:07:15 -0800 (PST)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N9qM25QrvzHvQq;
+        Mon, 14 Nov 2022 21:06:22 +0800 (CST)
+Received: from dggpeml500002.china.huawei.com (7.185.36.158) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 14 Nov 2022 21:06:51 +0800
+Received: from [10.67.103.44] (10.67.103.44) by dggpeml500002.china.huawei.com
+ (7.185.36.158) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 14 Nov
+ 2022 21:06:51 +0800
+Subject: Re: [PATCH v12 1/2] drivers/coresight: Add UltraSoc System Memory
+ Buffer driver
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        kernel test robot <lkp@intel.com>,
+        <mathieu.poirier@linaro.org>, <mike.leach@linaro.org>,
+        <leo.yan@linaro.org>, <jonathan.cameron@huawei.com>,
+        <john.garry@huawei.com>
+References: <20221109135008.9485-2-hejunhao3@huawei.com>
+ <202211120623.aFVBerTp-lkp@intel.com>
+ <a1343ef8-19f2-e3fc-35b7-02a989e093f5@arm.com>
+CC:     <oe-kbuild-all@lists.linux.dev>, <coresight@lists.linaro.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <lpieralisi@kernel.org>,
+        <linuxarm@huawei.com>, <liuqi115@huawei.com>,
+        <f.fangjian@huawei.com>, <prime.zeng@hisilicon.com>
+From:   hejunhao <hejunhao3@huawei.com>
+Message-ID: <901ee9b4-f0b3-437e-fce9-be3c6c214afe@huawei.com>
+Date:   Mon, 14 Nov 2022 21:06:51 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zvzqn4wjbzjl3o27"
-Content-Disposition: inline
-In-Reply-To: <b49a242f-dc85-171d-1f0c-93b9099712a3@i2se.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a1343ef8-19f2-e3fc-35b7-02a989e093f5@arm.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.44]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500002.china.huawei.com (7.185.36.158)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -92,94 +64,140 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---zvzqn4wjbzjl3o27
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi Stefan,
-
-On Mon, Nov 14, 2022 at 01:48:14AM +0100, Stefan Wahren wrote:
-> Am 11.11.22 um 22:08 schrieb Stefan Wahren:
-> > Hi Maxime,
-> >=20
-> > Am 29.09.22 um 11:21 schrieb Maxime Ripard:
-> > > This is a revert of commit fd5894fa2413 ("drm/vc4: hdmi: Remove clock
-> > > rate initialization"), with the code slightly moved around.
-> > >=20
-> > > It turns out that we can't downright remove that code from the driver,
-> > > since the Pi0-3 and Pi4 are in different cases, and it only works for
-> > > the Pi4.
-> > >=20
-> > > Indeed, the commit mentioned above was relying on the RaspberryPi
-> > > firmware clocks driver to initialize the rate if it wasn't done by the
-> > > firmware. However, the Pi0-3 are using the clk-bcm2835 clock driver t=
-hat
-> > > wasn't doing this initialization. We therefore end up with the clock =
-not
-> > > being assigned a rate, and the CPU stalling when trying to access a
-> > > register.
-> > >=20
-> > > We can't move that initialization in the clk-bcm2835 driver, since the
-> > > HSM clock we depend on is actually part of the HDMI power domain, so =
-any
-> > > rate setup is only valid when the power domain is enabled. Thus, we
-> > > reinstated the minimum rate setup at runtime_suspend, which should
-> > > address both issues.
-> > >=20
-> > > Link: https://lore.kernel.org/dri-devel/20220922145448.w3xfywkn5ecak2=
-et@pengutronix.de/
-> > > Fixes: fd5894fa2413 ("drm/vc4: hdmi: Remove clock rate initialization=
-")
-> > > Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> > > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> > > ---
-> > > =A0 drivers/gpu/drm/vc4/vc4_hdmi.c | 9 +++++++++
-> > > =A0 1 file changed, 9 insertions(+)
-> > >=20
-> > > diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> > > b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> > > index 199bc398817f..2e28fe16ed5e 100644
-> > > --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> > > +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> > > @@ -2891,6 +2891,15 @@ static int vc4_hdmi_runtime_resume(struct
-> > > device *dev)
-> > > =A0=A0=A0=A0=A0 u32 __maybe_unused value;
-> > > =A0=A0=A0=A0=A0 int ret;
-> > > =A0 +=A0=A0=A0 /*
-> > > +=A0=A0=A0=A0 * The HSM clock is in the HDMI power domain, so we need=
- to set
-> > > +=A0=A0=A0=A0 * its frequency while the power domain is active so tha=
-t it
-> > > +=A0=A0=A0=A0 * keeps its rate.
-> > > +=A0=A0=A0=A0 */
-> > > +=A0=A0=A0 ret =3D clk_set_min_rate(vc4_hdmi->hsm_clock, HSM_MIN_CLOC=
-K_FREQ);
-> > > +=A0=A0=A0 if (ret)
-> > > +=A0=A0=A0=A0=A0=A0=A0 return ret;
-> > > +
-> >=20
-> > unfortunately this breaks X on Raspberry Pi 4 in Linux 6.0.5
-> > (multi_v7_defconfig + LPAE). Today i saw this report [1] and bisected
-> > the issue down to this patch. Shame on me that i only tested this patch
-> > with Rpi 3B+ :-(
+On 2022/11/14 18:49, Suzuki K Poulose wrote:
+> On 11/11/2022 22:06, kernel test robot wrote:
+>> Hi Junhao,
+>>
+>> I love your patch! Perhaps something to improve:
+>>
+>> [auto build test WARNING on soc/for-next]
+>> [also build test WARNING on linus/master v6.1-rc4 next-20221111]
+>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>> And when submitting patch, we suggest to use '--base' as documented in
+>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>
+>> url: 
+>> https://github.com/intel-lab-lkp/linux/commits/Junhao-He/Add-support-for-UltraSoc-System-Memory-Buffer/20221109-215158
+>> base: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git 
+>> for-next
+>> patch link: 
+>> https://lore.kernel.org/r/20221109135008.9485-2-hejunhao3%40huawei.com
+>> patch subject: [PATCH v12 1/2] drivers/coresight: Add UltraSoc System 
+>> Memory Buffer driver
+>> config: arm64-randconfig-s033-20221111
+>> compiler: aarch64-linux-gcc (GCC) 12.1.0
+>> reproduce:
+>>          wget 
+>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
+>> -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # apt-get install sparse
+>>          # sparse version: v0.6.4-39-gce1a6720-dirty
+>>          # 
+>> https://github.com/intel-lab-lkp/linux/commit/49ede03fd874b65deca5382ea84c3377188136da
+>>          git remote add linux-review 
+>> https://github.com/intel-lab-lkp/linux
+>>          git fetch --no-tags linux-review 
+>> Junhao-He/Add-support-for-UltraSoc-System-Memory-Buffer/20221109-215158
+>>          git checkout 49ede03fd874b65deca5382ea84c3377188136da
+>>          # save the config file
+>>          mkdir build_dir && cp config build_dir/.config
+>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 
+>> make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' 
+>> O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwtracing/coresight/
+>>
+>> If you fix the issue, kindly add following tag where applicable
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>>
+>> sparse warnings: (new ones prefixed by >>)
+>>>> drivers/hwtracing/coresight/ultrasoc-smb.c:113:33: sparse: sparse: 
+>>>> cast removes address space '__iomem' of expression
+>>>> drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: sparse: 
+>>>> incorrect type in argument 1 (different address spaces) @@     
+>>>> expected void const * @@     got void [noderef] __iomem * @@
+>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse:     
+>> expected void const *
+>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse:     
+>> got void [noderef] __iomem *
+>>>> drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: sparse: 
+>>>> incorrect type in argument 1 (different address spaces) @@     
+>>>> expected void const * @@     got void [noderef] __iomem * @@
+>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse:     
+>> expected void const *
+>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse:     
+>> got void [noderef] __iomem *
+>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: 
+>> sparse: incorrect type in argument 2 (different address spaces) 
+>> @@     expected void const * @@     got void [noderef] __iomem * @@
+>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse:     
+>> expected void const *
+>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse:     
+>> got void [noderef] __iomem *
+>>>> drivers/hwtracing/coresight/ultrasoc-smb.c:463:14: sparse: sparse: 
+>>>> incorrect type in assignment (different address spaces) @@     
+>>>> expected void [noderef] __iomem *base @@     got void * @@
+>>     drivers/hwtracing/coresight/ultrasoc-smb.c:463:14: sparse:     
+>> expected void [noderef] __iomem *base
+>>     drivers/hwtracing/coresight/ultrasoc-smb.c:463:14: sparse:     
+>> got void *
+>>
+>> vim +/__iomem +113 drivers/hwtracing/coresight/ultrasoc-smb.c
+>>
+>>      89
+>>      90    static ssize_t smb_read(struct file *file, char __user 
+>> *data, size_t len,
+>>      91                loff_t *ppos)
+>>      92    {
+>>      93        struct smb_drv_data *drvdata = 
+>> container_of(file->private_data,
+>>      94                        struct smb_drv_data, miscdev);
+>>      95        struct smb_data_buffer *sdb = &drvdata->sdb;
+>>      96        struct device *dev = &drvdata->csdev->dev;
+>>      97        ssize_t to_copy = 0;
+>>      98
+>>      99        mutex_lock(&drvdata->mutex);
+>>     100
+>>     101        if (!sdb->data_size) {
+>>     102            smb_update_data_size(drvdata);
+>>     103            if (!sdb->data_size)
+>>     104                goto out;
+>>     105        }
+>>     106
+>>     107        to_copy = min(sdb->data_size, len);
+>>     108
+>>     109        /* Copy parts of trace data when read pointer wrap 
+>> around SMB buffer */
+>>     110        if (sdb->rd_offset + to_copy > sdb->buf_size)
+>>     111            to_copy = sdb->buf_size - sdb->rd_offset;
+>>     112
+>>   > 113        if (copy_to_user(data, (void *)sdb->buf_base + 
+>> sdb->rd_offset,
+>>     114                 to_copy)) {
+>>     115            dev_dbg(dev, "Failed to copy data to user\n");
+>>     116            to_copy = -EFAULT;
+>>     117            goto out;
+>>     118        }
+>>     119
 >
-> Looks like "drm/vc4: hdmi: Fix HSM clock too low on Pi4" addresses this
-> issue ...
+> Please could we replace this with copy_to_user_fromio() ?
+>
+> Suzuki
+>
+> _______________________________________________
+> CoreSight mailing list -- coresight@lists.linaro.org
+> To unsubscribe send an email to coresight-leave@lists.linaro.org
+> .
+>
+Hi Suzuki,
 
-Yes, indeed. The fix should be on its way to -stable already
+This is a cache memory,  due to improper use of "__iomem" , the sparse 
+generates warnings.
+I has fix it in v13.
+https://lore.kernel.org/lkml/20221114090316.63157-2-hejunhao3@huawei.com/
 
-Maxime
+Best regards,
+Junhao.
 
---zvzqn4wjbzjl3o27
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY3I9QAAKCRDj7w1vZxhR
-xQKtAP4+zlNIn7+r6XxtuDBvv0Eo4QlHEDhlHIQWW069FlLORAD+LiRnVQRFYCRX
-sJL1ElqKtlXEsrhB6Q2bUqMfY9W+Lww=
-=9ceS
------END PGP SIGNATURE-----
-
---zvzqn4wjbzjl3o27--
