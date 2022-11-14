@@ -2,158 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89F76280DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B856280DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237899AbiKNNKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:10:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
+        id S236758AbiKNNL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:11:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237926AbiKNNKA (ORCPT
+        with ESMTP id S237909AbiKNNLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:10:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0E02B257;
-        Mon, 14 Nov 2022 05:09:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35EA4B80EC3;
-        Mon, 14 Nov 2022 13:09:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55DB3C433D7;
-        Mon, 14 Nov 2022 13:09:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668431386;
-        bh=PvEnW3/dgb7M6jyRtGbgsIRe0xMSAxEh0nhMeyYw5/8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lc4hAJ6hEbiVSg63MZ8BNyOJdfgskIIT10tF9Aj6o2ynVUYIoJ/QXxTzmxwaqX+qq
-         I9Ce0tq7bRrAuCp2qTapSUSXSNFbWnYlVQ9YjXTkbiFa9iyOuoFnLj8N4+stpWwULi
-         Q7Eej9pYnrJfPK4vit2NCKvTUI9k0fx32UD0PnuS4QrLJePWei8m5AddgTTAZSqXSv
-         EmtGfVSv/pQfEZNmwW76WCOWFFPmU+dDBb2wqlW7UhpD5xzvj6ErSV0lQ8MNJvT/yT
-         iqrASAcH+7up4cr5aVLVDLzWTeffkkz+raCToTV/ywH2u3f34dYMyYIuGnXfe9GnZ0
-         WFU5OTZUAJq3w==
-Date:   Mon, 14 Nov 2022 15:09:42 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>
-Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jianjay.zhou@huawei.com,
-        zhuangshengen@huawei.com, arei.gonglei@huawei.com,
-        yechuan@huawei.com, huangzhichao@huawei.com, xiehong@huawei.com
-Subject: Re: [RFC 0/4] pci/sriov: support VFs dynamic addition
-Message-ID: <Y3I+Fs0/dXH/hnpL@unreal>
-References: <20221111142722.1172-1-longpeng2@huawei.com>
- <Y256ty6xGyUpkFn9@unreal>
- <0b2202bf-18d3-b288-9605-279208165080@huawei.com>
- <Y3Hoi4zGFY4Fz1l4@unreal>
- <d7327d46-deb5-dc75-21c3-1f351d7da108@huawei.com>
+        Mon, 14 Nov 2022 08:11:55 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54F317899;
+        Mon, 14 Nov 2022 05:11:51 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id b62so10246449pgc.0;
+        Mon, 14 Nov 2022 05:11:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=itwylVtul7Z49JKkp9kyK5X/B4iweq+ayVxXXotYQJw=;
+        b=MhmYxowk5DwtJgYGp8dCt9DBse6IZR1/QsPRPK0Xelm6pisV3yfUoD4CTsa+dinrge
+         cCwlff3pZMlBTXU/UMzhdVbGftM/n1A+azTXLAt99AkOPpb+rroZ08Ko+CHLI6wTBD0g
+         CqJ1fh8ASbfN7E9l6t16+7WPeuQtR9z1doqXcgOJGx7US+/u/QOWhMEQ4PTraMy9rIZM
+         jDorNtoXLX31vjleS9m/c6D1DGyOB0aiJTBy0B3zYzpUPupsd6hHueIH8UwBSU8Uc43z
+         SK0ofefxNq21dBXovbGvssLeytLO6I4d3VPth8zh+RIBcFDwPQVXdZCgraPo/25mYkxw
+         e9Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=itwylVtul7Z49JKkp9kyK5X/B4iweq+ayVxXXotYQJw=;
+        b=fgqEtajlm9Kr/M8KZtgausdwJiRnHPqUXKT5NQwzu/NoMksYaBJSomaCWYvCSS62QS
+         jcPnGjyfVPz1zRt1do3akyDtbo1rpMnyha00N4ZaEq/BD51Vc5eoGG2bjtVBTqFidHWB
+         cnkosmDH930M1/c6J1hCN+UJr+9yxTUOLS2yJ5N1lNnflmnf+/oXAVMYCiEbfPuyUVVq
+         jmmki2JH6unaFbA3VoxUF/9lOWTbwX4ibIfQSXKebJ7DEtLacLdf86q7JbeMCrY5b9iT
+         LfX2n/Iwp7zYG4RRaBHmE53n2bwGVpvy0ARMMz51AMUfeEHb5IU8poZVAtNi+APLMEse
+         sc6Q==
+X-Gm-Message-State: ANoB5pklesqQZHn9ZRQVgXtBcHVv5aeDcvdENu/oq1tcmRE8zL8R7Rge
+        3+FqojWnitHPaSexyeY+8RA=
+X-Google-Smtp-Source: AA0mqf4BFVRB9+AMFDzK0Shf5FC49MuYofaTxw1/kzlGKOh8F5lY9AHUO8LwfsFYia6t7oYj5cP+1A==
+X-Received: by 2002:a05:6a00:d78:b0:56c:8dbc:f83e with SMTP id n56-20020a056a000d7800b0056c8dbcf83emr13675256pfv.41.1668431511318;
+        Mon, 14 Nov 2022 05:11:51 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-86.three.co.id. [180.214.232.86])
+        by smtp.gmail.com with ESMTPSA id y28-20020aa793dc000000b0056c0d129edfsm6617533pff.121.2022.11.14.05.11.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 05:11:50 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 326211042EC; Mon, 14 Nov 2022 20:11:46 +0700 (WIB)
+Date:   Mon, 14 Nov 2022 20:11:45 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Junhao He <hejunhao3@huawei.com>
+Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
+        mike.leach@linaro.org, leo.yan@linaro.org,
+        jonathan.cameron@huawei.com, john.garry@huawei.com,
+        coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        lpieralisi@kernel.org, linuxarm@huawei.com, yangyicong@huawei.com,
+        liuqi115@huawei.com, f.fangjian@huawei.com,
+        prime.zeng@hisilicon.com
+Subject: Re: [PATCH v13 0/2] Add support for UltraSoc System Memory Buffer
+Message-ID: <Y3I+kaZOe4TPNsd/@debian.me>
+References: <20221114090316.63157-1-hejunhao3@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="v3CYsDSexBSkad/c"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d7327d46-deb5-dc75-21c3-1f351d7da108@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221114090316.63157-1-hejunhao3@huawei.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 08:38:42PM +0800, Longpeng (Mike, Cloud Infrastructure Service Product Dept.) wrote:
-> 
-> 
-> 在 2022/11/14 15:04, Leon Romanovsky 写道:
-> > On Sun, Nov 13, 2022 at 09:47:12PM +0800, Longpeng (Mike, Cloud Infrastructure Service Product Dept.) wrote:
-> > > Hi leon,
-> > > 
-> > > 在 2022/11/12 0:39, Leon Romanovsky 写道:
-> > > > On Fri, Nov 11, 2022 at 10:27:18PM +0800, Longpeng(Mike) wrote:
-> > > > > From: Longpeng <longpeng2@huawei.com>
-> > > > > 
-> > > > > We can enable SRIOV and add VFs by /sys/bus/pci/devices/..../sriov_numvfs, but
-> > > > > this operation needs to spend lots of time if there has a large amount of VFs.
-> > > > > For example, if the machine has 10 PFs and 250 VFs per-PF, enable all the VFs
-> > > > > concurrently would cost about 200-250ms. However most of them are not need to be
-> > > > > used at the moment, so we can enable SRIOV first but add VFs on demand.
-> > > > 
-> > > > It is unclear what took 200-250ms, is it physical VF creation or bind of
-> > > > the driver to these VFs?
-> > > > 
-> > > It is neither. In our test, we already created physical VFs before, so we
-> > > skipped the 100ms waiting when writing PCI_SRIOV_CTRL. And our driver only
-> > > probes PF, it just returns an error if the function is VF.
-> > 
-> > It means that you didn't try sriov_drivers_autoprobe. Once it is set to
-> > true, It won't even try to probe VFs.
-> > 
-> > > 
-> > > The hotspot is the sriov_add_vfs (but no driver probe in fact) which is a
-> > > long procedure. Each step costs only a little, but the total cost is not
-> > > acceptable in some time-sensitive cases.
-> > 
-> > This is also cryptic to me. In standard SR-IOV deployment, all VFs are
-> > created and configured while operator booted the machine with sriov_drivers_autoprobe
-> > set to false. Once this machine is ready, VFs are assigned to relevant VMs/users
-> > through orchestration SW (IMHO, it is supported by all orchestration SW).
-> > 
-> > And only last part (assigning to users) is time-sensitive operation.
-> > 
-> The VF creation and configuration are also time-sensitive in some cases, for
-> example, the hypervisor live update case (such as [1]):
->  save VMs -> kexec -> restore VMs
-> 
-> After the new kernel starts, the VFs must be added into the system, and then
-> assign the original VFs to the QEMU. This means we must enable all 2K+ VFs
-> at once and increase the downtime.
-> 
-> If we can enable the VFs that are used by existing VMs then restore the VMs
-> and enable other unused VFs at last, the downtime would be significantly
-> reduced.
-> 
-> [1] https://static.sched.com/hosted_files/kvmforum2022/65/kvmforum2022-Preserving%20IOMMU%20states%20during%20kexec%20reboot-v4.pdf
 
-Like it is written in presentation, the standard way of doing it is done
-by VFIO live migration feature, where 2K+ VMs are migrated to another server
-at the time first server is scheduled for maintenance.
+--v3CYsDSexBSkad/c
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-However, even in live update case mentioned in the presentation, you
-should disable ALL PFs/VFs and enable ALL PFs/VFs at the same time,
-so you don't need per-VF id enable knob.
+On Mon, Nov 14, 2022 at 05:03:14PM +0800, Junhao He wrote:
+> Add support for UltraSoc System Memory Buffer.
+>=20
 
-> 
-> > > 
-> > > What’s more, the sriov_add_vfs adds the VFs of a PF one by one. So we can
-> > > mostly support 10 concurrent calls if there has 10 PFs.
-> > 
-> > I wondered, are you using real HW? or QEMU SR-IOV? What is your server
-> > that supports such large number of VFs?
-> > 
-> Physical device. Some devices in the market support the large number of VFs,
-> especially in the hardware offloading area, e.g DPU/IPU. I think the SR-IOV
-> software should keep pace with times too.
+The cover letter message (aside changelogs) is short but LGTM. However,
+for individual patches description, please write in imperative mood
+(that is, no "This patch/commit does foo" but "Do foo" instead).
 
-Our devices (and Intel too) support many VFs too. The thing is that
-servers are unlikely to be able to support 10 physical devices with 2K+
-VFs. There are many limitations that will make such is not usable.
-Like, global MSI-X pool and PCI bandwidth to support all these devices.
+Thanks.
 
-> 
-> > BTW, Your change will probably break all SR-IOV devices in the market as
-> > they rely on PCI subsystem to have VFs ready and configured.
-> > 
-> I see, but maybe this change could be a choice for some users.
+--=20
+An old man doll... just what I always wanted! - Clara
 
-It should come with relevant driver changes and very strong justification why
-such functionality is needed now and can't be achieved by anything else
-except user-facing sysfs.
+--v3CYsDSexBSkad/c
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I don't see anything in this presentation and discussion that supports
-need of such UAPI.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY3I+igAKCRD2uYlJVVFO
+o1UsAQC84UBCE7LcNm7rlFcJmsg5bIyUFwl1f5xkMLKP1kpS3AEAmqD8k+1nTJGa
+gxmYpWJx+6+dp8zsZXEhYNNQMUgYSAY=
+=xa7E
+-----END PGP SIGNATURE-----
 
-> 
-> > Thanks
-> > .
+--v3CYsDSexBSkad/c--
