@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD59962853E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF387628543
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237572AbiKNQ3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:29:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
+        id S237578AbiKNQ34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:29:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237438AbiKNQ3i (ORCPT
+        with ESMTP id S237441AbiKNQ3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Nov 2022 11:29:38 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FAEEB1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B037810AC
         for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:29:37 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -22,31 +22,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1B4/BOJeAGf7Dtoezu6zTfoEVRhsIga8Xj9og7bYHLY=;
-        b=JygoovyBYSjfFmhXKl3DmAhlTlJMYdCtcfRom0BM3TjsxVCd9RqT1dRYTPA3xW6S1Gl3A9
-        6Q1wZZ4PS7XESPMtpNAIuYFQAYhVd5hfIsXXQncmpNc60uwatFjTpnpglZ/vi8N3KEHtH0
-        XGwSXTpcH97xrfjJGHbC16W+Uqdg2qU2XXNqZlhU8hEMk188piz4DFQec/IuoSevJgSoxG
-        kpqk9JTvNp5c4l7iPB9b5IVcZbHzqPKEa0y2GAMuWW+AFBSi3QOF4gnns5yR5YavWK357q
-        gKLYDRd1C6Xk8GV3BiLv9ZI8QuIPB1YHqjcGEMj/A29bV7ZmOTgjcn8ePnePDA==
+        bh=pEuSpcGiXYy1rNkif2p1RcLRxWAuPnhCpMJ3boeNpjg=;
+        b=N/bsqRcka6hlDrx/SlwGRNAsEbFEBXRjQwbdRoXt4hlze32AZsQt/rhmkNMken4IpcG54I
+        +KvWEBHaer8/Gei53H6l+GCecFD4I7gidtMF6CWblJihnzxQzE5DwB42jQlbFiI1d7JifO
+        hFuuAyVPpFY967KrUNNJmdGq8x356zKRjK8THEwPyuHhFB2E7udRjbXnkVyFPxcQxw1HqS
+        B124lIIlpqwf3zgW5+iBRgUIoTHePgLGxtl5xlRRnuNpgcLJeXVGdEkcps40nCTPWHz7+L
+        /hurUZ2DPWtDUY2bh67wq39C+NuG0oiArgS1VEasLsceGezG9sOlOXjveNMh1Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1668443376;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=1B4/BOJeAGf7Dtoezu6zTfoEVRhsIga8Xj9og7bYHLY=;
-        b=C9bcEqkYCgPfBjJTl1ERYoNQdlGPpsHmxPDhPzApC7h3Yt9Zste8JJekNtPbq89aaPIlTv
-        SXPDj6ORGcGXF3Cw==
+        bh=pEuSpcGiXYy1rNkif2p1RcLRxWAuPnhCpMJ3boeNpjg=;
+        b=rsJm1DNOHkXtPr/zx3jxXiVx0pONhvzTAgITQSLoTexSWFuCX4rsVZoPheeJfALDD322mU
+        Ob7/pqdT1WRODLCA==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH printk v4 03/39] printk: Prepare for SRCU console list protection
-Date:   Mon, 14 Nov 2022 17:34:56 +0106
-Message-Id: <20221114162932.141883-4-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH printk v4 04/39] printk: register_console: use "registered" for variable names
+Date:   Mon, 14 Nov 2022 17:34:57 +0106
+Message-Id: <20221114162932.141883-5-john.ogness@linutronix.de>
 In-Reply-To: <20221114162932.141883-1-john.ogness@linutronix.de>
 References: <20221114162932.141883-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -61,241 +59,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide an NMI-safe SRCU protected variant to walk the console list.
+The @bootcon_enabled and @realcon_enabled local variables actually
+represent if such console types are registered. In general there
+has been a confusion about enabled vs. registered. Incorrectly
+naming such variables promotes such confusion.
 
-Note that all console fields are now set before adding the console
-to the list to avoid the console becoming visible by SCRU readers
-before being fully initialized.
+Rename the variables to _registered.
 
-This is a preparatory change for a new console infrastructure which
-operates independent of the console BKL.
-
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
-Acked-by: Miguel Ojeda <ojeda@kernel.org>
-Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
 ---
- .clang-format           |  1 +
- include/linux/console.h | 28 ++++++++++++-
- kernel/printk/printk.c  | 87 ++++++++++++++++++++++++++++++++++-------
- 3 files changed, 100 insertions(+), 16 deletions(-)
+ kernel/printk/printk.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/.clang-format b/.clang-format
-index 1247d54f9e49..04a675b56b57 100644
---- a/.clang-format
-+++ b/.clang-format
-@@ -222,6 +222,7 @@ ForEachMacros:
-   - 'for_each_component_dais'
-   - 'for_each_component_dais_safe'
-   - 'for_each_console'
-+  - 'for_each_console_srcu'
-   - 'for_each_cpu'
-   - 'for_each_cpu_and'
-   - 'for_each_cpu_not'
-diff --git a/include/linux/console.h b/include/linux/console.h
-index 7b5f21f9e469..f4f0c9523835 100644
---- a/include/linux/console.h
-+++ b/include/linux/console.h
-@@ -15,7 +15,7 @@
- #define _LINUX_CONSOLE_H_ 1
- 
- #include <linux/atomic.h>
--#include <linux/list.h>
-+#include <linux/rculist.h>
- #include <linux/types.h>
- 
- struct vc_data;
-@@ -158,8 +158,34 @@ struct console {
- 	struct hlist_node node;
- };
- 
-+#ifdef CONFIG_DEBUG_LOCK_ALLOC
-+extern bool console_srcu_read_lock_is_held(void);
-+#else
-+static inline bool console_srcu_read_lock_is_held(void)
-+{
-+	return 1;
-+}
-+#endif
-+
-+extern int console_srcu_read_lock(void);
-+extern void console_srcu_read_unlock(int cookie);
-+
- extern struct hlist_head console_list;
- 
-+/**
-+ * for_each_console_srcu() - Iterator over registered consoles
-+ * @con:	struct console pointer used as loop cursor
-+ *
-+ * Although SRCU guarantees the console list will be consistent, the
-+ * struct console fields may be updated by other CPUs while iterating.
-+ *
-+ * Requires console_srcu_read_lock to be held. Can be invoked from
-+ * any context.
-+ */
-+#define for_each_console_srcu(con)					\
-+	hlist_for_each_entry_srcu(con, &console_list, node,		\
-+				  console_srcu_read_lock_is_held())
-+
- /*
-  * for_each_console() allows you to iterate on each console
-  */
 diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index e6f0832e71f0..173f46a29252 100644
+index 173f46a29252..3d449dfb1ed6 100644
 --- a/kernel/printk/printk.c
 +++ b/kernel/printk/printk.c
-@@ -85,6 +85,7 @@ EXPORT_SYMBOL(oops_in_progress);
- static DEFINE_SEMAPHORE(console_sem);
- HLIST_HEAD(console_list);
- EXPORT_SYMBOL_GPL(console_list);
-+DEFINE_STATIC_SRCU(console_srcu);
+@@ -3156,8 +3156,8 @@ static void try_enable_default_console(struct console *newcon)
+ void register_console(struct console *newcon)
+ {
+ 	struct console *con;
+-	bool bootcon_enabled = false;
+-	bool realcon_enabled = false;
++	bool bootcon_registered = false;
++	bool realcon_registered = false;
+ 	int err;
  
- /*
-  * System may need to suppress printk message under certain
-@@ -104,6 +105,13 @@ static struct lockdep_map console_lock_dep_map = {
- };
- #endif
+ 	for_each_console(con) {
+@@ -3168,13 +3168,13 @@ void register_console(struct console *newcon)
  
-+#ifdef CONFIG_DEBUG_LOCK_ALLOC
-+bool console_srcu_read_lock_is_held(void)
-+{
-+	return srcu_read_lock_held(&console_srcu);
-+}
-+#endif
-+
- enum devkmsg_log_bits {
- 	__DEVKMSG_LOG_BIT_ON = 0,
- 	__DEVKMSG_LOG_BIT_OFF,
-@@ -219,6 +227,32 @@ int devkmsg_sysctl_set_loglvl(struct ctl_table *table, int write,
- }
- #endif /* CONFIG_PRINTK && CONFIG_SYSCTL */
+ 	for_each_console(con) {
+ 		if (con->flags & CON_BOOT)
+-			bootcon_enabled = true;
++			bootcon_registered = true;
+ 		else
+-			realcon_enabled = true;
++			realcon_registered = true;
+ 	}
  
-+/**
-+ * console_srcu_read_lock - Register a new reader for the
-+ *	SRCU-protected console list
-+ *
-+ * Use for_each_console_srcu() to iterate the console list
-+ *
-+ * Context: Any context.
-+ */
-+int console_srcu_read_lock(void)
-+{
-+	return srcu_read_lock_nmisafe(&console_srcu);
-+}
-+EXPORT_SYMBOL(console_srcu_read_lock);
-+
-+/**
-+ * console_srcu_read_unlock - Unregister an old reader from
-+ *	the SRCU-protected console list
-+ *
-+ * Counterpart to console_srcu_read_lock()
-+ */
-+void console_srcu_read_unlock(int cookie)
-+{
-+	srcu_read_unlock_nmisafe(&console_srcu, cookie);
-+}
-+EXPORT_SYMBOL(console_srcu_read_unlock);
-+
- /*
-  * Helper macros to handle lockdep when locking/unlocking console_sem. We use
-  * macros instead of functions so that _RET_IP_ contains useful information.
-@@ -2989,6 +3023,14 @@ void console_stop(struct console *console)
- 	console_lock();
- 	console->flags &= ~CON_ENABLED;
- 	console_unlock();
-+
-+	/*
-+	 * Ensure that all SRCU list walks have completed. All contexts must
-+	 * be able to see that this console is disabled so that (for example)
-+	 * the caller can suspend the port without risk of another context
-+	 * using the port.
-+	 */
-+	synchronize_srcu(&console_srcu);
- }
- EXPORT_SYMBOL(console_stop);
- 
-@@ -3179,6 +3221,17 @@ void register_console(struct console *newcon)
+ 	/* Do not register boot consoles when there already is a real one. */
+-	if (newcon->flags & CON_BOOT && realcon_enabled) {
++	if ((newcon->flags & CON_BOOT) && realcon_registered) {
+ 		pr_info("Too late to register bootconsole %s%d\n",
+ 			newcon->name, newcon->index);
+ 		return;
+@@ -3216,7 +3216,7 @@ void register_console(struct console *newcon)
+ 	 * the real console are the same physical device, it's annoying to
+ 	 * see the beginning boot messages twice
+ 	 */
+-	if (bootcon_enabled &&
++	if (bootcon_registered &&
+ 	    ((newcon->flags & (CON_CONSDEV | CON_BOOT)) == CON_CONSDEV)) {
  		newcon->flags &= ~CON_PRINTBUFFER;
  	}
- 
-+	newcon->dropped = 0;
-+	if (newcon->flags & CON_PRINTBUFFER) {
-+		/* Get a consistent copy of @syslog_seq. */
-+		mutex_lock(&syslog_lock);
-+		newcon->seq = syslog_seq;
-+		mutex_unlock(&syslog_lock);
-+	} else {
-+		/* Begin with next message. */
-+		newcon->seq = prb_next_seq(prb);
-+	}
-+
- 	/*
- 	 * Put this console in the list - keep the
- 	 * preferred driver at the head of the list.
-@@ -3187,28 +3240,24 @@ void register_console(struct console *newcon)
- 	if (hlist_empty(&console_list)) {
- 		/* Ensure CON_CONSDEV is always set for the head. */
- 		newcon->flags |= CON_CONSDEV;
--		hlist_add_head(&newcon->node, &console_list);
-+		hlist_add_head_rcu(&newcon->node, &console_list);
- 
- 	} else if (newcon->flags & CON_CONSDEV) {
- 		/* Only the new head can have CON_CONSDEV set. */
- 		console_first()->flags &= ~CON_CONSDEV;
--		hlist_add_head(&newcon->node, &console_list);
-+		hlist_add_head_rcu(&newcon->node, &console_list);
- 
- 	} else {
--		hlist_add_behind(&newcon->node, console_list.first);
--	}
--
--	newcon->dropped = 0;
--	if (newcon->flags & CON_PRINTBUFFER) {
--		/* Get a consistent copy of @syslog_seq. */
--		mutex_lock(&syslog_lock);
--		newcon->seq = syslog_seq;
--		mutex_unlock(&syslog_lock);
--	} else {
--		/* Begin with next message. */
--		newcon->seq = prb_next_seq(prb);
-+		hlist_add_behind_rcu(&newcon->node, console_list.first);
- 	}
- 	console_unlock();
-+
-+	/*
-+	 * No need to synchronize SRCU here! The caller does not rely
-+	 * on all contexts being able to see the new console before
-+	 * register_console() completes.
-+	 */
-+
- 	console_sysfs_notify();
- 
- 	/*
-@@ -3254,7 +3303,7 @@ int unregister_console(struct console *console)
- 		return -ENODEV;
- 	}
- 
--	hlist_del_init(&console->node);
-+	hlist_del_init_rcu(&console->node);
- 
- 	/*
- 	 * <HISTORICAL>
-@@ -3269,6 +3318,14 @@ int unregister_console(struct console *console)
- 		console_first()->flags |= CON_CONSDEV;
- 
- 	console_unlock();
-+
-+	/*
-+	 * Ensure that all SRCU list walks have completed. All contexts
-+	 * must not be able to see this console in the list so that any
-+	 * exit/cleanup routines can be performed safely.
-+	 */
-+	synchronize_srcu(&console_srcu);
-+
- 	console_sysfs_notify();
- 
- 	if (console->exit)
+@@ -3268,7 +3268,7 @@ void register_console(struct console *newcon)
+ 	 * went to the bootconsole (that they do not see on the real console)
+ 	 */
+ 	con_printk(KERN_INFO, newcon, "enabled\n");
+-	if (bootcon_enabled &&
++	if (bootcon_registered &&
+ 	    ((newcon->flags & (CON_CONSDEV | CON_BOOT)) == CON_CONSDEV) &&
+ 	    !keep_bootcon) {
+ 		struct hlist_node *tmp;
 -- 
 2.30.2
 
