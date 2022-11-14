@@ -2,133 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DFD6276F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C766276FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236105AbiKNIBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:01:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
+        id S236121AbiKNICw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:02:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236088AbiKNIBg (ORCPT
+        with ESMTP id S236116AbiKNICt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:01:36 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E3CC48;
-        Mon, 14 Nov 2022 00:01:33 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id y16so16582219wrt.12;
-        Mon, 14 Nov 2022 00:01:33 -0800 (PST)
+        Mon, 14 Nov 2022 03:02:49 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC381958F
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:02:47 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id k19so12119852lji.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:02:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eANwCkb3Vp19xhtdhoIJYYHLk76oMsoOORUWfegYSaU=;
-        b=FSPmjVA8A1plQhs8YuWo2yJXT4Rsg4nblJ72HfeTSst9Nf+zjXd0Fb5EWaP574sRti
-         aUockDfFs3TgRtjbDAjOCQMnjRXT6/JmVnFd/EytBJ6WSSGE182OmFWQG+Du21vomG54
-         U2AiFoHNSGcMO7f6m0saQHtI2kgE5irJEezPrVSxAEZEeDnmRtE9N6iJ7Vaoa1H3Fi94
-         mGorkoyRTTcPgJFfE80b2WEcWjHV0HEjXRZMeuUh3Kzjph3NGcxeKAAZbQb87XnFE6at
-         LoMSKaUPd0rPobyyDldM8Rah34dkVMMTgnGilhmVjm7H3BQOiJ/Ne/PD4ftwuiCh5y/p
-         g7oA==
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sYOkC3lSl+MCr0UtIVqb3uN+PxWKiXCe/KSGqm7Qpw4=;
+        b=DH+KqV80xgBULrXFFFSI+0ylBOGgDx3w6GbXJJk/vMUzZruaUiL2huAzlCsWiQsEqK
+         CYlVQcGC2HkQFYMCuzM6iK00X4WXZUE/0snchq3BZzwgzS+gA6j8iXPaOyXQg8R8I2Qd
+         c9i8w6mYogOniJ1wRzl8VK2cpeh7W8RuFAi54=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eANwCkb3Vp19xhtdhoIJYYHLk76oMsoOORUWfegYSaU=;
-        b=f8BA9d4XEHHjCN/xZXMT1qJEcKnlfCbK5LNuLVxORLrgzZYppFQpONCKViD3TBZ16k
-         BjTQSrRv2K4B/oNX1hBXrTc9tUhyGqhiB+UI8FpbG/UT2Z4v0WpW8v1fiFkzPBRye0DR
-         /bQmEKd0CJa91pWAADviExjDuIb8tY73D4Q1KDm+Zz7WogRPskhxSaRa2zTbMHJSzT5z
-         HufHgcO6hgLMW4i1wnc/KQQ0lXsnf9buKh1Iv5TqjRPQdQTOnXTfiuFZbRooA7wepjOT
-         T2anXPXyOqw8Lf3SSgWAN2iy3ob/bSU4Y+Up9J/ymdxqwtP7lpXKtlUJOLKevOZf3/fa
-         rtuA==
-X-Gm-Message-State: ANoB5pnRnVKjugUq71u1wp1RF9MPN20gCSBdUoWWW8sZqQt+gLhdu9Ns
-        fP6dmt2m+/emB+k/fn2rBSo=
-X-Google-Smtp-Source: AA0mqf5PDMVUfikPG9pcFnonlJzOth4c+4Xk7cEOExUnK/u0nVqWpPav2IDrz4doZn1ieyGnApgvZQ==
-X-Received: by 2002:adf:de04:0:b0:236:88a2:f072 with SMTP id b4-20020adfde04000000b0023688a2f072mr6692837wrm.516.1668412891629;
-        Mon, 14 Nov 2022 00:01:31 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-8b88-53b7-c55c-8535.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:8b88:53b7:c55c:8535])
-        by smtp.gmail.com with ESMTPSA id r15-20020a05600c35cf00b003a84375d0d1sm19128269wmq.44.2022.11.14.00.01.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 00:01:31 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 14 Nov 2022 09:01:29 +0100
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the modules tree
-Message-ID: <Y3H12Xyt8ALo+HAU@krava>
-References: <20221114111350.38e44eec@canb.auug.org.au>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sYOkC3lSl+MCr0UtIVqb3uN+PxWKiXCe/KSGqm7Qpw4=;
+        b=PJxzRyVIWpTMaIH5T702gDF/yUsPLFGTZ2oUk1bJxkTNCRs2vMf3ssHrxuxPU8p4rr
+         98kJnQ8Vec8uo48J9BirhSb14drDuRg3S9D4kRpXGmm+kTrq16xzoMpD6taz9jI06Pc6
+         1sB2mgQ0JV0VUlkAnXtJfGQ6KzQKpEyvxU0LtzYAaKtsacywuQA8pBMqkdLdH3b1MiBr
+         /8sGLWEW9s51iPuMFDn9T2+vOy133MYFs93x4ITWwQ3cpWOItf5zW5xNVSOsDDMOyER+
+         BLGPAU4uZNyKsEW9XRlkP9P3nE5qbxMiuyrnlqOZE+HoR5Gokyt0IT4tzuSkKTEcseNe
+         wRng==
+X-Gm-Message-State: ANoB5pkarF0BbQc5sfIIkFRTOZrW3KDJYuGkSr0AV5BJM79Sm2mUrqI2
+        ZgdIzDvLYIekzpkQhgXvj9xHEg==
+X-Google-Smtp-Source: AA0mqf676uYWbKGiXMXUjh0D7SVyW8ofLT9CqD+JCKE7P0nbNhtoW3TSlB7wJnQdLy+u1OmceiOUow==
+X-Received: by 2002:a2e:a448:0:b0:277:1cfe:398 with SMTP id v8-20020a2ea448000000b002771cfe0398mr3439816ljn.10.1668412966059;
+        Mon, 14 Nov 2022 00:02:46 -0800 (PST)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id a3-20020a05651c030300b002772414817esm1900919ljp.1.2022.11.14.00.02.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 00:02:45 -0800 (PST)
+Message-ID: <4e98c469-cd22-a946-784c-5e0391142570@rasmusvillemoes.dk>
+Date:   Mon, 14 Nov 2022 09:02:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114111350.38e44eec@canb.auug.org.au>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/5] iio: addac: ad74413r: add spi_device_id table
+Content-Language: en-US, da
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Oleksij Rempel <linux@rempel-privat.de>
+References: <20221111143921.742194-1-linux@rasmusvillemoes.dk>
+ <20221111143921.742194-2-linux@rasmusvillemoes.dk>
+ <20221112165049.51a5f391@jic23-huawei>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20221112165049.51a5f391@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 11:13:50AM +1100, Stephen Rothwell wrote:
-> Hi all,
+On 12/11/2022 17.50, Jonathan Cameron wrote:
+> On Fri, 11 Nov 2022 15:39:17 +0100
+> Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
 > 
-> After merging the modules tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
-> 
-> kernel/trace/ftrace.c: In function 'ftrace_lookup_symbols':
-> kernel/trace/ftrace.c:8316:52: error: passing argument 1 of 'module_kallsyms_on_each_symbol' from incompatible pointer type [-Werror=incompatible-pointer-types]
->  8316 |         found_all = module_kallsyms_on_each_symbol(kallsyms_callback, &args);
->       |                                                    ^~~~~~~~~~~~~~~~~
->       |                                                    |
->       |                                                    int (*)(void *, const char *, long unsigned int)
-> In file included from include/linux/device/driver.h:21,
->                  from include/linux/device.h:32,
->                  from include/linux/node.h:18,
->                  from include/linux/cpu.h:17,
->                  from include/linux/stop_machine.h:5,
->                  from kernel/trace/ftrace.c:17:
-> include/linux/module.h:882:48: note: expected 'const char *' but argument is of type 'int (*)(void *, const char *, long unsigned int)'
->   882 | int module_kallsyms_on_each_symbol(const char *modname,
->       |                                    ~~~~~~~~~~~~^~~~~~~
-> kernel/trace/ftrace.c:8316:71: error: passing argument 2 of 'module_kallsyms_on_each_symbol' from incompatible pointer type [-Werror=incompatible-pointer-types]
->  8316 |         found_all = module_kallsyms_on_each_symbol(kallsyms_callback, &args);
->       |                                                                       ^~~~~
->       |                                                                       |
->       |                                                                       struct kallsyms_data *
-> include/linux/module.h:883:42: note: expected 'int (*)(void *, const char *, long unsigned int)' but argument is of type 'struct kallsyms_data *'
->   883 |                                    int (*fn)(void *, const char *, unsigned long),
->       |                                    ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> kernel/trace/ftrace.c:8316:21: error: too few arguments to function 'module_kallsyms_on_each_symbol'
->  8316 |         found_all = module_kallsyms_on_each_symbol(kallsyms_callback, &args);
->       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/linux/module.h:882:5: note: declared here
->   882 | int module_kallsyms_on_each_symbol(const char *modname,
->       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   90de88426f3c ("livepatch: Improve the search performance of module_kallsyms_on_each_symbol()")
-> 
-> from the modules tree interatcing with commit
-> 
->   3640bf8584f4 ("ftrace: Add support to resolve module symbols in ftrace_lookup_symbols")
-> 
-> from the next-next tree.
-> 
-> I have no idea how to easily fix this up, so I have used the modules
-> tree from next-20221111 for today in the hope someone will send me a fix.
+>> Silence the run-time warning
+>>
+>>   SPI driver ad74413r has no spi_device_id for adi,ad74412r
+>>
+>> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+>> ---
+>>  drivers/iio/addac/ad74413r.c | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
+>> index 899bcd83f40b..37485be88a63 100644
+>> --- a/drivers/iio/addac/ad74413r.c
+>> +++ b/drivers/iio/addac/ad74413r.c
+>> @@ -1457,12 +1457,20 @@ static const struct of_device_id ad74413r_dt_id[] = {
+>>  };
+>>  MODULE_DEVICE_TABLE(of, ad74413r_dt_id);
+>>  
+>> +static const struct spi_device_id ad74413r_spi_id[] = {
+>> +	{ .name = "ad74412r", .driver_data = (kernel_ulong_t)&ad74412r_chip_info_data },
+>> +	{ .name = "ad74413r", .driver_data = (kernel_ulong_t)&ad74413r_chip_info_data },
+>> +	{},
+> Trivial, but prefer not to have a comma after a "NULL" terminator like this.
+> It would never make sense to add anything after it in the array.
 
-hi,
-there's no quick fix.. I sent follow up email to the original
-change and cc-ed you
+I agree and wouldn't have added it if it weren't for the existing case
+in the other table.
 
-thanks,
-jirka
+> Now you are matching existing driver style, but I'd still rather not see more
+> instances of this added.
+
+Sure.
+
+> Also, driver_data is not currently used. It should be because adding this
+> spi_id table means the driver can be probed via various routes where
+> device_get_match_data() == NULL. 
+
+That makes sense, I think I thought that that would somehow happen
+automatically. Looking through the history of similar fixes, I see that
+for example 3f8dd0a7dc does indeed add code as you suggest, but
+855fe49984 does not (and also doesn't add the corresponding .driver_data
+initializers in the spi table). They may very well both be correct, but
+looping in Oleksij for good measure.
+
+> Hence, alongside this change you need to have a fallback to cover that case.
+> Something along the lines of...
+> 
+> 	st->chip_info = device_get_match_data(..);
+> 	if (!st->chip_info) {
+> 		struct spi_device_id *id = spi_get_device_id();
+> 		if (!id)
+> 			return -EINVAL;
+> 
+> 		st->chip_info = (void *)id->driver_data;
+> 		//or better yet cast to the correct type I'm just too lazy to look it up ;)
+> 		if (!st->chip_info)
+> 			return -EINVAL;
+> 
+> 	}
+
+Thanks,
+Rasmus
+
