@@ -2,144 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDCD6288BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:58:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B476A6288C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236771AbiKNS61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 13:58:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S236523AbiKNS7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 13:59:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236318AbiKNS6L (ORCPT
+        with ESMTP id S236828AbiKNS7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 13:58:11 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025F11D33C;
-        Mon, 14 Nov 2022 10:58:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668452289; x=1699988289;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=BZMLhTwKqFLidxOVtwWq081cCaNo7ow4HF5ovB57GGE=;
-  b=GppoaM+AeBp3THbC30cQaYtJRZEhR9Bow3agyfVCEymlXZT04nkSUfCD
-   mw4b2xegRjaRphDpIwI1QrwTgYEjHrL0FLVujEYahf/V1BiQxDIZjb/I8
-   wm5QIx3yBjhv83yx38PoslQ2/yvHxKPfQPD2PSDPhuNfpRQSboPBvWB6u
-   PzX2E0QEq0NP4PpejxFDllRUt1OuQFHPn7+3DN1SWFIGVBbXlg91YU8NI
-   JsgdAjcvLjnEPttsOSwiq63F/2B1jgN8LV0+Zhc+9E8YxekRC1b3+P70I
-   PoIhQxiyLsEoZwhaMVbHz6yF0R9s9U31s/4fFYkDQ2RGQdlrBYOjuIVvK
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="338843407"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="338843407"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 10:58:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="638607286"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="638607286"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 14 Nov 2022 10:58:00 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id EECC2348; Mon, 14 Nov 2022 20:58:24 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-        linux-pci@vger.kernel.org, xen-devel@lists.xenproject.org
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: [PATCH v3 4/4] pcmcia: Convert to use pci_bus_for_each_resource_p()
-Date:   Mon, 14 Nov 2022 20:58:22 +0200
-Message-Id: <20221114185822.65038-5-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221114185822.65038-1-andriy.shevchenko@linux.intel.com>
-References: <20221114185822.65038-1-andriy.shevchenko@linux.intel.com>
+        Mon, 14 Nov 2022 13:59:20 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F15C12090
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 10:59:08 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1ouefj-0007cG-5m; Mon, 14 Nov 2022 19:59:07 +0100
+Message-ID: <49ab0931-0d45-7884-e7b6-5c7d4de82ee2@leemhuis.info>
+Date:   Mon, 14 Nov 2022 19:59:06 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [GIT PULL] arm64 updates for 6.1-rc1 #forregzbot
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221005144116.2256580-1-catalin.marinas@arm.com>
+ <CAMi1Hd38YB2m_r=m0wuDz+wErii37fUq1BJnvN9=y6opDzo_Fw@mail.gmail.com>
+ <Y0aq8y5mEZi14lJ/@arm.com>
+ <CAMi1Hd3Y9AibeVnh9_KYJ2EXar7bBSypKm4Tixj47htM7ZOURw@mail.gmail.com>
+ <CAMi1Hd1VBCFhf7+EXWHQWcGy4k=tcyLa7RGiFdprtRnegSG0Mw@mail.gmail.com>
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <CAMi1Hd1VBCFhf7+EXWHQWcGy4k=tcyLa7RGiFdprtRnegSG0Mw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1668452350;dfce5e30;
+X-HE-SMSGID: 1ouefj-0007cG-5m
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pci_bus_for_each_resource_p() hides the iterator loop since
-it may be not used otherwise. With this, we may drop that iterator
-variable definition.
+[Note: this mail is primarily send for documentation purposes and/or for
+regzbot, my Linux kernel regression tracking bot. That's why I removed
+most or all folks from the list of recipients, but left any that looked
+like a mailing lists. These mails usually contain '#forregzbot' in the
+subject, to make them easy to spot and filter out.]
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Acked-by: Dominik Brodowski <linux@dominikbrodowski.net>
----
- drivers/pcmcia/rsrc_nonstatic.c | 9 +++------
- drivers/pcmcia/yenta_socket.c   | 3 +--
- 2 files changed, 4 insertions(+), 8 deletions(-)
+[TLDR: I'm adding this regression report to the list of tracked
+regressions; all text from me you find below is based on a few templates
+paragraphs you might have encountered already already in similar form.]
 
-diff --git a/drivers/pcmcia/rsrc_nonstatic.c b/drivers/pcmcia/rsrc_nonstatic.c
-index ad1141fddb4c..9d92d4bb6239 100644
---- a/drivers/pcmcia/rsrc_nonstatic.c
-+++ b/drivers/pcmcia/rsrc_nonstatic.c
-@@ -934,7 +934,7 @@ static int adjust_io(struct pcmcia_socket *s, unsigned int action, unsigned long
- static int nonstatic_autoadd_resources(struct pcmcia_socket *s)
- {
- 	struct resource *res;
--	int i, done = 0;
-+	int done = 0;
- 
- 	if (!s->cb_dev || !s->cb_dev->bus)
- 		return -ENODEV;
-@@ -960,12 +960,9 @@ static int nonstatic_autoadd_resources(struct pcmcia_socket *s)
- 	 */
- 	if (s->cb_dev->bus->number == 0)
- 		return -EINVAL;
--
--	for (i = 0; i < PCI_BRIDGE_RESOURCE_NUM; i++) {
--		res = s->cb_dev->bus->resource[i];
--#else
--	pci_bus_for_each_resource(s->cb_dev->bus, res, i) {
- #endif
-+
-+	pci_bus_for_each_resource_p(s->cb_dev->bus, res) {
- 		if (!res)
- 			continue;
- 
-diff --git a/drivers/pcmcia/yenta_socket.c b/drivers/pcmcia/yenta_socket.c
-index 3966a6ceb1ac..b200f2b99a7a 100644
---- a/drivers/pcmcia/yenta_socket.c
-+++ b/drivers/pcmcia/yenta_socket.c
-@@ -673,9 +673,8 @@ static int yenta_search_res(struct yenta_socket *socket, struct resource *res,
- 			    u32 min)
- {
- 	struct resource *root;
--	int i;
- 
--	pci_bus_for_each_resource(socket->dev->bus, root, i) {
-+	pci_bus_for_each_resource_p(socket->dev->bus, root) {
- 		if (!root)
- 			continue;
- 
--- 
-2.35.1
+Hi, this is your Linux kernel regression tracker.
 
+On 08.11.22 18:28, Amit Pundir wrote:
+> On Tue, 25 Oct 2022 at 18:08, Amit Pundir <amit.pundir@linaro.org> wrote:
+>>
+>> On Wed, 12 Oct 2022 at 17:24, Catalin Marinas <catalin.marinas@arm.com> wrote:
+>>>
+>>> Hi Amit,
+>>>
+>>> On Sat, Oct 08, 2022 at 08:28:26PM +0530, Amit Pundir wrote:
+>>>> On Wed, 5 Oct 2022 at 20:11, Catalin Marinas <catalin.marinas@arm.com> wrote:
+>>>>> Will Deacon (2):
+>>>>>       arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()
+>>>>
+>>>> Hi Will,
+>>>>
+>>>> This patch broke AOSP on Dragonboard 845c (SDM845). I don't see any
+>>>> relevant crash in the attached log and device silently reboots into
+>>>> USB crash dump mode. The crash is fairly reproducible on db845c. I
+>>>> could trigger it twice in 5 reboots and it always crash at the same
+>>>> point during the boot process. Reverting this patch fixes the crash.
+>>>>
+>>>> I'm happy to test run any debug patche(s), that would help narrow
+>>>> down this breakage.
+>>>
+>>> Cc'ing Robin, maybe he has a better idea (that's commit c44094eee32f).
+>>> Architecturally the change shouldn't make any difference since the cache
+>>> lines can be brought in via the linear mapping at any point. It's just
+>>> less likely to hit a real bug (software or hardware). It's also possible
+>>> that arch_dma_prep_coherent() is used outside the DMA API (if you have
+>>> out of tree drivers).
+>>>
+>>> Leaving the original log in place for Robin. A question I have, with a
+>>> successful boot, what's normally after the bpfloader lines are printed?
+>>> We should try to pinpoint which device/driver causes this. It looks like
+>>> it's well into user-space at that point (graphics about to start?)
+>>
+>> Further narrowed down the breakage to the userspace daemon rmtfs
+>> https://github.com/andersson/rmtfs. Is there anything specific in the
+>> userspace code that I should be paying attention to?
+
+Thanks for the report. To be sure below issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+tracking bot:
+
+#regzbot ^introduced c44094eee32f
+#regzbot title arm64: crash on the Qualcomm SM8250
+#regzbot monitor
+https://lore.kernel.org/all/20221114110329.68413-1-manivannan.sadhasivam@linaro.org/
+
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply -- ideally with also
+telling regzbot about it, as explained here:
+https://linux-regtracking.leemhuis.info/tracked-regression/
+
+Reminder for developers: When fixing the issue, add 'Link:' tags
+pointing to the report (the mail this one replies to), as explained for
+in the Linux kernel's documentation; above webpage explains why this is
+important for tracked regressions.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
