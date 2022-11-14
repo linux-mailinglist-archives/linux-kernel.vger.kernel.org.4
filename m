@@ -2,59 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BE5627C1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D31627C13
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:19:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236376AbiKNLT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:19:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
+        id S236081AbiKNLTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:19:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236520AbiKNLRp (ORCPT
+        with ESMTP id S236984AbiKNLRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:17:45 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0508CA190;
-        Mon, 14 Nov 2022 03:15:49 -0800 (PST)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 612D660004;
-        Mon, 14 Nov 2022 11:15:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1668424548;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5UZmAHjc+nU5bxoFrl7cCvCg0uv7jGLLCbb1brlNZ+0=;
-        b=EzwS1tlQ7fU2aYnUpqReVPgs645PoyGlScCGNIUPc+0CPYZMktpTBHPxxvhLd3Wb+ydXdG
-        eBEeh9U0qcLYUupTNBakRa5DNt8mWUtebHqgeZo4re4CXTZJfrP0z2APrbKHBL0uwLwgB3
-        prgTPJXkndQY9cJsXGiIriexKji66VF/MMaownGhNt678YJNanhx+get9og0z8qBK5Y0it
-        M0ca12r8atsumyscaroL0wM9GLTcFLw6Bbar0P8x5F+JO9+DoeTJiFyXWM2oBj7RhgQ4Xd
-        pWZOEoOeF1orlKlewae70Sy8graGcnn6XhZBAEnRM4KTc5AHm6TuwPCBuJS1gA==
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v2 7/7] MAINTAINERS: add the Renesas RZ/N1 USBF controller entry
-Date:   Mon, 14 Nov 2022 12:15:13 +0100
-Message-Id: <20221114111513.1436165-8-herve.codina@bootlin.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221114111513.1436165-1-herve.codina@bootlin.com>
-References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+        Mon, 14 Nov 2022 06:17:30 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392A9384;
+        Mon, 14 Nov 2022 03:15:34 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EFB4B660231A;
+        Mon, 14 Nov 2022 11:15:31 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1668424532;
+        bh=yY/YRATm0Q3oV5sdHDnUziPQTMU6rAOaaPCbRF/cZoU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=eVNxyhrj+kwldNcRgpie15yV/5vTkKIkqlAsDbdWFCo4+LxeobgaKyCpcakevSO8a
+         akqx/S3ViUV+h7YKq/sBdg9dHiextX/Pee2JXDmLLabEx2R9jQT1XfCHLP7Lu0S1mY
+         V+0+gxRiuD7djrLH0caMoGvOdKZh7kcSXldgUsNVPHezsDf50qJVJR7LUDbh1I3mx7
+         E7EUZiBqKVBUWIRMcYpqRFlcIK2OG4YCrGnMQIIxYN9kFqwkmFd2Ti8EHkst03EclX
+         JcDcvw0oLGfoTU7XFnpMoDgmG26UsKgqk2jlf4XKxxJP8GykG/q/Gz+uZqB8+h5E56
+         1MygFgxgzgy1g==
+Message-ID: <f8b13cd9-c018-e52a-7c93-a8776f5f9ce6@collabora.com>
+Date:   Mon, 14 Nov 2022 12:15:28 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 1/5] media: mediatek: vcodec: Fix getting NULL pointer for
+ dst buffer
+Content-Language: en-US
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221112094144.4256-1-yunfei.dong@mediatek.com>
+ <20221112094144.4256-2-yunfei.dong@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221112094144.4256-2-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,34 +74,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After contributing the driver, add myself as the maintainer
-for Renesas RZ/N1 USBF controller.
+Il 12/11/22 10:41, Yunfei Dong ha scritto:
+> The driver may can't get v4l2 buffer when lat or core decode timeout,
+> will lead to crash when call v4l2_m2m_buf_done to set dst buffer
+> (NULL pointer) done.
+> 
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 
-Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+This commit needs a Fixes tag.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 379945f82a64..9ccac3275a88 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17627,6 +17627,14 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/rtc/renesas,rzn1-rtc.yaml
- F:	drivers/rtc/rtc-rzn1.c
- 
-+RENESAS RZ/N1 USBF CONTROLLER DRIVER
-+M:	Herve Codina <herve.codina@bootlin.com>
-+L:	linux-renesas-soc@vger.kernel.org
-+L:	linux-usb@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/usb/renesas,usbf.yaml
-+F:	drivers/usb/gadget/udc/renesas_usbf.c
-+
- RENESAS R-CAR GEN3 & RZ/N1 NAND CONTROLLER DRIVER
- M:	Miquel Raynal <miquel.raynal@bootlin.com>
- L:	linux-mtd@lists.infradead.org
--- 
-2.38.1
+Regards,
+Angelo
+
 
