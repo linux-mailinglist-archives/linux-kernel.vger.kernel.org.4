@@ -2,111 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310476276EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B28E26276FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236085AbiKNIA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:00:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
+        id S236111AbiKNICN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:02:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236024AbiKNIAv (ORCPT
+        with ESMTP id S236125AbiKNIBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:00:51 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E744335;
-        Mon, 14 Nov 2022 00:00:51 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id y203so10294123pfb.4;
-        Mon, 14 Nov 2022 00:00:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Rl7XVfCURtX7IREOejYVHcuTKEa5Stt/cs0k6IIAT8s=;
-        b=g7j6iKS8QzPekE/NsHsf99xS2YkZMkU0ht/LBWHE94c6k1y0oKp+/lsAXPGSLr0eIx
-         LTIPOEdZ122h9c4+sfRLvAasLdawZd+ZzHsUepncaKIXkQhuaDA5tQ+cFo6WFMKD6ctU
-         ZzC11qUWrAWWKMDnPi2YcBnTTbs9bFYftV0swBsFpMDmH4JoJ7c44X6tz5Xyv6J2995W
-         7Fbhwsk+nsxZZcFi33+eZTaJ05i+nGBPhWKaBaIAnRsgy7hkrjtSSQYTfpWKL4SyJqtx
-         0QeQxcph9hfeU0ERm/NsxxYwzfwnOSI5y5aYoEuEKWxMGKAVsoZ/t+BC1U+z0tAV1Q1o
-         zzzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rl7XVfCURtX7IREOejYVHcuTKEa5Stt/cs0k6IIAT8s=;
-        b=IlNxdkX9FhE9EplfXBQNptbyc8ob6kXV62cgyoekvqK1AP1pIjCgd54xLp+lNDAjcj
-         UG0pHGxRPtVnVxznINCht2DRYdOrjwiaaU/nq7SontW+PxTTyoYAb1SbpHIeXnClKt1F
-         qWaa2P1cw7j56ETWt3FF8zoaMgdziIBzY1Wr57kxkHWyt5ky7A2f+LOm2e1R184P3nCY
-         uzRYiysHLwaYNjj0ztM333cwCLpwhSHv24BqWM5AXwd8Wxp/FcufLfvya8oMhdOHMXDG
-         yalmLSMh+3mRyR0Fcc7UvFCxGO5rqu1KXQ+7XV6Ksjq5MVPPipGvrdraNrv+G06RW/GT
-         IkEQ==
-X-Gm-Message-State: ANoB5pk2A/ZDFp1sRhh5a2nBoioldJ1rD97k3RzCbfFF3I9C45P7VtKD
-        C7BEky5z6mkHb1X/l7BJTUVx6O9/QYE=
-X-Google-Smtp-Source: AA0mqf43vZ2eUvFWOndO4XEoWcD7PQqdMC0LWR4PbveSwpL+5qefS8YkG9HEgNTQ7tnQP1GWZeA8lg==
-X-Received: by 2002:a62:648a:0:b0:561:ada0:69d7 with SMTP id y132-20020a62648a000000b00561ada069d7mr13044989pfb.9.1668412850574;
-        Mon, 14 Nov 2022 00:00:50 -0800 (PST)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id q16-20020a17090311d000b00182a9c27acfsm783254plh.227.2022.11.14.00.00.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 00:00:49 -0800 (PST)
-Message-ID: <6a7f6bb3-bbd4-9b71-b069-b543de067079@gmail.com>
-Date:   Mon, 14 Nov 2022 17:00:45 +0900
+        Mon, 14 Nov 2022 03:01:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F912192B6;
+        Mon, 14 Nov 2022 00:01:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEDEB60EEF;
+        Mon, 14 Nov 2022 08:01:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54D94C433C1;
+        Mon, 14 Nov 2022 08:01:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668412903;
+        bh=+kGmZ2sr1MoPvw4pQEbx/x2LSke6RIWI3WFIYXcquC0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qoxRhZKBInOC5h2N75rNgmfDJiMzUYwas+6qSzBFYdRPbgVF46SahuG/Xk73Gl/2/
+         FENZvSKkiCgUCo9mbsQXDgSepuIBH4llVukrwTAoYENc/pMxPYZkjKuXXSXqISjw3Q
+         QKolX1/bThNCpaQQLCsO8G2JoOnC7apghRvabEUdmrq6NPwLVCYuyj+ynzFb//xXAe
+         mJS+xAX+Lzw5X4XpWoluergq8yzAz9TQSq5rwJcH44H0Zwcx2CvNN/RoV7PvvQM1/D
+         kmSk3x4IEkEpfeFjxG17e0BJjGU/nPedp8WVAPBVvk5NdV5neDB+/TSL1L8B+kFJKi
+         oKBV8fjLEWqdA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ouUP0-0000za-RS; Mon, 14 Nov 2022 09:01:10 +0100
+Date:   Mon, 14 Nov 2022 09:01:10 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] phy: qcom-qmp-combo: fix runtime suspend
+Message-ID: <Y3H1xjtl+dMGssDU@hovoldconsulting.com>
+References: <20221111084255.8963-1-johan+linaro@kernel.org>
+ <20221111084255.8963-6-johan+linaro@kernel.org>
+ <c685cfc8-adec-31e6-c45a-f0e63d85cfcf@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     andrii@kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        lorenzo@kernel.org, mtahhan@redhat.com, netdev@vger.kernel.org,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <20221114183131.3c68e1b5@canb.auug.org.au>
-Subject: Re: linux-next: build warnings after merge of the net-next tree
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20221114183131.3c68e1b5@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c685cfc8-adec-31e6-c45a-f0e63d85cfcf@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 18:31:31 +1100, Stephen Rothwell wrote:
-> Hi all,
+On Sat, Nov 12, 2022 at 09:17:29AM +0300, Dmitry Baryshkov wrote:
+> On 11/11/2022 11:42, Johan Hovold wrote:
+> > Drop the confused runtime-suspend type check which effectively broke
+> > runtime PM if the DP child node happens to be parsed before the USB
+> > child node during probe (e.g. due to order of child nodes in the
+> > devicetree).
+> > 
+> > Instead use the new driver data USB PHY pointer to access the USB
+> > configuration and resources.
+> > 
+> > Fixes: ac0d239936bd ("phy: qcom-qmp: Add support for runtime PM")
 > 
-> After merging the net-next tree, today's linux-next build (htmldocs)
-> produced these warnings:
-> 
-> Documentation/bpf/map_cpumap.rst:50: WARNING: Error in declarator or parameters
-> Invalid C declaration: Expected identifier in nested name. [error at 67]
->   int bpf_map_update_elem(int fd, const void *key, const void *value,
->   -------------------------------------------------------------------^
-> Documentation/bpf/map_cpumap.rst:50: WARNING: Error in declarator or parameters
-> Invalid C declaration: Expecting "(" in parameters. [error at 11]
->   __u64 flags);
->   -----------^
-> Documentation/bpf/map_cpumap.rst:73: WARNING: Duplicate C declaration, also defined at bpf/map_array:35.
-> Declaration is '.. c:function:: int bpf_map_lookup_elem(int fd, const void *key, void *value);'.
-> 
-> Introduced by commit
-> 
->   161939abc80b ("docs/bpf: Document BPF_MAP_TYPE_CPUMAP map")
+> I belive the Fixes tag is incorrect. One can not easily backport this 
+> patch on top of the original ac0d239936bd. I'd suggest to point the 
+> Fixes tags to the addition of phy-qcom-qmp-combo.c
 
-Hi Stephen,
+The Fixes tag should document the commit introducing the bug regardless
+of what kind of changes happened in between.
 
-Maryam has posted a patch at:
+That said, the tag should have been
 
-    https://lore.kernel.org/r/20221113103327.3287482-1-mtahhan@redhat.com/
+Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
 
-        Thanks, Akira
+as this wasn't an issue before adding DP support, which intentionally
+relied on these hard-coded indexes ("luckily USB3 is the first phy").
 
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+Johan
