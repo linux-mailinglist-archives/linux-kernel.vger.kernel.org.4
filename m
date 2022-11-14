@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193ED627ABB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC26627AC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236204AbiKNKlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 05:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
+        id S236177AbiKNKmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 05:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236081AbiKNKlj (ORCPT
+        with ESMTP id S235968AbiKNKmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 05:41:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8811A22E;
-        Mon, 14 Nov 2022 02:41:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CDC760FB6;
-        Mon, 14 Nov 2022 10:41:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5636C433D6;
-        Mon, 14 Nov 2022 10:41:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668422494;
-        bh=+NWKJ+0AC8Jgz8dRFVwYfGZ7NuudhxZusORMCmUpF6k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RF2dcXrTT36pZVRaXF0AlMUvVQGzwdW6CpY5JTYmMjEeLeHr0zVCMkIyvprQJq/Qx
-         UDHD/Y8en3Fp5M8JBUazicfZGksvR7QwVMIDPhMnFVRX8A8A8yHRFZTd4ovPKvaX/J
-         YgOBoVx3JASJQAHv6V7UitYZF7sOkCpAnRy9NvAI=
-Date:   Mon, 14 Nov 2022 11:41:31 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Lee Jones <lee@kernel.org>, Gene Chen <gene_chen@richtek.com>,
-        Andrew Jeffery <andrew@aj.id.au>, linux-leds@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH v3 00/11] leds: deduplicate led_init_default_state_get()
-Message-ID: <Y3IbW5/yTWE7z0cO@kroah.com>
-References: <20220906135004.14885-1-andriy.shevchenko@linux.intel.com>
- <Y1gZ/zBtc2KgXlbw@smile.fi.intel.com>
- <Y1+NHVS5ZJLFTBke@google.com>
- <Y1/qisszTjUL9ngU@smile.fi.intel.com>
- <Y2pmqBXYq3WQa97u@smile.fi.intel.com>
- <Y3IUTUr/MXf9RQEP@google.com>
- <Y3IWMe5nGePMAEFv@smile.fi.intel.com>
+        Mon, 14 Nov 2022 05:42:37 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F26D1D66F
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:42:36 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id l8so12559819ljh.13
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:42:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zDzwDb0dnKoTPgCy4RBfiMpDFetmXY9OEGk9SR/WSLY=;
+        b=FhlApcqDxCtCoupJ/TIS0Ykf65afLK30ejNB8v2zhMO/08W/KJGjo+jBHJsNqt10pm
+         1GEqKtYy830ohGlIM91yJZR6N3HiLjwX/ldBqlIKM5vXM3kFSN+2IIvvYOj+qJ87LRfI
+         dzDH0BAB4MOhdYEyvZ3udJabwEej8WLG14Mgf1O8L/LxHKjVqaxAvZpwi12vdDcBIVpu
+         SuIQrLXvLUodif/creo1nAh7wOM3vGtIU/3ALCYbvqgi8SSmbsONxt+v709lJdR5zYEw
+         fxJFr0c9PqfemGYKmEEvkXXlRTEeFlBCxfFC6xv+x98BZlO64aBbZ6833hVafWVYTAYD
+         0eZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zDzwDb0dnKoTPgCy4RBfiMpDFetmXY9OEGk9SR/WSLY=;
+        b=SJ9LoKbKBw5VWlRs7EKoeikdSVx7DW0fg+Xol6tCh32SfrFRra6JFqOxsFdsF4adSm
+         NYHsEZFG0g17MwXhuRyj/16842E6JUrriEtwZ4RibXwAPadF8e17jOIYkWJz/Wxp4SK6
+         d4getVcpEZ+knkwkHe7qxL9zem9C+ZwxeGJP2ujOFWhRhoTi6GZQ+PmSRILVotrS5+HJ
+         +XsMC0O+qZaeOxRUlGlx5He+de1dWZXT0lVjqkagQoEygxHKzxUHxtg+72tFeRFJldG+
+         TzTHp3lolkzuE5YQ91e7OnlwNO8BzCKN6G7qIV1OO5USa2jfpRkekGa1MKS0w+EUa010
+         /l8Q==
+X-Gm-Message-State: ANoB5plMsPX0H2TLHoLFNGi6EQzuNPtZP3kRF4+jUhjyYEbggfl/A3QP
+        iJcMW1T/++5o6Xe3nOJnXSTHjQ==
+X-Google-Smtp-Source: AA0mqf4qlxiMY3JDejy6a3SVEFC3TJHChXsZGfocnkqWhpRLRNPJLTzvyucW4mkNtj7j0c1yswAz8g==
+X-Received: by 2002:a2e:960d:0:b0:277:4f:bd2a with SMTP id v13-20020a2e960d000000b00277004fbd2amr3622765ljh.341.1668422554455;
+        Mon, 14 Nov 2022 02:42:34 -0800 (PST)
+Received: from localhost.localdomain ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id bs21-20020a05651c195500b0026c4e922fb2sm1946486ljb.48.2022.11.14.02.42.33
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 14 Nov 2022 02:42:34 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/9] dt-bindings: arm-smmu: Allow up to 3 power-domains
+Date:   Mon, 14 Nov 2022 11:42:14 +0100
+Message-Id: <20221114104222.36329-2-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+In-Reply-To: <20221114104222.36329-1-konrad.dybcio@linaro.org>
+References: <20221114104222.36329-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3IWMe5nGePMAEFv@smile.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,35 +78,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 12:19:29PM +0200, Andy Shevchenko wrote:
-> On Mon, Nov 14, 2022 at 10:11:25AM +0000, Lee Jones wrote:
-> > On Tue, 08 Nov 2022, Andy Shevchenko wrote:
-> > > On Mon, Oct 31, 2022 at 05:32:26PM +0200, Andy Shevchenko wrote:
-> > > > On Mon, Oct 31, 2022 at 08:53:49AM +0000, Lee Jones wrote:
-> > > > > On Tue, 25 Oct 2022, Andy Shevchenko wrote:
-> > > > > 
-> > > > > > On Tue, Sep 06, 2022 at 04:49:53PM +0300, Andy Shevchenko wrote:
-> > > > > > > There are several users of LED framework that reimplement the
-> > > > > > > functionality of led_init_default_state_get(). In order to
-> > > > > > > deduplicate them move the declaration to the global header
-> > > > > > > (patch 2) and convert users (patche 3-11).
-> > > > > > 
-> > > > > > Dear LED maintainers, is there any news on this series? It's hanging around
-> > > > > > for almost 2 months now...
-> > > > > 
-> > > > > My offer still stands if help is required.
-> > > > 
-> > > > From my point of view the LED subsystem is quite laggish lately (as shown by
-> > > > this patch series, for instance), which means that _in practice_ the help is
-> > > > needed, but I haven't got if we have any administrative agreement on that.
-> > > > 
-> > > > Pavel?
-> > > 
-> > > So, Pavel seems quite unresponsive lately... Shall we just move on and take
-> > > maintainership?
-> > 
-> > I had an off-line conversation with Greg who advised me against that.
-> 
-> OK. What the reasonable option we have then?
+Some SMMUs require that a vote is held on as much as 3 separate PDs
+(hello Qualcomm). Allow it in bindings.
 
-I thought there is now a new LED maintainer, is that not working out?
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Changes since v1:
+- Add minItems
+
+ Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+index 9066e6df1ba1..82bc696de662 100644
+--- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
++++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+@@ -159,7 +159,8 @@ properties:
+           through the TCU's programming interface.
+ 
+   power-domains:
+-    maxItems: 1
++    minItems: 0
++    maxItems: 3
+ 
+   nvidia,memory-controller:
+     description: |
+-- 
+2.38.1
+
