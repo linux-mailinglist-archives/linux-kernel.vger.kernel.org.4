@@ -2,123 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25F7628338
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:50:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F5862833A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236302AbiKNOuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:50:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
+        id S236684AbiKNOvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:51:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbiKNOur (ORCPT
+        with ESMTP id S236642AbiKNOu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:50:47 -0500
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3BB8B23BE5;
-        Mon, 14 Nov 2022 06:50:44 -0800 (PST)
-Received: from zju.edu.cn (unknown [10.12.77.33])
-        by mail-app3 (Coremail) with SMTP id cC_KCgB376rAVXJj+uwGCQ--.58627S4;
-        Mon, 14 Nov 2022 22:50:40 +0800 (CST)
-From:   Lin Ma <linma@zju.edu.cn>
-To:     axboe@kernel.dk, asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Lin Ma <linma@zju.edu.cn>
-Subject: [PATCH v1] io_uring/filetable: fix file reference underflow
-Date:   Mon, 14 Nov 2022 22:50:40 +0800
-Message-Id: <20221114145040.14365-1-linma@zju.edu.cn>
-X-Mailer: git-send-email 2.38.1
+        Mon, 14 Nov 2022 09:50:58 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029C02B1AC;
+        Mon, 14 Nov 2022 06:50:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1668437455; bh=B/1yflx2z2cxbHE4OzmE90yDQ7Z9dwdRgPK6Qtfxewg=;
+        h=X-UI-Sender-Class:Date:From:Subject:To:Cc;
+        b=CfpQsleQsYIpnpQc9ZJIBWd0Duy84QEun7x8Z9P0HchXrWxNkrs5EIcgepCpFocf/
+         KB3fhXXl071iAT1jLfUAd+v1ZpzMrDz1aqiHBaTHLBL88AQOThRS20dEJ26ujy4AuN
+         Q6jyahQ17Y6X06zDxwMIP8fsGM82K/3ta/Uev516uMvEhiDBK1UMjsDSSNCc00H2Yh
+         VQ5n1k03BDkPk50B2IIbGkXQC+rFXLPIMBCf6zrzSl/5kBkZL6fQrSnHCE+a/xsx3+
+         rEmDLxxwqcrM1wOfvGaRF8QorUB9X+8l1Bgiu9riQeE409ZpY4PgGEufH0LuxHKAGC
+         VfrmQ5H3eE1DQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.100.20] ([46.142.34.171]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MIwz4-1oeaLV1dNa-00KSR8; Mon, 14
+ Nov 2022 15:50:55 +0100
+Message-ID: <2e8172d0-7c93-66e6-8b8f-531ab2083e32@gmx.de>
+Date:   Mon, 14 Nov 2022 15:50:55 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cC_KCgB376rAVXJj+uwGCQ--.58627S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7WFykuF1xtw18tw47Kr47CFg_yoW8KryrpF
-        Z8J3W0qF1DG348K3ZrGFWrAF95C3yxAF1DZr95ur4Skr1UZFnYyr4S9a4Y9a1jkr4kAa4Y
-        qr48K398urW8Jw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
-        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+From:   Ronald Warsow <rwarsow@gmx.de>
+Subject: Re: [PATCH 6.0 000/190] 6.0.9-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:7HzibFwRSjmOdTpUliQJJlKsR6G8ij1tW+fHFjaODz62Y1rmqdT
+ oHzqbJsBESQSYErYl8WXRw2viIPgmbZYl0aQ0bVOOuEI1UNBoucOTUd0j2SEAONCrMRoR8f
+ 1IbTMUDtYbugm+cYRzZGbuKF+Ydm19p85BGcMtbNq1/7fCLmV/eFPV4N6Ocb44opxVM5y66
+ qo5zw+6ygPLewXNmBgaGw==
+UI-OutboundReport: notjunk:1;M01:P0:MLcCs4mGgoQ=;HycfhyfkceX5vRmlmk4Sv3j7RuZ
+ YsF3G37S/qBWdBYt7jN/xZ3d4SbR+NRcyeLSvyQlL6UJASXbMVFi+gklGTjLfWiQWYmkYFL7Q
+ eXPsu4RwB8BR8iK127GoxDz7IX2MtFeKU1A+xP2gb5Jhb9RBH+tjjWIGr202n2SavCjnrt1Zb
+ Md0YeaF3Kt5ZTZ4CHgIUcjgh+XZUoYRu5PNSlvTIobC/pEVdMZwqKK9j5liXBu56pK30PD5HY
+ X0fMLrlrP+HV2btwGlKwDLMF2kcD5NWhi9abtyZtdFxahFtHGcfcCw9G9otTSNdprcfzNHIqb
+ lY+ZJm4zx+Pfn+ZraTlCahwYo/5MqMVlCxgB9cIUoIukuFDtZMZZ0iuf9oVfMZCo5tisVOOBs
+ OMjsds9LueKkzLPIgDc0AGG8YU790hIf2O2yvUbb+aU093o+UAWdnRNzAh6+Ae5G+Scup1W/J
+ dzNG6JvguCw/1ok0SAlkxmK+8BUHwGyUc0qAiaKmNTJsDBobVabs+8HXIwMqcYBbj/ZYg1lGV
+ C3774LGejnZg3jlF0gDxnaTzR+MwjpWzMUqNx8NNLE8OhTxK97ma4a4yPYaTQxU2XVIMgrhJu
+ Ct3fxP4DLDfUmX4p1YVX0q06bZ3ckEPbcqnGdV9JLNz0Q8ABtpvrvizEHBZ4FvEQ689K93szU
+ fLjRXvd5Hswvy/xxx+n9aQvn6uBI4HpJnPv0b3JDc9y89QOPtuaMbEW2QyRMVC9c0SN/GPon0
+ l3IwVWUcAtlD3RmUun+PRbucjI5D1CtQSwmLLjiczQ0mK1VLMjetwvDHDx3hrN1Sl/wigFJ2P
+ RrLVSo4zJGihD4tBrFKwPj5Xi7myN25STnNMUpvzW55YEEUYwnQG5AgGp3BCm5cbr4FjRL8i3
+ dEgDUaJZ1bWRC1ynj7u6HC+rS0R3HrsVLrgxwrgV93+EBspGIkujnbrF3cVt1ewozfGS4/2pm
+ slYR5g==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is an interesting reference bug when -ENOMEM occurs in calling of
-io_install_fixed_file(). The tracing of this bug is shown below:
+Hi Greg
 
-commit 8c71fe750215 ("io_uring: ensure fput() called correspondingly
-when direct install fails") adds an additional fput() in
-io_fixed_fd_install() when io_file_bitmap_get() returns error values. In
-that case, the routine will never make it to io_install_fixed_file() due
-to an early return.
+6.0.9-rc1
 
-static int io_fixed_fd_install(...)
-{
-  if (alloc_slot) {
-    ...
-    ret = io_file_bitmap_get(ctx);
-    if (unlikely(ret < 0)) {
-      io_ring_submit_unlock(ctx, issue_flags);
-      fput(file);
-      return ret;
-    }
-    ...
-  }
-  ...
-  ret = io_install_fixed_file(req, file, issue_flags, file_slot);
-  ...
-}
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 37 Beta)
 
-In the above scenario, the reference is okay as io_fixed_fd_install()
-ensures the fput() is called when something bad happens, either via
-bitmap or via inner io_install_fixed_file().
+Thanks
 
-However, the commit 61c1b44a21d7 ("io_uring: fix deadlock on iowq file
-slot alloc") breaks the balance because it places fput() into the common
-path for both io_file_bitmap_get() and io_install_fixed_file(). Since
-io_install_fixed_file() handles the fput() itself, the reference
-underflow come across then.
-
-There are some extra commits make the current code into
-io_fixed_fd_install() -> __io_fixed_fd_install() ->
-io_install_fixed_file()
-
-However, the fact that there is an extra fput() is called if
-io_install_fixed_file() calls fput(). Traversing through the code, I
-find that the existing two callers to __io_fixed_fd_install():
-io_fixed_fd_install() and io_msg_send_fd() have fput() when handling
-error return, this patch simply removes the fput() in
-io_install_fixed_file() to fix the bug.
-
-Fixes: 61c1b44a21d7 ("io_uring: fix deadlock on iowq file slot alloc")
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
----
- io_uring/filetable.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/io_uring/filetable.c b/io_uring/filetable.c
-index 7b473259f3f4..68dfc6936aa7 100644
---- a/io_uring/filetable.c
-+++ b/io_uring/filetable.c
-@@ -101,8 +101,6 @@ static int io_install_fixed_file(struct io_ring_ctx *ctx, struct file *file,
- err:
- 	if (needs_switch)
- 		io_rsrc_node_switch(ctx, ctx->file_data);
--	if (ret)
--		fput(file);
- 	return ret;
- }
- 
--- 
-2.38.1
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 
