@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315E8628826
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D19262882C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236723AbiKNSS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 13:18:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
+        id S236523AbiKNSTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 13:19:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238356AbiKNSSH (ORCPT
+        with ESMTP id S237258AbiKNSSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 13:18:07 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9392DA9B
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 10:17:36 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id z14so19662572wrn.7
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 10:17:36 -0800 (PST)
+        Mon, 14 Nov 2022 13:18:45 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECCEFAF7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 10:18:44 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id c3-20020a1c3503000000b003bd21e3dd7aso11323424wma.1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 10:18:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ReBzsBimdpveLsy+Lkg8Fji3O2Fl/6cfbARc8AiQfvs=;
-        b=NMN/xH8R+SLKUOKCqztbFprqD4QQFBZBIMsn2qSQwp5gh0JsF10UlcY1OBJC4qgOlW
-         7ximjAX4ZJ6Gj3x9e/4ZiPRTdZteuQiDYVTKAPoRSJO5XhpPfT626xd3g1n5IOx29b5G
-         V16b2eg/y3XsLMUg53LRs8XdHewdUHf5ujP23Dt2kscw4jNXyTBimpkdCIdGUC+IF3sW
-         z76Zt86/kfvLdSld/bSODvQbEnDL+6WEm5YCP1QdfBEyNj4hxsglk82oU0B3cpRRX9UW
-         Ytipd0OsoPd+NuUHeMKLd2xmztnyptsPnSkC18B0ZMYosLJcWXTYo+yI9FHGXZJ/jxaZ
-         rkdA==
+        bh=HVsZ7GvEsebyi2G4cAyW7BniWNFoesfCFO8x3KzC1zQ=;
+        b=qJeRNH87aJ9JmjFPx/1JAMC4pp6z4sMpOxj499Z+f29KO6WWaVJpLLopzQDkOUBoZP
+         YYoyNwTx4CG3mcgFAxOKoyjPN3uC12gQHSpgKjKEJwZ7wYseCRQfCIhzALShni+NkETm
+         yETlG3W72nGoKY0ibAcDujVgH//nNG1TfwYk3UfldiNJDcf1rbz65if6AnXRrAXO6P0D
+         vMIL+NE/46p6MGvNG8LNJOSpb5oUfjhWTiqHg/6w0bYJic/NaQxXefqMS2ipedX5dNfU
+         uEZ35cZz8rq26BHzfAQ04KIyQSK41RvEtyNQPJv0Pq1Wn43CEdapMIl1i8eQQwhV8CV1
+         2mEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ReBzsBimdpveLsy+Lkg8Fji3O2Fl/6cfbARc8AiQfvs=;
-        b=rEI1QcOWtfOwSvXnnnXr9mLkqgF94QMpIMUYYoNGg5ujSUfNZCgmD37/q5IGbSACzU
-         Lx4up6lyYNCEYjGSi2hVAWDbOAdQyAP3Wp5fjAQtZNIHmVqRN1QpN2+j30yEpUGd9y9F
-         6CMuk/3e9Fo5OrGE/IaeNrTGr2cZSiPhfQ3BvumO2mfUOhGe8Qx5SGbAhYRhQmaomZ7m
-         IX683mCLXa8mlLUSBd7i1O9Z9vPDrkhSylzpV0T02AB1Aw1Ne0thlpFdvOTyxXuNyrTR
-         ITNQnMwLiM1GCDD7nUyJ5619wlRmOWepoubZssaJblQxOyTOsIyhumnXm7vGuwU/uhGk
-         ourQ==
-X-Gm-Message-State: ANoB5pmar9h0WrGytIsPOJtH2n4+OKQRBt7JXL9O+dCN0+A7K6OWmX26
-        oJrG4BJF+1btLr7pFk6CbAQgSXqrxq791qZMnT7TdA==
-X-Google-Smtp-Source: AA0mqf4j2XZu4W7wXvD7hTiCUa5tk5anNfQoyv5Q23/o/kY8GrZvi3Lo4Tpw1PP0IkdLpHg/OlFk8Nyg865KgGd6n1k=
-X-Received: by 2002:adf:a492:0:b0:22d:d4c:e99c with SMTP id
- g18-20020adfa492000000b0022d0d4ce99cmr8270139wrb.582.1668449854955; Mon, 14
- Nov 2022 10:17:34 -0800 (PST)
+        bh=HVsZ7GvEsebyi2G4cAyW7BniWNFoesfCFO8x3KzC1zQ=;
+        b=Jz2mijbyp7Vq4USVXmDGkGAeYxlxGA5D2DXyu1K9u+PYDL+Q4lpaHYKM4FhqPJUzto
+         eejg+I0beODByKzD2HQJGEmGNvIDYPhdbX88huiBPrkxjo0Ba7rY02dr+ySe/I8TrsrR
+         N2kIOamoxvs5a9VR9EsFoysz32gm37jl7ssGShSpYSaMshyqq8PLd7TlK/Fol1JBTfIu
+         k1eSvRuvwjCRodTF+twf84x1LkzaWhe0VKWSVQhsFPe9WcxAISzUpln6R6UZQYWDJuxo
+         O+GVfPw28cxToG+Fx//O1Kn52NxT6a73rekH59Kdx9ssPCm1x2hMSFCUW1zvyU6zlySp
+         GYDg==
+X-Gm-Message-State: ANoB5pk1mp6Z3YfPoBM28hKZrO9SwB3AugZhWKOqdwFdXxwCyVtxIsG4
+        V2Puofh4y9qCjvi78y3R/ApF5utBHNREFsjNEpYg8Q==
+X-Google-Smtp-Source: AA0mqf5oksAO4SHnx5wzRLV6BSaMeEvYK4gsPf/ey60xBdtNlrAhG4pdnApLhL7LHZmpLHKAaWwvAM13Hw5gODYjJ9U=
+X-Received: by 2002:a05:600c:6006:b0:3cf:45ff:aca with SMTP id
+ az6-20020a05600c600600b003cf45ff0acamr8832089wmb.53.1668449922995; Mon, 14
+ Nov 2022 10:18:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20221112032244.1077370-1-namhyung@kernel.org> <20221112032244.1077370-2-namhyung@kernel.org>
-In-Reply-To: <20221112032244.1077370-2-namhyung@kernel.org>
+References: <20221112032244.1077370-1-namhyung@kernel.org> <20221112032244.1077370-4-namhyung@kernel.org>
+In-Reply-To: <20221112032244.1077370-4-namhyung@kernel.org>
 From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 14 Nov 2022 10:17:22 -0800
-Message-ID: <CAP-5=fWwnnRDDyf+DknFYU4aYeagXeemXOK9X-yP9Tax+bVnNA@mail.gmail.com>
-Subject: Re: [PATCH 01/11] perf stat: Fix crash with --per-node --metric-only
- in CSV mode
+Date:   Mon, 14 Nov 2022 10:18:30 -0800
+Message-ID: <CAP-5=fWzC8mZVQ0ok+bMYynXYEs2ZThbp+_ezhwLtSboFNM3TA@mail.gmail.com>
+Subject: Re: [PATCH 03/11] perf stat: Fix --metric-only --json output
 To:     Namhyung Kim <namhyung@kernel.org>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
@@ -78,12 +77,24 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, Nov 11, 2022 at 7:22 PM Namhyung Kim <namhyung@kernel.org> wrote:
 >
-> The following command will get segfault due to missing aggr_header_csv
-> for AGGR_NODE:
+> Currently it prints all metric headers for JSON output.  But actually it
+> skips some metrics with valid_only_metric().  So the output looks like:
 >
->   $ sudo perf stat -a --per-node -x, --metric-only true
+>   $ perf stat --metric-only --json true
+>   {"unit" : "CPUs utilized", "unit" : "/sec", "unit" : "/sec", "unit" : "/sec", "unit" : "GHz", "unit" : "insn per cycle", "unit" : "/sec", "unit" : "branch-misses of all branches"}
+>   {"metric-value" : "3.861"}{"metric-value" : "0.79"}{"metric-value" : "3.04"}
 >
-> Fixes: 86895b480a2f ("perf stat: Add --per-node agregation support")
+> As you can see there are 8 units in the header but only 3 metric-values
+> are there.  It should skip the unused headers as well.  Also each unit
+> should be printed as a separate object like metric values.
+>
+> With this patch:
+>
+>   $ perf stat --metric-only --json true
+>   {"unit" : "GHz"}{"unit" : "insn per cycle"}{"unit" : "branch-misses of all branches"}
+>   {"metric-value" : "4.166"}{"metric-value" : "0.73"}{"metric-value" : "2.96"}
+>
+> Fixes: df936cadfb58 ("perf stat: Add JSON output option")
 > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
 Acked-by: Ian Rogers <irogers@google.com>
@@ -92,38 +103,74 @@ Thanks,
 Ian
 
 > ---
->  tools/perf/util/stat-display.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  tools/perf/util/stat-display.c | 22 +++-------------------
+>  1 file changed, 3 insertions(+), 19 deletions(-)
 >
 > diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-> index 657434cd29ee..ea41e6308c50 100644
+> index c7b3a1e10263..96ad0c71adc2 100644
 > --- a/tools/perf/util/stat-display.c
 > +++ b/tools/perf/util/stat-display.c
-> @@ -534,7 +534,7 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
->                         [AGGR_CORE] = 2,
->                         [AGGR_THREAD] = 1,
->                         [AGGR_UNSET] = 0,
-> -                       [AGGR_NODE] = 0,
-> +                       [AGGR_NODE] = 1,
->                 };
+> @@ -430,12 +430,12 @@ static void print_metric_header(struct perf_stat_config *config,
+>             os->evsel->priv != os->evsel->evlist->selected->priv)
+>                 return;
 >
->                 pm = config->metric_only ? print_metric_only_csv : print_metric_csv;
-> @@ -819,6 +819,7 @@ static int aggr_header_lens[] = {
->         [AGGR_SOCKET] = 12,
->         [AGGR_NONE] = 6,
->         [AGGR_THREAD] = 24,
-> +       [AGGR_NODE] = 6,
->         [AGGR_GLOBAL] = 0,
->  };
+> -       if (!valid_only_metric(unit) && !config->json_output)
+> +       if (!valid_only_metric(unit))
+>                 return;
+>         unit = fixunit(tbuf, os->evsel, unit);
 >
-> @@ -828,6 +829,7 @@ static const char *aggr_header_csv[] = {
->         [AGGR_SOCKET]   =       "socket,cpus",
->         [AGGR_NONE]     =       "cpu,",
->         [AGGR_THREAD]   =       "comm-pid,",
-> +       [AGGR_NODE]     =       "node,",
->         [AGGR_GLOBAL]   =       ""
->  };
+>         if (config->json_output)
+> -               fprintf(os->fh, "\"unit\" : \"%s\"", unit);
+> +               fprintf(os->fh, "{\"unit\" : \"%s\"}", unit);
+>         else if (config->csv_output)
+>                 fprintf(os->fh, "%s%s", unit, config->csv_sep);
+>         else
+> @@ -847,10 +847,6 @@ static void print_metric_headers(struct perf_stat_config *config,
+>                 .new_line = new_line_metric,
+>                 .force_header = true,
+>         };
+> -       bool first = true;
+> -
+> -       if (config->json_output && !config->interval)
+> -               fprintf(config->output, "{");
 >
+>         if (prefix && !config->json_output)
+>                 fprintf(config->output, "%s", prefix);
+> @@ -871,18 +867,12 @@ static void print_metric_headers(struct perf_stat_config *config,
+>         evlist__for_each_entry(evlist, counter) {
+>                 os.evsel = counter;
+>
+> -               if (!first && config->json_output)
+> -                       fprintf(config->output, ", ");
+> -               first = false;
+> -
+>                 perf_stat__print_shadow_stats(config, counter, 0,
+>                                               0,
+>                                               &out,
+>                                               &config->metric_events,
+>                                               &rt_stat);
+>         }
+> -       if (config->json_output)
+> -               fprintf(config->output, "}");
+>         fputc('\n', config->output);
+>  }
+>
+> @@ -954,14 +944,8 @@ static void print_interval(struct perf_stat_config *config,
+>                 }
+>         }
+>
+> -       if ((num_print_interval == 0 || config->interval_clear)
+> -                        && metric_only && !config->json_output)
+> +       if ((num_print_interval == 0 || config->interval_clear) && metric_only)
+>                 print_metric_headers(config, evlist, " ", true);
+> -       if ((num_print_interval == 0 || config->interval_clear)
+> -                        && metric_only && config->json_output) {
+> -               fprintf(output, "{");
+> -               print_metric_headers(config, evlist, " ", true);
+> -       }
+>         if (++num_print_interval == 25)
+>                 num_print_interval = 0;
+>  }
 > --
 > 2.38.1.493.g58b659f92b-goog
 >
