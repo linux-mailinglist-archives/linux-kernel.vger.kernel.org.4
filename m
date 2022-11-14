@@ -2,121 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B208628A83
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73779628A93
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237546AbiKNUdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 15:33:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S237557AbiKNUe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 15:34:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237208AbiKNUdl (ORCPT
+        with ESMTP id S235838AbiKNUer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:33:41 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FB6299;
-        Mon, 14 Nov 2022 12:33:41 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AEKT0DT017845;
-        Mon, 14 Nov 2022 20:33:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=pXFNkV/SxmNW6LxlT1roul8AOmGIMlXURfjeeBJ2KHQ=;
- b=RaiDNH1eLm2YzbK1YYPYo/+KSOtt72cAJW8zOcD8u/AD0BI28FTjGmkzqq/lYTW2+lTc
- XeXkCmz4F2L9KxG8+AjNhIj6UXMkgnGj47SLtju0edVf9BJTrm+sRZ7bAGdaUSjpvvLA
- 30nhTwW0U0yJ5C+CWLX4+7fIVla8IaFhzvon3ZRNUlEFCSSvayoYT+3wmE3bGS5hduZN
- wvV2Evk0gd1yLMBL0DUrUyZzz6ZS549HyOkXVtZPYjmgkTlEh8yD+thqXsyK/wHHkKV6
- 0kKtIHxa9LvTT+icAhDpPkGLjaNgTnINemjBKQeyy7iOCtbDyb/HShbX56SwLxLIkNx0 1w== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kut23gj2h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 20:33:32 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AEKXRUX000885
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 20:33:27 GMT
-Received: from [10.216.50.94] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 14 Nov
- 2022 12:33:22 -0800
-Message-ID: <61b0954d-d294-4c60-3188-aa29b6545465@quicinc.com>
-Date:   Tue, 15 Nov 2022 02:03:19 +0530
+        Mon, 14 Nov 2022 15:34:47 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C286611472
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:34:45 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CD57C41303
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 20:34:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1668458081;
+        bh=WC+NC/bp8exDJsewvJ8oxWxlDpF4ig1RrOTupSn7stI=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=jxGeKlxvLdEHg7Dg++tG4aqTrfDd3u1ROUa1+lfNshAk4UTKZz764dyTUl9Wk/L/U
+         ffJ38lUJ7ErCRrB+vPTvNAEaXu2erOB+QJ5Q8qvLxLV+SPjOH12Fm+kvKoiiDW1nme
+         TtcQanYUtkhuguliwQm/ySkhcSaldqodwJyxUuC+2/Us7G/oaee855TZsPe6zq+0ZV
+         KBs1h1SQ1XxZKuzRhP9UH9mjjGY4t37gAwjAH62Y9WQc0MPshF7TrHvJykGOvbYdW3
+         HlncUTenS+K6lhbPEDQrYYSlI91ey6Pw+EhZm1eSDREVdvS6Yd2aOOn5LTaRHamoeF
+         zIR3jceM+UGqw==
+Received: by mail-ed1-f69.google.com with SMTP id t4-20020a056402524400b004620845ba7bso8790453edd.4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:34:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WC+NC/bp8exDJsewvJ8oxWxlDpF4ig1RrOTupSn7stI=;
+        b=oAi3NlhZRkhYoD2VHYJdGGQZ5Cfr29ezlx3OC66Feybp5txDQcfhjaio2XEe/Vxsbv
+         JDlFzVKrHkFV1Ri+IoF3mQWMYvu7DeI7PQ91nr+6mUut5gia0gN+3rCTuRfwGQkvbe5y
+         jCbFNvb4rv3v+maKRjPmczqi8dfxdMbnC9EJBbLCqhjXtatWt++PzYrn/lFXDty8GFZQ
+         QT/706dTuCTN8X3TLdoa2bFduitWSr8uzQ2yXAGg4mN9lKv3c4wuIj4Btf6PngiPgUEV
+         Xosorqy/6NcIAL5nWZ5+mUH086U66o0E7btYZaHKVuH9m4qX3j6nALyxPx07uHBKSGQH
+         Tcuw==
+X-Gm-Message-State: ANoB5pnqF20qk7MDDgrA9j4v8RIct3ZNV04gihp03D0OZ9A/mwnM1rMP
+        UiR0Qr3r9RAObAO9NClqX4gqHhgX720hQK/bw9lxbgmmEJh1F3/5KPB9hmuu/Vs6b6953rEU1jM
+        gbEAfiA2H35vvLbfgFopT5LLVHSPTYIlMtAQuiCZcRg==
+X-Received: by 2002:a17:906:388c:b0:7aa:97c7:2c04 with SMTP id q12-20020a170906388c00b007aa97c72c04mr11621713ejd.191.1668458078754;
+        Mon, 14 Nov 2022 12:34:38 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5s/a1Lng3ilCkg3POCMwx76l0spcBD3eOI0wAt+YffElcdeD9WJFZ0nls6iE/3xfYz1CCwNg==
+X-Received: by 2002:a17:906:388c:b0:7aa:97c7:2c04 with SMTP id q12-20020a170906388c00b007aa97c72c04mr11621699ejd.191.1668458078551;
+        Mon, 14 Nov 2022 12:34:38 -0800 (PST)
+Received: from localhost.localdomain (host-87-10-120-177.retail.telecomitalia.it. [87.10.120.177])
+        by smtp.gmail.com with ESMTPSA id k15-20020a1709063fcf00b007ae32daf4b9sm4572587ejj.106.2022.11.14.12.34.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 12:34:38 -0800 (PST)
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        Coleman Dietsch <dietschc@csp.edu>,
+        Lina Wang <lina.wang@mediatek.com>,
+        Kamal Mostafa <kamal@canonical.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests net: additional fix for kselftest net build error
+Date:   Mon, 14 Nov 2022 21:34:31 +0100
+Message-Id: <20221114203431.302655-1-andrea.righi@canonical.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] drm/msm/a6xx: Fix speed-bin detection vs probe-defer
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Chia-I Wu <olvaffe@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221114194133.1535178-1-robdclark@gmail.com>
- <CAD=FV=WB__v5TPFOqnQMajR6MvLGjLYrKrV+qosJYQFTCpROzQ@mail.gmail.com>
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <CAD=FV=WB__v5TPFOqnQMajR6MvLGjLYrKrV+qosJYQFTCpROzQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Hm197p9GzJIb3apL3JHrtitJaUhHQ26c
-X-Proofpoint-ORIG-GUID: Hm197p9GzJIb3apL3JHrtitJaUhHQ26c
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-14_13,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- impostorscore=0 suspectscore=0 bulkscore=0 malwarescore=0
- priorityscore=1501 mlxscore=0 spamscore=0 mlxlogscore=797 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211140144
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/15/2022 1:57 AM, Doug Anderson wrote:
-> Hi,
->
-> On Mon, Nov 14, 2022 at 11:41 AM Rob Clark <robdclark@gmail.com> wrote:
->> From: Rob Clark <robdclark@chromium.org>
->>
->> If we get an error (other than -ENOENT) we need to propagate that up the
->> stack.  Otherwise if the nvmem driver hasn't probed yet, we'll end up with
->> whatever OPP(s) are represented by bit zero.
-> Can you explain the "whatever OPP(s) are represented by bit zero"
-> part? This doesn't seem to be true because `supp_hw` is initiated to
-> UINT_MAX. If I'm remembering how this all works, doesn't that mean
-> that if we get an error we'll assume all OPPs are OK?
->
-> I'm not saying that I'm against your change, but I think maybe you're
-> misdescribing the old behavior.
->
-> Speaking of the initialization of supp_hw, if we want to change the
-> behavior like your patch does then we should be able to remove that
-> initialization, right?
->
-> I would also suspect that your patch will result in a compiler
-> warning, at least on some compilers. The goto label `done` is no
-> longer needed, right?
->
-> -Doug
-You are right about the commit message. The problem is we can't enable 
-all bits in supp_hw anymore due to changes like this:
-https://patchwork.kernel.org/project/linux-arm-msm/patch/20220829011035.1.Ie3564662150e038571b7e2779cac7229191cf3bf@changeid/
+We need to make sure that bpf_helpers.h is properly generated when
+building the net kselftest, otherwise we get this build error:
 
-This creates 2 opps with same freq when supp_hw = UINT_MAX.
+ $ make -C tools/testing/selftests/net
+ ...
+ bpf/nat6to4.c:43:10: fatal error: 'bpf/bpf_helpers.h' file not found
+          ^~~~~~~~~~~~~~~~~~~
+ 1 error generated.
 
--Akhil.
+Fix by adding a make dependency on tools/lib/bpf/bpf_helper_defs.h.
+
+Moreover, re-add the include that was initially added by commit
+cf67838c4422 ("selftests net: fix bpf build error"), otherwise we won't
+be able to properly include bpf_helpers.h.
+
+Fixes: 7b92aa9e6135 ("selftests net: fix kselftest net fatal error")
+Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+---
+ tools/testing/selftests/net/bpf/Makefile | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/bpf/Makefile b/tools/testing/selftests/net/bpf/Makefile
+index 8ccaf8732eb2..cc6579e154eb 100644
+--- a/tools/testing/selftests/net/bpf/Makefile
++++ b/tools/testing/selftests/net/bpf/Makefile
+@@ -2,11 +2,15 @@
+ 
+ CLANG ?= clang
+ CCINCLUDE += -I../../bpf
++CCINCLUDE += -I../../../lib
+ CCINCLUDE += -I../../../../lib
+ CCINCLUDE += -I../../../../../usr/include/
+ 
++bpf_helper_defs.h:
++	@make OUTPUT=./ -C $(OUTPUT)/../../../../tools/lib/bpf bpf_helper_defs.h
++
+ TEST_CUSTOM_PROGS = $(OUTPUT)/bpf/nat6to4.o
+-all: $(TEST_CUSTOM_PROGS)
++all: bpf_helper_defs.h $(TEST_CUSTOM_PROGS)
+ 
+ $(OUTPUT)/%.o: %.c
+ 	$(CLANG) -O2 -target bpf -c $< $(CCINCLUDE) -o $@
+-- 
+2.37.2
+
