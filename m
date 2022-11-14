@@ -2,124 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20910628311
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5688562829D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237161AbiKNOpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:45:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S237036AbiKNOcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:32:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236730AbiKNOpO (ORCPT
+        with ESMTP id S236587AbiKNOcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:45:14 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A952D2D77E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:44:02 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id z24so13468472ljn.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:44:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ejflZfRBJZNtbDrOFC8bunVAY8SzTkb6ZTYNd35CpN8=;
-        b=ZHXettCaWz+3gxKUE9liEzp5XWwCBfeD/3YJHp2tmkGX1VCRa+qIn7/dX660w5/R/U
-         kCBSwZ1hbrn565S00TC+V27KrIbqFrM/Z3V7jWyqCfGl8EzEY8M+Sbz0fupb8izvOIrN
-         QVraaeLVBtEl8BOa75+7ZwfJ/FYSAKaNk2hgELw5+n0xYtfm1YJ4PdcGV6vUlB6mt2cp
-         7YVy72dUgLQt2NquOyFXsXQjAEQszNF/VQOw7g//sfAv+USdeuESSjwSSWb1+hXbiPUz
-         A65l+i42Jdse5H/5N+uk/BEZ8KyoCoHlh2aouhjHAQwElpo5ZVB3+iSZ4dqHPtrwTPKg
-         61Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ejflZfRBJZNtbDrOFC8bunVAY8SzTkb6ZTYNd35CpN8=;
-        b=fOYxVYmaPuanuBSVZ8eAcov+u9vx6xfrxE7SMUsgQUQj8GKIsPBbPtjC0PZ8eETFIa
-         yC2w7VeDRXfrL1hWgV+3BU/unQcjcXCQO3zi25EQ80ExNbtnkjE2f98CHDvSfbag3q52
-         d6IhPaMJkUss4w9k986R/Wd94SqwJPFQZ5Aa0P2uXvt5TLJrf2+vweTwB8hO79xiWruG
-         wJxm5JEgWlBCaVg6qyYSjYSB0Yv0VsVazC/RmjkITsWzFMoyRJTXZRnaLe6A+UlLw8Wi
-         HitzR970KAo0KY8aPNIv5GB9+kPWsqgRFMXwK+FnmfhahujgIleK3JNCtzyJrKcp47Zu
-         K60g==
-X-Gm-Message-State: ANoB5pnCSbZn8K9QNxWXgqwGutrgu6jD6w6GMvpA2k25KCzMHM764DsU
-        z1DdCLSImYBEqsjZFJ1eOu4=
-X-Google-Smtp-Source: AA0mqf4Vmt8eS6siyEamccNe+6rgjmMuH4A46zfX72r1xhqRLOF7KvP7NR3JZseVWtZQbKoZFcWy9g==
-X-Received: by 2002:a05:651c:1a13:b0:277:113d:1c38 with SMTP id by19-20020a05651c1a1300b00277113d1c38mr4765556ljb.238.1668437040914;
-        Mon, 14 Nov 2022 06:44:00 -0800 (PST)
-Received: from ?IPV6:2a02:6b8:0:107:3e85:844d:5b1d:60a? ([2a02:6b8:0:107:3e85:844d:5b1d:60a])
-        by smtp.gmail.com with ESMTPSA id u4-20020a05651c130400b0026e02eb613csm2053541lja.18.2022.11.14.06.43.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 06:44:00 -0800 (PST)
-Message-ID: <3b7a841d-bbbd-6018-556f-d2414a5f02b2@gmail.com>
-Date:   Mon, 14 Nov 2022 17:44:00 +0300
+        Mon, 14 Nov 2022 09:32:18 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB8028E3E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:32:17 -0800 (PST)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N9sFk6yHsz15M0R;
+        Mon, 14 Nov 2022 22:31:54 +0800 (CST)
+Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 14 Nov 2022 22:32:14 +0800
+Received: from huawei.com (10.175.101.6) by dggpemm100009.china.huawei.com
+ (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 14 Nov
+ 2022 22:32:13 +0800
+From:   ZhaoLong Wang <wangzhaolong1@huawei.com>
+To:     <richard@nod.at>, <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
+        <patchwork@huawei.com>
+CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <chengzhihao1@huawei.com>, <wangzhaolong1@huawei.com>,
+        <yi.zhang@huawei.com>, <miaoxie@huawei.com>,
+        <guohanjun@huawei.com>, <huawei.libin@huawei.com>,
+        <yuehaibing@huawei.com>, <johnny.chenyi@huawei.com>,
+        <weiyongjun1@huawei.com>
+Subject: [PATCH -next] ubi: Fix permission display of the debugfs files
+Date:   Mon, 14 Nov 2022 22:46:46 +0800
+Message-ID: <20221114144646.3828749-1-wangzhaolong1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 5/5] x86/kasan: Populate shadow for shared chunk of the
- CPU entry area
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com,
-        syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com
-References: <20221110203504.1985010-1-seanjc@google.com>
- <20221110203504.1985010-6-seanjc@google.com>
-From:   Andrey Ryabinin <ryabinin.a.a@gmail.com>
-In-Reply-To: <20221110203504.1985010-6-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm100009.china.huawei.com (7.185.36.113)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Some interface files in debugfs support the read method
+dfs_file_read(), but their rwx permissions is shown as
+unreadable.
 
+In the user mode, the following problem can be clearly seen:
 
-On 11/10/22 23:35, Sean Christopherson wrote:
+ # ls -l /sys/kernel/debug/ubi/ubi0/
+ total 0
+ --w------- 1 root root 0 Oct 22 16:26 chk_fastmap
+ --w------- 1 root root 0 Oct 22 16:26 chk_gen
+ --w------- 1 root root 0 Oct 22 16:26 chk_io
+ -r-------- 1 root root 0 Oct 22 16:26 detailed_erase_block_info
+ --w------- 1 root root 0 Oct 22 16:26 tst_disable_bgt
+ --w------- 1 root root 0 Oct 22 16:26 tst_emulate_bitflips
+ --w------- 1 root root 0 Oct 22 16:26 tst_emulate_io_failures
+ --w------- 1 root root 0 Oct 22 16:26 tst_emulate_power_cut
+ --w------- 1 root root 0 Oct 22 16:26 tst_emulate_power_cut_max
+ --w------- 1 root root 0 Oct 22 16:26 tst_emulate_power_cut_min
 
->  
-> +	/*
-> +	 * Populate the shadow for the shared portion of the CPU entry area.
-> +	 * Shadows for the per-CPU areas are mapped on-demand, as each CPU's
-> +	 * area is randomly placed somewhere in the 512GiB range and mapping
-> +	 * the entire 512GiB range is prohibitively expensive.
-> +	 */
-> +	kasan_populate_early_shadow((void *)shadow_cea_begin,
-> +				    (void *)shadow_cea_per_cpu_begin);
-> +
+It shows that these files do not have read permission 'r',
+but we can actually read their contents.
 
-I know I suggested to use "early" here, but I just realized that this might be a problem.
-This will actually map shadow page for the 8 pages (KASAN_SHADOW_SCALE_SHIFT) of the original memory.
-In case there is some per-cpu entry area starting right at CPU_ENTRY_AREA_PER_CPU the shadow for it will
-be covered with kasan_early_shadow_page instead of the usual one.
+ # echo 1 > /sys/kernel/debug/ubi/ubi0/chk_io
+ # cat /sys/kernel/debug/ubi/ubi0/chk_io
+ 1
 
-So we need to go back to your v1 PATCH, or alternatively we can round up CPU_ENTRY_AREA_PER_CPU
-#define CPU_ENTRY_AREA_PER_CPU		(CPU_ENTRY_AREA_RO_IDT + PAGE_SIZE << KASAN_SHADOW_SCALE_SHIFT)
+User's permission access is determined by capabilities.
+Of course, the root user is not restricted from reading
+these files.
 
-Such change will also require fixing up max_cea calculation in init_cea_offsets()
+When reading a debugfs file, the process is as follows:
 
+ ksys_read()
+   vfs_read()
+     if (file->f_op->read)
+       file->f_op->read()
+         full_proxy_open()
+           real_fops->read()
+             dfs_file_read() -- Read method of debugfs file.
+     else if (file->f_op->read_iter)
+       new_sync_read()
+     else
+       ret = -EINVAL -- Return -EINVAL if no read method.
 
-Going back kasan_populate_shadow() seems like safer and easier choice. The only disadvantage of it
-that we might waste 1 page, which is not much compared to the KASAN memory overhead.
+This indicates that the debugfs file can be read as long as the read
+method of the debugfs file is registered. This patch adds the read
+permission display for file that support the read method.
 
+Signed-off-by: ZhaoLong Wang <wangzhaolong1@huawei.com>
+---
+ drivers/mtd/ubi/debug.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/mtd/ubi/debug.c b/drivers/mtd/ubi/debug.c
+index 908d0e088557..552b765af810 100644
+--- a/drivers/mtd/ubi/debug.c
++++ b/drivers/mtd/ubi/debug.c
+@@ -504,6 +504,7 @@ int ubi_debugfs_init_dev(struct ubi_device *ubi)
+ {
+ 	unsigned long ubi_num = ubi->ubi_num;
+ 	struct ubi_debug_info *d = &ubi->dbg;
++	umode_t mode = S_IRUSR | S_IWUSR;
+ 	int n;
+ 
+ 	if (!IS_ENABLED(CONFIG_DEBUG_FS))
+@@ -518,41 +519,41 @@ int ubi_debugfs_init_dev(struct ubi_device *ubi)
+ 
+ 	d->dfs_dir = debugfs_create_dir(d->dfs_dir_name, dfs_rootdir);
+ 
+-	d->dfs_chk_gen = debugfs_create_file("chk_gen", S_IWUSR, d->dfs_dir,
++	d->dfs_chk_gen = debugfs_create_file("chk_gen", mode, d->dfs_dir,
+ 					     (void *)ubi_num, &dfs_fops);
+ 
+-	d->dfs_chk_io = debugfs_create_file("chk_io", S_IWUSR, d->dfs_dir,
++	d->dfs_chk_io = debugfs_create_file("chk_io", mode, d->dfs_dir,
+ 					    (void *)ubi_num, &dfs_fops);
+ 
+-	d->dfs_chk_fastmap = debugfs_create_file("chk_fastmap", S_IWUSR,
++	d->dfs_chk_fastmap = debugfs_create_file("chk_fastmap", mode,
+ 						 d->dfs_dir, (void *)ubi_num,
+ 						 &dfs_fops);
+ 
+-	d->dfs_disable_bgt = debugfs_create_file("tst_disable_bgt", S_IWUSR,
++	d->dfs_disable_bgt = debugfs_create_file("tst_disable_bgt", mode,
+ 						 d->dfs_dir, (void *)ubi_num,
+ 						 &dfs_fops);
+ 
+ 	d->dfs_emulate_bitflips = debugfs_create_file("tst_emulate_bitflips",
+-						      S_IWUSR, d->dfs_dir,
++						      mode, d->dfs_dir,
+ 						      (void *)ubi_num,
+ 						      &dfs_fops);
+ 
+ 	d->dfs_emulate_io_failures = debugfs_create_file("tst_emulate_io_failures",
+-							 S_IWUSR, d->dfs_dir,
++							 mode, d->dfs_dir,
+ 							 (void *)ubi_num,
+ 							 &dfs_fops);
+ 
+ 	d->dfs_emulate_power_cut = debugfs_create_file("tst_emulate_power_cut",
+-						       S_IWUSR, d->dfs_dir,
++						       mode, d->dfs_dir,
+ 						       (void *)ubi_num,
+ 						       &dfs_fops);
+ 
+ 	d->dfs_power_cut_min = debugfs_create_file("tst_emulate_power_cut_min",
+-						   S_IWUSR, d->dfs_dir,
++						   mode, d->dfs_dir,
+ 						   (void *)ubi_num, &dfs_fops);
+ 
+ 	d->dfs_power_cut_max = debugfs_create_file("tst_emulate_power_cut_max",
+-						   S_IWUSR, d->dfs_dir,
++						   mode, d->dfs_dir,
+ 						   (void *)ubi_num, &dfs_fops);
+ 
+ 	debugfs_create_file("detailed_erase_block_info", S_IRUSR, d->dfs_dir,
+-- 
+2.31.1
 
->  	kasan_populate_early_shadow((void *)shadow_cea_end,
->  			kasan_mem_to_shadow((void *)__START_KERNEL_map));
->  
