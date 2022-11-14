@@ -2,47 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D7B6275B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 07:02:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A98F6275BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 07:03:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235675AbiKNGCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 01:02:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60570 "EHLO
+        id S235717AbiKNGDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 01:03:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233166AbiKNGCl (ORCPT
+        with ESMTP id S235698AbiKNGDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 01:02:41 -0500
+        Mon, 14 Nov 2022 01:03:15 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811001742F;
-        Sun, 13 Nov 2022 22:02:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08831758F;
+        Sun, 13 Nov 2022 22:03:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
         :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=htUX5wXsVqQtfEIzF3R3jTgb9FejL1nSejYDfcLYiAM=; b=eepvBu3sqqhQ0CAKocgxuXXL/9
-        nd2dws1R3l0m73KbCd0ttqcgfh4qPI2YMh9ErnvjsTWnKFCbSOpssg9Ffg/8kuEhf4dE900Amdlt0
-        bKg6WixEFZmNEWeI5QDJwO6gwOJyWvfQcNH2KuE+Rv0mpACVzMs1Gr2J0vShkvNjYLZVSYfvlK1s/
-        iPsKrcEN8+WFkoP575vjnkid26ER/o+8J7OVbE3jZmeF2I5JYh4sbdBH40CMQWAt/SNYFS+HWNmHQ
-        YfLLSRaCiEoPTo1NeD1ekUsLvROGaw0bL1ZjNl33pXvlwgkVLoJJ55GL/avtZw18m0SILmQILuOnG
-        /WtZrV0w==;
+        bh=3nXiEkTHPSqcPohTZPOVmLRWizzGrhUgHhIBQefPWhM=; b=xgMCBIa0QhMpFPXemt89EZmxgq
+        T9guZcwHbF86yzqI7jOE+PChT9os/oyvItF/vo7zx0OUa56eT286A2cpEHS0fLozY2ccbNcJpJYny
+        JeNjjLCAHFEL7C0qG/LGhVAW01zOiIMemeW5QMSuCD3QpqhgGKYeR9ol0cQshQeWbiKcnEvuFN5o0
+        MWZsvqgSDKxhgxljvqX2CE7fsfmPFn08VK0JPpHOe+YBn+R6ZeDfGA3lf16Ya+rDN8OXPMolwV8U6
+        XHJdAPmcVhvPvc93JPjdE1l/q5evcGXj5dK/+IH4wKkji4Sj/YsPALpHM2urlpm5BmPiTvn68rK6d
+        SnkpaghA==;
 Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ouSYH-00GAaw-Gk; Mon, 14 Nov 2022 06:02:37 +0000
-Date:   Sun, 13 Nov 2022 22:02:37 -0800
+        id 1ouSYj-00GAg0-Mq; Mon, 14 Nov 2022 06:03:05 +0000
+Date:   Sun, 13 Nov 2022 22:03:05 -0800
 From:   Christoph Hellwig <hch@infradead.org>
-To:     Niels de Vos <ndevos@redhat.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>, linux-fscrypt@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiubo Li <xiubli@redhat.com>,
-        Marcel Lauhoff <marcel.lauhoff@suse.com>
-Subject: Re: [RFC 0/4] fs: provide per-filesystem options to disable fscrypt
-Message-ID: <Y3HZ/To8z76vBqYo@infradead.org>
-References: <20221110141225.2308856-1-ndevos@redhat.com>
- <Y20a/akbY8Wcy3qg@mit.edu>
- <Y20rDl45vSmdEo3N@ndevos-x1>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Peter Xu <peterx@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Nadav Amit <namit@vmware.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Oded Gabbay <ogabbay@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH RFC 00/19] mm/gup: remove FOLL_FORCE usage from drivers
+ (reliable R/O long-term pinning)
+Message-ID: <Y3HaGbPcGfTxlLPZ@infradead.org>
+References: <20221107161740.144456-1-david@redhat.com>
+ <CAHk-=wj51-dtxf8BQBYP+9Kc3ejq4Y0=-6hCbf_XAnkT3fsgDQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y20rDl45vSmdEo3N@ndevos-x1>
+In-Reply-To: <CAHk-=wj51-dtxf8BQBYP+9Kc3ejq4Y0=-6hCbf_XAnkT3fsgDQ@mail.gmail.com>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -53,17 +69,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 05:47:10PM +0100, Niels de Vos wrote:
-> And, there actually are options like CONFIG_EXT4_FS_POSIX_ACL and
-> CONFIG_EXT4_FS_SECURITY. Because these exist already, I did not expect
-> too much concerns with proposing a CONFIG_EXT4_FS_ENCRYPTION...
+On Mon, Nov 07, 2022 at 09:27:23AM -0800, Linus Torvalds wrote:
+> And I'd really love to just have this long saga ended, and FOLL_FORCE
+> finally relegated to purely ptrace accesses.
 
-ext4 is a little weird there as most file systems don't do that.
-So I think these should go away for ext4 as well.
-
-> Note that even with the additional options, enabling only
-> CONFIG_FS_ENCRYPTION causes all the filesystems that support fscrypt to
-> have it enabled. For users there is no change, except that they now have
-> an option to disable fscrypt support per filesystem.
-
-But why would you do that anyay?
+At that point we should also rename it to FOLL_PTRACE to make that
+very clear, and also break anything in-flight accidentally readding it,
+which I'd otherwise expect to happen.
