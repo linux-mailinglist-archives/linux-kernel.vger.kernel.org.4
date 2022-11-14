@@ -2,118 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278E96278B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B61C86278BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236798AbiKNJJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:09:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
+        id S236066AbiKNJJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:09:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236725AbiKNJIr (ORCPT
+        with ESMTP id S236444AbiKNJJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:08:47 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955D51DA43
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:06:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668416782;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MyDiWdKe1VYdsKgzDX1uadXsuftR4IzIbTjD84A1VBs=;
-        b=YO4i5RnYA0Rru/9xonjpOJjOMHF7ng1JtR90/hS6BFrNRN6VHu0a0oxwsL4K+PRwh+jEyI
-        dMjHWuAKCc+ylxik6y8PvTWKZCmm50B3kopUhPlTwFIhx083rD31bUd0bnNTdqwBQ14X8I
-        JJhPUhoVXm/sM5CwHfBUe1zqF/IsNvQ=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-77-JIn3BtwpP_Cnmhwzy29xog-1; Mon, 14 Nov 2022 04:06:21 -0500
-X-MC-Unique: JIn3BtwpP_Cnmhwzy29xog-1
-Received: by mail-wr1-f69.google.com with SMTP id u13-20020adfa18d000000b00236566b5b40so1761390wru.9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:06:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MyDiWdKe1VYdsKgzDX1uadXsuftR4IzIbTjD84A1VBs=;
-        b=yWoiFBf+YmBqcmciIx8T9wMJ0Hg9LLkgEWh5J+MV1+Kg1AFcaddzOzm1mwIqpFRoJO
-         WOqVVWzHcdxdhBm0FVnkJh0FPGdwkIM0Z5ukPJwTlReOK2lPo0kfiiAnqLdq0KyxffB1
-         Myp15Pv5nqFrn7URbwwWONzzbfB2t7xjg3P+7DDnAyRjsqo3WNMU9+xtLu8nz8WHB/sp
-         P4CJXCqaDk8OVR/hY7ckJMO50RK6qk/9cLdCDi66HVyC/M2XKwp3P/LHI3idYnfwtntY
-         EOSJcFTFbukky0PWXycJTOEvFDBP9aMlXoWQ0yt2RQHZFaZhoOtK/dmHPLluNkTIuJs0
-         Ro1g==
-X-Gm-Message-State: ANoB5pk0jKb03tJFMJmPeKTs2N3vxbL8d8co1lbX9+LP1DWRJ2O8WPMx
-        I/V2qAwcWg53Oj68VMgNsRQR7FFLzDgFd0VBzoXl96opbQDnHR1ZKaWwjw7D0WKEc/UxsjaL+65
-        nRdBQxB59yDeXPYBqUuU1OYWR
-X-Received: by 2002:a05:6000:51:b0:241:553e:5040 with SMTP id k17-20020a056000005100b00241553e5040mr6948318wrx.578.1668416780275;
-        Mon, 14 Nov 2022 01:06:20 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4l1B+wPdFoYaTSboiqdtBGcv+KQQAevPv9Adl6JHAVGpTZ8odXESHyxfOdy80t/1su8czTaA==
-X-Received: by 2002:a05:6000:51:b0:241:553e:5040 with SMTP id k17-20020a056000005100b00241553e5040mr6948298wrx.578.1668416780032;
-        Mon, 14 Nov 2022 01:06:20 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:d300:8765:6ef2:3111:de53? (p200300cbc703d30087656ef23111de53.dip0.t-ipconnect.de. [2003:cb:c703:d300:8765:6ef2:3111:de53])
-        by smtp.gmail.com with ESMTPSA id i22-20020a05600c355600b003cf894c05e4sm19299080wmq.22.2022.11.14.01.06.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 01:06:19 -0800 (PST)
-Message-ID: <cfb2e9de-3bf8-6380-f336-dc3d7a5ecc29@redhat.com>
-Date:   Mon, 14 Nov 2022 10:06:18 +0100
+        Mon, 14 Nov 2022 04:09:07 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5BD1D64C;
+        Mon, 14 Nov 2022 01:08:46 -0800 (PST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N9k4S6xhDzmVvC;
+        Mon, 14 Nov 2022 17:08:24 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 14 Nov 2022 17:08:44 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 14 Nov 2022 17:08:44 +0800
+Subject: Re: linux-next: build failure after merge of the modules tree
+To:     Jiri Olsa <olsajiri@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Luis Chamberlain <mcgrof@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>
+References: <20221114111350.38e44eec@canb.auug.org.au>
+ <Y3H12Xyt8ALo+HAU@krava>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <4d2bd614-028e-ec8c-597c-56353a0a4ccf@huawei.com>
+Date:   Mon, 14 Nov 2022 17:08:43 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v9 2/3] hugetlb: remove duplicate mmu notifications
+In-Reply-To: <Y3H12Xyt8ALo+HAU@krava>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wei Chen <harperchen1110@gmail.com>, stable@vger.kernel.org
-References: <20221111232628.290160-1-mike.kravetz@oracle.com>
- <20221111232628.290160-3-mike.kravetz@oracle.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20221111232628.290160-3-mike.kravetz@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.11.22 00:26, Mike Kravetz wrote:
-> The common hugetlb unmap routine __unmap_hugepage_range performs mmu
-> notification calls.  However, in the case where __unmap_hugepage_range
-> is called via __unmap_hugepage_range_final, mmu notification calls are
-> performed earlier in other calling routines.
-> 
-> Remove mmu notification calls from __unmap_hugepage_range.  Add
-> notification calls to the only other caller: unmap_hugepage_range.
-> unmap_hugepage_range is called for truncation and hole punch, so
-> change notification type from UNMAP to CLEAR as this is more appropriate.
-> 
-> Fixes: 90e7e7f5ef3f ("mm: enable MADV_DONTNEED for hugetlb mappings")
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
-> Reported-by: Wei Chen <harperchen1110@gmail.com>
-> Cc: <stable@vger.kernel.org>
 
-Why exactly do we care about stable backports here? What's the 
-user-visible impact?
+
+On 2022/11/14 16:01, Jiri Olsa wrote:
+> On Mon, Nov 14, 2022 at 11:13:50AM +1100, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the modules tree, today's linux-next build (powerpc
+>> ppc64_defconfig) failed like this:
+>>
+>> kernel/trace/ftrace.c: In function 'ftrace_lookup_symbols':
+>> kernel/trace/ftrace.c:8316:52: error: passing argument 1 of 'module_kallsyms_on_each_symbol' from incompatible pointer type [-Werror=incompatible-pointer-types]
+>>  8316 |         found_all = module_kallsyms_on_each_symbol(kallsyms_callback, &args);
+>>       |                                                    ^~~~~~~~~~~~~~~~~
+>>       |                                                    |
+>>       |                                                    int (*)(void *, const char *, long unsigned int)
+>> In file included from include/linux/device/driver.h:21,
+>>                  from include/linux/device.h:32,
+>>                  from include/linux/node.h:18,
+>>                  from include/linux/cpu.h:17,
+>>                  from include/linux/stop_machine.h:5,
+>>                  from kernel/trace/ftrace.c:17:
+>> include/linux/module.h:882:48: note: expected 'const char *' but argument is of type 'int (*)(void *, const char *, long unsigned int)'
+>>   882 | int module_kallsyms_on_each_symbol(const char *modname,
+>>       |                                    ~~~~~~~~~~~~^~~~~~~
+>> kernel/trace/ftrace.c:8316:71: error: passing argument 2 of 'module_kallsyms_on_each_symbol' from incompatible pointer type [-Werror=incompatible-pointer-types]
+>>  8316 |         found_all = module_kallsyms_on_each_symbol(kallsyms_callback, &args);
+>>       |                                                                       ^~~~~
+>>       |                                                                       |
+>>       |                                                                       struct kallsyms_data *
+>> include/linux/module.h:883:42: note: expected 'int (*)(void *, const char *, long unsigned int)' but argument is of type 'struct kallsyms_data *'
+>>   883 |                                    int (*fn)(void *, const char *, unsigned long),
+>>       |                                    ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/trace/ftrace.c:8316:21: error: too few arguments to function 'module_kallsyms_on_each_symbol'
+>>  8316 |         found_all = module_kallsyms_on_each_symbol(kallsyms_callback, &args);
+>>       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/module.h:882:5: note: declared here
+>>   882 | int module_kallsyms_on_each_symbol(const char *modname,
+>>       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>
+>> Caused by commit
+>>
+>>   90de88426f3c ("livepatch: Improve the search performance of module_kallsyms_on_each_symbol()")
+>>
+>> from the modules tree interatcing with commit
+>>
+>>   3640bf8584f4 ("ftrace: Add support to resolve module symbols in ftrace_lookup_symbols")
+>>
+>> from the next-next tree.
+>>
+>> I have no idea how to easily fix this up, so I have used the modules
+>> tree from next-20221111 for today in the hope someone will send me a fix.
+> 
+> hi,
+> there's no quick fix.. I sent follow up email to the original
+> change and cc-ed you
+
+The fastest fix is drop my patch 7/9, 8/9, they depend on the interface change
+of patch 6/9，but other patches don't rely on either of them.. And I can repost
+them after v6.2-rc1.
+
+Otherwise, you'll need to modify your patch, take the module reference before
+invoking callback and put it after it is called, without passing modname.
+
+
+> 
+> thanks,
+> jirka
+> .
+> 
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Regards,
+  Zhen Lei
