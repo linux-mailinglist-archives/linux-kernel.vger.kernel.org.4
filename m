@@ -2,233 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 296C9627DD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A921627DDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237171AbiKNMc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 07:32:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
+        id S237175AbiKNMec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 07:34:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237166AbiKNMcZ (ORCPT
+        with ESMTP id S236734AbiKNMeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 07:32:25 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DCE23149;
-        Mon, 14 Nov 2022 04:32:23 -0800 (PST)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N9pbD0DbSzHvqf;
-        Mon, 14 Nov 2022 20:31:52 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 20:32:21 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 20:32:20 +0800
-Subject: Re: [PATCH v7 4/6] rcu: Add RCU stall diagnosis information
-To:     Frederic Weisbecker <frederic@kernel.org>
-CC:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Robert Elliott <elliott@hpe.com>
-References: <20221111130709.247-1-thunder.leizhen@huawei.com>
- <20221111130709.247-5-thunder.leizhen@huawei.com>
- <20221114112438.GA472998@lothringen>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <5f73bb77-e334-d604-d0cd-0ce7af45f209@huawei.com>
-Date:   Mon, 14 Nov 2022 20:32:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Mon, 14 Nov 2022 07:34:31 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA65240A4;
+        Mon, 14 Nov 2022 04:34:30 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AE9ufF6009159;
+        Mon, 14 Nov 2022 06:34:11 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=2e+0Fy45j+r3qO1kdoenMNM6JG4cOatfMv6LlNiyQxk=;
+ b=krY6QAVv+Gah+RvGkNYxnWSd/ebGPzFN0viG3LIq+xp0MA4ejTVtYvEgRutoo53STvlb
+ WZBsx5n6r1CxmaOL/HWO5qCP5J4Kj0RmOdXA1L2zki/twJY/rZlgepZtGIfa8xj426Rm
+ vlY2yxTGXqQW4wMdw0tAfA9KH2rZxlnd45muTO4D9iEN1E6pPzVz4vVxFa5CuHytwMsB
+ AbIFAjVt1vSFwvfb/7cP7hrLKKy7F5mCX+AjLfEp5UMk55aQVCEPDaFHNLgkHBUosHsF
+ ZeOCgqf+DSm+xuSX/EJ0qYkw0p66As8Rk1+o7bEv5Db/cEa5+8Kt92wku2OLR2wJ9Pud IQ== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3kt8sst3p5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 06:34:11 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.15; Mon, 14 Nov
+ 2022 06:34:09 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.15 via Frontend Transport; Mon, 14 Nov 2022 06:34:09 -0600
+Received: from [198.90.251.111] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.111])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 7386F2AA;
+        Mon, 14 Nov 2022 12:34:09 +0000 (UTC)
+Message-ID: <d3868694-64b5-25e4-d955-2b86d643eb0c@opensource.cirrus.com>
+Date:   Mon, 14 Nov 2022 12:34:09 +0000
 MIME-Version: 1.0
-In-Reply-To: <20221114112438.GA472998@lothringen>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 11/12] dt-bindings: sound: Add Cirrus Logic CS48L31/32/33
+ codecs
 Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linus.walleij@linaro.org>,
+        <broonie@kernel.org>, <tglx@linutronix.de>, <maz@kernel.org>
+CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+References: <20221109165331.29332-1-rf@opensource.cirrus.com>
+ <20221109165331.29332-12-rf@opensource.cirrus.com>
+ <5f012334-1815-2ef6-7dc0-08b4d60f754f@linaro.org>
+ <8bd6b864-ca58-022d-220d-328121f7e7dd@opensource.cirrus.com>
+ <c7d73b1e-053f-21a7-4f4d-632742b4761c@linaro.org>
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <c7d73b1e-053f-21a7-4f4d-632742b4761c@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-GUID: urp2okFLvVvpuanNfMbOFJgen2N9UTBN
+X-Proofpoint-ORIG-GUID: urp2okFLvVvpuanNfMbOFJgen2N9UTBN
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/11/14 19:24, Frederic Weisbecker wrote:
-> On Fri, Nov 11, 2022 at 09:07:07PM +0800, Zhen Lei wrote:
->> Because RCU CPU stall warnings are driven from the scheduling-clock
->> interrupt handler, a workload consisting of a very large number of
->> short-duration hardware interrupts can result in misleading stall-warning
->> messages.  On systems supporting only a single level of interrupts,
->> that is, where interrupts handlers cannot be interrupted, this can
->> produce misleading diagnostics.  The stack traces will show the
->> innocent-bystander interrupted task, not the interrupts that are
->> at the very least exacerbating the stall.
+On 14/11/2022 11:03, Krzysztof Kozlowski wrote:
+> On 14/11/2022 12:00, Richard Fitzgerald wrote:
+>> On 14/11/2022 08:45, Krzysztof Kozlowski wrote:
+>>> On 09/11/2022 17:53, Richard Fitzgerald wrote:
+>>>> Codecs in this family have multiple digital and analog audio I/O that
+>>>> support a variety of external hardware connections and configurations.
+>>>>
+>>>> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+>>>> ---
+>>>>    .../bindings/sound/cirrus,cs48l32.yaml        | 96 +++++++++++++++++++
+>>>>    include/dt-bindings/sound/cs48l32.h           | 25 +++++
+>>>>    2 files changed, 121 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/sound/cirrus,cs48l32.yaml
+>>>>    create mode 100644 include/dt-bindings/sound/cs48l32.h
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/sound/cirrus,cs48l32.yaml b/Documentation/devicetree/bindings/sound/cirrus,cs48l32.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..70fb294c6dc1
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/sound/cirrus,cs48l32.yaml
+>>>> @@ -0,0 +1,96 @@
+>>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/sound/cirrus,cs48l32.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: Cirrus Logic CS48L31/32/33 audio CODECs
+>>>> +
+>>>> +maintainers:
+>>>> +  - patches@opensource.cirrus.com
+>>>> +
+>>>> +description: |
+>>>> +  This describes audio configuration bindings for these codecs.
+>>>
+>>> Don't start with "This". Instead describe the hardware.
+>>>
+>>>> +
+>>>> +  See also the core bindings for the parent MFD driver:
+>>>> +
+>>>> +    Documentation/devicetree/bindings/mfd/cirrus,cs48l32.yaml
+>>>
+>>> Same comment as for pinctrl patch.
+>>>
+>>>> +
+>>>> +  and defines for values used in these bindings:
+>>>> +
+>>>> +    include/dt-bindings/sound/cs48l32.h
+>>>> +
+>>>> +  The properties are all contained in the parent MFD node.
+>>>> +
+>>>> +properties:
+>>>
+>>> Missing compatible. What's the point to organize bindings like that? The
+>>> schema on its own does nothing - does not match anything.
 >>
->> This situation can be improved by displaying the number of interrupts
->> and the CPU time that they have consumed.  Diagnosing other types
->> of stalls can be eased by also providing the count of softirqs and
->> the CPU time that they consumed as well as the number of context
->> switches and the task-level CPU time consumed.
->>
->> Consider the following output given this change:
->>
->> rcu: INFO: rcu_preempt self-detected stall on CPU
->> rcu:     0-....: (1250 ticks this GP) <omitted>
->> rcu:          hardirqs   softirqs   csw/system
->> rcu:  number:      624         45            0
->> rcu: cputime:       69          1         2425   ==> 2500(ms)
->>
->> This output shows that the number of hard and soft interrupts is small,
->> there are no context switches, and the system takes up a lot of time. This
->> indicates that the current task is looping with preemption disabled.
->>
->> The impact on system performance is negligible because snapshot is
->> recorded only once for all continuous RCU stalls.
->>
->> This added debugging information is suppressed by default and can be
->> enabled by building the kernel with CONFIG_RCU_CPU_STALL_CPUTIME=y or
->> by booting with rcupdate.rcu_cpu_stall_cputime=1.
->>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
->> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->> ---
->>  .../admin-guide/kernel-parameters.txt         |  6 ++++
->>  kernel/rcu/Kconfig.debug                      | 11 +++++++
->>  kernel/rcu/rcu.h                              |  1 +
->>  kernel/rcu/tree.c                             | 18 +++++++++++
->>  kernel/rcu/tree.h                             | 19 ++++++++++++
->>  kernel/rcu/tree_stall.h                       | 31 +++++++++++++++++++
->>  kernel/rcu/update.c                           |  2 ++
->>  7 files changed, 88 insertions(+)
->>
->> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
->> index 811b2e6d4672685..ee7d9d962591c5d 100644
->> --- a/Documentation/admin-guide/kernel-parameters.txt
->> +++ b/Documentation/admin-guide/kernel-parameters.txt
->> @@ -5084,6 +5084,12 @@
->>  			rcupdate.rcu_cpu_stall_timeout to be used (after
->>  			conversion from seconds to milliseconds).
->>  
->> +	rcupdate.rcu_cpu_stall_cputime= [KNL]
->> +			Provide statistics on the cputime and count of
->> +			interrupts and tasks during the sampling period. For
->> +			multiple continuous RCU stalls, all sampling periods
->> +			begin at half of the first RCU stall timeout.
->> +
->>  	rcupdate.rcu_expedited= [KNL]
->>  			Use expedited grace-period primitives, for
->>  			example, synchronize_rcu_expedited() instead
->> diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
->> index 1b0c41d490f0588..025566a9ba44667 100644
->> --- a/kernel/rcu/Kconfig.debug
->> +++ b/kernel/rcu/Kconfig.debug
->> @@ -95,6 +95,17 @@ config RCU_EXP_CPU_STALL_TIMEOUT
->>  	  says to use the RCU_CPU_STALL_TIMEOUT value converted from
->>  	  seconds to milliseconds.
->>  
->> +config RCU_CPU_STALL_CPUTIME
->> +	bool "Provide additional RCU stall debug information"
->> +	depends on RCU_STALL_COMMON
->> +	default n
->> +	help
->> +	  Collect statistics during the sampling period, such as the number of
->> +	  (hard interrupts, soft interrupts, task switches) and the cputime of
->> +	  (hard interrupts, soft interrupts, kernel tasks) are added to the
->> +	  RCU stall report. For multiple continuous RCU stalls, all sampling
->> +	  periods begin at half of the first RCU stall timeout.
->> +
->>  config RCU_TRACE
->>  	bool "Enable tracing for RCU"
->>  	depends on DEBUG_KERNEL
->> diff --git a/kernel/rcu/rcu.h b/kernel/rcu/rcu.h
->> index 96122f203187f39..4844dec36bddb48 100644
->> --- a/kernel/rcu/rcu.h
->> +++ b/kernel/rcu/rcu.h
->> @@ -231,6 +231,7 @@ extern int rcu_cpu_stall_ftrace_dump;
->>  extern int rcu_cpu_stall_suppress;
->>  extern int rcu_cpu_stall_timeout;
->>  extern int rcu_exp_cpu_stall_timeout;
->> +extern int rcu_cpu_stall_cputime;
->>  int rcu_jiffies_till_stall_check(void);
->>  int rcu_exp_jiffies_till_stall_check(void);
->>  
->> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
->> index ed93ddb8203d42c..3921aacfd421ba9 100644
->> --- a/kernel/rcu/tree.c
->> +++ b/kernel/rcu/tree.c
->> @@ -866,6 +866,24 @@ static int rcu_implicit_dynticks_qs(struct rcu_data *rdp)
->>  			rdp->rcu_iw_gp_seq = rnp->gp_seq;
->>  			irq_work_queue_on(&rdp->rcu_iw, rdp->cpu);
->>  		}
->> +
->> +		if (rcu_cpu_stall_cputime && rdp->snap_record.gp_seq != rdp->gp_seq) {
->> +			int cpu = rdp->cpu;
->> +			struct rcu_snap_record *rsrp;
->> +			struct kernel_cpustat *kcsp;
->> +
->> +			kcsp = &kcpustat_cpu(cpu);
->> +
->> +			rsrp = &rdp->snap_record;
->> +			rsrp->cputime_irq     = kcpustat_field(kcsp, CPUTIME_IRQ, cpu);
->> +			rsrp->cputime_softirq = kcpustat_field(kcsp, CPUTIME_SOFTIRQ, cpu);
->> +			rsrp->cputime_system  = kcpustat_field(kcsp, CPUTIME_SYSTEM, cpu);
->> +			rsrp->nr_hardirqs = kstat_cpu_irqs_sum(rdp->cpu);
->> +			rsrp->nr_softirqs = kstat_cpu_softirqs_sum(rdp->cpu);
+>> Do you mean child drivers should not share the MFD node? Or do you mean
+>> that if they share the MFD node all the child driver bindings should be
+>> documented in the MFD schema instead of having a sub-schema for each
+>> class of hardware functionality?
 > 
-> Getting the sum of all CPU's IRQs, with even two iterations on all of them, look
-> costly. So I have to ask: why is this information useful and why can't we deduce
-> it from other CPUs stall reports?
-
-Only the RCU stalled CPUs are recorded. Why all CPUs?
-
-static void force_qs_rnp(int (*f)(struct rcu_data *rdp))
-{
-	rcu_for_each_leaf_node(rnp) {
-		if (rnp->qsmask == 0) {
-			continue;
-		}
-		for_each_leaf_node_cpu_mask(rnp, cpu, rnp->qsmask) {
-			if (f(rdp))
-
+> I mean, that regular binding has a compatible which allows the schema to
+> be matched.
 > 
-> I'm also asking because this rcu_cpu_stall_cputime is likely to be very useful for
-> distros, to the point that I expect it to be turned on by default as doing a
-> snapshot of kcpustat fields is cheap. But doing that wide CPU snapshot is
-> definetly going to be an unbearable overhead.
-
-I purposely added a print test, only the RCU stalled CPU would be taken snapshots and
-calculated differentials.
-
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index d1f0d857dc85df5..693e7c83bd17d1e 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -872,6 +872,7 @@ static int rcu_implicit_dynticks_qs(struct rcu_data *rdp)
-                        struct rcu_snap_record *rsrp;
-                        struct kernel_cpustat *kcsp;
-
-+                       printk("fixme: cpu=%d\n", smp_processor_id());
-                        kcsp = &kcpustat_cpu(cpu);
-
-                        rsrp = &rdp->snap_record;
-
-> 
-> Thanks.
-> .
+> Splitting parts from top-level properties is used only for re-usable
+> shared/common schemas, which does not seem the case here.
 > 
 
--- 
-Regards,
-  Zhen Lei
+Ok, that's good. None of these drivers are re-useable standalone.
+I'll squash the bindings all into MFD schema for V2.
+
+>>
+>> I'm certainly willing to collapse all the bindings into a single MFD
+>> schema yaml. For this driver we followed the same structure that was
+>> accepted for madera (and there was some discussion when we upstreamed
+>> madera about how the bindings should be organized which resulted in
+>> them being changed). We pretty much assumed that the safe bet was to do
+>> the same that was accepted by the maintainer last time around.
+> 
+> Just merge it with MFD binding.
+> 
+> Best regards,
+> Krzysztof
+> 
