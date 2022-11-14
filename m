@@ -2,151 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B486286B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C50036286B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238208AbiKNRLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:11:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
+        id S237638AbiKNRLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:11:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238131AbiKNRLH (ORCPT
+        with ESMTP id S237134AbiKNRLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:11:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6800930553;
-        Mon, 14 Nov 2022 09:11:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB41461313;
-        Mon, 14 Nov 2022 17:11:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E79B0C433D7;
-        Mon, 14 Nov 2022 17:11:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668445865;
-        bh=zMD3k7kl4ms288ed0Dzk5pz6tGe8UqBdVUVgbgvVQBw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=RFGkA6RL7QX14GUUIU/J1uB+IYdkp9EYZJ2aXjMfYQBy1U/L0vq8NsBudAUByvne6
-         Q3WooKrcAEbJKztc2bdtnh7AooKJ0ushK1ioQj8ZwNVJrQbN3Do2GvEGrdcEMwriKq
-         CAc66jRqs8ZOHAqqjNEXMOkiqFy2gTgtFJXwr38EeAWls4lErI1ndSmTMiWdl6+ImP
-         oHCPXris4Lppc7hsYKzv81Ufk39P3+EicAAZ4/FnAkR7vOOLkxZGfGLmlIVnzq/lDL
-         NvDc+gq9knDHw4Gcq26vff4ed04CpHstMnO9g6PbmTeEA2jQbo7Ctwnp/JeEt4Iemn
-         XGYRc7YntFCZA==
-Date:   Mon, 14 Nov 2022 11:11:03 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Liu Peibao <liupeibao@loongson.cn>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        wanghongliang <wanghongliang@loongson.cn>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V5] PCI: loongson: Skip scanning unavailable child devices
-Message-ID: <20221114171103.GA917836@bhelgaas>
+        Mon, 14 Nov 2022 12:11:41 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2768B31EED;
+        Mon, 14 Nov 2022 09:11:41 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 2AEGqVsV025573;
+        Mon, 14 Nov 2022 17:11:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : content-transfer-encoding : mime-version; s=pp1;
+ bh=x7c7LUNyumPEJ3B8TV1/j9qF5b+3SUS7E0BiRFnwAbo=;
+ b=jCAlNuRYfC9tDAwR1wGmzlrGM4FCQuveLCx7EbqludrC77hhyQOSEbbDwWLJeVMRLKAu
+ kvw5+hV+v1nHCEyuIDrEaVi+Y7ti4yoap9iMlmZO5sP570owC/o3f48bs/PUB2Y12Q2W
+ lKotJayK2kXckExHyelwtXz4flCDhN3GD+v1Mr24E+ZWVxGM7InBJCI1lWu0mJZx+t3n
+ nuokWmodJhwszEOMkVN1gS3QENvZoYHpPj2msnCY0JnkND+dWb6yFTJis63E2V6BKs+j
+ /CplmGFItoICs5t5c0jm3UJIsvhkVFiYJqyte8tGF46ZD1lcTSeX+gD1Z0ZyjvjxQBLw GA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kusjxrf8e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 17:11:28 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AEGv8qw008757;
+        Mon, 14 Nov 2022 17:11:28 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kusjxrf80-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 17:11:28 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AEH5KDH010721;
+        Mon, 14 Nov 2022 17:11:27 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma02dal.us.ibm.com with ESMTP id 3kt349jrvd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 17:11:27 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AEHBUeJ6881896
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Nov 2022 17:11:30 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 47DFF7805E;
+        Mon, 14 Nov 2022 18:08:54 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 41B9B7805C;
+        Mon, 14 Nov 2022 18:08:50 +0000 (GMT)
+Received: from lingrow.int.hansenpartnership.com (unknown [9.211.83.197])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 14 Nov 2022 18:08:49 +0000 (GMT)
+Message-ID: <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Evan Green <evgreen@chromium.org>, linux-kernel@vger.kernel.org
+Cc:     corbet@lwn.net, linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com,
+        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
+        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Date:   Mon, 14 Nov 2022 12:11:20 -0500
+In-Reply-To: <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+         <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: SPoXwJpwVDHbFazbYEXvpg1f0RZ1H4pz
+X-Proofpoint-ORIG-GUID: bSxPprtCkFl2jtIKUQFcKMctzDpA0WDH
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114074346.23008-1-liupeibao@loongson.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-14_13,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ spamscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1011 mlxlogscore=801 phishscore=0
+ priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211140117
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liu,
+On Fri, 2022-11-11 at 15:16 -0800, Evan Green wrote:
+> Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
+> restricts usermode's ability to extend or reset PCR 23.
 
-On Mon, Nov 14, 2022 at 03:43:46PM +0800, Liu Peibao wrote:
-> The PCI Controller of 2K1000 could not mask devices by setting vender ID or
-> device ID in configuration space header as invalid values.
+Could I re ask the question here that I asked of Matthew's patch set:
 
-I don't think this 2K1000 information is really relevant.  I
-understand that some chipsets might support this, and they might use
-that to avoid this issue, but there's no PCI requirement that the
-Vendor/Device ID be writable by anything.
+https://lore.kernel.org/all/b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com/
 
-> When there are
-> pins shareable between the platform device and the on chip PCI device, if
+Which was could we use an NVRAM index in the TPM instead of a PCR?  The
+reason for asking was that PCRs are rather precious and might get more
+so now that Lennart has some grand scheme for using more of them in his
+unified boot project.  Matthew promised to play with the idea but never
+got back to the patch set to say whether he investigated this or not.
 
-What does "pins shareable between the platform device and the on chip
-PCI device" mean?
+James
 
-I assume there's a single device in the hardware, and both the
-"platform device" and the PCI device" refer to that single device?
-
-And there's some reason you prefer to use the platform device
-interface to enumerate that device?
-
-> the platform device is preferred, we should not scan this PCI device. In
-> the above scene, add `status = "disabled"` property in DT node of this PCI
-> device.
-> 
-> Before this patch, to solve the above problem, we treat the on chip PCI
-> devices as platform devices with fixed address assigned by the BIOS.
-
-This says "before this patch".  But the rest of the sentence sounds
-like what happens *after* this patch.
-
-> When
-> there is device not preferred, add the `status = "disabled"` property in DT
-> node.
-
-> In kernel, the PCI host bridge only scans slot 9/A/B/C/D/E that are
-> bridges.
-
-I guess this has something to do with pdev_may_exist() [1], but why do
-you mention it here?  Do you intend to remove pdev_may_exist() and use
-this DT mechanism instead?
-
-Bjorn
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/pci-loongson.c?id=v6.0#n168
-
-> Overall, this looks not much elegant.
-> 
-> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
-> ---
-> V4 -> V5: make the issue we are facing clear in commit log.
-> V3 -> V4: 1. get rid of the masklist and search the status property
-> 	  directly.
->           2. check the status property only when accessing the vendor ID.
-> V2 -> V3: 1. use list_for_each_entry() for more clearly.
->           2. fix wrong use of sizeof().
-> V1 -> V2: use existing property "status" instead of adding new property.
-> 
->  drivers/pci/controller/pci-loongson.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
-> index 05c50408f13b..efca0b3b5a29 100644
-> --- a/drivers/pci/controller/pci-loongson.c
-> +++ b/drivers/pci/controller/pci-loongson.c
-> @@ -194,6 +194,17 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
->  			return NULL;
->  	}
->  
-> +#ifdef CONFIG_OF
-> +	/* Don't access disabled devices. */
-> +	if (pci_is_root_bus(bus) && where == PCI_VENDOR_ID) {
-> +		struct device_node *dn;
-> +
-> +		dn = of_pci_find_child_device(bus->dev.of_node, devfn);
-> +		if (dn && !of_device_is_available(dn))
-> +			return NULL;
-> +	}
-> +#endif
-> +
->  	/* CFG0 can only access standard space */
->  	if (where < PCI_CFG_SPACE_SIZE && priv->cfg0_base)
->  		return cfg0_map(priv, bus, devfn, where);
-> -- 
-> 2.20.1
-> 
