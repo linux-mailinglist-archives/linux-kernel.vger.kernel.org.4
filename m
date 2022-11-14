@@ -2,169 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD85F628B62
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:33:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC416628B80
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:44:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236250AbiKNVdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 16:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
+        id S237720AbiKNVoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 16:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbiKNVdh (ORCPT
+        with ESMTP id S237639AbiKNVoG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 16:33:37 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F9525E7;
-        Mon, 14 Nov 2022 13:33:36 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id i21so19226476edj.10;
-        Mon, 14 Nov 2022 13:33:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eKfZHCbbq2pbj5ZCKNOXHjHou+CBwHckbUbOdThGkZk=;
-        b=lJfxyhuW1VKX/07EXNu42iSxH+OmYQe5UV10zPkKDz50jdMFRoarCeseVuO8CUyrb4
-         yIqkG7eanrwUklwAHftXYmGYeCTNNIvmljt58CzTKAi2dyzmNTODcdd07zHTGxsFCZ4w
-         LZXmcB7yTVITKLPIVl1eodewAiPXamreg5zAI3wWp068c/9bj8M//J2FBWcMskPuFaBw
-         uLp3iaivBg+TtLMTWD4TbiHa52y5cVLeAkuqygomMd0wnqVKEMxQbZhiH4UkPDoLtK8w
-         9Ql+WgvGduqDlC4CPFFK2hdwPGnUkcGLqV+rXDe3/G6ZbTWLJZjhUmykEGHVLK/+gSfM
-         kAYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eKfZHCbbq2pbj5ZCKNOXHjHou+CBwHckbUbOdThGkZk=;
-        b=WYkPQmFE6do7zC5nZkUdH02PJoXZciRoJrkniXz1E4mZ8JsdiV4xDFnfc9GJ5csEOh
-         Vogs9CfBzOe/bUMQ/SvafevvmvWdmzU4Azjj9GcmWx/eX+/JpiK5LCL2Qk++eLkEGRoh
-         WjZqqD6wVZsNkQoFJAVHghnrswY3glqu50PiNxh6QP61hA8q2jZeg4FADD/2Y/80hiAy
-         g4PoSLi3BNBuKZ3DS6TnF6UZZAM83XC8YCaZUR4TX9bYfcR/kBsSmAqcizJZkwtZecDx
-         HGjSl01MbWQAZcA8RXJ9r7gapiA1ecpBY6xGOWKzCMdV6i1COh4Zxkzs2HT7YweE61CQ
-         DQ4w==
-X-Gm-Message-State: ANoB5plyRxSvlrmH1taL/xTVmFdsnBWMVepkGWfkBIFckDwXw73HZwWB
-        LIiJ66nURJtJWQ5A405+XCU=
-X-Google-Smtp-Source: AA0mqf6AAIdOaVTwo9dnJzgZOFGDw+mo3rfN3f53F3NHXaHAbqTHoeeHbU7uD3L4MQaRfmOlTwl0Kg==
-X-Received: by 2002:aa7:da55:0:b0:464:718c:b271 with SMTP id w21-20020aa7da55000000b00464718cb271mr12581926eds.287.1668461614528;
-        Mon, 14 Nov 2022 13:33:34 -0800 (PST)
-Received: from ?IPV6:2a01:c23:c14f:9a00:5c5e:411:c829:d51c? (dynamic-2a01-0c23-c14f-9a00-5c5e-0411-c829-d51c.c23.pool.telefonica.de. [2a01:c23:c14f:9a00:5c5e:411:c829:d51c])
-        by smtp.googlemail.com with ESMTPSA id l27-20020a170906079b00b0073022b796a7sm4680770ejc.93.2022.11.14.13.33.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 13:33:33 -0800 (PST)
-Message-ID: <fedda473-3233-4dfa-e2a3-3f22c2b894e8@gmail.com>
-Date:   Mon, 14 Nov 2022 22:33:27 +0100
+        Mon, 14 Nov 2022 16:44:06 -0500
+X-Greylist: delayed 326 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Nov 2022 13:44:04 PST
+Received: from ns2.wdyn.eu (ns2.wdyn.eu [5.252.227.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23E7AE03;
+        Mon, 14 Nov 2022 13:44:03 -0800 (PST)
+Message-ID: <00e8e836-7a5e-3c65-b09b-b1e71d79a6c6@wetzel-home.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wetzel-home.de;
+        s=wetzel-home; t=1668461912;
+        bh=CaEb5TL7mi3Z7BL8t/8RHyqhrExer6WZWRCfyITK1C8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=tDBtN0PM1x8QOQ6yKExzpG8AX7MTCVMXcnV/vP9Dbw6MqAKXvoHuWIlZBNPVqd9ue
+         dA1szTe4LhYRK9vPuMQCBtsyi9a5I13o6MEBB8RlzmBKzs+WPDWVkuOOePnH86/gjz
+         gOylCDAbNNdpebsxs3YDYS8uRG/FaY9Z1C4bHAL4=
+Date:   Mon, 14 Nov 2022 22:38:29 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [Regression] Bug 216672 - soft lockup in ieee80211_select_queue
+ -- system freezing random time on msi laptop
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        Johannes Berg <johannes@sipsolutions.net>
+Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, misac1987@gmail.com
+References: <83b28e2d-7af7-f91a-7e67-7f224bcf0557@leemhuis.info>
 Content-Language: en-US
-To:     Peter Suti <peter.suti@streamunlimited.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221114093857.491695-1-peter.suti@streamunlimited.com>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH] mmc: meson-gx: fix SDIO interrupt handling
-In-Reply-To: <20221114093857.491695-1-peter.suti@streamunlimited.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Alexander Wetzel <alexander@wetzel-home.de>
+In-Reply-To: <83b28e2d-7af7-f91a-7e67-7f224bcf0557@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.11.2022 10:38, Peter Suti wrote:
-> With the interrupt support introduced in commit 066ecde sometimes the
-> Marvell-8987 wifi chip entered a deadlock using the marvell-sd-uapsta-8987
-> vendor driver. The cause seems to be that sometimes the interrupt handler
-> handles 2 IRQs and one of them disables the interrupts which are not reenabled
-> when all interrupts are finished. To work around this, disable all interrupts
-> when we are in the IRQ context and reenable them when the current IRQ is handled.
+On 13.11.22 09:22, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker speaking.
+> 
+> I noticed a slightly vague regression report in bugzilla.kernel.org. As
+> many (most?) kernel developer don't keep an eye on it, I decided to
+> forward it by mail. Quoting from
+> https://bugzilla.kernel.org/show_bug.cgi?id=216672 :
 > 
 
-IIRC I had a similar/same problem in mind when discussing the following:
-https://lore.kernel.org/linux-arm-kernel/CAPDyKFoameOb7d3cn8_ki1O6DbMEAFvkQh1uUsYp4S-Lkq41oQ@mail.gmail.com/
-Not sure though whether it's related to the issue you're facing.
+I've tried to extrapolate the info in mail/ticket to get something we 
+can work with. But the result is insane: The CPU can't get stuck where 
+the trace claims it does. Not without some really strange and unlikely 
+HW defect.
 
-> Fixes: 066ecde ("mmc: meson-gx: add SDIO interrupt support")
-> 
-> Signed-off-by: Peter Suti <peter.suti@streamunlimited.com>
-> ---
->  drivers/mmc/host/meson-gx-mmc.c | 21 ++++++++++++++-------
->  1 file changed, 14 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/meson-gx-mmc.c b/drivers/mmc/host/meson-gx-mmc.c
-> index 6e5ea0213b47..972024d57d1c 100644
-> --- a/drivers/mmc/host/meson-gx-mmc.c
-> +++ b/drivers/mmc/host/meson-gx-mmc.c
-> @@ -950,6 +950,10 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
->  	struct mmc_command *cmd;
->  	u32 status, raw_status;
->  	irqreturn_t ret = IRQ_NONE;
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&host->lock, flags);
+Based on the loaded modules the issue must be with the rtl8723ae card 
+and - according to the bug content - affect at least the kernels 5.19 
+and 6.0.6. (which are not supporting wake_tx_queue in 6.0.6)
 
-Typically you wouldn't have to use _irqsave version in a hard irq handler.
-Or is to deal with forced threaded irq handlers?
-Do you use forced threaded handlers on your system?
+The core error message from a 6.0.6 (Ubuntu?) kernel is:
+   watchdog: BUG: soft lockup - CPU#1 stuck for 26s! [ksoftirqd/1:23]
+   RIP: 0010:ieee80211_select_queue+0x1b/0x110 [mac80211]
 
-> +	__meson_mmc_enable_sdio_irq(host->mmc, 0);
->  
->  	raw_status = readl(host->regs + SD_EMMC_STATUS);
->  	status = raw_status & (IRQ_EN_MASK | IRQ_SDIO);
-> @@ -958,11 +962,11 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
->  		dev_dbg(host->dev,
->  			"Unexpected IRQ! irq_en 0x%08lx - status 0x%08x\n",
->  			 IRQ_EN_MASK | IRQ_SDIO, raw_status);
-> -		return IRQ_NONE;
-> +		goto out_unlock;
->  	}
->  
->  	if (WARN_ON(!host))
-> -		return IRQ_NONE;
-> +		goto out_unlock;
->  
->  	/* ack all raised interrupts */
->  	writel(status, host->regs + SD_EMMC_STATUS);
-> @@ -970,17 +974,16 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
->  	cmd = host->cmd;
->  
->  	if (status & IRQ_SDIO) {
-> -		spin_lock(&host->lock);
-> -		__meson_mmc_enable_sdio_irq(host->mmc, 0);
->  		sdio_signal_irq(host->mmc);
-> -		spin_unlock(&host->lock);
->  		status &= ~IRQ_SDIO;
-> -		if (!status)
-> +		if (!status) {
-> +			spin_unlock_irqrestore(&host->lock, flags);
->  			return IRQ_HANDLED;
-> +		}
->  	}
->  
->  	if (WARN_ON(!cmd))
-> -		return IRQ_NONE;
-> +		goto out_unlock;
->  
->  	cmd->error = 0;
->  	if (status & IRQ_CRC_ERR) {
-> @@ -1023,6 +1026,10 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
->  	if (ret == IRQ_HANDLED)
->  		meson_mmc_request_done(host->mmc, cmd->mrq);
->  
-> +out_unlock:
-> +	__meson_mmc_enable_sdio_irq(host->mmc, 1);
-> +	spin_unlock_irqrestore(&host->lock, flags);
-> +
->  	return ret;
->  }
->  
+According to the trace history and the identified driver the problematic 
+softirg should be a scheduled run of _rtl_pci_irq_tasklet().
+And it looks like a RX packet triggered a TCP RST reply. Which then 
+triggered the issue.
+
+I ten checked with a Gentoo 6.0.6 mac80211 module the reference to 
+ieee80211_select_queue+0x1b:
+
+And at least in my build that's the local->ops->wake_tx_queue *check* in 
+ieee80211_select_queue(). Which of course does not make any sense short 
+of some fundamental assumption to be wrong...
+
+185             struct sta_info *sta = NULL;
+186             const u8 *ra = NULL;
+187             u16 ret;
+188
+189             /* when using iTXQ, we can do this later */
+190             if (local->ops->wake_tx_queue)
+191                     return 0;
+192
+
+Now my module is for sure far from the original but 
+ieee80211_select_queue() looks pretty harmless:
+No obvious way how we can get stuck in there...
+
+CPU broken? Strange compiler bug?
+Some stupid error from my site reading the trace?
+
+Are the traces all looking the same? Any other strange errors on the system?
+
+And can you verify that the error is indeed a regression by going back 
+to a kernel "known" to be not affected in the past?
+
+Other extreme would be to try the wireless development kernel 
+git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-testing.git 
+and hope, that it also shows a more sane problem.
+(ieee80211_select_queue() has been dropped, changing the tx flow 
+drastically when compared to 6.0.6)
+
+In short, I'm also stuck what that can be. We can try some different 
+angles and hope to hit something.
+
+
+Alexander
 
