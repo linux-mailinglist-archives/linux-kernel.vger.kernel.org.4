@@ -2,112 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2298462751A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 05:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C2B562751C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 05:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235695AbiKND77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 22:59:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35334 "EHLO
+        id S235772AbiKNEA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 23:00:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233909AbiKND75 (ORCPT
+        with ESMTP id S235771AbiKNEAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 22:59:57 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C947DEA3
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:59:56 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id m6so9938254pfb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:59:56 -0800 (PST)
+        Sun, 13 Nov 2022 23:00:14 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DF115FF3
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 20:00:09 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id l11so15548094edb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 20:00:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SQZZjpNqvZsbs1aZ+f9L6Zj8PA0ItCU0rBc0b1FARyw=;
-        b=vdB5fAHXaRnl7hEGIoiRCjv4822lI+8QizRapf66BmUN2RvoLmk1izUL25FAw8x4c0
-         Fg1r5WnIaf5BUQwu7KlU9RU+15lhg9x+V0K9tRRu6XunTvyOe2M+d9p0Z8UCfB+IjmFo
-         6HgrdONadSO1rj4QGrvMn46maeMM1yZeED2aU8PhbJvHIo1pyk7Ggu4QDktXJlqbQ3zH
-         GR3dlDfqu/90Dwu8sr159TzENYpVbOaHtEYQmJ7PVkmtlxE2QQbo6Mq1E2yM+i4kxQ4p
-         2HyTY4R02QmKE+UbuWvcM2grft8OfjzohGFcD0oJs2HAifkoivRgDqMQbopDaKIVW7kS
-         kYyg==
+        d=nathanrossi.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t32Vju5XIgtrJ4jgA9bvoDKcNVYN0sL+9zOrih8YQXY=;
+        b=CMA5IyCyGJHr/SsizAbheGNFPyx9JCmnZqxdXIktai3oYWi5BkddRDpuDHV2etUgLZ
+         b/RqScmBCWFae1tZja4l50ohZVPHtyTC9X2N37rzguLHL8PRT96Jqs8HT9rF2CWUISbN
+         ZJtkcz+Xh06JRi0ndmcnEkN8gk+1wYE+DCQF/T2Db9h128kPVCPsHwowMPpMS/t3Days
+         Up1WZRTWb6fC8Wu/ZEbGJhCH3HRSSq4lUDMRqiR4926bgi2lltptBiw68lodAGyLJPKZ
+         gh2Lr1ptl5XDE/7GObR3Hp3S4gs8r0WmK4sXrHR/DuneK1hNa2VRY8cMGDj9XkXimx45
+         Ap+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SQZZjpNqvZsbs1aZ+f9L6Zj8PA0ItCU0rBc0b1FARyw=;
-        b=dEgDA2LqODx8XLSj1h8fT68MPYO8fnsyctARG9adalf/kZx/gHDzZrkPBW/OT7YcNn
-         mkBdS4ZQ6qiE3xUK4w1L95KnqtsDhrhnAzOsqSwxegNHljZCNcZhrYp9rLtuo9DSajcf
-         J8Rpb7BewXmuWMeHCRomrY1BBzW34ep0YKviMCbpnaiiYETRCmGD2NMEmx9O6JAnuQxq
-         LTziSJH2o6UdRmnl308yw8SQ5zlNXG7lMg1WazfSR/ezErph2+9BXDxuSLHk1w+7bpSs
-         e/bqBBEWhme+ShsRk+NU3E5wcOsIuEfexxpZCW7/bIS/pacIAkvjl+mG4+GKpitYKDaA
-         L0KQ==
-X-Gm-Message-State: ANoB5pkeDfPQWjDcG9k0TRu3vtJLnn9cm9FP2soky6KTdAJm9sEutmj9
-        F90DgRk11a6BeZNnh+TJiqC51Q==
-X-Google-Smtp-Source: AA0mqf72JWncrSTFwDOEPs30Ny/aQyU6SBZ2m0gCMhNu13fXnwcY9AQ7OCeL8R/ZUFswDSD0+buZ2w==
-X-Received: by 2002:a63:1d49:0:b0:476:898c:ded5 with SMTP id d9-20020a631d49000000b00476898cded5mr2276339pgm.299.1668398395776;
-        Sun, 13 Nov 2022 19:59:55 -0800 (PST)
-Received: from [10.254.69.19] ([139.177.225.231])
-        by smtp.gmail.com with ESMTPSA id g3-20020a170902868300b00168dadc7354sm6061996plo.78.2022.11.13.19.59.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Nov 2022 19:59:55 -0800 (PST)
-Message-ID: <039ce475-f935-e0c2-4734-1dd57519d961@bytedance.com>
-Date:   Mon, 14 Nov 2022 11:59:47 +0800
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t32Vju5XIgtrJ4jgA9bvoDKcNVYN0sL+9zOrih8YQXY=;
+        b=5Bwb9FVdZAqRKML92ypfO7MdtlAVyU/7yfK18Dj/8oQDTyFks3vNdf5GZGohxKKndY
+         czBnT+25wCMttcKFN1kxMhPy9yjDMBWzrm/5Lgl4E024BPyrzvuMYbjWpA0Lzii191vS
+         SL505fTSt/pdmj1fxZmZrbau7vOP3saF4H2wHGkQsWcMjnh81fEZf0UDdAmeiuoKtKkd
+         tIHL4AWTy/s1Fs2v+GKhwzDc8DpvO9gjbVNtUIyRI9+Axux4t6i1LoVt/Xh3sheAxy0v
+         GtgePgbG0ng1It5c7Iukc8t2alckqZbceHUziAZaDAWot85pmkxsHx110sap2yygmEi5
+         Lq+Q==
+X-Gm-Message-State: ANoB5pno3tbHqVw0hPf2DMCVewKFGvz2Qoga35Z8ULVGbSrzkjn6KVVy
+        vaVpNSKowp+vYdMrSp8a3Zn4AhsUtR+aypljVnZREg==
+X-Google-Smtp-Source: AA0mqf49FgaOQeHHb4SP9TWrnK2IZIiBDuO6awnQb988Y/hSJ9phcAa7GbZQcewAyTneCWB7a+mVnYTxAH6NEg6LVMc=
+X-Received: by 2002:a50:d485:0:b0:461:af68:9bcd with SMTP id
+ s5-20020a50d485000000b00461af689bcdmr10222403edi.67.1668398408026; Sun, 13
+ Nov 2022 20:00:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH v2] mm: fix unexpected changes to
- {failslab|fail_page_alloc}.attr
-To:     Akinobu Mita <akinobu.mita@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     dvyukov@google.com, jgg@nvidia.com, willy@infradead.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org
-References: <Y2kxrerISWIxQsFO@nvidia.com>
- <20221108035232.87180-1-zhengqi.arch@bytedance.com>
- <CAC5umygzc=H-9dCa_pLoqodS4Qz90OVmQkrvFOCPv27514tP3A@mail.gmail.com>
-Content-Language: en-US
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <CAC5umygzc=H-9dCa_pLoqodS4Qz90OVmQkrvFOCPv27514tP3A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221108222944.GA504625@bhelgaas> <20221109173454.GA567052@bhelgaas>
+In-Reply-To: <20221109173454.GA567052@bhelgaas>
+From:   Nathan Rossi <nathan@nathanrossi.com>
+Date:   Mon, 14 Nov 2022 13:59:56 +1000
+Message-ID: <CA+aJhH2EEE_n5T0PAcOr5RQbfOzEKF67ckcWMTbP_NesQ5ggtw@mail.gmail.com>
+Subject: Re: [PATCH] PCI/ASPM: Wait for data link active after retraining
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Rossi <nathan.rossi@digi.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 10 Nov 2022 at 03:34, Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> [+cc Maciej for similar retrain issue]
+>
+> On Tue, Nov 08, 2022 at 04:29:44PM -0600, Bjorn Helgaas wrote:
+> > On Thu, Jun 02, 2022 at 06:55:44AM +0000, Nathan Rossi wrote:
+> > > From: Nathan Rossi <nathan.rossi@digi.com>
+> > >
+> > > When retraining the link either the child or the parent device may ha=
+ve
+> > > the data link layer state machine of the respective devices move out =
+of
+> > > the active state despite the physical link training being completed.
+> > > Depending on how long is takes for the devices to return to the activ=
+e
+> > > state, the device may not be ready and any further reads/writes to th=
+e
+> > > device can fail.
+> > >
+> > > This issue is present with the pci-mvebu controller paired with a dev=
+ice
+> > > supporting ASPM but without advertising the Slot Clock, where during
+> > > boot the pcie_aspm_cap_init call would cause common clocks to be made
+> > > consistent and then retrain the link. However the data link layer wou=
+ld
+> > > not be active before any device initialization (e.g. ASPM capability
+> > > queries, BAR configuration) causing improper configuration of the dev=
+ice
+> > > without error.
+> > >
+> > > To ensure the child device is accessible, after the link retraining u=
+se
+> > > pcie_wait_for_link to perform the associated state checks and any nee=
+ded
+> > > delays.
+> > >
+> > > Signed-off-by: Nathan Rossi <nathan.rossi@digi.com>
+> > > ---
+> > >  drivers/pci/pcie/aspm.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> > > index a96b7424c9..4b8a1810be 100644
+> > > --- a/drivers/pci/pcie/aspm.c
+> > > +++ b/drivers/pci/pcie/aspm.c
+> > > @@ -288,7 +288,8 @@ static void pcie_aspm_configure_common_clock(stru=
+ct pcie_link_state *link)
+> > >             reg16 &=3D ~PCI_EXP_LNKCTL_CCC;
+> > >     pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
+> > >
+> > > -   if (pcie_retrain_link(link))
+> > > +   /* Retrain link and then wait for the link to become active */
+> > > +   if (pcie_retrain_link(link) && pcie_wait_for_link(parent, true))
+> >
+> > pcie_retrain_link() waits for PCI_EXP_LNKSTA_LT (Link Training) to be
+> > cleared, which means the LTSSM has exited the Configuration/Recovery
+> > state.  pcie_wait_for_link() waits for PCI_EXP_LNKSTA_DLLLA (Data Link
+> > Layer Link Active) to be set, which means the link is in DL_Active.
+> >
+> > I don't see an explicit procedure in the spec for determining when
+> > a link retrain is complete, but from PCIe r6.0, sec 6.2.11 (DPC):
+> >
+> >   After software releases the Downstream Port from DPC, the Port=E2=80=
+=99s
+> >   LTSSM must transition to the Detect state, where the Link will
+> >   attempt to retrain. Software can use Data Link Layer State Changed
+> >   interrupts, DL_ACTIVE ERR_COR signaling, or both, to signal when the
+> >   Link reaches the DL_Active state again.
+> >
+> > and sec 6.6:
+> >
+> >   On the completion of Link Training (entering the DL_Active state,
+> >   see Section 3.2), a component must be able to receive and process
+> >   TLPs and DLLPs.
+> >
+> > The only use mentioned in the spec for the Link Training bit is the
+> > implementation note in sec 7.5.3.7 about avoiding race conditions when
+> > using the Retrain Link bit, where software should poll Link Training
+> > until it returns to zero before setting the Retrain Link bit to change
+> > link parameters.
+> >
+> > And I think you're absolutely right that what we *want* here is the
+> > data link layer DL_Active state, not just the link layer L0 state.
+> >
+> > This all makes me think that checking the Link Training bit might be
+> > the wrong thing to begin with.
+> >
+> > Of course, the Data Link Layer Link Active bit wasn't added until PCIe
+> > r1.1, and even now it's optional.  Without it, I don't know if there's
+> > a way to make sure the link is in DL_Active.
 
+My understanding is there is no way to check for the DL_Active state
+on these devices. Which is why pcie_wait_for_link_delay uses a fixed
+delay in that case.
 
-On 2022/11/9 01:36, Akinobu Mita wrote:
-> 2022年11月8日(火) 12:52 Qi Zheng <zhengqi.arch@bytedance.com>:
->>
->> When we specify __GFP_NOWARN, we only expect that no warnings
->> will be issued for current caller. But in the __should_failslab()
->> and __should_fail_alloc_page(), the local GFP flags alter the
->> global {failslab|fail_page_alloc}.attr, which is persistent and
->> shared by all tasks. This is not what we expected, let's fix it.
->>
->> Cc: stable@vger.kernel.org
->> Fixes: 3f913fc5f974 ("mm: fix missing handler for __GFP_NOWARN")
->> Reported-by: Dmitry Vyukov <dvyukov@google.com>
->> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->> ---
->>   v1: https://lore.kernel.org/lkml/20221107033109.59709-1-zhengqi.arch@bytedance.com/
->>
->>   Changelog in v1 -> v2:
->>    - add comment for __should_failslab() and __should_fail_alloc_page()
->>      (suggested by Jason)
-> 
-> Looks good.
-> 
-> Reviewed-by: Akinobu Mita <akinobu.mita@gmail.com>
+> >
+> > Maybe pcie_retrain_link() should wait for Data Link Layer Link Active
+> > if it is supported, and use the existing behavior of waiting for Link
+> > Training to be cleared otherwise?
 
-Thanks. And hi Andrew, seems no action left for me, can this patch
-be applied to mm-unstable tree for testing? :)
+I think it still makes sense for pcie_retrain_link to wait for the
+Link Training bit, since it is typical for the retraining to never go
+to a LTSSM state where the LinkUp is 0 (e.g. Recovery ->
+Configuration), thus the Data Link Layer will stay in DL_Active. But
+it is still important to wait for the link training to complete in
+that case, but also because the training may not cause the Data Link
+state to change immediately.
 
--- 
+However since DLLLA reporting is optional, it is probably ideal if the
+pcie_retrain_link only calls pcie_wait_for_link if reporting is
+available? This would avoid the fixed delay of 1s upon link retraining
+for devices without reporting, which is unnecessary in the majority of
+cases.
+
 Thanks,
-Qi
+Nathan
+
+
+>
+> Nathan, I meant to cc you on this thread, which is doing something
+> very similar.  Just FYI:
+>
+> https://lore.kernel.org/all/alpine.DEB.2.21.2209130050380.60554@angie.orc=
+am.me.uk/
