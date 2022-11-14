@@ -2,57 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 473C8628727
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9739628743
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:39:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237700AbiKNRdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:33:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
+        id S237119AbiKNRit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:38:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237797AbiKNRdd (ORCPT
+        with ESMTP id S236124AbiKNRin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:33:33 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44648626A;
-        Mon, 14 Nov 2022 09:33:31 -0800 (PST)
+        Mon, 14 Nov 2022 12:38:43 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D1517884
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:38:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+woNkKK6JSXdy4mqNbD3Tr9quE3pzUwSQqKVI1X/BPE=; b=fHomstRuFLzlEHSxV4ihy4uUn6
-        YvJdVaKHoB+i1x8XYxSv3RpRMcxe61Xrh62ZbL1CwCk6Pr8pRA6a6ruyE4XUevOmmP1GYaM65Z6JE
-        bOs796MYabZLN6vCCZ9sEuLMIP+GK74A4IDH6h6GgoM2T2TCVkv4bqNOB46QIKMbv3kMzG6iaxEOg
-        pHlajUP6vBPH3+6JbTx45ahU1qwxFpmhRL9js5GtDZ5T0wRN+UWRLztFD5QIVIyKnOHnHuhg4YRWN
-        mi6C8iRL5EJHP5lJNaT83bcrM0VpC2TN3hRJ2yLArQUrQZpqP4/DDgnFeA9JBgWRiI31OER4LkS3e
-        HQ33BaAA==;
+        bh=8PlpYY+vP5Rrdd5T8dnq/iP+uWZYn4QdrChaBtGnOwA=; b=miXVHeb/tDvgc2f3bbWKa3qSBw
+        hb9clp+orzrLwvVDwT1zCzIwSN7ELjEs1MvF7A/1hCAI8k7NV4/hUcstsFjFd/J8n7sTW0DrxImUK
+        FO2qz4IiPdT1fb4rEMkwBI6pIb4vCnMNAa5OGsrLM6izXP5p3231+SCo9hqIBwZTbZ/+zgeHVj7cV
+        L3RznL/HQetsxmSlctAU3GRgONUDja1HPjbNCXQ2sThj9iHwS9Nh6buaCm5U0+Os3ZbhJkFhpCanD
+        j8YNwVAOwULa0iybp4kjv6dfU27QAkDoKU4ps6FbpOmGKJ80BbeLZul3Wzk2KdDoYVoN+ZNw9AwAv
+        s8cqlkSA==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oudKt-00FbcY-M8; Mon, 14 Nov 2022 17:33:31 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oudPe-000qQm-4l; Mon, 14 Nov 2022 17:38:26 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3B3EC300348;
-        Mon, 14 Nov 2022 13:46:27 +0100 (CET)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3C67A3010E0;
+        Mon, 14 Nov 2022 16:12:31 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 24AF320242906; Mon, 14 Nov 2022 13:46:27 +0100 (CET)
-Date:   Mon, 14 Nov 2022 13:46:27 +0100
+        id 213952C0713BB; Mon, 14 Nov 2022 16:12:31 +0100 (CET)
+Date:   Mon, 14 Nov 2022 16:12:31 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     Like Xu <like.xu.linux@gmail.com>
+To:     Andrey Ryabinin <ryabinin.a.a@gmail.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: Re: [PATCH v3 3/3] perf/x86/intel: Expose EPT-friendly PEBS for SPR
- and future models
-Message-ID: <Y3I4o4Y/TcqidyJT@hirez.programming.kicks-ass.net>
-References: <20221109082802.27543-1-likexu@tencent.com>
- <20221109082802.27543-4-likexu@tencent.com>
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com,
+        syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2 5/5] x86/kasan: Populate shadow for shared chunk of
+ the CPU entry area
+Message-ID: <Y3Ja33LyShqjvmQZ@hirez.programming.kicks-ass.net>
+References: <20221110203504.1985010-1-seanjc@google.com>
+ <20221110203504.1985010-6-seanjc@google.com>
+ <3b7a841d-bbbd-6018-556f-d2414a5f02b2@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221109082802.27543-4-likexu@tencent.com>
+In-Reply-To: <3b7a841d-bbbd-6018-556f-d2414a5f02b2@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -62,27 +71,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 04:28:02PM +0800, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> According to Intel SDM, the EPT-friendly PEBS is supported by all the
-> platforms after ICX, ADL and the future platforms with PEBS format 5.
-> 
-> Currently the only in-kernel user of this capability is KVM, which has
-> very limited support for hybrid core pmu, so ADL and its successors do
-> not currently expose this capability. When both hybrid core and PEBS
-> format 5 are present, KVM will decide on its own merits.
+On Mon, Nov 14, 2022 at 05:44:00PM +0300, Andrey Ryabinin wrote:
+> Going back kasan_populate_shadow() seems like safer and easier choice.
+> The only disadvantage of it that we might waste 1 page, which is not
+> much compared to the KASAN memory overhead.
 
-Oh right; the whole ADL KVM trainwreck :/ What's the plan there?
+So the below delta?
 
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: linux-perf-users@vger.kernel.org
-> Suggested-by: Kan Liang <kan.liang@linux.intel.com>
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-> ---
-> Nit: This change is proposed to be applied via the KVM tree.
-
-Works for me;
-
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+--- a/arch/x86/mm/kasan_init_64.c
++++ b/arch/x86/mm/kasan_init_64.c
+@@ -388,7 +388,7 @@ void __init kasan_init(void)
+ 	shadow_cea_end = kasan_mem_to_shadow_align_up(CPU_ENTRY_AREA_BASE +
+ 						      CPU_ENTRY_AREA_MAP_SIZE);
+ 
+-	kasan_populate_early_shadow(
++	kasan_populate_shadow(
+ 		kasan_mem_to_shadow((void *)PAGE_OFFSET + MAXMEM),
+ 		kasan_mem_to_shadow((void *)VMALLOC_START));
+ 
