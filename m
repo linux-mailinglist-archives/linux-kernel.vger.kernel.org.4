@@ -2,81 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F201627448
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 02:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2937662744D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 02:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235574AbiKNBtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 20:49:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
+        id S233069AbiKNBue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 20:50:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235249AbiKNBtj (ORCPT
+        with ESMTP id S235579AbiKNBua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 20:49:39 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3303BE4F
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 17:49:39 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id c14-20020a5ea80e000000b006d6e9b05e58so5274235ioa.23
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 17:49:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0NIciGEMFs3GR0VxmcRj2FqKZjUa05yht5hU+xLHqL8=;
-        b=XDVRikc8HBzITxMYGAA8nfZbO4PD8pwqcRl18HG/OM5mCx+4OABwRXotnq0yccxtjX
-         6YlXaMryIY2iOENuB5qYLi6xbe+f88+Pxeo1QBVExEVasP6FXm3trCLkYkgpSOmSw7yP
-         yDKsXQnTnf1K0astSnOVoM9UXiykvAjIexo2Tz56MPwyQz6YLlIWblKjh2K8GrSaC8iK
-         2SlL6WAGgDwnE4IGVzxoSL04LyStoWYv6Qss6+2jCYAGPk9p/V0OOGsI5bNmGs26xLdc
-         yetAgosEqi6P0RDpzmBLBqUxde2Ee7TgMfjqTOzPs+YnrZ45INFPXKTbHeeaX1/9YwAa
-         GrQg==
-X-Gm-Message-State: ANoB5pncLY1Zqz7gdONYPFI5onEvWSnCpmP+tXk9YEEhdV/EQ0Wn1sPh
-        K3auU2HJxY0aAsLa86KmrPllTJTppfMzgM23h9zYBjLmB07e
-X-Google-Smtp-Source: AA0mqf4oSH+2L1giJjDUKiHTVQUltrz0Z1AwBwcVEqq+IVE588oskcYMuAffWmdXohdOr+bP5nkTCRoWMV6ijRU4lY/7rTO8ke0c
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1061:b0:300:d3e0:2492 with SMTP id
- q1-20020a056e02106100b00300d3e02492mr5288163ilj.148.1668390578548; Sun, 13
- Nov 2022 17:49:38 -0800 (PST)
-Date:   Sun, 13 Nov 2022 17:49:38 -0800
-In-Reply-To: <00000000000041665a05ed5c17db@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c7f9c605ed6473c8@google.com>
-Subject: Re: [syzbot] possible deadlock in vfs_fileattr_set
-From:   syzbot <syzbot+abe01a74653f00aabe3e@syzkaller.appspotmail.com>
-To:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-graphics-maintainer@vmware.com, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, sroland@vmware.com,
-        syzkaller-bugs@googlegroups.com, tzimmermann@suse.de,
-        zackr@vmware.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        Sun, 13 Nov 2022 20:50:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3E7D91;
+        Sun, 13 Nov 2022 17:50:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A03460BD6;
+        Mon, 14 Nov 2022 01:50:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0314C433D6;
+        Mon, 14 Nov 2022 01:50:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668390628;
+        bh=4V9YbxChV9WUSpnF4+YUz3YrvsUYrk7aSD6B1Bbml2g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=B0H+3SkDYeDKqrw3gQKlyCwSTTZijJGNBXftbJpzS37nmYznamsqrvYq8bvH2KG7W
+         bDF5dlgyYvuoJ5rqqp/bZ9QI8XGYgIW7usGyztc7bD8VJsuL3NIbTcDWzusL5EN9/f
+         9h87wozryv+ReIpGPXE1hC9w0+SE7heKja1kSErJUJEWzFV7xYpFNkgV4Y0D/MAQWR
+         hBtBaHDCPRg/qwWK81MYyyRIsaG7RmRpESgUD/oaC9vk/YnFjy/ke3WuFrokZdrPGm
+         fexWaAvxrzpb7QVLsIaP+ZOOVzHwjo5d8IUjRpLRl2AAfK9awjcfyhhVZq8UCrGmC0
+         5ma4TiG5i6Axw==
+Date:   Mon, 14 Nov 2022 10:50:25 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Rafael Mendonca <rafaelmendsr@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Tzvetomir Stoyanov <tz.stoyanov@gmail.com>
+Subject: Re: [PATCH] tracing/eprobe: Fix eprobe filter to make a filter
+ correctly
+Message-Id: <20221114105025.570082c976b24cc399bf693c@kernel.org>
+In-Reply-To: <166823166395.1385292.8931770640212414483.stgit@devnote3>
+References: <166823166395.1385292.8931770640212414483.stgit@devnote3>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+Hi Rafael,
 
-commit 6dd6b7643e723b4779e59c8ad97bd5db6ff3bb12
-Author: Thomas Zimmermann <tzimmermann@suse.de>
-Date:   Mon Jan 18 13:14:19 2021 +0000
+Can you give me your Tested-by on this?
 
-    drm/vmwgfx: Remove reference to struct drm_device.pdev
+Thank you,
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1418e6a5880000
-start commit:   f8f60f322f06 Add linux-next specific files for 20221111
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1618e6a5880000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1218e6a5880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=85ba52c07cd97289
-dashboard link: https://syzkaller.appspot.com/bug?extid=abe01a74653f00aabe3e
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=138b76ae880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ab1bfe880000
+On Sat, 12 Nov 2022 14:41:04 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-Reported-by: syzbot+abe01a74653f00aabe3e@syzkaller.appspotmail.com
-Fixes: 6dd6b7643e72 ("drm/vmwgfx: Remove reference to struct drm_device.pdev")
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Since the eprobe filter was defined based on the eprobe's trace event
+> itself, it doesn't work correctly. Use the original trace event of
+> the eprobe when making the filter so that the filter works correctly.
+> 
+> Without this fix:
+> 
+>  # echo 'e syscalls/sys_enter_openat \
+> 	flags_rename=$flags:u32 if flags < 1000' >> dynamic_events
+>  # echo 1 > events/eprobes/sys_enter_openat/enable
+> [  114.551550] event trace: Could not enable event sys_enter_openat
+> -bash: echo: write error: Invalid argument
+> 
+> With this fix:
+>  # echo 'e syscalls/sys_enter_openat \
+> 	flags_rename=$flags:u32 if flags < 1000' >> dynamic_events
+>  # echo 1 > events/eprobes/sys_enter_openat/enable
+>  # tail trace
+> cat-241     [000] ...1.   266.498449: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
+> cat-242     [000] ...1.   266.977640: sys_enter_openat: (syscalls.sys_enter_openat) flags_rename=0
+> 
+> Fixes: 752be5c5c910 ("tracing/eprobe: Add eprobe filter support")
+> Reported-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> ---
+>  kernel/trace/trace_eprobe.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+> index fe4833a7b7b3..1c3096ab2fe7 100644
+> --- a/kernel/trace/trace_eprobe.c
+> +++ b/kernel/trace/trace_eprobe.c
+> @@ -643,7 +643,7 @@ new_eprobe_trigger(struct trace_eprobe *ep, struct trace_event_file *file)
+>  	INIT_LIST_HEAD(&trigger->list);
+>  
+>  	if (ep->filter_str) {
+> -		ret = create_event_filter(file->tr, file->event_call,
+> +		ret = create_event_filter(file->tr, ep->event,
+>  					ep->filter_str, false, &filter);
+>  		if (ret)
+>  			goto error;
+> 
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
