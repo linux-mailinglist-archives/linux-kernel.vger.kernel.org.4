@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8B0627CA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 522DA627CA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236475AbiKNLpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:45:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
+        id S236661AbiKNLpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:45:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236642AbiKNLo3 (ORCPT
+        with ESMTP id S236660AbiKNLoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:44:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A42FA443
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:44:21 -0800 (PST)
+        Mon, 14 Nov 2022 06:44:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDBA20BC5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:44:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B278D61045
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:44:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F37ABC433D6;
-        Mon, 14 Nov 2022 11:44:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 905B0B80E6C
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:44:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 988CDC433C1;
+        Mon, 14 Nov 2022 11:44:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668426260;
-        bh=IHoKQKrRrTt+P5k/IAfDdtfWsTsoL9pAz/rh5KwFgsA=;
+        s=k20201202; t=1668426263;
+        bh=owzR+yZF1fBmG413bQU+FKodqiSnrZRm615nsyA2Qd8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fPJIeLVKEPphF5Jd/ZBtMLYLlwXq2jNC6yM/rnlSjD/oEDQPHp1ZE7kCqMJrdANgg
-         OYx54IDoHISHcJxw3pc63Qs2tcOYxTtRHcTJ4W9F7HcoW5/trhw8vxeyyBHq+m/Pis
-         eVp7HVYPXPjZu/8kvjDRf+wsLTPWpFOJXSIB9ygDzr+QGCKYC9YzaiJGp+oM9zBEML
-         XaRGFyOztx/UxUgwt2iThXV+acWKlYmMWdcI+N5dtWuxNIMlKfJRSY9V6c/13B3Uj9
-         OBttxZPrsD3xy5aYX5kXeCwCk+/s7m658Lv3c+TMu6DYODrLIFZWoGZ5JMdKyP8xcJ
-         WYpEU/+a4AW3w==
+        b=iMdFCUcwcAU0BxJEunp20sguBCmcihaBHzTN2R0laCZjfHpV3wYTLqN8Vo2RZE7iE
+         haT1PNIPMmf++W29BCMx6YNaaDQS8iK2T4P5eJJzru7mrUTlNkwpLyOvP/sVh3ZW7g
+         jVUQmQuZqHtZAIEj4JTTWT7Fml+LW8NRfvsbzTjt4+Ejv/GYDgIi4+nyNlni1tgPdH
+         qhdKHJQ1coiRZPhNytWT8z/3lra+iaMThcXGG5fwaGe7WwfIYSj0GxQSZungNuRLsC
+         8kdFYo1ocB+NsfrwYgJw3vwGvgr9pTj/vGO7sjkMOOniPt6Bd8ZEa++WhKOr3ySQUf
+         Q0rqE88PdqL1w==
 From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Andi Kleen <ak@linux.intel.com>,
+Cc:     Andi Kleen <ak@linux.intel.com>, Juergen Gross <jgross@suse.com>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
         Martin Liska <mliska@suse.cz>, Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 11/46] x86/alternative, lto: Mark int3_*() as global and __visible
-Date:   Mon, 14 Nov 2022 12:43:09 +0100
-Message-Id: <20221114114344.18650-12-jirislaby@kernel.org>
+Subject: [PATCH 12/46] x86/paravirt, lto: Mark native_steal_clock() as __visible_on_lto
+Date:   Mon, 14 Nov 2022 12:43:10 +0100
+Message-Id: <20221114114344.18650-13-jirislaby@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221114114344.18650-1-jirislaby@kernel.org>
 References: <20221114114344.18650-1-jirislaby@kernel.org>
@@ -64,8 +66,14 @@ DEFINE_STATIC_KEY()) need to be global and visible in gcc LTO because
 they could end up in a different object file than the assembler. This
 can lead to linker errors without this patch.
 
-So mark int3_magic() and int3_selftest_ip() as global and __visible.
+So mark native_steal_clock() as __visible_on_lto.
 
+[js] use __visible_on_lto
+
+Cc: Juergen Gross <jgross@suse.com>
+Cc: "Srivatsa S. Bhat
+Cc: Alexey Makhalov <amakhalov@vmware.com>
+Cc: VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Borislav Petkov <bp@alien8.de>
@@ -76,36 +84,22 @@ Signed-off-by: Andi Kleen <ak@linux.intel.com>
 Signed-off-by: Martin Liska <mliska@suse.cz>
 Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 ---
- arch/x86/kernel/alternative.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ arch/x86/kernel/paravirt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 5cadcea035e0..05e5eb9cbd51 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -823,11 +823,12 @@ extern struct paravirt_patch_site __start_parainstructions[],
-  * convention such that we can 'call' it from assembly.
-  */
+diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
+index 7ca2d46c08cc..27a537cd4b0e 100644
+--- a/arch/x86/kernel/paravirt.c
++++ b/arch/x86/kernel/paravirt.c
+@@ -120,7 +120,7 @@ unsigned int paravirt_patch(u8 type, void *insn_buff, unsigned long addr,
+ struct static_key paravirt_steal_enabled;
+ struct static_key paravirt_steal_rq_enabled;
  
--extern void int3_magic(unsigned int *ptr); /* defined in asm */
-+extern __visible void int3_magic(unsigned int *ptr); /* defined in asm */
- 
- asm (
- "	.pushsection	.init.text, \"ax\", @progbits\n"
- "	.type		int3_magic, @function\n"
-+"	.globl		int3_magic\n"
- "int3_magic:\n"
- 	ANNOTATE_NOENDBR
- "	movl	$1, (%" _ASM_ARG1 ")\n"
-@@ -836,7 +837,7 @@ asm (
- "	.popsection\n"
- );
- 
--extern void int3_selftest_ip(void); /* defined in asm below */
-+extern __visible void int3_selftest_ip(void); /* defined in asm below */
- 
- static int __init
- int3_exception_notify(struct notifier_block *self, unsigned long val, void *data)
+-static u64 native_steal_clock(int cpu)
++__visible_on_lto u64 native_steal_clock(int cpu)
+ {
+ 	return 0;
+ }
 -- 
 2.38.1
 
