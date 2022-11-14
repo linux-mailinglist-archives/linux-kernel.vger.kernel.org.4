@@ -2,106 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F0B46285BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B769C6285BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237652AbiKNQnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:43:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
+        id S237928AbiKNQnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:43:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237882AbiKNQnE (ORCPT
+        with ESMTP id S237895AbiKNQnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:43:04 -0500
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60467AE5D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:43:02 -0800 (PST)
-Received: by mail-vk1-xa2d.google.com with SMTP id m18so5226528vka.10
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:43:02 -0800 (PST)
+        Mon, 14 Nov 2022 11:43:06 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACF760C3
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:43:04 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id q21so8588863iod.4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:43:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r6+Uc7KspS9LnQ7lQ8KADE8xYhNwIZ0EslnJy4rOJIQ=;
-        b=pXlLzqqea3rFwcAo0BCKnnKZine2dIaVs1WKl0zC8f4r5mX8yfoWOTYXBcNQ2k/CTC
-         gyonvxZA1RIE8qxHdaqSwRlS7sZDrmqAVs0CnAJqR8m8BRyFOMRk+o05e9V4RPFowx1h
-         y8ZHwMXLftERyS8j3xA5e3N3ogEVd/3ej8xV8nVh2rGuMmI36uy1Dbrm6fTf6+LaUeu1
-         hEBfdKjruLa+K7j9XDqq64OZyLc4emGZDSwhaT9X1htGTY289G/xd4+E26slJ6ESzO5f
-         y1NivQybEzJ7mRb8u4RBBFZYiCZx8WczDldkFTGRjok2QuPet9Ciklqo50m3x4u0pcXp
-         5e0A==
+        bh=zvshJTPFOLi1aFoI1m6FADH65pEihkNnlKNCxyRQXF8=;
+        b=fAlfBnaauJUubAYqzd76iEPVeYlf+a2YCNUYymAu8x3YSsqq5hN4QIUjFHXClJBh4R
+         gFhzftsJ4juWm4E1ALYLopzEqaQwcuPnFwnfbO/w0SUncCL98bZfCGmcljYK+MuS8ubP
+         RfPU82MHCSc9TaPPCsAeoT+2GKOhUo0mWc2vRAITLDCYh30AYOXOuC95gBE6xYboXJAW
+         yZUqj7x9sQ8iW4kWvhcvwJfVrYsWy4Po4p7JzizW5QWxHEjkaZcSqmxliVwm4G3uk3Tx
+         SGWH35IPTfMSicFl5bmEScDNExnxzwgdxgmDBXy32XcdDvR24pAskeX0+peeT7cGpJL0
+         PqSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=r6+Uc7KspS9LnQ7lQ8KADE8xYhNwIZ0EslnJy4rOJIQ=;
-        b=jD2YE8qJw3/ow3siUki1bCsUL704iRlkuIAtc+2aFP06HdAbjpAIXZBdXU0xPN6Rmr
-         tsk1CHDLQf0C3TPps+6iDiPVnH+piBVo9n1vRScOUz52PBJFPIMW16/+KnrOcACQvoPG
-         HV4SPcJCwRXH2geW3TiFuOiIsO53kMxs16YwJXzwqGgxeXWLgTlRSwAwcYZwpq7DaB9a
-         eQPI9JupXrCLP79wQjcS3vecS3uERTG0SOhYS8Xnk8Q/G/x9/XwYuRaYhU8CBDhrv0W8
-         WRFNY4QImGFP0FUqY7DnzyWV3g0hbtTU3WXwintNOcve+FCFslwOTnWB8Ybnw9xwEc8x
-         kNQA==
-X-Gm-Message-State: ANoB5pnG/ZRZCWfkGnuaXYrTAY21s5EOG5meMPmPMqdMjsxJnYyKaotX
-        epDuJqqXrZ6zZDaGTR9gdmKTA0e4bmJ87/x+BlZEEw==
-X-Google-Smtp-Source: AA0mqf4JZZcyI0e3LlhvIJqy5/kKz/rCYZl9cgjvokgRpT+9Gh2L4+/4nkyXKZB7aoi88JomTTlBCNt8+58AZgDef1U=
-X-Received: by 2002:a05:6122:1989:b0:3b8:1bb4:b750 with SMTP id
- bv9-20020a056122198900b003b81bb4b750mr6892769vkb.20.1668444181396; Mon, 14
- Nov 2022 08:43:01 -0800 (PST)
+        bh=zvshJTPFOLi1aFoI1m6FADH65pEihkNnlKNCxyRQXF8=;
+        b=w+gxRKlzWOQ3zoXAyXvKBrw1x2MLfWNfl3i9UGabI9Ja+AR++MiukFVWOehWS+QGT3
+         yGE0FUDsv6y5+yWG6KFAk2qicjVB/lXqMc0oPsYSQk2y+MsrkycV72lzwpKFQD+jAepo
+         vToS+DYusDu9cxZqFHKc9unu3b3Bet4JEv7zz061R11xv4eWhMMoF9OikDV8OrzCBH7V
+         OT70nxtsumD23jeDKAL6/yN+r7v6k8hcp1vqxxImnjQ1rxD5t9nzX9Au55vPGeG/+BXG
+         4f55mU5dnpVozVlnWxqsmiqKA1tk2N8HHxdHgG3aQ5G7MNm77saQYgc01rXSk4rd3uJu
+         dBvg==
+X-Gm-Message-State: ANoB5pneD6o7P7RiXx1NCm4/4y2y8CdB5+33JL1MLmKE7ZaI9LNInLI5
+        QymYWm3E9P8Ip4Nb/gJWdQdk583H/KjULrQpDtxc0A==
+X-Google-Smtp-Source: AA0mqf6m7E+6JeWfvUfKBnctexkkE7MxtSJi4yAHAILTr547yVqcrT5wsiTIlji22bp773FKPUAUhNvK+u/JuO8//JM=
+X-Received: by 2002:a05:6638:15c7:b0:375:2ce7:e2b5 with SMTP id
+ i7-20020a05663815c700b003752ce7e2b5mr6115801jat.120.1668444183592; Mon, 14
+ Nov 2022 08:43:03 -0800 (PST)
 MIME-Version: 1.0
-References: <b2d1004d-4a76-ab0b-d369-a38c2d7c1624@csgroup.eu>
- <20221111152852.2837363-1-allenwebb@google.com> <Y26UcbviRaoK9a3C@bombadil.infradead.org>
-In-Reply-To: <Y26UcbviRaoK9a3C@bombadil.infradead.org>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Mon, 14 Nov 2022 10:42:50 -0600
-Message-ID: <CAJzde06b4d065y7KSoGO6qQBgvcVdkUai1WAy_TkrkTCDHS41A@mail.gmail.com>
-Subject: Re: [PATCH] modules: add modalias file to sysfs for modules.
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        Alexey Gladkov <gladkov.alexey@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221102035301.512892-1-zhangsong34@huawei.com>
+ <CAKfTPtCcYySw2ZC_pr8=3KFPmAAVN=1h8=5jWkW5YXyy11sehg@mail.gmail.com>
+ <b45f96b6-e0b2-22bb-eda1-2468d6fbe104@huawei.com> <CAKfTPtDrWCenxtVcunjS3pGD81TdLf2EkhO_YcdfxnUHXpVF3w@mail.gmail.com>
+ <4bad43c0-40a4-dc39-7214-f2c3321a47ee@huawei.com> <CAKfTPtCwUvkqnzs9n0G+cyE5h5QdgwoKF-gNu+4A5g4NHNRe9w@mail.gmail.com>
+ <7d887171-491a-1d36-0926-d0486aacc9c2@huawei.com>
+In-Reply-To: <7d887171-491a-1d36-0926-d0486aacc9c2@huawei.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 14 Nov 2022 17:42:52 +0100
+Message-ID: <CAKfTPtCHZm2AKemnpE1UvQPsgpB5ycFdjkJa1pHQS-=DYJ2-KA@mail.gmail.com>
+Subject: Re: [PATCH] sched/fair: Introduce priority load balance for CFS
+To:     Song Zhang <zhangsong34@huawei.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 12:29 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+On Sat, 12 Nov 2022 at 03:51, Song Zhang <zhangsong34@huawei.com> wrote:
 >
-> On Fri, Nov 11, 2022 at 09:28:52AM -0600, Allen Webb wrote:
-> > USB devices support the authorized attribute which can be used by
-> > user-space to implement trust-based systems for enabling USB devices. It
-> > would be helpful when building these systems to be able to know in
-> > advance which kernel drivers (or modules) are reachable from a
-> > particular USB device.
+> Hi, Vincent
+>
+> On 2022/11/3 17:22, Vincent Guittot wrote:
+> > On Thu, 3 Nov 2022 at 10:20, Song Zhang <zhangsong34@huawei.com> wrote:
+> >>
+> >>
+> >>
+> >> On 2022/11/3 16:33, Vincent Guittot wrote:
+> >>> On Thu, 3 Nov 2022 at 04:01, Song Zhang <zhangsong34@huawei.com> wrote:
+> >>>>
+> >>>> Thanks for your reply!
+> >>>>
+> >>>> On 2022/11/3 2:01, Vincent Guittot wrote:
+> >>>>> On Wed, 2 Nov 2022 at 04:54, Song Zhang <zhangsong34@huawei.com> wrote:
+> >>>>>>
+> >>>>>
+> >>>>> This really looks like a v3 of
+> >>>>> https://lore.kernel.org/all/20220810015636.3865248-1-zhangsong34@huawei.com/
+> >>>>>
+> >>>>> Please keep versioning.
+> >>>>>
+> >>>>>> Add a new sysctl interface:
+> >>>>>> /proc/sys/kernel/sched_prio_load_balance_enabled
+> >>>>>
+> >>>>> We don't want to add more sysctl knobs for the scheduler, we even
+> >>>>> removed some. Knob usually means that you want to fix your use case
+> >>>>> but the solution doesn't make sense for all cases.
+> >>>>>
+> >>>>
+> >>>> OK, I will remove this knobs later.
+> >>>>
+> >>>>>>
+> >>>>>> 0: default behavior
+> >>>>>> 1: enable priority load balance for CFS
+> >>>>>>
+> >>>>>> For co-location with idle and non-idle tasks, when CFS do load balance,
+> >>>>>> it is reasonable to prefer migrating non-idle tasks and migrating idle
+> >>>>>> tasks lastly. This will reduce the interference by SCHED_IDLE tasks
+> >>>>>> as much as possible.
+> >>>>>
+> >>>>> I don't agree that it's always the best choice to migrate a non-idle task 1st.
+> >>>>>
+> >>>>> CPU0 has 1 non idle task and CPU1 has 1 non idle task and hundreds of
+> >>>>> idle task and there is an imbalance between the 2 CPUS: migrating the
+> >>>>> non idle task from CPU1 to CPU0 is not the best choice
+> >>>>>
+> >>>>
+> >>>> If the non idle task on CPU1 is running or cache hot, it cannot be
+> >>>> migrated and idle tasks can also be migrated from CPU1 to CPU0. So I
+> >>>> think it does not matter.
+> >>>
+> >>> What I mean is that migrating non idle tasks first is not a universal
+> >>> win and not always what we want.
+> >>>
+> >>
+> >> But migrating online tasks first is mostly a trade-off that
+> >> non-idle(Latency Sensitive) tasks can obtain more CPU time and minimize
+> >> the interference caused by IDLE tasks. I think this makes sense in most
+> >> cases, or you can point out what else I need to think about it ?
+> >>
+> >> Best regards.
+> >>
+> >>>>
+> >>>>>>
+> >>>>>> Testcase:
+> >>>>>> - Spawn large number of idle(SCHED_IDLE) tasks occupy CPUs
+> >>>>>
+> >>>>> What do you mean by a large number ?
+> >>>>>
+> >>>>>> - Let non-idle tasks compete with idle tasks for CPU time.
+> >>>>>>
+> >>>>>> Using schbench to test non-idle tasks latency:
+> >>>>>> $ ./schbench -m 1 -t 10 -r 30 -R 200
+> >>>>>
+> >>>>> How many CPUs do you have ?
+> >>>>>
+> >>>>
+> >>>> OK, some details may not be mentioned.
+> >>>> My virtual machine has 8 CPUs running with a schbench process and 5000
+> >>>> idle tasks. The idle task is a while dead loop process below:
+> >>>
+> >>> How can you care about latency when you start 10 workers on 8 vCPUs
+> >>> with 5000 non idle threads ?
+> >>>
+> >>
+> >> No no no... spawn 5000 idle(SCHED_IDLE) processes not 5000 non-idle
+> >> threads, and with 10 non-idle schbench workers on 8 vCPUs.
 > >
-> > This information is readily available for external modules in
-> > modules.alias. However, builtin kernel modules are not covered. This
-> > patch adds a sys-fs attribute to both builtin and loaded modules
-> > exposing the matching rules in the modalias format for integration
-> > with tools like USBGuard.
+> > yes spawn 5000 idle tasks but my point remains the same
 > >
-> > Signed-off-by: Allen Webb <allenwebb@google.com>
 >
-> Thanks for the patch Allen!
->
-> I'd rather have something generic though, and it would seem kmod [0] already
-> does this, have you seen the kmod support for builtin.alias.bin
->
-> Can't that be used?
+> I am so sorry that I have not received your reply for a long time, and I
+> am still waiting for it anxiously. In fact, migrating non-idle tasks 1st
+> works well in most scenarios, so it maybe possible to add a
+> sched_feat(LB_PRIO) to enable or disable that. Finally, I really hope
+> you can give me some better advice.
 
-Probably, but I don't see the builtin.alias.bin in my build. Is it experimental?
+I have seen that you posted a v4 5 days ago which is on my list to be reviewed.
+
+My concern here remains that selecting non idle task 1st is not always
+the best choices as for example when you have 1 non idle task per cpu
+and thousands of idle tasks moving around. Then regarding your use
+case, the weight of the 5000 idle threads is around twice more than
+the weight of your non idle bench: sum weight of idle threads is 15k
+whereas the weight of your bench is around 6k IIUC how RPS run. This
+also means that the idle threads will take a significant times of the
+system: 5000 / 7000 ticks. I don't understand how you can care about
+latency in such extreme case and I'm interested to get the real use
+case where you can have such situation.
+
+All that to say that idle task remains cfs task with a small but not
+null weight and we should not make them special other than by not
+preempting at wakeup.
 
 >
-> [0] git://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git
+> Best regards.
 >
->   Luis
+> Song Zhang
