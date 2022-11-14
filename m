@@ -2,246 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37298628D07
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9E8628CF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238097AbiKNXDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 18:03:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51208 "EHLO
+        id S237866AbiKNXCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 18:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237991AbiKNXDF (ORCPT
+        with ESMTP id S237841AbiKNXC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 18:03:05 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141D01C131;
-        Mon, 14 Nov 2022 15:02:41 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id p21so11500850plr.7;
-        Mon, 14 Nov 2022 15:02:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+XtdOOIqcdV1KgiG/01v+Rj8BokEmQ43hQ9dFYU/fNg=;
-        b=ei84jXWjNfmnH9OUB1u5al/lYsHMGOntgzm0Q5K+8D47aWFOFNF9PikTTkgU1qzsZD
-         UmRBYU4J1y9wr+QP7oFH3pe5LtCFle0bGq8arql1ouwgtBOFZuJQQFGO6qIWE0SimoK7
-         iWk3UNLloqElE1gsyRP8Lvh5LAeh9eYRAAht85lQUNulIxTlK45HXq1fZ29aPmjLzuL1
-         8fNxjaES1Z57CwrUKDd/mnHVrfq0PFeebKgoel3EoUmhdANJ3WdTD9K6RUv/22PN0Yq1
-         4XyBVZHOJI9Lvp8miDaILeUSiVol+GsO6BO/cj5FKkHFAh0svzNJViRsZVZqHRUVy0ik
-         9OQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+XtdOOIqcdV1KgiG/01v+Rj8BokEmQ43hQ9dFYU/fNg=;
-        b=XfHA6lT4G7xWx+rllPBZI0s/lBlzF0PS3gjLtnxGD8djZxOe2uVH6S5QNzAuDgKM3r
-         mJ28KpWoDeUAv7A94B9ndwNrf1c0oVrE+Lk+TqF/HppD8hqAuzk+IOnxQeh0lrHqCDbe
-         mO1pEYKy9xtwFWK/K3Q07gjtMnvqhT4lQvC31mjAEk3d2k4HyYj5/pnOzbMkgqC/tb97
-         Rb7ytlpipmesnMEsb5WhqDt2l3pjt/7kuK1iF7cWNfkrip2GaHr4A5uB1+asVo2KMmye
-         eZz+oqV8E7EUntG1V9tWgIa/RvlGNhpBXVzx13/8snp+5GxFrkUxUeXcnI83+VC3SLPK
-         LYzg==
-X-Gm-Message-State: ANoB5pkgr2l88sCAM2hAgUMEwfJR7DA2pkAOKGxbIyD49Qfc/M9ZHL/f
-        4cxawKeMGR0MI0MuJhIPsGw=
-X-Google-Smtp-Source: AA0mqf7rdaUq+jdzSbAtikgHm9cnhmYBiObpl+h5pXUJyYLh9rNbSBTQZ4KhUl+TWpkGH/nqBm9wCw==
-X-Received: by 2002:a17:902:f7c3:b0:176:e414:722 with SMTP id h3-20020a170902f7c300b00176e4140722mr1409144plw.26.1668466960520;
-        Mon, 14 Nov 2022 15:02:40 -0800 (PST)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:a80:cf9f:e038:c19b:797e])
-        by smtp.gmail.com with ESMTPSA id 132-20020a62148a000000b0056c814a501dsm7534724pfu.10.2022.11.14.15.02.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 15:02:40 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-Subject: [PATCH 07/19] perf stat: Handle bad events in abs_printout()
-Date:   Mon, 14 Nov 2022 15:02:15 -0800
-Message-Id: <20221114230227.1255976-8-namhyung@kernel.org>
-X-Mailer: git-send-email 2.38.1.493.g58b659f92b-goog
-In-Reply-To: <20221114230227.1255976-1-namhyung@kernel.org>
-References: <20221114230227.1255976-1-namhyung@kernel.org>
+        Mon, 14 Nov 2022 18:02:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5091B7A2;
+        Mon, 14 Nov 2022 15:02:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC52EB815BD;
+        Mon, 14 Nov 2022 23:02:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6900CC43140;
+        Mon, 14 Nov 2022 23:02:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668466946;
+        bh=mP1glOMgwwjtxxD/5YyQGpy9Kmwl+tbpsLXysXmem+0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=X88qJahLWjU6ipVHtqUEc2mvYoJbNkgZHmy3j0WyJZi4p5bH7nFWT70KpFbBbASgI
+         ugMuU270WgpeAi6aXl/dD6joIQRx0iqTyi0MM/7nyDGifmXkPWlU0Rj7dlmqKH3Ov1
+         4HleICOIGJJ8Hk7FupQpyhxiTmtPhPYP+YPFG35w0cHMxJRBZ8anYsstT81Fz8iFGK
+         vGEwboFb5YlYtTluHS+2s613TXX0shIu56wOoJm28pkjY79U9+gx4uRFjrieZUhoaB
+         NEtV6mEQpB5NfwT8ep0gZ8p+j+BL83DsD3OY6+WreLqBbJuot7xRLIV10rRMbVUTVB
+         Y+XHRn9Tp+1ng==
+From:   Dinh Nguyen <dinguyen@kernel.org>
+To:     jh80.chung@samsung.com
+Cc:     dinguyen@kernel.org, ulf.hansson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCHv9 4/6] mmc: dw_mmc-pltfm: socfpga: add method to configure clk-phase
+Date:   Mon, 14 Nov 2022 17:02:15 -0600
+Message-Id: <20221114230217.202634-4-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221114230217.202634-1-dinguyen@kernel.org>
+References: <20221114230217.202634-1-dinguyen@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the printout() function, it checks if the event is bad (i.e. not
-counted or not supported) and print the result.  But it does the same
-what abs_printout() is doing.  So add an argument to indicate the value
-is ok or not and use the same function in both cases.
+The clock-phase settings for the SDMMC controller in the SoCFPGA
+platforms reside in a register in the System Manager. Add a method
+to access that register through the syscon interface.
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 ---
- tools/perf/util/stat-display.c | 68 ++++++++++++++--------------------
- 1 file changed, 27 insertions(+), 41 deletions(-)
+v9: no changes
+v8: no changes
+v7: use dev_warn if clk-phase-sd-hs is specified, but "altr,sysmgr-syscon"
+    is not found
+v6: not getting the clk-phase-sd-hs is not a hard failure
+v5: change error handling from of_property_read_variable_u32_array()
+    support arm32 by reading the reg_shift
+v4: no change
+v3: add space before &socfpga_drv_data
+v2: simplify clk-phase calculations
+---
+ drivers/mmc/host/dw_mmc-pltfm.c | 41 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 40 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index a72c7442ff3d..fe5483893289 100644
---- a/tools/perf/util/stat-display.c
-+++ b/tools/perf/util/stat-display.c
-@@ -518,18 +518,22 @@ static void print_metric_header(struct perf_stat_config *config,
- }
+diff --git a/drivers/mmc/host/dw_mmc-pltfm.c b/drivers/mmc/host/dw_mmc-pltfm.c
+index 9901208be797..13e55cff8237 100644
+--- a/drivers/mmc/host/dw_mmc-pltfm.c
++++ b/drivers/mmc/host/dw_mmc-pltfm.c
+@@ -17,10 +17,16 @@
+ #include <linux/mmc/host.h>
+ #include <linux/mmc/mmc.h>
+ #include <linux/of.h>
++#include <linux/mfd/altera-sysmgr.h>
++#include <linux/regmap.h>
  
- static void print_counter_value_std(struct perf_stat_config *config,
--				    struct evsel *evsel, double avg)
-+				    struct evsel *evsel, double avg, bool ok)
+ #include "dw_mmc.h"
+ #include "dw_mmc-pltfm.h"
+ 
++#define SOCFPGA_DW_MMC_CLK_PHASE_STEP	45
++#define SYSMGR_SDMMC_CTRL_SET(smplsel, drvsel, reg_shift) \
++	((((smplsel) & 0x7) << reg_shift) | (((drvsel) & 0x7) << 0))
++
+ int dw_mci_pltfm_register(struct platform_device *pdev,
+ 			  const struct dw_mci_drv_data *drv_data)
  {
- 	FILE *output = config->output;
- 	double sc =  evsel->scale;
- 	const char *fmt;
-+	const char *bad_count = evsel->supported ? CNTR_NOT_COUNTED : CNTR_NOT_SUPPORTED;
+@@ -62,9 +68,42 @@ const struct dev_pm_ops dw_mci_pltfm_pmops = {
+ };
+ EXPORT_SYMBOL_GPL(dw_mci_pltfm_pmops);
  
- 	if (config->big_num)
- 		fmt = floor(sc) != sc ? "%'18.2f " : "%'18.0f ";
- 	else
- 		fmt = floor(sc) != sc ? "%18.2f " : "%18.0f ";
- 
--	fprintf(output, fmt, avg);
-+	if (ok)
-+		fprintf(output, fmt, avg);
-+	else
-+		fprintf(output, "%18s ", bad_count);
- 
- 	if (evsel->unit)
- 		fprintf(output, "%-*s ", config->unit_width, evsel->unit);
-@@ -538,14 +542,18 @@ static void print_counter_value_std(struct perf_stat_config *config,
- }
- 
- static void print_counter_value_csv(struct perf_stat_config *config,
--				    struct evsel *evsel, double avg)
-+				    struct evsel *evsel, double avg, bool ok)
- {
- 	FILE *output = config->output;
- 	double sc =  evsel->scale;
- 	const char *sep = config->csv_sep;
- 	const char *fmt = floor(sc) != sc ? "%.2f%s" : "%.0f%s";
-+	const char *bad_count = evsel->supported ? CNTR_NOT_COUNTED : CNTR_NOT_SUPPORTED;
- 
--	fprintf(output, fmt, avg, sep);
-+	if (ok)
-+		fprintf(output, fmt, avg, sep);
-+	else
-+		fprintf(output, "%s%s", bad_count, sep);
- 
- 	if (evsel->unit)
- 		fprintf(output, "%s%s", evsel->unit, sep);
-@@ -554,11 +562,15 @@ static void print_counter_value_csv(struct perf_stat_config *config,
- }
- 
- static void print_counter_value_json(struct perf_stat_config *config,
--				     struct evsel *evsel, double avg)
-+				     struct evsel *evsel, double avg, bool ok)
- {
- 	FILE *output = config->output;
-+	const char *bad_count = evsel->supported ? CNTR_NOT_COUNTED : CNTR_NOT_SUPPORTED;
- 
--	fprintf(output, "\"counter-value\" : \"%f\", ", avg);
-+	if (ok)
-+		fprintf(output, "\"counter-value\" : \"%f\", ", avg);
-+	else
-+		fprintf(output, "\"counter-value\" : \"%s\", ", bad_count);
- 
- 	if (evsel->unit)
- 		fprintf(output, "\"unit\" : \"%s\", ", evsel->unit);
-@@ -567,21 +579,22 @@ static void print_counter_value_json(struct perf_stat_config *config,
- }
- 
- static void print_counter_value(struct perf_stat_config *config,
--				struct evsel *evsel, double avg)
-+				struct evsel *evsel, double avg, bool ok)
- {
- 	if (config->json_output)
--		print_counter_value_json(config, evsel, avg);
-+		print_counter_value_json(config, evsel, avg, ok);
- 	else if (config->csv_output)
--		print_counter_value_csv(config, evsel, avg);
-+		print_counter_value_csv(config, evsel, avg, ok);
- 	else
--		print_counter_value_std(config, evsel, avg);
-+		print_counter_value_std(config, evsel, avg, ok);
- }
- 
- static void abs_printout(struct perf_stat_config *config,
--			 struct aggr_cpu_id id, int nr, struct evsel *evsel, double avg)
-+			 struct aggr_cpu_id id, int nr,
-+			 struct evsel *evsel, double avg, bool ok)
- {
- 	aggr_printout(config, evsel, id, nr);
--	print_counter_value(config, evsel, avg);
-+	print_counter_value(config, evsel, avg, ok);
- 	print_cgroup(config, evsel);
- }
- 
-@@ -658,17 +671,8 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
- 			pm(config, &os, NULL, "", "", 0);
- 			return;
- 		}
--		aggr_printout(config, counter, id, nr);
- 
--		if (config->json_output) {
--			fprintf(config->output, "\"counter-value\" : \"%s\", ",
--					counter->supported ? CNTR_NOT_COUNTED : CNTR_NOT_SUPPORTED);
--		} else {
--			fprintf(config->output, "%*s%s",
--				config->csv_output ? 0 : 18,
--				counter->supported ? CNTR_NOT_COUNTED : CNTR_NOT_SUPPORTED,
--				config->csv_sep);
--		}
-+		abs_printout(config, id, nr, counter, uval, /*ok=*/false);
- 
- 		if (counter->supported) {
- 			if (!evlist__has_hybrid(counter->evlist)) {
-@@ -678,24 +682,6 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
- 			}
- 		}
- 
--		if (config->json_output) {
--			fprintf(config->output, "\"unit\" : \"%s\", ", counter->unit);
--		} else {
--			fprintf(config->output, "%-*s%s",
--				config->csv_output ? 0 : config->unit_width,
--				counter->unit, config->csv_sep);
--		}
--
--		if (config->json_output) {
--			fprintf(config->output, "\"event\" : \"%s\", ",
--				evsel__name(counter));
--		} else {
--			fprintf(config->output, "%*s",
--				 config->csv_output ? 0 : -25, evsel__name(counter));
--		}
--
--		print_cgroup(config, counter);
--
- 		if (!config->csv_output && !config->json_output)
- 			pm(config, &os, NULL, NULL, "", 0);
- 		print_noise(config, counter, noise);
-@@ -706,7 +692,7 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
- 	}
- 
- 	if (!config->metric_only)
--		abs_printout(config, id, nr, counter, uval);
-+		abs_printout(config, id, nr, counter, uval, /*ok=*/true);
- 
- 	out.print_metric = pm;
- 	out.new_line = nl;
++static int dw_mci_socfpga_priv_init(struct dw_mci *host)
++{
++	struct device_node *np = host->dev->of_node;
++	struct regmap *sys_mgr_base_addr;
++	u32 clk_phase[2] = {0}, reg_offset, reg_shift;
++	int i, rc, hs_timing;
++
++	rc = of_property_read_variable_u32_array(np, "clk-phase-sd-hs", &clk_phase[0], 2, 0);
++	if (rc < 0)
++		return 0;
++
++	sys_mgr_base_addr = altr_sysmgr_regmap_lookup_by_phandle(np, "altr,sysmgr-syscon");
++	if (IS_ERR(sys_mgr_base_addr)) {
++		dev_warn(host->dev, "clk-phase-sd-hs was specified, but failed to find altr,sys-mgr regmap!\n");
++		return 0;
++	}
++
++	of_property_read_u32_index(np, "altr,sysmgr-syscon", 1, &reg_offset);
++	of_property_read_u32_index(np, "altr,sysmgr-syscon", 2, &reg_shift);
++
++	for (i = 0; i < ARRAY_SIZE(clk_phase); i++)
++		clk_phase[i] /= SOCFPGA_DW_MMC_CLK_PHASE_STEP;
++
++	hs_timing = SYSMGR_SDMMC_CTRL_SET(clk_phase[0], clk_phase[1], reg_shift);
++	regmap_write(sys_mgr_base_addr, reg_offset, hs_timing);
++
++	return 0;
++}
++
++static const struct dw_mci_drv_data socfpga_drv_data = {
++	.init		= dw_mci_socfpga_priv_init,
++};
++
+ static const struct of_device_id dw_mci_pltfm_match[] = {
+ 	{ .compatible = "snps,dw-mshc", },
+-	{ .compatible = "altr,socfpga-dw-mshc", },
++	{ .compatible = "altr,socfpga-dw-mshc", .data = &socfpga_drv_data, },
+ 	{ .compatible = "img,pistachio-dw-mshc", },
+ 	{},
+ };
 -- 
-2.38.1.493.g58b659f92b-goog
+2.25.1
 
