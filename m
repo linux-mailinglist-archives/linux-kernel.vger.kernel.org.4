@@ -2,59 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B6C6281E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D892B6281E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236610AbiKNODc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:03:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
+        id S236314AbiKNOEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:04:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236763AbiKNODO (ORCPT
+        with ESMTP id S236719AbiKNODT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:03:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973F92B60A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:03:07 -0800 (PST)
+        Mon, 14 Nov 2022 09:03:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0BC2AC75;
+        Mon, 14 Nov 2022 06:03:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 319E2611AD
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 14:03:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D14AC433D6;
-        Mon, 14 Nov 2022 14:03:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82B46B80F91;
+        Mon, 14 Nov 2022 14:03:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33777C433C1;
+        Mon, 14 Nov 2022 14:03:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668434586;
-        bh=ZQFKFIqIqP3t6Xzc4YPRbr4vAQmSmgIvh8UjHkOiHMM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H/GNe/Y9M+dpo3wX6AvTwWNpVVaZRCMe4iLLhI7VfWfRlgv8NNFSHSi0kPq97ze78
-         aw3QxaSl1VeIDYGxpCJbq+LRjOLMM85DbFyWuQYCNQ12kSGrc+cEiSKJ9MitOdxpgt
-         hSzZG7AyvzhAPld5kAhJuLOwO185Udu7UEKEhKSMO54bH6eapSe05Z0t9zeXKHq2iv
-         mQgGqZ7/s0zcQSXU9YlCu02FvdupLHzpisDSZuJUL9UzmOVUFTKZOSwOGjFY2NYGh9
-         Tmo5KpghqCCnOHNuUuA79Vc3ZPdPlhOQRUrj+EmPzs4S+BjJTHMSOMnfWMdfnQ0mCK
-         AHGF6FEpgwG9A==
-Date:   Mon, 14 Nov 2022 14:02:58 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        mani@kernel.org, cristian.ciocaltea@gmail.com, wens@csie.org,
-        tharvey@gateworks.com, cw00.choi@samsung.com, brgl@bgdev.pl,
-        mazziesaccount@gmail.com, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 05/18] mfd: max14577: Replace irqchip mask_invert with
- unmask_base
-Message-ID: <Y3JKkmd9FRnwTg91@google.com>
-References: <20221112151835.39059-1-aidanmacdonald.0x0@gmail.com>
- <20221112151835.39059-6-aidanmacdonald.0x0@gmail.com>
- <03b94d20-05a6-71fb-61e4-00889f5aa64d@linaro.org>
- <KGy5eAsJh4YwYjYVTvnohmym61EBqJX5@localhost>
+        s=k20201202; t=1668434596;
+        bh=MUvSTgHOHNFDpAL2hFpOgTLtI7jmWOp30r5+jRyuvvg=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=cli7xA2q8GmnA1bTRkzFFKoYOEy8ffVbJ4oO3j5hmsuNRKUVmlAUxXtaQrgq+yZOG
+         3hKXdBS36zkhDnDLmRkA1WTcfD6XA2qil5PkNTiQSrd/rQk8v46YKh4UnhdqR36f1V
+         lWIEPWheqkOhkrqsqJbssb7eVvWadWzi8shpkENyox15O4Fz2LdCY3hpMIlCngKu10
+         hZ5j5hS5Q73bmCBc+mMz/vssRhtXJHB2VZJu6LlJCm0A0wnM7kyAtbhx9YTohM50XZ
+         eseTZjrhb1E+ofCT9Q7ql/9bk4hidD5vtH23GJP2jQWAXqBpw25QX2Qw35iFcntwdn
+         11rRbiA9imf2Q==
+Date:   Mon, 14 Nov 2022 15:03:14 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     =?ISO-8859-15?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+cc:     benjamin.tissoires@redhat.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: uclogic: Fix frame templates for big endian
+ architectures
+In-Reply-To: <20221110174918.398567-1-jose.exposito89@gmail.com>
+Message-ID: <nycvar.YFH.7.76.2211141503020.6045@cbobk.fhfr.pm>
+References: <20221110174918.398567-1-jose.exposito89@gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <KGy5eAsJh4YwYjYVTvnohmym61EBqJX5@localhost>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,39 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022, Aidan MacDonald wrote:
+On Thu, 10 Nov 2022, José Expósito wrote:
 
+> When parsing a frame template with a placeholder indicating the number
+> of buttons present on the frame its value was incorrectly set on big
+> endian architectures due to double little endian conversion.
 > 
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
+> In order to reproduce the issue and verify the fix, run the HID KUnit
+> tests on the PowerPC architecture:
 > 
-> > On 12/11/2022 16:18, Aidan MacDonald wrote:
-> >> Remove use of the deprecated mask_invert flag. Inverted mask
-> >> registers (where a '1' bit enables an IRQ) can be described more
-> >> directly as an unmask register.
-> >>
-> >> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> >> ---
-> >>  drivers/mfd/max14577.c | 7 ++-----
-> >>  1 file changed, 2 insertions(+), 5 deletions(-)
-> >
-> > Mention this is a resend or provide a changelog for v2.
+>   $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/hid \
+>     --arch=powerpc --cross_compile=powerpc64-linux-gnu-
 > 
-> Most of these patches are resends, but they're so trivial it seems
-> pointless to mention that fact. There are no changes from v1.
+> Fixes: 867c89254425 ("HID: uclogic: Allow to generate frame templates")
+> Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+> ---
+>  drivers/hid/hid-uclogic-rdesc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hid/hid-uclogic-rdesc.c b/drivers/hid/hid-uclogic-rdesc.c
+> index 4bd54c4fb5b0..6b73eb0df6bd 100644
+> --- a/drivers/hid/hid-uclogic-rdesc.c
+> +++ b/drivers/hid/hid-uclogic-rdesc.c
+> @@ -1193,7 +1193,7 @@ __u8 *uclogic_rdesc_template_apply(const __u8 *template_ptr,
+>  			   p[sizeof(btn_head)] < param_num) {
+>  			v = param_list[p[sizeof(btn_head)]];
+>  			put_unaligned((__u8)0x2A, p); /* Usage Maximum */
+> -			put_unaligned_le16((__force u16)cpu_to_le16(v), p + 1);
+> +			put_unaligned((__force u16)cpu_to_le16(v), (s16 *)(p + 1));
+>  			p += sizeof(btn_head) + 1;
+>  		} else {
 
-How are people supposed to know the difference between "no change"
-and "there have been lots of changes, but I forgot to add a
-change-log"? :)
-
-Nothing wrong with:
-
-v1 -> v2:
-  No code changes
-
-> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >
-> > Best regards,
-> > Krzysztof
+Applied to hid.git#for-6.1/upstream-fixes, thanks José.
 
 -- 
-Lee Jones [李琼斯]
+Jiri Kosina
+SUSE Labs
+
