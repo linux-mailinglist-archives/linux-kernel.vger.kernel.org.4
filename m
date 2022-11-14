@@ -2,119 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50036286B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 939EE6286BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237638AbiKNRLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:11:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
+        id S237465AbiKNRMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:12:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237134AbiKNRLl (ORCPT
+        with ESMTP id S236334AbiKNRMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:11:41 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2768B31EED;
-        Mon, 14 Nov 2022 09:11:41 -0800 (PST)
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 2AEGqVsV025573;
-        Mon, 14 Nov 2022 17:11:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : content-transfer-encoding : mime-version; s=pp1;
- bh=x7c7LUNyumPEJ3B8TV1/j9qF5b+3SUS7E0BiRFnwAbo=;
- b=jCAlNuRYfC9tDAwR1wGmzlrGM4FCQuveLCx7EbqludrC77hhyQOSEbbDwWLJeVMRLKAu
- kvw5+hV+v1nHCEyuIDrEaVi+Y7ti4yoap9iMlmZO5sP570owC/o3f48bs/PUB2Y12Q2W
- lKotJayK2kXckExHyelwtXz4flCDhN3GD+v1Mr24E+ZWVxGM7InBJCI1lWu0mJZx+t3n
- nuokWmodJhwszEOMkVN1gS3QENvZoYHpPj2msnCY0JnkND+dWb6yFTJis63E2V6BKs+j
- /CplmGFItoICs5t5c0jm3UJIsvhkVFiYJqyte8tGF46ZD1lcTSeX+gD1Z0ZyjvjxQBLw GA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kusjxrf8e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 17:11:28 +0000
-Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AEGv8qw008757;
-        Mon, 14 Nov 2022 17:11:28 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kusjxrf80-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 17:11:28 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AEH5KDH010721;
-        Mon, 14 Nov 2022 17:11:27 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma02dal.us.ibm.com with ESMTP id 3kt349jrvd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 17:11:27 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AEHBUeJ6881896
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Nov 2022 17:11:30 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 47DFF7805E;
-        Mon, 14 Nov 2022 18:08:54 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41B9B7805C;
-        Mon, 14 Nov 2022 18:08:50 +0000 (GMT)
-Received: from lingrow.int.hansenpartnership.com (unknown [9.211.83.197])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Nov 2022 18:08:49 +0000 (GMT)
-Message-ID: <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Evan Green <evgreen@chromium.org>, linux-kernel@vger.kernel.org
-Cc:     corbet@lwn.net, linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com,
-        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
-        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Date:   Mon, 14 Nov 2022 12:11:20 -0500
-In-Reply-To: <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
-References: <20221111231636.3748636-1-evgreen@chromium.org>
-         <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: SPoXwJpwVDHbFazbYEXvpg1f0RZ1H4pz
-X-Proofpoint-ORIG-GUID: bSxPprtCkFl2jtIKUQFcKMctzDpA0WDH
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 14 Nov 2022 12:12:53 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB723204B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:12:52 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id k5so10878741pjo.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:12:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Gq4n5C/t1zsqZOKXkWVuXqIWklkF8rMGlYoqGLC400=;
+        b=hO7Q0TY2AdjW2SD6aH3T1YtUt0UZafhbqB0bSJCNd1xF7xWabCGu1E1fsaROX7rMfy
+         lD/V1XZSYCQTOyl4lO43R3jo9F6M7vce40/CeherGcldJjB5RPgLIfFmbrFJSzwzxfMd
+         BXd0zzNBMn6jOLrN/30xO3Bv+pdhDJfCsRTjBOieHA4HrRntn+wqabxFbaeh1JkFqtdj
+         PWcnLeRo5ToYlgDUzFSQhe4s8MjIlZhNeOUSgHtcwllrfmnWyU6cL+kEo9QD0G5XFhDa
+         8BX2PObkGRyQB3gUdAzMgkNUp4Fe9d8wBcsCgtIHFSRpLwVW6ettTS4D0Ui+DIZ5dA6I
+         tPSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2Gq4n5C/t1zsqZOKXkWVuXqIWklkF8rMGlYoqGLC400=;
+        b=0g28/ChffMUqvast+pqGsAG+ADkb46OI6jPwqKKLBY/5UsX5MYRkcnuXJIGBbKAXEv
+         ioVbO2ZM7tSLv08iduD2Szovjfh3cWq6ELHRwEdjtBAEr28PmNRBKZku4uT9wOg95u7Z
+         salcgvrjmIIrKWlXE74aL5SH8gWLQ9h7lVv8qFrs3Bx0kSCpa9gizdWlw/w7InECqSOK
+         A8YG1QyXSKW1txipHlwLe5Cd2erFJuFJ18IH4nyDjzJ/4eUWx9mAyLfTHymn4K4OJeo4
+         nCpfCfQU58y2tXV/IAbpprTFMLzJUG96oMoSNXaZFjD+jwknvLh0FVlGNXcYiNdnXSVG
+         c+eQ==
+X-Gm-Message-State: ANoB5pnOLvx17Hk9m6f/GmksD1nUBb72jpnBByazM1NGFX7z69fUiZiW
+        VWNQgDpgW8WdxrP5QTbZ7sJ6MQ==
+X-Google-Smtp-Source: AA0mqf7XnNmTQkkH7vcYfSPzE2TNLhf316K5J+UMYFkTvtQuWgviRBWa4oPj+NOxyf42Em0406m3YQ==
+X-Received: by 2002:a17:902:f08a:b0:17f:8011:dd03 with SMTP id p10-20020a170902f08a00b0017f8011dd03mr250380pla.59.1668445972073;
+        Mon, 14 Nov 2022 09:12:52 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id q6-20020a17090a2dc600b0020af2411721sm6689583pjm.34.2022.11.14.09.12.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 09:12:51 -0800 (PST)
+Date:   Mon, 14 Nov 2022 17:12:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-kselftest@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/2] KVM: selftests: Allow >1 guest mode in
+ access_tracking_perf_test
+Message-ID: <Y3J3EH74B6yafeqm@google.com>
+References: <20221111231946.944807-1-oliver.upton@linux.dev>
+ <20221111231946.944807-2-oliver.upton@linux.dev>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-14_13,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- spamscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
- malwarescore=0 clxscore=1011 mlxlogscore=801 phishscore=0
- priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211140117
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221111231946.944807-2-oliver.upton@linux.dev>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-11-11 at 15:16 -0800, Evan Green wrote:
-> Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
-> restricts usermode's ability to extend or reset PCR 23.
+On Fri, Nov 11, 2022, Oliver Upton wrote:
+> As the name implies, for_each_guest_mode() will run the test case for
+> all supported guest addressing modes. On x86 that doesn't amount to
+> anything, but arm64 can handle 4K, 16K, and 64K page sizes on supporting
+> hardware.
+> 
+> Blindly attempting to run access_tracking_perf_test on arm64 stalls on
+> the second test case, as the 'done' global remains set between test
+> iterations. Clear it after VM teardown in anticipation of a subsequent
+> test case.
+> 
+> Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+> ---
+>  tools/testing/selftests/kvm/access_tracking_perf_test.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+> index 76c583a07ea2..4da066479e0a 100644
+> --- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
+> +++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+> @@ -326,6 +326,9 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>  
+>  	perf_test_join_vcpu_threads(nr_vcpus);
+>  	perf_test_destroy_vm(vm);
+> +
+> +	/* Clear done in anticipation of testing another guest mode */
+> +	done = false;
 
-Could I re ask the question here that I asked of Matthew's patch set:
+Can we fix this in the so called "perf_test" infrastructure?
+memslot_modification_stress_test.c has the same bug just inverted (see run_vcpus).
 
-https://lore.kernel.org/all/b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com/
+E.g. (compile tested only)
 
-Which was could we use an NVRAM index in the TPM instead of a PCR?  The
-reason for asking was that PCRs are rather precious and might get more
-so now that Lennart has some grand scheme for using more of them in his
-unified boot project.  Matthew promised to play with the idea but never
-got back to the patch set to say whether he investigated this or not.
+---
+ .../selftests/kvm/access_tracking_perf_test.c | 28 +++++--------------
+ .../selftests/kvm/include/perf_test_util.h    |  3 ++
+ .../selftests/kvm/lib/perf_test_util.c        |  3 ++
+ .../kvm/memslot_modification_stress_test.c    |  6 +---
+ 4 files changed, 14 insertions(+), 26 deletions(-)
 
-James
+diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+index 76c583a07ea2..786bc62a2c79 100644
+--- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
++++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
+@@ -58,9 +58,6 @@ static enum {
+ 	ITERATION_MARK_IDLE,
+ } iteration_work;
+ 
+-/* Set to true when vCPU threads should exit. */
+-static bool done;
+-
+ /* The iteration that was last completed by each vCPU. */
+ static int vcpu_last_completed_iteration[KVM_MAX_VCPUS];
+ 
+@@ -206,28 +203,20 @@ static void assert_ucall(struct kvm_vcpu *vcpu, uint64_t expected_ucall)
+ 		    expected_ucall, actual_ucall);
+ }
+ 
+-static bool spin_wait_for_next_iteration(int *current_iteration)
+-{
+-	int last_iteration = *current_iteration;
+-
+-	do {
+-		if (READ_ONCE(done))
+-			return false;
+-
+-		*current_iteration = READ_ONCE(iteration);
+-	} while (last_iteration == *current_iteration);
+-
+-	return true;
+-}
+-
+ static void vcpu_thread_main(struct perf_test_vcpu_args *vcpu_args)
+ {
+ 	struct kvm_vcpu *vcpu = vcpu_args->vcpu;
+ 	struct kvm_vm *vm = perf_test_args.vm;
+ 	int vcpu_idx = vcpu_args->vcpu_idx;
+ 	int current_iteration = 0;
++	int last_iteration;
++
++	while (!READ_ONCE(perf_test_args.stop_vcpus)) {
++		last_iteration = current_iteration;
++		do {
++			current_iteration = READ_ONCE(iteration);
++		} while (current_iteration == last_iteration);
+ 
+-	while (spin_wait_for_next_iteration(&current_iteration)) {
+ 		switch (READ_ONCE(iteration_work)) {
+ 		case ITERATION_ACCESS_MEMORY:
+ 			vcpu_run(vcpu);
+@@ -321,9 +310,6 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	mark_memory_idle(vm, nr_vcpus);
+ 	access_memory(vm, nr_vcpus, ACCESS_READ, "Reading from idle memory");
+ 
+-	/* Set done to signal the vCPU threads to exit */
+-	done = true;
+-
+ 	perf_test_join_vcpu_threads(nr_vcpus);
+ 	perf_test_destroy_vm(vm);
+ }
+diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
+index eaa88df0555a..536d7c3c3f14 100644
+--- a/tools/testing/selftests/kvm/include/perf_test_util.h
++++ b/tools/testing/selftests/kvm/include/perf_test_util.h
+@@ -40,6 +40,9 @@ struct perf_test_args {
+ 	/* Run vCPUs in L2 instead of L1, if the architecture supports it. */
+ 	bool nested;
+ 
++	/* Test is done, stop running vCPUs. */
++	bool stop_vcpus;
++
+ 	struct perf_test_vcpu_args vcpu_args[KVM_MAX_VCPUS];
+ };
+ 
+diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
+index 9618b37c66f7..ee3f499ccbd2 100644
+--- a/tools/testing/selftests/kvm/lib/perf_test_util.c
++++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
+@@ -267,6 +267,7 @@ void perf_test_start_vcpu_threads(int nr_vcpus,
+ 
+ 	vcpu_thread_fn = vcpu_fn;
+ 	WRITE_ONCE(all_vcpu_threads_running, false);
++	WRITE_ONCE(perf_test_args.stop_vcpus, false);
+ 
+ 	for (i = 0; i < nr_vcpus; i++) {
+ 		struct vcpu_thread *vcpu = &vcpu_threads[i];
+@@ -289,6 +290,8 @@ void perf_test_join_vcpu_threads(int nr_vcpus)
+ {
+ 	int i;
+ 
++	WRITE_ONCE(perf_test_args.stop_vcpus, true);
++
+ 	for (i = 0; i < nr_vcpus; i++)
+ 		pthread_join(vcpu_threads[i].thread, NULL);
+ }
+diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+index bb1d17a1171b..3a5e4518307c 100644
+--- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
++++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+@@ -34,8 +34,6 @@
+ static int nr_vcpus = 1;
+ static uint64_t guest_percpu_mem_size = DEFAULT_PER_VCPU_MEM_SIZE;
+ 
+-static bool run_vcpus = true;
+-
+ static void vcpu_worker(struct perf_test_vcpu_args *vcpu_args)
+ {
+ 	struct kvm_vcpu *vcpu = vcpu_args->vcpu;
+@@ -45,7 +43,7 @@ static void vcpu_worker(struct perf_test_vcpu_args *vcpu_args)
+ 	run = vcpu->run;
+ 
+ 	/* Let the guest access its memory until a stop signal is received */
+-	while (READ_ONCE(run_vcpus)) {
++	while (!READ_ONCE(perf_test_args.stop_vcpus)) {
+ 		ret = _vcpu_run(vcpu);
+ 		TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
+ 
+@@ -110,8 +108,6 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+ 	add_remove_memslot(vm, p->memslot_modification_delay,
+ 			   p->nr_memslot_modifications);
+ 
+-	run_vcpus = false;
+-
+ 	perf_test_join_vcpu_threads(nr_vcpus);
+ 	pr_info("All vCPU threads joined\n");
+ 
+
+base-commit: 10dbc57b5777e6938a648eb4a870bad448fcb6f5
+-- 
 
