@@ -2,99 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D489627514
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 04:55:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2298462751A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 05:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235758AbiKNDzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 22:55:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
+        id S235695AbiKND77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 22:59:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235592AbiKNDzL (ORCPT
+        with ESMTP id S233909AbiKND75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 22:55:11 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA59F1582C
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:55:10 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso12628956pjg.5
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:55:10 -0800 (PST)
+        Sun, 13 Nov 2022 22:59:57 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C947DEA3
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:59:56 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id m6so9938254pfb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:59:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=t3GShZvQl4pEmRrtjPK8DlcTmZgRHU01e2znj5m/hEU=;
-        b=elfcGsDxiPXwzz150co30bptffTx7enBnC3vjVcv3FUPjNOdHhD3FFwlo7U5yP7CLQ
-         zlOLSdotYjmPq1VviLKiqDA2gL+JW70oOHGjJsEYBlz/vss8FTyqJ985KmAzrF1dmfMe
-         RrgLx+u+qf/rKTM9ZvkHMzZc3Ifk1DJhG1i0w=
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SQZZjpNqvZsbs1aZ+f9L6Zj8PA0ItCU0rBc0b1FARyw=;
+        b=vdB5fAHXaRnl7hEGIoiRCjv4822lI+8QizRapf66BmUN2RvoLmk1izUL25FAw8x4c0
+         Fg1r5WnIaf5BUQwu7KlU9RU+15lhg9x+V0K9tRRu6XunTvyOe2M+d9p0Z8UCfB+IjmFo
+         6HgrdONadSO1rj4QGrvMn46maeMM1yZeED2aU8PhbJvHIo1pyk7Ggu4QDktXJlqbQ3zH
+         GR3dlDfqu/90Dwu8sr159TzENYpVbOaHtEYQmJ7PVkmtlxE2QQbo6Mq1E2yM+i4kxQ4p
+         2HyTY4R02QmKE+UbuWvcM2grft8OfjzohGFcD0oJs2HAifkoivRgDqMQbopDaKIVW7kS
+         kYyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t3GShZvQl4pEmRrtjPK8DlcTmZgRHU01e2znj5m/hEU=;
-        b=mC3jTC8knrQuMcIgip2Eop88ajwyegTxXiTpkntHLB4c/FVPT61aq0sVl7B73/Ib/e
-         znDH+BrBzw14uUqADzdiOfkljKWxqrXhqKAJxu2VtHfhRfvLv+IvIlSEGkNCsk0hIMqk
-         f/R6+tKJ65ZiO6nCwkNtDQim0cBpBDP/Ic5/imk3/zoq25gDFs7cnQjkpcq6Xkyk/FaW
-         p8Rdp/NEP6gyJZQhnmbUQaXAFBVR+4sWQtRIxY+c5McEeNA6uSiolWHUE6ZUidOikCr6
-         kHI6E52ArNHa6jlD+hSX33IQ0D2kA1xfE4h17XG2AM4hdMA3WO59fj2IW1VoUXDnax9n
-         sifw==
-X-Gm-Message-State: ANoB5pk5J31idRcn6Hulz3csjP1VPYGez4RMO5AAYJ7b2uJhHh9sLnXl
-        eUy88QnJPcmNf/9k5mRBQ232xA==
-X-Google-Smtp-Source: AA0mqf6r+S/Po/KR0EubjPX0NCRKOxILcyqeQtRODXINN+i8Y+6OLxpxyxl3MwYy9KILMhNfeUkc+A==
-X-Received: by 2002:a17:90a:9a8f:b0:212:9625:c8e9 with SMTP id e15-20020a17090a9a8f00b002129625c8e9mr12089043pjp.128.1668398110344;
-        Sun, 13 Nov 2022 19:55:10 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:68f5:86c0:dcaa:df5])
-        by smtp.gmail.com with ESMTPSA id d4-20020a170902654400b00188a23098aasm6041093pln.69.2022.11.13.19.55.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 19:55:09 -0800 (PST)
-Date:   Mon, 14 Nov 2022 12:55:05 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv4 2/9] zsmalloc: turn zspage order into runtime variable
-Message-ID: <Y3G8GehTg9ucl7Xs@google.com>
-References: <20221031054108.541190-1-senozhatsky@chromium.org>
- <20221031054108.541190-3-senozhatsky@chromium.org>
- <Y210OrSgrqWPr0DT@google.com>
- <Y24mEiy0pt2qSCqr@google.com>
- <Y26BvxM1CeqnaLI3@google.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SQZZjpNqvZsbs1aZ+f9L6Zj8PA0ItCU0rBc0b1FARyw=;
+        b=dEgDA2LqODx8XLSj1h8fT68MPYO8fnsyctARG9adalf/kZx/gHDzZrkPBW/OT7YcNn
+         mkBdS4ZQ6qiE3xUK4w1L95KnqtsDhrhnAzOsqSwxegNHljZCNcZhrYp9rLtuo9DSajcf
+         J8Rpb7BewXmuWMeHCRomrY1BBzW34ep0YKviMCbpnaiiYETRCmGD2NMEmx9O6JAnuQxq
+         LTziSJH2o6UdRmnl308yw8SQ5zlNXG7lMg1WazfSR/ezErph2+9BXDxuSLHk1w+7bpSs
+         e/bqBBEWhme+ShsRk+NU3E5wcOsIuEfexxpZCW7/bIS/pacIAkvjl+mG4+GKpitYKDaA
+         L0KQ==
+X-Gm-Message-State: ANoB5pkeDfPQWjDcG9k0TRu3vtJLnn9cm9FP2soky6KTdAJm9sEutmj9
+        F90DgRk11a6BeZNnh+TJiqC51Q==
+X-Google-Smtp-Source: AA0mqf72JWncrSTFwDOEPs30Ny/aQyU6SBZ2m0gCMhNu13fXnwcY9AQ7OCeL8R/ZUFswDSD0+buZ2w==
+X-Received: by 2002:a63:1d49:0:b0:476:898c:ded5 with SMTP id d9-20020a631d49000000b00476898cded5mr2276339pgm.299.1668398395776;
+        Sun, 13 Nov 2022 19:59:55 -0800 (PST)
+Received: from [10.254.69.19] ([139.177.225.231])
+        by smtp.gmail.com with ESMTPSA id g3-20020a170902868300b00168dadc7354sm6061996plo.78.2022.11.13.19.59.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Nov 2022 19:59:55 -0800 (PST)
+Message-ID: <039ce475-f935-e0c2-4734-1dd57519d961@bytedance.com>
+Date:   Mon, 14 Nov 2022 11:59:47 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y26BvxM1CeqnaLI3@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH v2] mm: fix unexpected changes to
+ {failslab|fail_page_alloc}.attr
+To:     Akinobu Mita <akinobu.mita@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     dvyukov@google.com, jgg@nvidia.com, willy@infradead.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org
+References: <Y2kxrerISWIxQsFO@nvidia.com>
+ <20221108035232.87180-1-zhengqi.arch@bytedance.com>
+ <CAC5umygzc=H-9dCa_pLoqodS4Qz90OVmQkrvFOCPv27514tP3A@mail.gmail.com>
+Content-Language: en-US
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <CAC5umygzc=H-9dCa_pLoqodS4Qz90OVmQkrvFOCPv27514tP3A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/11 09:09), Minchan Kim wrote:
-> > [..]
-> > OK. Any reason why we don't want u32? I thought that
-> > s16/u16/s32/u32/etc. is the new normal.
-> 
-> Oh, I didn't know the new normal.
-> 
-> # ag u32 mm/ | wc -l 
-> 65
-> 
-> Then, I'd like to use int to be consistent with others.
 
-OK.
 
-> > > Let's just use int instead of u32
-> > > 
-> > > Why do you need num_pages argument instead of using 1UL << ZS_DEFAULT_PAGE_ORDER?
-> > > It looks like static value.
-> > 
-> > It is static right now, but in the a couple of patches it'll change to
-> > dynamic.
+On 2022/11/9 01:36, Akinobu Mita wrote:
+> 2022年11月8日(火) 12:52 Qi Zheng <zhengqi.arch@bytedance.com>:
+>>
+>> When we specify __GFP_NOWARN, we only expect that no warnings
+>> will be issued for current caller. But in the __should_failslab()
+>> and __should_fail_alloc_page(), the local GFP flags alter the
+>> global {failslab|fail_page_alloc}.attr, which is persistent and
+>> shared by all tasks. This is not what we expected, let's fix it.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 3f913fc5f974 ("mm: fix missing handler for __GFP_NOWARN")
+>> Reported-by: Dmitry Vyukov <dvyukov@google.com>
+>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>> ---
+>>   v1: https://lore.kernel.org/lkml/20221107033109.59709-1-zhengqi.arch@bytedance.com/
+>>
+>>   Changelog in v1 -> v2:
+>>    - add comment for __should_failslab() and __should_fail_alloc_page()
+>>      (suggested by Jason)
 > 
-> Then, plase have the change in the patch you will use to review easier.
+> Looks good.
+> 
+> Reviewed-by: Akinobu Mita <akinobu.mita@gmail.com>
 
-OK.
+Thanks. And hi Andrew, seems no action left for me, can this patch
+be applied to mm-unstable tree for testing? :)
+
+-- 
+Thanks,
+Qi
