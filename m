@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B02E62856C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:31:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA470628572
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237713AbiKNQbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:31:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
+        id S237826AbiKNQb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237653AbiKNQa2 (ORCPT
+        with ESMTP id S237514AbiKNQaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:30:28 -0500
+        Mon, 14 Nov 2022 11:30:39 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570182EF32;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF76E2F005;
         Mon, 14 Nov 2022 08:29:48 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668443386;
+        s=2020; t=1668443387;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ihos3kVL43GcNnwvRQa8EAkart8aw0DgSI6lBkWbDJU=;
-        b=gDRDGEIlmAFx9jHad/WBpJk7dYEPGJDAe4Rk61bOKfOqT3mehUsQKb4keYsUMPSPsdPCH3
-        rh/IqkNd2kP12Z7ZZJ5Q6UpQi26MMcGDyn79l+kAgPljp3n+P/nE9gbcQHMels/aOZlf04
-        gvzaSIAO9Ov+RLj7wqaNb3eSDwxjPoyfs8flmUMma2qp4bWhG3+4S0HLB1HhV1AKJYSgCa
-        szkb1zz0UHIRDO1rxOcXWYYeZyPGsEQDX3qRaTEnhRfn5nCLnkBEw1zRJUXCVuYN2De9ix
-        pXy9j1e90b+yrfTItl3IJ3+fhxo/dA8V2eV6JZTU15Mr0n7Yj/pazIX44e1v5Q==
+        bh=nTf9OGb9zWeAnXP7WUtzyXzYpJkGff40DU/J1LONmEY=;
+        b=X2nZGlkZy8hrJxqmrFFecZCY+sQ9NUXkXt8yfVeEWVFTGthvoBAQzN5rmoP9KRNRE26w6t
+        9jiGJ1ON9wOdxumNo2q4ufzjYgzft3cZ0D0RQkq9tPmX5pe6xsYCWGCOwzghY2mWo0kPYB
+        oVSq7hxOHpu9l2KcQnZhtQtSALKert3M5ENv9iyJIqM2g1ktbreAXhapRtNREBK59pA2uj
+        plcXLIJFnoTYhySXS7zM/JuqN/YBOCCj3k1AZWEV6G6GOQJlt+bnurtPc1+/wa25Yz3NSh
+        kUkrtnGJqdGdswSmI4u7aJZBoFIQT8mguQykB4cv+OGSYjdAtiJU0xWgg5JZpQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668443386;
+        s=2020e; t=1668443387;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ihos3kVL43GcNnwvRQa8EAkart8aw0DgSI6lBkWbDJU=;
-        b=qEGMwJgLtL6+f1KskwLCVPpGRA/Rkj8qPXYJz8mOscQn36t/rcF9+WsdQUG6lPJ/3gDIvG
-        HaEcIL6ZNzGiLpDg==
+        bh=nTf9OGb9zWeAnXP7WUtzyXzYpJkGff40DU/J1LONmEY=;
+        b=SFxIRrs0xCYkhUmANHStJ9PFRlamUrMYkDFOxLwsJ2Z1crrn2VCOnDK+DynOQDDQKTIYsj
+        JUoobDFz1L4cWEBA==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH printk v4 29/39] usb: early: xhci-dbc: use console_is_registered()
-Date:   Mon, 14 Nov 2022 17:35:22 +0106
-Message-Id: <20221114162932.141883-30-john.ogness@linutronix.de>
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Subject: [PATCH printk v4 30/39] netconsole: avoid CON_ENABLED misuse to track registration
+Date:   Mon, 14 Nov 2022 17:35:23 +0106
+Message-Id: <20221114162932.141883-31-john.ogness@linutronix.de>
 In-Reply-To: <20221114162932.141883-1-john.ogness@linutronix.de>
 References: <20221114162932.141883-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -63,27 +63,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is not reliable to check for CON_ENABLED in order to identify if a
-console is registered. Use console_is_registered() instead.
+The CON_ENABLED flag is being misused to track whether or not the
+extended console should be or has been registered. Instead use
+a local variable to decide if the extended console should be
+registered and console_is_registered() to determine if it has
+been registered.
+
+Also add a check in cleanup_netconsole() to only unregister the
+extended console if it has been registered.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 ---
- drivers/usb/early/xhci-dbc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/netconsole.c | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
-index bfb7e2b85299..797047154820 100644
---- a/drivers/usb/early/xhci-dbc.c
-+++ b/drivers/usb/early/xhci-dbc.c
-@@ -927,7 +927,7 @@ void __init early_xdbc_register_console(void)
+diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+index bdff9ac5056d..4f4f79532c6c 100644
+--- a/drivers/net/netconsole.c
++++ b/drivers/net/netconsole.c
+@@ -332,10 +332,8 @@ static ssize_t enabled_store(struct config_item *item,
+ 	}
  
- static void xdbc_unregister_console(void)
+ 	if (enabled) {	/* true */
+-		if (nt->extended && !(netconsole_ext.flags & CON_ENABLED)) {
+-			netconsole_ext.flags |= CON_ENABLED;
++		if (nt->extended && !console_is_registered(&netconsole_ext))
+ 			register_console(&netconsole_ext);
+-		}
+ 
+ 		/*
+ 		 * Skip netpoll_parse_options() -- all the attributes are
+@@ -869,7 +867,7 @@ static void write_msg(struct console *con, const char *msg, unsigned int len)
+ 
+ static struct console netconsole_ext = {
+ 	.name	= "netcon_ext",
+-	.flags	= CON_EXTENDED,	/* starts disabled, registered on first use */
++	.flags	= CON_ENABLED | CON_EXTENDED,
+ 	.write	= write_ext_msg,
+ };
+ 
+@@ -883,6 +881,7 @@ static int __init init_netconsole(void)
  {
--	if (early_xdbc_console.flags & CON_ENABLED)
-+	if (console_is_registered(&early_xdbc_console))
- 		unregister_console(&early_xdbc_console);
- }
+ 	int err;
+ 	struct netconsole_target *nt, *tmp;
++	bool extended = false;
+ 	unsigned long flags;
+ 	char *target_config;
+ 	char *input = config;
+@@ -895,11 +894,12 @@ static int __init init_netconsole(void)
+ 				goto fail;
+ 			}
+ 			/* Dump existing printks when we register */
+-			if (nt->extended)
+-				netconsole_ext.flags |= CON_PRINTBUFFER |
+-							CON_ENABLED;
+-			else
++			if (nt->extended) {
++				extended = true;
++				netconsole_ext.flags |= CON_PRINTBUFFER;
++			} else {
+ 				netconsole.flags |= CON_PRINTBUFFER;
++			}
  
+ 			spin_lock_irqsave(&target_list_lock, flags);
+ 			list_add(&nt->list, &target_list);
+@@ -915,7 +915,7 @@ static int __init init_netconsole(void)
+ 	if (err)
+ 		goto undonotifier;
+ 
+-	if (netconsole_ext.flags & CON_ENABLED)
++	if (extended)
+ 		register_console(&netconsole_ext);
+ 	register_console(&netconsole);
+ 	pr_info("network logging started\n");
+@@ -945,7 +945,8 @@ static void __exit cleanup_netconsole(void)
+ {
+ 	struct netconsole_target *nt, *tmp;
+ 
+-	unregister_console(&netconsole_ext);
++	if (console_is_registered(&netconsole_ext))
++		unregister_console(&netconsole_ext);
+ 	unregister_console(&netconsole);
+ 	dynamic_netconsole_exit();
+ 	unregister_netdevice_notifier(&netconsole_netdev_notifier);
 -- 
 2.30.2
 
