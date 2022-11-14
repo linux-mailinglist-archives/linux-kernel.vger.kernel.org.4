@@ -2,122 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA8F627933
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 964FC627924
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:39:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236964AbiKNJke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:40:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S236200AbiKNJja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:39:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236926AbiKNJkI (ORCPT
+        with ESMTP id S236708AbiKNJj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:40:08 -0500
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086741DDE5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:40:08 -0800 (PST)
-Received: by mail-ot1-x32b.google.com with SMTP id a7-20020a056830008700b0066c82848060so6326065oto.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:40:08 -0800 (PST)
+        Mon, 14 Nov 2022 04:39:27 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5FD1A838
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:39:26 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id s8so1188186lfc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:39:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8+D6mfTqwfey0lLy9Lc3RpfTXi+1JUYYl3NRmY/n6Cg=;
-        b=mYE+ec9IXB6vAxMkqvnDohJnignWzN6sP+uMuCmmjqMF+LN7t8mFcaVk7M/IUujQQQ
-         QpMlpGljTQMKtQMDU3t8ud4Q/NRM7Xv6atQp2CVvv7sfAc6rErDtSkcYOBiWVkBwNw7V
-         4RmUJ8o75a6ssu5twmDTth2IRViiHPXo/ICejPp24KRzDf3S9UCYbblReHoDtHPODOE2
-         ub5hSzx8RGHlhfyaeQk2gUFDvhx2uyGBiuNuIVlf8lDV25wXQXQxHnFXaav0kCB3ltzr
-         ia86Z9pdVyMViCKaidGZfx6q1Si7pyHtno+aPhr5shTjhXhLmD1sLdI9miWUhaHRNSHC
-         jpOg==
+        bh=k9XCkUeelflv0OvZlPTdiVOkOo+oSDAdHLbSak8ToQo=;
+        b=mCY53LUKaJZ5o4feNXdaLfJEoFH+MlvQ9YtHKi3BBSBaY1U7P8fnx/yl5U0F0mFS2D
+         LMdhxt9HYMFtwmbxbMfdElHaXEw8+6sdgCeO9N/gXbccLW1/wbAOzXX1YzR+8E8snThn
+         lLP7HF32qRYZe/eC2BigWPU+RBKf9rQXvlELML585STcgmcFS6DPP2rMz6AhUW9tl8B4
+         B2j6f4banrRSrHIm2sf8SyVkpwqFoO9reAaf/44+EKl2dp9ZX/8XCtDUjYz1OJXu6m/B
+         C4ALWI0KC9g3gGEKCn2k/h6v8jRNWDScxGpyr9kJccrTh4qmEiNoCd5hwndogsqwFVT3
+         4ufA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8+D6mfTqwfey0lLy9Lc3RpfTXi+1JUYYl3NRmY/n6Cg=;
-        b=od7fKjhQHoAY34gQ91qA5bb+ZZxN8iyz79VyylK0nIAS+MPRQ2b671lOmsJX1s5Awl
-         lzC4bG3fhGkZK08GhIE3vlArD7ojTTENaERH5q6xVWJdUTRMOuP6s3zNIQUIAFnW5Fap
-         5TKhTWXMekMU4UKs4IETRN083RAc+b3taZLi8uyPa1wDbi7ZGr2sQ2ss1jraxtz7ZWG5
-         JSxMHan2BPXa+2R1TdzKfSc0S/ktSPCHBLgdRt7dl19b06zcA7KUxvVvNg16HJXU5JBE
-         pzQQw+msyJNt0abk7Qu8FYuJhMQ58/otQqkCrWys22wYaVl4x0Pr+RHwB1LixbAltrPE
-         p0bA==
-X-Gm-Message-State: ANoB5pkgfZuuEIVNfFW3jen37EKvif2Fi/NykTbeGesW7LRVu3Y6bZbH
-        191qvA8tOVEK2AWC04KvNRTKDw==
-X-Google-Smtp-Source: AA0mqf5PWFamSHkt6BWY3FBYrOVdIwJqVj5bAOC0u2eHqPfK+YFGfVO1f3M0sLrDjrE+6PUeGz3JSA==
-X-Received: by 2002:a9d:4f10:0:b0:66c:5232:b9d1 with SMTP id d16-20020a9d4f10000000b0066c5232b9d1mr5855911otl.224.1668418807264;
-        Mon, 14 Nov 2022 01:40:07 -0800 (PST)
-Received: from anup-ubuntu64-vm.. ([103.97.165.210])
-        by smtp.gmail.com with ESMTPSA id l12-20020a4ae38c000000b0049f3bdd791esm3222677oov.26.2022.11.14.01.40.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 01:40:07 -0800 (PST)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>
-Subject: [PATCH v11 7/7] RISC-V: Use IPIs for remote icache flush when possible
-Date:   Mon, 14 Nov 2022 15:09:04 +0530
-Message-Id: <20221114093904.1669461-8-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221114093904.1669461-1-apatel@ventanamicro.com>
-References: <20221114093904.1669461-1-apatel@ventanamicro.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=k9XCkUeelflv0OvZlPTdiVOkOo+oSDAdHLbSak8ToQo=;
+        b=rhL8AyOZwlZ4JhjQIzReD3W8X4Iu6mocoXXMQIfmAiTcjCGQahlPavRYxNxGOewIj4
+         ckpi8gw8+8K8Ky2kJgu2zWzAVdy2V/lx6JikuppSYy1yImVWcd7kqwwBQ/cvJL5EudUi
+         5IZny/1YQsmyTaC1Tb8CbUsh+62LoVytBn/FhIgwYyRGpAMjQH8Gwv4+lbxu9zFJsTyV
+         6HUZuutMLyO2b6Ltpls+ewLpxVl5zFGzKnnko4vPjbQ6sgi3uK7XRNm+CzuGZwpps9xp
+         lCJtBoSm5hDv0N2g4UzfIgHv0aemDfPi7Iku655LiWxifFCGEgaP5JoaBeYHHwW2XPtm
+         HcZA==
+X-Gm-Message-State: ANoB5pnSLVBDQxCnP69A6uw8gnY8eYRJTD1zGWmUHtXJFvviRQOy+ZtD
+        iaHxup10jSDXRfsM/qjoPZ3yhQ==
+X-Google-Smtp-Source: AA0mqf6BjkXQmHn8zZLevpw4U3qXzZF296n/9D4aB48QjECYDiMKnX7ASO/YTJr4Odu2XE+Ni5hr4Q==
+X-Received: by 2002:a05:6512:3baa:b0:4b1:2aab:7cc4 with SMTP id g42-20020a0565123baa00b004b12aab7cc4mr3564609lfv.241.1668418764651;
+        Mon, 14 Nov 2022 01:39:24 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id bi39-20020a0565120ea700b004a91df49508sm1767001lfb.177.2022.11.14.01.39.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 01:39:24 -0800 (PST)
+Message-ID: <b69afa6a-119a-41cc-a1d8-da900d452941@linaro.org>
+Date:   Mon, 14 Nov 2022 10:39:20 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH v2 06/11] dt-bindings: arm: qcom,ids: Add SoC IDs for
+ MSM8956 and MSM8976
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, agross@kernel.org
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jassisinghbrar@gmail.com,
+        srinivas.kandagatla@linaro.org, jic23@kernel.org, lars@metafoo.de,
+        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
+        evgreen@chromium.org, gregkh@linuxfoundation.org,
+        a39.skl@gmail.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-hardening@vger.kernel.org,
+        marijn.suijten@somainline.org, kernel@collabora.com, luca@z3ntu.xyz
+References: <20221111120156.48040-1-angelogioacchino.delregno@collabora.com>
+ <20221111120156.48040-7-angelogioacchino.delregno@collabora.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221111120156.48040-7-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we have specialized interrupt controller (such as AIA IMSIC) which
-allows supervisor mode to directly inject IPIs without any assistance
-from M-mode or HS-mode then using such specialized interrupt controller,
-we can do remote icache flushe directly from supervisor mode instead of
-using the SBI RFENCE calls.
 
-This patch extends remote icache flush functions to use supervisor mode
-IPIs whenever direct supervisor mode IPIs.are supported by interrupt
-controller.
+On 11/11/2022 13:01, AngeloGioacchino Del Regno wrote:
+> Document the identifier of MSM8956/76.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
----
- arch/riscv/mm/cacheflush.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
-index 57b40a350420..f10cb47eac3a 100644
---- a/arch/riscv/mm/cacheflush.c
-+++ b/arch/riscv/mm/cacheflush.c
-@@ -19,7 +19,7 @@ void flush_icache_all(void)
- {
- 	local_flush_icache_all();
- 
--	if (IS_ENABLED(CONFIG_RISCV_SBI))
-+	if (IS_ENABLED(CONFIG_RISCV_SBI) && !riscv_use_ipi_for_rfence())
- 		sbi_remote_fence_i(NULL);
- 	else
- 		on_each_cpu(ipi_remote_fence_i, NULL, 1);
-@@ -67,7 +67,8 @@ void flush_icache_mm(struct mm_struct *mm, bool local)
- 		 * with flush_icache_deferred().
- 		 */
- 		smp_mb();
--	} else if (IS_ENABLED(CONFIG_RISCV_SBI)) {
-+	} else if (IS_ENABLED(CONFIG_RISCV_SBI) &&
-+		   !riscv_use_ipi_for_rfence()) {
- 		sbi_remote_fence_i(&others);
- 	} else {
- 		on_each_cpu_mask(&others, ipi_remote_fence_i, NULL, 1);
--- 
-2.34.1
 
+Konrad
+
+>   include/dt-bindings/arm/qcom,ids.h | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/include/dt-bindings/arm/qcom,ids.h b/include/dt-bindings/arm/qcom,ids.h
+> index 8b1a0f43bd93..91633da5fcf6 100644
+> --- a/include/dt-bindings/arm/qcom,ids.h
+> +++ b/include/dt-bindings/arm/qcom,ids.h
+> @@ -78,6 +78,8 @@
+>   #define QCOM_ID_MSM8616			250
+>   #define QCOM_ID_MSM8992			251
+>   #define QCOM_ID_APQ8094			253
+> +#define QCOM_ID_MSM8956			266
+> +#define QCOM_ID_MSM8976			278
+>   #define QCOM_ID_MDM9607			290
+>   #define QCOM_ID_APQ8096			291
+>   #define QCOM_ID_MSM8998			292
