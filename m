@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EDAF62854A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D5F62854C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:30:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237601AbiKNQaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:30:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        id S237614AbiKNQaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:30:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237539AbiKNQ3l (ORCPT
+        with ESMTP id S237542AbiKNQ3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Nov 2022 11:29:41 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C99426B;
-        Mon, 14 Nov 2022 08:29:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529D41090
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:29:40 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668443378;
+        s=2020; t=1668443379;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WyGtVM99u5kVDH70iZExE1J1KzxzFf6H5/dTCHJGWmg=;
-        b=FqAoNjaBB2Rlp2mNiLSbghpPzLzwe/mxSu1PahgKtAnhy0JYz8REmdtNz9jHFQFaj113nY
-        ywZ/YEc1WnqLUt/lbm8feA+MyPzbJIRZv3VyR+hVIHoOTru/KIzygWDs2cWOkXnelZvsoo
-        32AkyhpdUEvPRj7CPilKpeib4j1jznLqH+nKWXz7/7IBnl7Xk86MCDk0tWzXGSqSVG/RUv
-        QRAw1Gqdw/S2PhYt+lV+WuN3kZ8zlf7KMaF8BftoCfYw9WENgLe5lBCaUXBOUsalZFaZAb
-        9ZPCStORGaRXJVDKwcBdwVGTJacSupeBxD5165H9Ma8QabshUKzxXOyMSguQiA==
+        bh=5JsDGu5IVhR/uTTIVh+OD2xeQMjAWfs9q7KkYfOMdPo=;
+        b=0U7Vhra8kpNEeWbfS2OZvl45p4MAP21g7TlrthXGIolUtEWWkpaGim29mqHfuLdcOV8Bcs
+        vzs+Yp6VoagioH2U3kRUcuOOLbGU5Zzgmz7f01M058bgPVvh2tCRDP6vh/Xw+feHwn3vdX
+        TTqSPNxftntApw4EOKT03Nu8xzrIewiC+n4aC4iPsCMHcJuuO+AB4qY+6cI0FE58aYdTzp
+        qWItjw6eqro2lR7nHvkcGJOa1nPChW3AFYHoA3qIYQsaMeaRXr7B9rLvuguocrRJpA2ZLI
+        +gXt/AMdPowg1dfuOGk16b0DpqeIL94LsaWplBTv6xW3rYlFE27pByHV7sFzMw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668443378;
+        s=2020e; t=1668443379;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WyGtVM99u5kVDH70iZExE1J1KzxzFf6H5/dTCHJGWmg=;
-        b=TSOchCPgjdlhJPka+GKTvoyPM/0XtrZC5Yjg7o2tlsAmZW/yw3oP7dxd3MB5cXFma4zBBg
-        1gDZE59V6J1GTfDQ==
+        bh=5JsDGu5IVhR/uTTIVh+OD2xeQMjAWfs9q7KkYfOMdPo=;
+        b=pbKCTsz9yGCQaP7FTXHPbuyfxCaX3Ev4YnxyWvQoj/S9QHk2p6KroYdyoQYVMsCeUv1uLN
+        7cnLqs+zlhxQcsCg==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH printk v4 09/39] proc: consoles: document console_lock usage
-Date:   Mon, 14 Nov 2022 17:35:02 +0106
-Message-Id: <20221114162932.141883-10-john.ogness@linutronix.de>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH printk v4 10/39] printk: introduce console_list_lock
+Date:   Mon, 14 Nov 2022 17:35:03 +0106
+Message-Id: <20221114162932.141883-11-john.ogness@linutronix.de>
 In-Reply-To: <20221114162932.141883-1-john.ogness@linutronix.de>
 References: <20221114162932.141883-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -61,38 +60,299 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The console_lock is held throughout the start/show/stop procedure
-to print out device/driver information about all registered
-consoles. Since the console_lock is being used for multiple reasons,
-explicitly document these reasons. This will be useful when the
-console_lock is split into fine-grained locking.
+Currently there exist races in register_console(), where the types
+of registered consoles are checked (without holding the console_lock)
+and then after acquiring the console_lock, it is assumed that the list
+has not changed. Also, some code that performs console_unregister()
+make similar assumptions.
 
+It might be possible to fix these races using the console_lock. But
+it would require a complex analysis of all console drivers to make
+sure that the console_lock is not taken in match() and setup()
+callbacks. And we really prefer to split up and reduce the
+responsibilities of console_lock rather than expand its complexity.
+Therefore, introduce a new console_list_lock to provide full
+synchronization for any console list changes.
+
+In addition, also use console_list_lock for synchronization of
+console->flags updates. All flags are either static or modified only
+during the console registration. There are only two exceptions.
+
+The first exception is CON_ENABLED, which is also modified by
+console_start()/console_stop(). Therefore, these functions must
+also take the console_list_lock.
+
+The second exception is when the flags are modified by the console
+driver init code before the console is registered. These will be
+ignored because they are not visible to the rest of the system
+via the console_drivers list.
+
+Note that one of the various responsibilities of the console_lock is
+also intended to provide console list and console->flags
+synchronization. Later changes will update call sites relying on the
+console_lock for these purposes. Once all call sites have been
+updated, the console_lock will be relieved of synchronizing
+console_list and console->flags updates.
+
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 Reviewed-by: Petr Mladek <pmladek@suse.com>
 ---
- fs/proc/consoles.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ include/linux/console.h | 23 +++++++++--
+ kernel/printk/printk.c  | 88 ++++++++++++++++++++++++++++++++++++-----
+ 2 files changed, 99 insertions(+), 12 deletions(-)
 
-diff --git a/fs/proc/consoles.c b/fs/proc/consoles.c
-index cf2e0788f9c7..46b305fa04ed 100644
---- a/fs/proc/consoles.c
-+++ b/fs/proc/consoles.c
-@@ -63,6 +63,15 @@ static void *c_start(struct seq_file *m, loff_t *pos)
- 	struct console *con;
- 	loff_t off = 0;
+diff --git a/include/linux/console.h b/include/linux/console.h
+index f4f0c9523835..24d83e24840b 100644
+--- a/include/linux/console.h
++++ b/include/linux/console.h
+@@ -158,6 +158,14 @@ struct console {
+ 	struct hlist_node node;
+ };
  
++#ifdef CONFIG_LOCKDEP
++extern void lockdep_assert_console_list_lock_held(void);
++#else
++static inline void lockdep_assert_console_list_lock_held(void)
++{
++}
++#endif
++
+ #ifdef CONFIG_DEBUG_LOCK_ALLOC
+ extern bool console_srcu_read_lock_is_held(void);
+ #else
+@@ -170,6 +178,9 @@ static inline bool console_srcu_read_lock_is_held(void)
+ extern int console_srcu_read_lock(void);
+ extern void console_srcu_read_unlock(int cookie);
+ 
++extern void console_list_lock(void) __acquires(console_mutex);
++extern void console_list_unlock(void) __releases(console_mutex);
++
+ extern struct hlist_head console_list;
+ 
+ /**
+@@ -186,10 +197,16 @@ extern struct hlist_head console_list;
+ 	hlist_for_each_entry_srcu(con, &console_list, node,		\
+ 				  console_srcu_read_lock_is_held())
+ 
+-/*
+- * for_each_console() allows you to iterate on each console
++/**
++ * for_each_console() - Iterator over registered consoles
++ * @con:	struct console pointer used as loop cursor
++ *
++ * The console list and the console->flags are immutable while iterating.
++ *
++ * Requires console_list_lock to be held.
+  */
+-#define for_each_console(con) \
++#define for_each_console(con)						\
++	lockdep_assert_console_list_lock_held();			\
+ 	hlist_for_each_entry(con, &console_list, node)
+ 
+ extern int console_set_on_cmdline;
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 8dbf3461cba0..e3f81dda5b09 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -78,6 +78,13 @@ EXPORT_SYMBOL(ignore_console_lock_warning);
+ int oops_in_progress;
+ EXPORT_SYMBOL(oops_in_progress);
+ 
++/*
++ * console_mutex protects console_list updates and console->flags updates.
++ * The flags are synchronized only for consoles that are registered, i.e.
++ * accessible via the console list.
++ */
++static DEFINE_MUTEX(console_mutex);
++
+ /*
+  * console_sem protects console_list and console->flags updates, and also
+  * provides serialization for access to the entire console driver system.
+@@ -103,6 +110,11 @@ static int __read_mostly suppress_panic_printk;
+ static struct lockdep_map console_lock_dep_map = {
+ 	.name = "console_lock"
+ };
++
++void lockdep_assert_console_list_lock_held(void)
++{
++	lockdep_assert_held(&console_mutex);
++}
+ #endif
+ 
+ #ifdef CONFIG_DEBUG_LOCK_ALLOC
+@@ -227,6 +239,40 @@ int devkmsg_sysctl_set_loglvl(struct ctl_table *table, int write,
+ }
+ #endif /* CONFIG_PRINTK && CONFIG_SYSCTL */
+ 
++/**
++ * console_list_lock - Lock the console list
++ *
++ * For console list or console->flags updates
++ */
++void console_list_lock(void)
++{
 +	/*
-+	 * Take console_lock to serialize device() callback with
-+	 * other console operations. For example, fg_console is
-+	 * modified under console_lock when switching vt.
++	 * In unregister_console(), synchronize_srcu() is called with the
++	 * console_list_lock held. Therefore it is not allowed that the
++	 * console_list_lock is taken with the srcu_lock held.
 +	 *
-+	 * Hold the console_lock to guarantee safe traversal of the
-+	 * console list. SRCU cannot be used because there is no
-+	 * place to store the SRCU cookie.
++	 * Detecting if this context is really in the read-side critical
++	 * section is only possible if the appropriate debug options are
++	 * enabled.
 +	 */
++	WARN_ON_ONCE(debug_lockdep_rcu_enabled() &&
++		     srcu_read_lock_held(&console_srcu));
++
++	mutex_lock(&console_mutex);
++}
++EXPORT_SYMBOL(console_list_lock);
++
++/**
++ * console_list_unlock - Unlock the console list
++ *
++ * Counterpart to console_list_lock()
++ */
++void console_list_unlock(void)
++{
++	mutex_unlock(&console_mutex);
++}
++EXPORT_SYMBOL(console_list_unlock);
++
+ /**
+  * console_srcu_read_lock - Register a new reader for the
+  *	SRCU-protected console list
+@@ -3020,9 +3066,11 @@ struct tty_driver *console_device(int *index)
+ void console_stop(struct console *console)
+ {
+ 	__pr_flush(console, 1000, true);
++	console_list_lock();
  	console_lock();
- 	for_each_console(con)
- 		if (off++ == *pos)
+ 	console->flags &= ~CON_ENABLED;
+ 	console_unlock();
++	console_list_unlock();
+ 
+ 	/*
+ 	 * Ensure that all SRCU list walks have completed. All contexts must
+@@ -3036,9 +3084,11 @@ EXPORT_SYMBOL(console_stop);
+ 
+ void console_start(struct console *console)
+ {
++	console_list_lock();
+ 	console_lock();
+ 	console->flags |= CON_ENABLED;
+ 	console_unlock();
++	console_list_unlock();
+ 	__pr_flush(console, 1000, true);
+ }
+ EXPORT_SYMBOL(console_start);
+@@ -3134,6 +3184,8 @@ static void try_enable_default_console(struct console *newcon)
+ #define console_first()				\
+ 	hlist_entry(console_list.first, struct console, node)
+ 
++static int unregister_console_locked(struct console *console);
++
+ /*
+  * The console driver calls this routine during kernel initialization
+  * to register the console printing procedure with printk() and to
+@@ -3160,13 +3212,14 @@ void register_console(struct console *newcon)
+ 	bool realcon_registered = false;
+ 	int err;
+ 
++	console_list_lock();
++
+ 	for_each_console(con) {
+ 		if (WARN(con == newcon, "console '%s%d' already registered\n",
+-					 con->name, con->index))
+-			return;
+-	}
++					 con->name, con->index)) {
++			goto unlock;
++		}
+ 
+-	for_each_console(con) {
+ 		if (con->flags & CON_BOOT)
+ 			bootcon_registered = true;
+ 		else
+@@ -3177,7 +3230,7 @@ void register_console(struct console *newcon)
+ 	if ((newcon->flags & CON_BOOT) && realcon_registered) {
+ 		pr_info("Too late to register bootconsole %s%d\n",
+ 			newcon->name, newcon->index);
+-		return;
++		goto unlock;
+ 	}
+ 
+ 	/*
+@@ -3208,7 +3261,7 @@ void register_console(struct console *newcon)
+ 
+ 	/* printk() messages are not printed to the Braille console. */
+ 	if (err || newcon->flags & CON_BRL)
+-		return;
++		goto unlock;
+ 
+ 	/*
+ 	 * If we have a bootconsole, and are switching to a real console,
+@@ -3292,16 +3345,21 @@ void register_console(struct console *newcon)
+ 
+ 		hlist_for_each_entry_safe(con, tmp, &console_list, node) {
+ 			if (con->flags & CON_BOOT)
+-				unregister_console(con);
++				unregister_console_locked(con);
+ 		}
+ 	}
++unlock:
++	console_list_unlock();
+ }
+ EXPORT_SYMBOL(register_console);
+ 
+-int unregister_console(struct console *console)
++/* Must be called under console_list_lock(). */
++static int unregister_console_locked(struct console *console)
+ {
+ 	int res;
+ 
++	lockdep_assert_console_list_lock_held();
++
+ 	con_printk(KERN_INFO, console, "disabled\n");
+ 
+ 	res = _braille_unregister_console(console);
+@@ -3350,6 +3408,16 @@ int unregister_console(struct console *console)
+ 
+ 	return res;
+ }
++
++int unregister_console(struct console *console)
++{
++	int res;
++
++	console_list_lock();
++	res = unregister_console_locked(console);
++	console_list_unlock();
++	return res;
++}
+ EXPORT_SYMBOL(unregister_console);
+ 
+ /*
+@@ -3402,6 +3470,7 @@ static int __init printk_late_init(void)
+ 	struct console *con;
+ 	int ret;
+ 
++	console_list_lock();
+ 	hlist_for_each_entry_safe(con, tmp, &console_list, node) {
+ 		if (!(con->flags & CON_BOOT))
+ 			continue;
+@@ -3419,9 +3488,10 @@ static int __init printk_late_init(void)
+ 			 */
+ 			pr_warn("bootconsole [%s%d] uses init memory and must be disabled even before the real one is ready\n",
+ 				con->name, con->index);
+-			unregister_console(con);
++			unregister_console_locked(con);
+ 		}
+ 	}
++	console_list_unlock();
+ 
+ 	ret = cpuhp_setup_state_nocalls(CPUHP_PRINTK_DEAD, "printk:dead", NULL,
+ 					console_cpu_notify);
 -- 
 2.30.2
 
