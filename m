@@ -2,134 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61C86278BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0326278BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236066AbiKNJJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:09:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
+        id S235617AbiKNJJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:09:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236444AbiKNJJH (ORCPT
+        with ESMTP id S235826AbiKNJJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:09:07 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5BD1D64C;
-        Mon, 14 Nov 2022 01:08:46 -0800 (PST)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N9k4S6xhDzmVvC;
-        Mon, 14 Nov 2022 17:08:24 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 17:08:44 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 17:08:44 +0800
-Subject: Re: linux-next: build failure after merge of the modules tree
-To:     Jiri Olsa <olsajiri@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Luis Chamberlain <mcgrof@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>
-References: <20221114111350.38e44eec@canb.auug.org.au>
- <Y3H12Xyt8ALo+HAU@krava>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <4d2bd614-028e-ec8c-597c-56353a0a4ccf@huawei.com>
-Date:   Mon, 14 Nov 2022 17:08:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Mon, 14 Nov 2022 04:09:16 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D865330A;
+        Mon, 14 Nov 2022 01:09:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=CmCkVP6XVasiawMWAc2MfoRTytUQFHnWEyNdl8YOQ2s=; b=sJPpFzwZM45thglm1Lcdyxo+hB
+        /kqvQJXKkVETWLF3wT7rXwfO8CE/lwpxaayg0f9hTslmteCjyVriq71W1GMQrgyWKxT9p1tjrfzlX
+        h8aN9mrCczTIN1mqdShxKbMeaJ3uPsgFeQliRvSUvmPeZwh4j32mfhRHIl98JloUN4FcvsTs6nL7Q
+        yy6zxw1NnYlE93wllagjvtdqocPe+2BrzVqXwF/O+yr/xCpZHq8Y2fgQPqcPbrEXvrF1fRvsaJNr0
+        8alPAyIVFlxo9FTNHezy+JCEeN5Ln2onNVxA6C/vukjgqFqk5CLClrecLboV9ogydeVMV0oyYTywu
+        0ExVDnwg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ouVSd-00FNEY-ER; Mon, 14 Nov 2022 09:08:59 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B08F2300282;
+        Mon, 14 Nov 2022 10:08:51 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7BF392C8037C6; Mon, 14 Nov 2022 10:08:51 +0100 (CET)
+Date:   Mon, 14 Nov 2022 10:08:51 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Li, Xin3" <xin3.li@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>
+Subject: Re: [RESEND PATCH 5/6] KVM: x86/VMX: add kvm_vmx_reinject_nmi_irq()
+ for NMI/IRQ reinjection
+Message-ID: <Y3IFo9NrAcYalBzM@hirez.programming.kicks-ass.net>
+References: <Y2y+YgBUYuUHbPtd@hirez.programming.kicks-ass.net>
+ <BN6PR1101MB2161976800EB14B74A24D9F3A8019@BN6PR1101MB2161.namprd11.prod.outlook.com>
+ <Y24SoNKZtj/NPSGy@hirez.programming.kicks-ass.net>
+ <6097036e-063f-5175-72b2-8935b12af853@redhat.com>
+ <Y24908NWCdzUNqI0@hirez.programming.kicks-ass.net>
+ <6fd26a70-3774-6ae7-73ea-4653aee106f0@redhat.com>
+ <Y25a0Z2tOMWYZs4j@hirez.programming.kicks-ass.net>
+ <BN6PR1101MB216141A21353AB84CEA541DFA8009@BN6PR1101MB2161.namprd11.prod.outlook.com>
+ <Y26jkHfK9INwU7Yy@hirez.programming.kicks-ass.net>
+ <BN6PR1101MB2161E8217F50D18C56E5864EA8059@BN6PR1101MB2161.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <Y3H12Xyt8ALo+HAU@krava>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN6PR1101MB2161E8217F50D18C56E5864EA8059@BN6PR1101MB2161.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 14, 2022 at 04:39:40AM +0000, Li, Xin3 wrote:
 
-
-On 2022/11/14 16:01, Jiri Olsa wrote:
-> On Mon, Nov 14, 2022 at 11:13:50AM +1100, Stephen Rothwell wrote:
->> Hi all,
->>
->> After merging the modules tree, today's linux-next build (powerpc
->> ppc64_defconfig) failed like this:
->>
->> kernel/trace/ftrace.c: In function 'ftrace_lookup_symbols':
->> kernel/trace/ftrace.c:8316:52: error: passing argument 1 of 'module_kallsyms_on_each_symbol' from incompatible pointer type [-Werror=incompatible-pointer-types]
->>  8316 |         found_all = module_kallsyms_on_each_symbol(kallsyms_callback, &args);
->>       |                                                    ^~~~~~~~~~~~~~~~~
->>       |                                                    |
->>       |                                                    int (*)(void *, const char *, long unsigned int)
->> In file included from include/linux/device/driver.h:21,
->>                  from include/linux/device.h:32,
->>                  from include/linux/node.h:18,
->>                  from include/linux/cpu.h:17,
->>                  from include/linux/stop_machine.h:5,
->>                  from kernel/trace/ftrace.c:17:
->> include/linux/module.h:882:48: note: expected 'const char *' but argument is of type 'int (*)(void *, const char *, long unsigned int)'
->>   882 | int module_kallsyms_on_each_symbol(const char *modname,
->>       |                                    ~~~~~~~~~~~~^~~~~~~
->> kernel/trace/ftrace.c:8316:71: error: passing argument 2 of 'module_kallsyms_on_each_symbol' from incompatible pointer type [-Werror=incompatible-pointer-types]
->>  8316 |         found_all = module_kallsyms_on_each_symbol(kallsyms_callback, &args);
->>       |                                                                       ^~~~~
->>       |                                                                       |
->>       |                                                                       struct kallsyms_data *
->> include/linux/module.h:883:42: note: expected 'int (*)(void *, const char *, long unsigned int)' but argument is of type 'struct kallsyms_data *'
->>   883 |                                    int (*fn)(void *, const char *, unsigned long),
->>       |                                    ~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/trace/ftrace.c:8316:21: error: too few arguments to function 'module_kallsyms_on_each_symbol'
->>  8316 |         found_all = module_kallsyms_on_each_symbol(kallsyms_callback, &args);
->>       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> include/linux/module.h:882:5: note: declared here
->>   882 | int module_kallsyms_on_each_symbol(const char *modname,
->>       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>
->> Caused by commit
->>
->>   90de88426f3c ("livepatch: Improve the search performance of module_kallsyms_on_each_symbol()")
->>
->> from the modules tree interatcing with commit
->>
->>   3640bf8584f4 ("ftrace: Add support to resolve module symbols in ftrace_lookup_symbols")
->>
->> from the next-next tree.
->>
->> I have no idea how to easily fix this up, so I have used the modules
->> tree from next-20221111 for today in the hope someone will send me a fix.
+> > But what about NMIs, afaict this is all horribly broken for NMIs.
+> > 
+> > So the whole VMX thing latches the NMI (which stops NMI recursion), right?
+> > 
+> > But then you drop out of noinstr code, which means any random exception can
+> > happen (kprobes #BP, hw_breakpoint #DB, or even #PF due to random
+> > nonsense like *SAN). This exception will do IRET and clear the NMI latch, all
+> > before you get to run any of the NMI code.
 > 
-> hi,
-> there's no quick fix.. I sent follow up email to the original
-> change and cc-ed you
+> What you said here implies that we have this problem in the existing code.
+> Because a fake iret stack is created to call the NMI handler in the IDT NMI
+> descriptor, which lastly executes the IRET instruction.
 
-The fastest fix is drop my patch 7/9, 8/9, they depend on the interface change
-of patch 6/9，but other patches don't rely on either of them.. And I can repost
-them after v6.2-rc1.
+I can't follow; of course the IDT handler terminates with IRET, it has
+to no?
 
-Otherwise, you'll need to modify your patch, take the module reference before
-invoking callback and put it after it is called, without passing modname.
-
-
-> 
-> thanks,
-> jirka
-> .
-> 
-
--- 
-Regards,
-  Zhen Lei
+And yes, the current code appears to suffer the same defect.
