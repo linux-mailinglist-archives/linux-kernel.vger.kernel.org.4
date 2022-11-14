@@ -2,84 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DAC627C59
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5C8627C5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236394AbiKNLan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:30:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
+        id S235874AbiKNLcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:32:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235911AbiKNLaT (ORCPT
+        with ESMTP id S229484AbiKNLcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:30:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3952F5F4D;
-        Mon, 14 Nov 2022 03:30:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0B8FB80E2A;
-        Mon, 14 Nov 2022 11:30:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 377FFC4347C;
-        Mon, 14 Nov 2022 11:30:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668425416;
-        bh=aOH4MGwvdLyzHucsaBj3VMD/VmEWnedOzoLnOdLon8o=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=mIirX1OgKvi6T/devwH44uESM+66TxhXSA+4S58HqQ463LlQ2AR6VcN8NS16+yo2h
-         nSpq/jPwRFmUz9Yb16SxFVGQyLBW5X+id06p9+hKRHphbnzPzjUF+LoiGWkynqPPCz
-         koi3vwpaP/jEOKe/AX9mZnOZG1Tx2pqIuIpnDluHq0KsRJHXict+rzy1uTXdH3l8lG
-         OdXG+XKYFCtYovlLualIyh67pcKXd5NO4CTUjV7A1KAP43wFbKx98LueJ/qcd2sv3C
-         D/nX/jQHZuM3xc4MZ9BOWfDAnnlE8mqK/grxQyYq9beK84Ed2CMrgJUUJ8AFWkz5mF
-         qRcjg1iDwod1Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1760DC395FE;
-        Mon, 14 Nov 2022 11:30:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 14 Nov 2022 06:32:00 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA12BC50;
+        Mon, 14 Nov 2022 03:31:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=WWLpgrUnMpDL7blwsvF5dOfQKm1L1ZS3Z5Ep+83hIgU=; b=eliEjRqitFRP24Nf4GZqFcjjMG
+        VNcj/ugP24nWY/LhW0mAh2PQSXPGx09anHEamUWVV1VuS+SmsYMdJgeFyK4HQyIewpQ5vK46fDbTU
+        L1Mk0YBBvKN4GUg/8HaDiKEY0nF1rTJoJ2RbF0So/OsLuZlM525Ez/V6Th/ijVKA6oJkldC6vByoN
+        2vkUwxV9lGEPmfDqXSJRj+XL6IQtF5tjYO9mGMA/MtF4h9dAhbgqvplSp1pz+UkUYftw4WwCNYm2B
+        +y+DzGcDAMGdZL7KCfglBUvmgkBttyMfiT+sieE5/43PRt9xprPOs0EImeRI1d1MsDbFTrHm8ui6b
+        U59aNjSw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35256)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1ouXgw-0000hT-QD; Mon, 14 Nov 2022 11:31:54 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1ouXgu-0003m0-KS; Mon, 14 Nov 2022 11:31:52 +0000
+Date:   Mon, 14 Nov 2022 11:31:52 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Alexandru Tachici <alexandru.tachici@analog.com>
+Cc:     linux-kernel@vger.kernel.org, andrew@lunn.ch, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, steve.glendinning@shawell.net,
+        UNGLinuxDriver@microchip.com, andre.edich@microchip.com,
+        linux-usb@vger.kernel.org
+Subject: Re: [net] net: usb: smsc95xx: fix external PHY reset
+Message-ID: <Y3InKCr9BGaf8wiI@shell.armlinux.org.uk>
+References: <20221114131643.19450-1-alexandru.tachici@analog.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH linux-next] ipasdv4/tcp_ipv4: remove redundant assignment
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166842541609.32199.16555388041801965552.git-patchwork-notify@kernel.org>
-Date:   Mon, 14 Nov 2022 11:30:16 +0000
-References: <20221111090419.494633-1-xu.xin16@zte.com.cn>
-In-Reply-To: <20221111090419.494633-1-xu.xin16@zte.com.cn>
-To:     xu xin <xu.xin.sc@gmail.com>
-Cc:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xu.xin16@zte.com.cn
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221114131643.19450-1-alexandru.tachici@analog.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Mon, Nov 14, 2022 at 03:16:43PM +0200, Alexandru Tachici wrote:
+> +	} else {
+> +		/* Driver has no knowledge at this point about the external PHY.
+> +		 * The 802.3 specifies that the reset process shall
+> +		 * be completed within 0.5 s.
+> +		 */
+> +		fsleep(500000);
+> +	}
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+It's slightly more code, but would it be better to do this in the
+mdiobus reset() method?
 
-On Fri, 11 Nov 2022 09:04:20 +0000 you wrote:
-> From: xu xin <xu.xin16@zte.com.cn>
-> 
-> The value of 'st->state' has been verified as "TCP_SEQ_STATE_LISTENING",
-> it's unnecessary to assign TCP_SEQ_STATE_LISTENING to it, so we can remove it.
-> 
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> 
-> [...]
+Thanks.
 
-Here is the summary with links:
-  - [linux-next] ipasdv4/tcp_ipv4: remove redundant assignment
-    https://git.kernel.org/netdev/net-next/c/2fd450cd83e3
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
