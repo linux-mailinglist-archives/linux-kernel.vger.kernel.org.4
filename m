@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A12628AC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:50:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2EE1628ACB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236957AbiKNUuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 15:50:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
+        id S236525AbiKNUuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 15:50:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235800AbiKNUuD (ORCPT
+        with ESMTP id S235800AbiKNUuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:50:03 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C23A62C7
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:50:02 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id v17so19063821edc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:50:02 -0800 (PST)
+        Mon, 14 Nov 2022 15:50:35 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78AA62C7;
+        Mon, 14 Nov 2022 12:50:34 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id b11so11455155pjp.2;
+        Mon, 14 Nov 2022 12:50:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vbXFOKeTUlYXn2Mg9KmKqBvEsVbH8a0lnnF+t/CHaYg=;
-        b=My3IJzngB/YmGua1bnDr4KRu/psqtSBrjcP49Gz4NDfNxNbefC/yBb47pIj8h7ry+d
-         VcFJX5+pYd3EpAtPYndWLxoXJDJaexmUGaosAK5p/GlJ4yQx1UeiTy/YMnFKS1UJuyC+
-         0/M4iZ1nNABU8xtIkYFKEmtSMHwEov1KmDNEMd9xQnRmPod+cI9oBGtONSfsdN7WNU/7
-         8EWNotEOdHHEMk48RzK2XJUJ1CKWhLs+Mh9x+ChVOo8xnON1Rh0/5RCHEqCIyOvDS2rD
-         S93dH2Fi0lNvMHUne65iYpnZkIsXaePGmIgAraHs2vi1qzrqZUnCemkTrNb9rRQdfri0
-         WjMg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QXeA+y+MM1L5GCQKRlS8sHVhUjtEuhwBzouoQoIPKAg=;
+        b=R+WSP8EB91o8AyNj0awZIrD1OG47NnQDd1LvocHtU2qwVretNZi39qGTppPQdk9dhr
+         R9d23QxaizOi+AJfTwyWhiSHC8wH/tsw4awjTmmZZGtVYf5PJdFXcLIjBH23CIagb2hF
+         cy1uUWdMRHQQR0ov4xBYg6JsrEjmSeay5fYuApn3psXmBPIS4XiSpCYarbe+mpNJjsP8
+         1O9DsAAshBRVfk097hnyHenZZoE70NYcAwCz7FrtdL6IjBpzkVuX/dIibEOUPy+CjNdn
+         8NqdI88n93O+X9/5Ca+N29Z7FGV+8hkIjt2H+Mg4o/I1jdtaDj2ezhAvGsgDhktASXUp
+         +Awg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vbXFOKeTUlYXn2Mg9KmKqBvEsVbH8a0lnnF+t/CHaYg=;
-        b=diFXXKhfUCB7ytFvw34WUZOkoc4bn18w+FuL6bdtKbcrf2w5km9hAwjyhXL/IhtGue
-         U3CEhJz7H024yfac9gUCBi7+4e+zjBieJZ7n+PeBE/iOxkQ5BZlELentRbkx1x4wymUJ
-         E5Kor2z0MpnGveuphWnlZIaPN5ZxVuxDezOIoOVvRHPzQ57uO2MR+KRRvp13BIv4fXz5
-         mYaNnNbUkg/PLegt4echA5FYOT47+xTAo8TpBjzz/OCz/Qe3nDrDOaCqcraIIOZ8U60N
-         JVeyEVUbXM/8rn2i3/6xc43BybSbxsGDB00fqWM9LspgaheLQNiqzJ0n6+Pb1bUS8VVE
-         uQuA==
-X-Gm-Message-State: ANoB5pkBIcxqLV2j2kvi2yvZ/R8tux2rlYYtJYwDsWGwaCCWX3eg052Z
-        ePmyH3Bknrr5tPXvTKStQcg=
-X-Google-Smtp-Source: AA0mqf7JKyTLxwyn9ebdI2jJKDOugaX3DChyW0LE9ULhC7qV0de1AoKqcbD5HjYp/rHBaR/CC5pqlw==
-X-Received: by 2002:aa7:c446:0:b0:468:74:9820 with SMTP id n6-20020aa7c446000000b0046800749820mr3304216edr.288.1668459000719;
-        Mon, 14 Nov 2022 12:50:00 -0800 (PST)
-Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id v2-20020a170906292200b007aacfce2a91sm4605452ejd.27.2022.11.14.12.49.59
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QXeA+y+MM1L5GCQKRlS8sHVhUjtEuhwBzouoQoIPKAg=;
+        b=1viXUx8Rp1KpAc0RfJ6TMVDBSwpEh1/fYMLQcD5qJz+odPEvBDA7TSurvuHUYoxLvJ
+         SW3YKilI3Wxq9nvdSajBewnBASM+sCSimeYp7xyvghJWoImf5AXSt63wISvPlKhvLDGx
+         hSWp+xbtIluH6HZmvxuOucSRPrmYl+iqg+vVPWxGilE9iqmZwAs/kn5abMuPAMUUcT21
+         CnzoUjSlIo2dU3P9kqnTmPJr6ocpbebhMwohbtI2pSFPr7kfEeyozoUMBE8LnnGH/CTr
+         YdFJ7qwC16e2JKNXbuxNPMLYAlcHb+ovHVT6zcmhKQawsOlTHAj7QJXMdksSRVMNqZuS
+         8K6Q==
+X-Gm-Message-State: ANoB5pmZtHOSuSUgPP8R8bVEGRhke4dnrV5xHT9kVqu8mPE4e609XQ9z
+        IurdWXiFyDZeomhOGRewstw=
+X-Google-Smtp-Source: AA0mqf7pvZO/46MnyFzwdRFWRLAvLvWkgsxE5il3I8AEPtYOWHaydI9zLZQjD0WFq8NQFdvIiTuT5Q==
+X-Received: by 2002:a17:90a:138d:b0:213:b853:5e45 with SMTP id i13-20020a17090a138d00b00213b8535e45mr15373339pja.97.1668459034137;
+        Mon, 14 Nov 2022 12:50:34 -0800 (PST)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id n12-20020a170902d2cc00b001767f6f04efsm7983959plc.242.2022.11.14.12.50.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 12:50:00 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
-Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev,
-        Andre Przywara <andre.przywara@arm.com>,
-        Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH v3 2/3] bus: sunxi-rsb: Support atomic transfers
-Date:   Mon, 14 Nov 2022 21:49:58 +0100
-Message-ID: <3506150.LM0AJKV5NW@jernej-laptop>
-In-Reply-To: <20221114015749.28490-3-samuel@sholland.org>
-References: <20221114015749.28490-1-samuel@sholland.org> <20221114015749.28490-3-samuel@sholland.org>
+        Mon, 14 Nov 2022 12:50:33 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Chia-I Wu <olvaffe@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] drm/msm/a6xx: Fix speed-bin detection vs probe-defer
+Date:   Mon, 14 Nov 2022 12:50:53 -0800
+Message-Id: <20221114205055.1547497-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -75,19 +78,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne ponedeljek, 14. november 2022 ob 02:57:48 CET je Samuel Holland 
-napisal(a):
-> When communicating with a PMIC during system poweroff (pm_power_off()),
-> IRQs are disabled and we are in a RCU read-side critical section, so we
-> cannot use wait_for_completion_io_timeout(). Instead, poll the status
-> register for transfer completion.
-> 
-> Fixes: d787dcdb9c8f ("bus: sunxi-rsb: Add driver for Allwinner Reduced
-> Serial Bus") Signed-off-by: Samuel Holland <samuel@sholland.org>
+From: Rob Clark <robdclark@chromium.org>
 
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+If we get an error (other than -ENOENT) we need to propagate that up the
+stack.  Otherwise if the nvmem driver hasn't probed yet, we'll end up
+end up claiming that we support all the OPPs which is not likely to be
+true (and on some generations impossible to be true, ie. if there are
+conflicting OPPs).
 
-Best regards,
-Jernej
+v2: Update commit msg, gc unused label, etc
 
+Fixed: fe7952c629da ("drm/msm: Add speed-bin support to a618 gpu")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+index 7fe60c65a1eb..6ae77e88060f 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+@@ -1941,7 +1941,7 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_rev rev, u32 fuse)
+ 
+ static int a6xx_set_supported_hw(struct device *dev, struct adreno_rev rev)
+ {
+-	u32 supp_hw = UINT_MAX;
++	u32 supp_hw;
+ 	u32 speedbin;
+ 	int ret;
+ 
+@@ -1953,15 +1953,13 @@ static int a6xx_set_supported_hw(struct device *dev, struct adreno_rev rev)
+ 	if (ret == -ENOENT) {
+ 		return 0;
+ 	} else if (ret) {
+-		DRM_DEV_ERROR(dev,
+-			      "failed to read speed-bin (%d). Some OPPs may not be supported by hardware",
+-			      ret);
+-		goto done;
++		dev_err_probe(dev, ret,
++			      "failed to read speed-bin. Some OPPs may not be supported by hardware");
++		return ret;
+ 	}
+ 
+ 	supp_hw = fuse_to_supp_hw(dev, rev, speedbin);
+ 
+-done:
+ 	ret = devm_pm_opp_set_supported_hw(dev, &supp_hw, 1);
+ 	if (ret)
+ 		return ret;
+-- 
+2.38.1
 
