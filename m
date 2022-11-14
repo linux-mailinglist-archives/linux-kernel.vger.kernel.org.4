@@ -2,403 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E5F62897D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE4162897F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236624AbiKNThf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 14:37:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
+        id S236665AbiKNTiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 14:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236119AbiKNThd (ORCPT
+        with ESMTP id S235782AbiKNTin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 14:37:33 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD4119032
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:37:31 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id c1so21008840lfi.7
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:37:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DxfQQ0FbYO1UVrLEoDyZLSQVKUEHHCrSauGBgdo401E=;
-        b=YmKcG6pGH0XHtKR/C0FfmNAMBTd17iNmWbkg6En3QsGVhAi9ipSacYboj1/US8NkBP
-         agctGu2bzd9ryxbA2rAvPx7wFI90lotF8HCevBtM8HQYi6reSSQQSNSLZpo7vuBpGaot
-         JSYRq/cpDPRwwQV1tWR3IWFZIp2f7/srALqynT5Kpm12op9gpcCFWfa2A7T47FV/8/j4
-         J8NJZ4YmPZD1RT/fkY8AbLmUNVqZcZF+FvMR3NFiC/cMyvKLDmB0QLsFiUhwI7JphocI
-         cMP07dW1n0zi12cmQ0AqfMGQNFm3mXmErlswglgklnjjjz+h4059hjY3gT4yThrFWhRC
-         xp+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DxfQQ0FbYO1UVrLEoDyZLSQVKUEHHCrSauGBgdo401E=;
-        b=68tM3j8AXhlbOlCCsRAeHa/0++V80MBi8UVd3adxaXIOmXQt7cSVd5qZdh6Z5HSsKX
-         Y8BxNN7WbqSaQGMEwMCB3qZ+iGbpQVxiWz5adDPiIfanWRC7vJxvK593QdR+vl5tS2+U
-         UnmugdRwspZc6VEAKbyMuNEYmCIK6rYze3oK57r7N700Mme+jtltwq09Q9COs78s/0tj
-         TWTUL3QzVKI+aHeMhN6Rl8ZaSMe7IPPcjCAKnvFp5FXgwL/HkLNNppC1SIntyY5bzyEC
-         rEi2fDtftWZNdtlgNukJP3HA+8LnM2D489G8279530pQALc75XAw7XGQdJVHvqA3TPhr
-         sUlg==
-X-Gm-Message-State: ANoB5pmUSvJDvioZtTLzGA2ycNoXtUNVX2hqRr57+pmX1Tomwpcl1h+A
-        24BE/j/gNPnB68xEZOYbrutaSccfFRKT9r1UR3HBjg==
-X-Google-Smtp-Source: AA0mqf7HAQqdI4fYnOZjPZjlE1/tQZKSoPVdyIsFVBO3uYhYdSJ4LBoX1ogpfF0ygUDHDNd/E7IrM5duSa/5KAdPGAo=
-X-Received: by 2002:ac2:523c:0:b0:48a:b5ef:c49d with SMTP id
- i28-20020ac2523c000000b0048ab5efc49dmr5086030lfl.313.1668454649378; Mon, 14
- Nov 2022 11:37:29 -0800 (PST)
+        Mon, 14 Nov 2022 14:38:43 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282DDBCA;
+        Mon, 14 Nov 2022 11:38:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668454722; x=1699990722;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=4X8JlBdfix4PS6KQ5PrUN2Uz+es0n7jPVNOOOTjmZrc=;
+  b=OlpSP3cNIMuqQ8QsgNlEzRZaRqItziawUbLdgs/vDNIsGaP475y+aa+M
+   DEsZgi/LDribU6nvBq4hTfhYH+JV8uAWI6UyoQII0H5VNKuhyfZdFlpNP
+   L0T0tw7tmB88CHG1k7SLM0YJ3vQ4hY9dw/38Dvgf1/yiz3rSgZxXPWucj
+   mXcLRYwW3PaIHRS36leKtEUWLphmtbGtSWQ1uakH1fyrTZ14lRyUHzEkh
+   dqspYkjxHqhJitcHs/56ap+P43xvVdWQv/WO3tgNg/t0ygGeV5MihaSaz
+   0bo6WA2WFH7fTvB4JeYXEn/6cjORCOb/lqyF1gDkv7ofk04zFFiV/Jm3D
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="374194705"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="374194705"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 11:38:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="671695284"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="671695284"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga001.jf.intel.com with ESMTP; 14 Nov 2022 11:38:41 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 14 Nov 2022 11:38:40 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Mon, 14 Nov 2022 11:38:40 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Mon, 14 Nov 2022 11:38:40 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RWX/xXnTNRYWf89pQdn5JR/9Uc1Dz9D6dQBvhp0Cpye3SXidGjJEvSVIt1Y7wR7UNXYTTo7ZDIyqwfwGt3j95kKCZ/vUfwg+y5kFbRxL57mKNagvRPo5F/m7rtYxMIqaM7HxUexoOIZqD4IUYl22LFUmvmrL70s/N2uQ4oXsezTsgw1z4b2EoiFURD6sCI0C0zsUa1xYtFiROePpR0Edzf67BleyS6JGjuunfqAye7pxbsS667qE6KzEhKpcpcusUwaNYw3OP5kBw2LOgHuLKN40mGVq/Mkr713zBjMfk3ijzPrkCf089eFUacN5wJKADJb3Dsld9YaTslumgqj8DA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4X8JlBdfix4PS6KQ5PrUN2Uz+es0n7jPVNOOOTjmZrc=;
+ b=Foa8QcXQqdMGsLcx+x4qDVuiWJ3vwHgVg3gl7/PasBK2PVAz/1+9znUAZkJre0q/c9s5w4i+7t6+qyxBDF77z9dodAS2DM8faCFM9iMzn5weRRh+LqFNIX0qzUIERX4BTh04lRJGQsFifKlNMkjiy4FW7B+3FjmDZbQ2v61xA2syek7pBvbUZFxREe8+SISbj7m3pzcqiE4ZqqsceN02yC/GbkQfVA6RUNGh+YLsxJtgCnbOdBxWM8lkiXHk0cN9WrUmfXdWHb7CsH6UicYP7sFnR1T2kV9liwnu0/NedJy0LjlKRMs3TB9gx0nsvMMn8sHjKbcnwYTzZbcmrymRlw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
+ by PH8PR11MB6802.namprd11.prod.outlook.com (2603:10b6:510:1ca::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
+ 2022 19:38:35 +0000
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::4eea:7bf0:e6b0:5014]) by SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::4eea:7bf0:e6b0:5014%4]) with mapi id 15.20.5813.012; Mon, 14 Nov 2022
+ 19:38:35 +0000
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+CC:     "Hansen, Dave" <dave.hansen@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "Macieira, Thiago" <thiago.macieira@intel.com>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
+        "Mehta, Sohil" <sohil.mehta@intel.com>
+Subject: RE: [PATCH v2 12/14] platform/x86/intel/ifs: Add current_batch sysfs
+ entry
+Thread-Topic: [PATCH v2 12/14] platform/x86/intel/ifs: Add current_batch sysfs
+ entry
+Thread-Index: AQHY8vv3UouK3GalXk6mzwRA6fUNf647gQ8AgAAjoWeAANrsAIAARioAgAA5qoCAAAw+AIABuAMAgAAOBoCAAABzAIAAAzUAgAACwMA=
+Date:   Mon, 14 Nov 2022 19:38:35 +0000
+Message-ID: <SJ1PR11MB60837D7324618BDB33B98C24FC059@SJ1PR11MB6083.namprd11.prod.outlook.com>
+References: <20221107225323.2733518-13-jithu.joseph@intel.com>
+ <Y2/JNAmSoYlLKq3A@zn.tnic> <CC3629D6-B205-4150-80E5-FC7A7A76DD25@intel.com>
+ <Y3CevK2zhAmiUyG9@kroah.com> <Y3DZmKYV+8HBtZ+Q@zn.tnic>
+ <Y3EJ93xzgC/1v0WV@a4bf019067fa.jf.intel.com> <Y3EUPKWDefnkeObR@zn.tnic>
+ <45aa0f69-2523-3cba-8f41-b1351f16b78f@intel.com> <Y3KRGx/yNfS78zQ2@zn.tnic>
+ <SJ1PR11MB608361084E83E74EA348630BFC059@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <Y3KULFHC5JuBQdAZ@zn.tnic>
+In-Reply-To: <Y3KULFHC5JuBQdAZ@zn.tnic>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|PH8PR11MB6802:EE_
+x-ms-office365-filtering-correlation-id: 510b7841-dad8-4fb8-d581-08dac677d243
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: EdQUrsX9bEz7yBReSZgEk7QKGeAkemnt6XHsZqgP6h8KJ5aFX4lhH7KUDY0ipJcqwaV1sSzsXqXfmlMzGwVNOiGxJ/Naumx9V0IfmJLxcYSqfBu7uiIPXY5wpf6zLCWTINy5HVMAJnG8yB/Ov65PW1SrvNVuQxNxjWq5WB4Hww+ByUyhKYCcYCwGdRo7jDML72b9qbc9p7mkJm/voVC4SfdwDiqz5dj0ai/mooG4PBlswUKzU/V2j8xCeLL3SShxCFAyEYojIDxCTJYFHgnPz3dZAzCKsmzQeMK2rKph3BP87EGTUEXJyf8lA//rDD6nPsLwx0pna0iy3DR26/QWHRW0JkSaIBIxXrvBhfdo/G7bX2ftw0gugX7wz6Q675bRZoFO6aVCC7HQLurVUXSNDIIQtRaX2OHUbXyZ4rft5jg5/rm786orJaHAX2nTi/co6op1iuV0JNjJl2sua+CiSE9GLAmhm57xVgubRgL6723XB6VzTk2DNnRDE8Rbx8bO3mN7evcuxBj4YuUOL1OWXnfRczV0zJ3TtWhLAiHrmZfwu81tBBI3klj+OsKxMJv15IH5Ob3fm+GnDUVFHVU1mMNQSBfRkX9xYh/Syz6UdG0//5/+GTTkylGsHMaSGUB8S8knQPhOS2clb7CMkkVTkc/PIZ6GLHzDTbqj+uHaOdqUxjdg42bzVoLUF6WW0cANT6UOYCOvkf3ovfvWb/Zi3g21my/ZD5p+19dW5hLd5BSz0ulM9TPLB/rlsiXtLDsEG6JtePAkAIo1sNJrswDNrw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(376002)(136003)(396003)(39860400002)(346002)(451199015)(2906002)(83380400001)(38070700005)(33656002)(8936002)(4744005)(7416002)(41300700001)(66946007)(66556008)(122000001)(52536014)(38100700002)(5660300002)(66476007)(66446008)(76116006)(64756008)(4326008)(316002)(55016003)(82960400001)(6916009)(186003)(54906003)(86362001)(6506007)(71200400001)(7696005)(9686003)(26005)(8676002)(478600001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?amdKQzR3VXBDY2VUb1dnajhUQXFEVWdoTXdEemtkZmZSeE5IUDFMWVVjcUdk?=
+ =?utf-8?B?K01tc2EwSmpMYmsyd1FVVlJpS0JkNTQ4SFN1UE9rbkdjcDFhakJORDQzaEpz?=
+ =?utf-8?B?UzExVElnYjRTdW1hamcxM0M0TjYybmhYclJRZGNmMXpjQ2E5aU1zb2x0WjFk?=
+ =?utf-8?B?YWxMSld3QURZVGtqa0ZQN0JqRVlCekRxMFFLMkZ1YkdpbjR4UVRzU1VMU294?=
+ =?utf-8?B?dmxiN0pKWkU0TmJBT2xlMmZIK3JEZlNWNk5lWk5zcWIvOUZaV0hhaHUzMEhy?=
+ =?utf-8?B?UTMzZU05bm1LZUVlOTRkR04zUXRqaWw4Z3lSWWVvYm1rMVd0NzFnQ2tUczRR?=
+ =?utf-8?B?dldXRlUwVEkwbnVUdkkvYzdoUG83c0NHUnFPWnZ6TGpkeTg3SHQrUUFubXNH?=
+ =?utf-8?B?Q3ZlTXM1dnlQR0c0RFpzcFBIMVR2QnB5SUJBWmhSSWcxdTZNOTRIT2xleDl1?=
+ =?utf-8?B?VGp3V0x0UktLOElnVWF4ZC9QRVlxamEwVzdLRGNhbzJoa1ZZUkpsR001Vjgr?=
+ =?utf-8?B?eWNUdnp3MGhGYjVFRkNWbjdENGU4SklYRThXNkhuTzhXK2ZGNFlNQkJDelRa?=
+ =?utf-8?B?ajZMUVpsZ3VsV1l3Si9sOFBLN1ZWZnBsdHlPVjYrMGR5K0h3dW5sNnQ4ZWU3?=
+ =?utf-8?B?dElGREo4Y0hZWEEvYzd0b3B1dmttNC95enRnZXBrQlljR0JuMWRxZC8zd2pm?=
+ =?utf-8?B?ZlhqS0pVdjZ0ZGk0K0FFWnlDb2h4aVVvakVZZU40QmdoUWh6SzJqTWE4amZG?=
+ =?utf-8?B?TzViTEhrQnRyR1g0S1krVFcxTTJHWU1RaVFyeHNIMWJud0lKZVdCaGJWbHRm?=
+ =?utf-8?B?bThFa3NSb2FLRFlSMHovbEpwMDJLeWtTaGJSdTZzZS8yVFJFNy9zYlVaekxN?=
+ =?utf-8?B?ZFpYSXNzemN0aG94V2F6dUtwZndjbzRUWEcxT2wzOUpDeG5WQzlSd2FWaldW?=
+ =?utf-8?B?WENPTjh6SnhTN1RIM0MzZEZHa3lGWDNDdVFycVlUNXo3ZjI2YWl0cUhhWDNL?=
+ =?utf-8?B?Q3A5M00yWG8yZkpzZHU5UTY1Y05jTENzYnB1STdzeGFpREF2N1kvK1F2MjRP?=
+ =?utf-8?B?L1BJQ1M3cTl0SmtOQkhyTU1lSWhnYkRGMEVqNWlvR055bm1wTk1XN3ZKWUlr?=
+ =?utf-8?B?bE9IenljeE1RUG5TM0FtYlIzc0JvNzRzalhxVVFZbW5MTXp5clpDY2ZzMVY0?=
+ =?utf-8?B?cjRQSGRNUGxpV2FndEt2QzF3YmpESlprU3dVc1phWjZIWkxEM2c2VXFRTExP?=
+ =?utf-8?B?YjY5bXJDSnZzTkg4MHlVMENKMHJ4dExjd3ROQ3N3Y1dHbVR0bWFrMzRheVRX?=
+ =?utf-8?B?RWRXNW04Q3VVUHA4NHpVYUhGNk9xTmVGWDRZUDRFTUhXaFo0Z3UrSVZLVUd3?=
+ =?utf-8?B?TFVPKy9iS2hBL2JZOE5LVWRDWHNycW54YzMzRnMvWW9COFNjZjdxb0ppV1E1?=
+ =?utf-8?B?Q3pkVDZndG1FWit0VkpOZXNseDV4Yk9Nb0xWb1o1V0x3ajNlNzBlSmxZNkV3?=
+ =?utf-8?B?WTJvZmtSOTZXZ1VGRTZmbGw2YXNqUlJTUE5Ha2RHRC9PMjN2UnpYS1dJcTV1?=
+ =?utf-8?B?TUR6QnkvMEJTMDNlMHQyc0NXdUZLenZ1RFgxUkhoRWlKaDk1U2lsN0JrMVJy?=
+ =?utf-8?B?aWExR2F3Vm9LcU5tcWdiWXV3WFR2dmpxVlAvWkRndU1XTUplUGRIZEVoMXlH?=
+ =?utf-8?B?b2tkbDBTRzZYNndxUW80MittejlNWk5KOGR5ODM3SHcycGh5b25OZXJBMk9K?=
+ =?utf-8?B?bnlCSDU5Y3Z5dXpYY3Y4dm5NNTVIQy9pbmZoZU9BVEtFZVlqWk9kTlZRYmhv?=
+ =?utf-8?B?L25ZMHd3dnFsdWx5a2Q4S3ltZGF3TnFkdytlKzExOWs5ODM2alkwVFROSFNK?=
+ =?utf-8?B?Q0Rsa0R5R293dXV4SjNUZ2xxemtNNE1WSmJRVzJISzEzamhIVmJNeEpoT0hW?=
+ =?utf-8?B?ckVid2JIYzZPR3NWOGJlZFZWN0tjZit6NWRSdmF5cVJRalEvVmhic3VER2lX?=
+ =?utf-8?B?ZUgyNlBjUktLbEsvR0ZrWUxUOThCbEVDQkErY0Z2RGhISGZsYlVYVC9IdThW?=
+ =?utf-8?B?N1ZQc2lGdUtwdDk4Z1M1QmtqNmxnMVByK1VkcjAvUFQya0lidjR1M1R5VkQ1?=
+ =?utf-8?Q?z3nMiAJvTtCBzxtg450nmb3Vw?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20221111014244.1714148-1-vannapurve@google.com> <20221111014244.1714148-5-vannapurve@google.com>
-In-Reply-To: <20221111014244.1714148-5-vannapurve@google.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Mon, 14 Nov 2022 12:37:17 -0700
-Message-ID: <CAMkAt6qLC0BosvSN9Ri2XFYK65xH1E5sqJYNe6uAudb8U08rXw@mail.gmail.com>
-Subject: Re: [V1 PATCH 4/6] KVM: selftests: x86: Execute VMs with private memory
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, nikunj@amd.com, seanjc@google.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 510b7841-dad8-4fb8-d581-08dac677d243
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2022 19:38:35.6790
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vAP97Hqdp9D3fcTWug7lDJIkHG5dkVyKrUg9UhqaRAtWSdxBhjZefLbQcTEOVf2HTQPiIKw6Fq03MlMnkxBH6w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6802
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 6:43 PM Vishal Annapurve <vannapurve@google.com> wrote:
->
-> Introduce a set of APIs to execute VM with private memslots.
->
-> Host userspace APIs for:
-> 1) Setting up and executing VM having private memslots
-> 2) Backing/unbacking guest private memory
->
-> Guest APIs for:
-> 1) Changing memory mapping type
->
-> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> ---
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../kvm/include/x86_64/private_mem.h          |  37 +++
->  .../selftests/kvm/lib/x86_64/private_mem.c    | 211 ++++++++++++++++++
->  3 files changed, 249 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/include/x86_64/private_mem.h
->  create mode 100644 tools/testing/selftests/kvm/lib/x86_64/private_mem.c
->
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index 0172eb6cb6ee..57385ad58527 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -53,6 +53,7 @@ LIBKVM_STRING += lib/string_override.c
->  LIBKVM_x86_64 += lib/x86_64/apic.c
->  LIBKVM_x86_64 += lib/x86_64/handlers.S
->  LIBKVM_x86_64 += lib/x86_64/perf_test_util.c
-> +LIBKVM_x86_64 += lib/x86_64/private_mem.c
->  LIBKVM_x86_64 += lib/x86_64/processor.c
->  LIBKVM_x86_64 += lib/x86_64/svm.c
->  LIBKVM_x86_64 += lib/x86_64/ucall.c
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/private_mem.h b/tools/testing/selftests/kvm/include/x86_64/private_mem.h
-> new file mode 100644
-> index 000000000000..e556ded971fd
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/include/x86_64/private_mem.h
-> @@ -0,0 +1,37 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2022, Google LLC.
-> + */
-> +
-> +#ifndef SELFTEST_KVM_PRIVATE_MEM_H
-> +#define SELFTEST_KVM_PRIVATE_MEM_H
-> +
-> +#include <stdint.h>
-> +#include <kvm_util.h>
-> +
-> +void kvm_hypercall_map_shared(uint64_t gpa, uint64_t size);
-> +void kvm_hypercall_map_private(uint64_t gpa, uint64_t size);
-> +
-> +void vm_unback_private_mem(struct kvm_vm *vm, uint64_t gpa, uint64_t size);
-> +
-> +void vm_allocate_private_mem(struct kvm_vm *vm, uint64_t gpa, uint64_t size);
-> +
-> +typedef void (*guest_code_fn)(void);
-> +typedef void (*io_exit_handler)(struct kvm_vm *vm, uint32_t uc_arg1);
-> +
-> +struct test_setup_info {
-> +       uint64_t test_area_gpa;
-> +       uint64_t test_area_size;
-> +       uint32_t test_area_slot;
-> +};
-> +
-> +struct vm_setup_info {
-> +       enum vm_mem_backing_src_type test_mem_src;
-> +       struct test_setup_info test_info;
-> +       guest_code_fn guest_fn;
-> +       io_exit_handler ioexit_cb;
-> +};
-> +
-> +void execute_vm_with_private_test_mem(struct vm_setup_info *info);
-> +
-> +#endif /* SELFTEST_KVM_PRIVATE_MEM_H */
-> diff --git a/tools/testing/selftests/kvm/lib/x86_64/private_mem.c b/tools/testing/selftests/kvm/lib/x86_64/private_mem.c
-> new file mode 100644
-> index 000000000000..3076cae81804
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/lib/x86_64/private_mem.c
-> @@ -0,0 +1,211 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * tools/testing/selftests/kvm/lib/kvm_util.c
-> + *
-> + * Copyright (C) 2022, Google LLC.
-> + */
-> +#define _GNU_SOURCE /* for program_invocation_name */
-> +#include <fcntl.h>
-> +#include <limits.h>
-> +#include <sched.h>
-> +#include <signal.h>
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <sys/ioctl.h>
-> +
-> +#include <linux/compiler.h>
-> +#include <linux/kernel.h>
-> +#include <linux/kvm_para.h>
-> +
-> +#include <test_util.h>
-> +#include <kvm_util.h>
-> +#include <private_mem.h>
-> +#include <processor.h>
-> +
-> +static inline uint64_t __kvm_hypercall_map_gpa_range(uint64_t gpa, uint64_t size,
-> +       uint64_t flags)
-> +{
-> +       return kvm_hypercall(KVM_HC_MAP_GPA_RANGE, gpa, size >> PAGE_SHIFT, flags, 0);
-> +}
-> +
-> +static inline void kvm_hypercall_map_gpa_range(uint64_t gpa, uint64_t size,
-> +       uint64_t flags)
-> +{
-> +       uint64_t ret;
-> +
-> +       GUEST_ASSERT_2(IS_PAGE_ALIGNED(gpa) && IS_PAGE_ALIGNED(size), gpa, size);
-> +
-> +       ret = __kvm_hypercall_map_gpa_range(gpa, size, flags);
-> +       GUEST_ASSERT_1(!ret, ret);
-> +}
-> +
-> +void kvm_hypercall_map_shared(uint64_t gpa, uint64_t size)
-> +{
-> +       kvm_hypercall_map_gpa_range(gpa, size, KVM_MAP_GPA_RANGE_DECRYPTED);
-> +}
-> +
-> +void kvm_hypercall_map_private(uint64_t gpa, uint64_t size)
-> +{
-> +       kvm_hypercall_map_gpa_range(gpa, size, KVM_MAP_GPA_RANGE_ENCRYPTED);
-> +}
-> +
-> +static void vm_update_private_mem(struct kvm_vm *vm, uint64_t gpa, uint64_t size,
-> +       bool unback_mem)
-> +{
-> +       int restricted_fd;
-> +       uint64_t restricted_fd_offset, guest_phys_base, fd_offset;
-> +       struct kvm_enc_region enc_region;
-> +       struct kvm_userspace_memory_region_ext *region_ext;
-> +       struct kvm_userspace_memory_region *region;
-> +       int fallocate_mode = 0;
-> +       int ret;
-> +
-> +       region_ext = kvm_userspace_memory_region_ext_find(vm, gpa, gpa + size);
-> +       TEST_ASSERT(region_ext != NULL, "Region not found");
-> +       region = &region_ext->region;
-> +       TEST_ASSERT(region->flags & KVM_MEM_PRIVATE,
-> +               "Can not update private memfd for non-private memslot\n");
-> +       restricted_fd = region_ext->restricted_fd;
-> +       restricted_fd_offset = region_ext->restricted_offset;
-> +       guest_phys_base = region->guest_phys_addr;
-> +       fd_offset = restricted_fd_offset + (gpa - guest_phys_base);
-> +
-> +       if (unback_mem)
-> +               fallocate_mode = (FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE);
-> +
-> +       printf("restricted_fd %d fallocate_mode 0x%x for offset 0x%lx size 0x%lx\n",
-> +               restricted_fd, fallocate_mode, fd_offset, size);
-> +       ret = fallocate(restricted_fd, fallocate_mode, fd_offset, size);
-> +       TEST_ASSERT(ret == 0, "fallocate failed\n");
-> +       enc_region.addr = gpa;
-> +       enc_region.size = size;
-> +       if (unback_mem) {
-> +               printf("undoing encryption for gpa 0x%lx size 0x%lx\n", gpa, size);
-> +               vm_ioctl(vm, KVM_MEMORY_ENCRYPT_UNREG_REGION, &enc_region);
-> +       } else {
-> +               printf("doing encryption for gpa 0x%lx size 0x%lx\n", gpa, size);
-> +               vm_ioctl(vm, KVM_MEMORY_ENCRYPT_REG_REGION, &enc_region);
-> +       }
-> +}
-> +
-> +void vm_unback_private_mem(struct kvm_vm *vm, uint64_t gpa, uint64_t size)
-> +{
-> +       vm_update_private_mem(vm, gpa, size, true);
-> +}
-> +
-> +void vm_allocate_private_mem(struct kvm_vm *vm, uint64_t gpa, uint64_t size)
-> +{
-> +       vm_update_private_mem(vm, gpa, size, false);
-> +}
-> +
-> +static void handle_vm_exit_map_gpa_hypercall(struct kvm_vm *vm,
-> +                               struct kvm_vcpu *vcpu)
-> +{
-> +       uint64_t gpa, npages, attrs, size;
-> +
-> +       TEST_ASSERT(vcpu->run->hypercall.nr == KVM_HC_MAP_GPA_RANGE,
-> +               "Unhandled Hypercall %lld\n", vcpu->run->hypercall.nr);
-> +       gpa = vcpu->run->hypercall.args[0];
-> +       npages = vcpu->run->hypercall.args[1];
-> +       size = npages << MIN_PAGE_SHIFT;
-> +       attrs = vcpu->run->hypercall.args[2];
-> +       pr_info("Explicit conversion off 0x%lx size 0x%lx to %s\n", gpa, size,
-> +               (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED) ? "private" : "shared");
-> +
-> +       if (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED)
-> +               vm_allocate_private_mem(vm, gpa, size);
-> +       else
-> +               vm_unback_private_mem(vm, gpa, size);
-> +
-> +       vcpu->run->hypercall.ret = 0;
-> +}
-> +
-> +static void vcpu_work(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
-> +       struct vm_setup_info *info)
-> +{
-> +       struct ucall uc;
-> +       uint64_t cmd;
-> +
-> +       /*
-> +        * Loop until the guest is done.
-> +        */
-> +
-> +       while (true) {
-> +               vcpu_run(vcpu);
-> +
-> +               if (vcpu->run->exit_reason == KVM_EXIT_IO) {
-> +                       cmd = get_ucall(vcpu, &uc);
-> +                       if (cmd != UCALL_SYNC)
-> +                               break;
-> +
-> +                       TEST_ASSERT(info->ioexit_cb, "ioexit cb not present");
-> +                       info->ioexit_cb(vm, uc.args[1]);
-> +                       continue;
-> +               }
-
-Should this be integrated into the ucall library directly somehow?
-That way users of VMs with private memory do not need special
-handling?
-
-After Sean's series:
-https://lore.kernel.org/linux-arm-kernel/20220825232522.3997340-3-seanjc@google.com/
-we have a common get_ucall() that this check could be integrated into?
-
-> +
-> +               if (vcpu->run->exit_reason == KVM_EXIT_HYPERCALL) {
-> +                       handle_vm_exit_map_gpa_hypercall(vm, vcpu);
-> +                       continue;
-> +               }
-> +
-> +               TEST_FAIL("Unhandled VCPU exit reason %d\n",
-> +                       vcpu->run->exit_reason);
-> +               break;
-> +       }
-> +
-> +       if (vcpu->run->exit_reason == KVM_EXIT_IO && cmd == UCALL_ABORT)
-> +               TEST_FAIL("%s at %s:%ld, val = %lu", (const char *)uc.args[0],
-> +                         __FILE__, uc.args[1], uc.args[2]);
-> +}
-> +
-> +/*
-> + * Execute guest vm with private memory memslots.
-> + *
-> + * Input Args:
-> + *   info - pointer to a structure containing information about setting up a VM
-> + *     with private memslots
-> + *
-> + * Output Args: None
-> + *
-> + * Return: None
-> + *
-> + * Function called by host userspace logic in selftests to execute guest vm
-> + * logic. It will install test_mem_slot : containing the region of memory that
-> + * would be used to test private/shared memory accesses to a memory backed by
-> + * private memslots
-> + */
-> +void execute_vm_with_private_test_mem(struct vm_setup_info *info)
-> +{
-> +       struct kvm_vm *vm;
-> +       struct kvm_enable_cap cap;
-> +       struct kvm_vcpu *vcpu;
-> +       uint64_t test_area_gpa, test_area_size;
-> +       struct test_setup_info *test_info = &info->test_info;
-> +
-> +       TEST_ASSERT(info->guest_fn, "guest_fn not present");
-> +       vm = vm_create_with_one_vcpu(&vcpu, info->guest_fn);
-
-I am a little confused with how this library is going to work for SEV
-VMs that want to have UPM private memory eventually.
-
-Why should users of UPM be forced to use this very specific VM
-creation and vCPU run loop. In the patch
-https://lore.kernel.org/lkml/20220829171021.701198-1-pgonda@google.com/T/#m033ebc32df47a172bc6c46d4398b6c4387b7934d
-SEV VMs need to be created specially vm_sev_create_with_one_vcpu() but
-then callers can run the VM's vCPUs like other selftests.
-
-How do you see this working with SEV VMs?
-
-
-
-> +
-> +       vm_check_cap(vm, KVM_CAP_EXIT_HYPERCALL);
-> +       cap.cap = KVM_CAP_EXIT_HYPERCALL;
-> +       cap.flags = 0;
-> +       cap.args[0] = (1 << KVM_HC_MAP_GPA_RANGE);
-> +       vm_ioctl(vm, KVM_ENABLE_CAP, &cap);
-> +
-> +       TEST_ASSERT(test_info->test_area_size, "Test mem size not present");
-> +
-> +       test_area_size = test_info->test_area_size;
-> +       test_area_gpa = test_info->test_area_gpa;
-> +       vm_userspace_mem_region_add(vm, info->test_mem_src, test_area_gpa,
-> +               test_info->test_area_slot, test_area_size / vm->page_size,
-> +               KVM_MEM_PRIVATE);
-> +       vm_allocate_private_mem(vm, test_area_gpa, test_area_size);
-> +
-> +       pr_info("Mapping test memory pages 0x%zx page_size 0x%x\n",
-> +               test_area_size/vm->page_size, vm->page_size);
-> +       virt_map(vm, test_area_gpa, test_area_gpa, test_area_size/vm->page_size);
-> +
-> +       vcpu_work(vm, vcpu, info);
-> +
-> +       kvm_vm_free(vm);
-> +}
-> --
-> 2.38.1.431.g37b22c650d-goog
->
+PiBZb3UncmUgbWFraW5nIHRoZXNlIHNlcXVlbmNlIG51bWJlcnMgdW5uZWNlc3NhcmlseSBtYWdp
+Y2FsLg0KPiBBbmQgdGhleSBkb24ndCBuZWVkIHRvIGJlLg0KDQpJIHNlZSB0aGVtIGFzIG9wYXF1
+ZSB0b2tlbnMuICBVc2VyIGFza3MgdG8gbG9hZCAidGVzdCBzZXQgMiIgd2l0aCAiZWNobyAyID4g
+Y3VycmVudF9iYXRjaCINCmFuZCB0aGUgZHJpdmVyIGZpbmRzIHRoZSBmaWxlIGZvciB0aGUgZmYt
+bW0tc3MgdGhhdCBjb250YWlucyBiYXRjaCAyIG9mIHRlc3RzLg0KDQpOdW1iZXJzIGFyZSBwbGF1
+c2libGUgdG9rZW5zIC0gZXhjZXB0IGZvciB0aGUgc2VxdWVuY2UgaW1wbGljYXRpb24gLi4uIHlv
+dSBkb24ndA0KaGF2ZSB0byBzdGFydCBhdCBiYXRjaCAxLCBhbmQgeW91IGRvbid0IG5lZWQgdG8g
+Z28gaW4gYW55IHBhcnRpY3VsYXIgb3JkZXIuIEJ1dCByZWFsaXN0aWNhbGx5DQpwZW9wbGUgd2ls
+bCBydW4gezEuLk59IGluIG9yZGVyLCBhbmQgdGhlcmUncyBubyBoYXJtIGlmIHRoZXkgdGhpbmsg
+dGhleSBoYXZlIHRvIGRvIHRoYXQuDQoNCkZvciBUaGlhZ28ncyB1c2UgY2FzZSwgbnVtYmVycyBh
+cmUgYmV0dGVyIHRoYW4gZmlsZW5hbWVzIGJlY2F1c2UgdGhlIGNvbnRhaW5lciBydW5uaW5nDQp0
+aGUgdGVzdCBtYXkgbm90IGhhdmUgYWNjZXNzIHRvIHRoZSBkaXJlY3RvcnkgdG8gZmluZCB0aGUg
+ZmlsZW5hbWVzLg0KDQpCdXQgaWYgdGhpcyBpcyB0aGUgb25seSByb2FkYmxvY2sgdG8gdGFraW5n
+IHRoaXMgcGF0Y2ggc2VyaWVzLCB0aGVuIHdlIGNhbiBzd2l0Y2ggdG8gZmlsZW5hbWVzDQphbmQg
+bWFrZSBUaGlhZ28gZmluZCBzb21lIHdheSBmb3IgdGhlIGNvbnRhaW5lciB0byBiZSBnaXZlbiB0
+aGUgbGlzdCBvZiB0ZXN0cyB0byBydW4gaW4gdGhlDQpmb3JtIG9mIGZpbGVuYW1lcy4NCg0KLVRv
+bnkNCg==
