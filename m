@@ -2,98 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C2A6281C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6114A6281C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235836AbiKNN7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:59:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43708 "EHLO
+        id S236147AbiKNN7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:59:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiKNN7H (ORCPT
+        with ESMTP id S229740AbiKNN7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:59:07 -0500
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB87C6333;
-        Mon, 14 Nov 2022 05:59:06 -0800 (PST)
-Received: by mail-wr1-f44.google.com with SMTP id a14so18423223wru.5;
-        Mon, 14 Nov 2022 05:59:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iqBw4uJGnVX3z4DPc2jSDRa31QQsaamARtV+B+AB37w=;
-        b=TNCqiaBnJBJpI/0LXoXjEmi9uIHidQu7F3KZHxleNVdbhe4rpv93KtbyJx85HQj9MN
-         6KY6ofjpz0o7lSbjelubjxbdHSP6jlSauUENwQjJTsTCRrvx5M7LaFGsADCKWtxjyksX
-         YbH4ytiybXgGZ8962iJGGQgV8KAXV1XmaNVDxybyxwRJN9ovYOeuWDeSOZKgO8yaHg55
-         ScgtUn40Hp+bBaoUsBcpngBZ8DXinCTQ9f0723ZidjP47JLDB53RM0YygTX2gnXfTQT/
-         u2EmP/HDEBIcEX6wTW1ZYqB34FebpNrhv9SLgLx6802Ze9aiPvpXJ2Xh0dUUSSCwM2Of
-         hY5w==
-X-Gm-Message-State: ANoB5pkqkDmJc++yBvrmf/Kq8VsOlJyCNuuOrFggXMB+olD8GYtqlCvf
-        HXHaZU2oWRAa7PDHq00n+pg=
-X-Google-Smtp-Source: AA0mqf6sWl3Y3ybLQX3gzt/fpnJa5lC5OeEgLBiKOLq94WSSK5qCRn5EQdT6WADCZXcRKVREv3mgyQ==
-X-Received: by 2002:adf:fc8c:0:b0:235:9aae:35a6 with SMTP id g12-20020adffc8c000000b002359aae35a6mr7279816wrr.686.1668434345461;
-        Mon, 14 Nov 2022 05:59:05 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id g7-20020a056000118700b0022cd0c8c696sm9447356wrx.103.2022.11.14.05.59.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 05:59:04 -0800 (PST)
-Date:   Mon, 14 Nov 2022 13:59:03 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Cc:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>
-Subject: Re: [PATCH] iommu/hyper-v: Allow hyperv irq remapping without x2apic
-Message-ID: <Y3JJpyvCcrRZfJkV@liuwe-devbox-debian-v2>
-References: <1668020853-23950-1-git-send-email-nunodasneves@linux.microsoft.com>
- <Y255HhDbwbI/z5bJ@liuwe-devbox-debian-v2>
- <BYAPR21MB1688800D35F86D766567C1FAD7009@BYAPR21MB1688.namprd21.prod.outlook.com>
- <Y26F+H1SuJrad3Ra@liuwe-devbox-debian-v2>
- <BYAPR21MB168819214A20DF2E4835E763D7009@BYAPR21MB1688.namprd21.prod.outlook.com>
- <2f721208-d169-2baa-fa1f-b8450e80ddd7@linux.microsoft.com>
+        Mon, 14 Nov 2022 08:59:42 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAB0E5FA8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:59:41 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E447123A;
+        Mon, 14 Nov 2022 05:59:47 -0800 (PST)
+Received: from [10.57.39.18] (unknown [10.57.39.18])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2EF253F918;
+        Mon, 14 Nov 2022 05:59:39 -0800 (PST)
+Message-ID: <66dc097f-c568-bb50-1d93-dba812bf7091@arm.com>
+Date:   Mon, 14 Nov 2022 13:59:37 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2f721208-d169-2baa-fa1f-b8450e80ddd7@linux.microsoft.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH v12 1/2] drivers/coresight: Add UltraSoc System Memory
+ Buffer driver
+To:     hejunhao <hejunhao3@huawei.com>, kernel test robot <lkp@intel.com>,
+        mathieu.poirier@linaro.org, mike.leach@linaro.org,
+        leo.yan@linaro.org, jonathan.cameron@huawei.com,
+        john.garry@huawei.com
+Cc:     oe-kbuild-all@lists.linux.dev, coresight@lists.linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        lpieralisi@kernel.org, linuxarm@huawei.com, liuqi115@huawei.com,
+        f.fangjian@huawei.com, prime.zeng@hisilicon.com
+References: <20221109135008.9485-2-hejunhao3@huawei.com>
+ <202211120623.aFVBerTp-lkp@intel.com>
+ <a1343ef8-19f2-e3fc-35b7-02a989e093f5@arm.com>
+ <901ee9b4-f0b3-437e-fce9-be3c6c214afe@huawei.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <901ee9b4-f0b3-437e-fce9-be3c6c214afe@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 02:53:59PM -0800, Nuno Das Neves wrote:
-> On 11/11/2022 9:58 AM, Michael Kelley (LINUX) wrote:
-> > From: Wei Liu <wei.liu@kernel.org> Sent: Friday, November 11, 2022 9:27 AM
-[...]
+On 14/11/2022 13:06, hejunhao wrote:
 > 
-> I've tested this patch on these Azure SKUs:
-> - Standard_D2S_v2 (intel xapic)
-> - Standard_D4ds_v4 (intel xapic)
-> - Standard_D4ds_v5 (intel x2apic)
-> - Standard_D4ads_v5 (amd xapic)
 > 
-> I've tested with linux Dom0 (nested hyperv root partition) and as a
-> regular L1 guest.
+> On 2022/11/14 18:49, Suzuki K Poulose wrote:
+>> On 11/11/2022 22:06, kernel test robot wrote:
+>>> Hi Junhao,
+>>>
+>>> I love your patch! Perhaps something to improve:
+>>>
+>>> [auto build test WARNING on soc/for-next]
+>>> [also build test WARNING on linus/master v6.1-rc4 next-20221111]
+>>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>>> And when submitting patch, we suggest to use '--base' as documented in
+>>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>>
+>>> url: 
+>>> https://github.com/intel-lab-lkp/linux/commits/Junhao-He/Add-support-for-UltraSoc-System-Memory-Buffer/20221109-215158
+>>> base: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git 
+>>> for-next
+>>> patch link: 
+>>> https://lore.kernel.org/r/20221109135008.9485-2-hejunhao3%40huawei.com
+>>> patch subject: [PATCH v12 1/2] drivers/coresight: Add UltraSoc System 
+>>> Memory Buffer driver
+>>> config: arm64-randconfig-s033-20221111
+>>> compiler: aarch64-linux-gcc (GCC) 12.1.0
+>>> reproduce:
+>>>          wget 
+>>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>>          chmod +x ~/bin/make.cross
+>>>          # apt-get install sparse
+>>>          # sparse version: v0.6.4-39-gce1a6720-dirty
+>>>          # 
+>>> https://github.com/intel-lab-lkp/linux/commit/49ede03fd874b65deca5382ea84c3377188136da
+>>>          git remote add linux-review 
+>>> https://github.com/intel-lab-lkp/linux
+>>>          git fetch --no-tags linux-review 
+>>> Junhao-He/Add-support-for-UltraSoc-System-Memory-Buffer/20221109-215158
+>>>          git checkout 49ede03fd874b65deca5382ea84c3377188136da
+>>>          # save the config file
+>>>          mkdir build_dir && cp config build_dir/.config
+>>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 
+>>> make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' 
+>>> O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwtracing/coresight/
+>>>
+>>> If you fix the issue, kindly add following tag where applicable
+>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>>
+>>> sparse warnings: (new ones prefixed by >>)
+>>>>> drivers/hwtracing/coresight/ultrasoc-smb.c:113:33: sparse: sparse: 
+>>>>> cast removes address space '__iomem' of expression
+>>>>> drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: sparse: 
+>>>>> incorrect type in argument 1 (different address spaces) @@ expected 
+>>>>> void const * @@     got void [noderef] __iomem * @@
+>>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: 
+>>> expected void const *
+>>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: got 
+>>> void [noderef] __iomem *
+>>>>> drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: sparse: 
+>>>>> incorrect type in argument 1 (different address spaces) @@ expected 
+>>>>> void const * @@     got void [noderef] __iomem * @@
+>>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: 
+>>> expected void const *
+>>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: got 
+>>> void [noderef] __iomem *
+>>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: 
+>>> sparse: incorrect type in argument 2 (different address spaces) 
+>>> @@     expected void const * @@     got void [noderef] __iomem * @@
+>>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: 
+>>> expected void const *
+>>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: got 
+>>> void [noderef] __iomem *
+>>>>> drivers/hwtracing/coresight/ultrasoc-smb.c:463:14: sparse: sparse: 
+>>>>> incorrect type in assignment (different address spaces) @@ expected 
+>>>>> void [noderef] __iomem *base @@     got void * @@
+>>>     drivers/hwtracing/coresight/ultrasoc-smb.c:463:14: sparse: 
+>>> expected void [noderef] __iomem *base
+>>>     drivers/hwtracing/coresight/ultrasoc-smb.c:463:14: sparse: got 
+>>> void *
+>>>
+>>> vim +/__iomem +113 drivers/hwtracing/coresight/ultrasoc-smb.c
+>>>
+>>>      89
+>>>      90    static ssize_t smb_read(struct file *file, char __user 
+>>> *data, size_t len,
+>>>      91                loff_t *ppos)
+>>>      92    {
+>>>      93        struct smb_drv_data *drvdata = 
+>>> container_of(file->private_data,
+>>>      94                        struct smb_drv_data, miscdev);
+>>>      95        struct smb_data_buffer *sdb = &drvdata->sdb;
+>>>      96        struct device *dev = &drvdata->csdev->dev;
+>>>      97        ssize_t to_copy = 0;
+>>>      98
+>>>      99        mutex_lock(&drvdata->mutex);
+>>>     100
+>>>     101        if (!sdb->data_size) {
+>>>     102            smb_update_data_size(drvdata);
+>>>     103            if (!sdb->data_size)
+>>>     104                goto out;
+>>>     105        }
+>>>     106
+>>>     107        to_copy = min(sdb->data_size, len);
+>>>     108
+>>>     109        /* Copy parts of trace data when read pointer wrap 
+>>> around SMB buffer */
+>>>     110        if (sdb->rd_offset + to_copy > sdb->buf_size)
+>>>     111            to_copy = sdb->buf_size - sdb->rd_offset;
+>>>     112
+>>>   > 113        if (copy_to_user(data, (void *)sdb->buf_base + 
+>>> sdb->rd_offset,
+>>>     114                 to_copy)) {
+>>>     115            dev_dbg(dev, "Failed to copy data to user\n");
+>>>     116            to_copy = -EFAULT;
+>>>     117            goto out;
+>>>     118        }
+>>>     119
+>>
+>> Please could we replace this with copy_to_user_fromio() ?
+>>
+>> Suzuki
+>>
+>> _______________________________________________
+>> CoreSight mailing list -- coresight@lists.linaro.org
+>> To unsubscribe send an email to coresight-leave@lists.linaro.org
+>> .
+>>
+> Hi Suzuki,
+> 
+> This is a cache memory,  due to improper use of "__iomem" , the sparse 
+> generates warnings.
+> I has fix it in v13.
+> https://lore.kernel.org/lkml/20221114090316.63157-2-hejunhao3@huawei.com/
+
+I don't see a ChangeLog mentioning that this change. Please make sure
+you accurately describe the changes (especially fixes like these).
+
+Thanks
+Suzuki
+
+> 
+> Best regards,
+> Junhao.
+> 
+> 
 > 
 
-Okay. I think your tests are good.
-
-Michael, do you have any further concern?
-
-Thanks,
-Wei.
