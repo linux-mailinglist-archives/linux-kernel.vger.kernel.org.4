@@ -2,83 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93262628B1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:09:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2BA628B0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:08:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237606AbiKNVJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 16:09:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45702 "EHLO
+        id S237401AbiKNVIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 16:08:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237556AbiKNVJU (ORCPT
+        with ESMTP id S237315AbiKNVIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 16:09:20 -0500
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AE7F01C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:09:18 -0800 (PST)
-Received: by mail-pf1-x44a.google.com with SMTP id cw4-20020a056a00450400b00561ec04e77aso6671790pfb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:09:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EZnzM6HV3BgbBycTCsM2gbe0FFNFRdGwj//bA/m+O8Y=;
-        b=eRkzWvFLUemkH6BcT+JLRuVOTwZY5HaqVQUVJsjop2oOPdRwgcYwOc/2o/EKY762K8
-         qJEDKBgHgRZNp6e81MxqPjSwZ3cqHtmmycDj4l+YJygUhBmEJRWOp+mex2uTmAQVLrh9
-         9kJByM4oXQ+gWZbXdrLfgKi8PRgNRLqwqOHnNGmWtocEyisQdy71kqAl2WQcF8XGoIxY
-         hVSeb0iQ5Wf4nw9cZoH9yfx/d4DI6pIwrO61Jk4qrRvzARYP+G4BR8I5UVJAg2FgOxye
-         zX11sBlS+/Ba3XsqQliSus04XyHVjvVwkuMquby/mQt6fXfYixf2mTuNpUqCP4L4HB0Q
-         125A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EZnzM6HV3BgbBycTCsM2gbe0FFNFRdGwj//bA/m+O8Y=;
-        b=V5mTXaG4qP+ksRBfcva3i7HLrfzTqX4T0RCeM2RFtoKHg9NxlJx1a465+bSwhX6qYW
-         QCUn9NoXbVzbTLdOrRKgNTT3dOl/kz4SGHHvoyw6edB0x+N4bAvMFpJBE4Et/AcCA13E
-         LRArOJS3MJz1Ni9UPrRsspYUOvXXcrEnTpurGL3qOJpYI7fB7pNnLqU8Opue38GbcQLd
-         lPNL/1VHY3yfsS+Y9FP3KVcJC1q6yhv5mYMScsrw+rFJMxcLjOyXCGYb7vwbBI+bfmmU
-         HfG0rO/N2AVKxhsb9ETNeEKVW4HlmjiX99pYBwfnC13L2cherWmgigBgZm/CFXnjV928
-         5THg==
-X-Gm-Message-State: ANoB5pm4MzVFCnEZmmKccfNG7PfMBmG46X0+wE11xKXl1haXLqeKNCkp
-        BtoF3QA43CcMbcGIyaMl3wQi42jgp5zm
-X-Google-Smtp-Source: AA0mqf7tqo7a1oMDS2CUc5SH8zur9ItiylG+U9LZh0MyrGN4/zypb6UhLcBYL9L9w/PaHAt9qLzeaaNlv7qB
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:553:438f:b86a:87f])
- (user=irogers job=sendgmr) by 2002:a62:6446:0:b0:565:c122:b63 with SMTP id
- y67-20020a626446000000b00565c1220b63mr14979790pfb.49.1668460157676; Mon, 14
- Nov 2022 13:09:17 -0800 (PST)
-Date:   Mon, 14 Nov 2022 13:07:23 -0800
-In-Reply-To: <20221114210723.2749751-1-irogers@google.com>
-Message-Id: <20221114210723.2749751-11-irogers@google.com>
-Mime-Version: 1.0
-References: <20221114210723.2749751-1-irogers@google.com>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH v3 10/10] perf list: Add json output option
-From:   Ian Rogers <irogers@google.com>
-To:     Weilin Wang <weilin.wang@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Xin Gao <gaoxin@cdjrlc.com>, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        Mon, 14 Nov 2022 16:08:00 -0500
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2051.outbound.protection.outlook.com [40.107.22.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DF41114;
+        Mon, 14 Nov 2022 13:07:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T4/VOTO17YLDRa2YPhGrq36/1Ri2L5txaiOB51bb4YRQ4NTWQcfI/RwPzl9DpZF4LSF8GbmpId6fyCGzEBiIeFEZ/COpiN4ky9qQGU81p/RFXSXCgx747bOixsq83qLzeHE+TWMPK5sqVRwwpw3bIBo9yA/hLTqz67e//0Tr2hCWHz/ntfmxj/lcGklLW8t5r2sSFtw/j0Ncj5972taTo8sZe+xGImpdaO6+pbaZzdDT5Td+/Dwib3696XfVVdGpa8sHhjLFl45nTh8SDpc9ADOA6yzmt6xSd4xSiqwmZcrqPljW/0ZFDYC5j7jK4VoxIXqZA7psfm0PWQZDE6cYNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UjxcSIvL12nFFTzPtR1SUf+QUdxX+clFcMTQR2hZNJA=;
+ b=KbvKgo4Gy4MXOprrIilytacjgJ9SfeAzUwI8Ag1AhIrHn8L8bME86hfaZ2fV1kniTCeAsnUFbBjJBcsJP+INVwJ2VoBhjbEqU+u64dyu38DPGtLR83LhRHTgUEw/lm0/mUA5adk2OnJiWvLwojAOaD+RLGyN0W0/j7Gs3Bpn9n5YhNPgdSkm1DzNzP1ZeSJ4Cd+PV+fP9cXQ2EKI6HqsHial0tVrNkTQcPMFZaWNpquD3MMCXHlNtqzZ9LwkUBbrafJ/rTdf4O3gEqkMWjqsV7UJdDjCDmBf4vjurJK9nutx+KmD6FcYdOes0T8Eg5sIcIfRk+s7atIr/HfhRjawZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UjxcSIvL12nFFTzPtR1SUf+QUdxX+clFcMTQR2hZNJA=;
+ b=z6CWTFQcdWLl+PQr4Of4S0sbZPiQbUzbfkmcJ8UK0HyZNjFTN+od1gY1Vo8X4w0xWZCQDVtxv3zwlFpYEF807j/LdyNS6ngaYvkLCX7L1AIWfm04BxbusC5+6j/OzgW/mb2zdo21iVuQHhivB88CatMIrK3S2bWTJ1BDI3Wa7o+UwZ8QvxdIhP/1yKcaLlDgda/vHj7wI3B2WxpQPO1Y6WA4gnokJ9i419rhpwrOxmJzAfmb+HfF3SGOAY2fELK+8PHrG89AKz3g3KJQXesYn7rEgvAKC+H3cymzr6MaOuu4IpIZfa8UTkOLDHUKIlXtT3Pj1Ez/8XPWEdfZiqWzHQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by PAWPR03MB9177.eurprd03.prod.outlook.com (2603:10a6:102:341::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.15; Mon, 14 Nov
+ 2022 21:07:54 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::e9d6:22e1:489a:c23d]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::e9d6:22e1:489a:c23d%4]) with mapi id 15.20.5813.018; Mon, 14 Nov 2022
+ 21:07:54 +0000
+From:   Sean Anderson <sean.anderson@seco.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: [PATCH] phy: aquantia: Configure SERDES mode by default
+Date:   Mon, 14 Nov 2022 16:07:39 -0500
+Message-Id: <20221114210740.3332937-1-sean.anderson@seco.com>
+X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MN2PR07CA0012.namprd07.prod.outlook.com
+ (2603:10b6:208:1a0::22) To DB7PR03MB4972.eurprd03.prod.outlook.com
+ (2603:10a6:10:7d::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB7PR03MB4972:EE_|PAWPR03MB9177:EE_
+X-MS-Office365-Filtering-Correlation-Id: bd78b9d9-4fdf-444e-ba71-08dac6844bc5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HChHyHr9pwFIvihC4jAZJgx0dbiMA4ChIdbG9YkYfHGB0/uq1UxAPgMuStAdwz/+inivtqWOtM4UNXIigXsNpkbLCT5HCw+HqSK32m5CvOAfkLJojhEhTzaqgewDfA7TzRM3yHvnclhys37garLx5eUeAvL60kzPCkNWCtv6SbtwonwuAgpeODty4SdP66GovNQgxfT1sKnzrZ0ygHPqrciJFXSnfCs26UhhF+rllsECHbpupjc+61klxktojVh7GB4EYvVxkf0DLTNHGAUn8T7X1Obbo5SPgTm2e5FNc28pxFH8YS+MVrXXwvtcC5ER4mcNDiyLoPDfgYWnPEypqH+XKToG/KioBalkFMkPLt5Adu9EKK3khqIf+3iBryC4FNiJ0l8Y0/nVrphad7oduQIwkr1QOAeQZBmouDEd1IPG5Zq++3mX9CU7sIGiPAosvzG8FB/58ERrs7uwB3G1w8uruOUrm0/YHoVHsw7qCbiWUHW6AmXPIZdVOBxpmm4nyeHsVHrMdHj9aFskmbbJOf+Tz/0YDnjvRQKJ9WpwYtvY05Uh3ytX7U3nskettXlXxE8q4Ng/t9RFz1nwm/AhuD1cfR4T0CmAFifZDdt+zmjT4H1TSSm7xEj5jSg7vPTAP8kZQieyjmS61UMahBIWNG0QVCq7Pv5rna8070+pVDR9/IWRKlRCEZDjlZ60/4jIX/SGB2+9M3CpF6jZeBrp03sFt0lIRGE1RnHyhAhEI4CLPH6zc6KASxxBafvJiM3O
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(396003)(376002)(39850400004)(366004)(346002)(451199015)(41300700001)(8676002)(4326008)(316002)(6512007)(66946007)(66476007)(66556008)(36756003)(44832011)(5660300002)(7416002)(2616005)(52116002)(8936002)(186003)(1076003)(26005)(38350700002)(86362001)(38100700002)(2906002)(6666004)(107886003)(478600001)(6486002)(6506007)(54906003)(110136005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EyD0NFc8HAtQXizyjCgRdoR7xq7Ic8kk7P+xKwTXntww1UxLHaxEHZK/t3HN?=
+ =?us-ascii?Q?7M3eBwlm0j4daZmhkXhIamnsUX/FFqt9lNpmuK1QWtJoscgZtKpV2A68sAK3?=
+ =?us-ascii?Q?Ib//TIxE9bahvjDjHigBgbqbl/dSXY6Tgh21wB4rVWIEc0EO6wiv/4hkjTeQ?=
+ =?us-ascii?Q?GuynH8EksYOvNOqp5Ef5ffTwlj/w3lpHTGZN4X372xxNFCa1OPmXrMOmYta7?=
+ =?us-ascii?Q?Hh4JHZ7AR6x8Ez94xKFW71dL5mt3XCIHrpmCkZd76+G1vpYiDv4hlXjKAFnP?=
+ =?us-ascii?Q?gUEVShaYZB48QakfD8597PHwlD/h5s9nWYiDeAjJd3qpo2SNsAI4WrmGJCYH?=
+ =?us-ascii?Q?TJa5YvKOJ68Ax4W1dMCLyi4HfyLgaOMlccav4Wgfz+j8f1xdhz+9ALt0YsB+?=
+ =?us-ascii?Q?aN8eVTusvHDwLQg2N2WHIu26HUfX/ksNnlr/fUnnvIpxVrTDUz75/wU/5o6V?=
+ =?us-ascii?Q?bS+eeLI7/NGfdRV7MO51S6Otzi5sRqndgLELnf94Pb4yrU5nB3+/dHxIipnM?=
+ =?us-ascii?Q?i21iE0/H/PiE3e871v4A5cebRL3OZcv9RcjX6Ao09cQQkS2+cCYLbgx3E4Wg?=
+ =?us-ascii?Q?s5PSJ4dOzrnCXODY2IEnLPYAdTZ7KQFLvRfVjrKZyXNNP2FwrTlaxDSsVU/5?=
+ =?us-ascii?Q?d7RIFsBMhG+BpiX0UMA4cHVs+5gWLPrCINATBrpTKwSbLGQk7PefhWyZT+OS?=
+ =?us-ascii?Q?6J74VKEEaQ7NUgx8fPD3IA1J7HPxzXHNhUp8U0OYgtPSMvpSPGfHCdePN/7e?=
+ =?us-ascii?Q?nD+RfY7IpNtZL1INHI0jEp9k4aEenqUqY/XS90zYu/dbCTDr4I/9Ltcsjh8M?=
+ =?us-ascii?Q?vc5Ea6Xl86uXtDL/0jHf9lhl++SIiSfv0swuy5IMs5nRX4klvZUfUSCaOtNc?=
+ =?us-ascii?Q?4yKyAhhqQ2l1j5JapoxIC3s35hB+5EEPY5W+3sZw3bEx5+CPrX8PxvUW+v2Q?=
+ =?us-ascii?Q?fuUnTX7trJYrZ/ZBb9Z0wInHcxcTikLReT5EcZk/CJcpc50mk2rZ7aN3Draq?=
+ =?us-ascii?Q?wupk3x6dRR+euo5nNdsML86dC8exQ1aQ7D5qhin3XVL7X52VBT5L8m32fJtQ?=
+ =?us-ascii?Q?oavHfur+NT5/00uq4ze0HYhXRJyIwKV/TecS/+b3/q3oNQcvXFNJFtIsNYnG?=
+ =?us-ascii?Q?QhRFc0o7LY9T1yU7D2oK+0bWP93Fl37Up14l8FpfIuepZqEmHDN4aZp4TU+I?=
+ =?us-ascii?Q?WuUrQiYcEux2nfhrC5zAcYEmJBriwNffEA/8ra0TxXRpv9hVOp2Xrbta1GNh?=
+ =?us-ascii?Q?Vuibs0RmiDdR/a0bZstk2QLOlLFIx7iLeUbs5gXSPDry33ptM0vdkOPuejbj?=
+ =?us-ascii?Q?rm0rg87tlyjSkPx2LE0KFLg0eNs5lvEnIMbDsNvy18pCn6P3rdtwITRzr7/I?=
+ =?us-ascii?Q?QXtiW1gFge9rfIoegEcD2YkATjAD1AYfbTZH1rLqGVMEC4ojmg2ySm3FstYF?=
+ =?us-ascii?Q?i7Q1Bn62tNGx1rVXOc31Rj/uo4hVJRmTZNmyS5mGkqCdpF1rCbVK+y01U+iT?=
+ =?us-ascii?Q?WFwRpPaQ3o2HRheDfTByLvt+TrtgQjsrMyT36wZJWp/Qw5DaXbAkjjLx/R3U?=
+ =?us-ascii?Q?W55CcjjhIQrH2DS2YogY2TOp/N0W7pw+PKzOTBEzWwLtUbzETRecMH29Ao8m?=
+ =?us-ascii?Q?YQ=3D=3D?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd78b9d9-4fdf-444e-ba71-08dac6844bc5
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 21:07:53.9953
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HfJKD7NIoAV+U+wzvjsXoHiOr+hpoQbV/GAtWenEKIiqyBOppUWs2oEnlu9JJUuKGnSlFXvjLUZP8Eo0GXcTVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR03MB9177
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,409 +119,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Output events and metrics in a json format by overriding the print
-callbacks. Currently other command line options aren't supported and
-metrics are repeated once per metric group.
+When autonegotiation completes, the phy interface will be set based on
+the global config register for that speed. If the SERDES mode is set to
+something which the MAC does not support, then the link will not come
+up. The register reference says that the SERDES mode should default to
+XFI, but for some phys lower speeds default to XFI/2 (5G XFI). To ensure
+the link comes up correctly, configure the SERDES mode.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+We use the same configuration for all interfaces. We don't advertise
+any speeds faster than the interface mode, so they won't be selected.
+We default to pause-based rate adaptation, but enable USXGMII rate
+adaptation for USXGMII. I'm not sure if this is correct for
+SGMII; it might need USXGMII adaptation instead.
+
+This effectively disables switching interface mode depending on the
+speed, in favor of using rate adaptation. If this is not desired, we
+would need some kind of API to configure things.
+
+Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 ---
- tools/perf/Documentation/perf-list.txt |   4 +
- tools/perf/builtin-list.c              | 294 ++++++++++++++++++++-----
- 2 files changed, 240 insertions(+), 58 deletions(-)
 
-diff --git a/tools/perf/Documentation/perf-list.txt b/tools/perf/Documentation/perf-list.txt
-index 44a819af573d..43263ca88ff7 100644
---- a/tools/perf/Documentation/perf-list.txt
-+++ b/tools/perf/Documentation/perf-list.txt
-@@ -43,6 +43,10 @@ Print deprecated events. By default the deprecated events are hidden.
- Print PMU events and metrics limited to the specific PMU name.
- (e.g. --unit cpu, --unit msr, --unit cpu_core, --unit cpu_atom)
+ drivers/net/phy/aquantia_main.c | 65 +++++++++++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+
+diff --git a/drivers/net/phy/aquantia_main.c b/drivers/net/phy/aquantia_main.c
+index 47a76df36b74..88a3defb632c 100644
+--- a/drivers/net/phy/aquantia_main.c
++++ b/drivers/net/phy/aquantia_main.c
+@@ -109,6 +109,10 @@
+ #define VEND1_GLOBAL_CFG_RATE_ADAPT_NONE	0
+ #define VEND1_GLOBAL_CFG_RATE_ADAPT_USX		1
+ #define VEND1_GLOBAL_CFG_RATE_ADAPT_PAUSE	2
++#define VEND1_GLOBAL_CFG_SERDES_MODE		GENMASK(2, 0)
++#define VEND1_GLOBAL_CFG_SERDES_MODE_XFI	0
++#define VEND1_GLOBAL_CFG_SERDES_MODE_SGMII	3
++#define VEND1_GLOBAL_CFG_SERDES_MODE_OCSGMII	4
  
-+-j::
-+--json::
-+Output in json format.
-+
- [[EVENT_MODIFIERS]]
- EVENT MODIFIERS
- ---------------
-diff --git a/tools/perf/builtin-list.c b/tools/perf/builtin-list.c
-index 12811fc40a30..aec139f7fbb2 100644
---- a/tools/perf/builtin-list.c
-+++ b/tools/perf/builtin-list.c
-@@ -19,6 +19,7 @@
- #include "util/strlist.h"
- #include <subcmd/pager.h>
- #include <subcmd/parse-options.h>
-+#include <stdarg.h>
- #include <stdio.h>
- 
- /**
-@@ -228,10 +229,176 @@ static void default_print_metric(void *ps,
- 	}
+ #define VEND1_GLOBAL_RSVD_STAT1			0xc885
+ #define VEND1_GLOBAL_RSVD_STAT1_FW_BUILD_ID	GENMASK(7, 4)
+@@ -558,6 +562,63 @@ static void aqr107_chip_info(struct phy_device *phydev)
+ 		   fw_major, fw_minor, build_id, prov_id);
  }
  
-+struct json_print_state {
-+	/** Should a separator be printed prior to the next item? */
-+	bool need_sep;
-+};
-+
-+static void json_print_start(void *print_state __maybe_unused)
++static int aqr107_global_config_init(struct phy_device *phydev)
 +{
-+	printf("[\n");
-+}
++	u16 mask = VEND1_GLOBAL_CFG_RATE_ADAPT | VEND1_GLOBAL_CFG_SERDES_MODE;
++	u16 val, serdes_mode, rate_adapt = VEND1_GLOBAL_CFG_RATE_ADAPT_PAUSE;
++	u16 config_regs[] = {
++		VEND1_GLOBAL_CFG_10M,
++		VEND1_GLOBAL_CFG_100M,
++		VEND1_GLOBAL_CFG_1G,
++		VEND1_GLOBAL_CFG_2_5G,
++		VEND1_GLOBAL_CFG_5G,
++		VEND1_GLOBAL_CFG_10G,
++	};
++	int i, ret;
 +
-+static void json_print_end(void *ps)
-+{
-+	struct json_print_state *print_state = ps;
++	switch (phydev->interface) {
++	case PHY_INTERFACE_MODE_SGMII:
++	case PHY_INTERFACE_MODE_1000BASEKX:
++		rate_adapt = VEND1_GLOBAL_CFG_RATE_ADAPT_USX;
++		serdes_mode = VEND1_GLOBAL_CFG_SERDES_MODE_SGMII;
++		break;
 +
-+	printf("%s]\n", print_state->need_sep ? "\n" : "");
-+}
++	case PHY_INTERFACE_MODE_2500BASEX:
++		serdes_mode = VEND1_GLOBAL_CFG_SERDES_MODE_OCSGMII;
++		break;
 +
-+static void fix_escape_printf(const char *fmt, ...)
-+{
-+	va_list args;
-+	char buf[2048];
-+	size_t buf_pos = 0;
++	case PHY_INTERFACE_MODE_USXGMII:
++		rate_adapt = VEND1_GLOBAL_CFG_RATE_ADAPT_USX;
++		fallthrough;
++	case PHY_INTERFACE_MODE_XGMII:
++	case PHY_INTERFACE_MODE_10GKR:
++	case PHY_INTERFACE_MODE_10GBASER:
++	case PHY_INTERFACE_MODE_XAUI:
++	case PHY_INTERFACE_MODE_RXAUI:
++		serdes_mode = VEND1_GLOBAL_CFG_SERDES_MODE_XFI;
++		break;
 +
-+	va_start(args, fmt);
-+	for (size_t fmt_pos = 0; fmt_pos < strlen(fmt); fmt_pos++) {
-+		switch (fmt[fmt_pos]) {
-+		case '%': {
-+			const char *s = va_arg(args, const char*);
++	default:
++		WARN_ON_ONCE(1);
++		return -EINVAL;
++	}
 +
-+			fmt_pos++;
-+			assert(fmt[fmt_pos] == 's');
-+			for (size_t s_pos = 0; s_pos < strlen(s); s_pos++) {
-+				switch (s[s_pos]) {
-+				case '\\':
-+					__fallthrough;
-+				case '\"':
-+					buf[buf_pos++] = '\\';
-+					assert(buf_pos < sizeof(buf));
-+					__fallthrough;
-+				default:
-+					buf[buf_pos++] = s[s_pos];
-+					assert(buf_pos < sizeof(buf));
-+					break;
-+				}
-+			}
-+			break;
++	val = FIELD_PREP(VEND1_GLOBAL_CFG_RATE_ADAPT, rate_adapt);
++	val |= FIELD_PREP(VEND1_GLOBAL_CFG_SERDES_MODE, serdes_mode);
++
++	for (i = 0; i < ARRAY_SIZE(config_regs); i++) {
++		ret = phy_modify_mmd(phydev, MDIO_MMD_VEND1, config_regs[i],
++				     mask, val);
++		if (ret) {
++			phydev_err(phydev, "could not initialize register %x\n",
++				   config_regs[i]);
++			return ret;
 +		}
-+		default:
-+			buf[buf_pos++] = fmt[fmt_pos];
-+			assert(buf_pos < sizeof(buf));
-+			break;
-+		}
 +	}
-+	va_end(args);
-+	buf[buf_pos] = '\0';
-+	fputs(buf, stdout);
++
++	return 0;
 +}
 +
-+static void json_print_event(void *ps, const char *pmu_name, const char *topic,
-+			     const char *event_name, const char *event_alias,
-+			     const char *scale_unit,
-+			     bool deprecated, const char *event_type_desc,
-+			     const char *desc, const char *long_desc,
-+			     const char *encoding_desc,
-+			     const char *metric_name, const char *metric_expr)
-+{
-+	struct json_print_state *print_state = ps;
-+	bool need_sep = false;
-+
-+	printf("%s{\n", print_state->need_sep ? ",\n" : "");
-+	print_state->need_sep = true;
-+	if (pmu_name) {
-+		fix_escape_printf("\t\"Unit\": \"%s\"", pmu_name);
-+		need_sep = true;
-+	}
-+	if (topic) {
-+		fix_escape_printf("%s\t\"Topic\": \"%s\"", need_sep ? ",\n" : "", topic);
-+		need_sep = true;
-+	}
-+	if (event_name) {
-+		fix_escape_printf("%s\t\"EventName\": \"%s\"", need_sep ? ",\n" : "", event_name);
-+		need_sep = true;
-+	}
-+	if (event_alias && strlen(event_alias)) {
-+		fix_escape_printf("%s\t\"EventAlias\": \"%s\"", need_sep ? ",\n" : "", event_alias);
-+		need_sep = true;
-+	}
-+	if (scale_unit && strlen(scale_unit)) {
-+		fix_escape_printf("%s\t\"ScaleUnit\": \"%s\"", need_sep ? ",\n" : "",
-+				  scale_unit);
-+		need_sep = true;
-+	}
-+	if (event_type_desc) {
-+		fix_escape_printf("%s\t\"EventType\": \"%s\"", need_sep ? ",\n" : "",
-+				  event_type_desc);
-+		need_sep = true;
-+	}
-+	if (deprecated) {
-+		fix_escape_printf("%s\t\"Deprecated\": \"%s\"", need_sep ? ",\n" : "",
-+				  deprecated ? "1" : "0");
-+		need_sep = true;
-+	}
-+	if (desc) {
-+		fix_escape_printf("%s\t\"BriefDescription\": \"%s\"", need_sep ? ",\n" : "", desc);
-+		need_sep = true;
-+	}
-+	if (long_desc) {
-+		fix_escape_printf("%s\t\"PublicDescription\": \"%s\"", need_sep ? ",\n" : "",
-+				  long_desc);
-+		need_sep = true;
-+	}
-+	if (encoding_desc) {
-+		fix_escape_printf("%s\t\"Encoding\": \"%s\"", need_sep ? ",\n" : "", encoding_desc);
-+		need_sep = true;
-+	}
-+	if (metric_name) {
-+		fix_escape_printf("%s\t\"MetricName\": \"%s\"", need_sep ? ",\n" : "", metric_name);
-+		need_sep = true;
-+	}
-+	if (metric_expr) {
-+		fix_escape_printf("%s\t\"MetricExpr\": \"%s\"", need_sep ? ",\n" : "", metric_expr);
-+		need_sep = true;
-+	}
-+	printf("%s}", need_sep ? "\n" : "");
-+}
-+
-+static void json_print_metric(void *ps __maybe_unused, const char *group,
-+			      const char *name, const char *desc,
-+			      const char *long_desc, const char *expr,
-+			      const char *unit)
-+{
-+	struct json_print_state *print_state = ps;
-+	bool need_sep = false;
-+
-+	printf("%s{\n", print_state->need_sep ? ",\n" : "");
-+	print_state->need_sep = true;
-+	if (group) {
-+		fix_escape_printf("\t\"MetricGroup\": \"%s\"", group);
-+		need_sep = true;
-+	}
-+	if (name) {
-+		fix_escape_printf("%s\t\"MetricName\": \"%s\"", need_sep ? ",\n" : "", name);
-+		need_sep = true;
-+	}
-+	if (expr) {
-+		fix_escape_printf("%s\t\"MetricExpr\": \"%s\"", need_sep ? ",\n" : "", expr);
-+		need_sep = true;
-+	}
-+	if (unit) {
-+		fix_escape_printf("%s\t\"ScaleUnit\": \"%s\"", need_sep ? ",\n" : "", unit);
-+		need_sep = true;
-+	}
-+	if (desc) {
-+		fix_escape_printf("%s\t\"BriefDescription\": \"%s\"", need_sep ? ",\n" : "", desc);
-+		need_sep = true;
-+	}
-+	if (long_desc) {
-+		fix_escape_printf("%s\t\"PublicDescription\": \"%s\"", need_sep ? ",\n" : "",
-+				  long_desc);
-+		need_sep = true;
-+	}
-+	printf("%s}", need_sep ? "\n" : "");
-+}
-+
- int cmd_list(int argc, const char **argv)
+ static int aqr107_config_init(struct phy_device *phydev)
  {
- 	int i, ret = 0;
--	struct print_state ps = {};
-+	struct print_state default_ps = {};
-+	struct print_state json_ps = {};
-+	void *ps = &default_ps;
- 	struct print_callbacks print_cb = {
- 		.print_start = default_print_start,
- 		.print_end = default_print_end,
-@@ -240,15 +407,17 @@ int cmd_list(int argc, const char **argv)
- 	};
- 	const char *hybrid_name = NULL;
- 	const char *unit_name = NULL;
-+	bool json = false;
- 	struct option list_options[] = {
--		OPT_BOOLEAN(0, "raw-dump", &ps.name_only, "Dump raw events"),
--		OPT_BOOLEAN('d', "desc", &ps.desc,
-+		OPT_BOOLEAN(0, "raw-dump", &default_ps.name_only, "Dump raw events"),
-+		OPT_BOOLEAN('j', "json", &json, "JSON encode events and metrics"),
-+		OPT_BOOLEAN('d', "desc", &default_ps.desc,
- 			    "Print extra event descriptions. --no-desc to not print."),
--		OPT_BOOLEAN('v', "long-desc", &ps.long_desc,
-+		OPT_BOOLEAN('v', "long-desc", &default_ps.long_desc,
- 			    "Print longer event descriptions."),
--		OPT_BOOLEAN(0, "details", &ps.detailed,
-+		OPT_BOOLEAN(0, "details", &default_ps.detailed,
- 			    "Print information on the perf event names and expressions used internally by events."),
--		OPT_BOOLEAN(0, "deprecated", &ps.deprecated,
-+		OPT_BOOLEAN(0, "deprecated", &default_ps.deprecated,
- 			    "Print deprecated events."),
- 		OPT_STRING(0, "cputype", &hybrid_name, "hybrid cpu type",
- 			   "Limit PMU or metric printing to the given hybrid PMU (e.g. core or atom)."),
-@@ -272,28 +441,37 @@ int cmd_list(int argc, const char **argv)
+ 	int ret;
+@@ -581,6 +642,10 @@ static int aqr107_config_init(struct phy_device *phydev)
+ 	if (!ret)
+ 		aqr107_chip_info(phydev);
  
- 	setup_pager();
- 
--	if (!ps.name_only)
-+	if (!default_ps.name_only)
- 		setup_pager();
- 
--	ps.desc = !ps.long_desc;
--	ps.last_topic = strdup("");
--	assert(ps.last_topic);
--	ps.visited_metrics = strlist__new(NULL, NULL);
--	assert(ps.visited_metrics);
--	if (unit_name)
--		ps.pmu_glob = strdup(unit_name);
--	else if (hybrid_name) {
--		ps.pmu_glob = perf_pmu__hybrid_type_to_pmu(hybrid_name);
--		if (!ps.pmu_glob)
--			pr_warning("WARNING: hybrid cputype is not supported!\n");
-+	if (json) {
-+		print_cb = (struct print_callbacks){
-+			.print_start = json_print_start,
-+			.print_end = json_print_end,
-+			.print_event = json_print_event,
-+			.print_metric = json_print_metric,
-+		};
-+		ps = &json_ps;
-+	} else {
-+		default_ps.desc = !default_ps.long_desc;
-+		default_ps.last_topic = strdup("");
-+		assert(default_ps.last_topic);
-+		default_ps.visited_metrics = strlist__new(NULL, NULL);
-+		assert(default_ps.visited_metrics);
-+		if (unit_name)
-+			default_ps.pmu_glob = strdup(unit_name);
-+		else if (hybrid_name) {
-+			default_ps.pmu_glob = perf_pmu__hybrid_type_to_pmu(hybrid_name);
-+			if (!default_ps.pmu_glob)
-+				pr_warning("WARNING: hybrid cputype is not supported!\n");
-+		}
- 	}
--
- 	print_cb.print_start(&ps);
- 
- 	if (argc == 0) {
--		ps.metrics = true;
--		ps.metricgroups = true;
--		print_events(&print_cb, &ps);
-+		default_ps.metrics = true;
-+		default_ps.metricgroups = true;
-+		print_events(&print_cb, ps);
- 		goto out;
- 	}
- 
-@@ -301,32 +479,32 @@ int cmd_list(int argc, const char **argv)
- 		char *sep, *s;
- 
- 		if (strcmp(argv[i], "tracepoint") == 0)
--			print_tracepoint_events(&print_cb, &ps);
-+			print_tracepoint_events(&print_cb, ps);
- 		else if (strcmp(argv[i], "hw") == 0 ||
- 			 strcmp(argv[i], "hardware") == 0)
--			print_symbol_events(&print_cb, &ps, PERF_TYPE_HARDWARE,
-+			print_symbol_events(&print_cb, ps, PERF_TYPE_HARDWARE,
- 					event_symbols_hw, PERF_COUNT_HW_MAX);
- 		else if (strcmp(argv[i], "sw") == 0 ||
- 			 strcmp(argv[i], "software") == 0) {
--			print_symbol_events(&print_cb, &ps, PERF_TYPE_SOFTWARE,
-+			print_symbol_events(&print_cb, ps, PERF_TYPE_SOFTWARE,
- 					event_symbols_sw, PERF_COUNT_SW_MAX);
--			print_tool_events(&print_cb, &ps);
-+			print_tool_events(&print_cb, ps);
- 		} else if (strcmp(argv[i], "cache") == 0 ||
- 			 strcmp(argv[i], "hwcache") == 0)
--			print_hwcache_events(&print_cb, &ps);
-+			print_hwcache_events(&print_cb, ps);
- 		else if (strcmp(argv[i], "pmu") == 0)
--			print_pmu_events(&print_cb, &ps);
-+			print_pmu_events(&print_cb, ps);
- 		else if (strcmp(argv[i], "sdt") == 0)
--			print_sdt_events(&print_cb, &ps);
-+			print_sdt_events(&print_cb, ps);
- 		else if (strcmp(argv[i], "metric") == 0 || strcmp(argv[i], "metrics") == 0) {
--			ps.metricgroups = false;
--			ps.metrics = true;
--			metricgroup__print(&print_cb, &ps);
-+			default_ps.metricgroups = false;
-+			default_ps.metrics = true;
-+			metricgroup__print(&print_cb, ps);
- 		} else if (strcmp(argv[i], "metricgroup") == 0 ||
- 			   strcmp(argv[i], "metricgroups") == 0) {
--			ps.metricgroups = true;
--			ps.metrics = false;
--			metricgroup__print(&print_cb, &ps);
-+			default_ps.metricgroups = true;
-+			default_ps.metrics = false;
-+			metricgroup__print(&print_cb, ps);
- 		} else if ((sep = strchr(argv[i], ':')) != NULL) {
- 			int sep_idx;
- 
-@@ -338,41 +516,41 @@ int cmd_list(int argc, const char **argv)
- 			}
- 
- 			s[sep_idx] = '\0';
--			ps.pmu_glob = s;
--			ps.event_glob = s + sep_idx + 1;
--			print_tracepoint_events(&print_cb, &ps);
--			print_sdt_events(&print_cb, &ps);
--			ps.metrics = true;
--			ps.metricgroups = true;
--			metricgroup__print(&print_cb, &ps);
-+			default_ps.pmu_glob = s;
-+			default_ps.event_glob = s + sep_idx + 1;
-+			print_tracepoint_events(&print_cb, ps);
-+			print_sdt_events(&print_cb, ps);
-+			default_ps.metrics = true;
-+			default_ps.metricgroups = true;
-+			metricgroup__print(&print_cb, ps);
- 			free(s);
- 		} else {
- 			if (asprintf(&s, "*%s*", argv[i]) < 0) {
- 				printf("Critical: Not enough memory! Trying to continue...\n");
- 				continue;
- 			}
--			ps.event_glob = s;
--			print_symbol_events(&print_cb, &ps, PERF_TYPE_HARDWARE,
-+			default_ps.event_glob = s;
-+			print_symbol_events(&print_cb, ps, PERF_TYPE_HARDWARE,
- 					event_symbols_hw, PERF_COUNT_HW_MAX);
--			print_symbol_events(&print_cb, &ps, PERF_TYPE_SOFTWARE,
-+			print_symbol_events(&print_cb, ps, PERF_TYPE_SOFTWARE,
- 					event_symbols_sw, PERF_COUNT_SW_MAX);
--			print_tool_events(&print_cb, &ps);
--			print_hwcache_events(&print_cb, &ps);
--			print_pmu_events(&print_cb, &ps);
--			print_tracepoint_events(&print_cb, &ps);
--			print_sdt_events(&print_cb, &ps);
--			ps.metrics = true;
--			ps.metricgroups = true;
--			metricgroup__print(&print_cb, &ps);
-+			print_tool_events(&print_cb, ps);
-+			print_hwcache_events(&print_cb, ps);
-+			print_pmu_events(&print_cb, ps);
-+			print_tracepoint_events(&print_cb, ps);
-+			print_sdt_events(&print_cb, ps);
-+			default_ps.metrics = true;
-+			default_ps.metricgroups = true;
-+			metricgroup__print(&print_cb, ps);
- 			free(s);
- 		}
- 	}
- 
- out:
--	print_cb.print_end(&ps);
--	free(ps.pmu_glob);
--	free(ps.last_topic);
--	free(ps.last_metricgroups);
--	strlist__delete(ps.visited_metrics);
-+	print_cb.print_end(ps);
-+	free(default_ps.pmu_glob);
-+	free(default_ps.last_topic);
-+	free(default_ps.last_metricgroups);
-+	strlist__delete(default_ps.visited_metrics);
- 	return ret;
++	ret = aqr107_global_config_init(phydev);
++	if (ret)
++		return ret;
++
+ 	return aqr107_set_downshift(phydev, MDIO_AN_VEND_PROV_DOWNSHIFT_DFLT);
  }
+ 
 -- 
-2.38.1.431.g37b22c650d-goog
+2.35.1.1320.gc452695387.dirty
 
