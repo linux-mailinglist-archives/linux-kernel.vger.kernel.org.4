@@ -2,92 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2853B6277D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F40206277D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235750AbiKNIfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:35:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
+        id S236546AbiKNIgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:36:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236394AbiKNIfD (ORCPT
+        with ESMTP id S236545AbiKNIgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:35:03 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18746B20;
-        Mon, 14 Nov 2022 00:35:01 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.77])
-        by gateway (Coremail) with SMTP id _____8AxSti1_XFjdtgGAA--.18915S3;
-        Mon, 14 Nov 2022 16:35:01 +0800 (CST)
-Received: from [10.20.42.77] (unknown [10.20.42.77])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxFle0_XFj3m4SAA--.31378S3;
-        Mon, 14 Nov 2022 16:35:00 +0800 (CST)
-Subject: Re: [PATCH V5] PCI: loongson: Skip scanning unavailable child devices
-To:     =?UTF-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        wanghongliang <wanghongliang@loongson.cn>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221114074346.23008-1-liupeibao@loongson.cn>
- <3eb09d86.900e.1847534872f.Coremail.chenhuacai@loongson.cn>
-From:   Liu Peibao <liupeibao@loongson.cn>
-Message-ID: <091d18b8-fe7c-bdeb-351c-85607c82a9d6@loongson.cn>
-Date:   Mon, 14 Nov 2022 16:35:00 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 14 Nov 2022 03:36:01 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CAC1C114;
+        Mon, 14 Nov 2022 00:36:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668414961; x=1699950961;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=fdpZZ4r1hTVkoO3kGE4DlZQf60aaP2bmV66mBFHDQ/U=;
+  b=C2Wg0o2p64l9epkj4axYH6U+R/sMR/Du/H79RR1+XV7jxrn/V+dK5TL4
+   +XlL1RyOmLSpy2K/5o/FBAJd4vDn5/IDArmo0LyEwCNdMPEMjNiFZ67b7
+   KFY3Asrw+q01CbnV7BGS0eDdYle87O6AGv+WRKz3x9L7NrCRNhJo8saUA
+   iWyYVU7v9iFcSpJwDQ7ajNvlfOa4oHXI+hhWtjQeReX91Hl0OrVjvzFUs
+   uh/stjv8jfHBKK5DICrzCYZYORd5CgWAWi2h0VSPC4I1bc6iujbxDXJ+A
+   5YV2gkDLofyLkjn16G7LXMluPiLXZVsOOKMziu9mhnZ9BXg526AQK7eTG
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="295277104"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="295277104"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 00:36:00 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="967483826"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="967483826"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.254.211.184]) ([10.254.211.184])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 00:35:56 -0800
+Message-ID: <b39171e6-4af3-6102-2207-aad57dc92226@linux.intel.com>
+Date:   Mon, 14 Nov 2022 16:35:35 +0800
 MIME-Version: 1.0
-In-Reply-To: <3eb09d86.900e.1847534872f.Coremail.chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH v2 3/6] perf vendor events arm64: Add cache metrics
+ for neoverse-n2
+To:     Jing Zhang <renyu.zj@linux.alibaba.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Zhuo Song <zhuo.song@linux.alibaba.com>
+References: <1668411720-3581-1-git-send-email-renyu.zj@linux.alibaba.com>
+ <1668411720-3581-4-git-send-email-renyu.zj@linux.alibaba.com>
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxFle0_XFj3m4SAA--.31378S3
-X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQAKCmNw3mQO9QAAsT
-X-Coremail-Antispam: 1Uk129KBjvJXoW7uFyxWF43ur4DJryUWF47CFg_yoW8JFy3p3
-        4ay3Wqkr1UCryUGws5Wry7CFy3X398G3s3JFWDKa4vk34DZwn8Xas5uF4jkrWqvFWFqa4j
-        9r4UurnYgayUt3DanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
-        07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
-        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07jFa0PUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+In-Reply-To: <1668411720-3581-4-git-send-email-renyu.zj@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/14/22 4:14 PM, 陈华才 wrote:
-> Hi, Peibao,
-> 
-> 
->> -----原始邮件-----
->> 发件人: "Liu Peibao" <liupeibao@loongson.cn>
->> 发送时间:2022-11-14 15:43:46 (星期一)
->> 收件人: "Bjorn Helgaas" <bhelgaas@google.com>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Lorenzo Pieralisi" <lpieralisi@kernel.org>, "Krzysztof Wilczyński" <kw@linux.com>, "Jiaxun Yang" <jiaxun.yang@flygoat.com>, "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>
->> 抄送: "Huacai Chen" <chenhuacai@loongson.cn>, "Jianmin Lv" <lvjianmin@loongson.cn>, "Yinbo Zhu" <zhuyinbo@loongson.cn>, wanghongliang <wanghongliang@loongson.cn>, "Liu Peibao" <liupeibao@loongson.cn>, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
->> 主题: [PATCH V5] PCI: loongson: Skip scanning unavailable child devices
->>
->> The PCI Controller of 2K1000 could not mask devices by setting vender ID or
-> I think this patch is needed by both LS2K500 and LS2K1000, so replace 2K1000 with "LS2K" or "Loongson-2K" or "LS2K500/LS2K1000" maybe better. If new version is needed, please change this, thanks.
-> 
 
-LS2K500 does not need this as there are no on chip PCI devices.
 
-BR,
-Peibao
+On 11/14/2022 3:41 PM, Jing Zhang wrote:
+> Add cache related metrics.
+> 
+> Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+> ---
+>   .../arch/arm64/arm/neoverse-n2/metrics.json        | 77 ++++++++++++++++++++++
+>   1 file changed, 77 insertions(+)
+> 
+> diff --git a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+> index 324ca12..1690ef6 100644
+> --- a/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+> +++ b/tools/perf/pmu-events/arch/arm64/arm/neoverse-n2/metrics.json
+> @@ -54,5 +54,82 @@
+>           "BriefDescription": "The rate of DTLB Walks to the overall TLB lookups",
+>           "MetricGroup": "TLB",
+>           "MetricName": "dtlb_walk_rate"
+> +    },
+> +    {
+> +        "MetricExpr": "L1I_CACHE_REFILL / INST_RETIRED * 1000",
+> +        "PublicDescription": "The rate of L1 I-Cache misses per kilo instructions",
+> +        "BriefDescription": "The rate of L1 I-Cache misses per kilo instructions",
+> +        "MetricGroup": "Cache",
+> +        "MetricName": "l1i_cache_mpki"
+> +    },
+> +    {
+> +        "MetricExpr": "L1I_CACHE_REFILL / L1I_CACHE",
+> +        "PublicDescription": "The rate of L1 I-Cache misses to the overall L1 I-Cache",
+> +        "BriefDescription": "The rate of L1 I-Cache misses to the overall L1 I-Cache",
+> +        "MetricGroup": "Cache",
+> +        "MetricName": "l1i_cache_miss_rate"
+> +    },
+> +    {
+> +        "MetricExpr": "L1D_CACHE_REFILL / INST_RETIRED * 1000",
+> +        "PublicDescription": "The rate of L1 D-Cache misses per kilo instructions",
+> +        "BriefDescription": "The rate of L1 D-Cache misses per kilo instructions",
+> +        "MetricGroup": "Cache",
+> +        "MetricName": "l1d_cache_mpki"
+> +    },
+> +    {
+> +        "MetricExpr": "L1D_CACHE_REFILL / L1D_CACHE",
+> +        "PublicDescription": "The rate of L1 D-Cache misses to the overall L1 D-Cache",
+> +        "BriefDescription": "The rate of L1 D-Cache misses to the overall L1 D-Cache",
+> +        "MetricGroup": "Cache",
+> +        "MetricName": "l1d_cache_miss_rate"
+> +    },
+> +    {
+> +        "MetricExpr": "L2D_CACHE_REFILL / INST_RETIRED * 1000",
+> +        "PublicDescription": "The rate of L2 D-Cache misses per kilo instructions",
+> +        "BriefDescription": "The rate of L2 D-Cache misses per kilo instructions",
+> +        "MetricGroup": "Cache",
+> +        "MetricName": "l2d_cache_mpki"
+> +    },
+> +    {
+> +        "MetricExpr": "L2D_CACHE_REFILL / L2D_CACHE",
+> +        "PublicDescription": "The rate of L2 D-Cache misses to the overall L2 D-Cache",
+> +        "BriefDescription": "The rate of L2 D-Cache misses to the overall L2 D-Cache",
+> +        "MetricGroup": "Cache",
+> +        "MetricName": "l2d_cache_miss_rate"
+> +    },
+> +    {
+> +        "MetricExpr": "L3D_CACHE_REFILL / INST_RETIRED * 1000",
+> +        "PublicDescription": "The rate of L3 D-Cache misses per kilo instructions",
+> +        "BriefDescription": "The rate of L3 D-Cache misses per kilo instructions",
+> +        "MetricGroup": "Cache",
+> +        "MetricName": "l3d_cache_mpki"
+> +    },
+> +    {
+> +        "MetricExpr": "L3D_CACHE_REFILL / L3D_CACHE",
+> +        "PublicDescription": "The rate of L3 D-Cache misses to the overall L3 D-Cache",
+> +        "BriefDescription": "The rate of L3 D-Cache misses to the overall L3 D-Cache",
+> +        "MetricGroup": "Cache",
+> +        "MetricName": "l3d_cache_miss_rate"
+> +    },
+> +    {
+> +        "MetricExpr": "LL_CACHE_MISS_RD / INST_RETIRED * 1000",
+> +        "PublicDescription": "The rate of LL Cache read misses per kilo instructions",
+> +        "BriefDescription": "The rate of LL Cache read misses per kilo instructions",
+> +        "MetricGroup": "Cache",
+> +        "MetricName": "ll_cache_read_mpki"
+> +    },
+> +    {
+> +        "MetricExpr": "LL_CACHE_MISS_RD / LL_CACHE_RD",
+> +        "PublicDescription": "The rate of LL Cache read misses to the overall LL Cache read",
+> +        "BriefDescription": "The rate of LL Cache read misses to the overall LL Cache read",
+> +        "MetricGroup": "Cache",
+> +        "MetricName": "ll_cache_read_miss_rate"
+> +    },
+> +    {
+> +        "MetricExpr": "(LL_CACHE_RD - LL_CACHE_MISS_RD) / LL_CACHE_RD",
+> +        "PublicDescription": "The rate of LL Cache read hit to the overall LL Cache read",
+> +        "BriefDescription": "The rate of LL Cache read hit to the overall LL Cache read",
+> +        "MetricGroup": "Cache",
+> +        "MetricName": "ll_cache_read_hit_rate"
+>       }
+>   ]
+> \ No newline at end of file
 
+It is better to fix this by adding a newline at the end of the file.
+
+-- 
+Zhengjun Xing
