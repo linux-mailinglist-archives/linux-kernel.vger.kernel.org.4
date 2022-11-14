@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F27628558
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B344662855A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237691AbiKNQas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:30:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
+        id S237714AbiKNQaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:30:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237569AbiKNQ3v (ORCPT
+        with ESMTP id S237607AbiKNQaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:29:51 -0500
+        Mon, 14 Nov 2022 11:30:15 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1FC2252D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:29:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2092922BC4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:29:44 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1668443382;
@@ -22,29 +22,30 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lXMXbp7RkCm+6HR9dgXj+chNQzy16FhmR2CfzYfqcKY=;
-        b=bbR2W4gqB1076ROKgh/MNgK01Tzv0Le3BX+Zotvf/ft2eI7wlxLJhjLW27gCrMzbsLG/gK
-        G6r5Ad9lmV0s2P8unlytWuKvcYuADR72fClD57tKzaEOi4ndiE3ME2QYSR4JJ9wNEherg6
-        7tC8+dinHlxyjiWfl9whO2u8jrBXBwL6pikjf/NN3WKm/FcyiDbUCLXKoz1CWpWWPlciex
-        Fyals1BFl9+dtKFxw0Yn3wBjC1bSlRo93qnu9ieRsXPWK+JWE8S+SlJy9Iyq8NrItyqIwB
-        PdLhEsG4AH8UF/7XHTyr/lxgxttkKw6egNT60YIJaHsVGkarmdfNjMo+y8sF9A==
+        bh=wX56Rx4ehD7yCLYC+HBYrPWlmwQCTi9+gNx/cMRdAa0=;
+        b=sZwXHYkHvPbktNSwjxUK5aj2mlUfsNem40DSF6jkIhmjnLqme07Bj37zy8BIOHUrp4R+kO
+        z20l7qtc9/VbGba0euziTCjOck6y0KeieHFYZ16r4/5p3EUfZkyVMuYj/ZUI1Y9PQXqyKQ
+        wwabfaBCwER2N2R8NdsQJIhHmtea3R6RtskJewsP9Sc3cDiAnrz/ibxX+tysUT3L3qoZ9a
+        RTuLJLASQj//Ycg2JFB4X8jCBVC8rTaTv/+ou5+jjJl98bUO4W74oj0ghdFP/CzB+UUTZK
+        sV2lPIpF5ion3n4mLc5PiZdySngafhsq9WtLsLgbX/eTUODx2a9RiD+3L4b+Pw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1668443382;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=lXMXbp7RkCm+6HR9dgXj+chNQzy16FhmR2CfzYfqcKY=;
-        b=0FQ3W38V4gG8pEPSTtVp12zhC1wqEbepo4UKy77fjui7MHnQj6A/VCbbcUMV+WhYXnre+L
-        x+7lL5FXwnoLC6DQ==
+        bh=wX56Rx4ehD7yCLYC+HBYrPWlmwQCTi9+gNx/cMRdAa0=;
+        b=YSUY3x9QKkaBKpLI3HuYgJ3L+uxIygG746+BhVG6JRy2hyD9v0E6waIFwmYOUybnOdJ3Al
+        G7H0jZldXWqYGJBA==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH printk v4 19/39] printk: console_device: use srcu console list iterator
-Date:   Mon, 14 Nov 2022 17:35:12 +0106
-Message-Id: <20221114162932.141883-20-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH printk v4 20/39] console: introduce console_is_registered()
+Date:   Mon, 14 Nov 2022 17:35:13 +0106
+Message-Id: <20221114162932.141883-21-john.ogness@linutronix.de>
 In-Reply-To: <20221114162932.141883-1-john.ogness@linutronix.de>
 References: <20221114162932.141883-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -59,52 +60,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use srcu console list iteration for console list traversal. It is
-acceptable because the consoles might come and go at any time.
-Strict synchronizing with console registration code would not bring
-any advantage over srcu.
+Currently it is not possible for drivers to detect if they have
+already successfully registered their console. Several drivers
+have multiple paths that lead to console registration. To avoid
+attempting a 2nd registration (which leads to a WARN), drivers
+are implementing their own solution.
 
-Document why the console_lock is still necessary. Note that this
-is a preparatory change for when console_lock no longer provides
-synchronization for the console list.
+Introduce console_is_registered() so drivers can easily identify
+if their console is currently registered. A _locked() variant
+is also provided if the caller is already holding the
+console_list_lock.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 Reviewed-by: Petr Mladek <pmladek@suse.com>
 ---
- kernel/printk/printk.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ include/linux/console.h | 28 ++++++++++++++++++++++++++++
+ kernel/printk/printk.c  |  2 +-
+ 2 files changed, 29 insertions(+), 1 deletion(-)
 
+diff --git a/include/linux/console.h b/include/linux/console.h
+index c1ca461d088a..f716e1dd9eaf 100644
+--- a/include/linux/console.h
++++ b/include/linux/console.h
+@@ -228,6 +228,34 @@ static inline void console_srcu_write_flags(struct console *con, short flags)
+ 	WRITE_ONCE(con->flags, flags);
+ }
+ 
++/* Variant of console_is_registered() when the console_list_lock is held. */
++static inline bool console_is_registered_locked(const struct console *con)
++{
++	lockdep_assert_console_list_lock_held();
++	return !hlist_unhashed(&con->node);
++}
++
++/*
++ * console_is_registered - Check if the console is registered
++ * @con:	struct console pointer of console to check
++ *
++ * Context: Process context. May sleep while acquiring console list lock.
++ * Return: true if the console is in the console list, otherwise false.
++ *
++ * If false is returned for a console that was previously registered, it
++ * can be assumed that the console's unregistration is fully completed,
++ * including the exit() callback after console list removal.
++ */
++static inline bool console_is_registered(const struct console *con)
++{
++	bool ret;
++
++	console_list_lock();
++	ret = console_is_registered_locked(con);
++	console_list_unlock();
++	return ret;
++}
++
+ /**
+  * for_each_console_srcu() - Iterator over registered consoles
+  * @con:	struct console pointer used as loop cursor
 diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index f536233d8234..fb609a19f797 100644
+index fb609a19f797..e770b1ede6c9 100644
 --- a/kernel/printk/printk.c
 +++ b/kernel/printk/printk.c
-@@ -3076,15 +3076,25 @@ struct tty_driver *console_device(int *index)
- {
- 	struct console *c;
- 	struct tty_driver *driver = NULL;
-+	int cookie;
+@@ -3414,7 +3414,7 @@ static int unregister_console_locked(struct console *console)
+ 	/* Disable it unconditionally */
+ 	console_srcu_write_flags(console, console->flags & ~CON_ENABLED);
  
-+	/*
-+	 * Take console_lock to serialize device() callback with
-+	 * other console operations. For example, fg_console is
-+	 * modified under console_lock when switching vt.
-+	 */
- 	console_lock();
--	for_each_console(c) {
-+
-+	cookie = console_srcu_read_lock();
-+	for_each_console_srcu(c) {
- 		if (!c->device)
- 			continue;
- 		driver = c->device(c, index);
- 		if (driver)
- 			break;
+-	if (hlist_unhashed(&console->node)) {
++	if (!console_is_registered_locked(console)) {
+ 		console_unlock();
+ 		return -ENODEV;
  	}
-+	console_srcu_read_unlock(cookie);
-+
- 	console_unlock();
- 	return driver;
- }
 -- 
 2.30.2
 
