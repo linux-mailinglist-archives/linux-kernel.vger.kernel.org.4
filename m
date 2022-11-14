@@ -2,350 +2,376 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8027A6276DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35176276EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236073AbiKNH6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 02:58:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
+        id S235995AbiKNIAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:00:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235756AbiKNH5v (ORCPT
+        with ESMTP id S235540AbiKNIA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 02:57:51 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA946226
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:57:49 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso7290540wmo.1
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:57:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cs80pL0FNsV+Wgi6hPChFI+8VMTRJO85rWzAI3KBgao=;
-        b=hgbaLZliXFzQ6RizxfDuJr2/w1TT9J4Hm+oEc1uN4iqxECeMWSW/UyIeRBLcQ3fX2e
-         Nu8Fq0dUGopr1Z4N17r42q2ciucEUFBcoi2XU5Stpzbm0iPyWhzn0VlOAom7Sxo7CN2B
-         87gvFS9uEadKHnYw6A2d2FaQjXr/CauQcHzAVYpWuqzBfu6ey5rLa85cBqkxba/RKLt+
-         B2Lao7RorJfsHOQ4oWzdvwpApl0vdoAQQFDRfKjbv/BRqQNf2DtbM9/7SSIzvmrMJRwq
-         m7Ozg/22gyAxfHzHfVJnBU91UOE5w08krfgoj5/cPwmPnEHtbyI9FLaVVPBlmocYtJTC
-         lTFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cs80pL0FNsV+Wgi6hPChFI+8VMTRJO85rWzAI3KBgao=;
-        b=tcIHxO/BwO5YVahi4YyXpqeaFpkoaVR2ydKJWhM5fI9gf+2u4jMoiPgKiU1eSblUJ2
-         pSWOS5503HyXsegOIqYsN2/BkJhnUGAxufxXDBzju3yVgCG/ySvdsFOMvEF+9hlqBOTv
-         Iy0CJlOo8CXQ10xEMTtlX1eBHwUMDJOllj+0r/4PGEuoN1dNVUO1IPRyrWg1HgaW06IX
-         RvtGuSXworUVpXd9BDHvzW8x+AgTj2ej6/ZsX1BPasQEjv13o5U7UNSHNt/c8w6lz2aa
-         zS4qAw0O1XyHWZ8V5rE/r6AuRKqI9lv571KdKfhXkaDbuVvTdt7i5+gPZl+l9ARV4Tek
-         BJ0g==
-X-Gm-Message-State: ANoB5pnGJtrdCbejXtXyU5mWCWLXHpCYqd1dE9v1lBnnXjXZFHW4umGP
-        TIDsolTalLHFRprk78iBkLWgECIZ2G0BZtLh
-X-Google-Smtp-Source: AA0mqf5+JTaE77iFPmnzXQOYZEKbzB24WxiZa0Eehw1FtIfzdr7IHe2pJye0ooX/oVbPxp2rA4Et3g==
-X-Received: by 2002:a05:600c:1c06:b0:3c3:77c2:cfff with SMTP id j6-20020a05600c1c0600b003c377c2cfffmr6888796wms.171.1668412668146;
-        Sun, 13 Nov 2022 23:57:48 -0800 (PST)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id p25-20020a05600c1d9900b003c64c186206sm11617768wms.16.2022.11.13.23.57.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 23:57:47 -0800 (PST)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Lee Jones <lee@kernel.org>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v9 2/2] mfd: max597x: Add support for MAX5970 and MAX5978
-Date:   Mon, 14 Nov 2022 08:57:39 +0100
-Message-Id: <20221114075739.4117439-3-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221114075739.4117439-1-Naresh.Solanki@9elements.com>
-References: <20221114075739.4117439-1-Naresh.Solanki@9elements.com>
+        Mon, 14 Nov 2022 03:00:28 -0500
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE350B3;
+        Mon, 14 Nov 2022 00:00:26 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=32;SR=0;TI=SMTPD_---0VUjZSxU_1668412818;
+Received: from 30.240.96.240(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VUjZSxU_1668412818)
+          by smtp.aliyun-inc.com;
+          Mon, 14 Nov 2022 16:00:20 +0800
+Message-ID: <9b6e1098-3d0a-d01c-ede2-344730a9450e@linux.alibaba.com>
+Date:   Mon, 14 Nov 2022 16:00:17 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH v5 2/2] arm64: support batched/deferred tlb shootdown
+ during page reclamation
+To:     Yicong Yang <yangyicong@huawei.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        anshuman.khandual@arm.com, linux-doc@vger.kernel.org
+Cc:     corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
+        punit.agrawal@bytedance.com, linux-kernel@vger.kernel.org,
+        darren@os.amperecomputing.com, yangyicong@hisilicon.com,
+        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
+        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        Barry Song <21cnbao@gmail.com>, wangkefeng.wang@huawei.com,
+        prime.zeng@hisilicon.com, Barry Song <v-songbaohua@oppo.com>,
+        Nadav Amit <namit@vmware.com>, Mel Gorman <mgorman@suse.de>
+References: <20221028081255.19157-1-yangyicong@huawei.com>
+ <20221028081255.19157-3-yangyicong@huawei.com>
+From:   haoxin <xhao@linux.alibaba.com>
+In-Reply-To: <20221028081255.19157-3-yangyicong@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-Implement a regulator driver with IRQ support for fault management.
-Written against documentation [1] and [2] and tested on real hardware.
-
-Every channel has its own regulator supplies nammed 'vss1-supply' and
-'vss2-supply'. The regulator supply is used to determine the output
-voltage, as the smart switch provides no output regulation.
-The driver requires the 'shunt-resistor-micro-ohms' property to be
-present in Device Tree to properly calculate current related
-values.
-
-Datasheet links:
-1: https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
-2: https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
-
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
----
- drivers/mfd/Kconfig         |  12 +++++
- drivers/mfd/Makefile        |   1 +
- drivers/mfd/max597x.c       |  92 ++++++++++++++++++++++++++++++++
- include/linux/mfd/max597x.h | 103 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 208 insertions(+)
- create mode 100644 drivers/mfd/max597x.c
- create mode 100644 include/linux/mfd/max597x.h
-
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 8b93856de432..416fe7986b7b 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -253,6 +253,18 @@ config MFD_MADERA_SPI
- 	  Support for the Cirrus Logic Madera platform audio SoC
- 	  core functionality controlled via SPI.
- 
-+config MFD_MAX597X
-+	tristate "Maxim 597x Power Switch and Monitor"
-+	depends on I2C
-+	depends on OF
-+	select MFD_CORE
-+	select REGMAP_I2C
-+	help
-+	  This driver controls a Maxim 5970/5978 switch via I2C bus.
-+	  The MAX5970/5978 is a smart switch with no output regulation, but
-+	  fault protection and voltage and current monitoring capabilities.
-+	  Also it supports upto 4 indication LEDs.
-+
- config MFD_CS47L15
- 	bool "Cirrus Logic CS47L15"
- 	select PINCTRL_CS47L15
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index 7ed3ef4a698c..819d711fa748 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -161,6 +161,7 @@ obj-$(CONFIG_MFD_DA9063)	+= da9063.o
- obj-$(CONFIG_MFD_DA9150)	+= da9150-core.o
- 
- obj-$(CONFIG_MFD_MAX14577)	+= max14577.o
-+obj-$(CONFIG_MFD_MAX597X)	+= max597x.o
- obj-$(CONFIG_MFD_MAX77620)	+= max77620.o
- obj-$(CONFIG_MFD_MAX77650)	+= max77650.o
- obj-$(CONFIG_MFD_MAX77686)	+= max77686.o
-diff --git a/drivers/mfd/max597x.c b/drivers/mfd/max597x.c
-new file mode 100644
-index 000000000000..ae43d57cde26
---- /dev/null
-+++ b/drivers/mfd/max597x.c
-@@ -0,0 +1,92 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Maxim MAX5970/MAX5978 Power Switch & Monitor
-+ *
-+ * Copyright (c) 2022 9elements GmbH
-+ *
-+ * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
-+ */
-+
-+#include <linux/i2c.h>
-+#include <linux/mfd/core.h>
-+#include <linux/mfd/max597x.h>
-+#include <linux/regmap.h>
-+
-+static const struct regmap_config max597x_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = MAX_REGISTERS,
-+};
-+
-+static const struct mfd_cell max597x_cells[] = {
-+	{ .name = "max597x-regulator", },
-+	{ .name = "max597x-iio", },
-+	{ .name = "max597x-led", },
-+};
-+
-+static int max597x_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
-+{
-+	struct max597x_data *ddata;
-+	enum max597x_chip_type chip = id->driver_data;
-+
-+	ddata = devm_kzalloc(&i2c->dev, sizeof(*ddata),	GFP_KERNEL);
-+	if (!ddata)
-+		return -ENOMEM;
-+
-+	/*
-+	 * Based on chip type, Initialize the number of switch. This is needed by
-+	 * regulator & iio cells.
-+	 */
-+	switch (chip) {
-+	case MAX597x_TYPE_MAX5970:
-+		ddata->num_switches = MAX5970_NUM_SWITCHES;
-+		break;
-+	case MAX597x_TYPE_MAX5978:
-+		ddata->num_switches = MAX5978_NUM_SWITCHES;
-+		break;
-+	}
-+
-+	ddata->regmap = devm_regmap_init_i2c(i2c, &max597x_regmap_config);
-+	if (IS_ERR(ddata->regmap)) {
-+		dev_err(&i2c->dev, "Failed to initialize regmap");
-+		return PTR_ERR(ddata->regmap);
-+	}
-+
-+	/* IRQ used by regulator cell */
-+	ddata->irq = i2c->irq;
-+	ddata->dev = &i2c->dev;
-+	i2c_set_clientdata(i2c, ddata);
-+
-+	return devm_mfd_add_devices(ddata->dev, PLATFORM_DEVID_AUTO,
-+				    max597x_cells, ARRAY_SIZE(max597x_cells),
-+				    NULL, 0, NULL);
-+}
-+
-+static const struct i2c_device_id max597x_table[] = {
-+	{ .name = "max5970", MAX597x_TYPE_MAX5970 },
-+	{ .name = "max5978", MAX597x_TYPE_MAX5978 },
-+};
-+
-+MODULE_DEVICE_TABLE(i2c, max597x_table);
-+
-+static const struct of_device_id max597x_of_match[] = {
-+	{ .compatible = "maxim,max5970", .data = (void *)MAX597x_TYPE_MAX5970 },
-+	{ .compatible = "maxim,max5978", .data = (void *)MAX597x_TYPE_MAX5978 },
-+	{}
-+};
-+
-+MODULE_DEVICE_TABLE(of, max597x_of_match);
-+
-+static struct i2c_driver max597x_driver = {
-+	.id_table = max597x_table,
-+	.driver = {
-+		  .name = "max597x",
-+		  .of_match_table = of_match_ptr(max597x_of_match),
-+		  },
-+	.probe = max597x_probe,
-+};
-+module_i2c_driver(max597x_driver);
-+
-+MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
-+MODULE_DESCRIPTION("MAX597X Power Switch and Monitor");
-+MODULE_LICENSE("GPL v2");
-diff --git a/include/linux/mfd/max597x.h b/include/linux/mfd/max597x.h
-new file mode 100644
-index 000000000000..99a047e66b44
---- /dev/null
-+++ b/include/linux/mfd/max597x.h
-@@ -0,0 +1,103 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Maxim MAX5970/MAX5978 Power Switch & Monitor
-+ *
-+ * Copyright (c) 2022 9elements GmbH
-+ *
-+ * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
-+ */
-+
-+#ifndef MFD_MAX597X_H
-+#define MFD_MAX597X_H
-+
-+#include <linux/device.h>
-+#include <linux/regmap.h>
-+
-+/* Number of switch based on chip variant */
-+#define MAX5970_NUM_SWITCHES 2
-+#define MAX5978_NUM_SWITCHES 1
-+/* Both chip variant have 4 indication LEDs used by LED cell */
-+#define MAX597X_NUM_LEDS     4
-+
-+enum max597x_chip_type {
-+	MAX597x_TYPE_MAX5978 = 1,
-+	MAX597x_TYPE_MAX5970,
-+};
-+
-+#define MAX5970_REG_CURRENT_L(ch)		(0x01 + (ch) * 4)
-+#define MAX5970_REG_CURRENT_H(ch)		(0x00 + (ch) * 4)
-+#define MAX5970_REG_VOLTAGE_L(ch)		(0x03 + (ch) * 4)
-+#define MAX5970_REG_VOLTAGE_H(ch)		(0x02 + (ch) * 4)
-+#define MAX5970_REG_MON_RANGE			0x18
-+#define  MAX5970_MON_MASK				0x3
-+#define  MAX5970_MON(reg, ch)		(((reg) >> ((ch) * 2)) & MAX5970_MON_MASK)
-+#define  MAX5970_MON_MAX_RANGE_UV		16000000
-+
-+#define MAX5970_REG_CH_UV_WARN_H(ch)	(0x1A + (ch) * 10)
-+#define MAX5970_REG_CH_UV_WARN_L(ch)	(0x1B + (ch) * 10)
-+#define MAX5970_REG_CH_UV_CRIT_H(ch)	(0x1C + (ch) * 10)
-+#define MAX5970_REG_CH_UV_CRIT_L(ch)	(0x1D + (ch) * 10)
-+#define MAX5970_REG_CH_OV_WARN_H(ch)	(0x1E + (ch) * 10)
-+#define MAX5970_REG_CH_OV_WARN_L(ch)	(0x1F + (ch) * 10)
-+#define MAX5970_REG_CH_OV_CRIT_H(ch)	(0x20 + (ch) * 10)
-+#define MAX5970_REG_CH_OV_CRIT_L(ch)	(0x21 + (ch) * 10)
-+
-+#define  MAX5970_VAL2REG_H(x)			(((x) >> 2) & 0xFF)
-+#define  MAX5970_VAL2REG_L(x)			((x) & 0x3)
-+
-+#define MAX5970_REG_DAC_FAST(ch)		(0x2E + (ch))
-+
-+#define MAX5970_FAST2SLOW_RATIO			200
-+
-+#define MAX5970_REG_STATUS0				0x31
-+#define  MAX5970_CB_IFAULTF(ch)			(1 << (ch))
-+#define  MAX5970_CB_IFAULTS(ch)			(1 << ((ch) + 4))
-+
-+#define MAX5970_REG_STATUS1				0x32
-+#define  STATUS1_PROT_MASK				0x3
-+#define  STATUS1_PROT(reg) \
-+	(((reg) >> 6) & STATUS1_PROT_MASK)
-+#define  STATUS1_PROT_SHUTDOWN			0
-+#define  STATUS1_PROT_CLEAR_PG			1
-+#define  STATUS1_PROT_ALERT_ONLY		2
-+
-+#define MAX5970_REG_STATUS2				0x33
-+#define  MAX5970_IRNG_MASK				0x3
-+#define  MAX5970_IRNG(reg, ch)	\
-+						(((reg) >> ((ch) * 2)) & MAX5970_IRNG_MASK)
-+
-+#define MAX5970_REG_STATUS3				0x34
-+#define  MAX5970_STATUS3_ALERT			BIT(4)
-+#define  MAX5970_STATUS3_PG(ch)			BIT(ch)
-+
-+#define MAX5970_REG_FAULT0				0x35
-+#define  UV_STATUS_WARN(ch)				BIT(ch)
-+#define  UV_STATUS_CRIT(ch)				BIT(ch + 4)
-+
-+#define MAX5970_REG_FAULT1				0x36
-+#define  OV_STATUS_WARN(ch)				BIT(ch)
-+#define  OV_STATUS_CRIT(ch)				BIT(ch + 4)
-+
-+#define MAX5970_REG_FAULT2				0x37
-+#define  OC_STATUS_WARN(ch)				BIT(ch)
-+
-+#define MAX5970_REG_CHXEN				0x3b
-+#define  CHXEN(ch)						(3 << (ch * 2))
-+
-+#define MAX5970_REG_LED_FLASH			0x43
-+
-+#define MAX_REGISTERS					0x49
-+#define ADC_MASK						0x3FF
-+
-+struct max597x_data {
-+	struct device *dev;
-+	int irq;
-+	int num_switches;
-+	struct regmap *regmap;
-+	/* Chip specific parameters needed by regulator & iio cells */
-+	u32 irng[MAX5970_NUM_SWITCHES];
-+	u32 mon_rng[MAX5970_NUM_SWITCHES];
-+	u32 shunt_micro_ohms[MAX5970_NUM_SWITCHES];
-+};
-+
-+#endif
-\ No newline at end of file
--- 
-2.37.3
-
+在 2022/10/28 下午4:12, Yicong Yang 写道:
+> From: Barry Song <v-songbaohua@oppo.com>
+>
+> on x86, batched and deferred tlb shootdown has lead to 90%
+> performance increase on tlb shootdown. on arm64, HW can do
+> tlb shootdown without software IPI. But sync tlbi is still
+> quite expensive.
+>
+> Even running a simplest program which requires swapout can
+> prove this is true,
+>   #include <sys/types.h>
+>   #include <unistd.h>
+>   #include <sys/mman.h>
+>   #include <string.h>
+>
+>   int main()
+>   {
+>   #define SIZE (1 * 1024 * 1024)
+>           volatile unsigned char *p = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
+>                                            MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+>
+>           memset(p, 0x88, SIZE);
+>
+>           for (int k = 0; k < 10000; k++) {
+>                   /* swap in */
+>                   for (int i = 0; i < SIZE; i += 4096) {
+>                           (void)p[i];
+>                   }
+>
+>                   /* swap out */
+>                   madvise(p, SIZE, MADV_PAGEOUT);
+>           }
+>   }
+>
+> Perf result on snapdragon 888 with 8 cores by using zRAM
+> as the swap block device.
+>
+>   ~ # perf record taskset -c 4 ./a.out
+>   [ perf record: Woken up 10 times to write data ]
+>   [ perf record: Captured and wrote 2.297 MB perf.data (60084 samples) ]
+>   ~ # perf report
+>   # To display the perf.data header info, please use --header/--header-only options.
+>   # To display the perf.data header info, please use --header/--header-only options.
+>   #
+>   #
+>   # Total Lost Samples: 0
+>   #
+>   # Samples: 60K of event 'cycles'
+>   # Event count (approx.): 35706225414
+>   #
+>   # Overhead  Command  Shared Object      Symbol
+>   # ........  .......  .................  .............................................................................
+>   #
+>      21.07%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irq
+>       8.23%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock_irqrestore
+>       6.67%  a.out    [kernel.kallsyms]  [k] filemap_map_pages
+>       6.16%  a.out    [kernel.kallsyms]  [k] __zram_bvec_write
+>       5.36%  a.out    [kernel.kallsyms]  [k] ptep_clear_flush
+>       3.71%  a.out    [kernel.kallsyms]  [k] _raw_spin_lock
+>       3.49%  a.out    [kernel.kallsyms]  [k] memset64
+>       1.63%  a.out    [kernel.kallsyms]  [k] clear_page
+>       1.42%  a.out    [kernel.kallsyms]  [k] _raw_spin_unlock
+>       1.26%  a.out    [kernel.kallsyms]  [k] mod_zone_state.llvm.8525150236079521930
+>       1.23%  a.out    [kernel.kallsyms]  [k] xas_load
+>       1.15%  a.out    [kernel.kallsyms]  [k] zram_slot_lock
+>
+> ptep_clear_flush() takes 5.36% CPU in the micro-benchmark
+> swapping in/out a page mapped by only one process. If the
+> page is mapped by multiple processes, typically, like more
+> than 100 on a phone, the overhead would be much higher as
+> we have to run tlb flush 100 times for one single page.
+> Plus, tlb flush overhead will increase with the number
+> of CPU cores due to the bad scalability of tlb shootdown
+> in HW, so those ARM64 servers should expect much higher
+> overhead.
+>
+> Further perf annonate shows 95% cpu time of ptep_clear_flush
+> is actually used by the final dsb() to wait for the completion
+> of tlb flush. This provides us a very good chance to leverage
+> the existing batched tlb in kernel. The minimum modification
+> is that we only send async tlbi in the first stage and we send
+> dsb while we have to sync in the second stage.
+>
+> With the above simplest micro benchmark, collapsed time to
+> finish the program decreases around 5%.
+>
+> Typical collapsed time w/o patch:
+>   ~ # time taskset -c 4 ./a.out
+>   0.21user 14.34system 0:14.69elapsed
+> w/ patch:
+>   ~ # time taskset -c 4 ./a.out
+>   0.22user 13.45system 0:13.80elapsed
+>
+> Also, Yicong Yang added the following observation.
+> 	Tested with benchmark in the commit on Kunpeng920 arm64 server,
+> 	observed an improvement around 12.5% with command
+> 	`time ./swap_bench`.
+> 		w/o		w/
+> 	real	0m13.460s	0m11.771s
+> 	user	0m0.248s	0m0.279s
+> 	sys	0m12.039s	0m11.458s
+>
+> 	Originally it's noticed a 16.99% overhead of ptep_clear_flush()
+> 	which has been eliminated by this patch:
+>
+> 	[root@localhost yang]# perf record -- ./swap_bench && perf report
+> 	[...]
+> 	16.99%  swap_bench  [kernel.kallsyms]  [k] ptep_clear_flush
+>
+> It is tested on 4,8,128 CPU platforms and shows to be beneficial on
+> large systems but may not have improvement on small systems like on
+> a 4 CPU platform. So make ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH depends
+> on CONFIG_EXPERT for this stage and only make this enabled on systems
+> with more than 8 CPUs. User can modify this threshold according to
+> their own platforms by CONFIG_NR_CPUS_FOR_BATCHED_TLB.
+>
+> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Nadav Amit <namit@vmware.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Tested-by: Yicong Yang <yangyicong@hisilicon.com>
+> Tested-by: Xin Hao <xhao@linux.alibaba.com>
+> Signed-off-by: Barry Song <v-songbaohua@oppo.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>   .../features/vm/TLB/arch-support.txt          |  2 +-
+>   arch/arm64/Kconfig                            |  6 +++
+>   arch/arm64/include/asm/tlbbatch.h             | 12 +++++
+>   arch/arm64/include/asm/tlbflush.h             | 46 ++++++++++++++++++-
+>   arch/x86/include/asm/tlbflush.h               |  3 +-
+>   mm/rmap.c                                     | 10 ++--
+>   6 files changed, 71 insertions(+), 8 deletions(-)
+>   create mode 100644 arch/arm64/include/asm/tlbbatch.h
+>
+> diff --git a/Documentation/features/vm/TLB/arch-support.txt b/Documentation/features/vm/TLB/arch-support.txt
+> index 039e4e91ada3..2caf815d7c6c 100644
+> --- a/Documentation/features/vm/TLB/arch-support.txt
+> +++ b/Documentation/features/vm/TLB/arch-support.txt
+> @@ -9,7 +9,7 @@
+>       |       alpha: | TODO |
+>       |         arc: | TODO |
+>       |         arm: | TODO |
+> -    |       arm64: | N/A  |
+> +    |       arm64: |  ok  |
+>       |        csky: | TODO |
+>       |     hexagon: | TODO |
+>       |        ia64: | TODO |
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 505c8a1ccbe0..72975e82c7d7 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -93,6 +93,7 @@ config ARM64
+>   	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+>   	select ARCH_SUPPORTS_NUMA_BALANCING
+>   	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
+> +	select ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH if EXPERT
+>   	select ARCH_WANT_COMPAT_IPC_PARSE_VERSION if COMPAT
+>   	select ARCH_WANT_DEFAULT_BPF_JIT
+>   	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+> @@ -268,6 +269,11 @@ config ARM64_CONT_PMD_SHIFT
+>   	default 5 if ARM64_16K_PAGES
+>   	default 4
+>   
+> +config ARM64_NR_CPUS_FOR_BATCHED_TLB
+> +	int "Threshold to enable batched TLB flush"
+> +	default 8
+> +	depends on ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
+> +
+>   config ARCH_MMAP_RND_BITS_MIN
+>   	default 14 if ARM64_64K_PAGES
+>   	default 16 if ARM64_16K_PAGES
+> diff --git a/arch/arm64/include/asm/tlbbatch.h b/arch/arm64/include/asm/tlbbatch.h
+> new file mode 100644
+> index 000000000000..fedb0b87b8db
+> --- /dev/null
+> +++ b/arch/arm64/include/asm/tlbbatch.h
+> @@ -0,0 +1,12 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _ARCH_ARM64_TLBBATCH_H
+> +#define _ARCH_ARM64_TLBBATCH_H
+> +
+> +struct arch_tlbflush_unmap_batch {
+> +	/*
+> +	 * For arm64, HW can do tlb shootdown, so we don't
+> +	 * need to record cpumask for sending IPI
+> +	 */
+> +};
+> +
+> +#endif /* _ARCH_ARM64_TLBBATCH_H */
+> diff --git a/arch/arm64/include/asm/tlbflush.h b/arch/arm64/include/asm/tlbflush.h
+> index 412a3b9a3c25..b21cdeb57a18 100644
+> --- a/arch/arm64/include/asm/tlbflush.h
+> +++ b/arch/arm64/include/asm/tlbflush.h
+> @@ -254,17 +254,23 @@ static inline void flush_tlb_mm(struct mm_struct *mm)
+>   	dsb(ish);
+>   }
+>   
+> -static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
+> +static inline void __flush_tlb_page_nosync(struct mm_struct *mm,
+>   					 unsigned long uaddr)
+>   {
+>   	unsigned long addr;
+>   
+>   	dsb(ishst);
+> -	addr = __TLBI_VADDR(uaddr, ASID(vma->vm_mm));
+> +	addr = __TLBI_VADDR(uaddr, ASID(mm));
+>   	__tlbi(vale1is, addr);
+>   	__tlbi_user(vale1is, addr);
+>   }
+>   
+> +static inline void flush_tlb_page_nosync(struct vm_area_struct *vma,
+> +					 unsigned long uaddr)
+> +{
+> +	return __flush_tlb_page_nosync(vma->vm_mm, uaddr);
+> +}
+> +
+>   static inline void flush_tlb_page(struct vm_area_struct *vma,
+>   				  unsigned long uaddr)
+>   {
+> @@ -272,6 +278,42 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
+>   	dsb(ish);
+>   }
+>   
+> +#ifdef CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
+> +
+> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
+> +{
+> +	/*
+> +	 * TLB batched flush is proved to be beneficial for systems with large
+> +	 * number of CPUs, especially system with more than 8 CPUs. TLB shutdown
+> +	 * is cheap on small systems which may not need this feature. So use
+> +	 * a threshold for enabling this to avoid potential side effects on
+> +	 * these platforms.
+> +	 */
+> +	if (num_online_cpus() <= CONFIG_ARM64_NR_CPUS_FOR_BATCHED_TLB)
+> +		return false;
+> +
+> +#ifdef CONFIG_ARM64_WORKAROUND_REPEAT_TLBI
+> +	if (unlikely(this_cpu_has_cap(ARM64_WORKAROUND_REPEAT_TLBI)))
+Maybe there need a comment  why set  ARM64_WORKAROUND_REPEAT_TLBI it 
+should return false?
+> +		return false;
+> +#endif
+> +
+> +	return true;
+> +}
+> +
+> +static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
+> +					struct mm_struct *mm,
+> +					unsigned long uaddr)
+> +{
+> +	__flush_tlb_page_nosync(mm, uaddr);
+> +}
+> +
+> +static inline void arch_tlbbatch_flush(struct arch_tlbflush_unmap_batch *batch)
+> +{
+> +	dsb(ish);
+> +}
+> +
+> +#endif /* CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH */
+> +
+>   /*
+>    * This is meant to avoid soft lock-ups on large TLB flushing ranges and not
+>    * necessarily a performance improvement.
+> diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+> index 8a497d902c16..5bd78ae55cd4 100644
+> --- a/arch/x86/include/asm/tlbflush.h
+> +++ b/arch/x86/include/asm/tlbflush.h
+> @@ -264,7 +264,8 @@ static inline u64 inc_mm_tlb_gen(struct mm_struct *mm)
+>   }
+>   
+>   static inline void arch_tlbbatch_add_mm(struct arch_tlbflush_unmap_batch *batch,
+> -					struct mm_struct *mm)
+> +					struct mm_struct *mm,
+> +					unsigned long uaddr)
+>   {
+>   	inc_mm_tlb_gen(mm);
+>   	cpumask_or(&batch->cpumask, &batch->cpumask, mm_cpumask(mm));
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index a9ab10bc0144..a1b408ff44e5 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -640,12 +640,13 @@ void try_to_unmap_flush_dirty(void)
+>   #define TLB_FLUSH_BATCH_PENDING_LARGE			\
+>   	(TLB_FLUSH_BATCH_PENDING_MASK / 2)
+>   
+> -static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
+> +static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable,
+> +				      unsigned long uaddr)
+>   {
+>   	struct tlbflush_unmap_batch *tlb_ubc = &current->tlb_ubc;
+>   	int batch, nbatch;
+>   
+> -	arch_tlbbatch_add_mm(&tlb_ubc->arch, mm);
+> +	arch_tlbbatch_add_mm(&tlb_ubc->arch, mm, uaddr);
+>   	tlb_ubc->flush_required = true;
+>   
+>   	/*
+> @@ -723,7 +724,8 @@ void flush_tlb_batched_pending(struct mm_struct *mm)
+>   	}
+>   }
+>   #else
+> -static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
+> +static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable,
+> +				      unsigned long uaddr)
+>   {
+>   }
+>   
+> @@ -1596,7 +1598,7 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+>   				 */
+>   				pteval = ptep_get_and_clear(mm, address, pvmw.pte);
+>   
+> -				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval));
+> +				set_tlb_ubc_flush_pending(mm, pte_dirty(pteval), address);
+>   			} else {
+>   				pteval = ptep_clear_flush(vma, address, pvmw.pte);
+>   			}
