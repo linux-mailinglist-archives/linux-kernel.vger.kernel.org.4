@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB2C628A5E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DBC1628A61
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237587AbiKNUT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 15:19:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
+        id S237583AbiKNUUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 15:20:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237540AbiKNUTw (ORCPT
+        with ESMTP id S237580AbiKNUUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:19:52 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43603BC9C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:19:45 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id f7so18974063edc.6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:19:45 -0800 (PST)
+        Mon, 14 Nov 2022 15:20:49 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812B325F4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:20:48 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id h206so9090637iof.10
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:20:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linuxfoundation.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=sQzqbyft4iPMYkgJwXfvCqwNgbrQqe1lCD4jJDJZADQ=;
-        b=dE8jYcGBcnKicXkp24y7WzOAabIk5bf0+RqUHcnUJcg9ya39nXCN288OTVfl5/FCvI
-         OHqyDpMEQL+uws1fUXaZqyTb/0CgVS4KraGEx1PvEhiPd1850dGHSNpgzTG4k0CRgP7J
-         dWws3z3AqSbPEtkLn6Sg4cOrp/QqDCWLz1t0lIwdYVOS6NW14vAuiUHuKrgVZbonV+EQ
-         N7BpoyJ9Ligzjdj804ZN1oTVTrHf/o563qnzdTN7qrESoPcjgryC/NYGscbDmt7Mu6mn
-         /avm8INepykeZ1K5xxHf0ig1OzGy/S3/SN4Rd1Mj4ycmY+mv6hlIJPjNZ0AiPR0k86Sc
-         s8Fw==
+        bh=0nQMvLB5INQNmj5E/HGsA2eiB52DexTVVJe3m04ZfpA=;
+        b=A22VrwqESF/t5YHz3RtHI5c8nxBisEmNDqZ+aI+eW1Yq1Ic21fd3d+8Q5WPpMWSqQM
+         sP726UE30fXy8u7zepEOIhmDVY/JVB0G/mwcOobUw5uwU+uEnrKGbw5K16VnVR/GvK20
+         4GRiEHFrRjhHsTxNVZkNqT92MR9W5KgBPu/10=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sQzqbyft4iPMYkgJwXfvCqwNgbrQqe1lCD4jJDJZADQ=;
-        b=DphZaOMqg8Z7kWpgtn6/ftEIlEVn8++DKiLvH9TDE9+I1QrlWJjKHBabu6whoJjj/O
-         +Auj4CQ6YXmi4O+gufuBIxrADUW9gBoRdntjDU3RNkgtXG4jZxTpgqSrFffE4oew85gy
-         R8Wg/iOfNzj2xpa5utb615Tdy1c6Y/v63SUlXssgvnwESqlXapuR/1CMsmXYEx9T3rae
-         4W/AqF+thV7wzi5UoyGFrqUKWCR3jKmeFXq6OIsdDsWk7+zHivIjZIPBX20R1/F14Ex6
-         gNnHwMKAF7DTsceI0dGAkTaSC4h9y5hKJak9KPRGSnfTUhLKBpsBAkGymSfhhoP30zc/
-         9M4Q==
-X-Gm-Message-State: ANoB5pmfnYCrAlfEQRn3rzA74MLgLHU9dF3JKIrvTKoM34tthwtd5Fiz
-        g26cpFd/hIZqKIintOcztAhfuZmXs4E=
-X-Google-Smtp-Source: AA0mqf7rsgOSHy/GtN5CZ8eDL5FkKZG1I/T6scjFAcQ9JQ9k+FX9kjzmREmTEnTa69++YROid16UUA==
-X-Received: by 2002:a05:6402:284:b0:467:481f:df2a with SMTP id l4-20020a056402028400b00467481fdf2amr11980860edv.324.1668457183747;
-        Mon, 14 Nov 2022 12:19:43 -0800 (PST)
-Received: from ?IPV6:2003:c7:8f35:4b62:6623:1f88:59ad:8b23? (p200300c78f354b6266231f8859ad8b23.dip0.t-ipconnect.de. [2003:c7:8f35:4b62:6623:1f88:59ad:8b23])
-        by smtp.gmail.com with ESMTPSA id fg15-20020a1709069c4f00b0078d4ee47c82sm4530880ejc.129.2022.11.14.12.19.43
+        bh=0nQMvLB5INQNmj5E/HGsA2eiB52DexTVVJe3m04ZfpA=;
+        b=qtOQK1D2dMSZaiqTpc8ra4Thlle2S29XXgovpeeRknAZ2pzDrrpMN3MdywyReYawXx
+         Freh1lbkDV73T666899rR9ZYmpfo/XnERb3q73JTgdT7TkSkYQM47AzvC9u0bcDSLQor
+         YndGwb8fA81YZ/YNSJ/zewrFHaMIKgHqoOdK5D2rgeQiik0ehnnpxzjuCOODUTHZXEWe
+         /hyFDwUZno1ua49IzC7fQ2By53tLq4/KS2kLBDR/O4SWZ6w6BKrMqaTRZYSuXi0+q4Lw
+         +7o8RwcN1QbiIR0vyv7iltc6Ms00yj4ZM976MxnhT91LSvCmjsXaY9YveFNzXJrvEVQ3
+         O6gA==
+X-Gm-Message-State: ANoB5pkRIl2GXXe6uz1CFd+dXJ3OY4ZgLn+VBcKROpJCQ+pfJzX+Nf7f
+        t7eI6VUbFrI/9eMNgPN6wywq0A==
+X-Google-Smtp-Source: AA0mqf45a4K8rpJsFCtIvLY6IJ/KooyuKaDOP6YHXNNeADL9vwk+q3ct9iaZw5xCdlHBiG7SnheWiA==
+X-Received: by 2002:a02:a002:0:b0:376:e17:5eaf with SMTP id a2-20020a02a002000000b003760e175eafmr3080930jah.56.1668457247869;
+        Mon, 14 Nov 2022 12:20:47 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id e22-20020a0566380cd600b00363dfbb145asm3685533jak.30.2022.11.14.12.20.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 12:19:43 -0800 (PST)
-Message-ID: <480340b3-c1c1-74b5-1889-f49dcb644469@gmail.com>
-Date:   Mon, 14 Nov 2022 21:19:42 +0100
+        Mon, 14 Nov 2022 12:20:47 -0800 (PST)
+Message-ID: <0af677b8-a796-8fc8-c892-c588704732f6@linuxfoundation.org>
+Date:   Mon, 14 Nov 2022 13:20:46 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] staging: vt6655: change the function name
- s_vFillRTSHead
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 5.10 00/95] 5.10.155-rc1 review
 Content-Language: en-US
-To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-References: <Y3KJBdUue5otWgOT@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <Y3KJBdUue5otWgOT@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20221114124442.530286937@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221114124442.530286937@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,118 +78,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/14/22 19:29, Tanjuate Brunostar wrote:
-> Remove the use of Hungarian notation, which is not used in the Linux
-> kernel. Reported by checkpatch
-> Add indentation to the affected function to follow the Linux kernel
-> coding style. This improves visibility
+On 11/14/22 05:44, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.155 release.
+> There are 95 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-> ---
-> v2: corrected confusing changlog message on this patch
-> v3: removed unnecessary function prototype
+> Responses should be made by Wed, 16 Nov 2022 12:44:21 +0000.
+> Anything received after that time might be too late.
 > 
->   drivers/staging/vt6655/rxtx.c | 40 ++++++++++++-----------------------
->   1 file changed, 13 insertions(+), 27 deletions(-)
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.155-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
 > 
-> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-> index 31ae99b3cb35..715b323cd2a8 100644
-> --- a/drivers/staging/vt6655/rxtx.c
-> +++ b/drivers/staging/vt6655/rxtx.c
-> @@ -23,7 +23,7 @@
->    *      s_uGetTxRsvTime- get frame reserved time
->    *      s_vFillCTSHead- fulfill CTS ctl header
->    *      s_vFillFragParameter- Set fragment ctl parameter.
-> - *      s_vFillRTSHead- fulfill RTS ctl header
-> + *      fill_rts_header- fulfill RTS ctl header
->    *      s_vFillTxKey- fulfill tx encrypt key
->    *      s_vSWencryption- Software encrypt header
->    *      vDMA0_tx_80211- tx 802.11 frame via dma0
-> @@ -85,16 +85,6 @@ static const unsigned short fb_opt1[2][5] = {
->   #define DATADUR_A_F1    13
->   
->   /*---------------------  Static Functions  --------------------------*/
-> -static void s_vFillRTSHead(struct vnt_private *pDevice,
-> -			   unsigned char byPktType,
-> -			   void *pvRTS,
-> -			   unsigned int	cbFrameLength,
-> -			   bool bNeedAck,
-> -			   bool bDisCRC,
-> -			   struct ieee80211_hdr *hdr,
-> -			   unsigned short wCurrentRate,
-> -			   unsigned char byFBOption);
-> -
->   static void s_vGenerateTxParameter(struct vnt_private *pDevice,
->   				   unsigned char byPktType,
->   				   struct vnt_tx_fifo_head *,
-> @@ -555,19 +545,15 @@ s_uFillDataHead(
->   	return buf->duration;
->   }
->   
-> -static
-> -void
-> -s_vFillRTSHead(
-> -	struct vnt_private *pDevice,
-> -	unsigned char byPktType,
-> -	void *pvRTS,
-> -	unsigned int cbFrameLength,
-> -	bool bNeedAck,
-> -	bool bDisCRC,
-> -	struct ieee80211_hdr *hdr,
-> -	unsigned short wCurrentRate,
-> -	unsigned char byFBOption
-> -)
-> +static void fill_rts_header(struct vnt_private *pDevice,
-> +			    unsigned char byPktType,
-> +			    void *pvRTS,
-> +			    unsigned int cbFrameLength,
-> +			    bool bNeedAck,
-> +			    bool bDisCRC,
-> +			    struct ieee80211_hdr *hdr,
-> +			    unsigned short wCurrentRate,
-> +			    unsigned char byFBOption)
->   {
->   	unsigned int uRTSFrameLen = 20;
->   
-> @@ -912,7 +898,7 @@ s_vGenerateTxParameter(
->   			buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
->   			buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
->   
-> -			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> +			fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
->   		} else {/* RTS_needless, PCF mode */
->   			struct vnt_rrv_time_cts *buf = pvRrvTime;
->   
-> @@ -931,7 +917,7 @@ s_vGenerateTxParameter(
->   			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
->   
->   			/* Fill RTS */
-> -			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> +			fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
->   		} else if (!pvRTS) {/* RTS_needless, non PCF mode */
->   			struct vnt_rrv_time_ab *buf = pvRrvTime;
->   
-> @@ -945,7 +931,7 @@ s_vGenerateTxParameter(
->   			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
->   
->   			/* Fill RTS */
-> -			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> +			fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
->   		} else { /* RTS_needless, non PCF mode */
->   			struct vnt_rrv_time_ab *buf = pvRrvTime;
->   
+> thanks,
+> 
+> greg k-h
+> 
 
-Hi,
+Compiled and booted on my test system. No dmesg regressions.
 
-I cannot apply your patch.
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Here my git infos:
-git remote show origin
-* remote origin
-   Fetch URL: 
-git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
-...
-git branch -a
-my branch: staging-testing
-
-Bye Philipp
+thanks,
+-- Shuah
