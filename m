@@ -2,206 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E448F627F3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:57:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2FF3627F33
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237570AbiKNM47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 07:56:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
+        id S237551AbiKNM4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 07:56:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237607AbiKNM4r (ORCPT
+        with ESMTP id S237554AbiKNM4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 07:56:47 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA23286E4;
-        Mon, 14 Nov 2022 04:56:42 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id f7so17163724edc.6;
-        Mon, 14 Nov 2022 04:56:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uSCoAMd5ij+y73I07p+YhPw7UjTyLQk7rY41RsaGjf0=;
-        b=Vs0ezKqhulrQy4LrTgbXUJsLL1E+njapaniLkEvOCDhSGfbt+PiWNMPu2yd1ioJdV0
-         jQ1UZy45mvphmwLSdlMKWkt9nv6hcKE4zNnQkOsr3NVU4Er9OEQdFFJiUYxnES4pHuih
-         W/VrVHn+ayAqD8JfNIFT5g8Dt2gRaGftA7lY0gUEINVF2w6VWFWaAMB1Q0lCDovsMrFc
-         ZL9IGAo52/Va0H646lOB3cz3lxz37K7UVuOryrf9tto+TpM/QFfW/YXRddSFnUmxcRNk
-         /lbW4agBfmJp/izEGP/9CPyI/bTzbIoArh/Show9sqbqxVm7cCyOYxT5fpnDbRMXJOv3
-         OGcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uSCoAMd5ij+y73I07p+YhPw7UjTyLQk7rY41RsaGjf0=;
-        b=ngO/IN0miDuz3BM9DCiNrU+cZX0y6IhgmpIrc09Bv2kh6zGRuDM8Rsk0INww8WB1BU
-         /G63AEbzh09UJot58QR1XH+bEO5HP7OrMdtAB1C1RGVwrfRlxi7nyzbpMwhtawqkadjB
-         NrIXq5H8RXsJFfTCn/OrnFZ/P3BfMCSkXhvvMp1U3ZDzx/FfG0xrP95T4usmjyfe2WvV
-         14BMsIR0gKgIPYTM9g7hPKAu+UgVKisjjo6bJDcLf3dFipgrHOXCaIvcppIlnpxmDph6
-         UWcz1NKrLFGCpmt/UWtQBx4ATpFlRlkK2mYQT2Qjr/tU0vrY9EWFl+tHN+0U5QcDvNfa
-         FVuw==
-X-Gm-Message-State: ANoB5pmby4XJ/tyQvEZjeuTUQE0G+lBr7cF6hZ9aC5WDD/fnnmNUjS8W
-        M2iGeOMp2gFMLJsVmUuc47s=
-X-Google-Smtp-Source: AA0mqf53bdMQADFT39A2YbQtYdfW0PRCMkLqHmcFX9aRvznKCnzOwLhhM2dVR6ncXjuoFP1nLwwMNw==
-X-Received: by 2002:a05:6402:715:b0:461:9fe:6d8a with SMTP id w21-20020a056402071500b0046109fe6d8amr10724137edx.4.1668430601085;
-        Mon, 14 Nov 2022 04:56:41 -0800 (PST)
-Received: from localhost.localdomain ([46.249.74.23])
-        by smtp.gmail.com with ESMTPSA id b25-20020a17090630d900b0078d38cda2b1sm4097302ejb.202.2022.11.14.04.56.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 14 Nov 2022 04:56:40 -0800 (PST)
-From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-To:     sre@kernel.org, orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
-        zhang.lyra@gmail.com, gregkh@linuxfoundation.org,
-        felipe.balbi@linux.intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com, linux-usb@vger.kernel.org,
-        tony@atomide.com, Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Subject: [PATCH] usb: phy: add dedicated notifier for charger events
-Date:   Mon, 14 Nov 2022 14:56:02 +0200
-Message-Id: <1668430562-27114-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
-X-Mailer: git-send-email 1.9.1
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 14 Nov 2022 07:56:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2494A27FEC;
+        Mon, 14 Nov 2022 04:56:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA840B80EBD;
+        Mon, 14 Nov 2022 12:56:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42BCCC433D7;
+        Mon, 14 Nov 2022 12:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668430584;
+        bh=2D2gQfZ06yOvJUXC9oWEx/vkQjZiEDRDwKv9ey449SQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g+08jDKCi1InaKWpdvju0i+QzkvW28vhnPlL0DjgU6CeXo95YDNBZo3est930MVpg
+         dhpr/qhJyhdvXGDTfdpnp3RXlq78yCxiBQrSXYYEwHtDn1bdDeg0huYKNJr6ItIH7h
+         N3xLYLP4ZNF8xjQUs190xPK97RMET1KVtZWsmY5ecO+zEJ/oX+0hK7Ytf6eS98IiqM
+         +LsOsCJloheDX1DTlPTb5sI1qjOxV2R+zDuJeSjr/Y1LNEetsCHGvha9BFYMayMnrm
+         gKfz+t9HHQaeDBYAEY0ZCnfwpm/85S8vgM6lPV6t0rGvgwrupUSHsx+IqiyXEa9Biy
+         9JBF2s9ggcZBw==
+Date:   Mon, 14 Nov 2022 12:56:18 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Martin Botka <martin.botka@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        konrad.dybcio@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V3 1/2] dt-bindings: iommu: arm-smmu: Add binding for
+ sm6125
+Message-ID: <20221114125616.GC30263@willie-the-truck>
+References: <20210612094606.89576-1-martin.botka@somainline.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210612094606.89576-1-martin.botka@somainline.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-usb_phy::notifier is already used by various PHY drivers (including
-phy_generic) to report VBUS status changes and its usage conflicts with
-charger current limit changes reporting.
+On Sat, Jun 12, 2021 at 11:46:04AM +0200, Martin Botka wrote:
+> This patch adds binding for sm6125 SoC
+> 
+> Signed-off-by: Martin Botka <martin.botka@somainline.org>
+> ---
+> Changes in V2:
+> Add commit description
+> Changes in V3:
+> None
+>  Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+> index 9d27aa5111d4..26d7ca86e519 100644
+> --- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+> +++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+> @@ -37,6 +37,7 @@ properties:
+>                - qcom,sc7280-smmu-500
+>                - qcom,sc8180x-smmu-500
+>                - qcom,sdm845-smmu-500
+> +              - qcom,sm6125-smmu-500
+>                - qcom,sm8150-smmu-500
+>                - qcom,sm8250-smmu-500
+>                - qcom,sm8350-smmu-500
 
-Fix that by introducing a second notifier that is dedicated to usb charger
-notifications. Add usb_charger_XXX_notifier functions. Fix charger drivers
-that currently (ab)use usb_XXX_notifier() to use the new API.
+Neither this patch nor the subsequent driver patch apply. Please can you
+send a v4 based on v6.1-rc1?
 
-Fixes: a9081a008f84 ("usb: phy: Add USB charger support")
+Thanks,
 
-Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
----
- drivers/power/supply/sc2731_charger.c |  4 ++--
- drivers/power/supply/wm831x_power.c   |  7 ++++---
- drivers/usb/phy/phy.c                 |  7 +++++--
- include/linux/usb/phy.h               | 14 ++++++++++++++
- 4 files changed, 25 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/power/supply/sc2731_charger.c b/drivers/power/supply/sc2731_charger.c
-index 9ac17cf..e3fa0e2 100644
---- a/drivers/power/supply/sc2731_charger.c
-+++ b/drivers/power/supply/sc2731_charger.c
-@@ -500,7 +500,7 @@ static int sc2731_charger_probe(struct platform_device *pdev)
- 	}
- 
- 	info->usb_notify.notifier_call = sc2731_charger_usb_change;
--	ret = usb_register_notifier(info->usb_phy, &info->usb_notify);
-+	ret = usb_charger_register_notifier(info->usb_phy, &info->usb_notify);
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed to register notifier: %d\n", ret);
- 		return ret;
-@@ -515,7 +515,7 @@ static int sc2731_charger_remove(struct platform_device *pdev)
- {
- 	struct sc2731_charger_info *info = platform_get_drvdata(pdev);
- 
--	usb_unregister_notifier(info->usb_phy, &info->usb_notify);
-+	usb_charger_unregister_notifier(info->usb_phy, &info->usb_notify);
- 
- 	return 0;
- }
-diff --git a/drivers/power/supply/wm831x_power.c b/drivers/power/supply/wm831x_power.c
-index 82e3106..0744167 100644
---- a/drivers/power/supply/wm831x_power.c
-+++ b/drivers/power/supply/wm831x_power.c
-@@ -650,7 +650,8 @@ static int wm831x_power_probe(struct platform_device *pdev)
- 	switch (ret) {
- 	case 0:
- 		power->usb_notify.notifier_call = wm831x_usb_limit_change;
--		ret = usb_register_notifier(power->usb_phy, &power->usb_notify);
-+		ret = usb_charger_register_notifier(power->usb_phy,
-+						    &power->usb_notify);
- 		if (ret) {
- 			dev_err(&pdev->dev, "Failed to register notifier: %d\n",
- 				ret);
-@@ -701,8 +702,8 @@ static int wm831x_power_remove(struct platform_device *pdev)
- 	int irq, i;
- 
- 	if (wm831x_power->usb_phy) {
--		usb_unregister_notifier(wm831x_power->usb_phy,
--					&wm831x_power->usb_notify);
-+		usb_charger_unregister_notifier(wm831x_power->usb_phy,
-+						&wm831x_power->usb_notify);
- 	}
- 
- 	for (i = 0; i < ARRAY_SIZE(wm831x_bat_irqs); i++) {
-diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c
-index 1b24492..6b8bf05 100644
---- a/drivers/usb/phy/phy.c
-+++ b/drivers/usb/phy/phy.c
-@@ -129,12 +129,13 @@ static void usb_phy_notify_charger_work(struct work_struct *work)
- 	case USB_CHARGER_PRESENT:
- 		usb_phy_get_charger_current(usb_phy, &min, &max);
- 
--		atomic_notifier_call_chain(&usb_phy->notifier, max, usb_phy);
-+		atomic_notifier_call_chain(&usb_phy->chg_notifier, max,
-+					   usb_phy);
- 		break;
- 	case USB_CHARGER_ABSENT:
- 		usb_phy_set_default_current(usb_phy);
- 
--		atomic_notifier_call_chain(&usb_phy->notifier, 0, usb_phy);
-+		atomic_notifier_call_chain(&usb_phy->chg_notifier, 0, usb_phy);
- 		break;
- 	default:
- 		dev_warn(usb_phy->dev, "Unknown USB charger state: %d\n",
-@@ -678,6 +679,7 @@ int usb_add_phy(struct usb_phy *x, enum usb_phy_type type)
- 		return ret;
- 
- 	ATOMIC_INIT_NOTIFIER_HEAD(&x->notifier);
-+	ATOMIC_INIT_NOTIFIER_HEAD(&x->chg_notifier);
- 
- 	spin_lock_irqsave(&phy_lock, flags);
- 
-@@ -730,6 +732,7 @@ int usb_add_phy_dev(struct usb_phy *x)
- 	x->dev->type = &usb_phy_dev_type;
- 
- 	ATOMIC_INIT_NOTIFIER_HEAD(&x->notifier);
-+	ATOMIC_INIT_NOTIFIER_HEAD(&x->chg_notifier);
- 
- 	spin_lock_irqsave(&phy_lock, flags);
- 	list_add_tail(&x->head, &phy_list);
-diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
-index e4de6bc..23db554 100644
---- a/include/linux/usb/phy.h
-+++ b/include/linux/usb/phy.h
-@@ -111,6 +111,7 @@ struct usb_phy {
- 	enum usb_charger_state	chg_state;
- 	struct usb_charger_current	chg_cur;
- 	struct work_struct		chg_work;
-+	struct atomic_notifier_head	chg_notifier;
- 
- 	/* for notification of usb_phy_events */
- 	struct atomic_notifier_head	notifier;
-@@ -347,6 +348,19 @@ static inline void usb_phy_set_charger_state(struct usb_phy *usb_phy,
- 	atomic_notifier_chain_unregister(&x->notifier, nb);
- }
- 
-+/* notifiers */
-+static inline int
-+usb_charger_register_notifier(struct usb_phy *x, struct notifier_block *nb)
-+{
-+	return atomic_notifier_chain_register(&x->chg_notifier, nb);
-+}
-+
-+static inline void
-+usb_charger_unregister_notifier(struct usb_phy *x, struct notifier_block *nb)
-+{
-+	atomic_notifier_chain_unregister(&x->chg_notifier, nb);
-+}
-+
- static inline const char *usb_phy_type_string(enum usb_phy_type type)
- {
- 	switch (type) {
--- 
-1.9.1
-
+Will
