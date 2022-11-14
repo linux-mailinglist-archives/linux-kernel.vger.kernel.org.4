@@ -2,234 +2,542 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B91627562
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 05:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1D7627560
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 05:42:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235846AbiKNEmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 23:42:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45798 "EHLO
+        id S235843AbiKNEmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 23:42:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235848AbiKNEmX (ORCPT
+        with ESMTP id S235837AbiKNEmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 23:42:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA178167F4
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 20:41:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668400886;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MKjDmIAt0prUKa9dsHOjZqBINBMFFGgMprh04cvIpSE=;
-        b=EaGMNGM1/T8PpWYrQ93w2VPEKlUOY9N1jWVB1P3dfq5sa67IKQNP26ZqMkCrUbbQxxqOn5
-        fXG7nh608dFcu1RVnIoz0fzjbHApIcm7ubt3qfwRZxyqSJNG2jH6zPCyECm1HLwAKWQrbJ
-        HV3I9jqt5aRGqVSi5A0yBzKsFRyDw5g=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-528-2KzUbnmzPfeAQmHwA5tjMQ-1; Sun, 13 Nov 2022 23:41:22 -0500
-X-MC-Unique: 2KzUbnmzPfeAQmHwA5tjMQ-1
-Received: by mail-oo1-f69.google.com with SMTP id t9-20020a4a6049000000b00496bbda4343so3376960oof.22
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 20:41:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MKjDmIAt0prUKa9dsHOjZqBINBMFFGgMprh04cvIpSE=;
-        b=jEiCocLsumwYZl514GIyESMdxZrsLA9+eM33vBM4kw7xHvL5I3jP+K9pppByBRFosF
-         HQ28u0/4tIlo5WwYV5K5ntPEervGj3Lx2+2RjQme9sLcO+IxDuKF9dVmSCT22WuSmuRC
-         eHwoQXVCOr012YFBu++iAdtZrarZl2ofEzFPSBmXOvzEl+UckzFQtlzykUFkk7YKDKiV
-         xwqYoDDtjBAk7T/ZXGQ53hZ7UXSeuTKTHCYoAh72g99h+0D8PovSVVBn0+1uOtsCafD2
-         +r/N/APQj1++6TpQRcNTM35MK6GE1ZAc1vPGEGr+NWzYcEnGqWireB3zSnZUlMZy8fmX
-         PGmQ==
-X-Gm-Message-State: ANoB5pmJC5CMkupFGsgqXTGhSABJPWJPWow7NdAvTaZIUhXeL97zRmfy
-        eP+C5tIaDOxWNp9S4Qyi6GdrdvVLkG+VBfweDmDu9xAxuNTRoXqfpe6TOHj/cD1fPWCF0KWszqF
-        Ev2NAg4mouatQOmD3kXRuUC/GVu1PmBnEDRJq1TWU
-X-Received: by 2002:a4a:5704:0:b0:49f:449a:5f6c with SMTP id u4-20020a4a5704000000b0049f449a5f6cmr4541461ooa.93.1668400881569;
-        Sun, 13 Nov 2022 20:41:21 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4157B6oXCXw3RByikzI77lJ0hjf54Is1etpUu0/uYC5dlkUqPYlH8kcl1nJLGCLNnaGKUBBQSU5CZcdPgp04k=
-X-Received: by 2002:a4a:5704:0:b0:49f:449a:5f6c with SMTP id
- u4-20020a4a5704000000b0049f449a5f6cmr4541452ooa.93.1668400881317; Sun, 13 Nov
- 2022 20:41:21 -0800 (PST)
+        Sun, 13 Nov 2022 23:42:02 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB684140FC
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 20:41:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44C88B80D13
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 04:41:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D56DBC433B5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 04:41:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668400916;
+        bh=iyHqH0MlKOnG+pIYAfk2ulGY4W2qcFZKEimUgd+Hs4k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Uk9oNMs1UULyV6miyVwPX2XUIC1CaXL7TDN2uEzAroRVe/+HoJ4scQOgdylGCp/Il
+         oSrgiXtp17hbTiHg4iyRR1e4ZKNS81e8bQ9QY99BikJCZtCQdbjx9C6RYOmDd/Dk61
+         8xv10/Egb/tz323XUXOpAFR61JnqVcz9jqSMjorZL6UFxqEYE2THNQa6tlZfKSQ4z/
+         HsyJ4fftQ/GBqBRBmzH0iXzyxVocWAm1oQB1LZc0KGu1ujq5Qa4xb2YiVriAFvn+ww
+         7FOAH3QrK2bKx5klrmeKppwK7V+E7M9MnLYjLW2Qvi+R3U0qABcN9DjAmc3a39pLQO
+         inocLUaohh5IQ==
+Received: by mail-ej1-f47.google.com with SMTP id 13so25620636ejn.3
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 20:41:56 -0800 (PST)
+X-Gm-Message-State: ANoB5pkUbRbj8+YWhZBAJdJxDBgZ/b4VzdZqq17xFevnXV8FVsOXoPGR
+        YSDHurE5q68pZPDYXivbXZAvwSDQo4NO0ob+gbo=
+X-Google-Smtp-Source: AA0mqf4u3q54q9xLsG2JUGSI5A57yyI486N9oysxZ08AlJJ/cNEGe6YWR4dYS9oOwKQpxY3ls+Nt75MIudUhwjRESj0=
+X-Received: by 2002:a17:906:5603:b0:780:8143:cc0e with SMTP id
+ f3-20020a170906560300b007808143cc0emr8616288ejq.684.1668400914954; Sun, 13
+ Nov 2022 20:41:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20221113134442.152695-1-elic@nvidia.com> <20221113134442.152695-4-elic@nvidia.com>
-In-Reply-To: <20221113134442.152695-4-elic@nvidia.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 14 Nov 2022 12:41:10 +0800
-Message-ID: <CACGkMEupWx6YZToNqxyJ9sD5v41ouOeKe2=0_ASbWPFt8s1uGA@mail.gmail.com>
-Subject: Re: [PATCH 3/7] vdpa/mlx5: Move some definitions to a new header file
-To:     Eli Cohen <elic@nvidia.com>
-Cc:     mst@redhat.com, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, si-wei.liu@oracle.com,
-        eperezma@redhat.com, lulu@redhat.com
+References: <1664326209-13995-1-git-send-email-yangtiezhu@loongson.cn> <1664326209-13995-3-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1664326209-13995-3-git-send-email-yangtiezhu@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 14 Nov 2022 12:41:42 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4oj4NWO_AYQH5LWnASEtW9oyQnd_an=GCOB6QiZmc+sw@mail.gmail.com>
+Message-ID: <CAAhV-H4oj4NWO_AYQH5LWnASEtW9oyQnd_an=GCOB6QiZmc+sw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] LoongArch: Add kprobe support
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 13, 2022 at 9:45 PM Eli Cohen <elic@nvidia.com> wrote:
+Hi, Tiezhu,
+
+On Wed, Sep 28, 2022 at 8:50 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
 >
-> Move some definitions from mlx5_vnet.c to newly added header file
-> mlx5_vnet.h. We need these definitions for the following patches that
-> add debugfs tree to expose information vital for debug.
+> Kprobes allows you to trap at almost any kernel address and
+> execute a callback function, this commit adds kprobe support
+> for LoongArch.
 >
-> Reviewed-by: Si-Wei Liu <si-wei.liu@oracle.com>
-> Signed-off-by: Eli Cohen <elic@nvidia.com>
-
-Acked-by: Jason Wang <jasowang@redhat.com>
-
-Thanks
-
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 > ---
->  drivers/vdpa/mlx5/net/mlx5_vnet.c | 45 +------------------------
->  drivers/vdpa/mlx5/net/mlx5_vnet.h | 55 +++++++++++++++++++++++++++++++
->  2 files changed, 56 insertions(+), 44 deletions(-)
->  create mode 100644 drivers/vdpa/mlx5/net/mlx5_vnet.h
+>  arch/loongarch/Kconfig               |   1 +
+>  arch/loongarch/include/asm/inst.h    |  12 ++
+>  arch/loongarch/include/asm/kprobes.h |  44 +++++
+>  arch/loongarch/kernel/Makefile       |   2 +
+>  arch/loongarch/kernel/kprobes.c      | 312 +++++++++++++++++++++++++++++++++++
+>  arch/loongarch/mm/fault.c            |   3 +
+>  6 files changed, 374 insertions(+)
+>  create mode 100644 arch/loongarch/include/asm/kprobes.h
+>  create mode 100644 arch/loongarch/kernel/kprobes.c
 >
-> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> index c54d5088ed4f..e45b83527b41 100644
-> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> @@ -18,15 +18,12 @@
->  #include <linux/mlx5/mlx5_ifc_vdpa.h>
->  #include <linux/mlx5/mpfs.h>
->  #include "mlx5_vdpa.h"
-> +#include "mlx5_vnet.h"
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index be8389f..8debd70 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -94,6 +94,7 @@ config LOONGARCH
+>         select HAVE_IOREMAP_PROT
+>         select HAVE_IRQ_EXIT_ON_IRQ_STACK
+>         select HAVE_IRQ_TIME_ACCOUNTING
+> +       select HAVE_KPROBES
+>         select HAVE_MOD_ARCH_SPECIFIC
+>         select HAVE_NMI
+>         select HAVE_PCI
+> diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
+> index 93d5cd4..fc8879b 100644
+> --- a/arch/loongarch/include/asm/inst.h
+> +++ b/arch/loongarch/include/asm/inst.h
+> @@ -21,6 +21,10 @@
 >
->  MODULE_AUTHOR("Eli Cohen <eli@mellanox.com>");
->  MODULE_DESCRIPTION("Mellanox VDPA driver");
->  MODULE_LICENSE("Dual BSD/GPL");
+>  #define ADDR_IMM(addr, INSN)   ((addr & ADDR_IMMMASK_##INSN) >> ADDR_IMMSHIFT_##INSN)
 >
-> -#define to_mlx5_vdpa_ndev(__mvdev)                                             \
-> -       container_of(__mvdev, struct mlx5_vdpa_net, mvdev)
-> -#define to_mvdev(__vdev) container_of((__vdev), struct mlx5_vdpa_dev, vdev)
-> -
->  #define VALID_FEATURES_MASK                                                                        \
->         (BIT_ULL(VIRTIO_NET_F_CSUM) | BIT_ULL(VIRTIO_NET_F_GUEST_CSUM) |                                   \
->          BIT_ULL(VIRTIO_NET_F_CTRL_GUEST_OFFLOADS) | BIT_ULL(VIRTIO_NET_F_MTU) | BIT_ULL(VIRTIO_NET_F_MAC) |   \
-> @@ -50,14 +47,6 @@ MODULE_LICENSE("Dual BSD/GPL");
+> +enum reg0i15_op {
+> +       break_op        = 0x54,
+> +};
+> +
+>  enum reg0i26_op {
+>         b_op            = 0x14,
+>         bl_op           = 0x15,
+> @@ -38,6 +42,8 @@ enum reg1i20_op {
+>  enum reg1i21_op {
+>         beqz_op         = 0x10,
+>         bnez_op         = 0x11,
+> +       bceqz_op        = 0x48000000,
+> +       bcnez_op        = 0x48000100,
+>  };
 >
->  #define MLX5V_UNTAGGED 0x1000
+>  enum reg2_op {
+> @@ -167,6 +173,11 @@ enum reg3sa2_op {
+>         alsld_op        = 0x16,
+>  };
 >
-> -struct mlx5_vdpa_net_resources {
-> -       u32 tisn;
-> -       u32 tdn;
-> -       u32 tirn;
-> -       u32 rqtn;
-> -       bool valid;
-> -};
-> -
->  struct mlx5_vdpa_cq_buf {
->         struct mlx5_frag_buf_ctrl fbc;
->         struct mlx5_frag_buf frag_buf;
-> @@ -146,38 +135,6 @@ static bool is_index_valid(struct mlx5_vdpa_dev *mvdev, u16 idx)
->         return idx <= mvdev->max_idx;
->  }
+> +struct reg0i15_format {
+> +       unsigned int immediate : 15;
+> +       unsigned int opcode : 17;
+> +};
+> +
+>  struct reg0i26_format {
+>         unsigned int immediate_h : 10;
+>         unsigned int immediate_l : 16;
+> @@ -252,6 +263,7 @@ struct reg3sa2_format {
 >
-> -#define MLX5V_MACVLAN_SIZE 256
-> -
-> -struct mlx5_vdpa_net {
-> -       struct mlx5_vdpa_dev mvdev;
-> -       struct mlx5_vdpa_net_resources res;
-> -       struct virtio_net_config config;
-> -       struct mlx5_vdpa_virtqueue *vqs;
-> -       struct vdpa_callback *event_cbs;
-> -
-> -       /* Serialize vq resources creation and destruction. This is required
-> -        * since memory map might change and we need to destroy and create
-> -        * resources while driver in operational.
-> -        */
-> -       struct rw_semaphore reslock;
-> -       struct mlx5_flow_table *rxft;
-> -       bool setup;
-> -       u32 cur_num_vqs;
-> -       u32 rqt_size;
-> -       bool nb_registered;
-> -       struct notifier_block nb;
-> -       struct vdpa_callback config_cb;
-> -       struct mlx5_vdpa_wq_ent cvq_ent;
-> -       struct hlist_head macvlan_hash[MLX5V_MACVLAN_SIZE];
-> -};
-> -
-> -struct macvlan_node {
-> -       struct hlist_node hlist;
-> -       struct mlx5_flow_handle *ucast_rule;
-> -       struct mlx5_flow_handle *mcast_rule;
-> -       u64 macvlan;
-> -};
-> -
->  static void free_resources(struct mlx5_vdpa_net *ndev);
->  static void init_mvqs(struct mlx5_vdpa_net *ndev);
->  static int setup_driver(struct mlx5_vdpa_dev *mvdev);
-> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.h b/drivers/vdpa/mlx5/net/mlx5_vnet.h
+>  union loongarch_instruction {
+>         unsigned int word;
+> +       struct reg0i15_format   reg0i15_format;
+>         struct reg0i26_format   reg0i26_format;
+>         struct reg1i20_format   reg1i20_format;
+>         struct reg1i21_format   reg1i21_format;
+> diff --git a/arch/loongarch/include/asm/kprobes.h b/arch/loongarch/include/asm/kprobes.h
 > new file mode 100644
-> index 000000000000..6691c879a6ca
+> index 0000000..afcf254
 > --- /dev/null
-> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.h
-> @@ -0,0 +1,55 @@
-> +/* SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB */
-> +/* Copyright (c) 2022, NVIDIA CORPORATION & AFFILIATES. All rights reserved. */
+> +++ b/arch/loongarch/include/asm/kprobes.h
+> @@ -0,0 +1,44 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef __ASM_LOONGARCH_KPROBES_H
+> +#define __ASM_LOONGARCH_KPROBES_H
 > +
-> +#ifndef __MLX5_VNET_H__
-> +#define __MLX5_VNET_H__
+> +#include <asm-generic/kprobes.h>
 > +
-> +#include "mlx5_vdpa.h"
+> +#ifdef CONFIG_KPROBES
 > +
-> +#define to_mlx5_vdpa_ndev(__mvdev)                                             \
-> +       container_of(__mvdev, struct mlx5_vdpa_net, mvdev)
-> +#define to_mvdev(__vdev) container_of((__vdev), struct mlx5_vdpa_dev, vdev)
+> +#include <asm/inst.h>
 > +
-> +struct mlx5_vdpa_net_resources {
-> +       u32 tisn;
-> +       u32 tdn;
-> +       u32 tirn;
-> +       u32 rqtn;
-> +       bool valid;
-> +};
+> +#define __ARCH_WANT_KPROBES_INSN_SLOT
+> +#define MAX_INSN_SIZE                  2
 > +
-> +#define MLX5V_MACVLAN_SIZE 256
-> +
-> +struct mlx5_vdpa_net {
-> +       struct mlx5_vdpa_dev mvdev;
-> +       struct mlx5_vdpa_net_resources res;
-> +       struct virtio_net_config config;
-> +       struct mlx5_vdpa_virtqueue *vqs;
-> +       struct vdpa_callback *event_cbs;
-> +
-> +       /* Serialize vq resources creation and destruction. This is required
-> +        * since memory map might change and we need to destroy and create
-> +        * resources while driver in operational.
-> +        */
-> +       struct rw_semaphore reslock;
-> +       struct mlx5_flow_table *rxft;
-> +       struct dentry *rx_dent;
-> +       struct dentry *rx_table_dent;
-> +       bool setup;
-> +       u32 cur_num_vqs;
-> +       u32 rqt_size;
-> +       bool nb_registered;
-> +       struct notifier_block nb;
-> +       struct vdpa_callback config_cb;
-> +       struct mlx5_vdpa_wq_ent cvq_ent;
-> +       struct hlist_head macvlan_hash[MLX5V_MACVLAN_SIZE];
-> +};
-> +
-> +struct macvlan_node {
-> +       struct hlist_node hlist;
-> +       struct mlx5_flow_handle *ucast_rule;
-> +       struct mlx5_flow_handle *mcast_rule;
-> +       u64 macvlan;
-> +};
-> +
-> +#endif /* __MLX5_VNET_H__ */
-> --
-> 2.38.1
->
+> +#define flush_insn_slot(p)             do { } while (0)
+We don't need an ibar here?
 
+> +#define kretprobe_blacklist_size       0
+> +
+> +typedef union loongarch_instruction kprobe_opcode_t;
+> +
+> +/* Architecture specific copy of original instruction */
+> +struct arch_specific_insn {
+> +       /* copy of the original instruction */
+> +       kprobe_opcode_t *insn;
+> +};
+> +
+> +struct prev_kprobe {
+> +       struct kprobe *kp;
+> +       unsigned long status;
+> +       unsigned long saved_irq;
+> +       unsigned long saved_era;
+> +};
+> +
+> +/* per-cpu kprobe control block */
+> +struct kprobe_ctlblk {
+> +       unsigned long kprobe_status;
+> +       unsigned long kprobe_saved_irq;
+> +       unsigned long kprobe_saved_era;
+> +       struct prev_kprobe prev_kprobe;
+> +};
+> +
+> +void arch_remove_kprobe(struct kprobe *p);
+> +bool kprobe_fault_handler(struct pt_regs *regs, int trapnr);
+> +
+> +#endif /* CONFIG_KPROBES */
+> +#endif /* __ASM_LOONGARCH_KPROBES_H */
+> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+> index 5358144..ff98d8a 100644
+> --- a/arch/loongarch/kernel/Makefile
+> +++ b/arch/loongarch/kernel/Makefile
+> @@ -33,4 +33,6 @@ obj-$(CONFIG_UNWINDER_PROLOGUE) += unwind_prologue.o
+>
+>  obj-$(CONFIG_PERF_EVENTS)      += perf_event.o perf_regs.o
+>
+> +obj-$(CONFIG_KPROBES)          += kprobes.o
+> +
+>  CPPFLAGS_vmlinux.lds           := $(KBUILD_CFLAGS)
+> diff --git a/arch/loongarch/kernel/kprobes.c b/arch/loongarch/kernel/kprobes.c
+> new file mode 100644
+> index 0000000..c11f6e0
+> --- /dev/null
+> +++ b/arch/loongarch/kernel/kprobes.c
+> @@ -0,0 +1,312 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include <linux/kprobes.h>
+> +#include <linux/kdebug.h>
+> +#include <asm/break.h>
+> +
+> +static const union loongarch_instruction breakpoint_insn = {
+> +       .reg0i15_format = {
+> +               .opcode = break_op,
+> +               .immediate = BRK_KPROBE_BP,
+> +       }
+> +};
+> +
+> +static const union loongarch_instruction singlestep_insn = {
+> +       .reg0i15_format = {
+> +               .opcode = break_op,
+> +               .immediate = BRK_KPROBE_SSTEPBP,
+> +       }
+> +};
+> +
+> +DEFINE_PER_CPU(struct kprobe *, current_kprobe);
+> +DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
+> +
+> +static bool insns_are_not_supported(union loongarch_instruction insn)
+> +{
+> +       switch (insn.reg2i14_format.opcode) {
+> +       case llw_op:
+> +       case lld_op:
+> +       case scw_op:
+> +       case scd_op:
+> +               pr_notice("kprobe: ll or sc instructions are not supported\n");
+> +               return true;
+> +       }
+> +
+> +       switch (insn.reg1i21_format.opcode) {
+> +       case bceqz_op:
+> +       case bcnez_op:
+> +               pr_notice("kprobe: bceqz or bcnez instructions are not supported\n");
+> +               return true;
+> +       }
+> +
+> +       return false;
+> +}
+> +NOKPROBE_SYMBOL(insns_are_not_supported);
+> +
+> +int arch_prepare_kprobe(struct kprobe *p)
+> +{
+> +       union loongarch_instruction insn;
+> +
+> +       insn = p->addr[0];
+> +       if (insns_are_not_supported(insn))
+> +               return -EINVAL;
+> +
+> +       p->ainsn.insn = get_insn_slot();
+> +       if (!p->ainsn.insn)
+> +               return -ENOMEM;
+> +
+> +       p->ainsn.insn[0] = *p->addr;
+> +       p->ainsn.insn[1] = singlestep_insn;
+> +
+> +       p->opcode = *p->addr;
+> +
+> +       return 0;
+> +}
+> +NOKPROBE_SYMBOL(arch_prepare_kprobe);
+> +
+> +/* Install breakpoint in text */
+> +void arch_arm_kprobe(struct kprobe *p)
+> +{
+> +       *p->addr = breakpoint_insn;
+> +}
+> +NOKPROBE_SYMBOL(arch_arm_kprobe);
+> +
+> +/* Remove breakpoint from text */
+> +void arch_disarm_kprobe(struct kprobe *p)
+> +{
+> +       *p->addr = p->opcode;
+> +}
+> +NOKPROBE_SYMBOL(arch_disarm_kprobe);
+> +
+> +void arch_remove_kprobe(struct kprobe *p)
+> +{
+> +       if (p->ainsn.insn) {
+> +               free_insn_slot(p->ainsn.insn, 0);
+> +               p->ainsn.insn = NULL;
+> +       }
+> +}
+> +NOKPROBE_SYMBOL(arch_remove_kprobe);
+> +
+> +static void save_previous_kprobe(struct kprobe_ctlblk *kcb)
+> +{
+> +       kcb->prev_kprobe.kp = kprobe_running();
+> +       kcb->prev_kprobe.status = kcb->kprobe_status;
+> +       kcb->prev_kprobe.saved_irq = kcb->kprobe_saved_irq;
+> +       kcb->prev_kprobe.saved_era = kcb->kprobe_saved_era;
+> +}
+> +NOKPROBE_SYMBOL(save_previous_kprobe);
+> +
+> +static void restore_previous_kprobe(struct kprobe_ctlblk *kcb)
+> +{
+> +       __this_cpu_write(current_kprobe, kcb->prev_kprobe.kp);
+> +       kcb->kprobe_status = kcb->prev_kprobe.status;
+> +       kcb->kprobe_saved_irq = kcb->prev_kprobe.saved_irq;
+> +       kcb->kprobe_saved_era = kcb->prev_kprobe.saved_era;
+> +}
+> +NOKPROBE_SYMBOL(restore_previous_kprobe);
+> +
+> +static void set_current_kprobe(struct kprobe *p, struct pt_regs *regs,
+> +                              struct kprobe_ctlblk *kcb)
+> +{
+> +       __this_cpu_write(current_kprobe, p);
+> +       kcb->kprobe_saved_irq = regs->csr_prmd & CSR_PRMD_PIE;
+> +       kcb->kprobe_saved_era = regs->csr_era;
+> +}
+> +NOKPROBE_SYMBOL(set_current_kprobe);
+> +
+> +static bool insns_are_not_simulated(struct kprobe *p, struct pt_regs *regs)
+> +{
+> +       if (is_branch_ins(&p->opcode)) {
+> +               simu_branch(regs, p->opcode);
+> +               return false;
+> +       } else if (is_pc_ins(&p->opcode)) {
+> +               simu_pc(regs, p->opcode);
+> +               return false;
+> +       } else {
+> +               return true;
+> +       }
+> +}
+> +NOKPROBE_SYMBOL(insns_are_not_simulated);
+> +
+> +static void setup_singlestep(struct kprobe *p, struct pt_regs *regs,
+> +                            struct kprobe_ctlblk *kcb, int reenter)
+> +{
+> +       if (reenter) {
+> +               save_previous_kprobe(kcb);
+> +               set_current_kprobe(p, regs, kcb);
+> +               kcb->kprobe_status = KPROBE_REENTER;
+> +       } else {
+> +               kcb->kprobe_status = KPROBE_HIT_SS;
+> +       }
+> +
+> +       if (p->ainsn.insn->word == breakpoint_insn.word) {
+> +               regs->csr_prmd &= ~CSR_PRMD_PIE;
+> +               regs->csr_prmd |= kcb->kprobe_saved_irq;
+> +               return;
+> +       }
+> +
+> +       regs->csr_prmd &= ~CSR_PRMD_PIE;
+> +
+> +       if (insns_are_not_simulated(p, regs)) {
+> +               kcb->kprobe_status = KPROBE_HIT_SS;
+> +               regs->csr_era = (unsigned long)&p->ainsn.insn[0];
+> +       } else {
+> +               kcb->kprobe_status = KPROBE_HIT_SSDONE;
+> +               if (p->post_handler)
+> +                       p->post_handler(p, regs, 0);
+> +               reset_current_kprobe();
+> +       }
+> +}
+> +NOKPROBE_SYMBOL(setup_singlestep);
+> +
+> +static bool reenter_kprobe(struct kprobe *p, struct pt_regs *regs,
+> +                         struct kprobe_ctlblk *kcb)
+> +{
+> +       switch (kcb->kprobe_status) {
+> +       case KPROBE_HIT_SSDONE:
+> +       case KPROBE_HIT_ACTIVE:
+> +               kprobes_inc_nmissed_count(p);
+> +               setup_singlestep(p, regs, kcb, 1);
+> +               break;
+> +       case KPROBE_HIT_SS:
+> +       case KPROBE_REENTER:
+> +               pr_warn("Failed to recover from reentered kprobes.\n");
+> +               dump_kprobe(p);
+> +               BUG();
+> +               break;
+> +       default:
+> +               WARN_ON(1);
+> +               return false;
+> +       }
+> +
+> +       return true;
+> +}
+> +NOKPROBE_SYMBOL(reenter_kprobe);
+> +
+> +static bool kprobe_pre_handler(struct pt_regs *regs)
+> +{
+> +       struct kprobe *p, *cur_kprobe;
+> +       struct kprobe_ctlblk *kcb;
+> +       unsigned long addr = instruction_pointer(regs);
+> +
+> +       kcb = get_kprobe_ctlblk();
+> +       cur_kprobe = kprobe_running();
+> +
+> +       p = get_kprobe((kprobe_opcode_t *) addr);
+> +       if (p) {
+> +               if (cur_kprobe) {
+> +                       if (reenter_kprobe(p, regs, kcb))
+> +                               return true;
+> +               } else {
+> +                       /* Probe hit */
+> +                       set_current_kprobe(p, regs, kcb);
+> +                       kcb->kprobe_status = KPROBE_HIT_ACTIVE;
+> +
+> +                       /*
+> +                        * If we have no pre-handler or it returned 0, we
+> +                        * continue with normal processing.  If we have a
+> +                        * pre-handler and it returned non-zero, it will
+> +                        * modify the execution path and no need to single
+> +                        * stepping. Let's just reset current kprobe and exit.
+> +                        *
+> +                        * pre_handler can hit a breakpoint and can step thru
+> +                        * before return.
+> +                        */
+> +                       if (!p->pre_handler || !p->pre_handler(p, regs))
+> +                               setup_singlestep(p, regs, kcb, 0);
+> +                       else
+> +                               reset_current_kprobe();
+> +               }
+> +               return true;
+> +       }
+> +
+> +       /*
+> +        * The breakpoint instruction was removed right
+> +        * after we hit it.  Another cpu has removed
+> +        * either a probepoint or a debugger breakpoint
+> +        * at this address.  In either case, no further
+> +        * handling of this interrupt is appropriate.
+> +        * Return back to original instruction, and continue.
+> +        */
+> +       return false;
+> +}
+> +NOKPROBE_SYMBOL(kprobe_pre_handler);
+> +
+> +static bool kprobe_post_handler(struct pt_regs *regs)
+> +{
+> +       struct kprobe *cur = kprobe_running();
+> +       struct kprobe_ctlblk *kcb = get_kprobe_ctlblk();
+> +
+> +       if (!cur)
+> +               return false;
+> +
+> +       /* Restore back the original saved kprobes variables and continue */
+> +       if (kcb->kprobe_status == KPROBE_REENTER) {
+> +               restore_previous_kprobe(kcb);
+> +               return true;
+> +       }
+> +
+> +       /* Call post handler */
+> +       kcb->kprobe_status = KPROBE_HIT_SSDONE;
+> +       if (cur->post_handler)
+> +               cur->post_handler(cur, regs, 0);
+> +
+> +       regs->csr_era = kcb->kprobe_saved_era + LOONGARCH_INSN_SIZE;
+> +       regs->csr_prmd |= kcb->kprobe_saved_irq;
+> +
+> +       reset_current_kprobe();
+> +
+> +       return true;
+> +}
+> +NOKPROBE_SYMBOL(kprobe_post_handler);
+I'm not sure whether kprobe_pre_handler/kprobe_post_handler is
+suitable, but nearly all other architectures use
+kprobe_handler/post_kprobe_handler.
+
+Huacai
+> +
+> +bool kprobe_fault_handler(struct pt_regs *regs, int trapnr)
+> +{
+> +       struct kprobe_ctlblk *kcb = get_kprobe_ctlblk();
+> +
+> +       if (kcb->kprobe_status & KPROBE_HIT_SS) {
+> +               regs->csr_era = kcb->kprobe_saved_era + LOONGARCH_INSN_SIZE;
+> +               regs->csr_prmd |= kcb->kprobe_saved_irq;
+> +               reset_current_kprobe();
+> +       }
+> +
+> +       return false;
+> +}
+> +NOKPROBE_SYMBOL(kprobe_fault_handler);
+> +
+> +int kprobe_exceptions_notify(struct notifier_block *self,
+> +                            unsigned long val, void *data)
+> +{
+> +       struct die_args *args = (struct die_args *)data;
+> +       int ret = NOTIFY_DONE;
+> +
+> +       switch (val) {
+> +       case DIE_BREAK:
+> +               if (kprobe_pre_handler(args->regs))
+> +                       ret = NOTIFY_STOP;
+> +               break;
+> +       case DIE_SSTEPBP:
+> +               if (kprobe_post_handler(args->regs))
+> +                       ret = NOTIFY_STOP;
+> +               break;
+> +       default:
+> +               break;
+> +       }
+> +
+> +       return ret;
+> +}
+> +NOKPROBE_SYMBOL(kprobe_exceptions_notify);
+> +
+> +/*
+> + * Provide a blacklist of symbols identifying ranges which cannot be kprobed.
+> + * This blacklist is exposed to userspace via debugfs (kprobes/blacklist).
+> + */
+> +int __init arch_populate_kprobe_blacklist(void)
+> +{
+> +       return kprobe_add_area_blacklist((unsigned long)__irqentry_text_start,
+> +                                        (unsigned long)__irqentry_text_end);
+> +}
+> +
+> +int __init arch_init_kprobes(void)
+> +{
+> +       return 0;
+> +}
+> diff --git a/arch/loongarch/mm/fault.c b/arch/loongarch/mm/fault.c
+> index 1ccd536..5882f17 100644
+> --- a/arch/loongarch/mm/fault.c
+> +++ b/arch/loongarch/mm/fault.c
+> @@ -253,6 +253,9 @@ asmlinkage void __kprobes do_page_fault(struct pt_regs *regs,
+>  {
+>         irqentry_state_t state = irqentry_enter(regs);
+>
+> +       if (kprobe_page_fault(regs, current->thread.trap_nr))
+> +               return;
+> +
+>         /* Enable interrupt if enabled in parent context */
+>         if (likely(regs->csr_prmd & CSR_PRMD_PIE))
+>                 local_irq_enable();
+> --
+> 2.1.0
+>
+>
