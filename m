@@ -2,78 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B37628274
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B03628219
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235826AbiKNOZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:25:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
+        id S236986AbiKNOKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:10:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiKNOZv (ORCPT
+        with ESMTP id S236989AbiKNOKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:25:51 -0500
-X-Greylist: delayed 905 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Nov 2022 06:25:50 PST
-Received: from sender4-of-o54.zoho.com (sender4-of-o54.zoho.com [136.143.188.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8097C332;
-        Mon, 14 Nov 2022 06:25:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1668435040; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=apHDiiwYXYvUFTkgwJPwrDjZkNQQhU5pRiqQzE0P654pbcKIQIxavf6mnse8OtdS1Y23dX3VkSc7ig46Uo3C0ka+VQJ4FCzYE4SCWwRaFonmyK7TUF0J4lxLQ6YqkJRTDmGC7lvDb+BuKDAcXQAKu16732aED+2nlJ3dqQ30xxw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1668435040; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=Obamzi7+h416URfz7TCOzXR/hOBh/eTAtx+Zw3J7MNk=; 
-        b=fa7qkLlgeEvgoiwJzHaMiUiv1o1VZgA2BGxmSmP+VrTShLD/tzeUG5AWUme7LQZ4UtN4OuGsogYnRrsgWWPxl4MQFWe8TIsEU0fQ01HodgXBSdrf0TflJy6wj46BNZcCikztU/1ivhrpVE4f08ZZ7pKiNlffIo0zzpG2OYtR75A=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        spf=pass  smtp.mailfrom=business@elijahpepe.com;
-        dmarc=pass header.from=<business@elijahpepe.com>
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1668435038060533.7770069828593; Mon, 14 Nov 2022 06:10:38 -0800 (PST)
-Date:   Mon, 14 Nov 2022 06:10:38 -0800
-From:   Elijah Conners <business@elijahpepe.com>
-To:     "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "linux-pm" <linux-pm@vger.kernel.org>
-Cc:     "mszyprowski" <m.szyprowski@samsung.com>
-Message-ID: <184767a4f60.d9a0c3da334147.3171681720569322283@elijahpepe.com>
-In-Reply-To: 
-Subject: [PATCH] drivers: undo simplify POWER_SUPPLY_PROP_ONLINE
+        Mon, 14 Nov 2022 09:10:41 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5509E1FCF0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:10:40 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id l8so13305384ljh.13
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:10:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ADSq2f7jGhQ/42j/nm6BykZfXnm5jbp6+XiZg6V4aNs=;
+        b=bSeOmRV84dazrprcJMg38nKqQZ1+Tq0XqgSKIMwgieiVhhYniNfD2CfPAYLXPbVeU3
+         sFXUgSPLC5zwsJAH/vr55NJjHeCd7L7G8kTYVBxY4P1++jtKBD6KgZEIBWIaAiSbvhLm
+         eG5BOQKGUfJEAufuq+oqFUq9yDgz/m2KxtASoRkWh9QqhZlOi7aEl4jqPeO+l701ceEt
+         pfGiAby+CTl9DNJXquNhew5T2DUNuoffTjDqjBxv8gUV7xPz1ud1eZc3u3AxUBvMHMTF
+         oX9eOxVf55+NVJWclTCCquHVRVfSRyew7YIQJ+/LFesKex1RJy1cqzjIqQT4POP32BQ+
+         NlEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ADSq2f7jGhQ/42j/nm6BykZfXnm5jbp6+XiZg6V4aNs=;
+        b=mck3/kbixeYGYuhFkj0+jTa1O/CVEncq2TaeOKLlq+sJBytta2vh30DhMH/HTFuWJ+
+         MdDd06YX94hpuMX+DHjgmotwFX6rYoHlcN3ZLu+MybQrB3vhnNYd6JOx89alxMNaJdP8
+         CYY/x8H1FTzqna3AwDDtcNf+dV278YUyQ68s9KPBXBpnIV2BXUrftH9mfcSkMaztKMFi
+         +bibI3+8EZ+LbUBD8Oq32M/YGq3CWrQRGtyxlDZx3DRaQusglHx5DR/avPivBKDhV2MM
+         oOl/8uIMiITAmZJeJtY+wnP88Bg2ORrmjBPb6FrZQkZSOZ0Z4ay53GXN8utI7fDFHHuZ
+         CH0Q==
+X-Gm-Message-State: ANoB5pkzOSfUR+Fflx2VE14ISZJ4z6VhhLig6idDhEssHHu++gAeYL9K
+        JMbr0j5b1u9W+yn4ASE7vBQ=
+X-Google-Smtp-Source: AA0mqf5IsamLhCJhWu55KmajM6t3WOOsOl957GGk4kdg+8LFR3PUric6TOjTnMscbhZ0/8t26W25ow==
+X-Received: by 2002:a05:651c:491:b0:277:38d8:1e28 with SMTP id s17-20020a05651c049100b0027738d81e28mr4570723ljc.46.1668435038555;
+        Mon, 14 Nov 2022 06:10:38 -0800 (PST)
+Received: from ?IPV6:2a02:6b8:0:107:3e85:844d:5b1d:60a? ([2a02:6b8:0:107:3e85:844d:5b1d:60a])
+        by smtp.gmail.com with ESMTPSA id c2-20020a056512074200b004979e1ff641sm1824669lfs.115.2022.11.14.06.10.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 06:10:38 -0800 (PST)
+Message-ID: <288b8f73-ee5d-76f2-18e4-f8e41ca98df5@gmail.com>
+Date:   Mon, 14 Nov 2022 17:10:38 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 3/5] x86/kasan: Rename local CPU_ENTRY_AREA variables
+ to shorten names
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com,
+        syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com
+References: <20221110203504.1985010-1-seanjc@google.com>
+ <20221110203504.1985010-4-seanjc@google.com>
+From:   Andrey Ryabinin <ryabinin.a.a@gmail.com>
+In-Reply-To: <20221110203504.1985010-4-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Per the work done by arturo182, the value of max17040() with LiPo
-batteries will always be 1, even if it's not connected. This is
-ambiguous and setting the return value to 1 presents complications for
-anyone working with LiPo batteries, and does not result in significant
-overhead.
 
-Signed-off-by: Elijah Conners <business@elijahpepe.com>
----
- drivers/power/supply/max17040_battery.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
-index a9aef1e8b186..5284f2bf735c 100644
---- a/drivers/power/supply/max17040_battery.c
-+++ b/drivers/power/supply/max17040_battery.c
-@@ -217,7 +217,8 @@ static int max17040_get_version(struct max17040_chip *chip)
- 
- static int max17040_get_online(struct max17040_chip *chip)
- {
--	return 1;
-+	return chip->pdata && chip->pdata->battery_online ?
-+		chip->pdata->battery_online() : 1;
- }
- 
- static int max17040_get_of_data(struct max17040_chip *chip)
--- 
-2.29.2.windows.2
+On 11/10/22 23:35, Sean Christopherson wrote:
+> Rename the CPU entry area variables in kasan_init() to shorten their
+> names, a future fix will reference the beginning of the per-CPU portion
+> of the CPU entry area, and shadow_cpu_entry_per_cpu_begin is a bit much.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/mm/kasan_init_64.c | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+
+Reviewed-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
