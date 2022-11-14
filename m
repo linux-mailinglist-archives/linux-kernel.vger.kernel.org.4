@@ -2,134 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77769628648
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D200628649
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:58:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238014AbiKNQ5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:57:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35856 "EHLO
+        id S238043AbiKNQ5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238175AbiKNQ5A (ORCPT
+        with ESMTP id S238213AbiKNQ5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:57:00 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BDB15715
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:56:24 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id l12so20267628lfp.6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:56:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y58GC68qONNsMENmg/gVzchuwfipMrSIXXvNyA3gkbg=;
-        b=erS66v2Lwbd/Bxw+cRVGXpnK35dtxrMBXRB+gqK+ylQztNcHOO9KdsKrDgfgjZcEX+
-         ouaZTMB5YfsbyHkyDGm6jELbRu5So6/39tYq+IF6XHddJfI5TTmJ4z6iAg8DVsHMGfl0
-         HaJS/gZBtc22idWiPmbWpoymiy/5C7d267VVNe/NDMKjydsr3ooRdpDux5wD1rFsajuf
-         7siXOYyiajlxTPPIFiuXXDqe/6sddtRVNlm3w3MN/yBBk+Bcfsh4/TSgWH0yt5p50G56
-         2ymTpYLIj7UDHMugg/DMFidpg2JVq3pWUw/KNzYlaCzSBmeDP7NsY+xy/0oLaJSQmZxz
-         U4vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y58GC68qONNsMENmg/gVzchuwfipMrSIXXvNyA3gkbg=;
-        b=wesSll4HWXBJ9CF65UnjnomiwmvjfShcha2ThMihG9ZeTbxxDxV0xTNckTaIXmvZpG
-         QyGVgFJ3kHkE7rRBlF+k1yd1+pfUjfkj/GuJXcaA70p9fsg/KmQXi8vcbKZLHYzLBGk9
-         qETEu6M4hzniSDm0aZdHJFOnO55/m4c7dsatzl1ee+jGhMEeMizh9SSOk4BYbZ3pXout
-         xF3Jnd/Kc1g203J00KoYtEw5YQnS2GX/rtFbmbJC5DDBe+AFcIqlSkKiD5oUrRCXQybQ
-         3PbCEARncEo/0EvlfRiz8IJB4KKIGsbh9mEpEbT+Vc2FtNYBG4YjMk99P1MvgUK1apWt
-         h8kQ==
-X-Gm-Message-State: ANoB5pnPWwyapXdwWB7tDabVkmurIbVmkXnMdOKErc74ELG4vh4K3dJy
-        JR7dUmSf+h8Ao/cVxE9uBoPm/Q==
-X-Google-Smtp-Source: AA0mqf6nd4/xXmES0TovIm34CZ9x5BlOLPTUbu60+ZDPXCjvtXdVhANJep/PDnB+Ud+HWFXHnhLUzQ==
-X-Received: by 2002:a05:6512:3414:b0:4a2:2b23:f17f with SMTP id i20-20020a056512341400b004a22b23f17fmr4121950lfr.688.1668444983295;
-        Mon, 14 Nov 2022 08:56:23 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id q3-20020a19f203000000b00493014c3d7csm1882169lfh.309.2022.11.14.08.56.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 08:56:22 -0800 (PST)
-Message-ID: <8420c342-9dce-aea7-8d1e-f141e0c1ebb5@linaro.org>
-Date:   Mon, 14 Nov 2022 17:56:21 +0100
+        Mon, 14 Nov 2022 11:57:06 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAE1303E4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:56:27 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3C8C22015B;
+        Mon, 14 Nov 2022 16:56:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668444986; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cohWP967fM5k66eiwPyUCzOvFE5A3xQATFXcYzJTBgI=;
+        b=x8PJN/88Rs3HDZEPW4SS73lszJ990ZTjc7y0jGLs1TsAm2/0hhzlKEz9nyBvf6x6OYDVbt
+        /rCmgFK6yaPNV0zwY7qwMT2CmdSdnVlXyIrQ4k2B9qrTNRWspbz7+oIl79Qd6OQFofxHTN
+        6voNGvj6fjSfCQ6eDXyFwZlJJByGl50=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668444986;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cohWP967fM5k66eiwPyUCzOvFE5A3xQATFXcYzJTBgI=;
+        b=RZcYSQu9jIglU+wUpMu9+XuS0nOFfr3z7sgt41Fe2Y52l6JV2t+2HrXL88xqAbNaDLLNm+
+        VZPSieo85RWXtfDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1A74F13A92;
+        Mon, 14 Nov 2022 16:56:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eUHsBTpzcmMARgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 14 Nov 2022 16:56:26 +0000
+Message-ID: <5dc7529d-9edf-4ea7-35d3-a5f3dc55dd5c@suse.cz>
+Date:   Mon, 14 Nov 2022 17:56:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 02/14] dt-bindings: phy: qcom,qmp-usb3-dp: fix sc8280xp
- bindings
+ Thunderbird/102.4.1
+Subject: Re: include: linux: slab: kmalloc_trace undefined when compiling
+ drivers
 Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221111092457.10546-1-johan+linaro@kernel.org>
- <20221111092457.10546-3-johan+linaro@kernel.org>
- <a22888cd-34cb-3453-0dc2-096da208564c@linaro.org>
- <Y3JCVzJ74YsfcDz4@hovoldconsulting.com>
- <de3a426a-03e8-ed15-a9a1-bb300e776e5f@linaro.org>
- <Y3JOO0kNnaNhnW3K@hovoldconsulting.com>
- <02725b78-04ad-8f4a-25c2-9cdaa1e37ab7@linaro.org>
- <Y3JthM1jC2vH1Kn+@hovoldconsulting.com>
- <efd412d0-7411-8b0b-4700-9e183a592048@linaro.org>
- <Y3JxZ+yFMLZkwNBi@hovoldconsulting.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y3JxZ+yFMLZkwNBi@hovoldconsulting.com>
+To:     Ian Cowan <ian@linux.cowan.aero>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        roman.gushchin@linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <Y2/Luovqgz8O+Kqa@rhino>
+ <f83aca33-3a5f-97ac-625e-aa7c72bf60ba@infradead.org> <Y3AXVRAoZA5YEho+@rhino>
+ <1df133ef-d5e9-f323-7c67-fc9ffed04274@infradead.org> <Y3A9waTkehESUyn+@rhino>
+ <abdb1b8d-859d-669b-6bbf-604febb643b2@infradead.org> <Y3BGimp2LmRqV9oy@rhino>
+ <Y3IDWt9vINpCtXjP@hyeyoo> <Y3I3FnPfHObfdIUb@rhino>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <Y3I3FnPfHObfdIUb@rhino>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/11/2022 17:48, Johan Hovold wrote:
-> On Mon, Nov 14, 2022 at 05:39:26PM +0100, Krzysztof Kozlowski wrote:
->> On 14/11/2022 17:32, Johan Hovold wrote:
+On 11/14/22 13:39, Ian Cowan wrote:
+> On Mon, Nov 14, 2022 at 05:59:06PM +0900, Hyeonggon Yoo wrote:
+>> On Sat, Nov 12, 2022 at 08:21:14PM -0500, Ian Cowan wrote:
+>> > On Sat, Nov 12, 2022 at 05:11:27PM -0800, Randy Dunlap wrote:
+>> > > 
+>> > > 
+>> > > On 11/12/22 16:43, Ian Cowan wrote:
+>> > > > On Sat, Nov 12, 2022 at 04:34:18PM -0800, Randy Dunlap wrote:
+>> > > >>
+>> > > >>
+>> > > >> On 11/12/22 13:59, Ian Cowan wrote:
+>> > > >>> On Sat, Nov 12, 2022 at 09:21:34AM -0800, Randy Dunlap wrote:
+>> > > >>>> Hi--
+>> > > >>>>
+>> > > >>>> On 11/12/22 08:37, Ian Cowan wrote:
+>> > > >>>>> When compiling drivers (speficially drivers/pci/hotplug), I am receiving
+>> > > >>>>> the following modpost error for both `kmalloc_trace` and
+>> > > >>>>> `kmalloc_node_trace` on the staging/staging-next branch:
+>> > > >>>>>
+>> > > >>
+>> > > >> Ian, what do you mean by "on the staging/staging-next branch"?
+>> > > >>
+>> > > >> What kernel version are you trying to build?
+>> > > >>
+>> > > >> The .config that you sent is for v6.1.0-rc1.
+>> > > > 
+>> > > > I am building from the staging repository (gregkh/staging) and my
+>> > > > working branch when building is staging-next. So I am trying to build
+>> > > > from staging and not a particular version. I have also run `make modules_prepare`
+>> > > > and updated the .config per that script. However, when I do build
+>> > > > v6.1.0-rc1 from the main repository (torvalds/linux), I run into the same problem.
+>> > > 
+>> > > Have you built the entire kernel already and then you are trying to build
+>> > > only drivers/pci/hotplug?
+>> > Yes, I did build the entire kernel already and then I'm just trying to
+>> > rebuild that module.
+>> > 
+>> > In `include/linux/slab.h` if I remove the lines between `#ifdef
+>> > CONFIG_TRACING` and `#else` (lines 473-480) and then the corresponding
+>> > `#endif` and leave lines 481-499, I'm able to compile that module
+>> > without issue.
+>> 
+>> I don't get what the problem is.
+>> In case kmalloc[_node]_trace() is undefined, it's replaced with kmem_cache_alloc[_node]. 
+>> 
+>> Is the kernel built with same config on tree?
 > 
->>> Fair enough, I'll drop it. But there doesn't seem to be a good way to
->>> describe the indexes currently and most bindings simply ignore to do so.
->>>
->>> So what is the preference then? Just leave things undocumented, listing
->>> indexes in a free-text 'description', or adding a free-text reference to
->>> a binding header file and using those define names in a free-text
->>> 'description'?
->>
->> Either 2 or 3. Several bindings for small number of constants choose
->> option 2.
+> Yes, the same config on tree with no errors or warnings. I was able to
+> trace it back to this commit - building on the commit immediately prior
+> builds without error or warning. It looks like this commit does some
+> refactoring of the kmem_cache_alloc[_node] and kmalloc[_node]_trace.
 > 
-> Ok, we have three now, but USB4 will bump this to ten or so.
+> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git/commit/?h=staging-next&id=26a40990ba052
 
-Then probably header file is the way to go.
+As you can see in that diff, mm/slab_common.c does
+EXPORT_SYMBOL(kmalloc_trace) and EXPORT_SYMBOL(kmalloc_node_trace) so I
+don't see why they should be missing.
 
->  
->>> And if going with the last option, does this mean that every SoC and PHY
->>> type needs its own header for those three clocks or so to avoid having
->>> a common dumping ground header file where indexes will not necessarily
->>> be 0-based and consecutive.
->>
->> phy-qcom-qmp-combo.c has one qcom_qmp_dp_clks_hw_get(), so why would you
->> have many of header files?
-> 
-> We don't know what kind of clock outputs later revisions of these PHYs
-> will have. The only way to guarantee 0-based consecutive indexes appears
-> to be to use per-SoC defines (e.g. as for the GCC bindings).
+Wonder if you have a stale mm/slab_common.o because for some reason it's not
+being recompiled (a file timestamp in the future?)
+Can you rm it and rebuild? And maybe also mm/built-in.a
+Or maybe a full make clean and/or a fresh checkout.
 
-Which is also fine. I don't understand still why it is a problem - even
-if you have multiple files, one for each SoC/phy. If USB4 brings here 10
-more clocks and other SoCs/phys might bring many more options, then what
-else can you do? Grow the binding file with big text-based mapping of
-IDs? It's not a viable solution. Header or headers is the only
-maintainable way for such cases.
-
-Best regards,
-Krzysztof
 
