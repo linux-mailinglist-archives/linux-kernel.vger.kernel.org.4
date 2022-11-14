@@ -2,312 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E00628D73
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F87628D77
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:34:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235813AbiKNXcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 18:32:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
+        id S236133AbiKNXer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 18:34:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbiKNXcd (ORCPT
+        with ESMTP id S230520AbiKNXep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 18:32:33 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6387020E;
-        Mon, 14 Nov 2022 15:32:29 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D5B711FB;
-        Mon, 14 Nov 2022 15:32:35 -0800 (PST)
-Received: from slackpad.lan (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA0193F663;
-        Mon, 14 Nov 2022 15:32:25 -0800 (PST)
-Date:   Mon, 14 Nov 2022 23:31:02 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Martin Botka <martin.botka@somainline.org>
-Cc:     martin.botka1@gmail.com, ~postmarketos/upstreaming@lists.sr.ht,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Jan Trmal <jtrmal@gmail.com>, Tom <takuya@takuya.tech>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Conley Lee <conleylee@foxmail.com>,
-        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] arm64: dts: Add basic support for BIQU CB1
-Message-ID: <20221114233102.3b1f96cc@slackpad.lan>
-In-Reply-To: <20221114214452.1993744-2-martin.botka@somainline.org>
-References: <20221114214452.1993744-1-martin.botka@somainline.org>
-        <20221114214452.1993744-2-martin.botka@somainline.org>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Nov 2022 18:34:45 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1520AE6B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 15:34:44 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id m6-20020aa79006000000b0056bc283f477so6777740pfo.19
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 15:34:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2C+mEdWGRF7/5Wann0NujnMardQrr8Pv4jnCYIOIfiI=;
+        b=KdNFTJ+kuX5LRPdITAEfyeE5gXPE4KELlxqjIkj/2C8ZNoZ5iZfHOVNDOOfbCszRT2
+         EaHbD6iQ0CU8zAwaA6+iaPNkTOFNfl+7SI4hQ9w3qmWHphbSo8l+UcnrhrfcFxRUufWZ
+         RC8hBKQGlGyoM+QDaYRdUAnHywNf8Z+239VTm1JOIFTx/M3ta+dz7FG9CH6TMiVV8fbQ
+         0HxyUg2OeZDkIqp4q1UwzLYaKEiLBWCY8GQ7HDVo4w93hiRbYNXdW9SI7bCb/MUzSnOS
+         M0md+d9QDWIxVbQgKli/kpzDulxMjA83byuaklikp6IKAYHFDbU3PJ+0feaaGPCd4Zbt
+         E3bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2C+mEdWGRF7/5Wann0NujnMardQrr8Pv4jnCYIOIfiI=;
+        b=fCYgZV1O5XUCfyGHOY2cXkO/RNsAsW+/xj6GurMLiapG0iEvv/inbOzNJc9nQFHLrX
+         wkVFO/+SRoAs9vPsXoQCpnE4ugKqelsLpttkxVbamnvPpL6ePmWVvMcPQuIqXBO/ExgI
+         U+s+ZkZh6Xiqd3dvcjDTgRZy2bgOtTPNVdceEIQNEfDbQbkgJDfm8oU06Kwptdeftmbw
+         C0n27dFwExbQMTy1p064v/IJJHzEHedYcB8PrtUOHIfNIx8YeMsVopqlR/1I0wVF5I7T
+         vIw+O6anLJSTAG1nkjSz4VGJvxFROsObDC++pnBQl3/MecJQjgUbuBLyaAcdx0bYgfNP
+         wtqA==
+X-Gm-Message-State: ANoB5pnmWtx4vYklFH2JEYam5zPAyptIIpKSTPDPbOABfKAgfbxFkfXv
+        PC9LruF5MhjS7GkXBsiQ8Ne4/p4JqvA=
+X-Google-Smtp-Source: AA0mqf43xEFm+n2DcQgWiAGNQ5hf1jRgFH/hpiR4J/Hd/pbOkdug8JRkGl0N/bo1Ld0JTrpUae9+sFKZMR8=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:1c86:b0:56b:d027:214 with SMTP id
+ y6-20020a056a001c8600b0056bd0270214mr15823140pfw.79.1668468884170; Mon, 14
+ Nov 2022 15:34:44 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Mon, 14 Nov 2022 23:34:38 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221114233441.3895891-1-seanjc@google.com>
+Subject: [PATCH v3 0/3] x86/crash: Fix double NMI shootdown bug
+From:   Sean Christopherson <seanjc@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 22:44:49 +0100
-Martin Botka <martin.botka@somainline.org> wrote:
+Tom,
 
-> CB1 is Compute Module style board that plugs into Rpi board style adapter or
-> Manta 3D printer boards (M4P/M8P).
-> 
-> The board has:
-> 	H616 SoC
-> 	1GB of RAM
-> 	AXP313A PMIC
-> 
-> And the actual boards that CB1 plugs in are just extension to it with ports and
-> thus are not split in DT.
+I Cc'd you this time around because the APM doesn't explicitly state that
+GIF is set when EFER.SVME is disabled.  KVM's nSVM emulation does set GIF
+in this case, but it's not clear whether or not KVM is making up behavior.
+If clearing EFER.SVME doesn't set GIF, then patch 1 needs to be modified
+to try STGI before clearing EFER.SVME, e.g. if a crash is initiated from
+KVM between CLGI and STGI.  Responding CPUs are "safe" because GIF=0 also
+blocks NMIs, but the initiating CPU might leave GIF=0 when jumping into
+the new kernel.
 
-I don't really understand that sentence. There is some precedent for a
-SoM/board split, look at the sun50i-a64-sopine or
-sun50i-h5-emlid-neutis-n5 files. And if I see this correctly, then
-there are *two* boards available for the same CB1 SoM, the PI4B and the
-Manta board? Which would a strong case for a SoM .dtsi, plus the one
-or two board .dts files.
-I am just not sure whether that relation to the Pi4-CM is helpful or
-just complicates things...
+Fix a double NMI shootdown bug found and debugged by Guilherme, who did all
+the hard work.  NMI shootdown is a one-time thing; the handler leaves NMIs
+blocked and enters halt.  At best, a second (or third...) shootdown is an
+expensive nop, at worst it can hang the kernel and prevent kexec'ing into
+a new kernel, e.g. prior to the hardening of register_nmi_handler(), a
+double shootdown resulted in a double list_add(), which is fatal when running
+with CONFIG_BUG_ON_DATA_CORRUPTION=y.
 
-Cheers,
-Andre
+With the "right" kexec/kdump configuration, emergency_vmx_disable_all() can
+be reached after kdump_nmi_shootdown_cpus() (currently the only two users
+of nmi_shootdown_cpus()).
 
-> 
-> Boards have:
-> 	4x (3x for Manta boards) USB and 1 USB OTG.
-> 	SDcard slot for loading images.
-> 	Ethernet port wired to the internal PHY.
-> 	2x HDMI 2.0.
-> 	Power and Status LEDs.
-> 
-> Currently working:
-> 	Booting
-> 	USB
-> 	UART
-> 
-> Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> ---
-> Changes in V2:
-> Add proper board compatible
-> Add regulator prefix for vcc5v
-> Drop okay status from PMIC
-> Drop standby_param
-> Changes in V3:
-> Change copyright to me
-> regulator_vcc5v to regulator-vcc5v
-> Drop ehci0 and ohci0
->  arch/arm64/boot/dts/allwinner/Makefile        |   1 +
->  .../dts/allwinner/sun50i-h616-biqu-cb1.dts    | 178 ++++++++++++++++++
->  2 files changed, 179 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
-> 
-> diff --git a/arch/arm64/boot/dts/allwinner/Makefile b/arch/arm64/boot/dts/allwinner/Makefile
-> index 6a96494a2e0a..223f1be73541 100644
-> --- a/arch/arm64/boot/dts/allwinner/Makefile
-> +++ b/arch/arm64/boot/dts/allwinner/Makefile
-> @@ -38,5 +38,6 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64-model-b.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6-mini.dtb
-> +dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-biqu-cb1.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-orangepi-zero2.dtb
->  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-x96-mate.dtb
-> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
-> new file mode 100644
-> index 000000000000..86b5aca9b53e
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
-> @@ -0,0 +1,178 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-> +/*
-> + * Copyright (C) 2022 Martin Botka <martin.botka@somainline.org>.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "sun50i-h616.dtsi"
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/leds/common.h>
-> +
-> +/ {
-> +	model = "BIQU CB1";
-> +	compatible = "biqu,cb1", "allwinner,sun50i-h616";
-> +
-> +	aliases {
-> +		serial0 = &uart0;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		led-0 {
-> +			function = LED_FUNCTION_POWER;
-> +			color = <LED_COLOR_ID_RED>;
-> +			gpios = <&pio 2 12 GPIO_ACTIVE_HIGH>; /* PC12 */
-> +			default-state = "on";
-> +		};
-> +
-> +		led-1 {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			gpios = <&pio 2 13 GPIO_ACTIVE_HIGH>; /* PC13 */
-> +		};
-> +	};
-> +
-> +	reg_vcc5v: regulator-vcc5v {
-> +		/* board wide 5V supply directly from the USB-C socket */
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc-5v";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	reg_usb1_vbus: regulator-usb1-vbus {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "usb1-vbus";
-> +		regulator-min-microvolt = <5000000>;
-> +		regulator-max-microvolt = <5000000>;
-> +		vin-supply = <&reg_vcc5v>;
-> +		enable-active-high;
-> +		gpio = <&pio 2 16 GPIO_ACTIVE_HIGH>; /* PC16 */
-> +	};
-> +};
-> +
-> +&ehci1 {
-> +	status = "okay";
-> +};
-> +
-> +&ehci2 {
-> +	status = "okay";
-> +};
-> +
-> +&ehci3 {
-> +	status = "okay";
-> +};
-> +
-> +&mmc0 {
-> +	vmmc-supply = <&reg_dldo1>;
-> +	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;	/* PF6 */
-> +	no-1-8-v;
-> +	bus-width = <4>;
-> +	status = "disabled";
-> +};
-> +
-> +&ohci1 {
-> +	status = "okay";
-> +};
-> +
-> +&ohci2 {
-> +	status = "okay";
-> +};
-> +
-> +&ohci3 {
-> +	status = "okay";
-> +};
-> +
-> +&r_i2c {
-> +	status = "okay";
-> +
-> +	axp1530: pmic@36 {
-> +		compatible = "x-powers,axp1530";
-> +		reg = <0x36>;
-> +		wakeup-source;
-> +
-> +		regulators{
-> +			reg_dcdc1: dcdc1 {
-> +				regulator-name = "axp1530-dcdc1";
-> +				regulator-min-microvolt = <500000>;
-> +				regulator-max-microvolt = <3400000>;
-> +				regulator-step-delay-us = <25>;
-> +				regulator-final-delay-us = <50>;
-> +				regulator-always-on;
-> +			};
-> +
-> +			reg_dcdc2: dcdc2 {
-> +				regulator-name = "axp1530-dcdc2";
-> +				regulator-min-microvolt = <500000>;
-> +				regulator-max-microvolt = <1540000>;
-> +				regulator-step-delay-us = <25>;
-> +				regulator-final-delay-us = <50>;
-> +				regulator-ramp-delay = <200>;
-> +				regulator-always-on;
-> +			};
-> +
-> +			reg_dcdc3: dcdc3 {
-> +				regulator-name = "axp1530-dcdc3";
-> +				regulator-min-microvolt = <500000>;
-> +				regulator-max-microvolt = <1840000>;
-> +				regulator-step-delay-us = <25>;
-> +				regulator-final-delay-us = <50>;
-> +				regulator-always-on;
-> +			};
-> +
-> +			reg_aldo1: ldo1 {
-> +				regulator-name = "axp1530-aldo1";
-> +				regulator-min-microvolt = <1800000>;
-> +				regulator-max-microvolt = <1800000>;
-> +				regulator-step-delay-us = <25>;
-> +				regulator-final-delay-us = <50>;
-> +				regulator-always-on;
-> +			};
-> +
-> +			reg_dldo1: ldo2 {
-> +				regulator-name = "axp1530-dldo1";
-> +				regulator-min-microvolt = <3300000>;
-> +				regulator-max-microvolt = <3300000>;
-> +				regulator-step-delay-us = <25>;
-> +				regulator-final-delay-us = <50>;
-> +				regulator-always-on;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&uart0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&uart0_ph_pins>;
-> +	status = "okay";
-> +};
-> +
-> +&usbotg {
-> +	/*
-> +	 * PHY0 pins are connected to a USB-C socket, but a role switch
-> +	 * is not implemented: both CC pins are pulled to GND.
-> +	 * The VBUS pins power the device, so a fixed peripheral mode
-> +	 * is the best choice.
-> +	 * The board can be powered via GPIOs, in this case port0 *can*
-> +	 * act as a host (with a cable/adapter ignoring CC), as VBUS is
-> +	 * then provided by the GPIOs. Any user of this setup would
-> +	 * need to adjust the DT accordingly: dr_mode set to "host",
-> +	 * enabling OHCI0 and EHCI0.
-> +	 */
-> +	dr_mode = "peripheral";
-> +	status = "okay";
-> +};
-> +
-> +&usbphy {
-> +	usb1_vbus-supply = <&reg_usb1_vbus>;
-> +	status = "okay";
-> +};
+To fix, move the disabling of virtualization into crash_nmi_callback(),
+remove emergency_vmx_disable_all()'s callback, and do a shootdown for
+emergency_vmx_disable_all() if and only if a shootdown hasn't yet occurred.
+The only thing emergency_vmx_disable_all() cares about is disabling VMX/SVM
+(obviously), and since I can't envision a use case for an NMI shootdown that
+doesn't want to disable virtualization, doing that in the core handler means
+emergency_vmx_disable_all() only needs to ensure _a_ shootdown occurs, it
+doesn't care when that shootdown happened or what callback may have run.
+
+Patch 2 is a related bug fix found while exploring ideas for patch 1.
+Patch 3 is a cleanup to try to prevent future "fixed VMX but not SVM"
+style bugs.
+
+v3:
+  - Re-collect Guilherme's Tested-by.
+  - Tweak comment in patch 1 to reference STGI instead of CLGI.
+  - Celebrate this series' half-birthday.
+
+v2:
+  - Use a NULL handler and crash_ipi_issued instead of a magic nop
+    handler. [tglx]
+  - Add comments to call out that modifying the existing handler
+    once the NMI is sent may cause explosions.
+  - Add a patch to cleanup cpu_emergency_vmxoff().
+  - https://lore.kernel.org/all/20220518001647.1291448-1-seanjc@google.com
+
+v1: https://lore.kernel.org/all/20220511234332.3654455-1-seanjc@google.com
+
+Sean Christopherson (3):
+  x86/crash: Disable virt in core NMI crash handler to avoid double
+    shootdown
+  x86/reboot: Disable virtualization in an emergency if SVM is supported
+  x86/virt: Fold __cpu_emergency_vmxoff() into its sole caller
+
+ arch/x86/include/asm/reboot.h  |  1 +
+ arch/x86/include/asm/virtext.h | 14 +-----
+ arch/x86/kernel/crash.c        | 16 +-----
+ arch/x86/kernel/reboot.c       | 89 +++++++++++++++++++++++++---------
+ 4 files changed, 69 insertions(+), 51 deletions(-)
+
+
+base-commit: dacca1e5e75d7c1297f1334cdc10491dcdd1b2b8
+-- 
+2.38.1.431.g37b22c650d-goog
 
