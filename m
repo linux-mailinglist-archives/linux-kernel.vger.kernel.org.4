@@ -2,166 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F9D628999
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:45:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F7A62899D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237266AbiKNTpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 14:45:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
+        id S237135AbiKNTpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 14:45:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiKNTo7 (ORCPT
+        with ESMTP id S236593AbiKNTpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 14:44:59 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D312B3B
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:44:58 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so13015346pjh.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:44:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2yrDwPwm83Gsd8MHtP5CTPBx61olTD3WwjbzbhCn5CU=;
-        b=bmpJHazTG2M58Com07n6mhACwU8N4zkHdpZ1uT5MKUhjJgviuO0pNnQ66Y0z8CGvIK
-         pmQTe5FG5dMMafxXK7YZACoLCqiG/Db6I9ID0t9ZGnjn+XZDFkS28vs4Sg2QfDqpe0sM
-         td4IpNxcooPmOB3VwKukzQOd5OflrE8y7fLPzIfvNNCCuKB+sWLFJOJ7B3ZBonCRnEsQ
-         dLRT+HzMk63o+34AEpk7ZYzBouOqmse0ALpLSMyyvGuePWqrPbIL25UeTQabs8QT3N82
-         9gjdt34Jm1PS/0DqPEs1HNd9hnQDia57JqbAyGDU8yA6IdM1vM7lv3LDhYvQcOpfw+wM
-         U61g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2yrDwPwm83Gsd8MHtP5CTPBx61olTD3WwjbzbhCn5CU=;
-        b=gD0G1v7dWhB4guRtts/U4Pz5YovAsEo8gFpdS857+cG3nl3gIEz1IeTDZ+zqo/nPKQ
-         wMaFG9zWSbZPXA+Hrq4ZT1zEY62cSc+pZ+AEk7xPPE6mbI64oMELwBfagUOun1VsWhaB
-         9DUBXf6J/ffw8NTpJ0SM7AQjtPIjgSi/NFrv7/Qn9sLw5HidChU0YspaB2+o/8Ylum2L
-         GUIcXT+G6NbAc6b8s6ZXps6OtMCiJzIUe/WsrmMZGywPgmRxaYlEIwl1Rlr7M3rPudlm
-         /n9bKlWR6Zir7fM4VSolRO9mVV4kqw62l6Fj5RHOyP9ie5kIIyVFzCPOabdarsHzhF7n
-         0l2w==
-X-Gm-Message-State: ANoB5pm0yObopm7vuysDFRwqkXqLThsmHhAE5HU5Lzs2sNLF/eTG64pC
-        p+aaPRoprpYM1Wl3AQrmCFxbIg==
-X-Google-Smtp-Source: AA0mqf55AAw7qDrbDesrQK7sJCvApOkyqnD+kAhD+9HMAXoCAlL5/GcCPeh4vOxFf6nB7tetNaAUKA==
-X-Received: by 2002:a17:90a:af92:b0:212:e307:b59f with SMTP id w18-20020a17090aaf9200b00212e307b59fmr15390020pjq.208.1668455097479;
-        Mon, 14 Nov 2022 11:44:57 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id mp14-20020a17090b190e00b0020ae09e9724sm6841941pjb.53.2022.11.14.11.44.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 11:44:56 -0800 (PST)
-Date:   Mon, 14 Nov 2022 11:44:56 -0800 (PST)
-X-Google-Original-Date: Mon, 14 Nov 2022 11:44:52 PST (-0800)
-Subject:     Re: [PATCH v1 1/4] MAINTAINERS: add entries for misc. RISC-V SoC drivers and devicetrees
-In-Reply-To: <20221109212219.1598355-2-conor@kernel.org>
-CC:     kernel@esmil.dk, Arnd Bergmann <arnd@arndb.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, nicolas.ferre@microchip.com, soc@kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Conor Dooley <conor.dooley@microchip.com>
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-d094b0d1-e4cc-451f-81a7-266805b22105@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 14 Nov 2022 14:45:33 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFBF101F7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:45:32 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668455130;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UcOwoMmtRfpEcec4fb3EfiDIbbnctB2tyNqPSNegIvc=;
+        b=UNUtc9Rg0BC9FFgTcDhCXb4J45YIREJhmq1ERzGMX29+2SWoJCwdxpRJ/+xNXHNYDgQYqE
+        drboq5N6UkzOec4xyrgBp1kLLfIS89vtCuQ8DCAhw6hbvcKpb2f1USbLp4xAxatdaXakdP
+        T9yw1WXCU1G/FYDz0GmYUYm2Olg73t5cJl9lrY12LXy8+eJtlf6/veFznowA8rLoQ2Xb7s
+        e2nwsx9ApkViQVG9mjfFQR0h8P9zJ89jBSKAVQiKnASeYE/cXKF0mrqnwu9X7xf/y3Ck4n
+        t5Hgf0fxUVTA7pur4+TC6oyZMaOKmU9hryakRqSx2tU2LikRDfdXAqzKQ8KdfQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668455130;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UcOwoMmtRfpEcec4fb3EfiDIbbnctB2tyNqPSNegIvc=;
+        b=MRHucAuVOeKg9+1WLu/Yqlpr/xhJsYqxaVIZNQ2Bp3aRjApypWnGsFQyDBMeaLSPrOf9Op
+        phdwZ+HgV6HUlGDw==
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Eric Dumazet <edumazet@google.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: Re: [PATCH v6 4/6] timers: Add timer_shutdown_sync() to be called
+ before freeing timers
+In-Reply-To: <CAHk-=wj7DtViDctAzV3PqdYBEh5vcQnRJPtFFB=uaAP=W-VG4A@mail.gmail.com>
+References: <20221110064101.429013735@goodmis.org>
+ <20221110064147.343514404@goodmis.org> <875yfitpdu.ffs@tglx>
+ <20221113191518.0a3b29b1@rorschach.local.home> <87sfims7ca.ffs@tglx>
+ <87iljhsftt.ffs@tglx>
+ <CAHk-=wj7DtViDctAzV3PqdYBEh5vcQnRJPtFFB=uaAP=W-VG4A@mail.gmail.com>
+Date:   Mon, 14 Nov 2022 20:45:29 +0100
+Message-ID: <875yfhs4km.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 09 Nov 2022 13:22:17 PST (-0800), Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> Following some discussion both on & off list, I have volunteered to take
-> over maintaining the miscellaneous RISC-V devicetrees & soc drivers from
-> Palmer to ease his load.
->
-> So far only SiFive and Microchip have stuff in drivers/soc. For the
-> former, a SiFive entry exists with a dead GitHub repo - so remove that
-> to avoid confusion since the patches for drivers/soc & devicetrees will
-> be routed via my tree & other drivers go through their subsystem trees.
-> The Microchip directory only contains a RISC-V driver for now, but is
-> likely to contain drivers for other archs in the future. To that end,
-> change the PolarFire SoC entry to specifically mention the RISC-V driver
-> & the new directory level entry does not mention an architecture.
->
-> CC: Arnd Bergmann <arnd@arndb.de>
-> CC: Nicolas Ferre <nicolas.ferre@microchip.com>
-> CC: Palmer Dabbelt <palmer@dabbelt.com>
-> Link: https://lore.kernel.org/linux-riscv/mhng-e4210f56-fcc3-4db8-abdb-d43b3ebe695d@palmer-ri-x1c9a/
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  MAINTAINERS | 25 +++++++++++++++++++++++--
->  1 file changed, 23 insertions(+), 2 deletions(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 046ff06ff97f..b88ced1ff72c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13627,6 +13627,12 @@ S:	Supported
->  F:	drivers/misc/atmel-ssc.c
->  F:	include/linux/atmel-ssc.h
->
-> +MICROCHIP SOC DRIVERS
-> +M:	Conor Dooley <conor@kernel.org>
-> +S:	Supported
-> +T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
-> +F:	drivers/soc/microchip/
-> +
->  MICROCHIP USB251XB DRIVER
->  M:	Richard Leitner <richard.leitner@skidata.com>
->  L:	linux-usb@vger.kernel.org
-> @@ -17749,12 +17755,21 @@ F:	drivers/mailbox/mailbox-mpfs.c
->  F:	drivers/pci/controller/pcie-microchip-host.c
->  F:	drivers/reset/reset-mpfs.c
->  F:	drivers/rtc/rtc-mpfs.c
-> -F:	drivers/soc/microchip/
-> +F:	drivers/soc/microchip/mpfs-sys-controller.c
->  F:	drivers/spi/spi-microchip-core-qspi.c
->  F:	drivers/spi/spi-microchip-core.c
->  F:	drivers/usb/musb/mpfs.c
->  F:	include/soc/microchip/mpfs.h
->
-> +RISC-V MISC SOC SUPPORT
-> +M:	Conor Dooley <conor@kernel.org>
-> +L:	linux-riscv@lists.infradead.org
-> +S:	Maintained
-> +Q:	https://patchwork.kernel.org/project/linux-riscv/list/
-> +T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
-> +F:	Documentation/devicetree/bindings/riscv/
-> +F:	arch/riscv/boot/dts/
-> +
->  RNBD BLOCK DRIVERS
->  M:	Md. Haris Iqbal <haris.iqbal@ionos.com>
->  M:	Jack Wang <jinpu.wang@ionos.com>
-> @@ -18781,7 +18796,6 @@ M:	Palmer Dabbelt <palmer@dabbelt.com>
->  M:	Paul Walmsley <paul.walmsley@sifive.com>
->  L:	linux-riscv@lists.infradead.org
->  S:	Supported
-> -T:	git https://github.com/sifive/riscv-linux.git
->  N:	sifive
->  K:	[^@]sifive
->
-> @@ -18800,6 +18814,13 @@ S:	Maintained
->  F:	Documentation/devicetree/bindings/dma/sifive,fu540-c000-pdma.yaml
->  F:	drivers/dma/sf-pdma/
->
-> +SIFIVE SOC DRIVERS
-> +M:	Conor Dooley <conor@kernel.org>
-> +L:	linux-riscv@lists.infradead.org
-> +S:	Maintained
-> +T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
-> +F:	drivers/soc/sifive/
-> +
->  SILEAD TOUCHSCREEN DRIVER
->  M:	Hans de Goede <hdegoede@redhat.com>
->  L:	linux-input@vger.kernel.org
+Linus!
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+On Mon, Nov 14 2022 at 09:16, Linus Torvalds wrote:
+> On Mon, Nov 14, 2022 at 7:42 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>>
+>> So if we want to make this solid and make the life of driver writers
+>> easier, then we cannot issue a warning as I said in the original thread
+>> already.
+>
+> So I think that there are two issues at play:
+>
+>  (a) do we want to *find* problem places after the conversion
+>
+>  (b) do we want to make driver writing easier
+>
+> and (a) argues for warning on timer re-arming, but (b) just says
+> "don't warn, just ignore it, the driver is being shut down".
+>
+> I'm personally ok with either of those approaches, and it's literally
+> just a question of mindset.
 
-Thanks!
+Correct. I'm very much for (b). Look at the bluetooth example. The "fix"
+was obviously right and then introduced a new subtle bug which will only
+happen every 7th half-moon.
+
+But if you turn it around then:
+
+    timer_shutdown();
+    destroy_workqueue();
+
+will trigger the warning in mod_timer() every 6.5th half-moon.
+
+And then you have to go and sprinkle 'if (mydev->inshutdown)'
+conditionals all over the place with a high probability that they will
+not cut it completely. Or you end up with the reverse order of shutdown
+calls which is wrong too.
+
+So I rather have the very simple semantics that attempts to arm a
+shutdown timer are silently ignored. As I said to Steven in the other
+mail, I'm sure that the vast majority of teardown sites will not depend
+on the timer(s) being functional. The two other esoteric cases will have
+to be treated special.
+
+>> The semantics of timer_shutdown_sync() have to be:
+>>
+>>    After return:
+>>      - the timer is not queued
+>>      - the timer callbacks is not running
+>>      - the timer cannot be enqueued again
+>
+> Yes, but that last case is literally a "do we expect the *driver* to
+> not enqueue it and warn if it tries, or do we just silently enforce
+> it"?
+>
+> I agree with all three points. I'm just not sure about who we expect
+> to do the "don't enqueue again".
+>
+> There's a big argument for "make it easy for driver writers" in just
+> saying "make mod_timer() silently just ignore a re-arming". Making
+> things easier for driver writers is a good thing.
+>
+> But maybe it's a "you shouldn't have done that in the first place"
+> thing, and merits a warning?
+
+See above.
+
+> I have no strong opinions on that.
+>
+> What I *do* still want to happen is for subsystems to be able to start
+> doing the conversion one by one. Which is why I'd still prefer to have
+> the new names available just so that we don't have to have one
+> 50-patch series, but we can have subsystems apply the obvious cases.
+>
+> And I'd still like the mindless "let's get the non-semantic changes
+> out of the way" as one single patch, to get rid of mindless noise.
+>
+> And honestly, for that to happen I'd be perfectly happy with something like
+>
+>   #define timer_shutdown(t) del_timer(t)
+>   #define timer_shutdown_sync(t) del_timer_sync(t)
+>
+> (obviously with the patches that first remove the existing
+> 'timer_shutdown()' uses first). That wouldn't introduce the *new*
+> semantics, but it would at least allow the different subsystems to do
+> the obvious cases, and let the networking people wonder about the much
+> less obvious ones.
+
+As we are at -rc5 now and the core code is not yet ready, I suggest that
+we get the core changes done for the next merge window and have some
+obvious fixes which demonstrate the usage, e.g. the borked BT fix
+replacement, and then subsystem people can queue their stuff for 6.3 or
+send in the obvious bugfixes during the 6.2-rc series.
+
+I'm not a fan of having
+
+   #define timer_shutdown_sync(t) del_timer_sync(t)
+
+as a gap measure right now. That's just going to make things worse
+because the semantical difference between the both functions is
+significant and I don't want people to run around and replace their
+'if (mydev->in_shutdown)' conditionals prematurely or do any other fancy
+"fixes" which cause more problems than they solve.
+
+This problem exists for ever so there is no need to rush this just
+because.
+
+If we all agree that the semantics of timer_shutdown_sync() are:
+
+    After return:
+      - the timer is not queued
+      - the timer callback is not running
+      - the timer cannot be enqueued again. Any attempts to do
+        so are silently ignored (needs some more explanation...)
+
+and the semantics of timer_shutdown() are:
+
+    After return:
+      - the timer is not queued
+      - the timer cannot be enqueued again. Any attempts to do
+        so are silently ignored (needs some more explanation...)
+      - the timer callback might be still running
+
+then we can definitly get this in shape for 6.2.
+
+Thanks,
+
+        tglx
