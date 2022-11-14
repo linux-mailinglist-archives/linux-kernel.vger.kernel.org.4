@@ -2,75 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFA1627780
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:25:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FEC5627785
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236392AbiKNIZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:25:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
+        id S236395AbiKNI02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:26:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236289AbiKNIZ1 (ORCPT
+        with ESMTP id S236232AbiKNI01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:25:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1C46461;
-        Mon, 14 Nov 2022 00:25:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 14 Nov 2022 03:26:27 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33F06461
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:26:26 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0490F60F06;
-        Mon, 14 Nov 2022 08:25:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20AE8C433C1;
-        Mon, 14 Nov 2022 08:25:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668414325;
-        bh=mEWDDGfOvzODYr1Wo+Lm67meG8rILRHSmSM3ZZZ4HkU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mZJ0mhDyMraRf77awQWX5pRoxAmoEe4QLq2cUvKaPicTOxQ00hA8HGff3NrBWIIYD
-         /g4uqg/BQyH1en/eAHzslwdiOPP85MpRE+V+ZpZasN6sZNv6VRjcyRLfjE95gKZr3c
-         pHIWqhnbmyuR9Oo/5jUoqNtMz9K5ScMcK+MakcJzpfurjGwfud0WKwbNPO6+kiG+BD
-         Ei9ClUEyvFuT1NV6U2G18SwSvHjCBodxi37dng0Xy7AOs5j1hBVOHHg7jk5lB9V4us
-         PtmNceN4mpJhbqUJ7Wca9GYvi2ZJHbhDiPQW06Ao4r8sGTWD+3s7oPbsjdkN7Mhqm0
-         xQ3ggIwKE9Ilg==
-Date:   Mon, 14 Nov 2022 16:25:18 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Detlev Casanova <detlev.casanova@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] ARM: dts: imx6qdl-sabre: Add mmc aliases
-Message-ID: <20221114082518.GS2649582@dragon>
-References: <20221028141811.101122-1-detlev.casanova@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221028141811.101122-1-detlev.casanova@collabora.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5606E2277D;
+        Mon, 14 Nov 2022 08:26:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1668414385; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z2aocgqFLjmTJVHL3ktQa4BmIRZ6GsVn6ZGLHkljFiQ=;
+        b=SzF1dX6F3sCU+u8GU0fIU9Yiswaz8EZK6CNJm+yyQyJmtWS5Dg6zIyVaN2MgAVB4vCilAf
+        NuJjyQzqga5Mokc8dKh3ttqnMpAEjBPEEh8gYSwP9Hn3hQAYjji6tO+EXMb4cn5G9mT/GB
+        9WXu+2IHcRAvdHwDvLqEeov2x9i8OJs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1668414385;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z2aocgqFLjmTJVHL3ktQa4BmIRZ6GsVn6ZGLHkljFiQ=;
+        b=LqczeHUlnsysaB++Tj/gkeAR7Ysi4h2D0md0WJ5EncrlfzMIJfCAQlX5RcI/Ark02Ud+gf
+        lGXn79YBGCHBLQBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 14B5D13A8C;
+        Mon, 14 Nov 2022 08:26:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rZ0zBLH7cWM1IQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 14 Nov 2022 08:26:25 +0000
+Date:   Mon, 14 Nov 2022 09:26:24 +0100
+Message-ID: <87r0y63psf.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Daniil Tatianin <d-tatianin@yandex-team.ru>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Tim Crawford <tcrawford@system76.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Meng Tang <tangmeng@uniontech.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Philipp Jungkamp <p.jungkamp@gmx.net>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org, yc-core@yandex-team.ru
+Subject: Re: [PATCH v1] sound/pci/hda/patch_realtek: don't call alc_shutup_pins without a spec
+In-Reply-To: <20221114082048.3477027-1-d-tatianin@yandex-team.ru>
+References: <20221114082048.3477027-1-d-tatianin@yandex-team.ru>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 10:18:11AM -0400, Detlev Casanova wrote:
-> If not specified, the mmc0 and mmc1 devices will be the devices
-> mmc@2190000 and mmc@2194000, which are in disabled state on the iMX.6
-> Sabrelite devices.
+On Mon, 14 Nov 2022 09:20:48 +0100,
+Daniil Tatianin wrote:
 > 
-> The actual SD card reader devices are the ones at mmc@2198000 and
-> mmc@219c000.
+> alc_shutup_pins always expects the spec to be present, so make sure
+> it is before we call it.
 > 
-> Set aliases to use the correct mmc devices order.
+> Found by Linux Verification Center (linuxtesting.org) with the SVACE
+> static analysis tool.
 > 
-> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+> Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
 
-Applied, thanks!
+In which path can it be without spec assigned?
+That's the internal callback that is set only by the codec driver
+where the allocation of codec->spec is mandatory.
+
+
+thanks,
+
+Takashi
+
+
+> ---
+>  sound/pci/hda/patch_realtek.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+> index 60e3bc124836..2cf4b64971d7 100644
+> --- a/sound/pci/hda/patch_realtek.c
+> +++ b/sound/pci/hda/patch_realtek.c
+> @@ -939,10 +939,12 @@ static inline void alc_shutup(struct hda_codec *codec)
+>  {
+>  	struct alc_spec *spec = codec->spec;
+>  
+> +	if (!spec)
+> +		return;
+>  	if (!snd_hda_get_bool_hint(codec, "shutup"))
+>  		return; /* disabled explicitly by hints */
+>  
+> -	if (spec && spec->shutup)
+> +	if (spec->shutup)
+>  		spec->shutup(codec);
+>  	else
+>  		alc_shutup_pins(codec);
+> -- 
+> 2.25.1
+> 
