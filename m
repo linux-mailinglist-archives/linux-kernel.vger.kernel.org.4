@@ -2,102 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DCD62782F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED743627831
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236284AbiKNIzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:55:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37684 "EHLO
+        id S236360AbiKNIzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:55:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236274AbiKNIzE (ORCPT
+        with ESMTP id S235456AbiKNIyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:55:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0CB1C93C;
-        Mon, 14 Nov 2022 00:54:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 14 Nov 2022 03:54:52 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349531C401
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:54:52 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBB7360F33;
-        Mon, 14 Nov 2022 08:54:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C008C433D6;
-        Mon, 14 Nov 2022 08:54:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668416092;
-        bh=pp5pDQZWN6NVccBVIUaPNVdc4w9kyJ+/i8wyV2Ao5/g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TM6hdfxGKtq2rX9QM4eMo3x3NSdDkyzMnPsOCbXreJK/TyrHS4KSYoMz+xf7pwtkk
-         BB3C/2v+PUUgk1g5sjiFKlIVfbONn1GP+52rmOXLLMVtQaTOTYVpgxAhziwfVXGtBX
-         3LMbJDgJjWVDlPTKX0jxGvInveBsT4L6YKHOIK9gFYeqKWW/ZQmFb0mKYNpMKe8X7t
-         Wea6I7lkAyN8mcjxJSINQDJfjYWq1vqnARWJ1+bcEUYl0aPQ+GUktHDKkUDXaMNmlB
-         yMvle51AFzQqSDHvXM/oj9DIvGeFrZZBolNDZG4Ib8X55pIwoAVYL4qn416K0gd8lX
-         EGKyUxf1ffXmQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ouVER-0001zw-7f; Mon, 14 Nov 2022 09:54:19 +0100
-Date:   Mon, 14 Nov 2022 09:54:19 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 17/22] phy: qcom-qmp-combo: merge USB and DP
- configurations
-Message-ID: <Y3ICOwr2ld9cdgrK@hovoldconsulting.com>
-References: <20221111085643.9478-1-johan+linaro@kernel.org>
- <20221111085643.9478-18-johan+linaro@kernel.org>
- <5fd7a56f-db12-deb3-753a-22867526d90b@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5fd7a56f-db12-deb3-753a-22867526d90b@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E860622874;
+        Mon, 14 Nov 2022 08:54:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1668416090; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2kpCoTStDLbC0mDpL36oNJqRAWBqkoojNVraAyspOWw=;
+        b=J+87jFaZ7xCpG3IxH9cRl+30Ilvlt1Af69iuLmO0AQG8bwdgDcHCeDog+BQ6qAuwTwMrz/
+        KTDa4QilSwTlygiH0PeTcvhRIwVvMx/0zO8yNWrRbaapdlxA0C3/IouqpYFzeYjHiFX5vK
+        19fJKUeVk7qeYY7Ka5poQdIomQCOVmw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1668416090;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2kpCoTStDLbC0mDpL36oNJqRAWBqkoojNVraAyspOWw=;
+        b=fD80/1FtpAS7P8XmNfXh4Jryy6XUJR53Iu+SPwvjaUoTQ9zgiL1H2jHajKPta3DCcf2Yyl
+        no6iQbUeqkCyO5Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A17D813A8C;
+        Mon, 14 Nov 2022 08:54:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FZJFJloCcmMkLwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 14 Nov 2022 08:54:50 +0000
+Date:   Mon, 14 Nov 2022 09:54:50 +0100
+Message-ID: <87o7t9531h.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Daniil Tatianin <d-tatianin@yandex-team.ru>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Tim Crawford <tcrawford@system76.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Meng Tang <tangmeng@uniontech.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Philipp Jungkamp <p.jungkamp@gmx.net>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org, yc-core@yandex-team.ru
+Subject: Re: [PATCH v1] sound/pci/hda/patch_realtek: don't call alc_shutup_pins without a spec
+In-Reply-To: <d3a31735-8f5c-3168-6a0d-2cf1e9005864@yandex-team.ru>
+References: <20221114082048.3477027-1-d-tatianin@yandex-team.ru>
+        <87r0y63psf.wl-tiwai@suse.de>
+        <d3a31735-8f5c-3168-6a0d-2cf1e9005864@yandex-team.ru>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 10:43:14AM +0300, Dmitry Baryshkov wrote:
-> On 11/11/2022 11:56, Johan Hovold wrote:
-> > It does not really make any sense to keep separate configuration
-> > structures for the USB and DP parts of the same PHY so merge them.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >   drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 182 +++++++---------------
-> >   1 file changed, 57 insertions(+), 125 deletions(-)
-> > 
-> > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> > index b27d1821116c..249912b75964 100644
-> > --- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> > +++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-> > @@ -798,10 +798,7 @@ static const u8 qmp_dp_v5_voltage_swing_hbr_rbr[4][4] = {
-> >   
-> >   struct qmp_phy;
-> >   
-> > -/* struct qmp_phy_cfg - per-PHY initialization config */
-> >   struct qmp_phy_cfg {
-> > -	/* phy-type - PCIE/UFS/USB */
-> > -	unsigned int type;
-> >   	int lanes;
+On Mon, 14 Nov 2022 09:35:10 +0100,
+Daniil Tatianin wrote:
 > 
-> int lanes doesn't really make sense here in my opinion. It should be 
-> usb_lanes and dp_lanes.
+> 
+> 
+> On 11/14/22 11:26 AM, Takashi Iwai wrote:
+> > On Mon, 14 Nov 2022 09:20:48 +0100,
+> > Daniil Tatianin wrote:
+> >> 
+> >> alc_shutup_pins always expects the spec to be present, so make sure
+> >> it is before we call it.
+> >> 
+> >> Found by Linux Verification Center (linuxtesting.org) with the SVACE
+> >> static analysis tool.
+> >> 
+> >> Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
+> > 
+> > In which path can it be without spec assigned?
+> > That's the internal callback that is set only by the codec driver
+> > where the allocation of codec->spec is mandatory.
+> 
+> Would you then say that the "if (spec && ...)" that was there before
+> was redundant?
 
-It doesn't make much less sense than having it here currently do.
+Yes.
 
-All of these USB-C PHYs are dual lane for bi-directional SS USB and
-quad lane for uni-directional DP (even if only CC1 orientation and lanes
-2 and 3 are currently supported).
 
-I should probably just drop the lanes parameter completely, either as a
-preparatory clean up or as follow-on one (e.g. also a bit depending on
-if there are other reasons for respinning a v2).
-
-Johan
+Takashi
