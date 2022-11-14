@@ -2,224 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8CB86275AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 06:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D7B6275B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 07:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235628AbiKNFss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 00:48:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
+        id S235675AbiKNGCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 01:02:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233166AbiKNFsp (ORCPT
+        with ESMTP id S233166AbiKNGCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 00:48:45 -0500
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C8B15732
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 21:48:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1668404923; x=1699940923;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=v1sR2mwFH9dmYdHzu0koJ50qxkQ0XF8GxeWMZxBQMlk=;
-  b=EDr+TqkqJW2ooW7yADe8MLzU/RdM+freQMPq6imSGruYhZV0YCuyTBOD
-   aSB3mlZKp+df4W5zbVd9UREPCFROmjq2o+rg274VJalXkXo6pbno42asr
-   fYuXsKrJSgq2iQmkrwV9VB1oj0ePeGTJf4OorYoI2s4/C3NaTNLRcmf7t
-   +Kt1qsiRwkgW4MqcuuDqTjEbv8ALAtFJajEENadERonsC8Kf97KPUB5LA
-   M835529BvYcWDw83Mjxuc1Q9BR4UBkVI+clhIpTEqv+O9Pkb+TfjRH5+4
-   A2/INtGzgkpPLsGqBeqZ8N1ConIBsQWuwP863nmg8x/ZDB+EjQN9gGHsY
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,161,1665417600"; 
-   d="scan'208";a="320535393"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 14 Nov 2022 13:48:38 +0800
-IronPort-SDR: oqObsUuMEPmwgWaURRjwbkW6qLJINxFFlC+LC7DnUsFgbW5G3GSOqdXam7jHbEaK1A2KeG+O1m
- l5hvSyqZAJWKB1mt5E0609JmnGY80YW8vVe9LFeRDzYPE+eY5dpO4nINATJfokKvH7/0zEFVAJ
- h11YOtPVRxgSlque0TuTQsDtEwyubE/93utF6Ge67YRjnYmydNJ3JTmsklxGCe9S8dVPFm0Mm5
- MFvpGcR+vtjmtmldMVNFQ9ThcMXTADokneKdDIcDewFh96MGynVKKIaSML+Y1Kz1mO1kmYHrvD
- tGE=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Nov 2022 21:01:52 -0800
-IronPort-SDR: /UHzO+QBlXQEp8ZYUN0ehMrKlRetz5aNadWKGyxjRU5G9Vrm7zpooXQdZWokRGveiYp45+Nxeg
- 5Ayj2hftxkd7wAnrXDRUKiJRABsoZihe48mtpqNtmWw76YHw4/sxSeYBmQ9IVTQ6OP2ucr2oe2
- YNEKll84HsvwVHeU4OTO4I4muiC5rF7dpaTjnVFuF90COORkds0rhfuWJnoBj5JQmvgzHMIi+m
- Zcr8sx2x4fmAFf0iAzr/BfewUQKLvyIYfTKGV53upSLU3bRR1g84CMBp+LjGTLoMzLWNgijz/1
- Zyo=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Nov 2022 21:48:39 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4N9ddx6tf1z1RvTp
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 21:48:37 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:references:to:from:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1668404916; x=1670996917; bh=v1sR2mwFH9dmYdHzu0koJ50qxkQ0XF8GxeW
-        MZxBQMlk=; b=rutv4KCi7M1XNlfMkfPzY2SpJEPEarCExPjjAQg1a3KAjHnhK94
-        trp1G8GWC5pRuCQv0tsgeAXq5uvuxcPjJd9Cx0MAwarnFJLiH7gVn5CR79lAGZ1Z
-        AcPRc3qyda2iR5HANJTIe5KLAgmK+8KyBy/yqNckoRhNQKsLGE1H0iQesm2nfqA8
-        8HY8zXzj0qILcdTi8YssJxMqozJdMYudpIwBN32TQOoOCnFXdri8Makww4uhn6De
-        2uJX6l3qsifBFkCOZ0GogE+1zWy8Oaqo8DhTIhc6H6CBJrXbEzWo99uaHjNH1KVb
-        0RgREcX1ffQYZv2mTbD7CJl/Y2vfYjj1Gtw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id NeO2-WWVPphr for <linux-kernel@vger.kernel.org>;
-        Sun, 13 Nov 2022 21:48:36 -0800 (PST)
-Received: from [10.225.163.46] (unknown [10.225.163.46])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4N9ddp5cqHz1RvLy;
-        Sun, 13 Nov 2022 21:48:30 -0800 (PST)
-Message-ID: <93079aba-362e-5d1e-e9b4-dfe3a84da750@opensource.wdc.com>
-Date:   Mon, 14 Nov 2022 14:48:29 +0900
+        Mon, 14 Nov 2022 01:02:41 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811001742F;
+        Sun, 13 Nov 2022 22:02:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=htUX5wXsVqQtfEIzF3R3jTgb9FejL1nSejYDfcLYiAM=; b=eepvBu3sqqhQ0CAKocgxuXXL/9
+        nd2dws1R3l0m73KbCd0ttqcgfh4qPI2YMh9ErnvjsTWnKFCbSOpssg9Ffg/8kuEhf4dE900Amdlt0
+        bKg6WixEFZmNEWeI5QDJwO6gwOJyWvfQcNH2KuE+Rv0mpACVzMs1Gr2J0vShkvNjYLZVSYfvlK1s/
+        iPsKrcEN8+WFkoP575vjnkid26ER/o+8J7OVbE3jZmeF2I5JYh4sbdBH40CMQWAt/SNYFS+HWNmHQ
+        YfLLSRaCiEoPTo1NeD1ekUsLvROGaw0bL1ZjNl33pXvlwgkVLoJJ55GL/avtZw18m0SILmQILuOnG
+        /WtZrV0w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ouSYH-00GAaw-Gk; Mon, 14 Nov 2022 06:02:37 +0000
+Date:   Sun, 13 Nov 2022 22:02:37 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Niels de Vos <ndevos@redhat.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>, linux-fscrypt@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiubo Li <xiubli@redhat.com>,
+        Marcel Lauhoff <marcel.lauhoff@suse.com>
+Subject: Re: [RFC 0/4] fs: provide per-filesystem options to disable fscrypt
+Message-ID: <Y3HZ/To8z76vBqYo@infradead.org>
+References: <20221110141225.2308856-1-ndevos@redhat.com>
+ <Y20a/akbY8Wcy3qg@mit.edu>
+ <Y20rDl45vSmdEo3N@ndevos-x1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: Deprecating and removing SLOB
-Content-Language: en-US
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-To:     Conor Dooley <conor@kernel.org>, Vlastimil Babka <vbabka@suse.cz>
-Cc:     Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Rustam Kovhaev <rkovhaev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexander Shiyan <shc_work@mail.ru>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        openrisc@lists.librecores.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Conor.Dooley@microchip.com, Paul Cercueil <paul@crapouillou.net>
-References: <b35c3f82-f67b-2103-7d82-7a7ba7521439@suse.cz>
- <CA+CK2bD-uVGJ0=9uc7Lt5zwY+2PM2RTcfOhxEd65S7TvTrJULA@mail.gmail.com>
- <c1caa5ce-eeaf-8038-2dea-051c98aade45@suse.cz> <Y260tkNHc2vFITJ3@spud>
- <a5bba3ca-da19-293c-c01b-a28291533466@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <a5bba3ca-da19-293c-c01b-a28291533466@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y20rDl45vSmdEo3N@ndevos-x1>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/14/22 10:55, Damien Le Moal wrote:
-> On 11/12/22 05:46, Conor Dooley wrote:
->> On Fri, Nov 11, 2022 at 11:33:30AM +0100, Vlastimil Babka wrote:
->>> On 11/8/22 22:44, Pasha Tatashin wrote:
->>>> On Tue, Nov 8, 2022 at 10:55 AM Vlastimil Babka <vbabka@suse.cz> wrote:
->>>>>
->>>>> Hi,
->>>>>
->>>>> as we all know, we currently have three slab allocators. As we discussed
->>>>> at LPC [1], it is my hope that one of these allocators has a future, and
->>>>> two of them do not.
->>>>>
->>>>> The unsurprising reasons include code maintenance burden, other features
->>>>> compatible with only a subset of allocators (or more effort spent on the
->>>>> features), blocking API improvements (more on that below), and my
->>>>> inability to pronounce SLAB and SLUB in a properly distinguishable way,
->>>>> without resorting to spelling out the letters.
->>>>>
->>>>> I think (but may be proven wrong) that SLOB is the easier target of the
->>>>> two to be removed, so I'd like to focus on it first.
->>>>>
->>>>> I believe SLOB can be removed because:
->>>>>
->>>>> - AFAIK nobody really uses it? It strives for minimal memory footprint
->>>>> by putting all objects together, which has its CPU performance costs
->>>>> (locking, lack of percpu caching, searching for free space...). I'm not
->>>>> aware of any "tiny linux" deployment that opts for this. For example,
->>>>> OpenWRT seems to use SLUB and the devices these days have e.g. 128MB
->>>>> RAM, not up to 16 MB anymore. I've heard anecdotes that the performance
->>>>> SLOB impact is too much for those who tried. Googling for
->>>>> "CONFIG_SLOB=y" yielded nothing useful.
->>>>
->>>> I am all for removing SLOB.
->>>>
->>>> There are some devices with configs where SLOB is enabled by default.
->>>> Perhaps, the owners/maintainers of those devices/configs should be
->>>> included into this thread:
->>>>
->>>> tatashin@soleen:~/x/linux$ git grep SLOB=y
->>
->>>> arch/riscv/configs/nommu_k210_defconfig:CONFIG_SLOB=y
->>>> arch/riscv/configs/nommu_k210_sdcard_defconfig:CONFIG_SLOB=y
->>>> arch/riscv/configs/nommu_virt_defconfig:CONFIG_SLOB=y
->>
->>>
->>> Turns out that since SLOB depends on EXPERT, many of those lack it so
->>> running make defconfig ends up with SLUB anyway, unless I miss something.
->>> Only a subset has both SLOB and EXPERT:
->>>
->>>> git grep CONFIG_EXPERT `git grep -l "CONFIG_SLOB=y"`
->>
->>> arch/riscv/configs/nommu_virt_defconfig:CONFIG_EXPERT=y
->>
->> I suppose there's not really a concern with the virt defconfig, but I
->> did check the output of `make nommu_k210_defconfig" and despite not
->> having expert it seems to end up CONFIG_SLOB=y in the generated .config.
->>
->> I do have a board with a k210 so I checked with s/SLOB/SLUB and it still
->> boots etc, but I have no workloads or w/e to run on it.
-> 
-> I sent a patch to change the k210 defconfig to using SLUB. However...
-> 
-> The current default config using SLOB gives about 630 free memory pages
-> after boot (cat /proc/vmstat). Switching to SLUB, this is down to about
-> 400 free memory pages (CONFIG_SLUB_CPU_PARTIAL is off).
-> 
-> This is with a buildroot kernel 5.19 build including a shell and sd-card
-> boot. With SLUB, I get clean boots and a shell prompt as expected. But I
-> definitely see more errors with shell commands failing due to allocation
-> failures for the shell process fork. So as far as the K210 is concerned,
-> switching to SLUB is not ideal.
-> 
-> I would not want to hold on kernel mm improvements because of this toy
-> k210 though, so I am not going to prevent SLOB deprecation. I just wish
-> SLUB itself used less memory :)
+On Thu, Nov 10, 2022 at 05:47:10PM +0100, Niels de Vos wrote:
+> And, there actually are options like CONFIG_EXT4_FS_POSIX_ACL and
+> CONFIG_EXT4_FS_SECURITY. Because these exist already, I did not expect
+> too much concerns with proposing a CONFIG_EXT4_FS_ENCRYPTION...
 
-Did further tests with kernel 6.0.1:
-* SLOB: 630 free pages after boot, shell working (occasional shell fork
-failure happen though)
-* SLAB: getting memory allocation for order 7 failures on boot already
-(init process). Shell barely working (high frequency of shell command fork
-failures)
-* SLUB: getting memory allocation for order 7 failures on boot. I do get a
-shell prompt but cannot run any shell command that involves forking a new
-process.
+ext4 is a little weird there as most file systems don't do that.
+So I think these should go away for ext4 as well.
 
-So if we want to keep the k210 support functional with a shell, we need
-slob. If we reduce that board support to only one application started as
-the init process, then I guess anything is OK.
+> Note that even with the additional options, enabling only
+> CONFIG_FS_ENCRYPTION causes all the filesystems that support fscrypt to
+> have it enabled. For users there is no change, except that they now have
+> an option to disable fscrypt support per filesystem.
 
--- 
-Damien Le Moal
-Western Digital Research
-
+But why would you do that anyay?
