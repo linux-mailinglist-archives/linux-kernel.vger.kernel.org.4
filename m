@@ -2,46 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 208026281AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDBC6281AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236367AbiKNNwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:52:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
+        id S236427AbiKNNws convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 14 Nov 2022 08:52:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236250AbiKNNwR (ORCPT
+        with ESMTP id S235984AbiKNNwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:52:17 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 316C922BE0;
-        Mon, 14 Nov 2022 05:52:16 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F2EF23A;
-        Mon, 14 Nov 2022 05:52:22 -0800 (PST)
-Received: from [10.57.70.90] (unknown [10.57.70.90])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC19B3F73D;
-        Mon, 14 Nov 2022 05:52:14 -0800 (PST)
-Message-ID: <796b5eac-8408-d1ef-352a-4722c3196295@arm.com>
-Date:   Mon, 14 Nov 2022 13:52:09 +0000
+        Mon, 14 Nov 2022 08:52:46 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409DF22BE0;
+        Mon, 14 Nov 2022 05:52:45 -0800 (PST)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AECVxM9008761;
+        Mon, 14 Nov 2022 08:52:29 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3ku76yn5j1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 08:52:29 -0500
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2AEDqSPE025093
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 14 Nov 2022 08:52:28 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Mon, 14 Nov
+ 2022 08:52:27 -0500
+Received: from ASHBMBX9.ad.analog.com ([fe80::c1f2:f121:22ef:29db]) by
+ ASHBMBX9.ad.analog.com ([fe80::c1f2:f121:22ef:29db%20]) with mapi id
+ 15.02.0986.014; Mon, 14 Nov 2022 08:52:27 -0500
+From:   "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+CC:     Lars-Peter Clausen <lars@metafoo.de>,
+        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 5/5] iio: addac: ad74413r: add support for reset-gpio
+Thread-Topic: [PATCH 5/5] iio: addac: ad74413r: add support for reset-gpio
+Thread-Index: AQHY9reALFIOJ45fGkOdEYqpsVzwNK4+cXWA
+Date:   Mon, 14 Nov 2022 13:52:26 +0000
+Message-ID: <095a454b55cf497392a621649f24e067@analog.com>
+References: <20221111143921.742194-1-linux@rasmusvillemoes.dk>
+        <20221111143921.742194-6-linux@rasmusvillemoes.dk>
+ <20221112170705.7efe1673@jic23-huawei>
+In-Reply-To: <20221112170705.7efe1673@jic23-huawei>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcY3RhbmlzbGFc?=
+ =?us-ascii?Q?YXBwZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZiODRi?=
+ =?us-ascii?Q?YTI5ZTM1Ylxtc2dzXG1zZy05MWM0YmM1MS02NDIzLTExZWQtYjcyNy00MTU2?=
+ =?us-ascii?Q?NDUwMDAwMzBcYW1lLXRlc3RcOTFjNGJjNTMtNjQyMy0xMWVkLWI3MjctNDE1?=
+ =?us-ascii?Q?NjQ1MDAwMDMwYm9keS50eHQiIHN6PSIzNjE4IiB0PSIxMzMxMjkwNzU0NjEw?=
+ =?us-ascii?Q?MjE5OTYiIGg9Iit2VXNrVTRXNWo4aHF5MVVrZ1hCL3F4TWVnMD0iIGlkPSIi?=
+ =?us-ascii?Q?IGJsPSIwIiBibz0iMSIgY2k9ImNBQUFBRVJIVTFSU1JVRk5DZ1VBQUVvQ0FB?=
+ =?us-ascii?Q?QXNZU0ZVTVBqWUFjc3d6Q2l3WGltMXl6RE1LTEJlS2JVREFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFIQUFBQURhQVFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFFQUFRQUJBQUFBSnJqSklRQUFBQUFBQUFBQUFBQUFBSjRBQUFCaEFHUUFh?=
+ =?us-ascii?Q?UUJmQUhNQVpRQmpBSFVBY2dCbEFGOEFjQUJ5QUc4QWFnQmxBR01BZEFCekFG?=
+ =?us-ascii?Q?OEFaZ0JoQUd3QWN3QmxBRjhBWmdCdkFITUFhUUIwQUdrQWRnQmxBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBR0VBWkFCcEFGOEFjd0JsQUdNQWRR?=
+ =?us-ascii?Q?QnlBR1VBWHdCd0FISUFid0JxQUdVQVl3QjBBSE1BWHdCMEFHa0FaUUJ5QURF?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQ0FB?=
+ =?us-ascii?Q?QUFBQUNlQUFBQVlRQmtBR2tBWHdCekFHVUFZd0IxQUhJQVpRQmZBSEFBY2dC?=
+ =?us-ascii?Q?dkFHb0FaUUJqQUhRQWN3QmZBSFFBYVFCbEFISUFNZ0FBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFBPT0iLz48L21l?=
+ =?us-ascii?Q?dGE+?=
+x-dg-rorf: true
+x-originating-ip: [10.32.224.42]
+x-adiruleop-newscl: Rule Triggered
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH -next] iommu/dma: avoid expensive indirect calls for sync
- operations
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     Eric Dumazet <edumazet@google.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        netdev@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
-        iommu@lists.linux.dev
-References: <20221112040452.644234-1-edumazet@google.com>
- <1602bacc-d6c6-3780-a0ae-68137746fcf2@arm.com>
-In-Reply-To: <1602bacc-d6c6-3780-a0ae-68137746fcf2@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Proofpoint-GUID: qir8QAEG-MWFkEc3ZemqDaFniSX2X3dx
+X-Proofpoint-ORIG-GUID: qir8QAEG-MWFkEc3ZemqDaFniSX2X3dx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-14_12,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 clxscore=1011 phishscore=0 bulkscore=0 lowpriorityscore=0
+ mlxlogscore=999 suspectscore=0 mlxscore=0 spamscore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211140098
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,209 +105,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-14 13:30, Robin Murphy wrote:
-> On 2022-11-12 04:04, Eric Dumazet wrote:
->> Quite often, NIC devices do not need dma_sync operations
->> on x86_64 at least.
->>
->> Indeed, when dev_is_dma_coherent(dev) is true and
->> dev_use_swiotlb(dev) is false, iommu_dma_sync_single_for_cpu()
->> and friends do nothing.
->>
->> However, indirectly calling them when CONFIG_RETPOLINE=y
->> consumes about 10% of cycles on a cpu receiving packets
->> from softirq at ~100Gbit rate, as shown in [1]
->>
->> Even if/when CONFIG_RETPOLINE is not set, there
->> is a cost of about 3%.
->>
->> This patch adds a copy of iommu_dma_ops structure,
->> where sync_single_for_cpu, sync_single_for_device,
->> sync_sg_for_cpu and sync_sg_for_device are unset.
+
+
+> -----Original Message-----
+> From: Jonathan Cameron <jic23@kernel.org>
+> Sent: Saturday, November 12, 2022 7:07 PM
+> To: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Cc: Tanislav, Cosmin <Cosmin.Tanislav@analog.com>; Lars-Peter Clausen
+> <lars@metafoo.de>; Hennerich, Michael <Michael.Hennerich@analog.com>;
+> devicetree@vger.kernel.org; Rob Herring <robh+dt@kernel.org>; linux-
+> iio@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH 5/5] iio: addac: ad74413r: add support for reset-gpio
 > 
-> TBH I reckon it might be worthwhile to add another top-level bitfield to 
-> struct device to indicate when syncs can be optimised out completely, so 
-> we can handle it at the DMA API dispatch level and short-circuit a bit 
-> more of the dma-direct path too.
+> [External]
 > 
->> perf profile before the patch:
->>
->>      18.53%  [kernel]       [k] gq_rx_skb
->>      14.77%  [kernel]       [k] napi_reuse_skb
->>       8.95%  [kernel]       [k] skb_release_data
->>       5.42%  [kernel]       [k] dev_gro_receive
->>       5.37%  [kernel]       [k] memcpy
->> <*>  5.26%  [kernel]       [k] iommu_dma_sync_sg_for_cpu
->>       4.78%  [kernel]       [k] tcp_gro_receive
->> <*>  4.42%  [kernel]       [k] iommu_dma_sync_sg_for_device
->>       4.12%  [kernel]       [k] ipv6_gro_receive
->>       3.65%  [kernel]       [k] gq_pool_get
->>       3.25%  [kernel]       [k] skb_gro_receive
->>       2.07%  [kernel]       [k] napi_gro_frags
->>       1.98%  [kernel]       [k] tcp6_gro_receive
->>       1.27%  [kernel]       [k] gq_rx_prep_buffers
->>       1.18%  [kernel]       [k] gq_rx_napi_handler
->>       0.99%  [kernel]       [k] csum_partial
->>       0.74%  [kernel]       [k] csum_ipv6_magic
->>       0.72%  [kernel]       [k] free_pcp_prepare
->>       0.60%  [kernel]       [k] __napi_poll
->>       0.58%  [kernel]       [k] net_rx_action
->>       0.56%  [kernel]       [k] read_tsc
->> <*>  0.50%  [kernel]       [k] __x86_indirect_thunk_r11
->>       0.45%  [kernel]       [k] memset
->>
->> After patch, lines with <*> no longer show up, and overall
->> cpu usage looks much better (~60% instead of ~72%)
->>
->>      25.56%  [kernel]       [k] gq_rx_skb
->>       9.90%  [kernel]       [k] napi_reuse_skb
->>       7.39%  [kernel]       [k] dev_gro_receive
->>       6.78%  [kernel]       [k] memcpy
->>       6.53%  [kernel]       [k] skb_release_data
->>       6.39%  [kernel]       [k] tcp_gro_receive
->>       5.71%  [kernel]       [k] ipv6_gro_receive
->>       4.35%  [kernel]       [k] napi_gro_frags
->>       4.34%  [kernel]       [k] skb_gro_receive
->>       3.50%  [kernel]       [k] gq_pool_get
->>       3.08%  [kernel]       [k] gq_rx_napi_handler
->>       2.35%  [kernel]       [k] tcp6_gro_receive
->>       2.06%  [kernel]       [k] gq_rx_prep_buffers
->>       1.32%  [kernel]       [k] csum_partial
->>       0.93%  [kernel]       [k] csum_ipv6_magic
->>       0.65%  [kernel]       [k] net_rx_action
->>
->> Signed-off-by: Eric Dumazet <edumazet@google.com>
->> Cc: Robin Murphy <robin.murphy@arm.com>
->> Cc: Joerg Roedel <joro@8bytes.org>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: iommu@lists.linux.dev
->> ---
->>   drivers/iommu/dma-iommu.c | 67 +++++++++++++++++++++++++++------------
->>   1 file changed, 47 insertions(+), 20 deletions(-)
->>
->> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
->> index 
->> 9297b741f5e80e2408e864fc3f779410d6b04d49..976ba20a55eab5fd94e9bec2d38a2a60e0690444 100644
->> --- a/drivers/iommu/dma-iommu.c
->> +++ b/drivers/iommu/dma-iommu.c
->> @@ -522,6 +522,11 @@ static bool dev_use_swiotlb(struct device *dev)
->>       return IS_ENABLED(CONFIG_SWIOTLB) && dev_is_untrusted(dev);
->>   }
->> +static bool dev_is_dma_sync_needed(struct device *dev)
->> +{
->> +    return !dev_is_dma_coherent(dev) || dev_use_swiotlb(dev);
->> +}
->> +
->>   /**
->>    * iommu_dma_init_domain - Initialise a DMA mapping domain
->>    * @domain: IOMMU domain previously prepared by iommu_get_dma_cookie()
->> @@ -914,7 +919,7 @@ static void iommu_dma_sync_single_for_cpu(struct 
->> device *dev,
->>   {
->>       phys_addr_t phys;
->> -    if (dev_is_dma_coherent(dev) && !dev_use_swiotlb(dev))
->> +    if (!dev_is_dma_sync_needed(dev))
->>           return;
->>       phys = iommu_iova_to_phys(iommu_get_dma_domain(dev), dma_handle);
->> @@ -930,7 +935,7 @@ static void 
->> iommu_dma_sync_single_for_device(struct device *dev,
->>   {
->>       phys_addr_t phys;
->> -    if (dev_is_dma_coherent(dev) && !dev_use_swiotlb(dev))
->> +    if (!dev_is_dma_sync_needed(dev))
->>           return;
->>       phys = iommu_iova_to_phys(iommu_get_dma_domain(dev), dma_handle);
->> @@ -1544,30 +1549,51 @@ static size_t iommu_dma_opt_mapping_size(void)
->>       return iova_rcache_range();
->>   }
->> +#define iommu_dma_ops_common_fields \
->> +    .flags            = DMA_F_PCI_P2PDMA_SUPPORTED,        \
->> +    .alloc            = iommu_dma_alloc,            \
->> +    .free            = iommu_dma_free,            \
->> +    .alloc_pages        = dma_common_alloc_pages,        \
->> +    .free_pages        = dma_common_free_pages,        \
->> +    .alloc_noncontiguous    = iommu_dma_alloc_noncontiguous,    \
->> +    .free_noncontiguous    = iommu_dma_free_noncontiguous,        \
->> +    .mmap            = iommu_dma_mmap,            \
->> +    .get_sgtable        = iommu_dma_get_sgtable,        \
->> +    .map_page        = iommu_dma_map_page,            \
->> +    .unmap_page        = iommu_dma_unmap_page,            \
->> +    .map_sg            = iommu_dma_map_sg,            \
->> +    .unmap_sg        = iommu_dma_unmap_sg,            \
->> +    .map_resource        = iommu_dma_map_resource,        \
->> +    .unmap_resource        = iommu_dma_unmap_resource,        \
->> +    .get_merge_boundary    = iommu_dma_get_merge_boundary,        \
->> +    .opt_mapping_size    = iommu_dma_opt_mapping_size,
->> +
->>   static const struct dma_map_ops iommu_dma_ops = {
->> -    .flags            = DMA_F_PCI_P2PDMA_SUPPORTED,
->> -    .alloc            = iommu_dma_alloc,
->> -    .free            = iommu_dma_free,
->> -    .alloc_pages        = dma_common_alloc_pages,
->> -    .free_pages        = dma_common_free_pages,
->> -    .alloc_noncontiguous    = iommu_dma_alloc_noncontiguous,
->> -    .free_noncontiguous    = iommu_dma_free_noncontiguous,
->> -    .mmap            = iommu_dma_mmap,
->> -    .get_sgtable        = iommu_dma_get_sgtable,
->> -    .map_page        = iommu_dma_map_page,
->> -    .unmap_page        = iommu_dma_unmap_page,
->> -    .map_sg            = iommu_dma_map_sg,
->> -    .unmap_sg        = iommu_dma_unmap_sg,
->> +    iommu_dma_ops_common_fields
->> +
->>       .sync_single_for_cpu    = iommu_dma_sync_single_for_cpu,
->>       .sync_single_for_device    = iommu_dma_sync_single_for_device,
->>       .sync_sg_for_cpu    = iommu_dma_sync_sg_for_cpu,
->>       .sync_sg_for_device    = iommu_dma_sync_sg_for_device,
->> -    .map_resource        = iommu_dma_map_resource,
->> -    .unmap_resource        = iommu_dma_unmap_resource,
->> -    .get_merge_boundary    = iommu_dma_get_merge_boundary,
->> -    .opt_mapping_size    = iommu_dma_opt_mapping_size,
->>   };
->> +/* Special instance of iommu_dma_ops for devices satisfying this 
->> condition:
->> + *   !dev_is_dma_sync_needed(dev)
->> + *
->> + * iommu_dma_sync_single_for_cpu(), iommu_dma_sync_single_for_device(),
->> + * iommu_dma_sync_sg_for_cpu(), iommu_dma_sync_sg_for_device()
->> + * do nothing special and can be avoided, saving indirect calls.
->> + */
->> +static const struct dma_map_ops iommu_nosync_dma_ops = {
->> +    iommu_dma_ops_common_fields
->> +
->> +    .sync_single_for_cpu    = NULL,
->> +    .sync_single_for_device    = NULL,
->> +    .sync_sg_for_cpu    = NULL,
->> +    .sync_sg_for_device    = NULL,
->> +};
->> +#undef iommu_dma_ops_common_fields
->> +
->>   /*
->>    * The IOMMU core code allocates the default DMA domain, which the 
->> underlying
->>    * IOMMU driver needs to support via the dma-iommu layer.
->> @@ -1586,7 +1612,8 @@ void iommu_setup_dma_ops(struct device *dev, u64 
->> dma_base, u64 dma_limit)
->>       if (iommu_is_dma_domain(domain)) {
->>           if (iommu_dma_init_domain(domain, dma_base, dma_limit, dev))
->>               goto out_err;
->> -        dev->dma_ops = &iommu_dma_ops;
->> +        dev->dma_ops = dev_is_dma_sync_needed(dev) ?
->> +                &iommu_dma_ops : &iommu_nosync_dma_ops;
+> On Fri, 11 Nov 2022 15:39:21 +0100
+> Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
 > 
-> This doesn't work, because at this point we don't know whether a 
-> coherent device is still going to need SWIOTLB for DMA mask reasons or not.
+> > We have a board where the reset pin of the ad74412 is connected to a
+> > gpio, but also pulled low by default. Hence to get the chip out of
+> > reset, the driver needs to know about that gpio and set it high before
+> > attempting to communicate with it.
+> 
+> I'm a little confused on polarity here.  The pin is a !reset so
+> we need to drive it low briefly to trigger a reset.
+> I'm guessing for your board the pin is set to active low? (an example
+> in the dt would have made that clearer) Hence the pulse
+> in here to 1 is actually briefly driving it low before restoring to high?
+> 
+> For a pin documented as !reset that seems backwards though you have
+> called it reset so that is fine, but this description doesn't make that
+> celar.
 
-Wait, no, now I've completely confused myself... :(
+My opinion is that the driver shouldn't exactly know the polarity of the reset,
+and just assume that setting the reset GPIO to 1 means putting it in reset,
+and setting it to 0 means bringing out of reset.
 
-This probably *is* OK since it's specifically iommu_dma_ops, not DMA ops 
-in general, and we don't support IOMMUs with addressing limitations of 
-their own. Plus the other reasons for hooking into SWIOTLB here that 
-have also muddled my brain have been for non-coherent stuff, so still 
-probably shouldn't make a difference.
+> 
+> Perhaps just add some more description here to make it clear the GPIO
+> is active low, and then refer to setting it to true and false to avoid
+> the confusing high / low terminology which are inverted...
+> 
+> >
+> > When a reset-gpio is given in device tree, use that instead of the
+> > software reset. According to the data sheet, the two methods are
+> > functionally equivalent.
+> >
+> > Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> > ---
+> >  drivers/iio/addac/ad74413r.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
+> > index 9f77d2f514de..af09d43f921c 100644
+> > --- a/drivers/iio/addac/ad74413r.c
+> > +++ b/drivers/iio/addac/ad74413r.c
+> > @@ -71,6 +71,7 @@ struct ad74413r_state {
+> >  	struct regmap			*regmap;
+> >  	struct device			*dev;
+> >  	struct iio_trigger		*trig;
+> > +	struct gpio_desc		*reset_gpio;
+> >
+> >  	size_t			adc_active_channels;
+> >  	struct spi_message	adc_samples_msg;
+> > @@ -393,6 +394,13 @@ static int ad74413r_reset(struct ad74413r_state
+> *st)
+> >  {
+> >  	int ret;
+> >
+> > +	if (st->reset_gpio) {
+> > +		gpiod_set_value_cansleep(st->reset_gpio, 1);
+> > +		fsleep(50);
+> > +		gpiod_set_value_cansleep(st->reset_gpio, 0);
+> > +		return 0;
+> > +	}
+> > +
+> >  	ret = regmap_write(st->regmap, AD74413R_REG_CMD_KEY,
+> >  			   AD74413R_CMD_KEY_RESET1);
+> >  	if (ret)
+> > @@ -1316,6 +1324,10 @@ static int ad74413r_probe(struct spi_device *spi)
+> >  	if (IS_ERR(st->regmap))
+> >  		return PTR_ERR(st->regmap);
+> >
+> > +	st->reset_gpio = devm_gpiod_get_optional(st->dev, "reset",
+> GPIOD_OUT_LOW);
+> > +	if (IS_ERR(st->reset_gpio))
+> > +		return PTR_ERR(st->reset_gpio);
+> > +
+> >  	st->refin_reg = devm_regulator_get_optional(st->dev, "refin");
+> >  	if (IS_ERR(st->refin_reg)) {
+> >  		ret = PTR_ERR(st->refin_reg);
 
-Either way I do think it would be neatest to handle this higher up in 
-the API (not to mention apparently easier to reason about...)
-
-Thanks,
-Robin.
