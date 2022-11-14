@@ -2,161 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B479627D39
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:00:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 944CF627D38
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236861AbiKNMAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 07:00:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59910 "EHLO
+        id S237052AbiKNL7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:59:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236840AbiKNL72 (ORCPT
+        with ESMTP id S237035AbiKNL67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:59:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F1515713
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:56:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668426996;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3w5yQu6+bnmhTRV4iI0QGMo1Zmd1XXNiki4K9/359KE=;
-        b=L4BHzJ8wA+wyrYZdZBFzu+4oZnZPXKyJL/iZV6qlLFrcqkIn566iPdRj+u94OP+Oatp1aS
-        +XtKmfjAQ6lfrfHYEPRRckQ8G3tJIsw8OXdI1FVZkRIPbNpT7IfhLAMis2NLky1qA/FNbg
-        uQyrkNt2E2SiZwhVO65dfkS7VlCcJ4A=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-633-nJiKd3AJOhCghKRGa2yOIw-1; Mon, 14 Nov 2022 06:56:35 -0500
-X-MC-Unique: nJiKd3AJOhCghKRGa2yOIw-1
-Received: by mail-wm1-f70.google.com with SMTP id z18-20020a05600c221200b003cf7fcc286aso2849836wml.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:56:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3w5yQu6+bnmhTRV4iI0QGMo1Zmd1XXNiki4K9/359KE=;
-        b=Wsw8rBrHgJKeElwxWaqGrSvFzX/jsMVO0bOWlM33y5dJHsMyfJO9aeFeGDLaBluHlH
-         h9z/4hpq2xSeG1eoYzL/W+T1Uf09qYB1gzTIli43hjKkT6y4hYi+qLukFHhfIej7urhB
-         YiGG6Bp+N8forkhbiq5f7x3/vT9zJaLW6EoEoGqFIfOKagr/CTtwWF66S99EWYYINtrw
-         rwynXox7JSN4zg10P7wj3oufhp4O4mSdnssQO3azEyw22T4fKaszvmAMlayOAA5Bp0AU
-         iaCJMJY5KpKXaupJyZWjPdKhyesYApYri6tBTbtllAcIcFhD6Dec1rjiDdM40tT91qWI
-         Xx0A==
-X-Gm-Message-State: ANoB5pnpIcfHPqT6WsDs69c3gOdPKXvob+elCqet6kCFHvIxNt2DWrUE
-        0zRNsfhzoHS9/ACR0AUeAG9psVz/DJ5lNeIU7GXjR0MZEVLxoitGoEgLD7V4JAOzRM3FvHK8fTb
-        +XFb2n7Bj7vZgqWWbdiPWJkMq
-X-Received: by 2002:adf:cf12:0:b0:236:611d:b6b9 with SMTP id o18-20020adfcf12000000b00236611db6b9mr7674372wrj.190.1668426993796;
-        Mon, 14 Nov 2022 03:56:33 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf43LETANuGPh3OVYo5kOK+95wTdLcqmrl4YgxmDJPUP7x241G7hOVt3+D9AScUhpRzEgZwAOQ==
-X-Received: by 2002:adf:cf12:0:b0:236:611d:b6b9 with SMTP id o18-20020adfcf12000000b00236611db6b9mr7674359wrj.190.1668426993589;
-        Mon, 14 Nov 2022 03:56:33 -0800 (PST)
-Received: from [192.168.1.130] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id r7-20020a05600c458700b003c7087f6c9asm18823551wmo.32.2022.11.14.03.56.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 03:56:33 -0800 (PST)
-Message-ID: <9d53f7f9-b77b-21ff-500a-88f3a7fcee80@redhat.com>
-Date:   Mon, 14 Nov 2022 12:56:32 +0100
+        Mon, 14 Nov 2022 06:58:59 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A622122B35
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:56:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 599A1B80E7E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:56:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DC95C43147
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:56:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668427017;
+        bh=rHSkLT53Nv/ib2Ggyg8R8XnjvwWSO7MjKfJFJvq+vrM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=K61oir9HYVf2Kl8Zg7LLJaR9C4ZmEHf6qzWLLS9AMF8wizEZ8H7/a4VX1r88AuAYx
+         0WUKhMnd/CEWXm7qXAVA9jBoOv1hObLlJpp5jLUNvWvwst134qw+2z1Dqv8ZijsjLd
+         gyzi69ytG0c8KQN43Wm1pt7oxyBpUJ0fFzFPXk9jxqwRqBnR5TxjMZuzodU29ldtby
+         M4kMNecm6R0aYj9hJIPpVTmhBzr7z3YaUIDCKVj1t2qVvwBBKjm/t1oEsJwSGXUZuK
+         8TrVHBzxBjoihN7Bog9oMGJZKMTkwhmP2ajAsuGZwRECrQRXKsjpG2nZR5AAoz4U5E
+         RyObfa0MZQyyQ==
+Received: by mail-lf1-f50.google.com with SMTP id j4so18931799lfk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:56:56 -0800 (PST)
+X-Gm-Message-State: ANoB5pnDwJNiOytS3PEzBsiEDNbmBjfvybLcnTARtd76pMPmk7U0Fxay
+        AbWeyALn67pDDGthZnv4eolRks5rZiSwQAu+/Y8=
+X-Google-Smtp-Source: AA0mqf7AocsadZ4cituWmBvSQIrolicmS9m21JD/aN183U53PFdMtTMBKNIlujCeLMb2MSkJgqsghK2SQHhMZaSGfQ4=
+X-Received: by 2002:ac2:5044:0:b0:4b0:cca8:bdb3 with SMTP id
+ a4-20020ac25044000000b004b0cca8bdb3mr4165197lfm.539.1668427014943; Mon, 14
+ Nov 2022 03:56:54 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] driver core: Disable driver deferred probe timeout by
- default
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20221114114344.18650-1-jirislaby@kernel.org>
+In-Reply-To: <20221114114344.18650-1-jirislaby@kernel.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 14 Nov 2022 12:56:43 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFqNvs2OvLJLi2CQYtPe4_BquHQg55F8J=oO76N9wRT9g@mail.gmail.com>
+Message-ID: <CAMj1kXFqNvs2OvLJLi2CQYtPe4_BquHQg55F8J=oO76N9wRT9g@mail.gmail.com>
+Subject: Re: [PATCH 00/46] gcc-LTO support for the kernel
+To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        Borislav Petkov <bp@alien8.de>
 Cc:     linux-kernel@vger.kernel.org,
-        Saravana Kannan <saravanak@google.com>,
-        Peter Robinson <pbrobinson@redhat.com>,
-        Steev Klimaszewski <steev@kali.org>,
-        Rob Herring <robh@kernel.org>,
-        Sergio Lopez Pascual <slp@redhat.com>,
-        Enric Balletbo i Serra <eballetbo@redhat.com>,
-        John Stultz <jstultz@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20221114104333.3695531-1-javierm@redhat.com>
- <Y3IeUADalX6WDnuO@kroah.com>
- <354820e8-939c-781a-0d76-c1574c43b7f3@redhat.com>
- <Y3IonmwrJ3aqDbAw@kroah.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <Y3IonmwrJ3aqDbAw@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Alexander Potapenko <glider@google.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Don Zickus <dzickus@redhat.com>, Hao Luo <haoluo@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Huang Rui <ray.huang@amd.com>,
+        Ingo Molnar <mingo@redhat.com>, Jan Hubicka <jh@suse.de>,
+        Jason Baron <jbaron@akamai.com>,
+        Jiri Kosina <jikos@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Martin Liska <mliska@suse.cz>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Mel Gorman <mgorman@suse.de>, Miguel Ojeda <ojeda@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Richard Biener <RGuenther@suse.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/14/22 12:38, Greg Kroah-Hartman wrote:
-> On Mon, Nov 14, 2022 at 12:13:15PM +0100, Javier Martinez Canillas wrote:
->> Hello Greg,
-
-[...]
-
->> I even gave an example about general purpose distributions that build as
->> much as possible as a module. What more info do you think that is missing?
-> 
-> Exact systems that this is failing on would be great to have.
+On Mon, 14 Nov 2022 at 12:44, Jiri Slaby (SUSE) <jirislaby@kernel.org> wrote:
+>
+> Hi,
+>
+> this is the first call for comments (and kbuild complaints) for this
+> support of gcc (full) LTO in the kernel. Most of the patches come from
+> Andi. Me and Martin rebased them to new kernels and fixed the to-use
+> known issues. Also I updated most of the commit logs and reordered the
+> patches to groups of patches with similar intent.
+>
+> The very first patch comes from Alexander and is pending on some x86
+> queue already (I believe). I am attaching it only for completeness.
+> Without that, the kernel does not boot (LTO reorders a lot).
 >
 
-The exact system is a Snapdragon SC7180 based HP X2 Chromebook with latest
-Fedora Rawhide image (kernel version 6.1-rc4). The reason why is timing out
-is that the arm_smmu driver is built-in (CONFIG_ARM_SMMU=y) but it depends
-on gpucc-sc7180 clk driver that's built as module (CONFIG_SC_GPUCC_7180=m).
-
- >>> failing on the current value?  What drivers are causing the long delay
->>> here?  No one should be having to wait 10 seconds for a deferred delay
->>> on a real system as that feels really wrong.
->>>
->>
->> Not really, it depends if the drivers are built-in, built as modules, in
->> the initramfs or in the rootfs. A 10 seconds might not be enough if these
->> modules are in the root partition and need to wait for this to be mounted
->> and udev to load the modules, etc.
-> 
-> How does it take 10 seconds to load the initramfs for a system that
-> requires deferred probe devices?  What typs of hardware is this?
->
-
-That could depend on may things. The dependency of the systemd unit files,
-whether NetworkManager-wait-online.service is enabled or not, etc. It can
-really take more than 10 seconds on some systems to load all the modules.
- 
-[...]
-
->>
->> A nice feature of the probe deferral mechanism is that it was simple and
->> reliable. Adding a timeout makes it non-deterministic and more fragile IMO.
-> 
-> deferred probe was never simple or reliable or determinisitic.  It was a
-> hack we had to implement to handle complex hardware situations and
-> loadable drivers.  Let's not try to paper over driver bugs here by
-> making the timeout "forever" but rather fix the root problem in the
-> broken drivers.
->
-
-I don't understand how adding a 10 secs timeout would make it more robust than
-just letting the driver core to attempt probing the deferred drivers again for
-every driver (or device) that gets registered.
- 
-> So, what drivers do we need to fix up?
-> 
-
-So what exactly needs to get fixed on the arm_smmu and gpucc-sc7180 drivers
-mentioned? Yes, we could built both of them as =y and make sure that drivers
-are registered and probed before the initcalls are done, but if we do that,
-we will need to have most of the drivers built-in in the Fedora kernel. That
-does not scale for all the platforms that we need to support.
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+You didn't cc me on that patch so I will reply here: I don't think
+this is the right solution.
+On x86, there is a lot of stuff injected into .head.text that simply
+does not belong there, and getting rid of the __head annotation and
+dropping __HEAD from the Xen pvh head.S file would be a much better
+solution.
