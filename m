@@ -2,474 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10B46282CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F4E6282D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236579AbiKNOif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:38:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
+        id S236796AbiKNOjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:39:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236178AbiKNOi2 (ORCPT
+        with ESMTP id S236928AbiKNOi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:38:28 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457F9307
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:38:24 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id a5so17579320edb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:38:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LqqUx7jeg7y/E/nMBqurpKnaZhcr17k+jJ5fcyWu3v8=;
-        b=MYcwephvYa7GUyaY/QiqWOye2J3Ho6Kj5JLdQDYdGyLGfi+PHjARZinsjkO1TAlf7y
-         jHZJblFrgtaOCc0us6rUhw+znVI/kunPlp1jVju59gkHP6V+YcEi651j9dfi85LXRlc9
-         uBiT+UZAbwg6c30O0vJjSx0849O0h+VIoHWA8K7bM6RUugRWh/NITNC1pdYztdiaw6Me
-         YJfKnr6ACBRUC2QV/5vOEwy/UsSWB3/2dKALu+CEYBJMk9vwvUW8Pco/TYVL85mDt1cz
-         fwR8QHbm8xUaglZ/QmfIH+8iBF1G4WbJQ0SJU3O8M/azmFPOZTRKf5YmJRv6rKzkiHE0
-         Xkyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LqqUx7jeg7y/E/nMBqurpKnaZhcr17k+jJ5fcyWu3v8=;
-        b=BP2/ngveSrbbau3NCrTDSQakIDO5qn8f0dya+gduAjE3Qz+1yE2a6CcA55YVaCtsbx
-         0x5KBZ5gpPndKZ0bmLAjusrVGV8z0kgSsMf+M9Z0wnKqaSTHFldc6UTSMEoDflgwpB4M
-         NF4p4HhnfU8NL7yq6ZImc4zXTess7RGTR32CG8ltKuwXB0kJgEBZ+XoQUsTkTEw6btYf
-         H+O1sWlfqrertybCEkXElm93ostFtdwJDn218hwpgiNLXRdzSo14AV/de+kZVvk9f2ph
-         uQbEvF1gDON+ZqwtFe+swyo7vIVdAB6FmcDW98SuRwmLYel2uFrTd55oOAoa55qz1BNC
-         cQ0Q==
-X-Gm-Message-State: ANoB5plMgRALxjOgFjetshDLwuLVwuKM97ceZO1F/gTvaDGYpAVwt+0O
-        EF5uMncKcG/Ycer8v6ezfcmwHA==
-X-Google-Smtp-Source: AA0mqf6luQo4JVFA04VeRS35aPiZWQMhzTwbkk7AMirt++NdBLv+JTPJpxktifaK/f5XKJr+gEeKww==
-X-Received: by 2002:aa7:c95a:0:b0:458:b6dc:2b56 with SMTP id h26-20020aa7c95a000000b00458b6dc2b56mr11628589edt.412.1668436702715;
-        Mon, 14 Nov 2022 06:38:22 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id ce12-20020a170906b24c00b007addcbd402esm4255069ejb.215.2022.11.14.06.38.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 06:38:22 -0800 (PST)
-Message-ID: <364844bf-73ca-96b6-cc17-893709ed5b9b@linaro.org>
-Date:   Mon, 14 Nov 2022 15:38:18 +0100
+        Mon, 14 Nov 2022 09:38:56 -0500
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2056.outbound.protection.outlook.com [40.107.20.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAB228E08;
+        Mon, 14 Nov 2022 06:38:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DWsQjlrFHuN5wGT9dateOMbxQG7xo2gDziJDY9bq90kQc/5NLQaZ6RSdj+hm2O9XdaI1rVn5mKApumrWR8SlFS57yBcETmz8h3ImlDwEuAg1YpQE8OOZxJ7fEbdFjpz8x3i+RgvCPcvXN1ovAJ/0IVNzCvhfynZqGBTWgngqKdqaRgxkqjVlnkgCw4IvU13PAa0n3VlpkNgTrRFlAHAeqMOe9pCcJBQ4DGEDi7/ylTtIxaJ1p2SH0dcSywrjbSd40ufoM5/SMhSW8AqQRYj61lYC1V5b/JVf4Q07Psh6lrunZdupNh7XSviUodGJzVxljqeAJOyi4WsF2f62AH6S1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ACrouBeuN3ynQU2FOOJ/kAcuvOn2RrRvO25DFTdV37E=;
+ b=ma9kDHIF5Dn7MwfEFZxIIQI4VyNzqGAKDimRWIoKGiGmr+oOP6OUxYEvNfldRCP1Ajfy48Fegun6yoj1oPCxm1+iTSJf5xXW7dENJ+3YRAQE8DryqH3xhvW9+yLO16FExaFL4Yng8/8WGYi6qVdloTwi1OwbxqyNkHQWWWGZ3jnCrkCjBcXHfbY6Bf/H907/AeYNX96AUGvQFkYdCQijV0yrL5lqtqTk7dxHqr0u0F0Zy30dDoADXH2B61AAiGrrehsKs+oCAz5gdtt/FgYDBT8xP4SWYY46DpyTo7NykpOHWpDspFdbg8DwZRMAPmIYJefSIQt2+Eq2wHhKeBJhhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ACrouBeuN3ynQU2FOOJ/kAcuvOn2RrRvO25DFTdV37E=;
+ b=FK3DmU6NsCpcuwfsu0LVSC/tQawD4hrNKDZPUucQfJ74XN72O4W847zMpz5fTQ+UsseLO+mKjRLgNWUMvxI4khrr1VYSk0QJ+0VxNVPaXm71vyjf6elms4/E79LfN5XODevlYmGYhOIW3WGi3j7IivLmR57d02XcLfHnFkz+4VM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by AS1PR04MB9288.eurprd04.prod.outlook.com (2603:10a6:20b:4dc::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.16; Mon, 14 Nov
+ 2022 14:38:47 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::dcca:b62f:206b:dcf8]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::dcca:b62f:206b:dcf8%3]) with mapi id 15.20.5813.016; Mon, 14 Nov 2022
+ 14:38:47 +0000
+From:   Liu Ying <victor.liu@nxp.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, geert+renesas@glider.be,
+        saravanak@google.com, linux-imx@nxp.com, greg@kroah.com,
+        arnd@arndb.de, sfr@canb.auug.org.au, linux-next@vger.kernel.org
+Subject: [PATCH v5] drivers: bus: simple-pm-bus: Use clocks
+Date:   Mon, 14 Nov 2022 22:39:16 +0800
+Message-Id: <20221114143916.1162000-1-victor.liu@nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0046.apcprd02.prod.outlook.com
+ (2603:1096:4:196::15) To AM7PR04MB7046.eurprd04.prod.outlook.com
+ (2603:10a6:20b:113::22)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: sm8350-sagami: Add most RPMh
- regulators
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     patches@linaro.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221114143642.44839-1-konrad.dybcio@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221114143642.44839-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|AS1PR04MB9288:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5188f13a-fe52-4669-9f18-08dac64def21
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AQjnk7W+gFXnrJGAKjL6UodObjoK7RzuY9otnykjHUHKAfEIpZfz+pUDnQMHqYXkuWhSMWGrz7qux/mUx0YriPZVUPy2skkDbzhOsTErTuve0I8oV9gaK9L8bvgedgdxHFLzdkxtvgyjv5N5+WO8hvcRqteK7V9d3lFHdma/ApCx1UuE2jzzZ09koMZjwfMnX7QvIJ35/A+/bJECBPlW/Xrg9cz0qUcauVunlVcMTZiouphptqHTbiw514Ms1gDajzM8NHQGw1OoeuEkA3/2dFHJH6r2jtmn4m/nDUqBi/K5zTBM7Q/UkQsjNaD3rqMn6O5Q6oL/NHAEoBAo1miP8v2YuzumR2Zy7fWCzAinfKkT78Lq50q2GCHiYxWGff8zd/B5PCX8flbvJLwE7h97kh6Uz3aAjz+MP4pkEFgsbij3CRAJHa6DYsHcCplLC4HbTDwpbjty6ofCDerVJmb3tcAPPd9yM5B/PCuPHqOBsMrz9vxgGQ4nA1G5utoveJAoNvHSssGKwSpdqPFIqrlMAcwcWeYc7oDIlcrBmTWMzKj078Q2sTMH24a+g1fF5SDa7ykwRHaoNJiRKrC83sV0ntmHezaArHVBfgYLNNlvZn5dYHALGHQP5Wo9OzhS7W5vJr8tI3QjFC8b2Stzb44tCWF/ngBR0HSNZXD50bVYbqkZCv6i7BwqQAbwZGZI9wqzv+c+KbhBGMxhnjaOFubpyY8UqDjJTsRUk4ZSuAxeNCK5041c0/CvounUZgpXJjxG1FYyvD7h4mlg6rmab71VDQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(136003)(396003)(366004)(451199015)(478600001)(6486002)(66946007)(66476007)(36756003)(66556008)(8676002)(6916009)(316002)(4326008)(83380400001)(38350700002)(38100700002)(6506007)(6512007)(6666004)(86362001)(26005)(52116002)(186003)(1076003)(2616005)(8936002)(41300700001)(2906002)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?V1sPeltp9fxmwRiMP090FUJBT0MBLzRzU12H0TJfwgXU8OPuZ3QHhH71mPqO?=
+ =?us-ascii?Q?csKKvuq5oXZtGqLLHuoegRmbHLrShkYXcryxFHMW9yF8XEmoRJk3H03KZpgG?=
+ =?us-ascii?Q?dmjWTgBvC5nG5p2qYzfxt+7yRulgAAKDLI4NBXtbwx7E1GYU2DTBe2AvGGwe?=
+ =?us-ascii?Q?voR3k3x0Z+/2tE5s/7j7dNVVmf2vXcW3Aqw/voXzgyom3WNEfQrsQw7T4Ug5?=
+ =?us-ascii?Q?0JdgWgotL1+PgJ2rpVgd6QCcEAcAV44CbfPk0VHm+jmFm1QcEeotRhq8C0ZG?=
+ =?us-ascii?Q?U19nvEGpYNRpXGsKFRtlayOFSHLGcI/8PRokNDk5fN2xrMoj+GLPkCYQYXT3?=
+ =?us-ascii?Q?HmcEmdEahhgxF1wtpbIKkDjn3Vjh5CQa+AZEwZGc2OQRPir8frVpoguIwQbm?=
+ =?us-ascii?Q?1sM/O3OTWE1f9YQRNF25H2PJ+BVNoAXNgW0aqrxyqGlxq/P2j3Kz8Cna9XA+?=
+ =?us-ascii?Q?cAbShBwTRtyqCG9uWXx2+lA0+cAHMF2o1y0Vp1gNZHK3vqS9zKTJJo64QXRp?=
+ =?us-ascii?Q?8Gz+fLZRwjOPmYZ73iz25Q/4+hacONLHvhEFeflrJygpyVEnM/wAt8869+7p?=
+ =?us-ascii?Q?IrcJ6otckPQ6LtB307BzkjTZXS51n3+nwNrFixbhbABLBGbUeuUCHYTKnnBo?=
+ =?us-ascii?Q?jf9Q1wfYA9NSZZ3vPwpyCTXAwSD+VNeaxmR7eZITyl9Q+vY3YubBuukYVZql?=
+ =?us-ascii?Q?AZK0sQkBf04UfBxLpooXNct/I9BgUVMMWFMSkeadQ0XUgqx7cxpbPYA65M2d?=
+ =?us-ascii?Q?gI5xggdPqfdcVcwY70urO/K9tKB41GZVwC3dfyktEd6nvH/mBiJcsHsbRi2Y?=
+ =?us-ascii?Q?M8avoN+6TQuVJrSnEkyYJKYKQv2xyg5mCDATQ3hcYlq+pfMWhLlqT3Ft8akK?=
+ =?us-ascii?Q?M9cQL738cRjWC5PWufEhRsdiESTAzohvDAYpO20vxI8tyDTUYttWypz2TXb0?=
+ =?us-ascii?Q?JKX2qQgI8LwQswBStTOifuzibch8t+lHswo1zyKGGIkqsH040yu9tv1i3PzR?=
+ =?us-ascii?Q?zw4ChhpMBr9Sr6OdKaFy/aV+Jcr+pOkZkB4Fs0j0qIkgLvdy4LLe/xjS/rE4?=
+ =?us-ascii?Q?NwI1mndVWtmXrRe9fSAVLjnLIPVzj+JeXhM8Vuz0sWFpOR0oG5i/zm5lL+FY?=
+ =?us-ascii?Q?w19MFFqywJ9pKl9ozoBXMPlqDgtNkjY9gDf5X0enF0bwDR5cVubHHQFN0xDj?=
+ =?us-ascii?Q?SeK9zmPmX2SlPdi7WH8GI/gmGEdJADNgWUUW/i+bgx6HT1khF7vg+mxCyGX6?=
+ =?us-ascii?Q?RDzJjrfUAQx/InRW8zz4mq6LONDLw+kgMgu0mukeW8LD+bXGHtb5ka6vWqi+?=
+ =?us-ascii?Q?wld8xgyeBZvEBXErkxLuUmVJlrccE0L7HSuAeCyyIOvwf9ANBiXKD45jXl2W?=
+ =?us-ascii?Q?kw06g0lkLj5Y+O1euFuyVRW4BnUv/yasBQYLnFufzaEtYYU8e7kcy8b2Bj8O?=
+ =?us-ascii?Q?vHVtC09jK1bdz7pD60P1/44fBrh1Qmen45mYoP4KbZXMYGYAVjipNTmftW04?=
+ =?us-ascii?Q?iE6bQ1Y2sHdEGBUWrOFUBs7zVrgBVeijDTsB6+CFPOomlOQHpK31whmWa5n1?=
+ =?us-ascii?Q?teYmf3LMwkq7EfMIQT4zNrH190rWXNqOuRk10Pyn?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5188f13a-fe52-4669-9f18-08dac64def21
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 14:38:47.8122
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 84fPkkdOq3ns/d9gZxnmgQmur3o1HJXTKtY2PI5/z9wC61Z9boR5VX+aMIjmlSgtzgSDz40mZxU4Cnq3r3uaNg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9288
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Simple Power-Managed bus controller may need functional clock(s)
+to be enabled before child devices connected to the bus can be
+accessed.  Get the clock(s) as a bulk and enable/disable the
+clock(s) when the bus is being power managed.
 
+One example is that Freescale i.MX8qxp pixel link MSI bus controller
+needs MSI clock and AHB clock to be enabled before accessing child
+devices.
 
-On 14/11/2022 15:36, Konrad Dybcio wrote:
-> From: Konrad Dybcio <konrad.dybcio@somainline.org>
-> 
-> Configure most RPMh-controlled regulators on SoMC Sagami. The missing
-> ones (on pm8350b and pm8008[ij]) will be configured when driver support
-> is added. Thankfully, it looks like PDX215 and PDX214 don't have any
-> differences when it comes to PM8350/PM8350C/PMR735a.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
-Missing second S-o-b, sorry:
+Signed-off-by: Liu Ying <victor.liu@nxp.com>
+---
+v4->v5:
+* Fix build warnings when CONFIG_PM=n by using RUNTIME_PM_OPS,
+  NOIRQ_SYSTEM_SLEEP_PM_OPS and pm_ptr macros.
+* Drop Geert's R-b tag due to the fix.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+v3->v4:
+* Drop unnecessary 'bus == NULL' check from simple_pm_bus_runtime_{suspend,resume}.
+  (Geert)
+* Add Geert's R-b tag.
 
-Konrad
->   .../dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 350 ++++++++++++++++++
->   1 file changed, 350 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-> index 93e88c40b3b9..f118caab3d42 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-> @@ -3,6 +3,7 @@
->    * Copyright (c) 2021, Konrad Dybcio <konrad.dybcio@somainline.org>
->    */
->   
-> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
->   #include "sm8350.dtsi"
->   #include "pm8350.dtsi"
->   #include "pm8350b.dtsi"
-> @@ -73,6 +74,16 @@ ramoops@ffc00000 {
->   			no-map;
->   		};
->   	};
-> +
-> +	vph_pwr: vph-pwr-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vph_pwr";
-> +		regulator-min-microvolt = <3700000>;
-> +		regulator-max-microvolt = <3700000>;
-> +
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +	};
->   };
->   
->   &adsp {
-> @@ -80,6 +91,345 @@ &adsp {
->   	firmware-name = "qcom/sm8350/Sony/sagami/adsp.mbn";
->   };
->   
-> +&apps_rsc {
-> +	regulators-0 {
-> +		compatible = "qcom,pm8350-rpmh-regulators";
-> +		qcom,pmic-id = "b";
-> +
-> +		vdd-s1-supply = <&vph_pwr>;
-> +		vdd-s2-supply = <&vph_pwr>;
-> +		vdd-s3-supply = <&vph_pwr>;
-> +		vdd-s4-supply = <&vph_pwr>;
-> +		vdd-s5-supply = <&vph_pwr>;
-> +		vdd-s6-supply = <&vph_pwr>;
-> +		vdd-s7-supply = <&vph_pwr>;
-> +		vdd-s8-supply = <&vph_pwr>;
-> +		vdd-s9-supply = <&vph_pwr>;
-> +		vdd-s10-supply = <&vph_pwr>;
-> +		vdd-s11-supply = <&vph_pwr>;
-> +		vdd-s12-supply = <&vph_pwr>;
-> +
-> +		vdd-l1-l4-supply = <&pm8350_s11>;
-> +		vdd-l2-l7-supply = <&vreg_bob>;
-> +		vdd-l3-l5-supply = <&vreg_bob>;
-> +		vdd-l6-l9-l10-supply = <&pm8350_s11>;
-> +
-> +		/*
-> +		 * ARC regulators:
-> +		 * S5 - mx.lvl
-> +		 * S6 - gfx.lvl
-> +		 * S9 - mxc.lvl
-> +		 */
-> +
-> +		pm8350_s10: smps10 {
-> +			regulator-name = "pm8350_s10";
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350_s11: smps11 {
-> +			regulator-name = "pm8350_s11";
-> +			regulator-min-microvolt = <752000>;
-> +			regulator-max-microvolt = <1000000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350_s12: smps12 {
-> +			regulator-name = "pm8350_s12";
-> +			regulator-min-microvolt = <1224000>;
-> +			regulator-max-microvolt = <1360000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350_l1: ldo1 {
-> +			regulator-name = "pm8350_l1";
-> +			regulator-min-microvolt = <912000>;
-> +			regulator-max-microvolt = <920000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350_l2: ldo2 {
-> +			regulator-name = "pm8350_l2";
-> +			regulator-min-microvolt = <3072000>;
-> +			regulator-max-microvolt = <3072000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350_l3: ldo3 {
-> +			regulator-name = "pm8350_l3";
-> +			regulator-min-microvolt = <904000>;
-> +			regulator-max-microvolt = <904000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		/* L4 - lmx.lvl (ARC) */
-> +
-> +		pm8350_l5: ldo5 {
-> +			regulator-name = "pm8350_l5";
-> +			regulator-min-microvolt = <880000>;
-> +			regulator-max-microvolt = <888000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +			regulator-allow-set-load;
-> +		};
-> +
-> +		pm8350_l6: ldo6 {
-> +			regulator-name = "pm8350_l6";
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1208000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +			regulator-allow-set-load;
-> +		};
-> +
-> +		pm8350_l7: ldo7 {
-> +			regulator-name = "pm8350_l7";
-> +			regulator-min-microvolt = <2400000>;
-> +			regulator-max-microvolt = <3008000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +			regulator-allow-set-load;
-> +		};
-> +
-> +		/* L8 - lcx.lvl (ARC) */
-> +
-> +		pm8350_l9: ldo9 {
-> +			regulator-name = "pm8350_l9";
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +			regulator-allow-set-load;
-> +		};
-> +	};
-> +
-> +	regulators-1 {
-> +		compatible = "qcom,pm8350c-rpmh-regulators";
-> +		qcom,pmic-id = "c";
-> +
-> +		vdd-s1-supply = <&vph_pwr>;
-> +		vdd-s2-supply = <&vph_pwr>;
-> +		vdd-s3-supply = <&vph_pwr>;
-> +		vdd-s4-supply = <&vph_pwr>;
-> +		vdd-s5-supply = <&vph_pwr>;
-> +		vdd-s6-supply = <&vph_pwr>;
-> +		vdd-s7-supply = <&vph_pwr>;
-> +		vdd-s8-supply = <&vph_pwr>;
-> +		vdd-s9-supply = <&vph_pwr>;
-> +		vdd-s10-supply = <&vph_pwr>;
-> +
-> +		vdd-l1-l12-supply = <&pm8350c_s1>;
-> +		vdd-l2-l8-supply = <&pm8350c_s1>;
-> +		vdd-l3-l4-l5-l7-l13-supply = <&vreg_bob>;
-> +		vdd-l6-l9-l11-supply = <&vreg_bob>;
-> +		vdd-l10-supply = <&pm8350_s12>;
-> +
-> +		vdd-bob-supply = <&vph_pwr>;
-> +
-> +		pm8350c_s1: smps1 {
-> +			regulator-name = "pm8350c_s1";
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1952000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		/* S2 - ebi.lvl (ARC) */
-> +
-> +		pm8350c_s3: smps3 {
-> +			regulator-name = "pm8350c_s3";
-> +			regulator-min-microvolt = <300000>;
-> +			regulator-max-microvolt = <704000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		/*
-> +		 * ARC regulators:
-> +		 * S4 - mss.lvl
-> +		 * S6 - cx.lvl
-> +		 * S8 - mmcx.lvl
-> +		 */
-> +
-> +		pm8350c_s10: smps10 {
-> +			regulator-name = "pm8350c_s10";
-> +			regulator-min-microvolt = <1048000>;
-> +			regulator-max-microvolt = <1128000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350c_l1: ldo1 {
-> +			regulator-name = "pm8350c_l1";
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350c_l2: ldo2 {
-> +			regulator-name = "pm8350c_l2";
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350c_l3: ldo3 {
-> +			regulator-name = "pm8350c_l3";
-> +			regulator-min-microvolt = <3304000>;
-> +			regulator-max-microvolt = <3304000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350c_l4: ldo4 {
-> +			regulator-name = "pm8350c_l4";
-> +			regulator-min-microvolt = <1704000>;
-> +			regulator-max-microvolt = <3000000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350c_l5: ldo5 {
-> +			regulator-name = "pm8350c_l5";
-> +			regulator-min-microvolt = <1704000>;
-> +			regulator-max-microvolt = <3000000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350c_l6: ldo6 {
-> +			regulator-name = "pm8350c_l6";
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2960000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350c_l7: ldo7 {
-> +			regulator-name = "pm8350c_l7";
-> +			regulator-min-microvolt = <3008000>;
-> +			regulator-max-microvolt = <3008000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350c_l8: ldo8 {
-> +			regulator-name = "pm8350c_l8";
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <1800000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350c_l9: ldo9 {
-> +			regulator-name = "pm8350c_l9";
-> +			regulator-min-microvolt = <2960000>;
-> +			regulator-max-microvolt = <3008000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350c_l10: ldo10 {
-> +			regulator-name = "pm8350c_l10";
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350c_l11: ldo11 {
-> +			regulator-name = "pm8350c_l11";
-> +			regulator-min-microvolt = <2400000>;
-> +			regulator-max-microvolt = <3008000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350c_l12: ldo12 {
-> +			regulator-name = "pm8350c_l12";
-> +			regulator-min-microvolt = <1800000>;
-> +			regulator-max-microvolt = <2000000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		pm8350c_l13: ldo13 {
-> +			regulator-name = "pm8350c_l13";
-> +			regulator-min-microvolt = <3000000>;
-> +			regulator-max-microvolt = <3000000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> +		};
-> +
-> +		vreg_bob: bob {
-> +			regulator-name = "vreg_bob";
-> +			regulator-min-microvolt = <3400000>;
-> +			regulator-max-microvolt = <3960000>;
-> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
-> +		};
-> +	};
-> +
-> +	/* TODO: Add pm8350b (just one ldo) once the driver part is in */
-> +
-> +	regulators-2 {
-> +		compatible = "qcom,pmr735a-rpmh-regulators";
-> +		qcom,pmic-id = "e";
-> +
-> +		vdd-s1-supply = <&vph_pwr>;
-> +		vdd-s2-supply = <&vph_pwr>;
-> +		vdd-s3-supply = <&vph_pwr>;
-> +
-> +		vdd-l1-l2-supply = <&pmr735a_s2>;
-> +		vdd-l3-supply = <&pmr735a_s1>;
-> +		vdd-l4-supply = <&pm8350c_s1>;
-> +		vdd-l5-l6-supply = <&pm8350c_s1>;
-> +		vdd-l7-bob-supply = <&vreg_bob>;
-> +
-> +		pmr735a_s1: smps1 {
-> +			regulator-name = "pmr735a_s1";
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1280000>;
-> +		};
-> +
-> +		pmr735a_s2: smps2 {
-> +			regulator-name = "pmr735a_s2";
-> +			regulator-min-microvolt = <500000>;
-> +			regulator-max-microvolt = <976000>;
-> +		};
-> +
-> +		pmr735a_s3: smps3 {
-> +			regulator-name = "pmr735a_s3";
-> +			regulator-min-microvolt = <2208000>;
-> +			regulator-max-microvolt = <2352000>;
-> +		};
-> +
-> +		pmr735a_l1: ldo1 {
-> +			regulator-name = "pmr735a_l1";
-> +			regulator-min-microvolt = <912000>;
-> +			regulator-max-microvolt = <912000>;
-> +		};
-> +
-> +		pmr735a_l2: ldo2 {
-> +			regulator-name = "pmr735a_l2";
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +		};
-> +
-> +		pmr735a_l3: ldo3 {
-> +			regulator-name = "pmr735a_l3";
-> +			regulator-min-microvolt = <1200000>;
-> +			regulator-max-microvolt = <1200000>;
-> +		};
-> +
-> +		pmr735a_l4: ldo4 {
-> +			regulator-name = "pmr735a_l4";
-> +			regulator-min-microvolt = <1776000>;
-> +			regulator-max-microvolt = <1872000>;
-> +		};
-> +
-> +		pmr735a_l5: ldo5 {
-> +			regulator-name = "pmr735a_l5";
-> +			regulator-min-microvolt = <800000>;
-> +			regulator-max-microvolt = <800000>;
-> +		};
-> +
-> +		pmr735a_l6: ldo6 {
-> +			regulator-name = "pmr735a_l6";
-> +			regulator-min-microvolt = <480000>;
-> +			regulator-max-microvolt = <904000>;
-> +		};
-> +
-> +		pmr735a_l7: ldo7 {
-> +			regulator-name = "pmr735a_l7";
-> +			regulator-min-microvolt = <2800000>;
-> +			regulator-max-microvolt = <2800000>;
-> +		};
-> +	};
-> +};
-> +
->   &cdsp {
->   	status = "okay";
->   	firmware-name = "qcom/sm8350/Sony/sagami/cdsp.mbn";
+v1->v3:
+* No change.
+
+ drivers/bus/simple-pm-bus.c | 46 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+
+diff --git a/drivers/bus/simple-pm-bus.c b/drivers/bus/simple-pm-bus.c
+index 6b8d6257ed8a..7afe1947e1c0 100644
+--- a/drivers/bus/simple-pm-bus.c
++++ b/drivers/bus/simple-pm-bus.c
+@@ -8,17 +8,24 @@
+  * for more details.
+  */
+ 
++#include <linux/clk.h>
+ #include <linux/module.h>
+ #include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ 
++struct simple_pm_bus {
++	struct clk_bulk_data *clks;
++	int num_clks;
++};
++
+ static int simple_pm_bus_probe(struct platform_device *pdev)
+ {
+ 	const struct device *dev = &pdev->dev;
+ 	const struct of_dev_auxdata *lookup = dev_get_platdata(dev);
+ 	struct device_node *np = dev->of_node;
+ 	const struct of_device_id *match;
++	struct simple_pm_bus *bus;
+ 
+ 	/*
+ 	 * Allow user to use driver_override to bind this driver to a
+@@ -44,6 +51,16 @@ static int simple_pm_bus_probe(struct platform_device *pdev)
+ 			return -ENODEV;
+ 	}
+ 
++	bus = devm_kzalloc(&pdev->dev, sizeof(*bus), GFP_KERNEL);
++	if (!bus)
++		return -ENOMEM;
++
++	bus->num_clks = devm_clk_bulk_get_all(&pdev->dev, &bus->clks);
++	if (bus->num_clks < 0)
++		return dev_err_probe(&pdev->dev, bus->num_clks, "failed to get clocks\n");
++
++	dev_set_drvdata(&pdev->dev, bus);
++
+ 	dev_dbg(&pdev->dev, "%s\n", __func__);
+ 
+ 	pm_runtime_enable(&pdev->dev);
+@@ -67,6 +84,34 @@ static int simple_pm_bus_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static int simple_pm_bus_runtime_suspend(struct device *dev)
++{
++	struct simple_pm_bus *bus = dev_get_drvdata(dev);
++
++	clk_bulk_disable_unprepare(bus->num_clks, bus->clks);
++
++	return 0;
++}
++
++static int simple_pm_bus_runtime_resume(struct device *dev)
++{
++	struct simple_pm_bus *bus = dev_get_drvdata(dev);
++	int ret;
++
++	ret = clk_bulk_prepare_enable(bus->num_clks, bus->clks);
++	if (ret) {
++		dev_err(dev, "failed to enable clocks: %d\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static const struct dev_pm_ops simple_pm_bus_pm_ops = {
++	RUNTIME_PM_OPS(simple_pm_bus_runtime_suspend, simple_pm_bus_runtime_resume, NULL)
++	NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_force_resume)
++};
++
+ #define ONLY_BUS	((void *) 1) /* Match if the device is only a bus. */
+ 
+ static const struct of_device_id simple_pm_bus_of_match[] = {
+@@ -85,6 +130,7 @@ static struct platform_driver simple_pm_bus_driver = {
+ 	.driver = {
+ 		.name = "simple-pm-bus",
+ 		.of_match_table = simple_pm_bus_of_match,
++		.pm = pm_ptr(&simple_pm_bus_pm_ops),
+ 	},
+ };
+ 
+-- 
+2.37.1
+
