@@ -2,202 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245C9627875
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E03DB6278A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236721AbiKNJDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:03:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
+        id S236872AbiKNJFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:05:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236702AbiKNJCy (ORCPT
+        with ESMTP id S236904AbiKNJFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:02:54 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8813F5FFE;
-        Mon, 14 Nov 2022 01:02:52 -0800 (PST)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N9jxg2jBRzmVys;
-        Mon, 14 Nov 2022 17:02:31 +0800 (CST)
-Received: from dggpeml500002.china.huawei.com (7.185.36.158) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 17:02:50 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- dggpeml500002.china.huawei.com (7.185.36.158) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 17:02:50 +0800
-From:   Junhao He <hejunhao3@huawei.com>
-To:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
-        <jonathan.cameron@huawei.com>, <john.garry@huawei.com>
-CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <lpieralisi@kernel.org>,
-        <linuxarm@huawei.com>, <yangyicong@huawei.com>,
-        <liuqi115@huawei.com>, <f.fangjian@huawei.com>,
-        <prime.zeng@hisilicon.com>, <hejunhao3@huawei.com>
-Subject: [PATCH v13 2/2] Documentation: Add document for UltraSoc SMB drivers
-Date:   Mon, 14 Nov 2022 17:03:16 +0800
-Message-ID: <20221114090316.63157-3-hejunhao3@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20221114090316.63157-1-hejunhao3@huawei.com>
-References: <20221114090316.63157-1-hejunhao3@huawei.com>
+        Mon, 14 Nov 2022 04:05:38 -0500
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150054.outbound.protection.outlook.com [40.107.15.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B10C13E14;
+        Mon, 14 Nov 2022 01:04:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZCRgnpXob4BwwgafqvmDW6FHEwe410NpOIGo4BPY8nNi45oCN2Vfk4cR4upNEgURtjZEveGrrf98SK1nhz4gAwZH0essWzhWUAuRambp0J/h+/3tgKNiayoEKz3iZlEcVZVMA3bOSLeXIM/25cSEWn2grGkh2GihTABZN/hEcvIMWhga6eAD0Mfq+O2UJp8/oh1kAxIXlRGbicICic7ghMn93XqiX2qTk+5OuBi76uvpqVveF2NMWrh4XPwFp/48oCAdVezPPvXMHINRPwct3rlGQOY05/zlaS/trg99y/0gsUOnZVaNqrp+UaWor52kBQr5RiMGBOyQ4a+3fTJLdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4joJirRrHtjTREIjMUxBIsT0w2joMqlzkwVuTnpqdGc=;
+ b=DofmL9WmNGlcAhRtmuHTEIEumgIqHLQHs+loqto7XdGUgUm2RetsQMsNiXqlc2b0wCY4Z4xc3J/1f3vFqqzk/RXgU0d5YAdchMvDVrD8kaQ9Y2puliosWeQEznceHRXi0gaeGdtX0z65ZSeBWCbbLzHR0vtK1ErD8GjAVLSeRK5W8oL4Jr+VLvjS8yItz4wrQOfwW64I34Gi1jKseq5ShWqxW79ttTgnw+I+bcASoqCukDA/SfmkYJ56n/gv2LtWucuoAkttc9qGw6mYEMBueV3QhJScmNKkAXpIoHcqxewJrJol0bdetvIGTE9YfURlWZbwU2OXZJpZK/mWGmid1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4joJirRrHtjTREIjMUxBIsT0w2joMqlzkwVuTnpqdGc=;
+ b=puciGDtzeibaE6G7AzUhcBgEHjfBnFJQNpmBg+UqgsceGlFDBd3WIoZ5P6u1pHKktpJAQYaj0azQRCFK4Lw5b15znZcECGR4qZg3/WsjKifujuPQU6twMxKA+Ui3CJglLDTiREzrXx3ZM6wEpPvwFXdWkEsmkEyUXPliJaeZOvQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+ by PA4PR04MB7792.eurprd04.prod.outlook.com (2603:10a6:102:c0::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Mon, 14 Nov
+ 2022 09:04:16 +0000
+Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::dcca:b62f:206b:dcf8]) by AM7PR04MB7046.eurprd04.prod.outlook.com
+ ([fe80::dcca:b62f:206b:dcf8%3]) with mapi id 15.20.5813.016; Mon, 14 Nov 2022
+ 09:04:16 +0000
+Message-ID: <23be5d9c69ae758602b9de97d47f787fa104961d.camel@nxp.com>
+Subject: Re: linux-next: build warnings after merge of the char-misc tree
+From:   Liu Ying <victor.liu@nxp.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Greg KH <greg@kroah.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+Date:   Mon, 14 Nov 2022 17:03:31 +0800
+In-Reply-To: <02828ff7-c734-4b55-b86e-5cc777e1a35b@app.fastmail.com>
+References: <20221114181752.08a850f0@canb.auug.org.au>
+         <02828ff7-c734-4b55-b86e-5cc777e1a35b@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.4-0ubuntu1 
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR03CA0096.apcprd03.prod.outlook.com
+ (2603:1096:4:7c::24) To AM7PR04MB7046.eurprd04.prod.outlook.com
+ (2603:10a6:20b:113::22)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500002.china.huawei.com (7.185.36.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|PA4PR04MB7792:EE_
+X-MS-Office365-Filtering-Correlation-Id: f11ffcee-782b-45b9-1d93-08dac61f34d2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KdqpwhGEp93IWfxtH+tLzcVg+FMTGDx1oVeaKz0Wau0ybmcTyL4AoTVTn2GtvYYsYQ15I692jgWFDhWymVaMQHzzHdjmGG16B8f84WBSI8MkCbkjiNqL5HCwpkxeaXaZ91qOm01gY/tXPB7TV3RV/fuHURnbwj0GHxEukqbwm0i4mYFaV/F0U2bb4EtS6e85cLwHALrAPudPy0DXBcPNtFAAkeO4VKCywBvhjD7jBIylw6lles5O6mJ7CAHqZ1nBEUDfN5s3G6Mb/Dk1FXswcW4x43JX78vc/3X+/Nrmkj9+XpaYnq68xdof2QY++ojyA3wsqNo4s0vMrsu4ggXu/rp+SLVeIAWCSy9wQnsogv3qoXg1Cqfqlwr0yb6djR2JaGHUKaRI8O6XfZa5e7XU5UevbU+o42X6SOFifabSrX2o6BNTQvopurVBkRsMqGKiV6Iz7FlglwindIKP4lLhlGWmsJgUiSr2KcZpTVfnJ8LvqMnTbbaXimwOIkl4TUf+U/iB2yK6Hkdv/xeeF2xnCFQePSEa5sIVtQB0z3+FxSFhX3cPOhHGPX3Np3ovn7vXH4onvGCOeacBdG8c5ggQDqlOCTzUDixokwCgCFTGvgxcMQ/HZ9bvsIC2a8R8a8oP12gZQ9ZB4IZDwaJ8yRJ3ydblMGQvVuCa/4Wex7NBXJVHF7hP3fFLlFFyEjjGFZT2UVxfLex28IRS7lg/gugXwYWF0JOcr62ofqU8wV9Q0Dom/3iifpDjJYwYeL8bLU62QfOnIpkgSZMS/a/1IB17Pg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(39860400002)(376002)(396003)(346002)(451199015)(66946007)(8936002)(36756003)(6506007)(86362001)(2616005)(38350700002)(38100700002)(4001150100001)(2906002)(41300700001)(83380400001)(5660300002)(6512007)(52116002)(26005)(6666004)(186003)(8676002)(6486002)(66556008)(4326008)(478600001)(110136005)(54906003)(316002)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dnp3Y0duTFZjRzdWZW9FRE9MUTJEbmpMZllLVHRGRkNIWG8xK2licUtraDFu?=
+ =?utf-8?B?RElqd1dMcUhjWmdHaDNOT0RKV3hSallweVhNUXdiZEN1R2pVK0pla0RZQ0xT?=
+ =?utf-8?B?T3FDV3FYeGNTRXpMenFZYkhNc1F4bGtPeWNraHdaOENuN1hyVnpvUUNwMDRP?=
+ =?utf-8?B?bk5lVlFSMTc2NnRoOWxqTjZPOVppN1FkWklTK1ovamFoUEVvZzZ3aGpwT2Zo?=
+ =?utf-8?B?N0thT3Z1Mm5WN3M5L29ZYWdPbGhEQkYxQlV5MUJBYy82aDBHVUZNK3hyaSsx?=
+ =?utf-8?B?YVdzS1FTNk11bkRhaGpFclAwL2s4UUJPT3FyOFVBeFFrcW5td1ZtK1kyM0F2?=
+ =?utf-8?B?aG1QRjRMRmJyb3BqUUUybTZOdm5iVy9XWGp2djJ5VVRCbTdyL1JZR2p1TU4z?=
+ =?utf-8?B?NHRpM3RWRnVqelQ5NnArYnBXWmNIRXRUT0pjQlNnRnJoQmx5ZW5mOUgwQ3U2?=
+ =?utf-8?B?VXUyQ0dSWlZpa2RTN2laRlNMWXMvUC9kUTROVTBMMWJJOGNKOUcyc3BmK3Vn?=
+ =?utf-8?B?cWRpNUxVZ2RHUmk0eURnN3d6MTgySzh6djYySk1uWGdyNUozNDFia05uZUtP?=
+ =?utf-8?B?ZnBYS2pPNTBweE5ZclRLQ3FsVUp2bzhtZGwwT2FpdTRuTXA4Tk55WU5GMTNl?=
+ =?utf-8?B?Z29UMU1icFhKdndWVlFHSmlzY2tDeEJaRE1OOWwyRFhMMG5mSHhzUHlQTk00?=
+ =?utf-8?B?RWdSRThML3NuVTYrSDdtVXlwKzJUeWF5TlV1Mm91Q2EyeXcxRkoxMTBVZWtL?=
+ =?utf-8?B?UVdJUFNBek10MjU3UUJHUDlPUFovUllvSDdKZFp0Ync2WFVVV2ZjTVRWWDE0?=
+ =?utf-8?B?UXVLb1VhRS9jY2VYV1pQUC81czF2TWc1Y2pTV2lGcytDQkVTNEF5QVpjczB5?=
+ =?utf-8?B?Wmc1NlBjcmhtdC9uRlVxL01RbzNVUFlzb3B3bHpmb2x2dmcyM2NzMzlIVVFs?=
+ =?utf-8?B?c1lZT1dRSG1IZDZ3YVJkR25TZXhCMjdOYXhTNzZndW4xeFE4bzdGcmszZk4r?=
+ =?utf-8?B?K29Fd0F6cHpVaWJ3dmMxMGNyMGFRVUlTNkw4UTJBVXZKRStlQVhBOGdncUNK?=
+ =?utf-8?B?aDhId2ZCZlpwcUxGd3V3UDVsNUJGa1JZanF0TGtTa1Ixb29JYWwrSTR3ZlJi?=
+ =?utf-8?B?OHlEK2RtbnNMdFNzWStvZkNORlA5bUx1cXBacUdPOHR6WVN4NUJ1OVE3YjJU?=
+ =?utf-8?B?cmlHcHo4TXVaSmp2Q2MyV3lPZkh5djJBaERINlZ2aVJKdFFlWkpNSkE1Smti?=
+ =?utf-8?B?N0Y5VWRPT3FJbG9xcDUwRHRnNFdTcGF4YnNXSzBuazdGUGFIZWY1Y2hCeDQ5?=
+ =?utf-8?B?VUlLbWZEcW0wS05YQlhJZzZXdERxS1hmSS80R3ZvdmdnejRUYnlFRytYRFMv?=
+ =?utf-8?B?RGIrcGl0aW5LZUxpWlhINldybVcrZW00T0xnZE9WK1o5S0JML01DWEtnL3F5?=
+ =?utf-8?B?bEc5d1ZXU2xhQkRpZTgwQlNTUks0azhQdm9oTjFQMFZFMWZUY3dIa015SGZC?=
+ =?utf-8?B?MC81UHcrZ05jYUtyOVdoQnQ3RlRzaHdWNmovNHl6OXRJWTlrT0xzMk1NRE43?=
+ =?utf-8?B?N1ZRNkMxTFcyZFlZakt4TmE4Mk5JQzBZOWZoUytVUTZTL0FTbHorTlg2TGJa?=
+ =?utf-8?B?cXVvR2c4T3JLUHpiN1FacFYvVWswRUFVNTFvcnpNenloVEE5dkIvK2YzYU1h?=
+ =?utf-8?B?ZzhvcjIrYktSYllncVlrMDdianlHNHE5Mm1Dd1NkOVRmNTJVc21jR3NkV2dr?=
+ =?utf-8?B?MDdwY0V1TUk4SXNZV0FEWlFjQ0VQUFhUaWlFNk04MmNMZXB1OEltL3phTjJY?=
+ =?utf-8?B?NWVTUURTNXVQNUhhdHY0cC94OGMveGJISmM3RTJFRkF2aXNhNUhiTEduWEhH?=
+ =?utf-8?B?b2kwNHFua3BraHFQR1JKbHFPM05vYzNxNXRGODBOMG1ScEd5Zmk1ekVrN3ZM?=
+ =?utf-8?B?ZlNoV1VuMFJ1cnZwRDZkZDB2NnZlOGFpdTNsdW5WVnY5VGlCVXVJc01DN2Jn?=
+ =?utf-8?B?ZStVMzV2THgvRVBuVTRsdk56UTBnUVZ3cjRYblNnZDRqMVVBb1RraFZtWWJy?=
+ =?utf-8?B?ZkRNOHZBaldPSFR5eVFBdnlKcVl5a1RGRmc5L2tUbHRwSFhGMkZ1VmJYNVNa?=
+ =?utf-8?Q?xGAG9vyAFVPJ6snudo5CWJI6+?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f11ffcee-782b-45b9-1d93-08dac61f34d2
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 09:04:16.0067
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wZNpRrm5668Fy0/GKFQe5yYuM63uC9+zMBxPQdWM/dmZl9kCPuOvTSQMm1y0kcgjGvMxYb7nNra8jCJCIsQ3EQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7792
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qi Liu <liuqi115@huawei.com>
+Hi Arnd,
 
-This patch bring in documentation for UltraSoc SMB drivers.
-It simply describes the device, sysfs interface and the
-firmware bindings.
+On Mon, 2022-11-14 at 08:33 +0100, Arnd Bergmann wrote:
+> On Mon, Nov 14, 2022, at 08:17, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the char-misc tree, today's linux-next build (powerpc
+> > allnoconfig) produced these warnings:
+> > 
+> > drivers/bus/simple-pm-bus.c:96:12: warning: 
+> > 'simple_pm_bus_runtime_resume' defined but not used [-Wunused-function]
+> >    96 | static int simple_pm_bus_runtime_resume(struct device *dev)
+> >       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > drivers/bus/simple-pm-bus.c:87:12: warning: 
+> > 'simple_pm_bus_runtime_suspend' defined but not used [-Wunused-function]
+> >    87 | static int simple_pm_bus_runtime_suspend(struct device *dev)
+> >       |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > 
+> > Introduced by commit
+> > 
+> >   882cf4c913d7 ("drivers: bus: simple-pm-bus: Use clocks")
+> 
+> I see that this is caused by the patch using the old-style
+> SET_RUNTIME_PM_OPS/SET_NOIRQ_SYSTEM_SLEEP_PM_OPS macros
+> instead of the correct SYSTEM_SLEEP_PM_OPS/NOIRQ_SYSTEM_SLEEP_PM_OPS
+> versions.
+> 
 
-Signed-off-by: Qi Liu <liuqi115@huawei.com>
-Signed-off-by: Junhao He <hejunhao3@huawei.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
----
- .../sysfs-bus-coresight-devices-ultra_smb     | 31 +++++++
- .../trace/coresight/ultrasoc-smb.rst          | 82 +++++++++++++++++++
- 2 files changed, 113 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
- create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
+You meant RUNTIME_PM_OPS/NOIRQ_SYSTEM_SLEEP_PM_OPS macros should be
+used, right?
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb b/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
-new file mode 100644
-index 000000000000..deaefd508105
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
-@@ -0,0 +1,31 @@
-+What:		/sys/bus/coresight/devices/ultra_smb<N>/enable_sink
-+Date:		November 2022
-+KernelVersion:	6.2
-+Contact:	Junhao He <hejunhao3@huawei.com>
-+Description:	(RW) Add/remove a SMB device from a trace path. There can be
-+		multiple sources for a single SMB device.
-+
-+What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/buf_size
-+Date:		November 2022
-+KernelVersion:	6.2
-+Contact:	Junhao He <hejunhao3@huawei.com>
-+Description:	(Read) Shows the buffer size of each UltraSoc SMB device.
-+
-+What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/buf_status
-+Date:		November 2022
-+KernelVersion:	6.2
-+Contact:	Junhao He <hejunhao3@huawei.com>
-+Description:	(Read) Shows the value held by UltraSoc SMB status register.
-+		BIT(0) is zero means buffer is empty.
-+
-+What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/read_pos
-+Date:		November 2022
-+KernelVersion:	6.2
-+Contact:	Junhao He <hejunhao3@huawei.com>
-+Description:	(Read) Shows the value held by UltraSoc SMB Read Pointer register.
-+
-+What:		/sys/bus/coresight/devices/ultra_smb<N>/mgmt/write_pos
-+Date:		November 2022
-+KernelVersion:	6.2
-+Contact:	Junhao He <hejunhao3@huawei.com>
-+Description:	(Read) Shows the value held by UltraSoc SMB Write Pointer register.
-diff --git a/Documentation/trace/coresight/ultrasoc-smb.rst b/Documentation/trace/coresight/ultrasoc-smb.rst
-new file mode 100644
-index 000000000000..b7fe3f5c7f53
---- /dev/null
-+++ b/Documentation/trace/coresight/ultrasoc-smb.rst
-@@ -0,0 +1,82 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+======================================
-+UltraSoc - HW Assisted Tracing on SoC
-+======================================
-+   :Author:   Qi Liu <liuqi115@huawei.com>
-+   :Date:     March 2022
-+
-+Introduction
-+------------
-+
-+UltraSoc SMB is a per SCCL(Super CPU Cluster) hardware, and it provides a
-+way to buffer and store CPU trace messages in a region of shared system
-+memory. SMB is plugged as a coresight sink device and the corresponding
-+trace generators (ETM) are plugged in as source devices.
-+
-+Sysfs files and directories
-+---------------------------
-+
-+The SMB devices appear on the existing coresight bus alongside the other
-+coresight devices::
-+
-+	$# ls /sys/bus/coresight/devices/
-+	ultra_smb0   ultra_smb1   ultra_smb2   ultra_smb3
-+
-+The ``ultra_smb<N>`` named SMB associated with SCCL.::
-+
-+	$# ls /sys/bus/coresight/devices/ultra_smb0
-+	enable_sink   mgmt
-+	$# ls /sys/bus/coresight/devices/ultra_smb0/mgmt
-+	buf_size  buf_status  read_pos  write_pos
-+
-+*Key file items are:-*
-+   * ``read_pos``: Shows the value held by UltraSoc SMB Read Pointer register.
-+   * ``write_pos``: Shows the value held by UltraSoc SMB Write Pointer register.
-+   * ``buf_status``: Shows the value held by UltraSoc SMB status register.
-+		     BIT(0) is zero means buffer is empty.
-+   * ``buf_size``: Shows the buffer size of each UltraSoc SMB device.
-+
-+Firmware Bindings
-+---------------------------
-+
-+SMB device is only supported with ACPI, and ACPI binding of SMB device
-+describes SMB device indentifier, resource information and graph structure.
-+
-+SMB is identified by ACPI HID "HISI03A1", resource of device is declared using
-+the _CRS method. Each SMB must present two base address, the first one is the
-+configuration base address of SMB device, the second one is the 32bits base
-+address of shared system memory.
-+
-+examples::
-+
-+    Device(USMB) {                                               \
-+      Name(_HID, "HISI03A1")                                     \
-+      Name(_CRS, ResourceTemplate() {                            \
-+          QWordMemory (ResourceConsumer, , MinFixed, MaxFixed, NonCacheable, \
-+		       ReadWrite, 0x0, 0x95100000, 0x951FFFFF, 0x0, 0x100000) \
-+          QWordMemory (ResourceConsumer, , MinFixed, MaxFixed, Cacheable, \
-+		       ReadWrite, 0x0, 0x50000000, 0x53FFFFFF, 0x0, 0x4000000) \
-+      })                                                         \
-+      Name(_DSD, Package() {                                     \
-+        ToUUID("ab02a46b-74c7-45a2-bd68-f7d344ef2153"),          \
-+	/* Use CoreSight Graph ACPI bindings to describe connections topology */
-+        Package() {                                              \
-+          0,                                                     \
-+          1,                                                     \
-+          Package() {                                            \
-+            1,                                                   \
-+            ToUUID("3ecbc8b6-1d0e-4fb3-8107-e627f805c6cd"),      \
-+            8,                                                   \
-+            Package() {0x8, 0, \_SB.S00.SL11.CL28.F008, 0},       \
-+            Package() {0x9, 0, \_SB.S00.SL11.CL29.F009, 0},       \
-+            Package() {0xa, 0, \_SB.S00.SL11.CL2A.F010, 0},       \
-+            Package() {0xb, 0, \_SB.S00.SL11.CL2B.F011, 0},       \
-+            Package() {0xc, 0, \_SB.S00.SL11.CL2C.F012, 0},       \
-+            Package() {0xd, 0, \_SB.S00.SL11.CL2D.F013, 0},       \
-+            Package() {0xe, 0, \_SB.S00.SL11.CL2E.F014, 0},       \
-+            Package() {0xf, 0, \_SB.S00.SL11.CL2F.F015, 0},       \
-+          }                                                      \
-+        }                                                        \
-+      })                                                         \
-+    }
--- 
-2.33.0
+Why not add __maybe_unused to the callbacks like below snippet instead?
+This way, the old-style macros may determine those callbacks are NULL
+or non-NULL according to CONFIG_PM_SLEEP and CONFIG_PM.
+-------------------------------8<-------------------------------------
+--- a/drivers/bus/simple-pm-bus.c
++++ b/drivers/bus/simple-pm-bus.c
+@@ -84,7 +84,7 @@ static int simple_pm_bus_remove(struct
+platform_device *pdev)
+        return 0;
+ }
+
+-static int simple_pm_bus_runtime_suspend(struct device *dev)
++static int __maybe_unused simple_pm_bus_runtime_suspend(struct device
+*dev)
+ {
+        struct simple_pm_bus *bus = dev_get_drvdata(dev);
+
+@@ -93,7 +93,7 @@ static int simple_pm_bus_runtime_suspend(struct
+device *dev)
+        return 0;
+ }
+
+-static int simple_pm_bus_runtime_resume(struct device *dev)
++static int __maybe_unused simple_pm_bus_runtime_resume(struct device
+*dev)
+ {
+        struct simple_pm_bus *bus = dev_get_drvdata(dev);
+        int ret;
+-------------------------------8<-------------------------------------
+
+Regards,
+Liu Ying
 
