@@ -2,207 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5986281F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 761D0628206
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:09:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236791AbiKNOHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:07:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
+        id S236856AbiKNOJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:09:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236147AbiKNOHj (ORCPT
+        with ESMTP id S236828AbiKNOJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:07:39 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985B42A958
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:07:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3609661162
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 14:07:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B155CC433D6;
-        Mon, 14 Nov 2022 14:07:36 +0000 (UTC)
-Date:   Mon, 14 Nov 2022 09:08:18 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>
-Subject: Re: [PATCH v6 4/6] timers: Add timer_shutdown_sync() to be called
- before freeing timers
-Message-ID: <20221114090818.30b292c7@gandalf.local.home>
-In-Reply-To: <87pmdqs5vr.ffs@tglx>
-References: <20221110064101.429013735@goodmis.org>
-        <20221110064147.343514404@goodmis.org>
-        <87cz9qttdb.ffs@tglx>
-        <20221113191135.0b61bb51@rorschach.local.home>
-        <87pmdqs5vr.ffs@tglx>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 14 Nov 2022 09:09:03 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C1E22BF8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:09:01 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id r12so19473522lfp.1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:09:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7bxYVgpnsGzW86VQq7hMIoZbZDot9yO7odIkSzWAAKs=;
+        b=lkGMB6zU+rGNPUbuWU7J/kalVndvafqvCQHqVEAt+K5Wf6LBwsPdnEgbWIlUg2bJ+b
+         w1KuXJPrLm1Gc4WbJSjr61zfxDxoSRqaMUOKA75uEZiE7rlOMbPQbX+ps4hKlrh9276u
+         WtsjLF58d0exWYff01tOjyQregQZcq18u4ATTK8GUYrcWt3Dn4qBVNmVOKmve4zWc/kI
+         Xbz1SqVK6lxp8/AIZeT5Ce0mho2ZkfCEYyumXwJo4CVhjyYCJ7lEEDLLNCnMjZcQdVWe
+         RURUdFxjMj4IpyplbyRXuf4LrZpir5AONHNM04UzgtFZcVOYkjbu4XehLm+2JrrKaocH
+         +iEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7bxYVgpnsGzW86VQq7hMIoZbZDot9yO7odIkSzWAAKs=;
+        b=fOtcNeaqXUYXPsqgGVIaZwxT1Ze8nlJpa9Gh5jvheYD+0IV1x1NXsVYT9/j5RbuIoD
+         KNjsVBenR4u3ZqAmAgT6/OQXeFBwtB/r36HdAEuk3SDPkPLj9I57TOBRu6q0FfODa/N1
+         270qOD4zAzKFI/d9lGaJR1O+tzWxhl15I4yUJpjMHLN49uOtXpr4Z7mXGS2/d66kfwux
+         lxY79HE5HVRdmLJuxQjUQX9sJm2mN6PrIVNOwYAbWCB+JsMUCOIbPPZLQ3yWJfcIA2bd
+         t1GRDEGNp3eaF/xxOx52U6KqubPqbPDKVDn+NvOgjfzcS6kORDI6mOFlqRKQTZBcfV7e
+         pJOg==
+X-Gm-Message-State: ANoB5pn8XEVDxweFf/p8ycVxSAYlYZ3xKUx37VNpCNszIvACjWCfYC81
+        AQ4ODD3Di3avg7cjQGCXzdA=
+X-Google-Smtp-Source: AA0mqf7nuWOLBi416tkfsXCMX4umRIHXrAX4jMyfRJo/6WI7kSOJ9qaswZrwYjYhjoZVa2gmND6jBw==
+X-Received: by 2002:a19:2d53:0:b0:499:cce2:12d9 with SMTP id t19-20020a192d53000000b00499cce212d9mr4578763lft.4.1668434940040;
+        Mon, 14 Nov 2022 06:09:00 -0800 (PST)
+Received: from ?IPV6:2a02:6b8:0:107:3e85:844d:5b1d:60a? ([2a02:6b8:0:107:3e85:844d:5b1d:60a])
+        by smtp.gmail.com with ESMTPSA id x3-20020a056512078300b004a44ffb1050sm1847952lfr.171.2022.11.14.06.08.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 06:08:59 -0800 (PST)
+Message-ID: <fda48075-783d-1833-5f1c-c10ca2880a56@gmail.com>
+Date:   Mon, 14 Nov 2022 17:09:00 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/5] x86/mm: Recompute physical address for every page
+ of per-CPU CEA mapping
+To:     Sean Christopherson <seanjc@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        syzbot+ffb4f000dc2872c93f62@syzkaller.appspotmail.com,
+        syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com
+References: <20221110203504.1985010-1-seanjc@google.com>
+ <20221110203504.1985010-2-seanjc@google.com>
+Content-Language: en-US
+From:   Andrey Ryabinin <ryabinin.a.a@gmail.com>
+In-Reply-To: <20221110203504.1985010-2-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 02:04:56 +0100
-Thomas Gleixner <tglx@linutronix.de> wrote:
 
-> On Sun, Nov 13 2022 at 19:11, Steven Rostedt wrote:
-> > On Sun, 13 Nov 2022 22:52:16 +0100
-> > Thomas Gleixner <tglx@linutronix.de> wrote:  
-> >> > We are hitting a common bug were a timer is being triggered after it
-> >> > is    
-> >> 
-> >> We are hitting? Talking in pluralis majestatis by now?  
-> >
-> > Should I say Chromebooks are hitting?  
+
+On 11/10/22 23:35, Sean Christopherson wrote:
+> Recompute the physical address for each per-CPU page in the CPU entry
+> area, a recent commit inadvertantly modified cea_map_percpu_pages() such
+> that every PTE is mapped to the physical address of the first page.
 > 
-> That would be at least more comprehensible than 'We', unless you (or
-> whoever is 'We') is a synomym for chromeborks.
+> Fixes: 9fd429c28073 ("x86/kasan: Map shadow for percpu pages on demand")
+> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Sure, I'll update it to start with:
-
-   Out in the field, the main cause of kernel crashes for Chromebooks is in
-   the timer code.
-
-
-> 
-> >> > freed. This causes a corruption in the timer link list and crashes the
-> >> > kernel. Unfortunately it is not easy to know what timer it was that was    
-> >> 
-> >> Well, that's not entirely true. debugobjects can tell you exactly what
-> >> happens.   
-> >
-> > Only if you have it enabled when it happens, and it has too much
-> > overhead to run in production. The full series changes debug object
-> > timers to report an issue if there's a timer not in the shutdown state
-> > when it is freed.  
-> 
-> The series changes 'debug object timers' to report an issue?
-
-The full series does. This isn't the full series, but only the part that
-Linus asked for.
-
-https://lore.kernel.org/lkml/20221104054917.915205356@goodmis.org/
-
-> 
-> Can you pretty please stop this completely nonsensical blurb? This
-> series has absolutely nothing to do with debugobjects at least not to
-> my knowledge. If the series expands the magics of debugobjects then
-> you fundamentaly failed to explain that.
-
-The full series does, but I was asked by Linus to only give the part that
-he could take early. The changes to debugobjects can only be done after we
-covert the other users of timers to make sure they are shutdown before
-being freed. Otherwise you will get a lot of false positives.
-
-> 
-> > This catches potential issues similar to how lockdep can catch
-> > potential deadlocks without having to hit the deadlock.  
-> 
-> By introducing new problems?
-> 
-> > The current debug object timers only catches it if the race condition
-> > is hit.  
-> 
-> True. But most if not all of the mentioned issues have been reported
-> before via debugobject enabled kernels. So what's the actual benefit?
-
-Because we are still hitting bugs in the field and have no idea who the
-culprit is. The bugs are triggered by what users are doing (probably
-unplugging some USB device or something) and we have not been able to
-reproduce it in the lab. The user's activities causes a crash later on
-in the timer code. And the crash report shows the backtrace in the timer
-code where the timer link list is corrupted. Something that would happen if
-the object was freed.
-
-> 
-> >> > + * @timer: The timer to be freed
-> >> > + *
-> >> > + * Shutdown the timer before freeing. This will return when all pending timers
-> >> > + * have finished and it is safe to free the timer.    
-> >> 
-> >>    "_ALL_ pending timers have finished?"
-> >> 
-> >> This is about exactly _ONE_ timer, i.e. the one which is handed in via
-> >> the @timer argument.
-> >> 
-> >> You want to educate people to do the right thing and then you go and
-> >> provide them uncomprehensible documentation garbage. How is that
-> >> supposed to work?  
-> >
-> > I don't know. Other people I showed this to appeared to understand it.
-> > But I'm all for updates.  
-> 
-> Do I really need to explain to you what the diffference between 'all
-> pending timers' and the one which is subject of the function call is?
-> 
-> No, I'm not rewriting this for you and your peers who care obviously as
-> much about correctness as you do.
-
-I'm not asking you to rewrite it, I'm fine doing it. My response here was
-due to your condescending remarks. That is:
-
-Instead of saying:
-
-    You want to educate people to do the right thing and then you go and
-    provide them uncomprehensible documentation garbage. How is that
-    supposed to work? 
-
-say:
-
-    You want to educate people to do the right thing, then please be more
-    accurate in your terminology. "All pending timers" is confusing
-    because this is about _ONE_ timer, i.e. the one which is handed in via
-    the @timer argument. Please rewrite the kernel doc to reflect this.
-
-> 
-> >> Can you please stop this frenzy and get your act together?  
-> >
-> > What the hell. I'm just trying to get this in because it's a thorn in
-> > our side.  
-> 
-> It's not a thorn in 'our' (who ever is our) side. It's a fundamental
-> problem of circular shutdown dependencies as I explained to you long
-> ago.
-
-The thorn is in the Chromebook users, that are having their machines crash
-due to something freeing an active timer.
-
-> 
-> > Sorry I'm not up to par with your expectations. I'm willing to make
-> > changes, but let's leave out the insults. This work is being done on
-> > top of my day job.  
-> 
-> Sure and because of that you are talking about this as a 'thorn on our
-> side'. If that's a thorn at (I assume) your employers side, which is
-> then related to your day job, then you should have the backing of that
-> company to spend company time on it and not inflict half baken changes
-> on the kernel which solve nothing.
-
-It may be my employer's, but not my team's issue. It's Guenter's team where
-I looked at a bug report that he posted and figured I could help. But I have
-other responsibilities that are not going away when I decided to help here.
-Thus, I just extended my work week. This is why I came back to it. I
-reported this back in April, but then found myself too busy with my current
-job to follow through with it. Then recently Guenter reported that the
-timer crashes are still the #1 reason for kernel crashes, and I figured I
-should then finish this series.
-
-> 
-> Coming back to your claim that I'm insulting. Please point me to the
-> actual insult I commenced and I'm happy to apologize.
-
-It's more the condescending attitude than a direct insult.
-
--- Steve
+Reviewed-by: Andrey Ryabinin <ryabinin.a.a@gmail.com>
