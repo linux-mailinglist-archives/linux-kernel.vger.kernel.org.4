@@ -2,91 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD88628B5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 308DB628B07
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237158AbiKNV3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 16:29:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
+        id S237288AbiKNVHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 16:07:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbiKNV3w (ORCPT
+        with ESMTP id S235592AbiKNVHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 16:29:52 -0500
-X-Greylist: delayed 1405 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Nov 2022 13:29:50 PST
-Received: from outbound-ip19b.ess.barracuda.com (outbound-ip19b.ess.barracuda.com [209.222.82.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D850618E11
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:29:50 -0800 (PST)
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com [209.85.219.72]) by mx-outbound41-171.us-east-2c.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Mon, 14 Nov 2022 21:29:49 +0000
-Received: by mail-qv1-f72.google.com with SMTP id z18-20020a0cfed2000000b004bc28af6f7dso9218313qvs.4
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:29:49 -0800 (PST)
+        Mon, 14 Nov 2022 16:07:39 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48F3265
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:07:38 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id pq17-20020a17090b3d9100b0020a4c65c3a9so5321823pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:07:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sladewatkins.net; s=googled;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sHhq7GAcH+SGAD2OAT/4GIJITY8Agpvr4ItX6H4dnTw=;
-        b=RkaNIlr9V5SN6THND5V/unQ4uGo4Ewoz2wIKKh+ktKuyCJdNnVVPtPduHX2TXf/r3W
-         OxV+lLwPYO0X+XWeGLEZ6I3mH7aPIjXo9AyxulJrwHbamWpmay+eU+B7rLJIkFYiYEve
-         ZSWF624bLS8OJ48owc55yns0psiZ8lOP/YruCDfdNvvg3D8QY6oVkL1IExlvhbOlkznZ
-         70h0LGGBw0M6fJwlBKvJBOWnCQ96ztSV3OtQ8cAlSDsTG8P61hJ3Vb9xDWv1jOHzZ2UN
-         JGIYpXsf69ITyp1HII4ksPVOAJVtMCt1wwGkjVTLta2BW12VcOuX5HHW4NiFp/Q7g3/W
-         fcAw==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bnk6QcACKDHfLaerzSC+1vUeLHtUQc78SZsram1d2Ns=;
+        b=cYOIca+NENhdYACfSPVmKjGEQejr4Fzt4sx/bRNYYxGS7WA+7LWkliB7ofeINiW5Ms
+         7Mo+vOvxe2sOljrDaJVzTAgD7JZsSDAoswQjxGt7VCm4y6AWk2H4cFa3TudXjUR/v4/n
+         Bg5eaxBFhCgr8P/QYJY3wvJQLzAe0PWA57d+3m5El8CMl6WLjEsF27B2awPef3C6ogMM
+         7BXVlXXWsdgrha+Z+1awDzFnC2NbxTvkvh6YuuH5+0wlq+r1PTBuurnIsrSoquELUbx/
+         Zuxbpw9yOpCqDTyToLd/qn33k7H/fYB5M3mTBVPcxrsaHXvp1V2X28/NGzEUNMQwj3xk
+         SZmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sHhq7GAcH+SGAD2OAT/4GIJITY8Agpvr4ItX6H4dnTw=;
-        b=TIEZZ8tkkNn7DUAVj/DbDBCngSHXj5wclWy64lbZ1CJFIC2H6mj8rkq5u6rTs0PpmZ
-         9Y+35kWYmR6UJnZOuO/s+h0R/6YhzwoQKJ4N8E8GxfNIflDaZWPMiBU0EXnbVnnvZfY5
-         2dAdm8552uhOwl1t7V8jIK3Drfs7LaCAaifNA4wg7IL97La2sB56aDAaEStHkA54h8qb
-         FbfvBtDb0SjWQbsNgqNecFW2gShGUiD+lB0PUyYjilVhhWqF33XjkzBvBmuxcBI0fbax
-         bdAbGBu/iBfn5eJH4OQhlEhANOjaqXTS4dqdf00PfovA/kL8OoPN8QWRVwHgA7vr2lh4
-         JtOQ==
-X-Gm-Message-State: ANoB5pnulWFGnyEi+mckUozA45yk6f2T/ZM6TzXGvEwlRlpnx6Elb5hj
-        fVrwQC/ocgd9zjjcr6s39rU0l+ndXT3Vz0y8L9bM3IbWnyc+uNs0Ex+mUPIE4mCBfjtdSbMInQo
-        Tsa7xPsJa2wWCPx6owTjE372hFV21AduzZnCMKQtu5dOikKXaYNuYHXjIy6Iy+h2PPxUwxZMX
-X-Received: by 2002:a17:902:b18e:b0:187:2790:9bc2 with SMTP id s14-20020a170902b18e00b0018727909bc2mr1045584plr.61.1668460006277;
-        Mon, 14 Nov 2022 13:06:46 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5hR1jUSh6vO+NzVXJRDYcadYdn4lJl0ydhNhJqjQVtk/DjBGaS18IFlwxJN0Asr3csyDUI7pdHlDadYCNkliw=
-X-Received: by 2002:a17:902:b18e:b0:187:2790:9bc2 with SMTP id
- s14-20020a170902b18e00b0018727909bc2mr1045562plr.61.1668460006054; Mon, 14
- Nov 2022 13:06:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20221114124442.530286937@linuxfoundation.org>
-In-Reply-To: <20221114124442.530286937@linuxfoundation.org>
-From:   Slade Watkins <srw@sladewatkins.net>
-Date:   Mon, 14 Nov 2022 16:06:34 -0500
-Message-ID: <CA+pv=HMHfNO-v2jRMrzHKx7VWzg9khjPxp6pNh0DPDsnF_O55w@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/95] 5.10.155-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, rwarsow@gmx.de
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bnk6QcACKDHfLaerzSC+1vUeLHtUQc78SZsram1d2Ns=;
+        b=4NKCw+4Qwr6hLZTE8fSzRSem2MXXWmQQdYDR8u/nFWfX+VP0/N6YuMBOHUMWqfQrN9
+         Bs52zSON6V/RhPH6GDaoppF1Sj7omci5erYc1IcwM9C9aZYBmtc7YyMlzZw2E63jqWKQ
+         Z/KOGooVq0D3CGiu14NGxQnL+q/pxZ/zCbBgODGzf5D/8hrZ2+dklInuWYl64I3eDIBu
+         /8sicWnx0KWmJNZng2ohe82ti9oKTrDr6mvHFGhyW+7jx8KURHkRbXCrbnoPMD+89pLh
+         czaerEE+A99lSV7YcsmvIJJJtk8E1CE+ARiqBobEjxHa8OtEh03J/dZKODtnqm6xBPIv
+         GB4Q==
+X-Gm-Message-State: ANoB5plviC5wLZHJGVS84v12H82orhIZR8VZCX4VcrrRkPlztWIib7xZ
+        5Xp8DHwjtTqD4eGZSEDrRvvjQLwcxpCD
+X-Google-Smtp-Source: AA0mqf5XLHjklsrSGEkkJMrepVuOU97r0u2RyqqeVSUn4+rizrpjePhHSNj9GGDN3SSU11FFNjz6Oy0zOSu1
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:553:438f:b86a:87f])
+ (user=irogers job=sendgmr) by 2002:a63:4f54:0:b0:476:85ee:aee2 with SMTP id
+ p20-20020a634f54000000b0047685eeaee2mr5230552pgl.582.1668460058138; Mon, 14
+ Nov 2022 13:07:38 -0800 (PST)
+Date:   Mon, 14 Nov 2022 13:07:13 -0800
+Message-Id: <20221114210723.2749751-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Subject: [PATCH v3 00/10] Restructure perf list and add json output
+From:   Ian Rogers <irogers@google.com>
+To:     Weilin Wang <weilin.wang@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Xin Gao <gaoxin@cdjrlc.com>, Rob Herring <robh@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-SWM-External: yes
-X-SWM-IntToExt-Scanning: swmout (swm-pri11-itoemail0-scan.leviathan.sladewatkins.net)
-X-SWM-Sent-by: swmPRISMgateway (swm-prismgateway-pri02-mail8-scan.leviathan.sladewatkins.net)
-X-SWM-Antivirus-Version: 1.1.0
-X-SWM-ite-Primary-Server: swm-pri12-item.leviathan.sladewatkins.net
-X-BESS-ID: 1668461389-110667-25855-6573-1
-X-BESS-VER: 2019.1_20221114.2026
-X-BESS-Apparent-Source-IP: 209.85.219.72
-X-BESS-Outbound-Spam-Score: 0.00
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.244150 [from 
-        cloudscan13-119.us-east-2a.ess.aws.cudaops.com]
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------
-        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
-        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS162129 scores of KILL_LEVEL=7.0 tests=BSF_SC0_MISMATCH_TO, BSF_BESS_OUTBOUND
-X-BESS-BRTS-Status: 1
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,21 +84,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 7:47 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> This is the start of the stable review cycle for the 5.10.155 release.
-> There are 95 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 16 Nov 2022 12:44:21 +0000.
-> Anything received after that time might be too late.
+Restructure perf list so that it uses callbacks to print events and
+metrics. Use the callbacks to implement json output. In the process
+add documentation to pmu.h, avoid some sorting of events, fix some
+command line and output bugs.
 
+v3. Removes is_hybrid from perf_pmu as suggested by Kan Liang.
+    ScaleUnit is added to the json output as suggested by
+    Weilin Wang. Some comments are also improved.
+v2. Address feedback from Adrian Hunter and make kernel-doc work.
 
-5.10.155-rc1 compiled and booted on my x86_64 test system. No errors
-or regressions.
+Ian Rogers (10):
+  perf pmu: Remove is_hybrid member
+  perf pmu: Add documentation
+  tools lib api fs tracing_path: Add scandir alphasort
+  perf tracepoint: Sort events in iterator
+  perf list: Generalize limiting to a PMU name
+  perf list: Simplify cache event printing
+  perf list: Simplify symbol event printing
+  perf pmu: Restructure print_pmu_events
+  perf list: Reorganize to use callbacks
+  perf list: Add json output option
 
-Tested-by: Slade Watkins <srw@sladewatkins.net>
+ tools/lib/api/fs/tracing_path.c        |  16 +
+ tools/lib/api/fs/tracing_path.h        |   1 +
+ tools/perf/Documentation/perf-list.txt |  10 +-
+ tools/perf/builtin-list.c              | 525 +++++++++++++++++---
+ tools/perf/util/evsel.c                |   5 +-
+ tools/perf/util/evsel.h                |   2 +-
+ tools/perf/util/metricgroup.c          | 242 +++-------
+ tools/perf/util/metricgroup.h          |   4 +-
+ tools/perf/util/pmu.c                  | 288 ++++++-----
+ tools/perf/util/pmu.h                  | 128 ++++-
+ tools/perf/util/print-events.c         | 638 ++++++++++---------------
+ tools/perf/util/print-events.h         |  42 +-
+ tools/perf/util/stat.c                 |  11 +-
+ 13 files changed, 1102 insertions(+), 810 deletions(-)
 
-All the best,
--srw
+-- 
+2.38.1.431.g37b22c650d-goog
+
