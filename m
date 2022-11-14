@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC1F627928
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:39:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A74BC62792B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236885AbiKNJju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:39:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
+        id S236912AbiKNJkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:40:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236872AbiKNJjo (ORCPT
+        with ESMTP id S236901AbiKNJjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:39:44 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5A41B7A6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:39:43 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id t62so10800832oib.12
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:39:43 -0800 (PST)
+        Mon, 14 Nov 2022 04:39:55 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96ED61AF1E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:39:48 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id n205so10861909oib.1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:39:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GBh16wlKK1pVBXMjv15TuW7j92X6+xaNPp74Ke5cwzg=;
-        b=hF9X0WTgoZ15u6lCmpBzIOPBVWdzZ3Vw6JoG3tBTJMXOxDAbfHLS87qMIOnUrcirpE
-         15GwdmZNiXKXSAp/+97TmqtsCq8sWpHrik7QY+mGtyzU23KDDYyW6Bc+hJP1I8uacoGi
-         yBKZ0NDVqyowQHvNM7xCWU1p3K6dRd12GuI5Iel2uRZ+bYb6ec3PvFT9+UGbc6GLbNcN
-         5zTsnvLBy/GwWCiBK0/dRG/akuPjk9nRZ7G2/yGZ+MCvhyqXyB2ymFHfJ0dZ2xzJSTsp
-         tWMdAJ9+y5NAIxWnraV5913SjMHGQ0rQuB2XnCNyD8xVMjDROSASmZnl/reobC6MlCgw
-         fhsA==
+        bh=fyR5SzCa2XgzFku7z7smGvot1vjVKCAAMkMCMMFre8k=;
+        b=PusBjvOEpWHKd4s8oYTlNcEM+nRxt/ImIJfjge5KkCm+phNlxlM9HYew4kauLT/fqL
+         qW9k6iEs0dpocQQmUq7694ilC/yMUAAp4K9gJqHEKUdUvidksp+xfTlQqAoV7n/fZvsh
+         uleiUwCStwu1lm0TJvXNSyOvBKeVoMP60/Ua/YEzxnVZdOK12/jqNyk/EEon+sFKBlR8
+         zpcZvqCv0sU0IstXFYZ2hJew7lv9inw1nZM/fXvjQ/uP1bBQuNXAG1Uvk/523Uxm/zbB
+         ATdwcutK7svu+0S2kz9DEojurx2WJQ2qvsV/BVNv9H9KtNTC0xETu5wAJ2sdjNiix+it
+         V9Yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GBh16wlKK1pVBXMjv15TuW7j92X6+xaNPp74Ke5cwzg=;
-        b=sTzB5p8ixR0LeF9cTVUSLR669EPumTiHib5vLJDgZMKDOcAJ9Oq152cVIVYAnRJiw7
-         mJsmFI2Olp7KKesT1VFxQp3kmdmlZYpH4BgpNSKPjLC2+sCAndcZJUoHPmk8qxo6rl4E
-         +HHKlfkKG23eoq0CD8LrGe04nlsWHF4IQ8eUvmVWstF156WfIRCaPLhKmTxYL+bsDp1m
-         uKVtSAWbIiOU1KKaZavTE01+QAlpyY5xjOXqj5lmHcJMo6zJqFhvCm8KzKa+Bsk7P0FG
-         QZX13R5DXAdmc3/9YM4RoyP1LCXtzmHECaaNlVyhC0IwMOGiISRPFwyyFGTCK9dRwzXH
-         WV7A==
-X-Gm-Message-State: ANoB5pn34LFqItGGiP6FDWhuXKA+iGehAe+cBagPMmko6EHG9rDOIOxX
-        NxMAYEaCBVNEI4OdWh1mEUzmKQ==
-X-Google-Smtp-Source: AA0mqf7RpvIB2xfApRsmQ5ij3Mys3TOt64xPnevQZhTYjoVW8cyMARoppeofqzAqaLbM1hOoLofPmQ==
-X-Received: by 2002:a05:6808:b0b:b0:350:a7b7:9ac5 with SMTP id s11-20020a0568080b0b00b00350a7b79ac5mr5401912oij.4.1668418783088;
-        Mon, 14 Nov 2022 01:39:43 -0800 (PST)
+        bh=fyR5SzCa2XgzFku7z7smGvot1vjVKCAAMkMCMMFre8k=;
+        b=3f/XgxheIgsmletuKj6UIZL5g3ohX3dLl2ApLazxADUA9s77UuNStsMAOsGw29M2Nb
+         Mx5xTHeXm3V0iGkmUhs6G01qtBrfJbASp1C86cjB2gkRUAl3DZS1Q2wWVBO7J9tmnUbg
+         /k0/Ayhyy2rbey41pG01f8cDbhYPiE9fR/q7PYvBJfMtjbdW1TjUuBCBQLtv2acZf0v5
+         ZIxipt9jeWhEcemg+BBHVr8fqa6LSJ7hE07nr5LSIu98z9cLmfWBNrMvMQjtZvw0YIeI
+         aPrxng2RNi/SLMn/imkLeBQ/FjkRndy6mMZphNRj4U4OT7B3P86dM6Yjoc1zRKFKfCpa
+         X22g==
+X-Gm-Message-State: ANoB5pmQZ6lNUHAP8pkDOrITv/oa5KoVMmifLlGkvenFVyYzjUaJdXUa
+        0GesCi9x1/wtFofSBnHuKABC91wjBe8zGg==
+X-Google-Smtp-Source: AA0mqf6MHlZqvTiJDRrecWw2K0o5nZFwTsSvlpZJLSBvzXuAG8UooV4YmpPYjKr/BkeIWmm4Rrtdjg==
+X-Received: by 2002:aca:2305:0:b0:35a:7760:43f3 with SMTP id e5-20020aca2305000000b0035a776043f3mr5358936oie.19.1668418787823;
+        Mon, 14 Nov 2022 01:39:47 -0800 (PST)
 Received: from anup-ubuntu64-vm.. ([103.97.165.210])
-        by smtp.gmail.com with ESMTPSA id l12-20020a4ae38c000000b0049f3bdd791esm3222677oov.26.2022.11.14.01.39.38
+        by smtp.gmail.com with ESMTPSA id l12-20020a4ae38c000000b0049f3bdd791esm3222677oov.26.2022.11.14.01.39.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 01:39:42 -0800 (PST)
+        Mon, 14 Nov 2022 01:39:47 -0800 (PST)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -60,11 +60,10 @@ Cc:     Atish Patra <atishp@atishpatra.org>,
         Alistair Francis <Alistair.Francis@wdc.com>,
         Anup Patel <anup@brainfault.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>
-Subject: [PATCH v11 2/7] irqchip/riscv-intc: Allow drivers to directly discover INTC hwnode
-Date:   Mon, 14 Nov 2022 15:08:59 +0530
-Message-Id: <20221114093904.1669461-3-apatel@ventanamicro.com>
+        Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH v11 3/7] genirq: Add mechanism to multiplex a single HW IPI
+Date:   Mon, 14 Nov 2022 15:09:00 +0530
+Message-Id: <20221114093904.1669461-4-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221114093904.1669461-1-apatel@ventanamicro.com>
 References: <20221114093904.1669461-1-apatel@ventanamicro.com>
@@ -79,96 +78,356 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Various RISC-V drivers (such as SBI IPI, SBI Timer, SBI PMU, and
-KVM RISC-V) don't have associated DT node but these drivers need
-standard per-CPU (local) interrupts defined by the RISC-V privileged
-specification.
+All RISC-V platforms have a single HW IPI provided by the INTC local
+interrupt controller. The HW method to trigger INTC IPI can be through
+external irqchip (e.g. RISC-V AIA), through platform specific device
+(e.g. SiFive CLINT timer), or through firmware (e.g. SBI IPI call).
 
-We add riscv_get_intc_hwnode() in arch/riscv which allows RISC-V
-drivers not having DT node to discover INTC hwnode which in-turn
-helps these drivers to map per-CPU (local) interrupts provided
-by the INTC driver.
+To support multiple IPIs on RISC-V, we add a generic IPI multiplexing
+mechanism which help us create multiple virtual IPIs using a single
+HW IPI. This generic IPI multiplexing is inspired from the Apple AIC
+irqchip driver and it is shared by various RISC-V irqchip drivers.
 
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/include/asm/irq.h     |  4 ++++
- arch/riscv/kernel/irq.c          | 18 ++++++++++++++++++
- drivers/irqchip/irq-riscv-intc.c |  7 +++++++
- 3 files changed, 29 insertions(+)
+ include/linux/irq.h  |  18 +++
+ kernel/irq/Kconfig   |   5 +
+ kernel/irq/Makefile  |   1 +
+ kernel/irq/ipi-mux.c | 268 +++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 292 insertions(+)
+ create mode 100644 kernel/irq/ipi-mux.c
 
-diff --git a/arch/riscv/include/asm/irq.h b/arch/riscv/include/asm/irq.h
-index e4c435509983..43b9ebfbd943 100644
---- a/arch/riscv/include/asm/irq.h
-+++ b/arch/riscv/include/asm/irq.h
-@@ -12,6 +12,10 @@
+diff --git a/include/linux/irq.h b/include/linux/irq.h
+index c3eb89606c2b..5ab702cb0a5b 100644
+--- a/include/linux/irq.h
++++ b/include/linux/irq.h
+@@ -1266,6 +1266,24 @@ int __ipi_send_mask(struct irq_desc *desc, const struct cpumask *dest);
+ int ipi_send_single(unsigned int virq, unsigned int cpu);
+ int ipi_send_mask(unsigned int virq, const struct cpumask *dest);
  
- #include <asm-generic/irq.h>
- 
-+void riscv_set_intc_hwnode_fn(struct fwnode_handle *(*fn)(void));
++/**
++ * struct ipi_mux_ops - IPI multiplex operations
++ *
++ * @ipi_mux_pre_handle:	Optional function called before handling parent IPI
++ * @ipi_mux_post_handle:Optional function called after handling parent IPI
++ * @ipi_mux_send:	Trigger parent IPI on target CPUs
++ */
++struct ipi_mux_ops {
++	void (*ipi_mux_pre_handle)(unsigned int parent_virq, void *data);
++	void (*ipi_mux_post_handle)(unsigned int parent_virq, void *data);
++	void (*ipi_mux_send)(unsigned int parent_virq, void *data,
++			     const struct cpumask *mask);
++};
 +
-+struct fwnode_handle *riscv_get_intc_hwnode(void);
++void ipi_mux_process(void);
++int ipi_mux_create(unsigned int parent_virq, unsigned int nr_ipi,
++		   const struct ipi_mux_ops *ops, void *data);
 +
- extern void __init init_IRQ(void);
+ #ifdef CONFIG_GENERIC_IRQ_MULTI_HANDLER
+ /*
+  * Registers a generic IRQ handling function as the top-level IRQ handler in
+diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+index db3d174c53d4..df17dbc54b02 100644
+--- a/kernel/irq/Kconfig
++++ b/kernel/irq/Kconfig
+@@ -86,6 +86,11 @@ config GENERIC_IRQ_IPI
+ 	depends on SMP
+ 	select IRQ_DOMAIN_HIERARCHY
  
- #endif /* _ASM_RISCV_IRQ_H */
-diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
-index 7207fa08d78f..96d3171f0ca1 100644
---- a/arch/riscv/kernel/irq.c
-+++ b/arch/riscv/kernel/irq.c
-@@ -7,9 +7,27 @@
- 
- #include <linux/interrupt.h>
- #include <linux/irqchip.h>
++# Generic IRQ IPI Mux support
++config GENERIC_IRQ_IPI_MUX
++	bool
++	depends on SMP
++
+ # Generic MSI interrupt support
+ config GENERIC_MSI_IRQ
+ 	bool
+diff --git a/kernel/irq/Makefile b/kernel/irq/Makefile
+index b4f53717d143..f19d3080bf11 100644
+--- a/kernel/irq/Makefile
++++ b/kernel/irq/Makefile
+@@ -15,6 +15,7 @@ obj-$(CONFIG_GENERIC_IRQ_MIGRATION) += cpuhotplug.o
+ obj-$(CONFIG_PM_SLEEP) += pm.o
+ obj-$(CONFIG_GENERIC_MSI_IRQ) += msi.o
+ obj-$(CONFIG_GENERIC_IRQ_IPI) += ipi.o
++obj-$(CONFIG_GENERIC_IRQ_IPI_MUX) += ipi-mux.o
+ obj-$(CONFIG_SMP) += affinity.o
+ obj-$(CONFIG_GENERIC_IRQ_DEBUGFS) += debugfs.o
+ obj-$(CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR) += matrix.o
+diff --git a/kernel/irq/ipi-mux.c b/kernel/irq/ipi-mux.c
+new file mode 100644
+index 000000000000..259e00366dd7
+--- /dev/null
++++ b/kernel/irq/ipi-mux.c
+@@ -0,0 +1,268 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Multiplex several virtual IPIs over a single HW IPI.
++ *
++ * Copyright The Asahi Linux Contributors
++ * Copyright (c) 2022 Ventana Micro Systems Inc.
++ */
++
++#define pr_fmt(fmt) "ipi-mux: " fmt
++#include <linux/cpu.h>
++#include <linux/init.h>
++#include <linux/irq.h>
++#include <linux/irqchip.h>
++#include <linux/irqchip/chained_irq.h>
 +#include <linux/irqdomain.h>
-+#include <linux/module.h>
- #include <linux/seq_file.h>
- #include <asm/smp.h>
- 
-+static struct fwnode_handle *(*__get_intc_node)(void);
++#include <linux/jump_label.h>
++#include <linux/percpu.h>
++#include <linux/smp.h>
 +
-+void riscv_set_intc_hwnode_fn(struct fwnode_handle *(*fn)(void))
++struct ipi_mux_cpu {
++	atomic_t			enable;
++	atomic_t			bits;
++	struct cpumask			send_mask;
++};
++
++struct ipi_mux_control {
++	void				*data;
++	unsigned int			nr;
++	unsigned int			parent_virq;
++	struct irq_domain		*domain;
++	const struct ipi_mux_ops	*ops;
++	struct ipi_mux_cpu __percpu	*cpu;
++};
++
++static struct ipi_mux_control *imux;
++static DEFINE_STATIC_KEY_FALSE(imux_pre_handle);
++static DEFINE_STATIC_KEY_FALSE(imux_post_handle);
++
++static void ipi_mux_mask(struct irq_data *d)
 +{
-+	__get_intc_node = fn;
++	struct ipi_mux_cpu *icpu = this_cpu_ptr(imux->cpu);
++
++	atomic_andnot(BIT(irqd_to_hwirq(d)), &icpu->enable);
 +}
 +
-+struct fwnode_handle *riscv_get_intc_hwnode(void)
++static void ipi_mux_unmask(struct irq_data *d)
 +{
-+	if (__get_intc_node)
-+		return __get_intc_node();
++	u32 ibit = BIT(irqd_to_hwirq(d));
++	struct ipi_mux_cpu *icpu = this_cpu_ptr(imux->cpu);
 +
-+	return NULL;
-+}
-+EXPORT_SYMBOL_GPL(riscv_get_intc_hwnode);
++	atomic_or(ibit, &icpu->enable);
 +
- int arch_show_interrupts(struct seq_file *p, int prec)
- {
- 	show_ipi_stats(p, prec);
-diff --git a/drivers/irqchip/irq-riscv-intc.c b/drivers/irqchip/irq-riscv-intc.c
-index 499e5f81b3fe..9066467e99e4 100644
---- a/drivers/irqchip/irq-riscv-intc.c
-+++ b/drivers/irqchip/irq-riscv-intc.c
-@@ -92,6 +92,11 @@ static const struct irq_domain_ops riscv_intc_domain_ops = {
- 	.xlate	= irq_domain_xlate_onecell,
- };
- 
-+static struct fwnode_handle *riscv_intc_hwnode(void)
-+{
-+	return intc_domain->fwnode;
++	/*
++	 * The atomic_or() above must complete before the atomic_read()
++	 * below to avoid racing ipi_mux_send_mask().
++	 */
++	smp_mb__after_atomic();
++
++	/* If a pending IPI was unmasked, raise a parent IPI immediately. */
++	if (atomic_read(&icpu->bits) & ibit)
++		imux->ops->ipi_mux_send(imux->parent_virq, imux->data,
++					cpumask_of(smp_processor_id()));
 +}
 +
- static int __init riscv_intc_init(struct device_node *node,
- 				  struct device_node *parent)
- {
-@@ -126,6 +131,8 @@ static int __init riscv_intc_init(struct device_node *node,
- 		return rc;
- 	}
- 
-+	riscv_set_intc_hwnode_fn(riscv_intc_hwnode);
++static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
++{
++	u32 ibit = BIT(irqd_to_hwirq(d));
++	struct ipi_mux_cpu *icpu = this_cpu_ptr(imux->cpu);
++	struct cpumask *send_mask = &icpu->send_mask;
++	unsigned long flags;
++	int cpu;
 +
- 	cpuhp_setup_state(CPUHP_AP_IRQ_RISCV_STARTING,
- 			  "irqchip/riscv/intc:starting",
- 			  riscv_intc_cpu_starting,
++	/*
++	 * We use send_mask as a per-CPU variable so disable local
++	 * interrupts to avoid being preempted.
++	 */
++	local_irq_save(flags);
++
++	cpumask_clear(send_mask);
++
++	for_each_cpu(cpu, mask) {
++		icpu = per_cpu_ptr(imux->cpu, cpu);
++		atomic_or(ibit, &icpu->bits);
++
++		/*
++		 * The atomic_or() above must complete before
++		 * the atomic_read() below to avoid racing with
++		 * ipi_mux_unmask().
++		 */
++		smp_mb__after_atomic();
++
++		if (atomic_read(&icpu->enable) & ibit)
++			cpumask_set_cpu(cpu, send_mask);
++	}
++
++	/* Trigger the parent IPI */
++	imux->ops->ipi_mux_send(imux->parent_virq, imux->data, send_mask);
++
++	local_irq_restore(flags);
++}
++
++static const struct irq_chip ipi_mux_chip = {
++	.name		= "IPI Mux",
++	.irq_mask	= ipi_mux_mask,
++	.irq_unmask	= ipi_mux_unmask,
++	.ipi_send_mask	= ipi_mux_send_mask,
++};
++
++static int ipi_mux_domain_alloc(struct irq_domain *d, unsigned int virq,
++				unsigned int nr_irqs, void *arg)
++{
++	int i;
++
++	for (i = 0; i < nr_irqs; i++) {
++		irq_set_percpu_devid(virq + i);
++		irq_domain_set_info(d, virq + i, i,
++				    &ipi_mux_chip, d->host_data,
++				    handle_percpu_devid_irq, NULL, NULL);
++	}
++
++	return 0;
++}
++
++static const struct irq_domain_ops ipi_mux_domain_ops = {
++	.alloc		= ipi_mux_domain_alloc,
++	.free		= irq_domain_free_irqs_top,
++};
++
++/**
++ * ipi_mux_process - Process multiplexed virtual IPIs
++ */
++void ipi_mux_process(void)
++{
++	struct ipi_mux_cpu *icpu = this_cpu_ptr(imux->cpu);
++	irq_hw_number_t hwirq;
++	unsigned long ipis;
++	int en;
++
++	if (static_branch_unlikely(&imux_pre_handle))
++		imux->ops->ipi_mux_pre_handle(imux->parent_virq, imux->data);
++
++	/*
++	 * Reading enable mask does not need to be ordered as long as
++	 * this function called from interrupt handler because only
++	 * the CPU itself can change it's own enable mask.
++	 */
++	en = atomic_read(&icpu->enable);
++
++	/*
++	 * Clear the IPIs we are about to handle. This pairs with the
++	 * atomic_fetch_or_release() in ipi_mux_send_mask().
++	 */
++	ipis = atomic_fetch_andnot(en, &icpu->bits) & en;
++
++	for_each_set_bit(hwirq, &ipis, imux->nr)
++		generic_handle_domain_irq(imux->domain, hwirq);
++
++	if (static_branch_unlikely(&imux_post_handle))
++		imux->ops->ipi_mux_post_handle(imux->parent_virq, imux->data);
++}
++
++static void ipi_mux_handler(struct irq_desc *desc)
++{
++	struct irq_chip *chip = irq_desc_get_chip(desc);
++
++	chained_irq_enter(chip, desc);
++	ipi_mux_process();
++	chained_irq_exit(chip, desc);
++}
++
++/**
++ * ipi_mux_create - Create virtual IPIs multiplexed on top of a single
++ * parent IPI.
++ * @parent_virq:	virq of the parent per-CPU IRQ
++ * @nr_ipi:		number of virtual IPIs to create. This should
++ *			be <= BITS_PER_TYPE(int)
++ * @ops:		multiplexing operations for the parent IPI
++ * @data:		opaque data used by the multiplexing operations
++ *
++ * If the parent IPI > 0 then ipi_mux_process() will be automatically
++ * called via chained handler.
++ *
++ * If the parent IPI <= 0 then it is responsibility of irqchip drivers
++ * to explicitly call ipi_mux_process() for processing muxed IPIs.
++ *
++ * Returns first virq of the newly created virtual IPIs upon success
++ * or <=0 upon failure
++ */
++int ipi_mux_create(unsigned int parent_virq, unsigned int nr_ipi,
++		   const struct ipi_mux_ops *ops, void *data)
++{
++	struct fwnode_handle *fwnode;
++	struct irq_domain *domain;
++	int rc;
++
++	if (imux)
++		return -EEXIST;
++
++	if (BITS_PER_TYPE(int) < nr_ipi || !ops || !ops->ipi_mux_send)
++		return -EINVAL;
++
++	if (parent_virq &&
++	    !irqd_is_per_cpu(irq_desc_get_irq_data(irq_to_desc(parent_virq))))
++		return -EINVAL;
++
++	imux = kzalloc(sizeof(*imux), GFP_KERNEL);
++	if (!imux)
++		return -ENOMEM;
++
++	imux->cpu = alloc_percpu(typeof(*imux->cpu));
++	if (!imux->cpu) {
++		rc = -ENOMEM;
++		goto fail_free_mux;
++	}
++
++	fwnode = irq_domain_alloc_named_fwnode("IPI-Mux");
++	if (!fwnode) {
++		pr_err("unable to create IPI Mux fwnode\n");
++		rc = -ENOMEM;
++		goto fail_free_cpu;
++	}
++
++	domain = irq_domain_create_simple(fwnode, nr_ipi, 0,
++					  &ipi_mux_domain_ops, NULL);
++	if (!domain) {
++		pr_err("unable to add IPI Mux domain\n");
++		rc = -ENOMEM;
++		goto fail_free_fwnode;
++	}
++
++	domain->flags |= IRQ_DOMAIN_FLAG_IPI_SINGLE;
++	irq_domain_update_bus_token(domain, DOMAIN_BUS_IPI);
++
++	rc = __irq_domain_alloc_irqs(domain, -1, nr_ipi,
++				     NUMA_NO_NODE, NULL, false, NULL);
++	if (rc <= 0) {
++		pr_err("unable to alloc IRQs from IPI Mux domain\n");
++		goto fail_free_domain;
++	}
++
++	imux->domain = domain;
++	imux->data = data;
++	imux->nr = nr_ipi;
++	imux->parent_virq = parent_virq;
++	imux->ops = ops;
++
++	if (imux->ops->ipi_mux_pre_handle)
++		static_branch_enable(&imux_pre_handle);
++
++	if (imux->ops->ipi_mux_post_handle)
++		static_branch_enable(&imux_post_handle);
++
++	if (parent_virq > 0)
++		irq_set_chained_handler(parent_virq, ipi_mux_handler);
++
++	return rc;
++
++fail_free_domain:
++	irq_domain_remove(domain);
++fail_free_fwnode:
++	irq_domain_free_fwnode(fwnode);
++fail_free_cpu:
++	free_percpu(imux->cpu);
++fail_free_mux:
++	kfree(imux);
++	imux = NULL;
++	return rc;
++}
 -- 
 2.34.1
 
