@@ -2,113 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF86C62750A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 04:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9744D62750D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 04:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235730AbiKNDkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 22:40:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
+        id S235744AbiKNDmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 22:42:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235249AbiKNDkl (ORCPT
+        with ESMTP id S235615AbiKNDme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 22:40:41 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BC36559;
-        Sun, 13 Nov 2022 19:40:40 -0800 (PST)
-Received: from mxde.zte.com.cn (unknown [10.35.20.165])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4N9ZpG44z7zjn8;
-        Mon, 14 Nov 2022 11:40:38 +0800 (CST)
-Received: from mxus.zte.com.cn (unknown [10.207.168.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxde.zte.com.cn (FangMail) with ESMTPS id 4N9ZpB72rKz4xD31;
-        Mon, 14 Nov 2022 11:40:34 +0800 (CST)
-Received: from mxhk.zte.com.cn (unknown [192.168.250.138])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxus.zte.com.cn (FangMail) with ESMTPS id 4N9Zp74zSvz9tyD6;
-        Mon, 14 Nov 2022 11:40:31 +0800 (CST)
-Received: from mxct.zte.com.cn (unknown [192.168.251.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4N9Zp42p3gz4xVnD;
-        Mon, 14 Nov 2022 11:40:28 +0800 (CST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4N9Zp20fR1z4y0tt;
-        Mon, 14 Nov 2022 11:40:26 +0800 (CST)
-Received: from szxlzmapp06.zte.com.cn ([10.5.230.252])
-        by mse-fl1.zte.com.cn with SMTP id 2AE3eC1t022476;
-        Mon, 14 Nov 2022 11:40:12 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp04[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Mon, 14 Nov 2022 11:40:13 +0800 (CST)
-Date:   Mon, 14 Nov 2022 11:40:13 +0800 (CST)
-X-Zmail-TransId: 2b066371b89d59d038a6
-X-Mailer: Zmail v1.0
-Message-ID: <202211141140133437292@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <martin.petersen@oracle.com>
-Cc:     <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
-        <yang.yang29@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHNjc2k6IHRhcmdldDogVXNlIHN5c2ZzX3N0cmVxKCkgaW5zdGVhZCBvZiBzdHJuY21wKCk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2AE3eC1t022476
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.14.novalocal with ID 6371B8B5.000 by FangMail milter!
-X-FangMail-Envelope: 1668397238/4N9ZpG44z7zjn8/6371B8B5.000/10.35.20.165/[10.35.20.165]/mxde.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6371B8B5.000/4N9ZpG44z7zjn8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sun, 13 Nov 2022 22:42:34 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5806B13D04
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:42:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668397353; x=1699933353;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8z0ajpLc6gE5Alh3knu25MNIVWlVtSK35cju1Sh60bo=;
+  b=TvDPWlsYFhjtt/9EUcAtpta6ph6S4vF6T/ac2X4e8AWW3Zf/qA8VIevY
+   emc04AcoWCOIv1YL7BQ3VxPCYRlbD3Mb3CzePHhT2vQnjsWcc3XmETyOA
+   UqS8tNN1+vrFLZPPRFcJUNigU2dePxQIs0ScgkpW4+YayEOTT8gOv2mwQ
+   8KV0TYIMSiDpljNcISYoM3LNAmhJlL7nJUCOp9pih0GtEImUPtPFEomiC
+   GY54l7TzlqHAT5PG2dnEcfL1YQ8kTJk10w6sI+82g2d7Dr7w+08u5CkLn
+   xAcH+vthCZrSWZobWy165KzKdiBuveMHwd9PhdJ5MNv6V9wVQgwovpHqe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="398163881"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="398163881"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 19:42:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="638305672"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="638305672"
+Received: from lkp-server01.sh.intel.com (HELO ebd99836cbe0) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 13 Nov 2022 19:42:21 -0800
+Received: from kbuild by ebd99836cbe0 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ouQMW-00004Z-1a;
+        Mon, 14 Nov 2022 03:42:20 +0000
+Date:   Mon, 14 Nov 2022 11:41:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Meng Li <li.meng@amd.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: spdxcheck: drivers/cpufreq/amd-pstate-ut.c: 1:28 Invalid License ID:
+ GPL-1.0-or-later
+Message-ID: <202211141151.NSoxwxUi-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Panda <xu.panda@zte.com.cn>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   094226ad94f471a9f19e8f8e7140a09c2625abaa
+commit: 14eb1c96e3a3fd9cd377ac9af3c7a410f8bf1015 cpufreq: amd-pstate: Add test module for amd-pstate driver
+date:   6 weeks ago
+reproduce:
+        scripts/spdxcheck.py
 
-There is a ready-to-use method to compare a retrieved from a sysfs node
-string with another string. It treats both NUL and newline-then-NUL as
-equivalent string terminations. So use it instead of manually truncating
-the line length in the strncmp() method.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-Signed-off-by: Yang Yang <yang.yang29@zte.com>
----
- drivers/target/target_core_configfs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+spdxcheck warnings: (new ones prefixed by >>)
+>> drivers/cpufreq/amd-pstate-ut.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/spi/spi-gxp.c: 1:35 Invalid token: =or-later
 
-diff --git a/drivers/target/target_core_configfs.c b/drivers/target/target_core_configfs.c
-index b8a5c8d6cfde..119711c2bc08 100644
---- a/drivers/target/target_core_configfs.c
-+++ b/drivers/target/target_core_configfs.c
-@@ -208,7 +208,7 @@ static struct config_group *target_core_register_fabric(
- 		 * mkdir(2) system calls with known TCM fabric modules.
- 		 */
-
--		if (!strncmp(name, "iscsi", 5)) {
-+		if (!sysfs_streq(name, "iscsi")) {
- 			/*
- 			 * Automatically load the LIO Target fabric module when the
- 			 * following is called:
-@@ -221,7 +221,7 @@ static struct config_group *target_core_register_fabric(
- 				         " iscsi_target_mod.ko: %d\n", ret);
- 				return ERR_PTR(-EINVAL);
- 			}
--		} else if (!strncmp(name, "loopback", 8)) {
-+		} else if (!sysfs_streq(name, "loopback")) {
- 			/*
- 			 * Automatically load the tcm_loop fabric module when the
- 			 * following is called:
 -- 
-2.15.2
+0-DAY CI Kernel Test Service
+https://01.org/lkp
