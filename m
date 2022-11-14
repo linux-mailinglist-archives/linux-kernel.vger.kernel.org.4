@@ -2,291 +2,441 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 470A2628440
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9058628441
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237049AbiKNPmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 10:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
+        id S237149AbiKNPma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 10:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235551AbiKNPmX (ORCPT
+        with ESMTP id S235551AbiKNPm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 10:42:23 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C3822BF8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:42:22 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id kt23so29325708ejc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:42:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uia2n6vb3z73s68HcuzcIZ5pI4+0K9n0KksMgCUvtY4=;
-        b=70J1wQsUwY8JcoAK62y24GvBZqAlBl4PDTKSuCz2jG+/ilvVmR2joZKvhlWuWYKFs+
-         ghb9DvAkI7MmjSq7ysp2vdEOI5vrJcnMihEksWg0RNxh9cfm3B8HtqBpRmdZMUFniJnH
-         w5J2gcedn9mPdm12jwjF6ccGfdcYsJD5y27BfwqEcCiJ2E3j9bFWQfrj9UuHNFrakCZA
-         xs2dhEvk1IJmtokqoLKBrg4PyXlTMyupomaIWtmpza1yYslFPIPaD0bIJQDoHWcdx2F9
-         SSj5oxpj5VcDjfR9Ybk/VHtZ+Naipt4vlm0y/e83OSOL8cmoD08OJMOYiDIgB7BE8Qc/
-         kwlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uia2n6vb3z73s68HcuzcIZ5pI4+0K9n0KksMgCUvtY4=;
-        b=Klw14xPHibNWSU2nblvtAFX1iFjfHwV7veuZPFRg57aOwRzVdUN9mvxeBdUTTak3ys
-         B4PKHd36iaxTtlExU1nqlxqxdTJOpKMikI7A+qdoAiIN2IUl0Zh4gyt76AYrWd63vxEd
-         pgqKKHkp0EkbhfQqOek9U4ZbHkR8SUz5FQomPObm+yfmYyV4TZtkqo0R5TEfqke3inZ6
-         oE8qnjJGRNAhyAg1vrwyCvZjsL2PXttyPK2jCB9KmBvjIk3Pgq7YagLlDY9GUWrChDrl
-         vTzYOrXHSEePyVSYK4J1wFuaiOecfgwbtJ83w2oOAQRU7jLnNeLxb6pvkP2PXhkLiT+S
-         HqAQ==
-X-Gm-Message-State: ANoB5pl+6T5TbTU70JB11NTfjYi2k4wqpMNlM6kDzOeRMRNG4c66u5WT
-        f7C7FKCbqfVW0Vg/HubwpQB8HON6ZOLecTzH5po1gA==
-X-Google-Smtp-Source: AA0mqf4m4FhlLNh0IHpFqGuxs2jxj2ARBlrKcbOafFRMxxgFsaLq+fsJLjlp2KPFevLEpGJ4KeoA2IVkCe8IICqOTWY=
-X-Received: by 2002:a17:906:1e96:b0:782:fd8e:9298 with SMTP id
- e22-20020a1709061e9600b00782fd8e9298mr10912317ejj.640.1668440540866; Mon, 14
- Nov 2022 07:42:20 -0800 (PST)
+        Mon, 14 Nov 2022 10:42:27 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FB8220C9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:42:25 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668440543;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=unZ79EI04FPyCTLjELDFXpRWHGSycC4SqJMn0XyHZ04=;
+        b=iD7mQSmtlAR3TZF6lyBExCH6jAShTWF7pooTQK2TFDghY7+YU8uAtQ5Vl+TIMV6A9tFibY
+        cvUGOlmbaN/TYIfy/ShzxA2mILerYwhw4q/Rg8MoKnTcOgbNTL6HntamGUe4BnNJeWvrOV
+        4CxxClZhZ7ia4NYWS8yTEfDM4NVfnY4dElsUkdilsIcswxCy9DFRw0A8g82BKPdFpv//c2
+        487WUABC5F9HX4TP7FBJX5K/Fup3DyEZIdOE3iDMO8G+uObRLXcoJj8lnxhYZuGjEEaNYi
+        AOH9XRnXPFrMUEZyxOSZ29IFEFdgw4gyZIT0sSrQfz1jDqKQdNTDYQbhg57DFg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668440543;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=unZ79EI04FPyCTLjELDFXpRWHGSycC4SqJMn0XyHZ04=;
+        b=cUhmi2zWYV/B6zoBrQlAJWmryZg/+0VimnSUcT5I/H/Qv2mVtuIFvB71x3v1rXbPcSLgRz
+        kxjOn81sEFNc2DAg==
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Eric Dumazet <edumazet@google.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Subject: Re: [PATCH v6 4/6] timers: Add timer_shutdown_sync() to be called
+ before freeing timers
+In-Reply-To: <87sfims7ca.ffs@tglx>
+References: <20221110064101.429013735@goodmis.org>
+ <20221110064147.343514404@goodmis.org> <875yfitpdu.ffs@tglx>
+ <20221113191518.0a3b29b1@rorschach.local.home> <87sfims7ca.ffs@tglx>
+Date:   Mon, 14 Nov 2022 16:42:22 +0100
+Message-ID: <87iljhsftt.ffs@tglx>
 MIME-Version: 1.0
-References: <20221111223108.1976562-1-abrestic@rivosinc.com>
- <CAJF2gTRbcocqkmkLVmfYO-8ae-kY0bJwZ+sE-WDXfbF0Y_ZkWg@mail.gmail.com>
- <CALE4mHo9uojGyhLo6Sci9VbES1GG=XcEZY-EyY6nkjyWhe2e5A@mail.gmail.com> <Y3JfLuRYF/jdjbOY@wendy>
-In-Reply-To: <Y3JfLuRYF/jdjbOY@wendy>
-From:   Andrew Bresticker <abrestic@rivosinc.com>
-Date:   Mon, 14 Nov 2022 10:42:10 -0500
-Message-ID: <CALE4mHrTWbNDDdSL9kimOcxJOFECwBJCjf64WdxAcdvkMFBfnQ@mail.gmail.com>
-Subject: Re: [PATCH] RISC-V: Fix unannoted hardirqs-on in return to userspace slow-path
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@rivosinc.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 10:31 AM Conor Dooley
-<conor.dooley@microchip.com> wrote:
->
-> On Mon, Nov 14, 2022 at 10:20:30AM -0500, Andrew Bresticker wrote:
-> > On Mon, Nov 14, 2022 at 9:43 AM Guo Ren <guoren@kernel.org> wrote:
-> > >
-> > > On Sat, Nov 12, 2022 at 6:31 AM Andrew Bresticker <abrestic@rivosinc.com> wrote:
-> > > >
-> > > > The return to userspace path in entry.S may enable interrupts without the
-> > > > corresponding lockdep annotation, producing a splat[0] when DEBUG_LOCKDEP
-> > > > is enabled. Simply calling __trace_hardirqs_on() here gets a bit messy
-> > > > due to the use of RA to point back to ret_from_exception, so just move
-> > > > the whole slow-path loop into C. It's more readable and it lets us use
-> > > > local_irq_{enable,disable}(), avoiding the need for manual annotations
-> > > > altogether.
-> > > Could generic_entry solve your problem? please try:
-> > > https://lore.kernel.org/linux-riscv/20221103075047.1634923-1-guoren@kernel.org/
-> >
-> > Indeed it does, as I mentioned below, however it wasn't clear to me
-> > how close your series was to landing so I'v emailed this small fix for
-> > the existing bug in case your series does not make it into 6.2
->
-> The backportablilty of this 26+, 26- change has to be considered too.
-> The generic entry patchset has 20x the changes and would not ordinarily
-> be stable material. How much of that series would be required to solve
-> the problem?
+On Mon, Nov 14 2022 at 01:33, Thomas Gleixner wrote:
+>    https://lore.kernel.org/all/87v8vjiaih.ffs@tglx/
 
-We'd need up to patch 6, "riscv: convert to generic entry":
-https://lore.kernel.org/linux-riscv/20221103075047.1634923-7-guoren@kernel.org/
+I went back to the original thread and looked at the Bluetooth example
+and then at commit 72ef98445aca ("Bluetooth: hci_qca: Use del_timer_sync()
+before freeing"). That commit fixes the obvious problem of using
+del_timer() instead of del_timer_sync(). Also the reordering of the
+timer teardown vs. the workqueue teardown makes it less likely to
+explode, but it's still fundamentally broken.
 
--Andrew
+destroy_workqueue(wq);
+/* After this point @wq cannot be touched anymore */
 
->
-> > >
-> > > >
-> > > > [0]:
-> > > >   ------------[ cut here ]------------
-> > > >   DEBUG_LOCKS_WARN_ON(!lockdep_hardirqs_enabled())
-> > > >   WARNING: CPU: 2 PID: 1 at kernel/locking/lockdep.c:5512 check_flags+0x10a/0x1e0
-> > > >   Modules linked in:
-> > > >   CPU: 2 PID: 1 Comm: init Not tainted 6.1.0-rc4-00160-gb56b6e2b4f31 #53
-> > > >   Hardware name: riscv-virtio,qemu (DT)
-> > > >   epc : check_flags+0x10a/0x1e0
-> > > >   ra : check_flags+0x10a/0x1e0
-> > > >   <snip>
-> > > >    status: 0000000200000100 badaddr: 0000000000000000 cause: 0000000000000003
-> > > >   [<ffffffff808edb90>] lock_is_held_type+0x78/0x14e
-> > > >   [<ffffffff8003dae2>] __might_resched+0x26/0x22c
-> > > >   [<ffffffff8003dd24>] __might_sleep+0x3c/0x66
-> > > >   [<ffffffff80022c60>] get_signal+0x9e/0xa70
-> > > >   [<ffffffff800054a2>] do_notify_resume+0x6e/0x422
-> > > >   [<ffffffff80003c68>] ret_from_exception+0x0/0x10
-> > > >   irq event stamp: 44512
-> > > >   hardirqs last  enabled at (44511): [<ffffffff808f901c>] _raw_spin_unlock_irqrestore+0x54/0x62
-> > > >   hardirqs last disabled at (44512): [<ffffffff80008200>] __trace_hardirqs_off+0xc/0x14
-> > > >   softirqs last  enabled at (44472): [<ffffffff808f9fbe>] __do_softirq+0x3de/0x51e
-> > > >   softirqs last disabled at (44467): [<ffffffff80017760>] irq_exit+0xd6/0x104
-> > > >   ---[ end trace 0000000000000000 ]---
-> > > >   possible reason: unannotated irqs-on.
-> > > >
-> > > > Signed-off-by: Andrew Bresticker <abrestic@rivosinc.com>
-> > > > ---
-> > > > This should also theoretically be fixed by the conversion to generic entry,
-> > > > but it's not clear how far away that series is from landing.
-> > > > ---
-> > > >  arch/riscv/kernel/entry.S  | 18 +++++-------------
-> > > >  arch/riscv/kernel/signal.c | 34 +++++++++++++++++++++-------------
-> > > >  2 files changed, 26 insertions(+), 26 deletions(-)
-> > > >
-> > > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > > > index b9eda3fcbd6d..58dfa8595e19 100644
-> > > > --- a/arch/riscv/kernel/entry.S
-> > > > +++ b/arch/riscv/kernel/entry.S
-> > > > @@ -263,12 +263,11 @@ ret_from_exception:
-> > > >  #endif
-> > > >         bnez s0, resume_kernel
-> > > >
-> > > > -resume_userspace:
-> > > >         /* Interrupts must be disabled here so flags are checked atomically */
-> > > >         REG_L s0, TASK_TI_FLAGS(tp) /* current_thread_info->flags */
-> > > >         andi s1, s0, _TIF_WORK_MASK
-> > > > -       bnez s1, work_pending
-> > > > -
-> > > > +       bnez s1, resume_userspace_slow
-> > > > +resume_userspace:
-> > > >  #ifdef CONFIG_CONTEXT_TRACKING_USER
-> > > >         call user_enter_callable
-> > > >  #endif
-> > > > @@ -368,19 +367,12 @@ resume_kernel:
-> > > >         j restore_all
-> > > >  #endif
-> > > >
-> > > > -work_pending:
-> > > > +resume_userspace_slow:
-> > > >         /* Enter slow path for supplementary processing */
-> > > > -       la ra, ret_from_exception
-> > > > -       andi s1, s0, _TIF_NEED_RESCHED
-> > > > -       bnez s1, work_resched
-> > > > -work_notifysig:
-> > > > -       /* Handle pending signals and notify-resume requests */
-> > > > -       csrs CSR_STATUS, SR_IE /* Enable interrupts for do_notify_resume() */
-> > > >         move a0, sp /* pt_regs */
-> > > >         move a1, s0 /* current_thread_info->flags */
-> > > > -       tail do_notify_resume
-> > > > -work_resched:
-> > > > -       tail schedule
-> > > > +       call do_work_pending
-> > > > +       j resume_userspace
-> > > >
-> > > >  /* Slow paths for ptrace. */
-> > > >  handle_syscall_trace_enter:
-> > > > diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
-> > > > index 5c591123c440..bfb2afa4135f 100644
-> > > > --- a/arch/riscv/kernel/signal.c
-> > > > +++ b/arch/riscv/kernel/signal.c
-> > > > @@ -313,19 +313,27 @@ static void do_signal(struct pt_regs *regs)
-> > > >  }
-> > > >
-> > > >  /*
-> > > > - * notification of userspace execution resumption
-> > > > - * - triggered by the _TIF_WORK_MASK flags
-> > > > + * Handle any pending work on the resume-to-userspace path, as indicated by
-> > > > + * _TIF_WORK_MASK. Entered from assembly with IRQs off.
-> > > >   */
-> > > > -asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
-> > > > -                                          unsigned long thread_info_flags)
-> > > > +asmlinkage __visible void do_work_pending(struct pt_regs *regs,
-> > > > +                                         unsigned long thread_info_flags)
-> > > >  {
-> > > > -       if (thread_info_flags & _TIF_UPROBE)
-> > > > -               uprobe_notify_resume(regs);
-> > > > -
-> > > > -       /* Handle pending signal delivery */
-> > > > -       if (thread_info_flags & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
-> > > > -               do_signal(regs);
-> > > > -
-> > > > -       if (thread_info_flags & _TIF_NOTIFY_RESUME)
-> > > > -               resume_user_mode_work(regs);
-> > > > +       do {
-> > > > +               if (thread_info_flags & _TIF_NEED_RESCHED) {
-> > > > +                       schedule();
-> > > > +               } else {
-> > > > +                       local_irq_enable();
-> > > > +                       if (thread_info_flags & _TIF_UPROBE)
-> > > > +                               uprobe_notify_resume(regs);
-> > > > +                       /* Handle pending signal delivery */
-> > > > +                       if (thread_info_flags & (_TIF_SIGPENDING |
-> > > > +                                                _TIF_NOTIFY_SIGNAL))
-> > > > +                               do_signal(regs);
-> > > > +                       if (thread_info_flags & _TIF_NOTIFY_RESUME)
-> > > > +                               resume_user_mode_work(regs);
-> > > > +               }
-> > > > +               local_irq_disable();
-> > > > +               thread_info_flags = read_thread_flags();
-> > > > +       } while (thread_info_flags & _TIF_WORK_MASK);
-> > > >  }
-> > > The more graceful code has been written in kernel/entry/common.c.
-> > > Let's base it on that:
-> > >
-> > > static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
-> > >                                             unsigned long ti_work)
-> > > {
-> > >         /*
-> > >          * Before returning to user space ensure that all pending work
-> > >          * items have been completed.
-> > >          */
-> > >         while (ti_work & EXIT_TO_USER_MODE_WORK) {
-> > >
-> > >                 local_irq_enable_exit_to_user(ti_work);
-> > >
-> > >                 if (ti_work & _TIF_NEED_RESCHED)
-> > >                         schedule();
-> > >
-> > >                 if (ti_work & _TIF_UPROBE)
-> > >                         uprobe_notify_resume(regs);
-> > >
-> > >                 if (ti_work & _TIF_PATCH_PENDING)
-> > >                         klp_update_patch_state(current);
-> > >
-> > >                 if (ti_work & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
-> > >                         arch_do_signal_or_restart(regs);
-> > >
-> > >                 if (ti_work & _TIF_NOTIFY_RESUME)
-> > >                         resume_user_mode_work(regs);
-> > >
-> > >                 /* Architecture specific TIF work */
-> > >                 arch_exit_to_user_mode_work(regs, ti_work);
-> > >
-> > >                 /*
-> > >                  * Disable interrupts and reevaluate the work flags as they
-> > >                  * might have changed while interrupts and preemption was
-> > >                  * enabled above.
-> > >                  */
-> > >                 local_irq_disable_exit_to_user();
-> > >
-> > >                 /* Check if any of the above work has queued a
-> > > deferred wakeup */
-> > >                 tick_nohz_user_enter_prepare();
-> > >
-> > >                 ti_work = read_thread_flags();
-> > >         }
-> > >
-> > >         /* Return the latest work state for arch_exit_to_user_mode() */
-> > >         return ti_work;
-> > > }
-> > >
-> > > > --
-> > > > 2.25.1
-> > > >
-> > >
-> > >
-> > > --
-> > > Best Regards
-> > >  Guo Ren
-> >
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+---> timer expires
+       queue_work(wq) <---- Explodes with a NULl pointer dereference
+                            deep in the work queue core code.
+del_timer_sync(t);
+
+As I said in the above mail:
+
+ "So well written drivers have a priv->shutdown flag which makes timer
+  callbacks and workqueue functions aware that a shutdown is in progress
+  so they can take appropriate action."
+
+That's exactly the point why I was not convinced that any form of
+timer_shutdown_sync() will solve these kind of problem. It might just
+lure people into the false expectation that all teardown ordering
+problems go magically away when this function is used.
+
+The above commit is just a proof.
+
+timer_shutdown_sync() can solve the problem in that driver, but you
+_cannot_ issue a warning if any of the enqueue functions is invoked with
+timer->function == NULL. Why?
+
+The ordering in that driver would have to go back to the original
+ordering to prevent the above problem.
+
+  timer_shutdown_sync(t);
+
+Now t->function == NULL, right?
+
+  destroy_workqueue(wq)
+    drain_workqueue(wq)
+      bt_work()
+        mod_timer(t);   <- would warn because t->function == NULL
+
+So if we want to make this solid and make the life of driver writers
+easier, then we cannot issue a warning as I said in the original thread
+already.
+
+The semantics of timer_shutdown_sync() have to be:
+
+   After return:
+     - the timer is not queued
+     - the timer callbacks is not running
+     - the timer cannot be enqueued again
+
+For that BT case this is the right thing to do because the draining of
+the pending work via destroy_workqueue() must not rearm the timers.
+There is no functional requirement to do so because the device is
+on the way out already.
+
+It won't solve all of those problems but probably quite some of
+them. Needs a careful look at each usage site.
+
+So something like the below should do the trick. It's compiled this time
+and I spent more than 5 seconds to stare at it. Still needs some
+eyeballs and splitting apart into more digestable pieces.
+
+The only downside of this is that timers which are not properly
+initialized are now silently ignored. That's not a real problem as
+driver writers should run their code with debugobjects enabled at least
+once, which will tell them nicely. So if someone has to scratch his head
+why his timer is not firing, then it's well deserved.
+
+Thanks,
+
+        tglx
+---
+--- a/include/linux/timer.h
++++ b/include/linux/timer.h
+@@ -183,12 +183,47 @@ extern int timer_reduce(struct timer_lis
+ extern void add_timer(struct timer_list *timer);
+ 
+ extern int try_to_del_timer_sync(struct timer_list *timer);
++extern int timer_delete_sync(struct timer_list *timer, bool shutdown);
+ 
+-#if defined(CONFIG_SMP) || defined(CONFIG_PREEMPT_RT)
+-  extern int del_timer_sync(struct timer_list *timer);
+-#else
+-# define del_timer_sync(t)		del_timer(t)
+-#endif
++/**
++ * del_timer_sync - Delete a pending timer and wait for a running callback
++ * @timer: The timer to be deleted
++ *
++ * The function ensures under timer_base(@timer)->lock that:
++ *   - @timer is not queued
++ *   - The callback function of @timer is not running
++ *
++ * But this function cannot guarantee that the timer is not rearmed again
++ * by some concurrent or preempting code, right after it dropped the base
++ * lock.
++ *
++ * If this guarantee is needed, e.g. for teardown, then use
++ * timer_shutdown_sync() instead.
++ *
++ * Returns:	%0 if the timer was not pending
++ *		%1 if the timer was pending
++ */
++static inline int del_timer_sync(struct timer_list *timer)
++{
++	return timer_delete_sync(timer, false);
++}
++
++/**
++ * timer_shutdown_sync - Shutdown a timer and prevent rearming
++ * @timer: The timer to be shutdown
++ *
++ * When the function returns it is guaranteed that:
++ *   - @timer is not queued
++ *   - The callback function of @timer is not running
++ *   - @timer cannot be enqueued again
++ *
++ * Returns:	%0 if the timer was not pending
++ *		%1 if the timer was pending
++ */
++static inline int timer_shutdown_sync(struct timer_list *timer)
++{
++	return timer_delete_sync(timer, true);
++}
+ 
+ #define del_singleshot_timer_sync(t) del_timer_sync(t)
+ 
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -1017,8 +1017,6 @@ static inline int
+ 	unsigned int idx = UINT_MAX;
+ 	int ret = 0;
+ 
+-	BUG_ON(!timer->function);
+-
+ 	/*
+ 	 * This is a common optimization triggered by the networking code - if
+ 	 * the timer is re-modified to have the same timeout or ends up in the
+@@ -1044,6 +1042,15 @@ static inline int
+ 		 * dequeue/enqueue dance.
+ 		 */
+ 		base = lock_timer_base(timer, &flags);
++		/*
++		 * Has @timer been shutdown? This needs to be evaluated
++		 * while holding base lock to prevent a race against the
++		 * shutdown code.
++		 */
++		if (!timer->function) {
++			ret = 0;
++			goto out_unlock;
++		}
+ 		forward_timer_base(base);
+ 
+ 		if (timer_pending(timer) && (options & MOD_TIMER_REDUCE) &&
+@@ -1070,6 +1077,15 @@ static inline int
+ 		}
+ 	} else {
+ 		base = lock_timer_base(timer, &flags);
++		/*
++		 * Has @timer been shutdown? This needs to be evaluated
++		 * while holding base lock to prevent a race against the
++		 * shutdown code.
++		 */
++		if (!timer->function) {
++			ret = 0;
++			goto out_unlock;
++		}
+ 		forward_timer_base(base);
+ 	}
+ 
+@@ -1193,7 +1209,8 @@ EXPORT_SYMBOL(timer_reduce);
+  */
+ void add_timer(struct timer_list *timer)
+ {
+-	BUG_ON(timer_pending(timer));
++	if (WARN_ON_ONCE(timer_pending(timer)))
++		return;
+ 	__mod_timer(timer, timer->expires, MOD_TIMER_NOTPENDING);
+ }
+ EXPORT_SYMBOL(add_timer);
+@@ -1210,7 +1227,8 @@ void add_timer_on(struct timer_list *tim
+ 	struct timer_base *new_base, *base;
+ 	unsigned long flags;
+ 
+-	BUG_ON(timer_pending(timer) || !timer->function);
++	if (WARN_ON_ONCE(timer_pending(timer)))
++		return;
+ 
+ 	new_base = get_timer_cpu_base(timer->flags, cpu);
+ 
+@@ -1220,6 +1238,13 @@ void add_timer_on(struct timer_list *tim
+ 	 * wrong base locked.  See lock_timer_base().
+ 	 */
+ 	base = lock_timer_base(timer, &flags);
++	/*
++	 * Has @timer been shutdown? This needs to be evaluated while
++	 * holding base lock to prevent a race against the shutdown code.
++	 */
++	if (!timer->function)
++		goto out_unlock;
++
+ 	if (base != new_base) {
+ 		timer->flags |= TIMER_MIGRATING;
+ 
+@@ -1233,20 +1258,22 @@ void add_timer_on(struct timer_list *tim
+ 
+ 	debug_timer_activate(timer);
+ 	internal_add_timer(base, timer);
++out_unlock:
+ 	raw_spin_unlock_irqrestore(&base->lock, flags);
+ }
+ EXPORT_SYMBOL_GPL(add_timer_on);
+ 
+ /**
+- * del_timer - deactivate a timer.
+- * @timer: the timer to be deactivated
++ * del_timer - Deactivate a timer.
++ * @timer:	The timer to be deactivated
+  *
+- * del_timer() deactivates a timer - this works on both active and inactive
+- * timers.
++ * Returns:	%0	If the timer was not pending
++ *		%1	If the timer was pending and deactivated
+  *
+- * The function returns whether it has deactivated a pending timer or not.
+- * (ie. del_timer() of an inactive timer returns 0, del_timer() of an
+- * active timer returns 1.)
++ * Note, the function does not wait for an eventually running timer
++ * callback on a different CPU and it neither prevents rearming of
++ * the timer. See del_timer_sync() and timer_shutdown_sync() for
++ * alternative options.
+  */
+ int del_timer(struct timer_list *timer)
+ {
+@@ -1267,13 +1294,24 @@ int del_timer(struct timer_list *timer)
+ EXPORT_SYMBOL(del_timer);
+ 
+ /**
+- * try_to_del_timer_sync - Try to deactivate a timer
+- * @timer: timer to delete
++ * __try_to_del_timer_sync - Internal function: Try to deactivate a timer
++ * @timer:	Timer to deactivate
++ * @shutdown:	If true this indicates that the timer is about to be
++ *		shutdown permanently.
++ *
++ * This function tries to deactivate @timer.
++ *
++ * If @shutdown is true then @timer->function is set to NULL under the
++ * timer base lock which prevents further rearming of the timer.
++ *
++ * Returns:	%0	If the timer was not pending
++ *		%1	If the timer was pending and deactivated
++ *		%-1	If the timer callback is running on a different CPU
+  *
+- * This function tries to deactivate a timer. Upon successful (ret >= 0)
+- * exit the timer is not queued and the handler is not running on any CPU.
++ * Note: This function cannot guarantee that the timer cannot be rearmed
++ *	 after dropping the base lock unless @shutdown is true.
+  */
+-int try_to_del_timer_sync(struct timer_list *timer)
++static int __try_to_del_timer_sync(struct timer_list *timer, bool free)
+ {
+ 	struct timer_base *base;
+ 	unsigned long flags;
+@@ -1285,11 +1323,30 @@ int try_to_del_timer_sync(struct timer_l
+ 
+ 	if (base->running_timer != timer)
+ 		ret = detach_if_pending(timer, base, true);
++	if (free)
++		timer->function = NULL;
+ 
+ 	raw_spin_unlock_irqrestore(&base->lock, flags);
+ 
+ 	return ret;
+ }
++
++/**
++ * try_to_del_timer_sync - Try to deactivate a timer
++ * @timer:	Timer to deactivate
++ *
++ * Returns:	%0	If the timer was not pending
++ *		%1	If the timer was pending and deactivated
++ *		%-1	If the timer callback is running on a different CPU
++ *
++ * Note: This function cannot guarantee that the timer cannot be rearmed
++ *	 right after dropping the base lock. That needs to be prevented
++ *	 by the calling code if necessary.
++ */
++int try_to_del_timer_sync(struct timer_list *timer)
++{
++	return __try_to_del_timer_sync(timer, false);
++}
+ EXPORT_SYMBOL(try_to_del_timer_sync);
+ 
+ #ifdef CONFIG_PREEMPT_RT
+@@ -1365,16 +1422,13 @@ static inline void timer_sync_wait_runni
+ static inline void del_timer_wait_running(struct timer_list *timer) { }
+ #endif
+ 
+-#if defined(CONFIG_SMP) || defined(CONFIG_PREEMPT_RT)
+ /**
+- * del_timer_sync - deactivate a timer and wait for the handler to finish.
+- * @timer: the timer to be deactivated
++ * timer_delete_sync - Deactivate a timer and wait for the handler to finish.
++ * @timer:	The timer to be deactivated
++ * @shutdown:	If true @timer->function will be set to NULL under the
++ *		timer base lock which prevents rearming of @timer
+  *
+- * This function only differs from del_timer() on SMP: besides deactivating
+- * the timer it also makes sure the handler has finished executing on other
+- * CPUs.
+- *
+- * Synchronization rules: Callers must prevent restarting of the timer,
++ * SMP synchronization rules: Callers must prevent restarting of the timer,
+  * otherwise this function is meaningless. It must not be called from
+  * interrupt contexts unless the timer is an irqsafe one. The caller must
+  * not hold locks which would prevent completion of the timer's
+@@ -1400,9 +1454,15 @@ static inline void del_timer_wait_runnin
+  * The interrupt on the other CPU is waiting to grab somelock but
+  * it has interrupted the softirq that CPU0 is waiting to finish.
+  *
+- * The function returns whether it has deactivated a pending timer or not.
++ * If @shutdown is not set the timer can be rearmed later. If it is set
++ * then @timer->function is set to NULL under timer base lock which
++ * prevents rearming of the timer. If the timer should be reused after
++ * shutdown it has to be initialized again.
++ *
++ * Returns:	%0	If the timer was not pending
++ *		%1	If the timer was pending and deactivated
+  */
+-int del_timer_sync(struct timer_list *timer)
++int timer_delete_sync(struct timer_list *timer, bool shutdown)
+ {
+ 	int ret;
+ 
+@@ -1432,7 +1492,7 @@ int del_timer_sync(struct timer_list *ti
+ 		lockdep_assert_preemption_enabled();
+ 
+ 	do {
+-		ret = try_to_del_timer_sync(timer);
++		ret = __try_to_del_timer_sync(timer, shutdown);
+ 
+ 		if (unlikely(ret < 0)) {
+ 			del_timer_wait_running(timer);
+@@ -1442,8 +1502,7 @@ int del_timer_sync(struct timer_list *ti
+ 
+ 	return ret;
+ }
+-EXPORT_SYMBOL(del_timer_sync);
+-#endif
++EXPORT_SYMBOL(timer_delete_sync);
+ 
+ static void call_timer_fn(struct timer_list *timer,
+ 			  void (*fn)(struct timer_list *),
+@@ -1509,6 +1568,12 @@ static void expire_timers(struct timer_b
+ 
+ 		fn = timer->function;
+ 
++		if (WARN_ON_ONCE(!fn)) {
++			/* Should never happen. Emphasis on should! */
++			base->running_timer = NULL;
++			return;
++		}
++
+ 		if (timer->flags & TIMER_IRQSAFE) {
+ 			raw_spin_unlock(&base->lock);
+ 			call_timer_fn(timer, fn, baseclk);
+
