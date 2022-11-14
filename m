@@ -2,141 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B19346273AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 01:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCBC6273AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 01:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233909AbiKNADS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 19:03:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
+        id S235430AbiKNAFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 19:05:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiKNADP (ORCPT
+        with ESMTP id S229692AbiKNAFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 19:03:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4B4FCFD
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 16:03:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 49440B80C9D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:03:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7B36C433B5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:03:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668384191;
-        bh=Y6+GesINiuVpEDuqYdsy5iev4MVdI1Uu35S43Ufbsfk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pHR9XXS3jciNgcTlJe4f8U6qRQubEv/9wFdbpipVtW9H3ufdxALFDsKKrsPl8RTNH
-         veSGQPkphxJU4IyIsY5qFZN4s953ZZYAeVaoeorksvV/kAX7oXZ6FGWAqFE8QCTgF2
-         S4MOashNnZBGTtvwa9S62atATbfCtC/aMFdDB0viGiXrxOpDOQLV0WszHer8MxKxzt
-         hOjzInM+pQN5E/J1iocH8WKSt3DLAgmKA0uEBoH5jHaqSR0+VqzMUBhhUW79b4AukJ
-         UbEBVMlcBNgzjbXEKRvRgfxbRzbHtOJPD8pQdjKdOmPmMMrQbYl65DscvL4KR6Es5k
-         pAJCtg/UF6/bw==
-Received: by mail-ot1-f46.google.com with SMTP id cn2-20020a056830658200b0066c74617e3dso5842785otb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 16:03:11 -0800 (PST)
-X-Gm-Message-State: ANoB5pkVq3HVgVSE2DuiJ/PopUytqkbH3cuiXqRmGVu9vXagSoO+u3qF
-        8a9vZ/eg6mGx40jPsAxKJL1piWiwFR6u/LA76g==
-X-Google-Smtp-Source: AA0mqf4gu4W/Men7HSJ8Gnbjz5l/uOk6f5sN2spmarR43u5YDzmkrtAca4fKVNC6ZOOoT9otESBFHAQKHzDDPV0mrKQ=
-X-Received: by 2002:a9d:4b02:0:b0:661:b04c:41d9 with SMTP id
- q2-20020a9d4b02000000b00661b04c41d9mr5409278otf.92.1668384190909; Sun, 13 Nov
- 2022 16:03:10 -0800 (PST)
+        Sun, 13 Nov 2022 19:05:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644222715
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 16:04:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668384291;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=C9HUJqOZpsUXX/KUd6qmIpZLso8+y/lXIHxvBzFZZlE=;
+        b=UOwN+IzUNVbPtWfOlp69OxalLygATw8DIr65V390IMHL8lWhNR/gHgaQ8SH8YEeQ01+dpi
+        J0iJGGXuwOUYNjuCWHDkNan+0L0e3KBoWu0ATO/LizTcUcaheZaDyZFTmmJbacqr662Y2g
+        ItpY0qEFsRhEXb4j6Fa6FAvsvbI8Syc=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-640-FsFJeDDvN-6pmgNGbpoXCg-1; Sun, 13 Nov 2022 19:04:50 -0500
+X-MC-Unique: FsFJeDDvN-6pmgNGbpoXCg-1
+Received: by mail-qk1-f200.google.com with SMTP id bp10-20020a05620a458a00b006fa29f253dcso9873652qkb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 16:04:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C9HUJqOZpsUXX/KUd6qmIpZLso8+y/lXIHxvBzFZZlE=;
+        b=QY2QKw0HRAqaE/UFSndYQFNoQSYgEbIYQHoutYTmmOBdf8mdIMUS6znNCjNEJZPeOU
+         lpTm/EdjRsGHTnSyXfSmP/jfXRvA/8OwHqDXCBXWS1Qbptjumjs0cKKaKP0P5sj5wrPA
+         9DargH1eSx46Bw7u9JMh81vXfvkqfXzNTFVBMCPpsGbObz52ce+MdIX1OQusjJ+Qhs2z
+         5TfPLtbw2poanVLNDm2Sf/aBdUTJGNxmGP/Kas5WaiIZwGX7W+2CuLoBd9iRw6YcVWV7
+         BZ3u2Pg7B+YMd6r84u1ahTzZ5M7PioftqAx0ytnC6GYGTdbKnsbOtz71owgHx5FL8P3B
+         /UAw==
+X-Gm-Message-State: ANoB5pk97k6dW3y2PVT+wwyycJxt1p0xPWRMi7PWCZmo1GubnVkVPtsx
+        H6DqkfVz5kOI40dxIuhishzVLrPnOKI2TJ0G0Xj3Tb9rlgCowhzWdEK9w5KbU6VEutpNLjyj8hn
+        5wNzMl3PRUgyyxP2QxLpf81nC/Zpv0waWJNZ6i+CPTkd1iTChoLDqLp+9UZ35WWTjSlRqh8fX4A
+        ==
+X-Received: by 2002:a05:620a:c10:b0:6fa:104e:ac20 with SMTP id l16-20020a05620a0c1000b006fa104eac20mr9599612qki.708.1668384289675;
+        Sun, 13 Nov 2022 16:04:49 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4r7Uvbz1ek7fXytkb7s7qylb3iixw+NX2gMug2qOpEU+tGK/GI4A5Eh8GsJwwjBaVDjI7GPw==
+X-Received: by 2002:a05:620a:c10:b0:6fa:104e:ac20 with SMTP id l16-20020a05620a0c1000b006fa104eac20mr9599584qki.708.1668384289345;
+        Sun, 13 Nov 2022 16:04:49 -0800 (PST)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id cb5-20020a05622a1f8500b0039cc0fbdb61sm4870380qtb.53.2022.11.13.16.04.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Nov 2022 16:04:48 -0800 (PST)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, peterx@redhat.com,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Ives van Hoorne <ives@codesandbox.io>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Alistair Popple <apopple@nvidia.com>
+Subject: [PATCH v3 0/2] mm/migrate: Fix writable pte for read migration entry
+Date:   Sun, 13 Nov 2022 19:04:45 -0500
+Message-Id: <20221114000447.1681003-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.37.3
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20221102154712.540548-1-nathan@kernel.org>
-In-Reply-To: <20221102154712.540548-1-nathan@kernel.org>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 14 Nov 2022 08:02:54 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_9nH8tW6yP=3giQmSKQjnQ+pmaGRQ0N3_ODFg1uS-rvCA@mail.gmail.com>
-Message-ID: <CAAOTY_9nH8tW6yP=3giQmSKQjnQ+pmaGRQ0N3_ODFg1uS-rvCA@mail.gmail.com>
-Subject: Re: [PATCH] drm/mediatek: Fix return type of mtk_hdmi_bridge_mode_valid()
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Hi, Nathan:
+v3:
+- Go back to use WARN_ON_ONCE because mmdebug.h not included in
+  arch/x86/include/asm/pgtable.h
+- Added r-b and t-b
+- s/symbton/symbtom/ [Nadav]
+- Updated commit message of patch 1, removing mprotect example
 
-Nathan Chancellor <nathan@kernel.org> =E6=96=BC 2022=E5=B9=B411=E6=9C=882=
-=E6=97=A5 =E9=80=B1=E4=B8=89 =E6=99=9A=E4=B8=8A11:47=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed. A
-> proposed warning in clang aims to catch these at compile time, which
-> reveals:
->
->   drivers/gpu/drm/mediatek/mtk_hdmi.c:1407:16: error: incompatible functi=
-on pointer types initializing 'enum drm_mode_status (*)(struct drm_bridge *=
-, const struct drm_display_info *, const struct drm_display_mode *)' with a=
-n expression of type 'int (struct drm_bridge *, const struct drm_display_in=
-fo *, const struct drm_display_mode *)' [-Werror,-Wincompatible-function-po=
-inter-types-strict]
->           .mode_valid =3D mtk_hdmi_bridge_mode_valid,
->                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
->   1 error generated.
->
-> ->mode_valid() in 'struct drm_bridge_funcs' expects a return type of
-> 'enum drm_mode_status', not 'int'. Adjust the return type of
-> mtk_hdmi_bridge_mode_valid() to match the prototype's to resolve the
-> warning and CFI failure.
+v2:
+- Replace WARN_ON_ONCE with VM_WARN_ON_ONCE in patch 2 [Nadav]
 
-Applied to mediatek-drm-next [1], thanks.
+This comes from a report from Ives on using uffd-wp on shmem.  More
+information can be found in patch 1 commit message.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
-log/?h=3Dmediatek-drm-next
+Patch 2 added some more sanity check when walking pgtables and when we
+convert the ptes into other forms e.g. for migration and swap.  It will
+make the error trigger even earlier than the user could notice, meanwhile
+nail down the case if it's a wrong pgtable setup.
 
-Chun-Kuang.
+We probably need patch 1 for stable (5.19+).  Please have a look, thanks.
 
->
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-> Reported-by: Sami Tolvanen <samitolvanen@google.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/gpu/drm/mediatek/mtk_hdmi.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_hdmi.c b/drivers/gpu/drm/mediat=
-ek/mtk_hdmi.c
-> index 4c80b6896dc3..6e8f99554f54 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_hdmi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_hdmi.c
-> @@ -1202,9 +1202,10 @@ static enum drm_connector_status mtk_hdmi_detect(s=
-truct mtk_hdmi *hdmi)
->         return mtk_hdmi_update_plugged_status(hdmi);
->  }
->
-> -static int mtk_hdmi_bridge_mode_valid(struct drm_bridge *bridge,
-> -                                     const struct drm_display_info *info=
-,
-> -                                     const struct drm_display_mode *mode=
-)
-> +static enum drm_mode_status
-> +mtk_hdmi_bridge_mode_valid(struct drm_bridge *bridge,
-> +                          const struct drm_display_info *info,
-> +                          const struct drm_display_mode *mode)
->  {
->         struct mtk_hdmi *hdmi =3D hdmi_ctx_from_bridge(bridge);
->         struct drm_bridge *next_bridge;
->
-> base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
-> --
-> 2.38.1
->
+Peter Xu (2):
+  mm/migrate: Fix read-only page got writable when recover pte
+  mm/uffd: Sanity check write bit for uffd-wp protected ptes
+
+ arch/x86/include/asm/pgtable.h | 18 +++++++++++++++++-
+ mm/migrate.c                   |  8 +++++++-
+ 2 files changed, 24 insertions(+), 2 deletions(-)
+
+-- 
+2.37.3
+
