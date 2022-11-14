@@ -2,119 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B24762775C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C504627763
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 09:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236318AbiKNIVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 03:21:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
+        id S236337AbiKNIVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 03:21:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236326AbiKNIU4 (ORCPT
+        with ESMTP id S236321AbiKNIVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 03:20:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BBE2DD8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:19:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668413996;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+Yxpc0+M0IPWKSXHEyC3cyneUXB0jkXapCGIc8Lc3oY=;
-        b=gj2HOp32vgeqSjpAvwAajLUvnNJUke4xPoH+vzCcgK2ESmLy4JRvq1S3qhBXbKebUsJEqq
-        pFk5GsqUyz/+NFhoe/m50IEGwattOnD/khiUzaYKp0ggI8NtrKIxtPU+5lfIgJ9P2mrfQH
-        AJhY8CYBg4Ju/+c+79xl7CQhkYkJqV8=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-464-RCQkLe4FOVCYQa0JoJ8LDA-1; Mon, 14 Nov 2022 03:19:48 -0500
-X-MC-Unique: RCQkLe4FOVCYQa0JoJ8LDA-1
-Received: by mail-ej1-f69.google.com with SMTP id qa14-20020a170907868e00b007ae24f77742so4960863ejc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:19:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Yxpc0+M0IPWKSXHEyC3cyneUXB0jkXapCGIc8Lc3oY=;
-        b=bECJcnx0jqiwnXJ7bcB7gAufI0Y1cPzreH0ILCeQ4UuB7p1lL/5k6pbuLZpjQaPJxZ
-         jAv2SEJifO5nQLwzJnTBTs3DGeooDzTnnJ7l+xfTrAm4RdwZOTCn8OCToOjPwJnvpv1X
-         vg15In8Yj/sH4yZ7tc9PPZ0utZt/CZLhyLWvPu/BETxYxSyJda0MBP+vrJVs8KJzYk7E
-         w4tgut21qLiIDdQSyxvkgFaYupuviRjAaKuKiIdRI7JZJ/oUDXntVmx+t4yQeF+Rojnk
-         GL47SREvBh9JhJaM2lCTchBUklZLsoaQ+KN8XOGh3IgMOQsFMRG/P8kE+VQmgfkmzyXA
-         e6XA==
-X-Gm-Message-State: ANoB5pldnsHl7BwDAZXkOIsF55f4eGcHUjnEWL57z+ihsAfnsNlPOEIm
-        Thc54Wm4GiGKs/KdWsZWrnHXZvx4m5eKw/jJnrVSl1/MmDO78WT0va4RN+2v7CxJ2y3GVzFHfj4
-        w6w77N8RYPp26nPhjxom1mPUl
-X-Received: by 2002:a17:906:5a6f:b0:7ad:8bd5:b7df with SMTP id my47-20020a1709065a6f00b007ad8bd5b7dfmr9198461ejc.57.1668413986798;
-        Mon, 14 Nov 2022 00:19:46 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf51p2NOcFiZ3Q4gnFIwqjGdYGaCfgTUB0YvTQf/RWWvsQXFVt45qefdd8RjE0Fo2ogYIQGtEA==
-X-Received: by 2002:a17:906:5a6f:b0:7ad:8bd5:b7df with SMTP id my47-20020a1709065a6f00b007ad8bd5b7dfmr9198451ejc.57.1668413986549;
-        Mon, 14 Nov 2022 00:19:46 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id o6-20020a170906768600b007a6c25819f1sm3897632ejm.145.2022.11.14.00.19.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 00:19:45 -0800 (PST)
-Message-ID: <33ef1207-aad7-b7cd-61ac-327e9afb0699@redhat.com>
-Date:   Mon, 14 Nov 2022 09:19:44 +0100
+        Mon, 14 Nov 2022 03:21:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025341A80E
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 00:20:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7E20B80D30
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:20:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91DD3C433C1;
+        Mon, 14 Nov 2022 08:20:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668414056;
+        bh=ihB3e8vu1WmRcZ4EVGW+DKA1UocA4mXLskW1iFweRDI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ASLijPJAC8F9b7QeDHbUv9IZ1QD1wkIxGPcJYD4r2FCbxyP2nJEig/d8I2QFFd/2R
+         Ch6r13wCd/mukuosZxjVTRURj0CIcpiSZA5VxN+NdybJKXlEeeM8OGJpIkvZrrZx7h
+         68eNsR8CWJvPp0AxG36OZdN1+3nPUHKA78A70vqI6BDEFgHqQT1bKa2J5R9LogOqYe
+         QE9IrfKbacYBJUeV5nC32zsSAQdVP8/T4q8LkfgfLm3HWG7fN8Ws6cexlQT3qwv4CI
+         Yti5BzH5yg02Gd+g5Ojf1qut8P50pgExWOxgYqfFS6yBSPgoBCDgorAxL4990ynXqf
+         kyxuWqdnyinmQ==
+Date:   Mon, 14 Nov 2022 16:20:44 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Lucas Stach <l.stach@pengutronix.de>
+Cc:     "Wang, Xiaolei" <xiaolei.wang@windriver.com>,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] soc: imx8m: Increase the clock enable before reading the
+ register
+Message-ID: <20221114082044.GR2649582@dragon>
+References: <20221028041418.4033261-1-xiaolei.wang@windriver.com>
+ <20221111024607.GH125525@dragon>
+ <f0e35731-07df-bd80-329f-a5ad9818e1e8@windriver.com>
+ <20221111035304.GL125525@dragon>
+ <fda5dd3656ffa2d0a18fd4dbe6d5a0d4a50f4798.camel@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: linux-next: manual merge of the drm-intel tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20221114102327.6d53341e@canb.auug.org.au>
-Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221114102327.6d53341e@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fda5dd3656ffa2d0a18fd4dbe6d5a0d4a50f4798.camel@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 11/14/22 00:23, Stephen Rothwell wrote:
-> Hi all,
+On Fri, Nov 11, 2022 at 10:05:21AM +0100, Lucas Stach wrote:
+> Am Freitag, dem 11.11.2022 um 11:53 +0800 schrieb Shawn Guo:
+> > On Fri, Nov 11, 2022 at 11:01:15AM +0800, Wang, Xiaolei wrote:
+> > > 
+> > > On 11/11/2022 10:46 AM, Shawn Guo wrote:
+> > > > CAUTION: This email comes from a non Wind River email account!
+> > > > Do not click links or open attachments unless you recognize the sender and know the content is safe.
+> > > > 
+> > > > On Fri, Oct 28, 2022 at 12:14:18PM +0800, Xiaolei Wang wrote:
+> > > > > When executing kdump to start the second kernel,
+> > > > > since IMX-OCOTP has turned off the clock, the clock
+> > > > > needs to be re-enabled, otherwise the system will hang.
+> > > > > 
+> > > > > Fixes: ac34de14ac30 ("Revert "soc: imx8m: change to use platform driver"")
+> > > > Are you saying this fixes a regression caused by ac34de14ac30?
+> > > 
+> > > 
+> > > Yes,
+> > > 
+> > > Although there is a problem with commit 7d981405d0fd, it also solves the
+> > > kexec kernel hang, commit 7d981405d0fd is reverted, and the kexec kernel
+> > > hang will also be introduced, so the clock needs to be enabled when the
+> > > kexec kernel starts.
+> > 
+> > Ok.
+> > 
+> > Lucas,
+> > 
+> > Any comments here?
 > 
-> Today's linux-next merge of the drm-intel tree got a conflict in:
+> Yea, the explanation with kdump in the commit message is a tad too
+> specific I think. The simple fact is: OCOTP register access needs the
+> OCOTP clock to be running and this code peeks into this register
+> region, so it needs to ensure the clock is active.
 > 
->   drivers/gpu/drm/i915/display/intel_backlight.c
-> 
-> between commit:
-> 
->   b1d36e73cc1c ("drm/i915: Don't register backlight when another backlight should be used (v2)")
-> 
-> from Linus' tree and commit:
-> 
->   801543b2593b ("drm/i915: stop including i915_irq.h from i915_trace.h")
-> 
-> from the drm-intel tree.
+> Other than this minor issue with the commit message, the change itself
+> looks fine:
+> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
 
-This is weird, because the:
+Thanks for the review and comment, Lucas!  I reworded the subject and
+commit log a bit like below, and applied the patch, thanks!
 
-   b1d36e73cc1c ("drm/i915: Don't register backlight when another backlight should be used (v2)")
+---8<------
+soc: imx8m: Enable OCOTP clock before reading the register
 
-commit is in 6.1-rc1, so there can only be a conflict it 6.1-rc1 has not
-been back-merged into drm-intel yet ?
+Commit 7d981405d0fd ("soc: imx8m: change to use platform driver") ever
+removed the dependency on bootloader for enabling OCOTP clock.  It
+helped to fix a kexec kernel hang issue.  But unfortunately it caused
+a regression on CAAM driver and got reverted.
 
-Regards,
+This is the second try to enable the OCOTP clock by directly calling
+clock API instead of indirectly enabling the clock via nvmem API.
 
-Hans
-
+Fixes: ac34de14ac30 ("Revert "soc: imx8m: change to use platform driver"")
+Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
