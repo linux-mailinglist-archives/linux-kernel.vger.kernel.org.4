@@ -2,456 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D11628350
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B36062834B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236653AbiKNO4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
+        id S237035AbiKNOzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:55:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237087AbiKNO4A (ORCPT
+        with ESMTP id S235771AbiKNOzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:56:00 -0500
-Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [5.144.164.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF7B27B0F
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:55:58 -0800 (PST)
-Received: from [192.168.31.208] (unknown [194.29.137.22])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 790111F88F;
-        Mon, 14 Nov 2022 15:55:53 +0100 (CET)
-Message-ID: <5dea6c72-1323-f052-a386-887c20e9f8c3@somainline.org>
-Date:   Mon, 14 Nov 2022 15:55:49 +0100
+        Mon, 14 Nov 2022 09:55:53 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6341CFFA
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:55:52 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id z139-20020a6bc991000000b006dac0d359edso5780370iof.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:55:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bwa63EUoiUdCiH174DlY0chW2QYqCxx5oOMcGGsl1B4=;
+        b=Hp7MIQGxzlKQDjj+v5QkxoqhCiCu9MYrI2UIsRG1T+IdTYf8WjLXxg6/wy20yWmeD2
+         EaKnpUF3JNe3LfTi5bHy+wTSkrLZJ7rxBFg3Rmp7UzN15kibwCUP2aqcAEHnot+puPLX
+         g/NiRAYfSuIOIxIXyJ3NvZ7VwYfT/dmebm2mbl19Ccr1oJ/uKuCSBfsu1XJ8r6o//sql
+         GpSScoAIKRr8C2dZ9q/SWBh31mP30s5Vuoe0R+PZemMiPmvM0xDjcV6bWdUAlOBV+RyJ
+         sGVAUk14daVbcu8zaTQPbu1vyT4Udy9hUycMWdpmxn9SEvrz4UJYylzzY0PNLNWL0Krz
+         qnoQ==
+X-Gm-Message-State: ANoB5pk6qhfCSBGwPb24fV0bVs3Pvk6FsXAF+ep6RsjlGYjFfwz2Bax9
+        F7SnuZ8YK0QoYp+yj0ZsraDh/VHeCWJMFFqS+/KIngdGk+fj
+X-Google-Smtp-Source: AA0mqf6Y1L3Ed2axmQjoS2i4jvVM2zoE3AogcP9FZ8PbVzne8joB54P50KhKXJmHuMNSwoAG2AqJGa5ledYvoZRo58RjOIxCWw2L
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH v3 2/2] gpu/drm/panel: Add Sony TD4353 JDI panel driver
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20220930180812.32210-1-konrad.dybcio@somainline.org>
- <20220930180812.32210-2-konrad.dybcio@somainline.org>
- <8a78ab73-443f-a18d-b8ef-4a2d507aa1fb@somainline.org>
-In-Reply-To: <8a78ab73-443f-a18d-b8ef-4a2d507aa1fb@somainline.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:9b19:0:b0:6c1:dfd6:abd9 with SMTP id
+ y25-20020a5d9b19000000b006c1dfd6abd9mr5649948ion.0.1668437751998; Mon, 14 Nov
+ 2022 06:55:51 -0800 (PST)
+Date:   Mon, 14 Nov 2022 06:55:51 -0800
+In-Reply-To: <000000000000cceef005ed659943@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000089b1a405ed6f6ff7@google.com>
+Subject: Re: [syzbot] possible deadlock in virtual_nci_close
+From:   syzbot <syzbot+8040d16d30c215f821de@syzkaller.appspotmail.com>
+To:     bongsu.jeon@samsung.com, dvyukov@google.com,
+        krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
+
+HEAD commit:    1621b6eaebf7 Merge branch 'for-next/fixes' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=108bcd85880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=606e57fd25c5c6cc
+dashboard link: https://syzkaller.appspot.com/bug?extid=8040d16d30c215f821de
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11b08dd1880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14fcee02880000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/82aa7741098d/disk-1621b6ea.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f6be08c4e4c2/vmlinux-1621b6ea.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/296b6946258a/Image-1621b6ea.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8040d16d30c215f821de@syzkaller.appspotmail.com
+
+nci: nci_start_poll: failed to set local general bytes
+nci: __nci_request: wait_for_completion_interruptible_timeout failed 0
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-rc4-syzkaller-31872-g1621b6eaebf7 #0 Not tainted
+------------------------------------------------------
+syz-executor424/3032 is trying to acquire lock:
+ffff80000d5fac10 (nci_mutex){+.+.}-{3:3}, at: virtual_nci_close+0x28/0x58 drivers/nfc/virtual_ncidev.c:44
+
+but task is already holding lock:
+ffff0000cb900350 (&ndev->req_lock){+.+.}-{3:3}, at: nci_close_device+0x74/0x2b4 net/nfc/nci/core.c:560
+
+which lock already depends on the new lock.
 
 
-On 14/10/2022 18:36, Konrad Dybcio wrote:
-> 
-> 
-> On 30.09.2022 20:08, Konrad Dybcio wrote:
->> Add support for the Sony TD4353 JDI 2160x1080 display panel used in
->> some Sony Xperia XZ2 and XZ2 Compact smartphones. Due to the specifics
->> of smartphone manufacturing, it is impossible to retrieve a better name
->> for this panel.
->>
->> This revision adds support for the default 60 Hz configuration, however
->> there could possibly be some room for expansion, as the display panels
->> used on Sony devices have historically been capable of >2x refresh rate
->> overclocking.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
->> ---
-> Gentle bump
-> 
-> Konrad
-Yet another one.
+the existing dependency chain (in reverse order) is:
 
-Konrad
->> Changes since v2:
->> - "GPL v2" -> "GPL"
->> - add missing S-o-b (how embarassing)
->> - move { after sony_td4353_assert_reset_gpios() to a new line
->>
->>   drivers/gpu/drm/panel/Kconfig                 |  10 +
->>   drivers/gpu/drm/panel/Makefile                |   1 +
->>   drivers/gpu/drm/panel/panel-sony-td4353-jdi.c | 329 ++++++++++++++++++
->>   3 files changed, 340 insertions(+)
->>   create mode 100644 drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
->>
->> diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
->> index a582ddd583c2..6ef1b48169b5 100644
->> --- a/drivers/gpu/drm/panel/Kconfig
->> +++ b/drivers/gpu/drm/panel/Kconfig
->> @@ -637,6 +637,16 @@ config DRM_PANEL_SONY_ACX565AKM
->>   	  Say Y here if you want to enable support for the Sony ACX565AKM
->>   	  800x600 3.5" panel (found on the Nokia N900).
->>   
->> +config DRM_PANEL_SONY_TD4353_JDI
->> +	tristate "Sony TD4353 JDI panel"
->> +	depends on GPIOLIB && OF
->> +	depends on DRM_MIPI_DSI
->> +	depends on BACKLIGHT_CLASS_DEVICE
->> +	help
->> +	  Say Y here if you want to enable support for the Sony Tama
->> +	  TD4353 JDI command mode panel as found on some Sony Xperia
->> +	  XZ2 and XZ2 Compact smartphones.
->> +
->>   config DRM_PANEL_SONY_TULIP_TRULY_NT35521
->>   	tristate "Sony Tulip Truly NT35521 panel"
->>   	depends on GPIOLIB && OF
->> diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
->> index 8e71aa7581b8..8ef27bc86f94 100644
->> --- a/drivers/gpu/drm/panel/Makefile
->> +++ b/drivers/gpu/drm/panel/Makefile
->> @@ -64,6 +64,7 @@ obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7701) += panel-sitronix-st7701.o
->>   obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7703) += panel-sitronix-st7703.o
->>   obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7789V) += panel-sitronix-st7789v.o
->>   obj-$(CONFIG_DRM_PANEL_SONY_ACX565AKM) += panel-sony-acx565akm.o
->> +obj-$(CONFIG_DRM_PANEL_SONY_TD4353_JDI) += panel-sony-td4353-jdi.o
->>   obj-$(CONFIG_DRM_PANEL_SONY_TULIP_TRULY_NT35521) += panel-sony-tulip-truly-nt35521.o
->>   obj-$(CONFIG_DRM_PANEL_TDO_TL070WSH30) += panel-tdo-tl070wsh30.o
->>   obj-$(CONFIG_DRM_PANEL_TPO_TD028TTEC1) += panel-tpo-td028ttec1.o
->> diff --git a/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c b/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
->> new file mode 100644
->> index 000000000000..11db62992b8b
->> --- /dev/null
->> +++ b/drivers/gpu/drm/panel/panel-sony-td4353-jdi.c
->> @@ -0,0 +1,329 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (c) 2022 Konrad Dybcio <konrad.dybcio@somainline.org>
->> + *
->> + * Generated with linux-mdss-dsi-panel-driver-generator with a
->> + * substantial amount of manual adjustments.
->> + *
->> + * SONY Downstream kernel calls this one:
->> + * - "JDI ID3" for Akari  (XZ2)
->> + * - "JDI ID4" for Apollo (XZ2 Compact)
->> + */
->> +
->> +#include <linux/delay.h>
->> +#include <linux/gpio/consumer.h>
->> +#include <linux/module.h>
->> +#include <linux/of.h>
->> +#include <linux/of_device.h>
->> +#include <linux/regulator/consumer.h>
->> +
->> +#include <video/mipi_display.h>
->> +
->> +#include <drm/drm_mipi_dsi.h>
->> +#include <drm/drm_modes.h>
->> +#include <drm/drm_panel.h>
->> +
->> +enum {
->> +	TYPE_TAMA_60HZ,
->> +	/*
->> +	 * Leaving room for expansion - SONY very often uses
->> +	 * *truly reliably* overclockable panels on their flagships!
->> +	 */
->> +};
->> +
->> +struct sony_td4353_jdi {
->> +	struct drm_panel panel;
->> +	struct mipi_dsi_device *dsi;
->> +	struct regulator_bulk_data supplies[3];
->> +	struct gpio_desc *panel_reset_gpio;
->> +	struct gpio_desc *touch_reset_gpio;
->> +	bool prepared;
->> +	int type;
->> +};
->> +
->> +static inline struct sony_td4353_jdi *to_sony_td4353_jdi(struct drm_panel *panel)
->> +{
->> +	return container_of(panel, struct sony_td4353_jdi, panel);
->> +}
->> +
->> +static int sony_td4353_jdi_on(struct sony_td4353_jdi *ctx)
->> +{
->> +	struct mipi_dsi_device *dsi = ctx->dsi;
->> +	struct device *dev = &dsi->dev;
->> +	int ret;
->> +
->> +	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
->> +
->> +	ret = mipi_dsi_dcs_set_column_address(dsi, 0x0000, 0x0437);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to set column address: %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	ret = mipi_dsi_dcs_set_page_address(dsi, 0x0000, 0x086f);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to set page address: %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	ret = mipi_dsi_dcs_set_tear_scanline(dsi, 0x0000);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to set tear scanline: %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to set tear on: %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_ADDRESS_MODE, 0x00);
->> +
->> +	ret = mipi_dsi_dcs_set_pixel_format(dsi, 0x77);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to set pixel format: %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_PARTIAL_ROWS,
->> +			  0x00, 0x00, 0x08, 0x6f);
->> +
->> +	ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
->> +		return ret;
->> +	}
->> +	msleep(70);
->> +
->> +	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_MEMORY_START);
->> +
->> +	ret = mipi_dsi_dcs_set_display_on(dsi);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to turn display on: %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int sony_td4353_jdi_off(struct sony_td4353_jdi *ctx)
->> +{
->> +	struct mipi_dsi_device *dsi = ctx->dsi;
->> +	struct device *dev = &dsi->dev;
->> +	int ret;
->> +
->> +	dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
->> +
->> +	ret = mipi_dsi_dcs_set_display_off(dsi);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to set display off: %d\n", ret);
->> +		return ret;
->> +	}
->> +	msleep(22);
->> +
->> +	ret = mipi_dsi_dcs_set_tear_off(dsi);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to set tear off: %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
->> +		return ret;
->> +	}
->> +	msleep(80);
->> +
->> +	return 0;
->> +}
->> +
->> +static void sony_td4353_assert_reset_gpios(struct sony_td4353_jdi *ctx, int mode)
->> +{
->> +	gpiod_set_value_cansleep(ctx->touch_reset_gpio, mode);
->> +	gpiod_set_value_cansleep(ctx->panel_reset_gpio, mode);
->> +	usleep_range(5000, 5100);
->> +}
->> +
->> +static int sony_td4353_jdi_prepare(struct drm_panel *panel)
->> +{
->> +	struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
->> +	struct device *dev = &ctx->dsi->dev;
->> +	int ret;
->> +
->> +	if (ctx->prepared)
->> +		return 0;
->> +
->> +	ret = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to enable regulators: %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	msleep(100);
->> +
->> +	sony_td4353_assert_reset_gpios(ctx, 1);
->> +
->> +	ret = sony_td4353_jdi_on(ctx);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to power on panel: %d\n", ret);
->> +		sony_td4353_assert_reset_gpios(ctx, 0);
->> +		regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
->> +		return ret;
->> +	}
->> +
->> +	ctx->prepared = true;
->> +	return 0;
->> +}
->> +
->> +static int sony_td4353_jdi_unprepare(struct drm_panel *panel)
->> +{
->> +	struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
->> +	struct device *dev = &ctx->dsi->dev;
->> +	int ret;
->> +
->> +	if (!ctx->prepared)
->> +		return 0;
->> +
->> +	ret = sony_td4353_jdi_off(ctx);
->> +	if (ret < 0)
->> +		dev_err(dev, "Failed to power off panel: %d\n", ret);
->> +
->> +	sony_td4353_assert_reset_gpios(ctx, 0);
->> +	regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
->> +
->> +	ctx->prepared = false;
->> +	return 0;
->> +}
->> +
->> +static const struct drm_display_mode sony_td4353_jdi_mode_tama_60hz = {
->> +	.clock = (1080 + 4 + 8 + 8) * (2160 + 259 + 8 + 8) * 60 / 1000,
->> +	.hdisplay = 1080,
->> +	.hsync_start = 1080 + 4,
->> +	.hsync_end = 1080 + 4 + 8,
->> +	.htotal = 1080 + 4 + 8 + 8,
->> +	.vdisplay = 2160,
->> +	.vsync_start = 2160 + 259,
->> +	.vsync_end = 2160 + 259 + 8,
->> +	.vtotal = 2160 + 259 + 8 + 8,
->> +	.width_mm = 64,
->> +	.height_mm = 128,
->> +};
->> +
->> +static int sony_td4353_jdi_get_modes(struct drm_panel *panel,
->> +				   struct drm_connector *connector)
->> +{
->> +	struct sony_td4353_jdi *ctx = to_sony_td4353_jdi(panel);
->> +	struct drm_display_mode *mode = NULL;
->> +
->> +	if (ctx->type == TYPE_TAMA_60HZ)
->> +		mode = drm_mode_duplicate(connector->dev, &sony_td4353_jdi_mode_tama_60hz);
->> +	else
->> +		return -EINVAL;
->> +
->> +	if (!mode)
->> +		return -ENOMEM;
->> +
->> +	drm_mode_set_name(mode);
->> +
->> +	mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
->> +	connector->display_info.width_mm = mode->width_mm;
->> +	connector->display_info.height_mm = mode->height_mm;
->> +	drm_mode_probed_add(connector, mode);
->> +
->> +	return 1;
->> +}
->> +
->> +static const struct drm_panel_funcs sony_td4353_jdi_panel_funcs = {
->> +	.prepare = sony_td4353_jdi_prepare,
->> +	.unprepare = sony_td4353_jdi_unprepare,
->> +	.get_modes = sony_td4353_jdi_get_modes,
->> +};
->> +
->> +static int sony_td4353_jdi_probe(struct mipi_dsi_device *dsi)
->> +{
->> +	struct device *dev = &dsi->dev;
->> +	struct sony_td4353_jdi *ctx;
->> +	int ret;
->> +
->> +	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
->> +	if (!ctx)
->> +		return -ENOMEM;
->> +
->> +	ctx->type = (uintptr_t)of_device_get_match_data(dev);
->> +
->> +	ctx->supplies[0].supply = "vddio";
->> +	ctx->supplies[1].supply = "vsp";
->> +	ctx->supplies[2].supply = "vsn";
->> +	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(ctx->supplies),
->> +				      ctx->supplies);
->> +	if (ret < 0)
->> +		return dev_err_probe(dev, ret, "Failed to get regulators\n");
->> +
->> +	ctx->panel_reset_gpio = devm_gpiod_get(dev, "panel-reset", GPIOD_ASIS);
->> +	if (IS_ERR(ctx->panel_reset_gpio))
->> +		return dev_err_probe(dev, PTR_ERR(ctx->panel_reset_gpio),
->> +				     "Failed to get panel-reset-gpios\n");
->> +
->> +	ctx->touch_reset_gpio = devm_gpiod_get(dev, "touch-reset", GPIOD_ASIS);
->> +	if (IS_ERR(ctx->touch_reset_gpio))
->> +		return dev_err_probe(dev, PTR_ERR(ctx->touch_reset_gpio),
->> +				     "Failed to get touch-reset-gpios\n");
->> +
->> +	ctx->dsi = dsi;
->> +	mipi_dsi_set_drvdata(dsi, ctx);
->> +
->> +	dsi->lanes = 4;
->> +	dsi->format = MIPI_DSI_FMT_RGB888;
->> +	dsi->mode_flags = MIPI_DSI_CLOCK_NON_CONTINUOUS;
->> +
->> +	drm_panel_init(&ctx->panel, dev, &sony_td4353_jdi_panel_funcs,
->> +		       DRM_MODE_CONNECTOR_DSI);
->> +
->> +	ret = drm_panel_of_backlight(&ctx->panel);
->> +	if (ret)
->> +		return dev_err_probe(dev, ret, "Failed to get backlight\n");
->> +
->> +	drm_panel_add(&ctx->panel);
->> +
->> +	ret = mipi_dsi_attach(dsi);
->> +	if (ret < 0) {
->> +		dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
->> +		drm_panel_remove(&ctx->panel);
->> +		return ret;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static void sony_td4353_jdi_remove(struct mipi_dsi_device *dsi)
->> +{
->> +	struct sony_td4353_jdi *ctx = mipi_dsi_get_drvdata(dsi);
->> +	int ret;
->> +
->> +	ret = mipi_dsi_detach(dsi);
->> +	if (ret < 0)
->> +		dev_err(&dsi->dev, "Failed to detach from DSI host: %d\n", ret);
->> +
->> +	drm_panel_remove(&ctx->panel);
->> +}
->> +
->> +static const struct of_device_id sony_td4353_jdi_of_match[] = {
->> +	{ .compatible = "sony,td4353-jdi-tama", .data = (void *)TYPE_TAMA_60HZ },
->> +	{ /* sentinel */ }
->> +};
->> +MODULE_DEVICE_TABLE(of, sony_td4353_jdi_of_match);
->> +
->> +static struct mipi_dsi_driver sony_td4353_jdi_driver = {
->> +	.probe = sony_td4353_jdi_probe,
->> +	.remove = sony_td4353_jdi_remove,
->> +	.driver = {
->> +		.name = "panel-sony-td4353-jdi",
->> +		.of_match_table = sony_td4353_jdi_of_match,
->> +	},
->> +};
->> +module_mipi_dsi_driver(sony_td4353_jdi_driver);
->> +
->> +MODULE_AUTHOR("Konrad Dybcio <konrad.dybcio@somainline.org>");
->> +MODULE_DESCRIPTION("DRM panel driver for SONY Xperia XZ2/XZ2c JDI panel");
->> +MODULE_LICENSE("GPL");
+-> #3 (&ndev->req_lock){+.+.}-{3:3}:
+       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+       nci_request net/nfc/nci/core.c:148 [inline]
+       nci_set_local_general_bytes+0xbc/0x480 net/nfc/nci/core.c:774
+       nci_start_poll+0x1e8/0x474 net/nfc/nci/core.c:838
+       nfc_start_poll+0xfc/0x170 net/nfc/core.c:225
+       nfc_genl_start_poll+0xd4/0x174 net/nfc/netlink.c:828
+       genl_family_rcv_msg_doit net/netlink/genetlink.c:756 [inline]
+       genl_family_rcv_msg net/netlink/genetlink.c:833 [inline]
+       genl_rcv_msg+0x458/0x4f4 net/netlink/genetlink.c:850
+       netlink_rcv_skb+0xe8/0x1d4 net/netlink/af_netlink.c:2540
+       genl_rcv+0x38/0x50 net/netlink/genetlink.c:861
+       netlink_unicast_kernel+0xfc/0x1dc net/netlink/af_netlink.c:1319
+       netlink_unicast+0x164/0x248 net/netlink/af_netlink.c:1345
+       netlink_sendmsg+0x484/0x584 net/netlink/af_netlink.c:1921
+       sock_sendmsg_nosec net/socket.c:714 [inline]
+       sock_sendmsg net/socket.c:734 [inline]
+       ____sys_sendmsg+0x2f8/0x440 net/socket.c:2482
+       ___sys_sendmsg net/socket.c:2536 [inline]
+       __sys_sendmsg+0x1ac/0x228 net/socket.c:2565
+       __do_sys_sendmsg net/socket.c:2574 [inline]
+       __se_sys_sendmsg net/socket.c:2572 [inline]
+       __arm64_sys_sendmsg+0x2c/0x3c net/socket.c:2572
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+-> #2 (&genl_data->genl_data_mutex){+.+.}-{3:3}:
+       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+       nfc_urelease_event_work+0x88/0x16c net/nfc/netlink.c:1811
+       process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
+       worker_thread+0x340/0x610 kernel/workqueue.c:2436
+       kthread+0x12c/0x158 kernel/kthread.c:376
+       ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
+
+-> #1 (nfc_devlist_mutex){+.+.}-{3:3}:
+       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+       nfc_register_device+0x34/0x208 net/nfc/core.c:1116
+       nci_register_device+0x338/0x3b0 net/nfc/nci/core.c:1256
+       virtual_ncidev_open+0x6c/0xd8 drivers/nfc/virtual_ncidev.c:146
+       misc_open+0x1b8/0x200 drivers/char/misc.c:143
+       chrdev_open+0x2b4/0x2e8 fs/char_dev.c:414
+       do_dentry_open+0x364/0x748 fs/open.c:882
+       vfs_open+0x38/0x48 fs/open.c:1013
+       do_open fs/namei.c:3557 [inline]
+       path_openat+0xe34/0x11c4 fs/namei.c:3713
+       do_filp_open+0xdc/0x1b8 fs/namei.c:3740
+       do_sys_openat2+0xb8/0x22c fs/open.c:1310
+       do_sys_open fs/open.c:1326 [inline]
+       __do_sys_openat fs/open.c:1342 [inline]
+       __se_sys_openat fs/open.c:1337 [inline]
+       __arm64_sys_openat+0xb0/0xe0 fs/open.c:1337
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+-> #0 (nci_mutex){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain kernel/locking/lockdep.c:3831 [inline]
+       __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
+       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+       virtual_nci_close+0x28/0x58 drivers/nfc/virtual_ncidev.c:44
+       nci_close_device+0x188/0x2b4 net/nfc/nci/core.c:592
+       nci_unregister_device+0x3c/0x100 net/nfc/nci/core.c:1291
+       virtual_ncidev_close+0x70/0xb0 drivers/nfc/virtual_ncidev.c:166
+       __fput+0x198/0x3e4 fs/file_table.c:320
+       ____fput+0x20/0x30 fs/file_table.c:348
+       task_work_run+0x100/0x148 kernel/task_work.c:179
+       exit_task_work include/linux/task_work.h:38 [inline]
+       do_exit+0x2dc/0xcac kernel/exit.c:820
+       do_group_exit+0x98/0xcc kernel/exit.c:950
+       get_signal+0xabc/0xb2c kernel/signal.c:2858
+       do_signal+0x128/0x438 arch/arm64/kernel/signal.c:1071
+       do_notify_resume+0xc0/0x1f0 arch/arm64/kernel/signal.c:1124
+       prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+       exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+       el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+other info that might help us debug this:
+
+Chain exists of:
+  nci_mutex --> &genl_data->genl_data_mutex --> &ndev->req_lock
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&ndev->req_lock);
+                               lock(&genl_data->genl_data_mutex);
+                               lock(&ndev->req_lock);
+  lock(nci_mutex);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor424/3032:
+ #0: ffff0000cb900350 (&ndev->req_lock){+.+.}-{3:3}, at: nci_close_device+0x74/0x2b4 net/nfc/nci/core.c:560
+
+stack backtrace:
+CPU: 0 PID: 3032 Comm: syz-executor424 Not tainted 6.1.0-rc4-syzkaller-31872-g1621b6eaebf7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Call trace:
+ dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+ show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+ dump_stack+0x1c/0x58 lib/dump_stack.c:113
+ print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2055
+ check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain kernel/locking/lockdep.c:3831 [inline]
+ __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
+ lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+ __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ virtual_nci_close+0x28/0x58 drivers/nfc/virtual_ncidev.c:44
+ nci_close_device+0x188/0x2b4 net/nfc/nci/core.c:592
+ nci_unregister_device+0x3c/0x100 net/nfc/nci/core.c:1291
+ virtual_ncidev_close+0x70/0xb0 drivers/nfc/virtual_ncidev.c:166
+ __fput+0x198/0x3e4 fs/file_table.c:320
+ ____fput+0x20/0x30 fs/file_table.c:348
+ task_work_run+0x100/0x148 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0x2dc/0xcac kernel/exit.c:820
+ do_group_exit+0x98/0xcc kernel/exit.c:950
+ get_signal+0xabc/0xb2c kernel/signal.c:2858
+ do_signal+0x128/0x438 arch/arm64/kernel/signal.c:1071
+ do_notify_resume+0xc0/0x1f0 arch/arm64/kernel/signal.c:1124
+ prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+ exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+ el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
