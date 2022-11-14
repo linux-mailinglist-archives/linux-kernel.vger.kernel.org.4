@@ -2,77 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB1B628BC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 23:08:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF99628BCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 23:10:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237554AbiKNWIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 17:08:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
+        id S237652AbiKNWKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 17:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236124AbiKNWIu (ORCPT
+        with ESMTP id S236124AbiKNWKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 17:08:50 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B79C2DD0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 14:08:49 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id u24so19294612edd.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 14:08:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vpQRZasD08S0MdHsPNjjNIlKX5TcZpvFCg+B+5S/zTc=;
-        b=hKwvXDDp7+qNTTZhoSLroEZ5voP47JmP6mDVejeUFiGATDc6RyTNyeTF+5tpYKn6nV
-         FPVy3w+FLGGGqf8DJjbpBpP7f+EwoHZBuktWk5SqyaAE1LCB7iPDhoYWlJy5OZ07OJuS
-         pA2g8vpJwF1OijAbAiaFHYvqme8FWe2NQBhDU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vpQRZasD08S0MdHsPNjjNIlKX5TcZpvFCg+B+5S/zTc=;
-        b=UmADhAI8rVViQhIk2B2NO30ApFh/FTKqL7CU1+woUNuIasWhkYkAMtiKLw/EAcpuW9
-         hFTwgAngo8k+bIYCq6EmidSlaGuyVMr/ZrZFIlStMnSdDyAznpyJexDKmihYWU3IW24L
-         nLc6VrnIKuJjjLglSIlQ4JoOv0eXDwnohrXR74eLwodZmEy9wrgDuFsUOjxcSsUYudCn
-         NMy1NA5++z+4MlVxLNxShHSSO11QOt6Fw2e17y6UxzhcCs0nUp0uEsGGP9NCS1fJf4mH
-         e+gmzHwdzDUQ6DWpfNUtqMTRTGMP1RGZiMcmhnFZRqEYyBnD+fUqEjfagMwgNvjd97Qg
-         1oLw==
-X-Gm-Message-State: ANoB5pkFH48RTedvnUdiZpT7fnX4xDHs1qcE5I+VHBsRiEq6V86urEkx
-        0DoWq1JQJCx/mzCTZB4hdbzBCp/LZY0LnjuE
-X-Google-Smtp-Source: AA0mqf5pVdWtk+CrJ1WhMMRwMAyKSGL/I41fqUTPQxKlWMz7IgA9XgRfNHA5lfrRqQLKpOZt0yn90g==
-X-Received: by 2002:a05:6402:d68:b0:467:b88c:f3af with SMTP id ec40-20020a0564020d6800b00467b88cf3afmr6717233edb.24.1668463727507;
-        Mon, 14 Nov 2022 14:08:47 -0800 (PST)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id eo8-20020a056402530800b00458898fe90asm5350778edb.5.2022.11.14.14.08.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 14:08:46 -0800 (PST)
-Received: by mail-wr1-f53.google.com with SMTP id k8so20960359wrh.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 14:08:44 -0800 (PST)
-X-Received: by 2002:adf:f145:0:b0:236:5270:735e with SMTP id
- y5-20020adff145000000b002365270735emr8729407wro.659.1668463724464; Mon, 14
- Nov 2022 14:08:44 -0800 (PST)
+        Mon, 14 Nov 2022 17:10:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6AD2DD0;
+        Mon, 14 Nov 2022 14:10:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8A5161489;
+        Mon, 14 Nov 2022 22:10:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3861AC43470;
+        Mon, 14 Nov 2022 22:10:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668463816;
+        bh=it+DmqALvMissYN0BJm/a/L7moNZDNLxTiB+fuO2SY8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=uKZ2HLiky6WbGvy6KFeJ66OoXA2PxsfhLxdeG2RakRxenegZwUfBADqX1h/Zc2drF
+         Nej11MXM5McT9jtgDecXIO7PQeOOYsF4cRhGs/BEo2AKrPSPpWkHGKHqg1rkiRvvGS
+         knVBcs4KLUYDfZ1qbVQQa5mCSmN7vW5tfYH8/D697jYTBcuBa0S1WJ5IjXrCxzcIcY
+         NB9/KKXy10GOwRR/lstG5xeqIwMRkRjB4LV8qigwolxFeZZ/Bz1U6HPDlWnofplhRa
+         JjfFUvXqq2amG61uyx0SrWBli9YDClQkLHrYHa3/aTeNh59BthnN4abcJSRSn4CHQr
+         QEkHGVp2oaM/w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1AE3FE50D60;
+        Mon, 14 Nov 2022 22:10:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20221021130637.1.I8c2de0954a4e54e0c59a72938268e2ead91daa98@changeid>
- <e6bc800b-2d3b-aac9-c1cb-7c08d618fc8e@quicinc.com> <CAD=FV=V4m5HNavewSTkrh64_BzLAkivR2mRkTQdaxA8k9JKQbA@mail.gmail.com>
- <956de566-d60a-f257-edff-85a2eac06d99@quicinc.com> <CAD=FV=UUpR9Euq5r+MujO6BdTk2cnWe_0JTdcP_e5RP47apUcw@mail.gmail.com>
- <87iljh4zwr.fsf@intel.com>
-In-Reply-To: <87iljh4zwr.fsf@intel.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 14 Nov 2022 14:08:30 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=WPa+CayKowHBDTRZTgv9FtCZWUWiKv-UB7XmQ4D+9P7w@mail.gmail.com>
-Message-ID: <CAD=FV=WPa+CayKowHBDTRZTgv9FtCZWUWiKv-UB7XmQ4D+9P7w@mail.gmail.com>
-Subject: Re: [PATCH] drm/edid: Dump the EDID when drm_edid_get_panel_id() has
- an error
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] Bluetooth: hci_conn: add missing hci_dev_put() in
+ iso_listen_bis()
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <166846381610.12666.4847222969416922565.git-patchwork-notify@kernel.org>
+Date:   Mon, 14 Nov 2022 22:10:16 +0000
+References: <20221109023906.1556201-1-bobo.shaobowang@huawei.com>
+In-Reply-To: <20221109023906.1556201-1-bobo.shaobowang@huawei.com>
+To:     Wang ShaoBo <bobo.shaobowang@huawei.com>
+Cc:     luiz.von.dentz@intel.com, luiz.dentz@gmail.com, pabeni@redhat.com,
+        liwei391@huawei.com, linux-bluetooth@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,78 +58,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello:
 
-On Mon, Nov 14, 2022 at 2:02 AM Jani Nikula <jani.nikula@linux.intel.com> wrote:
->
-> On Fri, 11 Nov 2022, Doug Anderson <dianders@chromium.org> wrote:
-> > Hi,
-> >
-> > On Tue, Oct 25, 2022 at 1:39 PM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
-> >>
-> >> Hi Doug
-> >>
-> >> On 10/24/2022 1:28 PM, Doug Anderson wrote:
-> >> > Hi,
-> >> >
-> >> > On Fri, Oct 21, 2022 at 2:18 PM Abhinav Kumar <quic_abhinavk@quicinc.com> wrote:
-> >> >>
-> >> >> Hi Doug
-> >> >>
-> >> >> On 10/21/2022 1:07 PM, Douglas Anderson wrote:
-> >> >>> If we fail to get a valid panel ID in drm_edid_get_panel_id() we'd
-> >> >>> like to see the EDID that was read so we have a chance of
-> >> >>> understanding what's wrong. There's already a function for that, so
-> >> >>> let's call it in the error case.
-> >> >>>
-> >> >>> NOTE: edid_block_read() has a retry loop in it, so actually we'll only
-> >> >>> print the block read back from the final attempt. This still seems
-> >> >>> better than nothing.
-> >> >>>
-> >> >>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> >> >>
-> >> >> Instead of checkinf for edid_block_status_valid() on the base_block, do
-> >> >> you want to use drm_edid_block_valid() instead?
-> >> >>
-> >> >> That way you get the edid_block_dump() for free if it was invalid.
-> >> >
-> >> > I can... ...but it feels a bit awkward and maybe not quite how the
-> >> > functions were intended to work together?
-> >> >
-> >> > One thing I notice is that if I call drm_edid_block_valid() I'm doing
-> >> > a bunch of duplicate work that already happened in edid_block_read(),
-> >> > which already calls edid_block_check() and handles fixing headers. I
-> >> > guess also if I call drm_edid_block_valid() then I should ignore the
-> >> > "status" return value of edid_block_read() because we don't need to
-> >> > pass it anywhere (because the work is re-done in
-> >> > drm_edid_block_valid()).
-> >> >
-> >> > So I guess I'm happy to do a v2 like that if everyone likes it better,
-> >> > but to me it feels a little weird.
-> >> >
-> >> > -Doug
-> >>
-> >> Alright, agreed. There is some duplication of code happening if we use
-> >> drm_edid_block_valid(). I had suggested that because it has inherent
-> >> support for dumping the bad EDID.
-> >>
-> >> In that case, this change LGTM, because in principle you are doing the
-> >> same thing as _drm_do_get_edid() (with the only difference being here we
-> >> read only the base block as opposed to the full EDID there).
-> >>
-> >> Hence,
-> >>
-> >> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> >
-> > I've given this patch a bunch of time because it wasn't urgent, but
-> > seems like it could be about time to land. I'll plan to land it next
-> > Monday or Tuesday unless anyone has any other comments.
->
-> Ack, it's benign enough.
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-Thanks! Since you didn't write the above as an Acked-by tag I didn't
-add it to the commit, but I went ahead and landed with Abhinav's tag.
+On Wed, 9 Nov 2022 10:39:06 +0800 you wrote:
+> hci_get_route() takes reference, we should use hci_dev_put() to release
+> it when not need anymore.
+> 
+> Fixes: f764a6c2c1e4 ("Bluetooth: ISO: Add broadcast support")
+> Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
+> ---
+> 
+> [...]
 
-69c7717c20cc drm/edid: Dump the EDID when drm_edid_get_panel_id() has an error
+Here is the summary with links:
+  - [v2] Bluetooth: hci_conn: add missing hci_dev_put() in iso_listen_bis()
+    https://git.kernel.org/bluetooth/bluetooth-next/c/e32c8d8c6f29
 
--Doug
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
