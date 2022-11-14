@@ -2,112 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B116284FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 009EF628516
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236699AbiKNQV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:21:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56916 "EHLO
+        id S237393AbiKNQXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236716AbiKNQVw (ORCPT
+        with ESMTP id S237448AbiKNQXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:21:52 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16262DE9;
-        Mon, 14 Nov 2022 08:21:50 -0800 (PST)
+        Mon, 14 Nov 2022 11:23:34 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD80BF6;
+        Mon, 14 Nov 2022 08:23:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668442910; x=1699978910;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=w8JnsSQEeOM8g80fNSiY85GCK9KLByACfZ2G33EPHKE=;
-  b=kUWML0nQpU20kQH7V/vUzzcHZViAnDrSrz6bJAFSvBAtfswFPCUryx14
-   EO6Z/ZTq+GiRv95SgHKwJZ2GVyyfoYMFe0uv6+Udlc2TBfqHK3bvxVgpq
-   dJLKKpZI6wpPsdf7PejlbBnOqRGt2TUysLJQK4Pd8m8tjT7hIFkC+RAaA
-   SoJug8hfJANmg9cmHeVFm0av+6sDE1D2MpURMx+7V8zosmTFv58tp7Igq
-   wzU8MWWSNn6n/1Wy/bOQU/YWfiaZLV4G9TR39V+/oDd5rAGFpqbTBFrfJ
-   jt/YKp1E4KpAyWtI6RLX+Yx6xpMzIYUgT1JA3/p/zO3C6SS/OU49AqtxT
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="398302924"
+  t=1668443012; x=1699979012;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=YG88I7VKq38DmjvfFFAngUFF9qTpl6rTFa1hUvsPS78=;
+  b=gRxaiBv0T3ycOWy7yxxvtGO3Dy0AyslJEuGVGrHLowdI4pVzLsKDb8oe
+   +inCOIYPfEWHwu+0Jy9bMCo8UH3b6XO1jkCMGbMrOjQqy5WO9w2KB6oPg
+   PcJQc5aPeiynmrMPnYA9MNGc6L5ogVUuvn4HPtMZjmFN7KwTdP83tkVky
+   zJQNkTIRJAschGsC7xdX2SQVOglOKq9+HVL7Z1OTdwKQPl6Wa06CCDVU8
+   V6xpRtfRwYKouMd4T5XLe+HpWrP1fFWq22/buqn6SUPX+g16Uf8CE9mx3
+   B4b0gJFN3mVQjoz42z2L0WvfCptf1mvtGyOPMCbLK7XhzgnGneBvzxPTo
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="292410010"
 X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="398302924"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 08:21:50 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="616372363"
+   d="scan'208";a="292410010"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 08:23:32 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="640830720"
 X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="616372363"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 14 Nov 2022 08:21:46 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id D065D346; Mon, 14 Nov 2022 18:22:10 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jakob Koschel <jakobkoschel@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v2 4/4] xhci: Convert to use list_count()
-Date:   Mon, 14 Nov 2022 18:22:07 +0200
-Message-Id: <20221114162207.62559-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221114162207.62559-1-andriy.shevchenko@linux.intel.com>
-References: <20221114162207.62559-1-andriy.shevchenko@linux.intel.com>
+   d="scan'208";a="640830720"
+Received: from satyanay-mobl1.amr.corp.intel.com (HELO [10.209.114.162]) ([10.209.114.162])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 08:23:29 -0800
+Message-ID: <ac5f0e24-cac8-828c-3b4b-995f77f81ce3@intel.com>
+Date:   Mon, 14 Nov 2022 08:23:28 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 02/12] x86/ioapic: Gate decrypted mapping on
+ cc_platform_has() attribute
+Content-Language: en-US
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+References: <1668147701-4583-1-git-send-email-mikelley@microsoft.com>
+ <1668147701-4583-3-git-send-email-mikelley@microsoft.com>
+ <50a8517d-328e-2178-e98c-4b160456e092@intel.com>
+ <BYAPR21MB168860D4D19F088CB41E7548D7039@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <BYAPR21MB168860D4D19F088CB41E7548D7039@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The list API now provides the list_count() to help with counting
-existing nodes in the list. Uilise it.
+On 11/11/22 20:48, Michael Kelley (LINUX) wrote:
+> From: Dave Hansen <dave.hansen@intel.com> Sent: Friday, November 11, 2022 4:22 PM
+>> On 11/10/22 22:21, Michael Kelley wrote:
+>>>  	 * Ensure fixmaps for IOAPIC MMIO respect memory encryption pgprot
+>>>  	 * bits, just like normal ioremap():
+>>>  	 */
+>>> -	flags = pgprot_decrypted(flags);
+>>> +	if (!cc_platform_has(CC_ATTR_HAS_PARAVISOR))
+>>> +		flags = pgprot_decrypted(flags);
+>> This begs the question whether *all* paravisors will want to avoid a
+>> decrypted ioapic mapping.  Is this _fundamental_ to paravisors, or it is
+>> an implementation detail of this _individual_ paravisor?
+> Hard to say.  The paravisor that Hyper-V provides for use with the vTOM
+> option in a SEV SNP VM is the only paravisor I've seen.  At least as defined
+> by Hyper-V and AMD SNP Virtual Machine Privilege Levels (VMPLs), the
+> paravisor resides within the VM trust boundary.  Anything that a paravisor
+> emulates would be in the "private" (i.e., encrypted) memory so it can be
+> accessed by both the guest OS and the paravisor.  But nothing fundamental
+> says that IOAPIC emulation *must* be done in the paravisor.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: no change
- drivers/usb/host/xhci-ring.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index ad81e9a508b1..817c31e3b0c8 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2532,7 +2532,6 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	union xhci_trb *ep_trb;
- 	int status = -EINPROGRESS;
- 	struct xhci_ep_ctx *ep_ctx;
--	struct list_head *tmp;
- 	u32 trb_comp_code;
- 	int td_num = 0;
- 	bool handling_skipped_tds = false;
-@@ -2580,10 +2579,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
- 	}
- 
- 	/* Count current td numbers if ep->skip is set */
--	if (ep->skip) {
--		list_for_each(tmp, &ep_ring->td_list)
--			td_num++;
--	}
-+	if (ep->skip)
-+		td_num += list_count(&ep_ring->td_list);
- 
- 	/* Look for common error cases */
- 	switch (trb_comp_code) {
--- 
-2.35.1
-
+Please just make this check more specific.  Either make this a specific
+Hyper-V+SVM check, or rename it HAS_EMULATED_IOAPIC, like you were
+thinking.  If paravisors catch on and we end up with ten more of these
+things across five different paravisors and see a pattern, *then* a
+paravisor-specific one makes sense.
