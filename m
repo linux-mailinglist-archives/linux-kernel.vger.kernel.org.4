@@ -2,363 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340D9628C65
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 23:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C11628C6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 23:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237315AbiKNW4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 17:56:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
+        id S237481AbiKNW5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 17:57:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiKNW4b (ORCPT
+        with ESMTP id S237808AbiKNW5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 17:56:31 -0500
-Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [5.144.164.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02461AD91
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 14:56:29 -0800 (PST)
-Received: from [192.168.2.144] (bband-dyn193.178-41-216.t-com.sk [178.41.216.193])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 2E5A01F917;
-        Mon, 14 Nov 2022 23:56:27 +0100 (CET)
-Date:   Mon, 14 Nov 2022 23:56:21 +0100
-From:   Martin Botka <martin.botka@somainline.org>
-Subject: Re: [PATCH 1/1] regulator: axp20x: Add support for AXP1530 variant
-To:     kernel test robot <lkp@intel.com>
-Cc:     martin.botka1@gmail.com, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mon, 14 Nov 2022 17:57:16 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBEE1B7A3;
+        Mon, 14 Nov 2022 14:57:12 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 06BD5240003;
+        Mon, 14 Nov 2022 22:57:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668466631;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=M3hQEMxlrNK+06eeO3xPT9LuLj4yjY7yvIvmM3pxtPo=;
+        b=bj9eV86lzO2PB1EMaUD1jpebxgmKDCSQHfN4vnk2N7CP9Sp0BntWcEb+LscO0TFl27SYbq
+        huthOt1QjAWLQOuK0MIdUHuitTti2lkheZnVDX42rOeEYo5Sm8oZ0DuvabkKthMx+xwbcF
+        kCAvB1k8/torNFRFnIY9JZHj8HWVEhjl7HceyIKCpMQrFwIMYKAH7oUxmmcYVPDWsFwvO2
+        FBjK1SdraumjMSx5Q5n3Qtrx1IUB6h6/TZ/+qh3zrAlZgZIRDPdDN6e+W4Kn/gm8idNiFP
+        ia/ECYj9ZldDZoWIuYzpmRzn0N89TSslCE+21uX6IQiQclrzRGWOLvTwmEjnFg==
+Date:   Mon, 14 Nov 2022 23:57:08 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Pavel Machek <pavel@ucw.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
         AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Yenda <jtrmal@gmail.com>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        linux-kernel@vger.kernel.org
-Message-Id: <X11DLR.YBCMARW947UJ2@somainline.org>
-In-Reply-To: <202211150623.9oWDx9Ec-lkp@intel.com>
-References: <20221114162459.1802174-1-martin.botka@somainline.org>
-        <202211150623.9oWDx9Ec-lkp@intel.com>
-X-Mailer: geary/40.0
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-rtc@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Subject: Re: [PATCH v4 2/9] dt-bindings: rtc: mediatek: convert MT6397 rtc
+ documentation
+Message-ID: <Y3LHxDIzfZWhnQJN@mail.local>
+References: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
+ <20221005-mt6357-support-v4-2-5d2bb58e6087@baylibre.com>
+ <20221109222916.GA2985917-robh@kernel.org>
+ <Y2wwUOJ0KZdt1tZ6@mail.local>
+ <adf8bc44-4cbc-af2a-4ec8-1859a98146d7@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <adf8bc44-4cbc-af2a-4ec8-1859a98146d7@linaro.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Patch depends on the MFD driver which introduces also the regulator 
-definitions.
+On 10/11/2022 15:14:01+0100, Krzysztof Kozlowski wrote:
+> On 09/11/2022 23:57, Alexandre Belloni wrote:
+> > On 09/11/2022 16:29:16-0600, Rob Herring wrote:
+> >> On Tue, Nov 08, 2022 at 07:43:37PM +0100, Alexandre Mergnat wrote:
+> >>> - Convert rtc/rtc-mt6397.txt to rtc/mt6397-rtc.yaml
+> >>> - Add mediatek,mt6357-rtc compatible.
+> >>> - Add maintainer
+> >>> - Remove the .txt binding file
+> >>>
+> >>> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> >>> ---
+> >>>  Documentation/devicetree/bindings/mfd/mt6397.txt   |  2 +-
+> >>>  .../bindings/rtc/mediatek,mt6397-rtc.yaml          | 40 ++++++++++++++++++++++
+> >>>  .../devicetree/bindings/rtc/rtc-mt6397.txt         | 31 -----------------
+> >>>  3 files changed, 41 insertions(+), 32 deletions(-)
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/mfd/mt6397.txt b/Documentation/devicetree/bindings/mfd/mt6397.txt
+> >>> index 0088442efca1..79aaf21af8e9 100644
+> >>> --- a/Documentation/devicetree/bindings/mfd/mt6397.txt
+> >>> +++ b/Documentation/devicetree/bindings/mfd/mt6397.txt
+> >>> @@ -33,7 +33,7 @@ Optional subnodes:
+> >>>  		- compatible: "mediatek,mt6331-rtc"
+> >>>  		- compatible: "mediatek,mt6358-rtc"
+> >>>  		- compatible: "mediatek,mt6397-rtc"
+> >>> -	For details, see ../rtc/rtc-mt6397.txt
+> >>> +	For details, see ../rtc/mediatek,mt6397-rtc.yaml
+> >>>  - regulators
+> >>>  	Required properties:
+> >>>  		- compatible: "mediatek,mt6323-regulator"
+> >>> diff --git a/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
+> >>> new file mode 100644
+> >>> index 000000000000..bb48c0150f95
+> >>> --- /dev/null
+> >>> +++ b/Documentation/devicetree/bindings/rtc/mediatek,mt6397-rtc.yaml
+> >>> @@ -0,0 +1,40 @@
+> >>> + # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> >>> +%YAML 1.2
+> >>> +---
+> >>> +$id: http://devicetree.org/schemas/rtc/mediatek,mt6397-rtc.yaml#
+> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >>> +
+> >>> +title: MediaTek MT6397/MT6366/MT6358/MT6357/MT6323 RTC
+> >>> +
+> >>> +maintainers:
+> >>> +  - Alexandre Mergnat <amergnat@baylibre.com>
+> >>> +
+> >>> +description: |
+> >>> +  MediaTek PMIC based RTC is an independent function of MediaTek PMIC that works
+> >>> +  as a type of multi-function device (MFD). The RTC can be configured and set up
+> >>> +  with PMIC wrapper bus which is a common resource shared with the other
+> >>> +  functions found on the same PMIC.
+> >>> +
+> >>> +properties:
+> >>> +  compatible:
+> >>> +    enum:
+> >>> +      - mediatek,mt6323-rtc
+> >>> +      - mediatek,mt6357-rtc
+> >>> +      - mediatek,mt6358-rtc
+> >>> +      - mediatek,mt6366-rtc
+> >>> +      - mediatek,mt6397-rtc
+> >>
+> >> As this is only a compatible string, just fold this into the MFD schema 
+> >> doc.
+> > 
+> > Actually, it probably also supports the start-year property
+> 
 
-On Tue, Nov 15 2022 at 06:52:24 AM +08:00:00, kernel test robot 
-<lkp@intel.com> wrote:
-> Hi Martin,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on broonie-regulator/for-next]
-> [also build test ERROR on linus/master v6.1-rc5 next-20221114]
-> [If your patch is applied to the wrong git tree, kindly drop us a 
-> note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    
-> https://github.com/intel-lab-lkp/linux/commits/Martin-Botka/regulator-axp20x-Add-support-for-AXP1530-variant/20221115-002644
-> base:   
-> https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git 
-> for-next
-> patch link:    
-> https://lore.kernel.org/r/20221114162459.1802174-1-martin.botka%40somainline.org
-> patch subject: [PATCH 1/1] regulator: axp20x: Add support for AXP1530 
-> variant
-> config: x86_64-randconfig-k001-20221114
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project 
-> f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build):
->         wget 
-> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
-> -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # 
-> https://github.com/intel-lab-lkp/linux/commit/7f0eb274b33943549c38a0eb160748d3754ad1e7
->         git remote add linux-review 
-> https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review 
-> Martin-Botka/regulator-axp20x-Add-support-for-AXP1530-variant/20221115-002644
->         git checkout 7f0eb274b33943549c38a0eb160748d3754ad1e7
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross 
-> W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/regulator/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->>>  drivers/regulator/axp20x-regulator.c:1021:2: error: use of 
->>> undeclared identifier 'AXP1530_DCDC1'
->            AXP_DESC_RANGES(AXP1530, DCDC1, "dcdc1", "vin1", 
-> axp1530_dcdc1_ranges,
->            ^
->    drivers/regulator/axp20x-regulator.c:351:10: note: expanded from 
-> macro 'AXP_DESC_RANGES'
->                    .id             = _family##_##_id,                 
->              \
->                                      ^
->    <scratch space>:53:1: note: expanded from here
->    AXP1530_DCDC1
->    ^
->>>  drivers/regulator/axp20x-regulator.c:1022:12: error: use of 
->>> undeclared identifier 'AXP1530_DCDC1_CONRTOL'
->                                            0x6B, 
-> AXP1530_DCDC1_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
->                                                  ^
->>>  drivers/regulator/axp20x-regulator.c:1022:41: error: use of 
->>> undeclared identifier 'AXP1530_OUTPUT_CONTROL'
->                                            0x6B, 
-> AXP1530_DCDC1_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
->                                                                       
->         ^
->>>  drivers/regulator/axp20x-regulator.c:1024:2: error: use of 
->>> undeclared identifier 'AXP1530_DCDC2'
->            AXP_DESC_RANGES(AXP1530, DCDC2, "dcdc2", "vin2", 
-> axp1530_dcdc2_ranges,
->            ^
->    drivers/regulator/axp20x-regulator.c:351:10: note: expanded from 
-> macro 'AXP_DESC_RANGES'
->                    .id             = _family##_##_id,                 
->              \
->                                      ^
->    <scratch space>:58:1: note: expanded from here
->    AXP1530_DCDC2
->    ^
->>>  drivers/regulator/axp20x-regulator.c:1025:12: error: use of 
->>> undeclared identifier 'AXP1530_DCDC2_CONRTOL'
->                                            0x58, 
-> AXP1530_DCDC2_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
->                                                  ^
->    drivers/regulator/axp20x-regulator.c:1025:41: error: use of 
-> undeclared identifier 'AXP1530_OUTPUT_CONTROL'
->                                            0x58, 
-> AXP1530_DCDC2_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
->                                                                       
->         ^
->>>  drivers/regulator/axp20x-regulator.c:1027:2: error: use of 
->>> undeclared identifier 'AXP1530_DCDC3'
->            AXP_DESC_RANGES(AXP1530, DCDC3, "dcdc3", "vin3", 
-> axp1530_dcdc3_ranges,
->            ^
->    drivers/regulator/axp20x-regulator.c:351:10: note: expanded from 
-> macro 'AXP_DESC_RANGES'
->                    .id             = _family##_##_id,                 
->              \
->                                      ^
->    <scratch space>:63:1: note: expanded from here
->    AXP1530_DCDC3
->    ^
->>>  drivers/regulator/axp20x-regulator.c:1028:12: error: use of 
->>> undeclared identifier 'AXP1530_DCDC3_CONRTOL'
->                                            0x58, 
-> AXP1530_DCDC3_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
->                                                  ^
->    drivers/regulator/axp20x-regulator.c:1028:41: error: use of 
-> undeclared identifier 'AXP1530_OUTPUT_CONTROL'
->                                            0x58, 
-> AXP1530_DCDC3_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
->                                                                       
->         ^
->>>  drivers/regulator/axp20x-regulator.c:1030:2: error: use of 
->>> undeclared identifier 'AXP1530_LDO1'
->            AXP_DESC(AXP1530, LDO1, "ldo1", "ldo1in", 500, 3500, 100,
->            ^
->    drivers/regulator/axp20x-regulator.c:303:10: note: expanded from 
-> macro 'AXP_DESC'
->                    .id             = _family##_##_id,                 
->              \
->                                      ^
->    <scratch space>:68:1: note: expanded from here
->    AXP1530_LDO1
->    ^
->>>  drivers/regulator/axp20x-regulator.c:1031:6: error: use of 
->>> undeclared identifier 'AXP1530_ALDO1_CONRTOL'
->                                            AXP1530_ALDO1_CONRTOL, 
-> 0x1f, AXP1530_OUTPUT_CONTROL,
->                                            ^
->    drivers/regulator/axp20x-regulator.c:1031:35: error: use of 
-> undeclared identifier 'AXP1530_OUTPUT_CONTROL'
->                                            AXP1530_ALDO1_CONRTOL, 
-> 0x1f, AXP1530_OUTPUT_CONTROL,
->                                                                       
->   ^
->>>  drivers/regulator/axp20x-regulator.c:1033:2: error: use of 
->>> undeclared identifier 'AXP1530_LDO2'
->            AXP_DESC(AXP1530, LDO2, "ldo2", "ldo2in", 500, 3500, 100,
->            ^
->    drivers/regulator/axp20x-regulator.c:303:10: note: expanded from 
-> macro 'AXP_DESC'
->                    .id             = _family##_##_id,                 
->              \
->                                      ^
->    <scratch space>:73:1: note: expanded from here
->    AXP1530_LDO2
->    ^
->>>  drivers/regulator/axp20x-regulator.c:1034:6: error: use of 
->>> undeclared identifier 'AXP1530_DLDO1_CONRTOL'
->                                            AXP1530_DLDO1_CONRTOL, 
-> 0x1f, AXP1530_OUTPUT_CONTROL,
->                                            ^
->    drivers/regulator/axp20x-regulator.c:1034:35: error: use of 
-> undeclared identifier 'AXP1530_OUTPUT_CONTROL'
->                                            AXP1530_DLDO1_CONRTOL, 
-> 0x1f, AXP1530_OUTPUT_CONTROL,
->                                                                       
->   ^
->>>  drivers/regulator/axp20x-regulator.c:1077:7: error: use of 
->>> undeclared identifier 'AXP1530_ID'; did you mean 'AXP152_ID'?
->            case AXP1530_ID:
->                 ^~~~~~~~~~
->                 AXP152_ID
->    include/linux/mfd/axp20x.h:14:2: note: 'AXP152_ID' declared here
->            AXP152_ID = 0,
->            ^
->    drivers/regulator/axp20x-regulator.c:1295:8: error: use of 
-> undeclared identifier 'AXP1530_ID'; did you mean 'AXP152_ID'?
->                    case AXP1530_ID:
->                         ^~~~~~~~~~
->                         AXP152_ID
->    include/linux/mfd/axp20x.h:14:2: note: 'AXP152_ID' declared here
->            AXP152_ID = 0,
->            ^
->>>  drivers/regulator/axp20x-regulator.c:1297:17: error: use of 
->>> undeclared identifier 'AXP1530_REG_ID_MAX'
->                    nregulators = AXP1530_REG_ID_MAX;
->                                  ^
->>>  drivers/regulator/axp20x-regulator.c:1021:2: error: use of 
->>> undeclared identifier 'AXP1530_DCDC1'
->            AXP_DESC_RANGES(AXP1530, DCDC1, "dcdc1", "vin1", 
-> axp1530_dcdc1_ranges,
->            ^
->    drivers/regulator/axp20x-regulator.c:345:3: note: expanded from 
-> macro 'AXP_DESC_RANGES'
->            [_family##_##_id] = {                                      
->              \
->             ^
->    <scratch space>:51:1: note: expanded from here
->    AXP1530_DCDC1
->    ^
->    fatal error: too many errors emitted, stopping now [-ferror-limit=]
->    20 errors generated.
-> 
-> 
-> vim +/AXP1530_DCDC1 +1021 drivers/regulator/axp20x-regulator.c
-> 
->   1019
->   1020	static const struct regulator_desc axp1530_regulators[] = {
->>  1021		AXP_DESC_RANGES(AXP1530, DCDC1, "dcdc1", "vin1", 
->> axp1530_dcdc1_ranges,
->>  1022						0x6B, AXP1530_DCDC1_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
->   1023						BIT(0)),
->>  1024		AXP_DESC_RANGES(AXP1530, DCDC2, "dcdc2", "vin2", 
->> axp1530_dcdc2_ranges,
->>  1025						0x58, AXP1530_DCDC2_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
->   1026						BIT(1)),
->>  1027		AXP_DESC_RANGES(AXP1530, DCDC3, "dcdc3", "vin3", 
->> axp1530_dcdc3_ranges,
->>  1028						0x58, AXP1530_DCDC3_CONRTOL, 0x7f, AXP1530_OUTPUT_CONTROL,
->   1029						BIT(2)),
->>  1030		AXP_DESC(AXP1530, LDO1, "ldo1", "ldo1in", 500, 3500, 100,
->>  1031						AXP1530_ALDO1_CONRTOL, 0x1f, AXP1530_OUTPUT_CONTROL,
->   1032						BIT(3)),
->>  1033		AXP_DESC(AXP1530, LDO2, "ldo2", "ldo2in", 500, 3500, 100,
->>  1034						AXP1530_DLDO1_CONRTOL, 0x1f, AXP1530_OUTPUT_CONTROL,
->   1035						BIT(4)),
->   1036	};
->   1037
->   1038	static int axp20x_set_dcdc_freq(struct platform_device *pdev, 
-> u32 dcdcfreq)
->   1039	{
->   1040		struct axp20x_dev *axp20x = dev_get_drvdata(pdev->dev.parent);
->   1041		unsigned int reg = AXP20X_DCDC_FREQ;
->   1042		u32 min, max, def, step;
->   1043
->   1044		switch (axp20x->variant) {
->   1045		case AXP202_ID:
->   1046		case AXP209_ID:
->   1047			min = 750;
->   1048			max = 1875;
->   1049			def = 1500;
->   1050			step = 75;
->   1051			break;
->   1052		case AXP803_ID:
->   1053		case AXP813_ID:
->   1054			/*
->   1055			 * AXP803/AXP813 DCDC work frequency setting has the same
->   1056			 * range and step as AXP22X, but at a different register.
->   1057			 * (See include/linux/mfd/axp20x.h)
->   1058			 */
->   1059			reg = AXP803_DCDC_FREQ_CTRL;
->   1060			fallthrough;	/* to the check below */
->   1061		case AXP806_ID:
->   1062			/*
->   1063			 * AXP806 also have DCDC work frequency setting register at a
->   1064			 * different position.
->   1065			 */
->   1066			if (axp20x->variant == AXP806_ID)
->   1067				reg = AXP806_DCDC_FREQ_CTRL;
->   1068			fallthrough;
->   1069		case AXP221_ID:
->   1070		case AXP223_ID:
->   1071		case AXP809_ID:
->   1072			min = 1800;
->   1073			max = 4050;
->   1074			def = 3000;
->   1075			step = 150;
->   1076			break;
->>  1077		case AXP1530_ID:
->   1078			/*
->   1079			 * Do not set the DCDC frequency on AXP1530
->   1080			 */
->   1081			return 0;
->   1082			break;
->   1083		default:
->   1084			dev_err(&pdev->dev,
->   1085				"Setting DCDC frequency for unsupported AXP variant\n");
->   1086			return -EINVAL;
->   1087		}
->   1088
->   1089		if (dcdcfreq == 0)
->   1090			dcdcfreq = def;
->   1091
->   1092		if (dcdcfreq < min) {
->   1093			dcdcfreq = min;
->   1094			dev_warn(&pdev->dev, "DCDC frequency too low. Set to 
-> %ukHz\n",
->   1095				 min);
->   1096		}
->   1097
->   1098		if (dcdcfreq > max) {
->   1099			dcdcfreq = max;
->   1100			dev_warn(&pdev->dev, "DCDC frequency too high. Set to 
-> %ukHz\n",
->   1101				 max);
->   1102		}
->   1103
->   1104		dcdcfreq = (dcdcfreq - min) / step;
->   1105
->   1106		return regmap_update_bits(axp20x->regmap, reg,
->   1107					  AXP20X_FREQ_DCDC_MASK, dcdcfreq);
->   1108	}
->   1109
-> 
-> --
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+I checked and it doesn't support it but this needs to be fixed.
 
+> What about rest of rtc.yaml schema?
+> 
 
+wakeup-source would make sense but the driver doesn't support it yet.
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
