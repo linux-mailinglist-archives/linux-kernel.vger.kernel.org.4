@@ -2,115 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC1562765A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:27:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 490F6627662
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235936AbiKNH16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 02:27:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58642 "EHLO
+        id S235667AbiKNHaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 02:30:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235415AbiKNH14 (ORCPT
+        with ESMTP id S235115AbiKNHaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 02:27:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA17D2E0
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:27:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668410825;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MOMWpm5CCVU3kUo0zgauw8Rj2SwIfM2Q5f5rHRWKMIU=;
-        b=CWGl6uHFiNxRdkLDyP6JSmvajOJZ1Qvv1WxJvg6hz56Z1j6+prTyWWFnQPxe40FXi1Wic8
-        /dUXITDo7ZYYGFz8mXKrTUWN64SyetOseDVi+Twf6iUZKM9MMtAL2d6WWyUvrb41oaFAi+
-        wJ8QR82hBbCtuseGjUJqZsxikVvG8nk=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-526-7EdMIGS8NdCdR-oShA_tUg-1; Mon, 14 Nov 2022 02:26:59 -0500
-X-MC-Unique: 7EdMIGS8NdCdR-oShA_tUg-1
-Received: by mail-oo1-f69.google.com with SMTP id g1-20020a4ad841000000b0049f25cf96afso3530190oov.20
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:26:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MOMWpm5CCVU3kUo0zgauw8Rj2SwIfM2Q5f5rHRWKMIU=;
-        b=YkjPqdR3SEwULw93FMX7YmR4s7z3kT6wr+9Z4oWw0Pzop7JO26XS1wuMBmo2bM8XnR
-         7jKEA6FJ28Blv2pm3Q2+nSbZe8Owy//x0idhimavg2X/AkNHI1uJrXu/EaZODBzoCb+0
-         jsextBOfB1SGvnEqQHEC0QqX15RYUSduQBiStuFicGdPN6NggPdYVhSgSc4t/Jvhf+VZ
-         jEgq5n5f399N8HJcQab6rc4dj3WMpivubKCBXh6gmz7uYWGZBjR1lpFJQu48kcSoxMBg
-         D8B8f4UZUfQy/+yWKxUv/qRSGQH3oQg3Vrhi0sciXe4P5olqofGMikg9XFiKngtQX/nT
-         vffQ==
-X-Gm-Message-State: ANoB5plMJdWIsYxsu+Q8C6cfsaWo703/ENzM++t8D1WpWMF/X/iRbpGC
-        CYMMqFjlEI9+t+QVluC9fdRAexgWKshPCx4difvtpSHgSpiyJEf9SfAAK3vq4FpvsD3NvXTBogw
-        G9QJ1ZsHTNI5eCYkrAdxjYdJMELw+I5X4f4/ZyK+E
-X-Received: by 2002:a54:4605:0:b0:354:68aa:9c59 with SMTP id p5-20020a544605000000b0035468aa9c59mr5184760oip.35.1668410818429;
-        Sun, 13 Nov 2022 23:26:58 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5C84VexBmAOzE61dCyw9QsbIJnHVsDzgFJer5/jEMAQ8yPSAWkeqlIJU/M8//CIQ5zkOkg3LjzGkZPhWF85AM=
-X-Received: by 2002:a54:4605:0:b0:354:68aa:9c59 with SMTP id
- p5-20020a544605000000b0035468aa9c59mr5184750oip.35.1668410818105; Sun, 13 Nov
- 2022 23:26:58 -0800 (PST)
+        Mon, 14 Nov 2022 02:30:07 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00E1616D;
+        Sun, 13 Nov 2022 23:30:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1668410974; bh=JlcudpcRB8lLSYM3pyxw2CcM5IMYVAIBgpsHzYD4udo=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=WuPQ08JH5+H2QEq6Kj2rJSwFrJFOFksZFFul+YkZedrA5Hxs0PfeC8mGVNDzAIWma
+         HOGWc0AN9IcRQ0bkyngoQ/VBfX1XEtagfaCJDOjtonx1i9Zl7zPbBaEpNg5yApB4Z1
+         T3vBkj/X4HeBTEDf3tP95IGH4wuI2q+4/ET1Fpxkh9XCTyT14J/eX+QVbKEAlO4QCa
+         Asb3TGkMj7YjAITqq09+0RuqYFsv1XxlcMAlvDfd36Kfpmi2WR8pnjjwhnf7qZuCP6
+         QJ297i+ms0Plh7huRysr9pQMK3ZWoDWgnrcPGHwn2ZB+HdLafgyMDIVhOIsapDBRMx
+         kdO2uWKqtm+og==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([92.116.133.36]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M89Gj-1oqNAb2PRr-005GaY; Mon, 14
+ Nov 2022 08:29:34 +0100
+Message-ID: <7f47e563-8c3c-dcba-3bfc-174681b608f3@gmx.de>
+Date:   Mon, 14 Nov 2022 08:29:32 +0100
 MIME-Version: 1.0
-References: <20221113134442.152695-1-elic@nvidia.com> <20221113134442.152695-6-elic@nvidia.com>
-In-Reply-To: <20221113134442.152695-6-elic@nvidia.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Mon, 14 Nov 2022 15:26:46 +0800
-Message-ID: <CACGkMEs4YpUUtkW-rWkQpYQY4vFLh2YcwY6bSqUGTd60Xq37_w@mail.gmail.com>
-Subject: Re: [PATCH 5/7] vdpa/mlx5: Add RX counters to debugfs
-To:     Eli Cohen <elic@nvidia.com>
-Cc:     mst@redhat.com, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, si-wei.liu@oracle.com,
-        eperezma@redhat.com, lulu@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] fbdev: smscufx: fix error handling code in ufx_usb_probe
+Content-Language: en-US
+To:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Steve Glendinning <steve.glendinning@shawell.net>
+Cc:     syzkaller <syzkaller@googlegroups.com>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20221111054949.1002804-1-dzm91@hust.edu.cn>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20221111054949.1002804-1-dzm91@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ZGHBiQ9xYRwYtrAQMEY5GJqQKCfzW1rR0WXUUcXgvBu5WQfsVc+
+ Am+KcE/Wr9JVYU03OQUANVrkiybqgtilkKDEMfjPpIXjDDyQbAJeTzMowPoF2Usr1f+KaE5
+ fytFbovaGWsDZ5/FKLBxUNG6ftHy/p7b45TWFrW/v98xXkFgrvtvh0a69JxJXH001uE02s+
+ K/icqzdD9sYs1Ff9aU7Ng==
+UI-OutboundReport: notjunk:1;M01:P0:E+fDw7+sEKk=;uVWA1A8eE36n1XJBz6XKB1jytRG
+ TmLBCVzbgWxycKuR5X2tH2g78MM7uCHNxcPh+Js58pOOdny+EwBvJTLWJwiO62c8rIFdnzev5
+ 1SWbL6a2THcv//BvF5148ntKKW6CjZAEJfR3rFqxQysRi7EUtr9ArkjjteDofD3TabJn0Bfta
+ 7kEZ3K3czCiTpGG5tiERuuwg4pYtbdTnRbC9fW8umb+VVTupiz1Te43eqDWvTmgpUOccRAwrb
+ 48DHS7GVn3VgBI+bGKXqgilItlHdBKoLWmS+BCWdEOSAAlhAL4tRGD7kF9kE525U8cMGwxyJF
+ YxqHrhMILcB7bvh+sXLQE3Z8WKAELEmgoTVjKYMeFtiKGAYJA/379pP3JmkIaYzBuxo1mBTmH
+ 5CAt6rClUn26S4Y1nJB3dfpNOYDMPaPZ54ILeMHKrg89bCs+xDj7h4C3Vtpp0ipg3g67kMLjz
+ oPaBZwu8pftwycISviMN6Spj4MzcKZ5hhBJ8EOY4LavorQ2MWtKM5o+OJtiBixSjP/PR7GIJ/
+ 1B+uT5nuDV3E34RqftyVfmnUr9V84wFnjIQiS0r4rZSAyerUFkVlZj4KdM44/N/7P+N0/Jp9M
+ no0RR133MAiY9FxbSZ6SrXN93zX2RHRTR65M2oGToZkiSwRgQ8aUb79kWp16XMrR0odw21Acw
+ jXe52Z0xbQ5zRcdYPiOiWGtzshmzmQyPCI2cvTStUdUpMYUhGl/O8xo5a0UTQCJyNggAAQXCp
+ 6HAL0KRn77NiAy/WOk1kHjDSvyBdsfhgcGkLFPRkXFjoB77S8FS6O9894QPwE/OpCLq+SY9iA
+ bICQHUhHj8GXiVUOz6MeZ7Gc1NUDypbyqK2tIps3YS6hyuUTpmqtET9boK17VQUt+tyYWPx/R
+ ozPihoArD7FLVcsrVShyZGWVZMny7ad+aauOwpQGjf83ua9Y7nh2yOtNQJuE7cppXJFpv3Mic
+ 7kTyhQ==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 13, 2022 at 9:45 PM Eli Cohen <elic@nvidia.com> wrote:
+On 11/11/22 06:49, Dongliang Mu wrote:
+> The current error handling code in ufx_usb_probe have many unmatching
+> issues, e.g., missing ufx_free_usb_list, destroy_modedb label should
+> only include framebuffer_release, fb_dealloc_cmap only matches
+> fb_alloc_cmap.
 >
-> For each interface, either VLAN tagged or untagged, add two hardware
-> counters: one for unicast and another for multicast. The counters count
-> RX packets and bytes and can be read through debugfs:
+> My local syzkaller reports a memory leak bug:
 >
-> $ cat /sys/kernel/debug/mlx5/mlx5_core.sf.1/vdpa-0/rx/untagged/mcast/packets
-> $ cat /sys/kernel/debug/mlx5/mlx5_core.sf.1/vdpa-0/rx/untagged/ucast/bytes
+> memory leak in ufx_usb_probe
 >
-> This feature is controlled via the config option
-> MLX5_VDPA_STEERING_DEBUG. It is off by default as it may have some
-> impact on performance.
+> BUG: memory leak
+> unreferenced object 0xffff88802f879580 (size 128):
+>    comm "kworker/0:7", pid 17416, jiffies 4295067474 (age 46.710s)
+>    hex dump (first 32 bytes):
+>      80 21 7c 2e 80 88 ff ff 18 d0 d0 0c 80 88 ff ff  .!|.............
+>      00 d0 d0 0c 80 88 ff ff e0 ff ff ff 0f 00 00 00  ................
+>    backtrace:
+>      [<ffffffff814c99a0>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1045
+>      [<ffffffff824d219c>] kmalloc include/linux/slab.h:553 [inline]
+>      [<ffffffff824d219c>] kzalloc include/linux/slab.h:689 [inline]
+>      [<ffffffff824d219c>] ufx_alloc_urb_list drivers/video/fbdev/smscufx=
+.c:1873 [inline]
+>      [<ffffffff824d219c>] ufx_usb_probe+0x11c/0x15a0 drivers/video/fbdev=
+/smscufx.c:1655
+>      [<ffffffff82d17927>] usb_probe_interface+0x177/0x370 drivers/usb/co=
+re/driver.c:396
+>      [<ffffffff82712f0d>] call_driver_probe drivers/base/dd.c:560 [inlin=
+e]
+>      [<ffffffff82712f0d>] really_probe+0x12d/0x390 drivers/base/dd.c:639
+>      [<ffffffff8271322f>] __driver_probe_device+0xbf/0x140 drivers/base/=
+dd.c:778
+>      [<ffffffff827132da>] driver_probe_device+0x2a/0x120 drivers/base/dd=
+.c:808
+>      [<ffffffff82713c27>] __device_attach_driver+0xf7/0x150 drivers/base=
+/dd.c:936
+>      [<ffffffff82710137>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c=
+:427
+>      [<ffffffff827136b5>] __device_attach+0x105/0x2d0 drivers/base/dd.c:=
+1008
+>      [<ffffffff82711d36>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:=
+487
+>      [<ffffffff8270e242>] device_add+0x642/0xdc0 drivers/base/core.c:351=
+7
+>      [<ffffffff82d14d5f>] usb_set_configuration+0x8ef/0xb80 drivers/usb/=
+core/message.c:2170
+>      [<ffffffff82d2576c>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb=
+/core/generic.c:238
+>      [<ffffffff82d16ffc>] usb_probe_device+0x5c/0x140 drivers/usb/core/d=
+river.c:293
+>      [<ffffffff82712f0d>] call_driver_probe drivers/base/dd.c:560 [inlin=
+e]
+>      [<ffffffff82712f0d>] really_probe+0x12d/0x390 drivers/base/dd.c:639
+>      [<ffffffff8271322f>] __driver_probe_device+0xbf/0x140 drivers/base/=
+dd.c:778
 >
-> Signed-off-by: Eli Cohen <elic@nvidia.com>
+> Fix this bug by rewriting the error handling code in ufx_usb_probe.
+>
+> Reported-by: syzkaller <syzkaller@googlegroups.com>
+> Tested-by: Dongliang Mu <dzm91@hust.edu.cn>
+> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+
+applied.
+Thanks!
+Helge
+
 > ---
->  drivers/vdpa/Kconfig              |  12 +++
->  drivers/vdpa/mlx5/net/debug.c     |  86 ++++++++++++++++++++++
->  drivers/vdpa/mlx5/net/mlx5_vnet.c | 118 +++++++++++++++++++++++-------
->  drivers/vdpa/mlx5/net/mlx5_vnet.h |  30 ++++++++
->  4 files changed, 218 insertions(+), 28 deletions(-)
+>   drivers/video/fbdev/smscufx.c | 46 +++++++++++++++++++++++------------
+>   1 file changed, 31 insertions(+), 15 deletions(-)
 >
-
-[...]
-
-> +       vid = key2vid(node->macvlan);
->         spec->match_criteria_enable = MLX5_MATCH_OUTER_HEADERS;
->         headers_c = MLX5_ADDR_OF(fte_match_param, spec->match_criteria, outer_headers);
->         headers_v = MLX5_ADDR_OF(fte_match_param, spec->match_value, outer_headers);
-> @@ -1430,48 +1475,62 @@ static int mlx5_vdpa_add_mac_vlan_rules(struct mlx5_vdpa_net *ndev, u8 *mac,
->         dmac_v = MLX5_ADDR_OF(fte_match_param, headers_v, outer_headers.dmac_47_16);
->         eth_broadcast_addr(dmac_c);
->         ether_addr_copy(dmac_v, mac);
-> -       if (ndev->mvdev.actual_features & VIRTIO_NET_F_CTRL_VLAN) {
-> +       if (ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_CTRL_VLAN)) {
-
-
-This seems like a fix for patch 1? If yes, let's just squash this.
-
-Thanks
+> diff --git a/drivers/video/fbdev/smscufx.c b/drivers/video/fbdev/smscufx=
+.c
+> index 9343b7a4ac89..2ad6e98ce10d 100644
+> --- a/drivers/video/fbdev/smscufx.c
+> +++ b/drivers/video/fbdev/smscufx.c
+> @@ -1622,7 +1622,7 @@ static int ufx_usb_probe(struct usb_interface *int=
+erface,
+>   	struct usb_device *usbdev;
+>   	struct ufx_data *dev;
+>   	struct fb_info *info;
+> -	int retval;
+> +	int retval =3D -ENOMEM;
+>   	u32 id_rev, fpga_rev;
+>
+>   	/* usb initialization */
+> @@ -1654,15 +1654,17 @@ static int ufx_usb_probe(struct usb_interface *i=
+nterface,
+>
+>   	if (!ufx_alloc_urb_list(dev, WRITES_IN_FLIGHT, MAX_TRANSFER)) {
+>   		dev_err(dev->gdev, "ufx_alloc_urb_list failed\n");
+> -		goto e_nomem;
+> +		goto put_ref;
+>   	}
+>
+>   	/* We don't register a new USB class. Our client interface is fbdev *=
+/
+>
+>   	/* allocates framebuffer driver structure, not framebuffer memory */
+>   	info =3D framebuffer_alloc(0, &usbdev->dev);
+> -	if (!info)
+> -		goto e_nomem;
+> +	if (!info) {
+> +		dev_err(dev->gdev, "framebuffer_alloc failed\n");
+> +		goto free_urb_list;
+> +	}
+>
+>   	dev->info =3D info;
+>   	info->par =3D dev;
+> @@ -1705,22 +1707,34 @@ static int ufx_usb_probe(struct usb_interface *i=
+nterface,
+>   	check_warn_goto_error(retval, "unable to find common mode for display=
+ and adapter");
+>
+>   	retval =3D ufx_reg_set_bits(dev, 0x4000, 0x00000001);
+> -	check_warn_goto_error(retval, "error %d enabling graphics engine", ret=
+val);
+> +	if (retval < 0) {
+> +		dev_err(dev->gdev, "error %d enabling graphics engine", retval);
+> +		goto setup_modes;
+> +	}
+>
+>   	/* ready to begin using device */
+>   	atomic_set(&dev->usb_active, 1);
+>
+>   	dev_dbg(dev->gdev, "checking var");
+>   	retval =3D ufx_ops_check_var(&info->var, info);
+> -	check_warn_goto_error(retval, "error %d ufx_ops_check_var", retval);
+> +	if (retval < 0) {
+> +		dev_err(dev->gdev, "error %d ufx_ops_check_var", retval);
+> +		goto reset_active;
+> +	}
+>
+>   	dev_dbg(dev->gdev, "setting par");
+>   	retval =3D ufx_ops_set_par(info);
+> -	check_warn_goto_error(retval, "error %d ufx_ops_set_par", retval);
+> +	if (retval < 0) {
+> +		dev_err(dev->gdev, "error %d ufx_ops_set_par", retval);
+> +		goto reset_active;
+> +	}
+>
+>   	dev_dbg(dev->gdev, "registering framebuffer");
+>   	retval =3D register_framebuffer(info);
+> -	check_warn_goto_error(retval, "error %d register_framebuffer", retval)=
+;
+> +	if (retval < 0) {
+> +		dev_err(dev->gdev, "error %d register_framebuffer", retval);
+> +		goto reset_active;
+> +	}
+>
+>   	dev_info(dev->gdev, "SMSC UDX USB device /dev/fb%d attached. %dx%d re=
+solution."
+>   		" Using %dK framebuffer memory\n", info->node,
+> @@ -1728,21 +1742,23 @@ static int ufx_usb_probe(struct usb_interface *i=
+nterface,
+>
+>   	return 0;
+>
+> -error:
+> -	fb_dealloc_cmap(&info->cmap);
+> -destroy_modedb:
+> +reset_active:
+> +	atomic_set(&dev->usb_active, 0);
+> +setup_modes:
+>   	fb_destroy_modedb(info->monspecs.modedb);
+>   	vfree(info->screen_base);
+>   	fb_destroy_modelist(&info->modelist);
+> +error:
+> +	fb_dealloc_cmap(&info->cmap);
+> +destroy_modedb:
+>   	framebuffer_release(info);
+> +free_urb_list:
+> +	if (dev->urbs.count > 0)
+> +		ufx_free_urb_list(dev);
+>   put_ref:
+>   	kref_put(&dev->kref, ufx_free); /* ref for framebuffer */
+>   	kref_put(&dev->kref, ufx_free); /* last ref from kref_init */
+>   	return retval;
+> -
+> -e_nomem:
+> -	retval =3D -ENOMEM;
+> -	goto put_ref;
+>   }
+>
+>   static void ufx_usb_disconnect(struct usb_interface *interface)
 
