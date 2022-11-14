@@ -2,166 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 258196282E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 071A76282F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236879AbiKNOkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46810 "EHLO
+        id S237154AbiKNOmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:42:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237063AbiKNOjq (ORCPT
+        with ESMTP id S237035AbiKNOlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:39:46 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DFC2099B;
-        Mon, 14 Nov 2022 06:39:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668436777; x=1699972777;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0p1aFZmokWFv/YvtG1Dxt87fVW/BDd9HRj23KFuYuZM=;
-  b=Zgl87nJqPHFiRKMYL7XDtVT/ga/d3ioBs2gBkZLeqxZtGAhi23hkWyXT
-   DmcfBCpHF7HKpdmGqMqeABeIabccUSfblgo1MgDlQnb4HBZoXZX5Azdj1
-   QiLDrsnLsWVuW9/xsADLtkWofX3fuYx3HjyHyHdJNBuK/51wa1iKp4WSs
-   Op7DcX0u7dN533eq8RtLgaAkmYV3a0Pii+aVGJamZle0K+zBXTZ4n4VXG
-   0+sMsCjrPtXosO6e8/Ci/4T6DHWQgrD0orNEQvX1Hu5WHq2OliuOSQX7/
-   akaXs7my9jT0mj/9oEyD94CBkhf4IUxWFKZgWu0tSpt+GKjdA0kw4Ms3j
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="313127933"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="313127933"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 06:39:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="813275625"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="813275625"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 14 Nov 2022 06:39:32 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1ouacT-00CCyz-1k;
-        Mon, 14 Nov 2022 16:39:29 +0200
-Date:   Mon, 14 Nov 2022 16:39:29 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Andrew Davis <afd@ti.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Li Yang <leoyang.li@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] Rename DTB overlay source files
-Message-ID: <Y3JTIbU7PkNUpU34@smile.fi.intel.com>
-References: <20221024173434.32518-1-afd@ti.com>
- <CAL_JsqJxgVwsjKnkCEkZeoSsDgaRD+DVPkHRBc2SrcSq69PBNw@mail.gmail.com>
- <Y26lDEtiG4KFzc91@smile.fi.intel.com>
- <e5ce57b2-4557-2dcb-fb3a-71e2acae4502@ti.com>
+        Mon, 14 Nov 2022 09:41:17 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD222C67A;
+        Mon, 14 Nov 2022 06:41:11 -0800 (PST)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AEEJPtQ032494;
+        Mon, 14 Nov 2022 14:40:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=7Sd5zn8zeXsyzei9F1nr7XxTnf+6sLmPm8zD+kQO6Ts=;
+ b=jBIFY7CkoMa57sXdtIGbJVB87xKcxNW8/HQiujWj+weNk0VjOJesc5GFqB7lmKM1bEAd
+ 7fF1A8+Lcmwi36XaKx3Pt05NJrkTYBE6HPc5uBLW158c5IVV5AGOEcXqo7pH4W8s5LID
+ ViAj1VyMtmTUBrWSgI+2jvEpjQqxkOl73vte7TmfVrwLezLNRFpvxSpMDIRqL8AjqK4P
+ PYJ/aRSMI12Q1poRauFifvsUPfcAeE/ucTHRRyzQZ45wrSCsITVoiQZHfTBree8bHFDS
+ moKHacjODQMHya+g7YmTDy7fUcX4suRTvbNwnOQ6p2pA1RkjROnbnyYExZOv3YUAUy1C 1Q== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kug7s98b8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 14:40:50 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AEEenZu009543
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 14:40:49 GMT
+Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 14 Nov 2022 06:40:44 -0800
+From:   Mao Jinlong <quic_jinlmao@quicinc.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>
+CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH v15 0/8] Coresight: Add support for TPDM and TPDA 
+Date:   Mon, 14 Nov 2022 22:40:19 +0800
+Message-ID: <20221114144027.14365-1-quic_jinlmao@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e5ce57b2-4557-2dcb-fb3a-71e2acae4502@ti.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IhvlFOvR7v25HKc5SNA-4GGwXcbdV_iS
+X-Proofpoint-ORIG-GUID: IhvlFOvR7v25HKc5SNA-4GGwXcbdV_iS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-14_12,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 mlxlogscore=999 spamscore=0 phishscore=0 adultscore=0
+ bulkscore=0 malwarescore=0 impostorscore=0 lowpriorityscore=0
+ clxscore=1011 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211140104
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 03:05:20PM -0600, Andrew Davis wrote:
-> On 11/11/22 1:39 PM, Andy Shevchenko wrote:
-> > On Wed, Oct 26, 2022 at 09:11:21AM -0500, Rob Herring wrote:
-> > > On Mon, Oct 24, 2022 at 12:34 PM Andrew Davis <afd@ti.com> wrote:
-> > > > 
-> > > > Hello all,
-> > > > 
-> > > > This is a series based on my patch here[0]. As suggested by Rob
-> > > > I've resurrected Frank's patch and appended it to mine as a series.
-> > > > 
-> > > > First patch here is my original patch, 3rd is Frank's patch but with
-> > > > the unittest changes pulled out into the 2nd patch. That was re-worked
-> > > > moving the source building macro into scripts/Makefile.lib.
-> > > > 
-> > > > Patches 4, 5, and 6 are an attempt at renaming all the existing DTB
-> > > > overlays. Split out by platform so they could be taken by platform
-> > > > maintainers or if easier ACK'd here and taken all together.
-> > > > 
-> > > > This should cover all the DTB overlays so we can remove the old .dts
-> > > > rule for overlays and make .dtso the only supported way, let me know
-> > > > if we want that this cycle and I can post that too.
-> > > > 
-> > > > Thanks,
-> > > > Andrew
-> > > > 
-> > > > Changes from v1[1]:
-> > > >   - Added patch to rename pi433 overlay.
-> > > >   - Cleaned wording on patch 4-6.
-> > > >   - Collected some ACKs
-> > > > 
-> > > > [0] https://www.spinics.net/lists/kernel/msg4548509.html
-> > > > [1] https://www.spinics.net/lists/arm-kernel/msg1020165.html
-> > > > 
-> > > > Andrew Davis (6):
-> > > >    kbuild: Allow DTB overlays to built from .dtso named source files
-> > > >    kbuild: Allow DTB overlays to built into .dtso.S files
-> > > >    arm64: dts: freescale: Rename DTB overlay source files from .dts to
-> > > >      .dtso
-> > > >    arm64: dts: renesas: Rename DTB overlay source files from .dts to
-> > > >      .dtso
-> > > >    arm64: dts: xilinx: Rename DTB overlay source files from .dts to .dtso
-> > > >    staging: pi433: overlay: Rename overlay source file from .dts to .dtso
-> > > > 
-> > > > Frank Rowand (1):
-> > > >    of: overlay: rename overlay source files from .dts to .dtso
-> > > 
-> > > I've applied patches 1-3 and 7. I'll send a PR for the branch to the
-> > > platform maintainers after a few days in linux-next.
-> > 
-> > The patch
-> > 
-> > commit 941214a512d8c80d47e720c17ec17e8539175e93
-> > Author: Andrew Davis <afd@ti.com>
-> > Date:   Mon Oct 24 12:34:29 2022 -0500
-> > 
-> >      kbuild: Allow DTB overlays to built into .dtbo.S files
-> > 
-> > broke the build reproducibility / no-op builds.
-> > 
-> > Before:
-> >    2+ execution of `make` on non-changed tree did nothing
-> > 
-> > Now:
-> >    Each run of `make` (even without a single bit changed) restarts vmlinux
-> >    rebuild.
-> > 
-> > Please, revert or fix.
-> > 
-> 
-> I do not see this behavior. What config are you using?
-> 
-> Not sure how this patch could be the root cause, it only adds
-> a build target/rule, but doesn't actually use it anywhere yet..
+This series adds support for the trace performance monitoring and
+diagnostics hardware (TPDM and TPDA). It is composed of two major
+elements.
+a) Changes for original coresight framework to support for TPDM and TPDA.
+b) Add driver code for TPDM and TPDA.
 
-Just to confirm, I reverted the patch and everything went fine again,
-so simple revert helps!
+Introduction of changes for original coresight framework
+Support TPDM as new coresight source.
+Since only STM and ETM are supported as coresight source originally.
+TPDM is a newly added coresight source. We need to change
+the original way of saving coresight path to support more types source
+for coresight driver.
+The following patch is to add support more coresight sources.
+    coresight: core: Use IDR for non-cpu bound sources' paths.
 
-(Tested on today's Linux Next)
+Introduction of TPDM and TPDA
+TPDM - The trace performance monitoring and diagnostics monitor or TPDM in
+short serves as data collection component for various dataset types
+specified in the QPMDA(Qualcomm performance monitoring and diagnostics
+architecture) spec. The primary use case of the TPDM is to collect data
+from different data sources and send it to a TPDA for packetization,
+timestamping and funneling.
+     Coresight: Add coresight TPDM source driver
+     dt-bindings: arm: Adds CoreSight TPDM hardware definitions
+     coresight-tpdm: Add DSB dataset support
+     coresight-tpdm: Add integration test support
+
+TPDA - The trace performance monitoring and diagnostics aggregator or
+TPDA in short serves as an arbitration and packetization engine for the
+performance monitoring and diagnostics network as specified in the QPMDA
+(Qualcomm performance monitoring and diagnostics architecture)
+specification. The primary use case of the TPDA is to provide
+packetization, funneling and timestamping of Monitor data as specified
+in the QPMDA specification.
+The following patch is to add driver for TPDA.
+     Coresight: Add TPDA link driver
+     dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+
+The last patch of this series is a device tree modification, which add
+the TPDM and TPDA configuration to device tree for validating.
+    ARM: dts: msm: Add tpdm mm/prng for sm8250
+
+Once this series patches are applied properly, the tpdm and tpda nodes
+should be observed at the coresight path /sys/bus/coresight/devices
+e.g.
+/sys/bus/coresight/devices # ls -l | grep tpd
+tpda0 -> ../../../devices/platform/soc@0/6004000.tpda/tpda0
+tpdm0 -> ../../../devices/platform/soc@0/6c08000.mm.tpdm/tpdm0
+
+We can use the commands are similar to the below to validate TPDMs.
+Enable coresight sink first.
+
+echo 1 > /sys/bus/coresight/devices/tmc_etf0/enable_sink
+echo 1 > /sys/bus/coresight/devices/tpdm0/enable_source
+echo 1 > /sys/bus/coresight/devices/tpdm0/integration_test
+echo 2 > /sys/bus/coresight/devices/tpdm0/integration_test
+The test data will be collected in the coresight sink which is enabled.
+If rwp register of the sink is keeping updating when do
+integration_test (by cat tmc_etf0/mgmt/rwp), it means there is data
+generated from TPDM to sink.
+
+There must be a tpda between tpdm and the sink. When there are some
+other trace event hw components in the same HW block with tpdm, tpdm
+and these hw components will connect to the coresight funnel. When
+there is only tpdm trace hw in the HW block, tpdm will connect to
+tpda directly.
+  
+    +---------------+                +-------------+
+    |  tpdm@6c08000 |                |tpdm@684C000 |
+    +-------|-------+                +------|------+
+            |                               |
+    +-------|-------+                       |
+    | funnel@6c0b000|                       |
+    +-------|-------+                       |
+            |                               |
+    +-------|-------+                       |
+    |funnel@6c2d000 |                       |
+    +-------|-------+                       |
+            |                               |
+            |    +---------------+          |
+            +----- tpda@6004000  -----------+
+                 +-------|-------+
+                         |
+                 +-------|-------+
+                 |funnel@6005000 |
+                 +---------------+
+
+This patch series depends on patch series:
+"[v5,00/14] coresight: Add new API to allocate trace source ID values"
+https://patchwork.kernel.org/project/linux-arm-kernel/cover/20221101163103.17921-1-mike.leach@linaro.org/
+
+"arm64: dts: qcom: sm8250: Add coresight components"
+https://patchwork.kernel.org/project/linux-arm-msm/patch/20221114091251.13939-1-quic_jinlmao@quicinc.com/
+
+Changes from V14:
+1. coresight-tpda: Add more comments in trace id function.
+2. qcom,coresight-tpdm.yaml: Add more comments in description.
+3. Push "arm64: dts: qcom: sm8250: Add coresight components" out this series. 
+
+Mao Jinlong (8):
+  coresight: core: Use IDR for non-cpu bound sources' paths.
+  Coresight: Add coresight TPDM source driver
+  dt-bindings: arm: Adds CoreSight TPDM hardware
+  coresight-tpdm: Add DSB dataset support
+  coresight-tpdm: Add integration test support
+  Coresight: Add TPDA link driver
+  dt-bindings: arm: Adds CoreSight TPDA hardware definitions
+  arm64: dts: qcom: sm8250: Add tpdm mm/prng
+
+ .../testing/sysfs-bus-coresight-devices-tpdm  |  13 +
+ .../bindings/arm/qcom,coresight-tpda.yaml     | 129 +++++++++
+ .../bindings/arm/qcom,coresight-tpdm.yaml     |  93 +++++++
+ MAINTAINERS                                   |   1 +
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          | 173 ++++++++++++
+ drivers/hwtracing/coresight/Kconfig           |  23 ++
+ drivers/hwtracing/coresight/Makefile          |   2 +
+ drivers/hwtracing/coresight/coresight-core.c  |  42 ++-
+ drivers/hwtracing/coresight/coresight-tpda.c  | 211 ++++++++++++++
+ drivers/hwtracing/coresight/coresight-tpda.h  |  35 +++
+ drivers/hwtracing/coresight/coresight-tpdm.c  | 259 ++++++++++++++++++
+ drivers/hwtracing/coresight/coresight-tpdm.h  |  62 +++++
+ include/linux/coresight.h                     |   1 +
+ 13 files changed, 1032 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+ create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-tpda.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-tpdm.yaml
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpda.h
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-tpdm.h
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.17.1
 
