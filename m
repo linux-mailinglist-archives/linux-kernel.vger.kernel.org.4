@@ -2,107 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F6F628594
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB9762859C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237804AbiKNQiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:38:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
+        id S237920AbiKNQjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:39:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237767AbiKNQid (ORCPT
+        with ESMTP id S237865AbiKNQjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:38:33 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E568C6140
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:33:32 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id b11so10799860pjp.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:33:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9ogg3fkQdFokCHIT301Mq6G/d+Jry/0mkt1THzib8yw=;
-        b=mfNuf5Wcxgjz9PTOA5OSLw7PSE41L3k++R9MQmsMRXZMhjr1srhCOJNkxaRdcyzn+I
-         gvaI1WLik/o55695AmtDTFQguCun+btFWxF34ACKPuL5I7eeDcF760Rz5M7yo6vzoG4i
-         uBlMImfVG2oAiZM6pd+UmVYc2jPTjGaNZjZuK7400f4VsegZoEoKRcLEBVKu57Ph4NTP
-         py2sQTrkNGXex50BcqHfMs1nZeiWrkk84BtLSu8/DpgRzuvOlNU6LOQIP76qM4rhkmM8
-         j0SMUVlXvlKQbMXfwv+zdx1Nf2u9OFEli4zUST6CtyxFYt89Jg3YEGCPvOzaUSlbo9Si
-         xYaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9ogg3fkQdFokCHIT301Mq6G/d+Jry/0mkt1THzib8yw=;
-        b=YmVGuNhLbF3kjr6aNNmmi7rt6dphDsjAo/ZSuMfQy6Z6FCALevA+o0dBQ4p+yR2mG+
-         TsFiJ/ILM2fhDhqRHAcm0aHLYvUzmcuLLN6oqRURawmoON2tUpwqINhmRNUrL7TdHsdu
-         /scPVpFkqjV/lVWvqfeq0Cx2/fNNqbeR+JJaO4ubMI8MgLOL5BmWw/HtgXJO7n7lY5yq
-         zlR0WWw7M20ZFu6eWlP5UkCvpbJWDXTRupoPTkpn9d/8btWecDJ3KSgaujLwWm49o03D
-         bYYJACIvkBvreikk3s9Wxvn3aRjszSOljXChShDC7ErecEtTSxgnZIGR020qFesBU+fC
-         f35Q==
-X-Gm-Message-State: ANoB5pnEPJhy4b7rwusVttFMvVqVxiJdL9Xtm6Tp6eDOKAChhTC61S4W
-        YmhPIQpGO0mkRzmuR5JmvCHlEA==
-X-Google-Smtp-Source: AA0mqf6Z7m4Z6nj8jAbKD4bNk9rSQVf+7mwebNI0vAN2YrFaFZCMxDD8FTVLAusqyFuI1Z7b/s4RmQ==
-X-Received: by 2002:a17:90a:fb58:b0:213:2230:96d0 with SMTP id iq24-20020a17090afb5800b00213223096d0mr14222680pjb.136.1668443611640;
-        Mon, 14 Nov 2022 08:33:31 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id b16-20020a170902d51000b00186b9196cbesm7778380plg.249.2022.11.14.08.33.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 08:33:31 -0800 (PST)
-Date:   Mon, 14 Nov 2022 16:33:27 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Woodhouse, David" <dwmw@amazon.co.uk>
-Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "mhal@rbox.co" <mhal@rbox.co>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Durrant, Paul" <pdurrant@amazon.co.uk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Kaya, Metin" <metikaya@amazon.co.uk>
-Subject: Re: [PATCH 03/16] KVM: x86: set gfn-to-pfn cache length consistently
- with VM word size
-Message-ID: <Y3Jt11kcj8lQ+NCN@google.com>
-References: <20221027161849.2989332-1-pbonzini@redhat.com>
- <20221027161849.2989332-4-pbonzini@redhat.com>
- <Y1q+a3gtABqJPmmr@google.com>
- <c61f6089-57b7-e00f-d5ed-68e62237eab0@redhat.com>
- <c30b46557c9c59b9f4c8c3a2139bd506a81f7ee1.camel@infradead.org>
- <994314051112513787cc4bd0c7d2694e15190d0f.camel@amazon.co.uk>
+        Mon, 14 Nov 2022 11:39:23 -0500
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [5.144.164.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B842F64D
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:37:02 -0800 (PST)
+Received: from [192.168.2.144] (bband-dyn193.178-41-216.t-com.sk [178.41.216.193])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 871CD40124;
+        Mon, 14 Nov 2022 17:36:59 +0100 (CET)
+Date:   Mon, 14 Nov 2022 17:36:53 +0100
+From:   Martin Botka <martin.botka@somainline.org>
+Subject: Re: [PATCH] arm64: dts: Add basic support for BIQU CB1
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     martin.botka1@gmail.com, ~postmarketos/upstreaming@lists.sr.ht,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jami Kettunen <jamipkettunen@somainline.org>,
+        Paul Bouchara <paul.bouchara@somainline.org>,
+        Yenda <jtrmal@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Message-Id: <HHJCLR.858WB1ISGFT32@somainline.org>
+In-Reply-To: <4ce3199e-1c9c-2fca-804e-dadc87a85704@linaro.org>
+References: <20221114162547.1802689-1-martin.botka@somainline.org>
+        <4ce3199e-1c9c-2fca-804e-dadc87a85704@linaro.org>
+X-Mailer: geary/40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <994314051112513787cc4bd0c7d2694e15190d0f.camel@amazon.co.uk>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022, Woodhouse, David wrote:
-> Most other data structures, including the pvclock info (both Xen and
-> native KVM), could potentially cross page boundaries. And isn't that
-> also true for things that we'd want to use the GPC for in nesting?
+Yea my bad this was not supposed to be sent this soon.
+Well either way V2 will come soon
 
-Off the top of my head, no.  Except for MSR and I/O permission bitmaps, which
-are >4KiB, things that are referenced by physical address are <=4KiB and must be
-naturally aligned.  nVMX does temporarily map L1's MSR bitmap, but that could be
-split into two separate mappings if necessary.
-
-> For the runstate info I suggested reverting commit a795cd43c5b5 but
-> that doesn't actually work because it still has the same problem. Even
-> the gfn-to-hva cache still only really works for a single page, and
-> things like kvm_write_guest_offset_cached() will fall back to using
-> kvm_write_guest() in the case where it crosses a page boundary.
+On Mon, Nov 14 2022 at 05:29:31 PM +01:00:00, Krzysztof Kozlowski 
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 14/11/2022 17:25, Martin Botka wrote:
+>>  CB1 is Compute Module style board that plugs into Rpi board style 
+>> adapter or
+>>  Manta 3D printer boards (M4P/M8P).
+>> 
+>>  The board has:
+>>  	H616 SoC
+>>  	1GB of RAM
+>>  	AXP313A PMIC
+>> 
+>>  And the actual boards that CB1 plugs in are just extension to it 
+>> with ports and
+>>  thus are not split in DT.
+>> 
+>>  Boards have:
+>>  	4x (3x for Manta boards) USB and 1 USB OTG.
+>>  	SDcard slot for loading images.
+>>  	Ethernet port wired to the internal PHY.
+>>  	2x HDMI 2.0.
+>>  	Power and Status LEDs.
+>> 
+>>  Currently working:
+>>  	Booting
+>>  	USB
+>>  	UART
+>> 
+>>  Signed-off-by: Martin Botka <martin.botka@somainline.org>
+>>  ---
+>>   arch/arm64/boot/dts/allwinner/Makefile        |   1 +
+>>   .../dts/allwinner/sun50i-h616-biqu-cb1.dts    | 191 
+>> ++++++++++++++++++
+>>   2 files changed, 192 insertions(+)
+>>   create mode 100644 
+>> arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
+>> 
+>>  diff --git a/arch/arm64/boot/dts/allwinner/Makefile 
+>> b/arch/arm64/boot/dts/allwinner/Makefile
+>>  index 6a96494a2e0a..223f1be73541 100644
+>>  --- a/arch/arm64/boot/dts/allwinner/Makefile
+>>  +++ b/arch/arm64/boot/dts/allwinner/Makefile
+>>  @@ -38,5 +38,6 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64.dtb
+>>   dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-pine-h64-model-b.dtb
+>>   dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6.dtb
+>>   dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6-mini.dtb
+>>  +dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-biqu-cb1.dtb
+>>   dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-orangepi-zero2.dtb
+>>   dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-x96-mate.dtb
+>>  diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts 
+>> b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
+>>  new file mode 100644
+>>  index 000000000000..2225a965dddc
+>>  --- /dev/null
+>>  +++ b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
+>>  @@ -0,0 +1,191 @@
+>>  +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+>>  +/*
+>>  + * Copyright (C) 2022 Arm Ltd.
+>>  + */
+>>  +
+>>  +/dts-v1/;
+>>  +
+>>  +#include "sun50i-h616.dtsi"
+>>  +
+>>  +#include <dt-bindings/gpio/gpio.h>
+>>  +#include <dt-bindings/interrupt-controller/arm-gic.h>
+>>  +#include <dt-bindings/leds/common.h>
+>>  +
+>>  +/ {
+>>  +	model = "BIQU CB1";
+>>  +	compatible = "allwinner,sun50i-h616";
 > 
-> I'm wondering if the better fix is to allow the GPC to map more than
-> one page.
+> That's not a proper board compatible.
+> 
+>>  +
+>>  +	aliases {
+>>  +		serial0 = &uart0;
+>>  +	};
+>>  +
+>>  +	chosen {
+>>  +		stdout-path = "serial0:115200n8";
+>>  +	};
+>>  +
+>>  +	leds {
+>>  +		compatible = "gpio-leds";
+>>  +
+>>  +		led-0 {
+>>  +			function = LED_FUNCTION_POWER;
+>>  +			color = <LED_COLOR_ID_RED>;
+>>  +			gpios = <&pio 2 12 GPIO_ACTIVE_HIGH>; /* PC12 */
+>>  +			default-state = "on";
+>>  +		};
+>>  +
+>>  +		led-1 {
+>>  +			function = LED_FUNCTION_STATUS;
+>>  +			color = <LED_COLOR_ID_GREEN>;
+>>  +			gpios = <&pio 2 13 GPIO_ACTIVE_HIGH>; /* PC13 */
+>>  +		};
+>>  +	};
+>>  +
+>>  +	reg_vcc5v: vcc5v {
+> 
+> regulator prefix. Keep it consistent.
+> 
+>>  +		/* board wide 5V supply directly from the USB-C socket */
+>>  +		compatible = "regulator-fixed";
+>>  +		regulator-name = "vcc-5v";
+>>  +		regulator-min-microvolt = <5000000>;
+>>  +		regulator-max-microvolt = <5000000>;
+>>  +		regulator-always-on;
+>>  +	};
+>>  +
+>>  +	reg_usb1_vbus: regulator-usb1-vbus {
+>>  +		compatible = "regulator-fixed";
+>>  +		regulator-name = "usb1-vbus";
+>>  +		regulator-min-microvolt = <5000000>;
+>>  +		regulator-max-microvolt = <5000000>;
+>>  +		vin-supply = <&reg_vcc5v>;
+>>  +		enable-active-high;
+>>  +		gpio = <&pio 2 16 GPIO_ACTIVE_HIGH>; /* PC16 */
+>>  +	};
+>>  +};
+>>  +
+>>  +&ehci0 {
+>>  +	status = "okay";
+>>  +};
+>>  +
+>>  +&ehci1 {
+>>  +	status = "okay";
+>>  +};
+>>  +
+>>  +&ehci2 {
+>>  +	status = "okay";
+>>  +};
+>>  +
+>>  +&ehci3 {
+>>  +	status = "okay";
+>>  +};
+>>  +
+>>  +&mmc0 {
+>>  +	vmmc-supply = <&reg_dldo1>;
+>>  +	cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;	/* PF6 */
+>>  +	no-1-8-v;
+>>  +	bus-width = <4>;
+>>  +	status = "disabled";
+>>  +};
+>>  +
+>>  +&ohci0 {
+>>  +	status = "okay";
+>>  +};
+>>  +
+>>  +&ohci1 {
+>>  +	status = "okay";
+>>  +};
+>>  +
+>>  +&ohci2 {
+>>  +	status = "okay";
+>>  +};
+>>  +
+>>  +&ohci3 {
+>>  +	status = "okay";
+>>  +};
+>>  +
+>>  +&r_i2c {
+>>  +	status = "okay";
+>>  +
+>>  +	axp1530: pmic@36 {
+>>  +		compatible = "x-powers,axp1530";
+>>  +		status = "okay";
+> 
+> Drop.
+> 
+>>  +		reg = <0x36>;
+>>  +		wakeup-source;
+>>  +
+>>  +		standby_param: standby_param {
+> 
+> Does not look like supported/documented/valid property. Test your DTS
+> with `make dtbs_check`.
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
 
-I agree that KVM should drop the "no page splits" restriction, but I don't think
-that would necessarily solve all KVM Xen issues.  KVM still needs to precisely
-handle the "correct" struct size, e.g. if one of the structs is placed at the very
-end of the page such that the smaller compat version doesn't split a page but the
-64-bit version does.
+
