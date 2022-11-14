@@ -2,180 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D05B6278CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8E56278CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236320AbiKNJPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:15:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
+        id S236247AbiKNJOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:14:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235832AbiKNJP3 (ORCPT
+        with ESMTP id S235832AbiKNJOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:15:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B9764EB
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:14:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668417270;
+        Mon, 14 Nov 2022 04:14:33 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A9FBCA9;
+        Mon, 14 Nov 2022 01:14:32 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9C223E0008;
+        Mon, 14 Nov 2022 09:14:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668417271;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5hofss//ywoRNQpOC2hnRbrd17v1Z4Ke0Sn/QHTSNDA=;
-        b=F33jSbHMhEN21tkWRItyGwjXo3BjvhxakrY3L6A54lg2CSYSpkTc/RMU9y/2QaxDwTMJsc
-        kSeemLmsxUTVSo2A1n1YcwaSvTVMwV/tw8BkNRsrdsFyNH+j9QEWSMjBQxJXRsqeZWCHBO
-        ch33ztSQK99w8xOx+Kczo3fdiD5dDi4=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-168-deKax_B9P_WTDSU-3Im1Lg-1; Mon, 14 Nov 2022 04:14:29 -0500
-X-MC-Unique: deKax_B9P_WTDSU-3Im1Lg-1
-Received: by mail-pg1-f200.google.com with SMTP id k16-20020a635a50000000b0042986056df6so5551772pgm.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:14:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5hofss//ywoRNQpOC2hnRbrd17v1Z4Ke0Sn/QHTSNDA=;
-        b=xXapzN8Z7zCsjYHG+R5fB6hZrXCJKHL9FkL41aJOgkD6gHl9DA24KMINF9p+fQxcEz
-         lfiVO8v6e6A4OID12/NGhXUHZuiz3B0vLY5Z2GoHWWfZKtf4WmxwRRDOHtCBEOMLPZWm
-         g5WQk/3TMbGu0vcBb/DdFC4cMM6gKUJGfURDazlh1Fx1koVQc5w6qijZm0Goazh06XbP
-         3Z/oxCXv7CnzfjdlIoAPG034sOD+e1tOGX4mAmtWRpU50Ctj5elQoY+hzYjyaH61EnBG
-         0X5qDU5+uo7T2GbJFvfQutpX5Dv3gkUC1eZeMBM4k7Ra2UV9/WrXsB9nZJIvhF7nulDC
-         koQQ==
-X-Gm-Message-State: ANoB5plMsSkFAeR+wyiuIKLfvspE4kFITalsZzDixfVfCVuQNttWVg9b
-        A3Z0WRw+Ttwr4G1UmOOcMootB867LPKvSu/fkxFev8mAnSvIBnpTgHTEtHaDlaycBRoJAnGDwmt
-        o9vGcAgRnYFT1JQGxjpLU5jGoUS1veCvA8njAtxew
-X-Received: by 2002:a17:902:d708:b0:186:5ce5:8022 with SMTP id w8-20020a170902d70800b001865ce58022mr12448092ply.62.1668417268341;
-        Mon, 14 Nov 2022 01:14:28 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4uO4nzhKMggeTT26a72aOVoPNbqhtrc2BIEVlMFyRN31zZBc0rw4X7Ojkw+dhSiJdJC0duVUo5tp3z0w2bohI=
-X-Received: by 2002:a17:902:d708:b0:186:5ce5:8022 with SMTP id
- w8-20020a170902d70800b001865ce58022mr12448076ply.62.1668417268052; Mon, 14
- Nov 2022 01:14:28 -0800 (PST)
+        bh=oBxa36/e2s5Q5a4tS85ZI4cWnvsxpE1Fze65dFPuccA=;
+        b=OBYem1eOTJHUmpN8jQbSq1S5Z4X0EyvDyjSYqCYfNbgLZn8z5FSrEf5LVNaqAhnyA6Hzzz
+        AFnBi1Z9KTnI81wP45e8L4yuauqL1ek1puJzuqgs3Sjtmut8voOi4/KZbwn6SntpgGMqrK
+        /DJ2ofaOyV/ZH5pwFJ35evlhh2tOtKCdeyn4Lhwraq8Ir5knm8JRfliYpH5wY6MeaX5Khw
+        pZkfd+45vUG0obMEp1d1kw9gv3agM0k5n9/RwGXRbU96VgZMdMmKlJBI0SRQ6yHtYrAXSJ
+        0kR7wYFj9vPEBA9RKcJVu9SKmzxmRV8TuTIWEDX2+Vd74dq1LgEhEuMLUtIimQ==
+Date:   Mon, 14 Nov 2022 10:14:28 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mikhail Zhilkin <csharper2005@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: mtd: fixed-partitions: Fix
+ 'sercomm,scpart-id' schema
+Message-ID: <20221114101428.3932e265@xps-13>
+In-Reply-To: <20221111212824.4103514-1-robh@kernel.org>
+References: <20221111212824.4103514-1-robh@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20221110141335.62171-1-sgarzare@redhat.com> <CAJaqyWdvdy2QxuuyPRtfBKtuObrMg_kX_R9hdui+Oh72XtJ7Qw@mail.gmail.com>
- <20221111163007.35kvkodvk6zpimmu@sgarzare-redhat>
-In-Reply-To: <20221111163007.35kvkodvk6zpimmu@sgarzare-redhat>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Mon, 14 Nov 2022 10:13:51 +0100
-Message-ID: <CAJaqyWfYx+63-hOp0K8fznkyjkScKu6-r8CUPd3eD96oKCHu9A@mail.gmail.com>
-Subject: Re: [PATCH] vdpa_sim: fix vringh initialization in vdpasim_queue_ready()
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 5:30 PM Stefano Garzarella <sgarzare@redhat.com> wr=
-ote:
->
-> On Fri, Nov 11, 2022 at 04:40:33PM +0100, Eugenio Perez Martin wrote:
-> >On Thu, Nov 10, 2022 at 3:13 PM Stefano Garzarella <sgarzare@redhat.com>=
- wrote:
-> >>
-> >> When we initialize vringh, we should pass the features and the
-> >> number of elements in the virtqueue negotiated with the driver,
-> >> otherwise operations with vringh may fail.
-> >>
-> >> This was discovered in a case where the driver sets a number of
-> >> elements in the virtqueue different from the value returned by
-> >> .get_vq_num_max().
-> >>
-> >> In vdpasim_vq_reset() is safe to initialize the vringh with
-> >> default values, since the virtqueue will not be used until
-> >> vdpasim_queue_ready() is called again.
-> >>
-> >> Fixes: 2c53d0f64c06 ("vdpasim: vDPA device simulator")
-> >> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> >> ---
-> >>  drivers/vdpa/vdpa_sim/vdpa_sim.c | 3 +--
-> >>  1 file changed, 1 insertion(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/=
-vdpa_sim.c
-> >> index b071f0d842fb..b20689f8fe89 100644
-> >> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> >> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> >> @@ -67,8 +67,7 @@ static void vdpasim_queue_ready(struct vdpasim *vdpa=
-sim, unsigned int idx)
-> >>  {
-> >>         struct vdpasim_virtqueue *vq =3D &vdpasim->vqs[idx];
-> >>
-> >> -       vringh_init_iotlb(&vq->vring, vdpasim->dev_attr.supported_feat=
-ures,
-> >> -                         VDPASIM_QUEUE_MAX, false,
-> >> +       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, fals=
-e,
-> >>                           (struct vring_desc *)(uintptr_t)vq->desc_add=
-r,
-> >>                           (struct vring_avail *)
-> >>                           (uintptr_t)vq->driver_addr,
-> >> --
-> >> 2.38.1
-> >>
-> >
-> >I think this is definitely an improvement, but I'd say we should go a
-> >step further and rename VDPASIM_QUEUE_MAX to VDPASIM_QUEUE_DEFAULT. As
-> >you point out in the patch message it is not a max anymore.
->
-> I'm not sure about renaming since it is the value returned by
-> vdpasim_get_vq_num_max, so IMHO the _MAX suffix is fine.
+Hi Rob,
 
-Oh that's a very good point. But then I guess a conformant driver
-should never set more descriptors than that.
+robh@kernel.org wrote on Fri, 11 Nov 2022 15:28:24 -0600:
 
-Would it be convenient to make the default queue size of 32768 and let
-the guest specify less descriptors than that? Default configuration
-will consume more memory then.
+> The schema for 'sercomm,scpart-id' is broken. The 'if' condition is
+> never true because 'compatible' is in the parent node, not the child
+> node the sub-schema applies to. The example passes as there are no
+> constraints on additional/unevaluated properties. That's a secondary
+> issue which is complicated due to nested partitions.
+>=20
+> Drop the if/then schema and the unnecessary 'allOf' so that the
+> 'sercomm,scpart-id' property is at least defined.
+>=20
+> Cc: Mikhail Zhilkin <csharper2005@gmail.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-> But I admit that initially I didn't understand whether it's the maximum
-> number of queues or elements, so maybe VDPASIM_VQ_NUM_MAX is better.
->
-> >
-> >Another thing to note is that we don't have a way to report that
-> >userspace indicated a bad value for queue length. With the current
-> >code vringh will not initialize at all if I'm not wrong, so we should
-> >prevent userspace to put a bad num.
->
-> Right!
->
-> >
-> >Ideally, we should repeat the tests of vring_init_kern at
-> >vdpasim_set_vq_num. We could either call it with NULL vring addresses
-> >to check for -EINVAL, or simply repeat the conditional (!num || num >
-> >0xffff || (num & (num - 1))). I'd say the first one is better to not
-> >go out of sync.
->
-> Or we could do the check in vdpasim_set_vq_ready() and set it not ready
-> if the vq_num is wrong.
->
+Mmmh right, I've missed that in my little rework. I'll apply it with
+the big series "[PATCH v3 00/17]  Improve MTD bindings" as soon as the
+last remaining patch gets reviewed.
 
-Maybe it is the right place to do it, but the device is initiated at
-that point so the driver needs to perform a full reset.
-
-As a reference, qemu will retain the last valid size set to a vq, or
-the default. This is because it ignores the bad values systematically.
-Not sure what is more conformant actually :).
+> ---
+>  .../mtd/partitions/fixed-partitions.yaml      | 29 +++++++------------
+>  1 file changed, 11 insertions(+), 18 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/mtd/partitions/fixed-parti=
+tions.yaml b/Documentation/devicetree/bindings/mtd/partitions/fixed-partiti=
+ons.yaml
+> index ad3ccd250802..39b715aad2dc 100644
+> --- a/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.y=
+aml
+> +++ b/Documentation/devicetree/bindings/mtd/partitions/fixed-partitions.y=
+aml
+> @@ -31,24 +31,17 @@ properties:
+> =20
+>  patternProperties:
+>    "@[0-9a-f]+$":
+> -    allOf:
+> -      - $ref: "partition.yaml#"
+> -      - if:
+> -          properties:
+> -            compatible:
+> -              contains:
+> -                const: sercomm,sc-partitions
+> -        then:
+> -          properties:
+> -            sercomm,scpart-id:
+> -              description: Partition id in Sercomm partition map. Mtd
+> -                parser uses this id to find a record in the partition map
+> -                containing offset and size of the current partition. The
+> -                values from partition map overrides partition offset and
+> -                size defined in reg property of the dts. Frequently these
+> -                values are the same, but may differ if device has bad
+> -                eraseblocks on a flash.
+> -              $ref: /schemas/types.yaml#/definitions/uint32
+> +    $ref: partition.yaml#
+> +
+> +    properties:
+> +      sercomm,scpart-id:
+> +        description: Partition id in Sercomm partition map. Mtd parser
+> +          uses this id to find a record in the partition map containing
+> +          offset and size of the current partition. The values from
+> +          partition map overrides partition offset and size defined in
+> +          reg property of the dts. Frequently these values are the same,
+> +          but may differ if device has bad eraseblocks on a flash.
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> =20
+>  required:
+>    - "#address-cells"
 
 
-> >
-> >All of that can be done on top anyway, so for this patch:
-> >
-> >Acked-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
-> >
->
-> Thanks for the review,
-> Stefano
->
-
+Thanks,
+Miqu=C3=A8l
