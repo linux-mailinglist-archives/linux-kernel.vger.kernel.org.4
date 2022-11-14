@@ -2,180 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD786284B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229036284D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237352AbiKNQKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:10:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49590 "EHLO
+        id S237217AbiKNQQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:16:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236656AbiKNQKj (ORCPT
+        with ESMTP id S236703AbiKNQQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:10:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442FEFAF9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:09:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668442177;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FRDOlAhtq+4FPxDn7xJvAO+rfsHWJZyuf4JMnt1m0vE=;
-        b=ZZMMMlfR1nbzUAYOjb+QTByN2hxS7quKdWS32eLRYNy0NMnlkzN+Rn0NJiFRBhOnEI9Jjt
-        VH9yj0Nj2ALce9tqua52M/FEKe9sL2KU9fI4bRNiC57vs1bqIGEvGciPdkFNHrcdyp6J5a
-        ShZb9LcH/YKY6Af1dtHD8OpUpYjQOsA=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-573-ZFKrfuYuMRm37GlwrCP05g-1; Mon, 14 Nov 2022 11:09:35 -0500
-X-MC-Unique: ZFKrfuYuMRm37GlwrCP05g-1
-Received: by mail-wm1-f69.google.com with SMTP id 1-20020a05600c028100b003cf7833293cso9137252wmk.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:09:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FRDOlAhtq+4FPxDn7xJvAO+rfsHWJZyuf4JMnt1m0vE=;
-        b=oQAktEAIMGSKnEEBN7W5dbfoMvYxLAkg1aggZtVGHLOmZ8OlcwIBiaskXH1DaBWOok
-         88Z1Qih1aTidIt31iIrMzZrUgCZyKlDm/N2bA3lxwKPEmB+N9LGJ7Ao2bPiAikXPjuYP
-         QYIL/Xe/QzgPUoPhdqeMZbAxSQMUEAiJj4w6yIjxTuF7YdZk14cidLoLHj8AGtztEwiR
-         jglRzOvHJLMbMCfNelecw1+rI/XYB/dVZms+l+snrE7uMrXlUhsLNE+1bJRGQgg1Pext
-         2BfPYxA9eCO1Rs1cAkbuifkFMb9BTZim7E7X3r2o1JjzWGYMvP+zyoCULUBDKV/TiatP
-         FjcQ==
-X-Gm-Message-State: ANoB5pmcP6l+S3fDv3ln8Yryf98v/cmre4mP3Fr4hV148YBMiBR4AhI5
-        7oHhnOc3yvZC76EiF7nVs4d9E0ZTaOJfL9w5iRsDS1bOga4dpf91l8s3KiBH9GwA+5l7dTqSob6
-        ZOvSrrhsB4nAaINZByW6wVxQa
-X-Received: by 2002:a05:600c:4143:b0:3c6:bc31:20ed with SMTP id h3-20020a05600c414300b003c6bc3120edmr8592686wmm.41.1668442174563;
-        Mon, 14 Nov 2022 08:09:34 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6jaWURvxgfsRAJxd6JqJAJZSFvhIsCymgU3NpsSC69NAaRQ9FIrIJbC8tZozb1WChbCSr4JQ==
-X-Received: by 2002:a05:600c:4143:b0:3c6:bc31:20ed with SMTP id h3-20020a05600c414300b003c6bc3120edmr8592646wmm.41.1668442174142;
-        Mon, 14 Nov 2022 08:09:34 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:d300:d881:1fd5:bc95:5e2d? (p200300cbc703d300d8811fd5bc955e2d.dip0.t-ipconnect.de. [2003:cb:c703:d300:d881:1fd5:bc95:5e2d])
-        by smtp.gmail.com with ESMTPSA id l22-20020a05600c16d600b003cf4eac8e80sm14761753wmn.23.2022.11.14.08.09.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 08:09:33 -0800 (PST)
-Message-ID: <9af36be3-313b-e39c-85bb-bf30011bccb8@redhat.com>
-Date:   Mon, 14 Nov 2022 17:09:32 +0100
+        Mon, 14 Nov 2022 11:16:40 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D5964CA
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:16:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668442599; x=1699978599;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=kiwQ0EsjaVIc5nx8UNug8Up0eAjXuQJy1+lUnlUIbdA=;
+  b=eUhfqKStdPwNr7pNjCRH2D6DJKBoysExQs46D433AzF2gE77JAgqbdsw
+   hVl1GGRgtwcQXMiQJQ9/jrlgh/A0fY+tukns/yFfBgeLWCrnn4ZUQVFPB
+   lCPHLvb+DShy7n14ZU3HZlejcGgXJe6Ggrv1JBooT4tbjYT6rytoQ1Jxy
+   Nf7HiWOo04XKL8MVsi+3IhAs3OTNeIbv39b4Qb8XWrTvYOKwQOueypHsv
+   AiK2ZLUUi6bneIcvR35XnaCi2uP2xoB5fkpfppItouOsA/M+izGNySxlU
+   6qkF1TK9UdcwSyJULwXLgwXjTcZVjN3vBpecAw7KhwS6gvkBWoajeuRaA
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="295373422"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="295373422"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 08:16:39 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="638542546"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="638542546"
+Received: from scewbso01.amr.corp.intel.com (HELO [10.212.76.77]) ([10.212.76.77])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 08:16:37 -0800
+Message-ID: <20d36e6d-0c4b-f903-8940-841ac1b65d98@linux.intel.com>
+Date:   Mon, 14 Nov 2022 10:11:34 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [PATCH v1 0/2] Adds the combination of headset codec ALC5682I-VD
+ + amp rt1019p
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Cc:     Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Ives van Hoorne <ives@codesandbox.io>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>, stable@vger.kernel.org
-References: <20221110203132.1498183-1-peterx@redhat.com>
- <20221110203132.1498183-2-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2 1/2] mm/migrate: Fix read-only page got writable when
- recover pte
-In-Reply-To: <20221110203132.1498183-2-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Mac Chiang <mac.chiang@intel.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Vamshi Krishna <vamshi.krishna.gopal@intel.com>,
+        Muralidhar Reddy <muralidhar.reddy@intel.com>,
+        Libin Yang <libin.yang@intel.com>,
+        David Lin <CTLIN0@nuvoton.com>, alsa-devel@alsa-project.org
+References: <20221108042716.2930255-1-ajye_huang@compal.corp-partner.google.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20221108042716.2930255-1-ajye_huang@compal.corp-partner.google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.11.22 21:31, Peter Xu wrote:
-> Ives van Hoorne from codesandbox.io reported an issue regarding possible
-> data loss of uffd-wp when applied to memfds on heavily loaded systems.  The
-> sympton is some read page got data mismatch from the snapshot child VMs.
-> 
-> Here I can also reproduce with a Rust reproducer that was provided by Ives
-> that keeps taking snapshot of a 256MB VM, on a 32G system when I initiate
-> 80 instances I can trigger the issues in ten minutes.
-> 
-> It turns out that we got some pages write-through even if uffd-wp is
-> applied to the pte.
-> 
-> The problem is, when removing migration entries, we didn't really worry
-> about write bit as long as we know it's not a write migration entry.  That
-> may not be true, for some memory types (e.g. writable shmem) mk_pte can
-> return a pte with write bit set, then to recover the migration entry to its
-> original state we need to explicit wr-protect the pte or it'll has the
-> write bit set if it's a read migration entry.
-> 
-> For uffd it can cause write-through.  I didn't verify, but I think it'll be
-> the same for mprotect()ed pages and after migration we can miss the sigbus
-> instead.
 
-I don't think so. mprotect() handling relies on vma->vm_page_prot, which 
-is supposed to do the right thing. E.g., map the pte protnone without 
-VM_READ/VM_WRITE/....
+
+On 11/7/22 22:27, Ajye Huang wrote:
+> v1:
+> - machine driver: 
+>   - Adds the combination of headset codec ALC5682I-VD + amp rt1019p.
+>   - Remove the duplicate code in machine driver.
+> 
+> Ajye Huang (2):
+>   ASoC: Intel: sof_rt5682: add support for ALC5682I-VD with amp rt1019p
+>   ASoC: Intel: sof rt5682: remove the duplicate codes
+
+Nice catch on the second patch, this sort of duplicates are hard to
+detect in code reviews.
+
+For the series:
+
+Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+
 
 > 
-> The relevant code on uffd was introduced in the anon support, which is
-> commit f45ec5ff16a7 ("userfaultfd: wp: support swap and page migration",
-> 2020-04-07).  However anon shouldn't suffer from this problem because anon
-> should already have the write bit cleared always, so that may not be a
-> proper Fixes target.  To satisfy the need on the backport, I'm attaching
-> the Fixes tag to the uffd-wp shmem support.  Since no one had issue with
-> mprotect, so I assume that's also the kernel version we should start to
-> backport for stable, and we shouldn't need to worry before that.
+>  sound/soc/intel/boards/sof_rt5682.c               | 7 +------
+>  sound/soc/intel/common/soc-acpi-intel-adl-match.c | 4 ++--
+>  2 files changed, 3 insertions(+), 8 deletions(-)
 > 
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: stable@vger.kernel.org
-> Fixes: b1f9e876862d ("mm/uffd: enable write protection for shmem & hugetlbfs")
-> Reported-by: Ives van Hoorne <ives@codesandbox.io>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->   mm/migrate.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index dff333593a8a..8b6351c08c78 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -213,8 +213,14 @@ static bool remove_migration_pte(struct folio *folio,
->   			pte = pte_mkdirty(pte);
->   		if (is_writable_migration_entry(entry))
->   			pte = maybe_mkwrite(pte, vma);
-> -		else if (pte_swp_uffd_wp(*pvmw.pte))
-> +		else
-> +			/* NOTE: mk_pte can have write bit set */
-> +			pte = pte_wrprotect(pte);
-
-
-Any particular reason why not to simply glue this to pte_swp_uffd_wp(), 
-because only that needs special care:
-
-if (pte_swp_uffd_wp(*pvmw.pte)) {
-	pte = pte_wrprotect(pte);
-	pte = pte_mkuffd_wp(pte);
-}
-
-
-And that would match what actually should have been done in commit 
-f45ec5ff16a7 -- only special-case uffd-wp.
-
-Note that I think there are cases where we have a PTE that was 
-!writable, but after migration we can map it writable.
-
-
-BTW, does unuse_pte() need similar care?
-
-new_pte = pte_mkold(mk_pte(page, vma->vm_page_prot));
-if (pte_swp_uffd_wp(*pte))
-	new_pte = pte_mkuffd_wp(new_pte);
-set_pte_at(vma->vm_mm, addr, pte, new_pte);
-
-
--- 
-Thanks,
-
-David / dhildenb
-
