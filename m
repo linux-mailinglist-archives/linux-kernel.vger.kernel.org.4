@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4427E628549
+	by mail.lfdr.de (Postfix) with ESMTP id E381B62854B
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237596AbiKNQaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:30:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
+        id S237608AbiKNQaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:30:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237531AbiKNQ3k (ORCPT
+        with ESMTP id S237528AbiKNQ3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Nov 2022 11:29:40 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964EB102C;
-        Mon, 14 Nov 2022 08:29:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9189BEB1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:29:39 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668443377;
+        s=2020; t=1668443378;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OX8P8PjcP3et+B8RxGuAu/qJSUE13puFYmEXVzvc8MY=;
-        b=07f/Iv1wL9DpAMhdAgc7Xt3WxoplT/3Nu02eKR1b8+j1+Y7qfzi1+FNR+cnpkz+yvo16Ze
-        MBTxlfIFPnOpIaZmaWz8PKDgW1EEFLce5Z7cjkdy6Vz0eKot3ypTtDpD7aXfrOfrZ5b4jX
-        QntAcdes7YddyPfeX5F8PQ8xBH1C/Xmv0UymHEQmXC9tX8u9cMQ0818P0ky0qz/V24Ia2u
-        6PtsU3Op8WIIueIM9CeNFqHhD5rmh6U9hltEKu6vOewN2wBbCliUb2DS6q5csf2Eu5FEkm
-        eEGxJwFLBff19l0CYvNQu8UBltdyze2FqKOkIC9D+rP9sBHRrdRV24X32/Thow==
+        bh=6POxijvlWYTfJk68FJg54j07I7MpPRBTNu3UsEFQG6Y=;
+        b=JCoPP84GTD7S6ZKvY3Z/oW1faIG0mRb+VXwmEMq2/9maJnu2bJ4vVZwAKdnWc0JkCEwziB
+        u9Z4tPX23Yk6Dq1b8w2jERlxWFg9DZ6B8ebtpQpj8Eh/HGr1vYGrbZvZRaddeJKAO3LlQx
+        J1TeVrqc45Q8oimpMKSBUzA7sN8i9CC+jZFqFP8+fC6nuurYGVkEgO8NfYHmsCdyslWqR3
+        r49w15/LRtFVLv5xvSxiCEuHQy5VVbMYf5zi6z8gKRt9MYYconzIJI69+2S8dLZ+WC4xuX
+        LH/xD2yPO2uk1n/+PeJzAvnTu0vVvHmwItiLx5zxsIDDlP21zAWNhv2/dqOwtQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668443377;
+        s=2020e; t=1668443378;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OX8P8PjcP3et+B8RxGuAu/qJSUE13puFYmEXVzvc8MY=;
-        b=tELjjwZ800XS5coQk0qRU9bwQBSC526T8kNf1rYyslpyZ3bvfpKU2a+6OVmFy+qzAW3ZUV
-        +iS9PnHyufG1tIDg==
+        bh=6POxijvlWYTfJk68FJg54j07I7MpPRBTNu3UsEFQG6Y=;
+        b=XM0sZBUTpYOnV33YxdEq1ANzbOmI/ncNQRLlKWlmnypDTlRkCpe0fo3vqHy9OFToINmwjt
+        D4N0MxF5n4UhX8DA==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
-Subject: [PATCH printk v4 07/39] tty: serial: kgdboc: document console_lock usage
-Date:   Mon, 14 Nov 2022 17:35:00 +0106
-Message-Id: <20221114162932.141883-8-john.ogness@linutronix.de>
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: [PATCH printk v4 08/39] tty: tty_io: document console_lock usage
+Date:   Mon, 14 Nov 2022 17:35:01 +0106
+Message-Id: <20221114162932.141883-9-john.ogness@linutronix.de>
 In-Reply-To: <20221114162932.141883-1-john.ogness@linutronix.de>
 References: <20221114162932.141883-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -65,41 +61,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kgdboc_earlycon_init() uses the console_lock to ensure that no consoles
-are unregistered until the kgdboc_earlycon is setup. This is necessary
-because the trapping of the exit() callback assumes that the exit()
-callback is not called before the trap is setup.
-
-Explicitly document this non-typical console_lock usage.
+show_cons_active() uses the console_lock to gather information
+on registered consoles. Since the console_lock is being used for
+multiple reasons, explicitly document these reasons. This will
+be useful when the console_lock is split into fine-grained
+locking.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 Reviewed-by: Petr Mladek <pmladek@suse.com>
 ---
- drivers/tty/serial/kgdboc.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/tty/tty_io.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-index e76f0186c335..5be381003e58 100644
---- a/drivers/tty/serial/kgdboc.c
-+++ b/drivers/tty/serial/kgdboc.c
-@@ -530,6 +530,14 @@ static int __init kgdboc_earlycon_init(char *opt)
- 	 * Look for a matching console, or if the name was left blank just
- 	 * pick the first one we find.
- 	 */
-+
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index de06c3c2ff70..ee4da2fec328 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -3526,6 +3526,16 @@ static ssize_t show_cons_active(struct device *dev,
+ 	struct console *c;
+ 	ssize_t count = 0;
+ 
 +	/*
 +	 * Hold the console_lock to guarantee that no consoles are
-+	 * unregistered until the kgdboc_earlycon setup is complete.
-+	 * Trapping the exit() callback relies on exit() not being
-+	 * called until the trap is setup. This also allows safe
-+	 * traversal of the console list and race-free reading of @flags.
++	 * unregistered until all console processing is complete.
++	 * This also allows safe traversal of the console list and
++	 * race-free reading of @flags.
++	 *
++	 * Take console_lock to serialize device() callback with
++	 * other console operations. For example, fg_console is
++	 * modified under console_lock when switching vt.
 +	 */
  	console_lock();
- 	for_each_console(con) {
- 		if (con->write && con->read &&
+ 	for_each_console(c) {
+ 		if (!c->device)
 -- 
 2.30.2
 
