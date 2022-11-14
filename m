@@ -2,172 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5333627527
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 05:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49622627506
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 04:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235781AbiKNEDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 23:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S235416AbiKNDjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 22:39:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235772AbiKNED3 (ORCPT
+        with ESMTP id S235348AbiKNDjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 23:03:29 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07169185;
-        Sun, 13 Nov 2022 20:03:24 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.77])
-        by gateway (Coremail) with SMTP id _____8DxOdgLvnFjbcsGAA--.18764S3;
-        Mon, 14 Nov 2022 12:03:23 +0800 (CST)
-Received: from [10.20.42.77] (unknown [10.20.42.77])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axf+AJvnFjX0ISAA--.49417S3;
-        Mon, 14 Nov 2022 12:03:21 +0800 (CST)
-Subject: Re: [PATCH V4] PCI: loongson: Skip scanning unavailable child devices
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20221110231351.GA681551@bhelgaas>
- <dfd408ed-5c2c-c73a-b901-6641ae7aae5f@flygoat.com>
-From:   Liu Peibao <liupeibao@loongson.cn>
-Message-ID: <855be31e-d3fe-bd7f-3abf-f07413973bd5@loongson.cn>
-Date:   Mon, 14 Nov 2022 12:03:21 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Sun, 13 Nov 2022 22:39:20 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174126559;
+        Sun, 13 Nov 2022 19:39:19 -0800 (PST)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N9ZmL55s8z15MdD;
+        Mon, 14 Nov 2022 11:38:58 +0800 (CST)
+Received: from kwepemm600020.china.huawei.com (7.193.23.147) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 14 Nov 2022 11:39:17 +0800
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 14 Nov 2022 11:39:16 +0800
+From:   Peng Zhang <zhangpeng362@huawei.com>
+To:     <konishi.ryusuke@gmail.com>, <ye.xingchen@zte.com.cn>,
+        <chi.minghao@zte.com.cn>, <vishal.moola@gmail.com>,
+        <linux-nilfs@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        <syzbot+ebe05ee8e98f755f61d0@syzkaller.appspotmail.com>
+Subject: [PATCH] nilfs2: fix NULL pointer dereference in nilfs_palloc_commit_free_entry()
+Date:   Mon, 14 Nov 2022 04:04:41 +0000
+Message-ID: <20221114040441.1649940-1-zhangpeng362@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <dfd408ed-5c2c-c73a-b901-6641ae7aae5f@flygoat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axf+AJvnFjX0ISAA--.49417S3
-X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQAKCmNw3mQJaAAAsJ
-X-Coremail-Antispam: 1Uk129KBjvJXoWxZw45tr18JFyDZw1UZrW7twb_yoWrXF45pF
-        95JFWakFZ5Kr18Kw1qqw18ZFy2yr4kJayDXrn5GF12krnIvr1jgry0vF1q9ry3Jr4kJF1j
-        vF1jga47ZF45ZaUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8HKZJUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/12/22 12:06 AM, Jiaxun Yang wrote:
-> 
-> 
-> 在 2022/11/10 23:13, Bjorn Helgaas 写道:
->> On Thu, Nov 10, 2022 at 11:00:45PM +0000, Jiaxun Yang wrote:
->>> 在2022年11月10日十一月 下午9:07，Bjorn Helgaas写道：
->>>> On Tue, Nov 08, 2022 at 02:42:40PM +0800, Liu Peibao wrote:
->>>>> The PCI Controller of 2k1000 could not mask devices by setting vender ID or
->>>>> device ID in configuration space header as invalid values. When there are
->>>>> pins shareable between the platform device and PCI device, if the platform
->>>>> device is preferred, we should not scan this PCI device. In the above
->>>>> scene, add `status = "disabled"` property in DT node of this PCI device.
->>>>>
->>>>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
->>>>> ---
->>>>> V3 -> V4: 1. get rid of the masklist and search the status property
->>>>>       directly.
->>>>>            2. check the status property only when accessing the vendor ID.
->>>>> V2 -> V3: 1. use list_for_each_entry() for more clearly.
->>>>>            2. fix wrong use of sizeof().
->>>>> V1 -> V2: use existing property "status" instead of adding new property.
->>>>>
->>>>>   drivers/pci/controller/pci-loongson.c | 11 +++++++++++
->>>>>   1 file changed, 11 insertions(+)
->>>>>
->>>>> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
->>>>> index 05c50408f13b..efca0b3b5a29 100644
->>>>> --- a/drivers/pci/controller/pci-loongson.c
->>>>> +++ b/drivers/pci/controller/pci-loongson.c
->>>>> @@ -194,6 +194,17 @@ static void __iomem *pci_loongson_map_bus(struct pci_bus *bus,
->>>>>               return NULL;
->>>>>       }
->>>>>   +#ifdef CONFIG_OF
->>>>> +    /* Don't access disabled devices. */
->>>>> +    if (pci_is_root_bus(bus) && where == PCI_VENDOR_ID) {
->>>>> +        struct device_node *dn;
->>>>> +
->>>>> +        dn = of_pci_find_child_device(bus->dev.of_node, devfn);
->>>>> +        if (dn && !of_device_is_available(dn))
->>>>> +            return NULL;
->>>>> +    }
->>>>> +#endif
->>>> Looks nice and simple, thanks for trying this out.
->>> Should we make this into common PCI code?
->>> I guess Loongson won’t be the last platform having such problem.
->> I think we should wait until somebody else has this problem.
->>
->> It's not a completely trivial situation because if the device uses PCI
->> memory or I/O space, we have to worry about how that space is handled.
->> Does the BIOS assign that space?  Is it included in the host bridge
->> _CRS or "ranges" properties?  If the device is below any PCI bridges
->> (I don't think that's the case in your situation), how does the space
->> it requires get routed through the bridges?
-> 
-> I believe in this case the address is assigned by BIOS and they are out of ranges
-> properties of host bridge. Those are all on chip devices so there won't be any
-> bridges.
-> 
-> @Peibao, can you please confirm this? I was never able to boot mainline kernel
-> on my LS2K board.
-> 
-> Thanks.
-> - Jiaxun
-> 
+From: ZhangPeng <zhangpeng362@huawei.com>
 
-@Jiaxun,
+Syzbot reported a null-ptr-deref bug:
 
-Yes, the same as you said totally.
+NILFS (loop0): segctord starting. Construction interval = 5 seconds, CP
+frequency < 30 seconds
+general protection fault, probably for non-canonical address
+0xdffffc0000000002: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
+CPU: 1 PID: 3603 Comm: segctord Not tainted
+6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
+Hardware name: Google Compute Engine/Google Compute Engine, BIOS Google
+10/11/2022
+RIP: 0010:nilfs_palloc_commit_free_entry+0xe5/0x6b0
+fs/nilfs2/alloc.c:608
+Code: 00 00 00 00 fc ff df 80 3c 02 00 0f 85 cd 05 00 00 48 b8 00 00 00
+00 00 fc ff df 4c 8b 73 08 49 8d 7e 10 48 89 fa 48 c1 ea 03 <80> 3c 02
+00 0f 85 26 05 00 00 49 8b 46 10 be a6 00 00 00 48 c7 c7
+RSP: 0018:ffffc90003dff830 EFLAGS: 00010212
+RAX: dffffc0000000000 RBX: ffff88802594e218 RCX: 000000000000000d
+RDX: 0000000000000002 RSI: 0000000000002000 RDI: 0000000000000010
+RBP: ffff888071880222 R08: 0000000000000005 R09: 000000000000003f
+R10: 000000000000000d R11: 0000000000000000 R12: ffff888071880158
+R13: ffff88802594e220 R14: 0000000000000000 R15: 0000000000000004
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000)
+knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fb1c08316a8 CR3: 0000000018560000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ nilfs_dat_commit_free fs/nilfs2/dat.c:114 [inline]
+ nilfs_dat_commit_end+0x464/0x5f0 fs/nilfs2/dat.c:193
+ nilfs_dat_commit_update+0x26/0x40 fs/nilfs2/dat.c:236
+ nilfs_btree_commit_update_v+0x87/0x4a0 fs/nilfs2/btree.c:1940
+ nilfs_btree_commit_propagate_v fs/nilfs2/btree.c:2016 [inline]
+ nilfs_btree_propagate_v fs/nilfs2/btree.c:2046 [inline]
+ nilfs_btree_propagate+0xa00/0xd60 fs/nilfs2/btree.c:2088
+ nilfs_bmap_propagate+0x73/0x170 fs/nilfs2/bmap.c:337
+ nilfs_collect_file_data+0x45/0xd0 fs/nilfs2/segment.c:568
+ nilfs_segctor_apply_buffers+0x14a/0x470 fs/nilfs2/segment.c:1018
+ nilfs_segctor_scan_file+0x3f4/0x6f0 fs/nilfs2/segment.c:1067
+ nilfs_segctor_collect_blocks fs/nilfs2/segment.c:1197 [inline]
+ nilfs_segctor_collect fs/nilfs2/segment.c:1503 [inline]
+ nilfs_segctor_do_construct+0x12fc/0x6af0 fs/nilfs2/segment.c:2045
+ nilfs_segctor_construct+0x8e3/0xb30 fs/nilfs2/segment.c:2379
+ nilfs_segctor_thread_construct fs/nilfs2/segment.c:2487 [inline]
+ nilfs_segctor_thread+0x3c3/0xf30 fs/nilfs2/segment.c:2570
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:nilfs_palloc_commit_free_entry+0xe5/0x6b0
+fs/nilfs2/alloc.c:608
+Code: 00 00 00 00 fc ff df 80 3c 02 00 0f 85 cd 05 00 00 48 b8 00 00 00
+00 00 fc ff df 4c 8b 73 08 49 8d 7e 10 48 89 fa 48 c1 ea 03 <80> 3c 02
+00 0f 85 26 05 00 00 49 8b 46 10 be a6 00 00 00 48 c7 c7
+RSP: 0018:ffffc90003dff830 EFLAGS: 00010212
+RAX: dffffc0000000000 RBX: ffff88802594e218 RCX: 000000000000000d
+RDX: 0000000000000002 RSI: 0000000000002000 RDI: 0000000000000010
+RBP: ffff888071880222 R08: 0000000000000005 R09: 000000000000003f
+R10: 000000000000000d R11: 0000000000000000 R12: ffff888071880158
+R13: ffff88802594e220 R14: 0000000000000000 R15: 0000000000000004
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000)
+knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fb1c08316a8 CR3: 0000000018560000 CR4: 0000000000350ee0
+----------------
+Code disassembly (best guess), 7 bytes skipped:
+   0:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   4:	0f 85 cd 05 00 00    	jne    0x5d7
+   a:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  11:	fc ff df
+  14:	4c 8b 73 08          	mov    0x8(%rbx),%r14
+  18:	49 8d 7e 10          	lea    0x10(%r14),%rdi
+  1c:	48 89 fa             	mov    %rdi,%rdx
+  1f:	48 c1 ea 03          	shr    $0x3,%rdx
+* 23:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping
+instruction
+  27:	0f 85 26 05 00 00    	jne    0x553
+  2d:	49 8b 46 10          	mov    0x10(%r14),%rax
+  31:	be a6 00 00 00       	mov    $0xa6,%esi
+  36:	48                   	rex.W
+  37:	c7                   	.byte 0xc7
+  38:	c7                   	.byte 0xc7
 
-Did you notice the following patch? The liointc of LS2K can't work after
-commit b2c4c3969fd7 ("irqchip/loongson-liointc: irqchip add 2.0 version"),
-which may cause the booting failure. 
-https://lore.kernel.org/all/20221104110712.23300-1-liupeibao@loongson.cn/
+When maxlevelp is 1, there is a case where req->pr_desc_bh is NULL and
+blocknr is 0, because nilfs_dat_commit_alloc() will modify the blocknr
+of oldreq at one level higher to 0. And we don't have a NULL check on
+req->pr_desc_bh and req->pr_bitmap_bh in
+nilfs_palloc_commit_free_entry() function, so when req->pr_desc_bh is
+NULL and kmap() dereferences a NULL pointer, it leads to above crash.
+Fix this by adding a NULL check on req->pr_desc_bh and req->pr_bitmap_bh
+before nilfs_palloc_commit_free_entry() in nilfs_dat_commit_free().
 
-In fact, I am developing this on the LoongArch compatible board LS2K1000LA.
-I boot the mainline kernel basing my FDT supporting patch set for LoongArch
-and the BIOS following current LoongArch booting protocol :).
+Reported-by: syzbot+ebe05ee8e98f755f61d0@syzkaller.appspotmail.com
+Fixes: bd8169efae8b ("nilfs2: add update functions of virtual block address to dat")
+Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+---
+ fs/nilfs2/dat.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-BR,
-Peibao
-
-> 
->>
->> It would be nice to say something in this commit log about whether
->> these are issues on your platform.
->>
-
-@Bjorn,
-
-Thanks!
-
-I will update commit log in the next patch to clear the issue on our platform,
-which is absolutely what Jiaxun has described above.
-
-BR,
-Peibao
+diff --git a/fs/nilfs2/dat.c b/fs/nilfs2/dat.c
+index 3b55e239705f..84ce050a8fa3 100644
+--- a/fs/nilfs2/dat.c
++++ b/fs/nilfs2/dat.c
+@@ -111,6 +111,9 @@ static void nilfs_dat_commit_free(struct inode *dat,
+ 	kunmap_atomic(kaddr);
+ 
+ 	nilfs_dat_commit_entry(dat, req);
++
++	if (req->pr_desc_bh == NULL || req->pr_bitmap_bh == NULL)
++		return;
+ 	nilfs_palloc_commit_free_entry(dat, req);
+ }
+ 
+-- 
+2.25.1
 
