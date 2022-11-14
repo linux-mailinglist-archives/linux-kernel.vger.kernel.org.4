@@ -2,48 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C144C628207
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 498A2628208
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236891AbiKNOJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:09:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52708 "EHLO
+        id S236895AbiKNOJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:09:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236843AbiKNOJE (ORCPT
+        with ESMTP id S236935AbiKNOJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:09:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE8D2AE0;
-        Mon, 14 Nov 2022 06:09:03 -0800 (PST)
+        Mon, 14 Nov 2022 09:09:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B756624943
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:09:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF03E611BE;
-        Mon, 14 Nov 2022 14:09:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12D01C433C1;
-        Mon, 14 Nov 2022 14:09:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69740B80EBB
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 14:09:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 323C7C4314E;
+        Mon, 14 Nov 2022 14:09:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668434942;
-        bh=nc57LEG5jYTS9ueM1mkZq7Psxs0hzm5AUlc0Xu2jMjw=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=lvmTPGJP+pq6k8dwEaDeV5llMxQi20DQNpDeff+eY54E0HuuxHX2PQuPXq5XaE0KS
-         ZQyzGXiE+m8FPm8f+BWk2EwHE6o1Ib+5Qo1kL2bRfzqffdbYEBVaKhZ1MAePUzmzfy
-         ZKzyAHtg9tjb1g3zlYKWyuhLxe8XHEWHFo2iyr5ERXF1QvWRnFI2syCDuhDaGMdVpO
-         sk+OpZZ2nWzpcNidIeCwckjlYoa0EIwugQSUCACCyRz5GAbHDH73/VvUjNKw4zCvPs
-         Zqiv2tjqbFomwTjvxWD5Sr67RqB+9S+Dxg3NXjw0ND39PwRZXO/l2ELK1Dh8E0i4DZ
-         eXfDmylS+0t6g==
-Date:   Mon, 14 Nov 2022 15:09:00 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Andreas Bergmeier <abergmeier@gmx.net>
-cc:     lains@riseup.net, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] HID: Print specific timeout error in probe
-In-Reply-To: <20221110204131.1354704-1-abergmeier@gmx.net>
-Message-ID: <nycvar.YFH.7.76.2211141507380.6045@cbobk.fhfr.pm>
-References: <20221110204131.1354704-1-abergmeier@gmx.net>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        s=k20201202; t=1668434950;
+        bh=OkrAT6K7xXq9Vzf1rCG22jNAzcXb4Qf+jlQwNH73UMs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iq5PrCv3X7ahO2e6vQs3RtEsBWbomTwydrPK/sVMFTrVjMBYLQfICWPjKmyYsBbS7
+         5mcCb1Ngb0BXr/qnKXupqwOERiELJNRBSm0XQJHmMKQsmClYP4PaoPNn/iy/Z2W0Sa
+         QQah3p2+AxBKWDM3qWcRlm5MlFBMN2CWMi6bVw6FskSb4Tyuah8UkRtc2/i+r2Q1YA
+         3bnf04mbb6iXym/bpIFRAZP0tmRI8Jf8z4Q+x1ZI0/eMzYYs39zgFED/VkzWlQNqGp
+         1G3WFWUzP3sS5r7UbGDBm38z+HacyaIk5KRLef7rHXCBSXGBDeJcAsJLoIfhgk2AUm
+         mErzc7IUs6nZQ==
+Date:   Mon, 14 Nov 2022 14:09:04 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [GIT PULL] arm64 updates for 6.1-rc1
+Message-ID: <20221114140903.GF30263@willie-the-truck>
+References: <20221005144116.2256580-1-catalin.marinas@arm.com>
+ <CAMi1Hd38YB2m_r=m0wuDz+wErii37fUq1BJnvN9=y6opDzo_Fw@mail.gmail.com>
+ <Y0aq8y5mEZi14lJ/@arm.com>
+ <CAMi1Hd3Y9AibeVnh9_KYJ2EXar7bBSypKm4Tixj47htM7ZOURw@mail.gmail.com>
+ <CAMi1Hd1VBCFhf7+EXWHQWcGy4k=tcyLa7RGiFdprtRnegSG0Mw@mail.gmail.com>
+ <Y24uvyDJU3CL1jOi@arm.com>
+ <20221111173952.GB5393@thinkpad>
+ <20221111191820.GC5393@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221111191820.GC5393@thinkpad>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,48 +67,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Nov 2022, Andreas Bergmeier wrote:
-
-> When -ETIMEOUT gets reported ensure that the error message mentiones
-> timeout.
+On Sat, Nov 12, 2022 at 12:48:20AM +0530, Manivannan Sadhasivam wrote:
+> On Fri, Nov 11, 2022 at 11:10:01PM +0530, Manivannan Sadhasivam wrote:
+> > On Fri, Nov 11, 2022 at 11:15:11AM +0000, Catalin Marinas wrote:
+> > > On Tue, Nov 08, 2022 at 10:58:16PM +0530, Amit Pundir wrote:
+> > > > On Tue, 25 Oct 2022 at 18:08, Amit Pundir <amit.pundir@linaro.org> wrote:
+> > > > > On Wed, 12 Oct 2022 at 17:24, Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > > > > On Sat, Oct 08, 2022 at 08:28:26PM +0530, Amit Pundir wrote:
+> > > > > > > On Wed, 5 Oct 2022 at 20:11, Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > > > > > > Will Deacon (2):
+> > > > > > > >       arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()
+> > > > > > >
+> > > > > > > This patch broke AOSP on Dragonboard 845c (SDM845). I don't see any
+> > > > > > > relevant crash in the attached log and device silently reboots into
+> > > > > > > USB crash dump mode. The crash is fairly reproducible on db845c. I
+> > > > > > > could trigger it twice in 5 reboots and it always crash at the same
+> > > > > > > point during the boot process. Reverting this patch fixes the crash.
+> > > > > > >
+> > > > > > > I'm happy to test run any debug patche(s), that would help narrow
+> > > > > > > down this breakage.
+> > > [...]
+> > > > > Further narrowed down the breakage to the userspace daemon rmtfs
+> > > > > https://github.com/andersson/rmtfs. Is there anything specific in the
+> > > > > userspace code that I should be paying attention to?
+> > > 
+> > > Since you don't see anything in the logs like a crash and the system
+> > > restarts, I suspect it's some deadlock and that's triggering the
+> > > watchdog. We have an erratum (826319) but that's for Cortex-A53. IIUC
+> > > SDM845 has Kryo 3xx series which based on some random google searches is
+> > > derived from A75/A55. Unfortunately the MIDR_EL1 register doesn't match
+> > > the Arm Ltd numbering, so I have no idea what CPUs these are by looking
+> > > at the boot log.
+> > > 
+> > > I wouldn't be surprised if you hit a similar bug, though I couldn't find
+> > > anything close in the A55 errata notice.
+> > > 
+> > > While we could revert commit c44094eee32f ("arm64: dma: Drop cache
+> > > invalidation from arch_dma_prep_coherent()"), if you hit a real hardware
+> > > issue it may trigger in other scenario where we only do cache cleaning
+> > > (without invalidate), like arch_sync_dma_for_device(). So I'd rather get
+> > > to the bottom of this and potentially enable the workaround for this
+> > > chipset.
+> > > 
+> > > You could give it a quick try to by adding the MIDR ranges for SDM845 to
+> > > struct midr_range workaround_clean_cache[].
+> > > 
+> > 
+> > I gave it a shot and indeed it fixes the crash on DB845.
+> > 
+> > > After that I suggest you raise it with Qualcomm to investigate. Normally
+> > > we ask for an erratum number to enable a workaround and it's only
+> > > Qualcomm that can provide one here.
+> > > 
+> > 
+> > I will check with Qualcomm folks and update.
+> > 
 > 
-> Signed-off-by: Andreas Bergmeier <abergmeier@gmx.net>
-> ---
->  drivers/hid/hid-logitech-hidpp.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+> I digged a little further and found that the crash was due to the secure
+> processor (XPU) violation. It happens because, CPU tried acccessing the memory
+> after sharing it with the modem for firmware metadata validation.
+
+Can you share more details about this violation, please? For example, is it
+s read or a write, what size is it, how is it detected?
+
+> Sibi tried fixing this problem earlier by using a hack in the remoteproc driver
+> [1], but I guess that got negated due to c44094eee32f?
+
+Performing a clean rather than a clean+invalidate when the buffer is
+allocated (which is what is achieved by c44094eee32f) shouldn't affect
+this afaict.
+
+> This is a common issue for other Qcom remoteproc drivers as well where CPU
+> shares a chunk of memory with the modem. There is one more hack in place where
+> the a chunk of memory is reserved and the driver will do memremap/copy the
+> data/memunmap using it and share it with modem.
 > 
-> diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
-> index 20ae7f73ef08..a0c148a8df6c 100644
-> --- a/drivers/hid/hid-logitech-hidpp.c
-> +++ b/drivers/hid/hid-logitech-hidpp.c
-> @@ -4438,12 +4438,16 @@ static int hidpp_probe(struct hid_device *hdev, const struct hid_device_id *id)
->  	if (hidpp->quirks & HIDPP_QUIRK_UNIFYING)
->  		hidpp_unifying_init(hidpp);
-> 
-> -	connected = hidpp_root_get_protocol_version(hidpp) == 0;
-> +	ret = hidpp_root_get_protocol_version(hidpp);
-> +	connected = ret == 0;
->  	atomic_set(&hidpp->connected, connected);
->  	if (!(hidpp->quirks & HIDPP_QUIRK_UNIFYING)) {
->  		if (!connected) {
-> +			if (ret == -ETIMEDOUT)
-> +				hid_err(hdev, "Device connection timed out");
-> +			else
-> +				hid_err(hdev, "Device not connected");
->  			ret = -ENODEV;
-> -			hid_err(hdev, "Device not connected");
+> But is there a better solution overall that you could advise?
 
-Printing as specific error as possible makes sense to me.
+I think we need a better understanding of what Qualcomm's SCM firmware is
+expecting about the state of the buffer pages being shared with the modem
+before we can suggest other solutions.
 
-I am however wondering whether the better aproach (covering all the cases, 
-not just ETIMEDOUT specifically) wouldn't be to convert all the dbg_hid() 
-in hidpp_send_message_sync() to be proper error messages instead? That 
-would cover also your case, as ETIMEDOUT is handled there as well with 
-debugging message.
-
-Thanks,
-
--- 
-Jiri Kosina
-SUSE Labs
-
+Will
