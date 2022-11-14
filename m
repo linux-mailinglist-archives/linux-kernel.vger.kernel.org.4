@@ -2,150 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98631628653
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7ED628654
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238159AbiKNQ7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:59:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
+        id S237268AbiKNQ7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237747AbiKNQ6h (ORCPT
+        with ESMTP id S238146AbiKNQ6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:58:37 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F172FFD6
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:57:42 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id d3so6043543ils.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:57:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mxPjJl19vuPi34g5mWzoQtUzWrzx70SGGhy6GFnbKUg=;
-        b=cX80NK6y7G8kTyANdhOD7kdjcjAH/TRYp3kZmubOqU3dQGR44+98vV3HsF5YRDibRv
-         p/wD7OoQUPAxu3ZsTFoTTOcQEh5I9gIFRxIL7JCfgOyW9p5rpZ+D6KRaseaJ92caY0Zp
-         EfcSZf1GguJSeng3mIanXLUDFX7v/9OrFviriPp1rTFvZjaDcXcXuIzmao4br7/EatPe
-         OWq04yPdN9GoqegH6WVdiI7Te1MYeuNdwEaJck4eAjkwlItLpYAonuM8vAWLtSBlkTXD
-         D34d263J70pjkn7q6SbeBKbWGph/+Ruc1TpXhEWQHO1HEYY4S14tiSAycZT0iNqC3/ti
-         3Lmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mxPjJl19vuPi34g5mWzoQtUzWrzx70SGGhy6GFnbKUg=;
-        b=bmwJfUs7Wj49o7sPr7X9MML5ZmnCCkXB+X/ecuV4Yj3TrVeEoBjJEYeKW4Yyz0gJv/
-         /WueZ+2RYJME0eawd3oq5cyLHXyVuTvL24f2Sr+YyTaUKsxtVOedGIdedHfX8NgvMd73
-         DzT/k6Hkyy0bVYpqKUgTPF+Ixy8eGaDfgxbBL8F9PCdpqAz4lC9/KhgvRMjmOJvZ+mFJ
-         5ticweu6731BesJxBbl9tLbtADLu8Phnbad0MzlLwJHy13EszgS6pU6aeD5NvXB1zKiW
-         NX/53bXY/YI5cMdgxJXOj/D/MtN5aEJQbpqFclurnaWBDA73cpz+PUPMDjHZxVkn2BzK
-         4UZw==
-X-Gm-Message-State: ANoB5plD7ZdvrSUjaBFQGV7ub1jg6uRp9VvVSZFYTR0kVfnd/UZrqjoG
-        boU9cSQsBq+pp6QYkaHDBddHXBooeCCxotU4cNkt8Q==
-X-Google-Smtp-Source: AA0mqf52zgqMXbpl+qW5Z9hVw/XrSGXUFHb3JSWLNZf40N01pqzDsROhxN38pm+h7Jgy7GeXTdXRliBC58MIVMzNIqM=
-X-Received: by 2002:a05:6e02:cce:b0:300:cf38:174f with SMTP id
- c14-20020a056e020cce00b00300cf38174fmr6750221ilj.22.1668445062085; Mon, 14
- Nov 2022 08:57:42 -0800 (PST)
+        Mon, 14 Nov 2022 11:58:43 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81C43E0AF;
+        Mon, 14 Nov 2022 08:57:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668445073; x=1699981073;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=1yAuHjiGqTYi1byh38jC/erNusV9XXEVsRIKu4bAuk0=;
+  b=efQ2Q9cn77vT/6XoiaWuk8H1Y8DLJaPrj2GACPyk6WDmjMO52Th4Fgqk
+   SfrM5vp0XHjvDZDlO8QQbUCQU/34f3+Cpmg5s7qLiasP9C7B02PKvPk8Z
+   rZ/JK+EdFyd5F2aKOO4KtM7oaIEcUjwrOQDQJXl0F5qK8vBZ2NmBmT07L
+   0i6xp21pFfXaJ3N0Zzki/6JJEAeDdqypQMShwxkHmkOaZWJTPQcw2tp8C
+   k1pQquehQ+pa4v+lvj3EODDW7zUUn0xh9WnCR8o/ChjmsLCaALJ0vZ/ZE
+   10P+jjVH5EL1AGqFyRSMNQTkwY0pPE8iF3MFevG5EOzACMSUalnnIQviM
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="338810175"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="338810175"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 08:57:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="669729848"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="669729848"
+Received: from satyanay-mobl1.amr.corp.intel.com (HELO [10.209.114.162]) ([10.209.114.162])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 08:57:50 -0800
+Message-ID: <10a4eb94-4764-717b-7c20-64a3d895b3d1@intel.com>
+Date:   Mon, 14 Nov 2022 08:57:49 -0800
 MIME-Version: 1.0
-References: <20221110175009.18458-1-vincent.guittot@linaro.org>
- <20221110175009.18458-7-vincent.guittot@linaro.org> <Y3Jq4gBB5+Qg67u7@google.com>
-In-Reply-To: <Y3Jq4gBB5+Qg67u7@google.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 14 Nov 2022 17:57:30 +0100
-Message-ID: <CAKfTPtDiKF7x0obCFXmNsmJdsJ9yXzAf4vuOVJmN_eO_bA8KHQ@mail.gmail.com>
-Subject: Re: [PATCH v8 6/9] sched/fair: Add sched group latency support
-To:     Patrick Bellasi <patrick.bellasi@matbug.net>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
-        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
-        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
-        yu.c.chen@intel.com, youssefesmat@chromium.org,
-        joel@joelfernandes.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 01/12] x86/ioremap: Fix page aligned size calculation
+ in __ioremap_caller()
+Content-Language: en-US
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+References: <1668147701-4583-1-git-send-email-mikelley@microsoft.com>
+ <1668147701-4583-2-git-send-email-mikelley@microsoft.com>
+ <feca1a0a-b9b2-44d9-30e9-c6a6aa11f6cd@intel.com>
+ <BYAPR21MB1688430B2111541FE68D3569D7059@BYAPR21MB1688.namprd21.prod.outlook.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <BYAPR21MB1688430B2111541FE68D3569D7059@BYAPR21MB1688.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 at 17:20, Patrick Bellasi
-<patrick.bellasi@matbug.net> wrote:
->
-> Hi Vincent,
->
-> On 10-Nov 18:50, Vincent Guittot wrote:
->
-> [...]
->
-> > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> > index be4a77baf784..a4866cd4e58c 100644
-> > --- a/Documentation/admin-guide/cgroup-v2.rst
-> > +++ b/Documentation/admin-guide/cgroup-v2.rst
-> > @@ -1095,6 +1095,16 @@ All time durations are in microseconds.
-> >          values similar to the sched_setattr(2). This maximum utilization
-> >          value is used to clamp the task specific maximum utilization clamp.
-> >
-> > +  cpu.latency.nice
-> > +     A read-write single value file which exists on non-root
-> > +     cgroups.  The default is "0".
-> > +
-> > +     The nice value is in the range [-20, 19].
-> > +
-> > +     This interface file allows reading and setting latency using the
-> > +     same values used by sched_setattr(2). The latency_nice of a group is
-> > + used to limit the impact of the latency_nice of a task outside the
-> > + group.
->
-> This control model is not clear to me.
->
-> It does not seem matching what we have for uclamp, where the cgroup values are
-> used to restrict how much a task can ask or give (in terms of latency here).
->
-> in the uclamp's requested-vs-effective values model:
->
-> A) a task can "request" (or give up) latency as much as it likes
->
-> B) the cgroup in which the task is in any moment limits wthe maximum
->    latency a task can "request" (or give up)
->
-> C) the system wide knob set the "request" limit for the root cgroup an any task
->    not in a cgroup.
->
-> This model seems to be what we should use here too.
->
-> IOW, for each task compute an "effective" latency_nice value which is defined
-> starting for a task "requested" latency value and by restricting this value
-> based on the (B) cgroup value and the (C) system wide value.
->
-> That's what we do in uclamp_eff_get():
->    https://elixir.bootlin.com/linux/v6.0/source/kernel/sched/core.c#L1484
->
-> Why such a model cannot be used for latency_nice too?
-> Am I missing something?
+On 11/14/22 08:53, Michael Kelley (LINUX) wrote:
+>> Because, first of all, that "Mappings have to be page-aligned" thing is
+>> (now) doing more than page-aligning things.  Second, the moment you mask
+>> out the metadata bits, the 'size' calculation gets harder.  Doing it in
+>> two phases (page alignment followed by metadata bit masking) breaks up
+>> the two logical operations.
+>>
+> Work for me.  Will do this in v3.
 
-Have you read the previous email thread on the subject ?
+Kirill also made a good point about TDX: it isn't affected by this
+because it always passes *real* (no metadata bits set) physical
+addresses in here.  Could you double check that you don't want to do the
+same for your code?
 
-As I mentioned previously we don't need an effective latency for this
-patchset because the current use of cgroup latency_nice is done at
-each scheduling level just like the cgroup weight is used at each
-level.
 
-Regards,
-Vincent
-
->
->
-> Best,
-> patrick
->
-> --
-> #include <best/regards.h>
->
-> Patrick Bellasi
