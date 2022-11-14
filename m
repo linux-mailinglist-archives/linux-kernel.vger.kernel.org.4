@@ -2,89 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EDA628766
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D848628768
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237599AbiKNRqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:46:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
+        id S237668AbiKNRrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:47:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237435AbiKNRq3 (ORCPT
+        with ESMTP id S237435AbiKNRrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:46:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B51B7D2;
-        Mon, 14 Nov 2022 09:46:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77718B810DE;
-        Mon, 14 Nov 2022 17:46:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A92FC433C1;
-        Mon, 14 Nov 2022 17:46:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668447985;
-        bh=ELuvAh5rXFUq6jZ+XUAJMs1kehBG2jCe/rQKj3uUkBw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tn0SBkNysYcB/YKO8/VT1GdiRMg/CPQogLZfl3NaqMu7LYa2UDV9Y5rmgKPKXzAIF
-         nQFaceMWnurjrmQEnIkHu/NXgUdd+Xu52gkxe3f1fgsdMVqTucdiKSJtcBtwPTBWKL
-         /XX86YgK/7JFXlrgSDT6nN2oGutMP+VbiGmwC+3J1FGaNDfH0JZzB6UBed4SgHwWiA
-         5Wenq5Cor/mepfSriy7R8tWtOW5ylngTeHJFKQcgoU3dUwO11qTpZdqfPjxBhzoMwK
-         VCn+vFaX6vltbBnRfXdhNeDgZljIzIo3svzU0og/BvEgNBKLcdM5DMD/+gfvR1dZVA
-         JHB5DEijc7t3g==
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kbuild: revive parallel execution for .tmp_initcalls.lds rule
-Date:   Tue, 15 Nov 2022 02:46:17 +0900
-Message-Id: <20221114174617.211980-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 14 Nov 2022 12:47:23 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4905DB7EC;
+        Mon, 14 Nov 2022 09:47:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=uC2or5Vi29/ILL+10ZunUsXoSK2kh2fnZB6/reHnjHU=; b=eixZyTc84zaknlvIhRid19qxBv
+        1ErWk6J1F6A5nX9R3Gq1xqT3S452frgG5qvxXsSeOBb29oqb9giLYMGzwt1BQiyS0zLW8CBJ7T3Wc
+        IcuCuIc/FUMLYb5ikR7pyoIP9rkKawUPtzIzfCDacq+J+jMM1+wacfwbd1QwvRM/61TvXCaAWpUY2
+        802jFBXCWyQxTSBSpyQuqQcDQQNhh42Yc+zOMrBbx+8eYqwpHEuzS/O1Fb0+YRpeN3zmynbe1CdgV
+        NTwTsYp8ECm3e504wlVNbiwLg5+K5+fFBAzx66zNmw6bTGiSwXvIKETxqE8S+/7/MdvalhTVu1d8G
+        ZM9LI9Mg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oudYH-00FcPV-4x; Mon, 14 Nov 2022 17:47:21 +0000
+Date:   Mon, 14 Nov 2022 17:47:21 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        oe-kbuild-all@lists.linux.dev, Kevin Cernekee <cernekee@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH v1 1/4] list: Introduce list_count() to count existing
+ nodes
+Message-ID: <Y3J/KUBu3adGPiwT@casper.infradead.org>
+References: <20221114112842.38565-1-andriy.shevchenko@linux.intel.com>
+ <202211142350.i0ngTfIl-lkp@intel.com>
+ <Y3JmtNExJulq2CEE@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3JmtNExJulq2CEE@smile.fi.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prior to commit 5d45950dfbb1 ("kbuild: move vmlinux.o link to
-scripts/Makefile.vmlinux_o"), jobserver-exec was invoked from the shell
-script, link-vmlinux.sh. It can get access to the jobserver because
-Makefile adds '+' prefix, as in:
+On Mon, Nov 14, 2022 at 06:03:00PM +0200, Andy Shevchenko wrote:
+> Oh, nice! I will fix this for v2.
 
-    +$(call if_changed_dep,link_vmlinux)
-
-Since 5d45950dfbb1, jobserver-exec is invoked from Makefile, but the
-'+' prefix is missing, hence jobserver-exec has no access to the
-jobserver.
-
-Fixes: 5d45950dfbb1 ("kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o")
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- scripts/Makefile.vmlinux_o | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-index 0edfdb40364b..ae52d3b3f063 100644
---- a/scripts/Makefile.vmlinux_o
-+++ b/scripts/Makefile.vmlinux_o
-@@ -19,7 +19,7 @@ quiet_cmd_gen_initcalls_lds = GEN     $@
- 
- .tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
- 		vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
--	$(call if_changed,gen_initcalls_lds)
-+	+$(call if_changed,gen_initcalls_lds)
- 
- targets := .tmp_initcalls.lds
- 
--- 
-2.34.1
-
+list_count() is an antipattern.  I don't have any of the patches in
+my inbox, so maybe there's a great reason for doing this, but my
+immediate response is: NAK.
