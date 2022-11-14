@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0A1627977
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6AF462797D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236395AbiKNJt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:49:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
+        id S236332AbiKNJul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:50:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236268AbiKNJtg (ORCPT
+        with ESMTP id S236322AbiKNJuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:49:36 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B957DEF3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:49:35 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id d6so18319660lfs.10
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:49:35 -0800 (PST)
+        Mon, 14 Nov 2022 04:50:12 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246FB1E3F0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:50:07 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id k19so12431740lji.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:50:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aJjyfBDsX+JRhsPEen5MxPycUVlZ3Pj+Kpu2ZuqdZ1A=;
-        b=dzSiwp9ZB2kRHdTTKSTGc6XUetNf7VZKxzJNTLuEIzfQWkS6RsmdFP+LfZ2oCgbFWf
-         1bmjDOe/QIX9twgxoMtuEnEv3kDcYKEjuXClp6OllOpVIADnmIYoxuA4q5fMbyqlTFM2
-         uBpWiop5maEP30N6G5BcDGKwfRagKTEmaYaXQ8bM0Fv4zT5NjmXu+s0zYb0EQouGjkEB
-         BlEF4LkaxcIXh1ZCivPaO5DQfudAOniqswvehdofaaYmobbMZwHdvY6/y6lB1kEsSR9F
-         IUXQFQz31xdDF25PS39zMW6bzdZwCoHDNUamDKt8M5wOJzkj8ItCEtov2hAtTgm02wSV
-         P+Dg==
+        bh=Bb1XdXznzYLeTlfpjaMwLLPlS8dogxRK+xeWlIfRthY=;
+        b=Bba7Br3qW4MJ9GT+nWtvv1YOAFcLlyAQxGyr6H6Wx8+l9sdgEpkaxc01+cFXdJaeDm
+         PVWICyz4l/EeStCaOzCk5/yPKKlljE6QAcki4QjDFy2ht96P/RsteKIO4tPuJV5F7gNM
+         pGqGNKBjAK41ZdEP5eFbdN675TTyjImehn7rIwKojvozCVG38aUyVDO0pdPZIEhxz9/g
+         LePNCsWAAw4f+iqp6am/ZANGSWCmz3vIQps6LL/1ZMgqHINvZ2l5akmq9p3v2RKOUtAt
+         sDJYrKfmv45zuKinQQFHRlXQlehysdH+lH/lhfIGFs3A32ZsOqodDr60tZizxnK/QCa9
+         NyWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aJjyfBDsX+JRhsPEen5MxPycUVlZ3Pj+Kpu2ZuqdZ1A=;
-        b=bhc69ZoAZZDGb4G5qqEYLV83ddlLfwpTEWTGSpfBB/As0ZWvgDBDjNocmtLTOi/M/d
-         MBKa0uSzV0J+go6wH96SIpYzkkNW28q6jy/dOsjhT3/wafW6uMIt1J3ikor7AWsPckSt
-         nDnY7O6M6b4KUHlhRCrMOHL1pG41zUBYjvbYpWiywE+dV2bPptJZHlJ2hwWWKSCUbn0+
-         zV3iZXfkeejmJKFHhwHrkhp3CLSJ5vg3/16j3eDwfDzUfw6DMFcuOk9F/ZVxBwFd5Rot
-         N3MoBz7T9c0PXWZsZa3hPU/akMJ0qYOc7DUwPZ8x497EOT5sfw6Fybeuq7F74ENZ+00I
-         exgw==
-X-Gm-Message-State: ANoB5pmeu7QTBFI7uI/QVEsIu0cHi6kLWVmbv98v8pcWbBMN+CarQgZq
-        f9AnkcoBWEOE9L/Li36SqlAAgg==
-X-Google-Smtp-Source: AA0mqf6ejVdnbLOljN6vUt8XoVjEdS6I9gXRZKGNs8IUB8bBi9iDeTHLclSEgVl5teuYUARYNLwZ5Q==
-X-Received: by 2002:a05:6512:6c5:b0:4a2:2223:a6e0 with SMTP id u5-20020a05651206c500b004a22223a6e0mr3810313lff.42.1668419373652;
-        Mon, 14 Nov 2022 01:49:33 -0800 (PST)
+        bh=Bb1XdXznzYLeTlfpjaMwLLPlS8dogxRK+xeWlIfRthY=;
+        b=oO2fE/p8DHKmLb+oMsA8hz4knPbJdCf/gLRgzm0BTl9PAREMEjjnrP6FbUjLDIQ/5n
+         aBgH/scdJnqRwUJ4irB/IytOHcAVoqjvn+s8ypUPBu52vJhqYzajw2OQz3+/GYTsMYZ1
+         kD20Sm8jP31ouTPkvYgN8eISduiQoco1WyU30Z3FH1Tn6mcdQ1gvvEAUJh5lHYMdmAI4
+         uE9f+dpmGaP6LlfKXPWNXI5Y2LOKaPVLvwGaJIlkiJ+ehhSTwsVw8LrR2J8AmeUBt36u
+         Sjzts1W8aaj1Wc48ApCdAKpodcp88rFMkgkzVIoUdKOXaCfYnvYAJBKB8FHjBSVV2Xo2
+         LlrA==
+X-Gm-Message-State: ANoB5plDoZblHuUfgCRoeodyEozLUyrAMOn1q4jT5JICSqUR8JulCENG
+        4dWwlTnpzZ33dORn6yY0+G0ggg==
+X-Google-Smtp-Source: AA0mqf6s18w6QWcr71EVCTgdz+uIIb4iJNURL08uyDNDCOMA8RbN/aaZ6bd6Wb3S/bg+o99lX+EhKw==
+X-Received: by 2002:a2e:711a:0:b0:26e:3292:12ad with SMTP id m26-20020a2e711a000000b0026e329212admr4189418ljc.271.1668419406135;
+        Mon, 14 Nov 2022 01:50:06 -0800 (PST)
 Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id s8-20020a056512202800b00498f32ae907sm1769448lfs.95.2022.11.14.01.49.33
+        by smtp.gmail.com with ESMTPSA id 14-20020ac25f4e000000b004a03eb21c4fsm1747994lfz.288.2022.11.14.01.50.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 01:49:33 -0800 (PST)
-Message-ID: <cba6d4c7-c3ca-1f2d-f6fa-86678e64f81c@linaro.org>
-Date:   Mon, 14 Nov 2022 12:49:32 +0300
+        Mon, 14 Nov 2022 01:50:05 -0800 (PST)
+Message-ID: <9a782abf-378d-08ab-aae2-683178622890@linaro.org>
+Date:   Mon, 14 Nov 2022 12:50:05 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
@@ -118,10 +118,9 @@ On 14/11/2022 11:38, Johan Hovold wrote:
 > You'd also need dedicated aggregate table structs for USB and DP and it
 > seems all of this would just make things more opaque for little gain.
 
-I was thinking about moving the qmp.*init_registers into the common 
-library. However let's probably finish the cleanup before working on 
-code consolidation.
+Forgot:
 
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 -- 
 With best wishes
