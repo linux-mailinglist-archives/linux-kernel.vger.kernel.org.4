@@ -2,224 +2,440 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D32962749A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 03:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 787036274AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 03:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235625AbiKNCfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 21:35:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
+        id S235675AbiKNCr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 21:47:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiKNCfF (ORCPT
+        with ESMTP id S234264AbiKNCrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 21:35:05 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AE26352
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 18:35:03 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N9YL13TqpzHvrF;
-        Mon, 14 Nov 2022 10:34:33 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 10:35:01 +0800
-Subject: Re: [syzbot] possible deadlock in hugetlb_fault
-To:     Dmitry Vyukov <dvyukov@google.com>
-CC:     Mike Kravetz <mike.kravetz@oracle.com>,
-        syzbot <syzbot+ca56f14c500045350f93@syzkaller.appspotmail.com>,
-        <akpm@linux-foundation.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <llvm@lists.linux.dev>, <nathan@kernel.org>,
-        <ndesaulniers@google.com>, <songmuchun@bytedance.com>,
-        <syzkaller-bugs@googlegroups.com>, <trix@redhat.com>
-References: <0000000000008c742d05eca72d4d@google.com>
- <Y27jxKoo1BmgbDbl@monkey> <c7646d97-c04b-7795-a6f8-a6523945f89c@huawei.com>
- <CACT4Y+ZWNV6ApzEv0UrsF2T8JWmXez_-H-EGMii-S_2JbXv07Q@mail.gmail.com>
- <CACT4Y+YAQVAMoU_vS_b+x-Ew3d-ecj+FTHGW9-MPE04dCzZ37w@mail.gmail.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <4c5fa6b4-6278-ce2b-73c2-883eb734bdc7@huawei.com>
-Date:   Mon, 14 Nov 2022 10:35:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Sun, 13 Nov 2022 21:47:23 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99082BC1B;
+        Sun, 13 Nov 2022 18:47:20 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8DxPdk2rHFj9McGAA--.20478S3;
+        Mon, 14 Nov 2022 10:47:18 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxr+AvrHFjMDkSAA--.49472S2;
+        Mon, 14 Nov 2022 10:47:17 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v12 1/2] thermal: loongson-2: add thermal management support
+Date:   Mon, 14 Nov 2022 10:47:08 +0800
+Message-Id: <20221114024709.7975-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <CACT4Y+YAQVAMoU_vS_b+x-Ew3d-ecj+FTHGW9-MPE04dCzZ37w@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Dxr+AvrHFjMDkSAA--.49472S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3uw4DJw1kuFyxAry7ZrykuFg_yoWkCw1UpF
+        W3C3y5GrsrGFsruwn8Ar1UZFs0vwnIyFy3ZFWxGw1Y9rZ8J343Wry8JFy8ZrWSkryDGF13
+        ZF98KFWUCFWDW3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bxkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcV
+        Cjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
+        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr4
+        1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1l
+        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
+        A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8niSJUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/12 22:14, Dmitry Vyukov wrote:
-> On Sat, 12 Nov 2022 at 12:33, Dmitry Vyukov <dvyukov@google.com> wrote:
->>
->> On Sat, 12 Nov 2022 at 05:02, 'Miaohe Lin' via syzkaller-bugs
->> <syzkaller-bugs@googlegroups.com> wrote:
->>>
->>> On 2022/11/12 8:07, Mike Kravetz wrote:
->>>> On 11/04/22 09:00, syzbot wrote:
->>>>> Hello,
->>>>>
->>>>> syzbot found the following issue on:
->>>>>
->>>>> HEAD commit:    f2f32f8af2b0 Merge tag 'for-6.1-rc3-tag' of git://git.kern..
->>>>> git tree:       upstream
->>>>> console output: https://syzkaller.appspot.com/x/log.txt?x=137d52ca880000
->>>>> kernel config:  https://syzkaller.appspot.com/x/.config?x=d080a4bd239918dd
->>>>> dashboard link: https://syzkaller.appspot.com/bug?extid=ca56f14c500045350f93
->>>>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->>>>> userspace arch: i386
->>>>>
->>>>> Unfortunately, I don't have any reproducer for this issue yet.
->>>>>
->>>>> Downloadable assets:
->>>>> disk image: https://storage.googleapis.com/syzbot-assets/b4f72e7a4c11/disk-f2f32f8a.raw.xz
->>>>> vmlinux: https://storage.googleapis.com/syzbot-assets/3f88997ad7c9/vmlinux-f2f32f8a.xz
->>>>> kernel image: https://storage.googleapis.com/syzbot-assets/b4b5b3963e2d/bzImage-f2f32f8a.xz
->>>>>
->>>>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->>>>> Reported-by: syzbot+ca56f14c500045350f93@syzkaller.appspotmail.com
->>>>>
->>>>> ======================================================
->>>>> WARNING: possible circular locking dependency detected
->>>>> 6.1.0-rc3-syzkaller-00152-gf2f32f8af2b0 #0 Not tainted
->>>>> ------------------------------------------------------
->>>>> syz-executor.2/5665 is trying to acquire lock:
->>>>> ffff88801c74c298 (&mm->mmap_lock#2){++++}-{3:3}, at: __might_fault+0xa1/0x170 mm/memory.c:5645
->>>>>
->>>>> but task is already holding lock:
->>>>> ffff88801c4f3078 (&vma_lock->rw_sema){++++}-{3:3}, at: hugetlb_vma_lock_read mm/hugetlb.c:6816 [inline]
->>>>> ffff88801c4f3078 (&vma_lock->rw_sema){++++}-{3:3}, at: hugetlb_fault+0x40a/0x2060 mm/hugetlb.c:5859
->>>>>
->>>>> which lock already depends on the new lock.
->>>>>
->>>>>
->>>>> the existing dependency chain (in reverse order) is:
->>>>>
->>>>> -> #1 (&vma_lock->rw_sema){++++}-{3:3}:
->>>>>        down_write+0x90/0x220 kernel/locking/rwsem.c:1562
->>>>>        hugetlb_vma_lock_write mm/hugetlb.c:6834 [inline]
->>>>>        __unmap_hugepage_range_final+0x97/0x340 mm/hugetlb.c:5202
->>>>>        unmap_single_vma+0x23d/0x2a0 mm/memory.c:1690
->>>>>        unmap_vmas+0x21e/0x370 mm/memory.c:1733
->>>>>        exit_mmap+0x189/0x7a0 mm/mmap.c:3090
->>>>>        __mmput+0x128/0x4c0 kernel/fork.c:1185
->>>>>        mmput+0x5c/0x70 kernel/fork.c:1207
->>>>>        exit_mm kernel/exit.c:516 [inline]
->>>>>        do_exit+0xa39/0x2a20 kernel/exit.c:807
->>>>>        do_group_exit+0xd0/0x2a0 kernel/exit.c:950
->>>>>        get_signal+0x21a1/0x2430 kernel/signal.c:2858
->>>>>        arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
->>>>>        exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
->>>>>        exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
->>>>>        __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
->>>>>        syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:296
->>>>>        __do_fast_syscall_32+0x72/0xf0 arch/x86/entry/common.c:181
->>>>>        do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
->>>>>        entry_SYSENTER_compat_after_hwframe+0x70/0x82
->>>>>
->>>>> -> #0 (&mm->mmap_lock#2){++++}-{3:3}:
->>>>>        check_prev_add kernel/locking/lockdep.c:3097 [inline]
->>>>>        check_prevs_add kernel/locking/lockdep.c:3216 [inline]
->>>>>        validate_chain kernel/locking/lockdep.c:3831 [inline]
->>>>>        __lock_acquire+0x2a43/0x56d0 kernel/locking/lockdep.c:5055
->>>>>        lock_acquire kernel/locking/lockdep.c:5668 [inline]
->>>>>        lock_acquire+0x1df/0x630 kernel/locking/lockdep.c:5633
->>>>>        __might_fault mm/memory.c:5646 [inline]
->>>>>        __might_fault+0x104/0x170 mm/memory.c:5639
->>>>>        _copy_from_user+0x25/0x170 lib/usercopy.c:13
->>>>>        copy_from_user include/linux/uaccess.h:161 [inline]
->>>>>        snd_rawmidi_kernel_write1+0x366/0x880 sound/core/rawmidi.c:1549
->>>>>        snd_rawmidi_write+0x273/0xbb0 sound/core/rawmidi.c:1618
->>>>>        vfs_write+0x2d7/0xdd0 fs/read_write.c:582
->>>>>        ksys_write+0x1e8/0x250 fs/read_write.c:637
->>>>>        do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
->>>>>        __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
->>>>>        do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:203
->>>>>        entry_SYSENTER_compat_after_hwframe+0x70/0x82
->>>>>
->>>>> other info that might help us debug this:
->>>>>
->>>>>  Possible unsafe locking scenario:
->>>>>
->>>>>        CPU0                    CPU1
->>>>>        ----                    ----
->>>>>   lock(&vma_lock->rw_sema);
->>>>>                                lock(&mm->mmap_lock#2);
->>>>>                                lock(&vma_lock->rw_sema);
->>>>>   lock(&mm->mmap_lock#2);
->>>>
->>>> I may not be reading the report correctly, but I can not see how we acquire the
->>>> hugetlb vma_lock before trying to acquire mmap_lock in stack 0.  We would not
->>>> acquire the vma_lock until we enter hugetlb fault processing (not in the stack).
->>
->> The unlock of vma_lock is conditional:
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/hugetlb.c?id=f2f32f8af2b0ca9d619e5183eae3eed431793baf#n6840
->>
->> and the condition is:
->>
->> static bool __vma_shareable_flags_pmd(struct vm_area_struct *vma)
->> {
->>     return vma->vm_flags & (VM_MAYSHARE | VM_SHARED) &&
->>          vma->vm_private_data;
->> }
->>
->> Is it possible that the condition has changed between vma lock and unlock?
->> What mutexes protect vma->vm_flags/vm_private_data?
->>
->> That would make the report perfectly sensible.
->>
->> FWIW the test case that was running is this, that's the syscalls that
->> were running concurrently:
->>
->> 07:56:56 executing program 2:
->> r0 = syz_open_dev$sndmidi(&(0x7f0000000040), 0x2, 0x141101)
->> r1 = dup(r0)
->> setsockopt$inet_sctp_SCTP_I_WANT_MAPPED_V4_ADDR(r1, 0x84, 0xc,
->> &(0x7f0000000080), 0x4) (async)
->> write$6lowpan_enable(r1, &(0x7f0000000000)='0', 0xc86ade39) (async)
->> mmap(&(0x7f0000000000/0xb36000)=nil, 0xb36000, 0x3, 0x68831,
->> 0xffffffffffffffff, 0x0) (async)
->> madvise(&(0x7f0000000000/0x600000)=nil, 0x600003, 0x4) (async, rerun: 32)
->> mremap(&(0x7f00007a0000/0x3000)=nil, 0x3000, 0x2000, 0x7,
->> &(0x7f0000835000/0x2000)=nil) (rerun: 32)
-> 
-> 
-> This new bug report seems to confirm the hypothesis:
-> 
-> WARNING: locking bug in hugetlb_no_page
-> https://syzkaller.appspot.com/bug?extid=d07c65298d2c15eafcb0
+This patch adds the support for Loongson-2 thermal sensor controller,
+which can support maximum 4 sensors.
 
-Thanks Dmitry!
+It's based on thermal of framework:
+ - Trip points defined in device tree.
+ - Cpufreq as cooling device registered in Loongson-2 cpufreq driver.
+ - Pwm fan as cooling device registered in hwmon pwm-fan driver.
 
-I believe Mike found the root cause and his proposed patches in next-20221111 will fix the problem:
-  https://lore.kernel.org/linux-mm/20221111232628.290160-1-mike.kravetz@oracle.com/
+Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+Change in v12:
+		1. Fixup it about min and max.
+		2. Use dev_err_probe replace dev_err in devm_request_threaded_irq context.
+Change in v11:
+		1. Add min() and max() to replace related code in function
+		   loongson2_thermal_set.
+		2. Add dev_err_probe to to replace related code for function
+		   return value use devm_thermal_of_zone_register.
+		3. Replace thermal_add_hwmon_sysfs with devm_thermal_add_hwmon_sysfs
+		   and use dev_warn replace dev_err in this context.
+Change in v10:
+		1. Add all history change log information.
+Change in v9:
+		1. Switch new API that use devm_thermal_of_zone_register
+		   to replace previous interfaces.
+		2. Add depend on LOONGARCH || COMPILE_TEST.
+Change in v8:
+                1. Replace string loongson2/Loongson2/LOONGSON2 with loongson-2/
+                   Loongson-2/LOONGSON-2 in Kconfig and commit log and MAINTAINERS
+		   files.
+Change in v7:
+		1. Split the modification of patch 3 and merge it into this patch.
+		2. Remove the unless code annotation to fix the compile warning
+		   when compile C code with W=1.
+Change in v6:
+		1. NO change, but other patch in this series of patches set has
+		   changes.
+Change in v5:
+		1. NO change, but other patch in this series of patches set has
+		   changes.
+Change in v4:
+		1. Fixup the compatible.
+Change in v3:
+		1. Add a function to gain sensor id an remove dts id.
+Change in v2:
+		1. Remove error msg printing when addr ioremap has error.
+		2. Make loongson2 thermal driver was built-in by default.
+		3. Replace ls2k with loongson2.
+		4. Remove CONFIG_PM_SLEEP and set pm function type was
+		   __maybe_unused.
 
-Let's keep looking. :) Thanks for your work!
+ MAINTAINERS                         |   7 +
+ drivers/thermal/Kconfig             |  10 ++
+ drivers/thermal/Makefile            |   1 +
+ drivers/thermal/loongson2_thermal.c | 260 ++++++++++++++++++++++++++++
+ 4 files changed, 278 insertions(+)
+ create mode 100644 drivers/thermal/loongson2_thermal.c
 
-Thanks,
-Miaohe Lin
-
-
-> 
-> 
->>>> Adding Miaohe Lin on Cc due to previous help with vma_lock potential deadlock
->>>> situations.  Miaohe, does this make sense to you?
->>>>
->>>
->>> Hi Mike,
->>>   This doesn't make sense for me too. Stack #1 shows that syz-executor is releasing
->>> its address space while stack #0 shows another thread is serving the write syscall.
->>> In this case, mm->mm_users is 0 and all threads in this process should be serving
->>> do_exit()? But I could be easily wrong. Also I can't see how vma_lock is locked before
->>> trying to acquire mmap_lock in above stacks. Might this be a false positive?
-> .
-> 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1b391ca7cf91..0d867573fe4c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12013,6 +12013,13 @@ F:	drivers/*/*loongarch*
+ F:	Documentation/loongarch/
+ F:	Documentation/translations/zh_CN/loongarch/
+ 
++LOONGSON-2 SOC SERIES THERMAL DRIVER
++M:	zhanghongchen <zhanghongchen@loongson.cn>
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-pm@vger.kernel.org
++S:	Maintained
++F:	drivers/thermal/loongson2_thermal.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index e052dae614eb..93d84bcb16dd 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+@@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
+ 	  If you say yes here you get support for the FAN controlled
+ 	  by the Microcontroller found on the Khadas VIM boards.
+ 
++config LOONGSON2_THERMAL
++	tristate "Loongson-2 SoC series thermal driver"
++	depends on LOONGARCH || COMPILE_TEST
++	depends on OF
++	help
++	  Support for Thermal driver found on Loongson-2 SoC series platforms.
++	  It supports one critical trip point and one passive trip point. The
++	  cpufreq and the pwm fan is used as the cooling device to throttle
++	  CPUs when the passive trip is crossed.
++
+ endif
+diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+index 2506c6c8ca83..02f3db809858 100644
+--- a/drivers/thermal/Makefile
++++ b/drivers/thermal/Makefile
+@@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+ obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+ obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
+ obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
++obj-$(CONFIG_LOONGSON2_THERMAL)	+= loongson2_thermal.o
+diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
+new file mode 100644
+index 000000000000..2d495469e8dd
+--- /dev/null
++++ b/drivers/thermal/loongson2_thermal.c
+@@ -0,0 +1,260 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Author: zhanghongchen <zhanghongchen@loongson.cn>
++ *         Yinbo Zhu <zhuyinbo@loongson.cn>
++ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
++ */
++
++#include <linux/cpufreq.h>
++#include <linux/delay.h>
++#include <linux/interrupt.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/io.h>
++#include <linux/of_device.h>
++#include <linux/thermal.h>
++#include "thermal_hwmon.h"
++
++#define LOONGSON2_SOC_MAX_SENSOR_NUM			4
++
++#define LOONGSON2_TSENSOR_CTRL_HI			0x0
++#define LOONGSON2_TSENSOR_CTRL_LO			0x8
++#define LOONGSON2_TSENSOR_STATUS			0x10
++#define LOONGSON2_TSENSOR_OUT				0x14
++
++struct loongson2_thermal_data {
++	struct thermal_zone_device *tzd;
++	int irq;
++	int id;
++	void __iomem *regs;
++	struct platform_device *pdev;
++	u16 ctrl_low_val;
++	u16 ctrl_hi_val;
++};
++
++static int loongson2_thermal_set(struct loongson2_thermal_data *data,
++					int low, int high, bool enable)
++{
++	u64 reg_ctrl = 0;
++	int reg_off = data->id * 2;
++
++	if (low > high)
++		return -EINVAL;
++
++	low = max(low, -100);
++	high = min(high, 155);
++
++	low += 100;
++	high += 100;
++
++	reg_ctrl |= low;
++	reg_ctrl |= enable ? 0x100 : 0;
++	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
++
++	reg_ctrl = 0;
++	reg_ctrl |= high;
++	reg_ctrl |= enable ? 0x100 : 0;
++	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
++
++	return 0;
++}
++
++static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
++{
++	u32 reg_val;
++	struct loongson2_thermal_data *data = tz->devdata;
++
++	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
++	*temp = ((reg_val & 0xff) - 100) * 1000;
++
++	return 0;
++}
++
++static int loongson2_thermal_get_sensor_id(void)
++{
++	int ret, id;
++	struct of_phandle_args sensor_specs;
++	struct device_node *np, *sensor_np;
++
++	np = of_find_node_by_name(NULL, "thermal-zones");
++	if (!np)
++		return -ENODEV;
++
++	sensor_np = of_get_next_child(np, NULL);
++	ret = of_parse_phandle_with_args(sensor_np, "thermal-sensors",
++			"#thermal-sensor-cells",
++			0, &sensor_specs);
++	if (ret) {
++		of_node_put(np);
++		of_node_put(sensor_np);
++		return ret;
++	}
++
++	if (sensor_specs.args_count >= 1) {
++		id = sensor_specs.args[0];
++		WARN(sensor_specs.args_count > 1,
++				"%s: too many cells in sensor specifier %d\n",
++				sensor_specs.np->name, sensor_specs.args_count);
++	} else {
++		id = 0;
++	}
++
++	of_node_put(np);
++	of_node_put(sensor_np);
++
++	return id;
++}
++
++static irqreturn_t loongson2_thermal_alarm_irq(int irq, void *dev)
++{
++	struct loongson2_thermal_data *data = dev;
++
++	/* clear interrupt */
++	writeb(0x3, data->regs + LOONGSON2_TSENSOR_STATUS);
++
++	disable_irq_nosync(irq);
++
++	return IRQ_WAKE_THREAD;
++}
++
++static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
++{
++	struct loongson2_thermal_data *data = dev;
++
++	thermal_zone_device_update(data->tzd,
++				   THERMAL_EVENT_UNSPECIFIED);
++	enable_irq(data->irq);
++
++	return IRQ_HANDLED;
++}
++
++static int loongson2_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
++{
++	struct loongson2_thermal_data *data = tz->devdata;
++
++	return loongson2_thermal_set(data, low/1000, high/1000, true);
++}
++
++static const struct thermal_zone_device_ops loongson2_of_thermal_ops = {
++	.get_temp = loongson2_thermal_get_temp,
++	.set_trips = loongson2_thermal_set_trips,
++};
++
++static int loongson2_thermal_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct resource *res;
++	struct loongson2_thermal_data *data;
++	int ret;
++
++	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->pdev = pdev;
++	platform_set_drvdata(pdev, data);
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	data->regs = devm_ioremap(dev, res->start, resource_size(res));
++	if (IS_ERR(data->regs))
++		return PTR_ERR(data->regs);
++
++	/* get irq */
++	data->irq = platform_get_irq(pdev, 0);
++	if (data->irq < 0)
++		return data->irq;
++
++	/* get id */
++	data->id = loongson2_thermal_get_sensor_id();
++	if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
++		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
++				LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
++		return -EINVAL;
++	}
++
++	writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
++
++	loongson2_thermal_set(data, 0, 0, false);
++
++	data->tzd = devm_thermal_of_zone_register(&pdev->dev, data->id, data,
++			&loongson2_of_thermal_ops);
++	if (IS_ERR(data->tzd))
++		return dev_err_probe(&pdev->dev, PTR_ERR(data->tzd),
++				"failed to register");
++
++	ret = devm_request_threaded_irq(dev, data->irq,
++			loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
++			IRQF_ONESHOT, "loongson2_thermal", data);
++	if (ret < 0)
++		return dev_err_probe(dev, ret, "failed to request alarm irq\n");
++
++	/*
++	 * Thermal_zone doesn't enable hwmon as default,
++	 * enable it here
++	 */
++	data->tzd->tzp->no_hwmon = false;
++	if (devm_thermal_add_hwmon_sysfs(data->tzd))
++		dev_warn(&pdev->dev, "Failed to add hwmon sysfs attributes\n");
++
++	return 0;
++}
++
++static int loongson2_thermal_remove(struct platform_device *pdev)
++{
++	struct loongson2_thermal_data *data = platform_get_drvdata(pdev);
++	int reg_off = data->id * 2;
++
++	/* disable interrupt */
++	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
++	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
++
++	return 0;
++}
++
++static const struct of_device_id of_loongson2_thermal_match[] = {
++	{ .compatible = "loongson,ls2k-thermal",},
++	{ /* end */ }
++};
++MODULE_DEVICE_TABLE(of, of_loongson2_thermal_match);
++
++static int __maybe_unused loongson2_thermal_suspend(struct device *dev)
++{
++	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
++	int reg_off = data->id * 2;
++
++	data->ctrl_low_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
++	data->ctrl_hi_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
++
++	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
++	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
++
++	return 0;
++}
++
++static int __maybe_unused loongson2_thermal_resume(struct device *dev)
++{
++	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
++	int reg_off = data->id * 2;
++
++	writew(data->ctrl_low_val, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
++	writew(data->ctrl_hi_val, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
++
++	return 0;
++}
++
++static SIMPLE_DEV_PM_OPS(loongson2_thermal_pm_ops,
++			 loongson2_thermal_suspend, loongson2_thermal_resume);
++
++static struct platform_driver loongson2_thermal_driver = {
++	.driver = {
++		.name		= "loongson2_thermal",
++		.pm = &loongson2_thermal_pm_ops,
++		.of_match_table = of_loongson2_thermal_match,
++	},
++	.probe	= loongson2_thermal_probe,
++	.remove	= loongson2_thermal_remove,
++};
++module_platform_driver(loongson2_thermal_driver);
++
++MODULE_DESCRIPTION("Loongson2 thermal driver");
++MODULE_LICENSE("GPL");
+-- 
+2.31.1
 
