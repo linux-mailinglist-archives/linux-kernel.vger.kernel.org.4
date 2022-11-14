@@ -2,157 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2E86289D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBCD6289D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:51:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235911AbiKNTv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 14:51:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53684 "EHLO
+        id S236661AbiKNTvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 14:51:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235813AbiKNTvV (ORCPT
+        with ESMTP id S236337AbiKNTvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 14:51:21 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5193AC16;
-        Mon, 14 Nov 2022 11:51:20 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668455478;
+        Mon, 14 Nov 2022 14:51:31 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBAB110D;
+        Mon, 14 Nov 2022 11:51:30 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e773329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e773:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DC1641EC0304;
+        Mon, 14 Nov 2022 20:51:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1668455488;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PfwmN3gCUQ+9TAw/6+bki3KtgpMLZgBklmxHfTgDw4o=;
-        b=iMGGVuDKNStmNor0UI3iTAYJ0AUO55XogBClFvM6B+tx0AU7fG2GCFY1lB/NC6Tb3UDkHT
-        wjMXw+7S+KKxg6nci2jZINQSPEpVH8/S75n8xpxWvbZB9TxM/doLt1grp8dJYSQNe4gcu2
-        DqQPQFAS80ZUU4gsK6dxxarHe2nXdRbTQa10ScIZY9lfZD459n/D+zboV2n4sGBx1lblni
-        JnLYd56MPxPaQR/+Mg3f7wjXIhTMsGxmrmPTrYXYKM4AA9jm8M7zDoQPx6vcpAWYDQ7x6x
-        bqOsfc0s5Ggddqj32cmnHa27cCEyV5ocQGudIreuupfSYr3csW2a8Zggd4jVgw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668455478;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PfwmN3gCUQ+9TAw/6+bki3KtgpMLZgBklmxHfTgDw4o=;
-        b=dncJ14jVrz1LFCtglE+whx9TPp6GS0vWhsUTBrHNZGXicNcXkFVwyCGWGQtJhi1XDLy5gW
-        vPUxufgOngSBI2Bw==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, Helge Deller <deller@gmx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Tom Rix <trix@redhat.com>, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH printk v4 31/39] printk, xen: fbfront: create/use safe
- function for forcing preferred
-In-Reply-To: <20221114162932.141883-32-john.ogness@linutronix.de>
-References: <20221114162932.141883-1-john.ogness@linutronix.de>
- <20221114162932.141883-32-john.ogness@linutronix.de>
-Date:   Mon, 14 Nov 2022 20:57:18 +0106
-Message-ID: <87mt8tfh6x.fsf@jogness.linutronix.de>
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Ta80/lJEXeync/q9lAj53oHgjWE6aOFOeaGaQcQ6TyQ=;
+        b=FR2o/Yzsr8JCyD2Uq8gYaQtwP+gGi5ljcPRkU7TKS/PC5nWn/9Jz67pqpYr8Qs15yplSj5
+        g6nqB7Mgza10lwqOvjbnKOR+szMVFrjGRMvWb/sQVXtO5tSr8BoYCy9JDH3yAkw/MKvzf2
+        wTCq5N16ZlpNTQFfwt0PaxKG0pbDJLY=
+Date:   Mon, 14 Nov 2022 20:51:25 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "Macieira, Thiago" <thiago.macieira@intel.com>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "hdegoede@redhat.com" <hdegoede@redhat.com>,
+        "markgross@kernel.org" <markgross@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
+        "Mehta, Sohil" <sohil.mehta@intel.com>
+Subject: Re: [PATCH v2 12/14] platform/x86/intel/ifs: Add current_batch sysfs
+ entry
+Message-ID: <Y3KcPUqP/K6Ceo9C@zn.tnic>
+References: <CC3629D6-B205-4150-80E5-FC7A7A76DD25@intel.com>
+ <Y3CevK2zhAmiUyG9@kroah.com>
+ <Y3DZmKYV+8HBtZ+Q@zn.tnic>
+ <Y3EJ93xzgC/1v0WV@a4bf019067fa.jf.intel.com>
+ <Y3EUPKWDefnkeObR@zn.tnic>
+ <45aa0f69-2523-3cba-8f41-b1351f16b78f@intel.com>
+ <Y3KRGx/yNfS78zQ2@zn.tnic>
+ <SJ1PR11MB608361084E83E74EA348630BFC059@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <Y3KULFHC5JuBQdAZ@zn.tnic>
+ <SJ1PR11MB60837D7324618BDB33B98C24FC059@SJ1PR11MB6083.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <SJ1PR11MB60837D7324618BDB33B98C24FC059@SJ1PR11MB6083.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Nov 14, 2022 at 07:38:35PM +0000, Luck, Tony wrote:
+> But if this is the only roadblock to taking this patch series,
+> then we can switch to filenames and make Thiago find some way for
+> the container to be given the list of tests to run in the form of
+> filenames.
 
-After more detailed runtime testing I discovered that I didn't re-insert
-the console to the correct place in the list. More below...
+I'm not putting any roadblocks as this is not the area I maintain. I'm
+just saying that this whole scheme looks fragile to me.
 
-On 2022-11-14, John Ogness <john.ogness@linutronix.de> wrote:
-> diff --git a/include/linux/console.h b/include/linux/console.h
-> index f716e1dd9eaf..9cea254b34b8 100644
-> --- a/include/linux/console.h
-> +++ b/include/linux/console.h
-> @@ -291,6 +291,7 @@ enum con_flush_mode {
->  };
->  
->  extern int add_preferred_console(char *name, int idx, char *options);
-> +extern void console_force_preferred_locked(struct console *con);
->  extern void register_console(struct console *);
->  extern int unregister_console(struct console *);
->  extern void console_lock(void);
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index e770b1ede6c9..dff76c1cef80 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -3461,6 +3462,48 @@ int unregister_console(struct console *console)
->  }
->  EXPORT_SYMBOL(unregister_console);
->  
-> +/**
-> + * console_force_preferred_locked - force a registered console preferred
-> + * @con: The registered console to force preferred.
-> + *
-> + * Must be called under console_list_lock().
-> + */
-> +void console_force_preferred_locked(struct console *con)
-> +{
-> +	struct console *cur_pref_con;
-> +
-> +	if (!console_is_registered_locked(con))
-> +		return;
-> +
-> +	cur_pref_con = console_first();
-> +
-> +	/* Already preferred? */
-> +	if (cur_pref_con == con)
-> +		return;
-> +
-> +	/*
-> +	 * Delete, but do not re-initialize the entry. This allows the console
-> +	 * to continue to appear registered (via any hlist_unhashed_lockless()
-> +	 * checks), even though it was briefly removed from the console list.
-> +	 */
-> +	hlist_del_rcu(&con->node);
-> +
-> +	/*
-> +	 * Ensure that all SRCU list walks have completed so that the console
-> +	 * can be added to the beginning of the console list and its forward
-> +	 * list pointer can be re-initialized.
-> +	 */
-> +	synchronize_srcu(&console_srcu);
-> +
-> +	con->flags |= CON_CONSDEV;
-> +	WARN_ON(!con->device);
-> +
-> +	/* Only the new head can have CON_CONSDEV set. */
-> +	console_srcu_write_flags(cur_pref_con, cur_pref_con->flags & ~CON_CONSDEV);
-> +	hlist_add_behind_rcu(&con->node, console_list.first);
+I.e., I'm just playing the devil's advocate and pointing out the issues
+this scheme could have. It might not but it could - we can't know of all
+the possible future use cases.
 
-This is adding the console as the 2nd item. It should be the new
-head. The patch below fixes it.
+So this is all your call as far as I'm concerned. Hans was fine either
+way.
 
-I have done careful runtime testing with this fixup. After the
-force_preferred, the console is the new head and sending data to
-/dev/console redirects to that console.
+I'll take the next revision through tip as we agreed with Hans and after
+the other, minor issues I've pointed out have been taken care of.
 
-It would be nice if we could fold this in. Sorry.
+-- 
+Regards/Gruss,
+    Boris.
 
-John Ogness
-
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 8d635467882f..4b77586cf4cb 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -3494,7 +3494,7 @@ void console_force_preferred_locked(struct console *con)
- 
- 	/* Only the new head can have CON_CONSDEV set. */
- 	console_srcu_write_flags(cur_pref_con, cur_pref_con->flags & ~CON_CONSDEV);
--	hlist_add_behind_rcu(&con->node, console_list.first);
-+	hlist_add_head_rcu(&con->node, &console_list);
- }
- EXPORT_SYMBOL(console_force_preferred_locked);
- 
+https://people.kernel.org/tglx/notes-about-netiquette
