@@ -2,233 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9833A628BAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2706A628BAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237453AbiKNV5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 16:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42690 "EHLO
+        id S237525AbiKNV63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 16:58:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235592AbiKNV51 (ORCPT
+        with ESMTP id S237136AbiKNV60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 16:57:27 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8EBE0DA;
-        Mon, 14 Nov 2022 13:57:25 -0800 (PST)
-Date:   Mon, 14 Nov 2022 21:57:19 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1668463043;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cvv73VT4lN9E4M2VgijTPhMKxC7cic18qdqEvGgeM/0=;
-        b=SwtRf5XHuoWAxp0FBIwIXxlgQz46tnQNxZ4bg2tvIoj/8cMdMGExDIaLj+GztJATAH9Kzo
-        5ZGE5IiG9egbnMHnNarasSnVRiyZNCKbK1AVaOZZIZIrWMEcMrRd6tlHdAgN2r3gjO/D1v
-        Oa1cbcgndr9Z99MMExgfOEerkso2u1c=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev,
-        linux-kselftest@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/2] KVM: selftests: Allow >1 guest mode in
- access_tracking_perf_test
-Message-ID: <Y3K5vyWB8m/mKmZD@google.com>
-References: <20221111231946.944807-1-oliver.upton@linux.dev>
- <20221111231946.944807-2-oliver.upton@linux.dev>
- <Y3J3EH74B6yafeqm@google.com>
+        Mon, 14 Nov 2022 16:58:26 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D868610FDF;
+        Mon, 14 Nov 2022 13:58:22 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id e189so9314676iof.1;
+        Mon, 14 Nov 2022 13:58:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eLuktCTSBHrWVfseua1QujoHXFQTgdM1z2Sw54d8NOs=;
+        b=OMI2kEoWCUTZZFdhlIPLZDnV9B7ClBzJJQJOiZmyTrlH9qIsvRf0/aRqo5MaBIJ4MP
+         R+S7f7CY0vaVxYELkQFRJUol5k57chitWsQ+wHi2hO6+OtC/7WfuS9/o2jVNlLVbwsBm
+         11ln8tqWT1tu//UbN6kirb5K+SJFdDuiCVX2PtxXAhJ4TnVhiiUxZ9RF5p2gChcO1X1J
+         IZQJm7O/rfNJZXzMq+aOYIV/dTzT9P6maCicXVrLQuMJcfazGeqY6vwDZcuvEkTpJ0PW
+         SsKWOrJfShFefrZpC3+Nd/+ejdYOKtsE2Ehat54w451ANwSlQLEPBdDe9I5iqHnVqm2u
+         noVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eLuktCTSBHrWVfseua1QujoHXFQTgdM1z2Sw54d8NOs=;
+        b=d+FHI1eCQqBUHEhGtqaJWhfuj+/38w6TCoXINLKkM/Q8Tuf6VzI3/yA4LsbEITyX+N
+         ZlbdkGMtO5wJ++4lrZPB+U2qdtxuPWotGfHJtEbm6sqo+E3dmZc4aOITOe1m7MKt7W4h
+         LfXz2ix+fufy1b7q3vyq4RYmPFkNCE5t7ZITNtksUamH0CWHrqiVdypq7ofFUCu1gKR9
+         8p4/0HXMplB4i2kvLK0DIMEGNR85abRtmYoEaKIq+UwIgB0tta6BpRfNhlxK0HeXfE5D
+         BTLH0K6op4ubk8WR0GlpxoZ2eCypbt1ROCoFYSlQJeJHBm/LxrFsdp0UzmbCp27nc5/p
+         XS3Q==
+X-Gm-Message-State: ANoB5pnF0T5NMDEypy8VRJ3+LqMFQzX1hiIsnjO8evXH1LTiKrffvdav
+        gA7x82aPVPG/qS+9+SDt4lilMTzzfzs=
+X-Google-Smtp-Source: AA0mqf7YUNTRaRZCCVYW8IxNOOVRQ1KiPQ9Q1hZIPE/jVOoKIHnzA865rBXMGGox3BYoSXwf4M66Qg==
+X-Received: by 2002:a02:2207:0:b0:375:f7b:7219 with SMTP id o7-20020a022207000000b003750f7b7219mr6125991jao.295.1668463102171;
+        Mon, 14 Nov 2022 13:58:22 -0800 (PST)
+Received: from hestia.gfnd.rcn-ee.org (208-107-176-7-dynamic.midco.net. [208.107.176.7])
+        by smtp.gmail.com with ESMTPSA id a1-20020a027341000000b003738c0a80b4sm3960357jae.144.2022.11.14.13.58.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 13:58:21 -0800 (PST)
+From:   Robert Nelson <robertcnelson@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Robert Nelson <robertcnelson@gmail.com>,
+        Rob Herring <robh@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Jason Kridner <jkridner@beagleboard.org>,
+        Drew Fustini <drew@beagleboard.org>
+Subject: [PATCH v5 1/2] dt-bindings: arm: ti: Add bindings for BeagleBone AI-64
+Date:   Mon, 14 Nov 2022 15:58:16 -0600
+Message-Id: <20221114215817.1953186-1-robertcnelson@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3J3EH74B6yafeqm@google.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 05:12:48PM +0000, Sean Christopherson wrote:
-> On Fri, Nov 11, 2022, Oliver Upton wrote:
-> > As the name implies, for_each_guest_mode() will run the test case for
-> > all supported guest addressing modes. On x86 that doesn't amount to
-> > anything, but arm64 can handle 4K, 16K, and 64K page sizes on supporting
-> > hardware.
-> > 
-> > Blindly attempting to run access_tracking_perf_test on arm64 stalls on
-> > the second test case, as the 'done' global remains set between test
-> > iterations. Clear it after VM teardown in anticipation of a subsequent
-> > test case.
-> > 
-> > Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
-> > ---
-> >  tools/testing/selftests/kvm/access_tracking_perf_test.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-> > index 76c583a07ea2..4da066479e0a 100644
-> > --- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
-> > +++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-> > @@ -326,6 +326,9 @@ static void run_test(enum vm_guest_mode mode, void *arg)
-> >  
-> >  	perf_test_join_vcpu_threads(nr_vcpus);
-> >  	perf_test_destroy_vm(vm);
-> > +
-> > +	/* Clear done in anticipation of testing another guest mode */
-> > +	done = false;
-> 
-> Can we fix this in the so called "perf_test" infrastructure?
-> memslot_modification_stress_test.c has the same bug just inverted (see run_vcpus).
+This board is based on the ti,j721e
 
-Yeah, sounds good to me. I'll wrap your diff up in a patch here in a
-bit.
+https://beagleboard.org/ai-64
+https://git.beagleboard.org/beagleboard/beaglebone-ai-64
 
---
-Thanks,
-Oliver
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+Acked-by: Rob Herring <robh@kernel.org>
+CC: Nishanth Menon <nm@ti.com>
+CC: Jason Kridner <jkridner@beagleboard.org>
+CC: Drew Fustini <drew@beagleboard.org>
+---
+Changes since v4:
+ - no changes
+Changes since v3:
+ - added Acked-by from Rob Herring
+Changes since v2:
+ - rebased on next after k3.yaml alphabetical sort
+Changes since v1:
+ - added documenation links
+ - add board in alphabetical order
+---
+ Documentation/devicetree/bindings/arm/ti/k3.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-> ---
->  .../selftests/kvm/access_tracking_perf_test.c | 28 +++++--------------
->  .../selftests/kvm/include/perf_test_util.h    |  3 ++
->  .../selftests/kvm/lib/perf_test_util.c        |  3 ++
->  .../kvm/memslot_modification_stress_test.c    |  6 +---
->  4 files changed, 14 insertions(+), 26 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/access_tracking_perf_test.c b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-> index 76c583a07ea2..786bc62a2c79 100644
-> --- a/tools/testing/selftests/kvm/access_tracking_perf_test.c
-> +++ b/tools/testing/selftests/kvm/access_tracking_perf_test.c
-> @@ -58,9 +58,6 @@ static enum {
->  	ITERATION_MARK_IDLE,
->  } iteration_work;
->  
-> -/* Set to true when vCPU threads should exit. */
-> -static bool done;
-> -
->  /* The iteration that was last completed by each vCPU. */
->  static int vcpu_last_completed_iteration[KVM_MAX_VCPUS];
->  
-> @@ -206,28 +203,20 @@ static void assert_ucall(struct kvm_vcpu *vcpu, uint64_t expected_ucall)
->  		    expected_ucall, actual_ucall);
->  }
->  
-> -static bool spin_wait_for_next_iteration(int *current_iteration)
-> -{
-> -	int last_iteration = *current_iteration;
-> -
-> -	do {
-> -		if (READ_ONCE(done))
-> -			return false;
-> -
-> -		*current_iteration = READ_ONCE(iteration);
-> -	} while (last_iteration == *current_iteration);
-> -
-> -	return true;
-> -}
-> -
->  static void vcpu_thread_main(struct perf_test_vcpu_args *vcpu_args)
->  {
->  	struct kvm_vcpu *vcpu = vcpu_args->vcpu;
->  	struct kvm_vm *vm = perf_test_args.vm;
->  	int vcpu_idx = vcpu_args->vcpu_idx;
->  	int current_iteration = 0;
-> +	int last_iteration;
-> +
-> +	while (!READ_ONCE(perf_test_args.stop_vcpus)) {
-> +		last_iteration = current_iteration;
-> +		do {
-> +			current_iteration = READ_ONCE(iteration);
-> +		} while (current_iteration == last_iteration);
->  
-> -	while (spin_wait_for_next_iteration(&current_iteration)) {
->  		switch (READ_ONCE(iteration_work)) {
->  		case ITERATION_ACCESS_MEMORY:
->  			vcpu_run(vcpu);
-> @@ -321,9 +310,6 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->  	mark_memory_idle(vm, nr_vcpus);
->  	access_memory(vm, nr_vcpus, ACCESS_READ, "Reading from idle memory");
->  
-> -	/* Set done to signal the vCPU threads to exit */
-> -	done = true;
-> -
->  	perf_test_join_vcpu_threads(nr_vcpus);
->  	perf_test_destroy_vm(vm);
->  }
-> diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
-> index eaa88df0555a..536d7c3c3f14 100644
-> --- a/tools/testing/selftests/kvm/include/perf_test_util.h
-> +++ b/tools/testing/selftests/kvm/include/perf_test_util.h
-> @@ -40,6 +40,9 @@ struct perf_test_args {
->  	/* Run vCPUs in L2 instead of L1, if the architecture supports it. */
->  	bool nested;
->  
-> +	/* Test is done, stop running vCPUs. */
-> +	bool stop_vcpus;
-> +
->  	struct perf_test_vcpu_args vcpu_args[KVM_MAX_VCPUS];
->  };
->  
-> diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
-> index 9618b37c66f7..ee3f499ccbd2 100644
-> --- a/tools/testing/selftests/kvm/lib/perf_test_util.c
-> +++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
-> @@ -267,6 +267,7 @@ void perf_test_start_vcpu_threads(int nr_vcpus,
->  
->  	vcpu_thread_fn = vcpu_fn;
->  	WRITE_ONCE(all_vcpu_threads_running, false);
-> +	WRITE_ONCE(perf_test_args.stop_vcpus, false);
->  
->  	for (i = 0; i < nr_vcpus; i++) {
->  		struct vcpu_thread *vcpu = &vcpu_threads[i];
-> @@ -289,6 +290,8 @@ void perf_test_join_vcpu_threads(int nr_vcpus)
->  {
->  	int i;
->  
-> +	WRITE_ONCE(perf_test_args.stop_vcpus, true);
-> +
->  	for (i = 0; i < nr_vcpus; i++)
->  		pthread_join(vcpu_threads[i].thread, NULL);
->  }
-> diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-> index bb1d17a1171b..3a5e4518307c 100644
-> --- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-> +++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
-> @@ -34,8 +34,6 @@
->  static int nr_vcpus = 1;
->  static uint64_t guest_percpu_mem_size = DEFAULT_PER_VCPU_MEM_SIZE;
->  
-> -static bool run_vcpus = true;
-> -
->  static void vcpu_worker(struct perf_test_vcpu_args *vcpu_args)
->  {
->  	struct kvm_vcpu *vcpu = vcpu_args->vcpu;
-> @@ -45,7 +43,7 @@ static void vcpu_worker(struct perf_test_vcpu_args *vcpu_args)
->  	run = vcpu->run;
->  
->  	/* Let the guest access its memory until a stop signal is received */
-> -	while (READ_ONCE(run_vcpus)) {
-> +	while (!READ_ONCE(perf_test_args.stop_vcpus)) {
->  		ret = _vcpu_run(vcpu);
->  		TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
->  
-> @@ -110,8 +108,6 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->  	add_remove_memslot(vm, p->memslot_modification_delay,
->  			   p->nr_memslot_modifications);
->  
-> -	run_vcpus = false;
-> -
->  	perf_test_join_vcpu_threads(nr_vcpus);
->  	pr_info("All vCPU threads joined\n");
->  
-> 
-> base-commit: 10dbc57b5777e6938a648eb4a870bad448fcb6f5
-> -- 
-> 
+diff --git a/Documentation/devicetree/bindings/arm/ti/k3.yaml b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+index 28b8232e1c5b..09e6845ff243 100644
+--- a/Documentation/devicetree/bindings/arm/ti/k3.yaml
++++ b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+@@ -61,6 +61,7 @@ properties:
+           - const: ti,j721e
+           - items:
+               - enum:
++                  - beagle,j721e-beagleboneai64
+                   - ti,j721e-evm
+                   - ti,j721e-sk
+               - const: ti,j721e
+-- 
+2.30.2
+
