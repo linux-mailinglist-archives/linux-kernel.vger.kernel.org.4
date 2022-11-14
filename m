@@ -2,69 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A075628B9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5490C628BA6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237662AbiKNVyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 16:54:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
+        id S237136AbiKNVz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 16:55:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236128AbiKNVyO (ORCPT
+        with ESMTP id S237344AbiKNVzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 16:54:14 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40BAEE089;
-        Mon, 14 Nov 2022 13:54:13 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id v8so4276908uap.12;
-        Mon, 14 Nov 2022 13:54:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=v+blShwVzVn2ShDVrtqz1stWlM2XFhwIpWM5biYTUq8=;
-        b=MYKEo8YFBIQYr1WtSl7TXE9Q2jF4hIFgSZ1Eb3ha7p0oVKPS0JCk+feFpLdaWfSPWj
-         W0ANvk5V9+DZGgztA4m1n9+8AGjdq21I4cHxCSrCNEtetNs9e//bnBPYZH/te6kQH4LZ
-         rKFGfiWC7u8aaJSCfkfIxRaDmp6eH7XJZ8RITcX2R4NWf4cOUPfqCQG15O/AHM4wBwIz
-         MYfSeTnUFDAUhXrT2LZkvDF/3g7cIR6wBsg7NWY5zY5881aePqHmgnJcHPXX5guZh8dS
-         GPJU1/MihZtQZluCmnEEYEXwnFxJeN2X1vTentMHHxLH+WuaT6DQ4mLTFg29LK5bUHeZ
-         zQrg==
+        Mon, 14 Nov 2022 16:55:53 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6B2F5A0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:55:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668462901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qpc2eQF4OVRCR9vIz7961ylczQfdMl7P3OUcWUSapU0=;
+        b=HuCaI4wDVF939S4gDPijaNf1dXE8+wHY75I7jYLzALrWMmX0qOcnGzfDRhy9CVBvIymaTn
+        j/e8w198V3dxjSzYiKR6oir/R1m1yYm7ql128ypBPh+gNI0B9WLeIu5A89fc6cy6GNUmHd
+        Q4uAJDZ74tCSbAxkj3xwXJOMihWyPs0=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-97-Dz53I3UePSyrzSqKsOG5bw-1; Mon, 14 Nov 2022 16:54:59 -0500
+X-MC-Unique: Dz53I3UePSyrzSqKsOG5bw-1
+Received: by mail-qt1-f199.google.com with SMTP id w27-20020a05622a191b00b003a56c0e1cd0so8892880qtc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:54:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v+blShwVzVn2ShDVrtqz1stWlM2XFhwIpWM5biYTUq8=;
-        b=t0wNrgDYpPJsLpqq+O0M7IAh+FZbzGbz65hYLPgkZ56xSx31chCnk0QWQ8HQWatyBV
-         acH1g6CQGEjeHSnX8w5DeHvuF4wrznX+rsMbNFp7XTqwfM9ogytwMX53XNFWcOXNcZYN
-         OyQeJ2ZIrG9rExOIlXbOT3xXyTn6Czemz3GawXrZ91XafK9DiW+DuuWNp0qrhtg1d+UH
-         trl6cRibN7JawREqMJdHgSWmR4J4NiGgWVfBeSB/zPXNUtptJ89oAs4wOmQIfIyLPs8U
-         qDM25N4jAUFeMMpZDRMc4NNbYkF6ouQlWExy6VELpHaD4py0ib7B//GkSwreCO+Obk/d
-         UkIA==
-X-Gm-Message-State: ANoB5pkMSmaLSEF13qyJle2zYItvmYyhaJsNOn8AO/f/qWoWRmmTdZUG
-        B/VZ/CCHe+87IaUbxgQi7CmS9bVY0zXKhDt0ubA=
-X-Google-Smtp-Source: AA0mqf4LjH2sk4MuaRBt6ypZQWs5afjoGfErlCG086KjswrlCzzSdD/OhVpFc1Fp9+9aMfOIb1+LohIGL77vmgspU4Y=
-X-Received: by 2002:ab0:2411:0:b0:3dc:3d19:584 with SMTP id
- f17-20020ab02411000000b003dc3d190584mr7568106uan.122.1668462852176; Mon, 14
- Nov 2022 13:54:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20221031200114.987024-1-robertcnelson@gmail.com>
- <20221031200114.987024-2-robertcnelson@gmail.com> <ce9291a0-e138-f0ec-9604-83abd93e72c3@ti.com>
-In-Reply-To: <ce9291a0-e138-f0ec-9604-83abd93e72c3@ti.com>
-From:   Robert Nelson <robertcnelson@gmail.com>
-Date:   Mon, 14 Nov 2022 15:53:46 -0600
-Message-ID: <CAOCHtYi-aBwxY3Hivgj+uW71E3XT6q6j0=SfWg+EfJOqQB3_SA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] arm64: dts: ti: add k3-j721e-beagleboneai64
-To:     Andrew Davis <afd@ti.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Jason Kridner <jkridner@beagleboard.org>,
-        Drew Fustini <drew@beagleboard.org>
+        h=content-transfer-encoding:mime-version:user-agent:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qpc2eQF4OVRCR9vIz7961ylczQfdMl7P3OUcWUSapU0=;
+        b=iESNpJuBSzVUBfDlYyX3Ztnqhw+6yCCgWjh0kvlaAsymJppEZI72p8MS/ZUbf5I6Ue
+         RJ3QBNI3Lz/PrlPwkSIFhm/86M/lYA6jaDblwTaiU1mhm75zR9AoSzuzXQ7bG8pCRVYp
+         4siFEbXug0i3yqQnlJydyv+iQHBv/Rab62dwEECHGCi9wOYceriQisXH/Ep3HMUqLgH6
+         F77grdnaXuji6kG7BwLDu1f9m+MxlGb8jIHO8E66pOU6d3dv6pke26bEJF9qpw7qDP8F
+         D0zY//UpD8IOH/EDyO5FvuznfEzmHc6dPZPiqIPAv2kTWhHzVF4oDqWqcX2lchjMlPPk
+         aX4Q==
+X-Gm-Message-State: ANoB5plfYgeZMbm9KCXfYxQ5hirysvkJ1omauF1SRr065V86ocNQFrqn
+        vdM49iif1BbdIVjmICQ70jlSqyxT84dY960pBH3eBQMDwS1MNfX8g2/gXj44F8O0eNiDIr5mSc7
+        Dnz1M4TcS68fZOGGZvZIh1Hj6
+X-Received: by 2002:a05:6214:1902:b0:4a4:474a:1394 with SMTP id er2-20020a056214190200b004a4474a1394mr14177468qvb.36.1668462898904;
+        Mon, 14 Nov 2022 13:54:58 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4JgH34ZSNeRxluqCoega8kEsCXijBbz2npC1p8GEG2x4oKXtEevNQk4JgOUn038jyPFgODag==
+X-Received: by 2002:a05:6214:1902:b0:4a4:474a:1394 with SMTP id er2-20020a056214190200b004a4474a1394mr14177451qvb.36.1668462898651;
+        Mon, 14 Nov 2022 13:54:58 -0800 (PST)
+Received: from ?IPv6:2600:4040:5c6c:9200::feb? ([2600:4040:5c6c:9200::feb])
+        by smtp.gmail.com with ESMTPSA id i19-20020a05620a249300b006fb38ff190bsm7023557qkn.34.2022.11.14.13.54.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 13:54:57 -0800 (PST)
+Message-ID: <4482e7de979cc6673162b7aac0fcbfddb5d2d906.camel@redhat.com>
+Subject: Re: [PATCH 1/2] drm/amdgpu/mst: Stop ignoring error codes and
+ deadlocking
+From:   Lyude Paul <lyude@redhat.com>
+To:     "Lin, Wayne" <Wayne.Lin@amd.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
+Cc:     "Wentland, Harry" <Harry.Wentland@amd.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
+        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Kazlauskas, Nicholas" <Nicholas.Kazlauskas@amd.com>,
+        "Pillai, Aurabindo" <Aurabindo.Pillai@amd.com>,
+        "Li, Roman" <Roman.Li@amd.com>, "Zuo, Jerry" <Jerry.Zuo@amd.com>,
+        "Wu, Hersen" <hersenxs.wu@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "Mahfooz, Hamza" <Hamza.Mahfooz@amd.com>,
+        "Hung, Alex" <Alex.Hung@amd.com>,
+        "Francis, David" <David.Francis@amd.com>,
+        Mikita Lipski <mikita.lipski@amd.com>,
+        "Liu, Wenjing" <Wenjing.Liu@amd.com>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Mon, 14 Nov 2022 16:54:55 -0500
+In-Reply-To: <CO6PR12MB5489E3850FE3C9FBDA7BAC29FC3E9@CO6PR12MB5489.namprd12.prod.outlook.com>
+References: <20221104235926.302883-1-lyude@redhat.com>
+         <20221104235926.302883-2-lyude@redhat.com>
+         <CO6PR12MB5489E3850FE3C9FBDA7BAC29FC3E9@CO6PR12MB5489.namprd12.prod.outlook.com>
+Organization: Red Hat Inc.
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,146 +103,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Andrew, sorry for the delay!
+On Wed, 2022-11-09 at 09:48 +0000, Lin, Wayne wrote:
+> >   	}
+> > -	if (!drm_dp_mst_atomic_check(state) && !debugfs_overwrite) {
+> > +	ret = drm_dp_mst_atomic_check(state);
+> > +	if (ret == 0 && !debugfs_overwrite) {
+> >   		set_dsc_configs_from_fairness_vars(params, vars, count,
+> > k);
+> > -		return true;
+> > +		return 0;
+> > +	} else if (ret == -EDEADLK) {
+> > +		return ret;
+> 
+> I think we should return here whenever there is an error. Not just for
+> EDEADLK case. 
 
-On Wed, Nov 2, 2022 at 11:16 AM Andrew Davis <afd@ti.com> wrote:
->
-> On 10/31/22 3:01 PM, Robert Nelson wrote:
-> > BeagleBoard.org BeagleBone AI-64 is an open source hardware single
-> > board computer based on the Texas Instruments TDA4VM SoC featuring
-> > dual-core 2.0GHz Arm Cortex-A72 processor, C7x+MMA and 2 C66x
-> > floating-point VLIW DSPs, 3x dual Arm Cortex-R5 co-processors,
-> > 2x 6-core Programmable Real-Time Unit and Industrial Communication
-> > SubSystem, PowerVR Rogue 8XE GE8430 3D GPU. The board features 4GB
-> > DDR4, USB3.0 Type-C, 2x USB SS Type-A, miniDisplayPort, 2x 4-lane
-> > CSI, DSI, 16GB eMMC flash, 1G Ethernet, M.2 E-key for WiFi/BT, and
-> > BeagleBone expansion headers.
-> >
-> > This board family can be indentified by the BBONEAI-64-B0 in the
-> > at24 eeprom:
-> >
-> > [aa 55 33 ee 01 37 00 10  2e 00 42 42 4f 4e 45 41 |.U3..7....BBONEA|]
-> > [49 2d 36 34 2d 42 30 2d  00 00 42 30 30 30 37 38 |I-64-B0-..B00078|]
-> >
-> > https://beagleboard.org/ai-64
-> > https://git.beagleboard.org/beagleboard/beaglebone-ai-64
-
-> > +
-> > +     reserved_memory: reserved-memory {
-> > +             #address-cells = <2>;
-> > +             #size-cells = <2>;
-> > +             ranges;
-> > +
-> > +             secure_ddr: optee@9e800000 {
-> > +                     reg = <0x00 0x9e800000 0x00 0x01800000>;
-> > +                     alignment = <0x1000>;
->
-> "alignment" property should not be needed here since you cannot
-> allocate from this region anyway.
-
-I removed alignment, wondering if these all should be eventually moved
-into the common file, with custom applications just updating the
-offset's.
-
-> > +
-> > +     gpio_keys: gpio-keys {
-> > +             compatible = "gpio-keys";
-> > +             autorepeat;
->
-> Do you need "autorepeat" on these?
->
-
-Removed, no idea where that came from...
-
-> > +             pinctrl-names = "default";
-> > +             pinctrl-0 = <&sw_pwr_pins_default>;
-> > +
-> > +             sw_boot: switch-1 {
->
-> I don't see anyone referencing these nodes, the "sw_boot" shouldn't be needed.
->
-> > +                     label = "BOOT";
-> > +                     linux,code = <BTN_0>;
-> > +                     gpios = <&wkup_gpio0 0 GPIO_ACTIVE_LOW>;
-> > +             };
-> > +
-> > +             sw_pwr: switch-2 {
->
-> NIT (no need to actually change this),
-> Would "button"-1/2 be better here, I see on the silkscreen has them as "sw"
-> but most would call these buttons if they saw them.
-
-I do like the 'button' label much better, nothing uses these, so i
-removed the label name.
-
->
-> > +                     label = "POWER";
-> > +                     linux,code = <KEY_POWER>;
-> > +                     gpios = <&wkup_gpio0 4 GPIO_ACTIVE_LOW>;
-> > +             };
-> > +     };
->
-> [...]
->
-> > +
-> > +&main_sdhci2 {
-> > +     /* Unused */
-> > +     status = "disabled";
-> > +};
-> > +
->
-> For J7x I did not "disable by default" several classes of device
-> like this one, since the default pinmux may allow their function.
-> Once that is sorted out I'll fix up this DT here and in the spots
-> below for you.
->
-> BTW, thanks for taking the time to rebase on my series for the
-> devices I did disable. Hope that didn't cause too much churn
-> on your side :)
-
-I love it!  I prefer everything disabled, and just enable what nodes we need.
-
-> > +
-> > +&main_r5fss0_core0 {
-> > +     firmware-name = "pdk-ipc/ipc_echo_test_mcu2_0_release_strip.xer5f";
-> > +};
-> > +
->
-> What is this crazy firmware name? These are not in linux-firmware, might
-> be better to leave these out until we get these names sorted out and
-> upstreamed. (yes I know the same snuck into k3-j721e-sk.dtb but
-> it probably isn't correct there either).
-
-Yeap, direct copy from k3-j721e-sk, I'll remove it till we get
-everything sorted out..
-
->
-> > +
-> > +&mcu_cpsw {
-> > +     pinctrl-names = "default";
-> > +     pinctrl-0 = <&mcu_cpsw_pins_default &mcu_mdio_pins_default>;
->
-> mcu_mdio_pins_default should belong to the MDIO node below.
->
-> > +};
-> > +
-> > +&davinci_mdio {
->
->
-> Right here.
->
-> pinctrl-names = "default";
-> pinctrl-0 = <&mcu_mdio_pins_default>;
-
-and moved!
-
-
-> Everything else looks sane enough to me,
->
-> Reviewed-by: Andrew Davis <afd@ti.com>
-
-Thanks!
+Are we sure about this one? I think we may actually want to make this so it
+returns on ret != -ENOSPC, since we want the function to continue if there's
+no space in the atomic state available so it can try recomputing things with
+compression enabled. On ret == 0 it should return early without doing
+compression, and on ret == -ENOSPC it should just continue the function from
+there
 
 -- 
-Robert Nelson
-https://rcn-ee.com/
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
+
