@@ -2,130 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D6276273B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 01:06:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C48316273B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 01:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235400AbiKNAF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 19:05:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
+        id S235593AbiKNAGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 19:06:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235415AbiKNAFt (ORCPT
+        with ESMTP id S235557AbiKNAFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 19:05:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC190DE86
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 16:04:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668384295;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vuiiwLAN7I1THL57m13Ion7pO7eyRCignS0WdOlLecg=;
-        b=IPXcjSQYbS+MXcWY1MD4DN+6sgEkg6BCqxpeBaVMeL9sDu/uIUcuktc8NwMnHRow+CW1Mk
-        ivyM40Ohz9HZsWmuT4JktuB5vuMe969auy3VIvqbGowb2XzRsr5uShpsWcWJ9rsXCbTrtN
-        ArJObzZ32htRj5OKERlDPXLQvzvFzeo=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-307-Ce3JMMc4Ph2Xyi0NjQBi4w-1; Sun, 13 Nov 2022 19:04:54 -0500
-X-MC-Unique: Ce3JMMc4Ph2Xyi0NjQBi4w-1
-Received: by mail-qv1-f72.google.com with SMTP id 71-20020a0c804d000000b004b2fb260447so7572669qva.10
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 16:04:53 -0800 (PST)
+        Sun, 13 Nov 2022 19:05:50 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3D7FADC
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 16:05:48 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id 13-20020a056e0216cd00b003023e8b7d03so5371399ilx.7
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 16:05:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vuiiwLAN7I1THL57m13Ion7pO7eyRCignS0WdOlLecg=;
-        b=lWBVSMuGjPve9Kuxd0OcuuJD7UTd8iS7B37RgpVQ1irDyZTNrSAA7nIZg5KXqc/ijW
-         cAQYcALvOUNl+ObPJ31TEn/7QEcUAkGclVhRx7uQwqylRTdFqW+RvILZ8aWMK77mGj7D
-         gHJIRB6/NJReH5oKvqrvQTSAerKtUDht8r2xO6CFf9Fx9la+En58/q+b5yoyValhVzOT
-         mlt8BsCwQLFLAJ2Vke+NVB9PiYjh3KzSNbAQ5APIhei+tFDbALEuYXXhrho2TJGo16bL
-         1MrFcec/IAHpUR9EETi5zKDP8O0oawKr9FpwnfDLvaoehuia3KO+uDhdiHgZo/rsY8tZ
-         cbAw==
-X-Gm-Message-State: ANoB5pmONyNiOlP5ADFsUz4VDPr3sct0t+gYw9Nj7PVBTfMpf+TidsVE
-        1VGffgI+qJd8RqIwDeq/lULNWAv4sNO+CGsgcctAUIi18QhGgmtmgH5zboJTRI4C0py9CsWVg9V
-        hR+n7AWVviZFwUOMOE3o6+/yHSe/FyWA+VZef3FM4rqzg7QDZkpnlR1wVw7eLUDxLLBpuX5go9A
-        ==
-X-Received: by 2002:ae9:e302:0:b0:6fa:6cb1:8965 with SMTP id v2-20020ae9e302000000b006fa6cb18965mr9424185qkf.541.1668384293245;
-        Sun, 13 Nov 2022 16:04:53 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5V1BslIfV280V95tlOvqubbpsxPQtv1YGg6N+bmjUfNbr1J4Ku+Hat5/cU0tUkSD60e2vKIw==
-X-Received: by 2002:ae9:e302:0:b0:6fa:6cb1:8965 with SMTP id v2-20020ae9e302000000b006fa6cb18965mr9424139qkf.541.1668384292663;
-        Sun, 13 Nov 2022 16:04:52 -0800 (PST)
-Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id cb5-20020a05622a1f8500b0039cc0fbdb61sm4870380qtb.53.2022.11.13.16.04.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 16:04:52 -0800 (PST)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, peterx@redhat.com,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Ives van Hoorne <ives@codesandbox.io>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Alistair Popple <apopple@nvidia.com>
-Subject: [PATCH v3 2/2] mm/uffd: Sanity check write bit for uffd-wp protected ptes
-Date:   Sun, 13 Nov 2022 19:04:47 -0500
-Message-Id: <20221114000447.1681003-3-peterx@redhat.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221114000447.1681003-1-peterx@redhat.com>
-References: <20221114000447.1681003-1-peterx@redhat.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Hr7wS+pJ69I44GVyM4s7OZmeFSZLRy9SbGypxd6p3yc=;
+        b=79hSHpetSLDs0cFMijOmay1MmTdh9WgRvts7sAvZ1bc3BsD413d4LEFAEJf9L58MO1
+         HGrvhEuBoNjyCAhQxgbr1OaZEkERXbSmBfoLQctXAqyF0AA2IJFamoNsjBc7ryI6lJjX
+         8ttlsZ96dbeduNJPm0ELeY8gdbwdHJWxT/exy1sDDWAuGhflpJZmPiHAAL+w4Dkc9r9c
+         qU1sLpfQV+SfGfU3wqd+xoOyEzJ5uYi3FSFRAuU9SEIQnCgBnD79JLwvmg2fujEOGfFs
+         hJjX9ueRWt2MHlJT7w3kSfWtCJIUT9ArEBAskStcMRdlkeXXE8j5q5BIDLiHojFMYEwy
+         Ck7A==
+X-Gm-Message-State: ANoB5plmZPXE5TtkDoTx0WZK2KS/fFkAeF1sItb9uq/SYczyEdrFM6Pl
+        b4wR2exjtiZQ5tqh1aiYqzv8J/cJ4y1zm3e+WG8+cbuQvF8F
+X-Google-Smtp-Source: AA0mqf5VC9l3lM2/b6X13YxJm5HhrgqaLlkjHm6c7EWMi10KVjfiDZqlulrDwDoJf5kuOjvvN0x/YgAw31Bw5FzcNveKsOPP6o1v
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:b4d2:0:b0:6dd:f70e:dda5 with SMTP id
+ d201-20020a6bb4d2000000b006ddf70edda5mr2102788iof.100.1668384347517; Sun, 13
+ Nov 2022 16:05:47 -0800 (PST)
+Date:   Sun, 13 Nov 2022 16:05:47 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000061fe2205ed6300fa@google.com>
+Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in smack_inode_permission
+From:   syzbot <syzbot+0f89bd13eaceccc0e126@syzkaller.appspotmail.com>
+To:     casey@schaufler-ca.com, jmorris@namei.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
+        paul@paul-moore.com, richardcochran@gmail.com, serge@hallyn.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's add one sanity check for CONFIG_DEBUG_VM on the write bit in whatever
-chance we have when walking through the pgtables.  It can bring the error
-earlier even before the app notices the data was corrupted on the snapshot.
-Also it helps us to identify this is a wrong pgtable setup, so hopefully a
-great information to have for debugging too.
+Hello,
 
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Signed-off-by: Peter Xu <peterx@redhat.com>
+syzbot found the following issue on:
+
+HEAD commit:    56751c56c2a2 Merge branch 'for-next/fixes' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=11fc8b0e880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=606e57fd25c5c6cc
+dashboard link: https://syzkaller.appspot.com/bug?extid=0f89bd13eaceccc0e126
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10a691fa880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1733c5b9880000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/cf4668c75dea/disk-56751c56.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e1ef82e91ef7/vmlinux-56751c56.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3dabe076170f/Image-56751c56.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0f89bd13eaceccc0e126@syzkaller.appspotmail.com
+
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000028
+Mem abort info:
+  ESR = 0x0000000096000004
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x04: level 0 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000004
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=0000000109d98000
+[0000000000000028] pgd=0000000000000000, p4d=0000000000000000
+Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 2557 Comm: udevd Not tainted 6.1.0-rc4-syzkaller-31859-g56751c56c2a2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : smack_inode_permission+0x70/0x164 security/smack/smack_lsm.c:1149
+lr : smack_inode_permission+0x68/0x164 security/smack/smack_lsm.c:1146
+sp : ffff800016a53a30
+x29: ffff800016a53a80 x28: fefefefefefefeff
+ x27: ffff0000ca5c0025
+
+x26: 0000000000000000
+ x25: 0000000000000000
+ x24: ffff0000ca5c0025
+x23: 0000000000000000 x22: 0000000000000008 x21: 0000000000000001
+x20: 0000000000000001 x19: ffff0000c70cf2d8
+ x18: 0000000000000000
+
+x17: 0000000000000000
+ x16: ffff80000db1a158
+ x15: ffff0000c4f39a40
+x14: 0000000000000090 x13: 00000000ffffffff x12: ffff0000c4f39a40
+x11: ff8080000944189c x10: 0000000000000000 x9 : ffff0000c4f39a40
+x8 : ffff80000944189c x7 : ffff8000086feb70 x6 : 0000000000000000
+x5 : ffff0000c4f39a40 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000001 x1 : 0000000000000001 x0 : 0000000000000000
+Call trace:
+ smack_inode_permission+0x70/0x164
+ security_inode_permission+0x50/0xa4 security/security.c:1326
+ inode_permission+0xa0/0x244 fs/namei.c:533
+ may_lookup fs/namei.c:1715 [inline]
+ link_path_walk+0x138/0x628 fs/namei.c:2262
+ path_lookupat+0x54/0x208 fs/namei.c:2473
+ filename_lookup+0xf8/0x264 fs/namei.c:2503
+ user_path_at_empty+0x5c/0x114 fs/namei.c:2876
+ do_readlinkat+0x84/0x1c8 fs/stat.c:468
+ __do_sys_readlinkat fs/stat.c:495 [inline]
+ __se_sys_readlinkat fs/stat.c:492 [inline]
+ __arm64_sys_readlinkat+0x28/0x3c fs/stat.c:492
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+Code: f90003ff 97b9817f 34000134 8b1602f6 (b94022d7) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	f90003ff 	str	xzr, [sp]
+   4:	97b9817f 	bl	0xfffffffffee60600
+   8:	34000134 	cbz	w20, 0x2c
+   c:	8b1602f6 	add	x22, x23, x22
+* 10:	b94022d7 	ldr	w23, [x22, #32] <-- trapping instruction
+
+
 ---
- arch/x86/include/asm/pgtable.h | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 5059799bebe3..63bdbb0f989e 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -291,7 +291,23 @@ static inline pte_t pte_clear_flags(pte_t pte, pteval_t clear)
- #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_WP
- static inline int pte_uffd_wp(pte_t pte)
- {
--	return pte_flags(pte) & _PAGE_UFFD_WP;
-+	bool wp = pte_flags(pte) & _PAGE_UFFD_WP;
-+
-+#ifdef CONFIG_DEBUG_VM
-+	/*
-+	 * Having write bit for wr-protect-marked present ptes is fatal,
-+	 * because it means the uffd-wp bit will be ignored and write will
-+	 * just go through.
-+	 *
-+	 * Use any chance of pgtable walking to verify this (e.g., when
-+	 * page swapped out or being migrated for all purposes). It means
-+	 * something is already wrong.  Tell the admin even before the
-+	 * process crashes. We also nail it with wrong pgtable setup.
-+	 */
-+	WARN_ON_ONCE(wp && pte_write(pte));
-+#endif
-+
-+	return wp;
- }
- 
- static inline pte_t pte_mkuffd_wp(pte_t pte)
--- 
-2.37.3
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
