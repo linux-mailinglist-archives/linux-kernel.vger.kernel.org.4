@@ -2,199 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD81628D05
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC54628CF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 00:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238085AbiKNXDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 18:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
+        id S237889AbiKNXCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 18:02:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237980AbiKNXDE (ORCPT
+        with ESMTP id S237809AbiKNXC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 18:03:04 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368211C10E;
-        Mon, 14 Nov 2022 15:02:39 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id f3so5166342pgc.2;
-        Mon, 14 Nov 2022 15:02:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gWTJCUMMuG2d3heYPVKFPEFB7/flVbDDi20CjhO794s=;
-        b=R9u8RjqhVZWOBpKgyOUL5+DiZvnxa6VpfFHjCrqW/mCfnsIqkvsKjce/wZVvuP2p+u
-         3jAfi4UxZEWCYB8W8t3/3yC7uJFfRz6TBJgiT4Gsu4jfbwfY9AoIxiSk2DDkjBVIKqxn
-         qRpx3N9JHrAwtOKePCTQY3zQX3OzUB/Vj7qPayR1WatwKytaDj/drmvIiF22gSb/KSHt
-         3mmNMpKiTcc3+g3b4OX5HWCVPPiiiX1FchwDFten3nEjGwPl0EWRkVyjIGaFF1UMK6jn
-         lVlSAe9rYNom0hN2gljFgq7hhAJKgkNZRRLOftUdAPe0Yze98IeODkH6fbRDLFQ+K5a1
-         1zcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gWTJCUMMuG2d3heYPVKFPEFB7/flVbDDi20CjhO794s=;
-        b=Q0E/59KShW9MYovlEfkAXGYq9u2pz+C7C2OtTtw27z4jDuAD1VZ1bpqwhsskafHKQT
-         2DnRiPSz2KWeZ+lFFYb8pkwnsvq3nhSWrM8TlDQe+RhEE6duguLTyWWYu7kXQDzhh50A
-         4ebOz7llap7CDHb9O9WRlUwfp1nfFjLVcXlgExdpUncNTxSJT3up6JyTcaVzA06t88S2
-         U+0eFV5Wm5oTpIhjRDUFTW8mgeMX7mg2bc+vmFFFes53ES2F8hXPJ4ebvJxVdNNKbyw+
-         yF0B0v6RvkmVjCBJtCNU+Z0EQ6QtgEdsbkg8cGJCA56aOiSjwmfR73gjvGLZ+kMdyN8z
-         RXFw==
-X-Gm-Message-State: ANoB5pl3MECrfCFL1OIMzgCWMlbH8HNT86freVXIwqw8o7qJJAwIiN9o
-        bMUnmYJZn9BWFwWXgOoKtmQ=
-X-Google-Smtp-Source: AA0mqf7KIRLjR6xF9YgSGRHmvxg7MWHFTFXgYnNLBMSEKgVR8VlWsqPhpMptr2yALWML2G+t1NsyBQ==
-X-Received: by 2002:a63:1b54:0:b0:476:a08b:b106 with SMTP id b20-20020a631b54000000b00476a08bb106mr2765184pgm.77.1668466959061;
-        Mon, 14 Nov 2022 15:02:39 -0800 (PST)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:6780:a80:cf9f:e038:c19b:797e])
-        by smtp.gmail.com with ESMTPSA id 132-20020a62148a000000b0056c814a501dsm7534724pfu.10.2022.11.14.15.02.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 15:02:38 -0800 (PST)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-Subject: [PATCH 06/19] perf stat: Factor out print_counter_value() function
-Date:   Mon, 14 Nov 2022 15:02:14 -0800
-Message-Id: <20221114230227.1255976-7-namhyung@kernel.org>
-X-Mailer: git-send-email 2.38.1.493.g58b659f92b-goog
-In-Reply-To: <20221114230227.1255976-1-namhyung@kernel.org>
-References: <20221114230227.1255976-1-namhyung@kernel.org>
+        Mon, 14 Nov 2022 18:02:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C511B1E5;
+        Mon, 14 Nov 2022 15:02:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B881B815BE;
+        Mon, 14 Nov 2022 23:02:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8BFEC4347C;
+        Mon, 14 Nov 2022 23:02:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668466945;
+        bh=XKw+Y6QvQP4tCxCkEPcaR63DnAXcOW/zkfrjgLuBJts=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QKHEJHuKtZTfTGKo/7rQUVe1yQG4fBu/L6gZPU4I5K/+UX0jMDOiKcV26fWNaiHlb
+         geiIQ4Xe/TuLB771zhutd+GLanAToJ9ikARie07bR9tARo7dju2G8oL0UqJHKVJ5jS
+         I61+eVRdwo7t97CWzPLZl7fOVRz0wrbkxVDNZ1V41P4X9iTuIsTFadNfX/PdMCrab3
+         8MVVuo2cyNwXc0OPBzi+mCZK7+dT11rWirxaYTefT2Slw6jrom798s0Aj7McgO0Obu
+         t7HGOUQnQUaV7Mkq+Ib4IWitYFfZtbxuV7KKejknKY1E4k62twtxazo+FjdiDAd1k2
+         09AhEUMWCCGIw==
+From:   Dinh Nguyen <dinguyen@kernel.org>
+To:     jh80.chung@samsung.com
+Cc:     dinguyen@kernel.org, ulf.hansson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCHv9 3/6] arm: dts: socfpga: Add clk-phase-sd-hs property to the sdmmc node
+Date:   Mon, 14 Nov 2022 17:02:14 -0600
+Message-Id: <20221114230217.202634-3-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221114230217.202634-1-dinguyen@kernel.org>
+References: <20221114230217.202634-1-dinguyen@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-And split it for each output mode like others.  I believe it makes the
-code simpler and more intuitive.  Now abs_printout() becomes just to
-call sub-functions.
+The sdmmc controller's CIU(Card Interface Unit) clock's phase can be
+adjusted through the register in the system manager. Add the binding
+"altr,sysmgr-syscon" to the SDMMC node for the driver to access the
+system manager. Add the "clk-phase-sd-hs" property in the SDMMC node to
+designate the smpsel and drvsel properties for the CIU clock.
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 ---
- tools/perf/util/stat-display.c | 81 ++++++++++++++++++++++------------
- 1 file changed, 53 insertions(+), 28 deletions(-)
+v9: no changes
+v8: no changes
+v7: no changes
+v6: no changes
+v5: new
+---
+ arch/arm/boot/dts/socfpga.dtsi                     | 1 +
+ arch/arm/boot/dts/socfpga_arria10.dtsi             | 1 +
+ arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi | 1 +
+ arch/arm/boot/dts/socfpga_arria10_socdk_sdmmc.dts  | 1 +
+ arch/arm/boot/dts/socfpga_arria5.dtsi              | 1 +
+ arch/arm/boot/dts/socfpga_cyclone5.dtsi            | 1 +
+ arch/arm/boot/dts/socfpga_cyclone5_mcv.dtsi        | 1 +
+ 7 files changed, 7 insertions(+)
 
-diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
-index ed421f6d512f..a72c7442ff3d 100644
---- a/tools/perf/util/stat-display.c
-+++ b/tools/perf/util/stat-display.c
-@@ -517,46 +517,71 @@ static void print_metric_header(struct perf_stat_config *config,
- 		fprintf(os->fh, "%*s ", config->metric_only_len, unit);
- }
+diff --git a/arch/arm/boot/dts/socfpga.dtsi b/arch/arm/boot/dts/socfpga.dtsi
+index 2459f3cd7dd9..604fc6e0c4ad 100644
+--- a/arch/arm/boot/dts/socfpga.dtsi
++++ b/arch/arm/boot/dts/socfpga.dtsi
+@@ -765,6 +765,7 @@ mmc: dwmmc0@ff704000 {
+ 			clocks = <&l4_mp_clk>, <&sdmmc_clk_divided>;
+ 			clock-names = "biu", "ciu";
+ 			resets = <&rst SDMMC_RESET>;
++			altr,sysmgr-syscon = <&sysmgr 0x108 3>;
+ 			status = "disabled";
+ 		};
  
--static void abs_printout(struct perf_stat_config *config,
--			 struct aggr_cpu_id id, int nr, struct evsel *evsel, double avg)
-+static void print_counter_value_std(struct perf_stat_config *config,
-+				    struct evsel *evsel, double avg)
- {
- 	FILE *output = config->output;
- 	double sc =  evsel->scale;
- 	const char *fmt;
+diff --git a/arch/arm/boot/dts/socfpga_arria10.dtsi b/arch/arm/boot/dts/socfpga_arria10.dtsi
+index 4370e3cbbb4b..b6ebe207e2bc 100644
+--- a/arch/arm/boot/dts/socfpga_arria10.dtsi
++++ b/arch/arm/boot/dts/socfpga_arria10.dtsi
+@@ -666,6 +666,7 @@ mmc: dwmmc0@ff808000 {
+ 			clocks = <&l4_mp_clk>, <&sdmmc_clk>;
+ 			clock-names = "biu", "ciu";
+ 			resets = <&rst SDMMC_RESET>;
++			altr,sysmgr-syscon = <&sysmgr 0x28 4>;
+ 			status = "disabled";
+ 		};
  
--	if (config->csv_output) {
--		fmt = floor(sc) != sc ?  "%.2f%s" : "%.0f%s";
--	} else {
--		if (config->big_num)
--			fmt = floor(sc) != sc ? "%'18.2f%s" : "%'18.0f%s";
--		else
--			fmt = floor(sc) != sc ? "%18.2f%s" : "%18.0f%s";
--	}
-+	if (config->big_num)
-+		fmt = floor(sc) != sc ? "%'18.2f " : "%'18.0f ";
-+	else
-+		fmt = floor(sc) != sc ? "%18.2f " : "%18.0f ";
+diff --git a/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi b/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi
+index ad7cd14de6b6..41f865c8c098 100644
+--- a/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi
++++ b/arch/arm/boot/dts/socfpga_arria10_mercury_aa1.dtsi
+@@ -73,6 +73,7 @@ &mmc {
+ 	cap-sd-highspeed;
+ 	broken-cd;
+ 	bus-width = <4>;
++	clk-phase-sd-hs = <0>, <135>;
+ };
  
--	aggr_printout(config, evsel, id, nr);
-+	fprintf(output, fmt, avg);
+ &osc1 {
+diff --git a/arch/arm/boot/dts/socfpga_arria10_socdk_sdmmc.dts b/arch/arm/boot/dts/socfpga_arria10_socdk_sdmmc.dts
+index 64dc0799f3d7..d3969367f4b5 100644
+--- a/arch/arm/boot/dts/socfpga_arria10_socdk_sdmmc.dts
++++ b/arch/arm/boot/dts/socfpga_arria10_socdk_sdmmc.dts
+@@ -12,6 +12,7 @@ &mmc {
+ 	cap-mmc-highspeed;
+ 	broken-cd;
+ 	bus-width = <4>;
++	clk-phase-sd-hs = <0>, <135>;
+ };
  
--	if (config->json_output)
--		fprintf(output, "\"counter-value\" : \"%f\", ", avg);
--	else
--		fprintf(output, fmt, avg, config->csv_sep);
-+	if (evsel->unit)
-+		fprintf(output, "%-*s ", config->unit_width, evsel->unit);
+ &eccmgr {
+diff --git a/arch/arm/boot/dts/socfpga_arria5.dtsi b/arch/arm/boot/dts/socfpga_arria5.dtsi
+index 22dbf07afcff..b531639ce7dc 100644
+--- a/arch/arm/boot/dts/socfpga_arria5.dtsi
++++ b/arch/arm/boot/dts/socfpga_arria5.dtsi
+@@ -23,6 +23,7 @@ mmc0: dwmmc0@ff704000 {
+ 			bus-width = <4>;
+ 			cap-mmc-highspeed;
+ 			cap-sd-highspeed;
++			clk-phase-sd-hs = <0>, <135>;
+ 		};
  
--	if (config->json_output) {
--		if (evsel->unit) {
--			fprintf(output, "\"unit\" : \"%s\", ",
--				evsel->unit);
--		}
--	} else {
--		if (evsel->unit)
--			fprintf(output, "%-*s%s",
--				config->csv_output ? 0 : config->unit_width,
--				evsel->unit, config->csv_sep);
--	}
-+	fprintf(output, "%-*s", 32, evsel__name(evsel));
-+}
+ 		sysmgr@ffd08000 {
+diff --git a/arch/arm/boot/dts/socfpga_cyclone5.dtsi b/arch/arm/boot/dts/socfpga_cyclone5.dtsi
+index 319a71e41ea4..a9d1ba66f1ff 100644
+--- a/arch/arm/boot/dts/socfpga_cyclone5.dtsi
++++ b/arch/arm/boot/dts/socfpga_cyclone5.dtsi
+@@ -23,6 +23,7 @@ mmc0: dwmmc0@ff704000 {
+ 			bus-width = <4>;
+ 			cap-mmc-highspeed;
+ 			cap-sd-highspeed;
++			clk-phase-sd-hs = <0>, <135>;
+ 		};
  
-+static void print_counter_value_csv(struct perf_stat_config *config,
-+				    struct evsel *evsel, double avg)
-+{
-+	FILE *output = config->output;
-+	double sc =  evsel->scale;
-+	const char *sep = config->csv_sep;
-+	const char *fmt = floor(sc) != sc ? "%.2f%s" : "%.0f%s";
-+
-+	fprintf(output, fmt, avg, sep);
-+
-+	if (evsel->unit)
-+		fprintf(output, "%s%s", evsel->unit, sep);
-+
-+	fprintf(output, "%s", evsel__name(evsel));
-+}
-+
-+static void print_counter_value_json(struct perf_stat_config *config,
-+				     struct evsel *evsel, double avg)
-+{
-+	FILE *output = config->output;
-+
-+	fprintf(output, "\"counter-value\" : \"%f\", ", avg);
-+
-+	if (evsel->unit)
-+		fprintf(output, "\"unit\" : \"%s\", ", evsel->unit);
-+
-+	fprintf(output, "\"event\" : \"%s\", ", evsel__name(evsel));
-+}
-+
-+static void print_counter_value(struct perf_stat_config *config,
-+				struct evsel *evsel, double avg)
-+{
- 	if (config->json_output)
--		fprintf(output, "\"event\" : \"%s\", ", evsel__name(evsel));
-+		print_counter_value_json(config, evsel, avg);
-+	else if (config->csv_output)
-+		print_counter_value_csv(config, evsel, avg);
- 	else
--		fprintf(output, "%-*s", config->csv_output ? 0 : 32, evsel__name(evsel));
-+		print_counter_value_std(config, evsel, avg);
-+}
+ 		sysmgr@ffd08000 {
+diff --git a/arch/arm/boot/dts/socfpga_cyclone5_mcv.dtsi b/arch/arm/boot/dts/socfpga_cyclone5_mcv.dtsi
+index bd92806ffc12..3b9daddf91cd 100644
+--- a/arch/arm/boot/dts/socfpga_cyclone5_mcv.dtsi
++++ b/arch/arm/boot/dts/socfpga_cyclone5_mcv.dtsi
+@@ -18,5 +18,6 @@ memory@0 {
  
-+static void abs_printout(struct perf_stat_config *config,
-+			 struct aggr_cpu_id id, int nr, struct evsel *evsel, double avg)
-+{
-+	aggr_printout(config, evsel, id, nr);
-+	print_counter_value(config, evsel, avg);
- 	print_cgroup(config, evsel);
- }
- 
+ &mmc0 {	/* On-SoM eMMC */
+ 	bus-width = <8>;
++	clk-phase-sd-hs = <0>, <135>;
+ 	status = "okay";
+ };
 -- 
-2.38.1.493.g58b659f92b-goog
+2.25.1
 
