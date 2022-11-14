@@ -2,143 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA709627ADB
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A975627ADD
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:44:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236345AbiKNKnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 05:43:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39274 "EHLO
+        id S236211AbiKNKox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 05:44:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236333AbiKNKms (ORCPT
+        with ESMTP id S236389AbiKNKon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 05:42:48 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A81C1FCE0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:42:47 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id a29so18542023lfj.9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:42:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nItdB8eAMelscjG++jq869kf8s0YiV/Dw6cuOez7lOk=;
-        b=IvHcqfKhnZveNhejhcrkOLY3/IUVU7YVS62Qdr/0gXXMsHFRh2HS4OXPAPMdFgkN5I
-         xWLMbFhtu8TP41RJuC0l6XNU5IYwOvHJYh7wVobbIKMsG1iWSAxZwlfJaKsIi0khZn7a
-         r0ONVmBBKioW76jtjHKd6xO9WahfgR24xt2cSW/X7rwtDqh7icn5m6JFBQidcg0vWOP/
-         QQDL2QtZxRSPCyKlUZeV64k4ryln+zX7el4tAqlpz06pd3eoFIfMzMBhIHoK4EqVkoRo
-         5NhC328LQ74jUiaetfElmViTtZfHaLXLO/8LNoRt98qMzFSVZmL5oWipb75aOFtP4zey
-         TvNA==
+        Mon, 14 Nov 2022 05:44:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3AEB8C
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:43:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668422622;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KhGrKqZABfxXgxhvFZS6ZgjvLKrUckNIrRZXNfiIo74=;
+        b=Lwg52Q+dxsZyoqmnYMkSKPaSzZXdYEUWr1GsF56/awJL/KrKNEKHFDqeuzE9nGLGv1vgic
+        SNbKEPKqB+FyMQfm5wOckIqQvbYVl+i6XhSdcgGFjLb2uA1aqlWywvV3P9E2H3iUH4YmHj
+        XWteV3T0Kx0eqCv8m1Q/ucoYAjR0/1w=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-605-D4HNFdWJNOOMQkJcVfxOpw-1; Mon, 14 Nov 2022 05:43:41 -0500
+X-MC-Unique: D4HNFdWJNOOMQkJcVfxOpw-1
+Received: by mail-wm1-f72.google.com with SMTP id bg25-20020a05600c3c9900b003cf3ed7e27bso6580695wmb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:43:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nItdB8eAMelscjG++jq869kf8s0YiV/Dw6cuOez7lOk=;
-        b=oUgT7S56PhChMZmikOFkVHWw/vslmMD29UN22RWivvJnFLyZU/xCWmQ2In5or13CRC
-         LtMIMfh+uF+1EdT7vVH3xvOzKZUCdw0bAacNB5JWxgrJFDRqLD/yHw+pTnhoDeeH1iJN
-         oXT7SKkNm9mwjpvs5ApXknnAr0cPnsXx7Y0qmdFrIIXFftoaq1C4mtOJz2e0oEhFyi/i
-         FCDBtmL8DX1K2QmAJM8qj7FmdOdQfV099+Wmlq5jlc2iSoXWxdw0LIKmEdeLkzYK62kw
-         JGQQAe2D6c2F5rqZbCA8WN0TVPlCWi+BRKh/MpPqCCmthywNpSwsosB7Fm/lSp5HvVS7
-         AonA==
-X-Gm-Message-State: ANoB5plBVD+V+hSSlz6EvPhwv6KgHCuF667UBLx//EbK4Zvwqv02R7H4
-        oDEKdQMZX1BbjAEIs1/l0PQnBQ==
-X-Google-Smtp-Source: AA0mqf5iNmdaQzZztLQqFNo881nTgTNZbZNI9+KtHf1xoaF8oAlIWFaai+bWbqmsv7PwkjLyanux0A==
-X-Received: by 2002:a05:6512:224d:b0:4a2:be5c:688f with SMTP id i13-20020a056512224d00b004a2be5c688fmr3605583lfu.121.1668422565886;
-        Mon, 14 Nov 2022 02:42:45 -0800 (PST)
-Received: from localhost.localdomain ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id bs21-20020a05651c195500b0026c4e922fb2sm1946486ljb.48.2022.11.14.02.42.44
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 14 Nov 2022 02:42:45 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 9/9] arm64: dts: qcom: sm6375-pdx225: Configure Samsung touchscreen
-Date:   Mon, 14 Nov 2022 11:42:22 +0100
-Message-Id: <20221114104222.36329-10-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-In-Reply-To: <20221114104222.36329-1-konrad.dybcio@linaro.org>
-References: <20221114104222.36329-1-konrad.dybcio@linaro.org>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KhGrKqZABfxXgxhvFZS6ZgjvLKrUckNIrRZXNfiIo74=;
+        b=0fNDPg9TrSe6upxhxpY6pTU7kDo07jnZXgh6bi3NxsuBV4TrzkqvfU7dklZCRPEYI+
+         mI/gj2gEVlNGinuTqRZNH9VQ/kRJWIDQSQMSRfotl3YlzpEd9IagDhV5PlA1xh89YwMn
+         /EPX18QpvFyCPPnKkq3doS8O8qVjgwaeCDcx0qiQvyhtpqM5OgAbhrAXa2yHkfl+Ugb2
+         /Egk7HsuShr6aGpJByhSwE3tI3/7M3U8VswJIwywZMDmJK7I0Bvr4iZ7qbL70paSAr0R
+         r/KTEP+bZ1xU5xADRzx/Y5mvxOHrNjnbYj2nR3JqM5jwhmc+M233IJh9zyG25qgu74j8
+         NWYQ==
+X-Gm-Message-State: ANoB5plheBhF2KnGm6MHFFHkpYwYejuMU3FwzATi6SlBS4d1ez/JFRQU
+        UgnTXSRWzSJ3Utdc0X6+USLIuEY9mpG/lqeNl13bojP5Eaov2lyiH/FObr0CEykkeNhhzghoONZ
+        LG/pXZ0n+o1la56lse8ynz4SqYZzkrQPb9OH2Wk9qJPwFrSzx/ZBQbSlQdZSvFWkBkYQD3B14Tf
+        M=
+X-Received: by 2002:a05:600c:3c93:b0:3cf:cfcd:1e0 with SMTP id bg19-20020a05600c3c9300b003cfcfcd01e0mr7551215wmb.166.1668422618433;
+        Mon, 14 Nov 2022 02:43:38 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4LTTfRgk2hIRvMGXUFWJY0WRKIO0NZxyor0pdMsOQonaFaUu/i8GL+jAbQiu7NJaJs3Mqc7Q==
+X-Received: by 2002:a05:600c:3c93:b0:3cf:cfcd:1e0 with SMTP id bg19-20020a05600c3c9300b003cfcfcd01e0mr7551187wmb.166.1668422618089;
+        Mon, 14 Nov 2022 02:43:38 -0800 (PST)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id n18-20020a7bcbd2000000b003cf9bf5208esm17225468wmi.19.2022.11.14.02.43.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 02:43:37 -0800 (PST)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Peter Robinson <pbrobinson@redhat.com>,
+        Steev Klimaszewski <steev@kali.org>,
+        Rob Herring <robh@kernel.org>,
+        Sergio Lopez Pascual <slp@redhat.com>,
+        Enric Balletbo i Serra <eballetbo@redhat.com>,
+        John Stultz <jstultz@google.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH] driver core: Disable driver deferred probe timeout by default
+Date:   Mon, 14 Nov 2022 11:43:33 +0100
+Message-Id: <20221114104333.3695531-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a pretty bog-standard-for-Xperias-for-the-past-3-years
-touchscreen setup.
+The driver_deferred_probe_timeout value has a long story. It was first set
+to -1 when it was introduced by commit 25b4e70dcce9 ("driver core: allow
+stopping deferred probe after init"), meaning that the driver core would
+defer the probe forever unless a subsystem would opt-in by checking if the
+initcalls where done using the driver_deferred_probe_check_state() helper,
+or if a timeout was explicitly set with a "deferred_probe_timeout" param.
 
-The OEM that built the Xperia 10 IV for SONY decided to use some
-kind of a GPIO regulator that needs to be enabled at all times
-for both the touch panel and the display panel to function.
+Only the power domain, IOMMU and MDIO subsystems currently opt-in to check
+if the initcalls have completed with driver_deferred_probe_check_state().
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Commit c8c43cee29f6 ("driver core: Fix driver_deferred_probe_check_state()
+logic") then changed the driver_deferred_probe_check_state() helper logic,
+to take into account whether modules have been enabled or not and also to
+return -EPROBE_DEFER if the probe deferred timeout was still running.
+
+Then in commit e2cec7d68537 ("driver core: Set deferred_probe_timeout to a
+longer default if CONFIG_MODULES is set"), the timeout was increased to 30
+seconds if modules are enabled. Because seems that some of the subsystems
+that were opt-in to not return -EPROBE_DEFER after the initcall where done
+could still have dependencies whose drivers were built as a module.
+
+This commit did a fundamental change to how probe deferral worked though,
+since now the default was not to attempt probing for drivers indefinitely
+but instead it would timeout after 30 seconds unless a different timeout
+was set using the "deferred_probe_timeout" parameter.
+
+The behavior was changed even mere with commit ce68929f07de ("driver core:
+Revert default driver_deferred_probe_timeout value to 0"), since the value
+was set to 0 by default. Meaning that the probe deferral would be disabled
+after the initcalls where done. Unless a timeout was set in the cmdline.
+
+Notice that the commit said that it was reverting the default value to 0,
+but this was never 0. The default was -1 at the beginning and then changed
+to 30 in a later commit.
+
+This default value of 0 was reverted again by commit f516d01b9df2 ("Revert
+"driver core: Set default deferred_probe_timeout back to 0."") and set to
+10 seconds instead. Which was still less than the 30 seconds that was set
+at some point to allow systems with drivers built as modules and loaded by
+user-land to probe drivers that were previously deferred.
+
+The 10 seconds timeout isn't enough for the mentioned systems, for example
+general purpose distributions attempt to build all the possible drivers as
+a module to keep the Linux kernel image small. But that means that in very
+likely that the probe deferral mechanism will timeout and drivers won't be
+probed correctly.
+
+So let's change the default again to -1 as it was at the beginning. That's
+how probe deferral always worked. In fact, it could even be that users can
+load modules manually after the system has already booted so it is better
+to not assume when it can be safe to just timeout instead of probe defer.
+
+Systems that want to somehow time bound the probe deferral seems to be the
+special case, so it makes more sense for these to either not enable module
+support or specify a timeout using the "deferred_probe_timeout" parameter.
+
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 ---
-No changes since v1.
 
- .../qcom/sm6375-sony-xperia-murray-pdx225.dts | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ drivers/base/dd.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts b/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
-index 0f1ddfa28c89..d18167bcb41f 100644
---- a/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
-+++ b/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
-@@ -81,6 +81,23 @@ &gpi_dma1 {
- 	status = "okay";
- };
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 3dda62503102..7592f5ce35c8 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -256,11 +256,7 @@ static int deferred_devs_show(struct seq_file *s, void *data)
+ }
+ DEFINE_SHOW_ATTRIBUTE(deferred_devs);
  
-+&i2c8 {
-+	clock-frequency = <400000>;
-+	status = "okay";
-+
-+	touchscreen@48 {
-+		compatible = "samsung,s6sy761";
-+		reg = <0x48>;
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <22 0x2008>;
-+
-+		vdd-supply = <&pm6125_l13>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&ts_int_default &ts_avdd_default>;
-+	};
-+};
-+
- &pmk8350_adc_tm {
- 	status = "okay";
- };
-@@ -290,6 +307,20 @@ pmr735a_l7: l7 {
+-#ifdef CONFIG_MODULES
+-int driver_deferred_probe_timeout = 10;
+-#else
+-int driver_deferred_probe_timeout;
+-#endif
++int driver_deferred_probe_timeout = -1;
  
- &tlmm {
- 	gpio-reserved-ranges = <13 4>;
-+
-+	ts_int_default: ts-int-default-state {
-+		pins = "gpio22";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		bias-pull-up;
-+	};
-+
-+	ts_avdd_default: ts-avdd-default-state {
-+		pins = "gpio59";
-+		function = "gpio";
-+		drive-strength = <8>;
-+		output-high;
-+	};
- };
+ EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
  
- &usb_1 {
 -- 
 2.38.1
 
