@@ -2,57 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D30B6284E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5976284EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:19:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237489AbiKNQSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:18:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
+        id S237446AbiKNQTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237418AbiKNQRv (ORCPT
+        with ESMTP id S237450AbiKNQSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:17:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864622EF20;
-        Mon, 14 Nov 2022 08:17:36 -0800 (PST)
+        Mon, 14 Nov 2022 11:18:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1579B38F
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:18:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 424B5B8105F;
-        Mon, 14 Nov 2022 16:17:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE488C433C1;
-        Mon, 14 Nov 2022 16:17:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668442654;
-        bh=8ch4EQw2RQcU4v2aPE4PxOMAb0sV9YuUbfQfBTcLzdA=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=X6dM0QmwVhUDqqtHsdmJzjwBfCCuaeP7IPhCI+KeTrJ14KKT4czxeBfE0/UhjWkF6
-         +ST/X6dgtwU7bcYGpV1+Kgpx2oAbHNCmogEFLEJOMY0fHPsfymh8MsI+GssBRZsJNK
-         095zixMYR7YOn+mA10EtOnzMchOY9DUM3Kekrf6OCHX69l+qKpg9lb0tMRLydrF0FZ
-         BRi2VHP1u+AgaL9hURB1Gx4SqU1NTHJeNgzwNbujNacDLXFtEwunayt8Ktd7Oc/0qs
-         EQoQvzSOHKOKi9tKF2KTHqgkPiQyekOrxVnd2plXLpbfzu33UqP9L1LhqE8KIh6xiA
-         /jwdUMS+CkhSQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 93B635C0F9C; Mon, 14 Nov 2022 08:17:33 -0800 (PST)
-Date:   Mon, 14 Nov 2022 08:17:33 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [PATCH v2] rcu/kfree: Do not request RCU when not needed
-Message-ID: <20221114161733.GD4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221109024758.2644936-1-joel@joelfernandes.org>
- <Y2z3Mb3u8bFZ12wY@pc636>
- <CAEXW_YSq89xzgyQ9Tdt1tCqz8VAfzb7kSXVZmnxDuJ65U0UZ3w@mail.gmail.com>
- <Y20EOinwcLSZHmXg@pc638.lan>
- <Y22ry4Q2OY2zovco@google.com>
- <Y3Iyka86FlUh9D1P@pc636>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A638F612A4
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 16:18:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2C8FC433D7;
+        Mon, 14 Nov 2022 16:18:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668442706;
+        bh=AqtzYtgXN3z9nM+kNUs9g6opjfSPy/5KmOAnNI1Je7U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yfcJXHl/qAG6UhIPzAWlKql8R2YTxkgePNZkoB8I8NWZmiEKmqYfi1uhCPxoI3NYl
+         OGfPj1Tt77iI7zUf1D+TyWRFtZTxZgCJ5j7bVUv5VTN4r1ohjSqJNhTOUPdo/T0Jnw
+         jZyOiBNTNPUxkdpLI0LWXbaswhvoUyMnH6i4XFnU=
+Date:   Mon, 14 Nov 2022 17:18:22 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>
+Cc:     Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] virtio_console: Use an atomic to allocate virtual
+ console numbers
+Message-ID: <Y3JqThFr67DJnGJL@kroah.com>
+References: <20221114080752.1900699-1-clg@kaod.org>
+ <Y3IC3miVoiMROwaE@kroah.com>
+ <b0503354-2d1e-a93d-a6a5-6f6a1f55f0e2@kaod.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y3Iyka86FlUh9D1P@pc636>
+In-Reply-To: <b0503354-2d1e-a93d-a6a5-6f6a1f55f0e2@kaod.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,117 +55,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 01:20:33PM +0100, Uladzislau Rezki wrote:
-> > On Thu, Nov 10, 2022 at 03:01:30PM +0100, Uladzislau Rezki wrote:
-> > > > Hi,
-> > > > 
-> > > > On Thu, Nov 10, 2022 at 8:05 AM Uladzislau Rezki <urezki@gmail.com> wrote:
-> > > > 
-> > > > > > On ChromeOS, using this with the increased timeout, we see that we
-> > > > > almost always
-> > > > > > never need to initiate a new grace period. Testing also shows this frees
-> > > > > large
-> > > > > > amounts of unreclaimed memory, under intense kfree_rcu() pressure.
-> > > > > >
-> > > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > > > > ---
-> > > > > > v1->v2: Same logic but use polled grace periods instead of sampling
-> > > > > gp_seq.
-> > > > > >
-> > > > > >  kernel/rcu/tree.c | 8 +++++++-
-> > > > > >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > > > > > index 591187b6352e..ed41243f7a49 100644
-> > > > > > --- a/kernel/rcu/tree.c
-> > > > > > +++ b/kernel/rcu/tree.c
-> > > > > > @@ -2935,6 +2935,7 @@ struct kfree_rcu_cpu_work {
-> > > > > >
-> > > > > >  /**
-> > > > > >   * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace
-> > > > > period
-> > > > > > + * @gp_snap: The GP snapshot recorded at the last scheduling of monitor
-> > > > > work.
-> > > > > >   * @head: List of kfree_rcu() objects not yet waiting for a grace period
-> > > > > >   * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiting for a
-> > > > > grace period
-> > > > > >   * @krw_arr: Array of batches of kfree_rcu() objects waiting for a
-> > > > > grace period
-> > > > > > @@ -2964,6 +2965,7 @@ struct kfree_rcu_cpu {
-> > > > > >       struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
-> > > > > >       raw_spinlock_t lock;
-> > > > > >       struct delayed_work monitor_work;
-> > > > > > +     unsigned long gp_snap;
-> > > > > >       bool initialized;
-> > > > > >       int count;
-> > > > > >
-> > > > > > @@ -3167,6 +3169,7 @@ schedule_delayed_monitor_work(struct kfree_rcu_cpu
-> > > > > *krcp)
-> > > > > >                       mod_delayed_work(system_wq, &krcp->monitor_work,
-> > > > > delay);
-> > > > > >               return;
-> > > > > >       }
-> > > > > > +     krcp->gp_snap = get_state_synchronize_rcu();
-> > > > > >       queue_delayed_work(system_wq, &krcp->monitor_work, delay);
-> > > > > >  }
-> > > > > >
-> > > > > How do you guarantee a full grace period for objects which proceed
-> > > > > to be placed into an input stream that is not yet detached?
-> > > > 
-> > > > 
-> > > > Just replying from phone as Iâ€™m OOO today.
-> > > > 
-> > > > Hmm, so youâ€™re saying that objects can be queued after the delayed work has
-> > > > been queued, but processed when the delayed work is run? Iâ€™m looking at
-> > > > this code after few years so I may have missed something.
-> > > > 
-> > > > Thatâ€™s a good point and I think I missed that. I think your version did too
-> > > > but Iâ€™ll have to double check.
-> > > > 
-> > > > The fix then is to sample the clock for the latest object queued, not for
-> > > > when the delayed work is queued.
-> > > > 
-> > > The patch i sent gurantee it. Just in case see v2:
+On Mon, Nov 14, 2022 at 05:03:40PM +0100, Cédric Le Goater wrote:
+> On 11/14/22 09:57, Greg Kroah-Hartman wrote:
+> > On Mon, Nov 14, 2022 at 09:07:52AM +0100, Cédric Le Goater wrote:
+> > > When a virtio console port is initialized, it is registered as an hvc
+> > > console using a virtual console number. If a KVM guest is started with
+> > > multiple virtio console devices, the same vtermno (or virtual console
+> > > number) can be used to allocate different hvc consoles, which leads to
+> > > various communication problems later on.
+> > > 
+> > > This is also reported in debugfs :
+> > > 
+> > >    # grep vtermno /sys/kernel/debug/virtio-ports/*
+> > >    /sys/kernel/debug/virtio-ports/vport1p1:console_vtermno: 1
+> > >    /sys/kernel/debug/virtio-ports/vport2p1:console_vtermno: 1
+> > >    /sys/kernel/debug/virtio-ports/vport3p1:console_vtermno: 2
+> > >    /sys/kernel/debug/virtio-ports/vport4p1:console_vtermno: 3
+> > > 
+> > > Fix the issue with an atomic variable and start the first console
+> > > number at 1 as it is today.
+> > > 
+> > > Signed-off-by: Cédric Le Goater <clg@kaod.org>
+> > > ---
+> > >   drivers/char/virtio_console.c | 8 ++++----
+> > >   1 file changed, 4 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
+> > > index 9fa3c76a267f..253574f41e57 100644
+> > > --- a/drivers/char/virtio_console.c
+> > > +++ b/drivers/char/virtio_console.c
+> > > @@ -58,12 +58,13 @@ struct ports_driver_data {
+> > >   	 * We also just assume the first console being initialised was
+> > >   	 * the first one that got used as the initial console.
+> > >   	 */
+> > > -	unsigned int next_vtermno;
+> > > +	atomic_t next_vtermno;
+> > >   	/* All the console devices handled by this driver */
+> > >   	struct list_head consoles;
+> > >   };
+> > > -static struct ports_driver_data pdrvdata = { .next_vtermno = 1};
+> > > +
+> > > +static struct ports_driver_data pdrvdata = { .next_vtermno = ATOMIC_INIT(0) };
+> > >   static DEFINE_SPINLOCK(pdrvdata_lock);
+> > >   static DECLARE_COMPLETION(early_console_added);
+> > > @@ -1244,7 +1245,7 @@ static int init_port_console(struct port *port)
+> > >   	 * pointers.  The final argument is the output buffer size: we
+> > >   	 * can do any size, so we put PAGE_SIZE here.
+> > >   	 */
+> > > -	port->cons.vtermno = pdrvdata.next_vtermno;
+> > > +	port->cons.vtermno = atomic_inc_return(&pdrvdata.next_vtermno);
 > > 
-> > You are right and thank you! CBs can be queued while the monitor timer is in
-> > progress. So we need to sample unconditionally. I think my approach is still
-> > better since I take advantage of multiple seconds (I update snapshot on every
-> > CB queue monitor and sample in the monitor handler).
-> > 
-> > Whereas your patch is snapshotting before queuing the regular work and when
-> > the work is executed (This is a much shorter duration and I bet you would be
-> > blocking in cond_synchronize..() more often).
-> > 
-> There is a performance test that measures a taken time and memory
-> footprint, so you can do a quick comparison. A "rcutorture" can be
-> run with various parameters to figure out if a patch that is in question
-> makes any difference.
+> > Why not use a normal ida/idr structure here?
 > 
-> Usually i run it as:
+> yes that works.
 > 
-> <snip>
-> #! /usr/bin/env bash
+> > And why is this never decremented?
 > 
-> LOOPS=10
-> 
-> for (( i=0; i<$LOOPS; i++ )); do
->         tools/testing/selftests/rcutorture/bin/kvm.sh --memory 10G --torture rcuscale --allcpus --duration 1 \
->         --kconfig CONFIG_NR_CPUS=64 \
->         --kconfig CONFIG_RCU_NOCB_CPU=y \
->         --kconfig CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y \
->         --kconfig CONFIG_RCU_LAZY=n \
->         --bootargs "rcuscale.kfree_rcu_test=1 rcuscale.kfree_nthreads=16 rcuscale.holdoff=20 rcuscale.kfree_loops=10000 torture.disable_onoff_at_boot" --trust-make
->         echo "Done $i"
-> done
-> <snip>
-> 
-> just run it from your linux sandbox.
+> The driver would then need to track the id allocation ...
 
-Would it make sense to modify the "if test "$do_kvfree" = "yes" code
-in tools/testing/selftests/rcutorture/bin/torture.sh to do something
-like this instead of what it currently does?
+That's what an ida/idr does.
 
-Though if so, it would be much faster to use kvm.sh's --buildonly flag
-to build the kernel, then kvm-again.sh to rerun that kernel.
+> > and finally, why not use the value that created the "vportN" number
+> > instead?
+> 
+> yes. we could also encode the tuple (vdev->index, port) using a bitmask,
 
-						Thanx, Paul
+No need for that, you already have a unique number in the name above,
+why not use that?
+
+> possibly using 'max_nr_ports' to reduce the port width.
+
+Why is that an issue?  Maybe I am confused as to what this magic
+"vtermno" is here.  Who uses it and why is the vportN number not
+sufficient?
+
+> VIRTCONS_MAX_PORTS
+> seems a bit big for this device and QEMU sets the #ports to 31.
+> 
+> An ida might be simpler. One drawback is that an id can be reused for a
+> different device/port tuple in case of an (unlikely) unplug/plug sequence.
+
+What's wrong with that?  We do not have persistent device names from
+within the kernel.
+
+thanks,
+
+greg k-h
