@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA0E628B10
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D88D5628B18
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237666AbiKNVJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 16:09:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
+        id S236993AbiKNVJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 16:09:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237661AbiKNVIr (ORCPT
+        with ESMTP id S237712AbiKNVIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 16:08:47 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0ED71570E
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:08:43 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id x23-20020a634857000000b0043c700f6441so6399223pgk.21
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:08:43 -0800 (PST)
+        Mon, 14 Nov 2022 16:08:55 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2236556
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:08:52 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id b17-20020a25b851000000b006e32b877068so1820852ybm.16
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 13:08:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=05I6atWVl+qVT8yMUMb7x3GwtdO61HeIYnH9Cn+25jQ=;
-        b=YnLoANQuFjbetHt540UCbpDWKoJh/exzhEQ66FkM0DNj43cS9FdHbXR77YM17jew7x
-         cHvBVFfd+dNUoPSAda91AwQEle/wJoTXMWWSZvQLZpo0WJW7L6mbFQTUaFiZk8Dbot0X
-         ca/91q3+zmW0juc/Ptg3A2A/zfY3FAu6hG26oCaPRIUJ1+ROCn3MLhVGjJyvZrK0e2Pq
-         7uGzqvVeoni2IXJxk2C4+mqpYpU7FH0vRRkcW01pLZ4l8itOTntfwtgunfq5UUJ68aBq
-         u74OZ02gIHZw/xIg5mxa82EKl9QveFHNCgZA+AJaCTw/1zA4nueSyfnrheYNWnIk5IHL
-         dPhA==
+        bh=HIf5Y9gptGCDfzfHbnNjnA19mp6qRpBDngBttcXhem0=;
+        b=GZZvStXHmV1H/jsQ47y9n//yaqltl/vwRLrf6lcIZ4n2MbmDx8/ILodhf/TEK75Z8h
+         vXUnxC0uMPqpB2vpMCDlnHSYpQa3dRDuEOq5vKovpKq+6HygbUCE6CxFPDJH2gM7E1Qi
+         FLLrolhCv9gq604BrlQkqDDkLA0ofnmSvLMWXDxOFhh1tp3dzVRpVhvk+6L+WKvrsVor
+         lZZe4gUEvOzHpoof7kQuiiR3Iu6mUFZeHXN9XKZ/SHkRgkMgQxrKpvFCK5p45B5IA+sK
+         mZuaxZ2n64tLPPGQlcOe5C8WIbk7k11MRMslThYNuZJYNMKQH3QxYYmA0Xhgz2/jqeDP
+         fDLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=05I6atWVl+qVT8yMUMb7x3GwtdO61HeIYnH9Cn+25jQ=;
-        b=ILFXRjqDZl0CYojT3sXnvqawrWVFm6SDuUxE7S3Dq4UuWU/7csaD0r/YZpaSokXTa7
-         7XZr9WP8sEngVCooik5TedZ/Eqsz2d4A+QVEhTUmYBVcF/BF1JMmoMJktaxTr3KKgdsa
-         CHplDJSZbKPnc4LcmJ7UGJ7V0iT7d83FXI3V52LAP4+O2pohtZuV4SGp5oS9XpvQqQ6e
-         BRNboVhQ+CJN0i7KQIdOiOrTo4pB1WwtBpMnTCnciUUchmh/7vg1srYjHMGZEw8+YRaS
-         MdVrOAdJK+ZygjaEvfY2upaqBH11PKNDrgOvDs60zj05f9/dKFL0uHxPElpWDLK1QE01
-         jfBg==
-X-Gm-Message-State: ANoB5pk5ORSUIqS/vusAvo9oFvt+lP3g6QeNCvI3Dq5dhYzE1X/NYq2D
-        R0MsYsiNzOFHR/jmznkdxo8S72RGfcKG
-X-Google-Smtp-Source: AA0mqf7J6M37Jt7UM1Lak9n8uZgRwp9XJRQrASOXpg5TUJKhAbrCX/8bwrC1Nv+P6XdAzTdc2pYlG5gJSSJX
+        bh=HIf5Y9gptGCDfzfHbnNjnA19mp6qRpBDngBttcXhem0=;
+        b=WCfiHuyAtsPUTrVStbc+Yz+7cK/RGJfsgJXkMbpYv4H4aVzu+7frNHrdjx4Xp1Papn
+         fZNyT4p8pY6QzW8hJgfIGyGzm/sbvABP1WFEUngd+Ujof2LrfaiKmHDaZgLTAK41xD2v
+         EcyG5TJ71ZhOgknlbhlVflNyvMzmIlMpI0jMDZrNoKAXWUFVLIXJoD8xCHmA4Q5AsJck
+         yxibkQ3CFgsI+VcQrtWLYNkq2ZUm5DCL0czVKa/jJ3R+fHjNw3R9gfiZqMENr4+8tPG0
+         JVxm4luREzMM+VbUxeR8jK+AZe9hgn0EQxh2EH/Ovo1Gu4l4nccL9UF7jox2VvxUke8b
+         PrrA==
+X-Gm-Message-State: ANoB5pmxIfWZ7tDaIPkE0xWT5vrKLxYoF8tiNai591flU/tn1vJ7m1JB
+        lNveU19gU+FILTX+T1f6zMAWzRhgBWUc
+X-Google-Smtp-Source: AA0mqf4iUCGjqHHy6le8WzwURkFlzhXoc/qhYuUsB8WjG8LnurJrKZI5KTY7Z/hdnQqtsNRqBFQconWgEbKj
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:553:438f:b86a:87f])
- (user=irogers job=sendgmr) by 2002:a05:6a00:4211:b0:56b:6936:ddfb with SMTP
- id cd17-20020a056a00421100b0056b6936ddfbmr15534031pfb.15.1668460123402; Mon,
- 14 Nov 2022 13:08:43 -0800 (PST)
-Date:   Mon, 14 Nov 2022 13:07:19 -0800
+ (user=irogers job=sendgmr) by 2002:a0d:d596:0:b0:36a:bc93:587c with SMTP id
+ x144-20020a0dd596000000b0036abc93587cmr15112789ywd.59.1668460132140; Mon, 14
+ Nov 2022 13:08:52 -0800 (PST)
+Date:   Mon, 14 Nov 2022 13:07:20 -0800
 In-Reply-To: <20221114210723.2749751-1-irogers@google.com>
-Message-Id: <20221114210723.2749751-7-irogers@google.com>
+Message-Id: <20221114210723.2749751-8-irogers@google.com>
 Mime-Version: 1.0
 References: <20221114210723.2749751-1-irogers@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH v3 06/10] perf list: Simplify cache event printing
+Subject: [PATCH v3 07/10] perf list: Simplify symbol event printing
 From:   Ian Rogers <irogers@google.com>
 To:     Weilin Wang <weilin.wang@intel.com>,
         Perry Taylor <perry.taylor@intel.com>,
@@ -78,7 +78,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,146 +86,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current code computes an array of cache names then sorts and
+The current code computes an array of symbol names then sorts and
 prints them. Use a strlist to create a list of names that is
-sorted. Keep the hybrid names, it is unclear how to generalize it, but
-drop the computation of evt_pmus that is never used.
+sorted and then print it.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/print-events.c | 132 +++++++--------------------------
- 1 file changed, 27 insertions(+), 105 deletions(-)
+ tools/perf/util/print-events.c | 79 +++++++++-------------------------
+ 1 file changed, 21 insertions(+), 58 deletions(-)
 
 diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
-index fefc025bc259..ff7793944246 100644
+index ff7793944246..d53dba033597 100644
 --- a/tools/perf/util/print-events.c
 +++ b/tools/perf/util/print-events.c
-@@ -206,137 +206,59 @@ void print_sdt_events(const char *subsys_glob, const char *event_glob,
+@@ -52,14 +52,6 @@ static const struct event_symbol event_symbols_tool[PERF_TOOL_MAX] = {
+ 	},
+ };
  
- int print_hwcache_events(const char *event_glob, bool name_only)
- {
--	unsigned int type, op, i, evt_i = 0, evt_num = 0, npmus = 0;
--	char name[64], new_name[128];
--	char **evt_list = NULL, **evt_pmus = NULL;
--	bool evt_num_known = false;
--	struct perf_pmu *pmu = NULL;
+-static int cmp_string(const void *a, const void *b)
+-{
+-	const char * const *as = a;
+-	const char * const *bs = b;
 -
--	if (perf_pmu__has_hybrid()) {
--		npmus = perf_pmu__hybrid_pmu_num();
--		evt_pmus = zalloc(sizeof(char *) * npmus);
--		if (!evt_pmus)
--			goto out_enomem;
--	}
-+	struct strlist *evt_name_list = strlist__new(NULL, NULL);
-+	struct str_node *nd;
- 
+-	return strcmp(*as, *bs);
+-}
+-
+ /*
+  * Print the events from <debugfs_mount_point>/tracing/events
+  */
+@@ -298,77 +290,48 @@ void print_symbol_events(const char *event_glob, unsigned int type,
+ 			 struct event_symbol *syms, unsigned int max,
+ 			 bool name_only)
+ {
+-	unsigned int i, evt_i = 0, evt_num = 0;
+-	char name[MAX_NAME_LEN];
+-	char **evt_list = NULL;
+-	bool evt_num_known = false;
+-
 -restart:
 -	if (evt_num_known) {
 -		evt_list = zalloc(sizeof(char *) * evt_num);
 -		if (!evt_list)
 -			goto out_enomem;
+-		syms -= max;
+-	}
++	struct strlist *evt_name_list = strlist__new(NULL, NULL);
++	struct str_node *nd;
+ 
+-	for (i = 0; i < max; i++, syms++) {
 +	if (!evt_name_list) {
-+		pr_debug("Failed to allocate new strlist for hwcache events\n");
-+		return -ENOMEM;
- 	}
--
--	for (type = 0; type < PERF_COUNT_HW_CACHE_MAX; type++) {
--		for (op = 0; op < PERF_COUNT_HW_CACHE_OP_MAX; op++) {
-+	for (int type = 0; type < PERF_COUNT_HW_CACHE_MAX; type++) {
-+		for (int op = 0; op < PERF_COUNT_HW_CACHE_OP_MAX; op++) {
- 			/* skip invalid cache type */
- 			if (!evsel__is_cache_op_valid(type, op))
- 				continue;
++		pr_debug("Failed to allocate new strlist for symbol events\n");
++		return;
++	}
++	for (unsigned int i = 0; i < max; i++) {
+ 		/*
+ 		 * New attr.config still not supported here, the latest
+ 		 * example was PERF_COUNT_SW_CGROUP_SWITCHES
+ 		 */
+-		if (syms->symbol == NULL)
++		if (syms[i].symbol == NULL)
+ 			continue;
  
--			for (i = 0; i < PERF_COUNT_HW_CACHE_RESULT_MAX; i++) {
--				unsigned int hybrid_supported = 0, j;
--				bool supported;
-+			for (int i = 0; i < PERF_COUNT_HW_CACHE_RESULT_MAX; i++) {
-+				struct perf_pmu *pmu = NULL;
-+				char name[64];
+-		if (event_glob != NULL && !(strglobmatch(syms->symbol, event_glob) ||
+-		      (syms->alias && strglobmatch(syms->alias, event_glob))))
++		if (event_glob != NULL && !(strglobmatch(syms[i].symbol, event_glob) ||
++		      (syms[i].alias && strglobmatch(syms[i].alias, event_glob))))
+ 			continue;
  
- 				__evsel__hw_cache_type_op_res_name(type, op, i, name, sizeof(name));
- 				if (event_glob != NULL && !strglobmatch(name, event_glob))
- 					continue;
+ 		if (!is_event_supported(type, i))
+ 			continue;
  
- 				if (!perf_pmu__has_hybrid()) {
--					if (!is_event_supported(PERF_TYPE_HW_CACHE,
--								type | (op << 8) | (i << 16))) {
--						continue;
--					}
--				} else {
--					perf_pmu__for_each_hybrid_pmu(pmu) {
--						if (!evt_num_known) {
--							evt_num++;
--							continue;
--						}
+-		if (!evt_num_known) {
+-			evt_num++;
+-			continue;
+-		}
 -
--						supported = is_event_supported(
--							PERF_TYPE_HW_CACHE,
--							type | (op << 8) | (i << 16) |
--							((__u64)pmu->type << PERF_PMU_TYPE_SHIFT));
--						if (supported) {
--							snprintf(new_name, sizeof(new_name),
--								 "%s/%s/", pmu->name, name);
--							evt_pmus[hybrid_supported] =
--								strdup(new_name);
--							hybrid_supported++;
--						}
--					}
--
--					if (hybrid_supported == 0)
--						continue;
--				}
--
--				if (!evt_num_known) {
--					evt_num++;
-+					if (is_event_supported(PERF_TYPE_HW_CACHE,
-+							       type | (op << 8) | (i << 16)))
-+						strlist__add(evt_name_list, name);
- 					continue;
- 				}
--
--				if ((hybrid_supported == 0) ||
--				    (hybrid_supported == npmus)) {
--					evt_list[evt_i] = strdup(name);
--					if (npmus > 0) {
--						for (j = 0; j < npmus; j++)
--							zfree(&evt_pmus[j]);
--					}
--				} else {
--					for (j = 0; j < hybrid_supported; j++) {
--						evt_list[evt_i++] = evt_pmus[j];
--						evt_pmus[j] = NULL;
-+				perf_pmu__for_each_hybrid_pmu(pmu) {
-+					if (is_event_supported(PERF_TYPE_HW_CACHE,
-+					    type | (op << 8) | (i << 16) |
-+					    ((__u64)pmu->type << PERF_PMU_TYPE_SHIFT))) {
-+						char new_name[128];
-+							snprintf(new_name, sizeof(new_name),
-+								 "%s/%s/", pmu->name, name);
-+							strlist__add(evt_name_list, new_name);
- 					}
--					continue;
- 				}
--
--				if (evt_list[evt_i] == NULL)
--					goto out_enomem;
--				evt_i++;
- 			}
- 		}
+-		if (!name_only && strlen(syms->alias))
+-			snprintf(name, MAX_NAME_LEN, "%s OR %s", syms->symbol, syms->alias);
+-		else
+-			strlcpy(name, syms->symbol, MAX_NAME_LEN);
++		if (strlen(syms[i].alias)) {
++			char name[MAX_NAME_LEN];
+ 
+-		evt_list[evt_i] = strdup(name);
+-		if (evt_list[evt_i] == NULL)
+-			goto out_enomem;
+-		evt_i++;
++			snprintf(name, MAX_NAME_LEN, "%s OR %s", syms[i].symbol, syms[i].alias);
++			strlist__add(evt_name_list, name);
++		} else
++			strlist__add(evt_name_list, syms[i].symbol);
  	}
  
 -	if (!evt_num_known) {
 -		evt_num_known = true;
 -		goto restart;
 -	}
--
--	for (evt_i = 0; evt_i < evt_num; evt_i++) {
--		if (!evt_list[evt_i])
--			break;
--	}
--
--	evt_num = evt_i;
 -	qsort(evt_list, evt_num, sizeof(char *), cmp_string);
 -	evt_i = 0;
 -	while (evt_i < evt_num) {
@@ -235,9 +191,8 @@ index fefc025bc259..ff7793944246 100644
 +			printf("%s ", nd->s);
  			continue;
  		}
--		printf("  %-50s [%s]\n", evt_list[evt_i++],
--				event_type_descriptors[PERF_TYPE_HW_CACHE]);
-+		printf("  %-50s [%s]\n", nd->s, event_type_descriptors[PERF_TYPE_HW_CACHE]);
+-		printf("  %-50s [%s]\n", evt_list[evt_i++], event_type_descriptors[type]);
++		printf("  %-50s [%s]\n", nd->s, event_type_descriptors[type]);
  	}
 -	if (evt_num && pager_in_use())
 +	if (!strlist__empty(evt_name_list) && pager_in_use())
@@ -248,23 +203,16 @@ index fefc025bc259..ff7793944246 100644
 -	for (evt_i = 0; evt_i < evt_num; evt_i++)
 -		zfree(&evt_list[evt_i]);
 -	zfree(&evt_list);
--
--	for (evt_i = 0; evt_i < npmus; evt_i++)
--		zfree(&evt_pmus[evt_i]);
--	zfree(&evt_pmus);
--	return evt_num;
+-	return;
 -
 -out_enomem:
--	printf("FATAL: not enough memory to print %s\n",
--		event_type_descriptors[PERF_TYPE_HW_CACHE]);
+-	printf("FATAL: not enough memory to print %s\n", event_type_descriptors[type]);
 -	if (evt_list)
 -		goto out_free;
--	return evt_num;
 +	strlist__delete(evt_name_list);
-+	return 0;
  }
  
- static void print_tool_event(const struct event_symbol *syms, const char *event_glob,
+ /*
 -- 
 2.38.1.431.g37b22c650d-goog
 
