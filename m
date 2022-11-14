@@ -2,100 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6526276A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5186276A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235561AbiKNHsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 02:48:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
+        id S236008AbiKNHsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 02:48:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235924AbiKNHsn (ORCPT
+        with ESMTP id S235848AbiKNHsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 02:48:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989A7226;
-        Sun, 13 Nov 2022 23:48:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5FD71B80D38;
-        Mon, 14 Nov 2022 07:48:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC9FDC433C1;
-        Mon, 14 Nov 2022 07:48:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668412119;
-        bh=Wty1q4Vw3osxbeKih7YgwVKV3K20oBfY1RvNlNBfyTc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XV2xyRy02RLWFX8vCuoAdVTHmGApf/7E3ZgGGyR0QpZUjMZ9OU5Rs/yxQku5rLCSm
-         NgjR/XvqkY2RIpsV4MAw9bW/mBhN4UhQOZ4ARfwZKEeQZ9Cuf7IaGJ2ABifeAyHCvL
-         XHgFXy8ZYCFk5ip148gjawUVwbBjTaVeUm+kC+i+tXo4IRTZzOUjpewr1hkkM6Tyot
-         vYqPMaQ+Zz7gzDW8O/A8Sz6twLufWVt4r9st7jTyeY/qvrip+dqfggYy8+ixuLtuCe
-         vVrakk4xzBEGLmmVAUyxzVaOxddw4OyggtHuEK2aoUgQDWTjhA7CRMe2ItBkSD79lH
-         dvCFWzY9fCujQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ouUCN-0000oU-6n; Mon, 14 Nov 2022 08:48:07 +0100
-Date:   Mon, 14 Nov 2022 08:48:07 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Mon, 14 Nov 2022 02:48:21 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB361011
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:48:20 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id d6so17899964lfs.10
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:48:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RtaXBhnGo8MVscIrQnKGheYkcw3Kx7+UsbUghToyCVI=;
+        b=SMH/wDR0ipSJQ9BUzSRMG2RWykZI8v94NQ6rQnIPL3+Oq+ZKPi/veswxkIv+yEMztD
+         2QmI0HH5GldekYzi2aGpmm2oQ8bYqWvWukggo1oah2jteXry9sKr9hhszaCUNhe7JaZB
+         wtQ2IWfLRze8qnIqqOUGV270budQ2QuruVB/5jdcg93GlDmIcmNOQ93VZ2dwFWHN/cNM
+         JLIE+7LyCVT068CkPRhtyAPK3R1eNs1lvDXpLB6AOz3Qp4VaXNsJRRW7UsnXmx6847Yu
+         TDymNZOPJZcegB76FHBGkSFkdBDkb9j47VZng4bShYGV0+c1jYTr0NOza+VNBooBqfle
+         LnBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RtaXBhnGo8MVscIrQnKGheYkcw3Kx7+UsbUghToyCVI=;
+        b=nr9BWdOkg3GgZRA6GNMf0HO8Huo61pmmkejk03hvWvorS+qIVt43myV62oPVGbgKFo
+         c+PSujbiXrMYQ0j3liOMzWR9B6R6EHFa128NE8BzQJBmYPrH/Wjdy+Kdh+eCEKa42KEi
+         7FoRYfssxvI/fhzjtdrN9vzr/PiNBk3kf8F2VXnHSJJUCvKnP4vL71h09e2Vh2IdghD5
+         f64gC3KX5SF11sSNZZ0CrvMVs4mrCVeEwBwzoONa0ZENFaTLHQSrRI+6BbyGM7HEP3OS
+         +p31xsnY6L8BYhpMsErLBt4VyeO2ecSRe9OIlNq4622oN7T4G313Q9HgBuVlzuiYd63b
+         Bzqg==
+X-Gm-Message-State: ANoB5pkRhDgiJpbeCsyo7uLAlr+8VG4QcocA9QNtB6Nj/SXYSxfUWz0N
+        iEHnBNliAXtjPL0/zJyG4iAidQ==
+X-Google-Smtp-Source: AA0mqf4L855tMQ/hmtg1Tuny5MoKVDR9pzpMX2tlC4Cl8NJCd/Q5ZQSx1O0gm5QI6BjibY6zuXXH2w==
+X-Received: by 2002:a05:6512:6d5:b0:4a9:6659:40d5 with SMTP id u21-20020a05651206d500b004a9665940d5mr4232367lff.516.1668412098837;
+        Sun, 13 Nov 2022 23:48:18 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id k20-20020a2eb754000000b0026b2094f6fcsm1899097ljo.73.2022.11.13.23.48.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Nov 2022 23:48:18 -0800 (PST)
+Message-ID: <0ee5db9e-d80c-947d-73d6-6214e9299b23@linaro.org>
+Date:   Mon, 14 Nov 2022 08:48:17 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 00/10] ASoC: dt-bindings: Rework Qualcomm APR/GPR Sound
+ nodes for SM8450
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 4/6] phy: qcom-qmp-combo: fix broken power on
-Message-ID: <Y3Hyt9xNQEjifDUY@hovoldconsulting.com>
-References: <20221111084255.8963-1-johan+linaro@kernel.org>
- <20221111084255.8963-5-johan+linaro@kernel.org>
- <e4a423c6-e92d-1c40-2609-e8512bd9c03c@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e4a423c6-e92d-1c40-2609-e8512bd9c03c@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Patrick Lai <plai@qti.qualcomm.com>,
+        Srinivasa Rao Mandadapu <srivasam@qti.qualcomm.com>
+References: <20221111113547.100442-1-krzysztof.kozlowski@linaro.org>
+ <06da072c-8cf0-8181-3c32-4592fe41f9c2@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <06da072c-8cf0-8181-3c32-4592fe41f9c2@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 09:15:43AM +0300, Dmitry Baryshkov wrote:
-> On 11/11/2022 11:42, Johan Hovold wrote:
-> > The PHY is powered on during phy-init by setting the SW_PRWDN bit in the
+On 11/11/2022 17:15, Srinivas Kandagatla wrote:
 > 
-> Nit: SW_PWRDN
 > 
-> > COM_POWER_DOWN_CTRL register and then setting the same bit in the in the
-> > PCS_POWER_DOWN_CONTROL register that belongs to the USB part of the
-> > PHY.
-> > 
-> > Currently, whether power on succeeds depends on probe order and having
-> > the USB part of the PHY be initialised first. In case the DP part of the
-> > PHY is instead initialised first, the intended power on of the USB block
-> > results in a corrupted DP_PHY register (e.g. DP_PHY_AUX_CFG8).
-> > 
-> > Add a pointer to the USB part of the PHY to the driver data and use that
-> > to power on the PHY also if the DP part of the PHY is initialised first.
-> > 
-> > Fixes: 52e013d0bffa ("phy: qcom-qmp: Add support for DP in USB3+DP combo phy")
-> > Cc: stable@vger.kernel.org	# 5.10
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> On 11/11/2022 11:35, Krzysztof Kozlowski wrote:
+>> Adding sound support for Qualcomm SM8450 SoC (and later for SC8280XP) brought
+>> some changes to APR/GPR services bindings.  These bindings are part of
+>> qcom,apr.yaml:
+>>
+>>    apr-or-gpr-device-node <- qcom,apr.yaml
+>>      apr-gpr-service@[0-9] <- qcom,apr.yaml
+>>        service-specific-components <- /schemas/sound/qcom,q6*.yaml
+>>
+>> The schema for services (apr-gpr-service@[0-9]) already grows considerably and
+>> is still quite not specific.  It allows several incorrect combinations, like
+>> adding a clock-controller to a APM device.  Restricting it would complicate the
+>> schema even more.  Bringing new support for sound on Qualcomm SM8450 and
+>> SC8280XP SoC would grow it as well.
 > 
-> I can only hope that at some point in your cleanup this hack is going to 
-> be removed.
-> Nevertheless, I don't see a good way to do this at this moment. Thus:
+> Why would this grow? All the dsp services are static and they will not 
+> change per SoC unless there is a total firmware change in DSP.
 
-Not sure why you're calling this a hack. This is how the hardware works
-and pretending that this PHY is some kind of MFD with completely
-independent components is partly what resulted in this mess.
+They grow now with SM8450 which requires changes there. Otherwise DTS
+does not pass with current bindings. The bindings before my fixing in
+2022 were really incomplete. Now they are complete, but:
+1. Not for SM8450 - this will bring new things,
+2. Very unspecific as they allow multiple invalid configurations.
 
-Accessing the USB registers by means of a hard-coded index in the PHY
-array as is done in the runtime PM callbacks is a hack (see patch 5/6),
-adding a dedicated pointer is not.
+> 
+>>
+>> Refactor the bindings before extending them for Qualcomm SM8450 SoC.
+> 
+> I dont understand this bit, what is SoC audio support to do with DSP 
+> bindings. DSP bindings should be totally independent of this.
 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+APR/GPR bindings are for SoC audio, so while adding SoC audio the first
+are affected. If you went through the commits here, you would notice the
+changes.
 
-Johan
+Best regards,
+Krzysztof
+
