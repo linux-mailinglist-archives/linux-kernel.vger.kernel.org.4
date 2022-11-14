@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28BE627CA9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A53B2627CAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236673AbiKNLpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:45:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
+        id S236623AbiKNLpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:45:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236609AbiKNLos (ORCPT
+        with ESMTP id S236690AbiKNLot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:44:48 -0500
+        Mon, 14 Nov 2022 06:44:49 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412B821E27
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:44:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156E422508
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:44:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E32FAB80E77
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:44:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB5DEC43145;
-        Mon, 14 Nov 2022 11:44:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 897A4B80E73
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:44:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16C86C433C1;
+        Mon, 14 Nov 2022 11:44:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668426270;
-        bh=wui7Joclil/1Zhbm3X8SG6joq+UGvmdb9Y11/m4UBYk=;
+        s=k20201202; t=1668426273;
+        bh=ApTSBGC/5zyM3eDvn776xtW4dxkstz2N0HPAS1gCaY0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oDcoRSsaEpF5qFmILR9P2mJ5a8lkQVqMz+gUsBuNicjhyBffTPM5tdA/mPGhAiGic
-         b5Wgy7NrKtO74lPiJPFz39XuitjuukIBpJcWmqcaBGCVEmSV9ucqUPWl6gUdl9BQXX
-         a+Ju58arWUNE9xg75AuU4gCyovLx/ItgDUgsr1wBwfbwhZkJPO/4/TJI+qMf2UmfoR
-         QlFdhFWt8ofWnNOWLzvO8u0t1IFU0YF853oowuhb98g1SDgmNnnzJ48rj2v1CL7+R8
-         AWDAd2XOz2ooKCMSPSbZwiKQ8kngNUK18qlmx+FMIcPKRaS9JrURlWmTDeKaFml2Z4
-         5lHZGRLILvEUA==
+        b=cDe/BWVa7LVUh1wr2YKoKMSQ+DOJlndaHrRFQwyP+4dg9OY5/w6swCuGR3SnvFnFi
+         BYfRYHeK0ukY7PG2tQPtB1s9+EfesgR5S3X9dHy+MTPim1IlxDX0GrSaNFjszroBsM
+         TrLvirzkUBIDy00BvaiFBVSsBdqwYsHhG+x17OwNte7Bb9NTv2dYhU4VLk9oJQwh+N
+         aAZMwV7jrT0HcL+9YZIANQ9pqCm3KzAJJ391EqaSh4Mh0IhTQR8YnAPoXkUzTUs0TW
+         biGP4UaRDZWyvnfkK7Bq6fRa8iPc/MpDnqxBESFp3e7EYS458CvD48vTVoBZHELnde
+         3Mswaewh+4pPg==
 From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Andi Kleen <ak@linux.intel.com>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org, Martin Liska <mliska@suse.cz>,
+Cc:     Andi Kleen <andi@firstfloor.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Martin Liska <mliska@suse.cz>,
         Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 15/46] x86/xen, lto: Mark xen_vcpu_stolen() as __visible
-Date:   Mon, 14 Nov 2022 12:43:13 +0100
-Message-Id: <20221114114344.18650-16-jirislaby@kernel.org>
+Subject: [PATCH 16/46] x86, lto: Mark gdt_page and native_sched_clock() as __visible
+Date:   Mon, 14 Nov 2022 12:43:14 +0100
+Message-Id: <20221114114344.18650-17-jirislaby@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221114114344.18650-1-jirislaby@kernel.org>
 References: <20221114114344.18650-1-jirislaby@kernel.org>
@@ -56,39 +57,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andi Kleen <ak@linux.intel.com>
+From: Andi Kleen <andi@firstfloor.org>
 
 Symbols referenced from assembler (either directly or e.f. from
 DEFINE_STATIC_KEY()) need to be global and visible in gcc LTO because
 they could end up in a different object file than the assembler. This
 can lead to linker errors without this patch.
 
-So mark xen_vcpu_stolen() as __visible.
+So mark gdt_page and native_sched_clock() as __visible.
 
-Cc: Juergen Gross <jgross@suse.com>
-Cc: Stefano Stabellini <sstabellini@kernel.org>
-Cc: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Cc: <xen-devel@lists.xenproject.org>
-Signed-off-by: Andi Kleen <ak@linux.intel.com>
-Signed-off-by: Martin Liska <mliska@suse.cz>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: <x86@kernel.org>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Martin Liska <mliska@suse.cz>
 Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 ---
- drivers/xen/time.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kernel/cpu/common.c | 2 +-
+ arch/x86/kernel/tsc.c        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/xen/time.c b/drivers/xen/time.c
-index 152dd33bb223..006a04592c8f 100644
---- a/drivers/xen/time.c
-+++ b/drivers/xen/time.c
-@@ -145,7 +145,7 @@ void xen_get_runstate_snapshot(struct vcpu_runstate_info *res)
- }
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 3e508f239098..5417a8fd7a45 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -201,7 +201,7 @@ static const struct cpu_dev default_cpu = {
  
- /* return true when a vcpu could run but has no real cpu to run on */
--bool xen_vcpu_stolen(int vcpu)
-+__visible bool xen_vcpu_stolen(int vcpu)
+ static const struct cpu_dev *this_cpu = &default_cpu;
+ 
+-DEFINE_PER_CPU_PAGE_ALIGNED(struct gdt_page, gdt_page) = { .gdt = {
++__visible DEFINE_PER_CPU_PAGE_ALIGNED(struct gdt_page, gdt_page) = { .gdt = {
+ #ifdef CONFIG_X86_64
+ 	/*
+ 	 * We need valid kernel segments for data and code in long mode too
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index cafacb2e58cc..df1589482662 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -215,7 +215,7 @@ static void __init cyc2ns_init_secondary_cpus(void)
+ /*
+  * Scheduler clock - returns current time in nanosec units.
+  */
+-u64 native_sched_clock(void)
++__visible u64 native_sched_clock(void)
  {
- 	return per_cpu(xen_runstate, vcpu).state == RUNSTATE_runnable;
- }
+ 	if (static_branch_likely(&__use_tsc)) {
+ 		u64 tsc_now = rdtsc();
 -- 
 2.38.1
 
