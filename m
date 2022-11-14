@@ -2,157 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A16627D92
+	by mail.lfdr.de (Postfix) with ESMTP id 5497E627D93
 	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 13:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237110AbiKNMU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 07:20:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
+        id S237136AbiKNMVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 07:21:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237113AbiKNMUv (ORCPT
+        with ESMTP id S237116AbiKNMUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 07:20:51 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8722023173
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 04:20:49 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id 13so27931318ejn.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 04:20:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NXTfftd5xWKKp33nFP7X0CH1DPM11ekgxqWBKgLeVyk=;
-        b=UyNyOvb73DVmmdW4A6hUI7xOJ4F5Us/ZAk8Oqo9EG8VFaLxxLKlo5jNKM83PhMn8ZR
-         BTf2wzXNaRbeDdFleR60losKp5kaoHjGMcSanDaDbd72yS1w9apSMh0TENIHpym8c3gx
-         4QOrTpOY/fLmBKSHZzFi/JkW6THJbTGDRupC8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NXTfftd5xWKKp33nFP7X0CH1DPM11ekgxqWBKgLeVyk=;
-        b=GmEg7q1FXpaN2A8dpNV8HzxRzPXS3FlmiUZDb9t50WC4myXV0WcIo51krBaOMydec+
-         QSE+SxFtB8DjXYMSpsgwLPbLl9whpgi8x/ZZOecObRx8g3gJ2V5/FuTNlsxZ7HfIhCWF
-         fJq1BVs5lozPW3VkodzUjBGAsbp63eFqs678GX/DOnvZP35mq/FM/JmYM6hYqdk3zSG2
-         Xdh8iDdva9MjzzqAdCLWZ6nqLdVgvNHNtnyHtgP6Zrt+yNhJsAeQZCBdU9D0a3SKndC1
-         zPKENDuWAq8dMlKLouNZVtI/mkN7kcyMdMRz0PjfMDDEoiruD2b/kkhAKumIFZWOaJQe
-         9itQ==
-X-Gm-Message-State: ANoB5pl+dY+LnPkzNwPPDo4ZTR2r8MxpytRnQyVOYaQa15WjJJNvl/WD
-        onas9b1OoniXMqz2cEXCrLdMvQ==
-X-Google-Smtp-Source: AA0mqf5Ht/3BL0OuAwlHt8jP8JpfLV/F97qpyxulz4U4uDihYbO+0TBkPaDxY2XKrdJ8Md5nlJk+pg==
-X-Received: by 2002:a17:906:8587:b0:78d:b367:20c1 with SMTP id v7-20020a170906858700b0078db36720c1mr9487437ejx.530.1668428448108;
-        Mon, 14 Nov 2022 04:20:48 -0800 (PST)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:c205:5c4e:7456:c8cc])
-        by smtp.gmail.com with ESMTPSA id v19-20020aa7cd53000000b0045bd14e241csm4718483edw.76.2022.11.14.04.20.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 04:20:47 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Mon, 14 Nov 2022 13:20:34 +0100
-Subject: [PATCH v6 1/1] i2c: Restore initial power state if probe fails
+        Mon, 14 Nov 2022 07:20:52 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A2C23383
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 04:20:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668428450; x=1699964450;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=rvPmNzCoa8n8SixsXezw6M9E+Ll3YuySZ4TJDTq+LLk=;
+  b=iFqkOSzqKWaB3eqIebDkIQi3YhNm55JSM/bW8068GAS04dL0+Jla9SFv
+   wqrYj87vBB0Yfmx80/4BivrOILvmeDGSBQiS6OOI7xnPWPvDQUFLSxuA7
+   HvA/v3XFVmrs3Lja2NlbnSAfXqUp4aiAMhSIxDSC8b9QVj9Z6MkHwT6Fe
+   +iKVDCnrdWjdpX76BWXKeWWmZJyq4IQnsMxckKhYt08yyc5UngHnJEDlI
+   SS2bL+xC8MWdBJAstPWJLPs+lVgKVIeW0+WQgl5HfMyITOskfPHqLa3gy
+   8skceTjX4H/lCVK5wMw2Ep0vPmD5DUs5emt7Uvzjifz5usWOgqqfndknt
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="398245648"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="398245648"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 04:20:50 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="616291804"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="616291804"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
+  by orsmga006.jf.intel.com with SMTP; 14 Nov 2022 04:20:46 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Mon, 14 Nov 2022 14:20:45 +0200
+Date:   Mon, 14 Nov 2022 14:20:45 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Jim Cromie <jim.cromie@gmail.com>
+Cc:     jbaron@akamai.com, gregkh@linuxfoundation.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        daniel.vetter@ffwll.ch, linux@rasmusvillemoes.dk,
+        seanpaul@chromium.org, joe@perches.com
+Subject: Re: [Intel-gfx] [PATCH 1/7] drm: mark drm.debug-on-dyndbg as BROKEN
+ for now
+Message-ID: <Y3IynYl3Ejb6NTAd@intel.com>
+References: <20220912052852.1123868-1-jim.cromie@gmail.com>
+ <20221111221715.563020-1-jim.cromie@gmail.com>
+ <20221111221715.563020-2-jim.cromie@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Message-Id: <20221109-i2c-waive-v6-1-bc059fb7e8fa@chromium.org>
-References: <20221109-i2c-waive-v6-0-bc059fb7e8fa@chromium.org>
-In-Reply-To: <20221109-i2c-waive-v6-0-bc059fb7e8fa@chromium.org>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>
-Cc:     Hidenori Kobayashi <hidenorik@chromium.org>,
-        stable@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        Hidenori Kobayashi <hidenorik@google.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        linux-i2c@vger.kernel.org
-X-Mailer: b4 0.11.0-dev-d93f8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2430; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=gQQQ17pxlEydPjxn9eYK5duBq8Uy+tbFVh7ak1smjBs=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjcjKcATxE9rHnIjhO8bAZEgAp2AddQ2TEduJ2Jkyo
- yDF+Q9mJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY3IynAAKCRDRN9E+zzrEiG4vD/
- 9Txh5QCN7Z+PkLIS7rncSO86jir/kGHzeNS3F1NBsG9Jqnj/cX7dEntCPT9ctXq04nDN+aHanNgNfr
- 4fU3Wsa9VIwChG2DMKlxbSlZZKGxK9XTpnVR/RN2EfocnLdySeuZlxU1PMEENPUZG28zOMpvkmjRl7
- Kv8/KBKR1Fd7BrmozVWKyY4HUlJLxdc+eNfEJ7+AZw2688qUyPgVjwFj97vdNhkemdZVnBujop39c9
- dpzxW4Of3RRsl9/UYxneWlLvd76WDScEzm7/qDn8XaDM9o8ot8286tSael/EuSrxzsIfF85K0qgJkv
- WAcUmtXb2bTwHm65fIAVV5Az76pOmfZwiUvHHZB1V46tfLUPy3fZFgUXfjz/prpyQZV61CxcRYIS33
- REk5XJDtj5F0JoMrCEUCeIIjFsibY8zlxIKANTj34ceiQpxoOJHECOdz2rkTao0aZqLTAs9FTp2DLa
- aNRjMvaLR65xNPrBFYMOI3udYugphY7SvCj2ADnnBTu9492cPZkC7Sm0woUCYERnhvPKp/bM35X4y+
- HF1fxEWzCqAvPGqX0Bp+ZgzwKEOEnD2snoKBl6wd1XqvSQVGxMRezSCxTvTOHOQsFkwIBQcPnp42rR
- LqIlM+7AmnDRGabMFb8Gx9nU+BoBgxx0iTkzJ4wTr665MFHcYyVMQe7TudXw==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221111221715.563020-2-jim.cromie@gmail.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A driver that supports I2C_DRV_ACPI_WAIVE_D0_PROBE is not expected to
-power off a device that it has not powered on previously.
+On Fri, Nov 11, 2022 at 03:17:09PM -0700, Jim Cromie wrote:
+> drm.debug-on-dyndbg has a regression, due to a chicken-egg
+> initialization problem:
+> 
+> 1- modprobe i915
+>    i915 needs drm.ko, which is loaded 1st
+> 
+> 2- "modprobe drm drm.debug=0x1ff" (virtual/implied)
+>    drm.debug is set post-initialization, from boot-args etc
+> 
+> 3- `modprobe i915` finishes
+> 
+> W/O drm.debug-on-dyndbg that just works, because all drm_dbg*
+> callsites use drm_debug_enabled() to check __drm_debug & DEM_UT_<CAT>
+> before printing.
+> 
+> But the whole point of drm.debug-on-dyndbg is to avoid that runtime
+> test, by enabling (at post-modinit) a static-key at each callsite in
+> the just-loaded module.
+> 
+> And since drm.ko is loaded before all dependent modules, none are
+> "just-loaded", and no drm.debug callsites are present yet, except
+> those in drm.ko itself.
+> 
+> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+> ---
+>  drivers/gpu/drm/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+> index 34f5a092c99e..0d1e59e6bb7e 100644
+> --- a/drivers/gpu/drm/Kconfig
+> +++ b/drivers/gpu/drm/Kconfig
+> @@ -54,6 +54,7 @@ config DRM_DEBUG_MM
+>  config DRM_USE_DYNAMIC_DEBUG
+>  	bool "use dynamic debug to implement drm.debug"
+>  	default y
 
-For devices operating in "full_power" mode, the first call to
-`i2c_acpi_waive_d0_probe` will return 0, which means that the device
-will be turned on with `dev_pm_domain_attach`.
+Could you switch to 'default n' as well? i915 CI actually enables
+BROKEN so that we can test some more experimental stuff which is
+hidden behind BROKEN for normal users.
 
-If probe fails the second call to `i2c_acpi_waive_d0_probe` will
-return 1, which means that the device will not be turned off.
-This is, it will be left in a different power state. Lets fix it.
-
-Reviewed-by: Hidenori Kobayashi <hidenorik@chromium.org>
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: stable@vger.kernel.org
-Fixes: b18c1ad685d9 ("i2c: Allow an ACPI driver to manage the device's power state during probe")
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index b4edf10e8fd0..7539b0740351 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -467,6 +467,7 @@ static int i2c_device_probe(struct device *dev)
- {
- 	struct i2c_client	*client = i2c_verify_client(dev);
- 	struct i2c_driver	*driver;
-+	bool do_power_on;
- 	int status;
- 
- 	if (!client)
-@@ -545,8 +546,8 @@ static int i2c_device_probe(struct device *dev)
- 	if (status < 0)
- 		goto err_clear_wakeup_irq;
- 
--	status = dev_pm_domain_attach(&client->dev,
--				      !i2c_acpi_waive_d0_probe(dev));
-+	do_power_on = !i2c_acpi_waive_d0_probe(dev);
-+	status = dev_pm_domain_attach(&client->dev, do_power_on);
- 	if (status)
- 		goto err_clear_wakeup_irq;
- 
-@@ -585,7 +586,7 @@ static int i2c_device_probe(struct device *dev)
- err_release_driver_resources:
- 	devres_release_group(&client->dev, client->devres_group_id);
- err_detach_pm_domain:
--	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
-+	dev_pm_domain_detach(&client->dev, do_power_on);
- err_clear_wakeup_irq:
- 	dev_pm_clear_wake_irq(&client->dev);
- 	device_init_wakeup(&client->dev, false);
-@@ -610,7 +611,7 @@ static void i2c_device_remove(struct device *dev)
- 
- 	devres_release_group(&client->dev, client->devres_group_id);
- 
--	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
-+	dev_pm_domain_detach(&client->dev, true);
- 
- 	dev_pm_clear_wake_irq(&client->dev);
- 	device_init_wakeup(&client->dev, false);
+> +	depends on BROKEN	# chicken-egg initial enable problem
+>  	depends on DRM
+>  	depends on DYNAMIC_DEBUG || DYNAMIC_DEBUG_CORE
+>  	depends on JUMP_LABEL
+> -- 
+> 2.38.1
 
 -- 
-b4 0.11.0-dev-d93f8
+Ville Syrjälä
+Intel
