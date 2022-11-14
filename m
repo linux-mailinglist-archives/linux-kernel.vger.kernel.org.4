@@ -2,203 +2,472 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 460FF62861D
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:54:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D47C9628621
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237346AbiKNQyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:54:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
+        id S237384AbiKNQzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:55:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236542AbiKNQym (ORCPT
+        with ESMTP id S238010AbiKNQzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:54:42 -0500
-Received: from na01-obe.outbound.protection.outlook.com (mail-westcentralusazon11020016.outbound.protection.outlook.com [40.93.198.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C9ADF0B;
-        Mon, 14 Nov 2022 08:54:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OXgq3AcDwa5BPnQsYl+hZnlYFWVIqX9xNCvgriT4+FhFKgXlSsX60BrIe2W95Ywaf7fm8va15NANjWrLCwOXxN3RsjIJkUJ33ivYa2q/zjbpZXq91GmvQGo1rGRecISucIoLb3hbeZWr73aSz5JuF0t+FnoG00u7kNoTugHWhlzaoEz/hlpqhy/UIbR2IXVjznEI5igJrNd9/gu5a5Mb6UOVEnLPJJIKs72IEqMYXybZSdOYYBkEKKw+wR20sccYbC2hX2AML/q6K00JlMnKAHf0E2WKIilpiXMdEUhl8qXXXSbuI5xzqxw7D14xLDOQQ2SnxYTRwDrLP5KOJnqvkA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KWEO5zSbZSz2nM/hcKKkCeS6Xi/KOcdwO4abtB6AG4Q=;
- b=cDfi9qOslsq1kYcDk0RQhTpTWAaKv/jJltmM/AhsZqdrHIv8Hx4RhmHzrpVeCTlEvbmaLTBk+sAZqdc4MZ/pF6jqqRWCA8emcVabI2iTQm3yVfZPAlosIRfCxLBDb3sty/kw1d/rzWfmiZaL1yrYWDAfWaRB9Kv/Q3b7JrgWLq8cBZnRHS/3+4/JwblrUgYdapQSFHwhJ1gScI9vM7QIikntLsejqiiBT0criD0LVK5Xcyjj2vRjo9dg0LvQ/bIOBVuh++fCwNQcX1VKFaRfRDUubpwVL3zP9ogMdGbVFzirtsSRWpwsTz/KtaH7lIzkWYaM3z9TZ5uJZJr2eaBBOg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KWEO5zSbZSz2nM/hcKKkCeS6Xi/KOcdwO4abtB6AG4Q=;
- b=HETf6T8R5bHYNtopZL/ReRhpTzMFZfKy3SRfWGmb1Dm4XZcwJ977wBgfeetm9aVt2jhgDCzfxgOHs5COjY28nn4zHYq1/yVvadsqcAfdjkCTKTfQ6lBXUZIMrMbyQfsOt616Bm8pqp0aplJ9bsWbejYuQ5VlXwYiaTG8zFNvurY=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by MN0PR21MB3557.namprd21.prod.outlook.com (2603:10b6:208:3d2::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.5; Mon, 14 Nov
- 2022 16:54:38 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::6468:9200:b217:b5b7]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::6468:9200:b217:b5b7%3]) with mapi id 15.20.5834.006; Mon, 14 Nov 2022
- 16:54:38 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "jane.chu@oracle.com" <jane.chu@oracle.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: RE: [PATCH v2 02/12] x86/ioapic: Gate decrypted mapping on
- cc_platform_has() attribute
-Thread-Topic: [PATCH v2 02/12] x86/ioapic: Gate decrypted mapping on
- cc_platform_has() attribute
-Thread-Index: AQHY9ZXxgPWJEvDlW0KqJPPwNb8jV646blKAgABF+cCAA+tkAIAACG5Q
-Date:   Mon, 14 Nov 2022 16:54:38 +0000
-Message-ID: <BYAPR21MB1688D90D14EBD1363F340A57D7059@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <1668147701-4583-1-git-send-email-mikelley@microsoft.com>
- <1668147701-4583-3-git-send-email-mikelley@microsoft.com>
- <50a8517d-328e-2178-e98c-4b160456e092@intel.com>
- <BYAPR21MB168860D4D19F088CB41E7548D7039@BYAPR21MB1688.namprd21.prod.outlook.com>
- <ac5f0e24-cac8-828c-3b4b-995f77f81ce3@intel.com>
-In-Reply-To: <ac5f0e24-cac8-828c-3b4b-995f77f81ce3@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=659f5979-58b5-4c2e-865f-096e496cd88e;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-14T16:53:38Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|MN0PR21MB3557:EE_
-x-ms-office365-filtering-correlation-id: 92e0725b-4e3a-4687-fe07-08dac660eaaa
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: XA+sxGMWIvTSmxTIP3vPBpGxNzh+6WqK3D0dWsHMIP/LAe8TWlvKXyZetgvpfosKHo4DQ2AU1wyF7lxFKp354engTU5CymiqbJ/eAfMc74hPyqKcMExSj8Z9HNTZ4inODOWoQACS13tl4v+nBVooqUWEbTogbV3FxMMuevThAbEAhS5g+EfSivhpdEzOoUJlv5zbAOLEDup6T2Xv7rQi9CpiqJT5e1S/SiU5RpJkS2XG8MP0g16yxRzJ+8Ha+h+NgJ/hDAcrKpJyVB5BiFFt3lAX6vs8+UmhmbiLtJHcX+sg7fK3fy6zizgkhYoo6gU5k5uYnDix14jbKCJiai2zN41r084YjeXnch/v71E8wMgSj+BIBuTOcH5sV/oGup7/pq5HVCMa4aRv5PfUxRw+VPkAAcKq7ysoRFCixbQvHOzKJ66ezrt/ixT0jPQSBn2h8FgkZCfyaxcyg9tWLBYDVIqYf1Q81hrfxqln0aF0Zfyse1N+Sy2HwJFFe+xWdXg6Jfyx74nfXxfYTj1K0truczz9upxDn8hQcJzAg5+3aQifND4vBYE4ANu7eaZtjbhhmnuoVkXR+IIYf1mxFN/iaxn0LsngVq4P4LADeeZJZlOHdnzxn/pY0PqLUM1dH3crY2dXMtH/z9PEKrsp0+QUlA3bMdswYc30tETiVCEz3EG5/IKAOJu9S3qit3tdIb19bhSgOYcRv3HqOciuQKzjOwglY+LRp1YaLsLDyV44fJYncU8TU/NOWHIFJh6IF+ooRQAQmNjN/fsYciMDvNNrUaCyL6cfv9rbXm73N5mEuo54w/rRb96s+j2qSiUCxZaR3IkICR5chdxdYm6MFyZ8OA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(396003)(346002)(366004)(451199015)(5660300002)(9686003)(86362001)(6506007)(55016003)(7696005)(7416002)(7406005)(110136005)(71200400001)(2906002)(64756008)(316002)(66556008)(66476007)(66446008)(76116006)(66946007)(122000001)(8676002)(83380400001)(186003)(33656002)(52536014)(41300700001)(10290500003)(26005)(8936002)(53546011)(8990500004)(82960400001)(82950400001)(38100700002)(478600001)(38070700005)(921005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SFkrTnZ4U2JDcmtjUXJOdHoxbUZadzF2ZFhwS3lLVHluWFpvTTdqVjdCZjI0?=
- =?utf-8?B?eXRuNnQ1MGppdDcvSDEvUjJaSWJpT0tvSDVUeGxGSlBMRFd1T0NzbEpySXJn?=
- =?utf-8?B?a2lIQm4wQVVkR3RldHhWbHJuUm1LNWtLY29XTWdqeGx1VFpYc2ZFM1A1N3RV?=
- =?utf-8?B?aW9obkpzU0w5QTMvMGRONS9KLys3ZS9tVU1hK2VuT2xMWXRXZUU4emdWQzY4?=
- =?utf-8?B?WDBUOHpJYmQ0bjduU2VpaGxrUklaV2ExRWJWOTVZZDNTcHBEbTZVY1pFaFVR?=
- =?utf-8?B?bzd2bG4zNjRCalFyOVVId2NzcElZNlBaYjkzcHBpdS9vTy83eFl3K0hQLytI?=
- =?utf-8?B?Y1E4Skd1TUE4RXpLNTZmdVFNL0YxTlJoMWVhOXNBNitjUFFqUlV1TlhhcEp4?=
- =?utf-8?B?bzZHYkhGNmFaQmxNYVZUaEtQV2dGN21OY2hXZjBucko3R0RpSDBvYkhqRG1z?=
- =?utf-8?B?b1MyQzRPekY1Q1IvZDVTc1FTdnBkeVNWMzZxemg5Q0pkeEYxRjQweUJnOXpz?=
- =?utf-8?B?L285d3JhMWNHaEtrVFNTdHQ3SHdRSURwTktWNU50bDZQNGtOYzlNditRVi94?=
- =?utf-8?B?ZStIY3hwdVFKOThIVlpibExyYXFIWHJYWlFaaTU0M3JWTjRvbWlib1EycjhV?=
- =?utf-8?B?cFJaV1pGRjVydFkyQzNDQ3ZUWVpwUzNsNmU0amRHMVRmdVRLZWY0Si9Ucm5P?=
- =?utf-8?B?S2xwNHFwaXl2Y2VSY3FVTmY5bklZNUJUcEpMdmtUeGtISDQyK3lpeC9neGVQ?=
- =?utf-8?B?OXR1SEVwS05pcFp1VmszekJWQ2dMdEloZUtCNDU5b3psb2JXZE1BbFkwbkJ4?=
- =?utf-8?B?TEE3ZVFMMzFFWTR4K3c4bmRzcStuNlQ1dVBTNzl5cUFJN1UwaTNVbTFKODNE?=
- =?utf-8?B?NUhudXp1ck1ONEJoQVY1SlpTVTN2TUZITXd0VEZjV21zbVVtcVE5ZW94WWts?=
- =?utf-8?B?UWRVbFQ5MXdvSXlrQUNERjFWZi9wR0xhNlpyb2hFZy9NR2lKUFBVNWJHZE8r?=
- =?utf-8?B?K2NhbmZuRmNXVEFqN21IWGFpU2Eray9Tb2hxWEE2TUVKMlVlOTNIbzg1Lzlq?=
- =?utf-8?B?UUlkWFJUb2RwWFJkYnRBU3RydHEyV3IwZHFYczQ5S1pmdzZTdEVLbzNmek1r?=
- =?utf-8?B?dlNWSXREeEJEV0hsc1Z5dkNGeFVqdGhYamtEeWpTNXZ2d0k2bEZ4bEoxV21a?=
- =?utf-8?B?UStIMUJqOVV1aldjcldtaW9TZFUyRVhNUzJaV2RtTmdUYVQ4YThKam1BVjUy?=
- =?utf-8?B?L2ltM0M2MlN2aFNlaTA2SjhNZm5kTGtzaU9uMFprdlB3eW5Sd25lTncrZU8z?=
- =?utf-8?B?MitJbi82aDl0YVRHR0REc2dmK3ZOaE5qQzRpUlN6aW5NbW5uWS9VZzJjbGI0?=
- =?utf-8?B?TnVnd0drODQrbVB2QnZrdmR3cUZkN1FHdklJZXNqY3UyVzZGSHZFR2d0SEJ3?=
- =?utf-8?B?amRmTVlhTnBoc2o0Y0F2NUdKMit0NWk0RXRvUGt1OTBaOW5GcGdrWWZlT0JG?=
- =?utf-8?B?bUwyL0ZKdi8vUG9ZSGh2QnNQR3VraUFBS0t5eWdNQm5KV2t4ZUFVQVRuUTk0?=
- =?utf-8?B?UzBZR1VrWTlRek5XQ0NVVzdhVktnRU1HOXJraC9KbG9UZHZiWUk4dUd3emxv?=
- =?utf-8?B?Z1VMTWVDakxlQ0ZOMmhlTkNRRFU4clJ6K2hxK0hGc25yRk1Md3RWQzNaYmpF?=
- =?utf-8?B?TGlIWndmMEJQTzFMKzRNQlUxOXM0MHBLdG5rWlZqQThxOVc3MWNyczhoZUc4?=
- =?utf-8?B?ZFUwako4RjRaNU5INXU1bjVEQ09RbGNtZ0V4Q0t1aEcycThWUjdaSDNydk16?=
- =?utf-8?B?MW1FTHJYVlVFZVh1cVpuZ2U0OE5yVXh3TlBPZzN4RWxtMk5HVlIzZ05mYiti?=
- =?utf-8?B?ZjloKzR5NXZlVzVGVC9yZUtlU2lIeXNBS1A5eHFLVnRXaUFZL3V0YnZVV2Qv?=
- =?utf-8?B?UUd5YVlWRk5vYmNCcW1iSmVxWU5OQ1luUHE4UDlGZUVON0t3QUhyTWc3V2Ri?=
- =?utf-8?B?eURKRVlITXUyenJrVjhkbDhuMzZuODY3N3hCSkdHZGN6M2RsWUtNTjEreXNW?=
- =?utf-8?B?RStrYzhBNmh6TGt4T0loaWVEMWx4SlhFRk8xci8wU2h1QmVyQ3I4WHdzeHhn?=
- =?utf-8?B?Vk5jVGFRR1QzaEsrOWxUdWo0WFFOdUp1eDE4NEdpU2dGVTVXVFR4Z1duMllp?=
- =?utf-8?B?ckE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 14 Nov 2022 11:55:11 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80E652F66C
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:55:01 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4DD4923A;
+        Mon, 14 Nov 2022 08:55:07 -0800 (PST)
+Received: from [10.57.84.113] (unknown [10.57.84.113])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C696E3F663;
+        Mon, 14 Nov 2022 08:54:55 -0800 (PST)
+Message-ID: <41c4d78c-cb47-d06f-f6af-e827dd56b857@arm.com>
+Date:   Mon, 14 Nov 2022 16:54:57 +0000
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92e0725b-4e3a-4687-fe07-08dac660eaaa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2022 16:54:38.2425
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: r8xxeAiYAgKtsk9al2ognlCF/FJ5Eem79FZ1irZj+glcMdRisV/gdx5qlyfx/o5D8edTCN+gXt6lvYWvUQwTsXVTfdFx3+Y+37AIxWQVwN0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR21MB3557
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v8 7/7] drm/panfrost: Switch to generic memory shrinker
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Herring <robh@kernel.org>, Sean Paul <sean@poorly.run>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>, kernel@collabora.com,
+        virtualization@lists.linux-foundation.org
+References: <20221105232719.302619-1-dmitry.osipenko@collabora.com>
+ <20221105232719.302619-8-dmitry.osipenko@collabora.com>
+Content-Language: en-GB
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <20221105232719.302619-8-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogRGF2ZSBIYW5zZW4gPGRhdmUuaGFuc2VuQGludGVsLmNvbT4gU2VudDogTW9uZGF5LCBO
-b3ZlbWJlciAxNCwgMjAyMiA4OjIzIEFNDQo+IA0KPiBPbiAxMS8xMS8yMiAyMDo0OCwgTWljaGFl
-bCBLZWxsZXkgKExJTlVYKSB3cm90ZToNCj4gPiBGcm9tOiBEYXZlIEhhbnNlbiA8ZGF2ZS5oYW5z
-ZW5AaW50ZWwuY29tPiBTZW50OiBGcmlkYXksIE5vdmVtYmVyIDExLCAyMDIyIDQ6MjINCj4gUE0N
-Cj4gPj4gT24gMTEvMTAvMjIgMjI6MjEsIE1pY2hhZWwgS2VsbGV5IHdyb3RlOg0KPiA+Pj4gIAkg
-KiBFbnN1cmUgZml4bWFwcyBmb3IgSU9BUElDIE1NSU8gcmVzcGVjdCBtZW1vcnkgZW5jcnlwdGlv
-biBwZ3Byb3QNCj4gPj4+ICAJICogYml0cywganVzdCBsaWtlIG5vcm1hbCBpb3JlbWFwKCk6DQo+
-ID4+PiAgCSAqLw0KPiA+Pj4gLQlmbGFncyA9IHBncHJvdF9kZWNyeXB0ZWQoZmxhZ3MpOw0KPiA+
-Pj4gKwlpZiAoIWNjX3BsYXRmb3JtX2hhcyhDQ19BVFRSX0hBU19QQVJBVklTT1IpKQ0KPiA+Pj4g
-KwkJZmxhZ3MgPSBwZ3Byb3RfZGVjcnlwdGVkKGZsYWdzKTsNCj4gPj4gVGhpcyBiZWdzIHRoZSBx
-dWVzdGlvbiB3aGV0aGVyICphbGwqIHBhcmF2aXNvcnMgd2lsbCB3YW50IHRvIGF2b2lkIGENCj4g
-Pj4gZGVjcnlwdGVkIGlvYXBpYyBtYXBwaW5nLiAgSXMgdGhpcyBfZnVuZGFtZW50YWxfIHRvIHBh
-cmF2aXNvcnMsIG9yIGl0IGlzDQo+ID4+IGFuIGltcGxlbWVudGF0aW9uIGRldGFpbCBvZiB0aGlz
-IF9pbmRpdmlkdWFsXyBwYXJhdmlzb3I/DQo+ID4gSGFyZCB0byBzYXkuICBUaGUgcGFyYXZpc29y
-IHRoYXQgSHlwZXItViBwcm92aWRlcyBmb3IgdXNlIHdpdGggdGhlIHZUT00NCj4gPiBvcHRpb24g
-aW4gYSBTRVYgU05QIFZNIGlzIHRoZSBvbmx5IHBhcmF2aXNvciBJJ3ZlIHNlZW4uICBBdCBsZWFz
-dCBhcyBkZWZpbmVkDQo+ID4gYnkgSHlwZXItViBhbmQgQU1EIFNOUCBWaXJ0dWFsIE1hY2hpbmUg
-UHJpdmlsZWdlIExldmVscyAoVk1QTHMpLCB0aGUNCj4gPiBwYXJhdmlzb3IgcmVzaWRlcyB3aXRo
-aW4gdGhlIFZNIHRydXN0IGJvdW5kYXJ5LiAgQW55dGhpbmcgdGhhdCBhIHBhcmF2aXNvcg0KPiA+
-IGVtdWxhdGVzIHdvdWxkIGJlIGluIHRoZSAicHJpdmF0ZSIgKGkuZS4sIGVuY3J5cHRlZCkgbWVt
-b3J5IHNvIGl0IGNhbiBiZQ0KPiA+IGFjY2Vzc2VkIGJ5IGJvdGggdGhlIGd1ZXN0IE9TIGFuZCB0
-aGUgcGFyYXZpc29yLiAgQnV0IG5vdGhpbmcgZnVuZGFtZW50YWwNCj4gPiBzYXlzIHRoYXQgSU9B
-UElDIGVtdWxhdGlvbiAqbXVzdCogYmUgZG9uZSBpbiB0aGUgcGFyYXZpc29yLg0KPiANCj4gUGxl
-YXNlIGp1c3QgbWFrZSB0aGlzIGNoZWNrIG1vcmUgc3BlY2lmaWMuICBFaXRoZXIgbWFrZSB0aGlz
-IGEgc3BlY2lmaWMNCj4gSHlwZXItVitTVk0gY2hlY2ssIG9yIHJlbmFtZSBpdCBIQVNfRU1VTEFU
-RURfSU9BUElDLCBsaWtlIHlvdSB3ZXJlDQo+IHRoaW5raW5nLiAgSWYgcGFyYXZpc29ycyBjYXRj
-aCBvbiBhbmQgd2UgZW5kIHVwIHdpdGggdGVuIG1vcmUgb2YgdGhlc2UNCj4gdGhpbmdzIGFjcm9z
-cyBmaXZlIGRpZmZlcmVudCBwYXJhdmlzb3JzIGFuZCBzZWUgYSBwYXR0ZXJuLCAqdGhlbiogYQ0K
-PiBwYXJhdmlzb3Itc3BlY2lmaWMgb25lIG1ha2VzIHNlbnNlLg0KDQpJJ20gZ29vZCB3aXRoIHRo
-YXQuICBJJ2xsIHVzZSBIQVNfRU1VTEFURURfSU9BUElDIGluIHYzLg0KDQpNaWNoYWVsDQo=
+On 05/11/2022 23:27, Dmitry Osipenko wrote:
+> Replace Panfrost's custom memory shrinker with a common drm-shmem
+> memory shrinker.
+> 
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+
+Sadly this triggers GPU faults under memory pressure - it looks
+suspiciously like mappings are being freed while the jobs are still running.
+
+I'm not sure I understand how the generic shrinker replicates the
+"gpu_usecount" atomic that Panfrost currently has, and I'm wondering if
+that's the cause?
+
+Also just reverting this commit (so just patches 1-6) I can't actually
+get Panfrost to purge any memory. So I don't think the changes (most
+likely in patch 4) are quite right either.
+
+At the moment I don't have the time to investigate in detail. But if
+you've any ideas for something specific I should look at I can run more
+testing.
+
+Steve
+
+> ---
+>  drivers/gpu/drm/panfrost/Makefile             |   1 -
+>  drivers/gpu/drm/panfrost/panfrost_device.h    |   4 -
+>  drivers/gpu/drm/panfrost/panfrost_drv.c       |  19 +--
+>  drivers/gpu/drm/panfrost/panfrost_gem.c       |  33 +++--
+>  drivers/gpu/drm/panfrost/panfrost_gem.h       |   9 --
+>  .../gpu/drm/panfrost/panfrost_gem_shrinker.c  | 129 ------------------
+>  drivers/gpu/drm/panfrost/panfrost_job.c       |  18 ++-
+>  7 files changed, 42 insertions(+), 171 deletions(-)
+>  delete mode 100644 drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+> 
+> diff --git a/drivers/gpu/drm/panfrost/Makefile b/drivers/gpu/drm/panfrost/Makefile
+> index 7da2b3f02ed9..11622e22cf15 100644
+> --- a/drivers/gpu/drm/panfrost/Makefile
+> +++ b/drivers/gpu/drm/panfrost/Makefile
+> @@ -5,7 +5,6 @@ panfrost-y := \
+>  	panfrost_device.o \
+>  	panfrost_devfreq.o \
+>  	panfrost_gem.o \
+> -	panfrost_gem_shrinker.o \
+>  	panfrost_gpu.o \
+>  	panfrost_job.o \
+>  	panfrost_mmu.o \
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_device.h b/drivers/gpu/drm/panfrost/panfrost_device.h
+> index 8b25278f34c8..fe04b21fc044 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_device.h
+> +++ b/drivers/gpu/drm/panfrost/panfrost_device.h
+> @@ -115,10 +115,6 @@ struct panfrost_device {
+>  		atomic_t pending;
+>  	} reset;
+>  
+> -	struct mutex shrinker_lock;
+> -	struct list_head shrinker_list;
+> -	struct shrinker shrinker;
+> -
+>  	struct panfrost_devfreq pfdevfreq;
+>  };
+>  
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_drv.c b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> index 94b8e6de34b8..fe78d5c75abf 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_drv.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_drv.c
+> @@ -160,7 +160,6 @@ panfrost_lookup_bos(struct drm_device *dev,
+>  			break;
+>  		}
+>  
+> -		atomic_inc(&bo->gpu_usecount);
+>  		job->mappings[i] = mapping;
+>  	}
+>  
+> @@ -392,7 +391,6 @@ static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
+>  {
+>  	struct panfrost_file_priv *priv = file_priv->driver_priv;
+>  	struct drm_panfrost_madvise *args = data;
+> -	struct panfrost_device *pfdev = dev->dev_private;
+>  	struct drm_gem_object *gem_obj;
+>  	struct panfrost_gem_object *bo;
+>  	int ret = 0;
+> @@ -409,7 +407,6 @@ static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
+>  	if (ret)
+>  		goto out_put_object;
+>  
+> -	mutex_lock(&pfdev->shrinker_lock);
+>  	mutex_lock(&bo->mappings.lock);
+>  	if (args->madv == PANFROST_MADV_DONTNEED) {
+>  		struct panfrost_gem_mapping *first;
+> @@ -435,17 +432,8 @@ static int panfrost_ioctl_madvise(struct drm_device *dev, void *data,
+>  
+>  	args->retained = drm_gem_shmem_madvise(&bo->base, args->madv);
+>  
+> -	if (args->retained) {
+> -		if (args->madv == PANFROST_MADV_DONTNEED)
+> -			list_move_tail(&bo->base.madv_list,
+> -				       &pfdev->shrinker_list);
+> -		else if (args->madv == PANFROST_MADV_WILLNEED)
+> -			list_del_init(&bo->base.madv_list);
+> -	}
+> -
+>  out_unlock_mappings:
+>  	mutex_unlock(&bo->mappings.lock);
+> -	mutex_unlock(&pfdev->shrinker_lock);
+>  	dma_resv_unlock(bo->base.base.resv);
+>  out_put_object:
+>  	drm_gem_object_put(gem_obj);
+> @@ -577,9 +565,6 @@ static int panfrost_probe(struct platform_device *pdev)
+>  	ddev->dev_private = pfdev;
+>  	pfdev->ddev = ddev;
+>  
+> -	mutex_init(&pfdev->shrinker_lock);
+> -	INIT_LIST_HEAD(&pfdev->shrinker_list);
+> -
+>  	err = panfrost_device_init(pfdev);
+>  	if (err) {
+>  		if (err != -EPROBE_DEFER)
+> @@ -601,7 +586,7 @@ static int panfrost_probe(struct platform_device *pdev)
+>  	if (err < 0)
+>  		goto err_out1;
+>  
+> -	panfrost_gem_shrinker_init(ddev);
+> +	drm_gem_shmem_shrinker_register(ddev, "panfrost-shrinker");
+>  
+>  	return 0;
+>  
+> @@ -619,8 +604,8 @@ static int panfrost_remove(struct platform_device *pdev)
+>  	struct panfrost_device *pfdev = platform_get_drvdata(pdev);
+>  	struct drm_device *ddev = pfdev->ddev;
+>  
+> +	drm_gem_shmem_shrinker_unregister(ddev);
+>  	drm_dev_unregister(ddev);
+> -	panfrost_gem_shrinker_cleanup(ddev);
+>  
+>  	pm_runtime_get_sync(pfdev->dev);
+>  	pm_runtime_disable(pfdev->dev);
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.c b/drivers/gpu/drm/panfrost/panfrost_gem.c
+> index 293e799e2fe8..f1436405e3a0 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_gem.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_gem.c
+> @@ -19,16 +19,6 @@ static void panfrost_gem_free_object(struct drm_gem_object *obj)
+>  	struct panfrost_gem_object *bo = to_panfrost_bo(obj);
+>  	struct panfrost_device *pfdev = obj->dev->dev_private;
+>  
+> -	/*
+> -	 * Make sure the BO is no longer inserted in the shrinker list before
+> -	 * taking care of the destruction itself. If we don't do that we have a
+> -	 * race condition between this function and what's done in
+> -	 * panfrost_gem_shrinker_scan().
+> -	 */
+> -	mutex_lock(&pfdev->shrinker_lock);
+> -	list_del_init(&bo->base.madv_list);
+> -	mutex_unlock(&pfdev->shrinker_lock);
+> -
+>  	/*
+>  	 * If we still have mappings attached to the BO, there's a problem in
+>  	 * our refcounting.
+> @@ -209,6 +199,25 @@ static const struct drm_gem_object_funcs panfrost_gem_funcs = {
+>  	.vm_ops = &drm_gem_shmem_vm_ops,
+>  };
+>  
+> +static int panfrost_shmem_evict(struct drm_gem_shmem_object *shmem)
+> +{
+> +	struct panfrost_gem_object *bo = to_panfrost_bo(&shmem->base);
+> +
+> +	if (!drm_gem_shmem_is_purgeable(shmem))
+> +		return -EOPNOTSUPP;
+> +
+> +	if (!mutex_trylock(&bo->mappings.lock))
+> +		return -EBUSY;
+> +
+> +	panfrost_gem_teardown_mappings_locked(bo);
+> +
+> +	drm_gem_shmem_purge(shmem);
+> +
+> +	mutex_unlock(&bo->mappings.lock);
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * panfrost_gem_create_object - Implementation of driver->gem_create_object.
+>   * @dev: DRM device
+> @@ -230,6 +239,7 @@ struct drm_gem_object *panfrost_gem_create_object(struct drm_device *dev, size_t
+>  	mutex_init(&obj->mappings.lock);
+>  	obj->base.base.funcs = &panfrost_gem_funcs;
+>  	obj->base.map_wc = !pfdev->coherent;
+> +	obj->base.evict = panfrost_shmem_evict;
+>  
+>  	return &obj->base.base;
+>  }
+> @@ -266,6 +276,9 @@ panfrost_gem_create_with_handle(struct drm_file *file_priv,
+>  	if (ret)
+>  		return ERR_PTR(ret);
+>  
+> +	if (!bo->is_heap)
+> +		drm_gem_shmem_set_purgeable(shmem);
+> +
+>  	return bo;
+>  }
+>  
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem.h b/drivers/gpu/drm/panfrost/panfrost_gem.h
+> index 8088d5fd8480..09da064f1c07 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_gem.h
+> +++ b/drivers/gpu/drm/panfrost/panfrost_gem.h
+> @@ -30,12 +30,6 @@ struct panfrost_gem_object {
+>  		struct mutex lock;
+>  	} mappings;
+>  
+> -	/*
+> -	 * Count the number of jobs referencing this BO so we don't let the
+> -	 * shrinker reclaim this object prematurely.
+> -	 */
+> -	atomic_t gpu_usecount;
+> -
+>  	bool noexec		:1;
+>  	bool is_heap		:1;
+>  };
+> @@ -84,7 +78,4 @@ panfrost_gem_mapping_get(struct panfrost_gem_object *bo,
+>  void panfrost_gem_mapping_put(struct panfrost_gem_mapping *mapping);
+>  void panfrost_gem_teardown_mappings_locked(struct panfrost_gem_object *bo);
+>  
+> -void panfrost_gem_shrinker_init(struct drm_device *dev);
+> -void panfrost_gem_shrinker_cleanup(struct drm_device *dev);
+> -
+>  #endif /* __PANFROST_GEM_H__ */
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c b/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+> deleted file mode 100644
+> index 865a989d67c8..000000000000
+> --- a/drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+> +++ /dev/null
+> @@ -1,129 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -/* Copyright (C) 2019 Arm Ltd.
+> - *
+> - * Based on msm_gem_freedreno.c:
+> - * Copyright (C) 2016 Red Hat
+> - * Author: Rob Clark <robdclark@gmail.com>
+> - */
+> -
+> -#include <linux/list.h>
+> -
+> -#include <drm/drm_device.h>
+> -#include <drm/drm_gem_shmem_helper.h>
+> -
+> -#include "panfrost_device.h"
+> -#include "panfrost_gem.h"
+> -#include "panfrost_mmu.h"
+> -
+> -static bool panfrost_gem_shmem_is_purgeable(struct drm_gem_shmem_object *shmem)
+> -{
+> -	return (shmem->madv > 0) &&
+> -		!shmem->pages_pin_count && shmem->sgt &&
+> -		!shmem->base.dma_buf && !shmem->base.import_attach;
+> -}
+> -
+> -static unsigned long
+> -panfrost_gem_shrinker_count(struct shrinker *shrinker, struct shrink_control *sc)
+> -{
+> -	struct panfrost_device *pfdev =
+> -		container_of(shrinker, struct panfrost_device, shrinker);
+> -	struct drm_gem_shmem_object *shmem;
+> -	unsigned long count = 0;
+> -
+> -	if (!mutex_trylock(&pfdev->shrinker_lock))
+> -		return 0;
+> -
+> -	list_for_each_entry(shmem, &pfdev->shrinker_list, madv_list) {
+> -		if (panfrost_gem_shmem_is_purgeable(shmem))
+> -			count += shmem->base.size >> PAGE_SHIFT;
+> -	}
+> -
+> -	mutex_unlock(&pfdev->shrinker_lock);
+> -
+> -	return count;
+> -}
+> -
+> -static bool panfrost_gem_purge(struct drm_gem_object *obj)
+> -{
+> -	struct drm_gem_shmem_object *shmem = to_drm_gem_shmem_obj(obj);
+> -	struct panfrost_gem_object *bo = to_panfrost_bo(obj);
+> -	bool ret = false;
+> -
+> -	if (atomic_read(&bo->gpu_usecount))
+> -		return false;
+> -
+> -	if (!mutex_trylock(&bo->mappings.lock))
+> -		return false;
+> -
+> -	if (!dma_resv_trylock(shmem->base.resv))
+> -		goto unlock_mappings;
+> -
+> -	panfrost_gem_teardown_mappings_locked(bo);
+> -	drm_gem_shmem_purge(&bo->base);
+> -	ret = true;
+> -
+> -	dma_resv_unlock(shmem->base.resv);
+> -
+> -unlock_mappings:
+> -	mutex_unlock(&bo->mappings.lock);
+> -	return ret;
+> -}
+> -
+> -static unsigned long
+> -panfrost_gem_shrinker_scan(struct shrinker *shrinker, struct shrink_control *sc)
+> -{
+> -	struct panfrost_device *pfdev =
+> -		container_of(shrinker, struct panfrost_device, shrinker);
+> -	struct drm_gem_shmem_object *shmem, *tmp;
+> -	unsigned long freed = 0;
+> -
+> -	if (!mutex_trylock(&pfdev->shrinker_lock))
+> -		return SHRINK_STOP;
+> -
+> -	list_for_each_entry_safe(shmem, tmp, &pfdev->shrinker_list, madv_list) {
+> -		if (freed >= sc->nr_to_scan)
+> -			break;
+> -		if (drm_gem_shmem_is_purgeable(shmem) &&
+> -		    panfrost_gem_purge(&shmem->base)) {
+> -			freed += shmem->base.size >> PAGE_SHIFT;
+> -			list_del_init(&shmem->madv_list);
+> -		}
+> -	}
+> -
+> -	mutex_unlock(&pfdev->shrinker_lock);
+> -
+> -	if (freed > 0)
+> -		pr_info_ratelimited("Purging %lu bytes\n", freed << PAGE_SHIFT);
+> -
+> -	return freed;
+> -}
+> -
+> -/**
+> - * panfrost_gem_shrinker_init - Initialize panfrost shrinker
+> - * @dev: DRM device
+> - *
+> - * This function registers and sets up the panfrost shrinker.
+> - */
+> -void panfrost_gem_shrinker_init(struct drm_device *dev)
+> -{
+> -	struct panfrost_device *pfdev = dev->dev_private;
+> -	pfdev->shrinker.count_objects = panfrost_gem_shrinker_count;
+> -	pfdev->shrinker.scan_objects = panfrost_gem_shrinker_scan;
+> -	pfdev->shrinker.seeks = DEFAULT_SEEKS;
+> -	WARN_ON(register_shrinker(&pfdev->shrinker, "drm-panfrost"));
+> -}
+> -
+> -/**
+> - * panfrost_gem_shrinker_cleanup - Clean up panfrost shrinker
+> - * @dev: DRM device
+> - *
+> - * This function unregisters the panfrost shrinker.
+> - */
+> -void panfrost_gem_shrinker_cleanup(struct drm_device *dev)
+> -{
+> -	struct panfrost_device *pfdev = dev->dev_private;
+> -
+> -	if (pfdev->shrinker.nr_deferred) {
+> -		unregister_shrinker(&pfdev->shrinker);
+> -	}
+> -}
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_job.c b/drivers/gpu/drm/panfrost/panfrost_job.c
+> index dbc597ab46fb..98d9751d2b2c 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_job.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_job.c
+> @@ -272,6 +272,19 @@ static void panfrost_attach_object_fences(struct drm_gem_object **bos,
+>  		dma_resv_add_fence(bos[i]->resv, fence, DMA_RESV_USAGE_WRITE);
+>  }
+>  
+> +static int panfrost_objects_prepare(struct drm_gem_object **bos, int bo_count)
+> +{
+> +	struct panfrost_gem_object *bo;
+> +	int ret = 0;
+> +
+> +	while (!ret && bo_count--) {
+> +		bo = to_panfrost_bo(bos[bo_count]);
+> +		ret = bo->base.madv ? -ENOMEM : 0;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  int panfrost_job_push(struct panfrost_job *job)
+>  {
+>  	struct panfrost_device *pfdev = job->pfdev;
+> @@ -283,6 +296,10 @@ int panfrost_job_push(struct panfrost_job *job)
+>  	if (ret)
+>  		return ret;
+>  
+> +	ret = panfrost_objects_prepare(job->bos, job->bo_count);
+> +	if (ret)
+> +		goto unlock;
+> +
+>  	mutex_lock(&pfdev->sched_lock);
+>  	drm_sched_job_arm(&job->base);
+>  
+> @@ -324,7 +341,6 @@ static void panfrost_job_cleanup(struct kref *ref)
+>  			if (!job->mappings[i])
+>  				break;
+>  
+> -			atomic_dec(&job->mappings[i]->obj->gpu_usecount);
+>  			panfrost_gem_mapping_put(job->mappings[i]);
+>  		}
+>  		kvfree(job->mappings);
+
