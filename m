@@ -2,146 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC2662811B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13EC628129
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236722AbiKNNSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:18:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
+        id S236037AbiKNNTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:19:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237486AbiKNNSQ (ORCPT
+        with ESMTP id S236779AbiKNNTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:18:16 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DD7140A4;
-        Mon, 14 Nov 2022 05:18:15 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id cl5so18186336wrb.9;
-        Mon, 14 Nov 2022 05:18:15 -0800 (PST)
+        Mon, 14 Nov 2022 08:19:34 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F222AE2F
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:19:06 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id y14so28228760ejd.9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:19:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+RkCSUED9FhCNs428frFC68H05yt7fFNYb0gdzPYo+k=;
-        b=ApcFtkYof2PfR/nalfvx6zDJCnF4d3GoglJdtbi0/XFzEPJYDsDfN0JjddQib/VoSq
-         LUP3Tf9LXMs6FXBI0ecyaJp+ozrouJWKJUwHZuCmSgzPFV4p1p2HxO23oRIjUAT+X8tx
-         0Wu85Z2LKYcWwZeL5r9D9RmOgNTOzqAb2YQtF8WuXzXeF94QVHYvUpvy3bxnJfqI28iP
-         a8RQGO//tMxR+hm+6yyPtM93D7AroHB8n0zeQGQfOWgU1nyJM71VvxNF1LQ1pl8r4Sbb
-         a7U46Bb4CPQOkUaiR9ovB7ZBqiMepFj1ysKi/H+BpfDkGhAY52EIsgfFzPbNpMJfYcjB
-         bW2w==
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=wptfyIK6cGXWafJRIE0+wKYEiUfT/C8Cp/88f6SDnJI=;
+        b=KN2CymL7WFkKiYXpoBmRpQWQXiDY44c7m6Y6yAFKT1NlHPmEkO6jZ5Yupm7GugU/Wo
+         ThOL9DjjqdaifsHu4IQ8e+xX70/vP0uafrmaoWSB2xHm25+2eT0nAg+QDEDjmqkf3sJe
+         JkJuIjrYCBcLhpIvAHy+6j27qnBKw3LG+ys7M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+RkCSUED9FhCNs428frFC68H05yt7fFNYb0gdzPYo+k=;
-        b=zB34Hdd8aiwDZ/6OOOfkuSr+t0Y30zl4gQXa7Xb9fQekQmtv8X4m8ofc4mG/fy75My
-         pGEch/7Ig7ZGsuaR+xe17SbNzNOvPDFqaM5sCcHcgK4Lga3keN9U7t7BjbupSrZ6cqP5
-         xkCERtUD9++tBei5YlZ9yypWyDArRpTjM4q+winVSAsG5hyEL4/wqjpXOhvcpHSF9wsy
-         nrYzVOWAq7bb+r7C/LMO/gNGvG5V7GRPbb0wUTOqVkeOf2EaowdasfnX3tALIE3Kz8J8
-         Cck6mzgfvCWNWW804Ns//kk++jK7Iw6XZ7KKl9Y4ON/xsgxaCGW2sNrB2V/7e0iHNVgD
-         N73g==
-X-Gm-Message-State: ANoB5pmKiNy/dleveakY5adhvRPdaQVv63vPN/k5UimnaD4jw+wVKUWz
-        bwAah61DF0PBVcdnouVneGtLSSGGgJiC7TmwosI=
-X-Google-Smtp-Source: AA0mqf5Yn8y/PwGxV6uAoHXEBCvJ9yU69EsbquffmFXRNZ60KWZKc/1v2t7azgf61tPHTs5KIEvJpMeGj/i37pgnEQ4=
-X-Received: by 2002:a05:6000:1183:b0:238:aa36:6b0d with SMTP id
- g3-20020a056000118300b00238aa366b0dmr7198267wrx.688.1668431894174; Mon, 14
- Nov 2022 05:18:14 -0800 (PST)
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wptfyIK6cGXWafJRIE0+wKYEiUfT/C8Cp/88f6SDnJI=;
+        b=A8bxKEip5JwpQ3ptRJzy3AKw3tEVKQmtbtIhUlkrE4bS8jhwZKr5YDLdVteqvgCze2
+         cPFgfTQGk9esPnXJVeAPPfnVz+Z3mTEW8hjxXCOyJHgt297cKuBmB8VVl4JHnu85pBcD
+         QjN1cyeXUvKQnKfrGOeMMyXGMbUAHPZFrXVCLYf9N9ZJxrUZKX8+z1SI18sUlOXAGFt/
+         DlMjAFtJ2tJsICu/Hi0YPMTID3bDS0kgnBr6C+GlR729erL7Ri0zHr9hD/0YzGyapEsn
+         ZOfN9oejoPtplkAXi2gsbkJ/v0B4bYPAsjg5m6wOj0csa7e7GpmwTKDClIA6Dp8KWH1L
+         NBWw==
+X-Gm-Message-State: ANoB5pkmPUcEVcgxZh0hETyZAFfkiN48xjmNwrqAtyw1FvJCtrJgRfSy
+        IF2QqfyqHQPJIEv42n/UAFRdCw==
+X-Google-Smtp-Source: AA0mqf5XAHfO6upM08Nlwr28NvlYYCOvH4cs7UB4GYrPptHd4Wu7+zqYlEwJB7EXRhdzfIqrEule5A==
+X-Received: by 2002:a17:906:edb7:b0:78d:b712:fe99 with SMTP id sa23-20020a170906edb700b0078db712fe99mr10318362ejb.462.1668431945090;
+        Mon, 14 Nov 2022 05:19:05 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:c205:5c4e:7456:c8cc])
+        by smtp.gmail.com with ESMTPSA id g13-20020a50ec0d000000b0045b3853c4b7sm4802061edr.51.2022.11.14.05.19.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 05:19:04 -0800 (PST)
+Subject: [PATCH v1 0/2] kexec: Add new toogle to disable kexec_reboot
 MIME-Version: 1.0
-References: <20221110212212.96825-1-nbd@nbd.name> <20221110212212.96825-2-nbd@nbd.name>
- <20221111233714.pmbc5qvq3g3hemhr@skbuf> <20221111204059.17b8ce95@kernel.org>
- <bcb33ba7-b2a3-1fe7-64b2-1e15203e2cce@nbd.name> <20221114115559.wl7efrgxphijqz4o@skbuf>
- <8faa9c5d-960c-849b-e6af-a847bb1fd12f@nbd.name>
-In-Reply-To: <8faa9c5d-960c-849b-e6af-a847bb1fd12f@nbd.name>
-From:   Dave Taht <dave.taht@gmail.com>
-Date:   Mon, 14 Nov 2022 05:18:01 -0800
-Message-ID: <CAA93jw4Z-fz_6gTxrjwsifcMy=oAcF0mPT6s=_aGdDU3UgCgcg@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 1/4] net: dsa: add support for DSA rx
- offloading via metadata dst
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAC1AcmMC/w3LQQqEMAwF0KtI1hMwVVDnNm39arB0oNFBEO9ul2/xbjIUhdG3uangr6a/XCGfhu
+ Lm8wrWuZpc65yI9Dyr+ZDAOy5ELjAcLFMYIDJ03bhQncEbOBSf41ZvPlN6nhcDB99zagAAAA==
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Mon, 14 Nov 2022 14:18:37 +0100
+Message-Id: <20221114-disable-kexec-reset-v1-0-fb51d20cf871@chromium.org>
+To:     Eric Biederman <ebiederm@xmission.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        Ross Zwisler <zwisler@kernel.org>, linux-doc@vger.kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.11.0-dev-d93f8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1244; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=JfIkpVZ3TPV8FpLGteqEp65kTEUP1lPgQkWDBE88DK8=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjckA4FzdwiaV6YR2rAuNRu5qRVsvHdkr8TBqmbGPm
+ CtXfY96JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY3JAOAAKCRDRN9E+zzrEiG2XD/
+ 9E6yRRi3EQWhNK8uXRmHb1MCO0lvuapyhVEgfn84IwmzoXZD0pthUawboSbdfqV2aCv95D7xDPGaom
+ Tkf8PBHwsFpeOBEWQ/jYmYr4+LqnKjvY3DJsWQPJTXM7VQ9EdTGBL5ZBfqHMmeGVvrUQB2dSWgqYcF
+ T3kFrEMBraghVcFnOA3223Ba2sSuonthRcaotPb+xSYYUMn/rkJXpdplql6892hC+w9L1sFDARUx7C
+ tvhRMa/vmLgAgd1tGn2TU7gPPutTUG7Jx0TAN04IZ97QZdyE7h7vKyskbiu0cmnhILdGFpomAVfnpW
+ xGV4XIGWqmIwc8x3v9jMckXWb23Av3Wfu3CWoPPXPKpajj9Vdz1C4kCQb7gTq2RQK0iRgIv1F1jUZ4
+ 5M8T38wr+Wv5+YbShJzRhR53LUtmNRBLjDlZ6x7FpUpTth5w3vyn4s/kzukKpAepAWp96lfjhoZ/hV
+ 8By8SfhB73wVspAP3X4fKz7Dn5Ghpgo6V0ww1ERk4z4Wp4Xzh1W0q3FF1jfIEIyMokns/CxFNKSD+b
+ Fuz/sLCrcNriPFsUkaXZX5n2KLveB+bOEoO0sBHzL+UhDyPkVYF3kKKZQw/O/TjeF6ybBcFuq1jiuI
+ ovH518DkpySdiiVfyHPxGcCI72WSIEGqwvrjoE0cFpEAPFpQtq3RQTTNU+DA==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 4:21 AM Felix Fietkau <nbd@nbd.name> wrote:
->
-> On 14.11.22 12:55, Vladimir Oltean wrote:
-> > On Sat, Nov 12, 2022 at 12:13:15PM +0100, Felix Fietkau wrote:
-> >> On 12.11.22 05:40, Jakub Kicinski wrote:
-> >> I don't really see a valid use case in running generic XDP, TC and NFT=
- on a
-> >> DSA master dealing with packets before the tag receive function has be=
-en
-> >> run. And after the tag has been processed, the metadata DST is cleared=
- from
-> >> the skb.
-> >
-> > Oh, there are potentially many use cases, the problem is that maybe
-> > there aren't as many actual implementations as ideas? At least XDP is,
-> > I think, expected to be able to deal with DSA tags if run on a DSA
-> > master (not sure how that applies when RX DSA tag is offloaded, but
-> > whatever). Marek Behun had a prototype with Marvell tags, not sure how
-> > far that went in the end:
-> > https://www.mail-archive.com/netdev@vger.kernel.org/msg381018.html
-> > In general, forwarding a packet to another switch port belonging to the
-> > same master via XDP_TX should be relatively efficient.
-> In that case it likely makes sense to disable DSA tag offloading
-> whenever driver XDP is being used.
-> Generic XDP probably doesn't matter much. Last time I tried to use it
-> and ran into performance issues, I was told that it's only usable for
-> testing anyway and there was no interest in fixing the cases that I ran
-> into.
+Kexec lets the system administratior replace the current kernel with a
+different one. 
 
-XDP continues to evolve rapidly, as do its use cases. ( ex:
-ttps://github.com/thebracket/cpumap-pping#readme )
+Add a new toggle to limit that replacement to system crashes only.
 
-What cases did you run into?
+To: Jonathan Corbet <corbet@lwn.net>
+To: Eric Biederman <ebiederm@xmission.com>
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: kexec@lists.infradead.org
+Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ross Zwisler <zwisler@kernel.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-specifically planning to be hacking on the mvpp2 switch driver soon.
+---
+Ricardo Ribalda (2):
+      Documentation: sysctl: Correct kexec_load_disabled
+      kexec: Introduce kexec_reboot_disabled
 
->
-> >> How about this: I send a v4 which uses skb_dst_drop instead of skb_dst=
-_set,
-> >> so that other drivers can use refcounting if it makes sense for them. =
-For
-> >> mtk_eth_soc, I prefer to leave out refcounting for performance reasons=
-.
-> >> Is that acceptable to you guys?
-> >
-> > I don't think you can mix refcounting at consumer side with no-refcount=
-ing
-> > at producer side, no?
-> skb_dst_drop checks if refcounting was used for the skb dst pointer.
->
-> > I suppose that we could leave refcounting out for now, and bug you if
-> > someone comes with a real need later and complains. Right now it's a bi=
-t
-> > hard for me to imagine all the possibilities. How does that sound?
-> Sounds good. I think I'll send v4 anyway to deal with the XDP case and
-> to switch to skb_dst_drop.
->
-> - Felix
+ Documentation/admin-guide/sysctl/kernel.rst | 18 +++++++++++++++---
+ include/linux/kexec.h                       |  1 +
+ kernel/kexec.c                              |  4 ++++
+ kernel/kexec_core.c                         | 13 ++++++++++++-
+ kernel/kexec_file.c                         |  5 +++++
+ 5 files changed, 37 insertions(+), 4 deletions(-)
+---
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
+change-id: 20221114-disable-kexec-reset-19b7e117338f
 
-
-
---=20
-This song goes out to all the folk that thought Stadia would work:
-https://www.linkedin.com/posts/dtaht_the-mushroom-song-activity-69813666656=
-07352320-FXtz
-Dave T=C3=A4ht CEO, TekLibre, LLC
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
