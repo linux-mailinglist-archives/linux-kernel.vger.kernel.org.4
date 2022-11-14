@@ -2,279 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A406283E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:30:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA246283EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236713AbiKNPaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 10:30:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S236825AbiKNPb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 10:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236205AbiKNPaq (ORCPT
+        with ESMTP id S236774AbiKNPbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 10:30:46 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E0F25E9C;
-        Mon, 14 Nov 2022 07:30:45 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 2AEFNGGF015028;
-        Mon, 14 Nov 2022 15:30:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=L50/DliiZdidzWrp6pcEC1pmRzIyeSC5rZakD3TQA+4=;
- b=aoyATzAeBM9HIoyQQAcx3Hq7vjTbyewfEktyzIjMH9OuAzvFGYHHU0wjbwpngwVq1OiK
- x9fmBHuanspJD8X+8av1LOWtoaVADdaDsdSvRPCd3zUhZNG8+zZXBpnlW3SFd5p4kHhR
- 8UD/j86vohouQ+6n86sldP+DGdhMUg/xZFb3kM8bNOz51HI1BVQ6wUsTuEuOK4LwJd+U
- 5UTBv0xd24S08mlMi6pgdWm78AdtkijvZqdgbDKTndHq2R50/fQLZR+O5espckS54kqE
- BWdykRPQ66xWu9AtuphwWJ4Jm8Or38RPHrHsEas5KT7U7kYYJ0knMgjb0N4gGRinIdmc Gg== 
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kupw0u2sr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 15:30:27 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AEFKTXT029262;
-        Mon, 14 Nov 2022 15:30:26 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma03wdc.us.ibm.com with ESMTP id 3kt349xgpk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 15:30:26 +0000
-Received: from smtpav04.dal12v.mail.ibm.com ([9.208.128.131])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AEFUTqe24183272
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Nov 2022 15:30:29 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D0FA05805E;
-        Mon, 14 Nov 2022 15:30:24 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 87ECE58065;
-        Mon, 14 Nov 2022 15:30:23 +0000 (GMT)
-Received: from [9.160.3.49] (unknown [9.160.3.49])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Nov 2022 15:30:23 +0000 (GMT)
-Message-ID: <e92655b6-2a60-8e15-8eba-522237807d9e@linux.ibm.com>
-Date:   Mon, 14 Nov 2022 10:30:23 -0500
+        Mon, 14 Nov 2022 10:31:19 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DCF2A429
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:31:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668439876; x=1699975876;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+z7vhMLu3yh8zpZfl0R8/tbQ1mKg/DE0MiKRhJ26irU=;
+  b=ypCOojXZNdgW9BEE3+RGlymS8Myl4IfgS4M0qtpqrAZ6c7v8iDoBBilK
+   Cyxx8Zv8ZGl3heg0Fmm0wXuxN0VhY6la4chv3vS1kOy/7Hu2cPiEQ4QzT
+   ktbfK+3BeyvEV8yTwyAgzJIFS2Qm1EbG+u9dwBrPt+D6ZBbZYAbdaOsgK
+   RuYJBUA4uxaJZYn/fsW7P8s0uK98yifzIZA2bGfjfU5Hd/J68j1+XkTVK
+   R02KM1Ujy9YRBhycK7GZhm8xx9bPm8iPQqIspVGE0WoVaI0szMjO6jjgc
+   0Z7GerLZ6iIJ1Kpod0+zJAzpnr+/tjHhDXq5Ua/IEGwC3gbGfVvfrnrY2
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="123323299"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Nov 2022 08:31:15 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 14 Nov 2022 08:31:12 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Mon, 14 Nov 2022 08:31:11 -0700
+Date:   Mon, 14 Nov 2022 15:30:54 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Andrew Bresticker <abrestic@rivosinc.com>
+CC:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@rivosinc.com>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] RISC-V: Fix unannoted hardirqs-on in return to userspace
+ slow-path
+Message-ID: <Y3JfLuRYF/jdjbOY@wendy>
+References: <20221111223108.1976562-1-abrestic@rivosinc.com>
+ <CAJF2gTRbcocqkmkLVmfYO-8ae-kY0bJwZ+sE-WDXfbF0Y_ZkWg@mail.gmail.com>
+ <CALE4mHo9uojGyhLo6Sci9VbES1GG=XcEZY-EyY6nkjyWhe2e5A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2 1/5] iommu/s390: Make attach succeed even if the device
- is in error state
-Content-Language: en-US
-To:     Niklas Schnelle <schnelle@linux.ibm.com>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org
-References: <20221109142903.4080275-1-schnelle@linux.ibm.com>
- <20221109142903.4080275-2-schnelle@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <20221109142903.4080275-2-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: q-_y80_4bgbkfpoLA3pIUX-sEmHthCCK
-X-Proofpoint-ORIG-GUID: q-_y80_4bgbkfpoLA3pIUX-sEmHthCCK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-14_12,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- impostorscore=0 phishscore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0
- adultscore=0 mlxlogscore=999 priorityscore=1501 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211140107
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CALE4mHo9uojGyhLo6Sci9VbES1GG=XcEZY-EyY6nkjyWhe2e5A@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/9/22 9:28 AM, Niklas Schnelle wrote:
-> If a zPCI device is in the error state while switching IOMMU domains
-> zpci_register_ioat() will fail and we would end up with the device not
-> attached to any domain. In this state since zdev->dma_table == NULL
-> a reset via zpci_hot_reset_device() would wrongfully re-initialize the
-> device for DMA API usage using zpci_dma_init_device(). As automatic
-> recovery is currently disabled while attached to an IOMMU domain this
-> only affects slot resets triggered through other means but will affect
-> automatic recovery once we switch to using dma-iommu.
+On Mon, Nov 14, 2022 at 10:20:30AM -0500, Andrew Bresticker wrote:
+> On Mon, Nov 14, 2022 at 9:43 AM Guo Ren <guoren@kernel.org> wrote:
+> >
+> > On Sat, Nov 12, 2022 at 6:31 AM Andrew Bresticker <abrestic@rivosinc.com> wrote:
+> > >
+> > > The return to userspace path in entry.S may enable interrupts without the
+> > > corresponding lockdep annotation, producing a splat[0] when DEBUG_LOCKDEP
+> > > is enabled. Simply calling __trace_hardirqs_on() here gets a bit messy
+> > > due to the use of RA to point back to ret_from_exception, so just move
+> > > the whole slow-path loop into C. It's more readable and it lets us use
+> > > local_irq_{enable,disable}(), avoiding the need for manual annotations
+> > > altogether.
+> > Could generic_entry solve your problem? please try:
+> > https://lore.kernel.org/linux-riscv/20221103075047.1634923-1-guoren@kernel.org/
 > 
-> Additionally with that switch common code expects attaching to the
-> default domain to always work so zpci_register_ioat() should only fail
-> if there is no chance to recover anyway, e.g. if the device has been
-> unplugged.
+> Indeed it does, as I mentioned below, however it wasn't clear to me
+> how close your series was to landing so I'v emailed this small fix for
+> the existing bug in case your series does not make it into 6.2
+
+The backportablilty of this 26+, 26- change has to be considered too.
+The generic entry patchset has 20x the changes and would not ordinarily
+be stable material. How much of that series would be required to solve
+the problem?
+ 
+> >
+> > >
+> > > [0]:
+> > >   ------------[ cut here ]------------
+> > >   DEBUG_LOCKS_WARN_ON(!lockdep_hardirqs_enabled())
+> > >   WARNING: CPU: 2 PID: 1 at kernel/locking/lockdep.c:5512 check_flags+0x10a/0x1e0
+> > >   Modules linked in:
+> > >   CPU: 2 PID: 1 Comm: init Not tainted 6.1.0-rc4-00160-gb56b6e2b4f31 #53
+> > >   Hardware name: riscv-virtio,qemu (DT)
+> > >   epc : check_flags+0x10a/0x1e0
+> > >   ra : check_flags+0x10a/0x1e0
+> > >   <snip>
+> > >    status: 0000000200000100 badaddr: 0000000000000000 cause: 0000000000000003
+> > >   [<ffffffff808edb90>] lock_is_held_type+0x78/0x14e
+> > >   [<ffffffff8003dae2>] __might_resched+0x26/0x22c
+> > >   [<ffffffff8003dd24>] __might_sleep+0x3c/0x66
+> > >   [<ffffffff80022c60>] get_signal+0x9e/0xa70
+> > >   [<ffffffff800054a2>] do_notify_resume+0x6e/0x422
+> > >   [<ffffffff80003c68>] ret_from_exception+0x0/0x10
+> > >   irq event stamp: 44512
+> > >   hardirqs last  enabled at (44511): [<ffffffff808f901c>] _raw_spin_unlock_irqrestore+0x54/0x62
+> > >   hardirqs last disabled at (44512): [<ffffffff80008200>] __trace_hardirqs_off+0xc/0x14
+> > >   softirqs last  enabled at (44472): [<ffffffff808f9fbe>] __do_softirq+0x3de/0x51e
+> > >   softirqs last disabled at (44467): [<ffffffff80017760>] irq_exit+0xd6/0x104
+> > >   ---[ end trace 0000000000000000 ]---
+> > >   possible reason: unannotated irqs-on.
+> > >
+> > > Signed-off-by: Andrew Bresticker <abrestic@rivosinc.com>
+> > > ---
+> > > This should also theoretically be fixed by the conversion to generic entry,
+> > > but it's not clear how far away that series is from landing.
+> > > ---
+> > >  arch/riscv/kernel/entry.S  | 18 +++++-------------
+> > >  arch/riscv/kernel/signal.c | 34 +++++++++++++++++++++-------------
+> > >  2 files changed, 26 insertions(+), 26 deletions(-)
+> > >
+> > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > > index b9eda3fcbd6d..58dfa8595e19 100644
+> > > --- a/arch/riscv/kernel/entry.S
+> > > +++ b/arch/riscv/kernel/entry.S
+> > > @@ -263,12 +263,11 @@ ret_from_exception:
+> > >  #endif
+> > >         bnez s0, resume_kernel
+> > >
+> > > -resume_userspace:
+> > >         /* Interrupts must be disabled here so flags are checked atomically */
+> > >         REG_L s0, TASK_TI_FLAGS(tp) /* current_thread_info->flags */
+> > >         andi s1, s0, _TIF_WORK_MASK
+> > > -       bnez s1, work_pending
+> > > -
+> > > +       bnez s1, resume_userspace_slow
+> > > +resume_userspace:
+> > >  #ifdef CONFIG_CONTEXT_TRACKING_USER
+> > >         call user_enter_callable
+> > >  #endif
+> > > @@ -368,19 +367,12 @@ resume_kernel:
+> > >         j restore_all
+> > >  #endif
+> > >
+> > > -work_pending:
+> > > +resume_userspace_slow:
+> > >         /* Enter slow path for supplementary processing */
+> > > -       la ra, ret_from_exception
+> > > -       andi s1, s0, _TIF_NEED_RESCHED
+> > > -       bnez s1, work_resched
+> > > -work_notifysig:
+> > > -       /* Handle pending signals and notify-resume requests */
+> > > -       csrs CSR_STATUS, SR_IE /* Enable interrupts for do_notify_resume() */
+> > >         move a0, sp /* pt_regs */
+> > >         move a1, s0 /* current_thread_info->flags */
+> > > -       tail do_notify_resume
+> > > -work_resched:
+> > > -       tail schedule
+> > > +       call do_work_pending
+> > > +       j resume_userspace
+> > >
+> > >  /* Slow paths for ptrace. */
+> > >  handle_syscall_trace_enter:
+> > > diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
+> > > index 5c591123c440..bfb2afa4135f 100644
+> > > --- a/arch/riscv/kernel/signal.c
+> > > +++ b/arch/riscv/kernel/signal.c
+> > > @@ -313,19 +313,27 @@ static void do_signal(struct pt_regs *regs)
+> > >  }
+> > >
+> > >  /*
+> > > - * notification of userspace execution resumption
+> > > - * - triggered by the _TIF_WORK_MASK flags
+> > > + * Handle any pending work on the resume-to-userspace path, as indicated by
+> > > + * _TIF_WORK_MASK. Entered from assembly with IRQs off.
+> > >   */
+> > > -asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
+> > > -                                          unsigned long thread_info_flags)
+> > > +asmlinkage __visible void do_work_pending(struct pt_regs *regs,
+> > > +                                         unsigned long thread_info_flags)
+> > >  {
+> > > -       if (thread_info_flags & _TIF_UPROBE)
+> > > -               uprobe_notify_resume(regs);
+> > > -
+> > > -       /* Handle pending signal delivery */
+> > > -       if (thread_info_flags & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
+> > > -               do_signal(regs);
+> > > -
+> > > -       if (thread_info_flags & _TIF_NOTIFY_RESUME)
+> > > -               resume_user_mode_work(regs);
+> > > +       do {
+> > > +               if (thread_info_flags & _TIF_NEED_RESCHED) {
+> > > +                       schedule();
+> > > +               } else {
+> > > +                       local_irq_enable();
+> > > +                       if (thread_info_flags & _TIF_UPROBE)
+> > > +                               uprobe_notify_resume(regs);
+> > > +                       /* Handle pending signal delivery */
+> > > +                       if (thread_info_flags & (_TIF_SIGPENDING |
+> > > +                                                _TIF_NOTIFY_SIGNAL))
+> > > +                               do_signal(regs);
+> > > +                       if (thread_info_flags & _TIF_NOTIFY_RESUME)
+> > > +                               resume_user_mode_work(regs);
+> > > +               }
+> > > +               local_irq_disable();
+> > > +               thread_info_flags = read_thread_flags();
+> > > +       } while (thread_info_flags & _TIF_WORK_MASK);
+> > >  }
+> > The more graceful code has been written in kernel/entry/common.c.
+> > Let's base it on that:
+> >
+> > static unsigned long exit_to_user_mode_loop(struct pt_regs *regs,
+> >                                             unsigned long ti_work)
+> > {
+> >         /*
+> >          * Before returning to user space ensure that all pending work
+> >          * items have been completed.
+> >          */
+> >         while (ti_work & EXIT_TO_USER_MODE_WORK) {
+> >
+> >                 local_irq_enable_exit_to_user(ti_work);
+> >
+> >                 if (ti_work & _TIF_NEED_RESCHED)
+> >                         schedule();
+> >
+> >                 if (ti_work & _TIF_UPROBE)
+> >                         uprobe_notify_resume(regs);
+> >
+> >                 if (ti_work & _TIF_PATCH_PENDING)
+> >                         klp_update_patch_state(current);
+> >
+> >                 if (ti_work & (_TIF_SIGPENDING | _TIF_NOTIFY_SIGNAL))
+> >                         arch_do_signal_or_restart(regs);
+> >
+> >                 if (ti_work & _TIF_NOTIFY_RESUME)
+> >                         resume_user_mode_work(regs);
+> >
+> >                 /* Architecture specific TIF work */
+> >                 arch_exit_to_user_mode_work(regs, ti_work);
+> >
+> >                 /*
+> >                  * Disable interrupts and reevaluate the work flags as they
+> >                  * might have changed while interrupts and preemption was
+> >                  * enabled above.
+> >                  */
+> >                 local_irq_disable_exit_to_user();
+> >
+> >                 /* Check if any of the above work has queued a
+> > deferred wakeup */
+> >                 tick_nohz_user_enter_prepare();
+> >
+> >                 ti_work = read_thread_flags();
+> >         }
+> >
+> >         /* Return the latest work state for arch_exit_to_user_mode() */
+> >         return ti_work;
+> > }
+> >
+> > > --
+> > > 2.25.1
+> > >
+> >
+> >
+> > --
+> > Best Regards
+> >  Guo Ren
 > 
-> Improve the robustness of attach by specifically looking at the status
-> returned by zpci_mod_fc() to determine if the device is unavailable and
-> in this case simply ignore the error. Once the device is reset
-> zpci_hot_reset_device() will then correctly set the domain's DMA
-> translation tables.
-> 
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-
-Hi Niklas,
-
-Already gave you this on v1, doesn't look like anything changed:
-
-Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
-
-> ---
->  arch/s390/include/asm/pci.h |  2 +-
->  arch/s390/kvm/pci.c         |  6 ++++--
->  arch/s390/pci/pci.c         | 11 ++++++-----
->  arch/s390/pci/pci_dma.c     |  3 ++-
->  drivers/iommu/s390-iommu.c  |  9 +++++++--
->  5 files changed, 20 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
-> index 15f8714ca9b7..07361e2fd8c5 100644
-> --- a/arch/s390/include/asm/pci.h
-> +++ b/arch/s390/include/asm/pci.h
-> @@ -221,7 +221,7 @@ void zpci_device_reserved(struct zpci_dev *zdev);
->  bool zpci_is_device_configured(struct zpci_dev *zdev);
->  
->  int zpci_hot_reset_device(struct zpci_dev *zdev);
-> -int zpci_register_ioat(struct zpci_dev *, u8, u64, u64, u64);
-> +int zpci_register_ioat(struct zpci_dev *, u8, u64, u64, u64, u8 *);
->  int zpci_unregister_ioat(struct zpci_dev *, u8);
->  void zpci_remove_reserved_devices(void);
->  void zpci_update_fh(struct zpci_dev *zdev, u32 fh);
-> diff --git a/arch/s390/kvm/pci.c b/arch/s390/kvm/pci.c
-> index c50c1645c0ae..03964c0e1fdf 100644
-> --- a/arch/s390/kvm/pci.c
-> +++ b/arch/s390/kvm/pci.c
-> @@ -434,6 +434,7 @@ static void kvm_s390_pci_dev_release(struct zpci_dev *zdev)
->  static int kvm_s390_pci_register_kvm(void *opaque, struct kvm *kvm)
->  {
->  	struct zpci_dev *zdev = opaque;
-> +	u8 status;
->  	int rc;
->  
->  	if (!zdev)
-> @@ -486,7 +487,7 @@ static int kvm_s390_pci_register_kvm(void *opaque, struct kvm *kvm)
->  
->  	/* Re-register the IOMMU that was already created */
->  	rc = zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
-> -				virt_to_phys(zdev->dma_table));
-> +				virt_to_phys(zdev->dma_table), &status);
->  	if (rc)
->  		goto clear_gisa;
->  
-> @@ -516,6 +517,7 @@ static void kvm_s390_pci_unregister_kvm(void *opaque)
->  {
->  	struct zpci_dev *zdev = opaque;
->  	struct kvm *kvm;
-> +	u8 status;
->  
->  	if (!zdev)
->  		return;
-> @@ -554,7 +556,7 @@ static void kvm_s390_pci_unregister_kvm(void *opaque)
->  
->  	/* Re-register the IOMMU that was already created */
->  	zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
-> -			   virt_to_phys(zdev->dma_table));
-> +			   virt_to_phys(zdev->dma_table), &status);
->  
->  out:
->  	spin_lock(&kvm->arch.kzdev_list_lock);
-> diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
-> index 73cdc5539384..a703dcd94a68 100644
-> --- a/arch/s390/pci/pci.c
-> +++ b/arch/s390/pci/pci.c
-> @@ -116,20 +116,20 @@ EXPORT_SYMBOL_GPL(pci_proc_domain);
->  
->  /* Modify PCI: Register I/O address translation parameters */
->  int zpci_register_ioat(struct zpci_dev *zdev, u8 dmaas,
-> -		       u64 base, u64 limit, u64 iota)
-> +		       u64 base, u64 limit, u64 iota, u8 *status)
->  {
->  	u64 req = ZPCI_CREATE_REQ(zdev->fh, dmaas, ZPCI_MOD_FC_REG_IOAT);
->  	struct zpci_fib fib = {0};
-> -	u8 cc, status;
-> +	u8 cc;
->  
->  	WARN_ON_ONCE(iota & 0x3fff);
->  	fib.pba = base;
->  	fib.pal = limit;
->  	fib.iota = iota | ZPCI_IOTA_RTTO_FLAG;
->  	fib.gd = zdev->gisa;
-> -	cc = zpci_mod_fc(req, &fib, &status);
-> +	cc = zpci_mod_fc(req, &fib, status);
->  	if (cc)
-> -		zpci_dbg(3, "reg ioat fid:%x, cc:%d, status:%d\n", zdev->fid, cc, status);
-> +		zpci_dbg(3, "reg ioat fid:%x, cc:%d, status:%d\n", zdev->fid, cc, *status);
->  	return cc;
->  }
->  EXPORT_SYMBOL_GPL(zpci_register_ioat);
-> @@ -764,6 +764,7 @@ EXPORT_SYMBOL_GPL(zpci_disable_device);
->   */
->  int zpci_hot_reset_device(struct zpci_dev *zdev)
->  {
-> +	u8 status;
->  	int rc;
->  
->  	zpci_dbg(3, "rst fid:%x, fh:%x\n", zdev->fid, zdev->fh);
-> @@ -787,7 +788,7 @@ int zpci_hot_reset_device(struct zpci_dev *zdev)
->  
->  	if (zdev->dma_table)
->  		rc = zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
-> -					virt_to_phys(zdev->dma_table));
-> +					virt_to_phys(zdev->dma_table), &status);
->  	else
->  		rc = zpci_dma_init_device(zdev);
->  	if (rc) {
-> diff --git a/arch/s390/pci/pci_dma.c b/arch/s390/pci/pci_dma.c
-> index 227cf0a62800..dee825ee7305 100644
-> --- a/arch/s390/pci/pci_dma.c
-> +++ b/arch/s390/pci/pci_dma.c
-> @@ -547,6 +547,7 @@ static void s390_dma_unmap_sg(struct device *dev, struct scatterlist *sg,
->  	
->  int zpci_dma_init_device(struct zpci_dev *zdev)
->  {
-> +	u8 status;
->  	int rc;
->  
->  	/*
-> @@ -598,7 +599,7 @@ int zpci_dma_init_device(struct zpci_dev *zdev)
->  
->  	}
->  	if (zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
-> -			       virt_to_phys(zdev->dma_table))) {
-> +			       virt_to_phys(zdev->dma_table), &status)) {
->  		rc = -EIO;
->  		goto free_bitmap;
->  	}
-> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
-> index 7fb512bece9a..e2c886bc4376 100644
-> --- a/drivers/iommu/s390-iommu.c
-> +++ b/drivers/iommu/s390-iommu.c
-> @@ -98,6 +98,7 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
->  	struct s390_domain *s390_domain = to_s390_domain(domain);
->  	struct zpci_dev *zdev = to_zpci_dev(dev);
->  	unsigned long flags;
-> +	u8 status;
->  	int cc;
->  
->  	if (!zdev)
-> @@ -113,8 +114,12 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
->  		zpci_dma_exit_device(zdev);
->  
->  	cc = zpci_register_ioat(zdev, 0, zdev->start_dma, zdev->end_dma,
-> -				virt_to_phys(s390_domain->dma_table));
-> -	if (cc)
-> +				virt_to_phys(s390_domain->dma_table), &status);
-> +	/*
-> +	 * If the device is undergoing error recovery the reset code
-> +	 * will re-establish the new domain.
-> +	 */
-> +	if (cc && status != ZPCI_PCI_ST_FUNC_NOT_AVAIL)
->  		return -EIO;
->  	zdev->dma_table = s390_domain->dma_table;
->  
-
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
