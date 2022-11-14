@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE8462881B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E781462881D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237356AbiKNSPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 13:15:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42634 "EHLO
+        id S238318AbiKNSPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 13:15:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238309AbiKNSOR (ORCPT
+        with ESMTP id S238410AbiKNSO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 13:14:17 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06642CE26
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 10:14:03 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id h19-20020a63e153000000b00434dfee8dbaso6177723pgk.18
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 10:14:03 -0800 (PST)
+        Mon, 14 Nov 2022 13:14:57 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D58E02B263
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 10:14:12 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-367f94b9b16so112177367b3.11
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 10:14:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HIf5Y9gptGCDfzfHbnNjnA19mp6qRpBDngBttcXhem0=;
-        b=ms3hkkK95AjV+ioKEVEzkclXhnmqtE13D4LhndsjTMdIUDHQQXNB8UOSp2+OFTFRFK
-         ViC7tHBGKBTJNv7KryjTbINFQI5fSv39fXjaAD5iZypgA1bxtBjBkHjH2M85yh6ALa2h
-         1r1lslPr4brLR45T0lMkmoq02U6kvVZouc8YCevM+z0aijHfPQjqgUTaoPOiWwSwRN9c
-         89CwAlZ0BJ7onnoeLlDSwM5RNnDzvUBjgPlZTeANeCa6chbAE3MnVd+zdOGqb3wd27t1
-         N9EDnlvusDE3+Mge/bfb7XJjnpg5n905IcTGtJ2BUzKJFtPCYmXEhsLg0SgWUwtRxGB7
-         /p3Q==
+        bh=p0sFG9H+Jdt/7rD1rWzkttpjmL0LLUKjEOvGlXV4TqY=;
+        b=pSvjPn+9c3QfCFIjYQab5YrlTKk7davFY3ZSvqrmKI2ah6JokR3pUKr/2/Z/Mqvfe+
+         HTpDUsNwwgs5ZgNij5QV6srhx3nBMDo21/iVmno2sJq9Emo3DOkV9o1suBBVQlMKB5/9
+         Q5nDSS6fTm3pShpJLg/6YXlgbzskTWUgslnIafEBlgLtfjBenNeGAisr8dQgfuSwBylG
+         SS1rX7GGJ1U+eENkORTG6TMXCTSzCheCRnZHbJiX1CsyKYNHExvv3oZzSMXxt2sMsMPG
+         qznIJYljcJw7YVmTo/w1KrPDP52wjGKL5KMBspjGDle1oLEU4S6zEiBISdYxa5YoKQ+Z
+         P/mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HIf5Y9gptGCDfzfHbnNjnA19mp6qRpBDngBttcXhem0=;
-        b=GNmLFJTFoP1skRE50L5cBSh8ilVrKPjft7Ysz6MddfyYAEhO5h1YtHWSyA7aQV2pYK
-         XGKPvs4waoC4b7CeikXeApOfqwr3zZlQ552wVn0KntNaHxNeTykldlZ/fVnXyrySDmXc
-         21JxfRVdedY1zfq5l/fIKD+6gU6oJXD9UYiiXPPO/opcBJF/nK3R5ug0cWKrg9XMgNLD
-         MOu77wdeH/RhiM1f7C5uu5ouvfQUvONjS7yj1nCdc4ZXAV+56lALwf6a+LlTUmBs4kL1
-         3aKfOcPlotRje2jd1DRZsBF2ds09Uq7RT4+LVX0HRHm1Mb/UGAFAUgGgsFzmX5WXbx3t
-         LLDg==
-X-Gm-Message-State: ANoB5pkH6kv+9F1Jr1L8wLF0eX9EB4bpj9ZJDwOTWyVMqDIXn/0IPIP5
-        /V8WoaNgWVEW81INJAeBHMlG4POWacAu
-X-Google-Smtp-Source: AA0mqf7fo8BRpt9UyNarIFwRiFpN3L3+Rg+07DS6Qqp0WgP/FT8AsgvT1iH5tLFIF2XStyDqjYS6g+TWGWsG
+        bh=p0sFG9H+Jdt/7rD1rWzkttpjmL0LLUKjEOvGlXV4TqY=;
+        b=et2xhDm8RBaVPitH4Byufp65qNW/UsWbHE4lpfNE+mLmpj3yCnWgWZ2fxLXpghDGEw
+         LgvvqYI2A0JgNgFw94hlFOFwR4wPUjjjL0g8xm3RtQX6iKxhv0Foq6hsfBRAccAxkRF4
+         FmVYqIo44pFmqybV+jDgAZaEpwvTZcIPkPn4hpG3o4wMqx/SF6zLPc6m/GR+IVXGPCCB
+         gsrttuJL/70TfsIH6VeO0U+0f7gQQKZv3fLtq6QiZ6aU3GyNRXLMpVeUKfBxXqT8G6qL
+         0iT/8h0kwY60N8exg19edZhPkRJNo9IgYG1blc6PrG3oC3VtgAKGScX9hXItbeHg6jSP
+         i7SA==
+X-Gm-Message-State: ANoB5plY/Jr9QuHei+ToXWtARmeyRjv80R9QjrBX9k/SAq6JU7ks2a6+
+        woSHGmSsBPvvxBIzEKRzaFwhQVsNcy0u
+X-Google-Smtp-Source: AA0mqf6bDwBI5g/o0ml34PhWkVmx5oqBlHtwBGJynpE0If9nDOlhHnudfmY6sQiwlsPZzYyPuTbUhSW8W67a
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:553:438f:b86a:87f])
- (user=irogers job=sendgmr) by 2002:a62:b402:0:b0:56e:8f96:6b2e with SMTP id
- h2-20020a62b402000000b0056e8f966b2emr14862845pfn.18.1668449643208; Mon, 14
- Nov 2022 10:14:03 -0800 (PST)
-Date:   Mon, 14 Nov 2022 10:12:48 -0800
+ (user=irogers job=sendgmr) by 2002:a81:7703:0:b0:360:65a3:46c with SMTP id
+ s3-20020a817703000000b0036065a3046cmr14018869ywc.119.1668449652158; Mon, 14
+ Nov 2022 10:14:12 -0800 (PST)
+Date:   Mon, 14 Nov 2022 10:12:49 -0800
 In-Reply-To: <20221114181251.2683871-1-irogers@google.com>
-Message-Id: <20221114181251.2683871-7-irogers@google.com>
+Message-Id: <20221114181251.2683871-8-irogers@google.com>
 Mime-Version: 1.0
 References: <20221114181251.2683871-1-irogers@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Subject: [PATCH v2 6/9] perf list: Simplify symbol event printing
+Subject: [PATCH v2 7/9] perf pmu: Restructure print_pmu_events
 From:   Ian Rogers <irogers@google.com>
 To:     Weilin Wang <weilin.wang@intel.com>,
         Perry Taylor <perry.taylor@intel.com>,
@@ -78,7 +78,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,133 +86,321 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current code computes an array of symbol names then sorts and
-prints them. Use a strlist to create a list of names that is
-sorted and then print it.
+Previously print_pmu_events would compute the values to be printed,
+place them in struct sevent, sort them and then print them. Modify the
+code so that struct sevent holds just the PMU and event, sort these
+and then in the main print loop calculate aliases for names, etc. This
+avoids memory allocations for copied values as they are computed then
+printed.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/print-events.c | 79 +++++++++-------------------------
- 1 file changed, 21 insertions(+), 58 deletions(-)
+ tools/perf/util/pmu.c | 208 ++++++++++++++++++++++--------------------
+ 1 file changed, 110 insertions(+), 98 deletions(-)
 
-diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
-index ff7793944246..d53dba033597 100644
---- a/tools/perf/util/print-events.c
-+++ b/tools/perf/util/print-events.c
-@@ -52,14 +52,6 @@ static const struct event_symbol event_symbols_tool[PERF_TOOL_MAX] = {
- 	},
- };
- 
--static int cmp_string(const void *a, const void *b)
--{
--	const char * const *as = a;
--	const char * const *bs = b;
--
--	return strcmp(*as, *bs);
--}
--
- /*
-  * Print the events from <debugfs_mount_point>/tracing/events
-  */
-@@ -298,77 +290,48 @@ void print_symbol_events(const char *event_glob, unsigned int type,
- 			 struct event_symbol *syms, unsigned int max,
- 			 bool name_only)
- {
--	unsigned int i, evt_i = 0, evt_num = 0;
--	char name[MAX_NAME_LEN];
--	char **evt_list = NULL;
--	bool evt_num_known = false;
--
--restart:
--	if (evt_num_known) {
--		evt_list = zalloc(sizeof(char *) * evt_num);
--		if (!evt_list)
--			goto out_enomem;
--		syms -= max;
--	}
-+	struct strlist *evt_name_list = strlist__new(NULL, NULL);
-+	struct str_node *nd;
- 
--	for (i = 0; i < max; i++, syms++) {
-+	if (!evt_name_list) {
-+		pr_debug("Failed to allocate new strlist for symbol events\n");
-+		return;
-+	}
-+	for (unsigned int i = 0; i < max; i++) {
- 		/*
- 		 * New attr.config still not supported here, the latest
- 		 * example was PERF_COUNT_SW_CGROUP_SWITCHES
- 		 */
--		if (syms->symbol == NULL)
-+		if (syms[i].symbol == NULL)
- 			continue;
- 
--		if (event_glob != NULL && !(strglobmatch(syms->symbol, event_glob) ||
--		      (syms->alias && strglobmatch(syms->alias, event_glob))))
-+		if (event_glob != NULL && !(strglobmatch(syms[i].symbol, event_glob) ||
-+		      (syms[i].alias && strglobmatch(syms[i].alias, event_glob))))
- 			continue;
- 
- 		if (!is_event_supported(type, i))
- 			continue;
- 
--		if (!evt_num_known) {
--			evt_num++;
--			continue;
--		}
--
--		if (!name_only && strlen(syms->alias))
--			snprintf(name, MAX_NAME_LEN, "%s OR %s", syms->symbol, syms->alias);
--		else
--			strlcpy(name, syms->symbol, MAX_NAME_LEN);
-+		if (strlen(syms[i].alias)) {
-+			char name[MAX_NAME_LEN];
- 
--		evt_list[evt_i] = strdup(name);
--		if (evt_list[evt_i] == NULL)
--			goto out_enomem;
--		evt_i++;
-+			snprintf(name, MAX_NAME_LEN, "%s OR %s", syms[i].symbol, syms[i].alias);
-+			strlist__add(evt_name_list, name);
-+		} else
-+			strlist__add(evt_name_list, syms[i].symbol);
- 	}
- 
--	if (!evt_num_known) {
--		evt_num_known = true;
--		goto restart;
--	}
--	qsort(evt_list, evt_num, sizeof(char *), cmp_string);
--	evt_i = 0;
--	while (evt_i < evt_num) {
-+	strlist__for_each_entry(nd, evt_name_list) {
- 		if (name_only) {
--			printf("%s ", evt_list[evt_i++]);
-+			printf("%s ", nd->s);
- 			continue;
- 		}
--		printf("  %-50s [%s]\n", evt_list[evt_i++], event_type_descriptors[type]);
-+		printf("  %-50s [%s]\n", nd->s, event_type_descriptors[type]);
- 	}
--	if (evt_num && pager_in_use())
-+	if (!strlist__empty(evt_name_list) && pager_in_use())
- 		printf("\n");
- 
--out_free:
--	evt_num = evt_i;
--	for (evt_i = 0; evt_i < evt_num; evt_i++)
--		zfree(&evt_list[evt_i]);
--	zfree(&evt_list);
--	return;
--
--out_enomem:
--	printf("FATAL: not enough memory to print %s\n", event_type_descriptors[type]);
--	if (evt_list)
--		goto out_free;
-+	strlist__delete(evt_name_list);
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index 779839525437..2dd543fd6b4d 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -1554,8 +1554,8 @@ static int sub_non_neg(int a, int b)
+ 	return a - b;
  }
  
- /*
+-static char *format_alias(char *buf, int len, struct perf_pmu *pmu,
+-			  struct perf_pmu_alias *alias)
++static char *format_alias(char *buf, int len, const struct perf_pmu *pmu,
++			  const struct perf_pmu_alias *alias)
+ {
+ 	struct parse_events_term *term;
+ 	int used = snprintf(buf, len, "%s/%s", pmu->name, alias->name);
+@@ -1580,51 +1580,67 @@ static char *format_alias(char *buf, int len, struct perf_pmu *pmu,
+ 	return buf;
+ }
+ 
+-static char *format_alias_or(char *buf, int len, struct perf_pmu *pmu,
+-			     struct perf_pmu_alias *alias)
++static char *format_alias_or(char *buf, int len, const struct perf_pmu *pmu,
++			     const struct perf_pmu_alias *alias)
+ {
+ 	snprintf(buf, len, "%s OR %s/%s/", alias->name, pmu->name, alias->name);
+ 	return buf;
+ }
+ 
++/** Struct for ordering events as output in perf list. */
+ struct sevent {
+-	char *name;
+-	char *desc;
+-	char *topic;
+-	char *str;
+-	char *pmu;
+-	char *metric_expr;
+-	char *metric_name;
+-	int is_cpu;
++	/** PMU for event. */
++	const struct perf_pmu *pmu;
++	/**
++	 * Optional event for name, desc, etc. If not present then this is a
++	 * selectable PMU and the event name is shown as "//".
++	 */
++	const struct perf_pmu_alias *event;
++	/** Is the PMU for the CPU? */
++	bool is_cpu;
+ };
+ 
+ static int cmp_sevent(const void *a, const void *b)
+ {
+ 	const struct sevent *as = a;
+ 	const struct sevent *bs = b;
++	const char *a_pmu_name, *b_pmu_name;
++	const char *a_name = "//", *a_desc = NULL, *a_topic = "";
++	const char *b_name = "//", *b_desc = NULL, *b_topic = "";
+ 	int ret;
+ 
+-	/* Put extra events last */
+-	if (!!as->desc != !!bs->desc)
+-		return !!as->desc - !!bs->desc;
+-	if (as->topic && bs->topic) {
+-		int n = strcmp(as->topic, bs->topic);
+-
+-		if (n)
+-			return n;
++	if (as->event) {
++		a_name = as->event->name;
++		a_desc = as->event->desc;
++		a_topic = as->event->topic ?: "";
+ 	}
++	if (bs->event) {
++		b_name = bs->event->name;
++		b_desc = bs->event->desc;
++		b_topic = bs->event->topic ?: "";
++	}
++	/* Put extra events last. */
++	if (!!a_desc != !!b_desc)
++		return !!a_desc - !!b_desc;
++
++	/* Order by topics. */
++	ret = strcmp(a_topic, b_topic);
++	if (ret)
++		return ret;
+ 
+ 	/* Order CPU core events to be first */
+ 	if (as->is_cpu != bs->is_cpu)
+ 		return bs->is_cpu - as->is_cpu;
+ 
+-	ret = strcmp(as->name, bs->name);
+-	if (!ret) {
+-		if (as->pmu && bs->pmu)
+-			return strcmp(as->pmu, bs->pmu);
+-	}
++	/* Order by PMU name. */
++	a_pmu_name = as->pmu->name ?: "";
++	b_pmu_name = bs->pmu->name ?: "";
++	ret = strcmp(a_pmu_name, b_pmu_name);
++	if (ret)
++		return ret;
+ 
+-	return ret;
++	/* Order by event name. */
++	return strcmp(a_name, b_name);
+ }
+ 
+ static void wordwrap(char *s, int start, int max, int corr)
+@@ -1656,16 +1672,18 @@ bool is_pmu_core(const char *name)
+ static bool pmu_alias_is_duplicate(struct sevent *alias_a,
+ 				   struct sevent *alias_b)
+ {
+-	/* Different names -> never duplicates */
+-	if (strcmp(alias_a->name, alias_b->name))
+-		return false;
++	const char *a_pmu_name, *b_pmu_name;
++	const char *a_name = alias_a->event ? alias_a->event->name : "//";
++	const char *b_name = alias_b->event ? alias_b->event->name : "//";
+ 
+-	/* Don't remove duplicates for hybrid PMUs */
+-	if (perf_pmu__is_hybrid(alias_a->pmu) &&
+-	    perf_pmu__is_hybrid(alias_b->pmu))
++	/* Different names -> never duplicates */
++	if (strcmp(a_name, b_name))
+ 		return false;
+ 
+-	return true;
++	/* Don't remove duplicates for different PMUs */
++	a_pmu_name = alias_a->pmu->name ?: "";
++	b_pmu_name = alias_b->pmu->name ?: "";
++	return strcmp(a_pmu_name, b_pmu_name) == 0;
+ }
+ 
+ void print_pmu_events(const char *event_glob, bool name_only, bool quiet_flag,
+@@ -1691,110 +1709,104 @@ void print_pmu_events(const char *event_glob, bool name_only, bool quiet_flag,
+ 			len++;
+ 	}
+ 	aliases = zalloc(sizeof(struct sevent) * len);
+-	if (!aliases)
+-		goto out_enomem;
++	if (!aliases) {
++		pr_err("FATAL: not enough memory to print PMU events\n");
++		return;
++	}
+ 	pmu = NULL;
+ 	j = 0;
+ 	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
++		bool is_cpu;
++
+ 		if (pmu_name && pmu->name && strcmp(pmu_name, pmu->name))
+ 			continue;
+ 
+-		list_for_each_entry(alias, &pmu->aliases, list) {
+-			char *name = alias->desc ? alias->name :
+-				format_alias(buf, sizeof(buf), pmu, alias);
+-			bool is_cpu = is_pmu_core(pmu->name) ||
+-				      perf_pmu__is_hybrid(pmu->name);
++		is_cpu = is_pmu_core(pmu->name) || pmu->is_hybrid;
+ 
++		list_for_each_entry(alias, &pmu->aliases, list) {
+ 			if (alias->deprecated && !deprecated)
+ 				continue;
+ 
+ 			if (event_glob != NULL &&
+-			    !(strglobmatch_nocase(name, event_glob) ||
+-			      (!is_cpu && strglobmatch_nocase(alias->name,
+-						       event_glob)) ||
++			    !(strglobmatch_nocase(alias->name, event_glob) ||
++			      (!is_cpu &&
++			       strglobmatch_nocase(alias->name, event_glob)) ||
+ 			      (alias->topic &&
+ 			       strglobmatch_nocase(alias->topic, event_glob))))
+ 				continue;
+ 
+-			if (is_cpu && !name_only && !alias->desc)
+-				name = format_alias_or(buf, sizeof(buf), pmu, alias);
+-
+-			aliases[j].name = name;
+-			if (is_cpu && !name_only && !alias->desc)
+-				aliases[j].name = format_alias_or(buf,
+-								  sizeof(buf),
+-								  pmu, alias);
+-			aliases[j].name = strdup(aliases[j].name);
+-			if (!aliases[j].name)
+-				goto out_enomem;
+-
+-			aliases[j].desc = long_desc ? alias->long_desc :
+-						alias->desc;
+-			aliases[j].topic = alias->topic;
+-			aliases[j].str = alias->str;
+-			aliases[j].pmu = pmu->name;
+-			aliases[j].metric_expr = alias->metric_expr;
+-			aliases[j].metric_name = alias->metric_name;
++			aliases[j].event = alias;
++			aliases[j].pmu = pmu;
+ 			aliases[j].is_cpu = is_cpu;
+ 			j++;
+ 		}
+ 		if (pmu->selectable &&
+ 		    (event_glob == NULL || strglobmatch(pmu->name, event_glob))) {
+-			char *s;
+-			if (asprintf(&s, "%s//", pmu->name) < 0)
+-				goto out_enomem;
+-			aliases[j].name = s;
++			aliases[j].event = NULL;
++			aliases[j].pmu = pmu;
++			aliases[j].is_cpu = is_cpu;
+ 			j++;
+ 		}
+ 	}
+ 	len = j;
+ 	qsort(aliases, len, sizeof(struct sevent), cmp_sevent);
+ 	for (j = 0; j < len; j++) {
++		char *name, *desc;
++
+ 		/* Skip duplicates */
+ 		if (j > 0 && pmu_alias_is_duplicate(&aliases[j], &aliases[j - 1]))
+ 			continue;
+ 
++		if (!aliases[j].event) {
++			/* A selectable event. */
++			snprintf(buf, sizeof(buf), "%s//", aliases[j].pmu->name);
++			name = buf;
++		} else if (aliases[j].event->desc) {
++			name = aliases[j].event->name;
++		} else {
++			if (!name_only && aliases[j].is_cpu) {
++				name = format_alias_or(buf, sizeof(buf), aliases[j].pmu,
++						       aliases[j].event);
++			} else {
++				name = format_alias(buf, sizeof(buf), aliases[j].pmu,
++						    aliases[j].event);
++			}
++		}
+ 		if (name_only) {
+-			printf("%s ", aliases[j].name);
++			printf("%s ", name);
+ 			continue;
+ 		}
+-		if (aliases[j].desc && !quiet_flag) {
+-			if (numdesc++ == 0)
+-				printf("\n");
+-			if (aliases[j].topic && (!topic ||
+-					strcmp(topic, aliases[j].topic))) {
+-				printf("%s%s:\n", topic ? "\n" : "",
+-						aliases[j].topic);
+-				topic = aliases[j].topic;
+-			}
+-			printf("  %-50s\n", aliases[j].name);
+-			printf("%*s", 8, "[");
+-			wordwrap(aliases[j].desc, 8, columns, 0);
+-			printf("]\n");
+-			if (details_flag) {
+-				printf("%*s%s/%s/ ", 8, "", aliases[j].pmu, aliases[j].str);
+-				if (aliases[j].metric_name)
+-					printf(" MetricName: %s", aliases[j].metric_name);
+-				if (aliases[j].metric_expr)
+-					printf(" MetricExpr: %s", aliases[j].metric_expr);
+-				putchar('\n');
+-			}
+-		} else
+-			printf("  %-50s [Kernel PMU event]\n", aliases[j].name);
+ 		printed++;
++		if (!aliases[j].event || !aliases[j].event->desc || quiet_flag) {
++			printf("  %-50s [Kernel PMU event]\n", name);
++			continue;
++		}
++		if (numdesc++ == 0)
++			printf("\n");
++		if (aliases[j].event->topic && (!topic ||
++						strcmp(topic, aliases[j].event->topic))) {
++			printf("%s%s:\n", topic ? "\n" : "", aliases[j].event->topic);
++			topic = aliases[j].event->topic;
++		}
++		printf("  %-50s\n", name);
++		printf("%*s", 8, "[");
++		desc = long_desc ? aliases[j].event->long_desc : aliases[j].event->desc;
++		wordwrap(desc, 8, columns, 0);
++		printf("]\n");
++		if (details_flag) {
++			printf("%*s%s/%s/ ", 8, "", aliases[j].pmu->name, aliases[j].event->str);
++			if (aliases[j].event->metric_name)
++				printf(" MetricName: %s", aliases[j].event->metric_name);
++			if (aliases[j].event->metric_expr)
++				printf(" MetricExpr: %s", aliases[j].event->metric_expr);
++			putchar('\n');
++		}
+ 	}
+ 	if (printed && pager_in_use())
+ 		printf("\n");
+-out_free:
+-	for (j = 0; j < len; j++)
+-		zfree(&aliases[j].name);
++
+ 	zfree(&aliases);
+ 	return;
+-
+-out_enomem:
+-	printf("FATAL: not enough memory to print PMU events\n");
+-	if (aliases)
+-		goto out_free;
+ }
+ 
+ bool pmu_have_event(const char *pname, const char *name)
 -- 
 2.38.1.431.g37b22c650d-goog
 
