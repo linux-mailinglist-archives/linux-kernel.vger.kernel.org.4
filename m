@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA305628579
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D49B62857D
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237874AbiKNQb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:31:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38784 "EHLO
+        id S237674AbiKNQcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:32:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237715AbiKNQaw (ORCPT
+        with ESMTP id S237724AbiKNQaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 14 Nov 2022 11:30:52 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A682F3B0;
-        Mon, 14 Nov 2022 08:29:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96BC2F642
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:29:52 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1668443391;
@@ -22,35 +22,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=R9VqGyF+glKoWbwrATKZGXQP3ZfoC2SELt3pYx7i6e4=;
-        b=DacyzsBcp752j0f06x6Q5nIQ3Y5gHBQvOHj6L2Z1z+kRtb13uwnRXYW37qeBlA7kgq5U5n
-        OaG76pGwOCwmTLoNnu/ZsGzwldP/gJxxLG3s06WbdxVYr9g1JXPqk0nThtOkMIKl8nD9ZC
-        J5NDzg7I6YeBPhNNt11xV2oCLyep6w6l3sQDsNbw86SZHUUGw3Z7L59dKKhdvveul7RcQw
-        gTAN2eDqhT8DvmFpCl3VGyA+CLcij+AIKpEnvnW1Y2ot2Pkpr7hjHH5KLAm7Due/1vwzjr
-        AB7lVHWHuwghLHNLPcTikzz1Xbjg9af9IqHrb2u8wSXUTwh+qQgOKXTfbaCX7Q==
+        bh=e8qnAfFTCJMXSmY0z9NbV6BFCys+Bgcrek19V+DaSP4=;
+        b=SVbG4PEKxAfH1E92FMTtE9BRZSIjc27GBLM2VkhgVtSRrzxNzR+aTM/aj0phkPxO7Rt/yY
+        kzAjig+wcjxC+AmDMHmPxDPYPwbNT0XvqlmF0++7F/c916y6Kn0O2jIJRkPfECvyhWECev
+        dI9lj/FxcerEjNO07uBv8QSAMRStiDR9Qe5s1SER/kk11wr288ZPxVpA1vz5NZ+sGiiDcz
+        nIp+xNOvK2zsK2ktiJuieYIiR+MhHHECfpwq8TRAoEomSR/OcP2tyhZq1cgIFpqzEA9JcG
+        rZM7q7LrQX8UssNG4FpuEmHQoCSerkvbQ+PDbtTKhrk49rS/OiaS+n0A/092sA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1668443391;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=R9VqGyF+glKoWbwrATKZGXQP3ZfoC2SELt3pYx7i6e4=;
-        b=5U/0tNMtf/1+xSx/qQ15ry4JRyEwzML/OTxzN7u46NDdwk8a6TlIBlnh67P6RTs4qrLo08
-        vYO+POSL/MrszBCw==
+        bh=e8qnAfFTCJMXSmY0z9NbV6BFCys+Bgcrek19V+DaSP4=;
+        b=IdXS+nHY6Hxx42ohYDYs3dMXShPYMab1+9r7Y2/TXhfUnf3OSGQ3URpdqRepwgEn7592sy
+        qruYH2a1Ng+xJyBA==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
-Subject: [PATCH printk v4 37/39] tty: serial: kgdboc: use console_list_lock to trap exit
-Date:   Mon, 14 Nov 2022 17:35:30 +0106
-Message-Id: <20221114162932.141883-38-john.ogness@linutronix.de>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH printk v4 38/39] printk: relieve console_lock of list synchronization duties
+Date:   Mon, 14 Nov 2022 17:35:31 +0106
+Message-Id: <20221114162932.141883-39-john.ogness@linutronix.de>
 In-Reply-To: <20221114162932.141883-1-john.ogness@linutronix.de>
 References: <20221114162932.141883-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -65,47 +59,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kgdboc_earlycon_init() uses the console_lock to ensure that no consoles
-are unregistered until the kgdboc_earlycon is setup. The console_list_lock
-should be used instead because list synchronization responsibility will
-be removed from the console_lock in a later change.
+The console_list_lock provides synchronization for console list and
+console->flags updates. All call sites that were using the console_lock
+for this synchronization have either switched to use the
+console_list_lock or the SRCU list iterator.
+
+Remove console_lock usage for console list updates and console->flags
+updates.
 
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
 ---
- drivers/tty/serial/kgdboc.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/printk/printk.c | 42 ++++++++++++++++++------------------------
+ 1 file changed, 18 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-index 8c2b7ccdfebf..a3ed9b34e2ab 100644
---- a/drivers/tty/serial/kgdboc.c
-+++ b/drivers/tty/serial/kgdboc.c
-@@ -558,13 +558,13 @@ static int __init kgdboc_earlycon_init(char *opt)
- 	 */
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index dff76c1cef80..8d635467882f 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -86,8 +86,8 @@ EXPORT_SYMBOL(oops_in_progress);
+ static DEFINE_MUTEX(console_mutex);
+ 
+ /*
+- * console_sem protects console_list and console->flags updates, and also
+- * provides serialization for access to the entire console driver system.
++ * console_sem protects updates to console->seq and console_suspended,
++ * and also provides serialization for console printing.
+  */
+ static DEFINE_SEMAPHORE(console_sem);
+ HLIST_HEAD(console_list);
+@@ -2639,10 +2639,10 @@ static int console_cpu_notify(unsigned int cpu)
+ }
+ 
+ /**
+- * console_lock - lock the console system for exclusive use.
++ * console_lock - block the console subsystem from printing
+  *
+- * Acquires a lock which guarantees that the caller has
+- * exclusive access to the console system and console_list.
++ * Acquires a lock which guarantees that no consoles will
++ * be in or enter their write() callback.
+  *
+  * Can sleep, returns nothing.
+  */
+@@ -2659,10 +2659,10 @@ void console_lock(void)
+ EXPORT_SYMBOL(console_lock);
+ 
+ /**
+- * console_trylock - try to lock the console system for exclusive use.
++ * console_trylock - try to block the console subsystem from printing
+  *
+- * Try to acquire a lock which guarantees that the caller has exclusive
+- * access to the console system and console_list.
++ * Try to acquire a lock which guarantees that no consoles will
++ * be in or enter their write() callback.
+  *
+  * returns 1 on success, and 0 on failure to acquire the lock.
+  */
+@@ -2919,10 +2919,10 @@ static bool console_flush_all(bool do_cond_resched, u64 *next_seq, bool *handove
+ }
+ 
+ /**
+- * console_unlock - unlock the console system
++ * console_unlock - unblock the console subsystem from printing
+  *
+- * Releases the console_lock which the caller holds on the console system
+- * and the console driver list.
++ * Releases the console_lock which the caller holds to block printing of
++ * the console subsystem.
+  *
+  * While the console_lock was held, console output may have been buffered
+  * by printk().  If this is the case, console_unlock(); emits
+@@ -3109,9 +3109,7 @@ void console_stop(struct console *console)
+ {
+ 	__pr_flush(console, 1000, true);
+ 	console_list_lock();
+-	console_lock();
+ 	console_srcu_write_flags(console, console->flags & ~CON_ENABLED);
+-	console_unlock();
+ 	console_list_unlock();
  
  	/*
--	 * Hold the console_lock to guarantee that no consoles are
-+	 * Hold the console_list_lock to guarantee that no consoles are
- 	 * unregistered until the kgdboc_earlycon setup is complete.
- 	 * Trapping the exit() callback relies on exit() not being
- 	 * called until the trap is setup. This also allows safe
- 	 * traversal of the console list and race-free reading of @flags.
- 	 */
+@@ -3127,9 +3125,7 @@ EXPORT_SYMBOL(console_stop);
+ void console_start(struct console *console)
+ {
+ 	console_list_lock();
 -	console_lock();
-+	console_list_lock();
- 	for_each_console(con) {
- 		if (con->write && con->read &&
- 		    (con->flags & (CON_BOOT | CON_ENABLED)) &&
-@@ -606,7 +606,7 @@ static int __init kgdboc_earlycon_init(char *opt)
+ 	console_srcu_write_flags(console, console->flags | CON_ENABLED);
+-	console_unlock();
+ 	console_list_unlock();
+ 	__pr_flush(console, 1000, true);
+ }
+@@ -3334,6 +3330,11 @@ void register_console(struct console *newcon)
+ 		 * boot console that is the furthest behind.
+ 		 */
+ 		if (bootcon_registered && !keep_bootcon) {
++			/*
++			 * Hold the console_lock to guarantee safe access to
++			 * console->seq.
++			 */
++			console_lock();
+ 			for_each_console(con) {
+ 				if ((con->flags & CON_BOOT) &&
+ 				    (con->flags & CON_ENABLED) &&
+@@ -3341,6 +3342,7 @@ void register_console(struct console *newcon)
+ 					newcon->seq = con->seq;
+ 				}
+ 			}
++			console_unlock();
+ 		}
  	}
  
- unlock:
+@@ -3348,7 +3350,6 @@ void register_console(struct console *newcon)
+ 	 * Put this console in the list - keep the
+ 	 * preferred driver at the head of the list.
+ 	 */
+-	console_lock();
+ 	if (hlist_empty(&console_list)) {
+ 		/* Ensure CON_CONSDEV is always set for the head. */
+ 		newcon->flags |= CON_CONSDEV;
+@@ -3362,7 +3363,6 @@ void register_console(struct console *newcon)
+ 	} else {
+ 		hlist_add_behind_rcu(&newcon->node, console_list.first);
+ 	}
 -	console_unlock();
-+	console_list_unlock();
  
- 	/* Non-zero means malformed option so we always return zero */
- 	return 0;
+ 	/*
+ 	 * No need to synchronize SRCU here! The caller does not rely
+@@ -3410,15 +3410,11 @@ static int unregister_console_locked(struct console *console)
+ 	if (res > 0)
+ 		return 0;
+ 
+-	console_lock();
+-
+ 	/* Disable it unconditionally */
+ 	console_srcu_write_flags(console, console->flags & ~CON_ENABLED);
+ 
+-	if (!console_is_registered_locked(console)) {
+-		console_unlock();
++	if (!console_is_registered_locked(console))
+ 		return -ENODEV;
+-	}
+ 
+ 	hlist_del_init_rcu(&console->node);
+ 
+@@ -3434,8 +3430,6 @@ static int unregister_console_locked(struct console *console)
+ 	if (!hlist_empty(&console_list) && console->flags & CON_CONSDEV)
+ 		console_srcu_write_flags(console_first(), console_first()->flags | CON_CONSDEV);
+ 
+-	console_unlock();
+-
+ 	/*
+ 	 * Ensure that all SRCU list walks have completed. All contexts
+ 	 * must not be able to see this console in the list so that any
 -- 
 2.30.2
 
