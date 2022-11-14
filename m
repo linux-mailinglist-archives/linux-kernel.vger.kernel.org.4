@@ -2,148 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E780B62857E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97465628580
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237729AbiKNQc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:32:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
+        id S237891AbiKNQeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:34:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237643AbiKNQaz (ORCPT
+        with ESMTP id S237753AbiKNQdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:30:55 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF6B2F64D;
-        Mon, 14 Nov 2022 08:29:53 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668443392;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lyFJ0F0+PfcRjhKzuNkMUBeWMaE9PNLLtfp/JWoaB8Q=;
-        b=o493Ws7OLoNBwC3oJekHe/zqr8d4O1r2boZdC330Lx7sXR/IS+LlFMlQSjiYgilqi2WvYy
-        bK6oiaWKOaMF+Ov1zkmR7m17gutu6TqbBnx+DW+0CKcPwn/WP4WoTvHeOnxG3Dcpw50L0F
-        uCuMhIdKv8bxHZuMIY7yE5xqI87CzHeE17gRcNmlIyNpc4AunL7RVRWKjhFqzm99845QTr
-        GU9GdrUeraNW+PFqq9HeRlvM+uQT2Bk7lgRw4l2QqcvqrMlmgfyI3VLCm+SlLEyaEy08XS
-        9IYpB54UDdp25QGOFuwjoXwpDVZUiUqepmIgjw9G5zSxprsVTUdFu7iZnYfhNw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668443392;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lyFJ0F0+PfcRjhKzuNkMUBeWMaE9PNLLtfp/JWoaB8Q=;
-        b=3yUj92YNamRVgcCdfRvOJqzWFRVhH0VyAxXFN/+0roEsIDgaS8xom/DI+PxiHFB0NAZLYl
-        geAOjgKKccPDeLAw==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-serial@vger.kernel.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH printk v4 39/39] tty: serial: sh-sci: use setup() callback for early console
-Date:   Mon, 14 Nov 2022 17:35:32 +0106
-Message-Id: <20221114162932.141883-40-john.ogness@linutronix.de>
-In-Reply-To: <20221114162932.141883-1-john.ogness@linutronix.de>
-References: <20221114162932.141883-1-john.ogness@linutronix.de>
+        Mon, 14 Nov 2022 11:33:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7351331230;
+        Mon, 14 Nov 2022 08:30:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B161B8104F;
+        Mon, 14 Nov 2022 16:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B60DC433C1;
+        Mon, 14 Nov 2022 16:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668443410;
+        bh=i3fM5D45EHtL70h2VJLiq8sI4O+TUzWx3M5h1tIWM9g=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=XPZr1PmapyZe0sVbruVI4r4CRgFK6lmvv0GjXf9DywfwyH8eKbIXC1exNdeIK+/R/
+         xr/wjGH+llrwx23Kwlyi1Zmzt/gMSuCPVfpgtjuBuXwNsGD0ON7D13Knd+Yfhhwdm+
+         pHVw5Z00Pnx3Sw2pRynr4doEbE4crJau8Kb7llQ2rbDeMMPX8iJwecf8JimlNTaCKA
+         8vZKvFAFH+2aIhL9GWC5ERWRzTet8sgT6e0XfaCQ/616JNhuG1n4H8dODVXwox9I+h
+         Vp5ZEmXuvqd1Ok7EU0ZxbyuNsL9cILPjscoj0Rw6n1M8fMkVGfRYZg+hsKxFeNNFAP
+         qyxzPAG8A5ewg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id B83D85C0F9C; Mon, 14 Nov 2022 08:30:09 -0800 (PST)
+Date:   Mon, 14 Nov 2022 08:30:09 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Sven Schnelle <svens@linux.ibm.com>
+Cc:     Davidlohr Bueso <dave@stgolabs.net>,
+        Josh Triplett <josh@joshtriplett.org>,
+        linux-kernel@vger.kernel.org, rcu@vger.kernel.org
+Subject: Re: [PATCH 1/2] torture: use for_each_present() loop in
+ torture_online_all()
+Message-ID: <20221114163009.GE4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221111125126.3319474-1-svens@linux.ibm.com>
+ <20221111125126.3319474-2-svens@linux.ibm.com>
+ <20221111185331.GA725751@paulmck-ThinkPad-P17-Gen-1>
+ <yt9dtu31k0r9.fsf@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yt9dtu31k0r9.fsf@linux.ibm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When setting up the early console, the setup() callback of the
-regular console is used. It is called manually before registering
-the early console instead of providing a setup() callback for the
-early console. This is probably because the early setup needs a
-different @options during the early stage.
+On Mon, Nov 14, 2022 at 04:35:06PM +0100, Sven Schnelle wrote:
+> "Paul E. McKenney" <paulmck@kernel.org> writes:
+> 
+> > On Fri, Nov 11, 2022 at 01:51:24PM +0100, Sven Schnelle wrote:
+> >> A CPU listed in the possible mask doesn't have to be present, in
+> >> which case it would crash the kernel in torture_online_all().
+> >> To prevent this use a for_each_present() loop.
+> >> 
+> >> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
+> >
+> > Looks good to me!  Any reason for no mailing list on CC?
+> 
+> No, my fault. I setup get_maintainer.pl to be called from git
+> send-email, but looks like i did it wrong :-)
 
-The issue here is that the setup() callback is called without the
-console_list_lock held and functions such as uart_set_options()
-expect that.
+Been there, done that!  ;-)
 
-Rather than manually calling the setup() function before registering,
-provide an early console setup() callback that will use the different
-early options. This ensures that the error checking, ordering, and
-locking context when setting up the early console are correct.
+> > Ah, and any synchronization required in case it is possible for a CPU
+> > to leave the cpu_present_mask?  Or can they only be added?
+> 
+> Hmm... I think the main question is, whether it is ok for a cpu to be
+> removed from the system when rcutorture is running? In both cases it
+> would disappear from the cpu online mask, so i don't think the patch
+> would change the behaviour. But i can check and send additional patches
+> if there are other places that needs adjustment.
 
-Since this early console can only be registered via the earlyprintk=
-parameter, the @options argument of the setup() callback will always
-be NULL. Rather than simply ignoring the argument, add a WARN_ON()
-to get our attention in case the setup() callback semantics should
-change in the future.
+Yes, rcutorture has lower-level checks for CPUs being hotplugged
+behind its back.  Which might be sufficient.  But this patch is in
+response to something bad happening if the CPU is also not present in
+the cpu_present_mask.  Would that same bad thing happen if rcutorture saw
+the CPU in cpu_online_mask, but by the time it attempted to CPU-hotplug
+it, that CPU was gone not just from cpu_online_mask, but also from
+cpu_present_mask?
 
-Note that technically the current implementation works because it is
-only used in early boot. And since the early console setup is
-performed before registering, it cannot race with anything and thus
-does not need any locking. However, longterm maintenance is easier
-when drivers rely on the subsystem API rather than manually
-implementing steps that could cause breakage in the future.
+Or are CPUs never removed from cpu_present_mask?
 
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/tty/serial/sh-sci.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-index 62f773286d44..76452fe2af86 100644
---- a/drivers/tty/serial/sh-sci.c
-+++ b/drivers/tty/serial/sh-sci.c
-@@ -3054,15 +3054,29 @@ static struct console serial_console = {
- };
- 
- #ifdef CONFIG_SUPERH
-+static char early_serial_buf[32];
-+
-+static int early_serial_console_setup(struct console *co, char *options)
-+{
-+	/*
-+	 * This early console is always registered using the earlyprintk=
-+	 * parameter, which does not call add_preferred_console(). Thus
-+	 * @options is always NULL and the options for this early console
-+	 * are passed using a custom buffer.
-+	 */
-+	WARN_ON(options);
-+
-+	return serial_console_setup(co, early_serial_buf);
-+}
-+
- static struct console early_serial_console = {
- 	.name           = "early_ttySC",
- 	.write          = serial_console_write,
-+	.setup		= early_serial_console_setup,
- 	.flags          = CON_PRINTBUFFER,
- 	.index		= -1,
- };
- 
--static char early_serial_buf[32];
--
- static int sci_probe_earlyprintk(struct platform_device *pdev)
- {
- 	const struct plat_sci_port *cfg = dev_get_platdata(&pdev->dev);
-@@ -3074,8 +3088,6 @@ static int sci_probe_earlyprintk(struct platform_device *pdev)
- 
- 	sci_init_single(pdev, &sci_ports[pdev->id], pdev->id, cfg, true);
- 
--	serial_console_setup(&early_serial_console, early_serial_buf);
--
- 	if (!strstr(early_serial_buf, "keep"))
- 		early_serial_console.flags |= CON_BOOT;
- 
--- 
-2.30.2
-
+							Thanx, Paul
