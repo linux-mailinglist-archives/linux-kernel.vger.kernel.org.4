@@ -2,71 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 490F6627662
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:30:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D380627682
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235667AbiKNHaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 02:30:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59332 "EHLO
+        id S235943AbiKNHkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 02:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235115AbiKNHaH (ORCPT
+        with ESMTP id S235617AbiKNHkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 02:30:07 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00E1616D;
-        Sun, 13 Nov 2022 23:30:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1668410974; bh=JlcudpcRB8lLSYM3pyxw2CcM5IMYVAIBgpsHzYD4udo=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=WuPQ08JH5+H2QEq6Kj2rJSwFrJFOFksZFFul+YkZedrA5Hxs0PfeC8mGVNDzAIWma
-         HOGWc0AN9IcRQ0bkyngoQ/VBfX1XEtagfaCJDOjtonx1i9Zl7zPbBaEpNg5yApB4Z1
-         T3vBkj/X4HeBTEDf3tP95IGH4wuI2q+4/ET1Fpxkh9XCTyT14J/eX+QVbKEAlO4QCa
-         Asb3TGkMj7YjAITqq09+0RuqYFsv1XxlcMAlvDfd36Kfpmi2WR8pnjjwhnf7qZuCP6
-         QJ297i+ms0Plh7huRysr9pQMK3ZWoDWgnrcPGHwn2ZB+HdLafgyMDIVhOIsapDBRMx
-         kdO2uWKqtm+og==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([92.116.133.36]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M89Gj-1oqNAb2PRr-005GaY; Mon, 14
- Nov 2022 08:29:34 +0100
-Message-ID: <7f47e563-8c3c-dcba-3bfc-174681b608f3@gmx.de>
-Date:   Mon, 14 Nov 2022 08:29:32 +0100
+        Mon, 14 Nov 2022 02:40:37 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4287B113;
+        Sun, 13 Nov 2022 23:40:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668411636; x=1699947636;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=pNNogqmjJm+mTqX41+8eX7joqpGAFmuRFJnxukrarac=;
+  b=I5AzTljeCez6wrqseVKtgbzTgkw3H7nPWkP9QsYuxafpU1/COgezmZ+A
+   IBddIUWFLdU97q8dvyoulPbv5xZlRXmolloiRJDrerRWx7coeQwDYg9ik
+   KKDZ9Bm3NzaJvf5R4FuV2cOorKltOoitGJv9/koGvi+RFOhXFmkBsmHli
+   88fE8SglOlARGv5PGZv5ZKqgXdbowOfxbBz6LZiQW8c/U7ll6A/S/rL90
+   JP71CU7CJoB33zP1AlpVzu3cwbl2AFDyxsmy9UHiSqVPO932ugJnOlgd2
+   oMqJ61mLjLA82Kre7tKtei2oXreL4+2Z+DZTKulXCXSsVPkzT1+UN2ryf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="338689172"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="338689172"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 23:40:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="616202077"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="616202077"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga006.jf.intel.com with ESMTP; 13 Nov 2022 23:40:32 -0800
+Date:   Mon, 14 Nov 2022 15:31:09 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 06/12] fpga: intel-m10-bmc: Add flash ops for sec update
+Message-ID: <Y3HuvXfgA5Tit4YO@yilunxu-OptiPlex-7050>
+References: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com>
+ <20221108144305.45424-7-ilpo.jarvinen@linux.intel.com>
+ <Y24K0LGs1tHru4vX@yilunxu-OptiPlex-7050>
+ <375b8b75-9de0-6f9c-241e-27d479388fd7@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] fbdev: smscufx: fix error handling code in ufx_usb_probe
-Content-Language: en-US
-To:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Steve Glendinning <steve.glendinning@shawell.net>
-Cc:     syzkaller <syzkaller@googlegroups.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20221111054949.1002804-1-dzm91@hust.edu.cn>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20221111054949.1002804-1-dzm91@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ZGHBiQ9xYRwYtrAQMEY5GJqQKCfzW1rR0WXUUcXgvBu5WQfsVc+
- Am+KcE/Wr9JVYU03OQUANVrkiybqgtilkKDEMfjPpIXjDDyQbAJeTzMowPoF2Usr1f+KaE5
- fytFbovaGWsDZ5/FKLBxUNG6ftHy/p7b45TWFrW/v98xXkFgrvtvh0a69JxJXH001uE02s+
- K/icqzdD9sYs1Ff9aU7Ng==
-UI-OutboundReport: notjunk:1;M01:P0:E+fDw7+sEKk=;uVWA1A8eE36n1XJBz6XKB1jytRG
- TmLBCVzbgWxycKuR5X2tH2g78MM7uCHNxcPh+Js58pOOdny+EwBvJTLWJwiO62c8rIFdnzev5
- 1SWbL6a2THcv//BvF5148ntKKW6CjZAEJfR3rFqxQysRi7EUtr9ArkjjteDofD3TabJn0Bfta
- 7kEZ3K3czCiTpGG5tiERuuwg4pYtbdTnRbC9fW8umb+VVTupiz1Te43eqDWvTmgpUOccRAwrb
- 48DHS7GVn3VgBI+bGKXqgilItlHdBKoLWmS+BCWdEOSAAlhAL4tRGD7kF9kE525U8cMGwxyJF
- YxqHrhMILcB7bvh+sXLQE3Z8WKAELEmgoTVjKYMeFtiKGAYJA/379pP3JmkIaYzBuxo1mBTmH
- 5CAt6rClUn26S4Y1nJB3dfpNOYDMPaPZ54ILeMHKrg89bCs+xDj7h4C3Vtpp0ipg3g67kMLjz
- oPaBZwu8pftwycISviMN6Spj4MzcKZ5hhBJ8EOY4LavorQ2MWtKM5o+OJtiBixSjP/PR7GIJ/
- 1B+uT5nuDV3E34RqftyVfmnUr9V84wFnjIQiS0r4rZSAyerUFkVlZj4KdM44/N/7P+N0/Jp9M
- no0RR133MAiY9FxbSZ6SrXN93zX2RHRTR65M2oGToZkiSwRgQ8aUb79kWp16XMrR0odw21Acw
- jXe52Z0xbQ5zRcdYPiOiWGtzshmzmQyPCI2cvTStUdUpMYUhGl/O8xo5a0UTQCJyNggAAQXCp
- 6HAL0KRn77NiAy/WOk1kHjDSvyBdsfhgcGkLFPRkXFjoB77S8FS6O9894QPwE/OpCLq+SY9iA
- bICQHUhHj8GXiVUOz6MeZ7Gc1NUDypbyqK2tIps3YS6hyuUTpmqtET9boK17VQUt+tyYWPx/R
- ozPihoArD7FLVcsrVShyZGWVZMny7ad+aauOwpQGjf83ua9Y7nh2yOtNQJuE7cppXJFpv3Mic
- 7kTyhQ==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <375b8b75-9de0-6f9c-241e-27d479388fd7@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,187 +72,324 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/11/22 06:49, Dongliang Mu wrote:
-> The current error handling code in ufx_usb_probe have many unmatching
-> issues, e.g., missing ufx_free_usb_list, destroy_modedb label should
-> only include framebuffer_release, fb_dealloc_cmap only matches
-> fb_alloc_cmap.
->
-> My local syzkaller reports a memory leak bug:
->
-> memory leak in ufx_usb_probe
->
-> BUG: memory leak
-> unreferenced object 0xffff88802f879580 (size 128):
->    comm "kworker/0:7", pid 17416, jiffies 4295067474 (age 46.710s)
->    hex dump (first 32 bytes):
->      80 21 7c 2e 80 88 ff ff 18 d0 d0 0c 80 88 ff ff  .!|.............
->      00 d0 d0 0c 80 88 ff ff e0 ff ff ff 0f 00 00 00  ................
->    backtrace:
->      [<ffffffff814c99a0>] kmalloc_trace+0x20/0x90 mm/slab_common.c:1045
->      [<ffffffff824d219c>] kmalloc include/linux/slab.h:553 [inline]
->      [<ffffffff824d219c>] kzalloc include/linux/slab.h:689 [inline]
->      [<ffffffff824d219c>] ufx_alloc_urb_list drivers/video/fbdev/smscufx=
-.c:1873 [inline]
->      [<ffffffff824d219c>] ufx_usb_probe+0x11c/0x15a0 drivers/video/fbdev=
-/smscufx.c:1655
->      [<ffffffff82d17927>] usb_probe_interface+0x177/0x370 drivers/usb/co=
-re/driver.c:396
->      [<ffffffff82712f0d>] call_driver_probe drivers/base/dd.c:560 [inlin=
-e]
->      [<ffffffff82712f0d>] really_probe+0x12d/0x390 drivers/base/dd.c:639
->      [<ffffffff8271322f>] __driver_probe_device+0xbf/0x140 drivers/base/=
-dd.c:778
->      [<ffffffff827132da>] driver_probe_device+0x2a/0x120 drivers/base/dd=
-.c:808
->      [<ffffffff82713c27>] __device_attach_driver+0xf7/0x150 drivers/base=
-/dd.c:936
->      [<ffffffff82710137>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c=
-:427
->      [<ffffffff827136b5>] __device_attach+0x105/0x2d0 drivers/base/dd.c:=
-1008
->      [<ffffffff82711d36>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:=
-487
->      [<ffffffff8270e242>] device_add+0x642/0xdc0 drivers/base/core.c:351=
-7
->      [<ffffffff82d14d5f>] usb_set_configuration+0x8ef/0xb80 drivers/usb/=
-core/message.c:2170
->      [<ffffffff82d2576c>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb=
-/core/generic.c:238
->      [<ffffffff82d16ffc>] usb_probe_device+0x5c/0x140 drivers/usb/core/d=
-river.c:293
->      [<ffffffff82712f0d>] call_driver_probe drivers/base/dd.c:560 [inlin=
-e]
->      [<ffffffff82712f0d>] really_probe+0x12d/0x390 drivers/base/dd.c:639
->      [<ffffffff8271322f>] __driver_probe_device+0xbf/0x140 drivers/base/=
-dd.c:778
->
-> Fix this bug by rewriting the error handling code in ufx_usb_probe.
->
-> Reported-by: syzkaller <syzkaller@googlegroups.com>
-> Tested-by: Dongliang Mu <dzm91@hust.edu.cn>
-> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+On 2022-11-11 at 15:32:42 +0200, Ilpo Järvinen wrote:
+> On Fri, 11 Nov 2022, Xu Yilun wrote:
+> 
+> > On 2022-11-08 at 16:42:59 +0200, Ilpo Järvinen wrote:
+> > > Access to flash staging area is different for N6000 from that of the
+> > > SPI interfaced counterparts. Introduce intel_m10bmc_flash_ops to allow
+> > > interface specific differentiations for the flash access path for sec
+> > > update.
+> > > 
+> > > Co-developed-by: Tianfei zhang <tianfei.zhang@intel.com>
+> > > Signed-off-by: Tianfei zhang <tianfei.zhang@intel.com>
+> > > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
+> > > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+> > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > > ---
+> > >  drivers/fpga/intel-m10-bmc-sec-update.c | 79 ++++++-------------------
+> > >  drivers/mfd/intel-m10-bmc-spi.c         | 52 ++++++++++++++++
+> > >  include/linux/mfd/intel-m10-bmc.h       | 14 +++++
+> > >  3 files changed, 84 insertions(+), 61 deletions(-)
+> > > 
+> > > diff --git a/drivers/fpga/intel-m10-bmc-sec-update.c b/drivers/fpga/intel-m10-bmc-sec-update.c
+> > > index dbe8aff95da3..3bd22d03616a 100644
+> > > --- a/drivers/fpga/intel-m10-bmc-sec-update.c
+> > > +++ b/drivers/fpga/intel-m10-bmc-sec-update.c
+> > > @@ -38,11 +38,9 @@ show_root_entry_hash(struct device *dev, u32 exp_magic,
+> > >  	struct m10bmc_sec *sec = dev_get_drvdata(dev);
+> > >  	int sha_num_bytes, i, ret, cnt = 0;
+> > >  	u8 hash[REH_SHA384_SIZE];
+> > > -	unsigned int stride;
+> > >  	u32 magic;
+> > >  
+> > > -	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
+> > > -	ret = m10bmc_raw_read(sec->m10bmc, prog_addr, &magic);
+> > > +	ret = sec->m10bmc->flash_ops->read(sec->m10bmc, (u8 *)&magic, prog_addr, sizeof(magic));
+> > >  	if (ret)
+> > >  		return ret;
+> > >  
+> > > @@ -50,19 +48,16 @@ show_root_entry_hash(struct device *dev, u32 exp_magic,
+> > >  		return sysfs_emit(buf, "hash not programmed\n");
+> > >  
+> > >  	sha_num_bytes = FIELD_GET(REH_SHA_NUM_BYTES, magic) / 8;
+> > > -	if ((sha_num_bytes % stride) ||
+> > > -	    (sha_num_bytes != REH_SHA256_SIZE &&
+> > > -	     sha_num_bytes != REH_SHA384_SIZE))   {
+> > > +	if (sha_num_bytes != REH_SHA256_SIZE &&
+> > > +	    sha_num_bytes != REH_SHA384_SIZE) {
+> > >  		dev_err(sec->dev, "%s bad sha num bytes %d\n", __func__,
+> > >  			sha_num_bytes);
+> > >  		return -EINVAL;
+> > >  	}
+> > >  
+> > > -	ret = regmap_bulk_read(sec->m10bmc->regmap, reh_addr,
+> > > -			       hash, sha_num_bytes / stride);
+> > > +	ret = sec->m10bmc->flash_ops->read(sec->m10bmc, hash, reh_addr, sha_num_bytes);
+> > >  	if (ret) {
+> > > -		dev_err(dev, "failed to read root entry hash: %x cnt %x: %d\n",
+> > > -			reh_addr, sha_num_bytes / stride, ret);
+> > > +		dev_err(dev, "failed to read root entry hash\n");
+> > >  		return ret;
+> > >  	}
+> > >  
+> > > @@ -98,27 +93,16 @@ DEVICE_ATTR_SEC_REH_RO(pr);
+> > >  static ssize_t
+> > >  show_canceled_csk(struct device *dev, u32 addr, char *buf)
+> > >  {
+> > > -	unsigned int i, stride, size = CSK_32ARRAY_SIZE * sizeof(u32);
+> > > +	unsigned int i, size = CSK_32ARRAY_SIZE * sizeof(u32);
+> > >  	struct m10bmc_sec *sec = dev_get_drvdata(dev);
+> > >  	DECLARE_BITMAP(csk_map, CSK_BIT_LEN);
+> > >  	__le32 csk_le32[CSK_32ARRAY_SIZE];
+> > >  	u32 csk32[CSK_32ARRAY_SIZE];
+> > >  	int ret;
+> > >  
+> > > -	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
+> > > -	if (size % stride) {
+> > > -		dev_err(sec->dev,
+> > > -			"CSK vector size (0x%x) not aligned to stride (0x%x)\n",
+> > > -			size, stride);
+> > > -		WARN_ON_ONCE(1);
+> > > -		return -EINVAL;
+> > > -	}
+> > > -
+> > > -	ret = regmap_bulk_read(sec->m10bmc->regmap, addr, csk_le32,
+> > > -			       size / stride);
+> > > +	ret = sec->m10bmc->flash_ops->read(sec->m10bmc, (u8 *)&csk_le32, addr, size);
+> > >  	if (ret) {
+> > > -		dev_err(sec->dev, "failed to read CSK vector: %x cnt %x: %d\n",
+> > > -			addr, size / stride, ret);
+> > > +		dev_err(sec->dev, "failed to read CSK vector\n");
+> > >  		return ret;
+> > >  	}
+> > >  
+> > > @@ -157,31 +141,21 @@ static ssize_t flash_count_show(struct device *dev,
+> > >  {
+> > >  	struct m10bmc_sec *sec = dev_get_drvdata(dev);
+> > >  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+> > > -	unsigned int stride, num_bits;
+> > > +	unsigned int num_bits;
+> > >  	u8 *flash_buf;
+> > >  	int cnt, ret;
+> > >  
+> > > -	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
+> > >  	num_bits = FLASH_COUNT_SIZE * 8;
+> > >  
+> > > -	if (FLASH_COUNT_SIZE % stride) {
+> > > -		dev_err(sec->dev,
+> > > -			"FLASH_COUNT_SIZE (0x%x) not aligned to stride (0x%x)\n",
+> > > -			FLASH_COUNT_SIZE, stride);
+> > > -		WARN_ON_ONCE(1);
+> > > -		return -EINVAL;
+> > > -	}
+> > > -
+> > >  	flash_buf = kmalloc(FLASH_COUNT_SIZE, GFP_KERNEL);
+> > >  	if (!flash_buf)
+> > >  		return -ENOMEM;
+> > >  
+> > > -	ret = regmap_bulk_read(sec->m10bmc->regmap, csr_map->rsu_update_counter,
+> > > -			       flash_buf, FLASH_COUNT_SIZE / stride);
+> > > +	ret = sec->m10bmc->flash_ops->read(sec->m10bmc, flash_buf,
+> > > +					   csr_map->rsu_update_counter,
+> > > +					   FLASH_COUNT_SIZE);
+> > >  	if (ret) {
+> > > -		dev_err(sec->dev,
+> > > -			"failed to read flash count: %x cnt %x: %d\n",
+> > > -			csr_map->rsu_update_counter, FLASH_COUNT_SIZE / stride, ret);
+> > > +		dev_err(sec->dev, "failed to read flash count\n");
+> > >  		goto exit_free;
+> > >  	}
+> > >  	cnt = num_bits - bitmap_weight((unsigned long *)flash_buf, num_bits);
+> > > @@ -470,15 +444,14 @@ static enum fw_upload_err m10bmc_sec_write(struct fw_upload *fwl, const u8 *data
+> > >  {
+> > >  	struct m10bmc_sec *sec = fwl->dd_handle;
+> > >  	const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
+> > > -	u32 blk_size, doorbell, extra_offset;
+> > > -	unsigned int stride, extra = 0;
+> > > +	struct intel_m10bmc *m10bmc = sec->m10bmc;
+> > > +	u32 blk_size, doorbell;
+> > >  	int ret;
+> > >  
+> > > -	stride = regmap_get_reg_stride(sec->m10bmc->regmap);
+> > >  	if (sec->cancel_request)
+> > >  		return rsu_cancel(sec);
+> > >  
+> > > -	ret = m10bmc_sys_read(sec->m10bmc, csr_map->doorbell, &doorbell);
+> > > +	ret = m10bmc_sys_read(m10bmc, csr_map->doorbell, &doorbell);
+> > >  	if (ret) {
+> > >  		return FW_UPLOAD_ERR_RW_ERROR;
+> > >  	} else if (rsu_prog(doorbell) != RSU_PROG_READY) {
+> > > @@ -486,28 +459,12 @@ static enum fw_upload_err m10bmc_sec_write(struct fw_upload *fwl, const u8 *data
+> > >  		return FW_UPLOAD_ERR_HW_ERROR;
+> > >  	}
+> > >  
+> > > -	WARN_ON_ONCE(WRITE_BLOCK_SIZE % stride);
+> > > +	WARN_ON_ONCE(WRITE_BLOCK_SIZE % regmap_get_reg_stride(m10bmc->regmap));
+> > >  	blk_size = min_t(u32, WRITE_BLOCK_SIZE, size);
+> > > -	ret = regmap_bulk_write(sec->m10bmc->regmap,
+> > > -				M10BMC_STAGING_BASE + offset,
+> > > -				(void *)data + offset,
+> > > -				blk_size / stride);
+> > > +	ret = m10bmc->flash_ops->write(m10bmc, data, offset, blk_size);
+> > >  	if (ret)
+> > >  		return FW_UPLOAD_ERR_RW_ERROR;
+> > >  
+> > > -	/*
+> > > -	 * If blk_size is not aligned to stride, then handle the extra
+> > > -	 * bytes with regmap_write.
+> > > -	 */
+> > > -	if (blk_size % stride) {
+> > > -		extra_offset = offset + ALIGN_DOWN(blk_size, stride);
+> > > -		memcpy(&extra, (u8 *)(data + extra_offset), blk_size % stride);
+> > > -		ret = regmap_write(sec->m10bmc->regmap,
+> > > -				   M10BMC_STAGING_BASE + extra_offset, extra);
+> > > -		if (ret)
+> > > -			return FW_UPLOAD_ERR_RW_ERROR;
+> > > -	}
+> > > -
+> > >  	*written = blk_size;
+> > >  	return FW_UPLOAD_ERR_NONE;
+> > >  }
+> > > diff --git a/drivers/mfd/intel-m10-bmc-spi.c b/drivers/mfd/intel-m10-bmc-spi.c
+> > > index e7b0b3b03186..e3b2edb8bc07 100644
+> > > --- a/drivers/mfd/intel-m10-bmc-spi.c
+> > > +++ b/drivers/mfd/intel-m10-bmc-spi.c
+> > > @@ -33,6 +33,57 @@ static struct regmap_config intel_m10bmc_regmap_config = {
+> > >  	.max_register = M10BMC_MEM_END,
+> > >  };
+> > >  
+> > > +static int m10bmc_spi_flash_write(struct intel_m10bmc *m10bmc, const u8 *buf, u32 offset, u32 size)
+> > > +{
+> > > +	unsigned int stride = regmap_get_reg_stride(m10bmc->regmap);
+> > > +	u32 leftover = size % stride;
+> > > +	u32 extra_offset, extra = 0;
+> > > +	int ret;
+> > > +
+> > > +	if (WARN_ON_ONCE(stride > sizeof(extra)))
+> > > +		return -EINVAL;
+> > > +
+> > > +	ret = regmap_bulk_write(m10bmc->regmap, M10BMC_STAGING_BASE + offset,
+> > > +				buf + offset, size / stride);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	/* If size is not aligned to stride, then handle the extra bytes with regmap_write */
+> > > +	if (leftover) {
+> > > +		extra_offset = offset + ALIGN_DOWN(size, stride);
+> > > +		memcpy(&extra, (u8 *)(buf + extra_offset), leftover);
+> > > +
+> > > +		ret = regmap_write(m10bmc->regmap, M10BMC_STAGING_BASE + extra_offset, extra);
+> > > +		if (ret)
+> > > +			return ret;
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int m10bmc_spi_flash_read(struct intel_m10bmc *m10bmc, u8 *buf, u32 addr, u32 size)
+> > > +{
+> > > +	unsigned int stride = regmap_get_reg_stride(m10bmc->regmap);
+> > > +	int ret;
+> > > +
+> > > +	if (WARN_ON_ONCE(size % stride)) {
+> > > +		dev_err(m10bmc->dev, "read size (0x%x) not aligned to stride (0x%x)\n",
+> > > +			size, stride);
+> > 
+> > Why read should be aligned to stride but write doesn't have to? It's odd that
+> > same amount of data could be written into flash but can't be read back.
+> 
+> I'll see what needs to be done with this before resubmitting.
+> 
+> > > +		return -EINVAL;
+> > > +	}
+> > > +
+> > > +	ret = regmap_bulk_read(m10bmc->regmap, addr, buf, size / stride);
+> > > +	if (ret)
+> > > +		dev_err(m10bmc->dev, "failed to read flash block data: %x cnt %x: %d\n",
+> > > +			addr, size / stride, ret);
+> > > +	return ret;
+> > > +}
+> > > +
+> > > +static const struct intel_m10bmc_flash_ops m10bmc_spi_flash_ops = {
+> > > +	.read = m10bmc_spi_flash_read,
+> > > +	.write = m10bmc_spi_flash_write,
+> > > +};
+> > 
+> > Is the flash ops used in other devices? For now, I see it's specific for
+> > sec-update dev. So why not implement it in sec-update driver?
+> 
+> Are you suggesting the sec-update driver should implement a similar split 
+> per interface type (SPI/PMCI) as the mfd/bmc one currently does? ...While 
+> doable, it seems a bit overkill to have that kind of double split.
 
-applied.
-Thanks!
-Helge
+My preference is, try best not to impact MFD driver if a subdev IP is internally
+changed. For FPGA/CPLD, IP change happens normally. Till now, I see the flash
+area is dedicated for sec-update dev. So the direct operations for related
+HW ioaddrs had better be handled by sec-update driver. In case the layout
+of these HW IO is changed, no need to change the MFD driver.
 
-> ---
->   drivers/video/fbdev/smscufx.c | 46 +++++++++++++++++++++++------------
->   1 file changed, 31 insertions(+), 15 deletions(-)
->
-> diff --git a/drivers/video/fbdev/smscufx.c b/drivers/video/fbdev/smscufx=
-.c
-> index 9343b7a4ac89..2ad6e98ce10d 100644
-> --- a/drivers/video/fbdev/smscufx.c
-> +++ b/drivers/video/fbdev/smscufx.c
-> @@ -1622,7 +1622,7 @@ static int ufx_usb_probe(struct usb_interface *int=
-erface,
->   	struct usb_device *usbdev;
->   	struct ufx_data *dev;
->   	struct fb_info *info;
-> -	int retval;
-> +	int retval =3D -ENOMEM;
->   	u32 id_rev, fpga_rev;
->
->   	/* usb initialization */
-> @@ -1654,15 +1654,17 @@ static int ufx_usb_probe(struct usb_interface *i=
-nterface,
->
->   	if (!ufx_alloc_urb_list(dev, WRITES_IN_FLIGHT, MAX_TRANSFER)) {
->   		dev_err(dev->gdev, "ufx_alloc_urb_list failed\n");
-> -		goto e_nomem;
-> +		goto put_ref;
->   	}
->
->   	/* We don't register a new USB class. Our client interface is fbdev *=
-/
->
->   	/* allocates framebuffer driver structure, not framebuffer memory */
->   	info =3D framebuffer_alloc(0, &usbdev->dev);
-> -	if (!info)
-> -		goto e_nomem;
-> +	if (!info) {
-> +		dev_err(dev->gdev, "framebuffer_alloc failed\n");
-> +		goto free_urb_list;
-> +	}
->
->   	dev->info =3D info;
->   	info->par =3D dev;
-> @@ -1705,22 +1707,34 @@ static int ufx_usb_probe(struct usb_interface *i=
-nterface,
->   	check_warn_goto_error(retval, "unable to find common mode for display=
- and adapter");
->
->   	retval =3D ufx_reg_set_bits(dev, 0x4000, 0x00000001);
-> -	check_warn_goto_error(retval, "error %d enabling graphics engine", ret=
-val);
-> +	if (retval < 0) {
-> +		dev_err(dev->gdev, "error %d enabling graphics engine", retval);
-> +		goto setup_modes;
-> +	}
->
->   	/* ready to begin using device */
->   	atomic_set(&dev->usb_active, 1);
->
->   	dev_dbg(dev->gdev, "checking var");
->   	retval =3D ufx_ops_check_var(&info->var, info);
-> -	check_warn_goto_error(retval, "error %d ufx_ops_check_var", retval);
-> +	if (retval < 0) {
-> +		dev_err(dev->gdev, "error %d ufx_ops_check_var", retval);
-> +		goto reset_active;
-> +	}
->
->   	dev_dbg(dev->gdev, "setting par");
->   	retval =3D ufx_ops_set_par(info);
-> -	check_warn_goto_error(retval, "error %d ufx_ops_set_par", retval);
-> +	if (retval < 0) {
-> +		dev_err(dev->gdev, "error %d ufx_ops_set_par", retval);
-> +		goto reset_active;
-> +	}
->
->   	dev_dbg(dev->gdev, "registering framebuffer");
->   	retval =3D register_framebuffer(info);
-> -	check_warn_goto_error(retval, "error %d register_framebuffer", retval)=
-;
-> +	if (retval < 0) {
-> +		dev_err(dev->gdev, "error %d register_framebuffer", retval);
-> +		goto reset_active;
-> +	}
->
->   	dev_info(dev->gdev, "SMSC UDX USB device /dev/fb%d attached. %dx%d re=
-solution."
->   		" Using %dK framebuffer memory\n", info->node,
-> @@ -1728,21 +1742,23 @@ static int ufx_usb_probe(struct usb_interface *i=
-nterface,
->
->   	return 0;
->
-> -error:
-> -	fb_dealloc_cmap(&info->cmap);
-> -destroy_modedb:
-> +reset_active:
-> +	atomic_set(&dev->usb_active, 0);
-> +setup_modes:
->   	fb_destroy_modedb(info->monspecs.modedb);
->   	vfree(info->screen_base);
->   	fb_destroy_modelist(&info->modelist);
-> +error:
-> +	fb_dealloc_cmap(&info->cmap);
-> +destroy_modedb:
->   	framebuffer_release(info);
-> +free_urb_list:
-> +	if (dev->urbs.count > 0)
-> +		ufx_free_urb_list(dev);
->   put_ref:
->   	kref_put(&dev->kref, ufx_free); /* ref for framebuffer */
->   	kref_put(&dev->kref, ufx_free); /* last ref from kref_init */
->   	return retval;
-> -
-> -e_nomem:
-> -	retval =3D -ENOMEM;
-> -	goto put_ref;
->   }
->
->   static void ufx_usb_disconnect(struct usb_interface *interface)
+And the PMCI provides an accelerated channel for flash area instead of
+direct access. It's OK for PMCI MFD driver to implement the acceleration
+access callbacks, but it is still the sec-update driver's responsibility
+to decide whether to use it for flash area access.
+
+I don't have a solid idea how to implement the accelerated access, maybe
+some callback in MFD driver, or leverage regmap_bus.write/gather_write?
+
+I also have concern about accessing M10BMC_PMCI_FLASH_CTRL in MFD
+driver, if this register is also dedicated for sec-update.
+
+Thanks,
+Yilun
+
+> 
+> -- 
+>  i.
+> 
+> > >  static int check_m10bmc_version(struct intel_m10bmc *ddata)
+> > >  {
+> > >  	unsigned int v;
+> > > @@ -72,6 +123,7 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
+> > >  
+> > >  	info = (struct intel_m10bmc_platform_info *)id->driver_data;
+> > >  	ddata->dev = dev;
+> > > +	ddata->flash_ops = &m10bmc_spi_flash_ops;
+> > >  
+> > >  	ddata->regmap = devm_regmap_init_spi_avmm(spi, &intel_m10bmc_regmap_config);
+> > >  	if (IS_ERR(ddata->regmap)) {
+> > > diff --git a/include/linux/mfd/intel-m10-bmc.h b/include/linux/mfd/intel-m10-bmc.h
+> > > index d752c0d7cbdb..860408aa8db3 100644
+> > > --- a/include/linux/mfd/intel-m10-bmc.h
+> > > +++ b/include/linux/mfd/intel-m10-bmc.h
+> > > @@ -161,16 +161,30 @@ struct intel_m10bmc_platform_info {
+> > >  	const struct m10bmc_csr_map *csr_map;
+> > >  };
+> > >  
+> > > +struct intel_m10bmc;
+> > > +
+> > > +/**
+> > > + * struct intel_m10bmc_flash_ops - device specific operations for flash R/W
+> > > + * @read: read a block of data from flash
+> > > + * @write: write a block of data to flash
+> > > + */
+> > > +struct intel_m10bmc_flash_ops {
+> > > +	int (*read)(struct intel_m10bmc *m10bmc, u8 *buf, u32 addr, u32 size);
+> > > +	int (*write)(struct intel_m10bmc *m10bmc, const u8 *buf, u32 offset, u32 size);
+> > > +};
+> > > +
+> > >  /**
+> > >   * struct intel_m10bmc - Intel MAX 10 BMC parent driver data structure
+> > >   * @dev: this device
+> > >   * @regmap: the regmap used to access registers by m10bmc itself
+> > >   * @info: the platform information for MAX10 BMC
+> > > + * @flash_ops: optional device specific operations for flash R/W
+> > >   */
+> > >  struct intel_m10bmc {
+> > >  	struct device *dev;
+> > >  	struct regmap *regmap;
+> > >  	const struct intel_m10bmc_platform_info *info;
+> > > +	const struct intel_m10bmc_flash_ops *flash_ops;
+> > 
+> > Same concern, maybe implement it in sec-update driver?
 
