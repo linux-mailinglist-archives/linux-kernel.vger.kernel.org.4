@@ -2,121 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0271F628AB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:46:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4ECD628AB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237553AbiKNUqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 15:46:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58082 "EHLO
+        id S237631AbiKNUqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 15:46:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237062AbiKNUqN (ORCPT
+        with ESMTP id S237525AbiKNUqw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:46:13 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B0C21A7;
-        Mon, 14 Nov 2022 12:46:12 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 14 Nov 2022 15:46:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C724312088;
+        Mon, 14 Nov 2022 12:46:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 969AF202CF;
-        Mon, 14 Nov 2022 20:46:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668458771;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wb4O7lLXD9XIPmsq/fgChivZD1DA6NsEAi7ItoReySI=;
-        b=zV5n/LJkrjMApj9pcYixvHtBQxMhgst7PvBJhFMosUSFekJO3P93V557ZUEXHiNCeMp+tA
-        a10oMsgDSNVLmKhNbiZngufxZqPiKw4b83sqPEk5ue9rbZOwPJ9EqaIyhaVepiNG76ukoJ
-        Z5eq9SQAjr0T2HamFZViIhEvX9at2sQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668458771;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wb4O7lLXD9XIPmsq/fgChivZD1DA6NsEAi7ItoReySI=;
-        b=KYC+LG7lwwa2agl/O+HdnbT1z24eFyUEJlZRIOmLHuTBubf7Eb3ArF/5lQLNMP3+5ELS0t
-        GHmThhdyBf1XMJDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4B57E13A92;
-        Mon, 14 Nov 2022 20:46:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id q3laEROpcmMzOwAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Mon, 14 Nov 2022 20:46:11 +0000
-Date:   Mon, 14 Nov 2022 21:45:45 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     Li zeming <zeming@nfschina.com>, clm@fb.com, josef@toxicpanda.com,
-        dsterba@suse.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] btrfs: volumes: Increase bioc pointer check
-Message-ID: <20221114204545.GB5824@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20221026013611.2900-1-zeming@nfschina.com>
- <26b65420-2609-26a5-9cc2-c12cabd310e0@gmx.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <26b65420-2609-26a5-9cc2-c12cabd310e0@gmx.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64E8F61462;
+        Mon, 14 Nov 2022 20:46:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CCCB7C433C1;
+        Mon, 14 Nov 2022 20:46:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668458810;
+        bh=X2mHCf+Q3ldFeCet6iqC0kk9fVee+YkuElaO2KDDo8w=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=bQtZqwLcSLVcdLVr1ZzxNQaZbUefqbCiSFC6aC2LpHOqv070RTxca9LU/ue6ZWeWW
+         AywYvc3AU8kE5NzT13qq2ACyFFPOq2C5x/qmHeD0flVq/PUxtZjp7AzGs3q7GLRVmQ
+         ieV3H9i4aDi6LVARxkBxmIurBQr54TqKnT2PYe7+CHydizftWRKNHRmbi7T+S721aX
+         dLVgpeu77vSDrvThiAUPe86V71z2rzJmywdatzq6PgIvRG/+92Mm+YaFberbBD85zJ
+         tkBtBpmCRfGMrJ708C8mu/h2Pvcjx4MRUIp06pZbWID8JcBgaKm2az03XCAQBuha9O
+         sw+OS9pB5RsYQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B8B3EE270EF;
+        Mon, 14 Nov 2022 20:46:50 +0000 (UTC)
+Subject: Re: [GIT PULL] VFIO fixes for v6.1-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221114124217.784a2d3f.alex.williamson@redhat.com>
+References: <20221114124217.784a2d3f.alex.williamson@redhat.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221114124217.784a2d3f.alex.williamson@redhat.com>
+X-PR-Tracked-Remote: https://github.com/awilliam/linux-vfio.git tags/vfio-v6.1-rc6
+X-PR-Tracked-Commit-Id: e806e223621e4f5105170df69d7311dc3fb4bbb4
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: e01d50cbd6eece456843717a566a34e8b926cf0c
+Message-Id: <166845881075.1688.1275038050189564935.pr-tracker-bot@kernel.org>
+Date:   Mon, 14 Nov 2022 20:46:50 +0000
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>, ajderossi@gmail.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 02:42:51PM +0800, Qu Wenruo wrote:
-> On 2022/10/26 09:36, Li zeming wrote:
-> > The __GFP_NOFAIL flag will cause memory to be allocated an infinite
-> > number of times until the allocation is successful, but it is best to
-> > use it only for very necessary code, and try not to use it.
-> >
-> > The alloc_btrfs_io_context function looks a little closer to normal
-> > (excuse my analysis), but I think we can remove __GFP_NOFAIL from it and
-> > add a bioc pointer allocation check that returns NULL if the allocation
-> > fails.
-> >
-> > Signed-off-by: Li zeming <zeming@nfschina.com>
-> > ---
-> >   v2: Add annotation vocabulary modify, remove __GFP_NOFAIL flag.
-> >   v3: Modifying the Description.
-> >
-> >   fs/btrfs/volumes.c | 6 ++++--
-> >   1 file changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
-> > index 064ab2a79c80..b8d901f58995 100644
-> > --- a/fs/btrfs/volumes.c
-> > +++ b/fs/btrfs/volumes.c
-> > @@ -5891,7 +5891,9 @@ static struct btrfs_io_context *alloc_btrfs_io_context(struct btrfs_fs_info *fs_
-> >   		 * and the stripes.
-> >   		 */
-> >   		sizeof(u64) * (total_stripes),
-> > -		GFP_NOFS|__GFP_NOFAIL);
-> > +		GFP_NOFS);
-> > +	if (!bioc)
-> > +		return NULL;
-> >
-> >   	atomic_set(&bioc->error, 0);
-> >   	refcount_set(&bioc->refs, 1);
-> > @@ -6071,7 +6073,7 @@ struct btrfs_discard_stripe *btrfs_map_discard(struct btrfs_fs_info *fs_info,
-> >    * array of stripes.
-> >    * For READ, it also needs to be supported using the same mirror number.
-> >    *
-> > - * If the requested block is not left of the left cursor, EIO is returned. This
-> > + * If the requested block is not left of the left cursor, EIO should be returned. This
-> 
-> Is there any need for this change?
-> 
-> I don't think your patch has even touched the call chain of
-> get_extra_mirror_from_replace().
+The pull request you sent on Mon, 14 Nov 2022 12:42:17 -0700:
 
-That's maybe an accidental change, not relevant to the NOFAIL removal.
+> https://github.com/awilliam/linux-vfio.git tags/vfio-v6.1-rc6
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/e01d50cbd6eece456843717a566a34e8b926cf0c
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
