@@ -2,95 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA23628321
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D25F7628338
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236257AbiKNOrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:47:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
+        id S236302AbiKNOuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:50:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237080AbiKNOrI (ORCPT
+        with ESMTP id S230520AbiKNOur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:47:08 -0500
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506198E;
-        Mon, 14 Nov 2022 06:47:07 -0800 (PST)
-Received: by mail-wm1-f42.google.com with SMTP id i186-20020a1c3bc3000000b003cfe29a5733so996779wma.3;
-        Mon, 14 Nov 2022 06:47:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/cQ8NgfFgLSok/KaQcOLHXWKL1ciKqDLjAWu87KcMnU=;
-        b=2VFjoIl1Olj3XZXngNZlwrdfJqj9VqV7ZTbvk22Kuee+zNNUcCO70Es2ayI1saqNhl
-         fZwhtWLLKivwf45AU7r4k2+YYzvjxIUa6tDN0R7FGGljB9KTVyJWmfUM7vr9/+H6pRGy
-         ru9F9LPA4zGrrhcflnP+flZUyRfuT8CmK23LjN1FYUIOoicUl5JvQuiJEn6EqDfwYzAR
-         liGSNzjfQGOF8KzINFnuNScF+Zut4IyXCnOkgwQ7djXUB4hCBiDldGq6je73LuWtr2Dg
-         fkRLdg4h85GiqAFbdwuHH5Fjdjwuzk7rJjdlgzBvwtZ4H5beI8UDbOS1WfMwx/YxWbQO
-         Sitg==
-X-Gm-Message-State: ANoB5plX4dFubTcbfvwTt5E+Nd6OedRTUpqnwABlrabhcjXw0QZFOjQ4
-        2U+2LutTGKLrxeGMRcx8iRg=
-X-Google-Smtp-Source: AA0mqf5wE1S5mLgKCd2OMeCBlex3zOQnN9+29JIVAUdfIe/x6QNmiCbJvOOyAEfXEYVKqCsMe8vcmg==
-X-Received: by 2002:a05:600c:6006:b0:3cf:45ff:aca with SMTP id az6-20020a05600c600600b003cf45ff0acamr8119832wmb.53.1668437225787;
-        Mon, 14 Nov 2022 06:47:05 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id h4-20020a05600c350400b003c6f426467fsm20090378wmq.40.2022.11.14.06.47.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 06:47:05 -0800 (PST)
-Date:   Mon, 14 Nov 2022 14:47:03 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Wei Liu <wei.liu@kernel.org>
-Subject: Re: [PATCH v1 07/28] rust: macros: take string literals in `module!`
-Message-ID: <Y3JU5xAGv3bNG7q2@liuwe-devbox-debian-v2>
-References: <20221110164152.26136-1-ojeda@kernel.org>
- <20221110164152.26136-8-ojeda@kernel.org>
+        Mon, 14 Nov 2022 09:50:47 -0500
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3BB8B23BE5;
+        Mon, 14 Nov 2022 06:50:44 -0800 (PST)
+Received: from zju.edu.cn (unknown [10.12.77.33])
+        by mail-app3 (Coremail) with SMTP id cC_KCgB376rAVXJj+uwGCQ--.58627S4;
+        Mon, 14 Nov 2022 22:50:40 +0800 (CST)
+From:   Lin Ma <linma@zju.edu.cn>
+To:     axboe@kernel.dk, asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Lin Ma <linma@zju.edu.cn>
+Subject: [PATCH v1] io_uring/filetable: fix file reference underflow
+Date:   Mon, 14 Nov 2022 22:50:40 +0800
+Message-Id: <20221114145040.14365-1-linma@zju.edu.cn>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110164152.26136-8-ojeda@kernel.org>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cC_KCgB376rAVXJj+uwGCQ--.58627S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7WFykuF1xtw18tw47Kr47CFg_yoW8KryrpF
+        Z8J3W0qF1DG348K3ZrGFWrAF95C3yxAF1DZr95ur4Skr1UZFnYyr4S9a4Y9a1jkr4kAa4Y
+        qr48K398urW8Jw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 05:41:19PM +0100, Miguel Ojeda wrote:
-> From: Gary Guo <gary@garyguo.net>
-> 
-> Instead of taking binary string literals, take string ones instead,
-> making it easier for users to define a module, i.e. instead of
-> calling `module!` like:
-> 
->     module! {
->         ...
->         name: b"rust_minimal",
->         ...
->     }
-> 
-> now it is called as:
-> 
->     module! {
->         ...
->         name: "rust_minimal",
->         ...
->     }
-> 
-> Module names, aliases and license strings are restricted to
-> ASCII only. However, the author and the description allows UTF-8.
+There is an interesting reference bug when -ENOMEM occurs in calling of
+io_install_fixed_file(). The tracing of this bug is shown below:
 
-What's the rationale behind allowing UTF-8? Why not stick with ASCII
-only?
+commit 8c71fe750215 ("io_uring: ensure fput() called correspondingly
+when direct install fails") adds an additional fput() in
+io_fixed_fd_install() when io_file_bitmap_get() returns error values. In
+that case, the routine will never make it to io_install_fixed_file() due
+to an early return.
 
-Thanks,
-Wei.
+static int io_fixed_fd_install(...)
+{
+  if (alloc_slot) {
+    ...
+    ret = io_file_bitmap_get(ctx);
+    if (unlikely(ret < 0)) {
+      io_ring_submit_unlock(ctx, issue_flags);
+      fput(file);
+      return ret;
+    }
+    ...
+  }
+  ...
+  ret = io_install_fixed_file(req, file, issue_flags, file_slot);
+  ...
+}
+
+In the above scenario, the reference is okay as io_fixed_fd_install()
+ensures the fput() is called when something bad happens, either via
+bitmap or via inner io_install_fixed_file().
+
+However, the commit 61c1b44a21d7 ("io_uring: fix deadlock on iowq file
+slot alloc") breaks the balance because it places fput() into the common
+path for both io_file_bitmap_get() and io_install_fixed_file(). Since
+io_install_fixed_file() handles the fput() itself, the reference
+underflow come across then.
+
+There are some extra commits make the current code into
+io_fixed_fd_install() -> __io_fixed_fd_install() ->
+io_install_fixed_file()
+
+However, the fact that there is an extra fput() is called if
+io_install_fixed_file() calls fput(). Traversing through the code, I
+find that the existing two callers to __io_fixed_fd_install():
+io_fixed_fd_install() and io_msg_send_fd() have fput() when handling
+error return, this patch simply removes the fput() in
+io_install_fixed_file() to fix the bug.
+
+Fixes: 61c1b44a21d7 ("io_uring: fix deadlock on iowq file slot alloc")
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+---
+ io_uring/filetable.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/io_uring/filetable.c b/io_uring/filetable.c
+index 7b473259f3f4..68dfc6936aa7 100644
+--- a/io_uring/filetable.c
++++ b/io_uring/filetable.c
+@@ -101,8 +101,6 @@ static int io_install_fixed_file(struct io_ring_ctx *ctx, struct file *file,
+ err:
+ 	if (needs_switch)
+ 		io_rsrc_node_switch(ctx, ctx->file_data);
+-	if (ret)
+-		fput(file);
+ 	return ret;
+ }
+ 
+-- 
+2.38.1
+
