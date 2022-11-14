@@ -2,94 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 098C66283F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:33:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2205628405
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:34:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236700AbiKNPdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 10:33:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
+        id S236008AbiKNPeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 10:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234803AbiKNPdO (ORCPT
+        with ESMTP id S236007AbiKNPeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 10:33:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E572CC91
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:33:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA9B561224
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 15:33:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 341DBC433D6;
-        Mon, 14 Nov 2022 15:33:12 +0000 (UTC)
-Date:   Mon, 14 Nov 2022 10:33:50 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Gautam Menghani <gautammenghani201@gmail.com>
-Cc:     akpm@linux-foundation.org, mhiramat@kernel.org,
-        shy828301@gmail.com, zokeefe@google.com, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] mm/khugepaged: add tracepoint to collapse_file()
-Message-ID: <20221114103350.4b8a2786@gandalf.local.home>
-In-Reply-To: <20221026052218.148234-1-gautammenghani201@gmail.com>
-References: <20221026052218.148234-1-gautammenghani201@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 14 Nov 2022 10:34:11 -0500
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3151170;
+        Mon, 14 Nov 2022 07:34:10 -0800 (PST)
+Received: by mail-qv1-f50.google.com with SMTP id o8so7964228qvw.5;
+        Mon, 14 Nov 2022 07:34:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KOfoaOPTc0krweU3P8wUkVTnZoULqG3PmNlXhu4M7TI=;
+        b=KY05PUqOp7FWcbU7eUfMaqVEef9rV8wBfLzgKHHluppi7/vDpdWTOIGrvfkqnqDDU2
+         8n7f2mT4Zt4XV1XN9KPNNCcewmrgz1Sv4HBaQIi4vUkAM3lYehWLuMoA0WIRc8rlpEdq
+         u6nkKIB9ijGdD7hx+wd0uukJ6zK0a16wXKRKP55+/9jE4xd2hJ5F7Fe5yrDW0QpC8WBl
+         qMiXAhpdO4YllgFW4NhLrZFqx19l0DcvnqxMLEXwmOnu50wvOyo6mJCgSfK67I0VQEgJ
+         +Mrm+ZxHTpsgHT55GjvVSQAehoHuSp0KeJYoo8Qi5Xe8uxJb4U+Cj5hmLHXnsqFqC3ew
+         z/bA==
+X-Gm-Message-State: ANoB5plRbehmcoiHx8zHLCm8enOR/KMg81r8oSnC4q7eOD7wpqxCjIOK
+        FUC2SrZntK8ZkkLlTgarMcs33eEfWJzQnCtvAVA=
+X-Google-Smtp-Source: AA0mqf6Nf71NA2JkPO/KxpfY/G2pWuerSOGZllPXl2qRNpfXA+FqSdXKHatBGpZ1xnWnxU3Yw6FuOoOu4fzhLgr8QcE=
+X-Received: by 2002:a0c:e606:0:b0:4b1:a9ac:21de with SMTP id
+ z6-20020a0ce606000000b004b1a9ac21demr12899948qvm.119.1668440049335; Mon, 14
+ Nov 2022 07:34:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <5754039e-e3c6-cdb8-8d64-6332b0093940@amd.com> <20221111214209.GA748269@bhelgaas>
+In-Reply-To: <20221111214209.GA748269@bhelgaas>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 14 Nov 2022 16:33:52 +0100
+Message-ID: <CAJZ5v0g834K4ZBrEvhAbJhvGBVyq53nreG+xeBufXKQXA3VtrQ@mail.gmail.com>
+Subject: Re: [PATCH v5] PCI/ACPI: PCI/ACPI: Validate devices with power
+ resources support D3
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mehta Sanju <Sanju.Mehta@amd.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Oct 2022 10:52:18 +0530
-Gautam Menghani <gautammenghani201@gmail.com> wrote:
+On Fri, Nov 11, 2022 at 10:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Fri, Nov 11, 2022 at 12:58:28PM -0600, Limonciello, Mario wrote:
+> > On 11/11/2022 11:41, Bjorn Helgaas wrote:
+> > > On Mon, Oct 31, 2022 at 05:33:55PM -0500, Mario Limonciello wrote:
+> > > > Firmware typically advertises that ACPI devices that represent PCIe
+> > > > devices can support D3 by a combination of the value returned by
+> > > > _S0W as well as the HotPlugSupportInD3 _DSD [1].
+> > > >
+> > > > `acpi_pci_bridge_d3` looks for this combination but also contains
+> > > > an assumption that if an ACPI device contains power resources the PCIe
+> > > > device it's associated with can support D3.  This was introduced
+> > > > from commit c6e331312ebf ("PCI/ACPI: Whitelist hotplug ports for
+> > > > D3 if power managed by ACPI").
+> > > >
+> > > > Some firmware configurations for "AMD Pink Sardine" do not support
+> > > > wake from D3 in _S0W for the ACPI device representing the PCIe root
+> > > > port used for tunneling. The PCIe device will still be opted into
+> > > > runtime PM in the kernel [2] because of the logic within
+> > > > `acpi_pci_bridge_d3`. This currently happens because the ACPI
+> > > > device contains power resources.
+>
+> Wait.  Is this as simple as just recognizing that:
+>
+>   _PS0 means the OS has a knob to put the device in D0, but it doesn't
+>   mean the device can wake itself from a low-power state.  The OS has
+>   to use _S0W to learn the device's ability to wake itself.
 
-Ideally we want the trace event structure to be as packed as possible to
-not waste space on the ring buffer.
+It is.
 
-> +	TP_ARGS(mm, hpage, index, is_shmem, addr, file, nr, result),
-> +	TP_STRUCT__entry(
-> +		__field(struct mm_struct *, mm)  4 / 8 bytes (depending on 32 bit or 64 bit arch)
-> +		__field(unsigned long, hpfn)     4 / 8 bytes
+> If that's enough, maybe we don't need to complicate this with all the
+> Thunderbolt and device link stuff.  Which would be great, because the
+> code change itself has nothing to do with those things.
 
-The two above is fine.
-
-> +		__field(pgoff_t, index)         4 / 8 bytes
-> +		__field(bool, is_shmem)         4 bytes (or less)
-
-> +		__field(unsigned long, addr)    4 / 8 bytes
-
-> +		__string(filename, file->f_path.dentry->d_iname)  4 bytes
-> +		__field(int, nr)		4 bytes
-> +		__field(int, result)		4 bytes
-
-For best packing, it's best to keep long / pointers together, and ints and
-bools together (or paired).
-
-On 64 bit archs, there is likely to be a 4 byte hole between is_shmem and
-addr.
-
-> +	),
-> +
-
-Better to have it be:
-
-
-	TP_STRUCT__entry(
-		__field(struct mm_struct *, mm)
-		__field(unsigned long, hpfn)
-		__field(pgoff_t, index)
-		__field(unsigned long, addr)
-		__field(bool, is_shmem)
-		__string(filename, file->f_path.dentry->d_iname)
-		__field(int, nr)
-		__field(int, result)
-	),
-
-Where I swapped is_shmem and addr.
-
--- Steve
+Indeed.
