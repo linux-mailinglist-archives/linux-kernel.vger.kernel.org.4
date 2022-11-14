@@ -2,105 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C51F62818E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C36BA62816B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236754AbiKNNpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:45:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
+        id S236755AbiKNNfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 08:35:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiKNNpQ (ORCPT
+        with ESMTP id S236331AbiKNNfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:45:16 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31EF23E9A
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:45:14 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id h9so18363640wrt.0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:45:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :references:from:to:cc:subject:date:message-id:reply-to;
-        bh=QlaQ+5L6ISjl1Quqoe6Zjc/8uHOtFVdW/GdcCpp/E/Q=;
-        b=jSCYGC5OOaP6wUoO8qDSxyvxYcDe1o8zBe8FkfWoFAjWSsikhUAtNoMBmNwFeq3uhI
-         G32ZWxouIGIydr0MRB9Py4ixg/z42dGJg9X3xVAoWk12hPfQEaNinSiqp34K6y+SQ+iY
-         XAHHzVH+RkkSRuTNC9lGBtDX2pacFYyCNwmOOJPgLFOA4nU8UyGPUpGxeHPDvVChT8Oa
-         U7WGPpTpSh9yPgOa8AOpqwwv6cLCWiKgJqiqk9m82By7kvu171l8969qwArbJxs+66N0
-         WP+Mr33C3tQ6IQaS1TkZIpp2QgXt+NE+dcRr4s5aRbbi+eBghyuQtoYo9k6XbuSKJQ4d
-         b3qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :references:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QlaQ+5L6ISjl1Quqoe6Zjc/8uHOtFVdW/GdcCpp/E/Q=;
-        b=OLtg7HkCTEFVBL1xbiTTlkGP05P3JrgyzNp1yTNy8N+ZARkjFJlmQ5NWVIb/hMNxhR
-         aXGEP5ypeTjF3Xv3h9E+eKJXVbJuCTphlyTrPiJ1Xw7VKFmHJJTAAV+Zh5DUrlyzt8h1
-         j4QffvVS0i015Ux7l/CL/beF9ncKfcOuUUrAoR0FKhkjqUHJCqgv5jyGShP5Cp2CCDVW
-         TkVmuP7NOe2F/sy9KDWWv/+KhYLk+x/kzKrhk0qWNdzm75+LAt32yqjxzr2mh5ggpNAI
-         b2mdD+v67PDd35k4g6QuHJvPGgorMteYtDZI5cEUkBcuLvPaAQw9o2j7/3Tcihd5z/0c
-         yMHg==
-X-Gm-Message-State: ANoB5pl3jE5UF5hpBvD14vkeI4wJ+xohzF0Y19yzQENHS4WeXzSQZFoo
-        a+aYn0COEREPeFNpbpoFBwY=
-X-Google-Smtp-Source: AA0mqf6t6wgbEYsEROt1KuQTFtTIDd5a+5nbKAjINA0i+aNpO23kv16iWfHV1aCU/yGepWTsRNrKrA==
-X-Received: by 2002:adf:bb43:0:b0:22e:6f0d:d69 with SMTP id x3-20020adfbb43000000b0022e6f0d0d69mr7759486wrg.134.1668433513466;
-        Mon, 14 Nov 2022 05:45:13 -0800 (PST)
-Received: from localhost (94.197.10.112.threembb.co.uk. [94.197.10.112])
-        by smtp.gmail.com with ESMTPSA id r11-20020a5d694b000000b0023691d62cffsm9536367wrw.70.2022.11.14.05.45.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 05:45:13 -0800 (PST)
-References: <20221112151835.39059-1-aidanmacdonald.0x0@gmail.com>
- <20221112151835.39059-6-aidanmacdonald.0x0@gmail.com>
- <03b94d20-05a6-71fb-61e4-00889f5aa64d@linaro.org>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     lee@kernel.org, mani@kernel.org, cristian.ciocaltea@gmail.com,
-        wens@csie.org, tharvey@gateworks.com, cw00.choi@samsung.com,
-        brgl@bgdev.pl, mazziesaccount@gmail.com, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 05/18] mfd: max14577: Replace irqchip mask_invert with
- unmask_base
-Date:   Mon, 14 Nov 2022 13:34:10 +0000
-In-reply-to: <03b94d20-05a6-71fb-61e4-00889f5aa64d@linaro.org>
-Message-ID: <KGy5eAsJh4YwYjYVTvnohmym61EBqJX5@localhost>
+        Mon, 14 Nov 2022 08:35:09 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20724DE87;
+        Mon, 14 Nov 2022 05:35:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668432909; x=1699968909;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=AerKXFsYG0MC60H6jSoivKzof9tjMF6SohiFF0KBOm0=;
+  b=GzYQCFu/T9hLNOvc7a6jCfgA3eUHJGrBAFjbx+WUZ450htRjKUbmz5oN
+   XZfXw73dNCBQ2rDOfBImzUPSc5F3me6h8pq+a9cgE6f2CLXALgufbXkw3
+   whdNfvzwlc+NQ/AfdAMzTzdRsbXkbsPBXybxqJ70TodMp+iPk0W331cS9
+   fFwsXeTUu23SmWU6bi897JAYyH2zxjx37s4kIRvA4tRekmXI8838Z5l4s
+   kIpW+SlrwGnep/GEqfiAneLH3Xb5yv+v3hm3Vu3w8moudKD1iHnHAUaM1
+   8YXi+4pMkFjFIXn3+KEcdw4Q5rLpyKophc64q+eetO0o2ZY/3FqznJ3sz
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="291683980"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="291683980"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 05:35:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="638477165"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="638477165"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga002.jf.intel.com with ESMTP; 14 Nov 2022 05:35:05 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2AEDZ4LW004280;
+        Mon, 14 Nov 2022 13:35:04 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Shenwei Wang <shenwei.wang@nxp.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>
+Subject: Re: [PATCH v2 RESEND 1/1] net: fec: add xdp and page pool statistics
+Date:   Mon, 14 Nov 2022 14:35:02 +0100
+Message-Id: <20221114133502.696740-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <PAXPR04MB9185CDDD50250DFE5E492C7189019@PAXPR04MB9185.eurprd04.prod.outlook.com>
+References: <20221109023147.242904-1-shenwei.wang@nxp.com> <4349bc93a5f2130a95305287141fde369245f921.camel@redhat.com> <PAXPR04MB91853A6A1DDDBB06F33C975E89019@PAXPR04MB9185.eurprd04.prod.outlook.com> <20221110164321.3534977-1-alexandr.lobakin@intel.com> <PAXPR04MB9185CDDD50250DFE5E492C7189019@PAXPR04MB9185.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Shenwei Wang <shenwei.wang@nxp.com>
+Date: Thu, 10 Nov 2022 21:40:21 +0000
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
+> > -----Original Message-----
+> > From: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > Sent: Thursday, November 10, 2022 10:43 AM
+> > To: Shenwei Wang <shenwei.wang@nxp.com>
+> > Cc: Alexander Lobakin <alexandr.lobakin@intel.com>; Paolo Abeni
+> > <pabeni@redhat.com>; David S. Miller <davem@davemloft.net>; Eric Dumazet
+> > <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Alexei
+> > > > at ../drivers/net/ethernet/freescale/fec_main.c:2788:4:
+> > > > ../include/linux/fortify-string.h:413:25: warning: call to
+> > '__read_overflow2_field'
+> > > > declared with attribute warning: detected read beyond size of field
+> > > > (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
+> > > >   413 |                         __read_overflow2_field(q_size_field, size);
+> > > >       |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > >
+> > > > I think you can address it changing fec_xdp_stat_strs definition to:
+> > > >
+> > > > static const char
+> > > > fec_xdp_stat_strs[XDP_STATS_TOTAL][ETH_GSTRING_LEN] =
+> > >
+> > > That does a problem. How about just change the memcpy to strncpy?
+> > 
+> > Don't use a static char array, it would consume more memory than the current
+> > code. Just replace memcpy()s with strscpy().
+> > 
+> > Why u32 for the stats tho? It will overflow sooner or later. "To keep it simple
+> > and compatible" you can use u64_stats API :)
+> 
+> The reason to use u32 here is : 1. It is simple to implement. 2. To follow the same
+> behavior as the other MAC hardware statistic counters which are all 32bit. 3. I did
+> investigate the u64_stats API, and think it is still a little expensive here.
 
-> On 12/11/2022 16:18, Aidan MacDonald wrote:
->> Remove use of the deprecated mask_invert flag. Inverted mask
->> registers (where a '1' bit enables an IRQ) can be described more
->> directly as an unmask register.
->>
->> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
->> ---
->>  drivers/mfd/max14577.c | 7 ++-----
->>  1 file changed, 2 insertions(+), 5 deletions(-)
->
-> Mention this is a resend or provide a changelog for v2.
+1) u64_stats_t is not much harder.
+2) This only means your HW statistics handling in the driver is
+   wrong, as every driver which HW has 32-bit counter implements
+   64-bit containers and a periodic task to take fresh HW numbers
+   and clear them (so that the full stats are stored in the driver
+   only).
+3) Page Pool stats currently give you much more overhead as they are
+   pure 64-bit, not u64_stats_t, with no synchronization.
+   What is your machine and how fast your link is? Just curious, I
+   never had any serious regressions using u64_stats_t on either
+   high-end x86_64 servers or low-end MIPS32.
 
-Most of these patches are resends, but they're so trivial it seems
-pointless to mention that fact. There are no changes from v1.
+> 
+> Thanks,
+> Shenwei
+> 
+> > 
+> > >
+> > > Regards,
+> > > Shenwei
+> > >
+> > > > { // ...
+> > > >
+> > > > Cheers,
+> > > >
+> > > > Paolo
+> > 
+> > Thanks,
+> > Olek
 
-Regards,
-Aidan
-
->
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> Best regards,
-> Krzysztof
+Thanks,
+Olek
