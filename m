@@ -2,122 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1159F62785C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBA5627862
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 10:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235899AbiKNJAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 04:00:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41590 "EHLO
+        id S236658AbiKNJAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 04:00:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236662AbiKNJAF (ORCPT
+        with ESMTP id S236633AbiKNJA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 04:00:05 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5631CFFC;
-        Mon, 14 Nov 2022 01:00:04 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 21A033200919;
-        Mon, 14 Nov 2022 04:00:03 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 14 Nov 2022 04:00:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1668416402; x=1668502802; bh=mVnSj1iJ99
-        XRSH8Flsh+M/LkbPmD6UmUFvX6v++TUpU=; b=a378pGvuyqgTQZMPJ5Ie0bWA+S
-        9tu8Bkh1p30mk6d6j01puqm61I1ytb1aXPmWMIRYJD2daavESZTmcvj34348tikd
-        SpKk4yGahMSWbP1m4LR553pEc9i5hLdXTtl+v2i+srD6qAq/XfBfUiDjfmMrgiAK
-        mmUrywWza5dgttnfmAmNLVmIF4H6EIWf70WvaFrO3EsyamVdONlOg0bXt1T+NEEf
-        n+/TQV7ZgMIrlvUX6jarNJk32Vv7ksTbTkVODWfuokB0apx0wFEvly95M1qikl2l
-        zWBOJ7t1kdIVMD958rxXGSG8NTUhsI9R9C4NgGQ8u4ijUk3yCWcrTaToTsTQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668416402; x=1668502802; bh=mVnSj1iJ99XRSH8Flsh+M/LkbPmD
-        6UmUFvX6v++TUpU=; b=fCJ9vVBwAqFvg+iKECAeJX0pPiIPwvr2MPRiCCeeA7P7
-        yPwl9h1bzgrYLoChxID3UqZare+3OwcgeH0HHX+4C1su8318+H+sUqqYbEW8NCXu
-        8Fy+YfL0LTwKxzhfk9BwyR4oqmCKkzYBzZnc8MukbXilOn5wgUjcaLXcCEJNQn0e
-        cCKp7PvfU5AWTR5YhfC+nm82lhKggjdFiNILs+5IaOgJ+LEcmcJyOzysUdk36Q5h
-        mkMfew8AEso8hPP8gYrbsYX2Ke9NR+ugNt3w0icPNeMT7FkYaOMjGYQFqG10tu7l
-        L/II/95/8ab9dvAyWWcn/QEPX5TDePZLKQn5RtWQfg==
-X-ME-Sender: <xms:kQNyY8JT6EDXLsCMPf8b-Q-ekPhlF-9hbn1GqQwGe_3gxwoH5aD-wA>
-    <xme:kQNyY8IR-hg2ImWGZQGSYqAsWYVc-W3gsrpu_oDQgyGneyJYg3x3d-TrFgN3s3IvE
-    dzq_ZuHxdw_9w>
-X-ME-Received: <xmr:kQNyY8szpuDUZLyUREPSV26pYKg4CTXZrY6nXbZQnaU1_k2v9u9vIfVsBNVImSHw6qv_iy_DTlZOF3mboNd1voB29SVeRXfs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedugdduvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeehue
-    ehgfdtledutdelkeefgeejteegieekheefudeiffdvudeffeelvedttddvnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:kQNyY5bbUwcc3UujRnqSwJj53__8IjCnVR3ePaPe_TyIK_vOz6zbQQ>
-    <xmx:kQNyYzYHiTTgZsDNdroHxzrT6-Ynws6-aUfre350bc9MfKwzaJGISw>
-    <xmx:kQNyY1AygXWvN-Wv_WmtGZe2y6oJ_42cz_NrC6RfZpI-t8cNW7OrmQ>
-    <xmx:kgNyY4Mt-qoJUKBkhwhl-bIynzd3pPsYZYr3P7L6u3k_wqqEQ94ttQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 14 Nov 2022 04:00:01 -0500 (EST)
-Date:   Mon, 14 Nov 2022 09:59:57 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the driver-core tree
-Message-ID: <Y3IDjSYTeC0xt/Cw@kroah.com>
-References: <20221114151235.01e5ff3b@canb.auug.org.au>
- <Y3IASgDYdKElTfIa@smile.fi.intel.com>
+        Mon, 14 Nov 2022 04:00:27 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BD81CFEE
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:00:26 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id k5so9735551pjo.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 01:00:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OHVvZDZbyEogVtk3XYqfqyWzOeOsXZdmYG4Vsfr4Pzs=;
+        b=IGlH+a/boVb7i6zolSK0zEvoMEddtxxH2nmc93lCCFV08bOZCNlgJxgFDpF0/JPDHu
+         ckYIGRfz/EA6eMc0VzdGQD4o1oB48QASsZlQIPKQ4BQlDOc3hHV4plz+jza1GFZ/VVjc
+         nTf+60GJLFAy4UVqpFpMpYwATK9woaMgfDBav2fX9dc2oUUVytTfnDZm2POJF9JsXFEU
+         RuMh+Tb5gNg6/ehHkMlHXQhE2ZGSs+MeqRjBBsUWLunO9jpHkixaOind7phxwkQxktl5
+         5SwJCZ9A4LQ2zUWuwMDqrLaHDIfzIDda+5BUT9byEbOAV899p/9dGl5MLl6kQ7TOJQR4
+         CAsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OHVvZDZbyEogVtk3XYqfqyWzOeOsXZdmYG4Vsfr4Pzs=;
+        b=g6mK8AEQLwmUuB9x1Eil42M0hcBME1k2hGroubEQaCd7X8umDDKaOVIpdULehkKhaS
+         BFvk+b3zCU/kMY8TQfMepEIAW4Ix3UFNDUijIh8SBnhCzHQLJ7jbEKG+USXFw7URC3aS
+         wLmMxoHkKTj69vlqIq7xwm74UXbMAC2p2qZH2kA88m5zDlCXXHKzsZcmEzUmUuoYEAle
+         OM1JY9agKphYX0r9iKd76USgPeH5K06tsBvahXrwt12bqb2yO4HOAT7jx8laR5CeSEsk
+         nRBpxQpvCIV1+x8rluP2eb98PJkfHmA1ip3Jy1Q+jfEAvFHGtWDeRSFo4OIFjALIBmTA
+         dErA==
+X-Gm-Message-State: ANoB5pnQVb1ObGy/DcAvOpflcthxnBxXHAZ8h9gk0wWG2bEzLCFOijQP
+        noo1CtoMi79LUFL7VhCGGcWDzlvRhx90VA==
+X-Google-Smtp-Source: AA0mqf5cZNQj8u+ZxbCaroI0Pmri5Pe5JqwutWZDxOXw61J8pMLqk/LVBKLC6XaybdNpMOnMuMHJrg==
+X-Received: by 2002:a17:903:1009:b0:17f:72a4:30a1 with SMTP id a9-20020a170903100900b0017f72a430a1mr12980922plb.124.1668416426378;
+        Mon, 14 Nov 2022 01:00:26 -0800 (PST)
+Received: from [10.94.58.189] ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id q13-20020aa7960d000000b0056a7486da77sm6371684pfg.13.2022.11.14.01.00.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 01:00:26 -0800 (PST)
+Message-ID: <e57733cd-364d-84e0-cfe0-fd41de14f434@bytedance.com>
+Date:   Mon, 14 Nov 2022 17:00:18 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3IASgDYdKElTfIa@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+To:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org
+Cc:     Dave Chinner <david@fromorbit.com>, Theodore Ts'o <tytso@mit.edu>,
+        Karel Zak <kzak@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
+Content-Language: en-US
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 10:46:02AM +0200, Andy Shevchenko wrote:
-> On Mon, Nov 14, 2022 at 03:12:35PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the driver-core tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> > 
-> > drivers/mfd/vexpress-sysreg.c:64:51: error: initializer element is not constant
-> >    64 |                 .resources = (struct resource []) {
-> >       |                                                   ^
-> > drivers/mfd/vexpress-sysreg.c:64:51: note: (near initialization for 'vexpress_sysreg_cells[0]')
-> > drivers/mfd/vexpress-sysreg.c:73:51: error: initializer element is not constant
-> >    73 |                 .resources = (struct resource []) {
-> >       |                                                   ^
-> > drivers/mfd/vexpress-sysreg.c:73:51: note: (near initialization for 'vexpress_sysreg_cells[1]')
-> > drivers/mfd/vexpress-sysreg.c:82:51: error: initializer element is not constant
-> >    82 |                 .resources = (struct resource []) {
-> >       |                                                   ^
-> > drivers/mfd/vexpress-sysreg.c:82:51: note: (near initialization for 'vexpress_sysreg_cells[2]')
-> > drivers/mfd/vexpress-sysreg.c:90:51: error: initializer element is not constant
-> >    90 |                 .resources = (struct resource []) {
-> >       |                                                   ^
-> > drivers/mfd/vexpress-sysreg.c:90:51: note: (near initialization for 'vexpress_sysreg_cells[3]')
-> > 
-> > Caused (probably) by commit
-> > 
-> >   52c4d11f1dce ("resource: Convert DEFINE_RES_NAMED() to be compound literal")
-> > 
-> > I have used the driver-core tree from next-20221111 for today.
+Hi Miklos and anyone interested in this proposal, is there any update on
+this? Sorry that I didn't find any..
+
+Thanks & Best regards,
+	Abel
+
+On 5/3/22 8:23 PM, Miklos Szeredi wrote:
+> This is a simplification of the getvalues(2) prototype and moving it to the
+> getxattr(2) interface, as suggested by Dave.
 > 
-> Fix is available here:
-> https://lore.kernel.org/lkml/20221113191027.2327-1-andriy.shevchenko@linux.intel.com/
-
-Thanks, I'll pick that up now.
-
-greg k-h
+> The patch itself just adds the possibility to retrieve a single line of
+> /proc/$$/mountinfo (which was the basic requirement from which the fsinfo
+> patchset grew out of).
+> 
+> But this should be able to serve Amir's per-sb iostats, as well as a host of
+> other cases where some statistic needs to be retrieved from some object.  Note:
+> a filesystem object often represents other kinds of objects (such as processes
+> in /proc) so this is not limited to fs attributes.
+> 
+> This also opens up the interface to setting attributes via setxattr(2).
+> 
