@@ -2,141 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2484E628B4C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79032628B55
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 22:27:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237740AbiKNVZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 16:25:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
+        id S237496AbiKNV1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 16:27:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236505AbiKNVZe (ORCPT
+        with ESMTP id S236593AbiKNV06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 16:25:34 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50BE18B37;
-        Mon, 14 Nov 2022 13:25:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=SLrGqAA2/wVAICCZp3ez3qec5hzvLwGpIffVQ+e9GvE=; b=o1doCigl7enF/EvIvsZR0Fblwc
-        p88/Tm9Si95Nm6IXD9LX1avKbBNz2rkXLLYbtDk7eFD6/GZ8fAPTwJtIdsOOpEgxo0FR537zDvEQ/
-        KPEwaTLehyNogpwFiW509IkGyE+eBALhqC96szeBTYGbGm82MfJyZIo4sWxRHlc0YT+13cEGdv5a/
-        hG1KD0a5C19im0b6JfjBQrSqMNnrKcoExKWM3j3dLcccUkq1StFe9bkMEehUMB+G1vuaQiEUsYw1Q
-        358mFOhjDn4llzBAa7bPGWFtnVAO9TeTZgKqiS/2ysGmI5GouXjfzPwfSPeqOX44kp2PAny9STWj5
-        9wCoHRYg==;
-Received: from [2601:1c2:d80:3110::a2e7]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ougxG-0056Lt-OY; Mon, 14 Nov 2022 21:25:22 +0000
-Message-ID: <fd7ebc60-811e-588a-5c55-ee540796f058@infradead.org>
-Date:   Mon, 14 Nov 2022 13:25:22 -0800
+        Mon, 14 Nov 2022 16:26:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F96B18B2B;
+        Mon, 14 Nov 2022 13:26:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E2D1B81259;
+        Mon, 14 Nov 2022 21:26:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1262DC433D7;
+        Mon, 14 Nov 2022 21:26:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668461214;
+        bh=FEKLdvD1x1+OX8jH4GUGuzC3nWMigkkjN+eWPw4lNCo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=nno8N5wMf6d5OiVDxkaD1QC85M3xJGKPOGZT5APc5vN2pbdcHwSqpJ3Bd5lDpXJD4
+         7+yEXG07rOdy/g5qHyWJmbYMokguzwW0tqc3kfJDZLy4UIN+C/5HrLW4O8KXjslcLH
+         Ac6xokunzn71NWspTh3kXbQH8TvTaXBjWAT9WO2wphxViS+HxZ5+TnL/BvUr0WKwp7
+         QAIpCXRI/pZa4e/FpQta+hARhnO1Yhi9+xNYrXeeRq3O5j913euTiFUz+S6S5i4ZoK
+         6w3japXDHAsCPUP8xXuR1qyrlHDFmnMfcFE01wJ3LdwULbBdovQSFpTUifoYiUD9WI
+         ia71Ct46rfZlw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A8A7C5C14FC; Mon, 14 Nov 2022 13:26:53 -0800 (PST)
+Date:   Mon, 14 Nov 2022 13:26:53 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-kernel@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH v2] rcu/kfree: Do not request RCU when not needed
+Message-ID: <20221114212653.GG4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221109024758.2644936-1-joel@joelfernandes.org>
+ <Y2z3Mb3u8bFZ12wY@pc636>
+ <CAEXW_YSq89xzgyQ9Tdt1tCqz8VAfzb7kSXVZmnxDuJ65U0UZ3w@mail.gmail.com>
+ <Y20EOinwcLSZHmXg@pc638.lan>
+ <Y22ry4Q2OY2zovco@google.com>
+ <Y3Iyka86FlUh9D1P@pc636>
+ <20221114161733.GD4001@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YSGmHWdFJFcYH1UoqC8NT8V0ZGPf+_NdtepCbu8O1LMnA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] fs: do not update freeing inode io_list
-Content-Language: en-US
-To:     Svyatoslav Feldsherov <feldsherov@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Lukas Czerner <lczerner@redhat.com>,
-        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>
-Cc:     syzbot+6ba92bd00d5093f7e371@syzkaller.appspotmail.com,
-        oferz@google.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221114192129.zkmubc6pmruuzkc7@quack3>
- <20221114212155.221829-1-feldsherov@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20221114212155.221829-1-feldsherov@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEXW_YSGmHWdFJFcYH1UoqC8NT8V0ZGPf+_NdtepCbu8O1LMnA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+On Mon, Nov 14, 2022 at 03:54:30PM -0500, Joel Fernandes wrote:
+> On Mon, Nov 14, 2022 at 11:17 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Mon, Nov 14, 2022 at 01:20:33PM +0100, Uladzislau Rezki wrote:
+> > > > On Thu, Nov 10, 2022 at 03:01:30PM +0100, Uladzislau Rezki wrote:
+> > > > > > Hi,
+> > > > > >
+> > > > > > On Thu, Nov 10, 2022 at 8:05 AM Uladzislau Rezki <urezki@gmail.com> wrote:
+> > > > > >
+> > > > > > > > On ChromeOS, using this with the increased timeout, we see that we
+> > > > > > > almost always
+> > > > > > > > never need to initiate a new grace period. Testing also shows this frees
+> > > > > > > large
+> > > > > > > > amounts of unreclaimed memory, under intense kfree_rcu() pressure.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > > > > > > ---
+> > > > > > > > v1->v2: Same logic but use polled grace periods instead of sampling
+> > > > > > > gp_seq.
+> > > > > > > >
+> > > > > > > >  kernel/rcu/tree.c | 8 +++++++-
+> > > > > > > >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > > > > > > >
+> > > > > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > > > > > > index 591187b6352e..ed41243f7a49 100644
+> > > > > > > > --- a/kernel/rcu/tree.c
+> > > > > > > > +++ b/kernel/rcu/tree.c
+> > > > > > > > @@ -2935,6 +2935,7 @@ struct kfree_rcu_cpu_work {
+> > > > > > > >
+> > > > > > > >  /**
+> > > > > > > >   * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace
+> > > > > > > period
+> > > > > > > > + * @gp_snap: The GP snapshot recorded at the last scheduling of monitor
+> > > > > > > work.
+> > > > > > > >   * @head: List of kfree_rcu() objects not yet waiting for a grace period
+> > > > > > > >   * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiting for a
+> > > > > > > grace period
+> > > > > > > >   * @krw_arr: Array of batches of kfree_rcu() objects waiting for a
+> > > > > > > grace period
+> > > > > > > > @@ -2964,6 +2965,7 @@ struct kfree_rcu_cpu {
+> > > > > > > >       struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
+> > > > > > > >       raw_spinlock_t lock;
+> > > > > > > >       struct delayed_work monitor_work;
+> > > > > > > > +     unsigned long gp_snap;
+> > > > > > > >       bool initialized;
+> > > > > > > >       int count;
+> > > > > > > >
+> > > > > > > > @@ -3167,6 +3169,7 @@ schedule_delayed_monitor_work(struct kfree_rcu_cpu
+> > > > > > > *krcp)
+> > > > > > > >                       mod_delayed_work(system_wq, &krcp->monitor_work,
+> > > > > > > delay);
+> > > > > > > >               return;
+> > > > > > > >       }
+> > > > > > > > +     krcp->gp_snap = get_state_synchronize_rcu();
+> > > > > > > >       queue_delayed_work(system_wq, &krcp->monitor_work, delay);
+> > > > > > > >  }
+> > > > > > > >
+> > > > > > > How do you guarantee a full grace period for objects which proceed
+> > > > > > > to be placed into an input stream that is not yet detached?
+> > > > > >
+> > > > > >
+> > > > > > Just replying from phone as I’m OOO today.
+> > > > > >
+> > > > > > Hmm, so you’re saying that objects can be queued after the delayed work has
+> > > > > > been queued, but processed when the delayed work is run? I’m looking at
+> > > > > > this code after few years so I may have missed something.
+> > > > > >
+> > > > > > That’s a good point and I think I missed that. I think your version did too
+> > > > > > but I’ll have to double check.
+> > > > > >
+> > > > > > The fix then is to sample the clock for the latest object queued, not for
+> > > > > > when the delayed work is queued.
+> > > > > >
+> > > > > The patch i sent gurantee it. Just in case see v2:
+> > > >
+> > > > You are right and thank you! CBs can be queued while the monitor timer is in
+> > > > progress. So we need to sample unconditionally. I think my approach is still
+> > > > better since I take advantage of multiple seconds (I update snapshot on every
+> > > > CB queue monitor and sample in the monitor handler).
+> > > >
+> > > > Whereas your patch is snapshotting before queuing the regular work and when
+> > > > the work is executed (This is a much shorter duration and I bet you would be
+> > > > blocking in cond_synchronize..() more often).
+> > > >
+> > > There is a performance test that measures a taken time and memory
+> > > footprint, so you can do a quick comparison. A "rcutorture" can be
+> > > run with various parameters to figure out if a patch that is in question
+> > > makes any difference.
+> > >
+> > > Usually i run it as:
+> > >
+> > > <snip>
+> > > #! /usr/bin/env bash
+> > >
+> > > LOOPS=10
+> > >
+> > > for (( i=0; i<$LOOPS; i++ )); do
+> > >         tools/testing/selftests/rcutorture/bin/kvm.sh --memory 10G --torture rcuscale --allcpus --duration 1 \
+> > >         --kconfig CONFIG_NR_CPUS=64 \
+> > >         --kconfig CONFIG_RCU_NOCB_CPU=y \
+> > >         --kconfig CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y \
+> > >         --kconfig CONFIG_RCU_LAZY=n \
+> > >         --bootargs "rcuscale.kfree_rcu_test=1 rcuscale.kfree_nthreads=16 rcuscale.holdoff=20 rcuscale.kfree_loops=10000 torture.disable_onoff_at_boot" --trust-make
+> > >         echo "Done $i"
+> > > done
+> > > <snip>
+> > >
+> > > just run it from your linux sandbox.
+> >
+> > Would it make sense to modify the "if test "$do_kvfree" = "yes" code
+> > in tools/testing/selftests/rcutorture/bin/torture.sh to do something
+> > like this instead of what it currently does?
+> 
+> Yes I think so, Were you also thinking of adding it to
+> tools/testing/selftests/rcutorture/configs with a corresponding
+> ".boot" file for the kfree test's boot parameters?
 
-Please see a small nit below.
+No, because I run torture.sh reasonably frequently, and the style of
+test makes it better to run separately in that way.  In particular,
+it needs lots of memory and runs for a short duration.  This is not all
+that compatible with typical rcutorture runs, where lots of scenarios run
+concurrently (thus limiting each VM's memory) and for long time periods.
 
-On 11/14/22 13:21, Svyatoslav Feldsherov wrote:
-> After commit cbfecb927f42 ("fs: record I_DIRTY_TIME even if inode
-> already has I_DIRTY_INODE") writeiback_single_inode can push inode with
-> I_DIRTY_TIME set to b_dirty_time list. In case of freeing inode with
-> I_DIRTY_TIME set this can happened after deletion of inode io_list at
-> evict. Stack trace is following.
-> 
-> evict
-> fat_evict_inode
-> fat_truncate_blocks
-> fat_flush_inodes
-> writeback_inode
-> sync_inode_metadata(inode, sync=0)
-> writeback_single_inode(inode, wbc) <- wbc->sync_mode == WB_SYNC_NONE
-> 
-> This will lead to use after free in flusher thread.
-> 
-> Similar issue can be triggered if writeback_single_inode in the
-> stack trace update inode->io_list. Add explicit check to avoid it.
-> 
-> Fixes: cbfecb927f42 ("fs: record I_DIRTY_TIME even if inode already has I_DIRTY_INODE")
-> Reported-by: syzbot+6ba92bd00d5093f7e371@syzkaller.appspotmail.com
-> Signed-off-by: Svyatoslav Feldsherov <feldsherov@google.com>
-> ---
->  V1 -> V2: 
->  - address review comments
->  - skip inode_cgwb_move_to_attached for freeing inode 
-> 
->  fs/fs-writeback.c | 30 +++++++++++++++++++-----------
->  1 file changed, 19 insertions(+), 11 deletions(-)
-> 
-> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-> index 443f83382b9b..c4aea096689c 100644
-> --- a/fs/fs-writeback.c
-> +++ b/fs/fs-writeback.c
-> @@ -1712,18 +1712,26 @@ static int writeback_single_inode(struct inode *inode,
->  	wb = inode_to_wb_and_lock_list(inode);
->  	spin_lock(&inode->i_lock);
->  	/*
-> -	 * If the inode is now fully clean, then it can be safely removed from
-> -	 * its writeback list (if any).  Otherwise the flusher threads are
-> -	 * responsible for the writeback lists.
-> +	 * If the inode is freeing, it's io_list shoudn't be updated
+> If it means the bots will run it more, that would be awesome :-)
 
-	                            its
+I am not quite ready to have the bots run torture.sh.  Though maybe
+with --do-no-scf it would be fine?
 
-> +	 * as it can be finally deleted at this moment.
->  	 */
-> -	if (!(inode->i_state & I_DIRTY_ALL))
-> -		inode_cgwb_move_to_attached(inode, wb);
-> -	else if (!(inode->i_state & I_SYNC_QUEUED)) {
-> -		if ((inode->i_state & I_DIRTY))
-> -			redirty_tail_locked(inode, wb);
-> -		else if (inode->i_state & I_DIRTY_TIME) {
-> -			inode->dirtied_when = jiffies;
-> -			inode_io_list_move_locked(inode, wb, &wb->b_dirty_time);
-> +	if (!(inode->i_state & I_FREEING)) {
-> +		/*
-> +		 * If the inode is now fully clean, then it can be safely
-> +		 * removed from its writeback list (if any). Otherwise the
-> +		 * flusher threads are responsible for the writeback lists.
-> +		 */
-> +		if (!(inode->i_state & I_DIRTY_ALL))
-> +			inode_cgwb_move_to_attached(inode, wb);
-> +		else if (!(inode->i_state & I_SYNC_QUEUED)) {
-> +			if ((inode->i_state & I_DIRTY))
-> +				redirty_tail_locked(inode, wb);
-> +			else if (inode->i_state & I_DIRTY_TIME) {
-> +				inode->dirtied_when = jiffies;
-> +				inode_io_list_move_locked(inode,
-> +							  wb,
-> +							  &wb->b_dirty_time);
-> +			}
->  		}
->  	}
->  
-
--- 
-~Randy
+							Thanx, Paul
