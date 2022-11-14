@@ -2,76 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BCC628A1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:09:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC4C628A24
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:10:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237153AbiKNUIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 15:08:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
+        id S236825AbiKNUKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 15:10:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236559AbiKNUI1 (ORCPT
+        with ESMTP id S235917AbiKNUKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:08:27 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260701108;
-        Mon, 14 Nov 2022 12:08:26 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id lf15so8454529qvb.9;
-        Mon, 14 Nov 2022 12:08:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RrPoR3x65T0grjDuHpR6Ul7miMhp6L7F3yAVPRrhNv8=;
-        b=fr/mo27KrUrwqsKRMpV3+g0YPGDR2l9bFhXDBxHx5L/f1gIHNohtIdL+L2VHWqkVkU
-         bxksXaRocsMd9WpplVFnxEtarhBxMj8Jjr7luJ827cwUOE52gxWoYwg7HfWDc7ptitB9
-         3xOnIMUdMf0/1HTwyd+4BUIrcx+F0BhBeBlrV/IGPV23tSrVmAupKxDJICAXg6dJcVg6
-         P8sidNA5JjK6LFmP2Owc1Y2whou0B8OdfqQ2cwksPo/uccwKsRsF+DVf9rTHzmAVpgos
-         z+VZHLcKAKdk0wEA5mybLMS+nX/H6Lhp7FSFrgs1b1BWBOtM3dWZSjwlkk9dFk9/Z9ZY
-         Z7TQ==
+        Mon, 14 Nov 2022 15:10:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2671A39B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:09:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668456550;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6n6zpJl4G/A5VCRLcxo9kc/9ERsyYZ62NHpJBtTugxQ=;
+        b=JI5D9uzxnl3BSD+4vHbEBJduzdRd/4r+2ImrRpRWeaDnHIEdMc/bN3rut2Fb4dfIPK0uIV
+        sAZU6c9t4vAHnWru5WcM/4CkfxxrKO6QspUPSFZyFVOstqfUxEM5SaoLzavWRJtjomAkW3
+        rqXoLMv3jjef5GfCHhuNDlcHGH6OmqU=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-654-LYKq3BnkNfmmgV0O19DxqA-1; Mon, 14 Nov 2022 15:09:08 -0500
+X-MC-Unique: LYKq3BnkNfmmgV0O19DxqA-1
+Received: by mail-qk1-f199.google.com with SMTP id bm2-20020a05620a198200b006fa6eeee4a9so11959790qkb.14
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:09:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RrPoR3x65T0grjDuHpR6Ul7miMhp6L7F3yAVPRrhNv8=;
-        b=xbX3grwB8GkM9hUNAmUF65mK0JY4TZKgRkzvzXUk1Avet6h5/sUvabtnObbwkWYxN2
-         AGq1RdzzaGiQNh68y1/556ncZGR+cGOi70jUiK1PyXrfwNfJSGmIcONqTEFPgzxuXXr6
-         eUJKdASU2ErejK6fh7lMhoKnNKPK5jv03YXAAe9yeptH5F8ufW1ejHq99uqhkEgFIjwu
-         +iGvz13srNHLJgNyPgiSKNqGtR/KXlJrKcPo/VS//lJVH4P23J85bP/krfquMLsbECes
-         +I2HsPZF3qWVWz92bVP5sy6puUPdbeIgEjxGQYxt4CfCnUhXszMPyi/IGmPexsr8PW/1
-         N2EQ==
-X-Gm-Message-State: ANoB5plWpVkIAyZj7dJiQ8Y1mXgDevdSBbKFyz9wcmd2CiaerJCEYufR
-        A/yPAIMxNORJ1VvlKhiTHWull1G2/Lu8N+bbVX8+vkEbobA=
-X-Google-Smtp-Source: AA0mqf4QgHgx6KHxwHRyLfRUDwTF/J4/LGv++FRYLZf5oBNZ19qgB72jzHBdQGjjG4atzIN1qkl2o2GuxkfHbk1MY3I=
-X-Received: by 2002:a05:6214:3d97:b0:4b1:a359:c204 with SMTP id
- om23-20020a0562143d9700b004b1a359c204mr13917524qvb.64.1668456505288; Mon, 14
- Nov 2022 12:08:25 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6n6zpJl4G/A5VCRLcxo9kc/9ERsyYZ62NHpJBtTugxQ=;
+        b=k8KH9cK9/o1z0lVdEXLV3i3vhW/IRXuHaaeecTbWiygy6JfP/mQmfeycixazln7wqw
+         /wyD9n1SEI8xjND0zcHBdOzCLdlJmcfimxBoxCASjXYD7tkwOLNukpGsQ6dF1mrLS5Lv
+         QNtNuBXaODT7nkXbC82hGGRHHwBwOTcHrnkrBqzemUMzk4L0KfsGfqDN1P2hAXngYGEY
+         pqDtZIuBvOkbO4MotfqNZxg5Ww+uSw+qyjtdB8v1nHaw+RHiTg38dWt9L52CNAVlnjJW
+         XyIkpVJwZGxIISw93YMufMtmX1/jqxPsQJtiS1KJ1ykNA5C6D7N+cTXMdMtWALHPvZrS
+         d7GQ==
+X-Gm-Message-State: ANoB5pnyvBkEP82Q4SSXBvKtXL/K5FnPxXmR0ImUSX0Vaodh8VtcDAIz
+        MU+BBraIBazh8/DVud8ZRthihRgcKDDeY0sEITHjYqIfxWJwNnmhhHPmo+iM2slSvgSkfv3fAhP
+        Kpm3XTUTLaQdcdzXXaYiXjmHk
+X-Received: by 2002:ae9:e416:0:b0:6fa:21ba:b882 with SMTP id q22-20020ae9e416000000b006fa21bab882mr12368623qkc.646.1668456547897;
+        Mon, 14 Nov 2022 12:09:07 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6upwGHutL5OZAEnZpDgA+t9A69V+yZeqyR7wNZmEjKXlTMunsCllTaEmsySgYRdSqy77p31w==
+X-Received: by 2002:ae9:e416:0:b0:6fa:21ba:b882 with SMTP id q22-20020ae9e416000000b006fa21bab882mr12368602qkc.646.1668456547589;
+        Mon, 14 Nov 2022 12:09:07 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id h3-20020a05620a244300b006eed47a1a1esm6992533qkn.134.2022.11.14.12.09.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 12:09:07 -0800 (PST)
+Date:   Mon, 14 Nov 2022 15:09:05 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ives van Hoorne <ives@codesandbox.io>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mm/migrate: Fix read-only page got writable when
+ recover pte
+Message-ID: <Y3KgYeMTdTM0FN5W@x1n>
+References: <20221110203132.1498183-1-peterx@redhat.com>
+ <20221110203132.1498183-2-peterx@redhat.com>
+ <9af36be3-313b-e39c-85bb-bf30011bccb8@redhat.com>
 MIME-Version: 1.0
-References: <20221114180843.1125308-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <OS0PR01MB5922DDCE24ED6F6DD44B4B3F86059@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CA+V-a8tRKxpq4LiDDKd98MW27X7DnMEUw0FoL=8MLXK11tD-ng@mail.gmail.com>
- <OS0PR01MB5922E8CB8DB680347BEB997C86059@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CA+V-a8u0X2isaMWkPhyteqPnKLKEwcR1K=TOarQQMFb8UcGLvQ@mail.gmail.com> <OS0PR01MB5922E8AC8C77B54A6572763B86059@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB5922E8AC8C77B54A6572763B86059@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 14 Nov 2022 20:07:57 +0000
-Message-ID: <CA+V-a8uSS69EpkVo1iBybdeFbZZJdsYaWkPBYxgC89MAqW4EjQ@mail.gmail.com>
-Subject: Re: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we put the PM clocks
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <9af36be3-313b-e39c-85bb-bf30011bccb8@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,167 +85,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 7:59 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
->
->
->
-> > -----Original Message-----
-> > From: Lad, Prabhakar <prabhakar.csengg@gmail.com>
-> > Sent: 14 November 2022 19:56
-> > To: Biju Das <biju.das.jz@bp.renesas.com>
-> > Cc: Geert Uytterhoeven <geert+renesas@glider.be>; Wim Van Sebroeck
-> > <wim@linux-watchdog.org>; Guenter Roeck <linux@roeck-us.net>; Philipp
-> > Zabel <p.zabel@pengutronix.de>; linux-watchdog@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; linux-renesas-soc@vger.kernel.org; Fabrizio
-> > Castro <fabrizio.castro.jz@renesas.com>; Prabhakar Mahadev Lad
-> > <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Subject: Re: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we put
-> > the PM clocks
-> >
-> > On Mon, Nov 14, 2022 at 7:53 PM Biju Das <biju.das.jz@bp.renesas.com>
-> > wrote:
-> > >
-> > >
-> > >
-> > > > -----Original Message-----
-> > > > From: Lad, Prabhakar <prabhakar.csengg@gmail.com>
-> > > > Sent: 14 November 2022 19:46
-> > > > To: Biju Das <biju.das.jz@bp.renesas.com>
-> > > > Cc: Geert Uytterhoeven <geert+renesas@glider.be>; Wim Van Sebroeck
-> > > > <wim@linux-watchdog.org>; Guenter Roeck <linux@roeck-us.net>;
-> > > > Philipp Zabel <p.zabel@pengutronix.de>;
-> > > > linux-watchdog@vger.kernel.org; linux- kernel@vger.kernel.org;
-> > > > linux-renesas-soc@vger.kernel.org; Fabrizio Castro
-> > > > <fabrizio.castro.jz@renesas.com>; Prabhakar Mahadev Lad
-> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > Subject: Re: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we
-> > > > put the PM clocks
-> > > >
-> > > > HI Biju,
-> > > >
-> > > > Thank you for the review.
-> > > >
-> > > > On Mon, Nov 14, 2022 at 6:42 PM Biju Das
-> > > > <biju.das.jz@bp.renesas.com>
-> > > > wrote:
-> > > > >
-> > > > >
-> > > > >
-> > > > > > -----Original Message-----
-> > > > > > From: Prabhakar <prabhakar.csengg@gmail.com>
-> > > > > > Sent: 14 November 2022 18:09
-> > > > > > To: Geert Uytterhoeven <geert+renesas@glider.be>; Wim Van
-> > > > > > Sebroeck <wim@linux-watchdog.org>; Guenter Roeck
-> > > > > > <linux@roeck-us.net>; Philipp Zabel <p.zabel@pengutronix.de>;
-> > > > > > linux-watchdog@vger.kernel.org
-> > > > > > Cc: linux-kernel@vger.kernel.org; linux-renesas-
-> > > > soc@vger.kernel.org;
-> > > > > > Prabhakar <prabhakar.csengg@gmail.com>; Biju Das
-> > > > > > <biju.das.jz@bp.renesas.com>; Fabrizio Castro
-> > > > > > <fabrizio.castro.jz@renesas.com>; Prabhakar Mahadev Lad
-> > > > > > <prabhakar.mahadev- lad.rj@bp.renesas.com>
-> > > > > > Subject: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we
-> > > > > > put the PM clocks
-> > > > > >
-> > > > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > > >
-> > > > > > On RZ/Five SoC it was observed that setting timeout (to say 1
-> > > > > > sec) wouldn't reset the system. To fix this we make sure we
-> > > > > > issue a
-> > > > reset
-> > > > > > before putting the PM clocks to make sure the registers have
-> > > > > > been
-> > > > cleared.
-> > > > > >
-> > > > > > While at it re-used rzg2l_wdt_stop() in
-> > rzg2l_wdt_set_timeout()
-> > > > > > as we were calling the same functions here.
-> > > > > >
-> > > > > > Signed-off-by: Lad Prabhakar
-> > > > > > <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > > > ---
-> > > > > > Note,
-> > > > > > - This patch has been tested on RZ/G2L, RZ/V2M and RZ/Five.
-> > > > > > - My initial investigation showed adding the delay after
-> > > > > > pm_runtime_get_sync()
-> > > > > >   also fixed this issue.
-> > > > > > - Do I need add the fixes tag ? what should be the operation
-> > > > > > PUT-
-> > > > > > >RESET/RESET->PUT?
-> > > > >
-> > > > > It looks like timing issue, None of the previous devices are
-> > > > affected by this.
-> > > > >
-> > > > yep.
-> > > >
-> > > > > >   in case we need the tag is:
-> > > > > >   Fixes: 4055ee81009e6 ("watchdog: rzg2l_wdt: Add set_timeout
-> > > > > > callback")
-> > > > > > ---
-> > > > > >  drivers/watchdog/rzg2l_wdt.c | 7 ++-----
-> > > > > >  1 file changed, 2 insertions(+), 5 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/watchdog/rzg2l_wdt.c
-> > > > > > b/drivers/watchdog/rzg2l_wdt.c index
-> > 00438ceed17a..d1271cc7750f
-> > > > > > 100644
-> > > > > > --- a/drivers/watchdog/rzg2l_wdt.c
-> > > > > > +++ b/drivers/watchdog/rzg2l_wdt.c
-> > > > > > @@ -115,16 +115,14 @@ static int rzg2l_wdt_stop(struct
-> > > > > > watchdog_device *wdev) {
-> > > > > >       struct rzg2l_wdt_priv *priv =
-> > watchdog_get_drvdata(wdev);
-> > > > > >
-> > > > > > -     pm_runtime_put(wdev->parent);
-> > > > > >       reset_control_reset(priv->rstc);
-> > > > > > +     pm_runtime_put(wdev->parent);
-> > > > > >
-> > > > > >       return 0;
-> > > > > >  }
-> > > > > >
-> > > > > >  static int rzg2l_wdt_set_timeout(struct watchdog_device
-> > *wdev,
-> > > > > > unsigned int
-> > > > > > timeout)  {
-> > > > > > -     struct rzg2l_wdt_priv *priv =
-> > watchdog_get_drvdata(wdev);
-> > > > > > -
-> > > > > >       wdev->timeout = timeout;
-> > > > > >
-> > > > > >       /*
-> > > > > > @@ -132,8 +130,7 @@ static int rzg2l_wdt_set_timeout(struct
-> > > > > > watchdog_device *wdev, unsigned int time
-> > > > > >        * register so that it is updated with new timeout
-> > values.
-> > > > > >        */
-> > > > >
-> > > > >
-> > > > > Maybe update the comment above with new code change.
-> > > > >
-> > > >     /*
-> > > >      * If the watchdog is active, reset the module for updating
-> > the
-> > > > WDTSET
-> > > >      * register so that it is updated with new timeout values.
-> > > >      */
-> > > >
-> > > > The above existing comment holds good with this code change. If
-> > you
-> > > > prefer something else please let me know I'll update it
-> > accordingly.
-> > >
-> > > Maybe mention, The resetting of the module is done in wdt_stop
-> > function.
-> > >
-> >     /*
-> >      * If the watchdog is active, reset the module for updating the
-> > WDTSET
-> >      * register by calling rzg2l_wdt_stop() (which internally calls
-> > reset_control_reset() and pm_runtime_put()
->
-> (which internally calls reset_control_reset() to reset the module)
->
-Sure will update that in v2.
+On Mon, Nov 14, 2022 at 05:09:32PM +0100, David Hildenbrand wrote:
+> On 10.11.22 21:31, Peter Xu wrote:
+> > Ives van Hoorne from codesandbox.io reported an issue regarding possible
+> > data loss of uffd-wp when applied to memfds on heavily loaded systems.  The
+> > sympton is some read page got data mismatch from the snapshot child VMs.
+> > 
+> > Here I can also reproduce with a Rust reproducer that was provided by Ives
+> > that keeps taking snapshot of a 256MB VM, on a 32G system when I initiate
+> > 80 instances I can trigger the issues in ten minutes.
+> > 
+> > It turns out that we got some pages write-through even if uffd-wp is
+> > applied to the pte.
+> > 
+> > The problem is, when removing migration entries, we didn't really worry
+> > about write bit as long as we know it's not a write migration entry.  That
+> > may not be true, for some memory types (e.g. writable shmem) mk_pte can
+> > return a pte with write bit set, then to recover the migration entry to its
+> > original state we need to explicit wr-protect the pte or it'll has the
+> > write bit set if it's a read migration entry.
+> > 
+> > For uffd it can cause write-through.  I didn't verify, but I think it'll be
+> > the same for mprotect()ed pages and after migration we can miss the sigbus
+> > instead.
+> 
+> I don't think so. mprotect() handling relies on vma->vm_page_prot, which is
+> supposed to do the right thing. E.g., map the pte protnone without
+> VM_READ/VM_WRITE/....
 
-Cheers,
-Prabhakar
+I've removed that example when I posted v3, feel free to have a look.
+
+> 
+> > 
+> > The relevant code on uffd was introduced in the anon support, which is
+> > commit f45ec5ff16a7 ("userfaultfd: wp: support swap and page migration",
+> > 2020-04-07).  However anon shouldn't suffer from this problem because anon
+> > should already have the write bit cleared always, so that may not be a
+> > proper Fixes target.  To satisfy the need on the backport, I'm attaching
+> > the Fixes tag to the uffd-wp shmem support.  Since no one had issue with
+> > mprotect, so I assume that's also the kernel version we should start to
+> > backport for stable, and we shouldn't need to worry before that.
+> > 
+> > Cc: Andrea Arcangeli <aarcange@redhat.com>
+> > Cc: stable@vger.kernel.org
+> > Fixes: b1f9e876862d ("mm/uffd: enable write protection for shmem & hugetlbfs")
+> > Reported-by: Ives van Hoorne <ives@codesandbox.io>
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > ---
+> >   mm/migrate.c | 8 +++++++-
+> >   1 file changed, 7 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/mm/migrate.c b/mm/migrate.c
+> > index dff333593a8a..8b6351c08c78 100644
+> > --- a/mm/migrate.c
+> > +++ b/mm/migrate.c
+> > @@ -213,8 +213,14 @@ static bool remove_migration_pte(struct folio *folio,
+> >   			pte = pte_mkdirty(pte);
+> >   		if (is_writable_migration_entry(entry))
+> >   			pte = maybe_mkwrite(pte, vma);
+> > -		else if (pte_swp_uffd_wp(*pvmw.pte))
+> > +		else
+> > +			/* NOTE: mk_pte can have write bit set */
+> > +			pte = pte_wrprotect(pte);
+> 
+> 
+> Any particular reason why not to simply glue this to pte_swp_uffd_wp(),
+> because only that needs special care:
+> 
+> if (pte_swp_uffd_wp(*pvmw.pte)) {
+> 	pte = pte_wrprotect(pte);
+> 	pte = pte_mkuffd_wp(pte);
+> }
+> 
+> 
+> And that would match what actually should have been done in commit
+> f45ec5ff16a7 -- only special-case uffd-wp.
+> 
+> Note that I think there are cases where we have a PTE that was !writable,
+> but after migration we can map it writable.
+
+The thing is recovering the pte into its original form is the safest
+approach to me, so I think we need justification on why it's always safe to
+set the write bit.
+
+Or do you perhaps have solid clue and think it's always safe?
+
+> 
+> BTW, does unuse_pte() need similar care?
+> 
+> new_pte = pte_mkold(mk_pte(page, vma->vm_page_prot));
+> if (pte_swp_uffd_wp(*pte))
+> 	new_pte = pte_mkuffd_wp(new_pte);
+> set_pte_at(vma->vm_mm, addr, pte, new_pte);
+
+I think unuse path is fine because unuse only applies to private mappings,
+so we should always have the W bit removed there within mk_pte().
+
+Thanks,
+
+-- 
+Peter Xu
+
