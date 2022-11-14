@@ -2,68 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1676627A90
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1126A627AA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235733AbiKNKdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 05:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
+        id S235876AbiKNKg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 05:36:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiKNKdK (ORCPT
+        with ESMTP id S236080AbiKNKgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 05:33:10 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7401BEBE;
-        Mon, 14 Nov 2022 02:33:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668421988; x=1699957988;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=Y0WdUR+FeU2C43ZxBmO//rjLti3e/g0n9XgzSjyHz+U=;
-  b=BCoNOUekDCrU3jD7MiC1LDjmda/cdFGRavFxfxrjZ8XMNxg9SQR32Ifg
-   K7Tk9UjBeQZB7xP/v2PBnk9FzbB0Jg4KQDWB7hjOyll2r5GzFGvycxKZ4
-   yE8pP6f14b4DW7cnuE9KsXtaa4cp7/uYf/hjC2j5lB6f9bT+gQKhMw0M4
-   wYqaEzxL/GJXOy3RTcvv4u2aND6yyEIZ+M3OnoD76ot0UIdlJNeO9j5ye
-   oMazl7EAxcGO4ZigUe/PpZVKMzfoTCE8a98HktHqZvJ15rZssmdnkk1qz
-   ba6Q1hcZoPj81lFUAG88QdxKBmpk0z+mESlU07EI+sEnJGgO/BlQephd2
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="309563246"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="309563246"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 02:33:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="616256319"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="616256319"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 14 Nov 2022 02:33:02 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id C75CE32E; Mon, 14 Nov 2022 12:33:26 +0200 (EET)
-Date:   Mon, 14 Nov 2022 12:33:26 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Hidenori Kobayashi <hidenorik@google.com>,
-        stable@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/1] i2c: Restore initial power state when we are done.
-Message-ID: <Y3IZdrwwfiolSjB4@black.fi.intel.com>
-References: <20221109-i2c-waive-v5-0-2839667f8f6a@chromium.org>
- <20221109-i2c-waive-v5-1-2839667f8f6a@chromium.org>
- <Y3AA7hZFvoI9+2fF@shikoro>
+        Mon, 14 Nov 2022 05:36:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DFF1D65B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:36:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668422161;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=24zRJBMMX5r7D0TfP9H8IpSMNGkPGaDlufPYAnb9o3c=;
+        b=I8O2Ni5fm5YhkBFZyMitiZmoyGg10HLrXJXSI8Tx28JMkOoc/JzGIB3TKLk/0UdisINQsn
+        V2OBBMJsgQ12XsV9ZueiVKniYSbGRgwx6bBSG+lV5FQF+2kI+vni0sBE5WdOi7lTERnmaZ
+        rXHWq3CrqgGySvqiP/We7Y5K8rZXCpA=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-440-Eev_oxOoNVml0XdOGSSw9w-1; Mon, 14 Nov 2022 05:35:59 -0500
+X-MC-Unique: Eev_oxOoNVml0XdOGSSw9w-1
+Received: by mail-ej1-f72.google.com with SMTP id hp16-20020a1709073e1000b007adf5a83df7so5184095ejc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:35:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=24zRJBMMX5r7D0TfP9H8IpSMNGkPGaDlufPYAnb9o3c=;
+        b=nIx4ooQeK0c9MbGirlc4pWEdEO2yknv3fGNMzl/R672iVg3puRp2eaFz6xNK5AZdGy
+         VA0zyipyJruGA8cJlxoXad+yKB0AvpMT1iL00b+h3PU5LLfoLiw7DGs+DqUKh3eIm/ig
+         E2+7l4EFPFeQX/unO47cDz2FvpNEGOclQfgvT6diOgfoaZMMvWETbfVcdZ1rmrdX1eOy
+         lloy06JZu6wA+vX5S0DZhalmQiUPcBupvf/8X35+4K7dIGC8AecIfEg3edu5UhqsmBfq
+         TZBcVp6ixqOTFtzXgsuxx6G7lO7PhO9ZftxbQTTRfpFuPS+9fNke5acvZz/H921E67qt
+         IXow==
+X-Gm-Message-State: ANoB5pkPWoeI2Wo/jbi68CMj7gIxGCDkd2XXccE7dL+mcZalgt6UWVUI
+        l4Ro4iTkqaakwHDN9tS5z3WSDnFtoly5DZlqFcIqilzlGwhZDJoxOHCKQfh6BbY94GciANFkhU5
+        QWt/Lhtgci0mtSUQ2NYgGPqCC
+X-Received: by 2002:a05:6402:519:b0:467:6847:1ea7 with SMTP id m25-20020a056402051900b0046768471ea7mr9673840edv.237.1668422158680;
+        Mon, 14 Nov 2022 02:35:58 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6ICCUSIbjUZ6xW1wwVWfNHWXpBEQHv6D03VDE1/OpgXEDSGOrXtsDchrX5iVx343T8ZpJuMQ==
+X-Received: by 2002:a05:6402:519:b0:467:6847:1ea7 with SMTP id m25-20020a056402051900b0046768471ea7mr9673827edv.237.1668422158530;
+        Mon, 14 Nov 2022 02:35:58 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id eg25-20020a056402289900b00457b5ba968csm4581792edb.27.2022.11.14.02.35.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 02:35:57 -0800 (PST)
+Message-ID: <57f57c29-cf48-67c1-b6b3-0e50e7105031@redhat.com>
+Date:   Mon, 14 Nov 2022 11:35:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3AA7hZFvoI9+2fF@shikoro>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: linux-next: manual merge of the drm-intel tree with Linus' tree
+Content-Language: en-US
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20221114102327.6d53341e@canb.auug.org.au>
+ <33ef1207-aad7-b7cd-61ac-327e9afb0699@redhat.com> <87cz9p4zj6.fsf@intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <87cz9p4zj6.fsf@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,114 +90,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Sat, Nov 12, 2022 at 09:24:14PM +0100, Wolfram Sang wrote:
-> On Thu, Nov 10, 2022 at 05:20:39PM +0100, Ricardo Ribalda wrote:
-> > A driver that supports I2C_DRV_ACPI_WAIVE_D0_PROBE is not expected to
-> > power off a device that it has not powered on previously.
-> > 
-> > For devices operating in "full_power" mode, the first call to
-> > `i2c_acpi_waive_d0_probe` will return 0, which means that the device
-> > will be turned on with `dev_pm_domain_attach`.
-> > 
-> > If probe fails or the device is removed the second call to
-> > `i2c_acpi_waive_d0_probe` will return 1, which means that the device
-> > will not be turned off. This is, it will be left in a different power
-> > state. Lets fix it.
-> > 
-> > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > Cc: stable@vger.kernel.org
-> > Fixes: b18c1ad685d9 ("i2c: Allow an ACPI driver to manage the device's power state during probe")
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+On 11/14/22 11:10, Jani Nikula wrote:
+> On Mon, 14 Nov 2022, Hans de Goede <hdegoede@redhat.com> wrote:
+>> Hi,
+>>
+>> On 11/14/22 00:23, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> Today's linux-next merge of the drm-intel tree got a conflict in:
+>>>
+>>>   drivers/gpu/drm/i915/display/intel_backlight.c
+>>>
+>>> between commit:
+>>>
+>>>   b1d36e73cc1c ("drm/i915: Don't register backlight when another backlight should be used (v2)")
+>>>
+>>> from Linus' tree and commit:
+>>>
+>>>   801543b2593b ("drm/i915: stop including i915_irq.h from i915_trace.h")
+>>>
+>>> from the drm-intel tree.
+>>
+>> This is weird, because the:
+>>
+>>    b1d36e73cc1c ("drm/i915: Don't register backlight when another backlight should be used (v2)")
+>>
+>> commit is in 6.1-rc1, so there can only be a conflict it 6.1-rc1 has not
+>> been back-merged into drm-intel yet ?
 > 
-> Adding I2C ACPI maintainer to CC. Mika, could you please help
-> reviewing?
+> That's the reason it *is* a conflict, right?
 
-Sure.
+Right what I was trying to say is that I am surprised that 6.1-rc1 has not
+been back-merged into drm-intel yet even though it has been released
+4 weeks ago.
 
-> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> > index b4edf10e8fd0..6f4974c76404 100644
-> > --- a/drivers/i2c/i2c-core-base.c
-> > +++ b/drivers/i2c/i2c-core-base.c
-> > @@ -467,6 +467,7 @@ static int i2c_device_probe(struct device *dev)
-> >  {
-> >  	struct i2c_client	*client = i2c_verify_client(dev);
-> >  	struct i2c_driver	*driver;
-> > +	bool do_power_on;
-> >  	int status;
-> >  
-> >  	if (!client)
-> > @@ -545,8 +546,8 @@ static int i2c_device_probe(struct device *dev)
-> >  	if (status < 0)
-> >  		goto err_clear_wakeup_irq;
-> >  
-> > -	status = dev_pm_domain_attach(&client->dev,
-> > -				      !i2c_acpi_waive_d0_probe(dev));
-> > +	do_power_on = !i2c_acpi_waive_d0_probe(dev);
-> > +	status = dev_pm_domain_attach(&client->dev, do_power_on);
+I thought it was more or less standard process to backmerge rc1 soon after
+it is released ?
 
-I think this is fine as the driver says it is OK to see the device in
-whatever power state (I assume this is what the
-i2c_acpi_waive_d0_probe() is supposed to be doing but there is no
-kernel-doc, though).
+Regards,
 
-> >  	if (status)
-> >  		goto err_clear_wakeup_irq;
-> >  
-> > @@ -580,12 +581,14 @@ static int i2c_device_probe(struct device *dev)
-> >  	if (status)
-> >  		goto err_release_driver_resources;
-> >  
-> > +	client->power_off_on_remove = do_power_on;
-> > +
-> >  	return 0;
-> >  
-> >  err_release_driver_resources:
-> >  	devres_release_group(&client->dev, client->devres_group_id);
-> >  err_detach_pm_domain:
-> > -	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
-> > +	dev_pm_domain_detach(&client->dev, do_power_on);
-> >  err_clear_wakeup_irq:
-> >  	dev_pm_clear_wake_irq(&client->dev);
-> >  	device_init_wakeup(&client->dev, false);
-> > @@ -610,7 +613,7 @@ static void i2c_device_remove(struct device *dev)
-> >  
-> >  	devres_release_group(&client->dev, client->devres_group_id);
-> >  
-> > -	dev_pm_domain_detach(&client->dev, !i2c_acpi_waive_d0_probe(dev));
-> > +	dev_pm_domain_detach(&client->dev, client->power_off_on_remove);
-
-However, on the remove path I think we should not call
-i2c_acpi_waive_d0_probe() at all as that has nothing to do with remove
-(it is for whether the driver accepts any power state on probe AFAICT)
-so this should stil be "true" here. Unless I'm missing something.
-
-> >  
-> >  	dev_pm_clear_wake_irq(&client->dev);
-> >  	device_init_wakeup(&client->dev, false);
-> > diff --git a/include/linux/i2c.h b/include/linux/i2c.h
-> > index f7c49bbdb8a1..eba83bc5459e 100644
-> > --- a/include/linux/i2c.h
-> > +++ b/include/linux/i2c.h
-> > @@ -326,6 +326,8 @@ struct i2c_driver {
-> >   *	calls it to pass on slave events to the slave driver.
-> >   * @devres_group_id: id of the devres group that will be created for resources
-> >   *	acquired when probing this device.
-> > + * @power_off_on_remove: Record if we have turned on the device before probing
-> > + *	so we can turn off the device at removal.
-> >   *
-> >   * An i2c_client identifies a single device (i.e. chip) connected to an
-> >   * i2c bus. The behaviour exposed to Linux is defined by the driver
-> > @@ -355,6 +357,8 @@ struct i2c_client {
-> >  	i2c_slave_cb_t slave_cb;	/* callback for slave mode	*/
-> >  #endif
-> >  	void *devres_group_id;		/* ID of probe devres group	*/
-> > +	bool power_off_on_remove;	/* if device needs to be turned	*/
-> > +					/* off by framework at removal	*/
-> >  };
-> >  #define to_i2c_client(d) container_of(d, struct i2c_client, dev)
-> >  
-> > 
-> > -- 
-> > b4 0.11.0-dev-d93f8
-
+Hans
 
