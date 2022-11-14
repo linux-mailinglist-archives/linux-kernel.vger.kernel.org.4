@@ -2,389 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDAC6287B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 700016287C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:02:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237991AbiKNSAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 13:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
+        id S238151AbiKNSCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 13:02:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237909AbiKNR7u (ORCPT
+        with ESMTP id S235617AbiKNSBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:59:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59A127B2E;
-        Mon, 14 Nov 2022 09:59:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4303561331;
-        Mon, 14 Nov 2022 17:59:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98FE6C433C1;
-        Mon, 14 Nov 2022 17:59:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668448785;
-        bh=e173ROKukEUUj9RQQoI/lX82KYy/bM84YFLsDMettg4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h9+MkNgNeZPoFeI7rcWLtZu9yGw1G2+6Urmw4TF7PMm8aJAEEu7uv6HAzWfBLnMC8
-         yVafXESaQd3pGWBwb5lwRnTkLjSPh9/WnDUjqHG1CIe5wO1uayECmHznhFjY178vJK
-         Ar5jDh4iieZWpj6D18gX9tm71r9zcgu4AjfTmre69pwcmt96caUyH/RlAqH03RY16j
-         iYK4d0NZDUuOVpkCKJMuLjIiZd+QUnyPh0kI5NX8MOCc9lc3t7yhDpbwtepds2wNW9
-         fnK0Ho781Hw64GSUJvW8bWcbJIVTN0WgOlktW6f5t1C6BNU0GNqK3gShejHIMFAerc
-         uLzPXr1R+Vn2Q==
-Date:   Mon, 14 Nov 2022 23:29:29 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        caihuoqing <caihuoqing@baidu.com>, Vinod Koul <vkoul@kernel.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 17/20] PCI: dwc: Introduce generic resources getter
-Message-ID: <20221114175929.GB5305@thinkpad>
-References: <20221113191301.5526-1-Sergey.Semin@baikalelectronics.ru>
- <20221113191301.5526-18-Sergey.Semin@baikalelectronics.ru>
- <20221114064654.GE3869@thinkpad>
- <20221114083903.r2vyuyotwkf52jk7@mobilestation>
+        Mon, 14 Nov 2022 13:01:35 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B9B2B262;
+        Mon, 14 Nov 2022 10:00:41 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 2AEHXTi6007635;
+        Mon, 14 Nov 2022 18:00:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : content-transfer-encoding : mime-version; s=pp1;
+ bh=QPhSdp/WvfS+gB8RUHumycoy4o2HnncDto2p1MtB9DY=;
+ b=OFVyYebNpWw/Lk5Ok4oNlUZyZwd+Yt6FdFX5hhaq1Xtca61+3PE9pUCR+yjD0kHHqE6X
+ Aa4Va2Dcmvv3rgrPMCXRtgYflj0A+uwrfaV7j2W1OiVLwhMl06RZ00t8t2rIa6sxiYjd
+ 1bGFVRJ2wgLglC0gz1MWRED1AEg9PcxyrNL+vZ1FuxYgD9DNRrs/fDOeMYgpy8a2I3GI
+ YnikAQjpp57I3vL1Jl9B0MFl38Nf0tlVX7DdovQnG1enSmPqTmxpjYtDv0OepYTlHzjG
+ cqeMkFcwrPyMYwXPDwKhIb7MxnoEKR0WYn1fn4pwrsTRCqhP7V4sNCgJLGCF+sS7ae6N Kg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kut698pej-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 18:00:17 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AEHXZoB007861;
+        Mon, 14 Nov 2022 18:00:16 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kut698pd1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 18:00:16 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AEHoaqs019792;
+        Mon, 14 Nov 2022 18:00:14 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma04wdc.us.ibm.com with ESMTP id 3kt349f8py-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 18:00:14 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AEI0AkM52101664
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Nov 2022 18:00:10 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 54BDE7805E;
+        Mon, 14 Nov 2022 18:57:43 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E6D8F7805C;
+        Mon, 14 Nov 2022 18:57:39 +0000 (GMT)
+Received: from lingrow.int.hansenpartnership.com (unknown [9.211.83.197])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 14 Nov 2022 18:57:39 +0000 (GMT)
+Message-ID: <95ffac38780bf0ec6084cb354bfcb3b7bee686b9.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 04/11] security: keys: trusted: Include TPM2 creation
+ data
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Evan Green <evgreen@chromium.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, linux-integrity@vger.kernel.org,
+        gwendal@chromium.org, dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com,
+        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
+        linux-pm@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Mon, 14 Nov 2022 13:00:08 -0500
+In-Reply-To: <CAE=gft6L6bMtzbqUfH_NAsFz2r0Nw7kkbCPXcr2nYj5n31FYQg@mail.gmail.com>
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+         <20221111151451.v5.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
+         <Y3FfhrgvBNey6T7V@sol.localdomain>
+         <ff23b4e24222037959c2a784496c7ee91024e6c5.camel@linux.ibm.com>
+         <CAE=gft63-jdKqKmepB+LXPm6WUWSnz+CMWcWWnyN1y-EnS4kVg@mail.gmail.com>
+         <c31d1a3af53515f2a9d3f53eb27ce698e796f9b9.camel@linux.ibm.com>
+         <CAE=gft6L6bMtzbqUfH_NAsFz2r0Nw7kkbCPXcr2nYj5n31FYQg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: mQ0o1bvpk3uvMiLkzZl2cNHEOfjstpwl
+X-Proofpoint-GUID: cPzfQg2eCGXV_bQt6IZwGIcCXhV5_zn6
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221114083903.r2vyuyotwkf52jk7@mobilestation>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-14_13,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 suspectscore=0 phishscore=0 malwarescore=0
+ lowpriorityscore=0 impostorscore=0 adultscore=0 mlxscore=0 mlxlogscore=561
+ bulkscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211140125
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 11:39:03AM +0300, Serge Semin wrote:
-> On Mon, Nov 14, 2022 at 12:16:54PM +0530, Manivannan Sadhasivam wrote:
-> > On Sun, Nov 13, 2022 at 10:12:58PM +0300, Serge Semin wrote:
-> > > Currently the DW PCIe Root Port and Endpoint CSR spaces are retrieved in
-> > > the separate parts of the DW PCIe core driver. It doesn't really make
-> > > sense since the both controller types have identical set of the core CSR
-> > > regions: DBI, DBI CS2 and iATU/eDMA. Thus we can simplify the DW PCIe Host
-> > > and EP initialization methods by moving the platform-specific registers
-> > > space getting and mapping into a common method. It gets to be even more
-> > > justified seeing the CSRs base address pointers are preserved in the
-> > > common DW PCIe descriptor. Note all the OF-based common DW PCIe settings
-> > > initialization will be moved to the new method too in order to have a
-> > > single function for all the generic platform properties handling in single
-> > > place.
-> > > 
-> > > A nice side-effect of this change is that the pcie-designware-host.c and
-> > > pcie-designware-ep.c drivers are cleaned up from all the direct dw_pcie
-> > > storage modification, which makes the DW PCIe core, Root Port and Endpoint
-> > > modules more coherent.
-> > > 
-> > 
+On Mon, 2022-11-14 at 09:43 -0800, Evan Green wrote:
+> On Mon, Nov 14, 2022 at 8:56 AM James Bottomley <jejb@linux.ibm.com>
+> wrote:
+[...]
+> > Of course, since openssl_tpm2_engine is the complete reference
+> > implementation that means I'll have to add the creation PCRs
+> > implementation to it ... unless you'd like to do it?
 > 
-> > You have clubbed both generic resource API and introducing CDM_CHECK flag.
-> > Please split them into separate patches.
-> 
-> This modification is a part of the new method dw_pcie_get_resources().
-> Without that method there is no point in adding the new flag. So no.
-> It's better to have all of it in a single patch as a part of creating
-> a coherent resources getter method.
-> 
+> I am willing to help as I'm the one making the mess. How does it
+> sequence along with your draft submission (before, after,
+> simultaneous)?
 
-Same comment as previous patch. I'll defer it to you.
+At the moment, just send patches.  The openssl_tpm2_engine is developed
+on a groups.io mailing list:
 
-Thanks,
-Mani
+https://groups.io/g/openssl-tpm2-engine/
 
-> -Sergey
-> 
-> > 
-> > Thanks,
-> > Mani
-> > 
-> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > > 
-> > > ---
-> > > 
-> > > Changelog v3:
-> > > - This is a new patch created on v3 lap of the series.
-> > > 
-> > > Changelog v4:
-> > > - Convert the method name from dw_pcie_get_res() to
-> > >   dw_pcie_get_resources(). (@Bjorn)
-> > > 
-> > > Changelog v7:
-> > > - Get back device.of_node pointer to the dw_pcie_ep_init() method.
-> > >   (@Yoshihiro)
-> > > ---
-> > >  .../pci/controller/dwc/pcie-designware-ep.c   | 25 +------
-> > >  .../pci/controller/dwc/pcie-designware-host.c | 15 +---
-> > >  drivers/pci/controller/dwc/pcie-designware.c  | 75 ++++++++++++++-----
-> > >  drivers/pci/controller/dwc/pcie-designware.h  |  3 +
-> > >  4 files changed, 65 insertions(+), 53 deletions(-)
-> > > 
-> > > diff --git a/drivers/pci/controller/dwc/pcie-designware-ep.c b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > > index 237bb01d7852..f68d1ab83bb3 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-designware-ep.c
-> > > @@ -13,8 +13,6 @@
-> > >  #include <linux/pci-epc.h>
-> > >  #include <linux/pci-epf.h>
-> > >  
-> > > -#include "../../pci.h"
-> > > -
-> > >  void dw_pcie_ep_linkup(struct dw_pcie_ep *ep)
-> > >  {
-> > >  	struct pci_epc *epc = ep->epc;
-> > > @@ -694,23 +692,9 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> > >  
-> > >  	INIT_LIST_HEAD(&ep->func_list);
-> > >  
-> > > -	if (!pci->dbi_base) {
-> > > -		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dbi");
-> > > -		pci->dbi_base = devm_pci_remap_cfg_resource(dev, res);
-> > > -		if (IS_ERR(pci->dbi_base))
-> > > -			return PTR_ERR(pci->dbi_base);
-> > > -	}
-> > > -
-> > > -	if (!pci->dbi_base2) {
-> > > -		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dbi2");
-> > > -		if (!res) {
-> > > -			pci->dbi_base2 = pci->dbi_base + SZ_4K;
-> > > -		} else {
-> > > -			pci->dbi_base2 = devm_pci_remap_cfg_resource(dev, res);
-> > > -			if (IS_ERR(pci->dbi_base2))
-> > > -				return PTR_ERR(pci->dbi_base2);
-> > > -		}
-> > > -	}
-> > > +	ret = dw_pcie_get_resources(pci);
-> > > +	if (ret)
-> > > +		return ret;
-> > >  
-> > >  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "addr_space");
-> > >  	if (!res)
-> > > @@ -739,9 +723,6 @@ int dw_pcie_ep_init(struct dw_pcie_ep *ep)
-> > >  		return -ENOMEM;
-> > >  	ep->outbound_addr = addr;
-> > >  
-> > > -	if (pci->link_gen < 1)
-> > > -		pci->link_gen = of_pci_get_max_link_speed(np);
-> > > -
-> > >  	epc = devm_pci_epc_create(dev, &epc_ops);
-> > >  	if (IS_ERR(epc)) {
-> > >  		dev_err(dev, "Failed to create epc device\n");
-> > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > index ea923c25e12d..3ab6ae3712c4 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-> > > @@ -16,7 +16,6 @@
-> > >  #include <linux/pci_regs.h>
-> > >  #include <linux/platform_device.h>
-> > >  
-> > > -#include "../../pci.h"
-> > >  #include "pcie-designware.h"
-> > >  
-> > >  static struct pci_ops dw_pcie_ops;
-> > > @@ -395,6 +394,10 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
-> > >  
-> > >  	raw_spin_lock_init(&pp->lock);
-> > >  
-> > > +	ret = dw_pcie_get_resources(pci);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > >  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "config");
-> > >  	if (res) {
-> > >  		pp->cfg0_size = resource_size(res);
-> > > @@ -408,13 +411,6 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
-> > >  		return -ENODEV;
-> > >  	}
-> > >  
-> > > -	if (!pci->dbi_base) {
-> > > -		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dbi");
-> > > -		pci->dbi_base = devm_pci_remap_cfg_resource(dev, res);
-> > > -		if (IS_ERR(pci->dbi_base))
-> > > -			return PTR_ERR(pci->dbi_base);
-> > > -	}
-> > > -
-> > >  	bridge = devm_pci_alloc_host_bridge(dev, 0);
-> > >  	if (!bridge)
-> > >  		return -ENOMEM;
-> > > @@ -429,9 +425,6 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
-> > >  		pp->io_base = pci_pio_to_address(win->res->start);
-> > >  	}
-> > >  
-> > > -	if (pci->link_gen < 1)
-> > > -		pci->link_gen = of_pci_get_max_link_speed(np);
-> > > -
-> > >  	/* Set default bus ops */
-> > >  	bridge->ops = &dw_pcie_ops;
-> > >  	bridge->child_ops = &dw_child_pcie_ops;
-> > > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> > > index 9d78e7ca61e1..a8436027434d 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-designware.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> > > @@ -11,6 +11,7 @@
-> > >  #include <linux/align.h>
-> > >  #include <linux/bitops.h>
-> > >  #include <linux/delay.h>
-> > > +#include <linux/ioport.h>
-> > >  #include <linux/of.h>
-> > >  #include <linux/of_platform.h>
-> > >  #include <linux/sizes.h>
-> > > @@ -19,6 +20,59 @@
-> > >  #include "../../pci.h"
-> > >  #include "pcie-designware.h"
-> > >  
-> > > +int dw_pcie_get_resources(struct dw_pcie *pci)
-> > > +{
-> > > +	struct platform_device *pdev = to_platform_device(pci->dev);
-> > > +	struct device_node *np = dev_of_node(pci->dev);
-> > > +	struct resource *res;
-> > > +
-> > > +	if (!pci->dbi_base) {
-> > > +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dbi");
-> > > +		pci->dbi_base = devm_pci_remap_cfg_resource(pci->dev, res);
-> > > +		if (IS_ERR(pci->dbi_base))
-> > > +			return PTR_ERR(pci->dbi_base);
-> > > +	}
-> > > +
-> > > +	/* DBI2 is mainly useful for the endpoint controller */
-> > > +	if (!pci->dbi_base2) {
-> > > +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dbi2");
-> > > +		if (res) {
-> > > +			pci->dbi_base2 = devm_pci_remap_cfg_resource(pci->dev, res);
-> > > +			if (IS_ERR(pci->dbi_base2))
-> > > +				return PTR_ERR(pci->dbi_base2);
-> > > +		} else {
-> > > +			pci->dbi_base2 = pci->dbi_base + SZ_4K;
-> > > +		}
-> > > +	}
-> > > +
-> > > +	/* For non-unrolled iATU/eDMA platforms this range will be ignored */
-> > > +	if (!pci->atu_base) {
-> > > +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "atu");
-> > > +		if (res) {
-> > > +			pci->atu_size = resource_size(res);
-> > > +			pci->atu_base = devm_ioremap_resource(pci->dev, res);
-> > > +			if (IS_ERR(pci->atu_base))
-> > > +				return PTR_ERR(pci->atu_base);
-> > > +		} else {
-> > > +			pci->atu_base = pci->dbi_base + DEFAULT_DBI_ATU_OFFSET;
-> > > +		}
-> > > +	}
-> > > +
-> > > +	/* Set a default value suitable for at most 8 in and 8 out windows */
-> > > +	if (!pci->atu_size)
-> > > +		pci->atu_size = SZ_4K;
-> > > +
-> > > +	if (pci->link_gen < 1)
-> > > +		pci->link_gen = of_pci_get_max_link_speed(np);
-> > > +
-> > > +	of_property_read_u32(np, "num-lanes", &pci->num_lanes);
-> > > +
-> > > +	if (of_property_read_bool(np, "snps,enable-cdm-check"))
-> > > +		dw_pcie_cap_set(pci, CDM_CHECK);
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > >  void dw_pcie_version_detect(struct dw_pcie *pci)
-> > >  {
-> > >  	u32 ver;
-> > > @@ -639,25 +693,8 @@ static void dw_pcie_iatu_detect_regions(struct dw_pcie *pci)
-> > >  
-> > >  void dw_pcie_iatu_detect(struct dw_pcie *pci)
-> > >  {
-> > > -	struct platform_device *pdev = to_platform_device(pci->dev);
-> > > -
-> > >  	if (dw_pcie_iatu_unroll_enabled(pci)) {
-> > >  		dw_pcie_cap_set(pci, IATU_UNROLL);
-> > > -
-> > > -		if (!pci->atu_base) {
-> > > -			struct resource *res =
-> > > -				platform_get_resource_byname(pdev, IORESOURCE_MEM, "atu");
-> > > -			if (res) {
-> > > -				pci->atu_size = resource_size(res);
-> > > -				pci->atu_base = devm_ioremap_resource(pci->dev, res);
-> > > -			}
-> > > -			if (!pci->atu_base || IS_ERR(pci->atu_base))
-> > > -				pci->atu_base = pci->dbi_base + DEFAULT_DBI_ATU_OFFSET;
-> > > -		}
-> > > -
-> > > -		if (!pci->atu_size)
-> > > -			/* Pick a minimal default, enough for 8 in and 8 out windows */
-> > > -			pci->atu_size = SZ_4K;
-> > >  	} else {
-> > >  		pci->atu_base = pci->dbi_base + PCIE_ATU_VIEWPORT_BASE;
-> > >  		pci->atu_size = PCIE_ATU_VIEWPORT_SIZE;
-> > > @@ -675,7 +712,6 @@ void dw_pcie_iatu_detect(struct dw_pcie *pci)
-> > >  
-> > >  void dw_pcie_setup(struct dw_pcie *pci)
-> > >  {
-> > > -	struct device_node *np = pci->dev->of_node;
-> > >  	u32 val;
-> > >  
-> > >  	if (pci->link_gen > 0)
-> > > @@ -703,14 +739,13 @@ void dw_pcie_setup(struct dw_pcie *pci)
-> > >  	val |= PORT_LINK_DLL_LINK_EN;
-> > >  	dw_pcie_writel_dbi(pci, PCIE_PORT_LINK_CONTROL, val);
-> > >  
-> > > -	if (of_property_read_bool(np, "snps,enable-cdm-check")) {
-> > > +	if (dw_pcie_cap_is(pci, CDM_CHECK)) {
-> > >  		val = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS);
-> > >  		val |= PCIE_PL_CHK_REG_CHK_REG_CONTINUOUS |
-> > >  		       PCIE_PL_CHK_REG_CHK_REG_START;
-> > >  		dw_pcie_writel_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS, val);
-> > >  	}
-> > >  
-> > > -	of_property_read_u32(np, "num-lanes", &pci->num_lanes);
-> > >  	if (!pci->num_lanes) {
-> > >  		dev_dbg(pci->dev, "Using h/w default number of lanes\n");
-> > >  		return;
-> > > diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-> > > index c6dddacee3b1..081f169e6021 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-designware.h
-> > > +++ b/drivers/pci/controller/dwc/pcie-designware.h
-> > > @@ -46,6 +46,7 @@
-> > >  
-> > >  /* DWC PCIe controller capabilities */
-> > >  #define DW_PCIE_CAP_IATU_UNROLL		1
-> > > +#define DW_PCIE_CAP_CDM_CHECK		2
-> > >  
-> > >  #define dw_pcie_cap_is(_pci, _cap) \
-> > >  	test_bit(DW_PCIE_CAP_ ## _cap, &(_pci)->caps)
-> > > @@ -338,6 +339,8 @@ struct dw_pcie {
-> > >  #define to_dw_pcie_from_ep(endpoint)   \
-> > >  		container_of((endpoint), struct dw_pcie, ep)
-> > >  
-> > > +int dw_pcie_get_resources(struct dw_pcie *pci);
-> > > +
-> > >  void dw_pcie_version_detect(struct dw_pcie *pci);
-> > >  
-> > >  u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap);
-> > > -- 
-> > > 2.38.1
-> > > 
-> > > 
-> > 
-> > -- 
-> > மணிவண்ணன் சதாசிவம்
+You need an IETF specific tool (xml2rfc) to build the rfc from the xml,
+but it's available in most distros as python3-xml2rfc.  If you don't
+want to learn the IETF XML I can help you code up the patch to add that
+to the draft spec.
 
--- 
-மணிவண்ணன் சதாசிவம்
+Regards,
+
+James
+
