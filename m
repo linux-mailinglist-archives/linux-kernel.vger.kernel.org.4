@@ -2,122 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA04627C79
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA8E627C7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236314AbiKNLip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35044 "EHLO
+        id S236260AbiKNLkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236275AbiKNLid (ORCPT
+        with ESMTP id S235903AbiKNLkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:38:33 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FBD3E6F;
-        Mon, 14 Nov 2022 03:38:30 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.77])
-        by gateway (Coremail) with SMTP id _____8Cxjdq1KHJjwOMGAA--.20508S3;
-        Mon, 14 Nov 2022 19:38:29 +0800 (CST)
-Received: from loongson-PC.loongson.cn (unknown [10.20.42.77])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxTuCwKHJjCZMSAA--.50121S4;
-        Mon, 14 Nov 2022 19:38:28 +0800 (CST)
-From:   Liu Peibao <liupeibao@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        wanghongliang <wanghongliang@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] dt-bindings: interrupt-controller: add yaml for LoongArch CPU interrupt controller
-Date:   Mon, 14 Nov 2022 19:38:24 +0800
-Message-Id: <20221114113824.1880-3-liupeibao@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221114113824.1880-1-liupeibao@loongson.cn>
-References: <20221114113824.1880-1-liupeibao@loongson.cn>
+        Mon, 14 Nov 2022 06:40:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD717B483;
+        Mon, 14 Nov 2022 03:40:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 666B0B80E6D;
+        Mon, 14 Nov 2022 11:40:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25EECC433D6;
+        Mon, 14 Nov 2022 11:40:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668426013;
+        bh=GT3VZNYIhMGDOg7rLWaUnnZ1FVKV70ahkY/v86oWAWo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QemPfybwnr41UjfgwuxeYtmf7ZurGLUDrh0ptjCeQ2t5fUdWWqP9Tjxv3XP+g38HB
+         aPnFMxWeI9Tga8KrWqKV7tFGdQLt7QpL5s9MmAi+dWIoTxfL7W5d8t8aXAH/2aDn2u
+         YRmM9210+LfyEsJXKkKNXsJ8fXI13RGmIEEnMQGI=
+Date:   Mon, 14 Nov 2022 12:40:10 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Haozhe Chang =?utf-8?B?KOW4uOa1qeWTsik=?= 
+        <Haozhe.Chang@mediatek.com>
+Cc:     "stephan@gerhold.net" <stephan@gerhold.net>,
+        "oneukum@suse.com" <oneukum@suse.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linuxwwan@intel.com" <linuxwwan@intel.com>,
+        "m.chetan.kumar@intel.com" <m.chetan.kumar@intel.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Hua Yang =?utf-8?B?KOadqOWNjik=?= <Hua.Yang@mediatek.com>,
+        "chiranjeevi.rapolu@linux.intel.com" 
+        <chiranjeevi.rapolu@linux.intel.com>,
+        Haijun Liu =?utf-8?B?KOWImOa1t+WGmyk=?= 
+        <haijun.liu@mediatek.com>,
+        "ryazanov.s.a@gmail.com" <ryazanov.s.a@gmail.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "loic.poulain@linaro.org" <loic.poulain@linaro.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "chandrashekar.devegowda@intel.com" 
+        <chandrashekar.devegowda@intel.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "shangxiaojing@huawei.com" <shangxiaojing@huawei.com>,
+        Lambert Wang =?utf-8?B?KOeOi+S8nyk=?= 
+        <Lambert.Wang@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "ricardo.martinez@linux.intel.com" <ricardo.martinez@linux.intel.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Xiayu Zhang =?utf-8?B?KOW8oOWkj+Wuhyk=?= 
+        <Xiayu.Zhang@mediatek.com>
+Subject: Re: [PATCH v3] wwan: core: Support slicing in port TX flow of WWAN
+ subsystem
+Message-ID: <Y3IpGs0SFSgvS0kw@kroah.com>
+References: <20221111100840.105305-1-haozhe.chang@mediatek.com>
+ <Y25j7fTdvCRqr26k@kroah.com>
+ <82c8728b0b0b20c7da4e25642e90de27af52feca.camel@mediatek.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxTuCwKHJjCZMSAA--.50121S4
-X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQAKCmNw3mQUVAAAso
-X-Coremail-Antispam: 1Uk129KBjvJXoW7CFy5Xr18Aw17Zw4fGF1kAFb_yoW8Ar4fpF
-        W7CFsxWF40qF13Cws2ga40krnxZrnxCrn29an7tw47Gr1aga4UXay29F95JayrGr92qw17
-        Zw1Fq3W0q3W7JF7anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262
-        kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
-        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8
-        JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
-        YxBIdaVFxhVjvjDU0xZFpf9x07j2MKZUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <82c8728b0b0b20c7da4e25642e90de27af52feca.camel@mediatek.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current LoongArch compatible CPUs support 14 CPU IRQs. We can describe how
-the 14 IRQs are wired to the platform's internal interrupt controller by
-devicetree.
+On Mon, Nov 14, 2022 at 11:23:19AM +0000, Haozhe Chang (常浩哲) wrote:
+> Hi Greg Kroah-Hartman
+> 
+> On Fri, 2022-11-11 at 16:02 +0100, Greg Kroah-Hartman wrote:
+> > On Fri, Nov 11, 2022 at 06:08:36PM +0800, haozhe.chang@mediatek.com
+> > wrote:
+> > > From: haozhe chang <haozhe.chang@mediatek.com>
+> > > 
+> > > wwan_port_fops_write inputs the SKB parameter to the TX callback of
+> > > the WWAN device driver. However, the WWAN device (e.g., t7xx) may
+> > > have an MTU less than the size of SKB, causing the TX buffer to be
+> > > sliced and copied once more in the WWAN device driver.
+> > > 
+> > > This patch implements the slicing in the WWAN subsystem and gives
+> > > the WWAN devices driver the option to slice(by frag_len) or not. By
+> > > doing so, the additional memory copy is reduced.
+> > > 
+> > > Meanwhile, this patch gives WWAN devices driver the option to
+> > > reserve
+> > > headroom in fragments for the device-specific metadata.
+> > > 
+> > > Signed-off-by: haozhe chang <haozhe.chang@mediatek.com>
+> > > 
+> > > ---
+> > > Changes in v2
+> > >   -send fragments to device driver by skb frag_list.
+> > > 
+> > > Changes in v3
+> > >   -move frag_len and headroom_len setting to wwan_create_port.
+> > > ---
+> > >  drivers/net/wwan/iosm/iosm_ipc_port.c  |  3 +-
+> > >  drivers/net/wwan/mhi_wwan_ctrl.c       |  2 +-
+> > >  drivers/net/wwan/rpmsg_wwan_ctrl.c     |  2 +-
+> > >  drivers/net/wwan/t7xx/t7xx_port_wwan.c | 34 +++++++--------
+> > >  drivers/net/wwan/wwan_core.c           | 59 ++++++++++++++++++++
+> > > ------
+> > >  drivers/net/wwan/wwan_hwsim.c          |  2 +-
+> > >  drivers/usb/class/cdc-wdm.c            |  2 +-
+> > >  include/linux/wwan.h                   |  6 ++-
+> > >  8 files changed, 73 insertions(+), 37 deletions(-)
+> > > 
+> > > diff --git a/drivers/net/wwan/iosm/iosm_ipc_port.c
+> > > b/drivers/net/wwan/iosm/iosm_ipc_port.c
+> > > index b6d81c627277..dc43b8f0d1af 100644
+> > > --- a/drivers/net/wwan/iosm/iosm_ipc_port.c
+> > > +++ b/drivers/net/wwan/iosm/iosm_ipc_port.c
+> > > @@ -63,7 +63,8 @@ struct iosm_cdev *ipc_port_init(struct iosm_imem
+> > > *ipc_imem,
+> > >  	ipc_port->ipc_imem = ipc_imem;
+> > >  
+> > >  	ipc_port->iosm_port = wwan_create_port(ipc_port->dev,
+> > > port_type,
+> > > -					       &ipc_wwan_ctrl_ops,
+> > > ipc_port);
+> > > +					       &ipc_wwan_ctrl_ops, 0,
+> > > 0,
+> > > +					       ipc_port);
+> > 
+> > How is 0, 0 a valid option here?
+> > 
+> > and if it is a valid option, shouldn't you just have 2 different
+> > functions, one that needs these values and one that does not?  That
+> > would make it more descriptive as to what those options are, and
+> > ensure
+> > that you get them right.
+> > 
+> 0 is a valid option. 
+> frag_len set to 0 means no split, and headroom set to 0 means no 
+> reserved headroom in skb. 
+> 
+> Sorry, I can't understand why it's more descriptive, could you help
+> with more information? It seems to me that the device driver needs to
+> know what each parameter is and how to set them, and that process is
+> also required in your proposed solution - "with 2 different functions",
+> right?
 
-Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
----
- .../loongarch,cpu-interrupt-controller.yaml   | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+When you see random integers in the middle of a function call like this,
+you then have to go and look up the function call to determine what
+exactly those values are and what is happening.  Using 0, 0 as valid
+values helps no one out here at all.
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
-new file mode 100644
-index 000000000000..2a1cf885c99d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
-@@ -0,0 +1,34 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/interrupt-controller/loongarch,cpu-interrupt-controller.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: LoongArch CPU Interrupt Controller
-+
-+maintainers:
-+  - Liu Peibao <liupeibao@loongson.cn>
-+
-+properties:
-+  compatible:
-+    const: loongarch,cpu-interrupt-controller
-+
-+  '#interrupt-cells':
-+    const: 1
-+
-+  interrupt-controller: true
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - '#interrupt-cells'
-+  - interrupt-controller
-+
-+examples:
-+  - |
-+    interrupt-controller {
-+      compatible = "loongarch,cpu-interrupt-controller";
-+      #interrupt-cells = <1>;
-+      interrupt-controller;
-+    };
--- 
-2.20.1
+While if the code said:
+	ipc_port->iosm_port = wwan_create_port(ipc_port->dev, port_type,
+						&ipc_wwan_ctrl_ops,
+						NO_SPLIT,
+						NO_RESERVED_HEADROOM,
+						ipc_port);
 
+
+or something like that, it would make more sense, right?
+
+Remember, we write code for people to read and understand and maintain
+it over time first, for the compiler second.
+
+thanks,
+
+greg k-h
