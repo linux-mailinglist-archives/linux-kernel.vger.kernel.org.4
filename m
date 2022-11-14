@@ -2,146 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405B7627A86
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:32:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65A7627A89
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236435AbiKNKbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 05:31:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
+        id S235917AbiKNKcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 05:32:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236269AbiKNKbL (ORCPT
+        with ESMTP id S236307AbiKNKb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 05:31:11 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B325E13CEB;
-        Mon, 14 Nov 2022 02:31:10 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id o30so7146044wms.2;
-        Mon, 14 Nov 2022 02:31:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TtcLNi7tC7VoXUW8XmXn99oLkoAAo0InkjTMRf4bmeE=;
-        b=cnkmuHD7oFyxoE3BFuMTChrbYeCfQtstPgtM5B1oWK1SXWUj8xVQ9s86ljm4VGdq0e
-         2gmJPnqZBi9Q0XqWd6MzA0pGOO/JGtzqTsaexGkMH2ghLTkSzI3X0dmnmP0fc2ip2XIC
-         c5GH1dKY40VqlM2m+JNsGawSOzZ9HItXFJgfe1/apiIOtXBUk+P3dtaWF7AmthDs+qkJ
-         tQeOQ+JvAMRV037sL61QwRWHXp+bHm8sOiBIHy6sv4pDsK4zsP10GWBro6fLWenbVfKq
-         sMBGt96H/dyPqJ0x1pyaXiwJpq91eD/Fljp+4djd6fEq3qv1ZZrqfHCaBVgGdWNvmLDP
-         YdQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TtcLNi7tC7VoXUW8XmXn99oLkoAAo0InkjTMRf4bmeE=;
-        b=6pQD0HxBzgSsDnS/SSSP/3ACSITghwCJQBh8U8iZIadwunKag4mZhwjL6lrpFK1h1d
-         QxUHC4ixY+IZXRYsnG7nDt2OUQw5KRqCbOjKWEFLX3t6Kje8la9YCtdGl8/l9Z6Ow0o8
-         N3WiHGbMGbvuD7wM7qB8CDH0JGOPxvIihYlxPHlhANqypbAo1XqcpSayRlcom3mk22AB
-         YgkGEdIyJX6phQ9Kr3AgNMexe2y2pufclqalDkvtORZejC4zS9OoHdt+og9x8O66Lm/n
-         q7v6RZI5JtWtD2YKkP5jZHkL2rqLUdGNNooxe1qLBP3C5L3iOF/SIt33398l0Apagf3Q
-         AvZg==
-X-Gm-Message-State: ANoB5pmHMeUVaYHVAeKKLg6HSWc/TRNBQ0N0mKYgf/rujUOH2JM8DMLo
-        YDH/+smE2B4eo8GWw2mf8zM=
-X-Google-Smtp-Source: AA0mqf5IqJ4O9Zkfh9bfxL5vfiMLQCTv2xM9rFUSnwq2Yk0oOSaajLxS8EFlQ4TPS6NE8/7L+UWKaQ==
-X-Received: by 2002:a05:600c:1c1a:b0:3cf:aae0:802a with SMTP id j26-20020a05600c1c1a00b003cfaae0802amr7467422wms.112.1668421869130;
-        Mon, 14 Nov 2022 02:31:09 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id g4-20020a5d4884000000b002383e977920sm9105111wrq.110.2022.11.14.02.31.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 02:31:08 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 14 Nov 2022 11:31:06 +0100
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-modules@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Laight <David.Laight@aculab.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH v8 7/9] livepatch: Improve the search performance of
- module_kallsyms_on_each_symbol()
-Message-ID: <Y3IY6gzDtk1ze3u7@krava>
-References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
- <20221102084921.1615-8-thunder.leizhen@huawei.com>
- <Y3HyrIwlZPYM8zYd@krava>
- <050b7513-4a20-75c7-0574-185004770329@huawei.com>
- <Y3IJ5GjrXBYDbfnA@krava>
- <ad637488-930e-33c1-558c-fc03d848afa8@huawei.com>
+        Mon, 14 Nov 2022 05:31:26 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962D11A076
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:31:25 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id D047F5C01A3;
+        Mon, 14 Nov 2022 05:31:24 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 14 Nov 2022 05:31:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1668421884; x=1668508284; bh=ucONn4Vdr4H2NM0BX9SZfqEHZEPMffIrGjL
+        SNtqQzlM=; b=Vp72NYFefjy9vy3UqOS+H1WUdeGDGamvbwiqHAR/1cOB1t/JaIS
+        QD3NER9FDpkdrBLDdMcGdcqUSXEIi7rZpWY5OcbOaEdz9auBDmv4pXIxSha505H6
+        aY33T9v5S4K82NwBzx35OkcmqjEa+M44EO71+8+JC27Ui2QgiBUf443CmI924Qm+
+        Ttxde/WDwa4/Ye7C5Fz4ptyhJMPV76oF7GnFsSz9LjFzN/0me48J98KRjuy6+Bf7
+        /Tlmu4Ff8jvuPClkb+Dszw8dHKd7eXuUQBN081XIwJfrrjAN7thpY3HBgXBxQ1IZ
+        LrV7xaXl80LKnTBxGf4/yrRxaqYeKmDnbGQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1668421884; x=1668508284; bh=ucONn4Vdr4H2N
+        M0BX9SZfqEHZEPMffIrGjLSNtqQzlM=; b=JFF542PckgJqbVZS+4Do7YSqN+jSO
+        TKt7h2BkG/G2j+sv5jYmGCUy6L1WiHZplZuxwFTUwZLWTVkzOHDD39s5WIIYGMaW
+        EcWM1M9FKtiM/qU47tnZDbAePVpE48iW96buzCy9YL3h9Ec97p8DO9mL1xa7CDZW
+        EDkxZ7AM1gSJQhBlqH5oLpimul8pSU4erAGCtfEs1zhaaBJOce0mwqdMe121Gean
+        kFkLGyJ9GV9iCDjVlLA3PYRhxHFKeZcC7mYHakHlCTPq4VZkNwbyijS4uKxZCugR
+        yryKiOapq7xmT95ay7kxSkg7ZT+EYDmuN4fkBSu5Kgir892NoVsqHhHww==
+X-ME-Sender: <xms:_BhyYy27Q0ClfbgulPGQk2fW584f8VfxeovAQ0mB-n8n3RZFBHl4rQ>
+    <xme:_BhyY1E8cxIIEzea3J0glo8xwUxC7zooaZ6LvE3y__iXCksmg4tikxeQ6YxJiuxhQ
+    17iBEY4R-ddSQ>
+X-ME-Received: <xmr:_BhyY67MTTOqtCCMnSe9wf1bQauUbEeQz474qmPvqCScIYyEP_MACR3gggp3sJgWTZiHejhJG-u4uvYMsbyV6v2gidAxuWy8JBAa32iEsXED9vc3W08>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgedugddugeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpeforghrvghk
+    ucforghrtgiihihkohifshhkihdqifpkrhgvtghkihcuoehmrghrmhgrrhgvkhesihhnvh
+    hishhisghlvghthhhinhhgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpeelkefh
+    udelteelleelteetveeffeetffekteetjeehlefggeekleeghefhtdehvdenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrghrmhgrrhgvkhes
+    ihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
+X-ME-Proxy: <xmx:_BhyYz3mT5dWEqWvimriUa9brLKMPwbAy0M0OmBnJK2jHIxy32be7Q>
+    <xmx:_BhyY1GaX5ju4DbggbGCupJWT8ENO1GWPcNzgjy_gaAirsxlSSielg>
+    <xmx:_BhyY88W7MZuYV0O7LKLzo5T7yxUDWTu78t5-QiJoSOc-Gw8zZoSWg>
+    <xmx:_BhyY1DnLAmq-xPE0Yhqvmd3DyXhvdQdhBctMGB418W-SSrPirsKng>
+Feedback-ID: i1568416f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 14 Nov 2022 05:31:23 -0500 (EST)
+From:   =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        xen-devel@lists.xenproject.org (moderated list:XEN HYPERVISOR INTERFACE)
+Subject: [PATCH] xen-pciback: Allow setting PCI_MSIX_FLAGS_MASKALL too
+Date:   Mon, 14 Nov 2022 11:31:08 +0100
+Message-Id: <20221114103110.1519413-1-marmarek@invisiblethingslab.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ad637488-930e-33c1-558c-fc03d848afa8@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 06:00:38PM +0800, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/11/14 17:27, Jiri Olsa wrote:
-> > On Mon, Nov 14, 2022 at 04:50:25PM +0800, Leizhen (ThunderTown) wrote:
-> >>
-> >> On 2022/11/14 15:47, Jiri Olsa wrote:
-> >>> On Wed, Nov 02, 2022 at 04:49:19PM +0800, Zhen Lei wrote:
-> >>>> Currently we traverse all symbols of all modules to find the specified
-> >>>> function for the specified module. But in reality, we just need to find
-> >>>> the given module and then traverse all the symbols in it.
-> >>> hi,
-> >>> sorry for delayed answer, I did not notice this until Stephen's email
-> >>> about merge issue with recent bpf change [1]
-> >>>
-> >>>> Let's add a new parameter 'const char *modname' to function
-> >>>> module_kallsyms_on_each_symbol(), then we can compare the module names
-> >>> we have use case for iterating all modules and their symbols when we
-> >>> want to resolve passed addresses for tracing
-> >>>
-> >>> we don't have 'modname' that we could pass, we need to iterate all modules
-> >>>
-> >>> so perhaps this could be made optional like with passing NULL for modname?
-> >> The deletion of modname was suggested by Petr Mladek. The reason is that
-> >> everyone passes modname as NULL, there was no actual demand at the time.
-> >> https://lkml.org/lkml/2022/9/20/682
-> >>
-> >>>> directly in this function and call hook 'fn' after matching. And the
-> >>>> parameter 'struct module *' in the hook 'fn' can also be deleted.
-> >>> we need 'struct module *' argument in the callback as well because we are
-> >>> taking the module reference if we trace function in it, so it wont get
-> >>> unloaded
-> >>>
-> >>> please let me know if I should do the change or can help in any way
-> >> It seems that we should take the module reference before invoking callback
-> >> and put it after it is called, without passing modname.
-> > we take the module ref only if we (callback) find the traced address in
-> > the module, we don't have the module object before
-> > 
-> > jirka
-> > 
-> 
-> Do it in function module_kallsyms_on_each_symbol()?
-> 
-> But I just saw that mutex_lock(&module_mutex) protection is already
-> provided in this function. So reference counting protection may not
-> be required.
+When Xen domain configures MSI-X, the usual approach is to enable MSI-X
+together with masking all of them via the config space, then fill the
+table and only then clear PCI_MSIX_FLAGS_MASKALL. Allow doing this via
+QEMU running in a stub domain.
 
-we take the module ref so it won't unload even outside of the
-module_kallsyms_on_each_symbol function
+Previously, when changing PCI_MSIX_FLAGS_MASKALL was not allowed, the
+whole write was aborted, preventing change to the PCI_MSIX_FLAGS_ENABLE
+bit too.
 
-jirka
+Note the Xen hypervisor intercepts this write anyway, and may keep the
+PCI_MSIX_FLAGS_MASKALL bit set if it wishes to. It will store the
+guest-requested state and will apply it eventually.
+
+Signed-off-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+---
+ drivers/xen/xen-pciback/conf_space_capability.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/xen/xen-pciback/conf_space_capability.c b/drivers/xen/xen-pciback/conf_space_capability.c
+index 5e53b4817f16..097316a74126 100644
+--- a/drivers/xen/xen-pciback/conf_space_capability.c
++++ b/drivers/xen/xen-pciback/conf_space_capability.c
+@@ -190,13 +190,16 @@ static const struct config_field caplist_pm[] = {
+ };
+ 
+ static struct msi_msix_field_config {
+-	u16          enable_bit; /* bit for enabling MSI/MSI-X */
+-	unsigned int int_type;   /* interrupt type for exclusiveness check */
++	u16          enable_bit;   /* bit for enabling MSI/MSI-X */
++	u16          allowed_bits; /* bits allowed to be changed */
++	unsigned int int_type;     /* interrupt type for exclusiveness check */
+ } msi_field_config = {
+ 	.enable_bit	= PCI_MSI_FLAGS_ENABLE,
++	.allowed_bits	= PCI_MSI_FLAGS_ENABLE,
+ 	.int_type	= INTERRUPT_TYPE_MSI,
+ }, msix_field_config = {
+ 	.enable_bit	= PCI_MSIX_FLAGS_ENABLE,
++	.allowed_bits	= PCI_MSIX_FLAGS_ENABLE | PCI_MSIX_FLAGS_MASKALL,
+ 	.int_type	= INTERRUPT_TYPE_MSIX,
+ };
+ 
+@@ -229,7 +232,7 @@ static int msi_msix_flags_write(struct pci_dev *dev, int offset, u16 new_value,
+ 		return 0;
+ 
+ 	if (!dev_data->allow_interrupt_control ||
+-	    (new_value ^ old_value) & ~field_config->enable_bit)
++	    (new_value ^ old_value) & ~field_config->allowed_bits)
+ 		return PCIBIOS_SET_FAILED;
+ 
+ 	if (new_value & field_config->enable_bit) {
+-- 
+2.37.3
+
