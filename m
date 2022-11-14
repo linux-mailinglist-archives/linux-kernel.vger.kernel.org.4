@@ -2,94 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3BCF627A5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A436E627A5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiKNKWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 05:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53802 "EHLO
+        id S236007AbiKNKYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 05:24:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236536AbiKNKWE (ORCPT
+        with ESMTP id S235798AbiKNKYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 05:22:04 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A891D0D0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:22:02 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id u2so12515511ljl.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:22:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=49ivR/hLqgiIv6OqrmbBxE2JsrRkoVPBA0UvfU8gm7A=;
-        b=l/uTJzzSuAgXfDj8m5PhL7yvhXNKhzoGsmDj0JX7Suu+H3cmDxCrPfKGiOzsGJt49T
-         gAh6TVWrK0jJXzpG6hb4UW1KM/WvKtjIFB6tLKxfVmz80aYmhatH9oFzeQp7ZnbZZGhI
-         4jIFn2NCHw6AWiQVqOG7ak+nw9MVWr0sOJcJ4WsUwe/GNqcxtEgjloXs11hhrf2fx0mp
-         pG64xF/TP0pIpMFkY1TSjRA3LwJff/FJwBGbMN0MbEY+IAsAhSXtEB6eatOxcNJLGS+3
-         d5jHZ2fAH71M7Z5YKLmbmROdY415BkgPWa4ZsKTG48H0uA9fLPuxBKP4e4ANj85l77lz
-         EhPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=49ivR/hLqgiIv6OqrmbBxE2JsrRkoVPBA0UvfU8gm7A=;
-        b=cdUu8YBozRFDfcI2pRbZHSuJUtfOyMIqfYI8mz2arsX4jC9/7cnGF7J2SIp400fBIn
-         rbbo+BhpqeiJ3iOe3hRPOCzWhKUYBXvQmbg7CPnqRkjjelRihe80CfO08K30uTu6F3X8
-         8iqhCaNcoLZK+W8Kz/8N3mKrrltdtnO7YngNrOmOCwOhVM5GZdS+zmoFTrtKNxdBYiFo
-         LF4b4oyicjaVIwUBXzotE74S/7XGw0mUYVhSkPkCjZLktp73i8sC31cdDQBHN3qvCRk+
-         hm6nacYIlhZXzvQ5SbgUP1tU3iF6w/zMDU+KE5m00V0lzwjH7ixM3DACzQEvZ+P4P5m5
-         ghXw==
-X-Gm-Message-State: ANoB5plAWlKx7pHFFKBcm6Xv4RI7agkne78qMAnKGPHN846b0frlscVL
-        CDCIktF13wLttC6uzcyM3eohQQ==
-X-Google-Smtp-Source: AA0mqf7l8bh0quUrWupe/mrB5RNgcjOTA4Xt7T1LJfExKiUMll8vKYtDKCJcM8pf87jCy1PMmbEozg==
-X-Received: by 2002:a2e:b705:0:b0:277:1c8f:7e8c with SMTP id j5-20020a2eb705000000b002771c8f7e8cmr4243094ljo.296.1668421321248;
-        Mon, 14 Nov 2022 02:22:01 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id t13-20020a19ad0d000000b004946e72711bsm1759717lfc.76.2022.11.14.02.21.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 02:22:00 -0800 (PST)
-Message-ID: <1ac3e532-566c-77d0-a9cd-516d0914d311@linaro.org>
-Date:   Mon, 14 Nov 2022 11:21:59 +0100
+        Mon, 14 Nov 2022 05:24:22 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233AA1D0EE
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:24:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668421461; x=1699957461;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MvTTp8g0BzZqb9lW89EYw8zYqh0h4Ytuqndp2GiUR8Y=;
+  b=N7vLPerwgvo7em74+YipsQe8xXEnvvwj7+Ntmw5lHNFBRKUqjU/eP+Jy
+   aMWr1UIHcIog5yN/QD7LRkLe2ZuWMZGAnlkX1BOkIhUPlfxi9hGtZ6lWI
+   dLRJBAypic41wpZiLW5fN/T8BXsspf8v1BQ0VzpOXR34XSeIIg/sRQAJ1
+   buBchN/WSR1tNJM0YrN4yPBJWJblXUMSyH4akUqh+UuZKbOzU0iajsO0M
+   E4y/5OTa6PAZrkOJQbkKjhH6XBR6Al2lNfr0aUWhJLwyaAvY+Ft38rsf/
+   ArTaqxewHAJRBS9bGIWY0y9eABEcCjJT/V8xw8sSCMQ4d4/hvFm1trAuU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="309561475"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="309561475"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 02:24:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="883486152"
+X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
+   d="scan'208";a="883486152"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 14 Nov 2022 02:24:18 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ouWdU-00C7Tl-1X;
+        Mon, 14 Nov 2022 12:24:16 +0200
+Date:   Mon, 14 Nov 2022 12:24:16 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rahul Tanwar <rtanwar@maxlinear.com>
+Cc:     "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-lgm-soc <linux-lgm-soc@maxlinear.com>
+Subject: Re: [PATCH RESEND 1/1] x86/of: Add support for boot time interrupt
+ mode config
+Message-ID: <Y3IXUN5ETBfrSXRW@smile.fi.intel.com>
+References: <cover.1668403214.git.rtanwar@maxlinear.com>
+ <37cc31242d0edda1bb0900cc62bba87954a7e892.1668403214.git.rtanwar@maxlinear.com>
+ <Y3IOEFTZ1e/7uWJ4@smile.fi.intel.com>
+ <00ce811f-2ec8-802d-d032-8ac2c65d06ff@maxlinear.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 08/18] mfd: max77843: Drop useless mask_invert flag on
- irqchip
-Content-Language: en-US
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, lee@kernel.org
-Cc:     mani@kernel.org, cristian.ciocaltea@gmail.com, wens@csie.org,
-        tharvey@gateworks.com, cw00.choi@samsung.com, brgl@bgdev.pl,
-        mazziesaccount@gmail.com, orsonzhai@gmail.com,
-        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-References: <20221112151835.39059-1-aidanmacdonald.0x0@gmail.com>
- <20221112151835.39059-9-aidanmacdonald.0x0@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221112151835.39059-9-aidanmacdonald.0x0@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00ce811f-2ec8-802d-d032-8ac2c65d06ff@maxlinear.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/11/2022 16:18, Aidan MacDonald wrote:
-> Setting mask_invert to false is pointless because that's the
-> default. The flag is also deprecated, so drop it.
+On Mon, Nov 14, 2022 at 10:00:02AM +0000, Rahul Tanwar wrote:
+> On 14/11/2022 5:45 pm, Andy Shevchenko wrote:
+> > On Mon, Nov 14, 2022 at 05:20:06PM +0800, Rahul Tanwar wrote:
+
+...
+
+> >> +     if (of_property_read_bool(dn, "intel,no-imcr")) {
+> > 
+> > I can't find this property in the Documentation/devicetree/bindings.
+> > 
+> > Moreover, I prefer to see positive one, something like:
+> > 
+> >          intel,virtual-wire-bla-bla-bla
+> > 
+> > Please consult with DT people on how properly name it.
 > 
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
+> 
+> Yes, agree. Need to add it in bindings doc after finalizing the property 
+> name. I chose "intel,no-imcr" to have a direct correlation with the MPS
+> spec defined data field for the same purpose.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The problems with it are:
+- it's negative
+- it's too cryptic to one who doesn't know area well enough
 
-Best regards,
-Krzysztof
+> It reads below bit in 
+> mpparse code to detect PIC mode or virtual wire mode.
+> 
+> Bit 7: IMCRP. When the IMCR presence bit is set, the IMCR is present and 
+> PIC Mode is implemented; otherwise, Virtual Wire Mode is implemented.
+> 
+> Please refer [1]
+> 
+> [1] https://www.manualslib.com/manual/77733/Intel 
+> Multiprocessor.html?page=40#manual
+
+This is good reference for DT people to suggest you a better name.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
