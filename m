@@ -2,226 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07029627443
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 02:48:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F222627433
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 02:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235718AbiKNBsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 20:48:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
+        id S235681AbiKNBnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 20:43:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235715AbiKNBsP (ORCPT
+        with ESMTP id S230525AbiKNBnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 20:48:15 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18043DFC3
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 17:48:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668390485; x=1699926485;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bkg2QOYq9dFPTr9pKF9x/c3y14FfEeHXLWjnD4WbICM=;
-  b=edadGNb3lJvGp8e1R9uBiJ5lo/TNPFd7H++EWZ+ejcKXkp4x4DILcAE/
-   HfLdwYtLZtjhuwk/0w6azKmqT2z1jfTf1zcL+E4jYROZJqryVgNfw1TBj
-   M4LBoV4DzGDbF6OKHo4FhNPYmxlZIvp5wWmu/yi8AN0yGEB1OMa4jTndS
-   EiPHSBTDa6RPQ009ehstQ+7CtO3Lz37mWZ5LXc9/MaGKcOj0laNen4wD8
-   rmrQV0ae3FRNQJrXWvo82QDkK2D9Fs0fEDfC8UaLahtp9dXXoqU/QfPQA
-   ciVUjZ29qQ3WWChxxzpuDaQgDn58pgG33lT5pJyQkfTFnofdpRO5aMH6M
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="313006703"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="313006703"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Nov 2022 17:48:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10530"; a="707124274"
-X-IronPort-AV: E=Sophos;i="5.96,161,1665471600"; 
-   d="scan'208";a="707124274"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Nov 2022 17:48:01 -0800
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     iommu@lists.linux.dev
-Cc:     Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v3 7/7] iommu/vt-d: Use real field for indication of first level
-Date:   Mon, 14 Nov 2022 09:40:49 +0800
-Message-Id: <20221114014049.3959-8-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221114014049.3959-1-baolu.lu@linux.intel.com>
-References: <20221114014049.3959-1-baolu.lu@linux.intel.com>
+        Sun, 13 Nov 2022 20:43:11 -0500
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2078.outbound.protection.outlook.com [40.107.117.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295EFDF40
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 17:43:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fnU76cbyFoXjhVXGjxM/c/g7ueTaFTczc5fRuhMAfJtHphs1jiUBfe7+NxiDB0LmVmVGUXiECG/tIfs+NM/ltV248nPW9lGUH33xtLWBz9uhksSL7AFpjg7hzkZSIZ5uGifFkqAiQq5ZCTyXUYnPwACxjKKh7NCJu7UP/V2ZwKYiLGDplqfyE2PX4Zdqvjb3Di0jcQe1B5S7mjF4Emgv/d7aly78rt30H3SCnN5o3WiYHQcDv4FsGYTEC5pjxgTn+eDShkZfKNFMp4jP2HPpQUDRJANzjvwriOd7whZ6BqUz2xbzPzPSEesz8ynLbZ3B20i6NF48is33mTayecz44A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CkiXB+KSJpPaRizUuHMOb48ZUVCVB5ifHSu5kTUFGLs=;
+ b=TnxAfLZVvYngUB8AdiiFvcPCRqcOExfuGcP80WghO2f2uvvHb8crhxUb7s/n2eEQeI8AurYBPA8ifpSEBPLoOdWz5Ptrr/sCLHwgXWINPVdFfX459A2JVAfAGjMdYwjEEKXa9148e2PnoK8C4uYC/WUbZwRCiJ5RBz/q6wd9AE9myEYYxGPzEXbQGnJr3ZVaZ3XD7qYtaMVtvBu2atAAGqxpu841Pu6QPbGuxsi8sJigzjS68bGW9RyPHFMC1tauldk5k7IHqcqadLVCcoy74it1lznCtXk2awEo/k02D109+J9WdZcc8Aa/TVAGW3ucF+ntif+sJdkEECO//LrpyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
+ dkim=pass header.d=oppo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CkiXB+KSJpPaRizUuHMOb48ZUVCVB5ifHSu5kTUFGLs=;
+ b=a544cRARu2+/VaZGCnp2pyczCerd8E/w4CEywKOYmH7U9SIKBcI6timGTcaXoXn/etyOGO0DosBN+qOXC8S34PDRs+IQIsMkcuYO3RPWWubVZw71+/pdNsJyrKVfYYiTJHHKM/MTpCpUlVtgD3ydsDd00z33Jf3Ynk4e9vsH8Yo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oppo.com;
+Received: from SI2PR02MB5148.apcprd02.prod.outlook.com (2603:1096:4:153::6) by
+ SEZPR02MB6078.apcprd02.prod.outlook.com (2603:1096:101:95::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5813.15; Mon, 14 Nov 2022 01:42:55 +0000
+Received: from SI2PR02MB5148.apcprd02.prod.outlook.com
+ ([fe80::2954:8e56:dcd1:452c]) by SI2PR02MB5148.apcprd02.prod.outlook.com
+ ([fe80::2954:8e56:dcd1:452c%3]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
+ 01:42:55 +0000
+Message-ID: <0119143d-6841-761f-93c1-159f424ee5e0@oppo.com>
+Date:   Mon, 14 Nov 2022 09:42:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/2] f2fs: fix to enable compress for newly created
+ file if extension matches
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20221111100830.953733-1-shengyong@oppo.com>
+ <Y272nVjzr6CynmyQ@google.com>
+From:   Sheng Yong <shengyong@oppo.com>
+In-Reply-To: <Y272nVjzr6CynmyQ@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI2PR02CA0019.apcprd02.prod.outlook.com
+ (2603:1096:4:195::13) To SI2PR02MB5148.apcprd02.prod.outlook.com
+ (2603:1096:4:153::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SI2PR02MB5148:EE_|SEZPR02MB6078:EE_
+X-MS-Office365-Filtering-Correlation-Id: 88d24e6d-b537-4e4f-9547-08dac5e18d3b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lQI4tmfQTS2AwMDzTTIeZzlFMxXaBt3hUB8YB97SbAy9Qm0FUZE+n1wxY8TC90OU6FZ9Hnq3nJRkpPd0hbNlXPxGRvWqueGCKTBvP8v3ZVp8jDTy7l8/1F0W7yN3bGXpRxcyiZsaYvV3iGJ87BKgv6AnHmTpQrmoXmeupxW4Lzmy5Hfl0N/2YybYjqiDEHCu+GEKNDkxBde5O+77RpuSwYBeReK1Elzvl/8oS8dy2+J7ihEpdhvCk8KHK4hHOaN/W18dvxmJaHE3XHkTdJr83K1K83w7R0AQHS8gExLFsTXlt790aG1Enrip9QJRVD0duSMp2tZSkbRKe4muR7qkuFZ6xWhpk2ybiLfEeM25Hq5Steyav29Y+E3SdQ3JSmhPEfy7YlgvnS7xTH8KXsoj6Y5nXyIxoR2Q/R4PVtQXEN1M/ypJMNDoMdZs4VjMSBNfLV33s0tjKAApT/SMgJpygBcsps2UNt0uc7evXeFXrl+aRH1JSEiAcjrqVPWlPvK8Afb3LtaIMA7oVLno9//vZv3TPWyxII1e3eAbXtPgY9cYRRU9xHoFFP7V9mw07+ZKc4e1OtlIzTymVUcIe9PAqbIcoYTAymm+jke5VTH6UUKU2yLwiiKFCZr34etBcsmuYk45EmGKnrHkG+RpGzeaf2ynD7HWbCe8InxmIe0yvYjvM0eou91XIBeqrMWrcIQIJWJwXuxqeIa4Q40BS7U0cMAVCcST47/GAZnSvRfBIi/9lFXqv1yTt4Wvg2nz7I8t1qOhqpxPTUnidBfKROtmDXJJtLGwXe5RIx4va93NBoHHr77viCrWaVTmyinp0N4H
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR02MB5148.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(366004)(396003)(136003)(451199015)(83380400001)(2906002)(31686004)(36756003)(8936002)(41300700001)(86362001)(31696002)(186003)(2616005)(5660300002)(6486002)(966005)(38100700002)(6506007)(6666004)(66556008)(26005)(66476007)(4326008)(66946007)(8676002)(478600001)(6512007)(6916009)(316002)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dDEwMUhWM2REMU1FWkJhOC9iZE0zd2tTT3hrbzgzOWs2Zm5pTFZwYXFXRVoy?=
+ =?utf-8?B?bjVETlN2alRwTkRiSHhzd1NpcSt5UUZjblJRSTAwR25sQ0JlMURQRldZaEFl?=
+ =?utf-8?B?K2VWV3ZDTW0zbDZZUHErdnYxK3N2MDhtMFpCalVPSnJ0bnJuYjFJY0JtNmZw?=
+ =?utf-8?B?Y2xodEJzOE0vbzBrUWwvTkxFWHlGK0Y1VTFxY2hJTFJ6S3czTlJJMm5RL3ph?=
+ =?utf-8?B?UW0rVCttUmpZZkttTFoySVgvUTVaa1ZOWjVtYWRRbHUzMVZDTENmU041WlBR?=
+ =?utf-8?B?dWlDWTMrUXZYbGY1UHljRWRkU0hyRmVteTVKOHU3Skt4WDVlTi8yZWZMZHNl?=
+ =?utf-8?B?MkZqbUVWSjVWSHIyem41cjJVZ2svbW5jeHdDZmd1dFQ2R0JvNWpnL2E0eXNK?=
+ =?utf-8?B?amN3UW85dnQ1eWxta3l1UHdoWkkwK3VqT1dONTJ5OUFVWjZMc3ZnenE2Sldp?=
+ =?utf-8?B?aDRRSGZidkR1bE5zSkhJZ3FVQmIyQlBSNkJEZ0w0Z0xpcEVWSlY0NkF0Z2Jz?=
+ =?utf-8?B?VnB3VnFWeTErMEVDVzJMUXJGQmVmcTk2Zm54Uy9lTHJjTjNOenpIWmJhTVVW?=
+ =?utf-8?B?OE81cWExdC9FL1dJZDl5eFVCU29yNGF1azN4QStvcVk3UWt5MWFYUWVReHF0?=
+ =?utf-8?B?N2M0NGloam81b1d3ZXFyNC8wK2xubDJvZWhxWDhLelJESUM1d2FVRGFmQis1?=
+ =?utf-8?B?WmJhQmdsL2JpdW5RazdaMEFBU3J2UVRybzFCcThJRlE3Q0wyQnl1ZThRSVNn?=
+ =?utf-8?B?MzdqOHVMWG1icnBmM3I4SEl0R3NtRTJZRlk5bnQxTFN1aUFLOTFkYURKamEv?=
+ =?utf-8?B?ZERCd3krVFFNdW1Nd25EZ2Jqa0FsV29zOStXMmRpNk8wanY3RFYyMDJqOFhB?=
+ =?utf-8?B?V3hUUVV1LzJ2dDJKK3FBRWowbmRXNlJoWXd1QXQ1SDg0UXAreW1iT1hYUENY?=
+ =?utf-8?B?blNuRk9SWERLUEVBUHhFV1lZNUNMc2RYdllXalR0UitXNGRQNG9jNUJyOTRI?=
+ =?utf-8?B?SklHVzFpdDNvQ0tKcGtwRXVLeG1NMUwwWTdkNHFiMUdMbU9mckFML09Hcmdm?=
+ =?utf-8?B?VmpFNnpXakVLZERLaXQ3anRZRlZLSGNBM0cxZFNjMXBWbVlSN1VrWXVKeDJo?=
+ =?utf-8?B?UFpWMGlQMXN4ZVc4YnJ2TktNcUhaa2E5eFdDRy9JeFBkNDFlU01DZlFkNE0y?=
+ =?utf-8?B?YWVQelY1cDhlU2x3a2xiSS9GZjVKU29OQmFuU1N0NlNMY0VZcVorQ2tzT1Zz?=
+ =?utf-8?B?T2k3WG8vMEtpZVB0d1EzN0dQTkwwOXNmN3pDZS9ENC9HZ0c4ek15Z1BLYVUy?=
+ =?utf-8?B?N0dsRnhCbXBXeFRiRndHeVk3dW5PQTVHREc5Uzd3a2gyUDJFK2x2Qm40L2dU?=
+ =?utf-8?B?NnVpYk05UmF6djNXUEJqV2pOUG1kZmlhakJNRUo3OG5Vc1hhcFRwQVhnMkR6?=
+ =?utf-8?B?Q2plajlEN0lSMlhoenN6NElGaXR1RVVFRTZQTzRldC93bVVkVjhvUUttb1RZ?=
+ =?utf-8?B?V1VIbGlHaktLTDZxaWxKN1JmdXlFeDMxU0ZQNDZmT1lmd1lCYlJsczAyUG5h?=
+ =?utf-8?B?VEJDeVE4UnBMUUwvYTVIYlJLSVBjVldSUmp6K2hjNzJFL1FKdnZEQ1ZNMHZC?=
+ =?utf-8?B?QU5vckhpa29tT1duUDk2UVFkcmkxQlUyUjJOKzUxam9SY3oxb3ExR211bmFz?=
+ =?utf-8?B?cXRaeDdZVEdUTkV5NmxWajA5Tk4yMzNVVU9wNUtHa2Rpc2xKQWFkRDF2a2Jq?=
+ =?utf-8?B?Y3Z5cWNkT0hjZVZaZU0yVHBYaTZsUEtHUnRBVjcyL2E2VGEvSk0zTUNyVVBM?=
+ =?utf-8?B?MHBETzFUOGpGU1J6RkR6Q2NnazNaTDQwNXNhSVVWWlg4RCtUSVd5cGdaNGov?=
+ =?utf-8?B?S01XQVBVY1QwZFB1NUhnMmg2aVl1UEZhQklvd2FwT281aGdnYWdSM2gyZ3JW?=
+ =?utf-8?B?L2hXU2w4SFN1eTJ3RVU0dkZ6V1ppWEg0M0IxVW5sZXFOZVAra2VLQk1QTzJn?=
+ =?utf-8?B?N1dnbkdOVGE2NDFCSS9oTDFMNThObmo4QzlVTlAweFNKVzA4N00zdW5TcThw?=
+ =?utf-8?B?MlFqTlpXenJFL2NIYS85bFJtZmw0Ly9tWElWNTA1dkV1NFZ2dDFTL3hpTS9i?=
+ =?utf-8?Q?hRHsLoXzBxOs5O73/hVnW8Fnb?=
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88d24e6d-b537-4e4f-9547-08dac5e18d3b
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR02MB5148.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 01:42:55.5089
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: C+aEPCywxofsGF5f6F1W4kogbtKkLs8VOyRwwRN0vdcSW/PjznPPWE8ZaPdX6LFUMJ/f2ODZNyosLFGuTImiLA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR02MB6078
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dmar_domain uses bit field members to indicate the behaviors. Add
-a bit field for using first level and remove the flags member to avoid
-duplication.
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
----
- drivers/iommu/intel/iommu.h | 15 +++++----------
- drivers/iommu/intel/iommu.c | 25 ++++++++++---------------
- 2 files changed, 15 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index 251a609fdce3..7b7234689cb4 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -515,14 +515,6 @@ struct context_entry {
- 	u64 hi;
- };
- 
--/*
-- * When VT-d works in the scalable mode, it allows DMA translation to
-- * happen through either first level or second level page table. This
-- * bit marks that the DMA translation for the domain goes through the
-- * first level page table, otherwise, it goes through the second level.
-- */
--#define DOMAIN_FLAG_USE_FIRST_LEVEL		BIT(1)
--
- struct iommu_domain_info {
- 	struct intel_iommu *iommu;
- 	unsigned int refcnt;		/* Refcount of devices per iommu */
-@@ -539,6 +531,11 @@ struct dmar_domain {
- 	u8 iommu_coherency: 1;		/* indicate coherency of iommu access */
- 	u8 force_snooping : 1;		/* Create IOPTEs with snoop control */
- 	u8 set_pte_snp:1;
-+	u8 use_first_level:1;		/* DMA translation for the domain goes
-+					 * through the first level page table,
-+					 * otherwise, goes through the second
-+					 * level.
-+					 */
- 
- 	spinlock_t lock;		/* Protect device tracking lists */
- 	struct list_head devices;	/* all devices' list */
-@@ -548,8 +545,6 @@ struct dmar_domain {
- 
- 	/* adjusted guest address width, 0 is level 2 30-bit */
- 	int		agaw;
--
--	int		flags;		/* flags to find out type of domain */
- 	int		iommu_superpage;/* Level of superpages supported:
- 					   0 == 4KiB (no superpages), 1 == 2MiB,
- 					   2 == 1GiB, 3 == 512GiB, 4 == 1TiB */
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 83d941b792f2..2e6829da460a 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -383,11 +383,6 @@ static inline int domain_type_is_si(struct dmar_domain *domain)
- 	return domain->domain.type == IOMMU_DOMAIN_IDENTITY;
- }
- 
--static inline bool domain_use_first_level(struct dmar_domain *domain)
--{
--	return domain->flags & DOMAIN_FLAG_USE_FIRST_LEVEL;
--}
--
- static inline int domain_pfn_supported(struct dmar_domain *domain,
- 				       unsigned long pfn)
- {
-@@ -501,7 +496,7 @@ static int domain_update_iommu_superpage(struct dmar_domain *domain,
- 	rcu_read_lock();
- 	for_each_active_iommu(iommu, drhd) {
- 		if (iommu != skip) {
--			if (domain && domain_use_first_level(domain)) {
-+			if (domain && domain->use_first_level) {
- 				if (!cap_fl1gp_support(iommu->cap))
- 					mask = 0x1;
- 			} else {
-@@ -579,7 +574,7 @@ static void domain_update_iommu_cap(struct dmar_domain *domain)
- 	 * paging and 57-bits with 5-level paging). Hence, skip bit
- 	 * [N-1].
- 	 */
--	if (domain_use_first_level(domain))
-+	if (domain->use_first_level)
- 		domain->domain.geometry.aperture_end = __DOMAIN_MAX_ADDR(domain->gaw - 1);
- 	else
- 		domain->domain.geometry.aperture_end = __DOMAIN_MAX_ADDR(domain->gaw);
-@@ -947,7 +942,7 @@ static struct dma_pte *pfn_to_dma_pte(struct dmar_domain *domain,
- 
- 			domain_flush_cache(domain, tmp_page, VTD_PAGE_SIZE);
- 			pteval = ((uint64_t)virt_to_dma_pfn(tmp_page) << VTD_PAGE_SHIFT) | DMA_PTE_READ | DMA_PTE_WRITE;
--			if (domain_use_first_level(domain)) {
-+			if (domain->use_first_level) {
- 				pteval |= DMA_FL_PTE_XD | DMA_FL_PTE_US;
- 				if (iommu_is_dma_domain(&domain->domain))
- 					pteval |= DMA_FL_PTE_ACCESS;
-@@ -1500,7 +1495,7 @@ static void iommu_flush_iotlb_psi(struct intel_iommu *iommu,
- 	if (ih)
- 		ih = 1 << 6;
- 
--	if (domain_use_first_level(domain)) {
-+	if (domain->use_first_level) {
- 		qi_flush_piotlb(iommu, did, PASID_RID2PASID, addr, pages, ih);
- 	} else {
- 		unsigned long bitmask = aligned_pages - 1;
-@@ -1554,7 +1549,7 @@ static inline void __mapping_notify_one(struct intel_iommu *iommu,
- 	 * It's a non-present to present mapping. Only flush if caching mode
- 	 * and second level.
- 	 */
--	if (cap_caching_mode(iommu->cap) && !domain_use_first_level(domain))
-+	if (cap_caching_mode(iommu->cap) && !domain->use_first_level)
- 		iommu_flush_iotlb_psi(iommu, domain, pfn, pages, 0, 1);
- 	else
- 		iommu_flush_write_buffer(iommu);
-@@ -1570,7 +1565,7 @@ static void intel_flush_iotlb_all(struct iommu_domain *domain)
- 		struct intel_iommu *iommu = info->iommu;
- 		u16 did = domain_id_iommu(dmar_domain, iommu);
- 
--		if (domain_use_first_level(dmar_domain))
-+		if (dmar_domain->use_first_level)
- 			qi_flush_piotlb(iommu, did, PASID_RID2PASID, 0, -1, 0);
- 		else
- 			iommu->flush.flush_iotlb(iommu, did, 0, 0,
-@@ -1743,7 +1738,7 @@ static struct dmar_domain *alloc_domain(unsigned int type)
- 
- 	domain->nid = NUMA_NO_NODE;
- 	if (first_level_by_default(type))
--		domain->flags |= DOMAIN_FLAG_USE_FIRST_LEVEL;
-+		domain->use_first_level = true;
- 	domain->has_iotlb_device = false;
- 	INIT_LIST_HEAD(&domain->devices);
- 	spin_lock_init(&domain->lock);
-@@ -2175,7 +2170,7 @@ __domain_mapping(struct dmar_domain *domain, unsigned long iov_pfn,
- 
- 	attr = prot & (DMA_PTE_READ | DMA_PTE_WRITE | DMA_PTE_SNP);
- 	attr |= DMA_FL_PTE_PRESENT;
--	if (domain_use_first_level(domain)) {
-+	if (domain->use_first_level) {
- 		attr |= DMA_FL_PTE_XD | DMA_FL_PTE_US | DMA_FL_PTE_ACCESS;
- 		if (prot & DMA_PTE_WRITE)
- 			attr |= DMA_FL_PTE_DIRTY;
-@@ -2445,7 +2440,7 @@ static int dmar_domain_attach_device(struct dmar_domain *domain,
- 		if (hw_pass_through && domain_type_is_si(domain))
- 			ret = intel_pasid_setup_pass_through(iommu, domain,
- 					dev, PASID_RID2PASID);
--		else if (domain_use_first_level(domain))
-+		else if (domain->use_first_level)
- 			ret = domain_setup_first_level(iommu, domain, dev,
- 					PASID_RID2PASID);
- 		else
-@@ -4388,7 +4383,7 @@ static void domain_set_force_snooping(struct dmar_domain *domain)
- 	 * Second level page table supports per-PTE snoop control. The
- 	 * iommu_map() interface will handle this by setting SNP bit.
- 	 */
--	if (!domain_use_first_level(domain)) {
-+	if (!domain->use_first_level) {
- 		domain->set_pte_snp = true;
- 		return;
- 	}
--- 
-2.34.1
+On 2022/11/12 9:27, Jaegeuk Kim wrote:
+> Does thes make sense?
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev-test&id=608460dfae20b9d23aa222f7448710a086778222
+> https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev-test&id=962379487b5cb9f3b85ea367b130c2c6ca584edf
+> 
+Hi, Jaegeuk,
 
+Absolutely. Thanks for addressing it.
+
+> Second one is needed to address build error.
+
+Sorry for missing adding a hunk of that patch :(
+The above 2 commits are already tested, shall I resend a new patchset?
+
+thanks,
+shengyong
+> 
+> On 11/11, Sheng Yong wrote:
+>> If compress_extension is set, and a newly created file matches the
+>> extension, the file could be marked as compression file. However,
+>> if inline_data is also enabled, there is no chance to check its
+>> extension since f2fs_should_compress() always returns false.
+>>
+>> This patch moves set_compress_inode(), which do extension check, in
+>> f2fs_should_compress() to check extensions before setting inline
+>> data flag.
+>>
+>> Fixes: 7165841d578e ("f2fs: fix to check inline_data during compressed inode conversion")
+>> Signed-off-by: Sheng Yong <shengyong@oppo.com>
+>> ---
+>>   fs/f2fs/namei.c | 27 +++++++++++++--------------
+>>   1 file changed, 13 insertions(+), 14 deletions(-)
+>>
+>> ---
+>> v1->v2: add filename parameter for f2fs_new_inode, and move
+>>          set_compress_inode into f2fs_new_inode
+>>
+>> diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
+>> index e104409c3a0e5..36e251f438568 100644
+>> --- a/fs/f2fs/namei.c
+>> +++ b/fs/f2fs/namei.c
+>> @@ -22,8 +22,12 @@
+>>   #include "acl.h"
+>>   #include <trace/events/f2fs.h>
+>>   
+>> +static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
+>> +						const unsigned char *name);
+>> +
+>>   static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+>> -						struct inode *dir, umode_t mode)
+>> +						struct inode *dir, umode_t mode,
+>> +						const char *name)
+>>   {
+>>   	struct f2fs_sb_info *sbi = F2FS_I_SB(dir);
+>>   	nid_t ino;
+>> @@ -119,6 +123,8 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+>>   		if ((F2FS_I(dir)->i_flags & F2FS_COMPR_FL) &&
+>>   					f2fs_may_compress(inode))
+>>   			set_compress_context(inode);
+>> +		if (name)
+>> +			set_compress_inode(sbi, inode, name);
+>>   	}
+>>   
+>>   	/* Should enable inline_data after compression set */
+>> @@ -293,8 +299,7 @@ static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
+>>   	unsigned char noext_cnt = F2FS_OPTION(sbi).nocompress_ext_cnt;
+>>   	int i, cold_count, hot_count;
+>>   
+>> -	if (!f2fs_sb_has_compression(sbi) ||
+>> -			F2FS_I(inode)->i_flags & F2FS_NOCOMP_FL ||
+>> +	if (F2FS_I(inode)->i_flags & F2FS_NOCOMP_FL ||
+>>   			!f2fs_may_compress(inode) ||
+>>   			(!ext_cnt && !noext_cnt))
+>>   		return;
+>> @@ -326,10 +331,6 @@ static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
+>>   	for (i = 0; i < ext_cnt; i++) {
+>>   		if (!is_extension_exist(name, ext[i], false))
+>>   			continue;
+>> -
+>> -		/* Do not use inline_data with compression */
+>> -		stat_dec_inline_inode(inode);
+>> -		clear_inode_flag(inode, FI_INLINE_DATA);
+>>   		set_compress_context(inode);
+>>   		return;
+>>   	}
+>> @@ -352,15 +353,13 @@ static int f2fs_create(struct user_namespace *mnt_userns, struct inode *dir,
+>>   	if (err)
+>>   		return err;
+>>   
+>> -	inode = f2fs_new_inode(mnt_userns, dir, mode);
+>> +	inode = f2fs_new_inode(mnt_userns, dir, mode, dentry->d_name.name);
+>>   	if (IS_ERR(inode))
+>>   		return PTR_ERR(inode);
+>>   
+>>   	if (!test_opt(sbi, DISABLE_EXT_IDENTIFY))
+>>   		set_file_temperature(sbi, inode, dentry->d_name.name);
+>>   
+>> -	set_compress_inode(sbi, inode, dentry->d_name.name);
+>> -
+>>   	inode->i_op = &f2fs_file_inode_operations;
+>>   	inode->i_fop = &f2fs_file_operations;
+>>   	inode->i_mapping->a_ops = &f2fs_dblock_aops;
+>> @@ -689,7 +688,7 @@ static int f2fs_symlink(struct user_namespace *mnt_userns, struct inode *dir,
+>>   	if (err)
+>>   		return err;
+>>   
+>> -	inode = f2fs_new_inode(mnt_userns, dir, S_IFLNK | S_IRWXUGO);
+>> +	inode = f2fs_new_inode(mnt_userns, dir, S_IFLNK | S_IRWXUGO, NULL);
+>>   	if (IS_ERR(inode))
+>>   		return PTR_ERR(inode);
+>>   
+>> @@ -760,7 +759,7 @@ static int f2fs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
+>>   	if (err)
+>>   		return err;
+>>   
+>> -	inode = f2fs_new_inode(mnt_userns, dir, S_IFDIR | mode);
+>> +	inode = f2fs_new_inode(mnt_userns, dir, S_IFDIR | mode, NULL);
+>>   	if (IS_ERR(inode))
+>>   		return PTR_ERR(inode);
+>>   
+>> @@ -817,7 +816,7 @@ static int f2fs_mknod(struct user_namespace *mnt_userns, struct inode *dir,
+>>   	if (err)
+>>   		return err;
+>>   
+>> -	inode = f2fs_new_inode(mnt_userns, dir, mode);
+>> +	inode = f2fs_new_inode(mnt_userns, dir, mode, NULL);
+>>   	if (IS_ERR(inode))
+>>   		return PTR_ERR(inode);
+>>   
+>> @@ -856,7 +855,7 @@ static int __f2fs_tmpfile(struct user_namespace *mnt_userns, struct inode *dir,
+>>   	if (err)
+>>   		return err;
+>>   
+>> -	inode = f2fs_new_inode(mnt_userns, dir, mode);
+>> +	inode = f2fs_new_inode(mnt_userns, dir, mode, NULL);
+>>   	if (IS_ERR(inode))
+>>   		return PTR_ERR(inode);
+>>   
+>> -- 
+>> 2.25.1
