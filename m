@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77E7628ADD
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:54:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A27D5628ADE
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 21:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236399AbiKNUyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 15:54:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
+        id S236662AbiKNUyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 15:54:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235639AbiKNUyP (ORCPT
+        with ESMTP id S236456AbiKNUyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 15:54:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7680F645C
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:54:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1977F61467
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 20:54:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68429C433B5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 20:54:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668459253;
-        bh=RpzN8H68aCjb0/JyiJOBU4yllyMbTQCHOKuIqTWmxig=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DdTo6iNMwueUq5L2aV3zlH4+Z00+xxAbM74tsJmd+hSy1WlH9bkshBKe3vD5UwhRk
-         C95ctEs6Y38R+VgS4Pwe6PiZPcpdEAr9zSxpq5GZ21RElKBV2zR7+BJR1ASUkbwZ+Q
-         CTBNQsuGzl08x3IFT9nK9LPJXU0kTPPAeCQGpCQIoUi1nJwuUF45MKquZANZ3XHEws
-         wpFDHOQSUkCYVF5NnhS+HAjt+/plsTbuBzaQQunzUbphgohtgsH0/g1//YryeAKLyZ
-         GVu0sd+8yyJLRCx5W0/Uv6jxo5t5n5Wl06ltdWj8eP9Jo4HMV7tGvzaOh+8QJ3DRTL
-         YL5Iubo4TLzsQ==
-Received: by mail-lf1-f46.google.com with SMTP id g12so21393122lfh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:54:13 -0800 (PST)
-X-Gm-Message-State: ANoB5pmIWG+fbhBEwdzKkJsBUgEyZDzp1ens2dZR9nQuHcvnHzxpKRyY
-        On4oSP6Fy+VFUkETNBepPdexRtZaCCaL3pKubQ==
-X-Google-Smtp-Source: AA0mqf6EQA5WXgdrOooku6hSuKEzcyytYAV+ZO6JbTyEPa6dLL2Hga6OwNfhWQ7IQEKnEJQmczYil+G5Rtz7RSgUxq8=
-X-Received: by 2002:ac2:5396:0:b0:4a4:6ee3:f57b with SMTP id
- g22-20020ac25396000000b004a46ee3f57bmr4433710lfh.17.1668459251363; Mon, 14
- Nov 2022 12:54:11 -0800 (PST)
+        Mon, 14 Nov 2022 15:54:43 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C0E65D8
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:54:42 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id w26-20020a056830061a00b0066c320f5b49so7403661oti.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 12:54:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HQOsCeOOJFs4UoeDhRrZPJ5dm+sP1ZOVKfdXHmuW7+g=;
+        b=Chx8SKM4uDi3l7GEZU4sEaiyG9UTKQoBTyv+/cn9VEAmASK0vq27nopo9q+QV3YhBg
+         /BuOgBLueDfmAsGbRwbCK3izH3GiOzVHK2ngBwAC9hjIYm5EPNHIRGZN/8JY04AKCV0S
+         A1Rn6b02JZLpEUDEKDxvfgnCWzjB8fi868Z88=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HQOsCeOOJFs4UoeDhRrZPJ5dm+sP1ZOVKfdXHmuW7+g=;
+        b=nWshm6thddwGFbABD7zGq0wXe2Nxlt2GJXFcAhnyzKQbJz8RreiDJYY1aTedTVKxYg
+         EIm3coPGwBDTKOMMR37iyJDj6isLTcWoCf1L0nQKfr57PsHu2QZEcuoej3O2WxlOk90n
+         700amMDNZ0ZsfpEsXGUOHV+Ouz+mjD1lSfAUsB2VEPQ4YeFqWbMQqPp4VLb54cA8euwC
+         CwaF4ArytHFt86Rb6qOTRwStkMUqts583jVDOHYPOGlS2csBg6h3PuQAAgj2JRByHHLI
+         IogaM35AFdOJgJB29vl24M5MMzHZyh6nUEFC8RCDkUNADl3aeC3o6A6pcqiUPKYIlahk
+         Iy+w==
+X-Gm-Message-State: ANoB5pnJC/mm8nFFQonUWk6kJW9echAXuOtSwuBKbPqDRS1UrmybQPDZ
+        5iMmIOM4Q/02Kq5KWo4VLLrHgt2pX5ure+klPH134w==
+X-Google-Smtp-Source: AA0mqf7b+N2UineU1wTXzjfjDotQVuh7h4cVws952140gNcmY0eEVvj/hWcg/bAvT9/ANrRC8nQU+72mEsJ8NL1HkBg=
+X-Received: by 2002:a9d:188:0:b0:66d:3e45:8e5a with SMTP id
+ e8-20020a9d0188000000b0066d3e458e5amr7231168ote.177.1668459281621; Mon, 14
+ Nov 2022 12:54:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20221017075702.4182846-1-victor.liu@nxp.com> <Y1/sUfeVy1a6EKZQ@google.com>
- <afa29fcc11436dd957314a4066c9141937f0470c.camel@nxp.com> <b7bcc99c006c91871f0518c1a132035d2a148f24.camel@nxp.com>
- <Y2jKRQ8VyauSfXmH@google.com> <4dfb7699c33974a682d798071c85b431b87e5432.camel@nxp.com>
-In-Reply-To: <4dfb7699c33974a682d798071c85b431b87e5432.camel@nxp.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 14 Nov 2022 14:54:02 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKoJimmbk5KoAs2yetrW4ONDy6-QMvvFdNdHH+HP6rk=w@mail.gmail.com>
-Message-ID: <CAL_JsqKoJimmbk5KoAs2yetrW4ONDy6-QMvvFdNdHH+HP6rk=w@mail.gmail.com>
-Subject: Re: [PATCH RESEND] mfd: Add Freescale i.MX8qxp Control and Status
- Registers (CSR) module driver
-To:     Liu Ying <victor.liu@nxp.com>
-Cc:     Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com
+References: <20221109024758.2644936-1-joel@joelfernandes.org>
+ <Y2z3Mb3u8bFZ12wY@pc636> <CAEXW_YSq89xzgyQ9Tdt1tCqz8VAfzb7kSXVZmnxDuJ65U0UZ3w@mail.gmail.com>
+ <Y20EOinwcLSZHmXg@pc638.lan> <Y22ry4Q2OY2zovco@google.com>
+ <Y3Iyka86FlUh9D1P@pc636> <20221114161733.GD4001@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20221114161733.GD4001@paulmck-ThinkPad-P17-Gen-1>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Mon, 14 Nov 2022 15:54:30 -0500
+Message-ID: <CAEXW_YSGmHWdFJFcYH1UoqC8NT8V0ZGPf+_NdtepCbu8O1LMnA@mail.gmail.com>
+Subject: Re: [PATCH v2] rcu/kfree: Do not request RCU when not needed
+To:     paulmck@kernel.org
+Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-kernel@vger.kernel.org,
+        rcu@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,142 +68,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 9:58 PM Liu Ying <victor.liu@nxp.com> wrote:
+On Mon, Nov 14, 2022 at 11:17 AM Paul E. McKenney <paulmck@kernel.org> wrot=
+e:
 >
-> Hi Lee,
->
-> On Mon, 2022-11-07 at 09:05 +0000, Lee Jones wrote:
-> > On Wed, 02 Nov 2022, Liu Ying wrote:
-> >
-> > > Hi Lee,
+> On Mon, Nov 14, 2022 at 01:20:33PM +0100, Uladzislau Rezki wrote:
+> > > On Thu, Nov 10, 2022 at 03:01:30PM +0100, Uladzislau Rezki wrote:
+> > > > > Hi,
+> > > > >
+> > > > > On Thu, Nov 10, 2022 at 8:05 AM Uladzislau Rezki <urezki@gmail.co=
+m> wrote:
+> > > > >
+> > > > > > > On ChromeOS, using this with the increased timeout, we see th=
+at we
+> > > > > > almost always
+> > > > > > > never need to initiate a new grace period. Testing also shows=
+ this frees
+> > > > > > large
+> > > > > > > amounts of unreclaimed memory, under intense kfree_rcu() pres=
+sure.
+> > > > > > >
+> > > > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.or=
+g>
+> > > > > > > ---
+> > > > > > > v1->v2: Same logic but use polled grace periods instead of sa=
+mpling
+> > > > > > gp_seq.
+> > > > > > >
+> > > > > > >  kernel/rcu/tree.c | 8 +++++++-
+> > > > > > >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > > > > > >
+> > > > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > > > > > index 591187b6352e..ed41243f7a49 100644
+> > > > > > > --- a/kernel/rcu/tree.c
+> > > > > > > +++ b/kernel/rcu/tree.c
+> > > > > > > @@ -2935,6 +2935,7 @@ struct kfree_rcu_cpu_work {
+> > > > > > >
+> > > > > > >  /**
+> > > > > > >   * struct kfree_rcu_cpu - batch up kfree_rcu() requests for =
+RCU grace
+> > > > > > period
+> > > > > > > + * @gp_snap: The GP snapshot recorded at the last scheduling=
+ of monitor
+> > > > > > work.
+> > > > > > >   * @head: List of kfree_rcu() objects not yet waiting for a =
+grace period
+> > > > > > >   * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiti=
+ng for a
+> > > > > > grace period
+> > > > > > >   * @krw_arr: Array of batches of kfree_rcu() objects waiting=
+ for a
+> > > > > > grace period
+> > > > > > > @@ -2964,6 +2965,7 @@ struct kfree_rcu_cpu {
+> > > > > > >       struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
+> > > > > > >       raw_spinlock_t lock;
+> > > > > > >       struct delayed_work monitor_work;
+> > > > > > > +     unsigned long gp_snap;
+> > > > > > >       bool initialized;
+> > > > > > >       int count;
+> > > > > > >
+> > > > > > > @@ -3167,6 +3169,7 @@ schedule_delayed_monitor_work(struct kf=
+ree_rcu_cpu
+> > > > > > *krcp)
+> > > > > > >                       mod_delayed_work(system_wq, &krcp->moni=
+tor_work,
+> > > > > > delay);
+> > > > > > >               return;
+> > > > > > >       }
+> > > > > > > +     krcp->gp_snap =3D get_state_synchronize_rcu();
+> > > > > > >       queue_delayed_work(system_wq, &krcp->monitor_work, dela=
+y);
+> > > > > > >  }
+> > > > > > >
+> > > > > > How do you guarantee a full grace period for objects which proc=
+eed
+> > > > > > to be placed into an input stream that is not yet detached?
+> > > > >
+> > > > >
+> > > > > Just replying from phone as I=E2=80=99m OOO today.
+> > > > >
+> > > > > Hmm, so you=E2=80=99re saying that objects can be queued after th=
+e delayed work has
+> > > > > been queued, but processed when the delayed work is run? I=E2=80=
+=99m looking at
+> > > > > this code after few years so I may have missed something.
+> > > > >
+> > > > > That=E2=80=99s a good point and I think I missed that. I think yo=
+ur version did too
+> > > > > but I=E2=80=99ll have to double check.
+> > > > >
+> > > > > The fix then is to sample the clock for the latest object queued,=
+ not for
+> > > > > when the delayed work is queued.
+> > > > >
+> > > > The patch i sent gurantee it. Just in case see v2:
 > > >
-> > > On Tue, 2022-11-01 at 13:53 +0800, Liu Ying wrote:
-> > > > Hi Lee,
-> > > >
-> > > > On Mon, 2022-10-31 at 15:40 +0000, Lee Jones wrote:
-> > > > > On Mon, 17 Oct 2022, Liu Ying wrote:
-> > > > >
-> > > > > > Freescale i.MX8qxp Control and Status Registers (CSR) module is a
-> > > > > > system
-> > > > > > controller. It represents a set of miscellaneous registers of a
-> > > > > > specific
-> > > > > > subsystem. It may provide control and/or status report interfaces
-> > > > > > to a
-> > > > > > mix of standalone hardware devices within that subsystem.
-> > > > > >
-> > > > > > The CSR module in i.MX8qm/qxp SoCs is a child node of a simple
-> > > > > > power-managed
-> > > > > > bus(i.MX8qxp pixel link MSI bus). To propagate power management
-> > > > > > operations
-> > > > > > of the CSR module's child devices to that simple power-managed
-> > > > > > bus, add a
-> > > > > > dedicated driver for the CSR module. Also, the driver would
-> > > > > > populate the CSR
-> > > > > > module's child devices.
-> > > > > >
-> > > > > > Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> > > > > > ---
-> > > > > > The Freescale i.MX8qxp CSR DT bindings is at
-> > > > > > Documentation/devicetree/bindings/mfd/fsl,imx8qxp-csr.yaml.
-> > > > > >
-> > > > > > Resend the patch based on v6.1-rc1.
-> > > > > >
-> > > > > >  drivers/mfd/Kconfig           | 10 +++++++
-> > > > > >  drivers/mfd/Makefile          |  1 +
-> > > > > >  drivers/mfd/fsl-imx8qxp-csr.c | 53
-> > > > > > +++++++++++++++++++++++++++++++++++
-> > > > > >  3 files changed, 64 insertions(+)
-> > > > > >  create mode 100644 drivers/mfd/fsl-imx8qxp-csr.c
-> > > >
-> > > > [...]
-> > > >
-> > > > > > diff --git a/drivers/mfd/fsl-imx8qxp-csr.c b/drivers/mfd/fsl-
-> > > > > > imx8qxp-csr.c
-> > > > > > new file mode 100644
-> > > > > > index 000000000000..3915d3d6ca65
-> > > > > > --- /dev/null
-> > > > > > +++ b/drivers/mfd/fsl-imx8qxp-csr.c
-> > > > > > @@ -0,0 +1,53 @@
-> > > > > > +// SPDX-License-Identifier: GPL-2.0+
-> > > > > > +
-> > > > > > +/*
-> > > > > > + * Copyright 2022 NXP
-> > > > > > + */
-> > > > > > +
-> > > > > > +#include <linux/module.h>
-> > > > > > +#include <linux/of_platform.h>
-> > > > > > +#include <linux/platform_device.h>
-> > > > > > +#include <linux/pm_runtime.h>
-> > > > > > +
-> > > > > > +static int imx8qxp_csr_probe(struct platform_device *pdev)
-> > > > > > +{
-> > > > > > +     int ret;
-> > > > > > +
-> > > > > > +     pm_runtime_enable(&pdev->dev);
-> > > > > > +
-> > > > > > +     ret = devm_of_platform_populate(&pdev->dev);
-> > > > >
-> > > > > The use of this API does not constitute a MFD.
-> > > > >
-> > > > > Please use "simple-mfd" instead.
-> > > >
-> > > > simple-mfd devices have "ONLY_BUS" set in simple-pm-bus.c, so the
-> > > > simple-pm-bus driver would not populate child devices of simple-mfd
-> > > > devices.
+> > > You are right and thank you! CBs can be queued while the monitor time=
+r is in
+> > > progress. So we need to sample unconditionally. I think my approach i=
+s still
+> > > better since I take advantage of multiple seconds (I update snapshot =
+on every
+> > > CB queue monitor and sample in the monitor handler).
+> > >
+> > > Whereas your patch is snapshotting before queuing the regular work an=
+d when
+> > > the work is executed (This is a much shorter duration and I bet you w=
+ould be
+> > > blocking in cond_synchronize..() more often).
+> > >
+> > There is a performance test that measures a taken time and memory
+> > footprint, so you can do a quick comparison. A "rcutorture" can be
+> > run with various parameters to figure out if a patch that is in questio=
+n
+> > makes any difference.
 > >
-> > Right, simple-pm-bus will not populate child devices, because:
->
-> simple-pm-bus.c may populate child devices of simple-pm-bus devices
-> because "ONLY_BUS" is _not_ set for simple-pm-bus devices.
->
-> simple-pm-bus.c would _not_ populate child devices of simple-mfd
-> devices because "ONLY_BUS" is set for simple-mfd devices.
->
+> > Usually i run it as:
 > >
-> >   /*
-> >    * These are transparent bus devices (not simple-pm-bus matches) that
-> >    * have their child nodes populated automatically.  So, don't need to
-> >    * do anything more. We only match with the device if this driver is
-> >    * the most specific match because we don't want to incorrectly bind to
-> >    * a device that has a more specific driver.
-> >    */
+> > <snip>
+> > #! /usr/bin/env bash
 > >
-> > So "simple-mfd" must be populated elsewhere i.e. drivers/of/platform.c.
+> > LOOPS=3D10
+> >
+> > for (( i=3D0; i<$LOOPS; i++ )); do
+> >         tools/testing/selftests/rcutorture/bin/kvm.sh --memory 10G --to=
+rture rcuscale --allcpus --duration 1 \
+> >         --kconfig CONFIG_NR_CPUS=3D64 \
+> >         --kconfig CONFIG_RCU_NOCB_CPU=3Dy \
+> >         --kconfig CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=3Dy \
+> >         --kconfig CONFIG_RCU_LAZY=3Dn \
+> >         --bootargs "rcuscale.kfree_rcu_test=3D1 rcuscale.kfree_nthreads=
+=3D16 rcuscale.holdoff=3D20 rcuscale.kfree_loops=3D10000 torture.disable_on=
+off_at_boot" --trust-make
+> >         echo "Done $i"
+> > done
+> > <snip>
+> >
+> > just run it from your linux sandbox.
 >
-> If simple-mfd device is a child device of one device listed in
-> of_default_bus_match_table[], then it may be populated by
-> drivers/of/platform.c.  But, in my case, simple-mfd device is a child
-> device of simple-pm-bus device(not listed in that table), so it will
-> not be populated by drivers/of/platform.c.  Instead,
-> drivers/bus/simple-pm-bus.c would populate the simple-mfd device.
->
-> >
-> > > > Also, the simple-pm-bus driver would not enable runtime
-> > > > power management for simple-mfd devices due to "ONLY_BUS", which
-> > > > means it would not propagate power management operations from child
-> > > > devices of simple-mfd devices to parent devices of simple-mfd
-> > > > devices.  That's why a dedicated fsl-imx8qxp-csr driver is needed.
-> >
-> > This is more of an issue.
-> >
-> > Why can't this device use "simple-pm-bus" to have support for both
-> > auto-registration AND Runtime PM?
->
-> If I change the compatible string of the CSR module from
-> "fsl,imx8qxp-mipi-lvds-csr", "syscon", "simple-mfd"
-> to
-> "fsl,imx8qxp-mipi-lvds-csr", "syscon", "simple-pm-bus",
-> all devices I'm interested in are populated and all relevant drivers
-> can probe.  But, this change makes 'make dt_binding_check' for the
-> existing fsl,imx8qxp-csr.yaml fail:
+> Would it make sense to modify the "if test "$do_kvfree" =3D "yes" code
+> in tools/testing/selftests/rcutorture/bin/torture.sh to do something
+> like this instead of what it currently does?
 
-As 'simple-bus' is for MMIO devices, so is 'simple-pm-bus' with the
-addition of PM capabilities. That means you have registers defined
-(reg), but you don't.
+Yes I think so, Were you also thinking of adding it to
+tools/testing/selftests/rcutorture/configs with a corresponding
+".boot" file for the kfree test's boot parameters?
 
-Either you have a block with mixed functions or you have separate
-blocks. If the register space is all mixed together, then it is the
-former and an MFD. Don't be designing your binding based on Linux
-behavior.
+If it means the bots will run it more, that would be awesome :-)
 
-Rob
+Thanks,
+
+ - Joel
