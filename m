@@ -2,263 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254E16274D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 04:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F1F6274D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 04:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235602AbiKNDG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 13 Nov 2022 22:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49082 "EHLO
+        id S235694AbiKNDL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 13 Nov 2022 22:11:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiKNDG0 (ORCPT
+        with ESMTP id S235561AbiKNDLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 13 Nov 2022 22:06:26 -0500
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7272624A
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:06:24 -0800 (PST)
-Received: by mail-qv1-xf2a.google.com with SMTP id x15so7138474qvp.1
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:06:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BlV/hH4vsUo/M2zZnxys0KFW2u/I8znQr8wRA6yRb/Q=;
-        b=weo1k3bYO7OZ3DZVr8WFZGrK+J5E7Ds/YA+WdPzvWF7eogeR3b1+poKUVNSYqU5ml3
-         5FgsMeEjg3n2Xf/gKd25aMD0Ys/UiKXGYU8jqZF1ojfJ+9ZMgwB0verBf8TVzjwsJ0XK
-         i+oRrAhh9a5Ms8kKS+xx82JcJukdIzWc1vtOk=
+        Sun, 13 Nov 2022 22:11:52 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72509DFD9
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:11:51 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id j20-20020a056e02219400b00300a22a7fe0so8512460ila.3
+        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 19:11:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BlV/hH4vsUo/M2zZnxys0KFW2u/I8znQr8wRA6yRb/Q=;
-        b=jZEX3nCH5CoQloogxyLxEBXQzqTHzXjrwPVr8bEp+aWbZdImOto/Afco0KLIRBFC2Y
-         n6Cxf6OVY1L2IjWi9B+xIuMpyH136qwLvDQ8QYeA0tyRlxUMb22UfI0i9RmfUZc7BeJn
-         VTeb9uGp3XUF7v3xNr6/GxmFe7DwvDekHOWpkvqjeczLMbkVud2eyfKejZwmkPpgDF04
-         V2SfUwOgxSxpqrWQ9Kmb5S1fLQr2hUo8F67r2r6sLx1okXJDHnjrRrRHvxLGyilsc3EK
-         fYGR9K1UCFkFoi77gDp1OB3zoK+wYOVozzoqQrDjaSsgPJ4tt8EhtCiHI9yIN8y/OO+9
-         bjKg==
-X-Gm-Message-State: ANoB5pk8xGlDTR8mPD3y37vMV61C0r97+Gta7yovabhjSSFGFKl8K0Z2
-        j46PC6O+e9OzfUgVXyuCdcAi8Q==
-X-Google-Smtp-Source: AA0mqf4phua86Wp0oQB3meRFz8YNGPp8/kh2m4vjJ/cMQ3uDo2opjlgNjhaEtCcisjfPSoT5By+eXg==
-X-Received: by 2002:a05:6214:3c89:b0:4bb:8572:999f with SMTP id ok9-20020a0562143c8900b004bb8572999fmr10817404qvb.6.1668395183882;
-        Sun, 13 Nov 2022 19:06:23 -0800 (PST)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id bk40-20020a05620a1a2800b006fa4b111c76sm5738183qkb.36.2022.11.13.19.06.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 19:06:23 -0800 (PST)
-Date:   Mon, 14 Nov 2022 03:06:23 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, riel@redhat.com
-Subject: Re: [PATCH v8 1/9] sched/fair: fix unfairness at wakeup
-Message-ID: <Y3Gwr2p5BcofuZ8e@google.com>
-References: <20221110175009.18458-1-vincent.guittot@linaro.org>
- <20221110175009.18458-2-vincent.guittot@linaro.org>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=plKmkDO4y+S3nTgLqqqXRWXSZPFO4qJ96/+1wRFN/hY=;
+        b=it5Mjl2laROjtXIIDL3yDF5gNE5g0BIqRNfe4nVHUjMrdGFMMdeTpa9F6CsHZoSiEL
+         88/JJ+lnFGfge1c4VgcAoMQqM7wnkZEhjklx83tCG3ZjvAHCjNO6OE0bM4KhBFTtRq+p
+         3+nLnHMoRZhL5wGBQq7kcC3Zz8XNW05WemlLzdnecWxVagxsAG4WBEeEzQ/Z6RZWz6Os
+         y1VJJejfZaHlkVv1BLNd65+v+H0N+gyR7QzgcUoBc4t9RGSpdnYNR/WrglKBvlkUx8Re
+         rkIWnbN0CHLEoG7iY++9gwhyercquFWFWFszoTYoBbfOTSxOkFJUmNCd+NMxJs9HziW5
+         hIwQ==
+X-Gm-Message-State: ANoB5pmgyoaBPMFSp6wpcexxFZosJuD+pCcUmBjGKttJyuQ9hoxkQgg/
+        NvsWOo3XnmuDJgxXoAO9N3Kp20npYxJIKzM2bthQmg49Uyoy
+X-Google-Smtp-Source: AA0mqf6MNFAmcajyelXzm+ov3xiz/DmIj+TE0V1R2TkbYDEMi+lljbMlh6TJsR+yjiLliCXDFJZtFcQl3b/f1DaJWG347wFcKzk0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110175009.18458-2-vincent.guittot@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DIET_1,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:8751:0:b0:6d1:832:50a1 with SMTP id
+ k17-20020a5d8751000000b006d1083250a1mr4714889iol.68.1668395510838; Sun, 13
+ Nov 2022 19:11:50 -0800 (PST)
+Date:   Sun, 13 Nov 2022 19:11:50 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c4bef605ed65992d@google.com>
+Subject: [syzbot] general protection fault in shm_close
+From:   syzbot <syzbot+83b4134621b7c326d950@syzkaller.appspotmail.com>
+To:     Liam.Howlett@Oracle.com, akpm@linux-foundation.org,
+        alexander.mikhalitsyn@virtuozzo.com, linux-kernel@vger.kernel.org,
+        manfred@colorfullife.com, mike.kravetz@oracle.com,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent,
+Hello,
 
-On Thu, Nov 10, 2022 at 06:50:01PM +0100, Vincent Guittot wrote:
-> At wake up, the vruntime of a task is updated to not be more older than
-> a sched_latency period behind the min_vruntime. This prevents long sleeping
-> task to get unlimited credit at wakeup.
-> Such waking task should preempt current one to use its CPU bandwidth but
-> wakeup_gran() can be larger than sched_latency, filter out the
-> wakeup preemption and as a results steals some CPU bandwidth to
-> the waking task.
+syzbot found the following issue on:
 
-Just a thought: one can argue that this also hurts the running task because
-wakeup_gran() is expected to not preempt the running task for a certain
-minimum amount of time right?
+HEAD commit:    f8f60f322f06 Add linux-next specific files for 20221111
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15599bd5880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=85ba52c07cd97289
+dashboard link: https://syzkaller.appspot.com/bug?extid=83b4134621b7c326d950
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15a05e71880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11de4db9880000
 
-So for example, if I set sysctl_sched_wakeup_granularity to a high value, I
-expect the current task to not be preempted for that long, even if the
-sched_latency cap in place_entity() makes the delta smaller than
-wakeup_gran(). The place_entity() in current code is used to cap the sleep
-credit, it does not really talk about preemption.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6008df424195/disk-f8f60f32.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/394340525f66/vmlinux-f8f60f32.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b13604a3343a/bzImage-f8f60f32.xz
 
-I don't mind this change, but it does change the meaning a bit of
-sysctl_sched_wakeup_granularity I think.
+The issue was bisected to:
 
-> Make sure that a task, which vruntime has been capped, will preempt current
-> task and use its CPU bandwidth even if wakeup_gran() is in the same range
-> as sched_latency.
+commit 6a892ddb84e542931554f4ee9a528190003b23a0
+Author: Mike Kravetz <mike.kravetz@oracle.com>
+Date:   Thu Nov 10 00:21:50 2022 +0000
 
-nit: I would prefer we say, instead of "is in the same range", "is greater
-than". Because it got confusing a bit for me.
+    ipc/shm: call underlying open/close vm_ops
 
-> If the waking task failed to preempt current it could to wait up to
-> sysctl_sched_min_granularity before preempting it during next tick.
-> 
-> Strictly speaking, we should use cfs->min_vruntime instead of
-> curr->vruntime but it doesn't worth the additional overhead and complexity
-> as the vruntime of current should be close to min_vruntime if not equal.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14a0f199880000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=16a0f199880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12a0f199880000
 
-Could we add here,
-Reported-by: Youssef Esmat <youssefesmat@chromium.org>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+83b4134621b7c326d950@syzkaller.appspotmail.com
+Fixes: 6a892ddb84e5 ("ipc/shm: call underlying open/close vm_ops")
 
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-
-Just a few more comments below:
-
-> ---
->  kernel/sched/fair.c  | 46 ++++++++++++++++++++------------------------
->  kernel/sched/sched.h | 30 ++++++++++++++++++++++++++++-
->  2 files changed, 50 insertions(+), 26 deletions(-)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 5ffec4370602..eb04c83112a0 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -4345,33 +4345,17 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->  {
->  	u64 vruntime = cfs_rq->min_vruntime;
->  
-> -	/*
-> -	 * The 'current' period is already promised to the current tasks,
-> -	 * however the extra weight of the new task will slow them down a
-> -	 * little, place the new task so that it fits in the slot that
-> -	 * stays open at the end.
-> -	 */
-> -	if (initial && sched_feat(START_DEBIT))
-> -		vruntime += sched_vslice(cfs_rq, se);
-> -
-> -	/* sleeps up to a single latency don't count. */
-> -	if (!initial) {
-> -		unsigned long thresh;
-> -
-> -		if (se_is_idle(se))
-> -			thresh = sysctl_sched_min_granularity;
-> -		else
-> -			thresh = sysctl_sched_latency;
-> -
-> +	if (!initial)
-> +		/* sleeps up to a single latency don't count. */
-> +		vruntime -= get_sched_latency(se_is_idle(se));
-> +	else if (sched_feat(START_DEBIT))
->  		/*
-> -		 * Halve their sleep time's effect, to allow
-> -		 * for a gentler effect of sleepers:
-> +		 * The 'current' period is already promised to the current tasks,
-> +		 * however the extra weight of the new task will slow them down a
-> +		 * little, place the new task so that it fits in the slot that
-> +		 * stays open at the end.
->  		 */
-> -		if (sched_feat(GENTLE_FAIR_SLEEPERS))
-> -			thresh >>= 1;
-> -
-> -		vruntime -= thresh;
-> -	}
-> +		vruntime += sched_vslice(cfs_rq, se);
->  
->  	/* ensure we never gain time by being placed backwards. */
->  	se->vruntime = max_vruntime(se->vruntime, vruntime);
-> @@ -7187,6 +7171,18 @@ wakeup_preempt_entity(struct sched_entity *curr, struct sched_entity *se)
->  		return -1;
->  
->  	gran = wakeup_gran(se);
-> +
-> +	/*
-> +	 * At wake up, the vruntime of a task is capped to not be older than
-> +	 * a sched_latency period compared to min_vruntime. This prevents long
-> +	 * sleeping task to get unlimited credit at wakeup. Such waking up task
-> +	 * has to preempt current in order to not lose its share of CPU
-> +	 * bandwidth but wakeup_gran() can become higher than scheduling period
-> +	 * for low priority task. Make sure that long sleeping task will get a
-> +	 * chance to preempt current.
-> +	 */
-> +	gran = min_t(s64, gran, get_latency_max());
-> +
-
-Can we move this to wakeup_gran(se)? IMO, it belongs there because you are
-adjusting the wakeup_gran().
-
->  	if (vdiff > gran)
->  		return 1;
->  
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index 1fc198be1ffd..14879d429919 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -2432,9 +2432,9 @@ extern void check_preempt_curr(struct rq *rq, struct task_struct *p, int flags);
->  extern const_debug unsigned int sysctl_sched_nr_migrate;
->  extern const_debug unsigned int sysctl_sched_migration_cost;
->  
-> -#ifdef CONFIG_SCHED_DEBUG
->  extern unsigned int sysctl_sched_latency;
->  extern unsigned int sysctl_sched_min_granularity;
-> +#ifdef CONFIG_SCHED_DEBUG
->  extern unsigned int sysctl_sched_idle_min_granularity;
->  extern unsigned int sysctl_sched_wakeup_granularity;
->  extern int sysctl_resched_latency_warn_ms;
-> @@ -2448,6 +2448,34 @@ extern unsigned int sysctl_numa_balancing_scan_period_max;
->  extern unsigned int sysctl_numa_balancing_scan_size;
->  #endif
->  
-> +static inline unsigned long  get_sched_latency(bool idle)
-> +{
-
-IMO, since there are other users of sysctl_sched_latency, it would be better
-to call this get_max_sleep_credit() or something.
-
-> +	unsigned long thresh;
-> +
-> +	if (idle)
-> +		thresh = sysctl_sched_min_granularity;
-> +	else
-> +		thresh = sysctl_sched_latency;
-> +
-> +	/*
-> +	 * Halve their sleep time's effect, to allow
-> +	 * for a gentler effect of sleepers:
-> +	 */
-> +	if (sched_feat(GENTLE_FAIR_SLEEPERS))
-> +		thresh >>= 1;
-> +
-> +	return thresh;
-> +}
-> +
-> +static inline unsigned long  get_latency_max(void)
-> +{
-> +	unsigned long thresh = get_sched_latency(false);
-> +
-> +	thresh -= sysctl_sched_min_granularity;
-
-Could you clarify, why are you subtracting sched_min_granularity here? Could
-you add some comments here to make it clear?
-
-thanks,
-
- - Joel
+general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+CPU: 0 PID: 5247 Comm: syz-executor310 Not tainted 6.1.0-rc4-next-20221111-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:shm_close+0xbf/0x740 ipc/shm.c:378
+Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 1c 06 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b 5d 18 48 8d 7b 08 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 db 05 00 00 48 8b 5b 08 48 85 db 74 0a e8 99 7c
+RSP: 0018:ffffc90003e0fba0 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000001 RSI: ffffffff83bf5016 RDI: 0000000000000008
+RBP: ffff8880296a2d40 R08: 0000000000000005 R09: 0000000000000000
+R10: 00000000fffffff4 R11: 0000000000000000 R12: ffff8880263fb1c0
+R13: ffffffff8c7a97a0 R14: 0000000000000008 R15: ffffc90003e0fca0
+FS:  0000555555992300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fde9cc15348 CR3: 0000000025865000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ shm_mmap+0x1c2/0x230 ipc/shm.c:604
+ call_mmap include/linux/fs.h:2164 [inline]
+ mmap_region+0x6bf/0x1dc0 mm/mmap.c:2625
+ do_mmap+0x825/0xf50 mm/mmap.c:1412
+ do_shmat+0xe33/0x10c0 ipc/shm.c:1661
+ __do_sys_shmat ipc/shm.c:1697 [inline]
+ __se_sys_shmat ipc/shm.c:1692 [inline]
+ __x64_sys_shmat+0xcc/0x160 ipc/shm.c:1692
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fde9cba2cf9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff3ed491f8 EFLAGS: 00000246 ORIG_RAX: 000000000000001e
+RAX: ffffffffffffffda RBX: 000000000000cfd6 RCX: 00007fde9cba2cf9
+RDX: ffffffffffffcfff RSI: 0000000020000000 RDI: 0000000000000008
+RBP: 0000000000000000 R08: 00007fff3ed49398 R09: 00007fff3ed49398
+R10: 00007fff3ed48c70 R11: 0000000000000246 R12: 00007fff3ed4920c
+R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:shm_close+0xbf/0x740 ipc/shm.c:378
+Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 1c 06 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b 5d 18 48 8d 7b 08 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 db 05 00 00 48 8b 5b 08 48 85 db 74 0a e8 99 7c
+RSP: 0018:ffffc90003e0fba0 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000001 RSI: ffffffff83bf5016 RDI: 0000000000000008
+RBP: ffff8880296a2d40 R08: 0000000000000005 R09: 0000000000000000
+R10: 00000000fffffff4 R11: 0000000000000000 R12: ffff8880263fb1c0
+R13: ffffffff8c7a97a0 R14: 0000000000000008 R15: ffffc90003e0fca0
+FS:  0000555555992300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff3ed491d8 CR3: 0000000025865000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	48 89 fa             	mov    %rdi,%rdx
+   3:	48 c1 ea 03          	shr    $0x3,%rdx
+   7:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   b:	0f 85 1c 06 00 00    	jne    0x62d
+  11:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  18:	fc ff df
+  1b:	48 8b 5d 18          	mov    0x18(%rbp),%rbx
+  1f:	48 8d 7b 08          	lea    0x8(%rbx),%rdi
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 db 05 00 00    	jne    0x60f
+  34:	48 8b 5b 08          	mov    0x8(%rbx),%rbx
+  38:	48 85 db             	test   %rbx,%rbx
+  3b:	74 0a                	je     0x47
+  3d:	e8                   	.byte 0xe8
+  3e:	99                   	cltd
+  3f:	7c                   	.byte 0x7c
 
 
-> +
-> +	return thresh;
-> +}
-> +
->  #ifdef CONFIG_SCHED_HRTICK
->  
->  /*
-> -- 
-> 2.17.1
-> 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
