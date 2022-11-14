@@ -2,115 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C256285B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE076285B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237756AbiKNQm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:42:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
+        id S237545AbiKNQmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:42:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237652AbiKNQmy (ORCPT
+        with ESMTP id S238000AbiKNQlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:42:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03F265F9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:41:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668444090;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vAPMcB4adDD3VD3fOe3xKGmraughThs1U7zivtVzWBA=;
-        b=DqVV6s1Z5CUxC9/rX7nOMo8RzTROelQCHTQ1Xm1qp0JfdiAMUDCwCyNS5ys6x/wRTm8J/e
-        jtoU4DaF6lsRkbsx+Yjaw42aFxaWj9YKwMxVoXyklYjNmwbKp3osNzWFKDsQFeU2Z9DnW4
-        oKHbXzH72tcvC2dshGT+bvYnBljQdDA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-67-uqG5vlnOOU-n-iyQo74Wmw-1; Mon, 14 Nov 2022 11:41:28 -0500
-X-MC-Unique: uqG5vlnOOU-n-iyQo74Wmw-1
-Received: by mail-wm1-f72.google.com with SMTP id m34-20020a05600c3b2200b003cf549cb32bso9180164wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:41:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vAPMcB4adDD3VD3fOe3xKGmraughThs1U7zivtVzWBA=;
-        b=p4R9qgIfK0ww7iU9q3AKOG2uS+zWguxZe6Evg+Mj+4XaEZ/NzPFdeqwjnR0PCDPMqU
-         j/CmRWUeZak+4JqQ9crY5h4aSFWoEPdymfyzlnYfNCxLlUnpQYb2EJ1L5fDTYps3Icq1
-         xr5Vi966zsZmeWjFVIfVzK3ewLpSBp1AiVE1uAYlANeGmhC4//q0xdrDHX3p2wLpwueB
-         +8DQxgiRVnFkDiUqh6xh3zcQ8h5LkbmHeUO1LvBruUcVTZ/BtlZ6ueXUP73jjVb+aihI
-         rMPa0KQw3r6pSnZ+LP+vnEqRBRaRFUFwwEQZq9RtcYbeJfnFRMtm0PlBAvuX9J/Sl9MB
-         oLmA==
-X-Gm-Message-State: ANoB5pk793aUHz11cSqDJ5BEW/VG6BC0wYIR3M0if8yMv/8rwkPX6OFE
-        aeXhT0hbIMLEfkFB9AZzheIDgkHyI5cQGCud5VRILMzRo3BLg1iEQncNPDIUA69r4XexMbGrgEt
-        c0fGvAlLWP0ilpbLF3HpDmGLD
-X-Received: by 2002:adf:f90f:0:b0:236:5c6c:1e06 with SMTP id b15-20020adff90f000000b002365c6c1e06mr7755387wrr.156.1668444087619;
-        Mon, 14 Nov 2022 08:41:27 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5f2l6f8RIGeBcBzU8xGAv66L/uhIhhSQt+HlQvWjp6Cbrwetta8fu53+oCpSsrch9tHIZNSA==
-X-Received: by 2002:adf:f90f:0:b0:236:5c6c:1e06 with SMTP id b15-20020adff90f000000b002365c6c1e06mr7755374wrr.156.1668444087256;
-        Mon, 14 Nov 2022 08:41:27 -0800 (PST)
-Received: from ?IPV6:2003:cb:c703:d300:d881:1fd5:bc95:5e2d? (p200300cbc703d300d8811fd5bc955e2d.dip0.t-ipconnect.de. [2003:cb:c703:d300:d881:1fd5:bc95:5e2d])
-        by smtp.gmail.com with ESMTPSA id n10-20020adff08a000000b002368f6b56desm11905661wro.18.2022.11.14.08.41.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 08:41:26 -0800 (PST)
-Message-ID: <b3fb40a1-f748-7c3f-8920-1f7a4a49cada@redhat.com>
-Date:   Mon, 14 Nov 2022 17:41:26 +0100
+        Mon, 14 Nov 2022 11:41:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9441169
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 08:41:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 21266B81084
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 16:41:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC8F4C433D6;
+        Mon, 14 Nov 2022 16:41:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668444101;
+        bh=sJlYpdlEpWSZJfz2x3sOrQSeKfAOLQ7Vr/1pDVDUXAk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cob+4nSMOS4k0r4QdKG7oEHPcdxmUh9+ev/F3T2LYs1yRQ3kDwtiDs7b1PK+ciUff
+         9IWJcHZiRs7CsoGwbp88dhGHpAOilcdhF1xXarW4dcHwQWFpPNR7+92fNSD3NCbJpQ
+         XsKfiOOroj7w7DLF52MCEk08btswoUJJP6xXD0Y39pD1abSZrCXs0kTidyzPLHwJXc
+         LyuxOTDN936sTl5oaabV1p7bJo/JZ3w6rX3BSsB7IH107k0mp9zfTUPHJR9W1pLHpV
+         ID2W6PgOO0wfH3wGlMp7UKimnB/6Yf5m//i3kCCoLa3RsO8VuXZmauvizF/BFuCY6D
+         WnsTNemuxffyg==
+Date:   Mon, 14 Nov 2022 16:41:37 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/3] Add PMEM support for RISC-V
+Message-ID: <Y3JvwagRsMOJyayy@spud>
+References: <20221114090536.1662624-1-apatel@ventanamicro.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] mm: mmap: fix documentation for vma_mas_szero
-Content-Language: en-US
-To:     Ian Cowan <ian@linux.cowan.aero>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20221114003349.41235-1-ian@linux.cowan.aero>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20221114003349.41235-1-ian@linux.cowan.aero>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221114090536.1662624-1-apatel@ventanamicro.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.11.22 01:33, Ian Cowan wrote:
-> When the struct_mm input, mm, was changed to a struct ma_state, mas, the
-> documentation for the function was never updated. This updates that
-> documentation reference.
-> 
-> Signed-off-by: Ian Cowan <ian@linux.cowan.aero>
-> ---
->   mm/mmap.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index bf2122af94e7..7ffd562c57a0 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -456,7 +456,7 @@ void vma_mas_remove(struct vm_area_struct *vma, struct ma_state *mas)
->    * vma_mas_szero() - Set a given range to zero.  Used when modifying a
->    * vm_area_struct start or end.
->    *
-> - * @mm: The struct_mm
-> + * @mas: The maple tree ma_state
->    * @start: The start address to zero
->    * @end: The end address to zero.
->    */
+Hey Anup,
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Looks like patches 2 and 3 are failing for the nommu defconfigs:
+https://patchwork.kernel.org/project/linux-riscv/list/?series=694995
+Unfortunately, if the build fails NIPA doesn't appear to save a log.
 
--- 
+In case it's relevant, should be gcc-11 & bintutils 2.37.
+
 Thanks,
+Conor.
 
-David / dhildenb
-
+On Mon, Nov 14, 2022 at 02:35:33PM +0530, Anup Patel wrote:
+> The Linux NVDIMM PEM drivers require arch support to map and access the
+> persistent memory device. This series adds RISC-V PMEM support using
+> recently added Svpbmt and Zicbom support.
+> 
+> First two patches are fixes and remaining two patches add the required
+> PMEM support for Linux RISC-V.
+> 
+> These patches can also be found in riscv_pmem_v6 branch at:
+> https://github.com/avpatel/linux.git
+> 
+> Changes since v5:
+>  - Rebased on Linux-6.1-rc5
+>  - Directly add pmem.o in obj-y of PATCH3
+>  - Dropped PATCH1 since this is already merged.
+> 
+> Changes since v4:
+>  - Simplify PATCH2 by implementing RISC-V specific arch_memremap_wb()
+> 
+> Changes since v3:
+>  - Pickup correct version of Drew's patch as PATCH1
+> 
+> Changes since v2:
+>  - Rebased on Linux-6.1-rc1
+>  - Replaced PATCH1 with the patch proposed by Drew
+> 
+> Changes since v1:
+>  - Fix error reported by test bot
+>    https://lore.kernel.org/all/202208272028.IwrNZ0Ur-lkp@intel.com/
+> 
+> Anup Patel (3):
+>   RISC-V: Fix MEMREMAP_WB for systems with Svpbmt
+>   RISC-V: Implement arch specific PMEM APIs
+>   RISC-V: Enable PMEM drivers
+> 
+>  arch/riscv/Kconfig           |  1 +
+>  arch/riscv/configs/defconfig |  1 +
+>  arch/riscv/include/asm/io.h  |  5 +++++
+>  arch/riscv/mm/Makefile       |  1 +
+>  arch/riscv/mm/pmem.c         | 21 +++++++++++++++++++++
+>  5 files changed, 29 insertions(+)
+>  create mode 100644 arch/riscv/mm/pmem.c
+> 
+> -- 
+> 2.34.1
+> 
