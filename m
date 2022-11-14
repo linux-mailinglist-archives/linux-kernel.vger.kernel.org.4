@@ -2,123 +2,378 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10BCF627633
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:01:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37511627632
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 08:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235894AbiKNHBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 02:01:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51160 "EHLO
+        id S235835AbiKNHBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 02:01:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235126AbiKNHBe (ORCPT
+        with ESMTP id S235126AbiKNHBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 02:01:34 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D75E17E35
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:01:33 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-381662c78a9so16838617b3.7
-        for <linux-kernel@vger.kernel.org>; Sun, 13 Nov 2022 23:01:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=T8++jjvsG0oXPi9XkXPJNv66frIPVuEbhLDe6tRY0RU=;
-        b=Mit4/wrbIr9xEAha0HHHyg2FaGR4UQVpWhD8bV88rdWQLdq8Db1QqDANasjWI4q01k
-         GRlCEXpGigu1GxcBuBvX76gXqBqgJB59mC6dEbI1WVjdolbyykQDyO7t4cJhWhY/Cnkv
-         vlVzr1FfXCP3c7dchMGAzG+2d/hPW4NIDUFDGqTF3VR69Frld5yLCdjb+uMB2t1YiZrK
-         4IJyqZTr0kB5DWIkqmo8R2gffOSL+SqaPwL1QczAtfC6t64YFNvO9B5Lo9uxnP9mn7QA
-         wrBI+h3dMRCrt1zodWIRayhOiwZS54qos/Ncq6FqAhakOXiOQGjUmxYex4+L0fthTNDY
-         gfIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T8++jjvsG0oXPi9XkXPJNv66frIPVuEbhLDe6tRY0RU=;
-        b=j/4leyqgss17MB4QYlSmGWDiNq0YfIs+pQe1ZeYrU/Pg0ZTbdBQXmlYwsizQLu7cwE
-         +I3NqDpHyi/g2d5CeJ7azEXqPjn6oVeGh+b8aQ+5wTZz4ZFcu+ey9BGAv54cmLPAKJhd
-         idfB3ppRQHWut505GiFyaf+kNgvmHTN54NQt/Dsg57yhbVd/yqgBHws9UFOm8/r1vHCN
-         F4JtOtsBx3vhCnrh2on+9GVastMMWFJjnTqsrUDJ57y0lYUbELArWzCbOMiGUW2JjHm7
-         g/blkyifePnz4aa0H0btUH6K1SIZExLP6WoMFZchN1ef4Jj3zlibQEEynR2nUa4fn+Bs
-         Zhsw==
-X-Gm-Message-State: ANoB5pm0gfsrLoupAgl42NPljM8jXHVLxTo25UE1WXBc6UUosbCMD7Ph
-        IaApoSKg1V3On6Or8BMmgt+8bHWZsfKP0tzBJpouPA==
-X-Google-Smtp-Source: AA0mqf7aaJuxLskBjfM+h8wmOFyBzzttsEbh4O1ZiJ/cHfJxEv3XIvoj1jdc+vUp0WOwBJSZLaTG4JS00+8SbZS3hx0=
-X-Received: by 2002:a81:13c1:0:b0:373:4460:e8bd with SMTP id
- 184-20020a8113c1000000b003734460e8bdmr11548114ywt.11.1668409292543; Sun, 13
- Nov 2022 23:01:32 -0800 (PST)
-MIME-Version: 1.0
-References: <1667986006-25420-1-git-send-email-quic_pkondeti@quicinc.com>
-In-Reply-To: <1667986006-25420-1-git-send-email-quic_pkondeti@quicinc.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 14 Nov 2022 08:00:00 +0100
-Message-ID: <CANpmjNNYRg7sYTxKN_YCts7wqGfr-2YZbw+pwdO5nTZp_bBVfg@mail.gmail.com>
-Subject: Re: [PATCH] mm/kfence: remove hung_task cruft
-To:     Pavankumar Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        Mon, 14 Nov 2022 02:01:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18E717E05;
+        Sun, 13 Nov 2022 23:01:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76326B80D30;
+        Mon, 14 Nov 2022 07:01:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCEADC433C1;
+        Mon, 14 Nov 2022 07:01:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668409287;
+        bh=ACiAjcQ0rfj7gy1ZgHyMNkBxyTpq9p6v6e6D3mejznw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mvJ++B+wvufWa1+GNoXjVsEYXM+6JXE04ZNZ4TRcgVOyVHGY0eckS9pCyTMeD62ZL
+         PkXsMTsVi9YXRykTGv3wdCQ+ADFr9O6W5eAcVj2qv1/HAG1qzDk3PqUd82+pgrJOf/
+         79Tbnj2xgL/XHsSLVt6nZd5T2tus624AtCDFG4BXduWYkHiA9uticiVxJRgNbB1LHv
+         5B4vmP3x11qJV3dDqxbBJEZYSIsb23VXtPvGg5Q3wODz/VCInBEQbkZsXfZIhxwqvA
+         ZswkiRA7q3hAFicKZUtYmS4bs7hmAUB1NxkYlknXebwloNhd/K1pDr37jWTmg6Ij4H
+         syCsof7uVWTZA==
+Date:   Mon, 14 Nov 2022 12:31:15 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        caihuoqing <caihuoqing@baidu.com>, Vinod Koul <vkoul@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v7 19/20] PCI: dwc: Introduce generic platform clocks and
+ resets
+Message-ID: <20221114070115.GG3869@thinkpad>
+References: <20221113191301.5526-1-Sergey.Semin@baikalelectronics.ru>
+ <20221113191301.5526-20-Sergey.Semin@baikalelectronics.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221113191301.5526-20-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 9 Nov 2022 at 10:26, Pavankumar Kondeti
-<quic_pkondeti@quicinc.com> wrote:
->
-> commit fdf756f71271 ("sched: Fix more TASK_state comparisons") makes
-> hung_task not to monitor TASK_IDLE tasks. The special handling to
-> workaround hung_task warnings is not required anymore.
->
-> Signed-off-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+On Sun, Nov 13, 2022 at 10:13:00PM +0300, Serge Semin wrote:
+> Currently almost each platform driver uses its own resets and clocks
+> naming in order to get the corresponding descriptors. It makes the code
+> harder to maintain and comprehend especially seeing the DWC PCIe core main
+> resets and clocks signals set hasn't changed much for about at least one
+> major IP-core release. So in order to organize things around these signals
+> we suggest to create a generic interface for them in accordance with the
+> naming introduced in the DWC PCIe IP-core reference manual:
+> 
+> Application clocks:
+> - "dbi"  - data bus interface clock (on some DWC PCIe platforms it's
+>            referred as "pclk", "pcie", "sys", "ahb", "cfg", "iface",
+>            "gio", "reg", "pcie_apb_sys");
+> - "mstr" - AXI-bus master interface clock (some DWC PCIe glue drivers
+>            refer to this clock as "port", "bus", "pcie_bus",
+>            "bus_master/master_bus/axi_m", "pcie_aclk");
+> - "slv"  - AXI-bus slave interface clock (also called as "port", "bus",
+>            "pcie_bus", "bus_slave/slave_bus/axi_s", "pcie_aclk",
+>            "pcie_inbound_axi").
+> 
+> Core clocks:
+> - "pipe" - core-PCS PIPE interface clock coming from external PHY (it's
+>            normally named by the platform drivers as just "pipe");
+> - "core" - primary clock of the controller (none of the platform drivers
+>            declare such a clock but in accordance with the ref. manual
+>            the devices may have it separately specified);
+> - "aux"  - auxiliary PMC domain clock (it is named by some platforms as
+>            "pcie_aux" and just "aux");
+> - "ref"  - Generic reference clock (it is a generic clock source, which
+>            can be used as a signal source for multiple interfaces, some
+>            platforms call it as "ref", "general", "pcie_phy",
+>            "pcie_phy_ref").
+> 
+> Application resets:
+> - "dbi"  - Data-bus interface reset (it's CSR interface clock and is
+>            normally called as "apb" though technically it's not APB but
+>            DWC PCIe-specific interface);
+> - "mstr" - AXI-bus master reset (some platforms call it as "port", "apps",
+>            "bus", "axi_m");
+> - "slv"  - ABI-bus slave reset (some platforms call it as "port", "apps",
+>            "bus", "axi_s").
+> 
+> Core resets:
+> - "non-sticky" - non-sticky CSR flags reset;
+> - "sticky"     - sticky CSR flags reset;
+> - "pipe"       - PIPE-interface (Core-PCS) logic reset (some platforms
+>                  call it just "pipe");
+> - "core"       - controller primary reset (resets everything except PMC
+>                  module, some platforms refer to this signal as "soft",
+>                  "pci");
+> - "phy"        - PCS/PHY block reset (strictly speaking it is normally
+>                  connected to the input of an external block, but the
+>                  reference manual says it must be available for the PMC
+>                  working correctly, some existing platforms call it
+>                  "pciephy", "phy", "link");
+> - "hot"        - PMC hot reset signal (also called as "sleep");
+> - "pwr"        - cold reset signal (can be referred as "pwr", "turnoff").
+> 
+> Bus reset:
+> - "perst" - PCIe standard signal used to reset the PCIe peripheral
+>             devices.
+> 
+> As you can see each platform uses it's own naming for basically the same
+> set of the signals. In the framework of this commit we suggest to add a
+> set of the clocks and reset signals resources, corresponding names and
+> identifiers for each denoted entity. At current stage the platforms will
+> be able to use the provided infrastructure to automatically request all
+> these resources and manipulate with them in the Host/EP init callbacks.
+> Alas it isn't that easy to create a common cold/hot reset procedure due to
+> too many platform-specifics in the procedure, like the external flags
+> exposure and the delays requirement.
+> 
 
-Good riddance, thanks.
+I'm not really sure if this generification is going to help. For instance, in
+Qcom platforms we have some required clocks and some optional clocks and that
+too differs with each SoC. For sure you can add logic in the core dwc driver to
+handle those cases but that starting to do that will add a pile of mess to the
+dwc driver.
 
-Reviewed-by: Marco Elver <elver@google.com>
+IMO, if the dwc driver is not going to use these clocks, like controlling the
+clocks/resets, then there is no point in keeping the resource acquiring part in
+it.
 
+Thanks,
+Mani
+
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
 > ---
->  mm/kfence/core.c | 12 +-----------
->  1 file changed, 1 insertion(+), 11 deletions(-)
->
-> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-> index 1417888..08f5bd6 100644
-> --- a/mm/kfence/core.c
-> +++ b/mm/kfence/core.c
-> @@ -26,7 +26,6 @@
->  #include <linux/random.h>
->  #include <linux/rcupdate.h>
->  #include <linux/sched/clock.h>
-> -#include <linux/sched/sysctl.h>
->  #include <linux/seq_file.h>
->  #include <linux/slab.h>
->  #include <linux/spinlock.h>
-> @@ -799,16 +798,7 @@ static void toggle_allocation_gate(struct work_struct *work)
->         /* Enable static key, and await allocation to happen. */
->         static_branch_enable(&kfence_allocation_key);
->
-> -       if (sysctl_hung_task_timeout_secs) {
-> -               /*
-> -                * During low activity with no allocations we might wait a
-> -                * while; let's avoid the hung task warning.
-> -                */
-> -               wait_event_idle_timeout(allocation_wait, atomic_read(&kfence_allocation_gate),
-> -                                       sysctl_hung_task_timeout_secs * HZ / 2);
-> -       } else {
-> -               wait_event_idle(allocation_wait, atomic_read(&kfence_allocation_gate));
-> -       }
-> +       wait_event_idle(allocation_wait, atomic_read(&kfence_allocation_gate));
->
->         /* Disable static key and reset timer. */
->         static_branch_disable(&kfence_allocation_key);
-> --
-> 2.7.4
->
+> 
+> Changelog v3:
+> - Add a method to at least request the generic clocks and resets. (@Rob)
+> - Add GPIO-based PERST# signal support.
+> ---
+>  drivers/pci/controller/dwc/pcie-designware.c | 91 ++++++++++++++++++++
+>  drivers/pci/controller/dwc/pcie-designware.h | 42 +++++++++
+>  2 files changed, 133 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index d31f9d41d5cb..1e06ccf2dc9e 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -10,7 +10,9 @@
+>  
+>  #include <linux/align.h>
+>  #include <linux/bitops.h>
+> +#include <linux/clk.h>
+>  #include <linux/delay.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/ioport.h>
+>  #include <linux/of.h>
+>  #include <linux/of_platform.h>
+> @@ -20,11 +22,89 @@
+>  #include "../../pci.h"
+>  #include "pcie-designware.h"
+>  
+> +static const char * const dw_pcie_app_clks[DW_PCIE_NUM_APP_CLKS] = {
+> +	[DW_PCIE_DBI_CLK] = "dbi",
+> +	[DW_PCIE_MSTR_CLK] = "mstr",
+> +	[DW_PCIE_SLV_CLK] = "slv",
+> +};
+> +
+> +static const char * const dw_pcie_core_clks[DW_PCIE_NUM_CORE_CLKS] = {
+> +	[DW_PCIE_PIPE_CLK] = "pipe",
+> +	[DW_PCIE_CORE_CLK] = "core",
+> +	[DW_PCIE_AUX_CLK] = "aux",
+> +	[DW_PCIE_REF_CLK] = "ref",
+> +};
+> +
+> +static const char * const dw_pcie_app_rsts[DW_PCIE_NUM_APP_RSTS] = {
+> +	[DW_PCIE_DBI_RST] = "dbi",
+> +	[DW_PCIE_MSTR_RST] = "mstr",
+> +	[DW_PCIE_SLV_RST] = "slv",
+> +};
+> +
+> +static const char * const dw_pcie_core_rsts[DW_PCIE_NUM_CORE_RSTS] = {
+> +	[DW_PCIE_NON_STICKY_RST] = "non-sticky",
+> +	[DW_PCIE_STICKY_RST] = "sticky",
+> +	[DW_PCIE_CORE_RST] = "core",
+> +	[DW_PCIE_PIPE_RST] = "pipe",
+> +	[DW_PCIE_PHY_RST] = "phy",
+> +	[DW_PCIE_HOT_RST] = "hot",
+> +	[DW_PCIE_PWR_RST] = "pwr",
+> +};
+> +
+> +static int dw_pcie_get_clocks(struct dw_pcie *pci)
+> +{
+> +	int i, ret;
+> +
+> +	for (i = 0; i < DW_PCIE_NUM_APP_CLKS; i++)
+> +		pci->app_clks[i].id = dw_pcie_app_clks[i];
+> +
+> +	for (i = 0; i < DW_PCIE_NUM_CORE_CLKS; i++)
+> +		pci->core_clks[i].id = dw_pcie_core_clks[i];
+> +
+> +	ret = devm_clk_bulk_get_optional(pci->dev, DW_PCIE_NUM_APP_CLKS,
+> +					 pci->app_clks);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return devm_clk_bulk_get_optional(pci->dev, DW_PCIE_NUM_CORE_CLKS,
+> +					  pci->core_clks);
+> +}
+> +
+> +static int dw_pcie_get_resets(struct dw_pcie *pci)
+> +{
+> +	int i, ret;
+> +
+> +	for (i = 0; i < DW_PCIE_NUM_APP_RSTS; i++)
+> +		pci->app_rsts[i].id = dw_pcie_app_rsts[i];
+> +
+> +	for (i = 0; i < DW_PCIE_NUM_CORE_RSTS; i++)
+> +		pci->core_rsts[i].id = dw_pcie_core_rsts[i];
+> +
+> +	ret = devm_reset_control_bulk_get_optional_shared(pci->dev,
+> +							  DW_PCIE_NUM_APP_RSTS,
+> +							  pci->app_rsts);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = devm_reset_control_bulk_get_optional_exclusive(pci->dev,
+> +							     DW_PCIE_NUM_CORE_RSTS,
+> +							     pci->core_rsts);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pci->pe_rst = devm_gpiod_get_optional(pci->dev, "reset", GPIOD_OUT_HIGH);
+> +	if (IS_ERR(pci->pe_rst))
+> +		return PTR_ERR(pci->pe_rst);
+> +
+> +	return 0;
+> +}
+> +
+>  int dw_pcie_get_resources(struct dw_pcie *pci)
+>  {
+>  	struct platform_device *pdev = to_platform_device(pci->dev);
+>  	struct device_node *np = dev_of_node(pci->dev);
+>  	struct resource *res;
+> +	int ret;
+>  
+>  	if (!pci->dbi_base) {
+>  		res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "dbi");
+> @@ -62,6 +142,17 @@ int dw_pcie_get_resources(struct dw_pcie *pci)
+>  	if (!pci->atu_size)
+>  		pci->atu_size = SZ_4K;
+>  
+> +	/* LLDD is supposed to manually switch the clocks and resets state */
+> +	if (dw_pcie_cap_is(pci, REQ_RES)) {
+> +		ret = dw_pcie_get_clocks(pci);
+> +		if (ret)
+> +			return ret;
+> +
+> +		ret = dw_pcie_get_resets(pci);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	if (pci->link_gen < 1)
+>  		pci->link_gen = of_pci_get_max_link_speed(np);
+>  
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
+> index 081f169e6021..393dfb931df6 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.h
+> +++ b/drivers/pci/controller/dwc/pcie-designware.h
+> @@ -13,10 +13,13 @@
+>  
+>  #include <linux/bitfield.h>
+>  #include <linux/bitops.h>
+> +#include <linux/clk.h>
+>  #include <linux/dma-mapping.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/irq.h>
+>  #include <linux/msi.h>
+>  #include <linux/pci.h>
+> +#include <linux/reset.h>
+>  
+>  #include <linux/pci-epc.h>
+>  #include <linux/pci-epf.h>
+> @@ -45,6 +48,7 @@
+>  	 __dw_pcie_ver_cmp(_pci, TYPE_ ## _type, >=))
+>  
+>  /* DWC PCIe controller capabilities */
+> +#define DW_PCIE_CAP_REQ_RES		0
+>  #define DW_PCIE_CAP_IATU_UNROLL		1
+>  #define DW_PCIE_CAP_CDM_CHECK		2
+>  
+> @@ -233,6 +237,39 @@ enum dw_pcie_device_mode {
+>  	DW_PCIE_RC_TYPE,
+>  };
+>  
+> +enum dw_pcie_app_clk {
+> +	DW_PCIE_DBI_CLK,
+> +	DW_PCIE_MSTR_CLK,
+> +	DW_PCIE_SLV_CLK,
+> +	DW_PCIE_NUM_APP_CLKS
+> +};
+> +
+> +enum dw_pcie_core_clk {
+> +	DW_PCIE_PIPE_CLK,
+> +	DW_PCIE_CORE_CLK,
+> +	DW_PCIE_AUX_CLK,
+> +	DW_PCIE_REF_CLK,
+> +	DW_PCIE_NUM_CORE_CLKS
+> +};
+> +
+> +enum dw_pcie_app_rst {
+> +	DW_PCIE_DBI_RST,
+> +	DW_PCIE_MSTR_RST,
+> +	DW_PCIE_SLV_RST,
+> +	DW_PCIE_NUM_APP_RSTS
+> +};
+> +
+> +enum dw_pcie_core_rst {
+> +	DW_PCIE_NON_STICKY_RST,
+> +	DW_PCIE_STICKY_RST,
+> +	DW_PCIE_CORE_RST,
+> +	DW_PCIE_PIPE_RST,
+> +	DW_PCIE_PHY_RST,
+> +	DW_PCIE_HOT_RST,
+> +	DW_PCIE_PWR_RST,
+> +	DW_PCIE_NUM_CORE_RSTS
+> +};
+> +
+>  struct dw_pcie_host_ops {
+>  	int (*host_init)(struct dw_pcie_rp *pp);
+>  	void (*host_deinit)(struct dw_pcie_rp *pp);
+> @@ -332,6 +369,11 @@ struct dw_pcie {
+>  	int			num_lanes;
+>  	int			link_gen;
+>  	u8			n_fts[2];
+> +	struct clk_bulk_data	app_clks[DW_PCIE_NUM_APP_CLKS];
+> +	struct clk_bulk_data	core_clks[DW_PCIE_NUM_CORE_CLKS];
+> +	struct reset_control_bulk_data	app_rsts[DW_PCIE_NUM_APP_RSTS];
+> +	struct reset_control_bulk_data	core_rsts[DW_PCIE_NUM_CORE_RSTS];
+> +	struct gpio_desc		*pe_rst;
+>  };
+>  
+>  #define to_dw_pcie_from_pp(port) container_of((port), struct dw_pcie, pp)
+> -- 
+> 2.38.1
+> 
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
