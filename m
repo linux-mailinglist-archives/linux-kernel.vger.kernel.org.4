@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3ED627CD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE30627CD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 12:48:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236853AbiKNLsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 06:48:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
+        id S236619AbiKNLsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 06:48:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236929AbiKNLr3 (ORCPT
+        with ESMTP id S236940AbiKNLra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 06:47:29 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427C821804
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:45:28 -0800 (PST)
+        Mon, 14 Nov 2022 06:47:30 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BF824087
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 03:45:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AD35DCE0FA7
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:45:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3B2AC43470;
-        Mon, 14 Nov 2022 11:45:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1881EB80E78
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:45:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58D34C433C1;
+        Mon, 14 Nov 2022 11:45:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668426324;
-        bh=ZL8klCP1h/76P9kKdRbQUqGgBjn+aOHuV9EO8AnyNpU=;
+        s=k20201202; t=1668426326;
+        bh=F41S5/OfJJjx4Qyx7KDXsJWPyr7ThQmJ94m+jQiNNUU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gDBhXqESy6UCVyjpxo3+gHOdn5+SwcoEj+Qouka4izFXaIPdOuHoSpb7k+SFn8oth
-         VXuPpZRMcCBKR4Xw+OevAnNvdq5k3eMN/i84bvYUEFHdPDd4BoFx9FtnmgrO0i3xRF
-         ivayV7hWJ8m3iLSTe02S8hRElQjKacFRyR9IFaoD2gauyajwW1hT/MaKiV2ShRD6gO
-         h3+tgaW552ZpfxVqw5BIYEsiDZJyWkmNMXCqtQiX7sOBj10i/5f6pWmcc9K2uBFT6o
-         lMzmLMQTMKOFTTaa+kz3osbkQX8JW+Evh3eViaTG6NbUHImSKEWdb0N6ny77tLWAw3
-         uuw6XHCb0q7zQ==
+        b=la1ciPpE+MIEVxztF90HGogzquhV08rLd3CsVUecIZyEyXFO5P7K4UPkoTyfnvLqe
+         oUMOIiKfbnSMlLH8X67gdclvvmnSs5uh/T5YUsCNDd3DXFnt2rd+wfoXNIpEdxsFcv
+         TZRrtnoHYltBZ7AWs9y146QMRODFePDO4jpkTqcx6Aal5rcpFilq/Eak7oKV5xkEy/
+         V6+LPxwF7j1bSe9M7pjGIOt2c4yw7tnK6WEWxpIrge8ihcc+HmUtpvbi1ieF0BFe19
+         Lulw23FgtYKiIrJ5/qmL8ISkxM9W9u0k/OtloelPjQZrVLX9gUIIIR0DqsxVtL/EHQ
+         1CpfBlSEyzcfw==
 From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Andi Kleen <andi@firstfloor.org>, Andi Kleen <ak@linux.intel.com>,
+Cc:     Andi Kleen <andi@firstfloor.org>, Miguel Ojeda <ojeda@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Martin Liska <mliska@suse.cz>, Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 36/46] lib/string, lto: disable gcc LTO for string.o
-Date:   Mon, 14 Nov 2022 12:43:34 +0100
-Message-Id: <20221114114344.18650-37-jirislaby@kernel.org>
+Subject: [PATCH 37/46] Compiler attributes, lto: disable __flatten with LTO
+Date:   Mon, 14 Nov 2022 12:43:35 +0100
+Message-Id: <20221114114344.18650-38-jirislaby@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221114114344.18650-1-jirislaby@kernel.org>
 References: <20221114114344.18650-1-jirislaby@kernel.org>
@@ -55,30 +56,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andi Kleen <andi@firstfloor.org>
 
-gcc can generate calls for string functions implicitly, and that assumes
-they exist in a non-LTOed copy. Mark string.o as LTO disabled to avoid
-missing symbols at link time.
+Using __flatten causes a simple gcc 12 LTO build not fit into 16GB
+anymore. Disable flatten with LTO. With gcc 12, the build still does not
+finish linking in 10 minutes, eating 40GB of RAM at that point.
 
-Signed-off-by: Andi Kleen <ak@linux.intel.com>
+There is an upstream bug about this:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107014
+
+Until this is resolved, simply disable __flatten with LTO.
+
+In the future, instead of this patch, we should likely drop __flatten
+and its only user (pcpu_build_alloc_info()) and use always_inline to all
+functions which shall be inlined there.
+
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Andi Kleen <andi@firstfloor.org>
 Signed-off-by: Martin Liska <mliska@suse.cz>
 Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 ---
- lib/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
+ include/linux/compiler_attributes.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/lib/Makefile b/lib/Makefile
-index 59bd7c2f793a..bf72b58de5c8 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -27,6 +27,8 @@ KASAN_SANITIZE_string.o := n
- CFLAGS_string.o += -fno-stack-protector
- endif
+diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+index be6c71fd5ebb..09cf8eebcb0d 100644
+--- a/include/linux/compiler_attributes.h
++++ b/include/linux/compiler_attributes.h
+@@ -229,7 +229,12 @@
+  * gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#Common-Function-Attributes
+  * clang: https://clang.llvm.org/docs/AttributeReference.html#flatten
+  */
++#ifndef CONFIG_LTO_GCC
+ # define __flatten			__attribute__((flatten))
++#else
++/* Causes very large memory use with gcc in LTO mode */
++# define __flatten
++#endif
  
-+CFLAGS_string.o += $(DISABLE_LTO_GCC)
-+
- lib-y := ctype.o string.o vsprintf.o cmdline.o \
- 	 rbtree.o radix-tree.o timerqueue.o xarray.o \
- 	 maple_tree.o idr.o extable.o irq_regs.o argv_split.o \
+ /*
+  * Note the missing underscores.
 -- 
 2.38.1
 
