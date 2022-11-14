@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A265628787
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:53:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D923762878C
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237809AbiKNRwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
+        id S237335AbiKNRyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 12:54:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237766AbiKNRwa (ORCPT
+        with ESMTP id S237378AbiKNRxt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:52:30 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A7022B08;
-        Mon, 14 Nov 2022 09:52:28 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 77AE6201F5;
-        Mon, 14 Nov 2022 17:52:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1668448347; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oz8YSs1KJVliL/2aW1xDmRDRza50VBN/mTm9YScVZfs=;
-        b=Y7mniaueGfgQQjcdXcDLeViStkDPrq7bUWrxQ9o2ohcp0QX5wurHpemxDWEX/zyxIOdmm4
-        ahN5H42yYKyGTub1/teRDQiBDers0olzs/sQdNyHWyzegi4XILIzw9ztJ+U17DtAold1J9
-        mK8yFHRHrgIBlzzsXDf0DBt/EnYMRjI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5BFF613A8C;
-        Mon, 14 Nov 2022 17:52:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HmkyFFuAcmMmZgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 14 Nov 2022 17:52:27 +0000
-Date:   Mon, 14 Nov 2022 18:52:26 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Zhongkun He <hezhongkun.hzk@bytedance.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, corbet@lwn.net,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [External] Re: [PATCH v2] mm: add new syscall
- pidfd_set_mempolicy().
-Message-ID: <Y3KAWnFkG7hC1D/B@dhcp22.suse.cz>
-References: <20221111084051.2121029-1-hezhongkun.hzk@bytedance.com>
- <20221111112732.30e1696bcd0d5b711c188a9a@linux-foundation.org>
- <a44f794e-fe60-e261-3631-9107822d5c36@bytedance.com>
- <Y3IqLzvduM6HqPJV@dhcp22.suse.cz>
- <Y3IqrCrDNdM5LDFt@dhcp22.suse.cz>
+        Mon, 14 Nov 2022 12:53:49 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34C1D51;
+        Mon, 14 Nov 2022 09:53:30 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 2AEHr3it015824
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 12:53:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1668448387; bh=0oY2FHq6aam4ViqDXvERuEDXT+lWMYAi0k7t0ceXGtY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=T9jIyOKT6a9ZXBo5B45dK908bfA8wWFMu1z6LujbTJTlNSMlBf8ZzOQ+et6xCQ6x0
+         xTzBiiWDsrbYShdtJ3r4k6VkH2LITjVbkBSGaa2kDDJqKgnt7HI5TaouvAvBwOpLI0
+         CFD41/h4aBfC9r6k77/89pKxwDzXc4lyZfo4uzvnMKmgICxhgWMTDSiCBYThAyuOLF
+         JneBERVwGpadBtlN0oncGjkfbXJLpIzXxH0hTiCrKcbB2fMO8IcQLLtDWERVg3VpRH
+         HTjy5zGARrPldeCwcFuRuhNxGDCsamEAZ2ZTb/qWl+R9wducW5cOLKcH7JrjlF792k
+         3YxI3FaICDjNQ==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id C5C4615C34C3; Mon, 14 Nov 2022 12:53:03 -0500 (EST)
+Date:   Mon, 14 Nov 2022 12:53:03 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Waiman Long <longman@redhat.com>
+Cc:     syzbot <syzbot+ea70429cd5cf47ba8937@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com,
+        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in ext4_enable_quotas
+Message-ID: <Y3KAfyQOf6GvEo/x@mit.edu>
+References: <0000000000006a74dd05e9931449@google.com>
+ <000000000000073a4a05ed620676@google.com>
+ <Y3Jb1Wcs/mQlZP32@mit.edu>
+ <8c3757ae-1aeb-49a4-47af-598d1d4737ea@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Y3IqrCrDNdM5LDFt@dhcp22.suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8c3757ae-1aeb-49a4-47af-598d1d4737ea@redhat.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 14-11-22 12:46:53, Michal Hocko wrote:
-> On Mon 14-11-22 12:44:48, Michal Hocko wrote:
-> > On Mon 14-11-22 00:41:21, Zhongkun He wrote:
-> > > Hi Andrew, thanks for your replay.
-> > > 
-> > > > This sounds a bit suspicious.  Please share much more detail about
-> > > > these races.  If we proced with this design then mpol_put_async()
-> > > > shouild have comments which fully describe the need for the async free.
-> > > > 
-> > > > How do we *know* that these races are fully prevented with this
-> > > > approach?  How do we know that mpol_put_async() won't free the data
-> > > > until the race window has fully passed?
-> > > 
-> > > A mempolicy can be either associated with a process or with a VMA.
-> > > All vma manipulation is somewhat protected by a down_read on
-> > > mmap_lock.In process context there is no locking because only
-> > > the process accesses its own state before.
-> > 
-> > We shouldn't really rely on mmap_sem for this IMO. There is alloc_lock
-> > (aka task lock) that makes sure the policy is stable so that caller can
-> > atomically take a reference and hold on the policy. And we do not do
-> > that consistently and this should be fixed. E.g. just looking at some
-> > random places like allowed_mems_nr (relying on get_task_policy) is
-> > completely lockless and some paths (like fadvise) do not use any of the
-> > explicit (alloc_lock) or implicit (mmap_lock) locking. That means that
-> > the task_work based approach cannot really work in this case, right?
+On Mon, Nov 14, 2022 at 11:21:33AM -0500, Waiman Long wrote:
 > 
-> Just to be more explicit. Task work based approach still requires an
-> additional synchronization among different threads unless I miss
-> something so this is really fragile synchronization model.
+> lockdep_set_subclass() should be translated into a call to
+> lockdep_init_map_type():
+> 
+> #define lockdep_set_subclass(lock, sub)                                 \
+>         lockdep_init_map_type(&(lock)->dep_map, #lock, (lock)->dep_map.key,
+> sub,\
+> (lock)->dep_map.wait_type_inner,          \
+> (lock)->dep_map.wait_type_outer,          \
+>                               (lock)->dep_map.lock_type)
+> 
+> All memory access should be within the bound of the given "&ei->i_data_sem".
+> Also lockdep_init_map_type() is not in the stack trace. So it is not a
+> problem within this lockdep_init_map_type() function. So is it possible that
+> the given inode pointer is invalid?
 
-Scratch that. I've managed to confuse myself. Multi-threading doesn't
-play any role as the mempolicy changed by the syscall is per-task_struct
-so task_work context is indeed mutually exclusive with any in kernel use
-of the policy.
+Well, the inode pointer would be coming from iget().  And since this
+is coming from ext4 mount operation, we would be getting a fresh inode
+that should be freshly allocated.  So the possibilities which comes to
+mind is some kind of use-after-free (probbly in f2fs) that was
+smashing the inode itself, such that ei->i_data_sem was pointing off
+into la-la-land, or in the inode cache's internal data srtuctures.
 
-I will need to think about it some more.
--- 
-Michal Hocko
-SUSE Labs
+The reason why I would assume it would be in f2fs is I *assume*
+syzkaller would have pruned down the test case enough to remove the
+messing around with mounting the invalid f2fs file system.  But the
+other mystery here is why didn't KASAN report the use-after-free (if
+that it is what it was) in the thousands of f2fs mount and
+unmount operations before it finally triggered?
+
+Anyway, I plan to ignore this Syzkaller unless report Syzkaller (or
+someone else) can come up with a more minimal/reliable reproducer.  (I
+mean, we could open a bug, but with kind of reproducer, it would get
+prioritized P3 or P4 and ignored for years until it finally got closed
+in a buganizer bankruptcy, so I figured I would just skip a few steps.  :-)
+
+Cheers,
+
+						- Ted
