@@ -2,374 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8148F628896
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B22F762889A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:53:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236162AbiKNSu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 13:50:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
+        id S235836AbiKNSxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 13:53:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236133AbiKNSuw (ORCPT
+        with ESMTP id S229484AbiKNSw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 13:50:52 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8967DF1B;
-        Mon, 14 Nov 2022 10:50:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668451851; x=1699987851;
-  h=subject:from:to:cc:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=GdDop3Zb517gVHlWLT6nRTwUKcnJ2dCYJ+r/uzuNVIM=;
-  b=jeVBzP4I73HMyUI8VUrfrwi8QQ/rBy7w1Nz8coQUcneQPWccub8RXwU3
-   ojjXbkCbnh3hDHHckgSk1WHiuRCISi5xu5TR/SAuGYZy6kFJnWpeJHWJR
-   MQTCSlVkGdj/l8d6tKVBYKrce01OX31Hn4xOsmQkL9F3PhXT+clgmZwgO
-   ZZviQGHiSDsx8ab/DKLVJ92vVQpwypGQOKmcqqNTWcAnktHtXALXbXE/B
-   k2dalqO5T3rzWTK3VhNLzuEbumsPuH2u6UrybXxOXe5r4XOLIm17s3P6r
-   Cext3F9dYEFsqg3cYUAqJj+EZGlvOIkJUY0B6Xu1Nk4HO+rV2a/Nh1hvV
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="338841812"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="338841812"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 10:50:51 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="727639068"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="727639068"
-Received: from shahr-mobl1.amr.corp.intel.com (HELO dwillia2-xfh.jf.intel.com) ([10.209.78.174])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 10:50:50 -0800
-Subject: [PATCH v6] memregion: Add cpu_cache_invalidate_memregion() interface
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     linux-cxl@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org
-Date:   Mon, 14 Nov 2022 10:50:49 -0800
-Message-ID: <166845177597.1351848.15454720528892170333.stgit@dwillia2-xfh.jf.intel.com>
-In-Reply-To: <166698148737.3132474.5901874516011784201.stgit@dwillia2-xfh.jf.intel.com>
-References: <166698148737.3132474.5901874516011784201.stgit@dwillia2-xfh.jf.intel.com>
-User-Agent: StGit/0.18-3-g996c
+        Mon, 14 Nov 2022 13:52:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CB619035
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 10:52:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B437DB811BC
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 18:52:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2FAAC433C1;
+        Mon, 14 Nov 2022 18:52:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668451973;
+        bh=zvg4yxCGie4tX/vQmTmF0cCzkrLxEjab7mvc5+U8IcA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JEbKDv+IN0jvUH1bxC7CP5GCvElH9fdkjAl4tEW+0hY35kctPwL0EYbL/eUjc0b8M
+         P+4gZah0g5s82bpEihxQp2kJmUMmMFwn6WlrMAvQoUKWlCSGwKmwl2d9uEqOkxtRjK
+         aiqRg8lLNFtTn7HSjS08UKtPRAGFfWYyY90oQVog0MTy1Hcie0e+trso83JI81r6sR
+         PvNXXADI6P5FBgdDTA5qkbseGo9TqP8Bnt/R/g7n2LkjU/FN3V8wFkU9tAufvjuYA2
+         S4RTCzxgA7YDg35E1cgmkh/QqJkgVy19wNBtC9JvZ4OkY/bAcoyGab+49gEHohEIbP
+         yEXNZpAVQj/Mg==
+Date:   Mon, 14 Nov 2022 10:52:51 -0800
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, Andi Kleen <andi@firstfloor.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Martin Liska <mliska@suse.cz>, Jiri Slaby <jslaby@suse.cz>
+Subject: Re: [PATCH 08/46] static_call, lto: Mark static keys as __visible
+Message-ID: <20221114185251.eq45bjri6tsv4nct@treble>
+References: <20221114114344.18650-1-jirislaby@kernel.org>
+ <20221114114344.18650-9-jirislaby@kernel.org>
+ <Y3Jj67TZ9tA2a6Pf@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y3Jj67TZ9tA2a6Pf@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Davidlohr Bueso <dave@stgolabs.net>
+On Mon, Nov 14, 2022 at 04:51:07PM +0100, Peter Zijlstra wrote:
+> On Mon, Nov 14, 2022 at 12:43:06PM +0100, Jiri Slaby (SUSE) wrote:
+> > From: Andi Kleen <andi@firstfloor.org>
+> > 
+> > Symbols referenced from assembler (either directly or e.f. from
+> > DEFINE_STATIC_KEY()) need to be global and visible in gcc LTO because
+> > they could end up in a different object file than the assembler. This
+> > can lead to linker errors without this patch.
+> > 
+> > So mark static call functions as __visible, namely static keys here.
+> 
+> Why doesn't llvm-lto need this?
+> 
+> Also, why am I getting a random selection of the patchset?
 
-With CXL security features, and CXL dynamic provisioning, global CPU
-cache flushing nvdimm requirements are no longer specific to that
-subsystem, even beyond the scope of security_ops. CXL will need such
-semantics for features not necessarily limited to persistent memory.
+Same, please Cc me on the whole set next time.
 
-The functionality this is enabling is to be able to instantaneously
-secure erase potentially terabytes of memory at once and the kernel
-needs to be sure that none of the data from before the erase is still
-present in the cache. It is also used when unlocking a memory device
-where speculative reads and firmware accesses could have cached poison
-from before the device was unlocked. Lastly this facility is used when
-mapping new devices, or new capacity into an established physical
-address range. I.e. when the driver switches DeviceA mapping AddressX to
-DeviceB mapping AddressX then any cached data from DeviceA:AddressX
-needs to be invalidated.
-
-This capability is typically only used once per-boot (for unlock), or
-once per bare metal provisioning event (secure erase), like when handing
-off the system to another tenant or decommissioning a device. It may
-also be used for dynamic CXL region provisioning.
-
-Users must first call cpu_cache_has_invalidate_memregion() to know
-whether this functionality is available on the architecture. On x86 this
-respects the constraints of when wbinvd() is tolerable. It is already
-the case that wbinvd() is problematic to allow in VMs due its global
-performance impact and KVM, for example, has been known to just trap and
-ignore the call. With confidential computing guest execution of wbinvd()
-may even trigger an exception. Given guests should not be messing with
-the bare metal address map via CXL configuration changes
-cpu_cache_has_invalidate_memregion() returns false in VMs.
-
-While this global cache invalidation facility, is exported to modules,
-since NVDIMM and CXL support can be built as a module, it is not for
-general use. The intent is that this facility is not available outside
-of specific "device-memory" use cases. To make that expectation as clear
-as possible the API is scoped to a new "DEVMEM" module namespace that
-only the NVDIMM and CXL subsystems are expected to import.
-
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Tested-by: Dave Jiang <dave.jiang@intel.com>
-Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-Co-developed-by: Dan Williams <dan.j.williams@intel.com>
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
----
-Changes since v5 [1]:
-- A collection of build fixed reported by the 0day build robot
-
-[1]: http://lore.kernel.org/r/166698148737.3132474.5901874516011784201.stgit@dwillia2-xfh.jf.intel.com
-
- arch/x86/Kconfig             |    1 +
- arch/x86/mm/pat/set_memory.c |   18 ++++++++++++++++++
- drivers/acpi/nfit/intel.c    |   43 ++++++++++++++++++++----------------------
- include/linux/memregion.h    |   38 +++++++++++++++++++++++++++++++++++++
- lib/Kconfig                  |    3 +++
- 5 files changed, 80 insertions(+), 23 deletions(-)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 67745ceab0db..e16b2b15d67e 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -69,6 +69,7 @@ config X86
- 	select ARCH_ENABLE_THP_MIGRATION if X86_64 && TRANSPARENT_HUGEPAGE
- 	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
- 	select ARCH_HAS_CACHE_LINE_SIZE
-+	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
- 	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_DEBUG_VIRTUAL
- 	select ARCH_HAS_DEBUG_VM_PGTABLE	if !X86_PAE
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 2e5a045731de..ef34ba21aa92 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -20,6 +20,7 @@
- #include <linux/kernel.h>
- #include <linux/cc_platform.h>
- #include <linux/set_memory.h>
-+#include <linux/memregion.h>
- 
- #include <asm/e820/api.h>
- #include <asm/processor.h>
-@@ -330,6 +331,23 @@ void arch_invalidate_pmem(void *addr, size_t size)
- EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
- #endif
- 
-+#ifdef CONFIG_ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-+bool cpu_cache_has_invalidate_memregion(void)
-+{
-+	return !cpu_feature_enabled(X86_FEATURE_HYPERVISOR);
-+}
-+EXPORT_SYMBOL_NS_GPL(cpu_cache_has_invalidate_memregion, DEVMEM);
-+
-+int cpu_cache_invalidate_memregion(int res_desc)
-+{
-+	if (WARN_ON_ONCE(!cpu_cache_has_invalidate_memregion()))
-+		return -ENXIO;
-+	wbinvd_on_all_cpus();
-+	return 0;
-+}
-+EXPORT_SYMBOL_NS_GPL(cpu_cache_invalidate_memregion, DEVMEM);
-+#endif
-+
- static void __cpa_flush_all(void *arg)
- {
- 	unsigned long cache = (unsigned long)arg;
-diff --git a/drivers/acpi/nfit/intel.c b/drivers/acpi/nfit/intel.c
-index 8dd792a55730..fa0e57e35162 100644
---- a/drivers/acpi/nfit/intel.c
-+++ b/drivers/acpi/nfit/intel.c
-@@ -3,6 +3,7 @@
- #include <linux/libnvdimm.h>
- #include <linux/ndctl.h>
- #include <linux/acpi.h>
-+#include <linux/memregion.h>
- #include <asm/smp.h>
- #include "intel.h"
- #include "nfit.h"
-@@ -190,8 +191,6 @@ static int intel_security_change_key(struct nvdimm *nvdimm,
- 	}
- }
- 
--static void nvdimm_invalidate_cache(void);
--
- static int __maybe_unused intel_security_unlock(struct nvdimm *nvdimm,
- 		const struct nvdimm_key_data *key_data)
- {
-@@ -213,6 +212,9 @@ static int __maybe_unused intel_security_unlock(struct nvdimm *nvdimm,
- 	if (!test_bit(NVDIMM_INTEL_UNLOCK_UNIT, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
-+	if (!cpu_cache_has_invalidate_memregion())
-+		return -EINVAL;
-+
- 	memcpy(nd_cmd.cmd.passphrase, key_data->data,
- 			sizeof(nd_cmd.cmd.passphrase));
- 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
-@@ -228,7 +230,7 @@ static int __maybe_unused intel_security_unlock(struct nvdimm *nvdimm,
- 	}
- 
- 	/* DIMM unlocked, invalidate all CPU caches before we read it */
--	nvdimm_invalidate_cache();
-+	cpu_cache_invalidate_memregion(IORES_DESC_PERSISTENT_MEMORY);
- 
- 	return 0;
- }
-@@ -297,8 +299,11 @@ static int __maybe_unused intel_security_erase(struct nvdimm *nvdimm,
- 	if (!test_bit(cmd, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
-+	if (!cpu_cache_has_invalidate_memregion())
-+		return -EINVAL;
-+
- 	/* flush all cache before we erase DIMM */
--	nvdimm_invalidate_cache();
-+	cpu_cache_invalidate_memregion(IORES_DESC_PERSISTENT_MEMORY);
- 	memcpy(nd_cmd.cmd.passphrase, key->data,
- 			sizeof(nd_cmd.cmd.passphrase));
- 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
-@@ -318,7 +323,7 @@ static int __maybe_unused intel_security_erase(struct nvdimm *nvdimm,
- 	}
- 
- 	/* DIMM erased, invalidate all CPU caches before we read it */
--	nvdimm_invalidate_cache();
-+	cpu_cache_invalidate_memregion(IORES_DESC_PERSISTENT_MEMORY);
- 	return 0;
- }
- 
-@@ -341,6 +346,9 @@ static int __maybe_unused intel_security_query_overwrite(struct nvdimm *nvdimm)
- 	if (!test_bit(NVDIMM_INTEL_QUERY_OVERWRITE, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
-+	if (!cpu_cache_has_invalidate_memregion())
-+		return -EINVAL;
-+
- 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
- 	if (rc < 0)
- 		return rc;
-@@ -355,7 +363,7 @@ static int __maybe_unused intel_security_query_overwrite(struct nvdimm *nvdimm)
- 	}
- 
- 	/* flush all cache before we make the nvdimms available */
--	nvdimm_invalidate_cache();
-+	cpu_cache_invalidate_memregion(IORES_DESC_PERSISTENT_MEMORY);
- 	return 0;
- }
- 
-@@ -380,8 +388,11 @@ static int __maybe_unused intel_security_overwrite(struct nvdimm *nvdimm,
- 	if (!test_bit(NVDIMM_INTEL_OVERWRITE, &nfit_mem->dsm_mask))
- 		return -ENOTTY;
- 
-+	if (!cpu_cache_has_invalidate_memregion())
-+		return -EINVAL;
-+
- 	/* flush all cache before we erase DIMM */
--	nvdimm_invalidate_cache();
-+	cpu_cache_invalidate_memregion(IORES_DESC_PERSISTENT_MEMORY);
- 	memcpy(nd_cmd.cmd.passphrase, nkey->data,
- 			sizeof(nd_cmd.cmd.passphrase));
- 	rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
-@@ -401,22 +412,6 @@ static int __maybe_unused intel_security_overwrite(struct nvdimm *nvdimm,
- 	}
- }
- 
--/*
-- * TODO: define a cross arch wbinvd equivalent when/if
-- * NVDIMM_FAMILY_INTEL command support arrives on another arch.
-- */
--#ifdef CONFIG_X86
--static void nvdimm_invalidate_cache(void)
--{
--	wbinvd_on_all_cpus();
--}
--#else
--static void nvdimm_invalidate_cache(void)
--{
--	WARN_ON_ONCE("cache invalidation required after unlock\n");
--}
--#endif
--
- static const struct nvdimm_security_ops __intel_security_ops = {
- 	.get_flags = intel_security_flags,
- 	.freeze = intel_security_freeze,
-@@ -775,3 +770,5 @@ static const struct nvdimm_fw_ops __intel_fw_ops = {
- };
- 
- const struct nvdimm_fw_ops *intel_fw_ops = &__intel_fw_ops;
-+
-+MODULE_IMPORT_NS(DEVMEM);
-diff --git a/include/linux/memregion.h b/include/linux/memregion.h
-index c04c4fd2e209..bf83363807ac 100644
---- a/include/linux/memregion.h
-+++ b/include/linux/memregion.h
-@@ -3,6 +3,7 @@
- #define _MEMREGION_H_
- #include <linux/types.h>
- #include <linux/errno.h>
-+#include <linux/bug.h>
- 
- struct memregion_info {
- 	int target_node;
-@@ -20,4 +21,41 @@ static inline void memregion_free(int id)
- {
- }
- #endif
-+
-+/**
-+ * cpu_cache_invalidate_memregion - drop any CPU cached data for
-+ *     memregions described by @res_desc
-+ * @res_desc: one of the IORES_DESC_* types
-+ *
-+ * Perform cache maintenance after a memory event / operation that
-+ * changes the contents of physical memory in a cache-incoherent manner.
-+ * For example, device memory technologies like NVDIMM and CXL have
-+ * device secure erase, and dynamic region provision that can replace
-+ * the memory mapped to a given physical address.
-+ *
-+ * Limit the functionality to architectures that have an efficient way
-+ * to writeback and invalidate potentially terabytes of address space at
-+ * once.  Note that this routine may or may not write back any dirty
-+ * contents while performing the invalidation. It is only exported for
-+ * the explicit usage of the NVDIMM and CXL modules in the 'DEVMEM'
-+ * symbol namespace on bare platforms.
-+ *
-+ * Returns 0 on success or negative error code on a failure to perform
-+ * the cache maintenance.
-+ */
-+#ifdef CONFIG_ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-+int cpu_cache_invalidate_memregion(int res_desc);
-+bool cpu_cache_has_invalidate_memregion(void);
-+#else
-+static inline bool cpu_cache_has_invalidate_memregion(void)
-+{
-+	return false;
-+}
-+
-+static inline int cpu_cache_invalidate_memregion(int res_desc)
-+{
-+	WARN_ON_ONCE("CPU cache invalidation required");
-+	return -ENXIO;
-+}
-+#endif
- #endif /* _MEMREGION_H_ */
-diff --git a/lib/Kconfig b/lib/Kconfig
-index 9bbf8a4b2108..9eb514abcdec 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -672,6 +672,9 @@ config ARCH_HAS_PMEM_API
- config MEMREGION
- 	bool
- 
-+config ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-+	bool
-+
- config ARCH_HAS_MEMREMAP_COMPAT_ALIGN
- 	bool
- 
-
+-- 
+Josh
