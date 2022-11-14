@@ -2,210 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F683628360
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:01:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5E7628475
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 16:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236364AbiKNPBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 10:01:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
+        id S236715AbiKNPzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 10:55:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237146AbiKNPA5 (ORCPT
+        with ESMTP id S235984AbiKNPz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 10:00:57 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265691DA67;
-        Mon, 14 Nov 2022 07:00:54 -0800 (PST)
-Received: from canpemm500001.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N9stZ6cXnzHw1J;
-        Mon, 14 Nov 2022 23:00:22 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- canpemm500001.china.huawei.com (7.192.104.163) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 23:00:51 +0800
-From:   Xie XiuQi <xiexiuqi@huawei.com>
-To:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <james.morse@arm.com>, <bp@alien8.de>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <tanxiaofei@huawei.com>, <lvying6@huawei.com>
-Subject: [PATCH] arm64: fix error unhandling in synchronous External Data Abort
-Date:   Mon, 14 Nov 2022 23:19:15 +0800
-Message-ID: <20221114151915.167414-1-xiexiuqi@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        Mon, 14 Nov 2022 10:55:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780FC2E6AB
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 07:55:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32D0CB8107B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 15:55:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03DBDC433D6;
+        Mon, 14 Nov 2022 15:55:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668441325;
+        bh=H2Y1GL/SJK1DpbLM59qFjLKurzWZxWEgT0xFdgJ3650=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jBhOPP3h1WF4rxpqWKIvOmKqNs2uikqxUy9fToQFF9JrbNpiKr9IEzcVY/01QBhk5
+         lsYsCx1PnX4rlO/AY4mllj4Cs0MZErjbCzO2lvNAnGs80qG/uMWX6qbUJUyslIS4d5
+         WNLBb9DMfb494tS/tiga5PfINY0nqh1F4vaMiXefdtpWVv0JrHs7t8SYiitWTkXQ4c
+         4BccEEnJJjKGYiyFOgTzvxo6eU0KfsjeTCAt2DHpJav2DySaiHb3WKLPqUuGwrcV/9
+         M16voDV37mDz8CBtqrtFyYh71J7/O/umd/WS4zRTyxMoQ7Y4I2q9/NBvGPVpgv9GCB
+         8YL83M29KtWAw==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        syzbot+f8f3dfa4abc489e768a1@syzkaller.appspotmail.com
+Subject: [PATCH] f2fs: fix to do sanity check on i_extra_isize in is_alive()
+Date:   Mon, 14 Nov 2022 11:05:41 +0800
+Message-Id: <20221114030541.6589-1-chao@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500001.china.huawei.com (7.192.104.163)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the RAS documentation, if we cannot determine the impact
-of the error based on the details of the error when an SEA occurs, the
-process cannot safely continue to run. Therefore, for unhandled error,
-we should signal the system and terminate the process immediately.
+syzbot found a f2fs bug:
 
-2.2 Generating error exceptions:
-  "An error exception is generated when a detected error is signaled
-  to the PE as an in-band error response to an architecturally-executed
-  memory access or cache maintenance operation. This includes any explicit
-  data access, instruction fetch, translation table walk, or hardware
-  update to the translation tables made by an architecturally-executed
-  instruction." [1]
+BUG: KASAN: slab-out-of-bounds in data_blkaddr fs/f2fs/f2fs.h:2891 [inline]
+BUG: KASAN: slab-out-of-bounds in is_alive fs/f2fs/gc.c:1117 [inline]
+BUG: KASAN: slab-out-of-bounds in gc_data_segment fs/f2fs/gc.c:1520 [inline]
+BUG: KASAN: slab-out-of-bounds in do_garbage_collect+0x386a/0x3df0 fs/f2fs/gc.c:1734
+Read of size 4 at addr ffff888076557568 by task kworker/u4:3/52
 
-2.3 Taking error exceptions:
-  Software is only able to successfully recover execution and make progress
-  from a restart address for the exception by executing an Exception Return
-  instruction to branch to the instruction at this restart address if all
-  of the following are true: [2]
-    - The error has not been silently propagated by the PE.
-    - At the point when the Exception Return instruction is executed, the
-      PE state and memory system state are consistent with the PE having
-      executed all of the instructions up to but not including the
-      instruction at the restart address, and none afterwards. That is,
-      at least one of the following restart conditions is true:
-        - The error has been not architecturally consumed by the PE
-          andinfected the PE state.
-        - Executing the instruction at the restart address will not consume
-          the error and will correct any corrupt state by overwriting it
-          with the correct value or values
+CPU: 1 PID: 52 Comm: kworker/u4:3 Not tainted 6.1.0-rc4-syzkaller-00362-gfef7fd48922d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: writeback wb_workfn (flush-7:0)
+Call Trace:
+<TASK>
+__dump_stack lib/dump_stack.c:88 [inline]
+dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+print_address_description mm/kasan/report.c:284 [inline]
+print_report+0x15e/0x45d mm/kasan/report.c:395
+kasan_report+0xbb/0x1f0 mm/kasan/report.c:495
+data_blkaddr fs/f2fs/f2fs.h:2891 [inline]
+is_alive fs/f2fs/gc.c:1117 [inline]
+gc_data_segment fs/f2fs/gc.c:1520 [inline]
+do_garbage_collect+0x386a/0x3df0 fs/f2fs/gc.c:1734
+f2fs_gc+0x88c/0x20a0 fs/f2fs/gc.c:1831
+f2fs_balance_fs+0x544/0x6b0 fs/f2fs/segment.c:410
+f2fs_write_inode+0x57e/0xe20 fs/f2fs/inode.c:753
+write_inode fs/fs-writeback.c:1440 [inline]
+__writeback_single_inode+0xcfc/0x1440 fs/fs-writeback.c:1652
+writeback_sb_inodes+0x54d/0xf90 fs/fs-writeback.c:1870
+wb_writeback+0x2c5/0xd70 fs/fs-writeback.c:2044
+wb_do_writeback fs/fs-writeback.c:2187 [inline]
+wb_workfn+0x2dc/0x12f0 fs/fs-writeback.c:2227
+process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
 
-After commit 8fcc4ae6faf8 ("arm64: acpi: Make apei_claim_sea() synchronise
-with APEI's irq work"), we deferred de SEA process to irq_work.
-For example, an memory reading error without valid pa, the process isn't
-been terminated. It is not safe.
+The root cause is that we forgot to do sanity check on .i_extra_isize
+in below path, result in accessing invalid address later, fix it.
+- gc_data_segment
+ - is_alive
+  - data_blkaddr
+   - offset_in_addr
 
-In this patch, a SIGBUS is force signaled to fix this case.
-
-Note:
-RAS documentation: https://developer.arm.com/documentation/ddi0587/latest
-
-Fixes: 8fcc4ae6faf8 ("arm64: acpi: Make apei_claim_sea() synchronise with APEI's irq work")
-Signed-off-by: Xie XiuQi <xiexiuqi@huawei.com>
+Reported-by: syzbot+f8f3dfa4abc489e768a1@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/linux-f2fs-devel/0000000000003cb3c405ed5c17f9@google.com/T/#u
+Signed-off-by: Chao Yu <chao@kernel.org>
 ---
- arch/arm64/kernel/acpi.c      |  6 ++++++
- drivers/acpi/apei/apei-base.c |  4 ++++
- drivers/acpi/apei/ghes.c      | 14 +++++++++++---
- include/acpi/apei.h           |  1 +
- 4 files changed, 22 insertions(+), 3 deletions(-)
+ fs/f2fs/gc.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/kernel/acpi.c b/arch/arm64/kernel/acpi.c
-index a5a256e3f9fe..a8cb02ddaf33 100644
---- a/arch/arm64/kernel/acpi.c
-+++ b/arch/arm64/kernel/acpi.c
-@@ -32,6 +32,7 @@
- #include <asm/cpu_ops.h>
- #include <asm/daifflags.h>
- #include <asm/smp_plat.h>
-+#include <asm/traps.h>
- 
- int acpi_noirq = 1;		/* skip ACPI IRQ initialization */
- int acpi_disabled = 1;
-@@ -407,6 +408,11 @@ int apei_claim_sea(struct pt_regs *regs)
- 	return err;
- }
- 
-+void arch_apei_do_unhandled_sea(void)
-+{
-+	arm64_force_sig_mceerr(BUS_MCEERR_AR, 0, 0, "Unhandled processor error");
-+}
-+
- void arch_reserve_mem_area(acpi_physical_address addr, size_t size)
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index 69d7d8db3daa..0aaabfd2cf91 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1077,7 +1077,7 @@ static bool is_alive(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
  {
- 	memblock_mark_nomap(addr, size);
-diff --git a/drivers/acpi/apei/apei-base.c b/drivers/acpi/apei/apei-base.c
-index 9b52482b4ed5..f372cf872125 100644
---- a/drivers/acpi/apei/apei-base.c
-+++ b/drivers/acpi/apei/apei-base.c
-@@ -773,6 +773,10 @@ void __weak arch_apei_report_mem_error(int sev,
- }
- EXPORT_SYMBOL_GPL(arch_apei_report_mem_error);
+ 	struct page *node_page;
+ 	nid_t nid;
+-	unsigned int ofs_in_node, max_addrs;
++	unsigned int ofs_in_node, max_addrs, base;
+ 	block_t source_blkaddr;
  
-+void __weak arch_apei_do_unhandled_sea(void)
-+{
-+}
-+
- int apei_osc_setup(void)
- {
- 	static u8 whea_uuid_str[] = "ed855e0c-6c90-47bf-a62a-26de0fc5ad5c";
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index 9952f3a792ba..7da39da4577a 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -48,6 +48,7 @@
- #include <asm/fixmap.h>
- #include <asm/tlbflush.h>
- #include <ras/ras_event.h>
-+#include <asm/traps.h>
- 
- #include "apei-internal.h"
- 
-@@ -483,11 +484,12 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
- 	return false;
- }
- 
--static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int sev)
-+static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata,
-+				     int sev, int type)
- {
- 	struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
- 	bool queued = false;
--	int sec_sev, i;
-+	int sec_sev, i, unhandled_err_count = 0;
- 	char *p;
- 
- 	log_arm_hw_error(err);
-@@ -521,9 +523,14 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
- 		pr_warn_ratelimited(FW_WARN GHES_PFX
- 				    "Unhandled processor error type: %s\n",
- 				    error_type);
-+		unhandled_err_count++;
-+
- 		p += err_info->length;
+ 	nid = le32_to_cpu(sum->nid);
+@@ -1103,11 +1103,17 @@ static bool is_alive(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
+ 		return false;
  	}
  
-+	if (unhandled_err_count && type == ACPI_HEST_NOTIFY_SEA)
-+		arch_apei_do_unhandled_sea();
+-	max_addrs = IS_INODE(node_page) ? DEF_ADDRS_PER_INODE :
+-						DEF_ADDRS_PER_BLOCK;
+-	if (ofs_in_node >= max_addrs) {
+-		f2fs_err(sbi, "Inconsistent ofs_in_node:%u in summary, ino:%u, nid:%u, max:%u",
+-			ofs_in_node, dni->ino, dni->nid, max_addrs);
++	if (IS_INODE(node_page)) {
++		base = offset_in_addr(F2FS_INODE(node_page));
++		max_addrs = DEF_ADDRS_PER_INODE;
++	} else {
++		base = 0;
++		max_addrs = DEF_ADDRS_PER_BLOCK;
++	}
 +
- 	return queued;
- }
- 
-@@ -631,6 +638,7 @@ static bool ghes_do_proc(struct ghes *ghes,
- 	const guid_t *fru_id = &guid_null;
- 	char *fru_text = "";
- 	bool queued = false;
-+	int type = ghes->generic->notify.type;
- 
- 	sev = ghes_severity(estatus->error_severity);
- 	apei_estatus_for_each_section(estatus, gdata) {
-@@ -654,7 +662,7 @@ static bool ghes_do_proc(struct ghes *ghes,
- 			ghes_handle_aer(gdata);
- 		}
- 		else if (guid_equal(sec_type, &CPER_SEC_PROC_ARM)) {
--			queued = ghes_handle_arm_hw_error(gdata, sev);
-+			queued = ghes_handle_arm_hw_error(gdata, sev, type);
- 		} else {
- 			void *err = acpi_hest_get_payload(gdata);
- 
-diff --git a/include/acpi/apei.h b/include/acpi/apei.h
-index dc60f7db5524..663db1f9556f 100644
---- a/include/acpi/apei.h
-+++ b/include/acpi/apei.h
-@@ -52,6 +52,7 @@ int erst_clear(u64 record_id);
- 
- int arch_apei_enable_cmcff(struct acpi_hest_header *hest_hdr, void *data);
- void arch_apei_report_mem_error(int sev, struct cper_sec_mem_err *mem_err);
-+void arch_apei_do_unhandled_sea(void);
- 
- #endif
- #endif
++	if (base + ofs_in_node >= max_addrs) {
++		f2fs_err(sbi, "Inconsistent blkaddr offset: base:%u, ofs_in_node:%u, max:%u, ino:%u, nid:%u",
++			base, ofs_in_node, max_addrs, dni->ino, dni->nid);
+ 		f2fs_put_page(node_page, 1);
+ 		return false;
+ 	}
 -- 
-2.20.1
+2.36.1
 
