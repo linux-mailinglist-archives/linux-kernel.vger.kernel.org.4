@@ -2,248 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B36062834B
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAFE62835B
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:59:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237035AbiKNOzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 09:55:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59468 "EHLO
+        id S236432AbiKNO7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235771AbiKNOzx (ORCPT
+        with ESMTP id S236124AbiKNO6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 09:55:53 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6341CFFA
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:55:52 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id z139-20020a6bc991000000b006dac0d359edso5780370iof.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 06:55:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bwa63EUoiUdCiH174DlY0chW2QYqCxx5oOMcGGsl1B4=;
-        b=Hp7MIQGxzlKQDjj+v5QkxoqhCiCu9MYrI2UIsRG1T+IdTYf8WjLXxg6/wy20yWmeD2
-         EaKnpUF3JNe3LfTi5bHy+wTSkrLZJ7rxBFg3Rmp7UzN15kibwCUP2aqcAEHnot+puPLX
-         g/NiRAYfSuIOIxIXyJ3NvZ7VwYfT/dmebm2mbl19Ccr1oJ/uKuCSBfsu1XJ8r6o//sql
-         GpSScoAIKRr8C2dZ9q/SWBh31mP30s5Vuoe0R+PZemMiPmvM0xDjcV6bWdUAlOBV+RyJ
-         sGVAUk14daVbcu8zaTQPbu1vyT4Udy9hUycMWdpmxn9SEvrz4UJYylzzY0PNLNWL0Krz
-         qnoQ==
-X-Gm-Message-State: ANoB5pk6qhfCSBGwPb24fV0bVs3Pvk6FsXAF+ep6RsjlGYjFfwz2Bax9
-        F7SnuZ8YK0QoYp+yj0ZsraDh/VHeCWJMFFqS+/KIngdGk+fj
-X-Google-Smtp-Source: AA0mqf6Y1L3Ed2axmQjoS2i4jvVM2zoE3AogcP9FZ8PbVzne8joB54P50KhKXJmHuMNSwoAG2AqJGa5ledYvoZRo58RjOIxCWw2L
+        Mon, 14 Nov 2022 09:58:50 -0500
+Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2124.outbound.protection.outlook.com [40.107.11.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC67F1DA67;
+        Mon, 14 Nov 2022 06:58:48 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VBWx1D/j3t1TCpxo2wgFpDAO7a1cvIFwAmOA4S+v1VtFJ31mnOagwygzuBy+SjcoOv+BI8VxcjKDgWmmhL6CSxwTHO6mat40Y9bz3VTrH7ZWS0SETm+zoFRMtuWiygkOvz334a9JkAcTXgofDIZaII9jmG5qnMcfzgfOk/HZOL8JNr0quvfuqwrcOOkJfB7cSmf6nqhS8QOXkDaMOxXAVSQxhHCvdSaUq99uesgCxyYAqPfZ/llLiLDu5Rf+rnDLs1sJ8/oF8seXTx3R2p/JPCFcwhXdodMRxq+mXOuZuS7geWOGGcf/0n+t845s083uMpIc6JXZlPOq8r8GLvJOWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nwLvjN7UqFR4+ktK51aUJTCFdTr2wbHU1dP6fXqAVdE=;
+ b=S4wKE4S4SeV1N+iBxbJWz/7DhQKACnrHDhHticPYk9JPYJRrUC5IFCngnbL+oy6DWMZvm1yL3A3bC1xQRK/ZIyVr+NiMwC6+5qEbr4QtUz6puVPC657zhvKi6QUPr5NYNqxwN1P1VGUTVajTombYDaX9/SbumqZJP3bjfB6FzK6VhE40SGndvWu/yK2OOJ6oYMH+CwZqZ3wKnuYDeq/bAriA/xlaDbI9cHC9V5JM6mien9cjxJUeMG9j5xYd8g2/xkrvdLZoJpcGf2OuYAfih8rrSWx5PM6HWjtRRaqh0iu7QyfLg+AZwMI5qKcHg0iw3UALGPGxV/VpcligJ5RiJQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nwLvjN7UqFR4+ktK51aUJTCFdTr2wbHU1dP6fXqAVdE=;
+ b=FUyWpup5knN7vNQhe72Seot8AGJNuAzRmDWLwksUR6u/yfHPxWtL4H/pjCGgQqH6LqJY9XUQHD0RlDxAcmj+PLNdahrrQa6RQXEVZw2ZcqUnwKuGCdil3HR/GIf2EohVEirwk8fBTZ5076pn3GfZBCnOhl1JUu+YSoQoL7qOj0Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by LO3P265MB1915.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:b2::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
+ 2022 14:58:46 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::6c07:e2da:3210:3fd7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::6c07:e2da:3210:3fd7%6]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
+ 14:58:46 +0000
+Date:   Mon, 14 Nov 2022 14:58:45 +0000
+From:   Gary Guo <gary@garyguo.net>
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+Subject: Re: [PATCH v1 22/28] rust: str: add `fmt!` macro
+Message-ID: <20221114145845.519fe889@GaryWorkstation>
+In-Reply-To: <20221110164152.26136-23-ojeda@kernel.org>
+References: <20221110164152.26136-1-ojeda@kernel.org>
+        <20221110164152.26136-23-ojeda@kernel.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P265CA0391.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:f::19) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9b19:0:b0:6c1:dfd6:abd9 with SMTP id
- y25-20020a5d9b19000000b006c1dfd6abd9mr5649948ion.0.1668437751998; Mon, 14 Nov
- 2022 06:55:51 -0800 (PST)
-Date:   Mon, 14 Nov 2022 06:55:51 -0800
-In-Reply-To: <000000000000cceef005ed659943@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000089b1a405ed6f6ff7@google.com>
-Subject: Re: [syzbot] possible deadlock in virtual_nci_close
-From:   syzbot <syzbot+8040d16d30c215f821de@syzkaller.appspotmail.com>
-To:     bongsu.jeon@samsung.com, dvyukov@google.com,
-        krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO3P265MB1915:EE_
+X-MS-Office365-Filtering-Correlation-Id: ab11f999-36db-43de-d465-08dac650bb42
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: G1XA43U3x3I9X6wxs1WcKeGiHlEYp8sc4FldRidoxl5KSLsZkwFhvjoWd1KcUSFdUKtQFOxsxAOp8zIol/eAa+Qf/9HdWvj2gbxa9yfr0kWXV+Hi4VOeJJZKdgH/x3CmpF7sut2tln6mwoXVJfB5RjbWTHBvBDNYZPXTNSXiUC3CFpZdlu69Cu2xTcmOtygEfipBZQA1fHT1Sf1hYGjoD3nJUxtSBJHKS1k1yw+EVhiEkjjHWi4F5LPdIpjvCGm/eD1mmPQTQC5zO0r/zR2SlyUtShIFQyPJ3s5BaoU0wu8EbdQbiNUWL5NyFSPdA915nt2DOfwY9iyxpU4v/OTFf9P/wGnUtoc2DP4To8QsfQSMcE5Cw1X5smQcOaApYhVj2qCcwTPWzAqZ46iJ2zfrPawXGMHx+qZRuhVU9e+5IQ1lnUowFZa9kPNng+GsO0UrMeCYBuPdz8Zl1odnuWa4IHMWSujmkV68ewg0pjpydh3tIUitHfZhG488fLOrdQ0OonQy2u+XirsGoFfSz8FmxEu/rggdiMxLC1GNTrKeuU36Cx2mtHnl6wCw6vLUHAggh13TfuDNgb/uaT+Xqyzxk2X6Ya5yGBZPz4ZTbtShhBRlI8OlAsT4NUNbTEd2KrtRTUmRK8Gl1r7jrYtY5pPxm5A7Ux4/W8OVpP/r6Z30ystyQL+A16FkAs+lTBHOVShXITCUpgo3YRDuDGWPAUoGmslRp/qZz1WIEYsvKcytEV4n+1B92DZnveerN9md0kPe
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(7916004)(376002)(346002)(396003)(136003)(366004)(39830400003)(451199015)(2906002)(8676002)(33716001)(66556008)(66946007)(86362001)(6916009)(316002)(54906003)(478600001)(6486002)(5660300002)(41300700001)(8936002)(38100700002)(6512007)(1076003)(186003)(6506007)(9686003)(4326008)(66476007)(81973001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sn/idpsNd7bssk5guTGsVDBJj3J4BxAMc0uUi0ADxWVRPR2om3jPXnamSwPy?=
+ =?us-ascii?Q?Wd7rJkSberqmGdmoi9bVelXcbn2m4qnrbl0zzSrlTnEc09TNnUYXrUFeTKFg?=
+ =?us-ascii?Q?Q+Sskjc3E6t76Ue9G9/uOpz42sTtu2ZNpj0PIRcGI7PNc2SsTBPPtXYl68Wv?=
+ =?us-ascii?Q?QOayCtcw0f/ybaPeURocnacJ36pw+EySxP85CPHUEMn28zVOdqPVJFYhXEJs?=
+ =?us-ascii?Q?eCHpMGsyDgGn9Na1XHe3AXNStCwoawNYv/o+dbggYyAHcC+4N0wuj+rGOs4k?=
+ =?us-ascii?Q?f4/1XwxYgVymmCdRvO1UQzN06JuWP9ZaADWwuRWI2TE5szsn1Vpr6d7jy4rW?=
+ =?us-ascii?Q?HBpiq44afTnsNv3Ou0NG0lyHzJb5eQG5QP5bwbcig1LFc4biGhSPjKH8s6Bz?=
+ =?us-ascii?Q?2M9hnniFZQPWH8NMUA3y6wF8VsMvJJ2w4ZQAqpAKQOgVxfGYFIkTtIaAYCUx?=
+ =?us-ascii?Q?mPqyw/PUw+WqQUs+vKxOBiJz2z9STYR0AFkaED/1Ztj1eDj7dmZlFHhGNMKY?=
+ =?us-ascii?Q?NSkeQQQajqLe0g0ZIoDXnd/tTeWm3m4xb3ahtS9UtFRieWjC7MVwgDkpNLoR?=
+ =?us-ascii?Q?KTcpYa6Y42wbg/XVYUryTU3NwXV//Jzzo6S9+3P3ZhJ4k9Rn0PiQs+oCw84/?=
+ =?us-ascii?Q?4g0J2RS6yK79VJNQZHCeU5RM0yVrqsPr0s7HHnMFj2DgNhh5N35TG81++iq3?=
+ =?us-ascii?Q?EGzoKzxGGY9pp88/Afjr+v2WZYD9shUAWqq1BDXEo4w7VtNa2XSbdYQ5xRUU?=
+ =?us-ascii?Q?DtGpaf9Js2eRPfTbQxv58XAPnaukGZX5+IIJTImetG1T2s6fSjGlYb8cC3KE?=
+ =?us-ascii?Q?9eKApolWphouwqHI4FU7/xlXipmpaMkH1c0pSY95WajY4VK0XBjA4JftZBxd?=
+ =?us-ascii?Q?JOjOR4apsSCmD2AkXV+XrkhPq7ID3TOkVbogimKxPGt+X5M1LAUqwX8XzoLr?=
+ =?us-ascii?Q?zaLHdkwCNf7T+Li4fcL2HXgwU4lX5vJcNYHgTgG+1vTvVKT8PWhzfWwDvKBn?=
+ =?us-ascii?Q?+tUPYdiGbP2Y7SFZz33PUHyXBhJsInBrdwZez56OtY1wY6a419LNi9eZh+Nz?=
+ =?us-ascii?Q?ULxVSnOr6ivDm4Ig6YzDwuguaXcWq8p/m0GQ1uKqyxpzUp98mZ4ZL4RzonpO?=
+ =?us-ascii?Q?R98wk20mjfUkSFNwtgePlPj2BrcaJdjNU6qrZEc+M95lWlExVqPfsfXgWrPC?=
+ =?us-ascii?Q?sfNkTkNW+JcKqsHNfGP4c3+JYjR1C8hSZSUtrjRKSpdhcE90rvE9S1vWQEVy?=
+ =?us-ascii?Q?ZpNbSiOxuhiv0T58rtQQcY/VdRUSXIbccSQdeuhdAwgybK5TR+Gozwe9M2HN?=
+ =?us-ascii?Q?iVYURdmha+iiDxct4TF/B7AOiYYIkgY63pMhkEtajr+LlpyNe4Iit40IjNfm?=
+ =?us-ascii?Q?xft3jLEV/EBf4moQwth1NExqklE4DmoA9L6hoVFbST33xUJ5oDQUPW2ujsg0?=
+ =?us-ascii?Q?Bf3NcQL2zRYPAiz6qhFefoGI5ORC1ePSe+r3jqr+3R3tuFEO9flD+8NSbZlU?=
+ =?us-ascii?Q?pjp8IXOCBt2EburQ2aSev9zL627tUXsnCTD4oxDqyXp6fv+O/kwKuoZ/JiI4?=
+ =?us-ascii?Q?IXGsaan5BF8ObKQabBi2VxNV7EDUPuyCXL73p1ZC6vtTVuoWXs6DSkB3gDQx?=
+ =?us-ascii?Q?Yw0qNjYppIXXSBHhaqUgSjqpLJkZa5RqT48vrRJ/1FJk?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab11f999-36db-43de-d465-08dac650bb42
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 14:58:46.8373
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Mwm0wezDzkrcyhzhMEVdjOPxETY3LEcYUK48Ggt6Y/IPt6iB1UPtLX8ANczZG8wmFtMPJvcj5IGD3Knt5ObFtA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO3P265MB1915
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Thu, 10 Nov 2022 17:41:34 +0100
+Miguel Ojeda <ojeda@kernel.org> wrote:
 
-HEAD commit:    1621b6eaebf7 Merge branch 'for-next/fixes' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=108bcd85880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=606e57fd25c5c6cc
-dashboard link: https://syzkaller.appspot.com/bug?extid=8040d16d30c215f821de
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11b08dd1880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14fcee02880000
+> From: Wedson Almeida Filho <wedsonaf@gmail.com>
+> 
+> Add the `fmt!` macro, which is a convenience alias for the Rust
+> `core::format_args!` macro.
+> 
+> For instance, it may be used to create a `CString`:
+> 
+>     CString::try_from_fmt(fmt!("{}{}", "abc", 42))?
+> 
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+> [Reworded, adapted for upstream and applied latest changes]
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/82aa7741098d/disk-1621b6ea.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/f6be08c4e4c2/vmlinux-1621b6ea.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/296b6946258a/Image-1621b6ea.gz.xz
+Reviewed-by: Gary Guo <gary@garyguo.net>
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8040d16d30c215f821de@syzkaller.appspotmail.com
-
-nci: nci_start_poll: failed to set local general bytes
-nci: __nci_request: wait_for_completion_interruptible_timeout failed 0
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc4-syzkaller-31872-g1621b6eaebf7 #0 Not tainted
-------------------------------------------------------
-syz-executor424/3032 is trying to acquire lock:
-ffff80000d5fac10 (nci_mutex){+.+.}-{3:3}, at: virtual_nci_close+0x28/0x58 drivers/nfc/virtual_ncidev.c:44
-
-but task is already holding lock:
-ffff0000cb900350 (&ndev->req_lock){+.+.}-{3:3}, at: nci_close_device+0x74/0x2b4 net/nfc/nci/core.c:560
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #3 (&ndev->req_lock){+.+.}-{3:3}:
-       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
-       nci_request net/nfc/nci/core.c:148 [inline]
-       nci_set_local_general_bytes+0xbc/0x480 net/nfc/nci/core.c:774
-       nci_start_poll+0x1e8/0x474 net/nfc/nci/core.c:838
-       nfc_start_poll+0xfc/0x170 net/nfc/core.c:225
-       nfc_genl_start_poll+0xd4/0x174 net/nfc/netlink.c:828
-       genl_family_rcv_msg_doit net/netlink/genetlink.c:756 [inline]
-       genl_family_rcv_msg net/netlink/genetlink.c:833 [inline]
-       genl_rcv_msg+0x458/0x4f4 net/netlink/genetlink.c:850
-       netlink_rcv_skb+0xe8/0x1d4 net/netlink/af_netlink.c:2540
-       genl_rcv+0x38/0x50 net/netlink/genetlink.c:861
-       netlink_unicast_kernel+0xfc/0x1dc net/netlink/af_netlink.c:1319
-       netlink_unicast+0x164/0x248 net/netlink/af_netlink.c:1345
-       netlink_sendmsg+0x484/0x584 net/netlink/af_netlink.c:1921
-       sock_sendmsg_nosec net/socket.c:714 [inline]
-       sock_sendmsg net/socket.c:734 [inline]
-       ____sys_sendmsg+0x2f8/0x440 net/socket.c:2482
-       ___sys_sendmsg net/socket.c:2536 [inline]
-       __sys_sendmsg+0x1ac/0x228 net/socket.c:2565
-       __do_sys_sendmsg net/socket.c:2574 [inline]
-       __se_sys_sendmsg net/socket.c:2572 [inline]
-       __arm64_sys_sendmsg+0x2c/0x3c net/socket.c:2572
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
--> #2 (&genl_data->genl_data_mutex){+.+.}-{3:3}:
-       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
-       nfc_urelease_event_work+0x88/0x16c net/nfc/netlink.c:1811
-       process_one_work+0x2d8/0x504 kernel/workqueue.c:2289
-       worker_thread+0x340/0x610 kernel/workqueue.c:2436
-       kthread+0x12c/0x158 kernel/kthread.c:376
-       ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:863
-
--> #1 (nfc_devlist_mutex){+.+.}-{3:3}:
-       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
-       nfc_register_device+0x34/0x208 net/nfc/core.c:1116
-       nci_register_device+0x338/0x3b0 net/nfc/nci/core.c:1256
-       virtual_ncidev_open+0x6c/0xd8 drivers/nfc/virtual_ncidev.c:146
-       misc_open+0x1b8/0x200 drivers/char/misc.c:143
-       chrdev_open+0x2b4/0x2e8 fs/char_dev.c:414
-       do_dentry_open+0x364/0x748 fs/open.c:882
-       vfs_open+0x38/0x48 fs/open.c:1013
-       do_open fs/namei.c:3557 [inline]
-       path_openat+0xe34/0x11c4 fs/namei.c:3713
-       do_filp_open+0xdc/0x1b8 fs/namei.c:3740
-       do_sys_openat2+0xb8/0x22c fs/open.c:1310
-       do_sys_open fs/open.c:1326 [inline]
-       __do_sys_openat fs/open.c:1342 [inline]
-       __se_sys_openat fs/open.c:1337 [inline]
-       __arm64_sys_openat+0xb0/0xe0 fs/open.c:1337
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
--> #0 (nci_mutex){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain kernel/locking/lockdep.c:3831 [inline]
-       __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
-       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
-       virtual_nci_close+0x28/0x58 drivers/nfc/virtual_ncidev.c:44
-       nci_close_device+0x188/0x2b4 net/nfc/nci/core.c:592
-       nci_unregister_device+0x3c/0x100 net/nfc/nci/core.c:1291
-       virtual_ncidev_close+0x70/0xb0 drivers/nfc/virtual_ncidev.c:166
-       __fput+0x198/0x3e4 fs/file_table.c:320
-       ____fput+0x20/0x30 fs/file_table.c:348
-       task_work_run+0x100/0x148 kernel/task_work.c:179
-       exit_task_work include/linux/task_work.h:38 [inline]
-       do_exit+0x2dc/0xcac kernel/exit.c:820
-       do_group_exit+0x98/0xcc kernel/exit.c:950
-       get_signal+0xabc/0xb2c kernel/signal.c:2858
-       do_signal+0x128/0x438 arch/arm64/kernel/signal.c:1071
-       do_notify_resume+0xc0/0x1f0 arch/arm64/kernel/signal.c:1124
-       prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
-       exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
-       el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
-other info that might help us debug this:
-
-Chain exists of:
-  nci_mutex --> &genl_data->genl_data_mutex --> &ndev->req_lock
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&ndev->req_lock);
-                               lock(&genl_data->genl_data_mutex);
-                               lock(&ndev->req_lock);
-  lock(nci_mutex);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor424/3032:
- #0: ffff0000cb900350 (&ndev->req_lock){+.+.}-{3:3}, at: nci_close_device+0x74/0x2b4 net/nfc/nci/core.c:560
-
-stack backtrace:
-CPU: 0 PID: 3032 Comm: syz-executor424 Not tainted 6.1.0-rc4-syzkaller-31872-g1621b6eaebf7 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2055
- check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain kernel/locking/lockdep.c:3831 [inline]
- __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
- __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
- virtual_nci_close+0x28/0x58 drivers/nfc/virtual_ncidev.c:44
- nci_close_device+0x188/0x2b4 net/nfc/nci/core.c:592
- nci_unregister_device+0x3c/0x100 net/nfc/nci/core.c:1291
- virtual_ncidev_close+0x70/0xb0 drivers/nfc/virtual_ncidev.c:166
- __fput+0x198/0x3e4 fs/file_table.c:320
- ____fput+0x20/0x30 fs/file_table.c:348
- task_work_run+0x100/0x148 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0x2dc/0xcac kernel/exit.c:820
- do_group_exit+0x98/0xcc kernel/exit.c:950
- get_signal+0xabc/0xb2c kernel/signal.c:2858
- do_signal+0x128/0x438 arch/arm64/kernel/signal.c:1071
- do_notify_resume+0xc0/0x1f0 arch/arm64/kernel/signal.c:1124
- prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
- exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
- el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+> ---
+>  rust/kernel/str.rs | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+> index 877148b77e71..ffac633423db 100644
+> --- a/rust/kernel/str.rs
+> +++ b/rust/kernel/str.rs
+> @@ -592,3 +592,9 @@ impl Deref for CString {
+>          unsafe { CStr::from_bytes_with_nul_unchecked(self.buf.as_slice()) }
+>      }
+>  }
+> +
+> +/// A convenience alias for [`core::format_args`].
+> +#[macro_export]
+> +macro_rules! fmt {
+> +    ($($f:tt)*) => ( core::format_args!($($f)*) )
+> +}
 
