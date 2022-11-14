@@ -2,113 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53999628953
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:29:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB2D628996
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 20:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236947AbiKNT3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 14:29:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
+        id S237135AbiKNTnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 14:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236525AbiKNT3n (ORCPT
+        with ESMTP id S236784AbiKNTnR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 14:29:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4255D20F66;
-        Mon, 14 Nov 2022 11:29:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2BF6613EA;
-        Mon, 14 Nov 2022 19:29:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94FC8C43470;
-        Mon, 14 Nov 2022 19:29:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668454181;
-        bh=7gDJJ7UtURCtpGUPxQT2lSB4H0lh3qa/bxjfMajltOo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=D6QdqWUzROR+yvuHACC6wdqq9feKbVHR+SQfEc/8HLszF532JSVdCCsE5EYNBiSwk
-         nmotoHZm/Qc07H2/yhTgplTNbAH+qsslxVybUxWhiRllTiuRrZpHEMBM36UY8g9pBa
-         mncQT6QDY6kuMUYTGwNXZqUFt7BiciiCBX0JH8/1Wloa/qvZYAHxP0GUWu/MNtHtfh
-         PTZfRlxd3Y5+p6s1P9WnQbWn3q/S0hfi2MH4a3iY3AE83tnblffmklHosmuHc1fe7R
-         Y+duGYbhmVusGkNThbH/vjdsrr4nIhyAnssuazfoEA2On4RA2VderhjKFoqGHzVmHl
-         jdzBVHZaHGv+g==
-Date:   Mon, 14 Nov 2022 19:41:57 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] iio: addac: ad74413r: add support for reset-gpio
-Message-ID: <20221114194157.1d03588a@jic23-huawei>
-In-Reply-To: <ccb148b2-c669-0317-e2b5-c59e595e4299@rasmusvillemoes.dk>
-References: <20221111143921.742194-1-linux@rasmusvillemoes.dk>
-        <20221111143921.742194-6-linux@rasmusvillemoes.dk>
-        <20221112170705.7efe1673@jic23-huawei>
-        <ccb148b2-c669-0317-e2b5-c59e595e4299@rasmusvillemoes.dk>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Mon, 14 Nov 2022 14:43:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CEA1A38B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:42:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668454941;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=etTcQk1F266hdIupm5+ic9SPXuOnJ0Fp357DOYO5OPY=;
+        b=ATY8Yn66yw1B+AFrgJyq+7dDsaCvV9vxIrw3tT2Jk3klzGZTkBCOsHNdkb9gkPgYscURqN
+        elP1hE0ZolBMBrqC6VDF9zeGkN0F67J71ujOUcYAQEtaY9SwsxITRNNWXDH7LHNL6a/xOm
+        C76RT2/vQUEyUZbDhK5b6v39Ety3X8c=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-202-MVotDzCjOgOmDJkFtHX12Q-1; Mon, 14 Nov 2022 14:42:20 -0500
+X-MC-Unique: MVotDzCjOgOmDJkFtHX12Q-1
+Received: by mail-il1-f199.google.com with SMTP id j20-20020a056e02219400b00300a22a7fe0so9902772ila.3
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 11:42:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=etTcQk1F266hdIupm5+ic9SPXuOnJ0Fp357DOYO5OPY=;
+        b=WJSs0XG8ia7o+XOY89PlNiZo3/CqTzoLLRnq2N2w/Q6ATT3HiR7rwCImoWt0CQlKNr
+         QqhADIMr8sQWxMjm7NGYOHR1AV10gkXhTOf59AijfUuePW/xf3lTuHMFlmtwm5/p7T29
+         2wPgghsyXOq/uEdyQZlD7gyj1weIxdDVBStGI2bu8VlCKB4lOSToAeFqi1WiUR2wOS0f
+         34OwJfyL3wpbHEZjAcT7m2vtlCBSXvhsVeRo+JSYpVzdHbGhz7TTkl+XmduiwAkNwDaE
+         6YZeNxfsX5kpWkFakVJNIyfMkEAm9kouWAheNorNUnsUUpbE11tflVu7G81+I93nthPN
+         mTCQ==
+X-Gm-Message-State: ANoB5pn51Ao1GVQvIYQVSjt0RbpwmFF6FaMHZRQ8ZKK9Np9dxbvtu711
+        ihZqH/qAePVwDqzPLEuo2rfBUqz+HSQfsNZpVKVbL9Vk62ls2y3CvIcTqIImRaIImh9q4saDALG
+        cUMIun2jfZeYzaNzMqijGqp3W
+X-Received: by 2002:a05:6638:4194:b0:376:21c3:23fe with SMTP id az20-20020a056638419400b0037621c323femr16256jab.192.1668454939199;
+        Mon, 14 Nov 2022 11:42:19 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6aSXy25nWpUG2W6rJAgx5bO97582f6XlysUPpT15W+rIiYbkl3WMAJZr6Sm9NDiyVebzOgTQ==
+X-Received: by 2002:a05:6638:4194:b0:376:21c3:23fe with SMTP id az20-20020a056638419400b0037621c323femr16249jab.192.1668454938983;
+        Mon, 14 Nov 2022 11:42:18 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id a59-20020a029441000000b003712c881d67sm3868751jai.164.2022.11.14.11.42.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 11:42:18 -0800 (PST)
+Date:   Mon, 14 Nov 2022 12:42:17 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>, ajderossi@gmail.com
+Subject: [GIT PULL] VFIO fixes for v6.1-rc6
+Message-ID: <20221114124217.784a2d3f.alex.williamson@redhat.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 09:37:59 +0100
-Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
+The following changes since commit f0c4d9fc9cc9462659728d168387191387e903cc:
 
-> On 12/11/2022 18.07, Jonathan Cameron wrote:
-> > On Fri, 11 Nov 2022 15:39:21 +0100
-> > Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
-> >   
-> >> We have a board where the reset pin of the ad74412 is connected to a
-> >> gpio, but also pulled low by default. Hence to get the chip out of
-> >> reset, the driver needs to know about that gpio and set it high before
-> >> attempting to communicate with it.  
-> > 
-> > I'm a little confused on polarity here.  The pin is a !reset so
-> > we need to drive it low briefly to trigger a reset.
-> > I'm guessing for your board the pin is set to active low? (an example
-> > in the dt would have made that clearer) Hence the pulse
-> > in here to 1 is actually briefly driving it low before restoring to high?  
-> 
-> Yes. I actually thought that was pretty standard. I do indeed have
-> something like
-> 
->   reset-gpios = <&gpio1 3 GPIO_ACTIVE_LOW>;
-> 
-> in my .dts, so setting the gpio value to 1 (logically asserting its
-> function) will end up driving the signal low, and setting it to 0
-> (de-asserting reset) will set the signal high. I will add that line to
-> the example in the binding.
-> 
-> > For a pin documented as !reset that seems backwards   
-> 
-> Well, it depends on where the knowledge of the pin being active low
-> belongs. In this case, the driver itself handles the gpio so it could be
-> done both ways.
-> 
-> But if, for example, the iio framework would handle an optional
-> reset-gpio for each device, it couldn't possibly know whether to set it
-> to 1 or 0 for a given device, it could only set it logic 1 to assert
-> reset and then rely on DT gpio descriptor to include the active low/high
-> info.
-> 
-> Also, see the "The active low and open drain semantics" section in
-> Documentation/driver-api/gpio/consumer.rst.
+  Linux 6.1-rc4 (2022-11-06 15:07:11 -0800)
 
-Throw in an example in the dt-binding and I'm fine with this as it
-stands.
+are available in the Git repository at:
 
-Jonathan
+  https://github.com/awilliam/linux-vfio.git tags/vfio-v6.1-rc6
 
-> 
-> Rasmus
-> 
+for you to fetch changes up to e806e223621e4f5105170df69d7311dc3fb4bbb4:
+
+  vfio/pci: Check the device set open count on reset (2022-11-10 12:03:36 -0700)
+
+----------------------------------------------------------------
+VFIO fixes for v6.1-rc6
+
+ - Fixes for potential container registration leak for drivers not
+   implementing a close callback, duplicate container de-registrations,
+   and a regression in support for bus reset on last device close from
+   a device set. (Anthony DeRossi)
+
+----------------------------------------------------------------
+Anthony DeRossi (3):
+      vfio: Fix container device registration life cycle
+      vfio: Export the device set open count
+      vfio/pci: Check the device set open count on reset
+
+ drivers/vfio/pci/vfio_pci_core.c | 10 +++++-----
+ drivers/vfio/vfio_main.c         | 26 +++++++++++++++++++++-----
+ include/linux/vfio.h             |  1 +
+ 3 files changed, 27 insertions(+), 10 deletions(-)
 
