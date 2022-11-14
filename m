@@ -2,101 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BC56286D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 18:19:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF6162882A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 19:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237897AbiKNRSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 12:18:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
+        id S235905AbiKNSS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 13:18:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237917AbiKNRSh (ORCPT
+        with ESMTP id S236993AbiKNSRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 12:18:37 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490C0FF7
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 09:18:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VHNRiFwLD0T8xlIzSdUGCUiQwRiGBIjAq2J/I0NP6Es=; b=iJAsxGebVqg5F0ryulGlz19f1x
-        AscGkDKEeCi5Lpbr/e/pA/pFuFkGfpXqardUjV8/OMj6lNtSNfo/XIaGf55DZ2+8fZvY51SZBAV9J
-        xXBuhJQzGvDFlwi7ddxEi70rWyM6gqCKCDMQR110Vth6gEF2/GvvpKxa4hDqBnMn78XBNRRcM3f1B
-        HMJwMSz0LSw4b0ygAonLQ0DJgXn3CcF+o7dkN+fJgpBRaySku9EYpfQi3cfObcfwe748rMENkuNe0
-        SjfSbDQqRlR79JNOuFpXCCMUHxpNESxADEshDT7MZFBAnwcKVmhDELn5Urzay6Hev6PrVHYUwNH3+
-        fcsJbUtg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oud6N-00FaHg-OL; Mon, 14 Nov 2022 17:18:31 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D3EE93021D4;
-        Mon, 14 Nov 2022 17:02:46 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BAF9D2B891F5A; Mon, 14 Nov 2022 17:02:46 +0100 (CET)
-Date:   Mon, 14 Nov 2022 17:02:46 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: Re: [PATCH 14/46] x86/sev, lto: Mark cpuid_table_copy as
- __visible_on_lto
-Message-ID: <Y3Jmpjwl0aJpwq/4@hirez.programming.kicks-ass.net>
-References: <20221114114344.18650-1-jirislaby@kernel.org>
- <20221114114344.18650-15-jirislaby@kernel.org>
+        Mon, 14 Nov 2022 13:17:48 -0500
+Received: from 2.mo552.mail-out.ovh.net (2.mo552.mail-out.ovh.net [178.33.105.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB22D45084
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 10:16:12 -0800 (PST)
+Received: from mxplan5.mail.ovh.net (unknown [10.108.4.47])
+        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 304A426EE3;
+        Mon, 14 Nov 2022 17:00:21 +0000 (UTC)
+Received: from kaod.org (37.59.142.96) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 14 Nov
+ 2022 18:00:20 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-96R001ba274e76-cd36-414b-a769-8a95de005f05,
+                    75464F94774268435EE9F43A7981E45EBBD3EAE1) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <ccf27ac3-c1de-aea6-689b-989781691de3@kaod.org>
+Date:   Mon, 14 Nov 2022 18:00:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114114344.18650-15-jirislaby@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] virtio_console: Use an atomic to allocate virtual console
+ numbers
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Amit Shah <amit@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221114080752.1900699-1-clg@kaod.org>
+ <Y3IC3miVoiMROwaE@kroah.com> <b0503354-2d1e-a93d-a6a5-6f6a1f55f0e2@kaod.org>
+ <Y3JqThFr67DJnGJL@kroah.com>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <Y3JqThFr67DJnGJL@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.96]
+X-ClientProxiedBy: DAG8EX1.mxp5.local (172.16.2.71) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: baa3eead-db12-4207-b471-6daf20ed2d35
+X-Ovh-Tracer-Id: 8369095486717004707
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvgedrgedvgdeikecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitgcunfgvucfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepffdufeeliedujeeffffhjeffiefghffhhfdvkeeijeehledvueffhfejtdehgeegnecukfhppeduvdejrddtrddtrddupdefjedrheelrddugedvrdelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepoegtlhhgsehkrghougdrohhrgheqpdhnsggprhgtphhtthhopedupdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdgrmhhitheskhgvrhhnvghlrdhorhhgpdgrrhhnugesrghrnhgusgdruggvpdhvihhrthhurghlihiirghtihhonheslhhishhtshdrlhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheehvddpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 12:43:12PM +0100, Jiri Slaby (SUSE) wrote:
-> From: Martin Liska <mliska@suse.cz>
+On 11/14/22 17:18, Greg Kroah-Hartman wrote:
+> On Mon, Nov 14, 2022 at 05:03:40PM +0100, Cédric Le Goater wrote:
+>> On 11/14/22 09:57, Greg Kroah-Hartman wrote:
+>>> On Mon, Nov 14, 2022 at 09:07:52AM +0100, Cédric Le Goater wrote:
+>>>> When a virtio console port is initialized, it is registered as an hvc
+>>>> console using a virtual console number. If a KVM guest is started with
+>>>> multiple virtio console devices, the same vtermno (or virtual console
+>>>> number) can be used to allocate different hvc consoles, which leads to
+>>>> various communication problems later on.
+>>>>
+>>>> This is also reported in debugfs :
+>>>>
+>>>>     # grep vtermno /sys/kernel/debug/virtio-ports/*
+>>>>     /sys/kernel/debug/virtio-ports/vport1p1:console_vtermno: 1
+>>>>     /sys/kernel/debug/virtio-ports/vport2p1:console_vtermno: 1
+>>>>     /sys/kernel/debug/virtio-ports/vport3p1:console_vtermno: 2
+>>>>     /sys/kernel/debug/virtio-ports/vport4p1:console_vtermno: 3
+>>>>
+>>>> Fix the issue with an atomic variable and start the first console
+>>>> number at 1 as it is today.
+>>>>
+>>>> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+>>>> ---
+>>>>    drivers/char/virtio_console.c | 8 ++++----
+>>>>    1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
+>>>> index 9fa3c76a267f..253574f41e57 100644
+>>>> --- a/drivers/char/virtio_console.c
+>>>> +++ b/drivers/char/virtio_console.c
+>>>> @@ -58,12 +58,13 @@ struct ports_driver_data {
+>>>>    	 * We also just assume the first console being initialised was
+>>>>    	 * the first one that got used as the initial console.
+>>>>    	 */
+>>>> -	unsigned int next_vtermno;
+>>>> +	atomic_t next_vtermno;
+>>>>    	/* All the console devices handled by this driver */
+>>>>    	struct list_head consoles;
+>>>>    };
+>>>> -static struct ports_driver_data pdrvdata = { .next_vtermno = 1};
+>>>> +
+>>>> +static struct ports_driver_data pdrvdata = { .next_vtermno = ATOMIC_INIT(0) };
+>>>>    static DEFINE_SPINLOCK(pdrvdata_lock);
+>>>>    static DECLARE_COMPLETION(early_console_added);
+>>>> @@ -1244,7 +1245,7 @@ static int init_port_console(struct port *port)
+>>>>    	 * pointers.  The final argument is the output buffer size: we
+>>>>    	 * can do any size, so we put PAGE_SIZE here.
+>>>>    	 */
+>>>> -	port->cons.vtermno = pdrvdata.next_vtermno;
+>>>> +	port->cons.vtermno = atomic_inc_return(&pdrvdata.next_vtermno);
+>>>
+>>> Why not use a normal ida/idr structure here?
+>>
+>> yes that works.
+>>
+>>> And why is this never decremented?
+>>
+>> The driver would then need to track the id allocation ...
 > 
-> Symbols referenced from assembler (either directly or e.f. from
-> DEFINE_STATIC_KEY()) need to be global and visible in gcc LTO because
-> they could end up in a different object file than the assembler. This
-> can lead to linker errors without this patch.
+> That's what an ida/idr does.
 > 
-> So mark cpuid_table_copy as __visible_on_lto.
+>>> and finally, why not use the value that created the "vportN" number
+>>> instead?
+>>
+>> yes. we could also encode the tuple (vdev->index, port) using a bitmask,
 > 
-> [js] use __visible_on_lto
+> No need for that, you already have a unique number in the name above,
+> why not use that?
 > 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: x86@kernel.org
-> Signed-off-by: Martin Liska <mliska@suse.cz>
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> ---
->  arch/x86/kernel/sev-shared.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>> possibly using 'max_nr_ports' to reduce the port width.
 > 
-> diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
-> index 3a5b0c9c4fcc..554da8aabfc7 100644
-> --- a/arch/x86/kernel/sev-shared.c
-> +++ b/arch/x86/kernel/sev-shared.c
-> @@ -64,7 +64,7 @@ struct snp_cpuid_table {
->  static u16 ghcb_version __ro_after_init;
->  
->  /* Copy of the SNP firmware's CPUID page. */
-> -static struct snp_cpuid_table cpuid_table_copy __ro_after_init;
-> +__visible_on_lto struct snp_cpuid_table cpuid_table_copy __ro_after_init;
+> Why is that an issue?  Maybe I am confused as to what this magic
+> "vtermno" is here.  Who uses it and why is the vportN number not 
+> sufficient?
 
-Same again, address is taken (and passed into inline asm). Must not be
-eliminated.
+A virtio console device can have multiple ports each being a /dev/hvcX
+exposed in the guest OS. The "vportN" prefix identifies the virtio
+device :
+
+   # grep vtermno /sys/kernel/debug/virtio-ports/*
+   /sys/kernel/debug/virtio-ports/vport1p0:console_vtermno: 2
+   /sys/kernel/debug/virtio-ports/vport1p1:console_vtermno: 3
+   /sys/kernel/debug/virtio-ports/vport1p2:console_vtermno: 4
+   /sys/kernel/debug/virtio-ports/vport1p3:console_vtermno: 5
+   /sys/kernel/debug/virtio-ports/vport2p0:console_vtermno: 1
+   /sys/kernel/debug/virtio-ports/vport2p1:console_vtermno: 6
+   /sys/kernel/debug/virtio-ports/vport2p2:console_vtermno: 7
+   /sys/kernel/debug/virtio-ports/vport2p3:console_vtermno: 8
+
+and "pX" the port within in the device. The naming is a bit confusing.
+
+>> VIRTCONS_MAX_PORTS
+>> seems a bit big for this device and QEMU sets the #ports to 31.
+>>
+>> An ida might be simpler. One drawback is that an id can be reused for a
+>> different device/port tuple in case of an (unlikely) unplug/plug sequence.
+> 
+> What's wrong with that?  We do not have persistent device names from
+> within the kernel.
+
+Let's go with the ida then.
+
+Thanks,
+C.
+
