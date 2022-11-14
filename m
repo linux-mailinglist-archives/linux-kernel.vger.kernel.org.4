@@ -2,200 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6114A6281C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 14:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEC56281CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 15:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236147AbiKNN7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 08:59:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
+        id S236454AbiKNOAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 09:00:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiKNN7m (ORCPT
+        with ESMTP id S229740AbiKNOAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 08:59:42 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAB0E5FA8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 05:59:41 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E447123A;
-        Mon, 14 Nov 2022 05:59:47 -0800 (PST)
-Received: from [10.57.39.18] (unknown [10.57.39.18])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2EF253F918;
-        Mon, 14 Nov 2022 05:59:39 -0800 (PST)
-Message-ID: <66dc097f-c568-bb50-1d93-dba812bf7091@arm.com>
-Date:   Mon, 14 Nov 2022 13:59:37 +0000
+        Mon, 14 Nov 2022 09:00:25 -0500
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064519FD6;
+        Mon, 14 Nov 2022 06:00:25 -0800 (PST)
+Received: by mail-qv1-f46.google.com with SMTP id x13so7794645qvn.6;
+        Mon, 14 Nov 2022 06:00:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jgcb91s2dt67CNb/h/jC4e6cUIsKNgCDgXmKk0U/nWQ=;
+        b=hwEuzU5J8yikUD8aJRnMHJb0QP7apmleFcbSGAkONwiLwhoFarXI9lzXY90JHSDVdQ
+         1M2nQNaG6HydNU/kh/L1J//erwNMNHDysBhuuPcRcSV6MYQ41RHPm0cm+mH91Tvhlk2H
+         NN8tBSf2It8cGMwWchdsBHstuvMFam7eEjH2Er8XCg2V7ksahYHH7K/0rxErYfHOiuXS
+         tj6fu8nvJZh4l5tFrty6RIf5sqi1I13KaQ7/tdC/qdwgdPJqoSQKRfCip7471nMuTPwh
+         eYfZT8JI/WK6lMqZ3n0pp2YSYZJWWpDAKOseZQqugZXIjUgu/wpDCoOr+KPRA+zXD5Pa
+         23tg==
+X-Gm-Message-State: ANoB5pmAtByWgdzETmdxJc5WjZs7+9Io/NGHAtW49aOXjexG1jzUf1Ic
+        3MLQ4ZymBjG96xETRJxY33MmKkQjOHahYg==
+X-Google-Smtp-Source: AA0mqf7po8+D17d3cgqFPr/Jzw0wrIfeQpZXmYk1MeWxqSbJsQ2az3XIUyQPrfTrBLzNmK5LZANlSQ==
+X-Received: by 2002:a0c:fa0f:0:b0:4b4:7ac1:aa38 with SMTP id q15-20020a0cfa0f000000b004b47ac1aa38mr12632722qvn.84.1668434423609;
+        Mon, 14 Nov 2022 06:00:23 -0800 (PST)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id az17-20020a05620a171100b006f3e6933bacsm6387130qkb.113.2022.11.14.06.00.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 06:00:23 -0800 (PST)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-37063f855e5so106876007b3.3;
+        Mon, 14 Nov 2022 06:00:23 -0800 (PST)
+X-Received: by 2002:a81:a085:0:b0:37e:6806:a5f9 with SMTP id
+ x127-20020a81a085000000b0037e6806a5f9mr7816378ywg.47.1668434409494; Mon, 14
+ Nov 2022 06:00:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH v12 1/2] drivers/coresight: Add UltraSoc System Memory
- Buffer driver
-To:     hejunhao <hejunhao3@huawei.com>, kernel test robot <lkp@intel.com>,
-        mathieu.poirier@linaro.org, mike.leach@linaro.org,
-        leo.yan@linaro.org, jonathan.cameron@huawei.com,
-        john.garry@huawei.com
-Cc:     oe-kbuild-all@lists.linux.dev, coresight@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        lpieralisi@kernel.org, linuxarm@huawei.com, liuqi115@huawei.com,
-        f.fangjian@huawei.com, prime.zeng@hisilicon.com
-References: <20221109135008.9485-2-hejunhao3@huawei.com>
- <202211120623.aFVBerTp-lkp@intel.com>
- <a1343ef8-19f2-e3fc-35b7-02a989e093f5@arm.com>
- <901ee9b4-f0b3-437e-fce9-be3c6c214afe@huawei.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <901ee9b4-f0b3-437e-fce9-be3c6c214afe@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221103223956.50575-1-fabrizio.castro.jz@renesas.com> <20221103223956.50575-2-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20221103223956.50575-2-fabrizio.castro.jz@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 14 Nov 2022 14:59:58 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUWbT6VArm9B56VE0yUYWCTm=3vMGrrONSv9cdsQQnhpg@mail.gmail.com>
+Message-ID: <CAMuHMdUWbT6VArm9B56VE0yUYWCTm=3vMGrrONSv9cdsQQnhpg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] watchdog: rzg2l_wdt: Fix reboot for RZ/V2M
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/11/2022 13:06, hejunhao wrote:
-> 
-> 
-> On 2022/11/14 18:49, Suzuki K Poulose wrote:
->> On 11/11/2022 22:06, kernel test robot wrote:
->>> Hi Junhao,
->>>
->>> I love your patch! Perhaps something to improve:
->>>
->>> [auto build test WARNING on soc/for-next]
->>> [also build test WARNING on linus/master v6.1-rc4 next-20221111]
->>> [If your patch is applied to the wrong git tree, kindly drop us a note.
->>> And when submitting patch, we suggest to use '--base' as documented in
->>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>>
->>> url: 
->>> https://github.com/intel-lab-lkp/linux/commits/Junhao-He/Add-support-for-UltraSoc-System-Memory-Buffer/20221109-215158
->>> base: https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git 
->>> for-next
->>> patch link: 
->>> https://lore.kernel.org/r/20221109135008.9485-2-hejunhao3%40huawei.com
->>> patch subject: [PATCH v12 1/2] drivers/coresight: Add UltraSoc System 
->>> Memory Buffer driver
->>> config: arm64-randconfig-s033-20221111
->>> compiler: aarch64-linux-gcc (GCC) 12.1.0
->>> reproduce:
->>>          wget 
->>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>          chmod +x ~/bin/make.cross
->>>          # apt-get install sparse
->>>          # sparse version: v0.6.4-39-gce1a6720-dirty
->>>          # 
->>> https://github.com/intel-lab-lkp/linux/commit/49ede03fd874b65deca5382ea84c3377188136da
->>>          git remote add linux-review 
->>> https://github.com/intel-lab-lkp/linux
->>>          git fetch --no-tags linux-review 
->>> Junhao-He/Add-support-for-UltraSoc-System-Memory-Buffer/20221109-215158
->>>          git checkout 49ede03fd874b65deca5382ea84c3377188136da
->>>          # save the config file
->>>          mkdir build_dir && cp config build_dir/.config
->>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 
->>> make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' 
->>> O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/hwtracing/coresight/
->>>
->>> If you fix the issue, kindly add following tag where applicable
->>> | Reported-by: kernel test robot <lkp@intel.com>
->>>
->>> sparse warnings: (new ones prefixed by >>)
->>>>> drivers/hwtracing/coresight/ultrasoc-smb.c:113:33: sparse: sparse: 
->>>>> cast removes address space '__iomem' of expression
->>>>> drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: sparse: 
->>>>> incorrect type in argument 1 (different address spaces) @@ expected 
->>>>> void const * @@     got void [noderef] __iomem * @@
->>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: 
->>> expected void const *
->>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: got 
->>> void [noderef] __iomem *
->>>>> drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: sparse: 
->>>>> incorrect type in argument 1 (different address spaces) @@ expected 
->>>>> void const * @@     got void [noderef] __iomem * @@
->>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: 
->>> expected void const *
->>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: got 
->>> void [noderef] __iomem *
->>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: 
->>> sparse: incorrect type in argument 2 (different address spaces) 
->>> @@     expected void const * @@     got void [noderef] __iomem * @@
->>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: 
->>> expected void const *
->>>     drivers/hwtracing/coresight/ultrasoc-smb.c:354:17: sparse: got 
->>> void [noderef] __iomem *
->>>>> drivers/hwtracing/coresight/ultrasoc-smb.c:463:14: sparse: sparse: 
->>>>> incorrect type in assignment (different address spaces) @@ expected 
->>>>> void [noderef] __iomem *base @@     got void * @@
->>>     drivers/hwtracing/coresight/ultrasoc-smb.c:463:14: sparse: 
->>> expected void [noderef] __iomem *base
->>>     drivers/hwtracing/coresight/ultrasoc-smb.c:463:14: sparse: got 
->>> void *
->>>
->>> vim +/__iomem +113 drivers/hwtracing/coresight/ultrasoc-smb.c
->>>
->>>      89
->>>      90    static ssize_t smb_read(struct file *file, char __user 
->>> *data, size_t len,
->>>      91                loff_t *ppos)
->>>      92    {
->>>      93        struct smb_drv_data *drvdata = 
->>> container_of(file->private_data,
->>>      94                        struct smb_drv_data, miscdev);
->>>      95        struct smb_data_buffer *sdb = &drvdata->sdb;
->>>      96        struct device *dev = &drvdata->csdev->dev;
->>>      97        ssize_t to_copy = 0;
->>>      98
->>>      99        mutex_lock(&drvdata->mutex);
->>>     100
->>>     101        if (!sdb->data_size) {
->>>     102            smb_update_data_size(drvdata);
->>>     103            if (!sdb->data_size)
->>>     104                goto out;
->>>     105        }
->>>     106
->>>     107        to_copy = min(sdb->data_size, len);
->>>     108
->>>     109        /* Copy parts of trace data when read pointer wrap 
->>> around SMB buffer */
->>>     110        if (sdb->rd_offset + to_copy > sdb->buf_size)
->>>     111            to_copy = sdb->buf_size - sdb->rd_offset;
->>>     112
->>>   > 113        if (copy_to_user(data, (void *)sdb->buf_base + 
->>> sdb->rd_offset,
->>>     114                 to_copy)) {
->>>     115            dev_dbg(dev, "Failed to copy data to user\n");
->>>     116            to_copy = -EFAULT;
->>>     117            goto out;
->>>     118        }
->>>     119
->>
->> Please could we replace this with copy_to_user_fromio() ?
->>
->> Suzuki
->>
->> _______________________________________________
->> CoreSight mailing list -- coresight@lists.linaro.org
->> To unsubscribe send an email to coresight-leave@lists.linaro.org
->> .
->>
-> Hi Suzuki,
-> 
-> This is a cache memory,  due to improper use of "__iomem" , the sparse 
-> generates warnings.
-> I has fix it in v13.
-> https://lore.kernel.org/lkml/20221114090316.63157-2-hejunhao3@huawei.com/
+On Thu, Nov 3, 2022 at 11:40 PM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+> The setting for the RZ/V2M watchdog cannot be changed once
+> the watchdog has been enabled, unless the IP gets reset.
+> The current implementation of the restart callback assumes
+> that the watchdog is not enabled, but that's not always the
+> case, and it leads to longer than necessary reboot times if
+> the watchdog is already running.
+>
+> Always reset the RZ/V2M watchdog first, so that we can always
+> restart quickly.
+>
+> Fixes: ec122fd94eeb ("watchdog: rzg2l_wdt: Add rzv2m support")
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 
-I don't see a ChangeLog mentioning that this change. Please make sure
-you accurately describe the changes (especially fixes like these).
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Thanks
-Suzuki
+Gr{oetje,eeting}s,
 
-> 
-> Best regards,
-> Junhao.
-> 
-> 
-> 
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
