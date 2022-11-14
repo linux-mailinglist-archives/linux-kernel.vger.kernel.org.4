@@ -2,129 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03DB5627A0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48972627A10
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 11:08:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236179AbiKNKHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 05:07:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
+        id S236075AbiKNKIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 05:08:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237202AbiKNKHS (ORCPT
+        with ESMTP id S236229AbiKNKIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 05:07:18 -0500
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED4CCE0A;
-        Mon, 14 Nov 2022 02:06:46 -0800 (PST)
-Received: from hillosipuli.retiisi.eu (dkxjnptf9d2bpn7gcmbty-3.rev.dnainternet.fi [IPv6:2001:14ba:44ce:b640:9d1d:82c5:eca2:5060])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id E40E31B00120;
-        Mon, 14 Nov 2022 12:06:42 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1668420403;
+        Mon, 14 Nov 2022 05:08:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E68CE0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 02:07:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668420423;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=n0E8YgTPeMlZaTVJH+p1nlFsfAcKuXhV2rFQ22qn48c=;
-        b=MuhPojJumg96qXDDlbrabUiYNYg8DcQZv1EJSsFMyIF6MyW0Vh+8sEnczpe+aD3M62my47
-        aIFsa8W8vIIWUFPOMph2ODZyvcz3wi4rEfazTeXTOc2gp5bHj/NBnAel+JHLpGJpRgy5mp
-        Kna6eH8mRIg4fMu98Lbx/y23F97XEoqNym1cR/3+EV4bXTjujS24MGECr21SbrhQMglJve
-        N5zTfaNew1/qt182IHViBRdU2ygu2SzXNBeB/G+C7rdG2fwxmwAuTomnuIxcOsq5ufMxaO
-        gIFl/MKK4NF7eoOUDhNaiQ54xMnbQIJf8FzsKHwnbFt1oQ573iglWIPj9ieNcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1668420403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=n0E8YgTPeMlZaTVJH+p1nlFsfAcKuXhV2rFQ22qn48c=;
-        b=Y7aT1VsbOGmSSq0I11cX04+ntBpkgrH+238otZdCyVwtdq0kmDNgAwbqnw2uJHmAwlXOhp
-        4OWi9/qmTpRIH9nEODPdN+JHljny2C2A/oLd67LairhSX9OLgw151jmgyRpv/YWYwTJNqr
-        xw0N7qRGnsAlfCk1sGcZdxETsGw4neW9z3V3rH3s9PwiEw5Tbvebsx+vDcpUVOWeAxju+n
-        UJn5YyibKo7fJjWDj6p1ybGaWQgn8WngXgLkKhE8gEULUzMJjY+0B5Kr1g8lWCoD8aiglc
-        XaMpEbYeBnjnKxFGjVhMXU8dY4wM5ye7w2Zr5gLLSlctguS2A+zZDtLfAs2VcA==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1668420403; a=rsa-sha256;
-        cv=none;
-        b=IMUzKT1HHR3XdI0gIP1tP9McRHkNwkZxTDbqyBNTHnGJoEl7a09jiaSwNs1dIwaGQ4J4z7
-        meXNjGkXeywM6mYFzXmtOF4EU05jXt+t0AG/kqMRuQ/RUQxEKqNIzPZQgTGZ1uZdXlxM0a
-        2CC+UWWvxv3yIKTGWfBH2xsghWpY83FY6YmXRxerN4JD0LbqHyXH/tkjm/3+oD6HcoBSWu
-        3EtJkg0KUty7702ZQvNseszepNz1SXgn5UZhyTjY7XmDpJe31YYSNDCqvquD4t++pHY4N8
-        lMWHl24CWAcoKOYPnpdXUPEo0GOaS7qbj8wolwFQ78JqD0Aw0v8Z/sW7TO6sAQ==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        bh=YOB5ovzwG41qBNYEX8G5z12o/BuLOtHt6/b8j0c3Fwg=;
+        b=TfF5I/J5bZb/NFFnvxb7NrSKyu2iFvuKvr/Wa8A3NOA9LzQrv1dB+gB8TH4F28Eo7hiK7r
+        chD+nkuNyLqZhNxctfejC/9bHL3BlxZbhMJl16f65ylmB1L8VYiUWkRM0O/6Rgvtn4t2J4
+        simanrGpZSD7pV5eSO82hD0LDDnTFeI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-310-Aw8vjTctObut8IMzRN_KUg-1; Mon, 14 Nov 2022 05:06:54 -0500
+X-MC-Unique: Aw8vjTctObut8IMzRN_KUg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 7D31F634C97;
-        Mon, 14 Nov 2022 12:06:42 +0200 (EET)
-Date:   Mon, 14 Nov 2022 12:06:42 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: Re: [PATCH v7 02/28] media: sun6i-csi: Rename sun6i_video to
- sun6i_csi_capture
-Message-ID: <Y3ITMguJsMQH96dt@valkosipuli.retiisi.eu>
-References: <20221103163113.245462-1-paul.kocialkowski@bootlin.com>
- <20221103163113.245462-3-paul.kocialkowski@bootlin.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B74EE101A54E;
+        Mon, 14 Nov 2022 10:06:53 +0000 (UTC)
+Received: from localhost (ovpn-12-71.pek2.redhat.com [10.72.12.71])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E57E71731B;
+        Mon, 14 Nov 2022 10:06:52 +0000 (UTC)
+Date:   Mon, 14 Nov 2022 18:06:49 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, urezki@gmail.com, hch@infradead.org
+Subject: Re: [PATCH RFC 3/3] mm/vmalloc.c: allow vread() to read out
+ vm_map_ram areas
+Message-ID: <Y3ITOevjhUpDKEiS@MiWiFi-R3L-srv>
+References: <20221109033535.269229-1-bhe@redhat.com>
+ <20221109033535.269229-4-bhe@redhat.com>
+ <87v8nnfwud.fsf@oracle.com>
+ <Y2zROzfhdR5UU+lv@MiWiFi-R3L-srv>
+ <87mt8yfxy6.fsf@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221103163113.245462-3-paul.kocialkowski@bootlin.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87mt8yfxy6.fsf@oracle.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On 11/10/22 at 10:48am, Stephen Brennan wrote:
+> Baoquan He <bhe@redhat.com> writes:
+> 
+> > On 11/09/22 at 04:59pm, Stephen Brennan wrote:
+> > ......  
+> >> > @@ -3569,12 +3609,14 @@ long vread(char *buf, char *addr, unsigned long count)
+> >> >  		if (!count)
+> >> >  			break;
+> >> >  
+> >> > -		if (!va->vm)
+> >> > +		if (!(va->flags & VMAP_RAM) && !va->vm)
+> >> >  			continue;
+> >> >  
+> >> >  		vm = va->vm;
+> >> > -		vaddr = (char *) vm->addr;
+> >> > -		if (addr >= vaddr + get_vm_area_size(vm))
+> >> > +		vaddr = (char *) va->va_start;
+> >> > +		size = vm ? get_vm_area_size(vm) : va_size(va);
+> >> 
+> >> Hi Baoquan,
+> >> 
+> >> Thanks for working on this. I tested your patches out by using drgn to
+> >> debug /proc/kcore. I have a kernel module[1] to do a vm_map_ram() call
+> >> and print the virtual address to the kernel log so I can try to read
+> >> that memory address in drgn. When I did this test, I got a panic on the
+> >> above line of code.
+> > ......
+> >> Since flags is in a union, it shadows "vm" and causes the condition to
+> >> be true, and then get_vm_area_size() tries to follow the pointer defined
+> >> by flags. I'm not sure if the fix is to have flags be a separate field
+> >> inside vmap_area, or to have more careful handling in the vread path.
+> >
+> > Sorry, my bad. Thanks for testing this and catching the error, Stephen.
+> >
+> > About the fix, both way are fine to me. I made a draft fix based on the
+> > current patchset. To me, adding flags in a separate field makes code
+> > easier, but cost extra memory. I will see what other people say about
+> > this, firstly if the solution is acceptable, then reusing the union
+> > field or adding anohter flags.
+> >
+> > Could you try below code to see if it works?
+> 
+> I tried the patch below and it worked for me: reading from vm_map_ram()
+> regions in drgn was fine, gave me the correct values, and I also tested
+> reads which overlapped the beginning and end of the region.
 
-On Thu, Nov 03, 2022 at 05:30:47PM +0100, Paul Kocialkowski wrote:
-> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> similarity index 58%
-> rename from drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
-> rename to drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> index fa83211a2c5a..9838a5a43c2d 100644
-> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c
-> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c
-> @@ -15,7 +15,7 @@
->  #include <media/videobuf2-v4l2.h>
->  
->  #include "sun6i_csi.h"
-> -#include "sun6i_video.h"
-> +#include "sun6i_csi_capture.h"
->  
->  /* This is got from BSP sources. */
->  #define MIN_WIDTH	(32)
-> @@ -26,7 +26,7 @@
->  /* Helpers */
->  
->  static struct v4l2_subdev *
-> -sun6i_video_remote_subdev(struct sun6i_video *video, u32 *pad)
-> +sun6i_csi_capture_remote_subdev(struct sun6i_csi_capture *capture, u32 *pad)
->  {
->  	struct media_pad *remote;
->  
+Thanks a lot for the testing.
 
-"video" was still being used a few lines below this, fixed that while
-applying. The PR has been sent already. Just FYI.
+> 
+> That said (and I don't know the vmalloc code well at all), I wonder
+> whether you can be confident that the lower 2 bits of the va->vm pointer
+> are always clear? It looks like it comes from kmalloc, and so it should
+> be aligned, but can slab red zones mess up that alignment?
 
--- 
-Kind regards,
+Hmm, it should be OK. I am also worried about the other places of va->vm
+checking. I will check code again to see if there's risk in the case you
+mentioned. I may change to add another ->flags field into vmap_area in
+v2 post.
 
-Sakari Ailus
+> 
+> I also tested out this patch on top of yours, to be a bit more cautious.
+> I think we can be confident that the remaining bits are zero when used
+> as flags, and non-zero when used as a pointer, so you can test them to
+> avoid any overlap. But it's probably too cautious.
+> 
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 78cae59170d8..911974f32b23 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -3613,7 +3613,7 @@ long vread(char *buf, char *addr, unsigned long count)
+>                 if (!va->vm)
+>                         continue;
+> 
+> -               flags = va->flags & VMAP_FLAGS_MASK;
+> +               flags = (va->flags & ~VMAP_FLAGS_MASK) ? 0 : (va->flags & VMAP_FLAGS_MASK);
+>                 vm = va->vm;
+> 
+>                 vaddr = (char *) va->va_start;
+> 
+
