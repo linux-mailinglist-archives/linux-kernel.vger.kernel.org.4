@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3942062856E
-	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 123EB62856A
+	for <lists+linux-kernel@lfdr.de>; Mon, 14 Nov 2022 17:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237810AbiKNQbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 11:31:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        id S237792AbiKNQbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 11:31:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237638AbiKNQaZ (ORCPT
+        with ESMTP id S237644AbiKNQa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 11:30:25 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B478226B;
-        Mon, 14 Nov 2022 08:29:46 -0800 (PST)
+        Mon, 14 Nov 2022 11:30:27 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523B324F20;
+        Mon, 14 Nov 2022 08:29:47 -0800 (PST)
 From:   John Ogness <john.ogness@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668443385;
+        s=2020; t=1668443386;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mrnamDANz6jBB9jzBVW9G8ct2/m0qCRJ/AQBo5wVT6Y=;
-        b=w5/sljKyRtYkYJ1pMsxCYitTfJqtg6hNm6DfbHlCejsKkYAZvv1BDeo2va2iPvHtHKY5GX
-        0QaQavGsGMSD5blng+gKYq21uvVtKZw2zPhZvqxyxRDJR9a707NB1m2hdWm3F4USO3vC4d
-        2EVxtxHwBZuHtcIbY2HbPS0vbifvVpvbFh1AVLwgxqfb+5y0jj5/1gxsCj6CdNjV49qDM4
-        pVE5HnqZaeSvfbO6I5CkNrC92ArX5yHTFNPjOdbnhfKRgWRKkU3VAgDsg27qGFh5C+DJMY
-        TJd+VZwciYr6yRrdjrpLXr86o8Gf9ui6s1I2FV7oIGvdPbvhA6Y1HXMS1mHGUQ==
+        bh=d6cWj091YR59AcrR/13CETRi+pH3BIcbTfvrd6iofMY=;
+        b=KI/u265xmuLvr6nYRPE12M3LB74Oi9WZ9jjTmAaeaK+kKHpWrekJ8vWFzHf8TWNRA0tj3K
+        xZTn/aUl6CkW7pwtzCHatJsXylMWpalDLTMwCTnZhBOXIveLBQplRtGpmjv+tBfcwfhNoG
+        ypxEP5xN+krsbBrXUI9JfA3HvwfuSoSHQSSbQres2w59iXY02+XbXgPS9d1lT1AKxZsIDh
+        Bh2lxvysNdC0JNEIgBC7CwfCGYolKRWk622Hfg2MIcrWg+A5GAQ8e6JssnHgv+tXS5kx7P
+        u/gQBgdqhhP6s3rI50iH1/wIbm9/5SozuNvdKxYsvJXZnT/VVYKtYpwDnudbkQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668443385;
+        s=2020e; t=1668443386;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mrnamDANz6jBB9jzBVW9G8ct2/m0qCRJ/AQBo5wVT6Y=;
-        b=wrDaBfnbdboxfSNqcK6NaH0l13NpOC/oqBFbDUHa9fhFMUBr4n0tN+svo6C1O0xwng8UUc
-        wRZJdRMznoJCYcBg==
+        bh=d6cWj091YR59AcrR/13CETRi+pH3BIcbTfvrd6iofMY=;
+        b=S0O+bhg0ej26IlK6PIB9ok+JZdFnLZxpszF0zbQlv9EtIB/DxIisAa9QKXrNrypAhUhALr
+        xGuslOOEe/kHTdAw==
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org
-Subject: [PATCH printk v4 26/39] tty: serial: pic32_uart: use console_is_registered()
-Date:   Mon, 14 Nov 2022 17:35:19 +0106
-Message-Id: <20221114162932.141883-27-john.ogness@linutronix.de>
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [PATCH printk v4 27/39] tty: serial: samsung_tty: use console_is_registered()
+Date:   Mon, 14 Nov 2022 17:35:20 +0106
+Message-Id: <20221114162932.141883-28-john.ogness@linutronix.de>
 In-Reply-To: <20221114162932.141883-1-john.ogness@linutronix.de>
 References: <20221114162932.141883-1-john.ogness@linutronix.de>
 MIME-Version: 1.0
@@ -67,22 +71,22 @@ console is registered. Use console_is_registered() instead.
 Signed-off-by: John Ogness <john.ogness@linutronix.de>
 Reviewed-by: Petr Mladek <pmladek@suse.com>
 ---
- drivers/tty/serial/pic32_uart.c | 2 +-
+ drivers/tty/serial/samsung_tty.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/pic32_uart.c b/drivers/tty/serial/pic32_uart.c
-index 1183b2a26539..c38754d593ca 100644
---- a/drivers/tty/serial/pic32_uart.c
-+++ b/drivers/tty/serial/pic32_uart.c
-@@ -843,7 +843,7 @@ console_initcall(pic32_console_init);
-  */
- static int __init pic32_late_console_init(void)
- {
--	if (!(pic32_console.flags & CON_ENABLED))
-+	if (!console_is_registered(&pic32_console))
- 		register_console(&pic32_console);
+diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+index 77d1363029f5..9c252c9ca95a 100644
+--- a/drivers/tty/serial/samsung_tty.c
++++ b/drivers/tty/serial/samsung_tty.c
+@@ -1732,7 +1732,7 @@ static void __init s3c24xx_serial_register_console(void)
  
- 	return 0;
+ static void s3c24xx_serial_unregister_console(void)
+ {
+-	if (s3c24xx_serial_console.flags & CON_ENABLED)
++	if (console_is_registered(&s3c24xx_serial_console))
+ 		unregister_console(&s3c24xx_serial_console);
+ }
+ 
 -- 
 2.30.2
 
