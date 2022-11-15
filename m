@@ -2,51 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAAB362A18D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4BE362A193
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbiKOSsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 13:48:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
+        id S231224AbiKOSzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 13:55:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbiKOSsT (ORCPT
+        with ESMTP id S230082AbiKOSza (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 13:48:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3C42F00F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:48:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DA0A6195B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 18:48:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E733C433D6;
-        Tue, 15 Nov 2022 18:48:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668538097;
-        bh=4h2pLemwieK+6X9ajdqA8ftjo1wxmsuup5HG2B6pxco=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=z83pzcQOuZqb2h3fNAbU18Y+hZu25jBrKl096793e+BmmFYSXzL46HyV0yhCzAkri
-         FLhhAx+oUevjwyuD9v/wO0gsUZXaEFyXn+VvALoboJJOjQtukSsVuSjVoRWyt+VuXO
-         8dKgEPCJqAI9mgl3V3aaKtCHbLfsfYQyFNtxaIxo=
-Date:   Tue, 15 Nov 2022 19:48:15 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Paul Fulghum <paulkf@microgate.com>
-Cc:     Zhengchao Shao <shaozhengchao@huawei.com>,
-        linux-kernel@vger.kernel.org, jirislaby@kernel.org,
-        akpm@linux-foundation.org, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com
-Subject: Re: [PATCH] tty: synclink_gt: unwind actions in error path of net
- device open
-Message-ID: <Y3Pe7/OSZ95ziQUf@kroah.com>
-References: <20221114010734.314910-1-shaozhengchao@huawei.com>
- <2b501d50-6777-a34f-7373-6648ed418794@microgate.com>
+        Tue, 15 Nov 2022 13:55:30 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3779527167
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:55:28 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id n12so38330837eja.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:55:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k/HKW+IBNa8pWOy4yMffEAraQs9LDCl6tE8zOCFA9Jo=;
+        b=iu6aGXZ5JUnKXPO/0OmaHU5wgsgN4NXi8MlrJ3ncVFsulB/dqcaD9yPhWhqpDQhv31
+         L8km3/PMSRhzap6uamWAucjIGw5/zmQ6q70AWGl/xVitx+FunKP24vQY31YZMtOYmwJk
+         JFT7aTOhOf5S8aSWmd+Oj95tD7n0pJLxwe6WM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k/HKW+IBNa8pWOy4yMffEAraQs9LDCl6tE8zOCFA9Jo=;
+        b=fYD8rZn5wipm0T09UAbp+UzKRPNcgQNx5ZWUETuYtaNW3kL/KeBBhyKXqAwroijbAk
+         ncKRQ9q+2hbUK9YHz05Z31Zo6ZRS15xxiqlO89PYIgz43HseozAjAtEawFVmd1lHuQBI
+         nIDbrL5PythNGtJoNLFj3THxETO0nv9OE3gUJ+yyoVLUHrtmNEp09eUuCrKTKVlwqJvX
+         CF+InsIx+b2+2TmQR+TmXHHuEsqYbktjIKL/a1cXFJpRSjPqCHLqnFbkXfjOublroFrg
+         rtEUSn5wW0wLMN5Mvp6MF3Vki172XHkOgrg3oZz8QcpvXFDYA2gbupJ1NLQJyNlmcw31
+         nHgA==
+X-Gm-Message-State: ANoB5pmH1fDDh+pPJMAdobrXHWqn1hMKlM6UOJKpxKD1idSWxM6Us9RY
+        xoegjM37A2Mo41utxi1DT6cbng==
+X-Google-Smtp-Source: AA0mqf59hGS6heF/IQyOMSZgrHch4FVbPi6hc8sOjvMbYixMuAIPtnyVI26lW0GmyKAd18yQK89iRg==
+X-Received: by 2002:a17:906:3c9:b0:7af:a2d4:e95c with SMTP id c9-20020a17090603c900b007afa2d4e95cmr4071754eja.666.1668538526505;
+        Tue, 15 Nov 2022 10:55:26 -0800 (PST)
+Received: from [192.168.1.149] ([80.208.71.65])
+        by smtp.gmail.com with ESMTPSA id d18-20020a056402401200b004580862ffdbsm6569490eda.59.2022.11.15.10.55.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 10:55:26 -0800 (PST)
+Message-ID: <708663f3-8e48-5e0d-a988-8d66ede02543@rasmusvillemoes.dk>
+Date:   Tue, 15 Nov 2022 19:55:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2b501d50-6777-a34f-7373-6648ed418794@microgate.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2] net: dsa: use more appropriate NET_NAME_* constants
+ for user ports
+Content-Language: en-US, da
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221111161729.915233-1-linux@rasmusvillemoes.dk>
+ <20221115074356.998747-1-linux@rasmusvillemoes.dk>
+ <20221115083828.06cebab1@kernel.org>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20221115083828.06cebab1@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,101 +80,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 10:21:14AM -0800, Paul Fulghum wrote:
-> hdlcdev_open() in synclink_gt.c did not fully unwind actions
-> in the error path. The use of try_module_get()/module_put() is unnecessary,
-> potentially hazardous and is removed. The synclink_gt driver is already
-> pinned any point the net device is registered, a requirement for calling
-> this entry point.
+On 15/11/2022 17.38, Jakub Kicinski wrote:
+> On Tue, 15 Nov 2022 08:43:55 +0100 Rasmus Villemoes wrote:
+>> +	if (port->name) {
+>> +		name = port->name;
+>> +		assign_type = NET_NAME_PREDICTABLE;
+>> +	} else {
+>> +		name = "eth%d";
+>> +		assign_type = NET_NAME_ENUM;
 > 
-> The call hdlc_open() to init the generic HDLC layer is moved to
-> after driver level init/checks and proper rollback of previous
-> actions is added. This is a more sensible ordering as the
-> most common error paths are at the driver level and the driver
-> level rollbacks require less processing than
-> hdlc_open()/hdlc_close().
-> 
-> This has been tested with supported hardware.
-> 
-> Suggested-by: Zhengchao Shao <shaozhengchao@huawei.com>
-> Signed-off-by: Paul Fulghum <paulkf@microgate.com>
-> 
-> diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
-> index 25e9befdda3a..72b76cdde534 100644
-> --- a/drivers/tty/synclink_gt.c
-> +++ b/drivers/tty/synclink_gt.c
-> @@ -1433,16 +1433,8 @@ static int hdlcdev_open(struct net_device *dev)
->      int rc;
->      unsigned long flags;
-> 
-> -    if (!try_module_get(THIS_MODULE))
-> -        return -EBUSY;
-> -
->      DBGINFO(("%s hdlcdev_open\n", dev->name));
-> 
-> -    /* generic HDLC layer open processing */
-> -    rc = hdlc_open(dev);
-> -    if (rc)
-> -        return rc;
-> -
->      /* arbitrate between network and tty opens */
->      spin_lock_irqsave(&info->netlock, flags);
->      if (info->port.count != 0 || info->netcount != 0) {
-> @@ -1461,6 +1453,16 @@ static int hdlcdev_open(struct net_device *dev)
->          return rc;
->      }
-> 
-> +    /* generic HDLC layer open processing */
-> +    rc = hdlc_open(dev);
-> +    if (rc) {
-> +        shutdown(info);
-> +        spin_lock_irqsave(&info->netlock, flags);
-> +        info->netcount = 0;
-> +        spin_unlock_irqrestore(&info->netlock, flags);
-> +        return rc;
-> +    }
-> +
->      /* assert RTS and DTR, apply hardware settings */
->      info->signals |= SerialSignal_RTS | SerialSignal_DTR;
->      program_hw(info);
-> @@ -1506,7 +1508,6 @@ static int hdlcdev_close(struct net_device *dev)
->      info->netcount=0;
->      spin_unlock_irqrestore(&info->netlock, flags);
-> 
-> -    module_put(THIS_MODULE);
->      return 0;
->  }
-> 
+> Per Andrew's comment lets make the change in two steps.
+> Which one should come first is a judgment call :)
 
+OK. I think I'll actually do it in three steps, with the first being
+this patch but with NET_NAME_UNKNOWN kept in both places (i.e. pure
+refactoring), and the latter two just changing one assign_type at a
+time, so they can be reverted independently.
 
-Hi,
+Rasmus
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/email-clients.txt in order to fix this.
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
