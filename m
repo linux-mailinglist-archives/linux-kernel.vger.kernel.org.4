@@ -2,143 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A5A562A0E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:59:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7B3862A0D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232592AbiKOR7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 12:59:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
+        id S237647AbiKOR6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 12:58:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbiKOR6L (ORCPT
+        with ESMTP id S232694AbiKOR6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 12:58:11 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2692F3BE;
-        Tue, 15 Nov 2022 09:58:10 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NBYdS3q2Dz9xs6c;
-        Wed, 16 Nov 2022 01:51:24 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwCHcW7o0nNj73dpAA--.16599S6;
-        Tue, 15 Nov 2022 18:57:46 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, revest@chromium.org,
-        jackmanb@chromium.org, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 4/4] security: Enforce limitations on return values from LSMs
-Date:   Tue, 15 Nov 2022 18:56:52 +0100
-Message-Id: <20221115175652.3836811-5-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221115175652.3836811-1-roberto.sassu@huaweicloud.com>
-References: <20221115175652.3836811-1-roberto.sassu@huaweicloud.com>
+        Tue, 15 Nov 2022 12:58:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A152F384;
+        Tue, 15 Nov 2022 09:58:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9271EB81A59;
+        Tue, 15 Nov 2022 17:58:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1333C433C1;
+        Tue, 15 Nov 2022 17:57:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668535080;
+        bh=r+VsSBM+QYb6w/Ek8eu6bcQf54b1Y5QWvU3cDpX9LNE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hj7bWcXJRCksnAEVm6gl+AfPsPKZ6ZVs14dsP9fI7w/2ybEI3hWNKJD/gS4gHN3IU
+         jWGDTVRj7pJWCej981ZPeSjwqr4U9eKrPeGao2c2Q+Fj0tW/5Wm6qbV/24AHy6Efpt
+         ru0mS0An2jobJPXQzcyx2WtIZMCW+ToO4tAcubU6/dOT978kG61pOq6hSIWbcZjdbU
+         l+ABBf96ki0vJwaYhm4Y3hKOK260YURrNSL30/sB8fhaNr0n6NlZeGnSqZ7BnpgYSs
+         Sudr26d9vT83DSJW9vhFS+brcvuC9WKDpGvHnEufWgkVS7KZCaYIwUYxLkHsgGfEMl
+         kZlUtPwhlvo2Q==
+Date:   Tue, 15 Nov 2022 09:57:55 -0800
+From:   Saeed Mahameed <saeed@kernel.org>
+To:     Shenwei Wang <shenwei.wang@nxp.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        imx@lists.linux.dev
+Subject: Re: [PATCH v4 0/2] net: fec: add xdp and page pool statistics
+Message-ID: <Y3PTI/ma2JexAGff@x130.lan>
+References: <20221115155744.193789-1-shenwei.wang@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwCHcW7o0nNj73dpAA--.16599S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxZFykWF4kJF4UJF1xGw47XFb_yoW5Jw47pw
-        4akFy5KF4j9Fy7XFZ3tanxua1Sv3yrKr4DCrZxXw15Za98Jwn8J3W8tF15tF1rCry8t34Y
-        gF4Ut3y5Cw4DG37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262
-        kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
-        6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GF
-        v_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvE
-        c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
-        pf9x07j7GYLUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgARBF1jj4F5bgAAsw
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20221115155744.193789-1-shenwei.wang@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On 15 Nov 09:57, Shenwei Wang wrote:
+> Changes in V4:
+> - Using u64 to record the XDP statistics
+> - Changing strncpy to strscpy
+> - Remove the "PAGE_POOL_STATS" select per Alexander's feedback
+> - Export the page_pool_stats definition in the page_pool.h
+>
 
-LSMs should not be able to return arbitrary return values, as the callers
-of the LSM infrastructure might not be ready to handle unexpected values
-(e.g. positive values that are first converted to a pointer with ERR_PTR,
-and then evaluated with IS_ERR()).
-
-Modify call_int_hook() to call is_ret_value_allowed(), so that the return
-value from each LSM for a given hook is checked. If for the interval the
-return value falls into the corresponding flag is not set, change the
-return value to the default value, just for the current LSM.
-
-A misbehaving LSM would not have impact on the decision of other LSMs, as
-the loop terminates whenever the return value is not zero.
-
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/security.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
-
-diff --git a/security/security.c b/security/security.c
-index 4041d24e3283..cd417a8a0e65 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -716,6 +716,35 @@ static int lsm_superblock_alloc(struct super_block *sb)
- #include <linux/lsm_hook_defs.h>
- #undef LSM_HOOK
- 
-+/*
-+ * The return value flags of the LSM hook are defined in linux/lsm_hook_defs.h
-+ * and can be accessed with:
-+ *
-+ *	LSM_RET_FLAGS(<hook_name>)
-+ *
-+ * The macros below define static constants for the return value flags of each
-+ * LSM hook.
-+ */
-+#define LSM_RET_FLAGS(NAME) (NAME##_ret_flags)
-+#define DECLARE_LSM_RET_FLAGS(RET_FLAGS, NAME) \
-+	static const u32 __maybe_unused LSM_RET_FLAGS(NAME) = (RET_FLAGS);
-+#define LSM_HOOK(RET, DEFAULT, RET_FLAGS, NAME, ...) \
-+	DECLARE_LSM_RET_FLAGS(RET_FLAGS, NAME)
-+
-+#include <linux/lsm_hook_defs.h>
-+#undef LSM_HOOK
-+
-+static bool is_ret_value_allowed(int ret, u32 ret_flags)
-+{
-+	if ((ret < 0 && !(ret_flags & LSM_RET_NEG)) ||
-+	    (ret == 0 && !(ret_flags & LSM_RET_ZERO)) ||
-+	    (ret == 1 && !(ret_flags & LSM_RET_ONE)) ||
-+	    (ret > 1 && !(ret_flags & LSM_RET_GT_ONE)))
-+		return false;
-+
-+	return true;
-+}
-+
- /*
-  * Hook list operation macros.
-  *
-@@ -741,6 +770,11 @@ static int lsm_superblock_alloc(struct super_block *sb)
- 								\
- 		hlist_for_each_entry(P, &security_hook_heads.FUNC, list) { \
- 			RC = P->hook.FUNC(__VA_ARGS__);		\
-+			if (!is_ret_value_allowed(RC, LSM_RET_FLAGS(FUNC))) { \
-+				WARN_ONCE(1, "Illegal ret %d for " #FUNC " from %s, forcing %d\n", \
-+					  RC, P->lsm, LSM_RET_DEFAULT(FUNC)); \
-+				RC = LSM_RET_DEFAULT(FUNC);	\
-+			}					\
- 			if (RC != 0)				\
- 				break;				\
- 		}						\
--- 
-2.25.1
+Reviewed-by: Saeed Mahameed <saeed@kernel.org>
 
