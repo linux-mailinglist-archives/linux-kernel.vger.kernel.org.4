@@ -2,72 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0866962964A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:51:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C86629652
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238221AbiKOKvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:51:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
+        id S238399AbiKOKvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:51:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238312AbiKOKuo (ORCPT
+        with ESMTP id S232690AbiKOKuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:50:44 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79322656F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:50:24 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id a15-20020a056e0208af00b00300806a52b6so11064122ilt.22
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:50:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SZnV+6NbxuXULt+sWB2/L/gIqBRC0Y69Y3IvhVemV88=;
-        b=tB06cX/0gcz+ddL+aQvdmAYk/HrOdNaUXXs9aCIzNAiffNEEyhpUM98IVZv1uqqL3h
-         TJZQyx0lcZ1ble+xnaFus4D2mchcH88W6LqrAD8/Wxhh4cjrmjqS4Ymq7tFfgF6Naeil
-         h7sRULjef6WLh/SzDOTRN3kk43MhCny4RKw4eY4Vv3W5ga8CwvRoj3Ma/olB9v/pkvaZ
-         Y8j4u1KSRKFBFEMvGteP/VzQ1DnHuxO2RWEtu8lsvMIpj0JvxSa+Ck3HzfwCuludLkNW
-         3LDXiiVJw0+8ybiDGsgamZXYNgTE47gida623Jryd5JJJkLJAYjZXwu6wz8gofxy22mB
-         IuuQ==
-X-Gm-Message-State: ANoB5pmyxewmlSVmmo6pU/Cb0T76EN8l6ok5B48XXLBK+ruXpEwC1At/
-        M3IGI2RsPdHAi85yMCDcuoJ3XpXLGsXmlVv5TJkq/kCOvWyS
-X-Google-Smtp-Source: AA0mqf7Uk0nm6MGg3DxTPRsqQB2Vgk1MkB8TGN0bFjC8ukRgDTUX41BoEb0No4lkbp960fc/0KZ7z8WOgpInvTqKZZW7+4rfkAkV
+        Tue, 15 Nov 2022 05:50:55 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6C321E23
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:50:35 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 21BD81F8B5;
+        Tue, 15 Nov 2022 10:50:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1668509434; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/FTzh3IqYnsvgJzPb6LH/DCDSa8tDLbBI2Cl4le4c+k=;
+        b=clQHvMuYUmo0CX84Qp1eGE9cTD09zVwxq2prklM6iZ2FuKryLC4kXT5f0w90oG64MeRI+F
+        UB9sh+z2SnRCSwxkI74rIZ5IhTuUP5U+6SuSaX+0Pg6aUQnY+RsEs7HXniFUVW22u6MFU0
+        QgmZMnc6/95IeIQlaUHA/yeX1+w9ISs=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id C19E82C142;
+        Tue, 15 Nov 2022 10:50:33 +0000 (UTC)
+Date:   Tue, 15 Nov 2022 11:50:32 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: Re: [PATCH printk v4 03/39] printk: Prepare for SRCU console list
+ protection
+Message-ID: <Y3Nu+Bd/SWsYn8Sp@alley>
+References: <20221114162932.141883-1-john.ogness@linutronix.de>
+ <20221114162932.141883-4-john.ogness@linutronix.de>
 MIME-Version: 1.0
-X-Received: by 2002:a92:8711:0:b0:2f8:f87a:d23d with SMTP id
- m17-20020a928711000000b002f8f87ad23dmr8224989ild.130.1668509424317; Tue, 15
- Nov 2022 02:50:24 -0800 (PST)
-Date:   Tue, 15 Nov 2022 02:50:24 -0800
-In-Reply-To: <20221115102048.2433-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008a7b4c05ed801fc3@google.com>
-Subject: Re: [syzbot] possible deadlock in virtual_nci_close
-From:   syzbot <syzbot+8040d16d30c215f821de@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221114162932.141883-4-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon 2022-11-14 17:34:56, John Ogness wrote:
+> Provide an NMI-safe SRCU protected variant to walk the console list.
+> 
+> Note that all console fields are now set before adding the console
+> to the list to avoid the console becoming visible by SCRU readers
+> before being fully initialized.
+> 
+> This is a preparatory change for a new console infrastructure which
+> operates independent of the console BKL.
+> 
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -3254,7 +3303,7 @@ int unregister_console(struct console *console)
+>  		return -ENODEV;
+>  	}
+>  
+> -	hlist_del_init(&console->node);
+> +	hlist_del_init_rcu(&console->node);
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+This should be hlist_del_rcu() here so that a list walker that it just
+processing this console could see the rest of the list.
 
-Reported-and-tested-by: syzbot+8040d16d30c215f821de@syzkaller.appspotmail.com
+It seems that hlist_unhashed() checks only node.pprev pointer
+so that we even do not need to initialize it.
 
-Tested on:
+We discussed this in v3 in the patch implementing
+console_force_preferred_locked(), see
+https://lore.kernel.org/r/Y20aBwNWT19YDeib@alley.
+I forgot that unregister_console() might have the same problem.
 
-commit:         1621b6ea Merge branch 'for-next/fixes' into for-kernelci
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=120ddf69880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9aff35d9bd592994
-dashboard link: https://syzkaller.appspot.com/bug?extid=8040d16d30c215f821de
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=11685d35880000
+Best Regards,
+Petr
 
-Note: testing is done by a robot and is best-effort only.
+>  
+>  	/*
+>  	 * <HISTORICAL>
+> @@ -3269,6 +3318,14 @@ int unregister_console(struct console *console)
+>  		console_first()->flags |= CON_CONSDEV;
+>  
+>  	console_unlock();
+> +
+> +	/*
+> +	 * Ensure that all SRCU list walks have completed. All contexts
+> +	 * must not be able to see this console in the list so that any
+> +	 * exit/cleanup routines can be performed safely.
+> +	 */
+> +	synchronize_srcu(&console_srcu);
+> +
+>  	console_sysfs_notify();
+>  
+>  	if (console->exit)
+> -- 
+> 2.30.2
