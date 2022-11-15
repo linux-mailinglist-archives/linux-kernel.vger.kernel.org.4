@@ -2,250 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC3462962B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:44:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BADF629633
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238210AbiKOKo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:44:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
+        id S229787AbiKOKrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:47:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiKOKoy (ORCPT
+        with ESMTP id S229781AbiKOKrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:44:54 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9A571FCF0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:44:52 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Dxu9ijbXNj8joHAA--.21410S3;
-        Tue, 15 Nov 2022 18:44:51 +0800 (CST)
-Received: from [10.130.0.63] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxNleibXNjmI0TAA--.34193S3;
-        Tue, 15 Nov 2022 18:44:51 +0800 (CST)
-Subject: Re: [PATCH v6 5/9] LoongArch/ftrace: Add DYNAMIC_FTRACE_WITH_REGS
- support
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Jinyang He <hejinyang@loongson.cn>
-References: <20221115025527.13382-1-zhangqing@loongson.cn>
- <20221115025527.13382-6-zhangqing@loongson.cn>
- <CAAhV-H6ceu-UfSNBEpBJOvOtvuS8hufoiEtjAT1fXdQX+T11Kg@mail.gmail.com>
- <1288f936-7e43-592a-8061-d9df94573c4d@loongson.cn>
- <CAAhV-H62-QSXjxOQK8ZJqBgJv2xX7UU_6OC275hRzG0Ou03xRA@mail.gmail.com>
-From:   Qing Zhang <zhangqing@loongson.cn>
-Message-ID: <10c05114-efa0-fe6d-09cf-46e455c359ff@loongson.cn>
-Date:   Tue, 15 Nov 2022 18:44:50 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 15 Nov 2022 05:47:47 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318671FFBA
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:47:45 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id d2-20020a056e020be200b00300ecc7e0d4so10925963ilu.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:47:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+aj7sEnxyD8T1Hj1HdidLCP7lfPYY5s0kIBRkasNpCg=;
+        b=mBYpNm3LkP9QYEfwyH8/iA1zo6wWmRjg4DsIcEbfYBNaJeHy/Mfz/HV2OhK5+YWO7c
+         ws/JMDcGcFJ2Y9aa0oPWUcXVqK8bancwzon9FRxovrlC0lTjqppNoTrooERC/TByJagX
+         oSEbLy38LPRUXos9x6adY/J24GZ2MaPCn9Y15K+weihT9Ib/Pyib6MHo4MyX1cpEg3BJ
+         Tv1AF7XrYGzJ6PxmdANMKLK9CHoh01qT6RJlxvDjNJdQ/y0KDvMwSrPviRRNc8SfbiuA
+         dFW7Nnl2k4iRiXdATspMuKteAIolnpk6NiLwgrrEqyDsOX6TQ+6LHtPG1Qfa9b3JDpnU
+         3EHQ==
+X-Gm-Message-State: ANoB5plZrAhjC8hVpKqHqtZKifq9FbyQo/doeqJNs6cKW5wVjeWVPVyP
+        V5aycPAYINuEo4+7Zn0kfnlvB4L0ngKb+eIGAwPE/b89Q7GL
+X-Google-Smtp-Source: AA0mqf6gL29lopecN6Qn5wRvRHA/S2lB6Vr8RC1Ti9+zJ4sPVawvatJREZTSAlwpw5zITxjO6hUOwQhGiXvzBBwYlosi4s+o+IhG
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H62-QSXjxOQK8ZJqBgJv2xX7UU_6OC275hRzG0Ou03xRA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxNleibXNjmI0TAA--.34193S3
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3GF45Xw45Kr4xJF4UJrWxXrb_yoW7Kw18pr
-        yUAF4DGFWj9FnI9rW2q34kXrnxtryvgrya9asrJFyfGr4qqFnxAr48Ar1DuFy0qws7G34x
-        uF1rCry3uF43X37anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2
-        jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
-        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
-        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
-        JbIYCTnIWIevJa73UjIFyTuYvjxU7PrcDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:190f:0:b0:2f9:d6cf:6b71 with SMTP id
+ 15-20020a92190f000000b002f9d6cf6b71mr7633874ilz.215.1668509264579; Tue, 15
+ Nov 2022 02:47:44 -0800 (PST)
+Date:   Tue, 15 Nov 2022 02:47:44 -0800
+In-Reply-To: <00000000000073500205eac39838@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000005146605ed801621@google.com>
+Subject: Re: [syzbot] possible deadlock in exfat_get_block
+From:   syzbot <syzbot+247e66a2c3ea756332c7@syzkaller.appspotmail.com>
+To:     linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sj1557.seo@samsung.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
 
-Hi, huacai
-On 2022/11/15 下午5:24, Huacai Chen wrote:
-> On Tue, Nov 15, 2022 at 5:22 PM Qing Zhang <zhangqing@loongson.cn> wrote:
->>
->> Hi, Huacai
->>
->> On 2022/11/15 下午4:41, Huacai Chen wrote:
->>> Hi, Qing,
->>>
->>> Patch5 and Patch6 are small and related, maybe they can be combined
->>> with a name "LoongArch/ftrace: Add DYNAMIC_FTRACE_WITH_{ARGS,REGS}
->>> support"
->> I think they should be independent due to different use scenarios.
->  From the commit message it seems  DYNAMIC_FTRACE_WITH_ARGS depend on
-> DYNAMIC_FTRACE_WITH_REGS.
+HEAD commit:    9e4ce762f0e7 Merge branches 'for-next/acpi', 'for-next/asm..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=142ea0e9880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=20ffacc1ce1c99b5
+dashboard link: https://syzkaller.appspot.com/bug?extid=247e66a2c3ea756332c7
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11cb6095880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ecada5880000
 
-DYNAMIC_FTRACE_WITH_REGS : which allows trace function saved registers,
-It means that these registers can be modified, eg: Kprobe、Livepatch.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/a70eb29add74/disk-9e4ce762.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/769d096516a8/vmlinux-9e4ce762.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/9309615f51d5/Image-9e4ce762.gz.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/709895381a4a/mount_0.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/b69a1a37527d/mount_3.gz
 
-DYNAMIC_FTRACE_WITH_ARGS: uses pt_regs as a parameter for get sp,
-which means it can be used to access registers on the stack, and
-use graph_ops::func to install return_hooker to replace the special
-hook, eg: Livepatch.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+247e66a2c3ea756332c7@syzkaller.appspotmail.com
 
- From the following Kconfig, they are reasonable as separate patches.
-config LIVEPATCH
-         bool "Kernel Live Patching"
-         depends on DYNAMIC_FTRACE_WITH_REGS || DYNAMIC_FTRACE_WITH_ARGS
+loop0: detected capacity change from 0 to 4096
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-rc5-syzkaller-32254-g9e4ce762f0e7 #0 Not tainted
+------------------------------------------------------
+syz-executor410/3072 is trying to acquire lock:
+ffff0000cb6210e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_get_block+0x6c/0x9ec fs/exfat/inode.c:282
 
-Thanks
-- Qing
-> 
-> Huacai
->>
->> Thanks,
->> -Qing
->>>
->>> Huacai
->>>
->>> On Tue, Nov 15, 2022 at 10:55 AM Qing Zhang <zhangqing@loongson.cn> wrote:
->>>>
->>>> This patch implements DYNAMIC_FTRACE_WITH_REGS on LoongArch, which allows
->>>> a traced function's arguments (and some other registers) to be captured
->>>> into a struct pt_regs, allowing these to be inspected and modified.
->>>>
->>>> Co-developed-by: Jinyang He <hejinyang@loongson.cn>
->>>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
->>>> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
->>>> ---
->>>>    arch/loongarch/Kconfig              |  1 +
->>>>    arch/loongarch/include/asm/ftrace.h |  3 +++
->>>>    arch/loongarch/kernel/ftrace_dyn.c  | 17 ++++++++++++++
->>>>    arch/loongarch/kernel/mcount-dyn.S  | 36 +++++++++++++++++++++++++++--
->>>>    4 files changed, 55 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
->>>> index 615ce62422b8..12e3e91a68ae 100644
->>>> --- a/arch/loongarch/Kconfig
->>>> +++ b/arch/loongarch/Kconfig
->>>> @@ -90,6 +90,7 @@ config LOONGARCH
->>>>           select HAVE_DEBUG_STACKOVERFLOW
->>>>           select HAVE_DMA_CONTIGUOUS
->>>>           select HAVE_DYNAMIC_FTRACE
->>>> +       select HAVE_DYNAMIC_FTRACE_WITH_REGS
->>>>           select HAVE_EBPF_JIT
->>>>           select HAVE_EXIT_THREAD
->>>>           select HAVE_FAST_GUP
->>>> diff --git a/arch/loongarch/include/asm/ftrace.h b/arch/loongarch/include/asm/ftrace.h
->>>> index 76ca58767f4d..a3f974a7a5ce 100644
->>>> --- a/arch/loongarch/include/asm/ftrace.h
->>>> +++ b/arch/loongarch/include/asm/ftrace.h
->>>> @@ -28,6 +28,9 @@ struct dyn_ftrace;
->>>>    int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
->>>>    #define ftrace_init_nop ftrace_init_nop
->>>>
->>>> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
->>>> +#define ARCH_SUPPORTS_FTRACE_OPS 1
->>>> +#endif
->>>>    #endif /* CONFIG_DYNAMIC_FTRACE */
->>>>    #endif /* __ASSEMBLY__ */
->>>>    #endif /* CONFIG_FUNCTION_TRACER */
->>>> diff --git a/arch/loongarch/kernel/ftrace_dyn.c b/arch/loongarch/kernel/ftrace_dyn.c
->>>> index 3fe791b6783e..ec3d951be50c 100644
->>>> --- a/arch/loongarch/kernel/ftrace_dyn.c
->>>> +++ b/arch/loongarch/kernel/ftrace_dyn.c
->>>> @@ -99,6 +99,23 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
->>>>           return ftrace_modify_code(pc, old, new, true);
->>>>    }
->>>>
->>>> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
->>>> +int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
->>>> +                       unsigned long addr)
->>>> +{
->>>> +       unsigned long pc;
->>>> +       long offset;
->>>> +       u32 old, new;
->>>> +
->>>> +       pc = rec->ip + LOONGARCH_INSN_SIZE;
->>>> +
->>>> +       old = larch_insn_gen_bl(pc, old_addr);
->>>> +       new = larch_insn_gen_bl(pc, addr);
->>>> +
->>>> +       return ftrace_modify_code(pc, old, new, true);
->>>> +}
->>>> +#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
->>>> +
->>>>    void arch_ftrace_update_code(int command)
->>>>    {
->>>>           command |= FTRACE_MAY_SLEEP;
->>>> diff --git a/arch/loongarch/kernel/mcount-dyn.S b/arch/loongarch/kernel/mcount-dyn.S
->>>> index 0c12cc108e6f..02835186b463 100644
->>>> --- a/arch/loongarch/kernel/mcount-dyn.S
->>>> +++ b/arch/loongarch/kernel/mcount-dyn.S
->>>> @@ -27,7 +27,7 @@
->>>>     * follows the LoongArch psABI well.
->>>>     */
->>>>
->>>> -       .macro  ftrace_regs_entry
->>>> +       .macro  ftrace_regs_entry allregs=0
->>>>           PTR_ADDI sp, sp, -PT_SIZE
->>>>           /* Save trace function ra at PT_ERA */
->>>>           PTR_S   ra, sp, PT_ERA
->>>> @@ -43,16 +43,48 @@
->>>>           PTR_S   a7, sp, PT_R11
->>>>           PTR_S   fp, sp, PT_R22
->>>>
->>>> +       .if \allregs
->>>> +       PTR_S   t0, sp, PT_R12
->>>> +       PTR_S   t1, sp, PT_R13
->>>> +       PTR_S   t2, sp, PT_R14
->>>> +       PTR_S   t3, sp, PT_R15
->>>> +       PTR_S   t4, sp, PT_R16
->>>> +       PTR_S   t5, sp, PT_R17
->>>> +       PTR_S   t6, sp, PT_R18
->>>> +       PTR_S   t7, sp, PT_R19
->>>> +       PTR_S   t8, sp, PT_R20
->>>> +       PTR_S   s0, sp, PT_R23
->>>> +       PTR_S   s1, sp, PT_R24
->>>> +       PTR_S   s2, sp, PT_R25
->>>> +       PTR_S   s3, sp, PT_R26
->>>> +       PTR_S   s4, sp, PT_R27
->>>> +       PTR_S   s5, sp, PT_R28
->>>> +       PTR_S   s6, sp, PT_R29
->>>> +       PTR_S   s7, sp, PT_R30
->>>> +       PTR_S   s8, sp, PT_R31
->>>> +       PTR_S   tp, sp, PT_R2
->>>> +       /* Clear it for later use as a flag sometimes. */
->>>> +       PTR_S   zero, sp, PT_R0
->>>> +       PTR_S   $r21, sp, PT_R21
->>>> +       .endif
->>>> +
->>>>           PTR_ADDI t8, sp, PT_SIZE
->>>>           PTR_S   t8, sp, PT_R3
->>>>
->>>>           .endm
->>>>
->>>>    SYM_CODE_START(ftrace_caller)
->>>> -       ftrace_regs_entry
->>>> +       ftrace_regs_entry allregs=0
->>>>           b       ftrace_common
->>>>    SYM_CODE_END(ftrace_caller)
->>>>
->>>> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
->>>> +SYM_CODE_START(ftrace_regs_caller)
->>>> +       ftrace_regs_entry allregs=1
->>>> +       b       ftrace_common
->>>> +SYM_CODE_END(ftrace_regs_caller)
->>>> +#endif
->>>> +
->>>>    SYM_CODE_START(ftrace_common)
->>>>           PTR_ADDI        a0, ra, -8      /* arg0: ip */
->>>>           move            a1, t0          /* arg1: parent_ip */
->>>> --
->>>> 2.36.0
->>>>
->>>>
->>
->>
+but task is already holding lock:
+ffff0000ca589060 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+ffff0000ca589060 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: page_cache_ra_unbounded+0x5c/0x400 mm/readahead.c:226
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (mapping.invalidate_lock#3){.+.+}-{3:3}:
+       down_read+0x5c/0x78 kernel/locking/rwsem.c:1509
+       filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+       filemap_fault+0x104/0x7fc mm/filemap.c:3127
+       __do_fault+0x60/0x358 mm/memory.c:4203
+       do_read_fault mm/memory.c:4554 [inline]
+       do_fault+0x338/0x550 mm/memory.c:4683
+       handle_pte_fault mm/memory.c:4955 [inline]
+       __handle_mm_fault mm/memory.c:5097 [inline]
+       handle_mm_fault+0x78c/0xa48 mm/memory.c:5218
+       __do_page_fault arch/arm64/mm/fault.c:506 [inline]
+       do_page_fault+0x428/0x79c arch/arm64/mm/fault.c:606
+       do_translation_fault+0x78/0x194 arch/arm64/mm/fault.c:689
+       do_mem_abort+0x54/0x130 arch/arm64/mm/fault.c:825
+       el1_abort+0x3c/0x5c arch/arm64/kernel/entry-common.c:367
+       el1h_64_sync_handler+0x60/0xac arch/arm64/kernel/entry-common.c:427
+       el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:579
+       do_strncpy_from_user lib/strncpy_from_user.c:41 [inline]
+       strncpy_from_user+0x1a8/0x3d8 lib/strncpy_from_user.c:139
+       getname_flags+0x84/0x278 fs/namei.c:150
+       getname+0x28/0x38 fs/namei.c:218
+       do_sys_openat2+0x78/0x22c fs/open.c:1304
+       do_sys_open fs/open.c:1326 [inline]
+       __do_sys_openat fs/open.c:1342 [inline]
+       __se_sys_openat fs/open.c:1337 [inline]
+       __arm64_sys_openat+0xb0/0xe0 fs/open.c:1337
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+-> #1 (&mm->mmap_lock){++++}-{3:3}:
+       __might_fault+0x7c/0xb4 mm/memory.c:5646
+       filldir64+0x1e8/0x574 fs/readdir.c:335
+       dir_emit_dot include/linux/fs.h:3561 [inline]
+       dir_emit_dots include/linux/fs.h:3572 [inline]
+       exfat_iterate+0xd4/0xcb4 fs/exfat/dir.c:231
+       iterate_dir+0x114/0x28c
+       __do_sys_getdents64 fs/readdir.c:369 [inline]
+       __se_sys_getdents64 fs/readdir.c:354 [inline]
+       __arm64_sys_getdents64+0x80/0x204 fs/readdir.c:354
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+-> #0 (&sbi->s_lock){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain kernel/locking/lockdep.c:3831 [inline]
+       __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
+       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+       exfat_get_block+0x6c/0x9ec fs/exfat/inode.c:282
+       do_mpage_readpage+0x474/0xd38 fs/mpage.c:208
+       mpage_readahead+0xf0/0x1b8 fs/mpage.c:361
+       exfat_readahead+0x28/0x38 fs/exfat/inode.c:345
+       read_pages+0x8c/0x4f0 mm/readahead.c:161
+       page_cache_ra_unbounded+0x374/0x400 mm/readahead.c:270
+       do_page_cache_ra mm/readahead.c:300 [inline]
+       page_cache_ra_order+0x348/0x380 mm/readahead.c:560
+       ondemand_readahead+0x340/0x720 mm/readahead.c:682
+       page_cache_sync_ra+0xc4/0xdc mm/readahead.c:709
+       page_cache_sync_readahead include/linux/pagemap.h:1213 [inline]
+       filemap_get_pages+0x118/0x598 mm/filemap.c:2581
+       filemap_read+0x14c/0x6f4 mm/filemap.c:2675
+       generic_file_read_iter+0x6c/0x25c mm/filemap.c:2821
+       call_read_iter include/linux/fs.h:2185 [inline]
+       new_sync_read fs/read_write.c:389 [inline]
+       vfs_read+0x2d4/0x448 fs/read_write.c:470
+       ksys_read+0xb4/0x160 fs/read_write.c:613
+       __do_sys_read fs/read_write.c:623 [inline]
+       __se_sys_read fs/read_write.c:621 [inline]
+       __arm64_sys_read+0x24/0x34 fs/read_write.c:621
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
+
+other info that might help us debug this:
+
+Chain exists of:
+  &sbi->s_lock --> &mm->mmap_lock --> mapping.invalidate_lock#3
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(mapping.invalidate_lock#3);
+                               lock(&mm->mmap_lock);
+                               lock(mapping.invalidate_lock#3);
+  lock(&sbi->s_lock);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor410/3072:
+ #0: ffff0000ca589060 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
+ #0: ffff0000ca589060 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: page_cache_ra_unbounded+0x5c/0x400 mm/readahead.c:226
+
+stack backtrace:
+CPU: 0 PID: 3072 Comm: syz-executor410 Not tainted 6.1.0-rc5-syzkaller-32254-g9e4ce762f0e7 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Call trace:
+ dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+ show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+ dump_stack+0x1c/0x58 lib/dump_stack.c:113
+ print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2055
+ check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain kernel/locking/lockdep.c:3831 [inline]
+ __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
+ lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
+ __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+ exfat_get_block+0x6c/0x9ec fs/exfat/inode.c:282
+ do_mpage_readpage+0x474/0xd38 fs/mpage.c:208
+ mpage_readahead+0xf0/0x1b8 fs/mpage.c:361
+ exfat_readahead+0x28/0x38 fs/exfat/inode.c:345
+ read_pages+0x8c/0x4f0 mm/readahead.c:161
+ page_cache_ra_unbounded+0x374/0x400 mm/readahead.c:270
+ do_page_cache_ra mm/readahead.c:300 [inline]
+ page_cache_ra_order+0x348/0x380 mm/readahead.c:560
+ ondemand_readahead+0x340/0x720 mm/readahead.c:682
+ page_cache_sync_ra+0xc4/0xdc mm/readahead.c:709
+ page_cache_sync_readahead include/linux/pagemap.h:1213 [inline]
+ filemap_get_pages+0x118/0x598 mm/filemap.c:2581
+ filemap_read+0x14c/0x6f4 mm/filemap.c:2675
+ generic_file_read_iter+0x6c/0x25c mm/filemap.c:2821
+ call_read_iter include/linux/fs.h:2185 [inline]
+ new_sync_read fs/read_write.c:389 [inline]
+ vfs_read+0x2d4/0x448 fs/read_write.c:470
+ ksys_read+0xb4/0x160 fs/read_write.c:613
+ __do_sys_read fs/read_write.c:623 [inline]
+ __se_sys_read fs/read_write.c:621 [inline]
+ __arm64_sys_read+0x24/0x34 fs/read_write.c:621
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
 
