@@ -2,70 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B096292D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:59:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3ADE6292D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232481AbiKOH7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 02:59:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33340 "EHLO
+        id S232621AbiKOH76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 02:59:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232196AbiKOH7f (ORCPT
+        with ESMTP id S232487AbiKOH7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 02:59:35 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E851B495
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:59:34 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id h193so12558953pgc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:59:34 -0800 (PST)
+        Tue, 15 Nov 2022 02:59:53 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53041FF98
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:59:51 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id bp15so23133697lfb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:59:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DdOHxmLLhGQ2JS9VW3BK8nUHmYD6rCy1tiLuitS/qc8=;
-        b=VyVL1Bz+AZz4KIISx7l8OK+u+Ne9T1mg0PrhTLKUq57AoS4ltny4XHyWDRP3srrYg7
-         7+LrXDAXXa/jJY17NUc5skWgpLqYxy/9dcfQHAyZ7oCojp92eWJ+IXXaHyLw9euzjgcQ
-         B6NRNt+i2c3fkrwebxYTbTRmh6NxZLpK/Hoho=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HJPFTJOGuPRhd7ksoWE06DkherlyxwNY/RJOZ9ATVqs=;
+        b=hO1pWG9FFw6lcA0dz0nGIKvIKA4R/SiXFR4HgemXVKeuy4ri+jgZm9KmbvhcTkPemv
+         9ZPEmoWV29gKa+KZ3+bVE3krOfiof6B2Miohku1IQFC6r1ZB2pa+OckJ9K/AgXva+/1C
+         qV8JLBtSUR8i9ufUY/1Zw5bUQqOvy6uGGzVol5BxOvWR5XsDP7P3g7Er/spdOOdVPuK5
+         9I2nC8zz2eG+VcaF1vK9Z34SeBvF/iSThHPxPxjH2jvy/9qHtcXuS56MAmVamZ7jixxm
+         1zjcu/F9Wdp4X/UurrUyZow9zrbqD+7cA+gSrPT843Smx57rhfuqTqyfHh0euoXhAWbK
+         lIvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DdOHxmLLhGQ2JS9VW3BK8nUHmYD6rCy1tiLuitS/qc8=;
-        b=k7ekit3FcqkasOUE/2QYKRcN3BgHVRV6pkKfkbucn4GpBYH1NtLxjPouFXpHPvNWqZ
-         T2Azm+5x7lC03H6Lp8sVdiwqLRB6VJDRLATalh3Pwu+GoA1iE9ZbArsQImusWRpXwpP9
-         Nu87gXsv4Uizev6NzsASRo+ywQ1qU8y8DwD+c6PUMbRnfvE6M8emD8R2lnExxOzCOPON
-         A4sVZWqShZbe6jteDLuVN+MZlg5X+alznS72LAS3MteNWoeYAy00kO+a5lhka/LEd7HD
-         Rzt0xaMWV5l/bzFhVa084GIqTZKa2Llj+agX5IuvfStfzwCJJBPnk+aYHmZnHjtOJuw6
-         Z6yA==
-X-Gm-Message-State: ANoB5pkru1Cw3PfRKACryyTc5MisLhhcVgLAyzdAeQ0VIFA5fxTvPr3e
-        L01TGH0a+f+VKIqO80W0oxPo+VYrN2F7NA==
-X-Google-Smtp-Source: AA0mqf7W2F5p+UWpTOghIiQlnL/OofJ/jf5ouCPUJe19FXfixiaZSfa48cupX1iJVLSdfMhoD67Tbg==
-X-Received: by 2002:a05:6a00:b49:b0:562:bcf8:7b35 with SMTP id p9-20020a056a000b4900b00562bcf87b35mr17603263pfo.52.1668499174008;
-        Mon, 14 Nov 2022 23:59:34 -0800 (PST)
-Received: from google.com ([240f:75:7537:3187:3d10:c2ca:ba5b:55e6])
-        by smtp.gmail.com with ESMTPSA id i187-20020a6287c4000000b0056262811c5fsm8052909pfe.59.2022.11.14.23.59.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 23:59:33 -0800 (PST)
-Date:   Tue, 15 Nov 2022 16:59:29 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv4 0/9] zsmalloc/zram: configurable zspage size
-Message-ID: <Y3NG4fsjxHGrnbDp@google.com>
-References: <20221031054108.541190-1-senozhatsky@chromium.org>
- <Y21+xp52OQYi/qjQ@google.com>
- <Y22dxEcs2g5mjuQ7@google.com>
- <Y26AbHxhPBJdWZQE@google.com>
- <Y3MrHsaLc8wth00E@google.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HJPFTJOGuPRhd7ksoWE06DkherlyxwNY/RJOZ9ATVqs=;
+        b=5gqts98ZwiD2UpPV3bSlsYin6exswJfjNT1LZVV8MJw0Zcu8Xk6q2bCZmhOBBCrXCO
+         po0Xqr5lSgDU68OH5VRfWlQ8tFpgMSKIOuiTebCi697+Hqk+x7AZYPPTK6h3FzlsHiMQ
+         Vl9F4qPELuYu79FLmc/KfXYid8whBt3TRpD97nr4rzo2VhtnvNThb0n814e0EYfdN71z
+         r9d8cjniMCPjhjPMFok9Y0JiHZDdNIgdfpWlr96IhPTGLBqhWLtYH4hWOl54lz1ofxXX
+         qgZA1TB+qZpDuB+cRLFHtRb8R/hzJm20mrUHMLXBRj9ue5dWmnzO/QJTSEM0FDMCoEX1
+         KzxQ==
+X-Gm-Message-State: ANoB5pkfj3xSYp7Y+lV9zs0bnIgt8tSnweQ90J0CxaCntflWHSEy0AlG
+        ZzuNFB/HMjFnwCcsYyME6i17ug==
+X-Google-Smtp-Source: AA0mqf4DsOuYz5YY9s6MWxbp9QH+GSKO3GjqvZ5CD3NNuQLOAKv/l/8yIDLggMj1iSKZHpcGsP8elg==
+X-Received: by 2002:a05:6512:2803:b0:4a6:2ff6:f32f with SMTP id cf3-20020a056512280300b004a62ff6f32fmr6024570lfb.1.1668499190153;
+        Mon, 14 Nov 2022 23:59:50 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a27-20020a2eb55b000000b0026e8b82eba6sm2388385ljn.34.2022.11.14.23.59.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 23:59:49 -0800 (PST)
+Message-ID: <88fd2f42-6f20-7bbe-1a4d-1f482c153f07@linaro.org>
+Date:   Tue, 15 Nov 2022 08:59:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3MrHsaLc8wth00E@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next 1/5] dt-bindings: net: qcom,ipa: deprecate
+ modem-init
+Content-Language: en-US
+To:     Alex Elder <elder@ieee.org>, Alex Elder <elder@linaro.org>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org,
+        elder@kernel.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221112200717.1533622-1-elder@linaro.org>
+ <20221112200717.1533622-2-elder@linaro.org>
+ <de98dbb4-afb5-de05-1e75-2959aa720333@linaro.org>
+ <2f827660-ae9d-01dd-ded8-7fd4c2f8f8ae@ieee.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2f827660-ae9d-01dd-ded8-7fd4c2f8f8ae@ieee.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,42 +83,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/15 15:01), Sergey Senozhatsky wrote:
-> On (22/11/11 09:03), Minchan Kim wrote:
-> [..]
-> > for class in classes:
-> >     wasted_bytes += class->pages_per_zspage * PAGE_SIZE - an object size
-> > 
-> > with *aggressive zpage compaction*. Now, we are relying on shrinker
-> > (it might be already enough) to trigger but we could change the policy 
-> > wasted memory in the class size crossed a threshold
+On 14/11/2022 18:48, Alex Elder wrote:
+> On 11/14/22 03:56, Krzysztof Kozlowski wrote:
+>> On 12/11/2022 21:07, Alex Elder wrote:
+>>> GSI firmware for IPA must be loaded during initialization, either by
+>>> the AP or by the modem.  The loader is currently specified based on
+>>> whether the Boolean modem-init property is present.
+>>>
+>>> Instead, use a new property with an enumerated value to indicate
+>>> explicitly how GSI firmware gets loaded.  With this in place, a
+>>> third approach can be added in an upcoming patch.
+>>>
+>>> The new qcom,gsi-loader property has two defined values:
+>>>    - self:   The AP loads GSI firmware
+>>>    - modem:  The modem loads GSI firmware
+>>> The modem-init property must still be supported, but is now marked
+>>> deprecated.
+>>>
+>>> Signed-off-by: Alex Elder <elder@linaro.org>
+>>> ---
+>>>   .../devicetree/bindings/net/qcom,ipa.yaml     | 59 +++++++++++++++----
+>>>   1 file changed, 46 insertions(+), 13 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/net/qcom,ipa.yaml b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+>>> index e752b76192df0..0dfd6c721e045 100644
+>>> --- a/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+>>> +++ b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+>>> @@ -124,12 +124,22 @@ properties:
+>>>         - const: ipa-clock-enabled-valid
+>>>         - const: ipa-clock-enabled
+>>>   
+>>> +  qcom,gsi-loader:
+>>> +    enum:
+>>> +      - self
+>>> +      - modem
+>>> +    description:
+>>> +      This indicates how GSI firmware should be loaded.  If the AP loads
+>>
+>> s/This indicates/Indicate/
+>> (or any other grammar without describing DT syntax but hardware/system)
 > 
-> Compaction does something good only when we can release zspage in the
-> end. Otherwise we just hold the global pool->lock (assuming that we
-> land zsmalloc writeback series) and simply move objects around zspages.
-> So ability to limit zspage chain size still can be valuable, on another
-> level, as a measure to reduce dependency on compaction success.
+> OK.
 > 
-> We may be can make compaction slightly more successful. For instance,
-> if we would start move objects not only within zspages of the same size
-> class, but, for example, move objects to class size + X (upper size
-> classes). As an example, when all zspages in class are almost full,
-> but class size + 1 has almost empty pages. In other words sort of as
-> is those classes had been merged. (virtual merge). Single pool->look
-> would be handy for it.
+>>> +      and validates GSI firmware, this property has value "self".  If the
+>>> +      modem does this, this property has value "modem".
+>>> +
+>>>     modem-init:
+>>> +    deprecated: true
+>>>       type: boolean
+>>>       description:
+>>> -      If present, it indicates that the modem is responsible for
+>>> -      performing early IPA initialization, including loading and
+>>> -      validating firwmare used by the GSI.
+>>> +      This is the older (deprecated) way of indicating how GSI firmware
+>>> +      should be loaded.  If present, the modem loads GSI firmware; if
+>>> +      absent, the AP loads GSI firmware.
+>>>   
+>>>     memory-region:
+>>>       maxItems: 1
+>>> @@ -155,15 +165,36 @@ required:
+>>>     - interconnects
+>>>     - qcom,smem-states
+>>>   
+>>> -# If modem-init is not present, the AP loads GSI firmware, and
+>>> -# memory-region must be specified
+>>> -if:
+>>> -  not:
+>>> -    required:
+>>> -      - modem-init
+>>> -then:
+>>> -  required:
+>>> -    - memory-region
+>>> +allOf:
+>>> +  # If qcom,gsi-loader is present, modem-init must not be present
+>>> +  - if:
+>>> +      required:
+>>> +        - qcom,gsi-loader
+>>> +    then:
+>>> +      properties:
+>>> +        modem-init: false
+>>
+>> This is ok, but will not allow you to keep deprecated property in DTS
+>> for the transition period. We talked about this that you need to keep
+>> both or wait few cycles before applying DTS cleanups.
+> 
+> My intention is expressed in the comment.  Is it because of the
+> "if .... required ... qcom,gsi-loader"?
+> 
+> Should it be "if ... properties ... qcom,gsi-loader"?
 
-What I'm trying to say here is that "aggressiveness of compaction"
-probably should be measured not by compaction frequency, but by overall
-cost of compaction operations.
+You disallow modem-init here, so it cannot be present in DTS if
+gsi-loader is present. Therefore the deprecated case like this:
+  qcom,gsi-loader = "modem"
+  modem-init;
+is not allowed by the schema.
 
-Aggressive frequency of compaction doesn't help us much if the state of
-the pool doesn't change significantly between compactions. E.g. if we do
-10 compaction calls, then only the first one potentially compacts some
-zspages, the remaining ones don't do anything.
+As I said, it is fine, but your DTS should wait a cycle.
 
-Cost of compaction operations is a measure of how hard compaction tries.
-Does it move object to neighbouring classes and so on? May be we can do
-something here.
 
-But then the question is - how do we control that we don't drain battery
-too fast? And perhaps some other questions too.
+Best regards,
+Krzysztof
+
