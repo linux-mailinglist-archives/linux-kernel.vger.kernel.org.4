@@ -2,158 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D126E6295D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:29:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 250BF6295D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232781AbiKOK3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:29:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
+        id S232414AbiKOKar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:30:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiKOK31 (ORCPT
+        with ESMTP id S229928AbiKOKao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:29:27 -0500
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F9D1D0D3;
-        Tue, 15 Nov 2022 02:29:26 -0800 (PST)
-Received: by mail-qv1-f50.google.com with SMTP id w10so9532079qvr.3;
-        Tue, 15 Nov 2022 02:29:26 -0800 (PST)
+        Tue, 15 Nov 2022 05:30:44 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000E322B17;
+        Tue, 15 Nov 2022 02:30:42 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id a5so21191215edb.11;
+        Tue, 15 Nov 2022 02:30:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=edqd+4W/Fixq/4Nm2nUOfh26ZYAkVpQJ0V7PoZhCnr8=;
+        b=DM9Te/3/UVkmGhBqXN0kECyymZzbViZD6xCSbfedqh4xZbGbSKSihk9bfPRvRInYWD
+         DwNM2sto4gGHXI2jsqsIsGgx26lnuraBM+6khyK7zLjdyel5TjO5IMpQtF0YvyUFgBIu
+         fJ51W+slL4JA7Gp4uENto7hn+wuXbzudcZ0g9Vb0MENJ+PxdubOfLC3nQRH8DzO2rCwm
+         Equr54JPUmKMaLjW5JPJ+CN893jNt2k2ZQCsvDyEn7VtZ4qenA7Invq6pgtRMOoD9QSm
+         2jhR0/IUW3IJ1Qo/9q4Ve/3iiJ6XWepAaQ+TvFt09xCjNeWay3YA6QObT3iHi4bYaKHC
+         2PuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zyWvwU9qjTDyVNHbJm/iJ/vqWlCu7gf1x9mYXMP0o0s=;
-        b=U1gV9147mao2eWxw/DJT6PSoHL0HYZR5mE90ZaJVYYM9PtKPuiQlXgaAwVg3iEEFKr
-         8ajiepuZ5CD89iSP/+QKt5qEih+TroXpxqIycInG83cyozLJyiN68GaYpvLD1oXZ81JP
-         fVDFKcSR5KeSCJq9DRUusBcJIe1XxUcq3kOS11gg8XpV1NQohnrrYkSLO6tGG4uZRpvN
-         nMtWyZHI+SYbHsTR7aQ9ZTU1laXQjthqQOUr/FDZy5NqDxhweOllQB07jlakd5QeneLh
-         uxKmWohGehz4jUjEhucfAy2bmBHaUZOeG3ZFekNrrElLx1CHLnNEistB8M7g4TBjJsWo
-         FdrQ==
-X-Gm-Message-State: ANoB5pkK3CjbOeiXFEuYBXJdz/5cFjnQ4DXvlkFQQvcYcOGEmRVJwAxG
-        ufgFS/WRPKn48XO1znkCItK8IO6IGuQO/Q==
-X-Google-Smtp-Source: AA0mqf6Kl1TO+9DrcPFL66vwbqOU/7GQg4lDgu/aeyumvh2dvxgoBbJ9RSWLfnjXF8eD9+25o1Xwng==
-X-Received: by 2002:a05:6214:2dc7:b0:4bb:754f:e974 with SMTP id nc7-20020a0562142dc700b004bb754fe974mr16089739qvb.2.1668508165617;
-        Tue, 15 Nov 2022 02:29:25 -0800 (PST)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id i18-20020a05620a405200b006fa84082b6dsm8119048qko.128.2022.11.15.02.29.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 02:29:25 -0800 (PST)
-Received: by mail-yb1-f176.google.com with SMTP id 136so1019384ybn.1;
-        Tue, 15 Nov 2022 02:29:24 -0800 (PST)
-X-Received: by 2002:a25:18c5:0:b0:6de:6183:c5c3 with SMTP id
- 188-20020a2518c5000000b006de6183c5c3mr16199179yby.89.1668508164385; Tue, 15
- Nov 2022 02:29:24 -0800 (PST)
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=edqd+4W/Fixq/4Nm2nUOfh26ZYAkVpQJ0V7PoZhCnr8=;
+        b=6qEa+0/zoDC/F0LdxsJNYHP2ra2/kZxJA+kExYryTrJ2bh+Vx0WsLYvLy87k8x/2/o
+         q7LM+xeCALSbKhHUCMNBwbz11ByMsNP8s0v4dxOtyofMwj2or/3jqZkkSrnqFhoo9+nr
+         Xjx8Ow4TSkBCcZKBmjovqTrKNYtNhXKs40MOD0Wr/+3YpiJn7ZkzqMcSmdmLKA9fFC4o
+         1HDNgy2to143yU+H677zJV96XDEyr9p8YwikXsb3KjLo20OtxYUE98HXgSckCBJQMPak
+         W/P+5tDvVwxh0/CVemcSDE1j00/vFbllDD0sujaUhtsqQ9palgB8wyJrmHrB1E8FqzQD
+         c3Yw==
+X-Gm-Message-State: ANoB5pl9MiuEZYRl/DgN5NlIigzMNGjuCKZB3fHWiaK5AF/lxQqzvOYv
+        ljx8WK7ikU1TI89E2WnZYqP4G75b1GUV8le1MBCYjxti
+X-Google-Smtp-Source: AA0mqf4hb9GaCIEmHTaEblcHmvogPjHNn+5hmbcfXpUjaDzwAspsp0dY3LLTaDNdQ3qAcj6E0wC5cr6gTqZ7z5pZLok=
+X-Received: by 2002:a05:6402:22f1:b0:462:1e07:1dd7 with SMTP id
+ dn17-20020a05640222f100b004621e071dd7mr14603963edb.293.1668508241291; Tue, 15
+ Nov 2022 02:30:41 -0800 (PST)
 MIME-Version: 1.0
-References: <f847459dc0a0e2d8ffa1d290d06e0e4a226a6f39.1668075479.git.jamie.bainbridge@gmail.com>
- <Y20Bxc1gQ8nrFsvA@lunn.ch> <CAAvyFNg1F8ixrgy0YeL-TT5xLmk8N7dD=ZMLQ6VxsjHb_PU9bg@mail.gmail.com>
- <Y217ikkZzXKKGix4@lunn.ch>
-In-Reply-To: <Y217ikkZzXKKGix4@lunn.ch>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 15 Nov 2022 11:29:12 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU4_BACY_7M8rQxPt+_A64Oz8O9PoAkFQfsP2yaWFUM6g@mail.gmail.com>
-Message-ID: <CAMuHMdU4_BACY_7M8rQxPt+_A64Oz8O9PoAkFQfsP2yaWFUM6g@mail.gmail.com>
-Subject: Re: [PATCH] tcp: Add listening address to SYN flood message
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Jamie Bainbridge <jamie.bainbridge@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <CAO4mrfdLsMZT1ytmTCK4m0xXezxskTUbQjqZoGobMVhnZgdfmw@mail.gmail.com>
+In-Reply-To: <CAO4mrfdLsMZT1ytmTCK4m0xXezxskTUbQjqZoGobMVhnZgdfmw@mail.gmail.com>
+From:   Wei Chen <harperchen1110@gmail.com>
+Date:   Tue, 15 Nov 2022 18:30:05 +0800
+Message-ID: <CAO4mrfcYtXiuuaPtm==heNarkMqTUGoKWxnmiOC3jvhfjeOBFg@mail.gmail.com>
+Subject: Re: WARNING in _btrfs_ioctl_set_received_subvol
+To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        osandov@fb.com, sweettea-kernel@dorminy.me,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+Dear Linux developers,
 
-On Thu, Nov 10, 2022 at 11:42 PM Andrew Lunn <andrew@lunn.ch> wrote:
-> On Fri, Nov 11, 2022 at 08:20:18AM +1100, Jamie Bainbridge wrote:
-> > On Fri, 11 Nov 2022 at 00:51, Andrew Lunn <andrew@lunn.ch> wrote:
-> > > On Thu, Nov 10, 2022 at 09:21:06PM +1100, Jamie Bainbridge wrote:
-> > > > The SYN flood message prints the listening port number, but on a system
-> > > > with many processes bound to the same port on different IPs, it's
-> > > > impossible to tell which socket is the problem.
-> > > >
-> > > > Add the listen IP address to the SYN flood message. It might have been
-> > > > nicer to print the address first, but decades of monitoring tools are
-> > > > watching for the string "SYN flooding on port" so don't break that.
-> > > >
-> > > > Tested with each protcol's "any" address and a host address:
-> > > >
-> > > >  Possible SYN flooding on port 9001. IP 0.0.0.0.
-> > > >  Possible SYN flooding on port 9001. IP 127.0.0.1.
-> > > >  Possible SYN flooding on port 9001. IP ::.
-> > > >  Possible SYN flooding on port 9001. IP fc00::1.
-> > > >
-> > > > Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
-> > > > ---
-> > > >  net/ipv4/tcp_input.c | 16 +++++++++++++---
-> > > >  1 file changed, 13 insertions(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> > > > index 0640453fce54b6daae0861d948f3db075830daf6..fb86056732266fedc8ad574bbf799dbdd7a425a3 100644
-> > > > --- a/net/ipv4/tcp_input.c
-> > > > +++ b/net/ipv4/tcp_input.c
-> > > > @@ -6831,9 +6831,19 @@ static bool tcp_syn_flood_action(const struct sock *sk, const char *proto)
-> > > >               __NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPREQQFULLDROP);
-> > > >
-> > > >       if (!queue->synflood_warned && syncookies != 2 &&
-> > > > -         xchg(&queue->synflood_warned, 1) == 0)
-> > > > -             net_info_ratelimited("%s: Possible SYN flooding on port %d. %s.  Check SNMP counters.\n",
-> > > > -                                  proto, sk->sk_num, msg);
-> > > > +         xchg(&queue->synflood_warned, 1) == 0) {
-> > > > +#if IS_ENABLED(CONFIG_IPV6)
-> > > > +             if (sk->sk_family == AF_INET6) {
-> > >
-> > > Can the IS_ENABLED() go inside the if? You get better build testing
-> > > that way.
-> > >
-> > >      Andrew
-> >
-> > Are you sure? Why would the IS_ENABLED() be inside of a condition
-> > which isn't compiled in? If IPv6 isn't compiled in then the condition
-> > would never evaluate as true, so seems pointless a pointless
-> > comparison to make? People not compiling in IPv6 have explicitly asked
-> > *not* to have their kernel filled with a bunch of "if (family ==
-> > AF_INET6)" haven't they?
-> >
-> > There are many other examples of this pattern of "IS_ENABLED()" first
-> > and "if (family == AF_INET6)" inside it, but I can't see any of the
-> > inverse which I think you're suggesting, see:
-> >
-> >  grep -C1 -ERHn "IS_ENABLED\(CONFIG_IPV6\)" net | grep -C1 "family == AF_INET6"
-> >
-> > Please let me know if I've misunderstood?
+I hope the following bug report is helpful.
+
+Best,
+Wei
+
+On Sun, 13 Nov 2022 at 19:38, Wei Chen <harperchen1110@gmail.com> wrote:
 >
-> So what i'm suggesting is
+> Dear Linux Developer,
 >
->                if (IS_ENABLED(CONFIG_IPV6) && sk->sk_family == AF_INET6) {
->                        net_info_ratelimited("%s: Possible SYN flooding on port %d. IP %pI6c. %s.  Check SNMP counters.\n",
->                                        proto, sk->sk_num,
->                                        &sk->sk_v6_rcv_saddr, msg);
->                 }
-
-Unfortunately the IPv6-specific members are not defined if
-CONFIG_IPV6=n. Patch sent.
-
-https://lore.kernel.org/netdev/d1ecf500f07e063d4e8e34f4045ddca55416c686.1668507036.git.geert+renesas@glider.be
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> Recently when using our tool to fuzz kernel, the following crash was
+> triggered. The bug persists in Linux 6.0.
+>
+> HEAD commit:  4f5365f77018  Linux 5.15.76
+> git tree: stable
+> compiler: gcc 7.5.0
+> console output:
+> https://drive.google.com/file/d/1wkzu8jz6edriSP6TpsCGYD5AzkLajIEv/view?usp=share_link
+> kernel config: https://drive.google.com/file/d/1flhc33savDkmYN6PRU5C2vXDX0LAKMvM/view?usp=share_link
+> C reproducer: https://drive.google.com/file/d/1zKWsWAOcaHfPKewTG6P3pnnVfwH_WXa9/view?usp=share_link
+> Syz reproducer:
+> https://drive.google.com/file/d/1jUR8_6Re4xpJhyLdXqPiiV72WT-Tk8A-/view?usp=share_link
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: Wei Chen <harperchen1110@gmail.com>
+>
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
+> R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd3c817900
+>  </TASK>
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 29222 at fs/btrfs/ioctl.c:4521
+> _btrfs_ioctl_set_received_subvol+0x221/0x430 fs/btrfs/ioctl.c:4521
+> Modules linked in:
+> CPU: 1 PID: 29222 Comm: syz-executor.0 Not tainted 5.15.76 #5
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+> RIP: 0010:_btrfs_ioctl_set_received_subvol+0x221/0x430 fs/btrfs/ioctl.c:4521
+> Code: e8 74 34 44 ff 83 fb fb 0f 84 de 01 00 00 83 fb e2 0f 84 d5 01
+> 00 00 e8 5d 34 44 ff 89 de 48 c7 c7 c0 f8 39 85 e8 9f dc 2e ff <0f> 0b
+> e8 48 34 44 ff 89 d9 ba a9 11 00 00 e9 45 01 00 00 49 8b 4f
+> RSP: 0018:ffffc9000aecfd40 EFLAGS: 00010286
+> RAX: 0000000000000000 RBX: fffffffffffffff4 RCX: ffffc900013ed000
+> RDX: 0000000000040000 RSI: ffffffff812d935c RDI: 00000000ffffffff
+> RBP: ffffc9000aecfda0 R08: 0000000000000000 R09: 0000000000000001
+> R10: ffffc9000aecfbe0 R11: 0000000000000003 R12: ffff888014210400
+> R13: ffff8880208d2000 R14: ffff88810c4f21c0 R15: ffff88810f37b600
+> FS:  00007f41ffc27700(0000) GS:ffff88813dc00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fab915f7008 CR3: 000000002096e000 CR4: 00000000003526e0
+> Call Trace:
+>  <TASK>
+>  btrfs_ioctl_set_received_subvol_32 fs/btrfs/ioctl.c:4584 [inline]
+>  btrfs_ioctl+0x2154/0x3d50 fs/btrfs/ioctl.c:5007
+>  vfs_ioctl fs/ioctl.c:51 [inline]
+>  __do_sys_ioctl fs/ioctl.c:874 [inline]
+>  __se_sys_ioctl fs/ioctl.c:860 [inline]
+>  __x64_sys_ioctl+0xb6/0x100 fs/ioctl.c:860
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x34/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x61/0xcb
+> RIP: 0033:0x4697f9
+> Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48
+> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+> 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f41ffc26c48 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 000000000077bf80 RCX: 00000000004697f9
+> RDX: 0000000020072c40 RSI: 00000000c0c09425 RDI: 0000000000000005
+> RBP: 00007f41ffc26c80 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
+> R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd3c817900
+>  </TASK>
+>
+> Best,
+> Wei
