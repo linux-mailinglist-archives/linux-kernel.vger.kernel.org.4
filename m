@@ -2,111 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28246628E29
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 01:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C55B2628E2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 01:20:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237481AbiKOASm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 19:18:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
+        id S237545AbiKOAUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 19:20:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236635AbiKOASk (ORCPT
+        with ESMTP id S232149AbiKOAUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 19:18:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932E263E8;
-        Mon, 14 Nov 2022 16:18:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 14 Nov 2022 19:20:30 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5124715A25;
+        Mon, 14 Nov 2022 16:20:28 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4BEF7B810A8;
-        Tue, 15 Nov 2022 00:18:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99199C433B5;
-        Tue, 15 Nov 2022 00:18:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668471516;
-        bh=UOGQoyCKo3XNkKtnl9+sB+VRkl2mOKRXguX0iYW8nF4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Phk0ny7PLtgAY/27DqHyuSCbkvRq9nxNcOzVv1jkFxv9OW74Y5xineUT+Os1KyjJS
-         DnNAmYfuVZuvBzVyMWlWIVs4ai2JQpjsQP8+5fhjsw59XYmKKIHU0pjDS09EWWK7sJ
-         2xueWCMpWlWSIFbHFumqxXzj4K25Ks7hrWKVJJOVjxmNZT4l7msYhV2Bc7evhmgvuB
-         QXJ08gfIdrWcr/PdoQRGyiW6o2FGjr1EES4W/il48Bv7GHk93SI/aEAJqso8wCNQlT
-         AFs1Xm+zNnSur8kx7mMkdLl5vEL0naWnVI/PClKZbEkUHyLGsAmZ6PUeQLxqR7Bhbc
-         gwdYlLO6QE68Q==
-Date:   Mon, 14 Nov 2022 17:18:34 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kbuild: revive parallel execution for .tmp_initcalls.lds
- rule
-Message-ID: <Y3La2mwCgD8r/5PI@dev-arch.thelio-3990X>
-References: <20221114174617.211980-1-masahiroy@kernel.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NB6Jl4w4Tz4xZZ;
+        Tue, 15 Nov 2022 11:20:23 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668471624;
+        bh=Flkuiws2gQG551lQNjjxnw9zCJ8mpY2AsUxbL0rV8II=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aTATRPWW8da1jkc6sPi5I0y71BJJODAI/fZq10Ky1y5ycqPpv7xHJQoRvaLgxbC2b
+         AJH23X061ftqmPvH6Fti6Fgzv6tUUVMxwNIZ0omgkysbSpvp6fT9RjHafsHGidalOM
+         6jPtVfwWOd86j0sSB6vwnkvtk+CXkWtS11NdWnQgD8Y7ZFW+nCpfwnYva7XGIGmrbC
+         yfl4sqKxlH45oynMRzWkeLko+DbGyb1g6VVR2mzVRiSeooB+v74IimCBYRc4a7g8N3
+         /nFp/H32dXeWNotMLVQxlSiulNuZyahlBVorI5aa7MjXvY5FPKUhpIR4hVhVXcdtwm
+         PCb7pk5dKuhdg==
+Date:   Tue, 15 Nov 2022 11:20:21 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Helge Deller <deller@gmx.de>
+Cc:     Shang XiaoJing <shangxiaojing@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the fbdev tree
+Message-ID: <20221115112021.1c8aa004@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221114174617.211980-1-masahiroy@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/RBOXzVc3SgC_7VbRKmzX=Mn";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 02:46:17AM +0900, Masahiro Yamada wrote:
-> Prior to commit 5d45950dfbb1 ("kbuild: move vmlinux.o link to
-> scripts/Makefile.vmlinux_o"), jobserver-exec was invoked from the shell
-> script, link-vmlinux.sh. It can get access to the jobserver because
-> Makefile adds '+' prefix, as in:
-> 
->     +$(call if_changed_dep,link_vmlinux)
-> 
-> Since 5d45950dfbb1, jobserver-exec is invoked from Makefile, but the
-> '+' prefix is missing, hence jobserver-exec has no access to the
-> jobserver.
-> 
-> Fixes: 5d45950dfbb1 ("kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o")
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+--Sig_/RBOXzVc3SgC_7VbRKmzX=Mn
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Hi all,
 
-At least it doesn't seem like compile times were majorly affected. I
-benchmarked arm64 allmodconfig (worst case scenario with ThinLTO):
+After merging the fbdev tree, today's linux-next build (x86_64
+allmodconfig) produced this warning:
 
-Benchmark 1: 094226ad94f4 ("Linux 6.1-rc5")
-  Time (mean ± σ):     899.036 s ±  1.133 s    [User: 49314.495 s, System: 3840.796 s]
-  Range (min … max):   898.118 s … 900.302 s    3 runs
+WARNING: modpost: drivers/video/fbdev/via/viafb.o: section mismatch in refe=
+rence: init_module (section: .init.text) -> viafb_exit (section: .exit.text)
 
-Benchmark 2: 0f45cbb5399b ("kbuild: revive parallel execution for .tmp_initcalls.lds rule")
-  Time (mean ± σ):     898.482 s ±  0.152 s    [User: 49329.703 s, System: 3836.408 s]
-  Range (min … max):   898.306 s … 898.584 s    3 runs
+Introduced by commit
 
-Summary
-  '0f45cbb5399b ("kbuild: revive parallel execution for .tmp_initcalls.lds rule")' ran
-    1.00 ± 0.00 times faster than '094226ad94f4 ("Linux 6.1-rc5")'
+  ab885d8c7e15 ("fbdev: via: Fix error in via_core_init()")
 
-> ---
-> 
->  scripts/Makefile.vmlinux_o | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-> index 0edfdb40364b..ae52d3b3f063 100644
-> --- a/scripts/Makefile.vmlinux_o
-> +++ b/scripts/Makefile.vmlinux_o
-> @@ -19,7 +19,7 @@ quiet_cmd_gen_initcalls_lds = GEN     $@
->  
->  .tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
->  		vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
-> -	$(call if_changed,gen_initcalls_lds)
-> +	+$(call if_changed,gen_initcalls_lds)
->  
->  targets := .tmp_initcalls.lds
->  
-> -- 
-> 2.34.1
-> 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/RBOXzVc3SgC_7VbRKmzX=Mn
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNy20UACgkQAVBC80lX
+0Gy6zQf9H1H0rD0Xqy7XbQgZzHxix0EHeKVeWutp/+ia9NjzdZGP3g4zR9Dfki4s
+K9kWPX6qyjZLEjemUyJnZgKgRF4XBYr+WiShvcxhxFTENr8y6veoefftHysf31EO
+GRX6S0sU66sz0oeKqy6k95DshNEWzHBrxei/jjElGStR9k0Bog09znGWWzlqtlfa
+nc0kr1GpJo88ClNmNJaOl8jI+flZLIq7N/XGc/0qE1Ay0xZIb8ZJWZ7UGVTZXF8G
+Nw8i4i3K//Kf6zGtOxUbvL4XS0o/WIx3qKedR6ZvxxAHnoSNF3eiL37wOzWZg6+2
+T7xDi8IarcULgmj9QFMgrvk52YASfw==
+=Rngp
+-----END PGP SIGNATURE-----
+
+--Sig_/RBOXzVc3SgC_7VbRKmzX=Mn--
