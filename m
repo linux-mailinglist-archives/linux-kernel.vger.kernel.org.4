@@ -2,94 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF6D629628
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC3462962B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237481AbiKOKnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:43:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
+        id S238210AbiKOKo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiKOKnL (ORCPT
+        with ESMTP id S229745AbiKOKoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:43:11 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD0F25C51;
-        Tue, 15 Nov 2022 02:43:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=B85cuMRk7m/GxUw8KclvU5Eto26IVRvj2aMlFbVY1SU=; b=MS5yRjBVqNX8Cz7qZ346BZzJEO
-        AFtoeic2FvsFskee3v2ZQRh3/japbhQiR5YrJ4/9KArJwNO5p0NU9rR3R+tr+z91ElT5UaRCAhApX
-        sAFKZ2zfPaKEenDMRdaw48TZqmfO4OuYRNApSXCZB5hTQ1CLXomRywfBfV5a/NyF9Z8P3zKeaH2fq
-        gGtqWJdPJ8NNDzxvtNaZv2KeLzuPciybCvHrLlsMmbS3xAL/ViJNW6kSrFMzL9fvhTJjeTW9LXX/a
-        B/xPE0BtvgrPvWWvm5nn0vCGuoAGv7cQ674hyPc57SoaaQCxhMqRdqY/TiUDXjSmVDZ4knGYd/M9e
-        XIGE2K5w==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35282)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1outP4-0001vu-6Q; Tue, 15 Nov 2022 10:42:54 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1outP0-0004iD-2t; Tue, 15 Nov 2022 10:42:50 +0000
-Date:   Tue, 15 Nov 2022 10:42:50 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Corentin LABBE <clabbe@baylibre.com>, andrew@lunn.ch,
-        calvin.johnson@oss.nxp.com, davem@davemloft.net,
-        edumazet@google.com, hkallweit1@gmail.com,
-        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        kuba@kernel.org, lgirdwood@gmail.com, pabeni@redhat.com,
-        robh+dt@kernel.org, samuel@sholland.org, wens@csie.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        netdev@vger.kernel.org, linux-sunxi@googlegroups.com
-Subject: Re: [PATCH v4 1/3] regulator: Add of_regulator_bulk_get_all
-Message-ID: <Y3NtKgb0LpWs0RkB@shell.armlinux.org.uk>
-References: <20221115073603.3425396-1-clabbe@baylibre.com>
- <20221115073603.3425396-2-clabbe@baylibre.com>
- <Y3Nj4pA2+WRFvSNd@sirena.org.uk>
- <Y3NnirK0bN71IgCo@Red>
- <Y3NrQffcdGIjS64a@sirena.org.uk>
+        Tue, 15 Nov 2022 05:44:54 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9A571FCF0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:44:52 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Dxu9ijbXNj8joHAA--.21410S3;
+        Tue, 15 Nov 2022 18:44:51 +0800 (CST)
+Received: from [10.130.0.63] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxNleibXNjmI0TAA--.34193S3;
+        Tue, 15 Nov 2022 18:44:51 +0800 (CST)
+Subject: Re: [PATCH v6 5/9] LoongArch/ftrace: Add DYNAMIC_FTRACE_WITH_REGS
+ support
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Jinyang He <hejinyang@loongson.cn>
+References: <20221115025527.13382-1-zhangqing@loongson.cn>
+ <20221115025527.13382-6-zhangqing@loongson.cn>
+ <CAAhV-H6ceu-UfSNBEpBJOvOtvuS8hufoiEtjAT1fXdQX+T11Kg@mail.gmail.com>
+ <1288f936-7e43-592a-8061-d9df94573c4d@loongson.cn>
+ <CAAhV-H62-QSXjxOQK8ZJqBgJv2xX7UU_6OC275hRzG0Ou03xRA@mail.gmail.com>
+From:   Qing Zhang <zhangqing@loongson.cn>
+Message-ID: <10c05114-efa0-fe6d-09cf-46e455c359ff@loongson.cn>
+Date:   Tue, 15 Nov 2022 18:44:50 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <CAAhV-H62-QSXjxOQK8ZJqBgJv2xX7UU_6OC275hRzG0Ou03xRA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y3NrQffcdGIjS64a@sirena.org.uk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8DxNleibXNjmI0TAA--.34193S3
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3GF45Xw45Kr4xJF4UJrWxXrb_yoW7Kw18pr
+        yUAF4DGFWj9FnI9rW2q34kXrnxtryvgrya9asrJFyfGr4qqFnxAr48Ar1DuFy0qws7G34x
+        uF1rCry3uF43X37anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2
+        jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
+        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
+        1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
+        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
+        1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
+        JbIYCTnIWIevJa73UjIFyTuYvjxU7PrcDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 10:34:41AM +0000, Mark Brown wrote:
-> On Tue, Nov 15, 2022 at 11:18:50AM +0100, Corentin LABBE wrote:
-> > Le Tue, Nov 15, 2022 at 10:03:14AM +0000, Mark Brown a �crit :
-> 
-> > > What's the use case - why would a device not know which supplies
-> > > it requires?  This just looks like an invitation to badly written
-> > > consumers TBH.
-> 
-> > The device know which supply it have, but I found only this way to made all maintainers happy.
-> > See https://lore.kernel.org/netdev/0518eef1-75a6-fbfe-96d8-bb1fc4e5178a@linaro.org/t/#m7a2e012f4c7c7058478811929774ab2af9bfcbf6
-> 
-> Well, it's not making this maintainer happy :/  If we know what
-> PHY is there why not just look up the set of supplies based on
-> the compatible of the PHY?
 
-It looks to me like this series fetches the regulators before the PHY
-is bound to the driver, so what you're proposing would mean that the
-core PHY code would need a table of all compatibles (which is pretty
-hard to do, they encode the vendor/device ID, not some descriptive
-name) and then a list of the regulator names. IMHO that doesn't scale.
+Hi, huacai
+On 2022/11/15 下午5:24, Huacai Chen wrote:
+> On Tue, Nov 15, 2022 at 5:22 PM Qing Zhang <zhangqing@loongson.cn> wrote:
+>>
+>> Hi, Huacai
+>>
+>> On 2022/11/15 下午4:41, Huacai Chen wrote:
+>>> Hi, Qing,
+>>>
+>>> Patch5 and Patch6 are small and related, maybe they can be combined
+>>> with a name "LoongArch/ftrace: Add DYNAMIC_FTRACE_WITH_{ARGS,REGS}
+>>> support"
+>> I think they should be independent due to different use scenarios.
+>  From the commit message it seems  DYNAMIC_FTRACE_WITH_ARGS depend on
+> DYNAMIC_FTRACE_WITH_REGS.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+DYNAMIC_FTRACE_WITH_REGS : which allows trace function saved registers,
+It means that these registers can be modified, eg: Kprobe、Livepatch.
+
+DYNAMIC_FTRACE_WITH_ARGS: uses pt_regs as a parameter for get sp,
+which means it can be used to access registers on the stack, and
+use graph_ops::func to install return_hooker to replace the special
+hook, eg: Livepatch.
+
+ From the following Kconfig, they are reasonable as separate patches.
+config LIVEPATCH
+         bool "Kernel Live Patching"
+         depends on DYNAMIC_FTRACE_WITH_REGS || DYNAMIC_FTRACE_WITH_ARGS
+
+Thanks
+- Qing
+> 
+> Huacai
+>>
+>> Thanks,
+>> -Qing
+>>>
+>>> Huacai
+>>>
+>>> On Tue, Nov 15, 2022 at 10:55 AM Qing Zhang <zhangqing@loongson.cn> wrote:
+>>>>
+>>>> This patch implements DYNAMIC_FTRACE_WITH_REGS on LoongArch, which allows
+>>>> a traced function's arguments (and some other registers) to be captured
+>>>> into a struct pt_regs, allowing these to be inspected and modified.
+>>>>
+>>>> Co-developed-by: Jinyang He <hejinyang@loongson.cn>
+>>>> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+>>>> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+>>>> ---
+>>>>    arch/loongarch/Kconfig              |  1 +
+>>>>    arch/loongarch/include/asm/ftrace.h |  3 +++
+>>>>    arch/loongarch/kernel/ftrace_dyn.c  | 17 ++++++++++++++
+>>>>    arch/loongarch/kernel/mcount-dyn.S  | 36 +++++++++++++++++++++++++++--
+>>>>    4 files changed, 55 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+>>>> index 615ce62422b8..12e3e91a68ae 100644
+>>>> --- a/arch/loongarch/Kconfig
+>>>> +++ b/arch/loongarch/Kconfig
+>>>> @@ -90,6 +90,7 @@ config LOONGARCH
+>>>>           select HAVE_DEBUG_STACKOVERFLOW
+>>>>           select HAVE_DMA_CONTIGUOUS
+>>>>           select HAVE_DYNAMIC_FTRACE
+>>>> +       select HAVE_DYNAMIC_FTRACE_WITH_REGS
+>>>>           select HAVE_EBPF_JIT
+>>>>           select HAVE_EXIT_THREAD
+>>>>           select HAVE_FAST_GUP
+>>>> diff --git a/arch/loongarch/include/asm/ftrace.h b/arch/loongarch/include/asm/ftrace.h
+>>>> index 76ca58767f4d..a3f974a7a5ce 100644
+>>>> --- a/arch/loongarch/include/asm/ftrace.h
+>>>> +++ b/arch/loongarch/include/asm/ftrace.h
+>>>> @@ -28,6 +28,9 @@ struct dyn_ftrace;
+>>>>    int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
+>>>>    #define ftrace_init_nop ftrace_init_nop
+>>>>
+>>>> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+>>>> +#define ARCH_SUPPORTS_FTRACE_OPS 1
+>>>> +#endif
+>>>>    #endif /* CONFIG_DYNAMIC_FTRACE */
+>>>>    #endif /* __ASSEMBLY__ */
+>>>>    #endif /* CONFIG_FUNCTION_TRACER */
+>>>> diff --git a/arch/loongarch/kernel/ftrace_dyn.c b/arch/loongarch/kernel/ftrace_dyn.c
+>>>> index 3fe791b6783e..ec3d951be50c 100644
+>>>> --- a/arch/loongarch/kernel/ftrace_dyn.c
+>>>> +++ b/arch/loongarch/kernel/ftrace_dyn.c
+>>>> @@ -99,6 +99,23 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
+>>>>           return ftrace_modify_code(pc, old, new, true);
+>>>>    }
+>>>>
+>>>> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+>>>> +int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
+>>>> +                       unsigned long addr)
+>>>> +{
+>>>> +       unsigned long pc;
+>>>> +       long offset;
+>>>> +       u32 old, new;
+>>>> +
+>>>> +       pc = rec->ip + LOONGARCH_INSN_SIZE;
+>>>> +
+>>>> +       old = larch_insn_gen_bl(pc, old_addr);
+>>>> +       new = larch_insn_gen_bl(pc, addr);
+>>>> +
+>>>> +       return ftrace_modify_code(pc, old, new, true);
+>>>> +}
+>>>> +#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+>>>> +
+>>>>    void arch_ftrace_update_code(int command)
+>>>>    {
+>>>>           command |= FTRACE_MAY_SLEEP;
+>>>> diff --git a/arch/loongarch/kernel/mcount-dyn.S b/arch/loongarch/kernel/mcount-dyn.S
+>>>> index 0c12cc108e6f..02835186b463 100644
+>>>> --- a/arch/loongarch/kernel/mcount-dyn.S
+>>>> +++ b/arch/loongarch/kernel/mcount-dyn.S
+>>>> @@ -27,7 +27,7 @@
+>>>>     * follows the LoongArch psABI well.
+>>>>     */
+>>>>
+>>>> -       .macro  ftrace_regs_entry
+>>>> +       .macro  ftrace_regs_entry allregs=0
+>>>>           PTR_ADDI sp, sp, -PT_SIZE
+>>>>           /* Save trace function ra at PT_ERA */
+>>>>           PTR_S   ra, sp, PT_ERA
+>>>> @@ -43,16 +43,48 @@
+>>>>           PTR_S   a7, sp, PT_R11
+>>>>           PTR_S   fp, sp, PT_R22
+>>>>
+>>>> +       .if \allregs
+>>>> +       PTR_S   t0, sp, PT_R12
+>>>> +       PTR_S   t1, sp, PT_R13
+>>>> +       PTR_S   t2, sp, PT_R14
+>>>> +       PTR_S   t3, sp, PT_R15
+>>>> +       PTR_S   t4, sp, PT_R16
+>>>> +       PTR_S   t5, sp, PT_R17
+>>>> +       PTR_S   t6, sp, PT_R18
+>>>> +       PTR_S   t7, sp, PT_R19
+>>>> +       PTR_S   t8, sp, PT_R20
+>>>> +       PTR_S   s0, sp, PT_R23
+>>>> +       PTR_S   s1, sp, PT_R24
+>>>> +       PTR_S   s2, sp, PT_R25
+>>>> +       PTR_S   s3, sp, PT_R26
+>>>> +       PTR_S   s4, sp, PT_R27
+>>>> +       PTR_S   s5, sp, PT_R28
+>>>> +       PTR_S   s6, sp, PT_R29
+>>>> +       PTR_S   s7, sp, PT_R30
+>>>> +       PTR_S   s8, sp, PT_R31
+>>>> +       PTR_S   tp, sp, PT_R2
+>>>> +       /* Clear it for later use as a flag sometimes. */
+>>>> +       PTR_S   zero, sp, PT_R0
+>>>> +       PTR_S   $r21, sp, PT_R21
+>>>> +       .endif
+>>>> +
+>>>>           PTR_ADDI t8, sp, PT_SIZE
+>>>>           PTR_S   t8, sp, PT_R3
+>>>>
+>>>>           .endm
+>>>>
+>>>>    SYM_CODE_START(ftrace_caller)
+>>>> -       ftrace_regs_entry
+>>>> +       ftrace_regs_entry allregs=0
+>>>>           b       ftrace_common
+>>>>    SYM_CODE_END(ftrace_caller)
+>>>>
+>>>> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+>>>> +SYM_CODE_START(ftrace_regs_caller)
+>>>> +       ftrace_regs_entry allregs=1
+>>>> +       b       ftrace_common
+>>>> +SYM_CODE_END(ftrace_regs_caller)
+>>>> +#endif
+>>>> +
+>>>>    SYM_CODE_START(ftrace_common)
+>>>>           PTR_ADDI        a0, ra, -8      /* arg0: ip */
+>>>>           move            a1, t0          /* arg1: parent_ip */
+>>>> --
+>>>> 2.36.0
+>>>>
+>>>>
+>>
+>>
+
