@@ -2,95 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9831062AD9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48BF362ADA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:05:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238130AbiKOWEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 17:04:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47506 "EHLO
+        id S238167AbiKOWFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 17:05:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238363AbiKOWET (ORCPT
+        with ESMTP id S232010AbiKOWFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:04:19 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1112496B;
-        Tue, 15 Nov 2022 14:04:09 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 15 Nov 2022 17:05:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D26820BE7;
+        Tue, 15 Nov 2022 14:05:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NBgDz563Wz4xDK;
-        Wed, 16 Nov 2022 09:04:03 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668549844;
-        bh=9AEMdOzc8tdMtvvnfetC34mjCGufm6r2F9K70yef6Nk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=fhQmShV1muPFZYmYDk5gZ5yleXnCblyIl+t4kVxHCZeCXnF8oj+kLYaTf6DFMJn+a
-         AED8sXMaQb4XKmTMgYzyRj9NWSvYK8I4H9QbG/tU1Sao6kIFSCI6M7wprlYUIAmEdL
-         HXkawqZobPD2YVWJI2Ihlkq2iVf2RzXQqkvWclWypOr165F7eo8hymK8KN85YHfx8f
-         2Oz7fg7OLCkbqYv5GHTpeGSGMusbmwXZ20DjOPiX5DL1MqeuQQXphpCh0eExXXTwu0
-         F+McdwgUAe93oC/CA2vr6BCLEPXbFeGpo7j7cLgI7S1VwaIqIr7XeFohzHASVZ+rYX
-         oHdUeae6rwi+w==
-Date:   Wed, 16 Nov 2022 09:04:01 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Besar Wicaksono <bwicaksono@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the arm64 tree
-Message-ID: <20221116090401.0cd5ccc7@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id ACE2DB81B61;
+        Tue, 15 Nov 2022 22:05:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57C0FC433C1;
+        Tue, 15 Nov 2022 22:05:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668549904;
+        bh=A8hKVJDELpSDaM76TOxGC8jzHZnsHhPxgoYTVJKtqvw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=o45sbarpGs0nSr/r8wCDwhN/6lr470p23hgVSasjyfDWsYnqf1ebnWOnep5EK0gSf
+         dhMfsJs4K52ME3k0yXIH/HS8jyt6cmyFe1gIMaxL/tdXaTp0FU8QyUltCfsztLr8LS
+         p4naDPHQY8WKXPK3BRoFyBZgbqp3S/0klQAchJ2ebVRtB/DvIjTHkoSwswlDHeKIjm
+         K4jm8W2UsqTI9Xx8pu6FIxtVdD+hUsWibPCQHEado0nnJnA9rVjbgpz1pO8fiDSYnN
+         kYzYUqcRhtPMsRWj0eIWUDWBAxww0RcXw30L2E4NntgoV4nWat/2kgFdHkkAX5vVta
+         oABb4WlhbR0pw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ov43B-006Jl2-SZ;
+        Tue, 15 Nov 2022 22:05:01 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH] kbuild: Restore .version auto-increment behaviour for Debian packages
+Date:   Tue, 15 Nov 2022 22:04:53 +0000
+Message-Id: <20221115220453.3463096-1-maz@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/36dHDFHuE3kPA_fGIIKtC0/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, masahiroy@kernel.org, michal.lkml@markovi.net, ndesaulniers@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/36dHDFHuE3kPA_fGIIKtC0/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Since 2df8220cc511 ("kbuild: build init/built-in.a just once"),
+generating Debian packages using 'make bindeb-pkg' results in
+packages that are stuck to the same .version, leading to unexpected
+behaviours (multiple packages with the same version).
 
-Hi all,
+That's because the mkdebian script samples the build version
+before building the kernel, and forces the use of that version
+number for the actual build.
 
-After merging the arm64 tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Restore the previous behaviour by calling init/build-version
+instead of reading the .version file. This is likely to result
+in too many .version bumps, but this is what was happening before
+(although the bump was affecting builds made after the current one).
 
-drivers/perf/arm_cspmu/arm_cspmu.c: In function 'arm_cspmu_get_cpus':
-drivers/perf/arm_cspmu/arm_cspmu.c:1114:29: error: implicit declaration of =
-function 'get_acpi_id_for_cpu' [-Werror=3Dimplicit-function-declaration]
- 1114 |                             get_acpi_id_for_cpu(cpu)) {
-      |                             ^~~~~~~~~~~~~~~~~~~
+Eventually, this script should be turned into something that
+is a bit less counter-intuitive (building the kernel first
+and only then generating the packaging artefacts).
 
-Caused by commit
+Fixes: 2df8220cc511 ("kbuild: build init/built-in.a just once")
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Michal Marek <michal.lkml@markovi.net>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+---
 
-  e37dfd65731d ("perf: arm_cspmu: Add support for ARM CoreSight PMU driver")
+Notes:
+    v2: Drop the RPM version which was wrong, and make the path
+        relative to $srctree.
 
-I have used the arm64 tree from next-20221115 for today.
+ scripts/package/mkdebian | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---=20
-Cheers,
-Stephen Rothwell
+diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
+index 60a2a63a5e90..a3ac5a716e9f 100755
+--- a/scripts/package/mkdebian
++++ b/scripts/package/mkdebian
+@@ -90,7 +90,7 @@ if [ -n "$KDEB_PKGVERSION" ]; then
+ 	packageversion=$KDEB_PKGVERSION
+ 	revision=${packageversion##*-}
+ else
+-	revision=$(cat .version 2>/dev/null||echo 1)
++	revision=$($srctree/init/build-version)
+ 	packageversion=$version-$revision
+ fi
+ sourcename=$KDEB_SOURCENAME
+-- 
+2.34.1
 
---Sig_/36dHDFHuE3kPA_fGIIKtC0/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN0DNEACgkQAVBC80lX
-0Gynggf/Y4H4Pvz2464pQlLXSKGPNg+e6KqU9/QhAfAybxTlFvbJMNthH/RZ44Bp
-rncnCTHfOcCAqSCsewFrMBEFc7KEX+Dp24G8YXapmULY4GirNFeB+Zc1EtxhFePE
-8jYP+BGmD4jrj3hswo+0dB5xzr7fzP3AAOIheOCSMa1cOiZaZ7hk0avmLYAV0u4q
-xVY7HuijVJVE+t/XqaNsPmGrgEL5oRQ6jghYcPj+Txg7utBnL+lq+KpCZB9cez8G
-q8H5slmKwFtzDO9dBz8IQi9spTmtR9Hh4WCSMM/XYEwVvfOyVwKM/qinI9BwpYIH
-rUuurNa/9VPp7hD+MsMycjA+Ss6yRA==
-=2rjn
------END PGP SIGNATURE-----
-
---Sig_/36dHDFHuE3kPA_fGIIKtC0/--
