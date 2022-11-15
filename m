@@ -2,159 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26587629B20
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:50:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE345629BB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:12:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238494AbiKONuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:50:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
+        id S237069AbiKOOLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 09:11:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238142AbiKONth (ORCPT
+        with ESMTP id S230292AbiKOOLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:49:37 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3864526AD1;
-        Tue, 15 Nov 2022 05:49:36 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NBSGL1hhXz4f3kJw;
-        Tue, 15 Nov 2022 21:49:30 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgBni9jnmHNjrPFIAg--.61645S14;
-        Tue, 15 Nov 2022 21:49:33 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     hch@lst.de, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH v3 10/10] block: don't allow a disk link holder to itself
-Date:   Tue, 15 Nov 2022 22:10:54 +0800
-Message-Id: <20221115141054.1051801-11-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221115141054.1051801-1-yukuai1@huaweicloud.com>
-References: <20221115141054.1051801-1-yukuai1@huaweicloud.com>
+        Tue, 15 Nov 2022 09:11:25 -0500
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CEEC2B610;
+        Tue, 15 Nov 2022 06:11:24 -0800 (PST)
+Received: by mail-qk1-f169.google.com with SMTP id d7so7116816qkk.3;
+        Tue, 15 Nov 2022 06:11:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PEBoPkzZkEwXxKxn/LguL/Tj7JNM9p+vnmqYk3f/wqg=;
+        b=t+0BF7v8qNwl9dvZTGsWpEK+153oiJxHnUloU7OOA0OaFRDMXH0pSRjkcJZ6BsCKl1
+         S6eYj4vqa6qZhJ9aFpnn/gZLc8qvygceWJ7YyzssLq8EE8NFmBkM+P/I/ZqXVGzHUZHp
+         pUzQy4dxAWIe9cu/t3V2df8p8++ehhoZlg8grw1umexHn2nTGF/9iiuqTnDWtpcrHA5b
+         iJCH1P/VaDKDQsiFe4IcrQ42KENs0/eLQp/Mk3XfNEIqlL72ivtrOJR1EAmXCUupFK8F
+         4cGzgGlEN7E2KntsrycO5WRYTfjfocYLxqFBqOldwkFq6/lzzSaXw4UTu851kFujJNoK
+         J8MQ==
+X-Gm-Message-State: ANoB5pnQI6ahEvOZvvv775rU3iR2BaXi5uWFh1e+zxNTgzBDP2cG17IF
+        iigkjw8o4tTIWGQ2CkE62HMc76UuD8zbjw==
+X-Google-Smtp-Source: AA0mqf4QG3pJAV5zFRWByezi8YOB5YXep940kO74qeNszq9lLHnXXhlsaBbglsJ7hUOzoiEMHI69Dw==
+X-Received: by 2002:a37:c245:0:b0:6ee:909e:ed6c with SMTP id j5-20020a37c245000000b006ee909eed6cmr15276266qkm.264.1668521483304;
+        Tue, 15 Nov 2022 06:11:23 -0800 (PST)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id g26-20020ac8469a000000b003a5416da03csm7193453qto.96.2022.11.15.06.11.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 06:11:21 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id 63so17300258ybq.4;
+        Tue, 15 Nov 2022 06:11:20 -0800 (PST)
+X-Received: by 2002:a25:844b:0:b0:6de:6c43:3991 with SMTP id
+ r11-20020a25844b000000b006de6c433991mr15875248ybm.604.1668521478365; Tue, 15
+ Nov 2022 06:11:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBni9jnmHNjrPFIAg--.61645S14
-X-Coremail-Antispam: 1UD129KBjvJXoWxXw4kCFy5Xw1kuF1fWrWDXFb_yoWrurWkpr
-        1jqr4UGr48Jr1UXF4UAr1UJr1UJrW8AF48Jr17Xr1DJF15W3WUZr1UJrWUAr15Jr4Yqr17
-        tw4DXw18tryUKaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPI14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-        z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-        4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
-        3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-        IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
-        kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-        14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIx
-        kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAF
-        wI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr
-        0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUQ
-        SdkUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+ <20221114111513.1436165-7-herve.codina@bootlin.com> <51d42fc2-0492-9077-302d-5c3be4b45cd1@linaro.org>
+In-Reply-To: <51d42fc2-0492-9077-302d-5c3be4b45cd1@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 15 Nov 2022 15:11:06 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUHEc6XYcdrcZ=H_wjBy4vFBTRjUDE2rRmGd+Jyg7BzDQ@mail.gmail.com>
+Message-ID: <CAMuHMdUHEc6XYcdrcZ=H_wjBy4vFBTRjUDE2rRmGd+Jyg7BzDQ@mail.gmail.com>
+Subject: Re: [PATCH v2 6/7] ARM: dts: r9a06g032: Add the USBF controller node
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Herve Codina <herve.codina@bootlin.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+Hi Krzysztof,
 
-After creating a dm device, then user can reload such dm with itself,
-and dead loop will be triggered because dm keep looking up to itself.
+On Tue, Nov 15, 2022 at 2:16 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 14/11/2022 12:15, Herve Codina wrote:
+> > Add the USBF controller available in the r9a06g032 SoC.
+> >
+> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> > ---
+> >  arch/arm/boot/dts/r9a06g032.dtsi | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/arch/arm/boot/dts/r9a06g032.dtsi b/arch/arm/boot/dts/r9a06g032.dtsi
+> > index 563024c9a4ae..a4bb069457a3 100644
+> > --- a/arch/arm/boot/dts/r9a06g032.dtsi
+> > +++ b/arch/arm/boot/dts/r9a06g032.dtsi
+> > @@ -117,6 +117,18 @@ dmamux: dma-router@a0 {
+> >                       };
+> >               };
+> >
+> > +             udc: usb@4001e000 {
+> > +                     compatible = "renesas,r9a06g032-usbf", "renesas,rzn1-usbf";
+> > +                     reg = <0x4001e000 0x2000>;
+> > +                     interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
+> > +                                  <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
+> > +                     clocks = <&sysctrl R9A06G032_HCLK_USBF>,
+> > +                              <&sysctrl R9A06G032_HCLK_USBPM>;
+> > +                     clock-names = "hclkf", "hclkpm";
+> > +                     power-domains = <&sysctrl>;
+> > +                     status = "disabled";
+>
+> If you provided all resources (clocks, power domains etc), why disabling it?
 
-Test procedures:
+Doesn't this depend on wiring on the board, and providing pin control
+in the board DTS?
 
-1) dmsetup create test --table "xxx sda", assume dm-0 is created
-2) dmsetup suspend test
-3) dmsetup reload test --table "xxx dm-0"
-4) dmsetup resume test
+Gr{oetje,eeting}s,
 
-Test result:
+                        Geert
 
-BUG: TASK stack guard page was hit at 00000000736a261f (stack is 000000008d12c88d..00000000c8dd82d5)
-stack guard page: 0000 [#1] PREEMPT SMP
-CPU: 29 PID: 946 Comm: systemd-udevd Not tainted 6.1.0-rc3-next-20221101-00006-g17640ca3b0ee #1295
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS ?-20190727_073836-buildvm-ppc64le-16.ppc.fedoraproject.org-3.fc31 04/01/2014
-RIP: 0010:dm_prepare_ioctl+0xf/0x1e0
-Code: da 48 83 05 4a 7c 99 0b 01 41 89 c4 eb cd e8 b8 1f 40 00 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 41 57 48 83 05 a1 5a 99 0b 01 <41> 56 49 89 d6 41 55 4c 8d af 90 02 00 00 9
-RSP: 0018:ffffc90002090000 EFLAGS: 00010206
-RAX: ffff8881049d6800 RBX: ffff88817e589000 RCX: 0000000000000000
-RDX: ffffc90002090010 RSI: ffffc9000209001c RDI: ffff88817e589000
-RBP: 00000000484a101d R08: 0000000000000000 R09: 0000000000000007
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000005331
-R13: 0000000000005331 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007fddf9609200(0000) GS:ffff889fbfd40000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffc9000208fff8 CR3: 0000000179043000 CR4: 00000000000006e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- dm_blk_ioctl+0x50/0x1c0
- ? dm_prepare_ioctl+0xe0/0x1e0
- dm_blk_ioctl+0x88/0x1c0
- dm_blk_ioctl+0x88/0x1c0
- ......(a lot of same lines)
- dm_blk_ioctl+0x88/0x1c0
- dm_blk_ioctl+0x88/0x1c0
- blkdev_ioctl+0x184/0x3e0
- __x64_sys_ioctl+0xa3/0x110
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fddf7306577
-Code: b3 66 90 48 8b 05 11 89 2c 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d e1 88 8
-RSP: 002b:00007ffd0b2ec318 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00005634ef478320 RCX: 00007fddf7306577
-RDX: 0000000000000000 RSI: 0000000000005331 RDI: 0000000000000007
-RBP: 0000000000000007 R08: 00005634ef4843e0 R09: 0000000000000080
-R10: 00007fddf75cfb38 R11: 0000000000000246 R12: 00000000030d4000
-R13: 0000000000000000 R14: 0000000000000000 R15: 00005634ef48b800
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:dm_prepare_ioctl+0xf/0x1e0
-Code: da 48 83 05 4a 7c 99 0b 01 41 89 c4 eb cd e8 b8 1f 40 00 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 41 57 48 83 05 a1 5a 99 0b 01 <41> 56 49 89 d6 41 55 4c 8d af 90 02 00 00 9
-RSP: 0018:ffffc90002090000 EFLAGS: 00010206
-RAX: ffff8881049d6800 RBX: ffff88817e589000 RCX: 0000000000000000
-RDX: ffffc90002090010 RSI: ffffc9000209001c RDI: ffff88817e589000
-RBP: 00000000484a101d R08: 0000000000000000 R09: 0000000000000007
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000005331
-R13: 0000000000005331 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007fddf9609200(0000) GS:ffff889fbfd40000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffc9000208fff8 CR3: 0000000179043000 CR4: 00000000000006e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Kernel panic - not syncing: Fatal exception in interrupt
-Kernel Offset: disabled
----[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Fix the problem by forbidding a disk to create link to itself.
-
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/holder.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/block/holder.c b/block/holder.c
-index 3332142bb867..37d18c13d958 100644
---- a/block/holder.c
-+++ b/block/holder.c
-@@ -65,6 +65,9 @@ int bd_link_disk_holder(struct block_device *bdev, struct gendisk *disk)
- 	if (WARN_ON_ONCE(!disk->slave_dir))
- 		return -EINVAL;
- 
-+	if (bdev->bd_disk == disk)
-+		return -EINVAL;
-+
- 	/*
- 	 * del_gendisk drops the initial reference to bd_holder_dir, so we
- 	 * need to keep our own here to allow for cleanup past that point.
--- 
-2.31.1
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
