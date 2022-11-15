@@ -2,163 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58BE62AE88
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BDC262AE8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232375AbiKOWq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 17:46:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
+        id S231907AbiKOWrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 17:47:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiKOWqT (ORCPT
+        with ESMTP id S231521AbiKOWrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:46:19 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147B61FCFE;
-        Tue, 15 Nov 2022 14:46:15 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7A5CF20A90;
-        Tue, 15 Nov 2022 22:46:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1668552374; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d3jRfb3u2UMhELX3RFNE2yKyqYVqcOMcurpZIDpUfqQ=;
-        b=ICr7+PbdeP+cvI4LbyR8wehVSKXI9D+8UYj/5EI5AZlluzxdnsPEZEd1qGvXKzSRNwdWEr
-        3+iX//2sCDWNtPdX61Ol2e1nAgZu7aUFQtYsYgMWy5NTcfMyT56IdlHqUfIoPx/JnyVmvA
-        SbBZmECalYSPPyWnXXAK1mCm2KXGpBs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1668552374;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d3jRfb3u2UMhELX3RFNE2yKyqYVqcOMcurpZIDpUfqQ=;
-        b=a5XL0CFX5ESUe67zQsjAkZjjyX5RwRLma+q2/quZ8SEzsSCciMKWsyEY+8PctohwjOaoRd
-        XgjXOpMSoqafK9DQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D122213273;
-        Tue, 15 Nov 2022 22:46:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id nvQtI7UWdGPzSwAAMHmgww
-        (envelope-from <krisman@suse.de>); Tue, 15 Nov 2022 22:46:13 +0000
-From:   Gabriel Krisman Bertazi <krisman@suse.de>
-To:     axboe@kernel.dk
-Cc:     mingo@redhat.com, peterz@infradead.org, jack@suse.cz,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        liusong@linux.alibaba.com, chaitanyak@nvidia.com,
-        Gabriel Krisman Bertazi <krisman@suse.de>
-Subject: [PATCH 3/3] sbitmap: Try each queue to wake up at least one waiter
-Date:   Tue, 15 Nov 2022 17:45:53 -0500
-Message-Id: <20221115224553.23594-4-krisman@suse.de>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20221115224553.23594-1-krisman@suse.de>
-References: <20221115224553.23594-1-krisman@suse.de>
+        Tue, 15 Nov 2022 17:47:05 -0500
+Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2072.outbound.protection.outlook.com [40.107.103.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A641F623;
+        Tue, 15 Nov 2022 14:47:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LmgGRuOwO0Q8LLHgGpsgmnewRg++egMLw53PUV7NrWaBnqv6azzlsPqUzwj39LBOMlVVPu0GlS3iQEHmG+C3lJ8kB7krqrFUHl1LSWSojmVGDBWERTVjgrrjiOdrNEb47fin9FV7eRqVBXJtOeO8XJJNuuJWa/3PQTb5WJxn0oZDiz5N6jGwiCyOuxHlm40vfHY137xFjgY4FcBHgI4OUoki0Bqb7FM5HnBy1E9derKmXgBP4i/3z8rjH7H6kjel4peKx72lp0QredmzLDYXj7P0LSHbKUE5Px4HlMoZA/Rd9sNyGbR8tp1lNHhP4j78GbQXFtCJ8VfrarUGac6Ung==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lIJCjUYikoZnaJUmD/oS23+7ZFraEHzOXYDBWrNhn6M=;
+ b=fXwNPaphJ4bWOGSc+hltnDo+ow/0N08g4CZeKwq1rgvCbF6iEbwgU8zwG22Gas8Gf9wrAmSOMhICflHcMXvi7zbIWcLvZ+FVR80O+9EldWSLFc4rn0b9twHVnlsIvMR5bycj1LcQGkgAbnAZmupWfsxYJ5XOKoN7sYIs5lelIKMZUDNSDHe4dzeFoJAnR12AdBuo67sQ/pjGBz4pkT9foZFJKTgHryEl3rWDZWb9LooV25+Dmhc8qxdDPz461BQH8ZzLcZMGdTqIIhLUnHbBz2wz7otAuLuCChmVGRt8XT6orfI8uojJr8fW8o0ZnuXVdOw+MOdofreHAX7Y+5lzxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lIJCjUYikoZnaJUmD/oS23+7ZFraEHzOXYDBWrNhn6M=;
+ b=eXqopvpXkyzx7xLwTsN56IlHL0p/5BaCVrbNraupZcOVvCjM9uPV9Z/34rc0+00lq/VwuqEOpVnw1UrCMrHR7kVEUiYMg7R9ZNT7IXz7mzko7ryiNcCzpe8TC0ttAJ++7ozChH/INd7kNIjU+Zgfe6TujRTx0kGtRhBHeRgepCxrvIi9jHq+o+J/48icNQ8rlYrhg6ur5Vpw5N9XJ7LcoCN8D6DH3mnlhNrUfuQGfCx6TXndKCpnEMN3yX5xsJz5WRt1AMMajldf2BLiNoMCrUukaa6f1DYp3a9yQejMrsW+FmvXhHlbF9K29D0IpX2+yURSMZ/NQOUPRfr0FX0z2Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by AS2PR03MB9347.eurprd03.prod.outlook.com (2603:10a6:20b:579::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Tue, 15 Nov
+ 2022 22:46:59 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::e9d6:22e1:489a:c23d]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::e9d6:22e1:489a:c23d%4]) with mapi id 15.20.5813.018; Tue, 15 Nov 2022
+ 22:46:59 +0000
+Message-ID: <3771f5be-3deb-06f9-d0a0-c3139d098bf0@seco.com>
+Date:   Tue, 15 Nov 2022 17:46:54 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] phy: aquantia: Configure SERDES mode by default
+Content-Language: en-US
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>
+References: <20221114210740.3332937-1-sean.anderson@seco.com>
+ <20221114210740.3332937-1-sean.anderson@seco.com>
+ <20221115223732.ctvzjbpeaxulnm5l@skbuf>
+From:   Sean Anderson <sean.anderson@seco.com>
+In-Reply-To: <20221115223732.ctvzjbpeaxulnm5l@skbuf>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR02CA0016.namprd02.prod.outlook.com
+ (2603:10b6:208:fc::29) To DB7PR03MB4972.eurprd03.prod.outlook.com
+ (2603:10a6:10:7d::22)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB7PR03MB4972:EE_|AS2PR03MB9347:EE_
+X-MS-Office365-Filtering-Correlation-Id: df95cb65-bc6a-4ed8-b263-08dac75b4dc7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3EIYibbVWY9/yujQOev/0Ba31hyWK2CJqyVKAaRZuJk1YriaHxWWGTeEKWVPcmyDnJcwmTw1v1JWh+yrqB2Lu1ZZGsJT7zVFGqU2sXu1c40nZAaoKfMJWKnPHZrG3oUiOlHXk93c5WxEr/FItMFXJJ8GP15MPgNTQ54NsKcU3C5SSNbmE496zFSQ6buOP0AeJE8Y/2WrAjy/kVHz4JaYgRsVwcIf5Lhecyv1O94EcPYGrWNASuyAOGxdU8yUxfUB034otZ3T95h4g1Myiw4Y2vZ+97p3ROIZ/uyXhad+DPaF/wSY7wrvh2tkMcct58kS5IiAzIorVcF2UCpfSQ/6aFU4w49nu1Ox+ELa4ACQGTAJRi1FnE2KvIIky8IyZTQK/LNPcNolJObVh6b+zNijWPvnYTTKHWWkdJMb2/MjGtu9g2W3C2hWju6HM1qw1llnoIoc2HlvaCU0d9S7A5QSXLlwZpSq+gLLxG0ZCfzzYwWk37EoNtoOHX4u1M7+nSNsb33XwLYRTWqR3a9OyFT5+ICqUFlmioEhXvZ56OG0Hp6Pqw83phK1Z3vC6Nmkev13S3WuJ9JP/sKY9GUs26H6Ovoy9GlF4jT9Zs7yLtLIt/+vg0ODPjEcR0YOZS9RWRukSNmqj+eYdW+k+QoYQM+nKLB9hFdTBOTAylYq2GAydKMA0DvOR509zcbOvHREQmFzuuy8zWzr3bs7q20b+0IXwYeFz8gqamyLIJXzJGCc0caT8QtFujA8wLKRkMcyHPMOe05iG32k9yeU/4oNYuf+7eY7Gx8pwraEDdKh5wv8KsKvjr5C8CPvsSxYzL1Wv4FM
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(136003)(376002)(396003)(366004)(39850400004)(451199015)(478600001)(6666004)(6916009)(54906003)(83380400001)(31686004)(6486002)(8676002)(66476007)(4326008)(66946007)(53546011)(66556008)(41300700001)(86362001)(6512007)(38100700002)(6506007)(8936002)(2616005)(186003)(52116002)(5660300002)(316002)(36756003)(26005)(7416002)(44832011)(2906002)(31696002)(38350700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b2dyZk5CNGZ0WWgyRk4veldidmlDWU9Jcjl6SVdab0hiSE9WdytEbXBiejZQ?=
+ =?utf-8?B?MzdYWnZENjBZeFE4dTBVUWFURDR5L0liSXE0NVJweUtvYzVTSWJZYVM5a3N6?=
+ =?utf-8?B?UWpobmxXRkZYQ2l1T3M3OVd0TEJ0VFFoU1dnWGRrc0lhVDlyZVgzTTAvZWIr?=
+ =?utf-8?B?eEFIQkN3MnBUUHBOVXhrcVlkOFhhSllYT3kwMG9iQXdPRUc5TjJXYmZJc1oy?=
+ =?utf-8?B?MCtndGZTejdZQmlRL2xSZFcrNTVRWFVlTmUxYnFJMTBtZisvQkR2RDc5SzZp?=
+ =?utf-8?B?Y2R2V3BQM3pHNWUwbVpCVjdQUWRNQVlRSVZYT0thL29TRzNNM3hjWjNJcG14?=
+ =?utf-8?B?UzJrK3JTblhaeHo0WkwzZ3J5aEhWaXlDa0JSZWxSbjRUNGZHOExpNE8yL0U5?=
+ =?utf-8?B?bUhabWVYMS9HMkhOZGtWVVh3ZCtMbzlESHVUckdzSGUrRWZxWUhOQ1liYlFp?=
+ =?utf-8?B?T2JzMzlRQjh4aDNsNFpSeDM2LzZ0djNNcjRhOTVkR0tJOUh3VTlrdFFqekFm?=
+ =?utf-8?B?ejJ4YVRSSnpjVHZ0a1V0Y2xmMHBGc3hYd0l0TW1HbE5rZnVJTGg3SjRUem92?=
+ =?utf-8?B?TC9JMVByeTFiWkJLL2RudktMaG8zVGQ4TnBmRjZOcUJaWmZzcjJBdUlaUjdH?=
+ =?utf-8?B?N2d6QlQxUktvOVZWRzNBT2FkNEhVSUVDeUxuemJpLzlqYWlRY3dvaG1hT1Nz?=
+ =?utf-8?B?T29kMzBRK3JuT1ZGVVlaNEE1OU9vbTFRVVVVOGVRM040bThsNUVNUTVyajZs?=
+ =?utf-8?B?d2s1SEQ5bDFqOXlDRGNkOWdWNlhzZ2NGV3FucVJEM215YlNtZHExWkNGbFE2?=
+ =?utf-8?B?OS9SZUZiL0hiZGtjQ2hmSHhONW5TdlFOaTQrMVZrUUNHMWRPeHRBUWlSTEhh?=
+ =?utf-8?B?SmFQOTNKLzl2d2hYaVRWVHk1OUk5WjZYRDBidVFvKzNtOUVjWitCN01XRlJx?=
+ =?utf-8?B?MVhhZldZd0kyclZpSk5ka2JFL0NFUCtGenluRFVPTTdCdGlqMittdE9NMTBo?=
+ =?utf-8?B?anUwN2RkRVpoK2Z6bXdNR2k3WjU2STgvUjBaWkVUSjNoTHZIUWM2amQzckZN?=
+ =?utf-8?B?UEpMU29PclZkVm1XZEpLeDQwQlBZRWlYUjdES0ZrakpNSDR1OTdJWTAzdUJZ?=
+ =?utf-8?B?ZTVTc0FseTIwaTBjMGZLdEwwWUpnV2hidHNYQVhzT2JoUmtyeTQ1R2krMk1z?=
+ =?utf-8?B?c1Vqd1pJVlhSQ0xRNTFKdjZLWENNZmlTREE0WTNxMjJXY2pTN1dtRENxUFcw?=
+ =?utf-8?B?dG1DeUxuTHc0VlY1bC9ob0pZZ1dDa0U1U1NUMDBkMmtUOVNOckRRWklBRnpt?=
+ =?utf-8?B?TlRtbEhOZmhYRXNXOFRLSDR5alRxQTBkWTBJSHdlY21nN3VsTXE0eDAwT1pO?=
+ =?utf-8?B?eUowQUl0dXJZNTRhN05QYmgrbi95a2JQN3dReTZQQmhWb3NjQ1R0NmcyVlIz?=
+ =?utf-8?B?V0g0eHRPVC9paHBQTDdDZEFNaHFiWW8yblF3bEF1QTd6MEdwVU94T1NCbWcv?=
+ =?utf-8?B?cUFuL1VlR2Fyamc0ZlM4MldxeVdGdUZRWGorSGJSMFdWVWlvVktwZXpodWVj?=
+ =?utf-8?B?SkJRaUlVdlYrVFQ1akJ6NFBFVy9uRStjL0RaOGxxR2huK0t6UGVNYUNxdlZX?=
+ =?utf-8?B?Nlh1TjNiSFRNL1NveXE2dEs5UTc0MGUvWnI3aVNQTDBEZkkxcTg3MlQ4UmRB?=
+ =?utf-8?B?RG8vRVZaVjdTZFp3MVFtRnBmMWNtWEFoMS9LZFJiWDhJRWJuTUpGb0FYMW9R?=
+ =?utf-8?B?MXdrY3BJWm1zcHg0THRwVlIxbFFPS2NxU3ZVb1gxL04ram5qUVpxby81bm9o?=
+ =?utf-8?B?eVUyNE1kVnppNU41OGxXTTFUNXhybE0xM3ZUeHJvdE4yT3FNLzVHWStYRFlM?=
+ =?utf-8?B?bUQ0bmFublhzWlh4M0wwRmR5bmhsMnpXTEJBcUo0V3NrNHdPQUFhQW13dFJ1?=
+ =?utf-8?B?NDd0cE9tZjIrem1CKy9MNmFpb0FVNUh4ZkM0YVVFVkpOQVltOHJmTmhENWhD?=
+ =?utf-8?B?QkdXcGt5WG5OcDlpWGFzY3V1RUlDN29Famtqc0hNMWRibkRSWlBxUk1uTDlr?=
+ =?utf-8?B?ZVdlcmVIVnZNeGZic3hPN25FcUZhem1NMTNwb3g0bmFOS3pneW1qYnRJMDFZ?=
+ =?utf-8?B?eVp4LzRUdzVJVzFaajF4Qmx1SE85Tmd6ekFGVnU5TXB2WEp6Z3JIVWNtTTQw?=
+ =?utf-8?B?K2c9PQ==?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: df95cb65-bc6a-4ed8-b263-08dac75b4dc7
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2022 22:46:58.9261
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OKyS/l+26KbWmXhjIsw6QasQQZmh2sYFQNZBNhbRHWAFyMngDiLUyYn5p1Xy+IN4yVYpB6LXpvJJj6XTNsHRtA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR03MB9347
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jan reported the new algorithm as merged might be problematic if the
-queue being awaken becomes empty between the waitqueue_active inside
-sbq_wake_ptr check and the wake up.  If that happens, wake_up_nr will
-not wake up any waiter and we loose too many wake ups.  In order to
-guarantee progress, we need to wake up at least one waiter here, if
-there are any.  This now requires trying to wake up from every queue.
+On 11/15/22 17:37, Vladimir Oltean wrote:
+> On Mon, Nov 14, 2022 at 04:07:39PM -0500, Sean Anderson wrote:
+>> When autonegotiation completes, the phy interface will be set based on
+>> the global config register for that speed. If the SERDES mode is set to
+>> something which the MAC does not support, then the link will not come
+>> up. The register reference says that the SERDES mode should default to
+>> XFI, but for some phys lower speeds default to XFI/2 (5G XFI). To ensure
+>> the link comes up correctly, configure the SERDES mode.
+>> 
+>> We use the same configuration for all interfaces. We don't advertise
+>> any speeds faster than the interface mode, so they won't be selected.
+>> We default to pause-based rate adaptation, but enable USXGMII rate
+>> adaptation for USXGMII. I'm not sure if this is correct for
+>> SGMII; it might need USXGMII adaptation instead.
+>> 
+>> This effectively disables switching interface mode depending on the
+>> speed, in favor of using rate adaptation. If this is not desired, we
+>> would need some kind of API to configure things.
+>> 
+>> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+>> ---
+> 
+> Was this patch tested and confirmed to do something sane on any platform
+> at all?
 
-Instead of walking through all the queues with sbq_wake_ptr, this call
-moves the wake up inside that function.  In a previous version of the
-patch, I found that updating wake_index several times when walking
-through queues had a measurable overhead.  This ensures we only update
-it once, at the end.
+This was mainly intended for Tim to test and see if it fixed his problem.
 
-Fixes: 4f8126bb2308 ("sbitmap: Use single per-bitmap counting to wake up queued tags")
-Reported-by: Jan Kara <jack@suse.cz>
-Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
----
- lib/sbitmap.c | 28 ++++++++++++----------------
- 1 file changed, 12 insertions(+), 16 deletions(-)
-
-diff --git a/lib/sbitmap.c b/lib/sbitmap.c
-index bea7984f7987..586deb333237 100644
---- a/lib/sbitmap.c
-+++ b/lib/sbitmap.c
-@@ -560,12 +560,12 @@ void sbitmap_queue_min_shallow_depth(struct sbitmap_queue *sbq,
- }
- EXPORT_SYMBOL_GPL(sbitmap_queue_min_shallow_depth);
- 
--static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue *sbq)
-+static void __sbitmap_queue_wake_up(struct sbitmap_queue *sbq, int nr)
- {
- 	int i, wake_index;
- 
- 	if (!atomic_read(&sbq->ws_active))
--		return NULL;
-+		return;
- 
- 	wake_index = atomic_read(&sbq->wake_index);
- 	for (i = 0; i < SBQ_WAIT_QUEUES; i++) {
-@@ -579,20 +579,22 @@ static struct sbq_wait_state *sbq_wake_ptr(struct sbitmap_queue *sbq)
- 		 */
- 		wake_index = sbq_index_inc(wake_index);
- 
--		if (waitqueue_active(&ws->wait)) {
--			if (wake_index != atomic_read(&sbq->wake_index))
--				atomic_set(&sbq->wake_index, wake_index);
--			return ws;
--		}
-+		/*
-+		 * It is sufficient to wake up at least one waiter to
-+		 * guarantee forward progress.
-+		 */
-+		if (waitqueue_active(&ws->wait) &&
-+		    wake_up_nr(&ws->wait, nr))
-+			break;
- 	}
- 
--	return NULL;
-+	if (wake_index != atomic_read(&sbq->wake_index))
-+		atomic_set(&sbq->wake_index, wake_index);
- }
- 
- void sbitmap_queue_wake_up(struct sbitmap_queue *sbq, int nr)
- {
- 	unsigned int wake_batch = READ_ONCE(sbq->wake_batch);
--	struct sbq_wait_state *ws = NULL;
- 	unsigned int wakeups;
- 
- 	if (!atomic_read(&sbq->ws_active))
-@@ -604,16 +606,10 @@ void sbitmap_queue_wake_up(struct sbitmap_queue *sbq, int nr)
- 	do {
- 		if (atomic_read(&sbq->completion_cnt) - wakeups < wake_batch)
- 			return;
--
--		if (!ws) {
--			ws = sbq_wake_ptr(sbq);
--			if (!ws)
--				return;
--		}
- 	} while (!atomic_try_cmpxchg(&sbq->wakeup_cnt,
- 				     &wakeups, wakeups + wake_batch));
- 
--	wake_up_nr(&ws->wait, wake_batch);
-+	__sbitmap_queue_wake_up(sbq, wake_batch);
- }
- EXPORT_SYMBOL_GPL(sbitmap_queue_wake_up);
- 
--- 
-2.35.3
-
+--Sean
