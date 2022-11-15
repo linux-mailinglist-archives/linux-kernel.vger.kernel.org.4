@@ -2,111 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48BF362ADA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE5A62ADAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238167AbiKOWFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 17:05:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
+        id S238402AbiKOWGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 17:06:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbiKOWFI (ORCPT
+        with ESMTP id S232403AbiKOWF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:05:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D26820BE7;
-        Tue, 15 Nov 2022 14:05:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ACE2DB81B61;
-        Tue, 15 Nov 2022 22:05:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57C0FC433C1;
-        Tue, 15 Nov 2022 22:05:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668549904;
-        bh=A8hKVJDELpSDaM76TOxGC8jzHZnsHhPxgoYTVJKtqvw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=o45sbarpGs0nSr/r8wCDwhN/6lr470p23hgVSasjyfDWsYnqf1ebnWOnep5EK0gSf
-         dhMfsJs4K52ME3k0yXIH/HS8jyt6cmyFe1gIMaxL/tdXaTp0FU8QyUltCfsztLr8LS
-         p4naDPHQY8WKXPK3BRoFyBZgbqp3S/0klQAchJ2ebVRtB/DvIjTHkoSwswlDHeKIjm
-         K4jm8W2UsqTI9Xx8pu6FIxtVdD+hUsWibPCQHEado0nnJnA9rVjbgpz1pO8fiDSYnN
-         kYzYUqcRhtPMsRWj0eIWUDWBAxww0RcXw30L2E4NntgoV4nWat/2kgFdHkkAX5vVta
-         oABb4WlhbR0pw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1ov43B-006Jl2-SZ;
-        Tue, 15 Nov 2022 22:05:01 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH] kbuild: Restore .version auto-increment behaviour for Debian packages
-Date:   Tue, 15 Nov 2022 22:04:53 +0000
-Message-Id: <20221115220453.3463096-1-maz@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 15 Nov 2022 17:05:58 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3B7F21272;
+        Tue, 15 Nov 2022 14:05:57 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A0F1913D5;
+        Tue, 15 Nov 2022 14:06:03 -0800 (PST)
+Received: from pierre123.arm.com (unknown [10.57.6.31])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C04963F73B;
+        Tue, 15 Nov 2022 14:05:54 -0800 (PST)
+From:   Pierre Gondois <pierre.gondois@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Rob.Herring@arm.com, sudeep.holla@arm.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Pierre Gondois <pierre.gondois@arm.com>
+Subject: [PATCH -next] cacheinfo: Remove of_node_put() for fw_token
+Date:   Tue, 15 Nov 2022 23:05:20 +0100
+Message-Id: <20221115220520.2076189-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, masahiroy@kernel.org, michal.lkml@markovi.net, ndesaulniers@google.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since 2df8220cc511 ("kbuild: build init/built-in.a just once"),
-generating Debian packages using 'make bindeb-pkg' results in
-packages that are stuck to the same .version, leading to unexpected
-behaviours (multiple packages with the same version).
+fw_token is used for DT/ACPI systems to identify CPUs sharing caches.
+For DT based systems, fw_token is set to a pointer to a DT node.
 
-That's because the mkdebian script samples the build version
-before building the kernel, and forces the use of that version
-number for the actual build.
+commit ("cacheinfo: Decrement refcount in cache_setup_of_node()")
+doesn't increment the refcount of fw_token anymore in
+cache_setup_of_node(). fw_token is indeed used as a token and not
+as a (struct device_node*), so no reference to fw_token should be
+kept.
 
-Restore the previous behaviour by calling init/build-version
-instead of reading the .version file. This is likely to result
-in too many .version bumps, but this is what was happening before
-(although the bump was affecting builds made after the current one).
+However, [1] is triggered when hotplugging a CPU multiple times
+since cache_shared_cpu_map_remove() decrements the refcount to
+fw_token at each CPU unplugging, eventually reaching 0.
 
-Eventually, this script should be turned into something that
-is a bit less counter-intuitive (building the kernel first
-and only then generating the packaging artefacts).
+Remove of_node_put() for fw_token in cache_shared_cpu_map_remove().
 
-Fixes: 2df8220cc511 ("kbuild: build init/built-in.a just once")
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Michal Marek <michal.lkml@markovi.net>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
+[1]
+[   53.651182] ------------[ cut here ]------------
+[   53.651186] refcount_t: saturated; leaking memory.
+[   53.651223] WARNING: CPU: 4 PID: 32 at lib/refcount.c:22 refcount_warn_saturate (lib/refcount.c:22 (discriminator 3))
+[   53.651241] Modules linked in:
+[   53.651249] CPU: 4 PID: 32 Comm: cpuhp/4 Tainted: G        W          6.1.0-rc1-14091-g9fdf2ca7b9c8 #76
+[   53.651261] Hardware name: ARM LTD ARM Juno Development Platform/ARM Juno Development Platform, BIOS EDK II Oct 31 2022
+[   53.651268] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   53.651279] pc : refcount_warn_saturate (lib/refcount.c:22 (discriminator 3))
+[   53.651293] lr : refcount_warn_saturate (lib/refcount.c:22 (discriminator 3))
+[...]
+[   53.651513] Call trace:
+[...]
+[   53.651735] of_node_release (drivers/of/dynamic.c:335)
+[   53.651750] kobject_put (lib/kobject.c:677 lib/kobject.c:704 ./include/linux/kref.h:65 lib/kobject.c:721)
+[   53.651762] of_node_put (drivers/of/dynamic.c:49)
+[   53.651776] free_cache_attributes.part.0 (drivers/base/cacheinfo.c:712)
+[   53.651792] cacheinfo_cpu_pre_down (drivers/base/cacheinfo.c:718)
+[   53.651807] cpuhp_invoke_callback (kernel/cpu.c:247 (discriminator 4))
+[   53.651819] cpuhp_thread_fun (kernel/cpu.c:785)
+[   53.651832] smpboot_thread_fn (kernel/smpboot.c:164 (discriminator 3))
+[   53.651847] kthread (kernel/kthread.c:376)
+[   53.651858] ret_from_fork (arch/arm64/kernel/entry.S:861)
+[   53.651869] ---[ end trace 0000000000000000 ]---
+
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
+ drivers/base/cacheinfo.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Notes:
-    v2: Drop the RPM version which was wrong, and make the path
-        relative to $srctree.
-
- scripts/package/mkdebian | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-index 60a2a63a5e90..a3ac5a716e9f 100755
---- a/scripts/package/mkdebian
-+++ b/scripts/package/mkdebian
-@@ -90,7 +90,7 @@ if [ -n "$KDEB_PKGVERSION" ]; then
- 	packageversion=$KDEB_PKGVERSION
- 	revision=${packageversion##*-}
- else
--	revision=$(cat .version 2>/dev/null||echo 1)
-+	revision=$($srctree/init/build-version)
- 	packageversion=$version-$revision
- fi
- sourcename=$KDEB_SOURCENAME
+diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
+index 04317cde800c..950b22cdb5f7 100644
+--- a/drivers/base/cacheinfo.c
++++ b/drivers/base/cacheinfo.c
+@@ -317,8 +317,6 @@ static void cache_shared_cpu_map_remove(unsigned int cpu)
+ 			cpumask_clear_cpu(cpu, &sib_leaf->shared_cpu_map);
+ 			cpumask_clear_cpu(sibling, &this_leaf->shared_cpu_map);
+ 		}
+-		if (of_have_populated_dt())
+-			of_node_put(this_leaf->fw_token);
+ 	}
+ }
+ 
 -- 
-2.34.1
+2.25.1
 
