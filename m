@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5796296AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 380BD6296AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238304AbiKOLCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 06:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
+        id S238328AbiKOLDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 06:03:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238275AbiKOLBt (ORCPT
+        with ESMTP id S237742AbiKOLB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 06:01:49 -0500
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9FA62D9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:01:16 -0800 (PST)
-Received: by mail-vs1-xe2d.google.com with SMTP id i2so9854874vsc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:01:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3GpXLJE7XWPa3z0Eh6vApuFsIkuRF+XGpozyyNRWwzY=;
-        b=26o34GWBfUIiqpuLc/xTHrlYYldMNCaqik4cgtWfM7Gn9nvxTy7nf7WSCqLXPbhH3c
-         oF7vVTq2x2OxdquLz+dwE+OxpNSLhBvFSreNZ4c59Cg+UES/iYXiN4iHuxxxQ0GgNyPB
-         MHIuKPkdmT+HUBOEhK6NVxUujCIau14h7oVzD1hEu1GrzSo/DOKj+YwrRvJAZJhvdn/P
-         fdC4BEgbm3KTNCMpBoh00jutsosKgXjr2LlRnU+MqSzBlSrNBoZRP1slVI4k3db9EOZl
-         +/d4CFUdbmL+Dujhn7dgvHAKVOFt1gPNljO5Lu9FetTR2pmahdJUDCIZKWOIHl6YfP+/
-         PQtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3GpXLJE7XWPa3z0Eh6vApuFsIkuRF+XGpozyyNRWwzY=;
-        b=3aasLivayyKumAvslLTiyDGt+rKG+XWsAvamSB2xe7KJuyc9u2vPq+1iELl5jC2Cnf
-         2lWKpfWmnc5cdWGL8KpbolZYGR+3BadXbNIP3jxvyfEMQur0hhpUqjk7PR6dN9tvGOn0
-         +q7SgY7YOZioc/q/xcwaqP2LhhMysCiyD2FQ8Koo306bJIVNu6aEQhnL+wCaLeJ6E9cV
-         LKBvVKuie892s17jHFpEaprWlJF0U+ZbNOtLpOkucF7Jtc5o1eAigIOYW29OrOfN52/+
-         5BLS8q/KkdBrkePPK0jkBXvRaH4udX0OSoCxY5+5vtenCGdDdNCABirxWdIVMW72nxvo
-         I7oQ==
-X-Gm-Message-State: ANoB5plp1vxpISou4oBktdnQxFkiPtFxQRd5zvCk6OejeGgk45ygFF5e
-        /X6Z8zcN1A7QKRYNZQMjkM+/xuzACFvx0DoXPjLgog==
-X-Google-Smtp-Source: AA0mqf7qS1tG58i68RSXsH5Aa4l2015jfFgmckfP6lPX/XfrOTq9W9ZSf0ojB/0bdTl/c3kV8s2VQ1eghwog2FZPWis=
-X-Received: by 2002:a67:fb81:0:b0:3a9:afe1:eef6 with SMTP id
- n1-20020a67fb81000000b003a9afe1eef6mr8358643vsr.61.1668510075698; Tue, 15 Nov
- 2022 03:01:15 -0800 (PST)
+        Tue, 15 Nov 2022 06:01:58 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD1D5FA5;
+        Tue, 15 Nov 2022 03:01:28 -0800 (PST)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NBNX44hJ9zRpJQ;
+        Tue, 15 Nov 2022 19:01:08 +0800 (CST)
+Received: from dggpeml500002.china.huawei.com (7.185.36.158) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 19:01:26 +0800
+Received: from [10.67.103.44] (10.67.103.44) by dggpeml500002.china.huawei.com
+ (7.185.36.158) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 15 Nov
+ 2022 19:01:26 +0800
+Subject: Re: [PATCH v13 2/2] Documentation: Add document for UltraSoc SMB
+ drivers
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+References: <20221114090316.63157-1-hejunhao3@huawei.com>
+ <20221114090316.63157-3-hejunhao3@huawei.com> <Y3JJSfVoatl5yKlm@debian.me>
+ <a6adaeec-182c-140d-9925-45f659b4eef2@huawei.com>
+ <3a00467c-7f78-e2ba-33d6-06caf523a183@gmail.com>
+CC:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
+        <jonathan.cameron@huawei.com>, <john.garry@huawei.com>,
+        <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <lpieralisi@kernel.org>,
+        <linuxarm@huawei.com>, <yangyicong@huawei.com>,
+        <liuqi115@huawei.com>, <f.fangjian@huawei.com>,
+        <prime.zeng@hisilicon.com>
+From:   hejunhao <hejunhao3@huawei.com>
+Message-ID: <e181e283-df50-6a65-6f14-38c871d53d99@huawei.com>
+Date:   Tue, 15 Nov 2022 19:01:26 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-References: <20221114184626.64214-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20221114184626.64214-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 15 Nov 2022 12:01:04 +0100
-Message-ID: <CAMRc=McXcKxnqYonaxLYK5cvMDaZDHYdiCXkJiBq+nZRJ0vF2A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] gpiolib: of: Prepare of_mm_gpiochip_add_data() for fwnode
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <3a00467c-7f78-e2ba-33d6-06caf523a183@gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.44]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500002.china.huawei.com (7.185.36.158)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,40 +64,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 7:46 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> GPIO library is getting rid of of_node, fwnode should be utilized instead.
-> Prepare of_mm_gpiochip_add_data() for fwnode.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-> v2: added tag (Linus), modified according to Dmitry's suggestion
->  drivers/gpio/gpiolib-of.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-> index 4be3c21aa718..d30a5210dfdd 100644
-> --- a/drivers/gpio/gpiolib-of.c
-> +++ b/drivers/gpio/gpiolib-of.c
-> @@ -935,8 +935,8 @@ int of_mm_gpiochip_add_data(struct device_node *np,
->         if (mm_gc->save_regs)
->                 mm_gc->save_regs(mm_gc);
->
-> -       of_node_put(mm_gc->gc.of_node);
-> -       mm_gc->gc.of_node = of_node_get(np);
-> +       fwnode_handle_put(mm_gc->gc.fwnode);
-> +       mm_gc->gc.fwnode = fwnode_handle_get(of_fwnode_handle(np));
->
->         ret = gpiochip_add_data(gc, data);
->         if (ret)
->
-> base-commit: 8dab99c9eab3162bfb4326c35579a3388dbf68f2
-> --
-> 2.35.1
->
+Hi Bagas,
 
-Both applied, thanks!
 
-Bart
+On 2022/11/15 15:35, Bagas Sanjaya wrote:
+> On 11/15/22 14:33, hejunhao wrote:
+>> Hi Bagas,
+>>
+>> will apply the fix  in next version.
+>> Thank you very much.
+>>
+> Please don't top-post, reply inline with appropriate context instead.
+> I had to trim all the below context as a result.
+Yes, I'm sorry for that.
+
+Best regards,
+Junhao.
+
