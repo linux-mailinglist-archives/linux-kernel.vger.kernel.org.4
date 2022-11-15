@@ -2,46 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A29D6295E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F24FD6295E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:33:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237977AbiKOKcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:32:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
+        id S238227AbiKOKdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:33:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKOKct (ORCPT
+        with ESMTP id S229516AbiKOKc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:32:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEC91A83B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:32:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7616A615F5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:32:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D845C433D6;
-        Tue, 15 Nov 2022 10:32:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668508367;
-        bh=J0AqUCNbx/Nxfw1cajX4O1nZtC6ckY4c4ixhv+h6pe4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GFb1hsWA8wetK2APjkF+q18gGGqZqpI8+yLsuswnkUuqVjce9x1bqHG0PpCxAMlo/
-         PX5r9ZijPvovg/xpqtjJIXABL0UJUSITERWFJMSAzBTu8XD+dVOf7G+fTrotZjbpL6
-         JzsTWalzUxEmWvtAC32IagpEtMnP6rEIRJtudOyU=
-Date:   Tue, 15 Nov 2022 11:32:40 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     guo.ziliang@zte.com.cn
-Cc:     tj@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH linux-next] kernfs: use strscpy() is more robust and safer
-Message-ID: <Y3NqyDDGz/UKPgxM@kroah.com>
-References: <202211150847452601249@zte.com.cn>
+        Tue, 15 Nov 2022 05:32:57 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6AD24F33
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:32:56 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id c203so2603960pfc.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:32:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n6bwOxePFh46NaBMZODMDlWticrcCSmbJ4eG9oo6U4I=;
+        b=aJLqEIUnLoEcqEpLJVeyLDSI4JWya9I6xfkg+ypjcC6c5uFWQRGrJXG/h8qnz/fzn5
+         Jzs2FgEgorPHrC3aZgS5jQ78pKZ1cCLRrDS5D0SUUN26zOBpLJTMEGUPECoFgywkAJAU
+         /pMcFh4gMmi34RnkLgcBsknOLsLXoU+L3BqTc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n6bwOxePFh46NaBMZODMDlWticrcCSmbJ4eG9oo6U4I=;
+        b=oVbVVvmjdotOFrIVG0uCX4N/0TrrAtq9tnatxw62ljDEvIBNS4Q/CnleZSXKRjh7ry
+         q2ISbPsCysl517Rlmox03sngcn5L0XqirRWdOFhF3r8HV9wYDg1dEt5p1DzdP032OOCL
+         0F6EvQm5SGJlFDUUth/JJn3WB4Z7YolTEC9T6DtyRJjiOY70QTPLDzkdNSbA2SwgGVng
+         GBNeDOrQqCCQ4D6E3PK022huN/KWJWUsFfKeMASPszZB1Rwc1PEEufPIdczLdo6a661z
+         i8joyqlM64LJKYxgmu+LXo4Kq4SjJFoCU0SH84E/0qdiEKbYtTnR3EScE2J2VdUToREE
+         Ebfg==
+X-Gm-Message-State: ANoB5plrhlGJ4tj4Q1vQvMaw/sC4YiKgFnWo6TMRRBEfrIlFR9yA93H4
+        CbRU7xwff2A2TqsAXnkYUukTgA==
+X-Google-Smtp-Source: AA0mqf6c7cKl4JNJ3YsXWMTQrXcVKdJmUcemuX343NMnE30n7czJ0JHIaY+k8DYxqkh+sEjUJkf/4Q==
+X-Received: by 2002:a05:6a00:e14:b0:56c:db44:7b1f with SMTP id bq20-20020a056a000e1400b0056cdb447b1fmr17938099pfb.54.1668508375545;
+        Tue, 15 Nov 2022 02:32:55 -0800 (PST)
+Received: from d5d3ab63aed3 ([220.253.112.46])
+        by smtp.gmail.com with ESMTPSA id z12-20020a170903018c00b0016cf3f124e1sm9429839plg.234.2022.11.15.02.32.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 02:32:54 -0800 (PST)
+Date:   Tue, 15 Nov 2022 10:32:47 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.0 000/190] 6.0.9-rc1 review
+Message-ID: <20221115103247.GA258@d5d3ab63aed3>
+References: <20221114124458.806324402@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202211150847452601249@zte.com.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20221114124458.806324402@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,19 +71,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 08:47:45AM +0800, guo.ziliang@zte.com.cn wrote:
-> From: guo ziliang <guo.ziliang@zte.com.cn>
+On Mon, Nov 14, 2022 at 01:43:44PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.9 release.
+> There are 190 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> The implementation of strscpy() is more robust and safer.  That's now the
-> recommended way to copy NUL terminated strings.
-> 
-> Signed-off-by: guo ziliang <guo.ziliang@zte.com.cn>
+> Responses should be made by Wed, 16 Nov 2022 12:44:21 +0000.
+> Anything received after that time might be too late.
 
-Note, your email is showing up as "unvalidated" with in invalid
-signature based on your domain.  Please fix that up so that your patches
-will be able to be accepted, otherwise we have to consider this as a
-spoofed email :(
+Hi Greg,
 
-thanks,
+6.0.9-rc1 tested.
 
-greg k-h
+Run tested on:
+- Intel Alder Lake x86_64 (nuc12 i7-1260P)
+- SolidRun Cubox-i Dual/Quad - NXP iMX6 (Cubox-i4Pro)
+
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- Allwinner H6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
+
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi
