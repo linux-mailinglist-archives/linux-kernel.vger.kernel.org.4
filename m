@@ -2,145 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D375262A05A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 583E862A05C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbiKOR3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 12:29:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
+        id S229490AbiKOR3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 12:29:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbiKOR2m (ORCPT
+        with ESMTP id S231391AbiKOR3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 12:28:42 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B06927CE8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:28:40 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id s8so8383590lfc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:28:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qnzzFvDnrUNiU88yEZt6sQdtp0kEECaqorraO0GqvxU=;
-        b=gTqXfTfz1AawXgaddIVtPqg4+pkukv3DqH6QpxMlqCBS05LIvP+2dQ4b6OMEevO4kA
-         FHj86IBdobrG3d5IdXt/+3TCHAqqGWj7BmXM4FluMRmhulHmbEe5m0nXfF6h4N6N0+3n
-         znqac4WQsqsJdf44MkWe6m4u5H+yNPTs63KaTASt2BnjxAZq/98zjcYD8Al4EFI54bEU
-         QqtUy4uUBwj4NKrABJcJqUAW+u4RH3y95bTU2KY9/wJr8NkScoBaNXb7FrgeRbGujFTf
-         mtDvGyealO5gkDiuH5wrlXwrTfAJbO+wzBFX9fYvNonCrOQYraxjuRY14Zkz3nz+ld+n
-         lMJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qnzzFvDnrUNiU88yEZt6sQdtp0kEECaqorraO0GqvxU=;
-        b=vT0xhz6nvEnfXxHOXjtZNozQQdk18tCiSwXAfVBpu8CHOrng3itLAC0j9W7yDrnQk/
-         R3gps06uHwNrkLILCrCz+B2dXL3UJveg2nvjN5uI2NhL7fmbDeBRdqi6x0bOUybU5+As
-         2BIK30fOJ3sXqQ94bhI2UR9n+DuXWwizbPGFjh8AaBYaDdnPSDf3krLrZ8ZABymmwpwp
-         8sb04WUT5QVnhyftca7JbIJcEAANAwt/IH31U55sfb4TZAZbieQYw0ky/DlcYvpXoTZm
-         1HYV5UDqooy6dfz2Ql4qPUngsmPvSJgM7jxwQ4D7zN0GWvShTvZHScZIeVi0YhZ4tKPV
-         1fAw==
-X-Gm-Message-State: ANoB5pk4qWak9PjD5AZOzhx3LISpwfMMrP2H6sMXSEctiWMk/4qKcEPi
-        AwP55wTvwFERzJMKc7+lRog6sQ==
-X-Google-Smtp-Source: AA0mqf5iYiSCCg41VSN3+mgDERmio+BS0NImVtdSFTzVWSNilw7sO0zafZj5BDmVrN1pC8TF7RC4kA==
-X-Received: by 2002:a05:6512:3c8e:b0:4a0:5393:3749 with SMTP id h14-20020a0565123c8e00b004a053933749mr6050082lfv.494.1668533319861;
-        Tue, 15 Nov 2022 09:28:39 -0800 (PST)
-Received: from localhost.localdomain ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id b42-20020a0565120baa00b00496d3e6b131sm2261511lfv.234.2022.11.15.09.28.38
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 15 Nov 2022 09:28:39 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: [PATCH 4/4] arm64: dts: qcom: sm8350-sagami: Wire up SDHCI2
-Date:   Tue, 15 Nov 2022 18:28:28 +0100
-Message-Id: <20221115172828.14372-4-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
-In-Reply-To: <20221115172828.14372-1-konrad.dybcio@linaro.org>
-References: <20221115172828.14372-1-konrad.dybcio@linaro.org>
+        Tue, 15 Nov 2022 12:29:20 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BB029C86;
+        Tue, 15 Nov 2022 09:29:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=MghNhBLFepqKOQwkGUfSW1GJuxjMVRFJVMazuOGss7w=; b=MbrntDhCaie5kamEI+pFVXWgke
+        exlodypGNSNS2Bt5dkI3GpEVxZYAaiaV3mJPLkpBIxHKje72LT2DeBlTHmHl/y8CwM3B1edq/n/UG
+        28bJfK45ZR/yOf4v/ZSiibDhGapmDiwCxpbY1TxB8BiAPiozjuQjh7ZkiaKJ13z+7HT4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ouzjj-002Tth-P3; Tue, 15 Nov 2022 18:28:39 +0100
+Date:   Tue, 15 Nov 2022 18:28:39 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Shenwei Wang <shenwei.wang@nxp.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        imx@lists.linux.dev, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v4 2/2] net: fec: add xdp and page pool statistics
+Message-ID: <Y3PMRwstfJkUiYwl@lunn.ch>
+References: <20221115155744.193789-1-shenwei.wang@nxp.com>
+ <20221115155744.193789-3-shenwei.wang@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221115155744.193789-3-shenwei.wang@nxp.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adjust regulators, add required pin setup and finally enable SDHCI2
-to get the SD Card slot going on Sagami Xperias.
+> @@ -1582,6 +1586,7 @@ fec_enet_rx_queue(struct net_device *ndev, int budget, u16 queue_id)
+>  	struct bpf_prog *xdp_prog = READ_ONCE(fep->xdp_prog);
+>  	u32 ret, xdp_result = FEC_ENET_XDP_PASS;
+>  	u32 data_start = FEC_ENET_XDP_HEADROOM;
+> +	u32 xdp_stats[XDP_STATS_TOTAL];
+>  	struct xdp_buff xdp;
+>  	struct page *page;
+>  	u32 sub_len = 4;
+> @@ -1656,11 +1661,13 @@ fec_enet_rx_queue(struct net_device *ndev, int budget, u16 queue_id)
+>  		fec_enet_update_cbd(rxq, bdp, index);
+>  
+>  		if (xdp_prog) {
+> +			memset(xdp_stats, 0, sizeof(xdp_stats));
+>  			xdp_buff_clear_frags_flag(&xdp);
+>  			/* subtract 16bit shift and FCS */
+>  			xdp_prepare_buff(&xdp, page_address(page),
+>  					 data_start, pkt_len - sub_len, false);
+> -			ret = fec_enet_run_xdp(fep, xdp_prog, &xdp, rxq, index);
+> +			ret = fec_enet_run_xdp(fep, xdp_prog, &xdp, rxq,
+> +					       xdp_stats, index);
+>  			xdp_result |= ret;
+>  			if (ret != FEC_ENET_XDP_PASS)
+>  				goto rx_processing_done;
+> @@ -1762,6 +1769,15 @@ fec_enet_rx_queue(struct net_device *ndev, int budget, u16 queue_id)
+>  	if (xdp_result & FEC_ENET_XDP_REDIR)
+>  		xdp_do_flush_map();
+>  
+> +	if (xdp_prog) {
+> +		int i;
+> +
+> +		u64_stats_update_begin(&rxq->syncp);
+> +		for (i = 0; i < XDP_STATS_TOTAL; i++)
+> +			rxq->stats[i] += xdp_stats[i];
+> +		u64_stats_update_end(&rxq->syncp);
+> +	}
+> +
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- .../dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 30 ++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
+This looks wrong. You are processing upto the napi budget, 64 frames,
+in a loop. The memset to 0 happens inside the loop, but you do the
+accumulation outside the loop?
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-index a428ce31ab4e..fdf95b763cf4 100644
---- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
-@@ -312,7 +312,8 @@ pm8350c_l8: ldo8 {
- 		pm8350c_l9: ldo9 {
- 			regulator-name = "pm8350c_l9";
- 			regulator-min-microvolt = <2960000>;
--			regulator-max-microvolt = <3008000>;
-+			/* Originally max = 3008000 but SDHCI expects 2960000 */
-+			regulator-max-microvolt = <2960000>;
- 			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
- 		};
- 
-@@ -558,6 +559,19 @@ &qupv3_id_2 {
- 	status = "okay";
- };
- 
-+&sdhc_2 {
-+	cd-gpios = <&tlmm 92 GPIO_ACTIVE_HIGH>;
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&sdc2_default_state &sdc2_card_det_active>;
-+	pinctrl-1 = <&sdc2_sleep_state &sdc2_card_det_sleep>;
-+	vmmc-supply = <&pm8350c_l9>;
-+	vqmmc-supply = <&pm8350c_l6>;
-+	no-sdio;
-+	no-mmc;
-+	status = "okay";
-+};
-+
-+
- &slpi {
- 	status = "okay";
- 	firmware-name = "qcom/sm8350/Sony/sagami/slpi.mbn";
-@@ -782,6 +796,20 @@ ts_int_default: ts-int-default-state {
- 		bias-disable;
- 		input-enable;
- 	};
-+
-+	sdc2_card_det_active: sd-card-det-active-state {
-+		pins = "gpio92";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+
-+	sdc2_card_det_sleep: sd-card-det-sleep-state {
-+		pins = "gpio92";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
- };
- 
- /* BIG WARNING! DO NOT TOUCH UFS, YOUR DEVICE WILL DIE! */
--- 
-2.38.1
+This patch is getting pretty big. Please break it up, at least into
+one patch for XDP stats and one for page pool stats.
 
+    Andrew
