@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C855A629B17
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:49:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7803629B12
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238481AbiKONto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:49:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
+        id S229560AbiKONtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:49:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbiKONtg (ORCPT
+        with ESMTP id S229546AbiKONtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Nov 2022 08:49:36 -0500
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1F624969;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107A92497E;
         Tue, 15 Nov 2022 05:49:33 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NBSGG3Cs4z4f3vdk;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NBSGG6C49z4f3vdx;
         Tue, 15 Nov 2022 21:49:26 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgBni9jnmHNjrPFIAg--.61645S5;
+        by APP4 (Coremail) with SMTP id gCh0CgBni9jnmHNjrPFIAg--.61645S6;
         Tue, 15 Nov 2022 21:49:29 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     hch@lst.de, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
         dm-devel@redhat.com
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH v3 01/10] block: clear ->slave_dir when dropping the main slave_dir reference
-Date:   Tue, 15 Nov 2022 22:10:45 +0800
-Message-Id: <20221115141054.1051801-2-yukuai1@huaweicloud.com>
+Subject: [PATCH v3 02/10] dm: remove free_table_devices
+Date:   Tue, 15 Nov 2022 22:10:46 +0800
+Message-Id: <20221115141054.1051801-3-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221115141054.1051801-1-yukuai1@huaweicloud.com>
 References: <20221115141054.1051801-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBni9jnmHNjrPFIAg--.61645S5
-X-Coremail-Antispam: 1UD129KBjvdXoWrtrykCw4kWry3Xw4rXr45GFg_yoWkZrcEka
-        s3C3Wkuws7Gw1ag3ZFkr1rZr40vw4YvayUuFZrXF9xGa4UJrn3J3WkWr4rAFn3GFWkK343
-        AF1qvFy7Crs7CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb6AFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGwA2048vs2IY02
-        0Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM2
-        8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
-        vE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
-        r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04
-        v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_
-        Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x
-        0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8
-        JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIx
-        AIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbec_DUUUUU=
+X-CM-TRANSID: gCh0CgBni9jnmHNjrPFIAg--.61645S6
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZFyxWFWrZFy8KF1DtryDGFg_yoW8XF43pF
+        13Xa42yrW5Wrs29w4UZr1Uua43Kan0y3yrKrW5Cw1v93W5A34FvFWxJFyrXFy5Jay8GF43
+        WFy7tr18Cay8Kr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
+        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
+        xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
+        6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2
+        Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
+        Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
+        IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUc6pPUUUUU
         =
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
@@ -64,38 +64,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Christoph Hellwig <hch@lst.de>
 
-Zero out the pointer to ->slave_dir so that the holder code doesn't
-incorrectly treat the object as alive when add_disk failed or after
-del_gendisk was called.
+free_table_devices just warns and frees all table_device structures when
+the target removal did not remove them.  This should never happen, but
+if it did, just freeing the structure without deleting them from the
+list or cleaning up the resources would not help at all.  So just WARN on
+a non-empty list instead.
 
-Fixes: 89f871af1b26 ("dm: delay registering the gendisk")
-Reported-by: Yu Kuai <yukuai3@huawei.com>
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- block/genhd.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/md/dm.c | 15 +--------------
+ 1 file changed, 1 insertion(+), 14 deletions(-)
 
-diff --git a/block/genhd.c b/block/genhd.c
-index 74026ce31405..e9501c66ba4d 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -530,6 +530,7 @@ int __must_check device_add_disk(struct device *parent, struct gendisk *disk,
- 	rq_qos_exit(disk->queue);
- out_put_slave_dir:
- 	kobject_put(disk->slave_dir);
-+	disk->slave_dir = NULL;
- out_put_holder_dir:
- 	kobject_put(disk->part0->bd_holder_dir);
- out_del_integrity:
-@@ -634,6 +635,7 @@ void del_gendisk(struct gendisk *disk)
+diff --git a/drivers/md/dm.c b/drivers/md/dm.c
+index 95a1ee3d314e..19d25bf997be 100644
+--- a/drivers/md/dm.c
++++ b/drivers/md/dm.c
+@@ -833,19 +833,6 @@ void dm_put_table_device(struct mapped_device *md, struct dm_dev *d)
+ 	mutex_unlock(&md->table_devices_lock);
+ }
  
- 	kobject_put(disk->part0->bd_holder_dir);
- 	kobject_put(disk->slave_dir);
-+	disk->slave_dir = NULL;
+-static void free_table_devices(struct list_head *devices)
+-{
+-	struct list_head *tmp, *next;
+-
+-	list_for_each_safe(tmp, next, devices) {
+-		struct table_device *td = list_entry(tmp, struct table_device, list);
+-
+-		DMWARN("dm_destroy: %s still exists with %d references",
+-		       td->dm_dev.name, refcount_read(&td->count));
+-		kfree(td);
+-	}
+-}
+-
+ /*
+  * Get the geometry associated with a dm device
+  */
+@@ -2122,7 +2109,7 @@ static void free_dev(struct mapped_device *md)
  
- 	part_stat_set_all(disk->part0, 0);
- 	disk->part0->bd_stamp = 0;
+ 	cleanup_mapped_device(md);
+ 
+-	free_table_devices(&md->table_devices);
++	WARN_ON_ONCE(!list_empty(&md->table_devices));
+ 	dm_stats_cleanup(&md->stats);
+ 	free_minor(minor);
+ 
 -- 
 2.31.1
 
