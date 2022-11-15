@@ -2,41 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF2E628FF1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 03:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FEC628FF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 03:35:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbiKOCdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 21:33:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
+        id S231807AbiKOCe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 21:34:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiKOCdU (ORCPT
+        with ESMTP id S236320AbiKOCdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 21:33:20 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC612FD27
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 18:33:18 -0800 (PST)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NB9Fl4N0kzRpDv;
-        Tue, 15 Nov 2022 10:32:59 +0800 (CST)
-Received: from huawei.com (10.67.174.53) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 15 Nov
- 2022 10:33:16 +0800
-From:   Liao Chang <liaochang1@huawei.com>
-To:     <shaggy@kernel.org>
-CC:     <jfs-discussion@lists.sourceforge.net>,
-        <linux-kernel@vger.kernel.org>, <liaochang1@huawei.com>
-Subject: [PATCH] jfs: Fix out-of-bounds access on dtSearch
-Date:   Tue, 15 Nov 2022 10:30:09 +0800
-Message-ID: <20221115023009.251044-1-liaochang1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 14 Nov 2022 21:33:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA293AB;
+        Mon, 14 Nov 2022 18:33:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A1AEB811FF;
+        Tue, 15 Nov 2022 02:33:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D485FC433D7;
+        Tue, 15 Nov 2022 02:33:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668479605;
+        bh=arWWnXNyckh53wt46pLNwjigmsa726WXb0yla1rWH2E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lmr5It+r7k82nBnQZkLsFlM7R6e70zyPYUIJmSo+MeuBaTN3bKzWu7dtyVRJNyuN1
+         au3kioDCZwEovI3EAR63XA2Dbyou73KD7gqWSb5yAyi3NdWWeXa3IipU3ov7IzNdHG
+         GZnfEwkSjfBf47XnTP3qUgi4myRtrflpjqh0MyFHuHpoWKd7EIFT31UKPdIgAgwF66
+         gYlSH0B+ArxQJoLWnzQMa0f3dSlpfKg1STajGi0MiuKbmewphezOe2TmtqAumEaoyW
+         UVhrGFMEgzfnWQ0pnDXaIp6pedheKq6lwTn9h+sQK5r7Z16WI7fBbgoNmCsJ0xDpWX
+         uQ7qec5DQpr0w==
+Date:   Mon, 14 Nov 2022 18:33:23 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Denis Kirjanov <kda@linux-powerpc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: sundance: remove unused variable cnt
+Message-ID: <20221114183323.54d81387@kernel.org>
+In-Reply-To: <20221114170317.92817-1-colin.i.king@gmail.com>
+References: <20221114170317.92817-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.53]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,52 +55,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BUG: KASAN: slab-out-of-bounds in dtSearch+0x1d92/0x2000
-Read of size 1 at addr ffff888134497f94 by task syz-executor.2/8793
+On Mon, 14 Nov 2022 17:03:17 +0000 Colin Ian King wrote:
+> Variable cnt is just being incremented and it's never used
+> anywhere else. The variable and the increment are redundant so
+> remove it.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-CPU: 0 PID: 8793 Comm: syz-executor.2 Tainted: G        W
-6.0.0-07994-ge8bc52cb8df8 #9
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
-BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0xcd/0x134
- print_report.cold+0x2ba/0x719
- kasan_report+0xb1/0x1e0
- dtSearch+0x1d92/0x2000
- jfs_lookup+0x17c/0x2f0
- __lookup_slow+0x24c/0x460
- walk_component+0x33f/0x5a0
- link_path_walk.part.0.constprop.0+0x715/0xd80
- path_lookupat+0x92/0x760
- filename_lookup+0x1d2/0x590
- user_path_at_empty+0x42/0x60
- __x64_sys_chdir+0xb7/0x260
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-The out-of-bounds access occurs in macro ciToUpper, which converts the
-unicode character in ciKey.name into uppercase, this upper operation
-will stop when it meets a terminal character(digit 0), so it needs to
-set the last character to zero to ensure upper can stop in valid range.
-
-Signed-off-by: Liao Chang <liaochang1@huawei.com>
----
- fs/jfs/jfs_dtree.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/fs/jfs/jfs_dtree.c b/fs/jfs/jfs_dtree.c
-index 92b7c533407c..0c3af64abcfd 100644
---- a/fs/jfs/jfs_dtree.c
-+++ b/fs/jfs/jfs_dtree.c
-@@ -592,6 +592,7 @@ int dtSearch(struct inode *ip, struct component_name * key, ino_t * data,
- 	/* uppercase search key for c-i directory */
- 	UniStrcpy(ciKey.name, key->name);
- 	ciKey.namlen = key->namlen;
-+	ciKey.name[ciKey.namlen] = 0;
- 
- 	/* only uppercase if case-insensitive support is on */
- 	if ((JFS_SBI(sb)->mntflag & JFS_OS2) == JFS_OS2) {
--- 
-2.17.1
-
+Once you've noticed that I'm tossing all your networking changes from
+patchwork - the reason is that you seem to have ignored completely 
+one of my replies and also recent review comments from Leon. 
