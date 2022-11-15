@@ -2,213 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B27629E04
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:48:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF4A629E0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:50:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbiKOPsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
+        id S229953AbiKOPur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:50:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiKOPsI (ORCPT
+        with ESMTP id S229495AbiKOPuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:48:08 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667822CCAE;
-        Tue, 15 Nov 2022 07:48:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668527287; x=1700063287;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=esQYanLlOvexoYc53n1hkKiLmuXm7gaBOcFvaSRa3d8=;
-  b=Yiw1R6rKl7UHPaOjlEY0isC9k5q1JS/hMghfUvBOGmRR0IXfPnblVV9c
-   2DoH0YNG5C9aesQNNT2dc0jjRhI6GJb6cA38mnc4X0FctSg9MRbAJLxQK
-   ssYD1bfcZ6441krMuGAw2ShbjEuGjWW7gM6Qd5hqtX57kjIteHaZNGVXY
-   +MvfdWLxmJogCxKaN8SnXU8pSy0uqVXbqQcQ6pD7N7AeN3HCCn+i67QE3
-   44tEypr8HBLmot+7ZbFWeBQ3VfIKqMY96wqfYffbW4RY28mFYULpG9oEf
-   GBcUSFRWqRAEtrOFVcZTxOnYX3NyDJ74puXRq00UEg0+OX2Ok2QggPDq8
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="291995132"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="291995132"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:48:07 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="781382824"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="781382824"
-Received: from mrosso-mobl1.ger.corp.intel.com ([10.249.45.244])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:48:03 -0800
-Date:   Tue, 15 Nov 2022 17:48:01 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Gabriel Somlo <gsomlo@gmail.com>
-cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, kgugala@antmicro.com,
-        mholenko@antmicro.com, joel@jms.id.au,
-        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
-        geert@linux-m68k.org
-Subject: Re: [PATCH v3 11/14] serial: liteuart: move function definitions
-In-Reply-To: <20221112212125.448824-12-gsomlo@gmail.com>
-Message-ID: <4acd99f5-86eb-e0c8-a9ca-a4f5c7e07393@linux.intel.com>
-References: <20221112212125.448824-1-gsomlo@gmail.com> <20221112212125.448824-12-gsomlo@gmail.com>
+        Tue, 15 Nov 2022 10:50:44 -0500
+Received: from egress-ip33a.ess.de.barracuda.com (egress-ip33a.ess.de.barracuda.com [18.185.115.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4F728D
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:50:42 -0800 (PST)
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199]) by mx-outbound15-12.eu-central-1a.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Tue, 15 Nov 2022 15:50:40 +0000
+Received: by mail-pl1-f199.google.com with SMTP id k15-20020a170902c40f00b001887cd71fe6so11519469plk.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:50:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mistralsolutions.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/AKk/iHxlRyPsei0kf0ul5R2X5r1GkRebYS9OplFI6w=;
+        b=R/Ch57dNpGhLRTiFS/EDyZXyBSMFfT/2wuO4XuDBUMj61Zk0a9fcYJYOtUeC02otPm
+         LEBoaK+dbqptFwrnytjx12SG0DdyFJQEKFpiiH932OEFd3wVvlOfs8lD03Tw0rhjXOiz
+         Ps6DLRwQsaboHtWg5qhnYLpHBuunTQZRqg5IA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/AKk/iHxlRyPsei0kf0ul5R2X5r1GkRebYS9OplFI6w=;
+        b=RFQCe3e5ZLUNiYoTC0PRwFq8n21G9/mwOVuJfbBr54YEjdfwnezwupMqFD+8mlxtsz
+         n30nSrdixgJ4hCAdR3xu5AunT4tGBCDdsRfRBrOfeUT/WRAFmxO/5TFpxMy6AWbMwQDS
+         lufzhZ/FykTDuyzuqio8J7nXZk2WaHG9JVubUdO2kaxBIh7GDcTK3Xd5uIcaIRV/M7sj
+         K2w9n7BXhupsLjHFA/RrTqpHh7K4V6drErfOcdtCk+LiZoBtDXvcT1GiiXs7cl1JgmUs
+         u4ZOUimO9nLM5QIhRgoFhq5hnIP+edS10DV+Pu2IhZ/gotgiDogUj0TXhTgD7mucNYoO
+         RaXg==
+X-Gm-Message-State: ANoB5plGyLDQDkGEzbNsxQtE+UflHFy5R1PCg3ng5VqZAwOSPsb6m1Kv
+        t6tS+O9QKCMzwDFGnPWStZ71J9fviUjRmkqoUO9R/oSAJ5RW6SzmUljNXtzYsQUHA7EaRSvd7q8
+        C1UHhae6bIoy+1c3CV3w4qUN57e0JIe/9CTNIKqi3wjTpftwTxt9zFjpUKvWQ
+X-Received: by 2002:a63:550b:0:b0:46a:f665:ed96 with SMTP id j11-20020a63550b000000b0046af665ed96mr16442919pgb.486.1668527437370;
+        Tue, 15 Nov 2022 07:50:37 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7nanjVbNOu0c9YMBYkuDrnfggk1H1OIyW4wrG8UFQdPwfUgwaY+3oyRu/o2ccWOpZ7VzuQYA==
+X-Received: by 2002:a63:550b:0:b0:46a:f665:ed96 with SMTP id j11-20020a63550b000000b0046af665ed96mr16442903pgb.486.1668527437033;
+        Tue, 15 Nov 2022 07:50:37 -0800 (PST)
+Received: from LAP568U.mistral.in ([106.51.227.150])
+        by smtp.gmail.com with ESMTPSA id y1-20020a17090264c100b00178b6ccc8a0sm10018478pli.51.2022.11.15.07.50.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 07:50:36 -0800 (PST)
+From:   Sinthu Raja <sinthu.raja@mistralsolutions.com>
+X-Google-Original-From: Sinthu Raja <sinthu.raja@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>
+Subject: [PATCH V3 0/3] AM68 SK: Add initial support
+Date:   Tue, 15 Nov 2022 21:18:29 +0530
+Message-Id: <20221115154832.19759-1-sinthu.raja@ti.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-931260506-1668527287=:2268"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-BESS-ID: 1668527439-303852-5540-3110-1
+X-BESS-VER: 2019.1_20221114.2026
+X-BESS-Apparent-Source-IP: 209.85.214.199
+X-BESS-Outbound-Spam-Score: 0.40
+X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.244167 [from 
+        cloudscan16-48.eu-central-1b.ess.aws.cudaops.com]
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------
+        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
+        0.40 BSF_SC0_SA085b         META: Custom Rule SA085b 
+        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
+X-BESS-Outbound-Spam-Status: SCORE=0.40 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_SC0_MISMATCH_TO, BSF_SC0_SA085b, BSF_BESS_OUTBOUND
+X-BESS-BRTS-Status: 1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+From: Sinthu Raja <sinthu.raja@ti.com>
 
---8323329-931260506-1668527287=:2268
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
+Hi,
+This series of patches add support for AM68 Starter kit(SK). AM68 SK
+is a low cost, small form factor board designed for TIâ€™s J721S2/AM68 SoC.
 
-On Sat, 12 Nov 2022, Gabriel Somlo wrote:
+Refer below link to J721S2/AM68 Technical Reference Manual for further details: 
+http://www.ti.com/lit/pdf/spruj28
 
-> Move definitions for liteuart_[stop|start]_tx(), liteuart_stop_rx(),
-> and liteuart_putchar() to a more convenient location in preparation
-> for adding IRQ support. This patch contains no functional changes.
-> 
-> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-> ---
->  drivers/tty/serial/liteuart.c | 98 +++++++++++++++++------------------
->  1 file changed, 49 insertions(+), 49 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-> index 172ac190ba2f..cf1ce597b45e 100644
-> --- a/drivers/tty/serial/liteuart.c
-> +++ b/drivers/tty/serial/liteuart.c
-> @@ -67,36 +67,6 @@ static struct uart_driver liteuart_driver = {
->  #endif
->  };
->  
-> -static void liteuart_rx_chars(struct uart_port *port)
-> -{
-> -	unsigned char __iomem *membase = port->membase;
-> -	unsigned int status, ch;
-> -
-> -	while ((status = !litex_read8(membase + OFF_RXEMPTY)) == 1) {
-> -		ch = litex_read8(membase + OFF_RXTX);
-> -		port->icount.rx++;
-> -
-> -		/* necessary for RXEMPTY to refresh its value */
-> -		litex_write8(membase + OFF_EV_PENDING, EV_RX);
-> -
-> -		/* no overflow bits in status */
-> -		if (!(uart_handle_sysrq_char(port, ch)))
-> -			uart_insert_char(port, status, 0, ch, TTY_NORMAL);
-> -	}
-> -
-> -	tty_flip_buffer_push(&port->state->port);
-> -}
-> -
-> -static void liteuart_timer(struct timer_list *t)
-> -{
-> -	struct liteuart_port *uart = from_timer(uart, t, timer);
-> -	struct uart_port *port = &uart->port;
-> -
-> -	liteuart_rx_chars(port);
-> -
-> -	mod_timer(&uart->timer, jiffies + uart_poll_timeout(port));
-> -}
-> -
->  static void liteuart_putchar(struct uart_port *port, unsigned char ch)
->  {
->  	while (litex_read8(port->membase + OFF_TXFULL))
-> @@ -105,25 +75,6 @@ static void liteuart_putchar(struct uart_port *port, unsigned char ch)
->  	litex_write8(port->membase + OFF_RXTX, ch);
->  }
->  
-> -static unsigned int liteuart_tx_empty(struct uart_port *port)
-> -{
-> -	/* not really tx empty, just checking if tx is not full */
-> -	if (!litex_read8(port->membase + OFF_TXFULL))
-> -		return TIOCSER_TEMT;
-> -
-> -	return 0;
-> -}
-> -
-> -static void liteuart_set_mctrl(struct uart_port *port, unsigned int mctrl)
-> -{
-> -	/* modem control register is not present in LiteUART */
-> -}
-> -
-> -static unsigned int liteuart_get_mctrl(struct uart_port *port)
-> -{
-> -	return TIOCM_CTS | TIOCM_DSR | TIOCM_CAR;
-> -}
-> -
->  static void liteuart_stop_tx(struct uart_port *port)
->  {
->  	/* not used in LiteUART, but called unconditionally from serial_core */
-> @@ -159,6 +110,55 @@ static void liteuart_stop_rx(struct uart_port *port)
->  	del_timer(&uart->timer);
->  }
->  
-> +static void liteuart_rx_chars(struct uart_port *port)
-> +{
-> +	unsigned char __iomem *membase = port->membase;
-> +	unsigned int status, ch;
-> +
-> +	while ((status = !litex_read8(membase + OFF_RXEMPTY)) == 1) {
-> +		ch = litex_read8(membase + OFF_RXTX);
-> +		port->icount.rx++;
-> +
-> +		/* necessary for RXEMPTY to refresh its value */
-> +		litex_write8(membase + OFF_EV_PENDING, EV_RX);
-> +
-> +		/* no overflow bits in status */
-> +		if (!(uart_handle_sysrq_char(port, ch)))
-> +			uart_insert_char(port, status, 0, ch, TTY_NORMAL);
-> +	}
-> +
-> +	tty_flip_buffer_push(&port->state->port);
-> +}
-> +
-> +static void liteuart_timer(struct timer_list *t)
-> +{
-> +	struct liteuart_port *uart = from_timer(uart, t, timer);
-> +	struct uart_port *port = &uart->port;
-> +
-> +	liteuart_rx_chars(port);
-> +
-> +	mod_timer(&uart->timer, jiffies + uart_poll_timeout(port));
-> +}
-> +
-> +static unsigned int liteuart_tx_empty(struct uart_port *port)
-> +{
-> +	/* not really tx empty, just checking if tx is not full */
-> +	if (!litex_read8(port->membase + OFF_TXFULL))
-> +		return TIOCSER_TEMT;
-> +
-> +	return 0;
-> +}
-> +
-> +static void liteuart_set_mctrl(struct uart_port *port, unsigned int mctrl)
-> +{
-> +	/* modem control register is not present in LiteUART */
-> +}
-> +
-> +static unsigned int liteuart_get_mctrl(struct uart_port *port)
-> +{
-> +	return TIOCM_CTS | TIOCM_DSR | TIOCM_CAR;
-> +}
-> +
->  static int liteuart_startup(struct uart_port *port)
->  {
->  	struct liteuart_port *uart = to_liteuart_port(port);
-> 
+Design files can be referrred from https://www.ti.com/lit/zip/SPRR463
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Changes in  V3:
+Addressed all the review comments and the changes are captured in seperate patches.
+ - Removed the unused nodes that are disabled by default.
+ - Updated the gpio regulator node: gpio-regulator-tlv to "regulator-tlv".
+
+V1: https://lore.kernel.org/linux-arm-kernel/20221018123849.23695-1-sinthu.raja@ti.com/t/#mbe43b02221733bb6eb06b203359e90ec08406afc
+V2: https://lore.kernel.org/lkml/20221107123852.8063-1-sinthu.raja@ti.com/
+
+Sinthu Raja (3):
+  dt-bindings: arm: ti: Add binding for AM68 SK
+  arm64: dts: ti: Add initial support for AM68 SK System on Module
+  arm64: dts: ti: k3-am68-sk: Add support for AM68 SK base board
+
+ .../devicetree/bindings/arm/ti/k3.yaml        |   1 +
+ arch/arm64/boot/dts/ti/Makefile               |   2 +
+ .../boot/dts/ti/k3-am68-sk-base-board.dts     | 335 ++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi    |  31 ++
+ 4 files changed, 369 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
 
 -- 
- i.
+2.36.1
 
---8323329-931260506-1668527287=:2268--
