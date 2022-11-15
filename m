@@ -2,79 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A86B629DC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B39629DC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238293AbiKOPko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:40:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
+        id S238340AbiKOPks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:40:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237952AbiKOPkl (ORCPT
+        with ESMTP id S238320AbiKOPko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:40:41 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C6B29361;
-        Tue, 15 Nov 2022 07:40:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=IVRozCvsAl0N4wyUApbsWG3nXgbptg/3aW0X1ZtUpNU=; b=hbYowYFDGyWEkJvrZPomeEH0C3
-        4RwaDvc2XtrOCw7djpk3RnIsFEjmZQpjxJGsnLLm9Z/cjeWGXzH3ie4nRTl5J7GKzi1H39AU9Fc5s
-        7Pca08Uiw+FwspSXAbusiGt5nHoQMXJMSwHhbpJJZ2zQg3d6vw+hnWSIGOMkwyXXAMt0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ouy2h-002TR0-OJ; Tue, 15 Nov 2022 16:40:07 +0100
-Date:   Tue, 15 Nov 2022 16:40:07 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Daniil Tatianin <d-tatianin@yandex-team.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hao Chen <chenhao288@hisilicon.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Marco Bonelli <marco@mebeim.net>, Tom Rix <trix@redhat.com>,
-        Tonghao Zhang <xiangxia.m.yue@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org, yc-core@yandex-team.ru
-Subject: Re: [PATCH v1] net/ethtool/ioctl: ensure that we have phy ops before
- using them
-Message-ID: <Y3Oy14CNVEttEI7T@lunn.ch>
-References: <20221114081532.3475625-1-d-tatianin@yandex-team.ru>
- <20221114210705.216996a9@kernel.org>
+        Tue, 15 Nov 2022 10:40:44 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8352C13A
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:40:42 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id x21so18008234ljg.10
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:40:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UfBzaGjWfEAox7BcKqKuuoSLrouBnkbb1/SrkRonxSE=;
+        b=xvtq4fYqCANTIemGSgaIUhItpbOjRKERmNTLQOFTd5RCNv/30IkrE53Xd5Kve0/0Id
+         aQYxSAQ1oTTSFY546lX06TL3qe3kzwM8eSiqLXL5Tc5Htf8yRAGTxK7vdEdtD1Ub/lit
+         W4G2T3Vz5Fp0ntv7q2MMZy8vvNATBqqohRv49MFvHHh+iKr2le3wh02JC2NofMsfA/as
+         92MZ3z/4fi3bmmk9GNGtH0Hq7jDXevU4M5q9vmDz2CZ6xYF3xyHOlnsKNTpZ/LPXBctO
+         9pL5w1X/iKDJnMXCF8VGLZoMJVHCfq1xEPflBw7TsHYS3w0eC2c+8xeJ9k7JNDq3ERtf
+         MJGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UfBzaGjWfEAox7BcKqKuuoSLrouBnkbb1/SrkRonxSE=;
+        b=DymqCiFBWCbuDj+BQpnqQRoCqDH7Mxrb5/KrVktQ67ybhxKPbiOh0QdF0CrwYt/rxm
+         gFpo4DuswkDcK5aNgnPDPHM2+g8Go1bJ2CFLKZvrTHYqEzSAleW30uFFDMqaUXp9WPU+
+         cuoQzSprt+Ps7quE2O3PmBCI6mZKjPzY2z9kumy4+o2/1GtUZHl7O89VQUTpscY51uz1
+         03/y0H0xuwHopDvaoOsECZ4GnFXQrQtvsZ2EWQwkzl2EZJUPXfZ1gyJ/FobPJiIgHC6K
+         M4/0ELavUcm8fT7qpqwNg+a0BDb2xTCxeZNb6rC/5aTPPEMSgQMCk/NtLRX1vuAc94FM
+         d4CA==
+X-Gm-Message-State: ANoB5pkI0PilTKAcqQ1xaNZ897khP2NNh8z8pEVjq+5ylpd2th6VSXSM
+        kcJ3zQMhzHlIsnMql4314tXrE6o17QAHhEat7py2hA==
+X-Google-Smtp-Source: AA0mqf5R6RqdWE1pPxNgyyqrriEb8L2e0mWWbDCXTzkEXKkKGkSv5+ZFYD8oC9q4grhVq8lxFqMbUOWswjCxxli0fT8=
+X-Received: by 2002:a2e:4952:0:b0:277:792:c406 with SMTP id
+ b18-20020a2e4952000000b002770792c406mr6164132ljd.126.1668526841045; Tue, 15
+ Nov 2022 07:40:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114210705.216996a9@kernel.org>
+References: <20221110175009.18458-1-vincent.guittot@linaro.org>
+ <20221110175009.18458-6-vincent.guittot@linaro.org> <Y3JqygejPxrtTFgP@google.com>
+In-Reply-To: <Y3JqygejPxrtTFgP@google.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 15 Nov 2022 16:40:28 +0100
+Message-ID: <CAKfTPtAJrai_KYUcT=deSjxZ835Ou_RyxdNpZc0Gnb3_NA2iKA@mail.gmail.com>
+Subject: Re: [PATCH v8 5/9] sched/fair: Take into account latency priority at wakeup
+To:     Patrick Bellasi <patrick.bellasi@matbug.net>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        David.Laight@aculab.com, pjt@google.com, pavel@ucw.cz,
+        tj@kernel.org, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
+        yu.c.chen@intel.com, youssefesmat@chromium.org,
+        joel@joelfernandes.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 09:07:05PM -0800, Jakub Kicinski wrote:
-> On Mon, 14 Nov 2022 11:15:32 +0300 Daniil Tatianin wrote:
-> > +	if (!(phydev && phy_ops && phy_ops->get_stats) &&
-> > +	    !ops->get_ethtool_phy_stats)
-> 
-> This condition is still complicated.
-> 
-> > +		return -EOPNOTSUPP;
-> 
-> The only way this crash can happen is if driver incorrectly returns
-> non-zero stats count but doesn't have a callback to read the stats.
-> So WARN_ON() would be in order here.
+On Mon, 14 Nov 2022 at 17:20, Patrick Bellasi
+<patrick.bellasi@matbug.net> wrote:
+>
+> Hi Vincent,
+>
+> On 10-Nov 18:50, Vincent Guittot wrote:
+>
+> [...]
+>
+> > diff --git a/init/init_task.c b/init/init_task.c
+> > index 7dd71dd2d261..b8ddf403bc62 100644
+> > --- a/init/init_task.c
+> > +++ b/init/init_task.c
+> > @@ -78,7 +78,7 @@ struct task_struct init_task
+> >       .prio           = MAX_PRIO - 20,
+> >       .static_prio    = MAX_PRIO - 20,
+> >       .normal_prio    = MAX_PRIO - 20,
+> > -     .latency_nice   = DEFAULT_LATENCY_NICE,
+> > +     .latency_prio   = NICE_WIDTH - 20,
+>                     ^^^^^^^^^^
+>
+> For robustness/consistency, shoudln't this be LATENCY_NICE_WIDTH?
 
-Hi Daniil
+yes, good catch
 
-I'm missing the patch itself, and b4 does not return it. Please
-consider reposting. Since this appear to be to do with PHY statistics,
-you should Cc: the PHY maintainers.
-
-       Andrew
+>
+> [...]
+>
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index b2accc9da4fe..caf54e54a74f 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -1284,6 +1284,16 @@ static void set_load_weight(struct task_struct *p, bool update_load)
+> >       }
+> >  }
+> >
+> > +static void set_latency_offset(struct task_struct *p)
+> > +{
+> > +     long weight = sched_latency_to_weight[p->latency_prio];
+> > +     s64 offset;
+> > +
+> > +     offset = weight * get_sched_latency(false);
+>                       ^^^^^^^^^^^^^^^^^^^^^^^^
+> As per my comment in patch 1, we almost always (but one time) call this with
+> "false" and that's not returning the sysctl_sched_latency but a possibly
+> discounted value in case of feat(GENTLE_FAIR_SLEEPERS).
+>
+> Just to avoid confusion (this could be not the sched_latency) and to better
+> document the code, what about using a accessor define something like e.g.
+>
+>    #define max_wakeup_latency get_wakeup_latency(false)
+>
+> ?
+>
+> [...]
+>
+> Best,
+> Patrick
+>
+> --
+> #include <best/regards.h>
+>
+> Patrick Bellasi
