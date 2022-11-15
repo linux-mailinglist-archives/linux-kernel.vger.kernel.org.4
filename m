@@ -2,130 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806CD62AFC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8769B62AFCC
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiKOX4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 18:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
+        id S231270AbiKOX5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 18:57:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiKOX4q (ORCPT
+        with ESMTP id S231166AbiKOX5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 18:56:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6510312AC5;
-        Tue, 15 Nov 2022 15:56:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 15 Nov 2022 18:57:07 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8356C1AF39;
+        Tue, 15 Nov 2022 15:57:06 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 197E9B81B7B;
-        Tue, 15 Nov 2022 23:56:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FAE5C433D6;
-        Tue, 15 Nov 2022 23:56:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668556602;
-        bh=fmtFU9r9azSVNfkJz1lP+IVE4pNw8RU+BlNPODiczaQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZFSHlT/si1HQjrtKxvXQyXtXyZGov9zxqMGHT6YE2JWGYxER/Hld5fpIYPTrF2px5
-         TdJLH3GlcVUIXjSDaRyJ+Xaov0a3rRo59fUe/UICFnYhMupXezw50MKoiQkDXTKwmc
-         qAYO+dEJKLZpxIOlHabKPX472GiVki3bU9dEiqEsmsdj/7Ad91cyzH0aOU8uEfZot5
-         tLMeyF+Ph58MXR7BY9cvd7otCA9kpZANPlpdz5WY/OqrhC60/FFhXgdDsBw0jSFek/
-         g/BMqSiQb9PqI3zXnheikF9TkIaozqLOpC02nXJwIDIfD+Vs1yrhxlEmhx4JRdy6rn
-         F86PHXmbwZECw==
-Date:   Wed, 16 Nov 2022 01:56:39 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] certs: don't try to update blacklist keys
-Message-ID: <Y3QnNwWrOjpNwZ6r@kernel.org>
-References: <20221109025019.1855-1-linux@weissschuh.net>
- <20221109025019.1855-4-linux@weissschuh.net>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NBjlN0Qr6z4xDK;
+        Wed, 16 Nov 2022 10:57:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668556624;
+        bh=SOAAR+njNw3INBbf23L+zGH83Vm3xaTAHvnq1EaTm9w=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dFFEw71ZV9IPGSSlK8bMIhrvK/8LswAo675y4s0xoj8Fgx2vEVg/d0zAqCpC+KfW2
+         SLOHQqiTskERziUwvNS+PpxRYoYppcRNk7s7zCQdLXlGLAOFdewxgdp55TVhBhE3Qz
+         VT5J23vwhNuwyuP8x40+oW+0ynF55YHlW+RfaXzWkaxQvJD92BaKfYBukng9UPXhoq
+         0sMzimdjNKJ8cfp/YkiOBb/VuWMQkWtvuWaxHuhSHstoeRrj1dSFOLt4W5nWDVsxE3
+         Ux6+Nt1yS+MBCNbkGojfL/lNzl6bjNsuXC34B5gCthzbb+WtWtQXQy9E7FP8cdwdos
+         oaVfNwb6KKVFw==
+Date:   Wed, 16 Nov 2022 10:57:02 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: linux-next: manual merge of the drm-misc tree with the origin tree
+Message-ID: <20221116105702.746ce3cf@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221109025019.1855-4-linux@weissschuh.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/P12Sa_2We=6e8ciHH2y4_Od";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 03:50:19AM +0100, Thomas Weiﬂschuh wrote:
-> When the same key is blacklisted repeatedly we don't want to log an
+--Sig_/P12Sa_2We=6e8ciHH2y4_Od
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Who is "we"?
+Hi all,
 
-> error. These duplicates can be provided by buggy firmware. Instead of
-> spamming the bootlog with errors we use a warning that can still be seen
-> by OEMs when testing.
-> 
-> Also extend BLACKLIST_KEY_PERM as otherwise the EACCES will shadow the
-> EEXIST.
+Today's linux-next merge of the drm-misc tree got a conflict in:
 
-How? I.e. please state how you extend it, and why new need the extra bits.
+  drivers/gpu/drm/vc4/vc4_hdmi.c
 
-> Link: https://lore.kernel.org/all/c8c65713-5cda-43ad-8018-20f2e32e4432@t-8ch.de/
-> Link: https://lore.kernel.org/all/20221104014704.3469-1-linux@weissschuh.net/
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> ---
->  certs/blacklist.c | 23 +++++++++++++----------
->  1 file changed, 13 insertions(+), 10 deletions(-)
-> 
-> diff --git a/certs/blacklist.c b/certs/blacklist.c
-> index 6e260c4b6a19..ac8e3166b6d7 100644
-> --- a/certs/blacklist.c
-> +++ b/certs/blacklist.c
-> @@ -26,7 +26,7 @@
->   */
->  #define MAX_HASH_LEN	128
->  
-> -#define BLACKLIST_KEY_PERM (KEY_POS_SEARCH | KEY_POS_VIEW | \
-> +#define BLACKLIST_KEY_PERM (KEY_POS_WRITE | KEY_POS_SEARCH | KEY_POS_VIEW | \
->  			    KEY_USR_SEARCH | KEY_USR_VIEW)
->  
->  static const char tbs_prefix[] = "tbs";
-> @@ -183,16 +183,19 @@ static int mark_raw_hash_blacklisted(const char *hash)
->  {
->  	key_ref_t key;
->  
-> -	key = key_create_or_update(make_key_ref(blacklist_keyring, true),
-> -				   "blacklist",
-> -				   hash,
-> -				   NULL,
-> -				   0,
-> -				   BLACKLIST_KEY_PERM,
-> -				   KEY_ALLOC_NOT_IN_QUOTA |
-> -				   KEY_ALLOC_BUILT_IN);
-> +	key = key_create(make_key_ref(blacklist_keyring, true),
-> +			 "blacklist",
-> +			 hash,
-> +			 NULL,
-> +			 0,
-> +			 BLACKLIST_KEY_PERM,
-> +			 KEY_ALLOC_NOT_IN_QUOTA |
-> +			 KEY_ALLOC_BUILT_IN);
->  	if (IS_ERR(key)) {
-> -		pr_err("Problem blacklisting hash %s: %pe\n", hash, key);
-> +		if (PTR_ERR(key) == -EEXIST)
-> +			pr_warn("Duplicate blacklisted hash %s\n", hash);
-> +		else
-> +			pr_err("Problem blacklisting hash %s: %pe\n", hash, key);
->  		return PTR_ERR(key);
->  	}
->  	return 0;
-> -- 
-> 2.38.1
-> 
+between commit:
 
-BR, Jarkko
+  682f99b8ae88 ("drm/vc4: hdmi: Take our lock to reset the link")
+
+from the origin tree and commits:
+
+  d218750805a3 ("drm/vc4: hdmi: Pass vc4_hdmi to vc4_hdmi_supports_scrambli=
+ng()")
+  0a99962c0dbf ("drm/vc4: hdmi: Fix pointer dereference before check")
+
+from the drm-misc tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/vc4/vc4_hdmi.c
+index d7fcc7a4c082,6b223a5fcf6f..000000000000
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.c
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+@@@ -349,12 -348,9 +348,13 @@@ static int vc4_hdmi_reset_link(struct d
+  	if (!crtc_state->active)
+  		return 0;
+ =20
+ +	mutex_lock(&vc4_hdmi->mutex);
+ +
+- 	if (!vc4_hdmi_supports_scrambling(encoder)) {
++ 	vc4_hdmi =3D connector_to_vc4_hdmi(connector);
+ -	if (!vc4_hdmi_supports_scrambling(vc4_hdmi))
+++	if (!vc4_hdmi_supports_scrambling(vc4_hdmi)) {
+ +		mutex_unlock(&vc4_hdmi->mutex);
+  		return 0;
+ +	}
+ =20
+  	scrambling_needed =3D vc4_hdmi_mode_needs_scrambling(&vc4_hdmi->saved_ad=
+justed_mode,
+  							   vc4_hdmi->output_bpc,
+
+--Sig_/P12Sa_2We=6e8ciHH2y4_Od
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN0J04ACgkQAVBC80lX
+0GwRaQf/Q8h2ktVV7CYeiKNBoJU9zX+j/yv9PTNMbMzO8mTbb4ahk9s3SYINU4LC
+6hkdaOsDeAaGtPCETYDJEirGMh12PRtgUIKAyHcm4MJSazMQnJo8MaO3ZpONw452
+P7twC11nUDolbgOkYOU35YHvkD1b11l1XFWj3OR8rndF74AKv6uMpt4Dr6L96NhC
+3037MLMBoKgn4H9SCTY7MkGbEtQ74v/oRIPMjcN3p1a6sqbJusq/gAH4W6Hl+JqJ
+CalnbdgwPCVt7PnvPq9lcfZoSyK6J2hF5BP9keO1KdsaQ7y+Bzv0Pgfcmdhg/Q4e
+GrammVlfft+eJo1asqQEfpl0K4MGXA==
+=2tJB
+-----END PGP SIGNATURE-----
+
+--Sig_/P12Sa_2We=6e8ciHH2y4_Od--
