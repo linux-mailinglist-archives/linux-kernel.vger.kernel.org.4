@@ -2,115 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313EC629908
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B071C62990F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232253AbiKOMjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 07:39:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
+        id S232786AbiKOMkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 07:40:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiKOMjH (ORCPT
+        with ESMTP id S232318AbiKOMkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:39:07 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA201FF97;
-        Tue, 15 Nov 2022 04:39:05 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id j15so24062818wrq.3;
-        Tue, 15 Nov 2022 04:39:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QKEXLyPGXjJRKPyvW3PaMhdvkr3/5SmF5s8yvu+zTKo=;
-        b=NmWecbfPc3BUXQz2DWCZAXcNm8nXoinDTs8mMqCsMqBQOS83ucUtmaru3L/0xEFY78
-         v5xjfaF1k5d639TGBRJfDsGlo4iqw1cTeIZWY9b2tDG669D9Bnm0USvWmCaW0HzSqyyR
-         JX4ZFafXCEVWEc4Np7IQRGttEgNeKUZx9mQZy+dB/ftO2lFfFlZB59QmUD9u3mx1ycZo
-         pnuToKBnOu/Bbe9XIBQdJZo0lhreWYN6SEdJVcUK1JGUP6Wz0O5doccRIicJu+1CSR2d
-         kgVR21EiXBHrCbsBwoc6bLbn0oTkgYxgyfKss94IhB89FJxOOuMAirjayTIgocruMt68
-         kBaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QKEXLyPGXjJRKPyvW3PaMhdvkr3/5SmF5s8yvu+zTKo=;
-        b=BWod6FeIRGIhaseV2vmGvSi96Y4I1YzJPZa5HRSKO/nRX+VOjumHwBb5WxTwKnjQ4E
-         APUpK0+aslRe/vMvF1B5jZPwG8TmF3IqG55QST8dav0fmzPCSZUmG7MwgB2ydEtia4AG
-         ZUnSGfA3wiXq9dNXbX0Q7Ub1BirYw/k5P8thnZehD6BcRzSrGnJzFE5lnBFZXRJlDrYN
-         AQ9kKedT2p4WRb1+KUMV9cQinMUn+b1+kflLp0MTfwquYxAJRlWrRY4yAOBqj0oEV5Nr
-         YDVwL1M5TD1mbke4BGhb3/DkCAhnwrT1kSS4917J1ZLJm5cd1VzEmjzQvfFnh78itwGm
-         yEdw==
-X-Gm-Message-State: ANoB5pkOI5j2/xZaOL/ILqMrzpi/9MB/uoo2jwPinh+spbTh9pGlOqv8
-        aYEYskGEfMLnQr3mbvsaQUU=
-X-Google-Smtp-Source: AA0mqf6tmoz1BJJ0n5zUU8CY0LabZNgtpI2+CtgwsY8wssR/lutYM+mj34Bhl0yB6iOJaiI9THy/Sg==
-X-Received: by 2002:a05:6000:1806:b0:241:7277:6aa4 with SMTP id m6-20020a056000180600b0024172776aa4mr10038121wrh.660.1668515944078;
-        Tue, 15 Nov 2022 04:39:04 -0800 (PST)
-Received: from prasmi.home ([2a00:23c8:2501:c701:d94a:6345:c378:e255])
-        by smtp.gmail.com with ESMTPSA id r8-20020a05600c2f0800b003c701c12a17sm20735803wmn.12.2022.11.15.04.39.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 04:39:02 -0800 (PST)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] dt-bindings: can: renesas,rcar-canfd: Document RZ/Five SoC
-Date:   Tue, 15 Nov 2022 12:38:11 +0000
-Message-Id: <20221115123811.1182922-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 15 Nov 2022 07:40:47 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4061FF97;
+        Tue, 15 Nov 2022 04:40:45 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 332BA1883FF1;
+        Tue, 15 Nov 2022 12:40:43 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 2A46725002DE;
+        Tue, 15 Nov 2022 12:40:43 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 20A5891201E4; Tue, 15 Nov 2022 12:40:43 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Tue, 15 Nov 2022 13:40:43 +0100
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8 net-next 0/2] mv88e6xxx: Add MAB offload support
+In-Reply-To: <20221115122237.jfa5aqv6hauqid6l@skbuf>
+References: <20221112203748.68995-1-netdev@kapio-technology.com>
+ <Y3NcOYvCkmcRufIn@shredder>
+ <5559fa646aaad7551af9243831b48408@kapio-technology.com>
+ <20221115102833.ahwnahrqstcs2eug@skbuf>
+ <7c02d4f14e59a6e26431c086a9bb9643@kapio-technology.com>
+ <20221115111034.z5bggxqhdf7kbw64@skbuf>
+ <0cd30d4517d548f35042a535fd994831@kapio-technology.com>
+ <20221115122237.jfa5aqv6hauqid6l@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <61810a4b3afb7bb6de1bcbaa52080e01@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On 2022-11-15 13:22, Vladimir Oltean wrote:
+> On Tue, Nov 15, 2022 at 12:31:59PM +0100, netdev@kapio-technology.com 
+> wrote:
+>> It happens on upstart, so I would then have to hack the system upstart 
+>> to
+>> add trace.
+> 
+> Hack upstart or disable the service that brings the switch ports up, 
+> and
+> bring them up manually...
+> 
+>> I also have:
+>> mv88e6085 1002b000.ethernet-1:04: switch 0x990 detected: Marvell 
+>> 88E6097/88E6097F, revision 2
+>> mv88e6085 1002b000.ethernet-1:04: configuring for fixed/rgmii-id link 
+>> mode
+>> mv88e6085 1002b000.ethernet-1:04: Link is Up - 100Mbps/Full - flow 
+>> control off
+>> mv88e6085 1002b000.ethernet-1:04 eth10 (uninitialized): PHY 
+>> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:00] driver 
+>> [Generic PHY] (irq=POLL)
+>> mv88e6085 1002b000.ethernet-1:04 eth6 (uninitialized): PHY 
+>> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:01] driver 
+>> [Generic PHY] (irq=POLL)
+>> mv88e6085 1002b000.ethernet-1:04 eth9 (uninitialized): PHY 
+>> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:02] driver 
+>> [Generic PHY] (irq=POLL)
+>> mv88e6085 1002b000.ethernet-1:04 eth5 (uninitialized): PHY 
+>> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:03] driver 
+>> [Generic PHY] (irq=POLL)
+>> mv88e6085 1002b000.ethernet-1:04 eth8 (uninitialized): PHY 
+>> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:04] driver 
+>> [Generic PHY] (irq=POLL)
+>> mv88e6085 1002b000.ethernet-1:04 eth4 (uninitialized): PHY 
+>> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:05] driver 
+>> [Generic PHY] (irq=POLL)
+>> mv88e6085 1002b000.ethernet-1:04 eth7 (uninitialized): PHY 
+>> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:06] driver 
+>> [Generic PHY] (irq=POLL)
+>> mv88e6085 1002b000.ethernet-1:04 eth3 (uninitialized): PHY 
+>> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:07] driver 
+>> [Generic PHY] (irq=POLL)
+>> mv88e6085 1002b000.ethernet-1:04 eth2 (uninitialized): PHY 
+>> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdioe:08] driver 
+>> [Marvell 88E1112] (irq=174)
+>> mv88e6085 1002b000.ethernet-1:04 eth1 (uninitialized): PHY 
+>> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdioe:09] driver 
+>> [Marvell 88E1112] (irq=175)
+>> 
+>> after this and adding the ifaces to the bridge, it continues like:
+>> 
+>> br0: port 1(eth10) entered blocking state
+>> br0: port 1(eth10) entered disabled state
+>> br0: port 2(eth6) entered blocking state
+>> br0: port 2(eth6) entered disabled state
+>> device eth6 entered promiscuous mode
+>> device eth10 entered promiscuous mode
+>> br0: port 3(eth9) entered blocking state
+>> br0: port 3(eth9) entered disabled state
+>> device eth9 entered promiscuous mode
+>> br0: port 4(eth5) entered blocking state
+>> br0: port 4(eth5) entered disabled state
+>> device eth5 entered promiscuous mode
+>> br0: port 5(eth8) entered blocking state
+>> br0: port 5(eth8) entered disabled state
+>> device eth8 entered promiscuous mode
+>> br0: port 6(eth4) entered blocking state
+>> br0: port 6(eth4) entered disabled state
+>> mv88e6085 1002b000.ethernet-1:04: Timeout while waiting for switch
+>> mv88e6085 1002b000.ethernet-1:04: port 0 failed to add 
+>> 9a:af:03:f1:bd:0a vid 1 to fdb: -110
+> 
+> Dumb question, but if you get errors like this, how can you test 
+> anything at all
+> in the patches that you submit?
 
-The CANFD block on the RZ/Five SoC is identical to one found on the
-RZ/G2UL SoC. "renesas,r9a07g043-canfd" compatible string will be used
-on the RZ/Five SoC so to make this clear, update the comment to include
-RZ/Five SoC.
+The answer is that I don't always get these errors... once in a while 
+(maaany resets) it does
+not happen, and all is fine.
 
-No driver changes are required as generic compatible string
-"renesas,rzg2l-canfd" will be used as a fallback on RZ/Five SoC.
+The error code is... well of course -110 (timed out).
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
- .../devicetree/bindings/net/can/renesas,rcar-canfd.yaml         | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+>> device eth4 entered promiscuous mode
+>> br0: port 7(eth7) entered blocking state
+>> br0: port 7(eth7) entered disabled state
+>> 
+>> I don't know if that gives ay clues...?
+> 
+> Not really. That error might be related - something indicating a 
+> breakage
+> in the top-level (fec IIUC) MDIO controller, or not. There was "recent"
+> rework almost everywhere.  For example commit 35da1dfd9484 ("net: dsa:
+> mv88e6xxx: Improve performance of busy bit polling"). That also hooks
+> into the mv88e6xxx cascaded MDIO controller 
+> (mv88e6xxx_g2_smi_phy_wait),
+> so there might be something there.
+> 
 
-diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-index 6f71fc96bc4e..8347053a96dc 100644
---- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-+++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-@@ -33,7 +33,7 @@ properties:
- 
-       - items:
-           - enum:
--              - renesas,r9a07g043-canfd    # RZ/G2UL
-+              - renesas,r9a07g043-canfd    # RZ/G2UL and RZ/Five
-               - renesas,r9a07g044-canfd    # RZ/G2{L,LC}
-               - renesas,r9a07g054-canfd    # RZ/V2L
-           - const: renesas,rzg2l-canfd     # RZ/G2L family
--- 
-2.25.1
+I can check that out, but I remember that net-next has not worked on 
+this device for quite some
+time...
+
+>> 
+>> Otherwise I have to take more time to see what I can dig out. The 
+>> easiest
+>> for me is then to add some printk statements giving targeted 
+>> information if told what and
+>> where...
+> 
+> Do you have a timeline for when the regression was introduced?
+> Commit 35da1dfd9484 reverts cleanly, so I suppose giving it a go with
+> that reverted might be worth a shot. Otherwise, a bisect from a known
+> working version only takes a couple of hours, and shouldn't require
+> other changes to the setup.
+
+I can't say when the regression was introduced as I used modified 
+kernels, but something
+between 5.16 and 5.17, I know there was something phy related, but it's 
+a bit more complicated,
+so it is only a guess...
+
+I would have to get the whole locked port patch set etc. on a 5.16 to 
+see if that works.
 
