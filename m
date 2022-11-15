@@ -2,53 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55686629CF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF33629CF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiKOPH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:07:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46784 "EHLO
+        id S230445AbiKOPI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:08:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiKOPHX (ORCPT
+        with ESMTP id S229572AbiKOPIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:07:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523422D1C2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:07:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 113B6B8162B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:07:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEF7FC433D6;
-        Tue, 15 Nov 2022 15:07:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668524839;
-        bh=QkNQYbk7sT+LWeYMY8bXDXIsFDEOy7WD1ocCTl5Lxvw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fss09H86y6CN9bVN+MgYRrFI+TGRp4rHhBHLlGlwDyKjC71WuRGo+QDF1Yk4yiPxn
-         2jm7m7iAxxDOtCogFEqKsQGUuBUxCk5nwBcoscGU1pPmmgGeGngN68We5PG68po5iT
-         kSdgqdT7ACt5hkpfxIBsHMAmcXUN2tk9soTXdg3ygCvbWqr1NYvSqPPiXY8atMmwse
-         gnAeXvH7MAzml2YpBv6I5OD+XJ+UI2djd/gAvyFKGGRhrtBKGZq34rm4H+Za046AnS
-         jn1/9MAQpQCwMs43oLPe2s4OWyV/mEHvoMiJnn5icrKvv0KrwBDE4LVzSFPWB94DJO
-         vM+kY8DYpLI7A==
-Date:   Wed, 16 Nov 2022 00:07:17 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc:     <rostedt@goodmis.org>, <beaub@linux.microsoft.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] tracing/user_events: Fix memory leak in
- user_event_create()
-Message-Id: <20221116000717.4b62513eeaf0b2296b399bda@kernel.org>
-In-Reply-To: <20221115014445.158419-1-xiujianfeng@huawei.com>
-References: <20221115014445.158419-1-xiujianfeng@huawei.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 15 Nov 2022 10:08:55 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77569FF0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:08:54 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id gv23so4020983ejb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:08:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vTfeHWdQpYzScR0IYhK542Q4DB1sWCfhQ34vRdL9HzM=;
+        b=hjYGcK95V/Y+c+Sw/+JpTF4ubBz9ykH8BcyRLaCltwFDCYcMDDjGsMFFBa1zpl5SoE
+         cpq+axRW3kK/HEesuSV28qJGCFX7JAn6PQkUo8vYfxjbcVChjXWLaZpT0fYQcZQOOTsD
+         U/U/lWhQxbl6AqVTQN5l1Q0kOvI9TIKMz0ikS+uucocatZvbcOc/Syy0pTGkrm48FpYZ
+         xEXh1Ke2hPoElv6fO6x4VTm3QlRJXhEhP926k7srInJ5yg8p/xvVhP9UsRquGU5jLhND
+         nVK8gzkNENVpBjTi8cMxFtk0iEX4g4rCzCWe4Pfv+YWX/xO7ESWyvkiJcGdiWI2a9YIv
+         iSVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vTfeHWdQpYzScR0IYhK542Q4DB1sWCfhQ34vRdL9HzM=;
+        b=3U0wbOPGAERP+4GDjafdyDEpDvmali59NlYnqnGLKXtrhxG4niJX5mEqe9DP1ZfmVQ
+         YYY5DfqZelya1ky963n6TPnQTGEoi5hmzssorQ+wWm58Lkva4zUGEPPccepjNtx6G548
+         9I67xUGr9acOHCdmaTZnoMJM6qBAz8IjY/9aWzZXqgzqQJiq23QWvW0/8zOwNFef0AUj
+         td89A4vIxfFARkfTTzdrcmAL+vlNSn5ZqXoiN5GD2Qe01V4iujh38py7++F6V/zYhNln
+         KbOricvE8nZubF2eWAeotWAJgDMskAw03zdB1d5g+e1PHemWWXI0JtoMhKzcWAWn06TC
+         VAQw==
+X-Gm-Message-State: ANoB5pn1txTb/Kpg//ibpM/7htcq1yTKaWTqiWPTvZAurNyrjhTs/lck
+        mkNwdZGCM9rT1R0GAs+y4X4PvMcoP3GVV8TjXGXbXQczs1x4KA==
+X-Google-Smtp-Source: AA0mqf7fwtwTm2k4Iwt5uFb32Yo4UpbADkPfEXjLy9zl6d8qFpihOJ7TWjhicLJEq34UDIzgi+iHUItsHB64k3kNQFo=
+X-Received: by 2002:a17:907:9a8c:b0:7a0:948d:80ae with SMTP id
+ km12-20020a1709079a8c00b007a0948d80aemr14502708ejc.658.1668524933062; Tue, 15
+ Nov 2022 07:08:53 -0800 (PST)
+MIME-Version: 1.0
+References: <CAOGzEzeOek71ij9M1r2KUKKWbJvAmgS5imcURNKFjKNC3ORBVQ@mail.gmail.com>
+In-Reply-To: <CAOGzEzeOek71ij9M1r2KUKKWbJvAmgS5imcURNKFjKNC3ORBVQ@mail.gmail.com>
+From:   lkml gm4 <lkml4gm@gmail.com>
+Date:   Tue, 15 Nov 2022 16:08:41 +0100
+Message-ID: <CAOGzEzfvPHTuuCAEx1n4zVxHF6JT63oHu1nfRfaxuJBKGZxtCw@mail.gmail.com>
+Subject: Fwd: CET shadow stack app compatibility
+To:     linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,45 +64,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 09:44:45 +0800
-Xiu Jianfeng <xiujianfeng@huawei.com> wrote:
+* Linus Torvalds:
 
-> Before current_user_event_group(), it has allocated memory and save it
-> in @name, this should freed before return error.
-> 
-> Fixes: e5d271812e7a ("tracing/user_events: Move pages/locks into groups to prepare for namespaces")
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> I'm disgusted by glibc being willing to just upgrade and break
+> existing binaries and take the "you shouldn't upgrade glibc if you
+> have old binaries" approach.
 
-This looks good to me.
+But glibc also claims this policy:
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+https://www.gnu.org/software/libc/
+says:
+The GNU C Library is designed to be a backwards compatible,
 
-Thanks,
+And
+https://gcc.gnu.org/onlinedocs/libstdc++/manual/abi.html
+Thus, program binaries linked with the initial release of a library
+binary will still run correctly if the library binary is replaced by
+carefully-managed subsequent library binaries.
 
-> ---
->  kernel/trace/trace_events_user.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index ae78c2d53c8a..539b08ae7020 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -1100,8 +1100,10 @@ static int user_event_create(const char *raw_command)
->  
->  	group = current_user_event_group();
->  
-> -	if (!group)
-> +	if (!group) {
-> +		kfree(name);
->  		return -ENOENT;
-> +	}
->  
->  	mutex_lock(&group->reg_mutex);
->  
-> -- 
-> 2.17.1
-> 
+And glibc even has it easier then the kernel: implement incompatible
+changes by applying
+symbol versioning.
 
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+-
+lkml4gm
