@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DECE629DD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3DF629DDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbiKOPnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:43:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
+        id S229674AbiKOPob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:44:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbiKOPnP (ORCPT
+        with ESMTP id S231279AbiKOPo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:43:15 -0500
+        Tue, 15 Nov 2022 10:44:27 -0500
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733482DAB6;
-        Tue, 15 Nov 2022 07:43:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB4F1DDED;
+        Tue, 15 Nov 2022 07:44:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668526994; x=1700062994;
+  t=1668527066; x=1700063066;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=s9oaosGmUEUIu8B6Y80o7wEcDR5HzGUb+csj5/bQq/k=;
-  b=mBns1BeqUILOTLpALM/0vNBo6ZmhH0Kh7YOPTI8C1GfOXkZriYGeQMgS
-   sbQ+4q92oxFjBn0mye5haWl6hJB3oLicT7hgKobkocPkOuuFOKfPwzE0x
-   QwVfDImCa45rr0JrhlbEqVYVdaVU7lq0v/yMA6OtelspJ/4PpEL/UaD9c
-   vg0i2E5du43GDzirlMhbRzQAcLfVEX6iX84As7DhayRefKNybBeO5spUb
-   V/4K1eqU2PV6yknHB9eCeE5sBguAyukkFTP0XbbTtsqsQfPFvGO3AtJXc
-   XVY6vcF1VYVg4znOYG36iXfnPnAkX8DJMLPT1cxm2tLbx6JFcL1hZWbvq
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="292678077"
+  bh=USym5oX9k54PcnynIq9soigokEvjd1nWZygxCD6cywI=;
+  b=bsoL1EXSTncLVGNPwEy/DIomCD7mEifqzR+TcMJTN3xo/LEw0jv5nEzL
+   6S4+CAp0C1alUAiowE56c2oCmrlpCQH47x5oAeiL8s/up81XMS79MvaFI
+   AkG9KagkSkgT97O3+QVzxaiAkbkoG3aE83ewCYBRgqv3ibPHiCHcvZihO
+   VOQPhBnsEWMyn5QfeCglqZVOgrlqtAEPlejNqwm7cf8QZk50EHrMhlC0a
+   WcbZtM+QXw8/h77rFemEhUcGF365AGa6xTQMbsTbFzTqXY98/DCb7WXvJ
+   LuFIEcmB1sJVLsfO9GzdkOe72X83qn9eNNGX1KLbHUdg2MUu7d9dvVb9a
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="292678434"
 X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="292678077"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:43:14 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="763954388"
+   d="scan'208";a="292678434"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:44:26 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="672033565"
 X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="763954388"
+   d="scan'208";a="672033565"
 Received: from mrosso-mobl1.ger.corp.intel.com ([10.249.45.244])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:43:09 -0800
-Date:   Tue, 15 Nov 2022 17:43:06 +0200 (EET)
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:44:22 -0800
+Date:   Tue, 15 Nov 2022 17:44:19 +0200 (EET)
 From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     Gabriel Somlo <gsomlo@gmail.com>
 cc:     LKML <linux-kernel@vger.kernel.org>,
@@ -48,13 +48,13 @@ cc:     LKML <linux-kernel@vger.kernel.org>,
         mholenko@antmicro.com, joel@jms.id.au,
         david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
         geert@linux-m68k.org
-Subject: Re: [PATCH v3 08/14] serial: liteuart: simplify passing of
- uart_insert_char() flag
-In-Reply-To: <20221112212125.448824-9-gsomlo@gmail.com>
-Message-ID: <14c6a4bc-8299-6259-135d-787889f71d2b@linux.intel.com>
-References: <20221112212125.448824-1-gsomlo@gmail.com> <20221112212125.448824-9-gsomlo@gmail.com>
+Subject: Re: [PATCH v3 10/14] serial: liteuart: separate rx loop from poll
+ timer
+In-Reply-To: <20221112212125.448824-11-gsomlo@gmail.com>
+Message-ID: <6bff9a8e-1360-32cf-e2cb-313cde8eb456@linux.intel.com>
+References: <20221112212125.448824-1-gsomlo@gmail.com> <20221112212125.448824-11-gsomlo@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1293795107-1668526993=:2268"
+Content-Type: multipart/mixed; boundary="8323329-855007299-1668527066=:2268"
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -67,45 +67,57 @@ X-Mailing-List: linux-kernel@vger.kernel.org
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-1293795107-1668526993=:2268
+--8323329-855007299-1668527066=:2268
 Content-Type: text/plain; charset=ISO-8859-15
 Content-Transfer-Encoding: 8BIT
 
 On Sat, 12 Nov 2022, Gabriel Somlo wrote:
 
-> Simply provide the hard-coded TTY_NORMAL flag to uart_insert_char()
-> directly -- no need to dedicate a variable for that exclusive purpose.
+> Convert the rx loop into its own dedicated function, and (for now)
+> call it from the poll timer. This is in preparation for adding irq
+> support to the receive path.
 > 
 > Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
 > ---
->  drivers/tty/serial/liteuart.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  drivers/tty/serial/liteuart.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
 > 
 > diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-> index b5ab48aa35cf..e9e99d6b5fef 100644
+> index 974da0f73257..172ac190ba2f 100644
 > --- a/drivers/tty/serial/liteuart.c
 > +++ b/drivers/tty/serial/liteuart.c
-> @@ -72,7 +72,6 @@ static void liteuart_timer(struct timer_list *t)
->  	struct liteuart_port *uart = from_timer(uart, t, timer);
->  	struct uart_port *port = &uart->port;
+> @@ -67,10 +67,8 @@ static struct uart_driver liteuart_driver = {
+>  #endif
+>  };
+>  
+> -static void liteuart_timer(struct timer_list *t)
+> +static void liteuart_rx_chars(struct uart_port *port)
+>  {
+> -	struct liteuart_port *uart = from_timer(uart, t, timer);
+> -	struct uart_port *port = &uart->port;
 >  	unsigned char __iomem *membase = port->membase;
-> -	unsigned int flg = TTY_NORMAL;
->  	int ch;
->  	unsigned long status;
+>  	unsigned int status, ch;
 >  
-> @@ -85,7 +84,7 @@ static void liteuart_timer(struct timer_list *t)
->  
->  		/* no overflow bits in status */
->  		if (!(uart_handle_sysrq_char(port, ch)))
-> -			uart_insert_char(port, status, 0, ch, flg);
-> +			uart_insert_char(port, status, 0, ch, TTY_NORMAL);
+> @@ -87,6 +85,14 @@ static void liteuart_timer(struct timer_list *t)
 >  	}
 >  
 >  	tty_flip_buffer_push(&port->state->port);
+> +}
+> +
+> +static void liteuart_timer(struct timer_list *t)
+> +{
+> +	struct liteuart_port *uart = from_timer(uart, t, timer);
+> +	struct uart_port *port = &uart->port;
+> +
+> +	liteuart_rx_chars(port);
+>  
+>  	mod_timer(&uart->timer, jiffies + uart_poll_timeout(port));
+>  }
 
 Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
 
 -- 
  i.
 
---8323329-1293795107-1668526993=:2268--
+--8323329-855007299-1668527066=:2268--
