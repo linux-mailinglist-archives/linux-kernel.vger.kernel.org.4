@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B66B629587
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F82662958C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiKOKPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:15:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S232808AbiKOKQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:16:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiKOKPE (ORCPT
+        with ESMTP id S229727AbiKOKQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:15:04 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AA817AAF
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:15:03 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id j4so23744565lfk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:15:03 -0800 (PST)
+        Tue, 15 Nov 2022 05:16:27 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08629B61
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:16:26 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id s24so16868018ljs.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:16:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0IcBMH20r+ISbVoq6CN/oXjmzZOO9PfgZcgfdmdIh5E=;
-        b=keQ7t/4uMkpUIyBOIR5QmpCYWdTB8C8hPtfJLr8SMoT2efcAbucezDzLXsmvkTv/V4
-         +gb9FSvD5irD3Iebe0BDQpqbW/kfbw9yXiQCoBXmPOLEApfUOQjgtMZFKA6u43IxljHl
-         XBzmKoOrTAZ5Fr22sT9qxmvT1aLVRTgNWAMjKAX2WBBjdC1DtmTwM6Z+RAjy0rphEmhZ
-         9fFYENqfX3Y5NYzAA9E9YjKJzV09CCyOBwmPl7WWWCB0hmyDLOCaV8OBaVXgEvCvP+X7
-         pF76voVl6A8ogkpT7aggXn+vNwmjVpKMozoV+iLb/8g+a7LoOqEy2ln+NSU7c500ZZ2g
-         MvEA==
+        bh=jGHlZVL39eCUsJrhUm15x+JuQR4luXm9cgq/qr21IVY=;
+        b=etoIZgnqAeeAztGAY0oY4aMkSANYzJwcegk3tPICBKH07bc7OBcEuXy4aHDAh3Lklp
+         PSM14j14q26wQkZGe4AxoLUpeXbyGJ8FcXuKaaefsSyvZcMQpjh8jWA7KpjJJqyA4dxG
+         pB3ZZ+jtw1X0qrDR8Tn4s1HfC1r0xjrXv66TyET+EqCOd9UFS63JX1jgKC0NLfwe2Lds
+         IvWNxGUou28td2JgbQ9K64Q/vMaVO4xlKRPAdL+Zg8nQOan/qnib7ublcnAPNhg/g27U
+         AhrQ1akMtoQFwt2Mv8iDa6ge+6L2HfVPR744POiyDn4qHbZDbliolGuzI6UIqrXpShKo
+         +xvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0IcBMH20r+ISbVoq6CN/oXjmzZOO9PfgZcgfdmdIh5E=;
-        b=wn1rl9t4MQSTeEjTR/wU6caIM3N0t8y5oxplK3ZYUwDFOvapFcFY62Ch0glDin/5uR
-         XHzGqkc3RrYDAqij7QLS0Z6nErVaG5xOaqzZbeHNzpdZHcHV4lWNsZo/weVQkeHm/Uj+
-         tflQmx0bTzGbweIAN+3y08k3D8J4yieIkv+w+IapjN9tHLn4yMFS8oNKeQMZZkck4h7m
-         94Fn2NO/PaKWPFNVsVcsv5CDe9tuwJMkyM9NLPLp5DsSqWEQ5uOgEvYtgssRzCe9AWQy
-         CjopmwHHh4Q1uqX/5TF/AXbYyyR/ZsSwYH/PGHBJC9uMXir5gvM0UqtiG2rujlevLPyq
-         /v9w==
-X-Gm-Message-State: ANoB5plHr4X5mz5H+QnfOb6lCQ5aVYUnk6sFu+aqnG9NTBHAU+4+UeFf
-        lvWyNhc1Pw2rqzUE5pLU5f2X31//yGWh94Xi
-X-Google-Smtp-Source: AA0mqf6OADtsNBFR7yJjFMz9J9RhdUEdAdgY48O80tuySN0Hvjgh6eICLECJsmkDrRV9axnTnBURng==
-X-Received: by 2002:a05:6512:2983:b0:4ae:6bbc:e8af with SMTP id du3-20020a056512298300b004ae6bbce8afmr5050326lfb.411.1668507301787;
-        Tue, 15 Nov 2022 02:15:01 -0800 (PST)
+        bh=jGHlZVL39eCUsJrhUm15x+JuQR4luXm9cgq/qr21IVY=;
+        b=QjpqDswfg7pk92X/p0txMtTEPhI5RLZnCZkIZmA2zYF+4Dt/AVeWxee0pg/5vzO1Ko
+         hYoEpJD0cT+jMW0ov1HlqwpMIxUXJMQb1dPZ3hgCHUiv6QTH3PHVb9kxb5Hin8bGyZKI
+         p1zjuBHJo2XKkLfQy0hDm28vd7eQ7gK0sm7huX/u3W2QmWtpOGR9SG8fjHk3Y1KCW4dJ
+         VmhToC6duxBiVw0eSCV6J8uBKGIN9q+P8FXNsyI1hc64iC7HElj6siDYfzz4KKx28yXq
+         Eby9CF70NNFitNCcz/9tLZXwkp2uKQLnr91SI3zJMbjV76o449qZB+5eWvvsqH7Gcgbd
+         xNdA==
+X-Gm-Message-State: ANoB5pnlgugoupJkje6Gu/Ofj0TM0ywElp8k+XHU+c5ztEjbvyBrTKFa
+        YKfMuFnQ54VY041lVGqt+rHbqw==
+X-Google-Smtp-Source: AA0mqf4j0NwkOajZo6/FfndECMtqa/uh+Ezn1EL74qlkjKNZN5lyyAl+CoL93o3aU1vj951oIH0KKA==
+X-Received: by 2002:a2e:300c:0:b0:277:524c:f83d with SMTP id w12-20020a2e300c000000b00277524cf83dmr5880907ljw.217.1668507384396;
+        Tue, 15 Nov 2022 02:16:24 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id g18-20020a05651222d200b00494643db68bsm2146034lfu.78.2022.11.15.02.15.00
+        by smtp.gmail.com with ESMTPSA id c2-20020a056512074200b004979e1ff641sm2142914lfs.115.2022.11.15.02.16.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 02:15:01 -0800 (PST)
-Message-ID: <d1177e53-a4f2-70e5-9214-671910ea28ac@linaro.org>
-Date:   Tue, 15 Nov 2022 11:15:00 +0100
+        Tue, 15 Nov 2022 02:16:24 -0800 (PST)
+Message-ID: <4f97dc96-5f95-4d36-6d40-c247043162bc@linaro.org>
+Date:   Tue, 15 Nov 2022 11:16:22 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 2/3] arm64: dts: qcom: sm8450: add Soundwire and LPASS
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm8450-hdk: add sound support
 Content-Language: en-US
 To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -66,10 +66,10 @@ To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         linux-kernel@vger.kernel.org
 Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 References: <20221114152130.385871-1-krzysztof.kozlowski@linaro.org>
- <20221114152130.385871-3-krzysztof.kozlowski@linaro.org>
- <fbf1fc09-31a9-a08f-6ffd-551fdd317ec0@linaro.org>
+ <20221114152130.385871-4-krzysztof.kozlowski@linaro.org>
+ <f52157c7-d198-9c26-089a-c5227a1c1f4f@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <fbf1fc09-31a9-a08f-6ffd-551fdd317ec0@linaro.org>
+In-Reply-To: <f52157c7-d198-9c26-089a-c5227a1c1f4f@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,69 +82,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/11/2022 16:37, Konrad Dybcio wrote:
+On 14/11/2022 16:39, Konrad Dybcio wrote:
 > 
 > On 14/11/2022 16:21, Krzysztof Kozlowski wrote:
 >> From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 >>
->> Add Soundwire controllers, Low Power Audio SubSystem (LPASS) devices and
->> LPASS pin controller.
+>> Add sound support to SM8450 HDK board.  Tested setup so far is only two
+>> speakers (working) and head-phones (only one channel working).
 >>
 >> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 >> Co-developed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >> ---
->>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 295 +++++++++++++++++++++++++++
->>   1 file changed, 295 insertions(+)
+>>   arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 161 ++++++++++++++++++++++++
+>>   1 file changed, 161 insertions(+)
 >>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> index 4b0a1eee8bd9..c99740591467 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> @@ -15,6 +15,7 @@
->>   #include <dt-bindings/interconnect/qcom,sm8450.h>
->>   #include <dt-bindings/soc/qcom,gpr.h>
->>   #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+>> index 4d75f9db08c2..c177283b6764 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+>> @@ -6,6 +6,8 @@
+>>   /dts-v1/;
+>>   
+>>   #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
 >> +#include <dt-bindings/sound/qcom,q6afe.h>
->>   #include <dt-bindings/thermal/thermal.h>
+>> +#include <dt-bindings/sound/qcom,q6asm.h>
+>>   #include "sm8450.dtsi"
 >>   
 >>   / {
->> @@ -2097,6 +2098,212 @@ compute-cb@3 {
->>   			};
->>   		};
+>> @@ -421,6 +423,147 @@ &uart7 {
+>>   	status = "okay";
+>>   };
 >>   
->> +		wsa2macro: codec@31e0000 {
->> +			compatible = "qcom,sm8450-lpass-wsa-macro";
->> +			reg = <0 0x031e0000 0 0x1000>;
-> The sorting will be off, as adsp and cdsp have been mistakenly put in
-> the wrong place (notice adsp @ 32300000 is actually at an address
-> that's 8 hex digits long, but the reg addr is padded to 9 hex digits..).
-
-I don't get it. This has address:
-31e0000
-ADSP has
-30000000
-
-so why sorting is odd?
-
-> > Could you submit a fix for that as well?
-
-For 9 digits, sure, but this is independent issue.
-
+>> +&soc {
 > 
->> +			clocks = <&q6prmcc LPASS_CLK_ID_WSA_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +				 <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +				 <&q6prmcc LPASS_HW_MACRO_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +				 <&q6prmcc LPASS_HW_DCODEC_VOTE LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +				 <&vamacro>;
->> +			clock-names = "mclk", "npl", "macro", "dcodec", "fsgen";
->> +			assigned-clocks = <&q6prmcc LPASS_CLK_ID_WSA_CORE_TX_MCLK LPASS_CLK_ATTRIBUTE_COUPLE_NO>,
->> +					  <&q6prmcc LPASS_CLK_ID_RX_CORE_MCLK2_2X_MCLK  LPASS_CLK_ATTRIBUTE_COUPLE_NO>;
+> soc should go before uart alphabetically.
 > 
-> Remove the duplicated space before LPASS_CLK_ATTRIBUTE_COUPLE_NO.
+> 
+> Other than that:
+> 
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+> 
 
-Ack.
-
+Ack
 
 Best regards,
 Krzysztof
