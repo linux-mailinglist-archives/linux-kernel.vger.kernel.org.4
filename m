@@ -2,122 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D10A629BE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5D3629BE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiKOOV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 09:21:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiKOOVR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230402AbiKOOVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 15 Nov 2022 09:21:17 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166AD27DF3;
-        Tue, 15 Nov 2022 06:21:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1668522076; x=1700058076;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T9xa+wT894O/BNbmmhpsL2DaZVMB3Ufsjex3WlA9okU=;
-  b=PB1c9Q61uvE/R55Ki6QzGk8oaxQifuUxScPWT2pDen4UoAkcnCzAbiyW
-   /ggqzoGX1aId+fX0y60k8EhrLLKRHPCNpmJDKVBB1X5N3O1HGOGDwKV0Z
-   iiidPkvvmxT2ryV8mNvdte1NRjJfdG7wUwC3C/KPcnLdIG07c5l+gsx/4
-   TenXQjtBTFGNf1dCJWXU1X+mTOmfV5+jfwejlzuVrKL9LKAO7h+Ik/tLC
-   Rp1jAT+B5tFCmgeFOZxNXKvxv185RQKDLrtuDXCQi11FQjKz87wwKrAfO
-   uw4At0jH7CalJ4catIoWwAYUEICchOSvs0KeBHiukDzjUHTmVfUM8H2H3
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="123510930"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Nov 2022 07:21:16 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 15 Nov 2022 07:21:16 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 15 Nov 2022 07:21:13 -0700
-Date:   Tue, 15 Nov 2022 14:20:56 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-CC:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 0/3] RZ/Five: Enable ADC/CANFD/I2C/OPP/Thermal Zones/TSU
-Message-ID: <Y3OgSAnst0qt5WSk@wendy>
-References: <20221115105135.1180490-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44912 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230339AbiKOOVM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 15 Nov 2022 09:21:12 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F732BB01
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:21:08 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id s8so7502697lfc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:21:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ACgHMFuGKzy3RGwW6XHrQYZNS+YLjUOXJZAsXWrWtGs=;
+        b=HShR3wKOJcnBxWiCo3jeWX+nqBmY7jdqQxaDhFfMLBjHDv36J+RsIx27T1YWbYLSuI
+         yJuV9RXMTuEFfa1vTJSZ2AkdCmq27eLcBDIla5OWTvnCNQpZPWiPVYMXP89CLL0i5dEp
+         jNtwWCN/2k04uQShe5hSnv4VEecopp7F/GbsLYezvFV43PkSGTxLC0ft0nw8SYgtiewi
+         HNo9RT9JxiYQKJ2j1f7/xCNs8Q/3eP81P5EbIEgCAEEcUhNJZIKcwltLzlSz4fPau3Sz
+         XVBoEsK19cu2OgBxmLCWKmRN0a4DbiUmRFZCPNV4MQ9DGKR06bbSi4jKVjIkqBVhLLQd
+         Z9qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ACgHMFuGKzy3RGwW6XHrQYZNS+YLjUOXJZAsXWrWtGs=;
+        b=hke1z4y5OUiruo9fdNkwElijfWJZ+d4D9/nFlq+t6LpK6NOHvn2ZZJW5g0MPE7+nFf
+         2U3Lyq79FpRIFncg3Aj4xyekdXWR42djLYmubF6kRDiCIb7VVJK5KGVgw3rF6+Zw3Bue
+         75kPDUVEQdSQGzIptOMqtWAbJLt1sqR3dlgMJrvk1Kcw71OCaamqNAVdd0WWP+84NOCP
+         p+ShrGNS8IwbzCEw9agS3Rw9vVetF79jPqAl9FwBxMGDPryqywAbj/6XSh3UggmcJlyI
+         pXCnOL4WzAVKeZZwQhf81c0tuHH+Y435mlAE0nCRHC9pCs3I8Ci/6I53lr1H6oxk2OnH
+         D6dA==
+X-Gm-Message-State: ANoB5plqCLt+397bE+6uO4UzFHVj5zyVg6eTorbcK+oW0i9zeN3vi3nC
+        R3KkHoiXQFNhk8qSy59dncrkHA==
+X-Google-Smtp-Source: AA0mqf5KID519SFnnfTcLoNNny5R3BJ970yABv3j0l6ETKypPDYbUDkY+VVoHy6vD3ScOULPBNLKHw==
+X-Received: by 2002:a19:5016:0:b0:4ad:5fbb:a5b0 with SMTP id e22-20020a195016000000b004ad5fbba5b0mr5417040lfb.466.1668522067299;
+        Tue, 15 Nov 2022 06:21:07 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c8-20020a056512324800b004afc1607130sm2226467lfr.8.2022.11.15.06.21.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 06:21:06 -0800 (PST)
+Message-ID: <f3a6a7b1-b196-0abb-0c18-8a13908c6891@linaro.org>
+Date:   Tue, 15 Nov 2022 15:21:05 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221115105135.1180490-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] ASoC: dt-bindings: lpass-va: add npl clock for new VA
+ macro
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org
+References: <20221115105541.16322-1-srinivas.kandagatla@linaro.org>
+ <20221115105541.16322-2-srinivas.kandagatla@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221115105541.16322-2-srinivas.kandagatla@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 10:51:32AM +0000, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On 15/11/2022 11:55, Srinivas Kandagatla wrote:
+> LPASS VA Macro now has soundwire master to deal with access to
+> analog mic in low power island use cases. This also means that VA macro
+> now needs to get hold of the npl clock too. Add clock bindings required
+> for this.
 > 
-> Hi All,
+> As part of adding this bindings, also update bindings to be able to
+> specific and associate the clock names specific to the SoC.
 > 
-> This patch series aims to enable support for below blocks
-> on RZ/Five SoC/SMARC EVK:
-> - ADC
-> - CANFD
-> - I2C
-> - OPP
-> - Thermal Zones
-> - TSU
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> ---
+>  .../bindings/sound/qcom,lpass-va-macro.yaml   | 72 ++++++++++++++++---
+>  1 file changed, 64 insertions(+), 8 deletions(-)
 > 
-> Note, patches apply on top of [0].
-> 
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/log/?h=renesas-riscv-dt-for-v6.2
-> 
-> Cheers,
-> Prabhakar
-> 
-> Lad Prabhakar (3):
->   riscv: Kconfig: Enable cpufreq kconfig menu
->   riscv: dts: renesas: r9a07g043f/rzfive-smarc-som: Enable
->     ADC/OPP/Thermal Zones/TSU
->   riscv: dts: renesas: rzfive-smarc: Enable CANFD/I2C
+> diff --git a/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml b/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml
+> index c36caf90b837..848e34111df1 100644
+> --- a/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml
+> +++ b/Documentation/devicetree/bindings/sound/qcom,lpass-va-macro.yaml
+> @@ -27,16 +27,13 @@ properties:
+>      const: 0
+>  
+>    clocks:
+> -    maxItems: 3
+> +    minItems: 1
+> +    maxItems: 4
+> +
+>  
+>    clock-names:
+> -    oneOf:
+> -      - items:   #for ADSP based platforms
+> -          - const: mclk
+> -          - const: core
+> -          - const: dcodec
+> -      - items:   #for ADSP bypass based platforms
+> -          - const: mclk
+> +    minItems: 1
+> +    maxItems: 4
+>  
+>    clock-output-names:
+>      maxItems: 1
+> @@ -61,6 +58,65 @@ required:
+>    - reg
+>    - "#sound-dai-cells"
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: qcom,sc7280-lpass-va-macro
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 1
 
-I know ~nothing about your SoC so idk if the values are correct, but I
-did give it a go earlier to see if it did anything warning wise. Seeing
-that it didn't cause any I am curious - how come these didn't land in
-the original dts? Just waiting for driver stuff to land to support it?
+You can skip minItems here.
 
-Anyway, no new warnings which is what I care about - I suppose that
-makes it an acked-by?
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Can include that tag if you like. Either way, nice to see some of the
-/delete-node/s etc being removed.
+> +          maxItems: 1
+> +        clock-names:
+> +          items:
+> +            - const: mclk
+> +      required:
+> +        - clock-names
+> +        - clocks
 
-Thanks,
-Conor.
+IIUC, all variants require now clocks, so these two lines should be part
+of top level "required:".
 
-> 
->  arch/riscv/Kconfig                            |  2 ++
->  arch/riscv/boot/dts/renesas/r9a07g043f.dtsi   |  2 ++
->  .../boot/dts/renesas/rzfive-smarc-som.dtsi    | 11 --------
->  arch/riscv/boot/dts/renesas/rzfive-smarc.dtsi | 27 -------------------
->  4 files changed, 4 insertions(+), 38 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: qcom,sm8250-lpass-va-macro
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 3
+> +          maxItems: 3
+> +        clock-names:
+> +          items:
+> +            - const: mclk
+> +            - const: core
+> +            - const: dcodec
+> +      required:
+> +        - clock-names
+> +        - clocks
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sc8280xp-lpass-va-macro
+> +              - qcom,sm8450-lpass-va-macro
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 4
+> +          maxItems: 4
+> +        clock-names:
+> +          items:
+> +            - const: mclk
+> +            - const: npl
+
+How about making it the last clock so the order matches with sm8250?
+
+
+Best regards,
+Krzysztof
+
