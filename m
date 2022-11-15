@@ -2,103 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8103C629E3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:58:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC10629E44
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbiKOP6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:58:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52386 "EHLO
+        id S238395AbiKOP6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:58:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbiKOP6J (ORCPT
+        with ESMTP id S231693AbiKOP60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:58:09 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966F42DAA7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:58:08 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id A93B03200928;
-        Tue, 15 Nov 2022 10:58:05 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 15 Nov 2022 10:58:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1668527885; x=1668614285; bh=Yt
-        mPYJH+3NB2X9whuY4EvN/qQZLq+JqRriE20y2qXUQ=; b=iZmfaeMMYftnv2gJXb
-        MtfjS+vsWXltd2sl3z97lcY0pWWoejmWPpwzbie48tu5TGFM7ckNCN1r+BSKdwSL
-        wilyOKgKj5VFi2dGG3TC8gDppr+FUdO4HHwQblHTCbQJ9a69THJUoyrUhjq274GL
-        TjWWF6or+Fn2YeaZOHJ0sektam0yYdW2zaD3V0ZIfI4/RzXu/YLjyONqdl7Y1xXv
-        wXVYgu1iJPcH2Pw1oiYxrmx/O08nRMPNjL9TZX50upu03A2HItK/6ZL3Blz7TrH6
-        AKGHVJ3lnYiceH0fp4YevNHjCpz8HIOG0hX/yBPFjgz2D4y/Jw9GI/c5B7rCaBKh
-        Rz5Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1668527885; x=1668614285; bh=YtmPYJH+3NB2X9whuY4EvN/qQZLq
-        +JqRriE20y2qXUQ=; b=FgyXfNsj5B+Mkm1siFldGp4pzOfYkdf6Rd03cR+2FATT
-        hYrMJNtB7xwbAPPPE4xy52Pf5lH6DAmGWj3Q1cXYRys0Xa4ZmWSGVMTK+nOeFF0N
-        gmXMQk3ctpxMdLKkqY2c+yQ6qJ5NJVoenj7sFtnjvQfhHJCgmDNyxQUbFHNhi2rw
-        Ol++JcWIftibqtKxuZrI1rV5D7R/0oFxMksMQ5/mrwonp7Ryhc/DFaZt7DzfOY8D
-        8tCrTiEZtErh7OqtYb3Vxxs/RQSU2GLJNcDVsPKwVruB0G2O0GyjEwvplPztua47
-        0N91ub+PB4nNxyWeih72nl0N709U4MzD8m4Ln1OqsQ==
-X-ME-Sender: <xms:DbdzYyBML0Y7DGI51X7hsRL1PQPO0fJJrqkSBvUxHaITb64r-xIgLA>
-    <xme:DbdzY8hF_pWeEvqw0vvHkZtLxgXFdVkfDLfRVkmWH6-7HUgbeAzQeC-jxFTD-dPah
-    s1APwjAio4JfuYfAS8>
-X-ME-Received: <xmr:DbdzY1m-tQvZaEZjb_KutpnbqFypBXMvwmxb8uzr9RbgsWkGKPa69KuRXKSLlbklOHw8EQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeeggdekfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueehtedt
-    tdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:DbdzYwxuVTJmVUdwgSBDJShBrqBwvBlfhcmm-4JYFCWiZuw6tSJBlQ>
-    <xmx:DbdzY3Rnkka-orLcg-n9y0-8Im3vy65ZvgZjOScQT8l7bqkhbo8ihg>
-    <xmx:DbdzY7bgHg2pRssMHDyDYMhWSWJschPFwqR8PR0kFQLmHzbpCZAq0g>
-    <xmx:DbdzYwTSJKO6WqYF-GJX1dFRoKS5opeAWhxtUxs2VJcykQ28i1BtwQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 15 Nov 2022 10:58:04 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 5570C10997B; Tue, 15 Nov 2022 18:58:02 +0300 (+03)
-Date:   Tue, 15 Nov 2022 18:58:02 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: Re: [tip:x86/mm 5/16] sound/core/hwdep.c:243:24: sparse: sparse:
- incorrect type in assignment (different address spaces)
-Message-ID: <20221115155802.p3vjnk7eqqcyskt3@box.shutemov.name>
-References: <202211150551.T7mpZomP-lkp@intel.com>
- <fdae3de9-db03-b04d-1992-bc8efd053053@intel.com>
- <20221115034007.go64rirsoqazpks7@box.shutemov.name>
+        Tue, 15 Nov 2022 10:58:26 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A638D2ED45
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:58:17 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id s5so6288092edc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:58:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hGWW/MIEHrCQNewHhRIGxXTQAeOC4rpUnCL7BHFVFTI=;
+        b=Lwa63gbzI5j9Db9s8Tqo3pXxDn8bTBGC+950ifG8Uz2bpbSF1oscH0frYnjYaR0ERK
+         rDu3aYe+mm6brSi6rKtOcMBnJ9aG/H3G7JvqcGPn5GtdshRIgHy4g4hmF93ikZW4SVpA
+         S69zH9z1s3Vfgxx16h6OQrZY0S7AR+Yso0IeaJmQNX5kFV8kpYNKE7Ru9QSKuorHdyes
+         NwIhpnoBQbknI85fF5KIuFzVVcERf1c4v97jTRYlWJo4cyXXG+10oHZZCiVMEScM5el/
+         Gcl3jjD1tQCTTPVPgNU+lFj2mHwYv2xlruI3BlcfDHuMW5E1jPCPWAP1d+3absNiOqGs
+         aVkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hGWW/MIEHrCQNewHhRIGxXTQAeOC4rpUnCL7BHFVFTI=;
+        b=Z2wM4fjNdTUfaP1RzcnMBvVVGBTr2LbhuqQFQsP+9SrZuV4itok7IO683IfOkn22kn
+         gLxettgh7k3K9PU6sDMttDvg6GNaKqBeRgOb/QJ8H9sm85dI/Rw9t/Fa29eeAzPVR3wx
+         lmRB27eyBIZEfzMsw7qPcd84ml/kU1og45VQ6h5RLz4GTHWfQ7AC6owaWhjam0JFX7ZI
+         nCy3SWjcBSh8yJVw7+IJZavdP8Kyjvw4z0T/C9r2SqqoHRoQtLCxCHP9Iq937kGLH2Xg
+         kXvTYxTj/1tcVf0Q8B1lrrgHB+HdKBUUtAnmpD8vcEve3lY9ZG0loiUEkImsH1F5TiOD
+         88Ig==
+X-Gm-Message-State: ANoB5pkLRUbbbIYSuCmBfD7MADpmrtvlALPgQEmLRLD/v9K35Cl8qzp7
+        O5QSDJ8JZCvCJ6YOZG+KSISP9w==
+X-Google-Smtp-Source: AA0mqf7luJopzkTusEkfEOC8tAcynClaHNm8M2ztZoZ1CBg7umddLW94rNC65M0BYZxMvfKkgbqhTw==
+X-Received: by 2002:aa7:cd15:0:b0:458:5987:7203 with SMTP id b21-20020aa7cd15000000b0045859877203mr15005315edw.161.1668527896175;
+        Tue, 15 Nov 2022 07:58:16 -0800 (PST)
+Received: from localhost.localdomain ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id ky4-20020a170907778400b0077b523d309asm5648085ejc.185.2022.11.15.07.58.14
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 15 Nov 2022 07:58:15 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: clock: add QCOM SM6375 display clock bindings
+Date:   Tue, 15 Nov 2022 16:58:04 +0100
+Message-Id: <20221115155808.10899-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221115034007.go64rirsoqazpks7@box.shutemov.name>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 06:40:07AM +0300, Kirill A. Shutemov wrote:
-> I also looked again at get_user() and put_user() and I think we can
-> simplify them. The variable just adds noise.
+Add device tree bindings for display clock controller for
+Qualcomm Technology Inc's SM6375 SoC.
 
-I just realized that this is not only cleanup, but also fixes sparse
-warnings.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Changes in v2:
+- Switch to dual licensing in both files
+- Adjust the wording with the recent refactoring
+- use qcom,gcc.yaml for common properties
 
+ .../bindings/clock/qcom,sm6375-dispcc.yaml    | 54 +++++++++++++++++++
+ .../dt-bindings/clock/qcom,sm6375-dispcc.h    | 42 +++++++++++++++
+ 2 files changed, 96 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm6375-dispcc.yaml
+ create mode 100644 include/dt-bindings/clock/qcom,sm6375-dispcc.h
+
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sm6375-dispcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm6375-dispcc.yaml
+new file mode 100644
+index 000000000000..183b1c75dbdf
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/qcom,sm6375-dispcc.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/qcom,sm6375-dispcc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Display Clock & Reset Controller on SM6375
++
++maintainers:
++  - Konrad Dybcio <konrad.dybcio@linaro.org>
++
++description: |
++  Qualcomm display clock control module provides the clocks, resets and power
++  domains on SM6375.
++
++  See also:: include/dt-bindings/clock/qcom,dispcc-sm6375.h
++
++allOf:
++  - $ref: qcom,gcc.yaml#
++
++properties:
++  compatible:
++    const: qcom,sm6375-dispcc
++
++  clocks:
++    items:
++      - description: Board XO source
++      - description: GPLL0 source from GCC
++      - description: Byte clock from DSI PHY
++      - description: Pixel clock from DSI PHY
++
++required:
++  - compatible
++  - clocks
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,sm6375-gcc.h>
++    #include <dt-bindings/clock/qcom,rpmh.h>
++
++    clock-controller@5f00000 {
++      compatible = "qcom,sm6375-dispcc";
++      reg = <0x05f00000 0x20000>;
++      clocks = <&rpmhcc RPMH_CXO_CLK>,
++               <&gcc GCC_DISP_GPLL0_CLK_SRC>,
++               <&dsi_phy 0>,
++               <&dsi_phy 1>;
++      #clock-cells = <1>;
++      #reset-cells = <1>;
++      #power-domain-cells = <1>;
++    };
++...
+diff --git a/include/dt-bindings/clock/qcom,sm6375-dispcc.h b/include/dt-bindings/clock/qcom,sm6375-dispcc.h
+new file mode 100644
+index 000000000000..1cb0bed004bd
+--- /dev/null
++++ b/include/dt-bindings/clock/qcom,sm6375-dispcc.h
+@@ -0,0 +1,42 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2022, Linaro Limited
++ */
++
++#ifndef _DT_BINDINGS_CLK_QCOM_DISP_CC_SM6375_H
++#define _DT_BINDINGS_CLK_QCOM_DISP_CC_SM6375_H
++
++/* Clocks */
++#define DISP_CC_PLL0					0
++#define DISP_CC_MDSS_AHB_CLK				1
++#define DISP_CC_MDSS_AHB_CLK_SRC			2
++#define DISP_CC_MDSS_BYTE0_CLK				3
++#define DISP_CC_MDSS_BYTE0_CLK_SRC			4
++#define DISP_CC_MDSS_BYTE0_DIV_CLK_SRC			5
++#define DISP_CC_MDSS_BYTE0_INTF_CLK			6
++#define DISP_CC_MDSS_ESC0_CLK				7
++#define DISP_CC_MDSS_ESC0_CLK_SRC			8
++#define DISP_CC_MDSS_MDP_CLK				9
++#define DISP_CC_MDSS_MDP_CLK_SRC			10
++#define DISP_CC_MDSS_MDP_LUT_CLK			11
++#define DISP_CC_MDSS_NON_GDSC_AHB_CLK			12
++#define DISP_CC_MDSS_PCLK0_CLK				13
++#define DISP_CC_MDSS_PCLK0_CLK_SRC			14
++#define DISP_CC_MDSS_ROT_CLK				15
++#define DISP_CC_MDSS_ROT_CLK_SRC			16
++#define DISP_CC_MDSS_RSCC_AHB_CLK			17
++#define DISP_CC_MDSS_RSCC_VSYNC_CLK			18
++#define DISP_CC_MDSS_VSYNC_CLK				19
++#define DISP_CC_MDSS_VSYNC_CLK_SRC			20
++#define DISP_CC_SLEEP_CLK				21
++#define DISP_CC_XO_CLK					22
++
++/* Resets */
++#define DISP_CC_MDSS_CORE_BCR				0
++#define DISP_CC_MDSS_RSCC_BCR				1
++
++/* GDSCs */
++#define MDSS_GDSC					0
++
++#endif
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.38.1
+
