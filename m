@@ -2,191 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C93CC628F19
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 02:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2361B628F26
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 02:20:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235800AbiKOBRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 20:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59930 "EHLO
+        id S232059AbiKOBT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 20:19:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236432AbiKOBRX (ORCPT
+        with ESMTP id S230109AbiKOBTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 20:17:23 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1D31B9F0;
-        Mon, 14 Nov 2022 17:17:20 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id j12so11740930plj.5;
-        Mon, 14 Nov 2022 17:17:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BUIpc8OohuRwXXTymHuQYeof5fwY+3ojN2l9M9GcprA=;
-        b=oUtVIOmA+hDrwfw6hXBGXEWEiUNMsAHXNCb1DogIAutUo3yWYa8OVEQlDCZYPxMRjL
-         p7A9Mt0lsHTpvaTKR7AqJWuOEfJ4MgRFMpwrSYJjR/OOimc0Yd62WEVqiF38mCq9qHFV
-         hibrRm2vl1oyYrKZSIUUcv0b2GDP8/lMq6ctyy6BcZ3D+8pytwo+MaqYRpQQtCKELnqb
-         KhasTnP8z/67muakDUzLJ6Z7Bm5YiLfBipxYGSaES1pw+pdaz+bBWdUlSpXT3U8Tc0ZI
-         b1ccr3lM9Xh527XRmGAJGyyCsKhbPp9HSlkzYwYVjhDDVEkdNq8OCCUXpTOIJD4YzWdo
-         I1GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BUIpc8OohuRwXXTymHuQYeof5fwY+3ojN2l9M9GcprA=;
-        b=lZNm25aHROzkkxlWxmn7shOVXXE8OW8Z1yYiKL8xdHQg8ZiNO3krlG0dXDfpHdaaft
-         KJrHHPpa9dlZvpSLA5Rl8uqBud9rJgcexX+Yhdl2VhXvbk1bdcv/wFhCQME9aBsQIaGm
-         wkr/zM2ZALe1vFchazsj5h7UXmnZbC4hmwlgfButXTSXBwyPUKzP/HcxRZrFmiSH6AQ2
-         +9pEmtNNNBBf5hizwW+0XMg/d5Grnn+6CZ6WL1ozx6XC1wXTCEH6BdWuLQvLZwGFUofP
-         YJVHNX67z5g+zwarHAO1A4hBS1koH0wOWU82nEvZVZpKiQ4poaA+ym+kLWaNHgSHSi7P
-         60QQ==
-X-Gm-Message-State: ANoB5pkj8FQ2eCDS7ZYFsFoKZpKgYm6XJ7F4ltMaTfGt3dIHu70SR2i4
-        ZLz5VJcE+Fr+zPj+8wXzUkM=
-X-Google-Smtp-Source: AA0mqf7AYFxLloZV1/xCKWZzDYS0lMqASczojZNKvBWAniq5L2uJ5HHmbKWbZ+2tWum2MmizzLjblA==
-X-Received: by 2002:a17:903:26c1:b0:186:9852:b9e4 with SMTP id jg1-20020a17090326c100b001869852b9e4mr1849835plb.52.1668475040137;
-        Mon, 14 Nov 2022 17:17:20 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:718:95ee:2678:497])
-        by smtp.gmail.com with ESMTPSA id f88-20020a17090a28e100b002137030f652sm7238569pjd.12.2022.11.14.17.17.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 17:17:19 -0800 (PST)
-Date:   Mon, 14 Nov 2022 17:17:16 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Vincent Knecht <vincent.knecht@mailoo.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, w.david0@protonmail.com,
-        stephan@gerhold.net, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v4 5/5] Input: msg2638 - Add support for msg2138 key
- events
-Message-ID: <Y3LonDibllKkTmPs@google.com>
-References: <20221110171952.34207-1-vincent.knecht@mailoo.org>
- <20221110171952.34207-6-vincent.knecht@mailoo.org>
+        Mon, 14 Nov 2022 20:19:48 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9FB13DCC;
+        Mon, 14 Nov 2022 17:19:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668475187; x=1700011187;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9i9GneyN5wzD0q5QGpre3W00YKsgyhnQ1SvEvL9knhc=;
+  b=FCrCuSzJMbBBE2i2v8aUFEGqLSiGzPlbuBgrxqAENVCMSpaSkUf6WVeR
+   qzLrYdiVmO3gov5Sv1ugRdHj7gHwQnbCu6S9UJNwpE9Ltbiuj7/e8ivsH
+   iBqSQq+RwPG2BdfL+3w9Mtok09XqIBvGhA+SiKNZgIuEFVVtD5JSdntAi
+   XjGsieZTcccDtGOW3VXAYP/KGDFJfZg8CZxt147NLvAzYCGk2qCs0xphL
+   IeGhXfMNaAlpX/I5IgOgDjWYLxRKSZfJrG4OfGxyjUJvr1j16DRHjekBH
+   M0VTaO9CR7U02S5W8/U2ZuaE84NXY+wFH8TLTq4Q+c8//C4XKYorMrJ7w
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="374258102"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="374258102"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 17:19:46 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="744378892"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="744378892"
+Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.212.91.132])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 17:19:45 -0800
+From:   ira.weiny@intel.com
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Gregory Price <gregory.price@memverge.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: [PATCH] PCI/doe: Fix work struct declaration
+Date:   Mon, 14 Nov 2022 17:19:43 -0800
+Message-Id: <20221115011943.1051039-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110171952.34207-6-vincent.knecht@mailoo.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 06:19:48PM +0100, Vincent Knecht wrote:
-> Some devices with msg2138 have back/menu/home keys.
-> Add support for them.
-> 
-> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
-> ---
->  drivers/input/touchscreen/msg2638.c | 53 +++++++++++++++++++++++++----
->  1 file changed, 47 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/input/touchscreen/msg2638.c b/drivers/input/touchscreen/msg2638.c
-> index 73e1b4d550fb..36069b30ab9b 100644
-> --- a/drivers/input/touchscreen/msg2638.c
-> +++ b/drivers/input/touchscreen/msg2638.c
-> @@ -29,6 +29,8 @@
->  #define MSG2138_MAX_FINGERS		2
->  #define MSG2638_MAX_FINGERS		5
->  
-> +#define MAX_BUTTONS			4
-> +
->  #define CHIP_ON_DELAY_MS		15
->  #define FIRMWARE_ON_DELAY_MS		50
->  #define RESET_DELAY_MIN_US		10000
-> @@ -72,6 +74,8 @@ struct msg2638_ts_data {
->  	struct regulator_bulk_data supplies[2];
->  	struct gpio_desc *reset_gpiod;
->  	int max_fingers;
-> +	u32 keycodes[MAX_BUTTONS];
-> +	int num_keycodes;
->  };
->  
->  static u8 msg2638_checksum(u8 *data, u32 length)
-> @@ -85,6 +89,19 @@ static u8 msg2638_checksum(u8 *data, u32 length)
->  	return (u8)((-sum) & 0xFF);
->  }
->  
-> +static void msg2138_report_keys(struct msg2638_ts_data *msg2638, u8 keys)
-> +{
-> +	int i;
-> +
-> +	/* keys can be 0x00 or 0xff when all keys have been released */
-> +	if (keys == 0xff)
-> +		keys = 0;
-> +
-> +	for (i = 0; i < msg2638->num_keycodes; ++i)
-> +		input_report_key(msg2638->input_dev, msg2638->keycodes[i],
-> +				 !!(keys & BIT(i)));
+From: Ira Weiny <ira.weiny@intel.com>
 
-No need to do double-negation here, input_report_key() does it already.
+The callers of pci_doe_submit_task() allocate the pci_doe_task on the
+stack.  This causes the work structure to be allocated on the stack
+without pci_doe_submit_task() knowing.  Work item initialization needs
+to be done with either INIT_WORK_ONSTACK() or INIT_WORK() depending on
+how the work item is allocated.
 
-> +}
-> +
->  static irqreturn_t msg2138_ts_irq_handler(int irq, void *msg2638_handler)
->  {
->  	struct msg2638_ts_data *msg2638 = msg2638_handler;
-> @@ -121,9 +138,12 @@ static irqreturn_t msg2138_ts_irq_handler(int irq, void *msg2638_handler)
->  	p0 = &touch_event.pkt[0];
->  	p1 = &touch_event.pkt[1];
->  
-> -	/* Ignore non-pressed finger data */
-> -	if (p0->xy_hi == 0xFF && p0->x_low == 0xFF && p0->y_low == 0xFF)
-> +	/* Ignore non-pressed finger data, but check for key code */
-> +	if (p0->xy_hi == 0xFF && p0->x_low == 0xFF && p0->y_low == 0xFF) {
-> +		if (p1->xy_hi == 0xFF && p1->y_low == 0xFF)
-> +			msg2138_report_keys(msg2638, p1->x_low);
->  		goto report;
-> +	}
->  
->  	x = (((p0->xy_hi & 0xF0) << 4) | p0->x_low);
->  	y = (((p0->xy_hi & 0x0F) << 8) | p0->y_low);
-> @@ -283,6 +303,7 @@ static int msg2638_init_input_dev(struct msg2638_ts_data *msg2638)
->  	struct device *dev = &msg2638->client->dev;
->  	struct input_dev *input_dev;
->  	int error;
-> +	int i;
->  
->  	input_dev = devm_input_allocate_device(dev);
->  	if (!input_dev) {
-> @@ -299,6 +320,14 @@ static int msg2638_init_input_dev(struct msg2638_ts_data *msg2638)
->  	input_dev->open = msg2638_input_open;
->  	input_dev->close = msg2638_input_close;
->  
-> +	if (msg2638->num_keycodes) {
-> +		input_dev->keycode = msg2638->keycodes;
-> +		input_dev->keycodemax = msg2638->num_keycodes;
-> +		input_dev->keycodesize = sizeof(msg2638->keycodes[0]);
-> +		for (i = 0; i < msg2638->num_keycodes; i++)
-> +			input_set_capability(input_dev, EV_KEY, msg2638->keycodes[i]);
-> +	}
-> +
->  	input_set_capability(input_dev, EV_ABS, ABS_MT_POSITION_X);
->  	input_set_capability(input_dev, EV_ABS, ABS_MT_POSITION_Y);
->  
-> @@ -367,10 +396,16 @@ static int msg2638_ts_probe(struct i2c_client *client)
->  		return error;
->  	}
->  
-> -	error = msg2638_init_input_dev(msg2638);
-> -	if (error) {
-> -		dev_err(dev, "Failed to initialize input device: %d\n", error);
-> -		return error;
-> +	msg2638->num_keycodes =
-> +		of_property_read_variable_u32_array(dev->of_node, "linux,keycodes",
-> +						    msg2638->keycodes, 0,
-> +						    ARRAY_SIZE(msg2638->keycodes));
+Jonathan suggested creating doe task allocation macros such as
+DECLARE_CDAT_DOE_TASK_ONSTACK().[1]  The issue with this is the work
+function is not known to the callers and must be initialized correctly.
 
-Please do not use OF-specific API, use generic device property API (yes,
-you will need 2 calls, one to get the count, and another to actually
-fill the array).
+A follow up suggestion was to have an internal 'pci_doe_work' item
+allocated by pci_doe_submit_task().[2]  This requires an allocation which
+could restrict the context where tasks are used.
 
-Thanks.
+Compromise with an intermediate step to initialize the task struct with
+a new call pci_doe_init_task() which must be called prior to submit
+task.
 
+[1] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m88a7f50dcce52f30c8bf5c3dcc06fa9843b54a2d
+[2] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m63c636c5135f304480370924f4d03c00357be667
+
+Cc: Bjorn Helgaas <helgaas@kernel.org>
+Reported-by: Gregory Price <gregory.price@memverge.com>
+Reported-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Suggested-by: Dan Williams <dan.j.williams@intel.com>
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+---
+ drivers/cxl/core/pci.c  |  2 ++
+ drivers/pci/doe.c       | 14 ++++++++++++--
+ include/linux/pci-doe.h |  8 +++++---
+ 3 files changed, 19 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
+index 9240df53ed87..a19c1fa0e2f4 100644
+--- a/drivers/cxl/core/pci.c
++++ b/drivers/cxl/core/pci.c
+@@ -525,6 +525,7 @@ static int cxl_cdat_get_length(struct device *dev,
+ 	DECLARE_CDAT_DOE_TASK(CDAT_DOE_REQ(0), t);
+ 	int rc;
+ 
++	pci_doe_init_task(cdat_doe, &t.task, true);
+ 	rc = pci_doe_submit_task(cdat_doe, &t.task);
+ 	if (rc < 0) {
+ 		dev_err(dev, "DOE submit failed: %d", rc);
+@@ -554,6 +555,7 @@ static int cxl_cdat_read_table(struct device *dev,
+ 		u32 *entry;
+ 		int rc;
+ 
++		pci_doe_init_task(cdat_doe, &t.task, true);
+ 		rc = pci_doe_submit_task(cdat_doe, &t.task);
+ 		if (rc < 0) {
+ 			dev_err(dev, "DOE submit failed: %d", rc);
+diff --git a/drivers/pci/doe.c b/drivers/pci/doe.c
+index e402f05068a5..cabeae4ae955 100644
+--- a/drivers/pci/doe.c
++++ b/drivers/pci/doe.c
+@@ -319,6 +319,7 @@ static int pci_doe_discovery(struct pci_doe_mb *doe_mb, u8 *index, u16 *vid,
+ 	};
+ 	int rc;
+ 
++	pci_doe_init_task(doe_mb, &task, true);
+ 	rc = pci_doe_submit_task(doe_mb, &task);
+ 	if (rc < 0)
+ 		return rc;
+@@ -495,6 +496,14 @@ bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type)
+ }
+ EXPORT_SYMBOL_GPL(pci_doe_supports_prot);
+ 
++void pci_doe_init_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task,
++		       bool onstack)
++{
++	task->doe_mb = doe_mb;
++	__INIT_WORK(&task->work, doe_statemachine_work, onstack);
++}
++EXPORT_SYMBOL_GPL(pci_doe_init_task);
++
+ /**
+  * pci_doe_submit_task() - Submit a task to be processed by the state machine
+  *
+@@ -517,6 +526,9 @@ int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
+ 	if (!pci_doe_supports_prot(doe_mb, task->prot.vid, task->prot.type))
+ 		return -EINVAL;
+ 
++	if (WARN_ON_ONCE(task->work.func != doe_statemachine_work))
++		return -EINVAL;
++
+ 	/*
+ 	 * DOE requests must be a whole number of DW and the response needs to
+ 	 * be big enough for at least 1 DW
+@@ -528,8 +540,6 @@ int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
+ 	if (test_bit(PCI_DOE_FLAG_DEAD, &doe_mb->flags))
+ 		return -EIO;
+ 
+-	task->doe_mb = doe_mb;
+-	INIT_WORK(&task->work, doe_statemachine_work);
+ 	queue_work(doe_mb->work_queue, &task->work);
+ 	return 0;
+ }
+diff --git a/include/linux/pci-doe.h b/include/linux/pci-doe.h
+index ed9b4df792b8..457fc0e53d64 100644
+--- a/include/linux/pci-doe.h
++++ b/include/linux/pci-doe.h
+@@ -31,8 +31,8 @@ struct pci_doe_mb;
+  * @rv: Return value.  Length of received response or error (bytes)
+  * @complete: Called when task is complete
+  * @private: Private data for the consumer
+- * @work: Used internally by the mailbox
+- * @doe_mb: Used internally by the mailbox
++ * @work: Used internally by the mailbox [see pci_doe_init_task()]
++ * @doe_mb: Used internally by the mailbox [see pci_doe_init_task()]
+  *
+  * The payload sizes and rv are specified in bytes with the following
+  * restrictions concerning the protocol.
+@@ -53,7 +53,7 @@ struct pci_doe_task {
+ 	void (*complete)(struct pci_doe_task *task);
+ 	void *private;
+ 
+-	/* No need for the user to initialize these fields */
++	/* Call pci_doe_init_task() for these */
+ 	struct work_struct work;
+ 	struct pci_doe_mb *doe_mb;
+ };
+@@ -72,6 +72,8 @@ struct pci_doe_task {
+ 
+ struct pci_doe_mb *pcim_doe_create_mb(struct pci_dev *pdev, u16 cap_offset);
+ bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type);
++void pci_doe_init_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task,
++		       bool onstack);
+ int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task);
+ 
+ #endif
+
+base-commit: 30a0b95b1335e12efef89dd78518ed3e4a71a763
 -- 
-Dmitry
+2.37.2
+
