@@ -2,307 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446C9629AFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A2CF629AFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:47:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiKONqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:46:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        id S230369AbiKONrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:47:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbiKONqr (ORCPT
+        with ESMTP id S229971AbiKONrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:46:47 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C42520BFA
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:46:45 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so10301904wmg.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:46:45 -0800 (PST)
+        Tue, 15 Nov 2022 08:47:22 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159E924969
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:47:21 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id c1so24479608lfi.7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:47:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GKSVED77pBiwPpJ2Rxir+nKGuTDM1BFyofF1Zlc2DKM=;
-        b=ajV3q/DBWIST9XnzaLUBlOUEBSdLAQqK1xUrmmix8OMOMNlF/Sky2+pKt3h41v2pMv
-         2Q8zfjga/05QO/Wxrbr1kdI9Ma6O/pKaRDIldQDP44LRSMEViXjU9XDgH0/gT8sOvzAE
-         EUjTyy+ZdQnV3JCE39/AJKutOV29A49uSWi7iKVNl/UYVnw0lpNLb8AEXub5gqIslSbM
-         he8yGZs62o0EBrjHVoOtJn/kylV44U5prleVZz35sA5yx2RbfGgl7aafIyusiNN4vSBL
-         wYX6b3mO/Nb787I28cQvLlaCLPRQrAdAxbII3jScpr67IxabycomE/+wHPF4ced7/QSA
-         uhoQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D1lsJdjigIX8ZDz/U2Ud7ZNMW6v6rQsSpoxZd5XzRCU=;
+        b=toZYMHYHTMpkCtWeEVOJGZddt5opCfkJre25TDxhpInMjQ13zbH8ndmt4JbDPDyKI4
+         Ygx606/KjsyiP9FDUiRTSLYEi74hurhoTA7pAnMO6MPGAo4dMHHNSYB4LivXKi1OhD2g
+         NHRGtdtq6I3izbstBC7OHL8IaIp+njwTn3PVXkgEW+lUru48QoI0Kl7XEhbjxepVLfcU
+         RaDN3MdNZBt+bdUYqvAUiQBQJbv1nMxRKGcVg9sqH3E8pUlXZjWBBBaM4CnhM5yybMsw
+         Zkacv+sfli28hw4WE59YZhDvPNk9rvkIMtfQGQUQSlwOposIpikkeUJ6TJu7lG1eujoe
+         fTyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GKSVED77pBiwPpJ2Rxir+nKGuTDM1BFyofF1Zlc2DKM=;
-        b=fcZHy0xNnzJ8WocSfy3EJctqDT9iBMFwBmWsgXkPwybP6hZ5BzRiCVHqhFsza52rXQ
-         hZ6XPm1Qe/7F8JmwGXEAqxswdZra8PC5eUguTFz7GSSFUzWCnv3q2k7I+kWd80veYBgx
-         efbITsVaj7JioqIwUcwixZhFPjuqK/hNZBsGm7jnDTBdQh+M/exFAaLEHauNEXUiuwim
-         A5HjjI3v3cN2GwXKeO1MOKlXj4fqnzM3VcWeeGv/CbjOqniM5Oj2dz1n0AOHzlS4ofta
-         xy2lLmhf4dG4EWiDHmdJLqjg9I1tUKyRkIkCyhADuICbz7sy7epQ6xLil2ijfTQjKmjx
-         U1Eg==
-X-Gm-Message-State: ANoB5pme7+3eaqcOanxIn1Dzl/dYg+iYa09p5Tk8ESMbekogy+0quQM9
-        D4ttD2qthd6ismLOmQ6bPCTpAQ==
-X-Google-Smtp-Source: AA0mqf5X5syFwbQSMWDFIqO7dVJyWje/diBdKJ0N7P3JuWEdDQfvhb0INF8arqz3z9IEe8X96oBSqA==
-X-Received: by 2002:a05:600c:1c1d:b0:3cf:5d41:bea1 with SMTP id j29-20020a05600c1c1d00b003cf5d41bea1mr1630709wms.118.1668520003893;
-        Tue, 15 Nov 2022 05:46:43 -0800 (PST)
-Received: from [192.168.99.239] ([95.178.111.30])
-        by smtp.gmail.com with ESMTPSA id ay19-20020a05600c1e1300b003c6bbe910fdsm26460343wmb.9.2022.11.15.05.46.42
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=D1lsJdjigIX8ZDz/U2Ud7ZNMW6v6rQsSpoxZd5XzRCU=;
+        b=UZfahglhZoNFgJe2SqGQhNe46HeyUrBdDAD1yw+iTFcYxuUsJd7CqkH0JzCWRDoYh7
+         BDcSwD+4SpORDJlj1CVSuKXQUsaapUsLyLoA47hKLk0DCOLJKQ8Iane1aPyjJLYxoHBK
+         cVmoldiXWMF7MUGThE/777E5SlBSLglshfCZR60bL2Tc1mpPuukEGdLWO2Jlx6PvkwNn
+         sNEnH07gsX54q3V23uQe3w6UG6lyecjVflrWAR1YqW4V3dqlfm96ETc8I2nsqmYgisM8
+         QpvhkJELrH5V7UfYEzWmL5ymSLxn9B/I0dN+ySLWgCoJfo+Vko0/DC7gV2X6hqI53I8+
+         OGpQ==
+X-Gm-Message-State: ANoB5pnJFZfYPyl3vukWUZTISlbqc2Dd2D2Pw7MLyLTtmA7x1hhBxTyH
+        4BF4Daekzu75VzO+WSWd3w0gvQ==
+X-Google-Smtp-Source: AA0mqf5xZIdpKC+8d2I3BbXfsVS3Y6jQcYqCsbUQ+AHMtLAbUdSpt3NQjEc8eMotSJsgEv7BcpI0qQ==
+X-Received: by 2002:a19:e01a:0:b0:4b1:61a6:fc45 with SMTP id x26-20020a19e01a000000b004b161a6fc45mr5503018lfg.224.1668520039387;
+        Tue, 15 Nov 2022 05:47:19 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id q23-20020a056512211700b0049e9122bd1bsm2209533lfr.164.2022.11.15.05.47.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 05:46:43 -0800 (PST)
-Message-ID: <f2667872-c9e9-69aa-8196-12f58c2e9316@baylibre.com>
-Date:   Tue, 15 Nov 2022 14:46:41 +0100
+        Tue, 15 Nov 2022 05:47:18 -0800 (PST)
+Message-ID: <dc138171-f7b1-2761-d800-620e85afd6d9@linaro.org>
+Date:   Tue, 15 Nov 2022 14:47:12 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-To:     Pin-yen Lin <treapking@chromium.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-mediatek@lists.infradead.org, Rob Herring <robh@kernel.org>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Michael Kao <michael.kao@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>
-References: <20221018-up-i350-thermal-bringup-v6-0-c87b9f75550b@baylibre.com>
- <20221018-up-i350-thermal-bringup-v6-4-c87b9f75550b@baylibre.com>
- <CAEXTbpd2zLdk-VmkGvpk2_Qz0TDyC9aOsQbCz=FpopnMqs9djg@mail.gmail.com>
-Content-Language: en-US
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-In-Reply-To: <CAEXTbpd2zLdk-VmkGvpk2_Qz0TDyC9aOsQbCz=FpopnMqs9djg@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH v2 10/12] arm64: dts: qcom: sm8350: Add display system
+ nodes
+To:     Robert Foss <robert.foss@linaro.org>, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        quic_kalyant@quicinc.com, swboyd@chromium.org,
+        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
+        quic_khsieh@quicinc.com, quic_vpolimer@quicinc.com,
+        vkoul@kernel.org, dianders@chromium.org,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
+        vinod.koul@linaro.org, quic_jesszhan@quicinc.com,
+        andersson@kernel.org
+References: <20221115133105.980877-1-robert.foss@linaro.org>
+ <20221115133105.980877-11-robert.foss@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221115133105.980877-11-robert.foss@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pin-yen,
 
-On 11/15/22 11:49, Pin-yen Lin wrote:
-> Hi Amjad,
->
-> On Wed, Oct 19, 2022 at 10:17 PM Amjad Ouled-Ameur
-> <aouledameur@baylibre.com> wrote:
->> Provide thermal zone to read thermal sensor in the SoC. We can read all the
->> thermal sensors value in the SoC by the node /sys/class/thermal/
->>
->> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
->> on the first read of sensor that often are bogus values.
->> This can avoid following warning on boot:
->>
->>    thermal thermal_zone6: failed to read out thermal zone (-13)
->>
->> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
->> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
->> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   drivers/thermal/mtk_thermal.c | 104 ++++++++++++++++++++++++++++++++----------
->>   1 file changed, 79 insertions(+), 25 deletions(-)
->>
->> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
->> index 3a5df1440822..311ad611fdab 100644
->> --- a/drivers/thermal/mtk_thermal.c
->> +++ b/drivers/thermal/mtk_thermal.c
->> @@ -259,6 +259,11 @@ enum mtk_thermal_version {
->>
->>   struct mtk_thermal;
->>
->> +struct mtk_thermal_zone {
->> +       struct mtk_thermal *mt;
->> +       int id;
->> +};
->> +
->>   struct thermal_bank_cfg {
->>          unsigned int num_sensors;
->>          const int *sensors;
->> @@ -307,6 +312,8 @@ struct mtk_thermal {
->>
->>          const struct mtk_thermal_data *conf;
->>          struct mtk_thermal_bank banks[MAX_NUM_ZONES];
->> +
->> +       int (*raw_to_mcelsius)(struct mtk_thermal *mt, int sensno, s32 raw);
->>   };
->>
->>   /* MT8183 thermal sensor data */
->> @@ -709,6 +716,29 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
->>                  mutex_unlock(&mt->lock);
->>   }
->>
->> +static int _get_sensor_temp(struct mtk_thermal *mt, int id)
->> +{
->> +       u32 raw;
->> +       int temp;
->> +
->> +       const struct mtk_thermal_data *conf = mt->conf;
->> +
->> +       raw = readl(mt->thermal_base + conf->msr[id]);
->> +
->> +       temp = mt->raw_to_mcelsius(mt, id, raw);
->> +
->> +       /*
->> +        * The first read of a sensor often contains very high bogus
->> +        * temperature value. Filter these out so that the system does
->> +        * not immediately shut down.
->> +        */
->> +
->> +       if (temp > 200000)
->> +               return -EAGAIN;
->> +       else
->> +               return temp;
->> +}
->> +
->>   /**
->>    * mtk_thermal_bank_temperature - get the temperature of a bank
->>    * @bank:      The bank
->> @@ -721,26 +751,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->>          struct mtk_thermal *mt = bank->mt;
->>          const struct mtk_thermal_data *conf = mt->conf;
->>          int i, temp = INT_MIN, max = INT_MIN;
->> -       u32 raw;
->>
->>          for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
->> -               raw = readl(mt->thermal_base + conf->msr[i]);
->> -
->> -               if (mt->conf->version == MTK_THERMAL_V1) {
->> -                       temp = raw_to_mcelsius_v1(
->> -                               mt, conf->bank_data[bank->id].sensors[i], raw);
->> -               } else {
->> -                       temp = raw_to_mcelsius_v2(
->> -                               mt, conf->bank_data[bank->id].sensors[i], raw);
->> -               }
->> -
->> -               /*
->> -                * The first read of a sensor often contains very high bogus
->> -                * temperature value. Filter these out so that the system does
->> -                * not immediately shut down.
->> -                */
->> -               if (temp > 200000)
->> -                       temp = 0;
->> +               temp = _get_sensor_temp(mt, i);
->>
->>                  if (temp > max)
->>                          max = temp;
->> @@ -749,9 +762,10 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->>          return max;
->>   }
->>
->> -static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
->> +static int mtk_read_temp(struct thermal_zone_device *tzdev, int *temperature)
->>   {
->> -       struct mtk_thermal *mt = tz->devdata;
->> +       struct mtk_thermal_zone *tz = tzdev->devdata;
->> +       struct mtk_thermal *mt = tz->mt;
->>          int i;
->>          int tempmax = INT_MIN;
->>
->> @@ -770,10 +784,28 @@ static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
->>          return 0;
->>   }
->>
->> +static int mtk_read_sensor_temp(struct thermal_zone_device *tzdev, int *temperature)
->> +{
->> +       struct mtk_thermal_zone *tz = tzdev->devdata;
->> +       struct mtk_thermal *mt = tz->mt;
->> +       int id = tz->id - 1;
->> +
->> +       if (id < 0)
->> +               return -EACCES;
->> +
->> +       *temperature = _get_sensor_temp(mt, id);
->> +
->> +       return 0;
->> +}
->> +
->>   static const struct thermal_zone_device_ops mtk_thermal_ops = {
->>          .get_temp = mtk_read_temp,
->>   };
->>
->> +static const struct thermal_zone_device_ops mtk_thermal_sensor_ops = {
->> +       .get_temp = mtk_read_sensor_temp,
->> +};
->> +
->>   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
->>                                    u32 apmixed_phys_base, u32 auxadc_phys_base,
->>                                    int ctrl_id)
->> @@ -1072,6 +1104,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>          u64 auxadc_phys_base, apmixed_phys_base;
->>          struct thermal_zone_device *tzdev;
->>          void __iomem *apmixed_base, *auxadc_base;
->> +       struct mtk_thermal_zone *tz;
->>
->>          mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
->>          if (!mt)
->> @@ -1150,6 +1183,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>
->>          mtk_thermal_turn_on_buffer(mt, apmixed_base);
->>
->> +       mt->raw_to_mcelsius = (mt->conf->version == MTK_THERMAL_V1) ?
->> +                               raw_to_mcelsius_v1 : raw_to_mcelsius_v2;
->> +
->>          if (mt->conf->version == MTK_THERMAL_V2) {
->>                  mtk_thermal_release_periodic_ts(mt, auxadc_base);
->>          }
->> @@ -1161,11 +1197,29 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>
->>          platform_set_drvdata(pdev, mt);
->>
->> -       tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
->> -                                             &mtk_thermal_ops);
->> -       if (IS_ERR(tzdev)) {
->> -               ret = PTR_ERR(tzdev);
->> -               goto err_disable_clk_peri_therm;
->> +       for (i = 0; i < mt->conf->num_sensors + 1; i++) {
->> +               tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
->> +               if (!tz)
->> +                       return -ENOMEM;
->> +
->> +               tz->mt = mt;
->> +               tz->id = i;
->> +
->> +               tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
->> +                                                            &mtk_thermal_ops :
->> +                                                            &mtk_thermal_sensor_ops);
->> +
->> +               if (IS_ERR(tzdev)) {
->> +                       if (PTR_ERR(tzdev) == -ENODEV) {
->> +                               dev_warn(&pdev->dev,
->> +                                        "sensor %d not registered in thermal zone in dt\n", i);
->> +                               continue;
->> +                       }
->> +                       if (PTR_ERR(tzdev) == -EACCES) {
->> +                               ret = PTR_ERR(tzdev);
->> +                               goto err_disable_clk_peri_therm;
->> +                       }
->> +               }
->>          }
->>
->>          ret = devm_thermal_add_hwmon_sysfs(tzdev);
-> tzdev can be an error pointer here. I think we should move the line
-> into the loop above, so hwmon sysfs is not added when IS_ERR(tzdev) ==
-> true.
 
-Good catch, will fix this in next rev.
+On 15/11/2022 14:31, Robert Foss wrote:
+> Add mdss, mdss_mdp, dsi0, dsi0_phy nodes. With these
+> nodes the display subsystem is configured to support
+> one DSI output.
+> 
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sm8350.dtsi | 197 ++++++++++++++++++++++++++-
+>   1 file changed, 193 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> index 434f8e8b12c1..5c98e5cf5ad0 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+> @@ -3,6 +3,7 @@
+>    * Copyright (c) 2020, Linaro Limited
+>    */
+>   
+> +#include <dt-bindings/interconnect/qcom,sm8350.h>
+>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>   #include <dt-bindings/clock/qcom,dispcc-sm8350.h>
+>   #include <dt-bindings/clock/qcom,gcc-sm8350.h>
+> @@ -2536,14 +2537,201 @@ usb_2_dwc3: usb@a800000 {
+>   			};
+>   		};
+>   
+> +		mdss: mdss@ae00000 {
+> +			compatible = "qcom,sm8350-mdss";
+> +			reg = <0 0x0ae00000 0 0x1000>;
+> +			reg-names = "mdss";
+> +
+> +			interconnects = <&mmss_noc MASTER_MDP0 0 &mc_virt SLAVE_EBI1 0>,
+> +					<&mmss_noc MASTER_MDP1 0 &mc_virt SLAVE_EBI1 0>;
+> +			interconnect-names = "mdp0-mem", "mdp1-mem";
+> +
+> +			power-domains = <&dispcc MDSS_GDSC>;
+> +			resets = <&dispcc DISP_CC_MDSS_CORE_BCR>;
+> +
+> +			clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +				 <&gcc GCC_DISP_HF_AXI_CLK>,
+> +				 <&gcc GCC_DISP_SF_AXI_CLK>,
+> +				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
+> +			clock-names = "iface", "bus", "nrt_bus", "core";
+> +
+> +			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <1>;
+> +
+> +			iommus = <&apps_smmu 0x820 0x402>;
+> +
+> +			status = "disabled";
+> +
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +
+> +			mdss_mdp: display-controller@ae01000 {
+> +				compatible = "qcom,sm8350-dpu";
+> +				reg = <0 0x0ae01000 0 0x8f000>,
+> +				      <0 0x0aeb0000 0 0x2008>;
+> +				reg-names = "mdp", "vbif";
+> +
+> +				clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
+> +					<&gcc GCC_DISP_SF_AXI_CLK>,
+> +					<&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +					<&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
+> +					<&dispcc DISP_CC_MDSS_MDP_CLK>,
+> +					<&dispcc DISP_CC_MDSS_VSYNC_CLK>;
+> +				clock-names = "bus",
+> +					      "nrt_bus",
+> +					      "iface",
+> +					      "lut",
+> +					      "core",
+> +					      "vsync";
+> +
+> +				assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
+> +				assigned-clock-rates = <19200000>;
+> +
+> +				operating-points-v2 = <&mdp_opp_table>;
+> +				power-domains = <&rpmhpd SM8350_MMCX>;
+> +
+> +				interrupt-parent = <&mdss>;
+> +				interrupts = <0>;
+> +
+> +				status = "disabled";
+It doesn't make sense to disable mdp separately, as mdss is essentially 
+useless without it.
 
-Regards,
+> +
+> +				ports {
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +
+> +					port@0 {
+> +						reg = <0>;
+> +						dpu_intf1_out: endpoint {
+> +							remote-endpoint = <&dsi0_in>;
+> +						};
+> +					};
+> +				};
+> +
+> +				mdp_opp_table: opp-table {
+> +					compatible = "operating-points-v2";
+> +
+> +					opp-200000000 {
+> +						opp-hz = /bits/ 64 <200000000>;
+> +						required-opps = <&rpmhpd_opp_low_svs>;
+> +					};
+> +
+> +					opp-300000000 {
+> +						opp-hz = /bits/ 64 <300000000>;
+> +						required-opps = <&rpmhpd_opp_svs>;
+> +					};
+> +
+> +					opp-345000000 {
+> +						opp-hz = /bits/ 64 <345000000>;
+> +						required-opps = <&rpmhpd_opp_svs_l1>;
+> +					};
+> +
+> +					opp-460000000 {
+> +						opp-hz = /bits/ 64 <460000000>;
+> +						required-opps = <&rpmhpd_opp_nom>;
+> +					};
+> +				};
+> +			};
+> +
+> +			dsi0: dsi@ae94000 {
+> +				compatible = "qcom,mdss-dsi-ctrl";
+> +				reg = <0 0x0ae94000 0 0x400>;
+> +				reg-names = "dsi_ctrl";
+> +
+> +				interrupt-parent = <&mdss>;
+> +				interrupts = <4>;
+> +
+> +				clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_ESC0_CLK>,
+> +					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +					 <&gcc GCC_DISP_HF_AXI_CLK>;
+> +				clock-names = "byte",
+> +					      "byte_intf",
+> +					      "pixel",
+> +					      "core",
+> +					      "iface",
+> +					      "bus";
+> +
+> +				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>,
+> +						  <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
+> +				assigned-clock-parents = <&dsi0_phy 0>,
+> +							 <&dsi0_phy 1>;
+> +
+> +				operating-points-v2 = <&dsi_opp_table>;
+> +				power-domains = <&rpmhpd SM8350_MMCX>;
+> +
+> +				phys = <&dsi0_phy>;
+> +				phy-names = "dsi";
+I think that was dropped as of late.
 
-Amjad
+> +
+> +				status = "disabled";
+> +
+> +				ports {
+> +					#address-cells = <1>;
+> +					#size-cells = <0>;
+> +
+> +					port@0 {
+> +						reg = <0>;
+> +						dsi0_in: endpoint {
+> +							remote-endpoint = <&dpu_intf1_out>;
+> +						};
+> +					};
+> +
+> +					port@1 {
+> +						reg = <1>;
+> +						dsi0_out: endpoint {
+> +						};
+> +					};
+> +				};
+> +			};
+> +
+> +			dsi0_phy: phy@ae94400 {
+> +				compatible = "qcom,dsi-phy-5nm-8350";
+> +				reg = <0 0x0ae94400 0 0x200>,
+> +				      <0 0x0ae94600 0 0x280>,
+> +				      <0 0x0ae94900 0 0x260>;
+> +				reg-names = "dsi_phy",
+> +					    "dsi_phy_lane",
+> +					    "dsi_pll";
+> +
+> +				#clock-cells = <1>;
+> +				#phy-cells = <0>;
+> +
+> +				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +					 <&rpmhcc RPMH_CXO_CLK>;
+> +				clock-names = "iface", "ref";
+> +
+> +				status = "disabled";
+> +
+> +				dsi_opp_table: dsi-opp-table {
+> +					compatible = "operating-points-v2";
+> +
+> +					opp-187500000 {
+> +						opp-hz = /bits/ 64 <187500000>;
+> +						required-opps = <&rpmhpd_opp_low_svs>;
+> +					};
+> +
+> +					opp-300000000 {
+> +						opp-hz = /bits/ 64 <300000000>;
+> +						required-opps = <&rpmhpd_opp_svs>;
+> +					};
+> +
+> +					opp-358000000 {
+> +						opp-hz = /bits/ 64 <358000000>;
+> +						required-opps = <&rpmhpd_opp_svs_l1>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+>   		dispcc: clock-controller@af00000 {
+>   			compatible = "qcom,sm8350-dispcc";
+>   			reg = <0 0x0af00000 0 0x10000>;
+>   			clocks = <&rpmhcc RPMH_CXO_CLK>,
+> -				 <0>,
+> -				 <0>,
+> -				 <0>,
+> -				 <0>,
+> +				 <&dsi0_phy 0>, <&dsi0_phy 1>,
+> +				 <0>, <0>,
+>   				 <0>,
+>   				 <0>;
+>   			clock-names = "bi_tcxo",
+> @@ -2558,6 +2746,7 @@ dispcc: clock-controller@af00000 {
+>   			#power-domain-cells = <1>;
+>   
+>   			power-domains = <&rpmhpd SM8350_MMCX>;
+> +			required-opps = <&rpmhpd_opp_turbo>;
+A turbo vote is required for it to function? Seems a bit high..
 
-> Regards,
-> Pin-yen
+Konrad
+>   		};
+>   
+>   		adsp: remoteproc@17300000 {
