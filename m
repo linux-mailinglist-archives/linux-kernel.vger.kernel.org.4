@@ -2,51 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E72629EF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:25:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E36D629E97
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238619AbiKOQZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 11:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
+        id S238403AbiKOQO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 11:14:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238606AbiKOQZA (ORCPT
+        with ESMTP id S229624AbiKOQO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 11:25:00 -0500
-X-Greylist: delayed 643 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Nov 2022 08:24:57 PST
-Received: from mail.fris.de (mail.fris.de [116.203.77.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3B3D103;
-        Tue, 15 Nov 2022 08:24:57 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5C5CBBFADB;
-        Tue, 15 Nov 2022 17:13:53 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
-        t=1668528845; h=from:subject:date:message-id:to:cc:mime-version:
-         content-transfer-encoding; bh=C4LnN75ZJGeCz9hy3XT4dIQ9QgHsqGAcTbNSzRrmDiY=;
-        b=vaXBey0yBOBIRCWMnptaIpwnlve+A/dln0kZWT8PjmQaZfxv6L8krfrflgqYl0cIrOhYqe
-        yD9pQlF96yqlV3/dIYj1jIxTtlDrj+sDYczzY8FgNgxca5YiVe3Yn+5tbPkXlfqBqNqZHl
-        S0XCgFE2ckfiGdHaUpaKyUaD7yD+xed3Uk7SPyCxGzTAf+NMyN1e0Kua+RKtlSpqkQz+Dr
-        h7AbCf1T1RWbaH2LqWHvQD4Oq3UpU4SmIk6mWhRHHDrZSPlZHlLiY6UF6LnB+8TkWn5kqO
-        vFCtWQwOIFQhKM7k/GOiZRV6f8Q6pcVhiqJTI7tIbfW3/bH23tnI9c98I0q/LA==
-From:   Frieder Schrempf <frieder@fris.de>
-To:     David Jander <david@protonic.nl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marek Vasut <marex@denx.de>, Mark Brown <broonie@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Fabio Estevam <festevam@gmail.com>, stable@vger.kernel.org,
-        Baruch Siach <baruch.siach@siklu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: [PATCH] spi: spi-imx: Fix spi_bus_clk if requested clock is higher than input clock
-Date:   Tue, 15 Nov 2022 17:13:30 +0100
-Message-Id: <20221115161331.1972336-1-frieder@fris.de>
+        Tue, 15 Nov 2022 11:14:57 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F261D673;
+        Tue, 15 Nov 2022 08:14:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668528896; x=1700064896;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=75pgIdVKQNQqHUWCvgs9DIXphPFBaaKB0XR/iHS+Qbk=;
+  b=YyPREz725oBax5FrOZP6xsMsABZGiLGlDA9VNTH2Z1Y6xFzsSSCRmaZE
+   8fG9NczKUCSczLd8Y0Liz7ZY5U/RLrrDFANKH4OLYfUvlmjnHO0JWls7R
+   H8rhIcl5JUDdfwJKoXBI7uJGtjCyn/D16zU+TStQkIi8xX30RGVHQWBJz
+   DxHe3ui0jRJ58h6txcgyopoKORuVK74oJT8MOM+rCGPinn2XnjQWnYyJ/
+   v4b+iIQbPc0RgAHge5X6SiQ9UtgNfMjiD+/oD65QvQdHk+kgPHV4fW3J9
+   E1Ohnn/N1bfAY3SbNjssxH/Wp4Arnv68kYdgumGjqOLUu/NBEEHbdh79v
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="339091821"
+X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
+   d="scan'208";a="339091821"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 08:14:55 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="781393695"
+X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
+   d="scan'208";a="781393695"
+Received: from mrosso-mobl1.ger.corp.intel.com ([10.249.45.244])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 08:14:52 -0800
+Date:   Tue, 15 Nov 2022 18:14:50 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Gabriel Somlo <gsomlo@gmail.com>
+cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, kgugala@antmicro.com,
+        mholenko@antmicro.com, joel@jms.id.au,
+        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
+        geert@linux-m68k.org
+Subject: Re: [PATCH v3 13/14] serial: liteuart: add IRQ support for the TX
+ path
+In-Reply-To: <20221112212125.448824-14-gsomlo@gmail.com>
+Message-ID: <957056a1-78a5-1141-18d7-b49f87fa85f0@linux.intel.com>
+References: <20221112212125.448824-1-gsomlo@gmail.com> <20221112212125.448824-14-gsomlo@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,63 +65,171 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frieder Schrempf <frieder.schrempf@kontron.de>
+On Sat, 12 Nov 2022, Gabriel Somlo wrote:
 
-In case the requested bus clock is higher than the input clock, the correct
-dividers (pre = 0, post = 0) are returned from mx51_ecspi_clkdiv(), but
-*fres is left uninitialized and therefore contains an arbitrary value.
+> Modify the TX path to operate in an IRQ-compatible way, while
+> maintaining support for polling mode via the poll timer.
+> 
+> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+> ---
+>  drivers/tty/serial/liteuart.c | 67 ++++++++++++++++++++++++-----------
+>  1 file changed, 47 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
+> index e30adb30277f..307c27398e30 100644
+> --- a/drivers/tty/serial/liteuart.c
+> +++ b/drivers/tty/serial/liteuart.c
+> @@ -46,6 +46,7 @@ struct liteuart_port {
+>  	struct uart_port port;
+>  	struct timer_list timer;
+>  	u32 id;
+> +	bool poll_tx_started;
+>  };
+>  
+>  #define to_liteuart_port(port)	container_of(port, struct liteuart_port, port)
+> @@ -78,29 +79,24 @@ static void liteuart_putchar(struct uart_port *port, unsigned char ch)
+>  
+>  static void liteuart_stop_tx(struct uart_port *port)
+>  {
+> -	/* not used in LiteUART, but called unconditionally from serial_core */
 
-This causes trouble for the recently introduced PIO polling feature as the
-value in spi_imx->spi_bus_clk is used there to calculate for which
-transfers to enable PIO polling.
+Drop this comment from the earlier patch too given you remove it here. It 
+just adds useless churn in diff for no useful reason.
 
-Less serious but also incorrect, it causes the calculation of the delay for
-propagation of register changes added in
+> +	if (port->irq) {
+> +		u8 irq_mask = litex_read8(port->membase + OFF_EV_ENABLE);
+> +		litex_write8(port->membase + OFF_EV_ENABLE, irq_mask & ~EV_TX);
 
-commit 6fd8b8503a0d ("spi: spi-imx: Fix out-of-order CS/SCLK operation at low speeds")
+If you put irq_mask into liteuart_port you wouldn't need to read it 
+back here?
 
-to be wrong, as not the actual bus clock but the potentially higher requested
-bus clock is used.
+> +	} else {
+> +		struct liteuart_port *uart = to_liteuart_port(port);
+> +		uart->poll_tx_started = false;
+> +	}
+>  }
+>  
+>  static void liteuart_start_tx(struct uart_port *port)
+>  {
+> -	struct circ_buf *xmit = &port->state->xmit;
+> -	unsigned char ch;
+> -
+> -	if (unlikely(port->x_char)) {
+> -		litex_write8(port->membase + OFF_RXTX, port->x_char);
+> -		port->icount.tx++;
+> -		port->x_char = 0;
+> -	} else if (!uart_circ_empty(xmit)) {
+> -		while (xmit->head != xmit->tail) {
+> -			ch = xmit->buf[xmit->tail];
+> -			xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
+> -			port->icount.tx++;
 
-Fix this by setting *fres even if no clock dividers are in use.
+This is not based on tty-next tree. Please rebase on top of it (you 
+might have noted it already, IIRC, somebody noted uart_xmit_advance
+conflict in some patch, perhaps it was you :-)).
 
-This issue was observed on Kontron BL i.MX8MM with an SPI peripheral clock set
-to 50 MHz by default and a requested SPI bus clock of 80 MHz for the SPI NOR
-flash.
+> -			liteuart_putchar(port, ch);
+> -		}
+> +	if (port->irq) {
+> +		u8 irq_mask = litex_read8(port->membase + OFF_EV_ENABLE);
+> +		litex_write8(port->membase + OFF_EV_ENABLE, irq_mask | EV_TX);
 
-With the fix applied the debug message from mx51_ecspi_clkdiv() now prints the
-following:
+->irq_mask?
 
-spi_imx 30820000.spi: mx51_ecspi_clkdiv: fin: 50000000, fspi: 50000000,
-post: 0, pre: 0
+> +	} else {
+> +		struct liteuart_port *uart = to_liteuart_port(port);
+> +		uart->poll_tx_started = true;
+>  	}
+> -
+> -	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
+> -		uart_write_wakeup(port);
+>  }
+>  
+>  static void liteuart_stop_rx(struct uart_port *port)
+> @@ -131,18 +127,47 @@ static void liteuart_rx_chars(struct uart_port *port)
+>  	tty_flip_buffer_push(&port->state->port);
+>  }
+>  
+> +static void liteuart_tx_chars(struct uart_port *port)
+> +{
+> +	struct circ_buf *xmit = &port->state->xmit;
+> +
+> +	if (unlikely(port->x_char)) {
+> +		litex_write8(port->membase + OFF_RXTX, port->x_char);
+> +		port->x_char = 0;
+> +		port->icount.tx++;
+> +		return;
+> +	}
+> +
+> +	while (!litex_read8(port->membase + OFF_TXFULL)) {
+> +		if (xmit->head == xmit->tail)
 
-Fixes: 6fd8b8503a0d ("spi: spi-imx: Fix out-of-order CS/SCLK operation at low speeds")
-Fixes: 07e759387788 ("spi: spi-imx: add PIO polling support")
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: David Jander <david@protonic.nl>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Marek Vasut <marex@denx.de>
-Cc: stable@vger.kernel.org
-Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
----
- drivers/spi/spi-imx.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+There exists a helper for this condition.
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 30d82cc7300b..468ce0a2b282 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -444,8 +444,7 @@ static unsigned int mx51_ecspi_clkdiv(struct spi_imx_data *spi_imx,
- 	unsigned int pre, post;
- 	unsigned int fin = spi_imx->spi_clk;
- 
--	if (unlikely(fspi > fin))
--		return 0;
-+	fspi = min(fspi, fin);
- 
- 	post = fls(fin) - fls(fspi);
- 	if (fin > fspi << post)
+> +			break;
+> +		litex_write8(port->membase + OFF_RXTX, xmit->buf[xmit->tail]);
+> +		xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
+> +		port->icount.tx++;
+
+uart_xmit_advance()
+
+> +	}
+> +
+> +	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
+> +		uart_write_wakeup(port);
+> +
+> +	if (uart_circ_empty(xmit))
+> +		liteuart_stop_tx(port);
+> +}
+
+You might want to check if you can generate this whole function with 
+Jiri's tx helpers (IIRC, they're only in tty-next tree currently).
+
+> +
+>  static irqreturn_t liteuart_interrupt(int irq, void *data)
+>  {
+>  	struct liteuart_port *uart = data;
+>  	struct uart_port *port = &uart->port;
+>  	u8 isr = litex_read8(port->membase + OFF_EV_PENDING);
+>  
+> -	/* for now, only rx path triggers interrupts */
+> -	isr &= EV_RX;
+> +	if (!(port->irq || uart->poll_tx_started))
+> +		isr &= ~EV_TX;	/* polling mode with tx stopped */
+>  
+>  	spin_lock(&port->lock);
+>  	if (isr & EV_RX)
+>  		liteuart_rx_chars(port);
+> +	if (isr & EV_TX) {
+> +		liteuart_tx_chars(port);
+> +	}
+
+Extra braces.
+
+>  	spin_unlock(&port->lock);
+>  
+>  	return IRQ_RETVAL(isr);
+> @@ -196,6 +221,7 @@ static int liteuart_startup(struct uart_port *port)
+>  	}
+>  
+>  	if (!port->irq) {
+> +		uart->poll_tx_started = false;
+
+Can poll_tx_started ever be true here?
+
+>  		timer_setup(&uart->timer, liteuart_timer, 0);
+>  		mod_timer(&uart->timer, jiffies + uart_poll_timeout(port));
+>  	}
+> @@ -210,6 +236,7 @@ static void liteuart_shutdown(struct uart_port *port)
+>  	struct liteuart_port *uart = to_liteuart_port(port);
+>  
+>  	litex_write8(port->membase + OFF_EV_ENABLE, 0);
+> +	uart->poll_tx_started = false;
+>  
+>  	if (port->irq)
+>  		free_irq(port->irq, port);
+> 
+
 -- 
-2.38.1
+ i.
 
