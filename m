@@ -2,147 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739B862A017
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8513962A016
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:18:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbiKORSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 12:18:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
+        id S230046AbiKORSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 12:18:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbiKORSo (ORCPT
+        with ESMTP id S229518AbiKORSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 12:18:44 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FE11177
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:18:43 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id b29so14678841pfp.13
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:18:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=microgate-com.20210112.gappssmtp.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gbvf8JuLv1wMhwhAEgB+CL5cUC6ypqc3XxatSCjumxA=;
-        b=Qq5DRXeKk+Dfehs+QKh25gjeGXgZzP5u9Yrl0rzdJKr++GmRe+BW9uv9PknwgYq+wN
-         lmsss78JaTx2k62G2wWPZKR1mwDFZC1TrBUT4LYTtYGpNm/9hMSXXn69pyHQCKrzbdmI
-         ILPZM1BueXlqjz2yGF5b022O7pZFVtWev3i9+ixqpaS6lV6Id7ELvKpMXcGutc49zNId
-         8MqPLA1GSkDi7dnBbYrTjlNe5Dx2fDH7M4KKfbGIq+HDlDddoZ9IhmjP8iijkuN+4+pZ
-         KCpobaErf399Lzj2NEdZifdcDeNxCQdLcoHutGqDbLHFigjFqOQeZKVDB8xaapFUnrtA
-         54pQ==
+        Tue, 15 Nov 2022 12:18:43 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C1810CC
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:18:42 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id i8-20020a056e0212c800b00302578e6d78so5119193ilm.0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:18:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Gbvf8JuLv1wMhwhAEgB+CL5cUC6ypqc3XxatSCjumxA=;
-        b=czklH/xD7Wzwl4wFqqroXUyo+ZnmtmIcvpN/uyCv7iSok/KDZUNmqh7w6sk+cGRlKM
-         DSiLhjGEyovpEsK6Z0S9bGFMSKM2Z4szpPJAzxPGW48yVRjoFiFurFfWKJN/7q5PiMau
-         PooPimfzo9YseypcM9YjP6EUF4CkCckrV77VwFSyKOLh9rl7Z9HGiwRacUMGqkdZEPID
-         xWYzw5IH5xuo9PIsvW71/AtakgdC386Qk7mq/UE/qNQPup4sgHEsgZAKueArGI2mAmle
-         nfxB45OjAn6j1cDunDxfL8Pcbfz0tpBlo1wpBgxDZKVvmXzGKIkdRnbtr7UmL86EGAgk
-         3OAg==
-X-Gm-Message-State: ANoB5pnJkyIHgFZMczuWORyiarOTLeSjQwFcTZqk/7kO9fqi74eBD6Vd
-        31vwjEKUogNC8Rsh7G37JtJWtA==
-X-Google-Smtp-Source: AA0mqf6CXttmjL0njM00T/oqWm5aHwTxcAuzjGT2/sUoJtNLZ/71IsWLwMnAV4ZoYdw5tH0YWHbxyQ==
-X-Received: by 2002:a05:6a00:1bc3:b0:572:698b:5fa9 with SMTP id o3-20020a056a001bc300b00572698b5fa9mr4548976pfw.28.1668532722752;
-        Tue, 15 Nov 2022 09:18:42 -0800 (PST)
-Received: from smtpclient.apple (c-208-53-111-167.customer.broadstripe.net. [208.53.111.167])
-        by smtp.gmail.com with ESMTPSA id m9-20020a170902db0900b0018862bb3976sm10254235plx.308.2022.11.15.09.18.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 15 Nov 2022 09:18:42 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
-Subject: [PATCH] tty: synclink_gt: unwind actions in error path of net device
- open
-From:   Paul Fulghum <paulkf@microgate.com>
-In-Reply-To: <387F9F7B-C3AF-45BF-94ED-59348990B407@microgate.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SZYFdepLdLLBz3kuYnNkUTI8QvLao2m+qSUsVMEEUrU=;
+        b=z5hUn6goccuCEizeyF2ZV0X1D5RbAGOHCjOXzmVt5okwl070EpPoRERcbipdSYtoeW
+         Zt8fZcbl1NIB26g4DSioOkFgAYj00uRO53URJaC8ZXdWohtjVw5IQxV8nQxG4a06dWDz
+         wPMKqf8BGHWovkPCZ+xWTVJdAA2b4nixsTGy14yzKijgeoKMLz9mBxR7moS5rrWhlvmx
+         cOJoe4CC9a4exujRtvVcFwv/Jdc6DdYUjsR8lvKdxpjgdcRHZsTsStjAUJV5CaaDWnpC
+         GO/3J1p8jaFj7Oi19cbzfXEJD4CmMWMRF8G30/+NzmdeYFNYp+QSXMFagDNcswLEc1h8
+         Csgg==
+X-Gm-Message-State: ANoB5pneiQPVxwW4dk4oYNPJevW5PK87WtQjpDNlSGWr96NEYPcqYiYT
+        c89hfIcPduC+F8ISyWPQPJBfa/MJheV6X1d5gm/mm0odvlp4
+X-Google-Smtp-Source: AA0mqf7YGSOSV8bw4F7p48hxW/QP4J8XYNwR0R91MzpkeuCp7a+F+lrldyiJjwZOXxU0Mb7kJVOF+oghAnw+j6iUZsWvlcW867Sf
+MIME-Version: 1.0
+X-Received: by 2002:a02:a61a:0:b0:374:4af4:8630 with SMTP id
+ c26-20020a02a61a000000b003744af48630mr8423411jam.89.1668532721621; Tue, 15
+ Nov 2022 09:18:41 -0800 (PST)
 Date:   Tue, 15 Nov 2022 09:18:41 -0800
-Cc:     "linux-kernel@vger.kernel.org Mailing List" 
-        <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, akpm@linux-foundation.org,
-        weiyongjun1@huawei.com, yuehaibing@huawei.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <D2A8DDC3-9D72-4CDD-92A0-2C27146C1BE0@microgate.com>
-References: <20221114010734.314910-1-shaozhengchao@huawei.com>
- <4DFE07D7-B041-4C1C-8182-020066D4A5C2@microgate.com>
- <387F9F7B-C3AF-45BF-94ED-59348990B407@microgate.com>
-To:     Zhengchao Shao <shaozhengchao@huawei.com>
-X-Mailer: Apple Mail (2.3731.200.110.1.12)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002b1f7d05ed858cb7@google.com>
+Subject: [syzbot] WARNING in send_hsr_supervision_frame (3)
+From:   syzbot <syzbot+3ae0a3f42c84074b7c8e@syzkaller.appspotmail.com>
+To:     bigeasy@linutronix.de, brianvv@google.com, claudiajkang@gmail.com,
+        davem@davemloft.net, edumazet@google.com, ennoerlangen@gmail.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Resent in plain text, sorry for the previous HTML.
+Hello,
 
-Zhengchao Shao <shaozhengchao@huawei.com> identified by inspection bugs =
-in the error path of hdlcdev_open() in synclink_gt.c
+syzbot found the following issue on:
 
-The function did not fully unwind actions in the error path. The use of =
-try_module_get()/module_put() is unnecessary, potentially hazardous and =
-is removed. The synclink_gt driver is already pinned any point the net =
-device is registered, a requirement for calling this entry point.
+HEAD commit:    55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14146fc6880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=df75278aabf0681a
+dashboard link: https://syzkaller.appspot.com/bug?extid=3ae0a3f42c84074b7c8e
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-The call hdlc_open() to init the generic HDLC layer is moved to after =
-driver level init/checks and proper rollback of previous actions is =
-added. This is a more sensible ordering as the most common error paths =
-are at the driver level and the driver level rollbacks require less =
-processing than hdlc_open()/hdlc_close().
+Unfortunately, I don't have any reproducer for this issue yet.
 
-This has been tested with supported hardware.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/9d967e5d91fa/disk-55be6084.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9a8cffcbc089/vmlinux-55be6084.xz
 
-Signed-off-by:Paul Fulghum <paulkf@microgate.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3ae0a3f42c84074b7c8e@syzkaller.appspotmail.com
 
-diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
-index 25e9befdda3a..72b76cdde534 100644
---- a/drivers/tty/synclink_gt.c
-+++ b/drivers/tty/synclink_gt.c
-@@ -1433,16 +1433,8 @@ static int hdlcdev_open(struct net_device *dev)
- 	int rc;
- 	unsigned long flags;
-=20
--	if (!try_module_get(THIS_MODULE))
--		return -EBUSY;
--
- 	DBGINFO(("%s hdlcdev_open\n", dev->name));
-=20
--	/* generic HDLC layer open processing */
--	rc =3D hdlc_open(dev);
--	if (rc)
--		return rc;
--
- 	/* arbitrate between network and tty opens */
- 	spin_lock_irqsave(&info->netlock, flags);
- 	if (info->port.count !=3D 0 || info->netcount !=3D 0) {
-@@ -1461,6 +1453,16 @@ static int hdlcdev_open(struct net_device *dev)
- 		return rc;
- 	}
-=20
-+	/* generic HDLC layer open processing */
-+	rc =3D hdlc_open(dev);
-+	if (rc) {
-+		shutdown(info);
-+		spin_lock_irqsave(&info->netlock, flags);
-+		info->netcount =3D 0;
-+		spin_unlock_irqrestore(&info->netlock, flags);
-+		return rc;
-+	}
-+
- 	/* assert RTS and DTR, apply hardware settings */
- 	info->signals |=3D SerialSignal_RTS | SerialSignal_DTR;
- 	program_hw(info);
-@@ -1506,7 +1508,6 @@ static int hdlcdev_close(struct net_device *dev)
- 	info->netcount=3D0;
- 	spin_unlock_irqrestore(&info->netlock, flags);
-=20
--	module_put(THIS_MODULE);
- 	return 0;
- }
-=20
+------------[ cut here ]------------
+HSR: Could not send supervision frame
+WARNING: CPU: 0 PID: 3593 at net/hsr/hsr_device.c:293 send_hsr_supervision_frame+0x66d/0x8d0 net/hsr/hsr_device.c:293
+Modules linked in:
+CPU: 0 PID: 3593 Comm: syz-fuzzer Not tainted 6.0.0-syzkaller-09589-g55be6084c8e0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
+RIP: 0010:send_hsr_supervision_frame+0x66d/0x8d0 net/hsr/hsr_device.c:293
+Code: 1d 90 9c 9a 04 31 ff 89 de e8 9f bf 4a f8 84 db 75 b6 e8 16 c3 4a f8 48 c7 c7 20 f0 21 8b c6 05 70 9c 9a 04 01 e8 12 a7 0d 00 <0f> 0b eb 9a e8 fa c2 4a f8 41 be 3c 00 00 00 ba 01 00 00 00 4c 89
+RSP: 0018:ffffc90000007c60 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88801cd93b00 RSI: ffffffff81612e28 RDI: fffff52000000f7e
+RBP: ffff8880445b8c80 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000100 R11: 000000003a525348 R12: ffff888020fe8f80
+R13: 0000000000000000 R14: ffff888020fe8f98 R15: 0000000000000017
+FS:  000000c000052090(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000c001ab66b0 CR3: 000000002091d000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ hsr_announce+0x10c/0x330 net/hsr/hsr_device.c:382
+ call_timer_fn+0x1a0/0x6b0 kernel/time/timer.c:1474
+ expire_timers kernel/time/timer.c:1519 [inline]
+ __run_timers.part.0+0x674/0xa80 kernel/time/timer.c:1790
+ __run_timers kernel/time/timer.c:1768 [inline]
+ run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1803
+ __do_softirq+0x1d0/0x9c8 kernel/softirq.c:571
+ invoke_softirq kernel/softirq.c:445 [inline]
+ __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
+ irq_exit_rcu+0x5/0x20 kernel/softirq.c:662
+ sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1107
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 0010:__syscall_enter_from_user_work kernel/entry/common.c:89 [inline]
+RIP: 0010:syscall_enter_from_user_mode+0x2c/0xb0 kernel/entry/common.c:110
+Code: 49 89 f4 55 48 89 fd 53 48 8b 7c 24 18 e8 4c fa ff ff eb 28 eb 2c e8 13 fa fe f7 e8 ce f7 fe f7 fb 65 48 8b 04 25 80 6f 02 00 <48> 8b 70 08 40 f6 c6 3f 75 1a 5b 4c 89 e0 5d 41 5c c3 eb 1c 0f 0b
+RSP: 0018:ffffc90003baff20 EFLAGS: 00000246
+RAX: ffff88801cd93b00 RBX: 0000000000000002 RCX: 1ffffffff1bc1f51
+RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffffffff8982c992
+RBP: ffffc90003baff58 R08: 0000000000000000 R09: 0000000000000000
+R10: fffffbfff1bc18da R11: 0000000000000001 R12: 0000000000000023
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ do_syscall_64+0x16/0xb0 arch/x86/entry/common.c:76
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x46703d
+Code: 8b 44 24 20 b9 40 42 0f 00 f7 f1 48 89 04 24 b8 e8 03 00 00 f7 e2 48 89 44 24 08 48 89 e7 be 00 00 00 00 b8 23 00 00 00 0f 05 <48> 8b 6c 24 10 48 83 c4 18 c3 cc cc cc cc cc cc cc cc cc cc cc cc
+RSP: 002b:000000c000061f10 EFLAGS: 00000202 ORIG_RAX: 0000000000000023
+RAX: ffffffffffffffda RBX: 0000000000002710 RCX: 000000000046703d
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000000c000061f10
+RBP: 000000c000061f20 R08: 0000000000080d9f R09: 00007fff7a533080
+R10: 0000000000000000 R11: 0000000000000202 R12: 000000c000061950
+R13: 000000c016676000 R14: 000000c0000004e0 R15: 00007f1b6b42021a
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	49 89 f4             	mov    %rsi,%r12
+   3:	55                   	push   %rbp
+   4:	48 89 fd             	mov    %rdi,%rbp
+   7:	53                   	push   %rbx
+   8:	48 8b 7c 24 18       	mov    0x18(%rsp),%rdi
+   d:	e8 4c fa ff ff       	callq  0xfffffa5e
+  12:	eb 28                	jmp    0x3c
+  14:	eb 2c                	jmp    0x42
+  16:	e8 13 fa fe f7       	callq  0xf7fefa2e
+  1b:	e8 ce f7 fe f7       	callq  0xf7fef7ee
+  20:	fb                   	sti
+  21:	65 48 8b 04 25 80 6f 	mov    %gs:0x26f80,%rax
+  28:	02 00
+* 2a:	48 8b 70 08          	mov    0x8(%rax),%rsi <-- trapping instruction
+  2e:	40 f6 c6 3f          	test   $0x3f,%sil
+  32:	75 1a                	jne    0x4e
+  34:	5b                   	pop    %rbx
+  35:	4c 89 e0             	mov    %r12,%rax
+  38:	5d                   	pop    %rbp
+  39:	41 5c                	pop    %r12
+  3b:	c3                   	retq
+  3c:	eb 1c                	jmp    0x5a
+  3e:	0f 0b                	ud2
 
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
