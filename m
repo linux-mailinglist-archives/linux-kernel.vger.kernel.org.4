@@ -2,151 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEEB56297B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 004736297B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232786AbiKOLnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 06:43:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45934 "EHLO
+        id S232649AbiKOLre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 06:47:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbiKOLnt (ORCPT
+        with ESMTP id S229787AbiKOLrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 06:43:49 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7CD2529A;
-        Tue, 15 Nov 2022 03:43:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668512628; x=1700048628;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JO33YPL4NpCf+QtbSvBLune4D/6KvXp403nfS2tAN/c=;
-  b=icX/gImr8kWPZJO6apmqT/0DpRGBYkTIwC8ZYBCIuF4B88ibUMHvXP7s
-   PbAuvdNIL3CelM9JOLcidsdKI6t9NjDgI+qFZPxLUzgqFsFxuNAJplpNV
-   h8oXxuN3ZgM/CoeZ3wmlWMdeH/ag4AY+M95+dhAboxnlY2bDTtyNPxqoG
-   YQDxGtBgLZGXoei90MgswDI6l0ZC0y1LlY6U5xMdWkNhV0y967y5JB3FN
-   oMNNpZw/cc4TgZjgRrbYDHSD12NcgzEt1qGt8Qjpf7H0B852vvVKknGhO
-   a8OU/ZIwnW+T0fEoPQdQ5VhrRzZnI9hpsWAe3+SShcZrKWCI1DZ3QWdRR
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="374365168"
-X-IronPort-AV: E=Sophos;i="5.96,165,1665471600"; 
-   d="scan'208";a="374365168"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 03:43:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="633206267"
-X-IronPort-AV: E=Sophos;i="5.96,165,1665471600"; 
-   d="scan'208";a="633206267"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 15 Nov 2022 03:43:43 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ouuLt-00Cb7Y-03;
-        Tue, 15 Nov 2022 13:43:41 +0200
-Date:   Tue, 15 Nov 2022 13:43:40 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andrew Davis <afd@ti.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kbuild: Cleanup DT Overlay intermediate files as
- appropriate
-Message-ID: <Y3N7bLuSTKJYPcIC@smile.fi.intel.com>
-References: <20221114205939.27994-1-afd@ti.com>
+        Tue, 15 Nov 2022 06:47:32 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E6525EAD;
+        Tue, 15 Nov 2022 03:47:31 -0800 (PST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NBPTx47QNzJnWW;
+        Tue, 15 Nov 2022 19:44:21 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 19:47:29 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 19:47:28 +0800
+Subject: Re: [PATCH v9 4/8] kallsyms: introduce sections needed to map symbols
+ to built-in modules
+To:     Nick Alcock <nick.alcock@oracle.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+CC:     <masahiroy@kernel.org>, <linux-modules@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <arnd@arndb.de>,
+        <akpm@linux-foundation.org>, <eugene.loh@oracle.com>,
+        <kris.van.hees@oracle.com>, Steven Rostedt <rostedt@goodmis.org>
+References: <20221109134132.9052-1-nick.alcock@oracle.com>
+ <20221109134132.9052-5-nick.alcock@oracle.com>
+ <Y3BhRvt53xO5A0iQ@bombadil.infradead.org> <87mt8tv554.fsf@esperi.org.uk>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <76d7ba29-c7d2-d082-5928-599844112494@huawei.com>
+Date:   Tue, 15 Nov 2022 19:47:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114205939.27994-1-afd@ti.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87mt8tv554.fsf@esperi.org.uk>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 02:59:39PM -0600, Andrew Davis wrote:
-> %.dtbo.o and %.dtbo.S files are used to build-in DT Overlay. They should
-> should not be removed by Make or the kernel will be needlessly rebuilt.
+
+
+On 2022/11/15 1:04, Nick Alcock wrote:
+> On 13 Nov 2022, Luis Chamberlain outgrape:
 > 
-> These should be removed by "clean" and ignored by git like other
-> intermediate files.
-
-Fixes: 941214a512d8 ("kbuild: Allow DTB overlays to built into .dtbo.S files")
-
-Tested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Reported-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
->  .gitignore             | 1 +
->  Makefile               | 4 +++-
->  scripts/Makefile.build | 2 ++
->  3 files changed, 6 insertions(+), 1 deletion(-)
+>> On Wed, Nov 09, 2022 at 01:41:28PM +0000, Nick Alcock wrote:
+>>> The mapping consists of three new symbols
+>>
+>> The entire commit log does not describe *why*.
 > 
-> diff --git a/.gitignore b/.gitignore
-> index 5da004814678d..3ec73ead6757e 100644
-> --- a/.gitignore
-> +++ b/.gitignore
-> @@ -20,6 +20,7 @@
->  *.dtb
->  *.dtbo
->  *.dtb.S
-> +*.dtbo.S
->  *.dwo
->  *.elf
->  *.gcno
-> diff --git a/Makefile b/Makefile
-> index 3735d5996c637..0dd7e8d022289 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -2003,7 +2003,9 @@ clean: $(clean-dirs)
->  	@find $(or $(KBUILD_EXTMOD), .) $(RCS_FIND_IGNORE) \
->  		\( -name '*.[aios]' -o -name '*.rsi' -o -name '*.ko' -o -name '.*.cmd' \
->  		-o -name '*.ko.*' \
-> -		-o -name '*.dtb' -o -name '*.dtbo' -o -name '*.dtb.S' -o -name '*.dt.yaml' \
-> +		-o -name '*.dtb' -o -name '*.dtbo' \
-> +		-o -name '*.dtb.S' -o -name '*.dtbo.S' \
-> +		-o -name '*.dt.yaml' \
->  		-o -name '*.dwo' -o -name '*.lst' \
->  		-o -name '*.su' -o -name '*.mod' -o -name '*.usyms' \
->  		-o -name '.*.d' -o -name '.*.tmp' -o -name '*.mod.c' \
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index 41f3602fc8de7..3ceab076127b7 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -468,10 +468,12 @@ intermediate_targets = $(foreach sfx, $(2), \
->  					$(filter %$(strip $(1)), $(targets))))
->  # %.asn1.o <- %.asn1.[ch] <- %.asn1
->  # %.dtb.o <- %.dtb.S <- %.dtb <- %.dts
-> +# %.dtbo.o <- %.dtbo.S <- %.dtbo <- %.dtso
->  # %.lex.o <- %.lex.c <- %.l
->  # %.tab.o <- %.tab.[ch] <- %.y
->  targets += $(call intermediate_targets, .asn1.o, .asn1.c .asn1.h) \
->  	   $(call intermediate_targets, .dtb.o, .dtb.S .dtb) \
-> +	   $(call intermediate_targets, .dtbo.o, .dtbo.S .dtbo) \
->  	   $(call intermediate_targets, .lex.o, .lex.c) \
->  	   $(call intermediate_targets, .tab.o, .tab.c .tab.h)
->  
-> -- 
-> 2.38.1
+> ... because it's in the other commit logs and the cover letter. I can
+> repeat the motivation in this log too if you like.
+> 
+>> Can I also trouble you to rebase on top of modules-next [0]
+> 
+> Sure!
+> 
+>> Does the kallsyms loop more than 3 times now with Zhen Lei's work and
+>> your new symbols on top on a allyesconfig build?
+> 
+> I don't understand the question, sorry. If this is about the number of
+> KALLSYMS invocations in the kernel build, that should be unchanged by
+> this patch. This was an explicit design goal because it's quite slow to
+> run kallsyms more times and I was already feeling guilty about having to
+> bring back the tristate recursion.
+> 
+> I haven't tried it with Zhen Lei's work: will try for the next
+> iteration, as a matter of course after the rebase. (And, looking at the
+> patch series at the top of modules-next, wow is that quite a hefty
+> performance improvement. And a hefty memory usage increase :( I have a
+> horrible feeling that one of my machines won't have enough memory to
+> boot after this goes in, but it was terribly outdated anyway.)
+
+It's only about 500K. It shouldn't be a problem. Your machine boot from flash?
+
+> .
 > 
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Regards,
+  Zhen Lei
