@@ -2,80 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFCC162AF7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C4062AF85
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbiKOXhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 18:37:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S229561AbiKOXiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 18:38:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKOXhy (ORCPT
+        with ESMTP id S231402AbiKOXiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 18:37:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C2F25C44
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:36:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668555417;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4XetoM6asLvbivro5LNSnOcG5/aoLdHsQPYTHt+rXSA=;
-        b=c0kmxNsFhBoLQRvn0ssOwbZGKDI6G10qd1WzKiRov8WsEaX2JvHwYvIyAqWZwhgBLU5lJq
-        aFh/Bhl0gjhKXplSFlCY36jS4wDq9L8U1Fa5Yo+gSyRkdEP+KO6HM/FMBZjyQx9e2B0sHs
-        OUn/CIRc1TV97tJWLfwzqazXtmMFIYQ=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-500--bERmD0CNRiuRacV1sW4Vw-1; Tue, 15 Nov 2022 18:36:56 -0500
-X-MC-Unique: -bERmD0CNRiuRacV1sW4Vw-1
-Received: by mail-wm1-f72.google.com with SMTP id bi19-20020a05600c3d9300b003cf9d6c4016so204633wmb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:36:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4XetoM6asLvbivro5LNSnOcG5/aoLdHsQPYTHt+rXSA=;
-        b=xx+bPkSoCC02+lFhsGmEwo2019pHLoN8JoWTzzfLDxsqED84bBYearwBYt1gqp6xqM
-         8r0lTeTuoUTM/dibs8Zy44IgqqrocyAdKA6b4D8lEkpkcZk1pgBub647SUdkO/H6ARGu
-         h1Jn9oM2o34AVt6Gh7rAifqZ/3uDKRNBbKnL+xSEqhxPvCr8I6w+fUEueFpG49+avtoe
-         qv/ijlEGcc+fighfJemc5leYm0QakmSIVXOBagwHU2fVvonpn9t1wu7L5vXnD6PKROLb
-         RzOCq8ePA7weU25mN1Sh8UehEL7PAkPc3+wRRFppaGmaMejnczMv5MeveV3PLk6C32Yq
-         0E2g==
-X-Gm-Message-State: ANoB5pmdQEljn3/fNrdQ5LwMyO1zVRbfQoBev1N4skOau9xsKg/myQ6S
-        Xpgs0oZ380k0C4KGKcUCzw35hmeiI9cyOD8aB7V+ZXp0kZ8D0/Y4TEpjuhhe4OvLNpaxLAdu2m9
-        sAAijcG0U/UAmpr+DbxDxqxha
-X-Received: by 2002:adf:f0cd:0:b0:22e:344a:ec5e with SMTP id x13-20020adff0cd000000b0022e344aec5emr12775319wro.673.1668555415076;
-        Tue, 15 Nov 2022 15:36:55 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf44sAkEb9SFH8DlYi4u6Zl73rUGcsiZzrDiqrji/4ri1He1zDO1KBy7cZ0qLFGx2ppxCl+R5g==
-X-Received: by 2002:adf:f0cd:0:b0:22e:344a:ec5e with SMTP id x13-20020adff0cd000000b0022e344aec5emr12775314wro.673.1668555414868;
-        Tue, 15 Nov 2022 15:36:54 -0800 (PST)
-Received: from redhat.com ([2.52.131.207])
-        by smtp.gmail.com with ESMTPSA id s15-20020a7bc38f000000b003cf6a55d8e8sm239936wmj.7.2022.11.15.15.36.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 15:36:54 -0800 (PST)
-Date:   Tue, 15 Nov 2022 18:36:51 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Angus Chen <angus.chen@jaguarmicro.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Subject: Re: IRQ affinity problem from virtio_blk
-Message-ID: <20221115183339-mutt-send-email-mst@kernel.org>
-References: <TY2PR06MB3424CB11DB57CA1FAA16F10D85049@TY2PR06MB3424.apcprd06.prod.outlook.com>
- <87v8nfrhbw.ffs@tglx>
- <20221115174152-mutt-send-email-mst@kernel.org>
- <87sfijrf9o.ffs@tglx>
- <87o7t7rec7.ffs@tglx>
+        Tue, 15 Nov 2022 18:38:12 -0500
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2101.outbound.protection.outlook.com [40.107.113.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32C32EF40;
+        Tue, 15 Nov 2022 15:38:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=m6AZHfgQAY3BxwoZ14+/+oEnXNLPVe6LN4sQ24djcKHPl1Y6BIjFZef8dFhjTUx3ULGs7yIu/9NMMlh9UsB8a4kF1J2WWTD5WDUWxIJH3EIVs8w8wTa0aAL6b6tbgsFwlfGqaIPpDAGO5DS/aLZt9wH18H3Q93ve0H+JbbsgFNjOEsa0BVuWfUuXS0pkdWgRLatxqXSlOPpJHgB/vtK5hd7OJK57zOpWnqex2BKA+LbpqyIz3P9qGe++ZzHB67E0fPcmDIAE2F/aoU6ci6UV/Nep2xvrGr89bNfkmYXm5NsbiAreiRvlBQWi/Azkdo1+MnxEhsKteW+ABrjfhb/AXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=speoRZO1EgwX+8gJIoBOlg7ZvVOGztWNvz7lkcaFsO8=;
+ b=haYnqaOV0OneQ3NcE0Zu+NYboz1vhD/o7Z9o70moZfXrSjX1pwExLtSQpfBxmVugECcG7y7CGhaBJGEoSout/ucUkWei0Ztj2cXTsa7cbcGDp6AyKLtjm5FXPuM5UZEONU1I2wDnHMMa0QQRVGlFNKzvei194bS5gcJmM3IyXzklx3wLC6xHkKJo1VLh11M/OvdjmCQ43O/AG4ipDmWcH7DQUyKwCkcDPMff37agapYDyhfhxtOniJgVACTFtdhc6oibE2XspJuNR8JmU8ymmPwhp0So1zzU1K/1n+Wlq/mK31GZmKoBrD66loH7Qd+K+fOHYcmvnVfNfiGK6xFRrg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=speoRZO1EgwX+8gJIoBOlg7ZvVOGztWNvz7lkcaFsO8=;
+ b=akwCaWjhbGqwBO57zDNNao77Ty4gh6VEGCFz1oLx/9WmI4M80VHzcdIwNTWmjdLkBodlYS0efhnJNr+zjuOdfPX4oIK2oynxuK3a/AVX0PdT9UE4GnrBOFs/bEhi3a6ImDUiJpZKvHfOmA1cnBlkrsSrxr9iRnm0wAxoSPQL9Y4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+Received: from OSAPR01MB3892.jpnprd01.prod.outlook.com (2603:1096:604:5b::23)
+ by OS3PR01MB8842.jpnprd01.prod.outlook.com (2603:1096:604:17f::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Tue, 15 Nov
+ 2022 23:38:05 +0000
+Received: from OSAPR01MB3892.jpnprd01.prod.outlook.com
+ ([fe80::60f7:f062:7c7c:d289]) by OSAPR01MB3892.jpnprd01.prod.outlook.com
+ ([fe80::60f7:f062:7c7c:d289%6]) with mapi id 15.20.5813.018; Tue, 15 Nov 2022
+ 23:38:05 +0000
+From:   Alex Helms <alexander.helms.jy@renesas.com>
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        sboyd@kernel.org, mturquette@baylibre.com, geert+renesas@glider.be,
+        alexander.helms.jy@renesas.com
+Subject: [PATCH v3 0/2] Add support for Renesas ProXO XP oscillator
+Date:   Tue, 15 Nov 2022 16:37:47 -0700
+Message-Id: <20221115233749.10161-1-alexander.helms.jy@renesas.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR13CA0052.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c2::27) To OSAPR01MB3892.jpnprd01.prod.outlook.com
+ (2603:1096:604:5b::23)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87o7t7rec7.ffs@tglx>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: OSAPR01MB3892:EE_|OS3PR01MB8842:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9b2d8f8e-6da1-45f6-1dfb-08dac7627184
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FnLalM0ANWsLp1G0kFgp0FWcEisICSUvspSkIV29tGAwJE/8BK4di4tNIczOeqgsoDbtVhm/g93uCFduyrMIO29XpQjp8zWDBDv3yQjPbzp6COQyXSV7zTjHxoD46Sb03mJs7CFDP5ol5zB3meC1XRShdRWnb6KqGD8e1JB+DMamgMGq06WpHRT+l7es1AJ5mbkE9/S9LjQXv9GSln/OnF7/AZ/TRgUGKpj+jNB7TzhUCOTHmNgFgiUv7KAeA6wCHP3lAb7c2gy6lKIHFzakwxC/0Jj8bUgUO11RPPM+juYYtbUDVHY+yTQyrUGddqtSDI/mQzqPvHAK/hmW2mxQ910iJty7jA3OJQlS88Vn3pU+8DHoZ5J2nJdZEwFG7vJIMjS7/a23Us82jPJ1UUW952fA3+iW840aruy5NgAOEY6kVM/AgmpLQqWmic5CKM5soEFCIa2sXmjag17iPc6BFxq3/IRHhUWCN9GIYF9tfe0MMd6rVTEra3SwdXh6w6waLc5dMPxXe1NaZSHs49+Uha+E3OjAUH6vjizhlIty+rQu7uhpWTJp5bQeNya0iOWP8ipKP/iUQU3dTzK3UoAwz9wrL6wcnK6lIDiMLRUtRZoV10BgjJGejUcECRJFXqC5t/bVK/t7kTgPwuCGhrBlT29rY0dqZuYZ4vqPLVHhGkGYgrxZRB+bmF0K+cUeGj0FI9hww3HulBuu5teMlEHSjH+s1KVXCy4V9UugN1AyhlCiJlDEIKYt2+NjGJ2Sgu90
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSAPR01MB3892.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(376002)(396003)(366004)(39860400002)(451199015)(1076003)(186003)(36756003)(83380400001)(6486002)(478600001)(6512007)(2616005)(107886003)(6666004)(52116002)(6506007)(86362001)(103116003)(38350700002)(8936002)(38100700002)(41300700001)(2906002)(26005)(5660300002)(4744005)(316002)(8676002)(66476007)(66946007)(66556008)(4326008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZdgOrbok1bpm+uhGd2QfeqmsXx/XfepHQh1jlm+bJPHilNQonP8lYGxxEYcN?=
+ =?us-ascii?Q?kq8b8xIfjVdQvABnw/voyZIhT673nJ9TqIyKHhopHVGA5oRb0hIJ3qOJ5sGl?=
+ =?us-ascii?Q?AKS5Oe8vW5U4FohQK3KdRTsfl2Yue8VcSMEIHUNcH1hahmxJ0m5b3ZdoKm9f?=
+ =?us-ascii?Q?O81gBeRShl2zuvWvQldx03iYBo485BYhrxe87EmyE7F9aIVUmheDqPPUEkxD?=
+ =?us-ascii?Q?TWTCll2oggQVrkxnDEnsDj4QiMXYBCpKUd7Fa58v5wxFFpf8QP8S+/+rGzFj?=
+ =?us-ascii?Q?SQR8Bs7jL3bwDsM5KZbAbg6uNWPxZ8zCMa1U7C97hDub9I5vUTtUdLPdOJga?=
+ =?us-ascii?Q?6GKpjSe5QykCSgTf9RYoFJUoYMg9RTb/bTA8M83GeL0PpzwbTc8eblf7GDpJ?=
+ =?us-ascii?Q?0lKdi9ixQqdx/zhIqLTsyTxQqzUss5+uPXbHzYz6fh022b8hDnET/K+XQnfO?=
+ =?us-ascii?Q?6JL7lO2BBLTnF/ypqMhV8cBmrCVT5c7GBCVNFLT+xJYJfE5bnaHEl5GdoZV9?=
+ =?us-ascii?Q?3DCgq0RPef7Z2dUDd/hDJFuzSpk+mJ8XM/t/SzincW3QmXBky6C864FgAjSn?=
+ =?us-ascii?Q?Sy/CnOIob0PyM5COsLSKzxcHHI5h9ux/7eDhVSfAdNjOVhsgh3l8Zwum2ci/?=
+ =?us-ascii?Q?+8yMCFkDt5HcfGKLvsMuE/0y01KHO6j4OK0uTfulQ9qf0sApjX4pVZ5epJhK?=
+ =?us-ascii?Q?c5D3qKIggphz8aHvBMGi1snq4kZ2f4GljFIhlJ20Bf3ElNNjQxtvgmDytdpg?=
+ =?us-ascii?Q?RzYQplw+fzJzoaXlKKFaLVVNabbGBKWqasb3BWr3ywGpRbb0+BcHG7XMVg/h?=
+ =?us-ascii?Q?6APtwKVGjvtxGM38kzwvxJ96U+qPCRZNT6+OCOdo4KBPjE8Pq6rrzlhUe1Jf?=
+ =?us-ascii?Q?8MgN2t4oKOKUNPaQo7KkkfdQnDvdxE84cIee7Q2D1JyeqEN28gCKqFHCozTU?=
+ =?us-ascii?Q?8n24I90rT25sJ9uRoReVU+0d6KrQwBC6pNT+KcwkOffoBvwslhhOV3xzZChL?=
+ =?us-ascii?Q?c8DoQ6BG86XMlE/1tJTv4VmdZ1p5uTvlsIT+cnCXqw66pY2DJvYgfYpRp3vh?=
+ =?us-ascii?Q?x3bI9bjdo6J85go6ahNHiZq+3nDIBC+SlJcm0N/9pl1owcpxsGQ3Mx3QI8PX?=
+ =?us-ascii?Q?wrduw0W6sPByRJ8xy7MGolbL8Gnf7w6dSEjVwWnNKUAMl6eFv/IwjVmR3djj?=
+ =?us-ascii?Q?qgGMj22MTldNB8png+Xq9Ka0G8HraPLz2c11Xs7R3OzVW9tORRYDuIB7qnZC?=
+ =?us-ascii?Q?mTCrCJG1NCPZFtqNl7cfu7V1Ic0PlUm9/G0bkBr3L7Eou/YWaRRyV4PNqgSl?=
+ =?us-ascii?Q?iSNJlGLg2Xctc5cwtyjIMAN/4f0kxONlAH0uXX1QaIDefPfZ1XxdBvh3UHEx?=
+ =?us-ascii?Q?IMYCtQ70xDPMH5Lake10jrC7t9ie6VDD43KNZdmSIsWG4oryWQtszu6b+rgp?=
+ =?us-ascii?Q?++yHBRRebLR6NsJtzUYlQ+JXLypeHUuHiJ+hHA5IvjwSrFO/i6h+F/J7a6Yt?=
+ =?us-ascii?Q?E+Xxl1rPOFpYkZHLt+Y2FTKgPlDDHY0MKNzMcV95dHuAt5ePydIaOCIm+O5w?=
+ =?us-ascii?Q?Qp8P9Ao+NmMlImsIfqFK5zqV7yXKd0JE6IbFoqerwCj0xBgEBQ+C72/lBnJu?=
+ =?us-ascii?Q?nE/8JZSv9sOmTtkBEeewReM=3D?=
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b2d8f8e-6da1-45f6-1dfb-08dac7627184
+X-MS-Exchange-CrossTenant-AuthSource: OSAPR01MB3892.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2022 23:38:05.4990
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Qzx7EsLatAv4Dv27fQ3dDQosqJ/MACLptOU+LjsNvDgnOf20bViKbFxb6tJsfvQvKOiDdAHc/Qh8EDnwTmyA+okEtc/qNDfZFZBj+IwJL4Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB8842
+X-Spam-Status: No, score=0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,58 +115,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 12:24:24AM +0100, Thomas Gleixner wrote:
-> On Wed, Nov 16 2022 at 00:04, Thomas Gleixner wrote:
-> 
-> > On Tue, Nov 15 2022 at 17:44, Michael S. Tsirkin wrote:
-> >> On Tue, Nov 15, 2022 at 11:19:47PM +0100, Thomas Gleixner wrote:
-> >>> > We can see global_available drop from 15354 to 15273, is 81.
-> >>> > And the total_allocated increase from 411 to 413. One config irq,and
-> >>> > one vq irq.
-> >>> 
-> >>> Right. That's perfectly fine. At the point where you looking at it, the
-> >>> matrix allocator has given out 2 vectors as can be seen via
-> >>> total_allocated.
-> >>> 
-> >>> But then it also has another 79 vectors put aside for the other queues,
-> >>
-> >> What makes it put these vectors aside? pci_alloc_irq_vectors_affinity ?
-> >
-> > init_vq() -> virtio_find_vqs() -> vp_find_vqs() ->
-> > vp_request_msix_vectors() -> pci_alloc_irq_vectors_affinity()
-> >
-> > init_vq() hands in a struct irq_affinity which means that
-> > pci_alloc_irq_vectors_affinity() will spread out interrupts and have one
-> > for config and one per queue if vp_request_msix_vectors() is invoked
-> > with per_vq_vectors == true, which is what the first invocation in
-> > vp_find_vqs() does.
-> 
-> I just checked on a random VM. The PCI device as advertised to the guest
-> does not expose that many vectors. One has 2 and the other 4.
-> 
-> But as the interrupts are requested 'managed' the core ends up setting
-> the vectors aside. That's a fundamental property of managed interrupts.
-> 
-> Assume you have less queues than CPUs, which is the case with 2 vectors
-> and tons of CPUs, i.e. one ends up for config and the other for the
-> actual queue. So the affinity spreading code will end up having the full
-> cpumask for the queue vector, which is marked managed. And managed means
-> that it's guaranteed e.g. in the CPU hotplug case that the interrupt can
-> be migrated to a still online CPU.
-> 
-> So we end up setting 79 vectors aside (one per CPU) in the case that the
-> virtio device only provides two vectors.
-> 
-> But that's not the end of the world as you really would need ~200 such
-> devices to exhaust the vector space...
-> 
-> Thanks,
-> 
->         tglx
+Device tree bindings and a common clock framework device drivers
+for the Renesas ProXO XP oscillator.
 
-Let's say we have 20 queues - then just 10 devices will exhaust the
-vector space right?
+V3:
+ - Add '-hz' suffix to dt property
+V2:
+ - Fix minor issues in dt bindings
+ - Change renesas,xtal to renesas,crystal-frequency
 
+Alex Helms (2):
+  dt-bindings: clock: Add bindings for Renesas ProXO
+  clk: Add support for Renesas ProXO oscillator
+
+ .../bindings/clock/renesas,proxo.yaml         |  51 +++
+ MAINTAINERS                                   |   6 +
+ drivers/clk/Kconfig                           |   7 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-proxo.c                       | 410 ++++++++++++++++++
+ 5 files changed, 475 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/renesas,proxo.yaml
+ create mode 100644 drivers/clk/clk-proxo.c
+
+
+base-commit: f64b5666e11dce481737208027d4af300c63842d
 -- 
-MST
+2.30.2
 
