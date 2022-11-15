@@ -2,77 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB7862AFB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4D262AFBE
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbiKOXyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 18:54:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
+        id S229766AbiKOXy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 18:54:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiKOXym (ORCPT
+        with ESMTP id S231183AbiKOXyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 18:54:42 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCC4183AB
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:54:41 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id f201so17873634yba.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:54:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GzpV787PpQa3wMcQZOLjE1ggwFm+OA6jZZnJ1PhdDmg=;
-        b=d0yWECzlYCXEVhjYtrWEoRNmuvq3nEwlipzMv1j84WB7bQgxYMKw4HMBjzKyUpL30S
-         1XRUP7sCgbfSypKs9svs06yJYnwP0cTEXBN97RzKwml+1J04Q/L+vx1vNMXNyWCDzByQ
-         +pLyac9RvNKH/XAYmNBHzPlYMdC/DZ8/sIXtY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GzpV787PpQa3wMcQZOLjE1ggwFm+OA6jZZnJ1PhdDmg=;
-        b=dPz5LDKheIpEBrehnE6yAquXDZ3wbu8wWFWbU0Va9bp7UqtE4ZmusiOIIPak2OHynJ
-         Z3nFnEcoLF/ifPaMO+47mAaQERYk0UAa1ipfoms7BueS1aKnUiV+t4QWd6HDaEjl0R4d
-         TSz+68W1ZI0SfrSyyEocPPkp9GA/0b9KhnkPLXpbSihDORJxK/ijRKJvSTFaQe9s2KFD
-         yJa9J92dsPjXhufqA5VMQ9vnQXhJyr78uBpn4w3+sa2ZxQM/aLE9zb8cNbC5HpSVGRHG
-         UA8Ym3ofc2RYI9gh484QgqHzV7MQq3tnoEdkDgAyOISMIUKYFB5t/xg/Llaour+7I6HA
-         sc7Q==
-X-Gm-Message-State: ANoB5pl/Ng0Tv5Lrr4JOSnMo8jF/ZoqmnvUU6V4/qgpFj/WlFkSfALds
-        txgOHJnGW3XJ7n1B6dxoPqoMkZDiXTDhXHviVMMEZg==
-X-Google-Smtp-Source: AA0mqf6iE2483ECvC8cMXoP9I8gYtnO2fK4TmhXgNyxSpxJelV4YkeazPipm10i7HZnKnr8djg2CbnLnS70pJ5iPc8s=
-X-Received: by 2002:a25:dace:0:b0:6bc:e934:83c0 with SMTP id
- n197-20020a25dace000000b006bce93483c0mr19330675ybf.167.1668556480561; Tue, 15
- Nov 2022 15:54:40 -0800 (PST)
+        Tue, 15 Nov 2022 18:54:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2A21B9F5;
+        Tue, 15 Nov 2022 15:54:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5DF1FB81B7B;
+        Tue, 15 Nov 2022 23:54:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A17C433C1;
+        Tue, 15 Nov 2022 23:54:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668556485;
+        bh=mZzH0uh0acP4b2+hbljQK6iWDtVLN6kiCb6ZQr1iESo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k/n7Yl0RuP4kgp6O9qWGJbXqV4EZlzrwcHYvNvs1WNlB6GXen7lUDCSS45K2RJcCt
+         6DwFc5zZ4ghxIK5QBezw2ErAj1C3EtNI/EaJdRJ0qMokBO3p5ICf8ReSe2pfxBRSWh
+         sGHh38CXwkDjP1KyUS+Y7pcLFJ6s9ja+JbpW+687uv7fzd8VhkUrv6Po1PAFF5KE+d
+         rOgU6AZlz5pmhxAGwwfpiHrBdqESRLSeb1wh8t5CzYQlSaIEuP1FQem5AS/qkHbF+t
+         AV0ChuM5CkUz2PgfeMT1BGBCXCC+SzbcPLIxg4a4nwopJMmFDxzH+Kl6Jo4yqAdq11
+         Y4tZITIki6E7g==
+Date:   Wed, 16 Nov 2022 01:54:41 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Pearson <markpearson@lenovo.com>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] certs: log more information on blacklist error
+Message-ID: <Y3QmwVIvwPoeVxVK@kernel.org>
+References: <20221109025019.1855-1-linux@weissschuh.net>
+ <20221109025019.1855-2-linux@weissschuh.net>
 MIME-Version: 1.0
-References: <20221110053133.2433412-1-mani@chromium.org> <1d066cb4-fb82-bffd-5e89-97ba572be3fa@intel.com>
- <a26db94512198c20457ce40a6dc8692a3f8bf196.camel@linux.intel.com>
- <CAHzEqDkFAiGkTFF3C--2NKt+ALjtfiNpWYca-Y-p=sekjQXGpw@mail.gmail.com> <9d0b5696-496f-a03a-2b5c-e38f36a02d86@linux.intel.com>
-In-Reply-To: <9d0b5696-496f-a03a-2b5c-e38f36a02d86@linux.intel.com>
-From:   Mani Milani <mani@chromium.org>
-Date:   Wed, 16 Nov 2022 10:54:29 +1100
-Message-ID: <CAHzEqDnTgtB6VCprpSQfR7_tjkZV3-1dtfbiYH8_mQHCbCkY0Q@mail.gmail.com>
-Subject: Re: [PATCH] drm/i915: Fix unhandled deadlock in grab_vma()
-To:     =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>
-Cc:     Matthew Auld <matthew.auld@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Niranjana Vishwanathapura <niranjana.vishwanathapura@intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221109025019.1855-2-linux@weissschuh.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,151 +61,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Wed, Nov 09, 2022 at 03:50:17AM +0100, Thomas Weißschuh wrote:
+> Without this information these logs are not actionable.
 
-It is a user-space application that crashes due to receiving an -ENOSPC.
+Neither "more information" nor "this information" describe
+"what information", right? :-)
 
-This occurs after code reaches the line below where grab_vma() fails
-(due to deadlock) and consequently i915_gem_evict_for_node() returns
--ENOSPC. I provided the call stack for when this happens in my
-previous message:
-https://github.com/torvalds/linux/blame/59d0d52c30d4991ac4b329f049cc37118e0=
-0f5b0/drivers/gpu/drm/i915/i915_gem_evict.c#L386
-
-Context:
-This crash is happening on an intel GeminiLake chromebook, when
-running a video seek h264 stress test, and it is reproducible 100%. To
-troubleshoot, I did a git bisect and found the following commit to be
-the culprit (which is when grab_vma() has been introduced):
-https://github.com/torvalds/linux/commit/7e00897be8bf13ef9c68c95a8e386b714c=
-29ad95
-
-I also have crash dumps and further logs that I can send you if
-needed. But please let me know how to share those with you, since
-pasting them here does not seem reasonable to me.
-
-Thanks,
-Mani
-
-On Mon, Nov 14, 2022 at 11:48 PM Thomas Hellstr=C3=B6m
-<thomas.hellstrom@linux.intel.com> wrote:
->
-> Hi, Mani.
->
-> On 11/14/22 03:16, Mani Milani wrote:
-> > Thank you for your comments.
-> >
-> > To Thomas's point, the crash always seems to happen when the following
-> > sequence of events occurs:
-> >
-> > 1. When inside "i915_gem_evict_vm()", the call to
-> > "i915_gem_object_trylock(vma->obj, ww)" fails (due to deadlock), and
-> > eviction of a vma is skipped as a result. Basically if the code
-> > reaches here:
-> > https://github.com/torvalds/linux/blob/master/drivers/gpu/drm/i915/i915=
-_gem_evict.c#L468
-> > And here is the stack dump for this scenario:
-> >      Call Trace:
-> >      <TASK>
-> >      dump_stack_lvl+0x68/0x95
-> >      i915_gem_evict_vm+0x1d2/0x369
-> >      eb_validate_vmas+0x54a/0x6ae
-> >      eb_relocate_parse+0x4b/0xdb
-> >      i915_gem_execbuffer2_ioctl+0x6f5/0xab6
-> >      ? i915_gem_object_prepare_write+0xfb/0xfb
-> >      drm_ioctl_kernel+0xda/0x14d
-> >      drm_ioctl+0x27f/0x3b7
-> >      ? i915_gem_object_prepare_write+0xfb/0xfb
-> >      __se_sys_ioctl+0x7a/0xbc
-> >      do_syscall_64+0x56/0xa1
-> >      ? exit_to_user_mode_prepare+0x3d/0x8c
-> >      entry_SYSCALL_64_after_hwframe+0x61/0xcb
-> >      RIP: 0033:0x78302de5fae7
-> >      Code: c0 0f 89 74 ff ff ff 48 83 c4 08 49 c7 c4 ff ff ff ff 5b 4c
-> > 89 e0 41 5c 41 5d 5d c3 0f 1f 80 00 00 00 00 b8 10 00 00 00 0f 05 <48>
-> > 3d 01 f0 ff ff 73 01 c3 48 8b 0d 51 c3 0c 00 f7 d8 64 89 01 48
-> >      RSP: 002b:00007ffe64b87f78 EFLAGS: 00000246 ORIG_RAX: 000000000000=
-0010
-> >      RAX: ffffffffffffffda RBX: 000003cc00470000 RCX: 000078302de5fae7
-> >      RDX: 00007ffe64b87fd0 RSI: 0000000040406469 RDI: 000000000000000d
-> >      RBP: 00007ffe64b87fa0 R08: 0000000000000013 R09: 000003cc004d0950
-> >      R10: 0000000000000200 R11: 0000000000000246 R12: 000000000000000d
-> >      R13: 0000000000000000 R14: 00007ffe64b87fd0 R15: 0000000040406469
-> >      </TASK>
-> > It is worth noting that "i915_gem_evict_vm()" still returns success in
-> > this case.
-> >
-> > 2. After step 1 occurs, the next call to "grab_vma()" always fails
-> > (with "i915_gem_object_trylock(vma->obj, ww)" failing also due to
-> > deadlock), which then results in the crash.
-> > Here is the stack dump for this scenario:
-> >      Call Trace:
-> >      <TASK>
-> >      dump_stack_lvl+0x68/0x95
-> >      grab_vma+0x6c/0xd0
-> >      i915_gem_evict_for_node+0x178/0x23b
-> >      i915_gem_gtt_reserve+0x5a/0x82
-> >      i915_vma_insert+0x295/0x29e
-> >      i915_vma_pin_ww+0x41e/0x5c7
-> >      eb_validate_vmas+0x5f5/0x6ae
-> >      eb_relocate_parse+0x4b/0xdb
-> >      i915_gem_execbuffer2_ioctl+0x6f5/0xab6
-> >      ? i915_gem_object_prepare_write+0xfb/0xfb
-> >      drm_ioctl_kernel+0xda/0x14d
-> >      drm_ioctl+0x27f/0x3b7
-> >      ? i915_gem_object_prepare_write+0xfb/0xfb
-> >      __se_sys_ioctl+0x7a/0xbc
-> >      do_syscall_64+0x56/0xa1
-> >      ? exit_to_user_mode_prepare+0x3d/0x8c
-> >      entry_SYSCALL_64_after_hwframe+0x61/0xcb
-> >      RIP: 0033:0x78302de5fae7
-> >      Code: c0 0f 89 74 ff ff ff 48 83 c4 08 49 c7 c4 ff ff ff ff 5b 4c
-> > 89 e0 41 5c 41 5d 5d c3 0f 1f 80 00 00 00 00 b8 10 00 00 00 0f 05 <48>
-> > 3d 01 f0 ff ff 73 01 c3 48 8b 0d 51 c3 0c 00 f7 d8 64 89 01 48
-> >      RSP: 002b:00007ffe64b87f78 EFLAGS: 00000246 ORIG_RAX: 000000000000=
-0010
-> >      RAX: ffffffffffffffda RBX: 000003cc00470000 RCX: 000078302de5fae7
-> >      RDX: 00007ffe64b87fd0 RSI: 0000000040406469 RDI: 000000000000000d
-> >      RBP: 00007ffe64b87fa0 R08: 0000000000000013 R09: 000003cc004d0950
-> >      R10: 0000000000000200 R11: 0000000000000246 R12: 000000000000000d
-> >      R13: 0000000000000000 R14: 00007ffe64b87fd0 R15: 0000000040406469
-> >      </TASK>
-> >
-> > My Notes:
-> > - I verified the two "i915_gem_object_trylock()" failures I mentioned
-> > above are due to deadlock by slightly modifying the code to call
-> > "i915_gem_object_lock()" only in those exact cases and subsequent to
-> > the trylock failure, only to look at the return error code.
-> > - The two cases mentioned above, are the only cases where
-> > "i915_gem_object_trylock(obj, ww)" is called with the second argument
-> > not being forced to NULL.
-> > - When in either of the two cases above (i.e. inside "grab_vma()" or
-> > "i915_gem_evict_vm") I replace calling "i915_gem_object_trylock" with
-> > "i915_gem_object_lock", the issue gets resolved (because deadlock is
-> > detected and resolved).
-> >
-> > So if this could matches the design better, another solution could be
-> > for "grab_vma" to continue to call "i915_gem_object_trylock", but for
-> > "i915_gem_evict_vm" to call "i915_gem_object_lock" instead.
->
-> No, i915_gem_object_lock() is not allowed when the vm mutex is held.
->
->
-> >
-> > Further info:
-> > - Would you like any further info on the crash? If so, could you
-> > please advise 1) what exactly you need and 2) how I can share with you
-> > especially if it is big dumps?
->
-> Yes, I would like to know how the crash manifests itself. Is it a kernel
-> BUG or a kernel WARNING or is it the user-space application that crashes
-> due to receiveing an -ENOSPC?
->
-> Thanks,
->
-> Thomas
->
->
->
-> >
-> > Thanks.
+BR, Jarkko
