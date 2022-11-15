@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF29F62A14F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:29:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0BE562A150
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiKOS3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 13:29:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
+        id S231295AbiKOS3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 13:29:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231800AbiKOS3N (ORCPT
+        with ESMTP id S231759AbiKOS3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Nov 2022 13:29:13 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2352FFC1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:29:03 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id o7so14059758pjj.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:29:03 -0800 (PST)
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F205F2FFD8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:29:04 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id n17so6412319pgh.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:29:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JyDgb7jTANE0Qk859LfOEdF0OgwEPQqULMlB2KUqBqA=;
-        b=SPvwBZphKt7+WD2D+YQ/omAaF18nUwvOrvHwpHsUIQwQngxMUoOz8S51fOMuJRUcjy
-         O5gyD+/5wcpkmMdwa3/gZlr/Zktv1qA+qM53PvIoaOk83YK0inRytOPqAMc7f47mADV8
-         Qalg+zcJAkxyoSH5vGsLFIg2aw1TBgZ0kcyBHwTUFt+jAQ4HCE7fy1cgA5qdFBA9XYeO
-         9g/G7BI1dFi+prQUVAbdAm2BBKCxzOzfwfVocNlZZNccSFT2+fKiDNSpoIIFdpSdxSZd
-         +zXG1n3WoCJc1IyKZ/khKDqmsSyJrP45w3dMptlCoaswDJNg+QHrtAdDjAYmnAfFkg7j
-         w3zA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=npFjL6Dds3DKnQo07iUTlbqXMaucW9/yvERNl8ZNQRo=;
+        b=NPDHr0QlHVIUIhIrDfHxvLDIuBOtKZfo7tv9Z1S0sFSK9TGsnpiguY2DVaj8KQqkUg
+         2SugxfLILvY2yZb9mSRU2q3++D6K9Vj+iOyidmF/ozO/p/7XOGWmFRfizSWm5iaLk5hj
+         il4Q4TvN2HUyX2sk4tSfr2n2+tzXd77V5UybYcVVdBEnLxiMpx20HM6oe4QsCFyHtEs2
+         LJ3vSboCcqML9M7WDu6BnBSGDB+A5Hgh9HctMZlRn/EuhBDkfp2Exqkb6OqkY16lFgjL
+         mqYbnVzmCbSOyK+6Jgh/buBRjxAFZ5UldLk6C7sULrRpi2KwbgfgjYgFwkYbz8uiAGV1
+         sx/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JyDgb7jTANE0Qk859LfOEdF0OgwEPQqULMlB2KUqBqA=;
-        b=WveWs6P5+bYVOntD8H3z1g7uvCZ7WG5o38sk1kPQjV4yUs/RwxRhnWd7riqK/68DBe
-         JxijLItTpERqdaBT4hmx8RsCQCndTkBRMBQ29jUEN5TMATOnvh4lEytW+VXSRXChkq0q
-         mNc8yp5FnKn19NGEd8Qji3w0tcC3OKpZhL9pi34XVEUVeAj/ESfrDMOsgUApUy75cz9g
-         eL/I2rleFInQ9o3BfuHQrD9Mwnq8RutXWcC+PMJQ56BQZamwp9TbkNt5+iTNZL68v3c4
-         56t6ZPPAg0rMJ625P7/lcACDWCSlMhAT4GoSsrErh99+d/rzSwm990ChyOZP2qVVhKMx
-         Lndg==
-X-Gm-Message-State: ANoB5pmU+W8N2xrhPhccAZOWbD5CpNcoBM9VaJp9g/JF/mWf55zp8tKn
-        +0IAW+yuYPy4FkBnI0mUto2vAY/uxT7Nlg==
-X-Google-Smtp-Source: AA0mqf66garNKvM1of1uk/mXKAilT5V4v/nR05Pj2iYX1RAq7vck4xLmVnWZWoGwC9G9lzt2wbvyCg==
-X-Received: by 2002:a17:902:e792:b0:188:dd4b:7da3 with SMTP id cp18-20020a170902e79200b00188dd4b7da3mr32566plb.91.1668536943144;
-        Tue, 15 Nov 2022 10:29:03 -0800 (PST)
-Received: from localhost (fwdproxy-prn-003.fbsv.net. [2a03:2880:ff:3::face:b00c])
-        by smtp.gmail.com with ESMTPSA id g10-20020a1709026b4a00b0018853dd8832sm10277486plt.4.2022.11.15.10.29.02
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=npFjL6Dds3DKnQo07iUTlbqXMaucW9/yvERNl8ZNQRo=;
+        b=S0sz/vWAjQCs/1P4XYe5XebJKXlS1wTddDknpvkdJTY80L4CblJNlZNf6XoKDRhuEN
+         i1WcHhLkYl6QPXsvQRB2Y4duhd43JJUcZ97KxFJKHD/IMDdxsWdJeqcWaPqX9KGpJAJ2
+         LGRSJYtwcukxasvo4UThOYumC83uz7UNOKDKpBp7FZHQ6eWskcLIxieuQtRr8f+VqBKY
+         +PJcSOWPQ/SCFqwKOy2Rs4ol48lCC8B7Sbix2uLQ4ef4E1nY4Q3TK2pnkg/WbUCBaLZH
+         c+hYfCYd3fcFe/jIgmxTt/uRPIGkqRpD1uzk+v35gHufuYbOx05uR1DeFUtnaeVaw7hr
+         vC3A==
+X-Gm-Message-State: ANoB5pmgPNfO81TdlooPUHx2zgGl9LQEFgMVxLqu/Z2zFcOY5Z0o/hvp
+        Y4lIj8Rxwm0iqo9zsUG7d6Q=
+X-Google-Smtp-Source: AA0mqf7wqzv071P0x/mRXjpwael9ewocrXAjhS7lO6DJTDtlWHz7zdSkAz307rNNRRW624ZDI3KXTA==
+X-Received: by 2002:a63:560c:0:b0:476:9983:b4b5 with SMTP id k12-20020a63560c000000b004769983b4b5mr6888328pgb.516.1668536944373;
+        Tue, 15 Nov 2022 10:29:04 -0800 (PST)
+Received: from localhost (fwdproxy-prn-116.fbsv.net. [2a03:2880:ff:74::face:b00c])
+        by smtp.gmail.com with ESMTPSA id k15-20020aa7972f000000b0056bbba4302dsm9034046pfg.119.2022.11.15.10.29.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 10:29:02 -0800 (PST)
+        Tue, 15 Nov 2022 10:29:03 -0800 (PST)
 From:   Nhat Pham <nphamcs@gmail.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     hannes@cmpxchg.org
-Subject: [RFC][PATCH 0/4] cachestat: a new syscall for page cache state of files
-Date:   Tue, 15 Nov 2022 10:28:57 -0800
-Message-Id: <20221115182901.2755368-1-nphamcs@gmail.com>
+Subject: [PATCH 1/4] workingset: fix confusion around eviction vs refault container
+Date:   Tue, 15 Nov 2022 10:28:58 -0800
+Message-Id: <20221115182901.2755368-2-nphamcs@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221115182901.2755368-1-nphamcs@gmail.com>
+References: <20221115182901.2755368-1-nphamcs@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,78 +71,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is currently no good way to query the page cache state of large
-file sets and directory trees. There is mincore(), but it scales poorly:
-the kernel writes out a lot of bitmap data that userspace has to
-aggregate, when the user really doesn not care about per-page information
-in that case. The user also needs to mmap and unmap each file as it goes
-along, which can be quite slow as well.
+From: Johannes Weiner <hannes@cmpxchg.org>
 
-This series of patches introduces a new system call, cachestat, that
-summarizes the page cache statistics (number of cached pages, dirty
-pages, pages marked for writeback, evicted pages etc.) of a file, in a
-specified range of bytes. It also include a selftest suite that tests some
-typical usage
+Refault decisions are made based on the lruvec where the page was
+evicted, as that determined its LRU order while it was alive. Stats
+and workingset aging must then occur on the lruvec of the new page, as
+that's the node and cgroup that experience the refault and that's the
+lruvec whose nonresident info ages out by a new resident page. Those
+lruvecs could be different when a page is shared between cgroups, or
+the refaulting page is allocated on a different node.
 
-This interface is inspired by past discussion and concerns with fincore,
-which has a similar design (and as a result, issues) as mincore.
-Relevant links:
+There are currently two mix-ups:
 
-https://lkml.indiana.edu/hypermail/linux/kernel/1302.1/04207.html
-https://lkml.indiana.edu/hypermail/linux/kernel/1302.1/04209.html
+1. When swap is available, the resident anon set must be considered
+   when comparing the refault distance. The comparison is made against
+   the right anon set, but the check for swap is not. When pages get
+   evicted from a cgroup with swap, and refault in one without, this
+   can incorrectly consider a hot refault as cold - and vice
+   versa. Fix that by using the eviction cgroup for the swap check.
 
-For comparison with mincore, I ran both syscalls on a 2TB sparse file:
+2. The stats and workingset age are updated against the wrong lruvec
+   altogether: the right cgroup but the wrong NUMA node. When a page
+   refaults on a different NUMA node, this will have confusing stats
+   and distort the workingset age on a different lruvec - again
+   possibly resulting in hot/cold misclassifications down the line.
 
-Using mincore:
-real    0m37.510s
-user    0m2.934s
-sys     0m34.558s
+Fix the swap check and the refault pgdat to address both concerns.
 
-Using cachestat:
-real    0m0.009s
-user    0m0.000s
-sys     0m0.009s
+This was found during code review. It hasn't caused notable issues in
+production, suggesting that those refault-migrations are relatively
+rare in practice.
 
-Mincore takes about 4000 times longer to obtain less aggregated
-information!
+Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+Co-developed-by: Nhat Pham <nphamcs@gmail.com>
+Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+---
+ mm/workingset.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Some open questions:
-
-* What other fields might be useful?
-* Huge pages: another useful stat to include is the number of huge pages
-  cached. However, as the size of a huge page can vary, having just a
-  single field is not very meaningful.
-* An alternative would be to have one field for each possible size - but
-  this is not future-proof, as bigger sizes might be introduced later.
-
-Johannes Weiner (1):
-  workingset: fix confusion around eviction vs refault container
-
-Nhat Pham (3):
-  workingset: refactor LRU refault to expose refault recency check
-  cachestat: implement cachestat syscall
-  selftests: Add selftests for cachestat
-
- MAINTAINERS                                   |   8 +
- arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
- arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
- include/linux/swap.h                          |   1 +
- include/linux/syscalls.h                      |   2 +
- include/uapi/asm-generic/unistd.h             |   5 +-
- include/uapi/linux/mman.h                     |   8 +
- kernel/sys_ni.c                               |   1 +
- mm/Makefile                                   |   2 +-
- mm/cachestat.c                                | 109 +++++++++++
- mm/workingset.c                               | 142 +++++++++-----
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/cachestat/.gitignore  |   2 +
- tools/testing/selftests/cachestat/Makefile    |   9 +
- .../selftests/cachestat/test_cachestat.c      | 184 ++++++++++++++++++
- 15 files changed, 430 insertions(+), 46 deletions(-)
- create mode 100644 mm/cachestat.c
- create mode 100644 tools/testing/selftests/cachestat/.gitignore
- create mode 100644 tools/testing/selftests/cachestat/Makefile
- create mode 100644 tools/testing/selftests/cachestat/test_cachestat.c
-
---
+diff --git a/mm/workingset.c b/mm/workingset.c
+index ae7e984b23c6..79585d55c45d 100644
+--- a/mm/workingset.c
++++ b/mm/workingset.c
+@@ -457,6 +457,7 @@ void workingset_refault(struct folio *folio, void *shadow)
+ 	 */
+ 	nr = folio_nr_pages(folio);
+ 	memcg = folio_memcg(folio);
++	pgdat = folio_pgdat(folio);
+ 	lruvec = mem_cgroup_lruvec(memcg, pgdat);
+ 
+ 	mod_lruvec_state(lruvec, WORKINGSET_REFAULT_BASE + file, nr);
+@@ -474,7 +475,7 @@ void workingset_refault(struct folio *folio, void *shadow)
+ 		workingset_size += lruvec_page_state(eviction_lruvec,
+ 						     NR_INACTIVE_FILE);
+ 	}
+-	if (mem_cgroup_get_nr_swap_pages(memcg) > 0) {
++	if (mem_cgroup_get_nr_swap_pages(eviction_memcg) > 0) {
+ 		workingset_size += lruvec_page_state(eviction_lruvec,
+ 						     NR_ACTIVE_ANON);
+ 		if (file) {
+-- 
 2.30.2
+
