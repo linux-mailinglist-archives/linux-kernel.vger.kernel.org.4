@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3789862ADDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:11:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A81E262ADEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiKOWLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 17:11:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
+        id S231398AbiKOWLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 17:11:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiKOWLa (ORCPT
+        with ESMTP id S231211AbiKOWLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:11:30 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3333F23E9E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:11:29 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id k22so15596473pfd.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:11:29 -0800 (PST)
+        Tue, 15 Nov 2022 17:11:52 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7FF2715F;
+        Tue, 15 Nov 2022 14:11:51 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id k5so14744579pjo.5;
+        Tue, 15 Nov 2022 14:11:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MkMnn2hGaVIkC9WoaV7C4n+L3kmdU9eKYGAAaB0CkLs=;
-        b=omrubLvBhU67yWHuCUt157MtsLyqmOxlOY90kmUhIC+fxrSEJuMAhD3Q3dstqlRjRs
-         QDAPvF0t3LvqGN2e/OQhw0tUQy9A7AIZfA9uibwsGGGcZcB2sFokQc5YWbymwn6sXU+D
-         ua3URoZeBOQ1ejBwqsq8SFUbz9hL3lrJVgU692VI9J9wfdd9CwnTx/LIBlUz74GeC7i3
-         5ei/ujLx0cfYNc0oAsg4vsKAMZLylCiUfzf1O7vSSMvITeHvsvZ+xyHJXkHPeyMYdFxC
-         HxVFUVlB+mMdnbKusTfnG0V8VZGNMC+q7lq0AAvHDCYWZSijG43qQ2QOTplhFbBEsYKn
-         resA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xt37wQQQ2UBMRQ+NV2HhjZPCcpOsAKHeXNbqwrzrV88=;
+        b=YkwZAzWUea0ahhsPHFNd25jYxc/z63BYkatRQ2FtDZ20WztyLg2G9ADtwKOcdLXmwg
+         9GNnJtuIvKz77+f4PyHZ624jBlXJQhAJ4uz/6wDD5BbCsreuX2INetEb5LAqctlCFtd5
+         4FuEmhURypmHAR54y1pDv71WKqnsTAcMsJupcgldgICRtd79jfURpN321025tLvFTUBy
+         2e8upnFgnSnFhU8UuFc+2fZow7m5WyIDtq3LwA4rEDwVyRRhih2aYL1FOoPlJo6Doz5u
+         n7+M7x6b6//TwfoQWFFChE64fUnsuVXnwFmJsm0GYMuGvvbVBszpfrq6RJNlAzltfkGd
+         iGjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MkMnn2hGaVIkC9WoaV7C4n+L3kmdU9eKYGAAaB0CkLs=;
-        b=E+nlJMar2L2DgO1Sc1gXRBTudQqoLEQacarUGrkVmCq0ftz9ezgu8jwPLpYUVtY1Kb
-         9m7jwKL3jNaxohu2+SVDILYAciNtJQg53p+DIUCYdncEga2EMHQFOhBoWzqnUdjGhJwq
-         q24nqfCxkg462eRG8OV8VDkZ9824RxpbiBv6IzkUA4r+bf4wMNuULQZm8Xx6bcWO/W6O
-         lNb/fwlsfBCuS0Mjq30l6BzbJgBTu4TPqc3D6b6wJPkZ83sW98atihERCf9rux25fnux
-         ZpdpEhfou0OIXst4r/SCAu9mS0LBgKK46DCvSXuMw92chkniZDAojvp9COnfGDoYRJ0n
-         g5RQ==
-X-Gm-Message-State: ANoB5plwKjERjpfrVIklB7GUudrO8XEMwbY3B2v1/ENHxn9QQnI+mOZ6
-        +Tfy8Xz1A5UJ7oRa/vnK4rdOmw==
-X-Google-Smtp-Source: AA0mqf5Ej6WdaotiYIORVhIReaHaKonh/Grxk+AFuiPYZ68nUsc0E2HWyPHXEZNxvKIXYL2BFPpSzQ==
-X-Received: by 2002:a63:b14:0:b0:470:18d4:f18d with SMTP id 20-20020a630b14000000b0047018d4f18dmr17900349pgl.295.1668550288686;
-        Tue, 15 Nov 2022 14:11:28 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id t6-20020a170902e84600b001785fa792f4sm10534216plg.243.2022.11.15.14.11.27
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xt37wQQQ2UBMRQ+NV2HhjZPCcpOsAKHeXNbqwrzrV88=;
+        b=cqpWU9L3YHpT0VmpJlpG0NH0IoyMpE5Da7notjmYcWN5JsORnXAkzfyi7YX4Yvd1m6
+         jqO0GKLMbdf5MDcfx8kKjorBu6fFjiSqrFj01/4jI+WRV4Updjpz4WKKdPaG8KvATFED
+         3zTuisV1JZmGCx/4LiQSPcahXmCo5qUvZowonqA6eytyWkktbRPuKNLRYQmHdv2AjvPm
+         TOKleL+1yCBNglR/h6ONUaOCFiBR/lM5KTfit+DYbs2Uo0RlQKtBFduOAFIF7orMCu6O
+         OgX986irDExbwf6upvH2EQFTg5DjOoOKtQfKLBYY3VdqaAJ5SXlfKSd3N2ZPniVUUc0T
+         8inA==
+X-Gm-Message-State: ANoB5pkStksMn1HUkldFC22DnmzzFxUYTXOf9Ez9UUxXA8vLnJ8LVmFO
+        b6JJCQaDFIPjbXJ2VUQoItp91TlPwBA=
+X-Google-Smtp-Source: AA0mqf7bbXanwHaV6IVN6scidQnsDo+47q4SqVoT97rLdr+o1n5XegH70XIp+MivIEYUBLiTx5HnHg==
+X-Received: by 2002:a17:90a:ca96:b0:212:d404:5513 with SMTP id y22-20020a17090aca9600b00212d4045513mr505081pjt.27.1668550310433;
+        Tue, 15 Nov 2022 14:11:50 -0800 (PST)
+Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:2d36:e9a0:170b:669f])
+        by smtp.gmail.com with ESMTPSA id y1-20020a17090264c100b00178b6ccc8a0sm10400038pli.51.2022.11.15.14.11.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 14:11:28 -0800 (PST)
-From:   Deepak Gupta <debug@rivosinc.com>
-To:     conor.dooley@microchip.com
-Cc:     ajones@ventanamicro.com, aou@eecs.berkeley.edu, debug@rivosinc.com,
-        jan.kiszka@siemens.com, kbingham@kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com
-Subject: [PATCH v5] scripts/gdb: add lx_current support for riscv
-Date:   Tue, 15 Nov 2022 14:10:51 -0800
-Message-Id: <20221115221051.1871569-1-debug@rivosinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <d65bddf3-c58a-1420-bff9-8333c10edb56@microchip.com>
-References: <d65bddf3-c58a-1420-bff9-8333c10edb56@microchip.com>
+        Tue, 15 Nov 2022 14:11:49 -0800 (PST)
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: [PATCH 1/4] media: i2c: s5k6a3: switch to using gpiod API
+Date:   Tue, 15 Nov 2022 14:11:42 -0800
+Message-Id: <20221115221145.2550572-1-dmitry.torokhov@gmail.com>
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,103 +71,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-csr_sscratch CSR holds current task_struct address when hart is in
-user space. Trap handler on entry spills csr_sscratch into "tp" (x2)
-register and zeroes out csr_sscratch CSR. Trap handler on exit reloads
-"tp" with expected user mode value and place current task_struct address
-again in csr_sscratch CSR.
+This patch switches the driver away from legacy gpio/of_gpio API to
+gpiod API, and removes one of the last uses of of_get_gpio_flags().
 
-This patch assumes "tp" is pointing to task_struct. If value in
-csr_sscratch is numerically greater than "tp" then it assumes csr_sscratch
-is correct address of current task_struct. This logic holds when
-   - hart is in user space, "tp" will be less than csr_sscratch.
-   - hart is in kernel space but not in trap handler, "tp" will be more
-     than csr_sscratch (csr_sscratch being equal to 0).
-   - hart is executing trap handler
-       - "tp" is still pointing to user mode but csr_sscratch contains
-          ptr to task_struct. Thus numerically higher.
-       - "tp" is  pointing to task_struct but csr_sscratch now contains
-          either 0 or numerically smaller value (transiently holds
-          user mode tp)
-
-Patch also adds new cached type "ulong" in scripts/gdb/linux/utils.py
-
-Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
-Since patch has changed a little bit from v1 and I didn't include
-changelog earlier, here it is.
+ drivers/media/i2c/s5k6a3.c | 30 +++++++++++-------------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
 
-v1 --> v2:
- - added logic to locate task_struct irrespective of priv
- - made locating task_struct agnostic to bitness(32 vs 64).
- - added caching of ulong type in scripts/gdb/linux/utils.py
- - added more descriptive commit message
-
-v2 --> v3:
- - amended commit message and source line to fit column width
-
-v3 --> v4:
- - amended commit message and remove whitespace in source
- - added Reviewed-by for reviewers
-
-v4 --> v5:
- - changing the order of changelog and sign off/review tags in commit
----
----
- scripts/gdb/linux/cpus.py  | 15 +++++++++++++++
- scripts/gdb/linux/utils.py |  5 +++++
- 2 files changed, 20 insertions(+)
-
-diff --git a/scripts/gdb/linux/cpus.py b/scripts/gdb/linux/cpus.py
-index 15fc4626d236..14c22f82449b 100644
---- a/scripts/gdb/linux/cpus.py
-+++ b/scripts/gdb/linux/cpus.py
-@@ -173,6 +173,21 @@ def get_current_task(cpu):
-          else:
-              raise gdb.GdbError("Sorry, obtaining the current task is not allowed "
-                                 "while running in userspace(EL0)")
-+    elif utils.is_target_arch("riscv"):
-+         current_tp = gdb.parse_and_eval("$tp")
-+         scratch_reg = gdb.parse_and_eval("$sscratch")
-+
-+         # by default tp points to current task
-+         current_task = current_tp.cast(task_ptr_type)
-+
-+         # scratch register is set 0 in trap handler after entering kernel.
-+         # When hart is in user mode, scratch register is pointing to task_struct.
-+         # and tp is used by user mode. So when scratch register holds larger value
-+         # (negative address as ulong is larger value) than tp, then use scratch register.
-+         if (scratch_reg.cast(utils.get_ulong_type()) > current_tp.cast(utils.get_ulong_type())):
-+             current_task = scratch_reg.cast(task_ptr_type)
-+
-+         return current_task.dereference()
-     else:
-         raise gdb.GdbError("Sorry, obtaining the current task is not yet "
-                            "supported with this arch")
-diff --git a/scripts/gdb/linux/utils.py b/scripts/gdb/linux/utils.py
-index 1553f68716cc..ddaf3089170d 100644
---- a/scripts/gdb/linux/utils.py
-+++ b/scripts/gdb/linux/utils.py
-@@ -35,12 +35,17 @@ class CachedType:
+diff --git a/drivers/media/i2c/s5k6a3.c b/drivers/media/i2c/s5k6a3.c
+index a4efd6d10b43..ef6673b10580 100644
+--- a/drivers/media/i2c/s5k6a3.c
++++ b/drivers/media/i2c/s5k6a3.c
+@@ -9,12 +9,12 @@
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/device.h>
++#include <linux/err.h>
+ #include <linux/errno.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/i2c.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of_gpio.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/slab.h>
+@@ -59,7 +59,7 @@ struct s5k6a3 {
+ 	struct v4l2_subdev subdev;
+ 	struct media_pad pad;
+ 	struct regulator_bulk_data supplies[S5K6A3_NUM_SUPPLIES];
+-	int gpio_reset;
++	struct gpio_desc *gpio_reset;
+ 	struct mutex lock;
+ 	struct v4l2_mbus_framefmt format;
+ 	struct clk *clock;
+@@ -216,11 +216,11 @@ static int __s5k6a3_power_on(struct s5k6a3 *sensor)
+ 			goto error_clk;
+ 	}
  
+-	gpio_set_value(sensor->gpio_reset, 1);
++	gpiod_set_value_cansleep(sensor->gpio_reset, 0);
+ 	usleep_range(600, 800);
+-	gpio_set_value(sensor->gpio_reset, 0);
++	gpiod_set_value_cansleep(sensor->gpio_reset, 1);
+ 	usleep_range(600, 800);
+-	gpio_set_value(sensor->gpio_reset, 1);
++	gpiod_set_value_cansleep(sensor->gpio_reset, 0);
  
- long_type = CachedType("long")
-+ulong_type = CachedType("ulong")
- atomic_long_type = CachedType("atomic_long_t")
+ 	/* Delay needed for the sensor initialization */
+ 	msleep(20);
+@@ -240,7 +240,7 @@ static int __s5k6a3_power_off(struct s5k6a3 *sensor)
+ {
+ 	int i;
  
- def get_long_type():
-     global long_type
-     return long_type.get_type()
+-	gpio_set_value(sensor->gpio_reset, 0);
++	gpiod_set_value_cansleep(sensor->gpio_reset, 1);
  
-+def get_ulong_type():
-+    global ulong_type
-+    return ulong_type.get_type()
-+
- def offset_of(typeobj, field):
-     element = gdb.Value(0).cast(typeobj)
-     return int(str(element[field].address).split()[0], 16)
+ 	for (i = S5K6A3_NUM_SUPPLIES - 1; i >= 0; i--)
+ 		regulator_disable(sensor->supplies[i].consumer);
+@@ -285,32 +285,24 @@ static int s5k6a3_probe(struct i2c_client *client)
+ 	struct device *dev = &client->dev;
+ 	struct s5k6a3 *sensor;
+ 	struct v4l2_subdev *sd;
+-	int gpio, i, ret;
++	int i, ret;
+ 
+ 	sensor = devm_kzalloc(dev, sizeof(*sensor), GFP_KERNEL);
+ 	if (!sensor)
+ 		return -ENOMEM;
+ 
+ 	mutex_init(&sensor->lock);
+-	sensor->gpio_reset = -EINVAL;
+-	sensor->clock = ERR_PTR(-EINVAL);
+ 	sensor->dev = dev;
+ 
+ 	sensor->clock = devm_clk_get(sensor->dev, S5K6A3_CLK_NAME);
+ 	if (IS_ERR(sensor->clock))
+ 		return PTR_ERR(sensor->clock);
+ 
+-	gpio = of_get_gpio_flags(dev->of_node, 0, NULL);
+-	if (!gpio_is_valid(gpio))
+-		return gpio;
+-
+-	ret = devm_gpio_request_one(dev, gpio, GPIOF_OUT_INIT_LOW,
+-						S5K6A3_DRV_NAME);
+-	if (ret < 0)
++	sensor->gpio_reset = devm_gpiod_get(dev, NULL, GPIOD_OUT_HIGH);
++	ret = PTR_ERR_OR_ZERO(sensor->gpio_reset);
++	if (ret)
+ 		return ret;
+ 
+-	sensor->gpio_reset = gpio;
+-
+ 	if (of_property_read_u32(dev->of_node, "clock-frequency",
+ 				 &sensor->clock_frequency)) {
+ 		sensor->clock_frequency = S5K6A3_DEFAULT_CLK_FREQ;
 -- 
-2.25.1
+2.38.1.431.g37b22c650d-goog
 
