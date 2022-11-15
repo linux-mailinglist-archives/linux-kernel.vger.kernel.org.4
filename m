@@ -2,52 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11AC662A162
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:33:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0FF62A163
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiKOSdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 13:33:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
+        id S231565AbiKOSdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 13:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiKOSdV (ORCPT
+        with ESMTP id S230188AbiKOSdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 13:33:21 -0500
+        Tue, 15 Nov 2022 13:33:22 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEA5303C6;
-        Tue, 15 Nov 2022 10:33:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F67930544
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:33:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D65B1B818D1;
-        Tue, 15 Nov 2022 18:33:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45185C433D7;
-        Tue, 15 Nov 2022 18:33:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4CFB7B81A45
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 18:33:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EAD8C433D6;
+        Tue, 15 Nov 2022 18:33:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668537189;
-        bh=iFk2C5rMscwTCjr6mbJ3SLiT1nN1ydkf/s9Is0bqib4=;
+        s=k20201202; t=1668537192;
+        bh=aUlE+XlVtUegRenzbhP2nA8Eu9V4nyuIs/7txING2vE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tvSye5iaT5YDKDCyhxf7vx/QIgVomCFkqjLlYSxYPZsFed5kggUOEmMGA1Eru2n+u
-         vWXNmEpl18df15MLFC/oHRVu0WgDsaRRHVYTRyuVHiC0YK659SlBW3NiL6w2KGnx/9
-         1wxctLBfFEZjYMRw2LKVIk8Pu+jGVSMA2k/sqlUDfiJFYCaBKL9+mPadiMMSTEOc3Z
-         LSMYOZPuQaW6IGiLbK30Vi/T6CDmsrhELNxo7UtFQB10nzeirISuCS+Ol0Q8oCwR4M
-         SJVdr1i0A1KYvGQdIduhLOba45IuHhokoOghtD9uZYOaZ7G+cuRTbJooCFqRO5qawe
-         nKMeeuH4Uqjow==
+        b=KmiVS0bwNsNgQR9IogJTkocpIWRJL4gMbDTftt+LqCKzy+ODrFWamEOjkp3qBKTXd
+         gojnf5W1y5hOIbTk7a3Pw6X4QCy6WfVQOq+RN1TzR0jnXcEkdwtO1UjaruVGj8UFtt
+         PMrw2qMfvFIlBqT6UquCepxuFmupbcjRR/4/z5Oeg/xF94yPGhqyfrnPVnVkZ8vAzH
+         DyJ6Yaot/lkl+oB/8M7QIQ7ucSSedTEFjVBZoMiy3z3EpECPyJSMbZgHdgV8MiNSuM
+         1QW/vBpNRflFf4GlyZbxA3Lipg6Lj8pTFWvQtSBRj/EchpRFF+pbgdawfyp64ShzPp
+         ais38Hecsow7Q==
 From:   Will Deacon <will@kernel.org>
-To:     Besar Wicaksono <bwicaksono@nvidia.com>, catalin.marinas@arm.com,
-        suzuki.poulose@arm.com, mark.rutland@arm.com
-Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        jonathanh@nvidia.com, linux-arm-kernel@lists.infradead.org,
-        mathieu.poirier@linaro.org, thanu.rangarajan@arm.com,
-        vsethi@nvidia.com, linux-kernel@vger.kernel.org,
-        robin.murphy@arm.com, linux-tegra@vger.kernel.org,
-        treding@nvidia.com, mike.leach@linaro.org,
-        Michael.Williams@arm.com, sudeep.holla@arm.com, leo.yan@linaro.org
-Subject: Re: [PATCH v7 0/3] perf: ARM CoreSight PMU support
-Date:   Tue, 15 Nov 2022 18:32:53 +0000
-Message-Id: <166852008965.2033505.10501634922702345601.b4-ty@kernel.org>
+To:     Chen Lin <chen45464546@163.com>
+Cc:     catalin.marinas@arm.com, kernel-team@android.com,
+        Will Deacon <will@kernel.org>, robin.murphy@arm.com,
+        treding@nvidia.com, joro@8bytes.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu/arm-smmu: Warn once when the perfetcher errata patch fails to apply
+Date:   Tue, 15 Nov 2022 18:32:54 +0000
+Message-Id: <166851283020.1266596.8585820030047050712.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221111222330.48602-1-bwicaksono@nvidia.com>
-References: <20221111222330.48602-1-bwicaksono@nvidia.com>
+In-Reply-To: <20221103222121.3051-1-chen45464546@163.com>
+References: <20221103222121.3051-1-chen45464546@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,26 +57,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Nov 2022 16:23:27 -0600, Besar Wicaksono wrote:
-> Add driver support for ARM CoreSight PMU device and event attributes for NVIDIA
-> implementation. The code is based on ARM Coresight PMU architecture and ACPI ARM
-> Performance Monitoring Unit table (APMT) specification below:
->  * ARM Coresight PMU:
->         https://developer.arm.com/documentation/ihi0091/latest
->  * APMT: https://developer.arm.com/documentation/den0117/latest
+On Fri, 4 Nov 2022 06:21:21 +0800, Chen Lin wrote:
+> Default reset value of secure banked register SMMU_sACR.cache_lock is 1.
+> If it is not been set to 0 by secure software(eg: atf), the non-secure
+> linux cannot clear ARM_MMU500_ACTLR_CPRE bit. In this situation,
+> the prefetcher errata is not applied successfully, warn once.
 > 
-> [...]
+> 
 
-Applied to will (for-next/perf), thanks!
+Applied to will (for-joerg/arm-smmu/updates), thanks!
 
-[1/3] perf: arm_cspmu: Add support for ARM CoreSight PMU driver
-      https://git.kernel.org/will/c/e37dfd65731d
-[2/3] perf: arm_cspmu: Add support for NVIDIA SCF and MCF attribute
-      https://git.kernel.org/will/c/84481be7167e
-
-Note that I had to add some MODULE_LICENSE() macros to the files so that
-modpost doesn't fail with an allmodconfig build. Please shout if that
-needs adjusting at all.
+[1/1] iommu/arm-smmu: Warn once when the perfetcher errata patch fails to apply
+      https://git.kernel.org/will/c/f87f6e5b4539
 
 Cheers,
 -- 
