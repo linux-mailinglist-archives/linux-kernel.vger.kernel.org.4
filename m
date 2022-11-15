@@ -2,75 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01B862AF09
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED68962AF0B
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238559AbiKOXBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 18:01:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
+        id S231863AbiKOXCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 18:02:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238529AbiKOXBF (ORCPT
+        with ESMTP id S231580AbiKOXCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 18:01:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8C6140DE;
-        Tue, 15 Nov 2022 15:01:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CE215B81B8F;
-        Tue, 15 Nov 2022 23:01:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 732D5C433D6;
-        Tue, 15 Nov 2022 23:01:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668553262;
-        bh=xi2tiQCRuoMPu5vdJanj/W6Y98sznQKj82AFtTRd9hU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=bGyPaMdGWY7hkH9VXXwcBXqdpNr/nJJ9SI2Gs1+j0uywryoxR3qKC1festJSpD6Mj
-         em3vhqYBBsfSXkARs4ZvWRmoeCAzRr5P9UgkpQksqFuut5T3Az/YQiiqxF9dRaSdT6
-         zf7D32L8GhBtYTjT0UZVZuxmNJCp8dap7so62xIhpTAHtb0aP/PWyeZo629j7CF0lm
-         exXyOVgw9GF+GFxBTYtgLUp54DCj2hqTe8y/CQwQJW39o+fCrj3MmuaSXnHvdxZM9j
-         wki4RkmZx6LomHLMlriKmY0Ba3Am4mhE2nrV11PoCm38Z1mSa0UhGUwzI0hsxQ47Eq
-         w5w+OdfP6wZyg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 53A91C395F6;
-        Tue, 15 Nov 2022 23:01:02 +0000 (UTC)
-Subject: Re: [GIT PULL] netfs: Fix folio unmarking/unlocking loops
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1846994.1668547169@warthog.procyon.org.uk>
-References: <1846994.1668547169@warthog.procyon.org.uk>
-X-PR-Tracked-List-Id: <linux-fsdevel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1846994.1668547169@warthog.procyon.org.uk>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/netfs-fixes-20221115
-X-PR-Tracked-Commit-Id: 5e51c627c5acbcf82bb552e17533a79d2a6a2600
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 59d0d52c30d4991ac4b329f049cc37118e00f5b0
-Message-Id: <166855326232.27083.6280024386871580610.pr-tracker-bot@kernel.org>
-Date:   Tue, 15 Nov 2022 23:01:02 +0000
-To:     David Howells <dhowells@redhat.com>
-Cc:     torvalds@linux-foundation.org, dhowells@redhat.com,
-        willy@infradead.org, Jeff Layton <jlayton@kernel.org>,
-        JeffleXu <jefflexu@linux.alibaba.com>, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Nov 2022 18:02:14 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B512C67B;
+        Tue, 15 Nov 2022 15:02:11 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id i10so31281867ejg.6;
+        Tue, 15 Nov 2022 15:02:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=i1bi2KgOik0BJgrqTOkLO626dlyRqNG/k0Pt8yh+GI8=;
+        b=c7hinHZD13uIeXD27stsQQGXPwFZhVLI48+Zy3BvZRiNxOzold4KncLYVDUC7PyVqU
+         D/aiFKPiryug78Cf7+bhbkrK1GXs10x+FkfrryLTT9ORfRixyyaWAd002zhMBntDIJv9
+         /VY8dq7c8UPOUnp+d+OuCbokWQj69rxJ141BruXSiwIqm/6J10I74PAX07TzgahA8imh
+         N46smD8qJrxEzvEQHaCOF+Wy1q8BWrmsHLysuasahWTi+LCVOQgKjjT28ER5OWHMw658
+         fGbyxuzqDBXFe5Z75e0Ms5+lREciyWTEHC399z8GY3O+6DpFvjDRl6dt3MC4mmN/40eC
+         8VEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i1bi2KgOik0BJgrqTOkLO626dlyRqNG/k0Pt8yh+GI8=;
+        b=3PV6Gy9eIM3pW2feKvoSKHepM4M6eEpDfhfqOtbCp6LuIyj4YUzK/1tgQjSmtEjXpO
+         FsvOOD8Ny5i3ihqJ4H5Y0csQGtxQx3lMqylm2ntA5kf6cqntHXNGoxUWoIFElfLa1Miw
+         APyvmrHFgsy7kLinZeabzweoaGRj/tZU8dFXeGTlDMyLpenViLLNVh19rkyBbj5rcMdp
+         aRouu8sAC9b0yb1hiI/mhoJ+CPexzBQwVoN8n2Wg0fSL+Fsd6fYjYIQFhnT79XmW1eIm
+         LKOZvHcGq6lEEo0L2+Zo0pCfYPUov+r+kEUYgX+Kprt35ySi+ji2HE6oB38nX7qZriqa
+         nODQ==
+X-Gm-Message-State: ANoB5plgNLrQgNM8Paxnz5tCmAiWApbeTs6rmfVeFo3gjVTBgsX5jeYb
+        2087HfZ9uWU2ewEtHUBCs/0=
+X-Google-Smtp-Source: AA0mqf7j03zdPFSJZ0f7Hy1McFF3zKaXi5Ry4nVXdAeGk0TxpCmuHEuyBzi4LgD0RRyUr151hpstfA==
+X-Received: by 2002:a17:906:4456:b0:7b2:7e7a:11c1 with SMTP id i22-20020a170906445600b007b27e7a11c1mr1436499ejp.684.1668553329925;
+        Tue, 15 Nov 2022 15:02:09 -0800 (PST)
+Received: from skbuf ([188.26.57.19])
+        by smtp.gmail.com with ESMTPSA id f24-20020a17090631d800b0073d81b0882asm6127366ejf.7.2022.11.15.15.02.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 15:02:09 -0800 (PST)
+Date:   Wed, 16 Nov 2022 01:02:07 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Tim Harvey <tharvey@gateworks.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH] phy: aquantia: Configure SERDES mode by default
+Message-ID: <20221115230207.2e77pifwruzkexbr@skbuf>
+References: <20221114210740.3332937-1-sean.anderson@seco.com>
+ <20221114210740.3332937-1-sean.anderson@seco.com>
+ <20221115223732.ctvzjbpeaxulnm5l@skbuf>
+ <3771f5be-3deb-06f9-d0a0-c3139d098bf0@seco.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3771f5be-3deb-06f9-d0a0-c3139d098bf0@seco.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 15 Nov 2022 21:19:29 +0000:
+On Tue, Nov 15, 2022 at 05:46:54PM -0500, Sean Anderson wrote:
+> On 11/15/22 17:37, Vladimir Oltean wrote:
+> > Was this patch tested and confirmed to do something sane on any platform
+> > at all?
+> 
+> This was mainly intended for Tim to test and see if it fixed his problem.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/netfs-fixes-20221115
+And that is stated where? Does Tim know he should test it?
+If you don't have the certainty that it works, do maintainers know not
+to apply it, as many times unfortunately happens when there is no review
+comment and the change looks innocuous?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/59d0d52c30d4991ac4b329f049cc37118e00f5b0
+Even if the change works, why would it be a good idea to overwrite some
+random registers which are supposed to be configured correctly by the
+firmware provided for the board? If the Linux fixup works for one board
+with one firmware, how do we know it also works for another board with
+the same PHY, but different firmware? Are you willing to take the risk
+to break someone's system to find out?
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+As long as the Aquantia PHY driver doesn't contain all the necessary
+steps for bringing the PHY up from a clean slate, but works on top of
+what the firmware has done, changes like this make me very uncomfortable
+to add any PHY ID to the Aquantia driver. I'd rather leave them with the
+Generic C45 driver, even if that means I'll lose interrupt support, rate
+matching and things like that.
