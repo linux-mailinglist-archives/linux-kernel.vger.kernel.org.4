@@ -2,177 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA506293B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9266293C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232307AbiKOI6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 03:58:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S232632AbiKOJAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 04:00:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiKOI6j (ORCPT
+        with ESMTP id S229998AbiKOJAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 03:58:39 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A27641A;
-        Tue, 15 Nov 2022 00:58:37 -0800 (PST)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AF8Yntt002802;
-        Tue, 15 Nov 2022 08:58:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=y93H31PDnGNeHGJxuwKYXAQVout/WdMDytfWdJ6ezoA=;
- b=HQpnLNnZllwnX+hl4ZYEzsnShG3HyGEFm/wa2AENztf46ImuKFu/6gdZqx0JQJ5SABiw
- slsTuKXUHOrJVlfT4Mps2TO0gOqZeWmORu65p7shyg9dN2fORjOHu2BZkguE3PqS4Clx
- DngSLmhsy+3Z4tjNMMu5fXadMSMnXrN9WITJxpwoGalt5MM2R5PbfSV34S7h/jJUajz6
- zic8IFDaJNcSQ6Pwzko2ndqCrqfG9Fz6HeD2cB213M9NslxMjZDGB4MxXxFbWThMK5Ie
- lJG5FjBg9LdXF/yXaAhSnm3pwM4W6tHEsTodNz6xq9JkUg6agBdoropFlb/NvruYRD9P YA== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kv7cj8kuc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Nov 2022 08:58:28 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AF8q5mC009305;
-        Tue, 15 Nov 2022 08:58:26 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma01fra.de.ibm.com with ESMTP id 3ktbd9jmxc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Nov 2022 08:58:26 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AF8wNsq32703074
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Nov 2022 08:58:23 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2DBEC5204E;
-        Tue, 15 Nov 2022 08:58:23 +0000 (GMT)
-Received: from [9.171.35.73] (unknown [9.171.35.73])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id BDE3552051;
-        Tue, 15 Nov 2022 08:58:22 +0000 (GMT)
-Message-ID: <c1f8de28-1948-85b1-cd85-5bbd301e22bc@linux.ibm.com>
-Date:   Tue, 15 Nov 2022 09:58:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2] perf list: Add PMU pai_ext event description for IBM
- z16
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Andreas Krebbel <krebbel@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com, Ingo Molnar <mingo@kernel.org>
-References: <20221111135402.858623-1-tmricht@linux.ibm.com>
- <Y3JnjmxPX+m7G9HL@kernel.org>
-From:   Thomas Richter <tmricht@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <Y3JnjmxPX+m7G9HL@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: gLbghLxiKMVzY1OztwL0O3L8r9wUWTcp
-X-Proofpoint-GUID: gLbghLxiKMVzY1OztwL0O3L8r9wUWTcp
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 15 Nov 2022 04:00:37 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D6E95B1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:00:34 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id o4so22947701wrq.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:00:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ieee.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UqMA6Tje+3ZsVcAAIQPTB3aQZjTGfrywbsqDdzk9JQs=;
+        b=KIp2+/chwKI09PZkHXOBaaLZqJANenWBoecDu/vhLEPD8onbbS1Dlly1mkfV7tefeZ
+         6sw8kVUIFff+j7w99uAp1bPMm5B8+hngwOFKybRZBl0BhBYmWMmsMzSaTxCLetRaLhNE
+         hdkGZwUdt7t8k9QhYgHQU8zJ7bVLuZ2IErfgQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UqMA6Tje+3ZsVcAAIQPTB3aQZjTGfrywbsqDdzk9JQs=;
+        b=HlJnTeMWEvyZXGz8r+Cczo6lEhO1ysaMX/yFg3da7SDTvhMgSSOKcvV8iORPPxcoL/
+         JIM0wcrZnpkanj0oJzQ3iupRfxDyWR/RYJdfMaEhcWU3LqoUW8jMeQoWE/djeFhOviJl
+         xc+49woIlDNaO0ZdCoqTizf7rtgg1cTiKQdpgZeQJaqdIU6tLntt/vAZgpf2biiwpreL
+         m77eTS6/IxYikZOHM2nuQ6dRhc1/ccnFnk6njMoJTdIsZcP6X1XSnXxvPGo4ja2zV8/i
+         8b5EQdzcSBnoESAVAd17ccA71AXRO+VOPdNKCw8okT2pxKsWeDrydceu1L4C1RWJpasM
+         a/fg==
+X-Gm-Message-State: ANoB5pl2DbjgxQM1ZBFrEQuW0xdvRZhdQ91xxAqVs3JpgaSK4JAuU5tv
+        WptOu0Cu4hNBueEPKY2PSd3Zmw==
+X-Google-Smtp-Source: AA0mqf54F/lZDKhCg3Oy0nmHzH6qldXo1KDM/vSOj3Y+3NQg4tQNXmzbhq8Eh9Boh+IgZWdHw86TQw==
+X-Received: by 2002:adf:a4c1:0:b0:236:6f18:37e6 with SMTP id h1-20020adfa4c1000000b002366f1837e6mr9637216wrb.262.1668502833056;
+        Tue, 15 Nov 2022 01:00:33 -0800 (PST)
+Received: from [10.211.55.3] ([167.98.215.174])
+        by smtp.googlemail.com with ESMTPSA id w9-20020adfee49000000b00228cd9f6349sm11842579wro.106.2022.11.15.01.00.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 01:00:32 -0800 (PST)
+Message-ID: <48fbae83-728e-d7ec-7516-4f8c972a1a1d@ieee.org>
+Date:   Tue, 15 Nov 2022 03:00:31 -0600
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-15_04,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 clxscore=1011 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 suspectscore=0 adultscore=0 spamscore=0 bulkscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211150058
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next 1/5] dt-bindings: net: qcom,ipa: deprecate
+ modem-init
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alex Elder <elder@linaro.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org,
+        elder@kernel.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221112200717.1533622-1-elder@linaro.org>
+ <20221112200717.1533622-2-elder@linaro.org>
+ <de98dbb4-afb5-de05-1e75-2959aa720333@linaro.org>
+ <2f827660-ae9d-01dd-ded8-7fd4c2f8f8ae@ieee.org>
+ <88fd2f42-6f20-7bbe-1a4d-1f482c153f07@linaro.org>
+Content-Language: en-US
+From:   Alex Elder <elder@ieee.org>
+In-Reply-To: <88fd2f42-6f20-7bbe-1a4d-1f482c153f07@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/14/22 17:06, Arnaldo Carvalho de Melo wrote:
-> Em Fri, Nov 11, 2022 at 02:54:02PM +0100, Thomas Richter escreveu:
->> Add the event description for the IBM z16 pai_ext PMU released with
->> commit c432fefe8e62 ("s390/pai: Add support for PAI Extension 1 NNPA counters")
+On 11/15/22 01:59, Krzysztof Kozlowski wrote:
+> On 14/11/2022 18:48, Alex Elder wrote:
+>> On 11/14/22 03:56, Krzysztof Kozlowski wrote:
+>>> On 12/11/2022 21:07, Alex Elder wrote:
+>>>> GSI firmware for IPA must be loaded during initialization, either by
+>>>> the AP or by the modem.  The loader is currently specified based on
+>>>> whether the Boolean modem-init property is present.
+>>>>
+>>>> Instead, use a new property with an enumerated value to indicate
+>>>> explicitly how GSI firmware gets loaded.  With this in place, a
+>>>> third approach can be added in an upcoming patch.
+>>>>
+>>>> The new qcom,gsi-loader property has two defined values:
+>>>>     - self:   The AP loads GSI firmware
+>>>>     - modem:  The modem loads GSI firmware
+>>>> The modem-init property must still be supported, but is now marked
+>>>> deprecated.
+>>>>
+>>>> Signed-off-by: Alex Elder <elder@linaro.org>
+>>>> ---
+>>>>    .../devicetree/bindings/net/qcom,ipa.yaml     | 59 +++++++++++++++----
+>>>>    1 file changed, 46 insertions(+), 13 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/net/qcom,ipa.yaml b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+>>>> index e752b76192df0..0dfd6c721e045 100644
+>>>> --- a/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+>>>> +++ b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
+>>>> @@ -124,12 +124,22 @@ properties:
+>>>>          - const: ipa-clock-enabled-valid
+>>>>          - const: ipa-clock-enabled
+>>>>    
+>>>> +  qcom,gsi-loader:
+>>>> +    enum:
+>>>> +      - self
+>>>> +      - modem
+>>>> +    description:
+>>>> +      This indicates how GSI firmware should be loaded.  If the AP loads
+>>>
+>>> s/This indicates/Indicate/
+>>> (or any other grammar without describing DT syntax but hardware/system)
 >>
->> The document SA22-7832-13 "z/Architecture Principles of Operation",
->> published May, 2022, contains the description of the
->> Processor Activity Instrumentation Facility and the NNPA counter
->> set., See Pages 5-113 to 5-116.
+>> OK.
 >>
->> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
->> ---
->>  .../pmu-events/arch/s390/cf_z16/pai_ext.json  | 198 ++++++++++++++++++
->>  tools/perf/pmu-events/jevents.py              |   1 +
->>  2 files changed, 199 insertions(+)
->>  create mode 100644 tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json
+>>>> +      and validates GSI firmware, this property has value "self".  If the
+>>>> +      modem does this, this property has value "modem".
+>>>> +
+>>>>      modem-init:
+>>>> +    deprecated: true
+>>>>        type: boolean
+>>>>        description:
+>>>> -      If present, it indicates that the modem is responsible for
+>>>> -      performing early IPA initialization, including loading and
+>>>> -      validating firwmare used by the GSI.
+>>>> +      This is the older (deprecated) way of indicating how GSI firmware
+>>>> +      should be loaded.  If present, the modem loads GSI firmware; if
+>>>> +      absent, the AP loads GSI firmware.
+>>>>    
+>>>>      memory-region:
+>>>>        maxItems: 1
+>>>> @@ -155,15 +165,36 @@ required:
+>>>>      - interconnects
+>>>>      - qcom,smem-states
+>>>>    
+>>>> -# If modem-init is not present, the AP loads GSI firmware, and
+>>>> -# memory-region must be specified
+>>>> -if:
+>>>> -  not:
+>>>> -    required:
+>>>> -      - modem-init
+>>>> -then:
+>>>> -  required:
+>>>> -    - memory-region
+>>>> +allOf:
+>>>> +  # If qcom,gsi-loader is present, modem-init must not be present
+>>>> +  - if:
+>>>> +      required:
+>>>> +        - qcom,gsi-loader
+>>>> +    then:
+>>>> +      properties:
+>>>> +        modem-init: false
+>>>
+>>> This is ok, but will not allow you to keep deprecated property in DTS
+>>> for the transition period. We talked about this that you need to keep
+>>> both or wait few cycles before applying DTS cleanups.
 >>
->> diff --git a/tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json b/tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json
->> new file mode 100644
->> index 000000000000..8bee481f05d5
->> --- /dev/null
->> +++ b/tools/perf/pmu-events/arch/s390/cf_z16/pai_ext.json
->> @@ -0,0 +1,198 @@
->> +[
->> +	{
->> +		"Unit": "PAI-EXT",
->> +		"EventCode": "6144",
->> +		"EventName": "NNPA_ALL",
->> +		"BriefDescription": "NNPA ALL",
->> +		"PublicDescription": "Sum of all non zero NNPA counters"
->> +	},
+>> My intention is expressed in the comment.  Is it because of the
+>> "if .... required ... qcom,gsi-loader"?
+>>
+>> Should it be "if ... properties ... qcom,gsi-loader"?
 > 
-> Since the Brief description mentions NNPA, shouldn't the Public
-> Description expand on this "NNPA" acronym?, something like:
+> You disallow modem-init here, so it cannot be present in DTS if
+> gsi-loader is present. Therefore the deprecated case like this:
+>    qcom,gsi-loader = "modem"
+>    modem-init;
+> is not allowed by the schema.
 > 
-> Oops, can't expand on that since there isn't a link to that SA22-7832-13
-> document.
+> As I said, it is fine, but your DTS should wait a cycle.
+
+OK, then this is exactly as I intended.  I am planning to wait
+until Linux v6.2-rc1 is published before I post the DTS updates
+that implement this change.  It is not technically necessary
+until IPA v5.0 is fully supported, and I don't have confidence
+all of that will accepted before then.
+
+If I did it "your way" first I could get it done now, but then
+I'd want to do another round later to make it this way.
+
+I will still send an updated series shortly, to address your
+other comment about wording in the description.  But I will
+not be changing this part.
+
+Thanks for the explanation Krzysztof.
+
+					-Alex
+
+
 > 
-> Googling for it...
 > 
-> https://www-40.ibm.com/servers/resourcelink/svc03100.nsf/pages/zResourceLinkUrl?OpenDocument&url=http://www.ibm.com/servers/resourcelink/lib03010.nsf/0/B9DE5F05A9D57819852571C500428F9A/$file/SA22-7832-13.pdf
+> Best regards,
+> Krzysztof
 > 
-> Ok, requires registration.
-> 
-> I wonder what is the value of these descriptions then :-\
-> 
-> I miss Ingo jumping into these discussions :-)
-> 
-> - Arnaldo
-
-I added Andreas Krebbel to the discussion, he knows more than I on this counters.
-
-NNPA stands for Neural Networks Processing Assist. This is a new feature in 
-the IBM z16. Here is a quote from Document SG2489-51 IBM z16 (3931) Technical Guide:
-
-<START-OF-QUOTE>
-  "The new IBM z16 microprocessor chip, also called the IBM Telum processor, integrates a
-   new AI accelerator. This innovation brings incredible value to applications and workloads that
-   are running on IBM Z platform.
-   Customers can benefit from the integrated AI accelerator by adding AI operations that are
-   used to perform fraud prevention and fraud detection, customer behavior predictions, and
-   supply chain operations. All of these operations are done in real time and fully integrated in
-   transactional workloads. As a result, valuable insights are gained from their data instantly.
-
-   ...
-   The AI accelerator is driven by the new Neural Networks Processing Assist (NNPA)
-   instruction.
-   NNPA is a new nonprivileged Complex Instruction Set Computer (CISC) memory-to-memory
-   instruction that operates on tensor objects that are in user program’s memory. AI functions
-   and macros are abstracted by NNPA."
-<END-OF-QUOTE>
-
-This intension of this patch is to give a small hint on what these NNPA counters are
-supposed to count and operate on. A full explanation is given in the document
-SA22-7832-13 "z/Architecture Principles of Operation", Chapter 26, pp 26-1 to 26-115.
-
-If you think this small description is not worth it, then we can drop the patch.
-
-Thanks for you help and directions.
-
--- 
-Thomas Richter, Dept 3303, IBM s390 Linux Development, Boeblingen, Germany
---
-Vorsitzender des Aufsichtsrats: Gregor Pillen
-Geschäftsführung: David Faller
-Sitz der Gesellschaft: Böblingen / Registergericht: Amtsgericht Stuttgart, HRB 243294
 
