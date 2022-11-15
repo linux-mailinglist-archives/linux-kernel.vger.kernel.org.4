@@ -2,115 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F426294FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 767D8629500
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232655AbiKOJzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 04:55:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        id S230023AbiKOJ5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 04:57:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiKOJzl (ORCPT
+        with ESMTP id S229954AbiKOJ5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 04:55:41 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C31323BC7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:55:37 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id c1so23600378lfi.7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:55:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cHVGZGFvlfOuto+Xt8nKu6o58i2L4GJKNS5eugoVkdE=;
-        b=zujkZBsa5qfQFD0h/od/X1kboXjmeDHm2yfi4szFjwzyYt7mnF4wBKv5WQn9NLO9+B
-         lYpysXg9wd7vHoEJ9HvIUhdmb0bgAobw+IBZeQ59YOjDKb3OaQJ6zQrne2IfNtOJD35S
-         MKe/vfadEg5hdu2TwEf/qNWON4ABNcvs5m4Uv5Hlo3p1cHN9WLARq+1G/RNgJ7PkZ9bJ
-         8yk2+SIMzZ7rMQJXzKE8fhQdWznUW5zFy6rIXxZLF4yfl/91aDu+tVKn7ht2kQyDsEM0
-         mIVChOdiOzNrA/GwOryL3DtSCiuqy8QeYvVDrziGqUI/jtWLXwZWOD0UCscg2XCOmnfr
-         QsUQ==
+        Tue, 15 Nov 2022 04:57:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B67DF0C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:56:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668506211;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Nu3ArU28TM2hYIfKLCvBtkAP2klHTLMumzmyu1fNa5U=;
+        b=a7+sc3viiBz7V72RdTAg61KF/op8xR611D0rI8nqTotJwT+0v+TWH6u/kGHSDbBk45ynOW
+        qxwWGsQm2w7GDkBdU0T4S2fcQhzcQqnVRoqeoTIKVoa06SRMPnSh9OVijgYJtfiu9YGUJQ
+        XW0oft9F1ZStEDnWpZfh5VfLWAin4Js=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-372-gW-NkHEwPi28KZcrkZaSKA-1; Tue, 15 Nov 2022 04:56:49 -0500
+X-MC-Unique: gW-NkHEwPi28KZcrkZaSKA-1
+Received: by mail-qk1-f199.google.com with SMTP id h8-20020a05620a284800b006b5c98f09fbso13333484qkp.21
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:56:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cHVGZGFvlfOuto+Xt8nKu6o58i2L4GJKNS5eugoVkdE=;
-        b=pj+fwARj+vkVIsdl8pONoG2+3EKxCll2pv3uyR21f9x/q/NZ7QabEx+TlQbbEh+VsX
-         qwB+iNcJVsrRRwY3uOmsDAZSAXauYDJwwGTv5YgkLN9Cu13Ondj1IZ9Hb7rc5UTBRaOp
-         Ot9EOKmKtRff1IWSRX5YFxKvTLifbEgHodJ6TSNhbA14ZvqTOmCrE4jA2LgA/MPZR7nC
-         qIeWPqFSO2/GC9KXc1ZYV9en8vI4KiV9KelOpIO1kjqb5Zjus7xIX8Q2SAy3A2c42vPf
-         DkpJL9KkTizHkVavvzd5cYtcxwQMaIiC9b6DC1qnC6b6qUBWivqIvTb8U+JkW+7BR/Gq
-         Sofg==
-X-Gm-Message-State: ANoB5pnqU1ThguMWi3Ekw6YUd9BNr+wwiS3kiAM/Ti7J8XXHQ/1sNrMX
-        7sMzcTq+DkBucQXUACA4rLk4Tg==
-X-Google-Smtp-Source: AA0mqf5B6D63SwaArDeQof7jXTKety9c9QdXaQDZlQbDtJv27tmP/fm6Z/YAplBjW8krHbClAmPb3w==
-X-Received: by 2002:a05:6512:3ac:b0:498:f36a:76fa with SMTP id v12-20020a05651203ac00b00498f36a76famr5519055lfp.532.1668506135411;
-        Tue, 15 Nov 2022 01:55:35 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id h28-20020a2eb0fc000000b0027741daec09sm2343827ljl.107.2022.11.15.01.55.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 01:55:35 -0800 (PST)
-Message-ID: <5b7f035c-807b-a6d4-30ec-e5467ff4ea47@linaro.org>
-Date:   Tue, 15 Nov 2022 10:55:33 +0100
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Nu3ArU28TM2hYIfKLCvBtkAP2klHTLMumzmyu1fNa5U=;
+        b=T8LZzSdwDd5PO3/NfScXVyVy67Rq91s6CG206AVH4Pr3XlxmkU57bJ8Qt+cfmKFKPS
+         ujRq8S4g0LEaaB3jRsia6Ytf9KBKUx/w/pNhTjn4EkcohSjrgDs+65TivpTJbsNZdlWo
+         PB05VcCy6cFJ+ZrcawM+mIJs8cvwbohlR7Frwam/iyon/louaTGyn3FuYtsnPLReCz9w
+         pJqS/Kgk9blm9gq5tUOdCx7w4cgK3xdoyoSmCx002kFb58bjf3hrVina5hfaiHTa7qIW
+         ymcAKUPGkZUIJYYHkCwSH/hYJP7zU9HkIB2WYXYstSedoWRxpLotWF5PUPNp92oCn4bU
+         dNlA==
+X-Gm-Message-State: ANoB5pm4oBo8hG8cbwC/VZl+qM83LxdAsrzJDg3jzLxHE9gUj7up4xfE
+        Y4z4pCCbHNcU3KdQuM/v98NAak9DpgNDr1WTFStyXyBxqrPy0PJv+AQ+IepUanrkVhW2CtCD3Qs
+        9UMt4gfFO8w/zqd2qTYInxqz8
+X-Received: by 2002:a0c:eda2:0:b0:4bb:6692:a5a6 with SMTP id h2-20020a0ceda2000000b004bb6692a5a6mr15927764qvr.108.1668506209432;
+        Tue, 15 Nov 2022 01:56:49 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5qErtemVdLPkg6MKl6FsmY7VSbcQ3GZi2WzT/IrqnFSATo+99+GcFPnsuSsEzWBObGu5uCDA==
+X-Received: by 2002:a0c:eda2:0:b0:4bb:6692:a5a6 with SMTP id h2-20020a0ceda2000000b004bb6692a5a6mr15927757qvr.108.1668506209169;
+        Tue, 15 Nov 2022 01:56:49 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
+        by smtp.gmail.com with ESMTPSA id l5-20020ac87245000000b0039cc7ebf46bsm6870110qtp.93.2022.11.15.01.56.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 01:56:48 -0800 (PST)
+Message-ID: <205d812ab74d721f4345eabcf3e5a86a710b40da.camel@redhat.com>
+Subject: Re: [PATCH] net: neigh: decrement the family specific qlen
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        "Denis V. Lunev" <den@openvz.org>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Yuwei Wang <wangyuweihx@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 15 Nov 2022 10:56:45 +0100
+In-Reply-To: <Y295+9+JDjqRWbwU@x1.ze-it.at>
+References: <Y295+9+JDjqRWbwU@x1.ze-it.at>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 3/3] dt-bindings: gpio: Add Nuvoton NPCM750 serial I/O
- expansion interface(SGPIO)
-Content-Language: en-US
-To:     Jim Liu <jim.t90615@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     JJLIU0@nuvoton.com, KWLIU@nuvoton.com, brgl@bgdev.pl,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, openbmc@lists.ozlabs.org
-References: <20221108092840.14945-1-JJLIU0@nuvoton.com>
- <20221108092840.14945-4-JJLIU0@nuvoton.com>
- <CACRpkdb+Bkwa8yCKGtRcsJ6KnJh+RUuz_gOrQV63pcYQLaHCaw@mail.gmail.com>
- <CAKUZ0+GCf_Zv=VhnY5Z=yYAfR1=_ha98BVVxRGVy8ui6so_Yrg@mail.gmail.com>
- <CACRpkdYW0P8gqtGdiRX_frP32WF2W=NVg1JTu1fVMBXxEL0-WA@mail.gmail.com>
- <CAKUZ0+Hy5suFg9VZ8-+cH7kGc5KLqUnf9hjnT+iaw+a1HF8x0A@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAKUZ0+Hy5suFg9VZ8-+cH7kGc5KLqUnf9hjnT+iaw+a1HF8x0A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/11/2022 09:38, Jim Liu wrote:
-> Hi Linus
+Hello,
+
+On Sat, 2022-11-12 at 11:48 +0100, Thomas Zeitlhofer wrote:
+> Commit 0ff4eb3d5ebb ("neighbour: make proxy_queue.qlen limit
+> per-device") introduced the length counter qlen in struct neigh_parms.
+> There are separate neigh_parms instances for IPv4/ARP and IPv6/ND, and
+> while the family specific qlen is incremented in pneigh_enqueue(), the
+> mentioned commit decrements always the IPv4/ARP specific qlen,
+> regardless of the currently processed family, in pneigh_queue_purge()
+> and neigh_proxy_process().
 > 
-> Thanks for your reply.
+> As a result, with IPv6/ND, the family specific qlen is only incremented
+> (and never decremented) until it exceeds PROXY_QLEN, and then, according
+> to the check in pneigh_enqueue(), neighbor solicitations are not
+> answered anymore. As an example, this is noted when using the
+> subnet-router anycast address to access a Linux router. After a certain
+> amount of time (in the observed case, qlen exceeded PROXY_QLEN after two
+> days), the Linux router stops answering neighbor solicitations for its
+> subnet-router anycast address and effectively becomes unreachable.
 > 
-> let me explain the gpio pin as below:
+> Another result with IPv6/ND is that the IPv4/ARP specific qlen is
+> decremented more often than incremented. This leads to negative qlen
+> values, as a signed integer has been used for the length counter qlen,
+> and potentially to an integer overflow.
 > 
-> Our sgpio module has 64 pins output and 64 pins input.
-> Soc have 8 reg to control 64 output pins
-> and  8 reg to control 64 input pins.
-> so the pin is only for gpi or gpo.
+> Fix this by introducing the helper function neigh_parms_qlen_dec(),
+> which decrements the family specific qlen. Thereby, make use of the
+> existing helper function neigh_get_dev_parms_rcu(), whose definition
+> therefore needs to be placed earlier in neighbour.c. Take the family
+> member from struct neigh_table to determine the currently processed
+> family and appropriately call neigh_parms_qlen_dec() from
+> pneigh_queue_purge() and neigh_proxy_process().
 > 
-> The common property ngpio can be out or in.
-> so i need to create d_out and d_in to control it.
-> customers can set the number of output or input pins to use.
+> Additionally, use an unsigned integer for the length counter qlen.
+> 
+> Fixes: 0ff4eb3d5ebb ("neighbour: make proxy_queue.qlen limit per-device")
+> Signed-off-by: Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
+> ---
+>  include/net/neighbour.h |  2 +-
+>  net/core/neighbour.c    | 58 +++++++++++++++++++++--------------------
+>  2 files changed, 31 insertions(+), 29 deletions(-)
+> 
+> diff --git a/include/net/neighbour.h b/include/net/neighbour.h
+> index 20745cf7ae1a..cc0b65b7c829 100644
+> --- a/include/net/neighbour.h
+> +++ b/include/net/neighbour.h
+> @@ -83,7 +83,7 @@ struct neigh_parms {
+>  	struct rcu_head rcu_head;
+>  
+>  	int	reachable_time;
+> -	int	qlen;
+> +	__u32	qlen;
+>  	int	data[NEIGH_VAR_DATA_MAX];
+>  	DECLARE_BITMAP(data_state, NEIGH_VAR_DATA_MAX);
+>  };
 
-Aren't customers interested in specific pins, not the number? IOW, why
-do you assume pins should be set to output in ascending order (e.g. 1, 2
-and 3) and not in a flexible way?
+The patch LGTM, but why did you use __u32 above? this is not part of
+uAPI, plain u32 should be fine. 
 
-> the driver will open the ports to use.
-> ex: if  i set d_out=9   and d_in=20
+Thanks!
 
-Why 20 means three input ports? 9 opening two outputs could have sense
-if it was a mask but you did not say it is a mask.
-
-
-
-Best regards,
-Krzysztof
+Paolo
 
