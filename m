@@ -2,274 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7407A62A306
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 990F162A30F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238462AbiKOUdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 15:33:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38484 "EHLO
+        id S238518AbiKOUgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 15:36:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbiKOUdG (ORCPT
+        with ESMTP id S232034AbiKOUfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:33:06 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E6B3122E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:30:49 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id w23so7784082ply.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:30:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VruM4CbTIOWzFMx0rxGuqPrwzvP7mA2aTck9eYJcn90=;
-        b=fVp5FfgiqCHuyKWQmSsmfW7fMN91QNmKjM9t974RJ3KQETVgnF5Ot05IHAT+MJsK3q
-         o6mwyQJXySlCDrk8IHbxo/Z+yUCD0f7YXhZ2tr0atS0gt6JFjeHPSbuT+dsChQ9nQemU
-         YpuzBhYuOhH1sTIC8zGOlpLVk+5bd8WUjf2qQszSIf7+Fe237qpMsbbpu8KSUUOyXW6y
-         MdPspjl83T1AFlAS/U0YSYxKhwwkASS00Sw5HnsxNlVRDYR3tOz8flE3EMnliljdcAeQ
-         10dIVmo+NXpBsoVfwAXiAcQAXJNrPwi4elvMhsFmtjPG9gQZhkUBN6OfeQQSfMBVlqMA
-         dDpg==
+        Tue, 15 Nov 2022 15:35:54 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F66C3123C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:31:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668544304;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=T6SnydtGhvRB1WXJGQc/GnEivc01dn3HZFeqVNWDLRw=;
+        b=a6spF9R8ambST/8QMqyc57ehmdRcOsiYn0B3i88Hua0gsiVNTuJ8yWm+yL0JeKabQYVqU2
+        tXNwbrHaO2j4YIykjZMp5Va9YIkz+nzspJbIltVHpHlSbo1+GPyMAfGU6oOqFciYyUyh2w
+        j7diwwfAxmSqrHcBxyf6jQLMc5E24LY=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-397-a0JAsYJ0P5OkWxQGT2ke1w-1; Tue, 15 Nov 2022 15:31:41 -0500
+X-MC-Unique: a0JAsYJ0P5OkWxQGT2ke1w-1
+Received: by mail-ej1-f71.google.com with SMTP id dn14-20020a17090794ce00b007ae5d040ca8so8108117ejc.17
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:31:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VruM4CbTIOWzFMx0rxGuqPrwzvP7mA2aTck9eYJcn90=;
-        b=ffpPdc/Arc9DxR3YusP8fN7P5EUXslq7oO/8Ec9sBaaMEyycvlZt8e+i16QvasK6vM
-         qgcNlPvWsUt4n7TAlpOOzKF48z/7t9qxyvqNyGk4XwZdFZGCGLDoFLm9GGHqsQka/e9e
-         6r29IAg5dgsI/Ep+PczGhPl3zBKW9GSxmtez+mUPzMCzativ3AKGfjRWQs5tvtqagnqS
-         elshGnZs9mYzdtf+BxZ9ypQgFyG1dZX0RcbnpjB1UOte0Rxstn2lYuWtSl38+NrX/Rt8
-         QC1Df6TYoqkJzG8sUmuMkKnfKeZX+5Tjy34PFH2LIxnhv9HG4cSQrvUMsIVSk0X53KVx
-         VXHA==
-X-Gm-Message-State: ANoB5pkGC4jLk0Db1nP/2xbw4pZ4PIKWoTOlkbScZPwCGshQi/mtOSk0
-        5EQnyYiOAJZtEaWVrPahoKSPNA==
-X-Google-Smtp-Source: AA0mqf6L/z5lIHZ+hIvsUNv+f/79D0F3jpzeUa0ZxfrVTezdYuEwUbgVfpAzAN5Ftu/o/J2nL/G+RA==
-X-Received: by 2002:a17:902:e483:b0:188:b44b:598 with SMTP id i3-20020a170902e48300b00188b44b0598mr5754384ple.54.1668544248651;
-        Tue, 15 Nov 2022 12:30:48 -0800 (PST)
-Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
-        by smtp.gmail.com with ESMTPSA id y188-20020a6364c5000000b00451f4071151sm7985842pgb.65.2022.11.15.12.30.45
+        bh=T6SnydtGhvRB1WXJGQc/GnEivc01dn3HZFeqVNWDLRw=;
+        b=h6U7xNmEcXig8bA6bUn1h7jC18KikGwD4M/fU3RpuisoGLPRuBtBP7pjhSmjUlfSdd
+         QOTlk7ZB3CawmicXXQabEFBUvMg2w9m7W2QXtWbmEHm0oh3sNOE3waivJERsmGB9kA5R
+         nqgboy0YVrf4gXhRF+xwwziZ07WwtQQl+bDUbBL0+Up5Io002BE2vq3OHMQssy6P3g2o
+         sJdBlg52OReLso0FBgV3qIL9BcoJ7TMYNzJlousL4oDSmzAxar43nJwm/XOsaL8Fofys
+         6E5+hi2URlhq/EGXHKzD9BGGHoxwDfFQ45WseDUUdBFS2eCwY3jurtGbEMO9HYbjvNZw
+         WFbA==
+X-Gm-Message-State: ANoB5pm0TDEh1MBXvJ+kFtJXOt+hPpkJ6Fjq6QTc4Wn2wq1ukwXk5uPi
+        2glgQOFNY+DhetDOEeEQ/bSwxz6DQHVJC/J/VBmV5jcmEikjGQe0BHwpdeCsFrQWfZM+ODZxQMH
+        tIF9Y7zEd4YHkCEh3wmDj11OY
+X-Received: by 2002:a17:906:492:b0:7ad:bb54:75d3 with SMTP id f18-20020a170906049200b007adbb5475d3mr15239281eja.484.1668544300669;
+        Tue, 15 Nov 2022 12:31:40 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6rfuCW6M+fSsYP2tM+nBSTMFTn0vK4e4vNkKmOR1CQt2TLUrb4lgeBkWbly7x94fEYFWdyFg==
+X-Received: by 2002:a17:906:492:b0:7ad:bb54:75d3 with SMTP id f18-20020a170906049200b007adbb5475d3mr15239265eja.484.1668544300481;
+        Tue, 15 Nov 2022 12:31:40 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id hd16-20020a170907969000b007ab1b4cab9bsm5894956ejc.224.2022.11.15.12.31.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 12:30:48 -0800 (PST)
-Message-ID: <d6be0d25-b7a2-fe6a-f653-d3b583c7202a@9elements.com>
-Date:   Wed, 16 Nov 2022 02:00:44 +0530
+        Tue, 15 Nov 2022 12:31:39 -0800 (PST)
+Message-ID: <382b83c0-a075-999e-6ba2-410d25343d57@redhat.com>
+Date:   Tue, 15 Nov 2022 21:31:39 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v10 1/2] dt-bindings: mfd: Add MAX5970 and MAX5978
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-Cc:     Marcello Sylvester Bauer <sylv@sylv.io>
-References: <20221115110932.637091-1-Naresh.Solanki@9elements.com>
- <20221115110932.637091-2-Naresh.Solanki@9elements.com>
- <87ba1b05-5b10-1925-838e-0099dabe0703@linaro.org>
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-In-Reply-To: <87ba1b05-5b10-1925-838e-0099dabe0703@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2 3/7] platform/x86: ideapad-laptop: Report
+ KEY_CAMERA_ACCESS_TOGGLE instead of KEY_CAMERA
+Content-Language: en-US, nl
+To:     =?UTF-8?Q?Eray_Or=c3=a7unus?= <erayorcunus@gmail.com>,
+        platform-driver-x86@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        ike.pan@canonical.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, dmitry.torokhov@gmail.com,
+        mgross@linux.intel.com, pobrn@protonmail.com
+References: <20221029120311.11152-1-erayorcunus@gmail.com>
+ <20221029120311.11152-4-erayorcunus@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221029120311.11152-4-erayorcunus@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+Hi Eray,
 
-On 15-11-2022 07:34 pm, Krzysztof Kozlowski wrote:
-> On 15/11/2022 12:09, Naresh Solanki wrote:
->> From: Marcello Sylvester Bauer <sylv@sylv.io>
->>
->> The MAX597x is a hot swap controller with configurable fault protection.
->> It also has 10bit ADC for current & voltage measurements.
->>
->> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
->> Co-developed-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
->> Co-developed-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
->> ---
->>   .../bindings/mfd/maxim,max5970.yaml           | 154 ++++++++++++++++++
->>   1 file changed, 154 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml b/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
->> new file mode 100644
->> index 000000000000..edf0c23db4ca
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
->> @@ -0,0 +1,154 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/mfd/maxim,max5970.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Regulator for MAX5970 smart switch from Maxim Integrated.
->> +
->> +maintainers:
->> +  - Patrick Rudolph <patrick.rudolph@9elements.com>
->> +
->> +description: |
->> +  The smart switch provides no output regulation, but independent fault protection
->> +  and voltage and current sensing.
->> +  Programming is done through I2C bus.
->> +
->> +  Datasheets:
->> +    https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
->> +    https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - maxim,max5970
->> +      - maxim,max5978
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  leds:
->> +    type: object
->> +    description:
->> +      Properties for four LEDS.
->> +
->> +    properties:
->> +      "#address-cells":
->> +        const: 1
->> +
->> +      "#size-cells":
->> +        const: 0
->> +
->> +    patternProperties:
->> +      "^led@[0-3]$":
->> +        $ref: /schemas/leds/common.yaml#
->> +        type: object
->> +
->> +    additionalProperties: false
->> +
->> +  vss1-supply:
->> +    description: Supply of the first channel.
->> +
->> +  vss2-supply:
->> +    description: Supply of the second channel.
->> +
->> +  regulators:
->> +    type: object
->> +    description:
->> +      Properties for both regulators. Also set value for shunt resistor used.
-> 
-> You should explain not the syntax,  but what part of hardware this nodes
-> represents. Therefore "Also set value" does not fit at all. Hardware
-> sets value?
-You mean something like: Properties for power switch
-> 
-> I looked at datasheets to figure it out but they do not refer to any
-> configurable regulator, LDO nor "sw0/sw1/sw2". Therefore I have no clue
-> what to expect here...
-Yes this is for power switch part of max5970/8
-> 
->> +
->> +    patternProperties:
->> +      "^sw[0-1]$":
->> +        $ref: /schemas/regulator/regulator.yaml#
->> +        type: object
->> +        properties:
->> +          shunt-resistor-micro-ohms:
->> +            description: |
->> +              The value of current sense resistor in microohms.
->> +
->> +        required:
->> +          - shunt-resistor-micro-ohms
->> +
->> +      unevaluatedProperties: false
-> 
-> I don't think it has proper indentation. Did you test the binding?
-Definitely tested the bindings before I push the patch.
-> 
->> +
->> +    additionalProperties: false
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - regulators
->> +  - vss1-supply
->> +
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          enum:
->> +            - maxim,max5970
->> +    then:
->> +      required:
->> +        - vss2-supply
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    i2c {
->> +        #address-cells = <1>;
->> +        #size-cells = <0>;
->> +        regulator@3a {
->> +            compatible = "maxim,max5978";
->> +            reg = <0x3a>;
->> +            vss1-supply = <&p3v3>;
->> +
->> +            regulators {
->> +                sw0_ref_0: sw0 {
->> +                    regulator-compatible = "SW0";
->> +                    shunt-resistor-micro-ohms = <12000>;
->> +                };
->> +            };
->> +
->> +            leds {
->> +                #address-cells = <1>;
->> +                #size-cells = <0>;
->> +                led@0 {
->> +                    reg = <0>;
->> +                    label = "led0";
->> +                    default-state = "on";
->> +                };
->> +                led@1 {
->> +                    reg = <1>;
->> +                    label = "led1";
->> +                    default-state = "on";
->> +                };
->> +            };
->> +        };
->> +    };
->> +
->> +  - |
->> +    i2c {
->> +        #address-cells = <1>;
->> +        #size-cells = <0>;
->> +
->> +        regulator@3a {
->> +            compatible = "maxim,max5970";
->> +            reg = <0x3a>;
->> +            vss1-supply = <&p3v3>;
->> +            vss2-supply = <&p5v>;
->> +
->> +            regulators {
->> +                sw0_ref_1: sw0 {
->> +                    regulator-compatible = "SW0";
-> 
-> This property is deprecated, isn't it? Again - did you test this?
-Yes tested.
-> 
-> Best regards,
-> Krzysztof
-> 
+On 10/29/22 14:03, Eray Orçunus wrote:
+> Reporting KEY_CAMERA when pressing camera switch key is wrong, since
+> KEY_CAMERA is supposed to be used for taking snapshot. Change it with
+> KEY_CAMERA_ACCESS_TOGGLE, so user-space can act correctly.
+
+I'm afraid that we cannot just go and change the emitted key-code,
+users might already have setup key-bindings to the existing
+KEY_CAMERA code. Also key-codes >= 240 (decimal!) don't work in
+X11 based desktop-environments. And even under Wayland they still
+have issues, see e.g.:
+
+https://gitlab.gnome.org/GNOME/gtk/-/issues/4353
+
+So I'm afraid that I cannot take this patch.
+
+Note that since a sparse_keymap is used, you can always override
+this on your own systems by using a /etc/udev/hwdb.d/61-keyboard.hwdb
+file, see: /lib/udev/hwdb.d/60-keyboard.hwdb for the syntax to
+map a (sparse) scancode to the KEY_FOO code of your choice.
 
 Regards,
-Naresh
+
+Hans
+
+
+
+
+
+
+> 
+> This patch needs KEY_CAMERA_ACCESS_TOGGLE to be defined, thus depends on
+> "HID: add mapping for camera access keys" patch.
+> 
+> Signed-off-by: Eray Orçunus <erayorcunus@gmail.com>
+> ---
+>  drivers/platform/x86/ideapad-laptop.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/ideapad-laptop.c b/drivers/platform/x86/ideapad-laptop.c
+> index b67bac457a7a..0ef40b88b240 100644
+> --- a/drivers/platform/x86/ideapad-laptop.c
+> +++ b/drivers/platform/x86/ideapad-laptop.c
+> @@ -1038,7 +1038,7 @@ static void ideapad_sysfs_exit(struct ideapad_private *priv)
+>   */
+>  static const struct key_entry ideapad_keymap[] = {
+>  	{ KE_KEY,   6, { KEY_SWITCHVIDEOMODE } },
+> -	{ KE_KEY,   7, { KEY_CAMERA } },
+> +	{ KE_KEY,   7, { KEY_CAMERA_ACCESS_TOGGLE } },
+>  	{ KE_KEY,   8, { KEY_MICMUTE } },
+>  	{ KE_KEY,  11, { KEY_F16 } },
+>  	{ KE_KEY,  13, { KEY_WLAN } },
+
