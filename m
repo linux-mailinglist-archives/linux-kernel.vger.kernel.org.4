@@ -2,112 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8934762AE98
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C91A62AEA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:50:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbiKOWt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 17:49:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
+        id S232587AbiKOWuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 17:50:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238658AbiKOWtF (ORCPT
+        with ESMTP id S231521AbiKOWuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:49:05 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9A72A726
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:48:46 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id j20-20020a056e02219400b00300a22a7fe0so12049669ila.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:48:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PZRfM6paNEn42pAs04dPr3vwwNPVW+jfdJDbudmuBF8=;
-        b=bBrwmo+plPSQr3b6G8my57GZkAARmo37b+9mcAIZwdBwJhl81ioyEUnp/CqOtSq8wf
-         xuVfq7Ck96RuGakx+eqg3NeHwrZ43YMRaOkIWr2I3I+WQpI1QS2hYWYdPuasFIdk5MIQ
-         SrEh+DaiQEmAQFP4r3N9sCSP90NkjPs9cje0jlvbWbg2Nt4hvCG5pfQIx9WDtfu66ngo
-         PhBd/kk07HAga3bU6Pz3mNpdhgEjq9mGmMjtE9KDx/PLBHZba7BCS98SnnXlyzjlZK24
-         55SrZeIzFt7osGOWWvB2yQUtIgmqpLa6OBqCUONB5S9AbGmP8qyOcOWmz6i4TBrA1SPx
-         e/aQ==
-X-Gm-Message-State: ANoB5plG+WaiLEkuwkRLrTqINO0VJXloIrxPd1wyivwy0EAt+N+OP80B
-        HtcBY3qdMSA5orTLxiy03n5r3C+VkelJJyx9l7k+AnzOXB31
-X-Google-Smtp-Source: AA0mqf64SsyDvKMeHVrnmD2z2kZ6HxREsRlr2vB/TICdBf9yS30rH4ziUvUrHFck6VW5E3nJZVUmsVN1O+gMHT+6dOWJtgZ0JvAY
+        Tue, 15 Nov 2022 17:50:51 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F40BCB;
+        Tue, 15 Nov 2022 14:50:50 -0800 (PST)
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MORAU-1oamU70bWA-00PyO4; Tue, 15
+ Nov 2022 23:50:29 +0100
+Message-ID: <8845454d-9942-8216-2f00-2bb12bad0e41@gmx.com>
+Date:   Wed, 16 Nov 2022 06:50:22 +0800
 MIME-Version: 1.0
-X-Received: by 2002:a6b:c88f:0:b0:6bb:e329:fcd7 with SMTP id
- y137-20020a6bc88f000000b006bbe329fcd7mr8676971iof.206.1668552525732; Tue, 15
- Nov 2022 14:48:45 -0800 (PST)
-Date:   Tue, 15 Nov 2022 14:48:45 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000095e1b405ed8a284a@google.com>
-Subject: [syzbot] kernel panic: stack is corrupted in __blk_flush_plug
-From:   syzbot <syzbot+fade8a8e2bdc29b3a90b@syzkaller.appspotmail.com>
-To:     broonie@kernel.org, catalin.marinas@arm.com,
-        kaleshsingh@google.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, madvenka@linux.microsoft.com,
-        mark.rutland@arm.com, maz@kernel.org,
-        syzkaller-bugs@googlegroups.com, will@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v4 3/3] btrfs: qgroup: fix sleep from invalid context bug
+ in update_qgroup_limit_item()
+Content-Language: en-US
+To:     ChenXiaoSong <chenxiaosong2@huawei.com>, clm@fb.com,
+        josef@toxicpanda.com, dsterba@suse.com
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhangxiaoxu5@huawei.com, yanaijie@huawei.com, wqu@suse.com
+References: <20221115171709.3774614-1-chenxiaosong2@huawei.com>
+ <20221115171709.3774614-4-chenxiaosong2@huawei.com>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+In-Reply-To: <20221115171709.3774614-4-chenxiaosong2@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:qf4UcSkypubV65Z6pVPtMUkjo4L+Q7azP7Z8uLzXO8IYUD1jxMe
+ 1qZwDgiKLUrnevm7tjsbzauTaB/07Gnr1EI9nzqmdOOfEjQ5EESP46Dl8hjkoutRpDdzXcv
+ TGsvUv/J5E3SbX8AF7vUdPh0ngCREK2mwwrE3gDtQpN7Jqd+IMWG3ZB7qPYIlHGWT2xUJWD
+ ra5CwJK+MTA62JGPoIwWg==
+UI-OutboundReport: notjunk:1;M01:P0:QrughL3YMH0=;KGDkQr7lOw5M29GsaFewPxfwPou
+ wvWylbZp4VU6Sgef8yEUQDBYu97Xdez2rINtAfqsVeOumF4t2YuyWS1iuu+p3G7qvvuAJnFIA
+ E8Ad0Dn77QSWXVFwNL3kUzWk8uxtxw7Sw0BUb75ivHX1hD7EVq9C41KuTjJbTAfH7EcGvhagl
+ jYgwV2VZCaLbQPFoiUMiAT49QqCA5HtkapUjd+r376ZybFSyK4gbmk6vHxk8N4MI9AW6JAYgC
+ IQaWXLNFAEzUeG0ElzyAnOqp2LaNQ1/kYmzpWNxY4cIgB565wFFZSzx9M4sZd6V48CF6t90Wi
+ p0FUVLd2n8nkaVH28uWwpxx+JJGJ7dP86juOwtbfok/i7D5THrL0Qk4YlvyUAJIRfdGjk1U3j
+ tzf6zHTQwCvn1qb4VI+ZFeL+1Fz5GLpfIRAVo4Ea52OSjZ6dAH1UolzJ0GRYp88hp+w9bvd8q
+ YQRId1wZUrgZaBGsCIya9RP8oa6Sa2hgYfrJ2CtKsJXkcGV90j0Kt/dF0B76/03ZaLwAqWXvE
+ IdTEXnCYkEfUq6UAUN2x2ab8thRki4QgfOd31r2GWyOoNc8TzPwr0GHP0+xcn7ZvQxkhyMP7Y
+ BwmAP/eCwexTXYD0Qp1B4bpOn4mCgxm2Gu7Wl8qx7F+gMGL5eGpleAASjsLlKj5fk7dmzPfLG
+ 8oyqtFXeqnRnJE9mxy4Js+ueWDjS+Wq8fDP91+TWtA+SCZsomKQ6du+ogbXA245TlF+FqADh7
+ h58PcYCWX7xBKYM7R8oOPChORLy8sVeRlxIDNrqnLvj2GAtm0rW3P/HqgLtXFnB7+9wO/qr8o
+ RhUzAeuIyMeKFW9koipoyW509qMkVjrZceTPiSfaOyoFUTQ8y7UDEft/KcaG58H8eIwSo1N0e
+ hgday+Aw5zC77WWY8A6wAb6YCwpv0bdUB9vNX36EPL1VIh9mrlNnQe3qUCnhIhaKHIShOwsr/
+ l979FJFl6Ef+Qv3M8jVvgCRCmtc=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    9e4ce762f0e7 Merge branches 'for-next/acpi', 'for-next/asm..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=1502ad35880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=20ffacc1ce1c99b5
-dashboard link: https://syzkaller.appspot.com/bug?extid=fade8a8e2bdc29b3a90b
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14f33159880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13e33ef1880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/a70eb29add74/disk-9e4ce762.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/769d096516a8/vmlinux-9e4ce762.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9309615f51d5/Image-9e4ce762.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/0332fee8ec34/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fade8a8e2bdc29b3a90b@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 8226
-ntfs3: loop0: Mark volume as dirty due to NTFS errors
-ntfs3: loop0: Failed to load $Extend.
-Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: __blk_flush_plug+0x1a4/0x1a4
-CPU: 0 PID: 4370 Comm: syz-executor220 Not tainted 6.1.0-rc5-syzkaller-32254-g9e4ce762f0e7 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- panic+0x218/0x508 kernel/panic.c:274
- warn_bogus_irq_restore+0x0/0x40 kernel/panic.c:703
- blk_finish_plug+0x0/0x54
-SMP: stopping secondary CPUs
-Kernel Offset: disabled
-CPU features: 0x00000,040e0108,4c017203
-Memory Limit: none
-Rebooting in 86400 seconds..
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+On 2022/11/16 01:17, ChenXiaoSong wrote:
+> Syzkaller reported BUG as follows:
+> 
+>    BUG: sleeping function called from invalid context at
+>         include/linux/sched/mm.h:274
+>    Call Trace:
+>     <TASK>
+>     dump_stack_lvl+0xcd/0x134
+>     __might_resched.cold+0x222/0x26b
+>     kmem_cache_alloc+0x2e7/0x3c0
+>     update_qgroup_limit_item+0xe1/0x390
+>     btrfs_qgroup_inherit+0x147b/0x1ee0
+>     create_subvol+0x4eb/0x1710
+>     btrfs_mksubvol+0xfe5/0x13f0
+>     __btrfs_ioctl_snap_create+0x2b0/0x430
+>     btrfs_ioctl_snap_create_v2+0x25a/0x520
+>     btrfs_ioctl+0x2a1c/0x5ce0
+>     __x64_sys_ioctl+0x193/0x200
+>     do_syscall_64+0x35/0x80
+> 
+> Fix this by delaying the limit item updates until unlock the spin lock.
+> 
+> Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+> ---
+>   fs/btrfs/qgroup.c | 13 +++++++++----
+>   1 file changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/btrfs/qgroup.c b/fs/btrfs/qgroup.c
+> index ca609a70d067..f84507ca3b99 100644
+> --- a/fs/btrfs/qgroup.c
+> +++ b/fs/btrfs/qgroup.c
+> @@ -2867,6 +2867,8 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
+>   	bool need_rescan = false;
+>   	u32 level_size = 0;
+>   	u64 nums;
+> +	bool update_limit = false;
+> +	int err;
+>   
+>   	/*
+>   	 * There are only two callers of this function.
+> @@ -2957,10 +2959,7 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
+>   		dstgroup->max_excl = inherit->lim.max_excl;
+>   		dstgroup->rsv_rfer = inherit->lim.rsv_rfer;
+>   		dstgroup->rsv_excl = inherit->lim.rsv_excl;
+> -
+> -		ret = btrfs_update_quoto_limit(trans, dstgroup, fs_info);
+> -		if (ret)
+> -			goto unlock;
+> +		update_limit = true;
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Nope, just call qgroup_dirty() for @dstgroup.
+
+Thanks,
+Qu
+>   	}
+>   
+>   	if (srcid) {
+> @@ -2987,6 +2986,7 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
+>   		dstgroup->max_excl = srcgroup->max_excl;
+>   		dstgroup->rsv_rfer = srcgroup->rsv_rfer;
+>   		dstgroup->rsv_excl = srcgroup->rsv_excl;
+> +		update_limit = false;
+>   
+>   		qgroup_dirty(fs_info, dstgroup);
+>   		qgroup_dirty(fs_info, srcgroup);
+> @@ -3055,6 +3055,11 @@ int btrfs_qgroup_inherit(struct btrfs_trans_handle *trans, u64 srcid,
+>   
+>   unlock:
+>   	spin_unlock(&fs_info->qgroup_lock);
+> +	if (update_limit) {
+> +		err = btrfs_update_quoto_limit(trans, dstgroup, fs_info);
+> +		if (err)
+> +			ret = err;
+> +	}
+>   	if (!ret)
+>   		ret = btrfs_sysfs_add_one_qgroup(fs_info, dstgroup);
+>   out:
