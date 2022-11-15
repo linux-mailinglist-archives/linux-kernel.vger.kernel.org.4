@@ -2,109 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFD462996C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:56:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFEC1629976
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:57:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238066AbiKOM42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 07:56:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
+        id S238304AbiKOM5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 07:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237917AbiKOM4X (ORCPT
+        with ESMTP id S230468AbiKOM52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:56:23 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA58C3BE
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:56:21 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id l12so24262960lfp.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:56:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wjdv2UNqYCuw6JZR6Qee1XPUfMLpqLvp5AsLB1cS+Ik=;
-        b=OwUZ+bRXRknpv394jiyHB6iYAL8S+/dF0QDWH8P7Tycz1AVEtSjbg5cAP8RAF5DPh0
-         KGf6tu9eQ6EEOAtaHOEDCy2veq6w3RXOb77aBzBeZLmZ1kLBqo1MZ0/TepJVSi0CNPj5
-         q2YbOwO3mpUEaRmbwYPi/KO++T/o5sZJgrRa//3iMyxa1/hFejq5/insq9fyAGQzCz1S
-         /Q5bx6oZZygnFE1ZAuUPfTyDQFG76WxKeXqSrC5+DM8T0qCDEJ4PFDm93WvX/KS5kMbX
-         hmf47q3XHnzrgurhmN/e3PrMs48V4rfD1TerZ9ueSXbzmpFxiPSnLoem687ai8D+0Rk5
-         W/aQ==
+        Tue, 15 Nov 2022 07:57:28 -0500
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D112C7;
+        Tue, 15 Nov 2022 04:57:28 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id jr19so8601580qtb.7;
+        Tue, 15 Nov 2022 04:57:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wjdv2UNqYCuw6JZR6Qee1XPUfMLpqLvp5AsLB1cS+Ik=;
-        b=P7dr+THf2+h+iKs8IAe1e1KuOKt+TeRsafoH0favrzUIBBuptN3Ux5BWP8PPWWZa5c
-         ZDVw6iYq1W2BB+/a5KoLigxWvhyIDPjQSXSuI9nduz6ollrw0fqQqsqmTV9fDJx69uQI
-         X3VwqTfUMrTvdgsPJwmlUlY1QGrcSEt1mib0CIviD6hw+24S+VP6vMUduly9QtmApHQS
-         zXLoKMqL1ExH9EMovBhRkk3yxc2WBroQdzJd5vQIwuP6U4QYfC3BBTd5F4gP+Uncqz4a
-         QshHire/UVV1UFfislk2SbJwaKr4s3WG5dajIZE+L0hEyMUL/M8iukbLF9ZHfulp5zAA
-         9qvQ==
-X-Gm-Message-State: ANoB5ple5ZQZybLveVSDP1Wg8E9Gtufjk1hrcEAqbeV4j0Jb9imjYS1X
-        xX3AyeVGus8pFBTH2rzn7io74Q==
-X-Google-Smtp-Source: AA0mqf6CP8Ur/mJFML2icvGxqrOoUsXzsngCLunz9VxC5g5y+d0aiTC9FJSlSZT9+Iyq9wF5rDUCfA==
-X-Received: by 2002:a05:6512:530:b0:4a4:77a8:45a4 with SMTP id o16-20020a056512053000b004a477a845a4mr5253259lfc.654.1668516980234;
-        Tue, 15 Nov 2022 04:56:20 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v26-20020ac258fa000000b004a8b9c68728sm2206285lfo.105.2022.11.15.04.56.18
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AHkJPzka4zfXCGTLs0aO8VP7mGUblhi6WGRHIHM6AP4=;
+        b=W/TD5vpJBlhgyRRBRlGaO7+ipmFEYCspKfYpckw8N5NDsj9OwXk2u1FyoGLZJmG0AJ
+         WfxliHskXp/NcKrz7nIsACXpvnQAlpFD+9PYlh27k3P2TjZRX0rF9F8dssuHZnqgbAS2
+         iUmo+CL0pVIClpP9hx6vc7pUi24ls8s/vEOm34qxUF3WSGTOQX+RiNEo+SRH7UwGcikr
+         Ah5UHbj1S4sywaBQeiIIZUfNeTXbt3aLixM7fCwDBjg+pX/pk3Xv0KxqGY6KFyazjQsV
+         oBSDJxx75KKwbPX4Pwo/z4UewSPJJ+HM7k3jxbJgRZVLjxZd658pK1/Gy6IRNI5i9x0G
+         iQAA==
+X-Gm-Message-State: ANoB5plFuagK/H2HR8QJrKcZ4qzSKaAxKseLdM4bmRVpPzo1rUJm60Mp
+        RCi74wNalOs0jw1NgMRjgr1usafZspSqrA==
+X-Google-Smtp-Source: AA0mqf4A5haEB1MLSv4thEtH6i37ACnXrWnkiijgSliXdhTxkskYHGxLehBjjV85ZuFx+JBO9Ep9rg==
+X-Received: by 2002:ac8:4753:0:b0:3a5:2967:f8b6 with SMTP id k19-20020ac84753000000b003a52967f8b6mr16763788qtp.86.1668517047205;
+        Tue, 15 Nov 2022 04:57:27 -0800 (PST)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id d27-20020ac84e3b000000b00398313f286dsm7209786qtw.40.2022.11.15.04.57.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 04:56:19 -0800 (PST)
-Message-ID: <a4c4257b-1467-2ccb-f546-d58c6356a39a@linaro.org>
-Date:   Tue, 15 Nov 2022 13:56:18 +0100
+        Tue, 15 Nov 2022 04:57:26 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id e68so14223584ybh.2;
+        Tue, 15 Nov 2022 04:57:26 -0800 (PST)
+X-Received: by 2002:a25:18c5:0:b0:6de:6183:c5c3 with SMTP id
+ 188-20020a2518c5000000b006de6183c5c3mr16677266yby.89.1668517046328; Tue, 15
+ Nov 2022 04:57:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next v2 4/5] dt-bindings: net: qcom,ipa: support
- skipping GSI firmware load
-Content-Language: en-US
-To:     Alex Elder <elder@linaro.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org,
-        elder@kernel.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221115113119.249893-1-elder@linaro.org>
- <20221115113119.249893-5-elder@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115113119.249893-5-elder@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221115121629.1181667-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20221115121629.1181667-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 15 Nov 2022 13:57:14 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUm77=79oEWCrjVcC9qJLkNPMKYDjdwfOy6Q1C9KFsOHg@mail.gmail.com>
+Message-ID: <CAMuHMdUm77=79oEWCrjVcC9qJLkNPMKYDjdwfOy6Q1C9KFsOHg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: thermal: rzg2l-thermal: Document RZ/Five SoC
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 12:31, Alex Elder wrote:
-> Add a new enumerated value to those defined for the qcom,gsi-loader
-> property.  If the qcom,gsi-loader is "skip", the GSI firmware will
-> already be loaded, so neither the AP nor modem is required to load
-> GSI firmware.
-> 
-> Signed-off-by: Alex Elder <elder@linaro.org>
-> ---
+On Tue, Nov 15, 2022 at 1:20 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> The TSU block on the RZ/Five SoC is identical to one found on the RZ/G2UL
+> SoC. "renesas,r9a07g043-tsu" compatible string will be used on the
+> RZ/Five SoC so to make this clear, update the comment to include RZ/Five
+> SoC.
+>
+> No driver changes are required as generic compatible string
+> "renesas,rzg2l-tsu" will be used as a fallback on RZ/Five SoC.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-This is a friendly reminder during the review process.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-It looks like you received a tag and forgot to add it.
+Gr{oetje,eeting}s,
 
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions. However, there's no need to repost patches *only* to add the
-tags. The upstream maintainer will do that for acks received on the
-version they apply.
+                        Geert
 
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-If a tag was not added on purpose, please state why and what changed.
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
