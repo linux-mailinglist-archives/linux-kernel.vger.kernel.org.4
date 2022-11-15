@@ -2,105 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D121462AE18
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8F862AE1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbiKOWRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 17:17:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56060 "EHLO
+        id S230346AbiKOWUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 17:20:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiKOWRf (ORCPT
+        with ESMTP id S229607AbiKOWT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:17:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C12271F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:17:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8632E61522
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 22:17:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D82BC433C1;
-        Tue, 15 Nov 2022 22:17:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668550652;
-        bh=0hu7rKCEN7EFEfQlBLLzIaScplCM3c5RZS+5NSeqKAY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pEMH4orDzHDiNvbLvQQI0vvUFneS7XXW+lBWsmjjvGTxHw7FthyZ8ACBRJ9ZAafEp
-         8fXBRcxEjfmu/ZkqgZg6FjJqrL461SNq4SN3KBAlqcrAxI+0UWreMhHdkCZBExDDyg
-         bt9Rofs8zCs3WqEiSDNYCoWQhf9AFb/TpwOIzVmS3LIIViZnio42Z3WQGN2cBNDTV0
-         o6HWlJ5MmUZ2EQNX1RARcN2M2ronhI1W5ZfCeBYJXiVcR66EwfjDmoWFPtm7daUw3F
-         RoNmU+0HUjSop/wTxPsuJalBuPFAhczLY0W7/1QgXxXRhgSwZ/N/XOwEhZt/0fCxQC
-         xpsduM0buvSrg==
-Date:   Tue, 15 Nov 2022 22:17:27 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Vineet Gupta <vineetg@rivosinc.com>
-Cc:     Conor.Dooley@microchip.com, bjorn@kernel.org,
-        stillson@rivosinc.com, greentime.hu@sifive.com,
-        guoren@linux.alibaba.com, vincent.chen@sifive.com,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, guoren@kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        ajones@ventanamicro.com
-Subject: Re: [PATCH v12 04/17] riscv: Add vector feature to compile
-Message-ID: <Y3QP9zjM3a4yifvi@spud>
-References: <20220921214439.1491510-1-stillson@rivosinc.com>
- <20220921214439.1491510-4-stillson@rivosinc.com>
- <87zgd2d6j1.fsf@all.your.base.are.belong.to.us>
- <98343aa8-b04d-fe58-8af8-4eeca03106d1@microchip.com>
- <9cda597c-1d31-4b8b-99ba-deab58975976@rivosinc.com>
+        Tue, 15 Nov 2022 17:19:57 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D8B2A24A
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:19:52 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668550788;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zHwYQqfoOwKcMgyEe73TdbeHd2/6ZKMXhdeVBBQPHNg=;
+        b=MmAV1YcKMD0BzxpDIvUnmA4Ef+S3Y0U3aWeFJ5tVBA8Ka67XcTdATiUhZMJT7W1skHdK/y
+        mvuzwAHSbfXRb9SPd2cyjKyflWwc8iDxD749PSqM1hrkE5LP/YzobmSbtckoiZTbrCYItt
+        LSXSKmAGtgBVxLVOrEyjJ/57di1/WL/4uXTDi7CyOW4oAD3ZT2J9rq4v0rbZKVt7bi8w3b
+        nut7VMFcKmBMRhXLU7MV59RaZniZbcby4H5S903g06GTVD5Cn8T01aeeqD8EPwS4lkY54G
+        gKTFj38VeQku9R29qfWf/qzpHIz4qzUvpAV+lu2M9zsD9ZpTMUaAdblP1Na3dg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668550788;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zHwYQqfoOwKcMgyEe73TdbeHd2/6ZKMXhdeVBBQPHNg=;
+        b=y4SneHOqzIKoHWTzbJON3lgOJWeFJQhN3JBulvmGwF1i7t7Bx7xNHa5x58I8JLEpEWaDIR
+        7nX6CQX4/NdsSADw==
+To:     Angus Chen <angus.chen@jaguarmicro.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Subject: Re: IRQ affinity problem from virtio_blk
+In-Reply-To: <TY2PR06MB3424CB11DB57CA1FAA16F10D85049@TY2PR06MB3424.apcprd06.prod.outlook.com>
+References: <TY2PR06MB3424CB11DB57CA1FAA16F10D85049@TY2PR06MB3424.apcprd06.prod.outlook.com>
+Date:   Tue, 15 Nov 2022 23:19:47 +0100
+Message-ID: <87v8nfrhbw.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9cda597c-1d31-4b8b-99ba-deab58975976@rivosinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 09:38:53AM -0800, Vineet Gupta wrote:
-> On 11/13/22 08:16, Conor.Dooley@microchip.com wrote:
-> > > > +config VECTOR
-> > > > +     bool "VECTOR support"
-> > > > +     depends on GCC_VERSION >= 120000 || CLANG_VERSION >= 130000
-> > > > +     default n
-> > > > +     help
-> > > > +       Say N here if you want to disable all vector related procedure
-> > > > +       in the kernel.
-> > > > +
-> > > > +       If you don't know what to do here, say Y.
-> > > > +
-> > > > +endmenu
-> > > "VECTOR" is not really consistent to how the other configs are named;
-> > > RISCV_ISA_V, RISCV_ISA_VECTOR, RISCV_VECTOR?
-> > It'd be RISCV_ISA_V to match the others single letter extentions, right?
-> 
-> Yep.
-> 
-> > The toolchain dependency check here also seems rather naive.
-> 
-> Indeed. I can build the code just fine with gcc-11 (and gcc-12), although my
-> reworked patcheset doesn't include all the orig patches including the
-> in-kernel xor stuff.
+On Tue, Nov 15 2022 at 03:40, Angus Chen wrote:
+> Before probe one virtio_blk.
+> crash_cts> p *vector_matrix
+> $44 = {
+>   matrix_bits = 256,
+>   alloc_start = 32,
+>   alloc_end = 236,
+>   alloc_size = 204,
+>   global_available = 15354,
+>   global_reserved = 154,
+>   systembits_inalloc = 3,
+>   total_allocated = 411,
+>   online_maps = 80,
+>   maps = 0x46100,
+>   scratch_map = {1160908723191807, 0, 1, 18435222497520517120},
+>   system_map = {1125904739729407, 0, 1, 18435221191850459136}
+> }
+> After probe one virtio_blk.
+> crash_cts> p *vector_matrix
+> $45 = {
+>   matrix_bits = 256,
+>   alloc_start = 32,
+>   alloc_end = 236,
+>   alloc_size = 204,
+>   global_available = 15273,
+>   global_reserved = 154,
+>   systembits_inalloc = 3,
+>   total_allocated = 413,
+>   online_maps = 80,
+>   maps = 0x46100,
+>   scratch_map = {25769803776, 0, 0, 14680064},
+>   system_map = {1125904739729407, 0, 1, 18435221191850459136}
+> }
+>
+> We can see global_available drop from 15354 to 15273, is 81.
+> And the total_allocated increase from 411 to 413. One config irq,and
+> one vq irq.
 
-By naive here I meant that checking cc alone is probably not a
-sufficient check for whether the toolchain supports the extension.
-What about the assembler etc?
+Right. That's perfectly fine. At the point where you looking at it, the
+matrix allocator has given out 2 vectors as can be seen via
+total_allocated.
 
-With Zicbom and Zihintpause we ran into problems with mixed usage, eg
-binutils 2.35 + gcc 12. In his Zicboz series Drew has gone with insn
-definitions - but while that's okay for something small like Zicboz,
-do we want to do that for something with as many instructions as vector?
+But then it also has another 79 vectors put aside for the other queues,
+but those queues have not yet requested the interrupts so there is no
+allocation yet. But the vectors are guaranteed to be available when
+request_irq() for those queues runs, which does the actual allocation.
 
-The alternative is cc-option, but that feels a lot less clean than what
-Drew cooked up here:
-https://lore.kernel.org/linux-riscv/20221027130247.31634-1-ajones@ventanamicro.com/
+Btw, you can enable CONFIG_GENERIC_IRQ_DEBUGFS and then look at the
+content of /sys/kernel/debug/irq/domain/VECTOR which gives you a very
+clear picture of what's going on. No need for gdb.
 
-I've not checked this because I am lazy, but I am also assuming that
-whoever put clang-13 in there picked it such that it doesn't require
-experimental extensions flags. Mostly just writing this to remind myself
-to check it at some point.
+> It is easy to expend the irq resource ,because virtio_blk device could
+> be more than 512.
+
+How so? virtio_blk allocates a config interrupt and one queue interrupt
+per CPU. So in your case a total of 81.
+
+How would you exhaust the vector space? Each CPU has about ~200 (in your
+case exactly 204) vectors which can be handed out to devices. You'd need
+to instantiate about 200 virtio_blk devices to get to the point of
+vector exhaustion.
+
+So what are you actually worried about and which problem are you trying
+to solve?
+
+Thanks,
+
+        tglx
+
+
