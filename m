@@ -2,98 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E5F629280
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:35:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DEBA629285
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbiKOHfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 02:35:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
+        id S232222AbiKOHgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 02:36:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231966AbiKOHfc (ORCPT
+        with ESMTP id S231966AbiKOHgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 02:35:32 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F4E65B2;
-        Mon, 14 Nov 2022 23:35:27 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id b21so12387420plc.9;
-        Mon, 14 Nov 2022 23:35:27 -0800 (PST)
+        Tue, 15 Nov 2022 02:36:14 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2409120995
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:36:13 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id v7so9084854wmn.0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:36:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nnMVi0OBBT8B9lLKo4PxxDOhksXvtuMX1YZVM1HxTMs=;
-        b=YaIonodup6DSuDeM4MzZ7M6fMzi8x59lXwRwP4SVS4WmsvxpEtOB/N+MJk0yWjYk7Y
-         nHytr//UzEfkhug9h+QQLxNEj8WlbXNqEIyKRhjGjQmuL5LYgl2q6I9VzkmaG4sxXeE9
-         h3FbNBKa5SOJz1VEE3F/VXO5jld/71DlPglPSaw2eKYKi/EuXJ9q5TpffX5gjpFvTknf
-         ECCLoKwEmyAiTr2LT44pPx48M9T/gT9cVdj7jW6DqZODgujqqPXIdDbXPkQJxUxYxIv/
-         LCQSY+1kZOD7T7uCsKdL5hktJYWo/asxQ/KzKuRt5PBbwWVdEdLof5ej0y/0TV+YimP+
-         vGsQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=behpqgNTXreSZukfyARZq1T8Bw0AtPtkMcPJmTi9xoI=;
+        b=FuYvOmmzTyXyt+6y7IakaZ7B5oewGa4eSDsx0PQNoyZ652p85IY2AmgRcnKDzeL3hQ
+         TE1xgJRBwg5lnn/uEZ/nQfAxywv47e1X4ZTAR+qZlrmP9a46M673+9HHny5YS+rLGEBZ
+         Wjr+exnPowaX0+gx1X8ukUDWlGf3eHYJzbwd+DKWnVud45pyT8DMD/NQNs56KQaj9KeI
+         UFpmKQmODMRXTbje5I+2z0oJnnL3lydwURT/iar3nJwt2GXZsfxgp0z/lV7bpQun6ZaJ
+         J/NxDx3DzDqtUyvZ0T6UeiaiYEr4shR1xWIt3f+/EJ5qPPvFgYQez8K+wNZ4KnOEgwVX
+         +Peg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nnMVi0OBBT8B9lLKo4PxxDOhksXvtuMX1YZVM1HxTMs=;
-        b=m2Lyb+9H0Yu6NvevpAG0TJLbUOL0L+jSyEdMGHeFBD7bXTFQ8dwrOaS2FZ4RhCZgkj
-         pe7FQSu3AHL0F20+ZczdzgwLD+lWZE2y4XElCvEfID+q6D21TEVrpJ13OdmrpZYGPFyJ
-         0Plh8cXAsIaoRNJ5sZlza8opU4gfbqfjKamIWVsQHWo1iAHjfm/plvIDozefLwc6mdbt
-         CVyJx/FZ9IMwgVXPrAbAX36eUdtR+wuHdcHhbOK+LFoRzfBDxbmCxW7ERsC86juesDtV
-         6Vg8T58cem+Wv0oseJhNDxrxIk6ZDUkcigW7KPoSK6aAiCnTpsFF9Iip40x07m1dNufy
-         9fJA==
-X-Gm-Message-State: ANoB5pnUXiSpMC7ViDx15OfjW8GxuabhhW5mpcy8vEEh2S1b3BZEphCQ
-        sQxgXoR5kgZGigmjlBaiT5qVZc4tTxdYaA==
-X-Google-Smtp-Source: AA0mqf4grdEN4O8XTlELm99qpeqMpnYLVd0a1Pg1gOLorFA5ScnFuuDACbNP2fwflz9mPlM3DH/K3g==
-X-Received: by 2002:a17:902:e013:b0:184:cb7e:ba36 with SMTP id o19-20020a170902e01300b00184cb7eba36mr2861310plo.57.1668497727427;
-        Mon, 14 Nov 2022 23:35:27 -0800 (PST)
-Received: from [192.168.43.80] (subs02-180-214-232-13.three.co.id. [180.214.232.13])
-        by smtp.gmail.com with ESMTPSA id l2-20020a635702000000b0046ec057243asm6955722pgb.12.2022.11.14.23.35.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 23:35:27 -0800 (PST)
-Message-ID: <3a00467c-7f78-e2ba-33d6-06caf523a183@gmail.com>
-Date:   Tue, 15 Nov 2022 14:35:19 +0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=behpqgNTXreSZukfyARZq1T8Bw0AtPtkMcPJmTi9xoI=;
+        b=d5r2Nt4yhz0u0vRqWA7oYyh3wyhb9S9vU6yRq6iknlfZCERegDrlNqRezQBVFyP5QC
+         +hG98SyKFGBAmtyGtPI4gPkbjJb6oBcWUGPZskxnnUC0EiCLgEZHpH/rR0cZWp7p2VUT
+         z5Jk+/17R4P6Rsi3k+yN/LXvmmrPlt/+2B2aCPcUQzUjcwWf/tP9ppHLKxI+NuL++4yq
+         Q9Sn1SKp/MV4fWSXySGCsyxU8RXrsdekoEp6g/puDaKLXaouzKoM9hgb7+Y84PghjDz+
+         iWNIwURM+HsyPHBpafcspboHL1WhxhoAvwJ/wNzNUjEI4pyXicpbGRTyEfBHMOC8B5ba
+         di0g==
+X-Gm-Message-State: ANoB5pk12DVQR9hUJzkUmNfuPnW77qiOnDu5nHoDCcz8ajOSgRczRozp
+        FRgfOg2yD+A/GGN322fxDJHaR/cNzXTW+Q==
+X-Google-Smtp-Source: AA0mqf514eXOs8uyBoURxGkasNRtcd7mDPPW/TXifbyM66DF+128CCiNBap+QgSvaeiXW0fT3u91aA==
+X-Received: by 2002:a05:600c:4e04:b0:3cf:a4a6:a048 with SMTP id b4-20020a05600c4e0400b003cfa4a6a048mr59983wmq.202.1668497771567;
+        Mon, 14 Nov 2022 23:36:11 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id j13-20020a5d452d000000b0022cbf4cda62sm13836811wra.27.2022.11.14.23.36.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 23:36:10 -0800 (PST)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     andrew@lunn.ch, broonie@kernel.org, calvin.johnson@oss.nxp.com,
+        davem@davemloft.net, edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        kuba@kernel.org, lgirdwood@gmail.com, linux@armlinux.org.uk,
+        pabeni@redhat.com, robh+dt@kernel.org, samuel@sholland.org,
+        wens@csie.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        netdev@vger.kernel.org, linux-sunxi@googlegroups.com,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH v4 0/3] arm64: add ethernet to orange pi 3
+Date:   Tue, 15 Nov 2022 07:36:00 +0000
+Message-Id: <20221115073603.3425396-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v13 2/2] Documentation: Add document for UltraSoc SMB
- drivers
-To:     hejunhao <hejunhao3@huawei.com>
-Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
-        mike.leach@linaro.org, leo.yan@linaro.org,
-        jonathan.cameron@huawei.com, john.garry@huawei.com,
-        coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        lpieralisi@kernel.org, linuxarm@huawei.com, yangyicong@huawei.com,
-        liuqi115@huawei.com, f.fangjian@huawei.com,
-        prime.zeng@hisilicon.com
-References: <20221114090316.63157-1-hejunhao3@huawei.com>
- <20221114090316.63157-3-hejunhao3@huawei.com> <Y3JJSfVoatl5yKlm@debian.me>
- <a6adaeec-182c-140d-9925-45f659b4eef2@huawei.com>
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <a6adaeec-182c-140d-9925-45f659b4eef2@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/15/22 14:33, hejunhao wrote:
-> Hi Bagas,
-> 
-> will apply the fix  in next version.
-> Thank you very much.
-> 
+Hello
 
-Please don't top-post, reply inline with appropriate context instead.
-I had to trim all the below context as a result.
+2 sunxi board still does not have ethernet working, orangepi 1+ and
+orangepi 3.
+This is due to the fact thoses boards have a PHY which need 2 regulators.
+
+A first attempt by Ondřej Jirman was made to support them was made by adding support in
+stmmac driver:
+https://lore.kernel.org/lkml/20190820145343.29108-6-megous@megous.com/
+Proposal rejected, since regulators need to be handled by the PHY core.
+
+My first tentative was to just add handling of phy and phy-io in
+phy-core:
+https://lore.kernel.org/netdev/20220509074857.195302-7-clabbe@baylibre.com/T/
+But having hard-coded phy names was rejected.
+
+Second tentative tryed the same path than clocks and clock-names for
+regulators.
+https://lore.kernel.org/netdev/0518eef1-75a6-fbfe-96d8-bb1fc4e5178a@linaro.org/t/
+But using this was rejected by DT maintainers.
+
+So v3 use a new regulator_bulk_get_all() which grab all supplies
+properties in a DT node.
+But this way could have some problem, a netdev driver could handle
+already its PHY (like dwmac-sun8i already do) and so both phy-core and
+the netdev will use both.
+It is why phy-supply was renamed in ephy-supply in patch #3.
+
+This serie was tested on whole range of board and PHY architecture:
+- internal PHY
+  * sun8i-h3-orangepi-pc
+- external PHY
+  * sun50i-h6-pine-h64
+  * sun8i-r40-bananapi-m2-ultra
+  * sun8i-a83t-bananapi-m3
+  * sun50i-a64-bananapi-m64
+  * sun50i-h6-orangepi-3
+  * sun50i-h5-nanopi-neo-plus2
+
+The resume/suspend of PHY was tested.
+
+Regards
+
+changes since v1:
+- Add regulator_bulk_get_all for ease handling of PHY regulators
+- Removed all convertion patchs to keep DT compatibility.
+
+Changes since v2:
+- removed use of regulator-names and regulators list.
+
+Changes since v3:
+- fixes kbuild robot report
+
+Corentin Labbe (2):
+  regulator: Add of_regulator_bulk_get_all
+  phy: handle optional regulator for PHY
+
+Ondřej Jirman (1):
+  arm64: dts: allwinner: orange-pi-3: Enable ethernet
+
+ .../dts/allwinner/sun50i-h6-orangepi-3.dts    | 38 ++++++++
+ drivers/net/mdio/fwnode_mdio.c                | 31 ++++++-
+ drivers/net/phy/phy_device.c                  | 10 ++
+ drivers/regulator/of_regulator.c              | 92 +++++++++++++++++++
+ include/linux/phy.h                           |  3 +
+ include/linux/regulator/consumer.h            |  8 ++
+ 6 files changed, 181 insertions(+), 1 deletion(-)
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.37.4
 
