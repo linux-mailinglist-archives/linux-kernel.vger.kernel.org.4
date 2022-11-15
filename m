@@ -2,196 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E09062A38A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1861862A38D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238645AbiKOU4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 15:56:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
+        id S238673AbiKOU4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 15:56:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238681AbiKOUz4 (ORCPT
+        with ESMTP id S238671AbiKOU4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:55:56 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1613317DF
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:55:51 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id y16so26443420wrt.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:55:51 -0800 (PST)
+        Tue, 15 Nov 2022 15:56:10 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0FD3123A
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:56:09 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id o7so14453989pjj.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:56:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RyUy3FPoDZHpwS/VbPdG1C0STKM2EnbRqd6JJodHJlc=;
-        b=U5nlGcBPMNWp/Xt2hRAghUYFWmN6wwNXCHZjJUj2vxkImjYFZRW4uteWG4V3FeVdRs
-         Fl50nI7zXE1jPP6mTri82uh9Kiw5O595Or3TnDVdmMDmNZDO8v4rsHDOxA0wsff3nu+D
-         K0eB/lfxN+KIPJBFPg+sTn5mTR8Ngf2MiponBLFpe0EgPXiE3YyJOMxLkC8k02QydLKh
-         pW3HOATAsdHn+UFL70hLsORCjfKiO8O005nkb53FwO/Kn6opkDLwRzoceRldAocirxp3
-         2+3Qj2w8O1mhnZoCk0U/FdrsfHH90fYv6tEwbfTBfJM0OlnW/AqV1pqM3fQUALBEbozY
-         1eBg==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DZjFL7yYOWYKcfuVNZsgyNYjjTO3AwGipoyKeicSLgA=;
+        b=z8Ab5x/yV+xhbBYeZa+jA6mYm+oXKavs08pWJGfL2OsiL0FyDTlsdh2rv/luYIANAf
+         +dtbJXCy+MzmfvQHAglmvybxfFava+hxO3/Jf3t3p1e6O3rMiBZ+pdOvqqkvdyQm2j+X
+         XZr/ol8N3P97kL3IcUTCWXWF0TJxlnUKdhBqiD47my5jXIICQ9zPojY8SZmnTN5WcQMx
+         WZa4qJx7x8TgzU2WTud9S+qhnxpn6UkDAdbp7fDWPK9qzQB/Fq6DsganwYWWGDOjzjJ4
+         2ETpbcMlTKSNNJtR7z4JvQh1Y86C/omIyqEJEMlXgFcx7rYdF2XRFFIHc6LEfDEKz5+4
+         ovtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RyUy3FPoDZHpwS/VbPdG1C0STKM2EnbRqd6JJodHJlc=;
-        b=IWOJF1QqTfy95NHW+N8stoOXqlBiGF1rDadNG8lXbPfQDY4eG5hUiB+ZracHDznEvF
-         uEpvTwf5sVAcQyQTsi1n3d5eQs+d4ypXfhSvDZVlYubEwJgrPbiw8UEjlYpSyUFWG490
-         K80fNS+qhyWJwt3I1rT6LpitFsFk5x/zZqpuXc+hMUfpgXaJ9FTN3Of0p0BiUdtfBQ6J
-         G/spSQCY+AupgwRHf+kZnWKX/dXNjL19d8+ZN/jhJVfP49Ehg54W73KBEAAlUFD6DHSm
-         nD/+9Ue9RckMA3pQ+oXiZ5X+lmdCz7oRjMj6/vjxgYKcsR+F2jlhJmjTRd6O17xEEGxJ
-         SFpQ==
-X-Gm-Message-State: ANoB5pkiL+0AVhROQ/MjV1UtH1+5RKHNBdvIbsclGlfVev27S0nGEfJr
-        9s1AAQ6Jxya/TpiwPF4HPIcY3g==
-X-Google-Smtp-Source: AA0mqf5dHQcyR/rzPXzBYaHBwalgHriwZ76e2nI9JYRtXBV3qfTZQVRFVYuYzlzUls0ASh5rwX2/sQ==
-X-Received: by 2002:a5d:5234:0:b0:236:518d:f2b4 with SMTP id i20-20020a5d5234000000b00236518df2b4mr12379273wra.397.1668545750388;
-        Tue, 15 Nov 2022 12:55:50 -0800 (PST)
-Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id p14-20020a5d458e000000b0022eafed36ebsm13281766wrq.73.2022.11.15.12.55.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 12:55:49 -0800 (PST)
-Date:   Tue, 15 Nov 2022 20:55:47 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     kernel test robot <lkp@intel.com>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>, Wei Wang <wvw@google.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Hank <han.lin@mediatek.com>, Paul Bone <pbone@mozilla.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH] Documentation: sched: Add a new sched-util-clamp.rst
-Message-ID: <20221115205547.3f4kzig5r44ipv3b@airbuntu>
-References: <20221113152629.3wbyeejsj5v33rvu@airbuntu>
- <Y3ICaCPX61EOn/KN@debian.me>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DZjFL7yYOWYKcfuVNZsgyNYjjTO3AwGipoyKeicSLgA=;
+        b=oDr6db+2kx6IUm/MVNm6offPb181wujSe6cul5fowQ5PWg/KFDO/bdkbPcBBt1JQnJ
+         ev1E/8gnCADszsrOAYQ5bGyB4cnte4bN2YJOzcwU/AGOMoxmP4meg5+mjvxQXz+iStOl
+         VEyA1LlRQ5EOrY//8FrxvJy3Sbgadk0Pw8TxvcVYHxccPyswe3NjklaMn0nOER2Rzyxd
+         EP15AyEPdUJHhsmK1JMTeQSyWJ2Rx85EjWSiA1VJ915WWARozl71P1t2jUUS73XRnxHv
+         aOuX13HBtABtvQjZBcnRsQo/zojN1iGO5i/TifcgsYcQLZqq1wLqYbdRonXqzeHbqMum
+         Fwtw==
+X-Gm-Message-State: ANoB5pks+8EKHZ/qRA3Mjn1IDDkjSp7cXCUPiOq+nTBW3BFQQRLhqmep
+        rP+YT/2SvpgItUum79YD2ABS3HxD/yIM37m6TyUa
+X-Google-Smtp-Source: AA0mqf7AcdZ10wPXSSsAWtLv/DhAQnxdYUg1ZC73InU8aFVybv0lnVY+X8uP/247Fm8pVoydGtwAZy2x6Fso/CX7Pt0=
+X-Received: by 2002:a17:90a:2b8c:b0:212:f4f1:96ee with SMTP id
+ u12-20020a17090a2b8c00b00212f4f196eemr216799pjd.72.1668545768620; Tue, 15 Nov
+ 2022 12:56:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y3ICaCPX61EOn/KN@debian.me>
+References: <20221025113101.41132-1-wangweiyang2@huawei.com>
+ <CAHC9VhQW9g6QTpPMHehTyfT_N5kQjeAGZjdiiUS9od+0CrmbiQ@mail.gmail.com> <7da459bc-ffb7-1b0b-dcac-5e967d836434@huawei.com>
+In-Reply-To: <7da459bc-ffb7-1b0b-dcac-5e967d836434@huawei.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 15 Nov 2022 15:55:58 -0500
+Message-ID: <CAHC9VhQaaxAtgsBv9hL7HrnEDDTHtiNxFLoOgNkH1hMsK9790g@mail.gmail.com>
+Subject: Re: [PATCH] device_cgroup: Roll back to original exceptions after
+ copy failure
+To:     wangweiyang <wangweiyang2@huawei.com>
+Cc:     jmorris@namei.org, serge@hallyn.com, serge.hallyn@canonical.com,
+        akpm@linux-foundation.org, aris@redhat.com,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/14/22 15:55, Bagas Sanjaya wrote:
-> On Sun, Nov 13, 2022 at 03:26:29PM +0000, Qais Yousef wrote:
-> > Thanks! I have the below fixup patch that addresses these. It made me realize
-> > my html output could look better. It's cosmetic; so won't post a new version
-> > till some feedback is provided first.
-> > 
-> > 
-> > Cheers
-> > 
-> > --
-> > Qais Yousef
-> > 
-> > 
-> > --->8---
-> > 
-> > diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
-> > index b430d856056a..f12d0d06de3a 100644
-> > --- a/Documentation/scheduler/index.rst
-> > +++ b/Documentation/scheduler/index.rst
-> > @@ -15,6 +15,7 @@ Linux Scheduler
-> >      sched-capacity
-> >      sched-energy
-> >      schedutil
-> > +    sched-util-clamp
-> >      sched-nice-design
-> >      sched-rt-group
-> >      sched-stats
-> > diff --git a/Documentation/scheduler/sched-util-clamp.rst b/Documentation/scheduler/sched-util-clamp.rst
-> > index e75b69767afb..728ffa364fc7 100644
-> > --- a/Documentation/scheduler/sched-util-clamp.rst
-> > +++ b/Documentation/scheduler/sched-util-clamp.rst
-> > @@ -169,24 +169,27 @@ could change with implementation details.
-> >  2.1  BUCKETS:
-> >  -------------
-> >  
-> > +.. code-block:: c
-> > +
-> >                             [struct rq]
-> >  
-> > -(bottom)                                                    (top)
-> > +  (bottom)                                                    (top)
-> >  
-> > -  0                                                          1024
-> > -  |                                                           |
-> > -  +-----------+-----------+-----------+----   ----+-----------+
-> > -  |  Bucket 0 |  Bucket 1 |  Bucket 2 |    ...    |  Bucket N |
-> > -  +-----------+-----------+-----------+----   ----+-----------+
-> > -     :           :                                   :
-> > -     +- p0       +- p3                               +- p4
-> > -     :                                               :
-> > -     +- p1                                           +- p5
-> > -     :
-> > -     +- p2
-> > +    0                                                          1024
-> > +    |                                                           |
-> > +    +-----------+-----------+-----------+----   ----+-----------+
-> > +    |  Bucket 0 |  Bucket 1 |  Bucket 2 |    ...    |  Bucket N |
-> > +    +-----------+-----------+-----------+----   ----+-----------+
-> > +       :           :                                   :
-> > +       +- p0       +- p3                               +- p4
-> > +       :                                               :
-> > +       +- p1                                           +- p5
-> > +       :
-> > +       +- p2
-> 
-> The code block above is diagram, isn't it? Thus specifying language for
-> syntax highlighting (in this case ``c``) isn't appropriate.
+On Mon, Nov 14, 2022 at 10:54 PM wangweiyang <wangweiyang2@huawei.com> wrote:
+>
+> Hi, Paul
+> Can this patch be applied or something to improve?
 
-I could do with a helping hand here actually. I am a text only person but
-trying to follow the new rst docs; but I don't have a clue to be honest.
+Possibly.  I need to find the time to properly review the patch; it's
+in my queue, I just haven't gotten to it yet.  I'll reply to the patch
+posting with either a note that the patch has been merged, or a set of
+questions/feedback that needs to be resolved.  If you haven't heard
+from me on the patch, the best thing you can do is exercise patience.
 
-I did try to find the right directive, but I couldn't find it. What should be
-specified for this diagram?
+> on 2022/10/28 19:19, Paul Moore wrote:
+> > On Tue, Oct 25, 2022 at 7:02 AM Wang Weiyang <wangweiyang2@huawei.com> wrote:
+> >>
+> >> When add the 'a *:* rwm' entry to devcgroup A's whitelist, at first A's
+> >> exceptions will be cleaned and A's behavior is changed to
+> >> DEVCG_DEFAULT_ALLOW. Then parent's exceptions will be copyed to A's
+> >> whitelist. If copy failure occurs, just return leaving A to grant
+> >> permissions to all devices. And A may grant more permissions than
+> >> parent.
+> >>
+> >> Backup A's whitelist and recover original exceptions after copy
+> >> failure.
+> >>
+> >> Fixes: 4cef7299b478 ("device_cgroup: add proper checking when changing default behavior")
+> >> Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
+> >> ---
+> >>  security/device_cgroup.c | 33 +++++++++++++++++++++++++++++----
+> >>  1 file changed, 29 insertions(+), 4 deletions(-)
+> >
+> > On quick glance this looks reasonable to me, but I'm working with
+> > limited time connected to a network so I can't say I've given this a
+> > full and proper review; if a third party could spend some time to give
+> > this an additional review before I merge it I would greatly appreciate
+> > it.
+> >
+> >> diff --git a/security/device_cgroup.c b/security/device_cgroup.c
+> >> index a9f8c63a96d1..bef2b9285fb3 100644
+> >> --- a/security/device_cgroup.c
+> >> +++ b/security/device_cgroup.c
+> >> @@ -82,6 +82,17 @@ static int dev_exceptions_copy(struct list_head *dest, struct list_head *orig)
+> >>         return -ENOMEM;
+> >>  }
+> >>
+> >> +static void dev_exceptions_move(struct list_head *dest, struct list_head *orig)
+> >> +{
+> >> +       struct dev_exception_item *ex, *tmp;
+> >> +
+> >> +       lockdep_assert_held(&devcgroup_mutex);
+> >> +
+> >> +       list_for_each_entry_safe(ex, tmp, orig, list) {
+> >> +               list_move_tail(&ex->list, dest);
+> >> +       }
+> >> +}
+> >> +
+> >>  /*
+> >>   * called under devcgroup_mutex
+> >>   */
+> >> @@ -604,11 +615,13 @@ static int devcgroup_update_access(struct dev_cgroup *devcgroup,
+> >>         int count, rc = 0;
+> >>         struct dev_exception_item ex;
+> >>         struct dev_cgroup *parent = css_to_devcgroup(devcgroup->css.parent);
+> >> +       struct dev_cgroup tmp_devcgrp;
+> >>
+> >>         if (!capable(CAP_SYS_ADMIN))
+> >>                 return -EPERM;
+> >>
+> >>         memset(&ex, 0, sizeof(ex));
+> >> +       memset(&tmp_devcgrp, 0, sizeof(tmp_devcgrp));
+> >>         b = buffer;
+> >>
+> >>         switch (*b) {
+> >> @@ -620,15 +633,27 @@ static int devcgroup_update_access(struct dev_cgroup *devcgroup,
+> >>
+> >>                         if (!may_allow_all(parent))
+> >>                                 return -EPERM;
+> >> -                       dev_exception_clean(devcgroup);
+> >> -                       devcgroup->behavior = DEVCG_DEFAULT_ALLOW;
+> >> -                       if (!parent)
+> >> +                       if (!parent) {
+> >> +                               devcgroup->behavior = DEVCG_DEFAULT_ALLOW;
+> >> +                               dev_exception_clean(devcgroup);
+> >>                                 break;
+> >> +                       }
+> >>
+> >> +                       INIT_LIST_HEAD(&tmp_devcgrp.exceptions);
+> >> +                       rc = dev_exceptions_copy(&tmp_devcgrp.exceptions,
+> >> +                                                &devcgroup->exceptions);
+> >> +                       if (rc)
+> >> +                               return rc;
+> >> +                       dev_exception_clean(devcgroup);
+> >>                         rc = dev_exceptions_copy(&devcgroup->exceptions,
+> >>                                                  &parent->exceptions);
+> >> -                       if (rc)
+> >> +                       if (rc) {
+> >> +                               dev_exceptions_move(&devcgroup->exceptions,
+> >> +                                                   &tmp_devcgrp.exceptions);
+> >>                                 return rc;
+> >> +                       }
+> >> +                       devcgroup->behavior = DEVCG_DEFAULT_ALLOW;
+> >> +                       dev_exception_clean(&tmp_devcgrp);
+> >>                         break;
+> >>                 case DEVCG_DENY:
+> >>                         if (css_has_online_children(&devcgroup->css))
+> >> --
+> >> 2.17.1
+> >>
+> >
+> >
 
-> 
-> >  
-> >  
-> > -DISCLAMER:
-> > +.. note::
-> > +  DISCLAMER:
-> >     The diagram above is an illustration rather than a true depiction of the
-> >     internal data structure.
-> 
-> The DISCLAIMER line above isn't needed, since note block should do the
-> job.
-
-Okay.
-
-> 
-> >  
-> > @@ -200,6 +203,8 @@ The rq has a bucket for each uclamp_id: [UCLAMP_MIN, UCLAMP_MAX].
-> >  The range of each bucket is 1024/N. For example for the default value of 5 we
-> >  will have 5 buckets, each of which will cover the following range:
-> >  
-> > +.. code-block:: c
-> > +
-> 
-> Again, why ``c`` syntax highlighting?
-
-This is a C code snippet. What would be better to use? I think I was getting
-errors if I don't specify something. But again; I was touching my way around in
-the dark here trying to figure it out.
-
-> Otherwise no new warnings. Thanks for fixing this up.
-> 
-> However, in the future, for documentation patches you should always Cc:
-> linux-doc list. Adding it to Cc list now.
-
-Indeed. Maybe I went into auto-mode and didn't use get_maintainer proper.
-Apologies.
 
 
-Thanks!
-
---
-Qais Yousef
+-- 
+paul-moore.com
