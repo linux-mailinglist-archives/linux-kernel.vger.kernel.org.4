@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E0F629B1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:50:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC0B629B1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238029AbiKONt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:49:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
+        id S238403AbiKONty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:49:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237567AbiKONth (ORCPT
+        with ESMTP id S231163AbiKONth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Nov 2022 08:49:37 -0500
 Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0A324F2A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E12424F35;
         Tue, 15 Nov 2022 05:49:34 -0800 (PST)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NBSGJ4LbGz4f41hr;
-        Tue, 15 Nov 2022 21:49:28 +0800 (CST)
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NBSGK0N6Sz4f41hQ;
+        Tue, 15 Nov 2022 21:49:29 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP4 (Coremail) with SMTP id gCh0CgBni9jnmHNjrPFIAg--.61645S10;
-        Tue, 15 Nov 2022 21:49:31 +0800 (CST)
+        by APP4 (Coremail) with SMTP id gCh0CgBni9jnmHNjrPFIAg--.61645S11;
+        Tue, 15 Nov 2022 21:49:32 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     hch@lst.de, axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
         dm-devel@redhat.com
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH v3 06/10] dm: track per-add_disk holder relations in DM
-Date:   Tue, 15 Nov 2022 22:10:50 +0800
-Message-Id: <20221115141054.1051801-7-yukuai1@huaweicloud.com>
+Subject: [PATCH v3 07/10] block: remove delayed holder registration
+Date:   Tue, 15 Nov 2022 22:10:51 +0800
+Message-Id: <20221115141054.1051801-8-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20221115141054.1051801-1-yukuai1@huaweicloud.com>
 References: <20221115141054.1051801-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBni9jnmHNjrPFIAg--.61645S10
-X-Coremail-Antispam: 1UD129KBjvJXoWxAw1fWrW5Kw4fKr4fJryxXwb_yoWrJFyUpF
-        ZxWayaqrWrGFsFvw47Xw4Uury5trs5ta4rZry7Gw1I9w15Ar909FW8GFy3XFyDJ397KFy5
-        XFWUtr4rua18KrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: gCh0CgBni9jnmHNjrPFIAg--.61645S11
+X-Coremail-Antispam: 1UD129KBjvJXoW3GF1DZFyUur4fZr4rGryfZwb_yoW7Zr13pF
+        W5GFWxtrW8JF4DuF4qqw47XF1Ygw1jg3WxCFWfKryI9rZxAr4v9F13Jry7XFyrtr92gF43
+        tF45XrWY9F10krJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUPF14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
         kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
@@ -64,116 +64,179 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Christoph Hellwig <hch@lst.de>
 
-dm is a bit special in that it opens the underlying devices.  Commit
-89f871af1b26 ("dm: delay registering the gendisk") tried to accommodate
-that by allowing to add the holder to the list before add_gendisk and
-then just add them to sysfs once add_disk is called.  But that leads to
-really odd lifetime problems and error handling problems as we can't
-know the state of the kobjects and don't unwind properly.  To fix this
-switch to just registering all existing table_devices with the holder
-code right after add_disk, and remove them before calling del_gendisk.
+Now that dm has been fixed to track of holder registrations before
+add_disk, the somewhat buggy block layer code can be safely removed.
 
-Fixes: 89f871af1b26 ("dm: delay registering the gendisk")
-Reported-by: Yu Kuai <yukuai3@huawei.com>
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/md/dm.c | 49 +++++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 39 insertions(+), 10 deletions(-)
+ block/genhd.c          |  4 ---
+ block/holder.c         | 72 ++++++++++++------------------------------
+ include/linux/blkdev.h |  5 ---
+ 3 files changed, 21 insertions(+), 60 deletions(-)
 
-diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-index 3728b56b364b..e1ea3a7bd9d9 100644
---- a/drivers/md/dm.c
-+++ b/drivers/md/dm.c
-@@ -751,9 +751,16 @@ static struct table_device *open_table_device(struct mapped_device *md,
- 		goto out_free_td;
+diff --git a/block/genhd.c b/block/genhd.c
+index e9501c66ba4d..dcf200bcbd3e 100644
+--- a/block/genhd.c
++++ b/block/genhd.c
+@@ -479,10 +479,6 @@ int __must_check device_add_disk(struct device *parent, struct gendisk *disk,
+ 		goto out_put_holder_dir;
  	}
  
--	r = bd_link_disk_holder(bdev, dm_disk(md));
--	if (r)
--		goto out_blkdev_put;
-+	/*
-+	 * We can be called before the dm disk is added.  In that case we can't
-+	 * register the holder relation here.  It will be done once add_disk was
-+	 * called.
-+	 */
-+	if (md->disk->slave_dir) {
-+		r = bd_link_disk_holder(bdev, md->disk);
-+		if (r)
-+			goto out_blkdev_put;
-+	}
- 
- 	td->dm_dev.mode = mode;
- 	td->dm_dev.bdev = bdev;
-@@ -774,7 +781,8 @@ static struct table_device *open_table_device(struct mapped_device *md,
-  */
- static void close_table_device(struct table_device *td, struct mapped_device *md)
- {
--	bd_unlink_disk_holder(td->dm_dev.bdev, dm_disk(md));
-+	if (md->disk->slave_dir)
-+		bd_unlink_disk_holder(td->dm_dev.bdev, md->disk);
- 	blkdev_put(td->dm_dev.bdev, td->dm_dev.mode | FMODE_EXCL);
- 	put_dax(td->dm_dev.dax_dev);
- 	list_del(&td->list);
-@@ -1951,7 +1959,13 @@ static void cleanup_mapped_device(struct mapped_device *md)
- 		md->disk->private_data = NULL;
- 		spin_unlock(&_minor_lock);
- 		if (dm_get_md_type(md) != DM_TYPE_NONE) {
-+			struct table_device *td;
-+
- 			dm_sysfs_exit(md);
-+			list_for_each_entry(td, &md->table_devices, list) {
-+				bd_unlink_disk_holder(td->dm_dev.bdev,
-+						      md->disk);
-+			}
- 
- 			/*
- 			 * Hold lock to make sure del_gendisk() won't concurrent
-@@ -2291,6 +2305,7 @@ int dm_setup_md_queue(struct mapped_device *md, struct dm_table *t)
- {
- 	enum dm_queue_mode type = dm_table_get_type(t);
- 	struct queue_limits limits;
-+	struct table_device *td;
- 	int r;
- 
- 	switch (type) {
-@@ -2329,16 +2344,30 @@ int dm_setup_md_queue(struct mapped_device *md, struct dm_table *t)
- 	if (r)
- 		return r;
- 
--	r = dm_sysfs_init(md);
--	if (r) {
--		mutex_lock(&md->table_devices_lock);
--		del_gendisk(md->disk);
--		mutex_unlock(&md->table_devices_lock);
--		return r;
-+	/*
-+	 * Register the holder relationship for devices added before the disk
-+	 * was live.
-+	 */
-+	list_for_each_entry(td, &md->table_devices, list) {
-+		r = bd_link_disk_holder(td->dm_dev.bdev, md->disk);
-+		if (r)
-+			goto out_undo_holders;
- 	}
- 
-+	r = dm_sysfs_init(md);
-+	if (r)
-+		goto out_undo_holders;
-+
- 	md->type = type;
- 	return 0;
-+
-+out_undo_holders:
-+	list_for_each_entry_continue_reverse(td, &md->table_devices, list)
-+		bd_unlink_disk_holder(td->dm_dev.bdev, md->disk);
-+	mutex_lock(&md->table_devices_lock);
-+	del_gendisk(md->disk);
-+	mutex_unlock(&md->table_devices_lock);
-+	return r;
+-	ret = bd_register_pending_holders(disk);
+-	if (ret < 0)
+-		goto out_put_slave_dir;
+-
+ 	ret = blk_register_queue(disk);
+ 	if (ret)
+ 		goto out_put_slave_dir;
+diff --git a/block/holder.c b/block/holder.c
+index 5283bc804cc1..dd9327b43ce0 100644
+--- a/block/holder.c
++++ b/block/holder.c
+@@ -29,19 +29,6 @@ static void del_symlink(struct kobject *from, struct kobject *to)
+ 	sysfs_remove_link(from, kobject_name(to));
  }
  
- struct mapped_device *dm_get_md(dev_t dev)
+-static int __link_disk_holder(struct block_device *bdev, struct gendisk *disk)
+-{
+-	int ret;
+-
+-	ret = add_symlink(disk->slave_dir, bdev_kobj(bdev));
+-	if (ret)
+-		return ret;
+-	ret = add_symlink(bdev->bd_holder_dir, &disk_to_dev(disk)->kobj);
+-	if (ret)
+-		del_symlink(disk->slave_dir, bdev_kobj(bdev));
+-	return ret;
+-}
+-
+ /**
+  * bd_link_disk_holder - create symlinks between holding disk and slave bdev
+  * @bdev: the claimed slave bdev
+@@ -75,6 +62,9 @@ int bd_link_disk_holder(struct block_device *bdev, struct gendisk *disk)
+ 	struct bd_holder_disk *holder;
+ 	int ret = 0;
+ 
++	if (WARN_ON_ONCE(!disk->slave_dir))
++		return -EINVAL;
++
+ 	mutex_lock(&disk->open_mutex);
+ 
+ 	WARN_ON_ONCE(!bdev->bd_holder);
+@@ -94,34 +84,32 @@ int bd_link_disk_holder(struct block_device *bdev, struct gendisk *disk)
+ 	INIT_LIST_HEAD(&holder->list);
+ 	holder->bdev = bdev;
+ 	holder->refcnt = 1;
+-	if (disk->slave_dir) {
+-		ret = __link_disk_holder(bdev, disk);
+-		if (ret) {
+-			kfree(holder);
+-			goto out_unlock;
+-		}
+-	}
+-
++	ret = add_symlink(disk->slave_dir, bdev_kobj(bdev));
++	if (ret)
++		goto out_free_holder;
++	ret = add_symlink(bdev->bd_holder_dir, &disk_to_dev(disk)->kobj);
++	if (ret)
++		goto out_del_symlink;
+ 	list_add(&holder->list, &disk->slave_bdevs);
++
+ 	/*
+ 	 * del_gendisk drops the initial reference to bd_holder_dir, so we need
+ 	 * to keep our own here to allow for cleanup past that point.
+ 	 */
+ 	kobject_get(bdev->bd_holder_dir);
++	mutex_unlock(&disk->open_mutex);
++	return 0;
+ 
++out_del_symlink:
++	del_symlink(disk->slave_dir, bdev_kobj(bdev));
++out_free_holder:
++	kfree(holder);
+ out_unlock:
+ 	mutex_unlock(&disk->open_mutex);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(bd_link_disk_holder);
+ 
+-static void __unlink_disk_holder(struct block_device *bdev,
+-		struct gendisk *disk)
+-{
+-	del_symlink(disk->slave_dir, bdev_kobj(bdev));
+-	del_symlink(bdev->bd_holder_dir, &disk_to_dev(disk)->kobj);
+-}
+-
+ /**
+  * bd_unlink_disk_holder - destroy symlinks created by bd_link_disk_holder()
+  * @bdev: the calimed slave bdev
+@@ -136,11 +124,14 @@ void bd_unlink_disk_holder(struct block_device *bdev, struct gendisk *disk)
+ {
+ 	struct bd_holder_disk *holder;
+ 
++	if (WARN_ON_ONCE(!disk->slave_dir))
++		return;
++
+ 	mutex_lock(&disk->open_mutex);
+ 	holder = bd_find_holder_disk(bdev, disk);
+ 	if (!WARN_ON_ONCE(holder == NULL) && !--holder->refcnt) {
+-		if (disk->slave_dir)
+-			__unlink_disk_holder(bdev, disk);
++		del_symlink(disk->slave_dir, bdev_kobj(bdev));
++		del_symlink(bdev->bd_holder_dir, &disk_to_dev(disk)->kobj);
+ 		kobject_put(bdev->bd_holder_dir);
+ 		list_del_init(&holder->list);
+ 		kfree(holder);
+@@ -148,24 +139,3 @@ void bd_unlink_disk_holder(struct block_device *bdev, struct gendisk *disk)
+ 	mutex_unlock(&disk->open_mutex);
+ }
+ EXPORT_SYMBOL_GPL(bd_unlink_disk_holder);
+-
+-int bd_register_pending_holders(struct gendisk *disk)
+-{
+-	struct bd_holder_disk *holder;
+-	int ret;
+-
+-	mutex_lock(&disk->open_mutex);
+-	list_for_each_entry(holder, &disk->slave_bdevs, list) {
+-		ret = __link_disk_holder(holder->bdev, disk);
+-		if (ret)
+-			goto out_undo;
+-	}
+-	mutex_unlock(&disk->open_mutex);
+-	return 0;
+-
+-out_undo:
+-	list_for_each_entry_continue_reverse(holder, &disk->slave_bdevs, list)
+-		__unlink_disk_holder(holder->bdev, disk);
+-	mutex_unlock(&disk->open_mutex);
+-	return ret;
+-}
+diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+index 9188aa3f6259..516e45246868 100644
+--- a/include/linux/blkdev.h
++++ b/include/linux/blkdev.h
+@@ -833,7 +833,6 @@ void set_capacity(struct gendisk *disk, sector_t size);
+ #ifdef CONFIG_BLOCK_HOLDER_DEPRECATED
+ int bd_link_disk_holder(struct block_device *bdev, struct gendisk *disk);
+ void bd_unlink_disk_holder(struct block_device *bdev, struct gendisk *disk);
+-int bd_register_pending_holders(struct gendisk *disk);
+ #else
+ static inline int bd_link_disk_holder(struct block_device *bdev,
+ 				      struct gendisk *disk)
+@@ -844,10 +843,6 @@ static inline void bd_unlink_disk_holder(struct block_device *bdev,
+ 					 struct gendisk *disk)
+ {
+ }
+-static inline int bd_register_pending_holders(struct gendisk *disk)
+-{
+-	return 0;
+-}
+ #endif /* CONFIG_BLOCK_HOLDER_DEPRECATED */
+ 
+ dev_t part_devt(struct gendisk *disk, u8 partno);
 -- 
 2.31.1
 
