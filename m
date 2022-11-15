@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8102B62A10F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD1262A111
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbiKOSH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 13:07:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
+        id S230331AbiKOSH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 13:07:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231601AbiKOSHQ (ORCPT
+        with ESMTP id S232766AbiKOSHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 13:07:16 -0500
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC7313F10
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:07:15 -0800 (PST)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-382f0906929so53345157b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:07:15 -0800 (PST)
+        Tue, 15 Nov 2022 13:07:37 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF48A13DD6;
+        Tue, 15 Nov 2022 10:07:21 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id g24so13901190plq.3;
+        Tue, 15 Nov 2022 10:07:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dloXDD6CiDCziJT2tHzl/Z+qUNepzcAu8WiV9q7UGjY=;
-        b=JYgZvPF0ht9E2Q56igI2aIXCY5xA0bGmnckBjD/RIFHLRkjtv+/pzXCHaKmZK8RC7T
-         6nUGxAAbze5gI9EG7y5ZeS91Bjcq/ugdpKVdvkPU8iQZyglm6cX4SR3aE4ZsaCVXLqMP
-         zZhIz9hAmeTrQ7lJfst/DoWgh42xSvNNX6OE5Up7hw/mziRWidAHgSkSxaNbKcw93dtd
-         1y+zFP3GPZTnVy6MQz9QEAbvl7MaC0lbNSm6CLtg/0DJc7RIt5bOGrTNMbeif4XsbXPu
-         MBuJ26Zik/sPd/TWdYNnzMdJ/ofCt5U6qktYv7fHZIzqh+IUBTqpxihgAGdnGMxfKRLO
-         nUOg==
+        bh=bBywltwPfbjC+ce3gndOtHFxBFbCBPvkG2/C6S0a1WI=;
+        b=GaQUaznYnm3NUF/MC7IYlMFHFoWHVbc4RHuWnJN50nyCIwN7sx9p+FB5jasfcprWCE
+         BWcSCAtHtnaUUkFsshq4oqZHstukeJoobJDLGVRlmSakBcZ9IMppe0BWufDYAQafwZyI
+         kZ8F2okBfC8J7JMVNR1CpsgffFHGv6c6Ej2U8z+mvJCUtuIcvM3h0gLrND7I7kE8ozFB
+         xtkLqoKGPyt3+FodUj+mnabAvKaCTFaAr3t0NcKg8GxYFJ3EhfJ32oNvn1ywTdLIkjir
+         r2/uTSLdV1JI0GAI4wSxc8VMrpsBDFF2CirgLfJfxoyolnrIzRbqCdltuT4378tqwleD
+         537w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dloXDD6CiDCziJT2tHzl/Z+qUNepzcAu8WiV9q7UGjY=;
-        b=Un3MPCHPdKho+RBgw/rGJse9uobnBgSRcgA3iIA2BNgeqHkLVSBr0RUur9b/fFVoHi
-         7UzS1e6Z+CmDyXYXwmq7fa/lcB8yFPx7ROAbFa/+f4jnli66AHY95fJKgC4Tjfv9Arsg
-         jtCX+1yn/4dNK2fZq/jxriOeNm/ijSXQldkSf7NtpNS0EV6yn4XEkpM5TgH0T9brQNKZ
-         XUl69SU9N9PyqvNz5DBClxK3M6J8f+gcOpbZXPlIkzHQXZ62sBk1tZVZtkEhSp7owa0O
-         gEJz70f1R9lh5apGXfsIS3uJKbksFa3wCjcI/SXouPIvd94BsSty3J0wz+5xSVH9pDTp
-         Nq/A==
-X-Gm-Message-State: ANoB5pmoFuyRQDmthC8ErSYpSwrV9Hba0vjTRZX0NekmowV2f1nXUH0T
-        EKyql7TrgzIjY6Gmz3L1nE+WnCgjcndqkcgMbAzDLA==
-X-Google-Smtp-Source: AA0mqf4eWcPEGrD/dKTwKKb8SfJskKxs+GrsMWE7+Jy0X4Q+pH06qzBSv/lfxAmwZDszEFO8l9OxBl9MHikt764urVs=
-X-Received: by 2002:a81:351:0:b0:344:ff29:4526 with SMTP id
- 78-20020a810351000000b00344ff294526mr18583621ywd.63.1668535634314; Tue, 15
- Nov 2022 10:07:14 -0800 (PST)
+        bh=bBywltwPfbjC+ce3gndOtHFxBFbCBPvkG2/C6S0a1WI=;
+        b=ij64K552oN3MCYzE4ieRcZA4f0eO/sf69zhL6f43tTFiORrLINLl+S8kJ9H48bQijt
+         Pu6HjX28fz2p+jHSIPhUA+kZDSsGGDvvuDhc77GhgQ5TZHn/z466SSV34nm6qDfUU/mc
+         yPE6HD4uQTEX9ZR9EqWIt9SAP7RxK0mXl5yVyfRYf7OkZ3gptAz7Wv/KpFR1h65VQqZt
+         HhxQ9bkJ/3ChpV/j2fLNbbKmQh/RpCxtBHC+NxY7UzYV6ZA5dFrtxQFgTD36cRr8yGVU
+         YTL5fREjysTWmfhwNkNvL3hf2W8GTeaxkOEjQK+c+WiBlmlD4aWHEfi6KA3+SgnaG5fd
+         nzlg==
+X-Gm-Message-State: ANoB5pm1odTLf2i5JPhMuloRkAckkejg6ZEmFqqve2wS1r0xRJauvSTE
+        rw2fZZkZu82NzJ6gmiN62I3PPbtgWCKexr1E280=
+X-Google-Smtp-Source: AA0mqf4DjA77nkIh39DWoUK2zu8eLVruCRANeUn1hy+5egUcLsy5ITYNaFkdHxmQ3lPoYOKqg4XiObTZKUdlHIWnx2w=
+X-Received: by 2002:a17:90a:fa43:b0:20a:f469:7307 with SMTP id
+ dt3-20020a17090afa4300b0020af4697307mr1652818pjb.213.1668535641357; Tue, 15
+ Nov 2022 10:07:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20221109003618.3784591-1-dlatypov@google.com> <20221109003618.3784591-2-dlatypov@google.com>
- <CAO2JNKUTiVM8YPgy0nz7W1GJtSVURhc1YkMgUWgs-rShNY0Zaw@mail.gmail.com>
- <CAGS_qxqPUHWyJ4nNQRdm79sMwHwysHV=99WXzMsY=g_WzSjZaw@mail.gmail.com> <CABVgOSkJGoyMrv-=Zd+8sveH0+04G4twmae+p+TJWdpB6SJ+FQ@mail.gmail.com>
-In-Reply-To: <CABVgOSkJGoyMrv-=Zd+8sveH0+04G4twmae+p+TJWdpB6SJ+FQ@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 15 Nov 2022 10:07:03 -0800
-Message-ID: <CAGS_qxodbGhwrGD-dHmCW7gWdrhFgCxQbrFPvNYMrXU67_ZryQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] Documentation: KUnit: reword description of assertions
-To:     David Gow <davidgow@google.com>
-Cc:     Sadiya Kazi <sadiyakazi@google.com>, brendanhiggins@google.com,
-        rmoar@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, skhan@linuxfoundation.org
+References: <20221115140300.534663914@linuxfoundation.org>
+In-Reply-To: <20221115140300.534663914@linuxfoundation.org>
+From:   Allen Pais <stable.kernel.dev@gmail.com>
+Date:   Tue, 15 Nov 2022 10:07:10 -0800
+Message-ID: <CAJq+SaAF-NfnPOiVu6s1Hn5jSs0595CjeezR9n-DAuZFzDZyhA@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/130] 5.15.79-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,46 +71,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 11:45 PM David Gow <davidgow@google.com> wrote:
-
-<snip>
-
-> +1 for the patch from me (modulo the "we" typo Sadiya mentioned).
+> This is the start of the stable review cycle for the 5.15.79 release.
+> There are 130 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> I otherwise also prefer Daniel's original here (though I'd possibly
-> merge it into one sentence, personally).
-> Maybe:
-> "In this example, as we need to be able to allocate an array in order
-> to test the sort function, we use ``KUNIT_ASSERT_NOT_ERR_OR_NULL()``
-> to abort the test if there's an allocation error."
-> or
-> "In this example, we need to allocate an array to test the sort
-> function. We therefore use ``KUNIT_ASSERT_NOT_ERR_OR_NULL()``, which
-> will automatically abort the test if there's an allocation error."
+> Responses should be made by Thu, 17 Nov 2022 14:02:33 +0000.
+> Anything received after that time might be too late.
 >
-> But any of the above wordings are fine for me.
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.79-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
 >
-> The note about ASSERT() working in any function is useful, though
-> there are definitely some "gotcha"s caused by killing the kthread
-> we'll need to resolve. (If there are any dangling references to things
-> on the stack, for example.) Still, not an issue for this bit of
-> documentation.
->
-> Reviewed-by: David Gow <davidgow@google.com>
->
-> (Once the "we" typo is fixed.)
 
-v3 is here, PTAL
-https://lore.kernel.org/all/20221111182906.1377191-2-dlatypov@google.com/
+Compiled and booted on my x86_64 and ARM64 test systems. No errors or
+regressions.
 
-Copying the relevant section here:
-+In this example, we need to be able to allocate an array to test the ``sort()``
-+function. So we use ``KUNIT_ASSERT_NOT_ERR_OR_NULL()`` to abort the test if
-+there's an allocation error.
-+
-+.. note::
-+   In other test frameworks, ``ASSERT`` macros are often implemented by calling
-+   ``return`` so they only work from the test function. In KUnit, we stop the
-+   current kthread on failure, so you can call them from anywhere.
+Tested-by: Allen Pais <apais@linux.microsoft.com>
 
-Daniel
+Thanks.
