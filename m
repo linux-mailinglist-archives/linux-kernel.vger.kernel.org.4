@@ -2,116 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B958E62929B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 410986292A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:44:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbiKOHjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 02:39:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
+        id S231908AbiKOHoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 02:44:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbiKOHjJ (ORCPT
+        with ESMTP id S229631AbiKOHoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 02:39:09 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA66BBA
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:39:08 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id q9so13377106pfg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:39:08 -0800 (PST)
+        Tue, 15 Nov 2022 02:44:03 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320011C93D
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:44:01 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id x21so16413331ljg.10
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:44:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qrKxYxO/T/9+ij5BpZ+ZeE91vTMifnc8qboFL3OM2PU=;
-        b=H01TrKGhQrD5MzuM4fOKDD5uVKMwHmW0a2HUiqcgBfGdx+x8fahWBZgYIaWZbJeywr
-         fZSutuU7hMyabiDX4PvQFlJRZG/NI9FZMGgbpxMXcpHWRQgP9FTvHDRCoqq5IZfLXjk8
-         a7kRqownJt+7uXXfEMcRzLwDYxVIQkoCjcgSBODuxOJddjB3/9/SG1h7Qn04lglhLTo6
-         LWhgRHFBV5vIiK+qSGNXeYd+FJn90lIJOGwqQS7Rgul0LkJYgkXu5mpUSBrvKz7/f5u/
-         CmLFjD/T9aAY77w4gyCmSRQeaOirfaoTEdXZz6f3GR+InFg4D/xZAGJlWKqqTg77tm1x
-         39Rw==
+        bh=XrOEygdWi3pXEJQNDPsb806sEtq19Rqxin4IiMd3olc=;
+        b=aHw8ddTPEpBYzI9XNrZBUhY7QEUdAqdwK+4DIhY5/ttzsxZHXagVnVZWwqbSsnR/L9
+         BAtWJEJ8HlDMOz1lFNo69MeWGGDA/mXbKhmo5RsHGZg+Of1ZN2snQqbQee0Tit1FOC/Q
+         kS64xE0nlozCRV7MIF7KZMgdp+69c5/9FBIe0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qrKxYxO/T/9+ij5BpZ+ZeE91vTMifnc8qboFL3OM2PU=;
-        b=7NowbSnxLgxyNA3eC4c+L5xUkKd3znCBlLxz8nmdDiqw1j7MkwI/j5UskJCWsJeVSv
-         AScwXK6ONBecfFVVl6pZwSDqY1XQ7xJlXXKj01C2sVS9BTxaeNMG66/BYNgJ2B1y2gfg
-         lInoXlA3C+h9OjHlN9v/z6rYPzFNAkS1iyXwi8VTUxB5Oo8K7ZJ9qwvl6OJbULGNdsZI
-         VascgqRYOyCrxre2Hw70RKaVnvG+PiRho4B/tlV7hppbyu/tbfI5L7tOa7lNZGQ9fgc7
-         pBLo5PvjuAUj9ChvPmDcJHey4J6upKfnd9oeJztoON8BlXdcfEe8mcXIpmJjL2KGFYNt
-         paUg==
-X-Gm-Message-State: ANoB5plTiFipe36Hm2vxPQmoXDhpWYes46U2MbOjvKO2zFAqSULV+7w6
-        JWrWTzWyeWdlTicSUEsrMSff6g==
-X-Google-Smtp-Source: AA0mqf78gRM3zma7ZP3Cy070W+sbXWWKNNRsCbOy5Iv8juBkB9xy5KIhg2Qcr76QN4KCFo1dK8075A==
-X-Received: by 2002:a65:5908:0:b0:46f:1e8f:1633 with SMTP id f8-20020a655908000000b0046f1e8f1633mr14878101pgu.556.1668497947573;
-        Mon, 14 Nov 2022 23:39:07 -0800 (PST)
-Received: from [10.68.76.92] ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id n63-20020a17090a5ac500b00200461cfa99sm10894663pji.11.2022.11.14.23.39.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 23:39:07 -0800 (PST)
-Message-ID: <82c9c89c-aee2-08a3-e562-359631bb0137@bytedance.com>
-Date:   Tue, 15 Nov 2022 15:39:02 +0800
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XrOEygdWi3pXEJQNDPsb806sEtq19Rqxin4IiMd3olc=;
+        b=BD/H8+BlcdSXSeAcM9m+awZSuO37YS/0J5xKQQVBwOAgi5ViNU2I6W2HXN24lbGkcK
+         /H2VZcVPcc+Mkf1EA7I13qwZeKJoxRl9HUq2qOD/TP4QD9wiTFjR6svYvy1KkpBJGN7D
+         OAuT7l/R1wvCCnu2/QYg8NviaxiVgmmpNhE3GZUMJ9ERm+HacReV1xpuUQDctDfccEdt
+         DkYlO1ntVyHEAAkRX+SahpoXEVARQwQGIOVML2SrBsHPx8KqV4I53r43BBj4aA1RRPsk
+         yfGfyIAJ7r3f7NBfg7jPonxzTvqAD3bBxqfH/qjkpqVx4VOPxYbSdPVHL0WLnSSD3c3Q
+         QOrw==
+X-Gm-Message-State: ANoB5pmAR34ZuLyDjrAYLuvmEh5PTUHzRY4lF2eSrQbf4/7MQFM9tpqc
+        J0CodTEAAhWoKZgTBQxJJQEqsQ==
+X-Google-Smtp-Source: AA0mqf6yh85DBb6cczRp8W3NVkP6JMvYmIva2InW8EL+ciD1s5uuGjAC6Z/+J12112Mquj26vFgGfQ==
+X-Received: by 2002:a2e:8544:0:b0:277:e01:610f with SMTP id u4-20020a2e8544000000b002770e01610fmr4948523ljj.60.1668498239466;
+        Mon, 14 Nov 2022 23:43:59 -0800 (PST)
+Received: from prevas-ravi.prevas.se ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id m20-20020a056512359400b00498fc3d4cfdsm2119742lfr.189.2022.11.14.23.43.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 23:43:58 -0800 (PST)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] net: dsa: use more appropriate NET_NAME_* constants for user ports
+Date:   Tue, 15 Nov 2022 08:43:55 +0100
+Message-Id: <20221115074356.998747-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20221111161729.915233-1-linux@rasmusvillemoes.dk>
+References: <20221111161729.915233-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [External] Re: [PATCH v2] mm: add new syscall
- pidfd_set_mempolicy().
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, corbet@lwn.net,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org
-References: <20221111084051.2121029-1-hezhongkun.hzk@bytedance.com>
- <20221111112732.30e1696bcd0d5b711c188a9a@linux-foundation.org>
- <a44f794e-fe60-e261-3631-9107822d5c36@bytedance.com>
- <Y3IqLzvduM6HqPJV@dhcp22.suse.cz>
- <3a3b4f5b-14d1-27d8-7727-cf23da90988f@bytedance.com>
- <Y3KFFfMFE55lVdNZ@dhcp22.suse.cz>
-From:   Zhongkun He <hezhongkun.hzk@bytedance.com>
-In-Reply-To: <Y3KFFfMFE55lVdNZ@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>> We shouldn't really rely on mmap_sem for this IMO.
->>
->>   Yes, We should rely on mmap_sem for vma->vm_policy,but not for
->>   process context policy(task->mempolicy).
-> 
-> But the caller has no way to know which kind of policy is returned so
-> the locking cannot be conditional on the policy type.
+When a user port has a label in device tree, the corresponding
+netdevice is "predictably named by the kernel".
 
-Yes. vma->vm_policy is protected by mmap_sem, which is reliable if
-we want to add a new apis(pidfd_mbind()) to change the vma->vm_policy
-specified in pidfd. but not for pidfd_set_mempolicy(task->mempolicy is
-protected by alloc_lock).
+Expose that information properly for the benefit of userspace tools
+that make decisions based on the name_assign_type attribute,
+e.g. a systemd-udev rule with "kernel" in NamePolicy.
 
-> 
-> Yes this is all understood but the level of the overhead is not really
-> clear. So the question is whether this will induce a visible overhead.
-OK,i will try it.
+Similarly, when we fall back to the eth%d scheme, the proper constant
+to use is NET_NAME_ENUM. See also commit e9f656b7a214 ("net: ethernet:
+set default assignment identifier to NET_NAME_ENUM"), which in turn
+quoted commit 685343fc3ba6 ("net: add name_assign_type netdev
+attribute"):
 
-> Because from the maintainability point of view it is much less costly to
-> have a clear life time model. Right now we have a mix of reference
-> counting and per-task requirements which is rather subtle and easy to
-> get wrong. In an ideal world we would have get_vma_policy always
-> returning a reference counted policy or NULL. If we really need to
-> optimize for cache line bouncing we can go with per cpu reference
-> counters (something that was not available at the time the mempolicy
-> code has been introduced).
-> 
-> So I am not saying that the task_work based solution is not possible I
-> just think that this looks like a good opportunity to get from the
-> existing subtle model.
+    ... when the kernel has given the interface a name using global
+    device enumeration based on order of discovery (ethX, wlanY, etc)
+    ... are labelled NET_NAME_ENUM.
 
-OK, i got it. Thanks for your reply and suggestions.
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
 
+v2: switch to NET_NAME_ENUM in the eth%d case (Andrew, Jakub). Update
+commit message accordingly.
 
-Zhongkun.
+ net/dsa/dsa2.c  |  3 ---
+ net/dsa/slave.c | 13 +++++++++++--
+ 2 files changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/net/dsa/dsa2.c b/net/dsa/dsa2.c
+index e504a18fc125..522fc1b6e8c6 100644
+--- a/net/dsa/dsa2.c
++++ b/net/dsa/dsa2.c
+@@ -1364,9 +1364,6 @@ static struct dsa_port *dsa_port_touch(struct dsa_switch *ds, int index)
+ 
+ static int dsa_port_parse_user(struct dsa_port *dp, const char *name)
+ {
+-	if (!name)
+-		name = "eth%d";
+-
+ 	dp->type = DSA_PORT_TYPE_USER;
+ 	dp->name = name;
+ 
+diff --git a/net/dsa/slave.c b/net/dsa/slave.c
+index a9fde48cffd4..821ab79bb60a 100644
+--- a/net/dsa/slave.c
++++ b/net/dsa/slave.c
+@@ -2374,16 +2374,25 @@ int dsa_slave_create(struct dsa_port *port)
+ {
+ 	struct net_device *master = dsa_port_to_master(port);
+ 	struct dsa_switch *ds = port->ds;
+-	const char *name = port->name;
+ 	struct net_device *slave_dev;
+ 	struct dsa_slave_priv *p;
++	const char *name;
++	int assign_type;
+ 	int ret;
+ 
+ 	if (!ds->num_tx_queues)
+ 		ds->num_tx_queues = 1;
+ 
++	if (port->name) {
++		name = port->name;
++		assign_type = NET_NAME_PREDICTABLE;
++	} else {
++		name = "eth%d";
++		assign_type = NET_NAME_ENUM;
++	}
++
+ 	slave_dev = alloc_netdev_mqs(sizeof(struct dsa_slave_priv), name,
+-				     NET_NAME_UNKNOWN, ether_setup,
++				     assign_type, ether_setup,
+ 				     ds->num_tx_queues, 1);
+ 	if (slave_dev == NULL)
+ 		return -ENOMEM;
+-- 
+2.37.2
+
