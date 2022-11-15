@@ -2,538 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED46F629FDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F29A629FEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:05:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbiKORDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 12:03:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
+        id S229846AbiKORFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 12:05:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbiKORCz (ORCPT
+        with ESMTP id S230130AbiKOREq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 12:02:55 -0500
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F45C2CCAD
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:02:53 -0800 (PST)
-Received: from [192.168.2.144] (bband-dyn193.178-41-216.t-com.sk [178.41.216.193])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 6D3F93F251;
-        Tue, 15 Nov 2022 18:02:49 +0100 (CET)
-Date:   Tue, 15 Nov 2022 18:02:43 +0100
-From:   Martin Botka <martin.botka@somainline.org>
-Subject: Re: [PATCH v3 2/2] arm64: dts: Add basic support for BIQU CB1
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Martin Botka <martin.botka1@gmail.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Jan Trmal <jtrmal@gmail.com>, Tom <takuya@takuya.tech>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Conley Lee <conleylee@foxmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Message-Id: <JCFELR.HONCNORN1D0L@somainline.org>
-In-Reply-To: <20221115142714.310049c4@donnerap.cambridge.arm.com>
-References: <20221114214452.1993744-1-martin.botka@somainline.org>
-        <20221114214452.1993744-2-martin.botka@somainline.org>
-        <20221114233102.3b1f96cc@slackpad.lan>
-        <CADQ2G_HXx59YYjNvhcNRonahgT3AcE_2BiU43vDJ3CRUGKwAKA@mail.gmail.com>
-        <20221115005429.57d72f64@slackpad.lan>
-        <D69CAA04-56A2-4FFD-A33D-C802084A7150@somainline.org>
-        <20221115103307.5f5b9106@donnerap.cambridge.arm.com>
-        <78EC79B1-1664-48EB-A902-9173FE59C45B@somainline.org>
-        <20221115142714.310049c4@donnerap.cambridge.arm.com>
-X-Mailer: geary/40.0
+        Tue, 15 Nov 2022 12:04:46 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4C626ACD
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:04:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668531885; x=1700067885;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=0sWPB6huMOB0bqgwKrsc3sRb9VOGl+xDRW4SS5VtDjI=;
+  b=YBslNpziYW/mtHqa+GWH2/4HPPioyjJhHj9frYtOc3RE/wDSvqkOllmP
+   8kyebE/baS0pj6rfYeyE7EPns9xK8i561+P/1D/64PLmfplluPjfCwydl
+   P16ArUrl5F5tSxL6Bwb94C65v/ouhhTIipzmxi23TLsuiQD3tSo3rdFkd
+   X9Qouk24XptX07GHgcr4qAuOarO2/1v9SHk2y0Dm3Yc+ShY8Q8Iy9n8AT
+   njpagtFWHF2JN8iFh+fyHDYsNmgg3t3W/VKBJ4apXMfdAvT1c/163kAGF
+   WFYauVZgMWiZIYSHnUb/kJfYjestYXL0UF6Tf08puPpjSZ+Qbgpy4fxw2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="374441121"
+X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
+   d="scan'208";a="374441121"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 09:04:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="763983080"
+X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
+   d="scan'208";a="763983080"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga004.jf.intel.com with ESMTP; 15 Nov 2022 09:04:43 -0800
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 09:04:43 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 15 Nov 2022 09:04:43 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 15 Nov 2022 09:04:42 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nnrZ3vITCF9c19GJYHr2HWvKeBG+OvCwT0mW7ieQr/RNGCTKM3BgmNaOVWf0oZftgE5oXIBIGIe2krC8fwqdRNhGPTRW57q/JUeSpFUMItdG3/u/fXAF0OUYQmffI12PFQK+2OopZoQutN6B+iDvy6ffV+vc+9CA+tU4WcjHR/smsm2HAB5Vyt1LA8nlczUYDsr9G+G2hMupczKjDOLg2/XfFNZ8jxIg8DWu5J/+y2L1t3b/0ThGD5KjnoRlQKME+08Rv3sikx7rNUVp+YwBL5R+PnWkb3xDMabT8ucy+VIu1lz6UF07bDIidwjH4f8a3QdVSgX5eXIc04MQJlyZdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0sWPB6huMOB0bqgwKrsc3sRb9VOGl+xDRW4SS5VtDjI=;
+ b=gTaXlj3mq6fC6xbm4+TdqNBD4FrJRiHCKDvWvtDTcL0T+TGzEphqxdfiVw2A95+oIB+O530bpXZuXzM4jMLL//uvlMI/abU6bBhbe6KMQyOddXC5RYw8fd7JO7za4plveRkD401APi/jZbSpCoyhuy9cNuMizt4DFWfIYf/Bdo4I8yltZ8FnRoI3AMSpnYwkDFAdlvmCz5SAnvmEAx9Hu4ntq14dLN4c0jBVFlr1Rxd4axE2jQVyoA20FOQXml+IOiOE8utAjrcxdbuSRbGfhrztgdTBS8QX3hgywd1xBLaQws7fzodK7Czp25RbU2oJU60kT5nK4Iek/qCr00wosA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
+ by CH0PR11MB5539.namprd11.prod.outlook.com (2603:10b6:610:d6::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Tue, 15 Nov
+ 2022 17:04:40 +0000
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::add7:df23:7f86:ecf3]) by MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::add7:df23:7f86:ecf3%5]) with mapi id 15.20.5813.018; Tue, 15 Nov 2022
+ 17:04:40 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "peterz@infradead.org" <peterz@infradead.org>
+CC:     "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: CET shadow stack app compatibility
+Thread-Topic: CET shadow stack app compatibility
+Thread-Index: AQHY+H8FF0IkDR4atkCzeBv5Re4FS64/vJSAgAB7H4A=
+Date:   Tue, 15 Nov 2022 17:04:40 +0000
+Message-ID: <883ed1a3f4de8d508c4bc2f504ae4a5c8db19a20.camel@intel.com>
+References: <7d8133c7e0186bdaeb3893c1c808148dc0d11945.camel@intel.com>
+         <Y3NfX0zXDIZztwKL@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y3NfX0zXDIZztwKL@hirez.programming.kicks-ass.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|CH0PR11MB5539:EE_
+x-ms-office365-filtering-correlation-id: 3ffc50f5-8b7b-467e-5f54-08dac72b7bee
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YRO9V+fkM+2knL99OCDYTKJeuENM3tqXcqbMFm/zC4lL2ir7p7DWD3H/G9SW7Qe/gLMH4V2+lMYy2HWetJA/0l+WE1rs/EWijOouN/g598VvO5/m75JzR7kDkvW9wqnzMH3+u2k6BteN4bHyQkEKw09ZIKzUd8gEVVqroXGZvW4eokw4sNfHJs008GwI2WT8ni3zsniJc9NMwujmsCRGoHnLnt88Rz1LNhw8TcwXgOODzFijcHRfc8scwpAFXIFfPbqvHCIqUD7hjohwoZSE7m5hWpcCuCf7ZxtRKcYcd7cMuscsA+ErkI0necmiZFEaFgdQu8pX3tfKLl+3E0SJHZ+iu4um2GXZkYgwJlV1SfCvl4IXaDzQcQwPGVCY4GSaLdLjn5SsngoZSulTHes1yxXhVGV0W7W4qVYaTUOFfr3GW260ZzYjec4hwnrdJgY5Uz7wzC4GJXT0C3Km9wZsolPmzG1z/F6kFL23ZSOtkO2oiyazPiFhLDz2HAa2V07PxXEwK4xREYJMpNq9lyF4ZDFvkAu6UBBe3VLU0JShHp+HxxRJW9oVHQTu7VLjfHyvzweSa4VVUZr5GTjDOKIZHv2xooO1t8t2H6jzvIa52lUzsjfJfuomORok9ms6A5V9H70NLg4XlabOIZpLj1GrHetGS9yTwsAnD3sDiLjdhb6H5t61CJzlzIXCephaQFbGtcat06rm3Gik/K+aWL6I3z/T/BcMRRZYQECT8vrvGttXlknJHtnYQAOTq23rPS5uFWVU0L6+R/jZrdR/cjR8bCtfchPc6viLqhO/zdVkcaQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(346002)(366004)(396003)(39860400002)(136003)(451199015)(66899015)(36756003)(38100700002)(122000001)(4001150100001)(2906002)(41300700001)(82960400001)(38070700005)(86362001)(8676002)(4326008)(64756008)(316002)(66946007)(76116006)(66446008)(66476007)(66556008)(91956017)(2616005)(186003)(6512007)(26005)(71200400001)(6486002)(54906003)(6916009)(5660300002)(8936002)(478600001)(6506007)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QzRzRlByeXFkbmFrZWRHeTdGNHZGMVpkWHRNWk5CUjJ1eERsRFcvT1VtR3RS?=
+ =?utf-8?B?blNZT1h5VUxoNkJYZjd0bUZDWDhYWUJrT25QOVY2bHcyQ1N5QTM4WFdOd1Vy?=
+ =?utf-8?B?ZkErMUVPT1JhbG9ZUzNOK3RRWlNWeFBZK1VqVXhsRzljcktUZkY4SzcwTGNq?=
+ =?utf-8?B?TWVRc0wzbmNqM3BWTEgyQTdSMmN4d2xYc1UzUHpKYWt4U2NwWXJZSkVvNVIy?=
+ =?utf-8?B?WDh5ZGVUTGY0RjRrMFZ2V3l5ZXovQTQzNGtDa2VOcVJGY3pRSlZLN1pwNGUx?=
+ =?utf-8?B?THdyTllqOVMzTHkxODRNSkR2ZGhZYlduV2NWVVMzRVlvb2JPZXhYYzJ1N09i?=
+ =?utf-8?B?MDJpelNPcWdraTd3MnNjcm5ianJ2OWpYT2dic2NJM3ZydS96Qi9hZGJMd0x4?=
+ =?utf-8?B?MUt4cnhjcW5NOU1LSGFvZm9CV1Iyb1F4ZUVmd21VYW1sWExBRDg1TXIvMU9F?=
+ =?utf-8?B?ZTlsbUN6cEVOS3JUZlJsamhBZ2hKRjZxbTJPaUdmOW1BWURYSE5tb2FCRUxW?=
+ =?utf-8?B?U2o3dTgrNzNuNmJDTFBNSVN6WDVLUjZZcmhOOW1CSlI1S3BkOEd0azhDMy9H?=
+ =?utf-8?B?MEFpZTlkTlc0SHVLTlNOMThyTm01RS9BTVNJdXVnamJ1Y0IxVlNybGdpVms3?=
+ =?utf-8?B?NTJqNC9STlVtc3JFSk9NYVlWN0hDbTdMa3B3SXMzekNxREFZRS8vMmJLMTRv?=
+ =?utf-8?B?ek1RQ24yTnMvQ0JkdkNSbkFWbjMxYkxjRmRtWTdxTEpvdWh2VTIyTjJGYVpy?=
+ =?utf-8?B?c0UzQ25tbkl5anl3RFNUOXBySUwrNm9RSkg0Rmt0bTlDQUVMcnRNb0psZjNJ?=
+ =?utf-8?B?bmpLdTAybUVUckRpbzR2Y1hpeVpwZXFpWmgzM29Wd0p5WHBQVVpWRFloTWxm?=
+ =?utf-8?B?cnNaYnBxNHNwTHFTQzJZOGUzVmNsbStCY3ZwbkY1UFNYTnlPaTRsN2NHRktt?=
+ =?utf-8?B?ODhqM0pzM1hWVm1RVU9NeHNDS3Y0S2lpb1orWW40dmJIS1ZKbXZHRlZXRTUw?=
+ =?utf-8?B?UzNqcGpRdWd5c05Td1ZPUlRWa2s5ZmlMWVh3ZEw3cU8zWEdFMjM5NUhtZTJy?=
+ =?utf-8?B?dEVMRGRrcDg5aTRrZVZNeXNpQ1U1U3NzNHNiVjcxSnZCNFgraGxTOHVUTkR6?=
+ =?utf-8?B?eFlsazl2ckZDZkpteDJLSWZKNHFEaVNXM2tQTEtBNW9lNy85RWNWWk1WWDZV?=
+ =?utf-8?B?UWFUQkZnRWx5bVp1MENGenhzWFF0cXprd3hub2pxVXhKOXg0d3dORkJmcks2?=
+ =?utf-8?B?dWJFU2dKNHRrWGNDVFFFaVNvQnZvWDJLc2hrRmM4QzhKNmxvKzhDOW5NT1I4?=
+ =?utf-8?B?UkZUUVZmNUp0VnprY21QVVlOeFluRUl6L2ZQQUZMeXdzYTlPdzQvV1dmZzgr?=
+ =?utf-8?B?eEYxS1BFaDd0ODYvdFRPcVRqS2FTNlFqS1VHeWZPTWZjc3NuRUhKS0xBc2NH?=
+ =?utf-8?B?NjBFZzVJdExUVXcwSFVxM0tVaEJHeEFKc2Z0RkQ1YjF1ZE5CWEg0TERnKzU0?=
+ =?utf-8?B?bjBrbE83L1V4SWdtdExMWVB3bHhNcXh0Q3VIM1dLakhHVjFrWG1HUU9xT0x2?=
+ =?utf-8?B?SmRMZ04zREJ1a2JOMkhPY1FJSHRYK2w3cU9qTll0RmZXc2xWYUs2N1o2cEEw?=
+ =?utf-8?B?UHJOcStodGVGWU9sNlBRV0YzMDd2Wm1VeE9Xb2NoeWl0REE5SDNKSzJteG1C?=
+ =?utf-8?B?cjIwUkpXaS9lWUpMcmJOcHZzYUFNeUszYVhESlRMUk80Y3ZYcjFSMXlmQXE1?=
+ =?utf-8?B?K01MWXlKZXFyZEoxMkRzQTJmQjVMMUw5b2pkZTd3ZnFtaXlzWEZucm92YmpX?=
+ =?utf-8?B?SEJkUUxjZGcyeGlxL21OL2RjTndhbHhOZzBZWmJOMlRBTy8zdWpkNysxZ2U1?=
+ =?utf-8?B?c3prUzFJNHpwL2tOUm4yVWU2Q3NXWWF0dnRTbkJSbHduZHQ4bHZTZ2Qva08y?=
+ =?utf-8?B?QUIrMU5BQnlMK3h4WGNZdEJjNGdwMS8wbk11REcxcjBhNUhHcG5VU1lRMjNL?=
+ =?utf-8?B?Sy8rcGtQK1A1ODg2QnZtTFJ0azBRMTFkY3hDakwzYytucGNMSVFwaDdNWW9m?=
+ =?utf-8?B?c3dZbUFEcVFrK05zbitjWFpSTzFCZkxpM0JXSDJNTjVlemZ1b3NuSFFvb1ZQ?=
+ =?utf-8?B?eFNjdHFJTTVLWVZJRkpTQjFqR3FqdWtHYWRDNS9taWR6Z2FDWmpyQW5lUHJr?=
+ =?utf-8?Q?EHaxjdtphZgvyH7qlobVEmw=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <AE15B8016B909B44B15B11793784688D@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ffc50f5-8b7b-467e-5f54-08dac72b7bee
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2022 17:04:40.2774
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6C8ygOom10N89HQ5fcuv1TBtUCRwuYV9KsbQZOWJehgqkRNqxLS7fFNRTn6nzWri4KQcU0w9HRvjs3YIdUCIXW3V/W1Hu11b6O2tP2jgIYM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5539
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Tue, Nov 15 2022 at 02:27:14 PM +00:00:00, Andre Przywara 
-<andre.przywara@arm.com> wrote:
-> On Tue, 15 Nov 2022 12:38:59 +0100
-> Martin Botka <martin.botka@somainline.org> wrote:
-> 
-> Hi Martin,
-> 
->>  On November 15, 2022 11:33:07 AM GMT+01:00, Andre Przywara 
->> <andre.przywara@arm.com> wrote:
->>  >On Tue, 15 Nov 2022 09:24:04 +0100
->>  >Martin Botka <martin.botka@somainline.org> wrote:
->>  >
->>  >Hi,
->>  >
->>  >> On November 15, 2022 1:54:29 AM GMT+01:00, Andre Przywara 
->> <andre.przywara@arm.com> wrote:
->>  >> >On Tue, 15 Nov 2022 00:44:46 +0100
->>  >> >Martin Botka <martin.botka1@gmail.com> wrote:
->>  >> >
->>  >> >Hi Martin,
->>  >> >
->>  >> >> I can totally understand how this can get confusing.
->>  >> >>
->>  >> >> Basically because of the Rpi shortage biqu decided to make an 
->> Rpi
->>  >> >> alternative.
->>  >> >>
->>  >> >> So they made CB1 which is compute module style board.
->>  >> >>
->>  >> >> And they made 3 other boards where CB1 or Rpi CM4 can be 
->> plugged in. The 3
->>  >> >> boards are:
->>  >> >>
->>  >> >> Rpi adapter which takes the Compute module style boards and 
->> turns them into
->>  >> >> SBC style with basically identical size and etc to Rpi 4.
->>  >> >>
->>  >> >> Then we have Manta M8P and M4P. These boards are MCUs for a 
->> 3D printer. But
->>  >> >> they were made for Klipper use case which requires a computer 
->> or SBC
->>  >> >> (Usually Rpi4). They combined it into 1 board.
->>  >> >> Where you get the MCU and you can plug in CM4 or CB1
->>  >> >
->>  >> >Thanks for the explanations! I was guessing along those 
->> shortage lines,
->>  >> >since the H616 is quite a step down from the RPi4CM, though 
->> probably
->>  >> >still enough for driving a 3D printer.
->>  >> Mostly yes
->>  >> >
->>  >> >> All these boards are basically taking the pins and routing 
->> them to ports.
->>  >> >
->>  >> >Yes, this is what those SoM carrier boards do ;-)
->>  >> :)
->>  >> >
->>  >> >> There is nearly 0 chips for conversion or processing of the 
->> pins from CB1
->>  >> >> or CM4 thus i do not see a reason for having parent dtsi and 
->> dts for the
->>  >> >> adapter and Manta boards.
->>  >> >
->>  >> >And the DT does not need to describe "chips" only, a lot of DT 
->> nodes
->>  >> >are about connectors, and which ports and which exact pins (out 
->> of the
->>  >> >possible pinmuxes) are actually used. The SoM itself mostly 
->> exposes
->>  >> >just pins, and the board DT describes how these pins are used 
->> (GPIO or
->>  >> >special function, for instance).
->>  >> >
->>  >> >So did you try to split this up? How would that look?
->>  >>
->>  >> The main difference between adapter and Manta boards is that 
->> adapter has 4x USB.
->>  >
->>  >So those are two double-type-A sockets? This is not really what 
->> the DT
->>  >below describes? It's perfectly fine to fix USB0 to host mode, we 
->> do this
->>  >on the Pine64 boards (both A64 and H6), for instance.
->> 
->>  Yes. But the third and fourth is also used. Third is done in 2.54 
->> 4p connector (just pins on board) and fourth is connected directly 
->> to manta stm32 MCU. So all 4 are host.
-> 
-> Wait, so you are talking about the Manta board now? I see two 
-> sockets, the
-> 2.54mm headers and the STM32 there, but the Pi4B is quite different in
-> that respect: I see four(!) USB type-A sockets (two dual-port stacks).
-> Plus the CM4 connector seems to only have pins for one USB 2.0 port
-> (D-,D+). So is this a hub chip on the underside of the board, close 
-> to the
-> USB ports? Can you read the label of that chip?
-> And where are the other H616 USB pins routed to? Are they (ab-)using 
-> the
-> PCIe pins of the CM4 connector? Or are they actually not used at all, 
-> and
-> it's all one USB port through a by-4 hub?
-> If you have a running system, "lsusb -t" should give you a clue which 
-> host
-> ports are used and if there is a hub.
-> 
-> Cheers,
-> Andre
-> 
->>  >> Manta only has 3 and 1 otg. But it has a switch to disable or 
->> enable otg.
->>  >
->>  >What does the switch do, exactly? By definition OTG works fine in 
->> both
->>  >ways. And there are pins in the connector to decide the role.
->>  The switch is just signal pin for RS2227. Its the multiplexer i 
->> mentioned. It decides if we should have the pins wired to usb type C 
->> port or normally to stm32 MCU. Thats all it does.
->>  >
->>  >Allwinner actually goes one step further and provides a full HCI 
->> to the
->>  >same PHY that the MUSB OTG controller is connected to, so you 
->> don't need
->>  >to live with the sometimes limited performance of the MUSB host 
->> mode
->>  >(which we drive without DMA). Not sure if that is the case or a 
->> problem on
->>  >the RPi4.
->>  >
->>  >> Im not opposed to splitting it up. It is probably a good idea.
->>  >> I dont see how to resolve that switch on manta boards tho.
->>  >
->>  >If the Manta board is (almost) a superset of the Pi4B, then you can
->>  >include the latter from there. Look at sun50i-a64-pine64-lts.dts or
->>  >sun50i-h6-pine-h64-model-b.dts for examples.
->>  >
->>  >Cheers,
->>  >Andre.
->>  >
->>  Yep i will split it into SoM boards.
->>  >> >> The only exception to conversion are the LEDs on the boards 
->> but since both
->>  >> >> adapter and manta boards have them this yet again eliminates 
->> need for
->>  >> >> parent style DT.
->>  >> >>
->>  >> >> Best regards,
->>  >> >> Martin
->>  >> >>
->>  >> >> On Tue, Nov 15, 2022, 12:32 AM Andre Przywara 
->> <andre.przywara@arm.com>
->>  >> >> wrote:
->>  >> >>
->>  >> >> > On Mon, 14 Nov 2022 22:44:49 +0100
->>  >> >> > Martin Botka <martin.botka@somainline.org> wrote:
->>  >> >> >
->>  >> >> > > CB1 is Compute Module style board that plugs into Rpi 
->> board style
->>  >> >> > adapter or
->>  >> >> > > Manta 3D printer boards (M4P/M8P).
->>  >> >> > >
->>  >> >> > > The board has:
->>  >> >> > >       H616 SoC
->>  >> >> > >       1GB of RAM
->>  >> >> > >       AXP313A PMIC
->>  >> >> > >
->>  >> >> > > And the actual boards that CB1 plugs in are just 
->> extension to it with
->>  >> >> > ports and
->>  >> >> > > thus are not split in DT.
->>  >> >> >
->>  >> >> > I don't really understand that sentence. There is some 
->> precedent for a
->>  >> >> > SoM/board split, look at the sun50i-a64-sopine or
->>  >> >> > sun50i-h5-emlid-neutis-n5 files. And if I see this 
->> correctly, then
->>  >> >> > there are *two* boards available for the same CB1 SoM, the 
->> PI4B and the
->>  >> >> > Manta board? Which would a strong case for a SoM .dtsi, 
->> plus the one
->>  >> >> > or two board .dts files.
->>  >> >> > I am just not sure whether that relation to the Pi4-CM is 
->> helpful or
->>  >> >> > just complicates things...
->>  >> >> >
->>  >> >> > Cheers,
->>  >> >> > Andre
->>  >> >> >
->>  >> >> > >
->>  >> >> > > Boards have:
->>  >> >> > >       4x (3x for Manta boards) USB and 1 USB OTG.
->>  >> >> > >       SDcard slot for loading images.
->>  >> >> > >       Ethernet port wired to the internal PHY.
->>  >> >> > >       2x HDMI 2.0.
->>  >> >> > >       Power and Status LEDs.
->>  >> >> > >
->>  >> >> > > Currently working:
->>  >> >> > >       Booting
->>  >> >> > >       USB
->>  >> >> > >       UART
->>  >> >> > >
->>  >> >> > > Signed-off-by: Martin Botka <martin.botka@somainline.org>
->>  >> >> > > ---
->>  >> >> > > Changes in V2:
->>  >> >> > > Add proper board compatible
->>  >> >> > > Add regulator prefix for vcc5v
->>  >> >> > > Drop okay status from PMIC
->>  >> >> > > Drop standby_param
->>  >> >> > > Changes in V3:
->>  >> >> > > Change copyright to me
->>  >> >> > > regulator_vcc5v to regulator-vcc5v
->>  >> >> > > Drop ehci0 and ohci0
->>  >> >> > >  arch/arm64/boot/dts/allwinner/Makefile        |   1 +
->>  >> >> > >  .../dts/allwinner/sun50i-h616-biqu-cb1.dts    | 178 
->> ++++++++++++++++++
->>  >> >> > >  2 files changed, 179 insertions(+)
->>  >> >> > >  create mode 100644
->>  >> >> > arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
->>  >> >> > >
->>  >> >> > > diff --git a/arch/arm64/boot/dts/allwinner/Makefile
->>  >> >> > b/arch/arm64/boot/dts/allwinner/Makefile
->>  >> >> > > index 6a96494a2e0a..223f1be73541 100644
->>  >> >> > > --- a/arch/arm64/boot/dts/allwinner/Makefile
->>  >> >> > > +++ b/arch/arm64/boot/dts/allwinner/Makefile
->>  >> >> > > @@ -38,5 +38,6 @@ dtb-$(CONFIG_ARCH_SUNXI) += 
->> sun50i-h6-pine-h64.dtb
->>  >> >> > >  dtb-$(CONFIG_ARCH_SUNXI) += 
->> sun50i-h6-pine-h64-model-b.dtb
->>  >> >> > >  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6.dtb
->>  >> >> > >  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6-mini.dtb
->>  >> >> > > +dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-biqu-cb1.dtb
->>  >> >> > >  dtb-$(CONFIG_ARCH_SUNXI) += 
->> sun50i-h616-orangepi-zero2.dtb
->>  >> >> > >  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-x96-mate.dtb
->>  >> >> > > diff --git 
->> a/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
->>  >> >> > b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
->>  >> >> > > new file mode 100644
->>  >> >> > > index 000000000000..86b5aca9b53e
->>  >> >> > > --- /dev/null
->>  >> >> > > +++ 
->> b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
->>  >> >> > > @@ -0,0 +1,178 @@
->>  >> >> > > +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
->>  >> >> > > +/*
->>  >> >> > > + * Copyright (C) 2022 Martin Botka 
->> <martin.botka@somainline.org>.
->>  >> >> > > + */
->>  >> >> > > +
->>  >> >> > > +/dts-v1/;
->>  >> >> > > +
->>  >> >> > > +#include "sun50i-h616.dtsi"
->>  >> >> > > +
->>  >> >> > > +#include <dt-bindings/gpio/gpio.h>
->>  >> >> > > +#include <dt-bindings/interrupt-controller/arm-gic.h>
->>  >> >> > > +#include <dt-bindings/leds/common.h>
->>  >> >> > > +
->>  >> >> > > +/ {
->>  >> >> > > +     model = "BIQU CB1";
->>  >> >> > > +     compatible = "biqu,cb1", "allwinner,sun50i-h616";
->>  >> >> > > +
->>  >> >> > > +     aliases {
->>  >> >> > > +             serial0 = &uart0;
->>  >> >> > > +     };
->>  >> >> > > +
->>  >> >> > > +     chosen {
->>  >> >> > > +             stdout-path = "serial0:115200n8";
->>  >> >> > > +     };
->>  >> >> > > +
->>  >> >> > > +     leds {
->>  >> >> > > +             compatible = "gpio-leds";
->>  >> >> > > +
->>  >> >> > > +             led-0 {
->>  >> >> > > +                     function = LED_FUNCTION_POWER;
->>  >> >> > > +                     color = <LED_COLOR_ID_RED>;
->>  >> >> > > +                     gpios = <&pio 2 12 
->> GPIO_ACTIVE_HIGH>; /* PC12 */
->>  >> >> > > +                     default-state = "on";
->>  >> >> > > +             };
->>  >> >> > > +
->>  >> >> > > +             led-1 {
->>  >> >> > > +                     function = LED_FUNCTION_STATUS;
->>  >> >> > > +                     color = <LED_COLOR_ID_GREEN>;
->>  >> >> > > +                     gpios = <&pio 2 13 
->> GPIO_ACTIVE_HIGH>; /* PC13 */
->>  >> >> > > +             };
->>  >> >> > > +     };
->>  >> >> > > +
->>  >> >> > > +     reg_vcc5v: regulator-vcc5v {
->>  >> >> > > +             /* board wide 5V supply directly from the 
->> USB-C socket */
->>  >> >> > > +             compatible = "regulator-fixed";
->>  >> >> > > +             regulator-name = "vcc-5v";
->>  >> >> > > +             regulator-min-microvolt = <5000000>;
->>  >> >> > > +             regulator-max-microvolt = <5000000>;
->>  >> >> > > +             regulator-always-on;
->>  >> >> > > +     };
->>  >> >> > > +
->>  >> >> > > +     reg_usb1_vbus: regulator-usb1-vbus {
->>  >> >> > > +             compatible = "regulator-fixed";
->>  >> >> > > +             regulator-name = "usb1-vbus";
->>  >> >> > > +             regulator-min-microvolt = <5000000>;
->>  >> >> > > +             regulator-max-microvolt = <5000000>;
->>  >> >> > > +             vin-supply = <&reg_vcc5v>;
->>  >> >> > > +             enable-active-high;
->>  >> >> > > +             gpio = <&pio 2 16 GPIO_ACTIVE_HIGH>; /* 
->> PC16 */
->>  >> >> > > +     };
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&ehci1 {
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&ehci2 {
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&ehci3 {
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&mmc0 {
->>  >> >> > > +     vmmc-supply = <&reg_dldo1>;
->>  >> >> > > +     cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;  /* PF6 */
->>  >> >> > > +     no-1-8-v;
->>  >> >> > > +     bus-width = <4>;
->>  >> >> > > +     status = "disabled";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&ohci1 {
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&ohci2 {
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&ohci3 {
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&r_i2c {
->>  >> >> > > +     status = "okay";
->>  >> >> > > +
->>  >> >> > > +     axp1530: pmic@36 {
->>  >> >> > > +             compatible = "x-powers,axp1530";
->>  >> >> > > +             reg = <0x36>;
->>  >> >> > > +             wakeup-source;
->>  >> >> > > +
->>  >> >> > > +             regulators{
->>  >> >> > > +                     reg_dcdc1: dcdc1 {
->>  >> >> > > +                             regulator-name = 
->> "axp1530-dcdc1";
->>  >> >> > > +                             regulator-min-microvolt = 
->> <500000>;
->>  >> >> > > +                             regulator-max-microvolt = 
->> <3400000>;
->>  >> >> > > +                             regulator-step-delay-us = 
->> <25>;
->>  >> >> > > +                             regulator-final-delay-us = 
->> <50>;
->>  >> >> > > +                             regulator-always-on;
->>  >> >> > > +                     };
->>  >> >> > > +
->>  >> >> > > +                     reg_dcdc2: dcdc2 {
->>  >> >> > > +                             regulator-name = 
->> "axp1530-dcdc2";
->>  >> >> > > +                             regulator-min-microvolt = 
->> <500000>;
->>  >> >> > > +                             regulator-max-microvolt = 
->> <1540000>;
->>  >> >> > > +                             regulator-step-delay-us = 
->> <25>;
->>  >> >> > > +                             regulator-final-delay-us = 
->> <50>;
->>  >> >> > > +                             regulator-ramp-delay = 
->> <200>;
->>  >> >> > > +                             regulator-always-on;
->>  >> >> > > +                     };
->>  >> >> > > +
->>  >> >> > > +                     reg_dcdc3: dcdc3 {
->>  >> >> > > +                             regulator-name = 
->> "axp1530-dcdc3";
->>  >> >> > > +                             regulator-min-microvolt = 
->> <500000>;
->>  >> >> > > +                             regulator-max-microvolt = 
->> <1840000>;
->>  >> >> > > +                             regulator-step-delay-us = 
->> <25>;
->>  >> >> > > +                             regulator-final-delay-us = 
->> <50>;
->>  >> >> > > +                             regulator-always-on;
->>  >> >> > > +                     };
->>  >> >> > > +
->>  >> >> > > +                     reg_aldo1: ldo1 {
->>  >> >> > > +                             regulator-name = 
->> "axp1530-aldo1";
->>  >> >> > > +                             regulator-min-microvolt = 
->> <1800000>;
->>  >> >> > > +                             regulator-max-microvolt = 
->> <1800000>;
->>  >> >> > > +                             regulator-step-delay-us = 
->> <25>;
->>  >> >> > > +                             regulator-final-delay-us = 
->> <50>;
->>  >> >> > > +                             regulator-always-on;
->>  >> >> > > +                     };
->>  >> >> > > +
->>  >> >> > > +                     reg_dldo1: ldo2 {
->>  >> >> > > +                             regulator-name = 
->> "axp1530-dldo1";
->>  >> >> > > +                             regulator-min-microvolt = 
->> <3300000>;
->>  >> >> > > +                             regulator-max-microvolt = 
->> <3300000>;
->>  >> >> > > +                             regulator-step-delay-us = 
->> <25>;
->>  >> >> > > +                             regulator-final-delay-us = 
->> <50>;
->>  >> >> > > +                             regulator-always-on;
->>  >> >> > > +                     };
->>  >> >> > > +             };
->>  >> >> > > +     };
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&uart0 {
->>  >> >> > > +     pinctrl-names = "default";
->>  >> >> > > +     pinctrl-0 = <&uart0_ph_pins>;
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&usbotg {
->>  >> >> > > +     /*
->>  >> >> > > +      * PHY0 pins are connected to a USB-C socket, but a 
->> role switch
->>  >> >> > > +      * is not implemented: both CC pins are pulled to 
->> GND.
->>  >> >> > > +      * The VBUS pins power the device, so a fixed 
->> peripheral mode
->>  >> >> > > +      * is the best choice.
->>  >> >> > > +      * The board can be powered via GPIOs, in this case 
->> port0 *can*
->>  >> >> > > +      * act as a host (with a cable/adapter ignoring 
->> CC), as VBUS is
->>  >> >> > > +      * then provided by the GPIOs. Any user of this 
->> setup would
->>  >> >> > > +      * need to adjust the DT accordingly: dr_mode set 
->> to "host",
->>  >> >> > > +      * enabling OHCI0 and EHCI0.
->>  >> >> > > +      */
->>  >> >> > > +     dr_mode = "peripheral";
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&usbphy {
->>  >> >> > > +     usb1_vbus-supply = <&reg_usb1_vbus>;
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> >
->>  >> >> >
->>  >> >
->>  >
-> 
-And yes there should be CM4 and CB1 DT for these boards.
-But since i do not own CM4. I will only create CB1 version of this DT.
-
-
+T24gVHVlLCAyMDIyLTExLTE1IGF0IDEwOjQzICswMTAwLCBQZXRlciBaaWpsc3RyYSB3cm90ZToN
+Cj4gQ0VUIGlzIHR3byB0aGluZ3MsIGlkZWFsbHkgd2UncmUgZnVsbHkgZXJhZGljYXRlIHRoZSB0
+ZXJtIENFVCwgbmV2ZXINCj4gYWdhaW4gbWVudGlvbiBDRVQsIGV2ZXIuIFdob2V2ZXIgYXQgSW50
+ZWwgZGVjaWRlZCB0byBwdXNoIHRoYXQgdGVybQ0KPiBoYXMNCj4gY3JlYXRlZCBzbyBtdWNoIGNv
+bmZ1c2lvbiBpdCdzIG5vdCBmdW5ueSA6Lw0KPiANCj4gVGhlIGZlYXR1cmUgYXQgaGFuZCBoZXJl
+IGlzIGJhY2t3YXJkIGVkZ2UgY29udHJvbCBmbG93IC0tIG9yIHNoYWRvdw0KPiBzdGFja3MgKHRo
+ZSBtZWFucyB0byBpbXBsZW1lbnQgdGhpcykuIEJlIGV4cGxpY2l0IGFib3V0IHRoaXMsIGRvDQo+
+ICpOT1QqDQo+IHVzZSBDRVQgZXZlciBhZ2Fpbi4NCj4gDQo+IFRoZSBvdGhlciB0aGluZyBDRVQg
+aGFzIGlzIGZvcndhcmQgZWRnZSBjb250cm9sIGZsb3cgLS0gb3IgaW5kaXJlY3QNCj4gYnJhbmNo
+IHRyYWNraW5nLCB0aGlzIGlzIGEgY29tcGxldGVseSBkaWZmZXJlbnQgYW5kIGluZGVwZW5kZW50
+DQo+IGZlYXR1cmUNCj4gYW5kIG5vdCBhZHZlcnRpc2VkIG9yIGltcGxlbWVudGVkIGhlcmUuDQo+
+IA0KPiBUaGVzZSB0aGluZ3MgYXJlIG9idmlvdXNseSByZWxhdGVkLCBidXQgc2luY2UgdGhleSdy
+ZSB0d28gaW5kZXBlbmRlbnQNCj4gZmVhdHVyZXMgdGhlcmUncyB0aGUgZW5kbGVzcyBjb25mdXNp
+b24gYXMgdG8gd2hpY2ggaXMgYWN0dWFsbHkgbWVhbnQuDQo+IA0KPiAoZ28gKHJlKXdhdGNoIHRo
+ZSBsYXN0IHBsdW1iZXJzIGNvbmYgdGFsa3Mgb24gdGhlIHN1YmplY3QgLS0gdGhlcmUncw0KPiBh
+bHdheXMgc29tZW9uZSB3aG8gZ2V0cyBpcyB3cm9uZykNCj4gDQo+IFRoZSBvbmx5IHRoaW5ncyB0
+aGF0IHNob3VsZCBoYXZlIENFVCBpbiB0aGVpciBuYW1lIGFyZSB0aGUgQ1I0IGJpdA0KPiBhbmQN
+Cj4gdGhlIHR3byBNU1JzLCBub3RoaW5nIG1vcmUuDQoNClRoZSBvbmx5IG90aGVyIHBsYWNlIGlu
+IHRoZSBrZXJuZWwgd2hlcmUgaXQgaGFzIHRvIGJlIHRoYXQgd2F5IGlzIHRoZQ0KImNvbnRyb2wg
+cHJvdGVjdGlvbiIgZmF1bHQgaGFuZGxlci4NCg0KSSBhZ3JlZSBpdCdzIGNvbmZ1c2luZywgYnV0
+IHdoZW4geW91IHRhbGsgYWJvdXQgInNoYWRvdyBzdGFja3MiLCBhIGxvdA0Kb2YgcGVvcGxlIGRv
+bid0IGNvbm5lY3QgaXQgdG8gdGhlIEhXIGZlYXR1cmUuIFdoZXJlIGFzIHRoZXkgaGF2ZSBoZWFy
+ZA0Kb2YgQ0VULiBTbyBmb3IgY29udGV4dHMgbGlrZSB0aGlzLCBJIHRob3VnaHQgaXQgd2FzIHVz
+ZWZ1bCB0byBqb2cNCm1lbW9yaWVzLiBJIGNvdWxkIHB1dCBtb3JlIGRpc3RhbmNlIGJldHdlZW4g
+aXQuLi4gIng4NiBzaGFkb3cgc3RhY2tzDQooeW91IG1heSBoYXZlIGhlYXJkIG9mIENFVCkiLg0K
+DQo+IA0KPiBFTEYgYml0cyBzaG91bGQgbm90LCBtdXN0IG5vdCwgYmUgY2FsbGVkIENFVC4gQVBJ
+LCBub3QgQ0VULCBDb21waWxlcg0KPiBmZWF0dXJlcywgYWxzbyBub3QgQ0VULg0KDQpTbyB0aGUg
+YXJjaF9wcmN0bCgpcyBjYW4ndCBiZSBzaGFyZWQgYmV0d2VlbiBzaGFkb3cgc3RhY2sgYW5kIElC
+VD8gVGhleQ0KZG9uJ3QgaGF2ZSB0byBiZSwgYnV0IHRoaXMgaXMgYSBuZXcgdGhpbmcgYWZ0ZXIg
+YSBmYWlyIGFtb3VudCBvZg0KZWFybGllciBkaXNjdXNzaW9uLg0KDQo+IA0KPiAoYW5kIEkga25v
+dyBpdCdzIHRvbyBsYXRlIHRvIGVyYWRpY2F0ZSBzb21lIG9mIGl0LCBidXQgcGxlYXNlLCBhdA0K
+PiBsZWFzdA0KPiBtYWtlIHN1cmUgdGhlIGtlcm5lbCBkb2Vzbid0IHByb3BhZ2F0ZSB0aGlzIG5v
+bnNlbnNlKS4NCg0KDQo=
