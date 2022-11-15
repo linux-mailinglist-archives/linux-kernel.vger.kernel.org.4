@@ -2,231 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A085C62ADEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E5E62ADF7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:13:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238403AbiKOWMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 17:12:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
+        id S230137AbiKOWNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 17:13:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbiKOWL6 (ORCPT
+        with ESMTP id S229923AbiKOWNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:11:58 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D183120C;
-        Tue, 15 Nov 2022 14:11:56 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id d13-20020a17090a3b0d00b00213519dfe4aso427645pjc.2;
-        Tue, 15 Nov 2022 14:11:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OrZfenAnf9sYON4n47hNey76ONHNUDUWnON3//izvEc=;
-        b=kiQkSeD9f7oaGu/M9BkH6RjD6Au08SNhthZGu5aQbxMFaUJ5W7YNSXB7Y5t4fx2EN5
-         FD/kK2AToQ6cOJeISWZ+H/U9ixFbaJbdlp+noFxYE3AbnaXIGFBYBo3fEaAMxqaz+fjs
-         GEb3zHIQSlXeJpslI8BBRyoRnwYfuGSKzB9sXlwcMxku7qGoby//GhXV4pJ7dgney+WQ
-         yGS/VNqUR91DmxqRz1g+JK/kRclX9jcE/hl6rVn6DvjcqKXjvMPf9yilCwl+s7U1Wpji
-         rBkPsmYXV/7zTu56lTk+r+M372/7FaP7VlGwTPtpAxv1hyOOKMa6arR10oY8KxkudKyE
-         Mf2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OrZfenAnf9sYON4n47hNey76ONHNUDUWnON3//izvEc=;
-        b=MP3X3CZ2bV5tpHJvYdBknV4AqZSH80tIWQS7KcCroazXn3m9KosnBet4vTf3eaCEeG
-         UK12klM3Y2RCcuUUgS9LZ4AHPjC29SzPm3giG/lvVwX+K82ldNDu+LJCzRRXo9dA9sDf
-         zLZpzlX+V1E3XcXRCsQvgooQiMa60oOoWKQg1wD2JwTAL7gKkEGrWSVrSXjSF4xPV9dm
-         yUJGwYfA0rNitpKkCV8T3CZjJbGlkXW2sS1z/VAnCPABvDVVM0fr4K4WarpQ7N5aMwfk
-         JDKFB/Hb6w68H/T43wJ58Pqa244aJU14qCweYs+EY9AteAmv95Hj+lqE05WDKr5vkklx
-         HgLw==
-X-Gm-Message-State: ANoB5pnihnFt658EVT5N4OsPNK6TyMz9UrgRedrcJ9kp0fNLeEwfugUP
-        ijsTbxnzhG6mDLxCS40QJ4M=
-X-Google-Smtp-Source: AA0mqf5Ki380Wv+k6C4x2tLurD5R1ak3fttiGubwrqktPB2Ra0P8GdTzgDocjTLRs7Dtz1B9cYMyRA==
-X-Received: by 2002:a17:902:76c5:b0:187:282c:9b95 with SMTP id j5-20020a17090276c500b00187282c9b95mr6140760plt.41.1668550316213;
-        Tue, 15 Nov 2022 14:11:56 -0800 (PST)
-Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:2d36:e9a0:170b:669f])
-        by smtp.gmail.com with ESMTPSA id y1-20020a17090264c100b00178b6ccc8a0sm10400038pli.51.2022.11.15.14.11.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 14:11:55 -0800 (PST)
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 4/4] media: i2c: s5c73m3: switch to using gpiod API
-Date:   Tue, 15 Nov 2022 14:11:45 -0800
-Message-Id: <20221115221145.2550572-4-dmitry.torokhov@gmail.com>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-In-Reply-To: <20221115221145.2550572-1-dmitry.torokhov@gmail.com>
-References: <20221115221145.2550572-1-dmitry.torokhov@gmail.com>
+        Tue, 15 Nov 2022 17:13:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C179623E9E;
+        Tue, 15 Nov 2022 14:13:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46F20618F5;
+        Tue, 15 Nov 2022 22:13:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72063C433D6;
+        Tue, 15 Nov 2022 22:13:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668550380;
+        bh=jh9CtEAIl4VyKEMdbO0r63nNKRHJc4qHe8W+S9YVK/g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=d18B8alLG0iRmncEtwhS9oPfkperAKWh5UEwrotkifx/FYTWFcgFFThjfMNiGIb9x
+         ZrSw+5MSRBJHGYB1J6WW1AY3uHem3SLWzzulGEkmRoe2DqrA12HLpSO+zMM4pRBp12
+         cLX8wO8f3DWvqDv5PxtE2qdlVi3HzofIcJUEIFUZq7GE2gx1h9omDJ7s5Z5VPBorUq
+         vDDjU9TNc5H1QZvkMPIQ2chAM43kRro5+W6C6cVTcD3fLqhgnSlZU4/Qn5HZCIUPlR
+         NoSOwW+QEtWXhl9LKz7SCxoDPwfKjR5kY708AUIpp6G/Uc0XfgPQohvvVh1BF2TXEO
+         9iTKSJsTI7/hw==
+Date:   Tue, 15 Nov 2022 16:12:58 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Gregory Price <gregory.price@memverge.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH] PCI/doe: Fix work struct declaration
+Message-ID: <20221115221258.GA1053475@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3P8jyhGDIjSAoTT@iweiny-mobl>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch switches the driver away from legacy gpio/of_gpio API to
-gpiod API, and removes use of of_get_named_gpio_flags() which I want to
-make private to gpiolib.
+On Tue, Nov 15, 2022 at 12:54:39PM -0800, Ira Weiny wrote:
+> On Tue, Nov 15, 2022 at 02:41:35PM -0600, Bjorn Helgaas wrote:
+> > On Tue, Nov 15, 2022 at 12:18:38PM -0800, Ira Weiny wrote:
+> > > On Tue, Nov 15, 2022 at 01:44:24PM -0600, Bjorn Helgaas wrote:
+> > > > On Mon, Nov 14, 2022 at 05:19:43PM -0800, ira.weiny@intel.com wrote:
+> > > > > From: Ira Weiny <ira.weiny@intel.com>
+> > > > > 
+> > > > > The callers of pci_doe_submit_task() allocate the
+> > > > > pci_doe_task on the stack.  This causes the work structure
+> > > > > to be allocated on the stack without pci_doe_submit_task()
+> > > > > knowing.  Work item initialization needs to be done with
+> > > > > either INIT_WORK_ONSTACK() or INIT_WORK() depending on how
+> > > > > the work item is allocated.
+> > > > > 
+> > > > > Jonathan suggested creating doe task allocation macros such
+> > > > > as DECLARE_CDAT_DOE_TASK_ONSTACK().[1]  The issue with this
+> > > > > is the work function is not known to the callers and must be
+> > > > > initialized correctly.
+> > > > > 
+> > > > > A follow up suggestion was to have an internal
+> > > > > 'pci_doe_work' item allocated by pci_doe_submit_task().[2]
+> > > > > This requires an allocation which could restrict the context
+> > > > > where tasks are used.
+> > > > > 
+> > > > > Compromise with an intermediate step to initialize the task
+> > > > > struct with a new call pci_doe_init_task() which must be
+> > > > > called prior to submit task.
+> > > > 
+> > > > I'm not really a fan of passing a parameter to say "this struct is on
+> > > > the stack" because that seems kind of error-prone and I don't know
+> > > > what the consequence of getting it wrong would be.  Sounds like it
+> > > > *could* be some memory corruption or reading garbage data that would
+> > > > be hard to debug.
+> > > > 
+> > > > Do we have cases today where pci_doe_submit_task() can't do the
+> > > > kzalloc() as in your patch at [3]?
+> 
+> No.
+> 
+> > > > If the current use cases allow a
+> > > > kzalloc(), why not do that now and defer this until it becomes an
+> > > > issue?
+> 
+> I do like pci_doe_submit_task() handling this as an internal detail.
+> I'm happy with that if you are.
+> 
+> I was just concerned about the restriction of context.  Dan
+> suggested this instead of passing a gfp parameter.
+> 
+> If you are happy with my original patch I will submit it instead.
+> (With a better one liner.)
 
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
- drivers/media/i2c/s5c73m3/s5c73m3-core.c | 63 +++++++-----------------
- drivers/media/i2c/s5c73m3/s5c73m3.h      |  7 +--
- 2 files changed, 20 insertions(+), 50 deletions(-)
+I don't know what's coming as far as pci_doe_submit_task() callers.
+If there's some imminent caller that will require atomic context, I
+guess we could solve it now.  But DOE doesn't really seem like an
+atomic context thing to begin with, so maybe we could postpone dealing
+with it.
 
-diff --git a/drivers/media/i2c/s5c73m3/s5c73m3-core.c b/drivers/media/i2c/s5c73m3/s5c73m3-core.c
-index 561c1a1583ac..f1e073ed5f99 100644
---- a/drivers/media/i2c/s5c73m3/s5c73m3-core.c
-+++ b/drivers/media/i2c/s5c73m3/s5c73m3-core.c
-@@ -10,12 +10,11 @@
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/firmware.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
- #include <linux/init.h>
- #include <linux/media.h>
- #include <linux/module.h>
--#include <linux/of_gpio.h>
- #include <linux/of_graph.h>
- #include <linux/regulator/consumer.h>
- #include <linux/sizes.h>
-@@ -1348,20 +1347,20 @@ static int s5c73m3_oif_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 
- static int s5c73m3_gpio_set_value(struct s5c73m3 *priv, int id, u32 val)
- {
--	if (!gpio_is_valid(priv->gpio[id].gpio))
-+	if (!priv->gpio[id])
- 		return 0;
--	gpio_set_value(priv->gpio[id].gpio, !!val);
-+	gpiod_set_value_cansleep(priv->gpio[id], val);
- 	return 1;
- }
- 
- static int s5c73m3_gpio_assert(struct s5c73m3 *priv, int id)
- {
--	return s5c73m3_gpio_set_value(priv, id, priv->gpio[id].level);
-+	return s5c73m3_gpio_set_value(priv, id, 1);
- }
- 
- static int s5c73m3_gpio_deassert(struct s5c73m3 *priv, int id)
- {
--	return s5c73m3_gpio_set_value(priv, id, !priv->gpio[id].level);
-+	return s5c73m3_gpio_set_value(priv, id, 0);
- }
- 
- static int __s5c73m3_power_on(struct s5c73m3 *state)
-@@ -1544,49 +1543,29 @@ static const struct v4l2_subdev_ops oif_subdev_ops = {
- 
- static int s5c73m3_configure_gpios(struct s5c73m3 *state)
- {
--	static const char * const gpio_names[] = {
--		"S5C73M3_STBY", "S5C73M3_RST"
--	};
-+	static const char * const name[] = { "standby", "xshutdown" };
-+	static const char * const label[] = { "S5C73M3_STBY", "S5C73M3_RST" };
- 	struct i2c_client *c = state->i2c_client;
--	struct s5c73m3_gpio *g = state->gpio;
-+	struct gpio_desc *gpio;
- 	int ret, i;
- 
- 	for (i = 0; i < GPIO_NUM; ++i) {
--		unsigned int flags = GPIOF_DIR_OUT;
--		if (g[i].level)
--			flags |= GPIOF_INIT_HIGH;
--		ret = devm_gpio_request_one(&c->dev, g[i].gpio, flags,
--					    gpio_names[i]);
-+		gpio = devm_gpiod_get(&c->dev, name[i], GPIOD_OUT_HIGH);
-+		ret = PTR_ERR_OR_ZERO(gpio);
- 		if (ret) {
--			v4l2_err(c, "failed to request gpio %s\n",
--				 gpio_names[i]);
-+			v4l2_err(c, "failed to request gpio %s: %d\n",
-+				 name[i], ret);
- 			return ret;
- 		}
--	}
--	return 0;
--}
--
--static int s5c73m3_parse_gpios(struct s5c73m3 *state)
--{
--	static const char * const prop_names[] = {
--		"standby-gpios", "xshutdown-gpios",
--	};
--	struct device *dev = &state->i2c_client->dev;
--	struct device_node *node = dev->of_node;
--	int ret, i;
- 
--	for (i = 0; i < GPIO_NUM; ++i) {
--		enum of_gpio_flags of_flags;
--
--		ret = of_get_named_gpio_flags(node, prop_names[i],
--					      0, &of_flags);
--		if (ret < 0) {
--			dev_err(dev, "failed to parse %s DT property\n",
--				prop_names[i]);
--			return -EINVAL;
-+		ret = gpiod_set_consumer_name(gpio, label[i]);
-+		if (ret) {
-+			v4l2_err(c, "failed to set up name for gpio %s: %d\n",
-+				 name[i], ret);
-+			return ret;
- 		}
--		state->gpio[i].gpio = ret;
--		state->gpio[i].level = !(of_flags & OF_GPIO_ACTIVE_LOW);
-+
-+		state->gpio[i] = gpio;
- 	}
- 	return 0;
- }
-@@ -1613,10 +1592,6 @@ static int s5c73m3_get_dt_data(struct s5c73m3 *state)
- 					state->mclk_frequency);
- 	}
- 
--	ret = s5c73m3_parse_gpios(state);
--	if (ret < 0)
--		return -EINVAL;
--
- 	node_ep = of_graph_get_next_endpoint(node, NULL);
- 	if (!node_ep) {
- 		dev_warn(dev, "no endpoint defined for node: %pOF\n", node);
-diff --git a/drivers/media/i2c/s5c73m3/s5c73m3.h b/drivers/media/i2c/s5c73m3/s5c73m3.h
-index d68528898249..9887d03fcdeb 100644
---- a/drivers/media/i2c/s5c73m3/s5c73m3.h
-+++ b/drivers/media/i2c/s5c73m3/s5c73m3.h
-@@ -356,11 +356,6 @@ enum s5c73m3_gpio_id {
- 	GPIO_NUM,
- };
- 
--struct s5c73m3_gpio {
--	int gpio;
--	int level;
--};
--
- enum s5c73m3_resolution_types {
- 	RES_ISP,
- 	RES_JPEG,
-@@ -387,7 +382,7 @@ struct s5c73m3 {
- 	u32 i2c_read_address;
- 
- 	struct regulator_bulk_data supplies[S5C73M3_MAX_SUPPLIES];
--	struct s5c73m3_gpio gpio[GPIO_NUM];
-+	struct gpio_desc *gpio[GPIO_NUM];
- 
- 	struct clk *clock;
- 
--- 
-2.38.1.431.g37b22c650d-goog
+That patch in [3] is more complicated than I expected, but I admit I
+haven't looked closely.
 
+Bjorn
+
+> > > > > [1] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m88a7f50dcce52f30c8bf5c3dcc06fa9843b54a2d
+> > > > > [2] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m63c636c5135f304480370924f4d03c00357be667
+> > > > 
+> > > > [3] https://lore.kernel.org/linux-cxl/Y2AnKB88ALYm9c5L@iweiny-desk3/
