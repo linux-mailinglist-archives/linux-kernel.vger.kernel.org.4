@@ -2,103 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B19A62A357
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8986D62A35A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:49:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238039AbiKOUtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 15:49:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
+        id S231912AbiKOUtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 15:49:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238362AbiKOUtI (ORCPT
+        with ESMTP id S230333AbiKOUtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:49:08 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF41AF7D;
-        Tue, 15 Nov 2022 12:49:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=USwSRFESZzf+4Lm757bVfbPV8dteEKJuMeMsGiYUTng=; b=Az8gETdCuJDCVCYZTqc0emOvy5
-        S8JcspxVFRr7xQZ+6S2yvPP9FxvyAYrqrOW76JIv9Dr8EplAnCrJYmfTRhS9moibRlpwHeW09M+Cz
-        X3RVi3ljuMOLn7+etzlIX0ijUJAqsW1qntk8UZwH3WzygkgCC/IsbWWOLEznLviLJCGao/tW7fFAp
-        mMHdsPSeq7RoLUI6VpIuMKzc6RV7KZ0JujWfdlpLJecg2ymvEAOVMNoUin2refCPnq51OKv2eCE6y
-        KLfIP8ZxBDg1N5ipZr4s6sJqIvFIpiOUSSWybS6XqJa+6fpbEFiRHi61YcAifW5/3ZtSmoyLIyhLG
-        DY4AXV7g==;
-Received: from [179.232.147.2] (helo=localhost)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1ov2rc-001Qk7-2d; Tue, 15 Nov 2022 21:49:00 +0100
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To:     linux-kernel@vger.kernel.org, rostedt@goodmis.org
-Cc:     rcu@vger.kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: [PATCH] ftrace: Prevent RCU stall on PREEMPT_VOLUNTARY kernels
-Date:   Tue, 15 Nov 2022 17:48:47 -0300
-Message-Id: <20221115204847.593616-1-gpiccoli@igalia.com>
-X-Mailer: git-send-email 2.38.0
+        Tue, 15 Nov 2022 15:49:45 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FD5A1B9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:49:44 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id g7so26397081lfv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:49:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=C7tUVYpO4jLfaqvMhqdCpmO66QWigemFPvbjNEjHSJ4=;
+        b=RyLafPpZTU9ucYBbhpi+V1I+plIAPNE+NaFEVe8vgquDBY5QK468W6QDDSEN/Mmm43
+         LZVO7gl6lIXfpB0iwaQxCkcGNLItecm1m2/BkLtsSkLOfglZhL3F0SjGriWHvkKRkZ2s
+         Vvfv9uZpepq1qCE9WtMYr8HPKBNUFSfJUHiUk+RfXCkBU8khtTwrMd/jIOBaZkd4cghz
+         wKluyqtiwaKMedUhhO9BYERvAWoVo6wkgXxnpbbc0O1Ygvr2twjQZAjABkcWUI6LPbfj
+         0Gsnk6vfJS0hbRtVxZANMdLI6GXXXNSS81PqVQz9odjXxcl7bdji87g6n5mgX8BqwZIB
+         lYqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C7tUVYpO4jLfaqvMhqdCpmO66QWigemFPvbjNEjHSJ4=;
+        b=jbBBMmpkY/bK7UDZ8B1pTVqcdOVar4je2gG4JAbimTkVfg+MRix/bgIWNGNaNP/RQB
+         hKWrBVjulbjtl8RqYIQPoLrM6iRJN81iZ3O70BwQ9pwu7VRrCtM/BQl+JjgaHWj4Ewzk
+         NPjzvcCy6ILLAYhXkGATQooCoDuGxXN/XJi0YEMJwceb9QPa37xeP/9nk/nDgUyoXxNL
+         OnhSJYZWVoLVcKC/oVnol6YAcVqstv2Caz7pgpLwXJ2VuTq/dBspghh1L5CsIDUJjS2j
+         gH9OHIhKWg21qgjkBKPy/hEoac/rLDJCkH4f6TjejdMGgnncsaAxRojVhXyyfOA5ZFNY
+         iCyg==
+X-Gm-Message-State: ANoB5pkMxWQ39Pej1RZBOOVerWnVW/56Ahgxi6IYJhL+/xn8wBt+e9TL
+        gL2UFs2vZ08DzHKcTtaRwt5+PTtsrTWfu6WKx48ATg==
+X-Google-Smtp-Source: AA0mqf5WE1OmCxTm3+6oYR82HozAdj/Ug60zwqHh4bKRK7ZYXXfslyMmWoI+6oqiZ0xsQo42WdTsDLFKfuF4n/4M12A=
+X-Received: by 2002:a19:7411:0:b0:4b1:215b:167d with SMTP id
+ v17-20020a197411000000b004b1215b167dmr6765094lfe.558.1668545382694; Tue, 15
+ Nov 2022 12:49:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221013121319.994170-1-vannapurve@google.com>
+ <20221013121319.994170-4-vannapurve@google.com> <20221013140112.ppm6jgoxd5oqvlgw@kamzik>
+In-Reply-To: <20221013140112.ppm6jgoxd5oqvlgw@kamzik>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 15 Nov 2022 13:49:31 -0700
+Message-ID: <CAMkAt6rgvo6rVhehTZYMMa2qetehc_gEXeTfQBoJFGgftUEkfg@mail.gmail.com>
+Subject: Re: [V3 PATCH 3/4] KVM: selftests: Add arch specific post vm creation hook
+To:     Andrew Jones <andrew.jones@linux.dev>
+Cc:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        shuah@kernel.org, bgardon@google.com, seanjc@google.com,
+        oupton@google.com, peterx@redhat.com, vkuznets@redhat.com,
+        dmatlack@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function match_records() may take a while due to a large
-number of string comparisons, so when in PREEMPT_VOLUNTARY
-kernels we could face RCU stalls due to that.
+On Thu, Oct 13, 2022 at 8:03 AM Andrew Jones <andrew.jones@linux.dev> wrote:
+>
+> On Thu, Oct 13, 2022 at 12:13:18PM +0000, Vishal Annapurve wrote:
+> > Add arch specific API kvm_arch_vm_post_create to perform any required setup
+> > after VM creation.
+> >
+> > This API will be used in followup commit to convey cpu vendor type to the
+> > guest vm.
+> >
+> > Suggested-by: Sean Christopherson <seanjc@google.com>
+> > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> > ---
+> >  tools/testing/selftests/kvm/include/kvm_util_base.h | 4 ++++
+> >  tools/testing/selftests/kvm/lib/kvm_util.c          | 9 ++++++---
+> >  tools/testing/selftests/kvm/lib/x86_64/processor.c  | 6 ++++++
+> >  3 files changed, 16 insertions(+), 3 deletions(-)
+> >
+>
+> Reviewed-by: Andrew Jones <andrew.jones@linux.dev>
 
-Add a cond_resched() to prevent that.
-
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Acked-by: Paul E. McKenney <paulmck@kernel.org> # from RCU CPU stall warning perspective
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
----
-
-Hi Steve / Paul, thanks for the discussions on the first thread [0],
-much appreciated! Here is the "official" version.
-
-Steve: lemme know if it's good for you, and in case you prefer to
-send it yourself (since you proposed it on IRC), fine by me!
-
-Paul: kept your ACK (thanks for that BTW) even though I changed the
-place of cond_resched() to align with Steve's preference. Lemme know
-in case you want to drop this ACK.
-
-Cheers,
-
-Guilherme
-
-
-[0] https://lore.kernel.org/lkml/1ef5fe19-a82f-835e-fda5-455e9c2b94b4@igalia.com/
-
-
- kernel/trace/ftrace.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 7dc023641bf1..80639bdb85f6 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -4192,6 +4192,7 @@ match_records(struct ftrace_hash *hash, char *func, int len, char *mod)
- 			}
- 			found = 1;
- 		}
-+		cond_resched();
- 	} while_for_each_ftrace_rec();
-  out_unlock:
- 	mutex_unlock(&ftrace_lock);
--- 
-2.38.0
-
+Reviewed-by: Peter Gonda <pgonda@google.com>
