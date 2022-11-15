@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088C4629ABF
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:39:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76701629AC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:40:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238367AbiKONjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:39:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41224 "EHLO
+        id S238382AbiKONkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:40:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238382AbiKONjI (ORCPT
+        with ESMTP id S229628AbiKONkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:39:08 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F61415FF6;
-        Tue, 15 Nov 2022 05:39:06 -0800 (PST)
+        Tue, 15 Nov 2022 08:40:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A808713FA6;
+        Tue, 15 Nov 2022 05:40:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DE0A5CE13B9;
-        Tue, 15 Nov 2022 13:39:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A586C433D7;
-        Tue, 15 Nov 2022 13:38:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668519540;
-        bh=28GbgPBbH/Y8okJ5x4U68SwxuQja9M8WQ2Dc6syfCIw=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49DADB80B31;
+        Tue, 15 Nov 2022 13:40:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53335C433D6;
+        Tue, 15 Nov 2022 13:40:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1668519625;
+        bh=+busdJntlcYmMJqAKez2ryHOpDCXIeLB8fPlmR69uhY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NdDIZmxn80i9LaK4bV9ydCsHdtQMfjAUhjM7j/zA9tObQLWjBwKpO7VZa7CJYEJ7d
-         lAIjzXKHgpKbwVwOwJLTmKOqJco/khSmvQo89yrsaKujKPfJoKatM9VATgvsWrWp+5
-         C1EwAGQ+eRQErMmRQyZumtx+6abZILxNoLESUX5krmrWBp3wKM4pZPRsPfYm9jmFxI
-         3Hr0H0hrWsmtbM43xWrxK5yxkZFJE8t1neNJJ2K0YyTMgP4PL04sOSyZbt9f0JxpCu
-         O4PBBZhMjW+kdm9nrsbBk5j/69yi8ByZSoBmNj8vWpOcCClIYavAbXsxd0UvyQhwgz
-         0XAAp6afitk4A==
-Date:   Tue, 15 Nov 2022 13:38:55 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        catalin.marinas@arm.com, Suzuki K Poulose <suzuki.poulose@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mark Rutland <mark.rutland@arm.com>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH V2 2/2] arm64: errata: Workaround possible Cortex-A715
- [ESR|FAR]_ELx corruption
-Message-ID: <20221115133854.GC524@willie-the-truck>
-References: <20221113012645.190301-1-anshuman.khandual@arm.com>
- <20221113012645.190301-3-anshuman.khandual@arm.com>
+        b=hNTVNQQ8FI7huuGqsX1cb6JOdZHNGowb7PkByv0OZx9Gv7eTEuffohFgFWRV0vSr3
+         eGECc4Ne/r0K2Gtkjwhvfpt7kYGC2Fm2V+rIPjnRPu1TK/6MhEEv7E6reYSYyo1ApL
+         svB+vqnElp3Qrgv+30kToMzUGpapUNAGEvErveEs=
+Date:   Tue, 15 Nov 2022 14:40:22 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     jiantao zhang <water.zhangjiantao@huawei.com>
+Cc:     stern@rowland.harvard.edu, jakobkoschel@gmail.com,
+        geert+renesas@glider.be, colin.i.king@gmail.com,
+        =?utf-8?B?6Jab5rab?= <xuetao09@huawei.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Caiyadong <caiyadong@huawei.com>,
+        xuhaiyang <xuhaiyang5@hisilicon.com>
+Subject: Re: [PATCH v3] USB: gadget: Fix use-after-free during usb config
+ switch
+Message-ID: <Y3OWxrVQzglNtrEM@kroah.com>
+References: <20221115065404.6067-1-xuetao09@huawei.com>
+ <d3393e2f-a79c-d2c1-f752-71bd21a7ddbf@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221113012645.190301-3-anshuman.khandual@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <d3393e2f-a79c-d2c1-f752-71bd21a7ddbf@huawei.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,79 +56,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 13, 2022 at 06:56:45AM +0530, Anshuman Khandual wrote:
-> If a Cortex-A715 cpu sees a page mapping permissions change from executable
-> to non-executable, it may corrupt the ESR_ELx and FAR_ELx registers, on the
-> next instruction abort caused by permission fault.
+On Tue, Nov 15, 2022 at 08:52:02PM +0800, jiantao zhang wrote:
+> In the process of switching USB config from rndis to other config,
+> if the hardware does not support the ->pullup callback, or the
+> hardware encounters a low probability fault, both of them may cause
+> the ->pullup callback to fail, which will then cause a system panic
+> (use after free).
 > 
-> Only user-space does executable to non-executable permission transition via
-> mprotect() system call which calls ptep_modify_prot_start() and ptep_modify
-> _prot_commit() helpers, while changing the page mapping. The platform code
-> can override these helpers via __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION.
+> The gadget drivers sometimes need to be unloaded regardless of the
+> hardware's behavior.
 > 
-> Work around the problem via doing a break-before-make TLB invalidation, for
-> all executable user space mappings, that go through mprotect() system call.
-> This overrides ptep_modify_prot_start() and ptep_modify_prot_commit(), via
-> defining HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION on the platform thus giving
-> an opportunity to intercept user space exec mappings, and do the necessary
-> TLB invalidation. Similar interceptions are also implemented for HugeTLB.
+> Analysis as follows:
+> =======================================================================
+> (1) write /config/usb_gadget/g1/UDC "none"
 > 
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> gether_disconnect+0x2c/0x1f8
+> rndis_disable+0x4c/0x74
+> composite_disconnect+0x74/0xb0
+> configfs_composite_disconnect+0x60/0x7c
+> usb_gadget_disconnect+0x70/0x124
+> usb_gadget_unregister_driver+0xc8/0x1d8
+> gadget_dev_desc_UDC_store+0xec/0x1e4
+> 
+> (2) rm /config/usb_gadget/g1/configs/b.1/f1
+> 
+> rndis_deregister+0x28/0x54
+> rndis_free+0x44/0x7c
+> usb_put_function+0x14/0x1c
+> config_usb_cfg_unlink+0xc4/0xe0
+> configfs_unlink+0x124/0x1c8
+> vfs_unlink+0x114/0x1dc
+> 
+> (3) rmdir /config/usb_gadget/g1/functions/rndis.gs4
+> 
+> panic+0x1fc/0x3d0
+> do_page_fault+0xa8/0x46c
+> do_mem_abort+0x3c/0xac
+> el1_sync_handler+0x40/0x78
+> 0xffffff801138f880
+> rndis_close+0x28/0x34
+> eth_stop+0x74/0x110
+> dev_close_many+0x48/0x194
+> rollback_registered_many+0x118/0x814
+> unregister_netdev+0x20/0x30
+> gether_cleanup+0x1c/0x38
+> rndis_attr_release+0xc/0x14
+> kref_put+0x74/0xb8
+> configfs_rmdir+0x314/0x374
+> 
+> If gadget->ops->pullup() return an error, function rndis_close() will be
+> called, then it will causes a use-after-free problem.
+> =======================================================================
+> 
+> Fixes: 0a55187a1ec8 ("USB: gadget core: Issue ->disconnect() callback from
+> usb_gadget_disconnect()")
+> Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
+> Signed-off-by: TaoXue <xuetao09@huawei.com>
 > ---
->  Documentation/arm64/silicon-errata.rst |  2 ++
->  arch/arm64/Kconfig                     | 16 ++++++++++++++++
->  arch/arm64/include/asm/hugetlb.h       |  9 +++++++++
->  arch/arm64/include/asm/pgtable.h       |  9 +++++++++
->  arch/arm64/kernel/cpu_errata.c         |  7 +++++++
->  arch/arm64/mm/hugetlbpage.c            | 21 +++++++++++++++++++++
->  arch/arm64/mm/mmu.c                    | 21 +++++++++++++++++++++
->  arch/arm64/tools/cpucaps               |  1 +
->  8 files changed, 86 insertions(+)
+> V2 -> V3: Solved the format issues of Fixes and backtraces.
+> V1 -> V2: V1 will affect the original function, V2 just move the callback
+> after "if" statement, so that the original function will not be affected.
+> And fixed formatting issues.
 
-[...]
+This patch is really corrupted and can not be applied.  How did you
+generate it?
 
-> diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> index 9a7c38965154..c1fb0ce1473c 100644
-> --- a/arch/arm64/mm/mmu.c
-> +++ b/arch/arm64/mm/mmu.c
-> @@ -1702,3 +1702,24 @@ static int __init prevent_bootmem_remove_init(void)
->  }
->  early_initcall(prevent_bootmem_remove_init);
->  #endif
-> +
-> +pte_t ptep_modify_prot_start(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep)
-> +{
-> +	if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198)) {
-> +		pte_t pte = READ_ONCE(*ptep);
-> +		/*
-> +		 * Break-before-make (BBM) is required for all user space mappings
-> +		 * when the permission changes from executable to non-executable
-> +		 * in cases where cpu is affected with errata #2645198.
-> +		 */
-> +		if (pte_user_exec(pte) && cpus_have_const_cap(ARM64_WORKAROUND_2645198))
-> +			return ptep_clear_flush(vma, addr, ptep);
-> +	}
-> +	return ptep_get_and_clear(vma->vm_mm, addr, ptep);
-> +}
-> +
-> +void ptep_modify_prot_commit(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep,
-> +			     pte_t old_pte, pte_t pte)
-> +{
-> +	__set_pte_at(vma->vm_mm, addr, ptep, pte);
-> +}
+The email is also showing up as unauthenticated and seems like it might
+be spoofed from your huawei.com domain, which is not good.
 
-So these are really similar to the generic copies and, in looking at
-change_pte_range(), it appears that we already invalidate the TLB, it just
-happens _after_ writing the new version.
+Please fix up both of those issues if you wish for this to be accepted.
 
-So with your change, I think we end up invalidating twice. Can we instead
-change the generic code to invalidate the TLB before writing the new entry?
+thanks,
 
-Will
+greg k-h
