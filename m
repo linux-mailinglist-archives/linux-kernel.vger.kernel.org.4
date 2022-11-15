@@ -2,102 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27965629DFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 822BB629DFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:47:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbiKOPqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:46:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
+        id S238293AbiKOPrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:47:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238410AbiKOPqV (ORCPT
+        with ESMTP id S238409AbiKOPqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:46:21 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA232DAAE;
-        Tue, 15 Nov 2022 07:46:20 -0800 (PST)
+        Tue, 15 Nov 2022 10:46:44 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3EA2C652;
+        Tue, 15 Nov 2022 07:46:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668527180; x=1700063180;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=9Qq2XUXt8gbfZmC6g0R1Hfo9Sn+JsGPDJ3ywIC7Po7w=;
-  b=g2blphrXMdrNGleAb6ZlVXZjXYRLfQ+SfegEMR9UugQTv5n+RghhWiyR
-   4fZGxyuWfiLTbcWxkispY7m8BZqUX51jGJF17FBW0ENyC2qc6dGkj7ldU
-   S64SwAsKwKDsVLfm06PgXwMT01jih0IEDubn42LtePAdrPVio7ir64PLh
-   8ov8bKzebyvLcLdJDAD9CHB4Vx80GNyNIJ8VkU3zXss9VunDtWpnljMoj
-   L1Z+D8oDUCUXsDrjSnasgre6o6b6MpVZbe8Lq7D/b6NCNlWzJAU7/Q+n3
-   Dk7ZQPoruJjSE0j6VuCsMfgvxEZc0GRJHTMzHdZagVsnxPAIkab8a6p0z
+  t=1668527195; x=1700063195;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=2h1puenqV2GbE9aSnvmb1LwGLVQPnIy1raebHUUmONY=;
+  b=gjK+52V/49w3Ao/enpPmYbXfvHdZd4rhjV9UTzxkhGB8/+kQ7kFuLwM2
+   PNYnOv83Y/KVdu/Y+QEePUTFRI4Tqt1LZ2HCooIMS36uTph0fY/ZBK53a
+   IfBHU77C9RVxsWrQT10OAM17WPmtldIqJqDwpo9kCSx+oIv5u5NA06R4x
+   4RQvvJHuniCdvZ9LwAk+WHqu/E9JBb+F/OZ2/qipMZulKzLSVldPSQYHL
+   rSEdR0Syl3wJ0DOGRh03YYrnFfQLTUkPZoC0kvBHUBmaBijat9DhmUYww
+   eyBcQE+S5jI58WQosTygT0ccmqAZKnLPr/vVjV7RtxObUyUGaBs+9+AQ4
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="295648296"
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="314093212"
 X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="295648296"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:46:20 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="672034156"
+   d="scan'208";a="314093212"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:46:35 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="641248834"
 X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="672034156"
-Received: from mrosso-mobl1.ger.corp.intel.com ([10.249.45.244])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:46:15 -0800
-Date:   Tue, 15 Nov 2022 17:46:13 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Gabriel Somlo <gsomlo@gmail.com>
-cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
+   d="scan'208";a="641248834"
+Received: from golubevv-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.58.73])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:46:30 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, kgugala@antmicro.com,
-        mholenko@antmicro.com, joel@jms.id.au,
-        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
-        geert@linux-m68k.org
-Subject: Re: [PATCH v3 09/14] serial: liteuart: fix rx loop variable types
-In-Reply-To: <20221112212125.448824-10-gsomlo@gmail.com>
-Message-ID: <eb41beea-dc4c-fd3c-7ecc-1f49fe5b288c@linux.intel.com>
-References: <20221112212125.448824-1-gsomlo@gmail.com> <20221112212125.448824-10-gsomlo@gmail.com>
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2 1/4] i915: Move list_count() to list.h for broader use
+In-Reply-To: <20221114162207.62559-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20221114162207.62559-1-andriy.shevchenko@linux.intel.com>
+Date:   Tue, 15 Nov 2022 17:46:28 +0200
+Message-ID: <87leoc2pbf.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-173275834-1668527179=:2268"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Mon, 14 Nov 2022, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> Some of the existing users, and definitely will be new ones, want to
+> count existing nodes in the list. Provide a generic API for that by
+> moving code from i915 to list.h.
 
---8323329-173275834-1668527179=:2268
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
+I think I'd find list_length() a much more natural name for this.
 
-On Sat, 12 Nov 2022, Gabriel Somlo wrote:
+*shrug*
 
-> Update variable types to match the signature of uart_insert_char()
-> which consumes them.
-> 
-> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+Acked-by: Jani Nikula <jani.nikula@intel.com>
+
+regardless of what you decide to do with name or static inline etc.
+
+
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  drivers/tty/serial/liteuart.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-> index e9e99d6b5fef..974da0f73257 100644
-> --- a/drivers/tty/serial/liteuart.c
-> +++ b/drivers/tty/serial/liteuart.c
-> @@ -72,8 +72,7 @@ static void liteuart_timer(struct timer_list *t)
->  	struct liteuart_port *uart = from_timer(uart, t, timer);
->  	struct uart_port *port = &uart->port;
->  	unsigned char __iomem *membase = port->membase;
-> -	int ch;
-> -	unsigned long status;
-> +	unsigned int status, ch;
+> v2: dropped the duplicate code in i915 (LKP)
+>  drivers/gpu/drm/i915/gt/intel_engine_cs.c | 13 +------------
+>  include/linux/list.h                      | 13 +++++++++++++
+>  2 files changed, 14 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/gt/intel_engine_cs.c b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
+> index 6ae8b07cfaa1..b5d474be564d 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_engine_cs.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_engine_cs.c
+> @@ -2085,17 +2085,6 @@ static void print_request_ring(struct drm_printer *m, struct i915_request *rq)
+>  	}
+>  }
 >  
->  	while ((status = !litex_read8(membase + OFF_RXEMPTY)) == 1) {
->  		ch = litex_read8(membase + OFF_RXTX);
-
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> -static unsigned long list_count(struct list_head *list)
+> -{
+> -	struct list_head *pos;
+> -	unsigned long count = 0;
+> -
+> -	list_for_each(pos, list)
+> -		count++;
+> -
+> -	return count;
+> -}
+> -
+>  static unsigned long read_ul(void *p, size_t x)
+>  {
+>  	return *(unsigned long *)(p + x);
+> @@ -2270,7 +2259,7 @@ void intel_engine_dump(struct intel_engine_cs *engine,
+>  	spin_lock_irqsave(&engine->sched_engine->lock, flags);
+>  	engine_dump_active_requests(engine, m);
+>  
+> -	drm_printf(m, "\tOn hold?: %lu\n",
+> +	drm_printf(m, "\tOn hold?: %zu\n",
+>  		   list_count(&engine->sched_engine->hold));
+>  	spin_unlock_irqrestore(&engine->sched_engine->lock, flags);
+>  
+> diff --git a/include/linux/list.h b/include/linux/list.h
+> index 61762054b4be..098eccf8c1b6 100644
+> --- a/include/linux/list.h
+> +++ b/include/linux/list.h
+> @@ -655,6 +655,19 @@ static inline void list_splice_tail_init(struct list_head *list,
+>  	     !list_is_head(pos, (head)); \
+>  	     pos = n, n = pos->prev)
+>  
+> +/**
+> + * list_count - count nodes in the list
+> + * @head:	the head for your list.
+> + */
+> +#define list_count(head)		\
+> +({					\
+> +	struct list_head *__tmp;	\
+> +	size_t __i = 0;			\
+> +	list_for_each(__tmp, head)	\
+> +		__i++;			\
+> +	__i;				\
+> +})
+> +
+>  /**
+>   * list_entry_is_head - test if the entry points to the head of the list
+>   * @pos:	the type * to cursor
 
 -- 
- i.
-
---8323329-173275834-1668527179=:2268--
+Jani Nikula, Intel Open Source Graphics Center
