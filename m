@@ -2,89 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566EC6297A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 873C0629797
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiKOLj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 06:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
+        id S230050AbiKOLjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 06:39:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232222AbiKOLjU (ORCPT
+        with ESMTP id S229716AbiKOLjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 06:39:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16ECD7656
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668512299;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cBuz4dB8pKEl0Eik12rqRP7QJDFUdnfWL8rmGUmRMkk=;
-        b=KOSvYmpGYqToOyrXpZD8jSyW+ZzwuoT/BTOgHJi9BrSWlsTV2cE0XH0daUW5Ar02YVpCqi
-        RHZvHFtvQbvz2MuQK0PQGKo36KS70WXRVt+g239oTnuql/6j7pTWwkBU9g/+sN1piOPvNY
-        FI228Cm08jfBH/8k5/HIZuYHK19tiAo=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-635-1eG0Y-rqPMiIrXLxB8EwDw-1; Tue, 15 Nov 2022 06:38:18 -0500
-X-MC-Unique: 1eG0Y-rqPMiIrXLxB8EwDw-1
-Received: by mail-ed1-f72.google.com with SMTP id s15-20020a056402520f00b0046321fff42dso9723481edd.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:38:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cBuz4dB8pKEl0Eik12rqRP7QJDFUdnfWL8rmGUmRMkk=;
-        b=x1z7fk0RutrQe1FStHomUiYYcwztS3/gliJdClZl/7KSL/uhO3MZwWEBaRCoc+h7s1
-         +80+JJUSs4AoVb+S7X98EaJ9iMKntdw4/NyJAlw1asnfwe04gr3AEhKj/xXwg9AyD82X
-         c8a97uOJo3PYyjNXBgPREhLOx34bDQbufxVY/5SRUG2PdwHP1vpCmFu5a3E41fUiNxWF
-         eLzyZNiz5rVq2/kJRbNfQ/QYumKBt4QbHj9S+JQ3ktyuzpIs5zjIQMP/ggkm/DqqzYd1
-         7EVErV1YFEVEZyF+jBR7hS9AQ0f7FDUmQGnpbJGBkAVwICoR4mMm4bhFAJdGlOMD4CQL
-         WwIw==
-X-Gm-Message-State: ANoB5pmeOglsOR2eKTn9zzvrdasnAIIf1mjZ4a+9T4iidbfy6oq3TelD
-        1WmkLKGlc1+tp5ouwEuvzKxrP9hOEJeav6GQpQXbzY5LFqIalisQSWAewdYA31SaDJrjxZugqwj
-        OD/DqSvuwOBhQ3iD7LkKNYvBW
-X-Received: by 2002:a17:906:81da:b0:78d:a01b:b474 with SMTP id e26-20020a17090681da00b0078da01bb474mr13759811ejx.8.1668512297138;
-        Tue, 15 Nov 2022 03:38:17 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4wT12I4HXRTPwOUfdpoipCB1G2eQz/MycoS5CRqzbh4CrriFYMveBAuh7Af5AA11wxq9NXlA==
-X-Received: by 2002:a17:906:81da:b0:78d:a01b:b474 with SMTP id e26-20020a17090681da00b0078da01bb474mr13759801ejx.8.1668512296987;
-        Tue, 15 Nov 2022 03:38:16 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id z4-20020a1709063ac400b007acd04fcedcsm5404574ejd.46.2022.11.15.03.38.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 03:38:16 -0800 (PST)
-Message-ID: <14f8fbd3-b1db-34af-d443-947bbdb21e37@redhat.com>
-Date:   Tue, 15 Nov 2022 12:38:15 +0100
+        Tue, 15 Nov 2022 06:39:01 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0DB17064;
+        Tue, 15 Nov 2022 03:38:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ctm4PwBv1snqtyqAMApkebcCB0sHmfgq7yaIIzkxXW8=; b=jBpVzVt7mfICokNfDgmScV1L+L
+        mqZPmFBdS1+qvD31UunFJUW8CV88m26rBFMchO2QEdd6YFmtMIWxvHK7I3ArirvB9eH/+VOCKqIE8
+        iudr6RE+k8n6cOjUzolMeVyig6AE7jROb28nEuS/gFsx1Dpi1KlpXx58eXWR9LxIMfcn6sBePsihU
+        d1EOCP980y/hvi26UmvhnEWNhbS4KHymACCtOrOgQ3dKpIXsxkVFWuyg1CYvDVEwAOgnPltYZ5JBi
+        OK/IwmZpnvtjZ503VpzqK4mXvFWY8df6XWLUaZXzszQAMgCK2Zws1hhKOcMYGRXKuJUbjxWyezFvM
+        iLIjHlnw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35284)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1ouuH8-00021j-6Y; Tue, 15 Nov 2022 11:38:46 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1ouuH4-0004jd-5D; Tue, 15 Nov 2022 11:38:42 +0000
+Date:   Tue, 15 Nov 2022 11:38:42 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Corentin LABBE <clabbe@baylibre.com>, andrew@lunn.ch,
+        calvin.johnson@oss.nxp.com, davem@davemloft.net,
+        edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        kuba@kernel.org, lgirdwood@gmail.com, pabeni@redhat.com,
+        robh+dt@kernel.org, samuel@sholland.org, wens@csie.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        netdev@vger.kernel.org, linux-sunxi@googlegroups.com
+Subject: Re: [PATCH v4 1/3] regulator: Add of_regulator_bulk_get_all
+Message-ID: <Y3N6Qhf+RLNrr/nW@shell.armlinux.org.uk>
+References: <20221115073603.3425396-1-clabbe@baylibre.com>
+ <20221115073603.3425396-2-clabbe@baylibre.com>
+ <Y3Nj4pA2+WRFvSNd@sirena.org.uk>
+ <Y3NnirK0bN71IgCo@Red>
+ <Y3NrQffcdGIjS64a@sirena.org.uk>
+ <Y3NtKgb0LpWs0RkB@shell.armlinux.org.uk>
+ <Y3N1JYVx9tB9pisR@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 1/1] platform/x86/amd: Fix pmc compile dependency errors.
-Content-Language: en-US, nl
-To:     Borislav Petkov <bp@alien8.de>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     Yupeng Li <liyupeng@zbhlos.com>,
-        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
-        "markgross@kernel.org" <markgross@kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "caizp2008@163.com" <caizp2008@163.com>,
-        "smf-linux@virginmedia.com" <smf-linux@virginmedia.com>
-References: <20221026072531.346013-1-liyupeng@zbhlos.com>
- <0910bcc4-d55f-6f3a-b2df-4e30d164aeeb@redhat.com>
- <721f6a1a-1144-4fe4-e722-2ba2d7200680@amd.com> <Y25m8tPTtyfHOCfK@zn.tnic>
- <MN0PR12MB6101AB9F2AD8A41CE3EC5650E2009@MN0PR12MB6101.namprd12.prod.outlook.com>
- <Y25sohHGkdAn5OZD@zn.tnic>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <Y25sohHGkdAn5OZD@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3N1JYVx9tB9pisR@sirena.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,22 +70,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 11/11/22 16:39, Borislav Petkov wrote:
-> On Fri, Nov 11, 2022 at 03:16:10PM +0000, Limonciello, Mario wrote:
->> I sent up a patch for it, but Hans hasn't applied it.
->> https://patchwork.kernel.org/project/platform-driver-x86/patch/20221108023323.19304-1-mario.limonciello@amd.com/
+On Tue, Nov 15, 2022 at 11:16:53AM +0000, Mark Brown wrote:
+> On Tue, Nov 15, 2022 at 10:42:50AM +0000, Russell King (Oracle) wrote:
+> > On Tue, Nov 15, 2022 at 10:34:41AM +0000, Mark Brown wrote:
 > 
-> Yap, that fixes it.
+> > > Well, it's not making this maintainer happy :/  If we know what
+> > > PHY is there why not just look up the set of supplies based on
+> > > the compatible of the PHY?
 > 
-> So yeah, Hans, make sure to Cc: stable too when applying.
+> > It looks to me like this series fetches the regulators before the PHY
+> > is bound to the driver, so what you're proposing would mean that the
+> > core PHY code would need a table of all compatibles (which is pretty
+> > hard to do, they encode the vendor/device ID, not some descriptive
+> > name) and then a list of the regulator names. IMHO that doesn't scale.
+> 
+> Oh, PHYs have interesting enough drivers to dynamically load
+> here? The last time I was looking at MDIO stuff it was all
+> running from generic class devices but that was quite a while
+> ago.
 
-Done. I'll send this out in my next fixes pull-req to Linus
-before the end of this week.
+There's a couple of generic drivers which are used if there isn't a
+specific driver available for the vendor/device ID that has either
+been probed from the hardware, or discovered encoded in the firmware's
+compatible property.
 
-Regards,
-
-Hans
-
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
