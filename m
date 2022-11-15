@@ -2,104 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A31629ECD
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6272E629ECF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238623AbiKOQTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 11:19:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37630 "EHLO
+        id S238578AbiKOQT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 11:19:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238649AbiKOQTC (ORCPT
+        with ESMTP id S238548AbiKOQTL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 11:19:02 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B7FC0B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:18:27 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id d3so18200055ljl.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:18:27 -0800 (PST)
+        Tue, 15 Nov 2022 11:19:11 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7331FCEC;
+        Tue, 15 Nov 2022 08:18:51 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id l11so22625803edb.4;
+        Tue, 15 Nov 2022 08:18:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M+CzAkDFHmdMgl4j2DtvxmhnqVrVZWAc9Wn/m7gqc2E=;
-        b=X0c/8PFj10auVUGpFbGxu7DN+PI9HmL9eHBPdbSwb0V1VYE/8FWQ0hxchocw8Rp9fN
-         HBH2cYvgcIxXfMOx4Dis6k1YMlrnsUI/gL487IzJc+nMS3r+FEg/qq1oFSWawTvoNjL/
-         FLLubKfHwBo/nNBDwSRrpskjcurzGREIrvO4Zj5qVwkUPni2PW4MVD7CwiqHf+urMyJ1
-         THqhrfjcIrAIyLL1DmVnAVLNegKCcwLPeW3F129XfhgOMzC4oPLeiXoDHqBtmIW7d3bs
-         blYHjh/vkpmyblTPrVr/lICaEqBda0pOs8GcTy+OeFa2eiTPmrDp/TluSyN0r/kDTErK
-         E5Gw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uINY/jIMIxRyn6m5pdLz4FKta5fxJkrYSOuMFgbaZyk=;
+        b=nNkc8aWzbTjyfUr8kEZx+5alsQ68tw9ghy1Szis2HjFmXT40tm5T6ddp4pxL12POxZ
+         c141tfSBWGqFAIw5gScAlVp79RWvnaHk0hssR9rWDYCYqYhU3+9isAEjE34yIyUWoPIn
+         EOqiO1h2hzyioaChAQKNdG0mWUlmnys2wCBtLjifrGfJC83MCs0IDZKK+Rk1Qqkdpiyd
+         mCWSJNXoyjslI1iBD7+8DmgIlggBP34oFVVFVELlnDvOCP3SMRRiUyY0vgeRnbXZqf4h
+         EctjONEQtVI++e0BUc73h71UtVhy+LJtvAKDdnmGzK0uI7mTcNSHMkslpIu46KAMYjUV
+         qCuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M+CzAkDFHmdMgl4j2DtvxmhnqVrVZWAc9Wn/m7gqc2E=;
-        b=oboMzAXMxGHfuPw6bjMZ9jeZeZeuQvm/4ZtgeLcd2k/vmClF7l44Ne/8MdbTF4i403
-         aZ2AVbDoj4Tr1YJapSYO4pn4cfpBpRT51PIeqf9whyBdNeVtuUcrjOhuZbPxJxnEJepz
-         MFfDmX5PWX3U55apCDBT/jnnrJfEo/oOWE9bv8u82PX5zDndd+Y9jzn7ONdDvhjLxbZT
-         zhgwnthlnKdlxnlH3AAwmFvJYjata6LjK57bn5dM2n8o42Tdim7N10xl+xPT47cN32VT
-         9DvdLjyRbMx6I+Jg9096O6flXhAFjZ2C6tbyzjO68mk+VTEGTr+GOMQ9XT61yzxnDfmm
-         YGcQ==
-X-Gm-Message-State: ANoB5pl/zyxXBMtMEhPH4w/ChVSnZkYpddwSIsUExVrWQ6NWORedrnrD
-        9yElbnaUmxxv/8VWvWTqoyKYeg==
-X-Google-Smtp-Source: AA0mqf5AqaaZmA92crIbJFDiqqgI+iCSQJ4Z/1LSWLrXQ0IglXC99waP1UTkiIZAWVKU/ECdp/xBYw==
-X-Received: by 2002:a2e:b0cd:0:b0:277:14bc:50f9 with SMTP id g13-20020a2eb0cd000000b0027714bc50f9mr6800122ljl.359.1668529106271;
-        Tue, 15 Nov 2022 08:18:26 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b11-20020a056512070b00b004a46a9cebe2sm2250332lfs.289.2022.11.15.08.18.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 08:18:25 -0800 (PST)
-Message-ID: <68ed4cb6-3c8b-e0a4-8a41-2cf7321e46ab@linaro.org>
-Date:   Tue, 15 Nov 2022 17:18:24 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uINY/jIMIxRyn6m5pdLz4FKta5fxJkrYSOuMFgbaZyk=;
+        b=ogDdQ9pk2MiCJMZt58NZfB/3cOqj9/o5/dFNgpcBBIM3lDfT/e10ZK7bvJrH7oxFF5
+         HjCG9BPxyUp5vfvlq8Sx07ZkU5GgciLPw6rx7gzPjIbKrjbXlu3Hl/SnDyWbTvonQwXH
+         Bo2FtwOxIYCE3eb4DLbvf+OI/9lZUcnCP91baQ1E76sjVAiH466/b6hqJFpqLPgcGyTr
+         /9opHkiJ71Rt1KD8VUpElOT6ty7vDV8U3A6cSdiEdXKME99Wsa7DQfu3Xx0Jt5CkVDdy
+         V6K7xFpzksggodyfw0CCUUVsAMMvVuTWBYt2n2W2faqA3iNxOOV+ReeGnCqY7EaHvMwr
+         Kaqw==
+X-Gm-Message-State: ANoB5plA9hh4m7GIm69GoVW5BlLJRVAlNTKNGnrny2ITul6y0DIrkWiX
+        5x+wajzVGhbCW5+MseLRdws=
+X-Google-Smtp-Source: AA0mqf5Pcwb4Fcrg3PPWz2jGjAx09kUO3+McZ/HW63p07odhpPSiUWELlzhFb/g/4JGD3FZmF4kT1w==
+X-Received: by 2002:a05:6402:1856:b0:461:dc29:275b with SMTP id v22-20020a056402185600b00461dc29275bmr15819135edy.108.1668529129431;
+        Tue, 15 Nov 2022 08:18:49 -0800 (PST)
+Received: from skbuf ([188.26.57.19])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906210a00b0078dce9984afsm5625377ejt.220.2022.11.15.08.18.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 08:18:48 -0800 (PST)
+Date:   Tue, 15 Nov 2022 18:18:46 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     netdev@kapio-technology.com
+Cc:     Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8 net-next 0/2] mv88e6xxx: Add MAB offload support
+Message-ID: <20221115161846.2st2kjxylfvlncib@skbuf>
+References: <Y3NcOYvCkmcRufIn@shredder>
+ <5559fa646aaad7551af9243831b48408@kapio-technology.com>
+ <20221115102833.ahwnahrqstcs2eug@skbuf>
+ <7c02d4f14e59a6e26431c086a9bb9643@kapio-technology.com>
+ <20221115111034.z5bggxqhdf7kbw64@skbuf>
+ <0cd30d4517d548f35042a535fd994831@kapio-technology.com>
+ <20221115122237.jfa5aqv6hauqid6l@skbuf>
+ <fb1707b55bd8629770e77969affaa2f9@kapio-technology.com>
+ <20221115145650.gs7crhkidbq5ko6v@skbuf>
+ <f229503b98d772c936f1fc8ca826a14f@kapio-technology.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/2] dt-bindings: clock: add QCOM SM6375 display clock
- bindings
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221115155808.10899-1-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115155808.10899-1-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f229503b98d772c936f1fc8ca826a14f@kapio-technology.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 16:58, Konrad Dybcio wrote:
-> Add device tree bindings for display clock controller for
-> Qualcomm Technology Inc's SM6375 SoC.
+On Tue, Nov 15, 2022 at 05:03:01PM +0100, netdev@kapio-technology.com wrote:
+> Yes, so you want me to simply increase the 50ms on line 58 in smi.c...
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> Changes in v2:
-> - Switch to dual licensing in both files
-> - Adjust the wording with the recent refactoring
-> - use qcom,gcc.yaml for common properties
+> I have now tried to increase it even to 10000ms == 10s and it didn't help,
+> so something else must be needed...
 
-If there is going to be a resend, please drop second "bindings" word
-from subject (the trailing one). It's redundant.
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Not only that, but also the one in mv88e6xxx_wait_mask().
