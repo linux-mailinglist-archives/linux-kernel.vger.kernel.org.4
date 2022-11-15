@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2AA162A446
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:39:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E8F62A45E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238829AbiKOVjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 16:39:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59876 "EHLO
+        id S231907AbiKOVmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 16:42:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238816AbiKOVjA (ORCPT
+        with ESMTP id S230296AbiKOVmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 16:39:00 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB472871B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:38:56 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id k7-20020a256f07000000b006cbcc030bc8so14331632ybc.18
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:38:56 -0800 (PST)
+        Tue, 15 Nov 2022 16:42:00 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8B332BA9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:41:22 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id y6-20020a25b9c6000000b006c1c6161716so14201732ybj.8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:41:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aQ7ZnbgmkJrVlWH5xbfOVSLuvcBscmBcOHFm+u9P9Is=;
-        b=ab3uRPKYkSxn/QjpN1So1yF1Z1NN2PYbkpgY8mGVjPzZ9MqLZaGWAVnsdWE2RsXjEc
-         8El0iBvxFpuy6viBm2Pm7wUcr+FJHIA2Wsw8Yvg1dmPT7dAY1ezhWWTpdWHpyRYCM8kY
-         A5Ejqaam5XT87aJsHHP5vsZEPik7JgXJkqgeu/AMlfWWqw8e3BgDtTdB9AKMjB16m50c
-         UIikOys1nEgQQMR5T6jK0mylJFSMO2EeW1WmF7exlaik5bq7UQqSYurk5yF14puo5rMg
-         XzgXo100/d1jQrL63t9IhZctr/AGW5/NI/PsirTxQT1Fcnk9tDrNSXRn94cFyTUp4+qF
-         qZqg==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=X2q2jXZbiR4aVk+j4cgzelsOGwbnws5+6EO0kS0q+IE=;
+        b=bc8gszccDarK7qqwempMPNtbikI8jkIOiq/wh6VybGdCVg6NwG/Nx85IKREmkFRuKU
+         wShAc4YefT81y8pFMR1rxelAe/RRgfpvpPmNlQEZEKpzo+c1M3/C7NJnGgjkinSTAxWr
+         qVKQ3wauGSA/Lewwmgqvq9e006mGZVpXq682GvsurpiaXjeSpHA3QRJTFqPGwKqgTeOm
+         YpeAyY7kri8DeFOmUx37xDNBusgu4XbtjicarUdIsq0DCAcH6Us3YD5wihN/jH4yP30k
+         7W198pKVPpm5ebcBI9A8BeOfWYWFyoQiE5lu9Q9bZIYmQ82aQhzPy9WzzxM2O19DPRLm
+         ZrRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aQ7ZnbgmkJrVlWH5xbfOVSLuvcBscmBcOHFm+u9P9Is=;
-        b=z63CM8CMFaF16vJm/2Q8yb9TsE89doOAa/P9DLIGjE0w8YUH9Ee5awRDeHFCDxTyXo
-         NPLRWM1rxq1XXZSdxThHNkZG/P/1okMOhpew011eWvROSsnsnD6xSvyN0HPRaTKE/YeG
-         TcPYPgVwpYJpdyGYtlZDcXYkaCQ6ouwdKtXqa9shM1weBPddYibII9Me1xjE8T688xSP
-         vwwy+3ayD9jvckKYBP4ZzINo5PscB2xJWi+0ZCS/qa+/S9BHnE2zf+WRQItppGStiCOk
-         MmABX8gH38+zVjnQ3beWzenN0vw5l3K7Wh7ThI9EdDopZwOKz6SfBZnPyCRWTkZrDF4s
-         0c0Q==
-X-Gm-Message-State: ANoB5pkIdJ2Pvy3wLcPJqdsGiFhyxzdysWffGtuzSjIazRZt1ogShqgD
-        TCVMruCImLHTW6umCrExWVKLTLqZp/UQKyrj
-X-Google-Smtp-Source: AA0mqf44WZQSn2ofSKhxuYlXbV0gsnelihomPaefr5UbU5tGVPfiQ4QL7tIx01rfuoC7phPo9KvKtDEV0YERWjyx
-X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a81:1c41:0:b0:36a:31c2:7acb with SMTP
- id c62-20020a811c41000000b0036a31c27acbmr20565473ywc.426.1668548335967; Tue,
- 15 Nov 2022 13:38:55 -0800 (PST)
-Date:   Tue, 15 Nov 2022 21:38:45 +0000
-In-Reply-To: <20221115213845.3348210-1-vannapurve@google.com>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X2q2jXZbiR4aVk+j4cgzelsOGwbnws5+6EO0kS0q+IE=;
+        b=W5cQmDNLXypR/5wmplxHaoxmcj5M+zP3kPjOVZJ0esTlIUn5Lj+JCC7VTSYWf7ujJf
+         bj7G3ScbkSi7uD7H0iJrm5vfNc0v1to6sD7BkthqkGdUy/HJqcmExQcWicmDDnY5Iu4m
+         edLcUE6chq6jJou4G8RnGUgtuhb5ys0OswZe0EQhvyj3LXyaIOkUx6pg7YVTyp7hfdFO
+         8QeP24njtDfqvy5cmDXETutTKQMQmQBVXjwUY68SDPCfYRF66vMrLmHUBxrgPcQ9EHsh
+         hd8NphT9qm82fRPWNlKolZrDhEYL9xAOP1h9UE8xhtUthDwVQL2TbXuMvJgleXbXjvQ/
+         WUmQ==
+X-Gm-Message-State: ANoB5pnAb2sMfZsFquZUocqFIQ2lnEraIx6BlCfd8QovKw/g1kyUQAD/
+        GKytQCHwa1MJ1a2+kprTOoKBWBXo9v2U
+X-Google-Smtp-Source: AA0mqf7GgKCoXOCi2F46eSyK33OlF+GBC970TPtJzlizq2rWCFH+aPNwsJ8Zy7KnDh1jhzu4fIyuMGmvV68G
+X-Received: from sammler.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:43cd])
+ (user=sammler job=sendgmr) by 2002:a25:41d7:0:b0:6cb:8949:fdbb with SMTP id
+ o206-20020a2541d7000000b006cb8949fdbbmr18613201yba.328.1668548481659; Tue, 15
+ Nov 2022 13:41:21 -0800 (PST)
+Date:   Tue, 15 Nov 2022 21:40:36 +0000
 Mime-Version: 1.0
-References: <20221115213845.3348210-1-vannapurve@google.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221115213845.3348210-4-vannapurve@google.com>
-Subject: [V4 PATCH 3/3] KVM: selftests: Add arch specific post vm creation hook
-From:   Vishal Annapurve <vannapurve@google.com>
-To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     pbonzini@redhat.com, shuah@kernel.org, bgardon@google.com,
-        seanjc@google.com, oupton@google.com, peterx@redhat.com,
-        vkuznets@redhat.com, dmatlack@google.com, pgonda@google.com,
-        andrew.jones@linux.dev, Vishal Annapurve <vannapurve@google.com>
+Message-ID: <20221115214036.1571015-1-sammler@google.com>
+Subject: [PATCH v2] virtio_pmem: populate numa information
+From:   Michael Sammler <sammler@google.com>
+To:     Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mina Almasry <almasrymina@google.com>, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     Michael Sammler <sammler@google.com>,
+        Pankaj Gupta <pankaj.gupta@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -71,73 +73,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add arch specific API kvm_arch_vm_post_create to perform any required setup
-after VM creation.
+Compute the numa information for a virtio_pmem device from the memory
+range of the device. Previously, the target_node was always 0 since
+the ndr_desc.target_node field was never explicitly set. The code for
+computing the numa node is taken from cxl_pmem_region_probe in
+drivers/cxl/pmem.c.
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Andrew Jones <andrew.jones@linux.dev>
-Reviewed-by: Peter Gonda <pgonda@google.com>
-Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+Signed-off-by: Michael Sammler <sammler@google.com>
+Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Reviewed-by: Pankaj Gupta <pankaj.gupta@amd.com>
+Tested-by: Mina Almasry <almasrymina@google.com>
 ---
- tools/testing/selftests/kvm/include/kvm_util_base.h | 4 ++++
- tools/testing/selftests/kvm/lib/kvm_util.c          | 9 ++++++---
- tools/testing/selftests/kvm/lib/x86_64/processor.c  | 6 ++++++
- 3 files changed, 16 insertions(+), 3 deletions(-)
+Changes from v1:
+- added Reviewed-by and Tested-by
+- synced with mainline
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index eec0e4898efe..1e7d3eae8c91 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -843,4 +843,8 @@ static inline int __vm_disable_nx_huge_pages(struct kvm_vm *vm)
-  */
- void kvm_selftest_arch_init(void);
- 
-+/*
-+ * API to execute architecture specific setup after creating the VM.
-+ */
-+void kvm_arch_vm_post_create(struct kvm_vm *vm);
- #endif /* SELFTEST_KVM_UTIL_BASE_H */
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index deb4c731b9fa..3ed72980c996 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -340,9 +340,8 @@ struct kvm_vm *__vm_create(enum vm_guest_mode mode, uint32_t nr_runnable_vcpus,
- 
- 	kvm_vm_elf_load(vm, program_invocation_name);
- 
--#ifdef __x86_64__
--	vm_create_irqchip(vm);
--#endif
-+	kvm_arch_vm_post_create(vm);
-+
- 	return vm;
- }
- 
-@@ -2022,6 +2021,10 @@ void __vm_get_stat(struct kvm_vm *vm, const char *stat_name, uint64_t *data,
- 	}
- }
- 
-+__weak void kvm_arch_vm_post_create(struct kvm_vm *vm)
-+{
-+}
-+
- __weak void kvm_selftest_arch_init(void)
+drivers/nvdimm/virtio_pmem.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/nvdimm/virtio_pmem.c b/drivers/nvdimm/virtio_pmem.c
+index 20da455d2ef6..a92eb172f0e7 100644
+--- a/drivers/nvdimm/virtio_pmem.c
++++ b/drivers/nvdimm/virtio_pmem.c
+@@ -32,7 +32,6 @@ static int init_vq(struct virtio_pmem *vpmem)
+ static int virtio_pmem_probe(struct virtio_device *vdev)
  {
- }
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 39c4409ef56a..fa65e8142c16 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -1327,3 +1327,9 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
- 
- 	return get_kvm_intel_param_bool("unrestricted_guest");
- }
-+
-+
-+void kvm_arch_vm_post_create(struct kvm_vm *vm)
-+{
-+	vm_create_irqchip(vm);
-+}
--- 
-2.38.1.431.g37b22c650d-goog
+ 	struct nd_region_desc ndr_desc = {};
+-	int nid = dev_to_node(&vdev->dev);
+ 	struct nd_region *nd_region;
+ 	struct virtio_pmem *vpmem;
+ 	struct resource res;
+@@ -79,7 +78,15 @@ static int virtio_pmem_probe(struct virtio_device *vdev)
+ 	dev_set_drvdata(&vdev->dev, vpmem->nvdimm_bus);
 
+ 	ndr_desc.res = &res;
+-	ndr_desc.numa_node = nid;
++
++	ndr_desc.numa_node = memory_add_physaddr_to_nid(res.start);
++	ndr_desc.target_node = phys_to_target_node(res.start);
++	if (ndr_desc.target_node == NUMA_NO_NODE) {
++		ndr_desc.target_node = ndr_desc.numa_node;
++		dev_dbg(&vdev->dev, "changing target node from %d to %d",
++			NUMA_NO_NODE, ndr_desc.target_node);
++	}
++
+ 	ndr_desc.flush = async_pmem_flush;
+ 	ndr_desc.provider_data = vdev;
+ 	set_bit(ND_REGION_PAGEMAP, &ndr_desc.flags);
+--
+2.38.1.431.g37b22c650d-goog
