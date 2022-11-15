@@ -2,232 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223D162ADD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B5062ADD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbiKOWJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 17:09:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
+        id S238465AbiKOWJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 17:09:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiKOWJp (ORCPT
+        with ESMTP id S232997AbiKOWJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:09:45 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1987525E9D;
-        Tue, 15 Nov 2022 14:09:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668550185; x=1700086185;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=cEZAt0cB7NR6JfUKbt2NJK0Kgz8jmSnn4K9dOcWi5K8=;
-  b=cdaavEzb/WU9hrxaCipFL3ueh8kZZj+XbwGZW8xXfzQhFqqN+AG2HueI
-   NGZsNAYEivEeyR6tvwI7u0VUlPn4dI8Uqz8i3m1b6e3KPYmg50wst9vUg
-   fIPBpSoI8qamjQwbIyVkqE4/RW+4aBs3IZbexkVEKojDJ7wBzBhfB12tJ
-   vYwXDrnlYGT1mHsKv8sOEwOakckMNMrbjtoVpheApbcIL7l4rxYAxtvGv
-   ClTRAtSIXvh2rriLZJHN/bELR+tIwYmBvb3AisD4rgq1FpmFCNhMK2kmk
-   BDjjuT4Oo6wWbD6f2A9DX0vfLiNxqFYO4LGmbPEsSK/5hwx8qq6chO6o2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="339185330"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="339185330"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 14:09:44 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="633394064"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="633394064"
-Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.7.249]) ([10.212.7.249])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 14:09:40 -0800
-Message-ID: <0100f37b-3bbb-bd0c-2a11-5a45d1d7b199@intel.com>
-Date:   Tue, 15 Nov 2022 15:09:39 -0700
+        Tue, 15 Nov 2022 17:09:50 -0500
+Received: from vie01a-dmta-at03-1.mx.upcmail.net (vie01a-dmta-at03-1.mx.upcmail.net [62.179.121.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2337E275CD
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:09:48 -0800 (PST)
+Received: from [172.31.216.235] (helo=vie01a-pemc-psmtp-pe12.mail.upcmail.net)
+        by vie01a-dmta-at03.mx.upcmail.net with esmtp (Exim 4.92)
+        (envelope-from <thomas.zeitlhofer+lkml@ze-it.at>)
+        id 1ov47l-00AT0Z-PS
+        for linux-kernel@vger.kernel.org; Tue, 15 Nov 2022 23:09:45 +0100
+Received: from ren-mail-psmtp-mg02. ([80.109.253.241])
+        by vie01a-pemc-psmtp-pe12.mail.upcmail.net with ESMTP
+        id v47loejvM8s8Uv47lom72W; Tue, 15 Nov 2022 23:09:45 +0100
+Received: from mr1 ([80.108.14.125])
+        by ren-mail-psmtp-mg02. with ESMTP
+        id v47ko7xqObZLDv47kos7Gy; Tue, 15 Nov 2022 23:09:44 +0100
+X-Env-Mailfrom: thomas.zeitlhofer+lkml@ze-it.at
+X-Env-Rcptto: linux-kernel@vger.kernel.org
+X-SourceIP: 80.108.14.125
+X-CNFS-Analysis: v=2.4 cv=Ufwy9IeN c=1 sm=1 tr=0 ts=63740e29
+ a=NZF4o3NPETkZAaMtA+lBEA==:117 a=NZF4o3NPETkZAaMtA+lBEA==:17
+ a=kj9zAlcOel0A:10 a=VG87k5yWxwQ-MwjZPvcA:9 a=CjuIK1q_8ugA:10
+Date:   Tue, 15 Nov 2022 23:09:41 +0100
+From:   Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
+To:     Paolo Abeni <pabeni@redhat.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        "Denis V. Lunev" <den@openvz.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Yuwei Wang <wangyuweihx@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] net: neigh: decrement the family specific qlen
+Message-ID: <Y3QNGHkhvWnxo2LD@x1.ze-it.at>
+References: <Y295+9+JDjqRWbwU@x1.ze-it.at>
+ <205d812ab74d721f4345eabcf3e5a86a710b40da.camel@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.1
-Subject: Re: [PATCH 03/11] cxl/mem: Implement Clear Event Records command
-Content-Language: en-US
-To:     ira.weiny@intel.com, Dan Williams <dan.j.williams@intel.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
-References: <20221110185758.879472-1-ira.weiny@intel.com>
- <20221110185758.879472-4-ira.weiny@intel.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20221110185758.879472-4-ira.weiny@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <205d812ab74d721f4345eabcf3e5a86a710b40da.camel@redhat.com>
+X-CMAE-Envelope: MS4wfHw0bTZVdEuAVSMqBwCcMeuCnME9toMJrnXQ50trBd+EAC0uMt1AkmZVhwUZAFBA47NdpVwbGSI5cf6GQ6bYrU9LvWC18FN+RO67yVgTmFUAErMqjgXm
+ eBIuATnCyvwW/1IRvEadbUqNwxLIYcctVwpQ3yvYEwpgqhGlptFwz5972j0WEEzIlBkZIifwkU+yHEx7hr95JlLYKOK4+ef/6bo=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 0ff4eb3d5ebb ("neighbour: make proxy_queue.qlen limit
+per-device") introduced the length counter qlen in struct neigh_parms.
+There are separate neigh_parms instances for IPv4/ARP and IPv6/ND, and
+while the family specific qlen is incremented in pneigh_enqueue(), the
+mentioned commit decrements always the IPv4/ARP specific qlen,
+regardless of the currently processed family, in pneigh_queue_purge()
+and neigh_proxy_process().
 
+As a result, with IPv6/ND, the family specific qlen is only incremented
+(and never decremented) until it exceeds PROXY_QLEN, and then, according
+to the check in pneigh_enqueue(), neighbor solicitations are not
+answered anymore. As an example, this is noted when using the
+subnet-router anycast address to access a Linux router. After a certain
+amount of time (in the observed case, qlen exceeded PROXY_QLEN after two
+days), the Linux router stops answering neighbor solicitations for its
+subnet-router anycast address and effectively becomes unreachable.
 
-On 11/10/2022 10:57 AM, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> CXL rev 3.0 section 8.2.9.2.3 defines the Clear Event Records mailbox
-> command.  After an event record is read it needs to be cleared from the
-> event log.
-> 
-> Implement cxl_clear_event_record() and call it for each record retrieved
-> from the device.
-> 
-> Each record is cleared individually.  A clear all bit is specified but
-> events could arrive between a get and the final clear all operation.
-> Therefore each event is cleared specifically.
-> 
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+Another result with IPv6/ND is that the IPv4/ARP specific qlen is
+decremented more often than incremented. This leads to negative qlen
+values, as a signed integer has been used for the length counter qlen,
+and potentially to an integer overflow.
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Fix this by introducing the helper function neigh_parms_qlen_dec(),
+which decrements the family specific qlen. Thereby, make use of the
+existing helper function neigh_get_dev_parms_rcu(), whose definition
+therefore needs to be placed earlier in neighbour.c. Take the family
+member from struct neigh_table to determine the currently processed
+family and appropriately call neigh_parms_qlen_dec() from
+pneigh_queue_purge() and neigh_proxy_process().
 
-> 
-> ---
-> Changes from RFC:
-> 	Jonathan
-> 		Clean up init of payload and use return code.
-> 		Also report any error to clear the event.
-> 		s/v3.0/rev 3.0
-> ---
->   drivers/cxl/core/mbox.c      | 46 ++++++++++++++++++++++++++++++------
->   drivers/cxl/cxlmem.h         | 15 ++++++++++++
->   include/uapi/linux/cxl_mem.h |  1 +
->   3 files changed, 55 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index a908b95a7de4..f46558e09f08 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
-> @@ -52,6 +52,7 @@ static struct cxl_mem_command cxl_mem_commands[CXL_MEM_COMMAND_ID_MAX] = {
->   #endif
->   	CXL_CMD(GET_SUPPORTED_LOGS, 0, CXL_VARIABLE_PAYLOAD, CXL_CMD_FLAG_FORCE_ENABLE),
->   	CXL_CMD(GET_EVENT_RECORD, 1, CXL_VARIABLE_PAYLOAD, 0),
-> +	CXL_CMD(CLEAR_EVENT_RECORD, CXL_VARIABLE_PAYLOAD, 0, 0),
->   	CXL_CMD(GET_FW_INFO, 0, 0x50, 0),
->   	CXL_CMD(GET_PARTITION_INFO, 0, 0x20, 0),
->   	CXL_CMD(GET_LSA, 0x8, CXL_VARIABLE_PAYLOAD, 0),
-> @@ -708,6 +709,27 @@ int cxl_enumerate_cmds(struct cxl_dev_state *cxlds)
->   }
->   EXPORT_SYMBOL_NS_GPL(cxl_enumerate_cmds, CXL);
->   
-> +static int cxl_clear_event_record(struct cxl_dev_state *cxlds,
-> +				  enum cxl_event_log_type log,
-> +				  struct cxl_get_event_payload *get_pl, u16 nr)
-> +{
-> +	struct cxl_mbox_clear_event_payload payload = {
-> +		.event_log = log,
-> +		.nr_recs = nr,
-> +	};
-> +	int i;
-> +
-> +	for (i = 0; i < nr; i++) {
-> +		payload.handle[i] = get_pl->record[i].hdr.handle;
-> +		dev_dbg(cxlds->dev, "Event log '%s': Clearning %u\n",
-> +			cxl_event_log_type_str(log),
-> +			le16_to_cpu(payload.handle[i]));
-> +	}
-> +
-> +	return cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_CLEAR_EVENT_RECORD,
-> +				 &payload, sizeof(payload), NULL, 0);
-> +}
-> +
->   static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
->   				    enum cxl_event_log_type type)
->   {
-> @@ -728,14 +750,23 @@ static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
->   		}
->   
->   		pl_nr = le16_to_cpu(payload.record_count);
-> -		if (trace_cxl_generic_event_enabled()) {
-> +		if (pl_nr > 0) {
->   			u16 nr_rec = min_t(u16, pl_nr, CXL_GET_EVENT_NR_RECORDS);
->   			int i;
->   
-> -			for (i = 0; i < nr_rec; i++)
-> -				trace_cxl_generic_event(dev_name(cxlds->dev),
-> -							type,
-> -							&payload.record[i]);
-> +			if (trace_cxl_generic_event_enabled()) {
-> +				for (i = 0; i < nr_rec; i++)
-> +					trace_cxl_generic_event(dev_name(cxlds->dev),
-> +								type,
-> +								&payload.record[i]);
-> +			}
-> +
-> +			rc = cxl_clear_event_record(cxlds, type, &payload, nr_rec);
-> +			if (rc) {
-> +				dev_err(cxlds->dev, "Event log '%s': Failed to clear events : %d",
-> +					cxl_event_log_type_str(type), rc);
-> +				return;
-> +			}
->   		}
->   
->   		if (trace_cxl_overflow_enabled() &&
-> @@ -750,10 +781,11 @@ static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
->    * cxl_mem_get_event_records - Get Event Records from the device
->    * @cxlds: The device data for the operation
->    *
-> - * Retrieve all event records available on the device and report them as trace
-> - * events.
-> + * Retrieve all event records available on the device, report them as trace
-> + * events, and clear them.
->    *
->    * See CXL rev 3.0 @8.2.9.2.2 Get Event Records
-> + * See CXL rev 3.0 @8.2.9.2.3 Clear Event Records
->    */
->   void cxl_mem_get_event_records(struct cxl_dev_state *cxlds)
->   {
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index da64ba0f156b..28a114c7cf69 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -258,6 +258,7 @@ enum cxl_opcode {
->   	CXL_MBOX_OP_INVALID		= 0x0000,
->   	CXL_MBOX_OP_RAW			= CXL_MBOX_OP_INVALID,
->   	CXL_MBOX_OP_GET_EVENT_RECORD	= 0x0100,
-> +	CXL_MBOX_OP_CLEAR_EVENT_RECORD	= 0x0101,
->   	CXL_MBOX_OP_GET_FW_INFO		= 0x0200,
->   	CXL_MBOX_OP_ACTIVATE_FW		= 0x0202,
->   	CXL_MBOX_OP_GET_SUPPORTED_LOGS	= 0x0400,
-> @@ -397,6 +398,20 @@ static inline const char *cxl_event_log_type_str(enum cxl_event_log_type type)
->   	return "<unknown>";
->   }
->   
-> +/*
-> + * Clear Event Records input payload
-> + * CXL rev 3.0 section 8.2.9.2.3; Table 8-51
-> + *
-> + * Space given for 1 record
-> + */
-> +struct cxl_mbox_clear_event_payload {
-> +	u8 event_log;		/* enum cxl_event_log_type */
-> +	u8 clear_flags;
-> +	u8 nr_recs;		/* 1 for this struct */
-> +	u8 reserved[3];
-> +	__le16 handle[CXL_GET_EVENT_NR_RECORDS];
-> +};
-> +
->   struct cxl_mbox_get_partition_info {
->   	__le64 active_volatile_cap;
->   	__le64 active_persistent_cap;
-> diff --git a/include/uapi/linux/cxl_mem.h b/include/uapi/linux/cxl_mem.h
-> index 70459be5bdd4..7c1ad8062792 100644
-> --- a/include/uapi/linux/cxl_mem.h
-> +++ b/include/uapi/linux/cxl_mem.h
-> @@ -25,6 +25,7 @@
->   	___C(RAW, "Raw device command"),                                  \
->   	___C(GET_SUPPORTED_LOGS, "Get Supported Logs"),                   \
->   	___C(GET_EVENT_RECORD, "Get Event Record"),                       \
-> +	___C(CLEAR_EVENT_RECORD, "Clear Event Record"),                   \
->   	___C(GET_FW_INFO, "Get FW Info"),                                 \
->   	___C(GET_PARTITION_INFO, "Get Partition Information"),            \
->   	___C(GET_LSA, "Get Label Storage Area"),                          \
+Additionally, use an unsigned integer for the length counter qlen.
+
+Fixes: 0ff4eb3d5ebb ("neighbour: make proxy_queue.qlen limit per-device")
+Signed-off-by: Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
+---
+
+Notes:
+
+	v2: implement review comment from Paolo Abeni (thanks for the
+	    feedback): use u32 instead of __u32 in qlen declaration
+
+ include/net/neighbour.h |  2 +-
+ net/core/neighbour.c    | 58 +++++++++++++++++++++--------------------
+ 2 files changed, 31 insertions(+), 29 deletions(-)
+
+diff --git a/include/net/neighbour.h b/include/net/neighbour.h
+index 20745cf7ae1a..2f2a6023fb0e 100644
+--- a/include/net/neighbour.h
++++ b/include/net/neighbour.h
+@@ -83,7 +83,7 @@ struct neigh_parms {
+ 	struct rcu_head rcu_head;
+ 
+ 	int	reachable_time;
+-	int	qlen;
++	u32	qlen;
+ 	int	data[NEIGH_VAR_DATA_MAX];
+ 	DECLARE_BITMAP(data_state, NEIGH_VAR_DATA_MAX);
+ };
+diff --git a/net/core/neighbour.c b/net/core/neighbour.c
+index a77a85e357e0..952a54763358 100644
+--- a/net/core/neighbour.c
++++ b/net/core/neighbour.c
+@@ -307,7 +307,31 @@ static int neigh_del_timer(struct neighbour *n)
+ 	return 0;
+ }
+ 
+-static void pneigh_queue_purge(struct sk_buff_head *list, struct net *net)
++static struct neigh_parms *neigh_get_dev_parms_rcu(struct net_device *dev,
++						   int family)
++{
++	switch (family) {
++	case AF_INET:
++		return __in_dev_arp_parms_get_rcu(dev);
++	case AF_INET6:
++		return __in6_dev_nd_parms_get_rcu(dev);
++	}
++	return NULL;
++}
++
++static void neigh_parms_qlen_dec(struct net_device *dev, int family)
++{
++	struct neigh_parms *p;
++
++	rcu_read_lock();
++	p = neigh_get_dev_parms_rcu(dev, family);
++	if (p)
++		p->qlen--;
++	rcu_read_unlock();
++}
++
++static void pneigh_queue_purge(struct sk_buff_head *list, struct net *net,
++			       int family)
+ {
+ 	struct sk_buff_head tmp;
+ 	unsigned long flags;
+@@ -321,13 +345,7 @@ static void pneigh_queue_purge(struct sk_buff_head *list, struct net *net)
+ 		struct net_device *dev = skb->dev;
+ 
+ 		if (net == NULL || net_eq(dev_net(dev), net)) {
+-			struct in_device *in_dev;
+-
+-			rcu_read_lock();
+-			in_dev = __in_dev_get_rcu(dev);
+-			if (in_dev)
+-				in_dev->arp_parms->qlen--;
+-			rcu_read_unlock();
++			neigh_parms_qlen_dec(dev, family);
+ 			__skb_unlink(skb, list);
+ 			__skb_queue_tail(&tmp, skb);
+ 		}
+@@ -409,7 +427,8 @@ static int __neigh_ifdown(struct neigh_table *tbl, struct net_device *dev,
+ 	write_lock_bh(&tbl->lock);
+ 	neigh_flush_dev(tbl, dev, skip_perm);
+ 	pneigh_ifdown_and_unlock(tbl, dev);
+-	pneigh_queue_purge(&tbl->proxy_queue, dev ? dev_net(dev) : NULL);
++	pneigh_queue_purge(&tbl->proxy_queue, dev ? dev_net(dev) : NULL,
++			   tbl->family);
+ 	if (skb_queue_empty_lockless(&tbl->proxy_queue))
+ 		del_timer_sync(&tbl->proxy_timer);
+ 	return 0;
+@@ -1621,13 +1640,8 @@ static void neigh_proxy_process(struct timer_list *t)
+ 
+ 		if (tdif <= 0) {
+ 			struct net_device *dev = skb->dev;
+-			struct in_device *in_dev;
+ 
+-			rcu_read_lock();
+-			in_dev = __in_dev_get_rcu(dev);
+-			if (in_dev)
+-				in_dev->arp_parms->qlen--;
+-			rcu_read_unlock();
++			neigh_parms_qlen_dec(dev, tbl->family);
+ 			__skb_unlink(skb, &tbl->proxy_queue);
+ 
+ 			if (tbl->proxy_redo && netif_running(dev)) {
+@@ -1821,7 +1835,7 @@ int neigh_table_clear(int index, struct neigh_table *tbl)
+ 	cancel_delayed_work_sync(&tbl->managed_work);
+ 	cancel_delayed_work_sync(&tbl->gc_work);
+ 	del_timer_sync(&tbl->proxy_timer);
+-	pneigh_queue_purge(&tbl->proxy_queue, NULL);
++	pneigh_queue_purge(&tbl->proxy_queue, NULL, tbl->family);
+ 	neigh_ifdown(tbl, NULL);
+ 	if (atomic_read(&tbl->entries))
+ 		pr_crit("neighbour leakage\n");
+@@ -3539,18 +3553,6 @@ static int proc_unres_qlen(struct ctl_table *ctl, int write,
+ 	return ret;
+ }
+ 
+-static struct neigh_parms *neigh_get_dev_parms_rcu(struct net_device *dev,
+-						   int family)
+-{
+-	switch (family) {
+-	case AF_INET:
+-		return __in_dev_arp_parms_get_rcu(dev);
+-	case AF_INET6:
+-		return __in6_dev_nd_parms_get_rcu(dev);
+-	}
+-	return NULL;
+-}
+-
+ static void neigh_copy_dflt_parms(struct net *net, struct neigh_parms *p,
+ 				  int index)
+ {
+-- 
+2.30.2
+
