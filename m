@@ -2,87 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 935D46295B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 220A76295AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238085AbiKOKW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:22:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
+        id S232523AbiKOKWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:22:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238127AbiKOKWx (ORCPT
+        with ESMTP id S229917AbiKOKWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:22:53 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2317D1F9F1;
-        Tue, 15 Nov 2022 02:22:50 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AF8Ek4k004588;
-        Tue, 15 Nov 2022 10:22:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=BIGCnaiFy7YNCZXdgVkrUvh5iKWcR3W3fZ3jy0dp1jQ=;
- b=c4mKFTlUgeS9PeUxCR49hJAlRYpREABMY68/zuQJeClx838WWELy8zSpM6VCQKXFThC6
- /RGbS1v7DkroR5KvGqnUe+ppmjkEzFhpQs41Ps3rvRXU8uzBPz01cSoVJ0geNcsfIcsu
- 0Va7MEtqm5l9UargEXTCsnGhh6UVOasa5XAks86Eudvxp2XFKgwMw7Uq724YXtFHdeSn
- zJKxdYgYhB/J7ru7OcJ2wO72BuXnIIxxqEsHXrG2c0/yX93cRepRbwv09tRVveF1X/jx
- z3jGU8N2DgX/DQCf7/5w0OWH/BGweDySC6zkahxI6jEFfEEMBVjlSP9EW0LxLvreVyFn fg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kuxm09hkb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Nov 2022 10:22:40 +0000
-Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2AFAMdJ6019979;
-        Tue, 15 Nov 2022 10:22:39 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 3kt4jm3e7k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Nov 2022 10:22:39 +0000
-Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AFAL60l018263;
-        Tue, 15 Nov 2022 10:22:39 GMT
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 2AFAMdhY019973
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Nov 2022 10:22:39 +0000
-Received: from shazhuss-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Tue, 15 Nov 2022 02:22:35 -0800
-From:   Shazad Hussain <quic_shazhuss@quicinc.com>
-To:     <andersson@kernel.org>, <johan@kernel.org>
-CC:     <sboyd@kernel.org>, <bmasney@redhat.com>, <agross@kernel.org>,
-        <mturquette@baylibre.com>,
-        Shazad Hussain <quic_shazhuss@quicinc.com>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] clk: qcom: gcc-sc8280xp: add cxo as parent for three ufs ref clks
-Date:   Tue, 15 Nov 2022 15:52:17 +0530
-Message-ID: <20221115102217.6381-1-quic_shazhuss@quicinc.com>
-X-Mailer: git-send-email 2.38.0
+        Tue, 15 Nov 2022 05:22:44 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7DD1A05F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:22:42 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id g12so23753888lfh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:22:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3ZbREAzKGWsIEWUQJpy4XElK+ime7W53jXwcpw2dqzo=;
+        b=URWmS52KU77TWjmjG6UB4lH6yXLsHtFdFoDjqDZDTqW8s8fgbpukZVncpNKzxXkXiK
+         Ig37LGNmjMnu1U2f/1pomq95OJLikyGVyB+4ABQ0POWetHCFlHhL94EXdNn5+7UpOX4Q
+         ZhKHee8n+38c/rLKiVvjJQ8SSexQrhnSFzsNoRNLejRYqPK/7mdYwYG5stAufYWtyK+O
+         7jp0YZoE+rK/1zIWDtCV4jMq6ttRkqDgjFxIo/+bG5zNIpxmTe73E5QIux/rYqHA+M0n
+         +w4RiGEYZ599h0aPvRTuCJ4evleTgjqQ/pZsMEpOn1E4kCr2nM6UkMljIEeQgqCv7ecL
+         Mx8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3ZbREAzKGWsIEWUQJpy4XElK+ime7W53jXwcpw2dqzo=;
+        b=utWUGL9au3rK2LQdG6GZQqkUqhRBsBpr9cjVF4ds31380exCArKwzXdFMqnmTEezVp
+         59NP1Y4GOkug+0a+cMvOZpazXeN6v5bI4yYkW9C6+FLflWY9qFSH9bLP1ejmoDBe0wro
+         mpQtZ3uAbMuKeDvJcnJNl3XFq2MIfl6Sr26eOdyETfoYaEnnPqBVZQdcBX3glyYvuct1
+         +YZ0YtdiPc+WnIjeUrbxv3gML+tDERy05k2MF/u1NdPm4yHNeoyTeFn03+nAFLrz0DvR
+         GW9qR4ulifP2MD3IkZQZQWoiiwW4qIyWfRLctJoRKwHXNkoiGREfImSktDz9ckqexB2e
+         GsXw==
+X-Gm-Message-State: ANoB5pnyvmAf/9Dl6QnC5A5ASrhu+dbn+6GXzOJXV9kZoxNiEZ11vmVr
+        6uFcobrBjwtNXMveK4ag/rPm3g==
+X-Google-Smtp-Source: AA0mqf7Eoob8tu5VvSML0bCXRs+5OlrwB4RhRTonYV8TvWwQfLAeC7eqY+781izx5/9lW5imSf++mA==
+X-Received: by 2002:a05:6512:258f:b0:4af:ad16:8a08 with SMTP id bf15-20020a056512258f00b004afad168a08mr5231106lfb.664.1668507761001;
+        Tue, 15 Nov 2022 02:22:41 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c18-20020ac25f72000000b00492dc29be7bsm2148197lfc.227.2022.11.15.02.22.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 02:22:40 -0800 (PST)
+Message-ID: <5dae76ba-bd48-233d-4d4a-14111ff1b2ec@linaro.org>
+Date:   Tue, 15 Nov 2022 11:22:39 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: C2DtN1PIcxxMrpKWkG_95hEwGahN2_yD
-X-Proofpoint-GUID: C2DtN1PIcxxMrpKWkG_95hEwGahN2_yD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-15_05,2022-11-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 bulkscore=0 mlxlogscore=793 spamscore=0 clxscore=1011
- lowpriorityscore=0 impostorscore=0 suspectscore=0 mlxscore=0 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211150071
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 02/10] ASoC: dt-bindings: qcom,apr: Split services to
+ shared schema
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Patrick Lai <plai@qti.qualcomm.com>,
+        Srinivasa Rao Mandadapu <srivasam@qti.qualcomm.com>
+References: <20221111113547.100442-1-krzysztof.kozlowski@linaro.org>
+ <20221111113547.100442-3-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221111113547.100442-3-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,60 +86,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added parent_data as CXO for three UFS reference clocks named,
-gcc_ufs_ref_clkref_clk, gcc_ufs_card_clkref_clk and
-gcc_ufs_1_card_clkref_clk.
+On 11/11/2022 12:35, Krzysztof Kozlowski wrote:
+> The APR/GPR nodes are organized like:
+> 
+>   apr-or-gpr-device-node <- qcom,apr.yaml
+>     apr-gpr-service@[0-9] <- qcom,apr.yaml
+>       service-specific-components <- /schemas/sound/qcom,q6*.yaml
+> 
 
-Fixes: d65d005f9a6c ("clk: qcom: add sc8280xp GCC driver")
-Link: https://lore.kernel.org/lkml/Y2Tber39cHuOSR%2FW@hovoldconsulting.com/
-Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
----
-Changes since v1:
-- Renamed patch subject. Did not include Brian's T-b comment.
-- Added parent data for two ufs phy ref clocks.
+(...)
 
-v1 of this patch can be found at
-https://lore.kernel.org/all/20221030142333.31019-1-quic_shazhuss@quicinc.com/
+> +additionalProperties: true
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
+> index 0a7a34cb2497..9302ffe567d6 100644
+> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
+> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,apr.yaml
+> @@ -80,115 +80,13 @@ properties:
+>    '#size-cells':
+>      const: 0
+>  
+> -#APR/GPR Services
+>  patternProperties:
+>    "^service@[1-9a-d]$":
+>      type: object
+> +    $ref: /schemas/soc/qcom/qcom,apr-services.yaml
+> +    additionalProperties: true
+>      description:
+> -      APR/GPR node's client devices use subnodes for desired static port services.
+> -
+> -    properties:
+> -      compatible:
+> -        enum:
+> -          - qcom,q6core
+> -          - qcom,q6asm
+> -          - qcom,q6afe
+> -          - qcom,q6adm
+> -          - qcom,q6apm
+> -          - qcom,q6prm
 
-used below patches for verification on next-20221114
-https://lore.kernel.org/lkml/20221104092045.17410-2-johan+linaro@kernel.org/
-https://lore.kernel.org/lkml/20221104092045.17410-3-johan+linaro@kernel.org/
-https://lore.kernel.org/lkml/20221111113732.461881-1-thierry.reding@gmail.com/
+I think that this piece could stay here. Otherwise we allow any
+compatible which matches the qcom,apr-services.yaml binding, but that's
+easy to achieve.
 
- drivers/clk/qcom/gcc-sc8280xp.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
-index a18ed88f3b82..b3198784e1c3 100644
---- a/drivers/clk/qcom/gcc-sc8280xp.c
-+++ b/drivers/clk/qcom/gcc-sc8280xp.c
-@@ -5364,6 +5364,8 @@ static struct clk_branch gcc_ufs_1_card_clkref_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(const struct clk_init_data) {
- 			.name = "gcc_ufs_1_card_clkref_clk",
-+			.parent_data = &gcc_parent_data_tcxo,
-+			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -5432,6 +5434,8 @@ static struct clk_branch gcc_ufs_card_clkref_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(const struct clk_init_data) {
- 			.name = "gcc_ufs_card_clkref_clk",
-+			.parent_data = &gcc_parent_data_tcxo,
-+			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -5848,6 +5852,8 @@ static struct clk_branch gcc_ufs_ref_clkref_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(const struct clk_init_data) {
- 			.name = "gcc_ufs_ref_clkref_clk",
-+			.parent_data = &gcc_parent_data_tcxo,
-+			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
--- 
-2.38.0
+Best regards,
+Krzysztof
 
