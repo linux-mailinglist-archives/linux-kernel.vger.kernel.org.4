@@ -2,190 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E656291C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8F16291C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbiKOGP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 01:15:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
+        id S230243AbiKOGS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 01:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiKOGPu (ORCPT
+        with ESMTP id S229685AbiKOGSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 01:15:50 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398D71EC56
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:15:48 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so12918093pjl.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:15:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ui8airw69h4AUo9oSmUgv1gkgt+KqV79d7fg2QkBl5M=;
-        b=qjXR2fiv4kg9+omGG4vO16S+uSEZ7V3D5muYTI2e+cCxJKqZZpOed+6egG+gp1pCoX
-         pMjy/kZeJ51sujHaYgIFrywHsdJWPuUEjfll30uxR63zU44uRf+jA9fLF2bW9eq2DBXd
-         rXT6rpuM6BTdIrnC9l3j06dlpTwwr56h3qwrUbFTYaN461zWfipD9qMnGJFF0FlFoNgp
-         w8Qh2rcNICYacRmDfFHyoxT5ebblLdWKa6DTY5pjRq8jGiV6KU9E1CrVvEcQJoJYDDP7
-         IQS9IKNrsTM+6a2ohqm0uqAzVykK1ku3PBuu+o7yguxGhUDggkiWEe27PEGe0Xqs/D8n
-         7HlQ==
+        Tue, 15 Nov 2022 01:18:55 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D7115A0F
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:18:53 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id z139-20020a6bc991000000b006dac0d359edso6766019iof.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:18:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ui8airw69h4AUo9oSmUgv1gkgt+KqV79d7fg2QkBl5M=;
-        b=o3VIa+b7GgqB6Ur7eR1X89jSJFhB5KYQeAebAj9elhnqLFLO3XZ+njvJ25M5iux3Yo
-         fiVxVpT0kVRjw1n0QpQ1Yca+q0MjFYFl8WopJWJ22PDiUfwY63OyKaXBnoE0X/l8n6dy
-         iW3hGRwTDCKR3fiWbHivtulixICdQF/Eq53O511CqaPF7WRzJPybDCAx8i7eFAhGSQ1p
-         XlVvuQtBXoXamRWSDRMXnWuJF6ZQkdPesGUB3e3HMcm0EYjJdGHwQrFfYXJOAp7RxzHx
-         YrUBWsNcZFrydazmvbCpCr2K33uZ3LqoJsJXMEcF1ud0vXbbZtx4r/isGvayV6ES6ogx
-         UmGA==
-X-Gm-Message-State: ANoB5pmJpWTlHb5DVUUgzewtjE6A6pJM0MPtMsq+hXupyxqsoKjlfEUG
-        h7stzkSBWd7TJWUfZCfdr2A=
-X-Google-Smtp-Source: AA0mqf6ahWjvyXPj6nTnyXmRe3B+e5AQiDB1hRBcbBS3K1NZio1kDogPfJrNTwZ80MFleU/NGUZNrQ==
-X-Received: by 2002:a17:90a:5b08:b0:213:7030:b2ec with SMTP id o8-20020a17090a5b0800b002137030b2ecmr687621pji.95.1668492947682;
-        Mon, 14 Nov 2022 22:15:47 -0800 (PST)
-Received: from localhost.localdomain ([221.226.144.218])
-        by smtp.gmail.com with ESMTPSA id p9-20020a1709027ec900b0017f57787a4asm8736769plb.229.2022.11.14.22.15.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 22:15:47 -0800 (PST)
-From:   Song Shuai <suagrfillet@gmail.com>
-To:     guoren@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
-        mark.rutland@arm.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Song Shuai <suagrfillet@gmail.com>
-Subject: [PATCH 3/3] riscv/ftrace: cleanup ftrace_caller and ftrace_regs_caller
-Date:   Tue, 15 Nov 2022 14:15:25 +0800
-Message-Id: <20221115061525.112757-4-suagrfillet@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221115061525.112757-1-suagrfillet@gmail.com>
-References: <20221115061525.112757-1-suagrfillet@gmail.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dlLtc6w6HfHRQLFXd3GSj9ody/dyrqExLOMq4OTwn8Q=;
+        b=XfdhiMPrYtWqPnuhgTuAign/JrGL9AVgmwh7FbLbjWU/FfBa48GyZPN6DGB8Tfbto9
+         Sf4dITzQwIRDG35vzZdwUB8ixyd0su4foJKomGq+23L2CgvKykxU40wrpRugoIn5PTQA
+         z4dRVM0SKn30ij+J/iOc8xUpJT7tb65/pQmYwYU4jfkmwATz9wE9887TI3p3R+3A65mo
+         35PcZDXDDO4OGSSVkqPZ5q5+GVgGv9zBzVOXcU0AE1kW4rM9KWN9KkU5WWLliOY7XCmG
+         9smH4mQJz5VnLdhJgPAj2oWbYpJsVKbyn3KIJwBhmE7CHS8LTOu60kAh2CJDC2uKnk0s
+         N50Q==
+X-Gm-Message-State: ANoB5pnnHDb5W8UJm4c0TnGnXTVXuXDg1vOXwDFliP7yu8kx+H8cuc0O
+        SBoErlet8cuioi0c7nGOBkiJOYrsKunvS694ke7/lcRwxViY
+X-Google-Smtp-Source: AA0mqf7Mgc+43FsQw6SmHCygF9D6sWhl+yGLQjiUWmmI47ZN3STRi0XVvIwa7rTVsk+1HorAvt6fV5ERhFH9h3z4lfdy5tFMYupb
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6602:258b:b0:6c8:63c1:d8d3 with SMTP id
+ p11-20020a056602258b00b006c863c1d8d3mr7362620ioo.114.1668493132325; Mon, 14
+ Nov 2022 22:18:52 -0800 (PST)
+Date:   Mon, 14 Nov 2022 22:18:52 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000076699c05ed7c54a2@google.com>
+Subject: [syzbot] possible deadlock in btrfs_commit_transaction
+From:   syzbot <syzbot+52d708a0bca2efc4c9df@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ftrace_caller and ftrace_regs_caller save their regs with the respective
-option of SAVE_ALL, then call the tracing function, especially graph_ops's
-ftrace_graph_func. So the ftrace_graph_[regs]_call labels aren't needed
-anymore if FTRACE_WITH_REGS is defined.
+Hello,
 
-If FTRACE_WITH_REGS isn't defined, the !FTRACE_WITH_REGS version
-ftrace_caller remains with the ftrace_graph_call. So the enable/disable
-helpers are revised for serving only this ftrace_graph_call.
+syzbot found the following issue on:
 
-Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+HEAD commit:    e01d50cbd6ee Merge tag 'vfio-v6.1-rc6' of https://github.c..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=122bd401880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=47b0b2ecc119b39f
+dashboard link: https://syzkaller.appspot.com/bug?extid=52d708a0bca2efc4c9df
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=167dfbf5880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11558535880000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/b48e4d485e7e/disk-e01d50cb.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/dc9ba558e055/vmlinux-e01d50cb.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b766d9815123/bzImage-e01d50cb.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/ac6062c53b8d/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+52d708a0bca2efc4c9df@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0 Not tainted
+------------------------------------------------------
+syz-executor110/3653 is trying to acquire lock:
+ffff88807e4a24d8 (btrfs-root-00){.+.+}-{3:3}, at: __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
+ffff88807e4a24d8 (btrfs-root-00){.+.+}-{3:3}, at: btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
+ffff88807e4a24d8 (btrfs-root-00){.+.+}-{3:3}, at: btrfs_read_lock_root_node+0x2b4/0x400 fs/btrfs/locking.c:279
+
+but task is already holding lock:
+ffff888027234cc0 (&fs_info->reloc_mutex){+.+.}-{3:3}, at: btrfs_commit_transaction+0x13e8/0x3760 fs/btrfs/transaction.c:2316
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #4 (&fs_info->reloc_mutex){+.+.}-{3:3}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       btrfs_record_root_in_trans+0x153/0x180 fs/btrfs/transaction.c:484
+       start_transaction+0x3af/0x1180 fs/btrfs/transaction.c:721
+       btrfs_create_common+0x2c6/0x420 fs/btrfs/inode.c:6633
+       lookup_open fs/namei.c:3413 [inline]
+       open_last_lookups fs/namei.c:3481 [inline]
+       path_openat+0x12d0/0x2df0 fs/namei.c:3710
+       do_filp_open+0x264/0x4f0 fs/namei.c:3740
+       do_sys_openat2+0x124/0x4e0 fs/open.c:1310
+       do_sys_open fs/open.c:1326 [inline]
+       __do_sys_open fs/open.c:1334 [inline]
+       __se_sys_open fs/open.c:1330 [inline]
+       __x64_sys_open+0x221/0x270 fs/open.c:1330
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #3 (btrfs_trans_num_extwriters){++++}-{0:0}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       join_transaction+0x19f/0xe60 fs/btrfs/transaction.c:299
+       start_transaction+0x6fb/0x1180 fs/btrfs/transaction.c:658
+       btrfs_create_common+0x2c6/0x420 fs/btrfs/inode.c:6633
+       lookup_open fs/namei.c:3413 [inline]
+       open_last_lookups fs/namei.c:3481 [inline]
+       path_openat+0x12d0/0x2df0 fs/namei.c:3710
+       do_filp_open+0x264/0x4f0 fs/namei.c:3740
+       do_sys_openat2+0x124/0x4e0 fs/open.c:1310
+       do_sys_open fs/open.c:1326 [inline]
+       __do_sys_open fs/open.c:1334 [inline]
+       __se_sys_open fs/open.c:1330 [inline]
+       __x64_sys_open+0x221/0x270 fs/open.c:1330
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #2 (btrfs_trans_num_writers){++++}-{0:0}:
+       reacquire_held_locks+0x386/0x650 kernel/locking/lockdep.c:5193
+       __lock_release kernel/locking/lockdep.c:5382 [inline]
+       lock_release+0x2e2/0x820 kernel/locking/lockdep.c:5688
+       percpu_up_read include/linux/percpu-rwsem.h:99 [inline]
+       __sb_end_write include/linux/fs.h:1821 [inline]
+       sb_end_intwrite+0x1e/0x1a0 include/linux/fs.h:1877
+       __btrfs_end_transaction+0x388/0x790 fs/btrfs/transaction.c:995
+       btrfs_dirty_inode+0x177/0x1c0 fs/btrfs/inode.c:6099
+       inode_update_time fs/inode.c:1871 [inline]
+       touch_atime+0x315/0x630 fs/inode.c:1944
+       file_accessed include/linux/fs.h:2521 [inline]
+       btrfs_file_mmap+0xbb/0x120 fs/btrfs/file.c:2333
+       call_mmap include/linux/fs.h:2196 [inline]
+       mmap_region+0xfe6/0x1e20 mm/mmap.c:2625
+       do_mmap+0x8d9/0xf30 mm/mmap.c:1412
+       vm_mmap_pgoff+0x19e/0x2b0 mm/util.c:520
+       ksys_mmap_pgoff+0x48c/0x6d0 mm/mmap.c:1458
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #1 (&mm->mmap_lock#2){++++}-{3:3}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __might_fault+0xb2/0x110 mm/memory.c:5646
+       _copy_to_user+0x26/0x130 lib/usercopy.c:29
+       copy_to_user include/linux/uaccess.h:169 [inline]
+       btrfs_ioctl_get_subvol_rootref+0x8cf/0xa90 fs/btrfs/ioctl.c:3203
+       btrfs_ioctl+0xb7c/0xc10 fs/btrfs/ioctl.c:5556
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (btrfs-root-00){.+.+}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       down_read_nested+0x3c/0x50 kernel/locking/rwsem.c:1634
+       __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
+       btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
+       btrfs_read_lock_root_node+0x2b4/0x400 fs/btrfs/locking.c:279
+       btrfs_search_slot_get_root fs/btrfs/ctree.c:1665 [inline]
+       btrfs_search_slot+0x495/0x2fe0 fs/btrfs/ctree.c:1985
+       btrfs_update_root+0xf0/0xc60 fs/btrfs/root-tree.c:132
+       commit_fs_roots+0x4d3/0x710 fs/btrfs/transaction.c:1441
+       btrfs_commit_transaction+0x147f/0x3760 fs/btrfs/transaction.c:2353
+       iterate_supers+0x137/0x1f0 fs/super.c:724
+       ksys_sync+0xd5/0x1c0 fs/sync.c:104
+       __do_sys_sync+0xa/0x10 fs/sync.c:113
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+Chain exists of:
+  btrfs-root-00 --> btrfs_trans_num_extwriters --> &fs_info->reloc_mutex
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&fs_info->reloc_mutex);
+                               lock(btrfs_trans_num_extwriters);
+                               lock(&fs_info->reloc_mutex);
+  lock(btrfs-root-00);
+
+ *** DEADLOCK ***
+
+5 locks held by syz-executor110/3653:
+ #0: ffff8880264240e0 (&type->s_umount_key#42){++++}-{3:3}, at: iterate_supers+0xb0/0x1f0 fs/super.c:722
+ #1: ffff8880272363f0 (btrfs_trans_completed){.+.+}-{0:0}, at: btrfs_commit_transaction+0x130f/0x3760 fs/btrfs/transaction.c:2295
+ #2: ffff8880272363c8 (btrfs_trans_super_committed){.+.+}-{0:0}, at: btrfs_commit_transaction+0x133e/0x3760 fs/btrfs/transaction.c:2296
+ #3: ffff8880272363a0 (btrfs_trans_unblocked){.+.+}-{0:0}, at: btrfs_commit_transaction+0x136d/0x3760 fs/btrfs/transaction.c:2297
+ #4: ffff888027234cc0 (&fs_info->reloc_mutex){+.+.}-{3:3}, at: btrfs_commit_transaction+0x13e8/0x3760 fs/btrfs/transaction.c:2316
+
+stack backtrace:
+CPU: 1 PID: 3653 Comm: syz-executor110 Not tainted 6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+ down_read_nested+0x3c/0x50 kernel/locking/rwsem.c:1634
+ __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
+ btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
+ btrfs_read_lock_root_node+0x2b4/0x400 fs/btrfs/locking.c:279
+ btrfs_search_slot_get_root fs/btrfs/ctree.c:1665 [inline]
+ btrfs_search_slot+0x495/0x2fe0 fs/btrfs/ctree.c:1985
+ btrfs_update_root+0xf0/0xc60 fs/btrfs/root-tree.c:132
+ commit_fs_roots+0x4d3/0x710 fs/btrfs/transaction.c:1441
+ btrfs_commit_transaction+0x147f/0x3760 fs/btrfs/transaction.c:2353
+ iterate_supers+0x137/0x1f0 fs/super.c:724
+ ksys_sync+0xd5/0x1c0 fs/sync.c:104
+ __do_sys_sync+0xa/0x10 fs/sync.c:113
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fec18d5dc79
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd705bc978 EFLAGS: 00000246 ORIG_RAX: 00000000000000a2
+RAX: ffffffffffffffda RBX: 00007fec18d9ea80 RCX: 00007fec18d5dc79
+RDX: 00007fec18d140c3 RSI: 0000000000000003 RDI: 0000000000004c00
+RBP: 00007fec18d9e938 R08: 00005555556912c0 R09: 0000000000000140
+R10: 00007ffd705bc680 R11: 0000000000000246 R12: 00007fec18d9e8d0
+R13: 00007fec18d9b838 R14: 431bde82d7b634db R15: 00007ffd705bc990
+ </TASK>
+
+
 ---
- arch/riscv/kernel/ftrace.c     | 19 ++----------------
- arch/riscv/kernel/mcount-dyn.S | 35 +++++++++++++++-------------------
- 2 files changed, 17 insertions(+), 37 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
-index 2d7ce77d4f33..974732207c1f 100644
---- a/arch/riscv/kernel/ftrace.c
-+++ b/arch/riscv/kernel/ftrace.c
-@@ -211,30 +211,15 @@ void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
- #else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
- 
- extern void ftrace_graph_call(void);
--extern void ftrace_graph_regs_call(void);
- int ftrace_enable_ftrace_graph_caller(void)
- {
--	int ret;
--
--	ret = __ftrace_modify_call((unsigned long)&ftrace_graph_call,
--				    (unsigned long)&prepare_ftrace_return, true);
--	if (ret)
--		return ret;
--
--	return __ftrace_modify_call((unsigned long)&ftrace_graph_regs_call,
-+	return  __ftrace_modify_call((unsigned long)&ftrace_graph_call,
- 				    (unsigned long)&prepare_ftrace_return, true);
- }
- 
- int ftrace_disable_ftrace_graph_caller(void)
- {
--	int ret;
--
--	ret = __ftrace_modify_call((unsigned long)&ftrace_graph_call,
--				    (unsigned long)&prepare_ftrace_return, false);
--	if (ret)
--		return ret;
--
--	return __ftrace_modify_call((unsigned long)&ftrace_graph_regs_call,
-+	return  __ftrace_modify_call((unsigned long)&ftrace_graph_call,
- 				    (unsigned long)&prepare_ftrace_return, false);
- }
- #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
-diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
-index 2f0a280bd7a0..9e4097c6793d 100644
---- a/arch/riscv/kernel/mcount-dyn.S
-+++ b/arch/riscv/kernel/mcount-dyn.S
-@@ -215,6 +215,7 @@
- 	.endm
- #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
- 
-+#ifndef CONFIG_DYNAMIC_FTRACE_WITH_REGS
- ENTRY(ftrace_caller)
- 	SAVE_ABI
- 
-@@ -243,33 +244,27 @@ ftrace_graph_call:
- 	ret
- ENDPROC(ftrace_caller)
- 
--#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+#else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
- ENTRY(ftrace_regs_caller)
--	SAVE_ALL
--
--	addi	a0, ra, -FENTRY_RA_OFFSET
--	la	a1, function_trace_op
--	REG_L	a2, 0(a1)
--	REG_L	a1, PT_SIZE_ON_STACK(sp)
--	mv	a3, sp
-+	SAVE_ALL 1
- 
- ftrace_regs_call:
- 	.global ftrace_regs_call
- 	call	ftrace_stub
- 
--#ifdef CONFIG_FUNCTION_GRAPH_TRACER
--	addi	a0, sp, PT_RA
--	REG_L	a1, PT_EPC(sp)
--	addi	a1, a1, -FENTRY_RA_OFFSET
--#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
--	mv	a2, s0
--#endif
--ftrace_graph_regs_call:
--	.global ftrace_graph_regs_call
--	call	ftrace_stub
--#endif
- 
--	RESTORE_ALL
-+	RESTORE_ALL 1
- 	ret
- ENDPROC(ftrace_regs_caller)
-+
-+ENTRY(ftrace_caller)
-+	SAVE_ALL 0
-+
-+ftrace_call:
-+	.global ftrace_call
-+	call	ftrace_stub
-+
-+	RESTORE_ALL 0
-+	ret
-+ENDPROC(ftrace_caller)
- #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
--- 
-2.20.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
