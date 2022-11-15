@@ -2,113 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7498162A205
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 20:36:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 377D562A21E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 20:44:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbiKOTg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 14:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
+        id S231409AbiKOTod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 14:44:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiKOTg0 (ORCPT
+        with ESMTP id S229553AbiKOTo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 14:36:26 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB1B9FC8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 11:36:25 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id io19so14077868plb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 11:36:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o6BqLENm/h338dftUjsKFDSeM6kMWXWWN9CsVYvY8zQ=;
-        b=JDgSpXGV4HWxjfdCgMqs0/0hb8b7tisv0YWnctoiIaM+k69Si4+P5wueZ0R7PgBmZl
-         OSvHVLPe+ShsX3jqoQmM7TKtrr0SI7BsfcP9y4kp17OgxnHOJVTUXc2LFKa8Q4NzG3ZM
-         oU7ksJ1BIw/a911UBM/hbiNDWB6oZEKdx/E5zTNR9ep9Fq7HftfQTxX9j+psCJdq1nE9
-         RvlNoUvuB3fP1NVxB1e6upjb0jKAjtYxv36GhVHpbXs2F7WJBEisdcq0+hpaoTUAGUtY
-         VOe5UN5GMCkuPV9NgEYBxoagmWwBXksl8+jeXzg2bIYx0s6Kss7f37ojwmR+2opHVQsp
-         +0oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o6BqLENm/h338dftUjsKFDSeM6kMWXWWN9CsVYvY8zQ=;
-        b=HAyAcV4MiQyzdTDhombA3GzLWovqObXWC1Z0vDJ6OE8VJOxVGESHw0fPxcJeyi8Czq
-         D57ZETgUC+Onr9QLOxLPqxcoW925W1VTYH1eenO2XJnZ2JUAaR4COZZAhD2VJPJ+m6Jw
-         PIN4OUjVIVSFa5R8+lyS6B9iAJ5LrougOy6q904jcUszGewt8kWv/4+zNloZ/tnm4DAb
-         D7n7XQYHd71EtJZzVe2fuWUdniM5u0zRCVXefuXhIG2GO1dMl37CFIn2fv9gjpM8QzaH
-         0YPEcq8pZiaSgeIrkYOKEL6UKkRjj7JR9BgAgFOrWOTJzCGKRZZBInS8O4+yffvKMRl4
-         RxWg==
-X-Gm-Message-State: ANoB5plouW59BHdjidzUt897tr2hTF7wwJKht5N8zVl5ktPjf9XsaYGH
-        wO7vwbTyPiqAOQcm3nGLW22zRw==
-X-Google-Smtp-Source: AA0mqf4lXPkPd95BFyQnywfA1qweD1Cy57S5Pb5IROVHDHYHCQKixgBKLjXpo1rMjUVyyFNhjmjftQ==
-X-Received: by 2002:a17:902:ce83:b0:188:5698:5beb with SMTP id f3-20020a170902ce8300b0018856985bebmr5419753plg.150.1668540984403;
-        Tue, 15 Nov 2022 11:36:24 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 33-20020a631661000000b0046b1dabf9a8sm8241131pgw.70.2022.11.15.11.36.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 11:36:24 -0800 (PST)
-Date:   Tue, 15 Nov 2022 19:36:20 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: [PATCH v3 0/3] x86/crash: Fix double NMI shootdown bug
-Message-ID: <Y3PqNLW48pXaWRyA@google.com>
-References: <20221114233441.3895891-1-seanjc@google.com>
- <abf9feef-443f-fcfa-952c-0123e61b280d@igalia.com>
+        Tue, 15 Nov 2022 14:44:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F141EACA;
+        Tue, 15 Nov 2022 11:44:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5DCB2B818D1;
+        Tue, 15 Nov 2022 19:44:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE7AC433C1;
+        Tue, 15 Nov 2022 19:44:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668541466;
+        bh=CXQO7PQs3jB1+J2w7Xn3k88uLPiRcovKmkQBEc+7oqo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=htt1i+kQUHyo0NK7mVyne/WeGZdWYuR/jbXSrj1nEOn75TFtNo4c3XD2hn3EYua2k
+         alavkvsgt+RIlptkVU2p/JqyZx9F0em5gQ/Ioc7fniNoWYl6kNf+e/EEPu+wkF2lUz
+         /TfH1jk0f5in/osdbHIDabyWNEe5ofQBDtiP1892eGIT5y/N1OyaGBolcA7A6rD4gE
+         BYmx2Hy+sufW9CwWccr5Wtffacuu7DoKD5SeHQGCXxWa6LTXd9S3TeKydl0yaYmhrb
+         fA1chMBmv7YXXk6j/5W5BCpTOEXLkFQbHBqInXpjuXydJsgn97e/q62eaSvue7/0rL
+         he+kxR0/RJJ1Q==
+Date:   Tue, 15 Nov 2022 13:44:24 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     ira.weiny@intel.com
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Gregory Price <gregory.price@memverge.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH] PCI/doe: Fix work struct declaration
+Message-ID: <20221115194424.GA993906@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <abf9feef-443f-fcfa-952c-0123e61b280d@igalia.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221115011943.1051039-1-ira.weiny@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022, Guilherme G. Piccoli wrote:
-> On 14/11/2022 20:34, Sean Christopherson wrote:
-> > [...]
-> > v3:
-> >   - Re-collect Guilherme's Tested-by.
-> >   - Tweak comment in patch 1 to reference STGI instead of CLGI.
-> >   - Celebrate this series' half-birthday.
+Hi Ira,
+
+Can you fix the subject to follow capitalization convention (use "git
+log --oneline") and say something more specific than "fix struct"?
+
+On Mon, Nov 14, 2022 at 05:19:43PM -0800, ira.weiny@intel.com wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
 > 
-> Heheh
+> The callers of pci_doe_submit_task() allocate the pci_doe_task on the
+> stack.  This causes the work structure to be allocated on the stack
+> without pci_doe_submit_task() knowing.  Work item initialization needs
+> to be done with either INIT_WORK_ONSTACK() or INIT_WORK() depending on
+> how the work item is allocated.
 > 
-> Thanks a lot for persisting with this Sean, much appreciated! I'm
-> surprised on how long is taking to get these _fixes_ merged in the
-> kernel, hence your effort is very valuable =)
+> Jonathan suggested creating doe task allocation macros such as
+> DECLARE_CDAT_DOE_TASK_ONSTACK().[1]  The issue with this is the work
+> function is not known to the callers and must be initialized correctly.
+> 
+> A follow up suggestion was to have an internal 'pci_doe_work' item
+> allocated by pci_doe_submit_task().[2]  This requires an allocation which
+> could restrict the context where tasks are used.
+> 
+> Compromise with an intermediate step to initialize the task struct with
+> a new call pci_doe_init_task() which must be called prior to submit
+> task.
 
-Well, to be fair, the fixes aren't perfect.  Aside from the GIF thing, patch 2
-breaks CONFIG_SMP=n.
+I'm not really a fan of passing a parameter to say "this struct is on
+the stack" because that seems kind of error-prone and I don't know
+what the consequence of getting it wrong would be.  Sounds like it
+*could* be some memory corruption or reading garbage data that would
+be hard to debug.
 
-I think there's another bug lurking too.  The emergency reboot path doesn't
-VMCLEAR VMCSes.  AFAIK, Intel doesn't guarantee the VMCS caches are purged on
-INIT, so if the reboot doesn't actually RESET CPUs, the new kernel could observe
-memory corruption due to an old VMCS getting written back.
+Do we have cases today where pci_doe_submit_task() can't do the
+kzalloc() as in your patch at [3]?  If the current use cases allow a
+kzalloc(), why not do that now and defer this until it becomes an
+issue?
 
-Argh, and I missed sysvec_reboot() + smp_stop_nmi_callback() for SVM support.
+Bjorn
 
-And slightly longer term, this entire mess can be cleaned up.  Once KVM's handling
-of VMX/SVM initialization sucks less[*], all of the disabling logic can be moved
-into KVM callbacks and the kernel can stop speculatively trying to disable VMX/SVM.
+> [1] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m88a7f50dcce52f30c8bf5c3dcc06fa9843b54a2d
+> [2] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m63c636c5135f304480370924f4d03c00357be667
 
-I'll send a v4 to fix all of the suspected bugs, and then work on another series to
-clean up the callbacks, which will have dependencies on both the kvm_init() rework
-and this series.
+[3] https://lore.kernel.org/linux-cxl/Y2AnKB88ALYm9c5L@iweiny-desk3/
 
-[*] https://lore.kernel.org/all/20221102231911.3107438-1-seanjc@google.com
+> Cc: Bjorn Helgaas <helgaas@kernel.org>
+> Reported-by: Gregory Price <gregory.price@memverge.com>
+> Reported-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Suggested-by: Dan Williams <dan.j.williams@intel.com>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> ---
+>  drivers/cxl/core/pci.c  |  2 ++
+>  drivers/pci/doe.c       | 14 ++++++++++++--
+>  include/linux/pci-doe.h |  8 +++++---
+>  3 files changed, 19 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
+> index 9240df53ed87..a19c1fa0e2f4 100644
+> --- a/drivers/cxl/core/pci.c
+> +++ b/drivers/cxl/core/pci.c
+> @@ -525,6 +525,7 @@ static int cxl_cdat_get_length(struct device *dev,
+>  	DECLARE_CDAT_DOE_TASK(CDAT_DOE_REQ(0), t);
+>  	int rc;
+>  
+> +	pci_doe_init_task(cdat_doe, &t.task, true);
+>  	rc = pci_doe_submit_task(cdat_doe, &t.task);
+>  	if (rc < 0) {
+>  		dev_err(dev, "DOE submit failed: %d", rc);
+> @@ -554,6 +555,7 @@ static int cxl_cdat_read_table(struct device *dev,
+>  		u32 *entry;
+>  		int rc;
+>  
+> +		pci_doe_init_task(cdat_doe, &t.task, true);
+>  		rc = pci_doe_submit_task(cdat_doe, &t.task);
+>  		if (rc < 0) {
+>  			dev_err(dev, "DOE submit failed: %d", rc);
+> diff --git a/drivers/pci/doe.c b/drivers/pci/doe.c
+> index e402f05068a5..cabeae4ae955 100644
+> --- a/drivers/pci/doe.c
+> +++ b/drivers/pci/doe.c
+> @@ -319,6 +319,7 @@ static int pci_doe_discovery(struct pci_doe_mb *doe_mb, u8 *index, u16 *vid,
+>  	};
+>  	int rc;
+>  
+> +	pci_doe_init_task(doe_mb, &task, true);
+>  	rc = pci_doe_submit_task(doe_mb, &task);
+>  	if (rc < 0)
+>  		return rc;
+> @@ -495,6 +496,14 @@ bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type)
+>  }
+>  EXPORT_SYMBOL_GPL(pci_doe_supports_prot);
+>  
+> +void pci_doe_init_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task,
+> +		       bool onstack)
+> +{
+> +	task->doe_mb = doe_mb;
+> +	__INIT_WORK(&task->work, doe_statemachine_work, onstack);
+> +}
+> +EXPORT_SYMBOL_GPL(pci_doe_init_task);
+> +
+>  /**
+>   * pci_doe_submit_task() - Submit a task to be processed by the state machine
+>   *
+> @@ -517,6 +526,9 @@ int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
+>  	if (!pci_doe_supports_prot(doe_mb, task->prot.vid, task->prot.type))
+>  		return -EINVAL;
+>  
+> +	if (WARN_ON_ONCE(task->work.func != doe_statemachine_work))
+> +		return -EINVAL;
+> +
+>  	/*
+>  	 * DOE requests must be a whole number of DW and the response needs to
+>  	 * be big enough for at least 1 DW
+> @@ -528,8 +540,6 @@ int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
+>  	if (test_bit(PCI_DOE_FLAG_DEAD, &doe_mb->flags))
+>  		return -EIO;
+>  
+> -	task->doe_mb = doe_mb;
+> -	INIT_WORK(&task->work, doe_statemachine_work);
+>  	queue_work(doe_mb->work_queue, &task->work);
+>  	return 0;
+>  }
+> diff --git a/include/linux/pci-doe.h b/include/linux/pci-doe.h
+> index ed9b4df792b8..457fc0e53d64 100644
+> --- a/include/linux/pci-doe.h
+> +++ b/include/linux/pci-doe.h
+> @@ -31,8 +31,8 @@ struct pci_doe_mb;
+>   * @rv: Return value.  Length of received response or error (bytes)
+>   * @complete: Called when task is complete
+>   * @private: Private data for the consumer
+> - * @work: Used internally by the mailbox
+> - * @doe_mb: Used internally by the mailbox
+> + * @work: Used internally by the mailbox [see pci_doe_init_task()]
+> + * @doe_mb: Used internally by the mailbox [see pci_doe_init_task()]
+>   *
+>   * The payload sizes and rv are specified in bytes with the following
+>   * restrictions concerning the protocol.
+> @@ -53,7 +53,7 @@ struct pci_doe_task {
+>  	void (*complete)(struct pci_doe_task *task);
+>  	void *private;
+>  
+> -	/* No need for the user to initialize these fields */
+> +	/* Call pci_doe_init_task() for these */
+>  	struct work_struct work;
+>  	struct pci_doe_mb *doe_mb;
+>  };
+> @@ -72,6 +72,8 @@ struct pci_doe_task {
+>  
+>  struct pci_doe_mb *pcim_doe_create_mb(struct pci_dev *pdev, u16 cap_offset);
+>  bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type);
+> +void pci_doe_init_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task,
+> +		       bool onstack);
+>  int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task);
+>  
+>  #endif
+> 
+> base-commit: 30a0b95b1335e12efef89dd78518ed3e4a71a763
+> -- 
+> 2.37.2
+> 
