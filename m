@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E6F629376
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF6A8629381
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232870AbiKOInx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 03:43:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51352 "EHLO
+        id S232976AbiKOIoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 03:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236567AbiKOInh (ORCPT
+        with ESMTP id S232939AbiKOIoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 03:43:37 -0500
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E95AF205EA;
-        Tue, 15 Nov 2022 00:43:21 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VUsd9r0_1668501796;
-Received: from 30.221.131.168(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VUsd9r0_1668501796)
-          by smtp.aliyun-inc.com;
-          Tue, 15 Nov 2022 16:43:18 +0800
-Message-ID: <f3823c3e-d45e-40ce-1981-e726b4b6be62@linux.alibaba.com>
-Date:   Tue, 15 Nov 2022 16:43:15 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [External] : [RFC PATCH v2 1/6] perf vendor events arm64: Add
- topdown L1 metrics for neoverse-n2
-To:     John Garry <john.g.garry@oracle.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Tue, 15 Nov 2022 03:44:03 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C72F12091;
+        Tue, 15 Nov 2022 00:44:01 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NBKPS5bH9zqSQQ;
+        Tue, 15 Nov 2022 16:40:12 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 16:43:59 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 16:43:58 +0800
+Subject: Re: [PATCH v9] kallsyms: Add self-test facility
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1667214694-89839-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1668411720-3581-2-git-send-email-renyu.zj@linux.alibaba.com>
- <590ff032-d271-48ee-a4d8-141cc070c335@oracle.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <590ff032-d271-48ee-a4d8-141cc070c335@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+CC:     David Laight <David.Laight@ACULAB.COM>
+References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <f21eb27b-4c7f-5136-85ab-61a8ca762496@huawei.com>
+Date:   Tue, 15 Nov 2022 16:43:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <20221115083349.1662-1-thunder.leizhen@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,39 +69,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2022/11/14 下午8:59, John Garry 写道:
-> On 14/11/2022 07:41, Jing Zhang wrote:
->> The calculation formula of topdown L1 is from the document:
->> https://urldefense.com/v3/__https://documentation-service.arm.com/static/60250c7395978b529036da86?token=__;!!ACWV5N9M2RV99hQ!Ll-Jgvfs0LitTCU-hC6i6BKBVJfhke-pbQq2VoO-gmuSAcglQ3ZqMVMd2r0An_5a3ZDPYmn8zXuCrpUbehwnLHplVQ$  
+On 2022/11/15 16:33, Zhen Lei wrote:
+> Added test cases for basic functions and performance of functions
+> kallsyms_lookup_name(), kallsyms_on_each_symbol() and
+> kallsyms_on_each_match_symbol(). It also calculates the compression rate
+> of the kallsyms compression algorithm for the current symbol set.
 > 
-> So since this is a from "standard" document, did you consider putting these as an arch std event? I think arch std events would work for metrics, like they do for regular events.
+> The basic functions test begins by testing a set of symbols whose address
+> values are known. Then, traverse all symbol addresses and find the
+> corresponding symbol name based on the address. It's impossible to
+> determine whether these addresses are correct, but we can use the above
+> three functions along with the addresses to test each other. Due to the
+> traversal operation of kallsyms_on_each_symbol() is too slow, only 60
+> symbols can be tested in one second, so let it test on average once
+> every 128 symbols. The other two functions validate all symbols.
 > 
+> If the basic functions test is passed, print only performance test
+> results. If the test fails, print error information, but do not perform
+> subsequent performance tests.
+> 
+> Start self-test automatically after system startup if
+> CONFIG_KALLSYMS_SELFTEST=y.
+> 
+> Example of output content: (prefix 'kallsyms_selftest:' is omitted
+>  start
+>   ---------------------------------------------------------
+>  | nr_symbols | compressed size | original size | ratio(%) |
+>  |---------------------------------------------------------|
+>  |     107543 |       1357912   |      2407433  |  56.40   |
+>   ---------------------------------------------------------
+>  kallsyms_lookup_name() looked up 107543 symbols
+>  The time spent on each symbol is (ns): min=630, max=35295, avg=7353
+>  kallsyms_on_each_symbol() traverse all: 11782628 ns
+>  kallsyms_on_each_match_symbol() traverse all: 9261 ns
+>  finish
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  include/linux/kallsyms.h   |   1 +
+>  init/Kconfig               |  13 +
+>  kernel/Makefile            |   1 +
+>  kernel/kallsyms.c          |   2 +-
+>  kernel/kallsyms_selftest.c | 485 +++++++++++++++++++++++++++++++++++++
+>  kernel/kallsyms_selftest.h |  13 +
+>  6 files changed, 514 insertions(+), 1 deletion(-)
+>  create mode 100644 kernel/kallsyms_selftest.c
+>  create mode 100644 kernel/kallsyms_selftest.h
 
-I didn't find out how to put the metric as an arch std event, it would be best if you could provide me with an example in the upstream code,
-thank you very much.
+v8 --> v9:
+[v8] https://lkml.org/lkml/2022/11/2/225
 
->>
->> However, due to the wrong count of stall_slot and stall_slot_frontend
->> in neoverse-n2, the real stall_slot and real stall_slot_frontend need
->> to subtract cpu_cycles, so when calculating the topdownL1 metrics,
->> stall_slot and stall_slot_frontend are corrected.
-> 
-> Is there a reference to this? It would be indeed useful to pass a link to the n2 doc as these metrics are not part of the arm64 arm. At least I assume that they are not there.
-> 
+Adjust the prototype of some callback functions. Because 7/9 and 8/9
+in v8 are dropped.
 
-You are right, I need to add a doc link. ARM has released the n2 ERRATA document about the incorrect count of stall_slot and stall_slot_frontend,
-and provides a workaround to get the correct value.
-Link: https://developer.arm.com/documentation/SDEN1982442/1200/?lang=en
-
->>
->> Since neoverse-n2 does not yet support topdown L2, metricgroups such
->> as Cache, TLB, Branch, InstructionsMix, and PEutilization will be
->> added to further analysis of performance bottlenecks in the following
->> patches.
->>
-> 
-> 
-> Thanks,
-> John
-Best Regards,
-Jing
+-- 
+Regards,
+  Zhen Lei
