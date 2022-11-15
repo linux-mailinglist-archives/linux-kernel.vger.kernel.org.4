@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F171629B9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82403629BAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiKOOLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 09:11:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
+        id S232249AbiKOOLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 09:11:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiKOOLQ (ORCPT
+        with ESMTP id S229981AbiKOOLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 09:11:16 -0500
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167051DDD2;
-        Tue, 15 Nov 2022 06:11:14 -0800 (PST)
-Received: by mail-oi1-f182.google.com with SMTP id n186so14951129oih.7;
-        Tue, 15 Nov 2022 06:11:14 -0800 (PST)
+        Tue, 15 Nov 2022 09:11:20 -0500
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C549665B8;
+        Tue, 15 Nov 2022 06:11:19 -0800 (PST)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-13bd19c3b68so16323775fac.7;
+        Tue, 15 Nov 2022 06:11:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=vz7uYUJeJamm9PygKBSIU9xy9hxrNgiwqn+UopNSfxg=;
-        b=Pry+ejpCWfkzv9XVTtYEYzKD9AP9QHkyNafatfBySs6Y1xNr0UL3dn783pUT44jz3b
-         C6rSOsMYqhmlNiwwK6MGjyLLwAD+5ULJzZNWR2mojuJI2O951CcuerEXwNgD5kLH9ngb
-         PTEHpUelBwhCP8Ld/o1Y0Aodarn6I71g9i5nY6cff0Ve88vZ3btZ8ioaMrzbbsC8xi76
-         gHC26m9Sqp0bGMxgvOQVO5/vCnvCROexrOPAElH4DGFDtlrQH5FyeHrJ4Ww2x+AS6vXn
-         KHapDccyKg4eSR/027izP5RMtAo7lVE3FlCqLh+IKc8cRXOEkpxCq49jaSe+hQK5mlPV
-         XiIA==
-X-Gm-Message-State: ANoB5pnAfb34woXDcNfMkyhZZuS+jFdomCiMfpmQVC4K6U4zI+aohTUq
-        lbOaXjrfbvP5IwZbyk2+zg==
-X-Google-Smtp-Source: AA0mqf63x/dD+y9Qcgt5y0VP/sBf/XF/rZGM6hGioza2aUahrUk0uRvZcUGMWd8ljseCIlQn2gvXCA==
-X-Received: by 2002:a05:6808:655:b0:354:2c52:51eb with SMTP id z21-20020a056808065500b003542c5251ebmr383158oih.89.1668521473150;
-        Tue, 15 Nov 2022 06:11:13 -0800 (PST)
+        bh=c5N91/KhOasWYPhexzTdP8VafBqdlF1gEW+N65BWXt8=;
+        b=Az6WiAjntBLV9RU/3XUaxbAbZa5qoTldktEJaROJCQRrydR8trledzSZxK9CWepld2
+         BNcqC+kw5J9qFawXw85DJ2geVnVDkm1pd/YbFdTX+w5BWkfdU1+K4bjj15qNmIiDqBHt
+         qsuGJy0p9wlK9ZrxgKqoTqzG+kq9QbUer+xMlEBD/1uAibULTWLF0NH7//nFisLp4qwi
+         FBa323XaTk85ddWyBNDV+93pfz0MfHxEs6nnA08a3FS2i6LB2a9biCgRgIZp1t6IAbmc
+         ieQ0tCPUXtUpYKLqNGJuJz8BuqT6uTBg9dkcL6XYZhCopGS0UhvzYVcwVXBOCLjdHEey
+         XpyA==
+X-Gm-Message-State: ANoB5pl3Nc0us2GqExUizm0qzWgHS9aj275xUpkmx1SZqIswtDBPQB3a
+        5Qe9zbHQaer/Uj9KzZXiTA2dFEi9JQ==
+X-Google-Smtp-Source: AA0mqf6nYfASooBBF6z9v/cD7taFztOAnQfXgMwa2knN6vvGmeETBJghAeI6PSSUhC1CWCqvEuuVUg==
+X-Received: by 2002:a05:6870:781b:b0:132:68d8:703e with SMTP id hb27-20020a056870781b00b0013268d8703emr406826oab.174.1668521478957;
+        Tue, 15 Nov 2022 06:11:18 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id cg3-20020a056830630300b0066dae8cf9a0sm347740otb.50.2022.11.15.06.11.12
+        by smtp.gmail.com with ESMTPSA id w13-20020a9d450d000000b00661948e6119sm5504101ote.47.2022.11.15.06.11.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 06:11:12 -0800 (PST)
-Received: (nullmailer pid 908575 invoked by uid 1000);
+        Tue, 15 Nov 2022 06:11:18 -0800 (PST)
+Received: (nullmailer pid 908578 invoked by uid 1000);
         Tue, 15 Nov 2022 14:11:14 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Bernhard =?utf-8?q?Rosenkr=C3=A4nzer?= <bero@baylibre.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221115025421.59847-12-bero@baylibre.com>
-References: <20221107211001.257393-1-bero@baylibre.com>
- <20221115025421.59847-1-bero@baylibre.com>
- <20221115025421.59847-12-bero@baylibre.com>
-Message-Id: <166851961560.867545.11435946011050466616.robh@kernel.org>
-Subject: Re: [PATCH v2 11/15] dt-bindings: pinctrl: add bindings for Mediatek
- MT8365 SoC
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mark Brown <broonie@kernel.org>, Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org
+In-Reply-To: <20221005-mdm9615-pinctrl-yaml-v4-1-463523919c19@linaro.org>
+References: <20221005-mdm9615-pinctrl-yaml-v4-0-463523919c19@linaro.org>
+ <20221005-mdm9615-pinctrl-yaml-v4-1-463523919c19@linaro.org>
+Message-Id: <166851961643.867594.12105329661363857830.robh@kernel.org>
+Subject: Re: [PATCH v4 1/2] dt-bindings: regulators: convert non-smd RPM
+ Regulators bindings to dt-schema
 Date:   Tue, 15 Nov 2022 08:11:14 -0600
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -68,14 +72,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 15 Nov 2022 03:54:17 +0100, Bernhard Rosenkränzer wrote:
-> Add devicetree bindings for Mediatek MT8365 pinctrl driver.
+On Tue, 15 Nov 2022 11:12:35 +0100, Neil Armstrong wrote:
+> Convert the non-SMD Regulators bindings to dt-schema, the old text based
+> bindings will be deleted later since the RPM bindings are not yet converted.
 > 
-> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > ---
->  .../pinctrl/mediatek,mt8365-pinctrl.yaml      | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+>  .../bindings/regulator/qcom,rpm-regulator.yaml     | 128 +++++++++++++++++++++
+>  1 file changed, 128 insertions(+)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -84,22 +89,11 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml: properties:reg: 'anyOf' conditional failed, one must be fixed:
-	'minItems' is not one of ['maxItems', 'description', 'deprecated']
-		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
-	'minItems' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref', 'oneOf']
-	'maxItems' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref', 'oneOf']
-	1 is less than the minimum of 2
-		hint: Arrays must be described with a combination of minItems/maxItems/items
-	hint: cell array properties must define how many entries and what the entries are when there is more than one entry.
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-Error: Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.example.dts:34.29-30 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1492: dt_binding_check] Error 2
+./Documentation/devicetree/bindings/regulator/qcom,rpm-regulator.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/regulator/qcom,rpm-regulator.yaml#
 
 doc reference errors (make refcheckdocs):
+Documentation/devicetree/bindings/regulator/qcom,rpm-regulator.yaml: Documentation/devicetree/bindings/soc/qcom/qcom,ipc-rpm.yaml
 
 See https://patchwork.ozlabs.org/patch/
 
