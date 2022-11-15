@@ -2,165 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD45629C39
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEEF629C3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:39:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiKOOiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 09:38:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
+        id S230152AbiKOOjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 09:39:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiKOOir (ORCPT
+        with ESMTP id S229990AbiKOOjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 09:38:47 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4241D0E0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:38:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1668523126; x=1700059126;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5v0DP53feCYo7PgTo+QK93dELwfjr9wlhPwVR8nosZo=;
-  b=lfnkN5/xXXn4EKW+XZtxe04anil66saTEhJ8T4FNRtH9gHDpme7Dq0h1
-   ameK2nEFAA7RUm3VRdBGi/2yVZYFbTXNzltJryMSsezuVzajvsoowvZ8f
-   uiEu7jUKlwAFQMbmoULlN1fpUC691TjXJumlskVNYz8fxPuiSQWccSP6P
-   xBXZ5Od2rjT+OxWHLXIKeIyACCwVpkj4iEcer0w9LD7bzHJAM2PhhKHvI
-   qpdovXM4BmBCkI6m2kMBS0NA7j39rhCupzrH50cJDdGWZAOhYx9rvYJEI
-   bLfRjFWKPEhOsBzGQxTR2oKR9D6Az/drY0VfWOb7XKFL3Sf0+9RAimMx2
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="189059446"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Nov 2022 07:38:46 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 15 Nov 2022 07:38:45 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Tue, 15 Nov 2022 07:38:44 -0700
-Date:   Tue, 15 Nov 2022 14:38:27 +0000
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Deepak Gupta <debug@rivosinc.com>
-CC:     <aou@eecs.berkeley.edu>, <jan.kiszka@siemens.com>,
-        <kbingham@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <palmer@dabbelt.com>, <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v3] scripts/gdb: add lx_current support for riscv
-Message-ID: <Y3OkY6myfea00BaK@wendy>
-References: <20221115012917.1781185-1-debug@rivosinc.com>
- <20221115084923.1822572-1-debug@rivosinc.com>
+        Tue, 15 Nov 2022 09:39:09 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BE81D66B
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:39:08 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id a6so10597722vsc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:39:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=82y7Gjoh2vK/1hHEVfyS2/5SQLrPaHEAMPh1kMxO3wM=;
+        b=mqJ1+QmOHWvrC0IxHuIXatvVLI93FpamLigCyK+aAt/S5wbZNxxCTLQxMfPWSWLdn9
+         BajYVIAO4kGz8zNkLDVJEL+oJ0K7+Pp2QaRmcENFaHXwj3/c3GToSV9BpHwxrZKSDg2K
+         BNalKlNy2yFpj5iIFDc/ADGChLxrVkl8YSxaAJYS9UysM0GFWaKibFADjnWmTY5qbpYV
+         /8/b084DDBSoBsHF8nh73cRR9ThrtAF8A9Q2uIKa09uiYd7yL3ov9lrgsBX8Kejq++fo
+         kRFGUaTz+tyXfotujUk3HK4DBZvokrgjzfO/kB7KMnRyqtqEjn3sqA59IErx+xqnjh7h
+         sugA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=82y7Gjoh2vK/1hHEVfyS2/5SQLrPaHEAMPh1kMxO3wM=;
+        b=d7z+i02Fnrf8bvaw+lma+kJJ1lUc7nsH9a5/Hvr1jU/utFd7wjLH38REtbKXB5fjMJ
+         g0AJJy9WjRVUTpQF4oXZTlf7yAI65JXajVn9/wUSlhLFIkFigH2fNWytcBVGFWCuV1Xo
+         TFDjF0o4dsaMfArA1cjT9hBr1ps1rORwcRN/Cta4PEL6HMbV6lRc8Yx6kycQkthSxnqR
+         sMWPT8gzMoDurtUmEUn2pAkIWyb1nQsTxrzZbP1UQS3X6fgLZe5r6OIqouLKBf0lZL/j
+         5b6bdGXbw616zKE1SNScCgIe7Lqc4EzIdAT5Y0LsLewP1isaFFv0fmNeFoK1JIrp/Uok
+         S9GA==
+X-Gm-Message-State: ANoB5pmZs/ToIOOR1JYU+jyjsokYpvCN8WKGOpMz3+iVpAHqg7adHO9O
+        qsezvOsgFfGodr2xpguCgER3ZIH4hPXu5F/Bp9LeAg==
+X-Google-Smtp-Source: AA0mqf5wQmk1dnhyYOMbsRbwTOYYUMqp2dVn2qBKxjyAGgyzV3SUejNPUFC1JBbWy2ZAwOhdWipJwmoKEn1mkMtANKI=
+X-Received: by 2002:a05:6102:488:b0:3ac:38c7:1bdd with SMTP id
+ n8-20020a056102048800b003ac38c71bddmr8814757vsa.9.1668523148092; Tue, 15 Nov
+ 2022 06:39:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221115084923.1822572-1-debug@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221111113732.461881-1-thierry.reding@gmail.com>
+In-Reply-To: <20221111113732.461881-1-thierry.reding@gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 15 Nov 2022 15:38:57 +0100
+Message-ID: <CAMRc=MfTCb5G0OHxnW=wwpP2u=VbhS_-dH=N7vdY8pq6U030jg@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: of: Use correct fwnode for DT-probed chips
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Deepak,
-
-On Tue, Nov 15, 2022 at 12:49:23AM -0800, Deepak Gupta wrote:
-> csr_sscratch CSR holds current task_struct address when hart is in
-> user space. Trap handler on entry spills csr_sscratch into "tp" (x2)
-> register and zeroes out csr_sscratch CSR. Trap handler on exit reloads
-> "tp" with expected user mode value and place current task_struct address
-> again in csr_scratch CSR.
-> 
-> This patch assumes "tp" is pointing to task_struct. If value in
-> csr_scratch is numerically greater than "tp" then it assumes csr_scratch
-
-nit: s/scratch/sscratch/ ?
-
-> is correct address of current task_struct. This logic holds when
->    - hart is in user space, "tp" will be less than csr_scratch.
->    - hart is in kernel space but not in trap handler, "tp" will be more
->      than csr_scratch (csr_scratch being equal to 0).
->    - hart is executing trap handler
->        - "tp" is still pointing to user mode but csr_scratch contains
->           ptr to task_struct. Thus numerically higher.
->        - "tp" is  pointing to task_struct but csr_scratch now contains
->           either 0 or numerically smaller value (transiently holds
->           user mode tp)
-> 
-> Patch also adds new cached type "ulong" in scripts/gdb/linux/utils.py
-> 
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-
-I noticed when looking into patchwork complaining about checkpatch
-errors in v2, that b4 had actually downloaded v3 but I could not see
-this patch on the RISC-V list. I don't see a changelog anywhere here
-from v2 either, nor did you pick up Drew's Reviewed-by.
-
-What's the story there?
-
-One really minor thing below. Should be able to fix it up trivially up
-& submit a v4, CCing the linux-riscv list.
-
+On Fri, Nov 11, 2022 at 12:37 PM Thierry Reding
+<thierry.reding@gmail.com> wrote:
+>
+> From: Thierry Reding <treding@nvidia.com>
+>
+> The OF node store in chip->fwnode is used to explicitly override the FW
+> node for a GPIO chip. For chips that use the default FW node (i.e. that
+> of their parent device), this will be NULL and cause the chip not to be
+> fully registered.
+>
+> Instead, use the GPIO device's FW node, which is set to either the node
+> of the parent device or the explicit override in chip->fwnode.
+>
+> Fixes: 8afe82550240 ("gpiolib: of: Prepare of_gpiochip_add() / of_gpiochip_remove() for fwnode")
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
 > ---
->  scripts/gdb/linux/cpus.py  | 15 +++++++++++++++
->  scripts/gdb/linux/utils.py |  5 +++++
->  2 files changed, 20 insertions(+)
-> 
-> diff --git a/scripts/gdb/linux/cpus.py b/scripts/gdb/linux/cpus.py
-> index 15fc4626d236..ca5215a660c7 100644
-> --- a/scripts/gdb/linux/cpus.py
-> +++ b/scripts/gdb/linux/cpus.py
-> @@ -173,6 +173,21 @@ def get_current_task(cpu):
->           else:
->               raise gdb.GdbError("Sorry, obtaining the current task is not allowed "
->                                  "while running in userspace(EL0)")
-> +    elif utils.is_target_arch("riscv"):
-> +         current_tp = gdb.parse_and_eval("$tp")
-> +         scratch_reg = gdb.parse_and_eval("$sscratch")
-> +
-> +         # by default tp points to current task
-> +         current_task = current_tp.cast(task_ptr_type)
-> +
-> +         # scratch register is set 0 in trap handler after entering kernel.
-> +         # When hart is in user mode, scratch register is pointing to task_struct.
-> +         # and tp is used by user mode. So when scratch register holds larger value
-> +         # (negative address as ulong is larger value) than tp, then use scratch register.
-> +         if (scratch_reg.cast(utils.get_ulong_type()) >  current_tp.cast(utils.get_ulong_type())):
-                                                          ^^
-extra space here?
+>  drivers/gpio/gpiolib-of.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+> index 4be3c21aa718..55c3712592db 100644
+> --- a/drivers/gpio/gpiolib-of.c
+> +++ b/drivers/gpio/gpiolib-of.c
+> @@ -1067,7 +1067,7 @@ int of_gpiochip_add(struct gpio_chip *chip)
+>         struct device_node *np;
+>         int ret;
+>
+> -       np = to_of_node(chip->fwnode);
+> +       np = to_of_node(dev_fwnode(&chip->gpiodev->dev));
+>         if (!np)
+>                 return 0;
+>
+> --
+> 2.38.1
+>
 
+Applied, thanks!
 
-> +             current_task = scratch_reg.cast(task_ptr_type)
-> +
-> +         return current_task.dereference()
->      else:
->          raise gdb.GdbError("Sorry, obtaining the current task is not yet "
->                             "supported with this arch")
-> diff --git a/scripts/gdb/linux/utils.py b/scripts/gdb/linux/utils.py
-> index 1553f68716cc..ddaf3089170d 100644
-> --- a/scripts/gdb/linux/utils.py
-> +++ b/scripts/gdb/linux/utils.py
-> @@ -35,12 +35,17 @@ class CachedType:
->  
->  
->  long_type = CachedType("long")
-> +ulong_type = CachedType("ulong")
->  atomic_long_type = CachedType("atomic_long_t")
->  
->  def get_long_type():
->      global long_type
->      return long_type.get_type()
->  
-> +def get_ulong_type():
-> +    global ulong_type
-> +    return ulong_type.get_type()
-> +
->  def offset_of(typeobj, field):
->      element = gdb.Value(0).cast(typeobj)
->      return int(str(element[field].address).split()[0], 16)
-> -- 
-> 2.25.1
+Bart
