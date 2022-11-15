@@ -2,209 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B43629212
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DE8629217
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:02:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232466AbiKOG6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 01:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
+        id S232318AbiKOHCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 02:02:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiKOG55 (ORCPT
+        with ESMTP id S229522AbiKOHCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 01:57:57 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB901F9FF
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:57:53 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id i131so15987363ybc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:57:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oepuDSJrpTbqZQNEqu7I0fwnW4/YSZGuESogruzpg5Q=;
-        b=knlwIzTGgEIrAPrftSIdgCxWPKpheE7M67Oqqkz6ZE21fUXpjVvattjHeNmBRLuLdQ
-         Y2HAJ22PuC1c3iD75u9KOPgAgA4VNRuptkORhQd33z/q9jOdRVfWnUE1FvNrvpKL+6TD
-         YydusemqY9t+sXBHjoDfiVQj0gqdLjST2T3zTKvBy95TrLD8SqfkttM7io6pEktqPwL6
-         JJadLBFKls3NEVeUGghXzH4BRbqeo6N/Ciz5SbjjPY/OxZc6Tiip6j26ouXReiWsfHWd
-         6L3Uf63ghWYgGcMJ9cxrEUs5mg5QTb0Crcrbp/woYi0FGRNIdRJ5BsSiaaD2obQAIJ4r
-         NTeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oepuDSJrpTbqZQNEqu7I0fwnW4/YSZGuESogruzpg5Q=;
-        b=yVH5YyoVj3AxQMrc6zZfMFzvfhQcLxgUOCg0wJ9xFnKGfgoocUaWF5Pbtnpppw2dhJ
-         8i9uE4J6qs4It5f6rsQ+7DQUWnGjPQi8mcqNBAfabsIFSO9HA4mU+aoqvAs3L24vm60Q
-         zOwYGjuGbkd57JuLosLgaaxJPZcdRXsXhCVSqsnLeM97VuQUGg4vgnDMjwDoxgYxBI1H
-         XL0O2yDKelssW8c9Zwlid7vesuShoqfAhXKQwePZlrnNcnL3YdQtr/ofEg6Ku9VByYxu
-         Sbm9uuIQ9o8Z98AfO7w2ErWOEcoDi/76R4PyM1xCNC8wtZqsZ0XG79IE9r9Vo1IQSLZy
-         hVHg==
-X-Gm-Message-State: ANoB5pkNkYBW5JEaQaBYZVQTjUvPcViYCoLTQq8tvYyyQdzDuJy7JYmr
-        RUi7MJX3FIuevtFdNSskKEoaNoSMWNzl8RXQCzjrjw==
-X-Google-Smtp-Source: AA0mqf4T8wvoKdrJyp/6DKFZA+QsOSY/8MqcrusDB7x/SJqNicHk+0wwCM3Zw3bKpIMx5V+xgKLeiu5wh1tPRRV9vL0=
-X-Received: by 2002:a25:b119:0:b0:6cc:60bf:a33f with SMTP id
- g25-20020a25b119000000b006cc60bfa33fmr16263274ybj.534.1668495472358; Mon, 14
- Nov 2022 22:57:52 -0800 (PST)
+        Tue, 15 Nov 2022 02:02:04 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4C87672
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:02:04 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id D1D0B320095A;
+        Tue, 15 Nov 2022 02:02:02 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 15 Nov 2022 02:02:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1668495722; x=
+        1668582122; bh=qSXY6b1OFdbBMx6N9E7tR9znaN9W9UBLf9DFV6qUxEw=; b=p
+        DeRwsTYNYh3kzMcLmSxrYk2fEF6GoeWpdfg4HF8JTysNkCvJXCcf4FM/jOFoVl6s
+        RBsY52MIQ9JkOe0JaBe9PxTm7g2k2RmI/3n0kw3yHvEPOAPphFxIrIi4xCJDORu3
+        ACMa6iS/ViBf+Gwba15YmII2bDvAhkt0iMbo3Q9VZNiiu7wnjmzmSQrtDI4SBnrs
+        MVJokccUF5JtMbQ7kRFvzOUKqhFx+3UM2DtigFuXSSD0Y65Tow4FnIXbmMIgTbVV
+        e9Ygr05HbHiUHGUktroyTkq4csop0GxdRwFKYDxbo0JduEcsUd6fp8l4xFxTmpPa
+        rRH8MmqVC/ZqKqm5Sdvjw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1668495722; x=
+        1668582122; bh=qSXY6b1OFdbBMx6N9E7tR9znaN9W9UBLf9DFV6qUxEw=; b=v
+        4xtmZnS1TwlqYHpQLXo5W70khni1rCadRxMZzxiRFoe/8YTdI2pE/geiw32uPEgL
+        9bH+/bBay0ZqhUryWHO+1P3iqRvu8k+m2DF6mtQvWUAkHv5b5ns5NavvxuoMH2Ba
+        i+XKnbYTpqBdfIXMDQvKwRk5SRQJuCDKyKRNwhDcgtEg2bPcP1/Kr4MZnBj6qZGv
+        MFtt/BtTyE0GrZ9pp25VK+wGCyGDHbbGd4C0S0naJzOatIeV7gk31pFxwde1WEjQ
+        f0xcnlyQfZa7pzrpOssJI0shDuBtipB5ZVbJ2UMo5aYnAmu5+/e8C0JoJ/TKvcwV
+        Vt/gE4mxyFOS/+dx3rrQw==
+X-ME-Sender: <xms:ajlzY6GfwWNCReozB_AifeEXPXIYqv5BTxpJhF8cpYmoDnUDEGB04Q>
+    <xme:ajlzY7W5PX2iUpNxmSIo-F1gBf4qX___8KEKrpJGUGGBTb3ZsXY3ce5LTRY_YSGDk
+    tx4dk-F1o-oxr4iww>
+X-ME-Received: <xmr:ajlzY0IIXeiNmKBr44Sy-RvXHay6QffhW_u5N0Z3-Mm7036Ee-Ej1-ZWTj_NsFzHKiR5ptzonYRmZXzjJ9HPGP7T_fWujfY0wWwFN84BxiVH8WNAZIRQeDtMow>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeefgddutdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeekjeelleefiedthfdtgfekgeehudefudeugeffvdfhudekleel
+    fedtteejhedutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:ajlzY0E8w6LRgYibTM-hKn54m7aZFTfUOR42OqUNsmKu-KYxWvF2ww>
+    <xmx:ajlzYwXSctvlGDSfDau6s7_fwGfA32JUB_-BYHNWSqOrfzDjt0nwzw>
+    <xmx:ajlzY3OGFgzi3JIuhjaDBLa_rhoP39dDbShnHcVvWPoTpLU3P6Yz8A>
+    <xmx:ajlzY_Mbd4mG3S2tw4cfoxMvQfmTQ6X2ieB0EEHG5y2pUeO-XLQphA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 15 Nov 2022 02:02:01 -0500 (EST)
+Message-ID: <ac450a01-5771-be91-fda4-9b3084c9bff3@sholland.org>
+Date:   Tue, 15 Nov 2022 01:02:00 -0600
 MIME-Version: 1.0
-References: <20221114124458.806324402@linuxfoundation.org>
-In-Reply-To: <20221114124458.806324402@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 15 Nov 2022 12:27:41 +0530
-Message-ID: <CA+G9fYvA+hGXNmOVMYwN=GsQ6yjkNW3bOUHuqzxWi+JUUFFVCA@mail.gmail.com>
-Subject: Re: [PATCH 6.0 000/190] 6.0.9-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 1/1] regulator: axp20x: Add support for AXP1530 variant
+Content-Language: en-US
+To:     Martin Botka <martin.botka@somainline.org>
+Cc:     martin.botka1@gmail.com, ~postmarketos/upstreaming@lists.sr.ht,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jami Kettunen <jamipkettunen@somainline.org>,
+        Paul Bouchara <paul.bouchara@somainline.org>,
+        Yenda <jtrmal@gmail.com>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-kernel@vger.kernel.org
+References: <20221114162459.1802174-1-martin.botka@somainline.org>
+ <202211150623.9oWDx9Ec-lkp@intel.com> <X11DLR.YBCMARW947UJ2@somainline.org>
+From:   Samuel Holland <samuel@sholland.org>
+In-Reply-To: <X11DLR.YBCMARW947UJ2@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 at 18:30, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.0.9 release.
-> There are 190 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 16 Nov 2022 12:44:21 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.9-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi Martin,
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+On 11/14/22 16:56, Martin Botka wrote:
+> Patch depends on the MFD driver which introduces also the regulator
+> definitions.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Then you need to either send them together as a series, or wait until
+the MFD portion lands in linux-next.
 
-## Build
-* kernel: 6.0.9-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.0.y
-* git commit: f8896c3ebbcfcc053d9c27413bea3af94c01fd71
-* git describe: v6.0.8-191-gf8896c3ebbcf
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.8-191-gf8896c3ebbcf
+Regards,
+Samuel
 
-## Test Regressions (compared to v6.0.8)
-
-## Metric Regressions (compared to v6.0.8)
-
-## Test Fixes (compared to v6.0.8)
-
-## Metric Fixes (compared to v6.0.8)
-
-## Test result summary
-total: 70795, pass: 60088, fail: 2510, skip: 7975, xfail: 222
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 289 total, 283 passed, 6 failed
-* arm64: 80 total, 80 passed, 0 failed
-* i386: 71 total, 69 passed, 2 failed
-* mips: 54 total, 52 passed, 2 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 68 total, 60 passed, 8 failed
-* riscv: 24 total, 24 passed, 0 failed
-* s390: 24 total, 24 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 76 total, 76 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-kvm
-* kselftest-lib
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-openat2
-* kselftest-seccomp
-* kselftest-timens
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-
-* ltp-at
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-etlb
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-math++
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
