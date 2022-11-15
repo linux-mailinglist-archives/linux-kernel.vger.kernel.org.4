@@ -2,88 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B4662AEA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA9A62AEB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238500AbiKOWwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 17:52:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48660 "EHLO
+        id S230457AbiKOWzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 17:55:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238652AbiKOWwK (ORCPT
+        with ESMTP id S229797AbiKOWz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:52:10 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2860DF0C;
-        Tue, 15 Nov 2022 14:52:10 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id x21so10613199qkj.0;
-        Tue, 15 Nov 2022 14:52:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e6XCf3Cid6EuKMxTuNB1TmASKOrp/L4jyp5rSOVLLaw=;
-        b=ePIog6TmUeNSrll84Y+07x8DeQKymTZ2GvBeYq0WhafOOeC/SaIEz/J0xQy2KR4GES
-         c6M3aRdlAEeqmRiD5G3px7OJN7PvQjdxSqDY81spE+YnFoG98uXxxtJqNAl5A9e/rweS
-         RGIGD8iEFBc2REN4BjeIC/oOsj5WRieqgNazw5vd7wm/gDWC7CzVFzr3M59vx5EtiwfU
-         ncbfTG/6OWnh1TJ55a27Q7diVB6VKnMK732bBRlbRrUb+eEPbh8nnVlUxsjLasPflU9m
-         T7BWUP/UHu8GvrLHKKoOH5kN93Dm7DDzuCKTvve1z+kgqIJ4jGA2GCZBrFBj5lz9pzHK
-         /oPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e6XCf3Cid6EuKMxTuNB1TmASKOrp/L4jyp5rSOVLLaw=;
-        b=EvMydKvqr168IFEZlad4Qp81bCpekznMgvdDkAXrf1U8fGaqiYwsLUylkMzo8IUQTR
-         QMW92Au2OCvSqXGWknW1quooR0MHfrZAkHnHz2NAPYo6pkOu9NR0r3ptcQslwNHxmQzV
-         OJyhmXhrwva2p83tbe+RtGvdPo3g9rYX+fmVQ6haTmgp1tICGNmqOD01Wpui/qWh19LG
-         k+w+mrr5kMBRw/tVPPumUuUMVr9rF9upmCoP9Pe8Om/nfsWn2f1u08o5h6JxWuSAbBbr
-         72ZyxmfffwNSY8dO3qnmzWegdPO+bc7DWtp33GViGvGvkQXdS64BoJ1+gnXgysVZiwEH
-         TT4A==
-X-Gm-Message-State: ANoB5pnNgHphnxF5r7ZZMI57OmCO5kwYo244tTU3UcNS7kw13JlGdaST
-        qaGlmrOfhgvoTNXWNcb00qSuqneb1FCPjA==
-X-Google-Smtp-Source: AA0mqf5v2+sc+VGzI9tzx7I0l4UOokWuJYNlNBXBHCx7ZMl33ikze2zmI5C9d6NSYKmSrwmW83g4fg==
-X-Received: by 2002:a37:40b:0:b0:6fa:28d5:4b36 with SMTP id 11-20020a37040b000000b006fa28d54b36mr17215139qke.346.1668552729219;
-        Tue, 15 Nov 2022 14:52:09 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id d16-20020a05622a15d000b003a540320070sm7968924qty.6.2022.11.15.14.52.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 14:52:08 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Tue, 15 Nov 2022 17:55:28 -0500
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4652B274;
+        Tue, 15 Nov 2022 14:55:25 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1668552924;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=J7Rn9AcjldUeqhlwEDEwZXF5DiyqtkiLk+SNwNoYnn8=;
+        b=i3gwY0qOHEiKLr/7Eozm9b/dwBtR5PMSaV0FLOuJDH80ckVgOWUSKYpqrg70BCkvDdaDeb
+        7Ttaim5m5itJ0tI9qE041GkR4+9U3LwrB3pamGnpIfSSVFKmmP1dUDNeLLdwiCHHtqKg2r
+        gcx3XBAFZb7kCeJFkwkvI05chdIotwA=
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: broadcom: trim addresses to 8 digits
-Date:   Tue, 15 Nov 2022 14:52:06 -0800
-Message-Id: <20221115225206.4123398-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221115105047.95281-1-krzysztof.kozlowski@linaro.org>
-References: <20221115105047.95281-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2] KVM: arm64: Don't acquire RCU read lock for exclusive table walks
+Date:   Tue, 15 Nov 2022 22:55:02 +0000
+Message-Id: <20221115225502.2240227-1-oliver.upton@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 11:50:47 +0100, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> Hex numbers in addresses and sizes should be rather eight digits, not
-> nine.  Drop leading zeros.  No functional change (same DTB).
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+Marek reported a BUG resulting from the recent parallel faults changes,
+as the hyp stage-1 map walker attempted to allocate table memory while
+holding the RCU read lock:
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/next, thanks!
---
-Florian
+  BUG: sleeping function called from invalid context at
+  include/linux/sched/mm.h:274
+  in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper/0
+  preempt_count: 0, expected: 0
+  RCU nest depth: 1, expected: 0
+  2 locks held by swapper/0/1:
+    #0: ffff80000a8a44d0 (kvm_hyp_pgd_mutex){+.+.}-{3:3}, at:
+  __create_hyp_mappings+0x80/0xc4
+    #1: ffff80000a927720 (rcu_read_lock){....}-{1:2}, at:
+  kvm_pgtable_walk+0x0/0x1f4
+  CPU: 2 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc3+ #5918
+  Hardware name: Raspberry Pi 3 Model B (DT)
+  Call trace:
+    dump_backtrace.part.0+0xe4/0xf0
+    show_stack+0x18/0x40
+    dump_stack_lvl+0x8c/0xb8
+    dump_stack+0x18/0x34
+    __might_resched+0x178/0x220
+    __might_sleep+0x48/0xa0
+    prepare_alloc_pages+0x178/0x1a0
+    __alloc_pages+0x9c/0x109c
+    alloc_page_interleave+0x1c/0xc4
+    alloc_pages+0xec/0x160
+    get_zeroed_page+0x1c/0x44
+    kvm_hyp_zalloc_page+0x14/0x20
+    hyp_map_walker+0xd4/0x134
+    kvm_pgtable_visitor_cb.isra.0+0x38/0x5c
+    __kvm_pgtable_walk+0x1a4/0x220
+    kvm_pgtable_walk+0x104/0x1f4
+    kvm_pgtable_hyp_map+0x80/0xc4
+    __create_hyp_mappings+0x9c/0xc4
+    kvm_mmu_init+0x144/0x1cc
+    kvm_arch_init+0xe4/0xef4
+    kvm_init+0x3c/0x3d0
+    arm_init+0x20/0x30
+    do_one_initcall+0x74/0x400
+    kernel_init_freeable+0x2e0/0x350
+    kernel_init+0x24/0x130
+    ret_from_fork+0x10/0x20
+
+Since the hyp stage-1 table walkers are serialized by kvm_hyp_pgd_mutex,
+RCU protection really doesn't add anything. Don't acquire the RCU read
+lock for an exclusive walk. While at it, add a warning which codifies
+the lack of support for shared walks in the hypervisor code.
+
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+---
+
+Applies on top of the parallel faults series that was picked up last
+week. Tested with kvm-arm.mode={nvhe,protected} on an Ampere Altra
+system.
+
+v1 -> v2:
+ - Took Will's suggestion of conditioning RCU on a flag, small tweak to
+   use existing bit instead (Thanks!)
+
+ arch/arm64/include/asm/kvm_pgtable.h | 22 ++++++++++++++++------
+ arch/arm64/kvm/hyp/pgtable.c         |  5 +++--
+ 2 files changed, 19 insertions(+), 8 deletions(-)
+
+diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+index a874ce0ce7b5..d4c7321fa652 100644
+--- a/arch/arm64/include/asm/kvm_pgtable.h
++++ b/arch/arm64/include/asm/kvm_pgtable.h
+@@ -51,8 +51,16 @@ static inline kvm_pte_t *kvm_dereference_pteref(kvm_pteref_t pteref, bool shared
+ 	return pteref;
+ }
+ 
+-static inline void kvm_pgtable_walk_begin(void) {}
+-static inline void kvm_pgtable_walk_end(void) {}
++static inline void kvm_pgtable_walk_begin(bool shared)
++{
++	/*
++	 * Due to the lack of RCU (or a similar protection scheme), only
++	 * non-shared table walkers are allowed in the hypervisor.
++	 */
++	WARN_ON(shared);
++}
++
++static inline void kvm_pgtable_walk_end(bool shared) {}
+ 
+ static inline bool kvm_pgtable_walk_lock_held(void)
+ {
+@@ -68,14 +76,16 @@ static inline kvm_pte_t *kvm_dereference_pteref(kvm_pteref_t pteref, bool shared
+ 	return rcu_dereference_check(pteref, !shared);
+ }
+ 
+-static inline void kvm_pgtable_walk_begin(void)
++static inline void kvm_pgtable_walk_begin(bool shared)
+ {
+-	rcu_read_lock();
++	if (shared)
++		rcu_read_lock();
+ }
+ 
+-static inline void kvm_pgtable_walk_end(void)
++static inline void kvm_pgtable_walk_end(bool shared)
+ {
+-	rcu_read_unlock();
++	if (shared)
++		rcu_read_unlock();
+ }
+ 
+ static inline bool kvm_pgtable_walk_lock_held(void)
+diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+index 5bca9610d040..16aed10e7e59 100644
+--- a/arch/arm64/kvm/hyp/pgtable.c
++++ b/arch/arm64/kvm/hyp/pgtable.c
+@@ -287,11 +287,12 @@ int kvm_pgtable_walk(struct kvm_pgtable *pgt, u64 addr, u64 size,
+ 		.end	= PAGE_ALIGN(walk_data.addr + size),
+ 		.walker	= walker,
+ 	};
++	bool shared = walker->flags & KVM_PGTABLE_WALK_SHARED;
+ 	int r;
+ 
+-	kvm_pgtable_walk_begin();
++	kvm_pgtable_walk_begin(shared);
+ 	r = _kvm_pgtable_walk(pgt, &walk_data);
+-	kvm_pgtable_walk_end();
++	kvm_pgtable_walk_end(shared);
+ 
+ 	return r;
+ }
+-- 
+2.38.1.431.g37b22c650d-goog
+
