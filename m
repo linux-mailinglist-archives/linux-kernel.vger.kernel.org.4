@@ -2,107 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC6E6291B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0326291B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbiKOGBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 01:01:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        id S232196AbiKOGBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 01:01:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiKOGBD (ORCPT
+        with ESMTP id S232093AbiKOGBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 01:01:03 -0500
-Received: from m1323.mail.163.com (m1323.mail.163.com [220.181.13.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BB9112AFF;
-        Mon, 14 Nov 2022 22:01:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=hrk0d
-        bbBKzxXX4+Dgcaj55QnrSIJ7qLn9WdJODoPrYk=; b=SIcCZz46ddQl7fblmYx05
-        Oi7txIxvms7eaQTRysvNNr4I698alBcz8dIC09p6rbxaEkVgGvU7LAVEnZAJj1ZI
-        WQhzwxu6wGpzq7LRM0ByVe/ZmAPXRfr94890nB9TVLeT+LTg4WoSWfjJfGkUCTBK
-        fm5J6dQDgnTDHGIfh1hrCw=
-Received: from slark_xiao$163.com ( [112.97.55.21] ) by ajax-webmail-wmsvr23
- (Coremail) ; Tue, 15 Nov 2022 14:00:10 +0800 (CST)
-X-Originating-IP: [112.97.55.21]
-Date:   Tue, 15 Nov 2022 14:00:10 +0800 (CST)
-From:   "Slark Xiao" <slark_xiao@163.com>
-To:     mani@kernel.org, gregkh@linuxfoundation.org,
-        loic.poulain@linaro.org
-Cc:     dnlplm@gmail.com, yonglin.tan@outlook.com,
-        fabio.porcedda@gmail.com, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:[PATCH v3] bus: mhi: host: pci_generic: Add definition for some
- VIDs
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <20221107112700.773-1-slark_xiao@163.com>
-References: <20221107112700.773-1-slark_xiao@163.com>
-X-NTES-SC: AL_QuydCviSvUgq5imaZekWkkcRjuo+UMC0vfgh249fPJs0qin81gUHeUVoHmn478SlCyK3iiKRSQFx6eB5cIp8QYC2Tz9ADnGZkVyEGwrYt/iL
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Tue, 15 Nov 2022 01:01:10 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AC912AFF
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:01:08 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id 4so12267653pli.0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:01:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qbbp7EKV7fq9bVBmYPEt1VHCQM25Vfel3HOW3LqcouU=;
+        b=T/9s6RfSTd+Zea5yIicxqn+IcbXtJDKYWooHtIM2M133U9T6uy5fGQ/gU00XxG5NNy
+         AZnwPHZHESa8kaxaPhAeE/1yYc9YfFpzqtt+5lK8T58sbkt6Lp4SrqXP/5mmH9nZpx5p
+         VdSSSYrAgP8J1VrXaOiJ7wtbif69cjo2vJqkw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qbbp7EKV7fq9bVBmYPEt1VHCQM25Vfel3HOW3LqcouU=;
+        b=cRbCUSmC1lIqDpO0O1S3enOSxLBULOFLhKiamC36t0WTm+B45Jp3INby9RfTJYzWlt
+         bes2eSjDtcSBnXcKYLLsOMM50cQ4K38yiuWF7TzFrJDfjU3VFU029iTF85TN5azXMOVZ
+         QqoB/tFM7WAWhigVvEnYhXRIjRLUSK4NDDlDlcgll7OdYAfN1WdumFSYKijpr9LxRfE4
+         Tz/yqiA2wu3akuEJguiY36vl8VAt6rCC4+VHEH7srSsGMq0b5fOZadHLG+K5WCYaojuz
+         +2wHM+0ZZ31E+t+NmJcg2AZu1oSQPCb1rahPrAfVQvcklyVEQd8gjaPozIqB9VfY7C98
+         2NXw==
+X-Gm-Message-State: ANoB5pluw5jJXYdN98im4k2T+FLQv1q4IGvCIzryidi09vUpCIpUMKDp
+        lJCrIf9Fre+UJjx5XhMJh/obTA==
+X-Google-Smtp-Source: AA0mqf7YHseVeZHmH48Yt2HT0XGnJz3qtTmRMwbRzNHwgU9XgL94LA/sXgK8TeM3FZTxLff286SjHA==
+X-Received: by 2002:a17:90a:74cf:b0:213:f398:ed51 with SMTP id p15-20020a17090a74cf00b00213f398ed51mr578813pjl.216.1668492067993;
+        Mon, 14 Nov 2022 22:01:07 -0800 (PST)
+Received: from google.com ([240f:75:7537:3187:3d10:c2ca:ba5b:55e6])
+        by smtp.gmail.com with ESMTPSA id m15-20020a656a0f000000b0045dc85c4a5fsm6900883pgu.44.2022.11.14.22.01.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 22:01:07 -0800 (PST)
+Date:   Tue, 15 Nov 2022 15:01:02 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCHv4 0/9] zsmalloc/zram: configurable zspage size
+Message-ID: <Y3MrHsaLc8wth00E@google.com>
+References: <20221031054108.541190-1-senozhatsky@chromium.org>
+ <Y21+xp52OQYi/qjQ@google.com>
+ <Y22dxEcs2g5mjuQ7@google.com>
+ <Y26AbHxhPBJdWZQE@google.com>
 MIME-Version: 1.0
-Message-ID: <38bbe02b.1790.18479dfa5ac.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: F8GowACXZmnqKnNjNE1EAA--.17630W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbivxW5ZFWB2Ued3QACs-
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y26AbHxhPBJdWZQE@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CkhpIE1hbmksCkFueSB1cGRhdGUgYWJvdXQgdGhpcyBwYXRjaD8gCkF0IDIwMjItMTEtMDcgMTk6
-Mjc6MDAsICJTbGFyayBYaWFvIiA8c2xhcmtfeGlhb0AxNjMuY29tPiB3cm90ZToKPlRvIG1ha2Ug
-Y29kZSBuZWF0IGFuZCBmb3IgY29udmVuaWVuY2UgcHVycG9zZSwgYWRkIGRlZmluaXRpb24gZm9y
-IHNvbWUKPlZJRHMuIEFkZGluZyBpdCBsb2NhbGx5IHVudGlsIHRoZXNlIFZJRHMgYXJlIHVzZWQg
-aW4gbXVsdGlwbGUgcGxhY2VzLgo+Cj5TaWduZWQtb2ZmLWJ5OiBTbGFyayBYaWFvIDxzbGFya194
-aWFvQDE2My5jb20+Cj4tLS0KPnYzOiBVcGRhdGUgZGVzY3JpcHRpb24KPnYyOiBVcGRhdGUgZGVz
-Y3JpcHRpb24gYW5kIGZpeCBmb3JtYXQgaXNzdWUKPi0tLQo+IGRyaXZlcnMvYnVzL21oaS9ob3N0
-L3BjaV9nZW5lcmljLmMgfCAxOCArKysrKysrKysrKy0tLS0tLS0KPiAxIGZpbGUgY2hhbmdlZCwg
-MTEgaW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkKPgo+ZGlmZiAtLWdpdCBhL2RyaXZlcnMv
-YnVzL21oaS9ob3N0L3BjaV9nZW5lcmljLmMgYi9kcml2ZXJzL2J1cy9taGkvaG9zdC9wY2lfZ2Vu
-ZXJpYy5jCj5pbmRleCBjNDI1OWNiMmQyODkuLjNhNzg5YmIyZjYzMSAxMDA2NDQKPi0tLSBhL2Ry
-aXZlcnMvYnVzL21oaS9ob3N0L3BjaV9nZW5lcmljLmMKPisrKyBiL2RyaXZlcnMvYnVzL21oaS9o
-b3N0L3BjaV9nZW5lcmljLmMKPkBAIC0yNCw2ICsyNCwxMCBAQAo+IAo+ICNkZWZpbmUgSEVBTFRI
-X0NIRUNLX1BFUklPRCAoSFogKiAyKQo+IAo+Ky8qIFBDSSBWSUQgZGVmaW5pdGlvbnMgKi8KPisj
-ZGVmaW5lIFBDSV9WRU5ET1JfSURfVEhBTEVTCTB4MTI2OQo+KyNkZWZpbmUgUENJX1ZFTkRPUl9J
-RF9RVUVDVEVMCTB4MWVhYwo+Kwo+IC8qKgo+ICAqIHN0cnVjdCBtaGlfcGNpX2Rldl9pbmZvIC0g
-TUhJIFBDSSBkZXZpY2Ugc3BlY2lmaWMgaW5mb3JtYXRpb24KPiAgKiBAY29uZmlnOiBNSEkgY29u
-dHJvbGxlciBjb25maWd1cmF0aW9uCj5AQCAtNTU3LDExICs1NjEsMTEgQEAgc3RhdGljIGNvbnN0
-IHN0cnVjdCBwY2lfZGV2aWNlX2lkIG1oaV9wY2lfaWRfdGFibGVbXSA9IHsKPiAJCS5kcml2ZXJf
-ZGF0YSA9IChrZXJuZWxfdWxvbmdfdCkgJm1oaV90ZWxpdF9mbjk5MF9pbmZvIH0sCj4gCXsgUENJ
-X0RFVklDRShQQ0lfVkVORE9SX0lEX1FDT00sIDB4MDMwOCksCj4gCQkuZHJpdmVyX2RhdGEgPSAo
-a2VybmVsX3Vsb25nX3QpICZtaGlfcWNvbV9zZHg2NV9pbmZvIH0sCj4tCXsgUENJX0RFVklDRSgw
-eDFlYWMsIDB4MTAwMSksIC8qIEVNMTIwUi1HTCAoc2R4MjQpICovCj4rCXsgUENJX0RFVklDRShQ
-Q0lfVkVORE9SX0lEX1FVRUNURUwsIDB4MTAwMSksIC8qIEVNMTIwUi1HTCAoc2R4MjQpICovCj4g
-CQkuZHJpdmVyX2RhdGEgPSAoa2VybmVsX3Vsb25nX3QpICZtaGlfcXVlY3RlbF9lbTF4eF9pbmZv
-IH0sCj4tCXsgUENJX0RFVklDRSgweDFlYWMsIDB4MTAwMiksIC8qIEVNMTYwUi1HTCAoc2R4MjQp
-ICovCj4rCXsgUENJX0RFVklDRShQQ0lfVkVORE9SX0lEX1FVRUNURUwsIDB4MTAwMiksIC8qIEVN
-MTYwUi1HTCAoc2R4MjQpICovCj4gCQkuZHJpdmVyX2RhdGEgPSAoa2VybmVsX3Vsb25nX3QpICZt
-aGlfcXVlY3RlbF9lbTF4eF9pbmZvIH0sCj4tCXsgUENJX0RFVklDRSgweDFlYWMsIDB4MjAwMSks
-IC8qIEVNMTIwUi1HTCBmb3IgRkNDTCAoc2R4MjQpICovCj4rCXsgUENJX0RFVklDRShQQ0lfVkVO
-RE9SX0lEX1FVRUNURUwsIDB4MjAwMSksIC8qIEVNMTIwUi1HTCBmb3IgRkNDTCAoc2R4MjQpICov
-Cj4gCQkuZHJpdmVyX2RhdGEgPSAoa2VybmVsX3Vsb25nX3QpICZtaGlfcXVlY3RlbF9lbTF4eF9p
-bmZvIH0sCj4gCS8qIFQ5OVcxNzUgKHNkeDU1KSwgQm90aCBmb3IgZVNJTSBhbmQgTm9uLWVTSU0g
-Ki8KPiAJeyBQQ0lfREVWSUNFKFBDSV9WRU5ET1JfSURfRk9YQ09OTiwgMHhlMGFiKSwKPkBAIC01
-ODUsMTYgKzU4OSwxNiBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHBjaV9kZXZpY2VfaWQgbWhpX3Bj
-aV9pZF90YWJsZVtdID0gewo+IAl7IFBDSV9ERVZJQ0UoUENJX1ZFTkRPUl9JRF9GT1hDT05OLCAw
-eGUwZDkpLAo+IAkJLmRyaXZlcl9kYXRhID0gKGtlcm5lbF91bG9uZ190KSAmbWhpX2ZveGNvbm5f
-c2R4NjVfaW5mbyB9LAo+IAkvKiBNVjMxLVcgKENpbnRlcmlvbikgKi8KPi0JeyBQQ0lfREVWSUNF
-KDB4MTI2OSwgMHgwMGIzKSwKPisJeyBQQ0lfREVWSUNFKFBDSV9WRU5ET1JfSURfVEhBTEVTLCAw
-eDAwYjMpLAo+IAkJLmRyaXZlcl9kYXRhID0gKGtlcm5lbF91bG9uZ190KSAmbWhpX212MzFfaW5m
-byB9LAo+IAkvKiBNVjMxLVcgKENpbnRlcmlvbiksIGJhc2VkIG9uIG5ldyBiYXNlbGluZSAqLwo+
-LQl7IFBDSV9ERVZJQ0UoMHgxMjY5LCAweDAwYjQpLAo+Kwl7IFBDSV9ERVZJQ0UoUENJX1ZFTkRP
-Ul9JRF9USEFMRVMsIDB4MDBiNCksCj4gCQkuZHJpdmVyX2RhdGEgPSAoa2VybmVsX3Vsb25nX3Qp
-ICZtaGlfbXYzMV9pbmZvIH0sCj4gCS8qIE1WMzItV0EgKENpbnRlcmlvbikgKi8KPi0JeyBQQ0lf
-REVWSUNFKDB4MTI2OSwgMHgwMGJhKSwKPisJeyBQQ0lfREVWSUNFKFBDSV9WRU5ET1JfSURfVEhB
-TEVTLCAweDAwYmEpLAo+IAkJLmRyaXZlcl9kYXRhID0gKGtlcm5lbF91bG9uZ190KSAmbWhpX212
-MzJfaW5mbyB9LAo+IAkvKiBNVjMyLVdCIChDaW50ZXJpb24pICovCj4tCXsgUENJX0RFVklDRSgw
-eDEyNjksIDB4MDBiYiksCj4rCXsgUENJX0RFVklDRShQQ0lfVkVORE9SX0lEX1RIQUxFUywgMHgw
-MGJiKSwKPiAJCS5kcml2ZXJfZGF0YSA9IChrZXJuZWxfdWxvbmdfdCkgJm1oaV9tdjMyX2luZm8g
-fSwKPiAJeyAgfQo+IH07Cj4tLSAKPjIuMTcuMQo=
+On (22/11/11 09:03), Minchan Kim wrote:
+[..]
+> for class in classes:
+>     wasted_bytes += class->pages_per_zspage * PAGE_SIZE - an object size
+> 
+> with *aggressive zpage compaction*. Now, we are relying on shrinker
+> (it might be already enough) to trigger but we could change the policy 
+> wasted memory in the class size crossed a threshold
+
+Compaction does something good only when we can release zspage in the
+end. Otherwise we just hold the global pool->lock (assuming that we
+land zsmalloc writeback series) and simply move objects around zspages.
+So ability to limit zspage chain size still can be valuable, on another
+level, as a measure to reduce dependency on compaction success.
+
+We may be can make compaction slightly more successful. For instance,
+if we would start move objects not only within zspages of the same size
+class, but, for example, move objects to class size + X (upper size
+classes). As an example, when all zspages in class are almost full,
+but class size + 1 has almost empty pages. In other words sort of as
+is those classes had been merged. (virtual merge). Single pool->look
+would be handy for it.
+
+But this is more of a research project (intern project?), with unclear
+outcome and ETA. I think in the mean time we can let people start
+experimenting with various zspage chain sizes so that may be at some
+point we can arrive to a new "default" value for all zspool, higher
+than current 4, which has been around for many years. Can't think, at
+present, of a better way forward.
