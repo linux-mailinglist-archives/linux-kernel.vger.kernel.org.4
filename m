@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFCA7629D40
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:22:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D50B629D46
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:23:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiKOPWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:22:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
+        id S230460AbiKOPXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:23:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbiKOPWk (ORCPT
+        with ESMTP id S229742AbiKOPXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:22:40 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D90F18374;
-        Tue, 15 Nov 2022 07:22:39 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e7da329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7da:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AFEEB1EC02F2;
-        Tue, 15 Nov 2022 16:22:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1668525757;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=B64mdOFdT9uTOfYjl9ll3tHMRZvvBJ1CeVd454LiI/w=;
-        b=pFcmHugbADL2DSRItZt5Vs6GYiAwP5C4H7GwzbzykfoflNfCHtY31ltt1srrkXZ8fdm5CM
-        qCtoY3uier2iX7TxnpLGBJO3tX/QDKE70/Wc34RhyUpm6UC0WfS6wgMW5ahFVGVMMa+DnH
-        NpK0pB/JVpKsAKoozrLB9VdwGTq4fEU=
-Date:   Tue, 15 Nov 2022 16:22:37 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     "Kalra, Ashish" <ashish.kalra@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        michael.roth@amd.com, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org,
-        "Kaplan, David" <David.Kaplan@amd.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Oscar Salvador <osalvador@suse.de>
-Subject: Re: [PATCH Part2 v6 14/49] crypto: ccp: Handle the legacy TMR
- allocation when SNP is enabled
-Message-ID: <Y3OuvXCjttfFh++w@zn.tnic>
-References: <3a51840f6a80c87b39632dc728dbd9b5dd444cd7.1655761627.git.ashish.kalra@amd.com>
- <Y0grhk1sq2tf/tUl@zn.tnic>
- <380c9748-1c86-4763-ea18-b884280a3b60@amd.com>
- <Y1e5oC9QyDlKpxZ9@zn.tnic>
- <6511c122-d5cc-3f8d-9651-7c2cd67dc5af@amd.com>
- <Y2A6/ZwvKhpNBTMP@zn.tnic>
- <dc89b2f4-1053-91ac-aeac-bb3b25f9ebc7@amd.com>
- <Y2JS7kn8Q9P4rXso@zn.tnic>
- <c2ce6317-aa51-2a2b-2d75-ad1fd269f3fa@amd.com>
- <7882353e-2b13-d35a-b462-cef35ee56f51@suse.cz>
+        Tue, 15 Nov 2022 10:23:35 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF27ABF5B
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:23:33 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id l8so17917903ljh.13
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:23:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xLKS/17GpYY4MgR4/+gEylG604Jj9+YJ2C6BLpGM54Y=;
+        b=LYkbwLcE94T02m+S8klc61BdLgSw8W4InLpW5Q6gh9TUg136iEgHNKLzg8Tm4FHm8U
+         aOg4Do2GSIOXi7sGolkSuBk9k+R25thUGno+VbjD0A2gQu4+xJj0h3rkjhsZRsKgxGD6
+         j3G5C+tWgoHNxi1ZDXc6ob607kOUAs0bn6hUqt22dnZDbqUO4EKRDA+Zk0ULrO/wa7nw
+         r4VSX+vj1eh7rb3ImE/XWYRFCZxo91NwirRshRlmgG2Fzgwavpq1g2CwDONt9DDnRPwd
+         dC2sCKroneKdVoqhoxHO2HghWXHbKK9HHDppXpBZUnVJ0/L80e1UHn5QpQFAf/Aj29uF
+         R5bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xLKS/17GpYY4MgR4/+gEylG604Jj9+YJ2C6BLpGM54Y=;
+        b=u6CcxAFkJuvka+rZBz/6qFq4vSw1e/bjvoWHnJ7jdmmndldV3mmH5bSwIgLG8vzgRI
+         5FdVY1M9k6WNPsiLx6Q3TvPMwM7DdMXwpi6OybzFsuznhlQ7uASX330r0ExdLOjKbhho
+         hYur3hivg65Z3M+5M3qBufQr3C/NWNVnrh+bNkQnygB44cZTyA+g/SGKFVcfGYoJxTZ3
+         Oaf+a7SjqI0OsqgGShmnoKeTOQuKBbXwhgpxn65wRuVwoXqSfwMyrUa10sa/FFkcocJe
+         ghRJyHtnHQXpquy+uXeToJoPirzXn9c8GpwU+IpnZ4+Vmd2LcoQmhgYBxyW2431bpkrK
+         gAXw==
+X-Gm-Message-State: ANoB5plJ6pAvxk+bKcDonxeVClTQkaZu3lpz4GvEmMmQOFurA5V/WcOz
+        7EGBGbLDv2Gw+ZBjhb42JBvBXQ==
+X-Google-Smtp-Source: AA0mqf5usyXx6gAprC2KqXwUCKgLy2D00K8A1R/p5KXWhg4DJKBRIIA+Yqk/jAqdlUOURDEc2BvSfw==
+X-Received: by 2002:a2e:b4a9:0:b0:26d:cf5f:6a22 with SMTP id q9-20020a2eb4a9000000b0026dcf5f6a22mr5875512ljm.508.1668525812254;
+        Tue, 15 Nov 2022 07:23:32 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id w26-20020ac2443a000000b004acbfa4a18bsm2245731lfl.173.2022.11.15.07.23.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 07:23:31 -0800 (PST)
+Message-ID: <bbc08d1e-62fc-b0e2-15e1-76802ed3c4fc@linaro.org>
+Date:   Tue, 15 Nov 2022 16:23:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <7882353e-2b13-d35a-b462-cef35ee56f51@suse.cz>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 00/12] Enable Display for SM8350
+Content-Language: en-US
+To:     Robert Foss <robert.foss@linaro.org>, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, quic_kalyant@quicinc.com,
+        swboyd@chromium.org, angelogioacchino.delregno@somainline.org,
+        loic.poulain@linaro.org, quic_khsieh@quicinc.com,
+        quic_vpolimer@quicinc.com, vkoul@kernel.org, dianders@chromium.org,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
+        vinod.koul@linaro.org, quic_jesszhan@quicinc.com,
+        andersson@kernel.org
+References: <20221115133105.980877-1-robert.foss@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221115133105.980877-1-robert.foss@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 04:14:42PM +0100, Vlastimil Babka wrote:
->  but maybe we could just put the pages on some leaked lists without
-> special page? The only thing that should matter is not to free the
-> pages to the page allocator so they would be reused by something else.
+On 15/11/2022 14:30, Robert Foss wrote:
+> Dependencies:
+> https://lore.kernel.org/all/20221102231309.583587-1-dmitry.baryshkov@linaro.org/
+> https://lore.kernel.org/all/20221024164225.3236654-1-dmitry.baryshkov@linaro.org/
+> https://lore.kernel.org/all/20221104130324.1024242-5-dmitry.baryshkov@linaro.org/
+> 
+> Branch:
+> https://git.linaro.org/people/robert.foss/linux.git/log/?h=sm8350_dsi_v2
+> 
+> This series implements display support for SM8350 and
+> enables HDMI output for the SM8350-HDK platform.
+> 
 
-As said on IRC, I like this a *lot*. This perfectly represents what
-those leaked pages are: leaked, cannot be used and lost. Certainly not
-hwpoisoned.
+I received two of these patchsets... Which one is valid? Folks also
+review in both...
 
-Yeah, that's much better.
+Best regards,
+Krzysztof
 
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
