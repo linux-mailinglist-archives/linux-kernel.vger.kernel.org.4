@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B8E62A404
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B23A762A405
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238738AbiKOVXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 16:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48660 "EHLO
+        id S238799AbiKOVXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 16:23:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238402AbiKOVWy (ORCPT
+        with ESMTP id S232099AbiKOVW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 16:22:54 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436B51FCCB
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:22:52 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AFKD5Up008985;
-        Tue, 15 Nov 2022 21:22:43 GMT
+        Tue, 15 Nov 2022 16:22:57 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FD32790B
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:22:55 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AFJMu9g003946;
+        Tue, 15 Nov 2022 21:22:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2022-7-12;
- bh=c35oFeYVRDc1jiMWKSJGilR0YmnuM0FOLWWkNYqbAmY=;
- b=Ui1mhG+cz1UlBz0n8duynNVXMyHR4z2mJEbk8ardEqok8DaVR8+IahFBB1W2gmiG3pY7
- DJGbyu6Wl+K+z/+ltjLb80PCBEQ9n+HvSdnyKdVLQvhM0wZsV7HhneVygIFeMWea7XKf
- hamImMdruJ6fQy+j098g4TcLUH+3NcGaySuHikjmiufbLLM43xFrshprAeO8vGDdgID5
- jtvo+MFJZzd44kr/8gky9va4ielNACFseGvGQJemPNZvc42sKslUtv3gZATapcrhn8uW
- gfIVrA9e3GuVz/ScE901avIdAia2JbYSedscxctrSVci18rkFqiQYG2tllVDLTtJFWHy Ww== 
+ bh=S8tyJWIYcZoH4JvVl6w79xgzUHmCh2dSs4Q8Fb3RnFo=;
+ b=DQJFwLo5AMfmIVSrB2x1noVsrKi+CrlMZVhDAgvn0aKTv4iJFtAYy4zif3aNae+ax8vh
+ efIy/3TnR0In+DetYPzaBVUWTHUHpfSDkMW667A7LCGmeFe+caNyiu+SznQ9fgTgzECs
+ 7W2Er6OMjRKOFKjlsPXcLWqnlzglwrvDfRcNyKLIjW7T4crbnp09Zb9Jfh0R3j+rKsmx
+ blHoiQ6SwCyJW1mtNfMED047ykfKXbrJyHpWklSQ2FoWLD4HrQkvt8krJI0uYMD2rRKe
+ j1GXOKBnlClxJYGGbJ/Vc10CQoNfN89UMHbXHxBPAWx92zQx6JZVlYho4rcgx0eHntmn kQ== 
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kv3jsjxab-1
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kv3n131y0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 15 Nov 2022 21:22:43 +0000
 Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AFJo7KP032016;
-        Tue, 15 Nov 2022 21:22:41 GMT
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2AFK1dFO031835;
+        Tue, 15 Nov 2022 21:22:43 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kt1xcfvqu-1
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kt1xcfvsd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Nov 2022 21:22:41 +0000
+        Tue, 15 Nov 2022 21:22:43 +0000
 Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AFLMSRs002082;
-        Tue, 15 Nov 2022 21:22:40 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AFLMSRu002082;
+        Tue, 15 Nov 2022 21:22:42 GMT
 Received: from dhcp-10-132-95-73.usdhcp.oraclecorp.com.com (dhcp-10-132-95-73.usdhcp.oraclecorp.com [10.132.95.73])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3kt1xcfvb0-10;
-        Tue, 15 Nov 2022 21:22:40 +0000
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3kt1xcfvb0-11;
+        Tue, 15 Nov 2022 21:22:42 +0000
 From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
         mike.kravetz@oracle.com, willy@infradead.org,
         almasrymina@google.com, linmiaohe@huawei.com, hughd@google.com,
         Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Subject: [PATCH mm-unstable 09/10] mm/hugetlb: convert hugetlb prep functions to folios
-Date:   Tue, 15 Nov 2022 13:22:16 -0800
-Message-Id: <20221115212217.19539-10-sidhartha.kumar@oracle.com>
+Subject: [PATCH mm-unstable 10/10] mm/hugetlb: change hugetlb allocation functions to return a folio
+Date:   Tue, 15 Nov 2022 13:22:17 -0800
+Message-Id: <20221115212217.19539-11-sidhartha.kumar@oracle.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221115212217.19539-1-sidhartha.kumar@oracle.com>
 References: <20221115212217.19539-1-sidhartha.kumar@oracle.com>
@@ -65,8 +65,8 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 p
  suspectscore=0 malwarescore=0 mlxscore=0 adultscore=0 bulkscore=0
  spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2210170000 definitions=main-2211150146
-X-Proofpoint-ORIG-GUID: 13LmkHReTmM1lw843VOWh17NJgZFrTi9
-X-Proofpoint-GUID: 13LmkHReTmM1lw843VOWh17NJgZFrTi9
+X-Proofpoint-GUID: hiib2QocS7DmD6684nO_8-iB3ymcMvIO
+X-Proofpoint-ORIG-GUID: hiib2QocS7DmD6684nO_8-iB3ymcMvIO
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -77,159 +77,307 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert prep_new_huge_page() and __prep_compound_gigantic_page() to
-folios.
+Many hugetlb allocation helper functions have now been converting to
+folios, update their higher level callers to be compatible with folios.
 
 Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
 ---
- mm/hugetlb.c | 59 +++++++++++++++++++++++++---------------------------
- 1 file changed, 28 insertions(+), 31 deletions(-)
+ mm/hugetlb.c | 98 ++++++++++++++++++++++++----------------------------
+ 1 file changed, 46 insertions(+), 52 deletions(-)
 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index bc039ff28b8f..c1d68648943a 100644
+index c1d68648943a..ab20cfb0ff05 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -1780,28 +1780,26 @@ static void __prep_new_hugetlb_folio(struct hstate *h, struct folio *folio)
- 	set_hugetlb_cgroup_rsvd(folio, NULL);
+@@ -1369,7 +1369,7 @@ static void free_gigantic_folio(struct folio *folio, unsigned int order)
  }
  
--static void prep_new_huge_page(struct hstate *h, struct page *page, int nid)
-+static void prep_new_hugetlb_folio(struct hstate *h, struct folio *folio, int nid)
+ #ifdef CONFIG_CONTIG_ALLOC
+-static struct page *alloc_gigantic_page(struct hstate *h, gfp_t gfp_mask,
++static struct folio *alloc_gigantic_folio(struct hstate *h, gfp_t gfp_mask,
+ 		int nid, nodemask_t *nodemask)
  {
--	struct folio *folio = page_folio(page);
--
- 	__prep_new_hugetlb_folio(h, folio);
- 	spin_lock_irq(&hugetlb_lock);
- 	__prep_account_new_huge_page(h, nid);
- 	spin_unlock_irq(&hugetlb_lock);
- }
- 
--static bool __prep_compound_gigantic_page(struct page *page, unsigned int order,
--								bool demote)
-+static bool __prep_compound_gigantic_folio(struct folio *folio,
-+					unsigned int order, bool demote)
- {
- 	int i, j;
- 	int nr_pages = 1 << order;
- 	struct page *p;
- 
--	/* we rely on prep_new_huge_page to set the destructor */
--	set_compound_order(page, order);
--	__SetPageHead(page);
-+	/* we rely on prep_new_hugetlb_folio to set the destructor */
-+	folio_set_compound_order(folio, order);
-+	__folio_set_head(folio);
- 	for (i = 0; i < nr_pages; i++) {
--		p = nth_page(page, i);
-+		p = folio_page(folio, i);
- 
- 		/*
- 		 * For gigantic hugepages allocated through bootmem at
-@@ -1842,42 +1840,40 @@ static bool __prep_compound_gigantic_page(struct page *page, unsigned int order,
- 			VM_BUG_ON_PAGE(page_count(p), p);
+ 	unsigned long nr_pages = pages_per_huge_page(h);
+@@ -1385,7 +1385,7 @@ static struct page *alloc_gigantic_page(struct hstate *h, gfp_t gfp_mask,
+ 			page = cma_alloc(hugetlb_cma[nid], nr_pages,
+ 					huge_page_order(h), true);
+ 			if (page)
+-				return page;
++				return page_folio(page);
  		}
- 		if (i != 0)
--			set_compound_head(p, page);
-+			set_compound_head(p, &folio->page);
- 	}
--	atomic_set(compound_mapcount_ptr(page), -1);
--	atomic_set(compound_pincount_ptr(page), 0);
-+	atomic_set(folio_mapcount_ptr(folio), -1);
-+	atomic_set(folio_pincount_ptr(folio), 0);
- 	return true;
  
- out_error:
- 	/* undo page modifications made above */
- 	for (j = 0; j < i; j++) {
--		p = nth_page(page, j);
-+		p = folio_page(folio, j);
- 		if (j != 0)
- 			clear_compound_head(p);
- 		set_page_refcounted(p);
+ 		if (!(gfp_mask & __GFP_THISNODE)) {
+@@ -1396,17 +1396,16 @@ static struct page *alloc_gigantic_page(struct hstate *h, gfp_t gfp_mask,
+ 				page = cma_alloc(hugetlb_cma[node], nr_pages,
+ 						huge_page_order(h), true);
+ 				if (page)
+-					return page;
++					return page_folio(page);
+ 			}
+ 		}
  	}
- 	/* need to clear PG_reserved on remaining tail pages  */
- 	for (; j < nr_pages; j++) {
--		p = nth_page(page, j);
-+		p = folio_page(folio, j);
- 		__ClearPageReserved(p);
- 	}
--	set_compound_order(page, 0);
--#ifdef CONFIG_64BIT
--	page[1].compound_nr = 0;
--#endif
--	__ClearPageHead(page);
-+	folio_set_compound_order(folio, 0);
-+	__folio_clear_head(folio);
- 	return false;
+ #endif
+-
+-	return alloc_contig_pages(nr_pages, gfp_mask, nid, nodemask);
++	return page_folio(alloc_contig_pages(nr_pages, gfp_mask, nid, nodemask));
  }
  
--static bool prep_compound_gigantic_page(struct page *page, unsigned int order)
-+static bool prep_compound_gigantic_folio(struct folio *folio,
-+							unsigned int order)
+ #else /* !CONFIG_CONTIG_ALLOC */
+-static struct page *alloc_gigantic_page(struct hstate *h, gfp_t gfp_mask,
++static struct folio *alloc_gigantic_folio(struct hstate *h, gfp_t gfp_mask,
+ 					int nid, nodemask_t *nodemask)
  {
--	return __prep_compound_gigantic_page(page, order, false);
-+	return __prep_compound_gigantic_folio(folio, order, false);
+ 	return NULL;
+@@ -1414,7 +1413,7 @@ static struct page *alloc_gigantic_page(struct hstate *h, gfp_t gfp_mask,
+ #endif /* CONFIG_CONTIG_ALLOC */
+ 
+ #else /* !CONFIG_ARCH_HAS_GIGANTIC_PAGE */
+-static struct page *alloc_gigantic_page(struct hstate *h, gfp_t gfp_mask,
++static struct folio *alloc_gigantic_folio(struct hstate *h, gfp_t gfp_mask,
+ 					int nid, nodemask_t *nodemask)
+ {
+ 	return NULL;
+@@ -1938,7 +1937,7 @@ pgoff_t hugetlb_basepage_index(struct page *page)
+ 	return (index << compound_order(page_head)) + compound_idx;
  }
  
--static bool prep_compound_gigantic_page_for_demote(struct page *page,
-+static bool prep_compound_gigantic_folio_for_demote(struct folio *folio,
- 							unsigned int order)
+-static struct page *alloc_buddy_huge_page(struct hstate *h,
++static struct folio *alloc_buddy_hugetlb_folio(struct hstate *h,
+ 		gfp_t gfp_mask, int nid, nodemask_t *nmask,
+ 		nodemask_t *node_alloc_noretry)
  {
--	return __prep_compound_gigantic_page(page, order, true);
-+	return __prep_compound_gigantic_folio(folio, order, true);
+@@ -1997,7 +1996,7 @@ static struct page *alloc_buddy_huge_page(struct hstate *h,
+ 	if (node_alloc_noretry && !page && alloc_try_hard)
+ 		node_set(nid, *node_alloc_noretry);
+ 
+-	return page;
++	return page_folio(page);
  }
  
  /*
-@@ -2029,7 +2025,7 @@ static struct page *alloc_fresh_huge_page(struct hstate *h,
+@@ -2007,23 +2006,21 @@ static struct page *alloc_buddy_huge_page(struct hstate *h,
+  * Note that returned page is 'frozen':  ref count of head page and all tail
+  * pages is zero.
+  */
+-static struct page *alloc_fresh_huge_page(struct hstate *h,
++static struct folio *alloc_fresh_hugetlb_folio(struct hstate *h,
+ 		gfp_t gfp_mask, int nid, nodemask_t *nmask,
+ 		nodemask_t *node_alloc_noretry)
+ {
+-	struct page *page;
+ 	struct folio *folio;
+ 	bool retry = false;
+ 
+ retry:
+ 	if (hstate_is_gigantic(h))
+-		page = alloc_gigantic_page(h, gfp_mask, nid, nmask);
++		folio = alloc_gigantic_folio(h, gfp_mask, nid, nmask);
+ 	else
+-		page = alloc_buddy_huge_page(h, gfp_mask,
++		folio = alloc_buddy_hugetlb_folio(h, gfp_mask,
+ 				nid, nmask, node_alloc_noretry);
+-	if (!page)
++	if (!folio)
  		return NULL;
- 	folio = page_folio(page);
+-	folio = page_folio(page);
  	if (hstate_is_gigantic(h)) {
--		if (!prep_compound_gigantic_page(page, huge_page_order(h))) {
-+		if (!prep_compound_gigantic_folio(folio, huge_page_order(h))) {
+ 		if (!prep_compound_gigantic_folio(folio, huge_page_order(h))) {
  			/*
- 			 * Rare failure to convert pages to compound page.
- 			 * Free pages and try again - ONCE!
-@@ -2042,7 +2038,7 @@ static struct page *alloc_fresh_huge_page(struct hstate *h,
- 			return NULL;
- 		}
+@@ -2040,7 +2037,7 @@ static struct page *alloc_fresh_huge_page(struct hstate *h,
  	}
--	prep_new_huge_page(h, page, folio_nid(folio));
-+	prep_new_hugetlb_folio(h, folio, folio_nid(folio));
+ 	prep_new_hugetlb_folio(h, folio, folio_nid(folio));
  
- 	return page;
+-	return page;
++	return folio;
  }
-@@ -3047,10 +3043,10 @@ static void __init gather_bootmem_prealloc(void)
- 		struct hstate *h = m->hstate;
  
- 		VM_BUG_ON(!hstate_is_gigantic(h));
--		WARN_ON(page_count(page) != 1);
--		if (prep_compound_gigantic_page(page, huge_page_order(h))) {
--			WARN_ON(PageReserved(page));
--			prep_new_huge_page(h, page, page_to_nid(page));
-+		WARN_ON(folio_ref_count(folio) != 1);
-+		if (prep_compound_gigantic_folio(folio, huge_page_order(h))) {
-+			WARN_ON(folio_test_reserved(folio));
-+			prep_new_hugetlb_folio(h, folio, folio_nid(folio));
- 			free_huge_page(page); /* add to the hugepage allocator */
- 		} else {
- 			/* VERY unlikely inflated ref count on a tail page */
-@@ -3469,13 +3465,14 @@ static int demote_free_huge_page(struct hstate *h, struct page *page)
- 	for (i = 0; i < pages_per_huge_page(h);
- 				i += pages_per_huge_page(target_hstate)) {
- 		subpage = nth_page(page, i);
-+		folio = page_folio(subpage);
- 		if (hstate_is_gigantic(target_hstate))
--			prep_compound_gigantic_page_for_demote(subpage,
-+			prep_compound_gigantic_folio_for_demote(folio,
- 							target_hstate->order);
- 		else
- 			prep_compound_page(subpage, target_hstate->order);
- 		set_page_private(subpage, 0);
--		prep_new_huge_page(target_hstate, subpage, nid);
-+		prep_new_hugetlb_folio(target_hstate, folio, nid);
- 		free_huge_page(subpage);
+ /*
+@@ -2050,21 +2047,21 @@ static struct page *alloc_fresh_huge_page(struct hstate *h,
+ static int alloc_pool_huge_page(struct hstate *h, nodemask_t *nodes_allowed,
+ 				nodemask_t *node_alloc_noretry)
+ {
+-	struct page *page;
++	struct folio *folio;
+ 	int nr_nodes, node;
+ 	gfp_t gfp_mask = htlb_alloc_mask(h) | __GFP_THISNODE;
+ 
+ 	for_each_node_mask_to_alloc(h, nr_nodes, node, nodes_allowed) {
+-		page = alloc_fresh_huge_page(h, gfp_mask, node, nodes_allowed,
+-						node_alloc_noretry);
+-		if (page)
++		folio = alloc_fresh_hugetlb_folio(h, gfp_mask, node,
++					nodes_allowed, node_alloc_noretry);
++		if (folio)
+ 			break;
  	}
- 	mutex_unlock(&target_hstate->resize_lock);
+ 
+-	if (!page)
++	if (!folio)
+ 		return 0;
+ 
+-	free_huge_page(page); /* free it into the hugepage allocator */
++	free_huge_page(&folio->page); /* free it into the hugepage allocator */
+ 
+ 	return 1;
+ }
+@@ -2225,7 +2222,7 @@ int dissolve_free_huge_pages(unsigned long start_pfn, unsigned long end_pfn)
+ static struct page *alloc_surplus_huge_page(struct hstate *h, gfp_t gfp_mask,
+ 						int nid, nodemask_t *nmask)
+ {
+-	struct page *page = NULL;
++	struct folio *folio = NULL;
+ 
+ 	if (hstate_is_gigantic(h))
+ 		return NULL;
+@@ -2235,8 +2232,8 @@ static struct page *alloc_surplus_huge_page(struct hstate *h, gfp_t gfp_mask,
+ 		goto out_unlock;
+ 	spin_unlock_irq(&hugetlb_lock);
+ 
+-	page = alloc_fresh_huge_page(h, gfp_mask, nid, nmask, NULL);
+-	if (!page)
++	folio = alloc_fresh_hugetlb_folio(h, gfp_mask, nid, nmask, NULL);
++	if (!folio)
+ 		return NULL;
+ 
+ 	spin_lock_irq(&hugetlb_lock);
+@@ -2248,43 +2245,42 @@ static struct page *alloc_surplus_huge_page(struct hstate *h, gfp_t gfp_mask,
+ 	 * codeflow
+ 	 */
+ 	if (h->surplus_huge_pages >= h->nr_overcommit_huge_pages) {
+-		SetHPageTemporary(page);
++		folio_set_hugetlb_temporary(folio);
+ 		spin_unlock_irq(&hugetlb_lock);
+-		free_huge_page(page);
++		free_huge_page(&folio->page);
+ 		return NULL;
+ 	}
+ 
+ 	h->surplus_huge_pages++;
+-	h->surplus_huge_pages_node[page_to_nid(page)]++;
++	h->surplus_huge_pages_node[folio_nid(folio)]++;
+ 
+ out_unlock:
+ 	spin_unlock_irq(&hugetlb_lock);
+ 
+-	return page;
++	return &folio->page;
+ }
+ 
+ static struct page *alloc_migrate_huge_page(struct hstate *h, gfp_t gfp_mask,
+ 				     int nid, nodemask_t *nmask)
+ {
+-	struct page *page;
++	struct folio *folio;
+ 
+ 	if (hstate_is_gigantic(h))
+ 		return NULL;
+ 
+-	page = alloc_fresh_huge_page(h, gfp_mask, nid, nmask, NULL);
+-	if (!page)
++	folio = alloc_fresh_hugetlb_folio(h, gfp_mask, nid, nmask, NULL);
++	if (!folio)
+ 		return NULL;
+ 
+ 	/* fresh huge pages are frozen */
+-	set_page_refcounted(page);
+-
++	folio_ref_unfreeze(folio, 1);
+ 	/*
+ 	 * We do not account these pages as surplus because they are only
+ 	 * temporary and will be released properly on the last reference
+ 	 */
+-	SetHPageTemporary(page);
++	folio_set_hugetlb_temporary(folio);
+ 
+-	return page;
++	return &folio->page;
+ }
+ 
+ /*
+@@ -2734,19 +2730,18 @@ void restore_reserve_on_error(struct hstate *h, struct vm_area_struct *vma,
+ }
+ 
+ /*
+- * alloc_and_dissolve_huge_page - Allocate a new page and dissolve the old one
++ * alloc_and_dissolve_hugetlb_folio - Allocate a new folio and dissolve
++ * the old one
+  * @h: struct hstate old page belongs to
+  * @old_page: Old page to dissolve
+  * @list: List to isolate the page in case we need to
+  * Returns 0 on success, otherwise negated error.
+  */
+-static int alloc_and_dissolve_huge_page(struct hstate *h, struct page *old_page,
+-					struct list_head *list)
++static int alloc_and_dissolve_hugetlb_folio(struct hstate *h,
++			struct folio *old_folio, struct list_head *list)
+ {
+ 	gfp_t gfp_mask = htlb_alloc_mask(h) | __GFP_THISNODE;
+-	struct folio *old_folio = page_folio(old_page);
+ 	int nid = folio_nid(old_folio);
+-	struct page *new_page;
+ 	struct folio *new_folio;
+ 	int ret = 0;
+ 
+@@ -2757,26 +2752,25 @@ static int alloc_and_dissolve_huge_page(struct hstate *h, struct page *old_page,
+ 	 * the pool.  This simplifies and let us do most of the processing
+ 	 * under the lock.
+ 	 */
+-	new_page = alloc_buddy_huge_page(h, gfp_mask, nid, NULL, NULL);
+-	if (!new_page)
++	new_folio = alloc_buddy_hugetlb_folio(h, gfp_mask, nid, NULL, NULL);
++	if (!new_folio)
+ 		return -ENOMEM;
+-	new_folio = page_folio(new_page);
+ 	__prep_new_hugetlb_folio(h, new_folio);
+ 
+ retry:
+ 	spin_lock_irq(&hugetlb_lock);
+ 	if (!folio_test_hugetlb(old_folio)) {
+ 		/*
+-		 * Freed from under us. Drop new_page too.
++		 * Freed from under us. Drop new_folio too.
+ 		 */
+ 		goto free_new;
+ 	} else if (folio_ref_count(old_folio)) {
+ 		/*
+-		 * Someone has grabbed the page, try to isolate it here.
++		 * Someone has grabbed the folio, try to isolate it here.
+ 		 * Fail with -EBUSY if not possible.
+ 		 */
+ 		spin_unlock_irq(&hugetlb_lock);
+-		ret = isolate_hugetlb(old_page, list);
++		ret = isolate_hugetlb(&old_folio->page, list);
+ 		spin_lock_irq(&hugetlb_lock);
+ 		goto free_new;
+ 	} else if (!folio_test_hugetlb_freed(old_folio)) {
+@@ -2854,7 +2848,7 @@ int isolate_or_dissolve_huge_page(struct page *page, struct list_head *list)
+ 	if (folio_ref_count(folio) && !isolate_hugetlb(&folio->page, list))
+ 		ret = 0;
+ 	else if (!folio_ref_count(folio))
+-		ret = alloc_and_dissolve_huge_page(h, &folio->page, list);
++		ret = alloc_and_dissolve_hugetlb_folio(h, folio, list);
+ 
+ 	return ret;
+ }
+@@ -3072,14 +3066,14 @@ static void __init hugetlb_hstate_alloc_pages_onenode(struct hstate *h, int nid)
+ 			if (!alloc_bootmem_huge_page(h, nid))
+ 				break;
+ 		} else {
+-			struct page *page;
++			struct folio *folio;
+ 			gfp_t gfp_mask = htlb_alloc_mask(h) | __GFP_THISNODE;
+ 
+-			page = alloc_fresh_huge_page(h, gfp_mask, nid,
++			folio = alloc_fresh_hugetlb_folio(h, gfp_mask, nid,
+ 					&node_states[N_MEMORY], NULL);
+-			if (!page)
++			if (!folio)
+ 				break;
+-			free_huge_page(page); /* free it into the hugepage allocator */
++			free_huge_page(&folio->page); /* free it into the hugepage allocator */
+ 		}
+ 		cond_resched();
+ 	}
 -- 
 2.38.1
 
