@@ -2,74 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34C362A316
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 149B962A318
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbiKOUhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 15:37:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
+        id S231216AbiKOUi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 15:38:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbiKOUhB (ORCPT
+        with ESMTP id S229678AbiKOUix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:37:01 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA24BB3;
-        Tue, 15 Nov 2022 12:37:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Qy+DZuwA4M5WDugo0KAEoxGF9d6DWwiaweGeOENwlAA=; b=eeLAhDPOVheILTNUaMZAeCutI7
-        G+ckJYCpaI5UJ0GTgnAyOgw5lDsvQf25ULwX2jnRAbd09KnVHR5+ud+TBakN4h+hr8qpAxvRT8lJK
-        +Gvv9XYmLmOxBCJYsNA5rJk4UjlN3ftUxD79rmtSrMe9YChraW4hNwyL3XggoNw73bL/6dGBMIIcX
-        b1kfOIN6xYBe3v2+rK5VMOdqzrQqhNUn0VbXIvWcq5OIy81P4z7/4EeZJWOl+Ymw5NFrCYVMrwnmy
-        VpzQxiFQDxD9ql6QAsqmNUJbLGBvVHDP0ElX7u0DGvrpNZ/eAMaw11zGWcFqlAnTv6XBfMInpJ2XH
-        xI/iYEaw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ov2ft-00EcX0-LD; Tue, 15 Nov 2022 20:36:53 +0000
-Date:   Tue, 15 Nov 2022 12:36:53 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
-        masahiroy@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, arnd@arndb.de,
-        akpm@linux-foundation.org, eugene.loh@oracle.com,
-        kris.van.hees@oracle.com, Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH v9 4/8] kallsyms: introduce sections needed to map
- symbols to built-in modules
-Message-ID: <Y3P4ZXF97b88nVh5@bombadil.infradead.org>
-References: <20221109134132.9052-1-nick.alcock@oracle.com>
- <20221109134132.9052-5-nick.alcock@oracle.com>
- <Y3BhRvt53xO5A0iQ@bombadil.infradead.org>
- <87mt8tv554.fsf@esperi.org.uk>
- <76d7ba29-c7d2-d082-5928-599844112494@huawei.com>
- <87edu4uz7z.fsf@esperi.org.uk>
- <Y3PvavbJDZsQCiuQ@bombadil.infradead.org>
+        Tue, 15 Nov 2022 15:38:53 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAB7E84;
+        Tue, 15 Nov 2022 12:38:52 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NBdLf07pPz4xTg;
+        Wed, 16 Nov 2022 07:38:49 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1668544730;
+        bh=k809YecVyJ/i0stvUv8T83qyvCDeubm4DV7Sxyj+e9U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=DY/PLTvW4q2tQ1xhsZOvAFmc4IFoBDLH4ITdXOZC5I9dfxNhedV7oa9WaQ9074bcG
+         5BOd25Ee15fCV26+P/6TJ787+NrxcvdRlRQaVraCLWaavMX7N2mHXIhWj7N9K5jdJ2
+         jzFxsS+qBqXdHXjNHsXqRzrHKvuopO4U0uYGTimWHFKSt6PRvXWLAICo6kLFASVHst
+         Ks2d1h39uMVpCh4QhT44eq8PmaaPUeDvUURjqhiho1g0YBx3VD7JifSGrdOaGRl0m/
+         GiDq0T5Sm2t+MNkN87SF0YZ941I1hHK2soD76BOhCof4iqALf7IUydSxdUBRxO/FKw
+         t70wb0gFSB41w==
+Date:   Wed, 16 Nov 2022 07:38:48 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the v4l-dvb-next
+ tree
+Message-ID: <20221116073848.46178032@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3PvavbJDZsQCiuQ@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/j3X.ylo3M=FFjstQb4+_/wZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 11:58:34AM -0800, Luis Chamberlain wrote:
-> And then users.. we need users clearly documented, who the heck is
-> using this or wants this / is going to use it and why.
+--Sig_/j3X.ylo3M=FFjstQb4+_/wZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-What issues did existing users run into? Why is this an issue? If no
-bugs have been reported why isn't this an issue then? Why does the
-existing duplicate stuff not cause issues in-kernel for symbol
-lookups?
+Hi all,
 
-Who is dying for this feature? What userspace tools / whatever has
-support for this and can't wait to get their hands on this?
+Commits
 
-  Luis
+  0f6e8d8c94a8 ("venus: pm_helpers: Fix error check in vcodec_domains_get()=
+")
+  ee357294a85b ("MAINTAINERS: Add Vikash as VENUS video driver co-maintaine=
+r")
+
+are missing a Signed-off-by from their committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/j3X.ylo3M=FFjstQb4+_/wZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNz+NgACgkQAVBC80lX
+0Gwt6Qf+L7gAxvVRhyXfbu66Qa49EdLJggpQD6mswrsw3N6KwcEGwcq5VCIwKnlH
+yBzL5oloWEGJAml1UMkiETntGmWfJTGhGHTmDAh9RG4EnETWfhbrT+gQ+HBwxh1V
+tlwDbdKKQOFb8OXEus8F9D9TkBq0LLkLYGII5gnEGIlEuCkWlIyPF1siMr4UzPQW
+A4/YNFjaVM4XUjwtD0ydykpmE+NkldtPdlWyGlIBOIFJwmgcVxjYirm6RK4yrTef
+jcUJA6HUpywcHXpfI9wni+WnkkV8BHSBrf85ZBYQiRAMH1qMyR5NrLnqCwGnCmNt
+tuVldgFAegbDlGRFnHfIi0o6GntHhw==
+=Nq6M
+-----END PGP SIGNATURE-----
+
+--Sig_/j3X.ylo3M=FFjstQb4+_/wZ--
