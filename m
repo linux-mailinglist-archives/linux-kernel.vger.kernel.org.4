@@ -2,66 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FEC628FF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 03:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5323B628FFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 03:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231807AbiKOCe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 21:34:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S232179AbiKOCfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 21:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236320AbiKOCdb (ORCPT
+        with ESMTP id S232197AbiKOCe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 21:33:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA293AB;
-        Mon, 14 Nov 2022 18:33:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A1AEB811FF;
-        Tue, 15 Nov 2022 02:33:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D485FC433D7;
-        Tue, 15 Nov 2022 02:33:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668479605;
-        bh=arWWnXNyckh53wt46pLNwjigmsa726WXb0yla1rWH2E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lmr5It+r7k82nBnQZkLsFlM7R6e70zyPYUIJmSo+MeuBaTN3bKzWu7dtyVRJNyuN1
-         au3kioDCZwEovI3EAR63XA2Dbyou73KD7gqWSb5yAyi3NdWWeXa3IipU3ov7IzNdHG
-         GZnfEwkSjfBf47XnTP3qUgi4myRtrflpjqh0MyFHuHpoWKd7EIFT31UKPdIgAgwF66
-         gYlSH0B+ArxQJoLWnzQMa0f3dSlpfKg1STajGi0MiuKbmewphezOe2TmtqAumEaoyW
-         UVhrGFMEgzfnWQ0pnDXaIp6pedheKq6lwTn9h+sQK5r7Z16WI7fBbgoNmCsJ0xDpWX
-         uQ7qec5DQpr0w==
-Date:   Mon, 14 Nov 2022 18:33:23 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Denis Kirjanov <kda@linux-powerpc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: sundance: remove unused variable cnt
-Message-ID: <20221114183323.54d81387@kernel.org>
-In-Reply-To: <20221114170317.92817-1-colin.i.king@gmail.com>
-References: <20221114170317.92817-1-colin.i.king@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Nov 2022 21:34:59 -0500
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD1C140F0;
+        Mon, 14 Nov 2022 18:34:57 -0800 (PST)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 6C689C01F; Tue, 15 Nov 2022 03:35:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1668479700; bh=nbL/xZDPCL8jmbEEnRtWHyMrAnIAlzzCW9ltmbNEdmY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BTubEyb88pK+tsFm7mlAIi0fLDfKqvqQliCRntOPeC4bJA7GiR8kUDT7tiQCWJIiS
+         u0yKZzPzdUkxqS4ycN4tcYIjo+s5sw92WqHr8NaO7GbCjD3sgqG4vrudrxEhFOrT9f
+         +T8bbOugd7Dg7OSLKsblTaJ9E/kMNnh6rnyRX7sIEznZDN5dyWBWm7rjvVYYPfL8Ur
+         aGrU8o9oMCKHmT4nvvDedDxlMj92pLGNV+MnictvtnaosvsSfGqroOpH2OV3ziZ/E9
+         INWP10dOAk+5o4VIlIZbWsChdcJCuG+0QBDXAaLx8Rp1dTjjERzVmfrvQTLaxM64pK
+         r7cxJX4SQt5WQ==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id D917EC009;
+        Tue, 15 Nov 2022 03:34:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1668479699; bh=nbL/xZDPCL8jmbEEnRtWHyMrAnIAlzzCW9ltmbNEdmY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ODuILm6w+muG3YeYXeL/B2w4v4ALouBB7EV1VWeD79EfdWs/VXHiGECni9EG7SqsI
+         agXPtCjW3dGG4vr5u/QKL9H6P16bSuKD0imiXCGlAD0h2CLVsb8gZ+zbmNmMIOJRTR
+         Wv09VHJNaZty+f1IPSOoZ8PvXKpoig+0zjZjTZ2n4NhZJ2PqeRmn25Xf5lQgrMAo6M
+         mxOKmEx83Okrxey+BEMqnxazd9KX0jdhVii/ypx6Z171SAn5mV7jqq5K5IfgQrcRqn
+         HlAUbhC42z9d7SAJrThRyyEAOysG0Cja0bVY4Y2pkA+slZ0Jh+0maC+cdYHAkDORZO
+         rKrJwJ3Gb50hg==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id ea3428a8;
+        Tue, 15 Nov 2022 02:34:46 +0000 (UTC)
+Date:   Tue, 15 Nov 2022 11:34:31 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     willy@infradead.org, dwysocha@redhat.com,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Steve French <sfrench@samba.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Ilya Dryomov <idryomov@gmail.com>, linux-cachefs@redhat.com,
+        linux-cifs@vger.kernel.org, linux-afs@lists.infradead.org,
+        v9fs-developer@lists.sourceforge.net, ceph-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2] mm, netfs, fscache: Stop read optimisation when
+ folio removed from pagecache
+Message-ID: <Y3L6t0U89o27gJru@codewreck.org>
+References: <Y3Lbul7FZncNVwVZ@codewreck.org>
+ <166844174069.1124521.10890506360974169994.stgit@warthog.procyon.org.uk>
+ <1457985.1668472862@warthog.procyon.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1457985.1668472862@warthog.procyon.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 17:03:17 +0000 Colin Ian King wrote:
-> Variable cnt is just being incremented and it's never used
-> anywhere else. The variable and the increment are redundant so
-> remove it.
+David Howells wrote on Tue, Nov 15, 2022 at 12:41:02AM +0000:
+> Dominique Martinet <asmadeus@codewreck.org> wrote:
+> > any harm in setting this if netfs isn't enabled?
+> > (just asking because you checked in fs/9p/cache.c above)
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Well, it forces a call to ->release_folio() every time a folio is released, if
+> set, rather than just if PG_private/PG_private_2 is set.
 
-Once you've noticed that I'm tossing all your networking changes from
-patchwork - the reason is that you seem to have ignored completely 
-one of my replies and also recent review comments from Leon. 
+Yes, that's what I gathered from your explanation, but I don't
+understand what release_folio() actually implies in practice which is
+why I asked -- it looked a bit odd that you're checking for
+v9inode->netfs.cache in one case and not in the other; especially as all
+inodes should go through both v9fs_cache_inode_get_cookie() (when
+created) and v9fs_evict_inode() so I was a bit curious.
+
+In the 9p-without-cache case, we're normally not going through page
+cache at all, so I guess there won't be any mapping and this will be
+free anyway...
+
+> > > -	if (folio_has_private(folio) && !filemap_release_folio(folio, 0))
+> > > +	if (!filemap_release_folio(folio, 0))
+> > 
+> > should this (and all others) check for folio_needs_release instead of has_private?
+> > filemap_release_folio doesn't check as far as I can see, but perhaps
+> > it's already fast and noop for another reason I didn't see.
+> 
+> Willy suggested merging the checks from folio_has_private() into
+> filemap_release_folio():
+> 
+> 	https://lore.kernel.org/r/Yk9V/03wgdYi65Lb@casper.infradead.org/
+
+Ah, I didn't understand the suggestion in your patch was a separate
+patch and didn't follow the link.
+It doesn't look like a patch per se, perhaps sending both together would
+make sense -- but on top of this change these should indeed be fine,
+thanks.
+
+--
+Dominique
