@@ -2,97 +2,566 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573CA629E56
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63698629E60
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:03:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbiKOQBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 11:01:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S238090AbiKOQDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 11:03:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiKOQBa (ORCPT
+        with ESMTP id S232197AbiKOQDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 11:01:30 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB26BCA
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:01:29 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id s12so22497735edd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:01:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YCH6PtmHj3XKQVwXY2Gm1n1n5KTgNrZ2aoxjacIPkLA=;
-        b=XSZ1UsKd72WGVsU13AkxPx13kvV7eBMN2rk9mYv5/1BlvJuWdPfmvCjHqGY1YHuX1S
-         ZKcO4QYOE4Wc2+/sm0oCJqKm0mbgDpEta1QZXmLqmoik9/WEh1cA5d8rjRXkfeZwUrS2
-         t1agO5hRMm5K5WuuenC90gkUkRgs3BSOw1BPI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YCH6PtmHj3XKQVwXY2Gm1n1n5KTgNrZ2aoxjacIPkLA=;
-        b=k7ngeFk2BI9kyXsBpzIArXFJoot47nnL/s2GutYe9lpX8oTT6zaxS+3YPl8irXCGc/
-         YzdAO8eBTzP+mknnmsEaBVQ28wR+irr/WIbPEWUn7S976usvFbBvwdG4FDBNlScpGzO3
-         rZdT4Ydq1AZsCLQTwwcDlf8/Oz+mswMLwQl1TuGUDkvaRlO3oZdZuvPy7zsAk/AxwIUZ
-         tIa8yWML6prwZ8yd/HLKd14hUS5/8sVVYOzCDAhPcWN3z57YpUzxj42/bhx3soIEr7i8
-         wucHuOxJGfrADv8P5nhP2bt6Y33JGAzReisGozmoxTp01P7QhkH6K+aWOu/b805AkYJe
-         mr0g==
-X-Gm-Message-State: ANoB5pmR0CR4PsUpCcxXhuYZw7WwNSBUCReIJ9HJoVcbupiP2PXy8XNC
-        gpRLHBDCmTYTap9wEnUAofBKDrzgpW8suKhL
-X-Google-Smtp-Source: AA0mqf6gdSQ6Q81BieDh95B6/ETWcZlXDYgkVSRIHCpMcAmvoxi7Qdu5VkxOTNe4ntwIb9PeRR8XxA==
-X-Received: by 2002:a05:6402:3814:b0:461:7d1f:1a7b with SMTP id es20-20020a056402381400b004617d1f1a7bmr15074549edb.400.1668528088035;
-        Tue, 15 Nov 2022 08:01:28 -0800 (PST)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id c12-20020a0564021f8c00b0045b910b0542sm6310905edc.15.2022.11.15.08.01.25
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 08:01:25 -0800 (PST)
-Received: by mail-wr1-f45.google.com with SMTP id cl5so25043653wrb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:01:25 -0800 (PST)
-X-Received: by 2002:adf:f145:0:b0:236:5270:735e with SMTP id
- y5-20020adff145000000b002365270735emr10938918wro.659.1668528084437; Tue, 15
- Nov 2022 08:01:24 -0800 (PST)
+        Tue, 15 Nov 2022 11:03:30 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2080.outbound.protection.outlook.com [40.107.215.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DEF1000
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:03:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nNjpofMxR9/+cJ3X0rmERLvA56pfjGT//mNeou+pD86LeHP4lskx/dMJkWqU+p9WC54N5ZO56iaIBaAoWxgESpMOc83huOhGrhelx4/31ZDg9azcVV+bHrXVEdgnJNSiAXf3CcQK0pLoiikqPis3CeanaMxJUfJidWLYaG3X3sLd6olF78JaYXxpQT7FDr17Bz50fIIhIJvp8uLscC7KvDA8HOE2Aq6ABKum4vg3/wWqxGa27Oq8mtshGIvfEWXCUHA1tZ0Uypn45CpFjWOcZhbvWViUNFb8ukP2Zz2RVFu6BjB2ROhEXv7CNla3Y1Z4hWCWS/ZznMQekmgAfZtjUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4d3B/PGtTQYXHQ7OKboe22V9b3Gf8sq3dbcehpWreHY=;
+ b=ZvVzH8Ur7IMhNOKkpiqB8NqlYZx1lq5nEm0JTDGOHiMaCTqMHGES3C6uUVeYMyexLLcsNvdMLZvtk8vpbUUBy3cxRseQaTTRfDinlTdCuF3lD5uqrn+hYNup8zNP9AqR0MG1Qe0+EXYFMNwax/ARtqCEVC1ZuSvX572+oN4UuG1i5Bj2Q6oeRkWr3+HX5F0h9EKBCbbVvD55E/AE9LCYRw4MTty0YJUJT+fcQU/GfKtcftVPotRA/ZgZj2epb1SGMIlAtGy2hhOoHGR+EP0+mpjtMUtVkz2XmCXPaQqRKH3u9pk2X/yr6lvP2G5pMgOWBFQo0Y8Qf6uldVFU7fIfiw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
+ dkim=pass header.d=oppo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4d3B/PGtTQYXHQ7OKboe22V9b3Gf8sq3dbcehpWreHY=;
+ b=h3waAbtv0OQOwEzT9SqvlFgrUGq8giVPI53pwNE7Q9GozRC4nUD7h4niRDVnenNEAKT9of686Wxk3dKilPFYT6A8pX+kzEnqCsKTC/P6HGCkoHH2RbeW522Hz9pKSH9IYPi+epj7BiFY3evBLqNdJnX87Dsw6GnihR7FZF8fykM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oppo.com;
+Received: from SI2PR02MB5148.apcprd02.prod.outlook.com (2603:1096:4:153::6) by
+ TY0PR02MB5765.apcprd02.prod.outlook.com (2603:1096:400:1b4::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5813.17; Tue, 15 Nov 2022 16:03:20 +0000
+Received: from SI2PR02MB5148.apcprd02.prod.outlook.com
+ ([fe80::2954:8e56:dcd1:452c]) by SI2PR02MB5148.apcprd02.prod.outlook.com
+ ([fe80::2954:8e56:dcd1:452c%3]) with mapi id 15.20.5813.017; Tue, 15 Nov 2022
+ 16:03:20 +0000
+From:   Sheng Yong <shengyong@oppo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, shengyong@oppo.com
+Subject: [PATCH v3] f2fs: fix to enable compress for newly created file if extension matches
+Date:   Wed, 16 Nov 2022 00:01:55 +0800
+Message-Id: <20221115160155.1037163-1-shengyong@oppo.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <f508dea8-5dc3-e29e-0d8b-4d64735817ac@kernel.org>
+References: <f508dea8-5dc3-e29e-0d8b-4d64735817ac@kernel.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0024.apcprd02.prod.outlook.com
+ (2603:1096:4:1f4::12) To SI2PR02MB5148.apcprd02.prod.outlook.com
+ (2603:1096:4:153::6)
 MIME-Version: 1.0
-References: <20221115155535.1615278-1-robdclark@gmail.com>
-In-Reply-To: <20221115155535.1615278-1-robdclark@gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 15 Nov 2022 08:01:10 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VJKTHf7qLZkygfnMRSjXEdQ09opCpFM2brUc=uiTGyTw@mail.gmail.com>
-Message-ID: <CAD=FV=VJKTHf7qLZkygfnMRSjXEdQ09opCpFM2brUc=uiTGyTw@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm: Enable clamp_to_idle for 7c3
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Chia-I Wu <olvaffe@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SI2PR02MB5148:EE_|TY0PR02MB5765:EE_
+X-MS-Office365-Filtering-Correlation-Id: 69757fa1-8061-4761-a11c-08dac722ea99
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fUMRc9Il0z6uAJkqERNY6+gMDk9QIOPNL/EpAfMLDyNTGWMuP6O332EZYGyP8Q6/lFICvyAcWYLjntMsp+CjPqc3aXcJMmzH0S398m2bMPABmFlr6bQj20yumxACuPMb8Dsji1yr0BQ9v9939AMNfOTK4Anx9f93bHx+Pwt7sQMsbUH0KKeHmDuZSCKDFnvw18gLx9JwapAducczFnWNjDpVC3SB5o822GXH4ionnz9G6vr+D92jNKCs9hTyePMGxUKlB+DN+4gO+rriozPqP5nRKWLf8D6G86p4Rggbq0sdycZxOVuuL1kINPiSTvXph1qLOYNyi9YbXJl6i1QpYJ6th/yvo61vy5zv89KrKh2lKKO+jlV3Z9ogb4XAXkXjzN6cBkZK4h9w4GAm445V5V0YkldSssDuWli4zlCzUF6bGATGo50oeX2A2L8ytlhhTg1bnY3wsEt7MzlwNmJ7BcttKMsfZAxeA0cg8FCpddp2IyKYmeHjWQ1B1opPDLsXzwQgTEBNlkdqx/KxOKAv+CJIc4NKsJSciMjhDMZIZBOArHwaqKoiD7TyNexlCtdXk7zcQmOuhPIlDJoehHPXtYN/XQiKZc/t5J0Wc8cb47A+PZtJoIebpD90bkvfqRVGHVRXgyM7PtNxqcuhl9QbNlLTO/3P/6VkkS6Zof0Ryl1atYqY050vtwGfLE3volhxaUh6DzTW7WmUlnhzAfqwsbMf8H3xT3q45c4fXJcDt2v4fjUJhBFSpZ2YMhZb2j7p
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR02MB5148.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(366004)(346002)(39860400002)(376002)(451199015)(6486002)(52116002)(6666004)(107886003)(478600001)(66476007)(316002)(66946007)(66556008)(6512007)(26005)(6506007)(8676002)(41300700001)(4326008)(86362001)(38100700002)(38350700002)(186003)(2616005)(83380400001)(1076003)(8936002)(2906002)(5660300002)(36756003)(30864003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2AaElL+qqPCs+nDYDln7uxaT9rHV3wPW5Z46jRx3LUGLRd17ov/PhICVYOVQ?=
+ =?us-ascii?Q?cgXS8DFpSRCiKb0QDIc78J6zq0VXtDgtGHT7nVx9HGBp+bW94XjD59jJ1H+V?=
+ =?us-ascii?Q?4UMwjjrc78WBfZel+xigaMes/kWw5SY0mQ/13fJ5mEg2u21HMj7vLfqmKZ5n?=
+ =?us-ascii?Q?nCW603wZwXSlO6GC2XmPFVP2bl+DuMC8vDDiwgVBBm4gBtpd9d1T4NC+3H3z?=
+ =?us-ascii?Q?AmNh791yNlU5eZKxkDNTUVd597pvJcbAVzjTqgz+xXaV2juhhdpZBH2cdbUk?=
+ =?us-ascii?Q?/jO/A9TJpLyhEzKWJ3QcXsJjpXTuYtQXYvq/zPa47W++nIGsgy+LGl5NZUqX?=
+ =?us-ascii?Q?t7dkNXysyriEsjSDnmrJ8Eox3VlzIkh4F8A9FqzZFE/zLp+M0zZiJOSsCsLm?=
+ =?us-ascii?Q?VUJhfH6Bo0wpagZH3S+KHwOlW3JTTzrbvmxlrJ6Mfh6QVxXf6LoaG6pkg9Xz?=
+ =?us-ascii?Q?ydwD/FY3fd7IAo+dNtHJDArsKR4ht40/DBwklCt1Ra2B/aPtSDRTxsm0yf7x?=
+ =?us-ascii?Q?XcNm8Bt5u5AH7dc9E/w1moeKdN40yqj7NTAB8FHN2v9gJxIeiVACvTlcOaVW?=
+ =?us-ascii?Q?l5UO+LvRcl+Ap/CGpM0JLB8bYahEuRUofs5bgGmQXYSK8sHIjJjhPOrk5XnB?=
+ =?us-ascii?Q?UnkiFQRxadC+oPBzWI7qTUi5msdsxyEWR9YSdU/uyA4idqhkKkKeRTBbJ6TU?=
+ =?us-ascii?Q?SzZi255BVlM8WSfieIOb9X3N+aDES4t1x4Yw3y20W7B1q5WPgMxSPUwXYeq3?=
+ =?us-ascii?Q?Zx4BTuk7B8iGePRBwbEAUIshHV+4svkTivm5n5nOX0BhT2pqDVegl7kSp9CY?=
+ =?us-ascii?Q?50Nd0DIAASFBFGZoOWbM92BYluKQLYy+o8hL8isqaoA1ulh2aZdsIa92PoEf?=
+ =?us-ascii?Q?iYLAvo/+RTErnxvl/Y3QxnmOHDed4qHse4eIRr7untA+LalnrqA7vNcUxuWB?=
+ =?us-ascii?Q?+6SYM8sQ34Dc1w9icBRO4ixNPFYWAvI2l9pY8r0SI63XKi0GmzUZaPjqc8bk?=
+ =?us-ascii?Q?knxCct2JGBwzqXhsop0FARqN6Y+Qg/apVzAWfeNviLbASJyyJNGG0jotb9SV?=
+ =?us-ascii?Q?b0P6iIF1kRAoMEvmjT1TuGMZHOXlGRUTKrebMAfpg2WQwQ42R/mp4ZW3zX3u?=
+ =?us-ascii?Q?Q2/zkz/gC4xYqP01aiAHpGE9D23EzB69dUuSTTfZuQesRt2FRGvRH5F7yVMF?=
+ =?us-ascii?Q?Gsqn2E8BsiJn44Dant9e+TZuAFZ1gMy3nkRFFdgmipc8wwKkr+7ha6GFnuJ3?=
+ =?us-ascii?Q?6xbt+UAGpXF9qwdvvAK7sLmVgXdhyZYF3hmFrWt+g8SWl3U1VYVTLK2k0vFD?=
+ =?us-ascii?Q?TWK9eC4Xibnte2SK3ZkLJVlvI+R3eUb21L9qA6NN73sZnR0t3DYSl7SsDUKY?=
+ =?us-ascii?Q?y008YVdKqzb4r85PvLYc7D8HCqE4yOwy6HVBEc0PsYhkrHNPDaVBbQ9/b/q/?=
+ =?us-ascii?Q?q5qNG4coJCSuVnOg5x2FTRfAy8HW7WoOBTbewBhi98WrFKSf7uYLYlXPm7ua?=
+ =?us-ascii?Q?ZcULe0ApVo8udt/XVcQAPIy26OmRAzobGf2jh3K6TRCnLi55gmAFA71DLsBG?=
+ =?us-ascii?Q?wjkk3cTgIBhMOYp2lH2IJRZ4XGpTC6w5bIr5e+DK?=
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69757fa1-8061-4761-a11c-08dac722ea99
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR02MB5148.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2022 16:03:20.7285
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ReeByN0GveTnIiJ7ZpCj2htj2rDuDPdfvEydh3d3aeD3QEuObiRsSQwjum+4Mv+FZcA3vI0WiMCjnQu+DzlvsQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR02MB5765
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+If compress_extension is set, and a newly created file matches the
+extension, the file could be marked as compression file. However,
+if inline_data is also enabled, there is no chance to check its
+extension since f2fs_should_compress() always returns false.
 
-On Tue, Nov 15, 2022 at 7:55 AM Rob Clark <robdclark@gmail.com> wrote:
->
-> From: Rob Clark <robdclark@chromium.org>
->
-> This was overlooked.
->
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
+This patch moves set_compress_inode(), which do extension check, in
+f2fs_should_compress() to check extensions before setting inline
+data flag.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Fixes: 7165841d578e ("f2fs: fix to check inline_data during compressed inode conversion")
+Signed-off-by: Sheng Yong <shengyong@oppo.com>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
+ fs/f2fs/f2fs.h  |   1 +
+ fs/f2fs/namei.c | 336 ++++++++++++++++++++++++------------------------
+ 2 files changed, 171 insertions(+), 166 deletions(-)
+---
+
+Hi, Jaegeuk, Chao,
+
+How about adding a bool `may_compress' in set_compress_new_inode, set
+`my_compress` according to several conditions. If it is false, clear
+F2FS_COMPR_FL.
+
+And set_compress_context is also changed to clear F2FS_NOCOMP_FL,
+otherwise, if F2FS_NOCOMP_FL is inherited from parent and hit
+compress_extension, both F2FS_NOCOMP_FL and F2FS_COMPR_FL are set.
+
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 6a8cbf5bb1871..a3420fbb29214 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -4355,6 +4355,7 @@ static inline int set_compress_context(struct inode *inode)
+ 		F2FS_I(inode)->i_compress_flag |=
+ 				F2FS_OPTION(sbi).compress_level <<
+ 				COMPRESS_LEVEL_OFFSET;
++	F2FS_I(inode)->i_flags &= ~F2FS_NOCOMP_FL;
+ 	F2FS_I(inode)->i_flags |= F2FS_COMPR_FL;
+ 	set_inode_flag(inode, FI_COMPRESSED_FILE);
+ 	stat_inc_compr_inode(inode);
+diff --git a/fs/f2fs/namei.c b/fs/f2fs/namei.c
+index e104409c3a0e5..36ec5cf7cf859 100644
+--- a/fs/f2fs/namei.c
++++ b/fs/f2fs/namei.c
+@@ -22,8 +22,170 @@
+ #include "acl.h"
+ #include <trace/events/f2fs.h>
+ 
++static inline int is_extension_exist(const unsigned char *s, const char *sub,
++						bool tmp_ext)
++{
++	size_t slen = strlen(s);
++	size_t sublen = strlen(sub);
++	int i;
++
++	if (sublen == 1 && *sub == '*')
++		return 1;
++
++	/*
++	 * filename format of multimedia file should be defined as:
++	 * "filename + '.' + extension + (optional: '.' + temp extension)".
++	 */
++	if (slen < sublen + 2)
++		return 0;
++
++	if (!tmp_ext) {
++		/* file has no temp extension */
++		if (s[slen - sublen - 1] != '.')
++			return 0;
++		return !strncasecmp(s + slen - sublen, sub, sublen);
++	}
++
++	for (i = 1; i < slen - sublen; i++) {
++		if (s[i] != '.')
++			continue;
++		if (!strncasecmp(s + i + 1, sub, sublen))
++			return 1;
++	}
++
++	return 0;
++}
++
++int f2fs_update_extension_list(struct f2fs_sb_info *sbi, const char *name,
++							bool hot, bool set)
++{
++	__u8 (*extlist)[F2FS_EXTENSION_LEN] = sbi->raw_super->extension_list;
++	int cold_count = le32_to_cpu(sbi->raw_super->extension_count);
++	int hot_count = sbi->raw_super->hot_ext_count;
++	int total_count = cold_count + hot_count;
++	int start, count;
++	int i;
++
++	if (set) {
++		if (total_count == F2FS_MAX_EXTENSION)
++			return -EINVAL;
++	} else {
++		if (!hot && !cold_count)
++			return -EINVAL;
++		if (hot && !hot_count)
++			return -EINVAL;
++	}
++
++	if (hot) {
++		start = cold_count;
++		count = total_count;
++	} else {
++		start = 0;
++		count = cold_count;
++	}
++
++	for (i = start; i < count; i++) {
++		if (strcmp(name, extlist[i]))
++			continue;
++
++		if (set)
++			return -EINVAL;
++
++		memcpy(extlist[i], extlist[i + 1],
++				F2FS_EXTENSION_LEN * (total_count - i - 1));
++		memset(extlist[total_count - 1], 0, F2FS_EXTENSION_LEN);
++		if (hot)
++			sbi->raw_super->hot_ext_count = hot_count - 1;
++		else
++			sbi->raw_super->extension_count =
++						cpu_to_le32(cold_count - 1);
++		return 0;
++	}
++
++	if (!set)
++		return -EINVAL;
++
++	if (hot) {
++		memcpy(extlist[count], name, strlen(name));
++		sbi->raw_super->hot_ext_count = hot_count + 1;
++	} else {
++		char buf[F2FS_MAX_EXTENSION][F2FS_EXTENSION_LEN];
++
++		memcpy(buf, &extlist[cold_count],
++				F2FS_EXTENSION_LEN * hot_count);
++		memset(extlist[cold_count], 0, F2FS_EXTENSION_LEN);
++		memcpy(extlist[cold_count], name, strlen(name));
++		memcpy(&extlist[cold_count + 1], buf,
++				F2FS_EXTENSION_LEN * hot_count);
++		sbi->raw_super->extension_count = cpu_to_le32(cold_count + 1);
++	}
++	return 0;
++}
++
++static void set_compress_new_inode(struct f2fs_sb_info *sbi, struct inode *dir,
++				struct inode *inode, const unsigned char *name)
++{
++	struct f2fs_inode_info *fi = F2FS_I(inode);
++	__u8 (*extlist)[F2FS_EXTENSION_LEN] = sbi->raw_super->extension_list;
++	unsigned char (*noext)[F2FS_EXTENSION_LEN] =
++						F2FS_OPTION(sbi).noextensions;
++	unsigned char (*ext)[F2FS_EXTENSION_LEN] = F2FS_OPTION(sbi).extensions;
++	unsigned char ext_cnt = F2FS_OPTION(sbi).compress_ext_cnt;
++	unsigned char noext_cnt = F2FS_OPTION(sbi).nocompress_ext_cnt;
++	bool may_compress = false;
++	int i, cold_count, hot_count;
++
++	if (!f2fs_sb_has_compression(sbi) || !name)
++		return;
++	if (!S_ISREG(inode->i_mode) && !S_ISDIR(inode->i_mode))
++		return;
++
++	/* Inherit the compression flag in directory */
++	if (fi->i_flags & FS_COMPR_FL)
++		may_compress = true;
++
++	/* Start to check extension list for regular file */
++	if ((!ext_cnt && !noext_cnt) || S_ISDIR(inode->i_mode))
++		goto set_compress;
++
++	/* Don't compress hot files. */
++	f2fs_down_read(&sbi->sb_lock);
++	cold_count = le32_to_cpu(sbi->raw_super->extension_count);
++	hot_count = sbi->raw_super->hot_ext_count;
++	for (i = cold_count; i < cold_count + hot_count; i++)
++		if (is_extension_exist(name, extlist[i], false)) {
++			may_compress = false;
++			f2fs_up_read(&sbi->sb_lock);
++			goto set_compress;
++		}
++	f2fs_up_read(&sbi->sb_lock);
++
++	/* Don't compress unallowed extension. */
++	for (i = 0; i < noext_cnt; i++) {
++		if (is_extension_exist(name, noext[i], false)) {
++			may_compress = false;
++			goto set_compress;
++		}
++	}
++
++	/* Compress wanting extension. */
++	for (i = 0; i < ext_cnt; i++) {
++		if (is_extension_exist(name, ext[i], false)) {
++			may_compress = true;
++			goto set_compress;
++		}
++	}
++
++set_compress:
++	if (may_compress)
++		set_compress_context(inode);
++	else if (fi->i_flags & F2FS_COMPR_FL)
++		fi->i_flags &= ~F2FS_COMPR_FL;
++}
++
+ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+-						struct inode *dir, umode_t mode)
++						struct inode *dir, umode_t mode,
++						const char *name)
+ {
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(dir);
+ 	nid_t ino;
+@@ -114,12 +276,8 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+ 	if (F2FS_I(inode)->i_flags & F2FS_PROJINHERIT_FL)
+ 		set_inode_flag(inode, FI_PROJ_INHERIT);
+ 
+-	if (f2fs_sb_has_compression(sbi)) {
+-		/* Inherit the compression flag in directory */
+-		if ((F2FS_I(dir)->i_flags & F2FS_COMPR_FL) &&
+-					f2fs_may_compress(inode))
+-			set_compress_context(inode);
+-	}
++	/* Check compression first. */
++	set_compress_new_inode(sbi, dir, inode, name);
+ 
+ 	/* Should enable inline_data after compression set */
+ 	if (test_opt(sbi, INLINE_DATA) && f2fs_may_inline_data(inode))
+@@ -153,40 +311,6 @@ static struct inode *f2fs_new_inode(struct user_namespace *mnt_userns,
+ 	return ERR_PTR(err);
+ }
+ 
+-static inline int is_extension_exist(const unsigned char *s, const char *sub,
+-						bool tmp_ext)
+-{
+-	size_t slen = strlen(s);
+-	size_t sublen = strlen(sub);
+-	int i;
+-
+-	if (sublen == 1 && *sub == '*')
+-		return 1;
+-
+-	/*
+-	 * filename format of multimedia file should be defined as:
+-	 * "filename + '.' + extension + (optional: '.' + temp extension)".
+-	 */
+-	if (slen < sublen + 2)
+-		return 0;
+-
+-	if (!tmp_ext) {
+-		/* file has no temp extension */
+-		if (s[slen - sublen - 1] != '.')
+-			return 0;
+-		return !strncasecmp(s + slen - sublen, sub, sublen);
+-	}
+-
+-	for (i = 1; i < slen - sublen; i++) {
+-		if (s[i] != '.')
+-			continue;
+-		if (!strncasecmp(s + i + 1, sub, sublen))
+-			return 1;
+-	}
+-
+-	return 0;
+-}
+-
+ /*
+  * Set file's temperature for hot/cold data separation
+  */
+@@ -217,124 +341,6 @@ static inline void set_file_temperature(struct f2fs_sb_info *sbi, struct inode *
+ 		file_set_hot(inode);
+ }
+ 
+-int f2fs_update_extension_list(struct f2fs_sb_info *sbi, const char *name,
+-							bool hot, bool set)
+-{
+-	__u8 (*extlist)[F2FS_EXTENSION_LEN] = sbi->raw_super->extension_list;
+-	int cold_count = le32_to_cpu(sbi->raw_super->extension_count);
+-	int hot_count = sbi->raw_super->hot_ext_count;
+-	int total_count = cold_count + hot_count;
+-	int start, count;
+-	int i;
+-
+-	if (set) {
+-		if (total_count == F2FS_MAX_EXTENSION)
+-			return -EINVAL;
+-	} else {
+-		if (!hot && !cold_count)
+-			return -EINVAL;
+-		if (hot && !hot_count)
+-			return -EINVAL;
+-	}
+-
+-	if (hot) {
+-		start = cold_count;
+-		count = total_count;
+-	} else {
+-		start = 0;
+-		count = cold_count;
+-	}
+-
+-	for (i = start; i < count; i++) {
+-		if (strcmp(name, extlist[i]))
+-			continue;
+-
+-		if (set)
+-			return -EINVAL;
+-
+-		memcpy(extlist[i], extlist[i + 1],
+-				F2FS_EXTENSION_LEN * (total_count - i - 1));
+-		memset(extlist[total_count - 1], 0, F2FS_EXTENSION_LEN);
+-		if (hot)
+-			sbi->raw_super->hot_ext_count = hot_count - 1;
+-		else
+-			sbi->raw_super->extension_count =
+-						cpu_to_le32(cold_count - 1);
+-		return 0;
+-	}
+-
+-	if (!set)
+-		return -EINVAL;
+-
+-	if (hot) {
+-		memcpy(extlist[count], name, strlen(name));
+-		sbi->raw_super->hot_ext_count = hot_count + 1;
+-	} else {
+-		char buf[F2FS_MAX_EXTENSION][F2FS_EXTENSION_LEN];
+-
+-		memcpy(buf, &extlist[cold_count],
+-				F2FS_EXTENSION_LEN * hot_count);
+-		memset(extlist[cold_count], 0, F2FS_EXTENSION_LEN);
+-		memcpy(extlist[cold_count], name, strlen(name));
+-		memcpy(&extlist[cold_count + 1], buf,
+-				F2FS_EXTENSION_LEN * hot_count);
+-		sbi->raw_super->extension_count = cpu_to_le32(cold_count + 1);
+-	}
+-	return 0;
+-}
+-
+-static void set_compress_inode(struct f2fs_sb_info *sbi, struct inode *inode,
+-						const unsigned char *name)
+-{
+-	__u8 (*extlist)[F2FS_EXTENSION_LEN] = sbi->raw_super->extension_list;
+-	unsigned char (*noext)[F2FS_EXTENSION_LEN] = F2FS_OPTION(sbi).noextensions;
+-	unsigned char (*ext)[F2FS_EXTENSION_LEN] = F2FS_OPTION(sbi).extensions;
+-	unsigned char ext_cnt = F2FS_OPTION(sbi).compress_ext_cnt;
+-	unsigned char noext_cnt = F2FS_OPTION(sbi).nocompress_ext_cnt;
+-	int i, cold_count, hot_count;
+-
+-	if (!f2fs_sb_has_compression(sbi) ||
+-			F2FS_I(inode)->i_flags & F2FS_NOCOMP_FL ||
+-			!f2fs_may_compress(inode) ||
+-			(!ext_cnt && !noext_cnt))
+-		return;
+-
+-	f2fs_down_read(&sbi->sb_lock);
+-
+-	cold_count = le32_to_cpu(sbi->raw_super->extension_count);
+-	hot_count = sbi->raw_super->hot_ext_count;
+-
+-	for (i = cold_count; i < cold_count + hot_count; i++) {
+-		if (is_extension_exist(name, extlist[i], false)) {
+-			f2fs_up_read(&sbi->sb_lock);
+-			return;
+-		}
+-	}
+-
+-	f2fs_up_read(&sbi->sb_lock);
+-
+-	for (i = 0; i < noext_cnt; i++) {
+-		if (is_extension_exist(name, noext[i], false)) {
+-			f2fs_disable_compressed_file(inode);
+-			return;
+-		}
+-	}
+-
+-	if (is_inode_flag_set(inode, FI_COMPRESSED_FILE))
+-		return;
+-
+-	for (i = 0; i < ext_cnt; i++) {
+-		if (!is_extension_exist(name, ext[i], false))
+-			continue;
+-
+-		/* Do not use inline_data with compression */
+-		stat_dec_inline_inode(inode);
+-		clear_inode_flag(inode, FI_INLINE_DATA);
+-		set_compress_context(inode);
+-		return;
+-	}
+-}
+-
+ static int f2fs_create(struct user_namespace *mnt_userns, struct inode *dir,
+ 		       struct dentry *dentry, umode_t mode, bool excl)
+ {
+@@ -352,15 +358,13 @@ static int f2fs_create(struct user_namespace *mnt_userns, struct inode *dir,
+ 	if (err)
+ 		return err;
+ 
+-	inode = f2fs_new_inode(mnt_userns, dir, mode);
++	inode = f2fs_new_inode(mnt_userns, dir, mode, dentry->d_name.name);
+ 	if (IS_ERR(inode))
+ 		return PTR_ERR(inode);
+ 
+ 	if (!test_opt(sbi, DISABLE_EXT_IDENTIFY))
+ 		set_file_temperature(sbi, inode, dentry->d_name.name);
+ 
+-	set_compress_inode(sbi, inode, dentry->d_name.name);
+-
+ 	inode->i_op = &f2fs_file_inode_operations;
+ 	inode->i_fop = &f2fs_file_operations;
+ 	inode->i_mapping->a_ops = &f2fs_dblock_aops;
+@@ -689,7 +693,7 @@ static int f2fs_symlink(struct user_namespace *mnt_userns, struct inode *dir,
+ 	if (err)
+ 		return err;
+ 
+-	inode = f2fs_new_inode(mnt_userns, dir, S_IFLNK | S_IRWXUGO);
++	inode = f2fs_new_inode(mnt_userns, dir, S_IFLNK | S_IRWXUGO, NULL);
+ 	if (IS_ERR(inode))
+ 		return PTR_ERR(inode);
+ 
+@@ -760,7 +764,7 @@ static int f2fs_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
+ 	if (err)
+ 		return err;
+ 
+-	inode = f2fs_new_inode(mnt_userns, dir, S_IFDIR | mode);
++	inode = f2fs_new_inode(mnt_userns, dir, S_IFDIR | mode, dentry->d_name.name);
+ 	if (IS_ERR(inode))
+ 		return PTR_ERR(inode);
+ 
+@@ -817,7 +821,7 @@ static int f2fs_mknod(struct user_namespace *mnt_userns, struct inode *dir,
+ 	if (err)
+ 		return err;
+ 
+-	inode = f2fs_new_inode(mnt_userns, dir, mode);
++	inode = f2fs_new_inode(mnt_userns, dir, mode, NULL);
+ 	if (IS_ERR(inode))
+ 		return PTR_ERR(inode);
+ 
+@@ -856,7 +860,7 @@ static int __f2fs_tmpfile(struct user_namespace *mnt_userns, struct inode *dir,
+ 	if (err)
+ 		return err;
+ 
+-	inode = f2fs_new_inode(mnt_userns, dir, mode);
++	inode = f2fs_new_inode(mnt_userns, dir, mode, NULL);
+ 	if (IS_ERR(inode))
+ 		return PTR_ERR(inode);
+ 
+-- 
+2.25.1
+
