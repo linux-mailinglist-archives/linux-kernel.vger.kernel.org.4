@@ -2,65 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6A8629381
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:44:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D71E6629382
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232976AbiKOIoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 03:44:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
+        id S236559AbiKOIoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 03:44:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232939AbiKOIoD (ORCPT
+        with ESMTP id S232960AbiKOIoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 03:44:03 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C72F12091;
-        Tue, 15 Nov 2022 00:44:01 -0800 (PST)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NBKPS5bH9zqSQQ;
-        Tue, 15 Nov 2022 16:40:12 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 16:43:59 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 16:43:58 +0800
-Subject: Re: [PATCH v9] kallsyms: Add self-test facility
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        <linux-modules@vger.kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-CC:     David Laight <David.Laight@ACULAB.COM>
-References: <20221115083349.1662-1-thunder.leizhen@huawei.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <f21eb27b-4c7f-5136-85ab-61a8ca762496@huawei.com>
-Date:   Tue, 15 Nov 2022 16:43:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Tue, 15 Nov 2022 03:44:11 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78645F27
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 00:44:09 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8CxfbZXUXNj2zIHAA--.9839S3;
+        Tue, 15 Nov 2022 16:44:07 +0800 (CST)
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxoOJVUXNjo28TAA--.51662S3;
+        Tue, 15 Nov 2022 16:44:06 +0800 (CST)
+Subject: Re: [PATCH v2 0/5] Add kprobe and kretprobe support for LoongArch
+To:     Huacai Chen <chenhuacai@kernel.org>
+References: <1664326209-13995-1-git-send-email-yangtiezhu@loongson.cn>
+ <CAAhV-H47oPC6mYkeDh7NfmvL2jAHO32ugM-PK2mmFY6XdqF8_Q@mail.gmail.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <1af099bf-123e-06bb-cd9a-5fd939f9cb79@loongson.cn>
+Date:   Tue, 15 Nov 2022 16:44:05 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-In-Reply-To: <20221115083349.1662-1-thunder.leizhen@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+In-Reply-To: <CAAhV-H47oPC6mYkeDh7NfmvL2jAHO32ugM-PK2mmFY6XdqF8_Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8BxoOJVUXNjo28TAA--.51662S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoW5Kw4DWw48XFyUXw4fXw15CFg_yoWxXrcEgw
+        1kGF9rGa1jqws8K3Z0yr43XrsrGa9rA3W5Jrn5Kw13X3ZYqa1DGrs3Kr93ZF13Jan5Jws5
+        ZFWFqrn8AwsrXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        I7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUGVWUXwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7
+        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS
+        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
+        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Cr0_Gr1U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
+        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
+        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwI
+        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
+        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
+        C2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUzQ6pUUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,59 +64,23 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022/11/15 16:33, Zhen Lei wrote:
-> Added test cases for basic functions and performance of functions
-> kallsyms_lookup_name(), kallsyms_on_each_symbol() and
-> kallsyms_on_each_match_symbol(). It also calculates the compression rate
-> of the kallsyms compression algorithm for the current symbol set.
-> 
-> The basic functions test begins by testing a set of symbols whose address
-> values are known. Then, traverse all symbol addresses and find the
-> corresponding symbol name based on the address. It's impossible to
-> determine whether these addresses are correct, but we can use the above
-> three functions along with the addresses to test each other. Due to the
-> traversal operation of kallsyms_on_each_symbol() is too slow, only 60
-> symbols can be tested in one second, so let it test on average once
-> every 128 symbols. The other two functions validate all symbols.
-> 
-> If the basic functions test is passed, print only performance test
-> results. If the test fails, print error information, but do not perform
-> subsequent performance tests.
-> 
-> Start self-test automatically after system startup if
-> CONFIG_KALLSYMS_SELFTEST=y.
-> 
-> Example of output content: (prefix 'kallsyms_selftest:' is omitted
->  start
->   ---------------------------------------------------------
->  | nr_symbols | compressed size | original size | ratio(%) |
->  |---------------------------------------------------------|
->  |     107543 |       1357912   |      2407433  |  56.40   |
->   ---------------------------------------------------------
->  kallsyms_lookup_name() looked up 107543 symbols
->  The time spent on each symbol is (ns): min=630, max=35295, avg=7353
->  kallsyms_on_each_symbol() traverse all: 11782628 ns
->  kallsyms_on_each_match_symbol() traverse all: 9261 ns
->  finish
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->  include/linux/kallsyms.h   |   1 +
->  init/Kconfig               |  13 +
->  kernel/Makefile            |   1 +
->  kernel/kallsyms.c          |   2 +-
->  kernel/kallsyms_selftest.c | 485 +++++++++++++++++++++++++++++++++++++
->  kernel/kallsyms_selftest.h |  13 +
->  6 files changed, 514 insertions(+), 1 deletion(-)
->  create mode 100644 kernel/kallsyms_selftest.c
->  create mode 100644 kernel/kallsyms_selftest.h
+On 11/14/2022 12:31 PM, Huacai Chen wrote:
+> Hi, Tiezhu,
+>
+> Thanks for your patches, however,
+> 1, You should rebase your code, since some functions such as
+> is_pc_insn is provided in the github's loongarch-next branch;
+> 2, Your code may have some problems about preemption, you can do
+> something like this commit [1];
+> 3, I don't think Kprobe should be enabled by default, distribution
+> configs can enable it if needed.
+>
+> [1] https://github.com/loongson/linux/commit/023d5412ab5c154b87d57d70d465a4243df53717
+>
 
-v8 --> v9:
-[v8] https://lkml.org/lkml/2022/11/2/225
+OK, thank you, I will rebase and address the review comments,
+and then send v3 later.
 
-Adjust the prototype of some callback functions. Because 7/9 and 8/9
-in v8 are dropped.
+Thanks,
+Tiezhu
 
--- 
-Regards,
-  Zhen Lei
