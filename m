@@ -2,57 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B7E629345
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B4C629347
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:32:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232727AbiKOIby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 03:31:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
+        id S232748AbiKOIcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 03:32:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiKOIbw (ORCPT
+        with ESMTP id S229664AbiKOIcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 03:31:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDEF631F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 00:31:51 -0800 (PST)
+        Tue, 15 Nov 2022 03:32:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7AE631F;
+        Tue, 15 Nov 2022 00:32:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C5A26157B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:31:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ACEBC433C1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:31:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0161961576;
+        Tue, 15 Nov 2022 08:32:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 925F4C433C1;
+        Tue, 15 Nov 2022 08:32:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668501110;
-        bh=HhcFH+cadi57qTWbydHQdoKaz29QoMHUVpKX9PxEtsg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=A5CiupwYH8+BO8Nd/6yw0kQBMp/4zN7GL7KoQGLo6/9Vq1+tNz97T0oheaEAN2FDd
-         WGBKiD0XS9Prx729B8lwDT31wLVTdOmrSmLfX+rmPj1qg31K+SBVoGzeJxLjaa7mNJ
-         qlsTlGjpROnYtTA7XNPdDweRHP0Bp427g3+vk6pwZnXtHgTPNVTzMSJ/NGA2N/aR9T
-         YruKv0ZSYd3gl6WWDM3qS3cNJYBPxfn+9oTpJcszdyOaQOAipU7BPumPjgSR/5pQvc
-         Ut75Wy1hKHP0RN6M1mFuMKyFryvRaNTJvFJBOoz3FpeXt671+GAK6Nu3/pFkEE6fwx
-         5/PD0m5HM0JVA==
-Received: by mail-ed1-f50.google.com with SMTP id s5so4608945edc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 00:31:50 -0800 (PST)
-X-Gm-Message-State: ANoB5pkW4jE6yX+vIY1Lj/NOQA0GFGRHNZsNWDxuAct/fCCPjdrF/jVM
-        MfVX4NPkwC9s+hT+PzDemS+qDHGRnqbjCh6uJ+M=
-X-Google-Smtp-Source: AA0mqf48zfzMA14DyPoh+Ghu+RUlJPZcKfa5azAGVTnXzRlBdVSZuqAE7DFsi2PIRKckonj7bDwcYXCWZ8wwqZTKgY8=
-X-Received: by 2002:a05:6402:3715:b0:462:32bf:613a with SMTP id
- ek21-20020a056402371500b0046232bf613amr13628347edb.78.1668501108788; Tue, 15
- Nov 2022 00:31:48 -0800 (PST)
+        s=k20201202; t=1668501160;
+        bh=qvc4PkjbFLd4d9FhXUQJc9o0AtNm4ofX85R/Lkx1n2g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aWbubnBI1qXAmT9YJM8uICvKoBgnifdj8lYcpO/3SbrGURsWQAqoILnDn9fly3wlt
+         8feq45FgKdoGQ2PxCK6uDetR0y0Cq6YXs3K6RxR/CoAONUXuq8aZ0u1+0HzBimz8uR
+         FkYQgeZBMggFeBhMhaR37zXzNqtk4vchiBQlOXnjVm8rUKakxiy6WHL11+xAblnac6
+         iZCdRdg55asb/6qEkGtKABPmLLRcy6sm2fizsRnf1MOrkIDrY7asmN0im5CeQ9m8IQ
+         vJWupfvTQBz7PrMEblCyill8286guDqdwRjrN127NB5d6zC9LjB1qkjbQERgP5OFTb
+         DsUpJ2Tv3QH0A==
+Date:   Tue, 15 Nov 2022 10:32:35 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Oliver O'Halloran <oohall@gmail.com>
+Cc:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
+        <longpeng2@huawei.com>, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jianjay.zhou@huawei.com, zhuangshengen@huawei.com,
+        arei.gonglei@huawei.com, yechuan@huawei.com,
+        huangzhichao@huawei.com, xiehong@huawei.com
+Subject: Re: [RFC 0/4] pci/sriov: support VFs dynamic addition
+Message-ID: <Y3NOo3DaLKb219IV@unreal>
+References: <20221111142722.1172-1-longpeng2@huawei.com>
+ <Y256ty6xGyUpkFn9@unreal>
+ <0b2202bf-18d3-b288-9605-279208165080@huawei.com>
+ <Y3Hoi4zGFY4Fz1l4@unreal>
+ <d7327d46-deb5-dc75-21c3-1f351d7da108@huawei.com>
+ <Y3I+Fs0/dXH/hnpL@unreal>
+ <3a8efc92-eda8-9c61-50c5-5ec97e2e2342@huawei.com>
+ <Y3JOvTfBwpaldtZJ@unreal>
+ <CAOSf1CG+VGdeXGQetfMArwpafAx2yj3nmA_y7rN4SNdt=1=08w@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221115025527.13382-1-zhangqing@loongson.cn> <20221115025527.13382-10-zhangqing@loongson.cn>
-In-Reply-To: <20221115025527.13382-10-zhangqing@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 15 Nov 2022 16:31:36 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5YnpRu=mcdmHy=x9MstTmfFgHU=WV4ZBd49PBkeeZjAA@mail.gmail.com>
-Message-ID: <CAAhV-H5YnpRu=mcdmHy=x9MstTmfFgHU=WV4ZBd49PBkeeZjAA@mail.gmail.com>
-Subject: Re: [PATCH v6 9/9] LoongArch: Enable CONFIG_KALLSYMS_ALL and CONFIG_DEBUG_FS
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOSf1CG+VGdeXGQetfMArwpafAx2yj3nmA_y7rN4SNdt=1=08w@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,44 +65,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Qing,
+On Tue, Nov 15, 2022 at 12:50:34PM +1100, Oliver O'Halloran wrote:
+> On Tue, Nov 15, 2022 at 1:27 AM Leon Romanovsky <leon@kernel.org> wrote:
+> >
+> > *snip*
+> >
+> > Anyway, I'm aware of big cloud providers who are pretty happy with live
+> > migration in production.
+> 
+> I could see someone sufficiently cloudbrained deciding that rebooting
+> the hypervisor is fine provided the downtime doesn't violate any
+> customer uptime SLAs. Personally I'd only be brave enough to do that
+> for a HV hosting internal services which I know are behind a load
+> balancer, but apparently there are people at Huawei far braver than I.
 
-I suggest not enabling debug mechanisms in the default config file,
-distribution configs can make their own decisions.
+My main point in this discussion that Huawei team doesn't actually
+provide any meaningful justification why it is great idea to add new
+sysfs file. They use HPC as an argument, but in that world, you won't
+see many VMs on one server, as it is important to provide separate MSI-X
+vectors and CPUs to each VM.
 
-Huacai
+They ask from us optimization (do not add device hierarchy for existing HW)
+that doesn't exist in the kernel.
 
-On Tue, Nov 15, 2022 at 10:55 AM Qing Zhang <zhangqing@loongson.cn> wrote:
->
-> Defaults enable CONFIG_KALLSYMS_ALL and CONFIG_DEBUG_FS to convenient
-> ftrace tests.
->
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> ---
->  arch/loongarch/configs/loongson3_defconfig | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-> index 2d4678e6189a..0bbab17609b0 100644
-> --- a/arch/loongarch/configs/loongson3_defconfig
-> +++ b/arch/loongarch/configs/loongson3_defconfig
-> @@ -34,6 +34,7 @@ CONFIG_SYSFS_DEPRECATED=y
->  CONFIG_RELAY=y
->  CONFIG_BLK_DEV_INITRD=y
->  CONFIG_EXPERT=y
-> +CONFIG_KALLSYMS_ALL=y
->  CONFIG_USERFAULTFD=y
->  CONFIG_PERF_EVENTS=y
->  # CONFIG_COMPAT_BRK is not set
-> @@ -845,6 +846,7 @@ CONFIG_CRYPTO_DEV_VIRTIO=m
->  CONFIG_PRINTK_TIME=y
->  CONFIG_STRIP_ASM_SYMS=y
->  CONFIG_MAGIC_SYSRQ=y
-> +CONFIG_DEBUG_FS=y
->  # CONFIG_SCHED_DEBUG is not set
->  CONFIG_SCHEDSTATS=y
->  # CONFIG_DEBUG_PREEMPT is not set
-> --
-> 2.36.0
->
->
+I would say that they are trying to meld SIOV architecture of subfunctions
+(SFs) into PCI and SR-IOV world.
+
+Thanks
