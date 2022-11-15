@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CF662A1EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 20:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA7062A1EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 20:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbiKOTdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 14:33:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
+        id S230295AbiKOTcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 14:32:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbiKOTcw (ORCPT
+        with ESMTP id S229820AbiKOTcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Nov 2022 14:32:52 -0500
 Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C689E2F649
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5D6F2C11A
         for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 11:32:49 -0800 (PST)
 Received: from localhost.localdomain ([146.241.88.137])
         by Aruba Outgoing Smtp  with ESMTPSA
-        id v1fpoedd9ae4mv1fqoaGVJ; Tue, 15 Nov 2022 20:32:47 +0100
+        id v1fpoedd9ae4mv1froaGVo; Tue, 15 Nov 2022 20:32:47 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1668540767; bh=bYxD4zkvpQWcK4XaGs1emJgCui8X6J85I/IA0uMXmdw=;
+        t=1668540767; bh=CZGNAdcyRYcjhzECvTdpmDDAmXrU1WfFbXnrYeTMrSU=;
         h=From:To:Subject:Date:MIME-Version;
-        b=fDmhcdJKUZsA9jCF7Gya6TWhNzo46mVT7LhNsDlelHhtVFQxHic+E4QiGGBkfHuzn
-         jzQYoD7iIMx0CspNs3lWaxuAy41rHv6WrlTwm0p4KOm5kPhEooQ8jj8ZvudYUWz8Nb
-         8+8051lZSF03QugC4OChFjcT2eU0EVE6LEDtRQmioRUApQn3UxrnUhRU9plBd/uuwu
-         7AHwks9qgg4rEvoYZjyIAghg4DrdMSGSRRrhHTxMDG1pqQfcON1z/24Fn0mzke6z3M
-         WX5iCUce7XxcU1rcMmkn8ei3Ty913bXsMwRchi8HKkdYSE0AamDAAloXDQhRUtuOXG
-         oADscU9DmktmQ==
+        b=K7W5wU7S+T75J9qH9XKpq2z+UgM5j8BCI0Iwo1eOkGYN//UJdLRtAxQwKjgl1RLiW
+         HQd17v9FtOpuewC6cIwFwPCZN8AJrZGNwoQZJ96O3KM1m3a5um7stUrydTVqSRWRPk
+         4KgIGza6Lk96hn36jzd/O54iUY7CAYgmGamXpDejN6v2opam9ClEpkf/Ug7xUfvp/r
+         7vilTTjOh+o5KRAx8nCMjKhA8aluk52IK/SYs5qdR2LvCOqC7P8p+HRyCZREUwg+7C
+         jD5KHnLLbM+HNDaG2HSjj3EG506smLbTZN3jPknJ+qhGVJ0/CG2YtbGDytZrMHqeM9
+         lPheSzyFFHliA==
 From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
 To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
@@ -43,9 +43,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Bough Chen <haibo.chen@nxp.com>,
         Jesse Taube <mr.bossman075@gmail.com>,
         Giulio Benetti <giulio.benetti@benettiengineering.com>
-Subject: [PATCH v2 2/4] clk: imx: imxrt1050: add IMXRT1050_CLK_LCDIF_PIX clock gate
-Date:   Tue, 15 Nov 2022 20:32:42 +0100
-Message-Id: <20221115193244.10484-2-giulio.benetti@benettiengineering.com>
+Subject: [PATCH v2 3/4] ARM: dts: imxrt1050: increase mmc max-frequency property
+Date:   Tue, 15 Nov 2022 20:32:43 +0100
+Message-Id: <20221115193244.10484-3-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221115193244.10484-1-giulio.benetti@benettiengineering.com>
 References: <20221115193244.10484-1-giulio.benetti@benettiengineering.com>
@@ -67,27 +67,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+According to i.MXRT1050 Datasheet usdhc supports up to 200Mhz clock so
+let's increase max-frequency property to 200Mhz.
+
 Cc: Jesse Taube <mr.bossman075@gmail.com>
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
 V1->V2:
-* nothing done
+* set max-frequency to 200Mhz instead of removing it as suggested by
+  Bough Chen
 ---
- drivers/clk/imx/clk-imxrt1050.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/imxrt1050.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/imx/clk-imxrt1050.c b/drivers/clk/imx/clk-imxrt1050.c
-index 26108e9f7e67..39f77c03b892 100644
---- a/drivers/clk/imx/clk-imxrt1050.c
-+++ b/drivers/clk/imx/clk-imxrt1050.c
-@@ -141,6 +141,7 @@ static int imxrt1050_clocks_probe(struct platform_device *pdev)
- 	hws[IMXRT1050_CLK_USDHC2] = imx_clk_hw_gate2("usdhc2", "usdhc2_podf", ccm_base + 0x80, 4);
- 	hws[IMXRT1050_CLK_LPUART1] = imx_clk_hw_gate2("lpuart1", "lpuart_podf", ccm_base + 0x7c, 24);
- 	hws[IMXRT1050_CLK_LCDIF_APB] = imx_clk_hw_gate2("lcdif", "lcdif_podf", ccm_base + 0x70, 28);
-+	hws[IMXRT1050_CLK_LCDIF_PIX] = imx_clk_hw_gate2("lcdif_pix", "lcdif", ccm_base + 0x74, 10);
- 	hws[IMXRT1050_CLK_DMA] = imx_clk_hw_gate("dma", "ipg", ccm_base + 0x7C, 6);
- 	hws[IMXRT1050_CLK_DMA_MUX] = imx_clk_hw_gate("dmamux0", "ipg", ccm_base + 0x7C, 7);
- 	imx_check_clk_hws(hws, IMXRT1050_CLK_END);
+diff --git a/arch/arm/boot/dts/imxrt1050.dtsi b/arch/arm/boot/dts/imxrt1050.dtsi
+index 114465e4dde6..5b1991c32748 100644
+--- a/arch/arm/boot/dts/imxrt1050.dtsi
++++ b/arch/arm/boot/dts/imxrt1050.dtsi
+@@ -93,7 +93,7 @@ usdhc1: mmc@402c0000 {
+ 			bus-width = <4>;
+ 			fsl,wp-controller;
+ 			no-1-8-v;
+-			max-frequency = <4000000>;
++			max-frequency = <200000000>;
+ 			fsl,tuning-start-tap = <20>;
+ 			fsl,tuning-step = <2>;
+ 			status = "disabled";
 -- 
 2.34.1
 
