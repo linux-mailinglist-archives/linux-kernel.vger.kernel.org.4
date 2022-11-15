@@ -2,70 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD74562AE74
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6FA62AE7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbiKOWlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 17:41:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
+        id S231415AbiKOWpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 17:45:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbiKOWlS (ORCPT
+        with ESMTP id S231319AbiKOWpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:41:18 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BA2A1A7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:41:17 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-370547b8ca0so151725807b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:41:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6PHQLoSpI9ieMb01SGmNV+k3baSXTLXsQJ3u3XtAP4Q=;
-        b=eVMDaIyDnRoiBZbS3qpDVHFwht2msUL46zFdpPNpNUUOI6VJNt9S8COXwpm+D13UgQ
-         SMSUVDTkiQmT8YV/KO65wI4YPvoRUVhAh8uxBJa+N57pOC/+qMUEpK7QZwZBbBLYdlyS
-         gBZUA6x/2d+GIG7NJ39CDWc5fmPWHTyCq2FF7AKVwux1JSWUNSJdgOCLBJQYtryKQ1PP
-         y/wZ42KVK/ffbwstcO7g/qw6nMHWJYjA9apW1XotOiplRgNAgwU6U6VkzTw2dlPuRTXM
-         vEIYRtWQPe0KCHlRepvSqBV6gXGyxZZqhuLsR29XxT+/xEtM7BVuVrdylL1DOy2HXBX9
-         tDQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6PHQLoSpI9ieMb01SGmNV+k3baSXTLXsQJ3u3XtAP4Q=;
-        b=4brWSJvGwCtwkq1/jacB/33Sh9RvhO5KWf+J+bILgE0qi+Le0FnLXP95JOcGk7RbmT
-         9LpW7+5kxxgDM9KBFocF0vaYUN+ZtlctQVnH4bQklQcJNdgQBBAnLfezTHfMuUjbzp+8
-         BpY6uUMXfMyMZ0hKu433BWOki13RWQyL6zpSFk4PkaOglaUVvMv93PDJKRbd1Gy7nsHz
-         1S3Qql0GLhRTN0/2HxtBp9JbEAlKlRzKtZFkAOTyqMqXzMQzWxHmPb8zyMaNKduThzdc
-         3XO3BO2rYsjKwarakJmB6Adt+M8Fby3rrOg3yvvY09YXmR7iV7GuFVuPZYNMLJRWPCy8
-         bLyw==
-X-Gm-Message-State: ANoB5pncbXf8mETtKvtUjHJ1gYGTFkxaxqyyzxMX5eksQlORCPi+qoiw
-        yoieJ21vqLrTtLu7tsdnSeXAQQG1LNLKVG4K6Sgrpg==
-X-Google-Smtp-Source: AA0mqf5t66GapSerW6ciaSUVTlYlP07ofM3pS23X8mgEZHL5nydMPobMYst+uTfw0VFXedMfhtdvplNRpTuCF6i4pMs=
-X-Received: by 2002:a81:52ca:0:b0:388:dd9b:f3ee with SMTP id
- g193-20020a8152ca000000b00388dd9bf3eemr2260245ywb.164.1668552076399; Tue, 15
- Nov 2022 14:41:16 -0800 (PST)
+        Tue, 15 Nov 2022 17:45:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFE21CFDD
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:44:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668552251;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Sr5cmUXaaquPODOsp7wOywLMH70ji6BY41qEcJlkct8=;
+        b=F33jFi2UtY0+l0Zn23UUyBV8awHtqDldtvgQ7TZ8PGgUrk4oQIVtDT+37sNA/OMlrWbMN9
+        0QCcPpPcLyF/dXHpB6wWRCWtQ50lYwg+oQUGC3RB4VCY+Vwg8ovUGL900zSUFXxfELSF5N
+        HB+ge0ji6lWiLapTFR2rTdXaOD5jK9c=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-383-qYs-SrBBO5qTlAyD7FTboQ-1; Tue, 15 Nov 2022 17:44:06 -0500
+X-MC-Unique: qYs-SrBBO5qTlAyD7FTboQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 47DD9800B23;
+        Tue, 15 Nov 2022 22:44:06 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 40F4B40C6EC3;
+        Tue, 15 Nov 2022 22:44:05 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH] cifs: Fix problem with encrypted RDMA data read
+From:   David Howells <dhowells@redhat.com>
+To:     smfrench@gmail.com, tom@talpey.com
+Cc:     Long Li <longli@microsoft.com>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Stefan Metzmacher <metze@samba.org>,
+        linux-cifs@vger.kernel.org, dhowells@redhat.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 15 Nov 2022 22:44:02 +0000
+Message-ID: <166855224228.1998592.2212551359609792175.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-References: <20221104194705.3245738-1-rmoar@google.com> <CABVgOSnUDNvs6mYwVtzXq3+PmO62HG1pP=d_6EQiwOKF_9D6XA@mail.gmail.com>
- <CA+GJov4uUfp_a7FzCEMGivQJx3VGNOx=x+E_eN-9a46EsS2Ygg@mail.gmail.com>
-In-Reply-To: <CA+GJov4uUfp_a7FzCEMGivQJx3VGNOx=x+E_eN-9a46EsS2Ygg@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 15 Nov 2022 14:41:05 -0800
-Message-ID: <CAGS_qxqa6NW5EKA0y3Szp_6rEMfam5urSVRHaGVRZUHgmab8SA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] kunit: improve KTAP compliance of KUnit test output
-To:     Rae Moar <rmoar@google.com>
-Cc:     David Gow <davidgow@google.com>, brendanhiggins@google.com,
-        skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Isabella Basso <isabbasso@riseup.net>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,125 +66,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 12:18 PM Rae Moar <rmoar@google.com> wrote:
-> Yes, I agree. I think it does make more sense to provide KTAP
-> compatibility with the parser before changing the test output. This
-> would also help to solve the issue that Daniel brought up on this
-> patch about the "KTAP version 1" line and test plan being stored
-> in the test.log as random kernel output. I will swap the patches in
-> the v2 of this patch series.
->
-> >
-> > I'd also be curious to see if this is likely to break anyone else's
-> > (K)TAP parsers.
-> >
-> > +Isabella, Anders: do these changes break the IGT or LKFT TAP/KTAP
-> > parsing? From a quick look at [1] and [2], we're probably okay??
-> >
-> > [1]: https://gitlab.freedesktop.org/isinyaaa/igt-gpu-tools/-/commit/1a84306425e975377eb79c031bf1de147bd44e46
-> > [2]: https://github.com/Linaro/test-definitions/blob/master/automated/linux/kunit/kunit.sh
-> >
-> > I also looked into the possibility of moving or removing the Subtest
-> > line, but upon further thought (see below), it's probably best to keep
-> > it as-is here for now. That should be the closest to the current spec,
-> > and we can possibly find a better way to provide the name in KTAPv2.
-> >
-> > Reviewed-by: David Gow <davidgow@google.com>
-> >
-> > Cheers,
-> > -- David
-> >
-> > >  lib/kunit/executor.c | 6 +++---
-> > >  lib/kunit/test.c     | 5 +++--
-> > >  2 files changed, 6 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> > > index 9bbc422c284b..74982b83707c 100644
-> > > --- a/lib/kunit/executor.c
-> > > +++ b/lib/kunit/executor.c
-> > > @@ -166,7 +166,7 @@ static void kunit_exec_run_tests(struct suite_set *suite_set)
-> > >  {
-> > >         size_t num_suites = suite_set->end - suite_set->start;
-> > >
-> > > -       pr_info("TAP version 14\n");
-> > > +       pr_info("KTAP version 1\n");
-> > >         pr_info("1..%zu\n", num_suites);
-> > >
-> > >         __kunit_test_suites_init(suite_set->start, num_suites);
-> > > @@ -177,8 +177,8 @@ static void kunit_exec_list_tests(struct suite_set *suite_set)
-> > >         struct kunit_suite * const *suites;
-> > >         struct kunit_case *test_case;
-> > >
-> > > -       /* Hack: print a tap header so kunit.py can find the start of KUnit output. */
-> > > -       pr_info("TAP version 14\n");
-> > > +       /* Hack: print a ktap header so kunit.py can find the start of KUnit output. */
-> > > +       pr_info("KTAP version 1\n");
-> > >
-> > >         for (suites = suite_set->start; suites < suite_set->end; suites++)
-> > >                 kunit_suite_for_each_test_case((*suites), test_case) {
-> > > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> > > index 90640a43cf62..b541d59a05c3 100644
-> > > --- a/lib/kunit/test.c
-> > > +++ b/lib/kunit/test.c
-> > > @@ -151,6 +151,7 @@ static void kunit_print_suite_start(struct kunit_suite *suite)
-> > >  {
-> > >         kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "# Subtest: %s",
-> > >                   suite->name);
-> > > +       kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "KTAP version 1\n");
-> >
-> > Would it make sense to have the Subtest line _after_ the KTAP line here?
-> >
-> > Given KTAP doesn't specify the "Subtest" line at all, I guess it doesn't matter.
-> >
-> > A part of me feels that the "KTAP version 1" line should be the
-> > _first_ line of the subtest output, but that would introduce a line
-> > between it and the test plan, which goes against the spec.
-> >
-> > We could also just get rid of the "Subtest" line, given it's not
-> > technically required, though having the test name before the results
-> > is really useful.
-> >
-> > Having tried all three options while writing this email, I think it's
-> > probably best to leave this patch as is (with the Subtest line
-> > followed by the KTAP line), and discuss standardising something
-> > similar as part of the KTAP v2 spec.
-> >
->
-> I also struggle to decide how the "Subtest" line should be handled. Since
-> the current KTAP v1 spec does not provide a way to declare the name of
-> a test with subtests prior to the results, I think it is important to continue
-> to include this Subtest line because it provides that functionality.
-> Additionally,
-> the line is not expected to be very disruptive for other parsers because it
-> is read as a diagnostic line.
+When the cifs client is talking to the ksmbd server by RDMA and the ksmbd
+server has "smb3 encryption = yes" in its config file, the normal PDU
+stream is encrypted, but the directly-delivered data isn't in the stream
+(and isn't encrypted), but is rather delivered by DDP/RDMA packets (at
+least with IWarp).
 
-Yeah, since it's going to be ignored as a diagnostic line, I think
-we're largely free to put it where we want?
+Currently, the direct delivery fails with:
 
-I'm actually leaning towards making things more uniform e.g.
+   buf can not contain only a part of read data
+   WARNING: CPU: 0 PID: 4619 at fs/cifs/smb2ops.c:4731 handle_read_data+0x393/0x405
+   ...
+   RIP: 0010:handle_read_data+0x393/0x405
+   ...
+    smb3_handle_read_data+0x30/0x37
+    receive_encrypted_standard+0x141/0x224
+    cifs_demultiplex_thread+0x21a/0x63b
+    kthread+0xe7/0xef
+    ret_from_fork+0x22/0x30
 
-KTAP version 1
-# Subtest: optionally set for the top-level test!
-1..2
-  KTAP version 1
-  # Subtest: suite1
-  1..1
-  ok 1 - test1
- ok 1 -suite1
- // etc.
+The problem apparently stemming from the fact that it's trying to manage
+the decryption, but the data isn't in the smallbuf, the bigbuf or the page
+array).
 
-Then we can simplify the parser by not differentiating (as much)
-between the top-level test and subtests.
-This also simplifies parsing multiple KTAP documents (e.g. for
-supporting modules, etc.)
+This can be fixed simply by inserting an extra case into handle_read_data()
+that checks to see if use_rdma_mr is true, and if it is, just setting
+rdata->got_bytes to the length of data delivered and allowing normal
+continuation.
 
-We'll probably talk about this offline soon, but I wanted to put this out there.
+This can be seen in an IWarp packet trace.  With the upstream code, it does
+a DDP/RDMA packet, which produces the warning above and then retries,
+retrieving the data inline, spread across several SMBDirect messages that
+get glued together into a single PDU.  With the patch applied, only the
+DDP/RDMA packet is seen.
 
-Daniel
+Note that this doesn't happen if the server isn't told to encrypt stuff and
+it does also happen with softRoCE.
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Steve French <smfrench@gmail.com>
+cc: Tom Talpey <tom@talpey.com>
+cc: Long Li <longli@microsoft.com>
+cc: Namjae Jeon <linkinjeon@kernel.org>
+cc: Stefan Metzmacher <metze@samba.org>
+cc: linux-cifs@vger.kernel.org
+---
+
+ fs/cifs/smb2ops.c |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
+index 880cd494afea..8d459f60f27b 100644
+--- a/fs/cifs/smb2ops.c
++++ b/fs/cifs/smb2ops.c
+@@ -4726,6 +4726,9 @@ handle_read_data(struct TCP_Server_Info *server, struct mid_q_entry *mid,
+ 		iov.iov_base = buf + data_offset;
+ 		iov.iov_len = data_len;
+ 		iov_iter_kvec(&iter, WRITE, &iov, 1, data_len);
++	} else if (use_rdma_mr) {
++		/* The data was delivered directly by RDMA. */
++		rdata->got_bytes = data_len;
+ 	} else {
+ 		/* read response payload cannot be in both buf and pages */
+ 		WARN_ONCE(1, "buf can not contain only a part of read data");
 
 
->
-> The location of the "Subtest" line before the KTAP version line is potentially
-> not the most optimal but it seems to be the best choice while ensuring
-> compatibility with the current KTAP v1 spec. I recommend that we discuss
-> a standardized replacement for this "Subtest" line in the KTAP v2 spec.
