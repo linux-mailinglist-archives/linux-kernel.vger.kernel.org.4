@@ -2,253 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BADF629633
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF03E629645
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiKOKrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:47:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
+        id S229921AbiKOKuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiKOKrr (ORCPT
+        with ESMTP id S238418AbiKOKtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:47:47 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318671FFBA
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:47:45 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id d2-20020a056e020be200b00300ecc7e0d4so10925963ilu.5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:47:45 -0800 (PST)
+        Tue, 15 Nov 2022 05:49:45 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD29222A6;
+        Tue, 15 Nov 2022 02:49:17 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id f18so2019939ejz.5;
+        Tue, 15 Nov 2022 02:49:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=33zHiIrdoO2UoepEKyRaRVdNZjEtu5CN9IjvFX3uaZY=;
+        b=a/Z4RknSI4n/gL/3utpF34Cu0NwOZPjRvDi+zJPjyVKY7THXua0NBOIQhwz9fIVJWo
+         Jb6QmFiSdNNkhSBMNlTLhe6MiU2HLe7LX6pnorP+5w1VyJfBxu1p5nUJr9bEx7YpxKqt
+         fqpFafed54nyjZ9gQLBU+duXWFm+8YiGySxzVjOnk4RwDuzo8MEQmKj2DvvNasGn+b5O
+         31ti/khuiTs+WlanpnUAiswXLvrGy+YCPzJV63Ng8Ad+ML8Vt+iITynw3NiwKBQuXdv0
+         8mg9BwMasinLaVn7kGILzrw+LbmnuvMYUqD4ExY1erHm6bmxpQKgx7MxTdCzIT/B/SKe
+         F4QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+aj7sEnxyD8T1Hj1HdidLCP7lfPYY5s0kIBRkasNpCg=;
-        b=mBYpNm3LkP9QYEfwyH8/iA1zo6wWmRjg4DsIcEbfYBNaJeHy/Mfz/HV2OhK5+YWO7c
-         ws/JMDcGcFJ2Y9aa0oPWUcXVqK8bancwzon9FRxovrlC0lTjqppNoTrooERC/TByJagX
-         oSEbLy38LPRUXos9x6adY/J24GZ2MaPCn9Y15K+weihT9Ib/Pyib6MHo4MyX1cpEg3BJ
-         Tv1AF7XrYGzJ6PxmdANMKLK9CHoh01qT6RJlxvDjNJdQ/y0KDvMwSrPviRRNc8SfbiuA
-         dFW7Nnl2k4iRiXdATspMuKteAIolnpk6NiLwgrrEqyDsOX6TQ+6LHtPG1Qfa9b3JDpnU
-         3EHQ==
-X-Gm-Message-State: ANoB5plZrAhjC8hVpKqHqtZKifq9FbyQo/doeqJNs6cKW5wVjeWVPVyP
-        V5aycPAYINuEo4+7Zn0kfnlvB4L0ngKb+eIGAwPE/b89Q7GL
-X-Google-Smtp-Source: AA0mqf6gL29lopecN6Qn5wRvRHA/S2lB6Vr8RC1Ti9+zJ4sPVawvatJREZTSAlwpw5zITxjO6hUOwQhGiXvzBBwYlosi4s+o+IhG
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=33zHiIrdoO2UoepEKyRaRVdNZjEtu5CN9IjvFX3uaZY=;
+        b=SDLIq2Xz14GaKApYYD5hO8t521wpDO6ZJ/QAjKykCvG9aBdbI3iJnkz1XA+G2OYdZP
+         k3cn0sKNiPScObs65dxQYFuSn4e6TzEGV9xJQ28CdbhoYYShlSFZemcRc7U4JfBOHiic
+         ZSuDtw2q6oxr9H6GJTAex2v3lDLjxQC89ejuodf9K38G62VZHaCzTjRzTEarAqg7wFdo
+         9ARQ9ROnXs+znU9hZZQ5+XGGjcWGsWxM6x0qhBjDN5Tji9+HK+bNpczjgY2EiNlQFdJR
+         SBbq5MYaUeHF5A7MbCBcPDox9fCNaJx87hJaP9gclhLLxFuQ0XcP81iBZEYPUS2qY9dW
+         mrEA==
+X-Gm-Message-State: ANoB5pmEvcbcYIuT7QNR4LjWYPRyTZw8OTYK6sbhfuMEuf3iU2aFPqE/
+        UqSwtNILi7pxw2e40Qs/MNaP9030MPkgudiWWQc=
+X-Google-Smtp-Source: AA0mqf7VQd6NqiHNZvwJElD1AdeJDi59NNAZHAGxCxrMukzHvAhyn/kRvkqAQl56Oc0spwQJfd++oHeTKovQ5w1t+kE=
+X-Received: by 2002:a17:906:2b94:b0:7ae:5ad1:e834 with SMTP id
+ m20-20020a1709062b9400b007ae5ad1e834mr13065298ejg.312.1668509355655; Tue, 15
+ Nov 2022 02:49:15 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:190f:0:b0:2f9:d6cf:6b71 with SMTP id
- 15-20020a92190f000000b002f9d6cf6b71mr7633874ilz.215.1668509264579; Tue, 15
- Nov 2022 02:47:44 -0800 (PST)
-Date:   Tue, 15 Nov 2022 02:47:44 -0800
-In-Reply-To: <00000000000073500205eac39838@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000005146605ed801621@google.com>
-Subject: Re: [syzbot] possible deadlock in exfat_get_block
-From:   syzbot <syzbot+247e66a2c3ea756332c7@syzkaller.appspotmail.com>
-To:     linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sj1557.seo@samsung.com,
+References: <CAO4mrfdLsMZT1ytmTCK4m0xXezxskTUbQjqZoGobMVhnZgdfmw@mail.gmail.com>
+ <CAO4mrfcYtXiuuaPtm==heNarkMqTUGoKWxnmiOC3jvhfjeOBFg@mail.gmail.com> <08a18fd6-3ce8-a063-90cf-e659004d0894@gmx.com>
+In-Reply-To: <08a18fd6-3ce8-a063-90cf-e659004d0894@gmx.com>
+From:   Wei Chen <harperchen1110@gmail.com>
+Date:   Tue, 15 Nov 2022 18:48:40 +0800
+Message-ID: <CAO4mrfcnodR8csMs7s8SCgE5k7LEk2emhEJSaKs7+Ye3NzaXGQ@mail.gmail.com>
+Subject: Re: WARNING in _btrfs_ioctl_set_received_subvol
+To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        osandov@fb.com, sweettea-kernel@dorminy.me,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Dear Linux developers,
 
-HEAD commit:    9e4ce762f0e7 Merge branches 'for-next/acpi', 'for-next/asm..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=142ea0e9880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=20ffacc1ce1c99b5
-dashboard link: https://syzkaller.appspot.com/bug?extid=247e66a2c3ea756332c7
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11cb6095880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ecada5880000
+Thank you for the advice. Please find the crash report in the upstream
+release v6.0.0 below.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/a70eb29add74/disk-9e4ce762.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/769d096516a8/vmlinux-9e4ce762.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9309615f51d5/Image-9e4ce762.gz.xz
-mounted in repro #1: https://storage.googleapis.com/syzbot-assets/709895381a4a/mount_0.gz
-mounted in repro #2: https://storage.googleapis.com/syzbot-assets/b69a1a37527d/mount_3.gz
+[   93.080051][ T8445] Kernel panic - not syncing: panic_on_warn set ...
+[   93.080584][ T8445] CPU: 0 PID: 8445 Comm: a.out Not tainted 6.0.0+ #39
+[   93.081120][ T8445] Hardware name: QEMU Standard PC (i440FX + PIIX,
+1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+[   93.081919][ T8445] Call Trace:
+[   93.082209][ T8445]  <TASK>
+[   93.082478][ T8445]  dump_stack_lvl+0x1b1/0x28e
+[   93.082897][ T8445]  ? io_alloc_page_table+0xfe/0xfe
+[   93.083340][ T8445]  ? panic+0x81b/0x81b
+[   93.083709][ T8445]  ? _btrfs_ioctl_set_received_subvol+0xbe0/0x1660
+[   93.084260][ T8445]  panic+0x2c2/0x81b
+[   93.084597][ T8445]  ? __warn+0x131/0x220
+[   93.084955][ T8445]  ? asan.module_ctor+0x4/0x4
+[   93.085379][ T8445]  ? _btrfs_ioctl_set_received_subvol+0xc93/0x1660
+[   93.085933][ T8445]  __warn+0x1fc/0x220
+[   93.086282][ T8445]  ? _btrfs_ioctl_set_received_subvol+0xc93/0x1660
+[   93.086744][ T8445]  report_bug+0x1b3/0x2d0
+[   93.087034][ T8445]  handle_bug+0x3d/0x70
+[   93.087345][ T8445]  exc_invalid_op+0x16/0x40
+[   93.087708][ T8445]  asm_exc_invalid_op+0x16/0x20
+[   93.088121][ T8445] RIP: 0010:_btrfs_ioctl_set_received_subvol+0xc93/0x1660
+[   93.088707][ T8445] Code: 76 e6 8a 44 89 fa 31 c0 e8 9f 55 a6 06 4c
+8b 6c 24 10 eb 18 e8 7e 3a 04 fe 48 c7 c7 20 75 e6 8a 44 89 fe 31 c0
+e8 fd b4 cd fd <0f> 0b 4c 89 ef 48 c7 c6 c0 87 e6 8a ba f6 12 00 00 e9
+a7 06 00 00
+[   93.090000][ T8445] RSP: 0018:ffffc9000280f7a8 EFLAGS: 00010246
+[   93.090524][ T8445] RAX: cceb294c9a36ee00 RBX: ffff88802b27c001
+RCX: ffff88801e0cc880
+[   93.091197][ T8445] RDX: 0000000000000000 RSI: 0000000080000000
+RDI: 0000000000000000
+[   93.091833][ T8445] RBP: 00000000fffffff4 R08: ffffffff816b75fc
+R09: ffffed100c784f14
+[   93.092488][ T8445] R10: ffffed100c784f14 R11: 0000000000000000
+R12: ffff88802c664440
+[   93.093079][ T8445] R13: ffff88802c6643f0 R14: 1ffff110058cc888
+R15: 00000000fffffff4
+[   93.093585][ T8445]  ? __wake_up_klogd+0xcc/0x100
+[   93.094019][ T8445]  ? _btrfs_ioctl_set_received_subvol+0xc93/0x1660
+[   93.094542][ T8445]  btrfs_ioctl+0x1cf0/0x9db0
+[   93.094858][ T8445]  ? btrfs_ioctl_get_supported_features+0x40/0x40
+[   93.095352][ T8445]  ? lockdep_hardirqs_on_prepare+0x428/0x790
+[   93.095870][ T8445]  ? rcu_read_lock_sched_held+0x87/0x110
+[   93.096361][ T8445]  ? __bpf_trace_rcu_stall_warning+0x10/0x10
+[   93.096887][ T8445]  ? lockdep_hardirqs_on_prepare+0x428/0x790
+[   93.097401][ T8445]  ? do_vfs_ioctl+0xc35/0x29e0
+[   93.097853][ T8445]  ? __ia32_compat_sys_ioctl+0xb90/0xb90
+[   93.098321][ T8445]  ? __lock_acquire+0x6080/0x6080
+[   93.098754][ T8445]  ? slab_free_freelist_hook+0x12e/0x1a0
+[   93.099216][ T8445]  ? tomoyo_path_number_perm+0x5be/0x790
+[   93.099668][ T8445]  ? kfree+0xda/0x350
+[   93.100028][ T8445]  ? tomoyo_path_number_perm+0x627/0x790
+[   93.100500][ T8445]  ? tomoyo_check_path_acl+0x1c0/0x1c0
+[   93.100967][ T8445]  ? rcu_read_lock_sched_held+0x87/0x110
+[   93.101502][ T8445]  ? lockdep_hardirqs_on_prepare+0x428/0x790
+[   93.101995][ T8445]  ? print_irqtrace_events+0x220/0x220
+[   93.102327][ T8445]  ? vtime_user_exit+0x2b2/0x3e0
+[   93.102647][ T8445]  ? __ct_user_exit+0xd9/0x160
+[   93.102946][ T8445]  ? bpf_lsm_file_ioctl+0x5/0x10
+[   93.103249][ T8445]  ? security_file_ioctl+0x9d/0xb0
+[   93.103566][ T8445]  ? btrfs_ioctl_get_supported_features+0x40/0x40
+[   93.103953][ T8445]  __se_sys_ioctl+0xfb/0x170
+[   93.104232][ T8445]  do_syscall_64+0x3d/0x90
+[   93.104501][ T8445]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   93.104855][ T8445] RIP: 0033:0x7fbfad8e4469
+[   93.105126][ T8445] Code: 00 f3 c3 66 2e 0f 1f 84 00 00 00 00 00 0f
+1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b
+4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d ff 49 2b 00 f7 d8
+64 89 01 48
+[   93.106297][ T8445] RSP: 002b:00007fffb93a1248 EFLAGS: 00000202
+ORIG_RAX: 0000000000000010
+[   93.106853][ T8445] RAX: ffffffffffffffda RBX: 0000000000000000
+RCX: 00007fbfad8e4469
+[   93.107377][ T8445] RDX: 0000000020072c40 RSI: 00000000c0c09425
+RDI: 0000000000000006
+[   93.107901][ T8445] RBP: 00007fffb93a1260 R08: 0000000000000001
+R09: 00007fffb93a1260
+[   93.108441][ T8445] R10: 0000000000000001 R11: 0000000000000202
+R12: 00005650a6c01170
+[   93.108933][ T8445] R13: 00007fffb93a13a0 R14: 0000000000000000
+R15: 0000000000000000
+[   93.109418][ T8445]  </TASK>
+[   93.109843][ T8445] Kernel Offset: disabled
+[   93.110188][ T8445] Rebooting in 86400 seconds..
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+247e66a2c3ea756332c7@syzkaller.appspotmail.com
+Best,
+Wei
 
-loop0: detected capacity change from 0 to 4096
-======================================================
-WARNING: possible circular locking dependency detected
-6.1.0-rc5-syzkaller-32254-g9e4ce762f0e7 #0 Not tainted
-------------------------------------------------------
-syz-executor410/3072 is trying to acquire lock:
-ffff0000cb6210e0 (&sbi->s_lock){+.+.}-{3:3}, at: exfat_get_block+0x6c/0x9ec fs/exfat/inode.c:282
-
-but task is already holding lock:
-ffff0000ca589060 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
-ffff0000ca589060 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: page_cache_ra_unbounded+0x5c/0x400 mm/readahead.c:226
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (mapping.invalidate_lock#3){.+.+}-{3:3}:
-       down_read+0x5c/0x78 kernel/locking/rwsem.c:1509
-       filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
-       filemap_fault+0x104/0x7fc mm/filemap.c:3127
-       __do_fault+0x60/0x358 mm/memory.c:4203
-       do_read_fault mm/memory.c:4554 [inline]
-       do_fault+0x338/0x550 mm/memory.c:4683
-       handle_pte_fault mm/memory.c:4955 [inline]
-       __handle_mm_fault mm/memory.c:5097 [inline]
-       handle_mm_fault+0x78c/0xa48 mm/memory.c:5218
-       __do_page_fault arch/arm64/mm/fault.c:506 [inline]
-       do_page_fault+0x428/0x79c arch/arm64/mm/fault.c:606
-       do_translation_fault+0x78/0x194 arch/arm64/mm/fault.c:689
-       do_mem_abort+0x54/0x130 arch/arm64/mm/fault.c:825
-       el1_abort+0x3c/0x5c arch/arm64/kernel/entry-common.c:367
-       el1h_64_sync_handler+0x60/0xac arch/arm64/kernel/entry-common.c:427
-       el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:579
-       do_strncpy_from_user lib/strncpy_from_user.c:41 [inline]
-       strncpy_from_user+0x1a8/0x3d8 lib/strncpy_from_user.c:139
-       getname_flags+0x84/0x278 fs/namei.c:150
-       getname+0x28/0x38 fs/namei.c:218
-       do_sys_openat2+0x78/0x22c fs/open.c:1304
-       do_sys_open fs/open.c:1326 [inline]
-       __do_sys_openat fs/open.c:1342 [inline]
-       __se_sys_openat fs/open.c:1337 [inline]
-       __arm64_sys_openat+0xb0/0xe0 fs/open.c:1337
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
--> #1 (&mm->mmap_lock){++++}-{3:3}:
-       __might_fault+0x7c/0xb4 mm/memory.c:5646
-       filldir64+0x1e8/0x574 fs/readdir.c:335
-       dir_emit_dot include/linux/fs.h:3561 [inline]
-       dir_emit_dots include/linux/fs.h:3572 [inline]
-       exfat_iterate+0xd4/0xcb4 fs/exfat/dir.c:231
-       iterate_dir+0x114/0x28c
-       __do_sys_getdents64 fs/readdir.c:369 [inline]
-       __se_sys_getdents64 fs/readdir.c:354 [inline]
-       __arm64_sys_getdents64+0x80/0x204 fs/readdir.c:354
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
--> #0 (&sbi->s_lock){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3097 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
-       validate_chain kernel/locking/lockdep.c:3831 [inline]
-       __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
-       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
-       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
-       exfat_get_block+0x6c/0x9ec fs/exfat/inode.c:282
-       do_mpage_readpage+0x474/0xd38 fs/mpage.c:208
-       mpage_readahead+0xf0/0x1b8 fs/mpage.c:361
-       exfat_readahead+0x28/0x38 fs/exfat/inode.c:345
-       read_pages+0x8c/0x4f0 mm/readahead.c:161
-       page_cache_ra_unbounded+0x374/0x400 mm/readahead.c:270
-       do_page_cache_ra mm/readahead.c:300 [inline]
-       page_cache_ra_order+0x348/0x380 mm/readahead.c:560
-       ondemand_readahead+0x340/0x720 mm/readahead.c:682
-       page_cache_sync_ra+0xc4/0xdc mm/readahead.c:709
-       page_cache_sync_readahead include/linux/pagemap.h:1213 [inline]
-       filemap_get_pages+0x118/0x598 mm/filemap.c:2581
-       filemap_read+0x14c/0x6f4 mm/filemap.c:2675
-       generic_file_read_iter+0x6c/0x25c mm/filemap.c:2821
-       call_read_iter include/linux/fs.h:2185 [inline]
-       new_sync_read fs/read_write.c:389 [inline]
-       vfs_read+0x2d4/0x448 fs/read_write.c:470
-       ksys_read+0xb4/0x160 fs/read_write.c:613
-       __do_sys_read fs/read_write.c:623 [inline]
-       __se_sys_read fs/read_write.c:621 [inline]
-       __arm64_sys_read+0x24/0x34 fs/read_write.c:621
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
-other info that might help us debug this:
-
-Chain exists of:
-  &sbi->s_lock --> &mm->mmap_lock --> mapping.invalidate_lock#3
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(mapping.invalidate_lock#3);
-                               lock(&mm->mmap_lock);
-                               lock(mapping.invalidate_lock#3);
-  lock(&sbi->s_lock);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor410/3072:
- #0: ffff0000ca589060 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:811 [inline]
- #0: ffff0000ca589060 (mapping.invalidate_lock#3){.+.+}-{3:3}, at: page_cache_ra_unbounded+0x5c/0x400 mm/readahead.c:226
-
-stack backtrace:
-CPU: 0 PID: 3072 Comm: syz-executor410 Not tainted 6.1.0-rc5-syzkaller-32254-g9e4ce762f0e7 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2055
- check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2177
- check_prev_add kernel/locking/lockdep.c:3097 [inline]
- check_prevs_add kernel/locking/lockdep.c:3216 [inline]
- validate_chain kernel/locking/lockdep.c:3831 [inline]
- __lock_acquire+0x1530/0x3084 kernel/locking/lockdep.c:5055
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
- __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
- __mutex_lock kernel/locking/mutex.c:747 [inline]
- mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
- exfat_get_block+0x6c/0x9ec fs/exfat/inode.c:282
- do_mpage_readpage+0x474/0xd38 fs/mpage.c:208
- mpage_readahead+0xf0/0x1b8 fs/mpage.c:361
- exfat_readahead+0x28/0x38 fs/exfat/inode.c:345
- read_pages+0x8c/0x4f0 mm/readahead.c:161
- page_cache_ra_unbounded+0x374/0x400 mm/readahead.c:270
- do_page_cache_ra mm/readahead.c:300 [inline]
- page_cache_ra_order+0x348/0x380 mm/readahead.c:560
- ondemand_readahead+0x340/0x720 mm/readahead.c:682
- page_cache_sync_ra+0xc4/0xdc mm/readahead.c:709
- page_cache_sync_readahead include/linux/pagemap.h:1213 [inline]
- filemap_get_pages+0x118/0x598 mm/filemap.c:2581
- filemap_read+0x14c/0x6f4 mm/filemap.c:2675
- generic_file_read_iter+0x6c/0x25c mm/filemap.c:2821
- call_read_iter include/linux/fs.h:2185 [inline]
- new_sync_read fs/read_write.c:389 [inline]
- vfs_read+0x2d4/0x448 fs/read_write.c:470
- ksys_read+0xb4/0x160 fs/read_write.c:613
- __do_sys_read fs/read_write.c:623 [inline]
- __se_sys_read fs/read_write.c:621 [inline]
- __arm64_sys_read+0x24/0x34 fs/read_write.c:621
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-
+On Tue, 15 Nov 2022 at 18:42, Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
+>
+>
+>
+> On 2022/11/15 18:30, Wei Chen wrote:
+> > Dear Linux developers,
+> >
+> > I hope the following bug report is helpful.
+> >
+> > Best,
+> > Wei
+> >
+> > On Sun, 13 Nov 2022 at 19:38, Wei Chen <harperchen1110@gmail.com> wrote:
+> >>
+> >> Dear Linux Developer,
+> >>
+> >> Recently when using our tool to fuzz kernel, the following crash was
+> >> triggered. The bug persists in Linux 6.0.
+> >>
+> >> HEAD commit:  4f5365f77018  Linux 5.15.76
+>
+> Not related to the bug itself, but more on the report.
+>
+> I'd say, if the bug persists in the latest release, then please use the
+> latest kernel in the report.
+> Not use the latest LTS as the commit.
+>
+> You know most (if not all) linux communities are working on upstream
+> code, not some LTS branch.
+>
+> Thanks,
+> Qu
+>
+> >> git tree: stable
+> >> compiler: gcc 7.5.0
+> >> console output:
+> >> https://drive.google.com/file/d/1wkzu8jz6edriSP6TpsCGYD5AzkLajIEv/view?usp=share_link
+> >> kernel config: https://drive.google.com/file/d/1flhc33savDkmYN6PRU5C2vXDX0LAKMvM/view?usp=share_link
+> >> C reproducer: https://drive.google.com/file/d/1zKWsWAOcaHfPKewTG6P3pnnVfwH_WXa9/view?usp=share_link
+> >> Syz reproducer:
+> >> https://drive.google.com/file/d/1jUR8_6Re4xpJhyLdXqPiiV72WT-Tk8A-/view?usp=share_link
+> >>
+> >> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> >> Reported-by: Wei Chen <harperchen1110@gmail.com>
+> >>
+> >> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
+> >> R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd3c817900
+> >>   </TASK>
+> >> ------------[ cut here ]------------
+> >> WARNING: CPU: 1 PID: 29222 at fs/btrfs/ioctl.c:4521
+> >> _btrfs_ioctl_set_received_subvol+0x221/0x430 fs/btrfs/ioctl.c:4521
+> >> Modules linked in:
+> >> CPU: 1 PID: 29222 Comm: syz-executor.0 Not tainted 5.15.76 #5
+> >> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> >> rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+> >> RIP: 0010:_btrfs_ioctl_set_received_subvol+0x221/0x430 fs/btrfs/ioctl.c:4521
+> >> Code: e8 74 34 44 ff 83 fb fb 0f 84 de 01 00 00 83 fb e2 0f 84 d5 01
+> >> 00 00 e8 5d 34 44 ff 89 de 48 c7 c7 c0 f8 39 85 e8 9f dc 2e ff <0f> 0b
+> >> e8 48 34 44 ff 89 d9 ba a9 11 00 00 e9 45 01 00 00 49 8b 4f
+> >> RSP: 0018:ffffc9000aecfd40 EFLAGS: 00010286
+> >> RAX: 0000000000000000 RBX: fffffffffffffff4 RCX: ffffc900013ed000
+> >> RDX: 0000000000040000 RSI: ffffffff812d935c RDI: 00000000ffffffff
+> >> RBP: ffffc9000aecfda0 R08: 0000000000000000 R09: 0000000000000001
+> >> R10: ffffc9000aecfbe0 R11: 0000000000000003 R12: ffff888014210400
+> >> R13: ffff8880208d2000 R14: ffff88810c4f21c0 R15: ffff88810f37b600
+> >> FS:  00007f41ffc27700(0000) GS:ffff88813dc00000(0000) knlGS:0000000000000000
+> >> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >> CR2: 00007fab915f7008 CR3: 000000002096e000 CR4: 00000000003526e0
+> >> Call Trace:
+> >>   <TASK>
+> >>   btrfs_ioctl_set_received_subvol_32 fs/btrfs/ioctl.c:4584 [inline]
+> >>   btrfs_ioctl+0x2154/0x3d50 fs/btrfs/ioctl.c:5007
+> >>   vfs_ioctl fs/ioctl.c:51 [inline]
+> >>   __do_sys_ioctl fs/ioctl.c:874 [inline]
+> >>   __se_sys_ioctl fs/ioctl.c:860 [inline]
+> >>   __x64_sys_ioctl+0xb6/0x100 fs/ioctl.c:860
+> >>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >>   do_syscall_64+0x34/0xb0 arch/x86/entry/common.c:80
+> >>   entry_SYSCALL_64_after_hwframe+0x61/0xcb
+> >> RIP: 0033:0x4697f9
+> >> Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48
+> >> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+> >> 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+> >> RSP: 002b:00007f41ffc26c48 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> >> RAX: ffffffffffffffda RBX: 000000000077bf80 RCX: 00000000004697f9
+> >> RDX: 0000000020072c40 RSI: 00000000c0c09425 RDI: 0000000000000005
+> >> RBP: 00007f41ffc26c80 R08: 0000000000000000 R09: 0000000000000000
+> >> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
+> >> R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd3c817900
+> >>   </TASK>
+> >>
+> >> Best,
+> >> Wei
