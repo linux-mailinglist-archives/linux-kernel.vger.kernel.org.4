@@ -2,164 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA32A629B05
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59478629B25
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:50:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbiKONs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:48:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48552 "EHLO
+        id S238548AbiKONu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:50:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiKONsX (ORCPT
+        with ESMTP id S238487AbiKONuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:48:23 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFF8248DD
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:48:21 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id p8so24478854lfu.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:48:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PyQQsmdB9p1iCbGlgrbpIM/umuy2agle/uOgcxWJaw0=;
-        b=ifGbpBcqd+1nCUiyTrYte34kDBWXyRIYNmNA/HCI0elOYiAzLvI010U5mZ1NaqUCIr
-         PO/fHVmh7JB+FX+3TAHtpuM0QWLqfRib8Ymr3wAauhli56Dm77ENoOYnzuinHPc3H1cV
-         B9TY/9dQbZi2UcigQna6+JW6cvs6SYJjKXj8peTnDPLMT1cszxjjTIBBwjXHfSnkNwTA
-         9P0ZNihkfIEwMSr7/bIhf23XcMgXqi7v1gr/Q8aWCAe5KlBXny9Fx3GHdUW/TD88wsgg
-         1U6kX5uHrW47sF0n6w99xKMwCP1/w+sWvmuCqTuxz/MdeW6QRCy3rSBUgNEATjjB3mxd
-         GtMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PyQQsmdB9p1iCbGlgrbpIM/umuy2agle/uOgcxWJaw0=;
-        b=DZM3kpJmYcETE37CBZn+xYhoVMQ+c4DYphd4aruAeZNYhVV4T96hCr0Zs/+0dic5yA
-         3HrxO6V14yu5lw25Ch8DJdkoTpFD5+On5+NAmYb9iErQzqy/Rsn2Qvxl83TyH1L2Y4GA
-         MMpcvHU8rk7XOPjFFW0J9gsMQFYPis3VCYHXX4uGxUisLXX0FkCCc1s3CBhrRzekV6Ry
-         T51wYYpHVi1nLohDLxPVI4N3kJEYCfRz7YPTzuRNlaEedvPKWfmyV/VejNzLJLGGzf5J
-         eijUXc7CYuIzhAfTSKg3zQBTGQtadVPoh7jCB0ySL42guNpwgRTs4iIroOiLOhJMOz2Q
-         7xnQ==
-X-Gm-Message-State: ANoB5pn5Ru1djwxNcd/VAKTnOOgQA7BlyhRYJQMo4N08hvG6PAvCzxjF
-        aVx8/NJ5KSx4ows5ROilCmnXSg==
-X-Google-Smtp-Source: AA0mqf7NzmaJ1S8z7UNAq0GcGiVsV6Ak7vPyFfGsvevSVpg2e8K8g3+r2D+3QVfW/6/DuccuYbUTvg==
-X-Received: by 2002:a19:5051:0:b0:499:8e29:2763 with SMTP id z17-20020a195051000000b004998e292763mr6406317lfj.137.1668520100303;
-        Tue, 15 Nov 2022 05:48:20 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c8-20020ac24148000000b00492c663bba2sm2207122lfi.124.2022.11.15.05.48.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 05:48:19 -0800 (PST)
-Message-ID: <3fd767c3-84c3-7155-9e05-cc124e3b3d2f@linaro.org>
-Date:   Tue, 15 Nov 2022 14:48:18 +0100
+        Tue, 15 Nov 2022 08:50:05 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169292AC69;
+        Tue, 15 Nov 2022 05:49:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=g1iudGydG7aJ//r1cD+24YDDJDUMwVZ9P78R6YNPIw4=; b=1dQmz6sSEGUQhr7NS/wucU+aoJ
+        3jf+Gga+KmC8oDuZCZk7wjsVhtegfCdydax6o3wMn5hidfk8eTm28B7ZjQQ93o0OfrHRHGTVFlwDl
+        y3+AeyuEiwj9g7iNfd9pl/YfNULltX6iGnZQ4KUH/nL55p0ZoycD4FCT+8rQkcpDisEM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ouwJ7-002Ss3-BC; Tue, 15 Nov 2022 14:48:57 +0100
+Date:   Tue, 15 Nov 2022 14:48:57 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Corentin LABBE <clabbe@baylibre.com>,
+        calvin.johnson@oss.nxp.com, davem@davemloft.net,
+        edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        kuba@kernel.org, lgirdwood@gmail.com, pabeni@redhat.com,
+        robh+dt@kernel.org, samuel@sholland.org, wens@csie.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        netdev@vger.kernel.org, linux-sunxi@googlegroups.com
+Subject: Re: [PATCH v4 1/3] regulator: Add of_regulator_bulk_get_all
+Message-ID: <Y3OYyX2o6BsJKxFh@lunn.ch>
+References: <20221115073603.3425396-1-clabbe@baylibre.com>
+ <20221115073603.3425396-2-clabbe@baylibre.com>
+ <Y3Nj4pA2+WRFvSNd@sirena.org.uk>
+ <Y3NnirK0bN71IgCo@Red>
+ <Y3NrQffcdGIjS64a@sirena.org.uk>
+ <Y3NtKgb0LpWs0RkB@shell.armlinux.org.uk>
+ <Y3N1JYVx9tB9pisR@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/9] dt-bindings: arm-smmu: Allow up to 3 power-domains
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     patches@linaro.org, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221114104222.36329-1-konrad.dybcio@linaro.org>
- <20221114104222.36329-2-konrad.dybcio@linaro.org>
- <6fa8e3ea-2113-d930-96bc-3726d53e5bcd@linaro.org>
- <a4b160d8-0faa-3f4c-a925-0beaf6ace721@linaro.org>
- <0121fc03-b027-7659-5e6e-b42089c9888d@linaro.org>
- <12578e05-ced9-e5f7-7922-0af2f2159333@linaro.org>
- <878402e7-7f80-31c7-3a6b-989a6ca29841@linaro.org>
- <f59ddce1-c2e1-4055-3bce-1319c68ddf94@linaro.org>
- <4b4ca3ba-8e4d-088e-8b3e-a47ad6ecb965@linaro.org>
- <cff269c8-f944-9277-9df8-653522efbba0@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <cff269c8-f944-9277-9df8-653522efbba0@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3N1JYVx9tB9pisR@sirena.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 14:06, Konrad Dybcio wrote:>> diff --git
-a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->>> b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->>> index 28f5720824cd..55759aebc4a0 100644
->>> --- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->>> +++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->>> @@ -200,7 +200,7 @@ properties:
->>>        maxItems: 7
->>>
->>>      power-domains:
->>
->> As I mentioned before - minItems: 1.
-> But not all SMMUs require a power domain :/
-
-It does not matter. This does not require power-domains.
-
+On Tue, Nov 15, 2022 at 11:16:53AM +0000, Mark Brown wrote:
+> On Tue, Nov 15, 2022 at 10:42:50AM +0000, Russell King (Oracle) wrote:
+> > On Tue, Nov 15, 2022 at 10:34:41AM +0000, Mark Brown wrote:
 > 
->>
->> Just like the link I gave you.
->>
->>> -    maxItems: 1
->>> +    maxItems: 3
->>>
->>>      nvidia,memory-controller:
->>>        description: |
->>> @@ -364,6 +364,26 @@ allOf:
->>>                - description: interface clock required to access smmu's
->>> registers
->>>                    through the TCU's programming interface.
->>>
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          contains:
->>> +            const: qcom,sm6375-smmu-500
->>> +    then:
->>> +      properties:
->>> +        power-domains:
->>> +          items:
->>> +            - description: SNoC MMU TBU RT GDSC
->>> +            - description: SNoC MMU TBU NRT GDSC
->>> +            - description: SNoC TURING MMU TBU0 GDSC
->>> +
->>> +      required:
->>> +        - power-domains
->>> +    else:
->>> +      properties:
->>> +        power-domains:
->>> +          maxItems: 1
->>> +
->>>    examples:
->>>      - |+
->>>        /* SMMU with stream matching or stream indexing */
->>>
->>>
->>> In my eyes, this should work, but I still get errors like:
->>>
->>> /home/konrad/linux/arch/arm64/boot/dts/qcom/sm8250-hdk.dtb:
->>> iommu@3da0000: power-domains: [[108, 0]] is too short
->>>
->>> as if the else: path was never taken..
->>
->> It was, but the top-level property said that minItems=3 (implicitly), so
->> it is too short.
-> So the top-level properties take precedence over the ones that come from 
-> the if-then-else?? Ugh.
+> > > Well, it's not making this maintainer happy :/  If we know what
+> > > PHY is there why not just look up the set of supplies based on
+> > > the compatible of the PHY?
+> 
+> > It looks to me like this series fetches the regulators before the PHY
+> > is bound to the driver, so what you're proposing would mean that the
+> > core PHY code would need a table of all compatibles (which is pretty
+> > hard to do, they encode the vendor/device ID, not some descriptive
+> > name) and then a list of the regulator names. IMHO that doesn't scale.
+> 
+> Oh, PHYs have interesting enough drivers to dynamically load
+> here?
 
-It's a sum of them. Top level is expected to define the widest
-constraints and if-then-else narrows them per variants.
+Yes. And you sometimes have the chicken/egg problem that you don't
+know what PHY it is until you have turned its regulators on and you
+can talk to it. So the PHY code will poke around in the DT
+description, and turn on the regulator before enumerating the bus.
 
-Best regards,
-Krzysztof
-
+	Andrew	     
