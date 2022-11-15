@@ -2,133 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B57BB62AF60
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:24:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6696362AF62
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbiKOXXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 18:23:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
+        id S231346AbiKOXYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 18:24:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbiKOXXk (ORCPT
+        with ESMTP id S232040AbiKOXY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 18:23:40 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9146D9FC1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:23:39 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id 136so15022783pga.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:23:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KeFCzvbHxCMk5+FnFozTy4bW8T8EDfkdgl/UWLzqnP0=;
-        b=E7upmvckNneLUJ5t5ce/SSEpXNc6jC5Q/95UYsU5By7kT1h6pCfMkpfC8PMv1R+qHM
-         itjzlwuAa4YLgGwb6BTLgTFRA3d0lEsvTzlQt3ZhAVHHpkMb9G6aN4o571289K/Hpm7K
-         5oknw92j5qvRDQrFMOiJBw7XmIdpE26u5YTMkXgXRCG0riKZwBXFsGlTzcKezrnPGKH9
-         nTfaXKNERLS6WbjJvkcy9ToP3qW7YvwLl/L0IT+s6M+l79gq7dN/Q6kigtLB3u3PivVf
-         lyR/zjvK/YIl7Ac4vGLtKANJL8DNhPYqLaJwwYP9/A37evqMyhbrX1WqPpfShgN6sha7
-         0EpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KeFCzvbHxCMk5+FnFozTy4bW8T8EDfkdgl/UWLzqnP0=;
-        b=g8CK5QKfD4faxNy+zoUicuZsYlgUUEgX4Rrs3cLzgYYW6zUNnNU1w7XrSx4EyO6iDc
-         S9IIbaL4CrZIjPlJrtss46jLxXSscaKuM9Uj3NSa/sEOVL2mzVVFq/ATlCskf/XigL6p
-         DArt/JJTwUoRL2KOJLwAnn/VOw32o+t6ea4kUqB8XZV3TNZq9FrqNMgZVFfPQrgrmWtn
-         e7N6PEsr7QQqJqfxPzYch5hwIRca7Po2H3wedFS2GaH5UpmVzLuRbOlhAiJB6q+5Tvpr
-         aWtYopwyBIYjOdY4o0cBMObSu9uOxQx6mo02BrmRB+AxpSYARNLji7PoJAArL9+zzLNG
-         yNFw==
-X-Gm-Message-State: ANoB5pm80sjw4vxkWwQ/iI4HJ0Kcic1JNAdHUK0Ega7G5TYS86EK4LM7
-        IXCdGbO9kXUS8d7X37pEv4RVJZodNeI=
-X-Google-Smtp-Source: AA0mqf4rU0AfEIfJ+7/6nukd+YOE7yNVYuMIpXlKPRu0R12NQwcNfs1g00Jh6i0yd04CxC6k8MEVXg==
-X-Received: by 2002:aa7:91cf:0:b0:56e:64c8:f222 with SMTP id z15-20020aa791cf000000b0056e64c8f222mr20619863pfa.71.1668554618505;
-        Tue, 15 Nov 2022 15:23:38 -0800 (PST)
-Received: from google.com ([2620:15c:211:201:6ff2:4caf:5d97:1932])
-        by smtp.gmail.com with ESMTPSA id z9-20020a17090a66c900b0021358bd24b9sm110266pjl.21.2022.11.15.15.23.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 15:23:37 -0800 (PST)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Tue, 15 Nov 2022 15:23:35 -0800
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv4 0/9] zsmalloc/zram: configurable zspage size
-Message-ID: <Y3QfdyKNrZjx5FR8@google.com>
-References: <20221031054108.541190-1-senozhatsky@chromium.org>
- <Y21+xp52OQYi/qjQ@google.com>
- <Y22dxEcs2g5mjuQ7@google.com>
- <Y26AbHxhPBJdWZQE@google.com>
- <Y3MrHsaLc8wth00E@google.com>
- <Y3NG4fsjxHGrnbDp@google.com>
+        Tue, 15 Nov 2022 18:24:29 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFADA27921
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:24:27 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668554665;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BBbRZQXDdMBaAi+vrNqmlxDlwawbSjED4t0F+9t4J90=;
+        b=h/hHLLaSC4VUq7AzPOGBrFQhlr1/t6zcW5MlnS0mJ8bRz+WaJa4rf88kDr2P/GIUTxXEi8
+        VbsvyG4avktUNFWdCsliN6BICmNDgVIQMpu1gVFnLjGy7Pw1valyUgqBZIZuvxNXyBj+yd
+        r6Q8wsBw0S9s4+vIE40Y7USO9l1/xJ9vnz7tJiLF2MsAVzpnfB0hfOYd5G1IZnr/YdqKPD
+        4sL5jM55mlFbaEUjFINCtbAK0G6rdwlb4DdDgCDU/bHGY6iqKR96BQMzwRp91tAw8gZyMS
+        8IDX0wHior9wtFTG/2aTzge1EKquRXgePi4sHme3wD3jD24v1/1WW5WVvjLsUw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668554665;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BBbRZQXDdMBaAi+vrNqmlxDlwawbSjED4t0F+9t4J90=;
+        b=z3WFkdXGuDHmXZew5FKjZiCUAMLOCELlIm/5tsEzDEyKThhu009QtV/DBBB5VE9NKOrnnO
+        Dpv66sS+/iwqbQAQ==
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Angus Chen <angus.chen@jaguarmicro.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ming Lei <ming.lei@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Subject: Re: IRQ affinity problem from virtio_blk
+In-Reply-To: <87sfijrf9o.ffs@tglx>
+References: <TY2PR06MB3424CB11DB57CA1FAA16F10D85049@TY2PR06MB3424.apcprd06.prod.outlook.com>
+ <87v8nfrhbw.ffs@tglx> <20221115174152-mutt-send-email-mst@kernel.org>
+ <87sfijrf9o.ffs@tglx>
+Date:   Wed, 16 Nov 2022 00:24:24 +0100
+Message-ID: <87o7t7rec7.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y3NG4fsjxHGrnbDp@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 04:59:29PM +0900, Sergey Senozhatsky wrote:
-> On (22/11/15 15:01), Sergey Senozhatsky wrote:
-> > On (22/11/11 09:03), Minchan Kim wrote:
-> > [..]
-> > > for class in classes:
-> > >     wasted_bytes += class->pages_per_zspage * PAGE_SIZE - an object size
-> > > 
-> > > with *aggressive zpage compaction*. Now, we are relying on shrinker
-> > > (it might be already enough) to trigger but we could change the policy 
-> > > wasted memory in the class size crossed a threshold
-> > 
-> > Compaction does something good only when we can release zspage in the
-> > end. Otherwise we just hold the global pool->lock (assuming that we
-> > land zsmalloc writeback series) and simply move objects around zspages.
-> > So ability to limit zspage chain size still can be valuable, on another
-> > level, as a measure to reduce dependency on compaction success.
-> > 
-> > We may be can make compaction slightly more successful. For instance,
-> > if we would start move objects not only within zspages of the same size
-> > class, but, for example, move objects to class size + X (upper size
-> > classes). As an example, when all zspages in class are almost full,
-> > but class size + 1 has almost empty pages. In other words sort of as
-> > is those classes had been merged. (virtual merge). Single pool->look
-> > would be handy for it.
-> 
-> What I'm trying to say here is that "aggressiveness of compaction"
-> probably should be measured not by compaction frequency, but by overall
-> cost of compaction operations.
-> 
-> Aggressive frequency of compaction doesn't help us much if the state of
-> the pool doesn't change significantly between compactions. E.g. if we do
-> 10 compaction calls, then only the first one potentially compacts some
-> zspages, the remaining ones don't do anything.
-> 
-> Cost of compaction operations is a measure of how hard compaction tries.
-> Does it move object to neighbouring classes and so on? May be we can do
-> something here.
-> 
-> But then the question is - how do we control that we don't drain battery
-> too fast? And perhaps some other questions too.
-> 
+On Wed, Nov 16 2022 at 00:04, Thomas Gleixner wrote:
 
-Sure, if we start talking about battery, that would have a lot of things
-we need to consider not only from zram-direct but also other indirect-stuffs
-caused caused by memory pressure and workload patterns. That's not what we
-can control and would consume much more battery. I understand your concern
-but also think sysfs per-konb can solve the issue since workload is too
-dynamic even in the same swap file/fs, too. I'd like to try finding a
-sweet spot in general. If it's too hard to have, then, we need to introduce
-the knob with reasonable guideline how we could find it.
+> On Tue, Nov 15 2022 at 17:44, Michael S. Tsirkin wrote:
+>> On Tue, Nov 15, 2022 at 11:19:47PM +0100, Thomas Gleixner wrote:
+>>> > We can see global_available drop from 15354 to 15273, is 81.
+>>> > And the total_allocated increase from 411 to 413. One config irq,and
+>>> > one vq irq.
+>>> 
+>>> Right. That's perfectly fine. At the point where you looking at it, the
+>>> matrix allocator has given out 2 vectors as can be seen via
+>>> total_allocated.
+>>> 
+>>> But then it also has another 79 vectors put aside for the other queues,
+>>
+>> What makes it put these vectors aside? pci_alloc_irq_vectors_affinity ?
+>
+> init_vq() -> virtio_find_vqs() -> vp_find_vqs() ->
+> vp_request_msix_vectors() -> pci_alloc_irq_vectors_affinity()
+>
+> init_vq() hands in a struct irq_affinity which means that
+> pci_alloc_irq_vectors_affinity() will spread out interrupts and have one
+> for config and one per queue if vp_request_msix_vectors() is invoked
+> with per_vq_vectors == true, which is what the first invocation in
+> vp_find_vqs() does.
 
-Let me try to see the data under Android workload how much just increase
-the ZS_MAX_PAGES_PER_ZSPAGE blindly will change the data.
+I just checked on a random VM. The PCI device as advertised to the guest
+does not expose that many vectors. One has 2 and the other 4.
+
+But as the interrupts are requested 'managed' the core ends up setting
+the vectors aside. That's a fundamental property of managed interrupts.
+
+Assume you have less queues than CPUs, which is the case with 2 vectors
+and tons of CPUs, i.e. one ends up for config and the other for the
+actual queue. So the affinity spreading code will end up having the full
+cpumask for the queue vector, which is marked managed. And managed means
+that it's guaranteed e.g. in the CPU hotplug case that the interrupt can
+be migrated to a still online CPU.
+
+So we end up setting 79 vectors aside (one per CPU) in the case that the
+virtio device only provides two vectors.
+
+But that's not the end of the world as you really would need ~200 such
+devices to exhaust the vector space...
+
+Thanks,
+
+        tglx
+
+
