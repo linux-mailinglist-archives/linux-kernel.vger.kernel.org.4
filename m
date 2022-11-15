@@ -2,438 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C902762926E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:28:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB24629270
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:28:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232339AbiKOH2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 02:28:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
+        id S232478AbiKOH2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 02:28:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232276AbiKOH2B (ORCPT
+        with ESMTP id S232463AbiKOH2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 02:28:01 -0500
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C570186DB
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:27:58 -0800 (PST)
-Received: by mail-ua1-x934.google.com with SMTP id y25so4639461ual.2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:27:58 -0800 (PST)
+        Tue, 15 Nov 2022 02:28:11 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1508218377
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:28:06 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id b131so15537078yba.11
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:28:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4FtNnNl051h/rdDkusahW2husejw1bXM+7fcbxk0V38=;
-        b=asjIowl8+IvS3Ik8Y1WPE93JTkU4GSGug14rpHwlzoX4WIEU2it9axgq6ljA1m6txO
-         UOzAGpPHjlh0fo5ptFkOiH2AJzZPizVlkBNmRercFXaWby8S3YJL5527UnHHWHZNqNRS
-         rxFg3LfV8g4MknOovNulCPJT2xn1hZ1vPwHh92mHsV4oLG/PsOwAdV8+CXzkqMWfQBuT
-         BYWq7OsEqZgdIjionoXpPEyu776VAKHZdvOppS3l44HBT6wonDB5Vw6IoF8yJm1Tphui
-         nR2/ZvXdWU31SKayUtXLkSbSyaVv5Yy5oWun01S+lueOOpDnsVyio0JjNSgmM6z7r3fs
-         ZYIw==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=t2MSqieIloRSX5j4XySxPNiECkBoHXA8aafgFPvChpc=;
+        b=QgfBWx5jr+T9D0OPatz9aPNvycrIr4iLDGczMIzC44uZC9r3WFasL9kXz9bxT2FW/x
+         glqG1PaWw4xvuOrV67TlUP7yxQQloJzA5Nr3tRkrKnPpJCIc+coc18Cb5PhjpivrwkGg
+         8b+QBJu5yLEI9vWBdYYizjJqj8S+VftW/cgxTvZ1ef9mo5HH75/d6Jg3qOQvpy18ka0Q
+         y8GrQUcOykvgOiJhC94mg2ZxY6M5NaTQ6QQsxQcYUmgb6JwNjI+mo5lQ/mVik6dgg4wG
+         mCkOn+WDOFXogwYbNEDgriUju/CHlBrUvJ5r+WKPp+1BbyvCXBoi2OE1E5DCvpqBtLnh
+         N5Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4FtNnNl051h/rdDkusahW2husejw1bXM+7fcbxk0V38=;
-        b=U3mghWXXPMn8vMofEmk31wEp8/Q/m8uJ9Tk8e05EHuYYhM67w6RX+aRH5aJrDTIroC
-         14RWNLTj1Z3lPeyX8FMVaVkRZ3kQW1i2xznDj0R9pFXimIakc6nr9FaT3zZTN449VFmS
-         lPpX1/0GRMbCzBNEsD5OujZWuUbu7+hTrmAUaYY+58tCO57Bgw6tG0OJIRpk3UTiYIGp
-         9VH97g615mLfjE0cVkYoQMbsabrzOmQ2mbhflQGu19EVd/A0cJnRJ6p44N2cQ8UIZTI/
-         +p8Y3YWk8C649ROArMozo2tM66nwrGeuFQBhSVxnYmRCjFp+nR4tyi/7FnKReAqsSxgF
-         6I7g==
-X-Gm-Message-State: ANoB5pmX0AeI41WH/fJl9oKO3PW89I4VL2dj65lzZqNImwMuyU0K3btn
-        k49MxuzVEgHjzIenqAc0/1aYA7+1QEZCHvB4SuuS9g==
-X-Google-Smtp-Source: AA0mqf6V1rB9xGXsEmogrGXur/EgDRBUOXvbMw2BlVxn/wS6RDKujzJCRbERtQctSmEY3t2sU+RruJ3/afZGLFMYxxQ=
-X-Received: by 2002:ab0:4ac7:0:b0:411:968:212 with SMTP id t7-20020ab04ac7000000b0041109680212mr9261443uae.107.1668497277053;
- Mon, 14 Nov 2022 23:27:57 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t2MSqieIloRSX5j4XySxPNiECkBoHXA8aafgFPvChpc=;
+        b=NK6m1Of8YSXVlFtf7XTgLQkk8nocxzOkAVjKutOAmUfcT5XTKu9HoBG+KDvcPg2YtM
+         rp3fLPDv+D70IYbdaK2AH2EGI2mHftxFS+7XYjHg/1zCDm8tjgBC9ZoWCcLxeeBIFyka
+         IXs6TCbTV+IdspVYZpnDOl7ObK3E19+KqWBneAbwSpezlYwu1pDqNR1N9c64qCRPxjHx
+         cyRDU5837Qbe3RiIzMvBvEIzzA80lK27JjypTG4A6gk2sQ7Lci9NuP50Q4F+FXplSccQ
+         KkZHzM5b8DZ1B12AzS2Vl5x/5LLr7xVj1U5zwJ51DOx6P0l4Ujo9vAqo1BPvSK7ixYDa
+         4WEA==
+X-Gm-Message-State: ANoB5pmGdTbD/2O8Uw9Zo5d1imPN8ekXEtpxVvt4Xkp2G41y6SrxNL6p
+        IPE4yk46y7EOn5aAAs3bVnXQF08HuW9pEaCT2lzWcX8rGf0SHw==
+X-Google-Smtp-Source: AA0mqf6WThw8/wCMg/frn8fJbsp9aqZO/VwChiLVnMcfDNy/uDXXgreCDrwyobhbVXklWp54j9nYJImA/KC+mML6N7Y=
+X-Received: by 2002:a25:2358:0:b0:6d2:5835:301f with SMTP id
+ j85-20020a252358000000b006d25835301fmr15945622ybj.336.1668497285091; Mon, 14
+ Nov 2022 23:28:05 -0800 (PST)
 MIME-Version: 1.0
-References: <20221104194705.3245738-1-rmoar@google.com> <20221104194705.3245738-2-rmoar@google.com>
-In-Reply-To: <20221104194705.3245738-2-rmoar@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 15 Nov 2022 15:27:45 +0800
-Message-ID: <CABVgOS=eq0RnnP=MGMb-mZntA7+yZ=pe3U_dOq1gxoTPTeC8Bw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] kunit: tool: parse KTAP compliant test output
-To:     Rae Moar <rmoar@google.com>
-Cc:     brendanhiggins@google.com, dlatypov@google.com,
-        skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000087f2d205ed7d4b38"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 15 Nov 2022 12:57:53 +0530
+Message-ID: <CA+G9fYuXG7Rh_A8W1NRVWbgWjozwzxzQY7tYw7bA4NsCuSovMg@mail.gmail.com>
+Subject: WARNING: CPU: 0 PID: 1111 at arch/arm64/kernel/fpsimd.c:464 fpsimd_save+0x170/0x1b0
+To:     open list <linux-kernel@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>,
+        lkft-triage@lists.linaro.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000087f2d205ed7d4b38
-Content-Type: text/plain; charset="UTF-8"
+Following kernel warning noticed while running kselftest arm64 sve-ptrace
+on qemu-arm64 on ampere-altra server.
 
-On Sat, Nov 5, 2022 at 3:48 AM Rae Moar <rmoar@google.com> wrote:
->
-> Change the KUnit parser to be able to parse test output that complies with
-> the KTAP version 1 specification format found here:
-> https://kernel.org/doc/html/latest/dev-tools/ktap.html. Ensure the parser
-> is able to parse tests with the original KUnit test output format as
-> well.
->
-> KUnit parser now accepts any of the following test output formats:
->
-> Original KUnit test output format:
->
->  TAP version 14
->  1..1
->    # Subtest: kunit-test-suite
->    1..3
->    ok 1 - kunit_test_1
->    ok 2 - kunit_test_2
->    ok 3 - kunit_test_3
->  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
->  # Totals: pass:3 fail:0 skip:0 total:3
->  ok 1 - kunit-test-suite
->
-> KTAP version 1 test output format:
->
->  KTAP version 1
->  1..1
->    KTAP version 1
->    1..3
->    ok 1 kunit_test_1
->    ok 2 kunit_test_2
->    ok 3 kunit_test_3
->  ok 1 kunit-test-suite
->
-> New KUnit test output format (preferred for KUnit tests):
->
->  KTAP version 1
->  1..1
->    # Subtest: kunit-test-suite
->    KTAP version 1
->    1..3
->    ok 1 kunit_test_1
->    ok 2 kunit_test_2
->    ok 3 kunit_test_3
->  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
->  # Totals: pass:3 fail:0 skip:0 total:3
->  ok 1 kunit-test-suite
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> ---
-> Note: this patch is based on the linux-kselftest/kunit branch.
-> ---
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Looks good to me. Some minor thoughts:
-- As Daniel mentioned, can we think of a better placeholder name for
-tests without Subtest lines? One thought is to just leave it as the
-empty string?
-- Would it make sense to support the case where the "Subtest" line
-sits between the KTAP version line and the test plan as well. While
-that's not necessary (and does violate v1 of the KTAP spec), I suspect
-something similar would be useful in KTAP v2 for, e.g., individual
-module results.
-- As mentioned in patch 1, it'd be nice to swap the ordering of the two patches.
+ /usr/bin/qemu-system-aarch64 -cpu max,pauth-impdef=on \
+ -machine virt-2.10 \
+ -nographic \
+ -net nic,model=virtio,macaddr=BA:DD:AD:FC:09:12 \
+ -net tap -m 4096 -monitor none \
+ -kernel Image.gz --append "console=ttyAMA0 root=/dev/vda rw"
+ -hda lkft-kselftest-image-juno-20221114150409.rootfs.ext4
+ -smp 4 -nographic
 
-None of those are showstoppers, so if you disagree, we can probably
-accept them as-is, but they might make future changes easier.
-
-Reviewed-by: David Gow <davidgow@google.com>
-
-Cheers,
--- David
+Boot log:
+---------
+[    0.000000] Linux version 6.0.9-rc1 (tuxmake@tuxmake)
+(aarch64-linux-gnu-gcc (Debian 11.3.0-6) 11.3.0, GNU ld (GNU Binutils
+for Debian) 2.39) #1 SMP PREEMPT @1668438377
+[    0.000000] random: crng init done
+[    0.000000] Machine model: linux,dummy-virt
 
 
-> tools/testing/kunit/kunit_parser.py           | 69 ++++++++++++-------
->  tools/testing/kunit/kunit_tool_test.py        |  8 +++
->  .../test_data/test_parse_ktap_output.log      |  8 +++
->  3 files changed, 60 insertions(+), 25 deletions(-)
->  create mode 100644 tools/testing/kunit/test_data/test_parse_ktap_output.log
->
-> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> index a56c75a973b5..abb69f898263 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -441,6 +441,7 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
->         - '# Subtest: [test name]'
->         - '[ok|not ok] [test number] [-] [test name] [optional skip
->                 directive]'
-> +       - 'KTAP version [version number]'
->
->         Parameters:
->         lines - LineStream of KTAP output to parse
-> @@ -449,8 +450,9 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
->         Log of diagnostic lines
->         """
->         log = []  # type: List[str]
-> -       while lines and not TEST_RESULT.match(lines.peek()) and not \
-> -                       TEST_HEADER.match(lines.peek()):
-> +       non_diagnostic_lines = [TEST_RESULT, TEST_HEADER, KTAP_START]
-> +       while lines and not any(re.match(lines.peek())
-> +                       for re in non_diagnostic_lines):
->                 log.append(lines.pop())
->         return log
->
-> @@ -496,6 +498,12 @@ def print_test_header(test: Test) -> None:
->         test - Test object representing current test being printed
->         """
->         message = test.name
-> +       if message == "":
-> +               # KUnit tests print a Subtest header line that provides the name
-> +               # of the test suite. But the subtest header line isn't required
-> +               # by the KTAP spec, so use a placeholder name "Test suite" in that
-> +               # case.
-> +               message = "Test suite"
->         if test.expected_count:
->                 if test.expected_count == 1:
->                         message += ' (1 subtest)'
-> @@ -647,13 +655,13 @@ def bubble_up_test_results(test: Test) -> None:
->         elif test.counts.get_status() == TestStatus.TEST_CRASHED:
->                 test.status = TestStatus.TEST_CRASHED
->
-> -def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
-> +def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest: bool) -> Test:
->         """
->         Finds next test to parse in LineStream, creates new Test object,
->         parses any subtests of the test, populates Test object with all
->         information (status, name) about the test and the Test objects for
->         any subtests, and then returns the Test object. The method accepts
-> -       three formats of tests:
-> +       four formats of tests:
->
->         Accepted test formats:
->
-> @@ -674,6 +682,16 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
->         [subtests]
->         ok 1 name
->
-> +       - KTAP subtest header (in compliance with KTAP specification)
-> +
-> +       Example:
-> +
-> +    # May include subtest header line here
-> +       KTAP version 1
-> +       1..3
-> +       [subtests]
-> +       ok 1 name
-> +
->         - Test result line
->
->         Example:
-> @@ -685,6 +703,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
->         expected_num - expected test number for test to be parsed
->         log - list of strings containing any preceding diagnostic lines
->                 corresponding to the current test
-> +       is_subtest - boolean indicating whether test is a subtest
->
->         Return:
->         Test object populated with characteristics and any subtests
-> @@ -692,21 +711,22 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
->         test = Test()
->         test.log.extend(log)
->         parent_test = False
-> -       main = parse_ktap_header(lines, test)
-> -       if main:
-> -               # If KTAP/TAP header is found, attempt to parse
-> -               # test plan
-> +       if not is_subtest:
-> +               # If parsing the main test, attempt to parse KTAP/TAP header
-> +               # and test plan
->                 test.name = "main"
-> +               parse_ktap_header(lines, test)
->                 parse_test_plan(lines, test)
->                 parent_test = True
->         else:
-> -               # If KTAP/TAP header is not found, test must be subtest
-> -               # header or test result line so parse attempt to parser
-> -               # subtest header
-> -               parent_test = parse_test_header(lines, test)
-> +               # If test is a subtest, attempt to parse test suite header
-> +               # (either subtest line and/or KTAP/TAP version line)
-> +               subtest_line = parse_test_header(lines, test)
-> +               ktap_line = parse_ktap_header(lines, test)
-> +               parent_test = subtest_line or ktap_line
->                 if parent_test:
-> -                       # If subtest header is found, attempt to parse
-> -                       # test plan and print header
-> +                       # If subtest header and/or KTAP/version line is found, attempt
-> +                       # to parse test plan and print header
->                         parse_test_plan(lines, test)
->                         print_test_header(test)
->         expected_count = test.expected_count
-> @@ -721,7 +741,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
->                 sub_log = parse_diagnostic(lines)
->                 sub_test = Test()
->                 if not lines or (peek_test_name_match(lines, test) and
-> -                               not main):
-> +                               is_subtest):
->                         if expected_count and test_num <= expected_count:
->                                 # If parser reaches end of test before
->                                 # parsing expected number of subtests, print
-> @@ -735,20 +755,19 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
->                                 test.log.extend(sub_log)
->                                 break
->                 else:
-> -                       sub_test = parse_test(lines, test_num, sub_log)
-> +                       sub_test = parse_test(lines, test_num, sub_log, True)
->                 subtests.append(sub_test)
->                 test_num += 1
->         test.subtests = subtests
-> -       if not main:
-> +       if is_subtest:
->                 # If not main test, look for test result line
->                 test.log.extend(parse_diagnostic(lines))
-> -               if (parent_test and peek_test_name_match(lines, test)) or \
-> -                               not parent_test:
-> -                       parse_test_result(lines, test, expected_num)
-> -               else:
-> +               if subtest_line and not peek_test_name_match(lines, test):
->                         test.add_error('missing subtest result line!')
-> +               else:
-> +                       parse_test_result(lines, test, expected_num)
->
-> -       # Check for there being no tests
-> +       # Check for there being no subtests within parent test
->         if parent_test and len(subtests) == 0:
->                 # Don't override a bad status if this test had one reported.
->                 # Assumption: no subtests means CRASHED is from Test.__init__()
-> @@ -758,11 +777,11 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str]) -> Test:
->
->         # Add statuses to TestCounts attribute in Test object
->         bubble_up_test_results(test)
-> -       if parent_test and not main:
-> +       if parent_test and is_subtest:
->                 # If test has subtests and is not the main test object, print
->                 # footer.
->                 print_test_footer(test)
-> -       elif not main:
-> +       elif is_subtest:
->                 print_test_result(test)
->         return test
->
-> @@ -785,7 +804,7 @@ def parse_run_tests(kernel_output: Iterable[str]) -> Test:
->                 test.add_error('could not find any KTAP output!')
->                 test.status = TestStatus.FAILURE_TO_PARSE_TESTS
->         else:
-> -               test = parse_test(lines, 0, [])
-> +               test = parse_test(lines, 0, [], False)
->                 if test.status != TestStatus.NO_TESTS:
->                         test.status = test.counts.get_status()
->         stdout.print_with_timestamp(DIVIDER)
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index 90c65b072be9..7c2e2a45f330 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -312,6 +312,14 @@ class KUnitParserTest(unittest.TestCase):
->                 self.assertEqual(kunit_parser._summarize_failed_tests(result),
->                         'Failures: all_failed_suite, some_failed_suite.test2')
->
-> +       def test_ktap_format(self):
-> +               ktap_log = test_data_path('test_parse_ktap_output.log')
-> +               with open(ktap_log) as file:
-> +                       result = kunit_parser.parse_run_tests(file.readlines())
-> +               self.assertEqual(result.counts, kunit_parser.TestCounts(passed=3))
-> +               self.assertEqual('suite', result.subtests[0].name)
-> +               self.assertEqual('case_1', result.subtests[0].subtests[0].name)
-> +               self.assertEqual('case_2', result.subtests[0].subtests[1].name)
->
->  def line_stream_from_strs(strs: Iterable[str]) -> kunit_parser.LineStream:
->         return kunit_parser.LineStream(enumerate(strs, start=1))
-> diff --git a/tools/testing/kunit/test_data/test_parse_ktap_output.log b/tools/testing/kunit/test_data/test_parse_ktap_output.log
-> new file mode 100644
-> index 000000000000..ccdf244e5303
-> --- /dev/null
-> +++ b/tools/testing/kunit/test_data/test_parse_ktap_output.log
-> @@ -0,0 +1,8 @@
-> +KTAP version 1
-> +1..1
-> +  KTAP version 1
-> +  1..3
-> +  ok 1 case_1
-> +  ok 2 case_2
-> +  ok 3 case_3
-> +ok 1 suite
-> --
-> 2.38.1.431.g37b22c650d-goog
->
+# selftests: arm64: sve-ptrace
+# ok 680 # SKIP SVE set FPSIMD get SVE for VL 2704
+# ok 681 Set SVE VL 2720
 
---00000000000087f2d205ed7d4b38
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+[  422.607034] ------------[ cut here ]------------
+[  422.615382] WARNING: CPU: 0 PID: 1111 at
+arch/arm64/kernel/fpsimd.c:464 fpsimd_save+0x170/0x1b0
+[  422.617588] Modules linked in: cfg80211 bluetooth rfkill
+crct10dif_ce sm3_ce sm3 sha3_ce sha512_ce sha512_arm64 fuse drm
+[  422.619758] CPU: 0 PID: 1111 Comm: sve-ptrace Not tainted 6.0.9-rc1 #1
+[  422.620402] Hardware name: linux,dummy-virt (DT)
+[  422.620958] pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  422.621614] pc : fpsimd_save+0x170/0x1b0
+[  422.621988] lr : fpsimd_save+0xd8/0x1b0
+[  422.622307] sp : ffff800008f3bb00
+[  422.622612] x29: ffff800008f3bb00 x28: ffffae14dd664bc0 x27: 0000000000000001
+[  422.623519] x26: ffff0000ff773858 x25: 0000000000000000 x24: ffff0000c0994fa8
+[  422.624102] x23: 0000000000000001 x22: 0000000000000100 x21: ffff0000ff75f0b0
+[  422.624706] x20: ffff51ec22a8b000 x19: ffffae14dccd40b0 x18: 0000000000000000
+[  422.625292] x17: ffff51ec22a8b000 x16: 0000000000000000 x15: 0000000000000000
+[  422.626041] x14: 0000000000000003 x13: 0000000000000000 x12: 0000000000000002
+[  422.626647] x11: ffffae14ddbee840 x10: 0000000000000312 x9 : ffffae14da818210
+[  422.627326] x8 : ffff0000c09935c0 x7 : ffffae14de2b8d08 x6 : 0000000000000000
+[  422.627889] x5 : 000000c91075a4a8 x4 : 0000000000000000 x3 : 0000000000000001
+[  422.628487] x2 : ffff51ec22a8b000 x1 : 0000000000000204 x0 : 0000000000000010
+[  422.629203] Call trace:
+[  422.629579]  fpsimd_save+0x170/0x1b0
+[  422.630014]  fpsimd_thread_switch+0x2c/0xc4
+[  422.630431]  __switch_to+0x20/0x160
+[  422.630745]  __schedule+0x380/0xb90
+[  422.631038]  preempt_schedule_irq+0x4c/0x130
+[  422.631386]  el1_interrupt+0x4c/0x64
+[  422.631689]  el1h_64_irq_handler+0x18/0x24
+[  422.632037]  el1h_64_irq+0x64/0x68
+[  422.632335]  do_page_fault+0x31c/0x4d0
+[  422.632660]  do_translation_fault+0xd8/0x100
+[  422.632993]  do_mem_abort+0x58/0xb0
+[  422.633311]  el0_ia+0x8c/0x134
+[  422.633685]  el0t_64_sync_handler+0x134/0x140
+[  422.634061]  el0t_64_sync+0x18c/0x190
+[  422.634580] irq event stamp: 654
+[  422.634923] hardirqs last  enabled at (653): [<ffffae14dbeafc94>]
+exit_to_kernel_mode+0x34/0x130
+[  422.635713] hardirqs last disabled at (654): [<ffffae14dbeb7700>]
+__schedule+0x3f0/0xb90
+[  422.636309] softirqs last  enabled at (650): [<ffffae14da810be4>]
+__do_softirq+0x514/0x62c
+[  422.636877] softirqs last disabled at (637): [<ffffae14da8b4f58>]
+__irq_exit_rcu+0x164/0x19c
+[  422.637446] ---[ end trace 0000000000000000 ]---
 
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCe
-zAL/NpAJcPzGPD0x0X+oy7PT2WIOvXn6cZcmPWPD+jAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjExMTUwNzI3NTdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEALIyEagOqLfA/DPE4JJI9
-vlGTTFNVrzjaYDmSpFK4DpVIxP4FO7a6ACSfB1Zxf84wDV6El1Ur34QldWOWqnU5QrkDPQNF8LNA
-S7CLNschuTMYZZMVJhIImwDStVBpq2SLefwKGlNLLzmIaI20Viujy0aYSLLbBtNSW5AH/x32KhU1
-a6EzoKScn047r6d17W1MZJKbBFArIh2Iuv1R4u49luawDqkOFuULdE93KnOyEay1Wj0ozZPxS/w5
-hBpMukWfoZ/SwFdPDblevsYqhytxwhymXaQtyyIZTrer97nmUqBhX/p9iPNaZL6EtNF2hknZdCBU
-uZXuuc/50vdWFacqrg==
---00000000000087f2d205ed7d4b38--
+Full test log:
+https://lkft.validation.linaro.org/scheduler/job/5847349#L2206
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.8-191-gf8896c3ebbcf/testrun/13007451/suite/log-parser-test/test/check-kernel-exception/log
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.8-191-gf8896c3ebbcf/testrun/13007451/suite/log-parser-test/test/check-kernel-exception/details/
+
+metadata:
+  git_ref: linux-6.0.y
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+  git_sha: f8896c3ebbcfcc053d9c27413bea3af94c01fd71
+  git_describe: v6.0.8-191-gf8896c3ebbcf
+  kernel_version: 6.0.9-rc1
+  kernel-config: https://builds.tuxbuild.com/2HXisCgbMlQAU85bS1QC4TvzydK/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/pipelines/694074125
+  artifact-location: https://builds.tuxbuild.com/2HXisCgbMlQAU85bS1QC4TvzydK
+  toolchain: gcc-11
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
