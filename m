@@ -2,137 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0C062AFA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:48:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD4C62AFAA
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbiKOXsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 18:48:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
+        id S231426AbiKOXtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 18:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiKOXr6 (ORCPT
+        with ESMTP id S230083AbiKOXtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 18:47:58 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F807317F7;
-        Tue, 15 Nov 2022 15:47:56 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 15 Nov 2022 18:49:13 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3DBD2E9;
+        Tue, 15 Nov 2022 15:49:11 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NBjXn6LxNz4xTg;
-        Wed, 16 Nov 2022 10:47:53 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668556074;
-        bh=mNBclmwaAQTxYMzZYFdEyX+gKdInfl7kuoGFMn09KBE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VSBRMDX7d+o9U9vMdOkJFHDqhGZZpXmU1SF9zkKv+LvurcZNq+W66tBxTt9ArbT0p
-         Puva/8Di6LF2Z1Q/TQb5Vzf90i1/4hFWHUotU+H8u5iyk/DbzxogZvIbzjcrCOqNZV
-         fZdaZuguvV6MVMuqJG/CqR6dR+UyGPNxKJD8Il1th71kdbqwzf2F0NfvLwGtyTEz7z
-         nGKpPzpV4A3GWAX5c/PTIrCISK4ki7IHi+AfYi4JxcoNxdDfzTZsSxd7DWiO7jaLTw
-         JptBX61a7jj9+u4GEbZ+N+PK4xmNmhdv1R9LrYQe02zszVqfeS0q9kwScGoo5CiF+I
-         QLGKVNzyAeFuQ==
-Date:   Wed, 16 Nov 2022 10:47:52 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the drm-misc tree with the
- drm-misc-fixes tree
-Message-ID: <20221116104752.4c64495a@canb.auug.org.au>
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id E3904851B2;
+        Wed, 16 Nov 2022 00:49:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1668556149;
+        bh=31yr6ZgXFXDXweBdQrEwTiSggKicUZ/huC49zRMLSfg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=io9oqNvJWp3SW6vQybIXU0ZJYQ13PBHm8+dGSYl8m1PZemDnEhAwhu0m9Bm2YJ963
+         qzsR3mOsLVxSV/VYN55G1MjL1EWMuz3vHokgNjSh2sOQeOcvCSgMILnRs9V0YPv6fc
+         aNKv/tTP92Ntrfk1RC9+2YW40mTkFSb3RWaSIaChnemE0xXoY+n+5FzyXGTtZe+87E
+         w2AnfYVRW0M3RMlbfLNP0CVxCQI968hL2Shq6+i/OZdMTCk7dP8iLdgH+8tEu3lXvM
+         8y2wD63l7yeeRd+SddXbNDuVwa3RYwpLBnHs4tww4qu3+i66MPQi6DfvIBcanrXa9F
+         eBNHjoGTEcUZQ==
+Message-ID: <7b31dd4d-a74c-1013-491f-81538001917e@denx.de>
+Date:   Wed, 16 Nov 2022 00:49:07 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wjgPxu/WZguAY0NUMy/Wf_I";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v3] spi: spi-imx: Fix spi_bus_clk if requested clock is
+ higher than input clock
+Content-Language: en-US
+To:     Frieder Schrempf <frieder@fris.de>,
+        David Jander <david@protonic.nl>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Fabio Estevam <festevam@gmail.com>, stable@vger.kernel.org,
+        Baruch Siach <baruch.siach@siklu.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+References: <20221115181002.2068270-1-frieder@fris.de>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20221115181002.2068270-1-frieder@fris.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/wjgPxu/WZguAY0NUMy/Wf_I
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 11/15/22 19:10, Frieder Schrempf wrote:
+> From: Frieder Schrempf <frieder.schrempf@kontron.de>
+> 
+> In case the requested bus clock is higher than the input clock, the correct
+> dividers (pre = 0, post = 0) are returned from mx51_ecspi_clkdiv(), but
+> *fres is left uninitialized and therefore contains an arbitrary value.
+> 
+> This causes trouble for the recently introduced PIO polling feature as the
+> value in spi_imx->spi_bus_clk is used there to calculate for which
+> transfers to enable PIO polling.
+> 
+> Fix this by setting *fres even if no clock dividers are in use.
+> 
+> This issue was observed on Kontron BL i.MX8MM with an SPI peripheral clock set
+> to 50 MHz by default and a requested SPI bus clock of 80 MHz for the SPI NOR
+> flash.
+> 
+> With the fix applied the debug message from mx51_ecspi_clkdiv() now prints the
+> following:
+> 
+> spi_imx 30820000.spi: mx51_ecspi_clkdiv: fin: 50000000, fspi: 50000000,
+> post: 0, pre: 0
+> 
+> Fixes: 6fd8b8503a0d ("spi: spi-imx: Fix out-of-order CS/SCLK operation at low speeds")
+> Fixes: 07e759387788 ("spi: spi-imx: add PIO polling support")
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: David Jander <david@protonic.nl>
+> Cc: Fabio Estevam <festevam@gmail.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Marek Vasut <marex@denx.de>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> Tested-by: Fabio Estevam <festevam@gmail.com>
+> ---
+> 
+> Changes for v3:
+> 
+> * Add back the Fixes tag for commit 6fd8b8503a0d
+> * Add Fabio's Tested-by (Thanks!)
+> 
+> Changes for v2:
+> 
+> * Remove the reference and the Fixes tag for commit 6fd8b8503a0d as it is
+>    incorrect.
+> ---
+>   drivers/spi/spi-imx.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+> index 30d82cc7300b..468ce0a2b282 100644
+> --- a/drivers/spi/spi-imx.c
+> +++ b/drivers/spi/spi-imx.c
+> @@ -444,8 +444,7 @@ static unsigned int mx51_ecspi_clkdiv(struct spi_imx_data *spi_imx,
+>   	unsigned int pre, post;
+>   	unsigned int fin = spi_imx->spi_clk;
+>   
+> -	if (unlikely(fspi > fin))
+> -		return 0;
+> +	fspi = min(fspi, fin);
+>   
+>   	post = fls(fin) - fls(fspi);
+>   	if (fin > fspi << post)
 
-Hi all,
+Can you also test the SPI flash at some 100 kHz, just to see whether it 
+still works properly ? (to retain behavior fixed first in 6fd8b8503a0dc 
+("spi: spi-imx: Fix out-of-order CS/SCLK operation at low speeds") )
 
-Today's linux-next merge of the drm-misc tree got a conflict in:
-
-  drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-
-between commit:
-
-  eca13f3c67b6 ("drm/amdgpu: use the last IB as gang leader v2")
-
-from the drm-misc-fixes tree and commit:
-
-  1728baa7e4e6 ("drm/amdgpu: use scheduler dependencies for CS")
-
-from the drm-misc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-index de5cb056c9ad,0528c2b1db6e..000000000000
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
-@@@ -1197,10 -1201,7 +1203,10 @@@ static int amdgpu_cs_sync_rings(struct=20
-  	}
- =20
-  	for (i =3D 0; i < p->gang_size; ++i) {
- +		if (p->jobs[i] =3D=3D leader)
- +			continue;
- +
-- 		r =3D amdgpu_sync_clone(&leader->sync, &p->jobs[i]->sync);
-+ 		r =3D amdgpu_sync_push_to_job(&p->sync, p->jobs[i]);
-  		if (r)
-  			return r;
-  	}
-@@@ -1241,14 -1243,11 +1247,14 @@@ static int amdgpu_cs_submit(struct amdg
-  	for (i =3D 0; i < p->gang_size; ++i)
-  		drm_sched_job_arm(&p->jobs[i]->base);
- =20
- -	for (i =3D 0; i < (p->gang_size - 1); ++i) {
- +	for (i =3D 0; i < p->gang_size; ++i) {
-  		struct dma_fence *fence;
- =20
- +		if (p->jobs[i] =3D=3D leader)
- +			continue;
- +
-  		fence =3D &p->jobs[i]->base.s_fence->scheduled;
-- 		r =3D amdgpu_sync_fence(&leader->sync, fence);
-+ 		r =3D drm_sched_job_add_dependency(&leader->base, fence);
-  		if (r)
-  			goto error_cleanup;
-  	}
-
---Sig_/wjgPxu/WZguAY0NUMy/Wf_I
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN0JSgACgkQAVBC80lX
-0GxUwAgAoWI36aevpcyI9lzL7qDXiwqHVX3Vr5ed8U4YFtRFEOCr8jK+zBq4DnQK
-RTORhliDSaGNM4mZAbYeUcqPcIGEWBqcIYKmpwNPihBWP85dcO1LXN8r1Zxb33/y
-tuniOCKdJtCExKjq7b5I1FPkFxKMFND/MCkcWzMur4b/F8KedMYfczRqD1N1uU2C
-Nrrq88G/KeTj/3nqeH0+ErAdl++9zlLmWOHpzGUXJmjGmcVb7gHhZapFpNYbIhEB
-8OqKTU38GWuz+okJdR4wx4WIbcAQYbr+yO7nPKOgrwnjRlYEpJcdhCFh0jN/RwrG
-Etxmk8SdRn4TLVl1kX/HxmWAGDEs8A==
-=2ttS
------END PGP SIGNATURE-----
-
---Sig_/wjgPxu/WZguAY0NUMy/Wf_I--
+The fix here does look fine by me however.
