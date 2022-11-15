@@ -2,146 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF9262A201
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 20:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A6262A203
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 20:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbiKOTfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 14:35:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
+        id S231357AbiKOTfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 14:35:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbiKOTfH (ORCPT
+        with ESMTP id S231175AbiKOTfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 14:35:07 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2040.outbound.protection.outlook.com [40.107.93.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5A4C76F;
-        Tue, 15 Nov 2022 11:35:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gdDmxvXa0PNXgmvLVD8nKZMOxvT1/M9bzoEIcVbce7XixvgnBWiXYkbjllBNF7XhOrXc+t/vdbpsgmVEZfyJ6Rlnc1O2eEM++FwpHgDzAnyBdwDAF534ixeMwCXzls2tSEHKoKtP7h+ZRc4yACMoU4QSFyltt0vIAU/877gZUdIIcGkrR+yeLosUwDHecTHQbkJzKJBBpBJd+Yj9j9oiMlwXudKQKN7JXoahzTJSezag95mPgmOPYiFF9c2xTgx9jIFdqVc5my304doOltQlso4BcPtYHF7Waa7c8Xqgn4vaQ+OjUjJ/Qaz1pugqKne8rN5761YBxq1KM3oluyxdkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rZBKYh9FpySZkahUXdzKj+MHIfcXhEU3wAa33r7nQ20=;
- b=HQtr3u3klKKoe35XosNpxZBz9+eLGtv0GxPnVPOzA1ybIuLUqCthYbBQV+T9vXqb080L6yy6qwZX4OlcmBoAIn2eCaNK7tj3GbenWCYATnex9vWyPuyZ/jYgVWl1xUZ9wy+/zppiCkGErdraG2Di0x4VaAKeyQ/uloGWe2ojhrtDVN2eShnqPlq4u+1WGKok8NBQxW3MTdROt5QuiUYltlRyFvPR1Ysd8MpQncH2OyO2vw7ZvSMMntVdEpQIxHA3wiTd8LA0wVmhutS+APRdMGWrUeVH36pfUUnwEgwXPRQzG1Awz792HLoUUkdlSG9NxfQZic9BTQ/t2aY9+2rMvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rZBKYh9FpySZkahUXdzKj+MHIfcXhEU3wAa33r7nQ20=;
- b=FbmOFRgUKTR2B2B68VUTd8dpMG/L19o82G4F1qtfuHRDha83BCAIna+vKjqWxqf7uVMDHHxBBp3qoVojp6eVAhRU8aY9qCAlEe8NIA2oHfJK9mCnoiLdL9X0XsjOfGa0JVn0vNRo1kOsdmN3Wk9oafXNM90vssaUYn29R7JJ0NELuYmr7vue+M40hy8/VozbHY6iSj0F3JwVbiSJtE9VtXbaOi+q7p44TeJ6AyxvPGbgtljFB20sTPMr5Wy0Rq7qkIrE6oXTMT4rSwK6ZY3PENBRdZJKx927txiIYhwj33QAU+UDSzLLBi2TF7QoWnDjNH6N64YREIFmDP6r6YFBTw==
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
- by CY5PR12MB6551.namprd12.prod.outlook.com (2603:10b6:930:41::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Tue, 15 Nov
- 2022 19:35:03 +0000
-Received: from MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::eaf1:9be8:d472:ea57]) by MW2PR12MB4667.namprd12.prod.outlook.com
- ([fe80::eaf1:9be8:d472:ea57%7]) with mapi id 15.20.5813.017; Tue, 15 Nov 2022
- 19:35:03 +0000
-From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
-To:     Li Hua <hucool.lihua@huawei.com>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>
-CC:     "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
-        "yusongping@huawei.com" <yusongping@huawei.com>
-Subject: =?utf-8?B?UmU6IFtQQVRDSF0gY29yZWR1bXA6IEZpeCBidWlsZCBlcnJvciBmb3Ig4oCY?=
- =?utf-8?B?ZHVtcF9lbWl0X3BhZ2XigJkgZGVmaW5lZCBidXQgbm90IHVzZWQ=?=
-Thread-Topic: =?utf-8?B?W1BBVENIXSBjb3JlZHVtcDogRml4IGJ1aWxkIGVycm9yIGZvciDigJhkdW1w?=
- =?utf-8?B?X2VtaXRfcGFnZeKAmSBkZWZpbmVkIGJ1dCBub3QgdXNlZA==?=
-Thread-Index: AQHY+KNJ3Bf8c/XyDki6sLURxL9Fr65AYXCA
-Date:   Tue, 15 Nov 2022 19:35:03 +0000
-Message-ID: <21af6b11-d6e8-6f37-7d3d-b548dc7f5330@nvidia.com>
-References: <20221115040400.53712-1-hucool.lihua@huawei.com>
-In-Reply-To: <20221115040400.53712-1-hucool.lihua@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MW2PR12MB4667:EE_|CY5PR12MB6551:EE_
-x-ms-office365-filtering-correlation-id: feafc7d7-342c-4b70-55a9-08dac7407e34
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EbtdgBjHboZ1onW2OHaC2AV4mtD0tdPLcIhB2sapMNnDnW3ScNVW/xPZrG1DG0ma9aLWsQI5ABSiA1nhgPgGny2ukcR1K99dthr5CUPvyg+Er4wIvzhFA0eDHcNHP4AzjZrLwDNfdSNDgy0n2vLfKTkgAlQgpBYwJEnTCDJOc6EpkzPKnengxSPAIkMcpwSz6kgOAbOpneuDdWktXxtVvEGwxpju13h5j2aCyMa023hqWoGdTx52SBgMduy3O1rMUk8qtABII506Gv23I6EikwSaLqdWPK7tWWU3KSvtIa02h4mMLfQ7X/LKo9udTFfBcA0QSRpeRKAgBCcb/YxMFQrVg0weQfQh1inBUp0Q/6l4C8uv5dPz3Vc8TvaHCVs8j6UXzjptAPqLsxSNgCz/cJbkNHjkX6ot506nigm69YnDV3P+aRy4bTm4/N5ZhhVzA1aRWqqLd0QCKwFChcEwH+0rwu0K4RvymM3Kca6FI3Nf6hSS4u7EmlV5KZRNAJxdNhjU5rSpr+l7xE2srddhPxM+ft3g5fS5QVRA+fSlNs6SOGTcW0LEWdFIdB2STbYp3YyPLx4hQxKQg2WvzBptwtOryYXCy1qn+wUMITw4cPEqRjIpur5K1VTLpXbTFG6djNspFPXmqIwS1DA8ZtZoy5BS8jSW+HSHysQIqhSIhZeT7jRewLVMtH46CNV8mGWQ4xsNE5vu8LT6Y2QOS+eu9j0BKc51TE5PG5Fvx3ExRygRP+JsqkOsids5hpdb74Z+FL5FWjtCkRO37CtvQnCI9A4wZqTFfqN04uye1ITqyyU3HNwfUHDcr69DOseq+6tl/Ewk3R5A5naf/e2CaVSAuQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(346002)(396003)(39860400002)(376002)(451199015)(36756003)(31686004)(86362001)(31696002)(2906002)(478600001)(122000001)(4744005)(8936002)(38100700002)(38070700005)(186003)(2616005)(54906003)(316002)(110136005)(91956017)(5660300002)(6486002)(64756008)(66446008)(76116006)(53546011)(4326008)(41300700001)(66946007)(66556008)(6506007)(6512007)(66476007)(71200400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZEtzdURlZjJta1oydndWUkFlSzNnVmhlNnlRWUJ3YXV4RkFtbTJRdStCU3hI?=
- =?utf-8?B?ZURKMzR3b2tDRitwNGs5SUtDZkJKa2FESjhINTJiUWN6UmdwbDE4ajBheStq?=
- =?utf-8?B?bVVrTFhDOGJLbE1tcDBNMS9jK2VrQ2FsNGdPc3ZjSHA3ejdnaXRRdUVlV3hi?=
- =?utf-8?B?dUJaRC9pd2VHRFRlVWl0bnZJcGNnK2RYdU9pbVdoUFkzNFlQWXJ2WktzdEFt?=
- =?utf-8?B?RFptbWdJUkNKTk1nRmtXSWJkdnZ1S1BVTVJVb09qdU5hRUJWTEJtUDFxOVoy?=
- =?utf-8?B?MU5GYmhMUG5sajM1a0RJMXRGSkIxbzVKWDJqSkhiVEZ3TXJ4WnZMaVdTWWl0?=
- =?utf-8?B?dGpjU1l0MkV5aDkwQUI0Y1c0ZEUrVFhxOU5PK3REVEEzbjNHTlZDLzlNN0RW?=
- =?utf-8?B?bXdDRVhGRWNjWWJyQm5OVkdJU21mTFZNam1oZnJNUUE5WFZGSXRlK1R2djBm?=
- =?utf-8?B?bHpJRUwwbStVZzIxWFlZWlVhdnV3aWh3R05TVk5TSFB5QkhyeHlhNmFMbjZj?=
- =?utf-8?B?SGRlY3BFak4rQnR4UEJ5NEg3VXdhU0pSa3Q4ZWFDb3BBVWZRWENybE5QTkxw?=
- =?utf-8?B?SSszeU9HYjFDelRQNFR4Tm1ab29MWXlFY0JkU2xsT2VvaDhCK1RwTmdLYmMy?=
- =?utf-8?B?aEc4SG9LQmtSNGJJYVFKL1NDa25CTWtmdkVBNEFHZzlWN3RCK1dvN1REZk15?=
- =?utf-8?B?UUc4WVJhSUgweFkxVEdhUVBHVFVBSzdVZlMzOVNnU3p4bm5DMGdCbDNvQkxO?=
- =?utf-8?B?ZzVxQllRTjlZMXhvdjJQRSs4dVIrRnVZTUlkTlNkelZnMStWMTVZaU5WdVhq?=
- =?utf-8?B?eTVuMmQzWmd5T2tTVUdTR0Z6MyszUWZmL3pUNzY4cmo5VzEzVlhEelhXNkJB?=
- =?utf-8?B?NVhkWEJ6cnoxandzM2ZPUnpsQVlRazN2RTNJUFZ1eGdObjFZeTNNekx4bXo5?=
- =?utf-8?B?SlQ5elpJMTFCOENoL2xZR3RvcklZM0dtOUYyTkpyM3J5UVhGSUNwZDZoczB4?=
- =?utf-8?B?eVdrck9CSWNCcEpmQ2MyRHFyL0V6aVFuU1dJV0VsVHk3M0xyZTJLRGlyWUgw?=
- =?utf-8?B?MnZJM2ZRRUM3NkVXNDZPaTlGQUp4dnpMYzN0SWpEQk9BNytPbFU5ZlF3d0xK?=
- =?utf-8?B?bXNkdGhqSkpJQTIybUE0aWFWQVpaNm1kb1VjT3NYMlFybHcwNTVSVFU2Nmp1?=
- =?utf-8?B?SHBXUGR2REwrMUExeWxnQS9FOUdJRld4cE02VEJuOGhEdG13aStOYkV0aXQy?=
- =?utf-8?B?RitveUdVZmFVTFFXaENEYUpCY2FYRThIQlJGN3gydW9JcVVvcHNySXYraUJJ?=
- =?utf-8?B?bG0yRE8raHNlN2g4ekdyMWVPTmJNdCt4ZDlvdDFjZnUzZDhOcUdQZk9VbzZq?=
- =?utf-8?B?elFxV0xjc1BSdllPTm1hYllyQUsyT1crMzg4VHpvU09sK0lBcTEwSGRveFky?=
- =?utf-8?B?TEtpN09TOG5hQ3dENTVUaStXUmdhVHRXK0VSS3JqdDJKdlYzNFRwMUxlTndI?=
- =?utf-8?B?WFEwSDZnMXNpd0k4MjhwcjNYWjJlSmE4K09wZWlxSktENjc4VERNaURsTFZH?=
- =?utf-8?B?aTk3TGdWK2o1dDExd2J0c1NRb3BKSEprSit5SGZWeWlEdkdLdFFEeHdxYStS?=
- =?utf-8?B?Si8wTEJsb1ZBMkZVYWJuV0ErRHpmQk85c0VSR0RrZ3llZmdabnJPVlE4b0RJ?=
- =?utf-8?B?T0pXZ1hCN090SGoybldvWFpwa3ZXeHFRRXNhYU9rWktkSy9WYXVhLzR0NWRa?=
- =?utf-8?B?UEVLTWRjQ09SM1lXSWpCQjV3ZFNSYmJzVWhVUGFwUUwvNXBkZ24xZ0x2U0hq?=
- =?utf-8?B?NjdYYW1DWDR1SnZJV05HenBhSGc5eWluVXFxalhpNU52dTJodmNER0V4K1F6?=
- =?utf-8?B?NGZsOFQrUXpRQzRYSE1BemZvRUU1L3Z0eXBJYWsveVpUVG5pTHZtS3pacExx?=
- =?utf-8?B?NHF2SE0zRVlaTnlhU2F1ZWVnVDQ3S0Z6SkxINFQrMkpzWnBxcEQrSVVKVFha?=
- =?utf-8?B?eE45Z2hRcXJ0K0hpMG1Td1RhVXVvR3Bud3ROTjB2ZEE0TDMyeURhb1JOM0hr?=
- =?utf-8?B?LzQzOE45THRHQVpaZzJyQi93TEFOZHFWSGJvbTFsQ2RpQkRTbFB5dUlNZG9j?=
- =?utf-8?B?RVBsOHhJckZnK1BYNzJST002cnZUZ0dPbm1sNU5qQkhXRXJwWk9SeUZnTWdn?=
- =?utf-8?Q?rWlbC9F4uJclSLeM7RyBDwKp/+UWg9r7ShT+HVH2Md1L?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <658F0E709D9A9D488D1773E138E18A70@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 15 Nov 2022 14:35:25 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E23B7D7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 11:35:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mgO4rRXdMPTGi5Q4zNT8/529jd3tvagEvnNVftk04JQ=; b=GfkGU3YspjFGPAC0f9Ozgqdh1D
+        aVpTM4IoJS3HLfE0vvX9qCO4Kg07XgVH3nAp3xcedmUW/H1Xou0hf5mUakK2uxou4E0KgRGNv+xr0
+        yLw0ArbpZp8YKkQXoWI2cxxeYY9l9dRqwMA1SRF7wFOJ689kviPqUGY0ia22CiW2jkJLfFMYzhUvv
+        XbQgMGyzM7wnz1wLTQlrO7Xw//l/g7r8IR3QsGwrdv3H2QU/VDbggzngdCeok0DN4MfBdA0bgKJrq
+        ujEO1QMWJfMaQePE9QFRsHdVjHQkDVEm15CLIdb5lT5dBI9S4KcHEG4IOrHUQx3ovqsY23Lpy1pZS
+        Y1xID40g==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ov1iA-00EJQ3-Ve; Tue, 15 Nov 2022 19:35:10 +0000
+Date:   Tue, 15 Nov 2022 11:35:10 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Tejun Heo <tj@kernel.org>,
+        Matthieu Castet <castet.matthieu@free.fr>,
+        Stanislaw Gruszka <stf_xl@wp.pl>, ming.lei@redhat.com,
+        Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+6bc35f3913193fe7f0d3@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Read in
+ kernfs_next_descendant_post (2)
+Message-ID: <Y3Pp7geXZRX3ltNg@bombadil.infradead.org>
+References: <000000000000c183f505eb721745@google.com>
+ <20221021225228.1750-1-hdanton@sina.com>
+ <Y2BRzPxroVylPLan@slm.duckdns.org>
+ <Y3J8GKR905SZ84EE@bombadil.infradead.org>
+ <Y3KDxpuoY4PB22vt@google.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: feafc7d7-342c-4b70-55a9-08dac7407e34
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2022 19:35:03.4914
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TEgWrFWwZ2XJPKD99NqyGaDdjh3m40LVeTjMP6W4UA8Rm+OXVm2NSa4tSlx+jmk3LHSE5iJePXnh+xnf1yFxMw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6551
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3KDxpuoY4PB22vt@google.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTEvMTQvMjIgMjA6MDQsIExpIEh1YSB3cm90ZToNCj4gSWYgQ09ORklHX0VMRl9DT1JFIGlz
-IG5vdCBzZXQ6DQo+ICAgICAgZnMvY29yZWR1bXAuYzo4MzQ6MTI6IGVycm9yOiDigJhkdW1wX2Vt
-aXRfcGFnZeKAmSBkZWZpbmVkIGJ1dCBub3QgdXNlZCBbLVdlcnJvcj11bnVzZWQtZnVuY3Rpb25d
-DQo+ICAgICAgc3RhdGljIGludCBkdW1wX2VtaXRfcGFnZShzdHJ1Y3QgY29yZWR1bXBfcGFyYW1z
-ICpjcHJtLCBzdHJ1Y3QgcGFnZSAqcGFnZSkNCj4gICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+
-DQo+IA0KPiBGaXggdGhpcyBieSBhZGRpbmcgdGhlIG1pc3NpbmcgQ09ORklHX0VMRl9DT1JFIGZv
-ciBkdW1wX2VtaXRfcGFnZS4NCj4gDQo+IEZpeGVzOiAwNmJiYWE2ZGM1M2MgKCJbY29yZWR1bXBd
-IGRvbid0IHVzZSBfX2tlcm5lbF93cml0ZSgpIG9uIGttYXBfbG9jYWxfcGFnZSgpIikNCj4gU2ln
-bmVkLW9mZi1ieTogTGkgSHVhIDxodWNvb2wubGlodWFAaHVhd2VpLmNvbT4NCj4gLS0tDQoNCg0K
-UmV2aWV3ZWQtYnk6IENoYWl0YW55YSBLdWxrYXJuaSA8a2NoQG52aWRpYS5jb20+DQoNCi1jaw0K
-DQoNCg0K
+On Mon, Nov 14, 2022 at 10:07:02AM -0800, Dmitry Torokhov wrote:
+> I do not see how moving the point where we acquire device refcount
+> around fixes anything.
+
+The patch I posted does two things, moving the point where we acquire
+device refcount was just one so it was not clear that what I really
+wanted to be enforce a check for first, and that is that the driver
+*did* do the correct thing.
+
+So while we can surely expect the driver to do proper device refcounting
+and waiting on device removal, buggy drivers do exist and we should
+strive to not allow UAF with them.
+
+So something like this:
+
+From 92c8f4465a205e744c70dcba320708f72900442e Mon Sep 17 00:00:00 2001
+From: Luis Chamberlain <mcgrof@kernel.org>
+Date: Tue, 15 Nov 2022 10:02:13 -0800
+Subject: [PATCH] firmware_loader: avoid UAF on buggy request_firmware_nowait()
+ users
+
+request_firmware_nowait() is documented as requiring the caller to
+ensure to maintain the the reference count of @device during the
+lifetime of the call to request_firmware_nowait() and the callback.
+
+It would seem drivers exist which don't follow these rules though,
+and things like syzbot can trigger UAF if the device gets nuked
+as request_firmware_nowait() is being called. Instead of enabling
+use UAF, defend against such improperly written drivers and complain
+about it.
+
+Make the documentaiton a bit clearer and give a hint as to how to easily
+accomplish device lifetime maintenance on the driver using a completion
+and a wait_for_completion().
+
+Fixes: 0cfc1e1e7b534 ("firmware loader: fix device lifetime")
+Fixes: f8a4bd3456b98 ("firmware loader: embed device into firmware_priv structure")
+Cc: stable@vger.kernel.org # v2.6.36
+Reported-by: syzbot+6bc35f3913193fe7f0d3@syzkaller.appspotmail.com
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ drivers/base/firmware_loader/main.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
+index 7c3590fd97c2..6ac92dfdd85e 100644
+--- a/drivers/base/firmware_loader/main.c
++++ b/drivers/base/firmware_loader/main.c
+@@ -1118,15 +1118,16 @@ static void request_firmware_work_func(struct work_struct *work)
+  * @uevent: sends uevent to copy the firmware image if this flag
+  *	is non-zero else the firmware copy must be done manually.
+  * @name: name of firmware file
+- * @device: device for which firmware is being loaded
++ * @device: device for which firmware is being loaded. The caller must hold
++ * 	the reference count of @device during the lifetime of this routine
++ * 	and the @cont callback. This typically can be done with a completion
++ * 	and wait_for_completion prior to device teardown.
+  * @gfp: allocation flags
+  * @context: will be passed over to @cont, and
+  *	@fw may be %NULL if firmware request fails.
+  * @cont: function will be called asynchronously when the firmware
+  *	request is over.
+  *
+- *	Caller must hold the reference count of @device.
+- *
+  *	Asynchronous variant of request_firmware() for user contexts:
+  *		- sleep for as small periods as possible since it may
+  *		  increase kernel boot time of built-in device drivers
+@@ -1171,7 +1172,12 @@ request_firmware_nowait(
+ 		return -EFAULT;
+ 	}
+ 
+-	get_device(fw_work->device);
++	if (WARN_ON(!get_device(fw_work->device))) {
++		module_put(module);
++		kfree_const(fw_work->name);
++		kfree(fw_work);
++		return -ENODEV;
++	}
+ 	INIT_WORK(&fw_work->work, request_firmware_work_func);
+ 	schedule_work(&fw_work->work);
+ 	return 0;
+-- 
+2.35.1
+
