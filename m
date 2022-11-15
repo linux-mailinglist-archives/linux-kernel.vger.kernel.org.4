@@ -2,73 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C552629826
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33FE4629823
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbiKOMHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 07:07:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
+        id S238337AbiKOMGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 07:06:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiKOMG4 (ORCPT
+        with ESMTP id S232860AbiKOMGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:06:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E8BDF0F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:05:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668513930;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BI6S1D/Aw6YmKbDYrXeofwR77FnCGKUq367vbCtHncY=;
-        b=UDOqgq0iMOHpg+ArCIJhd7nKTku9Bv3fAT+uVBqO8/DP3RILZ52IvZYI+iU5fv1CkT2iVL
-        2mL4PkwaD3JYUByJsPWcs105Kix2Iqwry/t82zh74crIRbK86xPPLGvwC6JC+zVxlOQgYV
-        z21Qt5z01bZzKomfxGFsHHwGC25ofEw=
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
- [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-626-rVnG8IBUO8G8SuptAjauTw-1; Tue, 15 Nov 2022 07:05:26 -0500
-X-MC-Unique: rVnG8IBUO8G8SuptAjauTw-1
-Received: by mail-pj1-f70.google.com with SMTP id b1-20020a17090a10c100b0020da29fa5e5so7428601pje.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:05:26 -0800 (PST)
+        Tue, 15 Nov 2022 07:06:01 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2501613D78;
+        Tue, 15 Nov 2022 04:05:12 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id d20so17185083ljc.12;
+        Tue, 15 Nov 2022 04:05:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3EvCa6cklZcleBkPtAW83KAAzvvUfzZuN+g/oi5bp1s=;
+        b=K40SJr58G5kItKrjShn3I9/gAUG9y/SeLEozWo0jyXiVHDP0lbc/TP32E6y/iTrPN4
+         eARtkyAT+orQGZk4gBGoQDMk34ex2hG+t3wvkvqKstMs4TfhZPNfAGrBU3fOUdV+CM8p
+         KTzzxVFZHCNeHkXxACMZydKst3N7JsflXgSs8QMcCw1m8bkpCWQhFQmvJ88oMYUs6GWk
+         CGWGdWDoiUCR7Afo6kORS07PLbayTmtScj+AG7l9/+sOtxS+xDHo9KYokAToeDLw/JdQ
+         BtbuB8kfpBxtDYPHDFtrgDY16dGL4mwBjUBPEW3DBla90O7Y2EBeVDlnTnmqJNkXvBLs
+         jWeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BI6S1D/Aw6YmKbDYrXeofwR77FnCGKUq367vbCtHncY=;
-        b=0eUOmCTwbNO6IpeGKlYb3PU6sS5q2tcFhyvbmCyXH0mZBEz68xGHR+FrvNZFQGNRlN
-         ZmT09oG8MOT/xbv2BPHrnEMSlqOhvt0+BDGlNdaQzI5xi5HPa4+NDiFKsqGIeyjpoEFl
-         40tt1fsPHJDkSeM4EFmokB8Hv8YAJvi0wERpxZZT67tMwN7OgdCnYQAk3MAZEesq7us0
-         CEqYOEsA8h8EemTRMuJToCIRgg6WhT6EW4iTN3YbiEFO719DGqSjqP/qSAv5dXtD02G1
-         PJTG9Rjxm4E1XUAytkHcf4ZVHkR7vnS6VRiRiCT6nz+USwMslQsBoZYinTe5lZ/foSTn
-         dZHg==
-X-Gm-Message-State: ANoB5pmxb+DJoG61Y7FO5l13tP7iSNWmb8aJcVnM4O8AJeyBW6Bhuop+
-        sm/mCJ3dq6LUxigv/8S8N1uZN8AnRxlsbODsoQpS1j69Dz/YX/VmtnlWkbp+sdzeV7OjjuJ/Jky
-        qEI7YFbMW9rUDI3VreB1bt9bpIUrIbUtPRhC9uALK
-X-Received: by 2002:aa7:9389:0:b0:572:7833:57f0 with SMTP id t9-20020aa79389000000b00572783357f0mr2103004pfe.86.1668513925829;
-        Tue, 15 Nov 2022 04:05:25 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7dRERembHuf2S3cUPeNOIQU19imq4Tat99d+XaGBGjf3AXMe4z9dktfG3ZbtKf8xsy4NnK/be7oI+mqXPB8rQ=
-X-Received: by 2002:aa7:9389:0:b0:572:7833:57f0 with SMTP id
- t9-20020aa79389000000b00572783357f0mr2102982pfe.86.1668513925546; Tue, 15 Nov
- 2022 04:05:25 -0800 (PST)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3EvCa6cklZcleBkPtAW83KAAzvvUfzZuN+g/oi5bp1s=;
+        b=PYJaP3Xb2vtVtlMmNy6sxlxOTkFHWjw0avCAf49sGjhWK6NLmcPWnyG48Bz8U0b+1f
+         21qB5enwKrZMu1eGEYR1/zZmIiHcybmRFzvatt0cPPoHwsai9SS6VnrKFFJRgZ7U4JXP
+         I7d7t9X0wXZ1VrewIaEVri4BLrLQkma8ZRpCeCBK4l30u6BSbaehJ6TOxYjKSFJSlpE+
+         RHZX9u6qy1vG1Hkc/vyNXGbYZmcd8UkU6XzkGjZeV1ylQF3TARiHAJu62qWTfb/rRTr2
+         8+xb+Od75Dq9uNnZ9MDSVO3PsVDlnKwlmKgdAlcKgRaMMUWiI7MdtRHieL1MigAvT8hb
+         Ou/w==
+X-Gm-Message-State: ANoB5pnRqxbNGJ3YVwu0xeCAZSH6tktajdP/XA1GBZA2AJ31i+zrk4Cs
+        zz587/ggA8+wvg3T4xczc1MuAC5XbfQ=
+X-Google-Smtp-Source: AA0mqf7nnXr/zUzO3pJI10gT7XN5i4OwGyrXzs7SEaBLvLCs/1794UCVHIRD85uExkpFs8yA5/qJgA==
+X-Received: by 2002:a05:651c:2203:b0:26f:bda0:cf0d with SMTP id y3-20020a05651c220300b0026fbda0cf0dmr5570405ljq.227.1668513910252;
+        Tue, 15 Nov 2022 04:05:10 -0800 (PST)
+Received: from pc636 (host-90-235-25-77.mobileonline.telia.com. [90.235.25.77])
+        by smtp.gmail.com with ESMTPSA id i20-20020a198c54000000b004aa14caf6e9sm2186738lfj.58.2022.11.15.04.05.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 04:05:09 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Tue, 15 Nov 2022 13:05:07 +0100
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, rcu@vger.kernel.org
+Subject: Re: [PATCH v2] rcu/kfree: Do not request RCU when not needed
+Message-ID: <Y3OAc+cBK5Dcky8l@pc636>
+References: <20221109024758.2644936-1-joel@joelfernandes.org>
+ <Y2z3Mb3u8bFZ12wY@pc636>
+ <CAEXW_YSq89xzgyQ9Tdt1tCqz8VAfzb7kSXVZmnxDuJ65U0UZ3w@mail.gmail.com>
+ <Y20EOinwcLSZHmXg@pc638.lan>
+ <Y22ry4Q2OY2zovco@google.com>
+ <Y3Iyka86FlUh9D1P@pc636>
+ <20221114161733.GD4001@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-References: <20221110141335.62171-1-sgarzare@redhat.com> <CAJaqyWdvdy2QxuuyPRtfBKtuObrMg_kX_R9hdui+Oh72XtJ7Qw@mail.gmail.com>
- <20221111163007.35kvkodvk6zpimmu@sgarzare-redhat> <CAJaqyWfYx+63-hOp0K8fznkyjkScKu6-r8CUPd3eD96oKCHu9A@mail.gmail.com>
- <20221114151111.6ay3ra4shzj3k2lg@sgarzare-redhat>
-In-Reply-To: <20221114151111.6ay3ra4shzj3k2lg@sgarzare-redhat>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Tue, 15 Nov 2022 13:04:49 +0100
-Message-ID: <CAJaqyWem5n1jaXd65LMR0nGnd1Jort19E9beZef8a+gnFJ3JOA@mail.gmail.com>
-Subject: Re: [PATCH] vdpa_sim: fix vringh initialization in vdpasim_queue_ready()
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221114161733.GD4001@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,124 +81,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 4:11 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
->
-> On Mon, Nov 14, 2022 at 10:13:51AM +0100, Eugenio Perez Martin wrote:
-> >On Fri, Nov 11, 2022 at 5:30 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
-> >>
-> >> On Fri, Nov 11, 2022 at 04:40:33PM +0100, Eugenio Perez Martin wrote:
-> >> >On Thu, Nov 10, 2022 at 3:13 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
-> >> >>
-> >> >> When we initialize vringh, we should pass the features and the
-> >> >> number of elements in the virtqueue negotiated with the driver,
-> >> >> otherwise operations with vringh may fail.
-> >> >>
-> >> >> This was discovered in a case where the driver sets a number of
-> >> >> elements in the virtqueue different from the value returned by
-> >> >> .get_vq_num_max().
-> >> >>
-> >> >> In vdpasim_vq_reset() is safe to initialize the vringh with
-> >> >> default values, since the virtqueue will not be used until
-> >> >> vdpasim_queue_ready() is called again.
-> >> >>
-> >> >> Fixes: 2c53d0f64c06 ("vdpasim: vDPA device simulator")
-> >> >> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> >> >> ---
-> >> >>  drivers/vdpa/vdpa_sim/vdpa_sim.c | 3 +--
-> >> >>  1 file changed, 1 insertion(+), 2 deletions(-)
-> >> >>
-> >> >> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> >> >> index b071f0d842fb..b20689f8fe89 100644
-> >> >> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> >> >> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> >> >> @@ -67,8 +67,7 @@ static void vdpasim_queue_ready(struct vdpasim *vdpasim, unsigned int idx)
-> >> >>  {
-> >> >>         struct vdpasim_virtqueue *vq = &vdpasim->vqs[idx];
-> >> >>
-> >> >> -       vringh_init_iotlb(&vq->vring, vdpasim->dev_attr.supported_features,
-> >> >> -                         VDPASIM_QUEUE_MAX, false,
-> >> >> +       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, false,
-> >> >>                           (struct vring_desc *)(uintptr_t)vq->desc_addr,
-> >> >>                           (struct vring_avail *)
-> >> >>                           (uintptr_t)vq->driver_addr,
-> >> >> --
-> >> >> 2.38.1
-> >> >>
-> >> >
-> >> >I think this is definitely an improvement, but I'd say we should go a
-> >> >step further and rename VDPASIM_QUEUE_MAX to VDPASIM_QUEUE_DEFAULT. As
-> >> >you point out in the patch message it is not a max anymore.
-> >>
-> >> I'm not sure about renaming since it is the value returned by
-> >> vdpasim_get_vq_num_max, so IMHO the _MAX suffix is fine.
-> >
-> >Oh that's a very good point. But then I guess a conformant driver
-> >should never set more descriptors than that.
->
-> Yep, right!
->
-> >
-> >Would it be convenient to make the default queue size of 32768 and let
->
-> Yep, I think it makes sense.
->
-> >the guest specify less descriptors than that? Default configuration
-> >will consume more memory then.
->
-> Do you mean for the driver point of view?
->
-> Because IIUC in vringh we don't allocate anything related to the queue
-> size.
->
+On Mon, Nov 14, 2022 at 08:17:33AM -0800, Paul E. McKenney wrote:
+> On Mon, Nov 14, 2022 at 01:20:33PM +0100, Uladzislau Rezki wrote:
+> > > On Thu, Nov 10, 2022 at 03:01:30PM +0100, Uladzislau Rezki wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > On Thu, Nov 10, 2022 at 8:05 AM Uladzislau Rezki <urezki@gmail.com> wrote:
+> > > > > 
+> > > > > > > On ChromeOS, using this with the increased timeout, we see that we
+> > > > > > almost always
+> > > > > > > never need to initiate a new grace period. Testing also shows this frees
+> > > > > > large
+> > > > > > > amounts of unreclaimed memory, under intense kfree_rcu() pressure.
+> > > > > > >
+> > > > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > > > > > ---
+> > > > > > > v1->v2: Same logic but use polled grace periods instead of sampling
+> > > > > > gp_seq.
+> > > > > > >
+> > > > > > >  kernel/rcu/tree.c | 8 +++++++-
+> > > > > > >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > > > > > >
+> > > > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > > > > > index 591187b6352e..ed41243f7a49 100644
+> > > > > > > --- a/kernel/rcu/tree.c
+> > > > > > > +++ b/kernel/rcu/tree.c
+> > > > > > > @@ -2935,6 +2935,7 @@ struct kfree_rcu_cpu_work {
+> > > > > > >
+> > > > > > >  /**
+> > > > > > >   * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace
+> > > > > > period
+> > > > > > > + * @gp_snap: The GP snapshot recorded at the last scheduling of monitor
+> > > > > > work.
+> > > > > > >   * @head: List of kfree_rcu() objects not yet waiting for a grace period
+> > > > > > >   * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiting for a
+> > > > > > grace period
+> > > > > > >   * @krw_arr: Array of batches of kfree_rcu() objects waiting for a
+> > > > > > grace period
+> > > > > > > @@ -2964,6 +2965,7 @@ struct kfree_rcu_cpu {
+> > > > > > >       struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
+> > > > > > >       raw_spinlock_t lock;
+> > > > > > >       struct delayed_work monitor_work;
+> > > > > > > +     unsigned long gp_snap;
+> > > > > > >       bool initialized;
+> > > > > > >       int count;
+> > > > > > >
+> > > > > > > @@ -3167,6 +3169,7 @@ schedule_delayed_monitor_work(struct kfree_rcu_cpu
+> > > > > > *krcp)
+> > > > > > >                       mod_delayed_work(system_wq, &krcp->monitor_work,
+> > > > > > delay);
+> > > > > > >               return;
+> > > > > > >       }
+> > > > > > > +     krcp->gp_snap = get_state_synchronize_rcu();
+> > > > > > >       queue_delayed_work(system_wq, &krcp->monitor_work, delay);
+> > > > > > >  }
+> > > > > > >
+> > > > > > How do you guarantee a full grace period for objects which proceed
+> > > > > > to be placed into an input stream that is not yet detached?
+> > > > > 
+> > > > > 
+> > > > > Just replying from phone as I’m OOO today.
+> > > > > 
+> > > > > Hmm, so you’re saying that objects can be queued after the delayed work has
+> > > > > been queued, but processed when the delayed work is run? I’m looking at
+> > > > > this code after few years so I may have missed something.
+> > > > > 
+> > > > > That’s a good point and I think I missed that. I think your version did too
+> > > > > but I’ll have to double check.
+> > > > > 
+> > > > > The fix then is to sample the clock for the latest object queued, not for
+> > > > > when the delayed work is queued.
+> > > > > 
+> > > > The patch i sent gurantee it. Just in case see v2:
+> > > 
+> > > You are right and thank you! CBs can be queued while the monitor timer is in
+> > > progress. So we need to sample unconditionally. I think my approach is still
+> > > better since I take advantage of multiple seconds (I update snapshot on every
+> > > CB queue monitor and sample in the monitor handler).
+> > > 
+> > > Whereas your patch is snapshotting before queuing the regular work and when
+> > > the work is executed (This is a much shorter duration and I bet you would be
+> > > blocking in cond_synchronize..() more often).
+> > > 
+> > There is a performance test that measures a taken time and memory
+> > footprint, so you can do a quick comparison. A "rcutorture" can be
+> > run with various parameters to figure out if a patch that is in question
+> > makes any difference.
+> > 
+> > Usually i run it as:
+> > 
+> > <snip>
+> > #! /usr/bin/env bash
+> > 
+> > LOOPS=10
+> > 
+> > for (( i=0; i<$LOOPS; i++ )); do
+> >         tools/testing/selftests/rcutorture/bin/kvm.sh --memory 10G --torture rcuscale --allcpus --duration 1 \
+> >         --kconfig CONFIG_NR_CPUS=64 \
+> >         --kconfig CONFIG_RCU_NOCB_CPU=y \
+> >         --kconfig CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y \
+> >         --kconfig CONFIG_RCU_LAZY=n \
+> >         --bootargs "rcuscale.kfree_rcu_test=1 rcuscale.kfree_nthreads=16 rcuscale.holdoff=20 rcuscale.kfree_loops=10000 torture.disable_onoff_at_boot" --trust-make
+> >         echo "Done $i"
+> > done
+> > <snip>
+> > 
+> > just run it from your linux sandbox.
+> 
+> Would it make sense to modify the "if test "$do_kvfree" = "yes" code
+> in tools/testing/selftests/rcutorture/bin/torture.sh to do something
+> like this instead of what it currently does?
+> 
 
-Right, I mean the driver that does not override the vring size will
-start allocating bigger vrings by default. But I don't think that's a
-problem actually, given that it is the simulator, just pointing it
-out.
+<snip>
+if test "$do_kvfree" = "yes"
+then
+        torture_bootargs="rcuscale.kfree_rcu_test=1 rcuscale.kfree_nthreads=16 rcuscale.holdoff=20 rcuscale.kfree_loops=10000 torture.disable_onoff_at_boot"
+        torture_set "rcuscale-kvfree" tools/testing/selftests/rcutorture/bin/kvm.sh --torture rcuscale --allcpus --duration 10 --kconfig "CONFIG_NR_CPUS=$HALF_ALLOTED_CPUS" --memory 2G --trust-make
+fi
+<snip>
 
-> >
-> >> But I admit that initially I didn't understand whether it's the maximum
-> >> number of queues or elements, so maybe VDPASIM_VQ_NUM_MAX is better.
-> >>
-> >> >
-> >> >Another thing to note is that we don't have a way to report that
-> >> >userspace indicated a bad value for queue length. With the current
-> >> >code vringh will not initialize at all if I'm not wrong, so we should
-> >> >prevent userspace to put a bad num.
-> >>
-> >> Right!
-> >>
-> >> >
-> >> >Ideally, we should repeat the tests of vring_init_kern at
-> >> >vdpasim_set_vq_num. We could either call it with NULL vring addresses
-> >> >to check for -EINVAL, or simply repeat the conditional (!num || num >
-> >> >0xffff || (num & (num - 1))). I'd say the first one is better to not
-> >> >go out of sync.
-> >>
-> >> Or we could do the check in vdpasim_set_vq_ready() and set it not ready
-> >> if the vq_num is wrong.
-> >>
-> >
-> >Maybe it is the right place to do it, but the device is initiated at
-> >that point so the driver needs to perform a full reset.
-> >
->
-> Yes, but the driver is misbehaving, so it might be okay to request a
-> full reset.
->
+it does almost the same but i add some repeat loops usually to get some
+average results.
 
-Setting DEVICE_NEEDS_RESET in that case, right?
+> Though if so, it would be much faster to use kvm.sh's --buildonly flag
+> to build the kernel, then kvm-again.sh to rerun that kernel.
+> 
+I think can be easily run from the bash in while true; do ... done; script
+with a desired number of iteration.
 
-Thanks!
+But maybe torture.sh already has it. I mean number of iterations.
 
-> >As a reference, qemu will retain the last valid size set to a vq, or
-> >the default. This is because it ignores the bad values systematically.
-> >Not sure what is more conformant actually :).
-> >
->
-> Me too :-)
->
-> Thanks,
-> Stefano
->
-
+--
+Uladzislau Rezki
