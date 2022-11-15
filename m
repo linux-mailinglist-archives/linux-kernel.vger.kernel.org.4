@@ -2,50 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A83629551
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:08:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A479F629559
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238308AbiKOKIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:08:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
+        id S229818AbiKOKKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:10:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238306AbiKOKI2 (ORCPT
+        with ESMTP id S238266AbiKOKKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:08:28 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4349922F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:08:24 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1ousrd-0002Zz-Bh; Tue, 15 Nov 2022 11:08:21 +0100
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1ousrc-0007B7-W4; Tue, 15 Nov 2022 11:08:20 +0100
-Date:   Tue, 15 Nov 2022 11:08:20 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de,
-        Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
-        Haibo Chen <haibo.chen@nxp.com>, linux-imx@nxp.com,
-        kernel@pengutronix.de, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH V5 11/12] arm64: dts: imx8m[m, q]-evk: change to use
- off-on-delay-us in regulator
-Message-ID: <20221115100820.rzp6eepqnc5ykxco@pengutronix.de>
-References: <20221115091709.2865997-1-peng.fan@oss.nxp.com>
- <20221115091709.2865997-12-peng.fan@oss.nxp.com>
+        Tue, 15 Nov 2022 05:10:13 -0500
+Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3680722F;
+        Tue, 15 Nov 2022 02:10:10 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1668506982; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=CW4l41oR7KZQwFhNoYv0OJy8Cd2JSMsS6ZSkl1BGBJPIFgEtzLbklxeWRT3PjxH8tpznsDCokee2X62/26iUdnNZ1C72IAhauCouyUADqO72AXWPxQCPvNTe9n1CGvl1KpMWE30PFYiKyT098QSsoxyRRy2DC+LHnFP7Q4QkI0M=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1668506982; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=y0KP37fL06Ddkt/t9va+97Mqv3/Ml7gCQQoFspXKKGs=; 
+        b=Nj4LfgTwYNFtHzNUDBzXcaNRFOI6OdF0Pv4hvEH9ULQjLaGvsErMhAGL9GzwgFS9tchP5+iYkIgDcaReIZJyhvk25AX2Xqodcf0bLke1aFn7MIcYobCOM5IBoPxd42MdnQaWcHVUIIUulrUCgxpiDB4lulEw35C0S867R6txvnw=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1668506982;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=Message-ID:Date:Date:MIME-Version:To:To:Cc:Cc:References:Subject:Subject:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=y0KP37fL06Ddkt/t9va+97Mqv3/Ml7gCQQoFspXKKGs=;
+        b=qU1QmqMLateIUL8kOybJ2pEVqylDaGtjC9kT5vxZrcCITWUILt5Ti2Uq8YcOzNGT
+        9fsqOq2xXeezL2rCGfdytpYZ2AYct4lYgSd3H+KaLTnwsnv1Ls2nXGIa0l69J+d+ftg
+        31DTok8axZF+bZu71TwZZNMVzmOhPQHIvU12rQwA=
+Received: from [192.168.1.9] (110.226.30.173 [110.226.30.173]) by mx.zoho.in
+        with SMTPS id 1668506981538751.4796566831048; Tue, 15 Nov 2022 15:39:41 +0530 (IST)
+Message-ID: <917344b4-4256-6d77-b89b-07fa96ec4539@siddh.me>
+Date:   Tue, 15 Nov 2022 15:39:38 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221115091709.2865997-12-peng.fan@oss.nxp.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     Chao Yu <chao@kernel.org>, Yue Hu <huyue2@coolpad.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        linux-erofs <linux-erofs@lists.ozlabs.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <Y3MGf3TzgKpAz4IP@B-P7TQMD6M-0146.local>
+Subject: Re: [RFC PATCH] erofs/zmap.c: Bail out when no further region remains
+Content-Language: en-US, en-GB, hi-IN
+From:   Siddh Raman Pant <code@siddh.me>
+In-Reply-To: <Y3MGf3TzgKpAz4IP@B-P7TQMD6M-0146.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,59 +63,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22-11-15, Peng Fan (OSS) wrote:
-> From: Haibo Chen <haibo.chen@nxp.com>
-> 
-> Some SD Card controller and power circuitry has increased capacitance,
-> so the usual toggling of regulator to power the card off and on
-> is insufficient.
-> 
-> According to SD spec, for sd card power reset operation, the sd card
-> supply voltage needs to be lower than 0.5v and keep over 1ms, otherwise,
-> next time power back the sd card supply voltage to 3.3v, sd card can't
-> support SD3.0 mode again.
-> 
-> This patch add the off-on-delay-us, make sure the sd power reset behavior
-> is align with the specification. Without this patch, when do quick system
-> suspend/resume test, some sd card can't work at SD3.0 mode after system
-> resume back.
-> 
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+On Tue, 15 Nov 2022 08:54:47 +0530, Gao Xiang wrote:
+> I just wonder if we should return -EINVAL for post-EOF cases or
+> IOMAP_HOLE with arbitrary length?
 
-Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
+Since it has been observed that length can be zeroed, and we
+must stop, I think we should return an error appropriately.
 
-> ---
->  arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi | 1 +
->  arch/arm64/boot/dts/freescale/imx8mq-evk.dts  | 1 +
->  2 files changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> index 7d6317d95b13..f881494996a1 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-> @@ -56,6 +56,7 @@ reg_usdhc2_vmmc: regulator-usdhc2 {
->  		regulator-min-microvolt = <3300000>;
->  		regulator-max-microvolt = <3300000>;
->  		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
-> +		off-on-delay-us = <20000>;
->  		enable-active-high;
->  	};
->  
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> index 82387b9cb800..07d9fb2aacf8 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8mq-evk.dts
-> @@ -46,6 +46,7 @@ reg_usdhc2_vmmc: regulator-vsd-3v3 {
->  		regulator-min-microvolt = <3300000>;
->  		regulator-max-microvolt = <3300000>;
->  		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
-> +		off-on-delay-us = <20000>;
->  		enable-active-high;
->  	};
->  
-> -- 
-> 2.37.1
-> 
-> 
-> 
+For a read-only filesystem, we probably don't really need to
+care what's after the EOF or in unmapped regions, nothing can
+be changed/extended. The definition of IOMAP_HOLE in iomap.h
+says it stands for "no blocks allocated, need allocation".
+
+Alternatively, we can return error iff the length of the
+extent with holes is zero, like here.
+
+Thanks,
+Siddh
