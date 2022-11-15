@@ -2,184 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92BC62A33E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAD562A346
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbiKOUof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 15:44:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
+        id S230137AbiKOUqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 15:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231800AbiKOUo1 (ORCPT
+        with ESMTP id S229940AbiKOUp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:44:27 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A079205FA
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:44:26 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id i2so11496776vsc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:44:26 -0800 (PST)
+        Tue, 15 Nov 2022 15:45:57 -0500
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5906D63A9;
+        Tue, 15 Nov 2022 12:45:56 -0800 (PST)
+Received: by mail-qk1-x735.google.com with SMTP id x21so10397035qkj.0;
+        Tue, 15 Nov 2022 12:45:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fki+0TCoTrte3/BJmTglaCbQEGDgk5B9kayNvnzRPWM=;
-        b=Q+lW7U/1515XSKweAMw5eX05XaxUGZTKGcd7QsyfGV2BIVZ4vO6qOo11M9Bddjyytv
-         DDMWMCivk2+y76oMjBHBSQY+HCarazuvA/bDaWBvlCpuPgBu0JOWsyEeHaZhNQHuBJo7
-         Hvvh2Ow2EfGNHbJVM3I0K9wIbuiRYtl+5vKvUEA3VjNprdirOnD5UCchWEm1zfcR4U+6
-         DuB+MotSK2WwN6SB3IjLk3AuQHc1sb7c4FnPUax24E9fyf75hTVceol07USJCGppACm+
-         AjJKpvCwJUjosvIouvjLNOlPczSbirv331O5CJLTyrLn371E5IS1QZKMs9IfyhMR0XGi
-         uNvw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7BtXbBABgo0H5/POSbS5zs2QbNbB+wIA7vTbJVeUtOU=;
+        b=ZkqmNSlcU9tb+Sr1x16dLNwCqTlZz/9UIOEGoB2IUtQbz08uP3JKnUHS5AAGDV5KDv
+         mbLm/cz03jbmvMQVU41BLFtSTurrvwUBdSPGajoI3MRGWZa9mzQbgz4LugjIM7/ujcGq
+         x0BS9611+fNsC6mkoCAS6D7mywRTJT8P3V09njUSaGKpkQAIq65PVwa2eyeMs/y2Rg8I
+         nbn5M+0bXWKaJ2gckndHbflRWyb7Pwo+h/HyxuJ3nR9ZtLWrCs109mmb0DJpGtty3x7a
+         sQpAd9IH17mVf7ZLPqYc0zFWksq1R4+vdy55f5/SmcNpaNG9XNEU6D1UlCdILexQfV2C
+         03zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fki+0TCoTrte3/BJmTglaCbQEGDgk5B9kayNvnzRPWM=;
-        b=R1IoeG1mMveyk1hCS16O6YK1vKyv5UCYKWiJ+xq6o7cwxmEoiosnDBrmHNnvAJoFIC
-         LfC5rJsCC/qCfrd6X2z9WilkLr6dmeOfUZ51aTqXm9pNjo0lEpYdo+ond7Npgxd9qUy4
-         dyNhtUFzLuWiFDSjojFgBSAChLQkqo41gGMhq+05ES3aZ1TixmY7JC8T92m4HgL91mrO
-         h+xpz/3lrSuj+zx6weR6Y96DqsaUfqxc0ttOoGzoj4ADu/xPy0w7zBdKHhQFFQCkFS9q
-         Vz3t+GrDu/wDze0/aJkiCepdXqeE+/zb2as/wafEVh5o8ZBO/CIQ9uEZglgYoewMySsi
-         mqyw==
-X-Gm-Message-State: ANoB5pnp9oNBHTkSOcNPZX+C/k9mYQmj/5FoSABfeGxOUFsglwS99ZsQ
-        u3xH+DW0NRaQ0KDtfSgGwid3A+XKOgZovU5Q+RVo
-X-Google-Smtp-Source: AA0mqf49L62DSbkOhy5QdhSFkosUgoRxnZccam6+NPCc0pWQN1kIdQqfHb6qw+qOMl9/YLMbHuvo2aGXdUCt3JVCiug=
-X-Received: by 2002:a05:6102:3224:b0:3aa:8846:b9a with SMTP id
- x4-20020a056102322400b003aa88460b9amr9477748vsf.58.1668545065335; Tue, 15 Nov
- 2022 12:44:25 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7BtXbBABgo0H5/POSbS5zs2QbNbB+wIA7vTbJVeUtOU=;
+        b=1FsIi6q553mV8sFh5q/yDY8PsfoeQzkRWKRSTkdnELrIZh8F+jEdYsAjUbrzsMdqS6
+         DHPmZOMBVrlxRXae20L7r8R+6CucSb3zFidhFWMDTUgst9RisIqRzqNBorjxYV1MZt9S
+         66uneu8Ik3gHPHlhfuWnM+0mYSgwEr8QPstXMafoQzVlJuov3/PQvsypeUTCogQ/hPXA
+         T5kPfApZrGOtcvDtSNQ8qwScygGsDz7ATGEHwrWLafWUpOsTlQfx0g+9kuuI/CPdI8iX
+         ktV0/3eh4sSDdT0UbrWZvxrUfvcdjsBrVi8FVyJUtXiNQBBSRofCWyAe0MJi805baCkN
+         f8WQ==
+X-Gm-Message-State: ANoB5pmX63CzQ0tHVkPIHQVqFH+BR/PvoDrNrE2McQys104p/YzgDPxm
+        AJJmDqvKNuRT0zVTVhdU3/QdT1Rv7n4=
+X-Google-Smtp-Source: AA0mqf4RPayW1TgKEZCypkaacG26N45Dme4i3MHtuz9gu7Wy9rdyiJtQGmOKj/rgH/9QdjHgPn8bxQ==
+X-Received: by 2002:ae9:e119:0:b0:6fa:398c:e7c2 with SMTP id g25-20020ae9e119000000b006fa398ce7c2mr17167818qkm.517.1668545155427;
+        Tue, 15 Nov 2022 12:45:55 -0800 (PST)
+Received: from [10.4.10.38] ([96.237.180.62])
+        by smtp.gmail.com with ESMTPSA id l11-20020a37f90b000000b006fa9d101775sm8833476qkj.33.2022.11.15.12.45.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 12:45:55 -0800 (PST)
+Message-ID: <56c0d9b4-222e-e92f-4508-458d51e19761@gmail.com>
+Date:   Tue, 15 Nov 2022 15:45:54 -0500
 MIME-Version: 1.0
-References: <20221115200156.12218-1-mario.limonciello@amd.com> <20221115200156.12218-2-mario.limonciello@amd.com>
-In-Reply-To: <20221115200156.12218-2-mario.limonciello@amd.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Tue, 15 Nov 2022 12:44:14 -0800
-Message-ID: <CANDhNCqPWV_dC_wo-CCqBuO0J=5TcRAh5AX335PLft2+w19_tQ@mail.gmail.com>
-Subject: Re: [RFC v3 1/4] PM: Add a sysfs file to represent the total sleep duration
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 3/4] ARM: dts: imxrt1050: increase mmc max-frequency
+ property
+Content-Language: en-US
+To:     Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Sven van Ashbrook <svenva@chromium.org>,
-        Raul Rangel <rrangel@chromium.org>, linux-pm@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        Rajat Jain <rajatja@google.com>,
-        David E Box <david.e.box@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Bough Chen <haibo.chen@nxp.com>
+References: <20221115193244.10484-1-giulio.benetti@benettiengineering.com>
+ <20221115193244.10484-3-giulio.benetti@benettiengineering.com>
+From:   Jesse Taube <mr.bossman075@gmail.com>
+In-Reply-To: <20221115193244.10484-3-giulio.benetti@benettiengineering.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 12:02 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> For userspace to be able to analyze how much of a suspend cycle was spent
-> in the hardware sleep states userspace software has to use kernel trace
-> points paired with the file `low_power_idle_system_residency_us` on
-> supported systems.
->
-> To make this information more discoverable, introduce a new sysfs file
-> to represent the duration spent in a sleep state.
-> This file will be present and updated during resume for all suspend
-> types.
->
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+
+
+On 11/15/22 14:32, Giulio Benetti wrote:
+> According to i.MXRT1050 Datasheet usdhc supports up to 200Mhz clock so
+> let's increase max-frequency property to 200Mhz.
+> 
+> Cc: Jesse Taube <mr.bossman075@gmail.com>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > ---
-> RFC v2->v3
->  * Drop one of the sysfs files
->  * Use sysfs_emit instead
->  * Fix symbol name (s/type/time/)
->  * Drop is_visible
->  * Use timespec64 type for suspend stats
->  * Update documentation
->  * Update sysfs file name
+> V1->V2:
+> * set max-frequency to 200Mhz instead of removing it as suggested by
+>    Bough Chen
 > ---
->  Documentation/ABI/testing/sysfs-power |  8 ++++++++
->  include/linux/suspend.h               |  2 ++
->  kernel/power/main.c                   | 15 +++++++++++++++
->  kernel/power/suspend.c                |  2 ++
->  kernel/time/timekeeping.c             |  2 ++
->  5 files changed, 29 insertions(+)
->
-> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
-> index f99d433ff311..3abe20c47e08 100644
-> --- a/Documentation/ABI/testing/sysfs-power
-> +++ b/Documentation/ABI/testing/sysfs-power
-> @@ -413,6 +413,14 @@ Description:
->                 The /sys/power/suspend_stats/last_failed_step file contains
->                 the last failed step in the suspend/resume path.
->
-> +What:          /sys/power/suspend_stats/last_total
-> +Date:          December 2022
-> +Contact:       Mario Limonciello <mario.limonciello@amd.com>
-> +Description:
-> +               The /sys/power/suspend_stats/last_total file contains
-> +               the total duration of the sleep cycle.
-> +               This is measured in microseconds.
-> +
+>   arch/arm/boot/dts/imxrt1050.dtsi | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/imxrt1050.dtsi b/arch/arm/boot/dts/imxrt1050.dtsi
+> index 114465e4dde6..5b1991c32748 100644
+> --- a/arch/arm/boot/dts/imxrt1050.dtsi
+> +++ b/arch/arm/boot/dts/imxrt1050.dtsi
+> @@ -93,7 +93,7 @@ usdhc1: mmc@402c0000 {
+>   			bus-width = <4>;
+>   			fsl,wp-controller;
+>   			no-1-8-v;
+> -			max-frequency = <4000000>;
+> +			max-frequency = <200000000>;
+>   			fsl,tuning-start-tap = <20>;
+>   			fsl,tuning-step = <2>;
+>   			status = "disabled";
 
-Nit/bikeshed: "last_total" seems less straightforward then it should
-be? Maybe "total_suspend_time" instead?
-
-> diff --git a/kernel/power/main.c b/kernel/power/main.c
-> index 31ec4a9b9d70..f33012860699 100644
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-> @@ -6,6 +6,7 @@
->   * Copyright (c) 2003 Open Source Development Lab
->   */
->
-> +#include <linux/acpi.h>
->  #include <linux/export.h>
->  #include <linux/kobject.h>
->  #include <linux/string.h>
-> @@ -54,6 +55,11 @@ void unlock_system_sleep(unsigned int flags)
->  }
->  EXPORT_SYMBOL_GPL(unlock_system_sleep);
->
-> +void pm_account_suspend_time(const struct timespec64 t)
-> +{
-> +       suspend_stats.last_total = timespec64_add(suspend_stats.last_total, t);
-> +}
-> +
->  void ksys_sync_helper(void)
->  {
->         ktime_t start;
-> @@ -377,6 +383,14 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
->  }
->  static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
->
-> +static ssize_t last_total_show(struct kobject *kobj,
-> +               struct kobj_attribute *attr, char *buf)
-> +{
-> +       return sysfs_emit(buf, "%llu\n",
-> +                         timespec64_to_ns(&suspend_stats.last_total) / NSEC_PER_USEC);
-> +}
-> +static struct kobj_attribute last_total = __ATTR_RO(last_total);
-> +
->  static struct attribute *suspend_attrs[] = {
->         &success.attr,
->         &fail.attr,
-> @@ -391,6 +405,7 @@ static struct attribute *suspend_attrs[] = {
->         &last_failed_dev.attr,
->         &last_failed_errno.attr,
->         &last_failed_step.attr,
-> +       &last_total.attr,
->         NULL,
->  };
-
-While not identical, this has some overlap with the logic in
-kernel/time/timekeeping_debug.c
-I wonder if it would make sense to consolidate some of this accounting?
-
-thanks
--john
+Acked-by: Jesse Taube <mr.bossman075@gmail.com>
