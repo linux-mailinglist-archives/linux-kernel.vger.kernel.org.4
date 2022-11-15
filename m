@@ -2,125 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AD462A35D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:50:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 982ED62A369
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238409AbiKOUuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 15:50:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S238547AbiKOUv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 15:51:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238102AbiKOUt5 (ORCPT
+        with ESMTP id S238581AbiKOUur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:49:57 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2049.outbound.protection.outlook.com [40.107.22.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95124A45E;
-        Tue, 15 Nov 2022 12:49:55 -0800 (PST)
+        Tue, 15 Nov 2022 15:50:47 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2061.outbound.protection.outlook.com [40.107.93.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F409F30F41;
+        Tue, 15 Nov 2022 12:50:39 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N3z68MzlU6bVKGnL8G/C2AatB8mQoPuKuzdUTdnCQsCgXU4r5dc56Sa6tG7zXnPCjHapVPD4NNsARjfmiGaD4fR8MBCo2JwiP+rcGBs+TfnBU4wtDZqSxKnkNODssrHfoU02YtVVyZHcteYszyihMkVXheMHB6MdR9Z/MXs/Erz6LNeGkXeZfIR0EczdxAayGlrNmoGpObdNpktwcGQECrC58vG0/ZBlv6RKXmaH15Hr1CpgWQ6cdqFVvu4E1Gr8dFR7Af2LPD7dEGVqkEKkNAw51Q0ES3fe3j8HMQhjdz9rsuLqRK1ZjS1Lhxx+fIApI1yttRj3NxF2Y+OkIuG7nw==
+ b=c9Atfg8yN3On0tYcUxbXGkXKCFSS84KxV4FL3QSqPnTeiTQ+PFgi4A8/knbr2VZLn8EUyiSOMIeuOe0R76L6L47jPFOGQnSEIAT0ytmjHlHAjcIxrCz0C3icRRh7W8m6RR5IUmYrvajfv3LaNt3/1Vm9sdoGSS4gTGWMh73snXxoPP79zEzVsLedGCvNf955HOmmYIu9h9Z8ZcAL0i26e55X4G6Ih8UxpyMuUcl4FrP5ryan+HRK7xyR/weF8r+rl3PuMQjpbj0vWcY5MKUjZZGSlJ7dubsdxfSOzmoIr+UCAIhVcfj1Pb0QSPK90iHLa0MJ/I9GKl8tRr2mIi2qjg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h2xd2luHoS4IU1h/aS5oxjSIiXbwn2f3Yc7CXEptHyc=;
- b=FEvybzntWPrh35Bb5YL8Oqf9C6qoMyjCovlxmyVfIYtDejGzeEVW0uSs5V546gLY/MdN+7S5YGbA2mVF+xTuJ5WKC0RQryRv4HHz00ojfffdOJrVZLBs3XwDyIIU/hdweXaeFaHk5TWgqsrSkUmdhaoGtR4zCuyB/hwr6DSmNUypb2ZQIvr+c4rDwND1T5K94Uu3NYxYxirEo8QeY4KVATRUQuuhhVqxi7j7UFjpFK0PrspxIU3k3XqE70ojFwFVOjAkOBQVnSuyZx1qkWrlMU2VLggKKIPGMh4EOQkCg/0qwn7RWpJoxYC09KYQQsJzr2WX85E/8dgfI2ePaPxtHQ==
+ bh=zSMtiFvsLcDM+sBIRjylADwiccFYwMnljxKZYC3/AME=;
+ b=Sgcsut4+mjt9o7fRkoHQ4ITY/rfIh+zuNmyc7U5jSQ5s5DHbyzlmqBq2KMBwjwLnHI+2+GHQMBXDasu5voYvtf0S0XP+KsowmlKVjlYDFLRusAGHpEvmsXGOgxPk20E2FJr4a9VmEM0kAO9X9WSyObB6jzNMC0el8L8Y9LLMAPZ46aGdnqcCjK49dRSPQCaylnu41+ZWR3QqGGu/7MUP4ItTeol0oJguzW6tU5QJqcd7c+Kbwk5p/t/JF5ljb1lbA1CStUIUAAi4p0ILFgECesdOfN7DtRO50KxoS8PONCgcM4s+FR+jZnMgBwCuEi6bpG3k+uIKCYkr6q20Kl1tbQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h2xd2luHoS4IU1h/aS5oxjSIiXbwn2f3Yc7CXEptHyc=;
- b=KJ04HTsM20W4MIly//EmOcTHINJJxnP4NIZl60otDHrEuwi/ZTJ1vhexqwPS30xiFKMiwP7leB7NbcP6cns1/UPuDUV6qUSNDLJfHb5XtxQIW3SQiXSUYCdhzTpAB6acD1x6Y1nZOQIvPzt2+Trz4ncUc85CaAOuItA+fcyhHkA=
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
- by AM7PR04MB7110.eurprd04.prod.outlook.com (2603:10a6:20b:119::12) with
+ bh=zSMtiFvsLcDM+sBIRjylADwiccFYwMnljxKZYC3/AME=;
+ b=cpmFCdm+nmdDvS0B/J0ufp31iem+TLMzI2hBDj5Gu/IqCX4HxeaaHQnz6Lb7Gv5RLzrYjs/N+sTtbPB8oFfsJYSt7HLq1lZMAJ7DLh6/GoR02xv18u+rPmamD1c3AkR6xyx/LtFdesS+M3IhJnWeFgW41M0nGp1lBN2beDQ0eAg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
+ by SN7PR12MB6960.namprd12.prod.outlook.com (2603:10b6:806:260::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.15; Tue, 15 Nov
- 2022 20:49:53 +0000
-Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::a405:3557:91bc:9230]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
- ([fe80::a405:3557:91bc:9230%12]) with mapi id 15.20.5813.018; Tue, 15 Nov
- 2022 20:49:52 +0000
-From:   Frank Li <frank.li@nxp.com>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-CC:     "mani@kernel.org" <mani@kernel.org>,
-        "allenbh@gmail.com" <allenbh@gmail.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "dave.jiang@intel.com" <dave.jiang@intel.com>,
-        "helgaas@kernel.org" <helgaas@kernel.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        "jdmason@kudzu.us" <jdmason@kudzu.us>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "ntb@lists.linux.dev" <ntb@lists.linux.dev>
-Subject: RE: [EXT] Re: [PATCH v16 4/7] PCI: endpoint: pci-epf-vntb: remove
- unused field epf_db_phy
-Thread-Topic: [EXT] Re: [PATCH v16 4/7] PCI: endpoint: pci-epf-vntb: remove
- unused field epf_db_phy
-Thread-Index: AQHY7sTonrEmeP19GkSdtJORZ+azn644VMCAgAC5MsCAAIzCgIAG7pog
-Date:   Tue, 15 Nov 2022 20:49:52 +0000
-Message-ID: <HE1PR0401MB23316A12EB6890260ACB9E8888049@HE1PR0401MB2331.eurprd04.prod.outlook.com>
-References: <20221102141014.1025893-1-Frank.Li@nxp.com>
- <20221102141014.1025893-5-Frank.Li@nxp.com> <Y20Yt7T0bivqUvop@lpieralisi>
- <HE1PR0401MB23317A2372FCE691C230806E88009@HE1PR0401MB2331.eurprd04.prod.outlook.com>
- <Y24qJb9UisCqpdKZ@lpieralisi>
-In-Reply-To: <Y24qJb9UisCqpdKZ@lpieralisi>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.16; Tue, 15 Nov
+ 2022 20:50:37 +0000
+Received: from MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::2d5:77ac:6d39:e57b]) by MW3PR12MB4553.namprd12.prod.outlook.com
+ ([fe80::2d5:77ac:6d39:e57b%9]) with mapi id 15.20.5813.017; Tue, 15 Nov 2022
+ 20:50:37 +0000
+Message-ID: <f69a6454-a8c0-8ce1-0356-cde0d8b89c2a@amd.com>
+Date:   Tue, 15 Nov 2022 14:50:32 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Reply-To: babu.moger@amd.com
+Subject: Re: [PATCH v8 00/13] Support for AMD QoS new features
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: HE1PR0401MB2331:EE_|AM7PR04MB7110:EE_
-x-ms-office365-filtering-correlation-id: b6801aab-ef43-42bd-0a8d-08dac74af1d6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: J+GRflNKG1FOCWcDReb++xiTMG5mX910l4GRoSNwUiWRXNIKvZdNjmDlYRZQTjWOSbNOJ/Bj60TV7KJbDAojpNTy2iiMOAnc78F5dR7E4XIsyOHgvr/xqci+V5Vlbl7QhWbaygn7vhdpTocNE06EMZi3cF64esk3eG3S3hk7lnLBUDOo0VcMvdDPkWglqBprSL4LZNy7O/wzk5uTKlNt6F/5gBrJrdrBw2HGqk4dOb1S0JMIsj3FHdv5CdMaN7jkKI59S2cLsfUR7pSEwjcG6/ZtDdivxMAbzBWA1eelIsdI+BTiQYCb+9ff5nDKHGQOENwrzqr29H84fXzjehAVJxaWah5wKaDDIJlQNvimX0xGGD/8gL7q0I0M4gxuxs4lOtfM3isB/bqid+NDjpIKOIhVI8I51U1Uo0op64oy2cQQ1gIF+LMqXf3bKXQVNKvze4ngP9puDAkY+5B0XgI8vdvc1TEEsUsh3aEqdmJ7mI3FwDrPidRea9RTAUiAIIPJzznx8LZZ7TNRodmma9GYJ1h8M52dKN+UCI1EhfLixsbAraQd96/BvZ1pbbRvF0sPlT0kOuSeJHBK8HiBYNnvnC7fe40GfCUmCNwWfQYkDPsJLPYvDuD5gUjfDUhWzD+0vAnUolqiCiBhiWds1E6Lk1sJT+0tHtP6zfDRtSnMKHg2AQmeKtpzKMhUfyyrgYQqOWNNoWBQpYqC/boK/ZxKt9kvREdW/HvV+osQyXi5AaG9EZLqwNOcCz5oIwETL2cpJEf4kGPn0ddDjMt7/v9FC+5B3OXhR9Q+kYTJwhcWCis=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(366004)(136003)(346002)(376002)(451199015)(5660300002)(316002)(6916009)(54906003)(4326008)(8676002)(41300700001)(186003)(66946007)(66446008)(66556008)(76116006)(122000001)(64756008)(66476007)(38100700002)(38070700005)(83380400001)(7416002)(8936002)(52536014)(44832011)(55016003)(33656002)(86362001)(2906002)(9686003)(7696005)(478600001)(966005)(6506007)(26005)(53546011)(71200400001)(45080400002)(55236004);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?LluW0ZJDTt/VCqPxnGVah7V47UVMtKuBDQg0HZJRhA5FyuA8mpmjmWnuur1Q?=
- =?us-ascii?Q?mEFUjLQMUU+Q76yMRFIBmann8Xe8H8vGsK5PZE+91QcIAiBZmsMlsZQhCIb+?=
- =?us-ascii?Q?Iuq447LsCPYxv68TNxPLC1AhuYVATLQ37+TfMSXLQqiV0jq5rvmTebDqY+XQ?=
- =?us-ascii?Q?R7gbkUYBMaOHZ3OYd9RarM1l0KD8e9uOUPsBlJSq3BKUyEaA2989/vEoUWh+?=
- =?us-ascii?Q?ri+kJ72k+iaw11fslX4bG7LvSfavH2zH1jrRJXX+t+/rIWpIfiBvdfQpJqC2?=
- =?us-ascii?Q?a4EE/R9WAsMRUBPKzO/eUgGYZjFuB8HvW4kIi9y5WWV5tzcgGNwDIgsE7Wi5?=
- =?us-ascii?Q?z2cotvton9dkIgD48uxh6THtoeQCyMNlQvcEoSMBnO5v5h8kP9Zq1o5T9rSh?=
- =?us-ascii?Q?wcebP0hY/xK51AjqwfICnU/qS0zG/JVfLYnmb/WJ53QUor9Q78mKS3e0tdCG?=
- =?us-ascii?Q?s7WdbzoiYxeOBR8I6/2NkJexnaPWaPpNKIFKAq+5W8iwX5bW/CddVSvGOw7v?=
- =?us-ascii?Q?1AY8TiOb4p0JGDyjqhVrx2zcdVI5eiInc70VZuzjAvikXLVQCBHj0ObV8W9U?=
- =?us-ascii?Q?s8M5d5fhsxuJH8WtlbwVoVuCu6WsTmmv9dP/8dArlJX5GIAi7szKVQjBYDS7?=
- =?us-ascii?Q?7Rv8L9kA5MZnx/nWnkAos17VV96iNp9b9P9ALThwZiPf5E1iaNPe+2qFK6ES?=
- =?us-ascii?Q?mzDIKn+yzA71eknxID/l1At+nKqU10HdmPnE62Jw+5PsS08bQj542kiFr+DY?=
- =?us-ascii?Q?ujZ0bfxmOUb38u9rhDzGHce+YsOrtx1oIqEWoV470oEdM4QpXZqKY7zMvyDb?=
- =?us-ascii?Q?oXLlJAr0VL/5PixKNE7WyVDJwQ3mhnLSSAKnrJG2k3etLGwL7gqZzpTy0pay?=
- =?us-ascii?Q?wzzSSx1cpjE6fWFFSWolDZmtoCrb/YOetYBeqpu7F6DXzxJgg532iBuU9VZI?=
- =?us-ascii?Q?Wmk5DeEbkRe8wlT/rl2IllaihFE2gRVIaEAZ2WmZckWz8HIO0a8qtjErjZZa?=
- =?us-ascii?Q?3/goMGjTDgn7ka6p4vSlMmf+voziCDHG0IQTY6FEhPAn6rPT1UjJC9GiLB03?=
- =?us-ascii?Q?+7fsLG8H9/LsKZmK8VmEEcf783tlAqEcTmgk4AXgU5bUDX1ozBPndQBexU+N?=
- =?us-ascii?Q?OjdtQA1paEBYLbKqbb/I0MeXQOrhjPpHhaU2yXh4SJZvSBGmMOr3g6J4PKIL?=
- =?us-ascii?Q?zXr750xv+b2TynRXP9nP+gtcbApdqTgQ1C4HuNA3fNplOKjuV0R4/lVWTPwA?=
- =?us-ascii?Q?QWODtuTIXn+EVWIgWBgEwakRJ7uuuZGbz35k+ECR9/wBezYfEn8Kox0HiDXm?=
- =?us-ascii?Q?c0wUd7YrxL/6uB960/lF2FwFVNjuRmN0dL54nyhz66ijf5WPwIiq3TS/U/hk?=
- =?us-ascii?Q?/tkE47PEyF73rgUjKjz3O25JYVJnXYnXRbk+JagpDKe05GlPzy6cNTcyiLQX?=
- =?us-ascii?Q?HqaiQr/YlFIp+6s0Tc4X+f5thvneXboJYlSR60djAtoqia2M5PtXG6JcO72v?=
- =?us-ascii?Q?QR5WRySv/9VXN+m3sHiebch/zqexoSgtAkQOMPIOFTlzem00C1pX9mUrlFIC?=
- =?us-ascii?Q?gAOzUiRSV84bv+8N/6c=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+To:     corbet@lwn.net, reinette.chatre@intel.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de
+Cc:     fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
+        quic_neeraju@quicinc.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
+        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        jmattson@google.com, daniel.sneddon@linux.intel.com,
+        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bagasdotme@gmail.com, eranian@google.com
+References: <166759188265.3281208.11769277079826754455.stgit@bmoger-ubuntu>
+From:   "Moger, Babu" <babu.moger@amd.com>
+In-Reply-To: <166759188265.3281208.11769277079826754455.stgit@bmoger-ubuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CH0PR04CA0080.namprd04.prod.outlook.com
+ (2603:10b6:610:74::25) To MW3PR12MB4553.namprd12.prod.outlook.com
+ (2603:10b6:303:2c::19)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4553:EE_|SN7PR12MB6960:EE_
+X-MS-Office365-Filtering-Correlation-Id: aa1fca47-07b5-4774-d3f8-08dac74b0c9b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mYDNfwNfzBMLw58j548NJo24GPZ/wc9ggDzaXTu4tkskYIJmtxyZzTdvlN4ZyygT0TQrjU6PUC+XxUzbaxvsZdnPKIDycFMeTqukPjtKbX4je7zChGfw0dzkSh6ogJLChRq5olHYryF76LU1LsPjpJnhKcy8rCzHLJHa+Pp84snKtwgpfmnRNzQw2FyaWrugdmOJlXJicGToiqGQ/4VDpTMtU4UeDHpkgRYMBFB2dAAdrkL9hzkjsT2pE7JPffSbSpR+wFx2Dshn/+hhu0yQO4MpI/XAooMkRd1juixBGJ+xxB/knJIBOFjYQOIKpGu/MbLWhAiwLk+eoMzIWL4XuTNu+3VNbcXCvHVdaGgLs3O0LMEKNFAgSkZnrXG04zvhvNJ42T9ISenHVfwJWfQIO7cgGgGqxLf2q4w17/wtyaneabA42U0Dw5mCqei+oUFp8wJFZC8wwJilZt0Eo90IhdJLhDgw72jwmeo4EprGfXgiNbfK2qzqI8AwXFf5/PPMqFPgIcLKX0pkTeXZyMaGTmxe97cLnhEpPTnxBujm720Vq9tY6cIy+++Z0CpMnLb6murnfP2kh2l8z9dsZSuBiBdHTtSzEf8d19FDrycxjIJmWMfKXkEp/dXYVNu+kKy/yi96xQ7qxsKNiww09HlgyVTyCG0gupnG0AZ8EG9f82qI+EYzM11FBm+5nO5Sn9Q56EMyhM3vZ+BVCoXy+H0okyktQtkGh5NE0gvBqu/I5S1aBCcTgCMepX+9Gt9Q4MDPDUGT7Q6E6cgd12UhER1iRFb6l7pYpPehKGzSRBwBV5PIoYyLvK996E4utXb/2ao4ZGTW9PhQBy6r4eM0FwbJKhcaDPRlnT7VXEMxVeFK1K9FtljfkTvxHHeOmuAtoL8C
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(39860400002)(396003)(366004)(376002)(451199015)(186003)(26005)(3450700001)(2616005)(31686004)(6512007)(83380400001)(6666004)(8676002)(6486002)(4326008)(66476007)(86362001)(66556008)(66946007)(31696002)(478600001)(966005)(38100700002)(2906002)(6506007)(8936002)(5660300002)(36756003)(53546011)(7416002)(41300700001)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a3lTUEZKRmd6ZTM3MStibmpDNlZCNmozVVB2UUpwYU0wMXIvdmhRd0ZTRHhZ?=
+ =?utf-8?B?cFJUVVNYREYwY0RPRm9lRUtVUHMwNUxxK2k5aU5JUlFScG5nR0VRVHMvTmhM?=
+ =?utf-8?B?T1g1aDVMZUlQU2tmZjcyZjFVUmxFUTlidncreml1UnNZbXc4ekZwaCtWNGhM?=
+ =?utf-8?B?MHl0bEdzUk5KZ2pjN0dQR2VyTmdsMXZ5ckZoK2hraVVoUnlhcjZzRTFhVlNo?=
+ =?utf-8?B?VDA2S2ZWVDR5Zmo1T2lUNzVXcnFRTGdJNGdFalg0dWRab0VlTXEvM21TSDlM?=
+ =?utf-8?B?cXkraGplSmpkVVlPcXJNK2lDcW1Sa0ZmamNGdEJyYjlmelN2ZHpzSHFwdnFk?=
+ =?utf-8?B?YVRGcnlyY1pOaWROUHMvM3ZIRVM0TndrelRGcDZwVDBrekU2bVBqQnBUaUpj?=
+ =?utf-8?B?WjNFZE1PREE1QWh3TU9mQjJ5N1dxc2hwcjdUNHZIK3lpSW1IaGFld1JGUFR1?=
+ =?utf-8?B?Q2Q1aXQ1aVdUNU1mVHRyaVllZStUeTY5U21zUFhGZmVBTUxvMFB6Z2ZnZEw3?=
+ =?utf-8?B?Z2czdUFJbDZEQTQrRWxxSTdocTVzdUxtdUhta2xFRjU3YnJLTE82NTIwNyts?=
+ =?utf-8?B?VmpRWlJhVTJXbmtpZ0RNSWhFK2ppTnVrQnUvNkdmRk4rTlB3TGdIUkZFQURI?=
+ =?utf-8?B?N2F1SElBc3BQVTdrcVgvYlZtbk9Cb2xjWTFacDQrcWUxSXhZZm9mbjBab0NI?=
+ =?utf-8?B?dkF1dFV4bXdndWpMUmRod29ZUkF6Y2l3Ri8zRGlDS0RWVDNNRC9WQmhPeElJ?=
+ =?utf-8?B?Q25SNVJhSlhPeVNIcm5nKys2d0pvRTlLOUt4alhUTjRZVXlyVkl6cmV2eTBy?=
+ =?utf-8?B?Y24zOFo2Q3NlZHVzZGExa3FlaFpZM09FeWtCVzFOeG5HWDZGT3ZDNzNZNThN?=
+ =?utf-8?B?YnAyME4rdDU4Znk4V21RcUFJLy85Qk5EeURwYnFlblVBTWlzOC9kejBkdS9s?=
+ =?utf-8?B?RzNjYTRBRkxkSVRmamwvb0JzeUhTN1BVQksraXJaSnYrS2FOQXg5RjRyRU83?=
+ =?utf-8?B?UStPbnVMWnRDZGRhWnl2WndteG5PbEh2b1pjMWRjcHZwbG0rQ2gxdmpZZ3hz?=
+ =?utf-8?B?K1VZT2lIV2wxd2RUSW1YdTJlRC9hWjV2dndJRkg1Wk45czN0cnVleUkvQVdO?=
+ =?utf-8?B?ZUV0SzVlL0NUNTZPeDRieHBKbE9lL040eVp2dnJaUTZCNkdRUUEzNXRPUVds?=
+ =?utf-8?B?QXBmUEU1M2dWSklmSklTaURETGNYeFVtblRIZmp0eFU5Y0lLOVlyRzNyamRR?=
+ =?utf-8?B?K0xQOTZUMWo1TDFMeDFVV1BQZVJxQzdBMTBLekVjZ2NvemtYQ2FQN3Z5ZnQ4?=
+ =?utf-8?B?YU41eUVDNGRGR3BaYnVOajlWdjdIbmFEWmZhM1daUnRGYXN5RkVIek5TUC8r?=
+ =?utf-8?B?TE1PT0hENzlFZmEzVUlqa0tocjB5UStsNnVhY0E0VzJFUnR5ZUxWdWNyYkxO?=
+ =?utf-8?B?b2c5eDZiY28wSEZIUTFMaytjc1B0MzhqT1NMN2NxU3dIYVZGU2dLa1BtVWQx?=
+ =?utf-8?B?dTNQdEVvb2RYc01YQWVEeWdNSDI1aXpnTDFUOTc5YUt4NWlCMlFVY29wMk82?=
+ =?utf-8?B?TFd1OGtEcVFYV2wrdXhidG0zREZjTE9kNk9mNjNLdGRMd21iNGZXa3ZKY2xq?=
+ =?utf-8?B?Q1BVc1c5T1BKam1vLzlYWmtCdVZiaGhpODBBWU5iQm0rakJpSW9jWklTMmdX?=
+ =?utf-8?B?VnczY3J0RXNYTDFCNzRtTUtqd29zMzRXZ0NlZXZIbE5LQVNnZnVCY29vUjg4?=
+ =?utf-8?B?WHQzMFcxZk5yU3hLaE1Wc1lSZ0hrc1RibE5jMENmU2gvVzc4WXBWNStreDd3?=
+ =?utf-8?B?UDRKWDNiNXUrUEl5d0pGQVlLYjVrbTM3dUF0YVYwME5mbFV1OG9TL2Y4dnl6?=
+ =?utf-8?B?Unh0cGpOazRoSngzWkR4TXk2ck9zTEJvdnpwNnNNVjdSUnYxL0VVNTZZSVV5?=
+ =?utf-8?B?OWM3aFZoSmRIaXRycExWRzhBVS8xSUhnV0JwVVJZMHp6SVltYmxZREl1YkVW?=
+ =?utf-8?B?YXdmc0J6VmxCanA1NitSZkdVNU9rNkE5V0NVWHk3QnVxYndvOUVlbDNoSkVj?=
+ =?utf-8?B?azROMmh5cFFMV0QxWjZFMnVkc2UrZFRTR28rdGV0K09nT1RiNCsybGJJc2Fh?=
+ =?utf-8?Q?FPSm1+kkQB2bAX7qelMqjEOSU?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa1fca47-07b5-4774-d3f8-08dac74b0c9b
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6801aab-ef43-42bd-0a8d-08dac74af1d6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2022 20:49:52.5034
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2022 20:50:37.6859
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: I4dgMs2MkqG+XbTbIFRgwZNf8lnTDZruK2ZvvaQI7OkaLBvaYJf/n398Sanlo9khDKF2Z6XWxkOZg6lbi66Lrg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7110
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oowIIvfwtcYUukd8Xi+2z43qtUzT2wvOYFmbQlXOWn7Ij2bRPlUcCKXcA/CeAc4v
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6960
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -129,120 +134,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Reinette and Others,
+
+I was planning to refresh the series later this week. I have one comment
+from Peter Newman.  Let me know if you have any comments.
+
+Thanks
+
+Babu
 
 
-> -----Original Message-----
-> From: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> Sent: Friday, November 11, 2022 4:56 AM
-> To: Frank Li <frank.li@nxp.com>
-> Cc: mani@kernel.org; allenbh@gmail.com; bhelgaas@google.com;
-> dave.jiang@intel.com; helgaas@kernel.org; imx@lists.linux.dev;
-> jdmason@kudzu.us; kw@linux.com; linux-kernel@vger.kernel.org; linux-
-> pci@vger.kernel.org; ntb@lists.linux.dev
-> Subject: Re: [EXT] Re: [PATCH v16 4/7] PCI: endpoint: pci-epf-vntb: remov=
-e
-> unused field epf_db_phy
->=20
-> Caution: EXT Email
->=20
-> On Fri, Nov 11, 2022 at 02:39:12AM +0000, Frank Li wrote:
-> > > -----Original Message-----
-> > > From: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> > > Sent: Thursday, November 10, 2022 9:29 AM
-> > > To: Frank Li <frank.li@nxp.com>
-> > > Cc: mani@kernel.org; allenbh@gmail.com; bhelgaas@google.com;
-> > > dave.jiang@intel.com; helgaas@kernel.org; imx@lists.linux.dev;
-> > > jdmason@kudzu.us; kw@linux.com; linux-kernel@vger.kernel.org; linux-
-> > > pci@vger.kernel.org; ntb@lists.linux.dev
-> > > Subject: [EXT] Re: [PATCH v16 4/7] PCI: endpoint: pci-epf-vntb: remov=
-e
-> > > unused field epf_db_phy
-> > >
-> > > Caution: EXT Email
-> > >
-> > > On Wed, Nov 02, 2022 at 10:10:11AM -0400, Frank Li wrote:
-> > > > From: Frank Li <frank.li@nxp.com>
-> > > >
-> > > > epf_db_phy is not used, so remove it
-> > >
-> > > Sentences end with a period (.). I can fix these things but
-> > > we can't spend our lives telling you how to write a commit log,
-> > > check how they are written in the PCI subsystem and follow the
-> > > pattern.
-> >
-> > [Frank Li] Do you need me send new version to fix "."? Or you will plan
->=20
-> You don't have to write your name in brackets all the time in replies,
-> it is clear from the indentation what I am replying to and to whom.
->=20
-> > queue these patches?
->=20
-> I will queue them but next time I won't fix the commit log myself.
+On 11/4/22 14:59, Babu Moger wrote:
+> New AMD processors can now support following QoS features.
+>
+> 1. Slow Memory Bandwidth Allocation (SMBA)
+>    With this feature, the QOS enforcement policies can be applied
+>    to the external slow memory connected to the host. QOS enforcement
+>    is accomplished by assigning a Class Of Service (COS) to a processor
+>    and specifying allocations or limits for that COS for each resource
+>    to be allocated.
+>
+>    Currently, CXL.memory is the only supported "slow" memory device. With
+>    the support of SMBA feature the hardware enables bandwidth allocation
+>    on the slow memory devices.
+>
+> 2. Bandwidth Monitoring Event Configuration (BMEC)
+>    The bandwidth monitoring events mbm_total_event and mbm_local_event 
+>    are set to count all the total and local reads/writes respectively.
+>    With the introduction of slow memory, the two counters are not enough
+>    to count all the different types are memory events. With the feature
+>    BMEC, the users have the option to configure mbm_total_event and
+>    mbm_local_event to count the specific type of events.
+>
+>    Following are the bitmaps of events supported.
+>    Bits    Description
+>      6       Dirty Victims from the QOS domain to all types of memory
+>      5       Reads to slow memory in the non-local NUMA domain
+>      4       Reads to slow memory in the local NUMA domain
+>      3       Non-temporal writes to non-local NUMA domain
+>      2       Non-temporal writes to local NUMA domain
+>      1       Reads to memory in the non-local NUMA domain
+>      0       Reads to memory in the local NUMA domain
+>
+> This series adds support for these features.
+>
+> Feature description is available in the specification, "AMD64 Technology Platform Quality of Service Extensions, Revision: 1.03 Publication # 56375
+> Revision: 1.03 Issue Date: February 2022".
+>
+> Link: https://www.amd.com/en/support/tech-docs/amd64-technology-platform-quality-service-extensions
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=206537
+> ---
+> v8:
+>  Changes:
+>  1. Removed init attribute for rdt_cpu_has to make it available for all the files.
+>  2. Updated the change log for mon_features to correct the names of config files.
+>  3. Changed configuration file name from mbm_total_config to mbm_total_bytes_config.
+>     This is more consistant with other changes.
+>  4. Added lock protection while reading/writing the config file.
+>  5. Other few minor text changes. I have been missing few comments in last couple of
+>     revisions. Hope I have addressed all of them this time.
+>
+> v7:
+>  https://lore.kernel.org/lkml/166604543832.5345.9696970469830919982.stgit@bmoger-ubuntu/
+>  Changes:
+>  Not much of a change. Missed one comment from Reinette from v5. Corrected it now.
+>  Few format corrections from Sanjaya.
+>
+> v6:
+>  https://lore.kernel.org/lkml/166543345606.23830.3120625408601531368.stgit@bmoger-ubuntu/
+>  Summary of changes:
+>  1. Rebased on top of lastest tip tree. Fixed few minor conflicts.
+>  2. Fixed format issue with scattered.c.
+>  3. Removed config_name from the structure mon_evt. It is not required.
+>  4. The read/write format for mbm_total_config and mbm_local_config will be same
+>     as schemata format "id0=val0;id1=val1;...". This is comment from Fenghua.
+>  5. Added more comments MSR_IA32_EVT_CFG_BASE writng.
+>  5. Few text changes in resctrl.rst 
+>  
+> v5:
+>   https://lore.kernel.org/lkml/166431016617.373387.1968875281081252467.stgit@bmoger-ubuntu/
+>   Summary of changes.
+>   1. Split the series into two. The first two patches are bug fixes. So, sent them separate.
+>   2. The config files mbm_total_config and mbm_local_config are now under
+>      /sys/fs/resctrl/info/L3_MON/. Removed these config files from mon groups.
+>   3. Ran "checkpatch --strict --codespell" on all the patches. Looks good with few known exceptions.
+>   4. Few minor text changes in resctrl.rst file. 
+>
+> v4:
+>   https://lore.kernel.org/lkml/166257348081.1043018.11227924488792315932.stgit@bmoger-ubuntu/
+>   Got numerios of comments from Reinette Chatre. Addressed most of them. 
+>   Summary of changes.
+>   1. Removed mon_configurable under /sys/fs/resctrl/info/L3_MON/.  
+>   2. Updated mon_features texts if the BMEC is supported.
+>   3. Added more explanation about the slow memory support.
+>   4. Replaced smp_call_function_many with on_each_cpu_mask call.
+>   5. Removed arch_has_empty_bitmaps
+>   6. Few other text changes.
+>   7. Removed Reviewed-by if the patch is modified.
+>   8. Rebased the patches to latest tip.
+>
+> v3:
+>   https://lore.kernel.org/lkml/166117559756.6695.16047463526634290701.stgit@bmoger-ubuntu/
+>   a. Rebased the patches to latest tip. Resolved some conflicts.
+>      https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+>   b. Taken care of feedback from Bagas Sanjaya.
+>   c. Added Reviewed by from Mingo.
+>   Note: I am still looking for comments from Reinette or Fenghua.
+>
+> v2:
+>   https://lore.kernel.org/lkml/165938717220.724959.10931629283087443782.stgit@bmoger-ubuntu/
+>   a. Rebased the patches to latest stable tree (v5.18.15). Resolved some conflicts.
+>   b. Added the patch to fix CBM issue on AMD. This was originally discussed
+>      https://lore.kernel.org/lkml/20220517001234.3137157-1-eranian@google.com/
+>
+> v1:
+>   https://lore.kernel.org/lkml/165757543252.416408.13547339307237713464.stgit@bmoger-ubuntu/
+>
+> Babu Moger (13):
+>       x86/cpufeatures: Add Slow Memory Bandwidth Allocation feature flag
+>       x86/resctrl: Add a new resource type RDT_RESOURCE_SMBA
+>       x86/cpufeatures: Add Bandwidth Monitoring Event Configuration feature flag
+>       x86/resctrl: Include new features in command line options
+>       x86/resctrl: Detect and configure Slow Memory Bandwidth Allocation
+>       x86/resctrl: Remove the init attribute for rdt_cpu_has()
+>       x86/resctrl: Introduce data structure to support monitor configuration
+>       x86/resctrl: Add sysfs interface to read mbm_total_bytes_config
+>       x86/resctrl: Add sysfs interface to read mbm_local_bytes_config
+>       x86/resctrl: Add sysfs interface to write mbm_total_bytes_config
+>       x86/resctrl: Add sysfs interface to write mbm_local_bytes_config
+>       x86/resctrl: Replace smp_call_function_many() with on_each_cpu_mask()
+>       Documentation/x86: Update resctrl.rst for new features
+>
+>
+>  .../admin-guide/kernel-parameters.txt         |   2 +-
+>  Documentation/x86/resctrl.rst                 | 139 +++++++-
+>  arch/x86/include/asm/cpufeatures.h            |   2 +
+>  arch/x86/kernel/cpu/cpuid-deps.c              |   1 +
+>  arch/x86/kernel/cpu/resctrl/core.c            |  56 +++-
+>  arch/x86/kernel/cpu/resctrl/ctrlmondata.c     |   2 +-
+>  arch/x86/kernel/cpu/resctrl/internal.h        |  33 ++
+>  arch/x86/kernel/cpu/resctrl/monitor.c         |   7 +
+>  arch/x86/kernel/cpu/resctrl/rdtgroup.c        | 304 ++++++++++++++++--
+>  arch/x86/kernel/cpu/scattered.c               |   2 +
+>  10 files changed, 515 insertions(+), 33 deletions(-)
+>
+> --
+>
+-- 
+Thanks
+Babu Moger
 
-Do you have chance to queue it? I still have one patch (enable MSI)
-depend on these patch series.=20
-
->=20
-> > My means:
-> > Mani's below feedback will make both live easy.
->=20
-> What feedback ? I am sorry I don't understand.
->=20
-> Thank you,
-> Lorenzo
->=20
-> >        >
-> >                > None use epf_db_phy and remove it.
-> >
-> >                   "epf_db_phy is not used, so remove it"
-> >
-> >                 >
-> >                 >
-> > >
-> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flore.=
-k
-> %2F&amp;data=3D05%7C01%7Cfrank.li%40nxp.com%7C200a354ecae54e7b1af
-> 408dac3d34892%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638
-> 037609466107831%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAi
-> LCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&a
-> mp;sdata=3D3ngvYAIP0oTTF1uwAAHFAFmBVi1FvKtgTTw1u3tDXUg%3D&amp;re
-> served=3D0
-> > > ernel.org%2Fall%2F20171026223701.GA25649%40bhelgaas-
-> > >
-> glaptop.roam.corp.google.com&amp;data=3D05%7C01%7CFrank.Li%40nxp.co
-> > >
-> m%7Ca0924bed538a494cbfd508dac3304e8e%7C686ea1d3bc2b4c6fa92cd99c
-> > >
-> 5c301635%7C0%7C0%7C638036909484154968%7CUnknown%7CTWFpbGZsb
-> > >
-> 3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0
-> > > %3D%7C3000%7C%7C%7C&amp;sdata=3DB3G7sfaSVdLDC8BG95WzpBPFO5l
-> PJ
-> > > QpThKDcEexOHfU%3D&amp;reserved=3D0
-> >
-> > [Frank Li] Thank you for your documents.
-> >
-> > >
-> > > >
-> > > > Signed-off-by: Frank Li <frank.li@nxp.com>
-> > > > Acked-by: Manivannan Sadhasivam <mani@kernel.org>
-> > > > ---
-> > > >  drivers/pci/endpoint/functions/pci-epf-vntb.c | 1 -
-> > > >  1 file changed, 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > > index 191924a83454..ee66101cb5c4 100644
-> > > > --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > > +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > > > @@ -136,7 +136,6 @@ struct epf_ntb {
-> > > >
-> > > >       struct epf_ntb_ctrl *reg;
-> > > >
-> > > > -     phys_addr_t epf_db_phy;
-> > > >       void __iomem *epf_db;
-> > > >
-> > > >       phys_addr_t vpci_mw_phy[MAX_MW];
-> > > > --
-> > > > 2.34.1
-> > > >
