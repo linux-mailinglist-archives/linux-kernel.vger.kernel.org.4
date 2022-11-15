@@ -2,71 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B4C629924
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8EFB629931
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiKOMqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 07:46:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
+        id S229713AbiKOMt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 07:49:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiKOMq3 (ORCPT
+        with ESMTP id S229508AbiKOMt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:46:29 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2D327CFF;
-        Tue, 15 Nov 2022 04:46:28 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id cg5so8579570qtb.12;
-        Tue, 15 Nov 2022 04:46:28 -0800 (PST)
+        Tue, 15 Nov 2022 07:49:27 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2394827FCF;
+        Tue, 15 Nov 2022 04:49:26 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id z14so23927504wrn.7;
+        Tue, 15 Nov 2022 04:49:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gvlQ/2+jbJxaDG4Ge3UxK9lXSrT4XQinBBToDN+BIAo=;
-        b=m/Yv4Vyi0Zf7NDXx72Wj5PjsyBiYIIbf6i8H2n+mfSpQMNDGLj5IIJY0B0ZZ4FYizv
-         /m6W5hLqS4R7cAcKHykR2lU6ysFt8Pg2B0Q1PBFhZvyW1uzQAj6lhDJnWUl3mIHYbC14
-         D9ycIY6YJQhh5M9eldJ6Luk0grQErH9Zcds8RKVcS3QquuY3Epc/BSQeIbOIsQ3eP+/K
-         +gOx7FnUNwLJrYN1+c9UPK4u2fvq2e/Y6p3N4GHYBC+1GjjLOy4LIl9wdN1+Z9C7jTiS
-         QvvChf4hiqBqCVFl+eyv89Pf+341FIh/WgsBIH4Qt9x4ggfLQPmaFGdfqhrypYqsyXbs
-         8P4A==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vA5+0mCCYTIsaoxSUD4t74U1oJb0G7LU66XEZty9pDY=;
+        b=bWGpBF52oDY7yLZf//SeiaT9PoxV2Ckt9RJcH7gLkUVAGUaUmS/fd1zMggAhKs5DkE
+         X09qkoic8bE7JZBqpxw82GBnL217znnsEz/nUNptrTJUfL1sHemV60xq4zS55hKh+kbZ
+         EIh/+86PWmH9UfG32f+ib7X9trCctZyPQad3dAuEVcA66ysyVxKyoTYNQ77ed2hGWDeA
+         Ofg7ETPkycnuRYA1nWQQXwRIuyqu7g0G9I5HTfQe1Fm7qgKUWo97r0a7CQzK7gSa8JcN
+         lFkAtOsfW91BwkUtnYGfSLRBORBOV54/HV3lujFkkqVrmXG0le/iIwtuZs2/6bOCHJxB
+         JuDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gvlQ/2+jbJxaDG4Ge3UxK9lXSrT4XQinBBToDN+BIAo=;
-        b=7HNurFzcQpUQeQsszOdEcIDfnXfs9BuxuPcakX9mfSKdf2QwU94BpOASTr6dbZOI0J
-         GgSGkjwuFDw2MVU2VgJCTnT0Qd9UGQZ6DysKTL9y2peFhHYMvrmEumKS9Bl3F5Mr4tDC
-         nABl09YHP2LTpVIfTlyompwyJvO/JW0NP/cEo3JlZYQQshEmKNK85hWVNx6RqQHv3GxH
-         IHTbGBtujHpVUxJhygR923NHgC9D70bJn/Agsq3JT+2Y4SBsnjPTQtKQjSovWJEDYA9Q
-         tF/+Gk3xYVUIa3rAS7DATYBuO0XvpP3s4GJBuP8NlwJmBmiGha2vcotdR66U/1maGBOg
-         fgpw==
-X-Gm-Message-State: ANoB5pl9T9v4ac1f68Jt5FqAUpeNQojODlDFUVQN4STUAf2bs9NDSdh/
-        h4NPid4l5uYHSLf23+YOM78=
-X-Google-Smtp-Source: AA0mqf4Akou2yGGxibTloHYSgopuRq7xgJx3wc6sFwWUrPiyThVG0mF/+SbDW8XOT/U9dZk6RfNdzA==
-X-Received: by 2002:ac8:6f13:0:b0:3a5:1fdf:a768 with SMTP id bs19-20020ac86f13000000b003a51fdfa768mr16335408qtb.516.1668516387560;
-        Tue, 15 Nov 2022 04:46:27 -0800 (PST)
-Received: from p200300f6ef036f005de6a4d0d791ed01.dip0.t-ipconnect.de (p200300f6ef036f005de6a4d0d791ed01.dip0.t-ipconnect.de. [2003:f6:ef03:6f00:5de6:a4d0:d791:ed01])
-        by smtp.gmail.com with ESMTPSA id w9-20020ac86b09000000b003988b3d5280sm7142899qts.70.2022.11.15.04.46.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 04:46:27 -0800 (PST)
-Message-ID: <334af9a1281673c0ac43dedccb6c1aea16494827.camel@gmail.com>
-Subject: Re: [PATCH v2 0/8] Remove adis_initial_startup usage
-From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        "Sa, Nuno" <Nuno.Sa@analog.com>
-Cc:     "Bolboaca, Ramona" <Ramona.Bolboaca@analog.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Tue, 15 Nov 2022 13:47:56 +0100
-In-Reply-To: <20221105150647.2c9cbff7@jic23-huawei>
-References: <20221103080847.162509-1-ramona.bolboaca@analog.com>
-         <SJ0PR03MB677857576EF31B737F6D3DF599389@SJ0PR03MB6778.namprd03.prod.outlook.com>
-         <20221105150647.2c9cbff7@jic23-huawei>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vA5+0mCCYTIsaoxSUD4t74U1oJb0G7LU66XEZty9pDY=;
+        b=uVgpVRSJyt885KxTEKL4pvKJN4WIRMtX12SRZkyQGb/gL+2C9C0FO2aY1/LwSx12EH
+         a0q9AreWP/E0ZDWJwn02OFjkHNSrdf60Jhnui92B/RhIXDz1H/gYZUaWbIat1Ayqnxss
+         scFAj6IskbP7KrkjBDwPMdQ7+VuoTvDok/SL/Z0cirNq4Iza5VvSiIBU+bE29RtDXN8v
+         utNAsEBgpDLnB8mlsdxV+dl3f7UipIdbuKe9VFBjf8E10UtXRSgKk66LegSNWa/q4OxD
+         AJHILHzEmDncpt5BhI12s+9vnTGIDp0N1fOWPqes6vg3NyVRqE89APV4tdvYTg1LNbLz
+         ICfw==
+X-Gm-Message-State: ANoB5plGwwUUy7IoheqpTBGYZeARjFYuNUhIieePwnmrTRsx1nE3T/TG
+        VBKJLme9AyX8CpI5yWNcIZvQ1/5josu12K/rq4s=
+X-Google-Smtp-Source: AA0mqf5nAPubHOXWmgG9YWV6ZaPZ7Zki4ub80ozH9abj8R9jmaCd64wcxPgPRiSfAfq0LSeEJotQU+AawZ0vQYT2LG0=
+X-Received: by 2002:adf:ea06:0:b0:236:6d77:b6be with SMTP id
+ q6-20020adfea06000000b002366d77b6bemr10835243wrm.246.1668516564534; Tue, 15
+ Nov 2022 04:49:24 -0800 (PST)
 MIME-Version: 1.0
+References: <20221111142722.1172-1-longpeng2@huawei.com> <Y256ty6xGyUpkFn9@unreal>
+ <0b2202bf-18d3-b288-9605-279208165080@huawei.com> <Y3Hoi4zGFY4Fz1l4@unreal>
+ <d7327d46-deb5-dc75-21c3-1f351d7da108@huawei.com> <Y3I+Fs0/dXH/hnpL@unreal>
+ <3a8efc92-eda8-9c61-50c5-5ec97e2e2342@huawei.com> <Y3JOvTfBwpaldtZJ@unreal>
+ <CAOSf1CG+VGdeXGQetfMArwpafAx2yj3nmA_y7rN4SNdt=1=08w@mail.gmail.com> <Y3NOo3DaLKb219IV@unreal>
+In-Reply-To: <Y3NOo3DaLKb219IV@unreal>
+From:   "Oliver O'Halloran" <oohall@gmail.com>
+Date:   Tue, 15 Nov 2022 23:49:13 +1100
+Message-ID: <CAOSf1CGLM7wpN3=RwU+osy46jX9iWTi3TWDNyaCnBFOTyBiKpg@mail.gmail.com>
+Subject: Re: [RFC 0/4] pci/sriov: support VFs dynamic addition
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
+        <longpeng2@huawei.com>, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jianjay.zhou@huawei.com, zhuangshengen@huawei.com,
+        arei.gonglei@huawei.com, yechuan@huawei.com,
+        huangzhichao@huawei.com, xiehong@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -77,87 +75,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-11-05 at 15:06 +0000, Jonathan Cameron wrote:
-> On Thu, 3 Nov 2022 12:35:31 +0000
-> "Sa, Nuno" <Nuno.Sa@analog.com> wrote:
->=20
-> > > From: Ramona Bolboaca <ramona.bolboaca@analog.com>
-> > > Sent: Thursday, November 3, 2022 9:09 AM
-> > > To: jic23@kernel.org; linux-iio@vger.kernel.org; linux-
-> > > kernel@vger.kernel.org
-> > > Cc: Bolboaca, Ramona <Ramona.Bolboaca@analog.com>
-> > > Subject: [PATCH v2 0/8] Remove adis_initial_startup usage
-> > >=20
-> > >=20
-> > > Remove 'adis_initial_startup()' usage due to the fact that it
-> > > leads to a
-> > > deadlock.
-> > > The same mutex is acquired twice, without releasing it, once
-> > > inside
-> > > 'adis_initial_startup()' and once inside 'adis_enable_irq()'.
-> > > Instead of 'adis_initial_startup()', use
-> > > '__adis_initial_startup()'.
-> > >=20
-> > > Ramona Bolboaca (8):
-> > > =C2=A0 iio: accel: adis16201: Fix deadlock in probe
-> > > =C2=A0 iio: accel: adis16209: Fix deadlock in probe
-> > > =C2=A0 iio: gyro: adis16136: Fix deadlock in probe
-> > > =C2=A0 iio: gyro: adis16260: Fix deadlock in probe
-> > > =C2=A0 iio: imu: adis16400: Fix deadlock in probe
-> > > =C2=A0 staging: iio: accel: adis16203: Fix deadlock in probe
-> > > =C2=A0 staging: iio: accel: adis16240: Fix deadlock in probe
-> > > =C2=A0 iio: imu: adis: Remove adis_initial_startup function
-> > >=20
-> > > =C2=A0drivers/iio/accel/adis16201.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 |=C2=A0 2 +-
-> > > =C2=A0drivers/iio/accel/adis16209.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 |=C2=A0 2 +-
-> > > =C2=A0drivers/iio/gyro/adis16136.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +-
-> > > =C2=A0drivers/iio/gyro/adis16260.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +-
-> > > =C2=A0drivers/iio/imu/adis16400.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +-
-> > > =C2=A0drivers/staging/iio/accel/adis16203.c |=C2=A0 2 +-
-> > > =C2=A0drivers/staging/iio/accel/adis16240.c |=C2=A0 2 +-
-> > > =C2=A0include/linux/iio/imu/adis.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 | 12 ------------
-> > > =C2=A08 files changed, 7 insertions(+), 19 deletions(-)
-> > > =C2=A0=20
-> >=20
-> > You could have placed your v2 changelog in the cover letter.
-> > Moreover it's the same for all patches... Anyways:=20
-> >=20
-> > Reviewed-by: Nuno S=C3=A1 <nuno.sa@analog.com>
->=20
-> This feels a little backwards.=C2=A0 Normally we'd expect the
-> outer function to take the lock and the inner call to not
-> do so.=C2=A0 Now it's fine to not take the lock here at all because
-> the outer function call is in probe anyway, before we reach
-> the point where there should be an concurrency.
->=20
-> I wonder if we should instead do this by having
-> an unlocked __adis_enable_irq() that is always called
-> by __adis_initial_startup().=C2=A0 That would be the fix that
-> then needs backporting.
->=20
+On Tue, Nov 15, 2022 at 7:32 PM Leon Romanovsky <leon@kernel.org> wrote:
+>
+> On Tue, Nov 15, 2022 at 12:50:34PM +1100, Oliver O'Halloran wrote:
+> > On Tue, Nov 15, 2022 at 1:27 AM Leon Romanovsky <leon@kernel.org> wrote:
+> > >
+> > > *snip*
+> > >
+> > > Anyway, I'm aware of big cloud providers who are pretty happy with live
+> > > migration in production.
+> >
+> > I could see someone sufficiently cloudbrained deciding that rebooting
+> > the hypervisor is fine provided the downtime doesn't violate any
+> > customer uptime SLAs. Personally I'd only be brave enough to do that
+> > for a HV hosting internal services which I know are behind a load
+> > balancer, but apparently there are people at Huawei far braver than I.
+>
+> My main point in this discussion that Huawei team doesn't actually
+> provide any meaningful justification why it is great idea to add new
+> sysfs file.
 
-I did mentioned the same thing in the first version of the series but
-did not really pushed for it. Now that you mention, I agree it feels
-weird (and wrong from a design perspective) to have the lock,
-"silently", taken inside a function starting with double underscore
-(which should mean unlocked call).
+All their arguments seem to be based on trying to reduce the
+time-to-VMs when a hypervisor is kexec()ed, which is a pretty
+reasonable justification IMO.  I do have some reservations about the
+numbers they're claiming since 250ms for initializing struct pci_dev's
+for the VFs seems excessive. Unfortunately, I don't have any hardware
+that supports 2048 VFs on hand so I can't verify that claim.
 
-> Switching the calls from adis_initial_startup() to
-> __adis_initial_startup() would then just be a trivial
-> optimization to not take locks before they should ever matter.
->=20
-> This all hinges on my assumption that the lock isn't useful.
-> Am I right on that?
->=20
+> They use HPC as an argument but in that world, you won't
+> see many VMs on one server, as it is important to provide separate MSI-X
+> vectors and CPUs to each VM.
 
-I think so as all the calls happen during probe before registering the
-userspace interface.
+I don't think HPC has come up in this thread, but assuming it has: In
+the cloud "HPC" usually means "it has timesliced access to GPUs".
+Having 2k VMs sharing one or more GPUs on a single system isn't
+necessarily advisable, but if we assume only a subset of those VMs
+will actually need access to a GPU at any given time it's sort of
+reasonable.
 
-- Nuno S=C3=A1
+> They ask from us optimization (do not add device hierarchy for existing HW)
+> that doesn't exist in the kernel.
+>
+> I would say that they are trying to meld SIOV architecture of subfunctions
+> (SFs) into PCI and SR-IOV world.
 
+I don't know what asks you're referring to, but they're not present in
+this thread. I'm going to give Longpeng the benefit of the doubt and
+assume that this series is an attempt to fix a problem he's facing
+with actual hardware that exists today. To say they should have
+implemented the device with SIOV (proprietary to Intel until March
+this year) rather than SR-IOV (standardised by PCI-SIG over a decade
+ago) is not terribly helpful to anyone. Additionally, SIOV exists
+largely to solve a problem that's an issue because Intel decided that
+all PCI devices should exist within a single PCI domain. If you don't
+have that problem SIOV is a lot less compelling.
