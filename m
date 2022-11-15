@@ -2,82 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52195628E85
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 01:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60894628E8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 01:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235707AbiKOAkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 19:40:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42232 "EHLO
+        id S236334AbiKOAmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 19:42:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiKOAk2 (ORCPT
+        with ESMTP id S236123AbiKOAmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 19:40:28 -0500
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603921AD95;
-        Mon, 14 Nov 2022 16:40:28 -0800 (PST)
-Received: by mail-pl1-f176.google.com with SMTP id 4so11720007pli.0;
-        Mon, 14 Nov 2022 16:40:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oW03ME2CmBCFzSfXvUxvGBCWn7rXzi6KHiwAsFA8YYI=;
-        b=sL8bv2XyXPlrARcrzSBzLxgwnJTSWyvVP9At2CXWPTsfGyYjZPv0VFAtV1gsuZTD2t
-         egkC7gxcwPoGV0+7K6ZOzEDuQtrIsFMDk+cXksSavQKtsXj69WOgG/3PD8GxhFEPASyr
-         WaO/rSLuHkrH7htfwXFCexonUNZpA2HPr91xKS+WuMrg9biTLo0tUoJ62qghzuTTpKXu
-         BHuCTkZFSdrr4mFZlWNlT6X+VItZWqscnHkh1kEQ8lUKPcYyVJHPEoAqqI2jSDbRr3qa
-         GEqSKaaxKayox3XM04PV1SfB7yd99nbdrpAnkooG3PpU5YJB7Q9b693MfFD5eQI+c8Kx
-         EBjA==
-X-Gm-Message-State: ANoB5pm1z2jntl6oOruacoL62oG2lyDeNIcwTB4hRN+fUlaiI4QsVkhb
-        Ava5QFQjNhGoTGlBvWDlpv0=
-X-Google-Smtp-Source: AA0mqf7TM3r3CqkJcrmgPztfsNy+RTmFkJy8mLnO/2ZhefQzQI+z2dGv0nFPXeyKG+xpSxY35hJl5g==
-X-Received: by 2002:a17:902:ec91:b0:188:5dbc:96b2 with SMTP id x17-20020a170902ec9100b001885dbc96b2mr1568781plg.92.1668472827667;
-        Mon, 14 Nov 2022 16:40:27 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:637b:9535:5168:c84f? ([2620:15c:211:201:637b:9535:5168:c84f])
-        by smtp.gmail.com with ESMTPSA id g17-20020aa79f11000000b0056da2bf607csm7269868pfr.214.2022.11.14.16.40.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 16:40:26 -0800 (PST)
-Message-ID: <475fba10-c471-4922-91d5-3b84c4cce149@acm.org>
-Date:   Mon, 14 Nov 2022 16:40:24 -0800
+        Mon, 14 Nov 2022 19:42:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5844C1B1CC
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 16:41:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668472871;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kjYfp2hW5B/t44pYPHObfllFdrU8NC2GUrC2Ho+QsFY=;
+        b=eh7bihopSjCNIX/RQTaEoXB9zbLbaRvgm8vj3Wj+CswdxLvAE83rWMjfj+09nG71xc/VmY
+        0NDGAmzfXh7dKjqBi10rVF7VynWxcMFT5Y6eHpWVNVO8osjEVYanNqTKNDl74QpfqZQaou
+        +LRvfNT63d/bVehoeGc7KmVHfWXtU40=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-177-1FDKG86uNcGiCRr5tfa-9Q-1; Mon, 14 Nov 2022 19:41:08 -0500
+X-MC-Unique: 1FDKG86uNcGiCRr5tfa-9Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 791EC3814587;
+        Tue, 15 Nov 2022 00:41:07 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 75D27400DFD4;
+        Tue, 15 Nov 2022 00:41:05 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Y3Lbul7FZncNVwVZ@codewreck.org>
+References: <Y3Lbul7FZncNVwVZ@codewreck.org> <166844174069.1124521.10890506360974169994.stgit@warthog.procyon.org.uk>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     dhowells@redhat.com, willy@infradead.org, dwysocha@redhat.com,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Steve French <sfrench@samba.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Ilya Dryomov <idryomov@gmail.com>, linux-cachefs@redhat.com,
+        linux-cifs@vger.kernel.org, linux-afs@lists.infradead.org,
+        v9fs-developer@lists.sourceforge.net, ceph-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2] mm, netfs, fscache: Stop read optimisation when folio removed from pagecache
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH V2 4/7] null_blk: don't use magic numbers in the code
-Content-Language: en-US
-To:     Chaitanya Kulkarni <kch@nvidia.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     axboe@kernel.dk, damien.lemoal@opensource.wdc.com,
-        johannes.thumshirn@wdc.com, ming.lei@redhat.com,
-        shinichiro.kawasaki@wdc.com, vincent.fu@samsung.com,
-        yukuai3@huawei.com
-References: <20221006031829.37741-1-kch@nvidia.com>
- <20221006031829.37741-5-kch@nvidia.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20221006031829.37741-5-kch@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1457984.1668472862.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 15 Nov 2022 00:41:02 +0000
+Message-ID: <1457985.1668472862@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/5/22 20:18, Chaitanya Kulkarni wrote:
-> Insteasd of using the hardcoded value use meaningful macro for tag
+Dominique Martinet <asmadeus@codewreck.org> wrote:
 
-Insteasd -> Instead?
+> any harm in setting this if netfs isn't enabled?
+> (just asking because you checked in fs/9p/cache.c above)
 
-> available value of -1U in get_tag() and __alloc_cmd().
-> 
-> While at it return early on error to get rid of the extra indentation
-> in __alloc_cmd().
+Well, it forces a call to ->release_folio() every time a folio is released=
+, if
+set, rather than just if PG_private/PG_private_2 is set.
 
-Thanks,
+> > +static inline void mapping_clear_release_always(struct address_space =
+*mapping)
+> > +{
+> > +	set_bit(AS_RELEASE_ALWAYS, &mapping->flags);
+> =
 
-Bart.
+> clear_bit certainly?
+
+Bah.  Yes.
+
+> > -	if (folio_has_private(folio) && !filemap_release_folio(folio, 0))
+> > +	if (!filemap_release_folio(folio, 0))
+> =
+
+> should this (and all others) check for folio_needs_release instead of ha=
+s_private?
+> filemap_release_folio doesn't check as far as I can see, but perhaps
+> it's already fast and noop for another reason I didn't see.
+
+Willy suggested merging the checks from folio_has_private() into
+filemap_release_folio():
+
+	https://lore.kernel.org/r/Yk9V/03wgdYi65Lb@casper.infradead.org/
+
+David
 
