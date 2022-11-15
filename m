@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D036628ED4
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 01:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84446628ED2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 01:59:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbiKOA7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 19:59:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
+        id S237870AbiKOA7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 19:59:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237670AbiKOA7O (ORCPT
+        with ESMTP id S237684AbiKOA7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 19:59:14 -0500
+        Mon, 14 Nov 2022 19:59:12 -0500
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9754D1758B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 973D217077;
         Mon, 14 Nov 2022 16:59:10 -0800 (PST)
 Received: from W11-BEAU-MD.localdomain (unknown [76.135.50.127])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1604420B83E2;
+        by linux.microsoft.com (Postfix) with ESMTPSA id 5588E20B83E5;
         Mon, 14 Nov 2022 16:59:09 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1604420B83E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5588E20B83E5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1668473949;
-        bh=4Tw0x0REBVNQbPmE7YKz+0Y5T7GJmSyJL4LF57PSOTg=;
+        bh=dmkEXknb1A0Qhw2AWPTXryudmpuAFo4IqxhDoe6dNiw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qBwJWp00EVHa//EYAZmKYP7S64T/7RaOODC+D4McfNIISeyYxA/O6T5nEh2MpUc+o
-         6gkmO5JCf2KbPMG5nS+FOzDli40OiBIp3uOLeCSl/g4AHwgELNB8Z7m3hgc9YOLTbB
-         G8aJg6uOC9umP+PXapYbMTcSuW5r8nruKfHsPWJ4=
+        b=FSPkqdu4n0Z5drfJIWzir3GoLFEkiPdT/7kZx5m/sC/HYHCcvht13A5z9ZvL9Hi+3
+         gWxCTLx81RBSqdq1UXl6JEpz7tKcBstuXvTikfbzgHhokMboFLTxbWSl+bWX8Q1i1W
+         1eQoXqqXh71W2Qr9jSg9Ltpp0P3ksW6sPtnH8ZEQ=
 From:   Beau Belgrave <beaub@linux.microsoft.com>
 To:     rostedt@goodmis.org, mhiramat@kernel.org,
         mathieu.desnoyers@efficios.com, dcook@linux.microsoft.com,
         alanau@linux.microsoft.com
 Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v2 6/7] tracing/user_events: Update self-tests to write ABI
-Date:   Mon, 14 Nov 2022 16:59:01 -0800
-Message-Id: <20221115005902.30458-7-beaub@linux.microsoft.com>
+Subject: [RFC PATCH v2 7/7] tracing/user_events: Use write ABI in example
+Date:   Mon, 14 Nov 2022 16:59:02 -0800
+Message-Id: <20221115005902.30458-8-beaub@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221115005902.30458-1-beaub@linux.microsoft.com>
 References: <20221115005902.30458-1-beaub@linux.microsoft.com>
@@ -49,517 +49,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ABI has been changed to remote writes, update existing test cases to use
-this new ABI to ensure existing functionality continues to work.
+The ABI has changed to use a remote write approach. Update the example
+to show the expected use of this new ABI. Also remove debugfs
+path and use tracefs to ensure example works in more environments.
 
 Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
 ---
- .../testing/selftests/user_events/dyn_test.c  |   2 +-
- .../selftests/user_events/ftrace_test.c       | 162 ++++++++++--------
- .../testing/selftests/user_events/perf_test.c |  39 ++---
- 3 files changed, 105 insertions(+), 98 deletions(-)
+ samples/user_events/example.c | 47 +++++++----------------------------
+ 1 file changed, 9 insertions(+), 38 deletions(-)
 
-diff --git a/tools/testing/selftests/user_events/dyn_test.c b/tools/testing/selftests/user_events/dyn_test.c
-index d6265d14cd51..8879a7b04c6a 100644
---- a/tools/testing/selftests/user_events/dyn_test.c
-+++ b/tools/testing/selftests/user_events/dyn_test.c
-@@ -16,7 +16,7 @@
- 
- #include "../kselftest_harness.h"
- 
--const char *dyn_file = "/sys/kernel/debug/tracing/dynamic_events";
-+const char *dyn_file = "/sys/kernel/tracing/dynamic_events";
- const char *clear = "!u:__test_event";
- 
- static int Append(const char *value)
-diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
-index 404a2713dcae..aceafacfb126 100644
---- a/tools/testing/selftests/user_events/ftrace_test.c
-+++ b/tools/testing/selftests/user_events/ftrace_test.c
-@@ -12,20 +12,16 @@
- #include <fcntl.h>
+diff --git a/samples/user_events/example.c b/samples/user_events/example.c
+index d06dc24156ec..28165a096697 100644
+--- a/samples/user_events/example.c
++++ b/samples/user_events/example.c
+@@ -9,51 +9,28 @@
+ #include <errno.h>
  #include <sys/ioctl.h>
- #include <sys/stat.h>
+ #include <sys/mman.h>
 +#include <sys/uio.h>
+ #include <fcntl.h>
+ #include <stdio.h>
  #include <unistd.h>
+-#include <asm/bitsperlong.h>
+-#include <endian.h>
+ #include <linux/user_events.h>
  
- #include "../kselftest_harness.h"
+-#if __BITS_PER_LONG == 64
+-#define endian_swap(x) htole64(x)
+-#else
+-#define endian_swap(x) htole32(x)
+-#endif
++const char *data_file = "/sys/kernel/tracing/user_events_data";
++int enabled = 0;
  
+-/* Assumes debugfs is mounted */
 -const char *data_file = "/sys/kernel/debug/tracing/user_events_data";
 -const char *status_file = "/sys/kernel/debug/tracing/user_events_status";
--const char *enable_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/enable";
--const char *trace_file = "/sys/kernel/debug/tracing/trace";
--const char *fmt_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/format";
 -
--static inline int status_check(char *status_page, int status_bit)
+-static int event_status(long **status)
 -{
--	return status_page[status_bit >> 3] & (1 << (status_bit & 7));
+-	int fd = open(status_file, O_RDONLY);
+-
+-	*status = mmap(NULL, sysconf(_SC_PAGESIZE), PROT_READ,
+-		       MAP_SHARED, fd, 0);
+-
+-	close(fd);
+-
+-	if (*status == MAP_FAILED)
+-		return -1;
+-
+-	return 0;
 -}
-+const char *data_file = "/sys/kernel/tracing/user_events_data";
-+const char *status_file = "/sys/kernel/tracing/user_events_status";
-+const char *enable_file = "/sys/kernel/tracing/events/user_events/__test_event/enable";
-+const char *trace_file = "/sys/kernel/tracing/trace";
-+const char *fmt_file = "/sys/kernel/tracing/events/user_events/__test_event/format";
- 
- static int trace_bytes(void)
+-
+-static int event_reg(int fd, const char *command, long *index, long *mask,
+-		     int *write)
++static int event_reg(int fd, const char *command, int *write, int *enabled)
  {
-@@ -106,13 +102,23 @@ static int get_print_fmt(char *buffer, int len)
- 	return -1;
- }
+ 	struct user_reg reg = {0};
  
--static int clear(void)
-+static int clear(int *check)
- {
-+	struct user_unreg unreg = {0};
-+
-+	unreg.size = sizeof(unreg);
-+	unreg.disable_bit = 31;
-+	unreg.disable_addr = (__u64)check;
-+
- 	int fd = open(data_file, O_RDWR);
+ 	reg.size = sizeof(reg);
++	reg.enable_bit = 31;
++	reg.enable_size = sizeof(*enabled);
++	reg.enable_addr = (__u64)enabled;
+ 	reg.name_args = (__u64)command;
  
- 	if (fd == -1)
+ 	if (ioctl(fd, DIAG_IOCSREG, &reg) == -1)
  		return -1;
  
-+	if (ioctl(fd, DIAG_IOCSUNREG, &unreg) == -1)
-+		if (errno != ENOENT)
-+			return -1;
-+
- 	if (ioctl(fd, DIAG_IOCSDEL, "__test_event") == -1)
- 		if (errno != ENOENT)
- 			return -1;
-@@ -122,7 +128,7 @@ static int clear(void)
+-	*index = reg.status_bit / __BITS_PER_LONG;
+-	*mask = endian_swap(1L << (reg.status_bit % __BITS_PER_LONG));
+ 	*write = reg.write_index;
+ 
  	return 0;
- }
- 
--static int check_print_fmt(const char *event, const char *expected)
-+static int check_print_fmt(const char *event, const char *expected, int *check)
- {
- 	struct user_reg reg = {0};
- 	char print_fmt[256];
-@@ -130,7 +136,7 @@ static int check_print_fmt(const char *event, const char *expected)
- 	int fd;
- 
- 	/* Ensure cleared */
--	ret = clear();
-+	ret = clear(check);
- 
- 	if (ret != 0)
- 		return ret;
-@@ -142,14 +148,19 @@ static int check_print_fmt(const char *event, const char *expected)
- 
- 	reg.size = sizeof(reg);
- 	reg.name_args = (__u64)event;
-+	reg.enable_bit = 31;
-+	reg.enable_addr = (__u64)check;
-+	reg.enable_size = sizeof(*check);
- 
- 	/* Register should work */
- 	ret = ioctl(fd, DIAG_IOCSREG, &reg);
- 
- 	close(fd);
- 
--	if (ret != 0)
-+	if (ret != 0) {
-+		printf("Reg failed in fmt\n");
- 		return ret;
-+	}
- 
- 	/* Ensure correct print_fmt */
- 	ret = get_print_fmt(print_fmt, sizeof(print_fmt));
-@@ -164,6 +175,7 @@ FIXTURE(user) {
- 	int status_fd;
- 	int data_fd;
- 	int enable_fd;
-+	int check;
- };
- 
- FIXTURE_SETUP(user) {
-@@ -185,59 +197,56 @@ FIXTURE_TEARDOWN(user) {
- 		close(self->enable_fd);
- 	}
- 
--	ASSERT_EQ(0, clear());
-+	if (clear(&self->check) != 0)
-+		printf("WARNING: Clear didn't work!\n");
- }
- 
- TEST_F(user, register_events) {
- 	struct user_reg reg = {0};
--	int page_size = sysconf(_SC_PAGESIZE);
--	char *status_page;
-+	struct user_unreg unreg = {0};
- 
- 	reg.size = sizeof(reg);
- 	reg.name_args = (__u64)"__test_event u32 field1; u32 field2";
-+	reg.enable_bit = 31;
-+	reg.enable_addr = (__u64)&self->check;
-+	reg.enable_size = sizeof(self->check);
- 
--	status_page = mmap(NULL, page_size, PROT_READ, MAP_SHARED,
--			   self->status_fd, 0);
-+	unreg.size = sizeof(unreg);
-+	unreg.disable_bit = 31;
-+	unreg.disable_addr = (__u64)&self->check;
- 
- 	/* Register should work */
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
--	ASSERT_NE(0, reg.status_bit);
- 
- 	/* Multiple registers should result in same index */
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
--	ASSERT_NE(0, reg.status_bit);
- 
- 	/* Ensure disabled */
- 	self->enable_fd = open(enable_file, O_RDWR);
- 	ASSERT_NE(-1, self->enable_fd);
- 	ASSERT_NE(-1, write(self->enable_fd, "0", sizeof("0")))
- 
--	/* MMAP should work and be zero'd */
--	ASSERT_NE(MAP_FAILED, status_page);
--	ASSERT_NE(NULL, status_page);
--	ASSERT_EQ(0, status_check(status_page, reg.status_bit));
--
- 	/* Enable event and ensure bits updated in status */
- 	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
--	ASSERT_NE(0, status_check(status_page, reg.status_bit));
-+	ASSERT_EQ(1 << reg.enable_bit, self->check);
- 
- 	/* Disable event and ensure bits updated in status */
- 	ASSERT_NE(-1, write(self->enable_fd, "0", sizeof("0")))
--	ASSERT_EQ(0, status_check(status_page, reg.status_bit));
-+	ASSERT_EQ(0, self->check);
- 
- 	/* File still open should return -EBUSY for delete */
- 	ASSERT_EQ(-1, ioctl(self->data_fd, DIAG_IOCSDEL, "__test_event"));
- 	ASSERT_EQ(EBUSY, errno);
- 
--	/* Delete should work only after close */
-+	/* Unregister */
-+	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSUNREG, &unreg));
-+
-+	/* Delete should work only after close and unregister */
- 	close(self->data_fd);
- 	self->data_fd = open(data_file, O_RDWR);
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSDEL, "__test_event"));
--
--	/* Unmap should work */
--	ASSERT_EQ(0, munmap(status_page, page_size));
- }
- 
- TEST_F(user, write_events) {
-@@ -245,11 +254,12 @@ TEST_F(user, write_events) {
- 	struct iovec io[3];
- 	__u32 field1, field2;
- 	int before = 0, after = 0;
--	int page_size = sysconf(_SC_PAGESIZE);
--	char *status_page;
- 
- 	reg.size = sizeof(reg);
- 	reg.name_args = (__u64)"__test_event u32 field1; u32 field2";
-+	reg.enable_bit = 31;
-+	reg.enable_addr = (__u64)&self->check;
-+	reg.enable_size = sizeof(self->check);
- 
- 	field1 = 1;
- 	field2 = 2;
-@@ -261,18 +271,10 @@ TEST_F(user, write_events) {
- 	io[2].iov_base = &field2;
- 	io[2].iov_len = sizeof(field2);
- 
--	status_page = mmap(NULL, page_size, PROT_READ, MAP_SHARED,
--			   self->status_fd, 0);
--
- 	/* Register should work */
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
--	ASSERT_NE(0, reg.status_bit);
--
--	/* MMAP should work and be zero'd */
--	ASSERT_NE(MAP_FAILED, status_page);
--	ASSERT_NE(NULL, status_page);
--	ASSERT_EQ(0, status_check(status_page, reg.status_bit));
-+	ASSERT_EQ(0, self->check);
- 
- 	/* Write should fail on invalid slot with ENOENT */
- 	io[0].iov_base = &field2;
-@@ -287,7 +289,7 @@ TEST_F(user, write_events) {
- 	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
- 
- 	/* Event should now be enabled */
--	ASSERT_NE(0, status_check(status_page, reg.status_bit));
-+	ASSERT_NE(1 << reg.enable_bit, self->check);
- 
- 	/* Write should make it out to ftrace buffers */
- 	before = trace_bytes();
-@@ -304,6 +306,9 @@ TEST_F(user, write_fault) {
- 
- 	reg.size = sizeof(reg);
- 	reg.name_args = (__u64)"__test_event u64 anon";
-+	reg.enable_bit = 31;
-+	reg.enable_addr = (__u64)&self->check;
-+	reg.enable_size = sizeof(self->check);
- 
- 	anon = mmap(NULL, l, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
- 	ASSERT_NE(MAP_FAILED, anon);
-@@ -316,7 +321,6 @@ TEST_F(user, write_fault) {
- 	/* Register should work */
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
--	ASSERT_NE(0, reg.status_bit);
- 
- 	/* Write should work normally */
- 	ASSERT_NE(-1, writev(self->data_fd, (const struct iovec *)io, 2));
-@@ -333,24 +337,17 @@ TEST_F(user, write_validator) {
- 	int loc, bytes;
- 	char data[8];
- 	int before = 0, after = 0;
--	int page_size = sysconf(_SC_PAGESIZE);
--	char *status_page;
--
--	status_page = mmap(NULL, page_size, PROT_READ, MAP_SHARED,
--			   self->status_fd, 0);
- 
- 	reg.size = sizeof(reg);
- 	reg.name_args = (__u64)"__test_event __rel_loc char[] data";
-+	reg.enable_bit = 31;
-+	reg.enable_addr = (__u64)&self->check;
-+	reg.enable_size = sizeof(self->check);
- 
- 	/* Register should work */
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
--	ASSERT_NE(0, reg.status_bit);
--
--	/* MMAP should work and be zero'd */
--	ASSERT_NE(MAP_FAILED, status_page);
--	ASSERT_NE(NULL, status_page);
--	ASSERT_EQ(0, status_check(status_page, reg.status_bit));
-+	ASSERT_EQ(0, self->check);
- 
- 	io[0].iov_base = &reg.write_index;
- 	io[0].iov_len = sizeof(reg.write_index);
-@@ -369,7 +366,7 @@ TEST_F(user, write_validator) {
- 	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
- 
- 	/* Event should now be enabled */
--	ASSERT_NE(0, status_check(status_page, reg.status_bit));
-+	ASSERT_EQ(1 << reg.enable_bit, self->check);
- 
- 	/* Full in-bounds write should work */
- 	before = trace_bytes();
-@@ -409,71 +406,88 @@ TEST_F(user, print_fmt) {
- 	int ret;
- 
- 	ret = check_print_fmt("__test_event __rel_loc char[] data",
--			      "print fmt: \"data=%s\", __get_rel_str(data)");
-+			      "print fmt: \"data=%s\", __get_rel_str(data)",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event __data_loc char[] data",
--			      "print fmt: \"data=%s\", __get_str(data)");
-+			      "print fmt: \"data=%s\", __get_str(data)",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event s64 data",
--			      "print fmt: \"data=%lld\", REC->data");
-+			      "print fmt: \"data=%lld\", REC->data",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event u64 data",
--			      "print fmt: \"data=%llu\", REC->data");
-+			      "print fmt: \"data=%llu\", REC->data",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event s32 data",
--			      "print fmt: \"data=%d\", REC->data");
-+			      "print fmt: \"data=%d\", REC->data",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event u32 data",
--			      "print fmt: \"data=%u\", REC->data");
-+			      "print fmt: \"data=%u\", REC->data",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event int data",
--			      "print fmt: \"data=%d\", REC->data");
-+			      "print fmt: \"data=%d\", REC->data",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event unsigned int data",
--			      "print fmt: \"data=%u\", REC->data");
-+			      "print fmt: \"data=%u\", REC->data",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event s16 data",
--			      "print fmt: \"data=%d\", REC->data");
-+			      "print fmt: \"data=%d\", REC->data",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event u16 data",
--			      "print fmt: \"data=%u\", REC->data");
-+			      "print fmt: \"data=%u\", REC->data",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event short data",
--			      "print fmt: \"data=%d\", REC->data");
-+			      "print fmt: \"data=%d\", REC->data",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event unsigned short data",
--			      "print fmt: \"data=%u\", REC->data");
-+			      "print fmt: \"data=%u\", REC->data",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event s8 data",
--			      "print fmt: \"data=%d\", REC->data");
-+			      "print fmt: \"data=%d\", REC->data",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event u8 data",
--			      "print fmt: \"data=%u\", REC->data");
-+			      "print fmt: \"data=%u\", REC->data",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event char data",
--			      "print fmt: \"data=%d\", REC->data");
-+			      "print fmt: \"data=%d\", REC->data",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event unsigned char data",
--			      "print fmt: \"data=%u\", REC->data");
-+			      "print fmt: \"data=%u\", REC->data",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- 
- 	ret = check_print_fmt("__test_event char[4] data",
--			      "print fmt: \"data=%s\", REC->data");
-+			      "print fmt: \"data=%s\", REC->data",
-+			      &self->check);
- 	ASSERT_EQ(0, ret);
- }
- 
-diff --git a/tools/testing/selftests/user_events/perf_test.c b/tools/testing/selftests/user_events/perf_test.c
-index 8b4c7879d5a7..a070258d4449 100644
---- a/tools/testing/selftests/user_events/perf_test.c
-+++ b/tools/testing/selftests/user_events/perf_test.c
-@@ -18,10 +18,9 @@
- 
- #include "../kselftest_harness.h"
- 
--const char *data_file = "/sys/kernel/debug/tracing/user_events_data";
--const char *status_file = "/sys/kernel/debug/tracing/user_events_status";
--const char *id_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/id";
--const char *fmt_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/format";
-+const char *data_file = "/sys/kernel/tracing/user_events_data";
-+const char *id_file = "/sys/kernel/tracing/events/user_events/__test_event/id";
-+const char *fmt_file = "/sys/kernel/tracing/events/user_events/__test_event/format";
- 
- struct event {
- 	__u32 index;
-@@ -35,11 +34,6 @@ static long perf_event_open(struct perf_event_attr *pe, pid_t pid,
- 	return syscall(__NR_perf_event_open, pe, pid, cpu, group_fd, flags);
- }
- 
--static inline int status_check(char *status_page, int status_bit)
--{
--	return status_page[status_bit >> 3] & (1 << (status_bit & 7));
--}
--
- static int get_id(void)
- {
- 	FILE *fp = fopen(id_file, "r");
-@@ -88,45 +82,38 @@ static int get_offset(void)
- }
- 
- FIXTURE(user) {
--	int status_fd;
- 	int data_fd;
-+	int check;
- };
- 
- FIXTURE_SETUP(user) {
--	self->status_fd = open(status_file, O_RDONLY);
--	ASSERT_NE(-1, self->status_fd);
--
- 	self->data_fd = open(data_file, O_RDWR);
- 	ASSERT_NE(-1, self->data_fd);
- }
- 
- FIXTURE_TEARDOWN(user) {
--	close(self->status_fd);
- 	close(self->data_fd);
- }
- 
- TEST_F(user, perf_write) {
- 	struct perf_event_attr pe = {0};
- 	struct user_reg reg = {0};
--	int page_size = sysconf(_SC_PAGESIZE);
--	char *status_page;
- 	struct event event;
- 	struct perf_event_mmap_page *perf_page;
-+	int page_size = sysconf(_SC_PAGESIZE);
- 	int id, fd, offset;
- 	__u32 *val;
- 
- 	reg.size = sizeof(reg);
- 	reg.name_args = (__u64)"__test_event u32 field1; u32 field2";
--
--	status_page = mmap(NULL, page_size, PROT_READ, MAP_SHARED,
--			   self->status_fd, 0);
--	ASSERT_NE(MAP_FAILED, status_page);
-+	reg.enable_bit = 31;
-+	reg.enable_addr = (__u64)&self->check;
-+	reg.enable_size = sizeof(self->check);
- 
- 	/* Register should work */
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
--	ASSERT_NE(0, reg.status_bit);
--	ASSERT_EQ(0, status_check(status_page, reg.status_bit));
-+	ASSERT_EQ(0, self->check);
- 
- 	/* Id should be there */
- 	id = get_id();
-@@ -149,7 +136,7 @@ TEST_F(user, perf_write) {
- 	ASSERT_NE(MAP_FAILED, perf_page);
- 
- 	/* Status should be updated */
--	ASSERT_NE(0, status_check(status_page, reg.status_bit));
-+	ASSERT_EQ(1 << reg.enable_bit, self->check);
- 
- 	event.index = reg.write_index;
- 	event.field1 = 0xc001;
-@@ -165,6 +152,12 @@ TEST_F(user, perf_write) {
- 	/* Ensure correct */
- 	ASSERT_EQ(event.field1, *val++);
- 	ASSERT_EQ(event.field2, *val++);
-+
-+	munmap(perf_page, page_size * 2);
-+	close(fd);
-+
-+	/* Status should be updated */
-+	ASSERT_EQ(0, self->check);
- }
- 
+@@ -62,17 +39,12 @@ static int event_reg(int fd, const char *command, long *index, long *mask,
  int main(int argc, char **argv)
+ {
+ 	int data_fd, write;
+-	long index, mask;
+-	long *status_page;
+ 	struct iovec io[2];
+ 	__u32 count = 0;
+ 
+-	if (event_status(&status_page) == -1)
+-		return errno;
+-
+ 	data_fd = open(data_file, O_RDWR);
+ 
+-	if (event_reg(data_fd, "test u32 count", &index, &mask, &write) == -1)
++	if (event_reg(data_fd, "test u32 count", &write, &enabled) == -1)
+ 		return errno;
+ 
+ 	/* Setup iovec */
+@@ -80,13 +52,12 @@ int main(int argc, char **argv)
+ 	io[0].iov_len = sizeof(write);
+ 	io[1].iov_base = &count;
+ 	io[1].iov_len = sizeof(count);
+-
+ ask:
+ 	printf("Press enter to check status...\n");
+ 	getchar();
+ 
+ 	/* Check if anyone is listening */
+-	if (status_page[index] & mask) {
++	if (enabled) {
+ 		/* Yep, trace out our data */
+ 		writev(data_fd, (const struct iovec *)io, 2);
+ 
 -- 
 2.25.1
 
