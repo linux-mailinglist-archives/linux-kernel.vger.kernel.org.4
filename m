@@ -2,91 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193C76294BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9D56294E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238206AbiKOJq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 04:46:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
+        id S229954AbiKOJyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 04:54:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238158AbiKOJqa (ORCPT
+        with ESMTP id S229911AbiKOJyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 04:46:30 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D4C22B04
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:46:28 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id d3so16807863ljl.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:46:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KTCPHlKJiNqjfIcGyW+8cKWVQmtYwBfK2EmFcufHiE8=;
-        b=UoJoJpNga2JN91C9mlsCc8amblFjryx7MwFX+YRWgXFhv3E+Qu8wZS1LcIjhDxIE4N
-         zedEezVrZfERXru4BWS9TrCK0I7UKMY6XSe4DjgXnrzmEraLEx9VdkEL44nied7To91n
-         FdVXQXpMfoB0BsMZr2DF8uDZTzhVtuDGmIdtBeUNK5Rq7cLaRrwi9TWoKGekT8dhCX5G
-         1DipqTtLUHOCnXoTCk1Kzm3mwwAwk96twho6Pbvf8sj/0Dk/QDP0EGJLcpsFEUHKSFC/
-         3Lm7KslBlbI5INGsTnKsleEHFy3ilDjqepIwsXYx3Qg/lkUrlvRk0wytdBjYwiXwYOZt
-         kptA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KTCPHlKJiNqjfIcGyW+8cKWVQmtYwBfK2EmFcufHiE8=;
-        b=ThmxFKWhNAW3Pf+EoH1MWrRcOqcZ72sVE2b9Ktf3I7FpBlOa5QNh5/4TYZbTKf5DSs
-         gbRe3n/Hs8lm0udg+u3ze8BtFyYL8d420vlZB4f1JPSlaMVFDZVhlRwnNr1QgS9vWiYA
-         GyHKLH0wCXQrnLxsUnPHHHEkQ4W1rF8hTvR3BdRdpDMH6lvtGrvuwCwtzJbFvntmXAEO
-         0mwDvMxwzC8Zg8RJwvnKQhcpXt37m+ZcFS3LBalwol2ml3itDJFIkqzz5F7v+aJcnOD2
-         ogQEs+nAf/Aqs4DKsSFkPg5hlgDmbNK4aA+X8VNthKk/o3PIhaaVKpoWwcXS2yXU3mvb
-         fPfg==
-X-Gm-Message-State: ANoB5pm9uQ7e/ywi/8+mhpbfId13RQ2QWE8DaDOJbjSIzCZQlYxkSh/J
-        DenwIHC4LaZKrMYUOjx3TbgGeYuAgUqHCRkV
-X-Google-Smtp-Source: AA0mqf5Nu8UdAoc7UgGkcl4B6tJiLU5Cx9Yce67WDQMPaTN2UMUL7oUZZzzTczFOFrBNVji5CsvCWA==
-X-Received: by 2002:a2e:a44a:0:b0:26e:89d6:e6fc with SMTP id v10-20020a2ea44a000000b0026e89d6e6fcmr5090612ljn.145.1668505587408;
-        Tue, 15 Nov 2022 01:46:27 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id t16-20020a056512069000b00497a41b3a42sm2149059lfe.88.2022.11.15.01.46.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 01:46:27 -0800 (PST)
-Message-ID: <e125f05f-3f31-a5c3-e4c7-1132ce0be9b5@linaro.org>
-Date:   Tue, 15 Nov 2022 10:46:26 +0100
+        Tue, 15 Nov 2022 04:54:43 -0500
+X-Greylist: delayed 491 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Nov 2022 01:54:41 PST
+Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A802A38B4;
+        Tue, 15 Nov 2022 01:54:41 -0800 (PST)
+From:   Denis Arefev <arefev@swemel.ru>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
+        t=1668505589;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=NmmBGedzdtOQXgj14ZUnuEyKYV0y5hMfZTUePWXPEbw=;
+        b=sCnrEURWR+mhGX/LBvib/yhHGHOmE4zVV2U/doO+IVBvQrtJncWxwXNCNNUrjtYNonMigQ
+        25UDg0jFSQy9FsokzFGug5hM05TlaLVgsvDQYVRVG03WeY4Ndn0Fpge0LBBHdNmuJR+UG6
+        IFkTwM3LAyK+D16v+pATt5G3w6PlBak=
+To:     Karen Xie <kxie@chelsio.com>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        ldv-project@linuxtesting.org, trufanov@swemel.ru, vfh@swemel.ru
+Subject: [PATCH] cxgb4i : Added pointer check
+Date:   Tue, 15 Nov 2022 12:46:29 +0300
+Message-Id: <20221115094629.73591-1-arefev@swemel.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 12/15] dt-bindings: soc: mediatek: pwrap: add
- compatible for mt8365
-Content-Language: en-US
-To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        linux-mediatek@lists.infradead.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com
-References: <20221107211001.257393-1-bero@baylibre.com>
- <20221115025421.59847-1-bero@baylibre.com>
- <20221115025421.59847-13-bero@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115025421.59847-13-bero@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 03:54, Bernhard Rosenkränzer wrote:
-> Add dt-binding documentation of pwrap for Mediatek MT8365
-> 
-> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+Return value of a function 'alloc_wr' is dereferenced at cxgb4i.c:624
+without checking for null, but it is usually checked for this function
 
-I am not going to review this - please go through comments you received.
+Signed-off-by: Denis Arefev <arefev@swemel.ru>
+---
+ drivers/scsi/cxgbi/cxgb4i/cxgb4i.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c b/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
+index 2c3491528d42..40ed8e27945c 100644
+--- a/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
++++ b/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
+@@ -611,7 +611,7 @@ static inline int tx_flowc_wr_credits(int *nparamsp, int *flowclenp)
+ 
+ static inline int send_tx_flowc_wr(struct cxgbi_sock *csk)
+ {
+-	struct sk_buff *skb;
++	struct sk_buff *skb = NULL;
+ 	struct fw_flowc_wr *flowc;
+ 	int nparams, flowclen16, flowclen;
+ 
+@@ -620,6 +620,8 @@ static inline int send_tx_flowc_wr(struct cxgbi_sock *csk)
+ #endif
+ 	flowclen16 = tx_flowc_wr_credits(&nparams, &flowclen);
+ 	skb = alloc_wr(flowclen, 0, GFP_ATOMIC);
++	if (!skb)
++	 return -ENOMEM;
+ 	flowc = (struct fw_flowc_wr *)skb->head;
+ 	flowc->op_to_nparams =
+ 		htonl(FW_WR_OP_V(FW_FLOWC_WR) | FW_FLOWC_WR_NPARAMS_V(nparams));
+-- 
+2.25.1
 
