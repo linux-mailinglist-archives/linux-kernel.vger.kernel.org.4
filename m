@@ -2,243 +2,403 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323CA62954F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF46629544
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238240AbiKOKII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:08:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
+        id S229818AbiKOKHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238214AbiKOKH6 (ORCPT
+        with ESMTP id S232215AbiKOKG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:07:58 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413561A82F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:07:57 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id bs21so23366499wrb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:07:57 -0800 (PST)
+        Tue, 15 Nov 2022 05:06:57 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5849E5F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:06:55 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id t4so9306764wmj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:06:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x4vZ6ZNV0MeZz8K+VcEaVJqnAptkGto8thD1d7pNpbU=;
-        b=hH1H+YPmSvv2SuL5HTKzeCJH8KYmEx8ys7QaAYh3dmCfTopC21BFNsjOFGyTitKRLc
-         gIWCm2L9DlawqFv3AXjpQu5GDWeV6/wScu8/ebVUSs1LL6PCcsFEPC7D8b0eYC9xZxto
-         j4PcOkn/1Dnuo3fpXCDtXIvXaTgWuOZMWqaLTotbb/jbIyeMcvY9c/zNXhVaGe1Lz96o
-         awUZYlzeWrfLIQ8eXpZfKTTWf2YqjuqJaG6QOA+qCakAH7BCkLmZsXmVerzgOAl4JyjA
-         nZxAkCDQ+nZJ1Su0qxUPBzYWfapdkNRGYHx325f/5RM5MPt/sjU1MPBnxudNEC2tLgUI
-         fnoQ==
+        d=linaro.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=r6J2lsA0Wo197QAgdKxOXmtdQ23amoC9lDrXaGdR/FQ=;
+        b=RXsBzvZsf7KCOSfh2YF3gb4x2ca7GWci0hQ80sX9RbhHT0CwRxVHX3aQ7JsEYsP4yJ
+         U/xYGh3/K7RWX/Z4mMJ+P8hRuq9piViCBeOjdPvIrG00e24ltWTKqHjhdFyCT+h6rLXG
+         fKrOM0rLMIUVZ1SbWNsBTIgFd3iWhwHGynymr64zu6Zn+QS1pV8R9VuKDQ05Bce/aOzj
+         T8g5Aj1qx4lWXp75KkZSs8T50h6iNEXF8hA5NdjSIwy28GcOXsSeT6fkwCR1znmNI5cb
+         ZISNz96aGCWleN8yu/LTUdO0tlUNSIdQ0SSulTXnI4KTrzIUzsQTVvZujhy5N2IBc2Qf
+         oNgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x4vZ6ZNV0MeZz8K+VcEaVJqnAptkGto8thD1d7pNpbU=;
-        b=Zy9J4hjyh9QYVMnaHNFkdlFrwBMC8Xs4Wp96PGpDNvt3pnDuBlGqduI43bKfFUporF
-         crxS1sNRrHx7iaFWKbLlfizgfRIEjFfoKUP068pXYW0tNuhk3C9Zk5gPkmazbqrsB77w
-         zGVbfMUqGGfd4CFkIVGJB2C5HrPK/WJ5CjTU/6/BJUrim5NewkfDDqliBQPFJGxTYHyr
-         zsYZ554zXq5AIXs2BDvcd9ms22Ka799Gh7VubzYCDbYfrRxg4B+tC983Put1og3xbxdY
-         iKmPO8ivNxmu6I7JBSwDL1jR8Uw+8cR5vklWOIpUHcyiJzPIFJayL1ig+W9Uwk2VhZM7
-         lO4g==
-X-Gm-Message-State: ANoB5pk6zP77e3UpGvOw+n5akRqpRi6RjmYrIstcfjbex0ipf8SOA1+1
-        T/63Ja2SY0PSZGHPwQHsCu8=
-X-Google-Smtp-Source: AA0mqf5yhL+mHVS2V09H7V6hvWOeLksegBIR0ugANfltDdisjaRqE3GiHTiaSd8dlcVZj31ikW1iRg==
-X-Received: by 2002:adf:ebcb:0:b0:22f:1aae:6a58 with SMTP id v11-20020adfebcb000000b0022f1aae6a58mr10311535wrn.464.1668506875777;
-        Tue, 15 Nov 2022 02:07:55 -0800 (PST)
-Received: from arch.localdomain ([119.160.120.210])
-        by smtp.gmail.com with ESMTPSA id m16-20020a05600c3b1000b003a3170a7af9sm16577154wms.4.2022.11.15.02.07.53
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r6J2lsA0Wo197QAgdKxOXmtdQ23amoC9lDrXaGdR/FQ=;
+        b=GCOIbaYRtjS1nQwQXqSGTn4q83NryBmk4nbKzuCruvne916bJgr9xcW+foOVlX4ZhQ
+         EWX64c4Jf2rHRBBKN6Fr0ggwRhMkbpLzkzE6M2UpOxehbRHNsJwoeMRKPbwx+rH1VQU6
+         t28M8dTab61shIfhk4IELljnY5ZbQu8+sk076INRGIbJNKcFMHe3q89aWNmmoWikMXv9
+         i12UP8kMFlYQzmjvJPHC3J4eYYn9XWPXWsRowtPivX95jImm0bWYVlxGE6LPPSsQoJ2l
+         +iZELwfBXlyHgTLEAc57jjs5lew1G4+omA+ptqX3ClJXriFo5XbDFOJaAACIAaA2iI6R
+         pZ1A==
+X-Gm-Message-State: ANoB5pmWOVU+60sPHZvrwrBPk+ywzaKw1dEyRTw2y4AIGOZxogKG89+k
+        cpT53MhUWWLioE2OStVaYnDAiQ==
+X-Google-Smtp-Source: AA0mqf60kkOnsL2coIZUUusLLQoO8xcZuEF7Ejs909LN8vxM5+59flaYZZSPiG41TJq6qWFXdwGk3w==
+X-Received: by 2002:a05:600c:3b27:b0:3cf:6263:bfc5 with SMTP id m39-20020a05600c3b2700b003cf6263bfc5mr196888wms.137.1668506814125;
+        Tue, 15 Nov 2022 02:06:54 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id o7-20020a05600c4fc700b003a6125562e1sm16199370wmq.46.2022.11.15.02.06.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 02:07:55 -0800 (PST)
-From:   Mushahid Hussain <mushi.shar@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     speakup@linux-speakup.org, linux-kernel@vger.kernel.org,
-        Mushahid Hussain <mushi.shar@gmail.com>,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>
-Subject: [PATCHv2 2/2] accessibility: speakup: phonetic spelling while arrowing letter by letter
-Date:   Tue, 15 Nov 2022 15:05:30 +0500
-Message-Id: <20221115100530.91174-3-mushi.shar@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221115100530.91174-1-mushi.shar@gmail.com>
-References: <20221115100530.91174-1-mushi.shar@gmail.com>
+        Tue, 15 Nov 2022 02:06:53 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Tue, 15 Nov 2022 11:06:47 +0100
+Subject: [PATCH v3] dt-bindings: pinctrl: convert semtech,sx150xq bindings to
+ dt-schema
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20221005-mdm9615-sx1509q-yaml-v3-0-e8b349eb1900@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-gpio@vger.kernel.org
+X-Mailer: b4 0.10.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch includes an enhancement requested frequently on the mailing
-list.[1][2] It adds a variable, cur_phonetic in the spk_vars, which can
-be set as a module parameter, as well as in /sys/speakup/cur_phonetic.
-This patch also documents cur_phonetic as a sysfs attribute in
-sysfs-driver-speakup.
+This converts the Semtech SX150Xq bindings to dt-schemas, add necessary
+bindings documentation to cover all differences between HW variants
+and current bindings usage.
 
-When cur_phonetic=1, it causes speakup to speak letters phonetically if
-paused on the character while arrowing through a word.
-
-When a user does not set cur_phonetic to any value, the default value
-for it would be 0.
-
-[1]: https://github.com/linux-speakup/speakup/issues/6
-[2]: https://github.com/linux-speakup/speakup/issues/5
-
-since V1:
-	- removed unnecessary lines
-
-Signed-off-by: Mushahid Hussain<mushi.shar@gmail.com>
-Reviewed-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/ABI/stable/sysfs-driver-speakup |  9 +++++++++
- drivers/accessibility/speakup/kobjects.c      |  3 +++
- drivers/accessibility/speakup/main.c          | 14 +++++++++++---
- drivers/accessibility/speakup/speakup.h       |  1 +
- drivers/accessibility/speakup/spk_types.h     |  2 +-
- drivers/accessibility/speakup/varhandlers.c   |  1 +
- 6 files changed, 26 insertions(+), 4 deletions(-)
+To: Linus Walleij <linus.walleij@linaro.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: linux-gpio@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+Changes in v3:
+- Resent with missing To: Linus Walleij
+- Link to v2: https://lore.kernel.org/r/20221005-mdm9615-sx1509q-yaml-v2-0-a4a5b8eecc7b@linaro.org
 
-diff --git a/Documentation/ABI/stable/sysfs-driver-speakup b/Documentation/ABI/stable/sysfs-driver-speakup
-index dc2a6ba1674b..bcb6831aa114 100644
---- a/Documentation/ABI/stable/sysfs-driver-speakup
-+++ b/Documentation/ABI/stable/sysfs-driver-speakup
-@@ -35,6 +35,15 @@ Description:	This controls cursor delay when using arrow keys. When a
- 		characters. Set this to a higher value to adjust for the delay
- 		and better synchronisation between cursor position and speech.
+Changes in v2:
+- fixed rob comments
+- added rob's Reviewed-by
+- Link to v1: https://lore.kernel.org/r/20221005-mdm9615-sx1509q-yaml-v1-0-0c26649b637c@linaro.org
+---
+ .../devicetree/bindings/pinctrl/pinctrl-sx150x.txt |  72 -------
+ .../bindings/pinctrl/semtech,sx1501q.yaml          | 208 +++++++++++++++++++++
+ 2 files changed, 208 insertions(+), 72 deletions(-)
 
-+What:		/sys/accessibility/speakup/cur_phonetic
-+KernelVersion:	6.2
-+Contact:	speakup@linux-speakup.org
-+Description:	This allows speakup to speak letters phoneticaly when arrowing through
-+		a word letter by letter. This doesn't affect the spelling when typing
-+		the characters. When cur_phonetic=1, speakup will speak characters
-+		phoneticaly when arrowing over a letter. When cur_phonetic=0, speakup
-+		will speak letters as normally.
+diff --git a/Documentation/devicetree/bindings/pinctrl/pinctrl-sx150x.txt b/Documentation/devicetree/bindings/pinctrl/pinctrl-sx150x.txt
+deleted file mode 100644
+index 4023bad2fe39..000000000000
+--- a/Documentation/devicetree/bindings/pinctrl/pinctrl-sx150x.txt
++++ /dev/null
+@@ -1,72 +0,0 @@
+-SEMTECH SX150x GPIO expander bindings
+-
+-Please refer to pinctrl-bindings.txt, ../gpio/gpio.txt, and
+-../interrupt-controller/interrupts.txt for generic information regarding
+-pin controller, GPIO, and interrupt bindings.
+-
+-Required properties:
+-- compatible: should be one of :
+-			"semtech,sx1501q",
+-			"semtech,sx1502q",
+-			"semtech,sx1503q",
+-			"semtech,sx1504q",
+-			"semtech,sx1505q",
+-			"semtech,sx1506q",
+-			"semtech,sx1507q",
+-			"semtech,sx1508q",
+-			"semtech,sx1509q".
+-
+-- reg: The I2C slave address for this device.
+-
+-- #gpio-cells: Should be 2. The first cell is the GPIO number and the
+-		second cell is used to specify optional parameters:
+-		bit 0: polarity (0: normal, 1: inverted)
+-
+-- gpio-controller: Marks the device as a GPIO controller.
+-
+-Optional properties :
+-- interrupts: Interrupt specifier for the controllers interrupt.
+-
+-- interrupt-controller: Marks the device as a interrupt controller.
+-
+-- semtech,probe-reset: Will trigger a reset of the GPIO expander on probe,
+-		only for sx1507q, sx1508q and sx1509q
+-
+-The GPIO expander can optionally be used as an interrupt controller, in
+-which case it uses the default two cell specifier.
+-
+-Required properties for pin configuration sub-nodes:
+- - pins: List of pins to which the configuration applies.
+-
+-Optional properties for pin configuration sub-nodes:
+-----------------------------------------------------
+- - bias-disable: disable any pin bias, except the OSCIO pin
+- - bias-pull-up: pull up the pin, except the OSCIO pin
+- - bias-pull-down: pull down the pin, except the OSCIO pin
+- - bias-pull-pin-default: use pin-default pull state, except the OSCIO pin
+- - drive-push-pull: drive actively high and low
+- - drive-open-drain: drive with open drain only for sx1507q, sx1508q and sx1509q and except the OSCIO pin
+- - output-low: set the pin to output mode with low level
+- - output-high: set the pin to output mode with high level
+-
+-Example:
+-
+-	i2c0gpio-expander@20{
+-		#gpio-cells = <2>;
+-		#interrupt-cells = <2>;
+-		compatible = "semtech,sx1506q";
+-		reg = <0x20>;
+-		interrupt-parent = <&gpio_1>;
+-		interrupts = <16 0>;
+-
+-		gpio-controller;
+-		interrupt-controller;
+-
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&gpio1_cfg_pins>;
+-
+-		gpio1_cfg_pins: gpio1-cfg {
+-			pins = "gpio1";
+-			bias-pull-up;
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/pinctrl/semtech,sx1501q.yaml b/Documentation/devicetree/bindings/pinctrl/semtech,sx1501q.yaml
+new file mode 100644
+index 000000000000..df429a396ba3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pinctrl/semtech,sx1501q.yaml
+@@ -0,0 +1,208 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright 2022 Linaro Ltd.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pinctrl/semtech,sx1501q.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- What:		/sys/accessibility/speakup/delimiters
- KernelVersion:	2.6
- Contact:	speakup@linux-speakup.org
-diff --git a/drivers/accessibility/speakup/kobjects.c b/drivers/accessibility/speakup/kobjects.c
-index 41ae24ab5d08..a7522d409802 100644
---- a/drivers/accessibility/speakup/kobjects.c
-+++ b/drivers/accessibility/speakup/kobjects.c
-@@ -914,6 +914,8 @@ static struct kobj_attribute say_word_ctl_attribute =
- 	__ATTR(say_word_ctl, 0644, spk_var_show, spk_var_store);
- static struct kobj_attribute spell_delay_attribute =
- 	__ATTR(spell_delay, 0644, spk_var_show, spk_var_store);
-+static struct kobj_attribute cur_phonetic_attribute =
-+	__ATTR(cur_phonetic, 0644, spk_var_show, spk_var_store);
++title: Semtech SX150x GPIO expander
++
++maintainers:
++  - Neil Armstrong <neil.armstrong@linaro.org>
++
++properties:
++  compatible:
++    enum:
++      - semtech,sx1501q
++      - semtech,sx1502q
++      - semtech,sx1503q
++      - semtech,sx1504q
++      - semtech,sx1505q
++      - semtech,sx1506q
++      - semtech,sx1507q
++      - semtech,sx1508q
++      - semtech,sx1509q
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  '#interrupt-cells':
++    const: 2
++
++  interrupt-controller: true
++
++  '#gpio-cells':
++    const: 2
++
++  gpio-controller: true
++
++  semtech,probe-reset:
++    description: Will trigger a reset of the GPIO expander on probe
++    type: boolean
++
++patternProperties:
++  '-cfg$':
++    type: object
++    properties:
++      pins: true
++
++      bias-disable: true
++      bias-pull-up: true
++      bias-pull-down: true
++      bias-pull-pin-default: true
++      drive-push-pull: true
++      output-low: true
++      output-high: true
++      drive-open-drain: true
++
++    required:
++      - pins
++
++    allOf:
++      - $ref: "pincfg-node.yaml#"
++      - $ref: "pinmux-node.yaml#"
++      - if:
++          properties:
++            pins:
++              contains:
++                const: oscio
++        then:
++          properties:
++            bias-disable: false
++            bias-pull-up: false
++            bias-pull-down: false
++            bias-pull-pin-default: false
++            drive-open-drain: false
++
++    additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - '#gpio-cells'
++  - gpio-controller
++
++allOf:
++  - $ref: "pinctrl.yaml#"
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - semtech,sx1507q
++                - semtech,sx1508q
++                - semtech,sx1509q
++    then:
++      properties:
++        semtech,probe-reset: false
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - semtech,sx1501q
++              - semtech,sx1504q
++    then:
++      patternProperties:
++        '-cfg$':
++          properties:
++            pins:
++              items:
++                pattern: '^gpio[0-3]$'
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - semtech,sx1502q
++              - semtech,sx1505q
++    then:
++      patternProperties:
++        '-cfg$':
++          properties:
++            pins:
++              items:
++                pattern: '^gpio[0-7]$'
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - semtech,sx1503q
++              - semtech,sx1506q
++    then:
++      patternProperties:
++        '-cfg$':
++          properties:
++            pins:
++              items:
++                pattern: '^gpio[0-15]$'
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: semtech,sx1507q
++    then:
++      patternProperties:
++        '-cfg$':
++          properties:
++            pins:
++              items:
++                pattern: '^(oscio|gpio[0-3])$'
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: semtech,sx1508q
++    then:
++      patternProperties:
++        '-cfg$':
++          properties:
++            pins:
++              items:
++                pattern: '^(oscio|gpio[0-7])$'
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: semtech,sx1509q
++    then:
++      patternProperties:
++        '-cfg$':
++          properties:
++            pins:
++              items:
++                pattern: '^(oscio|gpio[0-15])$'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c@1000 {
++        reg = <0x1000 0x80>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        pinctrl@20 {
++            compatible = "semtech,sx1501q";
++            reg = <0x20>;
++
++            #gpio-cells = <2>;
++            #interrupt-cells = <2>;
++
++            interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
++
++            gpio-controller;
++            interrupt-controller;
++
++            gpio1-cfg {
++                  pins = "gpio1";
++                  bias-pull-up;
++            };
++        };
++    };
 
- /*
-  * These attributes are i18n related.
-@@ -967,6 +969,7 @@ static struct attribute *main_attrs[] = {
- 	&say_control_attribute.attr,
- 	&say_word_ctl_attribute.attr,
- 	&spell_delay_attribute.attr,
-+	&cur_phonetic_attribute.attr,
- 	NULL,
- };
+---
+base-commit: 4fe89d07dcc2804c8b562f6c7896a45643d34b2f
+change-id: 20221005-mdm9615-sx1509q-yaml-7cfabf896fff
 
-diff --git a/drivers/accessibility/speakup/main.c b/drivers/accessibility/speakup/main.c
-index 2e6e0649fe90..987fd29b6786 100644
---- a/drivers/accessibility/speakup/main.c
-+++ b/drivers/accessibility/speakup/main.c
-@@ -65,6 +65,7 @@ int spk_key_echo, spk_say_word_ctl;
- int spk_say_ctrl, spk_bell_pos;
- short spk_punc_mask;
- int spk_punc_level, spk_reading_punc;
-+int spk_cur_phonetic;
- char spk_str_caps_start[MAXVARLEN + 1] = "\0";
- char spk_str_caps_stop[MAXVARLEN + 1] = "\0";
- char spk_str_pause[MAXVARLEN + 1] = "\0";
-@@ -1273,7 +1274,7 @@ enum spk_vars_id {
- 	BLEEPS_ID, BLEEP_TIME_ID, PUNC_LEVEL_ID,
- 	READING_PUNC_ID, CURSOR_TIME_ID, SAY_CONTROL_ID,
- 	SAY_WORD_CTL_ID, NO_INTERRUPT_ID, KEY_ECHO_ID,
--	V_LAST_VAR_ID, NB_ID
-+	CUR_PHONETIC_ID, V_LAST_VAR_ID, NB_ID
- };
-
- static struct var_t spk_vars[NB_ID] = {
-@@ -1290,6 +1291,7 @@ static struct var_t spk_vars[NB_ID] = {
- 	[SAY_WORD_CTL_ID] = {SAY_WORD_CTL, TOGGLE_0},
- 	[NO_INTERRUPT_ID] = { NO_INTERRUPT, TOGGLE_0},
- 	[KEY_ECHO_ID] = { KEY_ECHO, .u.n = {NULL, 1, 0, 2, 0, 0, NULL} },
-+	[CUR_PHONETIC_ID] = { CUR_PHONETIC, .u.n = {NULL, 0, 0, 1, 0, 0, NULL} },
- 	V_LAST_VAR
- };
-
-@@ -1720,8 +1722,12 @@ static void cursor_done(struct timer_list *unused)
- 		speakup_win_say(vc);
- 	else if (is_cursor == 1 || is_cursor == 4)
- 		say_line_from_to(vc, 0, vc->vc_cols, 0);
--	else
--		say_char(vc);
-+	else {
-+		if (spk_cur_phonetic == 1)
-+			say_phonetic_char(vc);
-+		else
-+			say_char(vc);
-+	}
- 	spk_keydown = 0;
- 	is_cursor = 0;
- out:
-@@ -2473,6 +2479,7 @@ module_param_named(say_control, spk_vars[SAY_CONTROL_ID].u.n.default_val, int, 0
- module_param_named(say_word_ctl, spk_vars[SAY_WORD_CTL_ID].u.n.default_val, int, 0444);
- module_param_named(no_interrupt, spk_vars[NO_INTERRUPT_ID].u.n.default_val, int, 0444);
- module_param_named(key_echo, spk_vars[KEY_ECHO_ID].u.n.default_val, int, 0444);
-+module_param_named(cur_phonetic, spk_vars[CUR_PHONETIC_ID].u.n.default_val, int, 0444);
-
- MODULE_PARM_DESC(bell_pos, "This works much like a typewriter bell. If for example 72 is echoed to bell_pos, it will beep the PC speaker when typing on a line past character 72.");
- MODULE_PARM_DESC(spell_delay, "This controls how fast a word is spelled when speakup's spell word review command is pressed.");
-@@ -2486,6 +2493,7 @@ MODULE_PARM_DESC(say_control, "This controls if speakup speaks shift, alt and co
- MODULE_PARM_DESC(say_word_ctl, "Sets thw say_word_ctl  on load.");
- MODULE_PARM_DESC(no_interrupt, "Controls if typing interrupts output from speakup.");
- MODULE_PARM_DESC(key_echo, "Controls if speakup speaks keys when they are typed. One = on zero = off or don't echo keys.");
-+MODULE_PARM_DESC(cur_phonetic, "Controls if speakup speaks letters phonetically during navigation. One = on zero = off or don't speak phonetically.");
-
- module_init(speakup_init);
- module_exit(speakup_exit);
-diff --git a/drivers/accessibility/speakup/speakup.h b/drivers/accessibility/speakup/speakup.h
-index 33594f5a7983..364fde99749e 100644
---- a/drivers/accessibility/speakup/speakup.h
-+++ b/drivers/accessibility/speakup/speakup.h
-@@ -105,6 +105,7 @@ extern int spk_no_intr, spk_say_ctrl, spk_say_word_ctl, spk_punc_level;
- extern int spk_reading_punc, spk_attrib_bleep, spk_bleeps;
- extern int spk_bleep_time, spk_bell_pos;
- extern int spk_spell_delay, spk_key_echo;
-+extern int spk_cur_phonetic;
- extern short spk_punc_mask;
- extern short spk_pitch_shift, synth_flags;
- extern bool spk_quiet_boot;
-diff --git a/drivers/accessibility/speakup/spk_types.h b/drivers/accessibility/speakup/spk_types.h
-index 3a14d39bf896..08011518a28a 100644
---- a/drivers/accessibility/speakup/spk_types.h
-+++ b/drivers/accessibility/speakup/spk_types.h
-@@ -49,7 +49,7 @@ enum var_id_t {
- 	RATE, PITCH, VOL, TONE, PUNCT, VOICE, FREQUENCY, LANG,
- 	DIRECT, PAUSE,
- 	CAPS_START, CAPS_STOP, CHARTAB, INFLECTION, FLUSH,
--	MAXVARS
-+	CUR_PHONETIC, MAXVARS
- };
-
- typedef int (*special_func)(struct vc_data *vc, u_char type, u_char ch,
-diff --git a/drivers/accessibility/speakup/varhandlers.c b/drivers/accessibility/speakup/varhandlers.c
-index e1c9f42e39f0..462f8d879053 100644
---- a/drivers/accessibility/speakup/varhandlers.c
-+++ b/drivers/accessibility/speakup/varhandlers.c
-@@ -48,6 +48,7 @@ static struct st_var_header var_headers[] = {
- 	{ "chartab", CHARTAB, VAR_PROC, NULL, NULL },
- 	{ "direct", DIRECT, VAR_NUM, NULL, NULL },
- 	{ "pause", PAUSE, VAR_STRING, spk_str_pause, NULL },
-+	{ "cur_phonetic", CUR_PHONETIC, VAR_NUM, &spk_cur_phonetic, NULL },
- };
-
- static struct st_var_header *var_ptrs[MAXVARS] = { NULL, NULL, NULL };
---
-2.38.1
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
