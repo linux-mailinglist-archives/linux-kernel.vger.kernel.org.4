@@ -2,232 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA17629761
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B589629765
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:29:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232366AbiKOL3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 06:29:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
+        id S237029AbiKOL3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 06:29:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiKOL26 (ORCPT
+        with ESMTP id S232547AbiKOL3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 06:28:58 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6731010;
-        Tue, 15 Nov 2022 03:28:57 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id h14so13050973pjv.4;
-        Tue, 15 Nov 2022 03:28:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3o0IP0jRO/k6EuewxkJJcEod0HUZCfXHgiOkxOYiCag=;
-        b=EwXpXdYmCH55f66LcK5rJS3Qrmzr6sZjvFNr4efYWyP4Ykh/W1BOLZ3/7UM2LwRsZx
-         2lPQZRJWTmWsRULXVOfpEnxyUWLlHsmXwDrrx8uLxnQW8wdWZtTT6EsOqWOvxtC8Kn99
-         Bk+/Yccd+SaAKHP/QQVowATqCPuUK43n4EZOpMzdgLqfrcfj3t3eoHymfd14TXHKOmB6
-         X8RYMQUxJUpUdjNBDgjYzlWMMhUKIBfnG3jsAts74/Vx1wgp8/BZ/fYEnMPSUOoJfSNB
-         FJtJyPTLA5dawWuJBtqo6WOrjeHBYFo3bWC+LFGtgM1UMtOENCDPSeIT3le5sZ+fp+hv
-         5geA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3o0IP0jRO/k6EuewxkJJcEod0HUZCfXHgiOkxOYiCag=;
-        b=n2onegP1FbiIEE+Uy9t3uc6YJa1QsDrMsS8bp4d35fQnXV2GTlbUSatp9A5HYeHjts
-         InxFcpJEN5sU828FvGTG2izgMWf46XQb6yuZBtSZG8roUZsAC6f5z/EJI2JRcdbKTPfJ
-         QK4bN8h0GenAc0sdnI8zdWkTbESYV1BpyXRAB46NXQYM4jWWGe4EPxQaqGChU5BHVkl4
-         IJ/3rV0x0fWg9hTdiDlt1QuAKHF1tI5TUxqVksJa0WpOc+d7U8BpLxEVbOoelKNg+Ykg
-         doAp0QItmnBdeE/DERdGqC6Al+UvlqcfGVtTnD2IDXO2ezd1B0cjVqUVfutPqk+Fzrqu
-         dW+Q==
-X-Gm-Message-State: ANoB5pnRcG+HcmcMmq+EN1tYMrmkf4OpINMy0cZEdbCxAZyfgQo419/D
-        d9s5AvwuYFOp14NgcwcRiF91NdMw1QI=
-X-Google-Smtp-Source: AA0mqf5tODoJrAyf0JpV043CfqnPI1lrhyItE/45JfggxCVZZrt0S6dCz4CMu43Z8wP1NBU998BeYA==
-X-Received: by 2002:a17:903:2d0:b0:188:7dca:6f41 with SMTP id s16-20020a17090302d000b001887dca6f41mr3580296plk.72.1668511736984;
-        Tue, 15 Nov 2022 03:28:56 -0800 (PST)
-Received: from carlis-virtual-machine.localdomain ([156.236.96.164])
-        by smtp.gmail.com with ESMTPSA id e13-20020a17090ab38d00b0021806f631ccsm8127582pjr.30.2022.11.15.03.28.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 03:28:56 -0800 (PST)
-From:   Xuezhi Zhang <zhangxuezhi3@gmail.com>
-To:     zhangxuezhi1@coolpad.com, jinpu.wang@cloud.ionos.com,
-        jejb@linux.ibm.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: pm8001: convert sysfs snprintf to sysfs_emit
-Date:   Tue, 15 Nov 2022 19:28:51 +0800
-Message-Id: <20221115112851.1271409-1-zhangxuezhi3@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 15 Nov 2022 06:29:30 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40361EC5B;
+        Tue, 15 Nov 2022 03:29:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668511755; x=1700047755;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FvdD9kceN5CwXDRlw8ICmZuMX9S+bhG3igZvZo2D/Ig=;
+  b=KvU3rld99IFo2iC2TyzqlaZ+1s3CgXUPtmrs+VhKbV9giM7uj8LYquZc
+   7IWcsPMYWqA/gjxNbqsDh7CTip3S5ykhMJB790zrQpk7CAVqMxlnci4Kf
+   rDAzNbIkp/30iAX6Ztj/JuemXJvo/4dEK2SH8nFka9LZJEHVpshTaGCi1
+   9qUnMctwKlVCpYsJdUSniMFQmezu3v8oVlHpFcleNqs0CToj46N3GwBTR
+   2Dyk9lK5fJ/iJ4h9COVscT+KV3f/DQn5mh+UwRROvmY+1UFh9d+tWMW03
+   VKKVede6Y3jx7P8spcUSM7cj0j6QvpxShnJEshS6NBtlRj08PQutkzOKi
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="299753203"
+X-IronPort-AV: E=Sophos;i="5.96,165,1665471600"; 
+   d="scan'208";a="299753203"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 03:29:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="589759250"
+X-IronPort-AV: E=Sophos;i="5.96,165,1665471600"; 
+   d="scan'208";a="589759250"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 15 Nov 2022 03:29:05 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1ouu7i-00Caqh-2J;
+        Tue, 15 Nov 2022 13:29:02 +0200
+Date:   Tue, 15 Nov 2022 13:29:02 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Andrew Davis <afd@ti.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] Rename DTB overlay source files
+Message-ID: <Y3N3/pmmgv4nl7rZ@smile.fi.intel.com>
+References: <20221024173434.32518-1-afd@ti.com>
+ <CAL_JsqJxgVwsjKnkCEkZeoSsDgaRD+DVPkHRBc2SrcSq69PBNw@mail.gmail.com>
+ <Y26lDEtiG4KFzc91@smile.fi.intel.com>
+ <e5ce57b2-4557-2dcb-fb3a-71e2acae4502@ti.com>
+ <Y3DhIO7H9mfRpe3z@smile.fi.intel.com>
+ <Y3Dk0HJAPuq64tKe@smile.fi.intel.com>
+ <Y3JnfSUpBfATkD69@smile.fi.intel.com>
+ <f28505a4-3384-b6df-5229-d576a089b1dd@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f28505a4-3384-b6df-5229-d576a089b1dd@ti.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+On Mon, Nov 14, 2022 at 02:43:51PM -0600, Andrew Davis wrote:
+> On 11/14/22 10:06 AM, Andy Shevchenko wrote:
+> > On Sun, Nov 13, 2022 at 02:36:33PM +0200, Andy Shevchenko wrote:
+> > > On Sun, Nov 13, 2022 at 02:20:48PM +0200, Andy Shevchenko wrote:
+> > > > On Fri, Nov 11, 2022 at 03:05:20PM -0600, Andrew Davis wrote:
+> > > > > On 11/11/22 1:39 PM, Andy Shevchenko wrote:
+> > > > > > On Wed, Oct 26, 2022 at 09:11:21AM -0500, Rob Herring wrote:
+> > > > > > > On Mon, Oct 24, 2022 at 12:34 PM Andrew Davis <afd@ti.com> wrote:
+> > > > > > > > 
+> > > > > > > > Hello all,
+> > > > > > > > 
+> > > > > > > > This is a series based on my patch here[0]. As suggested by Rob
+> > > > > > > > I've resurrected Frank's patch and appended it to mine as a series.
+> > > > > > > > 
+> > > > > > > > First patch here is my original patch, 3rd is Frank's patch but with
+> > > > > > > > the unittest changes pulled out into the 2nd patch. That was re-worked
+> > > > > > > > moving the source building macro into scripts/Makefile.lib.
+> > > > > > > > 
+> > > > > > > > Patches 4, 5, and 6 are an attempt at renaming all the existing DTB
+> > > > > > > > overlays. Split out by platform so they could be taken by platform
+> > > > > > > > maintainers or if easier ACK'd here and taken all together.
+> > > > > > > > 
+> > > > > > > > This should cover all the DTB overlays so we can remove the old .dts
+> > > > > > > > rule for overlays and make .dtso the only supported way, let me know
+> > > > > > > > if we want that this cycle and I can post that too.
+> > > > > > > > 
+> > > > > > > > Thanks,
+> > > > > > > > Andrew
+> > > > > > > > 
+> > > > > > > > Changes from v1[1]:
+> > > > > > > >    - Added patch to rename pi433 overlay.
+> > > > > > > >    - Cleaned wording on patch 4-6.
+> > > > > > > >    - Collected some ACKs
+> > > > > > > > 
+> > > > > > > > [0] https://www.spinics.net/lists/kernel/msg4548509.html
+> > > > > > > > [1] https://www.spinics.net/lists/arm-kernel/msg1020165.html
+> > > > > > > > 
+> > > > > > > > Andrew Davis (6):
+> > > > > > > >     kbuild: Allow DTB overlays to built from .dtso named source files
+> > > > > > > >     kbuild: Allow DTB overlays to built into .dtso.S files
+> > > > > > > >     arm64: dts: freescale: Rename DTB overlay source files from .dts to
+> > > > > > > >       .dtso
+> > > > > > > >     arm64: dts: renesas: Rename DTB overlay source files from .dts to
+> > > > > > > >       .dtso
+> > > > > > > >     arm64: dts: xilinx: Rename DTB overlay source files from .dts to .dtso
+> > > > > > > >     staging: pi433: overlay: Rename overlay source file from .dts to .dtso
+> > > > > > > > 
+> > > > > > > > Frank Rowand (1):
+> > > > > > > >     of: overlay: rename overlay source files from .dts to .dtso
+> > > > > > > 
+> > > > > > > I've applied patches 1-3 and 7. I'll send a PR for the branch to the
+> > > > > > > platform maintainers after a few days in linux-next.
+> > > > > > 
+> > > > > > The patch
+> > > > > > 
+> > > > > > commit 941214a512d8c80d47e720c17ec17e8539175e93
+> > > > > > Author: Andrew Davis <afd@ti.com>
+> > > > > > Date:   Mon Oct 24 12:34:29 2022 -0500
+> > > > > > 
+> > > > > >       kbuild: Allow DTB overlays to built into .dtbo.S files
+> > > > > > 
+> > > > > > broke the build reproducibility / no-op builds.
+> > > > > > 
+> > > > > > Before:
+> > > > > >     2+ execution of `make` on non-changed tree did nothing
+> > > > > > 
+> > > > > > Now:
+> > > > > >     Each run of `make` (even without a single bit changed) restarts vmlinux
+> > > > > >     rebuild.
+> > > > > > 
+> > > > > > Please, revert or fix.
+> > > > > > 
+> > > > > 
+> > > > > I do not see this behavior. What config are you using?
+> > > > > 
+> > > > > Not sure how this patch could be the root cause, it only adds
+> > > > > a build target/rule, but doesn't actually use it anywhere yet..
+> > > > 
+> > > > For your reference I started with this one [1].
+> > > > 
+> > > > When I bisected, I just answered with defaults on whatever `make` told me at
+> > > > the configuration stage.
+> > > > 
+> > > > The actual `make` command I used:
+> > > > 
+> > > > 	make O=/path/to/the/result W=1 C=1 CF=-D__CHECK_ENDIAN__ -j64
+> > > > 
+> > > > But there is nothing that can affect the described issue.
+> > > 
+> > > Actually, O= might affect which Makefile is used and how.
+> > > The C=, CF= are sparse flags, W= is just warning level.
+> > 
+> > As far as I can tell right now it's the OF_UNITTEST on x86_64 that makes the
+> > above mentioned patch to be a culprit. Not sure if on ARM / ARM64 you can
+> > reproduce that. And it's really strange nobody reported this for a week+.
+> > 
+> > Whatever, I'm open for the suggestions and material to test.
+> 
+> I think I found the issue, we forgot to add the new dtbo.S/o files
+> to the list of preserved intermediate targets, so Make was
+> removing them after build.
+> 
+> Sending the fix now.
 
-Follow the advice of the Documentation/filesystems/sysfs.rst
-and show() should only use sysfs_emit() or sysfs_emit_at()
-when formatting the value to be returned to user space.
+I'll test it ASAP and reply there.
+Thank you.
 
-Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
----
- drivers/scsi/pm8001/pm8001_ctl.c | 38 +++++++++++++++-----------------
- 1 file changed, 18 insertions(+), 20 deletions(-)
+> > > > [1]: https://p.defau.lt/?ZSOdGnNxF9v9AQtrfDo_KQ
 
-diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
-index 73f036bed128..3a08ece321a8 100644
---- a/drivers/scsi/pm8001/pm8001_ctl.c
-+++ b/drivers/scsi/pm8001/pm8001_ctl.c
-@@ -61,10 +61,10 @@ static ssize_t pm8001_ctl_mpi_interface_rev_show(struct device *cdev,
- 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
- 
- 	if (pm8001_ha->chip_id == chip_8001) {
--		return snprintf(buf, PAGE_SIZE, "%d\n",
-+		return sysfs_emit(buf, "%d\n",
- 			pm8001_ha->main_cfg_tbl.pm8001_tbl.interface_rev);
- 	} else {
--		return snprintf(buf, PAGE_SIZE, "%d\n",
-+		return sysfs_emit(buf, "%d\n",
- 			pm8001_ha->main_cfg_tbl.pm80xx_tbl.interface_rev);
- 	}
- }
-@@ -86,8 +86,7 @@ static ssize_t controller_fatal_error_show(struct device *cdev,
- 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
- 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n",
--			pm8001_ha->controller_fatal_error);
-+	return sysfs_emit(buf, "%d\n", pm8001_ha->controller_fatal_error);
- }
- static DEVICE_ATTR_RO(controller_fatal_error);
- 
-@@ -107,13 +106,13 @@ static ssize_t pm8001_ctl_fw_version_show(struct device *cdev,
- 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
- 
- 	if (pm8001_ha->chip_id == chip_8001) {
--		return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x.%02x\n",
-+		return sysfs_emit(buf, "%02x.%02x.%02x.%02x\n",
- 		(u8)(pm8001_ha->main_cfg_tbl.pm8001_tbl.firmware_rev >> 24),
- 		(u8)(pm8001_ha->main_cfg_tbl.pm8001_tbl.firmware_rev >> 16),
- 		(u8)(pm8001_ha->main_cfg_tbl.pm8001_tbl.firmware_rev >> 8),
- 		(u8)(pm8001_ha->main_cfg_tbl.pm8001_tbl.firmware_rev));
- 	} else {
--		return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x.%02x\n",
-+		return sysfs_emit(buf, "%02x.%02x.%02x.%02x\n",
- 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.firmware_rev >> 24),
- 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.firmware_rev >> 16),
- 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.firmware_rev >> 8),
-@@ -138,7 +137,7 @@ static ssize_t pm8001_ctl_ila_version_show(struct device *cdev,
- 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
- 
- 	if (pm8001_ha->chip_id != chip_8001) {
--		return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x.%02x\n",
-+		return sysfs_emit(buf, "%02x.%02x.%02x.%02x\n",
- 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.ila_version >> 24),
- 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.ila_version >> 16),
- 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.ila_version >> 8),
-@@ -164,7 +163,7 @@ static ssize_t pm8001_ctl_inactive_fw_version_show(struct device *cdev,
- 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
- 
- 	if (pm8001_ha->chip_id != chip_8001) {
--		return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x.%02x\n",
-+		return sysfs_emit(buf, "%02x.%02x.%02x.%02x\n",
- 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.inc_fw_version >> 24),
- 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.inc_fw_version >> 16),
- 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.inc_fw_version >> 8),
-@@ -191,10 +190,10 @@ static ssize_t pm8001_ctl_max_out_io_show(struct device *cdev,
- 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
- 
- 	if (pm8001_ha->chip_id == chip_8001) {
--		return snprintf(buf, PAGE_SIZE, "%d\n",
-+		return sysfs_emit(buf, "%d\n",
- 			pm8001_ha->main_cfg_tbl.pm8001_tbl.max_out_io);
- 	} else {
--		return snprintf(buf, PAGE_SIZE, "%d\n",
-+		return sysfs_emit(buf, "%d\n",
- 			pm8001_ha->main_cfg_tbl.pm80xx_tbl.max_out_io);
- 	}
- }
-@@ -215,11 +214,11 @@ static ssize_t pm8001_ctl_max_devices_show(struct device *cdev,
- 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
- 
- 	if (pm8001_ha->chip_id == chip_8001) {
--		return snprintf(buf, PAGE_SIZE, "%04d\n",
-+		return sysfs_emit(buf, "%04d\n",
- 			(u16)(pm8001_ha->main_cfg_tbl.pm8001_tbl.max_sgl >> 16)
- 			);
- 	} else {
--		return snprintf(buf, PAGE_SIZE, "%04d\n",
-+		return sysfs_emit(buf, "%04d\n",
- 			(u16)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.max_sgl >> 16)
- 			);
- 	}
-@@ -242,11 +241,11 @@ static ssize_t pm8001_ctl_max_sg_list_show(struct device *cdev,
- 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
- 
- 	if (pm8001_ha->chip_id == chip_8001) {
--		return snprintf(buf, PAGE_SIZE, "%04d\n",
-+		return sysfs_emit(buf, "%04d\n",
- 			pm8001_ha->main_cfg_tbl.pm8001_tbl.max_sgl & 0x0000FFFF
- 			);
- 	} else {
--		return snprintf(buf, PAGE_SIZE, "%04d\n",
-+		return sysfs_emit(buf, "%04d\n",
- 			pm8001_ha->main_cfg_tbl.pm80xx_tbl.max_sgl & 0x0000FFFF
- 			);
- 	}
-@@ -315,7 +314,7 @@ static ssize_t pm8001_ctl_host_sas_address_show(struct device *cdev,
- 	struct Scsi_Host *shost = class_to_shost(cdev);
- 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
- 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
--	return snprintf(buf, PAGE_SIZE, "0x%016llx\n",
-+	return sysfs_emit(buf, "0x%016llx\n",
- 			be64_to_cpu(*(__be64 *)pm8001_ha->sas_addr));
- }
- static DEVICE_ATTR(host_sas_address, S_IRUGO,
-@@ -336,7 +335,7 @@ static ssize_t pm8001_ctl_logging_level_show(struct device *cdev,
- 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
- 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
- 
--	return snprintf(buf, PAGE_SIZE, "%08xh\n", pm8001_ha->logging_level);
-+	return sysfs_emit(buf, "%08xh\n", pm8001_ha->logging_level);
- }
- 
- static ssize_t pm8001_ctl_logging_level_store(struct device *cdev,
-@@ -517,7 +516,7 @@ static ssize_t event_log_size_show(struct device *cdev,
- 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
- 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n",
-+	return sysfs_emit(buf, "%d\n",
- 		pm8001_ha->main_cfg_tbl.pm80xx_tbl.event_log_size);
- }
- static DEVICE_ATTR_RO(event_log_size);
-@@ -604,8 +603,7 @@ static ssize_t non_fatal_count_show(struct device *cdev,
- 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
- 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
- 
--	return snprintf(buf, PAGE_SIZE, "%08x",
--			pm8001_ha->non_fatal_count);
-+	return sysfs_emit(buf, "%08x\n", pm8001_ha->non_fatal_count);
- }
- 
- static ssize_t non_fatal_count_store(struct device *cdev,
-@@ -884,7 +882,7 @@ static ssize_t pm8001_show_update_fw(struct device *cdev,
- 	if (pm8001_ha->fw_status != FLASH_IN_PROGRESS)
- 		pm8001_ha->fw_status = FLASH_OK;
- 
--	return snprintf(buf, PAGE_SIZE, "status=%x %s\n",
-+	return sysfs_emit(buf, "status=%x %s\n",
- 			flash_error_table[i].err_code,
- 			flash_error_table[i].reason);
- }
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
