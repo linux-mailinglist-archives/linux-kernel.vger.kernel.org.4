@@ -2,146 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3625629159
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 06:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8D2629171
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 06:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbiKOFHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 00:07:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
+        id S230360AbiKOFVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 00:21:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiKOFHL (ORCPT
+        with ESMTP id S230031AbiKOFU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 00:07:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9E4140F6;
-        Mon, 14 Nov 2022 21:07:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E5BDB8165D;
-        Tue, 15 Nov 2022 05:07:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FD4FC433D7;
-        Tue, 15 Nov 2022 05:07:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668488827;
-        bh=7haCLadCF4QfnZdVg6gZJuBcpCT3VBUqM11uFcjlPRE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RRo9am5EdLULZ91p3s4X3mge/fKyS/JwEMX7EL4WMW4uNdV33qKiF/tGn2J/gSG1k
-         8Jv+fIkOIaOBkn6JEZgag+i1lHHpch4En4a+tuuh85U9//Vf7FLj6c75CTGkNK6OxC
-         xt4luEs2hEAf48uMmRqAskavY84GDfwWj/9mWik497r78daxpOCJ9aZhAD3BrMHES2
-         Ewf7BjVXprai3rdD5wVnbV2OGOFdmYcxc9m91MFVS4Jk3sIxHxvbZ53dDtyz+EoaRy
-         tmP8NA241DxSkLNqSXGKTbhoM20GiIyoFoultUkTSbkbN1qUIJtxlmabM4jTrg24r/
-         F9iJwqqxGe3rQ==
-Date:   Mon, 14 Nov 2022 21:07:05 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Daniil Tatianin <d-tatianin@yandex-team.ru>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hao Chen <chenhao288@hisilicon.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Marco Bonelli <marco@mebeim.net>, Tom Rix <trix@redhat.com>,
-        Tonghao Zhang <xiangxia.m.yue@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org, yc-core@yandex-team.ru
-Subject: Re: [PATCH v1] net/ethtool/ioctl: ensure that we have phy ops
- before using them
-Message-ID: <20221114210705.216996a9@kernel.org>
-In-Reply-To: <20221114081532.3475625-1-d-tatianin@yandex-team.ru>
-References: <20221114081532.3475625-1-d-tatianin@yandex-team.ru>
+        Tue, 15 Nov 2022 00:20:59 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F235167DF;
+        Mon, 14 Nov 2022 21:20:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1668489641; bh=7a1CDBFiXBSPRVqpkBP3B5ID6/eFzYXsb4HHp3hy4ZI=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=g0LO7Z1VURvA1WeG5jNOwHCP+j2llwjGhcV37ASuv9hbDxY8YfnftJ/A7J8pVmOJ+
+         Q2/qfBKUrqDbthJ/XOP3lKT6Ig00Vmsc2G/zJozNOKo0iWLslgNOWspAO8K2CzOLcQ
+         hcABdSoWHPvhr3m9YF5eSWrDJCwZX7MakRJbgRQuRLt3rkHkp0T00vpdPmCmRZeJwH
+         e6eBcZDWyYNburnF2AnNyJaPOfL1ulvmY9HifuxTCQbwyizH6o8inoiZSVkAjTo3Di
+         s5YBdCeo6UOOY66bbUbuFsOjIRCJPm5qXmv9kasXtC/S3i/n1li5SoyeTZi2Heq6GZ
+         EafXh4r5nzPxg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([92.116.131.87]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MVNAr-1oUjCY06UB-00SKp6; Tue, 15
+ Nov 2022 06:20:41 +0100
+Message-ID: <17d44085-ae13-44ad-f9ac-031931ba26df@gmx.de>
+Date:   Tue, 15 Nov 2022 06:20:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: linux-next: build warning after merge of the fbdev tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Shang XiaoJing <shangxiaojing@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20221115112021.1c8aa004@canb.auug.org.au>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20221115112021.1c8aa004@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Hke/3atF54baUqnxwwJbD2mthx5HOzSEbbYRDm8Ed2sJmGBQ68z
+ zI8Lo2wng3uFZ3BvwLSOmMrb6pXVXVjGPmx9vDSSZt+LZekfOe8POjEIJ9iX8BXWvExAtUN
+ 1fZCBFBq2ro7uCcwNznEJSuIcHwcySGvi3wgxN7xpKtFv79zNxjVAS7MVLkevPyTT+TCNGT
+ WGfWgZtyuMEmOZHRGr80A==
+UI-OutboundReport: notjunk:1;M01:P0:8Li9gYSNWb4=;AzoWVn+jUfqgCUAIhkLssVxKdKW
+ 885tT90t09WuOvDHe2wmzmPiqrwPp0Y6xQiIEK6EMz4VKykHCnMQJ6A+j4JcxovQo83MS8kRh
+ bsM0yiFJYt9zoMLwBjV1JulyoPIw8RLw/hwZPw7JATQySccXC80hfTdTCs9KhorIzT4Lf/rUE
+ DH4YTueGEG1dtDFKeKUsBu9N81u/Wm6JcgNMWXcx/DPxGRv16tBqWXDGU4iIdZzIjDpTuD6nA
+ VzdUGryStAHumPD1Ym5yA0ueO/A94n33ZA6FadmTy5LHeHMSs1gT2NmhwGdHl2OEsH1PAc2cX
+ 44AeLy/7ft0g9VHDkm/4WspmIqyflshmgtZRCZnSqDjt7D468ZSdc73MSl1ZhYE6P3Y3+lOYu
+ X9cMpG38EGXX/EDbRUqi8IAA2BAbtMMHJacQsaDksAdmmsx60PD2GVW46hEHtgAzJk8FY5bHn
+ umC4wNkFOWCRq+vZzFH+XtLfCE3l7hqDkZpY7hmUWrSYVcG/mgbgMQNkqK/o5pYCIvUds4xxY
+ 1m28pp71pp/3y5TAuW7r1E2B0EkLbDwwvTv6J+kBtUxgp9a2RUVkdJGoUQKuwRHlJgrXaIpsq
+ MAAmfSZMR9GCaXk3mIu3YAhZoGtqBTcubwlIaooKhh10C9xpVKtvdzrtReW6z42+3m5AqkIqb
+ oAIPSORdvLKvFFlgFYfi7ZLsX8g4l7gn+4/PckxpxRKBfCmPqAvOixCcNZwbK3Al7r6VYzZC8
+ Mr/Vk/7xafrrzCZbfwp1QV8PdYx/MglMDGlBfUYxmwnCYNS3uTD6v74poMa6zIKfRBU4Be4FC
+ 6tUf+VxyHKnC0WRwUYWTFCf3yaHsh+SvZpL/3VT7yCLvBxcKhtAvwdoyVbnh4jz2ffPtcowtI
+ yzWDE1vrm81JQluEFlwuduvlTgOu8f51C4Giy772ag6cliN/DnDFsE3cpglRJVBEQM2YcKg0v
+ QY1gSoZulkKEY1XDQ3sw+v/6sJo=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 11:15:32 +0300 Daniil Tatianin wrote:
-> +	if (!(phydev && phy_ops && phy_ops->get_stats) &&
-> +	    !ops->get_ethtool_phy_stats)
+On 11/15/22 01:20, Stephen Rothwell wrote:
+> After merging the fbdev tree, today's linux-next build (x86_64
+> allmodconfig) produced this warning:
+>
+> WARNING: modpost: drivers/video/fbdev/via/viafb.o: section mismatch in r=
+eference: init_module (section: .init.text) -> viafb_exit (section: .exit.=
+text)
+>
+> Introduced by commit
+>
+>    ab885d8c7e15 ("fbdev: via: Fix error in via_core_init()")
 
-This condition is still complicated.
+build is fixed for now... but still looking for a better solution.
 
-> +		return -EOPNOTSUPP;
+Helge
 
-The only way this crash can happen is if driver incorrectly returns
-non-zero stats count but doesn't have a callback to read the stats.
-So WARN_ON() would be in order here.
-
->  	if (!phydev && (!ops->get_ethtool_phy_stats || !ops->get_sset_count))
->  		return -EOPNOTSUPP;
->  
-> @@ -2063,13 +2066,12 @@ static int ethtool_get_phy_stats(struct net_device *dev, void __user *useraddr)
->  		if (!data)
->  			return -ENOMEM;
->  
-> -		if (dev->phydev && !ops->get_ethtool_phy_stats &&
-> -		    phy_ops && phy_ops->get_stats) {
-> -			ret = phy_ops->get_stats(dev->phydev, &stats, data);
-> +		if (ops->get_ethtool_phy_stats) {
-> +			ops->get_ethtool_phy_stats(dev, &stats, data);
-> +		} else {
-> +			ret = phy_ops->get_stats(phydev, &stats, data);
->  			if (ret < 0)
->  				goto out;
-> -		} else {
-> -			ops->get_ethtool_phy_stats(dev, &stats, data);
->  		}
-
-We can also clean up the pointless indentation of this code while at it.
-
-How about something along these lines (completely untested, please
-review, test and make your own):
-
-diff --git a/net/ethtool/ioctl.c b/net/ethtool/ioctl.c
-index 99272a67525c..ee04c388f4c9 100644
---- a/net/ethtool/ioctl.c
-+++ b/net/ethtool/ioctl.c
-@@ -2105,23 +2105,28 @@ static int ethtool_get_phy_stats(struct net_device *dev, void __user *useraddr)
- 
- 	stats.n_stats = n_stats;
- 
--	if (n_stats) {
--		data = vzalloc(array_size(n_stats, sizeof(u64)));
--		if (!data)
--			return -ENOMEM;
-+	if (!n_stats) {
-+		data = NULL;
-+		goto copy_back;
-+	}
- 
--		if (phydev && !ops->get_ethtool_phy_stats &&
--		    phy_ops && phy_ops->get_stats) {
--			ret = phy_ops->get_stats(phydev, &stats, data);
--			if (ret < 0)
--				goto out;
--		} else {
--			ops->get_ethtool_phy_stats(dev, &stats, data);
--		}
-+	data = vzalloc(array_size(n_stats, sizeof(u64)));
-+	if (!data)
-+		return -ENOMEM;
-+
-+	if (ops->get_ethtool_phy_stats) {
-+		ops->get_ethtool_phy_stats(dev, &stats, data);
-+	} else if (phydev && phy_ops && phy_ops->get_stats) {
-+		ret = phy_ops->get_stats(phydev, &stats, data);
-+		if (ret < 0)
-+			goto out;
- 	} else {
--		data = NULL;
-+		WARN_ON_ONCE(1);
-+		n_stats = 0;
-+		stats.n_stats = 0;
- 	}
- 
-+copy_back:
- 	ret = -EFAULT;
- 	if (copy_to_user(useraddr, &stats, sizeof(stats)))
- 		goto out;
