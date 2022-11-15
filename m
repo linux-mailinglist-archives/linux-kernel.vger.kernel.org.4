@@ -2,53 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4556D629DA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B25C3629DB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238263AbiKOPgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:36:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36896 "EHLO
+        id S230239AbiKOPhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:37:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbiKOPf7 (ORCPT
+        with ESMTP id S229612AbiKOPh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:35:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D222E033
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:35:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A4AD61884
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:35:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDC18C433D6;
-        Tue, 15 Nov 2022 15:35:53 +0000 (UTC)
-Date:   Tue, 15 Nov 2022 15:35:49 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Topi Miettinen <toiwoton@gmail.com>
-Cc:     Joey Gouly <joey.gouly@arm.com>, Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Lennart Poettering <lennart@poettering.net>,
-        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jeremy Linton <jeremy.linton@arm.com>, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-abi-devel@lists.sourceforge.net, nd@arm.com, shuah@kernel.org
-Subject: Re: [PATCH v1 1/2] mm: Implement memory-deny-write-execute as a prctl
-Message-ID: <Y3Ox1QxAzdouCGUr@arm.com>
-References: <20221026150457.36957-1-joey.gouly@arm.com>
- <20221026150457.36957-2-joey.gouly@arm.com>
- <202210281053.904BE2F@keescook>
- <20221110112714.GA1201@e124191.cambridge.arm.com>
- <Y2zojDe0Oj4OSbIc@arm.com>
- <45419a7d-04dd-2749-2534-6ba3bbd5d060@gmail.com>
+        Tue, 15 Nov 2022 10:37:29 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C9A1135;
+        Tue, 15 Nov 2022 07:37:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668526648; x=1700062648;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=QQLyJI4VfQejyW/sYeJBUJDP5XIRKK9OrKTVrzJrIYQ=;
+  b=Wsg2pOFen0kGVHsCYG+pufOCWcCEODRUQwNSqXFrMgtgUltRvgRmrS6D
+   LZsHxc/N+qJtGULnSXrQjDMJEMWtmNJfE8HldqfeuLIthsG1slArlNVqq
+   SbpyJZXK8nVpMj7hJFgG92ZGnMP2uLaGQAy6Q+P/C3wGzUfGv0AT4ImW6
+   HzLaQ/Iu5/fTTeI2TY0GY+wnLCM3RLRKq4DREhDl0ZkSwXGdANz1rVdOf
+   ZYFCJTbMluZREcoigsrRLKbPb/cpdWt8n/NcWGYVksiEOMcXH7g0j5Ey7
+   jNP5/mHOEjwOawPskQsPr2FK9pdS7zmYWa7GDDZQqSd0zlr3aIKTGmpYw
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="313429239"
+X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
+   d="scan'208";a="313429239"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:37:28 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="883998050"
+X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
+   d="scan'208";a="883998050"
+Received: from mrosso-mobl1.ger.corp.intel.com ([10.249.45.244])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:37:24 -0800
+Date:   Tue, 15 Nov 2022 17:37:22 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Gabriel Somlo <gsomlo@gmail.com>
+cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, kgugala@antmicro.com,
+        mholenko@antmicro.com, joel@jms.id.au,
+        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
+        geert@linux-m68k.org
+Subject: Re: [PATCH v3 03/14] serial: liteuart: remove unused uart_ops
+ stubs
+In-Reply-To: <20221112212125.448824-4-gsomlo@gmail.com>
+Message-ID: <db1a5445-b22e-bcf2-e323-8f36392b9340@linux.intel.com>
+References: <20221112212125.448824-1-gsomlo@gmail.com> <20221112212125.448824-4-gsomlo@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <45419a7d-04dd-2749-2534-6ba3bbd5d060@gmail.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Type: multipart/mixed; boundary="8323329-967172777-1668526648=:2268"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,70 +65,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 08:11:24AM +0200, Topi Miettinen wrote:
-> On 10.11.2022 14.03, Catalin Marinas wrote:
-> > On Thu, Nov 10, 2022 at 11:27:14AM +0000, Joey Gouly wrote:
-> > > On Fri, Oct 28, 2022 at 11:51:00AM -0700, Kees Cook wrote:
-> > > > On Wed, Oct 26, 2022 at 04:04:56PM +0100, Joey Gouly wrote:
-> > > > > diff --git a/mm/mmap.c b/mm/mmap.c
-> > > > > index 099468aee4d8..42eaf6683216 100644
-> > > > > --- a/mm/mmap.c
-> > > > > +++ b/mm/mmap.c
-> > > > > @@ -1409,6 +1409,9 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
-> > > > >   			vm_flags |= VM_NORESERVE;
-> > > > >   	}
-> > > > > +	if (map_deny_write_exec(NULL, vm_flags))
-> > > > > +		return -EACCES;
-> > > > > +
-> > > > 
-> > > > This seems like the wrong place to do the check -- that the vma argument
-> > > > is a hard-coded "NULL" is evidence that something is wrong. Shouldn't
-> > > > it live in mmap_region()? What happens with MAP_FIXED, when there is
-> > > > an underlying vma? i.e. an MAP_FIXED will, I think, bypass the intended
-> > > > check. For example, we had "c" above:
-> > > > 
-> > > >       c)	mmap(PROT_READ);
-> > > > 	mprotect(PROT_READ|PROT_EXEC);		// fails
-> > > > 
-> > > > But this would allow another case:
-> > > > 
-> > > >       e)	addr = mmap(..., PROT_READ, ...);
-> > > > 	mmap(addr, ..., PROT_READ | PROT_EXEC, MAP_FIXED, ...);	// passes
-> > > 
-> > > I can move the check into mmap_region() but it won't fix the MAP_FIXED
-> > > example that you showed here.
-> > > 
-> > > mmap_region() calls do_mas_munmap(..) which will unmap overlapping regions.
-> > > However the `vma` for the 'old' region is not kept around, and a new vma will
-> > > be allocated later on "vma = vm_area_alloc(mm);", and the vm_flags are just set
-> > > to what is passed into mmap_region(), so map_deny_write_exec(vma, vm_flags)
-> > > will just be as good as passing NULL.
-> > > 
-> > > It's possible to save the vm_flags from the region that is unmapped, but Catalin
-> > > suggested it might be better if that is part of a later extension, what do you
-> > > think?
-> > 
-> > I thought initially we should keep the behaviour close to what systemd
-> > achieves via SECCOMP while only relaxing an mprotect(PROT_EXEC) if the
-> > vma is already executable (i.e. check actual permission change not just
-> > the PROT_* flags).
-> > 
-> > We could pass the old vm_flags for that region (and maybe drop the vma
-> > pointer entirely, just check old and new vm_flags). But this feels like
-> > tightening slightly systemd's MDWE approach. If user-space doesn't get
-> > confused by this, I'm fine to go with it. Otherwise we can add a new
-> > flag later for this behaviour
-> > 
-> > I guess that's more of a question for Topi on whether point tightening
-> > point (e) is feasible/desirable.
-> 
-> I think we want 1:1 compatibility with seccomp() for the basic version, so
-> MAP_FIXED shouldn't change the verdict. Later we can introduce more versions
-> (perhaps even less strict, too) when it's requested by configuration, like
-> MemoryDenyWriteExecute=[relaxed | strict].
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Are you ok with allowing mprotect(PROT_EXEC|PROT_BTI) if the mapping is
-already PROT_EXEC? Or you'd rather reject that as well?
+--8323329-967172777-1668526648=:2268
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+
+On Sat, 12 Nov 2022, Gabriel Somlo wrote:
+
+> Remove stub uart_ops methods that are not called unconditionally
+> from serial_core. Document stubs that are expected to be present.
+> 
+> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+> ---
+>  drivers/tty/serial/liteuart.c | 18 +-----------------
+>  1 file changed, 1 insertion(+), 17 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
+> index 1497d4cdc221..90f6280c5452 100644
+> --- a/drivers/tty/serial/liteuart.c
+> +++ b/drivers/tty/serial/liteuart.c
+> @@ -122,6 +122,7 @@ static unsigned int liteuart_get_mctrl(struct uart_port *port)
+>  
+>  static void liteuart_stop_tx(struct uart_port *port)
+>  {
+> +	/* not used in LiteUART, but called unconditionally from serial_core */
+>  }
+>  
+>  static void liteuart_start_tx(struct uart_port *port)
+> @@ -154,11 +155,6 @@ static void liteuart_stop_rx(struct uart_port *port)
+>  	del_timer(&uart->timer);
+>  }
+>  
+> -static void liteuart_break_ctl(struct uart_port *port, int break_state)
+> -{
+> -	/* LiteUART doesn't support sending break signal */
+> -}
+> -
+>  static int liteuart_startup(struct uart_port *port)
+>  {
+>  	struct liteuart_port *uart = to_liteuart_port(port);
+> @@ -197,15 +193,6 @@ static const char *liteuart_type(struct uart_port *port)
+>  	return "liteuart";
+>  }
+>  
+> -static void liteuart_release_port(struct uart_port *port)
+> -{
+> -}
+> -
+> -static int liteuart_request_port(struct uart_port *port)
+> -{
+> -	return 0;
+> -}
+> -
+>  static void liteuart_config_port(struct uart_port *port, int flags)
+>  {
+>  	/*
+> @@ -232,13 +219,10 @@ static const struct uart_ops liteuart_ops = {
+>  	.stop_tx	= liteuart_stop_tx,
+>  	.start_tx	= liteuart_start_tx,
+>  	.stop_rx	= liteuart_stop_rx,
+> -	.break_ctl	= liteuart_break_ctl,
+>  	.startup	= liteuart_startup,
+>  	.shutdown	= liteuart_shutdown,
+>  	.set_termios	= liteuart_set_termios,
+>  	.type		= liteuart_type,
+> -	.release_port	= liteuart_release_port,
+> -	.request_port	= liteuart_request_port,
+>  	.config_port	= liteuart_config_port,
+>  	.verify_port	= liteuart_verify_port,
+>  };
+> 
+
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
 
 -- 
-Catalin
+ i.
+
+--8323329-967172777-1668526648=:2268--
