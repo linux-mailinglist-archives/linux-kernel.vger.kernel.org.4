@@ -2,143 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D346291E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A44E6291E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:36:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232314AbiKOGgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 01:36:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
+        id S232332AbiKOGgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 01:36:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbiKOGgG (ORCPT
+        with ESMTP id S232387AbiKOGgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 01:36:06 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C051F2E8
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:36:03 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id j12so12288227plj.5
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:36:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+HKZAEUVQQUBttDmyc7IKUPKjfreDh+ajk8XM2NRY3o=;
-        b=a4yJy1ooSkHn+oYyYqCVoMQVZzD/uU5LFhOK0nPMBaEpYkghqShsP/rETQ1BHs3HXe
-         Mty1rEssYGt5wbQmyhAEQGzaLj3QyYSHjvB8UhQKQ28xgmfxW5X7KydjCIbc6LfRS69H
-         1mxMokS35vYoggGeNRZvbkKyNsSwiLASJuLqZNTLiwlrYLrySOYaEwJL0r8GsTRu4IvL
-         EBzJSjb5XODMKQHHInsT6rpxccfOeXgs7ViB9j6h0xJ1/N8jd6q3C2lIu04kAx3EIQQ+
-         Yl2UUgfahLk2gRljblLqXdHpHboy37jImoK2/+B2XV5VvITePgTI0jlyQvwmIUCKHG9E
-         utng==
+        Tue, 15 Nov 2022 01:36:17 -0500
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AA01F9DC
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:36:12 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id 129-20020a1c0287000000b003cfe48519a6so2661471wmc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:36:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+HKZAEUVQQUBttDmyc7IKUPKjfreDh+ajk8XM2NRY3o=;
-        b=oUCOmML16i9PKVnxWxjfTufSurUHVHJsnmws/BewmWUvT2gn0QFn5laocvHsn2LmIi
-         SSJ4Xbado40mSw3NGY/VR5RaBrR1QBz1eaDWgI5ZxnZT74jCpGGq/JUNoeOiej8F/T6J
-         hMuWW3gFBxOTZ5zkjEGQgmPVbRJDT7aJnbor2s30JCLRrLxFIeGOxewxge3eIGs1GJ65
-         fHZJSs6E9+SWnEaL2FBt3ma5KGrRtnvGRYTOIRjaUCS2Hcn1rSQZkbFrAeDO/SKltFZl
-         UwS8vckMpoc1Em/fD6of9X4fhyLANLvsuq33lf5B2HjmIRt76uIbrMbMBbpNLRSRhCaR
-         prjg==
-X-Gm-Message-State: ANoB5plEQd0Q3IFQslzE18zm0ErJv7RCSslV1Z/iVymgx9uwu1pHOeuw
-        IDTNYbHTm8jt+HAiu/GgZKyJ2Nk2xbI=
-X-Google-Smtp-Source: AA0mqf43JnCfXobNbI1CW7VnWqHCB8eV8NhwkeGxU6gwreo1mX/VPKdstNMos7HR1AZAx69v61zLOw==
-X-Received: by 2002:a17:90a:6e04:b0:213:22d:b2e2 with SMTP id b4-20020a17090a6e0400b00213022db2e2mr713827pjk.148.1668494163260;
-        Mon, 14 Nov 2022 22:36:03 -0800 (PST)
-Received: from VirtualBox.. ([129.227.152.6])
-        by smtp.gmail.com with ESMTPSA id e4-20020a170902d38400b001822121c45asm8767874pld.28.2022.11.14.22.36.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 22:36:02 -0800 (PST)
-From:   Yuwei Guan <ssawgyw@gmail.com>
-X-Google-Original-From: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yuwei.Guan@zeekrlife.com
-Subject: [PATCH v2 3/3] f2fs: change type for 'sbi->readdir_ra'
-Date:   Tue, 15 Nov 2022 14:35:37 +0800
-Message-Id: <20221115063537.59023-4-Yuwei.Guan@zeekrlife.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221115063537.59023-1-Yuwei.Guan@zeekrlife.com>
-References: <20221115063537.59023-1-Yuwei.Guan@zeekrlife.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lucaEfGhqe2TQcjXAWdO34ZK25H8iCuCpjwK71zIz9U=;
+        b=dthSXHgyVghlAUAW1toa/SOdq3dLdhkGVLqxSd4h6Vy/nseNsUR4HKYg2wlum0HzL3
+         +kt28KuovW3l2qggHtWcHBprF/IV3GxKVJUfWMIKMB61Kwu2DBXCBD5HEY3+QyDLbdEy
+         J42PB92s7XUjr1+gxHq8OjQcu+jlXu5Cd7gZ2vshfzgGYviQFIIOEmCshc4LibYr2/5c
+         tzxEwSH5Zsg7c8bUBaLdaPNmgNwXgMmU8iGHv4XkpmBvgKSlku8O6BtJSYW9CJv0UsX0
+         cVfyScRYjNB/AZUNEgFrxvmryvFOsK4qgOMw3EdKZfliUsDnxMlqKnkyAUtRXCJSRM5v
+         86ng==
+X-Gm-Message-State: ANoB5pmu1szhdBKM/sgtNfJNwWTnV18fyJSEzxnhv35+g/PHDmg//pTF
+        EwFudhyxqV27EAshPvefIsY=
+X-Google-Smtp-Source: AA0mqf6yPeh2Gmls0gbrGh64Kf8VrDiLW4ZqbPJr0XGRyNrhx2elhx6qm45J1ADcyA36JVjfQBEuVQ==
+X-Received: by 2002:a05:600c:89a:b0:3cf:ca91:7094 with SMTP id l26-20020a05600c089a00b003cfca917094mr324327wmp.24.1668494170478;
+        Mon, 14 Nov 2022 22:36:10 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id az40-20020a05600c602800b003b492753826sm14536803wmb.43.2022.11.14.22.36.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 22:36:09 -0800 (PST)
+Message-ID: <34ca6034-331c-7c6c-ddd4-f774dc8f22ce@kernel.org>
+Date:   Tue, 15 Nov 2022 07:36:08 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 02/46] kbuild: pass jobserver to cmd_ld_vmlinux.o
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Martin Liska <mliska@suse.cz>
+References: <20221114114344.18650-1-jirislaby@kernel.org>
+ <20221114114344.18650-3-jirislaby@kernel.org>
+ <CAK7LNASUb0PLiZahw46c0qBUn_caMWm2SrtY1Hb8Vd7RzsAwzg@mail.gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <CAK7LNASUb0PLiZahw46c0qBUn_caMWm2SrtY1Hb8Vd7RzsAwzg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before this patch, the varibale 'readdir_ra' takes effect if it's equal
-to '1' or not, so we can change type for it from 'int' to 'bool'.
+On 14. 11. 22, 18:57, Masahiro Yamada wrote:
+> On Mon, Nov 14, 2022 at 8:44 PM Jiri Slaby (SUSE) <jirislaby@kernel.org> wrote:
+>>
+>> From: Jiri Slaby <jslaby@suse.cz>
+>>
+>> Until the link-vmlinux.sh split (cf. the commit below), the linker was
+>> run with jobserver set in MAKEFLAGS. After the split, the command in
+>> Makefile.vmlinux_o is not prefixed by "+" anymore, so this information
+>> is lost.
+>>
+>> Restore it as linkers working in parallel (namely gcc LTO) make a use of
+>> it. Actually, they complain, if jobserver is not set:
+>>    lto-wrapper: warning: jobserver is not available: '--jobserver-auth=' is not present in 'MAKEFLAGS'
+>>
+>> Fixes: 5d45950dfbb1 (kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o)
+> 
+> 
+> This Fixes is wrong since GCC LTO is not in upstream code.
 
-Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
----
- fs/f2fs/dir.c   | 2 +-
- fs/f2fs/f2fs.h  | 2 +-
- fs/f2fs/super.c | 2 +-
- fs/f2fs/sysfs.c | 5 +++++
- 4 files changed, 8 insertions(+), 3 deletions(-)
+Yup, this is a left-over. Now dropped from both.
 
-diff --git a/fs/f2fs/dir.c b/fs/f2fs/dir.c
-index 21960a899b6a..eecbf5d6b002 100644
---- a/fs/f2fs/dir.c
-+++ b/fs/f2fs/dir.c
-@@ -1000,7 +1000,7 @@ int f2fs_fill_dentries(struct dir_context *ctx, struct f2fs_dentry_ptr *d,
- 	struct fscrypt_str de_name = FSTR_INIT(NULL, 0);
- 	struct f2fs_sb_info *sbi = F2FS_I_SB(d->inode);
- 	struct blk_plug plug;
--	bool readdir_ra = sbi->readdir_ra == 1;
-+	bool readdir_ra = sbi->readdir_ra;
- 	bool found_valid_dirent = false;
- 	int err = 0;
- 
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index e6355a5683b7..384840216e7f 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -1693,7 +1693,7 @@ struct f2fs_sb_info {
- 	unsigned int total_node_count;		/* total node block count */
- 	unsigned int total_valid_node_count;	/* valid node block count */
- 	int dir_level;				/* directory level */
--	int readdir_ra;				/* readahead inode in readdir */
-+	bool readdir_ra;			/* readahead inode in readdir */
- 	u64 max_io_bytes;			/* max io bytes to merge IOs */
- 
- 	block_t user_block_count;		/* # of user blocks */
-diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-index 3e974c003b77..0d1adfdd0603 100644
---- a/fs/f2fs/super.c
-+++ b/fs/f2fs/super.c
-@@ -4068,7 +4068,7 @@ static void f2fs_tuning_parameters(struct f2fs_sb_info *sbi)
- 					1 << F2FS_IPU_HONOR_OPU_WRITE;
- 	}
- 
--	sbi->readdir_ra = 1;
-+	sbi->readdir_ra = true;
- }
- 
- static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index df27afd71ef4..53fbbb87dd0f 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -649,6 +649,11 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
- 		return count;
- 	}
- 
-+	if (!strcmp(a->attr.name, "readdir_ra")) {
-+		sbi->readdir_ra = !!t;
-+		return count;
-+	}
-+
- 	*ui = (unsigned int)t;
- 
- 	return count;
+thanks,
 -- 
-2.34.1
+js
 
