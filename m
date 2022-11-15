@@ -2,70 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E836299AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EB86299B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbiKONIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:08:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S231179AbiKONJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:09:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiKONIc (ORCPT
+        with ESMTP id S229970AbiKONJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:08:32 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B44812D2D
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:08:22 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 2B3AE1F8C6;
-        Tue, 15 Nov 2022 13:08:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1668517701; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jy0g+SAsWGq8sRQnucoaXWL35lEmu7z5lnE3gvmVRnA=;
-        b=RS0rf54rExoOTJvsSM526LUnOC/hHdQNU4ydbFnqlO7PRqvfWliaFUQ6loxaOtG39bl1/Z
-        qlPq95nO8N0AEGcDh+D38LNn8GzkpHy8TcgD2Gxm/48ENeSCZW/RWokpv9Gpj7xKJAj98Y
-        Izg4dC/1rahbhidGzgUuXC/l8BhajmE=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CC7372C142;
-        Tue, 15 Nov 2022 13:08:20 +0000 (UTC)
-Date:   Tue, 15 Nov 2022 14:08:20 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-m68k@lists.linux-m68k.org
-Subject: Re: [PATCH printk v4 22/39] tty: nfcon: use console_is_registered()
-Message-ID: <Y3OPROSDSsXcWWte@alley>
-References: <20221114162932.141883-1-john.ogness@linutronix.de>
- <20221114162932.141883-23-john.ogness@linutronix.de>
+        Tue, 15 Nov 2022 08:09:46 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D43DB0B
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:09:45 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id y14so35892488ejd.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:09:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sb7kVf2+cqbh9c9psQ+6IfpJ5bt8QizDspR3uCbRadE=;
+        b=Ash/+IeUau8JlbOAS5SVeURaST37KmVAeD66Hu+ndKpbBAcHA+66DJ3syXsFz2fJzd
+         GdNYqZYvBMXvlmrFxevapGYxwlBaCDHlyxP8+P2TX+Zn49hgN00hTALMJsM/Lzsbag5P
+         WJpE3hCVHCh/yCEZkTnhTUajf9seqyhLyqO2igOX5yliYFf9j1KDz6DvGA2WQlDOiMfM
+         jBM33M6saVOzMGYmp5Duf81TCCnvrF5uk8/+fMvv/aSOHzX92OdeuF42cllG82fM69tR
+         0sNrxMUA+K3m5upwZua154rca5QZ4OWzYw4FEq9W7Ne1tFZqf9oMbxxdHX9b1h04ajco
+         E9Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Sb7kVf2+cqbh9c9psQ+6IfpJ5bt8QizDspR3uCbRadE=;
+        b=U5jqAo/p3SEDZ2eADQ2W8QfQ7Ck9ri42Me1DOVofNNIkVa/yNXKKK3yJgWdCcNfGES
+         nomXOmYzsKckdP84+HQ0CMI8OlWAW7eD4ePFEy242EC5pg4cxD/fZxRiNXZl/9qvPN8K
+         Ai4HmW2DO/mqUboYyaCWmmv48Y6+j1JLnvOD0v2HnzD/pYyGPhcuMfHarcPiiXmm23e+
+         Sq1V/HSU7n7Pn1/+T4iakNiEqLVgoXN2NEx7ZDfRouyzo0qQg+z3E+fgK7LWOcL3DrF7
+         7UreyVgxmCD+ccSYYNSUkaO4mhIhVcDsmJYxTDWlhbpI2mguchbeBf/6ZPh1Bo3x9M3Z
+         wy+g==
+X-Gm-Message-State: ANoB5plopbWkgKSm2jT6SVIcU4rDr4JEZA7NMYr+u5Iky6Lact3PuN6e
+        mm9MguPvWl3F54flis7/V7VETQ==
+X-Google-Smtp-Source: AA0mqf4468CWGLHs6W4KOti6ysoSWIH4+Xunqum1zCCfrea6gy8s1qhIVS6jvy5k4sVqJzva+Xl7eA==
+X-Received: by 2002:a17:906:53c7:b0:780:8144:a41f with SMTP id p7-20020a17090653c700b007808144a41fmr14284415ejo.189.1668517783752;
+        Tue, 15 Nov 2022 05:09:43 -0800 (PST)
+Received: from localhost.localdomain ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id ay26-20020a056402203a00b00461816beef9sm6093260edb.14.2022.11.15.05.09.42
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 15 Nov 2022 05:09:43 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] arm64: dts: qcom: sm8450: Use defines for power domain indices
+Date:   Tue, 15 Nov 2022 14:09:35 +0100
+Message-Id: <20221115130936.6830-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114162932.141883-23-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-11-14 17:35:15, John Ogness wrote:
-> Currently CON_ENABLED is being (mis)used to identify if the console
-> has been registered. This is not reliable because it can be set even
-> though registration failed or it can be unset, even though the console
-> is registered. Use console_is_registered() instead.
-> 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Use the defines from qcom-rpmpd.h instead of bare numbers for
+readability.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm8450.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Best Regards,
-Petr
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index 19a0f5033cc9..705e05588941 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -2277,8 +2277,8 @@ remoteproc_mpss: remoteproc@4080000 {
+ 			clocks = <&rpmhcc RPMH_CXO_CLK>;
+ 			clock-names = "xo";
+ 
+-			power-domains = <&rpmhpd 0>,
+-					<&rpmhpd 12>;
++			power-domains = <&rpmhpd SM8450_CX>,
++					<&rpmhpd SM8450_MSS>;
+ 			power-domain-names = "cx", "mss";
+ 
+ 			memory-region = <&mpss_mem>;
+-- 
+2.38.1
+
