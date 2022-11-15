@@ -2,124 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38CC629325
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2D4629326
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:17:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbiKOIRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 03:17:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41704 "EHLO
+        id S232708AbiKOIRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 03:17:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbiKOIRf (ORCPT
+        with ESMTP id S229685AbiKOIRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 03:17:35 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47641E3F5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 00:17:33 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id s24so16506442ljs.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 00:17:33 -0800 (PST)
+        Tue, 15 Nov 2022 03:17:37 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A96621244;
+        Tue, 15 Nov 2022 00:17:37 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id g12so22702454wrs.10;
+        Tue, 15 Nov 2022 00:17:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3GYVEqyWRIb5M8DvqDeUYgwKR6PMorbc+DxpJvheRTc=;
-        b=TqJCj+iF0xcmojTDBuDLqr1AeL6bJ9jOa5Q+rGhcue0HiucpyMr4LZxSGn3fUOgaWN
-         MB546udpmn7GTMK6FamliZ6yOM0xFmEaWZ0FAaB8W4Be+RG4HRSwvt+z/ae+viDoe1d+
-         Qu7Ho6EjyR7PZeIMtvE9rLe97vl5MesO8sFGAR3oSQGTsZ5MaYGGtFjOOAVnGRM07NVA
-         UMf92qW+MN7DXOI+1+r2OIb8dwug4ssjZYHyDrtftTuN5USXfRGFq2pZIi/ITtr8c41o
-         GimrzIiUDLZfP8ZrkDLf3BV5vuktAr1HRDJxRJn+SjR41SNt4C5HgciPnj3LgiXPMUVy
-         3yeA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dpkg0m971HY0liHkJ/8urftydU+FB+sjslyYJScsb4A=;
+        b=S8N5KtFFXoiH16LGGy//yyZAOBdK7b1h6f1ERj5H5CaCfp0MKCOcT4rdZI/l7OiLGa
+         6gCVRYlLEy4knPC9Oy3mM5e5KmuYc+zcbRWHLDT3SEUrZ7KBgf+gC4YdkbF2HffdLOXR
+         Kceoyjyg7Xp+9R3M4ThsLy20cobziIs2cox1da/QoFGyPOvUEXWF7+ScEBVBvnXqmONv
+         8HNBRik9uyTV9h6/HmmMK0BhI1CTS9AuYM8PDSUop76maX1HtF7mRSaxU5PsGNJeD1fD
+         AWzIpbUzL3K/bRfiXpP6GTvDCfY5FfLytfabVIQ6i9XQv7nOSEuLk2t6FwUdegPCJg6q
+         pq+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3GYVEqyWRIb5M8DvqDeUYgwKR6PMorbc+DxpJvheRTc=;
-        b=gSQzd5lpaSPrxsmEgRsM5fCqnXBBkXNDuLDPNraH0CW/qCrTfpnA8UL41y6memr9M5
-         guNnI8w2AqbfeiF8rj6IZqQpVlkbTS8BmUXGpUd+Kzms7HInFVBqcOzZruCjPvLMvoyP
-         Kr00cwdql7oV93Ty0y9H3ga9pS/MC4lCK5R2AVXMyN9sGblR5anSy7ekCz89r31mJalw
-         TGSFhQq2sqrSP0TgobCEgNeiGmFJOsJwg6ivVcBfOMMfGeeFJJgsAdWm4nLIgXZ8/7Jg
-         sMF2EaOZAy7YMf7ikhFt+mDcM4SL+ZbbISzW74tWFeILJhjjSDLRl1rkCgySDkcYFFT1
-         Yemg==
-X-Gm-Message-State: ANoB5plOKjhvO3/9z1Pf8KC0iAypUKSIAwaqxEWtNJQsfbOpkug7o6WI
-        qY+S8RxjXAXqcMIzEVXhX+MLMg==
-X-Google-Smtp-Source: AA0mqf5MXWb0JfEc/1mOlUnuRhtFp0aaBS83d/Ar8w4XBbipn6uUq0jtPrZD5niyiXlKAQweBcxJ6A==
-X-Received: by 2002:a05:651c:490:b0:277:5f7e:9cad with SMTP id s16-20020a05651c049000b002775f7e9cadmr5055715ljc.420.1668500252199;
-        Tue, 15 Nov 2022 00:17:32 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id m4-20020a056512358400b0048b003c4bf7sm2112048lfr.169.2022.11.15.00.17.30
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=dpkg0m971HY0liHkJ/8urftydU+FB+sjslyYJScsb4A=;
+        b=ZrVYH/88e2/w8yLQfxOZ+QJBlMvshKjeu8PEBqaekV2jsLivC0rRoAe6OxRPj37s8s
+         omf+fPbbbSXj3f1WRpYLB2LctZBV5G0SKl7WfzyU53ubpEbqEqJ3KAweqc/aBwBq2JOl
+         7FZc1W4ecbtbB8f73P+IbwVae/UdK2+DMXSZMDyWy4AAr5a2GRupq1QxJtFdXSXtMX9t
+         L5ZWW0OFdvkZzZjY58r7nuVBAAdo57/6n2czVOuTqr7+LWMz7eQ+EhfwNGL4F0dFTwu9
+         /DdzjzhteGvTzSbhHuLgMwB97TYCpIU2pNsc3WxFkRceq4KclXzGllSEhvciVByFc6lS
+         139w==
+X-Gm-Message-State: ANoB5pl6pWeLs5xmkOd1XasC2bA/IGnECTtGfCHiT/buHLJiM8bsQhyc
+        guBdX7G5q7LEEzVCbSkhNxJud+e75nA=
+X-Google-Smtp-Source: AA0mqf6KIRLo/vGkozM6QZ5P64pW0K46zCw3yKUC9G1QWS2uS+82ZOGSMV/aw7fJWJbKcLooxQo1pA==
+X-Received: by 2002:a5d:4568:0:b0:22a:e51c:458a with SMTP id a8-20020a5d4568000000b0022ae51c458amr10360348wrc.577.1668500255329;
+        Tue, 15 Nov 2022 00:17:35 -0800 (PST)
+Received: from [192.168.42.102] (mo4-84-90-72-130.netvisao.pt. [84.90.72.130])
+        by smtp.gmail.com with ESMTPSA id g9-20020a05600c310900b003a2f2bb72d5sm26267347wmo.45.2022.11.15.00.17.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 00:17:31 -0800 (PST)
-Message-ID: <09495553-e563-e12b-056e-bed95531ab6b@linaro.org>
-Date:   Tue, 15 Nov 2022 09:17:30 +0100
+        Tue, 15 Nov 2022 00:17:34 -0800 (PST)
+Message-ID: <be1a2495-1c46-cda1-4f89-7e3a39d939db@gmail.com>
+Date:   Tue, 15 Nov 2022 08:17:32 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v4 2/9] dt-bindings: rtc: mediatek: convert MT6397 rtc
- documentation
-Content-Language: en-US
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Pavel Machek <pavel@ucw.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-rtc@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>
-References: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
- <20221005-mt6357-support-v4-2-5d2bb58e6087@baylibre.com>
- <20221109222916.GA2985917-robh@kernel.org> <Y2wwUOJ0KZdt1tZ6@mail.local>
- <adf8bc44-4cbc-af2a-4ec8-1859a98146d7@linaro.org>
- <Y3LHxDIzfZWhnQJN@mail.local>
- <37dc4e39-8033-a40f-edd7-4bd30f841e23@linaro.org>
- <Y3NIRbyirJjT7xay@mail.local>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y3NIRbyirJjT7xay@mail.local>
+Content-Language: pt-PT, en-US
+To:     kernel test robot <lkp@intel.com>
+Cc:     ntfs3@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+From:   Daniel Pinto <danielpinto52@gmail.com>
+Subject: [PATCH] fs/ntfs3: fix wrong cast in xattr.c
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 09:05, Alexandre Belloni wrote:
->>> I checked and it doesn't support it but this needs to be fixed.
->>>
->>>> What about rest of rtc.yaml schema?
->>>>
->>>
->>> wakeup-source would make sense but the driver doesn't support it yet.
->>
->> The question is about hardware - does hardware support waking up the
->> system via interrupt? This is usually a domain of PMICs which still are
->> powered on when system sleeps.
->>
-> 
-> I'd say that it is possible that a PMIC is able to wake up the system
-> with or without having an interrupt wired to the SoC so wakeup-source
-> makes sense. We don't need it if it is interrupt only.
+cpu_to_be32 and be32_to_cpu respectively return and receive
+__be32, change the cast to the correct types.
 
-Then I propose to reference the rtc.yaml.
+Fixes the following sparse warnings:
+fs/ntfs3/xattr.c:811:48: sparse: sparse: incorrect type in
+                         assignment (different base types)
+fs/ntfs3/xattr.c:901:34: sparse: sparse: cast to restricted __be32
 
-Best regards,
-Krzysztof
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Daniel Pinto <danielpinto52@gmail.com>
+---
+ fs/ntfs3/xattr.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
+index 8620a7b4b3e6..6056ecbe8e4f 100644
+--- a/fs/ntfs3/xattr.c
++++ b/fs/ntfs3/xattr.c
+@@ -808,7 +808,7 @@ static int ntfs_getxattr(const struct xattr_handler *handler, struct dentry *de,
+ 			err = sizeof(u32);
+ 			*(u32 *)buffer = le32_to_cpu(ni->std_fa);
+ 			if (!strcmp(name, SYSTEM_NTFS_ATTRIB_BE))
+-				*(u32 *)buffer = cpu_to_be32(*(u32 *)buffer);
++				*(__be32 *)buffer = cpu_to_be32(*(u32 *)buffer);
+ 		}
+ 		goto out;
+ 	}
+@@ -898,7 +898,7 @@ static noinline int ntfs_setxattr(const struct xattr_handler *handler,
+ 		if (size != sizeof(u32))
+ 			goto out;
+ 		if (!strcmp(name, SYSTEM_NTFS_ATTRIB_BE))
+-			new_fa = cpu_to_le32(be32_to_cpu(*(u32 *)value));
++			new_fa = cpu_to_le32(be32_to_cpu(*(__be32 *)value));
+ 		else
+ 			new_fa = cpu_to_le32(*(u32 *)value);
