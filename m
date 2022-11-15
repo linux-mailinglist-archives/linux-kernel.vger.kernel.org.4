@@ -2,105 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7865962A295
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C400C62A29A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbiKOUQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 15:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57990 "EHLO
+        id S230287AbiKOUST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 15:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiKOUQJ (ORCPT
+        with ESMTP id S229561AbiKOUSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:16:09 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CA427DCC
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:16:08 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so14890625pjl.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:16:08 -0800 (PST)
+        Tue, 15 Nov 2022 15:18:17 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF9D27DCC
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:18:16 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso9197057otb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:18:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=T7LP3RGpmdXiMN5KPTn9/IO+rih2AglOTsvbEdRvS1Q=;
-        b=CuhvpEh+MwcQ8DdyO2LHPKc75+Mh4Tt/SrTxun8SjsbCLbKA/uujVn75/hrSWRbq3P
-         pp681Bo0ABWoVlpW4KZ12uslMC8XMyFowDj24K4rvmpM/9YujrW27P9Vv5MLxt+ZIfOV
-         Jm6zqwFB/7ZHai0ByGJfyD247/5LpCxHhMpkaFu377RaNtmMs+gPLXFcf0G1yQbvs+Rs
-         EYu+becUwCm5WaK54RGM6rYBIysavORuhi+fV9JxKIFpQITo1Jz1JNtjUgO7b5R2U1/e
-         xEGMqJLbi5RxqShnMYvwl9BbYi//M2ZHV0GVHxnWgbMAYD9A/uq/G/wppECfL4cNv6ol
-         hTbw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kZiqQC2TRqYGpQqGxX8IDQ4zinlxzUTLpJAlXiYH1J0=;
+        b=Dxk9+zyh+ju+7dKfW2cS/OHh5GFrbRzVCZJZTtmDwZeNSIXtoUSUOoeDOUH5GKT2ws
+         G+8U3QXH0WTrxvShd0AOUtxLrjM4LgxVqJIWdO/WEZsjhVOKG6Vfh8usk2r2nqSl6pxf
+         rpuCxVxF5PtFe53s+Twm0exZx0DFoSkdxmUZ2nkjDSidKlq5XAeAaMzio1qoG9D7geSg
+         rhms5VDYd2MT2uZX0qWxUDuZLdtgTDAkZIxfigsTyoHkI57S/tuedsLqL4NSGDP2HlUj
+         tpvHszpqXGxH5BqJ0X/vbe/Nk01179ayZhRZ1ZnpcZGhVsZwvpp/I+t56KLLxBjPPFTt
+         reyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T7LP3RGpmdXiMN5KPTn9/IO+rih2AglOTsvbEdRvS1Q=;
-        b=pJet4T697u7H2MV7gXPIloWCLb7nGpOumSGdVjbjaTrafIyLWjsaOENSsOjBnidBPz
-         +QjEGpt/GrI8Sk4fXFWLixudSWOQhQHXkjtsEJr2JpQRdFQ3/oS1vx7Z2BkkQ8w50EEE
-         bo7hyKa4wuW7WHkSv8iL+d/0XEAyaCws5HUPozTzTf4J5WR4UN82AyAOIWzEDI9TxkvE
-         vMSmeamMhziTIsxBhiU8CtSUhPiZyj2PkqaincHKkmHiX0uY9ayg2cE4Q+bPJGRn9CMT
-         R+bMdyDlVxpqlvf8epshhYdnVhPr4/X3wk0gDNwspMgrWTD8k4WFIF7d3N8r1QSE57Nu
-         skNw==
-X-Gm-Message-State: ANoB5pkUDOM9L11rBjEgMvE+TEZc8F9ZYgnyYzX05egP+u9KWTlZ5DFd
-        wjZ41Oug/6cZO8H7KRMx7Aru/w==
-X-Google-Smtp-Source: AA0mqf58/qb3pHX8jXG9rQwsI0kWr5CgUXW3YysHviPdV0VVEN3OAELl4gQs2//98Y2csv6jhLKLCw==
-X-Received: by 2002:a17:902:e8d5:b0:181:6c64:6dd3 with SMTP id v21-20020a170902e8d500b001816c646dd3mr5671131plg.123.1668543368117;
-        Tue, 15 Nov 2022 12:16:08 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d62-20020a623641000000b0056c08c87196sm9173979pfa.48.2022.11.15.12.16.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 12:16:07 -0800 (PST)
-Date:   Tue, 15 Nov 2022 20:16:04 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "farman@linux.ibm.com" <farman@linux.ibm.com>,
-        "frankja@linux.ibm.com" <frankja@linux.ibm.com>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "aleksandar.qemu.devel@gmail.com" <aleksandar.qemu.devel@gmail.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "atishp@atishpatra.org" <atishp@atishpatra.org>,
-        "farosas@linux.ibm.com" <farosas@linux.ibm.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "Yao, Yuan" <yuan.yao@intel.com>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "alexandru.elisei@arm.com" <alexandru.elisei@arm.com>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-        "kvmarm@lists.cs.columbia.edu" <kvmarm@lists.cs.columbia.edu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH 38/44] KVM: Disable CPU hotplug during hardware enabling
-Message-ID: <Y3PzhANShVlTXVg1@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-39-seanjc@google.com>
- <88e920944de70e7d69a98f74005b49c59b5aaa3b.camel@intel.com>
- <b198fe971cecd301f0c7c66028cfd71dd7ba7e62.camel@intel.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kZiqQC2TRqYGpQqGxX8IDQ4zinlxzUTLpJAlXiYH1J0=;
+        b=PbjBom8cF4GDNxLW/3L4BtauzkhG7/L5yhYVoTpBBnB6oBhFV8tBiWXnhga5c1e5R3
+         rojYpTaoix+Wu7g6pM6gzNirjn+LO/HsDpJlM7Qb8xBXc+KR53oNdYVwzhPQOv5MAWlu
+         AubVrvUFQRN/2Xqet4EHgIK+sYCeOz5IYVqjc7fJnHqBVNKJsmK3D6PP/VVPlDjHyaHY
+         PlnR9I9Lgsttof6UBJDvZIbBizm1LS8kmTehPPpvLyC8gni4qPD7ejF4O0xBZBK+/UWt
+         tbUQJHK07Ya0uyeNeZCGXlExOJkKSF16900+RUaVym3/5Mt+bdqWfAmtghbySbqj5dZw
+         XkOQ==
+X-Gm-Message-State: ANoB5plSWhC4vY+cKkR0XKQgNPr0S1vPDLhYllLpUoKXwHbIi+k9XXgT
+        0Lrfs9KTxxyiNDLX2k03HbWjiLYaySNZakC2p2Rhtw==
+X-Google-Smtp-Source: AA0mqf4unY4f49bA7zDs3HC05f2t2jJOz4dZl+RxJc2M6cr4lj3FCThq8PKi6q6f7iPSTfE5w3TBK5qUFz5yQmryeBg=
+X-Received: by 2002:a05:6830:14f:b0:668:73ff:e96 with SMTP id
+ j15-20020a056830014f00b0066873ff0e96mr9398940otp.256.1668543495841; Tue, 15
+ Nov 2022 12:18:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b198fe971cecd301f0c7c66028cfd71dd7ba7e62.camel@intel.com>
+References: <20221104194705.3245738-1-rmoar@google.com> <CABVgOSnUDNvs6mYwVtzXq3+PmO62HG1pP=d_6EQiwOKF_9D6XA@mail.gmail.com>
+In-Reply-To: <CABVgOSnUDNvs6mYwVtzXq3+PmO62HG1pP=d_6EQiwOKF_9D6XA@mail.gmail.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Tue, 15 Nov 2022 15:18:03 -0500
+Message-ID: <CA+GJov4uUfp_a7FzCEMGivQJx3VGNOx=x+E_eN-9a46EsS2Ygg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] kunit: improve KTAP compliance of KUnit test output
+To:     David Gow <davidgow@google.com>
+Cc:     brendanhiggins@google.com, dlatypov@google.com,
+        skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Isabella Basso <isabbasso@riseup.net>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -112,59 +72,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 10, 2022, Huang, Kai wrote:
-> On Thu, 2022-11-10 at 01:33 +0000, Huang, Kai wrote:
-> > > @@ -9283,7 +9283,13 @@ static int
-> > > kvm_x86_check_processor_compatibility(struct kvm_x86_init_ops *ops)
-> > >  	int cpu = smp_processor_id();
-> > >  	struct cpuinfo_x86 *c = &cpu_data(cpu);
-> > >  
-> > > -	WARN_ON(!irqs_disabled());
-> > > +	/*
-> > > +	 * Compatibility checks are done when loading KVM and when enabling
-> > > +	 * hardware, e.g. during CPU hotplug, to ensure all online CPUs are
-> > > +	 * compatible, i.e. KVM should never perform a compatibility check
-> > > on
-> > > +	 * an offline CPU.
-> > > +	 */
-> > > +	WARN_ON(!irqs_disabled() && cpu_active(cpu));
-> > >  
-> > 
-> > Also, the logic of:
-> > 
-> > 	!irqs_disabled() && cpu_active(cpu)
-> > 
-> > is quite weird.
-> > 
-> > The original "WARN(!irqs_disabled())" is reasonable because in STARTING
-> > section
-> > the IRQ is indeed disabled.
-> > 
-> > But this doesn't make sense anymore after we move to ONLINE section, in which
-> > IRQ has already been enabled (see start_secondary()).  IIUC the WARN_ON()
-> > doesn't get exploded is purely because there's an additional cpu_active(cpu)
-> > check.
-> > 
-> > So, a more reasonable check should be something like:
-> > 
-> > 	WARN_ON(irqs_disabled() || cpu_active(cpu) || !cpu_online(cpu));
-> > 
-> > Or we can simply do:
-> > 
-> > 	WARN_ON(!cpu_online(cpu) || cpu_active(cpu));
-> > 
-> > (because I don't know whether it's possible IRQ can somehow get disabled in
-> > ONLINE section).
-> > 
-> > Btw above is purely based on code analysis, but I haven't done any test.
-> 
-> Hmm.. I wasn't thinking thoroughly.  I forgot CPU compatibility check also
-> happens on all online cpus when loading KVM.  For this case, IRQ is disabled and
-> cpu_active() is true.  For the hotplug case, IRQ is enabled but  cpu_active() is
-> false.
+On Tue, Nov 15, 2022 at 2:27 AM David Gow <davidgow@google.com> wrote:
+>
+> On Sat, Nov 5, 2022 at 3:48 AM Rae Moar <rmoar@google.com> wrote:
+> >
+> > Change KUnit test output to comply with KTAP version 1 specifications
+> > found here: https://kernel.org/doc/html/latest/dev-tools/ktap.html.
+> > 1) Use "KTAP version 1" instead of "TAP version 14" as test output header
+> > 2) Remove '-' between test number and test name on test result lines
+> > 2) Add KTAP version lines to each subtest header as well
+> >
+> > Original output:
+> >
+> >  TAP version 14
+> >  1..1
+> >    # Subtest: kunit-test-suite
+> >    1..3
+> >    ok 1 - kunit_test_1
+> >    ok 2 - kunit_test_2
+> >    ok 3 - kunit_test_3
+> >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+> >  # Totals: pass:3 fail:0 skip:0 total:3
+> >  ok 1 - kunit-test-suite
+> >
+> > New output:
+> >
+> >  KTAP version 1
+> >  1..1
+> >    # Subtest: kunit-test-suite
+> >    KTAP version 1
+> >    1..3
+> >    ok 1 kunit_test_1
+> >    ok 2 kunit_test_2
+> >    ok 3 kunit_test_3
+> >  # kunit-test-suite: pass:3 fail:0 skip:0 total:3
+> >  # Totals: pass:3 fail:0 skip:0 total:3
+> >  ok 1 kunit-test-suite
+> >
+> > Signed-off-by: Rae Moar <rmoar@google.com>
+> > ---
+>
+> Thanks very much for doing this. It's always been slightly
+> embarrassing that we weren't perfectly following our own spec!
+>
+> I think this series is good enough, but have a minor suggestion: could
+> we swap the order of these two patches?
+> I'd rather have the parser changes go in first.
 
-Actually, you're right (and wrong).  You're right in that the WARN is flawed.  And
-the reason for that is because you're wrong about the hotplug case.  In this version
-of things, the compatibility checks are routed through hardware enabling, i.e. this
-flow is used only when loading KVM.  This helper should only be called via SMP function
-call, which means that IRQs should always be disabled.
+Hi David!
+Yes, I agree. I think it does make more sense to provide KTAP
+compatibility with the parser before changing the test output. This
+would also help to solve the issue that Daniel brought up on this
+patch about the "KTAP version 1" line and test plan being stored
+in the test.log as random kernel output. I will swap the patches in
+the v2 of this patch series.
+
+>
+> I'd also be curious to see if this is likely to break anyone else's
+> (K)TAP parsers.
+>
+> +Isabella, Anders: do these changes break the IGT or LKFT TAP/KTAP
+> parsing? From a quick look at [1] and [2], we're probably okay??
+>
+> [1]: https://gitlab.freedesktop.org/isinyaaa/igt-gpu-tools/-/commit/1a84306425e975377eb79c031bf1de147bd44e46
+> [2]: https://github.com/Linaro/test-definitions/blob/master/automated/linux/kunit/kunit.sh
+>
+> I also looked into the possibility of moving or removing the Subtest
+> line, but upon further thought (see below), it's probably best to keep
+> it as-is here for now. That should be the closest to the current spec,
+> and we can possibly find a better way to provide the name in KTAPv2.
+>
+> Reviewed-by: David Gow <davidgow@google.com>
+>
+> Cheers,
+> -- David
+>
+> >  lib/kunit/executor.c | 6 +++---
+> >  lib/kunit/test.c     | 5 +++--
+> >  2 files changed, 6 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> > index 9bbc422c284b..74982b83707c 100644
+> > --- a/lib/kunit/executor.c
+> > +++ b/lib/kunit/executor.c
+> > @@ -166,7 +166,7 @@ static void kunit_exec_run_tests(struct suite_set *suite_set)
+> >  {
+> >         size_t num_suites = suite_set->end - suite_set->start;
+> >
+> > -       pr_info("TAP version 14\n");
+> > +       pr_info("KTAP version 1\n");
+> >         pr_info("1..%zu\n", num_suites);
+> >
+> >         __kunit_test_suites_init(suite_set->start, num_suites);
+> > @@ -177,8 +177,8 @@ static void kunit_exec_list_tests(struct suite_set *suite_set)
+> >         struct kunit_suite * const *suites;
+> >         struct kunit_case *test_case;
+> >
+> > -       /* Hack: print a tap header so kunit.py can find the start of KUnit output. */
+> > -       pr_info("TAP version 14\n");
+> > +       /* Hack: print a ktap header so kunit.py can find the start of KUnit output. */
+> > +       pr_info("KTAP version 1\n");
+> >
+> >         for (suites = suite_set->start; suites < suite_set->end; suites++)
+> >                 kunit_suite_for_each_test_case((*suites), test_case) {
+> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > index 90640a43cf62..b541d59a05c3 100644
+> > --- a/lib/kunit/test.c
+> > +++ b/lib/kunit/test.c
+> > @@ -151,6 +151,7 @@ static void kunit_print_suite_start(struct kunit_suite *suite)
+> >  {
+> >         kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "# Subtest: %s",
+> >                   suite->name);
+> > +       kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "KTAP version 1\n");
+>
+> Would it make sense to have the Subtest line _after_ the KTAP line here?
+>
+> Given KTAP doesn't specify the "Subtest" line at all, I guess it doesn't matter.
+>
+> A part of me feels that the "KTAP version 1" line should be the
+> _first_ line of the subtest output, but that would introduce a line
+> between it and the test plan, which goes against the spec.
+>
+> We could also just get rid of the "Subtest" line, given it's not
+> technically required, though having the test name before the results
+> is really useful.
+>
+> Having tried all three options while writing this email, I think it's
+> probably best to leave this patch as is (with the Subtest line
+> followed by the KTAP line), and discuss standardising something
+> similar as part of the KTAP v2 spec.
+>
+
+I also struggle to decide how the "Subtest" line should be handled. Since
+the current KTAP v1 spec does not provide a way to declare the name of
+a test with subtests prior to the results, I think it is important to continue
+to include this Subtest line because it provides that functionality.
+Additionally,
+the line is not expected to be very disruptive for other parsers because it
+is read as a diagnostic line.
+
+The location of the "Subtest" line before the KTAP version line is potentially
+not the most optimal but it seems to be the best choice while ensuring
+compatibility with the current KTAP v1 spec. I recommend that we discuss
+a standardized replacement for this "Subtest" line in the KTAP v2 spec.
+
+>
+> >         kunit_log(KERN_INFO, suite, KUNIT_SUBTEST_INDENT "1..%zd",
+> >                   kunit_suite_num_test_cases(suite));
+> >  }
+> > @@ -175,13 +176,13 @@ static void kunit_print_ok_not_ok(void *test_or_suite,
+> >          * representation.
+> >          */
+> >         if (suite)
+> > -               pr_info("%s %zd - %s%s%s\n",
+> > +               pr_info("%s %zd %s%s%s\n",
+> >                         kunit_status_to_ok_not_ok(status),
+> >                         test_number, description, directive_header,
+> >                         (status == KUNIT_SKIPPED) ? directive : "");
+> >         else
+> >                 kunit_log(KERN_INFO, test,
+> > -                         KUNIT_SUBTEST_INDENT "%s %zd - %s%s%s",
+> > +                         KUNIT_SUBTEST_INDENT "%s %zd %s%s%s",
+> >                           kunit_status_to_ok_not_ok(status),
+> >                           test_number, description, directive_header,
+> >                           (status == KUNIT_SKIPPED) ? directive : "");
+> >
+> > base-commit: 6fe1ad4a156095859721fef85073df3ed43081d4
+> > --
+> > 2.38.1.431.g37b22c650d-goog
+> >
