@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439DB6294AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 049116296C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238026AbiKOJpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 04:45:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
+        id S238352AbiKOLH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 06:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238005AbiKOJp1 (ORCPT
+        with ESMTP id S238364AbiKOLGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 04:45:27 -0500
+        Tue, 15 Nov 2022 06:06:17 -0500
 Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE551FFA0;
-        Tue, 15 Nov 2022 01:45:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484CC2937D;
+        Tue, 15 Nov 2022 03:04:10 -0800 (PST)
 Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AF74xAB028085;
-        Tue, 15 Nov 2022 04:45:00 -0500
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kuvksuxek-1
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AF9neGA027553;
+        Tue, 15 Nov 2022 06:04:04 -0500
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kuvksvatp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Nov 2022 04:44:59 -0500
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 2AF9iwXR057517
+        Tue, 15 Nov 2022 06:04:04 -0500
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2AFB432Z051258
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 15 Nov 2022 04:44:58 -0500
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 15 Nov 2022 06:04:03 -0500
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Tue, 15 Nov
- 2022 04:44:57 -0500
+ 2022 06:04:02 -0500
 Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
  (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Tue, 15 Nov 2022 04:44:57 -0500
-Received: from tachici-Precision-5530.ad.analog.com ([10.48.65.160])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2AF9iatU023257;
-        Tue, 15 Nov 2022 04:44:53 -0500
-From:   Alexandru Tachici <alexandru.tachici@analog.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <andrew@lunn.ch>, <linux@armlinux.org.uk>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <steve.glendinning@shawell.net>,
-        <UNGLinuxDriver@microchip.com>, <andre.edich@microchip.com>,
-        <linux-usb@vger.kernel.org>
-Subject: [net v2 1/1] net: usb: smsc95xx: fix external PHY reset
-Date:   Tue, 15 Nov 2022 13:44:34 +0200
-Message-ID: <20221115114434.9991-2-alexandru.tachici@analog.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221115114434.9991-1-alexandru.tachici@analog.com>
-References: <20221115114434.9991-1-alexandru.tachici@analog.com>
+ Transport; Tue, 15 Nov 2022 06:04:02 -0500
+Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.115])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2AFB3nvC028138;
+        Tue, 15 Nov 2022 06:03:51 -0500
+From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
+To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux-iio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 1/2] dt-bindings: iio: frequency: add adf4377 doc
+Date:   Tue, 15 Nov 2022 13:00:40 +0200
+Message-ID: <20221115110041.71495-1-antoniu.miclaus@analog.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: B14qenhWzzHc7iPdXb2si1YDU4hGhPjY
-X-Proofpoint-ORIG-GUID: B14qenhWzzHc7iPdXb2si1YDU4hGhPjY
+X-Proofpoint-GUID: xcdkmuVVxcewMkmbkWTTUHV4p93p9Gpy
+X-Proofpoint-ORIG-GUID: xcdkmuVVxcewMkmbkWTTUHV4p93p9Gpy
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-15_04,2022-11-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=717
+ definitions=2022-11-15_06,2022-11-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
  lowpriorityscore=0 spamscore=0 mlxscore=0 malwarescore=0 bulkscore=0
- priorityscore=1501 adultscore=0 clxscore=1015 phishscore=0 suspectscore=0
+ priorityscore=1501 adultscore=0 clxscore=1011 phishscore=0 suspectscore=0
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211150067
+ engine=8.12.0-2210170000 definitions=main-2211150075
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -72,110 +69,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An external PHY needs settling time after power up or reset.
-In the bind() function an mdio bus is registered. If at this point
-the external PHY is still initialising, no valid PHY ID will be
-read and on phy_find_first() the bind() function will fail.
+Add device tree bindings for the ADF4377 driver.
 
-If an external PHY is present, wait the maximum time specified
-in 802.3 45.2.7.1.1.
-
-Fixes: 05b35e7eb9a1 ("smsc95xx: add phylib support")
-Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/net/usb/smsc95xx.c | 46 ++++++++++++++++++++++++++++++++++----
- 1 file changed, 42 insertions(+), 4 deletions(-)
+no changes in v3.
+ .../bindings/iio/frequency/adi,adf4377.yaml   | 92 +++++++++++++++++++
+ MAINTAINERS                                   |  8 ++
+ 2 files changed, 100 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/frequency/adi,adf4377.yaml
 
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index bfb58c91db04..32d2c60d334d 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -66,6 +66,7 @@ struct smsc95xx_priv {
- 	spinlock_t mac_cr_lock;
- 	u8 features;
- 	u8 suspend_flags;
-+	bool is_internal_phy;
- 	struct irq_chip irqchip;
- 	struct irq_domain *irqdomain;
- 	struct fwnode_handle *irqfwnode;
-@@ -252,6 +253,43 @@ static void smsc95xx_mdio_write(struct usbnet *dev, int phy_id, int idx,
- 	mutex_unlock(&dev->phy_mutex);
- }
+diff --git a/Documentation/devicetree/bindings/iio/frequency/adi,adf4377.yaml b/Documentation/devicetree/bindings/iio/frequency/adi,adf4377.yaml
+new file mode 100644
+index 000000000000..aa6a3193b4e0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/frequency/adi,adf4377.yaml
+@@ -0,0 +1,92 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/frequency/adi,adf4377.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ADF4377 Microwave Wideband Synthesizer with Integrated VCO
++
++maintainers:
++  - Antoniu Miclaus <antoniu.miclaus@analog.com>
++  - Dragos Bogdan <dragos.bogdan@analog.com>
++
++description: |
++   The ADF4377 is a high performance, ultralow jitter, dual output integer-N
++   phased locked loop (PLL) with integrated voltage controlled oscillator (VCO)
++   ideally suited for data converter and mixed signal front end (MxFE) clock
++   applications.
++
++   https://www.analog.com/en/products/adf4377.html
++
++properties:
++  compatible:
++    enum:
++      - adi,adf4377
++      - adi,adf4378
++
++  reg:
++    maxItems: 1
++
++  spi-max-frequency:
++    maximum: 10000000
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    description:
++      External clock that provides reference input frequency.
++    items:
++      - const: ref_in
++
++  chip-enable-gpios:
++    description:
++      GPIO that controls the Chip Enable Pin.
++    maxItems: 1
++
++  clk1-enable-gpios:
++    description:
++      GPIO that controls the Enable Clock 1 Output Buffer Pin.
++    maxItems: 1
++
++  clk2-enable-gpios:
++    description:
++      GPIO that controls the Enable Clock 2 Output Buffer Pin.
++    maxItems: 1
++
++  adi,muxout-select:
++    description:
++      On chip multiplexer output selection.
++      high_z - MUXOUT Pin set to high-Z.
++      lock_detect - MUXOUT Pin set to lock detector output.
++      muxout_low - MUXOUT Pin set to low.
++      f_div_rclk_2 - MUXOUT Pin set to fDIV_RCLK/2.
++      f_div_nclk_2 - MUXOUT Pin set to fDIV_NCLK/2.
++      muxout_high - MUXOUT Pin set to high.
++    enum: [high_z, lock_detect, muxout_low, f_div_rclk_2, f_div_nclk_2, muxout_high]
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    spi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        frequency@0 {
++            compatible = "adi,adf4377";
++            reg = <0>;
++            spi-max-frequency = <10000000>;
++            clocks = <&adf4377_ref_in>;
++            clock-names = "ref_in";
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e1bc31a6624b..19a2f689e43e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1189,6 +1189,14 @@ W:	https://ez.analog.com/linux-software-drivers
+ F:	Documentation/devicetree/bindings/iio/amplifiers/adi,ada4250.yaml
+ F:	drivers/iio/amplifiers/ada4250.c
  
-+static int smsc95xx_mdiobus_reset(struct mii_bus *bus)
-+{
-+	struct smsc95xx_priv *pdata;
-+	struct usbnet *dev;
-+	u32 val;
-+	int ret;
++ANALOG DEVICES INC ADF4377 DRIVER
++M:	Antoniu Miclaus <antoniu.miclaus@analog.com>
++L:	linux-iio@vger.kernel.org
++S:	Supported
++W:	https://ez.analog.com/linux-software-drivers
++F:	Documentation/devicetree/bindings/iio/frequency/adi,adf4377.yaml
++F:	drivers/iio/frequency/adf4377.c
 +
-+	dev = bus->priv;
-+	pdata = dev->driver_priv;
-+
-+	if (pdata->is_internal_phy)
-+		return 0;
-+
-+	mutex_lock(&dev->phy_mutex);
-+
-+	ret = smsc95xx_read_reg(dev, PM_CTRL, &val);
-+	if (ret < 0)
-+		goto reset_out;
-+
-+	val |= PM_CTL_PHY_RST_;
-+
-+	ret = smsc95xx_write_reg(dev, PM_CTRL, val);
-+	if (ret < 0)
-+		goto reset_out;
-+
-+	/* Driver has no knowledge at this point about the external PHY.
-+	 * The 802.3 specifies that the reset process shall
-+	 * be completed within 0.5 s.
-+	 */
-+	fsleep(500000);
-+
-+reset_out:
-+	mutex_unlock(&dev->phy_mutex);
-+
-+	return 0;
-+}
-+
- static int smsc95xx_mdiobus_read(struct mii_bus *bus, int phy_id, int idx)
- {
- 	struct usbnet *dev = bus->priv;
-@@ -1052,7 +1090,6 @@ static void smsc95xx_handle_link_change(struct net_device *net)
- static int smsc95xx_bind(struct usbnet *dev, struct usb_interface *intf)
- {
- 	struct smsc95xx_priv *pdata;
--	bool is_internal_phy;
- 	char usb_path[64];
- 	int ret, phy_irq;
- 	u32 val;
-@@ -1133,13 +1170,14 @@ static int smsc95xx_bind(struct usbnet *dev, struct usb_interface *intf)
- 	if (ret < 0)
- 		goto free_mdio;
- 
--	is_internal_phy = !(val & HW_CFG_PSEL_);
--	if (is_internal_phy)
-+	pdata->is_internal_phy = !(val & HW_CFG_PSEL_);
-+	if (pdata->is_internal_phy)
- 		pdata->mdiobus->phy_mask = ~(1u << SMSC95XX_INTERNAL_PHY_ID);
- 
- 	pdata->mdiobus->priv = dev;
- 	pdata->mdiobus->read = smsc95xx_mdiobus_read;
- 	pdata->mdiobus->write = smsc95xx_mdiobus_write;
-+	pdata->mdiobus->reset = smsc95xx_mdiobus_reset;
- 	pdata->mdiobus->name = "smsc95xx-mdiobus";
- 	pdata->mdiobus->parent = &dev->udev->dev;
- 
-@@ -1160,7 +1198,7 @@ static int smsc95xx_bind(struct usbnet *dev, struct usb_interface *intf)
- 	}
- 
- 	pdata->phydev->irq = phy_irq;
--	pdata->phydev->is_internal = is_internal_phy;
-+	pdata->phydev->is_internal = pdata->is_internal_phy;
- 
- 	/* detect device revision as different features may be available */
- 	ret = smsc95xx_read_reg(dev, ID_REV, &val);
+ ANALOG DEVICES INC ADGS1408 DRIVER
+ M:	Mircea Caprioru <mircea.caprioru@analog.com>
+ S:	Supported
 -- 
-2.34.1
+2.38.1
 
