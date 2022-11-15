@@ -2,122 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2A8629D79
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18672629D7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:31:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbiKOP3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:29:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
+        id S238338AbiKOPbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238464AbiKOP21 (ORCPT
+        with ESMTP id S231479AbiKOPaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:28:27 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3932D76F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:28:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668526093; x=1700062093;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=QyVi8xwimHr/SBGDnhpw7L6AZK+eBVpkUqCWoyo7LzM=;
-  b=HIgs+C4XSkwi98rra4e8L1BKM6necA1FRfZ757Np5NRZk1WeqsM6cUEe
-   CrMTogAjx7pFSYM1HIDAhQIOqABlsVnLePSCBSuwTitqC8C7Pr4v4DeZU
-   TaExF6gsOIIxFYQv9kCDHdN5Fc81jwYIK09F0zrm8JsNKbMqektTsW18y
-   MiWaQ5XtPBJbV6rMzzyG9KXfMAlmnWmlvW3cuRJwJwT7pBcs6ld/fexRq
-   7wsIBDl5j/0c3aocugBkaJ5j3Su9P4ndSwEHSG1FLQRSgFpi7c2AzSZzJ
-   O7r5hEgUuAez5fF0zK/gkSK0bpTFjEXrE51e/EiP6y28O/IIk1lfcXlIB
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="313427038"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="313427038"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:28:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="763949981"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="763949981"
-Received: from golubevv-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.58.73])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:28:10 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2] drm/i915: remove circ_buf.h includes
-In-Reply-To: <20221115070302.4064-1-jirislaby@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20221115070302.4064-1-jirislaby@kernel.org>
-Date:   Tue, 15 Nov 2022 17:28:07 +0200
-Message-ID: <87o7t82q60.fsf@intel.com>
+        Tue, 15 Nov 2022 10:30:39 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E072E68F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:29:49 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id b11so13643766pjp.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:29:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4xFPX3Z7GbW6bSnkxtp2PrmHn+B1TCPh3wtXpJcmJcQ=;
+        b=TUQVrky3j7PjthGvLv0MpsXChKErxo0kKVDc9vuozjGFAup0y/4rCu/Lzwz6ct6fZs
+         BNbGBoq4egydzZT1XD5G9Iw8nW/X04QBH7tE+4COvPwIa4SaJ1nuLtmpI036IMcToeGW
+         zZnGcx9sd4VGScYiYLy1OyEYKFwVDwbrkUsnNS4hFLF526AyUnyzMaNnHmNZcPZDfW7D
+         e0pMO2Uq6fHZ07WS/cFVVNICW//s8pxLGd0l36DhNuW1FMCWfklfG7mJQ6xjl4w9vKHV
+         TBG1TIXD1HoE37MGmdbRI15hUh4DH458Ms8kuR0sBB2a++VU0E+TYvMCouvgxHIFkkn2
+         8thw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4xFPX3Z7GbW6bSnkxtp2PrmHn+B1TCPh3wtXpJcmJcQ=;
+        b=Lc4R2e9Jzn3LIzzsLVVNMvKATRI0zdn2/hc6+0m0rb2VkR+WHk0lfq+7IQ0BiwZ24y
+         8FepzlSjR4aodbOkut45jptaihSf4s6h2pcq3fiWjh5s1Y3QnpSj7IoAUrrwr2q8Cbfi
+         h5fufmvVT9svnU9TS+YE/j2zWdRm8+bhZTx6Hll4lyB13wULTaTAU2FDO9vioXpupc9a
+         UHmBQyKJPv3IKsZizauio49lh5BxH8lz4FXz8lg19fhjTgR12gZcNTPh90Bk14RvZPaz
+         wjO709htogFp+F8+rDvCl/otixdfR9GvoJxIb+XlmEaiQqsJvYgOm8gOwjMVj/5vgLhY
+         X/Ig==
+X-Gm-Message-State: ANoB5pmY1tS33EkPj642KNY66TotQDE9h6d03r8Vh8uQr511k6C/OFii
+        eOkdH8tL4q4ZTTd9yza29qvK+w==
+X-Google-Smtp-Source: AA0mqf58kcbUcqreW0oERfBqZonqX7Aj1FkzaTQ3Wu++37yoKgQX6Z6ovOLD54LrZlViN1l9RXKR8A==
+X-Received: by 2002:a17:90b:684:b0:212:ca89:41c9 with SMTP id m4-20020a17090b068400b00212ca8941c9mr2723275pjz.244.1668526188923;
+        Tue, 15 Nov 2022 07:29:48 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id p2-20020a170902e74200b001869b988d93sm10093465plf.187.2022.11.15.07.29.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 07:29:48 -0800 (PST)
+Date:   Tue, 15 Nov 2022 15:29:45 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     Jiaxi Chen <jiaxi.chen@linux.intel.com>, kvm@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        pbonzini@redhat.com, ndesaulniers@google.com,
+        alexandre.belloni@bootlin.com, peterz@infradead.org,
+        jpoimboe@kernel.org, chang.seok.bae@intel.com,
+        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
+        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
+        keescook@chromium.org, nathan@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/7] x86: KVM: Move existing x86 CPUID leaf
+ [CPUID_7_1_EAX] to kvm-only leaf
+Message-ID: <Y3OwaRBzVFqJ4KEs@google.com>
+References: <20221110015252.202566-1-jiaxi.chen@linux.intel.com>
+ <20221110015252.202566-2-jiaxi.chen@linux.intel.com>
+ <f8607d23-afaa-2670-dd03-2ae8ec1e79a0@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f8607d23-afaa-2670-dd03-2ae8ec1e79a0@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022, "Jiri Slaby (SUSE)" <jirislaby@kernel.org> wrote:
-> The last user of macros from that include was removed in 2018 by the
-> commit below.
->
-> Fixes: 6cc42152b02b ("drm/i915: Remove support for legacy debugfs crc interface")
-> Cc: Jani Nikula <jani.nikula@linux.intel.com>
-> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: intel-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+On Tue, Nov 15, 2022, Xiaoyao Li wrote:
+> On 11/10/2022 9:52 AM, Jiaxi Chen wrote:
+> > cpuid_leaf[12] CPUID_7_1_EAX has only two bits are in use currently:
+> > 
+> >   - AVX-VNNI CPUID.(EAX=7,ECX=1):EAX[bit 4]
+> >   - AVX512-BF16 CPUID.(EAX=7,ECX=1):EAX[bit 5]
+> > 
+> > These two bits have no other kernel usages other than the guest
+> > CPUID advertisement in KVM. Given that and to save space for kernel
+> > feature bits, move these two bits to the kvm-only subleaves. The
+> > existing leaf cpuid_leafs[12] is set to CPUID_LNX_5 so future feature
+> > can pick it. This basically reverts:
+> > 
+> >   - commit b85a0425d805 ("Enumerate AVX Vector Neural Network
+> > instructions")
+> >   - commit b302e4b176d0 ("x86/cpufeatures: Enumerate the new AVX512
+> > BFLOAT16 instructions")
+> >   - commit 1085a6b585d7 ("KVM: Expose AVX_VNNI instruction to guset")
+> 
+> FYI, LAM support has been queued in tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=aa387b1b1e666cacffc0b7ac7e0949a68013b2d9
+> 
+> It adds
+> 
+> +#define X86_FEATURE_LAM			(12*32+26) /* Linear Address Masking */
+> 
+> and conflict with this patch.
+> 
+> Seen from the ISE, there are more bits defined in CPUID_7_1_EAX. And I
+> believe Intel will define more and it's likely some of them will be used by
+> kernel just like LAM.
 
-Pushed to drm-intel-next, thanks for the patch!
+Heh, are any of the bits you believe Intel will add publicly documented?  :-)
 
-BR,
-Jani.
+LAM could be scattered, but if more bits are expected that's probably a waste of
+time and effort.
 
-> ---
->
-> Notes:
->     [v2] fixed e-mail setup
->
->  drivers/gpu/drm/i915/display/intel_pipe_crc.c | 1 -
->  drivers/gpu/drm/i915/i915_irq.c               | 1 -
->  2 files changed, 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/i915/display/intel_pipe_crc.c b/drivers/gpu/drm/i915/display/intel_pipe_crc.c
-> index 673454fbf784..e9774670e3f6 100644
-> --- a/drivers/gpu/drm/i915/display/intel_pipe_crc.c
-> +++ b/drivers/gpu/drm/i915/display/intel_pipe_crc.c
-> @@ -24,7 +24,6 @@
->   *
->   */
->  
-> -#include <linux/circ_buf.h>
->  #include <linux/ctype.h>
->  #include <linux/debugfs.h>
->  #include <linux/seq_file.h>
-> diff --git a/drivers/gpu/drm/i915/i915_irq.c b/drivers/gpu/drm/i915/i915_irq.c
-> index b0180ea38de0..a815a45a6e6b 100644
-> --- a/drivers/gpu/drm/i915/i915_irq.c
-> +++ b/drivers/gpu/drm/i915/i915_irq.c
-> @@ -28,7 +28,6 @@
->  
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
->  
-> -#include <linux/circ_buf.h>
->  #include <linux/slab.h>
->  #include <linux/sysrq.h>
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Thanks for the heads up!
