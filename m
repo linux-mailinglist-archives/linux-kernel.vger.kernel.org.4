@@ -2,94 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E372E62A3C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0510962A3D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbiKOVKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 16:10:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41766 "EHLO
+        id S231893AbiKOVPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 16:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiKOVKp (ORCPT
+        with ESMTP id S231513AbiKOVPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 16:10:45 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB9012D3D
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:10:41 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id k7so14389592pll.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:10:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x00a1e9-dev.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lNMU8TIeSMv0FTr0kNyxjAzh/+lrHRAj4t2ZSINdgVA=;
-        b=kWylbFAEh24rQdEt4k+VipJIdPYlOvNYqugMiolgAhVYI9PgwztNserNuOmrnPs7Rt
-         kXU2DxMRqY1kx9Yh5hqYbEKp76GHD/GPuIldwdWMdtD5b9WB+IZWg7nOnze8CjeLsKBi
-         01HRZ43Y//0vkAVcU0Ae6G3MxWU1rgpdBBURtWVinLubl6gm46db+1vX/+fy+oRl3eNo
-         5pPuzbF+TvdK3ZrPbbUy+qNtbOp1UrZKm+YFPii6IUe8kh3UMpJnhx11Eua/ioJZTwyI
-         EcCWDfEyz5B2A8giso4odz7tYYCdSWkEkv3uuWyKTZbSVV8NYcPl3MbKqqKc+GrSRvGb
-         fbcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lNMU8TIeSMv0FTr0kNyxjAzh/+lrHRAj4t2ZSINdgVA=;
-        b=m+7Mk4jKgv/vLKyV3uOsFNziRltCGdsayIejWDA+03mBvSZ1Yx8ewSXrHtkpaXpnD/
-         Ic3avN65Mz3Mh/ijUX7C4YWVePEn8v1F6KqgmcAQYGfjfrcfL/kLRsfvNM3lnztZZOPi
-         WwwaNjRaS0tvWxP3IEYPbQa16B2XI5RG4VdH50Tu/MQwUlOV6Xuvb/2CMTRZo7eokEEb
-         dc9vlGPlpvQGsAoMyKr/NWvvGflQGbffbGGMf+gnQJnSf8nxLbpuLCrDMt+MNJXDLLjO
-         KnLfIOsO62MvvIAhLFc3+5b8aFmVvkBFwuq46w77qw2iAfiz5vqvOHaXG/4xHwphYwB5
-         SJhA==
-X-Gm-Message-State: ANoB5pmnwItvSCT/rcnhDNCYQw7ToSHLr7+Gvskc9/h6/w68i7mVor3Q
-        WD5dmj1npZb8qB3pNaqSrdhVofwESBHr+mzu
-X-Google-Smtp-Source: AA0mqf7WExdmGxFIDXNktByWKdeGT1b1xlrTejS45ZqpCc8FWhSnpF4BC2t6/4EeixtUa0BsttbBnA==
-X-Received: by 2002:a17:902:ee53:b0:188:5e78:be0 with SMTP id 19-20020a170902ee5300b001885e780be0mr5843505plo.18.1668546640405;
-        Tue, 15 Nov 2022 13:10:40 -0800 (PST)
-Received: from 0x00a1e9.dev ([2001:200:0:8802:ff5b:df6b:bf6c:21ba])
-        by smtp.gmail.com with ESMTPSA id 77-20020a621750000000b0056baebf23e7sm9516437pfx.141.2022.11.15.13.10.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 13:10:40 -0800 (PST)
-From:   Yuma Ueda <cyan@0x00a1e9.dev>
-To:     linux-kernel@vger.kernel.org
-Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
-        ojeda@kernel.org, boqun.feng@gmail.com, masahiroy@kernel.org,
-        samitolvanen@google.com, ytcoode@gmail.com,
-        Yuma Ueda <cyan@0x00a1e9.dev>
-Subject: [PATCH] scripts/kallsyms.c Make the comment up-to-date with current implementation
-Date:   Wed, 16 Nov 2022 06:10:34 +0900
-Message-Id: <20221115211034.6330-1-cyan@0x00a1e9.dev>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 15 Nov 2022 16:15:37 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5A212AB1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:15:37 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ov3HJ-0005Bk-2N; Tue, 15 Nov 2022 22:15:33 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ov3HG-004WcG-RW; Tue, 15 Nov 2022 22:15:31 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1ov3HG-00Gujz-QU; Tue, 15 Nov 2022 22:15:30 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH 0/4] pwm: Some refactoring of pwmchip_add()
+Date:   Tue, 15 Nov 2022 22:15:11 +0100
+Message-Id: <20221115211515.3750209-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=667; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=0l8GjUOKXyVW17IqypTgxp8Q0d3CEr4Pa1Jd2q/39Ak=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjdAFSuzLoZlcGLYYKt+aaok0zUOh2X79fYygUs//G URksLayJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY3QBUgAKCRDB/BR4rcrsCdd1B/ 9QHrIme09VpIhmD36p9UgPj/qugY2SjkNBHPZ0FXiDzGwd0QSYvdCJJJr08CFGGEbgA70Q1PaqbRXp q+RtwLQYPYPC57nC6NqJ/PSeWkM8gETjcf2Ksbpf1X0pC94fPGnUtxgLw0t6oI+bgDdHPF7xVzUaRO f6V0TgKcsZjVp/BPwWBJS1mobGI8fBFVmR6wPwkuhZODAfYxC834vrwArUzftr7kyTuWS8qnZspi2u U/Gcn3ypIDKU00MuqOIFEdHfNrJvo3cAm6Y1S5xpz1mSaSamRpqdNLfUFZrnA4cCZ4lsSCZrXZCway kQpOju+dSNTtR9EoWnI7folfIx2ri7
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The comment in scripts/kallsyms.c describing the usage of
-scripts/kallsyms does not reflect the latest implementation.
-Fix the comment to be up-to-date with the current implementation.
+Hello,
 
-Signed-off-by: Yuma Ueda <cyan@0x00a1e9.dev>
----
- scripts/kallsyms.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+this is inspired by a patch suggested by Andy Shevchenko[1] and so it
+conflicts with his patch.
 
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 03fa07ad45d9..e1080fed69fc 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -5,7 +5,8 @@
-  * This software may be used and distributed according to the terms
-  * of the GNU General Public License, incorporated herein by reference.
-  *
-- * Usage: nm -n vmlinux | scripts/kallsyms [--all-symbols] > symbols.S
-+ * Usage: scripts/kallsyms [--all-symbols] [--absolute-percpu]
-+ * 			"[--base-relative] in.map > out.S
-  *
-  *      Table compression uses all the unused char codes on the symbols and
-  *  maps these to the most used substrings (tokens). For instance, it might
+Best regards
+Uwe
+
+[1] https://lore.kernel.org/linux-pwm/20221114170006.61751-1-andriy.shevchenko@linux.intel.com
+
+Uwe Kleine-König (4):
+  pwm: Document variables protected by pwm_lock
+  pwm: Reduce time the pwm_lock mutex is held in pwmchip_add()
+  pwm: Mark free pwm IDs as used in alloc_pwms()
+  pwm: Don't initialize list head before calling list_add()
+
+ drivers/pwm/core.c | 37 +++++++++++++++++++------------------
+ 1 file changed, 19 insertions(+), 18 deletions(-)
+
+
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
 -- 
-2.17.1
+2.38.1
 
