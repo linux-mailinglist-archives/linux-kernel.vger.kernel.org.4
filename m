@@ -2,89 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 149B962A318
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:38:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE17B62A328
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:40:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbiKOUi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 15:38:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
+        id S231672AbiKOUkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 15:40:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiKOUix (ORCPT
+        with ESMTP id S230255AbiKOUk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:38:53 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAB7E84;
-        Tue, 15 Nov 2022 12:38:52 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NBdLf07pPz4xTg;
-        Wed, 16 Nov 2022 07:38:49 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668544730;
-        bh=k809YecVyJ/i0stvUv8T83qyvCDeubm4DV7Sxyj+e9U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DY/PLTvW4q2tQ1xhsZOvAFmc4IFoBDLH4ITdXOZC5I9dfxNhedV7oa9WaQ9074bcG
-         5BOd25Ee15fCV26+P/6TJ787+NrxcvdRlRQaVraCLWaavMX7N2mHXIhWj7N9K5jdJ2
-         jzFxsS+qBqXdHXjNHsXqRzrHKvuopO4U0uYGTimWHFKSt6PRvXWLAICo6kLFASVHst
-         Ks2d1h39uMVpCh4QhT44eq8PmaaPUeDvUURjqhiho1g0YBx3VD7JifSGrdOaGRl0m/
-         GiDq0T5Sm2t+MNkN87SF0YZ941I1hHK2soD76BOhCof4iqALf7IUydSxdUBRxO/FKw
-         t70wb0gFSB41w==
-Date:   Wed, 16 Nov 2022 07:38:48 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the v4l-dvb-next
- tree
-Message-ID: <20221116073848.46178032@canb.auug.org.au>
+        Tue, 15 Nov 2022 15:40:26 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE9713CE6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:40:24 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id b21so14235779plc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:40:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AmLprh1sbZt2eCw30nE1Tak+7KqUeEPNgaa2olliB1I=;
+        b=ReFv9H8JORI6bQggp7WipRxKojLCqrHn3A54Qkd2vXlzxEQHkGai71M1d9foIK3No8
+         XvqDO4x1RgEt6qf5dd0xTKF1myzr6kqJfOKwfhw7DfHwl5GcLAhdes1yjV4QqoACv75f
+         kJvrTRBwO5rLl6YS9vMpSlrjsEjk4fj3ClPEurbda2t0E9ZbAO1gCqHNMym+ApWKrrdP
+         tTsejKyUG7B8adIYmCoUafwGUyr+Fj5qWC0UdgMHAdXsYFwhAPIprMciZu+NCFV2KwMU
+         yfdpuF1yrF7MmNzI+KWiJGf3BWvRNZDHC2ghIcn5TMgPFdqEhEgOLcWBZbii0M875+3l
+         F+yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AmLprh1sbZt2eCw30nE1Tak+7KqUeEPNgaa2olliB1I=;
+        b=FbLbmCEt8PJkw4nJW+B/x5OyAYHJ8yrnG21Cjw4cxmp7RyS+Oh80fE0u/8sA3uuqf3
+         aBr0lb9UdZs0AVG7DKcPQy8uyjx2J+E9BmRMPzkYrL3H2GLJk9ODVVZZlTkDJLfrKY9T
+         n9KPuv06PuYTwc5VUsmsJgSJ890Nab8iDweg3Rd2e4n6tOmuJwWBmVEgUuXTkHqBbGW4
+         dg+UqBrym6mN26xststyZcXLDYQfESeKgwZ6dWG4G0STlBWvNSMtbhK2b9xiGuY0p1pt
+         D5LF81u6PISF6sktIot4cR9DN8+zq4g7J/4SswZPTIqgeB53C/uLDQR+DJIS8shsBBrF
+         hJmg==
+X-Gm-Message-State: ANoB5pnLBK0k7rhY/qO1bToT4FU+GKNYbLlAF+gObWaCQtEaCmbsz72p
+        JSx4zJA1L4aK8kgQJN+dEfEuRQ==
+X-Google-Smtp-Source: AA0mqf46oscVlcpTunUVAvwzl+Wo5Dd2xMneGR/63DGXgiOcxbUbTw7knJPzQcsl8Fg35Wb44IFH5g==
+X-Received: by 2002:a17:90a:4e4a:b0:211:55d8:4cdd with SMTP id t10-20020a17090a4e4a00b0021155d84cddmr132065pjl.133.1668544823609;
+        Tue, 15 Nov 2022 12:40:23 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id y2-20020aa79e02000000b005672daedc8fsm9199721pfq.81.2022.11.15.12.40.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 12:40:23 -0800 (PST)
+From:   Deepak Gupta <debug@rivosinc.com>
+To:     conor.dooley@microchip.com
+Cc:     ajones@ventanamicro.com, aou@eecs.berkeley.edu, debug@rivosinc.com,
+        jan.kiszka@siemens.com, kbingham@kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com
+Subject: [PATCH v4] scripts/gdb: add lx_current support for riscv
+Date:   Tue, 15 Nov 2022 12:40:03 -0800
+Message-Id: <20221115204003.1866421-1-debug@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <Y3OkY6myfea00BaK@wendy>
+References: <Y3OkY6myfea00BaK@wendy>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/j3X.ylo3M=FFjstQb4+_/wZ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/j3X.ylo3M=FFjstQb4+_/wZ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+csr_sscratch CSR holds current task_struct address when hart is in
+user space. Trap handler on entry spills csr_sscratch into "tp" (x2)
+register and zeroes out csr_sscratch CSR. Trap handler on exit reloads
+"tp" with expected user mode value and place current task_struct address
+again in csr_sscratch CSR.
 
-Hi all,
+This patch assumes "tp" is pointing to task_struct. If value in
+csr_sscratch is numerically greater than "tp" then it assumes csr_sscratch
+is correct address of current task_struct. This logic holds when
+   - hart is in user space, "tp" will be less than csr_sscratch.
+   - hart is in kernel space but not in trap handler, "tp" will be more
+     than csr_sscratch (csr_sscratch being equal to 0).
+   - hart is executing trap handler
+       - "tp" is still pointing to user mode but csr_sscratch contains
+          ptr to task_struct. Thus numerically higher.
+       - "tp" is  pointing to task_struct but csr_sscratch now contains
+          either 0 or numerically smaller value (transiently holds
+          user mode tp)
 
-Commits
+Patch also adds new cached type "ulong" in scripts/gdb/linux/utils.py
 
-  0f6e8d8c94a8 ("venus: pm_helpers: Fix error check in vcodec_domains_get()=
-")
-  ee357294a85b ("MAINTAINERS: Add Vikash as VENUS video driver co-maintaine=
-r")
+Since patch has changed a little bit from v1 and I didn't include
+changelog earlier, here it is.
 
-are missing a Signed-off-by from their committer.
+---
+v1 --> v2:
+ - added logic to locate task_struct irrespective of priv
+ - made locating task_struct agnostic to bitness(32 vs 64).
+ - added caching of ulong type in scripts/gdb/linux/utils.py
+ - added more descriptive commit message
 
---=20
-Cheers,
-Stephen Rothwell
+v2 --> v3:
+ - amended commit message and source line to fit column width
 
---Sig_/j3X.ylo3M=FFjstQb4+_/wZ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+v3 --> v4:
+ - amended commit message and remove whitespace in source
+ - added Reviewed-by for reviewers
+---
 
------BEGIN PGP SIGNATURE-----
+Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+---
+ scripts/gdb/linux/cpus.py  | 15 +++++++++++++++
+ scripts/gdb/linux/utils.py |  5 +++++
+ 2 files changed, 20 insertions(+)
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNz+NgACgkQAVBC80lX
-0Gwt6Qf+L7gAxvVRhyXfbu66Qa49EdLJggpQD6mswrsw3N6KwcEGwcq5VCIwKnlH
-yBzL5oloWEGJAml1UMkiETntGmWfJTGhGHTmDAh9RG4EnETWfhbrT+gQ+HBwxh1V
-tlwDbdKKQOFb8OXEus8F9D9TkBq0LLkLYGII5gnEGIlEuCkWlIyPF1siMr4UzPQW
-A4/YNFjaVM4XUjwtD0ydykpmE+NkldtPdlWyGlIBOIFJwmgcVxjYirm6RK4yrTef
-jcUJA6HUpywcHXpfI9wni+WnkkV8BHSBrf85ZBYQiRAMH1qMyR5NrLnqCwGnCmNt
-tuVldgFAegbDlGRFnHfIi0o6GntHhw==
-=Nq6M
------END PGP SIGNATURE-----
+diff --git a/scripts/gdb/linux/cpus.py b/scripts/gdb/linux/cpus.py
+index 15fc4626d236..14c22f82449b 100644
+--- a/scripts/gdb/linux/cpus.py
++++ b/scripts/gdb/linux/cpus.py
+@@ -173,6 +173,21 @@ def get_current_task(cpu):
+          else:
+              raise gdb.GdbError("Sorry, obtaining the current task is not allowed "
+                                 "while running in userspace(EL0)")
++    elif utils.is_target_arch("riscv"):
++         current_tp = gdb.parse_and_eval("$tp")
++         scratch_reg = gdb.parse_and_eval("$sscratch")
++
++         # by default tp points to current task
++         current_task = current_tp.cast(task_ptr_type)
++
++         # scratch register is set 0 in trap handler after entering kernel.
++         # When hart is in user mode, scratch register is pointing to task_struct.
++         # and tp is used by user mode. So when scratch register holds larger value
++         # (negative address as ulong is larger value) than tp, then use scratch register.
++         if (scratch_reg.cast(utils.get_ulong_type()) > current_tp.cast(utils.get_ulong_type())):
++             current_task = scratch_reg.cast(task_ptr_type)
++
++         return current_task.dereference()
+     else:
+         raise gdb.GdbError("Sorry, obtaining the current task is not yet "
+                            "supported with this arch")
+diff --git a/scripts/gdb/linux/utils.py b/scripts/gdb/linux/utils.py
+index 1553f68716cc..ddaf3089170d 100644
+--- a/scripts/gdb/linux/utils.py
++++ b/scripts/gdb/linux/utils.py
+@@ -35,12 +35,17 @@ class CachedType:
+ 
+ 
+ long_type = CachedType("long")
++ulong_type = CachedType("ulong")
+ atomic_long_type = CachedType("atomic_long_t")
+ 
+ def get_long_type():
+     global long_type
+     return long_type.get_type()
+ 
++def get_ulong_type():
++    global ulong_type
++    return ulong_type.get_type()
++
+ def offset_of(typeobj, field):
+     element = gdb.Value(0).cast(typeobj)
+     return int(str(element[field].address).split()[0], 16)
+-- 
+2.25.1
 
---Sig_/j3X.ylo3M=FFjstQb4+_/wZ--
