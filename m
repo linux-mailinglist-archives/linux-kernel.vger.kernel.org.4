@@ -2,75 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0FE62A036
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 736EC62A040
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbiKORYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 12:24:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
+        id S231276AbiKOR0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 12:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232412AbiKORYn (ORCPT
+        with ESMTP id S229939AbiKOR0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 12:24:43 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80188252B8;
-        Tue, 15 Nov 2022 09:24:42 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id l2so13752916pld.13;
-        Tue, 15 Nov 2022 09:24:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xc5csCyHnP/k7L77v/+McWwIPnI6MnCC2Uk0vP8Ve7M=;
-        b=CcajGkdqwVHA5iHM028V119bOfmakt04BU3AHIfjB12cWtWWJtxJzWwVjSgdK9GPON
-         oyr8tIGm6XLpd7gCK7mwWYb/bSP0r7SdbL74vSwl2cjQhpj8Dv2nyeFKY16wrz7Tl69e
-         2ri9vZcKja2GEJYBsfHe7qh4bSj7nybzz3yyWdbmdCG3JYOA/RyjUYBQtUv+aunoIyvn
-         epiAERLSDsC1MpSN7DY/bvtSn7kL4skrGTPWcWcVppmadjoAXnoCVz87vvvT4dy1vfDC
-         TnKlvyUwIhwOI2VveLGps2Xtvyvi49Gt6VupGIn0+R1e+A2A+7HzMX+6tJLme59q/2zn
-         at7g==
+        Tue, 15 Nov 2022 12:26:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41CB264AE
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:25:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668533106;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MgCElGXG2rRWfA57RmljDKl5xxJFEWYi3oRrsoKJ4dw=;
+        b=HwdcwL4/UaeLVir2WIRd7QVtnRdQLPqqy2RcgeXvUxtpoW0D5jznir5mZOymeHrbPJWatf
+        SAN9W8UEe2FLKZ3xBhCWslh3r3Xy9w90ndKgkPchZCudSAVetQCBmg91ewxZLyceh+iJZ7
+        ImJNBC+Pl4t90qsRKn3VcvRD+nm549E=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-183-2P4aBIfbOMCUXweczbPuRw-1; Tue, 15 Nov 2022 12:25:05 -0500
+X-MC-Unique: 2P4aBIfbOMCUXweczbPuRw-1
+Received: by mail-qk1-f197.google.com with SMTP id h8-20020a05620a284800b006b5c98f09fbso14427612qkp.21
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:25:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xc5csCyHnP/k7L77v/+McWwIPnI6MnCC2Uk0vP8Ve7M=;
-        b=7ihGthdN7C32ppdrEbrJHTAQeM1lGRdU1LyQ02F9T7RpzySsZ/5MzQpcIVRcaaNI+x
-         RI+kv5PGSBRrmrrArISgWGCUfGDnjv/+9ozdoHbCBoBmmEe3BCWAQAZAxq0590ouL0Np
-         Y2Qr3NeoEccWh1I9O/rkDr4QZhMh+AG7/geXyrjy3SMcQYrC1TiI5NxByB7PUtM+LSvJ
-         Ev+jQr1TaGBEfvy1iHM3AZXWbsUZCgp5x7iH+eyRjDbcVbJhG2eaj17KC9N6HKTo8kbo
-         +dVoi1d+H7p/I/s+ULe00Md2aUFgvGffwQlPs1qR2YQLFGH5AZMzTPfDPyil1N+0Swr4
-         4mfQ==
-X-Gm-Message-State: ANoB5plhuvMlobC6CkvlojWK8Ubjo93JNjZhFQ7Zk+gaAdPGrKjW/w4P
-        9/3o4I7LBtN9E/VV0FyiXbg2S/3tq/aWyZMMQyw=
-X-Google-Smtp-Source: AA0mqf6D2D8zz7o8Jr/zeZfYFOQEGRjsHxF3dTs6zxLdMf5s6WaYptKqxgGJEqxh/K5UpBPlj7bVVLqzQQntSN1B5dw=
-X-Received: by 2002:a17:90a:de96:b0:214:132a:2b90 with SMTP id
- n22-20020a17090ade9600b00214132a2b90mr1482901pjv.195.1668533081732; Tue, 15
- Nov 2022 09:24:41 -0800 (PST)
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MgCElGXG2rRWfA57RmljDKl5xxJFEWYi3oRrsoKJ4dw=;
+        b=pEC5UzvKPABNBIlTPwh//ppAZFYlGiXFMCwYOrUMqAiIWAnJQQfhSnb7B16tjlGcUV
+         olAsWbk3P25MrbdmTdT5PQkzCQDDYKFg8nO+IG3KFKH0V9wkdbmsd5tTjvlAELAYvV2u
+         PqqbAUyMTgd4GyYx8EHcIMb6eUbcguy+QMkfP7AcxQJpgBE1INTUmhM6XqzIEuwwTXBn
+         DSZwD8Iich1YHC2CLmK4KgsD+4UXscPGItmXV0roB7/rvx36y2Z5/ajqr6EoKYrOCOJ9
+         n1rWHQNCT/xoaoTLDEfQwdKvp6bcqk8iOYBm/Y5Qmr56GGSKlWZ1HzMK4+fZ7ve6K/+r
+         15uQ==
+X-Gm-Message-State: ANoB5pkLOPj4/H9oeBjKPubGzcoUDJSbLn0TzpqUoKBVaDFHwfZYmzFv
+        Gr4wiL3c69A7fN/3yBqnoqjyFRl29hxIvxHPBUcQYZO0bVwbL/+I+fPRwYibGzlcBozfG2T5aaR
+        Xe4IugZomKeiEmySSGctAFHIq
+X-Received: by 2002:a0c:e589:0:b0:4bd:e8ec:263c with SMTP id t9-20020a0ce589000000b004bde8ec263cmr17310863qvm.104.1668533104659;
+        Tue, 15 Nov 2022 09:25:04 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4z07MOGKiqWhjEb89y4p1GaGz5a6bbrNrm6BUrPdtG5V7MKy0l6ujLwU/2zPQXmYTWnfO48A==
+X-Received: by 2002:a0c:e589:0:b0:4bd:e8ec:263c with SMTP id t9-20020a0ce589000000b004bde8ec263cmr17310820qvm.104.1668533104327;
+        Tue, 15 Nov 2022 09:25:04 -0800 (PST)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id h21-20020ac846d5000000b003a4f22c6507sm7472090qto.48.2022.11.15.09.24.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 09:25:03 -0800 (PST)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Barry Song <baohua@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        haniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Tariq Toukan <ttoukan.linux@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Yury Norov <yury.norov@gmail.com>, linux-crypto@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] cpumask: improve on cpumask_local_spread() locality
+In-Reply-To: <20221112190946.728270-1-yury.norov@gmail.com>
+References: <20221112190946.728270-1-yury.norov@gmail.com>
+Date:   Tue, 15 Nov 2022 17:24:56 +0000
+Message-ID: <xhsmh7czwyvtj.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <20221115162654.2016820-1-frieder@fris.de>
-In-Reply-To: <20221115162654.2016820-1-frieder@fris.de>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 15 Nov 2022 14:24:24 -0300
-Message-ID: <CAOMZO5BEYhGS-nRuiTr6veujLM=k7bP9hHHCy6X62hfFzyLh_A@mail.gmail.com>
-Subject: Re: [PATCH v2] spi: spi-imx: Fix spi_bus_clk if requested clock is
- higher than input clock
-To:     Frieder Schrempf <frieder@fris.de>
-Cc:     David Jander <david@protonic.nl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Marek Vasut <marex@denx.de>, stable@vger.kernel.org,
-        Baruch Siach <baruch.siach@siklu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,39 +100,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 1:27 PM Frieder Schrempf <frieder@fris.de> wrote:
->
-> From: Frieder Schrempf <frieder.schrempf@kontron.de>
->
-> In case the requested bus clock is higher than the input clock, the correct
-> dividers (pre = 0, post = 0) are returned from mx51_ecspi_clkdiv(), but
-> *fres is left uninitialized and therefore contains an arbitrary value.
->
-> This causes trouble for the recently introduced PIO polling feature as the
-> value in spi_imx->spi_bus_clk is used there to calculate for which
-> transfers to enable PIO polling.
->
-> Fix this by setting *fres even if no clock dividers are in use.
->
-> This issue was observed on Kontron BL i.MX8MM with an SPI peripheral clock set
-> to 50 MHz by default and a requested SPI bus clock of 80 MHz for the SPI NOR
-> flash.
->
-> With the fix applied the debug message from mx51_ecspi_clkdiv() now prints the
-> following:
->
-> spi_imx 30820000.spi: mx51_ecspi_clkdiv: fin: 50000000, fspi: 50000000,
-> post: 0, pre: 0
->
-> Fixes: 07e759387788 ("spi: spi-imx: add PIO polling support")
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: David Jander <david@protonic.nl>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Marek Vasut <marex@denx.de>
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+Hi,
 
-Thanks for the fix:
+On 12/11/22 11:09, Yury Norov wrote:
+> cpumask_local_spread() currently checks local node for presence of i'th
+> CPU, and then if it finds nothing makes a flat search among all non-local
+> CPUs. We can do it better by checking CPUs per NUMA hops.
+>
+> This series is inspired by Tariq Toukan and Valentin Schneider's "net/mlx5e:
+> Improve remote NUMA preferences used for the IRQ affinity hints"
+>
+> https://patchwork.kernel.org/project/netdevbpf/patch/20220728191203.4055-3-tariqt@nvidia.com/
+>
+> According to their measurements, for mlx5e:
+>
+>         Bottleneck in RX side is released, reached linerate (~1.8x speedup).
+>         ~30% less cpu util on TX.
+>
+> This patch makes cpumask_local_spread() traversing CPUs based on NUMA
+> distance, just as well, and I expect comparabale improvement for its
+> users, as in case of mlx5e.
+>
+> I tested new behavior on my VM with the following NUMA configuration:
+>
+> root@debian:~# numactl -H
+> available: 4 nodes (0-3)
+> node 0 cpus: 0 1 2 3
+> node 0 size: 3869 MB
+> node 0 free: 3740 MB
+> node 1 cpus: 4 5
+> node 1 size: 1969 MB
+> node 1 free: 1937 MB
+> node 2 cpus: 6 7
+> node 2 size: 1967 MB
+> node 2 free: 1873 MB
+> node 3 cpus: 8 9 10 11 12 13 14 15
+> node 3 size: 7842 MB
+> node 3 free: 7723 MB
+> node distances:
+> node   0   1   2   3
+>   0:  10  50  30  70
+>   1:  50  10  70  30
+>   2:  30  70  10  50
+>   3:  70  30  50  10
+>
+> And the cpumask_local_spread() for each node and offset traversing looks
+> like this:
+>
+> node 0:   0   1   2   3   6   7   4   5   8   9  10  11  12  13  14  15
+> node 1:   4   5   8   9  10  11  12  13  14  15   0   1   2   3   6   7
+> node 2:   6   7   0   1   2   3   8   9  10  11  12  13  14  15   4   5
+> node 3:   8   9  10  11  12  13  14  15   4   5   6   7   0   1   2   3
+>
 
-Tested-by: Fabio Estevam <festevam@gmail.com>
+Is this meant as a replacement for [1]?
+
+I like that this is changing an existing interface so that all current
+users directly benefit from the change. Now, about half of the users of
+cpumask_local_spread() use it in a loop with incremental @i parameter,
+which makes the repeated bsearch a bit of a shame, but then I'm tempted to
+say the first point makes it worth it.
+
+[1]: https://lore.kernel.org/all/20221028164959.1367250-1-vschneid@redhat.com/
+
+> v1: https://lore.kernel.org/lkml/20221111040027.621646-5-yury.norov@gmail.com/T/
+> v2:
+>  - use bsearch() in sched_numa_find_nth_cpu();
+>  - fix missing 'static inline' in 3rd patch.
+>
+> Yury Norov (4):
+>   lib/find: introduce find_nth_and_andnot_bit
+>   cpumask: introduce cpumask_nth_and_andnot
+>   sched: add sched_numa_find_nth_cpu()
+>   cpumask: improve on cpumask_local_spread() locality
+>
+>  include/linux/cpumask.h  | 20 +++++++++++++++
+>  include/linux/find.h     | 33 ++++++++++++++++++++++++
+>  include/linux/topology.h |  8 ++++++
+>  kernel/sched/topology.c  | 55 ++++++++++++++++++++++++++++++++++++++++
+>  lib/cpumask.c            | 12 ++-------
+>  lib/find_bit.c           |  9 +++++++
+>  6 files changed, 127 insertions(+), 10 deletions(-)
+>
+> --
+> 2.34.1
+
