@@ -2,106 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C70DD62AF25
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7FA962AF28
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:11:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbiKOXKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 18:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
+        id S232040AbiKOXK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 18:10:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiKOXKa (ORCPT
+        with ESMTP id S238570AbiKOXKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 18:10:30 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9206F2B611;
-        Tue, 15 Nov 2022 15:10:28 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NBhjS6jt0z4xG5;
-        Wed, 16 Nov 2022 10:10:20 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1668553822;
-        bh=fhm8U/HFFB9ybOHcPNtA20Cg6w7QILs8MaHaUQL6Qos=;
-        h=Date:From:To:Cc:Subject:From;
-        b=uVTTlGGMy5A4Mcer6p1i5sBWxWgPw5knKjyZN15KZAbzKU9s7oALRyIiEOFvXfZ+8
-         ZrHABKZ28mh82V5sV256/BXNoFlffBom9PhtRZH+jLRl2Sqxfc3lpcyiWeBJjygmt6
-         mDS0EpbS7LD6VShO5Q0VjeUyUGY6p7SgKWiXYwN3ZhuhKogruDGSzPUb+LVc7QJ0AO
-         HrqD33EmCOxkTs/iWAuF80pRgc8Lm1Lx4GzVgSSbawF3Y4ujn/WWRvOv5/GlkGRAXK
-         EzUuyzmYDiFhXbR1Wmi5Cvb1ezYO1lYoSpns2hKYithZbuEKuxm/JlsjAPcwdhGXKX
-         h2hnNkU4mOpWg==
-Date:   Wed, 16 Nov 2022 10:10:17 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        David Miller <davem@davemloft.net>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Xu Kuohai <xukuohai@huawei.com>
-Subject: linux-next: manual merge of the bpf-next tree with the net tree
-Message-ID: <20221116101017.235b5952@canb.auug.org.au>
+        Tue, 15 Nov 2022 18:10:40 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B9F2E680;
+        Tue, 15 Nov 2022 15:10:38 -0800 (PST)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AFNAMUf026650;
+        Tue, 15 Nov 2022 17:10:22 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1668553822;
+        bh=gtf+eQVCKgSWi792JEHOnuPGmozhEm9qEIoe9H4zdgg=;
+        h=From:To:CC:Subject:Date;
+        b=jPOIf5AiID8XwK+J8AuyetpqXxWKUGmBI60zIdnA5pUEQuUDX1GraE7PofICp5cpl
+         2GTScVC8OVpS0cM89NgCFLNXP2zI0koT5k5qAN7+n6tBvDvm9q1so80pz4IdpYD1Ys
+         xeWV5K2St+L8tN+Peeql1IJJxlxUexN+MQD7sZ5w=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AFNAMej019020
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 15 Nov 2022 17:10:22 -0600
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 15
+ Nov 2022 17:10:22 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 15 Nov 2022 17:10:22 -0600
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AFNAMhV115002;
+        Tue, 15 Nov 2022 17:10:22 -0600
+From:   Nishanth Menon <nm@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Keerthy <j-keerthy@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        Robert Nelson <robertcnelson@gmail.com>,
+        Nishanth Menon <nm@ti.com>
+Subject: [PATCH] dt-bindings: gpio: gpio-davinci: Increase maxItems in gpio-line-names
+Date:   Tue, 15 Nov 2022 17:10:21 -0600
+Message-ID: <20221115231021.2389-1-nm@ti.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Me5A8Qfxn+JpOkY3s_c5Lj3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Me5A8Qfxn+JpOkY3s_c5Lj3
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+gpio-line-names really depends on ti,ngpios. However, the maximum value
+we have seen across the board is on K2G and da850 platforms where it can
+be upto 144.
 
-Hi all,
+Link: https://lore.kernel.org/linux-arm-kernel/20221115200357.qa2rvw3clbz7unzq@symptom/T/#u
+Fixes: c830b87a761b ("dt-bindings: gpio: gpio-davinci: Convert to json-schema")
+Reported-by: Robert Nelson <robertcnelson@gmail.com>
+Signed-off-by: Nishanth Menon <nm@ti.com>
+---
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+I dont see a practical scheme to set the maxItems based on ti,ngpios,
+but deleting the maxItems was softening the check as well.
 
-  include/linux/bpf.h
+ Documentation/devicetree/bindings/gpio/gpio-davinci.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-between commit:
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-davinci.yaml b/Documentation/devicetree/bindings/gpio/gpio-davinci.yaml
+index f32e09ef937c..10e56cf306db 100644
+--- a/Documentation/devicetree/bindings/gpio/gpio-davinci.yaml
++++ b/Documentation/devicetree/bindings/gpio/gpio-davinci.yaml
+@@ -35,7 +35,7 @@ properties:
+   gpio-line-names:
+     description: strings describing the names of each gpio line.
+     minItems: 1
+-    maxItems: 100
++    maxItems: 144
+ 
+   "#gpio-cells":
+     const: 2
+-- 
+2.31.1
 
-  1f6e04a1c7b8 ("bpf: Fix offset calculation error in __copy_map_value and =
-zero_map_value")
-
-from the net tree and commit:
-
-  e5feed0f64f7 ("bpf: Fix copy_map_value, zero_map_value")
-
-from the bpf-next tree.
-
-I fixed it up (I just used the latter) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Me5A8Qfxn+JpOkY3s_c5Lj3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmN0HFkACgkQAVBC80lX
-0GxPWwf/S+gFmnq8yPPU3IaosmITk2dreuKKRhL3x8Vx7ijz4/MyVWFKx9ecDWZM
-Js10zM5Z6T3Y732nRadIw/fbvmBTeuQtR3XBBr71ESzHdJ1oX8ZiLbWv/gMg2OIC
-5FmF93MqMWKyI6RaACSyb8SIZ1jiFoIY6xcaPHB6KQi0vT5mRi6jG//CA4PVXALT
-E29vL0DgR/Df72bBKCY1QLC1mmR1bnCbNA7TtgO/zHShdikDkUZjR2F0GHomY4sL
-zx2TAXNecoeCvQFAq+x/waiRwiqza4EFWaSMWiMzCYLC2dm9dS3DfahBVgaalqab
-9opeDbZvAbohl8197OI6f/EHbfLcJg==
-=f23a
------END PGP SIGNATURE-----
-
---Sig_/Me5A8Qfxn+JpOkY3s_c5Lj3--
