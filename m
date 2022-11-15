@@ -2,144 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8FE629E58
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C7F629E5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiKOQCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 11:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55864 "EHLO
+        id S231328AbiKOQDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 11:03:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbiKOQCD (ORCPT
+        with ESMTP id S229612AbiKOQDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 11:02:03 -0500
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2C3F0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:02:02 -0800 (PST)
-Received: by mail-qk1-x72e.google.com with SMTP id z17so9737742qki.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:02:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mphHOb91dA81eNm6zrgzZsbjN8Ohc/3yIAvdrTbJbYI=;
-        b=pVwc/aOmwXdnDaJKer7siBqCPA2gfnv74Iphmkvg+WZQHkmbtqS854NYYYAa+U4+3e
-         KHWeo4g02qOnund8YnBLeZ+H/y59pz5Kmd8vtc4CjHnP0iyTgLR1heMfpJpW35+0zywr
-         IMytAPm6kkeqFJEUMVN098j/WrKCI6pCOq/Xk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mphHOb91dA81eNm6zrgzZsbjN8Ohc/3yIAvdrTbJbYI=;
-        b=AOdbHtvPopOidtPYflovP8iRdzXbjCllE+plmy9clHWlPT9fBrIjpudPHnsxyHLlWl
-         RawUibzm421svLXtbi4KnkpSB4fK4u/nJR3+q1UMLBccD44P43SpBeTanA9KjFdCQXws
-         1NHnL3uQLVGpdaqYK9nUBd9m43/MCugRXUqOcpIm2gcI2jfR348/+XRxO6W/rSY5X+32
-         O+HlTVmiKvQ8hQ/p88vNWoij8wP4+huy51lYMJcIb6TxqIaQy36IAB97rqbzw1re73bN
-         j+J9jbsCgccvLtJifHllpcj9hmtgRdUBKEs7e/EZqqRZzbjiGNoPg+pHgkD0gSz1lmyv
-         icTw==
-X-Gm-Message-State: ANoB5pmRi2etbpcCvutP8ioxb9qU0BxG8sLmyKFPVXIZ2k34LOuxVbeS
-        AnP2/GBk0+UmE030RQaKH/GGXA==
-X-Google-Smtp-Source: AA0mqf7T5z5Bms3QZAXxIrcHzRqETWsSKrGXNLpZrjjg4bDHZKqCGtXJXOKU1dfwTc+fPMK0XlXyDw==
-X-Received: by 2002:a37:a893:0:b0:6fa:a188:a4be with SMTP id r141-20020a37a893000000b006faa188a4bemr15962834qke.228.1668528121244;
-        Tue, 15 Nov 2022 08:02:01 -0800 (PST)
-Received: from localhost (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id i20-20020ac85e54000000b0039ccbf75f92sm7413386qtx.11.2022.11.15.08.02.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 08:02:00 -0800 (PST)
-Date:   Tue, 15 Nov 2022 16:02:00 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Connor O'Brien <connoro@google.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        John Stultz <jstultz@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: Re: [RFC PATCH 10/11] torture: support randomized shuffling for
- proxy exec testing
-Message-ID: <Y3O3+NK+6/i7re3Q@google.com>
-References: <20221003214501.2050087-1-connoro@google.com>
- <20221003214501.2050087-11-connoro@google.com>
- <Y2/P3cMExRt2fUP5@google.com>
- <CALE1s+Ox_RF81kgF0YeV7sbuBN3RbBEvSK9_z6T4uWW2U_q=RQ@mail.gmail.com>
+        Tue, 15 Nov 2022 11:03:04 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18E4D5C;
+        Tue, 15 Nov 2022 08:03:03 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 17F931883A42;
+        Tue, 15 Nov 2022 16:03:02 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id E909C25002DE;
+        Tue, 15 Nov 2022 16:03:01 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id C67879EC0020; Tue, 15 Nov 2022 16:03:01 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALE1s+Ox_RF81kgF0YeV7sbuBN3RbBEvSK9_z6T4uWW2U_q=RQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 15 Nov 2022 17:03:01 +0100
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8 net-next 0/2] mv88e6xxx: Add MAB offload support
+In-Reply-To: <20221115145650.gs7crhkidbq5ko6v@skbuf>
+References: <20221112203748.68995-1-netdev@kapio-technology.com>
+ <Y3NcOYvCkmcRufIn@shredder>
+ <5559fa646aaad7551af9243831b48408@kapio-technology.com>
+ <20221115102833.ahwnahrqstcs2eug@skbuf>
+ <7c02d4f14e59a6e26431c086a9bb9643@kapio-technology.com>
+ <20221115111034.z5bggxqhdf7kbw64@skbuf>
+ <0cd30d4517d548f35042a535fd994831@kapio-technology.com>
+ <20221115122237.jfa5aqv6hauqid6l@skbuf>
+ <fb1707b55bd8629770e77969affaa2f9@kapio-technology.com>
+ <20221115145650.gs7crhkidbq5ko6v@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <f229503b98d772c936f1fc8ca826a14f@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 12:44:21PM -0800, Connor O'Brien wrote:
-> > Instead of doing it this way, maybe another approach is to randomize the
-> > sleep interval in:
-> >
-> >  */
-> > static int torture_shuffle(void *arg)
-> > {
-> >         VERBOSE_TOROUT_STRING("torture_shuffle task started");
-> >         do {
-> >                 schedule_timeout_interruptible(shuffle_interval);
-> >                 torture_shuffle_tasks();
-> >                 ...
-> >         } while (...)
-> >         ...
-> > }
-> >
-> > Right now with this patch you still wakeup the shuffle thread when skipping
-> > the affinity set operation.
-> >
-> > thanks,
-> >
-> >  - Joel
-> >
+On 2022-11-15 15:56, Vladimir Oltean wrote:
+> On Tue, Nov 15, 2022 at 02:25:13PM +0100, netdev@kapio-technology.com 
+> wrote:
+>> On 2022-11-15 13:22, Vladimir Oltean wrote:
+>> > Do you have a timeline for when the regression was introduced?
+>> > Commit 35da1dfd9484 reverts cleanly, so I suppose giving it a go with
+>> > that reverted might be worth a shot. Otherwise, a bisect from a known
+>> > working version only takes a couple of hours, and shouldn't require
+>> > other changes to the setup.
+>> 
+>> Wow! Reverting 35da1dfd9484 and the problem has disappeared. :-)
 > 
-> Wouldn't the affinities of all the tasks still change in lockstep
-> then? The intent with this patch is to get into situations where the
-> tasks have different affinity masks, which I think requires changing
-> the behavior of torture_shuffle_tasks() rather than how often it's
-> called.
+> See? That wasn't very painful, was it.
 
-Correct me if I'm wrong, but you are still changing the affinities of all the
-tasks at the same time (shuffle_task_list still has all the threads being set
-to the same affinity). The difference is with your patch, you occasionally
-skip punching a consecutive hole into shuffle_tmp_mask.
+Indeed it was not, when you get a good tip. Thanks alot! :-)
 
-I was thinking how you could make this patch more upstreamable, you are right
-calling less often is not what you are specifically looking for. However,
-would a better approach be to:
-	a) randomize the shuffle duration.
-	b) Instead of skipping the set_cpus_allowed_ptr(), why not randomize
-	the number of times you call cpumask_next() to pick a random hole.
+> 
+> Now, why doesn't that commit work for you? that's the real question.
+> I'm going to say there's a big assumption made there. The old code used
+> to poll up to 16 times with sleeps of up to 2 ms in between.
+> The new code polls until at least 50 ms have elapsed.
+> I can imagine the thought process being something like "hmm, 16*2=32ms,
+> let's round that up to 50 just to be sure". But the effective timeout
+> was not really increased. Rather said, in the old code there was never
+> really an effective timeout, since the polling code could have been
+> preempted many times, and these preemptions would not be accounted
+> against the msleep(2) calls. Whereas the new code really tracks
+> something approximating 50 ms now.
+> 
+> Could you please add the reverted patch back to your git tree, and see
+> by how much do you need to increase the timeout for your system to get
+> reliable results?
+> 
 
-These are just some ideas.
+Yes, so you want me to simply increase the 50ms on line 58 in smi.c...
 
-thanks,
-
- - Joel
-
-
-
-
-
-
-
-
-
-
-
+I have now tried to increase it even to 10000ms == 10s and it didn't 
+help,
+so something else must be needed...
