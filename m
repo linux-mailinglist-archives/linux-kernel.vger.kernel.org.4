@@ -2,120 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E65C5629313
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2C762930E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:14:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232672AbiKOIPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 03:15:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
+        id S232253AbiKOIOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 03:14:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiKOIPV (ORCPT
+        with ESMTP id S229966AbiKOIOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 03:15:21 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0242418E1F;
-        Tue, 15 Nov 2022 00:15:19 -0800 (PST)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NBJrK0khrz15MZK;
-        Tue, 15 Nov 2022 16:14:57 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 16:14:29 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 16:14:28 +0800
-Subject: Re: [PATCH v8 7/9] livepatch: Improve the search performance of
- module_kallsyms_on_each_symbol()
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Jiri Olsa <olsajiri@gmail.com>, <nick.alcock@oracle.com>
-CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "David Laight" <David.Laight@aculab.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <Y3HyrIwlZPYM8zYd@krava>
- <050b7513-4a20-75c7-0574-185004770329@huawei.com> <Y3IJ5GjrXBYDbfnA@krava>
- <ad637488-930e-33c1-558c-fc03d848afa8@huawei.com> <Y3IY6gzDtk1ze3u7@krava>
- <955eebae-0b36-d13f-0199-2f1b32af7da6@huawei.com> <Y3JB++KOXxMWWX35@krava>
- <Y3JivLcvbHNcIcSB@bombadil.infradead.org>
- <df46ad45-2de4-0300-4afa-5788463d712a@huawei.com> <Y3NADwGUIvfwnGTp@krava>
- <Y3NFoLn/GOJybXoc@bombadil.infradead.org>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <3df2bdd7-f10b-b8d1-3b7a-7e8111affd0c@huawei.com>
-Date:   Tue, 15 Nov 2022 16:14:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Tue, 15 Nov 2022 03:14:44 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A10175BB
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 00:14:42 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bp15so23183383lfb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 00:14:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=NJUghkSUxVBongGauUcPJFS1lAxj3QqixAvKwjEubTk=;
+        b=cBBk8m7XmoFr0+Q0ylI8LxpLDJUcMCNuSMdeEOxc7yPbXe108qVEPbz/Z6pO+ZkKDu
+         5Bm3b5piP5RfvOFy9vxYmn0K5jEvQQfmCFta7dwmVl73PkoER5d9jwGgxl1UejDOns0x
+         wOG6xEr96rU+0FM0s/PmMjUeV1dg1OZw4nMZQjURpmDPXfmWNJNLM8eUG0WmCMYkqUna
+         jbtGKlSX5BmhDusrCOZzCiY9DuF5xIZA/SGKWlkX4cxF+zqEPFrHY4iVuCmc6jzr3ehb
+         h9bHf/CliNnllAVzMEWvcEya9wZ8tMaKd2ZAhZAAXJRYoSiv7WcLkW0yTxWL3CBsrylc
+         UjEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NJUghkSUxVBongGauUcPJFS1lAxj3QqixAvKwjEubTk=;
+        b=oz9uZAQwCRSEqvUhURDsXPNCC3vKCamF1Z7QAco9ExWmMBGaZDsP6bL9wtnDoTdUUY
+         4UfQsSqXs89YIHxKTxuI+gZDGDIt9oMl4ont89w3zft7zVjBpkPB40G9m7Xd8PDcMuEb
+         0EsYAjd5bD/7ZahwtGlwbGMdiBfwpcMr6boowsWTFO0uMXP2ELptr3iVZhzDrIgiD4sR
+         T3T54pEDLSZshKTJP0OrU7gl6gt2Cg/zjNfJYd9tjHgO68zXcr+0IVMQqU+liGp0vY6s
+         1kS03bN6IgxSwvD79mSXvbj4MB5LjPvXpNXhGtAxxK9YiYxjUnRhVhTE1m9pxVxz9bSv
+         x3YQ==
+X-Gm-Message-State: ANoB5pmNRAm/jJAl9G6W9YyprtHxuD4zapo3N/xkoY+tGE3YOGio6MaM
+        V9THK8zS+XGjJsXcBmcLTkz3iQ==
+X-Google-Smtp-Source: AA0mqf6iiVRtWYnFEeY/1qHlfmPtscw/WYK0aqkvWvSBDGallokd8rzcWtuB1eWPEgrVm+gOuMRJWw==
+X-Received: by 2002:a19:f24d:0:b0:4a2:4d28:73b9 with SMTP id d13-20020a19f24d000000b004a24d2873b9mr5696619lfk.690.1668500080348;
+        Tue, 15 Nov 2022 00:14:40 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a21-20020ac25e75000000b00494603953b6sm2121955lfr.6.2022.11.15.00.14.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 00:14:39 -0800 (PST)
+Message-ID: <18ed041b-1ebb-910e-b426-c284f89b11cc@linaro.org>
+Date:   Tue, 15 Nov 2022 09:14:38 +0100
 MIME-Version: 1.0
-In-Reply-To: <Y3NFoLn/GOJybXoc@bombadil.infradead.org>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/5] dt-bindings: net: ipq4019-mdio: document IPQ6018
+ compatible
+To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221114194734.3287854-1-robimarko@gmail.com>
 Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221114194734.3287854-1-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 14/11/2022 20:47, Robert Marko wrote:
+> Document IPQ6018 compatible that is already being used in the DTS along
+> with the fallback IPQ4019 compatible as driver itself only gets probed
+> on IPQ4019 and IPQ5018 compatibles.
+> 
+> This is also required in order to specify which platform require clock to
+> be defined and validate it in schema.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 
 
-On 2022/11/15 15:54, Luis Chamberlain wrote:
-> On Tue, Nov 15, 2022 at 08:30:23AM +0100, Jiri Olsa wrote:
->> On Tue, Nov 15, 2022 at 10:10:16AM +0800, Leizhen (ThunderTown) wrote:
->>>
->>>
->>> On 2022/11/14 23:46, Luis Chamberlain wrote:
->>>> On Mon, Nov 14, 2022 at 02:26:19PM +0100, Jiri Olsa wrote:
->>>>> I'll check on that, meanwhile if we could keep the module argument,
->>>>> that'd be great
->>>>
->>>> As Leizhen suggested I could just drop patches:
->>>>
->>>> 7/9 livepatch: Improve the search performance of module_kallsyms_on_each_symbol()
->>>> 8/9 kallsyms: Delete an unused parameter related to kallsyms_on_each_symbol()
->>>>
->>>> Then after the next kernel is released this can be relooked at.
->>>> If this is agreeable let me know.
->>>
->>> I'm OK.
->>
->> sounds good, thanks
-> 
-> OK thanks, I dropped the last selftest patch as well, and pushed to
-> modules-next.  Leizhen, can you enhance the selftest for the new module
-> requirement and repost?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Okay, right away.
+Best regards,
+Krzysztof
 
-> 
-> Stephen, you can drop your fix from linux-next, hopefully there should
-> no longer be any merge conflicts. The module requirement will stick for
-> now.
-> 
-> Thanks,
-> 
->   Luis
-> .
-> 
-
--- 
-Regards,
-  Zhen Lei
