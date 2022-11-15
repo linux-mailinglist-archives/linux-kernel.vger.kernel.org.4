@@ -2,201 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D73629596
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E888E62959E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237926AbiKOKRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:17:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
+        id S232600AbiKOKTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:19:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232600AbiKOKR3 (ORCPT
+        with ESMTP id S232776AbiKOKTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:17:29 -0500
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A90B61;
-        Tue, 15 Nov 2022 02:17:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1668507444; bh=WHr2ExZRk8L8KdSJaScpbxLlfZXqwuhVfiMdT9FUlO4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HHU0B6Ok7zVOQ49GSdWezvezxQQFIvFEgTgpYSFE4Vtag1ALbcHP29lab/37lJab8
-         Nk5aKjq64KBx7F9ZwX8GC66jBGHvXrs74tX2QqFIf9s7OAdEIPOpKgKPG1jk6FcP/N
-         Y3MKP4hoO3sYcO82on8O4/b8Li5lgOZDWaYw8swo=
-Received: from [100.100.57.122] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 328F0600CE;
-        Tue, 15 Nov 2022 18:17:24 +0800 (CST)
-Message-ID: <fd5cc541-dfc6-d1cf-0865-669b11ce2e7a@xen0n.name>
-Date:   Tue, 15 Nov 2022 18:17:23 +0800
+        Tue, 15 Nov 2022 05:19:00 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EDE11A0A
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:18:57 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so9920496wmb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:18:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=y0jhQ5wWDkw9YieqTPmmqrGIOhq9gcBh4/aIkZ5lXzM=;
+        b=57noagd9/+GLWjNU9l6zkY9huepwbD69VwGHB+sQGnTHr1xZHyfKABbg4l4A4KRW5k
+         ruJ0W7plLAqEVfC09oNuWRQrNTDypUejVAyHQIkLAnJCp74Khfg64VJUWos7+NcX6iLa
+         gnpsgeEnzLVmexr7TFZoqkPbevxOTsmvfyDZNkQcpy4hgkvg6yV4FixJKueRVN9ew+RH
+         k3JhIE9cHIfqpGyzVApsoLHiZyKF1/AROnnTIWkNvB+JDtHB2g6fC+7RSqNn6EbGLU0t
+         E+q80oRh3vJmfeGrdASC8eTGBIOumDLS/VfT5BhurOOvdpPDzwq/M/wQqZKiRX2G3SeS
+         M+OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y0jhQ5wWDkw9YieqTPmmqrGIOhq9gcBh4/aIkZ5lXzM=;
+        b=Ha4P2/NEHy6HRFwb08mZnX07sSXJVQNDbFhFUAepUwSVq4hpOWgDBOq16/Zh60u2IG
+         l5OGydP6ZszInaStnpe7MDXJ542DYOk2plOMpw5HMB+4beAVKOLNimGELk7ZGdCkvG84
+         MwSAOAAsTeB6Y9nVJ9FCoiPj9BhUnl/icD+m/Nb5QwSjRIfrTG9d8rHb4beY3MngZKY5
+         RfZWcO/Elx7Kc4MA4tKrzQMH6djn+yFQT5q85CMA2JSS6CdfLemccMaAUk34vtatYxVg
+         5+HXd88MjKU2ytZUzTLGnhBrBJAM2Uv7DGcSDsnnCuqSSurcG15XVRNgRMkimDIMfTNS
+         p/OA==
+X-Gm-Message-State: ANoB5plin51DFxYKpl1PJz79nQI98MmFTcWwbjjLS9oGHBkT+47/Xmmv
+        vl88eqIgo7hBlJ0ZrttT6qRh1Q==
+X-Google-Smtp-Source: AA0mqf4ITJ/zq/QXos6q8t7wiTwkyykTspLsX8kURJcVbV6wRrgRL+pLuPL1gqJw44YPrazacqtxSw==
+X-Received: by 2002:a05:600c:314a:b0:3cf:7dc1:f432 with SMTP id h10-20020a05600c314a00b003cf7dc1f432mr791063wmo.148.1668507536327;
+        Tue, 15 Nov 2022 02:18:56 -0800 (PST)
+Received: from Red ([2a01:cb1d:3d5:a100:4a02:2aff:fe07:1efc])
+        by smtp.googlemail.com with ESMTPSA id f7-20020adfe907000000b0023677081f3asm11717345wrm.42.2022.11.15.02.18.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 02:18:55 -0800 (PST)
+Date:   Tue, 15 Nov 2022 11:18:50 +0100
+From:   Corentin LABBE <clabbe@baylibre.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     andrew@lunn.ch, calvin.johnson@oss.nxp.com, davem@davemloft.net,
+        edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        kuba@kernel.org, lgirdwood@gmail.com, linux@armlinux.org.uk,
+        pabeni@redhat.com, robh+dt@kernel.org, samuel@sholland.org,
+        wens@csie.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, netdev@vger.kernel.org,
+        linux-sunxi@googlegroups.com
+Subject: Re: [PATCH v4 1/3] regulator: Add of_regulator_bulk_get_all
+Message-ID: <Y3NnirK0bN71IgCo@Red>
+References: <20221115073603.3425396-1-clabbe@baylibre.com>
+ <20221115073603.3425396-2-clabbe@baylibre.com>
+ <Y3Nj4pA2+WRFvSNd@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:108.0)
- Gecko/20100101 Thunderbird/108.0a1
-Subject: Re: [PATCH v2 1/2] gpio: loongson: add dts/acpi gpio support
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        Arnaud Patard <apatard@mandriva.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        lvjianmin <lvjianmin@loongson.cn>,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>
-References: <20221114095332.21079-1-zhuyinbo@loongson.cn>
- <CAMRc=McnEiSj1Q51pG3Lc8e+HcXE_uU7dm=1VoOa__xOgyoZPg@mail.gmail.com>
- <8b24e3df-8c22-bd09-cfc1-b27e39a05c25@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <8b24e3df-8c22-bd09-cfc1-b27e39a05c25@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y3Nj4pA2+WRFvSNd@sirena.org.uk>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for jumping in, but...
-
-On 2022/11/15 17:53, Yinbo Zhu wrote:
+Le Tue, Nov 15, 2022 at 10:03:14AM +0000, Mark Brown a �crit :
+> On Tue, Nov 15, 2022 at 07:36:01AM +0000, Corentin Labbe wrote:
 > 
+> > It work exactly like regulator_bulk_get() but instead of working on a
+> > provided list of names, it seek all consumers properties matching
+> > xxx-supply.
 > 
-> 在 2022/11/15 下午5:05, Bartosz Golaszewski 写道:
->> On Mon, Nov 14, 2022 at 10:53 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
->>>
->>> The latest Loongson series platform use dts or acpi framework to
->>> register gpio device resources, such as the Loongson-2 series
->>> SoC of LOONGARCH architecture. In order to support dts, acpi and
->>> compatibility with previous platform device resources in driver,
->>> this patch was added.
->>>
->>> Signed-off-by: lvjianmin <lvjianmin@loongson.cn>
->>> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
->>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
->>> Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
->>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>> ---
->>> Change in v2:
->>>                  1. Fixup of_loongson_gpio_get_props and remove the 
->>> parse logic about
->>>                     "loongson,conf_offset", "loongson,out_offset", 
->>> "loongson,in_offset",
->>>                     "loongson,gpio_base", "loongson,support_irq" then 
->>> kernel driver will
->>>                     initial them that depend compatible except 
->>> "loongson,gpio_base".
->>>
->>>   arch/loongarch/include/asm/loongson.h         |  13 +
->>>   .../include/asm/mach-loongson2ef/loongson.h   |  12 +
->>>   .../include/asm/mach-loongson64/loongson.h    |  13 +
->>>   drivers/gpio/Kconfig                          |   6 +-
->>>   drivers/gpio/gpio-loongson.c                  | 422 +++++++++++++++---
->>>   5 files changed, 391 insertions(+), 75 deletions(-)
->>>
->>> diff --git a/arch/loongarch/include/asm/loongson.h 
->>> b/arch/loongarch/include/asm/loongson.h
->>> index 00db93edae1b..383fdda155f0 100644
->>> --- a/arch/loongarch/include/asm/loongson.h
->>> +++ b/arch/loongarch/include/asm/loongson.h
->>> @@ -60,6 +60,19 @@ static inline void xconf_writeq(u64 val64, 
->>> volatile void __iomem *addr)
->>>          );
->>>   }
->>>
->>> +/* ============== Data structrues =============== */
->>> +
->>> +/* gpio data */
->>> +struct platform_gpio_data {
->>> +       u32 gpio_conf;
->>> +       u32 gpio_out;
->>> +       u32 gpio_in;
->>> +       u32 support_irq;
->>> +       char *label;
->>> +       int gpio_base;
->>> +       int ngpio;
->>> +};
->>
->> This is a terrible name for an exported structure. You would at least
->> need some kind of a namespace prefix. But even then the need to add a
->> platform data structure is very questionable. We've moved past the
->> need for platform data in the kernel. I don't see anyone setting it up
->> in this series either. Could you provide more explanation on why you
->> would need it and who would use it?
-> okay, I will add a namespace prefix, about this platform data was added
-> that was to compatible with legacy platforms that do not support dts or
-> acpi, then, the mips loongson platform or loongarch loongson platform
+> What's the use case - why would a device not know which supplies
+> it requires?  This just looks like an invitation to badly written
+> consumers TBH.
 
-Why are you trying to support "legacy" LoongArch platforms when the 
-architecture was just upstreamed *this year*?
+Hello
 
-> can implement the gpio device driver to initialize the
-> platform_gpio_data structure as needed after exporting the structure.
->>
->>> +
->>>   /* ============== LS7A registers =============== */
->>>   #define LS7A_PCH_REG_BASE              0x10000000UL
->>>   /* LPC regs */
->>> diff --git a/arch/mips/include/asm/mach-loongson2ef/loongson.h 
->>> b/arch/mips/include/asm/mach-loongson2ef/loongson.h
->>> index ca039b8dcde3..b261cea4fee1 100644
->>> --- a/arch/mips/include/asm/mach-loongson2ef/loongson.h
->>> +++ b/arch/mips/include/asm/mach-loongson2ef/loongson.h
->>> @@ -315,4 +315,16 @@ extern unsigned long _loongson_addrwincfg_base;
->>>
->>>   #endif /* ! CONFIG_CPU_SUPPORTS_ADDRWINCFG */
->>>
->>> +/* ============== Data structrues =============== */
->>> +
->>> +/* gpio data */
->>> +struct platform_gpio_data {
->>> +       u32 gpio_conf;
->>> +       u32 gpio_out;
->>> +       u32 gpio_in;
->>> +       u32 support_irq;
->>> +       char *label;
->>> +       int gpio_base;
->>> +       int ngpio;
->>> +};
->>
->> No idea why you would need to duplicate it like this either. And why
->> put it in arch/.
-> because loongson platform include mips and loongarch, and the gpio 
-> device data was defined in arch/ in leagcy loongson gpio driver.  so the
-> latest loongson gpio drvier add platform_gpio_data in same dir.
+The device know which supply it have, but I found only this way to made all maintainers happy.
+See https://lore.kernel.org/netdev/0518eef1-75a6-fbfe-96d8-bb1fc4e5178a@linaro.org/t/#m7a2e012f4c7c7058478811929774ab2af9bfcbf6
 
-I think at this point it's hopefully clear, that the way forward to 
-supporting Loongson IP blocks shared between MIPS/LoongArch SoCs is to 
-start over and do things properly, making the code as platform-agnostic 
-as possible. Just make sure the drivers can get initialized via DT and 
-ACPI then you're all set -- the upstream kernel is guaranteed to use one 
-of the two well-established boot flows for every Loongson chip it 
-supports. Be it hard-coded DT in arch/mips/boot/dts/loongson, or the 
-LoongArch ACPI/upcoming DT, no need for hard-coding things in arch/ in 
-either case.
-
->>
->> [snip]
->>
->> I will hold off reviewing the rest of the patch until we get that 
->> clarified.
->>
->> Bartosz
->>
-> 
-
--- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
-
+Regards
