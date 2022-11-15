@@ -2,256 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B57D62AE3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB65662AE3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:25:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231504AbiKOWYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 17:24:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
+        id S231578AbiKOWZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 17:25:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231166AbiKOWYc (ORCPT
+        with ESMTP id S231548AbiKOWZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:24:32 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5311431C;
-        Tue, 15 Nov 2022 14:24:31 -0800 (PST)
+        Tue, 15 Nov 2022 17:25:10 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6125B24F34;
+        Tue, 15 Nov 2022 14:25:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668551071; x=1700087071;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=ioYse4mj8s6ql91TK5HvgW9IVOaDW+UiLOF39SY++Cs=;
-  b=LY5ayog8ZnVXlzEugZsHNL3N4SPjSybjdrpR4zog6oYmG7LRZoSWacRm
-   oULDFcu0hho1E5cK5sxDTHVUdsixppGpdnuxUCyOp0dkK7UHFU0xKxgSP
-   qt8vjwj/r7gu7pTFHLHbmWMXVJLxyAyKOiZ/LSMZbGp/GaFgx6Cvj/4CD
-   ujlVC909tEJbG/6aECwCBdVY32uPhppdtkkpt/NyTwTCQCZE67urA+w+X
-   OAfpRKv6cto0h8pNAawocQE0yfYoVa3RdQatZjQnzM6EmfNyl72/w49CP
-   WZ4q9UfR52N+xVXJa22gautRr8rFUqKd1KjInS4D41xVn9lds3i6MzVPW
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="292092323"
+  t=1668551109; x=1700087109;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=DgcocUg+FLP4uvo32ydeD+vexpqMydt+vM30Lvix/8c=;
+  b=PorihTF+UEhdnFgE3W8ltSjD7YSqd/nqDdPMqXnMUW2fTGXqpJayxDNy
+   +L4Hr1h0vfrsktA0jIsRLG00a3eFVHh/8fVvNYeR1xeek+vHuokGfzvxD
+   sxY43O0APLj1HzoKo3ly2ElY9lVhdI/YEFM7v4AzkovoxIaRNAmGuV39t
+   qge1pnXk4i9PA79N4d9piuj64DhOLCPQM+pjSVC4AYz0JAdyekSuLsS3i
+   kb5RFbj0bIYjfu8wiis3pDssPfEEJ3t+crqVUQiI4hd8uBAG5SzEj4juE
+   njJGqSLzgQJt2USoFrlw5snH8/+r77ZPugCORfGaok4Nqw4wNvkbNBcn2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="376653146"
 X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="292092323"
+   d="scan'208";a="376653146"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 14:24:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="764082978"
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 14:25:09 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="764083195"
 X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="764082978"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga004.jf.intel.com with ESMTP; 15 Nov 2022 14:24:29 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 14:24:29 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 14:24:28 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 15 Nov 2022 14:24:28 -0800
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.49) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 15 Nov 2022 14:24:19 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TanwpsY/5vBHxvGvLeugxbJ+LUa44z/pHS7LBuy0jmkgsBFMyczGaSiRsRnPCYOz/0WtOrE5ryMQTUIadA00RyKulrYkapdEu0RjrXhZ+jRsl9NNHT0X6MpkFvxgOfIgK0bXQTXnYp8nIheSTVGSpgPeSrzYnPfr0J1QRN7snkrMuMno8solDWBLpZixME4IAV2PzoQF04Y9Nm0ukt/zEhiK+fhmo2FYJLB/wksNYmIKyTy7m6nLnSjfCBkqeT27Ap5bCaRaW0NR0/bsJnQFYQo+M18F7RhVv0y2MADCf4PTgcZnghbYoM2bhB7JrFku86su20OMYcrJ7SuUfSX2gQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ioYse4mj8s6ql91TK5HvgW9IVOaDW+UiLOF39SY++Cs=;
- b=PLPgLa4BKyg2HXZ2D8AOvyVK3nk6BgHG5tqnVmg73k2gbAz8Mr5WSwKJOeptWlceEFfJKtsGqMMONK0JYDb2ZAWWM7ncQNT4Lh1Aau9dCGK4/DQBkzZd5GnZseItPQyccbCFrjCmAddotD0TrRghAEcCbe4Fmo56iRuDMA8qjHnKpr8Qvsv7sAjK9J2CxKmXEcTKmTpyQu4EZMTBc5fIK/5UpfGYgoFIcJAKTFPPI40Trj4ezPkFtVWQQVCepnD+NCE+4h2gkZs5jHzTBGRD5RDgIW9pFcGQIIhefvSUuosyJH9Wnxfm03cV/j3q+UqySP3bSc86p4ZH2imgAaiyQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by BL1PR11MB5509.namprd11.prod.outlook.com (2603:10b6:208:31f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Tue, 15 Nov
- 2022 22:23:47 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::add7:df23:7f86:ecf3]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::add7:df23:7f86:ecf3%5]) with mapi id 15.20.5813.018; Tue, 15 Nov 2022
- 22:23:47 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "peterz@infradead.org" <peterz@infradead.org>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>
-CC:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH v3 35/37] x86/cet: Add PTRACE interface for CET
-Thread-Topic: [PATCH v3 35/37] x86/cet: Add PTRACE interface for CET
-Thread-Index: AQHY8J5eaXgH6xugZk20MwPZdy8SOK5AIA2AgACAkAA=
-Date:   Tue, 15 Nov 2022 22:23:47 +0000
-Message-ID: <223bf306716f5eb68e4f9fd660414c84cddd9886.camel@intel.com>
-References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
-         <20221104223604.29615-36-rick.p.edgecombe@intel.com>
-         <Y3Olme4Nl+VOkjAH@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y3Olme4Nl+VOkjAH@hirez.programming.kicks-ass.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|BL1PR11MB5509:EE_
-x-ms-office365-filtering-correlation-id: 001f3729-9d39-4b5f-a7c6-08dac75810aa
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: waIiemWBgBObRbNrChWwbHLblsw5FXab1zMAST/6NNNEWbUTi3bqLi7jGrYtXilo28COE2Ww9pBGojYwraqkqb/G7okGZc8GJxIQcj/Wsf3CTJO7ZD55Xpdyzmy+asTxT8KZxBKxqAg7Qwija0eOI70dGbnBZ1AZstVGZBL7OQwAAma+i3vv6nCUJADfPDim36VKmLR9cBQLzZMXHzE95INkZjGqyAWD3686/9gXhh5jakMMPKUzIK5fvrpNv5t05hxF7+mMQbtI2Tz06C0NV+6WebhqiatW8xJOfYNbIvV0SAUpEEpeM1KvDDhPI41eN2LRTsncCl/QoQ/CUEBSuqZ+PpPe9hkSa5WRq1gu2HoqtoGQvkc4FW2NRIkD5RGDqkDeZVpz6DmUgq4OPkvluDAGeZ+BUNOIDtz58XpcWW6k68yPJ/yx5qxJxHPIHzcpLPTp1kjdzXq2NTE7z9Sr3o3NuwGtSh099N9vlm4p/NWc5rWvOAIzNgthLgYm8mRw9EkbjAfVhKtSV5lDBKnh817xnjOJhGqAc1rvb0dQS0Op+k80kr9rTxS58Y1KkFvddbN9akFSdpVI8mHMJYcwX0ohWamT506TcUfPVG/Vms802gRbVeGEIAfN1NG1/g45BG4oOSxNaEGsle/qzwJMOIXDh0VPrYd+xKMANMZhM78C9FF87192Dn04IIdt8GLzfVjC9ovQCqT04HEX5iFCvi7aWn0YJf3iBmYq5eH3jcTZ+cZYNZh233HnijwjYnUdv1c4Az/+sH0WoiC6SN5gBEOlY7sCvpW38F9wYaADZW8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(396003)(346002)(39860400002)(136003)(451199015)(5660300002)(7406005)(7416002)(71200400001)(41300700001)(4001150100001)(2906002)(6636002)(110136005)(8676002)(66446008)(64756008)(66476007)(66556008)(91956017)(76116006)(66946007)(316002)(6486002)(54906003)(4326008)(86362001)(6506007)(83380400001)(186003)(2616005)(478600001)(26005)(6512007)(8936002)(122000001)(82960400001)(38070700005)(36756003)(38100700002)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VHJuOWNiM3ZjOXczQmZnWGJxREloMUdhUUtCSUIzc2ZLSEJlNlJXcFU1ckE0?=
- =?utf-8?B?bnlHRkoyWXRiSFgzbDJBRS9TYldXZkJhQnkvaUFidDIwTFBieTRobWNPVGpy?=
- =?utf-8?B?TkNXRW9UK3FUZzNSNlVYM2dQai9qTXQyb1pMWVNneGVYaWgxZHFPeTYreTNj?=
- =?utf-8?B?OXhpQUVVYzZkeDV3SkFjbTBHTnc4R2tQTW9TZlFjNUM2WW1mcE1ZcjNySE1T?=
- =?utf-8?B?aFVER0NFY2JRbnNrM2hFbVY5a2tnMTNKQnNYSFdadGY2aERhR0lmWlVsY2JE?=
- =?utf-8?B?amRhNUVRUGZ6WFJiaUY2a3JFbmhWanFqOFltVlJCdTJQYS9ZREFYM04rVDVY?=
- =?utf-8?B?emsxWnJLRkhqZVAvdlFZd21iSTVxR1lwL2REVXcrTXAvZDNRckhOSnNlcTJx?=
- =?utf-8?B?RTkzSHZ5ZUlGaUJZbFV6MmpockRDbFJlS1VybUUwMEJpSWlYSjBZb25BMW5J?=
- =?utf-8?B?bm5MMEZrVDE3MWVpNEdCU0xsbWVYMENWbHZ0ZDZ4cXBGZGx4a0lMdGlJM3Nq?=
- =?utf-8?B?VlFMK0Yyek1GOWJGVTRuUW5qSjlYMWRBSzZwYnE5cDRmVFVsbXhhMEpiS0Nm?=
- =?utf-8?B?QURSL0ZSMUgvVnVCZjZVTXZRMHZnSi80YWJyYk02clZGSTgxamZpWmw2TXlH?=
- =?utf-8?B?YlVOT1MyQlFFMGlUUi81bmdVOWhvV1Y2MTk0ODg2Z2hWZ2pkcEw3bVdPaUdG?=
- =?utf-8?B?MHZneEx0L2FweEt2ckIwWDYzSGkxTlg0SnRranlTUE5PZFZHVDZPRGFOQzlO?=
- =?utf-8?B?VlJJMGVPOXRrbUExMjltRi9EKzUybHllTkUzblVLa0IyYUovaHI0a0NmTlhT?=
- =?utf-8?B?WTVHVVpMczlhTUUvNnhIbHZuZTNZQkNsTnlRRlRxaUJpZ05xbkFOZXA5b1Bj?=
- =?utf-8?B?Z3kwZkpvaVB3Y1QrVmZ2ZCttekpmNjF1TWZMcXdMR2VtaWpRNEpsRjRxZndU?=
- =?utf-8?B?WmUrM3Z4c0FSWFNsL3lUZXJWOFRqQjE2c1AwaEVoTW9MdnJoUGc5OHRpb2RB?=
- =?utf-8?B?eGNNbjQ2RS9CaUFHSmZFM3ZtSkFWTzE3bWl4SVo3Yld6ZzVTZTlLb09pem1F?=
- =?utf-8?B?d25BUWNBeWJUUk9yUHY0ZUJVS0IyeklWQVFzelowYSt4V3E3bTB3SWtxa2R5?=
- =?utf-8?B?YnZOMXJoOC91SmIvWTVnd2F4SVVWc0N0K0pFc1hsSlF5TWFvRjdQb3lxdG1F?=
- =?utf-8?B?dSs0UkRwMlc5VE9YUUUzcUt1TlYwejVqeWtmVHFkaGRBeE8yZDh2Zy8vK3Nm?=
- =?utf-8?B?UzlqWXdsclA0T3FUMUJmVjViMTV4aVFNV3R2dTdFN3k3WmJuM2tyRUp6V0RZ?=
- =?utf-8?B?VFFINktjM1NTWlgrOE8rVUFZMzlnbTc1VXJERFRYVEtQb0R5TXJ5YWduSWR3?=
- =?utf-8?B?TUdua3pGT1R5Tk0vRzJhdGhING9iOW12UFF3NVVySGltdXpWRXU2cVRoVVFC?=
- =?utf-8?B?eWY1VDJOelhHT2FaQjZtSTlRQmZQNXNvSVNqaWNHdXlidTc1Qlk4L1V0Nkha?=
- =?utf-8?B?WHZKWlZ1NFVJc1JoTXZSUEczaVRBOFkyeGdSN1ZOQlVYZHZUK0gwT2lmOUtQ?=
- =?utf-8?B?Q0ltTkpHMklDS1N3bXFZdmRZSlZYeHl2K2psZmFFRk53MnVlNmlxU3MvNGNl?=
- =?utf-8?B?b3dNc3Rab3NlREhWNHdsWWF0M0swY2dtTXdJeFJ1UGJqeFBqZ0tMMTZOSTZk?=
- =?utf-8?B?RnBiZ0JFYURTRGhXc055OVgwV2xLMm5CMVRoTU5QTC9wamplWjFSelhkdk40?=
- =?utf-8?B?MS8wSm5rTktzbWxpd0JtU1VkbExwSU5yL20xZkhHSS9walFUZjRKeUVuMWRM?=
- =?utf-8?B?NTIvYmpFR1pNRFhOOTV0ZHExeVdYTlNOZ0JKTFpwcE9uNk9JdG9NMmttTHVK?=
- =?utf-8?B?VUdoNm9HalYrYUdSWWZSZXVGek9iSXN1RGhtYzdmdDNReXNGbGNzK1pIbWlQ?=
- =?utf-8?B?YXBsNHB2dzJ4V2FVVU43eWttak5Gb3lCdWdsYjR6OFoyUnJBbWlZODkxNFhs?=
- =?utf-8?B?Zm5VNUM4MUJwa2Y3bG82ZW1sYlJxdGFWVFZPZFF6by9RbStWcXpCUFpQU3dk?=
- =?utf-8?B?NkVXUHlRb0VtanErendrSjIxK3l0S2U5cm8zcUNLR1ltK1JmQjRXK2pVVzVP?=
- =?utf-8?B?R09UcHV5RTdzaXlYRWpJM25hUWJ5bzFZaVJ0cHJqNGJUUncxdEZ4UHNITkN5?=
- =?utf-8?Q?k92IJdxfqlZGWlwdFV9x4CY=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A6316DAAA0206C4AA040A8F2BB2C0579@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+   d="scan'208";a="764083195"
+Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.7.249]) ([10.212.7.249])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 14:25:08 -0800
+Message-ID: <76b84a3e-b43b-47e4-0912-5085ec689fff@intel.com>
+Date:   Tue, 15 Nov 2022 15:25:07 -0700
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 001f3729-9d39-4b5f-a7c6-08dac75810aa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2022 22:23:47.6390
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: D7DNuxezfQpM7xEutN0bb5eIZluEvKCatAVLCcR/BDyjhUKEGq556NLJfsP6Rc1gbmg08eoT1wKKIWQLM2dN1YNAnMMtvfkjI0ef7/vaHxI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5509
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.1
+Subject: Re: [PATCH 05/11] cxl/mem: Trace General Media Event Record
+Content-Language: en-US
+To:     ira.weiny@intel.com, Dan Williams <dan.j.williams@intel.com>
+Cc:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
+References: <20221110185758.879472-1-ira.weiny@intel.com>
+ <20221110185758.879472-6-ira.weiny@intel.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20221110185758.879472-6-ira.weiny@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KyBDaHJpc3RpbmENCg0KT24gVHVlLCAyMDIyLTExLTE1IGF0IDE1OjQzICswMTAwLCBQZXRlciBa
-aWpsc3RyYSB3cm90ZToNCj4gT24gRnJpLCBOb3YgMDQsIDIwMjIgYXQgMDM6MzY6MDJQTSAtMDcw
-MCwgUmljayBFZGdlY29tYmUgd3JvdGU6DQo+ID4gRnJvbTogWXUtY2hlbmcgWXUgPHl1LWNoZW5n
-Lnl1QGludGVsLmNvbT4NCj4gPiANCj4gPiBTb21lIGFwcGxpY2F0aW9ucyAobGlrZSBHREIgYW5k
-IENSSVUpIHdvdWxkIGxpa2UgdG8gdHdlYWsgQ0VUIHN0YXRlDQo+ID4gdmlhDQo+ID4gcHRyYWNl
-LiBUaGlzIGFsbG93cyBmb3IgZXhpc3RpbmcgZnVuY3Rpb25hbGl0eSB0byBjb250aW51ZSB0byB3
-b3JrDQo+ID4gZm9yDQo+ID4gc2VpemVkIENFVCBhcHBsaWNhdGlvbnMuIFByb3ZpZGUgYW4gaW50
-ZXJmYWNlIGJhc2VkIG9uIHRoZSB4c2F2ZQ0KPiA+IGJ1ZmZlcg0KPiA+IGZvcm1hdCBvZiBDRVQs
-IGJ1dCBmaWx0ZXIgdW5uZWVkZWQgc3RhdGVzIHRvIG1ha2UgdGhlIGtlcm5lbOKAmXMgam9iDQo+
-ID4gZWFzaWVyLg0KPiA+IA0KPiA+IFRoZXJlIGlzIGFscmVhZHkgcHRyYWNlIGZ1bmN0aW9uYWxp
-dHkgZm9yIGFjY2Vzc2luZyB4c3RhdGUsIGJ1dA0KPiA+IHRoaXMNCj4gPiBkb2VzIG5vdCBpbmNs
-dWRlIHN1cGVydmlzb3IgeGZlYXR1cmVzLiBTbyB0aGVyZSBpcyBub3QgYSBjb21wbGV0ZWx5DQo+
-ID4gY2xlYXIgcGxhY2UgZm9yIHdoZXJlIHRvIHB1dCB0aGUgQ0VUIHN0YXRlLiBBZGRpbmcgaXQg
-dG8gdGhlIHVzZXINCj4gPiB4ZmVhdHVyZXMgcmVnc2V0IHdvdWxkIGNvbXBsaWNhdGUgdGhhdCBj
-b2RlLCBhcyBpdCBjdXJyZW50bHkgc2hhcmVzDQo+ID4gbG9naWMgd2l0aCBzaWduYWxzIHdoaWNo
-IHNob3VsZCBub3QgaGF2ZSBzdXBlcnZpc29yIGZlYXR1cmVzLg0KPiA+IA0KPiA+IERvbuKAmXQg
-YWRkIGEgZ2VuZXJhbCBzdXBlcnZpc29yIHhmZWF0dXJlIHJlZ3NldCBsaWtlIHRoZSB1c2VyIG9u
-ZSwNCj4gPiBiZWNhdXNlIGl0IGlzIGJldHRlciB0byBtYWludGFpbiBmbGV4aWJpbGl0eSBmb3Ig
-b3RoZXIgc3VwZXJ2aXNvcg0KPiA+IHhmZWF0dXJlcyB0byBkZWZpbmUgdGhlaXIgb3duIGludGVy
-ZmFjZS4gRm9yIGV4YW1wbGUsIGFuIHhmZWF0dXJlDQo+ID4gbWF5DQo+ID4gZGVjaWRlIG5vdCB0
-byBleHBvc2UgYWxsIG9mIGl04oCZcyBzdGF0ZSB0byB1c2Vyc3BhY2UuIEEgbG90IG9mIGVudW0N
-Cj4gPiB2YWx1ZXMgcmVtYWluIHRvIGJlIHVzZWQsIHNvIGp1c3QgcHV0IGl0IGluIGRlZGljYXRl
-ZCBDRVQgcmVnc2V0Lg0KPiA+IA0KPiA+IFRoZSBvbmx5IGRvd25zaWRlIHRvIG5vdCBoYXZpbmcg
-YSBnZW5lcmljIHN1cGVydmlzb3IgeGZlYXR1cmUNCj4gPiByZWdzZXQsDQo+ID4gaXMgdGhhdCBh
-cHBzIG5lZWQgdG8gYmUgZW5saWdodGVuZWQgb2YgYW55IG5ldyBzdXBlcnZpc29yIHhmZWF0dXJl
-DQo+ID4gZXhwb3NlZCB0aGlzIHdheSAoaS5lLiB0aGV5IGNhbuKAmXQgdHJ5IHRvIGhhdmUgZ2Vu
-ZXJpYyBzYXZlL3Jlc3RvcmUNCj4gPiBsb2dpYykuIEJ1dCBtYXliZSB0aGF0IGlzIGEgZ29vZCB0
-aGluZywgYmVjYXVzZSB0aGV5IGhhdmUgdG8gdGhpbmsNCj4gPiB0aHJvdWdoIGVhY2ggbmV3IHhm
-ZWF0dXJlIGluc3RlYWQgb2YgZW5jb3VudGVyaW5nIGlzc3VlcyB3aGVuIG5ldyBhDQo+ID4gbmV3
-DQo+ID4gc3VwZXJ2aXNvciB4ZmVhdHVyZSB3YXMgYWRkZWQuDQo+IA0KPiBQZXIgdGhpcyBhcmd1
-bWVudCB0aGlzIHNob3VsZCBub3QgdXNlIHRoZSBDRVQgWFNBVkUgZm9ybWF0IGFuZCBDRVQNCj4g
-bmFtZQ0KPiBhdCBhbGwsIGJlY2F1c2UgdGhhdCBjb25mbGF0ZXMgdGhlIHNpdHVhdGlvbiB2cyBJ
-QlQuIEVuYWJsaW5nIHRoYXQNCj4gbWlnaHQNCj4gbm90IHdhbnQgdG8gZm9sbG93IHRoaXMgcHJl
-Y2VkZW50Lg0KDQpIbW0sIHdlIGRlZmluaXRlbHkgbmVlZCB0byBiZSBhYmxlIHRvIHNldCB0aGUg
-U1NQLiBDaHJpc3RpbmEsIGRvZXMgR0RCDQpuZWVkIGFueXRoaW5nIGVsc2U/IEkgdGhvdWdodCBt
-YXliZSB0b2dnbGluZyBTSFNUS19FTj8NCg0KU28gaXQgbWlnaHQgZW5kIHVwIGxvb2tpbmcgcHJl
-dHR5IG11Y2ggdGhlIHNhbWUsIGFuZCBpdCB3b3VsZCBqdXN0IGJlDQpyZW5hbWVkIGFuZCBzZXBh
-cmF0ZWQgaW4gY29uY2VwdC4NCg0KPiANCj4gPiBCeSBhZGRpbmcgYSBDRVQgcmVnc2V0LCBpdCBh
-bHNvIGhhcyB0aGUgZWZmZWN0IG9mIGluY2x1ZGluZyB0aGUgQ0VUDQo+ID4gc3RhdGUNCj4gPiBp
-biBhIGNvcmUgZHVtcCwgd2hpY2ggY291bGQgYmUgdXNlZnVsIGZvciBkZWJ1Z2dpbmcuDQo+ID4g
-DQo+ID4gSW5zaWRlIHRoZSBzZXR0ZXIgQ0VUIHJlZ3NldCwgZmlsdGVyIG91dCBpbnZhbGlkIHN0
-YXRlLiBUb2RheSB0aGlzDQo+ID4gaW5jbHVkZXMgc3RhdGVzIGRpc2FsbG93ZWQgYnkgdGhlIEhX
-IGFuZCBzdGF0ZXMgaW52b2x2aW5nIEluZGlyZWN0DQo+ID4gQnJhbmNoDQo+ID4gVHJhY2tpbmcg
-d2hpY2ggdGhlIGtlcm5lbCBkb2VzIG5vdCBjdXJyZW50bHkgc3VwcG9ydCBmb3IgdXNlcnNhcGNl
-Lg0KPiA+IA0KPiA+IFNvIHRoaXMgbGVhdmVzIHRocmVlIHBpZWNlcyBvZiBkYXRhIHRoYXQgY2Fu
-IGJlIHNldCwgc2hhZG93IHN0YWNrDQo+ID4gZW5hYmxlbWVudCwgV1JTUyBlbmFibGVtZW50IGFu
-ZCB0aGUgc2hhZG93IHN0YWNrIHBvaW50ZXIuIEl0IGlzDQo+ID4gd29ydGgNCj4gPiBub3Rpbmcg
-dGhhdCB0aGlzIGlzIHNlcGFyYXRlIHRoYW4gZW5hYmxpbmcgc2hhZG93IHN0YWNrIHZpYSB0aGUN
-Cj4gPiBhcmNoX3ByY3RsKClzLg0KPiANCj4gRG9lcyB0aGlzIHZhbGlkYXRlIHRoZSBTU1AsIHdo
-ZW4gc2V0LCBwb2ludHMgdG8gYW4gYWN0dWFsIHZhbGlkIFNTDQo+IHBhZ2U/DQoNCk5vLCBidXQg
-dGhhdCBzaXR1YXRpb24gaXMgYWxyZWFkeSBwb3NzaWJsZSBhbmQgaGFzIHRvIGJlIGhhbmRsZWQN
-CmFueXdheS4gSnVzdCB1bm1hcCB5b3VyIHNoYWRvdyBzdGFjaywgYW5kIG1hcCB3aGF0ZXZlciBv
-dGhlciB0eXBlIG9mDQptZW1vcnkgYXQgdGhlIHNhbWUgYWRkcmVzcyB3aXRob3V0IGRvaW5nIGEg
-Y2FsbCBvciByZXQuIFRoZW4geW91IHdpbGwNCnNlZ2ZhdWx0IGF0IHRoZSBmaXJzdCBjYWxsIG9y
-IHJldC4NCg==
+
+
+On 11/10/2022 10:57 AM, ira.weiny@intel.com wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
+> 
+> CXL rev 3.0 section 8.2.9.2.1.1 defines the General Media Event Record.
+> 
+> Determine if the event read is a general media record and if so trace
+> the record as a General Media Event Record.
+> 
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+
+> 
+> ---
+> Changes from RFC v2:
+> 	Output DPA flags as a single field
+> 	Ensure names of fields match what TP_print outputs
+> 	Steven
+> 		prefix TRACE_EVENT with 'cxl_'
+> 	Jonathan
+> 		Remove Reserved field
+> 
+> Changes from RFC:
+> 	Add reserved byte array
+> 	Use common CXL event header record macros
+> 	Jonathan
+> 		Use unaligned_le{24,16} for unaligned fields
+> 		Don't use the inverse of phy addr mask
+> 	Dave Jiang
+> 		s/cxl_gen_media_event/general_media
+> 		s/cxl_evt_gen_media/cxl_event_gen_media
+> ---
+>   drivers/cxl/core/mbox.c    |  40 ++++++++++--
+>   drivers/cxl/cxlmem.h       |  19 ++++++
+>   include/trace/events/cxl.h | 124 +++++++++++++++++++++++++++++++++++++
+>   3 files changed, 179 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> index f46558e09f08..6d48fdb07700 100644
+> --- a/drivers/cxl/core/mbox.c
+> +++ b/drivers/cxl/core/mbox.c
+> @@ -709,6 +709,38 @@ int cxl_enumerate_cmds(struct cxl_dev_state *cxlds)
+>   }
+>   EXPORT_SYMBOL_NS_GPL(cxl_enumerate_cmds, CXL);
+>   
+> +/*
+> + * General Media Event Record
+> + * CXL rev 3.0 Section 8.2.9.2.1.1; Table 8-43
+> + */
+> +static const uuid_t gen_media_event_uuid =
+> +	UUID_INIT(0xfbcd0a77, 0xc260, 0x417f,
+> +		  0x85, 0xa9, 0x08, 0x8b, 0x16, 0x21, 0xeb, 0xa6);
+> +
+> +static bool cxl_event_tracing_enabled(void)
+> +{
+> +	return trace_cxl_generic_event_enabled() ||
+> +	       trace_cxl_general_media_enabled();
+> +}
+> +
+> +static void cxl_trace_event_record(const char *dev_name,
+> +				   enum cxl_event_log_type type,
+> +				   struct cxl_event_record_raw *record)
+> +{
+> +	uuid_t *id = &record->hdr.id;
+> +
+> +	if (uuid_equal(id, &gen_media_event_uuid)) {
+> +		struct cxl_event_gen_media *rec =
+> +				(struct cxl_event_gen_media *)record;
+> +
+> +		trace_cxl_general_media(dev_name, type, rec);
+> +		return;
+> +	}
+> +
+> +	/* For unknown record types print just the header */
+> +	trace_cxl_generic_event(dev_name, type, record);
+> +}
+> +
+>   static int cxl_clear_event_record(struct cxl_dev_state *cxlds,
+>   				  enum cxl_event_log_type log,
+>   				  struct cxl_get_event_payload *get_pl, u16 nr)
+> @@ -754,11 +786,11 @@ static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
+>   			u16 nr_rec = min_t(u16, pl_nr, CXL_GET_EVENT_NR_RECORDS);
+>   			int i;
+>   
+> -			if (trace_cxl_generic_event_enabled()) {
+> +			if (cxl_event_tracing_enabled()) {
+>   				for (i = 0; i < nr_rec; i++)
+> -					trace_cxl_generic_event(dev_name(cxlds->dev),
+> -								type,
+> -								&payload.record[i]);
+> +					cxl_trace_event_record(dev_name(cxlds->dev),
+> +							       type,
+> +							       &payload.record[i]);
+>   			}
+>   
+>   			rc = cxl_clear_event_record(cxlds, type, &payload, nr_rec);
+> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+> index 28a114c7cf69..86197f3168c7 100644
+> --- a/drivers/cxl/cxlmem.h
+> +++ b/drivers/cxl/cxlmem.h
+> @@ -412,6 +412,25 @@ struct cxl_mbox_clear_event_payload {
+>   	__le16 handle[CXL_GET_EVENT_NR_RECORDS];
+>   };
+>   
+> +/*
+> + * General Media Event Record
+> + * CXL rev 3.0 Section 8.2.9.2.1.1; Table 8-43
+> + */
+> +#define CXL_EVENT_GEN_MED_COMP_ID_SIZE	0x10
+> +struct cxl_event_gen_media {
+> +	struct cxl_event_record_hdr hdr;
+> +	__le64 phys_addr;
+> +	u8 descriptor;
+> +	u8 type;
+> +	u8 transaction_type;
+> +	u8 validity_flags[2];
+> +	u8 channel;
+> +	u8 rank;
+> +	u8 device[3];
+> +	u8 component_id[CXL_EVENT_GEN_MED_COMP_ID_SIZE];
+> +	u8 reserved[0x2e];
+> +} __packed;
+> +
+>   struct cxl_mbox_get_partition_info {
+>   	__le64 active_volatile_cap;
+>   	__le64 active_persistent_cap;
+> diff --git a/include/trace/events/cxl.h b/include/trace/events/cxl.h
+> index 60dec9a84918..a0c20e110708 100644
+> --- a/include/trace/events/cxl.h
+> +++ b/include/trace/events/cxl.h
+> @@ -119,6 +119,130 @@ TRACE_EVENT(cxl_generic_event,
+>   		__print_hex(__entry->data, CXL_EVENT_RECORD_DATA_LENGTH))
+>   );
+>   
+> +/*
+> + * Physical Address field masks
+> + *
+> + * General Media Event Record
+> + * CXL v2.0 Section 8.2.9.1.1.1; Table 154
+> + *
+> + * DRAM Event Record
+> + * CXL rev 3.0 section 8.2.9.2.1.2; Table 8-44
+> + */
+> +#define CXL_DPA_FLAGS_MASK			0x3F
+> +#define CXL_DPA_MASK				(~CXL_DPA_FLAGS_MASK)
+> +
+> +#define CXL_DPA_VOLATILE			BIT(0)
+> +#define CXL_DPA_NOT_REPAIRABLE			BIT(1)
+> +#define show_dpa_flags(flags)	__print_flags(flags, "|",		   \
+> +	{ CXL_DPA_VOLATILE,			"VOLATILE"		}, \
+> +	{ CXL_DPA_NOT_REPAIRABLE,		"NOT_REPAIRABLE"	}  \
+> +)
+> +
+> +/*
+> + * General Media Event Record - GMER
+> + * CXL v2.0 Section 8.2.9.1.1.1; Table 154
+> + */
+> +#define CXL_GMER_EVT_DESC_UNCORECTABLE_EVENT		BIT(0)
+> +#define CXL_GMER_EVT_DESC_THRESHOLD_EVENT		BIT(1)
+> +#define CXL_GMER_EVT_DESC_POISON_LIST_OVERFLOW		BIT(2)
+> +#define show_event_desc_flags(flags)	__print_flags(flags, "|",		   \
+> +	{ CXL_GMER_EVT_DESC_UNCORECTABLE_EVENT,		"Uncorrectable Event"	}, \
+> +	{ CXL_GMER_EVT_DESC_THRESHOLD_EVENT,		"Threshold event"	}, \
+> +	{ CXL_GMER_EVT_DESC_POISON_LIST_OVERFLOW,	"Poison List Overflow"	}  \
+> +)
+> +
+> +#define CXL_GMER_MEM_EVT_TYPE_ECC_ERROR			0x00
+> +#define CXL_GMER_MEM_EVT_TYPE_INV_ADDR			0x01
+> +#define CXL_GMER_MEM_EVT_TYPE_DATA_PATH_ERROR		0x02
+> +#define show_mem_event_type(type)	__print_symbolic(type,			\
+> +	{ CXL_GMER_MEM_EVT_TYPE_ECC_ERROR,		"ECC Error" },		\
+> +	{ CXL_GMER_MEM_EVT_TYPE_INV_ADDR,		"Invalid Address" },	\
+> +	{ CXL_GMER_MEM_EVT_TYPE_DATA_PATH_ERROR,	"Data Path Error" }	\
+> +)
+> +
+> +#define CXL_GMER_TRANS_UNKNOWN				0x00
+> +#define CXL_GMER_TRANS_HOST_READ			0x01
+> +#define CXL_GMER_TRANS_HOST_WRITE			0x02
+> +#define CXL_GMER_TRANS_HOST_SCAN_MEDIA			0x03
+> +#define CXL_GMER_TRANS_HOST_INJECT_POISON		0x04
+> +#define CXL_GMER_TRANS_INTERNAL_MEDIA_SCRUB		0x05
+> +#define CXL_GMER_TRANS_INTERNAL_MEDIA_MANAGEMENT	0x06
+> +#define show_trans_type(type)	__print_symbolic(type,					\
+> +	{ CXL_GMER_TRANS_UNKNOWN,			"Unknown" },			\
+> +	{ CXL_GMER_TRANS_HOST_READ,			"Host Read" },			\
+> +	{ CXL_GMER_TRANS_HOST_WRITE,			"Host Write" },			\
+> +	{ CXL_GMER_TRANS_HOST_SCAN_MEDIA,		"Host Scan Media" },		\
+> +	{ CXL_GMER_TRANS_HOST_INJECT_POISON,		"Host Inject Poison" },		\
+> +	{ CXL_GMER_TRANS_INTERNAL_MEDIA_SCRUB,		"Internal Media Scrub" },	\
+> +	{ CXL_GMER_TRANS_INTERNAL_MEDIA_MANAGEMENT,	"Internal Media Management" }	\
+> +)
+> +
+> +#define CXL_GMER_VALID_CHANNEL				BIT(0)
+> +#define CXL_GMER_VALID_RANK				BIT(1)
+> +#define CXL_GMER_VALID_DEVICE				BIT(2)
+> +#define CXL_GMER_VALID_COMPONENT			BIT(3)
+> +#define show_valid_flags(flags)	__print_flags(flags, "|",		   \
+> +	{ CXL_GMER_VALID_CHANNEL,			"CHANNEL"	}, \
+> +	{ CXL_GMER_VALID_RANK,				"RANK"		}, \
+> +	{ CXL_GMER_VALID_DEVICE,			"DEVICE"	}, \
+> +	{ CXL_GMER_VALID_COMPONENT,			"COMPONENT"	}  \
+> +)
+> +
+> +TRACE_EVENT(cxl_general_media,
+> +
+> +	TP_PROTO(const char *dev_name, enum cxl_event_log_type log,
+> +		 struct cxl_event_gen_media *rec),
+> +
+> +	TP_ARGS(dev_name, log, rec),
+> +
+> +	TP_STRUCT__entry(
+> +		CXL_EVT_TP_entry
+> +		/* General Media */
+> +		__field(u64, dpa)
+> +		__field(u8, descriptor)
+> +		__field(u8, type)
+> +		__field(u8, transaction_type)
+> +		__field(u8, channel)
+> +		__field(u32, device)
+> +		__array(u8, comp_id, CXL_EVENT_GEN_MED_COMP_ID_SIZE)
+> +		__field(u16, validity_flags)
+> +		/* Following are out of order to pack trace record */
+> +		__field(u8, rank)
+> +		__field(u8, dpa_flags)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		CXL_EVT_TP_fast_assign(dev_name, log, rec->hdr);
+> +
+> +		/* General Media */
+> +		__entry->dpa = le64_to_cpu(rec->phys_addr);
+> +		__entry->dpa_flags = __entry->dpa & CXL_DPA_FLAGS_MASK;
+> +		/* Mask after flags have been parsed */
+> +		__entry->dpa &= CXL_DPA_MASK;
+> +		__entry->descriptor = rec->descriptor;
+> +		__entry->type = rec->type;
+> +		__entry->transaction_type = rec->transaction_type;
+> +		__entry->channel = rec->channel;
+> +		__entry->rank = rec->rank;
+> +		__entry->device = get_unaligned_le24(rec->device);
+> +		memcpy(__entry->comp_id, &rec->component_id,
+> +			CXL_EVENT_GEN_MED_COMP_ID_SIZE);
+> +		__entry->validity_flags = get_unaligned_le16(&rec->validity_flags);
+> +	),
+> +
+> +	CXL_EVT_TP_printk("dpa=%llx dpa_flags='%s' " \
+> +		"descriptor='%s' type='%s' transaction_type='%s' channel=%u rank=%u " \
+> +		"device=%x comp_id=%s validity_flags='%s'",
+> +		__entry->dpa, show_dpa_flags(__entry->dpa_flags),
+> +		show_event_desc_flags(__entry->descriptor),
+> +		show_mem_event_type(__entry->type),
+> +		show_trans_type(__entry->transaction_type),
+> +		__entry->channel, __entry->rank, __entry->device,
+> +		__print_hex(__entry->comp_id, CXL_EVENT_GEN_MED_COMP_ID_SIZE),
+> +		show_valid_flags(__entry->validity_flags)
+> +	)
+> +);
+> +
+>   #endif /* _CXL_TRACE_EVENTS_H */
+>   
+>   /* This part must be outside protection */
