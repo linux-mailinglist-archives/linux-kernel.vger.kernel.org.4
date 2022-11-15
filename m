@@ -2,81 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A479F629559
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D683F62955D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:11:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbiKOKKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
+        id S238266AbiKOKLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:11:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238266AbiKOKKN (ORCPT
+        with ESMTP id S238182AbiKOKLg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:10:13 -0500
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3680722F;
-        Tue, 15 Nov 2022 02:10:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1668506982; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=CW4l41oR7KZQwFhNoYv0OJy8Cd2JSMsS6ZSkl1BGBJPIFgEtzLbklxeWRT3PjxH8tpznsDCokee2X62/26iUdnNZ1C72IAhauCouyUADqO72AXWPxQCPvNTe9n1CGvl1KpMWE30PFYiKyT098QSsoxyRRy2DC+LHnFP7Q4QkI0M=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1668506982; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=y0KP37fL06Ddkt/t9va+97Mqv3/Ml7gCQQoFspXKKGs=; 
-        b=Nj4LfgTwYNFtHzNUDBzXcaNRFOI6OdF0Pv4hvEH9ULQjLaGvsErMhAGL9GzwgFS9tchP5+iYkIgDcaReIZJyhvk25AX2Xqodcf0bLke1aFn7MIcYobCOM5IBoPxd42MdnQaWcHVUIIUulrUCgxpiDB4lulEw35C0S867R6txvnw=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1668506982;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Message-ID:Date:Date:MIME-Version:To:To:Cc:Cc:References:Subject:Subject:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=y0KP37fL06Ddkt/t9va+97Mqv3/Ml7gCQQoFspXKKGs=;
-        b=qU1QmqMLateIUL8kOybJ2pEVqylDaGtjC9kT5vxZrcCITWUILt5Ti2Uq8YcOzNGT
-        9fsqOq2xXeezL2rCGfdytpYZ2AYct4lYgSd3H+KaLTnwsnv1Ls2nXGIa0l69J+d+ftg
-        31DTok8axZF+bZu71TwZZNMVzmOhPQHIvU12rQwA=
-Received: from [192.168.1.9] (110.226.30.173 [110.226.30.173]) by mx.zoho.in
-        with SMTPS id 1668506981538751.4796566831048; Tue, 15 Nov 2022 15:39:41 +0530 (IST)
-Message-ID: <917344b4-4256-6d77-b89b-07fa96ec4539@siddh.me>
-Date:   Tue, 15 Nov 2022 15:39:38 +0530
+        Tue, 15 Nov 2022 05:11:36 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF741F0B;
+        Tue, 15 Nov 2022 02:11:34 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2E6E266023A6;
+        Tue, 15 Nov 2022 10:11:32 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1668507093;
+        bh=kZb3JWtliFai/b1ZuQh7QxCIbxt8MwDeQ3HbQ09qJuE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=U0GScTKQsbrxt3MWYMhL54sVhSRfyw38v9sRjI2VyQ4ET0WN36mQkKEwK1L0HB452
+         fRR2bNX6T6NwQf/4RGa8Wy1FEh5km1KIP4suzEt8ducXJsDDIwgk7cKKn48jqYzPlw
+         eZ0DaQc8OcggEK6DmQIb1UNbaR9u+JZZnMoYgwgJyT8QUfWhHOK0pXAljpbGBgsKXv
+         1pS7FDxTJ2rUsKToB9dKPfBfGNrttPnB5Y/on/fCosmsYwdw7jTiPLlwQkVXhNW860
+         CrMMA/VkIV1UAWxv8wiVGU39rFbeS2s668Wuzc4EukrJ3mi/YPvPhRCmJQOAPtDtge
+         FOUpCVK+J0oUw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     agross@kernel.org
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, joro@8bytes.org,
+        will@kernel.org, robin.murphy@arm.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robdclark@gmail.com,
+        linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        marijn.suijten@somainline.org, kernel@collabora.com,
+        luca@z3ntu.xyz, a39.skl@gmail.com, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v3 0/6] Add support for Qualcomm's legacy IOMMU v2
+Date:   Tue, 15 Nov 2022 11:11:16 +0100
+Message-Id: <20221115101122.155440-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     Chao Yu <chao@kernel.org>, Yue Hu <huyue2@coolpad.com>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        linux-erofs <linux-erofs@lists.ozlabs.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <Y3MGf3TzgKpAz4IP@B-P7TQMD6M-0146.local>
-Subject: Re: [RFC PATCH] erofs/zmap.c: Bail out when no further region remains
-Content-Language: en-US, en-GB, hi-IN
-From:   Siddh Raman Pant <code@siddh.me>
-In-Reply-To: <Y3MGf3TzgKpAz4IP@B-P7TQMD6M-0146.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 08:54:47 +0530, Gao Xiang wrote:
-> I just wonder if we should return -EINVAL for post-EOF cases or
-> IOMAP_HOLE with arbitrary length?
+This series adds support for handling "v2" firmware's IOMMU, found
+on at least MSM8956 and MSM8976 (some other SoCs also need the same
+but I honestly don't remember which ones precisely).
 
-Since it has been observed that length can be zeroed, and we
-must stop, I think we should return an error appropriately.
+This is strictly required to get functional IOMMUs on these SoCs.
 
-For a read-only filesystem, we probably don't really need to
-care what's after the EOF or in unmapped regions, nothing can
-be changed/extended. The definition of IOMAP_HOLE in iomap.h
-says it stands for "no blocks allocated, need allocation".
+I'm sorry for not performing a much needed schema conversion on
+qcom,iommu.txt, but I really didn't have time to do that :-(
 
-Alternatively, we can return error iff the length of the
-extent with holes is zero, like here.
+This series was tested on Sony Xperia X and X Compact (MSM8956):
+ADSP, LPASS, Venus, MSS, MDP and GPU are happy :-)
 
-Thanks,
-Siddh
+
+Changes in v3:
+ - Removed useless FSRRESTORE reset and definition as pointed
+   out in Robin Murphy's review
+ - Fixed qcom,iommu.txt changes: squashed MSM8976 compatible
+   string addition with msm-iommu-v2 generics addition
+
+Changes in v2:
+ - Added back Marijn's notes (sorry man!)
+ - Added ARM_SMMU_CB_FSRRESTORE definition
+ - Changed context bank reset to properly set FSR and FSRRESTORE
+
+AngeloGioacchino Del Regno (6):
+  dt-bindings: iommu: qcom,iommu: Document qcom,ctx-num property
+  iommu/qcom: Use the asid read from device-tree if specified
+  iommu/qcom: Properly reset the IOMMU context
+  iommu/qcom: Index contexts by asid number to allow asid 0
+  dt-bindings: iommu: qcom,iommu: Document QSMMUv2 and MSM8976
+    compatibles
+  iommu/qcom: Add support for QSMMUv2 and QSMMU-500 secured contexts
+
+ .../devicetree/bindings/iommu/qcom,iommu.txt  |  9 +++
+ drivers/iommu/arm/arm-smmu/qcom_iommu.c       | 78 +++++++++++++++----
+ 2 files changed, 70 insertions(+), 17 deletions(-)
+
+-- 
+2.38.1
+
