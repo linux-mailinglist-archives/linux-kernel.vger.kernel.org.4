@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0D9629F52
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:43:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE081629F57
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238726AbiKOQnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 11:43:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54634 "EHLO
+        id S238707AbiKOQnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 11:43:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238436AbiKOQnL (ORCPT
+        with ESMTP id S238351AbiKOQn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 11:43:11 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80E92F66C
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:43:06 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id j16so25272336lfe.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:43:06 -0800 (PST)
+        Tue, 15 Nov 2022 11:43:27 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214C127C
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:43:24 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id d20so18239478ljc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:43:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7DMVuHRBp4GftrN1V1KSQlvwpB/mUouGhCJfxN5gy/c=;
-        b=jK6kVEMwqFDOzl7o4MlPKo19vnfhcEnL2VbjT8hTvUAQw4mSgZYYnmwwTTKA8HpFvn
-         SM1B8KN7Oa2eJ8C0mAgFGeQ6WTR1gAlgp2h8luDz8FGbBjjuqTWCf1/EoicijscLzY1N
-         iL3Nb0+LtTbFFN1FQ9dOzcSLVUl/IJVeY5eDZK565Zo0+hF+So0nM8KWj3s0c5XJUwm4
-         j1HA3KndtMPmiPGZdTd4EbWiB7waHIV4SlkReHrpzjyalC79ZMgEhpb4wtBS69PmegDy
-         ehAwuYEZgCz/iZ9nw65cEgXJ0D5N+R4CrPo2Fni6th3cw6BpPCDBFtOHE/EUgHcpyWIB
-         c8nw==
+        bh=ZEBDvtJhWomLw8sN0K421zPrOXrpSvCJSM+NflGpqes=;
+        b=HgJHHgbtARUmX8OopoBXVK8pmzYnZlP4d6obs2+NVxGtmI6mfDtZOYURXLnfSFeW3u
+         ATv7IdfwsfVJXM9pfBME3Vq3frWJlEdsn/RYll98Bdc8VKTTZb9ejMWQGBHuzSP9KLl7
+         niGqyVDFv/ehAnLesHQTOE5Z2aJZeiihT5IIvB4drGXT5GIK3JulfmyuVkav/LINvkc9
+         wo92oj8J0E5iWwpa/DNfTESEY3rcn6S+ujHSCIFaL7YFwCz/MQglQMr+Ovlf5eZWgtYY
+         pLlFvXrxnRoom6ihKycnmTtDIF3XN/xsNr6vn0eTq1W1CbKlUbifvh6ZJ+P+Wie+8ZdJ
+         XxUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7DMVuHRBp4GftrN1V1KSQlvwpB/mUouGhCJfxN5gy/c=;
-        b=DJRKWHnZ6VBFEWzrnvtNxkGvcc4OnmIEja3hBxmWiDplsFefSbF0xVeWZia5lH9mNM
-         Z6+ANEg73Y5W5CPoDxjD7snkjJoHE7DD/Sr5a0kZDd4fXujXsibTXmsk9ffenJJmHgt3
-         BZOsSUcA464FAxXrcEDkH/nWHPYX3s1j1wWqefPVy9qmUpAB27p1XkbMyHLXHY+U8kEF
-         qvyykh6Jqrd7ieTyRggSAyH2kKAt0mtZxEgrk5q8o41BfjMYhtcPbziM6YBdpNGf5/zU
-         86+aIvFOFVh17mzHgX3nIj63lztWzH6oVZCQWYVd6qlZys+3rJy12T7zeigpvmQM53vt
-         pN8A==
-X-Gm-Message-State: ANoB5pmhgU1qDN0gbqG3Ni2S7nb11AV0khoW62DWBY03pfOT/sqIkze+
-        YaLbWdlJaaMSIajeqBCjUAvoJA==
-X-Google-Smtp-Source: AA0mqf5a13CZKGFrmN4xsbVr2cltGfCaGtn+odnP/5EobiQd89vK+ZWQb9JqN5euCAiUAqg8/6jTNg==
-X-Received: by 2002:a05:6512:a86:b0:4a4:72b0:9a2b with SMTP id m6-20020a0565120a8600b004a472b09a2bmr5745325lfu.469.1668530585022;
-        Tue, 15 Nov 2022 08:43:05 -0800 (PST)
+        bh=ZEBDvtJhWomLw8sN0K421zPrOXrpSvCJSM+NflGpqes=;
+        b=wWvfu0MIeque1a7BDLKYq6ePTTv4o3fCC6HY6VqS8AOlcc0REDJ06lbNkb04Ht/MLi
+         CZsDkm9GCPl43A9zz7F01Y00wunINoksgFlBpnmPcW4N6+AY3q6NFVbxR6q3vWv0bZGr
+         kXa4g0GNO7xu6hmOjDxDrtr5KtGcMSwLtA3kK0RrQkPx1bzaMw+hkirCWfljnoMXe4+W
+         ONwFNLGxpbLD18yvbEntBLQWArkagDJqfoAfOq82uman+YMHmyNxkrSRQc8ayIYiHlio
+         BUfRJ+3jXYddWC4+sluS0/uS35ZKO+ePiFNGZynoeKPea1FTKyo62z0MhOegdCAPrY4w
+         HrVg==
+X-Gm-Message-State: ANoB5pnfTv/P0bhA+sugHWDSBo6V7NceesjIW+4rVgftAW807ppVvig9
+        bzaEV2o5vUP+GJwj1nxVtZF7xA==
+X-Google-Smtp-Source: AA0mqf6ASnYVoOk4ydWsFVmdX++xvXFWnY1ekGXnfw8oopXx57hQW1SUDaf3emce/ap+pTicd5NB4Q==
+X-Received: by 2002:a2e:bf1b:0:b0:277:6d79:8936 with SMTP id c27-20020a2ebf1b000000b002776d798936mr6776017ljr.362.1668530602456;
+        Tue, 15 Nov 2022 08:43:22 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id 17-20020a2eb951000000b002770fb5722fsm2559896ljs.123.2022.11.15.08.43.03
+        by smtp.gmail.com with ESMTPSA id n5-20020a056512388500b00492ea54beeasm2266501lft.306.2022.11.15.08.43.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 08:43:04 -0800 (PST)
-Message-ID: <0051d380-7bba-f19a-2455-4f09b94caafe@linaro.org>
-Date:   Tue, 15 Nov 2022 17:43:02 +0100
+        Tue, 15 Nov 2022 08:43:22 -0800 (PST)
+Message-ID: <baaa34ca-4241-c66b-9cf0-ee0988667610@linaro.org>
+Date:   Tue, 15 Nov 2022 17:43:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v2 06/11] dt-bindings: arm: qcom,ids: Add SoC IDs for
- MSM8956 and MSM8976
+Subject: Re: [PATCH v2 07/11] soc: qcom: socinfo: Add MSM8956/76 SoC IDs to
+ the soc_id table
 Content-Language: en-US
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>, agross@kernel.org
@@ -70,9 +70,9 @@ Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
         linux-iio@vger.kernel.org, linux-hardening@vger.kernel.org,
         marijn.suijten@somainline.org, kernel@collabora.com, luca@z3ntu.xyz
 References: <20221111120156.48040-1-angelogioacchino.delregno@collabora.com>
- <20221111120156.48040-7-angelogioacchino.delregno@collabora.com>
+ <20221111120156.48040-8-angelogioacchino.delregno@collabora.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221111120156.48040-7-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221111120156.48040-8-angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,15 +86,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 11/11/2022 13:01, AngeloGioacchino Del Regno wrote:
-> Document the identifier of MSM8956/76.
+> Add SoC ID table entries for MSM8956 and MSM8976 chips.
 > 
 > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > ---
->  include/dt-bindings/arm/qcom,ids.h | 2 ++
+>  drivers/soc/qcom/socinfo.c | 2 ++
 >  1 file changed, 2 insertions(+)
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
