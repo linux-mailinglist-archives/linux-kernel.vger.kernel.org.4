@@ -2,94 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D210C629609
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 208AF62960D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:36:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiKOKgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:36:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
+        id S232629AbiKOKgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:36:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiKOKgA (ORCPT
+        with ESMTP id S229745AbiKOKgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:36:00 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D402611E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:35:59 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id j4so23819862lfk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:35:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C4UHGwxwnt4Cc6rH/RttAuD4Amllt6tSRn4Nm+z5DoY=;
-        b=cHznuR12/gE+BOW9xg+YW6XmVqpxjnb7ke+DgJambMA+vmlrRniD9930zKDtQqbU2J
-         kUOQyUJlwr7OD8BjraGTuVh6KtB+gTEcR5HtvL1IXj8QgZqfdQ+W1pxgaIrpL34yYAYg
-         zYqLIfgIFhhKzGDkFHVM2ak5CmtSuJi6KDD7FESP/tjDdhujuCcdowIoi+SMbRPGCOR1
-         l2Qu/Br1aZOwvbRod0u3n8ilsRdj/oOyLwkMwxNqGeyfKkFJqrO0egNs0zOidZg+DYNU
-         rNXlcBux6uvsa58FeOns9tK1MWVapp3zx0dxr8ZuaG9juGNM4Je796d3jQhEfjcCO/vy
-         +sbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C4UHGwxwnt4Cc6rH/RttAuD4Amllt6tSRn4Nm+z5DoY=;
-        b=y5wKfuf6Huw2ivPYI/lbHl90UUEWRgRCRN8i1NcIs2UX3cqhesNmmKwXSCgDJrYJqT
-         O+QdnS+bTMMMFem+Nkx289NIcbMS65104yEBURKni7gL1bXlicXeLSZJEXDpnnWGLMYo
-         g7AQ6TTt/g4wXCmrf+M72u+KZSkF/dxW+UVGndlZH1MMc4y3P2/rhtvwo5C7hQEdcM4g
-         Z+aqQx+SX4aE9bA12eRaDbgbh+Uwe/mjI2O+PXCyEQqKDSCeWx1nXX8f6zGsJ8/ticuN
-         RCmEnkBJEuTNWiJDI9p7it5uwcf6IRaUmiAWT3/YTRD8z72JbPgE1l4lwoafLPCY9nJf
-         2udw==
-X-Gm-Message-State: ANoB5pkoWp+7WyW2PffaE5n/sPG9puvJjPT5KreW50oxTLodnPNzkXij
-        54Xk0T1fPl2TH9bpHXsjNS9Ksw==
-X-Google-Smtp-Source: AA0mqf5BL3d+Gx9BcXZAHwX3sxhZR5kOKFTc3DJNBiRO1IsIjv+y+PQZA406NjuyI+8pDf/3Vvi6Gg==
-X-Received: by 2002:a05:6512:12c4:b0:4a2:4df9:4cab with SMTP id p4-20020a05651212c400b004a24df94cabmr5600420lfg.56.1668508557768;
-        Tue, 15 Nov 2022 02:35:57 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b11-20020a056512070b00b004a46a9cebe2sm2152572lfs.289.2022.11.15.02.35.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 02:35:57 -0800 (PST)
-Message-ID: <c21e0e3d-5970-d905-3b6f-54a1ddacd052@linaro.org>
-Date:   Tue, 15 Nov 2022 11:35:56 +0100
+        Tue, 15 Nov 2022 05:36:42 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CB2A197;
+        Tue, 15 Nov 2022 02:36:40 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id ED03F1883A68;
+        Tue, 15 Nov 2022 10:36:38 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id C94A325002DE;
+        Tue, 15 Nov 2022 10:36:38 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 7A9F79EC0022; Tue, 15 Nov 2022 10:36:38 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] MAINTAINERS: rectify entry for MICROCHIP USB251XB DRIVER
-Content-Language: en-US
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Marek Vasut <marex@denx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     Richard Leitner <richard.leitner@skidata.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221115103153.28502-1-lukas.bulwahn@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115103153.28502-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 15 Nov 2022 11:36:38 +0100
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8 net-next 2/2] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+In-Reply-To: <Y3NixroyU4XGL5j6@shredder>
+References: <20221112203748.68995-1-netdev@kapio-technology.com>
+ <20221112203748.68995-3-netdev@kapio-technology.com>
+ <Y3NixroyU4XGL5j6@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <864c4ae8e549721ba1ac5cf6ef77db9d@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 11:31, Lukas Bulwahn wrote:
-> Commit fff61d4ccf3d ("dt-bindings: usb: usb251xb: Convert to YAML schema")
-> converts usb251xb.txt to usb251xb.yaml, but misses to adjust its reference
-> in MAINTAINERS.
+On 2022-11-15 10:58, Ido Schimmel wrote:
+> On Sat, Nov 12, 2022 at 09:37:48PM +0100, Hans J. Schultz wrote:
+>> diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c 
+>> b/drivers/net/dsa/mv88e6xxx/global1_atu.c
+>> index 8a874b6fc8e1..0a57f4e7dd46 100644
+>> --- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
+>> +++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
+>> @@ -12,6 +12,7 @@
+>> 
+>>  #include "chip.h"
+>>  #include "global1.h"
+>> +#include "switchdev.h"
+>> 
+>>  /* Offset 0x01: ATU FID Register */
+>> 
+>> @@ -426,6 +427,8 @@ static irqreturn_t 
+>> mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
+>>  	if (err)
+>>  		goto out;
+>> 
+>> +	mv88e6xxx_reg_unlock(chip);
 > 
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-> broken reference.
-> 
-> Repair this file reference in MICROCHIP USB251XB DRIVER.
-> 
-You know this could be just one sentence (instead of three paragraphs)
-with a Fixes tag...
+> Why? At minimum such a change needs to be explained in the commit
+> message and probably split to a separate preparatory patch, assuming 
+> the
+> change is actually required.
 
-Best regards,
-Krzysztof
-
+This was a change done long time ago related to that the violation 
+handle function takes the NL lock,
+which could lead to a double-lock deadlock afair if the chip lock is 
+taken throughout the handler.
