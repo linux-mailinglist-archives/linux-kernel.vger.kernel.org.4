@@ -2,108 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1ECC62A02B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7514D62A02D
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiKORWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 12:22:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
+        id S230347AbiKORXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 12:23:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238248AbiKORVm (ORCPT
+        with ESMTP id S229776AbiKORXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 12:21:42 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9610F13E39;
-        Tue, 15 Nov 2022 09:21:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668532876; x=1700068876;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=0jqqtRNplKE/vAU4W9nyyIVHLGOvrsi3wlgDl1IgVSU=;
-  b=cGWPKuCWeoVjgn+JlV/XA574GmNaBngD5bkfWsR8P+XghxhryAdWKfSU
-   GpGD07Ks+4S9jweLwiROFX9o1aO6O6sD3Qw5yzeZHAJMPtxjtXCifh9/N
-   IJ+BnVbftvgN1+EAmsYXFwifhltLkSrGUjiCDn8VWzwQajqu5wONIxTC9
-   ay/iOnSIUdjz5AAzcBX6AfXN2cEv/sUdm4yB+1b1/kVH1VNhsSbQnYvDS
-   XMwWeVYIQGWzCgcD75vPFY9jedoUajnZv0ynkrdMTDlS3UlfU6+R6UVc7
-   NO8lm0vKQYuYm8mawKp4/9+uDc/ir7AIHktuvV9kkeMmMBboqW76UbMTx
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="309940985"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="309940985"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 09:21:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="813753093"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="813753093"
-Received: from eliteleevi.tm.intel.com ([10.237.54.20])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 09:21:13 -0800
-Date:   Tue, 15 Nov 2022 19:21:03 +0200 (EET)
-From:   Kai Vehmanen <kai.vehmanen@linux.intel.com>
-X-X-Sender: kvehmane@eliteleevi.tm.intel.com
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Kai Vehmanen <kvcontact@nosignal.fi>
-Subject: Re: [PATCH] headers: Remove some left-over license text in
- include/uapi/linux/hsi/
-In-Reply-To: <20221114210155.anq5gkggfrvj6nki@mercury.elektranox.org>
-Message-ID: <alpine.DEB.2.22.394.2211151909150.3532114@eliteleevi.tm.intel.com>
-References: <4919073b3dee8ca7612989659d31b12f9c5491ba.1662897400.git.christophe.jaillet@wanadoo.fr> <20221114210155.anq5gkggfrvj6nki@mercury.elektranox.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7 02160 Espoo
+        Tue, 15 Nov 2022 12:23:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AE12EF65
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:22:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668532928;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m8l4pIGrlIpw/sxoSKlU1ZG63LGDo4ZciEpI8QjHdn0=;
+        b=REjm43rG1kStr1lG0116jUobaWMYAxG6/vUaYu/5O7/pNRiGngviGXMLxylW31B2GoniYd
+        JfbEoQhpTbbXQKO7FzwYb+d1x3K/GqSxHiMnHLFONdvvu5PJBhzddkOf+o862ImgIF/wTx
+        qcBOshnaAfP+N0OrrbUMIcU+gIRRfow=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-304-Tu2_CloNMSWiexNYtY05Aw-1; Tue, 15 Nov 2022 12:22:07 -0500
+X-MC-Unique: Tu2_CloNMSWiexNYtY05Aw-1
+Received: by mail-wm1-f71.google.com with SMTP id bg25-20020a05600c3c9900b003cf3ed7e27bso8582479wmb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:22:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m8l4pIGrlIpw/sxoSKlU1ZG63LGDo4ZciEpI8QjHdn0=;
+        b=FSk0XjO/mahqG6mKiysnn8lJORvWaXOjnLEe5XF76i0y6w/k7WybS+DjPsLYz/QEh5
+         8EYzzMFtuLtlvV364ifwWte75TY9kzsqUAztDuhnOShIoNgtZ71L8vcbi4Mrp1oSD1L3
+         6wjS/6WH08xQWnQoHi5iflM0rNqasKRoS4T1e41KsBLMpHSVDveUUpOGyI4SAQdXR3Z9
+         KaIBS+/btAaxb1WtT1LLiAlhTozvqb1EG+OeuylDUKRFzCz7EUmp16XSgoo//14mGPoP
+         YKfH3Zpz2yPoGdcTsVDJrMzMcfHUod/dIYJOhcLJ9P4hJArBs0DXYdDYKIWA7Am3+W4t
+         Nu5A==
+X-Gm-Message-State: ANoB5pngY/cEAY4lYX+Srk7DzjcA75v+vaaKED/8EFuWlpF9cgrLvDDR
+        WPGUmxMvsL44zx2pFtDQ4wNL9xAbJv2C/MQO+/lYPrYzgl2eQDYV2Ya3ZJx/KOkcNLFHV9GXKLA
+        oLcMP76ubGDepX+xndu5foeZL
+X-Received: by 2002:adf:bb43:0:b0:22e:6f0d:d69 with SMTP id x3-20020adfbb43000000b0022e6f0d0d69mr11781326wrg.134.1668532925865;
+        Tue, 15 Nov 2022 09:22:05 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7FOlUtjvvU7F7kEfxG6kLCcch/2duEN2plX5JnnVuNV6ZxayUzFm3GisnIqxJlCULGLioKDg==
+X-Received: by 2002:adf:bb43:0:b0:22e:6f0d:d69 with SMTP id x3-20020adfbb43000000b0022e6f0d0d69mr11781292wrg.134.1668532925275;
+        Tue, 15 Nov 2022 09:22:05 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:9d00:9303:90ce:6dcb:2bc9? (p200300cbc7079d00930390ce6dcb2bc9.dip0.t-ipconnect.de. [2003:cb:c707:9d00:9303:90ce:6dcb:2bc9])
+        by smtp.gmail.com with ESMTPSA id r11-20020a5d694b000000b0023691d62cffsm12679101wrw.70.2022.11.15.09.22.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 09:22:04 -0800 (PST)
+Message-ID: <82d7a142-8c78-4168-37e9-7b677b18987a@redhat.com>
+Date:   Tue, 15 Nov 2022 18:22:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_FILL_THIS_FORM_SHORT autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ives van Hoorne <ives@codesandbox.io>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>, stable@vger.kernel.org
+References: <20221110203132.1498183-1-peterx@redhat.com>
+ <20221110203132.1498183-2-peterx@redhat.com>
+ <9af36be3-313b-e39c-85bb-bf30011bccb8@redhat.com> <Y3KgYeMTdTM0FN5W@x1n>
+ <ec8b3c86-d3b2-f898-7297-c20a58ae2ac1@redhat.com> <Y3O5bCXSbvKJrjRL@x1n>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v2 1/2] mm/migrate: Fix read-only page got writable when
+ recover pte
+In-Reply-To: <Y3O5bCXSbvKJrjRL@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Mon, 14 Nov 2022, Sebastian Reichel wrote:
-
-> On Sun, Sep 11, 2022 at 01:56:59PM +0200, Christophe JAILLET wrote:
-> > Remove some left-over from commit e2be04c7f995 ("License cleanup: add SPDX
-> > license identifier to uapi header files with a license")
-> > 
-> > When the SPDX-License-Identifier tag has been added, the corresponding
-> > license text has not been removed.
-> > 
-> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> > ---
+>> I consider UFFD-wp a special case: while the default VMA protection might
+>> state that it is writable, you actually want individual PTEs to be
+>> write-protected and have to manually remove the protection.
+>>
+>> softdirty tracking is another special case: however, softdirty tracking is
+>> enabled for the whole VMA. For remove_migration_pte() that should be fine (I
+>> guess) because writenotify is active when the VMA needs to track softdirty
+>> bits, and consequently vma->vm_page_prot has the proper default permissions.
+>>
+>>
+>> I wonder if the following (valid), for example is possible:
+>>
+>>
+>> 1) clear_refs() clears VM_SOFTDIRTY and pte_wrprotect() the pte.
+>> -> writenotify is active and vma->vm_page_prot updated accordingly
+>>
+>> VM_SOFTDIRTY is reset due to VMA merging and vma->vm_page_prot is updated
+>> accordingly. See mmap_region() where we set VM_SOFTDIRTY.
+>>
+>> If you now migrate the (still write-protected in the PTE) page, it was not
+>> writable, but it can be writable on the destination.
 > 
-> IIRC that was intentional, since the plan was to seek for an
-> explicit Ack from the copyright holder when removing the text.
-> I've added Greg for clarification and hopefully the latest
-> mail address from Kai and Peter.
-[...]
-> > --- a/include/uapi/linux/hsi/cs-protocol.h
-> > +++ b/include/uapi/linux/hsi/cs-protocol.h
-> > @@ -6,20 +6,6 @@
-> >   *
-> >   * Contact: Kai Vehmanen <kai.vehmanen@nokia.com>
-> >   * Original author: Peter Ujfalusi <peter.ujfalusi@nokia.com>
-> > - *
-> > - * This program is free software; you can redistribute it and/or
-> > - * modify it under the terms of the GNU General Public License
-> > - * version 2 as published by the Free Software Foundation.
-> > - *
+> I didn't even notice merging could work with soft-dirty enabled, that's
+> interesting to know.
+> 
+> Yes I think it's possible and I agree it's safe, as VM_SOFTDIRTY is set for
+> the merged vma so afaiu the write bit is safe to set.  We get a bunch of
+> false positives but that's how soft-dirty works.
+> 
+> I think the whole problem is easier if we see this at a higher level.
+> You're discussing this from vma pov and it's fair to do so, at least I
+> agree with what you mentioned so far and I can't see anything outside
+> uffd-wp that can be affected.  However, it is also true when you noticed we
+> already have quite a few paragraphs trying to discuss the safety for this
+> and that, that's the part where I think we need justification and it's not
+> that "natural".
+> 
+> For "natural", I meant fundamentally we're talking about page migrations
+> here.  The natural way (at least to me) for page migration to happen as a
+> fundamental rule is that, we leverag the migration pte to make sure the pte
+> being stable so we can do the migration work, then we "recover" the pte to
+> present either by a full recovery or just (hopefully) only replace the pfn,
+> keeping all the rest untouched.
+> 
+> One thing to prove that is we have two migration entries not one (I'm
+> temporarily put the exclusive read one aside since that's solving different
+> problems): MIGRATION_READ and MIGRATION_WRITE.  If we only rely on vma
+> flags logically we don't need MIGRATION_READ and MIGRATION_WRITE, we only
+> need MIGRATION generic swap pte then we recover the write bit from vma
+> flags and other things (like uffd-wp, currently we have the bit set in swap
+> pte besides the swap entry type).
+> 
+> So maybe one day we can use two migration types rather than three
+> (MIGRATION and MIGRATION_EXCLUSIVE)?  I can't tell, but hopefully that
+> shows what I meant, that we need further justification to grant write bit
+> only base on vma, rather than recovering write bit based on migration entry
+> type.
 
-sure, this looks ok. I cannot speak on behalf of my old employer,
-but as one of the authors of the code in question I can confirm
-this patch is ok and thus:
+That's precisely what I had in mind recently, and I am happy to hear 
+that you have similar idea:
 
-Acked-by: Kai Vehmanen <kvcontact@nosignal.fi>
+https://lkml.kernel.org/r/20221108174652.198904-6-david@redhat.com
 
-Cc'ing my private email address.
+"
+Note that we don't optimize for the actual migration case:
+(1) When migration succeeds the new PTE will not be writable because the
+     source PTE was not writable (protnone); in the future we
+     might just optimize that case similarly by reusing
+     can_change_pte_writable()/can_change_pmd_writable() when removing
+     migration PTEs.
+"
 
-Br, Kai
+Currently, "readable_migration_entry" is even wrong: it might be 
+PROT_NONE and not even readable.
+
+-- 
+Thanks,
+
+David / dhildenb
+
