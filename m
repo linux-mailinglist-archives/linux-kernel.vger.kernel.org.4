@@ -2,56 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28FFB629529
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 871E862952B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbiKOKCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:02:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
+        id S229955AbiKOKCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:02:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237742AbiKOKCH (ORCPT
+        with ESMTP id S237481AbiKOKCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:02:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303CE23EAB;
-        Tue, 15 Nov 2022 02:02:07 -0800 (PST)
+        Tue, 15 Nov 2022 05:02:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A79240A5;
+        Tue, 15 Nov 2022 02:02:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9126B8188D;
-        Tue, 15 Nov 2022 10:02:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0BD0C433D7;
-        Tue, 15 Nov 2022 10:02:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B2B860C25;
+        Tue, 15 Nov 2022 10:02:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52269C433D6;
+        Tue, 15 Nov 2022 10:02:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668506524;
-        bh=dQIm0jpNMea512ml4HBeW/HoNsS6JaZjSzioGFYiMtI=;
+        s=k20201202; t=1668506550;
+        bh=ncdKJ7n+5xnqMWJ69JS/iDQYOdJqOI7Xhk/xeUSmdGk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VnWWfGT9+g2uCNjVsvYXKMBtSm3SRUE+8rXskzlGhiDPHsepcfau5f/xmMTWFsxM9
-         FFfVeC8TJthKMmvWOo3LvI9ZgNarP0q1E2BNbHSNJ0wHUYh3fJRDKoPx2x8RhwDWH/
-         FGr+YsFNLKKRFeYR+MXdmwhkcOz4uNAJR1KMKhOe1g6TpRioSpm++PJqeb1hTmt+yS
-         FFLTOPZHDsnuFbFc4PIAgZSqOiG1+r2j/s9AuIC4nrZtH2boQ8EK/3W4e9lXFBkS9l
-         zCOCh5W6vofTOsSUXM3FGsyWonuERq95rAR+l3ykPZ8NI1LR+G0NJypXQnmVHNmdQM
-         dZSz/0UGefD8A==
-Date:   Tue, 15 Nov 2022 10:02:01 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: WARNING: CPU: 0 PID: 1111 at arch/arm64/kernel/fpsimd.c:464
- fpsimd_save+0x170/0x1b0
-Message-ID: <Y3NjmfPGK6qjh5LP@sirena.org.uk>
-References: <CA+G9fYuXG7Rh_A8W1NRVWbgWjozwzxzQY7tYw7bA4NsCuSovMg@mail.gmail.com>
+        b=Ov69RXAVqqnc4ZIYgsHDD+uUtC3B7R6l7HEy7XzykroTSHwpQhK5noX9SEo3dHs5g
+         Edw5NJau1o6JXw5rCM9mM7sSaIOTlgy+HHfO3+cqt7oij3x+TJKypIkPSW13HI2huz
+         J3fXPFfOXAZnaKNWdElTV1uzmNorKE/du/ALlCsdsgDXznZ32+Ul4mdZVa6VvKOqNc
+         +3OqHKqG8RHAhSIwoYYJFngxqjJF/WWtx07xf/jcIZGR38/FyIXsfAz9txEKD7EvTn
+         bATIObRj9r8VZOsaacEDPtl8txaxoKiMaqGqcLMKuIsQS9GaTQr+n7ps0hu/EGp4qe
+         70PU23GOSRMow==
+Date:   Tue, 15 Nov 2022 12:02:26 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
+        <longpeng2@huawei.com>
+Cc:     Oliver O'Halloran <oohall@gmail.com>, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jianjay.zhou@huawei.com, zhuangshengen@huawei.com,
+        arei.gonglei@huawei.com, yechuan@huawei.com,
+        huangzhichao@huawei.com, xiehong@huawei.com
+Subject: Re: [RFC 0/4] pci/sriov: support VFs dynamic addition
+Message-ID: <Y3NjslijVKfLQo3W@unreal>
+References: <Y256ty6xGyUpkFn9@unreal>
+ <0b2202bf-18d3-b288-9605-279208165080@huawei.com>
+ <Y3Hoi4zGFY4Fz1l4@unreal>
+ <d7327d46-deb5-dc75-21c3-1f351d7da108@huawei.com>
+ <Y3I+Fs0/dXH/hnpL@unreal>
+ <3a8efc92-eda8-9c61-50c5-5ec97e2e2342@huawei.com>
+ <Y3JOvTfBwpaldtZJ@unreal>
+ <CAOSf1CG+VGdeXGQetfMArwpafAx2yj3nmA_y7rN4SNdt=1=08w@mail.gmail.com>
+ <Y3NOo3DaLKb219IV@unreal>
+ <638b2550-7da8-1b48-4038-52f71947ff05@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yRsqSy0P+bXdS5Uu"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYuXG7Rh_A8W1NRVWbgWjozwzxzQY7tYw7bA4NsCuSovMg@mail.gmail.com>
-X-Cookie: Ego sum ens omnipotens.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <638b2550-7da8-1b48-4038-52f71947ff05@huawei.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,44 +67,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 15, 2022 at 05:36:38PM +0800, Longpeng (Mike, Cloud Infrastructure Service Product Dept.) wrote:
+> 
+> 
+> 在 2022/11/15 16:32, Leon Romanovsky 写道:
+> > On Tue, Nov 15, 2022 at 12:50:34PM +1100, Oliver O'Halloran wrote:
+> > > On Tue, Nov 15, 2022 at 1:27 AM Leon Romanovsky <leon@kernel.org> wrote:
+> > > > 
+> > > > *snip*
+> > > > 
+> > > > Anyway, I'm aware of big cloud providers who are pretty happy with live
+> > > > migration in production.
+> > > 
+> > > I could see someone sufficiently cloudbrained deciding that rebooting
+> > > the hypervisor is fine provided the downtime doesn't violate any
+> > > customer uptime SLAs. Personally I'd only be brave enough to do that
+> > > for a HV hosting internal services which I know are behind a load
+> > > balancer, but apparently there are people at Huawei far braver than I.
+> > 
+> > My main point in this discussion that Huawei team doesn't actually
+> > provide any meaningful justification why it is great idea to add new
+> > sysfs file. They use HPC as an argument, but in that world, you won't
+> > see many VMs on one server, as it is important to provide separate MSI-X
+> > vectors and CPUs to each VM.
+> > 
+> > They ask from us optimization (do not add device hierarchy for existing HW)
+> > that doesn't exist in the kernel.
+> > 
+> > I would say that they are trying to meld SIOV architecture of subfunctions
+> > (SFs) into PCI and SR-IOV world.
+> > 
+> I may not agree with you on this point. 
 
---yRsqSy0P+bXdS5Uu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The bright side of open source that you don't need to agree with everyone.
+If you success to convince others, it will be merged.
 
-On Tue, Nov 15, 2022 at 12:57:53PM +0530, Naresh Kamboju wrote:
-> Following kernel warning noticed while running kselftest arm64 sve-ptrace
-> on qemu-arm64 on ampere-altra server.
+> The sriov_numvfs interface mixes the
+> operation of enabling hardware VFs and the addition of VFs. I just want to
+> split these two operations and also can selectively add some VFs earlier
+> than others. I think there's no violation of PCI spec.
 
-> [  422.607034] ------------[ cut here ]------------
-> [  422.615382] WARNING: CPU: 0 PID: 1111 at
-> arch/arm64/kernel/fpsimd.c:464 fpsimd_save+0x170/0x1b0
-> [  422.617588] Modules linked in: cfg80211 bluetooth rfkill
-> crct10dif_ce sm3_ce sm3 sha3_ce sha512_ce sha512_arm64 fuse drm
+Right, it just doesn't fit into Linux kernel device initialization model.
 
-Without the ability to reproduce this or more information this
-isn't really actionable - since I'm not seeing any changes that
-look in the least bit relevant in the stable queue I'm guessing
-that it's just happened once?
+Thanks
 
-You mention that this is hosted on an Altra but it looks like
-you're running the TCG backend, if there's some reason to expect
-that qemu might be unstable when hosted on that platform it's
-probably worth looping the qemu people in.
-
---yRsqSy0P+bXdS5Uu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNzY5gACgkQJNaLcl1U
-h9CQzAf+IcSnHQ+8izD9i0xRCF2SV8pNK6d/Qa4aZblAfooRyn4EKZg+BuCepH1y
-siNIaqR6hKO8q1yqnrjSEDAfyYJVw3Gr9KEdmY2VvccFWeudquYSD4+QnmgvgJbz
-sLNHVCvirGKzvno1B1spCosYwFmElA74AfcbIrPBFhlwPQj8akU8ydB0tCy5lCLb
-eCS/NhD44VnQzJIQGHeJhFj4JsgqqlnF9WCl+QX7qkMKvtrMui97yOzom4ZAvpaU
-Adqtuecvus1r47qlYahceVJGsbWmFjYs+WIMEICyXNNrkzDgYRoGnm2kWibEWWTT
-201nrRDJM/MK5QH/lK/NljHBDS+Mww==
-=myaL
------END PGP SIGNATURE-----
-
---yRsqSy0P+bXdS5Uu--
+> 
+> > Thanks
+> > .
