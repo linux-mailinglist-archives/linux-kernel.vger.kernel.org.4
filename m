@@ -2,105 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D50B629D46
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB82629D4A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiKOPXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:23:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55968 "EHLO
+        id S231258AbiKOPYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:24:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiKOPXf (ORCPT
+        with ESMTP id S231279AbiKOPYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:23:35 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF27ABF5B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:23:33 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id l8so17917903ljh.13
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:23:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xLKS/17GpYY4MgR4/+gEylG604Jj9+YJ2C6BLpGM54Y=;
-        b=LYkbwLcE94T02m+S8klc61BdLgSw8W4InLpW5Q6gh9TUg136iEgHNKLzg8Tm4FHm8U
-         aOg4Do2GSIOXi7sGolkSuBk9k+R25thUGno+VbjD0A2gQu4+xJj0h3rkjhsZRsKgxGD6
-         j3G5C+tWgoHNxi1ZDXc6ob607kOUAs0bn6hUqt22dnZDbqUO4EKRDA+Zk0ULrO/wa7nw
-         r4VSX+vj1eh7rb3ImE/XWYRFCZxo91NwirRshRlmgG2Fzgwavpq1g2CwDONt9DDnRPwd
-         dC2sCKroneKdVoqhoxHO2HghWXHbKK9HHDppXpBZUnVJ0/L80e1UHn5QpQFAf/Aj29uF
-         R5bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xLKS/17GpYY4MgR4/+gEylG604Jj9+YJ2C6BLpGM54Y=;
-        b=u6CcxAFkJuvka+rZBz/6qFq4vSw1e/bjvoWHnJ7jdmmndldV3mmH5bSwIgLG8vzgRI
-         5FdVY1M9k6WNPsiLx6Q3TvPMwM7DdMXwpi6OybzFsuznhlQ7uASX330r0ExdLOjKbhho
-         hYur3hivg65Z3M+5M3qBufQr3C/NWNVnrh+bNkQnygB44cZTyA+g/SGKFVcfGYoJxTZ3
-         Oaf+a7SjqI0OsqgGShmnoKeTOQuKBbXwhgpxn65wRuVwoXqSfwMyrUa10sa/FFkcocJe
-         ghRJyHtnHQXpquy+uXeToJoPirzXn9c8GpwU+IpnZ4+Vmd2LcoQmhgYBxyW2431bpkrK
-         gAXw==
-X-Gm-Message-State: ANoB5plJ6pAvxk+bKcDonxeVClTQkaZu3lpz4GvEmMmQOFurA5V/WcOz
-        7EGBGbLDv2Gw+ZBjhb42JBvBXQ==
-X-Google-Smtp-Source: AA0mqf5usyXx6gAprC2KqXwUCKgLy2D00K8A1R/p5KXWhg4DJKBRIIA+Yqk/jAqdlUOURDEc2BvSfw==
-X-Received: by 2002:a2e:b4a9:0:b0:26d:cf5f:6a22 with SMTP id q9-20020a2eb4a9000000b0026dcf5f6a22mr5875512ljm.508.1668525812254;
-        Tue, 15 Nov 2022 07:23:32 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id w26-20020ac2443a000000b004acbfa4a18bsm2245731lfl.173.2022.11.15.07.23.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 07:23:31 -0800 (PST)
-Message-ID: <bbc08d1e-62fc-b0e2-15e1-76802ed3c4fc@linaro.org>
-Date:   Tue, 15 Nov 2022 16:23:29 +0100
+        Tue, 15 Nov 2022 10:24:08 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06C2DF09;
+        Tue, 15 Nov 2022 07:24:05 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E3B971883A1A;
+        Tue, 15 Nov 2022 15:24:02 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id DCD3225002DE;
+        Tue, 15 Nov 2022 15:24:02 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id CC2C49EC0020; Tue, 15 Nov 2022 15:24:02 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 00/12] Enable Display for SM8350
-Content-Language: en-US
-To:     Robert Foss <robert.foss@linaro.org>, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
-        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        konrad.dybcio@somainline.org, quic_kalyant@quicinc.com,
-        swboyd@chromium.org, angelogioacchino.delregno@somainline.org,
-        loic.poulain@linaro.org, quic_khsieh@quicinc.com,
-        quic_vpolimer@quicinc.com, vkoul@kernel.org, dianders@chromium.org,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
-        vinod.koul@linaro.org, quic_jesszhan@quicinc.com,
-        andersson@kernel.org
-References: <20221115133105.980877-1-robert.foss@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115133105.980877-1-robert.foss@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 15 Nov 2022 16:24:02 +0100
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@idosch.org>
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8 net-next 2/2] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+In-Reply-To: <Y3Osehw6Ra28HhYv@shredder>
+References: <20221112203748.68995-1-netdev@kapio-technology.com>
+ <20221112203748.68995-3-netdev@kapio-technology.com>
+ <Y3NixroyU4XGL5j6@shredder>
+ <864c4ae8e549721ba1ac5cf6ef77db9d@kapio-technology.com>
+ <Y3Osehw6Ra28HhYv@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <5a8195cfa02a95d614e782b9ae55546b@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 14:30, Robert Foss wrote:
-> Dependencies:
-> https://lore.kernel.org/all/20221102231309.583587-1-dmitry.baryshkov@linaro.org/
-> https://lore.kernel.org/all/20221024164225.3236654-1-dmitry.baryshkov@linaro.org/
-> https://lore.kernel.org/all/20221104130324.1024242-5-dmitry.baryshkov@linaro.org/
+On 2022-11-15 16:12, Ido Schimmel wrote:
+> On Tue, Nov 15, 2022 at 11:36:38AM +0100, netdev@kapio-technology.com 
+> wrote:
+>> On 2022-11-15 10:58, Ido Schimmel wrote:
+>> > On Sat, Nov 12, 2022 at 09:37:48PM +0100, Hans J. Schultz wrote:
+>> > > diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c
+>> > > b/drivers/net/dsa/mv88e6xxx/global1_atu.c
+>> > > index 8a874b6fc8e1..0a57f4e7dd46 100644
+>> > > --- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
+>> > > +++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
+>> > > @@ -12,6 +12,7 @@
+>> > >
+>> > >  #include "chip.h"
+>> > >  #include "global1.h"
+>> > > +#include "switchdev.h"
+>> > >
+>> > >  /* Offset 0x01: ATU FID Register */
+>> > >
+>> > > @@ -426,6 +427,8 @@ static irqreturn_t
+>> > > mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
+>> > >  	if (err)
+>> > >  		goto out;
+>> > >
+>> > > +	mv88e6xxx_reg_unlock(chip);
+>> >
+>> > Why? At minimum such a change needs to be explained in the commit
+>> > message and probably split to a separate preparatory patch, assuming the
+>> > change is actually required.
+>> 
+>> This was a change done long time ago related to that the violation 
+>> handle
+>> function takes the NL lock,
+>> which could lead to a double-lock deadlock afair if the chip lock is 
+>> taken
+>> throughout the handler.
 > 
-> Branch:
-> https://git.linaro.org/people/robert.foss/linux.git/log/?h=sm8350_dsi_v2
-> 
-> This series implements display support for SM8350 and
-> enables HDMI output for the SM8350-HDK platform.
-> 
+> Why do you need to take RTNL lock? br_switchdev_event() which receives
+> the 'SWITCHDEV_FDB_ADD_TO_BRIDGE' event has this comment:
+> "/* called with RTNL or RCU */"
+> And it's using br_port_get_rtnl_rcu(), so looks like RCU is enough.
 
-I received two of these patchsets... Which one is valid? Folks also
-review in both...
-
-Best regards,
-Krzysztof
-
+As I understand, dsa_port_to_bridge_port() needs to be called with the 
+NL lock taken...
