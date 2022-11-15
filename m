@@ -2,119 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF2862A165
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:36:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C484262A167
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiKOSgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 13:36:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
+        id S230193AbiKOShJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 13:37:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiKOSgK (ORCPT
+        with ESMTP id S230516AbiKOShG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 13:36:10 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2FACD7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:36:08 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 682371F892;
-        Tue, 15 Nov 2022 18:36:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1668537367; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5XQ2sJiljidryJdoIX8oswLfwoui4/Bu1nty4gymX/8=;
-        b=A54A9+xGYc9OqUV7vdGFpmQszxhIQ5tBZfxPrAFLJU/6sqMDjpsKmb+sp6gK26PhlhWZth
-        UbxIY2+tdWrG/rsLHT/Y7o6M851tdNGpwDMmIxgypa1r4rlq3JQUz/RtM91OF2UGFcAahn
-        2ZkWsS755qohpy6R1hYsq9qxhKp0U8I=
-Received: from suse.cz (unknown [10.100.208.146])
+        Tue, 15 Nov 2022 13:37:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69BCDFB5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:37:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 497222C149;
-        Tue, 15 Nov 2022 18:36:07 +0000 (UTC)
-Date:   Tue, 15 Nov 2022 19:36:06 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: replay log: Re: [PATCH printk v4 38/39] printk: relieve
- console_lock of list synchronization duties
-Message-ID: <Y3PcFvz1BXrDcyPm@alley>
-References: <20221114162932.141883-1-john.ogness@linutronix.de>
- <20221114162932.141883-39-john.ogness@linutronix.de>
- <Y3Oxck0/LAHFLYip@alley>
- <Y3PBNJRvE6tU8ct+@alley>
- <87r0y4m955.fsf@jogness.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87r0y4m955.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2642B81A45
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 18:37:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 512CBC433D6;
+        Tue, 15 Nov 2022 18:37:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668537423;
+        bh=DXtBqwAJNzvabhEQWkg/v9TIqBl57Z8uQGQkk8DLJik=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Gx6gn3BUolDn9LKLn3SiegK/aNplpPWVpSisRC2HEjW0evz1s6J82zuOJ4hyJOJWe
+         J1k6iEM9O5uiqWTI4fGxaytNLcChn4nSsEgq7SrVtbqqh5Lf1fy4p1O7JZdaGqivEx
+         EVspKIdTkQDsf/u3HsCKChs/QMEjn3dXYzdkQpigFVivu4AVlnbN5O1HsM20Un++fi
+         0L+jU7eJEjI7sHbcg+GjlCTv0mQo3+PMSpROpfAOaXrf4b9fG9iKfjy+ipNzbNaVXq
+         UCwUHtMDZsrtEtnFRXLc7US238553xOarR/XQFtO5UY9dmKfiWhmnOzSBsDIy5q3Jz
+         dq40ypaEJPNxA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3D74BC395FE;
+        Tue, 15 Nov 2022 18:37:03 +0000 (UTC)
+Subject: Re: [GIT PULL] erofs fixes for 6.1-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <Y3OhbojEWZa35DVf@debian>
+References: <Y3OhbojEWZa35DVf@debian>
+X-PR-Tracked-List-Id: Development of Linux EROFS file system <linux-erofs.lists.ozlabs.org>
+X-PR-Tracked-Message-Id: <Y3OhbojEWZa35DVf@debian>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-6.1-rc6-fixes
+X-PR-Tracked-Commit-Id: 37020bbb71d911431e16c2c940b97cf86ae4f2f6
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 81e7cfa3a9eb4ba6993a9c71772fdab21bc5d870
+Message-Id: <166853742324.15464.2205805184353773016.pr-tracker-bot@kernel.org>
+Date:   Tue, 15 Nov 2022 18:37:03 +0000
+To:     Gao Xiang <xiang@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Yue Hu <huyue2@coolpad.com>, linux-erofs@lists.ozlabs.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-11-15 18:21:34, John Ogness wrote:
-> On 2022-11-15, Petr Mladek <pmladek@suse.com> wrote:
-> >>> --- a/kernel/printk/printk.c
-> >>> +++ b/kernel/printk/printk.c
-> >>> @@ -3334,6 +3330,11 @@ void register_console(struct console *newcon)
-> >>>  		 * boot console that is the furthest behind.
-> >>>  		 */
-> >>>  		if (bootcon_registered && !keep_bootcon) {
-> >>> +			/*
-> >>> +			 * Hold the console_lock to guarantee safe access to
-> >>> +			 * console->seq.
-> >>> +			 */
-> >>> +			console_lock();
-> >>>  			for_each_console(con) {
-> >>>  				if ((con->flags & CON_BOOT) &&
-> >>>  				    (con->flags & CON_ENABLED) &&
-> >>> @@ -3341,6 +3342,7 @@ void register_console(struct console *newcon)
-> >>>  					newcon->seq = con->seq;
-> >>>  				}
-> >>>  			}
-> >>> +			console_unlock();
-> >
-> > So, without the above two hunks:
-> >
-> > Reviewed-by: Petr Mladek <pmladek@suse.com>
-> 
-> Note that we actually need those hunks to guarantee a consistent @seq
-> value. The console_lock is the only synchronization mechanism available
-> to read console->seq.
+The pull request you sent on Tue, 15 Nov 2022 22:25:50 +0800:
 
-Yes, we need a solution. But it does not need to be in this patch.
+> git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-6.1-rc6-fixes
 
-This patch removes console_lock() on some locations. But this
-particular code was called without console_lock() even before
-this patch.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/81e7cfa3a9eb4ba6993a9c71772fdab21bc5d870
 
-Note that the regression was added in the 3rd patch that moved
-this code outside console_lock().
+Thank you!
 
-Maybe, the easiest solution would be to do in the 3rd patch [*]:
-
-	} else {
-		/* Begin with next message. */
-		newcon->seq = prb_next_seq(prb);
-		/*
-		 * Try hard to show the pending messages on boot consoles.
-		 * so that the new console does not start too late.
-		 */
-		pr_flush();
-	}
-
-It should behave as good and as bad as the original code.
-
-[*] Or move the code and add this change before the 3rd patch
-    to keep this questionable solution separated and avoid
-    the regression.
-
-Best Regards,
-Petr
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
