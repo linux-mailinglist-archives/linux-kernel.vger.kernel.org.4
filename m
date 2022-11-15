@@ -2,154 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD0262AF37
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEDB662AF1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbiKOXMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 18:12:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57096 "EHLO
+        id S231513AbiKOXJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 18:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238289AbiKOXLf (ORCPT
+        with ESMTP id S229607AbiKOXJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 18:11:35 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EEC2E6AA
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:11:34 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id v3-20020a17090ac90300b00218441ac0f6so2486386pjt.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:11:34 -0800 (PST)
+        Tue, 15 Nov 2022 18:09:34 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E882CC86
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:09:31 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id gw22so14906252pjb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:09:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kylehuey.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VkXZyYO2hGQH+BId88DD3kMOt/JKYNASeU3kq3/BxNg=;
-        b=PJSFalW97JocjRPsweyy+GvKZWv53ItjFSUoPx5y9DdQ6EZ/fzc+SZpCngVuSd9ea1
-         LlVOTnFpygwuMc3lztlKy+xmDdb+Jp/+xaSiCp9boUPxnjP7mObm84gEd526bQlKMdKW
-         tIgzIfdG2ycjjmG23/XuePNtsMRIGoQMQNfwDlCWtaSjDiGY1UowCVM8bqRYoONG2bbc
-         I+d6SnAqmdBy6cFZWgDfGsC9zzqcv8d4iGLP/cJX/FPyfHJrLqafXYRt827bXtjHLxHW
-         lHyI34dIT86OTlpWY2FinxvlEhvZLL0UIdSVo1hAKM3l1YPJV1d/rsASSEGIkcIKAwnZ
-         RwBg==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FRJ2/NFUMo3tot9W+XQ4AmnzXlCEgzOQj+6LcJx3n5c=;
+        b=GSETCmmwbzYAUh1qY2IkDbt0DbmzVOSYoPpFC2XzrI8BtKj567Y45nKLP9gUovi3ig
+         oQH00y9Ev91UkP0KTipKG57JQCkPbBmhj0KvGNP9sJWrKHcWhHK/mdwDu0knzKwSbFGn
+         hyyjbfOPWqTOhSw0zCPDOtZadh2G6OGMTj90qWtII2VogJRv/9icbPbDuVUdyvq02BBc
+         +ZzLOw1rhI6SA1219JOfUnWxhwKEWxzUkn9jX3XLfMUbErQ2GudrFc7HQYnlL5zEtS0q
+         Y0EtV2xxkCmu1ET4xG5vRY51UHjE2Am6tbHozXw083/SeG9YowKv4MUhf+GmeWKt1eKt
+         xMhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VkXZyYO2hGQH+BId88DD3kMOt/JKYNASeU3kq3/BxNg=;
-        b=oLha6ugiHeE5sTAh3yaresYul0Pa6eL9J463lZ5wktOgCgz04YRRS59t3iyJBYY+hb
-         MYwql6sZ1C8hgaabh6bX/Xx5Y4DtaNkvFuTM1RofB98lBoWkuGSxq3SUVuiYyDVACtTq
-         J83oscPz/1VIyVnrswu5SJ+HEZ9vMySMr63B7jmExKQe35YYxQ0Z0g278cjwJ40Ek3Rw
-         rThxCa9e31oohWdx1nGcX2OosFuxVGgWkM7TjiBsRkVWnt/PHRjSBWnadd/zS4xNOF1n
-         UVd0D4DZmCfN7zi0D5D17s31N8tUVdD3jgmYbx0iqrRFcS4NHXdTxWDJL2whYiJPt3w+
-         Ueug==
-X-Gm-Message-State: ANoB5pkwW8moaPyvHyppVmP5eSkgS012KrD5JF/o+2i9xIQnPVc2BHP/
-        acS2yHcF5BKqQDzPQoTvqbBjPw==
-X-Google-Smtp-Source: AA0mqf75xxW4N9M95sb0sBsucwu2KWj9VrPDShkwX51uZY6Fbc5+qkz1jqYor6l+Fxz5aXrzC9V3Gw==
-X-Received: by 2002:a17:903:228e:b0:177:faf5:58c5 with SMTP id b14-20020a170903228e00b00177faf558c5mr6230654plh.166.1668553894421;
-        Tue, 15 Nov 2022 15:11:34 -0800 (PST)
-Received: from minbar.home.kylehuey.com (c-71-198-251-229.hsd1.ca.comcast.net. [71.198.251.229])
-        by smtp.gmail.com with ESMTPSA id f15-20020a62380f000000b0056c360af4e3sm9308372pfa.9.2022.11.15.15.11.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 15:11:34 -0800 (PST)
-From:   Kyle Huey <me@kylehuey.com>
-X-Google-Original-From: Kyle Huey <khuey@kylehuey.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Robert O'Callahan <robert@ocallahan.org>,
-        David Manouchehri <david.manouchehri@riseup.net>,
-        Kyle Huey <me@kylehuey.com>
-Subject: [PATCH v7 2/6] x86/fpu: Add a pkru argument to copy_uabi_from_kernel_to_xstate().
-Date:   Tue, 15 Nov 2022 15:09:28 -0800
-Message-Id: <20221115230932.7126-3-khuey@kylehuey.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221115230932.7126-1-khuey@kylehuey.com>
-References: <20221115230932.7126-1-khuey@kylehuey.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FRJ2/NFUMo3tot9W+XQ4AmnzXlCEgzOQj+6LcJx3n5c=;
+        b=AA/BcZy1nRoLCoc8gu8eXh9qK7kzMqCsYAndwdzWXmQFsi7jdZIMCircZfUAJ4LvxJ
+         iraijv0f9/6jlgFOh36n+cjNGXPYzR1WwRTsFFunByGs3sRv66SVzwbrzWhOT7kG6mYe
+         9mGwPqMuhwX3JCjiiaQkGhhIYsDiL+cQOykQaobB2wLz0cigLZ88iWqxW29B3Dr1DMX3
+         DOJNNUXaAFP9Zr9btOhksp/30eG0BszDToUhzd4fz23HLFELTdFHBNYIOvfyNZ2QjJLD
+         QDDVa8DMJ9yu1tLLrJ6yZc+iBLV3aNG0z2Bclxllc+2M7lsquhxdoSsuBAoPJX9kSLND
+         raVw==
+X-Gm-Message-State: ANoB5pmkblGw1buDYZMhmCeTdROY417o7BJBeYPqgItXgUpOR2LohqVh
+        P1q35NIE29TvGOR1QaNgm+dtVg==
+X-Google-Smtp-Source: AA0mqf5hrzm+u74QOK/MPhyijy1Gq+yHbSRmdLenCJSPLSlcI3lTOa69tFlNv+HXA/9Pa+laoNSPdQ==
+X-Received: by 2002:a17:903:2348:b0:186:c372:72d6 with SMTP id c8-20020a170903234800b00186c37272d6mr6220475plh.25.1668553771178;
+        Tue, 15 Nov 2022 15:09:31 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id g3-20020a170902868300b00168dadc7354sm10478322plo.78.2022.11.15.15.09.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 15:09:30 -0800 (PST)
+Message-ID: <928d9094-db54-7b27-98a6-9ece514f12e1@kernel.dk>
+Date:   Tue, 15 Nov 2022 16:09:29 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v1 2/2] io_uring: uapi: Don't use a zero-size array
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Metzmacher <metze@samba.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+References: <20221115212614.1308132-1-ammar.faizi@intel.com>
+ <20221115212614.1308132-3-ammar.faizi@intel.com>
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20221115212614.1308132-3-ammar.faizi@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both KVM (through KVM_SET_XSTATE) and ptrace (through PTRACE_SETREGSET
-with NT_X86_XSTATE) ultimately call copy_uabi_from_kernel_to_xstate(),
-but the canonical locations for the current PKRU value for KVM guests
-and processes in a ptrace stop are different (in the kvm_vcpu_arch and
-the thread_state structs respectively). In preparation for eventually
-handling PKRU in copy_uabi_to_xstate, pass in a pointer to the PKRU
-location.
+On 11/15/22 2:29 PM, Ammar Faizi wrote:
+> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> 
+> Don't use a zero-size array because it doesn't allow the user to
+> compile an app that uses liburing with the `-pedantic-errors` flag:
+> 
+>   io_uring.h:611:28: error: zero size arrays are an extension [-Werror,-Wzero-length-array]
+> 
+> Replace the array size from 0 to 1.
+> 
+>   - No functional change is intended.
+>   - No struct/union size change.
 
-Signed-off-by: Kyle Huey <me@kylehuey.com>
----
- arch/x86/kernel/fpu/core.c   | 2 +-
- arch/x86/kernel/fpu/regset.c | 2 +-
- arch/x86/kernel/fpu/xstate.c | 2 +-
- arch/x86/kernel/fpu/xstate.h | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+The only reason why they don't grow the struct, is because it's in
+a union. I don't like this patch, as the zero sized array is a clear
+sign that this struct has data past it. If it's a single entry, that's
+very different.
 
-diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-index 3b28c5b25e12..550157686323 100644
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -406,7 +406,7 @@ int fpu_copy_uabi_to_guest_fpstate(struct fpu_guest *gfpu, const void *buf,
- 	if (ustate->xsave.header.xfeatures & ~xcr0)
- 		return -EINVAL;
- 
--	ret = copy_uabi_from_kernel_to_xstate(kstate, ustate);
-+	ret = copy_uabi_from_kernel_to_xstate(kstate, ustate, vpkru);
- 	if (ret)
- 		return ret;
- 
-diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
-index 75ffaef8c299..6d056b68f4ed 100644
---- a/arch/x86/kernel/fpu/regset.c
-+++ b/arch/x86/kernel/fpu/regset.c
-@@ -167,7 +167,7 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
- 	}
- 
- 	fpu_force_restore(fpu);
--	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf);
-+	ret = copy_uabi_from_kernel_to_xstate(fpu->fpstate, kbuf ?: tmpbuf, &target->thread.pkru);
- 
- out:
- 	vfree(tmpbuf);
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index 32ba5d95628d..a4d24ae66796 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -1268,7 +1268,7 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
-  * Convert from a ptrace standard-format kernel buffer to kernel XSAVE[S]
-  * format and copy to the target thread. Used by ptrace and KVM.
-  */
--int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf)
-+int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru)
- {
- 	return copy_uabi_to_xstate(fpstate, kbuf, NULL);
- }
-diff --git a/arch/x86/kernel/fpu/xstate.h b/arch/x86/kernel/fpu/xstate.h
-index f08ee2722e74..a4ecb04d8d64 100644
---- a/arch/x86/kernel/fpu/xstate.h
-+++ b/arch/x86/kernel/fpu/xstate.h
-@@ -46,7 +46,7 @@ extern void __copy_xstate_to_uabi_buf(struct membuf to, struct fpstate *fpstate,
- 				      u32 pkru_val, enum xstate_copy_mode copy_mode);
- extern void copy_xstate_to_uabi_buf(struct membuf to, struct task_struct *tsk,
- 				    enum xstate_copy_mode mode);
--extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf);
-+extern int copy_uabi_from_kernel_to_xstate(struct fpstate *fpstate, const void *kbuf, u32 *pkru);
- extern int copy_sigframe_from_user_to_xstate(struct task_struct *tsk, const void __user *ubuf);
- 
- 
+Yes that apparently makes pendantic errors unhappy, but I care more
+about the readability of it.
+
 -- 
-2.38.1
+Jens Axboe
+
 
