@@ -2,224 +2,510 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D36E62A46C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:46:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F29C62A474
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:48:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbiKOVq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 16:46:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
+        id S231206AbiKOVsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 16:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiKOVq1 (ORCPT
+        with ESMTP id S231168AbiKOVr7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 16:46:27 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E0CAE7A;
-        Tue, 15 Nov 2022 13:46:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668548783; x=1700084783;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=tc209InMG8zJXJ2smzGRNQLL2WzafcWHWwCHeCJ2YQg=;
-  b=HFI8NBXdPYpw/sRBv5cEVlbkSRknLMbwB/gvX2YaQ/jMfMKRnlrwqoA+
-   czax3ViOfHVRyNntVvKurt38ysodw1Ly+3qsiNEuEBWFHhzFRpxNm108+
-   ZyUvQqHyhUZ0Sfg+1AyPyQcd2GguC8NTNHDAo9QKEYM4XBWVpVhYObOrM
-   b57PiBegRVsuf8eulx+Q2uZIBX0khTCI7Dg7OP/qmL26XyBsHkaJwi8Fw
-   TX9rBPA4gj/TGzeOgU80kw0eOzyqflPkQfrnTPW/UBdjnzOXFTBnJQl42
-   JizY7dEQadzxmwvlnIHajGqcqn+TFMoSzo4JeXjGZuAY4GY/fpK1fFGfT
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="310003332"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="310003332"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 13:46:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="707894236"
-X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="707894236"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga004.fm.intel.com with ESMTP; 15 Nov 2022 13:46:22 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 13:46:22 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 15 Nov 2022 13:46:22 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 15 Nov 2022 13:46:21 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XgSwyCKVyNIG4S8bhw/UUk9K0I1MRoOOPxKFaARImenkhdKcoZtlebg4OX+K3Bkd8joeHUf4cUGL8FvR5V6vsxYh/wB3+TzO+Q6ZSbdN9cnN3ytiv33SKyYpyv7fBlQeZKgu7SbidhwnqoLIxG+zPQhtfdSsIxGCTu3KFgXWjhavJVtWGZt0vJfIRx42GTM9AfZy0BAGpm4uYPjIqq5gRtfI2rohWSG4o6xQ6Wjzshl0kLFuteSPoeCFkde+9DdHSppo+K7+1yf9hvTbDgF9zYjO/i6jMjr6FJNCavz9iIQQsHL3zI9n9EB6waypIq8b/7ikfApVNoiKt6ubO3Sw6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tc209InMG8zJXJ2smzGRNQLL2WzafcWHWwCHeCJ2YQg=;
- b=QGbiRCZmSMw79k9lbP36voa4kNL5zRPG4sO92B35oVnCENrU05ss6l+0njt9bhW3rJM1Kt20OJPEORni0PgDznDlHrE9LrIBsJdLbTkiG6E77tMQO/1n3BaSypVK77bEjhyx5s0jYwM35S8jxokGH36xzuJrK0rWo+3TkBerUZAEzW3clAh/9JZGVL1CFg0Q3IYfm/06IalfU+EijprGZ1L5konUX16es0AS1NZD9f7PCyrRkRi1IHvIEYvtoX7ht0jo+1G6tQsXZBQu8Tmbkl6WEuzPeHUd22ZWUBmrBkozQ+ShPhQ7/1FdQWjFThgbPLd+TMIddQfWhThFyzrVmw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by SN7PR11MB7637.namprd11.prod.outlook.com (2603:10b6:806:340::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.16; Tue, 15 Nov
- 2022 21:46:13 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::add7:df23:7f86:ecf3]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::add7:df23:7f86:ecf3%5]) with mapi id 15.20.5813.018; Tue, 15 Nov 2022
- 21:46:13 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "peterz@infradead.org" <peterz@infradead.org>
-CC:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH v3 25/37] x86/shstk: Add user-mode shadow stack support
-Thread-Topic: [PATCH v3 25/37] x86/shstk: Add user-mode shadow stack support
-Thread-Index: AQHY8J5ePUADd6Ic9E+fUYJmZCKAz64/+2yAgACasgA=
-Date:   Tue, 15 Nov 2022 21:46:13 +0000
-Message-ID: <ef2c04a3b3156210a372b6653180cb33bc49f4d7.camel@intel.com>
-References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
-         <20221104223604.29615-26-rick.p.edgecombe@intel.com>
-         <Y3OG31hoj/q4Bgh7@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y3OG31hoj/q4Bgh7@hirez.programming.kicks-ass.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|SN7PR11MB7637:EE_
-x-ms-office365-filtering-correlation-id: b71935d9-7cc7-4c57-a95a-08dac752d0f3
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JIQExoQeAxkWou/Ifd95408+ytwUcZo+5LQgIkN2N9H1vZUM5XlhfnTQZxCJ7bUw5HhPTr41JD6GHZdCQTEr1sQcbHapAJXHsB+yBRAQ/qFk+5zhad3sNUsVwVl9Gfeo1LE12oWrGXxa/ZQb4IUPibreC64CyB48Dbi2IZSy6Si2kgdoUENOWJBmECrHGbMBBBkf7HwJVVgu8GAI0cdSSRXhWgSCrHCcX7giuNwmMdOn9HLmTlcce7eYbERx5nBH8ZEG/8fCAUPeHQ59pCys3FsVCXth8/Ku8y25egdfn3b/dNbeGCU6YNJTB8G1xBmBSNj/qf4qij0gh2UCLdkH4MuM8UMgSmpWP7P27cUxcCPJBKAnEWFdawbMt6OxUCJpN8pX2WiSQEH8Iyyynxc3hHXgJJ1sghTBggzGMLlaRcyGbiOGdOxaceaE6yzRd0rILNEOQyiuQuoVB2t0k7EeypXwTBIsnZj1kqneFYDi2Zj3ummPNskhAipGrr+0WWyl8qjGelT6SgCVDAUC7oF6HBSzQqYjMjolyiG2LCI6FOAOc53v0d7LtzVVuorvLwZ2ouoIR8UAXjsmk+rRpg+m1fmT7nWWkgb1nj5JTaWHeL4bOIEg625Hs09crfg6cOpoSYITeRZngc0lgs8eUt2ztHtkuvKRrUOScK2SWALhDq0kjvNx3XayiVwwDaRhOjBZUi5ZETiRAHRpWDpI3UGbN/cAHo0NodYrIVxyuORW6iN6pS8ym28V9Y9YaaqoVYqwy4h3oOq8NqRvVoxk+vd+ZxFMh5uvmU3ZJJqzA7zlJrY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(366004)(346002)(396003)(136003)(451199015)(7416002)(5660300002)(7406005)(71200400001)(36756003)(6512007)(8936002)(26005)(86362001)(2616005)(4001150100001)(6506007)(83380400001)(6486002)(478600001)(2906002)(8676002)(4326008)(186003)(38100700002)(66476007)(64756008)(54906003)(66446008)(6916009)(66556008)(82960400001)(76116006)(91956017)(316002)(122000001)(41300700001)(38070700005)(66946007)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TTdkWjNHUzl1TU1RdkdrazZvMWEvR3hFTjJWZ0EyMVJ6MkFxZFpqUlovNTRu?=
- =?utf-8?B?Z25JV3dSaWNUSWtoN1VJdVdhTUY1OWwzOXdkdkVVQy85LzAwMkg5UTB5eHRi?=
- =?utf-8?B?bXlRNlIxVmMrTzNvdWJPemFQQnU2Z1ZLR2VUcnBXWVZTei9obllHeDFGSFRO?=
- =?utf-8?B?aGxTejBmWmpUNzJzL3N1TS9peXFzRmZ0YlB0REFKTWxWRXk2SkRzNHRMQ0h0?=
- =?utf-8?B?RVJJNm5abmdVenpobDloR2I1MGswOFVMQ2xOSkVDcndFbG9OT29ycnA0S3Vj?=
- =?utf-8?B?TiszQlNlcUVRZWdOejBIQ1U2eGlYb3VkMngxZmZjcnBoYTloc3ltQmlNS2JN?=
- =?utf-8?B?YXh4cm9JcUVudnk2NmlHL1QrMS9KQTQ1WEVjcExLSGZ0bUM4bzhCTGVMVHBJ?=
- =?utf-8?B?WWhjVUZkRzZqaFpvblNCQVA0WWh0QUphaEYramJvV0VMUTBVd2JvcGUzUUpF?=
- =?utf-8?B?bnQzN2ZjY1VpZzZTTG9RRkhVbENBOUhKVkpHbjErNnVKSEhWZThjUy9UV0JI?=
- =?utf-8?B?aDB3NDg3VjBFRVFpSWc5N1BTc0ZPVDZtNnZDOVpMNjNacEgzeXNuZGVXMlhX?=
- =?utf-8?B?Vy9CNi93b2RtTmxQVGVUVmxjVDRJT0VlRHFZV0VqSzAyT2FaMVpyeGhFN1VP?=
- =?utf-8?B?d1BSMmVlei8vbUFNUllWQ01CWVdjb0ovWVB4TkF6MDFKbmhPdnYzN3IxMXVz?=
- =?utf-8?B?YTl3S1RpbzZYbWozbjEycHU2RG5IMCtWeG13UHJaSVJ1a3Joa2JDWExZNkRn?=
- =?utf-8?B?allPczBTcDI5QlNPYVZSM3RGcERyZ25xdzFCazQzUFlaRTh4eTRwaGliUUJj?=
- =?utf-8?B?SjJaN3VabmRPa1E3b1YwYjJSMnpRbnlUaHFYTTFmZjgxQW5qWWMyQjIvQXNF?=
- =?utf-8?B?SUhvbEFyWDVlVmZESWJhS0h5bStieXpyVW9SK0xRSEZOazNXZGlIZmNIZEkw?=
- =?utf-8?B?bnJkQkhLZENkeHVUVmF3VXRwZDBLVUY3b2swWWFtQkZyR2g1Qmh0TFYxTEdv?=
- =?utf-8?B?cFVtbVREVEd4d29Wb3lBYUQ5eDBjWm9HWW5UZCtEUmMrMEJMcGljRTZZK01G?=
- =?utf-8?B?SmtSSkpXeXhlNGkvZEw1cGdVSDh4czVNdHpzelpyNWxBdkdVOEt5MkR0YmE1?=
- =?utf-8?B?UGdnNmMvZjJUQm11YkFjamFzZmNMRVhWamUrN08ybGVRQU5xV0NBYy9ydFB2?=
- =?utf-8?B?Y0hOVDVKSmxRQStnVVFNYVZWWnZRK2tCVStKYWE0bkpIRTlKS1lvVFZzY0lx?=
- =?utf-8?B?YUJPVGRDa0FqdzlhUzRvWjQwTFViNDNtbkg4c3hCQ0JtWmdSc21RYWoza2th?=
- =?utf-8?B?d0Nya0EwUFRoMGQ5SGhSVzg0UEtNN1ppdDRQeXk0ZXJRRGpKOTZUNGJSVk83?=
- =?utf-8?B?ZHJLU2lnWUFBTmJmNitHSlpsckc2TUNSUDU1RWJsWjB2NHIyNUV2OVpGUStG?=
- =?utf-8?B?emh1dFlPM3MrSEZweFp0bXBaRlhMMElUeWNEL2JIc0kwd2twOUpvTmVoVWp5?=
- =?utf-8?B?VVRuS1FhOGZGT004OFN6VHZGM294Q2dQQVNKZ0h5dlFSV3AyNzBxTmJoWkIv?=
- =?utf-8?B?Z0tQQXVMU24rTTZWclVpa0FvMU5CWmhsbDFJV2YwcUJGcGZhclFKNDRQRjBj?=
- =?utf-8?B?U1lrMVVkRWhPcnRZY0dkcFlzd2hGbEZ0NlQ5dEZ0SFJwT0krRVJIZW1aV2dU?=
- =?utf-8?B?Ti9tQllSZndSMTBnTVdmR1B1dVQ2NmhUR2FCcDN3SHpwZW02VWdjN0p5b2lu?=
- =?utf-8?B?aUlBZUlkcjNHSHpNL1hzUFVTT3pjOEJNQ3lUcHJBM3ZTVStmbTZSQ2lSMTZ5?=
- =?utf-8?B?SGtYaVdQNm9XcEFNRTcrdnNtVTlNL1dKUEZrOStvekNzenhLZGJnR3Z3c3l5?=
- =?utf-8?B?RXJvSGJGL1RINTRwUm5Ba2YzandZWm9rN2R6eCt5MlNyN3J0SW94VlJPM0JY?=
- =?utf-8?B?alFYcVhOQlVGSU1JU3hjazIxZC8xQzRXcmtSUkV4K1BGY3ZIejNZTE9GTHBn?=
- =?utf-8?B?QUV6QTdjS0dvalU3Y0ljL2pkY3pjMTFwYzlleUI4Y2tmQWVsTW5EUjZLUHFF?=
- =?utf-8?B?bVZ5MFVwUjU3N0JKOStRYlltTmhSSDFKVktHeUVlMVNMdjEzQStqWDBNaGlD?=
- =?utf-8?B?WnFGOHZFUmZmVWZ6VUNaZmZHNERSczZkVVRSZHVpMTN0TkNLTXdWNWF2RXZM?=
- =?utf-8?Q?Os41JKbKIfEb0jgKjuynSRc=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <13CB2DD0210FEF4E9600102EFB8E6485@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 15 Nov 2022 16:47:59 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6765C193D6;
+        Tue, 15 Nov 2022 13:47:58 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1ov3mU-0005J5-8v; Tue, 15 Nov 2022 22:47:46 +0100
+Date:   Tue, 15 Nov 2022 21:46:21 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Golle <daniel@makrotopia.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Michal Orzel <michalorzel.eng@gmail.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org
+Subject: [PATCH v5 2/4] block: add partition parser for U-Boot uImage.FIT
+Message-ID: <a8d4df0b7684350d655a00d6b5ca1dc8c319edee.1668548123.git.daniel@makrotopia.org>
+References: <cover.1668548123.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b71935d9-7cc7-4c57-a95a-08dac752d0f3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2022 21:46:13.3065
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: G9NxCYC7Ma3wvrXudHvjHsdQQo2iGIuUD/N+CimHwqUT/5b5VsRwNulzpB2c1FqWAhyIBejtTaU8gQilTXz4Fx4TxtSv/Us5GRck3FHvuj0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7637
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1668548123.git.daniel@makrotopia.org>
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,PDS_OTHER_BAD_TLD,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTExLTE1IGF0IDEzOjMyICswMTAwLCBQZXRlciBaaWpsc3RyYSB3cm90ZToN
-Cj4gPiArICAgICBzdHJ1Y3QgdGhyZWFkX3Noc3RrICpzaHN0ayA9ICZjdXJyZW50LT50aHJlYWQu
-c2hzdGs7DQo+ID4gKyAgICAgdW5zaWduZWQgbG9uZyBhZGRyLCBzaXplOw0KPiA+ICsNCj4gPiAr
-ICAgICAvKiBBbHJlYWR5IGVuYWJsZWQgKi8NCj4gPiArICAgICBpZiAoZmVhdHVyZXNfZW5hYmxl
-ZChDRVRfU0hTVEspKQ0KPiA+ICsgICAgICAgICAgICAgcmV0dXJuIDA7DQo+ID4gKw0KPiA+ICsg
-ICAgIC8qIEFsc28gbm90IHN1cHBvcnRlZCBmb3IgMzIgYml0IGFuZCB4MzIgKi8NCj4gPiArICAg
-ICBpZiAoIWNwdV9mZWF0dXJlX2VuYWJsZWQoWDg2X0ZFQVRVUkVfVVNFUl9TSFNUSykgfHwNCj4g
-PiBpbl8zMmJpdF9zeXNjYWxsKCkpDQo+ID4gKyAgICAgICAgICAgICByZXR1cm4gLUVPUE5PVFNV
-UFA7DQo+ID4gKw0KPiA+ICsgICAgIHNpemUgPSBhZGp1c3Rfc2hzdGtfc2l6ZSgwKTsNCj4gPiAr
-ICAgICBhZGRyID0gYWxsb2Nfc2hzdGsoc2l6ZSk7DQo+ID4gKyAgICAgaWYgKElTX0VSUl9WQUxV
-RShhZGRyKSkNCj4gPiArICAgICAgICAgICAgIHJldHVybiBQVFJfRVJSKCh2b2lkICopYWRkcik7
-DQo+ID4gKw0KPiA+ICsgICAgIGZwcmVnc19sb2NrX2FuZF9sb2FkKCk7DQo+ID4gKyAgICAgd3Jt
-c3JsKE1TUl9JQTMyX1BMM19TU1AsIGFkZHIgKyBzaXplKTsNCj4gPiArICAgICB3cm1zcmwoTVNS
-X0lBMzJfVV9DRVQsIENFVF9TSFNUS19FTik7DQo+IA0KPiBUaGlzLi4NCj4gDQo+ID4gKyAgICAg
-ZnByZWdzX3VubG9jaygpOw0KPiA+ICsNCj4gPiArICAgICBzaHN0ay0+YmFzZSA9IGFkZHI7DQo+
-ID4gKyAgICAgc2hzdGstPnNpemUgPSBzaXplOw0KPiA+ICsgICAgIGZlYXR1cmVzX3NldChDRVRf
-U0hTVEspOw0KPiA+ICsNCj4gPiArICAgICByZXR1cm4gMDsNCj4gPiArfQ0KPiA+ICtzdGF0aWMg
-aW50IHNoc3RrX2Rpc2FibGUodm9pZCkNCj4gPiArew0KPiA+ICsgICAgIGlmICghY3B1X2ZlYXR1
-cmVfZW5hYmxlZChYODZfRkVBVFVSRV9VU0VSX1NIU1RLKSkNCj4gPiArICAgICAgICAgICAgIHJl
-dHVybiAtRU9QTk9UU1VQUDsNCj4gPiArDQo+ID4gKyAgICAgLyogQWxyZWFkeSBkaXNhYmxlZD8g
-Ki8NCj4gPiArICAgICBpZiAoIWZlYXR1cmVzX2VuYWJsZWQoQ0VUX1NIU1RLKSkNCj4gPiArICAg
-ICAgICAgICAgIHJldHVybiAwOw0KPiA+ICsNCj4gPiArICAgICBmcHJlZ3NfbG9ja19hbmRfbG9h
-ZCgpOw0KPiA+ICsgICAgIC8qIERpc2FibGUgV1JTUyB0b28gd2hlbiBkaXNhYmxpbmcgc2hhZG93
-IHN0YWNrICovDQoNCk9vcHMsIHRoaXMgY29tbWVudCBpcyBpbiB3cm9uZyBwYXRjaC4NCg0KPiA+
-ICsgICAgIHNldF9jbHJfYml0c19tc3JsKE1TUl9JQTMyX1VfQ0VULCAwLCBDRVRfU0hTVEtfRU4p
-Ow0KPiANCj4gQW5kIHRoaXMuLi4gYXJlbid0IHZlcnkgY29uc2lzdGVudCBpbiBhcHByb2FjaC4g
-R2l2ZW4gdGhlcmUgaXMgbm8NCj4gVV9JQlQNCj4geWV0LCB3aHkgY29tcGxpY2F0ZSBtYXR0ZXJz
-IGxpa2UgdGhpcz8NCg0KU3VyZSwgSSBjYW4gY2hhbmdlIGl0Lg0K
+Introduce a new partition parser for U-Boot's Flattened-Image-Tree (FIT) in
+order to allow Linux to mount the filesystem part of a uImage.FIT.
+
+uImage.FIT needs to be created with external data and aligned to the
+system's memory page size. e.g.
+ mkimage -E -B 0x1000 -p 0x1000 ...
+
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ MAINTAINERS               |   6 +
+ block/partitions/Kconfig  |  15 ++
+ block/partitions/Makefile |   1 +
+ block/partitions/check.h  |   4 +
+ block/partitions/core.c   |   3 +
+ block/partitions/fit.c    | 346 ++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 375 insertions(+)
+ create mode 100644 block/partitions/fit.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 547ba994ea98..632672eb33ee 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8059,6 +8059,12 @@ F:	Documentation/firmware_class/
+ F:	drivers/base/firmware_loader/
+ F:	include/linux/firmware.h
+ 
++FIT PARTITION TABLE (uImage.FIT)
++M:	Daniel Golle <daniel@makrotopia.org>
++L:	linux-block@vger.kernel.org
++S:	Maintained
++F:	block/partitions/fit.c
++
+ FLEXTIMER FTM-QUADDEC DRIVER
+ M:	Patrick Havelange <patrick.havelange@essensium.com>
+ L:	linux-iio@vger.kernel.org
+diff --git a/block/partitions/Kconfig b/block/partitions/Kconfig
+index 7aff4eb81c60..77dc85d3797d 100644
+--- a/block/partitions/Kconfig
++++ b/block/partitions/Kconfig
+@@ -103,6 +103,21 @@ config ATARI_PARTITION
+ 	  Say Y here if you would like to use hard disks under Linux which
+ 	  were partitioned under the Atari OS.
+ 
++config FIT_PARTITION
++	bool "Flattened-Image-Tree (FIT) partition support" if PARTITION_ADVANCED
++	default n
++	select LIBFDT
++	help
++	  Say Y here if your system needs to mount the filesystem part of
++	  a Flattened-Image-Tree (FIT) image commonly used with Das U-Boot.
++
++	  uImage.FIT needs to be created with external data and aligned to
++	  the systems memory page size. e.g.
++	    mkimage -E -B 0x1000 -p 0x1000 ...
++
++	  If your system doesn't use U-Boot or you don't need to mount uImage.FIT
++	  filesystem sub-images in Linux, say N.
++
+ config IBM_PARTITION
+ 	bool "IBM disk label and partition support"
+ 	depends on PARTITION_ADVANCED && S390
+diff --git a/block/partitions/Makefile b/block/partitions/Makefile
+index a7f05cdb02a8..d319eb1deba9 100644
+--- a/block/partitions/Makefile
++++ b/block/partitions/Makefile
+@@ -8,6 +8,7 @@ obj-$(CONFIG_ACORN_PARTITION) += acorn.o
+ obj-$(CONFIG_AMIGA_PARTITION) += amiga.o
+ obj-$(CONFIG_ATARI_PARTITION) += atari.o
+ obj-$(CONFIG_AIX_PARTITION) += aix.o
++obj-$(CONFIG_FIT_PARTITION) += fit.o
+ obj-$(CONFIG_CMDLINE_PARTITION) += cmdline.o
+ obj-$(CONFIG_MAC_PARTITION) += mac.o
+ obj-$(CONFIG_LDM_PARTITION) += ldm.o
+diff --git a/block/partitions/check.h b/block/partitions/check.h
+index 8d70a880c372..76b006d3cb27 100644
+--- a/block/partitions/check.h
++++ b/block/partitions/check.h
+@@ -57,6 +57,7 @@ int amiga_partition(struct parsed_partitions *state);
+ int atari_partition(struct parsed_partitions *state);
+ int cmdline_partition(struct parsed_partitions *state);
+ int efi_partition(struct parsed_partitions *state);
++int fit_partition(struct parsed_partitions *state);
+ int ibm_partition(struct parsed_partitions *);
+ int karma_partition(struct parsed_partitions *state);
+ int ldm_partition(struct parsed_partitions *state);
+@@ -67,3 +68,6 @@ int sgi_partition(struct parsed_partitions *state);
+ int sun_partition(struct parsed_partitions *state);
+ int sysv68_partition(struct parsed_partitions *state);
+ int ultrix_partition(struct parsed_partitions *state);
++
++int parse_fit_partitions(struct parsed_partitions *state, u64 fit_start_sector,
++			 u64 sectors, int *slot, int max_slot, bool add_remain);
+diff --git a/block/partitions/core.c b/block/partitions/core.c
+index 355646b0707d..9d4bb8f48d35 100644
+--- a/block/partitions/core.c
++++ b/block/partitions/core.c
+@@ -43,6 +43,9 @@ static int (*check_part[])(struct parsed_partitions *) = {
+ #ifdef CONFIG_CMDLINE_PARTITION
+ 	cmdline_partition,
+ #endif
++#ifdef CONFIG_FIT_PARTITION
++	fit_partition,
++#endif
+ #ifdef CONFIG_EFI_PARTITION
+ 	efi_partition,		/* this must come before msdos */
+ #endif
+diff --git a/block/partitions/fit.c b/block/partitions/fit.c
+new file mode 100644
+index 000000000000..1c19a250f8e6
+--- /dev/null
++++ b/block/partitions/fit.c
+@@ -0,0 +1,346 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ *  fs/partitions/fit.c
++ *  Copyright (C) 2021  Daniel Golle
++ *
++ *  headers extracted from U-Boot mkimage sources
++ *  (C) Copyright 2008 Semihalf
++ *  (C) Copyright 2000-2005
++ *  Wolfgang Denk, DENX Software Engineering, wd@denx.de.
++ *
++ *  based on existing partition parsers
++ *  Copyright (C) 1991-1998  Linus Torvalds
++ *  Re-organised Feb 1998 Russell King
++ */
++
++#include <linux/libfdt.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/of_fdt.h>
++#include <linux/types.h>
++
++#include "check.h"
++
++#define FIT_IMAGES_PATH		"/images"
++#define FIT_CONFS_PATH		"/configurations"
++
++/* hash/signature/key node */
++#define FIT_HASH_NODENAME	"hash"
++#define FIT_ALGO_PROP		"algo"
++#define FIT_VALUE_PROP		"value"
++#define FIT_IGNORE_PROP		"uboot-ignore"
++#define FIT_SIG_NODENAME	"signature"
++#define FIT_KEY_REQUIRED	"required"
++#define FIT_KEY_HINT		"key-name-hint"
++
++/* cipher node */
++#define FIT_CIPHER_NODENAME	"cipher"
++#define FIT_ALGO_PROP		"algo"
++
++/* image node */
++#define FIT_DATA_PROP		"data"
++#define FIT_DATA_POSITION_PROP	"data-position"
++#define FIT_DATA_OFFSET_PROP	"data-offset"
++#define FIT_DATA_SIZE_PROP	"data-size"
++#define FIT_TIMESTAMP_PROP	"timestamp"
++#define FIT_DESC_PROP		"description"
++#define FIT_ARCH_PROP		"arch"
++#define FIT_TYPE_PROP		"type"
++#define FIT_OS_PROP		"os"
++#define FIT_COMP_PROP		"compression"
++#define FIT_ENTRY_PROP		"entry"
++#define FIT_LOAD_PROP		"load"
++
++/* configuration node */
++#define FIT_KERNEL_PROP		"kernel"
++#define FIT_FILESYSTEM_PROP	"filesystem"
++#define FIT_RAMDISK_PROP	"ramdisk"
++#define FIT_FDT_PROP		"fdt"
++#define FIT_LOADABLE_PROP	"loadables"
++#define FIT_DEFAULT_PROP	"default"
++#define FIT_SETUP_PROP		"setup"
++#define FIT_FPGA_PROP		"fpga"
++#define FIT_FIRMWARE_PROP	"firmware"
++#define FIT_STANDALONE_PROP	"standalone"
++
++#define MIN_FREE_SECT		16
++#define REMAIN_VOLNAME		"rootfs_data"
++#define MAX_FIT_LOADABLES	16
++
++/**
++ * parse_fit_partitions - map uImage.FIT filesystem sub-images into sub-partitions
++ * @state: pointer to partition parser state
++ * @fit_start_sector: start sector of the FIT structure on disk
++ * @sectors: number of sectors of the uImage.FIT partition or 0 if whole device
++ * @slot: pointer to the current partition slot number
++ * @add_remain: map unused sectors into additional partition
++ *
++ * To be called by other partition parsers on physical block devices or using
++ * wrapper function int fit_partition(struct parsed_partitions *state) for the
++ * whole disk, relevant typically for ubiblock or mtdblock devices.
++ */
++int parse_fit_partitions(struct parsed_partitions *state, u64 fit_start_sector,
++			 u64 sectors, int *slot, int max_slot, bool add_remain)
++{
++	struct block_device *bdev = state->disk->part0;
++	struct address_space *mapping = bdev->bd_inode->i_mapping;
++	struct folio *folio;
++	void *fit, *init_fit;
++	struct partition_meta_info *info;
++	char tmp[sizeof(info->volname) + 2]; /* 2 extra bytes for parentheses */
++	u64 dsize, dsectors, imgmaxsect = 0;
++	u32 size, image_pos, image_len;
++	const __be32 *image_offset_be, *image_len_be, *image_pos_be;
++	int ret = 1, node, images, config;
++	const char *image_name, *image_type, *image_description,
++		*config_default, *config_description, *config_loadables;
++	u32 image_name_len, image_type_len, image_description_len,
++		config_default_len, config_description_len,
++		config_loadables_len;
++	sector_t start_sect, nr_sects;
++	size_t label_min;
++	struct device_node *np = NULL;
++	const char *bootconf;
++	const char *loadable;
++	bool found;
++	int loadables_rem_len, loadable_len;
++	u16 loadcnt;
++
++	/* uImage.FIT should be aligned to page boundaries */
++	if (fit_start_sector % (1 << (PAGE_SHIFT - SECTOR_SHIFT)))
++		return 0;
++
++	/* map first page */
++	folio = read_mapping_folio(
++		mapping, fit_start_sector >> (PAGE_SHIFT - SECTOR_SHIFT), NULL);
++
++	if (IS_ERR(folio))
++		return PTR_ERR(folio);
++
++	init_fit = folio_address(folio) + offset_in_folio(folio, fit_start_sector * SECTOR_SIZE);
++
++	/* uImage.FIT is based on flattened device tree structure */
++	if (fdt_check_header(init_fit)) {
++		folio_put(folio);
++		return 0;
++	}
++
++	/* acquire disk or partition size */
++	dsectors = get_capacity(bdev->bd_disk);
++	if (sectors)
++		dsectors = min_t(u64, sectors, dsectors);
++
++	dsize = dsectors << SECTOR_SHIFT;
++	size = fdt_totalsize(init_fit);
++
++	/* silently skip non-external-data legacy uImage.FIT */
++	if (size > PAGE_SIZE) {
++		folio_put(folio);
++		return 0;
++	}
++
++	/* abort if FIT structure is larger than disk or partition size */
++	if (size >= dsize) {
++		state->access_beyond_eod = 1;
++		folio_put(folio);
++		return -EFBIG;
++	}
++
++	/*
++	 * copy FIT structure for further processing
++	 * this is necessary for libfdt to work
++	 */
++	fit = kmemdup(init_fit, size, GFP_KERNEL);
++	folio_put(folio);
++	if (!fit)
++		return -ENOMEM;
++
++	/* set boot config node name U-Boot may have added to the device tree */
++	np = of_find_node_by_path("/chosen");
++	if (np)
++		bootconf = of_get_property(np, "u-boot,bootconf", NULL);
++	else
++		bootconf = NULL;
++
++	/* find configuration path in uImage.FIT */
++	config = fdt_path_offset(fit, FIT_CONFS_PATH);
++	if (config < 0) {
++		pr_err("FIT: Cannot find %s node: %d\n",
++		       FIT_CONFS_PATH, config);
++		ret = -ENOENT;
++		goto ret_out;
++	}
++
++	/* get default configuration node name */
++	config_default =
++		fdt_getprop(fit, config, FIT_DEFAULT_PROP, &config_default_len);
++
++	/* make sure we got either default or selected boot config node name */
++	if (!config_default && !bootconf) {
++		pr_err("FIT: Cannot find default configuration\n");
++		ret = -ENOENT;
++		goto ret_out;
++	}
++
++	/* find selected boot config node, fallback on default config node */
++	node = fdt_subnode_offset(fit, config, bootconf ?: config_default);
++	if (node < 0) {
++		pr_err("FIT: Cannot find %s node: %d\n",
++		       bootconf ?: config_default, node);
++		ret = -ENOENT;
++		goto ret_out;
++	}
++
++	/* get selected configuration data */
++	config_description =
++		fdt_getprop(fit, node, FIT_DESC_PROP, &config_description_len);
++	config_loadables = fdt_getprop(fit, node, FIT_LOADABLE_PROP,
++				       &config_loadables_len);
++
++	pr_info("FIT: %s configuration: \"%s\"%s%.*s%s\n",
++		bootconf ? "Selected" : "Default", bootconf ?: config_default,
++		config_description ? " (" : "",
++		config_description ? config_description_len : 0,
++		config_description ?: "",
++		config_description ? ")" : "");
++
++	if (!config_loadables || !config_loadables_len) {
++		pr_err("FIT: No loadables configured in \"%s\"\n",
++		       bootconf ?: config_default);
++		ret = -ENOENT;
++		goto ret_out;
++	}
++
++	/* get images path in uImage.FIT */
++	images = fdt_path_offset(fit, FIT_IMAGES_PATH);
++	if (images < 0) {
++		pr_err("FIT: Cannot find %s node: %d\n", FIT_IMAGES_PATH, images);
++		ret = -EINVAL;
++		goto ret_out;
++	}
++
++	/* allocate one slot for mapping remaing space */
++	if (add_remain)
++		--max_slot;
++
++	/* iterate over images in uImage.FIT */
++	fdt_for_each_subnode(node, fit, images) {
++		image_name = fdt_get_name(fit, node, &image_name_len);
++		image_type = fdt_getprop(fit, node, FIT_TYPE_PROP, &image_type_len);
++		image_offset_be = fdt_getprop(fit, node, FIT_DATA_OFFSET_PROP, NULL);
++		image_pos_be = fdt_getprop(fit, node, FIT_DATA_POSITION_PROP, NULL);
++		image_len_be = fdt_getprop(fit, node, FIT_DATA_SIZE_PROP, NULL);
++
++		if (!image_name || !image_type || !image_len_be)
++			continue;
++
++		image_len = be32_to_cpu(*image_len_be);
++		if (!image_len)
++			continue;
++
++		if (image_offset_be)
++			image_pos = be32_to_cpu(*image_offset_be) + size;
++		else if (image_pos_be)
++			image_pos = be32_to_cpu(*image_pos_be);
++		else
++			continue;
++
++		image_description = fdt_getprop(fit, node, FIT_DESC_PROP,
++						&image_description_len);
++
++		pr_info("FIT: %16s sub-image 0x%08x..0x%08x \"%.*s\"%s%.*s%s\n",
++			image_type, image_pos, image_pos + image_len - 1,
++			image_name_len, image_name, image_description ? " (" : "",
++			image_description ? image_description_len : 0,
++			image_description ?: "", image_description ? ") " : "");
++
++		/* only 'filesystem' images should be mapped as partitions */
++		if (strncmp(image_type, FIT_FILESYSTEM_PROP, image_type_len))
++			continue;
++
++		/* check if sub-image is part of configured loadables */
++		found = false;
++		loadable = config_loadables;
++		loadables_rem_len = config_loadables_len;
++		for (loadcnt = 0; loadables_rem_len > 1 &&
++				  loadcnt < MAX_FIT_LOADABLES; ++loadcnt) {
++			loadable_len =
++				strnlen(loadable, loadables_rem_len - 1) + 1;
++			loadables_rem_len -= loadable_len;
++			if (!strncmp(image_name, loadable, loadable_len)) {
++				found = true;
++				break;
++			}
++			loadable += loadable_len;
++		}
++		if (!found)
++			continue;
++
++		if (image_pos % (1 << PAGE_SHIFT)) {
++			pr_err("FIT: image %.*s start not aligned to page boundaries, skipping\n",
++			       image_name_len, image_name);
++			continue;
++		}
++
++		if (image_len % (1 << PAGE_SHIFT)) {
++			pr_err("FIT: sub-image %.*s end not aligned to page boundaries, skipping\n",
++			       image_name_len, image_name);
++			continue;
++		}
++
++		start_sect = image_pos >> SECTOR_SHIFT;
++		nr_sects = image_len >> SECTOR_SHIFT;
++		imgmaxsect = (imgmaxsect < (start_sect + nr_sects)) ?
++				     (start_sect + nr_sects) :
++					   imgmaxsect;
++
++		if (start_sect + nr_sects > dsectors) {
++			state->access_beyond_eod = 1;
++			continue;
++		}
++
++		put_partition(state, *slot, fit_start_sector + start_sect,
++			      nr_sects);
++		state->parts[*slot].flags = ADDPART_FLAG_READONLY;
++		state->parts[*slot].has_info = true;
++		info = &state->parts[*slot].info;
++
++		label_min = min_t(size_t, sizeof(info->volname), image_name_len + 1);
++		strscpy(info->volname, image_name, label_min);
++
++		snprintf(tmp, sizeof(tmp), "(%s)", info->volname);
++		strlcat(state->pp_buf, tmp, PAGE_SIZE);
++
++		if (++(*slot) > max_slot)
++			break;
++	}
++
++	/* in case uImage.FIT is stored in a partition, map the remaining space */
++	if (add_remain && (imgmaxsect + MIN_FREE_SECT) < dsectors) {
++		put_partition(state, *slot, fit_start_sector + imgmaxsect,
++			      dsectors - imgmaxsect);
++		state->parts[*slot].flags = 0;
++		info = &state->parts[*slot].info;
++		strcpy(info->volname, REMAIN_VOLNAME);
++		snprintf(tmp, sizeof(tmp), "(%s)", REMAIN_VOLNAME);
++		strlcat(state->pp_buf, tmp, PAGE_SIZE);
++		++(*slot);
++	}
++ret_out:
++	kfree(fit);
++	return ret;
++}
++
++/**
++ * fit_partition - map uImage.FIT filesystem sub-images into partitions
++ * @state: pointer to partition parser state
++ *
++ * Used to parse uImage.FIT structure for images directly stored on
++ * the whole block device (typically ubiblock or mtdblock).
++ */
++int fit_partition(struct parsed_partitions *state)
++{
++	int slot = 1;
++
++	return parse_fit_partitions(state, 0, 0, &slot, MAX_FIT_LOADABLES, false);
++}
+-- 
+2.38.1
+
