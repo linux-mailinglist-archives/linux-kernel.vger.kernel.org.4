@@ -2,137 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E6F62920E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0B43629212
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbiKOG4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 01:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
+        id S232466AbiKOG6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 01:58:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiKOG4G (ORCPT
+        with ESMTP id S229522AbiKOG55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 01:56:06 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA4A639D;
-        Mon, 14 Nov 2022 22:56:02 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AF6ftTF025471;
-        Tue, 15 Nov 2022 06:55:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=ptfk3Z0aqUjuwRhWp6fIEl22ZV3Y4VjXJ7dcnTyeahg=;
- b=bpPrJGJ5QN8KUpe5SthbwpQTBWDXuTDuGCapYYJTKJys4zuhgydm3OV0Lr+f+QR/5ODd
- sXd6Z5tBgUaNVJusUjJ8W3w15D77vyjjEBHqsHse1S6Fnl4Q87HZz1SmOPne/oBj7ZJo
- yhch2xtQ4vqEzXUt8pbhgkxF3MBDec8C8aHSjU9as3wF1WvlnB6GilAYdZ+1kcGrBLcS
- C7OE0CQ/otVjNrmeFOEp/i8a9A5u5yJbvvZSA+N3PhZIWPv/+yyeYypIj988kVfgxydy
- rztmIBmK6+kG5x46+0sOrMkUQOizydBdEN04KWb0JcZGD+sz33LXHGz0Z0Agrhw0N6w9 hg== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kv5qqg948-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Nov 2022 06:55:55 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AF6pBWs013869;
-        Tue, 15 Nov 2022 06:55:53 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3kt349at5n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Nov 2022 06:55:53 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AF6uUVW49742294
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Nov 2022 06:56:30 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C748B4C044;
-        Tue, 15 Nov 2022 06:55:50 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9323A4C040;
-        Tue, 15 Nov 2022 06:55:50 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 15 Nov 2022 06:55:50 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        Josh Triplett <josh@joshtriplett.org>,
-        linux-kernel@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [PATCH 1/2] torture: use for_each_present() loop in
- torture_online_all()
-References: <20221111125126.3319474-1-svens@linux.ibm.com>
-        <20221111125126.3319474-2-svens@linux.ibm.com>
-        <20221111185331.GA725751@paulmck-ThinkPad-P17-Gen-1>
-        <yt9dtu31k0r9.fsf@linux.ibm.com>
-        <20221114163009.GE4001@paulmck-ThinkPad-P17-Gen-1>
-Date:   Tue, 15 Nov 2022 07:55:50 +0100
-In-Reply-To: <20221114163009.GE4001@paulmck-ThinkPad-P17-Gen-1> (Paul
-        E. McKenney's message of "Mon, 14 Nov 2022 08:30:09 -0800")
-Message-ID: <yt9dzgcsiu4p.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Tue, 15 Nov 2022 01:57:57 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB901F9FF
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:57:53 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id i131so15987363ybc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:57:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oepuDSJrpTbqZQNEqu7I0fwnW4/YSZGuESogruzpg5Q=;
+        b=knlwIzTGgEIrAPrftSIdgCxWPKpheE7M67Oqqkz6ZE21fUXpjVvattjHeNmBRLuLdQ
+         Y2HAJ22PuC1c3iD75u9KOPgAgA4VNRuptkORhQd33z/q9jOdRVfWnUE1FvNrvpKL+6TD
+         YydusemqY9t+sXBHjoDfiVQj0gqdLjST2T3zTKvBy95TrLD8SqfkttM7io6pEktqPwL6
+         JJadLBFKls3NEVeUGghXzH4BRbqeo6N/Ciz5SbjjPY/OxZc6Tiip6j26ouXReiWsfHWd
+         6L3Uf63ghWYgGcMJ9cxrEUs5mg5QTb0Crcrbp/woYi0FGRNIdRJ5BsSiaaD2obQAIJ4r
+         NTeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oepuDSJrpTbqZQNEqu7I0fwnW4/YSZGuESogruzpg5Q=;
+        b=yVH5YyoVj3AxQMrc6zZfMFzvfhQcLxgUOCg0wJ9xFnKGfgoocUaWF5Pbtnpppw2dhJ
+         8i9uE4J6qs4It5f6rsQ+7DQUWnGjPQi8mcqNBAfabsIFSO9HA4mU+aoqvAs3L24vm60Q
+         zOwYGjuGbkd57JuLosLgaaxJPZcdRXsXhCVSqsnLeM97VuQUGg4vgnDMjwDoxgYxBI1H
+         XL0O2yDKelssW8c9Zwlid7vesuShoqfAhXKQwePZlrnNcnL3YdQtr/ofEg6Ku9VByYxu
+         Sbm9uuIQ9o8Z98AfO7w2ErWOEcoDi/76R4PyM1xCNC8wtZqsZ0XG79IE9r9Vo1IQSLZy
+         hVHg==
+X-Gm-Message-State: ANoB5pkNkYBW5JEaQaBYZVQTjUvPcViYCoLTQq8tvYyyQdzDuJy7JYmr
+        RUi7MJX3FIuevtFdNSskKEoaNoSMWNzl8RXQCzjrjw==
+X-Google-Smtp-Source: AA0mqf4T8wvoKdrJyp/6DKFZA+QsOSY/8MqcrusDB7x/SJqNicHk+0wwCM3Zw3bKpIMx5V+xgKLeiu5wh1tPRRV9vL0=
+X-Received: by 2002:a25:b119:0:b0:6cc:60bf:a33f with SMTP id
+ g25-20020a25b119000000b006cc60bfa33fmr16263274ybj.534.1668495472358; Mon, 14
+ Nov 2022 22:57:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 0artusJ36xUPpeRK3PcNy5KwTH7iJp1T
-X-Proofpoint-ORIG-GUID: 0artusJ36xUPpeRK3PcNy5KwTH7iJp1T
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-15_02,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- phishscore=0 priorityscore=1501 impostorscore=0 lowpriorityscore=0
- spamscore=0 adultscore=0 mlxlogscore=488 suspectscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211150047
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114124458.806324402@linuxfoundation.org>
+In-Reply-To: <20221114124458.806324402@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 15 Nov 2022 12:27:41 +0530
+Message-ID: <CA+G9fYvA+hGXNmOVMYwN=GsQ6yjkNW3bOUHuqzxWi+JUUFFVCA@mail.gmail.com>
+Subject: Re: [PATCH 6.0 000/190] 6.0.9-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
-
-"Paul E. McKenney" <paulmck@kernel.org> writes:
-
-> On Mon, Nov 14, 2022 at 04:35:06PM +0100, Sven Schnelle wrote:
->> "Paul E. McKenney" <paulmck@kernel.org> writes:
->> 
->> > On Fri, Nov 11, 2022 at 01:51:24PM +0100, Sven Schnelle wrote:
->> >> A CPU listed in the possible mask doesn't have to be present, in
->> >> which case it would crash the kernel in torture_online_all().
->> >> To prevent this use a for_each_present() loop.
->> >> 
->> >> Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
->> >
->> > Looks good to me!  Any reason for no mailing list on CC?
->> 
->> No, my fault. I setup get_maintainer.pl to be called from git
->> send-email, but looks like i did it wrong :-)
+On Mon, 14 Nov 2022 at 18:30, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Been there, done that!  ;-)
+> This is the start of the stable review cycle for the 6.0.9 release.
+> There are 190 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
->> > Ah, and any synchronization required in case it is possible for a CPU
->> > to leave the cpu_present_mask?  Or can they only be added?
->> 
->> Hmm... I think the main question is, whether it is ok for a cpu to be
->> removed from the system when rcutorture is running? In both cases it
->> would disappear from the cpu online mask, so i don't think the patch
->> would change the behaviour. But i can check and send additional patches
->> if there are other places that needs adjustment.
+> Responses should be made by Wed, 16 Nov 2022 12:44:21 +0000.
+> Anything received after that time might be too late.
 >
-> Yes, rcutorture has lower-level checks for CPUs being hotplugged
-> behind its back.  Which might be sufficient.  But this patch is in
-> response to something bad happening if the CPU is also not present in
-> the cpu_present_mask.  Would that same bad thing happen if rcutorture saw
-> the CPU in cpu_online_mask, but by the time it attempted to CPU-hotplug
-> it, that CPU was gone not just from cpu_online_mask, but also from
-> cpu_present_mask?
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.9-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
 >
-> Or are CPUs never removed from cpu_present_mask?
+> thanks,
+>
+> greg k-h
 
-In the current implementation CPUs can only be added to the
-cpu_present_mask, but never removed. This might change in the future
-when we get support from firmware for that, but the current s390 code
-doesn't do that.
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Regards
-Sven
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 6.0.9-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-6.0.y
+* git commit: f8896c3ebbcfcc053d9c27413bea3af94c01fd71
+* git describe: v6.0.8-191-gf8896c3ebbcf
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.8-191-gf8896c3ebbcf
+
+## Test Regressions (compared to v6.0.8)
+
+## Metric Regressions (compared to v6.0.8)
+
+## Test Fixes (compared to v6.0.8)
+
+## Metric Fixes (compared to v6.0.8)
+
+## Test result summary
+total: 70795, pass: 60088, fail: 2510, skip: 7975, xfail: 222
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 289 total, 283 passed, 6 failed
+* arm64: 80 total, 80 passed, 0 failed
+* i386: 71 total, 69 passed, 2 failed
+* mips: 54 total, 52 passed, 2 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 68 total, 60 passed, 8 failed
+* riscv: 24 total, 24 passed, 0 failed
+* s390: 24 total, 24 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 76 total, 76 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-kvm
+* kselftest-lib
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-openat2
+* kselftest-seccomp
+* kselftest-timens
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-
+* ltp-at
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-etlb
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-math++
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
