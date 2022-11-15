@@ -2,123 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1056296F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4FB6296F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbiKOLPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 06:15:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
+        id S229731AbiKOLPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 06:15:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiKOLOt (ORCPT
+        with ESMTP id S230309AbiKOLOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Nov 2022 06:14:49 -0500
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6724F48;
-        Tue, 15 Nov 2022 03:13:31 -0800 (PST)
-Received: by mail-qk1-f178.google.com with SMTP id d7so6836355qkk.3;
-        Tue, 15 Nov 2022 03:13:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=shAcRWILAJm2cGLIIwi6blyQz3hyqXRRFwP8TwIT5YM=;
-        b=aLi+373dOeQ/WxPGp6l+pOD1OwLniHqgDAHvxAtDENaFnYVt0RBaM2TD/4QLm4dxft
-         wmMbrMysZZl8/rDtkfZ2NDbOVtbwlk0l3pm5IQSj15+P+4jyWS6YJprUQE8YTcjUBmiJ
-         xhVKijgFcx2Mqm26hBMfIKNnC24NKZitNRzIzuxY9x/bqrfR9g7NaLulG6pFIUZmDJRK
-         wy7UIgxq9ds5len3FcRz+cdPu8I5dl96Uqpfv4CjxhLxspQx1RJDWOg7Kah+/7MQrXn9
-         8YByLyaMmWIUjnZvK6r1K43FoQ9xeeeI40Fnim1ZEGfOkO86w7b9NbKI8w6x4KtmcOOZ
-         X1xQ==
-X-Gm-Message-State: ANoB5pmEphq8ImDb0FcZ/gxQQ4CSWSX5N5g/f4Heo9KGR7pGqHN6TRWQ
-        niuQbaqhHCmyg7Nt1WE/zMQhRwpoIxLHtw==
-X-Google-Smtp-Source: AA0mqf6f9ZsvBZAdCxTzJ9dRy//nVOhWUWAC+8B8u9LxFd33aESiktDN7jwY3hb/vASYkx8DZSOR8A==
-X-Received: by 2002:ae9:e30d:0:b0:6f1:187c:8f79 with SMTP id v13-20020ae9e30d000000b006f1187c8f79mr14316594qkf.593.1668510810714;
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6935F65;
         Tue, 15 Nov 2022 03:13:30 -0800 (PST)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id ay40-20020a05620a17a800b006cbe3be300esm8015104qkb.12.2022.11.15.03.13.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 03:13:30 -0800 (PST)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-3704852322fso133635577b3.8;
-        Tue, 15 Nov 2022 03:13:29 -0800 (PST)
-X-Received: by 2002:a81:4dc3:0:b0:370:61f5:b19e with SMTP id
- a186-20020a814dc3000000b0037061f5b19emr16542249ywb.316.1668510809441; Tue, 15
- Nov 2022 03:13:29 -0800 (PST)
+Received: from fraeml737-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NBNlY659Gz6H72s;
+        Tue, 15 Nov 2022 19:11:05 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml737-chm.china.huawei.com (10.206.15.218) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 12:13:28 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 15 Nov
+ 2022 11:13:28 +0000
+Date:   Tue, 15 Nov 2022 11:13:27 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Gregory Price <gregory.price@memverge.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH] PCI/doe: Fix work struct declaration
+Message-ID: <20221115111327.00000899@Huawei.com>
+In-Reply-To: <20221115011943.1051039-1-ira.weiny@intel.com>
+References: <20221115011943.1051039-1-ira.weiny@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-References: <20221111113732.461881-1-thierry.reding@gmail.com>
-In-Reply-To: <20221111113732.461881-1-thierry.reding@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 15 Nov 2022 12:13:17 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW0uEaiigpsR+-qh=p508bKwaymau0TBDEo45dxfvQPaA@mail.gmail.com>
-Message-ID: <CAMuHMdW0uEaiigpsR+-qh=p508bKwaymau0TBDEo45dxfvQPaA@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: of: Use correct fwnode for DT-probed chips
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thierry,
+On Mon, 14 Nov 2022 17:19:43 -0800
+ira.weiny@intel.com wrote:
 
-On Fri, Nov 11, 2022 at 12:40 PM Thierry Reding
-<thierry.reding@gmail.com> wrote:
-> From: Thierry Reding <treding@nvidia.com>
->
-> The OF node store in chip->fwnode is used to explicitly override the FW
-> node for a GPIO chip. For chips that use the default FW node (i.e. that
-> of their parent device), this will be NULL and cause the chip not to be
-> fully registered.
->
-> Instead, use the GPIO device's FW node, which is set to either the node
-> of the parent device or the explicit override in chip->fwnode.
->
-> Fixes: 8afe82550240 ("gpiolib: of: Prepare of_gpiochip_add() / of_gpiochip_remove() for fwnode")
+> From: Ira Weiny <ira.weiny@intel.com>
+> 
+> The callers of pci_doe_submit_task() allocate the pci_doe_task on the
+> stack.  This causes the work structure to be allocated on the stack
+> without pci_doe_submit_task() knowing.  Work item initialization needs
+> to be done with either INIT_WORK_ONSTACK() or INIT_WORK() depending on
+> how the work item is allocated.
+> 
+> Jonathan suggested creating doe task allocation macros such as
+> DECLARE_CDAT_DOE_TASK_ONSTACK().[1]  The issue with this is the work
+> function is not known to the callers and must be initialized correctly.
+> 
+> A follow up suggestion was to have an internal 'pci_doe_work' item
+> allocated by pci_doe_submit_task().[2]  This requires an allocation which
+> could restrict the context where tasks are used.
+> 
+> Compromise with an intermediate step to initialize the task struct with
+> a new call pci_doe_init_task() which must be called prior to submit
+> task.
+> 
+> [1] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m88a7f50dcce52f30c8bf5c3dcc06fa9843b54a2d
+> [2] https://lore.kernel.org/linux-cxl/20221014151045.24781-1-Jonathan.Cameron@huawei.com/T/#m63c636c5135f304480370924f4d03c00357be667
+> 
+> Cc: Bjorn Helgaas <helgaas@kernel.org>
+> Reported-by: Gregory Price <gregory.price@memverge.com>
+> Reported-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Suggested-by: Dan Williams <dan.j.williams@intel.com>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+Looks like a good solution to me.
 
-Thank you, I bisected boot failures on Renesas platforms to that
-commit, and then found your patch.
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 > ---
->  drivers/gpio/gpiolib-of.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-> index 4be3c21aa718..55c3712592db 100644
-> --- a/drivers/gpio/gpiolib-of.c
-> +++ b/drivers/gpio/gpiolib-of.c
-> @@ -1067,7 +1067,7 @@ int of_gpiochip_add(struct gpio_chip *chip)
->         struct device_node *np;
->         int ret;
->
-> -       np = to_of_node(chip->fwnode);
-> +       np = to_of_node(dev_fwnode(&chip->gpiodev->dev));
->         if (!np)
->                 return 0;
->
+>  drivers/cxl/core/pci.c  |  2 ++
+>  drivers/pci/doe.c       | 14 ++++++++++++--
+>  include/linux/pci-doe.h |  8 +++++---
+>  3 files changed, 19 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
+> index 9240df53ed87..a19c1fa0e2f4 100644
+> --- a/drivers/cxl/core/pci.c
+> +++ b/drivers/cxl/core/pci.c
+> @@ -525,6 +525,7 @@ static int cxl_cdat_get_length(struct device *dev,
+>  	DECLARE_CDAT_DOE_TASK(CDAT_DOE_REQ(0), t);
+>  	int rc;
+>  
+> +	pci_doe_init_task(cdat_doe, &t.task, true);
+>  	rc = pci_doe_submit_task(cdat_doe, &t.task);
+>  	if (rc < 0) {
+>  		dev_err(dev, "DOE submit failed: %d", rc);
+> @@ -554,6 +555,7 @@ static int cxl_cdat_read_table(struct device *dev,
+>  		u32 *entry;
+>  		int rc;
+>  
+> +		pci_doe_init_task(cdat_doe, &t.task, true);
+>  		rc = pci_doe_submit_task(cdat_doe, &t.task);
+>  		if (rc < 0) {
+>  			dev_err(dev, "DOE submit failed: %d", rc);
+> diff --git a/drivers/pci/doe.c b/drivers/pci/doe.c
+> index e402f05068a5..cabeae4ae955 100644
+> --- a/drivers/pci/doe.c
+> +++ b/drivers/pci/doe.c
+> @@ -319,6 +319,7 @@ static int pci_doe_discovery(struct pci_doe_mb *doe_mb, u8 *index, u16 *vid,
+>  	};
+>  	int rc;
+>  
+> +	pci_doe_init_task(doe_mb, &task, true);
+>  	rc = pci_doe_submit_task(doe_mb, &task);
+>  	if (rc < 0)
+>  		return rc;
+> @@ -495,6 +496,14 @@ bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type)
+>  }
+>  EXPORT_SYMBOL_GPL(pci_doe_supports_prot);
+>  
+> +void pci_doe_init_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task,
+> +		       bool onstack)
+> +{
+> +	task->doe_mb = doe_mb;
+> +	__INIT_WORK(&task->work, doe_statemachine_work, onstack);
+> +}
+> +EXPORT_SYMBOL_GPL(pci_doe_init_task);
+> +
+>  /**
+>   * pci_doe_submit_task() - Submit a task to be processed by the state machine
+>   *
+> @@ -517,6 +526,9 @@ int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
+>  	if (!pci_doe_supports_prot(doe_mb, task->prot.vid, task->prot.type))
+>  		return -EINVAL;
+>  
+> +	if (WARN_ON_ONCE(task->work.func != doe_statemachine_work))
+> +		return -EINVAL;
+> +
+>  	/*
+>  	 * DOE requests must be a whole number of DW and the response needs to
+>  	 * be big enough for at least 1 DW
+> @@ -528,8 +540,6 @@ int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task)
+>  	if (test_bit(PCI_DOE_FLAG_DEAD, &doe_mb->flags))
+>  		return -EIO;
+>  
+> -	task->doe_mb = doe_mb;
+> -	INIT_WORK(&task->work, doe_statemachine_work);
+>  	queue_work(doe_mb->work_queue, &task->work);
+>  	return 0;
+>  }
+> diff --git a/include/linux/pci-doe.h b/include/linux/pci-doe.h
+> index ed9b4df792b8..457fc0e53d64 100644
+> --- a/include/linux/pci-doe.h
+> +++ b/include/linux/pci-doe.h
+> @@ -31,8 +31,8 @@ struct pci_doe_mb;
+>   * @rv: Return value.  Length of received response or error (bytes)
+>   * @complete: Called when task is complete
+>   * @private: Private data for the consumer
+> - * @work: Used internally by the mailbox
+> - * @doe_mb: Used internally by the mailbox
+> + * @work: Used internally by the mailbox [see pci_doe_init_task()]
+> + * @doe_mb: Used internally by the mailbox [see pci_doe_init_task()]
+>   *
+>   * The payload sizes and rv are specified in bytes with the following
+>   * restrictions concerning the protocol.
+> @@ -53,7 +53,7 @@ struct pci_doe_task {
+>  	void (*complete)(struct pci_doe_task *task);
+>  	void *private;
+>  
+> -	/* No need for the user to initialize these fields */
+> +	/* Call pci_doe_init_task() for these */
+>  	struct work_struct work;
+>  	struct pci_doe_mb *doe_mb;
+>  };
+> @@ -72,6 +72,8 @@ struct pci_doe_task {
+>  
+>  struct pci_doe_mb *pcim_doe_create_mb(struct pci_dev *pdev, u16 cap_offset);
+>  bool pci_doe_supports_prot(struct pci_doe_mb *doe_mb, u16 vid, u8 type);
+> +void pci_doe_init_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task,
+> +		       bool onstack);
+>  int pci_doe_submit_task(struct pci_doe_mb *doe_mb, struct pci_doe_task *task);
+>  
+>  #endif
+> 
+> base-commit: 30a0b95b1335e12efef89dd78518ed3e4a71a763
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
