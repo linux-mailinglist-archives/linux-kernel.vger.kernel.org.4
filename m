@@ -2,101 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA33629D35
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48099629D39
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiKOPTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
+        id S231210AbiKOPUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:20:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbiKOPTF (ORCPT
+        with ESMTP id S231325AbiKOPUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:19:05 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5924B275E2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:19:02 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id g7so24951561lfv.5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:19:02 -0800 (PST)
+        Tue, 15 Nov 2022 10:20:10 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAEF2D1D8;
+        Tue, 15 Nov 2022 07:20:09 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id x2so22367061edd.2;
+        Tue, 15 Nov 2022 07:20:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bBTiHOlwLmRiAuaSvNZO8YXJt075Sx4T7PQqEUHFf2c=;
-        b=d6u6VmjGdTBtmz5cEKvMM6xpVQ6BvhVhWJCSIuME0VV8b1aBkaLDsezcLTxZb2vrcG
-         rR8uuNHtMCcSaHyQ7KSfMHTW4LPRHxL5qSeQEMf80/9jcWQ3sPfDL2zGhFlhe3f48aEV
-         YVEX5hBoeB+y9lEtuLlCZDphF0T1D+u3GMWL6k4rZsFYojo4KNggT0ViLLlZtOAW8Nwp
-         s3hiUF8yl+k9DRNNIkut80NAEaCzYZ2y5zeCHwBp53LHx+wKVqG341hSpxNqoZHXLk2g
-         AQlsDnSjUW8m6H1RzZx/oMOMIhcn6JkXxS3noAHAE2rxgnScOAhVA/kN/8f68k6AGyVM
-         FXUQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zHKFp4Zv5CVjtabEP39vE06DfOwlzuV6r4Axs6FpoFA=;
+        b=B0wo68rV6SQCMqa8nmCYfzq9lPHIK+/pb+dfyMj0M+1H1WN88OQaLvEuXBrop8MsYU
+         aBZREh0subeFpKoniosRAZcSq7vPZpLXf/L4nI6/SuIJzOSiLEoYrvPkds/16q4o2Thv
+         zpd4GgYdhNKTEhOm6a44IVBr/Br+DHBNRWI4GO1YuC7CseH7GLNgT27430vLOsyNddoW
+         PBMA8zUTrOXEClkkd2WWnBCSwpOxrLkUctG80V2zaQNxXErMlvcox2ayRRe5l5RUoVHD
+         r4TUGmzJhABSOJAIydAMUtE8nuwmONjvwaexFFnr+1mRXwfxWIVUeraXJU7iXOUqpE/I
+         X4ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bBTiHOlwLmRiAuaSvNZO8YXJt075Sx4T7PQqEUHFf2c=;
-        b=LzBQ9cIV9R7qpkwtAK/MBma/WH8JwDBCDHTB1rf1Pc5CiLECSHZtGC4wxKUBsE0DBe
-         mNHHm+ptxsCoTEEfrxoa1wVliK2pI0RTOmBNomVqCGnlqYdTxCHjDrKcsj2zeJQeffSf
-         ZnjCQhoYoAoqxla6OfEQfT+pHlzgTLeD30wpuvAkrGyO6c+6zWgAFk8GYiBOmAVQuqWm
-         i30OaNf7gKQiXtL+Ukb9a5CdRAGHNTgXKMeogCQVT1OqJGPjKYENnvejHsWb8ldIEccw
-         8KRkVvyFie4F0ByBSu5V5hUEoCElp0OL6Wig8xlubPyKUqvLaQjL8Gluio4ibB/dscIE
-         MLyg==
-X-Gm-Message-State: ANoB5pnp4RbxAz6ISmfXKPSYzM3D21RqdpGTDb75t2a7aEM0Ewq/DUGJ
-        VvwuZQXj0lXOEIFSoaZ0pQvw5A==
-X-Google-Smtp-Source: AA0mqf4jb3EPPaIrHilGakTHY0Y9MJQ/s64A+PrmCjrCNClAt3BIroL+6i112TZF2XocXB6Cod5vEw==
-X-Received: by 2002:ac2:5314:0:b0:4b1:8fbb:d3f4 with SMTP id c20-20020ac25314000000b004b18fbbd3f4mr6147602lfh.70.1668525540702;
-        Tue, 15 Nov 2022 07:19:00 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bp8-20020a056512158800b00494a8fecacesm2241052lfb.192.2022.11.15.07.18.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 07:19:00 -0800 (PST)
-Message-ID: <a7d1de8f-c1a6-890e-12ed-ebb75a96aa2c@linaro.org>
-Date:   Tue, 15 Nov 2022 16:18:58 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zHKFp4Zv5CVjtabEP39vE06DfOwlzuV6r4Axs6FpoFA=;
+        b=GvfKig5KwFyS35Ky3OdkE74KhSIXrPybZKfVDKR0dODTr8nLyue7Dd1+TmlcGUeXvu
+         y7x4ASiwcebKuUWmK73DmFWw/a3y4vKJbpN2ykDMENxOTKHkpMPxmRrize5Htic+JkWg
+         rAxnBtvDFWOHpzsHYqP/jioJmudfKBOrsxcHFf/viF+xVt+JRqXF0QuN8lFmXqtZFPNB
+         hmlTQ1K7gq3EOACy50dPf6KGeWfImkNnDzeP+ix2tGGjYcrGkVDYECJ3VybEcd9Ax5F+
+         vcoP5Lq8bGJPUQKuSkNBjnBFPSxulvzJ/I9YVzIkVGs5cY0JutWLN9N1MBb2J5p0Uhgm
+         MA5Q==
+X-Gm-Message-State: ANoB5plZ336o1XChhdILImOPkSF7YOUYLJptkWJrrDzNxTLE/VBhth0b
+        AUQkkfWE7OXZqQzCVfvLoB0=
+X-Google-Smtp-Source: AA0mqf7w1WRb3wluumbypK8INPQl+HGec6+C8VLH5trnxvZ5TPCT/fb07a7GQtW/NQdt+c4KCb/R/w==
+X-Received: by 2002:aa7:c0c9:0:b0:467:a8cb:10c9 with SMTP id j9-20020aa7c0c9000000b00467a8cb10c9mr10477759edp.123.1668525608389;
+        Tue, 15 Nov 2022 07:20:08 -0800 (PST)
+Received: from localhost.localdomain ([5.2.194.157])
+        by smtp.gmail.com with ESMTPSA id l9-20020a1709060cc900b0078ddb518a90sm5648350ejh.223.2022.11.15.07.20.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 07:20:08 -0800 (PST)
+From:   Cosmin Tanislav <demonsingur@gmail.com>
+X-Google-Original-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: iio: adc: ad4130: use spi-peripheral-props.yaml
+Date:   Tue, 15 Nov 2022 17:19:55 +0200
+Message-Id: <20221115151955.394030-1-cosmin.tanislav@analog.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v10 1/2] dt-bindings: fsl-imx-sdma: Convert imx sdma to DT
- schema
-Content-Language: en-US
-To:     Joy Zou <joy.zou@nxp.com>, vkoul@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com
-Cc:     shengjiu.wang@nxp.com, martink@posteo.de, dev@lynxeye.de,
-        alexander.stein@ew.tq-group.com, peng.fan@nxp.com, david@ixit.cz,
-        aford173@gmail.com, hongxing.zhu@nxp.com, linux-imx@nxp.com,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221115093823.2879128-1-joy.zou@nxp.com>
- <20221115093823.2879128-2-joy.zou@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115093823.2879128-2-joy.zou@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 10:38, Joy Zou wrote:
-> Convert the i.MX SDMA binding to DT schema format using json-schema.
-> 
-> The compatibles fsl,imx31-to1-sdma, fsl,imx31-to2-sdma, fsl,imx35-to1-sdma
-> and fsl,imx35-to2-sdma are not used. So need to delete it. The compatibles
-> fsl,imx50-sdma, fsl,imx6sll-sdma and fsl,imx6sl-sdma are added. The
-> original binding don't list all compatible used.
-> 
-> In addition, add new peripheral types HDMI Audio.
-> 
-> Signed-off-by: Joy Zou <joy.zou@nxp.com>
-> ---
+Reference the "spi-peripheral-props.yaml" schema to allow using
+all SPI device properties.
 
+Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
+---
+ Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
+index 28ebd38b9db4..d00690a8d3fb 100644
+--- a/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/adi,ad4130.yaml
+@@ -190,7 +190,10 @@ patternProperties:
+       - reg
+       - diff-channels
+ 
+-additionalProperties: false
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+-- 
+2.38.1
 
