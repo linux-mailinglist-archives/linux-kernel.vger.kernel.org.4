@@ -2,108 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8038A628E75
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 01:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB430628E78
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 01:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbiKOAd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 19:33:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40296 "EHLO
+        id S231774AbiKOAfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 19:35:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbiKOAd4 (ORCPT
+        with ESMTP id S231557AbiKOAfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 19:33:56 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB78E8B;
-        Mon, 14 Nov 2022 16:33:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668472435; x=1700008435;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+daAp9yRKxqxVx9ONETlA94YpPq9DtiM593w7JnMP9c=;
-  b=PAaNe4pe90IngdGUGMxIhlzddRSMi+AW6mEOp77pZE9ll+Be33X5OtPk
-   Vkt3JAFBaQ2k+9aelnAKVbdaMKNLdqhzYXJ2TOHyFJAnfNqQ5MG13s5Cf
-   J8nUqybrZPjr3onoDDc6XrVEYjY/Twgi1zhEmgOLTzxcfXQPJMfxivxiX
-   zvBhkEiAm76HiLX1chyzTrrK4Rg3BWSbyDFfrUMQNDncguoRKd5Fh5bsO
-   nU+DrBxG0OFGrt/sB9W6TJA057HyRAiXQcIkQOav8cIVG9CAI5OyoBVjd
-   iS39Jf1rr5W1myf2IUanKs99R9v+XEdWQSKye/jGcijV1pXpnZ3jpjrFG
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="310829560"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="310829560"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 16:33:54 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="616534852"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="616534852"
-Received: from mmullick-mobl.amr.corp.intel.com (HELO [10.251.23.100]) ([10.251.23.100])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 16:33:53 -0800
-Message-ID: <8d5f8a74-f864-3cd9-dac2-7650d83a8b90@linux.intel.com>
-Date:   Mon, 14 Nov 2022 16:33:52 -0800
+        Mon, 14 Nov 2022 19:35:14 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9534E10068
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 16:35:13 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id f5so32421648ejc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 16:35:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NGk2wPhs4slpmIs2T/eEbmhJ9ilny1GSUlC3zed5xiw=;
+        b=Z3jJvxeYRd4c0jHP+1+QDjte8JAOp+spYi5rntloiM7sZDttF2eoJHrKt6l0FP5I9T
+         jrhpajrWrAZYoXBU1h+TRwV2Nj0Lh43+Ovim3FJTWamcxUrcZW/puSbwXjpRmLAbE89A
+         H8ROt8gU2TRQAw+6rtiSD+MXn9gIgWbfCnsTphWIXWXijJUzGyLiAJRJwscvP0WvteL2
+         AP1Xg/jOkjAdGR4e73pLS85mEr1rLpkozhuFBhIgbgkBP/e/c+ga1YcLdqBOmPZhMhf6
+         MBJ8L19sMYR1U0FuRPN8d+qJDD94wUU1ndktcqPA7FOWw2jlzGLpG3zvqVsK6o38yLxy
+         C/JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=NGk2wPhs4slpmIs2T/eEbmhJ9ilny1GSUlC3zed5xiw=;
+        b=EuJy6OlmjnvM5ICyeYffKL9uHYiFKaM7mDOiWlCBLPUvyqqk56rO8VGbmQB906Kta+
+         zFeqaF1laApqdC1IHXHfJi+ssf2fxR6hnbkmbpsAFAPQIqdyGqkYShQBAMar2KAFlUXR
+         Eds4At+YA3pi0QJ/7Nl1STtWnIG8nAJMYsCpvQdeOPvsBvjQakvkEgcVoOaA/EBH1CsN
+         vspfZO/k8j7bSeKIqTLTU8rrbH0Pyzg/3gSp2zstuaZ8e/m0y3vdf0a3ZsMr/kaE+aMV
+         Wnhse8pgATYiReAWtaYs2799FvOgX4sIQOnHFYx6iw5ispdza8MMl2j0UYpHZITj5lqH
+         LvtA==
+X-Gm-Message-State: ANoB5pmdsUfGRt8qx8ntXGSWaZR/jub8gftyROZwtIJKYsbyHPY8qXeV
+        mZV87ofGUyd+zHbmZ7BtffQdGA==
+X-Google-Smtp-Source: AA0mqf518cSWdLBM0HNyX7S9x0osj7z+VM1L2SvKr2vazdoHWfnwwnhkyLhPgRNiDXXMfDeUBF9UDA==
+X-Received: by 2002:a17:906:cb85:b0:7ad:beb3:91b6 with SMTP id mf5-20020a170906cb8500b007adbeb391b6mr11928100ejb.159.1668472512122;
+        Mon, 14 Nov 2022 16:35:12 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id r18-20020a17090609d200b0077f324979absm4789795eje.67.2022.11.14.16.35.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 16:35:11 -0800 (PST)
+Message-ID: <a724efdc-f35a-8320-f2e1-0078198408d4@linaro.org>
+Date:   Tue, 15 Nov 2022 01:35:06 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH v17 1/3] x86/tdx: Add a wrapper to get TDREPORT from the
- TDX Module
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20221104032355.227814-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221104032355.227814-2-sathyanarayanan.kuppuswamy@linux.intel.com>
- <115a87d7-144a-2828-8e4f-9c1f156b73ae@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <115a87d7-144a-2828-8e4f-9c1f156b73ae@intel.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH] arm64: dts: qcom: sc7280: Make herobrine-audio-rt5682 mic
+ dtsi's match more
+To:     Douglas Anderson <dianders@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     mka@chromium.org, swboyd@chromium.org,
+        Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>,
+        judyhsiao@chromium.org, Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221114162807.1.I0900b97128f9bb03e5f96fcb3068c227a33f143a@changeid>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221114162807.1.I0900b97128f9bb03e5f96fcb3068c227a33f143a@changeid>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
 
-On 11/11/22 10:35 AM, Dave Hansen wrote:
-> This is *NOT* "a wrapper to get TDREPORT from the TDX Module", this is
-> at best "a wrapper to get TDREPORT sub type 0 from the TDX Module".
+On 15/11/2022 01:28, Douglas Anderson wrote:
+> The 1-mic and 3-mic dtsi still had two minor cosmetic differences
+> after commit 3d11e7e120ee ("arm64: dts: qcom: sc7280: sort out the
+> "Status" to last property with
+> sc7280-herobrine-audio-rt5682.dtsi"). Let's fix them so the two files
+> diff better. This is expected to have no effect though it will
+> slightly change the generated dtb by removing an unnecessary 'status =
+> "okay"' from the sound node.
 
-In both the commit log and the comments, I can highlight the "subtype 0"
-information. Will that work for you, or do you prefer that this wrapper
-take the "subtype" option as argument and we pass 0 for the subtype value
-from the TDX guest driver?
+Also known as "no functional change"!
 
-> 
-> It also occurs to me that "sub type 0" could use an actual name.  Could
-> we give it one, please?
 
-Although the subtype option is mentioned in the TDX Module spec, it is not
-currently used (it expects this value to be zero), and the spec also does
-not explain why this option is required. According to TDX architects, this
-option was primarily added to handle any future requirements that may arise
-that require additional information to be added to the TDREPORT. However,
-they do not currently have any valid use cases for it. So the current
-version can only be described as "Type-0." Once a new use case for Subtype 1
-is defined, we may be able to come up with a suitable name. Are you okay
-with calling it "Type-0" for the time being?
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+
+Konrad
+
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>
+>   arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
+> index fc7a659dfe4a..af685bc35e10 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-audio-rt5682.dtsi
+> @@ -19,8 +19,6 @@ sound: sound {
+>   		#address-cells = <1>;
+>   		#size-cells = <0>;
+>   
+> -		status = "okay";
+> -
+>   		dai-link@0 {
+>   			link-name = "MAX98360";
+>   			reg = <0>;
+> @@ -96,6 +94,8 @@ dai-link@1 {
+>   	};
+>   };
+>   
+> +/* PINCTRL - ADDITIONS TO NODES IN PARENT DEVICE TREE FILES */
+> +
+>   &mi2s0_data0 {
+>   	drive-strength = <6>;
+>   	bias-disable;
