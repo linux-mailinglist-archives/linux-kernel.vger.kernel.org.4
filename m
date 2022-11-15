@@ -2,189 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B865C629883
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E496E629884
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbiKOMRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 07:17:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
+        id S230317AbiKOMS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 07:18:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238291AbiKOMRd (ORCPT
+        with ESMTP id S238306AbiKOMSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:17:33 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2083.outbound.protection.outlook.com [40.107.212.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC1B20181;
-        Tue, 15 Nov 2022 04:17:31 -0800 (PST)
+        Tue, 15 Nov 2022 07:18:02 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2080.outbound.protection.outlook.com [40.107.223.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5232122BE7;
+        Tue, 15 Nov 2022 04:18:00 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g+gFeZG9eV7+bAaIn1WDpvQJe+GiDOdGGyTm9t6Lb4Pw5KLhESdAff81Z7jSoi5evFLv5fdJzrwA+g5Bl0tsqrP5MyHFzN5vmBeHoIYglSNAExiMeCA9XRZkMNLoGRWIkKdn/K16EBcQnVLSerwNSE8iFPt71iE+2qXhBy1o5ulcFxWKzXGn04c9ryDFoGdgEelV3UycE8PuAf0BR38TWn3v5KQ8Uw5KrqmICI1uGFr64muHIifLZvuICkwjgbo/SAPGX7VvFLjn0QLIFuLDCwnvAkjJ7+m2m9mRLZOS1mjaC5GPYfkQImCA+xce/rIx1+nk2g21jdQn4A91fd9oiw==
+ b=D+5XEWpQYlDl6ZiMt7/OGcLJFn3iqn+nj0SonF7+1yNFcLPrP7B55t5oJWGbR6NwyiL5VxcHKN9WGAqxeCy7z0iEd+wcqReWdncyEBOGclzStJ33swkzMuLr7nFfWpvFB8JKC7H/QhgSfYo8o0wYAwST5+s5m8xg3aA2gXiyajyRJyKcNajNCaRlIte/LW1MM4Yc0M759TZbpQYFa+1NkLSDaC6Z6wHyERM4i/wm76CyyAeMEg7Aa5nEwC+5aGj4VaZhw+H9WhdQ7Cv3rn7jyfd2C+yEib/I/NBIRIc1/WvI3KKG+CNzxdJ0zrVw7W2H/3UDMymg997JQJqa/5s8KQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oHkxFc5zeps/uBJUh1LeqMi7ZnRq0YeGMUSt6bADlv0=;
- b=T9yhSsymV0Jz2MeCVJwvw8ec1vj+cp+RthPA1xhFuwGV7Xce+6hL4H2H5IMygli/VkEWKZ9yULPlDy+Lmh3Z1vPXF2p++Da5Uyk/cciOE8cgfQlRubLRNCJ1DHmPymdI/enHozEOQYJiAm54OzeuTt2QZuFLZ5Gxy6GTUOMYQWzwyzzo4hjgZrFxeIVujJFObQSZaiOW8edv+17Oytzcbr4i6X54PPWpJXtQgi/2tO1nnHn7nrgSRLcPmHKlnSLd7K3RMBfrBQEBYDB8X4V2jWWcjVO5bfdM5NEzh5g+QjYTu1RAjRuN2d3jw7NEngpyBgIEfvqn9oLyNLLIMvRjIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=YPhzcKUQ8q5aoBwIl8+t062FIBd3QnNoHXC03T5/p2s=;
+ b=c9V86INZ8ED6bdLO2b8fn/Bb8TgCSmIa9+8fJg3V8uhEnsA3N5pKquqT+Ji04zCg8/qEZ3tCYeU0XI1UwZB+UW0iauY+IB6nxvE8Ry/RuVG874oSsitVVSbaIH4Cbz+MiWNWc1J6tZwZ3pqh9p67yubCXsdRkmduJUecC+lgehQPFmtU2cVErkPyYyRJvHToBKrS6aVXoqbfkutfpPlbRyVGhyFbgQcyJ2MdF2UFeBaceGKHQAe+BdCeBHsjGm4mSPpE8rt1cwPxUTwUr9dpMSOgDZEauvvfUn6x+zVqCqNaFwHb8mnGClrlsi8Pgm69vJndg7cFc7mpsOQmClSCqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oHkxFc5zeps/uBJUh1LeqMi7ZnRq0YeGMUSt6bADlv0=;
- b=JchFXRAZbgj/bGDeiq9UQExj4iAYCS9XLcg35Iqdk3jBGY+Ujj3Pa0mBAjo1jSs6l7dLMypCzYq1XQS9r/0a1ZwdU+dEQuq73ykgfDC/RwQ6uognocw2hkXd7hPS8yp9hh0h7aoFT+RpO7YzqA1JrqlK4wkvS2SRUG5ZrBwHApfIQCHnHDUSuoPgvnYXNrL7LOkCfOeLVxl+oe3QS6iiHDK1OUAAU/XBZigopRlQw+W4DU/r9ofLZx48AJI6k9vd0bKPBq6btUjgnVC2ZImsjkZW+l6tBhxsQPzqwfbb2Vhj2R3TF6LDHWD1tLcWW1r3kg5LnqHduYA3QOvPYPQ1Zg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- BN9PR12MB5036.namprd12.prod.outlook.com (2603:10b6:408:135::8) with Microsoft
+ bh=YPhzcKUQ8q5aoBwIl8+t062FIBd3QnNoHXC03T5/p2s=;
+ b=Rb3myLLOeNC0InQ9oZjGzEV02yGaU05Tftvy5kAvb2ECVN4fauQjfYddxE1CcQMYCtrbXKDPHzivOL6miIE554auX66Uawdd7yBrBXgfqJdTRkuVKGyNxpYexEAMirWIw0acs5ov0wVfwYCJXL0tYl/LlZFfJ7mmAoMfSUh6lAM=
+Received: from DS7PR05CA0090.namprd05.prod.outlook.com (2603:10b6:8:56::13) by
+ DS7PR12MB6095.namprd12.prod.outlook.com (2603:10b6:8:9c::19) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5813.18; Tue, 15 Nov 2022 12:17:29 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::8edd:6269:6f31:779e]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::8edd:6269:6f31:779e%5]) with mapi id 15.20.5813.018; Tue, 15 Nov 2022
- 12:17:29 +0000
-Message-ID: <44ee7109-71a2-a172-e840-483e2db716b3@nvidia.com>
-Date:   Tue, 15 Nov 2022 12:17:21 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 05/13] usb: typec: ucsi_ccg: Add OF support
-Content-Language: en-US
-To:     Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        treding@nvidia.com, thierry.reding@gmail.com,
-        heikki.krogerus@linux.intel.com, ajayg@nvidia.com,
-        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
-        mathias.nyman@intel.com, jckuo@nvidia.com
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-References: <20221114124053.1873316-1-waynec@nvidia.com>
- <20221114124053.1873316-6-waynec@nvidia.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20221114124053.1873316-6-waynec@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO6P123CA0039.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:2fe::19) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+ 15.20.5813.17; Tue, 15 Nov 2022 12:17:57 +0000
+Received: from DM6NAM11FT100.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:56:cafe::60) by DS7PR05CA0090.outlook.office365.com
+ (2603:10b6:8:56::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.8 via Frontend
+ Transport; Tue, 15 Nov 2022 12:17:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT100.mail.protection.outlook.com (10.13.172.247) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5813.12 via Frontend Transport; Tue, 15 Nov 2022 12:17:57 +0000
+Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 15 Nov
+ 2022 06:17:54 -0600
+Date:   Tue, 15 Nov 2022 13:17:51 +0100
+From:   Robert Richter <rrichter@amd.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+CC:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Terry Bowman <terry.bowman@amd.com>
+Subject: Re: [PATCH v3 2/9] cxl/acpi: Extract component registers of
+ restricted hosts from RCRB
+Message-ID: <Y3ODbwk+12JvWyhJ@rric.localdomain>
+References: <20221109104059.766720-1-rrichter@amd.com>
+ <20221109104059.766720-3-rrichter@amd.com>
+ <6372b35953580_12cdff294b7@dwillia2-xfh.jf.intel.com.notmuch>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <6372b35953580_12cdff294b7@dwillia2-xfh.jf.intel.com.notmuch>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|BN9PR12MB5036:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7ce0e439-0b4f-401f-93f9-08dac7035d75
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT100:EE_|DS7PR12MB6095:EE_
+X-MS-Office365-Filtering-Correlation-Id: 179b7604-4681-4714-04e8-08dac7036e56
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JmdMbC/S+JxiM/qJkw3eZF0k1LVDNzGDbDsDv/YTPI4OabgoEAaixzQpEeA1A7MwD9pGdtKDojKQlOSkzvmATjc8oZfx1E7Sc8ANUClUdueOzn4sVhRDGAsk2UN0K0e2OEyvtFAlWub4ZJfnQX6rWSrO0utTOJz2zxO6h5AbrB5ko4uQC+WgNQcLX7PqTJcaCdJzVleeLP2IhiUzLKdd/2dASjLVhBdxJkygW/lfe8uNmJCGLTnESION0VyiERgsAbH/b+iLd/v2ACc7TrPfW3FAAkKHdsXnk3cCFp2LucV7eBB00rZW/1Z43zeLxFClqVUCWL9LeGYtNtGahbzoT/JQd65jji97UAC4Sq0fGeH2Iq7SrU+YMRag5LFr64BnYuQ5o6kgIrzSKxf/a9uJMBYpsMQ+KVaUzS9jpeVaAbEL+nicDq1HF4Y6ufZ5pAufnfMzKfp8Q/MHKPQdCl/+TMuyi/WdDEKTGwd7jd+DbRd940usjWDetGCQYCPPhe7FX6TCvbarIABcELv2sQ1AzTcr8ybfWgmCP3eZfHxxjUwREHTvTo+AjzOIECjdBsQvQs6cusBzDzMhgzRmK3fBHXyi5dmeUR4vWFk4JM9Snv4oZL7C+0nzF1p00M7HFXxJmrg8L7aqtBJC0sgd0OoFlZ5vrOJtGc9Ic5jW2pp3tArrLCGdi1Lg8fSQE7QKagZbSQ3nbSCMsTBfR4M/AoaZrgmenEB0f8hUmVd/gqk56QDFLj9y0muWbCBoq8wPPhJFBjFIzdWjMjWAyrXlGVLV4KPQ8Es+/yV8nFYRbVRBmZ2JxYSOx7h5SqX/uhO/FmI8
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(136003)(39860400002)(376002)(396003)(451199015)(6666004)(31686004)(6486002)(478600001)(6636002)(316002)(66946007)(55236004)(66556008)(26005)(53546011)(6512007)(8676002)(66476007)(36756003)(4326008)(41300700001)(2616005)(8936002)(186003)(5660300002)(921005)(38100700002)(7416002)(83380400001)(6506007)(86362001)(31696002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VHpScDl5NklQbHRrUzdDWlNIOGlvYVFkQ25FUm4zU2puQ0wxY1FHRlpVM2NK?=
- =?utf-8?B?bVhSYjRJUzFDRU0wcFE5MjhVMVQwUmU5SkJUaC9KN3o0aWhzTVZtbXhWb3Ry?=
- =?utf-8?B?RXk1bXdzekxvOEhzcTdMdnprZ0ltVGhoUXVLT2RPWmZzTEtKODFGS3EzaWJG?=
- =?utf-8?B?aXc2NEIrZjE5aTVGaTBsaDFBQnQvTi9adXpoM1NReW5iNkQ3VUduSmNpY1RP?=
- =?utf-8?B?NjFBWktyUGg5aUtCRFJyOWUxVGovaHRiQTl3WGRqd3dRZHRIdXFsazllWkFv?=
- =?utf-8?B?ZnpYdm0rbDdEYU54ZGhxSS91d01NMHJyUFlMTHlKY1RQakNReFNKMk9tbFcz?=
- =?utf-8?B?TG94Z3M5SVNMU1ZnRS9rd1RBSHg1SkxlL2FMN1g5SFQvZ0R3TU1HcjdpZWpq?=
- =?utf-8?B?MjB5R2hMWVhSengxWXdKR0xXVnZPNnk4OFFFdTFjL1JQL2JNTXZWNlNhOWMz?=
- =?utf-8?B?S3VpLzluT25RcjB6SkRGR1QzTGZKRm9nRnNhM1h6NEVBQnljUkFaZWRxSEhE?=
- =?utf-8?B?VU9ydWdkNU5peElPM1VTQTM0djBVUUlUbnVEaXFYRmk5dDY5NDgyMEkyYjZz?=
- =?utf-8?B?YUQ5eHBYQUZzRjB5cTBvZTZjVVlWTDZ2MUc2Zkkzc0pKbkEvdmdqTUJpZ01Q?=
- =?utf-8?B?dmFsUXY3QjhhSXduVjFFUmZSNUk0TUlGN0dNZmJXMCtZUVVJN2NyWVNVSkEx?=
- =?utf-8?B?aUdCWXpIZy91UjFpQTduYWNkMXM5VitXK3pxQnVlRzZ0M0NCeEZNRXY3QlN1?=
- =?utf-8?B?L0Y5V29GSVRjRU9yTjFnZExPVnE3dDJiV2M2a291WGVGVXpnMHhZNGxwL3ZM?=
- =?utf-8?B?Ti9PM1AwVndvTUlYZFkvbVY3ZGE4QTQ2WVNyb1VRSXpwQXlSdExDMkkvMjdO?=
- =?utf-8?B?bVNoNFdRaWdiMXgrS2JtSFBTdVdKZXpFQ0h2R256cjBKQms2cXI5bktUNGky?=
- =?utf-8?B?UW4xV3FkZGQ4UTRzK3RERnp6c3ZZRFlldXhybUM2UlpEbm1NK2dieVZyUktw?=
- =?utf-8?B?Y3FTRTlXUUdNQ2lFcEtMRGgzSFBZV25WTUJ2Z2I3aHpHUDZIdUpFL3lyUFlo?=
- =?utf-8?B?ZXZxRnZjQzN6VVY4amN3WTJ4ZVE3U1ZxYlB0ZWsrYmhSNzlOSTdOc2c4TDJC?=
- =?utf-8?B?OURHcXZsRjlGOHZhTWQ1S254bmJHM2ZXY0xvckdaTkx1Zno3a2padVFaVW4z?=
- =?utf-8?B?bHlBdUlSazkyUVNlRnp4OHVQRDNVcjRGd2ZBRW1WU1ZHbmp2NjBwakRPZW9F?=
- =?utf-8?B?L1VzQWNUNXU1VmJCMHBOMTRyQmFmVDlVc1EwZkhDQVAxZ3R1cGhVNnhxT3dW?=
- =?utf-8?B?SVVLV2R3cE5qcjRmVjFRZGQ4YVZjdTk4UXlHcjZ1bm9ieGpZamdHd2JWMkZ5?=
- =?utf-8?B?V2lKLytzZzE1QVlwQjNWeWFpeHRXQS9LQ0d5eDN5VDRSZis2SUc5Njk5cWVS?=
- =?utf-8?B?dEU1YWJCK3R5OGZvOXZDdDVaR010SFJEdlJWQ1M1Vm8weDdVQm1QZ3V4bjkr?=
- =?utf-8?B?Q2h1eDJYTDcrNENLTmdRcFNKVlp1bHpPWkxmWkRsQlJmYlFTc01Oak5melNC?=
- =?utf-8?B?Qnk0anUyODdNK3VqOThRejRvQmJkWUVGRW1GL29kbjdZZ1ZUcnhsOEhZQ2dC?=
- =?utf-8?B?UU9ROHZGZ3V5bGpsQmxiM2d6R3VRSzJyeC80L3FRR3NId2RhN3NaVGVtb3Zn?=
- =?utf-8?B?ZmFRcEY3R1NBUTNWRWd1T2EvekpERkZlcWRQMlA3ZTlaQ3RlSWlqQ2pnUTZV?=
- =?utf-8?B?MnNjaTlNKytzMkRlS2FSWUFlVWgrYitMT3RUSjZXU0NkaS92U0dzakdOODJn?=
- =?utf-8?B?ZnpKRmwremZIa1UrTDRLYnZsLzVHUnIrZTVsSEgyUzJTWEEvVTEvbzVyWnY4?=
- =?utf-8?B?aGFDc0pVSnB3UzBMN3N1b2dmMDQ5TU9UTEh3WExqWTlqT3VaRTJOSUFjTVJK?=
- =?utf-8?B?eWZ1MEZSeHdQVGhseEtLcnpwSUZUR2NvVkhNbmp4djM1V1gxM3pnRlBJRnFp?=
- =?utf-8?B?RkdPbys3OGllSFU3WmpsQWlrSkVkQXoxR2VOd2VxUzhoaWZOYjR2QW9uZHlR?=
- =?utf-8?B?ajZIM2tyL3ZHZ09hTUJ6T0s2ZTZNWHJGN1pUbk9PTHljV0xXV2pTNGs0MlVJ?=
- =?utf-8?B?YkgwMDZ0c0J5SlJxWWRjM05tOTBmb1RuRE9JSlUvcVRrQnFxOEZ5c21KY0RX?=
- =?utf-8?B?RFE9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ce0e439-0b4f-401f-93f9-08dac7035d75
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2022 12:17:29.5662
+X-Microsoft-Antispam-Message-Info: 8TZrWDMupoKHkgqMy29aEJzeQw3X5Wv0c0qkwT1AeGYymUpFbtExzPSc0as/rGBs9um2rKOVagkRR+00v2HfwJV/VThvxY1ojVIsdqfznnNfci1Kik5Mo6s7iS9OM/9UOhl2sGPvXfJ7KhzUe1Jkxzrg9TM+DyYCyTjxciETPmT+whlIlyafeRqmdh3mOszN2FaFLVwW6PNTOFPdzNSgtZclxW0sygyRfrnZND6okGbhVQHyqLRyI7tP6zFhWZ958DSCofKB72pZDqEFs6evyeIKqgvzmBy2AQDNiGwTbWe1+FaoVlEWdJ25+4Io3cdzecIqnZ/6qqIoCJ7L1jTSXM1/ek1iGwolc2s5IZ5FyukB+mP/PYDTo7BPM5UfLs3kYUn2vNf8JEVF9A+wPIedBaIgHVut/9HFfBor9uTGxqvO+p5KZDvrZTgpmipV1G/8ziiZ18sByhESEn7tR2F24zSUDaPXJTFAAPyiaiaKb9cSAgAQXr5/en/A+LI6bVtBbqtfBgfOkpNayxqqzU1CbWgDk4WiOW86uXxqNQuTYKbDSJR5Yi1BRI/JVHwVT6B8b5FhdkJFfgf/p4PrEt93xZiddRNK5nl6u0zz3CDc+QJHJBjWPabr0XYU1oUJ0znG6nG8uUBQXxCZhCc5bQyzC2btO1lrJc8sh7sTWf7Zn91DR2GwahLgMwrR+7IBDDB3nXSy2w+xPDnGjX6T+iZFMnmHRd9HXnXm5LoZrTrajWUjd7U2m4m5ZhAesV/sn0Nw51Hx/jnP7TtzahjoIABbGrsteJREg81FtkZXgi1uxTCZ48WpidPTzJ2mXlWAMyzf4qz5tEuuTOHe9gDryizFNg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(376002)(136003)(346002)(451199015)(36840700001)(40470700004)(46966006)(82310400005)(8936002)(478600001)(356005)(6666004)(316002)(81166007)(6916009)(55016003)(40460700003)(2906002)(54906003)(83380400001)(41300700001)(40480700001)(4326008)(70586007)(70206006)(82740400003)(5660300002)(186003)(7416002)(16526019)(26005)(47076005)(9686003)(8676002)(53546011)(336012)(7696005)(36860700001)(426003)(36900700001)(67856001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2022 12:17:57.5525
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: st+/8e4+vKhc9vkfndnk6Mirgocks1iFKds0amO+fjcGAp/D2dCUnSDyYgyelLg1KMOtzO7zZpfdRJzVngAjLQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5036
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 179b7604-4681-4714-04e8-08dac7036e56
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT100.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6095
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 14.11.22 13:30:01, Dan Williams wrote:
+> Robert Richter wrote:
 
-
-On 14/11/2022 12:40, Wayne Chang wrote:
-> The change enables the device tree infrastructure support.
+> > diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
+> > index ec178e69b18f..7a5bde81e949 100644
+> > --- a/drivers/cxl/core/regs.c
+> > +++ b/drivers/cxl/core/regs.c
+> > @@ -307,3 +307,49 @@ int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
+> >  	return -ENODEV;
+> >  }
+> >  EXPORT_SYMBOL_NS_GPL(cxl_find_regblock, CXL);
+> > +
+> > +resource_size_t cxl_rcrb_to_component(struct device *dev,
+> > +				      resource_size_t rcrb,
+> > +				      enum cxl_rcrb which)
+> > +{
+> > +	resource_size_t component_reg_phys;
+> > +	u32 bar0, bar1;
+> > +	void *addr;
+> > +
+> > +	if (which == CXL_RCRB_UPSTREAM)
+> > +		rcrb += SZ_4K;
+> > +
+> > +	/*
+> > +	 * RCRB's BAR[0..1] point to component block containing CXL
+> > +	 * subsystem component registers. MEMBAR extraction follows
+> > +	 * the PCI Base spec here, esp. 64 bit extraction and memory
+> > +	 * ranges alignment (6.0, 7.5.1.2.1).
+> > +	 */
 > 
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> ---
-> V2 -> V3:nothing has changed
-> V1 -> V2:nothing has changed
->   drivers/usb/typec/ucsi/ucsi_ccg.c | 9 ++++++++-
->   1 file changed, 8 insertions(+), 1 deletion(-)
+> A request_mem_region() is needed here to ensure ownership and expected
+> sequencing of accessing the RCRB to locate the component registers, and
+> accessing the RCRB to manipulate the component registers. It also helps
+> to sanity check that the BIOS mapped an exclusive range for the RCRB.
+
+Right, that is missing.
+
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> index 835f1c4372ba..139707a2f3d6 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> @@ -643,7 +643,7 @@ static int ccg_request_irq(struct ucsi_ccg *uc)
->   {
->   	unsigned long flags = IRQF_ONESHOT;
->   
-> -	if (!has_acpi_companion(uc->dev))
-> +	if (!dev_fwnode(uc->dev))
->   		flags |= IRQF_TRIGGER_HIGH;
->   
->   	return request_threaded_irq(uc->irq, NULL, ccg_irq_handler, flags, dev_name(uc->dev), uc);
-> @@ -1427,6 +1427,12 @@ static void ucsi_ccg_remove(struct i2c_client *client)
->   	free_irq(uc->irq, uc);
->   }
->   
-> +static const struct of_device_id ucsi_ccg_of_match_table[] = {
-> +		{ .compatible = "cypress,cypd4226", },
-> +		{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ucsi_ccg_of_match_table);
-> +
->   static const struct i2c_device_id ucsi_ccg_device_id[] = {
->   	{"ccgx-ucsi", 0},
->   	{}
-> @@ -1481,6 +1487,7 @@ static struct i2c_driver ucsi_ccg_driver = {
->   		.pm = &ucsi_ccg_pm,
->   		.dev_groups = ucsi_ccg_groups,
->   		.acpi_match_table = amd_i2c_ucsi_match,
-> +		.of_match_table = ucsi_ccg_of_match_table,
->   	},
->   	.probe = ucsi_ccg_probe,
->   	.remove = ucsi_ccg_remove,
+> > +	addr = ioremap(rcrb, PCI_BASE_ADDRESS_0 + SZ_8);
+> 
+> That PCI_BASE_ADDRESS_0 does not belong there. It ends up being benign
+> and forcing ioremap to map 12K instead of 8K, but it is a
+> config-register offset, not part of the RCRB size.
 
+Note this is BAR0 + 8 bytes, not 8k, and it does not map the whole
+RCRB region but instead the first part of the config space up to
+including the 64 bit BAR.
 
-Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
+> 
+> > +	if (!addr) {
+> > +		dev_err(dev, "Failed to map region %pr\n", addr);
+> > +		return CXL_RESOURCE_NONE;
+> > +	}
+> > +
+> > +	bar0 = readl(addr + PCI_BASE_ADDRESS_0);
+> > +	bar1 = readl(addr + PCI_BASE_ADDRESS_1);
+> > +	iounmap(addr);
+> 
+> ...corresponding release_mem_region() would go here.
+> 
+> > +
+> > +	/* sanity check */
+> > +	if (bar0 & (PCI_BASE_ADDRESS_MEM_TYPE_1M | PCI_BASE_ADDRESS_SPACE_IO))
+> > +		return CXL_RESOURCE_NONE;
+> 
+> I would have also expected:
+> 
+> - a sanity check for "Memory Space Enable" being set in the command
+>   register.
 
-Thanks
-Jon
+Ok.
 
--- 
-nvpublic
+> 
+> - an explicit check for 0xffffffff for the case when the upstream-port
+>   implements "no RCRB" mode.
+
+Yes, I left support for this to a later patch, but it's better to
+check it here already and possibly fall back to reg loc DVSEC then.
+
+> 
+> - some check that BIOS initialized the BAR values post reset given these
+>   BARs are invisible to the PCI core resource assignment 
+
+What check do you have in mind here? There is already the NULL check
+which would be the out-of-reset value.
+
+Thanks,
+
+-Robert
