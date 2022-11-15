@@ -2,170 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9E5629E37
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ABB9629E34
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiKOP4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:56:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
+        id S230481AbiKOP41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:56:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiKOP4p (ORCPT
+        with ESMTP id S230420AbiKOP4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:56:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715C72DAB6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:55:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668527744;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WPjmVSvbKB40CCR5+G61PkEf4Ba+oFIdDkT9Qj5RB98=;
-        b=PIaAHZQ1AG3n9/vVQwLPA5nrdcAdsbwBaysva+ZfswmR/y4hQjZoC6UPcn8vaif2yTNJqj
-        6xGFX/QIzOih/oIBrmfLLeukbRQG/w6mMJ97+NoQ56d/WPolyNv4a+ErR1xTJmrihP+oSG
-        L4fwn+P9dTwkvMTdcsss9GSDKem0PsA=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-379-jtjRl75cMC-j36hYyDpDpQ-1; Tue, 15 Nov 2022 10:55:43 -0500
-X-MC-Unique: jtjRl75cMC-j36hYyDpDpQ-1
-Received: by mail-ed1-f69.google.com with SMTP id b13-20020a056402350d00b00464175c3f1eso10173913edd.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:55:43 -0800 (PST)
+        Tue, 15 Nov 2022 10:56:24 -0500
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA092CE0A;
+        Tue, 15 Nov 2022 07:56:24 -0800 (PST)
+Received: by mail-qt1-f180.google.com with SMTP id e15so8974792qts.1;
+        Tue, 15 Nov 2022 07:56:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WPjmVSvbKB40CCR5+G61PkEf4Ba+oFIdDkT9Qj5RB98=;
-        b=Sg6r3noIFKZ5LslVKeC3DdYsButoYwOQIFkFUtHVKhE9aBNIGNqtxv2wipidQRPUKQ
-         ycgP2ivQftcNp6xIeWZf6Qi9CSEP36iEAkfcR1c8ftmZbiUSXm9LhZcwphlNCQ7j4iJp
-         HFFVEQZVKTgm/+juJ1+SKZ25rX/eetc1yZgep1IoVNAlmcLbo6gM/2edkFsmsWUEfAQa
-         lPECH0azT+CFWetn2pbNlCWI4llNP6XNBdVITdtNPLwZ2lZCTRUDn1Vrc1x3qd7dckVK
-         vdkttA79kfesZ3WgiM1xVrIScmOZ9Yx3+TylTM83W/pZAcjiMYFUKryPosYKfViS6hKx
-         0wJw==
-X-Gm-Message-State: ANoB5plqifR3Wws2F2O6+IWJMjsMeRqDGRGvBMN/B81doGbSLxN30vPG
-        V/5SIDEXpSlWFO331q0Xw0RE0ZNGqAeUh5z/JYuz6ofrQqstlwVgAREBkYnNRfho1Y7q47QSVsO
-        2O/Z7cqmrMvxUSdbv3IPji8+k
-X-Received: by 2002:a50:fe13:0:b0:461:565e:8779 with SMTP id f19-20020a50fe13000000b00461565e8779mr15869006edt.387.1668527742099;
-        Tue, 15 Nov 2022 07:55:42 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf62LnypI8+D6I1dwsExAn0tS+t62csKAA7KiPjW0+QdBxIexBU16E3VPnjUKKjLqOCYwTe88w==
-X-Received: by 2002:a50:fe13:0:b0:461:565e:8779 with SMTP id f19-20020a50fe13000000b00461565e8779mr15868982edt.387.1668527741895;
-        Tue, 15 Nov 2022 07:55:41 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id b25-20020a17090630d900b0078d38cda2b1sm5602709ejb.202.2022.11.15.07.55.40
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H013QBKjRovKMY+J7sz4b+GT3yfcFXzKqi34BAfCqyI=;
+        b=dLqj0zeDnOpbSJUgLCfH9nDX8IH+iD54WrkNsglQ5M5ZKK7XxfiuZmM0x7gFCf2qLl
+         VcOydFOEco+LCbuPn9qPWPpzSoSFBvCHGb43ejOpTZoPFahFT5pf2YEyUkDu4H3FCDNl
+         x0o9O77uJ6PhxhiRk6cgZL6m4pTDMu/4btk1UzSm1/4DsnzhNLaicrby5X1s9UB3X0gk
+         HkwVFWqBEpgqYnp8HBVGV8sPzDEcw6tQxyKMzz9fEusdZZ/XD3AVmVol21Wd142lZCw3
+         nOvJj78tt9uNwVwu3OJJr88VHK0ZSMPboPyod6FpNLFMTi2BTY8AEpx3VHqE9XLE5kBG
+         ZWTg==
+X-Gm-Message-State: ANoB5pkijuqxPqFUEM3BMjmNkC9/JuUW3YjkUyYxNTzJ/RF4YRH+xEB0
+        pogIg3LsEa7zMqXY10jvQe/JlGG3nw5S+w==
+X-Google-Smtp-Source: AA0mqf6lkCIgqqSF0MMgnQ+V9B+43oZ+zCgacNhL7a0gLqEmg3SrAqnl/GNWFZeVbb0UNz/mGPtc1w==
+X-Received: by 2002:a05:622a:4ccc:b0:3a5:9370:ccf4 with SMTP id fa12-20020a05622a4ccc00b003a59370ccf4mr16769589qtb.376.1668527783115;
+        Tue, 15 Nov 2022 07:56:23 -0800 (PST)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id t19-20020ac865d3000000b003a527d29a41sm7299870qto.75.2022.11.15.07.56.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 07:55:41 -0800 (PST)
-Message-ID: <8f28a8dd-5a0c-c233-217c-0e610b830406@redhat.com>
-Date:   Tue, 15 Nov 2022 16:55:40 +0100
+        Tue, 15 Nov 2022 07:56:22 -0800 (PST)
+Received: by mail-yb1-f179.google.com with SMTP id i131so17496350ybc.9;
+        Tue, 15 Nov 2022 07:56:22 -0800 (PST)
+X-Received: by 2002:a25:18c5:0:b0:6de:6183:c5c3 with SMTP id
+ 188-20020a2518c5000000b006de6183c5c3mr17442157yby.89.1668527781626; Tue, 15
+ Nov 2022 07:56:21 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v3] platform/x86: don't unconditionally attach Intel PMC
- when virtualized
-Content-Language: en-US, nl
-To:     Roger Pau Monne <roger.pau@citrix.com>,
-        linux-kernel@vger.kernel.org
-Cc:     xen-devel@lists.xenproject.org, jgross@suse.com,
-        "David E . Box" <david.e.box@linux.intel.com>,
-        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        David E Box <david.e.box@intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org
-References: <20221110163145.80374-1-roger.pau@citrix.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221110163145.80374-1-roger.pau@citrix.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221025191339.667614-1-helgaas@kernel.org> <20221025191339.667614-3-helgaas@kernel.org>
+In-Reply-To: <20221025191339.667614-3-helgaas@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 15 Nov 2022 16:56:10 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVnJZGqwnC0fZTwyb1GT5Nu+4K9LND4CXU96cvYG+qEgg@mail.gmail.com>
+Message-ID: <CAMuHMdVnJZGqwnC0fZTwyb1GT5Nu+4K9LND4CXU96cvYG+qEgg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PCI: Drop controller CONFIG_OF dependencies
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Bjorn,
 
-On 11/10/22 17:31, Roger Pau Monne wrote:
-> The current logic in the Intel PMC driver will forcefully attach it
-> when detecting any CPU on the intel_pmc_core_platform_ids array,
-> even if the matching ACPI device is not present.
-> 
-> There's no checking in pmc_core_probe() to assert that the PMC device
-> is present, and hence on virtualized environments the PMC device
-> probes successfully, even if the underlying registers are not present.
-> Previous to 21ae43570940 the driver would check for the presence of a
-> specific PCI device, and that prevented the driver from attaching when
-> running virtualized.
-> 
-> Fix by only forcefully attaching the PMC device when not running
-> virtualized.  Note that virtualized platforms can still get the device
-> to load if the appropriate ACPI device is present on the tables
-> provided to the VM.
-> 
-> Make an exception for the Xen initial domain, which does have full
-> hardware access, and hence can attach to the PMC if present.
-> 
-> Fixes: 21ae43570940 ('platform/x86: intel_pmc_core: Substitute PCI with CPUID enumeration')
-> Signed-off-by: Roger Pau Monné <roger.pau@citrix.com>
-> Acked-by: David E. Box <david.e.box@linux.intel.com>
+On Tue, Oct 25, 2022 at 9:16 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+>
+> Many drivers depend on OF interfaces, so they won't be functional if
+> CONFIG_OF is not set.  But OF provides stub functions in that case, so drop
+> the OF dependencies so we can at least compile-test the drivers.
+>
+> This means we can compile-test the following drivers even without CONFIG_OF
+> enabled (many still require either CONFIG_COMPILE_TEST or the relevant
+> arch):
+>
+>   aardvark
+>   al
+>   apple
+>   brcmstb
+>   cadence-host
+>   cadence-platform-host
+>   cadence-ep
+>   dra7xx-host
+>   dra7xx-ep
+>   dw-rockchip
+>   ftpci100
+>   hisi
+>   intel-gw
+>   ixp4xx
+>   j721e-host
+>   j721e-ep
+>   kirin
+>   layerscape-host
+>   layerscape-ep
+>   mediatek
+>   microchip-host
+>   mobiveil
+>   mvebu
+>   qcom-host
+>   qcom-ep
+>   rockchip-host
+>   rockchip-ep
+>   rockchip-dwc
+>   pci-host-generic
+>   uniphier-host
+>   uniphier-ep
+>   v3-semi
+>   xilinx
+>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 
-Thank you for your patch, I've applied this patch to my fixes
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
+Thanks for your patch, which is now commit 51dfb612ab3becf9 ("PCI: Drop
+controller CONFIG_OF dependencies") in pci/next.
 
-Note it will show up in my fixes branch once I've pushed my
-local branch there, which might take a while.
+> --- a/drivers/pci/controller/Kconfig
+> +++ b/drivers/pci/controller/Kconfig
+> @@ -8,7 +8,6 @@ config PCI_MVEBU
+>         depends on ARCH_MVEBU || ARCH_DOVE || COMPILE_TEST
+>         depends on MVEBU_MBUS
+>         depends on ARM
+> -       depends on OF
 
-I will include this patch in my next fixes pull-req to Linus
-for the current kernel development cycle.
+This is exactly why we have the COMPILE_TEST symbol.
+There is no point in bothering all users who configure kernels with
+questions about drivers that won't function anyway due to missing
+dependencies, unless the user explicitly wants to do compile-testing.
 
-Regards,
+So all of these should become:
 
-Hans
+    depends on OF || COMPILE_TEST
 
+>         select PCI_BRIDGE_EMUL
+>         help
+>          Add support for Marvell EBU PCIe controller. This PCIe controller
 
+> @@ -98,7 +94,6 @@ config PCI_HOST_GENERIC
+>
+>  config PCIE_XILINX
+>         bool "Xilinx AXI PCIe host bridge support"
+> -       depends on OF || COMPILE_TEST
 
-> ---
-> Changes since v2:
->  - Don't split condition line.
-> 
-> Changes since v1:
->  - Use cpu_feature_enabled() instead of boot_cpu_has().
-> ---
->  drivers/platform/x86/intel/pmc/pltdrv.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/platform/x86/intel/pmc/pltdrv.c b/drivers/platform/x86/intel/pmc/pltdrv.c
-> index 15ca8afdd973..ddfba38c2104 100644
-> --- a/drivers/platform/x86/intel/pmc/pltdrv.c
-> +++ b/drivers/platform/x86/intel/pmc/pltdrv.c
-> @@ -18,6 +18,8 @@
->  #include <asm/cpu_device_id.h>
->  #include <asm/intel-family.h>
->  
-> +#include <xen/xen.h>
-> +
->  static void intel_pmc_core_release(struct device *dev)
->  {
->  	kfree(dev);
-> @@ -53,6 +55,13 @@ static int __init pmc_core_platform_init(void)
->  	if (acpi_dev_present("INT33A1", NULL, -1))
->  		return -ENODEV;
->  
-> +	/*
-> +	 * Skip forcefully attaching the device for VMs. Make an exception for
-> +	 * Xen dom0, which does have full hardware access.
-> +	 */
-> +	if (cpu_feature_enabled(X86_FEATURE_HYPERVISOR) && !xen_initial_domain())
-> +		return -ENODEV;
-> +
->  	if (!x86_match_cpu(intel_pmc_core_platform_ids))
->  		return -ENODEV;
->  
+This one was fine.
 
+>         depends on PCI_MSI_IRQ_DOMAIN
+>         help
+>           Say 'Y' here if you want kernel to support the Xilinx AXI PCIe
+
+Thanks in advance for reverting or fixing!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
