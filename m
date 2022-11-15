@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D49628F8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 02:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B23B628F94
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 02:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbiKOBu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 20:50:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
+        id S232166AbiKOBxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 20:53:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbiKOBut (ORCPT
+        with ESMTP id S231799AbiKOBx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 20:50:49 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71D4FADF;
-        Mon, 14 Nov 2022 17:50:47 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id z14so21574335wrn.7;
-        Mon, 14 Nov 2022 17:50:47 -0800 (PST)
+        Mon, 14 Nov 2022 20:53:28 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFBE1FD
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 17:53:24 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id h193so11904442pgc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 17:53:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qq+GIxiklIVtKUEbK8ucEWoZBn9yKo/47esIkXSbciE=;
-        b=k6ih+eBWz7VpcB3X6ZiO2pFU3Npz+47xJTh+eTEHLt+wNZBuisnW69DY5KGluoS4bg
-         6BnmD3a6wJb5yiT/WG+kVwg8pbHw9fp3hx9FLCPI/dOlSCMiZX8U2aUcT5B556pP5hY/
-         nB5kfbzIQWzG4B9tO55xwOHKTC0dKAy4d4qQyq8i7Al34QANCJLG1RUUCt5znhkBXfCi
-         c9iYNID3ZQ5HnaVVRAQWc4ivIMSYvUufjPAgs3n2xpMhH8WQvMwmh0ChHPW6tqX7GZq5
-         bo28z/b6SnirBjZumcXjeI1mfI3eESNRFjmlk/aIdMD17IdHiOMIK+ZjHW/FM1SoAlIf
-         xyFg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sJL+OLm/9HBt9VTWAdJwvOJ+g8VmirxRTL8SSjHNQVg=;
+        b=rkHRihBMn7TFJuWebxPgdWFVVvwFb3btFvnNICt5ntm9UbrFuQjanYptOIqbJHYQyN
+         4ysQw2uCUwbfzesY4/LQsyZvxgC64PUwvMLuit482dri/z3JV0iZTPh1H5EOywaT9fc4
+         iAhtFK7tij8bg8Tp40d8aAuFnUpIbMuqk8UMqe9OlqBkgv0wIv4ZOjQRHyAXR7WbMMIE
+         5y3GH4AORF8PLSYcPxXegQhBIUGjlWWmC9pGpUcPzHhQqWHtQHVZe7pqz6yeg4xxIA9r
+         QmvBz5o1VLxrcUc77Vt2WpHb9XlPavPLGzfbOuor2Ar7O9cDo9AiHlxWV/TUTuwu8h9B
+         vk1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qq+GIxiklIVtKUEbK8ucEWoZBn9yKo/47esIkXSbciE=;
-        b=BnWrAWCz88Ri4PZD+1CS8u9r05KLTgxImRQ7nzdaKC77SkAOCQ14D6E7gR4gA7994C
-         /dD7oPtWbkHoRiQgBYIN25+kTnEexbgdcJk+8SdrISfArqoumv30B9Ucx/3sdfu1H/2k
-         wAON2E8f1/bOk+hBmno+EJW90SiulywbTpMELtTTbvcYTKanNpJxgd2UpXCkTIuSoGRJ
-         JXIBOT4JNMdLVRI58x0M8JxxoFitLWrABPM9n85zBA6dawZP3Vxa3qegvSukKpUds43G
-         kEpnn/9wX2iJZ9GzamECLgoIBrISDqPuyJY0rNF8sCdfJzMVKJAX7KbRIpHGYLVlvCp3
-         pv2g==
-X-Gm-Message-State: ANoB5pngwkfqAFQ5jUWlqiP7qqmkAlBr1YCuvmCNQ+u3o++qldkF7Uko
-        GmimXyE+/sNuwA8HKM/VhQetuvPgZuFaWpd9ow0=
-X-Google-Smtp-Source: AA0mqf7aq43bPMm7FbEqVbjX5qxAn2T0zciW2V19Bv1VonAMKypjCRrFvINg8lB+GIdvtZGnpgMI9nl1pEVUa4m0CAk=
-X-Received: by 2002:adf:dc09:0:b0:236:7180:6ccc with SMTP id
- t9-20020adfdc09000000b0023671806cccmr9406986wri.573.1668477046120; Mon, 14
- Nov 2022 17:50:46 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sJL+OLm/9HBt9VTWAdJwvOJ+g8VmirxRTL8SSjHNQVg=;
+        b=1jzgDTqw8BSaF3RiLPCZtGHzeye3JugPPMs99dNUaxnd1aTO5mu18/w+nohqGQYiSx
+         2y657PnV5ziNvotzNttpd6ebh/VgD+FEyXOmSXkBvwhGMt2w8uODWFOljpARo2VmAi1P
+         K0Lfb8Ogq/gjnezbwq3IXAsfX1k5TK+5ETxwWiuB8t9Uue85Oi9NDk3FvprOZ9a8p1QB
+         xsHvU/msLRRzDXPnrzpvKyEI76Oxl9z2/WDZ7YLKfP5Uq/gJu9wYM914AcXQSTIebWOw
+         GcNM3MiIVsMbyvUVNkriH72088Pbr2P+BvFdx4hJ1hHnTvyAYPn0FTSePociVPXysbc3
+         KXMw==
+X-Gm-Message-State: ANoB5pnud7u4f9nFPfmd58G5S+38MnaEgm1/K2W8IV5JzdR1MVJrr8G3
+        fysBbikOHIfwXjR/CwEbeI+dO7GgS3tYJLFlJcp2kg==
+X-Google-Smtp-Source: AA0mqf4+D70nwiuqmYZXKiMUqWwdK5UhdmuQ2WsugSkZYryDK0evBfEeHXyPyyLhkZaBOxTRRohXjk2oboz1mvld74I=
+X-Received: by 2002:aa7:880d:0:b0:56b:676e:1815 with SMTP id
+ c13-20020aa7880d000000b0056b676e1815mr16277604pfo.66.1668477203676; Mon, 14
+ Nov 2022 17:53:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20221111142722.1172-1-longpeng2@huawei.com> <Y256ty6xGyUpkFn9@unreal>
- <0b2202bf-18d3-b288-9605-279208165080@huawei.com> <Y3Hoi4zGFY4Fz1l4@unreal>
- <d7327d46-deb5-dc75-21c3-1f351d7da108@huawei.com> <Y3I+Fs0/dXH/hnpL@unreal>
- <3a8efc92-eda8-9c61-50c5-5ec97e2e2342@huawei.com> <Y3JOvTfBwpaldtZJ@unreal>
-In-Reply-To: <Y3JOvTfBwpaldtZJ@unreal>
-From:   "Oliver O'Halloran" <oohall@gmail.com>
-Date:   Tue, 15 Nov 2022 12:50:34 +1100
-Message-ID: <CAOSf1CG+VGdeXGQetfMArwpafAx2yj3nmA_y7rN4SNdt=1=08w@mail.gmail.com>
-Subject: Re: [RFC 0/4] pci/sriov: support VFs dynamic addition
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     "Longpeng (Mike, Cloud Infrastructure Service Product Dept.)" 
-        <longpeng2@huawei.com>, bhelgaas@google.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jianjay.zhou@huawei.com, zhuangshengen@huawei.com,
-        arei.gonglei@huawei.com, yechuan@huawei.com,
-        huangzhichao@huawei.com, xiehong@huawei.com
+References: <20221111014244.1714148-1-vannapurve@google.com>
+ <20221111014244.1714148-5-vannapurve@google.com> <CAMkAt6qLC0BosvSN9Ri2XFYK65xH1E5sqJYNe6uAudb8U08rXw@mail.gmail.com>
+In-Reply-To: <CAMkAt6qLC0BosvSN9Ri2XFYK65xH1E5sqJYNe6uAudb8U08rXw@mail.gmail.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Mon, 14 Nov 2022 17:53:12 -0800
+Message-ID: <CAGtprH8TQ9ep5KQ5-U1PUBmzQQC7fBOLOfn2mNgnDLMO70ZYjg@mail.gmail.com>
+Subject: Re: [V1 PATCH 4/6] KVM: selftests: x86: Execute VMs with private memory
+To:     Peter Gonda <pgonda@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
+        aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
+        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
+        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
+        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
+        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
+        erdemaktas@google.com, nikunj@amd.com, seanjc@google.com,
+        diviness@google.com, maz@kernel.org, dmatlack@google.com,
+        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
+        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,38 +85,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 1:27 AM Leon Romanovsky <leon@kernel.org> wrote:
+On Mon, Nov 14, 2022 at 11:37 AM Peter Gonda <pgonda@google.com> wrote:
+>...
+> > +static void handle_vm_exit_map_gpa_hypercall(struct kvm_vm *vm,
+> > +                               struct kvm_vcpu *vcpu)
+> > +{
+> > +       uint64_t gpa, npages, attrs, size;
+> > +
+> > +       TEST_ASSERT(vcpu->run->hypercall.nr == KVM_HC_MAP_GPA_RANGE,
+> > +               "Unhandled Hypercall %lld\n", vcpu->run->hypercall.nr);
+> > +       gpa = vcpu->run->hypercall.args[0];
+> > +       npages = vcpu->run->hypercall.args[1];
+> > +       size = npages << MIN_PAGE_SHIFT;
+> > +       attrs = vcpu->run->hypercall.args[2];
+> > +       pr_info("Explicit conversion off 0x%lx size 0x%lx to %s\n", gpa, size,
+> > +               (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED) ? "private" : "shared");
+> > +
+> > +       if (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED)
+> > +               vm_allocate_private_mem(vm, gpa, size);
+> > +       else
+> > +               vm_unback_private_mem(vm, gpa, size);
+> > +
+> > +       vcpu->run->hypercall.ret = 0;
+> > +}
+> > +
+> > +static void vcpu_work(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
+> > +       struct vm_setup_info *info)
+> > +{
+> > +       struct ucall uc;
+> > +       uint64_t cmd;
+> > +
+> > +       /*
+> > +        * Loop until the guest is done.
+> > +        */
+> > +
+> > +       while (true) {
+> > +               vcpu_run(vcpu);
+> > +
+> > +               if (vcpu->run->exit_reason == KVM_EXIT_IO) {
+> > +                       cmd = get_ucall(vcpu, &uc);
+> > +                       if (cmd != UCALL_SYNC)
+> > +                               break;
+> > +
+> > +                       TEST_ASSERT(info->ioexit_cb, "ioexit cb not present");
+> > +                       info->ioexit_cb(vm, uc.args[1]);
+> > +                       continue;
+> > +               }
 >
-> *snip*
+> Should this be integrated into the ucall library directly somehow?
+> That way users of VMs with private memory do not need special
+> handling?
 >
-> Anyway, I'm aware of big cloud providers who are pretty happy with live
-> migration in production.
+> After Sean's series:
+> https://lore.kernel.org/linux-arm-kernel/20220825232522.3997340-3-seanjc@google.com/
+> we have a common get_ucall() that this check could be integrated into?
+>
+> > +
+> > +               if (vcpu->run->exit_reason == KVM_EXIT_HYPERCALL) {
+> > +                       handle_vm_exit_map_gpa_hypercall(vm, vcpu);
+> > +                       continue;
+> > +               }
+> > +
+> > +               TEST_FAIL("Unhandled VCPU exit reason %d\n",
+> > +                       vcpu->run->exit_reason);
+> > +               break;
+> > +       }
+> > +
+> > +       if (vcpu->run->exit_reason == KVM_EXIT_IO && cmd == UCALL_ABORT)
+> > +               TEST_FAIL("%s at %s:%ld, val = %lu", (const char *)uc.args[0],
+> > +                         __FILE__, uc.args[1], uc.args[2]);
+> > +}
+> > +
+> > +/*
+> > + * Execute guest vm with private memory memslots.
+> > + *
+> > + * Input Args:
+> > + *   info - pointer to a structure containing information about setting up a VM
+> > + *     with private memslots
+> > + *
+> > + * Output Args: None
+> > + *
+> > + * Return: None
+> > + *
+> > + * Function called by host userspace logic in selftests to execute guest vm
+> > + * logic. It will install test_mem_slot : containing the region of memory that
+> > + * would be used to test private/shared memory accesses to a memory backed by
+> > + * private memslots
+> > + */
+> > +void execute_vm_with_private_test_mem(struct vm_setup_info *info)
+> > +{
+> > +       struct kvm_vm *vm;
+> > +       struct kvm_enable_cap cap;
+> > +       struct kvm_vcpu *vcpu;
+> > +       uint64_t test_area_gpa, test_area_size;
+> > +       struct test_setup_info *test_info = &info->test_info;
+> > +
+> > +       TEST_ASSERT(info->guest_fn, "guest_fn not present");
+> > +       vm = vm_create_with_one_vcpu(&vcpu, info->guest_fn);
+>
+> I am a little confused with how this library is going to work for SEV
+> VMs that want to have UPM private memory eventually.
+>
+> Why should users of UPM be forced to use this very specific VM
+> creation and vCPU run loop. In the patch
+> https://lore.kernel.org/lkml/20220829171021.701198-1-pgonda@google.com/T/#m033ebc32df47a172bc6c46d4398b6c4387b7934d
+> SEV VMs need to be created specially vm_sev_create_with_one_vcpu() but
+> then callers can run the VM's vCPUs like other selftests.
+>
+> How do you see this working with SEV VMs?
+>
 
-I could see someone sufficiently cloudbrained deciding that rebooting
-the hypervisor is fine provided the downtime doesn't violate any
-customer uptime SLAs. Personally I'd only be brave enough to do that
-for a HV hosting internal services which I know are behind a load
-balancer, but apparently there are people at Huawei far braver than I.
+This VM creation method can be useful to run the VMs whose execution
+might call mapgpa to change the memory attributes. New VM creation
+method specific to Sev VMs can be introduced.
 
-> *snip*
->
-> > Adding 2K+ VFs to the sysfs need too much time.
-> >
-> > Look at the bottomhalf of the hypervisor live update:
-> > kexec --> add 2K VFs --> restore VMs
-> >
-> > The downtime can be reduced if the sequence is:
-> > kexec --> add 100 VFs=EF=BC=88the VMs used=EF=BC=89 --> resotre VMs -->=
- add 1.9K VFs
->
-> Addition of VFs is serial operation, you can fire your VMs once you
-> counted 100 VFs in sysfs directory.
+I tried to reuse this framework earlier for Sev VM selftests via:
+1) https://lore.kernel.org/lkml/20220830224259.412342-8-vannapurve@google.com/T/#m8164d3111c9a17ebab77f01635df8930207cc65d
+2) https://lore.kernel.org/lkml/20220830224259.412342-8-vannapurve@google.com/T/#m8164d3111c9a17ebab77f01635df8930207cc65d
 
-I don't know if making that kind of assumption about the behaviour of
-sysfs is better or worse than just adding another knob. If at some
-point in the future the initialisation of VF pci_devs was moved to a
-workqueue or something we'd be violating that assumption without
-breaking any of the documented ABI. I guess you could argue that VFs
-being added sequentially is "ABI", but userspace has always been told
-not to make assumptions about when sysfs attributes (or nodes, I
-guess) appear since doing so is prone to races.
+Though these changes need to be refreshed after this updated series.
