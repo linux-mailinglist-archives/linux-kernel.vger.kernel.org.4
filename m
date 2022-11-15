@@ -2,199 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF09E6296C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CB56296CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238491AbiKOLHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 06:07:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45728 "EHLO
+        id S229879AbiKOLJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 06:09:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238551AbiKOLHE (ORCPT
+        with ESMTP id S238361AbiKOLJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 06:07:04 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E251DA9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:07:01 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1outmN-0000iz-Gx; Tue, 15 Nov 2022 12:06:59 +0100
-Message-ID: <83ae518c-be71-6e3f-c9f8-3ea6e4b05d87@leemhuis.info>
-Date:   Tue, 15 Nov 2022 12:06:58 +0100
+        Tue, 15 Nov 2022 06:09:09 -0500
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B4927DD7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:08:04 -0800 (PST)
+Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 338922004F;
+        Tue, 15 Nov 2022 12:08:02 +0100 (CET)
+Date:   Tue, 15 Nov 2022 12:08:00 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Brian Masney <bmasney@redhat.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, psodagud@quicinc.com,
+        quic_shazhuss@quicinc.com, quic_ppareek@quicinc.com,
+        ahalaney@redhat.com, echanude@redhat.com,
+        nicolas.dechesne@linaro.org
+Subject: Re: [PATCH RFC] gpiolib: ensure that fwnode is properly set
+Message-ID: <20221115110800.35gl3j43lmbxm3jb@SoMainline.org>
+References: <20221114202943.2389489-1-bmasney@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v6] cpu/hotplug: Do not bail-out in DYING/STARTING
- sections
-Content-Language: en-US, de-DE
-To:     peterz@infradead.org, tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, vschneid@redhat.com,
-        kernel-team@android.com, Derek Dolney <z23@posteo.net>,
-        Vincent Donnefort <vdonnefort@google.com>
-References: <20220927101259.1149636-1-vdonnefort@google.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <20220927101259.1149636-1-vdonnefort@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1668510421;47015ee5;
-X-HE-SMSGID: 1outmN-0000iz-Gx
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221114202943.2389489-1-bmasney@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker. Top-posting for once,
-to make this easily accessible to everyone.
-
-Peter, Thomas, what's the holdup with this patch?
-
-I'm asking because I have the linked issue on the list of tracked
-regressions and there wasn't really any progress for weeks now afaics
-(if I missed anything, please let me know). I'm getting quite close to
-the point where my only remaining option is "get Linus to look into
-this", but I'd like to avoid that.
-
-Ciao, Thorsten
-
-On 27.09.22 12:12, Vincent Donnefort wrote:
-> The DYING/STARTING callbacks are not expected to fail. However, as reported
-> by Derek, drivers such as tboot are still free to return errors within
-> those sections, which halts the hot(un)plug and leaves the CPU in an
-> unrecoverable state.
+On 2022-11-14 15:29:43, Brian Masney wrote:
+> Note that this is a RFC patch and not meant to be merged. I looked into
+> a problem with linux-next-20221110 on the Qualcomm SA8540P automotive
+> board (sc8280xp) where the UFS host controller would fail to probe due
+> to repeated probe deferrals when trying to get reset-gpios via
+> devm_gpiod_get_optional().
 > 
-> No rollback being possible there, let's only log the failures and proceed
-> with the following steps. This restores the hotplug behaviour prior to
-> commit 453e41085183 ("cpu/hotplug: Add cpuhp_invoke_callback_range()")
+> of_get_named_gpiod_flags() returns -EPROBE_DEFER, which is caused by
+> of_gpiochip_match_node_and_xlate() returning 0 since the of_xlate function
+> pointer is not set for the qcom,sc8280xp-tlmm pinctrl driver. The
+> pinctrl driver doesn't define one, so of_gpiochip_add() should
+> automatically setup of_gpio_simple_xlate() on it's behalf. This doesn't
+> happen since the fwnode member on the struct gpiochip is set to null
+> when of_gpiochip_add() is called. Let's work around this by ensuring
+> that it's set if available.
 > 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215867
-> Fixes: 453e41085183 ("cpu/hotplug: Add cpuhp_invoke_callback_range()")
-> Reported-by: Derek Dolney <z23@posteo.net>
-> Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
-> Tested-by: Derek Dolney <z23@posteo.net>
-> Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+> Note that this broke sometime within the last few weeks within
+> linux-next and I haven't bisected this. I'm posting this in the hopes
+> that someone may know offhand which patch(es) may have broken this.
 > 
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
+
+Thanks, this fixes the following abort I'm observing on multiple
+Qualcomm platforms (sdm630, Sony Nile, and msm8956, Sony Loire):
+
+    [    0.391439] Internal error: synchronous external abort: 0000000096000210 [#1] PREEMPT SMP
+    [    0.391526] Modules linked in:
+    [    0.398678] CPU: 2 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc5-next-20221114-07647-gb3ed2836a8f7 #38
+    [    0.401642] Hardware name: Sony Xperia XA2 Ultra (DT)
+    [    0.410879] pstate: 00400005 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+    [    0.415957] pc : msm_gpio_get_direction+0x40/0x80
+    [    0.422680] lr : msm_gpio_get_direction+0x18/0x80
+    [    0.427544] sp : ffff80000805b750
+    [    0.432270] x29: ffff80000805b750 x28: ffff739180b48c00 x27: ffff739180b50180
+    [    0.435537] x26: 0000000000000008 x25: 0000000000000002 x24: ffffdcf976192e98
+    [    0.442695] x23: ffff739180b31890 x22: 0000000000000000 x21: ffff739180b48c08
+    [    0.449814] x20: ffffdcf975ff4148 x19: 0000000000000008 x18: 0000000000000000
+    [    0.456891] x17: 64656c62616e655f x16: 7469647561206465 x15: 0000000000000002
+    [    0.464049] x14: 0000000000000001 x13: 006c7274636e6970 x12: 2e30303030303133
+    [    0.471166] x11: ffffdcf9760c98d8 x10: 000000000042c70 x9 : 0000000000000004
+    [    0.478243] x8 : 0101010101010101 x7 : 0073656d616e2d65 x6 : 0911040aadece9ee
+    [    0.485405] x5 : 6e696c2d0a041109 x4 : 0000000000000180 x3 : 0000000000008000
+    [    0.492483] x2 : 0000000000000000 x1 : ffffdcf975628db0 x0 : ffff800008808000
+    [    0.499642] Call trace:
+    [    0.506703]  msm_gpio_get_direction+0x40/0x80
+    [    0.509008]  gpiochip_add_data_with_key+0x638/0xed0
+    [    0.513481]  msm_pinctrl_probe+0x430/0x580
+    [    0.518168]  sdm660_pinctrl_probe+0x18/0x30
+    [    0.522376]  platform_probe+0x68/0xc0
+    [    0.526413]  really_probe+0xc0/0x3dc
+    [    0.530234]  __driver_probe_device+0x7c/0x190
+    [    0.533922]  driver_probe_device+0x3c/0x110
+    [    0.538132]  __device_attach_driver+0xbc/0x160
+    [    0.542168]  bus_for_each_drv+0x7c/0xd4
+    [    0.546637]  __device_attach+0x9c/0x1c0
+    [    0.550370]  device_initial_probe+0x14/0x20
+    [    0.554231]  bus_probe_device+0x9c/0xa4
+    [    0.558358]  device_add+0x3ac/0x8b0
+    [    0.562175]  of_device_add+0x54/0x64
+    [    0.565689]  of_platform_device_create_pdata+0x90/0x124
+    [    0.569470]  of_platform_bus_create+0x18c/0x510
+    [    0.574416]  of_platform_bus_create+0x1ec/0x510
+    [    0.578971]  of_platform_populate+0x60/0x150
+    [    0.583445]  of_platform_default_populate_init+0xe4/0x104
+    [    0.588002]  do_one_initcall+0x64/0x1dc
+    [    0.593253]  kernel_init_freeable+0x1b8/0x220
+    [    0.596900]  kernel_init+0x24/0x130
+    [    0.601453]  ret_from_fork+0x10/0x20
+    [    0.604715] Code: d37d0442 8b020000 f941b400 8b030000 (b9400000)
+    [    0.608583] ---[ end trace 0000000000000000 ]---
+    [    0.619572] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+
+This wasn't an issue on -next 20221109.
+
+Tested-by: Marijn Suijten <marijn.suijten@somainline.org>
+
 > ---
+>  drivers/gpio/gpiolib.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> v5 -> v6:
->    - Collect Reviewed-by
-> v4 -> v5:
->    - Remove WARN, only log broken states with pr_warn.
-> v3 -> v4:
->    - Sorry ... wrong commit description style ...
-> v2 -> v3:
->    - Tested-by tag.
->    - Refine commit description.
->    - Bugzilla link.
-> v1 -> v2:
->    - Commit message rewording.
->    - More details in the warnings.
->    - Some variable renaming
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index 11fb7ec883e9..8bec66008869 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -678,7 +678,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+>  	 * Assign fwnode depending on the result of the previous calls,
+>  	 * if none of them succeed, assign it to the parent's one.
+>  	 */
+> -	gdev->dev.fwnode = dev_fwnode(&gdev->dev) ?: fwnode;
+> +	gc->fwnode = gdev->dev.fwnode = dev_fwnode(&gdev->dev) ?: fwnode;
+>  
+>  	gdev->id = ida_alloc(&gpio_ida, GFP_KERNEL);
+>  	if (gdev->id < 0) {
+> -- 
+> 2.38.1
 > 
-> diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index bbad5e375d3b..621e5af42d57 100644
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -663,21 +663,51 @@ static bool cpuhp_next_state(bool bringup,
->  	return true;
->  }
->  
-> -static int cpuhp_invoke_callback_range(bool bringup,
-> -				       unsigned int cpu,
-> -				       struct cpuhp_cpu_state *st,
-> -				       enum cpuhp_state target)
-> +static int __cpuhp_invoke_callback_range(bool bringup,
-> +					 unsigned int cpu,
-> +					 struct cpuhp_cpu_state *st,
-> +					 enum cpuhp_state target,
-> +					 bool nofail)
->  {
->  	enum cpuhp_state state;
-> -	int err = 0;
-> +	int ret = 0;
->  
->  	while (cpuhp_next_state(bringup, &state, st, target)) {
-> +		int err;
-> +
->  		err = cpuhp_invoke_callback(cpu, state, bringup, NULL, NULL);
-> -		if (err)
-> +		if (!err)
-> +			continue;
-> +
-> +		if (nofail) {
-> +			pr_warn("CPU %u %s state %s (%d) failed (%d)\n",
-> +				cpu, bringup ? "UP" : "DOWN",
-> +				cpuhp_get_step(st->state)->name,
-> +				st->state, err);
-> +			ret = -1;
-> +		} else {
-> +			ret = err;
->  			break;
-> +		}
->  	}
->  
-> -	return err;
-> +	return ret;
-> +}
-> +
-> +static inline int cpuhp_invoke_callback_range(bool bringup,
-> +					      unsigned int cpu,
-> +					      struct cpuhp_cpu_state *st,
-> +					      enum cpuhp_state target)
-> +{
-> +	return __cpuhp_invoke_callback_range(bringup, cpu, st, target, false);
-> +}
-> +
-> +static inline void cpuhp_invoke_callback_range_nofail(bool bringup,
-> +						      unsigned int cpu,
-> +						      struct cpuhp_cpu_state *st,
-> +						      enum cpuhp_state target)
-> +{
-> +	__cpuhp_invoke_callback_range(bringup, cpu, st, target, true);
->  }
->  
->  static inline bool can_rollback_cpu(struct cpuhp_cpu_state *st)
-> @@ -999,7 +1029,6 @@ static int take_cpu_down(void *_param)
->  	struct cpuhp_cpu_state *st = this_cpu_ptr(&cpuhp_state);
->  	enum cpuhp_state target = max((int)st->target, CPUHP_AP_OFFLINE);
->  	int err, cpu = smp_processor_id();
-> -	int ret;
->  
->  	/* Ensure this CPU doesn't handle any more interrupts. */
->  	err = __cpu_disable();
-> @@ -1012,13 +1041,11 @@ static int take_cpu_down(void *_param)
->  	 */
->  	WARN_ON(st->state != (CPUHP_TEARDOWN_CPU - 1));
->  
-> -	/* Invoke the former CPU_DYING callbacks */
-> -	ret = cpuhp_invoke_callback_range(false, cpu, st, target);
-> -
->  	/*
-> +	 * Invoke the former CPU_DYING callbacks
->  	 * DYING must not fail!
->  	 */
-> -	WARN_ON_ONCE(ret);
-> +	cpuhp_invoke_callback_range_nofail(false, cpu, st, target);
->  
->  	/* Give up timekeeping duties */
->  	tick_handover_do_timer();
-> @@ -1296,16 +1323,14 @@ void notify_cpu_starting(unsigned int cpu)
->  {
->  	struct cpuhp_cpu_state *st = per_cpu_ptr(&cpuhp_state, cpu);
->  	enum cpuhp_state target = min((int)st->target, CPUHP_AP_ONLINE);
-> -	int ret;
->  
->  	rcu_cpu_starting(cpu);	/* Enables RCU usage on this CPU. */
->  	cpumask_set_cpu(cpu, &cpus_booted_once_mask);
-> -	ret = cpuhp_invoke_callback_range(true, cpu, st, target);
->  
->  	/*
->  	 * STARTING must not fail!
->  	 */
-> -	WARN_ON_ONCE(ret);
-> +	cpuhp_invoke_callback_range_nofail(true, cpu, st, target);
->  }
->  
->  /*
