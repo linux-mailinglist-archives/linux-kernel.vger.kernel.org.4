@@ -2,124 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F05AA6299C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FC56299C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230400AbiKONNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:13:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
+        id S230143AbiKONOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:14:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiKONNG (ORCPT
+        with ESMTP id S230152AbiKONOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:13:06 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41442AC77
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:13:03 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id j16so24290952lfe.12
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:13:03 -0800 (PST)
+        Tue, 15 Nov 2022 08:14:22 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812E4D84
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:14:20 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id d6so24316268lfs.10
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:14:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kTB4xFkuSqDJkguPgbNRXgSTiSjC5T2+Eayiy8u0drU=;
-        b=qkr1mPq/Iaq6jH68zz8NMaNhWjw1jXQNLTUA5ro/GwxRqLhvYOZZJggPfjJLkD/sDC
-         OybF5JEtdGoOcSJxev4oDb3DAV/yywXLFJre0xAjokkiNWsg3uVG9YHJdmit0j0MpjIC
-         eapXuzqulT4CYxV4+AsCscwvDmRIK+62394ng8bV4CSuxQL3wmriKBpy+2TApOKbthG3
-         hA09F9owNUYO9l4rc+W0cwptaDo2BnaUgPk8XFlfhZwYF2sJRUzYymXKaAbwFsQc5dKc
-         crN8yNqhipyN9V2aV7rBaJjk6g2aC+z9RyAwL4+U0e3b4bDXGENEaJ4Ri57Kv/Gf4fyR
-         Hapw==
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/TnpZNB3yY2sHehmo/ZWkSWGq3Xs6SVEAPhAgGjO2Uk=;
+        b=nL+PPcww964CyfJSCS0///oWfwoFvkKh00kPZDMlynkU+sy2hzoKq9ifRQeNSAGxe0
+         1eJjHQphyb6QX7IRdvDLztP98ri8JeWti0meT4DT5Bt+Fb8qA46hrY/fap4ykz0cVWGQ
+         vKBkWVPYSHuItFYU1DD8c6L6Q+C4gI+Efy7u4A4IJZpIOMoAIYBhtp9DPIUWiAlnDHVy
+         e5ihv7iOcuu5g+1pvYKhlshcLDHDkyBfC92f8nJBE1CUvd3AIX0cDf1sb2zls8ukZ0c9
+         IajiqPo3pCTft/FIcTB+9WwnIF1Iy0J53774nwp3J8Wnn2xMMhiJBFg1UFdue1OFk29S
+         osHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kTB4xFkuSqDJkguPgbNRXgSTiSjC5T2+Eayiy8u0drU=;
-        b=8QyesTAwwLYmTj8EjhMhzM1KIs+5IMRgBfnHH6pFRpkkVTbOsXjnm5AoLZeXOToNL8
-         oSNlJAt1NKZXww+4rHSRL75rCiChF+4XS57f0hoRr94iRTxCAMu4HL/C+gT3gLRMVJjt
-         spu4naGHKab/8VoZqCClOHT2OjTsM5a8ZdQ6e+0TiZ5T74onwlf6hsc7b0SGvhpzKJRJ
-         J87d09qKbJlDRi9UmPQFsXFMPQCoq3ZxlBorkwZB9GgOl+UFLg9qAlGWO2CW5GY3XjoS
-         tVLAz4vHwxv/ZxHlPPnFJ639zHLjQe2j1tfwCcDgbp8b45armRAlD74NRECzNRYcJR6T
-         wFxw==
-X-Gm-Message-State: ANoB5pnLhq6p5RP1cNZypHSFURBxN2N2z3Fcs9nliBDdbHzykgo5bdTS
-        +iUJW/aWZWbm2M6YjbMTIfxQPbteeopKKfdS
-X-Google-Smtp-Source: AA0mqf6bmDAkHFG20vnLLPsWE6BGuUChzkPAn4GcFmO719fkh9AATz5foTHq2aVxbcn4IGkfFeB/cQ==
-X-Received: by 2002:a19:645e:0:b0:4a9:e27a:1cfa with SMTP id b30-20020a19645e000000b004a9e27a1cfamr5452473lfj.147.1668517982163;
-        Tue, 15 Nov 2022 05:13:02 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bd24-20020a05651c169800b0026e04cc88cfsm2501210ljb.124.2022.11.15.05.13.00
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/TnpZNB3yY2sHehmo/ZWkSWGq3Xs6SVEAPhAgGjO2Uk=;
+        b=Akf6gOfTKbi5zQIyZpnOqth1FGxvyd2AI+ziy5C/LS7U/TS9I+QsMI2lRXY8okYlBB
+         kbWsNeWrevW8cWPUsynWv3cEwYbGfDf2Xdixzcz4kc05+wq9bO6tFLJMjgi+KgKJnTuM
+         IOyJRwA3SlljosJDRBxkX5XJmwFCaYYkbixzhKRKvQcdsih0pT3UeAZ9/t28zJzM0as0
+         aCTpVwAGEeqVTKqugAatyOAHL3Mby0wTtvdHbmTpGr6IrD7Z9DJsMQqcoVW6Ibakyx4s
+         TcWTa9VkmKoNb59MLcr2gT+85AnfKI4BftX/ZtaEU23i4klAH4NCn5wCq2PspuKUgjYx
+         /L6g==
+X-Gm-Message-State: ANoB5plu4DW/LbBlGvV/uAErL+mTi7HOCtwXzAaSb52ewvSYt7xDfSQg
+        bjGCh5W4JgxhG/FV2z2CjKm3fQ==
+X-Google-Smtp-Source: AA0mqf4YV/jzEwWzrzKvbefxTYEvQaQEti0/34/86ewugz0JCol/nnCLCELUYbRDl4hmnDF8cs5jaw==
+X-Received: by 2002:a05:6512:1398:b0:497:456d:890 with SMTP id p24-20020a056512139800b00497456d0890mr5081108lfa.687.1668518058876;
+        Tue, 15 Nov 2022 05:14:18 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id w8-20020a05651234c800b004b19f766b07sm2219694lfr.91.2022.11.15.05.14.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 05:13:01 -0800 (PST)
-Message-ID: <a5d53378-51dc-a024-bbda-5dd03bbf37b3@linaro.org>
-Date:   Tue, 15 Nov 2022 14:13:00 +0100
+        Tue, 15 Nov 2022 05:14:18 -0800 (PST)
+Message-ID: <42d173ae-d085-a6e1-86ee-6de02071aac9@linaro.org>
+Date:   Tue, 15 Nov 2022 14:14:13 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 4/7] dt-bindings: usb: add the Renesas RZ/N1 USBF
- controller binding
-Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH 3/4] arm64: dts: msm8998: add MSM8998 specific compatible
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-References: <20221114111513.1436165-1-herve.codina@bootlin.com>
- <20221114111513.1436165-5-herve.codina@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221114111513.1436165-5-herve.codina@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221115125310.184012-1-krzysztof.kozlowski@linaro.org>
+ <20221115125310.184012-3-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221115125310.184012-3-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/11/2022 12:15, Herve Codina wrote:
-> The Renesas RZ/N1 USBF controller is an USB2.0 device controller
-> (UDC) available in the Renesas r9a06g032 SoC (RZ/N1 family).
 
-Subject: drop redundant, second "binding".
 
+On 15/11/2022 13:53, Krzysztof Kozlowski wrote:
+> Add new compatible for MSM8998 (compatible with MSM8996) to allow
+> further customizing if needed and to accurately describe the hardware.
 > 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  .../bindings/usb/renesas,rzn1-usbf.yaml       | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/renesas,rzn1-usbf.yaml
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>   arch/arm64/boot/dts/qcom/msm8998.dtsi | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/renesas,rzn1-usbf.yaml b/Documentation/devicetree/bindings/usb/renesas,rzn1-usbf.yaml
-> new file mode 100644
-> index 000000000000..b67e9cea2522
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/renesas,rzn1-usbf.yaml
-> @@ -0,0 +1,68 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/renesas,rzn1-usbf.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas RZ/N1 SoCs USBF (USB Function) controller binding
-
-Drop "binding"
-
-With two above:
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+> diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> index da2dd87e3f4f..320a28232a32 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> @@ -900,7 +900,7 @@ anoc2_smmu: iommu@16c0000 {
+>   		};
+>   
+>   		pcie0: pci@1c00000 {
+> -			compatible = "qcom,pcie-msm8996";
+> +			compatible = "qcom,pcie-msm8998", "qcom,pcie-msm8996";
+>   			reg =	<0x01c00000 0x2000>,
+>   				<0x1b000000 0xf1d>,
+>   				<0x1b000f20 0xa8>,
