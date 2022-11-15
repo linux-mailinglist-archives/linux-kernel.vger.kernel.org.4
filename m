@@ -2,147 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C251629812
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:04:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CDCD6297FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238328AbiKOMEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 07:04:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
+        id S237922AbiKOMDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 07:03:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237900AbiKOMDg (ORCPT
+        with ESMTP id S232839AbiKOMCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:03:36 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883D82936B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:03:01 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id p8so24058591lfu.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:03:01 -0800 (PST)
+        Tue, 15 Nov 2022 07:02:51 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCECF22288
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:02:49 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-367cd2807f2so135106627b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:02:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zaNhfP/nOLQ48+6TzTDF7R1fJQ8t4XkKM7Atq6L3Heg=;
-        b=HhMszbCidv1BjEeyqH+iNPff0dj/tzcenSFpriNx7CLV7PYZcTWKIBiTzXwk/EFCsp
-         EjH4nFNH23GhDS2LQpa3VgHid3bsULTh7Lg4AZsAVoniu2iAB4ZDu9+CrqsqZznzVlFE
-         CRp9DQL9qlF57NJCWaOva57ewkY5k6csI80ofKF31GymsI4VipYOkKmDKjuxSDm2i4FR
-         G3SpZ5cnGmwUzEcn9jaf103ccLQUdiZeW/w9yT/O3+ZC3ACpYIWi58VtTYFPDlM0tBX7
-         KZ9XcDCMr4qMVYILY3MAuaL4Ml5s1bzPlIJhg0hOK6rZcWbZoCFVQ1vuakZtLCsbp5UE
-         kM2g==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ux8QFcJWIOHy95msi/DPXBwY/PKWFOBKNLrmFRGoLJE=;
+        b=wJ2e0xBMeihOIaC8JieBaPJG/TuJHqXQEU2+yn713eLHOW7P0jmjUAJc0FzT3BXupM
+         HAU/iMV1zGrbfC3heH90e44HKBildUEblpYMRHhu9KYqBdsxxjjnnYKuS3LHLTFsAfr9
+         ypRlKjjvaeNGdeX/CYjv99vaNWXU+ZvBP58n8vMspZn8hQmU6ufW269O60upfrH9Izuc
+         YThLq5YDiBnk9WT9nU2U0bcxZSCzRxKa9ddNGdGstZZS3OAi43mhBkJIAch+vNcKNtgY
+         E6sTKZzyHbeU5xXilalnhbbJFwQpPedzrcNmAM363TMM+/jou/Wqp1Rlo/lWHvLl4xsD
+         Zu6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zaNhfP/nOLQ48+6TzTDF7R1fJQ8t4XkKM7Atq6L3Heg=;
-        b=y7Wr7sf8aFoUEI+LQnrq2ANieZ2jHbYGEBB/s70nKp8FPVMO4ft4fckQVGgKV7Ckps
-         f02IKlEkwL3zDbALDj8d1H0IHtLtwKLaZomAXGhK1oAckPXIxccKLLiKgrDr+TvDNkxj
-         OsYzbWUsxZMRNectCf/YBvFKi8viRMnr3SNy0gq0NsyPeoedtH1pVQc2Hxkok4oGiWjz
-         68uvvOtbBUmyxjkdBQbEXfmQ6mEkxXPuekugXjxydZ3FkzR2k9w5xWi90xyGEAURcdug
-         +b5DZqstzqGO0DSf7EpfAe7YFc+Rfzck9iH/NZi1+f3Yf3+nVosMv3upUh3dcLrtMVJi
-         0/5g==
-X-Gm-Message-State: ANoB5plt/i3dLs+1tZJJFNjlC8K1Y/RxMHDIRXQP6ziLXKxXSUZlfdfS
-        Rqvv1Yf2QO4q54PPw0vb+M86xQ==
-X-Google-Smtp-Source: AA0mqf64kKT0ofbo54DaUnDY+YBs9l9fHXVwodgpsd+Yh1/Ebzr2T12keDq5/AyUp3Ez7jpQaMZxUQ==
-X-Received: by 2002:ac2:4f15:0:b0:4ad:23ac:94ef with SMTP id k21-20020ac24f15000000b004ad23ac94efmr5961832lfr.510.1668513781099;
-        Tue, 15 Nov 2022 04:03:01 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id i13-20020ac25d2d000000b004b0b2212315sm2176233lfb.121.2022.11.15.04.02.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 04:03:00 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        quic_srivasam@quicinc.com, quic_plai@quicinc.com
-Subject: [PATCH v2 11/11] ASoC: dt-bindings: qcom,q6apm: Add SM8450 bedais node
-Date:   Tue, 15 Nov 2022 13:02:35 +0100
-Message-Id: <20221115120235.167812-12-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221115120235.167812-1-krzysztof.kozlowski@linaro.org>
-References: <20221115120235.167812-1-krzysztof.kozlowski@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ux8QFcJWIOHy95msi/DPXBwY/PKWFOBKNLrmFRGoLJE=;
+        b=bnuYZ5ouSo13J0XJsedEJIqleZm1F4jl2K7vBXT4yRPF6rnZgygfL7ND6tX50JliFd
+         Gu5/nYosfmrs2q95Gl1nJXBeyg8vavyksDdJ2BGGACeUyDwTDYINM/KvH1TymRIN8f5h
+         eHBvDGJFdlOTAjYcd2uB7iprRzc8tPWtBSMgMNWG9ZeNR/dwOSpo3Hv2SvpvMRdC3KAb
+         d+VCMs4AIuIsnTHlGFk1YKbJQePZAZQVYjhRURJUaDo6QJHNmrPnM9bHIa05/2e45B6F
+         Qcko+k8l2NYhSDsDpTP9x196EoW462AK2OvtTNoiwifM2lMUtdKS/2XEAtitf43WKWKg
+         dh6A==
+X-Gm-Message-State: ANoB5pmhHpKDbFea4aMmWs1EXufx9JALlmV/amXOru6HzU8wthFwG7VF
+        WIsjiNpzQM4KT9w7iBJJxFnw3tNSOTME080AE0BVug==
+X-Google-Smtp-Source: AA0mqf4peP/pfzhfBwyPbXRi9SZmzgVzjr7Zhw8DsKipwrDO00grFNS7ArT8NL7616EwncYxAW6L0fn/wTkz8o7aafs=
+X-Received: by 2002:a81:4f42:0:b0:37c:a694:25b9 with SMTP id
+ d63-20020a814f42000000b0037ca69425b9mr14221008ywb.259.1668513768782; Tue, 15
+ Nov 2022 04:02:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221114124448.729235104@linuxfoundation.org>
+In-Reply-To: <20221114124448.729235104@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 15 Nov 2022 17:32:37 +0530
+Message-ID: <CA+G9fYs7z7hbf0rcKhhyAkROTnQHnbmOzZ+oTMbW=Es6pu159A@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/131] 5.15.79-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On SM8450 and SC8280XP, the Q6APM is a bit different:
-1. It is used as a platform DAI link, so it needs #sound-dai-cells.
-2. It has two DAI children, so add new "bedais" node.
+On Mon, 14 Nov 2022 at 18:24, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.79 release.
+> There are 131 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 16 Nov 2022 12:44:21 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.79-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Results from Linaro's test farm.
+A part from allmodconfig build failures on arm and arm64
+other test reports are looking ok.
 
----
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Cc: quic_srivasam@quicinc.com
-Cc: quic_plai@quicinc.com
----
- .../devicetree/bindings/sound/qcom,q6apm.yaml    | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+## Build
+* kernel: 5.15.79-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: b6ea7e152210f358e39d05a567697a098aa16e7a
+* git describe: v5.15.78-132-gb6ea7e152210
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.78-132-gb6ea7e152210
 
-diff --git a/Documentation/devicetree/bindings/sound/qcom,q6apm.yaml b/Documentation/devicetree/bindings/sound/qcom,q6apm.yaml
-index 7acb832aa557..cd434e8268ce 100644
---- a/Documentation/devicetree/bindings/sound/qcom,q6apm.yaml
-+++ b/Documentation/devicetree/bindings/sound/qcom,q6apm.yaml
-@@ -18,14 +18,24 @@ properties:
-     enum:
-       - qcom,q6apm
- 
-+  bedais:
-+    type: object
-+    $ref: /schemas/sound/qcom,q6apm-lpass-dais.yaml#
-+    unevaluatedProperties: false
-+    description: Qualcomm DSP audio ports
-+
-   dais:
-     type: object
-     $ref: /schemas/sound/qcom,q6apm-dai.yaml#
-     unevaluatedProperties: false
-     description: Qualcomm DSP audio ports
- 
-+  '#sound-dai-cells':
-+    const: 0
-+
- required:
-   - compatible
-+  - bedais
-   - dais
- 
- unevaluatedProperties: false
-@@ -41,11 +51,17 @@ examples:
-         service@1 {
-             reg = <GPR_APM_MODULE_IID>;
-             compatible = "qcom,q6apm";
-+            #sound-dai-cells = <0>;
-             qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
- 
-             dais {
-                 compatible = "qcom,q6apm-dais";
-                 iommus = <&apps_smmu 0x1801 0x0>;
-             };
-+
-+            bedais {
-+                compatible = "qcom,q6apm-lpass-dais";
-+                #sound-dai-cells = <1>;
-+            };
-         };
-     };
--- 
-2.34.1
+## Test Regressions (compared to v5.15.78)
 
+## Metric Regressions (compared to v5.15.78)
+
+## Test Fixes (compared to v5.15.78)
+
+## Metric Fixes (compared to v5.15.78)
+
+## Test result summary
+total: 63728, pass: 54817, fail: 1467, skip: 7178, xfail: 266
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 289 total, 287 passed, 2 failed
+* arm64: 80 total, 77 passed, 3 failed
+* i386: 68 total, 64 passed, 4 failed
+* mips: 54 total, 54 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 60 passed, 0 failed
+* riscv: 20 total, 20 passed, 0 failed
+* s390: 24 total, 24 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 76 total, 72 passed, 4 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-kvm
+* kselftest-lib
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-openat2
+* kselftest-seccomp
+* kselftest-timens
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
