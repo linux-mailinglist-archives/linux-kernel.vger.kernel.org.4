@@ -2,163 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB24629270
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DAD629274
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232478AbiKOH2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 02:28:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46484 "EHLO
+        id S232388AbiKOH3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 02:29:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbiKOH2L (ORCPT
+        with ESMTP id S229966AbiKOH3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 02:28:11 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1508218377
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:28:06 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id b131so15537078yba.11
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:28:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=t2MSqieIloRSX5j4XySxPNiECkBoHXA8aafgFPvChpc=;
-        b=QgfBWx5jr+T9D0OPatz9aPNvycrIr4iLDGczMIzC44uZC9r3WFasL9kXz9bxT2FW/x
-         glqG1PaWw4xvuOrV67TlUP7yxQQloJzA5Nr3tRkrKnPpJCIc+coc18Cb5PhjpivrwkGg
-         8b+QBJu5yLEI9vWBdYYizjJqj8S+VftW/cgxTvZ1ef9mo5HH75/d6Jg3qOQvpy18ka0Q
-         y8GrQUcOykvgOiJhC94mg2ZxY6M5NaTQ6QQsxQcYUmgb6JwNjI+mo5lQ/mVik6dgg4wG
-         mCkOn+WDOFXogwYbNEDgriUju/CHlBrUvJ5r+WKPp+1BbyvCXBoi2OE1E5DCvpqBtLnh
-         N5Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t2MSqieIloRSX5j4XySxPNiECkBoHXA8aafgFPvChpc=;
-        b=NK6m1Of8YSXVlFtf7XTgLQkk8nocxzOkAVjKutOAmUfcT5XTKu9HoBG+KDvcPg2YtM
-         rp3fLPDv+D70IYbdaK2AH2EGI2mHftxFS+7XYjHg/1zCDm8tjgBC9ZoWCcLxeeBIFyka
-         IXs6TCbTV+IdspVYZpnDOl7ObK3E19+KqWBneAbwSpezlYwu1pDqNR1N9c64qCRPxjHx
-         cyRDU5837Qbe3RiIzMvBvEIzzA80lK27JjypTG4A6gk2sQ7Lci9NuP50Q4F+FXplSccQ
-         KkZHzM5b8DZ1B12AzS2Vl5x/5LLr7xVj1U5zwJ51DOx6P0l4Ujo9vAqo1BPvSK7ixYDa
-         4WEA==
-X-Gm-Message-State: ANoB5pmGdTbD/2O8Uw9Zo5d1imPN8ekXEtpxVvt4Xkp2G41y6SrxNL6p
-        IPE4yk46y7EOn5aAAs3bVnXQF08HuW9pEaCT2lzWcX8rGf0SHw==
-X-Google-Smtp-Source: AA0mqf6WThw8/wCMg/frn8fJbsp9aqZO/VwChiLVnMcfDNy/uDXXgreCDrwyobhbVXklWp54j9nYJImA/KC+mML6N7Y=
-X-Received: by 2002:a25:2358:0:b0:6d2:5835:301f with SMTP id
- j85-20020a252358000000b006d25835301fmr15945622ybj.336.1668497285091; Mon, 14
- Nov 2022 23:28:05 -0800 (PST)
+        Tue, 15 Nov 2022 02:29:01 -0500
+Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25C95F6D;
+        Mon, 14 Nov 2022 23:28:56 -0800 (PST)
+Received: from ([60.208.111.195])
+        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id JIR00150;
+        Tue, 15 Nov 2022 15:28:50 +0800
+Received: from localhost.localdomain (10.180.206.146) by
+ jtjnmail201612.home.langchao.com (10.100.2.12) with Microsoft SMTP Server id
+ 15.1.2507.12; Tue, 15 Nov 2022 15:28:51 +0800
+From:   wangchuanlei <wangchuanlei@inspur.com>
+To:     <echaudro@redhat.com>, <pshelar@ovn.org>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC:     <wangpeihui@inspur.com>, <netdev@vger.kernel.org>,
+        <dev@openvswitch.org>, <linux-kernel@vger.kernel.org>,
+        wangchuanlei <wangchuanlei@inspur.com>
+Subject: [PATCH v2] openvswitch: Add support to count upall packets
+Date:   Tue, 15 Nov 2022 02:28:48 -0500
+Message-ID: <20221115072848.589294-1-wangchuanlei@inspur.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 15 Nov 2022 12:57:53 +0530
-Message-ID: <CA+G9fYuXG7Rh_A8W1NRVWbgWjozwzxzQY7tYw7bA4NsCuSovMg@mail.gmail.com>
-Subject: WARNING: CPU: 0 PID: 1111 at arch/arm64/kernel/fpsimd.c:464 fpsimd_save+0x170/0x1b0
-To:     open list <linux-kernel@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.180.206.146]
+tUid:   20221115152850f0900d0604a9d1dd08f4ed271e46b7d4
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following kernel warning noticed while running kselftest arm64 sve-ptrace
-on qemu-arm64 on ampere-altra server.
+Added the total number of upcalls and the total of upcall failures.
+Due to ovs-userspace do not support NLA_NESTED, here still use the
+"struct ovs_vport_upcall_stats"
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Thank you
+wangchuanlei
 
- /usr/bin/qemu-system-aarch64 -cpu max,pauth-impdef=on \
- -machine virt-2.10 \
- -nographic \
- -net nic,model=virtio,macaddr=BA:DD:AD:FC:09:12 \
- -net tap -m 4096 -monitor none \
- -kernel Image.gz --append "console=ttyAMA0 root=/dev/vda rw"
- -hda lkft-kselftest-image-juno-20221114150409.rootfs.ext4
- -smp 4 -nographic
+On 14 Sep 2022, at 14:14, wangchuanlei wrote:
 
-Boot log:
----------
-[    0.000000] Linux version 6.0.9-rc1 (tuxmake@tuxmake)
-(aarch64-linux-gnu-gcc (Debian 11.3.0-6) 11.3.0, GNU ld (GNU Binutils
-for Debian) 2.39) #1 SMP PREEMPT @1668438377
-[    0.000000] random: crng init done
-[    0.000000] Machine model: linux,dummy-virt
+> Add support to count upcall packets on every interface.
+> I always encounter high cpu use of ovs-vswictchd, this help to check
+> which interface send too many packets without open vlog/set switch,
+> and have no influence on datapath.
 
+Hi,
 
-# selftests: arm64: sve-ptrace
-# ok 680 # SKIP SVE set FPSIMD get SVE for VL 2704
-# ok 681 Set SVE VL 2720
+I did not do a full review, but I think we should not try to make the
+ same mistake as before and embed a structure inside a netlink message.
 
-[  422.607034] ------------[ cut here ]------------
-[  422.615382] WARNING: CPU: 0 PID: 1111 at
-arch/arm64/kernel/fpsimd.c:464 fpsimd_save+0x170/0x1b0
-[  422.617588] Modules linked in: cfg80211 bluetooth rfkill
-crct10dif_ce sm3_ce sm3 sha3_ce sha512_ce sha512_arm64 fuse drm
-[  422.619758] CPU: 0 PID: 1111 Comm: sve-ptrace Not tainted 6.0.9-rc1 #1
-[  422.620402] Hardware name: linux,dummy-virt (DT)
-[  422.620958] pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[  422.621614] pc : fpsimd_save+0x170/0x1b0
-[  422.621988] lr : fpsimd_save+0xd8/0x1b0
-[  422.622307] sp : ffff800008f3bb00
-[  422.622612] x29: ffff800008f3bb00 x28: ffffae14dd664bc0 x27: 0000000000000001
-[  422.623519] x26: ffff0000ff773858 x25: 0000000000000000 x24: ffff0000c0994fa8
-[  422.624102] x23: 0000000000000001 x22: 0000000000000100 x21: ffff0000ff75f0b0
-[  422.624706] x20: ffff51ec22a8b000 x19: ffffae14dccd40b0 x18: 0000000000000000
-[  422.625292] x17: ffff51ec22a8b000 x16: 0000000000000000 x15: 0000000000000000
-[  422.626041] x14: 0000000000000003 x13: 0000000000000000 x12: 0000000000000002
-[  422.626647] x11: ffffae14ddbee840 x10: 0000000000000312 x9 : ffffae14da818210
-[  422.627326] x8 : ffff0000c09935c0 x7 : ffffae14de2b8d08 x6 : 0000000000000000
-[  422.627889] x5 : 000000c91075a4a8 x4 : 0000000000000000 x3 : 0000000000000001
-[  422.628487] x2 : ffff51ec22a8b000 x1 : 0000000000000204 x0 : 0000000000000010
-[  422.629203] Call trace:
-[  422.629579]  fpsimd_save+0x170/0x1b0
-[  422.630014]  fpsimd_thread_switch+0x2c/0xc4
-[  422.630431]  __switch_to+0x20/0x160
-[  422.630745]  __schedule+0x380/0xb90
-[  422.631038]  preempt_schedule_irq+0x4c/0x130
-[  422.631386]  el1_interrupt+0x4c/0x64
-[  422.631689]  el1h_64_irq_handler+0x18/0x24
-[  422.632037]  el1h_64_irq+0x64/0x68
-[  422.632335]  do_page_fault+0x31c/0x4d0
-[  422.632660]  do_translation_fault+0xd8/0x100
-[  422.632993]  do_mem_abort+0x58/0xb0
-[  422.633311]  el0_ia+0x8c/0x134
-[  422.633685]  el0t_64_sync_handler+0x134/0x140
-[  422.634061]  el0t_64_sync+0x18c/0x190
-[  422.634580] irq event stamp: 654
-[  422.634923] hardirqs last  enabled at (653): [<ffffae14dbeafc94>]
-exit_to_kernel_mode+0x34/0x130
-[  422.635713] hardirqs last disabled at (654): [<ffffae14dbeb7700>]
-__schedule+0x3f0/0xb90
-[  422.636309] softirqs last  enabled at (650): [<ffffae14da810be4>]
-__do_softirq+0x514/0x62c
-[  422.636877] softirqs last disabled at (637): [<ffffae14da8b4f58>]
-__irq_exit_rcu+0x164/0x19c
-[  422.637446] ---[ end trace 0000000000000000 ]---
+You are adding “struct ovs_vport_upcall_stats” but in theory,
+ you could have just added the new entry to “ovs_vport_stats”.
+ But this is breaking userspace as it expects an exact structure size :(
 
-Full test log:
-https://lkft.validation.linaro.org/scheduler/job/5847349#L2206
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.8-191-gf8896c3ebbcf/testrun/13007451/suite/log-parser-test/test/check-kernel-exception/log
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.8-191-gf8896c3ebbcf/testrun/13007451/suite/log-parser-test/test/check-kernel-exception/details/
+So I think the right approach would be to have “
+OVS_VPORT_ATTR_UPCALL_STATS” be an NLA_NESTED type, and have
+individual stat attributes as NLA_U64 (or whatever type you need).
 
-metadata:
-  git_ref: linux-6.0.y
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-  git_sha: f8896c3ebbcfcc053d9c27413bea3af94c01fd71
-  git_describe: v6.0.8-191-gf8896c3ebbcf
-  kernel_version: 6.0.9-rc1
-  kernel-config: https://builds.tuxbuild.com/2HXisCgbMlQAU85bS1QC4TvzydK/config
-  build-url: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/pipelines/694074125
-  artifact-location: https://builds.tuxbuild.com/2HXisCgbMlQAU85bS1QC4TvzydK
-  toolchain: gcc-11
+What is also confusing is that you use upcall_packets in
+ ovs_vport_upcall_stats, which to me are the total of up calls,
+but you called it n_missed in your stats. I think you should try to
+ avoid missed in the upcall path, and just call it n_upcall_packets also.
 
+In addition, I think you should keep two types of statics, and make them
+ available, namely the total number of upcalls and the total of upcall
+failures.
 
---
-Linaro LKFT
-https://lkft.linaro.org
+Cheers,
+
+Eelco
+
+Signed-off-by: wangchuanlei <wangchuanlei@inspur.com>
+---
+ include/uapi/linux/openvswitch.h |  6 ++++
+ net/openvswitch/datapath.c       | 54 +++++++++++++++++++++++++++++++-
+ net/openvswitch/datapath.h       | 12 +++++++
+ net/openvswitch/vport.c          | 33 +++++++++++++++++++
+ net/openvswitch/vport.h          |  4 +++
+ 5 files changed, 108 insertions(+), 1 deletion(-)
+
+diff --git a/include/uapi/linux/openvswitch.h b/include/uapi/linux/openvswitch.h
+index 94066f87e9ee..bb671d92b711 100644
+--- a/include/uapi/linux/openvswitch.h
++++ b/include/uapi/linux/openvswitch.h
+@@ -126,6 +126,11 @@ struct ovs_vport_stats {
+ 	__u64   tx_dropped;		/* no space available in linux  */
+ };
+ 
++struct ovs_vport_upcall_stats {
++	__u64   upcall_success;             /* total packets upcalls  succeed */
++	__u64   upcall_fail;				/* total packets upcalls  failed */
++};
++
+ /* Allow last Netlink attribute to be unaligned */
+ #define OVS_DP_F_UNALIGNED	(1 << 0)
+ 
+@@ -277,6 +282,7 @@ enum ovs_vport_attr {
+ 	OVS_VPORT_ATTR_PAD,
+ 	OVS_VPORT_ATTR_IFINDEX,
+ 	OVS_VPORT_ATTR_NETNSID,
++	OVS_VPORT_ATTR_UPCALL_STATS, /* struct ovs_vport_upcall_stats */
+ 	__OVS_VPORT_ATTR_MAX
+ };
+ 
+diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
+index c8a9075ddd0a..8b8ea95f94ae 100644
+--- a/net/openvswitch/datapath.c
++++ b/net/openvswitch/datapath.c
+@@ -209,6 +209,28 @@ static struct vport *new_vport(const struct vport_parms *parms)
+ 	return vport;
+ }
+ 
++static void ovs_vport_upcalls(struct sk_buff *skb,
++			      const struct dp_upcall_info *upcall_info,
++			      bool upcall_success)
++{
++	if (upcall_info->cmd == OVS_PACKET_CMD_MISS ||
++	    upcall_info->cmd == OVS_PACKET_CMD_ACTION) {
++		const struct vport *p = OVS_CB(skb)->input_vport;
++		struct vport_upcall_stats_percpu *vport_stats;
++		u64 *stats_counter_upcall;
++
++		vport_stats = this_cpu_ptr(p->vport_upcall_stats_percpu);
++		if (upcall_success)
++			stats_counter_upcall = &vport_stats->n_upcall_success;
++		else
++			stats_counter_upcall = &vport_stats->n_upcall_fail;
++
++		u64_stats_update_begin(&vport_stats->syncp);
++		(*stats_counter_upcall)++;
++		u64_stats_update_end(&vport_stats->syncp);
++	}
++}
++
+ void ovs_dp_detach_port(struct vport *p)
+ {
+ 	ASSERT_OVSL();
+@@ -216,6 +238,9 @@ void ovs_dp_detach_port(struct vport *p)
+ 	/* First drop references to device. */
+ 	hlist_del_rcu(&p->dp_hash_node);
+ 
++	/* Free percpu memory */
++	free_percpu(p->vport_upcall_stats_percpu);
++
+ 	/* Then destroy it. */
+ 	ovs_vport_del(p);
+ }
+@@ -305,8 +330,12 @@ int ovs_dp_upcall(struct datapath *dp, struct sk_buff *skb,
+ 		err = queue_userspace_packet(dp, skb, key, upcall_info, cutlen);
+ 	else
+ 		err = queue_gso_packets(dp, skb, key, upcall_info, cutlen);
+-	if (err)
++	if (err) {
++		ovs_vport_upcalls(skb, upcall_info, false);
+ 		goto err;
++	} else {
++		ovs_vport_upcalls(skb, upcall_info, true);
++	}
+ 
+ 	return 0;
+ 
+@@ -1825,6 +1854,13 @@ static int ovs_dp_cmd_new(struct sk_buff *skb, struct genl_info *info)
+ 		goto err_destroy_portids;
+ 	}
+ 
++	vport->vport_upcall_stats_percpu =
++				netdev_alloc_pcpu_stats(struct vport_upcall_stats_percpu);
++	if (!vport->vport_upcall_stats_percpu) {
++		err = -ENOMEM;
++		goto err_destroy_portids;
++	}
++
+ 	err = ovs_dp_cmd_fill_info(dp, reply, info->snd_portid,
+ 				   info->snd_seq, 0, OVS_DP_CMD_NEW);
+ 	BUG_ON(err < 0);
+@@ -2068,6 +2104,7 @@ static int ovs_vport_cmd_fill_info(struct vport *vport, struct sk_buff *skb,
+ {
+ 	struct ovs_header *ovs_header;
+ 	struct ovs_vport_stats vport_stats;
++	struct ovs_vport_upcall_stats vport_upcall_stats;
+ 	int err;
+ 
+ 	ovs_header = genlmsg_put(skb, portid, seq, &dp_vport_genl_family,
+@@ -2097,6 +2134,13 @@ static int ovs_vport_cmd_fill_info(struct vport *vport, struct sk_buff *skb,
+ 			  OVS_VPORT_ATTR_PAD))
+ 		goto nla_put_failure;
+ 
++	ovs_vport_get_upcall_stats(vport, &vport_upcall_stats);
++	if (nla_put_64bit(skb, OVS_VPORT_ATTR_UPCALL_STATS,
++			  sizeof(struct ovs_vport_upcall_stats),
++			  &vport_upcall_stats,
++			  OVS_VPORT_ATTR_PAD))
++		goto nla_put_failure;
++
+ 	if (ovs_vport_get_upcall_portids(vport, skb))
+ 		goto nla_put_failure;
+ 
+@@ -2278,6 +2322,14 @@ static int ovs_vport_cmd_new(struct sk_buff *skb, struct genl_info *info)
+ 		goto exit_unlock_free;
+ 	}
+ 
++	vport->vport_upcall_stats_percpu =
++		netdev_alloc_pcpu_stats(struct vport_upcall_stats_percpu);
++
++	if (!vport->vport_upcall_stats_percpu) {
++		err = -ENOMEM;
++		goto exit_unlock_free;
++	}
++
+ 	err = ovs_vport_cmd_fill_info(vport, reply, genl_info_net(info),
+ 				      info->snd_portid, info->snd_seq, 0,
+ 				      OVS_VPORT_CMD_NEW, GFP_KERNEL);
+diff --git a/net/openvswitch/datapath.h b/net/openvswitch/datapath.h
+index 0cd29971a907..2f40db78d617 100644
+--- a/net/openvswitch/datapath.h
++++ b/net/openvswitch/datapath.h
+@@ -50,6 +50,18 @@ struct dp_stats_percpu {
+ 	struct u64_stats_sync syncp;
+ };
+ 
++/**
++ * struct vport_upcall_stats_percpu - per-cpu packet upcall statistics for
++ * a given vport.
++ * @n_upcall_success: Number of packets that upcall to userspace succeed.
++ * @n_upcall_fail:    Number of packets that upcall to userspace failed.
++ */
++struct vport_upcall_stats_percpu {
++	u64 n_upcall_success;
++	u64 n_upcall_fail;
++	struct u64_stats_sync syncp;
++};
++
+ /**
+  * struct dp_nlsk_pids - array of netlink portids of for a datapath.
+  *                       This is used when OVS_DP_F_DISPATCH_UPCALL_PER_CPU
+diff --git a/net/openvswitch/vport.c b/net/openvswitch/vport.c
+index 82a74f998966..39b018da685e 100644
+--- a/net/openvswitch/vport.c
++++ b/net/openvswitch/vport.c
+@@ -284,6 +284,39 @@ void ovs_vport_get_stats(struct vport *vport, struct ovs_vport_stats *stats)
+ 	stats->tx_packets = dev_stats->tx_packets;
+ }
+ 
++/**
++ *	ovs_vport_get_upcall_stats - retrieve upcall stats
++ *
++ * @vport: vport from which to retrieve the stats
++ * @ovs_vport_upcall_stats: location to store stats
++ *
++ * Retrieves upcall stats for the given device.
++ *
++ * Must be called with ovs_mutex or rcu_read_lock.
++ */
++void ovs_vport_get_upcall_stats(struct vport *vport, struct ovs_vport_upcall_stats *stats)
++{
++	int i;
++
++	stats->upcall_success = 0;
++	stats->upcall_fail = 0;
++
++	for_each_possible_cpu(i) {
++		const struct vport_upcall_stats_percpu *percpu_upcall_stats;
++		struct vport_upcall_stats_percpu local_stats;
++		unsigned int start;
++
++		percpu_upcall_stats = per_cpu_ptr(vport->vport_upcall_stats_percpu, i);
++		do {
++			start = u64_stats_fetch_begin_irq(&percpu_upcall_stats->syncp);
++			local_stats = *percpu_upcall_stats;
++		} while (u64_stats_fetch_retry_irq(&percpu_upcall_stats->syncp, start));
++
++		stats->upcall_success += local_stats.n_upcall_success;
++		stats->upcall_fail += local_stats.n_upcall_fail;
++	}
++}
++
+ /**
+  *	ovs_vport_get_options - retrieve device options
+  *
+diff --git a/net/openvswitch/vport.h b/net/openvswitch/vport.h
+index 7d276f60c000..6defacd6d718 100644
+--- a/net/openvswitch/vport.h
++++ b/net/openvswitch/vport.h
+@@ -32,6 +32,9 @@ struct vport *ovs_vport_locate(const struct net *net, const char *name);
+ 
+ void ovs_vport_get_stats(struct vport *, struct ovs_vport_stats *);
+ 
++void ovs_vport_get_upcall_stats(struct vport *vport,
++				struct ovs_vport_upcall_stats *stats);
++
+ int ovs_vport_set_options(struct vport *, struct nlattr *options);
+ int ovs_vport_get_options(const struct vport *, struct sk_buff *);
+ 
+@@ -78,6 +81,7 @@ struct vport {
+ 	struct hlist_node hash_node;
+ 	struct hlist_node dp_hash_node;
+ 	const struct vport_ops *ops;
++	struct vport_upcall_stats_percpu __percpu *vport_upcall_stats_percpu;
+ 
+ 	struct list_head detach_list;
+ 	struct rcu_head rcu;
+-- 
+2.27.0
+
