@@ -2,135 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49632629A65
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F481629A85
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:32:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbiKONbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:31:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
+        id S238345AbiKONcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:32:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238130AbiKONbZ (ORCPT
+        with ESMTP id S238409AbiKONcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:31:25 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BA3DFC5;
-        Tue, 15 Nov 2022 05:31:24 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E57021F8C7;
-        Tue, 15 Nov 2022 13:31:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668519082; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6S/6qWoM9bvr/F9wymPHSwbtM7nJIyGIcCGcRNv81bo=;
-        b=nRc2e39ELC7qec2QCbcBqak9znvCwWEA8u/ClgripvGSL3uCRohkLqqN4LZb/WbGYdn1yG
-        lIg5pSeJLRmmiAGEmWBcXnKTp/eEXExg6sNDynNQTc6jT94JA84Ud6wzEhRHgVhe6Arz/g
-        gszY/XtI64D+weNiedTmNo9bTFFXogE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668519082;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6S/6qWoM9bvr/F9wymPHSwbtM7nJIyGIcCGcRNv81bo=;
-        b=TyVcir2l7dmmsK0P0RXY3Ts8NnEqnyvECLb0kSHuhsVbIksp9rtl1mDSiwsNmIZe8gsPM2
-        qYAnPc36x++uuUAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8D62213273;
-        Tue, 15 Nov 2022 13:31:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id F8OlIKqUc2MRZQAAMHmgww
-        (envelope-from <mliska@suse.cz>); Tue, 15 Nov 2022 13:31:22 +0000
-Message-ID: <858176b3-a70e-01ce-4a56-96cb031f16c5@suse.cz>
-Date:   Tue, 15 Nov 2022 14:31:22 +0100
+        Tue, 15 Nov 2022 08:32:00 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAB329342;
+        Tue, 15 Nov 2022 05:31:39 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id 130so14097234pfu.8;
+        Tue, 15 Nov 2022 05:31:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SDCfTqp5RHmpPPiYAMZqgPg+FlYe7rD3rpk+dlOlmrs=;
+        b=KrwYvRnprSGRln3TvOkC1YiP6Df+3DLqQfIYTk2EiIbrltz1T4KtUySjLgIBWDzDcb
+         cVg5xSn7ARmm4NQ3818YdLO3qynehO02Svna5kXSG8afMINz3ycoBmCeiJqH8UlkEC+o
+         1vyNhVAtowXtOKXPwT4e8ZUetr1cWzWKL+TfSqssgLWsAPZRAUmziml9jJXaEBLfJwcc
+         Q5KXTWE13kC4/6tvcIxv8ToSD4WDfbFAtEbjqyn7343Q/9VmUZxCdG0CD5BcCWarKb+V
+         SY0H/OW7Fiy0y/0nKLdoLVC0/99/3negtgyRr4/cirsfLrPnMGYZmnI1Z0NXMFu9H5Wy
+         oKag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SDCfTqp5RHmpPPiYAMZqgPg+FlYe7rD3rpk+dlOlmrs=;
+        b=U05mLKhK1jbGS0CET/i5tE8U/JvnQ6dTnqabCXvq8WhLbmnRDO9No3s3PFNiCo6ODV
+         pfE0sEvOYkao02nWGNzRCWxJKc6T28vcXpuV5C7EyFMb0MM2gTITg969585WGO7GyzJE
+         w1ZW9IWDSPvjVTtBvz7iHI2eYx/cyXbJc602j1qa2a8ShZm4yRNZJZdx6rGiBXBjd4+l
+         r6hlfSGU+O8qCsfm9SpPOY11AeyZ0+knEVxsMUHx/Bw0RGDV5bZeroGyD13H6hM5OtsK
+         ekptxUWRERmb68O4kfbrMhNfSUCP7Ra66k82rkJGW78GCY1Oesx3kZda63/soIZN4PYI
+         xPCA==
+X-Gm-Message-State: ANoB5pkSVyt0Q9DRNTZForL+3g26TA7hUtOhzGqoEftanahkIlsQnwuH
+        YZWcxc0wvGNMYezgEwPPzdM=
+X-Google-Smtp-Source: AA0mqf6ovMAjD8mvMI4/+0p+hFXFvgTHeISLflHSnHfj/zqnwHHXWaPzQysZQnFtnWXnoEXHS5IMYQ==
+X-Received: by 2002:a05:6a00:26c4:b0:563:b88c:8d34 with SMTP id p4-20020a056a0026c400b00563b88c8d34mr18459182pfw.68.1668519098569;
+        Tue, 15 Nov 2022 05:31:38 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i65-20020a628744000000b0056b6c7a17c6sm9085486pfe.12.2022.11.15.05.31.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 05:31:37 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 15 Nov 2022 05:31:36 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/9] thermal/core: Protect thermal device operations
+ against removal
+Message-ID: <20221115133136.GC4189373@roeck-us.net>
+References: <20221110152500.3032655-1-linux@roeck-us.net>
+ <CAJZ5v0j50TWszcRWkb_m4BDQ_gEpCuJDR2EuOJWN8zvBf_KkUw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 30/46] Kbuild, lto: Add Link Time Optimization support
-Content-Language: en-US
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org, Richard Biener <RGuenther@suse.com>,
-        Jan Hubicka <jh@suse.de>, "H . J . Lu" <hjl.tools@gmail.com>,
-        Don Zickus <dzickus@redhat.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jiri Slaby <jslaby@suse.cz>
-References: <20221114114344.18650-1-jirislaby@kernel.org>
- <20221114114344.18650-31-jirislaby@kernel.org>
- <20221114185545.yobf3faky2njugfq@treble>
-From:   =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>
-In-Reply-To: <20221114185545.yobf3faky2njugfq@treble>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0j50TWszcRWkb_m4BDQ_gEpCuJDR2EuOJWN8zvBf_KkUw@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/14/22 19:55, Josh Poimboeuf wrote:
-> On Mon, Nov 14, 2022 at 12:43:28PM +0100, Jiri Slaby (SUSE) wrote:
->> +++ b/Documentation/kbuild/lto-build.rst
->> @@ -0,0 +1,76 @@
->> +=====================================================
->> +gcc link time optimization (LTO) for the Linux kernel
->> +=====================================================
->> +
->> +Link Time Optimization allows the compiler to optimize the complete program
->> +instead of just each file.
->> +
->> +The compiler can inline functions between files and do various other global
->> +optimizations, like specializing functions for common parameters,
->> +determing when global variables are clobbered, making functions pure/const,
->> +propagating constants globally, removing unneeded data and others.
->> +
->> +It will also drop unused functions which can make the kernel
->> +image smaller in some circumstances, in particular for small kernel
->> +configurations.
->> +
->> +For small monolithic kernels it can throw away unused code very effectively
->> +(especially when modules are disabled) and usually shrinks
->> +the code size.
->> +
->> +Build time and memory consumption at build time will increase, depending
->> +on the size of the largest binary. Modular kernels are less affected.
->> +With LTO incremental builds are less incremental, as always the whole
->> +binary needs to be re-optimized (but not re-parsed)
->> +
->> +Oopses can be somewhat more difficult to read, due to the more aggressive
->> +inlining: it helps to use scripts/faddr2line.
->> +
->> +It is currently incompatible with live patching.
+On Mon, Nov 14, 2022 at 07:06:57PM +0100, Rafael J. Wysocki wrote:
+> On Thu, Nov 10, 2022 at 4:25 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > Accesses to thermal zones, and with it to thermal zone device operations,
+> > are still possible after the thermal zone device has been unregistered.
+> > For example, thermal_zone_get_temp() can be called from temp_show()
+> > in thermal_sysfs.c if the sysfs attribute was opened before the thermal
+> > device was unregistered. This is problematic and may result in crashes
+> > since the operations data structure and the underlying code may be gone
+> > when the calls are made.
+> >
+> > The following series solves the problem by protecting accesses to thermal
+> > device operations with the thermal device mutex, and by verifying that the
+> > thermal device is still registered after the mutex has been acquired.
+> >
+> > This was previously sent as RFC/RFT as single patch [1]. The code was reworked
+> > to match thermal subsystem changes made between v6.0 and v6.1, and it was
+> > split into several patches to simplify review.
+> >
+> > [1] https://lore.kernel.org/linux-pm/20221004033936.1047691-1-linux@roeck-us.net/
+> >
+> > v2: Improved documentation, rearranged code.
+> >     No functional changes. See individual patches for details.
+> >
+> > ----------------------------------------------------------------
+> > Guenter Roeck (9):
+> >       thermal/core: Destroy thermal zone device mutex in release function
+> >       thermal/core: Delete device under thermal device zone lock
+> >       thermal/core: Ensure that thermal device is registered in thermal_zone_get_temp
+> >       thermal/core: Move parameter validation from __thermal_zone_get_temp to thermal_zone_get_temp
+> >       thermal/core: Introduce locked version of thermal_zone_device_update
+> >       thermal/core: Protect hwmon accesses to thermal operations with thermal zone mutex
+> >       thermal/core: Protect sysfs accesses to thermal operations with thermal zone mutex
+> >       thermal/core: Remove thermal_zone_set_trips()
+> >       thermal/core: Protect thermal device operations against thermal device removal
+> >
+> >  drivers/thermal/thermal_core.c    | 76 +++++++++++++++++++++++--------------
+> >  drivers/thermal/thermal_core.h    |  3 +-
+> >  drivers/thermal/thermal_helpers.c | 67 +++++++++++++++++++++------------
+> >  drivers/thermal/thermal_hwmon.c   | 10 ++++-
+> >  drivers/thermal/thermal_sysfs.c   | 79 ++++++++++++++++++++++++++++++++-------
+> >  5 files changed, 168 insertions(+), 67 deletions(-)
 > 
-> ... because ?
+> All applied as 6.2 material, thanks!
 
-There's no fundamental reason why live patching can't coexist with -flto.
+Thanks a lot!
 
-We removed the sorry message for GCC 13.1 release:
-https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=1a308905c1baf64d0ea4d09d7d92b55e79a2a339
-when it comes to -flive-patching=inline-clone option.
-
-But it seems Linux does not utilize the option (based on git grep):
-https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#index-flive-patching
-
-That said, I would remove this limitation as LTO can make creation of live patches
-more complicated, but fundamentally there's no barrier.
-
-Thanks,
-Martin
+Guenter
