@@ -2,162 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1410662AE12
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:16:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D121462AE18
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiKOWQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 17:16:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
+        id S230150AbiKOWRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 17:17:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiKOWQy (ORCPT
+        with ESMTP id S229607AbiKOWRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:16:54 -0500
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6EFD95
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:16:51 -0800 (PST)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id E0D8BC009; Tue, 15 Nov 2022 23:16:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1668550615; bh=OZL5LNQ/qoo+PMydbsm4DsIY24R1XznjxSjLJYR8vVM=;
+        Tue, 15 Nov 2022 17:17:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C12271F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:17:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8632E61522
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 22:17:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D82BC433C1;
+        Tue, 15 Nov 2022 22:17:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668550652;
+        bh=0hu7rKCEN7EFEfQlBLLzIaScplCM3c5RZS+5NSeqKAY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fh6HyKDf0DVD+mvNnRo1MlBIY64D8IAD+YqyBw55Q9Y8CTc1xc22BhpXIJbFZtMiO
-         v1Tl3w2Id4eLacpHimdWenZzVHR1cVnLcumorPcujCWfyawEM61vqpkqCEfD5pcKMQ
-         fm1/De+3UDCKCFSVKcSPeD4b33KS7AEb5X17orxTYnLKyn7GuKpA7Z85qziIoKhKvx
-         EMbW9GL6Z3HuzvU2W5LmTTJEkL8GVP9hONHgDz4+jeAWqYuCJQWlIewTCWm8M6XBz4
-         +Ebhmbzy2SRSwCU7i1aHlDxWIyve48PRdxOVlEHW7eAc3TPXfMS3/nDbkJ8YJZ6TX2
-         FRj7AZbw7yDRA==
+        b=pEMH4orDzHDiNvbLvQQI0vvUFneS7XXW+lBWsmjjvGTxHw7FthyZ8ACBRJ9ZAafEp
+         8fXBRcxEjfmu/ZkqgZg6FjJqrL461SNq4SN3KBAlqcrAxI+0UWreMhHdkCZBExDDyg
+         bt9Rofs8zCs3WqEiSDNYCoWQhf9AFb/TpwOIzVmS3LIIViZnio42Z3WQGN2cBNDTV0
+         o6HWlJ5MmUZ2EQNX1RARcN2M2ronhI1W5ZfCeBYJXiVcR66EwfjDmoWFPtm7daUw3F
+         RoNmU+0HUjSop/wTxPsuJalBuPFAhczLY0W7/1QgXxXRhgSwZ/N/XOwEhZt/0fCxQC
+         xpsduM0buvSrg==
+Date:   Tue, 15 Nov 2022 22:17:27 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Vineet Gupta <vineetg@rivosinc.com>
+Cc:     Conor.Dooley@microchip.com, bjorn@kernel.org,
+        stillson@rivosinc.com, greentime.hu@sifive.com,
+        guoren@linux.alibaba.com, vincent.chen@sifive.com,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, guoren@kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ajones@ventanamicro.com
+Subject: Re: [PATCH v12 04/17] riscv: Add vector feature to compile
+Message-ID: <Y3QP9zjM3a4yifvi@spud>
+References: <20220921214439.1491510-1-stillson@rivosinc.com>
+ <20220921214439.1491510-4-stillson@rivosinc.com>
+ <87zgd2d6j1.fsf@all.your.base.are.belong.to.us>
+ <98343aa8-b04d-fe58-8af8-4eeca03106d1@microchip.com>
+ <9cda597c-1d31-4b8b-99ba-deab58975976@rivosinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9cda597c-1d31-4b8b-99ba-deab58975976@rivosinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id E7333C009;
-        Tue, 15 Nov 2022 23:16:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1668550614; bh=OZL5LNQ/qoo+PMydbsm4DsIY24R1XznjxSjLJYR8vVM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GZWtUl4my76Dw99vycRNoUgSegPrGhpMi9fi7IYYTswgacGz+53Vfkowb3l+qqVuZ
-         43rxNdMClHGGmUWnkAoAveEQueR2Z7V9TBvDZY9ixRtsxuN79JuQNwbIzaXzZJqliV
-         7TZwNFHga+FzpOG2JFxghrTLu7qZIGUzSpHz2CLUMnP+4UPTu3woB7Yytke8SgdSQZ
-         dB5hoCm00ebFyleCrpD91Zy3nCnxHT/9i4SUWbtodmDwDkv40Q665KsB0DAVx+iViC
-         gPIYW/9/RsqEKfgHy79y7ctH+6LJbDIag9VQLerjYBDdlEosgoFVrSGZGpYNvGqAOy
-         GKfoZUNaYlw9Q==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 6a874494;
-        Tue, 15 Nov 2022 22:16:42 +0000 (UTC)
-Date:   Wed, 16 Nov 2022 07:16:27 +0900
-From:   asmadeus@codewreck.org
-To:     Peng Zhang <zhangpeng362@huawei.com>
-Cc:     ericvh@gmail.com, lucho@ionkov.net, linux_oss@crudebyte.com,
-        dhowells@redhat.com, jlayton@kernel.org,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2] fscache: fix OOB Read in __fscache_acquire_volume
-Message-ID: <Y3QPu9TM8LEdu07l@codewreck.org>
-References: <20221115140447.2971680-1-zhangpeng362@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221115140447.2971680-1-zhangpeng362@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peng Zhang wrote on Tue, Nov 15, 2022 at 02:04:47PM +0000:
-> From: ZhangPeng <zhangpeng362@huawei.com>
+On Tue, Nov 15, 2022 at 09:38:53AM -0800, Vineet Gupta wrote:
+> On 11/13/22 08:16, Conor.Dooley@microchip.com wrote:
+> > > > +config VECTOR
+> > > > +     bool "VECTOR support"
+> > > > +     depends on GCC_VERSION >= 120000 || CLANG_VERSION >= 130000
+> > > > +     default n
+> > > > +     help
+> > > > +       Say N here if you want to disable all vector related procedure
+> > > > +       in the kernel.
+> > > > +
+> > > > +       If you don't know what to do here, say Y.
+> > > > +
+> > > > +endmenu
+> > > "VECTOR" is not really consistent to how the other configs are named;
+> > > RISCV_ISA_V, RISCV_ISA_VECTOR, RISCV_VECTOR?
+> > It'd be RISCV_ISA_V to match the others single letter extentions, right?
 > 
-> Syzbot reported slab-out-of-bounds Read in __fscache_acquire_volume.
+> Yep.
 > 
-> ==================================================================
-> BUG: KASAN: slab-out-of-bounds in memcmp+0x16f/0x1c0 lib/string.c:757
-> Read of size 8 at addr ffff888016f3aa90 by task syz-executor344/3613
+> > The toolchain dependency check here also seems rather naive.
 > 
-> CPU: 0 PID: 3613 Comm: syz-executor344 Not tainted
-> 6.0.0-rc2-syzkaller-00327-g8379c0b31fbc #0
-> Hardware name: Google Compute Engine/Google Compute Engine, BIOS
-> Google 07/22/2022
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  print_address_description mm/kasan/report.c:317 [inline]
->  print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
->  kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
->  memcmp+0x16f/0x1c0 lib/string.c:757
->  memcmp include/linux/fortify-string.h:420 [inline]
->  fscache_volume_same fs/fscache/volume.c:133 [inline]
->  fscache_hash_volume fs/fscache/volume.c:171 [inline]
->  __fscache_acquire_volume+0x76c/0x1080 fs/fscache/volume.c:328
->  fscache_acquire_volume include/linux/fscache.h:204 [inline]
->  v9fs_cache_session_get_cookie+0x143/0x240 fs/9p/cache.c:34
->  v9fs_session_init+0x1166/0x1810 fs/9p/v9fs.c:473
->  v9fs_mount+0xba/0xc90 fs/9p/vfs_super.c:126
->  legacy_get_tree+0x105/0x220 fs/fs_context.c:610
->  vfs_get_tree+0x89/0x2f0 fs/super.c:1530
->  do_new_mount fs/namespace.c:3040 [inline]
->  path_mount+0x1326/0x1e20 fs/namespace.c:3370
->  do_mount fs/namespace.c:3383 [inline]
->  __do_sys_mount fs/namespace.c:3591 [inline]
->  __se_sys_mount fs/namespace.c:3568 [inline]
->  __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f7d5064b1d9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89
-> f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
-> f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffd1700c028 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-> RAX: ffffffffffffffda RBX: 00007ffd1700c060 RCX: 00007f7d5064b1d9
-> RDX: 0000000020000040 RSI: 0000000020000000 RDI: 0000000000000000
-> RBP: 0000000000000000 R08: 0000000020000200 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000f4240
-> R13: 0000000000000000 R14: 00007ffd1700c04c R15: 00007ffd1700c050
-> ==================================================================
-> 
-> The type of a->key[0] is char in fscache_volume_same(). If the length of
-> cache volume key is greater than 127, the value of a->key[0] is less
-> than 0. In this case, klen becomes much larger than 255 after type
-> conversion, because the type of klen is size_t. As a result, memcmp() is
-> read out of bounds. Fix this by adding a check on the length of the key
-> in fscache_alloc_volume().
-> ---
-> v1 -> v2:
-> - Make sure the length of cache volume key (klen) fits a signed char
-> before writing key[0] that'd benefit everyone, thanks to Dominique
-> Martinet.
-> 
-> Reported-by: syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com
-> Fixes: 62ab63352350 ("fscache: Implement volume registration")
-> Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
+> Indeed. I can build the code just fine with gcc-11 (and gcc-12), although my
+> reworked patcheset doesn't include all the orig patches including the
+> in-kernel xor stuff.
 
-These tags should go above the '---' line, or git am will be confused and drop
-them.
-(I assume David or whoever picks this up can manually fix this, letting
-them comment)
+By naive here I meant that checking cc alone is probably not a
+sufficient check for whether the toolchain supports the extension.
+What about the assembler etc?
 
-That aside:
-Acked-by: Dominique Martinet <asmadeus@codewreck.org>
+With Zicbom and Zihintpause we ran into problems with mixed usage, eg
+binutils 2.35 + gcc 12. In his Zicboz series Drew has gone with insn
+definitions - but while that's okay for something small like Zicboz,
+do we want to do that for something with as many instructions as vector?
 
-> ---
->  fs/fscache/volume.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/fs/fscache/volume.c b/fs/fscache/volume.c
-> index a058e0136bfe..cc206d5e4cc7 100644
-> --- a/fs/fscache/volume.c
-> +++ b/fs/fscache/volume.c
-> @@ -230,6 +230,8 @@ static struct fscache_volume *fscache_alloc_volume(const char *volume_key,
->  	 * hashing easier.
->  	 */
->  	klen = strlen(volume_key);
-> +	if (klen > 127)
-> +		goto err_cache;
->  	hlen = round_up(1 + klen + 1, sizeof(__le32));
->  	key = kzalloc(hlen, GFP_KERNEL);
->  	if (!key)
+The alternative is cc-option, but that feels a lot less clean than what
+Drew cooked up here:
+https://lore.kernel.org/linux-riscv/20221027130247.31634-1-ajones@ventanamicro.com/
 
---
-Dominique
+I've not checked this because I am lazy, but I am also assuming that
+whoever put clang-13 in there picked it such that it doesn't require
+experimental extensions flags. Mostly just writing this to remind myself
+to check it at some point.
