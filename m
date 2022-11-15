@@ -2,138 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D3462A19A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC0762A19B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:59:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiKOS6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 13:58:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51578 "EHLO
+        id S231269AbiKOS65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 13:58:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiKOS62 (ORCPT
+        with ESMTP id S231271AbiKOS6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 13:58:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8564128715
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:57:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668538647;
+        Tue, 15 Nov 2022 13:58:44 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5FDA46E
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:58:43 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e7da329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7da:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8C5361EC02F2;
+        Tue, 15 Nov 2022 19:58:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1668538721;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZhhMRXuffKWmJnSyDCn2McoLOIVtIOCGZv8DUDNnMo8=;
-        b=Y0yx+pkmsaq1C0uWFlPARo8Nlpbpp0icIXDLRV4RU4msd9F8fmAsduU238CsnQOVKBHq3x
-        lCzB8Io/GiCkAXjVU5DCZZk9XP8+ioNGFfayk246m+JKRfB9UuNjU5UStSuhpiwbGG4+/r
-        1xS2Apku0PCQLZ3ZcoM3d3ufUInasug=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-167-ZE0vms-ZPdCagNEYIwqCjg-1; Tue, 15 Nov 2022 13:57:26 -0500
-X-MC-Unique: ZE0vms-ZPdCagNEYIwqCjg-1
-Received: by mail-qk1-f199.google.com with SMTP id bm2-20020a05620a198200b006fa6eeee4a9so14667675qkb.14
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:57:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZhhMRXuffKWmJnSyDCn2McoLOIVtIOCGZv8DUDNnMo8=;
-        b=eyuXS3qXo53JkyFhSGkYzznMzIpbSLAz/HOU7vLFsOMaoblAz53Z12TGX7FeVXm7sl
-         mnxa2btJ0Gbbc5vXogQG3nZvh91c8Dck4GstY0WCIkget1S6AnScp108jrNHAtCPvA47
-         JRXCHUOtbFO8JeKMMBktB5EZLpMgp99kri3EwiM4p2MJ5FfUpvvECPU9jzTidtnt+e1k
-         I4ob2YK3KUo1xV2J1pjel+77WShrZ3xSoo58TM8kt4z5PqpUeK6wduOB9lxHKG3W5ofu
-         8YrXwCwwPGJviwvSUIv5lA5BrA/C7/knwX3ufDkjAz5ek3IRwZJnuckR69jGuL50DCGe
-         JQMA==
-X-Gm-Message-State: ANoB5pn5oBr8qWz2PC5o3NySpv0/rcqvdVCDPeg3NYN12Mk+oX6FqJYW
-        D3vP+54+4DM/kH031jMcA3+6n9EUs04Oblq5zmyyeCTXifwhtyQEHj2f3kxgZMNcbUKABSytiah
-        yK9luBZIAToUDydXoKrGyHgoF
-X-Received: by 2002:ae9:df02:0:b0:6fa:349b:7ba9 with SMTP id t2-20020ae9df02000000b006fa349b7ba9mr16439670qkf.339.1668538638077;
-        Tue, 15 Nov 2022 10:57:18 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7GD+tyKObY1rdcIBVv/8GoCtuT4sd5/XvTzrz7bCmBtCQN9hqUquK8/onwIkjV5MLTbXaA0g==
-X-Received: by 2002:ae9:df02:0:b0:6fa:349b:7ba9 with SMTP id t2-20020ae9df02000000b006fa349b7ba9mr16439513qkf.339.1668538634735;
-        Tue, 15 Nov 2022 10:57:14 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-120-203.dyn.eolo.it. [146.241.120.203])
-        by smtp.gmail.com with ESMTPSA id l6-20020a05620a210600b006ce1bfbd603sm8460405qkl.124.2022.11.15.10.57.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 10:57:14 -0800 (PST)
-Message-ID: <bc4616002932b25973533c39c07f48ea57afa3dc.camel@redhat.com>
-Subject: Re: [PATCH v2] net: sched: fix memory leak in tcindex_set_parms
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Hawkins Jiawei <yin31149@gmail.com>
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, 18801353760@163.com,
-        syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com,
-        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 15 Nov 2022 19:57:10 +0100
-In-Reply-To: <20221115090237.5d5988bb@kernel.org>
-References: <20221113170507.8205-1-yin31149@gmail.com>
-         <20221115090237.5d5988bb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=T6HeLeehV641J2nE98Nj30oEAQVC3Sf8j+2pJZ96dME=;
+        b=el8C5T48KAQZ1rtI5hQsco/OER1kNCyW9AO5D2PN4R4cLTWhxXk5WIPogWfaziDrlvA4pH
+        gRLxVzFrhqWwdef8msdNW/BRRFZUm0iynoCpZSGud/UNAhIKqnE+t4UYuAXHKSFAAKPzqb
+        vYkJ09t3HrxnqT1FAD1bePEnMiznZe8=
+Date:   Tue, 15 Nov 2022 19:58:41 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>
+Subject: Re: [PATCH v8 2/5] x86: Add cmdline_prepare() helper
+Message-ID: <Y3PhYRx9aAYsdvMQ@zn.tnic>
+References: <cover.1668082601.git.baskov@ispras.ru>
+ <b81fa524589ff21002a501f0b4cddf41b53f640f.1668082601.git.baskov@ispras.ru>
+ <Y3JQpxi6XDkPViBr@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y3JQpxi6XDkPViBr@zn.tnic>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-15 at 09:02 -0800, Jakub Kicinski wrote:
-> On Mon, 14 Nov 2022 01:05:08 +0800 Hawkins Jiawei wrote:
-> 
-> > @@ -479,6 +480,7 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
-> >  	}
-> >  
-> >  	if (old_r && old_r != r) {
-> > +		old_e = old_r->exts;
-> >  		err = tcindex_filter_result_init(old_r, cp, net);
-> >  		if (err < 0) {
-> >  			kfree(f);
-> > @@ -510,6 +512,12 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
-> >  		tcf_exts_destroy(&new_filter_result.exts);
-> >  	}
-> >  
-> > +	/* Note: old_e should be destroyed after the RCU grace period,
-> > +	 * to avoid possible use-after-free by concurrent readers.
-> > +	 */
-> > +	synchronize_rcu();
-> > +	tcf_exts_destroy(&old_e);
-> 
-> I don't think this dance is required, @cp is a copy of the original
-> data, and the original (@p) is destroyed in a safe manner below.
+On Mon, Nov 14, 2022 at 03:28:55PM +0100, Borislav Petkov wrote:
+> So now it is my turn: I'll do it how I think it should be done and you
+> can review it.
 
-This code confuses me more than a bit, and I don't follow ?!? it looks
-like that at this point:
+Ok, here are two patches as a reply to this message.
 
-* the data path could access 'old_r->exts' contents via 'p' just before
-the previous 'tcindex_filter_result_init(old_r, cp, net);' but still
-potentially within the same RCU grace period
+I was able to test them as much as I can in a VM here but I'd need more
+details/testing in your configuration with earlyprintk as a builtin
+cmdline.
 
-* 'tcindex_filter_result_init(old_r, cp, net);' has 'unlinked' the old
-exts from 'p'  so that will not be freed by later
-tcindex_partial_destroy_work() 
+cmdline_prepare() has grown a bit hairy in the end but I've tried hard
+to comment what happens there so that it is clear for the future. The
+main goal being to concentrate all command line strings processing in
+that function and not have it spread around the tree. And yes, there are
+more cleanups possible.
 
-Overall it looks to me that we need some somewhat wait for the RCU
-grace period, 
+In the compressed stage I'm using the cmdline which is in boot_params as
+source and destination to basically add only the builtin cmdline.
 
-Somewhat side question: it looks like that the 'perfect hashing' usage
-is the root cause of the issue addressed here, and very likely is
-afflicted by other problems, e.g. the data curruption in 'err =
-tcindex_filter_result_init(old_r, cp, net);'.
+In kernel proper the boot_command_line comes from generic code and that
+is a whole another way of crazy in itself when I look at init/main.c
 
-AFAICS 'perfect hashing' usage is a sort of optimization that the user-
-space may trigger with some combination of the tcindex arguments. I'm
-wondering if we could drop all perfect hashing related code?
+And as previously stated - the goal is to have everything in one place
+and documented as good as possible so that trying to figure out how
+command line parsing is done doesn't send you on grepping spree around
+the tree.
 
-Paolo
+Suggestions how to simplify this even more are always welcome, ofc.
 
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
