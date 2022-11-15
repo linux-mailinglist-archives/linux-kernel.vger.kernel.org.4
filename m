@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0741629C70
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9D1629C75
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238409AbiKOOl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 09:41:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
+        id S238480AbiKOOmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 09:42:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiKOOk5 (ORCPT
+        with ESMTP id S232248AbiKOOk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 09:40:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405B72C130;
-        Tue, 15 Nov 2022 06:40:56 -0800 (PST)
+        Tue, 15 Nov 2022 09:40:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B55B2A703;
+        Tue, 15 Nov 2022 06:40:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C49C0B8198E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FAEB617E2;
         Tue, 15 Nov 2022 14:40:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F14A8C4FF0F;
-        Tue, 15 Nov 2022 14:40:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28207C433D7;
+        Tue, 15 Nov 2022 14:40:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1668523253;
-        bh=516HTvXYHrQrblCudPuQCntVAN2LBYKUbYmS/g+agHg=;
+        bh=DPEC4Ilp5QnQgwZzP4PbKBn+Zx699/V1FQSwG3qGmeU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EW6Bh/l0gE1jxNHcgkJIUyFAPOHrEs6adX9M1v86WNeYVO04wtFE7fHWepD7LRW/5
-         nD2sV8M7V4FX6FYItsJt8vnBtcmvDabtzbNLSBlxUO89i7+2f96UfwRiA2xzmhEKqD
-         GbWJjY/1zPOVHO0wUhvCWRXYRZShYZt74xDvTf5aToJ1HinzpJnC7YfA5MFvVmD+1U
-         b/HLdaDPHjO1VAXsk3Pq55NNUw9hryUNgjp1OTnlOO6kCBeByYoV4wTUbuzNbW4plg
-         ZTdeARgJRnvbfPrVawbonNLl1YfzggCkKejH23+8nrFSVUzvw5/CvYgGyzEQlsG5KX
-         UDJBAjDZDAaqw==
+        b=p+p3NHhgf88bOUZcdCaJIm2VBQhroaQeVSQI0q94bPm9NDqgsix9PJFXES+8ceIMw
+         Af1cggMaaj8rO8nH2lDklqQazzurYkphy1XypW5goJ3eDdH6WR5UNRFG1a13slY31F
+         lHgztVLe23QOxmSLnpSCfbFknd7RnVSjuj1EMAchM/U7koalr2VPvKwn2VPtW1cOBt
+         HzmbnenW8N7I++Frc0Jk9+E4dr4GwI71KwAksx2b/m8aQBhRmheTVEuKG57z64QSaB
+         2lvm8jSj/VHmIkMDOSCsmnpfAbMTRDM+9ppQCzISz6zuSEcIUknLaakouH1G7cyKzj
+         yUJpyYcoCIkUA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oux6t-0000fy-IT; Tue, 15 Nov 2022 15:40:23 +0100
+        id 1oux6t-0000g1-Kz; Tue, 15 Nov 2022 15:40:23 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -46,9 +46,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 13/15] phy: qcom-qmp-combo: add support for updated sc8280xp binding
-Date:   Tue, 15 Nov 2022 15:40:03 +0100
-Message-Id: <20221115144005.2478-14-johan+linaro@kernel.org>
+Subject: [PATCH v2 14/15] arm64: dts: qcom: sc8280xp: fix primary USB-DP PHY reset
+Date:   Tue, 15 Nov 2022 15:40:04 +0100
+Message-Id: <20221115144005.2478-15-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221115144005.2478-1-johan+linaro@kernel.org>
 References: <20221115144005.2478-1-johan+linaro@kernel.org>
@@ -63,242 +63,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the new SC8280XP binding.
+The vendor kernel is using the GCC_USB4_DP_PHY_PRIM_BCR and
+GCC_USB4_1_DP_PHY_PRIM_BCR resets for the USB4-USB3-DP QMP PHYs.
 
-Note that the binding does not try to describe every register subregion
-and instead the driver holds the corresponding offsets.
+Update the primary USB-DP PHY node to match.
 
-Also note that (possibly) unlike on earlier platforms, the TX registers
-are used by both the USB and DP implementation.
-
+Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 145 ++++++++++++++++++++--
- 1 file changed, 134 insertions(+), 11 deletions(-)
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index b82bd0a221d6..77052c66cf70 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -20,7 +20,7 @@
- #include <linux/reset.h>
- #include <linux/slab.h>
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+index e769b7b0004b..85c674e7e1a5 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+@@ -1682,7 +1682,7 @@ usb_0_qmpphy: phy-wrapper@88ec000 {
+ 			clock-names = "aux", "ref_clk_src", "ref", "com_aux";
  
--#include <dt-bindings/phy/phy.h>
-+#include <dt-bindings/phy/phy-qcom-qmp.h>
+ 			resets = <&gcc GCC_USB3_PHY_PRIM_BCR>,
+-				 <&gcc GCC_USB3_DP_PHY_PRIM_BCR>;
++				 <&gcc GCC_USB4_DP_PHY_PRIM_BCR>;
+ 			reset-names = "phy", "common";
  
- #include "phy-qcom-qmp.h"
- 
-@@ -798,7 +798,23 @@ static const u8 qmp_dp_v5_voltage_swing_hbr_rbr[4][4] = {
- 
- struct qmp_combo;
- 
-+struct qmp_combo_offsets {
-+	u16 com;
-+	u16 txa;
-+	u16 rxa;
-+	u16 txb;
-+	u16 rxb;
-+	u16 usb3_serdes;
-+	u16 usb3_pcs_misc;
-+	u16 usb3_pcs;
-+	u16 usb3_pcs_usb;
-+	u16 dp_serdes;
-+	u16 dp_dp_phy;
-+};
-+
- struct qmp_phy_cfg {
-+	const struct qmp_combo_offsets *offsets;
-+
- 	/* Init sequence for PHY blocks - serdes, tx, rx, pcs */
- 	const struct qmp_phy_init_tbl *serdes_tbl;
- 	int serdes_tbl_num;
-@@ -959,6 +975,20 @@ static const char * const sc7180_usb3phy_reset_l[] = {
- 	"phy",
- };
- 
-+static const struct qmp_combo_offsets qmp_combo_offsets_v5 = {
-+	.com		= 0x0000,
-+	.txa		= 0x0400,
-+	.rxa		= 0x0600,
-+	.txb		= 0x0a00,
-+	.rxb		= 0x0c00,
-+	.usb3_serdes	= 0x1000,
-+	.usb3_pcs_misc	= 0x1200,
-+	.usb3_pcs	= 0x1400,
-+	.usb3_pcs_usb	= 0x1700,
-+	.dp_serdes	= 0x2000,
-+	.dp_dp_phy	= 0x2200,
-+};
-+
- static const struct qmp_phy_cfg sc7180_usb3dpphy_cfg = {
- 	.serdes_tbl		= qmp_v3_usb3_serdes_tbl,
- 	.serdes_tbl_num		= ARRAY_SIZE(qmp_v3_usb3_serdes_tbl),
-@@ -1098,6 +1128,8 @@ static const struct qmp_phy_cfg sc8180x_usb3dpphy_cfg = {
- };
- 
- static const struct qmp_phy_cfg sc8280xp_usb43dpphy_cfg = {
-+	.offsets		= &qmp_combo_offsets_v5,
-+
- 	.serdes_tbl		= sc8280xp_usb43dp_serdes_tbl,
- 	.serdes_tbl_num		= ARRAY_SIZE(sc8280xp_usb43dp_serdes_tbl),
- 	.tx_tbl			= sc8280xp_usb43dp_tx_tbl,
-@@ -1138,7 +1170,6 @@ static const struct qmp_phy_cfg sc8280xp_usb43dpphy_cfg = {
- 	.vreg_list		= qmp_phy_vreg_l,
- 	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
- 	.regs			= qmp_v4_usb3phy_regs_layout,
--	.pcs_usb_offset		= 0x300,
- };
- 
- static const struct qmp_phy_cfg sm8250_usb3dpphy_cfg = {
-@@ -2421,6 +2452,22 @@ static int phy_dp_clks_register(struct qmp_combo *qmp, struct device_node *np)
- 	return 0;
- }
- 
-+static struct clk_hw *qmp_combo_clk_hw_get(struct of_phandle_args *clkspec, void *data)
-+{
-+	struct qmp_combo *qmp = data;
-+
-+	switch (clkspec->args[0]) {
-+	case QMP_USB43DP_USB3_PIPE_CLK:
-+		return &qmp->pipe_clk_fixed.hw;
-+	case QMP_USB43DP_DP_LINK_CLK:
-+		return &qmp->dp_link_hw;
-+	case QMP_USB43DP_DP_VCO_DIV_CLK:
-+		return &qmp->dp_pixel_hw;
-+	}
-+
-+	return ERR_PTR(-EINVAL);
-+}
-+
- static int qmp_combo_register_clocks(struct qmp_combo *qmp, struct device_node *usb_np,
- 					struct device_node *dp_np)
- {
-@@ -2434,6 +2481,15 @@ static int qmp_combo_register_clocks(struct qmp_combo *qmp, struct device_node *
- 	if (ret)
- 		return ret;
- 
-+	/*
-+	 * Register a single provider for bindings without child nodes.
-+	 */
-+	if (usb_np == qmp->dev->of_node)
-+		return devm_of_clk_add_hw_provider(qmp->dev, qmp_combo_clk_hw_get, qmp);
-+
-+	/*
-+	 * Register multiple providers for legacy bindings with child nodes.
-+	 */
- 	ret = of_clk_add_hw_provider(usb_np, of_clk_hw_simple_get,
- 					&qmp->pipe_clk_fixed.hw);
- 	if (ret)
-@@ -2558,6 +2614,63 @@ static int qmp_combo_parse_dt_legacy(struct qmp_combo *qmp, struct device_node *
- 	return 0;
- }
- 
-+static int qmp_combo_parse_dt(struct qmp_combo *qmp)
-+{
-+	struct platform_device *pdev = to_platform_device(qmp->dev);
-+	const struct qmp_phy_cfg *cfg = qmp->cfg;
-+	const struct qmp_combo_offsets *offs = cfg->offsets;
-+	struct device *dev = qmp->dev;
-+	void __iomem *base;
-+
-+	if (!offs)
-+		return -EINVAL;
-+
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+
-+	qmp->com = base + offs->com;
-+	qmp->tx = base + offs->txa;
-+	qmp->rx = base + offs->rxa;
-+	qmp->tx2 = base + offs->txb;
-+	qmp->rx2 = base + offs->rxb;
-+
-+	qmp->serdes = base + offs->usb3_serdes;
-+	qmp->pcs_misc = base + offs->usb3_pcs_misc;
-+	qmp->pcs = base + offs->usb3_pcs;
-+	qmp->pcs_usb = base + offs->usb3_pcs_usb;
-+
-+	qmp->dp_serdes = base + offs->dp_serdes;
-+	qmp->dp_tx = base + offs->txa;
-+	qmp->dp_tx2 = base + offs->txb;
-+	qmp->dp_dp_phy = base + offs->dp_dp_phy;
-+
-+	qmp->pipe_clk = devm_clk_get(dev, "usb3_pipe");
-+	if (IS_ERR(qmp->pipe_clk)) {
-+		return dev_err_probe(dev, PTR_ERR(qmp->pipe_clk),
-+				"failed to get usb3_pipe clock\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static struct phy *qmp_combo_phy_xlate(struct device *dev, struct of_phandle_args *args)
-+{
-+	struct qmp_combo *qmp = dev_get_drvdata(dev);
-+
-+	if (args->args_count == 0)
-+		return ERR_PTR(-EINVAL);
-+
-+	switch (args->args[0]) {
-+	case QMP_USB43DP_USB3_PHY:
-+		return qmp->usb_phy;
-+	case QMP_USB43DP_DP_PHY:
-+		return qmp->dp_phy;
-+	}
-+
-+	return ERR_PTR(-EINVAL);
-+}
-+
- static int qmp_combo_probe(struct platform_device *pdev)
- {
- 	struct qmp_combo *qmp;
-@@ -2590,17 +2703,22 @@ static int qmp_combo_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	/* Check for legacy binding with child nodes. */
- 	usb_np = of_get_child_by_name(dev->of_node, "usb3-phy");
--	if (!usb_np)
--		return -EINVAL;
-+	if (usb_np) {
-+		dp_np = of_get_child_by_name(dev->of_node, "dp-phy");
-+		if (!dp_np) {
-+			of_node_put(usb_np);
-+			return -EINVAL;
-+		}
- 
--	dp_np = of_get_child_by_name(dev->of_node, "dp-phy");
--	if (!dp_np) {
--		of_node_put(usb_np);
--		return -EINVAL;
--	}
-+		ret = qmp_combo_parse_dt_legacy(qmp, usb_np, dp_np);
-+	} else {
-+		usb_np = of_node_get(dev->of_node);
-+		dp_np = of_node_get(dev->of_node);
- 
--	ret = qmp_combo_parse_dt_legacy(qmp, usb_np, dp_np);
-+		ret = qmp_combo_parse_dt(qmp);
-+	}
- 	if (ret)
- 		goto err_node_put;
- 
-@@ -2636,7 +2754,12 @@ static int qmp_combo_probe(struct platform_device *pdev)
- 
- 	phy_set_drvdata(qmp->dp_phy, qmp);
- 
--	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
-+	dev_set_drvdata(dev, qmp);
-+
-+	if (usb_np == dev->of_node)
-+		phy_provider = devm_of_phy_provider_register(dev, qmp_combo_phy_xlate);
-+	else
-+		phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
- 
- 	of_node_put(usb_np);
- 	of_node_put(dp_np);
+ 			power-domains = <&gcc USB30_PRIM_GDSC>;
 -- 
 2.37.4
 
