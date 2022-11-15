@@ -2,131 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F82662958C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC04629592
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbiKOKQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:16:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
+        id S229745AbiKOKRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:17:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiKOKQ1 (ORCPT
+        with ESMTP id S238367AbiKOKRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:16:27 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08629B61
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:16:26 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id s24so16868018ljs.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:16:25 -0800 (PST)
+        Tue, 15 Nov 2022 05:17:14 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6516DA1B9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:17:13 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso12737729wme.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:17:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jGHlZVL39eCUsJrhUm15x+JuQR4luXm9cgq/qr21IVY=;
-        b=etoIZgnqAeeAztGAY0oY4aMkSANYzJwcegk3tPICBKH07bc7OBcEuXy4aHDAh3Lklp
-         PSM14j14q26wQkZGe4AxoLUpeXbyGJ8FcXuKaaefsSyvZcMQpjh8jWA7KpjJJqyA4dxG
-         pB3ZZ+jtw1X0qrDR8Tn4s1HfC1r0xjrXv66TyET+EqCOd9UFS63JX1jgKC0NLfwe2Lds
-         IvWNxGUou28td2JgbQ9K64Q/vMaVO4xlKRPAdL+Zg8nQOan/qnib7ublcnAPNhg/g27U
-         AhrQ1akMtoQFwt2Mv8iDa6ge+6L2HfVPR744POiyDn4qHbZDbliolGuzI6UIqrXpShKo
-         +xvw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pdA+gwN2rGjIMgTg0+noXMRaLEEwMRfBfXbs4I6k2H0=;
+        b=Zt4y1g4rmSHuLcI5wrSBoJC1/bJZw2N1T33WD2n9Qb8IBlR1eLqi6P9A0BhbWejE62
+         E34CT+hKgpOjDAwiNPfoTzHeDL2jDkSAV9+G4er8c03aCKCQ9uyAI2EJwWCzgAyYs50X
+         Bz5oSywEK7R0Y+mEHhxMRaPoUuJf4UbbmCc9rxN7DIioOVIilQJrLa/W6W77ujR6lrGn
+         19QYhndgs/u+nkIEFGtrmgVO6Ld9gv16LH3tSvXuAEarZtspl3KkesRmOwCtuQtjudpJ
+         U3j1VNQNkqIlRhWxc6u9jiM5cnQSeJ7rS3MA7kKZENYebyzNZlq++yTkGwNJ6BK/DWMk
+         pBSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jGHlZVL39eCUsJrhUm15x+JuQR4luXm9cgq/qr21IVY=;
-        b=QjpqDswfg7pk92X/p0txMtTEPhI5RLZnCZkIZmA2zYF+4Dt/AVeWxee0pg/5vzO1Ko
-         hYoEpJD0cT+jMW0ov1HlqwpMIxUXJMQb1dPZ3hgCHUiv6QTH3PHVb9kxb5Hin8bGyZKI
-         p1zjuBHJo2XKkLfQy0hDm28vd7eQ7gK0sm7huX/u3W2QmWtpOGR9SG8fjHk3Y1KCW4dJ
-         VmhToC6duxBiVw0eSCV6J8uBKGIN9q+P8FXNsyI1hc64iC7HElj6siDYfzz4KKx28yXq
-         Eby9CF70NNFitNCcz/9tLZXwkp2uKQLnr91SI3zJMbjV76o449qZB+5eWvvsqH7Gcgbd
-         xNdA==
-X-Gm-Message-State: ANoB5pnlgugoupJkje6Gu/Ofj0TM0ywElp8k+XHU+c5ztEjbvyBrTKFa
-        YKfMuFnQ54VY041lVGqt+rHbqw==
-X-Google-Smtp-Source: AA0mqf4j0NwkOajZo6/FfndECMtqa/uh+Ezn1EL74qlkjKNZN5lyyAl+CoL93o3aU1vj951oIH0KKA==
-X-Received: by 2002:a2e:300c:0:b0:277:524c:f83d with SMTP id w12-20020a2e300c000000b00277524cf83dmr5880907ljw.217.1668507384396;
-        Tue, 15 Nov 2022 02:16:24 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c2-20020a056512074200b004979e1ff641sm2142914lfs.115.2022.11.15.02.16.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 02:16:24 -0800 (PST)
-Message-ID: <4f97dc96-5f95-4d36-6d40-c247043162bc@linaro.org>
-Date:   Tue, 15 Nov 2022 11:16:22 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pdA+gwN2rGjIMgTg0+noXMRaLEEwMRfBfXbs4I6k2H0=;
+        b=Gbz5jCp0uwNcLxeiV80xkBHme9xIaID5eWtskSdjJovDArR9oWMykKqafQn/bmlgTX
+         f9ikDY7pPfzlEjQOjL94U5BSykaT9ycMTdZ06bhf0wvoQU8fltAdxJd9aILheQMp1S1B
+         QbDGm96ZlKBNFcZF076ghHtxd0jhUr5ON9YMLpoCTdFxIUrEtdJwpHne6phYm7zHanTf
+         K4SXI79d98JVvG4PEzmfPjskevy8fORrpXN+/zcLZtUeRG64hHwnoEHjI9aXxk6/K7k2
+         sU/z+5HqoL/oF/oyoOddLUm8e7ofbm8ptVp9xi9PhCkXSmbq+0Jn+e8qY0TbLI6WoiZc
+         9WRQ==
+X-Gm-Message-State: ANoB5pk3mVPk9GwAt8Y8dT6kyMOOU9ndBcGb3rLfnDKjl41rabQSIwRd
+        t/EqF/tmsOHGeQxJ2vk4N2pFT5oGWsB3ldTcRqM=
+X-Google-Smtp-Source: AA0mqf45yhGOLNnomZV1m1B41PUv6FMTJnYvnvkOMdD2PbN7256eD/TfR3VwkF4MpPtEbO3KdP0b3cslKtqJAlmMk9s=
+X-Received: by 2002:a05:600c:31a2:b0:3cf:6e9b:21f1 with SMTP id
+ s34-20020a05600c31a200b003cf6e9b21f1mr273842wmp.90.1668507431832; Tue, 15 Nov
+ 2022 02:17:11 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm8450-hdk: add sound support
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-References: <20221114152130.385871-1-krzysztof.kozlowski@linaro.org>
- <20221114152130.385871-4-krzysztof.kozlowski@linaro.org>
- <f52157c7-d198-9c26-089a-c5227a1c1f4f@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f52157c7-d198-9c26-089a-c5227a1c1f4f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221112151835.39059-1-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20221112151835.39059-1-aidanmacdonald.0x0@gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Date:   Tue, 15 Nov 2022 12:17:00 +0200
+Message-ID: <CANhJrGNPUA6f9Ea5qwdKx-4t6285+xE8CxxDTF2X13ZCSeVPTQ@mail.gmail.com>
+Subject: Re: [PATCH 00/18] mfd: Clean up deprecated regmap-irq functionality
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     lee@kernel.org, mani@kernel.org, cristian.ciocaltea@gmail.com,
+        wens@csie.org, tharvey@gateworks.com, cw00.choi@samsung.com,
+        krzysztof.kozlowski@linaro.org, brgl@bgdev.pl, orsonzhai@gmail.com,
+        baolin.wang@linux.alibaba.com, zhang.lyra@gmail.com,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/11/2022 16:39, Konrad Dybcio wrote:
-> 
-> On 14/11/2022 16:21, Krzysztof Kozlowski wrote:
->> From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->>
->> Add sound support to SM8450 HDK board.  Tested setup so far is only two
->> speakers (working) and head-phones (only one channel working).
->>
->> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->> Co-developed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>   arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 161 ++++++++++++++++++++++++
->>   1 file changed, 161 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
->> index 4d75f9db08c2..c177283b6764 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
->> +++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
->> @@ -6,6 +6,8 @@
->>   /dts-v1/;
->>   
->>   #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
->> +#include <dt-bindings/sound/qcom,q6afe.h>
->> +#include <dt-bindings/sound/qcom,q6asm.h>
->>   #include "sm8450.dtsi"
->>   
->>   / {
->> @@ -421,6 +423,147 @@ &uart7 {
->>   	status = "okay";
->>   };
->>   
->> +&soc {
-> 
-> soc should go before uart alphabetically.
-> 
-> 
-> Other than that:
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> 
+Hi Aidan,
 
-Ack
+la 12. marrask. 2022 klo 17.19 Aidan MacDonald
+(aidanmacdonald.0x0@gmail.com) kirjoitti:
 
-Best regards,
-Krzysztof
+> Here are some trivial updates to replace old, deprecated regmap-irq APIs
+> with the new equivalents. There should be no functional changes, but none
+> of the patches have been tested (besides compile testing).
 
+> Link: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git/commit/?id=84498d1fb35de6ab71bdfdb6270a464fb4a0951b
+>
+> Aidan MacDonald (18):
+
+Just a small suggestion. Would it work if the CC-list was generated
+separately for each of the patches for a large series targeted to
+various individual drivers like this one? I think that many of the
+recipients are not interested in more than one or two of the patches +
+cover-letter in this 19-mail series...
+
+I know it can be a pain to hassle with the recipient lists and
+message-IDs - so I am glad if anyone can find some help from my
+personal playground - or even better, share their versions with us :)
+So, to open the window for any work-flow improvement suggestions...
+...I've personally started generating patches using the following
+shell-script (which is inefficient and lazily written but seems to
+mostly work for me):
+https://github.com/M-Vaittinen/linux/commit/9045670f8d3d4638b9032d96cff955704a6d438e
+
+It can be freely used as a source of inspiration (or perspiration - no
+guarantees it works as intended or is feasible for anything) when
+generating the next series ;)
+
+Yours
+    -- Matti
+
+-- 
+
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
+Discuss - Estimate - Plan - Report and finally accomplish this:
+void do_work(int time) __attribute__ ((const));
