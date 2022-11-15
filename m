@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABF66291C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:12:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF8B6291C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiKOGMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 01:12:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
+        id S230199AbiKOGPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 01:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiKOGMh (ORCPT
+        with ESMTP id S229455AbiKOGPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 01:12:37 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFFF2AEE
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:12:36 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-13bef14ea06so15162439fac.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:12:36 -0800 (PST)
+        Tue, 15 Nov 2022 01:15:35 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1757D13F2B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:15:35 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id y4so12263179plb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:15:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZdzdAEDTp4IXZ6o8IRPqc08B1bs5p5D2LmF4e0f0f/0=;
-        b=lSFfp1cVhVvY0nPB8cFYSrRGxuwWsgf4A6qX3A9M1F5GPPoqEHlnBLwHftVSWUUqtN
-         LmuqXbiwxJx5W4uBFpY4exoM0rI5kDOnNc4azCxHTtB0RiYGH1luul0jkgZVpLbTLI3C
-         9A1tc22pWK62q9gf1yRjfljtohlCzsAGcdQflzs276hu25IwlbOCkZxYrq7jQPT1GQQx
-         OX3GZ8nDrSFudb4jZ9189Xk4NZjW6xRWfUinLgxpCuqeaUVXoY4gGiXSwyAWfHXD0Om4
-         ABr46wvFsxN1bgvy2EJMgRdKt8X9K1NfWHfNbXJF928e8TEpuY+l9jr3/FalfGsyT4bX
-         T6bw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=S87JB0jXS/1245zlp0DfUQH9YtzFG2T1WCf/d65ubvA=;
+        b=iSRK/t7aVPl926xpswpdT3LP5BxwCAfSZTOr7OwGkPaB6PX+IHx2rN87Ku3TbXpmC1
+         bXlFK58LjE5mA0EVy4VMO/CrkaIkEYxrxU+rsB5Kx+TQ12svkXhH1iEMhRQWFvEMC0iS
+         e9k6fWxHKBwHYCWdRQwWfk9rZ0O+tIxHolbbuPN7l30PqZ3vzHu4lZAVnUVgk/mpF45u
+         SsGioiYvicOfDBnPVkfa41C8i/1sBlveGVnXkW6K/zFTyu0Pv1o595FfvfOwhK6Y0R62
+         5vlloVDw494RdCcagfk0y91X52r7ihZGSmuZJZ3iO7i1eeYPni0+7fqJT6MiVW/f9PSZ
+         otiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZdzdAEDTp4IXZ6o8IRPqc08B1bs5p5D2LmF4e0f0f/0=;
-        b=nFILsi1EOj6yrXXy+9237Mlu6NX2qGY4cT7eJkDvm2ekfq3+dMAfPrG2mETMpkqk8N
-         /SMjuCWgybNap2CcGlAd0Kq72FnY5uIN+ur1Ipu4j8fl5QaZuDMCQrvYqJl+rpEJRqi1
-         HgaytqWgK3Cv7rfVo07X0bNdfqwcsYcJJQh3vUs1c+x22/hflcgcX2q09VM7VMwV8uK9
-         V3BBRESm06gKk5dHG/VA2zs8yx9oPpla7ZN6s+trTpDbUdAu+oKN+1aPQHcxuloSUlQD
-         B9IYyTNEp69IE4DlgWR9Qp1qRrUJbrlTemAfu183OoekMTLe7RWkX9w+V+RXXEONUDs+
-         pWeg==
-X-Gm-Message-State: ANoB5pk1hpVm/lnAN74duQ7d14HLDW61e2FjrQcgCGbLrRiqyu3J3DgW
-        uoSPuABXCnu4AROMH4gWkIU2NmxAtCwqrSocHZHA1g==
-X-Google-Smtp-Source: AA0mqf6EBC0mh0n8X88h7Xyk4Is82N10++ebwcIADisW3zucafAu+m8NFqMq8J4tIgmChbUBiCObirKVqrzL8vz39Zc=
-X-Received: by 2002:a05:6871:4605:b0:13d:a22b:3503 with SMTP id
- nf5-20020a056871460500b0013da22b3503mr45269oab.233.1668492755625; Mon, 14 Nov
- 2022 22:12:35 -0800 (PST)
+        bh=S87JB0jXS/1245zlp0DfUQH9YtzFG2T1WCf/d65ubvA=;
+        b=41Avy0AUi6pRwTPETNtF8kBagAOKEtix3nTeNqo5Tx4kEW37RFbuCkR7er9r9MhTkT
+         CfNAGrmMtEWBFxA2SviuMX+1iVzhm1yzi0STp7XdcWO+qBzU5Qz0I14KPG+lmzqGZgZh
+         teGhsxRNlpDeb2S5oV21BL7iPgm89BhXGEondu1okvIFoN/5dSFTJAtDWmABwZDaoRMN
+         OJwV6awohJ19huWjKJpmHmk2eR673XFjmJ65YmAnX2BlM+OKuWHb1639VkdApJyMZSG2
+         +bbYXRlEmiKQHo5toLdaLI3WZHV4/cEGmSRfFMnYtQBmBdY1VvmiXOtLFahEXcubRAqS
+         rH6w==
+X-Gm-Message-State: ANoB5pnQINAfZvmSmvqRl82wJ+5c1zYpav5FrecYTvQGPovo5g5cXxc9
+        1RaDbutch2k3F7BFsn/guahoynN3dDI=
+X-Google-Smtp-Source: AA0mqf6GLQkOG+1nRPuyrln1cg9/qE9hPWTcUF2NcqOY3pLgJSG8Xf9e/WYv2vYh++6oTI3xz3VtbA==
+X-Received: by 2002:a17:90b:48cb:b0:212:e2e9:a522 with SMTP id li11-20020a17090b48cb00b00212e2e9a522mr699407pjb.55.1668492934466;
+        Mon, 14 Nov 2022 22:15:34 -0800 (PST)
+Received: from localhost.localdomain ([221.226.144.218])
+        by smtp.gmail.com with ESMTPSA id p9-20020a1709027ec900b0017f57787a4asm8736769plb.229.2022.11.14.22.15.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 22:15:34 -0800 (PST)
+From:   Song Shuai <suagrfillet@gmail.com>
+To:     guoren@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
+        mark.rutland@arm.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Song Shuai <suagrfillet@gmail.com>
+Subject: [PATCH 0/3] riscv/ftrace: make function graph use ftrace directly
+Date:   Tue, 15 Nov 2022 14:15:22 +0800
+Message-Id: <20221115061525.112757-1-suagrfillet@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <000000000000e4e4fe05ed5bf2b0@google.com> <Y3K2V6hwifLlBDfA@slm.duckdns.org>
-In-Reply-To: <Y3K2V6hwifLlBDfA@slm.duckdns.org>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 15 Nov 2022 07:12:24 +0100
-Message-ID: <CACT4Y+bD72vupKkvnbCH8KxVH3wmu7frNj0ycfCE0SK+CxjeZw@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in kernfs_activate (2)
-To:     Tejun Heo <tj@kernel.org>
-Cc:     syzbot <syzbot+782984d6f1701b526edb@syzkaller.appspotmail.com>,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,42 +71,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 at 22:42, Tejun Heo <tj@kernel.org> wrote:
->
-> On Sun, Nov 13, 2022 at 07:40:56AM -0800, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    59f2f4b8a757 fs/userfaultfd: Fix maple tree iterator in us..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=14e836fa880000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=480ba0fb2fd243ac
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=782984d6f1701b526edb
-> > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> >
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/619de907b82c/disk-59f2f4b8.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/bcd0dc7d69ef/vmlinux-59f2f4b8.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/a8dbe0bc7228/bzImage-59f2f4b8.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+782984d6f1701b526edb@syzkaller.appspotmail.com
-> >
-> > usb 4-1: Direct firmware load for ueagle-atm/eagleII.fw failed with error -2
-> > usb 4-1: Falling back to sysfs fallback for: ueagle-atm/eagleII.fw
-> > ==================================================================
-> > BUG: KASAN: use-after-free in kernfs_root fs/kernfs/kernfs-internal.h:66 [inline]
-> > BUG: KASAN: use-after-free in kernfs_next_descendant_post fs/kernfs/dir.c:1289 [inline]
-> > BUG: KASAN: use-after-free in kernfs_activate+0xd0/0x3a0 fs/kernfs/dir.c:1344
-> > Read of size 8 at addr ffff888079194b10 by task kworker/1:12/5383
->
-> Likely the same one as:
->
->  http://lkml.kernel.org/r/0000000000003a95ce05cd867417@google.com
->
-> This is a bug on the firmware loader side.
+In RISC-V architecture, when we enable the ftrace_graph tracer on some
+functions, the function tracings on other functions will suffer extra
+graph tracing work. In essence, graph_ops isn't limited by its func_hash
+due to the global ftrace_graph_[regs]_call label. That should be corrected.
 
-#syz dup: KASAN: use-after-free Read in kernfs_next_descendant_post (2)
+What inspires me is the commit 0c0593b45c9b ("x86/ftrace: Make function
+graph use ftrace directly") that uses graph_ops::func function to install
+return_hooker and makes the function called against its func_hash.
+
+This series of patches makes function graph use ftrace directly for riscv.
+
+If FTRACE_WITH_REGS isn't defined, ftrace_caller keeps ftrace_graph_call
+so that it can be replaced with the calling of prepare_ftrace_return by
+the enable/disable helper.
+
+As for defining FTRACE_WITH_REGS, ftrace_caller is adjusted to save the
+necessary regs against the pt_regs layout, so it can reasonably call the
+graph_ops::func function - ftrace_graph_func. And ftrace_graph_[regs]_call
+and its enable/disable helper aren't needed.
+
+The tests generated by CONFIG_FTRACE_STARTUP_TEST have passed in the local
+qemu-system-riscv64 virt machine. The following is the log during startup.
+
+```
+Nov 15 03:07:13 stage4 kernel: Testing tracer function: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace ops #1: 
+Nov 15 03:07:13 stage4 kernel: (1 0 1 0 0)  
+Nov 15 03:07:13 stage4 kernel: (1 1 2 0 0)  
+Nov 15 03:07:13 stage4 kernel: (2 1 3 0 365) 
+Nov 15 03:07:13 stage4 kernel: (2 2 4 0 399) 
+Nov 15 03:07:13 stage4 kernel: (3 2 4 0 146071) 
+Nov 15 03:07:13 stage4 kernel: (3 3 5 0 146105) PASSED
+Nov 15 03:07:13 stage4 kernel: Testing dynamic ftrace ops #2: 
+Nov 15 03:07:13 stage4 kernel: (1 0 1 589 0)  
+Nov 15 03:07:13 stage4 kernel: (1 1 2 635 0)  
+Nov 15 03:07:13 stage4 kernel: (2 1 3 1 2)  
+Nov 15 03:07:13 stage4 kernel: (2 2 4 125 126) 
+Nov 15 03:07:13 stage4 kernel: (3 2 4 146001 146078) 
+Nov 15 03:07:13 stage4 kernel: (3 3 5 146035 146112) PASSED
+Nov 15 03:07:13 stage4 kernel: Testing ftrace recursion: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing ftrace recursion safe: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing ftrace regs: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer nop: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer irqsoff: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup:
+Nov 15 03:07:13 stage4 kernel: sched: DL replenish lagged too much
+Nov 15 03:07:13 stage4 kernel: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup_rt: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer wakeup_dl: PASSED
+Nov 15 03:07:13 stage4 kernel: Testing tracer function_graph: PASSED
+```
+
+Note that the changes of mcount-dyn.S conflicts with this unmerged
+commit (riscv: entry: consolidate general regs saving/restoring).
+https://lore.kernel.org/linux-riscv/20221103075047.1634923-15-guoren@kernel.org/
+
+Song Shuai (3):
+  riscv/ftrace: add ftrace_graph_func
+  riscv/ftrace: SAVE_ALL supports lightweight save
+  riscv/ftrace: cleanup ftrace_caller and ftrace_regs_caller
+
+ arch/riscv/include/asm/ftrace.h |  13 ++-
+ arch/riscv/kernel/ftrace.c      |  35 ++++----
+ arch/riscv/kernel/mcount-dyn.S  | 145 +++++++++++++++++++++++---------
+ 3 files changed, 136 insertions(+), 57 deletions(-)
+
+-- 
+2.20.1
+
