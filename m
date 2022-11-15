@@ -2,66 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECB762A14E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF29F62A14F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiKOS27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 13:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
+        id S229890AbiKOS3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 13:29:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbiKOS2p (ORCPT
+        with ESMTP id S231800AbiKOS3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 13:28:45 -0500
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9952DDFEC
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:28:44 -0800 (PST)
-Received: by mail-qv1-xf49.google.com with SMTP id mo15-20020a056214330f00b004b96d712bccso11368960qvb.22
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:28:44 -0800 (PST)
+        Tue, 15 Nov 2022 13:29:13 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2352FFC1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:29:03 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id o7so14059758pjj.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:29:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=SoUmPkHlkDH+7nhAOWIZ0SCq+4Ebj+CALgmJJRMTdeg=;
-        b=eANR3/+r4/MRfVqHI/utl+NkZlPzevU1TGEEysolV5xO3wHm28FQqXZ3yK+tishuev
-         FEdyAzazOUwFaX/ieAkinArTmqoCzRPkfskS+jTQLD1MSouu/OMU9BXEUA/pPut5/7Rb
-         8fn99JhkQp5ZK/xXjV8842yEKstiUq2qleGkkoi+kBxNAuyXfOsquk6c5zVgEI4fEAjS
-         r9IEjLOtF7ByxDK7FTHiPiPVlT5Bn+FBXA5Vt40vGwdOeNFIQOVIcJN/BhQnjV17zKvA
-         cio68NUuIMMwMyvC7DbTShTMKa17vFn4vCPsfivXCRG8D7S3llUgVfR+CFMQNZnAf48h
-         F08Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JyDgb7jTANE0Qk859LfOEdF0OgwEPQqULMlB2KUqBqA=;
+        b=SPvwBZphKt7+WD2D+YQ/omAaF18nUwvOrvHwpHsUIQwQngxMUoOz8S51fOMuJRUcjy
+         O5gyD+/5wcpkmMdwa3/gZlr/Zktv1qA+qM53PvIoaOk83YK0inRytOPqAMc7f47mADV8
+         Qalg+zcJAkxyoSH5vGsLFIg2aw1TBgZ0kcyBHwTUFt+jAQ4HCE7fy1cgA5qdFBA9XYeO
+         9g/G7BI1dFi+prQUVAbdAm2BBKCxzOzfwfVocNlZZNccSFT2+fKiDNSpoIIFdpSdxSZd
+         +zXG1n3WoCJc1IyKZ/khKDqmsSyJrP45w3dMptlCoaswDJNg+QHrtAdDjAYmnAfFkg7j
+         w3zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SoUmPkHlkDH+7nhAOWIZ0SCq+4Ebj+CALgmJJRMTdeg=;
-        b=G/pCA6v6ZKwdFZPQFioFY9X+NY2sCiI/2xpCxqA+PH5e0Vr2VF8sQ0rLEBRryw828B
-         BfXrcsR8Yb08PPsxQxbwpGvKmhR1Y0HlGVVo1xAvjzRz1e3QIihNarBbWkbvylIZpyUb
-         1VKypTmIfGquXb+Llcny9Ed3wfksk3a9w8GSbstw+o61e1EgVSVi5547sJg5oHdzQfkS
-         EOkqEtjqtSMKCE9TbCcCN9wHxJQTHEapLp/wfn5/DIdp2Y7nzpG0FitgyyM3xRXFGtTm
-         R5GT73bHcXi8FJ8DRP/ix747T+FDknhqJ7iAK/a9QwrSspY9DBYStJlMnSU64zxXJqOx
-         3DDw==
-X-Gm-Message-State: ANoB5pmCZoHgFbK4N4gCuhDnsj76ilnWAYgmFsEUiboB2V0rhalT1+eD
-        EFrWUcjVQP00j7jqe+tYYkgd1Td6o+lwzw==
-X-Google-Smtp-Source: AA0mqf5m9Y9Hm6Nw/W5UoBKliGXP3uUoOBJcWlloA4j+N/XrgbIVcd0oc03Z6IzUgCXGvi39AAJLJagsngRr5A==
-X-Received: from edumazet1.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:395a])
- (user=edumazet job=sendgmr) by 2002:ac8:7502:0:b0:3a5:7e65:ddeb with SMTP id
- u2-20020ac87502000000b003a57e65ddebmr17287503qtq.424.1668536923808; Tue, 15
- Nov 2022 10:28:43 -0800 (PST)
-Date:   Tue, 15 Nov 2022 18:28:41 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221115182841.2640176-1-edumazet@google.com>
-Subject: [PATCH v2 -next] iommu/dma: avoid expensive indirect calls for sync operations
-From:   Eric Dumazet <edumazet@google.com>
-To:     Joerg Roedel <joro@8bytes.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>, iommu@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JyDgb7jTANE0Qk859LfOEdF0OgwEPQqULMlB2KUqBqA=;
+        b=WveWs6P5+bYVOntD8H3z1g7uvCZ7WG5o38sk1kPQjV4yUs/RwxRhnWd7riqK/68DBe
+         JxijLItTpERqdaBT4hmx8RsCQCndTkBRMBQ29jUEN5TMATOnvh4lEytW+VXSRXChkq0q
+         mNc8yp5FnKn19NGEd8Qji3w0tcC3OKpZhL9pi34XVEUVeAj/ESfrDMOsgUApUy75cz9g
+         eL/I2rleFInQ9o3BfuHQrD9Mwnq8RutXWcC+PMJQ56BQZamwp9TbkNt5+iTNZL68v3c4
+         56t6ZPPAg0rMJ625P7/lcACDWCSlMhAT4GoSsrErh99+d/rzSwm990ChyOZP2qVVhKMx
+         Lndg==
+X-Gm-Message-State: ANoB5pmU+W8N2xrhPhccAZOWbD5CpNcoBM9VaJp9g/JF/mWf55zp8tKn
+        +0IAW+yuYPy4FkBnI0mUto2vAY/uxT7Nlg==
+X-Google-Smtp-Source: AA0mqf66garNKvM1of1uk/mXKAilT5V4v/nR05Pj2iYX1RAq7vck4xLmVnWZWoGwC9G9lzt2wbvyCg==
+X-Received: by 2002:a17:902:e792:b0:188:dd4b:7da3 with SMTP id cp18-20020a170902e79200b00188dd4b7da3mr32566plb.91.1668536943144;
+        Tue, 15 Nov 2022 10:29:03 -0800 (PST)
+Received: from localhost (fwdproxy-prn-003.fbsv.net. [2a03:2880:ff:3::face:b00c])
+        by smtp.gmail.com with ESMTPSA id g10-20020a1709026b4a00b0018853dd8832sm10277486plt.4.2022.11.15.10.29.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 10:29:02 -0800 (PST)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     hannes@cmpxchg.org
+Subject: [RFC][PATCH 0/4] cachestat: a new syscall for page cache state of files
+Date:   Tue, 15 Nov 2022 10:28:57 -0800
+Message-Id: <20221115182901.2755368-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,215 +68,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quite often, NIC devices do not need dma_sync operations
-on x86_64 at least.
+There is currently no good way to query the page cache state of large
+file sets and directory trees. There is mincore(), but it scales poorly:
+the kernel writes out a lot of bitmap data that userspace has to
+aggregate, when the user really doesn not care about per-page information
+in that case. The user also needs to mmap and unmap each file as it goes
+along, which can be quite slow as well.
 
-Indeed, when dev_is_dma_coherent(dev) is true and
-dev_use_swiotlb(dev) is false, iommu_dma_sync_single_for_cpu()
-and friends do nothing.
+This series of patches introduces a new system call, cachestat, that
+summarizes the page cache statistics (number of cached pages, dirty
+pages, pages marked for writeback, evicted pages etc.) of a file, in a
+specified range of bytes. It also include a selftest suite that tests some
+typical usage
 
-However, indirectly calling them when CONFIG_RETPOLINE=y
-consumes about 10% of cycles on a cpu receiving packets
-from softirq at ~100Gbit rate, as shown in [1]
+This interface is inspired by past discussion and concerns with fincore,
+which has a similar design (and as a result, issues) as mincore.
+Relevant links:
 
-Even if/when CONFIG_RETPOLINE is not set, there
-is a cost of about 3%.
+https://lkml.indiana.edu/hypermail/linux/kernel/1302.1/04207.html
+https://lkml.indiana.edu/hypermail/linux/kernel/1302.1/04209.html
 
-This patch adds dev->skip_dma_sync boolean that can be opted-in.
+For comparison with mincore, I ran both syscalls on a 2TB sparse file:
 
-For instance iommu_setup_dma_ops() can set this boolean to true
-if CONFIG_DMA_API_DEBUG is not set, and dev_is_dma_coherent(dev).
+Using mincore:
+real    0m37.510s
+user    0m2.934s
+sys     0m34.558s
 
-Then later, if/when swiotlb is used for the first time, the flag
-is turned off, from swiotlb_tbl_map_single()
+Using cachestat:
+real    0m0.009s
+user    0m0.000s
+sys     0m0.009s
 
-We might in the future inline again these helpers, like:
+Mincore takes about 4000 times longer to obtain less aggregated
+information!
 
-static void inline
-dma_sync_single_for_cpu(struct device *dev, dma_addr_t addr,
-			size_t size, enum dma_data_direction dir)
-{
-	if (!dev_skip_dma_sync(dev))
-		__dma_sync_single_for_cpu(dev, addr, size, dir);
-}
+Some open questions:
 
-perf profile before the patch:
+* What other fields might be useful?
+* Huge pages: another useful stat to include is the number of huge pages
+  cached. However, as the size of a huge page can vary, having just a
+  single field is not very meaningful.
+* An alternative would be to have one field for each possible size - but
+  this is not future-proof, as bigger sizes might be introduced later.
 
-    18.53%  [kernel]       [k] gq_rx_skb
-    14.77%  [kernel]       [k] napi_reuse_skb
-     8.95%  [kernel]       [k] skb_release_data
-     5.42%  [kernel]       [k] dev_gro_receive
-     5.37%  [kernel]       [k] memcpy
-<*>  5.26%  [kernel]       [k] iommu_dma_sync_sg_for_cpu
-     4.78%  [kernel]       [k] tcp_gro_receive
-<*>  4.42%  [kernel]       [k] iommu_dma_sync_sg_for_device
-     4.12%  [kernel]       [k] ipv6_gro_receive
-     3.65%  [kernel]       [k] gq_pool_get
-     3.25%  [kernel]       [k] skb_gro_receive
-     2.07%  [kernel]       [k] napi_gro_frags
-     1.98%  [kernel]       [k] tcp6_gro_receive
-     1.27%  [kernel]       [k] gq_rx_prep_buffers
-     1.18%  [kernel]       [k] gq_rx_napi_handler
-     0.99%  [kernel]       [k] csum_partial
-     0.74%  [kernel]       [k] csum_ipv6_magic
-     0.72%  [kernel]       [k] free_pcp_prepare
-     0.60%  [kernel]       [k] __napi_poll
-     0.58%  [kernel]       [k] net_rx_action
-     0.56%  [kernel]       [k] read_tsc
-<*>  0.50%  [kernel]       [k] __x86_indirect_thunk_r11
-     0.45%  [kernel]       [k] memset
+Johannes Weiner (1):
+  workingset: fix confusion around eviction vs refault container
 
-After patch, lines with <*> no longer show up, and overall
-cpu usage looks much better (~60% instead of ~72%)
+Nhat Pham (3):
+  workingset: refactor LRU refault to expose refault recency check
+  cachestat: implement cachestat syscall
+  selftests: Add selftests for cachestat
 
-    25.56%  [kernel]       [k] gq_rx_skb
-     9.90%  [kernel]       [k] napi_reuse_skb
-     7.39%  [kernel]       [k] dev_gro_receive
-     6.78%  [kernel]       [k] memcpy
-     6.53%  [kernel]       [k] skb_release_data
-     6.39%  [kernel]       [k] tcp_gro_receive
-     5.71%  [kernel]       [k] ipv6_gro_receive
-     4.35%  [kernel]       [k] napi_gro_frags
-     4.34%  [kernel]       [k] skb_gro_receive
-     3.50%  [kernel]       [k] gq_pool_get
-     3.08%  [kernel]       [k] gq_rx_napi_handler
-     2.35%  [kernel]       [k] tcp6_gro_receive
-     2.06%  [kernel]       [k] gq_rx_prep_buffers
-     1.32%  [kernel]       [k] csum_partial
-     0.93%  [kernel]       [k] csum_ipv6_magic
-     0.65%  [kernel]       [k] net_rx_action
+ MAINTAINERS                                   |   8 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ include/linux/swap.h                          |   1 +
+ include/linux/syscalls.h                      |   2 +
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/uapi/linux/mman.h                     |   8 +
+ kernel/sys_ni.c                               |   1 +
+ mm/Makefile                                   |   2 +-
+ mm/cachestat.c                                | 109 +++++++++++
+ mm/workingset.c                               | 142 +++++++++-----
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/cachestat/.gitignore  |   2 +
+ tools/testing/selftests/cachestat/Makefile    |   9 +
+ .../selftests/cachestat/test_cachestat.c      | 184 ++++++++++++++++++
+ 15 files changed, 430 insertions(+), 46 deletions(-)
+ create mode 100644 mm/cachestat.c
+ create mode 100644 tools/testing/selftests/cachestat/.gitignore
+ create mode 100644 tools/testing/selftests/cachestat/Makefile
+ create mode 100644 tools/testing/selftests/cachestat/test_cachestat.c
 
-Many thanks to Robin Murphy for his feedback and ideas to make this patch
-much better !
-
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: Joerg Roedel <joro@8bytes.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: iommu@lists.linux.dev
----
- drivers/iommu/dma-iommu.c   |  2 ++
- include/linux/device.h      |  1 +
- include/linux/dma-map-ops.h |  5 +++++
- kernel/dma/mapping.c        | 20 ++++++++++++++++----
- kernel/dma/swiotlb.c        |  3 +++
- 5 files changed, 27 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index 9297b741f5e80e2408e864fc3f779410d6b04d49..bd3f4d3d646cc57c7588f22d49ea32ac693e38ff 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -1587,6 +1587,8 @@ void iommu_setup_dma_ops(struct device *dev, u64 dma_base, u64 dma_limit)
- 		if (iommu_dma_init_domain(domain, dma_base, dma_limit, dev))
- 			goto out_err;
- 		dev->dma_ops = &iommu_dma_ops;
-+		if (!IS_ENABLED(CONFIG_DMA_API_DEBUG) && dev_is_dma_coherent(dev))
-+			dev->skip_dma_sync = true;
- 	}
- 
- 	return;
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 424b55df02727b5742070f72374fd65f5dd68151..2fbb2cc18e44e21eba5f43557ee16d0dc92ef2ef 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -647,6 +647,7 @@ struct device {
-     defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
- 	bool			dma_coherent:1;
- #endif
-+	bool			skip_dma_sync:1;
- #ifdef CONFIG_DMA_OPS_BYPASS
- 	bool			dma_ops_bypass : 1;
- #endif
-diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
-index d678afeb8a13a3a54380a959d14f79bca9c23d8e..4691081f71c51da5468cf6703570ebc7a64d40c5 100644
---- a/include/linux/dma-map-ops.h
-+++ b/include/linux/dma-map-ops.h
-@@ -275,6 +275,11 @@ static inline bool dev_is_dma_coherent(struct device *dev)
- }
- #endif /* CONFIG_ARCH_HAS_DMA_COHERENCE_H */
- 
-+static inline bool dev_skip_dma_sync(struct device *dev)
-+{
-+	return dev->skip_dma_sync;
-+}
-+
- void *arch_dma_alloc(struct device *dev, size_t size, dma_addr_t *dma_handle,
- 		gfp_t gfp, unsigned long attrs);
- void arch_dma_free(struct device *dev, size_t size, void *cpu_addr,
-diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-index 33437d6206445812b6d4d5b33c77235d18074dec..5d5d286ffae7fa6b7ff1aef46bdc59e7e31a8038 100644
---- a/kernel/dma/mapping.c
-+++ b/kernel/dma/mapping.c
-@@ -328,9 +328,12 @@ EXPORT_SYMBOL(dma_unmap_resource);
- void dma_sync_single_for_cpu(struct device *dev, dma_addr_t addr, size_t size,
- 		enum dma_data_direction dir)
- {
--	const struct dma_map_ops *ops = get_dma_ops(dev);
-+	const struct dma_map_ops *ops;
- 
- 	BUG_ON(!valid_dma_direction(dir));
-+	if (dev_skip_dma_sync(dev))
-+		return;
-+	ops = get_dma_ops(dev);;
- 	if (dma_map_direct(dev, ops))
- 		dma_direct_sync_single_for_cpu(dev, addr, size, dir);
- 	else if (ops->sync_single_for_cpu)
-@@ -342,9 +345,12 @@ EXPORT_SYMBOL(dma_sync_single_for_cpu);
- void dma_sync_single_for_device(struct device *dev, dma_addr_t addr,
- 		size_t size, enum dma_data_direction dir)
- {
--	const struct dma_map_ops *ops = get_dma_ops(dev);
-+	const struct dma_map_ops *ops;
- 
- 	BUG_ON(!valid_dma_direction(dir));
-+	if (dev_skip_dma_sync(dev))
-+		return;
-+	ops = get_dma_ops(dev);;
- 	if (dma_map_direct(dev, ops))
- 		dma_direct_sync_single_for_device(dev, addr, size, dir);
- 	else if (ops->sync_single_for_device)
-@@ -356,9 +362,12 @@ EXPORT_SYMBOL(dma_sync_single_for_device);
- void dma_sync_sg_for_cpu(struct device *dev, struct scatterlist *sg,
- 		    int nelems, enum dma_data_direction dir)
- {
--	const struct dma_map_ops *ops = get_dma_ops(dev);
-+	const struct dma_map_ops *ops;
- 
- 	BUG_ON(!valid_dma_direction(dir));
-+	if (dev_skip_dma_sync(dev))
-+		return;
-+	ops = get_dma_ops(dev);;
- 	if (dma_map_direct(dev, ops))
- 		dma_direct_sync_sg_for_cpu(dev, sg, nelems, dir);
- 	else if (ops->sync_sg_for_cpu)
-@@ -370,9 +379,12 @@ EXPORT_SYMBOL(dma_sync_sg_for_cpu);
- void dma_sync_sg_for_device(struct device *dev, struct scatterlist *sg,
- 		       int nelems, enum dma_data_direction dir)
- {
--	const struct dma_map_ops *ops = get_dma_ops(dev);
-+	const struct dma_map_ops *ops;
- 
- 	BUG_ON(!valid_dma_direction(dir));
-+	if (dev_skip_dma_sync(dev))
-+		return;
-+	ops = get_dma_ops(dev);;
- 	if (dma_map_direct(dev, ops))
- 		dma_direct_sync_sg_for_device(dev, sg, nelems, dir);
- 	else if (ops->sync_sg_for_device)
-diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-index 339a990554e7fed98dd337efe4fb759a98161cdb..03ebd9803db1a457600f1fac8a18fb3dde724a6f 100644
---- a/kernel/dma/swiotlb.c
-+++ b/kernel/dma/swiotlb.c
-@@ -734,6 +734,9 @@ phys_addr_t swiotlb_tbl_map_single(struct device *dev, phys_addr_t orig_addr,
- 	int index;
- 	phys_addr_t tlb_addr;
- 
-+	if (unlikely(dev->skip_dma_sync))
-+		dev->skip_dma_sync = false;
-+
- 	if (!mem || !mem->nslabs) {
- 		dev_warn_ratelimited(dev,
- 			"Can not allocate SWIOTLB buffer earlier and can't now provide you with the DMA bounce buffer");
--- 
-2.38.1.431.g37b22c650d-goog
-
+--
+2.30.2
