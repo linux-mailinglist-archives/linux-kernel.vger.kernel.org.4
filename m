@@ -2,115 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D40D629EF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44EC3629EFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238603AbiKOQYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 11:24:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
+        id S238636AbiKOQ0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 11:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238579AbiKOQYr (ORCPT
+        with ESMTP id S238381AbiKOQ0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 11:24:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EE7221;
-        Tue, 15 Nov 2022 08:24:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 725E3B819B6;
-        Tue, 15 Nov 2022 16:24:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAE3DC433B5;
-        Tue, 15 Nov 2022 16:24:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668529484;
-        bh=TuVhkAZ0uTh5Zg7z7YoIeegiTSUDH74uPKa+wzXU/Cw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=JA5YxFCEc98HTu7yw2uflsCyRrPIvVZUNO6fyq8Il/vaT/EY/BEpShw3N2W/x+3Uc
-         RzBF21umBWS0SU4k20ICSzzpFwKe4kneFMO23bpEVz8xrfFRpHqWyPLQQcR8WHaxS6
-         y/2jlcDUYoIJ9uNw06mb3k4LqZFBJm9QKjpN7UDQfAJ29W9Hkf2Kh/AiPuQ4dQUdVh
-         lM2TaV5mvcY5bl8jx6rOKVlQC2Ssa/kcdXg4jiDXV2QEf+tJ7m62wMgsYpbYzsggsk
-         hgsU3egUEm3yUAgYIFBwwEwHTB5ieblNiu3DKFiU6wmXijWZ1/eyIy1jk4UMy9nURX
-         hog5ZPJA2Bz/w==
-Date:   Tue, 15 Nov 2022 10:24:42 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Wei Gong <gongwei833x@gmail.com>, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>
-Subject: Re: [PATCH v2] pci: fix device presence detection for VFs
-Message-ID: <20221115162442.GA919213@bhelgaas>
+        Tue, 15 Nov 2022 11:26:10 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5457FD12D;
+        Tue, 15 Nov 2022 08:26:08 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id 8so9830212qka.1;
+        Tue, 15 Nov 2022 08:26:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=a9IhxCF1cAeyewI8SYiOpvZjTk66VUbn+seWVTa9bhw=;
+        b=mykMIgeniufSLJ9cmo0MZyWqwIjhiClWIOtoujOie6LEb8/+QUhRlgYgQnms1lA7+s
+         VQ8XwZPFzTX4/ELERle39zxKRBeX2JXh/UwOZ8ZcGZ/hXWOEcK6+W0xu0sQ39zEYD94y
+         qzALW4knzggQGfxQvbIBwpEMZJaxk+oPlmmjSRGBum4Qrl5kYyvWjz2v2W18xxkDe3Lp
+         U6Oj8Yt9b+T3ymz6ZOgqF/mfBFNgclKlPJfo2ga8w6WHlCPStF8IKyIoPuuUgvi+5qB2
+         bxjMFcPOxn0YP46gbCWCvjcjSRt7BbDbuGb/9rS8saJrqa6q7uU+11I5Q56T1eX8KOdp
+         wS9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a9IhxCF1cAeyewI8SYiOpvZjTk66VUbn+seWVTa9bhw=;
+        b=BOu7sUjzMr0NU4+U+KxZv2ZuWTK0JSthCM6JbBDqovhQ2Q8iVbgC70Mu1FD5Dw4QQP
+         Kfmgv4F44QvZ0tLiLH/ClbXhDuS4vP5PzRY67y+BcEMzr7jAL2jk58dJebldYQiSW7+Q
+         2H2IgWBarnDsOpQs8RM2J8A69gPpQwTVRwVzmH0iVTFG2X0OSQfedAlqh6m4ylEsd9QD
+         RO1W+loLlZFoImbetQdX5uVo6sPG3fFU/Jgi7S+akL3oYuLh/fF+bJiuhpl25/kIZ5ba
+         wCohxgWRY3Bw6Hk5FwCdldytKMbA5tTLA4VVaJyYq+VOscvDXYTUbAt6I2E3a2+w6HAA
+         +c2Q==
+X-Gm-Message-State: ANoB5pmOwqgGNGskxdwpe1J5cX0VvGzkfILRpg2Y6tsThG0qJWbJTQZm
+        HLjA0TWNh7orbFWMN6l/vOM=
+X-Google-Smtp-Source: AA0mqf4nG5AWGXxrB9xBsaq2mJWE00q21VzciHsLwLRgvhGMU+WTheBsbXZ+2iO5iF39OKFCzAsETA==
+X-Received: by 2002:a05:620a:1d0d:b0:6f9:c2be:a89 with SMTP id dl13-20020a05620a1d0d00b006f9c2be0a89mr15912566qkb.437.1668529567455;
+        Tue, 15 Nov 2022 08:26:07 -0800 (PST)
+Received: from errol.ini.cmu.edu (pool-72-77-81-136.pitbpa.fios.verizon.net. [72.77.81.136])
+        by smtp.gmail.com with ESMTPSA id s8-20020a05620a254800b006fa16fe93bbsm8449105qko.15.2022.11.15.08.26.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 08:26:07 -0800 (PST)
+Date:   Tue, 15 Nov 2022 11:26:05 -0500
+From:   "Gabriel L. Somlo" <gsomlo@gmail.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, kgugala@antmicro.com,
+        mholenko@antmicro.com, joel@jms.id.au,
+        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
+        geert@linux-m68k.org
+Subject: Re: [PATCH v3 12/14] serial: liteuart: add IRQ support for the RX
+ path
+Message-ID: <Y3O9nfeyEXxhsmA5@errol.ini.cmu.edu>
+References: <20221112212125.448824-1-gsomlo@gmail.com>
+ <20221112212125.448824-13-gsomlo@gmail.com>
+ <a914ebd3-5eb8-6c53-3f58-3371fdabf7@linux.intel.com>
+ <Y3O7AKVuY3/n6I5K@errol.ini.cmu.edu>
+ <7b5042be-8061-d4f4-43b5-75a5ad6dbcb0@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221113034519-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7b5042be-8061-d4f4-43b5-75a5ad6dbcb0@linux.intel.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Lukas; you can probably give a better answer here :)]
-
-On Sun, Nov 13, 2022 at 03:46:06AM -0500, Michael S. Tsirkin wrote:
-> On Fri, Nov 11, 2022 at 05:42:19PM -0600, Bjorn Helgaas wrote:
-> > On Thu, Nov 10, 2022 at 03:15:55PM -0500, Michael S. Tsirkin wrote:
-> > > On Thu, Nov 10, 2022 at 01:35:47PM -0600, Bjorn Helgaas wrote:
-> > > ...
-> > 
-> > > > Prior to this change pci_device_is_present(VF) returned "false"
-> > > > (because the VF Vendor ID is 0xffff); after the change it will return
-> > > > "true" (because it will look at the PF Vendor ID instead).
-> > > > 
-> > > > Previously virtio_pci_remove() called virtio_break_device().  I guess
-> > > > that meant the virtio I/O operation will never be completed?
-> > > > 
-> > > > But if we don't call virtio_break_device(), the virtio I/O operation
-> > > > *will* be completed?
-> > > 
-> > > It's completed anyway - nothing special happened at the device
-> > > level - but driver does not detect it.
-> > > 
-> > > Calling virtio_break_device will mark all queues as broken, as
-> > > a result attempts to check whether operation completed
-> > > will return false.
-> > > 
-> > > This probably means we need to work on handling surprise removal
-> > > better in virtio blk - since it looks like actual suprise
-> > > removal will hang too. But that I think is a separate issue.
-> > 
-> > Yeah, this situation doesn't seem like it's inherently special for
-> > virtio or VFs, so it's a little surprising to see
-> > pci_device_is_present() used there.
+On Tue, Nov 15, 2022 at 06:21:00PM +0200, Ilpo Järvinen wrote:
+> On Tue, 15 Nov 2022, Gabriel L. Somlo wrote:
 > 
-> Just making sure - pci_device_is_present *is* the suggested way
-> to distinguish between graceful and surprise removal, isn't it?
+> > On Tue, Nov 15, 2022 at 06:00:11PM +0200, Ilpo Järvinen wrote:
+> > > On Sat, 12 Nov 2022, Gabriel Somlo wrote:
+> > > 
+> > > > Add support for IRQ-driven RX. Support for the TX path will be added
+> > > > in a separate commit.
+> > > > 
+> > > > Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+> > > > ---
+> > > >  drivers/tty/serial/liteuart.c | 61 +++++++++++++++++++++++++++++++----
+> > > >  1 file changed, 54 insertions(+), 7 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
+> > > > index cf1ce597b45e..e30adb30277f 100644
+> > > > --- a/drivers/tty/serial/liteuart.c
+> > > > +++ b/drivers/tty/serial/liteuart.c
+> > > > @@ -6,6 +6,7 @@
+> > > >   */
+> > > >  
+> > > >  #include <linux/console.h>
+> > > > +#include <linux/interrupt.h>
+> > > >  #include <linux/litex.h>
+> > > >  #include <linux/module.h>
+> > > >  #include <linux/of.h>
+> > > > @@ -130,13 +131,29 @@ static void liteuart_rx_chars(struct uart_port *port)
+> > > >  	tty_flip_buffer_push(&port->state->port);
+> > > >  }
+> > > >  
+> > > > +static irqreturn_t liteuart_interrupt(int irq, void *data)
+> > > > +{
+> > > > +	struct liteuart_port *uart = data;
+> > > > +	struct uart_port *port = &uart->port;
+> > > > +	u8 isr = litex_read8(port->membase + OFF_EV_PENDING);
+> > > > +
+> > > > +	/* for now, only rx path triggers interrupts */
+> > > 
+> > > Please don't add comment like this at all when your series removes it in a 
+> > > later patch.
+> > 
+> > OK, I will remove it in v4.
+> > 
+> > > > +	isr &= EV_RX;
+> > > > +
+> > > > +	spin_lock(&port->lock);
+> > > > +	if (isr & EV_RX)
+> > > > +		liteuart_rx_chars(port);
+> > > > +	spin_unlock(&port->lock);
+> > > > +
+> > > > +	return IRQ_RETVAL(isr);
+> > > > +}
+> > > > +
+> > > >  static void liteuart_timer(struct timer_list *t)
+> > > >  {
+> > > >  	struct liteuart_port *uart = from_timer(uart, t, timer);
+> > > >  	struct uart_port *port = &uart->port;
+> > > >  
+> > > > -	liteuart_rx_chars(port);
+> > > > -
+> > > > +	liteuart_interrupt(0, port);
+> > > >  	mod_timer(&uart->timer, jiffies + uart_poll_timeout(port));
+> > > >  }
+> > > >  
+> > > > @@ -162,19 +179,42 @@ static unsigned int liteuart_get_mctrl(struct uart_port *port)
+> > > >  static int liteuart_startup(struct uart_port *port)
+> > > >  {
+> > > >  	struct liteuart_port *uart = to_liteuart_port(port);
+> > > > +	int ret;
+> > > > +	u8 irq_mask = 0;
+> > > >  
+> > > > -	/* disable events */
+> > > > -	litex_write8(port->membase + OFF_EV_ENABLE, 0);
+> > > > +	if (port->irq) {
+> > > > +		ret = request_irq(port->irq, liteuart_interrupt, 0,
+> > > > +				  KBUILD_MODNAME, uart);
+> > > > +		if (ret == 0) {
+> > > > +			/* only enable rx interrupts at this time */
+> > > 
+> > > This comment seems pretty useless. Your code says very much the same.
+> > 
+> > The comment was meant to let the reader know that the code is doing it
+> > *intentionally* (rather than forgetting to enable tx irqs by mistake).
+> > But I'm OK with removing this comment in v4 as well if you think
+> > that's an overly paranoid and redundant thing to do... :)
+> 
+> I see. Reading the other comment first caused me to misinterpret this one 
+> to mean that only RX interrupts are implemented.
+> 
+> Maybe if you change "at this time" to "at startup" it would make it more 
+> obvious.
+ 
+OK, I'll fix the comment per your suggestion rather than get rid of it.
 
-I'm not quite sure what you're asking here.  A driver would learn
-about a graceful removal when its .remove() method is called before
-the device is physically removed.  The device is still accessible and
-everything should just work.
+Thanks again,
+--G
 
-A driver would learn about a surprise removal either by a read result
-that is PCI_POSSIBLE_ERROR() or possibly when its .error_detected()
-callback is called.  The .remove() method will eventually be called
-when we destroy the pci_dev.
+> -- 
+>  i.
 
-I guess .remove() might use pci_device_is_present() and assume that if
-it returns "true", this is a graceful removal.  But that's not
-reliable since the device could be physically removed between the
-pci_device_is_present() call and the driver's next access to it.
-
-I think the best thing would be for .remove() to just do whatever it
-needs to do and look for errors, e.g., using PCI_POSSIBLE_ERROR(),
-without relying on pci_device_is_present().
-
-If .remove() wants to avoid doing something that might cause an error,
-maybe we should expose pci_dev_is_disconnected().  That's set by the
-hotplug remove paths before .remove() is called and feels a little
-less racy.
-
-Bjorn
