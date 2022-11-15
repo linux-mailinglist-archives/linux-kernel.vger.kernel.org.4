@@ -2,101 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB82629D4A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:24:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74091629D4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbiKOPYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56290 "EHLO
+        id S237069AbiKOP0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:26:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbiKOPYI (ORCPT
+        with ESMTP id S232883AbiKOP0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:24:08 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06C2DF09;
-        Tue, 15 Nov 2022 07:24:05 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id E3B971883A1A;
-        Tue, 15 Nov 2022 15:24:02 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id DCD3225002DE;
-        Tue, 15 Nov 2022 15:24:02 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id CC2C49EC0020; Tue, 15 Nov 2022 15:24:02 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Tue, 15 Nov 2022 10:26:22 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE4E1E3D5;
+        Tue, 15 Nov 2022 07:26:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668525979; x=1700061979;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=97PFrgnk+DB1D9eGelLXCgNw+jakJpsENZbaBuQwyoc=;
+  b=x+IhVH94ygnSx2c8NebmbbdI4AqTAK2Qaz1t0SILuDEWWAOaHO+mmZGJ
+   d3pIWLIUmFnZ7HFp4VftEDBZt8k+lFQlwUKYE0T1VI1/elSdjTcVUPxH8
+   XaVbW1bxln29yIyTbpE+AWVk78YfpxFuDugLYS0Dc7feJs46ps8z4QV5d
+   Qox8X92aBY0Rhnlx1lAhPpwsFCsJcoIVRxF+zE5dFLKndIQZaY3Eb+KPm
+   eLUNkkDqZlLs2LQ567xnasOHeuuOXaiNa4ABHccYMCDl3ZrwjokspIuXY
+   KP8fux/S5ys2vzX94blcTd/eWLQsbUOKcZe0ISN+WXtrJz1eSPbddDBW1
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
+   d="scan'208";a="187073176"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Nov 2022 08:26:16 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 15 Nov 2022 08:26:10 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Tue, 15 Nov 2022 08:26:09 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Vattipalli Praveen <praveen.kumar@microchip.com>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] riscv: dts: microchip: remove pcie node from the sev kit
+Date:   Tue, 15 Nov 2022 15:25:46 +0000
+Message-ID: <20221115152546.1425309-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Date:   Tue, 15 Nov 2022 16:24:02 +0100
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 net-next 2/2] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <Y3Osehw6Ra28HhYv@shredder>
-References: <20221112203748.68995-1-netdev@kapio-technology.com>
- <20221112203748.68995-3-netdev@kapio-technology.com>
- <Y3NixroyU4XGL5j6@shredder>
- <864c4ae8e549721ba1ac5cf6ef77db9d@kapio-technology.com>
- <Y3Osehw6Ra28HhYv@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <5a8195cfa02a95d614e782b9ae55546b@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-15 16:12, Ido Schimmel wrote:
-> On Tue, Nov 15, 2022 at 11:36:38AM +0100, netdev@kapio-technology.com 
-> wrote:
->> On 2022-11-15 10:58, Ido Schimmel wrote:
->> > On Sat, Nov 12, 2022 at 09:37:48PM +0100, Hans J. Schultz wrote:
->> > > diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c
->> > > b/drivers/net/dsa/mv88e6xxx/global1_atu.c
->> > > index 8a874b6fc8e1..0a57f4e7dd46 100644
->> > > --- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
->> > > +++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
->> > > @@ -12,6 +12,7 @@
->> > >
->> > >  #include "chip.h"
->> > >  #include "global1.h"
->> > > +#include "switchdev.h"
->> > >
->> > >  /* Offset 0x01: ATU FID Register */
->> > >
->> > > @@ -426,6 +427,8 @@ static irqreturn_t
->> > > mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
->> > >  	if (err)
->> > >  		goto out;
->> > >
->> > > +	mv88e6xxx_reg_unlock(chip);
->> >
->> > Why? At minimum such a change needs to be explained in the commit
->> > message and probably split to a separate preparatory patch, assuming the
->> > change is actually required.
->> 
->> This was a change done long time ago related to that the violation 
->> handle
->> function takes the NL lock,
->> which could lead to a double-lock deadlock afair if the chip lock is 
->> taken
->> throughout the handler.
-> 
-> Why do you need to take RTNL lock? br_switchdev_event() which receives
-> the 'SWITCHDEV_FDB_ADD_TO_BRIDGE' event has this comment:
-> "/* called with RTNL or RCU */"
-> And it's using br_port_get_rtnl_rcu(), so looks like RCU is enough.
+The SEV kit reference design does not hook up the PCIe root port to the
+core complex including it is misleading.
+The entry is a re-use mistake - I was not aware of this when I moved
+the PCIe node out of mpfs.dtsi so that individual bistreams could
+connect it to different fics etc.
 
-As I understand, dsa_port_to_bridge_port() needs to be called with the 
-NL lock taken...
+Fixes: 978a17d1a688 ("riscv: dts: microchip: add sevkit device tree")
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ .../dts/microchip/mpfs-sev-kit-fabric.dtsi    | 29 -------------------
+ 1 file changed, 29 deletions(-)
+
+diff --git a/arch/riscv/boot/dts/microchip/mpfs-sev-kit-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-sev-kit-fabric.dtsi
+index 8545baf4d129..39a77df489ab 100644
+--- a/arch/riscv/boot/dts/microchip/mpfs-sev-kit-fabric.dtsi
++++ b/arch/riscv/boot/dts/microchip/mpfs-sev-kit-fabric.dtsi
+@@ -13,33 +13,4 @@ fabric_clk1: fabric-clk1 {
+ 		#clock-cells = <0>;
+ 		clock-frequency = <125000000>;
+ 	};
+-
+-	pcie: pcie@2000000000 {
+-		compatible = "microchip,pcie-host-1.0";
+-		#address-cells = <0x3>;
+-		#interrupt-cells = <0x1>;
+-		#size-cells = <0x2>;
+-		device_type = "pci";
+-		reg = <0x20 0x0 0x0 0x8000000>, <0x0 0x43000000 0x0 0x10000>;
+-		reg-names = "cfg", "apb";
+-		bus-range = <0x0 0x7f>;
+-		interrupt-parent = <&plic>;
+-		interrupts = <119>;
+-		interrupt-map = <0 0 0 1 &pcie_intc 0>,
+-				<0 0 0 2 &pcie_intc 1>,
+-				<0 0 0 3 &pcie_intc 2>,
+-				<0 0 0 4 &pcie_intc 3>;
+-		interrupt-map-mask = <0 0 0 7>;
+-		clocks = <&fabric_clk1>, <&fabric_clk1>, <&fabric_clk3>;
+-		clock-names = "fic0", "fic1", "fic3";
+-		ranges = <0x3000000 0x0 0x8000000 0x20 0x8000000 0x0 0x80000000>;
+-		msi-parent = <&pcie>;
+-		msi-controller;
+-		status = "disabled";
+-		pcie_intc: interrupt-controller {
+-			#address-cells = <0>;
+-			#interrupt-cells = <1>;
+-			interrupt-controller;
+-		};
+-	};
+ };
+-- 
+2.38.0
+
