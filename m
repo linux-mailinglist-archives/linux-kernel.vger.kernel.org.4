@@ -2,82 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9201C629829
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:08:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C95629833
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232816AbiKOMI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 07:08:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        id S229935AbiKOMKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 07:10:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiKOMIY (ORCPT
+        with ESMTP id S229709AbiKOMKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:08:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D30334;
-        Tue, 15 Nov 2022 04:08:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66794B816D6;
-        Tue, 15 Nov 2022 12:08:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38644C433D6;
-        Tue, 15 Nov 2022 12:08:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668514100;
-        bh=R61j7XvFsjKOIGH8lnB32pQtEXr+vA8qj1O0QUXEaRc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Hx/O2XaWQYMEROQxzdBxuKSHYCYl34im56uhTkwbkT21OFS9IwoWQRYp1PmJY5HkB
-         YR7MiU/850/8oDiOu9aVDg5JYBDly1HQIP9h/BTy4exS3wfQA1lZ3kEIQ/hVFCJMl5
-         wyxkt6zwCd4D0d5biedQF78/hMGeYjESNsfD/Tn7rx6rbmudi60ALNz/U3NRMKenU6
-         9cBHCsQJ5oqRYWWm2xQnEe2gTgPTNdM/jyOfggZgCmEgBwhBd3E/KGLnE+1SbhylOC
-         MpiB1tPiI3u4JWe9N+A9Dpsn4hkaciDWC2fuMOnAegvb3VWbhI0khGYwa2GqEypvxK
-         2zGJgQZfo1mRg==
-Date:   Tue, 15 Nov 2022 12:08:13 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Jiucheng Xu <jiucheng.xu@amlogic.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chris Healy <cphealy@gmail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        Chris Healy <healych@amzon.com>
-Subject: Re: [PATCH v9 1/4] perf/amlogic: Add support for Amlogic meson G12
- SoC DDR PMU driver
-Message-ID: <20221115120812.GF32523@willie-the-truck>
-References: <20221109015818.194927-1-jiucheng.xu@amlogic.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109015818.194927-1-jiucheng.xu@amlogic.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Nov 2022 07:10:17 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5BF205;
+        Tue, 15 Nov 2022 04:10:16 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AFBp4JD024603;
+        Tue, 15 Nov 2022 12:10:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=OiEtkInJN1H+cUbk1AcUr0St1ccwdHQqzyvzbPnaXeU=;
+ b=Z4JVjEdUPnTVvZgDSxTz9nXkOjV0iOgKc5ki/YhoY+HdyPL2WmqlcnHa3ExnULxfwO/v
+ bZiTfSiATRrdfhuXtiJW7Q2Qdo+uSO9IXtFp/6iawkPGN5K/FrNl/9IybvTs2FeYJLpV
+ RYGqiKhCJu9CeVAJ1/N3nV/dW9NpFgZ5oGNWuWnx0j6+MHKF+4EuYljxbzTij39WDwFH
+ nhkMhCJE00tqWq4+x4onWA4soUs+m3e+Wh3e1YGgiH4pkMJY/bVGtKNmfOvY8emXKetD
+ M4QongdkX9LwA6rA1Ze1KF2nDRlpEuO2XsTID1dlmsDtl17Gd63kE39+JLnac079vG1v LQ== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kv4yf1mnt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Nov 2022 12:10:12 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2AFCA8OP024583;
+        Tue, 15 Nov 2022 12:10:08 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3kt4jkds70-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 15 Nov 2022 12:10:08 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AFCA71p024578;
+        Tue, 15 Nov 2022 12:10:07 GMT
+Received: from vboma-linux.qualcomm.com (vboma-linux.qualcomm.com [10.204.65.94])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 2AFCA7QZ024577;
+        Tue, 15 Nov 2022 12:10:07 +0000
+Received: by vboma-linux.qualcomm.com (Postfix, from userid 72083)
+        id 9CADA900889; Tue, 15 Nov 2022 17:40:06 +0530 (IST)
+From:   quic_vboma@quicinc.com
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Viswanath Boma <quic_vboma@quicinc.com>
+Subject: [PATCH 0/1] Fix for H265 decoding failure .
+Date:   Tue, 15 Nov 2022 17:40:03 +0530
+Message-Id: <20221115121004.28197-1-quic_vboma@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: TzVjGWPUQtuoiMSH39exatFh2VbUZJL5
+X-Proofpoint-ORIG-GUID: TzVjGWPUQtuoiMSH39exatFh2VbUZJL5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-15_06,2022-11-15_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
+ mlxscore=0 suspectscore=0 impostorscore=0 phishscore=0 malwarescore=0
+ priorityscore=1501 bulkscore=0 mlxlogscore=974 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211150084
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 09:58:15AM +0800, Jiucheng Xu wrote:
-> This patch adds support Amlogic meson G12 series SoC
-> DDR bandwidth PMU driver framework and interfaces.
-> 
-> The PMU not only can monitor the total DDR bandwidth,
-> but also the bandwidth which is from individual IP module.
+From: Viswanath Boma <quic_vboma@quicinc.com>
 
-This doesn't apply on top of 6.1-rc4.
+Fixed the buffer size calculation mismatch with firmware requirements.
+Tested  on v5.15 and v5.4 kernels .
+For testing utilised the chrome utilities .
 
-Please can you send a rebased version for me to pick up, excluding the
-final .dts changes as they'll need to go via the respective SoC tree.
 
-Cheers,
+Viswanath Boma (1):
+  venus : Fix for H265 decoding failure.
 
-Will
+ drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+-- 
+2.17.1
+
