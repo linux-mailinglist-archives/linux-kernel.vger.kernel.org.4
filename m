@@ -2,153 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 410986292A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EB76292A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:45:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbiKOHoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 02:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55268 "EHLO
+        id S232433AbiKOHpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 02:45:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiKOHoD (ORCPT
+        with ESMTP id S232197AbiKOHpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 02:44:03 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320011C93D
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:44:01 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id x21so16413331ljg.10
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:44:01 -0800 (PST)
+        Tue, 15 Nov 2022 02:45:49 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7071CFF7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:45:48 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id l190so13838804vsc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:45:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XrOEygdWi3pXEJQNDPsb806sEtq19Rqxin4IiMd3olc=;
-        b=aHw8ddTPEpBYzI9XNrZBUhY7QEUdAqdwK+4DIhY5/ttzsxZHXagVnVZWwqbSsnR/L9
-         BAtWJEJ8HlDMOz1lFNo69MeWGGDA/mXbKhmo5RsHGZg+Of1ZN2snQqbQee0Tit1FOC/Q
-         kS64xE0nlozCRV7MIF7KZMgdp+69c5/9FBIe0=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pxg4eQXjrjP7gB9r1pAbz1fppWGdeomcj83Krdi3WRs=;
+        b=d/ghPliAe6yBY1monWxplnwNbSzyammhB0CMMEalvdyWNNFtR6WKOntMCYECWpAfqA
+         HdJIdF5T+HZqJO5yq58y6EdtgguzMtVChg1ErpUIqErmfet0PJOHgtdWSff9Z7v2wRo+
+         45WbeLQwKK2uVWV1UwViwIerZ9EWsvUZ3OO6cas1+NYmqH1qU764hoPZKukmEBMT3UKu
+         SvQwL6NitDaSZhr5jqvJyNBmX7xzpBgxeiG5Uw5GCDNa7TinCxZKCVnvTyCzfoETlE1f
+         96u0SADDJkP5mhf2rMR5ySpk0tVzN9w0yhsD07BjD9np+c+BKCGqyzIjjEu4KSticHUl
+         n0pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XrOEygdWi3pXEJQNDPsb806sEtq19Rqxin4IiMd3olc=;
-        b=BD/H8+BlcdSXSeAcM9m+awZSuO37YS/0J5xKQQVBwOAgi5ViNU2I6W2HXN24lbGkcK
-         /H2VZcVPcc+Mkf1EA7I13qwZeKJoxRl9HUq2qOD/TP4QD9wiTFjR6svYvy1KkpBJGN7D
-         OAuT7l/R1wvCCnu2/QYg8NviaxiVgmmpNhE3GZUMJ9ERm+HacReV1xpuUQDctDfccEdt
-         DkYlO1ntVyHEAAkRX+SahpoXEVARQwQGIOVML2SrBsHPx8KqV4I53r43BBj4aA1RRPsk
-         yfGfyIAJ7r3f7NBfg7jPonxzTvqAD3bBxqfH/qjkpqVx4VOPxYbSdPVHL0WLnSSD3c3Q
-         QOrw==
-X-Gm-Message-State: ANoB5pmAR34ZuLyDjrAYLuvmEh5PTUHzRY4lF2eSrQbf4/7MQFM9tpqc
-        J0CodTEAAhWoKZgTBQxJJQEqsQ==
-X-Google-Smtp-Source: AA0mqf6yh85DBb6cczRp8W3NVkP6JMvYmIva2InW8EL+ciD1s5uuGjAC6Z/+J12112Mquj26vFgGfQ==
-X-Received: by 2002:a2e:8544:0:b0:277:e01:610f with SMTP id u4-20020a2e8544000000b002770e01610fmr4948523ljj.60.1668498239466;
-        Mon, 14 Nov 2022 23:43:59 -0800 (PST)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id m20-20020a056512359400b00498fc3d4cfdsm2119742lfr.189.2022.11.14.23.43.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Nov 2022 23:43:58 -0800 (PST)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] net: dsa: use more appropriate NET_NAME_* constants for user ports
-Date:   Tue, 15 Nov 2022 08:43:55 +0100
-Message-Id: <20221115074356.998747-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221111161729.915233-1-linux@rasmusvillemoes.dk>
-References: <20221111161729.915233-1-linux@rasmusvillemoes.dk>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pxg4eQXjrjP7gB9r1pAbz1fppWGdeomcj83Krdi3WRs=;
+        b=VDMgNjSqcc+I64z5djCbAV0wziKVF+Xx9fsARbcewtbcflD32pMvDsEJ+smlP9gZlp
+         RoEIAE618DYt7c7ALVTh+hLv48/V/2dBgm7bwBzcRos7xfoDIQ29QENQPD5lhD61xf7z
+         vwrqyQOOQlSKhLnRtz8+Dnal2jg9MZLqf4KCNPmVoVTMloIhPkpL67rN6Bzy7JVJLucr
+         pETEA+tPhmPnZvB4P6a+SOLUhp9GG37EXJ4CPzql5KskLVBtGFBX99KMYoZi01Gffbho
+         Jy0wlUW7Rb7behtNQ8nbc3KMl5HlF4haTi8iG7y17kyT742aILoR7ZGJ5viXas8DD9uA
+         FeNg==
+X-Gm-Message-State: ANoB5pl34DGmC1bVL5Lzr+TXL6ioTpK9FY1qitLFRzKgg8TT1W4qc0dX
+        Wzk6bbSmRCjU3mUl0Vt3adRkWTAPmMfo+yn6VYaPbA==
+X-Google-Smtp-Source: AA0mqf7PeKluhJAomvFVsLKMa909CV8f+gD47cZDKckRtBI8IX06Q1KpQya8T2U05sMxOVNvoFnkar/MfgMNPVGyHLI=
+X-Received: by 2002:a05:6102:cca:b0:3af:2b1c:9908 with SMTP id
+ g10-20020a0561020cca00b003af2b1c9908mr5889007vst.18.1668498347347; Mon, 14
+ Nov 2022 23:45:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221109003618.3784591-1-dlatypov@google.com> <20221109003618.3784591-2-dlatypov@google.com>
+ <CAO2JNKUTiVM8YPgy0nz7W1GJtSVURhc1YkMgUWgs-rShNY0Zaw@mail.gmail.com> <CAGS_qxqPUHWyJ4nNQRdm79sMwHwysHV=99WXzMsY=g_WzSjZaw@mail.gmail.com>
+In-Reply-To: <CAGS_qxqPUHWyJ4nNQRdm79sMwHwysHV=99WXzMsY=g_WzSjZaw@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 15 Nov 2022 15:45:36 +0800
+Message-ID: <CABVgOSkJGoyMrv-=Zd+8sveH0+04G4twmae+p+TJWdpB6SJ+FQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] Documentation: KUnit: reword description of assertions
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Sadiya Kazi <sadiyakazi@google.com>, brendanhiggins@google.com,
+        rmoar@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, skhan@linuxfoundation.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000051e40d05ed7d8b89"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a user port has a label in device tree, the corresponding
-netdevice is "predictably named by the kernel".
+--00000000000051e40d05ed7d8b89
+Content-Type: text/plain; charset="UTF-8"
 
-Expose that information properly for the benefit of userspace tools
-that make decisions based on the name_assign_type attribute,
-e.g. a systemd-udev rule with "kernel" in NamePolicy.
+On Fri, Nov 11, 2022 at 12:04 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> On Wed, Nov 9, 2022 at 9:07 PM Sadiya Kazi <sadiyakazi@google.com> wrote:
+> >
+> > On Wed, Nov 9, 2022 at 6:06 AM 'Daniel Latypov' via KUnit Development
+> > <kunit-dev@googlegroups.com> wrote:
+> > >
+> > > The existing wording implies that kunit_kmalloc_array() is "the method
+> > > under test". We're actually testing the sort() function in that example.
+> > > This is because the example was changed in commit 953574390634
+> > > ("Documentation: KUnit: Rework writing page to focus on writing tests"),
+> > > but the wording was not.
+> > >
+> > > Also add a `note` telling people they can use the KUNIT_ASSERT_EQ()
+> > > macros from any function. Some users might be coming from a framework
+> > > like gUnit where that'll compile but silently do the wrong thing.
+> > >
+> > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > > ---
+> >
+> > Thank you, Daniel. This looks fine to me except for a small typo in
+> > this line "to abort
+> > the test if we there's an allocation error". Also, I have reworded
+> > that paragraph a bit
+> > as below. Please feel free to ignore, if you do not agree:
+> >
+> > In this example, to test the ``sort()`` function, we must be able to
+> > allocate an array.
+> > If there is an allocation error, the test is terminated using the function
+> > ``KUNIT ASSERT NOT ERR OR NULL()``.
+>
+> Thanks for catching that.
+>
+> Hmm, I slightly prefer the current structure since I like having the
+> <thing> being described near the start of the sentence as opposed to
+> the very end.
+> I'll wait a bit before sending a v3 to give time for anyone else to
+> chime in, if they want.
+>
+> Snipping the email to the block in question:
+>
+> > > +In this example, we need to be able to allocate an array to test the ``sort()``
+> > > +function. So we use ``KUNIT_ASSERT_NOT_ERR_OR_NULL()`` to abort the test if
+> > > +we there's an allocation error.
 
-Similarly, when we fall back to the eth%d scheme, the proper constant
-to use is NET_NAME_ENUM. See also commit e9f656b7a214 ("net: ethernet:
-set default assignment identifier to NET_NAME_ENUM"), which in turn
-quoted commit 685343fc3ba6 ("net: add name_assign_type netdev
-attribute"):
++1 for the patch from me (modulo the "we" typo Sadiya mentioned).
 
-    ... when the kernel has given the interface a name using global
-    device enumeration based on order of discovery (ethX, wlanY, etc)
-    ... are labelled NET_NAME_ENUM.
+I otherwise also prefer Daniel's original here (though I'd possibly
+merge it into one sentence, personally).
+Maybe:
+"In this example, as we need to be able to allocate an array in order
+to test the sort function, we use ``KUNIT_ASSERT_NOT_ERR_OR_NULL()``
+to abort the test if there's an allocation error."
+or
+"In this example, we need to allocate an array to test the sort
+function. We therefore use ``KUNIT_ASSERT_NOT_ERR_OR_NULL()``, which
+will automatically abort the test if there's an allocation error."
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
+But any of the above wordings are fine for me.
 
-v2: switch to NET_NAME_ENUM in the eth%d case (Andrew, Jakub). Update
-commit message accordingly.
+The note about ASSERT() working in any function is useful, though
+there are definitely some "gotcha"s caused by killing the kthread
+we'll need to resolve. (If there are any dangling references to things
+on the stack, for example.) Still, not an issue for this bit of
+documentation.
 
- net/dsa/dsa2.c  |  3 ---
- net/dsa/slave.c | 13 +++++++++++--
- 2 files changed, 11 insertions(+), 5 deletions(-)
+Reviewed-by: David Gow <davidgow@google.com>
 
-diff --git a/net/dsa/dsa2.c b/net/dsa/dsa2.c
-index e504a18fc125..522fc1b6e8c6 100644
---- a/net/dsa/dsa2.c
-+++ b/net/dsa/dsa2.c
-@@ -1364,9 +1364,6 @@ static struct dsa_port *dsa_port_touch(struct dsa_switch *ds, int index)
- 
- static int dsa_port_parse_user(struct dsa_port *dp, const char *name)
- {
--	if (!name)
--		name = "eth%d";
--
- 	dp->type = DSA_PORT_TYPE_USER;
- 	dp->name = name;
- 
-diff --git a/net/dsa/slave.c b/net/dsa/slave.c
-index a9fde48cffd4..821ab79bb60a 100644
---- a/net/dsa/slave.c
-+++ b/net/dsa/slave.c
-@@ -2374,16 +2374,25 @@ int dsa_slave_create(struct dsa_port *port)
- {
- 	struct net_device *master = dsa_port_to_master(port);
- 	struct dsa_switch *ds = port->ds;
--	const char *name = port->name;
- 	struct net_device *slave_dev;
- 	struct dsa_slave_priv *p;
-+	const char *name;
-+	int assign_type;
- 	int ret;
- 
- 	if (!ds->num_tx_queues)
- 		ds->num_tx_queues = 1;
- 
-+	if (port->name) {
-+		name = port->name;
-+		assign_type = NET_NAME_PREDICTABLE;
-+	} else {
-+		name = "eth%d";
-+		assign_type = NET_NAME_ENUM;
-+	}
-+
- 	slave_dev = alloc_netdev_mqs(sizeof(struct dsa_slave_priv), name,
--				     NET_NAME_UNKNOWN, ether_setup,
-+				     assign_type, ether_setup,
- 				     ds->num_tx_queues, 1);
- 	if (slave_dev == NULL)
- 		return -ENOMEM;
--- 
-2.37.2
+(Once the "we" typo is fixed.)
 
+Cheers,
+-- David
+
+--00000000000051e40d05ed7d8b89
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
+jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
+p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
+2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
++bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
+/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBk
+v650JQpZ6kM1j3A7JkLBCIbW8/t25s26tSpoc1VqGzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjExMTUwNzQ1NDdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAi7RUgQvVE4XXRhg+Tr+a
+djxk3G/xivj98RQZTZuazmbbIMQKL6VJ+dfHH5+70x6fkeEBj/lphjSmhx7s8HY4qqvQOXcFh0TC
+xLd43v0HrvbvZ02ZTD1wuFUUDhy0YCcsUlnZ71nAcouefjEVEOruLDiji4JZoXoG/giRtnpAYNxe
+E9y5J7fYHMugGtFG5JdsOY90qzIAv95dsCs+RpK7shy57v2n4Sp59o2RXxoeiKqY8BZyOKsi5Hij
+gWw3I5IPV+vEL/0aBPYc3LRjhhCdhe7HPyBAA1iwWnS/u8E1GPzgnEaa8iUy50GsrlblAABPT7dr
+5N9BihHV7v0xweGoBw==
+--00000000000051e40d05ed7d8b89--
