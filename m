@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 631AB6293EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B886293F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237821AbiKOJKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 04:10:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
+        id S237904AbiKOJMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 04:12:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233081AbiKOJKc (ORCPT
+        with ESMTP id S237902AbiKOJMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 04:10:32 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48D525D5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:10:30 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NBL4J6KcKz4f3vdd
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 17:10:24 +0800 (CST)
-Received: from [10.174.178.165] (unknown [10.174.178.165])
-        by APP2 (Coremail) with SMTP id Syh0CgBnfrmCV3Nj+0M3Ag--.105S2;
-        Tue, 15 Nov 2022 17:10:28 +0800 (CST)
-Message-ID: <0ec81207-23e9-d5e4-27ae-63197c98c549@huaweicloud.com>
-Date:   Tue, 15 Nov 2022 17:10:26 +0800
+        Tue, 15 Nov 2022 04:12:10 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B8622281;
+        Tue, 15 Nov 2022 01:12:08 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NBL2g0gfTzJnhM;
+        Tue, 15 Nov 2022 17:08:59 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 17:11:38 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 17:11:38 +0800
+Subject: Re: [PATCH v6 0/2] rcu: Add RCU stall diagnosis information
+To:     <paulmck@kernel.org>
+CC:     Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Robert Elliott <elliott@hpe.com>
+References: <20221109093739.187-1-thunder.leizhen@huawei.com>
+ <20221109152621.GB298683@lothringen>
+ <20221109155901.GA727034@paulmck-ThinkPad-P17-Gen-1>
+ <20221109170317.GA300561@lothringen>
+ <20221109172221.GD725751@paulmck-ThinkPad-P17-Gen-1>
+ <a48a3eb1-5fa4-4b6b-f7bf-e0bc589f7bf6@huawei.com>
+ <20221112185941.GG725751@paulmck-ThinkPad-P17-Gen-1>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <621a08d5-5dfa-8054-a180-64eac01596a5@huawei.com>
+Date:   Tue, 15 Nov 2022 17:11:37 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] irqchip/wpcm450: fix memory leak in ap_init_qci_info()
-To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Wei Yongjun <weiyongjun1@huawei.com>, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-References: <20221114110854.554220-1-weiyongjun@huaweicloud.com>
- <Y3NPcfuS9M6BSoEW@probook>
-From:   Wei Yongjun <weiyongjun@huaweicloud.com>
-In-Reply-To: <Y3NPcfuS9M6BSoEW@probook>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBnfrmCV3Nj+0M3Ag--.105S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gw4rtFWDZry5tr47WrW3Jrb_yoWkuwc_ur
-        4Uurn3ZF4vkF4rtay3uF45X390yF1vgrnaqF12yry5Zay0q393Grn7Zr93JF4IgF4xtrs7
-        Cr9avFy8A347GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb78YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1CPfJUUUUU==
-X-CM-SenderInfo: 5zhl50pqjm3046kxt4xhlfz01xgou0bp/
+In-Reply-To: <20221112185941.GG725751@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,51 +67,166 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2022/11/15 16:36, Jonathan Neuschäfer wrote:
-> Hi,
->
-> the function name is wrong in the in the subject line. Other than that,
-> the patch looks good.
 
-
-Thanks, will fix in next version.
-
-
-Regards,
-
-Wei Yongjun
-
-
->
-> Thanks,
-> Jonathan
->
->
-> On Mon, Nov 14, 2022 at 11:08:54AM +0000, Wei Yongjun wrote:
->> From: Wei Yongjun <weiyongjun1@huawei.com>
+On 2022/11/13 2:59, Paul E. McKenney wrote:
+> On Thu, Nov 10, 2022 at 10:27:44AM +0800, Leizhen (ThunderTown) wrote:
+>> On 2022/11/10 1:22, Paul E. McKenney wrote:
+>>> On Wed, Nov 09, 2022 at 06:03:17PM +0100, Frederic Weisbecker wrote:
+>>>> On Wed, Nov 09, 2022 at 07:59:01AM -0800, Paul E. McKenney wrote:
+>>>>> On Wed, Nov 09, 2022 at 04:26:21PM +0100, Frederic Weisbecker wrote:
+>>>>>> Hi Zhen Lei,
+>>>>>>
+>>>>>> On Wed, Nov 09, 2022 at 05:37:36PM +0800, Zhen Lei wrote:
+>>>>>>> v5 --> v6:
+>>>>>>> 1. When there are more than two continuous RCU stallings, correctly handle the
+>>>>>>>    value of the second and subsequent sampling periods. Update comments and
+>>>>>>>    document.
+>>>>>>>    Thanks to Elliott, Robert for the test.
+>>>>>>> 2. Change "rcu stall" to "RCU stall".
+>>>>>>>
+>>>>>>> v4 --> v5:
+>>>>>>> 1. Resolve a git am conflict. No code change.
+>>>>>>>
+>>>>>>> v3 --> v4:
+>>>>>>> 1. Rename rcu_cpu_stall_deep_debug to rcu_cpu_stall_cputime.
+>>>>>>>
+>>>>>>> v2 --> v3:
+>>>>>>> 1. Fix the return type of kstat_cpu_irqs_sum()
+>>>>>>> 2. Add Kconfig option CONFIG_RCU_CPU_STALL_DEEP_DEBUG and boot parameter
+>>>>>>>    rcupdate.rcu_cpu_stall_deep_debug.
+>>>>>>> 3. Add comments and normalize local variable name
+>>>>>>>
+>>>>>>>
+>>>>>>> v1 --> v2:
+>>>>>>> 1. Fixed a bug in the code. If the rcu stall is detected by another CPU,
+>>>>>>>    kcpustat_this_cpu cannot be used.
+>>>>>>> @@ -451,7 +451,7 @@ static void print_cpu_stat_info(int cpu)
+>>>>>>>         if (r->gp_seq != rdp->gp_seq)
+>>>>>>>                 return;
+>>>>>>>
+>>>>>>> -       cpustat = kcpustat_this_cpu->cpustat;
+>>>>>>> +       cpustat = kcpustat_cpu(cpu).cpustat;
+>>>>>>> 2. Move the start point of statistics from rcu_stall_kick_kthreads() to
+>>>>>>>    rcu_implicit_dynticks_qs(), removing the dependency on irq_work.
+>>>>>>>
+>>>>>>> v1:
+>>>>>>> In some extreme cases, such as the I/O pressure test, the CPU usage may
+>>>>>>> be 100%, causing RCU stall. In this case, the printed information about
+>>>>>>> current is not useful. Displays the number and usage of hard interrupts,
+>>>>>>> soft interrupts, and context switches that are generated within half of
+>>>>>>> the CPU stall timeout, can help us make a general judgment. In other
+>>>>>>> cases, we can preliminarily determine whether an infinite loop occurs
+>>>>>>> when local_irq, local_bh or preempt is disabled.
+>>>>>>
+>>>>>> That looks useful but I have to ask: what does it bring that the softlockup
+>>>>>> and hardlockup watchdog can not already solve?
+>>>>>
+>>>>> This is a good point.  One possible benefit is putting the needed information
+>>>>> in one spot, for example, in cases where the soft/hard lockup timeouts are
+>>>>> significantly different than the RCU CPU stall warning timeout.
+>>>>
+>>>> Arguably, the hardlockup/softlockup detectors usually trigger after RCU stall,
+>>>> unless all CPUs are caught into a hardlockup, in which case only the hardlockup
+>>>> detector has a chance.
+>>>>
+>>>> Anyway I would say that in this case just lower the delay for the lockup
+>>>> detectors to consider the situation is a lockup?
+>>>
+>>> Try it both ways and see how it works?  The rcutorture module parameters
+>>> stall_cpu and stall_cpu_irqsoff are easy ways to generate these sorts
+>>> of scenarios.
+>>>
+>>> Actually, that does remind me of something.  Back when I was chasing
+>>> that interrupt storm, would this patch have helped me?  In that case, the
 >>
->> If of_iomap() failed, 'aic' should be freed before return. Otherwise
->> there is a memory leak.
+>> Yes, this patch series originally addressed an RCU stall issue caused by an
+>> interruption storm. The serial port driver written by another project team
+>> failed to write the register in a specific condition. As a result, interrupts
+>> were repeatedly reported.
+> 
+> Very good!
+> 
+>>> half-way point would have been reached while all online CPUs were spinning
+>>> with interrupts disabled and the incoming CPU was getting hammered with
+>>> continual scheduling-clock interrupts.  So I suspect that the answer is
+>>> "no" because the incoming CPU was not blocking the grace period.
+>>>
+>>> Instead of being snapshot halfway to the RCU CPU stall warning, should
+>>> the values be snapshot when the CPU notices the beginning or end of an
+>>> RCU grace period and when a CPU goes offline?
 >>
->> Fixes: fead4dd49663 ("irqchip: Add driver for WPCM450 interrupt controller")
->> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
->> ---
->>  drivers/irqchip/irq-wpcm450-aic.c | 1 +
->>  1 file changed, 1 insertion(+)
+>> This won't work. Those normal counts that occurred before the failure
+>> have an impact on our analysis. For example, some software interrupts
+>> may have been generated before local_bh_disable() is called.
+> 
+> Fair enough, and thank you for considering this option.  But please be
+> prepared to adjust (somehow or another) as needed to accommodate other
+> failure scenarios as they arise.
+
+Except the document has an warning of "make htmldocs". I can't think of
+anything to improve on the v7 at the moment.
+
+Change the type of softirqs[NR_SOFTIRQS] from "unsigned int" to
+"unsigned long", I will post a separate patch in future. Because
+more people may join the discussion.
+
+How about I post v8 tomorrow?
+
+> 
+> 							Thanx, Paul
+> 
+>>> But that would not suffice, because detailed information would not have
+>>> been dumped for the incoming CPU.
+>>>
+>>> However, the lack of context switches and interrupts on the rest of the
+>>> CPUs would likely have been a big cluebat, so there is that.  It might
+>>> be better to rework the warning at the beginning of rcu_sched_clock_irq()
+>>> to complain if more than (say) 10 scheduling-clock interrupts occur on
+>>> a given CPU during a single jiffy.
+>>>
+>>> Independent of Zhen Lei patch.
+>>>
+>>> Thoughts?
+>>>
+>>> 							Thanx, Paul
+>>>
+>>>> Thanks.
+>>>>
+>>>>
+>>>>>
+>>>>> Thoughts?
+>>>>>
+>>>>> 							Thanx, Paul
+>>>>>
+>>>>>> Thanks.
+>>>>>>
+>>>>>>>
+>>>>>>> Zhen Lei (2):
+>>>>>>>   rcu: Add RCU stall diagnosis information
+>>>>>>>   doc: Document CONFIG_RCU_CPU_STALL_CPUTIME=y stall information
+>>>>>>>
+>>>>>>>  Documentation/RCU/stallwarn.rst               | 88 +++++++++++++++++++
+>>>>>>>  .../admin-guide/kernel-parameters.txt         |  6 ++
+>>>>>>>  kernel/rcu/Kconfig.debug                      | 11 +++
+>>>>>>>  kernel/rcu/rcu.h                              |  1 +
+>>>>>>>  kernel/rcu/tree.c                             | 17 ++++
+>>>>>>>  kernel/rcu/tree.h                             | 19 ++++
+>>>>>>>  kernel/rcu/tree_stall.h                       | 29 ++++++
+>>>>>>>  kernel/rcu/update.c                           |  2 +
+>>>>>>>  8 files changed, 173 insertions(+)
+>>>>>>>
+>>>>>>> -- 
+>>>>>>> 2.25.1
+>>>>>>>
+>>> .
+>>>
 >>
->> diff --git a/drivers/irqchip/irq-wpcm450-aic.c b/drivers/irqchip/irq-wpcm450-aic.c
->> index 0dcbeb1a05a1..91df62a64cd9 100644
->> --- a/drivers/irqchip/irq-wpcm450-aic.c
->> +++ b/drivers/irqchip/irq-wpcm450-aic.c
->> @@ -146,6 +146,7 @@ static int __init wpcm450_aic_of_init(struct device_node *node,
->>  	aic->regs = of_iomap(node, 0);
->>  	if (!aic->regs) {
->>  		pr_err("Failed to map WPCM450 AIC registers\n");
->> +		kfree(aic);
->>  		return -ENOMEM;
->>  	}
->>  
 >> -- 
->> 2.34.1
->>
+>> Regards,
+>>   Zhen Lei
+> .
+> 
 
+-- 
+Regards,
+  Zhen Lei
