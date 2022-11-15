@@ -2,108 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6696362AF62
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C1362AF6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:28:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbiKOXYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 18:24:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
+        id S231639AbiKOX2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 18:28:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbiKOXY3 (ORCPT
+        with ESMTP id S229607AbiKOX1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 18:24:29 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFADA27921
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:24:27 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1668554665;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BBbRZQXDdMBaAi+vrNqmlxDlwawbSjED4t0F+9t4J90=;
-        b=h/hHLLaSC4VUq7AzPOGBrFQhlr1/t6zcW5MlnS0mJ8bRz+WaJa4rf88kDr2P/GIUTxXEi8
-        VbsvyG4avktUNFWdCsliN6BICmNDgVIQMpu1gVFnLjGy7Pw1valyUgqBZIZuvxNXyBj+yd
-        r6Q8wsBw0S9s4+vIE40Y7USO9l1/xJ9vnz7tJiLF2MsAVzpnfB0hfOYd5G1IZnr/YdqKPD
-        4sL5jM55mlFbaEUjFINCtbAK0G6rdwlb4DdDgCDU/bHGY6iqKR96BQMzwRp91tAw8gZyMS
-        8IDX0wHior9wtFTG/2aTzge1EKquRXgePi4sHme3wD3jD24v1/1WW5WVvjLsUw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1668554665;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BBbRZQXDdMBaAi+vrNqmlxDlwawbSjED4t0F+9t4J90=;
-        b=z3WFkdXGuDHmXZew5FKjZiCUAMLOCELlIm/5tsEzDEyKThhu009QtV/DBBB5VE9NKOrnnO
-        Dpv66sS+/iwqbQAQ==
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Angus Chen <angus.chen@jaguarmicro.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ming Lei <ming.lei@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Subject: Re: IRQ affinity problem from virtio_blk
-In-Reply-To: <87sfijrf9o.ffs@tglx>
-References: <TY2PR06MB3424CB11DB57CA1FAA16F10D85049@TY2PR06MB3424.apcprd06.prod.outlook.com>
- <87v8nfrhbw.ffs@tglx> <20221115174152-mutt-send-email-mst@kernel.org>
- <87sfijrf9o.ffs@tglx>
-Date:   Wed, 16 Nov 2022 00:24:24 +0100
-Message-ID: <87o7t7rec7.ffs@tglx>
+        Tue, 15 Nov 2022 18:27:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B5027930;
+        Tue, 15 Nov 2022 15:27:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99E486178B;
+        Tue, 15 Nov 2022 23:27:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FBCEC433D6;
+        Tue, 15 Nov 2022 23:27:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668554859;
+        bh=w0ksqa3sKu6KJhhOKvS+AupK4IwA9FEjgKk5vq3U3tw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ln62TKu1ZIyIpWsRg++DjRXNcsharCAUz2MPbVXfne17UYIAMd2VsEWpiBXA9JSk6
+         DwkYJsdm7o/Mpkhs/qIORc2l2K8aCASLvO8Y3vj0GKj/u43/vBAMF6djiZyHlpMj6t
+         uzEBNxpRawrlEQgHqbgXHNGqNa5TGNpPK9e4ebB1UJ2BGI/GfGIRsclEPsHXuaiioE
+         W3tUFa2HYqeyi5MiO5A5aia8qN4s6YQRsX+F4vKT6b79+nFA1pkeZzh9uiXgs6P/hD
+         jKQAws2PBDXK69U7h1GliXPXCwYI6Jt6u7uyIx5RllGmKm1rmLiHYrj4sPhtNewKja
+         ojhWpBNjcu4cg==
+Date:   Wed, 16 Nov 2022 01:27:35 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc:     dave.hansen@linux.kernel.org, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH 01/26] x86/sgx: Call cond_resched() at the end of
+ sgx_reclaim_pages()
+Message-ID: <Y3QgZ+ZKAfJ92U5L@kernel.org>
+References: <20221111183532.3676646-1-kristen@linux.intel.com>
+ <20221111183532.3676646-2-kristen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221111183532.3676646-2-kristen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 16 2022 at 00:04, Thomas Gleixner wrote:
+On Fri, Nov 11, 2022 at 10:35:06AM -0800, Kristen Carlson Accardi wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
+> 
+> In order to avoid repetition of cond_resched() in ksgxd() and
+> sgx_alloc_epc_page(), move the invocation of post-reclaim cond_resched()
+> inside sgx_reclaim_pages(). Except in the case of sgx_reclaim_direct(),
+> sgx_reclaim_pages() is always called in a loop and is always followed
+> by a call to cond_resched().  This will hold true for the EPC cgroup
+> as well, which adds even more calls to sgx_reclaim_pages() and thus
+> cond_resched(). Calls to sgx_reclaim_direct() may be performance
+> sensitive. Allow sgx_reclaim_direct() to avoid the cond_resched()
+> call by moving the original sgx_reclaim_pages() call to
+> __sgx_reclaim_pages() and then have sgx_reclaim_pages() become a
+> wrapper around that call with a cond_resched().
+> 
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kernel/cpu/sgx/main.c | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+> index 160c8dbee0ab..ffce6fc70a1f 100644
+> --- a/arch/x86/kernel/cpu/sgx/main.c
+> +++ b/arch/x86/kernel/cpu/sgx/main.c
+> @@ -287,7 +287,7 @@ static void sgx_reclaimer_write(struct sgx_epc_page *epc_page,
+>   * problematic as it would increase the lock contention too much, which would
+>   * halt forward progress.
+>   */
+> -static void sgx_reclaim_pages(void)
+> +static void __sgx_reclaim_pages(void)
+>  {
+>  	struct sgx_epc_page *chunk[SGX_NR_TO_SCAN];
+>  	struct sgx_backing backing[SGX_NR_TO_SCAN];
+> @@ -369,6 +369,12 @@ static void sgx_reclaim_pages(void)
+>  	}
+>  }
+>  
+> +static void sgx_reclaim_pages(void)
+> +{
+> +	__sgx_reclaim_pages();
+> +	cond_resched();
+> +}
+> +
+>  static bool sgx_should_reclaim(unsigned long watermark)
+>  {
+>  	return atomic_long_read(&sgx_nr_free_pages) < watermark &&
+> @@ -378,12 +384,14 @@ static bool sgx_should_reclaim(unsigned long watermark)
+>  /*
+>   * sgx_reclaim_direct() should be called (without enclave's mutex held)
+>   * in locations where SGX memory resources might be low and might be
+> - * needed in order to make forward progress.
+> + * needed in order to make forward progress. This call to
+> + * __sgx_reclaim_pages() avoids the cond_resched() in sgx_reclaim_pages()
+> + * to improve performance.
+>   */
+>  void sgx_reclaim_direct(void)
+>  {
+>  	if (sgx_should_reclaim(SGX_NR_LOW_PAGES))
+> -		sgx_reclaim_pages();
+> +		__sgx_reclaim_pages();
 
-> On Tue, Nov 15 2022 at 17:44, Michael S. Tsirkin wrote:
->> On Tue, Nov 15, 2022 at 11:19:47PM +0100, Thomas Gleixner wrote:
->>> > We can see global_available drop from 15354 to 15273, is 81.
->>> > And the total_allocated increase from 411 to 413. One config irq,and
->>> > one vq irq.
->>> 
->>> Right. That's perfectly fine. At the point where you looking at it, the
->>> matrix allocator has given out 2 vectors as can be seen via
->>> total_allocated.
->>> 
->>> But then it also has another 79 vectors put aside for the other queues,
->>
->> What makes it put these vectors aside? pci_alloc_irq_vectors_affinity ?
->
-> init_vq() -> virtio_find_vqs() -> vp_find_vqs() ->
-> vp_request_msix_vectors() -> pci_alloc_irq_vectors_affinity()
->
-> init_vq() hands in a struct irq_affinity which means that
-> pci_alloc_irq_vectors_affinity() will spread out interrupts and have one
-> for config and one per queue if vp_request_msix_vectors() is invoked
-> with per_vq_vectors == true, which is what the first invocation in
-> vp_find_vqs() does.
+Is it a big deal to have "extra" cond_resched?
 
-I just checked on a random VM. The PCI device as advertised to the guest
-does not expose that many vectors. One has 2 and the other 4.
+>  }
+>  
+>  static int ksgxd(void *p)
+> @@ -410,8 +418,6 @@ static int ksgxd(void *p)
+>  
+>  		if (sgx_should_reclaim(SGX_NR_HIGH_PAGES))
+>  			sgx_reclaim_pages();
+> -
+> -		cond_resched();
+>  	}
+>  
+>  	return 0;
+> @@ -582,7 +588,6 @@ struct sgx_epc_page *sgx_alloc_epc_page(void *owner, bool reclaim)
+>  		}
+>  
+>  		sgx_reclaim_pages();
+> -		cond_resched();
+>  	}
+>  
+>  	if (sgx_should_reclaim(SGX_NR_LOW_PAGES))
+> -- 
+> 2.37.3
+> 
 
-But as the interrupts are requested 'managed' the core ends up setting
-the vectors aside. That's a fundamental property of managed interrupts.
-
-Assume you have less queues than CPUs, which is the case with 2 vectors
-and tons of CPUs, i.e. one ends up for config and the other for the
-actual queue. So the affinity spreading code will end up having the full
-cpumask for the queue vector, which is marked managed. And managed means
-that it's guaranteed e.g. in the CPU hotplug case that the interrupt can
-be migrated to a still online CPU.
-
-So we end up setting 79 vectors aside (one per CPU) in the case that the
-virtio device only provides two vectors.
-
-But that's not the end of the world as you really would need ~200 such
-devices to exhaust the vector space...
-
-Thanks,
-
-        tglx
-
-
+BR, Jarkko
