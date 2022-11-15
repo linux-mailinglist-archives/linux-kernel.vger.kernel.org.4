@@ -2,435 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F283362A14C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:28:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECB762A14E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiKOS2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 13:28:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
+        id S230086AbiKOS27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 13:28:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiKOS2h (ORCPT
+        with ESMTP id S230401AbiKOS2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 13:28:37 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A42210EF
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:28:34 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id q1so14024857pgl.11
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:28:34 -0800 (PST)
+        Tue, 15 Nov 2022 13:28:45 -0500
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9952DDFEC
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:28:44 -0800 (PST)
+Received: by mail-qv1-xf49.google.com with SMTP id mo15-20020a056214330f00b004b96d712bccso11368960qvb.22
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:28:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eN8Y8tmcXY1Sx8X/CKBIpdvOb7TPXPJYWBMc1VPUnfE=;
-        b=rXAHNSao3J24HGE7DiY019ib/78iKD4I9HRM2WnnP4fVWYL2LCHiU0trOH28PI+i59
-         Riijn7BvZ0tXXSV+xUCt/pqKrHKwpyP/Sh3s9iY+r9uMsSBKFm8STlW56JX+B/TWX9gW
-         GyKnGkdvPx4WsU/9AwbwdcNFQWXxGezce0A51L0/5pzX/zxC/U/LUkz6y2XWasW7Ze6b
-         NRd3IRxyf4A9I9JBSOtTiVM2EXFIvy0Ezsna1t2hYbuDvb8y9Jd5cgvJ53glj21/ANPR
-         pgg0coAy1ijKmfHrK425wh1JhGIuKuqN6G/AmW1c6F2x/5RcLh2Yw6Het2Ysi7IkRLFD
-         X6ag==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SoUmPkHlkDH+7nhAOWIZ0SCq+4Ebj+CALgmJJRMTdeg=;
+        b=eANR3/+r4/MRfVqHI/utl+NkZlPzevU1TGEEysolV5xO3wHm28FQqXZ3yK+tishuev
+         FEdyAzazOUwFaX/ieAkinArTmqoCzRPkfskS+jTQLD1MSouu/OMU9BXEUA/pPut5/7Rb
+         8fn99JhkQp5ZK/xXjV8842yEKstiUq2qleGkkoi+kBxNAuyXfOsquk6c5zVgEI4fEAjS
+         r9IEjLOtF7ByxDK7FTHiPiPVlT5Bn+FBXA5Vt40vGwdOeNFIQOVIcJN/BhQnjV17zKvA
+         cio68NUuIMMwMyvC7DbTShTMKa17vFn4vCPsfivXCRG8D7S3llUgVfR+CFMQNZnAf48h
+         F08Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eN8Y8tmcXY1Sx8X/CKBIpdvOb7TPXPJYWBMc1VPUnfE=;
-        b=edu4OcacEH8qaDuiQIc+PpTvRXnxFRoBc7ZDPerEV4g+DrNH1L22/bSXc3XMv4ptoW
-         IQI5aChqO6IyKTHKoE72BavI7alFN0HznBO1ymruxobK8bQ86GjsZh4d+HtLrjyvT+Pu
-         33oMCfuY6IhdxECu5La4/q9tcTnxts/pJKgrrmv3jjH3omU4dhq1M3KAPmJ/qsIjZcvn
-         k7v7xQ9iVx9CGes9f2tBkUynizG/cNEgBe0F4mnHO9CiQ6WEs4VzvPKcWOGA0j9+vVsI
-         kYaFBJprZCWBZfRstgA7Ny7ciWMCukJWoCnHxLHqPPEYm4vOEHq9YWbabrpLpb3v/JhG
-         BACg==
-X-Gm-Message-State: ANoB5pnNDeAjzNokt0MlEyDNZFqPsVnmMrS1gfOjzJ3k8OgUPFURh9qB
-        hb3VNziwJP4zMxGnzgGVVqiFMw==
-X-Google-Smtp-Source: AA0mqf76d87lFv9TGgIz9I/2+zNAKDJj01NBvRaRPkIKsREVZncSt6oyj/qVXHVy9h7pcGLErOpmow==
-X-Received: by 2002:a63:524b:0:b0:474:66fb:41fa with SMTP id s11-20020a63524b000000b0047466fb41famr16582322pgl.21.1668536913650;
-        Tue, 15 Nov 2022 10:28:33 -0800 (PST)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id m15-20020a656a0f000000b0045dc85c4a5fsm8048610pgu.44.2022.11.15.10.28.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 10:28:32 -0800 (PST)
-Date:   Tue, 15 Nov 2022 11:28:30 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Md Danish Anwar <a0501179@ti.com>
-Cc:     MD Danish Anwar <danishanwar@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        "Andrew F . Davis" <afd@ti.com>, nm@ti.com, vigneshr@ti.com,
-        srk@ti.com, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v7 2/5] remoteproc: pru: Add APIs to get and put the PRU
- cores
-Message-ID: <20221115182830.GA61935@p14s>
-References: <20221031073801.130541-1-danishanwar@ti.com>
- <20221031073801.130541-3-danishanwar@ti.com>
- <20221114205057.GA8042@p14s>
- <5e07e4e1-142e-1c48-6ee0-78c537e126b9@ti.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5e07e4e1-142e-1c48-6ee0-78c537e126b9@ti.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SoUmPkHlkDH+7nhAOWIZ0SCq+4Ebj+CALgmJJRMTdeg=;
+        b=G/pCA6v6ZKwdFZPQFioFY9X+NY2sCiI/2xpCxqA+PH5e0Vr2VF8sQ0rLEBRryw828B
+         BfXrcsR8Yb08PPsxQxbwpGvKmhR1Y0HlGVVo1xAvjzRz1e3QIihNarBbWkbvylIZpyUb
+         1VKypTmIfGquXb+Llcny9Ed3wfksk3a9w8GSbstw+o61e1EgVSVi5547sJg5oHdzQfkS
+         EOkqEtjqtSMKCE9TbCcCN9wHxJQTHEapLp/wfn5/DIdp2Y7nzpG0FitgyyM3xRXFGtTm
+         R5GT73bHcXi8FJ8DRP/ix747T+FDknhqJ7iAK/a9QwrSspY9DBYStJlMnSU64zxXJqOx
+         3DDw==
+X-Gm-Message-State: ANoB5pmCZoHgFbK4N4gCuhDnsj76ilnWAYgmFsEUiboB2V0rhalT1+eD
+        EFrWUcjVQP00j7jqe+tYYkgd1Td6o+lwzw==
+X-Google-Smtp-Source: AA0mqf5m9Y9Hm6Nw/W5UoBKliGXP3uUoOBJcWlloA4j+N/XrgbIVcd0oc03Z6IzUgCXGvi39AAJLJagsngRr5A==
+X-Received: from edumazet1.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:395a])
+ (user=edumazet job=sendgmr) by 2002:ac8:7502:0:b0:3a5:7e65:ddeb with SMTP id
+ u2-20020ac87502000000b003a57e65ddebmr17287503qtq.424.1668536923808; Tue, 15
+ Nov 2022 10:28:43 -0800 (PST)
+Date:   Tue, 15 Nov 2022 18:28:41 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221115182841.2640176-1-edumazet@google.com>
+Subject: [PATCH v2 -next] iommu/dma: avoid expensive indirect calls for sync operations
+From:   Eric Dumazet <edumazet@google.com>
+To:     Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>, iommu@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 11:29:19AM +0530, Md Danish Anwar wrote:
-> Hi Mathieu,
-> 
-> On 15/11/22 02:20, Mathieu Poirier wrote:
-> > On Mon, Oct 31, 2022 at 01:07:58PM +0530, MD Danish Anwar wrote:
-> >> From: Tero Kristo <t-kristo@ti.com>
-> >>
-> >> Add two new APIs, pru_rproc_get() and pru_rproc_put(), to the PRU
-> >> driver to allow client drivers to acquire and release the remoteproc
-> >> device associated with a PRU core. The PRU cores are treated as
-> >> resources with only one client owning it at a time.
-> >>
-> >> The pru_rproc_get() function returns the rproc handle corresponding
-> >> to a PRU core identified by the device tree "ti,prus" property under
-> >> the client node. The pru_rproc_put() is the complementary function
-> >> to pru_rproc_get().
-> >>
-> >> Co-developed-by: Suman Anna <s-anna@ti.com>
-> >> Signed-off-by: Suman Anna <s-anna@ti.com>
-> >> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> >> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> >> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> >> Co-developed-by: Puranjay Mohan <p-mohan@ti.com>
-> >> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
-> >> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
-> > 
-> > The above is very tedious to look at.  Other than yours, please replace all the
-> > SoBs with Co-developed-by tags.  Even that seems to be an overkill...  Anyways,
-> > for this patch and the other ones in this set.
-> > 
-> 
-> Sure, I will replace all the SoBs (other than mine) with Co-developed by tags
-> for all the patches in this series.
-> 
-> >> ---
-> >>  drivers/remoteproc/pru_rproc.c | 142 +++++++++++++++++++++++++++++++--
-> >>  include/linux/pruss.h          |  56 +++++++++++++
-> >>  2 files changed, 193 insertions(+), 5 deletions(-)
-> >>  create mode 100644 include/linux/pruss.h
-> >>
-> >> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-> >> index 128bf9912f2c..9ba73cfc29e2 100644
-> >> --- a/drivers/remoteproc/pru_rproc.c
-> >> +++ b/drivers/remoteproc/pru_rproc.c
-> >> @@ -2,12 +2,14 @@
-> >>  /*
-> >>   * PRU-ICSS remoteproc driver for various TI SoCs
-> >>   *
-> >> - * Copyright (C) 2014-2020 Texas Instruments Incorporated - https://www.ti.com/
-> >> + * Copyright (C) 2014-2022 Texas Instruments Incorporated - https://www.ti.com/
-> >>   *
-> >>   * Author(s):
-> >>   *	Suman Anna <s-anna@ti.com>
-> >>   *	Andrew F. Davis <afd@ti.com>
-> >>   *	Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org> for Texas Instruments
-> >> + *	Puranjay Mohan <p-mohan@ti.com>
-> >> + *	Md Danish Anwar <danishanwar@ti.com>
-> >>   */
-> >>  
-> >>  #include <linux/bitops.h>
-> >> @@ -16,6 +18,7 @@
-> >>  #include <linux/module.h>
-> >>  #include <linux/of_device.h>
-> >>  #include <linux/of_irq.h>
-> >> +#include <linux/pruss.h>
-> >>  #include <linux/pruss_driver.h>
-> >>  #include <linux/remoteproc.h>
-> >>  
-> >> @@ -111,6 +114,8 @@ struct pru_private_data {
-> >>   * @rproc: remoteproc pointer for this PRU core
-> >>   * @data: PRU core specific data
-> >>   * @mem_regions: data for each of the PRU memory regions
-> >> + * @client_np: client device node
-> >> + * @lock: mutex to protect client usage
-> >>   * @fw_name: name of firmware image used during loading
-> >>   * @mapped_irq: virtual interrupt numbers of created fw specific mapping
-> >>   * @pru_interrupt_map: pointer to interrupt mapping description (firmware)
-> >> @@ -126,6 +131,8 @@ struct pru_rproc {
-> >>  	struct rproc *rproc;
-> >>  	const struct pru_private_data *data;
-> >>  	struct pruss_mem_region mem_regions[PRU_IOMEM_MAX];
-> >> +	struct device_node *client_np;
-> >> +	struct mutex lock; /* client access lock */
-> > 
-> > Why is there a comment here when the field is already documented above?
-> > 
-> 
-> I will remove the comment from here.
-> 
-> > I will wait for you to address Roger's comments before looking at this set
-> > further.
-> > 
-> 
-> I had addressed two out of three of Roger's comments earlier. I missed one
-> comment. I have responded to that now. Please have a look at this set.
+Quite often, NIC devices do not need dma_sync operations
+on x86_64 at least.
 
-I won't - spin off a new revision after addressing Roger's comments and I will
-look at that one.
+Indeed, when dev_is_dma_coherent(dev) is true and
+dev_use_swiotlb(dev) is false, iommu_dma_sync_single_for_cpu()
+and friends do nothing.
 
-> 
-> > Thanks,
-> > Mathieu
-> > 
-> >>  	const char *fw_name;
-> >>  	unsigned int *mapped_irq;
-> >>  	struct pru_irq_rsc *pru_interrupt_map;
-> >> @@ -146,6 +153,127 @@ void pru_control_write_reg(struct pru_rproc *pru, unsigned int reg, u32 val)
-> >>  	writel_relaxed(val, pru->mem_regions[PRU_IOMEM_CTRL].va + reg);
-> >>  }
-> >>  
-> >> +static struct rproc *__pru_rproc_get(struct device_node *np, int index)
-> >> +{
-> >> +	struct rproc *rproc;
-> >> +	phandle rproc_phandle;
-> >> +	int ret;
-> >> +
-> >> +	ret = of_property_read_u32_index(np, "ti,prus", index, &rproc_phandle);
-> >> +	if (ret)
-> >> +		return ERR_PTR(ret);
-> >> +
-> >> +	rproc = rproc_get_by_phandle(rproc_phandle);
-> >> +	if (!rproc) {
-> >> +		ret = -EPROBE_DEFER;
-> >> +		goto err_no_rproc_handle;
-> >> +	}
-> >> +
-> >> +	/* make sure it is PRU rproc */
-> >> +	if (!is_pru_rproc(rproc->dev.parent)) {
-> >> +		rproc_put(rproc);
-> >> +		return ERR_PTR(-ENODEV);
-> >> +	}
-> >> +
-> >> +	get_device(&rproc->dev);
-> >> +
-> >> +	return rproc;
-> >> +
-> >> +err_no_rproc_handle:
-> >> +	rproc_put(rproc);
-> >> +	return ERR_PTR(ret);
-> >> +}
-> >> +
-> >> +/**
-> >> + * pru_rproc_get() - get the PRU rproc instance from a device node
-> >> + * @np: the user/client device node
-> >> + * @index: index to use for the ti,prus property
-> >> + * @pru_id: optional pointer to return the PRU remoteproc processor id
-> >> + *
-> >> + * This function looks through a client device node's "ti,prus" property at
-> >> + * index @index and returns the rproc handle for a valid PRU remote processor if
-> >> + * found. The function allows only one user to own the PRU rproc resource at a
-> >> + * time. Caller must call pru_rproc_put() when done with using the rproc, not
-> >> + * required if the function returns a failure.
-> >> + *
-> >> + * When optional @pru_id pointer is passed the PRU remoteproc processor id is
-> >> + * returned.
-> >> + *
-> >> + * Return: rproc handle on success, and an ERR_PTR on failure using one
-> >> + * of the following error values
-> >> + *    -ENODEV if device is not found
-> >> + *    -EBUSY if PRU is already acquired by anyone
-> >> + *    -EPROBE_DEFER is PRU device is not probed yet
-> >> + */
-> >> +struct rproc *pru_rproc_get(struct device_node *np, int index,
-> >> +			    enum pruss_pru_id *pru_id)
-> >> +{
-> >> +	struct rproc *rproc;
-> >> +	struct pru_rproc *pru;
-> >> +	struct device *dev;
-> >> +	int ret;
-> >> +
-> >> +	rproc = __pru_rproc_get(np, index);
-> >> +	if (IS_ERR(rproc))
-> >> +		return rproc;
-> >> +
-> >> +	pru = rproc->priv;
-> >> +	dev = &rproc->dev;
-> >> +
-> >> +	mutex_lock(&pru->lock);
-> >> +
-> >> +	if (pru->client_np) {
-> >> +		mutex_unlock(&pru->lock);
-> >> +		put_device(dev);
-> >> +		ret = -EBUSY;
-> >> +		goto err_no_rproc_handle;
-> >> +	}
-> >> +
-> >> +	pru->client_np = np;
-> >> +
-> >> +	mutex_unlock(&pru->lock);
-> >> +
-> >> +	if (pru_id)
-> >> +		*pru_id = pru->id;
-> >> +
-> >> +	return rproc;
-> >> +
-> >> +err_no_rproc_handle:
-> >> +	rproc_put(rproc);
-> >> +	return ERR_PTR(ret);
-> >> +}
-> >> +EXPORT_SYMBOL_GPL(pru_rproc_get);
-> >> +
-> >> +/**
-> >> + * pru_rproc_put() - release the PRU rproc resource
-> >> + * @rproc: the rproc resource to release
-> >> + *
-> >> + * Releases the PRU rproc resource and makes it available to other
-> >> + * users.
-> >> + */
-> >> +void pru_rproc_put(struct rproc *rproc)
-> >> +{
-> >> +	struct pru_rproc *pru;
-> >> +
-> >> +	if (IS_ERR_OR_NULL(rproc) || !is_pru_rproc(rproc->dev.parent))
-> >> +		return;
-> >> +
-> >> +	pru = rproc->priv;
-> >> +
-> >> +	mutex_lock(&pru->lock);
-> >> +
-> >> +	if (!pru->client_np) {
-> >> +		mutex_unlock(&pru->lock);
-> >> +		return;
-> >> +	}
-> >> +
-> >> +	pru->client_np = NULL;
-> >> +	mutex_unlock(&pru->lock);
-> >> +
-> >> +	rproc_put(rproc);
-> >> +}
-> >> +EXPORT_SYMBOL_GPL(pru_rproc_put);
-> >> +
-> >>  static inline u32 pru_debug_read_reg(struct pru_rproc *pru, unsigned int reg)
-> >>  {
-> >>  	return readl_relaxed(pru->mem_regions[PRU_IOMEM_DEBUG].va + reg);
-> >> @@ -438,7 +566,7 @@ static void *pru_d_da_to_va(struct pru_rproc *pru, u32 da, size_t len)
-> >>  	dram0 = pruss->mem_regions[PRUSS_MEM_DRAM0];
-> >>  	dram1 = pruss->mem_regions[PRUSS_MEM_DRAM1];
-> >>  	/* PRU1 has its local RAM addresses reversed */
-> >> -	if (pru->id == 1)
-> >> +	if (pru->id == PRUSS_PRU1)
-> >>  		swap(dram0, dram1);
-> >>  	shrd_ram = pruss->mem_regions[PRUSS_MEM_SHRD_RAM2];
-> >>  
-> >> @@ -747,14 +875,14 @@ static int pru_rproc_set_id(struct pru_rproc *pru)
-> >>  	case RTU0_IRAM_ADDR_MASK:
-> >>  		fallthrough;
-> >>  	case PRU0_IRAM_ADDR_MASK:
-> >> -		pru->id = 0;
-> >> +		pru->id = PRUSS_PRU0;
-> >>  		break;
-> >>  	case TX_PRU1_IRAM_ADDR_MASK:
-> >>  		fallthrough;
-> >>  	case RTU1_IRAM_ADDR_MASK:
-> >>  		fallthrough;
-> >>  	case PRU1_IRAM_ADDR_MASK:
-> >> -		pru->id = 1;
-> >> +		pru->id = PRUSS_PRU1;
-> >>  		break;
-> >>  	default:
-> >>  		ret = -EINVAL;
-> >> @@ -816,6 +944,8 @@ static int pru_rproc_probe(struct platform_device *pdev)
-> >>  	pru->pruss = platform_get_drvdata(ppdev);
-> >>  	pru->rproc = rproc;
-> >>  	pru->fw_name = fw_name;
-> >> +	pru->client_np = NULL;
-> >> +	mutex_init(&pru->lock);
-> >>  
-> >>  	for (i = 0; i < ARRAY_SIZE(mem_names); i++) {
-> >>  		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
-> >> @@ -904,7 +1034,7 @@ MODULE_DEVICE_TABLE(of, pru_rproc_match);
-> >>  
-> >>  static struct platform_driver pru_rproc_driver = {
-> >>  	.driver = {
-> >> -		.name   = "pru-rproc",
-> >> +		.name   = PRU_RPROC_DRVNAME,
-> >>  		.of_match_table = pru_rproc_match,
-> >>  		.suppress_bind_attrs = true,
-> >>  	},
-> >> @@ -916,5 +1046,7 @@ module_platform_driver(pru_rproc_driver);
-> >>  MODULE_AUTHOR("Suman Anna <s-anna@ti.com>");
-> >>  MODULE_AUTHOR("Andrew F. Davis <afd@ti.com>");
-> >>  MODULE_AUTHOR("Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>");
-> >> +MODULE_AUTHOR("Puranjay Mohan <p-mohan@ti.com>");
-> >> +MODULE_AUTHOR("Md Danish Anwar <danishanwar@ti.com>");
-> >>  MODULE_DESCRIPTION("PRU-ICSS Remote Processor Driver");
-> >>  MODULE_LICENSE("GPL v2");
-> >> diff --git a/include/linux/pruss.h b/include/linux/pruss.h
-> >> new file mode 100644
-> >> index 000000000000..fdc719b43db0
-> >> --- /dev/null
-> >> +++ b/include/linux/pruss.h
-> >> @@ -0,0 +1,56 @@
-> >> +/* SPDX-License-Identifier: GPL-2.0-only */
-> >> +/**
-> >> + * PRU-ICSS Subsystem user interfaces
-> >> + *
-> >> + * Copyright (C) 2015-2022 Texas Instruments Incorporated - http://www.ti.com
-> >> + *	Suman Anna <s-anna@ti.com>
-> >> + */
-> >> +
-> >> +#ifndef __LINUX_PRUSS_H
-> >> +#define __LINUX_PRUSS_H
-> >> +
-> >> +#include <linux/device.h>
-> >> +#include <linux/types.h>
-> >> +
-> >> +#define PRU_RPROC_DRVNAME "pru-rproc"
-> >> +
-> >> +/*
-> >> + * enum pruss_pru_id - PRU core identifiers
-> >> + */
-> >> +enum pruss_pru_id {
-> >> +	PRUSS_PRU0 = 0,
-> >> +	PRUSS_PRU1,
-> >> +	PRUSS_NUM_PRUS,
-> >> +};
-> >> +
-> >> +struct device_node;
-> >> +
-> >> +#if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
-> >> +
-> >> +struct rproc *pru_rproc_get(struct device_node *np, int index,
-> >> +			    enum pruss_pru_id *pru_id);
-> >> +void pru_rproc_put(struct rproc *rproc);
-> >> +
-> >> +#else
-> >> +
-> >> +static inline struct rproc *
-> >> +pru_rproc_get(struct device_node *np, int index, enum pruss_pru_id *pru_id)
-> >> +{
-> >> +	return ERR_PTR(-EOPNOTSUPP);
-> >> +}
-> >> +
-> >> +static inline void pru_rproc_put(struct rproc *rproc) { }
-> >> +
-> >> +#endif /* CONFIG_PRU_REMOTEPROC */
-> >> +
-> >> +static inline bool is_pru_rproc(struct device *dev)
-> >> +{
-> >> +	const char *drv_name = dev_driver_string(dev);
-> >> +
-> >> +	if (strncmp(drv_name, PRU_RPROC_DRVNAME, sizeof(PRU_RPROC_DRVNAME)))
-> >> +		return false;
-> >> +
-> >> +	return true;
-> >> +}
-> >> +
-> >> +#endif /* __LINUX_PRUSS_H */
-> >> -- 
-> >> 2.25.1
-> >>
-> 
-> Thanks,
-> Danish
+However, indirectly calling them when CONFIG_RETPOLINE=y
+consumes about 10% of cycles on a cpu receiving packets
+from softirq at ~100Gbit rate, as shown in [1]
+
+Even if/when CONFIG_RETPOLINE is not set, there
+is a cost of about 3%.
+
+This patch adds dev->skip_dma_sync boolean that can be opted-in.
+
+For instance iommu_setup_dma_ops() can set this boolean to true
+if CONFIG_DMA_API_DEBUG is not set, and dev_is_dma_coherent(dev).
+
+Then later, if/when swiotlb is used for the first time, the flag
+is turned off, from swiotlb_tbl_map_single()
+
+We might in the future inline again these helpers, like:
+
+static void inline
+dma_sync_single_for_cpu(struct device *dev, dma_addr_t addr,
+			size_t size, enum dma_data_direction dir)
+{
+	if (!dev_skip_dma_sync(dev))
+		__dma_sync_single_for_cpu(dev, addr, size, dir);
+}
+
+perf profile before the patch:
+
+    18.53%  [kernel]       [k] gq_rx_skb
+    14.77%  [kernel]       [k] napi_reuse_skb
+     8.95%  [kernel]       [k] skb_release_data
+     5.42%  [kernel]       [k] dev_gro_receive
+     5.37%  [kernel]       [k] memcpy
+<*>  5.26%  [kernel]       [k] iommu_dma_sync_sg_for_cpu
+     4.78%  [kernel]       [k] tcp_gro_receive
+<*>  4.42%  [kernel]       [k] iommu_dma_sync_sg_for_device
+     4.12%  [kernel]       [k] ipv6_gro_receive
+     3.65%  [kernel]       [k] gq_pool_get
+     3.25%  [kernel]       [k] skb_gro_receive
+     2.07%  [kernel]       [k] napi_gro_frags
+     1.98%  [kernel]       [k] tcp6_gro_receive
+     1.27%  [kernel]       [k] gq_rx_prep_buffers
+     1.18%  [kernel]       [k] gq_rx_napi_handler
+     0.99%  [kernel]       [k] csum_partial
+     0.74%  [kernel]       [k] csum_ipv6_magic
+     0.72%  [kernel]       [k] free_pcp_prepare
+     0.60%  [kernel]       [k] __napi_poll
+     0.58%  [kernel]       [k] net_rx_action
+     0.56%  [kernel]       [k] read_tsc
+<*>  0.50%  [kernel]       [k] __x86_indirect_thunk_r11
+     0.45%  [kernel]       [k] memset
+
+After patch, lines with <*> no longer show up, and overall
+cpu usage looks much better (~60% instead of ~72%)
+
+    25.56%  [kernel]       [k] gq_rx_skb
+     9.90%  [kernel]       [k] napi_reuse_skb
+     7.39%  [kernel]       [k] dev_gro_receive
+     6.78%  [kernel]       [k] memcpy
+     6.53%  [kernel]       [k] skb_release_data
+     6.39%  [kernel]       [k] tcp_gro_receive
+     5.71%  [kernel]       [k] ipv6_gro_receive
+     4.35%  [kernel]       [k] napi_gro_frags
+     4.34%  [kernel]       [k] skb_gro_receive
+     3.50%  [kernel]       [k] gq_pool_get
+     3.08%  [kernel]       [k] gq_rx_napi_handler
+     2.35%  [kernel]       [k] tcp6_gro_receive
+     2.06%  [kernel]       [k] gq_rx_prep_buffers
+     1.32%  [kernel]       [k] csum_partial
+     0.93%  [kernel]       [k] csum_ipv6_magic
+     0.65%  [kernel]       [k] net_rx_action
+
+Many thanks to Robin Murphy for his feedback and ideas to make this patch
+much better !
+
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: Joerg Roedel <joro@8bytes.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: iommu@lists.linux.dev
+---
+ drivers/iommu/dma-iommu.c   |  2 ++
+ include/linux/device.h      |  1 +
+ include/linux/dma-map-ops.h |  5 +++++
+ kernel/dma/mapping.c        | 20 ++++++++++++++++----
+ kernel/dma/swiotlb.c        |  3 +++
+ 5 files changed, 27 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index 9297b741f5e80e2408e864fc3f779410d6b04d49..bd3f4d3d646cc57c7588f22d49ea32ac693e38ff 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -1587,6 +1587,8 @@ void iommu_setup_dma_ops(struct device *dev, u64 dma_base, u64 dma_limit)
+ 		if (iommu_dma_init_domain(domain, dma_base, dma_limit, dev))
+ 			goto out_err;
+ 		dev->dma_ops = &iommu_dma_ops;
++		if (!IS_ENABLED(CONFIG_DMA_API_DEBUG) && dev_is_dma_coherent(dev))
++			dev->skip_dma_sync = true;
+ 	}
+ 
+ 	return;
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 424b55df02727b5742070f72374fd65f5dd68151..2fbb2cc18e44e21eba5f43557ee16d0dc92ef2ef 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -647,6 +647,7 @@ struct device {
+     defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
+ 	bool			dma_coherent:1;
+ #endif
++	bool			skip_dma_sync:1;
+ #ifdef CONFIG_DMA_OPS_BYPASS
+ 	bool			dma_ops_bypass : 1;
+ #endif
+diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
+index d678afeb8a13a3a54380a959d14f79bca9c23d8e..4691081f71c51da5468cf6703570ebc7a64d40c5 100644
+--- a/include/linux/dma-map-ops.h
++++ b/include/linux/dma-map-ops.h
+@@ -275,6 +275,11 @@ static inline bool dev_is_dma_coherent(struct device *dev)
+ }
+ #endif /* CONFIG_ARCH_HAS_DMA_COHERENCE_H */
+ 
++static inline bool dev_skip_dma_sync(struct device *dev)
++{
++	return dev->skip_dma_sync;
++}
++
+ void *arch_dma_alloc(struct device *dev, size_t size, dma_addr_t *dma_handle,
+ 		gfp_t gfp, unsigned long attrs);
+ void arch_dma_free(struct device *dev, size_t size, void *cpu_addr,
+diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
+index 33437d6206445812b6d4d5b33c77235d18074dec..5d5d286ffae7fa6b7ff1aef46bdc59e7e31a8038 100644
+--- a/kernel/dma/mapping.c
++++ b/kernel/dma/mapping.c
+@@ -328,9 +328,12 @@ EXPORT_SYMBOL(dma_unmap_resource);
+ void dma_sync_single_for_cpu(struct device *dev, dma_addr_t addr, size_t size,
+ 		enum dma_data_direction dir)
+ {
+-	const struct dma_map_ops *ops = get_dma_ops(dev);
++	const struct dma_map_ops *ops;
+ 
+ 	BUG_ON(!valid_dma_direction(dir));
++	if (dev_skip_dma_sync(dev))
++		return;
++	ops = get_dma_ops(dev);;
+ 	if (dma_map_direct(dev, ops))
+ 		dma_direct_sync_single_for_cpu(dev, addr, size, dir);
+ 	else if (ops->sync_single_for_cpu)
+@@ -342,9 +345,12 @@ EXPORT_SYMBOL(dma_sync_single_for_cpu);
+ void dma_sync_single_for_device(struct device *dev, dma_addr_t addr,
+ 		size_t size, enum dma_data_direction dir)
+ {
+-	const struct dma_map_ops *ops = get_dma_ops(dev);
++	const struct dma_map_ops *ops;
+ 
+ 	BUG_ON(!valid_dma_direction(dir));
++	if (dev_skip_dma_sync(dev))
++		return;
++	ops = get_dma_ops(dev);;
+ 	if (dma_map_direct(dev, ops))
+ 		dma_direct_sync_single_for_device(dev, addr, size, dir);
+ 	else if (ops->sync_single_for_device)
+@@ -356,9 +362,12 @@ EXPORT_SYMBOL(dma_sync_single_for_device);
+ void dma_sync_sg_for_cpu(struct device *dev, struct scatterlist *sg,
+ 		    int nelems, enum dma_data_direction dir)
+ {
+-	const struct dma_map_ops *ops = get_dma_ops(dev);
++	const struct dma_map_ops *ops;
+ 
+ 	BUG_ON(!valid_dma_direction(dir));
++	if (dev_skip_dma_sync(dev))
++		return;
++	ops = get_dma_ops(dev);;
+ 	if (dma_map_direct(dev, ops))
+ 		dma_direct_sync_sg_for_cpu(dev, sg, nelems, dir);
+ 	else if (ops->sync_sg_for_cpu)
+@@ -370,9 +379,12 @@ EXPORT_SYMBOL(dma_sync_sg_for_cpu);
+ void dma_sync_sg_for_device(struct device *dev, struct scatterlist *sg,
+ 		       int nelems, enum dma_data_direction dir)
+ {
+-	const struct dma_map_ops *ops = get_dma_ops(dev);
++	const struct dma_map_ops *ops;
+ 
+ 	BUG_ON(!valid_dma_direction(dir));
++	if (dev_skip_dma_sync(dev))
++		return;
++	ops = get_dma_ops(dev);;
+ 	if (dma_map_direct(dev, ops))
+ 		dma_direct_sync_sg_for_device(dev, sg, nelems, dir);
+ 	else if (ops->sync_sg_for_device)
+diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+index 339a990554e7fed98dd337efe4fb759a98161cdb..03ebd9803db1a457600f1fac8a18fb3dde724a6f 100644
+--- a/kernel/dma/swiotlb.c
++++ b/kernel/dma/swiotlb.c
+@@ -734,6 +734,9 @@ phys_addr_t swiotlb_tbl_map_single(struct device *dev, phys_addr_t orig_addr,
+ 	int index;
+ 	phys_addr_t tlb_addr;
+ 
++	if (unlikely(dev->skip_dma_sync))
++		dev->skip_dma_sync = false;
++
+ 	if (!mem || !mem->nslabs) {
+ 		dev_warn_ratelimited(dev,
+ 			"Can not allocate SWIOTLB buffer earlier and can't now provide you with the DMA bounce buffer");
+-- 
+2.38.1.431.g37b22c650d-goog
+
