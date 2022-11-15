@@ -2,394 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E306B62A0BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 784B262A0C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:53:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiKORxE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 15 Nov 2022 12:53:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47750 "EHLO
+        id S231415AbiKORxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 12:53:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbiKORxB (ORCPT
+        with ESMTP id S230295AbiKORxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 12:53:01 -0500
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD88E12;
-        Tue, 15 Nov 2022 09:52:59 -0800 (PST)
-Received: by mail-qt1-f170.google.com with SMTP id l2so9188979qtq.11;
-        Tue, 15 Nov 2022 09:52:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=muMc7CbTJu6jHHGM+CaKZtSCR1f+dMagxKkifG2lh0A=;
-        b=fOQbg10j+xagOG8iHOW3EZcJ525uB3hiXPzwNbDXbFS5lNZoa9my6gayPsDZXScMYp
-         xJh/hyWmv42NjdcnLngSA1QzuU1fB+w4MmaAEGzpalwUyg58pE6v7tE4del5n6V+E2B7
-         TPfBw3eFwDbJ89WyGQuxlEdrHvS8nyE1/DSff4OXR7PWMxTVT1JiIdCMb0Txt9rJ7PYT
-         FZVnVy1G8O0bl/Zk9FlE8WvOWqW0TjWPT0rU/LqQ8W2/RNpyBtEPs1x3W//0i89HLnW9
-         3/7SIb0UIvAd4++rejy+4jSJUOUz4DjS5dH2i5V8203R16gG2Dxtr20CWCPMJgw7cGrc
-         s1fw==
-X-Gm-Message-State: ANoB5pnApTcHWcFZksnf/Hf9qajGXBsuV1qMIKwhRwa55JEBmKdC72Zk
-        HJMh5tCPXtPlrNjOdD2/qNUh+b98HU7yH4pb+bk=
-X-Google-Smtp-Source: AA0mqf42Jnke7GUCpdg1g5IJRCh06ak7VmPXSJsFN8sWjqZ7ysqO4QhQwO7d+IuC2GQhoju4ltLmw4fT0zLG8fB6OxI=
-X-Received: by 2002:ac8:758b:0:b0:3a5:a53d:a102 with SMTP id
- s11-20020ac8758b000000b003a5a53da102mr17551608qtq.153.1668534778539; Tue, 15
- Nov 2022 09:52:58 -0800 (PST)
+        Tue, 15 Nov 2022 12:53:32 -0500
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2042.outbound.protection.outlook.com [40.107.104.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7E921B2;
+        Tue, 15 Nov 2022 09:53:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MrifsGhS8xLpzkMuvNtbNs5bqtRjVZZMidSTiLiShrh0jVFHEDNY1TqtaZRdhjaaeMwS5ZQ+48DPMSltsOzyZgg9nCdmJKExlOjfaCP6qop5vNy1geGIazfpXtGs9Al/Wsj6y1RGDnNhryzLDptt0MMb8dO1afymUUShYTzvQObsafgRIEJ2Md2Hftk5Vdj1R+3GivcLkN2MfdISNYL88CPZS14BArXtxRGCZ+SRbOac45ij0kvCQn0mILomO3muZ8xkRLZbCgblk9IAN9YjNGUhXq8yKt5dCGTWq7SqreM2ahjC6tMDnHHHthOiJJc0hJ7U+2gyC0KkE6i+asTbTw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=u3SnbIe2Wtx2Czf5x1EnKdZNngCPChpveYTUrG46fTk=;
+ b=Kr3VHsvNgmZg5GUTBwSM6tBq8FpxGTqO+AVgpvzR02EJ3xOUbYj3GwlT7vPPiNWe0jMzeKC4KA2jaY9sSmr13IxU8f485ddDC/nL2haOzv0PdFS/KyjTueQPb06j6kXe5fDF5AEURALla7VRe0bjROBGv00Klz/l8quMe2kogTnuSpHVj9J3IENPSDP1YVI7taEMytW3LEb6nsdOBaBADb7AUBoOFoljhbz+R7AGCn77hp8flUmMBF4ijwKoteF88avkIXi31+iAQpr80SxXsgc6uz+X2F+PDxMAkGIa+sKH/YcN8iU6J1MYW42IJQgcSH5RPuYAt9LBYnAiYLLC/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=u3SnbIe2Wtx2Czf5x1EnKdZNngCPChpveYTUrG46fTk=;
+ b=o4vFZHs7UYto8xIv0kXabTQ8ElkgVtMlzBN4yooShYEWyoHGoMuNTYR/3+37N3IJAnGBaxJefLijobm3oUznsMJbfb/QfXgdjfBaoDbvUj/6XR1LkKPWAk1GjVbydJme9DgGlIlL2jjZcHNstqXtpoaGhFu795cneO1E/Jl8Dqk=
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
+ by PAXPR04MB8143.eurprd04.prod.outlook.com (2603:10a6:102:1c4::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13; Tue, 15 Nov
+ 2022 17:53:28 +0000
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::6b44:4677:ad1d:b33a]) by PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::6b44:4677:ad1d:b33a%6]) with mapi id 15.20.5813.018; Tue, 15 Nov 2022
+ 17:53:28 +0000
+From:   Shenwei Wang <shenwei.wang@nxp.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        kernel test robot <lkp@intel.com>
+Subject: RE: [EXT] Re: [PATCH v4 2/2] net: fec: add xdp and page pool
+ statistics
+Thread-Topic: [EXT] Re: [PATCH v4 2/2] net: fec: add xdp and page pool
+ statistics
+Thread-Index: AQHY+QsXk5KqzdTauEq0snVUKlqfZK5APU+AgAAGw6A=
+Date:   Tue, 15 Nov 2022 17:53:28 +0000
+Message-ID: <PAXPR04MB9185DC399BA10036C0C7930D89049@PAXPR04MB9185.eurprd04.prod.outlook.com>
+References: <20221115155744.193789-1-shenwei.wang@nxp.com>
+ <20221115155744.193789-3-shenwei.wang@nxp.com> <Y3PMRwstfJkUiYwl@lunn.ch>
+In-Reply-To: <Y3PMRwstfJkUiYwl@lunn.ch>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR04MB9185:EE_|PAXPR04MB8143:EE_
+x-ms-office365-filtering-correlation-id: 5c1fe3e7-e11e-4e98-2929-08dac7324d33
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: gezs1/hL7R7amr9bMW8RF4iXD33r6Geint2SSLEa83kChgFZSFiRViOYMCR9dhwZ5MsOdX3A8sTBTSb8g2f+oZbh6uSWTv5oGhOCZIHnicpLc6+RXBbz7q2D18aNVcTtOzYrpZF1pFy65som0TUGzeP0YcpTK1E60PdIUg41v0+R4PocGit+3RigxyYMx9/C4kbN8bNtBxzh3uwHx3zm5WqsEyoxKdw3qxxkxoxPUZ9tpybz5wxZW9Fk9OqCHU+hevPgNXwlytChl8EzwanZXMgklYNgGSe2cIeqDJxYu7Ry7M7zgHLm5+k50bjS9XYezPkrK1EpvI0eFBM0IEa1DJaIchOcm5R4A/LA/NujHSqgnTH5rUn9K8TnXkl1qXQ1+SGLhp9WHuY/XW/eYq20c3wXBkF3sEJq1YzAljI9qxyPss585DQAuKHK7SaIemPKZvQF9jVKxaLchOV9QgkRLb5w0T6kT3alJC6DqvYKEeQvwz6Lszan26jfr9POsDzQtDEBDgWSDdNIB18PmdhwzpRgIN+7f2yW73zwajl0dqoFwGA9S5UsN83AULrmGIE9QJcLfJdUqg6agnA99lYdoqLHphdb07amhxMYn9eL1E0a3baSvjBZyrsKTqYUW3O2bkaVFNJl+x9uRspMDormGPDFGZAzWkft02cq8eFBEl2oNgygASomRR9CNr5zaeKIIrTjKwNKQKtG3rxeFgPUsbQFsFR0iOpHdqZjMDnTABghWqwW9LmagopC46O/QIDYvAKfGqd9yWwp4/4MmRX1+Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(346002)(136003)(396003)(39860400002)(451199015)(478600001)(6916009)(54906003)(83380400001)(71200400001)(8676002)(4326008)(38070700005)(66946007)(66476007)(66556008)(76116006)(64756008)(66446008)(26005)(41300700001)(86362001)(53546011)(55236004)(38100700002)(186003)(8936002)(52536014)(5660300002)(316002)(7696005)(9686003)(6506007)(44832011)(7416002)(2906002)(33656002)(55016003)(122000001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?LDEr9pEAt3stpfDltY2i3N9bny5IV39/l7jmDM6dRqkVOiFc9COwkGxPX+gH?=
+ =?us-ascii?Q?LDiHDyAuFPhu451IZxA+A6EhtiEh7a8i585G8tYyO1C/wJKiKn0awy8XiHWQ?=
+ =?us-ascii?Q?LJTHDMQ5wpmPQ4H+8zYsWiOSbFPBeCErZDG9YiMhbDroPvF0hTqHCrc/6NCp?=
+ =?us-ascii?Q?BLvBkCVZc7Y0pdmp5YK+Kw8HM45B+eu4Z5VbFOth4Bu78epzg1EBNtg8lekO?=
+ =?us-ascii?Q?UQ9U5JCOilz4AlbW1MBvLVIAAglEPrGJV2LKwDtuX3VAm64SZdRxgI6bk8oM?=
+ =?us-ascii?Q?EbnUnuhxjDIMt0XpP8lMgThxYk7tKjIYRydaiR4nBbRQ7Yz00B3WVdhkdzmn?=
+ =?us-ascii?Q?VJv2pVwzMGX+PxacbRK2ETZMVCW/1NuRkUmE+yH7wScbhY398ds2k1sD4Pk2?=
+ =?us-ascii?Q?2TG+iuZB4qYpneX8ALovZoLR9lk8U6SREy1I1PuaYXpGi/89auU1azzf4UaS?=
+ =?us-ascii?Q?Wk5k+5xYZMFCJeSVXjshn2pqgrtuDk84tpfxg9iU4fSBwYLlDxk5kEaryL8U?=
+ =?us-ascii?Q?WQiatu+ZZx4Y3GDWrH8tgnyikcXbvgfjZ1zIDvE7NJxwIjGy+KWyEM5L7FPO?=
+ =?us-ascii?Q?0vqaxB0tA1ku0ZznXxIi+CFGjUir6Q5tTbZex6rLWNeT58E66n6Fw4YetQuE?=
+ =?us-ascii?Q?keoSZt7WeYUMcznzcy+r2h9jTWtF3EJaAQVBNbr3n9e2t6o9j1RQI2sQos7q?=
+ =?us-ascii?Q?bgcBhlIyWRTu83VKl+jr2GYeGUdrvH9hjVbu5Sb+J8VEV2R0hnRmpjISQI6B?=
+ =?us-ascii?Q?zmXd3ulUKC9kNQwC9naytZM9h7g4rgs/sd4f84DjqVxD+AHOj9W8WoZtQzwP?=
+ =?us-ascii?Q?fvEwrI+1y7Jptb2Ia23k44SGh2VRruMagBdpMUFdZokIOR5Z3D9ClSMFJPcZ?=
+ =?us-ascii?Q?WDGoFqbhYFOsXVeE0bb4higGOJpix6CSmvCuCuOq+4WByRC1z8Jo/NRQwaWZ?=
+ =?us-ascii?Q?ZPRyYXm45uDPMhsTsNwzaDpGGoEwZGnK/QuxVGCob3mizGZcKzvKm6Wiulo/?=
+ =?us-ascii?Q?30iR472PRZWLlAsSbEcFarrm2leqw8mcW5gRQ4Mu3YbCJC36/CC+O8mKwZpp?=
+ =?us-ascii?Q?XyZ5E3XW4ZofCOXHlI+VhXKErHAeaWSY9QXQqLP3+UMaGdMNqoEcPIWvahDv?=
+ =?us-ascii?Q?bKtvwCbuqqmfu9zxjxxzzdLXmZ7dcjS/HrVGvwblUU3gUFgAPop8471Qj9Ig?=
+ =?us-ascii?Q?IZcSqo/DEjxaLv3EFrFun49WvB3SNFz3C/VnSO3EltkRAFs+kIa/44FMO49R?=
+ =?us-ascii?Q?Fx863GnoX4SOW1E+he1MN4qTPg4KrT2lFjs8Ap6EShklKTDDwNDw5VnNgV25?=
+ =?us-ascii?Q?Ds20FRWNEC4gniaRG0og/HqWx28zwCZXY6TjmahmphLKg4vYaq/9WTAIYHRl?=
+ =?us-ascii?Q?+6hjsNQ+v0J+dwd8slqTfiTDXiMIem+O5geUkCZgl3zTW2w+7SYfanTyDWIj?=
+ =?us-ascii?Q?JPXY33xOkugedQqUIf0yXhbYQWpdrSI7iY83nqt3QWsjGR6j4jn6zEunhCIr?=
+ =?us-ascii?Q?6cBgSyIZ/QsmEi9fbO3f/uJOVbCX5arc75H5yIYitt92bAzmo2XsYVGCm1Bd?=
+ =?us-ascii?Q?1e7QDi3B7l83hVlkzz65CapdusnHimMRls8RV2hR?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20221110064723.8882-1-mario.limonciello@amd.com>
- <20221110064723.8882-2-mario.limonciello@amd.com> <CAJZ5v0iwpSkd_8CS1dq6+rkszeKGygBbeifvugAEEKqA0w1s7w@mail.gmail.com>
- <460b23ee-16ed-f1e3-0e14-35051c908671@amd.com> <CAJZ5v0id3atXfu1OAsr4kWNwYgyMVo90u9Lu2j4ZNFWQX+QX0g@mail.gmail.com>
- <CAHQZ30BCXtyJ9qqHHX5eztXbgA_A8yH48+AQVMCB64CXjqE+hQ@mail.gmail.com> <bb86ba1f-c0cd-ae71-520c-b94d4d71b261@amd.com>
-In-Reply-To: <bb86ba1f-c0cd-ae71-520c-b94d4d71b261@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 15 Nov 2022 18:52:44 +0100
-Message-ID: <CAJZ5v0hj1yc8JZTD+_WfG0FZPPne41uw1RLj06FECzgSZSNuHw@mail.gmail.com>
-Subject: Re: [RFC v2 1/3] PM: Add a sysfs files to represent sleep duration
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Raul Rangel <rrangel@chromium.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sven van Ashbrook <svenva@chromium.org>,
-        linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        Rajat Jain <rajatja@google.com>,
-        David E Box <david.e.box@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c1fe3e7-e11e-4e98-2929-08dac7324d33
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2022 17:53:28.3212
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1iyPDKLVbmMeqbEkcjrFiTXuHXrSOdpocPA0F6/o+gOxJeIjZ1Nods0SG/ZaB1wmDgtSzlY/x8tVaW+ADju6Xg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8143
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 6:27 PM Limonciello, Mario
-<mario.limonciello@amd.com> wrote:
->
-> On 11/15/2022 11:20, Raul Rangel wrote:
-> >
-> >
-> > On Tue, Nov 15, 2022 at 9:35 AM Rafael J. Wysocki <rafael@kernel.org
-> > <mailto:rafael@kernel.org>> wrote:
-> >
-> >     On Tue, Nov 15, 2022 at 4:17 PM Limonciello, Mario
-> >     <mario.limonciello@amd.com <mailto:mario.limonciello@amd.com>> wrote:
-> >      >
-> >      > On 11/15/2022 08:45, Rafael J. Wysocki wrote:
-> >      > > On Thu, Nov 10, 2022 at 7:49 AM Mario Limonciello
-> >      > > <mario.limonciello@amd.com <mailto:mario.limonciello@amd.com>>
-> >     wrote:
-> >      > >>
-> >      > >> Both AMD and Intel SoCs have a concept of reporting whether
-> >     the hardware
-> >      > >> reached a hardware sleep state over s2idle as well as how much
-> >      > >> time was spent in such a state.
-> >      > >>
-> >      > >> This information is valuable to both chip designers and system
-> >     designers
-> >      > >> as it helps to identify when there are problems with power
-> >     consumption
-> >      > >> over an s2idle cycle.
-> >      > >>
-> >      > >> To make the information discoverable, create a new sysfs file
-> >     and a symbol
-> >      > >> that drivers from supported manufacturers can use to advertise
-> >     this
-> >      > >> information. This file will only be exported when the system
-> >     supports low
-> >      > >> power idle in the ACPI table.
-> >      > >>
-> >      > >> In order to effectively use this information you will ideally
-> >     want to
-> >      > >> compare against the total duration of sleep, so export a
-> >     second sysfs file
-> >      > >> that will show total time. This file will be exported on all
-> >     systems and
-> >      > >> used both for s2idle and s3.
-> >      > >
-> >      > > Well, my first question would be how this is related to
-> >      > >
-> >      > > /sys/devices/system/cpu/cpuidle/low_power_idle_system_residency_us
-> >      > >
-> >      >
-> >      > This has a dependency on the platform firmware offering an ACPI LPIT
-> >      > table.  I don't know how common that is.
-> >
-> >     Required for running Windows with Modern Standby AFAICS.
-> >
-> >      > As this series started from the needs on ChromeOS I would ask is
-> >     that typically populated by coreboot?
-> >
-> >     It should be, but I'd need to ask for confirmation.
-> >
-> >
-> > It looks like Intel platforms have support for the LPIT table:
-> > https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/third_party/coreboot/src/soc/intel/common/block/acpi/lpit.c?q=f:LPIT%20f:coreboot&ss=chromiumos <https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsource.chromium.org%2Fchromiumos%2Fchromiumos%2Fcodesearch%2F%2B%2Fmain%3Asrc%2Fthird_party%2Fcoreboot%2Fsrc%2Fsoc%2Fintel%2Fcommon%2Fblock%2Facpi%2Flpit.c%3Fq%3Df%3ALPIT%2520f%3Acoreboot%26ss%3Dchromiumos&data=05%7C01%7Cmario.limonciello%40amd.com%7C701602845ad14f37abbb08dac72db514%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638041296400209575%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=9ig2jlDevXMjzmTUf42WS5Ey3rLd2lDUXjncz3mbyMI%3D&reserved=0>
-> >
-> > For AMD, we had some patches to add _LPIL
-> > https://review.coreboot.org/c/coreboot/+/52381/1
-> > <https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Freview.coreboot.org%2Fc%2Fcoreboot%2F%2B%2F52381%2F1&data=05%7C01%7Cmario.limonciello%40amd.com%7C701602845ad14f37abbb08dac72db514%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638041296400209575%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=KV6ASbdfNOex%2FZtJYcdItZU1gdjCIXEcP1ExiY0pkf8%3D&reserved=0>
-> > They never got merged though. We could add an LPIT table to coreboot for
-> > AMD platforms if necessary.
->
-> _LPI I don't think makes a lot of sense on X86 today, which is why this
-> was sent up:
-> eb087f305919e ("ACPI: processor idle: Check for architectural support
-> for LPI")
 
-Well, LPI has nothing to do with LPIT.  [I guess this could not be
-even more confusing, but that's what you get in the world of 4-letter
-TLAs.]
 
-> As for LPIT - I've never seen LPIT on AMD UEFI systems either.  I guess
-> it's an Intel specific table?
-
-It used to be.  The spec is UEFI-hosted now.
-
+> -----Original Message-----
+> From: Andrew Lunn <andrew@lunn.ch>
+> Sent: Tuesday, November 15, 2022 11:29 AM
+> To: Shenwei Wang <shenwei.wang@nxp.com>
+> Cc: David S. Miller <davem@davemloft.net>; Eric Dumazet
+> <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo Abeni
+> <pabeni@redhat.com>; Jesper Dangaard Brouer <hawk@kernel.org>; Ilias
+> Apalodimas <ilias.apalodimas@linaro.org>; Alexei Starovoitov
+> <ast@kernel.org>; Daniel Borkmann <daniel@iogearbox.net>; John Fastabend
+> <john.fastabend@gmail.com>; netdev@vger.kernel.org; linux-
+> kernel@vger.kernel.org; imx@lists.linux.dev; kernel test robot <lkp@intel=
+.com>
+> Subject: [EXT] Re: [PATCH v4 2/2] net: fec: add xdp and page pool statist=
+ics
+>=20
+> Caution: EXT Email
+>=20
+> > @@ -1582,6 +1586,7 @@ fec_enet_rx_queue(struct net_device *ndev, int
+> budget, u16 queue_id)
+> >       struct bpf_prog *xdp_prog =3D READ_ONCE(fep->xdp_prog);
+> >       u32 ret, xdp_result =3D FEC_ENET_XDP_PASS;
+> >       u32 data_start =3D FEC_ENET_XDP_HEADROOM;
+> > +     u32 xdp_stats[XDP_STATS_TOTAL];
+> >       struct xdp_buff xdp;
+> >       struct page *page;
+> >       u32 sub_len =3D 4;
+> > @@ -1656,11 +1661,13 @@ fec_enet_rx_queue(struct net_device *ndev, int
+> budget, u16 queue_id)
+> >               fec_enet_update_cbd(rxq, bdp, index);
 > >
-> >      > I would hope it's the same number that is populated in that file on
-> >      > supported systems though.
+> >               if (xdp_prog) {
+> > +                     memset(xdp_stats, 0, sizeof(xdp_stats));
+> >                       xdp_buff_clear_frags_flag(&xdp);
+> >                       /* subtract 16bit shift and FCS */
+> >                       xdp_prepare_buff(&xdp, page_address(page),
+> >                                        data_start, pkt_len - sub_len, f=
+alse);
+> > -                     ret =3D fec_enet_run_xdp(fep, xdp_prog, &xdp, rxq=
+, index);
+> > +                     ret =3D fec_enet_run_xdp(fep, xdp_prog, &xdp, rxq=
+,
+> > +                                            xdp_stats, index);
+> >                       xdp_result |=3D ret;
+> >                       if (ret !=3D FEC_ENET_XDP_PASS)
+> >                               goto rx_processing_done; @@ -1762,6
+> > +1769,15 @@ fec_enet_rx_queue(struct net_device *ndev, int budget, u16
+> queue_id)
+> >       if (xdp_result & FEC_ENET_XDP_REDIR)
+> >               xdp_do_flush_map();
 > >
-> >     Well, which is exactly where I'm going.
-> >
-> >     Since there is one sysfs file for exposing this value already and it
-> >     is used (for example, by sleepgraph), perhaps the way to go would be
-> >     to extend this interface to systems that don't have LPIT instead of
-> >     introducing a new one possibly exposing the same value?
-> >
->
-> Ah; so since Raul confirmed coreboot on Chrome exports that maybe we
-> just need to add another way to populate that sysfs file for systems
-> without LPIT (IE AMD).  I think that's a very good idea; thanks.
->
-> I think we still probably want to have a way to get the total suspend
-> time out programmatically though to compare to.  So perhaps the other
-> sysfs file I had in the RFC v2 makes sense still.
+> > +     if (xdp_prog) {
+> > +             int i;
+> > +
+> > +             u64_stats_update_begin(&rxq->syncp);
+> > +             for (i =3D 0; i < XDP_STATS_TOTAL; i++)
+> > +                     rxq->stats[i] +=3D xdp_stats[i];
+> > +             u64_stats_update_end(&rxq->syncp);
+> > +     }
+> > +
+>=20
+> This looks wrong. You are processing upto the napi budget, 64 frames, in =
+a loop.
+> The memset to 0 happens inside the loop, but you do the accumulation outs=
+ide
+> the loop?
+>=20
 
-Well there are trace points to get that (sleepgraph uses these too),
-see Documentation/trace/events-power.rst (and you can git grep for
-"machine_suspend" to find where this comes from).
+My bad. That should be moved outside the loop.
 
-I guess there could be a sysfs file in addition to them, but I'm not
-sure if the extra overhead would be worth the benefit.
+Thanks,
+Shenwei
 
-> >      > > and
-> >      > >
-> >      > > /sys/devices/system/cpu/cpuidle/low_power_idle_cpu_residency_us
-> >      > >
-> >      >
-> >      > No relation to this one for what's in the series.
-> >      >
-> >      > >> Suggested-by: David E Box <david.e.box@intel.com
-> >     <mailto:david.e.box@intel.com>>
-> >      > >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com
-> >     <mailto:mario.limonciello@amd.com>>
-> >      > >> ---
-> >      > >>   Documentation/ABI/testing/sysfs-power | 17 +++++++++++
-> >      > >>   include/linux/suspend.h               |  4 +++
-> >      > >>   kernel/power/main.c                   | 42
-> >     +++++++++++++++++++++++++++
-> >      > >>   kernel/power/suspend.c                |  2 ++
-> >      > >>   kernel/time/timekeeping.c             |  2 ++
-> >      > >>   5 files changed, 67 insertions(+)
-> >      > >>
-> >      > >> diff --git a/Documentation/ABI/testing/sysfs-power
-> >     b/Documentation/ABI/testing/sysfs-power
-> >      > >> index f99d433ff311..5b47cbb4dc9e 100644
-> >      > >> --- a/Documentation/ABI/testing/sysfs-power
-> >      > >> +++ b/Documentation/ABI/testing/sysfs-power
-> >      > >> @@ -413,6 +413,23 @@ Description:
-> >      > >>                  The /sys/power/suspend_stats/last_failed_step
-> >     file contains
-> >      > >>                  the last failed step in the suspend/resume path.
-> >      > >>
-> >      > >> +What:          /sys/power/suspend_stats/last_hw_state_residency
-> >      > >> +Date:          December 2022
-> >      > >> +Contact:       Mario Limonciello <mario.limonciello@amd.com
-> >     <mailto:mario.limonciello@amd.com>>
-> >      > >> +Description:
-> >      > >> +               The
-> >     /sys/power/suspend_stats/last_hw_state_residency file contains
-> >      > >> +               the amount of time spent in a hardware sleep
-> >     state.
-> >      > >> +               This attribute is only available if the system
-> >     supports
-> >      > >> +               low power idle.  This is measured in microseconds.
-> >      > >> +
-> >      > >> +What:          /sys/power/suspend_stats/last_suspend_total
-> >      > >> +Date:          December 2022
-> >      > >> +Contact:       Mario Limonciello <mario.limonciello@amd.com
-> >     <mailto:mario.limonciello@amd.com>>
-> >      > >> +Description:
-> >      > >> +               The
-> >     /sys/power/suspend_stats/last_suspend_total file contains
-> >      > >> +               the total duration of the sleep cycle.
-> >      > >> +               This is measured in microseconds.
-> >      > >> +
-> >      > >>   What:          /sys/power/sync_on_suspend
-> >      > >>   Date:          October 2019
-> >      > >>   Contact:       Jonas Meurer <jonas@freesources.org
-> >     <mailto:jonas@freesources.org>>
-> >      > >> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> >      > >> index cfe19a028918..af343c3f8198 100644
-> >      > >> --- a/include/linux/suspend.h
-> >      > >> +++ b/include/linux/suspend.h
-> >      > >> @@ -68,6 +68,8 @@ struct suspend_stats {
-> >      > >>          int     last_failed_errno;
-> >      > >>          int     errno[REC_FAILED_NUM];
-> >      > >>          int     last_failed_step;
-> >      > >> +       u64     last_hw_state_residency;
-> >      > >> +       u64     last_suspend_total;
-> >      > >>          enum suspend_stat_step  failed_steps[REC_FAILED_NUM];
-> >      > >>   };
-> >      > >>
-> >      > >> @@ -489,6 +491,8 @@ void restore_processor_state(void);
-> >      > >>   extern int register_pm_notifier(struct notifier_block *nb);
-> >      > >>   extern int unregister_pm_notifier(struct notifier_block *nb);
-> >      > >>   extern void ksys_sync_helper(void);
-> >      > >> +extern void pm_set_hw_state_residency(u64 duration);
-> >      > >> +extern void pm_account_suspend_type(const struct timespec64 *t);
-> >      > >>
-> >      > >>   #define pm_notifier(fn, pri) {                         \
-> >      > >>          static struct notifier_block fn##_nb =                  \
-> >      > >> diff --git a/kernel/power/main.c b/kernel/power/main.c
-> >      > >> index 31ec4a9b9d70..11bd658583b0 100644
-> >      > >> --- a/kernel/power/main.c
-> >      > >> +++ b/kernel/power/main.c
-> >      > >> @@ -6,6 +6,7 @@
-> >      > >>    * Copyright (c) 2003 Open Source Development Lab
-> >      > >>    */
-> >      > >>
-> >      > >> +#include <linux/acpi.h>
-> >      > >>   #include <linux/export.h>
-> >      > >>   #include <linux/kobject.h>
-> >      > >>   #include <linux/string.h>
-> >      > >> @@ -54,6 +55,19 @@ void unlock_system_sleep(unsigned int flags)
-> >      > >>   }
-> >      > >>   EXPORT_SYMBOL_GPL(unlock_system_sleep);
-> >      > >>
-> >      > >> +void pm_set_hw_state_residency(u64 duration)
-> >      > >> +{
-> >      > >> +       suspend_stats.last_hw_state_residency = duration;
-> >      > >> +}
-> >      > >> +EXPORT_SYMBOL_GPL(pm_set_hw_state_residency);
-> >      > >> +
-> >      > >> +void pm_account_suspend_type(const struct timespec64 *t)
-> >      > >> +{
-> >      > >> +       suspend_stats.last_suspend_total += (s64)t->tv_sec *
-> >     USEC_PER_SEC +
-> >      > >> +                                                t->tv_nsec /
-> >     NSEC_PER_USEC;
-> >      > >> +}
-> >      > >> +EXPORT_SYMBOL_GPL(pm_account_suspend_type);
-> >      > >> +
-> >      > >>   void ksys_sync_helper(void)
-> >      > >>   {
-> >      > >>          ktime_t start;
-> >      > >> @@ -377,6 +391,20 @@ static ssize_t
-> >     last_failed_step_show(struct kobject *kobj,
-> >      > >>   }
-> >      > >>   static struct kobj_attribute last_failed_step =
-> >     __ATTR_RO(last_failed_step);
-> >      > >>
-> >      > >> +static ssize_t last_hw_state_residency_show(struct kobject *kobj,
-> >      > >> +               struct kobj_attribute *attr, char *buf)
-> >      > >> +{
-> >      > >> +       return sprintf(buf, "%llu\n",
-> >     suspend_stats.last_hw_state_residency);
-> >      > >> +}
-> >      > >> +static struct kobj_attribute last_hw_state_residency =
-> >     __ATTR_RO(last_hw_state_residency);
-> >      > >> +
-> >      > >> +static ssize_t last_suspend_total_show(struct kobject *kobj,
-> >      > >> +               struct kobj_attribute *attr, char *buf)
-> >      > >> +{
-> >      > >> +       return sprintf(buf, "%llu\n",
-> >     suspend_stats.last_suspend_total);
-> >      > >> +}
-> >      > >> +static struct kobj_attribute last_suspend_total =
-> >     __ATTR_RO(last_suspend_total);
-> >      > >> +
-> >      > >>   static struct attribute *suspend_attrs[] = {
-> >      > >>          &success.attr,
-> >      > >>          &fail.attr,
-> >      > >> @@ -391,12 +419,26 @@ static struct attribute *suspend_attrs[] = {
-> >      > >>          &last_failed_dev.attr,
-> >      > >>          &last_failed_errno.attr,
-> >      > >>          &last_failed_step.attr,
-> >      > >> +       &last_hw_state_residency.attr,
-> >      > >> +       &last_suspend_total.attr,
-> >      > >>          NULL,
-> >      > >>   };
-> >      > >>
-> >      > >> +static umode_t suspend_attr_is_visible(struct kobject *kobj,
-> >     struct attribute *attr, int idx)
-> >      > >> +{
-> >      > >> +       if (attr != &last_hw_state_residency.attr)
-> >      > >> +               return 0444;
-> >      > >> +#ifdef CONFIG_ACPI
-> >      > >> +       if (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)
-> >      > >> +               return 0444;
-> >      > >> +#endif
-> >      > >> +       return 0;
-> >      > >> +}
-> >      > >> +
-> >      > >>   static const struct attribute_group suspend_attr_group = {
-> >      > >>          .name = "suspend_stats",
-> >      > >>          .attrs = suspend_attrs,
-> >      > >> +       .is_visible = suspend_attr_is_visible,
-> >      > >>   };
-> >      > >>
-> >      > >>   #ifdef CONFIG_DEBUG_FS
-> >      > >> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> >      > >> index fa3bf161d13f..b6c4a3733212 100644
-> >      > >> --- a/kernel/power/suspend.c
-> >      > >> +++ b/kernel/power/suspend.c
-> >      > >> @@ -423,6 +423,8 @@ static int suspend_enter(suspend_state_t
-> >     state, bool *wakeup)
-> >      > >>          if (suspend_test(TEST_PLATFORM))
-> >      > >>                  goto Platform_wake;
-> >      > >>
-> >      > >> +       suspend_stats.last_suspend_total = 0;
-> >      > >> +
-> >      > >>          if (state == PM_SUSPEND_TO_IDLE) {
-> >      > >>                  s2idle_loop();
-> >      > >>                  goto Platform_wake;
-> >      > >> diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-> >      > >> index f72b9f1de178..e1b356787e53 100644
-> >      > >> --- a/kernel/time/timekeeping.c
-> >      > >> +++ b/kernel/time/timekeeping.c
-> >      > >> @@ -24,6 +24,7 @@
-> >      > >>   #include <linux/compiler.h>
-> >      > >>   #include <linux/audit.h>
-> >      > >>   #include <linux/random.h>
-> >      > >> +#include <linux/suspend.h>
-> >      > >>
-> >      > >>   #include "tick-internal.h"
-> >      > >>   #include "ntp_internal.h"
-> >      > >> @@ -1698,6 +1699,7 @@ static void
-> >     __timekeeping_inject_sleeptime(struct timekeeper *tk,
-> >      > >>          tk_set_wall_to_mono(tk,
-> >     timespec64_sub(tk->wall_to_monotonic, *delta));
-> >      > >>          tk_update_sleep_time(tk, timespec64_to_ktime(*delta));
-> >      > >>          tk_debug_account_sleep_time(delta);
-> >      > >> +       pm_account_suspend_type(delta);
-> >      > >>   }
-> >      > >>
-> >      > >>   #if defined(CONFIG_PM_SLEEP) &&
-> >     defined(CONFIG_RTC_HCTOSYS_DEVICE)
-> >      > >> --
-> >      > >> 2.34.1
-> >      > >>
-> >      >
-> >
->
+> This patch is getting pretty big. Please break it up, at least into one p=
+atch for XDP
+> stats and one for page pool stats.
+>=20
+>     Andrew
