@@ -2,69 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DD1628FB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 03:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 403DA628F9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 02:58:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232248AbiKOCFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 21:05:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
+        id S235613AbiKOB6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 20:58:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231764AbiKOCFG (ORCPT
+        with ESMTP id S231589AbiKOB6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 21:05:06 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DFB1181E;
-        Mon, 14 Nov 2022 18:05:05 -0800 (PST)
+        Mon, 14 Nov 2022 20:58:17 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E8517421;
+        Mon, 14 Nov 2022 17:58:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668477905; x=1700013905;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=zBTPI59Z1Wg7KdrzSEDraD/WWdbBNLSCrf8ib4MKfPQ=;
-  b=LCTemBs/CwkZzBUpzfe3f/W66fj4Dmx28HheXFPLraHiUSkU5T4X/edd
-   u0HrCLuS3tvamvN4UI6TBvHItfyYErbRu3BmuTQBdAf7RPCAj8Fz/wUP+
-   9/LXGmGLa7YuzHWbNlpmE27dxl9lzPg4asD2wnFhTpb16KV8sgQxyObT+
-   fdTLe11AHQUwOjZeTWfpUpR9TZ28jthOqj51OpMzPvLyI9StgjpdyNCvi
-   MLZg/v7+EPeagH85jzoZYUSIg2Mfl2y6rYqaWwbTE4NzEJ+vLt1v98haw
-   VnuYgW+NSX1ZJ/pEMbrwmjxv/6lIkHTBEkjs+MK4t3tio2gb5xPu38Zk4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="374267287"
+  t=1668477496; x=1700013496;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=4/x//HRnMUjXcH3Q0UcXn8L694ZkEkcG8ZNscMnZ7fA=;
+  b=ak5nnJHH4C8XXznf20sN4x6N7k4gtBX/Bo0yRGJ0wMhsPe+iiISVmNA5
+   KHSFTaqE3oXNa5l6KHlZD+Z2Xas6V2itG9CXOQnRDdBi3tGWGY8qJlQ8V
+   WQIQopNq5J1+1QTqOhTY8GhWHSuuJdDbf5TIXeNUBXTguRdmIG+x9ZSa9
+   42p+CjQX8YONX2Bt1jSif91dDPHrp3kZd3BhKY82XcAmtvzFuWiqXw6R1
+   m/8aV2tg/ZVz0Ob6rI+UFf5tGC2rUm9Dps6CmHhX7dwpAOC0mIBa5VfU9
+   xYB81z+A/WjYY3WIlGj4hwREt5t+mqM7Gw4Z2wpb4OG5HPYVYIWFfmJb5
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="313941362"
 X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="374267287"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 18:05:04 -0800
+   d="scan'208";a="313941362"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 17:58:15 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="967805419"
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="883769776"
 X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="967805419"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Nov 2022 18:05:01 -0800
-Date:   Tue, 15 Nov 2022 09:55:37 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Russ Weight <russell.h.weight@intel.com>
-Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 02/12] mfd: intel-m10-bmc: Create m10bmc_platform_info
- for type specific info
-Message-ID: <Y3LxmUpqycBoZctF@yilunxu-OptiPlex-7050>
-References: <20221108144305.45424-1-ilpo.jarvinen@linux.intel.com>
- <20221108144305.45424-3-ilpo.jarvinen@linux.intel.com>
- <Y24gJ7fIsUPmhzY2@yilunxu-OptiPlex-7050>
- <752a1dc-fae6-4431-41cf-a6deaf157ad3@linux.intel.com>
- <Y3Gg29pGm4DwjOgI@yilunxu-OptiPlex-7050>
- <30c62175-e96f-3911-8176-cac3d4928eb5@intel.com>
+   d="scan'208";a="883769776"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga006.fm.intel.com with ESMTP; 14 Nov 2022 17:58:15 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 14 Nov 2022 17:58:15 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 14 Nov 2022 17:58:14 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Mon, 14 Nov 2022 17:58:14 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.170)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Mon, 14 Nov 2022 17:58:14 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ga2h18Ah5kpDygk+mnYixD3cfe/luTy0HEejkkO7inYTT5KO7Ly2t0X+zNmbG4eE68prN/6FWvh+GOhcX09/Ai0bTxsB2A9LfJEOrLknnq8Jzv89bgX8npQoZn/BBD/s+vdPHiOHTfoQRZa7bYLEcoMGGUfkq0TGiD3C4qioKZllJFQxMPOgSkeGf24UKVvvlNDXxPyBd9MEPdKsuCqc84LvoabSaMT/6FFHAXEKxk3y52Ana4z7UU6FIWe9CVMF5zadmgfU8q9BOA5XoGMwXPNrW3fChk1GakHS11xm1HEZGiGsJJ9G0el/ajJdFeHl7IdxI+Dft5Vp3AYtM6hDuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4/x//HRnMUjXcH3Q0UcXn8L694ZkEkcG8ZNscMnZ7fA=;
+ b=EIM2IbPi0Ite6ap1fZaPcxop5AzBHd0254XdPttQ+OhfhBLEjyXECpc67WC/l07giNrt+aBRWXyD2N7SLVo+qWqKp7Zjd0AHU+Qd+Np/I0WIMjBuHTHgsv9nY8Ednbaei9w+FRqltPFUOO+32f21vxAS3JZ6rGi6tUJvq3ywZQEUorCu0emJtbn3ILpqWIHHPmtUQ6nYCJB1uGavgBF9oVtGbFEWRVdqY5g8SaXey8Y+yjnQohyi9IrtRoUBKPidjguYh1nUYS09MHTxymPBVBDQpCdgvW81WOKLLIUbHM1MuRUnc50EBjZc8mJ9iJpKHjtx8ZTjgQyyXRY8840jFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by MN0PR11MB6009.namprd11.prod.outlook.com (2603:10b6:208:370::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Tue, 15 Nov
+ 2022 01:58:12 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::2fb7:be18:a20d:9b6e%9]) with mapi id 15.20.5813.017; Tue, 15 Nov 2022
+ 01:58:12 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>
+CC:     "Christopherson,, Sean" <seanjc@google.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "dmatlack@google.com" <dmatlack@google.com>
+Subject: Re: [PATCH v10 005/108] KVM: TDX: Initialize the TDX module when
+ loading the KVM intel kernel module
+Thread-Topic: [PATCH v10 005/108] KVM: TDX: Initialize the TDX module when
+ loading the KVM intel kernel module
+Thread-Index: AQHY7ChDw1zmpi/iYkCerKDnhZwIwK40StmAgArbrICAACyVgA==
+Date:   Tue, 15 Nov 2022 01:58:12 +0000
+Message-ID: <ab48eb458666a1cd1d7ae36faebf851536b86544.camel@intel.com>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+         <99e5fcf2a7127347816982355fd4141ee1038a54.1667110240.git.isaku.yamahata@intel.com>
+         <0feaa13fa5bf45258f2ebb8407eaefadf5c48976.camel@intel.com>
+         <20221114231835.GA2350331@ls.amr.corp.intel.com>
+In-Reply-To: <20221114231835.GA2350331@ls.amr.corp.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|MN0PR11MB6009:EE_
+x-ms-office365-filtering-correlation-id: c75966ea-2fd5-47f0-38b2-08dac6acda4f
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1PMpM258CKmzhGnykkVCtyD+lz2SCc7LGO9QUKAOo2QS8vMYXXttg3echdgkICVKDNS3k1wqDmIx9fYnhcDtrHlVSpJogKBNUtXTz3mnMvEeMcGihehyL58UTrdbwMVduYl4JWqF2aqwEWZbqgtlqSMcq3asXMpbefqEa4H2oUybN0QjGW0Ka8axTeXqC1oeB7h8Ny6e3QFtCRgUeLkoyZXBmVdj2dd5uLKLxivB1UXNuUKIg0xZJuh0tXqZ2Fh1Ropkc36+jp8MQkYuEcw1lIF0AD1Nd4G3N8bEVzCiFXQWg7/2rLdujih9XhZi1spjS/IuD7y5RHCKoFRENLF67X7iDhpFOP4VxIPH1rJLstawD77et22Zeyto7I5XuiVxlBjvEzD/p0KD7k6d8RTrlGj377IzVuwsC6hfxH0CSu0oVNGQb/7Y1GTktwgobAgAnyHpAce1A9OgnYUFQ9I5oaSMTvasbilIXjf1EK8KMUPxNA5Zt7lbh/Ny4Iiv4Mb8dE6IQitNQtgwQobdfMRoaTlINBcnhIAbKCH6KFenuRpFVTI2bIE7bRhMnHWQ2RxOBP3SeYPJdKalem8SQRay39jgXCYWl3hMPmRYKKiVwhUXkf0DUJd2Z9Zyhg6TAlv+kV5sprzz1gFImsNpAjnmTbgObBBk3FiyOI41ZbmxXKDJPd8U6jfp0sN1XVetsdatRLbEPPakJVwgfJM/frr6OQ/gYk89fupLtYdTzfX+HcKCq5qMCkKy6m73pl3/a1cCYoxbRi8sGKWnj9+rgisdlQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(136003)(366004)(346002)(396003)(451199015)(8676002)(66946007)(4326008)(66446008)(64756008)(186003)(66476007)(66556008)(91956017)(316002)(76116006)(54906003)(6916009)(4001150100001)(2906002)(6486002)(5660300002)(82960400001)(38100700002)(8936002)(41300700001)(36756003)(71200400001)(86362001)(6506007)(6512007)(26005)(2616005)(38070700005)(122000001)(478600001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?STl0akZ2Wi9uZit3SWFyNUxuSUtoWHNoY1MwNEhWR1l0VHVUWis3ekxqUEhI?=
+ =?utf-8?B?aS9GZW0wam41UDJQbWpsWnR3Z25wUEt6b3hPOE9KeFBCdHhXSWtvYjF0bXI3?=
+ =?utf-8?B?NnFIcnBDUE1Qc1M1VEZlTmtpNzdjbGF4eXlpSlNIdTljN3JkVDdaUWFsR0tr?=
+ =?utf-8?B?bkYxUHhYWWswaWpRenBPWDNLbnlhNUk3engyaXJQc0lkSHBWZVpTbEY3NHNZ?=
+ =?utf-8?B?NjRRaW5NVUhyWmd0dnFPQUhpNTJpdWgveG5oRWVOU1ZjdTBIRnk0NTNPTDVs?=
+ =?utf-8?B?TXpXWU02bFpwYjRpR21JWkNHYVVwenBDbDVWbXpwcU5zYjFCOVdnM25yZ25z?=
+ =?utf-8?B?d3NmZzBkc1BZM0RFY0tNQ1hYNU81RVFQTTBTcFBMcE9mQ0E4SXppTnpjdFFQ?=
+ =?utf-8?B?YzJoOVZ1RnJpNk5LOGpDbzRra3N1Tis5VVhqbDUyMlFKWHE5aDJyeCtYSUFQ?=
+ =?utf-8?B?V2lzUmFJek1mNVYxU0ozazBMNTJQcHp5TUtIUGxYZWR0cHVSd3BhZHdTKzRI?=
+ =?utf-8?B?OFVpWW95NHZBRkx5KzZLNHNtN0tlVGZTalc2em81SmM1a3poQUpZbmRlVmxY?=
+ =?utf-8?B?RjB2Y3Y3L1lUYklhRkFKMGcxMFFDaDFwYjdlRUN4eHZSeHNDczdwZEREeEo0?=
+ =?utf-8?B?R05URUZJWk45NzQyZ255bWdHbzFZcGpYNk1wVmxOeUR2SXg3MFFLMlhwNzg3?=
+ =?utf-8?B?WFBTT1Y5VjNNaWhVRTdFbVJzbThUV2hPdjJxSmpNNFNrb1Ewd2lyVHp2U3dH?=
+ =?utf-8?B?dmN5bGNrb2psYnpIZjIzcHRhU1RxZzZzRWk1V3JvdE9mZ09XOGZDVkk5Q2Fk?=
+ =?utf-8?B?ajZPYWQ2MjJOc2hkc2FxU0NwOTI3b1d5L0xMcUMyUnlhbEpUV3h1VEhqYnla?=
+ =?utf-8?B?c3JLZWFWU0h3TXlxU1c3ZXljck1BODcvczVyTGNRNngvQThRUUhwcGRGRmk1?=
+ =?utf-8?B?NXdsY2Yxc1ZnS1J2NGhpUTc3TjhudGlONzhJbUFibHpiU05zaTJ2V21iei81?=
+ =?utf-8?B?NHlpVmVsQnI2azBRT1lEcEpnYXBLaEI5c0gxNkxYZVF4WVh6S0wzTDZLTmo2?=
+ =?utf-8?B?ZXhRVG4vbWRkdXEwam5UL1BMVVBTSWZaMEF6QnB2VVBvZmgrcE0zZUFSTStU?=
+ =?utf-8?B?eEdoZ2VCV2pqWExWK0xEam1iMnJNL3g0QzdNYjZ3YXVZWWpwQlZTZExXeDZT?=
+ =?utf-8?B?OXVFMlUyVHNJWXVIR3RFQmtyZHlQN1g2eDRqUy9kcjg2Z1ZCTTQ1RXRhWXdv?=
+ =?utf-8?B?aXRZNXlxcUlVR2UzcVEwNUFubTRXQlVMbHNwZUlzOVQxVGFHMlNZMHJWSmdx?=
+ =?utf-8?B?Sml5QVltZExCYS93cmpYL0RTU3lTRkVTa1dEY2FXQWhUSjBETU5wZTVHV01T?=
+ =?utf-8?B?TkY3RmgrWnV5NmR5N3Y2V0tKbmdvNzl4L2IwZDRsd0VxaXRYdUhXYVpZSW5o?=
+ =?utf-8?B?WHZOQk1qNVgxUmZYQXNEZmVLNkxJM1NGMmZrYXJFMTJYSEthK3hBMXhmUml0?=
+ =?utf-8?B?RkhyRzN1aW50dHU5TUNrWkZkMUgwYTJtRW5kc2FSNzc0QXVQQmhOWUdxQ05n?=
+ =?utf-8?B?NzdvK2JlYnNMc3BESGYySTJzYkl1dkNNc3kvQWFmd3BBOEZwb1A4cFZqazNR?=
+ =?utf-8?B?ZGl2RmVndmxGUDZRTHBoWW5sQWJOVzV4Y0ZiRFRERENxUlJleENBUTJPMkE4?=
+ =?utf-8?B?cEpZS3BUQnlLdmlpZUdoSG8vSzhJaXdYMzFpei9hcElBdW9uTURqZllTOE5H?=
+ =?utf-8?B?cHV4Z2RwWnJLcmRzWlY3blplUWlISmxzTWV3Z3dWVkh5dXRZZXhidHVxdHE3?=
+ =?utf-8?B?c2Q3Z0NmeWVHYitTNzY5d0tONHBCeEJ4NWd6Vk4xTWJtR2lZaklveUlyb0pt?=
+ =?utf-8?B?V1J2RE1xbHdMRjZibWVxRWJTd0FxT3ZzdDluZlV5N1lvMEMzazZyVFhIVzVk?=
+ =?utf-8?B?RVZNTE9KdjVNMk5KdndxemwxKzJ6ZFh6Z2Zya3R5ZHpLUkcwelA5RGRpUlBy?=
+ =?utf-8?B?UHNhNG85d0ZkOFJOd0dDMS9NRHl0ZTZjZHhhd3hCQUdQMmFvL3l3dy95RExh?=
+ =?utf-8?B?Zk9rR3lOeEtIcWkyUDVub0xoZTZ2bjVTRFJ4Tk95cHlZdUxJdlZMT3NFYXZJ?=
+ =?utf-8?B?S1VzaEUwSzNycmk3ajBVZ0g0ZFgzUmFWTVhHaHhtdkdHdHJKVHdQMkJWeDVk?=
+ =?utf-8?B?ZkE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7DC9335B9ADFE34182FC7A5D6AF6AB5A@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <30c62175-e96f-3911-8176-cac3d4928eb5@intel.com>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c75966ea-2fd5-47f0-38b2-08dac6acda4f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2022 01:58:12.5333
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: trlqAN6wiLMxM/qvisTXkjhj78zO12BakETf52wTiKOsvEOdvcBr8l4UVLrQQXtEbmfMp8OJe+hloD1XvLjmGQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6009
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -74,141 +175,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-14 at 17:17:06 -0800, Russ Weight wrote:
-> 
-> 
-> On 11/13/22 17:58, Xu Yilun wrote:
-> > On 2022-11-11 at 13:49:38 +0200, Ilpo Järvinen wrote:
-> >> On Fri, 11 Nov 2022, Xu Yilun wrote:
-> >>
-> >>> On 2022-11-08 at 16:42:55 +0200, Ilpo Järvinen wrote:
-> >>>> BMC type specific info is currently set by a switch/case block. The
-> >>>> size of this info is expected to grow as more dev types and features
-> >>>> are added which would have made the switch block bloaty.
-> >>>>
-> >>>> Store type specific info into struct and place them into .driver_data
-> >>>> instead because it makes things a bit cleaner.
-> >>>>
-> >>>> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-> >>>> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> >>>> ---
-> >>>>  drivers/mfd/intel-m10-bmc.c       | 50 +++++++++++++++++--------------
-> >>>>  include/linux/mfd/intel-m10-bmc.h | 14 +++++++++
-> >>>>  2 files changed, 41 insertions(+), 23 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/mfd/intel-m10-bmc.c b/drivers/mfd/intel-m10-bmc.c
-> >>>> index ee167c5dcd29..762808906380 100644
-> >>>> --- a/drivers/mfd/intel-m10-bmc.c
-> >>>> +++ b/drivers/mfd/intel-m10-bmc.c
-> >>>> @@ -156,15 +156,17 @@ static int check_m10bmc_version(struct intel_m10bmc *ddata)
-> >>>>  static int intel_m10_bmc_spi_probe(struct spi_device *spi)
-> >>>>  {
-> >>>>  	const struct spi_device_id *id = spi_get_device_id(spi);
-> >>>> +	const struct intel_m10bmc_platform_info *info;
-> >>>>  	struct device *dev = &spi->dev;
-> >>>> -	struct mfd_cell *cells;
-> >>>>  	struct intel_m10bmc *ddata;
-> >>>> -	int ret, n_cell;
-> >>>> +	int ret;
-> >>>>  
-> >>>>  	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
-> >>>>  	if (!ddata)
-> >>>>  		return -ENOMEM;
-> >>>>  
-> >>>> +	info = (struct intel_m10bmc_platform_info *)id->driver_data;
-> >>>> +	ddata->info = info;
-> >>> Where to use the ddata->info?
-> >> In patch 5/12 there are many these constructs:
-> >> const struct m10bmc_csr_map *csr_map = sec->m10bmc->info->csr_map;
-> >>
-> >> Now that I look though, this particular line is altered by the split patch 
-> >> 4/12 so it would be not strictly necessary to do it here. I'd prefer, 
-> >> however, still to add it here even if it's technically not used until 
-> >> after the split 5/12 patch because it very much logically belongs to this 
-> >> change.
-> > It's good to me.
-> >
-> >>>>  	ddata->dev = dev;
-> >>>>  
-> >>>>  	ddata->regmap =
-> >>>> @@ -183,24 +185,8 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
-> >>>>  		return ret;
-> >>>>  	}
-> >>>>  
-> >>>> -	switch (id->driver_data) {
-> >>>> -	case M10_N3000:
-> >>>> -		cells = m10bmc_pacn3000_subdevs;
-> >>>> -		n_cell = ARRAY_SIZE(m10bmc_pacn3000_subdevs);
-> >>>> -		break;
-> >>>> -	case M10_D5005:
-> >>>> -		cells = m10bmc_d5005_subdevs;
-> >>>> -		n_cell = ARRAY_SIZE(m10bmc_d5005_subdevs);
-> >>>> -		break;
-> >>>> -	case M10_N5010:
-> >>>> -		cells = m10bmc_n5010_subdevs;
-> >>>> -		n_cell = ARRAY_SIZE(m10bmc_n5010_subdevs);
-> >>>> -		break;
-> >>>> -	default:
-> >>>> -		return -ENODEV;
-> >>>> -	}
-> >>>> -
-> >>>> -	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, cells, n_cell,
-> >>>> +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO,
-> >>>> +				   info->cells, info->n_cells,
-> >>>>  				   NULL, 0, NULL);
-> >>>>  	if (ret)
-> >>>>  		dev_err(dev, "Failed to register sub-devices: %d\n", ret);
-> >>>> @@ -208,10 +194,28 @@ static int intel_m10_bmc_spi_probe(struct spi_device *spi)
-> >>>>  	return ret;
-> >>>>  }
-> >>>>  
-> >>>> +static const struct intel_m10bmc_platform_info m10bmc_m10_n3000 = {
-> >>>> +	.type = M10_N3000,
-> >>> Is the type enum still useful? Found no usage.
-> >> There's no use within context of this patch series. However, I think there 
-> >> might have been something depending on it in the changes that are not part 
-> >> of this series so I left it in place for now.
-> > I'm not sure how it would be used later. This patch is to eliminate the
-> > "switch (board type) case" block, but similar code is still to be added
-> > later?
-> 
-> Unfortunately, these will be needed later. Consider the following (future)
-> function that has to account for a field that was moved from one register
-> to another:
-> 
->     static int
->     m10bmc_sec_status(struct m10bmc_sec *sec, u32 *status)
->     {
->             u32 reg_offset, reg_value;
->             int ret;
-> 
->             reg_offset = (sec->type == N6000BMC_SEC) ?
->                     auth_result_reg(sec->m10bmc) : doorbell_reg(sec->m10bmc);
-> 
->             ret = m10bmc_sys_read(sec->m10bmc, reg_offset, &reg_value);
->             if (ret)
->                     return ret;
-> 
->             *status = rsu_stat(reg_value);
-> 
->             return 0;
->     }
-> 
-> With this patch-set, most conditionals are removed, but there will still
-> be some cases where it is needed. If you prefer, we could wait and add
-
-Why this condition can't be handled in the same manner? I actually hope
-all board type difference been handled in the same way, either by the
-core mfd driver or each subdev driver, but not a mix of the two.
-
-Thanks,
-Yilun
-
-> the type in when we are ready to use it.
-> 
-> - Russ
-> 
-> >
-> > Thanks,
-> > Yilun
-> 
+T24gTW9uLCAyMDIyLTExLTE0IGF0IDE1OjE4IC0wODAwLCBJc2FrdSBZYW1haGF0YSB3cm90ZToN
+Cj4gPiA+ICtzdHJ1Y3QgdGR4X2NhcGFiaWxpdGllcyB7DQo+ID4gPiArCXU4IHRkY3NfbnJfcGFn
+ZXM7DQo+ID4gPiArCXU4IHRkdnB4X25yX3BhZ2VzOw0KPiA+ID4gKw0KPiA+ID4gKwl1NjQgYXR0
+cnNfZml4ZWQwOw0KPiA+ID4gKwl1NjQgYXR0cnNfZml4ZWQxOw0KPiA+ID4gKwl1NjQgeGZhbV9m
+aXhlZDA7DQo+ID4gPiArCXU2NCB4ZmFtX2ZpeGVkMTsNCj4gPiA+ICsNCj4gPiA+ICsJdTMyIG5y
+X2NwdWlkX2NvbmZpZ3M7DQo+ID4gPiArCXN0cnVjdCB0ZHhfY3B1aWRfY29uZmlnIGNwdWlkX2Nv
+bmZpZ3NbVERYX01BWF9OUl9DUFVJRF9DT05GSUdTXTsNCj4gPiA+ICt9Ow0KPiA+ID4gKw0KPiA+
+ID4gKy8qIENhcGFiaWxpdGllcyBvZiBLVk0gKyB0aGUgVERYIG1vZHVsZS4gKi8NCj4gPiA+ICtz
+dGF0aWMgc3RydWN0IHRkeF9jYXBhYmlsaXRpZXMgdGR4X2NhcHM7DQo+ID4gDQo+ID4gSSB0aGlu
+ayB5b3UgY2FuIGludHJvZHVjZSB0aGlzIHRkeF9jYXBhYmlsaXRpZXMgaW4gYW5vdGhlciBwYXRj
+aC4NCj4gPiANCj4gPiBBcyBjbGFpbWVkIHRoaXMgcGF0Y2ggY2FuIGp1c3QgZm9jdXMgb24gaW5p
+dGlhbGl6aW5nIHRoZSBURFggbW9kdWxlLsKgDQo+ID4gV2hldGhlcg0KPiA+IHlvdSBuZWVkIHRo
+aXMgdGR4X2NhcGFiaWxpdGllcyBvciB0ZHhfc3lzaW5mbyBpcyBlbm91Z2ggY2FuIGJlIGRvbmUg
+aW4gdGhlDQo+ID4gcGF0Y2gNCj4gPiB3aGVuIHRoZXkgYXJlIHJlYWxseSBuZWVkZWQuwqAgSXQg
+bWFrZXMgcmV2aWV3IGVhc2llciBvdGhlcndpc2UgcGVvcGxlIHdvbid0DQo+ID4gYmUNCj4gPiBh
+YmxlIHRvIHRlbGwgd2h5IHRkeF9jYXBhYmlsaXRpZXMgaXMgbmVlZGVkIGhlcmUuDQo+IA0KPiBP
+aywgdGhlIHByZXZpb3VzIHBhdGNoICgieDg2L3ZpcnQvdGR4OiBBZGQgYSBoZWxwZXIgZnVuY3Rp
+b24gdG8gcmV0dXJuDQo+IHN5c3RlbSB3aWRlIGluZm8gYWJvdXQgVERYIG1vZHVsZSAiKSBhbmQg
+dGhpcyBwYXJ0IHdpbGwgYmUgbW92ZWQgcmlnaHQgYmVmb3JlDQo+IHRoZQ0KPiBmaXJzdCB1c2Ug
+b2YgdGR4X2NhcHMuICJLVk06IFREWDogY3JlYXRlL2Rlc3Ryb3kgVk0gc3RydWN0dXJlIg0KDQpJ
+IHRoaW5rIGl0J3MgT0sgdG8gcHV0IGFsbCBob3N0IGRlcGVuZGVuY3kgcGF0Y2hlcyBhdCB0aGUg
+YmVnaW5uaW5nIG9mIHRoZQ0Kc2VyaWVzLCBidXQganVzdCBtb3ZlICd0ZHhfY2FwYWJpbGl0aWVz
+JyB0byB0aGUgcGF0Y2ggd2hlcmUgaXQgaXMgbmVlZGVkLg0K
