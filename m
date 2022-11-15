@@ -2,133 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C5462A433
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCDD62A434
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231920AbiKOVe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 16:34:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57698 "EHLO
+        id S232330AbiKOVe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 16:34:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbiKOVex (ORCPT
+        with ESMTP id S231649AbiKOVez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 16:34:53 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2043.outbound.protection.outlook.com [40.107.92.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14465D67;
-        Tue, 15 Nov 2022 13:34:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WSsjCkJ1L+Q5ouhl/qvtiZto23iOpJsXjpL+FJDMvQiBvObHCJ9HHmAj7d7UuUgDcdvu+Dv5x3L2aBPJNqY2hGRtW1fFbL9w5gXeC9hAVek505sVQZGZK7pTKEMSKTUqtv6QMuhVHQcWXBGIEk1GvjLlp9g7w6da2l8kt4m51hf4R0BjG6CBJrHMQToLiTzAh/FXQE4qfxCKr46kc/kF21EvEP+//OhpKAh0Ysusm006/StAZqUZiUyePgAD62x2b4leNFYgc/wWNPYR04k4ePeufKollyOXumEyWrrFgFsONlg4UGzwpV8nUEGYRDhp6irlHvEk+g0HsOq4ZeSfJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1fnHl3bQRA9DzsSBuESUSQZXXueSOEf7/r53BVzWUkE=;
- b=Q+Ap3Jt8W9sFLlskf6K5DXxjHgu9Ovrduqh8rq4UaL8lzBen8fwE9VLlpQeAloxsY+BKwyJ1sp48lmIQ4v82HuCUGTedYfAj8WrmxHMtxuGQ9DJbPBouwMMPrNvWN1do0xgc44cb9AH7wMIpqQFFGQGZdQ4ndjIesxbl09Wxc0kWHBOQRKeHv/NSdQEmHPVE22qdxtrSYp3NIANRq6mFCMVo7cAc5NwQIZ2wT1sZa3BzMQb8EpUz058W7rsnHn27qjBvOElrNXi+dqNopkcs6chRbYEuHwdfgRXej2xlSe+oj3/IV7IkY2hHC2kguyG/dkMaphY1Zo33rji7GcYkNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1fnHl3bQRA9DzsSBuESUSQZXXueSOEf7/r53BVzWUkE=;
- b=xhBpm8Re4pOqoC8tjgsslR4rmzJai3C8vTwCeJ+1A5mUS34n6XDNc2xUfq/u9f8/FVR5UTylNoHi+VJomf9zmX8dzxgrYY0tTKkH7mY2qxhTj8cCShcx+2ad/42CYszsmLxa2rShKwDKU8DUDS5Ai7xMB6a68hzbfhfdLQLj1Ak=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
- by SN7PR12MB7276.namprd12.prod.outlook.com (2603:10b6:806:2af::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Tue, 15 Nov
- 2022 21:34:47 +0000
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::2d5:77ac:6d39:e57b]) by MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::2d5:77ac:6d39:e57b%9]) with mapi id 15.20.5813.017; Tue, 15 Nov 2022
- 21:34:47 +0000
-Message-ID: <5705b4a6-6fb6-56b0-473d-05ae3a926518@amd.com>
-Date:   Tue, 15 Nov 2022 15:34:42 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Reply-To: babu.moger@amd.com
-Subject: Re: [PATCH v8 00/13] Support for AMD QoS new features
-Content-Language: en-US
-To:     Reinette Chatre <reinette.chatre@intel.com>, corbet@lwn.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de
-Cc:     fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
-        quic_neeraju@quicinc.com, rdunlap@infradead.org,
-        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
-        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
-        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
-        jmattson@google.com, daniel.sneddon@linux.intel.com,
-        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bagasdotme@gmail.com, eranian@google.com
-References: <166759188265.3281208.11769277079826754455.stgit@bmoger-ubuntu>
- <f69a6454-a8c0-8ce1-0356-cde0d8b89c2a@amd.com>
- <90a66b72-368a-7199-0d6c-f876cd1ca63f@intel.com>
-From:   "Moger, Babu" <babu.moger@amd.com>
-In-Reply-To: <90a66b72-368a-7199-0d6c-f876cd1ca63f@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH0PR03CA0351.namprd03.prod.outlook.com
- (2603:10b6:610:11a::13) To MW3PR12MB4553.namprd12.prod.outlook.com
- (2603:10b6:303:2c::19)
+        Tue, 15 Nov 2022 16:34:55 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FD62638;
+        Tue, 15 Nov 2022 13:34:53 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id t25so39402127ejb.8;
+        Tue, 15 Nov 2022 13:34:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O3Pc4/CGHXBcfmuh5FACk8LjqEpCsIp7QK20YDRp6Ig=;
+        b=pwPBFAJ/G+NdDy9a3omf/kBM+Par445yEoUwOtNAjeMFD5VS8ujz9yAIPWN2/I2+9b
+         Q89MbE1+lVNzyMDgsndLDDCxmJnKH4g2LQfbdI+LerBjLUh4az8OE9mm0JhJWY7VFkF/
+         thekg59Rmvzy2/nro1jujpWL2zIp0HKZcVGbd3Uwnh3Vj6uchs7gLNrNaYajtKnfeAUl
+         MXLnrAcd9zy5GJ70gKARubAEnQW+LvmaWAXrfxkh7P26x8rmW9QrShn1DKijmPfeheDR
+         mP11FiOL1/rWt2BlpVV1FhyP5cdh/JVeUdv8iW4MMPizW5Vq92c2lOA9MewF5f4GvIRC
+         E06w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O3Pc4/CGHXBcfmuh5FACk8LjqEpCsIp7QK20YDRp6Ig=;
+        b=076SYSJHCEQe87rFRAZlBp00IAWWM2YMEXzSelrYqCwqENWmjoJdOJL5HxlmhVPrgJ
+         siNLQ8CGTBU/AZF+v5z5ljw+oiRli06T9GrZU6ke6WdGojPgwNY/AYW/E8o5sfEEpYaj
+         s+pk6FJLLc121KSV0fb4LXg6q7EuSXlPRRCywDEUQHIzhfwy7objFMLUR0vNmG/kV26I
+         LOnVPWyW5K1tuUlf3kWdg+L8ofV2KOA/wfFeedAy/VvvqjS6KJQ7hFlpMMTX7Fn6YLw6
+         yfq2OrvIqiJk4LU+1OVvvCs95/9LWYtkf55I7aSLyxG3AeRYZ/oocvztUjGhSSC+QWIv
+         ZPUA==
+X-Gm-Message-State: ANoB5plwf84/xBccSqV4BeXjdUjomzo6wGaU2FKdzIe8Ic1geXd1lEpP
+        A3ir5OaaHqX6r+Ss59bk7A4=
+X-Google-Smtp-Source: AA0mqf706j4etLneKjArZoBC50zKKSkCqofGi54tofA6K+QwQStFBfyr4cZ7LKDk8cgdPgxZsOyE3g==
+X-Received: by 2002:a17:906:1186:b0:7ae:5dd6:e62d with SMTP id n6-20020a170906118600b007ae5dd6e62dmr14928967eja.518.1668548091822;
+        Tue, 15 Nov 2022 13:34:51 -0800 (PST)
+Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id e1-20020aa7d7c1000000b00463c367024bsm6582301eds.63.2022.11.15.13.34.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 13:34:51 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Martin Botka <martin.botka@somainline.org>
+Cc:     martin.botka1@gmail.com, ~postmarketos/upstreaming@lists.sr.ht,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jami Kettunen <jamipkettunen@somainline.org>,
+        Paul Bouchara <paul.bouchara@somainline.org>,
+        Jan Trmal <jtrmal@gmail.com>, Tom <takuya@takuya.tech>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Conley Lee <conleylee@foxmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] arm64: dts: Add basic support for BIQU CB1
+Date:   Tue, 15 Nov 2022 22:34:49 +0100
+Message-ID: <8140265.T7Z3S40VBb@jernej-laptop>
+In-Reply-To: <AZ0DLR.RINPITJM904E2@somainline.org>
+References: <20221114214452.1993744-1-martin.botka@somainline.org> <4534857.CvnuH1ECHv@jernej-laptop> <AZ0DLR.RINPITJM904E2@somainline.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW3PR12MB4553:EE_|SN7PR12MB7276:EE_
-X-MS-Office365-Filtering-Correlation-Id: 562fb183-f7b9-4d8b-8bcf-08dac75137e1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ovnOf4rkwPk5yUdf066ZIDno1hdS7w54cVqHL165/JE4M2O87ru9erDVIjsqS65Yh6agmUCNMGT16cQipu4UHvdYinbxTIlqjW3zF5DIm4kfMqOoSsaYqC1+9a6HkK3+SWOyuJMCLhiw8M767Dw+d7cdrDpDLmPMBhcnMCakkLJNt4EC3TSa00AAGBv+Y0MCnJb9hwg+m2zWrRvpBVR/Yl0nGicGw/EjqurACNK7IVLeSqeEpBwcviNGu4p0ZlRuQUkrKkTcbwIWl7+L5iERqj60gti/sT775kygSlteCptiV4/k1HCSS8fFBDgCQ8KG+5sTOFVAx9dUQi3fpD/qjp3cSTK0W6+nK6kN2W6f+EwXhEJkJOZb5kVMNeYNV+JSM3rQkOZvtHxeztjx0NnESWS1gOtBxFZFAAq10xSvJFKMP3J8Ua2AndDzA11iRCtCUyRLVRCvDmHUt+jVcrMyk0FvW+DRVr+BenHvZW0kMlNeC4sHw37rLYGdfJEoSClxF3nkjzbxPOO44F8rDrQvbjiVV9disiqqCpZEcNUbpKr4Ixpeyymfibpn1rKHVrHlfqWGEMbfi2laNKLh/seM6palK7UUZHqpKDVrAS4uIcg5NsTZzQ9Y0ToRpH3anb6Si5pI5q2q+XfYKsBagubIP8c63VTTk2P+2ed0fHLAXD+Kk62y0wZ3QS0fI6Y7rb1euRKuUV+UKnFMPU7iQ3rAlj4WXbJBEIyjsorWarGy8UORLm9WS4Lra95RUVfMd+y394nJnuNH5KrlbrIuqVEnl8NlvJCn1XeECiVEx5nzDCQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(366004)(396003)(39860400002)(346002)(451199015)(478600001)(86362001)(6486002)(38100700002)(6666004)(31696002)(31686004)(2616005)(186003)(26005)(6512007)(6506007)(5660300002)(7416002)(36756003)(3450700001)(53546011)(316002)(41300700001)(4744005)(8936002)(4326008)(66946007)(66556008)(8676002)(66476007)(83380400001)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bnljL2czZHVBZ1BSdGtkdGhmMW9IUU9DYUN0QlkybkR3Tmhock0zK0o2bkRU?=
- =?utf-8?B?MGVZbjhFcWVwTkc5K0VhMW5meFY5bzlnTmtjRzJyVTlZRUtubmdTQllpNUV1?=
- =?utf-8?B?QVJJUm5rejJhRUpqd2owS3JBQkFkcU5OZzIwb0kzK21SVTRnV2ZkVi9EbDI3?=
- =?utf-8?B?OUtYNVYvSjZTWkR1TWY3K29lYitJRDI1L0VoVGhFZmJuNkZEZ3NQRm1LTDR1?=
- =?utf-8?B?ZzAxS1BYVmZYOXBKbHBXUVZJRGdrY2QxbXZpdDlkRFF1cXZSM2UvdCsvamR6?=
- =?utf-8?B?eTdtNklpRVp4eU1XbUVxQlgzSkxONDYxeVgwT28rZlpTSGZ4aGhyV0xvUVhz?=
- =?utf-8?B?Wlo2QUJUUWlVU0JuNXVjd0h2MHVtN2x1OE9CSDg5UUI2eXlQajNDdVAwNkhx?=
- =?utf-8?B?MEFXYmpFMHNLZ3RKUWV6WlVjd0ozcmJYd1RaczY5Skh3MktPQzl0SHo2N1FR?=
- =?utf-8?B?ZnBtalp0QXIvT3R3QmJJbERkMURxKzN1N1FhdE9TTzdYTHNSUWhLdzd5V2JT?=
- =?utf-8?B?bjYrY3Nub0gxZFU5Q2cwK245S0lTTUNGN0Vpa0JYS1p1cWVkaE42Umh3Z09o?=
- =?utf-8?B?L1UyOFk3QVFZVDRBbzNpNHhKNDBXQU9zN1BqSXJlOFNQVWxOVm9qS09LOFRS?=
- =?utf-8?B?S0M4Z0toZEJDUVVOWUpudktQelFzV2xTM3hjSDZwRkgwSVFLZHY2a3NOSFZt?=
- =?utf-8?B?YnRvbVc2OGJGbUdOVk01TmY5TzkvOGQzcmxjdVJVZ2kxa2xhaHVvczdzWUhL?=
- =?utf-8?B?WUprb1JtNm0wa3Q1UEsvOStveEtpS21qaFV5TjZWRzFEV004UjRLUVJsL0w1?=
- =?utf-8?B?bTZ2b1JMWUZ6VU1OK3QzeTVEdGtKYmx6QlA4K3gzZThJSElYYzE5b0VqYlF0?=
- =?utf-8?B?ZGVWeXhtenErUi82QXJ0WCtPWUdFbklkQjVqVHdpSk1aRmNIRnc0MEdQNVhG?=
- =?utf-8?B?ZE1UeUpTOFR3Q213eGR1by9jVE1QZ0I0YXVrWTRkMVNjV1Z2UHdSMEF6VDJn?=
- =?utf-8?B?a250Mjd4VkRiaHBvTGhUb1hNS0MxcDhaR2NERm5FNE1NV2ZSR2JXTnBrR242?=
- =?utf-8?B?T0FBRUljMTMyTHZ1TklOVm5IeHNuZWZ0M21hZ2x5cXhOZ2l5WmVZY1psQUhk?=
- =?utf-8?B?WFRPbzlFVGcvQ2JlYm1oNldjd2VHMnAzTXQ4RWw5UGJiTHhDajQ3SVg0bkE1?=
- =?utf-8?B?Z2Q3djBLY2MwWHQ1aC9VY3Z4TFEzRkhWM3o0Zy92T1UrcjZKZkREMkV6bjlr?=
- =?utf-8?B?RGx0M3lCMG9WQzJwaWQrRjNRMG9mT2QyL2hnYkpRMzJhd0dscDltaE40Y29S?=
- =?utf-8?B?clltZFRBaU4ySGE5Q3VaQnp5SGt1S053Y1BHT3gzbWIrbWJJTXdMbjJmc0NY?=
- =?utf-8?B?a29xOEg1c0VHUmxUQWVBQWU1N2lhTzFhK3pZdnpCMEJjcFltSTlxenZXRHBT?=
- =?utf-8?B?d24veFNNem9KWkd0UTBJUUp2S1h2OWtVM0kvVURHM2l5TkpiMFR1a21wTmtO?=
- =?utf-8?B?TVhyc3VKM0lzYU8zUFhnRHM5SFJjM3JaNG9VNml6RG4vUVdxakNKRUpkd3FB?=
- =?utf-8?B?bmtveEN6Qm9RcmpBM1lMZDlDczdLcHh1R2wrWno1UUhLWGw0aUd2M3ZTbXdE?=
- =?utf-8?B?R0hxdE5xS3ZDckhyb0dqZFhoL0ZSU3hpMEV0SE5pdG5GV1greHN1VDhQdmJH?=
- =?utf-8?B?dkEvSVdOUVJNUlB2L3lmT2hzUzlwTlhhRzlnTFpiNmxFMmIrVmhDb3U2R0U0?=
- =?utf-8?B?VTUwc2I5Rkt3bXRiQk8wSU8xTEFpTzJKT0tuTjdQYlBZOWc0SVhhcTBGT2Fa?=
- =?utf-8?B?QVkrSkR2TmZIcFdjT3pFMit6ZHVwSksxVHFkTVNHTCtwQVpoMVB0TmppcHYr?=
- =?utf-8?B?MVRQaXRpQkNsSFdCZ2JSd1BOOVhKNWE1RWRRUXpqOTV6emk4RVZWaW1VUTRj?=
- =?utf-8?B?SVNmTkdQY1hOK3VnOTRxb1FQNWJFanFTdk05Mk5oVGhIUGpxUitMTzRiQzk0?=
- =?utf-8?B?MGhBK3lidkx0VWJYL0hEUENXT2ovZXFpcEVlQkdHR2xMK1NZZnBQOXBrRkVZ?=
- =?utf-8?B?WGJIdEhpTVo4RmpmSk90dGZ2UktmR0dGdDI4UXd3eFJUUGRkdWF2UHBSUjFs?=
- =?utf-8?Q?1cCm9NThTJhiJmQsKMQotIqUV?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 562fb183-f7b9-4d8b-8bcf-08dac75137e1
-X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2022 21:34:47.1697
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: te9sE0WfKR8B44WmI06p9QGRrSOKSQQQwWtwJ7FHAVRT9GzEdqrK6Jgw5Vd7qFu2
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7276
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -136,24 +88,434 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette,
+Dne ponedeljek, 14. november 2022 ob 23:54:46 CET je Martin Botka napisal(a=
+):
+> On Mon, Nov 14 2022 at 11:30:17 PM +01:00:00, Jernej =C5=A0krabec
+>=20
+> <jernej.skrabec@gmail.com> wrote:
+> > Hi Martin,
+> >=20
+> > I was just writing new e-mail as response to v2. You should wait at
+> > least a
+> > day or two, usually more, before sending new version. Others will
+> > likely have
+> > some more comments. And there is also no rush. Until PMIC series is
+> > merged,
+> > this will not go anywhere. Since there is only this week until cut
+> > off date for
+> > DT updates for kernel 6.2, it's most likely that this will land in
+> > 6.3. And
+> > that gives as a few weeks (month) more.
+>=20
+> Yep. Was hoping for 5.2 thus the frequent updates. Will take it slow
+> then since 5.3 :)
 
-On 11/15/22 15:07, Reinette Chatre wrote:
-> Hi Babu,
->
-> On 11/15/2022 12:50 PM, Moger, Babu wrote:
->> Hi Reinette and Others,
->>
->> I was planning to refresh the series later this week. I have one comment
->> from Peter Newman.  Let me know if you have any comments.
->>
-> I am behind on resctrl work and have not had a chance to look
-> at this series yet.
+You're way too late for 5.x series :) Anyway, 6.2 would be possible if you=
+=20
+would have almost flawless patch with no additional dependencies, but that =
+is=20
+not the case here. I'll send DT pull requests for 6.2 at the end of this we=
+ek.
 
-Sure. Thanks for the update. I will wait.
+Best regards,
+Jernej
 
-Thanks
+>=20
+> > See comments below.
+> >=20
+> > Dne ponedeljek, 14. november 2022 ob 22:44:49 CET je Martin Botka
+> >=20
+> > napisal(a):
+> >>  CB1 is Compute Module style board that plugs into Rpi board style
+> >>=20
+> >> adapter or
+> >>=20
+> >>  Manta 3D printer boards (M4P/M8P).
+> >> =20
+> >>  The board has:
+> >>  	H616 SoC
+> >>  	1GB of RAM
+> >>  	AXP313A PMIC
+> >> =20
+> >>  And the actual boards that CB1 plugs in are just extension to it
+> >>=20
+> >> with ports
+> >>=20
+> >>  and thus are not split in DT.
+> >> =20
+> >>  Boards have:
+> >>  	4x (3x for Manta boards) USB and 1 USB OTG.
+> >>  	SDcard slot for loading images.
+> >>  	Ethernet port wired to the internal PHY.
+> >>  	2x HDMI 2.0.
+> >=20
+> > H616 has only one HDMI output. Unless there is some additional chip
+> > for some
+> > conversion, only one HDMI port can work.
+>=20
+> Yes correct. But the Rpi adapter and Manta boards also support
+> Rpi Compute Module 4 which has 2 HDMI outputs.
+> The chip itself ofc doesnt support this on CB1. Same goes for DSI/CSI
+> ports
+> on the boards and the 4x USB on Rpi adapter.
+>=20
+> It is indeed a bit of a mess.
+>=20
+> >>  	Power and Status LEDs.
+> >> =20
+> >>  Currently working:
+> >>  	Booting
+> >>  	USB
+> >>  	UART
+> >> =20
+> >>  Signed-off-by: Martin Botka <martin.botka@somainline.org>
+> >>  ---
+> >>  Changes in V2:
+> >>  Add proper board compatible
+> >>  Add regulator prefix for vcc5v
+> >>  Drop okay status from PMIC
+> >>  Drop standby_param
+> >>  Changes in V3:
+> >>  Change copyright to me
+> >>  regulator_vcc5v to regulator-vcc5v
+> >>  Drop ehci0 and ohci0
+> >> =20
+> >>   arch/arm64/boot/dts/allwinner/Makefile        |   1 +
+> >>   .../dts/allwinner/sun50i-h616-biqu-cb1.dts    | 178
+> >>=20
+> >> ++++++++++++++++++
+> >>=20
+> >>   2 files changed, 179 insertions(+)
+> >>   create mode 100644
+> >>=20
+> >> arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
+> >>=20
+> >>  diff --git a/arch/arm64/boot/dts/allwinner/Makefile
+> >>  b/arch/arm64/boot/dts/allwinner/Makefile index
+> >>=20
+> >> 6a96494a2e0a..223f1be73541
+> >>=20
+> >>  100644
+> >>  --- a/arch/arm64/boot/dts/allwinner/Makefile
+> >>  +++ b/arch/arm64/boot/dts/allwinner/Makefile
+> >>  @@ -38,5 +38,6 @@ dtb-$(CONFIG_ARCH_SUNXI) +=3D sun50i-h6-pine-h64.dtb
+> >> =20
+> >>   dtb-$(CONFIG_ARCH_SUNXI) +=3D sun50i-h6-pine-h64-model-b.dtb
+> >>   dtb-$(CONFIG_ARCH_SUNXI) +=3D sun50i-h6-tanix-tx6.dtb
+> >>   dtb-$(CONFIG_ARCH_SUNXI) +=3D sun50i-h6-tanix-tx6-mini.dtb
+> >> =20
+> >>  +dtb-$(CONFIG_ARCH_SUNXI) +=3D sun50i-h616-biqu-cb1.dtb
+> >> =20
+> >>   dtb-$(CONFIG_ARCH_SUNXI) +=3D sun50i-h616-orangepi-zero2.dtb
+> >>   dtb-$(CONFIG_ARCH_SUNXI) +=3D sun50i-h616-x96-mate.dtb
+> >> =20
+> >>  diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
+> >>  b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts new file
+> >>=20
+> >> mode
+> >>=20
+> >>  100644
+> >>  index 000000000000..86b5aca9b53e
+> >>  --- /dev/null
+> >>  +++ b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
+> >>  @@ -0,0 +1,178 @@
+> >>  +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+> >>  +/*
+> >>  + * Copyright (C) 2022 Martin Botka <martin.botka@somainline.org>.
+> >>  + */
+> >>  +
+> >>  +/dts-v1/;
+> >>  +
+> >>  +#include "sun50i-h616.dtsi"
+> >>  +
+> >>  +#include <dt-bindings/gpio/gpio.h>
+> >>  +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> >>  +#include <dt-bindings/leds/common.h>
+> >>  +
+> >>  +/ {
+> >>  +	model =3D "BIQU CB1";
+> >>  +	compatible =3D "biqu,cb1", "allwinner,sun50i-h616";
+> >>  +
+> >>  +	aliases {
+> >>  +		serial0 =3D &uart0;
+> >>  +	};
+> >>  +
+> >>  +	chosen {
+> >>  +		stdout-path =3D "serial0:115200n8";
+> >>  +	};
+> >>  +
+> >>  +	leds {
+> >>  +		compatible =3D "gpio-leds";
+> >>  +
+> >>  +		led-0 {
+> >>  +			function =3D LED_FUNCTION_POWER;
+> >>  +			color =3D <LED_COLOR_ID_RED>;
+> >>  +			gpios =3D <&pio 2 12 GPIO_ACTIVE_HIGH>; /*
+> >=20
+> > PC12 */
+> >=20
+> >>  +			default-state =3D "on";
+> >>  +		};
+> >>  +
+> >>  +		led-1 {
+> >>  +			function =3D LED_FUNCTION_STATUS;
+> >>  +			color =3D <LED_COLOR_ID_GREEN>;
+> >>  +			gpios =3D <&pio 2 13 GPIO_ACTIVE_HIGH>; /*
+> >=20
+> > PC13 */
+> >=20
+> >>  +		};
+> >>  +	};
+> >>  +
+> >>  +	reg_vcc5v: regulator-vcc5v {
+> >>  +		/* board wide 5V supply directly from the USB-C socket
+> >=20
+> > */
+> >=20
+> >>  +		compatible =3D "regulator-fixed";
+> >>  +		regulator-name =3D "vcc-5v";
+> >>  +		regulator-min-microvolt =3D <5000000>;
+> >>  +		regulator-max-microvolt =3D <5000000>;
+> >>  +		regulator-always-on;
+> >>  +	};
+> >>  +
+> >>  +	reg_usb1_vbus: regulator-usb1-vbus {
+> >>  +		compatible =3D "regulator-fixed";
+> >>  +		regulator-name =3D "usb1-vbus";
+> >>  +		regulator-min-microvolt =3D <5000000>;
+> >>  +		regulator-max-microvolt =3D <5000000>;
+> >>  +		vin-supply =3D <&reg_vcc5v>;
+> >>  +		enable-active-high;
+> >>  +		gpio =3D <&pio 2 16 GPIO_ACTIVE_HIGH>; /* PC16 */
+> >>  +	};
+> >>  +};
+> >>  +
+> >>  +&ehci1 {
+> >>  +	status =3D "okay";
+> >>  +};
+> >>  +
+> >>  +&ehci2 {
+> >>  +	status =3D "okay";
+> >>  +};
+> >>  +
+> >>  +&ehci3 {
+> >>  +	status =3D "okay";
+> >>  +};
+> >>  +
+> >>  +&mmc0 {
+> >>  +	vmmc-supply =3D <&reg_dldo1>;
+> >>  +	cd-gpios =3D <&pio 5 6 GPIO_ACTIVE_LOW>;	/* PF6 */
+> >>  +	no-1-8-v;
+> >=20
+> > Above property is not needed. If you don't provide vqmmc-supply with
+> > 1.8 V
+> > regulator, it won't be used.
+> >=20
+> >>  +	bus-width =3D <4>;
+> >>  +	status =3D "disabled";
+> >=20
+> > Why is set to disabled? If it's not a typo, remove whole node. It
+> > could be
+> > added later when it works.
+>=20
+> Would not removing it also make PMIC node useless as the regulators
+> wont be used and thus
+> should be technically removed ?
+>=20
+> >>  +};
+> >>  +
+> >>  +&ohci1 {
+> >>  +	status =3D "okay";
+> >>  +};
+> >>  +
+> >>  +&ohci2 {
+> >>  +	status =3D "okay";
+> >>  +};
+> >>  +
+> >>  +&ohci3 {
+> >>  +	status =3D "okay";
+> >>  +};
+> >>  +
+> >>  +&r_i2c {
+> >>  +	status =3D "okay";
+> >>  +
+> >>  +	axp1530: pmic@36 {
+> >>  +		compatible =3D "x-powers,axp1530";
+> >=20
+> > I just checked datasheet and it really seems that it supports only
+> > I2C.
+> > Anyway, rather than using axp1530 compatible, introduce axp313a
+> > compatible
+> > instead.
+>=20
+> Will do in V2 for drivers later.
+>=20
+> >>  +		reg =3D <0x36>;
+> >>  +		wakeup-source;
+> >>  +
+> >>  +		regulators{
+> >>  +			reg_dcdc1: dcdc1 {
+> >>  +				regulator-name =3D "axp1530-
+dcdc1";
+> >>  +				regulator-min-microvolt =3D
+> >=20
+> > <500000>;
+> >=20
+> >>  +				regulator-max-microvolt =3D
+> >=20
+> > <3400000>;
+> >=20
+> > This one is most likely used by CPU. If so, you should set
+> > appropriate range
+> > according to CPU needs, which are 810 - 1100 mV.
+> >=20
+> >>  +				regulator-step-delay-us =3D <25>;
+> >>  +				regulator-final-delay-us =3D <50>;
+> >>  +				regulator-always-on;
+> >>  +			};
+> >>  +
+> >>  +			reg_dcdc2: dcdc2 {
+> >>  +				regulator-name =3D "axp1530-
+dcdc2";
+> >>  +				regulator-min-microvolt =3D
+> >=20
+> > <500000>;
+> >=20
+> >>  +				regulator-max-microvolt =3D
+> >=20
+> > <1540000>;
+> >=20
+> > This one is most likely used by GPU. Its range must also be adjusted
+> > to GPU
+> > needs.
+> >=20
+> >>  +				regulator-step-delay-us =3D <25>;
+> >>  +				regulator-final-delay-us =3D <50>;
+> >>  +				regulator-ramp-delay =3D <200>;
+> >>  +				regulator-always-on;
+> >>  +			};
+> >>  +
+> >>  +			reg_dcdc3: dcdc3 {
+> >>  +				regulator-name =3D "axp1530-
+dcdc3";
+> >>  +				regulator-min-microvolt =3D
+> >=20
+> > <500000>;
+> >=20
+> >>  +				regulator-max-microvolt =3D
+> >=20
+> > <1840000>;
+> >=20
+> > This one looks like it supplies DRAM. You should set both min and max
+> > to
+> > actual DRAM needs.
+> >=20
+> >>  +				regulator-step-delay-us =3D <25>;
+> >>  +				regulator-final-delay-us =3D <50>;
+> >>  +				regulator-always-on;
+> >>  +			};
+> >>  +
+> >>  +			reg_aldo1: ldo1 {
+> >=20
+> > ldo1 -> aldo1
+> >=20
+> >>  +				regulator-name =3D "axp1530-
+aldo1";
+> >>  +				regulator-min-microvolt =3D
+> >=20
+> > <1800000>;
+> >=20
+> >>  +				regulator-max-microvolt =3D
+> >=20
+> > <1800000>;
+> >=20
+> >>  +				regulator-step-delay-us =3D <25>;
+> >>  +				regulator-final-delay-us =3D <50>;
+> >>  +				regulator-always-on;
+> >>  +			};
+> >>  +
+> >>  +			reg_dldo1: ldo2 {
+> >=20
+> > ldo2 -> dldo1
+> >=20
+> > Another issue I see is that you marked all regulators with
+> > regulator-always-
+> > on; While this works, I don't think this faithfully represent HW. For
+> > example,
+> > GPU regulator will be enabled by GPU driver when needed, so it
+> > shouldn't be
+> > marked with always on.
+> >=20
+> > There is also RTCLDO, but without schematic it's impossible to say if
+> > it is
+> > used or not.
+> >=20
+> > There are at least a few clues in AXP313A datasheet about which
+> > regulator is
+> > used for what. See chapter 7.5 in
+> > https://github.com/bigtreetech/CB1-Kernel/
+> > blob/kernel-5.16/docs/AXP313A%20datasheet%20V0.1%20-
+> > %2020201105_draft%20version.pdf
+>=20
+> As for regulators themselves. I have kept them as what downstream
+> kernel specifies.
+> But until I have schematic in hand and can confirm that they actually
+> used the correct regulators in
+> the correct place i will stick to stock values. If they in the end
+> decide to not supply schematic or etc
+> to the public i can test with adjusted values.
+>=20
+> > Best regards,
+> > Jernej
+> >=20
+> >>  +				regulator-name =3D "axp1530-
+dldo1";
+> >>  +				regulator-min-microvolt =3D
+> >=20
+> > <3300000>;
+> >=20
+> >>  +				regulator-max-microvolt =3D
+> >=20
+> > <3300000>;
+> >=20
+> >>  +				regulator-step-delay-us =3D <25>;
+> >>  +				regulator-final-delay-us =3D <50>;
+> >>  +				regulator-always-on;
+> >>  +			};
+> >>  +		};
+> >>  +	};
+> >>  +};
+> >>  +
+> >>  +&uart0 {
+> >>  +	pinctrl-names =3D "default";
+> >>  +	pinctrl-0 =3D <&uart0_ph_pins>;
+> >>  +	status =3D "okay";
+> >>  +};
+> >>  +
+> >>  +&usbotg {
+> >>  +	/*
+> >>  +	 * PHY0 pins are connected to a USB-C socket, but a role switch
+> >>  +	 * is not implemented: both CC pins are pulled to GND.
+> >>  +	 * The VBUS pins power the device, so a fixed peripheral mode
+> >>  +	 * is the best choice.
+> >>  +	 * The board can be powered via GPIOs, in this case port0 *can*
+> >>  +	 * act as a host (with a cable/adapter ignoring CC), as VBUS is
+> >>  +	 * then provided by the GPIOs. Any user of this setup would
+> >>  +	 * need to adjust the DT accordingly: dr_mode set to "host",
+> >>  +	 * enabling OHCI0 and EHCI0.
+> >>  +	 */
+> >>  +	dr_mode =3D "peripheral";
+> >>  +	status =3D "okay";
+> >>  +};
+> >>  +
+> >>  +&usbphy {
+> >>  +	usb1_vbus-supply =3D <&reg_usb1_vbus>;
+> >>  +	status =3D "okay";
+> >>  +};
+>=20
+> Best Regards,
+> Martin
 
-Babu
+
 
 
