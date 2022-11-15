@@ -2,183 +2,340 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 042CA629495
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6043162949C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:43:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237288AbiKOJmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 04:42:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34648 "EHLO
+        id S237735AbiKOJni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 04:43:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiKOJlz (ORCPT
+        with ESMTP id S237670AbiKOJnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 04:41:55 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52AF1AF3F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:41:16 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id u2so16768581ljl.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:41:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=okPVXaFb4lXO/cyUcimbQaAZrfvwngLm31tMd8+vgm4=;
-        b=CrAfccNRzCZGtFn11OTODDpiYWGu2tZTWuHMXKZGG931Zbr1pNtch1lpX8KWBAUspQ
-         byq4P4PKSx5lnNuewPZT5pBU/C6xW3nc2UNLyt7GFTiQi/mKS7YQbtP1WFNlIIZtrVjo
-         +cv5iQqAMbD9AJhMbVrknwiZPlebvcnIY1l18TBSskX78YERI7MF5HxdSYEQzQHAdUdX
-         7mugxXeMSyEoiVWvtkNshVzmkh6x6CV6lTnOxiOExA1UFezANNlJXP5wOMCG1BDwlVnK
-         J+dVKGiEXl7kW+82sRiQJDe0+l4jyS8V3Pj8cJhMsaptwy700hMw5TNaN2bLgNjNB1Z/
-         12AQ==
+        Tue, 15 Nov 2022 04:43:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC671F602
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:42:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668505360;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2ttHEaBx/IeW3e6Bv3/BHbYEZFm14tUllVeBMnniWeY=;
+        b=f4iqaDP8yIKSYMtlmg/Bod+oRPe3bG0N8uGKttE3z1b1zHvP0NSGQ2Go7/laq2kF1mANCJ
+        WMxnfBp9Z82vMpnJltJX9tWIeumg/6dzF/ICEwoZBqCsJtmUDh2W0EuM8wB5SukTd0x2Qx
+        zD5Dexjq3BingzrhXXRcwy9SDNR48bE=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-531-dcCUcmJVNDqUVogrHzQPEg-1; Tue, 15 Nov 2022 04:42:36 -0500
+X-MC-Unique: dcCUcmJVNDqUVogrHzQPEg-1
+Received: by mail-pl1-f198.google.com with SMTP id b18-20020a170903229200b00186e357f3b9so10919551plh.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:42:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=okPVXaFb4lXO/cyUcimbQaAZrfvwngLm31tMd8+vgm4=;
-        b=IABbLF/3KjHwlXDzsRSsCIeLioksI0ZIJO6thzySH0bgtC7gY79Jy6er4HeVTt2xFr
-         dkk6T/0DrVn5xE11HIylUH7gRI1crCzE1p+zHAwNfiTcxItoTE3LQNqcPpy7kU5hXcRA
-         XSi1AiQxwWvtdlbrhd15Ir0qhMlgy+9FCd/uNRPn3VvI5BnCwVMiSWV2OczknA1/ipXs
-         cy1eTC3uChGk2sTGb0sqf7w/53T5p7HnXstfyJeN1zCwvBihY2hzIztEGqXzFbOAO38G
-         wLghhmDVdhsc+YPHYPHkiBrsc/vsKyolCU283kyJk1vKjsmSVANULR0TXIVuIsu+DkFp
-         00gQ==
-X-Gm-Message-State: ANoB5pkWEaKnyjLt1POdk1VJXFoit34wmLixjftOCvVaTULZ5T4XJSTC
-        N8uF7+HaU2cAMyn1/P79dHx7dA==
-X-Google-Smtp-Source: AA0mqf6CL5jSVsEkqdjyWDVghVmfxzWVHtaTlRXuUvNTeeWDj4lvwmOP6vNPKDwzcWsJZWhZ5MAN3Q==
-X-Received: by 2002:a2e:b046:0:b0:278:fa79:3285 with SMTP id d6-20020a2eb046000000b00278fa793285mr3778824ljl.356.1668505275210;
-        Tue, 15 Nov 2022 01:41:15 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id n22-20020a05651203f600b004ab98cd5644sm2148179lfq.182.2022.11.15.01.41.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 01:41:14 -0800 (PST)
-Message-ID: <72de460d-8eb3-573f-ead2-3bfef0b0306c@linaro.org>
-Date:   Tue, 15 Nov 2022 10:41:13 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2ttHEaBx/IeW3e6Bv3/BHbYEZFm14tUllVeBMnniWeY=;
+        b=lxtDvVACoguH+0GAMcWpoFhadFeiuaiQuMnFytJ3kPBL5c/Wu8dSMWDXLzRhZ7w6oS
+         kVSwgfGTaILdTKCWhr3hzI2RxsNuLdCPWXH+VKrK8PlG7w1lPY0vuo2crXlyr4hIQZaF
+         bq48HAS27c5L+xsCjkiTrEtqQhfra1XauLk2C7/4Ny62Bsa2VBpncVuNp0BpD8q9kClP
+         Seb2Xpv8SRJVb+t7gwNLSMAfVa2TzBDJ0gfwHkET1SWJcMDbYQIYRqIInmNg0Ma3Bb5V
+         pdzSCfr+zIOqdE0UdthJ66Iv+l5nI/sBhhfPU8bejR3JX1RZcaKgfAeSUU08H2O2QNwL
+         DunQ==
+X-Gm-Message-State: ANoB5pnX5gt4NStcGSJ/4bOGnvPS1K18D3bOM3spkE8Bxscs1CpOvO+h
+        do/dwAVenYfY4CM0aAyXEcd+QMXduTRJe5snY4ncfo6iaCj9tYp5whCvimqxFvwpI0s1Ar1f8TN
+        Lp/6W80nxQGE3p/RdDpyxP3GFleUKil8Bvig/mBeX
+X-Received: by 2002:a17:902:ccca:b0:188:aa84:14 with SMTP id z10-20020a170902ccca00b00188aa840014mr3269968ple.17.1668505355130;
+        Tue, 15 Nov 2022 01:42:35 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6yhPrTg+Fg/YxEZM+Z0DzpphJj4xjNvg/PG2ZFR8L8FMs61BPnBAqbj935UL+bb2wnpQBgkZWpP9nVh6bmeA8=
+X-Received: by 2002:a17:902:ccca:b0:188:aa84:14 with SMTP id
+ z10-20020a170902ccca00b00188aa840014mr3269941ple.17.1668505354778; Tue, 15
+ Nov 2022 01:42:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 01/15] arm64: dts: mediatek: Initial mt8365-evk support
-Content-Language: en-US
-To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        linux-mediatek@lists.infradead.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com
-References: <20221107211001.257393-1-bero@baylibre.com>
- <20221115025421.59847-1-bero@baylibre.com>
- <20221115025421.59847-2-bero@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115025421.59847-2-bero@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114131759.57883-1-elic@nvidia.com> <20221114131759.57883-6-elic@nvidia.com>
+In-Reply-To: <20221114131759.57883-6-elic@nvidia.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Tue, 15 Nov 2022 10:41:58 +0100
+Message-ID: <CAJaqyWfw5gpF7qQwqoML2qjGGbZuMyDBLw1yuiWoAkLN2uocTg@mail.gmail.com>
+Subject: Re: [PATH v2 5/8] vdpa/mlx5: Avoid overwriting CVQ iotlb
+To:     Eli Cohen <elic@nvidia.com>
+Cc:     mst@redhat.com, jasowang@redhat.com, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, si-wei.liu@oracle.com,
+        lulu@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 03:54, Bernhard Rosenkränzer wrote:
-> From: Fabien Parent <fparent@baylibre.com>
-> 
-> This adds minimal support for the Mediatek 8365 SOC and the EVK reference
-> board, allowing the board to boot to initramfs with serial port I/O.
-> 
-> GPIO keys are supported, MMC is partially supported (needs the clocks
-> driver for full support).
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> [bero@baylibre.com: Removed parts depending on drivers that aren't upstream yet, cleanups]
-> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+On Mon, Nov 14, 2022 at 2:18 PM Eli Cohen <elic@nvidia.com> wrote:
+>
+> When qemu uses different address spaces for data and control virtqueues,
+> the current code would overwrite the control virtqueue iotlb through the
+> dup_iotlb call. Fix this by referring to the address space identifier
+> and the group to asid mapping to determine which mapping needs to be
+> updated. We also move the address space logic from mlx5 net to core
+> directory.
+>
+> Reported-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> Signed-off-by: Eli Cohen <elic@nvidia.com>
+
+Acked-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+
 > ---
->  arch/arm64/boot/dts/mediatek/Makefile       |   1 +
->  arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 344 +++++++++++
->  arch/arm64/boot/dts/mediatek/mt8365.dtsi    | 601 ++++++++++++++++++++
->  3 files changed, 946 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
->  create mode 100644 arch/arm64/boot/dts/mediatek/mt8365.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-> index 0ec90cb3ef289..e668fd50a3326 100644
-> --- a/arch/arm64/boot/dts/mediatek/Makefile
-> +++ b/arch/arm64/boot/dts/mediatek/Makefile
-> @@ -46,4 +46,5 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-cherry-tomato-r2.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-cherry-tomato-r3.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-demo.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
-> +dtb-$(CONFIG_ARCH_MEDIATEK) += mt8365-evk.dtb
->  dtb-$(CONFIG_ARCH_MEDIATEK) += mt8516-pumpkin.dtb
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> new file mode 100644
-> index 0000000000000..74e0f75231637
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-> @@ -0,0 +1,344 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2021-2022 BayLibre, SAS.
-> + * Authors:
-> + * Fabien Parent <fparent@baylibre.com>
-> + * Bernhard Rosenkränzer <bero@baylibre.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/pinctrl/mt8365-pinfunc.h>
-> +#include "mt8365.dtsi"
-> +
-> +/ {
-> +	model = "MediaTek MT8365 Open Platform EVK";
-> +	compatible = "mediatek,mt8365-evk", "mediatek,mt8365";
-
-Missing bindings.
-
-> +
-> +	aliases {
-> +		serial0 = &uart0;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:921600n8";
-> +	};
-> +
-
-(...)
-
-> +
-> +	soc {
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		compatible = "simple-bus";
-> +		ranges;
-> +
-> +		gic: interrupt-controller@c000000 {
-> +			compatible = "arm,gic-v3";
-> +			#interrupt-cells = <4>;
-> +			interrupt-parent = <&gic>;
-> +			interrupt-controller;
-> +			reg = <0 0x0c000000 0 0x80000>,
-> +			      <0 0x0c080000 0 0x80000>;
-> +
-> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH 0>;
-> +		};
-> +
-> +		topckgen: syscon@10000000 {
-> +			compatible = "mediatek,mt8365-topckgen", "syscon";
-> +			reg = <0 0x10000000 0 0x1000>;
-> +			#clock-cells = <1>;
-> +		};
-> +
-> +		infracfg: syscon@10001000 {
-> +			compatible = "mediatek,mt8365-infracfg", "syscon";
-
-Missing bindings.
-
-Did you order your patches in logical order?
-
-
-Best regards,
-Krzysztof
+>  drivers/vdpa/mlx5/core/mlx5_vdpa.h |  5 +--
+>  drivers/vdpa/mlx5/core/mr.c        | 44 ++++++++++++++++-----------
+>  drivers/vdpa/mlx5/net/mlx5_vnet.c  | 49 ++++++------------------------
+>  3 files changed, 39 insertions(+), 59 deletions(-)
+>
+> diff --git a/drivers/vdpa/mlx5/core/mlx5_vdpa.h b/drivers/vdpa/mlx5/core/=
+mlx5_vdpa.h
+> index 6af9fdbb86b7..058fbe28107e 100644
+> --- a/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+> +++ b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+> @@ -116,8 +116,9 @@ int mlx5_vdpa_create_mkey(struct mlx5_vdpa_dev *mvdev=
+, u32 *mkey, u32 *in,
+>                           int inlen);
+>  int mlx5_vdpa_destroy_mkey(struct mlx5_vdpa_dev *mvdev, u32 mkey);
+>  int mlx5_vdpa_handle_set_map(struct mlx5_vdpa_dev *mvdev, struct vhost_i=
+otlb *iotlb,
+> -                            bool *change_map);
+> -int mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb =
+*iotlb);
+> +                            bool *change_map, unsigned int asid);
+> +int mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb =
+*iotlb,
+> +                       unsigned int asid);
+>  void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev);
+>
+>  #define mlx5_vdpa_warn(__dev, format, ...)                              =
+                           \
+> diff --git a/drivers/vdpa/mlx5/core/mr.c b/drivers/vdpa/mlx5/core/mr.c
+> index a639b9208d41..a4d7ee2339fa 100644
+> --- a/drivers/vdpa/mlx5/core/mr.c
+> +++ b/drivers/vdpa/mlx5/core/mr.c
+> @@ -511,7 +511,8 @@ void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev=
+)
+>         mutex_unlock(&mr->mkey_mtx);
+>  }
+>
+> -static int _mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhos=
+t_iotlb *iotlb)
+> +static int _mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev,
+> +                               struct vhost_iotlb *iotlb, unsigned int a=
+sid)
+>  {
+>         struct mlx5_vdpa_mr *mr =3D &mvdev->mr;
+>         int err;
+> @@ -519,42 +520,49 @@ static int _mlx5_vdpa_create_mr(struct mlx5_vdpa_de=
+v *mvdev, struct vhost_iotlb
+>         if (mr->initialized)
+>                 return 0;
+>
+> -       if (iotlb)
+> -               err =3D create_user_mr(mvdev, iotlb);
+> -       else
+> -               err =3D create_dma_mr(mvdev, mr);
+> +       if (mvdev->group2asid[MLX5_VDPA_DATAVQ_GROUP] =3D=3D asid) {
+> +               if (iotlb)
+> +                       err =3D create_user_mr(mvdev, iotlb);
+> +               else
+> +                       err =3D create_dma_mr(mvdev, mr);
+>
+> -       if (err)
+> -               return err;
+> +               if (err)
+> +                       return err;
+> +       }
+>
+> -       err =3D dup_iotlb(mvdev, iotlb);
+> -       if (err)
+> -               goto out_err;
+> +       if (mvdev->group2asid[MLX5_VDPA_CVQ_GROUP] =3D=3D asid) {
+> +               err =3D dup_iotlb(mvdev, iotlb);
+> +               if (err)
+> +                       goto out_err;
+> +       }
+>
+>         mr->initialized =3D true;
+>         return 0;
+>
+>  out_err:
+> -       if (iotlb)
+> -               destroy_user_mr(mvdev, mr);
+> -       else
+> -               destroy_dma_mr(mvdev, mr);
+> +       if (mvdev->group2asid[MLX5_VDPA_DATAVQ_GROUP] =3D=3D asid) {
+> +               if (iotlb)
+> +                       destroy_user_mr(mvdev, mr);
+> +               else
+> +                       destroy_dma_mr(mvdev, mr);
+> +       }
+>
+>         return err;
+>  }
+>
+> -int mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb =
+*iotlb)
+> +int mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb =
+*iotlb,
+> +                       unsigned int asid)
+>  {
+>         int err;
+>
+>         mutex_lock(&mvdev->mr.mkey_mtx);
+> -       err =3D _mlx5_vdpa_create_mr(mvdev, iotlb);
+> +       err =3D _mlx5_vdpa_create_mr(mvdev, iotlb, asid);
+>         mutex_unlock(&mvdev->mr.mkey_mtx);
+>         return err;
+>  }
+>
+>  int mlx5_vdpa_handle_set_map(struct mlx5_vdpa_dev *mvdev, struct vhost_i=
+otlb *iotlb,
+> -                            bool *change_map)
+> +                            bool *change_map, unsigned int asid)
+>  {
+>         struct mlx5_vdpa_mr *mr =3D &mvdev->mr;
+>         int err =3D 0;
+> @@ -566,7 +574,7 @@ int mlx5_vdpa_handle_set_map(struct mlx5_vdpa_dev *mv=
+dev, struct vhost_iotlb *io
+>                 *change_map =3D true;
+>         }
+>         if (!*change_map)
+> -               err =3D _mlx5_vdpa_create_mr(mvdev, iotlb);
+> +               err =3D _mlx5_vdpa_create_mr(mvdev, iotlb, asid);
+>         mutex_unlock(&mr->mkey_mtx);
+>
+>         return err;
+> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/ml=
+x5_vnet.c
+> index 98dd8ce8af26..3a6dbbc6440d 100644
+> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> @@ -2394,7 +2394,8 @@ static void restore_channels_info(struct mlx5_vdpa_=
+net *ndev)
+>         }
+>  }
+>
+> -static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev, struct vhos=
+t_iotlb *iotlb)
+> +static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev,
+> +                               struct vhost_iotlb *iotlb, unsigned int a=
+sid)
+>  {
+>         struct mlx5_vdpa_net *ndev =3D to_mlx5_vdpa_ndev(mvdev);
+>         int err;
+> @@ -2406,7 +2407,7 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_de=
+v *mvdev, struct vhost_iotlb
+>
+>         teardown_driver(ndev);
+>         mlx5_vdpa_destroy_mr(mvdev);
+> -       err =3D mlx5_vdpa_create_mr(mvdev, iotlb);
+> +       err =3D mlx5_vdpa_create_mr(mvdev, iotlb, asid);
+>         if (err)
+>                 goto err_mr;
+>
+> @@ -2587,7 +2588,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev=
+)
+>         ++mvdev->generation;
+>
+>         if (MLX5_CAP_GEN(mvdev->mdev, umem_uid_0)) {
+> -               if (mlx5_vdpa_create_mr(mvdev, NULL))
+> +               if (mlx5_vdpa_create_mr(mvdev, NULL, 0))
+>                         mlx5_vdpa_warn(mvdev, "create MR failed\n");
+>         }
+>         up_write(&ndev->reslock);
+> @@ -2623,41 +2624,20 @@ static u32 mlx5_vdpa_get_generation(struct vdpa_d=
+evice *vdev)
+>         return mvdev->generation;
+>  }
+>
+> -static int set_map_control(struct mlx5_vdpa_dev *mvdev, struct vhost_iot=
+lb *iotlb)
+> -{
+> -       u64 start =3D 0ULL, last =3D 0ULL - 1;
+> -       struct vhost_iotlb_map *map;
+> -       int err =3D 0;
+> -
+> -       spin_lock(&mvdev->cvq.iommu_lock);
+> -       vhost_iotlb_reset(mvdev->cvq.iotlb);
+> -
+> -       for (map =3D vhost_iotlb_itree_first(iotlb, start, last); map;
+> -            map =3D vhost_iotlb_itree_next(map, start, last)) {
+> -               err =3D vhost_iotlb_add_range(mvdev->cvq.iotlb, map->star=
+t,
+> -                                           map->last, map->addr, map->pe=
+rm);
+> -               if (err)
+> -                       goto out;
+> -       }
+> -
+> -out:
+> -       spin_unlock(&mvdev->cvq.iommu_lock);
+> -       return err;
+> -}
+> -
+> -static int set_map_data(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb =
+*iotlb)
+> +static int set_map_data(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb =
+*iotlb,
+> +                       unsigned int asid)
+>  {
+>         bool change_map;
+>         int err;
+>
+> -       err =3D mlx5_vdpa_handle_set_map(mvdev, iotlb, &change_map);
+> +       err =3D mlx5_vdpa_handle_set_map(mvdev, iotlb, &change_map, asid)=
+;
+>         if (err) {
+>                 mlx5_vdpa_warn(mvdev, "set map failed(%d)\n", err);
+>                 return err;
+>         }
+>
+>         if (change_map)
+> -               err =3D mlx5_vdpa_change_map(mvdev, iotlb);
+> +               err =3D mlx5_vdpa_change_map(mvdev, iotlb, asid);
+>
+>         return err;
+>  }
+> @@ -2670,16 +2650,7 @@ static int mlx5_vdpa_set_map(struct vdpa_device *v=
+dev, unsigned int asid,
+>         int err =3D -EINVAL;
+>
+>         down_write(&ndev->reslock);
+> -       if (mvdev->group2asid[MLX5_VDPA_DATAVQ_GROUP] =3D=3D asid) {
+> -               err =3D set_map_data(mvdev, iotlb);
+> -               if (err)
+> -                       goto out;
+> -       }
+> -
+> -       if (mvdev->group2asid[MLX5_VDPA_CVQ_GROUP] =3D=3D asid)
+> -               err =3D set_map_control(mvdev, iotlb);
+> -
+> -out:
+> +       err =3D set_map_data(mvdev, iotlb, asid);
+>         up_write(&ndev->reslock);
+>         return err;
+>  }
+> @@ -3182,7 +3153,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *=
+v_mdev, const char *name,
+>                 goto err_mpfs;
+>
+>         if (MLX5_CAP_GEN(mvdev->mdev, umem_uid_0)) {
+> -               err =3D mlx5_vdpa_create_mr(mvdev, NULL);
+> +               err =3D mlx5_vdpa_create_mr(mvdev, NULL, 0);
+>                 if (err)
+>                         goto err_res;
+>         }
+> --
+> 2.38.1
+>
 
