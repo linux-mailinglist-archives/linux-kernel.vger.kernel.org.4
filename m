@@ -2,167 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8513962A016
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCE662A01A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbiKORSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 12:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
+        id S230347AbiKORTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 12:19:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiKORSn (ORCPT
+        with ESMTP id S231705AbiKORTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 12:18:43 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C1810CC
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:18:42 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id i8-20020a056e0212c800b00302578e6d78so5119193ilm.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:18:42 -0800 (PST)
+        Tue, 15 Nov 2022 12:19:03 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7542F585
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:18:59 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id g12so25254892wrs.10
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:18:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H1ihDDubQnzVTvOXXe9DVf3BQyDu+DU5t/3cX5utHNE=;
+        b=vhs+mrFtOYyBA78Um2G35bHjJ+LJwb3kC93yOoNf10lJXMRC2u7G3aHQDx/MTLZ376
+         gpRdasH5U//hJzIMVd1PR9dABy3gNEKBzM/whev7T/1Q90dofPmvzyKZf4svXLl4xq8q
+         9J9eWPgBnNCXZmamA/XNIxrVs/KJkDGFPmjmg+AHpJBsjR+XzF986GUu0qIvIyAEQGJZ
+         B/Ya0y4VmJ+JGqI1HeWfVhwj5H5WNWwLv1TbXnOuPUX8Z2jiWUYyv2B7JQ8jD3pGAiiK
+         pbcr4ZpBjLG2427J0QAFOSYmX/iYJufEwtLQAlWNBQZrl1YbcYPESpBYWMA7j8rzgVr8
+         S/BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SZYFdepLdLLBz3kuYnNkUTI8QvLao2m+qSUsVMEEUrU=;
-        b=z5hUn6goccuCEizeyF2ZV0X1D5RbAGOHCjOXzmVt5okwl070EpPoRERcbipdSYtoeW
-         Zt8fZcbl1NIB26g4DSioOkFgAYj00uRO53URJaC8ZXdWohtjVw5IQxV8nQxG4a06dWDz
-         wPMKqf8BGHWovkPCZ+xWTVJdAA2b4nixsTGy14yzKijgeoKMLz9mBxR7moS5rrWhlvmx
-         cOJoe4CC9a4exujRtvVcFwv/Jdc6DdYUjsR8lvKdxpjgdcRHZsTsStjAUJV5CaaDWnpC
-         GO/3J1p8jaFj7Oi19cbzfXEJD4CmMWMRF8G30/+NzmdeYFNYp+QSXMFagDNcswLEc1h8
-         Csgg==
-X-Gm-Message-State: ANoB5pneiQPVxwW4dk4oYNPJevW5PK87WtQjpDNlSGWr96NEYPcqYiYT
-        c89hfIcPduC+F8ISyWPQPJBfa/MJheV6X1d5gm/mm0odvlp4
-X-Google-Smtp-Source: AA0mqf7YGSOSV8bw4F7p48hxW/QP4J8XYNwR0R91MzpkeuCp7a+F+lrldyiJjwZOXxU0Mb7kJVOF+oghAnw+j6iUZsWvlcW867Sf
-MIME-Version: 1.0
-X-Received: by 2002:a02:a61a:0:b0:374:4af4:8630 with SMTP id
- c26-20020a02a61a000000b003744af48630mr8423411jam.89.1668532721621; Tue, 15
- Nov 2022 09:18:41 -0800 (PST)
-Date:   Tue, 15 Nov 2022 09:18:41 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002b1f7d05ed858cb7@google.com>
-Subject: [syzbot] WARNING in send_hsr_supervision_frame (3)
-From:   syzbot <syzbot+3ae0a3f42c84074b7c8e@syzkaller.appspotmail.com>
-To:     bigeasy@linutronix.de, brianvv@google.com, claudiajkang@gmail.com,
-        davem@davemloft.net, edumazet@google.com, ennoerlangen@gmail.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H1ihDDubQnzVTvOXXe9DVf3BQyDu+DU5t/3cX5utHNE=;
+        b=cduJP1x84AoDUwOgXrgzryVA6iGadhWahw7r/qEL/zwdGgbO/MphoVDfLH0IIGUEZn
+         3h7ct16/NJ/OqkYXJQ7gnv9Whv5XoaHcpEJFQn3zO6S8WlxbHXSvLXnpN36coe0OnLNU
+         aHkwLEgsdSMPit+CVQ5Kut7TqdTC+GgYOZxe/4USOqH1A5RGYUJdpTK3TISVAoulnrX+
+         KXzl6C56+qYFM/D3C2H6j+8s9MWanJWvdmA29ja8U52whgj9+0SV+EJTsQ0Ie+RzdW/x
+         ikM4wJCNGZ2Y5XRa7O35pY6FsPrdZB9FzyYVTeh7+9SM6zEVTv8Ky2O0O0nS7O3AYGDW
+         Osng==
+X-Gm-Message-State: ANoB5pmhV/YJrKF0+s1X+Vzb3k8Ror0T5zKUb5S1VOOoPVD97kU7rK9a
+        ITti79kVEobSl8FmKqLpVpS1Ow==
+X-Google-Smtp-Source: AA0mqf5I23yXiJ+Yy5i/RSM8m7novjlBww+XvdrJq1PgF/Re/GQsAl3OOyYMXibGMz4LCmw4K3vcUw==
+X-Received: by 2002:adf:f5c5:0:b0:22e:597:8541 with SMTP id k5-20020adff5c5000000b0022e05978541mr11845141wrp.612.1668532737954;
+        Tue, 15 Nov 2022 09:18:57 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e0a:f:6020:91c8:7496:8b73:811f])
+        by smtp.gmail.com with ESMTPSA id bg40-20020a05600c3ca800b003cf78aafdd7sm16846461wmb.39.2022.11.15.09.18.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 09:18:54 -0800 (PST)
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, parth@linux.ibm.com
+Cc:     qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, David.Laight@aculab.com,
+        pjt@google.com, pavel@ucw.cz, tj@kernel.org, qperret@google.com,
+        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
+        kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, joel@joelfernandes.org,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH v9 0/9] Add latency priority for CFS class
+Date:   Tue, 15 Nov 2022 18:18:42 +0100
+Message-Id: <20221115171851.835-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This patchset restarts the work about adding a latency priority to describe
+the latency tolerance of cfs tasks.
 
-syzbot found the following issue on:
+Patch [1] is a new one that has been added with v6. It fixes an
+unfairness for low prio tasks because of wakeup_gran() being bigger
+than the maximum vruntime credit that a waking task can keep after
+sleeping.
 
-HEAD commit:    55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14146fc6880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=df75278aabf0681a
-dashboard link: https://syzkaller.appspot.com/bug?extid=3ae0a3f42c84074b7c8e
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+The patches [2-4] have been done by Parth:
+https://lore.kernel.org/lkml/20200228090755.22829-1-parth@linux.ibm.com/
 
-Unfortunately, I don't have any reproducer for this issue yet.
+I have just rebased and moved the set of latency priority outside the
+priority update. I have removed the reviewed tag because the patches
+are 2 years old.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9d967e5d91fa/disk-55be6084.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9a8cffcbc089/vmlinux-55be6084.xz
+This aims to be a generic interface and the following patches is one use
+of it to improve the scheduling latency of cfs tasks.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3ae0a3f42c84074b7c8e@syzkaller.appspotmail.com
+Patch [5] uses latency nice priority to define a latency offset
+and then decide if a cfs task can or should preempt the current
+running task. The patch gives some tests results with cyclictests and
+hackbench to highlight the benefit of latency priority for short
+interactive task or long intensive tasks.
 
-------------[ cut here ]------------
-HSR: Could not send supervision frame
-WARNING: CPU: 0 PID: 3593 at net/hsr/hsr_device.c:293 send_hsr_supervision_frame+0x66d/0x8d0 net/hsr/hsr_device.c:293
-Modules linked in:
-CPU: 0 PID: 3593 Comm: syz-fuzzer Not tainted 6.0.0-syzkaller-09589-g55be6084c8e0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/22/2022
-RIP: 0010:send_hsr_supervision_frame+0x66d/0x8d0 net/hsr/hsr_device.c:293
-Code: 1d 90 9c 9a 04 31 ff 89 de e8 9f bf 4a f8 84 db 75 b6 e8 16 c3 4a f8 48 c7 c7 20 f0 21 8b c6 05 70 9c 9a 04 01 e8 12 a7 0d 00 <0f> 0b eb 9a e8 fa c2 4a f8 41 be 3c 00 00 00 ba 01 00 00 00 4c 89
-RSP: 0018:ffffc90000007c60 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88801cd93b00 RSI: ffffffff81612e28 RDI: fffff52000000f7e
-RBP: ffff8880445b8c80 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000100 R11: 000000003a525348 R12: ffff888020fe8f80
-R13: 0000000000000000 R14: ffff888020fe8f98 R15: 0000000000000017
-FS:  000000c000052090(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000c001ab66b0 CR3: 000000002091d000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- hsr_announce+0x10c/0x330 net/hsr/hsr_device.c:382
- call_timer_fn+0x1a0/0x6b0 kernel/time/timer.c:1474
- expire_timers kernel/time/timer.c:1519 [inline]
- __run_timers.part.0+0x674/0xa80 kernel/time/timer.c:1790
- __run_timers kernel/time/timer.c:1768 [inline]
- run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1803
- __do_softirq+0x1d0/0x9c8 kernel/softirq.c:571
- invoke_softirq kernel/softirq.c:445 [inline]
- __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
- irq_exit_rcu+0x5/0x20 kernel/softirq.c:662
- sysvec_apic_timer_interrupt+0x93/0xc0 arch/x86/kernel/apic/apic.c:1107
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
-RIP: 0010:__syscall_enter_from_user_work kernel/entry/common.c:89 [inline]
-RIP: 0010:syscall_enter_from_user_mode+0x2c/0xb0 kernel/entry/common.c:110
-Code: 49 89 f4 55 48 89 fd 53 48 8b 7c 24 18 e8 4c fa ff ff eb 28 eb 2c e8 13 fa fe f7 e8 ce f7 fe f7 fb 65 48 8b 04 25 80 6f 02 00 <48> 8b 70 08 40 f6 c6 3f 75 1a 5b 4c 89 e0 5d 41 5c c3 eb 1c 0f 0b
-RSP: 0018:ffffc90003baff20 EFLAGS: 00000246
-RAX: ffff88801cd93b00 RBX: 0000000000000002 RCX: 1ffffffff1bc1f51
-RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffffffff8982c992
-RBP: ffffc90003baff58 R08: 0000000000000000 R09: 0000000000000000
-R10: fffffbfff1bc18da R11: 0000000000000001 R12: 0000000000000023
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- do_syscall_64+0x16/0xb0 arch/x86/entry/common.c:76
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x46703d
-Code: 8b 44 24 20 b9 40 42 0f 00 f7 f1 48 89 04 24 b8 e8 03 00 00 f7 e2 48 89 44 24 08 48 89 e7 be 00 00 00 00 b8 23 00 00 00 0f 05 <48> 8b 6c 24 10 48 83 c4 18 c3 cc cc cc cc cc cc cc cc cc cc cc cc
-RSP: 002b:000000c000061f10 EFLAGS: 00000202 ORIG_RAX: 0000000000000023
-RAX: ffffffffffffffda RBX: 0000000000002710 RCX: 000000000046703d
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000000c000061f10
-RBP: 000000c000061f20 R08: 0000000000080d9f R09: 00007fff7a533080
-R10: 0000000000000000 R11: 0000000000000202 R12: 000000c000061950
-R13: 000000c016676000 R14: 000000c0000004e0 R15: 00007f1b6b42021a
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	49 89 f4             	mov    %rsi,%r12
-   3:	55                   	push   %rbp
-   4:	48 89 fd             	mov    %rdi,%rbp
-   7:	53                   	push   %rbx
-   8:	48 8b 7c 24 18       	mov    0x18(%rsp),%rdi
-   d:	e8 4c fa ff ff       	callq  0xfffffa5e
-  12:	eb 28                	jmp    0x3c
-  14:	eb 2c                	jmp    0x42
-  16:	e8 13 fa fe f7       	callq  0xf7fefa2e
-  1b:	e8 ce f7 fe f7       	callq  0xf7fef7ee
-  20:	fb                   	sti
-  21:	65 48 8b 04 25 80 6f 	mov    %gs:0x26f80,%rax
-  28:	02 00
-* 2a:	48 8b 70 08          	mov    0x8(%rax),%rsi <-- trapping instruction
-  2e:	40 f6 c6 3f          	test   $0x3f,%sil
-  32:	75 1a                	jne    0x4e
-  34:	5b                   	pop    %rbx
-  35:	4c 89 e0             	mov    %r12,%rax
-  38:	5d                   	pop    %rbp
-  39:	41 5c                	pop    %r12
-  3b:	c3                   	retq
-  3c:	eb 1c                	jmp    0x5a
-  3e:	0f 0b                	ud2
+Patch [6] adds the support of latency nice priority to task group by
+adding a cpu.latency.nice field. The range is [-20:19] as for setting task
+latency priority.
 
+Patch [7] makes sched_core taking into account the latency offset.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Patch [8] adds a rb tree to cover some corner cases where the latency
+sensitive task (priority < 0) is preempted by high priority task (RT/DL)
+or fails to preempt them. This patch ensures that tasks will have at least
+a slice of sched_min_granularity in priority at wakeup.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Patch [9] removes useless check after adding a latency rb tree.
+
+I have also backported the patchset on a dragonboard RB3 with an android
+mainline kernel based on v5.18 for a quick test. I have used the
+TouchLatency app which is part of AOSP and described to be a very good
+test to highlight jitter and jank frame sources of a system [1].
+In addition to the app, I have added some short running tasks waking-up
+regularly (to use the 8 cpus for 4 ms every 37777us) to stress the system
+without overloading it (and disabling EAS). The 1st results shows that the
+patchset helps to reduce the missed deadline frames from 5% to less than
+0.1% when the cpu.latency.nice of task group are set. I haven't rerun the
+test with latest version.
+
+I have also tested the patchset with the modified version of the alsa
+latency test that has been shared by Tim. The test quickly xruns with
+default latency nice priority 0 but is able to run without underuns with
+a latency -20 and hackbench running simultaneously.
+
+While preparing the version 8, I have evaluated the benefit of using an
+augmented rbtree instead of adding a rbtree for latency sensitive entities,
+which was a relevant suggestion done by PeterZ. Although the augmented
+rbtree enables to sort additional information in the tree with a limited
+overhead, it has more impact on legacy use cases (latency_nice >= 0)
+because the augmented callbacks are always called to maintain this
+additional information even when there is no sensitive tasks. In such
+cases, the dedicated rbtree remains empty and the overhead is reduced to
+loading a cached null node pointer. Nevertheless, we might want to
+reconsider the augmented rbtree once the use of negative latency_nice will
+be more widlely deployed. At now, the different tests that I have done,
+have not shown improvements with augmented rbtree.
+
+Below are some hackbench results:
+        2 rbtrees               augmented rbtree        augmented rbtree	
+                                sorted by vruntime      sorted by wakeup_vruntime
+sched	pipe	
+avg     26311,000               25976,667               25839,556
+stdev   0,15 %                  0,28 %                  0,24 %
+vs tip  0,50 %                  -0,78 %                 -1,31 %
+hackbench	1 group	
+avg     1,315                   1,344                   1,359
+stdev   0,88 %                  1,55 %                  1,82 %
+vs tip  -0,47 %                 -2,68 %                 -3,87 %
+hackbench	4 groups
+avg     1,339                   1,365                   1,367
+stdev   2,39 %                  2,26 %                  3,58 %
+vs tip  -0,08 %                 -2,01 %                 -2,22 %
+hackbench	8 groups
+avg     1,233                   1,286                   1,301
+stdev   0,74 %                  1,09 %                  1,52 %
+vs tip  0,29 %                  -4,05 %                 -5,27 %
+hackbench	16 groups	
+avg     1,268                   1,313                   1,319
+stdev   0,85 %                  1,60 %                  0,68 %
+vs tip  -0,02 %                 -3,56 %                 -4,01 %
+
+[1] https://source.android.com/docs/core/debug/eval_perf#touchlatency
+
+Change since v8:
+- Rename get_sched_latency by get_sleep_latency
+- move latency nice defines in sched/prio.h and fix latency_prio init value
+- Fix typo and comments
+
+Change since v7:
+- Replaced se->on_latency by using RB_CLEAR_NODE() and RB_EMPTY_NODE()
+- Clarify the limit behavior fo the cgroup cpu.latenyc_nice
+
+Change since v6:
+- Fix compilation error for !CONFIG_SCHED_DEBUG
+
+Change since v5:
+- Add patch 1 to fix unfairness for low prio task. This has been
+  discovered while studying Youssef's tests results with latency nice
+  which were hitting the same problem.
+- Fixed latency_offset computation to take into account
+  GENTLE_FAIR_SLEEPERS. This has diseappeared with v2and has been raised
+  by Youssef's tests.
+- Reworked and optimized how latency_offset in used to check for
+  preempting current task at wakeup and tick. This cover more cases too.
+- Add patch 9 to remove check_preempt_from_others() which is not needed
+  anymore with the rb tree.
+
+Change since v4:
+- Removed permission checks to set latency priority. This enables user
+  without elevated privilege like audio application to set their latency
+  priority as requested by Tim.
+- Removed cpu.latency and replaced it by cpu.latency.nice so we keep a
+  generic interface not tied to latency_offset which can be used to
+  implement other latency features.
+- Added an entry in Documentation/admin-guide/cgroup-v2.rst to describe
+  cpu.latency.nice.
+- Fix some typos.
+
+Change since v3:
+- Fix 2 compilation warnings raised by kernel test robot <lkp@intel.com>
+
+Change since v2:
+- Set a latency_offset field instead of saving a weight and computing it
+  on the fly.
+- Make latency_offset available for task group: cpu.latency
+- Fix some corner cases to make latency sensitive tasks schedule first and
+  add a rb tree for latency sensitive task.
+
+Change since v1:
+- fix typo
+- move some codes in the right patch to make bisect happy
+- simplify and fixed how the weight is computed
+- added support of sched core patch 7
+
+Parth Shah (3):
+  sched: Introduce latency-nice as a per-task attribute
+  sched/core: Propagate parent task's latency requirements to the child
+    task
+  sched: Allow sched_{get,set}attr to change latency_nice of the task
+
+Vincent Guittot (6):
+  sched/fair: fix unfairness at wakeup
+  sched/fair: Take into account latency priority at wakeup
+  sched/fair: Add sched group latency support
+  sched/core: Support latency priority with sched core
+  sched/fair: Add latency list
+  sched/fair: remove check_preempt_from_others
+
+ Documentation/admin-guide/cgroup-v2.rst |  10 ++
+ include/linux/sched.h                   |   4 +
+ include/linux/sched/prio.h              |  27 +++
+ include/uapi/linux/sched.h              |   4 +-
+ include/uapi/linux/sched/types.h        |  19 +++
+ init/init_task.c                        |   1 +
+ kernel/sched/core.c                     | 106 ++++++++++++
+ kernel/sched/debug.c                    |   1 +
+ kernel/sched/fair.c                     | 209 ++++++++++++++++++++----
+ kernel/sched/sched.h                    |  45 ++++-
+ tools/include/uapi/linux/sched.h        |   4 +-
+ 11 files changed, 394 insertions(+), 36 deletions(-)
+
+-- 
+2.17.1
+
