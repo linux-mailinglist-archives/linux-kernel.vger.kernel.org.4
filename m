@@ -2,88 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F23CC6298E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F3D6298E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:31:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbiKOMaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 07:30:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
+        id S230369AbiKOMbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 07:31:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiKOMaT (ORCPT
+        with ESMTP id S229629AbiKOMbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:30:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B44E1CB04;
-        Tue, 15 Nov 2022 04:30:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF9DA6171D;
-        Tue, 15 Nov 2022 12:30:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 00E23C43470;
-        Tue, 15 Nov 2022 12:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668515416;
-        bh=RDrvuxjFUp6i9QW7KL1QZyCZe3XLJgNRwHhIsYgr+9Y=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=pehsHjJwAm5ezTK8RwskGP5wGcesefgb1XS8VgyhENEdxN4nqbaHmrBneW92WXs9u
-         wC0jSW0QTgaD3ormS7KlrOQNDQrz49NBw18Y7fubFg2RvBnjjK6o1DqLMUAYbtEsCn
-         3P5kr5CVr/W4144h/7uspnkd06wBP0+Hfmg0UVJuK0J51sBtIzQURMG8sMDOXYl3QA
-         XO4oV/CnGcEkQuw7pnNmpOXWu5WMj37kblFtrKeRmn48o9swi4F9WZwPb6mXX/YP8Q
-         y2IkGNGYj2t85MR1ra+5HhGyi4fL/ezHFM/+yYqLwdS6jb6+kWDXDcJ5Am+9kVuqwv
-         SZil/h6S/vcWQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D9083C395F5;
-        Tue, 15 Nov 2022 12:30:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 15 Nov 2022 07:31:00 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B741C932;
+        Tue, 15 Nov 2022 04:30:59 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id d9so19285766wrm.13;
+        Tue, 15 Nov 2022 04:30:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=heQF+yUf7OPPJ/81qSJZBOwzAZ7P4r5Gfhl736W/C8g=;
+        b=K1O66LkMWAD9+WNZ0lBTjZbkXcOR49TVN2NIpTWnEuiWfpdcEvMtJesFzpvhbdmzT9
+         cd483Meg7hspAAedgrkWvcBT2QkaMgGSToQE0ZhrbmcF8cBTNx6RhoE5OjW8023vaSva
+         hbWALv4lfXfLIXZohAmtC7py2VpAObOGcZ177fcy5DXv36MtgYKqgWxmQjJ7sedxm9ws
+         Ob5cC2sTGU0BmH1vibo4vrpIuGV9o/dkkW6/V2/vGMymnpn+idkHyouRubkum/efn0AK
+         U7hyZmpOovEmZ+CPZGU2W0SpaVmw7JPveFBTLEMs1VhMwXK8btAxFqeFT3bL06f1n57k
+         ugGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=heQF+yUf7OPPJ/81qSJZBOwzAZ7P4r5Gfhl736W/C8g=;
+        b=TsjxO7zP+1LCc2+aqC6GuXVgJwdEeRdzK7GjxhdPVSjH29g8l7Q2/dfY5YqzV05V6F
+         6CYcXG0GIpZVvX83/QGRTnPsKbdUrJVhngek4hxPn+Ba/f8DHeQ2JPU1m82pjY+cgIyo
+         99OJPkH8QhGMWIBOLcRABa7Vwivxg4Mt/OlVmCcasovYt1noXOcvGSCtddG5hXc5VZa+
+         g6lKLKjdPWaBjYZFTn79XnBkJcRdafgWvYrl//dT70eRIMtb7yK8Hzng3WxpN+UcYlUc
+         fxumlZas9x6R/QleqgPc1O+eCdn0Y5g7bRP9E92tvymUMKx3Tk5q6UXB5qJzIBxKI641
+         vNpQ==
+X-Gm-Message-State: ANoB5pn5SBvvn9Q+ieVR4x6Nw4iATWi3fz3i/TTfKlI60F/moBVE8/Pt
+        651tggodmuYxbBQgPSrfXMowJ06mesyW/w==
+X-Google-Smtp-Source: AA0mqf4GuF+RTCpaeuemRjo+R3Hc2FW5+FQYZe5dx99cUQGVlTE3w22izlM+xCGojqtD28L9TirMQA==
+X-Received: by 2002:a5d:6407:0:b0:238:238:cae3 with SMTP id z7-20020a5d6407000000b002380238cae3mr10730999wru.685.1668515458233;
+        Tue, 15 Nov 2022 04:30:58 -0800 (PST)
+Received: from prasmi.home ([2a00:23c8:2501:c701:d94a:6345:c378:e255])
+        by smtp.gmail.com with ESMTPSA id v11-20020a05600c444b00b003c70191f267sm22862614wmn.39.2022.11.15.04.30.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 04:30:57 -0800 (PST)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] dt-bindings: i2c: renesas,riic: Document RZ/Five SoC
+Date:   Tue, 15 Nov 2022 12:30:18 +0000
+Message-Id: <20221115123018.1182324-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3] net: phy: marvell: add sleep time after enabling the
- loopback bit
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166851541587.30368.11058064913336167873.git-patchwork-notify@kernel.org>
-Date:   Tue, 15 Nov 2022 12:30:15 +0000
-References: <20221114065302.10625-1-aminuddin.jamaluddin@intel.com>
-In-Reply-To: <20221114065302.10625-1-aminuddin.jamaluddin@intel.com>
-To:     Aminuddin Jamaluddin <aminuddin.jamaluddin@intel.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, mohammad.athari.ismail@intel.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, tee.min.tan@intel.com,
-        muhammad.husaini.zulkifli@intel.com, hong.aun.looi@intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+The RIIC block on the RZ/Five SoC is identical to one found on the RZ/G2UL
+SoC. "renesas,riic-r9a07g043" compatible string will be used on the
+RZ/Five SoC so to make this clear, update the comment to include RZ/Five
+SoC.
 
-On Mon, 14 Nov 2022 14:53:02 +0800 you wrote:
-> Sleep time is added to ensure the phy to be ready after loopback
-> bit was set. This to prevent the phy loopback test from failing.
-> 
-> Fixes: 020a45aff119 ("net: phy: marvell: add Marvell specific PHY loopback")
-> Cc: <stable@vger.kernel.org> # 5.15.x
-> Signed-off-by: Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>
-> Signed-off-by: Aminuddin Jamaluddin <aminuddin.jamaluddin@intel.com>
-> 
-> [...]
+No driver changes are required as generic compatible string
+"renesas,riic-rz" will be used as a fallback on RZ/Five SoC.
 
-Here is the summary with links:
-  - [net,v3] net: phy: marvell: add sleep time after enabling the loopback bit
-    https://git.kernel.org/netdev/net/c/18c532e44939
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ Documentation/devicetree/bindings/i2c/renesas,riic.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You are awesome, thank you!
+diff --git a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
+index d3c0d5c427ac..2291a7cd619b 100644
+--- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
++++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
+@@ -19,7 +19,7 @@ properties:
+       - enum:
+           - renesas,riic-r7s72100   # RZ/A1H
+           - renesas,riic-r7s9210    # RZ/A2M
+-          - renesas,riic-r9a07g043  # RZ/G2UL
++          - renesas,riic-r9a07g043  # RZ/G2UL and RZ/Five
+           - renesas,riic-r9a07g044  # RZ/G2{L,LC}
+           - renesas,riic-r9a07g054  # RZ/V2L
+       - const: renesas,riic-rz      # RZ/A or RZ/G2L
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.25.1
 
