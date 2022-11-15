@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C216C629DE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D20629DE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231563AbiKOPpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:45:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
+        id S238142AbiKOPpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:45:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiKOPpn (ORCPT
+        with ESMTP id S231347AbiKOPps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:45:43 -0500
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258D92CCBD
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:45:42 -0800 (PST)
-Received: by mail-wm1-x34a.google.com with SMTP id c187-20020a1c35c4000000b003cfee3c91cdso175011wma.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:45:42 -0800 (PST)
+        Tue, 15 Nov 2022 10:45:48 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779FF10565
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:45:47 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-370624ca2e8so138944817b3.16
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:45:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ObjehQvDuvlq01aMll7M6N89WBfUDGdC0LNnzmMXX1M=;
-        b=I1Wg1uvq1oyJaj+alEl2o5E0nzemaZAoPIQF09uCoOGX/4FNMhoBwjDuBR4F/PJo5X
-         eZAh3A8JgSozBKpPrr6TQPI9fimBht0G15cPIBHES1yX/YoyaIJWnKAGNe30agmYaIpD
-         l3ELg4+LpVuFlVxuwpFLpAZEui/xxxf96mqE7QxwPYBHt3M4414nMZVyP7llZogIs31I
-         sf9KwDd+3UAXlNQ+o6IkuqjnOga/u9ABiahZM9jnOhJqHK9lSeZbORSqBhNjRHKK9xVT
-         xdYHsF2vaKG90TOxwDqlsuRrVSuLzEkCPjxvnp+0GWrN3E/5j9RNww3pNLtD+LAnlsID
-         Mf1A==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cUFeRtZYB7UeTgxIn2ZhYMocLTGExrmRKO4xcP78LzE=;
+        b=Si5zz34w8W5OUKEmuwma1mET23o1UNMM0e+o9fGg5w5QBLXN0EQOINeapJXw0xkhN5
+         jIBGAQpEgsaEeu2F7RJfTUTekBnD5xmh7oO3DT9e/g5GH9xCDINR/nnIH1JQBtjCA8Ky
+         cGd2mkkePepc9zsCKoQBhNWoANyqmXIHeOPNSUqILXJ+JDo0m+Fg58+w9dEi+qyzv9PK
+         mkkEjCyPJL2UD0KfMddbIdEX6IIwT+BCGM1qp7vQZJ89JXMBRgZua0U4jSF0TfY/8A3L
+         P5OCi+bq6OzDA/4TybR/avT7cMQ6ZUIN1MQpCKdkmJhl6PAQflUILq9El2VnyO7VmIPI
+         Ckig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ObjehQvDuvlq01aMll7M6N89WBfUDGdC0LNnzmMXX1M=;
-        b=QWWlWPj0gCmv8wcUYB6Nbx/azqAL8jCCyc0XAOIomC0qofkcMBkvap8S/6i8MOzPd2
-         rRmBQx8KO+8RP9Mn7jCaE11lqc7tk5SoIz3brdTBwek0Y7Z4EkVAPKD5GZSuxpso2HWi
-         DcIkXykiw04Pv4DAjNH8gVu6MfgwJcZsJg1EFHS9bWatsRHwKUItFdaReKAEDHcpN577
-         Px3NSD+eDh7Yncpfy9SFI82rVsmSber2gUdhqtYofbh+WQ/Yf02b7s1w67gqkUQ5hISQ
-         oY74/YsNaCD2bxWyszzxKYOjkKoE9zhSHpJtaWVrskc3nuXzlzNMiS5ygFS2s4nJGmSg
-         k1WQ==
-X-Gm-Message-State: ANoB5pkxPCQktCTUDvGsE18884XAVbHegwdHnyKLD+om7gXA6tQsrK19
-        u6EsEWUcE3sGJ4uos22SF4xTTstgBF9M6ND9Rg==
-X-Google-Smtp-Source: AA0mqf6lclCnZea8N6NOMkE/gZbhKhJZXgoQIjhYrTac3gIllgQDeI236kp8QTwoz1w+TtmKRsnrxpXLwN5w7xAE0g==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cUFeRtZYB7UeTgxIn2ZhYMocLTGExrmRKO4xcP78LzE=;
+        b=UAoHqmIwUjv6pmHoHfLUzdnwzEEavYeH5PIg7sBNDDyfPF/szhhHAxawbSnelet5v9
+         z0C+rTMXMmMjyT+TW96ti0hrcMVK7WPJFJGkZqJWXx9oenxvbYNyHvw2uuDnntNLVeJr
+         r4hN+leZO8qlwdt0o+9sr6ouXLGjrUhTAC6umz2gpNxv1hIXIdYj/G6wvKdNUvvbUKHK
+         7sBOQuExuKbLpKo7OAjBcxD910I9MbGVJ7oTkOoQfTHCzbevutu17iH+xWVSAiWUDy3C
+         VafdGZfURm6GY7nByFRNSSM9fgGzQqgnsukO1BlRo8HPwk7WzopofWAry5rP+/Dam4+q
+         37FA==
+X-Gm-Message-State: ANoB5pmqsQSnvWCN+RWeDRP6OajdBGKggHz8xkbxLT2QpE5PV+NWQmG5
+        qP4LYytun7sphLNWJfh6IIc18IJgS/0egFZvPg==
+X-Google-Smtp-Source: AA0mqf69A0hZw4IJg/9Hpym+IBCNApy2UjMUCdqSJlD8FX/eyVqv53ZuVqcM51FoPNf2fzyMh+wKHprvlaeRH4bg9Q==
 X-Received: from peternewman10.zrh.corp.google.com ([2a00:79e0:9d:6:fe62:9ede:ae13:6fda])
- (user=peternewman job=sendgmr) by 2002:a05:600c:1c9a:b0:3cf:6f23:a3e3 with
- SMTP id k26-20020a05600c1c9a00b003cf6f23a3e3mr371731wms.1.1668527140244; Tue,
- 15 Nov 2022 07:45:40 -0800 (PST)
-Date:   Tue, 15 Nov 2022 16:45:13 +0100
+ (user=peternewman job=sendgmr) by 2002:a25:40ce:0:b0:6d5:34ad:10c5 with SMTP
+ id n197-20020a2540ce000000b006d534ad10c5mr28033116yba.494.1668527146292; Tue,
+ 15 Nov 2022 07:45:46 -0800 (PST)
+Date:   Tue, 15 Nov 2022 16:45:14 +0100
+In-Reply-To: <20221115154515.952783-1-peternewman@google.com>
 Mime-Version: 1.0
+References: <20221115154515.952783-1-peternewman@google.com>
 X-Mailer: git-send-email 2.38.1.493.g58b659f92b-goog
-Message-ID: <20221115154515.952783-1-peternewman@google.com>
-Subject: [PATCH v1 0/2] x86/resctrl: implement rename to help move containers' tasks
+Message-ID: <20221115154515.952783-2-peternewman@google.com>
+Subject: [PATCH v1 1/2] x86/resctrl: factor rdtgroup lock for multi-file ops
 From:   Peter Newman <peternewman@google.com>
 To:     Fenghua Yu <fenghua.yu@intel.com>,
         Reinette Chatre <reinette.chatre@intel.com>
@@ -74,45 +76,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette, Fenghua,
+To help implement kernfs operations on multiple files, such as rename,
+factor the work needed to respectively break and unbreak active
+protection on an individual file into rdtgroup_kn_{get,put}().
 
-This patch series implements the solution Reinette suggested in the
-earlier RFD thread[1] for the problem of moving a container's tasks to a
-different control group on systems that don't provide enough CLOSIDs to
-give every container its own control group.
+The existing rdtgroup_kn_lock_live() could only release the kernfs lock
+for a single file before waiting on the rdtgroup_mutex.
 
-Without this, we were forced to write all of the task IDs from the
-container into the tasks file of the new control group. Because a group
-is free to dynamically create new tasks, we found this approach
-unusable.
+This refactoring should not result in any functional change.
 
-This change originally depended on the CLOSID update race fix[2] to
-provide a race-free mechanism for notifying the CPUs where moved tasks
-were residing. However, now that the current guidance for group task
-movement is to broadcast IPIs to all CPUs, this patch can be applied
-independently.
+Signed-off-by: Peter Newman <peternewman@google.com>
+---
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 35 ++++++++++++++++----------
+ 1 file changed, 22 insertions(+), 13 deletions(-)
 
-This patch series assumes that a MON group's CLOSID can simply be
-changed to that of a new parent CTRL_MON group. This is allowed on Intel
-and AMD, but not MPAM implementations. While we (Google) only foresee
-needing this functionality on Intel and AMD systems, this series should
-hopefully be a good starting point for supporting MPAM.
-
-These patches are based on v6.1-rc5
-
-[1] https://lore.kernel.org/lkml/7b09fb62-e61a-65b9-a71e-ab725f527ded@intel.com/
-[2] https://lore.kernel.org/lkml/20221103141641.3055981-2-peternewman@google.com/
-
-Thanks!
--Peter
-
-Peter Newman (2):
-  x86/resctrl: factor rdtgroup lock for multi-file ops
-  x86/resctrl: Implement rename op for mon groups
-
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 101 +++++++++++++++++++++----
- 1 file changed, 88 insertions(+), 13 deletions(-)
-
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+index e5a48f05e787..03b51543c26d 100644
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+@@ -2026,6 +2026,26 @@ static struct rdtgroup *kernfs_to_rdtgroup(struct kernfs_node *kn)
+ 	}
+ }
+ 
++static void rdtgroup_kn_get(struct rdtgroup *rdtgrp, struct kernfs_node *kn)
++{
++	atomic_inc(&rdtgrp->waitcount);
++	kernfs_break_active_protection(kn);
++}
++
++static void rdtgroup_kn_put(struct rdtgroup *rdtgrp, struct kernfs_node *kn)
++{
++	if (atomic_dec_and_test(&rdtgrp->waitcount) &&
++	    (rdtgrp->flags & RDT_DELETED)) {
++		if (rdtgrp->mode == RDT_MODE_PSEUDO_LOCKSETUP ||
++		    rdtgrp->mode == RDT_MODE_PSEUDO_LOCKED)
++			rdtgroup_pseudo_lock_remove(rdtgrp);
++		kernfs_unbreak_active_protection(kn);
++		rdtgroup_remove(rdtgrp);
++	} else {
++		kernfs_unbreak_active_protection(kn);
++	}
++}
++
+ struct rdtgroup *rdtgroup_kn_lock_live(struct kernfs_node *kn)
+ {
+ 	struct rdtgroup *rdtgrp = kernfs_to_rdtgroup(kn);
+@@ -2033,8 +2053,7 @@ struct rdtgroup *rdtgroup_kn_lock_live(struct kernfs_node *kn)
+ 	if (!rdtgrp)
+ 		return NULL;
+ 
+-	atomic_inc(&rdtgrp->waitcount);
+-	kernfs_break_active_protection(kn);
++	rdtgroup_kn_get(rdtgrp, kn);
+ 
+ 	mutex_lock(&rdtgroup_mutex);
+ 
+@@ -2053,17 +2072,7 @@ void rdtgroup_kn_unlock(struct kernfs_node *kn)
+ 		return;
+ 
+ 	mutex_unlock(&rdtgroup_mutex);
+-
+-	if (atomic_dec_and_test(&rdtgrp->waitcount) &&
+-	    (rdtgrp->flags & RDT_DELETED)) {
+-		if (rdtgrp->mode == RDT_MODE_PSEUDO_LOCKSETUP ||
+-		    rdtgrp->mode == RDT_MODE_PSEUDO_LOCKED)
+-			rdtgroup_pseudo_lock_remove(rdtgrp);
+-		kernfs_unbreak_active_protection(kn);
+-		rdtgroup_remove(rdtgrp);
+-	} else {
+-		kernfs_unbreak_active_protection(kn);
+-	}
++	rdtgroup_kn_put(rdtgrp, kn);
+ }
+ 
+ static int mkdir_mondata_all(struct kernfs_node *parent_kn,
 -- 
 2.38.1.493.g58b659f92b-goog
 
