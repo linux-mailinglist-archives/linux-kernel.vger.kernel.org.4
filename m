@@ -2,49 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7333D629F02
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 352CA629F05
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238652AbiKOQ1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 11:27:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
+        id S238667AbiKOQ10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 11:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238692AbiKOQ1G (ORCPT
+        with ESMTP id S238655AbiKOQ1S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 11:27:06 -0500
-Received: from mail.fris.de (mail.fris.de [116.203.77.234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A292496D;
-        Tue, 15 Nov 2022 08:27:05 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id BF9FBBFB36;
-        Tue, 15 Nov 2022 17:26:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fris.de; s=dkim;
-        t=1668529622; h=from:subject:date:message-id:to:cc:mime-version:
-         content-transfer-encoding; bh=5tgKf+p7vookHNtY0coTIkhFiTMT/dbT9kfNLD5BJEk=;
-        b=PuDasNOCxilEj2ZLt3Ng3PC9aw+m7AzQ5cN0UluxpTopBj4tpJTrnYEtTnC18ZtKpG3dpz
-        LCKfShB4UHon957EwvINZUg4loKUD4fakqlFhGLIldq0yqwfkjXIUQqG96H4SQGz9VEbxJ
-        Yi+TObf5Pr937nCfotNQXd3wjiIr1+PZ0f38G/9rDspqwhTbKaCb/5zlnZ/dFA8TPmFilH
-        ZyI/17zlxT2M2xE2ADHgQfYobclQt9qbF0CQDEeyowEo4I8VHp4rSzM3YEHUUyuJCFhAkA
-        Abg649ddL6Y3JRkoGlbYxqRl6tW7cu/QRl6VEWOb6V8Xbzz642tPBpofZqxTwQ==
-From:   Frieder Schrempf <frieder@fris.de>
-To:     David Jander <david@protonic.nl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Marek Vasut <marex@denx.de>, stable@vger.kernel.org,
-        Baruch Siach <baruch.siach@siklu.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Subject: [PATCH v2] spi: spi-imx: Fix spi_bus_clk if requested clock is higher than input clock
-Date:   Tue, 15 Nov 2022 17:26:53 +0100
-Message-Id: <20221115162654.2016820-1-frieder@fris.de>
+        Tue, 15 Nov 2022 11:27:18 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D94228E1C;
+        Tue, 15 Nov 2022 08:27:17 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e7da329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7da:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F0DB91EC02AD;
+        Tue, 15 Nov 2022 17:27:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1668529636;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=rqKIUpJn3nuSltSmzhMF2AZfwfkeGnGGGviR3ix9tLg=;
+        b=mejjCFr9kN4KR9WGJSUq/Be8o4tEwH/lc5S4fwqi2vbY822ufKa0pQR5vK6vWnDWoXFJEg
+        uw11kiWVcBoHglbEPF8K6WOiFUS2d8AorPN5Nys5XjJuAAy0CRlcecCpx++70Jjg96KZQX
+        V2sGDC+J4ua9VYHLBcwPcohp3KOjn/Y=
+Date:   Tue, 15 Nov 2022 17:27:12 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kalra, Ashish" <ashish.kalra@amd.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        michael.roth@amd.com, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org,
+        "Kaplan, David" <David.Kaplan@amd.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Oscar Salvador <osalvador@suse.de>
+Subject: Re: [PATCH Part2 v6 14/49] crypto: ccp: Handle the legacy TMR
+ allocation when SNP is enabled
+Message-ID: <Y3O94GPUECo+Gg6T@zn.tnic>
+References: <Y0grhk1sq2tf/tUl@zn.tnic>
+ <380c9748-1c86-4763-ea18-b884280a3b60@amd.com>
+ <Y1e5oC9QyDlKpxZ9@zn.tnic>
+ <6511c122-d5cc-3f8d-9651-7c2cd67dc5af@amd.com>
+ <Y2A6/ZwvKhpNBTMP@zn.tnic>
+ <dc89b2f4-1053-91ac-aeac-bb3b25f9ebc7@amd.com>
+ <Y2JS7kn8Q9P4rXso@zn.tnic>
+ <c2ce6317-aa51-2a2b-2d75-ad1fd269f3fa@amd.com>
+ <7882353e-2b13-d35a-b462-cef35ee56f51@suse.cz>
+ <Y3OuvXCjttfFh++w@zn.tnic>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y3OuvXCjttfFh++w@zn.tnic>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -54,60 +76,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frieder Schrempf <frieder.schrempf@kontron.de>
+And,
 
-In case the requested bus clock is higher than the input clock, the correct
-dividers (pre = 0, post = 0) are returned from mx51_ecspi_clkdiv(), but
-*fres is left uninitialized and therefore contains an arbitrary value.
+as dhansen connected the dots, this should be the exact same protection
+scenario as UPM:
 
-This causes trouble for the recently introduced PIO polling feature as the
-value in spi_imx->spi_bus_clk is used there to calculate for which
-transfers to enable PIO polling.
+https://lore.kernel.org/all/20221025151344.3784230-1-chao.p.peng@linux.intel.com
 
-Fix this by setting *fres even if no clock dividers are in use.
+so you should be able to mark them inaccessible the same way and you
+won't need any poisoning dance.
 
-This issue was observed on Kontron BL i.MX8MM with an SPI peripheral clock set
-to 50 MHz by default and a requested SPI bus clock of 80 MHz for the SPI NOR
-flash.
+And Michael has patches so you probably should talk to him...
 
-With the fix applied the debug message from mx51_ecspi_clkdiv() now prints the
-following:
+Thx.
 
-spi_imx 30820000.spi: mx51_ecspi_clkdiv: fin: 50000000, fspi: 50000000,
-post: 0, pre: 0
-
-Fixes: 07e759387788 ("spi: spi-imx: add PIO polling support")
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: David Jander <david@protonic.nl>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Marek Vasut <marex@denx.de>
-Cc: stable@vger.kernel.org
-Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
----
-
-Changes for v2:
-
-* Remove the reference and the Fixes tag for commit 6fd8b8503a0d as it is
-  incorrect.
----
- drivers/spi/spi-imx.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 30d82cc7300b..468ce0a2b282 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -444,8 +444,7 @@ static unsigned int mx51_ecspi_clkdiv(struct spi_imx_data *spi_imx,
- 	unsigned int pre, post;
- 	unsigned int fin = spi_imx->spi_clk;
- 
--	if (unlikely(fspi > fin))
--		return 0;
-+	fspi = min(fspi, fin);
- 
- 	post = fls(fin) - fls(fspi);
- 	if (fin > fspi << post)
 -- 
-2.38.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
