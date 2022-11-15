@@ -2,118 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53055629B70
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E069629B45
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238361AbiKOOE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 09:04:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60508 "EHLO
+        id S229828AbiKON5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:57:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiKOOEW (ORCPT
+        with ESMTP id S229590AbiKON5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 09:04:22 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E722A272;
-        Tue, 15 Nov 2022 06:04:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668521061; x=1700057061;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JYGN4YJCKpoBV1HK1xLD1KHTUJxt32dHk1bzAhudxGo=;
-  b=hRHuYgEqyjvzCjtcxSzsmO4RvIN7pIR6x43963SPoseRe4AvD/8/XSkC
-   9mNblLeUQX2enO9dN0zPpL35NfLGHeE7uMFRBqov+7B2EBrjyk/qJ93gK
-   LJMqyCNXyIGO7fY3aUsMmQ7WBV0vSRSJUlm3BE682bWGjR423Ga90IDAJ
-   wbnU+XVQzXVzPQX2k2FyAv1pvqtbFjx9IMyA0Rf/nyryuwmo2M5Trmp60
-   1NbHt9xw5lo4lTwSwrBPUyMBclBRAIcKEA5lgl6AKRbKfMO/yNqHowSAN
-   1xuj8nontZuU5Jmyj0mDyZE+4HIBTKfKv8VqyyB0612a6NOOgGRyPT6R9
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="292653173"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="292653173"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 06:04:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="781352842"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="781352842"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Nov 2022 06:04:18 -0800
-Date:   Tue, 15 Nov 2022 21:54:54 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Russ Weight <russell.h.weight@intel.com>, mdf@kernel.org,
-        hao.wu@intel.com, trix@redhat.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lgoncalv@redhat.com,
-        marpagan@redhat.com, matthew.gerlach@linux.intel.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
-        kernel test robot <lkp@intel.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] fpga: m10bmc-sec: Fix kconfig dependencies
-Message-ID: <Y3OaLlcTJECIeZoB@yilunxu-OptiPlex-7050>
-References: <20221115001127.289890-1-russell.h.weight@intel.com>
- <48206188-97e3-1477-87f1-8946320be737@infradead.org>
+        Tue, 15 Nov 2022 08:57:19 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6B41039
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:57:17 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id d6so24505932lfs.10
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:57:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eRDy77pLORMZ/XulovaxWyKY5V8oIS0uLhcTxtOQZjk=;
+        b=ih8E8fklramz2fm/5na93sr2QZeV4xQv9SRXu+nQBgU8zxhPDbkNEZfeBguyCyhN6g
+         8hLDWOItg8pG3YGEQM376J/9kGr3vNLtamH0ulRHB3BPlD31iqsYjllV4YMXi9EU3rc3
+         5p3lDezgSk409+a32ar9zhNxMQbYJSk0xs9KoQaQG3vojprSeNUL7CtnJbeJY46Qlq9r
+         tI/Ca+VE4UopJjOdJrEJtJG6SWFnwWuDk0Z85Jm83eyc+u6KuYcXjB6wcf8a4HN3BAtd
+         AKCnA6I5DOtrS2HVovVaxrvl/HC2eU5ZOfVLKqjIMf3yTXtPTXpdEr6dfArHbUXBwYYT
+         J3rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eRDy77pLORMZ/XulovaxWyKY5V8oIS0uLhcTxtOQZjk=;
+        b=GQPcwl5HbvRjnB5QkXPDKRdfn/QuxfIVQeEhyPuj15mcUVn4gxvsyWv8VTU0F1jLyJ
+         Px84z0m544z1xbuNDSzvTUw9AbRv3m0C24DBoAG++hoP/uJ7rjjRcNMMyaT2vxfxpB0l
+         UvHwBtUOoJbLaRe+0gtMnoi/S6i1+lVozZaOpWxwNPbd8r4AjgId3sPRuDDKMeQQTITq
+         PfmMIcVeIrcHVC7jIt1KYtsE3LmHPE3dXgMenWou959eYlyW5TN9+E+Jq+xnKhy/va1D
+         HV+DtBRquwyBGqw2SPxQpxb16xrmwHDIUCzm8/Tu5d4q6HgMNXhdWeL3hiRe4XmLQoSw
+         8CUg==
+X-Gm-Message-State: ANoB5plGBYWy4Q8UdW5xVP0cnml4uJGV6t5AI2cfl+ifUk+KGD7T9xJ+
+        t4SuVVj+TpjabFTk4G94NL9YoA==
+X-Google-Smtp-Source: AA0mqf7dCyJ6i1FCEJ9EudMl+bRs4RS1CImhCmmrmtULiRsWIYxofVo8G8JZ//VkKlUarOnUPvJhVw==
+X-Received: by 2002:a05:6512:2983:b0:4ae:6bbc:e8af with SMTP id du3-20020a056512298300b004ae6bbce8afmr5360869lfb.411.1668520636293;
+        Tue, 15 Nov 2022 05:57:16 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id d17-20020a2eb051000000b002770e6c620bsm2437751ljl.106.2022.11.15.05.57.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 05:57:15 -0800 (PST)
+Message-ID: <76d3c821-a5c1-952e-dc9a-6f1c2f927139@linaro.org>
+Date:   Tue, 15 Nov 2022 14:57:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <48206188-97e3-1477-87f1-8946320be737@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] arm64: dts: SC7280: Remove unused sleep pin control nodes
+Content-Language: en-US
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        vkoul@kernel.org, agross@kernel.org, andersson@kernel.org,
+        robh+dt@kernel.org, broonie@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_rohkumar@quicinc.com, srinivas.kandagatla@linaro.org,
+        dianders@chromium.org, swboyd@chromium.org, judyhsiao@chromium.org,
+        alsa-devel@alsa-project.org, quic_rjendra@quicinc.com,
+        konrad.dybcio@somainline.org, mka@chromium.org
+References: <1668510598-19535-1-git-send-email-quic_srivasam@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1668510598-19535-1-git-send-email-quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-14 at 17:03:03 -0800, Randy Dunlap wrote:
+On 15/11/2022 12:09, Srinivasa Rao Mandadapu wrote:
+> Remove Unused and redundant sleep pin control entries
+> in herobrine device tree variants.
 > 
-> 
-> On 11/14/22 16:11, Russ Weight wrote:
-> > The secure update driver depends on the firmware-upload functionality of
-> > the firmware-loader. The firmware-loader is carried in the firmware-class
-> > driver which is enabled with the tristate CONFIG_FW_LOADER option. The
-> > firmware-upload functionality is included in the firmware-class driver if
-> > the bool FW_UPLOAD config is set.
-> > 
-> > The current dependency statement, "depends on FW_UPLOAD", is not adequate
-> > because it does not implicitly turn on FW_LOADER. Instead of adding a
-> > dependency, follow the convention used by drivers that require the
-> > FW_LOADER_USER_HELPER functionality of the firmware-loader by using
-> > select for both FW_LOADER and FW_UPLOAD.
-> > 
-> > Fixes: bdf86d0e6ca3 ("fpga: m10bmc-sec: create max10 bmc secure update")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> 
-> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+And these are redundant because... ? E.g. not referenced anywhere thus
+not used?
 
-Applied to for-6.1
+Use subject prefixes matching the subsystem (git log --oneline -- ...).
 
-> 
-> Thanks.
-> 
-> > ---
-> >  drivers/fpga/Kconfig | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-> > index d1a8107fdcb3..6ce143dafd04 100644
-> > --- a/drivers/fpga/Kconfig
-> > +++ b/drivers/fpga/Kconfig
-> > @@ -246,7 +246,9 @@ config FPGA_MGR_VERSAL_FPGA
-> >  
-> >  config FPGA_M10_BMC_SEC_UPDATE
-> >  	tristate "Intel MAX10 BMC Secure Update driver"
-> > -	depends on MFD_INTEL_M10_BMC && FW_UPLOAD
-> > +	depends on MFD_INTEL_M10_BMC
-> > +	select FW_LOADER
-> > +	select FW_UPLOAD
-> >  	help
-> >  	  Secure update support for the Intel MAX10 board management
-> >  	  controller.
-> 
-> -- 
-> ~Randy
+Best regards,
+Krzysztof
+
