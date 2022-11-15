@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6620662A276
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:05:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB9F62A27C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbiKOUFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 15:05:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
+        id S231214AbiKOUHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 15:07:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiKOUFt (ORCPT
+        with ESMTP id S230401AbiKOUHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:05:49 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBC6C77A;
-        Tue, 15 Nov 2022 12:05:47 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id l8so19004016ljh.13;
-        Tue, 15 Nov 2022 12:05:47 -0800 (PST)
+        Tue, 15 Nov 2022 15:07:45 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FB67644
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:07:41 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id l2so14123661pld.13
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:07:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y3n9eTzyovuImpyqmAEmozCytKhOiLUTsASX6dM4moQ=;
-        b=SHSAvtomDRH42ON709sBLl59XSWVsQy34EfQhfVbSa08rIXrY84R4COytoYvMmr1D1
-         e81p11b2gX1IxLp1Wk3EkpuupEzk/0g0oEX+s/Xo9NDE8m7Y/DrAO/I7u/1IQNqQ7brM
-         z7GcVDKVktm0xwphBqywkq2JL0Sl/h/v9YrR/zfFOmyKDg1rGnrI3hYQTexcbuj67QiH
-         2d7TPxNf1woM7AXMXa0qxMhpJl+sDCjl1+WpbKEPOB22Dkw3yERFVMZsq6xKyyzmvog9
-         xMGJv7WgIGWmBi+2AlBz4d4c6vWTcA7c+xO9LI2oe1m94jw589WP/uY5i7EHwlS6RkEv
-         Fr0w==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=j8ZywzlJ9gNLgr5ZzI2h5JaTktuRQJCarasUQLptVEY=;
+        b=dKbzgUC9lipQYhQKT4GhjUAiDdSRWBKVcBbQMPN1V3PUtSgyYPryZTwr9HFhvUN2o3
+         l+mE1qmz9jXdxnv0uPg8+IJtxAZBQN7PJijbWjNp15QBVey2+4hS/ocuX2d3eVna7B5m
+         nzSiOieEFcE+3L2g3syoyQVvA/4QoFPvKIfZnsBIxfIEnufUs0gWG0s3V9AfSO3r8rh4
+         1KrMF2Xp9pigKaQnYqo+VvjioB/XN1Ip0f5vva9Uk64tXaXK2ywSj51lrBKh5T1GOGNd
+         tCmGhva7k2HHPk4BwlZbJm7g+E6l08qN2hpYHYeShL9epGvO+4jYHGxL/FOYWnoQ43a1
+         1+tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y3n9eTzyovuImpyqmAEmozCytKhOiLUTsASX6dM4moQ=;
-        b=Lq1q8ORnzl5Ffx2u5NmyZ2smEv9Qo1pE8BK449OdaqBsRhlYe7ynCSNlhLTfMN8oFg
-         2z53MXXAYs0X37fEDqT9q24eBWpZvviXgN7wgBD3benGy5nYZdfvt/hc17TUF2sWILZJ
-         NX8w8KSBth4odZN4zcX3oWsowUu8jzs+0rkPl9MxW4/bdPusUVySS/RZ9ECHvdYnybEo
-         P1IqfRYm7KGxxlV+EFry5Iqo9eyRP1DVej6eDbSP/KWJIVnIg+36Q9UdFv+RMKd92T2e
-         my4fwKxRPpGhLvg+KSd7H888Ikv0+m6VZznlP2Q8G0/vedqDF9Z32Jo4VL4IMVCiRdIf
-         0FhQ==
-X-Gm-Message-State: ANoB5pngQaBh1x5o5IXbAbD0dxsEcdMGwGauRBrywtiTdNcJmst+pN1M
-        uxexTv1TsFx7kzz3IaLNd6Y=
-X-Google-Smtp-Source: AA0mqf5jt+shThPbnx0wtDVLw2x666FkmDvA0ANREZf/u2AiwQmmMNKF+SrjKK9g7V3hpCfvUArtew==
-X-Received: by 2002:a2e:940a:0:b0:278:ecbe:ebba with SMTP id i10-20020a2e940a000000b00278ecbeebbamr6252965ljh.450.1668542745717;
-        Tue, 15 Nov 2022 12:05:45 -0800 (PST)
-Received: from localhost.localdomain ([78.133.163.249])
-        by smtp.googlemail.com with ESMTPSA id h8-20020ac24da8000000b004ad5f5c2b28sm2308586lfe.119.2022.11.15.12.05.44
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j8ZywzlJ9gNLgr5ZzI2h5JaTktuRQJCarasUQLptVEY=;
+        b=1N90F+qQs+02xPunz0AXHkVrr4gVLzxwh0K6XnPO8YN/dJ0PcEdktoMw5XltAiyKvv
+         H5SPFOpJ6kW/ZmkHIBI/S7wMXE7BNvxhKVE2YvT5AGMaU2g0m0Xr3oyd1tXmQNnX78yR
+         G4UkHt4zf+/JNoX6yvRuvAV/Zad9HbUgpoCzHALrq6LeIQKIlSB1mkcIil58KGRo6jij
+         qRmt31L8GwZb+Z9IDRHPMFO7csev0eMRftEuQIxRxaK4o9doRTJS2+l3xSjtoDmUGsg9
+         vsXoR+rcaWYNEUXhVH6p8q+NKGIK6MZlOgQA9jISnTJKSv3YygNP8yeolgk7ixFMf4vd
+         gd7w==
+X-Gm-Message-State: ANoB5pmAOtdjx6l8DyGvPx2M7FojpN+bhn0JGJtEvW2tUygK+Ujx3zjE
+        GJ+vCzXeNQfTRHCtw+dk52ZfpOY5Kc4EYQ==
+X-Google-Smtp-Source: AA0mqf4UEiJrFW1Ur8F4d6USvMZzw+qUbciplyzqE9PFTAP68TQk9VTB4aIT0vQGLHAv1V0fFTE1bA==
+X-Received: by 2002:a17:902:d70e:b0:185:57b6:13c3 with SMTP id w14-20020a170902d70e00b0018557b613c3mr5632758ply.116.1668542861279;
+        Tue, 15 Nov 2022 12:07:41 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id g11-20020a170902e38b00b00186c3af9644sm10182578ple.273.2022.11.15.12.07.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 12:05:45 -0800 (PST)
-From:   Lukasz Wiecaszek <lukasz.wiecaszek@googlemail.com>
-X-Google-Original-From: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
-To:     Gerd Hoffmann <kraxel@redhat.com>
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] udmabuf: add vmap and vunmap methods to udmabuf_ops
-Date:   Tue, 15 Nov 2022 21:04:26 +0100
-Message-Id: <20221115200426.4801-1-lukasz.wiecaszek@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 15 Nov 2022 12:07:40 -0800 (PST)
+Date:   Tue, 15 Nov 2022 20:07:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     syzbot <syzbot+644848628d5e12d5438c@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, kvm@vger.kernel.org
+Subject: Re: [syzbot] kernel BUG in workingset_activation (2)
+Message-ID: <Y3PxiIMOu+7x89YS@google.com>
+References: <000000000000a2c79f05ed84c7f9@google.com>
+ <20221115112729.1c82988047557e45765cc42d@linux-foundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221115112729.1c82988047557e45765cc42d@linux-foundation.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,93 +74,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The reason behind that patch is associated with videobuf2 subsystem
-(or more genrally with v4l2 framework) and user created
-dma buffers (udmabuf). In some circumstances
-when dealing with V4L2_MEMORY_DMABUF buffers videobuf2 subsystem
-wants to use dma_buf_vmap() method on the attached dma buffer.
-As udmabuf does not have .vmap operation implemented,
-such dma_buf_vmap() natually fails.
+On Tue, Nov 15, 2022, Andrew Morton wrote:
+> On Tue, 15 Nov 2022 08:23:44 -0800 syzbot <syzbot+644848628d5e12d5438c@syzkaller.appspotmail.com> wrote:
+> 
+> > Hello,
+> > 
+> > syzbot found the following issue on:
+> 
+> Thanks.
+> 
+> > HEAD commit:    f4bc5bbb5fef Merge tag 'nfsd-5.17-2' of git://git.kernel.o..
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=16c683d8700000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=5707221760c00a20
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=644848628d5e12d5438c
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1691d2c2700000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16cde752700000
+> > 
+> > Bisection is inconclusive: the issue happens on the oldest tested release.
+> > 
+> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=174c8174700000
+> > final oops:     https://syzkaller.appspot.com/x/report.txt?x=14cc8174700000
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=10cc8174700000
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+644848628d5e12d5438c@syzkaller.appspotmail.com
+> > 
+> >  do_one_initcall+0x103/0x650 init/main.c:1300
+> >  do_initcall_level init/main.c:1373 [inline]
+> >  do_initcalls init/main.c:1389 [inline]
+> >  do_basic_setup init/main.c:1408 [inline]
+> >  kernel_init_freeable+0x6b1/0x73a init/main.c:1613
+> >  kernel_init+0x1a/0x1d0 init/main.c:1502
+> >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+> > ------------[ cut here ]------------
+> > kernel BUG at include/linux/memcontrol.h:470!
+> 
+> That's
+> 
+> 	VM_BUG_ON_FOLIO(folio_test_slab(folio), folio);
+> 
+> in folio_memcg_rcu().
+> 
+> I'll cc the KVM list.
 
-videobuf2_common: __vb2_queue_alloc: allocated 3 buffers, 1 plane(s) each
-videobuf2_common: __prepare_dmabuf: buffer for plane 0 changed
-videobuf2_common: __prepare_dmabuf: failed to map dmabuf for plane 0
-videobuf2_common: __buf_prepare: buffer preparation failed: -14
+Thanks!  Saw this internally, was waiting for it to hit the lists.
 
-The patch itself seems to be strighforward.
-It adds implementation of .vmap and .vunmap methods
-to 'struct dma_buf_ops udmabuf_ops'.
-.vmap method itself uses vm_map_ram() to map pages linearly
-into the kernel virtual address space.
-.vunmap removes mapping created earlier by .vmap.
-All locking and 'vmapping counting' is done in dma_buf.c
-so it seems to be redundant/unnecessary in .vmap/.vunmap.
+I haven't been able to repro the syzkaller test (abuses /dev/bus/usb crud), but
+I believe the issue is that KVM attempts to mark a kmalloc'd page as accessed.
+workingset_activation() doesn't expect this and invokes folio_memcg_rcu() on a
+SLAB page, which triggers the VM_BUG.
 
-Signed-off-by: Lukasz Wiecaszek <lukasz.wiecaszek@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com>
----
-v1: https://lore.kernel.org/linux-media/202211120352.G7WPASoP-lkp@intel.com/T/#t
-v2: https://lore.kernel.org/linux-media/20221114052944.GA7264@thinkpad-p72/T/#t
+I suspect this can be reproduced with a KVM selftest by mapping KVM's own vcpu->run
+memory into the guest.  I'll give that a shot.
 
-v2 -> v3: Added .vunmap to 'struct dma_buf_ops udmabuf_ops'
-v1 -> v2: Patch prepared and tested against 6.1.0-rc2+
+In the meantime...
 
- drivers/dma-buf/udmabuf.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
-
-diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-index 283816fbd72f..740d6e426ee9 100644
---- a/drivers/dma-buf/udmabuf.c
-+++ b/drivers/dma-buf/udmabuf.c
-@@ -13,6 +13,8 @@
- #include <linux/slab.h>
- #include <linux/udmabuf.h>
- #include <linux/hugetlb.h>
-+#include <linux/vmalloc.h>
-+#include <linux/iosys-map.h>
- 
- static int list_limit = 1024;
- module_param(list_limit, int, 0644);
-@@ -60,6 +62,30 @@ static int mmap_udmabuf(struct dma_buf *buf, struct vm_area_struct *vma)
- 	return 0;
- }
- 
-+static int vmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
-+{
-+	struct udmabuf *ubuf = buf->priv;
-+	void *vaddr;
-+
-+	dma_resv_assert_held(buf->resv);
-+
-+	vaddr = vm_map_ram(ubuf->pages, ubuf->pagecount, -1);
-+	if (!vaddr)
-+		return -EINVAL;
-+
-+	iosys_map_set_vaddr(map, vaddr);
-+	return 0;
-+}
-+
-+static void vunmap_udmabuf(struct dma_buf *buf, struct iosys_map *map)
-+{
-+	struct udmabuf *ubuf = buf->priv;
-+
-+	dma_resv_assert_held(buf->resv);
-+
-+	vm_unmap_ram(map->vaddr, ubuf->pagecount);
-+}
-+
- static struct sg_table *get_sg_table(struct device *dev, struct dma_buf *buf,
- 				     enum dma_data_direction direction)
- {
-@@ -162,6 +188,8 @@ static const struct dma_buf_ops udmabuf_ops = {
- 	.unmap_dma_buf	   = unmap_udmabuf,
- 	.release	   = release_udmabuf,
- 	.mmap		   = mmap_udmabuf,
-+	.vmap		   = vmap_udmabuf,
-+	.vunmap		   = vunmap_udmabuf,
- 	.begin_cpu_access  = begin_cpu_udmabuf,
- 	.end_cpu_access    = end_cpu_udmabuf,
- };
--- 
-2.25.1
-
+#sys test https://github.com/sean-jc/linux.git x86/no_slab_accessed
