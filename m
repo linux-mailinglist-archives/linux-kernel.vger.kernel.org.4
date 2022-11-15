@@ -2,106 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86411629D9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC35629DA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbiKOPdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:33:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
+        id S238211AbiKOPe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:34:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiKOPc6 (ORCPT
+        with ESMTP id S236982AbiKOPeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:32:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A57273D;
-        Tue, 15 Nov 2022 07:32:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3424A6186A;
-        Tue, 15 Nov 2022 15:32:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85459C433C1;
-        Tue, 15 Nov 2022 15:32:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668526376;
-        bh=1L1PU7LcHMQLmP0fJq+V++VPtvtxdQUZkoNlMGwb9ak=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=vRNceK0H3tC4sH60FIUi3KHtxLfKL2+LlqanFddHdF0qPXoEuTLRIc+/jPZcnPbGk
-         Sa+DKJEqt8k6gL3fB8fuPq4lEk/xKDhK9oboCgkFrj+d8+dDwtvbld9VQVD/Kque37
-         UGHbwcpfFe6VJ/Up0MDBKzUojO/m7YYPPxmaVsneLaWfgLN9+8JkNTsiNSgkqyfkIQ
-         y8lG7JU5lOZ9uBhuCvCMEVAgu/plH0LNibtWTSiTodcDNjmUUd/48UjG214HX1Ymvd
-         ZyyEoxH1SdjHzgQx75l26nb5TCMu8qsQcSBkUxDfyvDUSmT5Zvq7ZkYJ/wJzP1ljJR
-         VnkyHbjxKfeLg==
-Date:   Tue, 15 Nov 2022 16:32:53 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH hid v12 00/15] Introduce eBPF support for HID devices
-In-Reply-To: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
-Message-ID: <nycvar.YFH.7.76.2211151631060.6045@cbobk.fhfr.pm>
-References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Tue, 15 Nov 2022 10:34:17 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC39EE30
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:34:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=sxGFQMeIhmiADf7XT/hfP3/fl66vCfyr7KNcTxTSahk=; b=pDLDle0nI2/AsXnoP2GYP+wNYJ
+        wPsR0T3wtRbArJdicK/gvA7whIq13PfcZuzydEU3wP28H+SFgHhUMEP1hOLqJtU/+xQrOZavMZeir
+        hOO/01Zbg4zXc0jteeBYrtOO9m5i7Q3sevGWopTXy5feDpcV3lSHylUjq7BQ2i1Rbh2j4aiCFmShz
+        GKNcsq8acO6uOkmT7vdlR3KSPaG7emwcvfQ+7jFugHZ+eWAcrXf4Wx6ZZ8Qdvm/XhKVkVlLMBTyeP
+        SOpMvpzT9Uj0d4Lv+HINgGWUZLCKcxOdaNyB6FJQQcMSst44AFLX6kpoN/w1sBXgmhKfszKg3Y13k
+        lFxK8BDg==;
+Received: from [179.232.147.2] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ouxwX-001IcX-29; Tue, 15 Nov 2022 16:33:45 +0100
+Message-ID: <abf9feef-443f-fcfa-952c-0123e61b280d@igalia.com>
+Date:   Tue, 15 Nov 2022 12:33:38 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v3 0/3] x86/crash: Fix double NMI shootdown bug
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>, x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+References: <20221114233441.3895891-1-seanjc@google.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20221114233441.3895891-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Nov 2022, Benjamin Tissoires wrote:
+On 14/11/2022 20:34, Sean Christopherson wrote:
+> [...]
+> v3:
+>   - Re-collect Guilherme's Tested-by.
+>   - Tweak comment in patch 1 to reference STGI instead of CLGI.
+>   - Celebrate this series' half-birthday.
 
-> Hi,
-> 
-> and here comes the v12 of the HID-BPF series.
-> 
-> Again, for a full explanation of HID-BPF, please refer to the last patch
-> in this series (15/15).
-> 
-> This revision contains most notably few fixes from the various kernel CI
-> bots. I also took Alexei's review into account, and we do not pollute
-> tools/include with useless hid headers.
-> 
-> I also removed most of the last checkpatch complains about adding
-> external kfunc declarations in C files. And this led me to also show in
-> samples/ how we can link together 2 BPF object files. Impressive how
-> easy it is :)
-> 
-> Cheers,
-> Benjamin
-> 
-> Benjamin Tissoires (15):
->   HID: fix I2C_HID not selected when I2C_HID_OF_ELAN is
->   HID: Kconfig: split HID support and hid-core compilation
->   HID: initial BPF implementation
->   selftests: add tests for the HID-bpf initial implementation
->   HID: bpf jmp table: simplify the logic of cleaning up programs
->   HID: bpf: allocate data memory for device_event BPF programs
->   selftests/hid: add test to change the report size
->   HID: bpf: introduce hid_hw_request()
->   selftests/hid: add tests for bpf_hid_hw_request
->   HID: bpf: allow to change the report descriptor
->   selftests/hid: add report descriptor fixup tests
->   selftests/hid: Add a test for BPF_F_INSERT_HEAD
->   samples/hid: add new hid BPF example
->   samples/hid: add Surface Dial example
->   Documentation: add HID-BPF docs
+Heheh
 
-This (apart from the first patch, which I've carved out into the fixes 
-branch) is now in hid.git#for-6.2/hid-bpf
+Thanks a lot for persisting with this Sean, much appreciated! I'm
+surprised on how long is taking to get these _fixes_ merged in the
+kernel, hence your effort is very valuable =)
 
-Thanks a lot for all the effort invested into this, Benjamin!
+Cheers,
 
--- 
-Jiri Kosina
-SUSE Labs
 
+Guilherme
