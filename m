@@ -2,57 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B418629ADA
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:42:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D52629ADD
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:43:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238450AbiKONmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:42:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
+        id S238415AbiKONnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:43:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiKONmf (ORCPT
+        with ESMTP id S229747AbiKONm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:42:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D896186E2;
-        Tue, 15 Nov 2022 05:42:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6EC36177F;
-        Tue, 15 Nov 2022 13:42:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72EEEC433D6;
-        Tue, 15 Nov 2022 13:42:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668519753;
-        bh=xHg3G395U98Mtabx7NVsrASIF/dX0dl0qNOXLK3KOTI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=liQxIWNpicfA25wBWONZ7cL9EJvz3sxD4CNmKzpBV3aybNTotJhJrQhrUukDkuzEL
-         97siY3fsyD9xazMtE8tH+DDLR6k86yuO75G4xm35SXUFG3mWgLjl4Uhm0velhlPHB1
-         wwaFlte4uekp2sTAE4kz234fiY+hCARhibqDWwlngg1e7kywNxuUvDEBaeEJhWypNh
-         2kffWPG7vL+2bKYfOxSVVmiIEhLVWhMVxP53vQvHs2JeQwS7JpjQf2GfUbnWmc9AOV
-         /NoHbZ8zupGdw9t382H4VSs4aKXGGMMU0ubTlkFTLRPpblyEgt5ltYL/+DXDAJ1zb0
-         XsFyX+wUy7oSA==
-Date:   Tue, 15 Nov 2022 13:42:27 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        catalin.marinas@arm.com, Suzuki K Poulose <suzuki.poulose@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mark Rutland <mark.rutland@arm.com>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH V2 2/2] arm64: errata: Workaround possible Cortex-A715
- [ESR|FAR]_ELx corruption
-Message-ID: <20221115134226.GD524@willie-the-truck>
-References: <20221113012645.190301-1-anshuman.khandual@arm.com>
- <20221113012645.190301-3-anshuman.khandual@arm.com>
- <20221115133854.GC524@willie-the-truck>
+        Tue, 15 Nov 2022 08:42:58 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D831B1E5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:42:57 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id t10so17588628ljj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:42:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fCqAsBzIYqwnKg+sxRUK0clUHkV80l++z9LwleH3TLc=;
+        b=AUHd9Vl5XP7LwggKtY0uN5sgsYZiCX11QgiYSD/c+2+rtQ6+Jout/Ghg6QdWN2Qbo9
+         x5sSBRJ5fWqochfRzBHxwpEJ3eWCKo0vZ0EJkYX0sXssEZul7nrA+GuFTiRVN+Cc+drY
+         zGeVJUBf4HXYPi+Ry4d0vSfJWJznx2ZPxGh9CAA+98EdXmjm17QHoPIHllnON+AA1NXp
+         QJZmkTvQJUALIfdpm/INLAuq6SFbvq75Z2AYmM7cLD9I5q5qVrcWZ9hPZpbJ/T6fljgw
+         CPm00n1HJQDmrJG8PqqJxutx3LaeUVa0R4f7IFQ6q9VZPQVnSDtV+kEn+Zw5muVgjdRR
+         USgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fCqAsBzIYqwnKg+sxRUK0clUHkV80l++z9LwleH3TLc=;
+        b=6YMfSjeE+pGoYSmBxy6YPDUF7a9yAulF2e2t3FVuruec/BMQouaEdiPdKANfjIh4Ez
+         6x/86fBd52SDdAIXZZF6jD5AKlk8husmYbRTbeg48mrE/iCG9IXzVHLcreE1uBiX5z8R
+         IlI4I3uLKtd9GgHL7YPfF94bq2KSL0rhz2edCbia8UUxYoebzBjGW5Y6uxIE+IQzYEID
+         rnmDwUgNpjRiGNt3mcIw0F5RqI4JbAyM68sfTXBfpO161jXxvOBzGw+KmQPr5oQPzeR3
+         WB5Dze9wYbwuetAHKL/6y8MikSKagm1PuE9NnIz7kf2fv63FdMwnqaiYQBdvYbRgbp5z
+         rQDw==
+X-Gm-Message-State: ANoB5plNegi5Tfki/c4Sodfx4j7DapcSXZ/sUZHtdT0psoIerCbcEwqu
+        fZ/jUoobde7chzkkYlj97WlXXw==
+X-Google-Smtp-Source: AA0mqf4jM/aaIEgxVl/vgYByJ08SwHmGqaXCY2GmD+dfUWrVFiHIuOPXAH4wPeBOtq/q5Y2zoAogbA==
+X-Received: by 2002:a2e:9a88:0:b0:276:b134:b04c with SMTP id p8-20020a2e9a88000000b00276b134b04cmr5684299lji.492.1668519775520;
+        Tue, 15 Nov 2022 05:42:55 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id d13-20020ac244cd000000b004ac980a1ba1sm2215836lfm.24.2022.11.15.05.42.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 05:42:55 -0800 (PST)
+Message-ID: <fed78af8-015b-e57d-76c7-68c8ba317952@linaro.org>
+Date:   Tue, 15 Nov 2022 14:42:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221115133854.GC524@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH v2 06/12] drm/msm: Add support for SM8350
+To:     Robert Foss <robert.foss@linaro.org>, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        quic_kalyant@quicinc.com, swboyd@chromium.org,
+        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
+        quic_khsieh@quicinc.com, quic_vpolimer@quicinc.com,
+        vkoul@kernel.org, dianders@chromium.org,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
+        vinod.koul@linaro.org, quic_jesszhan@quicinc.com,
+        andersson@kernel.org
+References: <20221115133105.980877-1-robert.foss@linaro.org>
+ <20221115133105.980877-7-robert.foss@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221115133105.980877-7-robert.foss@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,85 +85,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 01:38:54PM +0000, Will Deacon wrote:
-> On Sun, Nov 13, 2022 at 06:56:45AM +0530, Anshuman Khandual wrote:
-> > If a Cortex-A715 cpu sees a page mapping permissions change from executable
-> > to non-executable, it may corrupt the ESR_ELx and FAR_ELx registers, on the
-> > next instruction abort caused by permission fault.
-> > 
-> > Only user-space does executable to non-executable permission transition via
-> > mprotect() system call which calls ptep_modify_prot_start() and ptep_modify
-> > _prot_commit() helpers, while changing the page mapping. The platform code
-> > can override these helpers via __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION.
-> > 
-> > Work around the problem via doing a break-before-make TLB invalidation, for
-> > all executable user space mappings, that go through mprotect() system call.
-> > This overrides ptep_modify_prot_start() and ptep_modify_prot_commit(), via
-> > defining HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION on the platform thus giving
-> > an opportunity to intercept user space exec mappings, and do the necessary
-> > TLB invalidation. Similar interceptions are also implemented for HugeTLB.
-> > 
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Jonathan Corbet <corbet@lwn.net>
-> > Cc: Mark Rutland <mark.rutland@arm.com>
-> > Cc: linux-arm-kernel@lists.infradead.org
-> > Cc: linux-doc@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> > ---
-> >  Documentation/arm64/silicon-errata.rst |  2 ++
-> >  arch/arm64/Kconfig                     | 16 ++++++++++++++++
-> >  arch/arm64/include/asm/hugetlb.h       |  9 +++++++++
-> >  arch/arm64/include/asm/pgtable.h       |  9 +++++++++
-> >  arch/arm64/kernel/cpu_errata.c         |  7 +++++++
-> >  arch/arm64/mm/hugetlbpage.c            | 21 +++++++++++++++++++++
-> >  arch/arm64/mm/mmu.c                    | 21 +++++++++++++++++++++
-> >  arch/arm64/tools/cpucaps               |  1 +
-> >  8 files changed, 86 insertions(+)
-> 
-> [...]
-> 
-> > diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-> > index 9a7c38965154..c1fb0ce1473c 100644
-> > --- a/arch/arm64/mm/mmu.c
-> > +++ b/arch/arm64/mm/mmu.c
-> > @@ -1702,3 +1702,24 @@ static int __init prevent_bootmem_remove_init(void)
-> >  }
-> >  early_initcall(prevent_bootmem_remove_init);
-> >  #endif
-> > +
-> > +pte_t ptep_modify_prot_start(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep)
-> > +{
-> > +	if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_2645198)) {
-> > +		pte_t pte = READ_ONCE(*ptep);
-> > +		/*
-> > +		 * Break-before-make (BBM) is required for all user space mappings
-> > +		 * when the permission changes from executable to non-executable
-> > +		 * in cases where cpu is affected with errata #2645198.
-> > +		 */
-> > +		if (pte_user_exec(pte) && cpus_have_const_cap(ARM64_WORKAROUND_2645198))
-> > +			return ptep_clear_flush(vma, addr, ptep);
-> > +	}
-> > +	return ptep_get_and_clear(vma->vm_mm, addr, ptep);
-> > +}
-> > +
-> > +void ptep_modify_prot_commit(struct vm_area_struct *vma, unsigned long addr, pte_t *ptep,
-> > +			     pte_t old_pte, pte_t pte)
-> > +{
-> > +	__set_pte_at(vma->vm_mm, addr, ptep, pte);
-> > +}
-> 
-> So these are really similar to the generic copies and, in looking at
-> change_pte_range(), it appears that we already invalidate the TLB, it just
-> happens _after_ writing the new version.
-> 
-> So with your change, I think we end up invalidating twice. Can we instead
-> change the generic code to invalidate the TLB before writing the new entry?
 
-Bah, scratch that, the invalidations are all batched, aren't they?
 
-It just seems silly that we have to add all this code just to do a TLB
-invalidation.
+On 15/11/2022 14:30, Robert Foss wrote:
+> Add compatibles string, "qcom,sm8350-mdss", for the multimedia display
+> subsystem unit used on Qualcomm SM8350 platform.
+> 
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> ---
+>   drivers/gpu/drm/msm/msm_mdss.c | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
+> index a2264fb517a1..39746b972cdd 100644
+> --- a/drivers/gpu/drm/msm/msm_mdss.c
+> +++ b/drivers/gpu/drm/msm/msm_mdss.c
+> @@ -293,6 +293,9 @@ static int msm_mdss_enable(struct msm_mdss *msm_mdss)
+>   		/* UBWC_2_0 */
+>   		msm_mdss_setup_ubwc_dec_20(msm_mdss, 0x1e);
+>   		break;
+> +	case DPU_HW_VER_700:
+> +		msm_mdss_setup_ubwc_dec_40(msm_mdss, UBWC_4_0, 6, 1, 1, 1);
+> +		break;
+Shouldn't the second-last argument be 2 or 3 depending on DDR type?
 
-Will
+Konrad
+>   	case DPU_HW_VER_720:
+>   		msm_mdss_setup_ubwc_dec_40(msm_mdss, UBWC_3_0, 6, 1, 1, 1);
+>   		break;
+> @@ -530,6 +533,7 @@ static const struct of_device_id mdss_dt_match[] = {
+>   	{ .compatible = "qcom,sc8180x-mdss" },
+>   	{ .compatible = "qcom,sm8150-mdss" },
+>   	{ .compatible = "qcom,sm8250-mdss" },
+> +	{ .compatible = "qcom,sm8350-mdss" },
+>   	{ .compatible = "qcom,sm8450-mdss" },
+>   	{}
+>   };
