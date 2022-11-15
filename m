@@ -2,110 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECEEF629C3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C347629C4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbiKOOjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 09:39:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
+        id S232856AbiKOOlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 09:41:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiKOOjJ (ORCPT
+        with ESMTP id S230112AbiKOOky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 09:39:09 -0500
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BE81D66B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:39:08 -0800 (PST)
-Received: by mail-vs1-xe30.google.com with SMTP id a6so10597722vsc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:39:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=82y7Gjoh2vK/1hHEVfyS2/5SQLrPaHEAMPh1kMxO3wM=;
-        b=mqJ1+QmOHWvrC0IxHuIXatvVLI93FpamLigCyK+aAt/S5wbZNxxCTLQxMfPWSWLdn9
-         BajYVIAO4kGz8zNkLDVJEL+oJ0K7+Pp2QaRmcENFaHXwj3/c3GToSV9BpHwxrZKSDg2K
-         BNalKlNy2yFpj5iIFDc/ADGChLxrVkl8YSxaAJYS9UysM0GFWaKibFADjnWmTY5qbpYV
-         /8/b084DDBSoBsHF8nh73cRR9ThrtAF8A9Q2uIKa09uiYd7yL3ov9lrgsBX8Kejq++fo
-         kRFGUaTz+tyXfotujUk3HK4DBZvokrgjzfO/kB7KMnRyqtqEjn3sqA59IErx+xqnjh7h
-         sugA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=82y7Gjoh2vK/1hHEVfyS2/5SQLrPaHEAMPh1kMxO3wM=;
-        b=d7z+i02Fnrf8bvaw+lma+kJJ1lUc7nsH9a5/Hvr1jU/utFd7wjLH38REtbKXB5fjMJ
-         g0AJJy9WjRVUTpQF4oXZTlf7yAI65JXajVn9/wUSlhLFIkFigH2fNWytcBVGFWCuV1Xo
-         TFDjF0o4dsaMfArA1cjT9hBr1ps1rORwcRN/Cta4PEL6HMbV6lRc8Yx6kycQkthSxnqR
-         sMWPT8gzMoDurtUmEUn2pAkIWyb1nQsTxrzZbP1UQS3X6fgLZe5r6OIqouLKBf0lZL/j
-         5b6bdGXbw616zKE1SNScCgIe7Lqc4EzIdAT5Y0LsLewP1isaFFv0fmNeFoK1JIrp/Uok
-         S9GA==
-X-Gm-Message-State: ANoB5pmZs/ToIOOR1JYU+jyjsokYpvCN8WKGOpMz3+iVpAHqg7adHO9O
-        qsezvOsgFfGodr2xpguCgER3ZIH4hPXu5F/Bp9LeAg==
-X-Google-Smtp-Source: AA0mqf5wQmk1dnhyYOMbsRbwTOYYUMqp2dVn2qBKxjyAGgyzV3SUejNPUFC1JBbWy2ZAwOhdWipJwmoKEn1mkMtANKI=
-X-Received: by 2002:a05:6102:488:b0:3ac:38c7:1bdd with SMTP id
- n8-20020a056102048800b003ac38c71bddmr8814757vsa.9.1668523148092; Tue, 15 Nov
- 2022 06:39:08 -0800 (PST)
+        Tue, 15 Nov 2022 09:40:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2B01FCCF;
+        Tue, 15 Nov 2022 06:40:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E488A617D2;
+        Tue, 15 Nov 2022 14:40:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 498EEC433D6;
+        Tue, 15 Nov 2022 14:40:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668523252;
+        bh=tdOVhDzSZ5XpNzRfzXTMWRYvcJkVvDoiknCPxpwBlwI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hTNobZL8u/a5/wx3FwlAD+koJZ+rozFrtBXSZ1niM4JNhb0YpuH8sv8RbLJpwABf1
+         N67nTEK0wuc0EgfJuCNswZBfNZZ7WJULePeWk8mqBKhm68JwiKSZ7cwmdp9+CjZuwB
+         X4uCAcWwmebqJyo6CCQ4cBCkv2BGOru+LeKP11aNWpZkq9Db+Duno+Vz5WspYLRa2e
+         I/JAlvwbH5GXkKRu1hmyw3h4EALGO7ASxu6wMuRrQ0XopnY3bwiaiU0XXIwAZhB0PO
+         q/dmaU39q7A432vE6qbe6/itgq8s28VbkYC7y/eDYShd+HVjRPF3iIMcBahAhqCu3/
+         LOFbb4c2WOvdA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1oux6r-0000fE-QI; Tue, 15 Nov 2022 15:40:22 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH v2 00/15] phy: qcom-qmp-combo: fix sc8280xp binding (set 3/3)
+Date:   Tue, 15 Nov 2022 15:39:50 +0100
+Message-Id: <20221115144005.2478-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-References: <20221111113732.461881-1-thierry.reding@gmail.com>
-In-Reply-To: <20221111113732.461881-1-thierry.reding@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 15 Nov 2022 15:38:57 +0100
-Message-ID: <CAMRc=MfTCb5G0OHxnW=wwpP2u=VbhS_-dH=N7vdY8pq6U030jg@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: of: Use correct fwnode for DT-probed chips
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 12:37 PM Thierry Reding
-<thierry.reding@gmail.com> wrote:
->
-> From: Thierry Reding <treding@nvidia.com>
->
-> The OF node store in chip->fwnode is used to explicitly override the FW
-> node for a GPIO chip. For chips that use the default FW node (i.e. that
-> of their parent device), this will be NULL and cause the chip not to be
-> fully registered.
->
-> Instead, use the GPIO device's FW node, which is set to either the node
-> of the parent device or the explicit override in chip->fwnode.
->
-> Fixes: 8afe82550240 ("gpiolib: of: Prepare of_gpiochip_add() / of_gpiochip_remove() for fwnode")
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> ---
->  drivers/gpio/gpiolib-of.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
-> index 4be3c21aa718..55c3712592db 100644
-> --- a/drivers/gpio/gpiolib-of.c
-> +++ b/drivers/gpio/gpiolib-of.c
-> @@ -1067,7 +1067,7 @@ int of_gpiochip_add(struct gpio_chip *chip)
->         struct device_node *np;
->         int ret;
->
-> -       np = to_of_node(chip->fwnode);
-> +       np = to_of_node(dev_fwnode(&chip->gpiodev->dev));
->         if (!np)
->                 return 0;
->
-> --
-> 2.38.1
->
+This series fixes the USB-DP PHY devicetree binding for SC8280XP and
+adds support for the new updated binding to the driver.
 
-Applied, thanks!
+As the full series including the preparatory parts is over forty patches
+and I've been posting this in three parts of which this is the last one.
+In an effort to get all of these into 6.2, I've also submitted all three
+series before waiting for the previous ones to be applied. Parts one and
+two can be found here:
 
-Bart
+  https://lore.kernel.org/lkml/20221114081346.5116-1-johan+linaro@kernel.org/
+  https://lore.kernel.org/lkml/20221114110621.4639-1-johan+linaro@kernel.org/
+
+This last series adds a new binding for SC8280XP that drops the legacy
+child node and the (incomplete) description of register subregions.
+
+As the current bindings are both incomplete and incorrect it may be
+a good idea to update also the other platforms currently supported by
+this driver to the new binding scheme. The driver can support both
+schemes during a transition period before removing the corresponding
+code (dt parsing and clock-provider registration).
+
+Johan
+
+
+Changes in v2:
+ - drop quotes from old DT schema $id and $schema (Krzysztof)
+ - drop clock-output-names from new binding (Krzysztof)
+ - add QMP clock and PHY index constants in a new header
+ - drop patch moving clock registration before runtime PM enable (Dmitry)
+ - include also the corresponding dts changes
+
+
+Johan Hovold (15):
+  dt-bindings: phy: qcom,qmp-usb3-dp: rename current bindings
+  dt-bindings: phy: qcom,qmp-usb3-dp: fix sc8280xp binding
+  phy: qcom-qmp-combo: drop v4 reference-clock source
+  phy: qcom-qmp-combo: restructure PHY creation
+  phy: qcom-qmp-combo: generate pipe clock name
+  phy: qcom-qmp-combo: drop redundant clock structure
+  phy: qcom-qmp-combo: drop redundant clock allocation
+  phy: qcom-qmp-combo: add clock registration helper
+  phy: qcom-qmp-combo: separate clock and provider registration
+  phy: qcom-qmp-combo: clean up DP clock callbacks
+  phy: qcom-qmp-combo: rename common-register pointers
+  phy: qcom-qmp-combo: rename DP_PHY register pointer
+  phy: qcom-qmp-combo: add support for updated sc8280xp binding
+  arm64: dts: qcom: sc8280xp: fix primary USB-DP PHY reset
+  arm64: dts: qcom: sc8280xp: fix USB-DP PHY nodes
+
+ ....yaml => qcom,sc7180-qmp-usb3-dp-phy.yaml} |  25 +-
+ .../phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml    |  99 ++++
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  79 +--
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c     | 530 +++++++++++-------
+ include/dt-bindings/phy/phy-qcom-qmp.h        |  20 +
+ 5 files changed, 473 insertions(+), 280 deletions(-)
+ rename Documentation/devicetree/bindings/phy/{qcom,qmp-usb3-dp-phy.yaml => qcom,sc7180-qmp-usb3-dp-phy.yaml} (91%)
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
+ create mode 100644 include/dt-bindings/phy/phy-qcom-qmp.h
+
+-- 
+2.37.4
+
