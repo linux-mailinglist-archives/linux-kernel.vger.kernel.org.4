@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52ED962ADEE
+	by mail.lfdr.de (Postfix) with ESMTP id A085C62ADEF
 	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbiKOWMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 17:12:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
+        id S238403AbiKOWMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 17:12:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiKOWLz (ORCPT
+        with ESMTP id S231978AbiKOWL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:11:55 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AB1303F8;
-        Tue, 15 Nov 2022 14:11:54 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id gw22so14757890pjb.3;
-        Tue, 15 Nov 2022 14:11:54 -0800 (PST)
+        Tue, 15 Nov 2022 17:11:58 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D183120C;
+        Tue, 15 Nov 2022 14:11:56 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id d13-20020a17090a3b0d00b00213519dfe4aso427645pjc.2;
+        Tue, 15 Nov 2022 14:11:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WMGCOoya80Yh9qZLv453WUxet4tv4AcyXFF/KHbcD0s=;
-        b=VrAItYOOcUcnfIpE0RT5T8tL0J0dqo2B7Lv2zbYjRBB9Lp2rIr1gBiM1pvxGJXfr7m
-         uZGO9agr4dNhf0wDT+REyzcNKZvxa7QHCmQ7AVM4yjedgQyes7LhCuAb6d9n9893Iqh9
-         oxgDnepdLbqaNUapW38UiqBxUxPVRv71V/YhvlI1i14PrEEPeWvpG6ng2czmvzcz+XmQ
-         BuiU0h/wrrhqP8j0yLICy+5MdAEIJw6i4NcVUZ7vpJSEUUAoMBZDN1FuqAHFLuCPxbRi
-         XmsFnQNHlrgruk9BBr0mW0L6ORbqkJBbREYdjTub/TGApQ6N617zuGoge5LzKh7oi0kO
-         PyPw==
+        bh=OrZfenAnf9sYON4n47hNey76ONHNUDUWnON3//izvEc=;
+        b=kiQkSeD9f7oaGu/M9BkH6RjD6Au08SNhthZGu5aQbxMFaUJ5W7YNSXB7Y5t4fx2EN5
+         FD/kK2AToQ6cOJeISWZ+H/U9ixFbaJbdlp+noFxYE3AbnaXIGFBYBo3fEaAMxqaz+fjs
+         GEb3zHIQSlXeJpslI8BBRyoRnwYfuGSKzB9sXlwcMxku7qGoby//GhXV4pJ7dgney+WQ
+         yGS/VNqUR91DmxqRz1g+JK/kRclX9jcE/hl6rVn6DvjcqKXjvMPf9yilCwl+s7U1Wpji
+         rBkPsmYXV/7zTu56lTk+r+M372/7FaP7VlGwTPtpAxv1hyOOKMa6arR10oY8KxkudKyE
+         Mf2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WMGCOoya80Yh9qZLv453WUxet4tv4AcyXFF/KHbcD0s=;
-        b=waL4AohePqMYDmJRySDsHJWHHT9Zs0/9trK8qXsu8wi6Eigyx/2sKv/GGvjKHdV0v5
-         79bonWTIgSrW5/nUultdpsws47bw1R30jSPGK2nnZXJNPARGj+CX1NZSBYK8TO3VqW3W
-         SrbPtSIhdH3TLAjN2kzyv1rN9hQCWbq336h38qMw54H94s8Y4tjuRbdlToeQkp/oZkxh
-         s9HnbRIAhOGEpSeFqsZV9bEyLdr5zo3CbfeJk0vW9TvRF4iL2dnPkFSbXatrQVoiJ1/1
-         ZzoJDOpE+Od6PX5hF+hAGJi9GXO+1rHeKkqGdd7bTXWe0a43h/Owt/AJTMRbvZ9u3EH7
-         wz4Q==
-X-Gm-Message-State: ANoB5pl0ORYz6UefZGHyhfO83MW+bu5FMpHvY5TbJzA9LwXflQVrpvZs
-        gaUEpIqIWJ8AGgvVm+UV43ThTq/98jk=
-X-Google-Smtp-Source: AA0mqf5qNZ0cFI/wDaFRqHE56f9+p0F0elAX863apkQcUtBc69KSE6mb7bg6PTNh5/BgvKxUfw9bXw==
-X-Received: by 2002:a17:902:e741:b0:188:572c:b9c3 with SMTP id p1-20020a170902e74100b00188572cb9c3mr6162956plf.53.1668550314211;
-        Tue, 15 Nov 2022 14:11:54 -0800 (PST)
+        bh=OrZfenAnf9sYON4n47hNey76ONHNUDUWnON3//izvEc=;
+        b=MP3X3CZ2bV5tpHJvYdBknV4AqZSH80tIWQS7KcCroazXn3m9KosnBet4vTf3eaCEeG
+         UK12klM3Y2RCcuUUgS9LZ4AHPjC29SzPm3giG/lvVwX+K82ldNDu+LJCzRRXo9dA9sDf
+         zLZpzlX+V1E3XcXRCsQvgooQiMa60oOoWKQg1wD2JwTAL7gKkEGrWSVrSXjSF4xPV9dm
+         yUJGwYfA0rNitpKkCV8T3CZjJbGlkXW2sS1z/VAnCPABvDVVM0fr4K4WarpQ7N5aMwfk
+         JDKFB/Hb6w68H/T43wJ58Pqa244aJU14qCweYs+EY9AteAmv95Hj+lqE05WDKr5vkklx
+         HgLw==
+X-Gm-Message-State: ANoB5pnihnFt658EVT5N4OsPNK6TyMz9UrgRedrcJ9kp0fNLeEwfugUP
+        ijsTbxnzhG6mDLxCS40QJ4M=
+X-Google-Smtp-Source: AA0mqf5Ki380Wv+k6C4x2tLurD5R1ak3fttiGubwrqktPB2Ra0P8GdTzgDocjTLRs7Dtz1B9cYMyRA==
+X-Received: by 2002:a17:902:76c5:b0:187:282c:9b95 with SMTP id j5-20020a17090276c500b00187282c9b95mr6140760plt.41.1668550316213;
+        Tue, 15 Nov 2022 14:11:56 -0800 (PST)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:2d36:e9a0:170b:669f])
-        by smtp.gmail.com with ESMTPSA id y1-20020a17090264c100b00178b6ccc8a0sm10400038pli.51.2022.11.15.14.11.52
+        by smtp.gmail.com with ESMTPSA id y1-20020a17090264c100b00178b6ccc8a0sm10400038pli.51.2022.11.15.14.11.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 14:11:53 -0800 (PST)
+        Tue, 15 Nov 2022 14:11:55 -0800 (PST)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
         Andrzej Hajda <andrzej.hajda@intel.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 3/4] media: i2c: s5c73m3: remove support for platform data
-Date:   Tue, 15 Nov 2022 14:11:44 -0800
-Message-Id: <20221115221145.2550572-3-dmitry.torokhov@gmail.com>
+Subject: [PATCH 4/4] media: i2c: s5c73m3: switch to using gpiod API
+Date:   Tue, 15 Nov 2022 14:11:45 -0800
+Message-Id: <20221115221145.2550572-4-dmitry.torokhov@gmail.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 In-Reply-To: <20221115221145.2550572-1-dmitry.torokhov@gmail.com>
 References: <20221115221145.2550572-1-dmitry.torokhov@gmail.com>
@@ -74,177 +74,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no existing users of s5c73m3_platform_data in the tree, and
-new users shoudl either be using device tree, ACPI, or static device
-properties, so let's remove it from the driver.
+This patch switches the driver away from legacy gpio/of_gpio API to
+gpiod API, and removes use of of_get_named_gpio_flags() which I want to
+make private to gpiolib.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- drivers/media/i2c/s5c73m3/s5c73m3-core.c  | 19 ++------
- drivers/media/i2c/s5c73m3/s5c73m3-ctrls.c |  2 -
- drivers/media/i2c/s5c73m3/s5c73m3.h       |  6 ++-
- include/media/i2c/s5c73m3.h               | 56 -----------------------
- 4 files changed, 9 insertions(+), 74 deletions(-)
- delete mode 100644 include/media/i2c/s5c73m3.h
+ drivers/media/i2c/s5c73m3/s5c73m3-core.c | 63 +++++++-----------------
+ drivers/media/i2c/s5c73m3/s5c73m3.h      |  7 +--
+ 2 files changed, 20 insertions(+), 50 deletions(-)
 
 diff --git a/drivers/media/i2c/s5c73m3/s5c73m3-core.c b/drivers/media/i2c/s5c73m3/s5c73m3-core.c
-index d96ba58ce1e5..561c1a1583ac 100644
+index 561c1a1583ac..f1e073ed5f99 100644
 --- a/drivers/media/i2c/s5c73m3/s5c73m3-core.c
 +++ b/drivers/media/i2c/s5c73m3/s5c73m3-core.c
-@@ -27,7 +27,6 @@
- #include <media/v4l2-device.h>
- #include <media/v4l2-subdev.h>
- #include <media/v4l2-mediabus.h>
--#include <media/i2c/s5c73m3.h>
- #include <media/v4l2-fwnode.h>
- 
- #include "s5c73m3.h"
-@@ -1592,26 +1591,16 @@ static int s5c73m3_parse_gpios(struct s5c73m3 *state)
- 	return 0;
- }
- 
--static int s5c73m3_get_platform_data(struct s5c73m3 *state)
-+static int s5c73m3_get_dt_data(struct s5c73m3 *state)
- {
- 	struct device *dev = &state->i2c_client->dev;
--	const struct s5c73m3_platform_data *pdata = dev->platform_data;
- 	struct device_node *node = dev->of_node;
- 	struct device_node *node_ep;
- 	struct v4l2_fwnode_endpoint ep = { .bus_type = 0 };
- 	int ret;
- 
--	if (!node) {
--		if (!pdata) {
--			dev_err(dev, "Platform data not specified\n");
--			return -EINVAL;
--		}
--
--		state->mclk_frequency = pdata->mclk_frequency;
--		state->gpio[STBY] = pdata->gpio_stby;
--		state->gpio[RSET] = pdata->gpio_reset;
--		return 0;
--	}
-+	if (!node)
-+		return -EINVAL;
- 
- 	state->clock = devm_clk_get(dev, S5C73M3_CLK_NAME);
- 	if (IS_ERR(state->clock))
-@@ -1666,7 +1655,7 @@ static int s5c73m3_probe(struct i2c_client *client)
- 		return -ENOMEM;
- 
- 	state->i2c_client = client;
--	ret = s5c73m3_get_platform_data(state);
-+	ret = s5c73m3_get_dt_data(state);
- 	if (ret < 0)
- 		return ret;
- 
-diff --git a/drivers/media/i2c/s5c73m3/s5c73m3-ctrls.c b/drivers/media/i2c/s5c73m3/s5c73m3-ctrls.c
-index 141ad0ba7f5a..1c8103670fa2 100644
---- a/drivers/media/i2c/s5c73m3/s5c73m3-ctrls.c
-+++ b/drivers/media/i2c/s5c73m3/s5c73m3-ctrls.c
-@@ -10,7 +10,6 @@
- #include <linux/sizes.h>
+@@ -10,12 +10,11 @@
+ #include <linux/clk.h>
  #include <linux/delay.h>
  #include <linux/firmware.h>
 -#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
  #include <linux/i2c.h>
  #include <linux/init.h>
  #include <linux/media.h>
-@@ -24,7 +23,6 @@
- #include <media/v4l2-device.h>
- #include <media/v4l2-subdev.h>
- #include <media/v4l2-mediabus.h>
--#include <media/i2c/s5c73m3.h>
+ #include <linux/module.h>
+-#include <linux/of_gpio.h>
+ #include <linux/of_graph.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/sizes.h>
+@@ -1348,20 +1347,20 @@ static int s5c73m3_oif_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
  
- #include "s5c73m3.h"
+ static int s5c73m3_gpio_set_value(struct s5c73m3 *priv, int id, u32 val)
+ {
+-	if (!gpio_is_valid(priv->gpio[id].gpio))
++	if (!priv->gpio[id])
+ 		return 0;
+-	gpio_set_value(priv->gpio[id].gpio, !!val);
++	gpiod_set_value_cansleep(priv->gpio[id], val);
+ 	return 1;
+ }
  
+ static int s5c73m3_gpio_assert(struct s5c73m3 *priv, int id)
+ {
+-	return s5c73m3_gpio_set_value(priv, id, priv->gpio[id].level);
++	return s5c73m3_gpio_set_value(priv, id, 1);
+ }
+ 
+ static int s5c73m3_gpio_deassert(struct s5c73m3 *priv, int id)
+ {
+-	return s5c73m3_gpio_set_value(priv, id, !priv->gpio[id].level);
++	return s5c73m3_gpio_set_value(priv, id, 0);
+ }
+ 
+ static int __s5c73m3_power_on(struct s5c73m3 *state)
+@@ -1544,49 +1543,29 @@ static const struct v4l2_subdev_ops oif_subdev_ops = {
+ 
+ static int s5c73m3_configure_gpios(struct s5c73m3 *state)
+ {
+-	static const char * const gpio_names[] = {
+-		"S5C73M3_STBY", "S5C73M3_RST"
+-	};
++	static const char * const name[] = { "standby", "xshutdown" };
++	static const char * const label[] = { "S5C73M3_STBY", "S5C73M3_RST" };
+ 	struct i2c_client *c = state->i2c_client;
+-	struct s5c73m3_gpio *g = state->gpio;
++	struct gpio_desc *gpio;
+ 	int ret, i;
+ 
+ 	for (i = 0; i < GPIO_NUM; ++i) {
+-		unsigned int flags = GPIOF_DIR_OUT;
+-		if (g[i].level)
+-			flags |= GPIOF_INIT_HIGH;
+-		ret = devm_gpio_request_one(&c->dev, g[i].gpio, flags,
+-					    gpio_names[i]);
++		gpio = devm_gpiod_get(&c->dev, name[i], GPIOD_OUT_HIGH);
++		ret = PTR_ERR_OR_ZERO(gpio);
+ 		if (ret) {
+-			v4l2_err(c, "failed to request gpio %s\n",
+-				 gpio_names[i]);
++			v4l2_err(c, "failed to request gpio %s: %d\n",
++				 name[i], ret);
+ 			return ret;
+ 		}
+-	}
+-	return 0;
+-}
+-
+-static int s5c73m3_parse_gpios(struct s5c73m3 *state)
+-{
+-	static const char * const prop_names[] = {
+-		"standby-gpios", "xshutdown-gpios",
+-	};
+-	struct device *dev = &state->i2c_client->dev;
+-	struct device_node *node = dev->of_node;
+-	int ret, i;
+ 
+-	for (i = 0; i < GPIO_NUM; ++i) {
+-		enum of_gpio_flags of_flags;
+-
+-		ret = of_get_named_gpio_flags(node, prop_names[i],
+-					      0, &of_flags);
+-		if (ret < 0) {
+-			dev_err(dev, "failed to parse %s DT property\n",
+-				prop_names[i]);
+-			return -EINVAL;
++		ret = gpiod_set_consumer_name(gpio, label[i]);
++		if (ret) {
++			v4l2_err(c, "failed to set up name for gpio %s: %d\n",
++				 name[i], ret);
++			return ret;
+ 		}
+-		state->gpio[i].gpio = ret;
+-		state->gpio[i].level = !(of_flags & OF_GPIO_ACTIVE_LOW);
++
++		state->gpio[i] = gpio;
+ 	}
+ 	return 0;
+ }
+@@ -1613,10 +1592,6 @@ static int s5c73m3_get_dt_data(struct s5c73m3 *state)
+ 					state->mclk_frequency);
+ 	}
+ 
+-	ret = s5c73m3_parse_gpios(state);
+-	if (ret < 0)
+-		return -EINVAL;
+-
+ 	node_ep = of_graph_get_next_endpoint(node, NULL);
+ 	if (!node_ep) {
+ 		dev_warn(dev, "no endpoint defined for node: %pOF\n", node);
 diff --git a/drivers/media/i2c/s5c73m3/s5c73m3.h b/drivers/media/i2c/s5c73m3/s5c73m3.h
-index c3fcfdd3ea66..d68528898249 100644
+index d68528898249..9887d03fcdeb 100644
 --- a/drivers/media/i2c/s5c73m3/s5c73m3.h
 +++ b/drivers/media/i2c/s5c73m3/s5c73m3.h
-@@ -15,7 +15,6 @@
- #include <media/v4l2-common.h>
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-subdev.h>
--#include <media/i2c/s5c73m3.h>
- 
- #define DRIVER_NAME			"S5C73M3"
- 
-@@ -357,6 +356,11 @@ enum s5c73m3_gpio_id {
+@@ -356,11 +356,6 @@ enum s5c73m3_gpio_id {
  	GPIO_NUM,
  };
  
-+struct s5c73m3_gpio {
-+	int gpio;
-+	int level;
-+};
-+
- enum s5c73m3_resolution_types {
- 	RES_ISP,
- 	RES_JPEG,
-diff --git a/include/media/i2c/s5c73m3.h b/include/media/i2c/s5c73m3.h
-deleted file mode 100644
-index a51f1025ba1c..000000000000
---- a/include/media/i2c/s5c73m3.h
-+++ /dev/null
-@@ -1,56 +0,0 @@
--/*
-- * Samsung LSI S5C73M3 8M pixel camera driver
-- *
-- * Copyright (C) 2012, Samsung Electronics, Co., Ltd.
-- * Sylwester Nawrocki <s.nawrocki@samsung.com>
-- * Andrzej Hajda <a.hajda@samsung.com>
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of the GNU General Public License
-- * version 2 as published by the Free Software Foundation.
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- */
--#ifndef MEDIA_S5C73M3__
--#define MEDIA_S5C73M3__
--
--#include <linux/videodev2.h>
--#include <media/v4l2-mediabus.h>
--
--/**
-- * struct s5c73m3_gpio - data structure describing a GPIO
-- * @gpio:  GPIO number
-- * @level: indicates active state of the @gpio
-- */
 -struct s5c73m3_gpio {
 -	int gpio;
 -	int level;
 -};
 -
--/**
-- * struct s5c73m3_platform_data - s5c73m3 driver platform data
-- * @mclk_frequency: sensor's master clock frequency in Hz
-- * @gpio_reset:  GPIO driving RESET pin
-- * @gpio_stby:   GPIO driving STBY pin
-- * @bus_type:    bus type
-- * @nlanes:      maximum number of MIPI-CSI lanes used
-- * @horiz_flip:  default horizontal image flip value, non zero to enable
-- * @vert_flip:   default vertical image flip value, non zero to enable
-- */
--
--struct s5c73m3_platform_data {
--	unsigned long mclk_frequency;
--
--	struct s5c73m3_gpio gpio_reset;
--	struct s5c73m3_gpio gpio_stby;
--
--	enum v4l2_mbus_type bus_type;
--	u8 nlanes;
--	u8 horiz_flip;
--	u8 vert_flip;
--};
--
--#endif /* MEDIA_S5C73M3__ */
+ enum s5c73m3_resolution_types {
+ 	RES_ISP,
+ 	RES_JPEG,
+@@ -387,7 +382,7 @@ struct s5c73m3 {
+ 	u32 i2c_read_address;
+ 
+ 	struct regulator_bulk_data supplies[S5C73M3_MAX_SUPPLIES];
+-	struct s5c73m3_gpio gpio[GPIO_NUM];
++	struct gpio_desc *gpio[GPIO_NUM];
+ 
+ 	struct clk *clock;
+ 
 -- 
 2.38.1.431.g37b22c650d-goog
 
