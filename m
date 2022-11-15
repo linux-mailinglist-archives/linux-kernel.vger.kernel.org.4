@@ -2,92 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A0862A2C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EE662A2D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbiKOUZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 15:25:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
+        id S231524AbiKOU2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 15:28:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiKOUZd (ORCPT
+        with ESMTP id S229495AbiKOU2h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:25:33 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD796577;
-        Tue, 15 Nov 2022 12:25:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3FC2619FA;
-        Tue, 15 Nov 2022 20:25:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4707AC433D6;
-        Tue, 15 Nov 2022 20:25:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668543931;
-        bh=wkeY+zmuuIfH0P91UWN754W6X7lV8EgxxsphFuXI3qQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Fgg0M1Pa192/Avsm6D+UwDM5fJrY2sspV5S56Q+2trynAiKPqcStFT+abyT6XSc1/
-         a3x5kEAWQ+sZwqGN2K0FTFXyAZdYfUN6Mki0F8ZAudv4vZfDZ+u0gGMe6RDRJXWukL
-         UrAyFqTp5Mc39jkIyvLQ72CN/beRH3tKjCTt+cTA7RMKzxEC6PaGr0wIHueFBRSjUV
-         bV2vE5peSGuf1XnRLsrqSIftx4J3h+OftKuhb14g3jryyWGSZJotmApNd3daqKV3yh
-         +OD4viYDiq4mM10gITPiTO7iDtLGMwdaEAt/kDTFf2CzRk2MjUQIQVGWg29SM34K7J
-         7Fj+EZ52eSMkA==
-Date:   Tue, 15 Nov 2022 14:25:16 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
-        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] scsi: bfa: Replace one-element array with
- flexible-array member
-Message-ID: <Y3P1rEEBq7HzJygq@work>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Nov 2022 15:28:37 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BB56259;
+        Tue, 15 Nov 2022 12:28:35 -0800 (PST)
+Message-ID: <20221115195802.415956561@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1668544113;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=N0+DYQIzJQiuGQVL9zG7WmZVX2CclyspM4BrFbhZiQ4=;
+        b=M7ECxDE0fB4Eu8YucLFheDApDFsLZrYtCJcaFO+SOJLCYWeIswLu1kIiaw2A4DwSg7KQPs
+        s1AZ5RzM2N9m/XwTQFVZRuYoLcHvbcSDs9wLQuQ2KBFeaqa0xwsKAtJ6o05zt8Ynmm8FTC
+        njJ7KEfbuFvxFnQikQGBFrUrApiyvVt16OgJmB2MERr5pd4PYGmjjTj8CistfVWbGeYEeL
+        nHhkSE+Dpiknoo1XdNL/jkkiqgZ3mvk0GOI2nSJvddEsPE9sUtqH87wetaMUm9To3RtQ+l
+        H7XWTsjAldnu6cDgr0LFA82ogzpgjCKLWD4GLNmIPijLX000LKEdy3+W72VgOQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1668544113;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=N0+DYQIzJQiuGQVL9zG7WmZVX2CclyspM4BrFbhZiQ4=;
+        b=fvWTUM9JRU6WBtEcA9FaxJnJobRgfpEAalgfSWHfdnd4NJtaxKu1epQKvYY3Z6S7g+tSVK
+        8M5r+Fg9FZuU48Bg==
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Linus Torvalds <torvalds@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Subject: [patch 00/15] timers: Provide timer_shutdown[_sync]()
+Date:   Tue, 15 Nov 2022 21:28:32 +0100 (CET)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element arrays are deprecated, and we are replacing them with flexible
-array members instead. So, replace one-element array with flexible-array
-member in struct fdmi_attr_s.
+Tearing down timers can be tedious when there are circular dependencies to
+other things which need to be torn down. A prime example is timer and
+workqueue where the timer schedules work and the work arms the timer.
 
-Important to mention is that doing a build before/after this patch results
-in no binary output differences.
+Steven and the Google Chromebook team ran into such an issue in the
+Bluetooth HCI code.
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE routines
-on memcpy() and help us make progress towards globally enabling
--fstrict-flex-arrays=3 [1].
+Steven suggested to create a new function del_timer_free() which marks the
+timer as shutdown. Rearm attempts of shutdown timers are discarded and he
+wanted to emit a warning for that case:
 
-Link: https://github.com/KSPP/linux/issues/209
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+   https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home
+
+This resulted in a lengthy discussion and suggestions how this should be
+implemented. The patch series went through several iterations and during
+the review of the last version it turned out that this approach is
+suboptimal:
+
+   https://lore.kernel.org/all/20221110064101.429013735@goodmis.org
+
+The warning is not really helpful because it's entirely unclear how it
+should be acted upon. The only way to address such a case is to add 'if
+(in_shutdown)' conditionals all over the place. This is error prone and in
+most cases of teardown like the HCI one which started this discussion not
+required all.
+
+What needs to prevented is that pending work which is drained via
+destroy_workqueue() does not rearm the previously shutdown timer. Nothing
+in that shutdown sequence relies on the timer being functional.
+
+The conclusion was that the semantics of timer_shutdown_sync() should be:
+
+    - timer is not enqueued
+    - timer callback is not running
+    - timer cannot be rearmed
+
+Preventing the rearming of shutdown timers is done by discarding rearm
+attempts silently.
+
+As Steven is short of cycles, I made some spare cycles available and
+reworked the patch series to follow the new semantics and plugged the races
+which were discovered during review.
+
+The patches have been split up into small pieces to make review easier and
+I took the liberty to throw a bunch of overdue cleanups into the picture
+instead of proliferating the existing state further.
+
+The last patch in the series addresses the HCI teardown issue for real.
+
+The series is also available from git:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git timers
+
+Thanks,
+
+	tglx
 ---
- drivers/scsi/bfa/bfa_fc.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/bfa/bfa_fc.h b/drivers/scsi/bfa/bfa_fc.h
-index 0314e4b9e1fb..a12d693065ce 100644
---- a/drivers/scsi/bfa/bfa_fc.h
-+++ b/drivers/scsi/bfa/bfa_fc.h
-@@ -1548,7 +1548,7 @@ enum fdmi_port_attribute_type {
- struct fdmi_attr_s {
- 	__be16        type;
- 	__be16        len;
--	u8         value[1];
-+	u8         value[];
- };
- 
- /*
--- 
-2.34.1
-
+ Documentation/RCU/Design/Requirements/Requirements.rst |    2 
+ Documentation/core-api/local_ops.rst                   |    2 
+ Documentation/kernel-hacking/locking.rst               |   13 
+ arch/arm/mach-spear/time.c                             |    8 
+ drivers/bluetooth/hci_qca.c                            |   10 
+ drivers/char/tpm/tpm-dev-common.c                      |    4 
+ drivers/clocksource/arm_arch_timer.c                   |   12 
+ drivers/clocksource/timer-sp804.c                      |    6 
+ drivers/staging/wlan-ng/hfa384x_usb.c                  |    4 
+ drivers/staging/wlan-ng/prism2usb.c                    |    6 
+ include/linux/timer.h                                  |   35 +
+ kernel/time/timer.c                                    |  409 +++++++++++++----
+ net/sunrpc/xprt.c                                      |    2 
+ 13 files changed, 383 insertions(+), 130 deletions(-)
