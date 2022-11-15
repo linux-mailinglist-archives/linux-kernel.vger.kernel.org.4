@@ -2,153 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804E262A0E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30EAB62A0EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbiKOR75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 12:59:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51476 "EHLO
+        id S231601AbiKOSB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 13:01:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238418AbiKOR7Y (ORCPT
+        with ESMTP id S231596AbiKOSAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 12:59:24 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0223BC01
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:58:45 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ov0Cd-0007GZ-E7; Tue, 15 Nov 2022 18:58:31 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:6ac2:39cd:4970:9b29])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5794211F780;
-        Tue, 15 Nov 2022 17:58:29 +0000 (UTC)
-Date:   Tue, 15 Nov 2022 18:58:21 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Frieder Schrempf <frieder.schrempf@kontron.de>
-Cc:     Frieder Schrempf <frieder@fris.de>,
-        David Jander <david@protonic.nl>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, Marek Vasut <marex@denx.de>,
-        NXP Linux Team <linux-imx@nxp.com>, stable@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Baruch Siach <baruch.siach@siklu.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>
-Subject: Re: [PATCH v2] spi: spi-imx: Fix spi_bus_clk if requested clock is
- higher than input clock
-Message-ID: <20221115175821.4hs7k35fkxwkvew4@pengutronix.de>
-References: <20221115162654.2016820-1-frieder@fris.de>
- <20221115165413.4tvmhiv64gdmctml@pengutronix.de>
- <06f8339c-4be1-159f-9374-ef8e6031da1e@kontron.de>
+        Tue, 15 Nov 2022 13:00:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6530E2B0;
+        Tue, 15 Nov 2022 10:00:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B60661977;
+        Tue, 15 Nov 2022 18:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F9A3C433C1;
+        Tue, 15 Nov 2022 18:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668535217;
+        bh=QXsDGTguq09mN4sSHHgpPG8/brgbzE21EVYdVSJ3uzU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fxKlIIGq9uCKDSt9xkJtoEQs1wHMD2r/lfp4TJ2f74OQUWrwNXgBsMGeJzJT7nHlH
+         Ij9cJd4ztD2DdoT+VJxwc76ja6wpK+PE6Fa0JA51vmm1WvZla+kF1fg+pvOOTq2k41
+         VNN721p6VXYAugsrZeh030J5NnIT3oxdtSSIgX6dK3ZU6E3MJID6GNCZtFDqV7nr01
+         k9Yqvy4YM3OqzkreHA6ErDDhI0RfIO2pLdDHayHdTBiqe4K/SJ1k2NBKEn236Nem/O
+         ON2w9Qsqxc8/j1yGkpE8qoI9Gx0RMMuuwJ1ggcJNPnU+K7NFrq1uyL4lHrnGsAY9ZF
+         1tYXMXwCOh5Ag==
+Received: by pali.im (Postfix)
+        id 4DFCE805; Tue, 15 Nov 2022 19:00:14 +0100 (CET)
+Date:   Tue, 15 Nov 2022 19:00:14 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [v2 PATCH] PCI: aardvark: switch to using
+ devm_gpiod_get_optional()
+Message-ID: <20221115180014.ktutpo37vxwde4cy@pali>
+References: <Y3KMEZFv6dpxA+Gv@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="k7skofa35hxg3udw"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <06f8339c-4be1-159f-9374-ef8e6031da1e@kontron.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y3KMEZFv6dpxA+Gv@google.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Monday 14 November 2022 10:42:25 Dmitry Torokhov wrote:
+> Switch the driver to the generic version of gpiod API (and away from
+> OF-specific variant), so that we can stop exporting
+> devm_gpiod_get_from_of_node().
+> 
+> Acked-by: Pali Rohár <pali@kernel.org>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+> 
+> v2:
+>  - collected reviewed-by/acked-by tags
+>  - updated commit description to remove incorrect assumption of why
+>    devm_gpiod_get_from_of_node() was used in the first place
+> 
+> This is the last user of devm_gpiod_get_from_of_node() in the mainline
+> (next), it would be great to have it in so that we can remove the API in
+> the next release cycle.
+> 
+> Thanks!
 
---k7skofa35hxg3udw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Just a note that more aardvark patches are waiting on the list.
 
-On 15.11.2022 18:14:38, Frieder Schrempf wrote:
-> On 15.11.22 17:54, Marc Kleine-Budde wrote:
-> > On 15.11.2022 17:26:53, Frieder Schrempf wrote:
-> >> From: Frieder Schrempf <frieder.schrempf@kontron.de>
-> >>
-> >> In case the requested bus clock is higher than the input clock, the co=
-rrect
-> >> dividers (pre =3D 0, post =3D 0) are returned from mx51_ecspi_clkdiv()=
-, but
-> >> *fres is left uninitialized and therefore contains an arbitrary value.
-> >>
-> >> This causes trouble for the recently introduced PIO polling feature as=
- the
-> >> value in spi_imx->spi_bus_clk is used there to calculate for which
-> >> transfers to enable PIO polling.
-> >>
-> >> Fix this by setting *fres even if no clock dividers are in use.
-> >>
-> >> This issue was observed on Kontron BL i.MX8MM with an SPI peripheral c=
-lock set
-> >> to 50 MHz by default and a requested SPI bus clock of 80 MHz for the S=
-PI NOR
-> >> flash.
-> >>
-> >> With the fix applied the debug message from mx51_ecspi_clkdiv() now pr=
-ints the
-> >> following:
-> >>
-> >> spi_imx 30820000.spi: mx51_ecspi_clkdiv: fin: 50000000, fspi: 50000000,
-> >> post: 0, pre: 0
-> >>
-> >> Fixes: 07e759387788 ("spi: spi-imx: add PIO polling support")
->=20
-> You want me to remove this tag?
->=20
-> > The *fres parameter was introduced in:
-> >=20
-> > | Fixes: 6fd8b8503a0d ("spi: spi-imx: Fix out-of-order CS/SCLK operatio=
-n at low speeds")
->=20
-> and instead add back this tag? I wasn't really sure about that.
-
-Keep both.
-
-> >=20
-> > The exiting code:
-> >=20
-> > |	if (unlikely(fspi > fin))
-> > |		return 0;
-> >=20
-> > was not sufficient any more and should be fixed.
->=20
-> You want me to add this in the description? Or is this just the
-> explanation for why 6fd8b8503a0d should be in the Fixes tag?
-
-No need to add the explanation to the patch.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---k7skofa35hxg3udw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNz0zoACgkQrX5LkNig
-013UuwgAtv41tt1zXsWdLJ3pCyevuYY1FXRc3xhiFmuFZqEHQfpQ18i8PUYqxXPK
-djB3VfGjq4VuPvRBl/Zeei1ccW0XSQ/uwUjzFQHzZFE3+Sk0cGE/A8BkK4DrQtoU
-3DSaR1WHgM7ntoVOPGHiVs+r3Ab791LyFW4n7oZBqI5dRkyDe9avNbHghd76cfOe
-ytXqJ9MzcFw3w1c/Fo43/wHv1ATcC8kBYHL4kw4B3Duo3iXMQlgY0XcATRCjetBf
-L33EaAhGF3wJ0zV/SpXlY2mzUm2zqNN5RhiZz7JoZbev6R+uEsP2n6vOc8TKKe6d
-utjHIxqXthrl1NQa9b7EJOA0TTK5Eg==
-=sHfi
------END PGP SIGNATURE-----
-
---k7skofa35hxg3udw--
+> 
+>  drivers/pci/controller/pci-aardvark.c | 23 +++++++++++------------
+>  1 file changed, 11 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
+> index ba36bbc5897d..5ecfac23c9fc 100644
+> --- a/drivers/pci/controller/pci-aardvark.c
+> +++ b/drivers/pci/controller/pci-aardvark.c
+> @@ -1859,20 +1859,19 @@ static int advk_pcie_probe(struct platform_device *pdev)
+>  		return ret;
+>  	}
+>  
+> -	pcie->reset_gpio = devm_gpiod_get_from_of_node(dev, dev->of_node,
+> -						       "reset-gpios", 0,
+> -						       GPIOD_OUT_LOW,
+> -						       "pcie1-reset");
+> +	pcie->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
+>  	ret = PTR_ERR_OR_ZERO(pcie->reset_gpio);
+>  	if (ret) {
+> -		if (ret == -ENOENT) {
+> -			pcie->reset_gpio = NULL;
+> -		} else {
+> -			if (ret != -EPROBE_DEFER)
+> -				dev_err(dev, "Failed to get reset-gpio: %i\n",
+> -					ret);
+> -			return ret;
+> -		}
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(dev, "Failed to get reset-gpio: %i\n",
+> +				ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = gpiod_set_consumer_name(pcie->reset_gpio, "pcie1-reset");
+> +	if (ret) {
+> +		dev_err(dev, "Failed to set reset gpio name: %d\n", ret);
+> +		return ret;
+>  	}
+>  
+>  	ret = of_pci_get_max_link_speed(dev->of_node);
+> -- 
+> 2.38.1.431.g37b22c650d-goog
+> 
+> 
+> -- 
+> Dmitry
