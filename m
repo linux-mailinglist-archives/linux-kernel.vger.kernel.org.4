@@ -2,94 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B8C62AD89
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:02:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6483362AD8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 23:03:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232375AbiKOWCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 17:02:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
+        id S232418AbiKOWDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 17:03:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232266AbiKOWCQ (ORCPT
+        with ESMTP id S232412AbiKOWCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 17:02:16 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709BD2F641
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:02:15 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id 7so18785160ybp.13
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:02:15 -0800 (PST)
+        Tue, 15 Nov 2022 17:02:52 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE762F66F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:02:51 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id s12so23901348edd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 14:02:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=kali.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sOXMIOy4WN5lgYszDuN0wDh6uR0jdmTx6LWUdGFuzEs=;
-        b=AF+51D2E1FcandtHFX4Qke0hi48D4Wilo29nSIEdG6lGEt+k91s3eUWb30nlqINzf5
-         Umwsbj0SE2IoNowGYPLVVSDKCwpYr5/qftsCjYVMvGO1kZceiAZnuOwudIVOzctlTfvt
-         6i5eclJ29WBAVhv88U+BRM+juEZMdo0bKOtYIOYoNtmVlBwKgqWeGEXHNAsl9y8POMt2
-         uLNXWRPMoJLJj/0IPUGlBsQgtV0xPx/74LcEZtCoBbGym0tNEzdRNpD1qC1n+SCZj2MV
-         tC3XXJnmmMVGItrMAx343PzXXpaFr5QvuqVS1mes+CuOsUQDbhmzJXzw/P3jE5P2LXvC
-         HZkQ==
+        bh=GcIrTj8VztBeFoy4k6qhtUBsqi2dQ47UyYJpB5EaTPo=;
+        b=nftL9VuGbqz2wS8aoSGn3u7lKhkqTIh6Qw3ut+/2+mk6iuDylkuO4fKqsTWNWzmabb
+         1+uO4j7fYObWyKAiKEKmBE6gzehSG2tyufgvwVYrmRAYLhOssRGJ9oA3QBbh9RyOLzlD
+         D5fcH2cI5+DXyeI+BcwcFUebEsI1vJt1W0bEQaW9X71inPhHZi6DXA+kWLv8R2nH9LVA
+         yCJcUwuUooshd1gvooIvbPMh2/lQOVvj9ve3fZmdH63tyY2mitEUq1BLVqJRK6kOV6ox
+         eeo5WJFrUM+yQ2HFSuYk0Ulo2z+7GNylpGJhI/w5XIqx8FYdEGgPziqKHptGoWU+3dLY
+         VcMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sOXMIOy4WN5lgYszDuN0wDh6uR0jdmTx6LWUdGFuzEs=;
-        b=J9xdSPpOuWa12cbWDAAtIHiyAGewVIDwMaQA1AqI2K3uI4k04bWtYJ1lIOCgT/Ry6t
-         k2kHNjkaPzEy3q/y2CT5HPPMmwm+z90W8HHqsTONbSTfJjMbUohB/gsS+iux8qQVZ8zR
-         nT4+WX2vsaNXj710jJOFqeHF94Q4Y5JEsfoncoCKJP+iRlcHW5eiecAjz/tFsbjM31F+
-         9uvbkyaMT1C07eM4FtRjaVibg+wuNFIFW9GWrEnyNvQczYPeAQM7QInmSE2pwztqosYp
-         lWQYnBoS74zBjemHf4WiATuf7SuGtClcW5j5B06TPhnSJbjCR/vjg9KhP18y/wzE3iyE
-         uTag==
-X-Gm-Message-State: ANoB5pltNULdWtpPPussu0il1MB67p4fjw/mOOl1v13IYK8OxqetetUv
-        9roUpfB7a970JDvPekWVF3zA2kCuzfI51lZLUoEFR0ZigcWDZg==
-X-Google-Smtp-Source: AA0mqf4lkBv42yxFQw9Hqi29Ph//5Po92DKW4izl43xIAFxlJiLUy9tXiRqfkHm+rOhKRfpaj+T3E5WusKhICukFuss=
-X-Received: by 2002:a25:4016:0:b0:6ca:4fb8:a033 with SMTP id
- n22-20020a254016000000b006ca4fb8a033mr19598440yba.158.1668549734577; Tue, 15
- Nov 2022 14:02:14 -0800 (PST)
+        bh=GcIrTj8VztBeFoy4k6qhtUBsqi2dQ47UyYJpB5EaTPo=;
+        b=PYt2lztfazfZMxyEWA4AipWj5V+UTcWEYImlOVvxNv41IHNkwSGgU7NwfL8v3+Mty9
+         j1hZ1Yn9qnBMZqgQCTdKkALjHDmRww7wufDgHQ30E7mOURUVEcCzwKAzNflB5WEloLcj
+         a9SnlBsQm4X0tw7YCgYLW8RKRE9j8GQXOTal0XLM0TsiFaqtkjT/oH2V+Ww1dSazOZPF
+         CcP6WhYbr3LcOvl7w3PcJHmZZwH0NGMNCiwv704MNIIVGKLnWG3KtFasADxBHlO0zMlS
+         l41zS1sQNV8qyaJYQtsIc5ymSnA7BTOvYl6tGX6Ygmb80P6qqbOQ8i8HZ++9Ppvj5jcF
+         oP3A==
+X-Gm-Message-State: ANoB5pmBwnJ06tzdAI2w+/vsxtMwrD2Ix4Ur+KIAzbYaLwlJhsRjShrq
+        7xgbrbPnP6GbO1/tNwuov4RaquO2vKN9d/TmPgSfyg==
+X-Google-Smtp-Source: AA0mqf5SXfBI6T37ANtaU6IquIxC4j46qTnsreujvs83VOL05kbVxIsQj9U6F2D9Uv3/ulToJeZmoQ1bjTwySKzYq/0=
+X-Received: by 2002:a50:fd8f:0:b0:461:46c7:310b with SMTP id
+ o15-20020a50fd8f000000b0046146c7310bmr17315493edt.307.1668549769960; Tue, 15
+ Nov 2022 14:02:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20221104194705.3245738-1-rmoar@google.com> <20221104194705.3245738-2-rmoar@google.com>
- <CABVgOS=eq0RnnP=MGMb-mZntA7+yZ=pe3U_dOq1gxoTPTeC8Bw@mail.gmail.com> <CA+GJov7N0gU_a2xNkj_ex9EiuGtDq+7k2zVh4CQ259DL-YMA2Q@mail.gmail.com>
-In-Reply-To: <CA+GJov7N0gU_a2xNkj_ex9EiuGtDq+7k2zVh4CQ259DL-YMA2Q@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Tue, 15 Nov 2022 14:02:03 -0800
-Message-ID: <CAGS_qxpQVWs2RYX_+6FZS8a9-M1GocoMjHNrLBADtkGzxh8mHw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] kunit: tool: parse KTAP compliant test output
-To:     Rae Moar <rmoar@google.com>
-Cc:     David Gow <davidgow@google.com>, brendanhiggins@google.com,
-        skhan@linuxfoundation.org, mauro.chehab@linux.intel.com,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
+References: <20221114202943.2389489-1-bmasney@redhat.com> <7420da17-d6d6-10e6-c87e-d3dc37d17ffb@linaro.org>
+In-Reply-To: <7420da17-d6d6-10e6-c87e-d3dc37d17ffb@linaro.org>
+From:   Steev Klimaszewski <steev@kali.org>
+Date:   Tue, 15 Nov 2022 16:02:38 -0600
+Message-ID: <CAKXuJqgckbmikXwFi0g3P3Db5jvyst+xhQBcPoV7mA2XStVVzA@mail.gmail.com>
+Subject: Re: [PATCH RFC] gpiolib: ensure that fwnode is properly set
+To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+Cc:     Brian Masney <bmasney@redhat.com>, linus.walleij@linaro.org,
+        brgl@bgdev.pl, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        psodagud@quicinc.com, quic_shazhuss@quicinc.com,
+        quic_ppareek@quicinc.com, ahalaney@redhat.com, echanude@redhat.com,
+        nicolas.dechesne@linaro.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 12:46 PM Rae Moar <rmoar@google.com> wrote:
-> > - As Daniel mentioned, can we think of a better placeholder name for
-> > tests without Subtest lines? One thought is to just leave it as the
-> > empty string?
->
-> I am definitely open to changing this placeholder name.
->
-> The ideas I thought of are: "Test suite", just "Test", or just an
-> empty string. "Test" or empty string may be less confusing. What do
-> people prefer?
+Hi,
 
-I'd prefer the empty string.
+Others in the thread pointed to Thierry's patch, but on the Lenovo
+Thinkpad X13s, that patch did *not* fix the issue, and with it
+applied, the X13s still immediately reboots as soon as exiting EFI
+services.  With this patch applied, the X13s does *not* reboot after
+exiting EFI services, so thank you for this patch.
 
-So it would show up as something like
-===== (1 subtests) =====
-[PASSED] case1
-====== suite1 ======
-
-Note: we'll just have to make sure to avoid a leading space (e.g.
-we're currently doing message += f' (1 subtest)' )
-
-Daniel
+Tested-by: Steev Klimaszewski <steev@kali.org> #Lenovo Thinkpad X13s
