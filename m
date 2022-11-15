@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C7262A2A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADED762A2A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbiKOUTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 15:19:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
+        id S229495AbiKOUUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 15:20:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbiKOUTU (ORCPT
+        with ESMTP id S230083AbiKOUUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:19:20 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601A72C665
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:19:17 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id g10so10309830qkl.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:19:17 -0800 (PST)
+        Tue, 15 Nov 2022 15:20:12 -0500
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C83D2A731
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:20:11 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id c1-20020a7bc001000000b003cfe40fca79so1557284wmb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 12:20:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kg2p+d9BTb0sDApPTHD/FCt+oKLyPxzeDhZVVD2/bvE=;
-        b=oiqPPIadrE290wPskdviykHavn9ie2jg0rNWMYK9DXxkRRR5tL5u9Kw+40VMQRXpmL
-         YmsMd8l3Mf8tjrJkkcHRF6R+7wPaIJyTLZQgVBN63Q0ORPLENmAneLpIEkVzgZVCHc1q
-         qP134upef1/dOr0KiaCmgyRw32zBGSUjIj+RW8EyhD6AmG1ALBAp5ZMZVVcqPW4k7oXl
-         WyEiFqr8hYuwz3mxKQvX1R3J2/td4P/VwOnOpoJdILskAx2wLAZD4Gjqym6vT26ewMYN
-         Bh6n0Hqs1KawTr8ny/W90JyNL9fLYsJP2bonXx6RViN23LL8IzNyWDH1WseVubeuw2eB
-         mDIQ==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZTI3MBvJUKftMBIuqIfZDhk1MLqSSScMjtTeea1qXbs=;
+        b=Ik9WJSz677x4mKzyo9Cp9Gy2ZsfMCCf/lyv03MT6EvGvFo7V54HjqA0Zs8rSfLBN0S
+         VBH1PlCA43C6Z6CrbYpBBfsG+M/Zgpne+yjPu1z/T4K9NB2C1DX1kOo0mX1yam7BsGl4
+         UW8RjLqErsEqM5OvAmcZwKF02K2ZsIgxGhiwDencWVL2ZMyb8zAE52OMPJ5jLO4Nw6Tv
+         kWkE3LwjP2Ld5HHJ6YhVmqQjvlr4eSO07RnMBK5Q+LRphYfYnoeACm4DjN5ByisuP5HC
+         NNGNu33QKj15we5lkaYCNNuiEcSUiukC9wQxgGUBIseBEo3Eral+oh4ovw1j46Di99EB
+         Y/9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Kg2p+d9BTb0sDApPTHD/FCt+oKLyPxzeDhZVVD2/bvE=;
-        b=WnyneRyB+AaJ/KQowsJhqgWj6iseYwW6rLi+ATgImeqXIqoAE5o97L0Pke0OXDxG5H
-         R0TbgRCIho2dg8cR3LWv1MAYEn25afgwAnj+ho8qy6Vtkbwi+2H/xcAOCrFV6DSdQxOV
-         wfoo8sSNnAVcWLijLCRAhPOlJv1fvjf75kzP+TtmooFgLpmJyrepIXp4u4EMbGxqdqC6
-         /2IYS3nBMgLsUu0eklWWHSTRV8pi9ozySn600jG8uEkvRFidRrOS9htt5kBDjNAOwl9N
-         d+LmOJiJHWryviEShD589wE1x9noMu30pQSh+wbLkn9cnVXFpj4m6EVISWDkpntPPjku
-         DDvA==
-X-Gm-Message-State: ANoB5plYzGp1EPXvsazU1hAkCy9Rzu0TQrcBi+FTmlgJbr9I8UaarNN0
-        gsqDVTgwfT7DwGeI6mMG9YP/5XWnZR2wM2uNqjJVC9wf8jVxuPG/
-X-Google-Smtp-Source: AA0mqf4+NeFrs5IgilPztvEth+wuzXVCXKXZ6fBBFSO5bfaH4DFrSE079OowKhwnTee84fmxGXSVssJQy4r8nWe0Mms=
-X-Received: by 2002:a05:620a:4895:b0:6ce:2d77:92d0 with SMTP id
- ea21-20020a05620a489500b006ce2d7792d0mr16761581qkb.713.1668543556542; Tue, 15
- Nov 2022 12:19:16 -0800 (PST)
-MIME-Version: 1.0
-References: <1668517207-11822-1-git-send-email-yangtiezhu@loongson.cn> <Y3PdlPVxobFMVYoX@google.com>
-In-Reply-To: <Y3PdlPVxobFMVYoX@google.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-Date:   Tue, 15 Nov 2022 20:19:05 +0000
-Message-ID: <CACdoK4KEzd8w3pWjuGet-W3ZzAf+8uBpzngk_aX7_aBDYm4T5Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpftool: Check argc first before "file" in do_batch()
-To:     sdf@google.com
-Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZTI3MBvJUKftMBIuqIfZDhk1MLqSSScMjtTeea1qXbs=;
+        b=ExT0y0Bh/xBuOAhCbbdOc1l6OViq5e9r4alZYFEvuZvpJun/Saqi4eMTQzjK7aLZWY
+         KfZXCMcGVP7QYmz93CDrLnUxYbEsGsaZOhpo+tB4lFGG45sjwXjvgqUvNfOSeIVaAxJD
+         ESce+39M4wdcOYIGlCsV1WIEIAbrUfSF5Qfu0PdU9aELa3uCaDdZZjzdJ5kMXtOWXKum
+         h4zfWBul0aQDnaFzGwvAIii54Tb3kEeoYB0pM5gu0BvZp4S/TT6RCzDMfrs9kKSDkV6V
+         Q/quhuXp5tSwFdj0au441NuKs5b219f1IjLTvzBxFT9i7aV+CBP/jA6CKpHcsBRY2BEt
+         /jrg==
+X-Gm-Message-State: ANoB5pkTzZBJO+l7xhq8svt81XDEjAkNDJerSs+O0zHDRfaQizH+FFhp
+        /sPLKIdBMjFbpEkUPO4JgeMkOajKhpDKYM8R
+X-Google-Smtp-Source: AA0mqf5s7NpTHFmqs1uZ4AxO8HtUoNpSxzIIv7Fxd+4+gy5jrrPwcImYESvUyWyKWNl1pnvLbmSQWeX8sz+jIcN/
+X-Received: from fkdev.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:3506])
+ (user=feldsherov job=sendgmr) by 2002:a05:600c:3b19:b0:3cf:7514:a80d with
+ SMTP id m25-20020a05600c3b1900b003cf7514a80dmr7839wms.0.1668543609492; Tue,
+ 15 Nov 2022 12:20:09 -0800 (PST)
+Date:   Tue, 15 Nov 2022 20:20:01 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
+Message-ID: <20221115202001.324188-1-feldsherov@google.com>
+Subject: [PATCH v3] fs: do not update freeing inode i_io_list
+From:   Svyatoslav Feldsherov <feldsherov@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Lukas Czerner <lczerner@redhat.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Jan Kara <jack@suse.cz>
+Cc:     syzbot+6ba92bd00d5093f7e371@syzkaller.appspotmail.com,
+        oferz@google.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Svyatoslav Feldsherov <feldsherov@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,18 +70,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 15 Nov 2022 at 18:42, <sdf@google.com> wrote:
->
-> On 11/15, Tiezhu Yang wrote:
-> > If the parameters for batch are more than 2, check argc first can
-> > return immediately, no need to use is_prefix() to check "file" with
-> > a little overhead and then check argc, it is better to check "file"
-> > only when the parameters for batch are 2.
->
-> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->
-> Acked-by: Stanislav Fomichev <sdf@google.com>
+After commit cbfecb927f42 ("fs: record I_DIRTY_TIME even if inode
+already has I_DIRTY_INODE") writeback_single_inode can push inode with
+I_DIRTY_TIME set to b_dirty_time list. In case of freeing inode with
+I_DIRTY_TIME set this can happen after deletion of inode from i_io_list
+at evict. Stack trace is following.
 
-Reviewed-by: Quentin Monnet <quentin@isovalent.com>
+evict
+fat_evict_inode
+fat_truncate_blocks
+fat_flush_inodes
+writeback_inode
+sync_inode_metadata(inode, sync=0)
+writeback_single_inode(inode, wbc) <- wbc->sync_mode == WB_SYNC_NONE
 
-Thanks
+This will lead to use after free in flusher thread.
+
+Similar issue can be triggered if writeback_single_inode in the
+stack trace update inode->i_io_list. Add explicit check to avoid it.
+
+Fixes: cbfecb927f42 ("fs: record I_DIRTY_TIME even if inode already has I_DIRTY_INODE")
+Reported-by: syzbot+6ba92bd00d5093f7e371@syzkaller.appspotmail.com
+Reviewed-by: Jan Kara <jack@suse.cz>
+Signed-off-by: Svyatoslav Feldsherov <feldsherov@google.com>
+---
+ V2 -> V3:
+ - fix grammar in commit message and comments
+
+ V1 -> V2: 
+ - address review comments
+ - skip inode_cgwb_move_to_attached for freeing inode 
+
+ fs/fs-writeback.c | 30 +++++++++++++++++++-----------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
+
+diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+index 443f83382b9b..9958d4020771 100644
+--- a/fs/fs-writeback.c
++++ b/fs/fs-writeback.c
+@@ -1712,18 +1712,26 @@ static int writeback_single_inode(struct inode *inode,
+ 	wb = inode_to_wb_and_lock_list(inode);
+ 	spin_lock(&inode->i_lock);
+ 	/*
+-	 * If the inode is now fully clean, then it can be safely removed from
+-	 * its writeback list (if any).  Otherwise the flusher threads are
+-	 * responsible for the writeback lists.
++	 * If the inode is freeing, its i_io_list shoudn't be updated
++	 * as it can be finally deleted at this moment.
+ 	 */
+-	if (!(inode->i_state & I_DIRTY_ALL))
+-		inode_cgwb_move_to_attached(inode, wb);
+-	else if (!(inode->i_state & I_SYNC_QUEUED)) {
+-		if ((inode->i_state & I_DIRTY))
+-			redirty_tail_locked(inode, wb);
+-		else if (inode->i_state & I_DIRTY_TIME) {
+-			inode->dirtied_when = jiffies;
+-			inode_io_list_move_locked(inode, wb, &wb->b_dirty_time);
++	if (!(inode->i_state & I_FREEING)) {
++		/*
++		 * If the inode is now fully clean, then it can be safely
++		 * removed from its writeback list (if any). Otherwise the
++		 * flusher threads are responsible for the writeback lists.
++		 */
++		if (!(inode->i_state & I_DIRTY_ALL))
++			inode_cgwb_move_to_attached(inode, wb);
++		else if (!(inode->i_state & I_SYNC_QUEUED)) {
++			if ((inode->i_state & I_DIRTY))
++				redirty_tail_locked(inode, wb);
++			else if (inode->i_state & I_DIRTY_TIME) {
++				inode->dirtied_when = jiffies;
++				inode_io_list_move_locked(inode,
++							  wb,
++							  &wb->b_dirty_time);
++			}
+ 		}
+ 	}
+ 
+-- 
+2.38.1.431.g37b22c650d-goog
+
