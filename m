@@ -2,103 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5E3629FD6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE81629FE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:03:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiKORCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 12:02:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40028 "EHLO
+        id S230456AbiKORDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 12:03:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbiKORCm (ORCPT
+        with ESMTP id S230216AbiKORDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 12:02:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A87275E3;
-        Tue, 15 Nov 2022 09:02:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29348B819BA;
-        Tue, 15 Nov 2022 17:02:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54E0DC433C1;
-        Tue, 15 Nov 2022 17:02:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668531758;
-        bh=KABuRlXLh25sOol2t/UpXXI9wSIMYxFYsyTmlHopYp0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qgtqPtdU9Hfq4ShGXnzpTVVDB72e/1/mX/bew2o7ePx7kkl/KWaX76KjMu2RNIuhz
-         tWFVJ7nP48Rs1qwGkVJgNSE5g5AzaA1/xtjRKUyomkvDIVwLy6OLJOnACN9wajXEXE
-         8dAeGF1mDP3CKp+uCzB9SFAPEeGLX9dRSiW4qnxy8KBdAPq7+8Zd/DY5QKu/IE7myu
-         75jyR7Hp8csjUYPu1h3e5jJ8iI8AzonFAMmOZgGqOwj3vTN/oZzlAIkwvbOH6PjbKX
-         gAHDKuPmWE18ilTd6WyzPi04C9nwP6uDZ25f/LOeKe+sU1yMJdBTKewLiueqCjBdBQ
-         40F4mGZpYNt7g==
-Date:   Tue, 15 Nov 2022 09:02:37 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Hawkins Jiawei <yin31149@gmail.com>
-Cc:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, 18801353760@163.com,
-        syzbot+232ebdbd36706c965ebf@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com,
-        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: sched: fix memory leak in tcindex_set_parms
-Message-ID: <20221115090237.5d5988bb@kernel.org>
-In-Reply-To: <20221113170507.8205-1-yin31149@gmail.com>
-References: <20221113170507.8205-1-yin31149@gmail.com>
+        Tue, 15 Nov 2022 12:03:07 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2FC2DABA
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:02:57 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id cl5so25352010wrb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:02:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C+QI+a1LLKHJmXjbPhLCERTRJmwAWFttEeqSMGvp67c=;
+        b=hQ+brCIqwW8qYaEySmMH026wtvc3hNKIAWioWo/wZKzTqCv2yrOwEeEOlxz9uE9NqK
+         uYMW8T+UCZDxzXTkrse0eU3lphVpQG3HhaHyC1PDaWKZ1nA/zroHPvI3QTAxpa92nEkA
+         k3jSJfcYX5N70C/XHcRZLvkKhxSZRdj5i1g6xrePnaNIZ0i8jHTHnKB1l5A8DpsKFiU5
+         3RmQMuFFyO/YhksMCMkj4U09WDdFrGtitwbGHxNr4rmwxM/UUhe4ihGpYgN96c3ddJcI
+         vtQFnaJ7N0F9psjC+nrWM9isYSW7s2kUAzQAPRxKxB9lANBQXYjr8GlOLawhgZaWgFD7
+         6a6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C+QI+a1LLKHJmXjbPhLCERTRJmwAWFttEeqSMGvp67c=;
+        b=2FcyHp6o6GuIDNwdkdRNb+hX09BODFvFQQwuUdwI3Y5u9QsWdI5BapiuyvSfGC9rd7
+         /GjcrQHU0OMDghqeWf1JRHgHd+QirsV049V1IAQGYRIsnloNbG3SxU1NhpESa7eEw7mS
+         pITfIvtwDe4AkZq2VPT4KFi5jaWAWDGmjzm1bqWIkcve46Tdgal1pyeWUgTCZ4Sg8CuA
+         jPgn0s3wUWPUwQhCHFP1Rmwbc7sfu3bwvJM7ztCRuWCNs3CWWtq3NULsMhiULB9IGHpm
+         iEWHeCCRp9wgRvxs+1CEZNWs2SFHRrAGRm8Wh0jZeFU7MqUI6Ape2VodJRsZ3DZ9q6/G
+         35PA==
+X-Gm-Message-State: ANoB5pl0jT5k0Hj+c97w6IYFzu0xPE77XzwYWNxLDBjjK8O5evT72u6Z
+        infTNJFMT3RpavAONWQ5853RsQ==
+X-Google-Smtp-Source: AA0mqf7iiEvtIjraL7maQb8oxdfrIYeg3cHrgjjDrjNzxCzwmr9TGWZhUP/P0H+J+flUHnFd+0Vouw==
+X-Received: by 2002:adf:fc81:0:b0:236:7083:21df with SMTP id g1-20020adffc81000000b00236708321dfmr10970590wrr.123.1668531776414;
+        Tue, 15 Nov 2022 09:02:56 -0800 (PST)
+Received: from localhost.localdomain ([81.128.185.34])
+        by smtp.gmail.com with ESMTPSA id v21-20020a05600c215500b003c6c3fb3cf6sm15747090wml.18.2022.11.15.09.02.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 09:02:55 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     agross@kernel.org, andersson@kernel.org
+Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 0/3] arm64: dts: qcom: sc8280xp: add audio support
+Date:   Tue, 15 Nov 2022 17:02:39 +0000
+Message-Id: <20221115170242.150246-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 01:05:08 +0800 Hawkins Jiawei wrote:
-> diff --git a/net/sched/cls_tcindex.c b/net/sched/cls_tcindex.c
-> index 1c9eeb98d826..d2fac9559d3e 100644
-> --- a/net/sched/cls_tcindex.c
-> +++ b/net/sched/cls_tcindex.c
-> @@ -338,6 +338,7 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
->  	struct tcf_result cr = {};
->  	int err, balloc = 0;
->  	struct tcf_exts e;
-> +	struct tcf_exts old_e = {};
+This patchset adds audio support for sc8280xp Lenovo x13s.
+Support for Headset Playback/Capture, Speaker Playback and DMIC is
+tested.
 
-This is not a valid way of initializing a structure.
-tcf_exts_init() is supposed to be called.
-If we add a list member to that structure this code will break, again.
+A prebuit ASoC topology file available at
+https://git.linaro.org/people/srinivas.kandagatla/audioreach-topology.git/tree/prebuilt/SC8280XP-LENOVO-X13S-tplg.bin
 
->  	err = tcf_exts_init(&e, net, TCA_TCINDEX_ACT, TCA_TCINDEX_POLICE);
->  	if (err < 0)
-> @@ -479,6 +480,7 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
->  	}
->  
->  	if (old_r && old_r != r) {
-> +		old_e = old_r->exts;
->  		err = tcindex_filter_result_init(old_r, cp, net);
->  		if (err < 0) {
->  			kfree(f);
-> @@ -510,6 +512,12 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
->  		tcf_exts_destroy(&new_filter_result.exts);
->  	}
->  
-> +	/* Note: old_e should be destroyed after the RCU grace period,
-> +	 * to avoid possible use-after-free by concurrent readers.
-> +	 */
-> +	synchronize_rcu();
-> +	tcf_exts_destroy(&old_e);
+Thanks,
+Srini
 
-I don't think this dance is required, @cp is a copy of the original
-data, and the original (@p) is destroyed in a safe manner below.
 
->  	if (oldp)
->  		tcf_queue_work(&oldp->rwork, tcindex_partial_destroy_work);
->  	return 0;
+Srinivas Kandagatla (3):
+  arm64: dts: qcom: sc8280xp/sa8540p: add gpr node
+  arm64: dts: qcom: sc8280xp/sa8540p: add SoundWire and LPASS
+  arm64: dts: qcom: sc8280xp: Add soundcard support
+
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 213 ++++++++++
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 364 ++++++++++++++++++
+ 2 files changed, 577 insertions(+)
+
+-- 
+2.25.1
+
