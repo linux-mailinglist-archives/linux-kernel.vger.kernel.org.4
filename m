@@ -2,106 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A089262949E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 222876294AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:45:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237853AbiKOJny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 04:43:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
+        id S238102AbiKOJpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 04:45:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237805AbiKOJnw (ORCPT
+        with ESMTP id S238043AbiKOJpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 04:43:52 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EB562F8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:43:51 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id j4so23628910lfk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:43:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+wrWpTcqZkvu1mmEitCifcGVxseblveX37zlqDCCpjc=;
-        b=it/DGIfpFZ8anGUh2KdXMRwrOXmr/1l+NeEU4BlzB5mGBZkmEixmLYx40GUCVKB87e
-         bCrJmUvRNocDMraCwZfAYcF7ECn1W0ZriniqdEo6GMDTXquXhsB7Um4pr3eZ+s2VNGdc
-         11q/S+5B/4piz75M2HQhxuPy2uNKsSfDGwfzbYCayE/QnHZMdVQnGBKoqVAHTLBS+TXs
-         eel1HZWnAx8UWO9f+jPF8RMug7N7vVAGDysfsJMXcnx8W/fZIsWQNmsrUdKjlVXXmaua
-         2Dp17L1VeW/f2vj3AWfhevQHBHEMtbjLBwgdIY8/uwChGshulhPfbzyzPcFm2ji4RcDJ
-         sKJg==
+        Tue, 15 Nov 2022 04:45:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0783220187
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:44:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668505478;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0vWBmmZ+MaaTNoor+4JgOmz7dmr0qFnAhYd6s3lBFUI=;
+        b=ZHZqkVd4gsKRoG+w36HetlWKjamTVqqz5J1R8YdUnfALBaAIuWel6ypBDXFQ4yd7WC/WGM
+        /GJbn9PaYw59t49u48P5jqFlX0d3EvZO38M+ccFwYDjDjUTJBScZ3PB4b6DPYig1Q4sMcA
+        AC1Dm7F8CUTRFk0p3k4ChxHhlbjoyuU=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-590-9LUjXmFMP0W1OEIAHwU-0Q-1; Tue, 15 Nov 2022 04:44:35 -0500
+X-MC-Unique: 9LUjXmFMP0W1OEIAHwU-0Q-1
+Received: by mail-pf1-f200.google.com with SMTP id cj8-20020a056a00298800b0056cee8a0cf8so7471002pfb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:44:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+wrWpTcqZkvu1mmEitCifcGVxseblveX37zlqDCCpjc=;
-        b=UyqNqQqdrgNRIQsU/PSjBHPweYyySdmm1Lm7QHzBPJux2YDkR1MwIM6SjTKQBk9q5V
-         F0xaGYlDQV2QJ2UtvlzjMVPRKeOxjU4G8+NdWuTJtHfsXK1MRfC/Ku2mN6o2p8020yJR
-         bLTxthUsZy5+rt4co76iLBcy9q0JLDDuLs/EDfbzNkTcrbuL3Xv2WdsLhE0alGzA5XT2
-         XyB5Sqz5j8Q7XTOnsQDIM3z/s7xF2XjRdlKCgwB/A7SRSJIaeihfvHyBJ3eHB2V+qjo/
-         RbSrlowviiyOJW55xhvfeKPCPzwNMUUPAsbhHwjy7/sJy8jHNUg3ZA7RUCsLJtP8S1ei
-         cufQ==
-X-Gm-Message-State: ANoB5pnLkJgWAtZo4GOspwl74ERDEIq0N47Zhh6csqIfNBYi50UuJ/1f
-        PfEVOBRfzwwg3R7c9qYmhLQLbQ==
-X-Google-Smtp-Source: AA0mqf75O/7WU8XDD9IwQKSCfFeGbOFmcHAo5be07CziHS5AMi+B7pemqxe1e76Z9mVvNjLaX4/kIw==
-X-Received: by 2002:a19:6449:0:b0:4ae:5dc5:82c5 with SMTP id b9-20020a196449000000b004ae5dc582c5mr5964438lfj.2.1668505429663;
-        Tue, 15 Nov 2022 01:43:49 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b13-20020ac25e8d000000b004b1892aa5c8sm2155057lfq.56.2022.11.15.01.43.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 01:43:49 -0800 (PST)
-Message-ID: <33c2ffe2-7f23-5292-8eec-aee66fb59cf8@linaro.org>
-Date:   Tue, 15 Nov 2022 10:43:48 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0vWBmmZ+MaaTNoor+4JgOmz7dmr0qFnAhYd6s3lBFUI=;
+        b=YMluWSM7D4ajp1bomNRqqGFECDhyxq0UMciiumSOYjlFmEy8Uw4avd9bHVz4nBm8Ag
+         glyR/08oaEbenNLPcrNeXPUnmk+ZyhX/C+RQE0JxoLn/UMav6hQvSi/CJu0ogpvl4wKU
+         FeWcGuqzh6j+OqK8bk0h3M3t3kIXB0USa2lwOenFVnYGMaPXklXXikhuuk4IQLxa1cnK
+         /1sYQSIPpdmAgduCcdy3AuMeeVGeRNylOqY0qabMhIAQs3oNbUCxIyy5znFLyXoNaPdf
+         POu7R0mTqKzkZ0GF/7euv2FGMkZXUBdEnW8oMLC/J1k3sOuUM6YGkZCxA82kWlaklii3
+         MiSQ==
+X-Gm-Message-State: ANoB5pkSRTaAOWMrE/aw0mauuwFD5sX1+5XvpE5sU7Y7LsNXTdtzAd10
+        dkE3zjUPdUY4YdHUKTWqnz/dKWE3cMlzddCaAm6i0+qjaXQ26NnpL12t7TVpx+gkEbXDmXDizxi
+        5mLkY8B4y3O+b6tVTcI/l+AyRwk3xYTaxBKBvvE7q
+X-Received: by 2002:a63:942:0:b0:43c:b43f:5228 with SMTP id 63-20020a630942000000b0043cb43f5228mr16064361pgj.58.1668505474022;
+        Tue, 15 Nov 2022 01:44:34 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf43WRfjzPq1IwIinTobpP8n7DU67GGyyPyGFWJnRVW1tpkA7R3+pueZU5O0fWJQkQzgWakieDpZzmd8cv37euU=
+X-Received: by 2002:a63:942:0:b0:43c:b43f:5228 with SMTP id
+ 63-20020a630942000000b0043cb43f5228mr16064342pgj.58.1668505473833; Tue, 15
+ Nov 2022 01:44:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 05/15] dt-bindings: usb: mediatek,mtu3: add MT8365 SoC
- bindings
-Content-Language: en-US
-To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        linux-mediatek@lists.infradead.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com
-References: <20221107211001.257393-1-bero@baylibre.com>
- <20221115025421.59847-1-bero@baylibre.com>
- <20221115025421.59847-6-bero@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115025421.59847-6-bero@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114131759.57883-1-elic@nvidia.com> <20221114131759.57883-3-elic@nvidia.com>
+In-Reply-To: <20221114131759.57883-3-elic@nvidia.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Tue, 15 Nov 2022 10:43:58 +0100
+Message-ID: <CAJaqyWdYuFJ8nvc2YuoFMO=dj_GVMSghj016jU-X75WvXPXL2g@mail.gmail.com>
+Subject: Re: [PATH v2 2/8] vdpa/mlx5: Return error on vlan ctrl commands if
+ not supported
+To:     Eli Cohen <elic@nvidia.com>
+Cc:     mst@redhat.com, jasowang@redhat.com, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, si-wei.liu@oracle.com,
+        lulu@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 03:54, Bernhard Rosenkränzer wrote:
-> From: Fabien Parent <fparent@baylibre.com>
-> 
-> Add binding documentation for the MT8365 SoC.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+On Mon, Nov 14, 2022 at 2:18 PM Eli Cohen <elic@nvidia.com> wrote:
+>
+> Check if VIRTIO_NET_F_CTRL_VLAN is negotiated and return error if
+> control VQ command is received.
+>
+> Signed-off-by: Eli Cohen <elic@nvidia.com>
 
-1. Drop second, redundant "bindings" from subject.
+Acked-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
 
-2. This is a friendly reminder during the review process.
-
-It looks like you received a tag and forgot to add it.
-
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions. However, there's no need to repost patches *only* to add the
-tags. The upstream maintainer will do that for acks received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-
-If a tag was not added on purpose, please state why and what changed.
-
-Best regards,
-Krzysztof
+> ---
+>  drivers/vdpa/mlx5/net/mlx5_vnet.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/ml=
+x5_vnet.c
+> index 3fb06dcee943..01da229d22da 100644
+> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> @@ -1823,6 +1823,9 @@ static virtio_net_ctrl_ack handle_ctrl_vlan(struct =
+mlx5_vdpa_dev *mvdev, u8 cmd)
+>         size_t read;
+>         u16 id;
+>
+> +       if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_CTRL_VLA=
+N)))
+> +               return status;
+> +
+>         switch (cmd) {
+>         case VIRTIO_NET_CTRL_VLAN_ADD:
+>                 read =3D vringh_iov_pull_iotlb(&cvq->vring, &cvq->riov, &=
+vlan, sizeof(vlan));
+> --
+> 2.38.1
+>
 
