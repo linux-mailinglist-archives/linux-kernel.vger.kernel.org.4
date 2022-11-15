@@ -2,80 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2CF629AFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA32A629B05
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:48:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiKONrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:47:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
+        id S230472AbiKONs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:48:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiKONrW (ORCPT
+        with ESMTP id S230106AbiKONsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:47:22 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159E924969
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:47:21 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id c1so24479608lfi.7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:47:21 -0800 (PST)
+        Tue, 15 Nov 2022 08:48:23 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFF8248DD
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:48:21 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id p8so24478854lfu.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:48:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D1lsJdjigIX8ZDz/U2Ud7ZNMW6v6rQsSpoxZd5XzRCU=;
-        b=toZYMHYHTMpkCtWeEVOJGZddt5opCfkJre25TDxhpInMjQ13zbH8ndmt4JbDPDyKI4
-         Ygx606/KjsyiP9FDUiRTSLYEi74hurhoTA7pAnMO6MPGAo4dMHHNSYB4LivXKi1OhD2g
-         NHRGtdtq6I3izbstBC7OHL8IaIp+njwTn3PVXkgEW+lUru48QoI0Kl7XEhbjxepVLfcU
-         RaDN3MdNZBt+bdUYqvAUiQBQJbv1nMxRKGcVg9sqH3E8pUlXZjWBBBaM4CnhM5yybMsw
-         Zkacv+sfli28hw4WE59YZhDvPNk9rvkIMtfQGQUQSlwOposIpikkeUJ6TJu7lG1eujoe
-         fTyQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PyQQsmdB9p1iCbGlgrbpIM/umuy2agle/uOgcxWJaw0=;
+        b=ifGbpBcqd+1nCUiyTrYte34kDBWXyRIYNmNA/HCI0elOYiAzLvI010U5mZ1NaqUCIr
+         PO/fHVmh7JB+FX+3TAHtpuM0QWLqfRib8Ymr3wAauhli56Dm77ENoOYnzuinHPc3H1cV
+         B9TY/9dQbZi2UcigQna6+JW6cvs6SYJjKXj8peTnDPLMT1cszxjjTIBBwjXHfSnkNwTA
+         9P0ZNihkfIEwMSr7/bIhf23XcMgXqi7v1gr/Q8aWCAe5KlBXny9Fx3GHdUW/TD88wsgg
+         1U6kX5uHrW47sF0n6w99xKMwCP1/w+sWvmuCqTuxz/MdeW6QRCy3rSBUgNEATjjB3mxd
+         GtMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=D1lsJdjigIX8ZDz/U2Ud7ZNMW6v6rQsSpoxZd5XzRCU=;
-        b=UZfahglhZoNFgJe2SqGQhNe46HeyUrBdDAD1yw+iTFcYxuUsJd7CqkH0JzCWRDoYh7
-         BDcSwD+4SpORDJlj1CVSuKXQUsaapUsLyLoA47hKLk0DCOLJKQ8Iane1aPyjJLYxoHBK
-         cVmoldiXWMF7MUGThE/777E5SlBSLglshfCZR60bL2Tc1mpPuukEGdLWO2Jlx6PvkwNn
-         sNEnH07gsX54q3V23uQe3w6UG6lyecjVflrWAR1YqW4V3dqlfm96ETc8I2nsqmYgisM8
-         QpvhkJELrH5V7UfYEzWmL5ymSLxn9B/I0dN+ySLWgCoJfo+Vko0/DC7gV2X6hqI53I8+
-         OGpQ==
-X-Gm-Message-State: ANoB5pnJFZfYPyl3vukWUZTISlbqc2Dd2D2Pw7MLyLTtmA7x1hhBxTyH
-        4BF4Daekzu75VzO+WSWd3w0gvQ==
-X-Google-Smtp-Source: AA0mqf5xZIdpKC+8d2I3BbXfsVS3Y6jQcYqCsbUQ+AHMtLAbUdSpt3NQjEc8eMotSJsgEv7BcpI0qQ==
-X-Received: by 2002:a19:e01a:0:b0:4b1:61a6:fc45 with SMTP id x26-20020a19e01a000000b004b161a6fc45mr5503018lfg.224.1668520039387;
-        Tue, 15 Nov 2022 05:47:19 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id q23-20020a056512211700b0049e9122bd1bsm2209533lfr.164.2022.11.15.05.47.17
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PyQQsmdB9p1iCbGlgrbpIM/umuy2agle/uOgcxWJaw0=;
+        b=DZM3kpJmYcETE37CBZn+xYhoVMQ+c4DYphd4aruAeZNYhVV4T96hCr0Zs/+0dic5yA
+         3HrxO6V14yu5lw25Ch8DJdkoTpFD5+On5+NAmYb9iErQzqy/Rsn2Qvxl83TyH1L2Y4GA
+         MMpcvHU8rk7XOPjFFW0J9gsMQFYPis3VCYHXX4uGxUisLXX0FkCCc1s3CBhrRzekV6Ry
+         T51wYYpHVi1nLohDLxPVI4N3kJEYCfRz7YPTzuRNlaEedvPKWfmyV/VejNzLJLGGzf5J
+         eijUXc7CYuIzhAfTSKg3zQBTGQtadVPoh7jCB0ySL42guNpwgRTs4iIroOiLOhJMOz2Q
+         7xnQ==
+X-Gm-Message-State: ANoB5pn5Ru1djwxNcd/VAKTnOOgQA7BlyhRYJQMo4N08hvG6PAvCzxjF
+        aVx8/NJ5KSx4ows5ROilCmnXSg==
+X-Google-Smtp-Source: AA0mqf7NzmaJ1S8z7UNAq0GcGiVsV6Ak7vPyFfGsvevSVpg2e8K8g3+r2D+3QVfW/6/DuccuYbUTvg==
+X-Received: by 2002:a19:5051:0:b0:499:8e29:2763 with SMTP id z17-20020a195051000000b004998e292763mr6406317lfj.137.1668520100303;
+        Tue, 15 Nov 2022 05:48:20 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c8-20020ac24148000000b00492c663bba2sm2207122lfi.124.2022.11.15.05.48.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 05:47:18 -0800 (PST)
-Message-ID: <dc138171-f7b1-2761-d800-620e85afd6d9@linaro.org>
-Date:   Tue, 15 Nov 2022 14:47:12 +0100
+        Tue, 15 Nov 2022 05:48:19 -0800 (PST)
+Message-ID: <3fd767c3-84c3-7155-9e05-cc124e3b3d2f@linaro.org>
+Date:   Tue, 15 Nov 2022 14:48:18 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH v2 10/12] arm64: dts: qcom: sm8350: Add display system
- nodes
-To:     Robert Foss <robert.foss@linaro.org>, robdclark@gmail.com,
-        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
-        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        quic_kalyant@quicinc.com, swboyd@chromium.org,
-        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
-        quic_khsieh@quicinc.com, quic_vpolimer@quicinc.com,
-        vkoul@kernel.org, dianders@chromium.org,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
-        vinod.koul@linaro.org, quic_jesszhan@quicinc.com,
-        andersson@kernel.org
-References: <20221115133105.980877-1-robert.foss@linaro.org>
- <20221115133105.980877-11-robert.foss@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221115133105.980877-11-robert.foss@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/9] dt-bindings: arm-smmu: Allow up to 3 power-domains
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     patches@linaro.org, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221114104222.36329-1-konrad.dybcio@linaro.org>
+ <20221114104222.36329-2-konrad.dybcio@linaro.org>
+ <6fa8e3ea-2113-d930-96bc-3726d53e5bcd@linaro.org>
+ <a4b160d8-0faa-3f4c-a925-0beaf6ace721@linaro.org>
+ <0121fc03-b027-7659-5e6e-b42089c9888d@linaro.org>
+ <12578e05-ced9-e5f7-7922-0af2f2159333@linaro.org>
+ <878402e7-7f80-31c7-3a6b-989a6ca29841@linaro.org>
+ <f59ddce1-c2e1-4055-3bce-1319c68ddf94@linaro.org>
+ <4b4ca3ba-8e4d-088e-8b3e-a47ad6ecb965@linaro.org>
+ <cff269c8-f944-9277-9df8-653522efbba0@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <cff269c8-f944-9277-9df8-653522efbba0@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -86,249 +90,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 15/11/2022 14:06, Konrad Dybcio wrote:>> diff --git
+a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+>>> b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+>>> index 28f5720824cd..55759aebc4a0 100644
+>>> --- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+>>> +++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+>>> @@ -200,7 +200,7 @@ properties:
+>>>        maxItems: 7
+>>>
+>>>      power-domains:
+>>
+>> As I mentioned before - minItems: 1.
+> But not all SMMUs require a power domain :/
 
+It does not matter. This does not require power-domains.
 
-On 15/11/2022 14:31, Robert Foss wrote:
-> Add mdss, mdss_mdp, dsi0, dsi0_phy nodes. With these
-> nodes the display subsystem is configured to support
-> one DSI output.
 > 
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sm8350.dtsi | 197 ++++++++++++++++++++++++++-
->   1 file changed, 193 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> index 434f8e8b12c1..5c98e5cf5ad0 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> @@ -3,6 +3,7 @@
->    * Copyright (c) 2020, Linaro Limited
->    */
->   
-> +#include <dt-bindings/interconnect/qcom,sm8350.h>
->   #include <dt-bindings/interrupt-controller/arm-gic.h>
->   #include <dt-bindings/clock/qcom,dispcc-sm8350.h>
->   #include <dt-bindings/clock/qcom,gcc-sm8350.h>
-> @@ -2536,14 +2537,201 @@ usb_2_dwc3: usb@a800000 {
->   			};
->   		};
->   
-> +		mdss: mdss@ae00000 {
-> +			compatible = "qcom,sm8350-mdss";
-> +			reg = <0 0x0ae00000 0 0x1000>;
-> +			reg-names = "mdss";
-> +
-> +			interconnects = <&mmss_noc MASTER_MDP0 0 &mc_virt SLAVE_EBI1 0>,
-> +					<&mmss_noc MASTER_MDP1 0 &mc_virt SLAVE_EBI1 0>;
-> +			interconnect-names = "mdp0-mem", "mdp1-mem";
-> +
-> +			power-domains = <&dispcc MDSS_GDSC>;
-> +			resets = <&dispcc DISP_CC_MDSS_CORE_BCR>;
-> +
-> +			clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +				 <&gcc GCC_DISP_HF_AXI_CLK>,
-> +				 <&gcc GCC_DISP_SF_AXI_CLK>,
-> +				 <&dispcc DISP_CC_MDSS_MDP_CLK>;
-> +			clock-names = "iface", "bus", "nrt_bus", "core";
-> +
-> +			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-controller;
-> +			#interrupt-cells = <1>;
-> +
-> +			iommus = <&apps_smmu 0x820 0x402>;
-> +
-> +			status = "disabled";
-> +
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			mdss_mdp: display-controller@ae01000 {
-> +				compatible = "qcom,sm8350-dpu";
-> +				reg = <0 0x0ae01000 0 0x8f000>,
-> +				      <0 0x0aeb0000 0 0x2008>;
-> +				reg-names = "mdp", "vbif";
-> +
-> +				clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
-> +					<&gcc GCC_DISP_SF_AXI_CLK>,
-> +					<&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +					<&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
-> +					<&dispcc DISP_CC_MDSS_MDP_CLK>,
-> +					<&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-> +				clock-names = "bus",
-> +					      "nrt_bus",
-> +					      "iface",
-> +					      "lut",
-> +					      "core",
-> +					      "vsync";
-> +
-> +				assigned-clocks = <&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-> +				assigned-clock-rates = <19200000>;
-> +
-> +				operating-points-v2 = <&mdp_opp_table>;
-> +				power-domains = <&rpmhpd SM8350_MMCX>;
-> +
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <0>;
-> +
-> +				status = "disabled";
-It doesn't make sense to disable mdp separately, as mdss is essentially 
-useless without it.
+>>
+>> Just like the link I gave you.
+>>
+>>> -    maxItems: 1
+>>> +    maxItems: 3
+>>>
+>>>      nvidia,memory-controller:
+>>>        description: |
+>>> @@ -364,6 +364,26 @@ allOf:
+>>>                - description: interface clock required to access smmu's
+>>> registers
+>>>                    through the TCU's programming interface.
+>>>
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          contains:
+>>> +            const: qcom,sm6375-smmu-500
+>>> +    then:
+>>> +      properties:
+>>> +        power-domains:
+>>> +          items:
+>>> +            - description: SNoC MMU TBU RT GDSC
+>>> +            - description: SNoC MMU TBU NRT GDSC
+>>> +            - description: SNoC TURING MMU TBU0 GDSC
+>>> +
+>>> +      required:
+>>> +        - power-domains
+>>> +    else:
+>>> +      properties:
+>>> +        power-domains:
+>>> +          maxItems: 1
+>>> +
+>>>    examples:
+>>>      - |+
+>>>        /* SMMU with stream matching or stream indexing */
+>>>
+>>>
+>>> In my eyes, this should work, but I still get errors like:
+>>>
+>>> /home/konrad/linux/arch/arm64/boot/dts/qcom/sm8250-hdk.dtb:
+>>> iommu@3da0000: power-domains: [[108, 0]] is too short
+>>>
+>>> as if the else: path was never taken..
+>>
+>> It was, but the top-level property said that minItems=3 (implicitly), so
+>> it is too short.
+> So the top-level properties take precedence over the ones that come from 
+> the if-then-else?? Ugh.
 
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@0 {
-> +						reg = <0>;
-> +						dpu_intf1_out: endpoint {
-> +							remote-endpoint = <&dsi0_in>;
-> +						};
-> +					};
-> +				};
-> +
-> +				mdp_opp_table: opp-table {
-> +					compatible = "operating-points-v2";
-> +
-> +					opp-200000000 {
-> +						opp-hz = /bits/ 64 <200000000>;
-> +						required-opps = <&rpmhpd_opp_low_svs>;
-> +					};
-> +
-> +					opp-300000000 {
-> +						opp-hz = /bits/ 64 <300000000>;
-> +						required-opps = <&rpmhpd_opp_svs>;
-> +					};
-> +
-> +					opp-345000000 {
-> +						opp-hz = /bits/ 64 <345000000>;
-> +						required-opps = <&rpmhpd_opp_svs_l1>;
-> +					};
-> +
-> +					opp-460000000 {
-> +						opp-hz = /bits/ 64 <460000000>;
-> +						required-opps = <&rpmhpd_opp_nom>;
-> +					};
-> +				};
-> +			};
-> +
-> +			dsi0: dsi@ae94000 {
-> +				compatible = "qcom,mdss-dsi-ctrl";
-> +				reg = <0 0x0ae94000 0 0x400>;
-> +				reg-names = "dsi_ctrl";
-> +
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <4>;
-> +
-> +				clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_ESC0_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +					 <&gcc GCC_DISP_HF_AXI_CLK>;
-> +				clock-names = "byte",
-> +					      "byte_intf",
-> +					      "pixel",
-> +					      "core",
-> +					      "iface",
-> +					      "bus";
-> +
-> +				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>,
-> +						  <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
-> +				assigned-clock-parents = <&dsi0_phy 0>,
-> +							 <&dsi0_phy 1>;
-> +
-> +				operating-points-v2 = <&dsi_opp_table>;
-> +				power-domains = <&rpmhpd SM8350_MMCX>;
-> +
-> +				phys = <&dsi0_phy>;
-> +				phy-names = "dsi";
-I think that was dropped as of late.
+It's a sum of them. Top level is expected to define the widest
+constraints and if-then-else narrows them per variants.
 
-> +
-> +				status = "disabled";
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@0 {
-> +						reg = <0>;
-> +						dsi0_in: endpoint {
-> +							remote-endpoint = <&dpu_intf1_out>;
-> +						};
-> +					};
-> +
-> +					port@1 {
-> +						reg = <1>;
-> +						dsi0_out: endpoint {
-> +						};
-> +					};
-> +				};
-> +			};
-> +
-> +			dsi0_phy: phy@ae94400 {
-> +				compatible = "qcom,dsi-phy-5nm-8350";
-> +				reg = <0 0x0ae94400 0 0x200>,
-> +				      <0 0x0ae94600 0 0x280>,
-> +				      <0 0x0ae94900 0 0x260>;
-> +				reg-names = "dsi_phy",
-> +					    "dsi_phy_lane",
-> +					    "dsi_pll";
-> +
-> +				#clock-cells = <1>;
-> +				#phy-cells = <0>;
-> +
-> +				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +					 <&rpmhcc RPMH_CXO_CLK>;
-> +				clock-names = "iface", "ref";
-> +
-> +				status = "disabled";
-> +
-> +				dsi_opp_table: dsi-opp-table {
-> +					compatible = "operating-points-v2";
-> +
-> +					opp-187500000 {
-> +						opp-hz = /bits/ 64 <187500000>;
-> +						required-opps = <&rpmhpd_opp_low_svs>;
-> +					};
-> +
-> +					opp-300000000 {
-> +						opp-hz = /bits/ 64 <300000000>;
-> +						required-opps = <&rpmhpd_opp_svs>;
-> +					};
-> +
-> +					opp-358000000 {
-> +						opp-hz = /bits/ 64 <358000000>;
-> +						required-opps = <&rpmhpd_opp_svs_l1>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
->   		dispcc: clock-controller@af00000 {
->   			compatible = "qcom,sm8350-dispcc";
->   			reg = <0 0x0af00000 0 0x10000>;
->   			clocks = <&rpmhcc RPMH_CXO_CLK>,
-> -				 <0>,
-> -				 <0>,
-> -				 <0>,
-> -				 <0>,
-> +				 <&dsi0_phy 0>, <&dsi0_phy 1>,
-> +				 <0>, <0>,
->   				 <0>,
->   				 <0>;
->   			clock-names = "bi_tcxo",
-> @@ -2558,6 +2746,7 @@ dispcc: clock-controller@af00000 {
->   			#power-domain-cells = <1>;
->   
->   			power-domains = <&rpmhpd SM8350_MMCX>;
-> +			required-opps = <&rpmhpd_opp_turbo>;
-A turbo vote is required for it to function? Seems a bit high..
+Best regards,
+Krzysztof
 
-Konrad
->   		};
->   
->   		adsp: remoteproc@17300000 {
