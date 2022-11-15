@@ -2,170 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92811629682
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB95629686
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiKOK5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36224 "EHLO
+        id S238184AbiKOK6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:58:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238081AbiKOK4u (ORCPT
+        with ESMTP id S231960AbiKOK5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:56:50 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D97286FA;
-        Tue, 15 Nov 2022 02:55:15 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 81B972257D;
-        Tue, 15 Nov 2022 10:55:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1668509714; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=l6d1al7iVPZvy8XyqxGKVTzEvm8pG/L2/H7QzcMYZ+c=;
-        b=lnbpfBfgPj9v+blxlSnc9baHKOvd9curpSWJvUtLpFs/1EiYp0z1Z+xGHo2FxFRhg+LnTY
-        Jv/2xHXYDAcGhAAc0FMnZdbSs8C83EX3UEIAYHV9lZ/npdxSMhII1mkM1Nk/mLPpuFR/gw
-        vmGj0EDranmfeSaYDYfEMDi48CcmYlo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1668509714;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=l6d1al7iVPZvy8XyqxGKVTzEvm8pG/L2/H7QzcMYZ+c=;
-        b=XAgI9VUW51QYd4hI7eR9x1Upr9E8+OUavkhq8zJ6tz9myGrsZUWknqUg6KAEZIEn1SWxtk
-        h4t0FEU5qOmVZYDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7210513A91;
-        Tue, 15 Nov 2022 10:55:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZZfNGxJwc2PDDQAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 15 Nov 2022 10:55:14 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id F025FA0709; Tue, 15 Nov 2022 11:55:13 +0100 (CET)
-Date:   Tue, 15 Nov 2022 11:55:13 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Svyatoslav Feldsherov <feldsherov@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Lukas Czerner <lczerner@redhat.com>,
-        Theodore Ts'o <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
-        syzbot+6ba92bd00d5093f7e371@syzkaller.appspotmail.com,
-        oferz@google.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] fs: do not update freeing inode io_list
-Message-ID: <20221115105513.6qqyxj4klci6hozl@quack3>
-References: <20221114192129.zkmubc6pmruuzkc7@quack3>
- <20221114212155.221829-1-feldsherov@google.com>
+        Tue, 15 Nov 2022 05:57:47 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C7CC750
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:55:57 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id v1so23541906wrt.11
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:55:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7Os696b+9zkVS6lz3wwEWnLE1KxIJPKzpMEH3bahfyE=;
+        b=JiWctmm26IesWn9v52lXd+9stVyKBduqAE3Rig0nnvhzGYTGVluffpEgZmNhNVBSis
+         26BbjDcWfsAE+kLpccx9VLSB25WJBkVHSRbfL3Z6l2A/65jVgmHiEMpRClwe93CypaTP
+         bUIYzfJ0pU0tUt/lTnGhz/i/OD4VH8Y4qNksN3I+hDJrOEB2BoOQPrzga97s5kzxwMKn
+         f24YpA4ib8405CtdjX9WTrmtNCtqgcpFOzpWGCaB9JNt77fw2LjvUDbBtfMBXjFDaSrX
+         gzW5rnd2gQWdT8Q1HgLJEltr29mfIS3B35/SJeEGcQsE4jBFE9lSFCwTPwvqTGveqpUb
+         dzIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7Os696b+9zkVS6lz3wwEWnLE1KxIJPKzpMEH3bahfyE=;
+        b=dApFbugNTd2+5wbuwDO/y37uSVNoryRNPEBRM0T2DgtCn3g4F54VpsMN4c1Uk4pTEF
+         r0OFkvRHieQcKzHzefeZwZpVYhCF2gQR+30mWS/423MsGNZrEuEOfW8Rgd+MuIzVim7X
+         jwFq8UPrxLiWux+FajXiwiveRMRLcLHYmcS/JllSazd5CNgNtDkCi1v3DalHs3t+94/Y
+         EdgdNdRBASbmLkRPZtWeoBNnl+HqohezyT6ciMVkV32hDJkh5DHsbnTQw41MH9hH2dkq
+         NvMUrisOy6jOSZyy7+lX3RDlMoLEfcHs4j+akBSel7Z4/PgnARH4fwkgGSK36vGzsTih
+         JlYw==
+X-Gm-Message-State: ANoB5pm0AO/Q6JX1aIMJLvqJgV5mJ9QIjQdBZMOQWhSrqrZJgzXKWZ9s
+        gvgXOAds05w/3DV+CrvCQXiQug==
+X-Google-Smtp-Source: AA0mqf5CKMgNkTiCStyQMUE9zELmueYgW4bfgK1N2t93kQ1edF0KYrFc0oZ/oMvfPzr3cBEMDijUmw==
+X-Received: by 2002:a5d:58c3:0:b0:238:8896:7876 with SMTP id o3-20020a5d58c3000000b0023888967876mr10351481wrf.645.1668509755874;
+        Tue, 15 Nov 2022 02:55:55 -0800 (PST)
+Received: from localhost.localdomain ([185.201.60.217])
+        by smtp.gmail.com with ESMTPSA id r18-20020adfe692000000b00238df11940fsm12185046wrm.16.2022.11.15.02.55.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 02:55:55 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 0/2] ASoC: codec: lpass-va: add npl clock support
+Date:   Tue, 15 Nov 2022 10:55:39 +0000
+Message-Id: <20221115105541.16322-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114212155.221829-1-feldsherov@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 14-11-22 21:21:55, Svyatoslav Feldsherov wrote:
-> After commit cbfecb927f42 ("fs: record I_DIRTY_TIME even if inode
-> already has I_DIRTY_INODE") writeiback_single_inode can push inode with
-				^^^ writeback
+New versions of VA Macro has soundwire integrated, so handle the soundwire npl
+clock correctly in the codec driver and add related bindings.
 
-> I_DIRTY_TIME set to b_dirty_time list. In case of freeing inode with
-> I_DIRTY_TIME set this can happened after deletion of inode io_list at
-				^^ happen		^^^ deletion of
-inode *from i_io_list*
+Srinivas Kandagatla (2):
+  ASoC: dt-bindings: lpass-va: add npl clock for new VA macro
+  ASoC: codecs: va-macro: add npl clk
 
-> evict. Stack trace is following.
-> 
-> evict
-> fat_evict_inode
-> fat_truncate_blocks
-> fat_flush_inodes
-> writeback_inode
-> sync_inode_metadata(inode, sync=0)
-> writeback_single_inode(inode, wbc) <- wbc->sync_mode == WB_SYNC_NONE
-> 
-> This will lead to use after free in flusher thread.
-> 
-> Similar issue can be triggered if writeback_single_inode in the
-> stack trace update inode->io_list. Add explicit check to avoid it.
-			^^ inode->i_io_list
- 
-> Fixes: cbfecb927f42 ("fs: record I_DIRTY_TIME even if inode already has I_DIRTY_INODE")
-> Reported-by: syzbot+6ba92bd00d5093f7e371@syzkaller.appspotmail.com
-> Signed-off-by: Svyatoslav Feldsherov <feldsherov@google.com>
+ .../bindings/sound/qcom,lpass-va-macro.yaml   | 72 ++++++++++++++++---
+ sound/soc/codecs/lpass-va-macro.c             | 41 +++++++++++
+ 2 files changed, 105 insertions(+), 8 deletions(-)
 
-Besides these gramatical nits the patch looks good to me. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-Thanks!
-
-								Honza
-
-> ---
->  V1 -> V2: 
->  - address review comments
->  - skip inode_cgwb_move_to_attached for freeing inode 
-> 
->  fs/fs-writeback.c | 30 +++++++++++++++++++-----------
->  1 file changed, 19 insertions(+), 11 deletions(-)
-> 
-> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-> index 443f83382b9b..c4aea096689c 100644
-> --- a/fs/fs-writeback.c
-> +++ b/fs/fs-writeback.c
-> @@ -1712,18 +1712,26 @@ static int writeback_single_inode(struct inode *inode,
->  	wb = inode_to_wb_and_lock_list(inode);
->  	spin_lock(&inode->i_lock);
->  	/*
-> -	 * If the inode is now fully clean, then it can be safely removed from
-> -	 * its writeback list (if any).  Otherwise the flusher threads are
-> -	 * responsible for the writeback lists.
-> +	 * If the inode is freeing, it's io_list shoudn't be updated
-> +	 * as it can be finally deleted at this moment.
->  	 */
-> -	if (!(inode->i_state & I_DIRTY_ALL))
-> -		inode_cgwb_move_to_attached(inode, wb);
-> -	else if (!(inode->i_state & I_SYNC_QUEUED)) {
-> -		if ((inode->i_state & I_DIRTY))
-> -			redirty_tail_locked(inode, wb);
-> -		else if (inode->i_state & I_DIRTY_TIME) {
-> -			inode->dirtied_when = jiffies;
-> -			inode_io_list_move_locked(inode, wb, &wb->b_dirty_time);
-> +	if (!(inode->i_state & I_FREEING)) {
-> +		/*
-> +		 * If the inode is now fully clean, then it can be safely
-> +		 * removed from its writeback list (if any). Otherwise the
-> +		 * flusher threads are responsible for the writeback lists.
-> +		 */
-> +		if (!(inode->i_state & I_DIRTY_ALL))
-> +			inode_cgwb_move_to_attached(inode, wb);
-> +		else if (!(inode->i_state & I_SYNC_QUEUED)) {
-> +			if ((inode->i_state & I_DIRTY))
-> +				redirty_tail_locked(inode, wb);
-> +			else if (inode->i_state & I_DIRTY_TIME) {
-> +				inode->dirtied_when = jiffies;
-> +				inode_io_list_move_locked(inode,
-> +							  wb,
-> +							  &wb->b_dirty_time);
-> +			}
->  		}
->  	}
->  
-> -- 
-> 2.38.1.431.g37b22c650d-goog
-> 
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.25.1
+
