@@ -2,85 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF88D629E25
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F0B629E2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbiKOPye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:54:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
+        id S230368AbiKOPzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:55:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbiKOPyc (ORCPT
+        with ESMTP id S230088AbiKOPzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:54:32 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6DB2CDF0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:54:30 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id e13so13526126edj.7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:54:30 -0800 (PST)
+        Tue, 15 Nov 2022 10:55:10 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD352E689;
+        Tue, 15 Nov 2022 07:55:09 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id b185so14459297pfb.9;
+        Tue, 15 Nov 2022 07:55:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MXw2DcIrd4sYwZp2Qf6GO0lRe5Jh56EBfVUnFYKu6RE=;
-        b=VdrMWd2C0zRlIU+FT+lgMorBgLSdXIaGdRiqQEjfe8ICZQFWZbSQJdhtD35B6a6TBT
-         esMxNNkTUrQltwheZBCw0jpTcMirEaF3UBLCAQJNGSC5SvqsykCjHUMWADXOU4zkzN3N
-         zRcvodFQ2fJTRSA/8SKxycjIaZ3P/YHyvJCNDYCbN9ow9C19ZSnTmkk8bvOL0M3lRLf8
-         gtDCM0hKPwxajoUeptIpXUgt8dlhddD74sFXXX+qYapzoehSlThwIpxBYUp3g2URDHqf
-         VdCp91/IM06Ap6P8h7XkNAyZa/Qo7AIm/hG/vv/5oRLcpePO4Rzhv5JYp3oS756qwqg/
-         M58A==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C2pdDGcHzEOrC/CxVz6JXzn+8ROQCVIB4tco+V8khKI=;
+        b=lmxiKTwU9EufjzjCqWK+4zeLsUn2z1+RhlDqnBGWCUbHSaVqWEsuteZADyBl0p5Jc1
+         WS9Z28Ldft+0gHcHHNZo06DlJlxmD/EMdyHuIqgK0sKGn8mjn30raRGlh4kLzc6XvX0O
+         WTUpPQfBNSOCuy8NeIZwUmXr8MO0JpTz4RR71M/U8parEak+4kx83OnhITFwli8nDzsL
+         dZ0F5lnDFvo2Xw3CG7x8jG0turoh91KDLgHzCtpU3hBYfIA2jOcfyX1LivQl7Wsl38Fi
+         gZcrBjAgiuMo+zjVeVbvuUW713bauncKWonnGhRFhD6L825P5jovH2qcszZgfSlMXhNc
+         A/+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MXw2DcIrd4sYwZp2Qf6GO0lRe5Jh56EBfVUnFYKu6RE=;
-        b=BEM4JGxX7mFnyBjnkA53TVxr8vA+Cb7OQJTY+F7UVLkSXczGl6OtXH2MwdfrpJcOVy
-         fgtcOZ6sf63BLDis6lOKGosIV9JjAxctgHQwnlexQiaoqBvt0x6K3/IrpCG04kOjDwT5
-         2VcKB3lmXKUnyJ8tkoQkXCaj8htk4VTknJcwsKu7Bkx3CM7XkOM6PA5Mg+on1KMrAf6E
-         GnKWtIzVIcBQ4oc7j9m8vewkmC7W7WvS/yzmtftaRyKrWhtimm334mOpY/J6nkeBEAVa
-         rElDCSLxs74/7KHi1zGVRYG3Jt55lievHjNtK9XObyQASbad9+0Nnq6AQxgrhPxvK8q7
-         6m1w==
-X-Gm-Message-State: ANoB5plz6tXRB6Z8PhuQhjUkCHj6Z7vBvQDLIbz8bAofOXGqudaupRWF
-        7qKfVAAzU6vKYv+MdO8YSqUQzMf+izjtmfFmdPX9FA==
-X-Google-Smtp-Source: AA0mqf5TE5bV3zOgHOtylol+IUxKYYKrgvfQtjxF4BS+55SiwwnZkcIcQo0LiUhdzLshA1UMU7fopza3TqY0XOlXoGY=
-X-Received: by 2002:a50:fd9a:0:b0:461:b279:1175 with SMTP id
- o26-20020a50fd9a000000b00461b2791175mr15686083edt.124.1668527668323; Tue, 15
- Nov 2022 07:54:28 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C2pdDGcHzEOrC/CxVz6JXzn+8ROQCVIB4tco+V8khKI=;
+        b=ok2z4WdbxFXm9YOPtBD3jwgESFg2zgJ+toXmLla62aVi91t8TrIGDr076CeFpNjKNN
+         hAlkN4O9/WP0NHJcaO5nNPXg+upEtrui+WErPAb1XjqSbEV+1FUuAeFTo37N4vaNvYPd
+         wyBxhgvaR/Cf1V+y48wcLcR0iUq41CYbtTliiqsP6zhhuX8qywnOWbX2P+ume4cCov5P
+         DhuALhP/cyBR2AxllXDZp2v/2LVOmMNbBGzdYmae2kU3h7XsPqUiaHETVxDd4n4A0NJR
+         RLt68zCAr3GyUVqTgpPWGHHX8wVNklJ0mRhwtYHobI+vXoegNBp3VSalkCEzU7dwyZkz
+         XFaQ==
+X-Gm-Message-State: ANoB5plExT+L3YZjS3tBKDjPzO8P4PTOnAWPsdktF9/u9wN58MNf+7Ol
+        XdKp2gJwrReHWnfzFVRbn0A=
+X-Google-Smtp-Source: AA0mqf7v++J8wJlYIvd1JnXUJ2bJZVcaeIiHA7I/qToy2tlaCkZ7E0JMANpQu1t9KdE4xkibKJLdaA==
+X-Received: by 2002:a63:6742:0:b0:46f:59af:c1f4 with SMTP id b63-20020a636742000000b0046f59afc1f4mr15728710pgc.344.1668527708582;
+        Tue, 15 Nov 2022 07:55:08 -0800 (PST)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id h2-20020a170902f7c200b00176ab6a0d5fsm10014905plw.54.2022.11.15.07.55.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 07:55:08 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Chia-I Wu <olvaffe@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/msm: Enable clamp_to_idle for 7c3
+Date:   Tue, 15 Nov 2022 07:55:33 -0800
+Message-Id: <20221115155535.1615278-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
- <20221005-mt6357-support-v4-5-5d2bb58e6087@baylibre.com> <fe898d24-54fa-56bb-8067-b422a3a52ff5@collabora.com>
- <CAFGrd9r70XRd=4Ogei+U2QXQny7LhWr9bDCRNYco+Bsy+2XqrA@mail.gmail.com> <c426918a-8d63-5c40-4340-6c918296814f@linaro.org>
-In-Reply-To: <c426918a-8d63-5c40-4340-6c918296814f@linaro.org>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Tue, 15 Nov 2022 16:54:17 +0100
-Message-ID: <CAFGrd9o5GmqMS=MRq+EM+_T5kcHS2qftP0g0smu2W4QXBLozLA@mail.gmail.com>
-Subject: Re: [PATCH v4 5/9] dt-bindings: soc: mediatek: convert pwrap documentation
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fabien.parent@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Chen Zhong <chen.zhong@mediatek.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-rtc@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,30 +78,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mar. 15 nov. 2022 =C3=A0 15:18, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> a =C3=A9crit :
-> >>> +maintainers:
-> >>> +  - Alexandre Mergnat <amergnat@baylibre.com>
-> >>
-> >> I say that the maintainer for pwrap is Flora Fu <flora.fu@mediatek.com=
->....
-> >
-> > Flora Fu is the driver maintainer. As described in
-> > Documentation/devicetree/bindings/writing-schema.rst:
-> > maintainers
-> >   A DT specific property. Contains a list of email address(es)
-> >   for maintainers of this binding.
-> >
-> > My  understanding is this field is only for binding maintainers, but
-> > not related driver maintainers. Are we aligned ?
->
-> Usually driver maintainer should be also binding maintainer. You can
-> have more binding maintainers than drivers (and vice versa), but it's
-> less usual to maintain driver and do not care about its Devicetree
-> binding (unless driver is also for ACPI etc. but that's not the case here=
-?).
+From: Rob Clark <robdclark@chromium.org>
 
-Ok, thanks for the explanations
+This was overlooked.
 
-Regards,
-Alex
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+index ebe9599a8316..e495d8e192db 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+@@ -2029,13 +2029,6 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *dev)
+ 			adreno_cmp_rev(ADRENO_REV(6, 3, 5, ANY_ID), info->rev)))
+ 		adreno_gpu->base.hw_apriv = true;
+ 
+-	/*
+-	 * For now only clamp to idle freq for devices where this is known not
+-	 * to cause power supply issues:
+-	 */
+-	if (info && (info->revn == 618))
+-		gpu->clamp_to_idle = true;
+-
+ 	a6xx_llc_slices_init(pdev, a6xx_gpu);
+ 
+ 	ret = a6xx_set_supported_hw(&pdev->dev, config->rev);
+@@ -2050,6 +2043,13 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *dev)
+ 		return ERR_PTR(ret);
+ 	}
+ 
++	/*
++	 * For now only clamp to idle freq for devices where this is known not
++	 * to cause power supply issues:
++	 */
++	if (adreno_is_a618(adreno_gpu) || adreno_is_7c3(adreno_gpu))
++		gpu->clamp_to_idle = true;
++
+ 	/* Check if there is a GMU phandle and set it up */
+ 	node = of_parse_phandle(pdev->dev.of_node, "qcom,gmu", 0);
+ 
+-- 
+2.38.1
+
