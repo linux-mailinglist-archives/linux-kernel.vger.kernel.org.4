@@ -2,122 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18672629D7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:31:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FAA629D81
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238338AbiKOPbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:31:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
+        id S238307AbiKOPbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbiKOPaj (ORCPT
+        with ESMTP id S229665AbiKOPbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:30:39 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E072E68F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:29:49 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id b11so13643766pjp.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:29:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4xFPX3Z7GbW6bSnkxtp2PrmHn+B1TCPh3wtXpJcmJcQ=;
-        b=TUQVrky3j7PjthGvLv0MpsXChKErxo0kKVDc9vuozjGFAup0y/4rCu/Lzwz6ct6fZs
-         BNbGBoq4egydzZT1XD5G9Iw8nW/X04QBH7tE+4COvPwIa4SaJ1nuLtmpI036IMcToeGW
-         zZnGcx9sd4VGScYiYLy1OyEYKFwVDwbrkUsnNS4hFLF526AyUnyzMaNnHmNZcPZDfW7D
-         e0pMO2Uq6fHZ07WS/cFVVNICW//s8pxLGd0l36DhNuW1FMCWfklfG7mJQ6xjl4w9vKHV
-         TBG1TIXD1HoE37MGmdbRI15hUh4DH458Ms8kuR0sBB2a++VU0E+TYvMCouvgxHIFkkn2
-         8thw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4xFPX3Z7GbW6bSnkxtp2PrmHn+B1TCPh3wtXpJcmJcQ=;
-        b=Lc4R2e9Jzn3LIzzsLVVNMvKATRI0zdn2/hc6+0m0rb2VkR+WHk0lfq+7IQ0BiwZ24y
-         8FepzlSjR4aodbOkut45jptaihSf4s6h2pcq3fiWjh5s1Y3QnpSj7IoAUrrwr2q8Cbfi
-         h5fufmvVT9svnU9TS+YE/j2zWdRm8+bhZTx6Hll4lyB13wULTaTAU2FDO9vioXpupc9a
-         UHmBQyKJPv3IKsZizauio49lh5BxH8lz4FXz8lg19fhjTgR12gZcNTPh90Bk14RvZPaz
-         wjO709htogFp+F8+rDvCl/otixdfR9GvoJxIb+XlmEaiQqsJvYgOm8gOwjMVj/5vgLhY
-         X/Ig==
-X-Gm-Message-State: ANoB5pmY1tS33EkPj642KNY66TotQDE9h6d03r8Vh8uQr511k6C/OFii
-        eOkdH8tL4q4ZTTd9yza29qvK+w==
-X-Google-Smtp-Source: AA0mqf58kcbUcqreW0oERfBqZonqX7Aj1FkzaTQ3Wu++37yoKgQX6Z6ovOLD54LrZlViN1l9RXKR8A==
-X-Received: by 2002:a17:90b:684:b0:212:ca89:41c9 with SMTP id m4-20020a17090b068400b00212ca8941c9mr2723275pjz.244.1668526188923;
-        Tue, 15 Nov 2022 07:29:48 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id p2-20020a170902e74200b001869b988d93sm10093465plf.187.2022.11.15.07.29.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 07:29:48 -0800 (PST)
-Date:   Tue, 15 Nov 2022 15:29:45 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Jiaxi Chen <jiaxi.chen@linux.intel.com>, kvm@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        pbonzini@redhat.com, ndesaulniers@google.com,
-        alexandre.belloni@bootlin.com, peterz@infradead.org,
-        jpoimboe@kernel.org, chang.seok.bae@intel.com,
-        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
-        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
-        keescook@chromium.org, nathan@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/7] x86: KVM: Move existing x86 CPUID leaf
- [CPUID_7_1_EAX] to kvm-only leaf
-Message-ID: <Y3OwaRBzVFqJ4KEs@google.com>
-References: <20221110015252.202566-1-jiaxi.chen@linux.intel.com>
- <20221110015252.202566-2-jiaxi.chen@linux.intel.com>
- <f8607d23-afaa-2670-dd03-2ae8ec1e79a0@intel.com>
+        Tue, 15 Nov 2022 10:31:14 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1432E680;
+        Tue, 15 Nov 2022 07:30:45 -0800 (PST)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AFFTfD6026417;
+        Tue, 15 Nov 2022 15:30:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=x2ko2X3xrP6OAwA31iyaWLsAmnHHrOj2dnutRGO0xvQ=;
+ b=Nr5zEzlPDVb+IRIZbccqRex2kZFWRQr1VdFySMNYNAAE2dCOqO3XWm8horfcPohCaUrv
+ kGKSWHabvmxLHpZ8ikLiZ+dxhbJ442bv9aLLITbXoLEIeFpqNRulmDhrnJRx+KAEzSCR
+ jAt097u+8HCqlNpZa/FCgp3lK+twGLtZ9S5w6Odwnh4cRsb7fFRxsRTioFO3aCTN2fLd
+ CdJryk4TrdoZd98+bczHFOE3Oz5ipNxo88iJsmyMMZpUoKXhXSoPJcvnH7mHvIfmMLXH
+ Cw8RcsLGaJEfpt36BsZ88bFNMXDaDV55+emghW2M3Ju3HBTypQan+lmC8i0uarCu8IXz QA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kv51htdvt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Nov 2022 15:30:40 +0000
+Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2AFFUebo015670;
+        Tue, 15 Nov 2022 15:30:40 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 3kutnem5bh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Nov 2022 15:30:40 +0000
+Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AFFUeYG015662;
+        Tue, 15 Nov 2022 15:30:40 GMT
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 2AFFUdDB015661
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Nov 2022 15:30:40 +0000
+Received: from shazhuss-linux.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 15 Nov 2022 07:30:35 -0800
+From:   Shazad Hussain <quic_shazhuss@quicinc.com>
+To:     <andersson@kernel.org>, <johan@kernel.org>
+CC:     <sboyd@kernel.org>, <bmasney@redhat.com>, <agross@kernel.org>,
+        <mturquette@baylibre.com>, <ahalaney@redhat.com>,
+        Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3] clk: qcom: gcc-sc8280xp: add cxo as parent for three ufs ref clks
+Date:   Tue, 15 Nov 2022 20:59:56 +0530
+Message-ID: <20221115152956.21677-1-quic_shazhuss@quicinc.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f8607d23-afaa-2670-dd03-2ae8ec1e79a0@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: I6FDNuKTZ3SOcpP610kka_oyCnQj2kv9
+X-Proofpoint-GUID: I6FDNuKTZ3SOcpP610kka_oyCnQj2kv9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-15_08,2022-11-15_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ malwarescore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
+ spamscore=0 clxscore=1011 impostorscore=0 mlxscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211150104
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022, Xiaoyao Li wrote:
-> On 11/10/2022 9:52 AM, Jiaxi Chen wrote:
-> > cpuid_leaf[12] CPUID_7_1_EAX has only two bits are in use currently:
-> > 
-> >   - AVX-VNNI CPUID.(EAX=7,ECX=1):EAX[bit 4]
-> >   - AVX512-BF16 CPUID.(EAX=7,ECX=1):EAX[bit 5]
-> > 
-> > These two bits have no other kernel usages other than the guest
-> > CPUID advertisement in KVM. Given that and to save space for kernel
-> > feature bits, move these two bits to the kvm-only subleaves. The
-> > existing leaf cpuid_leafs[12] is set to CPUID_LNX_5 so future feature
-> > can pick it. This basically reverts:
-> > 
-> >   - commit b85a0425d805 ("Enumerate AVX Vector Neural Network
-> > instructions")
-> >   - commit b302e4b176d0 ("x86/cpufeatures: Enumerate the new AVX512
-> > BFLOAT16 instructions")
-> >   - commit 1085a6b585d7 ("KVM: Expose AVX_VNNI instruction to guset")
-> 
-> FYI, LAM support has been queued in tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=aa387b1b1e666cacffc0b7ac7e0949a68013b2d9
-> 
-> It adds
-> 
-> +#define X86_FEATURE_LAM			(12*32+26) /* Linear Address Masking */
-> 
-> and conflict with this patch.
-> 
-> Seen from the ISE, there are more bits defined in CPUID_7_1_EAX. And I
-> believe Intel will define more and it's likely some of them will be used by
-> kernel just like LAM.
+The three UFS reference clocks, gcc_ufs_ref_clkref_clk for external
+UFS devices, gcc_ufs_card_clkref_clk and gcc_ufs_1_card_clkref_clk for
+two PHYs are all sourced from CXO.
 
-Heh, are any of the bits you believe Intel will add publicly documented?  :-)
+Added parent_data for all three reference clocks described above to
+reflect that all three clocks are sourced from CXO to have valid
+frequency for the ref clock needed by UFS controller driver.
 
-LAM could be scattered, but if more bits are expected that's probably a waste of
-time and effort.
+Fixes: d65d005f9a6c ("clk: qcom: add sc8280xp GCC driver")
+Link: https://lore.kernel.org/lkml/Y2Tber39cHuOSR%2FW@hovoldconsulting.com/
+Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
+Tested-by: Johan Hovold <johan+linaro@kernel.org>
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+Tested-by: Andrew Halaney <ahalaney@redhat.com>
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+Reviewed-by: Reviewed-by: Brian Masney <bmasney@redhat.com>
+---
+Changes since v2:
+-  Tweaked commit message and added R-b T-b from v2
 
-Thanks for the heads up!
+v2 of this patch can be found at
+https://lore.kernel.org/all/20221115102217.6381-1-quic_shazhuss@quicinc.com/
+
+v1 of this patch can be found at
+https://lore.kernel.org/all/20221030142333.31019-1-quic_shazhuss@quicinc.com/
+
+used below patches for verification on next-20221114
+https://lore.kernel.org/lkml/20221104092045.17410-2-johan+linaro@kernel.org/
+https://lore.kernel.org/lkml/20221104092045.17410-3-johan+linaro@kernel.org/
+https://lore.kernel.org/lkml/20221111113732.461881-1-thierry.reding@gmail.com/
+
+ drivers/clk/qcom/gcc-sc8280xp.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
+index a18ed88f3b82..b3198784e1c3 100644
+--- a/drivers/clk/qcom/gcc-sc8280xp.c
++++ b/drivers/clk/qcom/gcc-sc8280xp.c
+@@ -5364,6 +5364,8 @@ static struct clk_branch gcc_ufs_1_card_clkref_clk = {
+ 		.enable_mask = BIT(0),
+ 		.hw.init = &(const struct clk_init_data) {
+ 			.name = "gcc_ufs_1_card_clkref_clk",
++			.parent_data = &gcc_parent_data_tcxo,
++			.num_parents = 1,
+ 			.ops = &clk_branch2_ops,
+ 		},
+ 	},
+@@ -5432,6 +5434,8 @@ static struct clk_branch gcc_ufs_card_clkref_clk = {
+ 		.enable_mask = BIT(0),
+ 		.hw.init = &(const struct clk_init_data) {
+ 			.name = "gcc_ufs_card_clkref_clk",
++			.parent_data = &gcc_parent_data_tcxo,
++			.num_parents = 1,
+ 			.ops = &clk_branch2_ops,
+ 		},
+ 	},
+@@ -5848,6 +5852,8 @@ static struct clk_branch gcc_ufs_ref_clkref_clk = {
+ 		.enable_mask = BIT(0),
+ 		.hw.init = &(const struct clk_init_data) {
+ 			.name = "gcc_ufs_ref_clkref_clk",
++			.parent_data = &gcc_parent_data_tcxo,
++			.num_parents = 1,
+ 			.ops = &clk_branch2_ops,
+ 		},
+ 	},
+-- 
+2.38.0
+
