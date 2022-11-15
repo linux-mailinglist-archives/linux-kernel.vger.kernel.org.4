@@ -2,216 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC274629FC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCCC629FB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:56:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbiKORAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 12:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
+        id S238102AbiKOQ4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 11:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiKOQ77 (ORCPT
+        with ESMTP id S230020AbiKOQ4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 11:59:59 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A5128E02
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:59:58 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id w14so25329476wru.8
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:59:58 -0800 (PST)
+        Tue, 15 Nov 2022 11:56:37 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592C613FB5
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:56:36 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id s196so13816047pgs.3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:56:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mfMmr+1QjnU4sjisGoRqb8FxQFwgEIl76i25CgDhNpM=;
-        b=UqienqYRbAH1e7sBF3xN1GzQ8JdfuqdaWqFqMP035H8CJyl9AAUJSxwUBiO+qV+wS1
-         j2+sEBQeEWUhhlE8ZdvRf+ZiZC11E+JtnjQBGWqt55TQ5ojF5av0xQ0wfwww8/QCcLo0
-         8GOkGU4WQOpSOHyF0SkAkiHP6h0Lo/Q1bpP2Z9TsjHOP6LPgvrNrPFpIHdVDwAiZGv1s
-         bXYcK28rMaUtSlGU+/1U6fOi4/tj6/fZgiRiWt3pEHmgs6vbP27mioTyX1gaSyGeAhJP
-         E73h2QDDCPNlZZoOl/dZq2jCFsoI3nF/FCoeBB/4o1ai7DAKHVm5TRu75uSL+hb9Nzkz
-         xouQ==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MvxZkFo9lEKIbouBZXZPUNsK695tEo0v2VM4QMcU4oo=;
+        b=Z6PsCrJqcgyXVZkJRHmJOnElMgYhxn3lnK7vNeD2wDgX/+dAOXUUqQW1eZAJb/NCmp
+         A3Q4XpdE4ZCuxjmSZNtHuLYYFlyj0IOkam+DFP8Fcuo1LqiInlDex62ky/oP9fb708+A
+         dpe22QvB2JIjW5pJq/S10VWpTRQQCjJn9A6F2EReZk6Kjvq32PVoW3sB4PTeoEEwzJXn
+         j0A9s0hQUvErzYRVoqqzTBdKO0aecYimTfvlGG/YJLXv4uh665ZBSkke6lJyzFqP6wAI
+         mlkWVHoOSusT1vNC9sK52J16zl8Jq6gm+7X0aVADQ8dj5ocCD88ITtYcoZ7Ga7NVXCqk
+         u69g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mfMmr+1QjnU4sjisGoRqb8FxQFwgEIl76i25CgDhNpM=;
-        b=CukHxVmo25J3h/OyEvHUPpWvqs+e/w5ZAb5vLOG2sncOMMWB5uW7fHjUAJP5tYQw7E
-         +D6gahKF4qDvYCA2cKdQl2XvQ+oWjy8K7JYJuiyB/OtDIE7teZlyLMN6E/rpPQVOVhZj
-         5vUikUAp1Ak2bkA5zibmzZ2lLTMRHciS/1Eh6xK6RUJm+2qe13J/ShikHyzTkFMV9AKh
-         +MgVY0xiZnNEhADu+xmbkhvL3iZaq+ACkm7uPRqcMrNxj4GG8rdlo58GMmV4beGr6EZJ
-         sNAU75vTgWY4iHigzVStap0DtE2HqWu3irGB4UYkMW3HgT3UsYDfyVq9MwOYFaALoAyr
-         DEVA==
-X-Gm-Message-State: ANoB5pn2xXMk1beGpK5e8BePsnEzkJv6ivX33wglnc6wHNrERqKWxVL5
-        vyop/R7f20xi6deHwyaqlgeOOw==
-X-Google-Smtp-Source: AA0mqf5UAnWqAlfsUVaCZun0Qjg6m/flblOYFMgHrRCoRvoR77BrSCG7B6qCWFEvqij78GTSI8YGew==
-X-Received: by 2002:a5d:6743:0:b0:22e:28fe:39d6 with SMTP id l3-20020a5d6743000000b0022e28fe39d6mr11543050wrw.701.1668531596730;
-        Tue, 15 Nov 2022 08:59:56 -0800 (PST)
-Received: from zen.linaroharston ([185.81.254.11])
-        by smtp.gmail.com with ESMTPSA id bl21-20020adfe255000000b002366dd0e030sm12793968wrb.68.2022.11.15.08.59.55
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MvxZkFo9lEKIbouBZXZPUNsK695tEo0v2VM4QMcU4oo=;
+        b=uxmXWqBsvDT56Db0EQbodnuwCbc8rI9AT0pDzkPdjgB14tIdISCaRl3zctjGxBqvgp
+         yjFQqIr6IL6iPswvVGhOK2SVNvRCLdsCPrMXNJ/YzMKomA/JdWfGB9XIM7SnsUNue1nD
+         E2q9R7u3Yg259WbqGYIPSGtYRf8WeKVh+9v8JR6Q+jv0V9ivmbPyfs3fYjQitmFfi54h
+         tug2u+Wm90+9GOG0SZB8f0HTTqIEZKaPw27Mk9j1DH6poQ96lmtwVJ4LXIkK8bjMBtxY
+         CE0/pPu45PCnn/HkU9pj7Qg2vWmsjGAPzWqyyM6lGoHqeSakZLemVlskz0+WJ7GJKqIK
+         dV2w==
+X-Gm-Message-State: ANoB5pkuHrBcYN/7sENgV/cyVmtKA+PRAcFd52W9DqekElpI56yCA1i7
+        Mvz0cIW09XGca/fd4cBgTOy92A==
+X-Google-Smtp-Source: AA0mqf7r/vwNGwh6O5xwH6c88rOBA1lAKXqssPbJ/HRV28HMg1KpT8vBXrA+i1DrPjiR2HXZg16Gsw==
+X-Received: by 2002:a63:c5d:0:b0:42b:87fd:1077 with SMTP id 29-20020a630c5d000000b0042b87fd1077mr17030978pgm.478.1668531395453;
+        Tue, 15 Nov 2022 08:56:35 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id l4-20020a654c44000000b00476799699e4sm4955605pgr.30.2022.11.15.08.56.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 08:59:55 -0800 (PST)
-Received: from zen (localhost [127.0.0.1])
-        by zen.linaroharston (Postfix) with ESMTP id 5BEF21FFB7;
-        Tue, 15 Nov 2022 16:59:55 +0000 (GMT)
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
-User-agent: mu4e 1.9.2; emacs 28.2.50
-From:   Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Tue, 15 Nov 2022 08:56:35 -0800 (PST)
+Date:   Tue, 15 Nov 2022 16:56:31 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
-Date:   Tue, 15 Nov 2022 16:56:12 +0000
-In-reply-to: <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
-Message-ID: <87cz9o9mr8.fsf@linaro.org>
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: Re: [PATCH v3 0/3] x86/crash: Fix double NMI shootdown bug
+Message-ID: <Y3PEv9MmQ+y91Ir+@google.com>
+References: <20221114233441.3895891-1-seanjc@google.com>
+ <5b8787b8-16e9-13dc-7fca-0dc441d673f9@citrix.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5b8787b8-16e9-13dc-7fca-0dc441d673f9@citrix.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 15, 2022, Andrew Cooper wrote:
+> On 14/11/2022 23:34, Sean Christopherson wrote:
+> > Tom,
+> >
+> > I Cc'd you this time around because the APM doesn't explicitly state that
+> > GIF is set when EFER.SVME is disabled.  KVM's nSVM emulation does set GIF
+> > in this case, but it's not clear whether or not KVM is making up behavior.
+> > If clearing EFER.SVME doesn't set GIF, then patch 1 needs to be modified
+> > to try STGI before clearing EFER.SVME, e.g. if a crash is initiated from
+> > KVM between CLGI and STGI.  Responding CPUs are "safe" because GIF=0 also
+> > blocks NMIs, but the initiating CPU might leave GIF=0 when jumping into
+> > the new kernel.
+> 
+> GIF exists independently of EFER.SVME.
+> 
+> It is also gets set by the SKINIT instruction, which is why there is an
+> asymmetry on the #UD conditions of STGI and CLGI.
+> 
+> STGI is also intended to be used by the DLME once critical
+> initialisation is done, hence why it's dependent on EFER.SVME || SKINIT.
 
-Chao Peng <chao.p.peng@linux.intel.com> writes:
+Gah, stupid APM.  The pseudocode states "EFER.SVME || CPUID.SKINIT", but the
+description and the comment both say that SVM must be enabled to execute SKINIT,
+which made me hope that disabling SVM would reset everything.
 
-> This new KVM exit allows userspace to handle memory-related errors. It
-> indicates an error happens in KVM at guest memory range [gpa, gpa+size).
-> The flags includes additional information for userspace to handle the
-> error. Currently bit 0 is defined as 'private memory' where '1'
-> indicates error happens due to private memory access and '0' indicates
-> error happens due to shared memory access.
->
-> When private memory is enabled, this new exit will be used for KVM to
-> exit to userspace for shared <-> private memory conversion in memory
-> encryption usage. In such usage, typically there are two kind of memory
-> conversions:
->   - explicit conversion: happens when guest explicitly calls into KVM
->     to map a range (as private or shared), KVM then exits to userspace
->     to perform the map/unmap operations.
->   - implicit conversion: happens in KVM page fault handler where KVM
->     exits to userspace for an implicit conversion when the page is in a
->     different state than requested (private or shared).
->
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> ---
->  Documentation/virt/kvm/api.rst | 23 +++++++++++++++++++++++
->  include/uapi/linux/kvm.h       |  9 +++++++++
->  2 files changed, 32 insertions(+)
->
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.=
-rst
-> index f3fa75649a78..975688912b8c 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6537,6 +6537,29 @@ array field represents return values. The userspac=
-e should update the return
->  values of SBI call before resuming the VCPU. For more details on RISC-V =
-SBI
->  spec refer, https://github.com/riscv/riscv-sbi-doc.
->=20=20
-> +::
-> +
-> +		/* KVM_EXIT_MEMORY_FAULT */
-> +		struct {
-> +  #define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
-> +			__u32 flags;
-> +			__u32 padding;
-> +			__u64 gpa;
-> +			__u64 size;
-> +		} memory;
-> +
-> +If exit reason is KVM_EXIT_MEMORY_FAULT then it indicates that the VCPU =
-has
-> +encountered a memory error which is not handled by KVM kernel module and
-> +userspace may choose to handle it. The 'flags' field indicates the memory
-> +properties of the exit.
-> +
-> + - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is caused by
-> +   private memory access when the bit is set. Otherwise the memory error=
- is
-> +   caused by shared memory access when the bit is clear.
+  This instruction generates a #UD exception if SVM is not enabled. See “Enabling
+  SVM” in AMD64 Architecture Programmer’s Manual Volume 2: System Instructions,
+  order# 24593.
 
-What does a shared memory access failure entail?
+...
 
-If you envision any other failure modes it might be worth making it
-explicit with additional flags. I also wonder if a bitmask makes sense if
-there can only be one reason for a failure? Maybe all that is needed is
-a reason enum?
-
-> +
-> +'gpa' and 'size' indicate the memory range the error occurs at. The user=
-space
-> +may handle the error and return to KVM to retry the previous memory acce=
-ss.
-> +
->  ::
->=20=20
->      /* KVM_EXIT_NOTIFY */
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index f1ae45c10c94..fa60b032a405 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -300,6 +300,7 @@ struct kvm_xen_exit {
->  #define KVM_EXIT_RISCV_SBI        35
->  #define KVM_EXIT_RISCV_CSR        36
->  #define KVM_EXIT_NOTIFY           37
-> +#define KVM_EXIT_MEMORY_FAULT     38
->=20=20
->  /* For KVM_EXIT_INTERNAL_ERROR */
->  /* Emulate instruction failed. */
-> @@ -538,6 +539,14 @@ struct kvm_run {
->  #define KVM_NOTIFY_CONTEXT_INVALID	(1 << 0)
->  			__u32 flags;
->  		} notify;
-> +		/* KVM_EXIT_MEMORY_FAULT */
-> +		struct {
-> +#define KVM_MEMORY_EXIT_FLAG_PRIVATE	(1 << 0)
-> +			__u32 flags;
-> +			__u32 padding;
-> +			__u64 gpa;
-> +			__u64 size;
-> +		} memory;
->  		/* Fix the size of the union. */
->  		char padding[256];
->  	};
-
-
---=20
-Alex Benn=C3=A9e
+  IF ((EFER.SVME == 0) && !(CPUID 8000_0001.ECX[SKINIT]) || (!PROTECTED_MODE))
+          EXCEPTION [#UD]  // This instruction can only be executed
+                           // in protected mode with SVM enabled
+                                                     ^^^^^^^^^^^
