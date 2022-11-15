@@ -2,156 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A7B62987D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB10629870
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:16:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238215AbiKOMR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 07:17:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
+        id S232040AbiKOMQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 07:16:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238291AbiKOMRI (ORCPT
+        with ESMTP id S238072AbiKOMQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:17:08 -0500
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76301FF8E;
-        Tue, 15 Nov 2022 04:17:07 -0800 (PST)
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 2AFCGmEO014751;
-        Tue, 15 Nov 2022 21:16:49 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2AFCGmEO014751
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1668514609;
-        bh=DzEq60ykSG5bYhq7I51xfa+aMo2N2iDeazHRRzbLNkk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UJBM0I1frGShIVdDRgoEwA77I0IMhI1KAhHzd6XYrG7Fh3dXbMRTXsODnocs/yTJ3
-         vXvbyGFMm0ov26HgA0TADMwQ4BSJbe9en/xcr50YvDOqmWAfZErcdwNg0p/NhI2eiH
-         lm5rsZtCEn7sSqqX8C1y0Jtk3cfItKIz3X/9RUfWGVoxW/UHguSiq2nS9VkSXMTpnl
-         pSHVXzbVAzPvBVk+96+PdVALgQxvxMA5NQtiKhxftOrOEyH+YPtVcWe0D+JoVmmD9y
-         tXVIX1hREoPghlBijQ1TztIXNnljPSKn1yGHkm2Ndot43BIYZxZufbU5RwkvewmHuE
-         HjsLqgR4br6Ig==
-X-Nifty-SrcIP: [209.85.160.51]
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-13bd19c3b68so15996862fac.7;
-        Tue, 15 Nov 2022 04:16:49 -0800 (PST)
-X-Gm-Message-State: ANoB5pkshMViMSfIDyNbAF+Uk+XKrp1zaWH6EP9KRD9Ryowyi38SG0Br
-        fCgkHOuMaSM1CnvvS8IcLSxj6HBQV7+5wwmcl5s=
-X-Google-Smtp-Source: AA0mqf6mmAah35Of30QCc4t3crf2yofcTDeglomR5PcNgtqbYn0wAg4XKxQcg/Q7T7cBiJ/FmPWFuuanDNj1TiDKxIM=
-X-Received: by 2002:a05:6870:538d:b0:13b:a31f:45fd with SMTP id
- h13-20020a056870538d00b0013ba31f45fdmr104263oan.194.1668514608102; Tue, 15
- Nov 2022 04:16:48 -0800 (PST)
+        Tue, 15 Nov 2022 07:16:28 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF141EAF0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:16:26 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id g12so24171797lfh.3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:16:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rw1sjbR71GpDX4+lhHk1yLaScEbbe6ryeafI3CiJP10=;
+        b=tR3w+a+JPTo0vZAk4sSj/mNTKv+ZhOTcOtCx2+3qEkMteQ3XTVzYbbKnLZLDmXNQZm
+         EpWwiKYR7wHiNnFffVMVMw6i/SIXUy6yohd81DoWzdGvds6PL3NO/qTsBfqLMYhwbcPv
+         +sLgujjc/1qTpymQnm2VbB4NjDWm6oZP7PTKtPAGtlgIFU1P3IotJ+Yg720TvfvWK5LY
+         So997eksu3gD1Yrl5CpB2+flKWypWap7lE2wGRgW5DGu26fYiFHytTfTK5NYRcUtI4Rt
+         OndCqUCzEim7UJBrC8EzWWZ93vwXJ8uYvAvn6KlHwiXbfEJU14Zda6YMkqNoUA5y05u3
+         YGaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rw1sjbR71GpDX4+lhHk1yLaScEbbe6ryeafI3CiJP10=;
+        b=C2EfTBGGXvOAk6pYTuKktIrxnS30DXLBBEVKM8CCNAR/A9pxgcoNPIWw7XFkVjeJJR
+         1Zf/TtJOJWt4uTCVbY+itvX2hLpLpCJ59AJG+q+w99JhyHlAFyxOxDQq4tqrvBfowxPa
+         ZjEr0t+TcJIkkEBh5iuA3Tk6F0lo/eH6ivZ74AYKxYlfIEXtCje2RygtI7xveLQ3Yhbw
+         mzhjR0YizmFJCyoZt0O1iJ1RFBOC1m6kOiQd9W2HJYbr6AOSfqHZPpbZ1l1dirDOXNl6
+         B/T0DwpLrsjgw0u8ydpRAmpxSthd+anY8l5ruRTA/XYZxh6qx2N6JNL9rlECCDMQbT02
+         67/w==
+X-Gm-Message-State: ANoB5pmkygCo1nLZsd1lRFlWMfFLGM4LaaGrjtpwLHVhReP5Yq23mQbU
+        z75VUuM+y+CciqiaEzC95lH3xg==
+X-Google-Smtp-Source: AA0mqf7VWxyl1RZKscxhjDznC/kqYEwrVwdbg5fIWlrY+D8kHURt5sGT6UffK1OwKrikT7PXoa0dPA==
+X-Received: by 2002:ac2:47ea:0:b0:4b4:1324:6ed3 with SMTP id b10-20020ac247ea000000b004b413246ed3mr5262252lfp.19.1668514585345;
+        Tue, 15 Nov 2022 04:16:25 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id u11-20020a2eb80b000000b0026dc7b59d8esm2482225ljo.22.2022.11.15.04.16.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 04:16:24 -0800 (PST)
+Message-ID: <35bb9f38-d89b-77c6-a546-f575da5a79f5@linaro.org>
+Date:   Tue, 15 Nov 2022 13:16:23 +0100
 MIME-Version: 1.0
-References: <20221114174617.211980-1-masahiroy@kernel.org> <Y3La2mwCgD8r/5PI@dev-arch.thelio-3990X>
-In-Reply-To: <Y3La2mwCgD8r/5PI@dev-arch.thelio-3990X>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 15 Nov 2022 21:16:09 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARCM=rUm8mA8GRQ7ufeyfneGf4OEvHmESKt=zuxs2KrHw@mail.gmail.com>
-Message-ID: <CAK7LNARCM=rUm8mA8GRQ7ufeyfneGf4OEvHmESKt=zuxs2KrHw@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: revive parallel execution for .tmp_initcalls.lds rule
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 03/23] ARM: dts: tegra20: add label to nvidia,tegra20-vi
+ node
+Content-Language: en-US
+To:     luca.ceresoli@bootlin.com, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Richard Leitner <richard.leitner@skidata.com>
+References: <20221109141852.729246-1-luca.ceresoli@bootlin.com>
+ <20221109141852.729246-4-luca.ceresoli@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221109141852.729246-4-luca.ceresoli@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 9:18 AM Nathan Chancellor <nathan@kernel.org> wrote=
-:
->
-> On Tue, Nov 15, 2022 at 02:46:17AM +0900, Masahiro Yamada wrote:
-> > Prior to commit 5d45950dfbb1 ("kbuild: move vmlinux.o link to
-> > scripts/Makefile.vmlinux_o"), jobserver-exec was invoked from the shell
-> > script, link-vmlinux.sh. It can get access to the jobserver because
-> > Makefile adds '+' prefix, as in:
-> >
-> >     +$(call if_changed_dep,link_vmlinux)
-> >
-> > Since 5d45950dfbb1, jobserver-exec is invoked from Makefile, but the
-> > '+' prefix is missing, hence jobserver-exec has no access to the
-> > jobserver.
-> >
-> > Fixes: 5d45950dfbb1 ("kbuild: move vmlinux.o link to scripts/Makefile.v=
-mlinux_o")
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->
-> At least it doesn't seem like compile times were majorly affected. I
-> benchmarked arm64 allmodconfig (worst case scenario with ThinLTO):
+On 09/11/2022 15:18, luca.ceresoli@bootlin.com wrote:
+> From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> 
+> Useful to enable it from a board DTS.
+> 
+> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
+Adding unused labels is not useful at all.
 
-Ah, sorry.
+Best regards,
+Krzysztof
 
-./scripts/generate_initcall_order.pl always runs in two threads
-(the parent and a single child) because it is given only
-one argument (vmlinux.a).
-
-So, using jobserver-exec is meaningless.
-Also, the code for parallel execution control in
-./scripts/generate_initcall_order.pl is meaningless.
-
-
-
-BTW, allmodconfig is not the worst case because most of the objects
-go into modules instead of vmlinux.
-
-allyesconfig would add more symbols to vmlinux although I did not test it.
-
-
-
-
-
-
-
->
-> Benchmark 1: 094226ad94f4 ("Linux 6.1-rc5")
->   Time (mean =C2=B1 =CF=83):     899.036 s =C2=B1  1.133 s    [User: 4931=
-4.495 s, System: 3840.796 s]
->   Range (min =E2=80=A6 max):   898.118 s =E2=80=A6 900.302 s    3 runs
->
-> Benchmark 2: 0f45cbb5399b ("kbuild: revive parallel execution for .tmp_in=
-itcalls.lds rule")
->   Time (mean =C2=B1 =CF=83):     898.482 s =C2=B1  0.152 s    [User: 4932=
-9.703 s, System: 3836.408 s]
->   Range (min =E2=80=A6 max):   898.306 s =E2=80=A6 898.584 s    3 runs
->
-> Summary
->   '0f45cbb5399b ("kbuild: revive parallel execution for .tmp_initcalls.ld=
-s rule")' ran
->     1.00 =C2=B1 0.00 times faster than '094226ad94f4 ("Linux 6.1-rc5")'
->
-> > ---
-> >
-> >  scripts/Makefile.vmlinux_o | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-> > index 0edfdb40364b..ae52d3b3f063 100644
-> > --- a/scripts/Makefile.vmlinux_o
-> > +++ b/scripts/Makefile.vmlinux_o
-> > @@ -19,7 +19,7 @@ quiet_cmd_gen_initcalls_lds =3D GEN     $@
-> >
-> >  .tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
-> >               vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
-> > -     $(call if_changed,gen_initcalls_lds)
-> > +     +$(call if_changed,gen_initcalls_lds)
-> >
-> >  targets :=3D .tmp_initcalls.lds
-> >
-> > --
-> > 2.34.1
-> >
-
-
-
---
-Best Regards
-
-Masahiro Yamada
