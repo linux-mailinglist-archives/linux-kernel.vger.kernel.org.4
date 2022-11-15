@@ -2,89 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF33629CF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7A5629D03
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:09:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbiKOPI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:08:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
+        id S230107AbiKOPJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:09:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiKOPIz (ORCPT
+        with ESMTP id S230165AbiKOPJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:08:55 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77569FF0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:08:54 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id gv23so4020983ejb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:08:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vTfeHWdQpYzScR0IYhK542Q4DB1sWCfhQ34vRdL9HzM=;
-        b=hjYGcK95V/Y+c+Sw/+JpTF4ubBz9ykH8BcyRLaCltwFDCYcMDDjGsMFFBa1zpl5SoE
-         cpq+axRW3kK/HEesuSV28qJGCFX7JAn6PQkUo8vYfxjbcVChjXWLaZpT0fYQcZQOOTsD
-         U/U/lWhQxbl6AqVTQN5l1Q0kOvI9TIKMz0ikS+uucocatZvbcOc/Syy0pTGkrm48FpYZ
-         xEXh1Ke2hPoElv6fO6x4VTm3QlRJXhEhP926k7srInJ5yg8p/xvVhP9UsRquGU5jLhND
-         nVK8gzkNENVpBjTi8cMxFtk0iEX4g4rCzCWe4Pfv+YWX/xO7ESWyvkiJcGdiWI2a9YIv
-         iSVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vTfeHWdQpYzScR0IYhK542Q4DB1sWCfhQ34vRdL9HzM=;
-        b=3U0wbOPGAERP+4GDjafdyDEpDvmali59NlYnqnGLKXtrhxG4niJX5mEqe9DP1ZfmVQ
-         YYY5DfqZelya1ky963n6TPnQTGEoi5hmzssorQ+wWm58Lkva4zUGEPPccepjNtx6G548
-         9I67xUGr9acOHCdmaTZnoMJM6qBAz8IjY/9aWzZXqgzqQJiq23QWvW0/8zOwNFef0AUj
-         td89A4vIxfFARkfTTzdrcmAL+vlNSn5ZqXoiN5GD2Qe01V4iujh38py7++F6V/zYhNln
-         KbOricvE8nZubF2eWAeotWAJgDMskAw03zdB1d5g+e1PHemWWXI0JtoMhKzcWAWn06TC
-         VAQw==
-X-Gm-Message-State: ANoB5pn1txTb/Kpg//ibpM/7htcq1yTKaWTqiWPTvZAurNyrjhTs/lck
-        mkNwdZGCM9rT1R0GAs+y4X4PvMcoP3GVV8TjXGXbXQczs1x4KA==
-X-Google-Smtp-Source: AA0mqf7fwtwTm2k4Iwt5uFb32Yo4UpbADkPfEXjLy9zl6d8qFpihOJ7TWjhicLJEq34UDIzgi+iHUItsHB64k3kNQFo=
-X-Received: by 2002:a17:907:9a8c:b0:7a0:948d:80ae with SMTP id
- km12-20020a1709079a8c00b007a0948d80aemr14502708ejc.658.1668524933062; Tue, 15
- Nov 2022 07:08:53 -0800 (PST)
+        Tue, 15 Nov 2022 10:09:25 -0500
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630037664;
+        Tue, 15 Nov 2022 07:09:21 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 47A9AC0006;
+        Tue, 15 Nov 2022 15:09:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668524960;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=52nZTyzLtyLE0oMbZMuPmwJjms8J7lFPa4BIfaCMGt8=;
+        b=Qdgpyqb++6k8h2Ul3v4+WDXeTugffLUG8/ox2YuZ9jkQakjENUumrptpRObBjztTwMiSJW
+        /UktSqmj/blsk2CPlU645Te7QzJWC6T/KO+gusI8l9yE0SYLzDMW7WGWFIJ2HKPe70u7KJ
+        7IjpyUTnISrtXARiMfZ97to3FiW9zSosv8CnXeu8bwUgH5b0qzQCzOa/T6a1pZrHdEQ56Q
+        yir514nkITii/3WblZTLcb39qjCoU+juEipCLiP2wgbdqlYYkvb5nZk54mxAYCWRV7h6Ka
+        SR/3hWaW52GXwRzFGCF2ZUDZ81kOeOG1qG98I/gIW1MxVWHorJFgGMFBRPv5GQ==
+Date:   Tue, 15 Nov 2022 16:09:17 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v2 6/7] ARM: dts: r9a06g032: Add the USBF controller
+ node
+Message-ID: <20221115160917.73e7b4ef@bootlin.com>
+In-Reply-To: <20221115142754.6253881b@bootlin.com>
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+        <20221114111513.1436165-7-herve.codina@bootlin.com>
+        <51d42fc2-0492-9077-302d-5c3be4b45cd1@linaro.org>
+        <20221115142754.6253881b@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <CAOGzEzeOek71ij9M1r2KUKKWbJvAmgS5imcURNKFjKNC3ORBVQ@mail.gmail.com>
-In-Reply-To: <CAOGzEzeOek71ij9M1r2KUKKWbJvAmgS5imcURNKFjKNC3ORBVQ@mail.gmail.com>
-From:   lkml gm4 <lkml4gm@gmail.com>
-Date:   Tue, 15 Nov 2022 16:08:41 +0100
-Message-ID: <CAOGzEzfvPHTuuCAEx1n4zVxHF6JT63oHu1nfRfaxuJBKGZxtCw@mail.gmail.com>
-Subject: Fwd: CET shadow stack app compatibility
-To:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Linus Torvalds:
+Hi Krzysztof
 
-> I'm disgusted by glibc being willing to just upgrade and break
-> existing binaries and take the "you shouldn't upgrade glibc if you
-> have old binaries" approach.
+On Tue, 15 Nov 2022 14:27:54 +0100
+Herve Codina <herve.codina@bootlin.com> wrote:
 
-But glibc also claims this policy:
+> Hi Krzysztof,
+>=20
+> On Tue, 15 Nov 2022 14:16:27 +0100
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>=20
+> > On 14/11/2022 12:15, Herve Codina wrote: =20
+> > > Add the USBF controller available in the r9a06g032 SoC.
+> > >=20
+> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> > > ---
+> > >  arch/arm/boot/dts/r9a06g032.dtsi | 12 ++++++++++++
+> > >  1 file changed, 12 insertions(+)
+> > >=20
+> > > diff --git a/arch/arm/boot/dts/r9a06g032.dtsi b/arch/arm/boot/dts/r9a=
+06g032.dtsi
+> > > index 563024c9a4ae..a4bb069457a3 100644
+> > > --- a/arch/arm/boot/dts/r9a06g032.dtsi
+> > > +++ b/arch/arm/boot/dts/r9a06g032.dtsi
+> > > @@ -117,6 +117,18 @@ dmamux: dma-router@a0 {
+> > >  			};
+> > >  		};
+> > > =20
+> > > +		udc: usb@4001e000 {
+> > > +			compatible =3D "renesas,r9a06g032-usbf", "renesas,rzn1-usbf";
+> > > +			reg =3D <0x4001e000 0x2000>;
+> > > +			interrupts =3D <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
+> > > +				     <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
+> > > +			clocks =3D <&sysctrl R9A06G032_HCLK_USBF>,
+> > > +				 <&sysctrl R9A06G032_HCLK_USBPM>;
+> > > +			clock-names =3D "hclkf", "hclkpm";
+> > > +			power-domains =3D <&sysctrl>;
+> > > +			status =3D "disabled";   =20
+> >=20
+> > If you provided all resources (clocks, power domains etc), why disablin=
+g it? =20
+>=20
+> Because I forgot to remove the 'status' property ...
+> 'status' will be simply removed in v3.
+> Sorry for this mistake.
+>=20
+> Thanks for the review,
+> Herv=C3=A9
+>=20
 
-https://www.gnu.org/software/libc/
-says:
-The GNU C Library is designed to be a backwards compatible,
+I said something completely wrong for this point.
 
-And
-https://gcc.gnu.org/onlinedocs/libstdc++/manual/abi.html
-Thus, program binaries linked with the initial release of a library
-binary will still run correctly if the library binary is replaced by
-carefully-managed subsequent library binaries.
+status is set disabled because it is a .dtsi and can be
+included by several dts to represent a board.
+This node (USB device) can be wired on some board and not on
+some others.
+So, the node will be enabled in each dts board that has the USBF
+device wired and used.
 
-And glibc even has it easier then the kernel: implement incompatible
-changes by applying
-symbol versioning.
+Herv=C3=A9
 
--
-lkml4gm
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
