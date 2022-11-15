@@ -2,93 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F81762A3D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0358762A3E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 22:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231875AbiKOVPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 16:15:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
+        id S231286AbiKOVTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 16:19:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbiKOVPi (ORCPT
+        with ESMTP id S229642AbiKOVTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 16:15:38 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8AB1E3CF
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:15:37 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ov3HJ-0005C2-FR; Tue, 15 Nov 2022 22:15:33 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ov3HH-004WcV-Tr; Tue, 15 Nov 2022 22:15:32 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1ov3HI-00GukD-2s; Tue, 15 Nov 2022 22:15:32 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH 4/4] pwm: Don't initialize list head before calling list_add()
-Date:   Tue, 15 Nov 2022 22:15:15 +0100
-Message-Id: <20221115211515.3750209-5-u.kleine-koenig@pengutronix.de>
+        Tue, 15 Nov 2022 16:19:47 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B672124B
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:19:46 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id cl5so26542274wrb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 13:19:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vZD/7uHvS5J34N2GYYAfPmKEdHy2neeRIgKH7Q4ZaFo=;
+        b=PJYCv+UxpU0P2K09mErm2HV6J0RWh+zwcSAdUZBcNry6+hpOlyCwSL2zk4qHh/3eCv
+         nxZsax44TN0KfUiX1HNcq3t5UTdc/8FgpvCNsdx6ci9CNMQou1modM/PQ7hPxh3Tzlg3
+         5ju/VdA6fWiZP0gycaJ5YysqrT+Hx2NvsdkJIK7DyJGlBi5LqZingJeYgsH3vCOaee0F
+         mQ9k9DHwH4nbK9vrcA139ojzq3lWw3tV4FUFAiSDjb9UL9oYGdDtA+mJ7i+H28G1pwut
+         iFAWZQzYdM7Yj55gGKystqyswarfz078yJAtgAskXJIrvt2cb9my1BJ25O3YgGKhp9e6
+         r3ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vZD/7uHvS5J34N2GYYAfPmKEdHy2neeRIgKH7Q4ZaFo=;
+        b=pjzAQ0md88dol+mCjFu8Vv5Cq8ClrebNCsytxDQtfSwMMFV2hqNYXwNoZkmim/enqQ
+         CWXYcgmi2RPh/47qZ7ZcY1C2m/tTmhLjcK4OmDxiAvWY9aXvLfKUtH0zc5xsKRo/h/1y
+         tIwFo3ua7zA38SEwD2BzYlkUnC6LWiW1FpZit/l1ThsGo5z1c2/2GfK4RLldOxqz1tkL
+         pMUzGpShTtyAvVwUWbBc7eIMzHFw8eTRqU3Q2covysotspzgQeK68Mo90/mjW2Xj4U7c
+         7suti8I1PlPPv0++Hz0FVAg3RFTe5k9cCC30X83MT5UTsBdi+L/h4lUcBz1u8Hwq20Zv
+         ptGA==
+X-Gm-Message-State: ANoB5pnNCwmAM9qmBbqWwy5MqUTErTUZBGixHI7cv5hGWBlzgQP/xnXN
+        ykBb8kv0FvZmhRQ7jLQ3QELZVJ3YYVH4eg==
+X-Google-Smtp-Source: AA0mqf4nNI8wfsKPCJV56BfDH8jzPKkB2fNgyBtM57A1yfkILgRjhBsC4hrC5cjNNfANg6YmuyIEHw==
+X-Received: by 2002:a5d:4ec4:0:b0:241:6a95:6aa1 with SMTP id s4-20020a5d4ec4000000b002416a956aa1mr12044058wrv.458.1668547152711;
+        Tue, 15 Nov 2022 13:19:12 -0800 (PST)
+Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id n41-20020a05600c502900b003c65c9a36dfsm17201487wmr.48.2022.11.15.13.19.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 13:19:12 -0800 (PST)
+From:   Dmitry Safonov <dima@arista.com>
+To:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Dmitry Safonov <dima@arista.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Steven Rostedt <rostedt@goodmis.org>, netdev@vger.kernel.org
+Subject: [PATCH v4 0/5] net/tcp: Dynamically disable TCP-MD5 static key
+Date:   Tue, 15 Nov 2022 21:19:00 +0000
+Message-Id: <20221115211905.1685426-1-dima@arista.com>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221115211515.3750209-1-u.kleine-koenig@pengutronix.de>
-References: <20221115211515.3750209-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1012; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=YW3mBqZ7La41Wb9SLeoLhl8wDMBGwJ2RzU7YOl5SQBE=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjdAFgbOa95Z13KU1LcmxBWu5VVZjas+KtO3JBsMPy r20F8yeJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY3QBYAAKCRDB/BR4rcrsCRwQB/ 938DL+ClTjEMeI52IZYFZL9fNc3sjnhVOmJbLUpSL+Wv++06cCZ6hGinZZ8eeWHQDz816frRz0igny oJVKSvPnO7Ofr6UJLBtVgmlDAELssuh3NgOJ1McbjxlTRvwz3EMfK8hZlWGSEsWVyN5Kb4RCZKogEm x4t2kXSLwlZgQCUC0MNe+ZgKU++fVlU5ZDGX5pydpN0bxPAPCQud4lgnKitu2EZSB+/ODU9YVZAhCg XMPni2CEu9CtncF2CnSSlcrc+srROSJhZ3aXHDwYFSQVANzRwMLwELA0kG8dbKIGIpS1THCY+K6Fi+ HNeeWQYngSsa3XPhuJsYrqVGFMVvyl
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-list_add() just overwrites the members of the element to add (here:
-chip->list) without any checks, even in the DEBUG_LIST case. So save the
-effort to initialize the list.
+Changes from v3:
+- Used atomic_try_cmpxchg() as suggested by Peter Zijlstra
+- Renamed static_key_fast_inc() => static_key_fast_inc_not_negative()
+  (addressing Peter Zijlstra's review)
+- Based on linux-tip/master
+- tcp_md5_key_copy() now does net_warn_ratelimited()
+  (addressing Peter Zijlstra's review)
+  tcp_md5_do_add() does not as it returns -EUSERS from setsockopt()
+  syscall back to the userspace
+- Corrected WARN_ON_ONCE(!static_key_fast_inc(key))
+  (Spotted by Jason Baron)
+- Moved declaration of static_key_fast_inc_not_negative() and its
+  EXPORT_SYMBOL_GPL() to the patch 3 that uses it,
+  "net/tcp: Disable TCP-MD5 static key on tcp_md5sig_info destruction"
+  (addressing Peter Zijlstra's review)
+- Added patch 4 that destroys the newly created request socket
+  if md5 info allocation or static_key increment was unsuccessful.
+  Instead of proceeding to add a socket without TCP-MD5 keys.
+- Added patch 5 that separates helper tcp_time_wait_init()
+  and converts BUG_ON() to WARN_ON_ONCE().
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
-Hello,
+Changes from v2:
+- Prevent key->enabled from turning negative by overflow from
+  static_key_slow_inc() or static_key_fast_inc()
+  (addressing Peter Zijlstra's review)
+- Added checks if static_branch_inc() and static_key_fast_int()
+  were successful to TCP-MD5 code.
 
-this patch I'm not sure about. A quick grep shows there are (only?) 40
-more code locations that call INIT_LIST_HEAD just before list_add().
-In my understanding INIT_LIST_HEAD is only to initialize lists, but
-chip->list is not a list, but the data needed to track chip as a list
-member.
+Changes from v1:
+- Add static_key_fast_inc() helper rather than open-coded atomic_inc()
+  (as suggested by Eric Dumazet)
 
-Best regards
-Uwe
+Version 3:
+https://lore.kernel.org/all/20221111212320.1386566-1-dima@arista.com/T/#u
+Version 2: 
+https://lore.kernel.org/all/20221103212524.865762-1-dima@arista.com/T/#u
+Version 1: 
+https://lore.kernel.org/all/20221102211350.625011-1-dima@arista.com/T/#u
 
- drivers/pwm/core.c | 1 -
- 1 file changed, 1 deletion(-)
+The static key introduced by commit 6015c71e656b ("tcp: md5: add
+tcp_md5_needed jump label") is a fast-path optimization aimed at
+avoiding a cache line miss.
+Once an MD5 key is introduced in the system the static key is enabled
+and never disabled. Address this by disabling the static key when
+the last tcp_md5sig_info in system is destroyed.
 
-diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
-index b43b24bd3c9f..61bacd8d9b44 100644
---- a/drivers/pwm/core.c
-+++ b/drivers/pwm/core.c
-@@ -299,7 +299,6 @@ int pwmchip_add(struct pwm_chip *chip)
- 		radix_tree_insert(&pwm_tree, pwm->pwm, pwm);
- 	}
- 
--	INIT_LIST_HEAD(&chip->list);
- 	list_add(&chip->list, &pwm_chips);
- 
- 	mutex_unlock(&pwm_lock);
+Previously it was submitted as a part of TCP-AO patches set [1].
+Now in attempt to split 36 patches submission, I send this independently.
+
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Bob Gilligan <gilligan@arista.com>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Dmitry Safonov <0x7f454c46@gmail.com>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Francesco Ruggeri <fruggeri@arista.com>
+Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Jason Baron <jbaron@akamai.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Salam Noureddine <noureddine@arista.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+[1]: https://lore.kernel.org/all/20221027204347.529913-1-dima@arista.com/T/#u
+
+Thanks,
+            Dmitry
+
+Dmitry Safonov (5):
+  jump_label: Prevent key->enabled int overflow
+  net/tcp: Separate tcp_md5sig_info allocation into
+    tcp_md5sig_info_add()
+  net/tcp: Disable TCP-MD5 static key on tcp_md5sig_info destruction
+  net/tcp: Do cleanup on tcp_md5_key_copy() failure
+  net/tcp: Separate initialization of twsk
+
+ include/linux/jump_label.h | 21 +++++++--
+ include/net/tcp.h          | 10 ++--
+ kernel/jump_label.c        | 55 +++++++++++++++++-----
+ net/ipv4/tcp.c             |  5 +-
+ net/ipv4/tcp_ipv4.c        | 94 +++++++++++++++++++++++++++++---------
+ net/ipv4/tcp_minisocks.c   | 61 ++++++++++++++++---------
+ net/ipv4/tcp_output.c      |  4 +-
+ net/ipv6/tcp_ipv6.c        | 21 ++++-----
+ 8 files changed, 191 insertions(+), 80 deletions(-)
+
+
+base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
 -- 
 2.38.1
 
