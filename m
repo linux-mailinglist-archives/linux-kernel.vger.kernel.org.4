@@ -2,81 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC926628E90
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 01:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD73D628E97
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 01:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236981AbiKOAmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 19:42:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
+        id S236825AbiKOAoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 19:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236375AbiKOAmG (ORCPT
+        with ESMTP id S229733AbiKOAoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 19:42:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900F51B1EE
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 16:41:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40202B810A0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 00:41:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C97EC433D7;
-        Tue, 15 Nov 2022 00:41:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1668472891;
-        bh=lAVWfOrc/rwWjzqaYTXRp+1KDrw37nDH3kkVtQ7yHEo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=f66AIpfdCswCix6JxHdGCmi4C7k/cPTKbqbjTLjEkN0MGuHhK0ndDkX9w1PI/WlJv
-         a1FbyuVKd7Dq+DdS1gmqtpiPHjPORZM2rp5JywZpD+5J55mg32JQKNCcGc3xgkwXY8
-         6BOkrX2OJgbgwfxbdo5KcN/of5Sh1uHHl0uXEUa4=
-Date:   Mon, 14 Nov 2022 16:41:30 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Minchan Kim <minchan@kernel.org>, Nitin Gupta <ngupta@vflare.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        coverity-bot <keescook+coverity-bot@chromium.org>
-Subject: Re: [PATCH] zram: explicitly limit prio_max for static analyzers
-Message-Id: <20221114164130.e45a95db4e8be2c3909bdba1@linux-foundation.org>
-In-Reply-To: <20221114021420.4060601-1-senozhatsky@chromium.org>
-References: <20221109115047.2921851-5-senozhatsky@chromium.org>
-        <20221114021420.4060601-1-senozhatsky@chromium.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 14 Nov 2022 19:44:11 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441C61704B
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 16:44:10 -0800 (PST)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NB6mX3SSZzJnfK;
+        Tue, 15 Nov 2022 08:41:00 +0800 (CST)
+Received: from [10.67.110.108] (10.67.110.108) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 08:44:07 +0800
+Message-ID: <9f69fc35-8767-c883-90a0-d57c5783ee01@huawei.com>
+Date:   Tue, 15 Nov 2022 08:44:01 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] fs: Fix UBSAN detected shift-out-bounds error for bad
+ superblock
+To:     Randy Dunlap <rdunlap@infradead.org>, <willy@infradead.org>,
+        <damien.lemoal@opensource.wdc.com>, <akpm@linux-foundation.org>,
+        <jack@suse.cz>, <qhjin.dev@gmail.com>, <songmuchun@bytedance.com>
+CC:     <linux-kernel@vger.kernel.org>
+References: <20221114024957.60916-1-liaochang1@huawei.com>
+ <e781f927-07f4-9165-1123-f9b501c552b1@infradead.org>
+From:   "liaochang (A)" <liaochang1@huawei.com>
+In-Reply-To: <e781f927-07f4-9165-1123-f9b501c552b1@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.108]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 14 Nov 2022 11:14:20 +0900 Sergey Senozhatsky <senozhatsky@chromium.org> wrote:
 
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
-> ---
->  drivers/block/zram/zram_drv.c | 1 +
->  1 file changed, 1 insertion(+)
+
+在 2022/11/15 5:09, Randy Dunlap 写道:
 > 
-> diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-> index 9d33801e8ba8..e67a124f2e88 100644
-> --- a/drivers/block/zram/zram_drv.c
-> +++ b/drivers/block/zram/zram_drv.c
-> @@ -1706,6 +1706,7 @@ static int zram_recompress(struct zram *zram, u32 index, struct page *page,
->  	 * Iterate the secondary comp algorithms list (in order of priority)
->  	 * and try to recompress the page.
->  	 */
-> +	prio_max = min(prio_max, ZRAM_MAX_COMPS);
->  	for (; prio < prio_max; prio++) {
->  		if (!zram->comps[prio])
->  			continue;
+> 
+> On 11/13/22 18:49, Liao Chang wrote:
+>> UBSAN: shift-out-of-bounds in fs/minix/bitmap.c:103:3
+>> shift exponent 8192 is too large for 32-bit type 'unsigned int'
+>> CPU: 1 PID: 32273 Comm: syz-executor.0 Tainted: G        W
+>> 6.1.0-rc4-dirty #11
+>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+>> BIOS rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
+>> Call Trace:
+>>  <TASK>
+>>  dump_stack_lvl+0xcd/0x134
+>>  ubsan_epilogue+0xb/0x50
+>>  __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x18d
+>>  minix_count_free_blocks.cold+0x16/0x1b
+>>  minix_statfs+0x22a/0x490
+>>  statfs_by_dentry+0x133/0x210
+>>  user_statfs+0xa9/0x160
+>>  __do_sys_statfs+0x7a/0xf0
+>>  do_syscall_64+0x35/0x80
+>>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>
+>> The superblock stores on disk contains the size of a data zone, which is
+>> too large to used as the shift when kernel try to calculate the total
+>> size of zones, so it needs to check the superblock when kernel mounts
+>> MINIX-FS.
+>>
+>> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+>> ---
+>>  fs/minix/inode.c | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/fs/minix/inode.c b/fs/minix/inode.c
+>> index da8bdd1712a7..f1d1c2312817 100644
+>> --- a/fs/minix/inode.c
+>> +++ b/fs/minix/inode.c
+>> @@ -166,6 +166,12 @@ static bool minix_check_superblock(struct super_block *sb)
+>>  	    sb->s_maxbytes > (7 + 512 + 512*512) * BLOCK_SIZE)
+>>  		return false;
+>>  
+>> +	/* the total size of zones must no exceed the limitation of U32_MAX. */
+> 
+> 	                           must not exceed
 
-I'll queue this as a fix to "zram: introduce recompress sysfs knob".
+Thanks, i will correct it in next revision.
 
-What's it do?  A little changelog would be nice, or at least a link to
-the coverity report?
+> 
+>> +	if (sbi->s_log_zone_size && (sbi->s_nzones - sbi->s_firstdatazone) &&
+>> +	    (__builtin_clzl((__u32)(sbi->s_nzones - sbi->s_firstdatazone)) <=
+>> +	     sbi->s_log_zone_size))
+>> +		return false;
+>> +
+>>  	return true;
+>>  }
+>>  
+> 
 
+-- 
+BR,
+Liao, Chang
