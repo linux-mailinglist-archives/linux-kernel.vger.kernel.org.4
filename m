@@ -2,53 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD167629DA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF27629DA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237952AbiKOPeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35390 "EHLO
+        id S231374AbiKOPe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:34:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbiKOPeN (ORCPT
+        with ESMTP id S238280AbiKOPep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:34:13 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104E0DFEF
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:34:12 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B918833688;
-        Tue, 15 Nov 2022 15:34:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1668526450; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fx1pabvdNXR/4MZEXdvaDvbLnLLLuOpiVQF5f9g0kBo=;
-        b=PRNvaJAr2b0ao2L6bSSuW4Eg76ey9yIIDFlheQf0a9IdwAjz/NHdGLvWOyV0TnRBtm8ASz
-        hUKcCG9qws8J2HJpGP0lY+Jsn8Xq8pByubsJXX+HvcUupIkR+I+huCwHl8KFvfT4faSJ1w
-        gdOJ0YqwXl2/NEzOgP0bhBCjG6teMO4=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 15 Nov 2022 10:34:45 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25242EE30;
+        Tue, 15 Nov 2022 07:34:39 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8CE642C142;
-        Tue, 15 Nov 2022 15:34:10 +0000 (UTC)
-Date:   Tue, 15 Nov 2022 16:34:10 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: replay log: Re: [PATCH printk v4 38/39] printk: relieve console_lock
- of list synchronization duties
-Message-ID: <Y3Oxck0/LAHFLYip@alley>
-References: <20221114162932.141883-1-john.ogness@linutronix.de>
- <20221114162932.141883-39-john.ogness@linutronix.de>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E68606602A2D;
+        Tue, 15 Nov 2022 15:34:36 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1668526477;
+        bh=UsrtOUGmm9yQjbTKRfPm8z8pCEAuKpMkDN99XHev6Wg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jBwVOnmaeqNEw6rRKembroMAaHqQ39JcG2R2PUJ77BocmGy4j1V7sWHDBOGy3b8Q1
+         EQzDgQ5zda3rsrxyhsRdzcOe+eJ/KdRexk09gOkMh2rifI0htoA26J2V7U9rgv6NmB
+         fNE34JtGUxDr3R6QjoV0kH5WvoD4pHD75yauxdG8SypkfTSPTwXhMOKcPSYPVWRkvY
+         LRT9wUn1Vpn1H3cUWwwhL74j0j+GJObQaXzOi3dPpOK4KDbmHi9ojTB3JfuLu3vVbJ
+         F2bo5ObrJeqFOpf8qqpRhpck52o9yNZv+ej3lh3kNGUTVhan7rK1LdQmbGluKiHaV0
+         9RtdJy+eolNkQ==
+Message-ID: <f2260dea-6f05-6ca9-d241-2ba986f4ca45@collabora.com>
+Date:   Tue, 15 Nov 2022 16:34:33 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221114162932.141883-39-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 1/2] dt-bindings: soc: qcom: Add bindings for Qualcomm
+ Ramp Controller
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     marijn.suijten@somainline.org, konrad.dybcio@somainline.org,
+        kernel@collabora.com, andersson@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, robh+dt@kernel.org,
+        agross@kernel.org
+References: <20221104142204.156333-1-angelogioacchino.delregno@collabora.com>
+ <20221104142204.156333-2-angelogioacchino.delregno@collabora.com>
+ <166758411781.2066027.6365889663189109123.robh@kernel.org>
+ <160cb3fc-176e-bc0e-1bff-9334478af8ec@collabora.com>
+ <342d556a-e710-590c-3c81-fcc60bbaa6e7@linaro.org>
+ <3e9deab6-58ca-3a58-5f06-c1e4d181bc94@collabora.com>
+ <5c0dfcad-956d-e3cd-fd06-7671b85c4ae7@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <5c0dfcad-956d-e3cd-fd06-7671b85c4ae7@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,47 +69,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-11-14 17:35:31, John Ogness wrote:
-> The console_list_lock provides synchronization for console list and
-> console->flags updates. All call sites that were using the console_lock
-> for this synchronization have either switched to use the
-> console_list_lock or the SRCU list iterator.
+Il 15/11/22 16:16, Krzysztof Kozlowski ha scritto:
+> On 15/11/2022 15:44, AngeloGioacchino Del Regno wrote:
 > 
-> Remove console_lock usage for console list updates and console->flags
-> updates.
+>>>>> Please check and re-submit.
+>>>>>
+>>>>
+>>>> I'm unsure about what I should do about this one.
+>>>> This is a power-controller, but does *not* need any #power-domain-cells, as it is
+>>>> standalone and doesn't require being attached to anything.
+>>>
+>>> power-domain-cells are for power domain providers, not consumers. The
+>>> generic binding expect that nodes called power-controller are exactly
+>>> like that.
+>>>
+>>> Solutions could be:
+>>> 1. Rename the node to something else. I cannot deduct the type of the
+>>> device based on description. What is "sequence ID" and how is it even
+>>> closely related to power control?
+>>
+>> This uC is mainly controlling DCVS, automagically plays with voltages for
+>> each ramp up/down step and from what I understand also decides to shut down
+>> or bring up *power* to "certain clocks" before ungating (CPU related, mainly
+>> big cluster).
+>> This also interacts with LMH - setting the LMH part makes it possible to
+>> later use CPR (otherwise CPR errors out internally and won't start, as it
+>> requires this controller, SAW and LMH to be set up in order to work).
+>>
+>> What I've seen is that without it I can't bring up the big cluster at all,
+>> not even at minimum frequency, as the HF2PLL (a clock source for that cluster)
+>> will not power up.
+>> All it takes is to initialize these params and start the controller, then
+>> everything goes as it should.
+>>
+>> If you're wondering why my explanation may not be particularly satisfying,
+>> that's because downstream contains practically no information about this
+>> one, apart from a bunch of lines of code and because this controller is
+>> just a big black box.
+>>
+>>>
+>>> 2. Narrow the node name in power-domain.yaml which would require changes
+>>> in multiple DTS and bindings.
+>>>
+>>> 3. Do not require power-domain-cells for power-controllers, only for
+>>> power-domains.
+>>>
+>>
+>> Solutions 2 and 3... well, I don't think that this would be really feasible
+>> as I envision this being the one and only driver that will ever require
+>> that kind of thing.
+>> Also, this programming was later moved to bootloaders and the only SoCs that
+>> will ever require this are MSM8956/76, MSM8953 and.. I think MSM8952 as well,
+>> but nothing more.
+>>
+>> Even if I can imagine the answer, I'm still tempted to ask: can we eventually
+>> just name it ramp-controller@xxxx or qcom-rc@xxxx or something "special" like
+>> that to overcome to this binding issue?
 > 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> So maybe "cpu-power-controller"? This should already help for this warning.
+> 
 
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -3334,6 +3330,11 @@ void register_console(struct console *newcon)
->  		 * boot console that is the furthest behind.
->  		 */
->  		if (bootcon_registered && !keep_bootcon) {
-> +			/*
-> +			 * Hold the console_lock to guarantee safe access to
-> +			 * console->seq.
-> +			 */
-> +			console_lock();
->  			for_each_console(con) {
->  				if ((con->flags & CON_BOOT) &&
->  				    (con->flags & CON_ENABLED) &&
-> @@ -3341,6 +3342,7 @@ void register_console(struct console *newcon)
->  					newcon->seq = con->seq;
->  				}
->  			}
-> +			console_unlock();
+Agreed. Thanks for the advice!
 
-Thinking more about it. This console_unlock() will actually cause
-flushing the boot consoles. A solution would be to call
-console_flush_all() here.
-
-And we could/should solve this in a separate patch. This code was not locked
-before. It is a corner case. It could be solved later.
-
->  		}
->  	}
->  
-
-Best Regards,
-Petr
+Sending a v3 asap!
