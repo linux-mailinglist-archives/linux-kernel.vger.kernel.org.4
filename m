@@ -2,108 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C4362A08A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BB462A08F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:41:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbiKORkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 12:40:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40486 "EHLO
+        id S231931AbiKORlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 12:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbiKORka (ORCPT
+        with ESMTP id S231855AbiKORlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 12:40:30 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4B329346
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:40:29 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 6so13903452pgm.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 09:40:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ky6Mco0OalSrctJAu1EOJBd+lJAoIkQi5z5MeDuMBMM=;
-        b=KYQzKZ5kcNqdDmtXq+8AHgkZoCrX86BWNNeDNjWO4Wbiwl1R008xFm5xBobnkhpp6v
-         msK3WCcdsJtN3aiBzR3P6mKT0ehY6yg9Ml5tR1PKiH8R9PWYZJtURob0x0A0GFkXbjLJ
-         3wSHpsSuQhwqcyE5SbBNVoNZUtweeoqSgmU+Dl0UPXexvkvATztQfxuPXvQEd9/CvJPZ
-         Iz1ZCBBs4blkTzkRCPtpB05buILbd/bmlkiRSZpyD63g8FKCCbi0WOctDv6edTddEf9c
-         GcN+rJ5uokAZu23ugVWDOE2i0TLpoDKuoC0bZboLmIUcbMlNhn/s5/EUjN9yBbpGh0nM
-         iNyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ky6Mco0OalSrctJAu1EOJBd+lJAoIkQi5z5MeDuMBMM=;
-        b=AI1RYSpxSWeEt4Ex/nO1RC6LjVbCapShrMB1gZ5SW4xIO96cjr6TG36PbiE5BFbzOW
-         GZnioyTlMy4boexCavF5QHtNkz63RwnAyo0Wpw9kam9c/4IY17QuB4F2pQ3/iwwM8PCp
-         8TgBgmzwWaDCuyQvfG26VJ7qqSX5nUU6NjPr8izT6qzwQFKHlnA3B6+lKGJZsROlGdOA
-         FFxTPfjS65aL1xKWn7I0KpLsqX5Ih7Yy/r7r69JEKCz0qJSFAaISPoQU06UL7L87PDHo
-         FcS1wWQJgvjagNEimNWkScxY/sNZam5IYmxU9/4LUMgT7Oyi9b5RXvrHdFxq7FnyssCv
-         N3SQ==
-X-Gm-Message-State: ANoB5pm064s1YClcVr1G72mch3kjCbndJ6mZEbtLUYGaLF3RhuOq+N8H
-        iQZpjRzqpeoHPac8iKJKRfKGmA==
-X-Google-Smtp-Source: AA0mqf79mdJMF/8Ew3sSkavuSrcAbRmS/zbCzf3ypigfhk0Vlku9YwXG4P0Aed3ocsjGOjf0/DlxZg==
-X-Received: by 2002:a63:ce56:0:b0:457:e41:c767 with SMTP id r22-20020a63ce56000000b004570e41c767mr16636972pgi.244.1668534029048;
-        Tue, 15 Nov 2022 09:40:29 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id y25-20020aa79439000000b0056bd1bf4243sm9063441pfo.53.2022.11.15.09.40.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 09:40:28 -0800 (PST)
-Date:   Tue, 15 Nov 2022 17:40:24 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     guo.ziliang@zte.com.cn, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH linux-next] KVM: replace DEFINE_SIMPLE_ATTRIBUTE with
- DEFINE_DEBUGFS_ATTRIBUTE
-Message-ID: <Y3PPCHa9Yzi1sSnQ@google.com>
-References: <202211150858513761518@zte.com.cn>
- <Y3PM4euxrCFhZnCc@google.com>
- <b81f9af0-28a0-fe23-37df-64a785bfe52a@redhat.com>
+        Tue, 15 Nov 2022 12:41:51 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDB6303D3;
+        Tue, 15 Nov 2022 09:41:50 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E41AC1F8E1;
+        Tue, 15 Nov 2022 17:41:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1668534108;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yb1QWgprwexsQKm4S/Gq/MwPIFzEpTMe+qnWWEHuwCo=;
+        b=AOtDzt1M2fGiZ/8NX5AFf2F72XKWlnKtKgjXMQYDehm9G1Z5SDTpQBVmMY8Qa8DhpMKFDZ
+        7RI5V9lKC4wC48Krfx4xeEbTOIW5cpz54048nWEoITLRVNewus3EaCRIx8gId5i4CcPgdg
+        ieEYKJM8r2TZzvav+MTXywVk59HdQZQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1668534108;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yb1QWgprwexsQKm4S/Gq/MwPIFzEpTMe+qnWWEHuwCo=;
+        b=Ha9x0WWXoA7lnuDcZtLmpSFtBEkGqNKQ797FYv3srYjBjXXgfYUJTSsTuI/oMdX6v7/JBS
+        NbGGlaZ+7kfyH1DA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A03CE13A91;
+        Tue, 15 Nov 2022 17:41:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id sDrZJVzPc2PFXAAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 15 Nov 2022 17:41:48 +0000
+Date:   Tue, 15 Nov 2022 18:41:22 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     ChenXiaoSong <chenxiaosong2@huawei.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhangxiaoxu5@huawei.com, yanaijie@huawei.com,
+        quwenruo.btrfs@gmx.com, wqu@suse.com
+Subject: Re: [PATCH v4 1/3] btrfs: add might_sleep() to some places in
+ update_qgroup_limit_item()
+Message-ID: <20221115174122.GM5824@suse.cz>
+Reply-To: dsterba@suse.cz
+References: <20221115171709.3774614-1-chenxiaosong2@huawei.com>
+ <20221115171709.3774614-2-chenxiaosong2@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b81f9af0-28a0-fe23-37df-64a785bfe52a@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221115171709.3774614-2-chenxiaosong2@huawei.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022, Paolo Bonzini wrote:
-> On 11/15/22 18:31, Sean Christopherson wrote:
-> > On Tue, Nov 15, 2022, guo.ziliang@zte.com.cn wrote:
-> > > From: guo ziliang <guo.ziliang@zte.com.cn>
-> > > Fix the following coccicheck warning:
-> > > /virt/kvm/kvm_main.c: 3849: 0-23: WARNING: vcpu_get_pid_fops
-> > > should be defined with DEFINE_DEBUGFS_ATTRIBUTE
-> > > 
-> > > Signed-off-by: guo ziliang <guo.ziliang@zte.com.cn>
-> > > ---
-> > > virt/kvm/kvm_main.c | 2 +-
-> > > 1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > > index 2719e10..6e58aec 100644
-> > > --- a/virt/kvm/kvm_main.c
-> > > +++ b/virt/kvm/kvm_main.c
-> > > @@ -3846,7 +3846,7 @@ static int vcpu_get_pid(void *data, u64 *val)
-> > > return 0;
-> > > }
-> > > 
-> > > -DEFINE_SIMPLE_ATTRIBUTE(vcpu_get_pid_fops, vcpu_get_pid, NULL, "%llu\n");
-> > > ++DEFINE_DEBUGFS_ATTRIBUTE(vcpu_get_pid_fops, vcpu_get_pid, NULL, "%llu\n");
-> > 
-> > NAK, third time is not a charm.
-> > 
-> > https://lore.kernel.org/all/20221101072506.7307-1-liubo03@inspur.com
-> > https://lore.kernel.org/all/20220815031228.64126-1-ye.xingchen@zte.com.cn
+On Wed, Nov 16, 2022 at 01:17:07AM +0800, ChenXiaoSong wrote:
+> As the potential sleeping under spin lock is hard to spot, we should add
+> might_sleep() to some places.
 > 
-> Screw it, I'm going to send a pull request just to delete that file.
+> Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+> ---
+>  fs/btrfs/ctree.c  | 2 ++
+>  fs/btrfs/qgroup.c | 2 ++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/fs/btrfs/ctree.c b/fs/btrfs/ctree.c
+> index a9543f01184c..809053e9cfde 100644
+> --- a/fs/btrfs/ctree.c
+> +++ b/fs/btrfs/ctree.c
+> @@ -1934,6 +1934,8 @@ int btrfs_search_slot(struct btrfs_trans_handle *trans, struct btrfs_root *root,
+>  	int min_write_lock_level;
+>  	int prev_cmp;
+>  
+> +	might_sleep();
 
-Heh, I was seriously considering sending a patch to do that too.
+This needs some explanation in the changelog, the reason was mentioned
+in some past patch iteration that it's due to potential IO fi the blocks
+are not cached.
+
+> +
+>  	lowest_level = p->lowest_level;
+>  	WARN_ON(lowest_level && ins_len > 0);
+>  	WARN_ON(p->nodes[0] != NULL);
+> diff --git a/fs/btrfs/qgroup.c b/fs/btrfs/qgroup.c
+> index 9334c3157c22..d0480b9c6c86 100644
+> --- a/fs/btrfs/qgroup.c
+> +++ b/fs/btrfs/qgroup.c
+> @@ -779,6 +779,8 @@ static int update_qgroup_limit_item(struct btrfs_trans_handle *trans,
+>  	int ret;
+>  	int slot;
+>  
+> +	might_sleep();
+
+This one is redundant, no? There's call to btrfs_search_slot a few lines
+below.
+
+> +
+>  	key.objectid = 0;
+>  	key.type = BTRFS_QGROUP_LIMIT_KEY;
+>  	key.offset = qgroup->qgroupid;
+> -- 
+> 2.31.1
+> 
