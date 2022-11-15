@@ -2,1708 +2,404 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E584629AC6
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:40:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA065629ACA
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238415AbiKONkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:40:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
+        id S238423AbiKONky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:40:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238287AbiKONkb (ORCPT
+        with ESMTP id S238439AbiKONkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:40:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0910140F6;
-        Tue, 15 Nov 2022 05:40:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F6036177F;
-        Tue, 15 Nov 2022 13:40:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F37EEC433D7;
-        Tue, 15 Nov 2022 13:40:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668519627;
-        bh=93lsKRuazRGvTxFbL6Nir+VepW2LO4Z4G7yh7RH22YQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jMnMdo3bBpyIkURymXy6cx2C31+OP+vwxmLSb0z8fMtEpmjOY1KAVuqDmF5WdSt+5
-         gOi9Ndeb9k7LLrhF2GLQ0zUoq50l6Sj+A0pyVsH6lL+DKo441kX2Rghh9TdfH+gHai
-         wVTn9H8yz1kwpbvNoDbKvn12Op7Nnpnnaplfk8W7ZzEK37Z29W9wAwLOIwjh6mGA4b
-         nI0xjqeMXxRngNhM6dyK0qCVGVT20G4c1eC3LxW9UqWd59WqtR5xDowwfWAoP/y/lb
-         0TxqU3CgoJBevm9O7eQi1Pzf6FlaboR6ahTYhu1y3/Jazcvc9XKtW2qsPJvwDeeAr2
-         Laytvk5vDMi2w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B70224073A; Tue, 15 Nov 2022 10:40:24 -0300 (-03)
-Date:   Tue, 15 Nov 2022 10:40:24 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Weilin Wang <weilin.wang@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Xin Gao <gaoxin@cdjrlc.com>, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v3 09/10] perf list: Reorganize to use callbacks
-Message-ID: <Y3OWyLWvZ/K5KnuL@kernel.org>
-References: <20221114210723.2749751-1-irogers@google.com>
- <20221114210723.2749751-10-irogers@google.com>
+        Tue, 15 Nov 2022 08:40:49 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791FB1B1E3
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:40:46 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id x21so17531138ljg.10
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:40:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WVmKFkci/3+AxskHpOlnI4prrtp9CiSe8JG/YJYX1Hk=;
+        b=eBNf26hYmiiaMWwOQpLupdlRO9rTBtMrwnDwQlnSvMbTRgp9CGewFM5DmiFzWKbg/E
+         6K14MpUuY8Mt8Ok+xPUddrfFViWr2o1k4l6/GSfbe94YsXFc8JKH1Drk/p8Pv0i6/oIe
+         AG82+hOcwy/LdkY8F/VnVH5cP7jVA98dl/iGbiMlUTA96d2SxhrGUh2UMI1S1YnQ7DpH
+         XNhoL3jrSTfe7nCmE3znw1iFKXMFAMBwRx9pe6GLrfIPqmN456mUcQ+CpTjs+l2jwCFG
+         CCUDXbE9Jc33wN3KGHUNof0JDVYUiJkTHJYxnnbYbTViMGOVYuBjYcxjhQdjgcXhaY3m
+         +9EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WVmKFkci/3+AxskHpOlnI4prrtp9CiSe8JG/YJYX1Hk=;
+        b=u0vCQv289LmkIw231SOH6D+FqCaGZe6LrD7f0TURbQxcJzbm4wX7XoW591nhDWzHoW
+         tSmjy2ePORragZIK0foyb3BPqjfeVRcbI8AxMRBvrzTSdXfqvfn+NwfOAwi4Mm3JDICu
+         Bh5gcF+D8Aa8Z8SFsTLEdG9EtONYtIAEPWBeL5TafhjOVRxFCVRQTyDEwjqOwMaf3Xbj
+         QEM+WuQdbVVaS668wzOi74qFFT6TP3kczcPdGRFq6ZLb4WDULKGZll+xG/89x6zDmUtY
+         z3wcXNSA1cisj5ja/CNRbqkXcwb3NZyJgr9ugVFQRpX1OJkrN+iaixK6RGXi2HfCbWsD
+         9lyg==
+X-Gm-Message-State: ANoB5pk3ZxhqH5dl4eQFUPPvjuuam+jkot1utCYYx4bbiKWtSMoj3Yfq
+        Ak+m3793NieQqHb1xGw7JZsWiA==
+X-Google-Smtp-Source: AA0mqf7kZjz/AX3c9+vEsF3iR/Nb148Eg9a5htmF2Jolr5xZ62zK/8RvCnMezw0dFwsw4JOpkNszTQ==
+X-Received: by 2002:a2e:8052:0:b0:278:f5b8:82c8 with SMTP id p18-20020a2e8052000000b00278f5b882c8mr4314905ljg.228.1668519644729;
+        Tue, 15 Nov 2022 05:40:44 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id w30-20020a197b1e000000b0048a9e18ae67sm2214212lfc.84.2022.11.15.05.40.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 05:40:44 -0800 (PST)
+Message-ID: <6991c8d8-cbcf-b459-bd3b-ba82a330d18a@linaro.org>
+Date:   Tue, 15 Nov 2022 14:40:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221114210723.2749751-10-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH v2 04/12] drm/msm/dpu: Add SM8350 to hw catalog
+To:     Robert Foss <robert.foss@linaro.org>, robdclark@gmail.com,
+        quic_abhinavk@quicinc.com, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        quic_kalyant@quicinc.com, swboyd@chromium.org,
+        angelogioacchino.delregno@somainline.org, loic.poulain@linaro.org,
+        quic_khsieh@quicinc.com, quic_vpolimer@quicinc.com,
+        vkoul@kernel.org, dianders@chromium.org,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
+        vinod.koul@linaro.org, quic_jesszhan@quicinc.com,
+        andersson@kernel.org
+References: <20221115133105.980877-1-robert.foss@linaro.org>
+ <20221115133105.980877-5-robert.foss@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221115133105.980877-5-robert.foss@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Nov 14, 2022 at 01:07:22PM -0800, Ian Rogers escreveu:
-> Rather than controlling the list output with passed flags, add
-> callbacks that are called when an event or metric are
-> encountered. State is passed to the callback so that command line
-> options can be respected, alternatively the callbacks can be changed.
+
+
+On 15/11/2022 14:30, Robert Foss wrote:
+> Add compatibility for SM8350 display subsystem, including
+> required entries in DPU hw catalog.
 > 
-> Fix a few bugs:
->  - wordwrap to columns metric descriptions and expressions;
->  - remove unnecessary whitespace after PMU event names;
->  - the metric filter is a glob but matched using strstr which will
->    always fail, switch to using a proper globmatch,
->  - the detail flag gives details for extra kernel PMU events like
->    branch-instructions.
-> 
-> In metricgroup.c switch from struct mep being a rbtree of metricgroups
-> containing a list of metrics, to the tree directly containing all the
-> metrics. In general the alias for a name is passed to the print
-> routine rather than being contained in the name with OR.
-
-⬢[acme@toolbox perf]$ gcc --version | head -1
-gcc (GCC) 12.2.1 20220819 (Red Hat 12.2.1-2)
-⬢[acme@toolbox perf]$
-
-  CC      /tmp/build/perf/util/s390-sample-raw.o
-util/print-events.c: In function ‘print_sdt_events’:
-util/print-events.c:183:33: error: ignoring return value of ‘asprintf’ declared with attribute ‘warn_unused_result’ [-Werror=unused-result]
-  183 |                                 asprintf(&evt_name, "%s@%s(%.12s)", sdt_name->s, path, bid);
-      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:97: /tmp/build/perf/util/print-events.o] Error 1
-make[4]: *** Waiting for unfinished jobs....
-
-Since we have a test for evt_name later on, I fixed this with:
-
-
-diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
-index 5210a168d54f9eb5..2646ae18d9f9b57b 100644
---- a/tools/perf/util/print-events.c
-+++ b/tools/perf/util/print-events.c
-@@ -180,7 +180,8 @@ void print_sdt_events(const struct print_callbacks *print_cb, void *print_state)
- 			char *path = build_id_cache__origname(bid);
- 
- 			if (path) {
--				asprintf(&evt_name, "%s@%s(%.12s)", sdt_name->s, path, bid);
-+				if (asprintf(&evt_name, "%s@%s(%.12s)", sdt_name->s, path, bid) < 0)
-+					evt_name = NULL;
- 				free(path);
- 			}
- 		}
-
-Thanks,
-
-- Arnaldo
-
- 
-> Signed-off-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
 > ---
->  tools/perf/builtin-list.c      | 331 +++++++++++++++++++++++++-----
->  tools/perf/util/metricgroup.c  | 243 ++++++----------------
->  tools/perf/util/metricgroup.h  |   4 +-
->  tools/perf/util/pmu.c          | 145 +++++--------
->  tools/perf/util/pmu.h          |   5 +-
->  tools/perf/util/print-events.c | 363 +++++++++++++++++----------------
->  tools/perf/util/print-events.h |  42 ++--
->  7 files changed, 621 insertions(+), 512 deletions(-)
+>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 196 ++++++++++++++++++
+>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |   1 +
+>   2 files changed, 197 insertions(+)
 > 
-> diff --git a/tools/perf/builtin-list.c b/tools/perf/builtin-list.c
-> index cc84ced6da26..12811fc40a30 100644
-> --- a/tools/perf/builtin-list.c
-> +++ b/tools/perf/builtin-list.c
-> @@ -15,31 +15,240 @@
->  #include "util/pmu-hybrid.h"
->  #include "util/debug.h"
->  #include "util/metricgroup.h"
-> +#include "util/string2.h"
-> +#include "util/strlist.h"
->  #include <subcmd/pager.h>
->  #include <subcmd/parse-options.h>
->  #include <stdio.h>
->  
-> -static bool desc_flag = true;
-> -static bool details_flag;
-> +/**
-> + * struct print_state - State and configuration passed to the default_print
-> + * functions.
-> + */
-> +struct print_state {
-> +	/**
-> +	 * @pmu_glob: Optionally restrict PMU and metric matching to PMU or
-> +	 * debugfs subsystem name.
-> +	 */
-> +	char *pmu_glob;
-> +	/** @event_glob: Optional pattern matching glob. */
-> +	char *event_glob;
-> +	/** @name_only: Print event or metric names only. */
-> +	bool name_only;
-> +	/** @desc: Print the event or metric description. */
-> +	bool desc;
-> +	/** @long_desc: Print longer event or metric description. */
-> +	bool long_desc;
-> +	/** @deprecated: Print deprecated events or metrics. */
-> +	bool deprecated;
-> +	/**
-> +	 * @detailed: Print extra information on the perf event such as names
-> +	 * and expressions used internally by events.
-> +	 */
-> +	bool detailed;
-> +	/** @metrics: Controls printing of metric and metric groups. */
-> +	bool metrics;
-> +	/** @metricgroups: Controls printing of metric and metric groups. */
-> +	bool metricgroups;
-> +	/** @last_topic: The last printed event topic. */
-> +	char *last_topic;
-> +	/** @last_metricgroups: The last printed metric group. */
-> +	char *last_metricgroups;
-> +	/** @visited_metrics: Metrics that are printed to avoid duplicates. */
-> +	struct strlist *visited_metrics;
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index 8f2d634f7b6b..e21ef7d912a0 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -112,6 +112,15 @@
+>   			 BIT(MDP_INTF3_INTR) | \
+>   			 BIT(MDP_INTF4_INTR))
+>   
+> +#define IRQ_SM8350_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+> +			 BIT(MDP_SSPP_TOP0_INTR2) | \
+> +			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+> +			 BIT(MDP_INTF0_7xxx_INTR) | \
+> +			 BIT(MDP_INTF1_7xxx_INTR) | \
+> +			 BIT(MDP_INTF2_7xxx_INTR) | \
+> +			 BIT(MDP_INTF3_7xxx_INTR) | \
+> +			 0)
+> +
+>   #define IRQ_SC8180X_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
+>   			  BIT(MDP_SSPP_TOP0_INTR2) | \
+>   			  BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+> @@ -375,6 +384,20 @@ static const struct dpu_caps sm8250_dpu_caps = {
+>   	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
+>   };
+>   
+> +static const struct dpu_caps sm8350_dpu_caps = {
+> +	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+> +	.max_mixer_blendstages = 0xb,
+> +	.qseed_type = DPU_SSPP_SCALER_QSEED3LITE,
+> +	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
+> +	.ubwc_version = DPU_HW_UBWC_VER_40,
+> +	.has_src_split = true,
+> +	.has_dim_layer = true,
+> +	.has_idle_pc = true,
+> +	.has_3d_merge = true,
+> +	.max_linewidth = 4096,
+> +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
 > +};
 > +
-> +static void default_print_start(void *ps)
-> +{
-> +	struct print_state *print_state = ps;
-> +
-> +	if (!print_state->name_only && pager_in_use())
-> +		printf("\nList of pre-defined events (to be used in -e or -M):\n\n");
-> +}
-> +
-> +static void default_print_end(void *print_state __maybe_unused) {}
-> +
-> +static void wordwrap(const char *s, int start, int max, int corr)
-> +{
-> +	int column = start;
-> +	int n;
-> +
-> +	while (*s) {
-> +		int wlen = strcspn(s, " \t");
-> +
-> +		if (column + wlen >= max && column > start) {
-> +			printf("\n%*s", start, "");
-> +			column = start + corr;
-> +		}
-> +		n = printf("%s%.*s", column > start ? " " : "", wlen, s);
-> +		if (n <= 0)
-> +			break;
-> +		s += wlen;
-> +		column += n;
-> +		s = skip_spaces(s);
-> +	}
-> +}
-> +
-> +static void default_print_event(void *ps, const char *pmu_name, const char *topic,
-> +				const char *event_name, const char *event_alias,
-> +				const char *scale_unit __maybe_unused,
-> +				bool deprecated, const char *event_type_desc,
-> +				const char *desc, const char *long_desc,
-> +				const char *encoding_desc,
-> +				const char *metric_name, const char *metric_expr)
-> +{
-> +	struct print_state *print_state = ps;
-> +	int pos;
-> +
-> +	if (deprecated && !print_state->deprecated)
-> +		return;
-> +
-> +	if (print_state->pmu_glob && !strglobmatch(pmu_name, print_state->pmu_glob))
-> +		return;
-> +
-> +	if (print_state->event_glob &&
-> +	    (!event_name || !strglobmatch(event_name, print_state->event_glob)) &&
-> +	    (!event_alias || !strglobmatch(event_alias, print_state->event_glob)) &&
-> +	    (!topic || !strglobmatch_nocase(topic, print_state->event_glob)))
-> +		return;
-> +
-> +	if (print_state->name_only) {
-> +		if (event_alias && strlen(event_alias))
-> +			printf("%s ", event_alias);
-> +		else
-> +			printf("%s ", event_name);
-> +		return;
-> +	}
-> +
-> +	if (strcmp(print_state->last_topic, topic ?: "")) {
-> +		if (topic)
-> +			printf("\n%s:\n", topic);
-> +		free(print_state->last_topic);
-> +		print_state->last_topic = strdup(topic ?: "");
-> +	}
-> +
-> +	if (event_alias && strlen(event_alias))
-> +		pos = printf("  %s OR %s", event_name, event_alias);
-> +	else
-> +		pos = printf("  %s", event_name);
-> +
-> +	if (!topic && event_type_desc) {
-> +		for (; pos < 53; pos++)
-> +			putchar(' ');
-> +		printf("[%s]\n", event_type_desc);
-> +	} else
-> +		putchar('\n');
-> +
-> +	if (desc && print_state->desc) {
-> +		printf("%*s", 8, "[");
-> +		wordwrap(desc, 8, pager_get_columns(), 0);
-> +		printf("]\n");
-> +	}
-> +
-> +	if (long_desc && print_state->long_desc) {
-> +		printf("%*s", 8, "[");
-> +		wordwrap(long_desc, 8, pager_get_columns(), 0);
-> +		printf("]\n");
-> +	}
-> +
-> +	if (print_state->detailed && encoding_desc) {
-> +		printf("%*s%s", 8, "", encoding_desc);
-> +		if (metric_name)
-> +			printf(" MetricName: %s", metric_name);
-> +		if (metric_expr)
-> +			printf(" MetricExpr: %s", metric_expr);
-> +		putchar('\n');
-> +	}
-> +}
-> +
-> +static void default_print_metric(void *ps,
-> +				const char *group,
-> +				const char *name,
-> +				const char *desc,
-> +				const char *long_desc,
-> +				const char *expr,
-> +				const char *unit __maybe_unused)
-> +{
-> +	struct print_state *print_state = ps;
-> +
-> +	if (print_state->event_glob &&
-> +	    (!print_state->metrics || !name || !strglobmatch(name, print_state->event_glob)) &&
-> +	    (!print_state->metricgroups || !group || !strglobmatch(group, print_state->event_glob)))
-> +		return;
-> +
-> +	if (!print_state->name_only && !print_state->last_metricgroups) {
-> +		if (print_state->metricgroups) {
-> +			printf("\nMetric Groups:\n");
-> +			if (!print_state->metrics)
-> +				putchar('\n');
-> +		} else {
-> +			printf("\nMetrics:\n\n");
-> +		}
-> +	}
-> +	if (!print_state->last_metricgroups ||
-> +	    strcmp(print_state->last_metricgroups, group ?: "")) {
-> +		if (group && print_state->metricgroups) {
-> +			if (print_state->name_only)
-> +				printf("%s ", group);
-> +			else if (print_state->metrics)
-> +				printf("\n%s:\n", group);
-> +			else
-> +				printf("%s\n", group);
-> +		}
-> +		free(print_state->last_metricgroups);
-> +		print_state->last_metricgroups = strdup(group ?: "");
-> +	}
-> +	if (!print_state->metrics)
-> +		return;
-> +
-> +	if (print_state->name_only) {
-> +		if (print_state->metrics &&
-> +		    !strlist__has_entry(print_state->visited_metrics, name)) {
-> +			printf("%s ", name);
-> +			strlist__add(print_state->visited_metrics, name);
-> +		}
-> +		return;
-> +	}
-> +	printf("  %s\n", name);
-> +
-> +	if (desc && print_state->desc) {
-> +		printf("%*s", 8, "[");
-> +		wordwrap(desc, 8, pager_get_columns(), 0);
-> +		printf("]\n");
-> +	}
-> +	if (long_desc && print_state->long_desc) {
-> +		printf("%*s", 8, "[");
-> +		wordwrap(long_desc, 8, pager_get_columns(), 0);
-> +		printf("]\n");
-> +	}
-> +	if (expr && print_state->detailed) {
-> +		printf("%*s", 8, "[");
-> +		wordwrap(expr, 8, pager_get_columns(), 0);
-> +		printf("]\n");
-> +	}
-> +}
->  
->  int cmd_list(int argc, const char **argv)
->  {
->  	int i, ret = 0;
-> -	bool raw_dump = false;
-> -	bool long_desc_flag = false;
-> -	bool deprecated = false;
-> -	char *pmu_name = NULL;
-> +	struct print_state ps = {};
-> +	struct print_callbacks print_cb = {
-> +		.print_start = default_print_start,
-> +		.print_end = default_print_end,
-> +		.print_event = default_print_event,
-> +		.print_metric = default_print_metric,
-> +	};
->  	const char *hybrid_name = NULL;
->  	const char *unit_name = NULL;
->  	struct option list_options[] = {
-> -		OPT_BOOLEAN(0, "raw-dump", &raw_dump, "Dump raw events"),
-> -		OPT_BOOLEAN('d', "desc", &desc_flag,
-> +		OPT_BOOLEAN(0, "raw-dump", &ps.name_only, "Dump raw events"),
-> +		OPT_BOOLEAN('d', "desc", &ps.desc,
->  			    "Print extra event descriptions. --no-desc to not print."),
-> -		OPT_BOOLEAN('v', "long-desc", &long_desc_flag,
-> +		OPT_BOOLEAN('v', "long-desc", &ps.long_desc,
->  			    "Print longer event descriptions."),
-> -		OPT_BOOLEAN(0, "details", &details_flag,
-> +		OPT_BOOLEAN(0, "details", &ps.detailed,
->  			    "Print information on the perf event names and expressions used internally by events."),
-> -		OPT_BOOLEAN(0, "deprecated", &deprecated,
-> +		OPT_BOOLEAN(0, "deprecated", &ps.deprecated,
->  			    "Print deprecated events."),
->  		OPT_STRING(0, "cputype", &hybrid_name, "hybrid cpu type",
->  			   "Limit PMU or metric printing to the given hybrid PMU (e.g. core or atom)."),
-> @@ -63,20 +272,28 @@ int cmd_list(int argc, const char **argv)
->  
->  	setup_pager();
->  
-> -	if (!raw_dump && pager_in_use())
-> -		printf("\nList of pre-defined events (to be used in -e or -M):\n\n");
-> +	if (!ps.name_only)
-> +		setup_pager();
->  
-> +	ps.desc = !ps.long_desc;
-> +	ps.last_topic = strdup("");
-> +	assert(ps.last_topic);
-> +	ps.visited_metrics = strlist__new(NULL, NULL);
-> +	assert(ps.visited_metrics);
->  	if (unit_name)
-> -		pmu_name = strdup(unit_name);
-> +		ps.pmu_glob = strdup(unit_name);
->  	else if (hybrid_name) {
-> -		pmu_name = perf_pmu__hybrid_type_to_pmu(hybrid_name);
-> -		if (!pmu_name)
-> +		ps.pmu_glob = perf_pmu__hybrid_type_to_pmu(hybrid_name);
-> +		if (!ps.pmu_glob)
->  			pr_warning("WARNING: hybrid cputype is not supported!\n");
->  	}
->  
-> +	print_cb.print_start(&ps);
-> +
->  	if (argc == 0) {
-> -		print_events(NULL, raw_dump, !desc_flag, long_desc_flag,
-> -				details_flag, deprecated, pmu_name);
-> +		ps.metrics = true;
-> +		ps.metricgroups = true;
-> +		print_events(&print_cb, &ps);
->  		goto out;
->  	}
->  
-> @@ -84,30 +301,33 @@ int cmd_list(int argc, const char **argv)
->  		char *sep, *s;
->  
->  		if (strcmp(argv[i], "tracepoint") == 0)
-> -			print_tracepoint_events(NULL, NULL, raw_dump);
-> +			print_tracepoint_events(&print_cb, &ps);
->  		else if (strcmp(argv[i], "hw") == 0 ||
->  			 strcmp(argv[i], "hardware") == 0)
-> -			print_symbol_events(NULL, PERF_TYPE_HARDWARE,
-> -					event_symbols_hw, PERF_COUNT_HW_MAX, raw_dump);
-> +			print_symbol_events(&print_cb, &ps, PERF_TYPE_HARDWARE,
-> +					event_symbols_hw, PERF_COUNT_HW_MAX);
->  		else if (strcmp(argv[i], "sw") == 0 ||
->  			 strcmp(argv[i], "software") == 0) {
-> -			print_symbol_events(NULL, PERF_TYPE_SOFTWARE,
-> -					event_symbols_sw, PERF_COUNT_SW_MAX, raw_dump);
-> -			print_tool_events(NULL, raw_dump);
-> +			print_symbol_events(&print_cb, &ps, PERF_TYPE_SOFTWARE,
-> +					event_symbols_sw, PERF_COUNT_SW_MAX);
-> +			print_tool_events(&print_cb, &ps);
->  		} else if (strcmp(argv[i], "cache") == 0 ||
->  			 strcmp(argv[i], "hwcache") == 0)
-> -			print_hwcache_events(NULL, raw_dump);
-> +			print_hwcache_events(&print_cb, &ps);
->  		else if (strcmp(argv[i], "pmu") == 0)
-> -			print_pmu_events(NULL, raw_dump, !desc_flag,
-> -						long_desc_flag, details_flag,
-> -						deprecated, pmu_name);
-> +			print_pmu_events(&print_cb, &ps);
->  		else if (strcmp(argv[i], "sdt") == 0)
-> -			print_sdt_events(NULL, NULL, raw_dump);
-> -		else if (strcmp(argv[i], "metric") == 0 || strcmp(argv[i], "metrics") == 0)
-> -			metricgroup__print(true, false, NULL, raw_dump, details_flag, pmu_name);
-> -		else if (strcmp(argv[i], "metricgroup") == 0 || strcmp(argv[i], "metricgroups") == 0)
-> -			metricgroup__print(false, true, NULL, raw_dump, details_flag, pmu_name);
-> -		else if ((sep = strchr(argv[i], ':')) != NULL) {
-> +			print_sdt_events(&print_cb, &ps);
-> +		else if (strcmp(argv[i], "metric") == 0 || strcmp(argv[i], "metrics") == 0) {
-> +			ps.metricgroups = false;
-> +			ps.metrics = true;
-> +			metricgroup__print(&print_cb, &ps);
-> +		} else if (strcmp(argv[i], "metricgroup") == 0 ||
-> +			   strcmp(argv[i], "metricgroups") == 0) {
-> +			ps.metricgroups = true;
-> +			ps.metrics = false;
-> +			metricgroup__print(&print_cb, &ps);
-> +		} else if ((sep = strchr(argv[i], ':')) != NULL) {
->  			int sep_idx;
->  
->  			sep_idx = sep - argv[i];
-> @@ -118,34 +338,41 @@ int cmd_list(int argc, const char **argv)
->  			}
->  
->  			s[sep_idx] = '\0';
-> -			print_tracepoint_events(s, s + sep_idx + 1, raw_dump);
-> -			print_sdt_events(s, s + sep_idx + 1, raw_dump);
-> -			metricgroup__print(true, true, s, raw_dump, details_flag, pmu_name);
-> +			ps.pmu_glob = s;
-> +			ps.event_glob = s + sep_idx + 1;
-> +			print_tracepoint_events(&print_cb, &ps);
-> +			print_sdt_events(&print_cb, &ps);
-> +			ps.metrics = true;
-> +			ps.metricgroups = true;
-> +			metricgroup__print(&print_cb, &ps);
->  			free(s);
->  		} else {
->  			if (asprintf(&s, "*%s*", argv[i]) < 0) {
->  				printf("Critical: Not enough memory! Trying to continue...\n");
->  				continue;
->  			}
-> -			print_symbol_events(s, PERF_TYPE_HARDWARE,
-> -					    event_symbols_hw, PERF_COUNT_HW_MAX, raw_dump);
-> -			print_symbol_events(s, PERF_TYPE_SOFTWARE,
-> -					    event_symbols_sw, PERF_COUNT_SW_MAX, raw_dump);
-> -			print_tool_events(s, raw_dump);
-> -			print_hwcache_events(s, raw_dump);
-> -			print_pmu_events(s, raw_dump, !desc_flag,
-> -						long_desc_flag,
-> -						details_flag,
-> -						deprecated,
-> -						pmu_name);
-> -			print_tracepoint_events(NULL, s, raw_dump);
-> -			print_sdt_events(NULL, s, raw_dump);
-> -			metricgroup__print(true, true, s, raw_dump, details_flag, pmu_name);
-> +			ps.event_glob = s;
-> +			print_symbol_events(&print_cb, &ps, PERF_TYPE_HARDWARE,
-> +					event_symbols_hw, PERF_COUNT_HW_MAX);
-> +			print_symbol_events(&print_cb, &ps, PERF_TYPE_SOFTWARE,
-> +					event_symbols_sw, PERF_COUNT_SW_MAX);
-> +			print_tool_events(&print_cb, &ps);
-> +			print_hwcache_events(&print_cb, &ps);
-> +			print_pmu_events(&print_cb, &ps);
-> +			print_tracepoint_events(&print_cb, &ps);
-> +			print_sdt_events(&print_cb, &ps);
-> +			ps.metrics = true;
-> +			ps.metricgroups = true;
-> +			metricgroup__print(&print_cb, &ps);
->  			free(s);
->  		}
->  	}
->  
->  out:
-> -	free(pmu_name);
-> +	print_cb.print_end(&ps);
-> +	free(ps.pmu_glob);
-> +	free(ps.last_topic);
-> +	free(ps.last_metricgroups);
-> +	strlist__delete(ps.visited_metrics);
->  	return ret;
->  }
-> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-> index 1943fed9b6d9..76501009ead5 100644
-> --- a/tools/perf/util/metricgroup.c
-> +++ b/tools/perf/util/metricgroup.c
-> @@ -12,6 +12,7 @@
->  #include "strbuf.h"
->  #include "pmu.h"
->  #include "pmu-hybrid.h"
-> +#include "print-events.h"
->  #include "expr.h"
->  #include "rblist.h"
->  #include <string.h>
-> @@ -352,51 +353,65 @@ static bool match_pe_metric(const struct pmu_event *pe, const char *metric)
->  	       match_metric(pe->metric_name, metric);
->  }
->  
-> +/** struct mep - RB-tree node for building printing information. */
->  struct mep {
-> +	/** nd - RB-tree element. */
->  	struct rb_node nd;
-> -	const char *name;
-> -	struct strlist *metrics;
-> +	/** @metric_group: Owned metric group name, separated others with ';'. */
-> +	char *metric_group;
-> +	const char *metric_name;
-> +	const char *metric_desc;
-> +	const char *metric_long_desc;
-> +	const char *metric_expr;
-> +	const char *metric_unit;
->  };
->  
->  static int mep_cmp(struct rb_node *rb_node, const void *entry)
->  {
->  	struct mep *a = container_of(rb_node, struct mep, nd);
->  	struct mep *b = (struct mep *)entry;
-> +	int ret;
->  
-> -	return strcmp(a->name, b->name);
-> +	ret = strcmp(a->metric_group, b->metric_group);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return strcmp(a->metric_name, b->metric_name);
->  }
->  
-> -static struct rb_node *mep_new(struct rblist *rl __maybe_unused,
-> -					const void *entry)
-> +static struct rb_node *mep_new(struct rblist *rl __maybe_unused, const void *entry)
->  {
->  	struct mep *me = malloc(sizeof(struct mep));
->  
->  	if (!me)
->  		return NULL;
-> +
->  	memcpy(me, entry, sizeof(struct mep));
-> -	me->name = strdup(me->name);
-> -	if (!me->name)
-> -		goto out_me;
-> -	me->metrics = strlist__new(NULL, NULL);
-> -	if (!me->metrics)
-> -		goto out_name;
->  	return &me->nd;
-> -out_name:
-> -	zfree(&me->name);
-> -out_me:
-> +}
-> +
-> +static void mep_delete(struct rblist *rl __maybe_unused,
-> +		       struct rb_node *nd)
-> +{
-> +	struct mep *me = container_of(nd, struct mep, nd);
-> +
-> +	zfree(&me->metric_group);
->  	free(me);
-> -	return NULL;
->  }
->  
-> -static struct mep *mep_lookup(struct rblist *groups, const char *name)
-> +static struct mep *mep_lookup(struct rblist *groups, const char *metric_group,
-> +			      const char *metric_name)
->  {
->  	struct rb_node *nd;
->  	struct mep me = {
-> -		.name = name
-> +		.metric_group = strdup(metric_group),
-> +		.metric_name = metric_name,
->  	};
->  	nd = rblist__find(groups, &me);
-> -	if (nd)
-> +	if (nd) {
-> +		free(me.metric_group);
->  		return container_of(nd, struct mep, nd);
-> +	}
->  	rblist__add_node(groups, &me);
->  	nd = rblist__find(groups, &me);
->  	if (nd)
-> @@ -404,107 +419,37 @@ static struct mep *mep_lookup(struct rblist *groups, const char *name)
->  	return NULL;
->  }
->  
-> -static void mep_delete(struct rblist *rl __maybe_unused,
-> -		       struct rb_node *nd)
-> -{
-> -	struct mep *me = container_of(nd, struct mep, nd);
-> -
-> -	strlist__delete(me->metrics);
-> -	zfree(&me->name);
-> -	free(me);
-> -}
-> -
-> -static void metricgroup__print_strlist(struct strlist *metrics, bool raw)
-> -{
-> -	struct str_node *sn;
-> -	int n = 0;
-> -
-> -	strlist__for_each_entry (sn, metrics) {
-> -		if (raw)
-> -			printf("%s%s", n > 0 ? " " : "", sn->s);
-> -		else
-> -			printf("  %s\n", sn->s);
-> -		n++;
-> -	}
-> -	if (raw)
-> -		putchar('\n');
-> -}
-> -
-> -static int metricgroup__print_pmu_event(const struct pmu_event *pe,
-> -					bool metricgroups, char *filter,
-> -					bool raw, bool details,
-> -					struct rblist *groups,
-> -					struct strlist *metriclist)
-> +static int metricgroup__add_to_mep_groups(const struct pmu_event *pe,
-> +					struct rblist *groups)
->  {
->  	const char *g;
->  	char *omg, *mg;
->  
-> -	g = pe->metric_group;
-> -	if (!g && pe->metric_name) {
-> -		if (pe->name)
-> -			return 0;
-> -		g = "No_group";
-> -	}
-> -
-> -	if (!g)
-> -		return 0;
-> -
-> -	mg = strdup(g);
-> -
-> +	mg = strdup(pe->metric_group ?: "No_group");
->  	if (!mg)
->  		return -ENOMEM;
->  	omg = mg;
->  	while ((g = strsep(&mg, ";")) != NULL) {
->  		struct mep *me;
-> -		char *s;
->  
->  		g = skip_spaces(g);
-> -		if (*g == 0)
-> -			g = "No_group";
-> -		if (filter && !strstr(g, filter))
-> -			continue;
-> -		if (raw)
-> -			s = (char *)pe->metric_name;
-> -		else {
-> -			if (asprintf(&s, "%s\n%*s%s]",
-> -				     pe->metric_name, 8, "[", pe->desc) < 0)
-> -				return -1;
-> -			if (details) {
-> -				if (asprintf(&s, "%s\n%*s%s]",
-> -					     s, 8, "[", pe->metric_expr) < 0)
-> -					return -1;
-> -			}
-> -		}
-> -
-> -		if (!s)
-> -			continue;
-> +		if (strlen(g))
-> +			me = mep_lookup(groups, g, pe->metric_name);
-> +		else
-> +			me = mep_lookup(groups, "No_group", pe->metric_name);
->  
-> -		if (!metricgroups) {
-> -			strlist__add(metriclist, s);
-> -		} else {
-> -			me = mep_lookup(groups, g);
-> -			if (!me)
-> -				continue;
-> -			strlist__add(me->metrics, s);
-> +		if (me) {
-> +			me->metric_desc = pe->desc;
-> +			me->metric_long_desc = pe->long_desc;
-> +			me->metric_expr = pe->metric_expr;
-> +			me->metric_unit = pe->unit;
->  		}
-> -
-> -		if (!raw)
-> -			free(s);
->  	}
->  	free(omg);
->  
->  	return 0;
->  }
->  
-> -struct metricgroup_print_sys_idata {
-> -	struct strlist *metriclist;
-> -	char *filter;
-> -	struct rblist *groups;
-> -	bool metricgroups;
-> -	bool raw;
-> -	bool details;
-> -};
-> -
->  struct metricgroup_iter_data {
->  	pmu_event_iter_fn fn;
->  	void *data;
-> @@ -527,61 +472,26 @@ static int metricgroup__sys_event_iter(const struct pmu_event *pe,
->  
->  		return d->fn(pe, table, d->data);
->  	}
-> -
->  	return 0;
->  }
->  
-> -static int metricgroup__print_sys_event_iter(const struct pmu_event *pe,
-> -					     const struct pmu_events_table *table __maybe_unused,
-> -					     void *data)
-> -{
-> -	struct metricgroup_print_sys_idata *d = data;
-> -
-> -	return metricgroup__print_pmu_event(pe, d->metricgroups, d->filter, d->raw,
-> -				     d->details, d->groups, d->metriclist);
-> -}
-> -
-> -struct metricgroup_print_data {
-> -	const char *pmu_name;
-> -	struct strlist *metriclist;
-> -	char *filter;
-> -	struct rblist *groups;
-> -	bool metricgroups;
-> -	bool raw;
-> -	bool details;
-> -};
-> -
-> -static int metricgroup__print_callback(const struct pmu_event *pe,
-> -				       const struct pmu_events_table *table __maybe_unused,
-> -				       void *vdata)
-> +static int metricgroup__add_to_mep_groups_callback(const struct pmu_event *pe,
-> +						const struct pmu_events_table *table __maybe_unused,
-> +						void *vdata)
->  {
-> -	struct metricgroup_print_data *data = vdata;
-> -	const char *pmu = pe->pmu ?: "cpu";
-> +	struct rblist *groups = vdata;
->  
-> -	if (!pe->metric_expr)
-> -		return 0;
-> -
-> -	if (data->pmu_name && strcmp(data->pmu_name, pmu))
-> +	if (!pe->metric_name)
->  		return 0;
->  
-> -	return metricgroup__print_pmu_event(pe, data->metricgroups, data->filter,
-> -					    data->raw, data->details, data->groups,
-> -					    data->metriclist);
-> +	return metricgroup__add_to_mep_groups(pe, groups);
->  }
->  
-> -void metricgroup__print(bool metrics, bool metricgroups, char *filter,
-> -			bool raw, bool details, const char *pmu_name)
-> +void metricgroup__print(const struct print_callbacks *print_cb, void *print_state)
->  {
->  	struct rblist groups;
-> -	struct rb_node *node, *next;
-> -	struct strlist *metriclist = NULL;
->  	const struct pmu_events_table *table;
-> -
-> -	if (!metricgroups) {
-> -		metriclist = strlist__new(NULL, NULL);
-> -		if (!metriclist)
-> -			return;
-> -	}
-> +	struct rb_node *node, *next;
->  
->  	rblist__init(&groups);
->  	groups.node_new = mep_new;
-> @@ -589,56 +499,31 @@ void metricgroup__print(bool metrics, bool metricgroups, char *filter,
->  	groups.node_delete = mep_delete;
->  	table = pmu_events_table__find();
->  	if (table) {
-> -		struct metricgroup_print_data data = {
-> -			.pmu_name = pmu_name,
-> -			.metriclist = metriclist,
-> -			.metricgroups = metricgroups,
-> -			.filter = filter,
-> -			.raw = raw,
-> -			.details = details,
-> -			.groups = &groups,
-> -		};
-> -
->  		pmu_events_table_for_each_event(table,
-> -						metricgroup__print_callback,
-> -						&data);
-> +						metricgroup__add_to_mep_groups_callback,
-> +						&groups);
->  	}
->  	{
->  		struct metricgroup_iter_data data = {
-> -			.fn = metricgroup__print_sys_event_iter,
-> -			.data = (void *) &(struct metricgroup_print_sys_idata){
-> -				.metriclist = metriclist,
-> -				.metricgroups = metricgroups,
-> -				.filter = filter,
-> -				.raw = raw,
-> -				.details = details,
-> -				.groups = &groups,
-> -			},
-> +			.fn = metricgroup__add_to_mep_groups_callback,
-> +			.data = &groups,
->  		};
-> -
->  		pmu_for_each_sys_event(metricgroup__sys_event_iter, &data);
->  	}
->  
-> -	if (!filter || !rblist__empty(&groups)) {
-> -		if (metricgroups && !raw)
-> -			printf("\nMetric Groups:\n\n");
-> -		else if (metrics && !raw)
-> -			printf("\nMetrics:\n\n");
-> -	}
-> -
->  	for (node = rb_first_cached(&groups.entries); node; node = next) {
->  		struct mep *me = container_of(node, struct mep, nd);
->  
-> -		if (metricgroups)
-> -			printf("%s%s%s", me->name, metrics && !raw ? ":" : "", raw ? " " : "\n");
-> -		if (metrics)
-> -			metricgroup__print_strlist(me->metrics, raw);
-> +		print_cb->print_metric(print_state,
-> +				me->metric_group,
-> +				me->metric_name,
-> +				me->metric_desc,
-> +				me->metric_long_desc,
-> +				me->metric_expr,
-> +				me->metric_unit);
->  		next = rb_next(node);
->  		rblist__remove_node(&groups, node);
->  	}
-> -	if (!metricgroups)
-> -		metricgroup__print_strlist(metriclist, raw);
-> -	strlist__delete(metriclist);
->  }
->  
->  static const char *code_characters = ",-=@";
-> diff --git a/tools/perf/util/metricgroup.h b/tools/perf/util/metricgroup.h
-> index 732d3a0d3334..0013cf582173 100644
-> --- a/tools/perf/util/metricgroup.h
-> +++ b/tools/perf/util/metricgroup.h
-> @@ -10,6 +10,7 @@
->  struct evlist;
->  struct evsel;
->  struct option;
-> +struct print_callbacks;
->  struct rblist;
->  struct cgroup;
->  
-> @@ -78,8 +79,7 @@ int metricgroup__parse_groups_test(struct evlist *evlist,
->  				   bool metric_no_merge,
->  				   struct rblist *metric_events);
->  
-> -void metricgroup__print(bool metrics, bool groups, char *filter,
-> -			bool raw, bool details, const char *pmu_name);
-> +void metricgroup__print(const struct print_callbacks *print_cb, void *print_state);
->  bool metricgroup__has_metric(const char *metric);
->  int arch_get_runtimeparam(const struct pmu_event *pe __maybe_unused);
->  void metricgroup__rblist_exit(struct rblist *metric_events);
-> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-> index 075c82dd1347..e9a4f31926bf 100644
-> --- a/tools/perf/util/pmu.c
-> +++ b/tools/perf/util/pmu.c
-> @@ -23,6 +23,7 @@
->  #include "evsel.h"
->  #include "pmu.h"
->  #include "parse-events.h"
-> +#include "print-events.h"
->  #include "header.h"
->  #include "string2.h"
->  #include "strbuf.h"
-> @@ -1579,13 +1580,6 @@ static char *format_alias(char *buf, int len, const struct perf_pmu *pmu,
->  	return buf;
->  }
->  
-> -static char *format_alias_or(char *buf, int len, const struct perf_pmu *pmu,
-> -			     const struct perf_pmu_alias *alias)
-> -{
-> -	snprintf(buf, len, "%s OR %s/%s/", alias->name, pmu->name, alias->name);
-> -	return buf;
-> -}
-> -
->  /** Struct for ordering events as output in perf list. */
->  struct sevent {
->  	/** PMU for event. */
-> @@ -1629,7 +1623,7 @@ static int cmp_sevent(const void *a, const void *b)
->  
->  	/* Order CPU core events to be first */
->  	if (as->is_cpu != bs->is_cpu)
-> -		return bs->is_cpu - as->is_cpu;
-> +		return as->is_cpu ? -1 : 1;
->  
->  	/* Order by PMU name. */
->  	a_pmu_name = as->pmu->name ?: "";
-> @@ -1642,27 +1636,6 @@ static int cmp_sevent(const void *a, const void *b)
->  	return strcmp(a_name, b_name);
->  }
->  
-> -static void wordwrap(char *s, int start, int max, int corr)
-> -{
-> -	int column = start;
-> -	int n;
-> -
-> -	while (*s) {
-> -		int wlen = strcspn(s, " \t");
-> -
-> -		if (column + wlen >= max && column > start) {
-> -			printf("\n%*s", start, "");
-> -			column = start + corr;
-> -		}
-> -		n = printf("%s%.*s", column > start ? " " : "", wlen, s);
-> -		if (n <= 0)
-> -			break;
-> -		s += wlen;
-> -		column += n;
-> -		s = skip_spaces(s);
-> -	}
-> -}
-> -
->  bool is_pmu_core(const char *name)
->  {
->  	return !strcmp(name, "cpu") || is_arm_pmu_core(name);
-> @@ -1685,24 +1658,19 @@ static bool pmu_alias_is_duplicate(struct sevent *alias_a,
->  	return strcmp(a_pmu_name, b_pmu_name) == 0;
->  }
->  
-> -void print_pmu_events(const char *event_glob, bool name_only, bool quiet_flag,
-> -			bool long_desc, bool details_flag, bool deprecated,
-> -			const char *pmu_name)
-> +void print_pmu_events(const struct print_callbacks *print_cb, void *print_state)
->  {
->  	struct perf_pmu *pmu;
-> -	struct perf_pmu_alias *alias;
-> +	struct perf_pmu_alias *event;
->  	char buf[1024];
->  	int printed = 0;
->  	int len, j;
->  	struct sevent *aliases;
-> -	int numdesc = 0;
-> -	int columns = pager_get_columns();
-> -	char *topic = NULL;
->  
->  	pmu = NULL;
->  	len = 0;
->  	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
-> -		list_for_each_entry(alias, &pmu->aliases, list)
-> +		list_for_each_entry(event, &pmu->aliases, list)
->  			len++;
->  		if (pmu->selectable)
->  			len++;
-> @@ -1715,32 +1683,15 @@ void print_pmu_events(const char *event_glob, bool name_only, bool quiet_flag,
->  	pmu = NULL;
->  	j = 0;
->  	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
-> -		bool is_cpu;
-> +		bool is_cpu = is_pmu_core(pmu->name) || perf_pmu__is_hybrid(pmu->name);
->  
-> -		if (pmu_name && pmu->name && strcmp(pmu_name, pmu->name))
-> -			continue;
-> -
-> -		is_cpu = is_pmu_core(pmu->name) || perf_pmu__is_hybrid(pmu->name);
-> -
-> -		list_for_each_entry(alias, &pmu->aliases, list) {
-> -			if (alias->deprecated && !deprecated)
-> -				continue;
-> -
-> -			if (event_glob != NULL &&
-> -			    !(strglobmatch_nocase(alias->name, event_glob) ||
-> -			      (!is_cpu &&
-> -			       strglobmatch_nocase(alias->name, event_glob)) ||
-> -			      (alias->topic &&
-> -			       strglobmatch_nocase(alias->topic, event_glob))))
-> -				continue;
-> -
-> -			aliases[j].event = alias;
-> +		list_for_each_entry(event, &pmu->aliases, list) {
-> +			aliases[j].event = event;
->  			aliases[j].pmu = pmu;
->  			aliases[j].is_cpu = is_cpu;
->  			j++;
->  		}
-> -		if (pmu->selectable &&
-> -		    (event_glob == NULL || strglobmatch(pmu->name, event_glob))) {
-> +		if (pmu->selectable) {
->  			aliases[j].event = NULL;
->  			aliases[j].pmu = pmu;
->  			aliases[j].is_cpu = is_cpu;
-> @@ -1750,7 +1701,12 @@ void print_pmu_events(const char *event_glob, bool name_only, bool quiet_flag,
->  	len = j;
->  	qsort(aliases, len, sizeof(struct sevent), cmp_sevent);
->  	for (j = 0; j < len; j++) {
-> -		char *name, *desc;
-> +		const char *name, *alias = NULL, *scale_unit = NULL,
-> +			*desc = NULL, *long_desc = NULL,
-> +			*encoding_desc = NULL, *topic = NULL,
-> +			*metric_name = NULL, *metric_expr = NULL;
-> +		bool deprecated = false;
-> +		size_t buf_used;
->  
->  		/* Skip duplicates */
->  		if (j > 0 && pmu_alias_is_duplicate(&aliases[j], &aliases[j - 1]))
-> @@ -1758,48 +1714,51 @@ void print_pmu_events(const char *event_glob, bool name_only, bool quiet_flag,
->  
->  		if (!aliases[j].event) {
->  			/* A selectable event. */
-> -			snprintf(buf, sizeof(buf), "%s//", aliases[j].pmu->name);
-> +			buf_used = snprintf(buf, sizeof(buf), "%s//", aliases[j].pmu->name) + 1;
->  			name = buf;
-> -		} else if (aliases[j].event->desc) {
-> -			name = aliases[j].event->name;
->  		} else {
-> -			if (!name_only && aliases[j].is_cpu) {
-> -				name = format_alias_or(buf, sizeof(buf), aliases[j].pmu,
-> -						       aliases[j].event);
-> +			if (aliases[j].event->desc) {
-> +				name = aliases[j].event->name;
-> +				buf_used = 0;
->  			} else {
->  				name = format_alias(buf, sizeof(buf), aliases[j].pmu,
->  						    aliases[j].event);
-> +				if (aliases[j].is_cpu) {
-> +					alias = name;
-> +					name = aliases[j].event->name;
-> +				}
-> +				buf_used = strlen(buf) + 1;
->  			}
-> -		}
-> -		if (name_only) {
-> -			printf("%s ", name);
-> -			continue;
-> -		}
-> -		printed++;
-> -		if (!aliases[j].event || !aliases[j].event->desc || quiet_flag) {
-> -			printf("  %-50s [Kernel PMU event]\n", name);
-> -			continue;
-> -		}
-> -		if (numdesc++ == 0)
-> -			printf("\n");
-> -		if (aliases[j].event->topic && (!topic ||
-> -						strcmp(topic, aliases[j].event->topic))) {
-> -			printf("%s%s:\n", topic ? "\n" : "", aliases[j].event->topic);
-> +			if (strlen(aliases[j].event->unit) || aliases[j].event->scale != 1.0) {
-> +				scale_unit = buf + buf_used;
-> +				buf_used += snprintf(buf + buf_used, sizeof(buf) - buf_used,
-> +						"%G%s", aliases[j].event->scale,
-> +						aliases[j].event->unit) + 1;
-> +			}
-> +			desc = aliases[j].event->desc;
-> +			long_desc = aliases[j].event->long_desc;
->  			topic = aliases[j].event->topic;
-> +			encoding_desc = buf + buf_used;
-> +			buf_used += snprintf(buf + buf_used, sizeof(buf) - buf_used,
-> +					"%s/%s/", aliases[j].pmu->name,
-> +					aliases[j].event->str) + 1;
-> +			metric_name = aliases[j].event->metric_name;
-> +			metric_expr = aliases[j].event->metric_expr;
-> +			deprecated = aliases[j].event->deprecated;
->  		}
-> -		printf("  %-50s\n", name);
-> -		printf("%*s", 8, "[");
-> -		desc = long_desc ? aliases[j].event->long_desc : aliases[j].event->desc;
-> -		wordwrap(desc, 8, columns, 0);
-> -		printf("]\n");
-> -		if (details_flag) {
-> -			printf("%*s%s/%s/ ", 8, "", aliases[j].pmu->name, aliases[j].event->str);
-> -			if (aliases[j].event->metric_name)
-> -				printf(" MetricName: %s", aliases[j].event->metric_name);
-> -			if (aliases[j].event->metric_expr)
-> -				printf(" MetricExpr: %s", aliases[j].event->metric_expr);
-> -			putchar('\n');
-> -		}
-> +		print_cb->print_event(print_state,
-> +				aliases[j].pmu->name,
-> +				topic,
-> +				name,
-> +				alias,
-> +				scale_unit,
-> +				deprecated,
-> +				"Kernel PMU event",
-> +				desc,
-> +				long_desc,
-> +				encoding_desc,
-> +				metric_name,
-> +				metric_expr);
->  	}
->  	if (printed && pager_in_use())
->  		printf("\n");
-> diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
-> index ee02e1ef9187..69ca0004f94f 100644
-> --- a/tools/perf/util/pmu.h
-> +++ b/tools/perf/util/pmu.h
-> @@ -12,6 +12,7 @@
->  
->  struct evsel_config_term;
->  struct perf_cpu_map;
-> +struct print_callbacks;
->  
->  enum {
->  	PERF_PMU_FORMAT_VALUE_CONFIG,
-> @@ -225,9 +226,7 @@ void perf_pmu__del_formats(struct list_head *formats);
->  struct perf_pmu *perf_pmu__scan(struct perf_pmu *pmu);
->  
->  bool is_pmu_core(const char *name);
-> -void print_pmu_events(const char *event_glob, bool name_only, bool quiet,
-> -		      bool long_desc, bool details_flag,
-> -		      bool deprecated, const char *pmu_name);
-> +void print_pmu_events(const struct print_callbacks *print_cb, void *print_state);
->  bool pmu_have_event(const char *pname, const char *name);
->  
->  int perf_pmu__scan_file(struct perf_pmu *pmu, const char *name, const char *fmt, ...) __scanf(3, 4);
-> diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
-> index d53dba033597..5210a168d54f 100644
-> --- a/tools/perf/util/print-events.c
-> +++ b/tools/perf/util/print-events.c
-> @@ -28,6 +28,7 @@
->  
->  #define MAX_NAME_LEN 100
->  
-> +/** Strings corresponding to enum perf_type_id. */
->  static const char * const event_type_descriptors[] = {
->  	"Hardware event",
->  	"Software event",
-> @@ -55,11 +56,9 @@ static const struct event_symbol event_symbols_tool[PERF_TOOL_MAX] = {
->  /*
->   * Print the events from <debugfs_mount_point>/tracing/events
->   */
-> -void print_tracepoint_events(const char *subsys_glob,
-> -			     const char *event_glob, bool name_only)
-> +void print_tracepoint_events(const struct print_callbacks *print_cb, void *print_state)
->  {
->  	struct dirent **sys_namelist = NULL;
-> -	bool printed = false;
->  	int sys_items = tracing_events__scandir_alphasort(&sys_namelist);
->  
->  	for (int i = 0; i < sys_items; i++) {
-> @@ -73,10 +72,6 @@ void print_tracepoint_events(const char *subsys_glob,
->  		    !strcmp(sys_dirent->d_name, ".."))
->  			continue;
->  
-> -		if (subsys_glob != NULL &&
-> -		    !strglobmatch(sys_dirent->d_name, subsys_glob))
-> -			continue;
-> -
->  		dir_path = get_events_file(sys_dirent->d_name);
->  		if (!dir_path)
->  			continue;
-> @@ -94,41 +89,41 @@ void print_tracepoint_events(const char *subsys_glob,
->  			if (tp_event_has_id(dir_path, evt_dirent) != 0)
->  				continue;
->  
-> -			if (event_glob != NULL &&
-> -			    !strglobmatch(evt_dirent->d_name, event_glob))
-> -				continue;
-> -
->  			snprintf(evt_path, MAXPATHLEN, "%s:%s",
->  				 sys_dirent->d_name, evt_dirent->d_name);
-> -			if (name_only)
-> -				printf("%s ", evt_path);
-> -			else {
-> -				printf("  %-50s [%s]\n", evt_path,
-> -				       event_type_descriptors[PERF_TYPE_TRACEPOINT]);
-> -			}
-> -			printed = true;
-> +			print_cb->print_event(print_state,
-> +					/*topic=*/NULL,
-> +					/*pmu_name=*/NULL,
-> +					evt_path,
-> +					/*event_alias=*/NULL,
-> +					/*scale_unit=*/NULL,
-> +					/*deprecated=*/false,
-> +					"Tracepoint event",
-> +					/*desc=*/NULL,
-> +					/*long_desc=*/NULL,
-> +					/*encoding_desc=*/NULL,
-> +					/*metric_name=*/NULL,
-> +					/*metric_expr=*/NULL);
->  		}
->  		free(dir_path);
->  		free(evt_namelist);
->  	}
->  	free(sys_namelist);
-> -	if (printed && pager_in_use())
-> -		printf("\n");
->  }
->  
-> -void print_sdt_events(const char *subsys_glob, const char *event_glob,
-> -		      bool name_only)
-> +void print_sdt_events(const struct print_callbacks *print_cb, void *print_state)
->  {
-> -	struct probe_cache *pcache;
-> -	struct probe_cache_entry *ent;
->  	struct strlist *bidlist, *sdtlist;
-> -	struct strlist_config cfg = {.dont_dupstr = true};
-> -	struct str_node *nd, *nd2;
-> -	char *buf, *path, *ptr = NULL;
-> -	bool show_detail = false;
-> -	int ret;
-> -
-> -	sdtlist = strlist__new(NULL, &cfg);
-> +	struct str_node *bid_nd, *sdt_name, *next_sdt_name;
-> +	const char *last_sdt_name = NULL;
-> +
-> +	/*
-> +	 * The implicitly sorted sdtlist will hold the tracepoint name followed
-> +	 * by @<buildid>. If the tracepoint name is unique (determined by
-> +	 * looking at the adjacent nodes) the @<buildid> is dropped otherwise
-> +	 * the executable path and buildid are added to the name.
-> +	 */
-> +	sdtlist = strlist__new(NULL, NULL);
->  	if (!sdtlist) {
->  		pr_debug("Failed to allocate new strlist for SDT\n");
->  		return;
-> @@ -138,65 +133,77 @@ void print_sdt_events(const char *subsys_glob, const char *event_glob,
->  		pr_debug("Failed to get buildids: %d\n", errno);
->  		return;
->  	}
-> -	strlist__for_each_entry(nd, bidlist) {
-> -		pcache = probe_cache__new(nd->s, NULL);
-> +	strlist__for_each_entry(bid_nd, bidlist) {
-> +		struct probe_cache *pcache;
-> +		struct probe_cache_entry *ent;
-> +
-> +		pcache = probe_cache__new(bid_nd->s, NULL);
->  		if (!pcache)
->  			continue;
->  		list_for_each_entry(ent, &pcache->entries, node) {
-> -			if (!ent->sdt)
-> -				continue;
-> -			if (subsys_glob &&
-> -			    !strglobmatch(ent->pev.group, subsys_glob))
-> -				continue;
-> -			if (event_glob &&
-> -			    !strglobmatch(ent->pev.event, event_glob))
-> -				continue;
-> -			ret = asprintf(&buf, "%s:%s@%s", ent->pev.group,
-> -					ent->pev.event, nd->s);
-> -			if (ret > 0)
-> -				strlist__add(sdtlist, buf);
-> +			char buf[1024];
-> +
-> +			snprintf(buf, sizeof(buf), "%s:%s@%s",
-> +				 ent->pev.group, ent->pev.event, bid_nd->s);
-> +			strlist__add(sdtlist, buf);
->  		}
->  		probe_cache__delete(pcache);
->  	}
->  	strlist__delete(bidlist);
->  
-> -	strlist__for_each_entry(nd, sdtlist) {
-> -		buf = strchr(nd->s, '@');
-> -		if (buf)
-> -			*(buf++) = '\0';
-> -		if (name_only) {
-> -			printf("%s ", nd->s);
-> -			continue;
-> -		}
-> -		nd2 = strlist__next(nd);
-> -		if (nd2) {
-> -			ptr = strchr(nd2->s, '@');
-> -			if (ptr)
-> -				*ptr = '\0';
-> -			if (strcmp(nd->s, nd2->s) == 0)
-> -				show_detail = true;
-> +	strlist__for_each_entry(sdt_name, sdtlist) {
-> +		bool show_detail = false;
-> +		char *bid = strchr(sdt_name->s, '@');
-> +		char *evt_name = NULL;
-> +
-> +		if (bid)
-> +			*(bid++) = '\0';
-> +
-> +		if (last_sdt_name && !strcmp(last_sdt_name, sdt_name->s)) {
-> +			show_detail = true;
-> +		} else {
-> +			next_sdt_name = strlist__next(sdt_name);
-> +			if (next_sdt_name) {
-> +				char *bid2 = strchr(next_sdt_name->s, '@');
-> +
-> +				if (bid2)
-> +					*bid2 = '\0';
-> +				if (strcmp(sdt_name->s, next_sdt_name->s) == 0)
-> +					show_detail = true;
-> +				if (bid2)
-> +					*bid2 = '@';
-> +			}
->  		}
-> +		last_sdt_name = sdt_name->s;
-> +
->  		if (show_detail) {
-> -			path = build_id_cache__origname(buf);
-> -			ret = asprintf(&buf, "%s@%s(%.12s)", nd->s, path, buf);
-> -			if (ret > 0) {
-> -				printf("  %-50s [%s]\n", buf, "SDT event");
-> -				free(buf);
-> +			char *path = build_id_cache__origname(bid);
-> +
-> +			if (path) {
-> +				asprintf(&evt_name, "%s@%s(%.12s)", sdt_name->s, path, bid);
-> +				free(path);
->  			}
-> -			free(path);
-> -		} else
-> -			printf("  %-50s [%s]\n", nd->s, "SDT event");
-> -		if (nd2) {
-> -			if (strcmp(nd->s, nd2->s) != 0)
-> -				show_detail = false;
-> -			if (ptr)
-> -				*ptr = '@';
->  		}
-> +		print_cb->print_event(print_state,
-> +				/*topic=*/NULL,
-> +				/*pmu_name=*/NULL,
-> +				evt_name ?: sdt_name->s,
-> +				/*event_alias=*/NULL,
-> +				/*deprecated=*/false,
-> +				/*scale_unit=*/NULL,
-> +				"SDT event",
-> +				/*desc=*/NULL,
-> +				/*long_desc=*/NULL,
-> +				/*encoding_desc=*/NULL,
-> +				/*metric_name=*/NULL,
-> +				/*metric_expr=*/NULL);
-> +
-> +		free(evt_name);
->  	}
->  	strlist__delete(sdtlist);
->  }
->  
-> -int print_hwcache_events(const char *event_glob, bool name_only)
-> +int print_hwcache_events(const struct print_callbacks *print_cb, void *print_state)
->  {
->  	struct strlist *evt_name_list = strlist__new(NULL, NULL);
->  	struct str_node *nd;
-> @@ -216,9 +223,6 @@ int print_hwcache_events(const char *event_glob, bool name_only)
->  				char name[64];
->  
->  				__evsel__hw_cache_type_op_res_name(type, op, i, name, sizeof(name));
-> -				if (event_glob != NULL && !strglobmatch(name, event_glob))
-> -					continue;
-> -
->  				if (!perf_pmu__has_hybrid()) {
->  					if (is_event_supported(PERF_TYPE_HW_CACHE,
->  							       type | (op << 8) | (i << 16)))
-> @@ -240,55 +244,47 @@ int print_hwcache_events(const char *event_glob, bool name_only)
->  	}
->  
->  	strlist__for_each_entry(nd, evt_name_list) {
-> -		if (name_only) {
-> -			printf("%s ", nd->s);
-> -			continue;
-> -		}
-> -		printf("  %-50s [%s]\n", nd->s, event_type_descriptors[PERF_TYPE_HW_CACHE]);
-> +		print_cb->print_event(print_state,
-> +				"cache",
-> +				/*pmu_name=*/NULL,
-> +				nd->s,
-> +				/*event_alias=*/NULL,
-> +				/*scale_unit=*/NULL,
-> +				/*deprecated=*/false,
-> +				event_type_descriptors[PERF_TYPE_HW_CACHE],
-> +				/*desc=*/NULL,
-> +				/*long_desc=*/NULL,
-> +				/*encoding_desc=*/NULL,
-> +				/*metric_name=*/NULL,
-> +				/*metric_expr=*/NULL);
->  	}
-> -	if (!strlist__empty(evt_name_list) && pager_in_use())
-> -		printf("\n");
-> -
->  	strlist__delete(evt_name_list);
->  	return 0;
->  }
->  
-> -static void print_tool_event(const struct event_symbol *syms, const char *event_glob,
-> -			     bool name_only)
-> -{
-> -	if (syms->symbol == NULL)
-> -		return;
-> -
-> -	if (event_glob && !(strglobmatch(syms->symbol, event_glob) ||
-> -	      (syms->alias && strglobmatch(syms->alias, event_glob))))
-> -		return;
-> -
-> -	if (name_only)
-> -		printf("%s ", syms->symbol);
-> -	else {
-> -		char name[MAX_NAME_LEN];
-> -
-> -		if (syms->alias && strlen(syms->alias))
-> -			snprintf(name, MAX_NAME_LEN, "%s OR %s", syms->symbol, syms->alias);
-> -		else
-> -			strlcpy(name, syms->symbol, MAX_NAME_LEN);
-> -		printf("  %-50s [%s]\n", name, "Tool event");
-> -	}
-> -}
-> -
-> -void print_tool_events(const char *event_glob, bool name_only)
-> +void print_tool_events(const struct print_callbacks *print_cb, void *print_state)
->  {
->  	// Start at 1 because the first enum entry means no tool event.
-> -	for (int i = 1; i < PERF_TOOL_MAX; ++i)
-> -		print_tool_event(event_symbols_tool + i, event_glob, name_only);
-> -
-> -	if (pager_in_use())
-> -		printf("\n");
-> +	for (int i = 1; i < PERF_TOOL_MAX; ++i) {
-> +		print_cb->print_event(print_state,
-> +				"tool",
-> +				/*pmu_name=*/NULL,
-> +				event_symbols_tool[i].symbol,
-> +				event_symbols_tool[i].alias,
-> +				/*scale_unit=*/NULL,
-> +				/*deprecated=*/false,
-> +				"Tool event",
-> +				/*desc=*/NULL,
-> +				/*long_desc=*/NULL,
-> +				/*encoding_desc=*/NULL,
-> +				/*metric_name=*/NULL,
-> +				/*metric_expr=*/NULL);
-> +	}
->  }
->  
-> -void print_symbol_events(const char *event_glob, unsigned int type,
-> -			 struct event_symbol *syms, unsigned int max,
-> -			 bool name_only)
-> +void print_symbol_events(const struct print_callbacks *print_cb, void *print_state,
-> +			 unsigned int type, const struct event_symbol *syms,
-> +			 unsigned int max)
->  {
->  	struct strlist *evt_name_list = strlist__new(NULL, NULL);
->  	struct str_node *nd;
-> @@ -305,10 +301,6 @@ void print_symbol_events(const char *event_glob, unsigned int type,
->  		if (syms[i].symbol == NULL)
->  			continue;
->  
-> -		if (event_glob != NULL && !(strglobmatch(syms[i].symbol, event_glob) ||
-> -		      (syms[i].alias && strglobmatch(syms[i].alias, event_glob))))
-> -			continue;
-> -
->  		if (!is_event_supported(type, i))
->  			continue;
->  
-> @@ -322,63 +314,92 @@ void print_symbol_events(const char *event_glob, unsigned int type,
->  	}
->  
->  	strlist__for_each_entry(nd, evt_name_list) {
-> -		if (name_only) {
-> -			printf("%s ", nd->s);
-> -			continue;
-> +		char *alias = strstr(nd->s, " OR ");
-> +
-> +		if (alias) {
-> +			*alias = '\0';
-> +			alias += 4;
->  		}
-> -		printf("  %-50s [%s]\n", nd->s, event_type_descriptors[type]);
-> +		print_cb->print_event(print_state,
-> +				/*topic=*/NULL,
-> +				/*pmu_name=*/NULL,
-> +				nd->s,
-> +				alias,
-> +				/*scale_unit=*/NULL,
-> +				/*deprecated=*/false,
-> +				event_type_descriptors[type],
-> +				/*desc=*/NULL,
-> +				/*long_desc=*/NULL,
-> +				/*encoding_desc=*/NULL,
-> +				/*metric_name=*/NULL,
-> +				/*metric_expr=*/NULL);
->  	}
-> -	if (!strlist__empty(evt_name_list) && pager_in_use())
-> -		printf("\n");
-> -
->  	strlist__delete(evt_name_list);
->  }
->  
->  /*
->   * Print the help text for the event symbols:
->   */
-> -void print_events(const char *event_glob, bool name_only, bool quiet_flag,
-> -			bool long_desc, bool details_flag, bool deprecated,
-> -			const char *pmu_name)
-> +void print_events(const struct print_callbacks *print_cb, void *print_state)
->  {
-> -	print_symbol_events(event_glob, PERF_TYPE_HARDWARE,
-> -			    event_symbols_hw, PERF_COUNT_HW_MAX, name_only);
-> -
-> -	print_symbol_events(event_glob, PERF_TYPE_SOFTWARE,
-> -			    event_symbols_sw, PERF_COUNT_SW_MAX, name_only);
-> -	print_tool_events(event_glob, name_only);
-> -
-> -	print_hwcache_events(event_glob, name_only);
-> -
-> -	print_pmu_events(event_glob, name_only, quiet_flag, long_desc,
-> -			details_flag, deprecated, pmu_name);
-> -
-> -	if (event_glob != NULL)
-> -		return;
-> -
-> -	if (!name_only) {
-> -		printf("  %-50s [%s]\n",
-> -		       "rNNN",
-> -		       event_type_descriptors[PERF_TYPE_RAW]);
-> -		printf("  %-50s [%s]\n",
-> -		       "cpu/t1=v1[,t2=v2,t3 ...]/modifier",
-> -		       event_type_descriptors[PERF_TYPE_RAW]);
-> -		if (pager_in_use())
-> -			printf("   (see 'man perf-list' on how to encode it)\n\n");
-> -
-> -		printf("  %-50s [%s]\n",
-> -		       "mem:<addr>[/len][:access]",
-> -			event_type_descriptors[PERF_TYPE_BREAKPOINT]);
-> -		if (pager_in_use())
-> -			printf("\n");
-> -	}
-> -
-> -	print_tracepoint_events(NULL, NULL, name_only);
-> -
-> -	print_sdt_events(NULL, NULL, name_only);
-> -
-> -	metricgroup__print(true, true, NULL, name_only, details_flag,
-> -			   pmu_name);
-> -
-> -	print_libpfm_events(name_only, long_desc);
-> +	print_symbol_events(print_cb, print_state, PERF_TYPE_HARDWARE,
-> +			event_symbols_hw, PERF_COUNT_HW_MAX);
-> +	print_symbol_events(print_cb, print_state, PERF_TYPE_SOFTWARE,
-> +			event_symbols_sw, PERF_COUNT_SW_MAX);
-> +
-> +	print_tool_events(print_cb, print_state);
-> +
-> +	print_hwcache_events(print_cb, print_state);
-> +
-> +	print_pmu_events(print_cb, print_state);
-> +
-> +	print_cb->print_event(print_state,
-> +			/*topic=*/NULL,
-> +			/*pmu_name=*/NULL,
-> +			"rNNN",
-> +			/*event_alias=*/NULL,
-> +			/*scale_unit=*/NULL,
-> +			/*deprecated=*/false,
-> +			event_type_descriptors[PERF_TYPE_RAW],
-> +			/*desc=*/NULL,
-> +			/*long_desc=*/NULL,
-> +			/*encoding_desc=*/NULL,
-> +			/*metric_name=*/NULL,
-> +			/*metric_expr=*/NULL);
-> +
-> +	print_cb->print_event(print_state,
-> +			/*topic=*/NULL,
-> +			/*pmu_name=*/NULL,
-> +			"cpu/t1=v1[,t2=v2,t3 ...]/modifier",
-> +			/*event_alias=*/NULL,
-> +			/*scale_unit=*/NULL,
-> +			/*deprecated=*/false,
-> +			event_type_descriptors[PERF_TYPE_RAW],
-> +			"(see 'man perf-list' on how to encode it)",
-> +			/*long_desc=*/NULL,
-> +			/*encoding_desc=*/NULL,
-> +			/*metric_name=*/NULL,
-> +			/*metric_expr=*/NULL);
-> +
-> +	print_cb->print_event(print_state,
-> +			/*topic=*/NULL,
-> +			/*pmu_name=*/NULL,
-> +			"mem:<addr>[/len][:access]",
-> +			/*scale_unit=*/NULL,
-> +			/*event_alias=*/NULL,
-> +			/*deprecated=*/false,
-> +			event_type_descriptors[PERF_TYPE_BREAKPOINT],
-> +			/*desc=*/NULL,
-> +			/*long_desc=*/NULL,
-> +			/*encoding_desc=*/NULL,
-> +			/*metric_name=*/NULL,
-> +			/*metric_expr=*/NULL);
-> +
-> +	print_tracepoint_events(print_cb, print_state);
-> +
-> +	print_sdt_events(print_cb, print_state);
-> +
-> +	metricgroup__print(print_cb, print_state);
-> +
-> +	print_libpfm_events(print_cb, print_state);
->  }
-> diff --git a/tools/perf/util/print-events.h b/tools/perf/util/print-events.h
-> index 1da9910d83a6..c237e53c4487 100644
-> --- a/tools/perf/util/print-events.h
-> +++ b/tools/perf/util/print-events.h
-> @@ -2,21 +2,39 @@
->  #ifndef __PERF_PRINT_EVENTS_H
->  #define __PERF_PRINT_EVENTS_H
->  
-> +#include <linux/perf_event.h>
->  #include <stdbool.h>
->  
->  struct event_symbol;
->  
-> -void print_events(const char *event_glob, bool name_only, bool quiet_flag,
-> -		  bool long_desc, bool details_flag, bool deprecated,
-> -		  const char *pmu_name);
-> -int print_hwcache_events(const char *event_glob, bool name_only);
-> -void print_sdt_events(const char *subsys_glob, const char *event_glob,
-> -		      bool name_only);
-> -void print_symbol_events(const char *event_glob, unsigned int type,
-> -			 struct event_symbol *syms, unsigned int max,
-> -			 bool name_only);
-> -void print_tool_events(const char *event_glob, bool name_only);
-> -void print_tracepoint_events(const char *subsys_glob, const char *event_glob,
-> -			     bool name_only);
-> +struct print_callbacks {
-> +	void (*print_start)(void *print_state);
-> +	void (*print_end)(void *print_state);
-> +	void (*print_event)(void *print_state, const char *topic,
-> +			const char *pmu_name,
-> +			const char *event_name, const char *event_alias,
-> +			const char *scale_unit,
-> +			bool deprecated, const char *event_type_desc,
-> +			const char *desc, const char *long_desc,
-> +			const char *encoding_desc,
-> +			const char *metric_name, const char *metric_expr);
-> +	void (*print_metric)(void *print_state,
-> +			const char *group,
-> +			const char *name,
-> +			const char *desc,
-> +			const char *long_desc,
-> +			const char *expr,
-> +			const char *unit);
+>   static const struct dpu_caps sm8450_dpu_caps = {
+>   	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+>   	.max_mixer_blendstages = 0xb,
+> @@ -526,6 +549,33 @@ static const struct dpu_mdp_cfg sm8250_mdp[] = {
+>   	},
+>   };
+>   
+> +static const struct dpu_mdp_cfg sm8350_mdp[] = {
+> +	{
+> +	.name = "top_0", .id = MDP_TOP,
+> +	.base = 0x0, .len = 0x494,
+> +	.features = 0,
+> +	.highest_bank_bit = 0x3, /* TODO: 2 for LP_DDR4 */
+> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = {
+> +			.reg_off = 0x2AC, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_VIG1] = {
+> +			.reg_off = 0x2B4, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_VIG2] = {
+> +			.reg_off = 0x2BC, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_VIG3] = {
+> +			.reg_off = 0x2C4, .bit_off = 0},
+> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = {
+> +			.reg_off = 0x2AC, .bit_off = 8},
+> +	.clk_ctrls[DPU_CLK_CTRL_DMA1] = {
+> +			.reg_off = 0x2B4, .bit_off = 8},
+> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR0] = {
+> +			.reg_off = 0x2BC, .bit_off = 8},
+> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR1] = {
+> +			.reg_off = 0x2C4, .bit_off = 8},
+> +	.clk_ctrls[DPU_CLK_CTRL_REG_DMA] = {
+> +			.reg_off = 0x2BC, .bit_off = 20},
+> +	},
+Let's try not adding more uppercase hex.
+
 > +};
 > +
-> +/** Print all events, the default when no options are specified. */
-> +void print_events(const struct print_callbacks *print_cb, void *print_state);
-> +int print_hwcache_events(const struct print_callbacks *print_cb, void *print_state);
-> +void print_sdt_events(const struct print_callbacks *print_cb, void *print_state);
-> +void print_symbol_events(const struct print_callbacks *print_cb, void *print_state,
-> +			 unsigned int type, const struct event_symbol *syms,
-> +			 unsigned int max);
-> +void print_tool_events(const struct print_callbacks *print_cb, void *print_state);
-> +void print_tracepoint_events(const struct print_callbacks *print_cb, void *print_state);
->  
->  #endif /* __PERF_PRINT_EVENTS_H */
-> -- 
-> 2.38.1.431.g37b22c650d-goog
+>   static const struct dpu_mdp_cfg sm8450_mdp[] = {
+>   	{
+>   	.name = "top_0", .id = MDP_TOP,
+> @@ -711,6 +761,45 @@ static const struct dpu_ctl_cfg sm8150_ctl[] = {
+>   	},
+>   };
+>   
+> +static const struct dpu_ctl_cfg sm8350_ctl[] = {
+> +	{
+> +	.name = "ctl_0", .id = CTL_0,
+> +	.base = 0x15000, .len = 0x1e8,
+> +	.features = BIT(DPU_CTL_SPLIT_DISPLAY) | CTL_SC7280_MASK,
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
+> +	},
+> +	{
+> +	.name = "ctl_1", .id = CTL_1,
+> +	.base = 0x16000, .len = 0x1e8,
+> +	.features = BIT(DPU_CTL_SPLIT_DISPLAY) | CTL_SC7280_MASK,
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 10),
+> +	},
+> +	{
+> +	.name = "ctl_2", .id = CTL_2,
+> +	.base = 0x17000, .len = 0x1e8,
+> +	.features = CTL_SC7280_MASK,
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 11),
+> +	},
+> +	{
+> +	.name = "ctl_3", .id = CTL_3,
+> +	.base = 0x18000, .len = 0x1e8,
+> +	.features = CTL_SC7280_MASK,
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 12),
+> +	},
+> +	{
+> +	.name = "ctl_4", .id = CTL_4,
+> +	.base = 0x19000, .len = 0x1e8,
+> +	.features = CTL_SC7280_MASK,
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 13),
+> +	},
+> +	{
+> +	.name = "ctl_5", .id = CTL_5,
+> +	.base = 0x1a000, .len = 0x1e8,
+> +	.features = CTL_SC7280_MASK,
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 23),
+> +	},
+> +};
+> +
+>   static const struct dpu_ctl_cfg sm8450_ctl[] = {
+>   	{
+>   	.name = "ctl_0", .id = CTL_0,
+> @@ -1301,6 +1390,27 @@ static const struct dpu_pingpong_cfg sc7280_pp[] = {
+>   	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, 0, sc7280_pp_sblk, -1, -1),
+>   };
+>   
+> +static const struct dpu_pingpong_cfg sm8350_pp[] = {
+> +	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk_te,
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 12)),
+> +	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk_te,
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 13)),
+> +	PP_BLK("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk,
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10),
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 14)),
+> +	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sdm845_pp_sblk,
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11),
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+> +	PP_BLK("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sdm845_pp_sblk,
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30),
+> +			-1),
+> +	PP_BLK("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sdm845_pp_sblk,
+> +			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31),
+> +			-1),
+> +};
+> +
+>   static struct dpu_pingpong_cfg qcm2290_pp[] = {
+>   	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, 0, sdm845_pp_sblk,
+>   		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+> @@ -1352,6 +1462,12 @@ static const struct dpu_merge_3d_cfg sm8150_merge_3d[] = {
+>   	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x83200),
+>   };
+>   
+> +static const struct dpu_merge_3d_cfg sm8350_merge_3d[] = {
+> +	MERGE_3D_BLK("merge_3d_0", MERGE_3D_0, 0x4e000),
+> +	MERGE_3D_BLK("merge_3d_1", MERGE_3D_1, 0x4f000),
+> +	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x50000),
+> +};
+> +
+>   static const struct dpu_merge_3d_cfg sm8450_merge_3d[] = {
+>   	MERGE_3D_BLK("merge_3d_0", MERGE_3D_0, 0x4e000),
+>   	MERGE_3D_BLK("merge_3d_1", MERGE_3D_1, 0x4f000),
+> @@ -1376,6 +1492,12 @@ static struct dpu_dsc_cfg sdm845_dsc[] = {
+>   	DSC_BLK("dsc_3", DSC_3, 0x80c00),
+>   };
+>   
+> +static struct dpu_dsc_cfg sm8350_dsc[] = {
+> +	DSC_BLK("dsc_0", DSC_0, 0x80000),
+> +	DSC_BLK("dsc_1", DSC_1, 0x81000),
+> +	DSC_BLK("dsc_2", DSC_2, 0x82000),
+> +};
+> +
+>   /*************************************************************
+>    * INTF sub blocks config
+>    *************************************************************/
+> @@ -1423,6 +1545,13 @@ static const struct dpu_intf_cfg sc7280_intf[] = {
+>   	INTF_BLK("intf_5", INTF_5, 0x39000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
+>   };
+>   
+> +static const struct dpu_intf_cfg sm8350_intf[] = {
+> +	INTF_BLK("intf_0", INTF_0, 0x34000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+> +	INTF_BLK("intf_1", INTF_1, 0x35000, INTF_DSI, 0, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> +	INTF_BLK("intf_2", INTF_2, 0x36000, INTF_DSI, 1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
+> +	INTF_BLK("intf_3", INTF_3, 0x37000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC7280_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
+> +};
+> +
+>   static const struct dpu_intf_cfg sc8180x_intf[] = {
+>   	INTF_BLK("intf_0", INTF_0, 0x6A000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
+>   	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
+> @@ -1558,6 +1687,14 @@ static const struct dpu_reg_dma_cfg sm8250_regdma = {
+>   	.clk_ctrl = DPU_CLK_CTRL_REG_DMA,
+>   };
+>   
+> +static const struct dpu_reg_dma_cfg sm8350_regdma = {
+> +	.base = 0x0,
+qcom,sde-reg-dma-off = <0 0x400>;
 
--- 
+> +	.version = 0x00020000,
+> +	.trigger_sel_off = 0x119c,
+> +	.xin_id = 7,
+> +	.clk_ctrl = DPU_CLK_CTRL_REG_DMA,
+> +};
+> +
+>   static const struct dpu_reg_dma_cfg sm8450_regdma = {
+>   	.base = 0x0,
+>   	.version = 0x00020000,
+> @@ -1899,6 +2036,36 @@ static const struct dpu_perf_cfg sc7280_perf_data = {
+>   	.bw_inefficiency_factor = 120,
+>   };
+>   
+> +static const struct dpu_perf_cfg sm8350_perf_data = {
+> +	.max_bw_low = 11800000,
+> +	.max_bw_high = 18200000,
+qcom,sde-max-bw-high-kbps = <15500000>;
 
-- Arnaldo
+I think the rest looks good.
+
+Konrad
+> +	.min_core_ib = 2500000,
+> +	.min_llcc_ib = 0,
+> +	.min_dram_ib = 800000,
+> +	.min_prefill_lines = 40,
+> +	/* FIXME: lut tables */
+> +	.danger_lut_tbl = {0x3ffff, 0x3ffff, 0x0},
+> +	.safe_lut_tbl = {0xfe00, 0xfe00, 0xffff},
+> +	.qos_lut_tbl = {
+> +		{.nentry = ARRAY_SIZE(sc7180_qos_linear),
+> +		.entries = sc7180_qos_linear
+> +		},
+> +		{.nentry = ARRAY_SIZE(sc7180_qos_macrotile),
+> +		.entries = sc7180_qos_macrotile
+> +		},
+> +		{.nentry = ARRAY_SIZE(sc7180_qos_nrt),
+> +		.entries = sc7180_qos_nrt
+> +		},
+> +		/* TODO: macrotile-qseed is different from macrotile */
+> +	},
+> +	.cdp_cfg = {
+> +		{.rd_enable = 1, .wr_enable = 1},
+> +		{.rd_enable = 1, .wr_enable = 0}
+> +	},
+> +	.clk_inefficiency_factor = 105,
+> +	.bw_inefficiency_factor = 120,
+> +};
+> +
+>   static const struct dpu_perf_cfg qcm2290_perf_data = {
+>   	.max_bw_low = 2700000,
+>   	.max_bw_high = 2700000,
+> @@ -2075,6 +2242,34 @@ static const struct dpu_mdss_cfg sm8250_dpu_cfg = {
+>   	.mdss_irqs = IRQ_SM8250_MASK,
+>   };
+>   
+> +static const struct dpu_mdss_cfg sm8350_dpu_cfg = {
+> +	.caps = &sm8350_dpu_caps,
+> +	.mdp_count = ARRAY_SIZE(sm8350_mdp),
+> +	.mdp = sm8350_mdp,
+> +	.ctl_count = ARRAY_SIZE(sm8350_ctl),
+> +	.ctl = sm8350_ctl,
+> +	.sspp_count = ARRAY_SIZE(sm8250_sspp),
+> +	.sspp = sm8250_sspp,
+> +	.mixer_count = ARRAY_SIZE(sm8150_lm),
+> +	.mixer = sm8150_lm,
+> +	.dspp_count = ARRAY_SIZE(sm8150_dspp),
+> +	.dspp = sm8150_dspp,
+> +	.pingpong_count = ARRAY_SIZE(sm8350_pp),
+> +	.pingpong = sm8350_pp,
+> +	.dsc_count = ARRAY_SIZE(sm8350_dsc),
+> +	.dsc = sm8350_dsc,
+> +	.merge_3d_count = ARRAY_SIZE(sm8350_merge_3d),
+> +	.merge_3d = sm8350_merge_3d,
+> +	.intf_count = ARRAY_SIZE(sm8350_intf),
+> +	.intf = sm8350_intf,
+> +	.vbif_count = ARRAY_SIZE(sdm845_vbif),
+> +	.vbif = sdm845_vbif,
+> +	.reg_dma_count = 1,
+> +	.dma_cfg = &sm8250_regdma,
+> +	.perf = &sm8350_perf_data,
+> +	.mdss_irqs = IRQ_SM8350_MASK,
+> +};
+> +
+>   static const struct dpu_mdss_cfg sm8450_dpu_cfg = {
+>   	.caps = &sm8450_dpu_caps,
+>   	.mdp_count = ARRAY_SIZE(sm8450_mdp),
+> @@ -2158,6 +2353,7 @@ static const struct dpu_mdss_hw_cfg_handler cfg_handler[] = {
+>   	{ .hw_rev = DPU_HW_VER_600, .dpu_cfg = &sm8250_dpu_cfg},
+>   	{ .hw_rev = DPU_HW_VER_620, .dpu_cfg = &sc7180_dpu_cfg},
+>   	{ .hw_rev = DPU_HW_VER_650, .dpu_cfg = &qcm2290_dpu_cfg},
+> +	{ .hw_rev = DPU_HW_VER_700, .dpu_cfg = &sm8350_dpu_cfg},
+>   	{ .hw_rev = DPU_HW_VER_720, .dpu_cfg = &sc7280_dpu_cfg},
+>   	{ .hw_rev = DPU_HW_VER_810, .dpu_cfg = &sm8450_dpu_cfg},
+>   };
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index 664c4876f44a..5335123a0289 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -45,6 +45,7 @@
+>   #define DPU_HW_VER_600	DPU_HW_VER(6, 0, 0) /* sm8250 */
+>   #define DPU_HW_VER_620	DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
+>   #define DPU_HW_VER_650	DPU_HW_VER(6, 5, 0) /* qcm2290|sm4125 */
+> +#define DPU_HW_VER_700	DPU_HW_VER(7, 0, 0) /* sm8350 */
+>   #define DPU_HW_VER_720	DPU_HW_VER(7, 2, 0) /* sc7280 */
+>   #define DPU_HW_VER_810	DPU_HW_VER(8, 1, 0) /* sm8450 */
+>   
