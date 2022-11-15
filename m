@@ -2,140 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A56C62A00A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:13:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C8062A00C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 18:14:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbiKORNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 12:13:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
+        id S231538AbiKOROG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 12:14:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiKORNv (ORCPT
+        with ESMTP id S231334AbiKOROB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 12:13:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23316EE08;
-        Tue, 15 Nov 2022 09:13:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25D7EB81A2F;
-        Tue, 15 Nov 2022 17:13:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBDA0C433D6;
-        Tue, 15 Nov 2022 17:13:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668532425;
-        bh=E2Ix0booTdpUdUIVDbuoAPq8iFBqUQnyUJ0GGMyLTVA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eB2SkQegJqT9LR5HkZTMj5ejtasKn/azCQj5kmf9jqf1Ev+F33SZVEot+fWkQVd8r
-         bq9Lim3hEmna0Djtks3LcjqrQU3ZDpgZi3axc7UNkMOF0k3xZD7yedNJV6LgrTulpS
-         0XNxc3fxCEtmWnbOjTQMDFcydJSo/wFTbK9OFCwwtBdD3zvZyLB0ksZapq4cdFOIW9
-         eiQuSLDWKls+qdC8xfQNgOaSSS9+5+9yEztCSOUMmW9+qoZ6ct7CUTwO0O84F152CH
-         QE1ZFkb6I9rmk1ceGjtsY+F4f5EYD4T+5SHaPScvXjsQn84yhiGW6sz+dkif2iyyCh
-         Sp8owc0MKTEhA==
-Date:   Tue, 15 Nov 2022 11:13:42 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Shazad Hussain <quic_shazhuss@quicinc.com>, sboyd@kernel.org
-Cc:     johan@kernel.org, bmasney@redhat.com, agross@kernel.org,
-        mturquette@baylibre.com, ahalaney@redhat.com,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] clk: qcom: gcc-sc8280xp: add cxo as parent for three
- ufs ref clks
-Message-ID: <20221115171342.v37vq4cqe7pxatlk@builder.lan>
-References: <20221115152956.21677-1-quic_shazhuss@quicinc.com>
+        Tue, 15 Nov 2022 12:14:01 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF00DE8D;
+        Tue, 15 Nov 2022 09:13:57 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id z1so9908965qkl.9;
+        Tue, 15 Nov 2022 09:13:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=36kVz+TOQy7DhDBy6CrLLD6aGpSobgzvfFtjbhVF3jE=;
+        b=daeYyOrtBiwAnWa2uRoH9E/idWtDydpcfjwQoyC0KfkjpgeRZt9oBBHDtzrxPPv2q/
+         4wTi/bvonlHxS+dlIFzNZo2VBN5KEwgmMjXRgHtpcOUoxCVJp6rBuGy8QKHRFPyiMvhC
+         Lib2jaHX+xrj/ofhQ3KTm9NcSkJVm5WZdBlvFzShCwoSSyqXi84swOmE8uvPvaxVAU7d
+         gM23HRjKrT2imLL0vvH1XHUFrA1sFQ+9zYYufPvNCYEvrseQPWG8yT+njOMPaftEU9vy
+         lHloM2wrmclbduQygF+NzPFfOE2RQ6rKcAZ1fxP9fkEpjtgRCrnXbxdkXpOmvB5cDIBg
+         WNrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=36kVz+TOQy7DhDBy6CrLLD6aGpSobgzvfFtjbhVF3jE=;
+        b=2nIqgjuuEu0lGionatiB0RUYe1490cXdm45zYeVdNgLEAuz+ZCTXNkVACGoOf9JRU4
+         1hcT1f6u6RXccFP6LJkoro2bwMRSYRRqCpb7sR7vH8lFhhtf9sLMfq2UCajw48bzBJVu
+         xdpluBS16oV0ljjpw1FOYQ96VE8KcG3sC3obankdfh/7C1Qaa1UqKPlJWwKxC0ymtqf/
+         7FlqDObvBXu4IAUaSk87X8QUTEgFtLQKpGu5Rbl4dhX2NO78rGF3F4iLFGXkctSKq2NP
+         dcdk424MoNUS6w0gbqOS9XxDTSB3WiXycLY/pZq686Ky7UTiRz2kH4mNJW5c2EgDK7EM
+         we1Q==
+X-Gm-Message-State: ANoB5pkKAhakFbYOT428etCbsd/f0SreqnTaezisRZGVvkCC19dtPg+A
+        YraUQbyhLqmzCBFcYgTJlHyBosGhZCbJ5Q==
+X-Google-Smtp-Source: AA0mqf5TAxsy6t9xXX4HdJRwLXbeHzAzbwl3wU/FhtDH4LRklYvVf592HwbeqeEEMCYXFJWRN6q5kQ==
+X-Received: by 2002:a05:620a:199d:b0:6fa:e099:bc12 with SMTP id bm29-20020a05620a199d00b006fae099bc12mr16358396qkb.308.1668532436915;
+        Tue, 15 Nov 2022 09:13:56 -0800 (PST)
+Received: from errol.ini.cmu.edu (pool-72-77-81-136.pitbpa.fios.verizon.net. [72.77.81.136])
+        by smtp.gmail.com with ESMTPSA id u16-20020a05620a0c5000b006cfc7f9eea0sm8505731qki.122.2022.11.15.09.13.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 09:13:56 -0800 (PST)
+Date:   Tue, 15 Nov 2022 12:13:54 -0500
+From:   "Gabriel L. Somlo" <gsomlo@gmail.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, kgugala@antmicro.com,
+        mholenko@antmicro.com, joel@jms.id.au,
+        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
+        geert@linux-m68k.org
+Subject: Re: [PATCH v3 13/14] serial: liteuart: add IRQ support for the TX
+ path
+Message-ID: <Y3PI0gP0vnmYTmZK@errol.ini.cmu.edu>
+References: <20221112212125.448824-1-gsomlo@gmail.com>
+ <20221112212125.448824-14-gsomlo@gmail.com>
+ <957056a1-78a5-1141-18d7-b49f87fa85f0@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221115152956.21677-1-quic_shazhuss@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <957056a1-78a5-1141-18d7-b49f87fa85f0@linux.intel.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 08:59:56PM +0530, Shazad Hussain wrote:
-> The three UFS reference clocks, gcc_ufs_ref_clkref_clk for external
-> UFS devices, gcc_ufs_card_clkref_clk and gcc_ufs_1_card_clkref_clk for
-> two PHYs are all sourced from CXO.
+On Tue, Nov 15, 2022 at 06:14:50PM +0200, Ilpo Järvinen wrote:
+> On Sat, 12 Nov 2022, Gabriel Somlo wrote:
 > 
-> Added parent_data for all three reference clocks described above to
-> reflect that all three clocks are sourced from CXO to have valid
-> frequency for the ref clock needed by UFS controller driver.
+> > Modify the TX path to operate in an IRQ-compatible way, while
+> > maintaining support for polling mode via the poll timer.
+> > 
+> > Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
+> > ---
+> >  drivers/tty/serial/liteuart.c | 67 ++++++++++++++++++++++++-----------
+> >  1 file changed, 47 insertions(+), 20 deletions(-)
+> > 
+> > diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
+> > index e30adb30277f..307c27398e30 100644
+> > --- a/drivers/tty/serial/liteuart.c
+> > +++ b/drivers/tty/serial/liteuart.c
+> > @@ -46,6 +46,7 @@ struct liteuart_port {
+> >  	struct uart_port port;
+> >  	struct timer_list timer;
+> >  	u32 id;
+> > +	bool poll_tx_started;
+> >  };
+> >  
+> >  #define to_liteuart_port(port)	container_of(port, struct liteuart_port, port)
+> > @@ -78,29 +79,24 @@ static void liteuart_putchar(struct uart_port *port, unsigned char ch)
+> >  
+> >  static void liteuart_stop_tx(struct uart_port *port)
+> >  {
+> > -	/* not used in LiteUART, but called unconditionally from serial_core */
 > 
-> Fixes: d65d005f9a6c ("clk: qcom: add sc8280xp GCC driver")
-> Link: https://lore.kernel.org/lkml/Y2Tber39cHuOSR%2FW@hovoldconsulting.com/
-> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
-> Tested-by: Johan Hovold <johan+linaro@kernel.org>
-> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-> Tested-by: Andrew Halaney <ahalaney@redhat.com>
-> Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
-> Reviewed-by: Reviewed-by: Brian Masney <bmasney@redhat.com>
+> Drop this comment from the earlier patch too given you remove it here. It 
+> just adds useless churn in diff for no useful reason.
 
-Really-really-reviewed-by? ;)
-
-
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-
-
-@Stephen, could you please pick this for clk-fixes?
-
-Thanks,
-Bjorn
-
-> ---
-> Changes since v2:
-> -  Tweaked commit message and added R-b T-b from v2
+Right -- I already had this lined up for v4 :)
+ 
+> > +	if (port->irq) {
+> > +		u8 irq_mask = litex_read8(port->membase + OFF_EV_ENABLE);
+> > +		litex_write8(port->membase + OFF_EV_ENABLE, irq_mask & ~EV_TX);
 > 
-> v2 of this patch can be found at
-> https://lore.kernel.org/all/20221115102217.6381-1-quic_shazhuss@quicinc.com/
+> If you put irq_mask into liteuart_port you wouldn't need to read it 
+> back here?
+
+So, instead of `bool poll_tx_started` I should just keep a copy of the
+irq_mask there, and take `&port->lock` whenever I need to *both* update
+the mask *and* write it out to the actual device register?
+
+> > +	} else {
+> > +		struct liteuart_port *uart = to_liteuart_port(port);
+> > +		uart->poll_tx_started = false;
+> > +	}
+> >  }
+> >  
+> >  static void liteuart_start_tx(struct uart_port *port)
+> >  {
+> > -	struct circ_buf *xmit = &port->state->xmit;
+> > -	unsigned char ch;
+> > -
+> > -	if (unlikely(port->x_char)) {
+> > -		litex_write8(port->membase + OFF_RXTX, port->x_char);
+> > -		port->icount.tx++;
+> > -		port->x_char = 0;
+> > -	} else if (!uart_circ_empty(xmit)) {
+> > -		while (xmit->head != xmit->tail) {
+> > -			ch = xmit->buf[xmit->tail];
+> > -			xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
+> > -			port->icount.tx++;
 > 
-> v1 of this patch can be found at
-> https://lore.kernel.org/all/20221030142333.31019-1-quic_shazhuss@quicinc.com/
+> This is not based on tty-next tree. Please rebase on top of it (you 
+> might have noted it already, IIRC, somebody noted uart_xmit_advance
+> conflict in some patch, perhaps it was you :-)).
+
+Yeah, I did notice that right after I sent out v3. I've already
+rebased it on top of your patch using uart_xmit_advance.
+
+> > -			liteuart_putchar(port, ch);
+> > -		}
+> > +	if (port->irq) {
+> > +		u8 irq_mask = litex_read8(port->membase + OFF_EV_ENABLE);
+> > +		litex_write8(port->membase + OFF_EV_ENABLE, irq_mask | EV_TX);
 > 
-> used below patches for verification on next-20221114
-> https://lore.kernel.org/lkml/20221104092045.17410-2-johan+linaro@kernel.org/
-> https://lore.kernel.org/lkml/20221104092045.17410-3-johan+linaro@kernel.org/
-> https://lore.kernel.org/lkml/20221111113732.461881-1-thierry.reding@gmail.com/
+> ->irq_mask?
+
+I'll switch to s/bool poll_tx_started/u8 irq_mask/g in v4, hopefully
+it should make it all look cleaner.
+
+> > +	} else {
+> > +		struct liteuart_port *uart = to_liteuart_port(port);
+> > +		uart->poll_tx_started = true;
+> >  	}
+> > -
+> > -	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
+> > -		uart_write_wakeup(port);
+> >  }
+> >  
+> >  static void liteuart_stop_rx(struct uart_port *port)
+> > @@ -131,18 +127,47 @@ static void liteuart_rx_chars(struct uart_port *port)
+> >  	tty_flip_buffer_push(&port->state->port);
+> >  }
+> >  
+> > +static void liteuart_tx_chars(struct uart_port *port)
+> > +{
+> > +	struct circ_buf *xmit = &port->state->xmit;
+> > +
+> > +	if (unlikely(port->x_char)) {
+> > +		litex_write8(port->membase + OFF_RXTX, port->x_char);
+> > +		port->x_char = 0;
+> > +		port->icount.tx++;
+> > +		return;
+> > +	}
+> > +
+> > +	while (!litex_read8(port->membase + OFF_TXFULL)) {
+> > +		if (xmit->head == xmit->tail)
 > 
->  drivers/clk/qcom/gcc-sc8280xp.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+> There exists a helper for this condition.
+
+Is that in the released linus tree, or still only in tty-next?
+
+> > +			break;
+> > +		litex_write8(port->membase + OFF_RXTX, xmit->buf[xmit->tail]);
+> > +		xmit->tail = (xmit->tail + 1) & (UART_XMIT_SIZE - 1);
+> > +		port->icount.tx++;
 > 
-> diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
-> index a18ed88f3b82..b3198784e1c3 100644
-> --- a/drivers/clk/qcom/gcc-sc8280xp.c
-> +++ b/drivers/clk/qcom/gcc-sc8280xp.c
-> @@ -5364,6 +5364,8 @@ static struct clk_branch gcc_ufs_1_card_clkref_clk = {
->  		.enable_mask = BIT(0),
->  		.hw.init = &(const struct clk_init_data) {
->  			.name = "gcc_ufs_1_card_clkref_clk",
-> +			.parent_data = &gcc_parent_data_tcxo,
-> +			.num_parents = 1,
->  			.ops = &clk_branch2_ops,
->  		},
->  	},
-> @@ -5432,6 +5434,8 @@ static struct clk_branch gcc_ufs_card_clkref_clk = {
->  		.enable_mask = BIT(0),
->  		.hw.init = &(const struct clk_init_data) {
->  			.name = "gcc_ufs_card_clkref_clk",
-> +			.parent_data = &gcc_parent_data_tcxo,
-> +			.num_parents = 1,
->  			.ops = &clk_branch2_ops,
->  		},
->  	},
-> @@ -5848,6 +5852,8 @@ static struct clk_branch gcc_ufs_ref_clkref_clk = {
->  		.enable_mask = BIT(0),
->  		.hw.init = &(const struct clk_init_data) {
->  			.name = "gcc_ufs_ref_clkref_clk",
-> +			.parent_data = &gcc_parent_data_tcxo,
-> +			.num_parents = 1,
->  			.ops = &clk_branch2_ops,
->  		},
->  	},
+> uart_xmit_advance()
+
+Already lined up for v4.
+
+> 
+> > +	}
+> > +
+> > +	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
+> > +		uart_write_wakeup(port);
+> > +
+> > +	if (uart_circ_empty(xmit))
+> > +		liteuart_stop_tx(port);
+> > +}
+> 
+> You might want to check if you can generate this whole function with 
+> Jiri's tx helpers (IIRC, they're only in tty-next tree currently).
+
+Looks like I should switch to tty-next for this whole series, which
+makes sense, since it's a tty I'm working on :)
+
+I'll rebase on top of that before I send out v4, hopefully later this
+afternoon.
+ 
+> > +
+> >  static irqreturn_t liteuart_interrupt(int irq, void *data)
+> >  {
+> >  	struct liteuart_port *uart = data;
+> >  	struct uart_port *port = &uart->port;
+> >  	u8 isr = litex_read8(port->membase + OFF_EV_PENDING);
+> >  
+> > -	/* for now, only rx path triggers interrupts */
+> > -	isr &= EV_RX;
+> > +	if (!(port->irq || uart->poll_tx_started))
+> > +		isr &= ~EV_TX;	/* polling mode with tx stopped */
+> >  
+> >  	spin_lock(&port->lock);
+> >  	if (isr & EV_RX)
+> >  		liteuart_rx_chars(port);
+> > +	if (isr & EV_TX) {
+> > +		liteuart_tx_chars(port);
+> > +	}
+> 
+> Extra braces.
+
+Got it, thanks!
+
+> >  	spin_unlock(&port->lock);
+> >  
+> >  	return IRQ_RETVAL(isr);
+> > @@ -196,6 +221,7 @@ static int liteuart_startup(struct uart_port *port)
+> >  	}
+> >  
+> >  	if (!port->irq) {
+> > +		uart->poll_tx_started = false;
+> 
+> Can poll_tx_started ever be true here?
+
+Proably not, but it shouldn't matter if I switch to using `u8 irq_mask`,
+instead, which should be initialized to 0 during probe().
+
+Thanks again for the feedback!
+
+Best,
+--Gabriel
+
+> >  		timer_setup(&uart->timer, liteuart_timer, 0);
+> >  		mod_timer(&uart->timer, jiffies + uart_poll_timeout(port));
+> >  	}
+> > @@ -210,6 +236,7 @@ static void liteuart_shutdown(struct uart_port *port)
+> >  	struct liteuart_port *uart = to_liteuart_port(port);
+> >  
+> >  	litex_write8(port->membase + OFF_EV_ENABLE, 0);
+> > +	uart->poll_tx_started = false;
+> >  
+> >  	if (port->irq)
+> >  		free_irq(port->irq, port);
+> > 
+> 
 > -- 
-> 2.38.0
+>  i.
 > 
