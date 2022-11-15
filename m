@@ -2,179 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642D9628DF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 01:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D27E4628DFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 01:10:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236629AbiKOAI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 19:08:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
+        id S236635AbiKOAKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 19:10:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236120AbiKOAI0 (ORCPT
+        with ESMTP id S229865AbiKOAKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 19:08:26 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161082F2
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 16:08:24 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id s5so3453967edc.12
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 16:08:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e8DEyGtnR3E51A3LHZsY+6bNt9izsNvoJTKMNpkota0=;
-        b=b6losVzSt1LsO1uAuD3bhs2NGAXC8uf9KiabRTwzuTa1mNOajTwAvj9lgPz9xCqgB0
-         OdhliqNT3S6ehFbfekme7ex+RkUMXEWjyv6U1s2uSsBulLxff149DQJCXq1NlLq4UFuO
-         MfstcMGHw/zmNh7ohyPGNT6fQZUtaFre4lAxY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e8DEyGtnR3E51A3LHZsY+6bNt9izsNvoJTKMNpkota0=;
-        b=QGCbcJd0pLJf8LXtwBvAs6xmWTrAbNkxZsHneOkQ+804K0ubNYxst40XUYl4oawqk/
-         XWnzS0A8XO8MOKes5HxsCy3ua9uDB5HE8ZPtj8OeDuVcxkB/vEEeozwisVJybgPLL72n
-         URVOzfY+NJxjTKDQeiJSWJ6p8JW6ouTjct1y8dRlC940hg6ND9tQamRP8aAOGebg9+Ga
-         Psl6QVrtMfAZGEfFCyRvOcTI5S5GUcIrzapgzca7iIfPjd8g8Vn5dDbpJFlabsCcOECD
-         91K3ROLZmE8Ru2pSXOES9QIYNSOtuBpY+HfG70qq+4BWQyf5AH9bIsSGm0N+0VdqhCzk
-         p0Qw==
-X-Gm-Message-State: ANoB5pmMAPJ2IbHHu6ldOvcBwKnXlXv+a9hUK94PotP/IpVn8rhYZE70
-        Tk6wgX8EjMElvv0Y2OflMCpI9EhyJsrgmYu8
-X-Google-Smtp-Source: AA0mqf7Oq20BF+yV8umP/C0dkptriLOIpUOdc7NXFm6f9psNOhf2KJ4axR6uCrS0gJyzfKJPDm3g+w==
-X-Received: by 2002:a05:6402:501a:b0:467:6b55:3cf5 with SMTP id p26-20020a056402501a00b004676b553cf5mr12287483eda.22.1668470902468;
-        Mon, 14 Nov 2022 16:08:22 -0800 (PST)
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com. [209.85.128.54])
-        by smtp.gmail.com with ESMTPSA id w12-20020a056402128c00b0046730154ccbsm5422758edv.42.2022.11.14.16.08.17
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 16:08:18 -0800 (PST)
-Received: by mail-wm1-f54.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so9152249wmi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 16:08:17 -0800 (PST)
-X-Received: by 2002:a05:600c:1c97:b0:3cf:b0ed:de9d with SMTP id
- k23-20020a05600c1c9700b003cfb0edde9dmr9143461wms.188.1668470896844; Mon, 14
- Nov 2022 16:08:16 -0800 (PST)
+        Mon, 14 Nov 2022 19:10:01 -0500
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2606FFCD;
+        Mon, 14 Nov 2022 16:09:59 -0800 (PST)
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 2AF09jor016476;
+        Tue, 15 Nov 2022 09:09:46 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2AF09jor016476
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1668470986;
+        bh=kaA/W3OJWm84xj9yEegRlT2FAT0iIsZ8VWe5fgSo9GU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=QTSW/6MALar81EQSANVauPIeMoO7hFmk+lKd4MXEYq4YsW8dPi3Ckb5KysNSy/GhV
+         xTKDuws0mSS7fFT77SPv3gLqMB1oFA28rt8Huc9E4WqHf3zqgVFAPqEx99k9zuQuNe
+         vO/gwagUFfLWYfymOEa9tdPo2Q3PYe1h4ATjK+TMHyF8AHjiK8XvM0sFZBHVvtcrRS
+         KYZonXB1obBHTemrCHU8cWiLUDwjVKJF5AdJPoFMTeXxXGA9/ZcInpBOqra9+MVCl7
+         6Jns9edanLzMlqVYjnJY2DEuNIuREGXAF/lkvowbg6Eb1eYhdHNetC3rgCnlOp2WJC
+         Nkt2Xf/a11AqQ==
+X-Nifty-SrcIP: [209.85.160.41]
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-13ba86b5ac0so14441531fac.1;
+        Mon, 14 Nov 2022 16:09:46 -0800 (PST)
+X-Gm-Message-State: ANoB5pkjk4pH3hLoSAzDeJZp35e1SY6GSWYPNYKjlzFqkgYD9kzIXJpK
+        BbyjH31S8DuaGgn3iOgkon1JOo5ajt7wsO/qfW0=
+X-Google-Smtp-Source: AA0mqf6eE8HDLCKvTlnxgDoYaH5GNpequC3qeHCSogElmgHpUN769SFeVKvjngqvP3+7CVcdknEjtjnNcyioMGjnIXI=
+X-Received: by 2002:a05:6870:4b4a:b0:13b:5d72:d2c6 with SMTP id
+ ls10-20020a0568704b4a00b0013b5d72d2c6mr7940778oab.287.1668470985073; Mon, 14
+ Nov 2022 16:09:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20221104064055.1.I00a0e4564a25489e85328ec41636497775627564@changeid>
-In-Reply-To: <20221104064055.1.I00a0e4564a25489e85328ec41636497775627564@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 14 Nov 2022 16:08:04 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=UD-mcLuV0qSOQiQZyb8+HbpOEORdMQB6g9+_teB1Yn_Q@mail.gmail.com>
-Message-ID: <CAD=FV=UD-mcLuV0qSOQiQZyb8+HbpOEORdMQB6g9+_teB1Yn_Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] clk: qcom: lpass-sc7280: Fix pm_runtime usage
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Taniya Das <quic_tdas@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Judy Hsiao <judyhsiao@chromium.org>,
-        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>
+References: <20221113160237.3152770-1-maz@kernel.org>
+In-Reply-To: <20221113160237.3152770-1-maz@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 15 Nov 2022 09:09:08 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASoWbJ458zLTP6NuC+5Q+YHOdzVOeCKQ3MeyXQYrkjneg@mail.gmail.com>
+Message-ID: <CAK7LNASoWbJ458zLTP6NuC+5Q+YHOdzVOeCKQ3MeyXQYrkjneg@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Restore .version auto-increment behaviour for
+ Debian/RPM packages
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bjorn,
-
-On Fri, Nov 4, 2022 at 6:57 AM Douglas Anderson <dianders@chromium.org> wrote:
+On Mon, Nov 14, 2022 at 1:02 AM Marc Zyngier <maz@kernel.org> wrote:
 >
-> The pm_runtime usage in lpass-sc7280 was broken in quite a few
-> ways. Specifically:
->
-> 1. At the end of probe it called "put" twice. This is a no-no and will
->    end us up with a negative usage count. Even worse than calling
->    "put" twice, it never called "get" once. Thus after bootup it could
->    be seen that the runtime usage of the devices managed by this
->    driver was -2.
-> 2. In some error cases it manually called pm_runtime_disable() even
->    though it had previously used devm_add_action_or_reset() to set
->    this up to be called automatically. This meant that in these error
->    cases we'd double-call pm_runtime_disable().
-> 3. It forgot to call undo pm_runtime_use_autosuspend(), which can
->    sometimes have subtle problems (and the docs specifically mention
->    that you need to undo this function).
->
-> Overall the above seriously calls into question how this driver is
-> working. It seems like a combination of "it doesn't", "by luck", and
-> "because of the weirdness of runtime_pm". Specifically I put a
-> printout to the serial console every time the runtime suspend/resume
-> was called for the two devices created by this driver (I wrapped the
-> pm_clk calls). When I had serial console enabled, I found that the
-> calls got resumed at bootup (when the clk core probed and before our
-> double-put) and then never touched again. That's no good.
->   [    0.829997] DOUG: my_pm_clk_resume, usage=1
->   [    0.835487] DOUG: my_pm_clk_resume, usage=1
->
-> When I disabled serial console (speeding up boot), I got a different
-> pattern, which I guess (?) is better:
->   [    0.089767] DOUG: my_pm_clk_resume, usage=1
->   [    0.090507] DOUG: my_pm_clk_resume, usage=1
->   [    0.151885] DOUG: my_pm_clk_suspend, usage=-2
->   [    0.151914] DOUG: my_pm_clk_suspend, usage=-2
->   [    1.825747] DOUG: my_pm_clk_resume, usage=-1
->   [    1.825774] DOUG: my_pm_clk_resume, usage=-1
->   [    1.888269] DOUG: my_pm_clk_suspend, usage=-2
->   [    1.888282] DOUG: my_pm_clk_suspend, usage=-2
->
-> These different patterns have to do with the fact that the core PM
-> Runtime code really isn't designed to be robust to negative usage
-> counts and sometimes may happen to stumble upon a behavior that
-> happens to "work". For instance, you can see that
-> __pm_runtime_suspend() will treat any non-zero value (including
-> negative numbers) as if the device is in use.
->
-> In any case, let's fix the driver to be correct. We'll hold a
-> pm_runtime reference for the whole probe and then drop it (once!) at
-> the end. We'll get rid of manual pm_runtime_disable() calls in the
-> error handling. We'll also switch to devm_pm_runtime_enable(), which
-> magically handles undoing pm_runtime_use_autosuspend() as of commit
-> b4060db9251f ("PM: runtime: Have devm_pm_runtime_enable() handle
-> pm_runtime_dont_use_autosuspend()").
->
-> While we're at this, let's also use devm_pm_clk_create() instead of
-> rolling it ourselves.
->
-> Note that the above changes make it obvious that
-> lpassaudio_create_pm_clks() was doing more than just creating
-> clocks. It was also setting up pm_runtime parameters. Let's rename it.
->
-> All of these problems were found by code inspection. I started looking
-> at this driver because it was involved in a deadlock that I reported a
-> while ago [1]. Though I bisected the deadlock to commit 1b771839de05
-> ("clk: qcom: gdsc: enable optional power domain support"), it was
-> never really clear why that patch affected it other than a luck of
-> timing changes. I'll also note that by fixing the timing (as done in
-> this change) we also seem to aboid the deadlock, which is a nice
-> benefit.
->
-> Also note that some of the fixes here are much the same type of stuff
-> that Dmitry did in commit 72cfc73f4663 ("clk: qcom: use
-> devm_pm_runtime_enable and devm_pm_clk_create"), but I guess
-> lpassaudiocc-sc7280.c didn't exist then.
->
-> [1] https://lore.kernel.org/r/20220922154354.2486595-1-dianders@chromium.org
->
-> Fixes: a9dd26639d05 ("clk: qcom: lpass: Add support for LPASS clock controller for SC7280")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
->
->  drivers/clk/qcom/lpassaudiocc-sc7280.c | 55 ++++++++++----------------
->  1 file changed, 21 insertions(+), 34 deletions(-)
-
-Is anything blocking this series from landing? I noticed a few other
-patches have landed since then to your Qualcomm clk branch, but I
-don't see these there. I assume it'll land through your tree.
-
-Thanks!
+> diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
+> index 60a2a63a5e90..e5c983afddab 100755
+> --- a/scripts/package/mkdebian
+> +++ b/scripts/package/mkdebian
+> @@ -90,7 +90,7 @@ if [ -n "$KDEB_PKGVERSION" ]; then
+>         packageversion=$KDEB_PKGVERSION
+>         revision=${packageversion##*-}
+>  else
+> -       revision=$(cat .version 2>/dev/null||echo 1)
+> +       revision=$(init/build-version)
 
 
--Doug
+This does not work for out-of-tree builds
+because init/build-version is a check-in source file.
+
+
+
+For example, "make O=/tmp/foo bindeb-pkg" fails with:
+.../linux/scripts/package/mkdebian: 93: init/build-version: not found
+
+
+The correct code is:
+
+
+          revision=$($srctree/init/build-version)
+
+
+
+
+>         packageversion=$version-$revision
+>  fi
+>  sourcename=$KDEB_SOURCENAME
+> diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+> index 70392fd2fd29..9cbd45f497ba 100755
+> --- a/scripts/package/mkspec
+> +++ b/scripts/package/mkspec
+> @@ -42,7 +42,7 @@ sed -e '/^DEL/d' -e 's/^\t*//' <<EOF
+>         Name: kernel
+>         Summary: The Linux Kernel
+>         Version: $__KERNELRELEASE
+> -       Release: $(cat .version 2>/dev/null || echo 1)
+> +       Release: $(init/build-version)
+
+
+Ditto.
+
+          Release: $($srctree/init/build-version)
+
+
+
+
+>         License: GPL
+>         Group: System Environment/Kernel
+>         Vendor: The Linux Community
+> --
+> 2.34.1
+>
+
+
+--
+Best Regards
+Masahiro Yamada
