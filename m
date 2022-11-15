@@ -2,42 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E3F7629CD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB1F629CDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiKOPBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:01:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43052 "EHLO
+        id S230100AbiKOPCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:02:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiKOPBM (ORCPT
+        with ESMTP id S229556AbiKOPCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:01:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AAC248E2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:01:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8CFEB81923
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:01:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97CEFC433D6;
-        Tue, 15 Nov 2022 15:01:05 +0000 (UTC)
-Date:   Tue, 15 Nov 2022 10:01:48 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org, mhiramat@kernel.org,
-        revest@chromium.org, will@kernel.org
-Subject: Re: [PATCH v2 0/4] arm64/ftrace: move to DYNAMIC_FTRACE_WITH_ARGS
-Message-ID: <20221115100148.08475da0@gandalf.local.home>
-In-Reply-To: <20221103170520.931305-1-mark.rutland@arm.com>
-References: <20221103170520.931305-1-mark.rutland@arm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 15 Nov 2022 10:02:49 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9911823BEA;
+        Tue, 15 Nov 2022 07:02:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=zRHf7uNPeh2kBVdWmKW0GFypLXCUl8jRA2VU7wkOlI4=; b=acgzf5ty3KyM8r6dyR61ocZrOX
+        NHdcRgTGYkYBr4L+p64UKkRDLvbLn3TI1QCmJCU3QFIlOHMEOTtrCL0wNftbU5j8XfGpJa1H3flUb
+        kvGiAfonWM8y38LmAj4pSE+e03SVm0m8PSfw6UGvg3M+K4TX39Ohx6lIILhKNba9mP18=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ouxSD-002TAZ-Q8; Tue, 15 Nov 2022 16:02:25 +0100
+Date:   Tue, 15 Nov 2022 16:02:25 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: dsa: use NET_NAME_PREDICTABLE for user ports with
+ name given in DT
+Message-ID: <Y3OqAfLZltb9OOmD@lunn.ch>
+References: <20221111161729.915233-1-linux@rasmusvillemoes.dk>
+ <Y26B8NL3Rv2u/otG@lunn.ch>
+ <26d3b005-aa4e-66d3-32eb-568d3dfe6379@rasmusvillemoes.dk>
+ <20221114181712.51856dd4@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221114181712.51856dd4@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,68 +57,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  3 Nov 2022 17:05:16 +0000
-Mark Rutland <mark.rutland@arm.com> wrote:
+> Apparently there may be a reason, see commit e9f656b7a214 ("net:
+> ethernet: set default assignment identifier to NET_NAME_ENUM")
+> so let's switch to ENUM while at it.
 
-> This series replaces arm64's support for FTRACE_WITH_REGS with support
-> for FTRACE_WITH_ARGS. This removes some overhead and complexity, and
-> removes some latent issues with inconsistent presentation of struct
-> pt_regs (which can only be reliably saved/restored at exception
-> boundaries).
-> 
-> The existing FTRACE_WITH_REGS support was added for two major reasons:
-> 
-> (1) To make it possible to use the ftrace graph tracer with pointer
->     authentication, where it's necessary to snapshot/manipulate the LR
->     before it is signed by the instrumented function.
-> 
-> (2) To make it possible to implement LIVEPATCH in future, where we need
->     to hook function entry before an instrumented function manipulates
->     the stack or argument registers. Practically speaking, we need to
->     preserve the argument/return registers, PC, LR, and SP.
-> 
-> Neither of these requires the full set of pt_regs, and only requires us
-> to save/restore a subset of registers used for passing
-> arguments/return-values and context/return information (which is the
-> minimum set we always need to save/restore today).
-> 
-> As there is no longer a need to save different sets of registers for
-> different features, we no longer need distinct `ftrace_caller` and
-> `ftrace_regs_caller` trampolines. This allows the trampoline assembly to
-> be simpler, and simplifies code which previously had to handle the two
-> trampolines.
-> 
-> I've tested this with the ftrace selftests, where there are no
-> unexpected failures.
+I would recommend two patches, making it easier to revert if we find
+something in userspace breaks.
 
-Were there any "expected" failures?
-
-> 
-> I plan to build atop this with subsequent patches to add per-callsite
-> ftrace_ops, and I'm sending these patches on their own as I think they
-> make sense regardless.
-> 
-> Since v1 [1]:
-> * Change ifdeferry per Steve's request
-> * Add ftrace_regs_query_register_offset() per Masami's request
-> * Fix a bunch of typos
-> 
-> [1] https://lore.kernel.org/lkml/20221024140846.3555435-1-mark.rutland@arm.com
-> 
-> This series can be found in my 'arm64/ftrace/minimal-regs' branch on
-> kernel.org:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/
->   git://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-> 
-> This version is tagged as:
-> 
->   arm64-ftrace-minimal-regs-20221103
-
-
-So I ran this on top of my code through all my ftrace tests (for x86) and
-it didn't cause any regressions.
-
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
+	  Andrew
