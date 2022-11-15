@@ -2,76 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A143562A17F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAC362A18C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbiKOSn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 13:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
+        id S231255AbiKOSry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 13:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiKOSnw (ORCPT
+        with ESMTP id S231175AbiKOSrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 13:43:52 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A61E65F2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:43:51 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id v3-20020a17090ac90300b00218441ac0f6so2064054pjt.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:43:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=00+9Ilghhv3lntMm+1aRi6kvIbEPCefmRGEhAjVwcJw=;
-        b=OZtxlOh99Bx9s9c9BOyIAwuhOJfZgo7d/mcaeLE7mxKJVeKdeFD6fM5Ks/7o9MbZhn
-         Pn2LhYcnwWw18985f5iOtI1gjTuYMXf9MTEU1Kq44fEMb5O2QipDHJRW+VeivUyO2QSb
-         oh+pVsMBb4skurDKdwSPDo8/2M+KyLJitjSpgUYx++8t5EO6at8ECEWKKJjtZAYRan1A
-         dQktsTJnNwcaLHw6mMXc7WsfYiBcWTW31/iABj3+/ybtor2a3Lxm0Fref6r9GvBQGwpI
-         mp4/AG2nJPtGj6Sg8jmPH4HCl53a286b7bN9qxGofT3M1xe2AusCSHxSwWTMjoNJ+Qd1
-         NaKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=00+9Ilghhv3lntMm+1aRi6kvIbEPCefmRGEhAjVwcJw=;
-        b=fpmBD8hDUBz5HMY0uMj9pQYM9W42z/8L7VwX7v1K1MlhrY38sPKNZO4FKqeHJV9N78
-         IFn/uYx9LC9imq2pxU+9pMh4/skUnQTW9pObupxg6LHUADnPgRRZhC1S/RQIP7ywEerb
-         Ed3IE+V3JIkXvpHA6N+LtAKt0TmVtmwXYSlFy/nbCSSXN/o40oJEBtIpPXCXBzudsrq+
-         iyJSQBy4OwvYB4cVs7vva9g0uJndaTs1r2vgEHoA7PYcAN5NVPn1vADW08cqX7npUo48
-         pxs0IUlXE6g4IXM9qHTtzqt4s5gOGCEiw+B8qa38NfYHcAo0tEpCehmewQAe79z2nstb
-         CvdA==
-X-Gm-Message-State: ANoB5plPvaI8tmU4/d2nLLwM4IFxR5EMkJ9gVXdELdu6NSraQ1WiDSXa
-        bx7vn15BpXG35STU63AEmyOxwA==
-X-Google-Smtp-Source: AA0mqf5twos0SU2IewJ7K9NEb95p/NVrr2KpeNPsORRYgK4dUVM1q4PEdD2VQ3toOdN4t6keDEkZsg==
-X-Received: by 2002:a17:902:9a01:b0:185:3ecb:d464 with SMTP id v1-20020a1709029a0100b001853ecbd464mr5393170plp.78.1668537830742;
-        Tue, 15 Nov 2022 10:43:50 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([66.220.2.162])
-        by smtp.gmail.com with ESMTPSA id 132-20020a62188a000000b00571dda13fafsm6990296pfy.163.2022.11.15.10.43.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 10:43:50 -0800 (PST)
-Date:   Tue, 15 Nov 2022 10:43:48 -0800
-From:   Deepak Gupta <debug@rivosinc.com>
-To:     Conor.Dooley@microchip.com
-Cc:     aou@eecs.berkeley.edu, jan.kiszka@siemens.com, kbingham@kernel.org,
-        linux-kernel@vger.kernel.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, ajones@ventanamicro.com,
-        linux-riscv@lists.infradead.org, bjorn@kernel.org,
-        atishp@rivosinc.com
-Subject: Re: [PATCH v3] scripts/gdb: add lx_current support for riscv
-Message-ID: <20221115184348.GA1854852@debug.ba.rivosinc.com>
-References: <20221115012917.1781185-1-debug@rivosinc.com>
- <20221115084923.1822572-1-debug@rivosinc.com>
- <Y3OkY6myfea00BaK@wendy>
- <CAKC1njRi9C0m3JKpu0ebAFCC25161EST=tFFWiAj1yZBbnak6A@mail.gmail.com>
- <4f293c39-6a0e-dd25-9ed2-10088bb971e1@microchip.com>
+        Tue, 15 Nov 2022 13:47:49 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2046.outbound.protection.outlook.com [40.107.243.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310352FFF8;
+        Tue, 15 Nov 2022 10:47:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XPqPmD0X0aRzZnbnfR82AZ82xkbwV1hRBp+Dzrw9MfTBUCs66z7WfRN7WUs2TM1XXnWRVJ9IY9mzJ/lK/OvFyMoTTRxsI77CjnUTd8B1dQwwHpZvAYIsXQokyz5w/RpQQ+twRe1DAAQ/HoMkTlud4iGyRDlOvHUfiyMtT02zb+bMWQLje+rYa/ecCGAcESE3OyBlZKw8LDHkrnKaXxqkEyq1A1zD3n8wnDfFuIisZ7Xgrd+oaPrkV665XxwJdN+WQhsg0wd+0E4uInT1PSOwkfsOoy65u9s75vQCg88IrbA5Lvgd4TqeyZDAVa37BX7U6z9qX3ai7a498NFyya+GRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z/7dUzu1tEEYbHb4QCH3NUiNM0zqu3imwbzSsUwE0S4=;
+ b=kRhNhRB+mLCw2crlfa9rUTB7MD9M9eAUcIeAvfle/7IjpuE6fEzeqXWcVHhqRaJjw9ZuNNeGSXeftDqz+hRSe5ZMeNt5E5jGqEJasHrsIAmfbsjsOEtsSJ6jX4BxZMPtGGECW3/ijAmXnXqb6+1zuln9RDO6yPHZch3BXP9dPwjLh1yF+Wcf7b6ZWvVOfJBIUmy71ekkqRezWqvi1SSOpwnPbT+/8gr9hX38BtAjzOs0q9FqNIJ0fP17a9GBh4Yl2gyBuBBLv5g8A194LsVtJz233NiApae2YOknLrcGEcW3vaVF6XJdp1W5il20o7TqurTOOmVrr1SPqDLnVqIzbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lwn.net smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z/7dUzu1tEEYbHb4QCH3NUiNM0zqu3imwbzSsUwE0S4=;
+ b=iWIlqVpNEa+4cL2kUTULm/ywRHP4SHE/Z3aM+k2dEYd+u6qu9MYp34mFxcG4RyzZa2i5mH1ckx46jI4jPD+HSwSDUQlNGjsPJq6MGyrzej3U7cM8E69I7J0cl4uTiWZzv4FlZNPsu9gT2M1qwcMYoAbT6d277ZRUnLdDWU62lBM=
+Received: from MW2PR2101CA0023.namprd21.prod.outlook.com (2603:10b6:302:1::36)
+ by MN2PR12MB4141.namprd12.prod.outlook.com (2603:10b6:208:1d5::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Tue, 15 Nov
+ 2022 18:47:41 +0000
+Received: from CO1PEPF00001A62.namprd05.prod.outlook.com
+ (2603:10b6:302:1:cafe::73) by MW2PR2101CA0023.outlook.office365.com
+ (2603:10b6:302:1::36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.5 via Frontend
+ Transport; Tue, 15 Nov 2022 18:47:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF00001A62.mail.protection.outlook.com (10.167.241.9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5813.11 via Frontend Transport; Tue, 15 Nov 2022 18:47:41 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 15 Nov
+ 2022 12:47:38 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 15 Nov
+ 2022 12:47:38 -0600
+Received: from iron-maiden.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Tue, 15 Nov 2022 12:47:37 -0600
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+To:     <corbet@lwn.net>
+CC:     <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <bilbao@vt.edu>, Carlos Bilbao <carlos.bilbao@amd.com>
+Subject: [PATCH] docs/sp_SP: Add process coding-style translation
+Date:   Tue, 15 Nov 2022 12:47:37 -0600
+Message-ID: <20221115184737.712625-1-carlos.bilbao@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <4f293c39-6a0e-dd25-9ed2-10088bb971e1@microchip.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF00001A62:EE_|MN2PR12MB4141:EE_
+X-MS-Office365-Filtering-Correlation-Id: 27e7f863-cb11-4392-f782-08dac739e02c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kMq1j6cMy8lJ0gPPPJSMdpyFaogWy314Uqeaxv04+Gp5kBmAa/S5NyoOCuq3TiyoRBWdSM1vhyA19ukVf9o9FAz3RP9unvz28daBHDRr9ht+jTaxS5XUhEeP4jYoWn+RSnmrIr+kahHO4tbTqlNJ3COQWlw4CnvzmknmmeAt/01hLV0xGCgYbLhEymGiZVuKhM9FHkfhSpk8dyLmL8CETDxyztmwGratxCJ5k6Vb9pq9/9J7Nhb3Sg/FOR1FCkxa/sYZEx55NZD1rWePIOfW27mOmBTKlB2khP/xh61fZstzkt6aolrqA/hY28VzZSoErZ10/4Fniyz0iyCtMVHHfezkTMcIfaNqjIcXk5sFW0FluC6TU5AxnyphOO33qpcnr4zOGG6OBiDTdhggnsAqqixCTXnJGRd79osqtCIfK195jkcaVBfYkNyE2mAP0Fm7qV57Bkwa8hSQVG1P3xeGRyDOcXwCNIyVhncOC31M8YbgjLxc4ezH/7/90KlhAAEi7Q2bDT4KRp3MLuh7J7qzBTlQX7pCNIyWqsRH8OHtNPgNAWHbykRjl3EDummLnsU2aJLOQ0GgJHWNF8qjtwqBf8eLvpQNFGe8HpTjmLZytZD9P5ucVXiAy2b9jqN28J7R6jIU5aHOK5ZT4fv+nXfL2eS+noQeK8HnD2bC0IUmwAzc00kRBiKet+DD4g67HtT76gB1xy9fQMDI6Aove99q2a19fZtE0U/6/gxC2Z8P555h3neP1pdV1wk0DTqS1S8NjNv4s1u+D3KFinBkjNi7vdbmkGI2qrJS5TnP4EnXO3acUeT50a8VjDClNOlpKRCvpxGvm7KVPxzeGh2VCHCYzkX/07rIB9pEUe939fRS0RiL5BJYxQWHHDpu53CkLIjCF0XHzGU+fvSIErzmDyMX/w==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:es;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(376002)(39860400002)(451199015)(46966006)(36840700001)(40470700004)(7696005)(2906002)(2616005)(4326008)(6916009)(316002)(54906003)(8676002)(83380400001)(41300700001)(70206006)(40460700003)(36756003)(336012)(5660300002)(70586007)(26005)(8936002)(186003)(30864003)(47076005)(426003)(82310400005)(66574015)(356005)(1076003)(44832011)(66899015)(82740400003)(86362001)(478600001)(966005)(36860700001)(40480700001)(81166007)(21314003)(36900700001)(559001)(579004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2022 18:47:41.1796
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27e7f863-cb11-4392-f782-08dac739e02c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF00001A62.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4141
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,174 +101,1348 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 06:06:34PM +0000, Conor.Dooley@microchip.com wrote:
->Hey Deepak,
->
->On 15/11/2022 17:49, Deepak Gupta wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->> Since I am new to all this. I've had some oversight�and am still learning�the flow.
->> Rest inline.
->
->No worries chief. Worth noting is that this mail came in html
->form, which the mailing lists reject. Noone outside of the
->direct CC list will see this mail. May be worth asking some
->of the other Rivos lads how they do their plain text emailing.
->
->ik Palmer's got his hand rolled stuff, so maybe he's not the
->best to ask - but try Bjorn or Atish?
+Translate Documentation/process/coding-style.rst into Spanish.
 
-Sending this time from mutt. Hopefully no bounces.
+Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+---
+ .../translations/sp_SP/coding-style.rst       | 1315 +++++++++++++++++
+ Documentation/translations/sp_SP/index.rst    |    1 +
+ 2 files changed, 1316 insertions(+)
+ create mode 100644 Documentation/translations/sp_SP/coding-style.rst
 
->
->>
->> On Tue, Nov 15, 2022 at 6:38 AM Conor Dooley <conor.dooley@microchip.com <mailto:conor.dooley@microchip.com>> wrote:
->>
->>     Hey Deepak,
->>
->>     On Tue, Nov 15, 2022 at 12:49:23AM -0800, Deepak Gupta wrote:
->>     > csr_sscratch CSR holds current task_struct address when hart is in
->>     > user space. Trap handler on entry spills csr_sscratch into "tp" (x2)
->>     > register and zeroes out csr_sscratch CSR. Trap handler on exit reloads
->>     > "tp" with expected user mode value and place current task_struct address
->>     > again in csr_scratch CSR.
->>     >
->>     > This patch assumes "tp" is pointing to task_struct. If value in
->>     > csr_scratch is numerically greater than "tp" then it assumes csr_scratch
->>
->>     nit: s/scratch/sscratch/ ?
->>
->>
->> Will fix it.
->> �
->>
->>
->>     > is correct address of current task_struct. This logic holds when
->>     >� � - hart is in user space, "tp" will be less than csr_scratch.
->>     >� � - hart is in kernel space but not in trap handler, "tp" will be more
->>     >� � � than csr_scratch (csr_scratch being equal to 0).
->>     >� � - hart is executing trap handler
->>     >� � � � - "tp" is still pointing to user mode but csr_scratch contains
->>     >� � � � � �ptr to task_struct. Thus numerically higher.
->>     >� � � � - "tp" is� pointing to task_struct but csr_scratch now contains
->>     >� � � � � �either 0 or numerically smaller value (transiently holds
->>     >� � � � � �user mode tp)
->>     >
->>     > Patch also adds new cached type "ulong" in scripts/gdb/linux/utils.py
->>     >
->>     > Signed-off-by: Deepak Gupta <debug@rivosinc.com <mailto:debug@rivosinc.com>>
->>
->>     I noticed when looking into patchwork complaining about checkpatch
->>     errors in v2, that b4 had actually downloaded v3 but I could not see
->>     this patch on the RISC-V list.
->>
->> �
->> I'll make sure to add the risc-v list on the next spin up.
->>
->>
->>     I don't see a changelog anywhere here
->>     from v2 either
->>
->>
->> I had been taking inputs and squashing commits on my end.
->> You want me to send a changelog of changes between versions of patches.
->
->Yeah, it's nice to say something like:
->v2 -> v3:
->- reworded commit message
->- fixed compile error in bar.c if !CONFIG_FOO
->
->Makes it easier for reviewers to see what changed between
->versions.
->
->> �
->>
->>     , nor did you pick up Drew's Reviewed-by.
->>
->>
->> I should've done that. My mistake and apologize.
->> I'll fix it in my next submission.
->> �
->>
->>
->>     What's the story there?
->>
->>     One really minor thing below. Should be able to fix it up trivially up
->>     & submit a v4, CCing the linux-riscv list.
->>
->>     > ---
->>     >� scripts/gdb/linux/cpus.py� | 15 +++++++++++++++
->>     >� scripts/gdb/linux/utils.py |� 5 +++++
->>     >� 2 files changed, 20 insertions(+)
->>     >
->>     > diff --git a/scripts/gdb/linux/cpus.py b/scripts/gdb/linux/cpus.py
->>     > index 15fc4626d236..ca5215a660c7 100644
->>     > --- a/scripts/gdb/linux/cpus.py
->>     > +++ b/scripts/gdb/linux/cpus.py
->>     > @@ -173,6 +173,21 @@ def get_current_task(cpu):
->>     >� � � � � �else:
->>     >� � � � � � � �raise gdb.GdbError("Sorry, obtaining the current task is not allowed "
->>     >� � � � � � � � � � � � � � � � � "while running in userspace(EL0)")
->>     > +� � elif utils.is_target_arch("riscv"):
->>     > +� � � � �current_tp = gdb.parse_and_eval("$tp")
->>     > +� � � � �scratch_reg = gdb.parse_and_eval("$sscratch")
->>     > +
->>     > +� � � � �# by default tp points to current task
->>     > +� � � � �current_task = current_tp.cast(task_ptr_type)
->>     > +
->>     > +� � � � �# scratch register is set 0 in trap handler after entering kernel.
->>     > +� � � � �# When hart is in user mode, scratch register is pointing to task_struct.
->>     > +� � � � �# and tp is used by user mode. So when scratch register holds larger value
->>     > +� � � � �# (negative address as ulong is larger value) than tp, then use scratch register.
->>     > +� � � � �if (scratch_reg.cast(utils.get_ulong_type()) >� current_tp.cast(utils.get_ulong_type())):
->>     � � � � � � � � � � � � � � � � � � � � � � � � � � � � � ^^
->>     extra space here?
->>
->>
->> I don't see the space in the patch. Can you clarify which space you're talking about here?
->
->There's a double space between the > and current_tp.
->I put a ^^ under it, but if you've not got a monospace font, which since
->you're replying in html you probably don't, it may not align for you.
->
->Hope that helps,
->Conor.
+diff --git a/Documentation/translations/sp_SP/coding-style.rst b/Documentation/translations/sp_SP/coding-style.rst
+new file mode 100644
+index 000000000000..01e93764e454
+--- /dev/null
++++ b/Documentation/translations/sp_SP/coding-style.rst
+@@ -0,0 +1,1315 @@
++.. include:: ./disclaimer-sp.rst
++
++:Original: :ref:`Documentation/process/coding-style.rst <submittingpatches>`
++:Translator: Carlos Bilbao <carlos.bilbao@amd.com>
++
++.. _sp_codingstyle:
++
++Estilo en el código del kernel Linux
++=====================================
++
++Este es un breve documento que describe el estilo preferido en el código
++del kernel Linux. El estilo de código es muy personal y no **forzaré** mi
++puntos de vista sobre nadie, pero esto vale para todo lo que tengo que
++mantener, y preferiría que para la mayoría de otras cosas también. Por
++favor, por lo menos considere los argumentos expuestos aquí.
++
++En primer lugar, sugeriría imprimir una copia de los estándares de código
++GNU, y NO leerlo. Quémelos, es un gran gesto simbólico.
++
++De todos modos, aquí va:
++
++
++1) Sangría
++-----------
++
++Las tabulaciones tienen 8 caracteres y, por lo tanto, las sangrías también
++tienen 8 caracteres. Hay movimientos heréticos que intentan hacer sangría
++de 4 (¡o incluso 2!) caracteres de longitud, y eso es similar a tratar de
++definir el valor de PI como 3.
++
++Justificación: La idea detrás de la sangría es definir claramente dónde
++comienza y termina un bloque de control. Especialmente, cuando ha estado
++buscando en su pantalla durante 20 horas seguidas, le resultará mucho más
++fácil ver cómo funciona la sangría si tiene sangrías grandes.
++
++Bueno, algunas personas dirán que tener sangrías de 8 caracteres hace que
++el código se mueva demasiado a la derecha y dificulta la lectura en una
++pantalla de terminal de 80 caracteres. La respuesta a eso es que si
++necesita más de 3 niveles de sangría, está en apuros de todos modos y
++debería arreglar su programa.
++
++En resumen, las sangrías de 8 caracteres facilitan la lectura y tienen la
++ventaja añadida de advertirle cuando está anidando sus funciones demasiado
++profundo. Preste atención a esa advertencia.
++
++La forma preferida de facilitar múltiples niveles de sangría en una
++declaración de switch es para alinear el ``switch`` y sus etiquetas
++``case`` subordinadas en la misma columna, en lugar de hacer ``doble
++sangría`` (``double-indenting``) en etiquetas ``case``. Por ejemplo:
++
++.. code-block:: c
++
++	switch (suffix) {
++	case 'G':
++	case 'g':
++		mem <<= 30;
++		break;
++	case 'M':
++	case 'm':
++		mem <<= 20;
++		break;
++	case 'K':
++	case 'k':
++		mem <<= 10;
++		fallthrough;
++	default:
++		break;
++	}
++
++No ponga varias declaraciones en una sola línea a menos que tenga algo que
++ocultar:
++
++.. code-block:: c
++
++	if (condición) haz_esto;
++	  haz_otra_cosa;
++
++No use comas para evitar el uso de llaves:
++
++.. code-block:: c
++
++	if (condición)
++		haz_esto(), haz_eso();
++
++Siempre use llaves para múltiples declaraciones:
++
++.. code-block:: c
++
++	if (condición) {
++		haz_esto();
++		haz_eso();
++	}
++
++Tampoco ponga varias asignaciones en una sola línea. El estilo de código
++del kernel es súper simple. Evite las expresiones engañosas.
++
++
++Aparte de los comentarios, la documentación y excepto en Kconfig, los
++espacios nunca se utilizan para la sangría, y el ejemplo anterior se rompe
++deliberadamente.
++
++Consiga un editor decente y no deje espacios en blanco al final de las
++líneas.
++
++2) Rompiendo líneas y strings largos
++------------------------------------
++
++El estilo de código tiene todo que ver con la legibilidad y la
++mantenibilidad usando herramientas disponibles comúnmente.
++
++El límite preferido en la longitud de una sola línea es de 80 columnas.
++
++Las declaraciones de más de 80 columnas deben dividirse en partes, a menos
++que exceder las 80 columnas aumente significativamente la legibilidad y no
++oculte información.
++
++Los descendientes siempre son sustancialmente más cortos que el padre y
++se colocan sustancialmente a la derecha. Un estilo muy usado es alinear
++descendientes a un paréntesis de función abierto.
++
++Estas mismas reglas se aplican a los encabezados de funciones con una larga
++lista de argumentos.
++
++Sin embargo, nunca rompa los strings visibles para el usuario, como los
++mensajes printk, porque eso rompe la capacidad de grep a estos.
++
++
++3) Colocación de llaves y espacios
++----------------------------------
++
++El otro problema que siempre surge en el estilo C es la colocación de
++llaves. A diferencia del tamaño de la sangría, existen pocas razones
++técnicas para elegir una estrategia de ubicación sobre la otra, pero la
++forma preferida, como mostraron los profetas Kernighan y Ritchie, es poner
++la llave de apertura en la línea, y colocar la llave de cierre primero,
++así:
++
++.. code-block:: c
++
++	if (x es verdad) {
++		hacemos y
++	}
++
++Esto se aplica a todos los bloques de declaraciones que no son funciones
++(if, switch, for, while, do). Por ejemplo:
++
++.. code-block:: c
++
++	switch (action) {
++	case KOBJ_ADD:
++		return "add";
++	case KOBJ_REMOVE:
++		return "remove";
++	case KOBJ_CHANGE:
++		return "change";
++	default:
++		return NULL;
++	}
++
++Sin embargo, hay un caso especial, a saber, las funciones: tienen la llave
++de apertura al comienzo de la siguiente línea, así:
++
++.. code-block:: c
++
++	int funcion(int x)
++	{
++		cuerpo de la función
++	}
++
++Gente hereje de todo el mundo ha afirmado que esta inconsistencia es...
++bueno... inconsistente, pero todas las personas sensatas saben que
++(a) K&R tienen **razón** y (b) K&R tienen razón. Además, las funciones son
++especiales de todos modos (no puede anidarlas en C).
++
++Tenga en cuenta que la llave de cierre está vacía en su línea propia,
++**excepto** en los casos en que es seguida por una continuación de la misma
++declaración, es decir, un ``while`` en una sentencia do o un ``else`` en
++una sentencia if, como en:
++
++.. code-block:: c
++
++	do {
++		cuerpo del bucle do
++	} while (condition);
++
++y
++
++.. code-block:: c
++
++	if (x == y) {
++		..
++	} else if (x > y) {
++		...
++	} else {
++		....
++	}
++
++Justificación: K&R.
++
++Además, tenga en cuenta que esta colocación de llaves también minimiza el
++número de líneas vacías (o casi vacías), sin pérdida de legibilidad. Así,
++como el suministro de nuevas líneas en su pantalla no es un recurso
++renovable (piense en pantallas de terminal de 25 líneas), tienes más líneas
++vacías para poner comentarios.
++
++No use llaves innecesariamente donde una sola declaración sea suficiente.
++
++.. code-block:: c
++
++	if (condition)
++		accion();
++
++y
++
++.. code-block:: none
++
++	if (condición)
++		haz_esto();
++	else
++		haz_eso();
++
++Esto no aplica si solo una rama de una declaración condicional es una sola
++declaración; en este último caso utilice llaves en ambas ramas:
++
++.. code-block:: c
++
++	if (condición) {
++		haz_esto();
++		haz_eso();
++	} else {
++		en_otro_caso();
++	}
++
++Además, use llaves cuando un bucle contenga más de una declaración simple:
++
++.. code-block:: c
++
++	while (condición) {
++		if (test)
++			haz_eso();
++	}
++
++3.1) Espacios
++*************
++
++El estilo del kernel Linux para el uso de espacios depende (principalmente)
++del uso de función versus uso de palabra clave. Utilice un espacio después
++de (la mayoría de) las palabras clave. Las excepciones notables son sizeof,
++typeof, alignof y __attribute__, que parecen algo así como funciones (y
++generalmente se usan con paréntesis en Linux, aunque no son requeridos en
++el idioma, como en: ``sizeof info`` después de que ``struct fileinfo info;``
++se declare).
++
++Así que use un espacio después de estas palabras clave::
++
++	if, switch, case, for, do, while
++
++pero no con sizeof, typeof, alignof, o __attribute__. Por ejemplo,
++
++.. code-block:: c
++
++
++	s = sizeof(struct file);
++
++No agregue espacios alrededor (dentro) de expresiones entre paréntesis.
++Este ejemplo es **malo**:
++
++.. code-block:: c
++
++
++	s = sizeof( struct file );
++
++Al declarar datos de puntero o una función que devuelve un tipo de puntero,
++el uso preferido de ``*`` es adyacente al nombre del dato o nombre de la
++función y no junto al nombre del tipo. Ejemplos:
++
++.. code-block:: c
++
++
++	char *linux_banner;
++	unsigned long long memparse(char *ptr, char **retptr);
++	char *match_strdup(substring_t *s);
++
++Use un espacio alrededor (a cada lado de) la mayoría de los operadores
++binarios y ternarios, como cualquiera de estos::
++
++	=  +  -  <  >  *  /  %  |  &  ^  <=  >=  ==  !=  ?  :
++
++pero sin espacio después de los operadores unarios::
++
++	&  *  +  -  ~  !  sizeof  typeof  alignof  __attribute__  defined
++
++sin espacio antes de los operadores unarios de incremento y decremento del
++sufijo::
++
++	++  --
++
++y sin espacio alrededor de los operadores de miembros de estructura ``.`` y
++``->``.
++
++No deje espacios en blanco al final de las líneas. Algunos editores con
++``inteligente`` sangría insertarán espacios en blanco al comienzo de las
++nuevas líneas como sea apropiado, para que pueda comenzar a escribir la
++siguiente línea de código de inmediato. Sin embargo, algunos de estos
++editores no eliminan los espacios en blanco si finalmente no termina
++poniendo una línea de código allí, como si dejara una línea en blanco. Como
++resultado, termina con líneas que contienen espacios en blanco al final.
++
++Git le advertirá sobre los parches que introducen espacios en blanco al
++final y puede, opcionalmente, eliminar los espacios en blanco finales por
++usted; sin embargo, si se aplica una serie de parches, esto puede hacer que
++los parches posteriores de la serie fallen al cambiar sus líneas de
++contexto.
++
++
++4) Nomenclatura
++---------------
++
++C es un lenguaje espartano, y sus convenciones de nomenclatura deberían
++seguir su ejemplo. A diferencia de los programadores de Modula-2 y Pascal,
++los programadores de C no usan nombres cuquis como
++EstaVariableEsUnContadorTemporal. Un programador de C lo llamaría
++variable ``tmp``, que es mucho más fácil de escribir, y no es mas difícil
++de comprender.
++
++SIN EMBARGO, mientras que los nombres de mayúsculas y minúsculas están mal
++vistos, los nombres descriptivos para las variables globales son
++imprescindibles. Llamar a una función global ``foo`` es un delito.
++
++Una variable GLOBAL (para usar solo si **realmente** las necesita) necesita
++tener un nombre descriptivo, al igual que las funciones globales. Si tiene
++una función que cuenta el número de usuarios activos, debe llamar a esta
++``contar_usuarios_activos()`` o similar, **no** debe llamarlo ``cntusr()``.
++
++Codificar el tipo de una función en el nombre (lo llamado notación húngara)
++es estúpido: el compilador conoce los tipos de todos modos y puede
++verificar estos, y solo confunde al programador.
++
++Los nombres de las variables LOCALES deben ser breves y directos. Si usted
++tiene algún contador aleatorio de tipo entero, probablemente debería
++llamarse ``i``. Llamarlo ``loop_counter`` no es productivo, si no hay
++posibilidad de ser mal entendido. De manera similar, ``tmp`` puede ser casi
++cualquier tipo de variable que se utiliza para contener un valor temporal.
++
++Si tiene miedo de mezclar los nombres de las variables locales, tiene otro
++problema, que se denomina síndrome de
++función-crecimiento-desequilibrio-de-hormona. Vea el capítulo 6 (Funciones).
++
++Para nombres de símbolos y documentación, evite introducir nuevos usos de
++'master / slave' (maestro / esclavo) (o 'slave' independientemente de
++'master') y 'lista negra / lista blanca' (backlist / whitelist).
++
++Los reemplazos recomendados para 'maestro / esclavo' son:
++    '{primary,main} / {secondary,replica,subordinate}'
++    '{initiator,requester} / {target,responder}'
++    '{controller,host} / {device,worker,proxy}'
++    'leader / follower'
++    'director / performer'
++
++Los reemplazos recomendados para 'backlist / whitelist' son:
++    'denylist / allowlist'
++    'blocklist / passlist'
++
++Las excepciones para la introducción de nuevos usos son mantener en espacio
++de usuario una ABI/API, o al actualizar la especificación del código de un
++hardware o protocolo existente (a partir de 2020) que requiere esos
++términos. Para nuevas especificaciones, traduzca el uso de la terminología
++de la especificación al estándar de código del kernel donde sea posible.
++
++5) Typedefs
++-----------
++
++Por favor no use cosas como ``vps_t``.
++Es un **error** usar typedef para estructuras y punteros. cuando ve un
++
++.. code-block:: c
++
++
++	vps_t a;
++
++en el código fuente, ¿qué significa?
++En cambio, si dice
++
++.. code-block:: c
++
++	struct virtual_container *a;
++
++puede decir qué es ``a`` en realidad.
++
++Mucha gente piensa que  los typedefs ``ayudan a la legibilidad``. No. Son
++útiles solamente para:
++
++ (a) objetos totalmente opacos (donde el typedef se usa activamente para
++     **ocultar** cuál es el objeto).
++
++     Ejemplo: ``pte_t`` etc. objetos opacos a los que solo puede acceder
++     usando las funciones de acceso adecuadas.
++
++     .. note::
++
++       La opacidad y las ``funciones de acceso`` no son buenas por sí
++       mismas. La razón por la que los tenemos para cosas como pte_t, etc.
++       es que hay real y absolutamente **cero** información accesible de
++       forma portátil allí.
++
++ (b) Tipos enteros claros, donde la abstracción **ayuda** a evitar
++     confusiones, ya sea ``int`` o ``long``.
++
++     u8/u16/u32 son definiciones tipográficas perfectamente correctas
++     aunque encajan en la categoría (d) mejor que aquí.
++
++     .. note::
++
++       De nuevo - debe haber una **razón** para esto. si algo es
++       ``unsigned long``, entonces no hay razón para hacerlo
++
++	typedef unsigned long mis_flags_t;
++
++     pero si hay una razón clara de por qué bajo ciertas circunstancias
++     podría ser un ``unsigned int`` y bajo otras configuraciones podría
++     ser ``unsigned long``, entonces, sin duda, adelante y use un typedef.
++
++ (c) cuando lo use para crear literalmente un tipo **nuevo** para
++     comprobación de tipos.
++
++ (d) Nuevos tipos que son idénticos a los tipos estándar C99, en ciertas
++     circunstancias excepcionales.
++
++     Aunque sólo costaría un corto período de tiempo para los ojos y
++     cerebro para acostumbrarse a los tipos estándar como ``uint32_t``,
++     algunas personas se oponen a su uso de todos modos.
++
++     Por lo tanto, los tipos ``u8/u16/u32/u64`` específicos de Linux y sus
++     equivalentes con signo, que son idénticos a los tipos estándar son
++     permitidos, aunque no son obligatorios en el nuevo código de su
++     elección.
++
++     Al editar código existente que ya usa uno u otro conjunto de tipos,
++     debe ajustarse a las opciones existentes en ese código.
++
++ (e) Tipos seguros para usar en el espacio de usuario.
++
++     En ciertas estructuras que son visibles para el espacio de usuario, no
++     podemos requerir tipos C99 y o utilizat el ``u32`` anterior. Por lo
++     tanto, usamos __u32 y tipos similares en todas las estructuras que se
++     comparten con espacio de usuario.
++
++Tal vez también haya otros casos, pero la regla básicamente debería ser
++NUNCA JAMÁS use un typedef a menos que pueda coincidir claramente con una
++de estas reglas.
++
++En general, un puntero o una estructura que tiene elementos que pueden
++ser razonablemente accedidos directamente, **nunca** deben ser un typedef.
++
++6) Funciones
++------------
++
++Las funciones deben ser cortas y dulces, y hacer una sola cosa. Deberían
++caber en una o dos pantallas de texto (el tamaño de pantalla ISO/ANSI es
++80x24, como todos sabemos), y hacer una cosa y hacerla bien.
++
++La longitud máxima de una función es inversamente proporcional a la
++complejidad y el nivel de sangría de esa función. Entonces, si tiene una
++función conceptualmente simple que es solo una larga (pero simple)
++declaración de case, donde tiene que hacer un montón de pequeñas cosas para
++un montón de diferentes casos, está bien tener una función más larga.
++
++Sin embargo, si tiene una función compleja y sospecha que un estudiante de
++primer año de secundaria menos que dotado podría no comprender de qué se
++trata la función, debe adherirse a los límites máximos tanto más de
++cerca. Use funciones auxiliares con nombres descriptivos (puede pedirle al
++compilador que los alinee si cree que es crítico para el rendimiento, y
++probablemente lo hará mejor de lo que usted hubiera hecho).
++
++Otra medida de la función es el número de variables locales. Estas no deben
++exceder de 5 a 10, o está haciendo algo mal. Piense de nuevo en la función
++y divida en partes más pequeñas. Un cerebro humano puede generalmente
++realiza un seguimiento de aproximadamente 7 cosas diferentes, cualquier
++elemento más y se confunde. Usted sabe que es brillante, pero tal vez le
++gustaría entender lo que hizo dentro de 2 semanas.
++
++En los archivos fuente, separe las funciones con una línea en blanco. Si la
++función es exportada, la macro **EXPORT** debería ponerse inmediatamente
++después de la función de cierre de línea de llave. Por ejemplo:
++
++.. code-block:: c
++
++	int sistema_corriendo(void)
++	{
++		return estado_sistema == SISTEMA_CORRIENDO;
++	}
++	EXPORT_SYMBOL(sistema_corriendo);
++
++6.1) Prototipos de funciones
++****************************
++
++En los prototipos de funciones, incluya nombres de parámetros con sus tipos
++de datos. Aunque esto no es requerido por el lenguaje C, se prefiere en
++Linux porque es una forma sencilla de añadir información valiosa para el
++lector.
++
++No utilice la palabra clave ``extern`` con declaraciones de función ya que
++esto hace las líneas más largas y no es estrictamente necesario.
++
++Al escribir prototipos de funciones, mantenga el `orden de los elementos regular
++<https://lore.kernel.org/mm-commits/CAHk-=wiOCLRny5aifWNhr621kYrJwhfURsa0vFPeUEm8mF0ufg@mail.gmail.com/>`_.
++Por ejemplo, usando este ejemplo de declaración de función::
++
++ __init void * __must_check action(enum magic value, size_t size, u8 count,
++				   char *fmt, ...) __printf(4, 5) __malloc;
++
++El orden preferido de elementos para un prototipo de función es:
++
++- clase de almacenamiento (a continuación, ``static __always_inline``,
++  teniendo en cuenta que ``__always_inline`` es técnicamente un atributo
++  pero se trata como ``inline``)
++- atributos de clase de almacenamiento (aquí, ``__init`` -- es decir,
++  declaraciones de sección, pero también cosas como ``__cold``)
++- tipo de retorno (aquí, ``void *``)
++- atributos de tipo de retorno (aquí, ``__must_check``)
++- nombre de la función (aquí, ``action``)
++- parámetros de la función (aquí, ``(enum magic value, size_t size, u8 count, char *fmt, ...)``,
++  teniendo en cuenta que los nombres de los parámetros siempre deben
++  incluirse)
++- atributos de parámetros de función (aquí, ``__printf(4, 5)``)
++- atributos de comportamiento de la función (aquí, ``__malloc``)
++
++Tenga en cuenta que para una **definición** de función (es decir, el cuerpo
++real de la función), el compilador no permite atributos de parámetros de
++función después de parámetros de la función. En estos casos, deberán ir
++tras los atributos de clase (por ejemplo, tenga en cuenta el cambio de
++posición de ``__printf(4, 5)`` a continuación, en comparación con el
++ejemplo de **declaración** anterior)::
++
++ static __always_inline __init __printf(4, 5) void * __must_check action(enum magic value,
++		size_t size, u8 count, char *fmt, ...) __malloc
++ {
++	...
++ }
++
++7) Salida centralizada de funciones
++-----------------------------------
++
++Aunque desaprobado por algunas personas, el equivalente de la instrucción
++goto es utilizado con frecuencia por los compiladores, en forma de
++instrucción de salto incondicional.
++
++La declaración goto es útil cuando una función sale desde múltiples
++ubicaciones y se deben realizar algunos trabajos comunes, como la limpieza.
++Si no se necesita limpieza, entonces simplemente haga return directamente.
++
++Elija nombres de etiquetas que digan qué hace el goto o por qué existe el
++goto. Un ejemplo de un buen nombre podría ser ``out_free_buffer:``
++(``salida_liberar_buffer``) si al irse libera ``buffer``. Evite usar
++nombres GW-BASIC como ``err1:`` y ``err2:``, ya que tendría que volver a
++numerarlos si alguna vez agrega o elimina rutas de salida, y hacen que sea
++difícil de verificar que sean correctos, de todos modos.
++
++La razón para usar gotos es:
++
++- Las declaraciones incondicionales son más fáciles de entender y seguir.
++- se reduce el anidamiento
++- errores al no actualizar los puntos de salida individuales al hacer
++  modificaciones son evitados
++- ahorra el trabajo del compilador de optimizar código redundante ;)
++
++.. code-block:: c
++
++	int fun(int a)
++	{
++		int result = 0;
++		char *buffer;
++
++		buffer = kmalloc(SIZE, GFP_KERNEL);
++		if (!buffer)
++			return -ENOMEM;
++
++		if (condition1) {
++			while (loop1) {
++				...
++			}
++			result = 1;
++			goto out_free_buffer;
++		}
++		...
++	out_free_buffer:
++		kfree(buffer);
++		return result;
++	}
++
++Un tipo común de error a tener en cuenta es "un error de error" que es algo
++así:
++
++.. code-block:: c
++
++	err:
++		kfree(foo->bar);
++		kfree(foo);
++		return ret;
++
++El error en este código es que en algunas rutas de salida, ``foo`` es NULL.
++Normalmente la solución para esto es dividirlo en dos etiquetas de error
++``err_free_bar:`` y ``err_free_foo:``:
++
++.. code-block:: c
++
++	 err_free_bar:
++		kfree(foo->bar);
++	 err_free_foo:
++		kfree(foo);
++		return ret;
++
++Idealmente, debería simular errores para probar todas las rutas de salida.
++
++
++8) Comentarios
++--------------
++
++Los comentarios son buenos, pero también existe el peligro de comentar
++demasiado. NUNCA trate de explicar CÓMO funciona su código en un
++comentario: es mucho mejor escribir el código para que el
++**funcionamiento** sea obvio y es una pérdida de tiempo explicar código mal
++escrito.
++
++Generalmente, desea que sus comentarios digan QUÉ hace su código, no CÓMO.
++Además, trate de evitar poner comentarios dentro del cuerpo de una función:
++si la función es tan compleja que necesita comentar por separado partes de
++esta, probablemente debería volver al capítulo 6 una temporada. Puede
++hacer pequeños comentarios para notar o advertir sobre algo particularmente
++inteligente (o feo), pero trate de evitar el exceso. En su lugar, ponga los
++comentarios al principio de la función, diga a la gente lo que hace y
++posiblemente POR QUÉ hace esto.
++
++Al comentar las funciones de la API del kernel, utilice el formato
++kernel-doc. Consulte los archivos en :ref:`Documentation/doc-guide/ <doc_guide>`
++y ``scripts/kernel-doc`` para más detalles.
++
++El estilo preferido para comentarios largos (de varias líneas) es:
++
++.. code-block:: c
++
++	/*
++	* Este es el estilo preferido para comentarios
++	* multilínea en el código fuente del kernel Linux.
++	* Por favor, utilícelo constantemente.
++	*
++	* Descripción: Una columna de asteriscos en el lado izquierdo,
++	* con líneas iniciales y finales casi en blanco.
++	*/
++
++Para archivos en net/ y drivers/net/, el estilo preferido para comentarios
++largos (multi-linea) es un poco diferente.
++
++.. code-block:: c
++
++	/* El estilo de comentario preferido para archivos en net/ y drivers/net
++	* se asemeja a esto.
++	*
++	* Es casi lo mismo que el estilo de comentario generalmente preferido,
++	* pero no hay una línea inicial casi en blanco.
++	*/
++
++También es importante comentar los datos, ya sean tipos básicos o
++derivados. Para este fin, use solo una declaración de datos por línea (sin
++comas para múltiples declaraciones de datos). Esto le deja espacio para un
++pequeño comentario sobre cada elemento, explicando su uso.
++
++9) Has hecho un desastre
++---------------------------
++
++Está bien, todos lo hacemos. Probablemente un antiguo usuario de Unix le
++haya dicho que ``GNU emacs`` formatea automáticamente las fuentes C por
++usted, y ha notado que sí, lo hace, pero los por defecto que tiene son
++menos que deseables (de hecho, son peores que los aleatorios) escribiendo -
++un número infinito de monos escribiendo en GNU emacs nunca harán un buen
++programa).
++
++Por lo tanto, puede deshacerse de GNU emacs o cambiarlo y usar valores más
++sanos. Para hacer esto último, puede pegar lo siguiente en su archivo
++.emacs:
++
++.. code-block:: none
++
++  (defun c-lineup-arglist-tabs-only (ignored)
++    "Line up argument lists by tabs, not spaces"
++    (let* ((anchor (c-langelem-pos c-syntactic-element))
++           (column (c-langelem-2nd-pos c-syntactic-element))
++           (offset (- (1+ column) anchor))
++           (steps (floor offset c-basic-offset)))
++      (* (max steps 1)
++         c-basic-offset)))
++
++  (dir-locals-set-class-variables
++   'linux-kernel
++   '((c-mode . (
++          (c-basic-offset . 8)
++          (c-label-minimum-indentation . 0)
++          (c-offsets-alist . (
++                  (arglist-close         . c-lineup-arglist-tabs-only)
++                  (arglist-cont-nonempty .
++		      (c-lineup-gcc-asm-reg c-lineup-arglist-tabs-only))
++                  (arglist-intro         . +)
++                  (brace-list-intro      . +)
++                  (c                     . c-lineup-C-comments)
++                  (case-label            . 0)
++                  (comment-intro         . c-lineup-comment)
++                  (cpp-define-intro      . +)
++                  (cpp-macro             . -1000)
++                  (cpp-macro-cont        . +)
++                  (defun-block-intro     . +)
++                  (else-clause           . 0)
++                  (func-decl-cont        . +)
++                  (inclass               . +)
++                  (inher-cont            . c-lineup-multi-inher)
++                  (knr-argdecl-intro     . 0)
++                  (label                 . -1000)
++                  (statement             . 0)
++                  (statement-block-intro . +)
++                  (statement-case-intro  . +)
++                  (statement-cont        . +)
++                  (substatement          . +)
++                  ))
++          (indent-tabs-mode . t)
++          (show-trailing-whitespace . t)
++          ))))
++
++  (dir-locals-set-directory-class
++   (expand-file-name "~/src/linux-trees")
++   'linux-kernel)
++
++Esto hará que emacs funcione mejor con el estilo de código del kernel para
++C en archivos bajo ``~/src/linux-trees``.
++
++Pero incluso si no logra que emacs realice un formateo correcto, no todo
++está perdido: use ``indent``.
++
++Ahora bien, de nuevo, la sangría de GNU tiene la misma configuración de
++muerte cerebral que GNU emacs tiene, por lo que necesita darle algunas
++opciones de línea de comando. Sin embargo, eso no es tan malo, porque
++incluso los creadores de GNU indent reconocen la autoridad de K&R (la gente
++de GNU no es mala, solo están gravemente equivocados en este asunto), por
++lo que simplemente de a la sangría las opciones ``-kr -i8`` (significa
++``K&R, guiones de 8 caracteres``), o use ``scripts/Lindent``, que indenta
++con ese estilo.
++
++``indent`` tiene muchas opciones, y especialmente cuando se trata de
++comentar reformateos, es posible que desee echar un vistazo a la página del
++manual. Pero recuerde: ``indent`` no es la solución para una mala
++programación.
++
++Tenga en cuenta que también puede usar la herramienta ``clang-format`` para
++ayudarlo con estas reglas, para volver a formatear rápidamente partes de su
++código automáticamente, y revisar archivos completos para detectar errores
++de estilo del código, errores tipográficos y posibles mejoras. También es
++útil para ordenar ``#includes``, para alinear variables/macros, para
++redistribuir texto y otras tareas similares. Vea el archivo
++:ref:`Documentation/process/clang-format.rst <clangformat>` para más
++detalles.
++
++10) Archivos de configuración de Kconfig
++----------------------------------------
++
++Para todos los archivos de configuración de Kconfig* en todo el árbol
++fuente, la sangría es algo diferente. Las líneas bajo una definición
++``config`` están indentadas con una tabulación, mientras que el texto de
++ayuda tiene una sangría adicional de dos espacios. Ejemplo::
++
++  config AUDIT
++	bool "Soporte para auditar"
++	depends on NET
++	help
++	  Habilita la infraestructura de auditoría que se puede usar con otro
++	  subsistema kernel, como SELinux (que requiere esto para
++	  registro de salida de mensajes avc). No hace auditoría de llamadas al
++    sistema sin CONFIG_AUDITSYSCALL.
++
++Características seriamente peligrosas (como soporte de escritura para
++ciertos filesystems) deben anunciar esto de forma destacada en su cadena de
++solicitud::
++
++  config ADFS_FS_RW
++	bool "ADFS write support (DANGEROUS)"
++	depends on ADFS_FS
++	...
++
++Para obtener la documentación completa sobre los archivos de configuración,
++consulte el archivo Documentation/kbuild/kconfig-language.rst.
++
++
++11) Estructuras de datos
++------------------------
++
++Las estructuras de datos que tienen visibilidad fuera del contexto de un
++solo subproceso en el que son creadas y destruidas, siempre debe tener
++contadores de referencia. En el kernel, la recolección de basura no existe
++(y fuera, la recolección de basura del kernel es lenta e ineficiente), lo
++que significa que absolutamente **tiene** para hacer referencia y contar
++todos sus usos.
++
++El conteo de referencias significa que puede evitar el bloqueo y permite
++que múltiples usuarios tengan acceso a la estructura de datos en paralelo -
++y no tengan que preocuparse de que la estructura, de repente, desaparezca
++debajo de su control, solo porque durmieron o hicieron otra cosa por un
++tiempo.
++
++Tenga en cuenta que el bloqueo **no** reemplaza el recuento de referencia.
++El bloqueo se utiliza para mantener la coherencia de las estructuras de
++datos, mientras que la referencia y contar es una técnica de gestión de
++memoria. Por lo general, ambos son necesarios, y no deben confundirse entre
++sí.
++
++De hecho, muchas estructuras de datos pueden tener dos niveles de conteo de
++referencias, cuando hay usuarios de diferentes ``clases``. El conteo de
++subclases cuenta el número de usuarios de la subclase y disminuye el conteo
++global solo una vez, cuando el recuento de subclases llega a cero.
++
++Se pueden encontrar ejemplos de este tipo de ``recuento de referencias de
++niveles múltiples`` en la gestión de memoria (``struct mm_struct``:
++mm_users y mm_count), y en código del sistema de archivos
++(``struct super_block``: s_count y s_active).
++
++Recuerde: si otro hilo puede encontrar su estructura de datos y usted no
++tiene un recuento de referencias, es casi seguro que tiene un error.
++
++12) Macros, Enums y RTL
++------------------------
++
++Los nombres de macros que definen constantes y etiquetas en enumeraciones
++(enums) están en mayúsculas.
++
++.. code-block:: c
++
++	#define CONSTANTE 0x12345
++
++Se prefieren los enums cuando se definen varias constantes relacionadas.
++
++Se aprecian los nombres de macro en MAYÚSCULAS, pero las macros que se
++asemejan a funciones puede ser nombradas en minúscula.
++
++Generalmente, las funciones en línea son preferibles a las macros que se
++asemejan a funciones.
++
++Las macros con varias instrucciones deben contenerse en un bloque do-while:
++
++.. code-block:: c
++
++	#define macrofun(a, b, c)			\
++		do {					\
++			if (a == 5)			\
++				haz_esto(b, c);		\
++		} while (0)
++
++Cosas a evitar al usar macros:
++
++1) macros que afectan el flujo de control:
++
++.. code-block:: c
++
++	#define FOO(x)					\
++		do {					\
++			if (blah(x) < 0)		\
++				return -EBUGGERED;	\
++		} while (0)
++
++es una **muy** mala idea. Parece una llamada de función pero sale de la
++función de ``llamada``; no rompa los analizadores internos de aquellos que
++leerán el código.
++
++2) macros que dependen de tener una variable local con un nombre mágico:
++
++.. code-block:: c
++
++	#define FOO(val) bar(index, val)
++
++puede parecer algo bueno, pero es confuso como el infierno cuando uno lee
++el código, y es propenso a romperse por cambios aparentemente inocentes.
++
++3) macros con argumentos que se usan como valores l: FOO(x) = y; le van
++a morder si alguien, por ejemplo, convierte FOO en una función en línea.
++
++4) olvidarse de la precedencia: las macros que definen constantes usando
++expresiones deben encerrar la expresión entre paréntesis. Tenga cuidado con
++problemas similares con macros usando parámetros.
++
++.. code-block:: c
++
++	#define CONSTANTE 0x4000
++	#define CONSTEXP (CONSTANTE | 3)
++
++5) colisiones de espacio de nombres ("namespace") al definir variables
++locales en macros que se asemejan a funciones:
++
++.. code-block:: c
++
++	#define FOO(x)				\
++	({					\
++		typeof(x) ret;			\
++		ret = calc_ret(x);		\
++		(ret);				\
++	})
++
++ret es un nombre común para una variable local -es menos probable que
++__foo_ret colisione (coincida) con una variable existente.
++
++El manual de cpp trata las macros de forma exhaustiva. El manual interno de
++gcc también cubre RTL, que se usa frecuentemente con lenguaje ensamblador
++en el kernel.
++
++13) Imprimir mensajes del kernel
++--------------------------------
++
++A los desarrolladores del kernel les gusta ser vistos como alfabetizados.
++Cuide la ortografía de los mensajes del kernel para causar una buena
++impresión. No utilice contracciones incorrectas como ``dont``; use
++``do not`` o ``don't`` en su lugar. Haga sus mensajes concisos, claros e
++inequívocos.
++
++Los mensajes del kernel no tienen que terminar con un punto.
++
++Imprimir números entre paréntesis (%d) no agrega valor y debe evitarse.
++
++Hay varias modelos de macros de diagnóstico de driver en <linux/dev_printk.h>
++que debe usar para asegurarse de que los mensajes coincidan con el
++dispositivo correcto y driver, y están etiquetados con el nivel correcto:
++dev_err(), dev_warn(), dev_info(), y así sucesivamente. Para mensajes que
++no están asociados con un dispositivo particular, <linux/printk.h> define
++pr_notice(), pr_info(), pr_warn(), pr_err(), etc.
++
++Crear buenos mensajes de depuración puede ser todo un desafío; y una vez
++los tiene, pueden ser de gran ayuda para la resolución remota de problemas.
++Sin embargo, la impresión de mensajes de depuración se maneja de manera
++diferente a la impresión de otros mensajes que no son de depuración.
++Mientras que las otras funciones pr_XXX() se imprimen incondicionalmente,
++pr_debug() no lo hace; se compila fuera por defecto, a menos que DEBUG sea
++definido o se establezca CONFIG_DYNAMIC_DEBUG. Eso es cierto para dev_dbg()
++también, y una convención relacionada usa VERBOSE_DEBUG para agregar
++mensajes dev_vdbg() a los ya habilitados por DEBUG.
++
++Muchos subsistemas tienen opciones de depuración de Kconfig para activar
++-DDEBUG en el Makefile correspondiente; en otros casos, los archivos
++usan #define DEBUG. Y cuando un mensaje de depuración debe imprimirse
++incondicionalmente, por ejemplo si es ya dentro de una sección #ifdef
++relacionada con la depuración, printk(KERN_DEBUG ...) puede ser usado.
++
++14) Reservando memoria
++----------------------
++
++El kernel proporciona los siguientes asignadores de memoria de propósito
++general: kmalloc(), kzalloc(), kmalloc_array(), kcalloc(), vmalloc() y
++vzalloc(). Consulte la documentación de la API para obtener más información.
++a cerca de ellos. :ref:`Documentation/core-api/memory-allocation.rst
++<memory_allocation>`
++
++La forma preferida para pasar el tamaño de una estructura es la siguiente:
++
++.. code-block:: c
++
++	p = kmalloc(sizeof(*p), ...);
++
++La forma alternativa donde se deletrea el nombre de la estructura perjudica
++la legibilidad, y presenta una oportunidad para un error cuando se cambia
++el tipo de variable de puntero, pero el tamaño correspondiente de eso que
++se pasa a un asignador de memoria no.
++
++Convertir el valor devuelto, que es un puntero vacío, es redundante. La
++conversión desde el puntero vacío a cualquier otro tipo de puntero está
++garantizado por la programación en idioma C.
++
++La forma preferida para asignar una matriz es la siguiente:
++
++.. code-block:: c
++
++	p = kmalloc_array(n, sizeof(...), ...);
++
++La forma preferida para asignar una matriz a cero es la siguiente:
++
++.. code-block:: c
++
++	p = kcalloc(n, sizeof(...), ...);
++
++Ambos casos verifican el desbordamiento en el tamaño de asignación n *
++sizeof (...), y devuelven NULL si esto ocurrió.
++
++Todas estas funciones de asignación genéricas emiten un volcado de pila
++(" stack dump") en caso de fallo cuando se usan sin __GFP_NOWARN, por lo
++que no sirve de nada emitir un mensaje de fallo adicional cuando se
++devuelva NULL.
++
++15) La enfermedad de inline
++----------------------------
++
++Parece haber una común percepción errónea de que gcc tiene una magica
++opción "hazme más rápido" de aceleración, llamada ``inline`` (en línea).
++Mientras que el uso de inlines puede ser apropiado (por ejemplo, como un
++medio para reemplazar macros, consulte el Capítulo 12), muy a menudo no lo
++es. El uso abundante de la palabra clave inline conduce a una mayor kernel,
++que a su vez ralentiza el sistema en su conjunto, debido a una mayor huella
++de icache para la CPU, y sencillamente porque hay menos memoria disponible
++para el pagecache. Solo piense en esto; un fallo en la memoria caché de la
++página provoca una búsqueda de disco, que tarda fácilmente 5 milisegundos.
++Hay MUCHOS ciclos de CPU que puede entrar en estos 5 milisegundos.
++
++Una razonable regla general es no poner funciones inline que tengan más de
++3 líneas de código en ellas. Una excepción a esta regla son los casos en
++que se sabe que un parámetro es una constante en tiempo de compilación, y
++como resultado de esto, usted *sabe*, el compilador podrá optimizar la
++mayor parte de su función en tiempo de compilación. Para un buen ejemplo de
++este último caso, véase la función en línea kmalloc().
++
++A menudo, la gente argumenta que agregar funciones en línea que son
++estáticas y se usan solo una vez, es siempre una victoria ya que no hay
++perdida de espacio. Mientras esto es técnicamente correcto, gcc es capaz de
++incorporarlos automáticamente sin ayuda, y esta el problema de
++mantenimiento de eliminar el inline, cuando un segundo usuario supera el
++valor potencial de la pista que le dice a gcc que haga algo que habría
++hecho de todos modos.
++
++16) Valores devueltos por función y sus nombres
++-----------------------------------------------
++
++Las funciones pueden devolver valores de muchos tipos diferentes, y uno de
++lo más común es un valor que indica si la función tuvo éxito o ha fallado.
++Dicho valor se puede representar como un número entero de código de error
++(-Exxx = falla, 0 = éxito) o un booleano ``con éxito`` (0 = falla, distinto
++de cero = éxito).
++
++La mezcla de estos dos tipos de representaciones es una fuente fértil de
++errores difíciles de encontrar. Si el lenguaje C incluyera una fuerte
++distinción entre enteros y booleanos, el compilador encontraría estos
++errores por nosotros... pero no lo hace. Para ayudar a prevenir tales
++errores, siga siempre esta convención::
++
++	Si el nombre de una función es una acción o un comando imperativo,
++	la función debe devolver un número entero de código de error. si el nombre
++	es un predicado, la función debe devolver un valor booleano "exitoso".
++
++Por ejemplo, ``agregar trabajo`` es un comando, y la función
++agregar_trabajo() devuelve 0 en caso de éxito o -EBUSY en caso de fracaso.
++De la misma manera, ``dispositivo PCI presente`` es un predicado, y la
++función pci_dev_present() devuelve 1 si tiene éxito en encontrar un
++dispositivo coincidente o 0 si no es así.
++
++Todas las funciones EXPORTed (exportadas) deben respetar esta convención,
++al igual que todas las funciones publicas. Las funciones privadas
++(estáticas) no lo necesitan, pero es recomendado que lo hagan.
++
++Las funciones cuyo valor devuelto es el resultado real de un cálculo, en
++lugar de una indicación de si el cómputo tuvo éxito, no están sujetas a
++esta regla. Generalmente indican fallo al devolver valores fuera del rango
++de resultados. Los ejemplos típicos serían funciones que devuelven
++punteros; estos usan NULL o el mecanismo ERR_PTR para informar de fallos.
++
++17) Usando bool
++----------------
++
++El tipo bool del kernel Linux es un alias para el tipo C99 _Bool. Los
++valores booleanos pueden solo evaluar a 0 o 1, y la conversión implícita o
++explícita a bool convierte automáticamente el valor en verdadero o falso.
++Cuando se utilizan tipos booleanos,
++!! no se necesita construcción, lo que elimina una clase de errores.
++
++Cuando se trabaja con valores booleanos, se deben usar las definiciones
++verdadera y falsa, en lugar de 1 y 0.
++
++Los tipos de devolución de función bool y las variables de pila siempre
++se pueden usar cuando esto sea adecuado. Se recomienda el uso de bool para
++mejorar la legibilidad y, a menudo, es una mejor opción que 'int' para
++almacenar valores booleanos.
++
++No use bool si el diseño de la línea de caché o el tamaño del valor son
++importantes, ya que su tamaño y la alineación varía según la arquitectura
++compilada. Las estructuras que son optimizadas para la alineación y el
++tamaño no debe usar bool.
++
++Si una estructura tiene muchos valores verdadero/falso, considere
++consolidarlos en un bitfield con miembros de 1 bit, o usando un tipo de
++ancho fijo apropiado, como u8.
++
++De manera similar, para los argumentos de función, se pueden consolidar
++muchos valores verdaderos/falsos en un solo argumento bit a bit 'flags' y
++'flags' a menudo, puede ser una alternativa de argumento más legible si los
++sitios de llamada tienen constantes desnudas de tipo verdaderas/falsas.
++
++De lo contrario, el uso limitado de bool en estructuras y argumentos puede
++mejorar la legibilidad.
++
++18) No reinvente las macros del kernel
++---------------------------------------
++
++El archivo de cabecera include/linux/kernel.h contiene una serie de macros
++que debe usar, en lugar de programar explícitamente alguna variante de
++estos por usted mismo. Por ejemplo, si necesita calcular la longitud de una
++matriz, aproveche la macro
++
++.. code-block:: c
++
++	#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
++
++De manera similar, si necesita calcular el tamaño de algún miembro de la
++estructura, use
++
++.. code-block:: c
++
++	#define sizeof_field(t, f) (sizeof(((t*)0)->f))
++
++También hay macros min() y max() que realizan una verificación estricta de
++tipos si lo necesita. Siéntase libre de leer detenidamente ese archivo de
++encabezado para ver qué más ya está definido y que no debe reproducir en su
++código.
++
++19) Editores modeline y otros desastres
++---------------------------------------
++
++Algunos editores pueden interpretar la información de configuración
++incrustada en los archivos fuente, indicado con marcadores especiales. Por
++ejemplo, emacs interpreta las líneas marcadas como esto:
++
++.. code-block:: c
++
++	-*- mode: c -*-
++
++O así:
++
++.. code-block:: c
++
++	/*
++	Local Variables:
++	compile-command: "gcc -DMAGIC_DEBUG_FLAG foo.c"
++	End:
++	*/
++
++Vim interpreta los marcadores que se ven así:
++
++.. code-block:: c
++
++	/* vim:set sw=8 noet */
++
++No incluya ninguno de estos en los archivos fuente. La gente tiene sus
++propias configuraciones del editor, y sus archivos de origen no deben
++anularlos. Esto incluye marcadores para sangría y configuración de modo.
++La gente puede usar su propio modo personalizado, o puede tener algún otro
++método mágico para que la sangría funcione correctamente.
++
++
++20) Ensamblador inline
++-----------------------
++
++En el código específico de arquitectura, es posible que deba usar
++ensamblador en línea para interactuar con funcionalidades de CPU o
++plataforma. No dude en hacerlo cuando sea necesario. Sin embargo, no use
++ensamblador en línea de forma gratuita cuando C puede hacer el trabajo.
++Puede y debe empujar el hardware desde C cuando sea posible.
++
++Considere escribir funciones auxiliares simples que envuelvan bits comunes
++de ensamblador, en lugar de escribirlos repetidamente con ligeras
++variaciones. Recuerde que el ensamblador en línea puede usar parámetros C.
++
++Las funciones de ensamblador grandes y no triviales deben ir en archivos .S,
++con su correspondientes prototipos de C definidos en archivos de encabezado
++en C. Los prototipos de C para el ensamblador deben usar ``asmlinkage``.
++
++Es posible que deba marcar su declaración asm como volátil, para evitar que
++GCC la elimine si GCC no nota ningún efecto secundario. No siempre es
++necesario hacerlo, sin embargo, y hacerlo innecesariamente puede limitar la
++optimización.
++
++Al escribir una sola declaración de ensamblador en línea que contiene
++múltiples instrucciones, ponga cada instrucción en una línea separada en
++una string separada, y termine cada string excepto la última con ``\n\t``
++para indentar correctamente la siguiente instrucción en la salida en
++ensamblador:
++
++.. code-block:: c
++
++	asm ("magic %reg1, #42\n\t"
++	     "more_magic %reg2, %reg3"
++	     : /* outputs */ : /* inputs */ : /* clobbers */);
++
++21) Compilación condicional
++---------------------------
++
++Siempre que sea posible, no use condicionales de preprocesador (#if,
++#ifdef) en archivos .c; de lo contrario, el código es más difícil de leer y
++la lógica más difícil de seguir. En cambio, use dichos condicionales en un
++archivo de encabezado que defina funciones para usar en esos archivos .c,
++proporcionando versiones de código auxiliar sin operación en el caso #else,
++y luego llame a estas funciones incondicionalmente desde archivos .c. El
++compilador evitará generar cualquier código para las llamadas restantes,
++produciendo resultados idénticos, pero la lógica es fácil de seguir.
++
++Prefiera compilar funciones completas, en lugar de porciones de funciones o
++porciones de expresiones. En lugar de poner un ifdef en una expresión,
++divida la totalidad de la expresión con una función de ayuda independiente
++y aplique el condicional a esa función.
++
++Si tiene una función o variable que puede potencialmente quedar sin usar en
++una configuración en particular, y el compilador advertiría sobre su
++definición sin usar, marque la definición como __maybe_unused en lugar de
++envolverla en un preprocesador condicional. (Sin embargo, si una función o
++variable *siempre* acaba sin ser usada, bórrela.)
++
++Dentro del código, cuando sea posible, use la macro IS_ENABLED para
++convertir un símbolo Kconfig en una expresión booleana de C, y utilícelo en
++un condicional de C normal:
++
++.. code-block:: c
++
++	if (IS_ENABLED(CONFIG_SOMETHING)) {
++		...
++	}
++
++El compilador "doblará"" constantemente el condicional e incluirá o
++excluirá el bloque de código al igual que con un #ifdef, por lo que esto no
++agregará ningún tiempo de gastos generales en ejecución. Sin embargo, este
++enfoque todavía permite que el compilador de C vea el código dentro del
++bloque, y verifique que sea correcto (sintaxis, tipos, símbolo, referencias,
++etc.). Por lo tanto, aún debe usar un #ifdef si el código dentro del bloque
++hace referencia a símbolos que no existirán si no se cumple la condición.
++
++Al final de cualquier bloque #if o #ifdef no trivial (más de unas pocas
++líneas), incluya un comentario después de #endif en la misma línea,
++anotando la expresión condicional utilizada. Por ejemplo:
++
++.. code-block:: c
++
++	#ifdef CONFIG_SOMETHING
++	...
++	#endif /* CONFIG_SOMETHING */
++
++22) No rompa el kernel
++-----------------------
++
++En general, la decisión de romper el kernel pertenece al usuario, más que
++al desarrollador del kernel.
++
++Evite el panic()
++****************
++
++panic() debe usarse con cuidado y principalmente solo durante el arranque
++del sistema. panic() es, por ejemplo, aceptable cuando se queda sin memoria
++durante el arranque y no puede continuar.
++
++Use WARN() en lugar de BUG()
++****************************
++
++No agregue código nuevo que use cualquiera de las variantes BUG(), como
++BUG(), BUG_ON() o VM_BUG_ON(). En su lugar, use una variante WARN*(),
++preferiblemente WARN_ON_ONCE(), y posiblemente con código de recuperación.
++El código de recuperación no es requerido si no hay una forma razonable de
++recuperar, al menos parcialmente.
++
++"Soy demasiado perezoso para tener en cuenta los errores" no es una excusa
++para usar BUG(). Importantes corrupciones internas sin forma de continuar
++aún pueden usar BUG(), pero necesitan una buena justificación.
++
++Use WARN_ON_ONCE() en lugar de WARN() o WARN_ON()
++*************************************************
++
++Generalmente, se prefiere WARN_ON_ONCE() a WARN() o WARN_ON(), porque es
++común que una condición de advertencia dada, si ocurre, ocurra varias
++veces. Esto puede llenar el registro del kernel, e incluso puede ralentizar
++el sistema lo suficiente como para que el registro excesivo se convierta en
++su propio, adicional problema.
++
++No haga WARN a la ligera
++************************
++
++WARN*() está diseñado para situaciones inesperadas que nunca deberían
++suceder. Las macros WARN*() no deben usarse para nada que se espera que
++suceda durante un funcionamiento normal. No hay "checkeos" previos o
++posteriores a la condición, por ejemplo. De nuevo: WARN*() no debe usarse
++para una condición esperada que vaya a activarse fácilmente, por ejemplo,
++mediante acciones en el espacio del usuario. pr_warn_once() es una
++alternativa posible, si necesita notificar al usuario de un problema.
++
++No se preocupe sobre panic_on_warn de usuarios
++**********************************************
++
++Algunas palabras más sobre panic_on_warn: Recuerde que ``panic_on_warn`` es
++una opción disponible del kernel, y que muchos usuarios configuran esta
++opción. Esta es la razón por la que hay un artículo de "No haga WARN a la
++ligera", arriba. Sin embargo, la existencia de panic_on_warn de usuarios no
++es una razón válida para evitar el uso juicioso de WARN*(). Esto se debe a
++que quien habilita panic_on_warn, explícitamente pidió al kernel que
++fallara si se dispara un WARN*(), y tales usuarios deben estar preparados
++para afrontar las consecuencias de un sistema que es algo más probable que
++se rompa.
++
++Use BUILD_BUG_ON() para aserciones en tiempo de compilación
++***********************************************************
++
++El uso de BUILD_BUG_ON() es aceptable y recomendado, porque es una aserción
++en tiempo de compilación, que no tiene efecto en tiempo de ejecución.
++
++Apéndice I) Referencias
++-----------------------
++
++The C Programming Language, Segunda edicion
++por Brian W. Kernighan and Dennis M. Ritchie.
++Prentice Hall, Inc., 1988.
++ISBN 0-13-110362-8 (paperback), 0-13-110370-9 (hardback).
++
++The Practice of Programming
++por Brian W. Kernighan and Rob Pike.
++Addison-Wesley, Inc., 1999.
++ISBN 0-201-61586-X.
++
++manuales GCC - en cumplimiento con K&R y este texto - para cpp, gcc,
++detalles de gcc y sangría, todo disponible en https://www.gnu.org/manual/
++
++WG14 es el grupo de trabajo de estandarización internacional de la
++programación en lenguaje C, URL: http://www.open-std.org/JTC1/SC22/WG14/
++
++:ref:`process/coding-style.rst <codingstyle>` del kernel, por greg@kroah.com at OLS 2002:
++http://www.kroah.com/linux/talks/ols_2002_kernel_codingstyle_talk/html/
+diff --git a/Documentation/translations/sp_SP/index.rst b/Documentation/translations/sp_SP/index.rst
+index 61dace3df9a6..519c5ef9ac9d 100644
+--- a/Documentation/translations/sp_SP/index.rst
++++ b/Documentation/translations/sp_SP/index.rst
+@@ -79,6 +79,7 @@ Traducciones al español
+ 
+    howto
+    submitting-patches
++   coding-style
+ 
+ .. include:: ./memory-barriers.txt
+     :literal:
+-- 
+2.34.1
 
-Yes can see it now.
-
->
->>
->>     �
->>
->>
->>     > +� � � � � � �current_task = scratch_reg.cast(task_ptr_type)
->>     > +
->>     > +� � � � �return current_task.dereference()
->>     >� � � else:
->>     >� � � � � raise gdb.GdbError("Sorry, obtaining the current task is not yet "
->>     >� � � � � � � � � � � � � � �"supported with this arch")
->>     > diff --git a/scripts/gdb/linux/utils.py b/scripts/gdb/linux/utils.py
->>     > index 1553f68716cc..ddaf3089170d 100644
->>     > --- a/scripts/gdb/linux/utils.py
->>     > +++ b/scripts/gdb/linux/utils.py
->>     > @@ -35,12 +35,17 @@ class CachedType:
->>     >�
->>     >�
->>     >� long_type = CachedType("long")
->>     > +ulong_type = CachedType("ulong")
->>     >� atomic_long_type = CachedType("atomic_long_t")
->>     >�
->>     >� def get_long_type():
->>     >� � � global long_type
->>     >� � � return long_type.get_type()
->>     >�
->>     > +def get_ulong_type():
->>     > +� � global ulong_type
->>     > +� � return ulong_type.get_type()
->>     > +
->>     >� def offset_of(typeobj, field):
->>     >� � � element = gdb.Value(0).cast(typeobj)
->>     >� � � return int(str(element[field].address).split()[0], 16)
->>     > --
->>     > 2.25.1
->>
->
