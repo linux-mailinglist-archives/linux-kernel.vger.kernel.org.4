@@ -2,207 +2,442 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2051F629341
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDA9629344
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbiKOI2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 03:28:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46326 "EHLO
+        id S232651AbiKOIba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 03:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbiKOI23 (ORCPT
+        with ESMTP id S229664AbiKOIb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 03:28:29 -0500
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2119.outbound.protection.outlook.com [40.107.113.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8F71108;
-        Tue, 15 Nov 2022 00:28:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CT2YR8Ka7OQwE3kuoUGI/Y8WDhM1pn97VqxrMGb8lcqNy9dlBaXdhroXqZz2ZctCw44ej61m2sXGWThSPFxwa1WezAZX6vEpoeih1LYDfnZHbr7m/xbW2f9t3ki/XXpxzlHqq1RcOdnfXYXAcZI3a/gAHsrhQlE+iBc4rPAVcDaGm798d9DgGTkvi33eWwfjHpmAo3YVntRRw0MCrVecOIcsBwA070OPlQTS+PLVh2nBsBnwBhP2fvxtAVOnZj2yDD0UU+V3VqGnFneNblx3Ok2yFud0SCtgF9W1xIVjJPKEEgoM0FkZiwQij+A7y6YCTjxXxysGmrbtLCnqJIIFjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ud+NQT6sg6p/F8RGZuMZNJuqnswFJ7ywOEzh5PRP0hE=;
- b=kbz4hi1ddyQPssIIiifgxcExWudyEUuiPyr271BHyblj3MG1KhHl/mvivN/C30A/D1LC01UvR1zeFen9lX/wKFuRj+bjqU+Dgr7CFVQk0ggoZPTqP6GCZvoC+1IXjc0wRC9JcEmPZ3UB57591Opmpjyni7u46P+nlD4xCVqm/2mgkCtZdycYEtvfJ0UYHyyJ4GdgnFGUW0q4y7fXt+9g6I1N0isg1ycPdkUBw9MEBg+fe8EC64qBa2b0Km+XgflfiTPGAMWa3e4P1KbOQWBjcdYyOIxmAyzIlc9MSpzAzqy7tLK9oGnfKWhr70hLLslAUDy8tk44tgLL0F+hzBwWLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ud+NQT6sg6p/F8RGZuMZNJuqnswFJ7ywOEzh5PRP0hE=;
- b=T0bhJQ0nz+RtHQDT33LT6lNYUcjpblD60O7yis/W9VW06EvYrnobq6Fl/XcJ82bFDAmWAitaOYddYw5odbD9qlrmNVvsQchaZD1iLbJDDUlYsLKRm1GpEwxO3GVJKQDyHR7ONU2ZxNKV23GeZm3qnLRc8/RMjT+OH833Q68W+eY=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYWPR01MB8445.jpnprd01.prod.outlook.com (2603:1096:400:176::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Tue, 15 Nov
- 2022 08:28:24 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::5b24:f581:85bd:6ce2]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::5b24:f581:85bd:6ce2%3]) with mapi id 15.20.5813.018; Tue, 15 Nov 2022
- 08:28:24 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Prabhakar <prabhakar.csengg@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: RE: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we put the PM
- clocks
-Thread-Topic: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we put the PM
- clocks
-Thread-Index: AQHY+FQ3i7+8G/jXAEWaK/AAUJtKua4+wHcggAAGgYCAAAGLYIAA0q6wgAAHxICAAAQu4A==
-Date:   Tue, 15 Nov 2022 08:28:24 +0000
-Message-ID: <OS0PR01MB5922145243E28E06FD3216D886049@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20221114180843.1125308-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <OS0PR01MB5922DDCE24ED6F6DD44B4B3F86059@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdUFsOktkVG0T9yGoVSKZ=JP1bdWnhpyQ5rKFt545JYnHg@mail.gmail.com>
- <OS0PR01MB59224DF03590185EFD5AF91386059@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <OS0PR01MB592239F10E9C768888F41D1786049@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdUzNA7CP1zGHSEMK9Jo+76fzEkZ+RXa7ecL0HD4y2gfMg@mail.gmail.com>
-In-Reply-To: <CAMuHMdUzNA7CP1zGHSEMK9Jo+76fzEkZ+RXa7ecL0HD4y2gfMg@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TYWPR01MB8445:EE_
-x-ms-office365-filtering-correlation-id: 4b01794a-0912-4156-6fa7-08dac6e35d0f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8l7Wb9ZGf9vIoiLHXxCX9QKbfBMK+a7dKCapik5i04GlXCqL79JhiPzQasLFFgpnIJ+tIAQ4dLYll8Hy73M+9rMyrzUOLDuJwV8orM+3f+8lD1IlHKPpvdVQJESLBSGn5csB7vv+Yn66zPRUnJ+BtlpJ4C+244lLmMV16+7oOXYiENlN/jZ+sfx6WmtRhOmLnDMWbzQp0GrQvV3jT5ZPseuJGh77tlZn1FpXkborg2ZwFHAwsO76UvPc8oCStTwbKruBGUgpKk6n8Ib+/JTzvJpmLFiYgQ7uUAo93ibC9IfoFa43DFYPQKqtTIYL69g0pusP2PIQU8e8rMMhYTdhktY8aBpOn/lAEMToyVITW4vAF/YOVpI0o7djIFU6r8c0KIAsX1HzH9SFMlrG8RniVzPAIhoWEz44HrjcaKtbU8NF2N6nqRQqX84sQxLOJd+xSaD0Kajo0o2kx5FAKigulEsdqC52hnpk17eZ1x5kUINktcLhMj5aYS3paE3sfCjGa8Zx4OADOWtD8zjfCDMAWlit2psHi1GNM7iqpBWVEqlsazxgF7UowS+rStlZpAGrNv3uPOkbvDBhxca3jBmOcSuvKN4mjgOdxRkXEdsXATApHYSnGc4MVcRdRZtAz9UQEHBHL5w7dZtPhzhvmU1HH6cCvsUwPM6ly/twWjwE0BvqYYuRXrPIsDbQVttJ43Qw+8U764ZiNgZbrXZf4/JISgyt35c/Vn2CYOtfDwLW9zpP2NiHkNUm++qaoBMQ3qjdbtuL0tiMw96R4daoTajylA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(396003)(376002)(39860400002)(346002)(451199015)(71200400001)(33656002)(38070700005)(6916009)(478600001)(107886003)(54906003)(7696005)(6506007)(8936002)(5660300002)(9686003)(316002)(66946007)(26005)(66476007)(64756008)(76116006)(66556008)(66446008)(4326008)(8676002)(52536014)(186003)(53546011)(41300700001)(55016003)(83380400001)(2906002)(38100700002)(122000001)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?NI1z3tqlYVxfEgwrYK7YVS52cUyvQ7Nej03GtMKv064tDkbRZYnK2QY61/5t?=
- =?us-ascii?Q?yrO0xBa0ctxSlN8kc5CfiIrQoYKf5BdX0mRxwdfQAyMjn9vi2GLV5U6mi8Wj?=
- =?us-ascii?Q?lrc7T/j9AtEf7q2k4fY7i2/j62QSZgEShvAsFHrLs8h7nZ9dzR5lsVeR/vjQ?=
- =?us-ascii?Q?8VSe9HWKL2OEIITTuoysCpu/A90gXLHqTLQHTWt7LHW+VW3y4JcuOFZpFn7A?=
- =?us-ascii?Q?CvGZDxoXZrSBzYPXTGF4ZOoNY0jhdnxj1K6XAP8q5xPaX+Cxsts2egKUqfpL?=
- =?us-ascii?Q?6QeufE5bTd8+FZNdFsrp7dva4QTRpDhnLi34WoGXGFo0Lm5ZggWsZB5q9qeE?=
- =?us-ascii?Q?VxC0Rhy0eFzhHts6sqjQiMj6rS3eZ2qQsV1Z7q0lzkPzJy6NdZ46c150Ser4?=
- =?us-ascii?Q?VY/2abS1hnw2/OdTnfNfYdJNi+vj+UEQlRMyFexb7eqwv9sN01KXybJTglfQ?=
- =?us-ascii?Q?WTdmSfKDfg8knfqYrdK26ztrgdof3SNolYNu7lvE8KpIk1mM4TNGCaFEE3Z+?=
- =?us-ascii?Q?6MJi3WpwNaj31UdJY4zSkpT4dWRFo0rjG5XxCbrcTVpNbe4SVkYmTc1oGOkv?=
- =?us-ascii?Q?HsU+5beg2yS0L6E0YsSy8EWYhni658siblJkRbYPdBaLRgJgYlfGOA08u1b+?=
- =?us-ascii?Q?3ThY9D/gaOjVQ54ZrrfY6DV6lsHO7fyFoj6pUFa1Gb9rcUAcxhCRZjfX1krA?=
- =?us-ascii?Q?HiRFmKV4d9b+Q3Wmruzdf+1H75cFOHT9zKaTfMA5cJRkVOv/iHTBdcdgvER2?=
- =?us-ascii?Q?4fJQriUszrziFmaZdDyh2ZJT/2byKcrrcu2VSi0fHUaZVG2VnTgh2hJp5aY/?=
- =?us-ascii?Q?60La7ADC5l42YypR9UtFwzY5SkiK6O3t0Q3TRdTEG2ntJ+uIC1VmW48fgo3z?=
- =?us-ascii?Q?5X789O/8H1o33mGh6db3r+tYDEujE+UGBmxJAzhIKsWN2i0NMp468XC1MRwQ?=
- =?us-ascii?Q?C2oc4xL3q3aMEXCFdRUkDUU9XpFCCQqDEe4T1/xUXZCMojVXb3BDAaD8dAY1?=
- =?us-ascii?Q?ukD63SiwIs1xAbNObpB06lsi+lihksSuuR0/ms5TP2R1qE9q87zTty38M2xp?=
- =?us-ascii?Q?K4lAOeThupJFAeu4Szk2lhr+6ON72sd5YUS+9QhKVkMpkC5LVv58qpp1ti07?=
- =?us-ascii?Q?tbwqYDoeHpuIqrz9oU5Bdi6T6Mgy2FM4IenQDutr2QexyItyNOP6cnIjhg4N?=
- =?us-ascii?Q?k40qda6LWI4qH9N2iYOw8GPtWn1Bsrul6Us3zbeC7eJALBhsK7aA4oaM1lcc?=
- =?us-ascii?Q?HVm+HI/e+XQJKpGDbciiNgosOZyYFOvOVQpt0SEvTNcjU5mkQ4scH1bpmqwl?=
- =?us-ascii?Q?Yc1tOomREF5hiIOBoFxZBSoHydd44lycmH4qzv36St5UjE7+A2+PKvxCL5+L?=
- =?us-ascii?Q?A1IkpRs9ayMuAK4/ozFLjDL4CrnaKCMzEE7Cni0cyjuBmu5sdKIGmiDZ5yME?=
- =?us-ascii?Q?qy56rVUXgUTE6LZkdUbqw6cWuO0iwG8QFlSYOEGi5ft2kOzk6yowHGAcSjEK?=
- =?us-ascii?Q?L8ouAJ7z/U+aHVRU8r7tb9z5sHXw1wexgQ451cwrb3wOnUu8ysfamq5RkZZA?=
- =?us-ascii?Q?WoNQt3ON/PRTa9XYRVC0YLhsqBuC82l9gEcS7CIViSMC02hy541Gbd+HkVnD?=
- =?us-ascii?Q?Vw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 15 Nov 2022 03:31:28 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865316580
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 00:31:26 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id k15so13500881pfg.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 00:31:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g30bH/0ivDnYW95TPAIrzo/Zs+p4nn/JKTft0SuQRw8=;
+        b=7HOeVtkLulBGzohCH87MOdxnmeiFN/rdUE3UH2WQnjBy/pspcGpBA1BPF8O74fWj0P
+         Q0H64ZpuNvJdD+V0RL9YNMVnq+KHx/fKfQ9+S3yAPnmz5RB4ypSfdsx7SMcIsRLB92hv
+         ifrsedlUu1ya3FAMyXC8laNwYsqFmufELydbSpzo4YY9YsmWmGuWDsGxSczFLBlA260G
+         0ncf42GUeTJjoZVHKjr5ZHy8FLc0A55L/B/2OpQI6CjWaYtUyVTTxTivtZWvSTuNH5+w
+         UNpTp36kCPPQs//stOsO/Fz/5GEaZmZFGeew5s+vBUz/yokLugm62ffXWTAjLMS2HUxk
+         6h6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g30bH/0ivDnYW95TPAIrzo/Zs+p4nn/JKTft0SuQRw8=;
+        b=dKljHL56WNGMuvShW/unwfsREQNUog6LzvjX7MImwoQUjzG2QRtgXJaUIi+u/ZkpTO
+         6j+YB0J9zfA6oydGKoBhvph4v2JW0wMqJvwV/JmRYhygMu6zMk3Qgh842zJfCTM4VI57
+         NszYZSHm2eIEqEHaD8R83YyObUHV3P0yTciI6wBcU17aY9CbaLJzOhrhuCKy9x02BDOp
+         SyClsvuEcRcXCqEACtCrdikXtIgYCXkHJvqYV/X2qNftf/VbiLiYLIkJJ+72FeNSRP50
+         4AB5Of4EcZolButONI08Z5wMaayT3VY/88bFOUnz7RXvafiU05sAIXbTibfvg15VF3NY
+         So7g==
+X-Gm-Message-State: ANoB5pktjj1ggvmcnseYm5WSLXrnkKWmOxFwS3IewkqZI/jnpEF1a4jz
+        wI47ifmGpu1a8giu8JuqoVxURA==
+X-Google-Smtp-Source: AA0mqf7rmTrPVbnP0EfqzVeAWLJ5vf+dNZm+RBEqtrm9UpFE6+d/OlFnF5Z51dDAiNpZqyM88vJxnw==
+X-Received: by 2002:a62:b41a:0:b0:56e:ad31:b98b with SMTP id h26-20020a62b41a000000b0056ead31b98bmr17151967pfn.40.1668501085967;
+        Tue, 15 Nov 2022 00:31:25 -0800 (PST)
+Received: from [10.255.4.35] ([139.177.225.229])
+        by smtp.gmail.com with ESMTPSA id c65-20020a621c44000000b005624e2e0508sm8044725pfc.207.2022.11.15.00.31.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 00:31:25 -0800 (PST)
+Message-ID: <2a049755-57cb-4943-0850-cbbf2537c97e@bytedance.com>
+Date:   Tue, 15 Nov 2022 16:31:17 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b01794a-0912-4156-6fa7-08dac6e35d0f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2022 08:28:24.6890
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GqcbYI7FFNI3moe161SfYjDKKk80NP3Z/x9DTKztypZVUs4AeRh2za6ycHETcfLgSNr8I4ADNvWF6Y5uUFNtMkqlDABWccRvI4rHsaivnYE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB8445
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH v6 0/4] sched/fair: Improve scan efficiency of SIS
+Content-Language: en-US
+To:     K Prateek Nayak <kprateek.nayak@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <valentin.schneider@arm.com>
+Cc:     Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Aubrey Li <aubrey.li@intel.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Yicong Yang <yangyicong@huawei.com>,
+        Barry Song <21cnbao@gmail.com>, linux-kernel@vger.kernel.org
+References: <20221019122859.18399-1-wuyun.abel@bytedance.com>
+ <c7c5a654-8d26-28d9-7b33-e7b2b7bf2401@amd.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <c7c5a654-8d26-28d9-7b33-e7b2b7bf2401@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Prateek, thanks very much for your detailed testing!
 
+On 11/14/22 1:45 PM, K Prateek Nayak wrote:
+> Hello Abel,
+> 
+> Sorry for the delay. I've tested the patch on a dual socket Zen3 system
+> (2 x 64C/128T)
+> 
+> tl;dr
+> 
+> o I do not notice any regressions with the standard benchmarks.
+> o schbench sees a nice improvement to the tail latency when the number
+>    of worker are equal to the number of cores in the system in NPS1 and
+>    NPS2 mode. (Marked with "^")
+> o Few data points show improvements in tbench in NPS1 and NPS2 mode.
+>    (Marked with "^")
+> 
+> I'm still in the process of running larger workloads. If there is any
+> specific workload you would like me to run on the test system, please
+> do let me know. Below is the detailed report:
 
-> -----Original Message-----
-> From: Geert Uytterhoeven <geert@linux-m68k.org>
-> Sent: 15 November 2022 08:11
-> To: Biju Das <biju.das.jz@bp.renesas.com>
-> Cc: Prabhakar <prabhakar.csengg@gmail.com>; Wim Van Sebroeck
-> <wim@linux-watchdog.org>; Guenter Roeck <linux@roeck-us.net>; Philipp
-> Zabel <p.zabel@pengutronix.de>; linux-watchdog@vger.kernel.org; linux-
-> kernel@vger.kernel.org; linux-renesas-soc@vger.kernel.org; Fabrizio
-> Castro <fabrizio.castro.jz@renesas.com>; Prabhakar Mahadev Lad
-> <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Subject: Re: [PATCH] watchdog: rzg2l_wdt: Issue a reset before we put
-> the PM clocks
->=20
-> Hi Biju,
->=20
-> On Tue, Nov 15, 2022 at 8:48 AM Biju Das <biju.das.jz@bp.renesas.com>
-> wrote:
-> > > > -----Original Message-----
-> > > > From: Geert Uytterhoeven <geert@linux-m68k.org> On Mon, Nov 14,
-> > > > 2022 at 7:42 PM Biju Das
-> > > <biju.das.jz@bp.renesas.com> wrote:
-> > > > > > From: Prabhakar <prabhakar.csengg@gmail.com> On RZ/Five SoC
-> it
-> > > > > > was observed that setting timeout (to say 1
-> > > sec)
-> > > > > > wouldn't reset the system. To fix this we make sure we issue
-> a
-> > > > > > reset before putting the PM clocks to make sure the
-> registers
-> > > have
-> > > > > > been
-> > > > cleared.
-> > > > > >
-> > > > > > While at it re-used rzg2l_wdt_stop() in
-> > > > > > rzg2l_wdt_set_timeout()
-> > > as
-> > > > > > we were calling the same functions here.
-> > > > > >
-> > > > > > Signed-off-by: Lad Prabhakar
-> > > > > > <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > > > ---
-> > > > > > Note,
-> > > > > > - This patch has been tested on RZ/G2L, RZ/V2M and RZ/Five.
-> > > > > > - My initial investigation showed adding the delay after
-> > > > > > pm_runtime_get_sync()
-> > > > > >   also fixed this issue.
-> > > > > > - Do I need add the fixes tag ? what should be the operation
-> > > PUT-
-> > > > > > >RESET/RESET->PUT?
-> > > > >
-> > > > > It looks like timing issue, None of the previous devices are
-> > > > > affected by
-> > > > this.
-> > > >
-> > > > To me it looks like the device must be clocked for the reset
-> > > > signal
-> > > to
-> > > > be propagated?
-> > >
-> > > Yep, provide clk supply for a device, then apply reset.
-> >
-> > Maybe we need to make it consistent by taking care of  [1]
-> >
-> > Current patch: CLK ON -> apply Reset for V2M.
-> > [1]:  Apply Reset -> CLK ON for V2M.
->=20
-> Yes, that would also simplify that patch: just add the call to reset?
+Not particularly in my mind, and I think testing larger workloads is
+great. Thanks!
 
-Fabrizio previously told me, CLK ON -> apply Reset does not work for RZ/V2M=
- reboot use case.
+> 
+> Following are the results from running standard benchmarks on a
+> dual socket Zen3 (2 x 64C/128T) machine configured in different
+> NPS modes.
+> 
+> NPS Modes are used to logically divide single socket into
+> multiple NUMA region.
+> Following is the NUMA configuration for each NPS mode on the system:
+> 
+> NPS1: Each socket is a NUMA node.
+>      Total 2 NUMA nodes in the dual socket machine.
+> 
+>      Node 0: 0-63,   128-191
+>      Node 1: 64-127, 192-255
+> 
+> NPS2: Each socket is further logically divided into 2 NUMA regions.
+>      Total 4 NUMA nodes exist over 2 socket.
+>     
+>      Node 0: 0-31,   128-159
+>      Node 1: 32-63,  160-191
+>      Node 2: 64-95,  192-223
+>      Node 3: 96-127, 223-255
+> 
+> NPS4: Each socket is logically divided into 4 NUMA regions.
+>      Total 8 NUMA nodes exist over 2 socket.
+>     
+>      Node 0: 0-15,    128-143
+>      Node 1: 16-31,   144-159
+>      Node 2: 32-47,   160-175
+>      Node 3: 48-63,   176-191
+>      Node 4: 64-79,   192-207
+>      Node 5: 80-95,   208-223
+>      Node 6: 96-111,  223-231
+>      Node 7: 112-127, 232-255
+> 
+> Benchmark Results:
+> 
+> Kernel versions:
+> - tip:          5.19.0 tip sched/core
+> - sis_core: 	5.19.0 tip sched/core + this series
+> 
+> When we started testing, the tip was at:
+> commit fdf756f71271 ("sched: Fix more TASK_state comparisons")
+> 
+> ~~~~~~~~~~~~~
+> ~ hackbench ~
+> ~~~~~~~~~~~~~
+> 
+> o NPS1
+> 
+> Test:			tip			sis_core
+>   1-groups:	   4.06 (0.00 pct)	   4.26 (-4.92 pct)	*
+>   1-groups:	   4.14 (0.00 pct)	   4.09 (1.20 pct)	[Verification Run]
+>   2-groups:	   4.76 (0.00 pct)	   4.71 (1.05 pct)
+>   4-groups:	   5.22 (0.00 pct)	   5.11 (2.10 pct)
+>   8-groups:	   5.35 (0.00 pct)	   5.31 (0.74 pct)
+> 16-groups:	   7.21 (0.00 pct)	   6.80 (5.68 pct)
+> 
+> o NPS2
+> 
+> Test:			tip			sis_core
+>   1-groups:	   4.09 (0.00 pct)	   4.08 (0.24 pct)
+>   2-groups:	   4.70 (0.00 pct)	   4.69 (0.21 pct)
+>   4-groups:	   5.05 (0.00 pct)	   4.92 (2.57 pct)
+>   8-groups:	   5.35 (0.00 pct)	   5.26 (1.68 pct)
+> 16-groups:	   6.37 (0.00 pct)	   6.34 (0.47 pct)
+> 
+> o NPS4
+> 
+> Test:			tip			sis_core
+>   1-groups:	   4.07 (0.00 pct)	   3.99 (1.96 pct)
+>   2-groups:	   4.65 (0.00 pct)	   4.59 (1.29 pct)
+>   4-groups:	   5.13 (0.00 pct)	   5.00 (2.53 pct)
+>   8-groups:	   5.47 (0.00 pct)	   5.43 (0.73 pct)
+> 16-groups:	   6.82 (0.00 pct)	   6.56 (3.81 pct)
 
-Regards,
-Biju
+Although each cpu will get 2.5 tasks when 16-groups, which can
+be considered overloaded, I tested in AMD EPYC 7Y83 machine and
+the total cpu usage was ~82% (with some older kernel version),
+so there is still lots of idle time.
+
+I guess cutting off at 16-groups is because it's enough loaded
+compared to the real workloads, so testing more groups might just
+be a waste of time?
+
+Thanks & Best Regards,
+	Abel
+
+> 
+> ~~~~~~~~~~~~
+> ~ schbench ~
+> ~~~~~~~~~~~~
+> 
+> o NPS1
+> 
+> #workers:	tip			sis_core
+>    1:	  33.00 (0.00 pct)	  33.00 (0.00 pct)
+>    2:	  35.00 (0.00 pct)	  35.00 (0.00 pct)
+>    4:	  39.00 (0.00 pct)	  38.00 (2.56 pct)
+>    8:	  49.00 (0.00 pct)	  48.00 (2.04 pct)
+>   16:	  63.00 (0.00 pct)	  66.00 (-4.76 pct)
+>   32:	 109.00 (0.00 pct)	 107.00 (1.83 pct)
+>   64:	 208.00 (0.00 pct)	 216.00 (-3.84 pct)
+> 128:	 559.00 (0.00 pct)	 469.00 (16.10 pct)     ^
+> 256:	 45888.00 (0.00 pct)	 47552.00 (-3.62 pct)
+> 512:	 80000.00 (0.00 pct)	 79744.00 (0.32 pct)
+> 
+> o NPS2
+> 
+> #workers:	=tip			sis_core
+>    1:	  30.00 (0.00 pct)	  32.00 (-6.66 pct)
+>    2:	  37.00 (0.00 pct)	  34.00 (8.10 pct)
+>    4:	  39.00 (0.00 pct)	  36.00 (7.69 pct)
+>    8:	  51.00 (0.00 pct)	  49.00 (3.92 pct)
+>   16:	  67.00 (0.00 pct)	  66.00 (1.49 pct)
+>   32:	 117.00 (0.00 pct)	 109.00 (6.83 pct)
+>   64:	 216.00 (0.00 pct)	 213.00 (1.38 pct)
+> 128:	 529.00 (0.00 pct)	 465.00 (12.09 pct)     ^
+> 256:	 47040.00 (0.00 pct)	 46528.00 (1.08 pct)
+> 512:	 84864.00 (0.00 pct)	 83584.00 (1.50 pct)
+> 
+> o NPS4
+> 
+> #workers:	tip			sis_core
+>    1:	  23.00 (0.00 pct)	  28.00 (-21.73 pct)
+>    2:	  28.00 (0.00 pct)	  36.00 (-28.57 pct)
+>    4:	  41.00 (0.00 pct)	  43.00 (-4.87 pct)
+>    8:	  60.00 (0.00 pct)	  48.00 (20.00 pct)
+>   16:	  71.00 (0.00 pct)	  69.00 (2.81 pct)
+>   32:	 117.00 (0.00 pct)	 115.00 (1.70 pct)
+>   64:	 227.00 (0.00 pct)	 228.00 (-0.44 pct)
+> 128:	 545.00 (0.00 pct)	 545.00 (0.00 pct)
+> 256:	 45632.00 (0.00 pct)	 47680.00 (-4.48 pct)
+> 512:	 81024.00 (0.00 pct)	 76416.00 (5.68 pct)
+> 
+> Note: For lower worker count, schbench can show run to
+> run variation depending on external factors. Regression
+> for lower worker count can be ignored. The results are
+> included to spot any large blow up in the tail latency
+> for larger worker count.
+> 
+> ~~~~~~~~~~
+> ~ tbench ~
+> ~~~~~~~~~~
+> 
+> o NPS1
+> 
+> Clients:	tip			sis_core
+>      1	 578.37 (0.00 pct)	 582.09 (0.64 pct)
+>      2	 1062.09 (0.00 pct)	 1063.95 (0.17 pct)
+>      4	 1800.62 (0.00 pct)	 1879.18 (4.36 pct)
+>      8	 3211.02 (0.00 pct)	 3220.44 (0.29 pct)
+>     16	 4848.92 (0.00 pct)	 4890.08 (0.84 pct)
+>     32	 9091.36 (0.00 pct)	 9721.13 (6.92 pct)     ^
+>     64	 15454.01 (0.00 pct)	 15124.42 (-2.13 pct)
+>    128	 3511.33 (0.00 pct)	 14314.79 (307.67 pct)
+>    128    19910.99 (0.00pct)      19935.61 (0.12 pct)   [Verification Run]
+>    256	 50019.32 (0.00 pct)	 50708.24 (1.37 pct)
+>    512	 44317.68 (0.00 pct)	 44787.48 (1.06 pct)
+>   1024	 41200.85 (0.00 pct)	 42079.29 (2.13 pct)
+> 
+> o NPS2
+> 
+> Clients:	tip			sis_core
+>      1	 576.05 (0.00 pct)	 579.18 (0.54 pct)
+>      2	 1037.68 (0.00 pct)	 1070.49 (3.16 pct)
+>      4	 1818.13 (0.00 pct)	 1860.22 (2.31 pct)
+>      8	 3004.16 (0.00 pct)	 3087.09 (2.76 pct)
+>     16	 4520.11 (0.00 pct)	 4789.53 (5.96 pct)
+>     32	 8624.23 (0.00 pct)	 9439.50 (9.45 pct)     ^
+>     64	 14886.75 (0.00 pct)	 15004.96 (0.79 pct)
+>    128	 20602.00 (0.00 pct)	 17730.31 (-13.93 pct) *
+>    128    20602.00 (0.00 pct)     19585.20 (-4.93 pct)   [Verification Run]
+>    256	 45566.83 (0.00 pct)	 47922.70 (5.17 pct)
+>    512	 42717.49 (0.00 pct)	 43809.68 (2.55 pct)
+>   1024	 40936.61 (0.00 pct)	 40787.71 (-0.36 pct)
+> 
+> o NPS4
+> 
+> Clients:	tip			sis_core
+>      1	 576.36 (0.00 pct)	 580.83 (0.77 pct)
+>      2	 1044.26 (0.00 pct)	 1066.50 (2.12 pct)
+>      4	 1839.77 (0.00 pct)	 1867.56 (1.51 pct)
+>      8	 3043.53 (0.00 pct)	 3115.17 (2.35 pct)
+>     16	 5207.54 (0.00 pct)	 4847.53 (-6.91 pct)	*
+>     16	 4722.56 (0.00 pct)	 4811.29 (1.87 pct)	[Verification Run]
+>     32	 9263.86 (0.00 pct)	 9478.68 (2.31 pct)
+>     64	 14959.66 (0.00 pct)	 15267.39 (2.05 pct)
+>    128	 20698.65 (0.00 pct)	 20432.19 (-1.28 pct)
+>    256	 46666.21 (0.00 pct)	 46664.81 (0.00 pct)
+>    512	 41532.80 (0.00 pct)	 44241.12 (6.52 pct)
+>   1024	 39459.49 (0.00 pct)	 41043.22 (4.01 pct)
+> 
+> Note: On the tested kernel, with 128 clients, tbench can
+> run into a bottleneck during C2 exit. More details can be
+> found at:
+> https://lore.kernel.org/lkml/20220921063638.2489-1-kprateek.nayak@amd.com/
+> This issue has been fixed in v6.0 but was not part of the
+> tip kernel when I started testing. This data point has
+> been rerun with C2 disabled to get representative results.
+> 
+> ~~~~~~~~~~
+> ~ Stream ~
+> ~~~~~~~~~~
+> 
+> o NPS1
+> 
+> -> 10 Runs:
+> 
+> Test:		tip			sis_core
+>   Copy:	 328419.14 (0.00 pct)	 337857.83 (2.87 pct)
+> Scale:	 206071.21 (0.00 pct)	 212133.82 (2.94 pct)
+>    Add:	 235271.48 (0.00 pct)	 243811.97 (3.63 pct)
+> Triad:	 253175.80 (0.00 pct)	 252333.43 (-0.33 pct)
+> 
+> -> 100 Runs:
+> 
+> Test:		tip			sis_core
+>   Copy:	 328209.61 (0.00 pct)	 339817.27 (3.53 pct)
+> Scale:	 216310.13 (0.00 pct)	 218635.16 (1.07 pct)
+>    Add:	 244417.83 (0.00 pct)	 245641.47 (0.50 pct)
+> Triad:	 237508.83 (0.00 pct)	 255387.28 (7.52 pct)
+> 
+> o NPS2
+> 
+> -> 10 Runs:
+> 
+> Test:		tip			sis_core
+>   Copy:	 336503.88 (0.00 pct)	 339684.21 (0.94 pct)
+> Scale:	 218035.23 (0.00 pct)	 217601.11 (-0.19 pct)
+>    Add:	 257677.42 (0.00 pct)	 258608.34 (0.36 pct)
+> Triad:	 268872.37 (0.00 pct)	 272548.09 (1.36 pct)
+> 
+> -> 100 Runs:
+> 
+> Test:		tip			sis_core
+>   Copy:	 332304.34 (0.00 pct)	 341565.75 (2.78 pct)
+> Scale:	 223421.60 (0.00 pct)	 224267.40 (0.37 pct)
+>    Add:	 252363.56 (0.00 pct)	 254926.98 (1.01 pct)
+> Triad:	 266687.56 (0.00 pct)	 270782.81 (1.53 pct)
+> 
+> o NPS4
+> 
+> -> 10 Runs:
+> 
+> Test:		tip			sis_core
+>   Copy:	 353515.62 (0.00 pct)	 342060.85 (-3.24 pct)
+> Scale:	 228854.37 (0.00 pct)	 218262.41 (-4.62 pct)
+>    Add:	 254942.12 (0.00 pct)	 241975.90 (-5.08 pct)
+> Triad:	 270521.87 (0.00 pct)	 257686.71 (-4.74 pct)
+> 
+> -> 100 Runs:
+> 
+> Test:		tip			sis_core
+>   Copy:	 374520.81 (0.00 pct)	 369353.13 (-1.37 pct)
+> Scale:	 246280.23 (0.00 pct)	 253881.69 (3.08 pct)
+>    Add:	 262772.72 (0.00 pct)	 266484.58 (1.41 pct)
+> Triad:	 283740.92 (0.00 pct)	 279981.18 (-1.32 pct)
+> 
+> On 10/19/2022 5:58 PM, Abel Wu wrote:
+>> This patchset tries to improve SIS scan efficiency by recording idle
+>> cpus in a cpumask for each LLC which will be used as a target cpuset
+>> in the domain scan. The cpus are recorded at CORE granule to avoid
+>> tasks being stack on same core.
+>>
+>> v5 -> v6:
+>>   - Rename SIS_FILTER to SIS_CORE as it can only be activated when
+>>     SMT is enabled and better describes the behavior of CORE granule
+>>     update & load delivery.
+>>   - Removed the part of limited scan for idle cores since it might be
+>>     better to open another thread to discuss the strategies such as
+>>     limited or scaled depth. But keep the part of full scan for idle
+>>     cores when LLC is overloaded because SIS_CORE can greatly reduce
+>>     the overhead of full scan in such case.
+>>   - Removed the state of sd_is_busy which indicates an LLC is fully
+>>     busy and we can safely skip the SIS domain scan. I would prefer
+>>     leave this to SIS_UTIL.
+>>   - The filter generation mechanism is replaced by in-place updates
+>>     during domain scan to better deal with partial scan failures.
+>>   - Collect Reviewed-bys from Tim Chen
+>>
+>> v4 -> v5:
+>>   - Add limited scan for idle cores when overloaded, suggested by Mel
+>>   - Split out several patches since they are irrelevant to this scope
+>>   - Add quick check on ttwu_pending before core update
+>>   - Wrap the filter into SIS_FILTER feature, suggested by Chen Yu
+>>   - Move the main filter logic to the idle path, because the newidle
+>>     balance can bail out early if rq->avg_idle is small enough and
+>>     lose chances to update the filter.
+>>
+>> v3 -> v4:
+>>   - Update filter in load_balance rather than in the tick
+>>   - Now the filter contains unoccupied cpus rather than overloaded ones
+>>   - Added mechanisms to deal with the false positive cases
+>>
+>> v2 -> v3:
+>>   - Removed sched-idle balance feature and focus on SIS
+>>   - Take non-CFS tasks into consideration
+>>   - Several fixes/improvement suggested by Josh Don
+>>
+>> v1 -> v2:
+>>   - Several optimizations on sched-idle balancing
+>>   - Ignore asym topos in can_migrate_task
+>>   - Add more benchmarks including SIS efficiency
+>>   - Re-organize patch as suggested by Mel Gorman
+>>
+>> Abel Wu (4):
+>>    sched/fair: Skip core update if task pending
+>>    sched/fair: Ignore SIS_UTIL when has_idle_core
+>>    sched/fair: Introduce SIS_CORE
+>>    sched/fair: Deal with SIS scan failures
+>>
+>>   include/linux/sched/topology.h |  15 ++++
+>>   kernel/sched/fair.c            | 122 +++++++++++++++++++++++++++++----
+>>   kernel/sched/features.h        |   7 ++
+>>   kernel/sched/sched.h           |   3 +
+>>   kernel/sched/topology.c        |   8 ++-
+>>   5 files changed, 141 insertions(+), 14 deletions(-)
+>>
+> 
+> I ran pgbench from mmtest but realised there is too much run to run
+> variation on the system. Planning on running MongoDB benchmark which
+> is more stable on the system and couple more workloads but the
+> initial results look good. I'll get back with results later this week
+> or by early next week. Meanwhile, if you need data for any specific
+> workload on the test system, please do let me know.
+> 
+> --
+> Thanks and Regards,
+> Prateek
