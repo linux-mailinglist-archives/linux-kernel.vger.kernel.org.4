@@ -2,168 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D453A629C12
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB75629C13
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiKOO0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 09:26:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        id S230402AbiKOO0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 09:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230090AbiKOO0R (ORCPT
+        with ESMTP id S229833AbiKOO0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 09:26:17 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A905A2C64A
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:26:15 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id bp15so24598625lfb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:26:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YRh5aMVcKhERES1ONTqHwjcTV3lsnsm7B9arRoDIzwg=;
-        b=DjbAMkTvi7XSmsMtHXkX+GA+YmTTsy0zB9gSrA+0UZqcwdniK+dARLL5vbJnMqz65N
-         MXnbWwvaGFevhUCJAJvG/ItgyqUqz9FOd/qIuJuVSA/gw1QrrKW2wno4bB/4A5PKf8yC
-         o3PJhxSKSlHZYc2eN9gvnSPXNKICm9MeLKVoJkQJOx/kSGnGlV+mGPxaHAtQotNtxeDm
-         NZArgDB3LLgkZkyj2YUK5j+MjUEaouSJfw4MBCd8ZIAlgLaqZmdzlvU49jI3HREJNXmK
-         Y0ex2Hwrr84xHYiIpE5oRs3lcaq8jKwCTe3VBi8KvvYdXsPq/jlA8JU6yRFcDkTLm12i
-         /hxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YRh5aMVcKhERES1ONTqHwjcTV3lsnsm7B9arRoDIzwg=;
-        b=NWkL2rN6ymB8PdCpMaaIpYtAv8SvgR5KA2O3A70k2A64Vo+7nusCK0jRweAjEBtdGs
-         BfKvv0sMePaBrsDMxljI6hygFsEhVzwE6YM7bUCIO0NAumwhVxiCUqw+h7JrhednO6mN
-         uua1O0l5xunAECLXOAlegVjC1q0tDeV+Q2zZRDd609L23sRlZ2EmgTc3TjrrYCxodwoo
-         Uv89vthNGV5CynXqegzJW6JiJwvU/BCbWX+++TI7Ef246hJVIP/BGbb9chZD9bzFyEwY
-         DR3k3hpkfkTGnHrOoOCzyfhRkx1s/VNjG8zjRJXr+3M9ZQ8+T+xUNpCXpV4/vjeqN/I6
-         YJ/Q==
-X-Gm-Message-State: ANoB5pktBRmEfR/2P14xUWsTmHZm5UnJZz4pxSJnWmt9fb6rtD445GMi
-        WHOyHGg4ISiEqRaaiRJQc2hBgg==
-X-Google-Smtp-Source: AA0mqf6xyTSdvIGlDY8pOSsCVEj97KZz0oQHmB+lhcNQ27kEuxY3WCJuO8UtXG9mqsufvthMcLH3sw==
-X-Received: by 2002:a19:5515:0:b0:4b1:82c6:295b with SMTP id n21-20020a195515000000b004b182c6295bmr5328743lfe.67.1668522373845;
-        Tue, 15 Nov 2022 06:26:13 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a21-20020ac25e75000000b00494603953b6sm2228200lfr.6.2022.11.15.06.26.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 06:26:13 -0800 (PST)
-Message-ID: <0b4d2bc0-0f45-4bff-dee9-825efa5b5a2e@linaro.org>
-Date:   Tue, 15 Nov 2022 15:26:11 +0100
+        Tue, 15 Nov 2022 09:26:34 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F34B2A948
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:26:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1668522393; x=1700058393;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+XERZkaZEnlrgczx883x+W1hcSu7sIngfJcKE+vi5KY=;
+  b=2dm9cKIOBcuXSggW4sEHYk+5uGBu3oM6jYI4wrV9pxjSBvsMiCv0dFAR
+   mYMFQXUk0eaEq8ORkFySpdP8H6lSjIA09HgWoXnMEYv6FtsBP1YS/ncpi
+   I5ocq2BzNP69ORGinHUodSkCZkorQV9D7vvcqQIvgVMeU0lu1KtrMW8k4
+   hmy3Iabp8sLicPHoWjPzE7jCCn1jizwGwCoVD1kVIVJ7xrrFdTDwYSQeo
+   BlLAIt+4bLTN/9m4Ba62u34d0mHDYsbMhC0nYQglp/hvJrMaUd+KZzSqu
+   hgWgLoarypHkT0tgWMlh3C+VFQsSJ7dCW4QqMgyHyLF9va7Rfdj5twQBf
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
+   d="scan'208";a="189058136"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Nov 2022 07:26:33 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 15 Nov 2022 07:26:32 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Tue, 15 Nov 2022 07:26:30 -0700
+Date:   Tue, 15 Nov 2022 14:26:13 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Song Shuai <suagrfillet@gmail.com>
+CC:     <guoren@kernel.org>, <rostedt@goodmis.org>, <mhiramat@kernel.org>,
+        <mark.rutland@arm.com>, <paul.walmsley@sifive.com>,
+        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/3] riscv/ftrace: add ftrace_graph_func
+Message-ID: <Y3OhhZGlk5I5DN+f@wendy>
+References: <20221115061525.112757-1-suagrfillet@gmail.com>
+ <20221115061525.112757-2-suagrfillet@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] dt-bindings: spi: convert Freescale DSPI to dt-schema
-Content-Language: en-US
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Michael Walle <michael@walle.cc>,
-        Kuldeep Singh <kuldeep.singh@nxp.com>
-References: <20221111224651.577729-1-vladimir.oltean@nxp.com>
- <417bfdea-ed41-6468-ec16-f54480cfe2f6@linaro.org>
- <20221115135912.ksjk7zxqsyazqhtf@skbuf>
- <c9b82051-a9f5-883f-5455-1cb06aa6521b@linaro.org>
- <20221115141904.26lyetiforkgoqaf@skbuf>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115141904.26lyetiforkgoqaf@skbuf>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221115061525.112757-2-suagrfillet@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 15:19, Vladimir Oltean wrote:
-> On Tue, Nov 15, 2022 at 03:08:37PM +0100, Krzysztof Kozlowski wrote:
->> On 15/11/2022 14:59, Vladimir Oltean wrote:
->>> On Tue, Nov 15, 2022 at 02:46:21PM +0100, Krzysztof Kozlowski wrote:
->>>>> +$id: http://devicetree.org/schemas/spi/fsl,spi-fsl-dspi.yaml
->>>>
->>>> Why second "fsl" in file name? It does not patch compatibles and
->>>> duplicates the vendor. We do not have compatibles "nxp,imx6-nxp".
->>>
->>> Ok, which file name would be good then? There are 9 different (all SoC
->>> specific) compatible strings, surely the convention of naming the file
->>> after a compatible string has some limitations...
->>
->> If all DSPI blocks fit here, then maybe: fsl,dspi.yaml
->>
->> fsl,spi-dspi.yaml is also a bit redundant.
+On Tue, Nov 15, 2022 at 02:15:23PM +0800, Song Shuai wrote:
+> Here implements ftrace_graph_func as the function graph tracing function
+> with FTRACE_WITH_REGS defined.
 > 
-> Ok, fsl,dspi.yaml and fsl,dspi-peripheral-props.yaml, and MAINTAINERS
-> entry for fsl,dspi*.yaml?
-
-Yes.
-
+> function_graph_func gets the point of the parent IP and the frame pointer
+> from fregs and call prepare_ftrace_return for function graph tracing.
 > 
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    description:
->>>>> +      Some integrations can have a single compatible string containing their
->>>>> +      SoC name (LS1012A, LS1021A, ...). Others require their SoC compatible
->>>>> +      string, plus a fallback compatible string (either on LS1021A or on
->>>>> +      LS2085A).
->>>>
->>>> Why? The fsl,ls1012a-dspi device is either compatible with
->>>> fsl,ls1021a-v1.0-dspi or not. It cannot be both - compatible and not
->>>> compatible.
->>>
->>> LS1012A is compatible with LS1021A to the extent that it works when
->>> treated like a LS1021A. LS1012A has a FIFO size of 8 SPI words, LS1021A
->>> of just 4. Treating it like LS1021A means roughly half the performance,
->>> but it still works.
->>>
->>> I didn't invent any of this. When I took over the driver, there were
->>> device trees like this all over the place:
->>>
->>> 		dspi: spi@2100000 {
->>> 			compatible = "fsl,ls1012a-dspi", "fsl,ls1021a-v1.0-dspi";
->>
->> Which looks ok...
->>
->>> 			#address-cells = <1>;
->>> 			#size-cells = <0>;
->>> 			reg = <0x0 0x2100000 0x0 0x10000>;
->>> 			interrupts = <0 64 IRQ_TYPE_LEVEL_HIGH>;
->>> 			clock-names = "dspi";
->>> 			clocks = <&clockgen QORIQ_CLK_PLATFORM_PLL
->>> 					    QORIQ_CLK_PLL_DIV(1)>;
->>> 			spi-num-chipselects = <5>;
->>> 			big-endian;
->>> 			status = "disabled";
->>> 		};
->>>
->>> but the Linux driver pre-~5.7 always relied on the fallback compatible
->>> string (LS1021A in this case). I'm working with what's out in the field,
->>> haven't changed a thing there.
->>
->> The driver matters less (except ABI), but anyway it confirms the case -
->> fallback is expected always.  Why the fallback should be removed if the
->> devices are compatible (including halved performance)?
+> If FTRACE_WITH_REGS isn't defined, the enable/disable helpers of
+> ftrace_graph_[regs]_call remain for serving the !FTRACE_WITH_REGS
+> version ftrace_caller.
 > 
-> I don't think I said the fallback should be removed? I think you're
-> talking about a typo/braino I made, which puts the LS1012A both in the
-> bucket of SoCs with a single compatible strings required, as well as in
-> that with fallback required. Obviously both can't be true... I didn't
-> mean LS1012A but VF610.
+> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
 
-To be clear: ls1012a, ls1028a and lx2160a should be either followed by
-compatible or not. Cannot be both.
+Hey Song,
+Last time I saw your email I'd swear it was "sugarfillet", just making
+sure that it is not a typo.
 
-Best regards,
-Krzysztof
+Anyways, checkpatch is whinging about some parenthesis stuff:
+https://patchwork.kernel.org/project/linux-riscv/patch/20221115061525.112757-2-suagrfillet@gmail.com/
 
+Would be nice to fix that when you resping.
+
+Thanks,
+Conor.
+
+> ---
+>  arch/riscv/include/asm/ftrace.h | 13 +++++++++++--
+>  arch/riscv/kernel/ftrace.c      | 16 ++++++++++++++++
+>  2 files changed, 27 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
+> index 04dad3380041..b33c98070972 100644
+> --- a/arch/riscv/include/asm/ftrace.h
+> +++ b/arch/riscv/include/asm/ftrace.h
+> @@ -81,8 +81,17 @@ do {									\
+>  struct dyn_ftrace;
+>  int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
+>  #define ftrace_init_nop ftrace_init_nop
+> -#endif
+>  
+> -#endif
+> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+> +struct ftrace_ops;
+> +struct ftrace_regs;
+> +void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+> +			struct ftrace_ops *op, struct ftrace_regs *fregs);
+> +#define ftrace_graph_func ftrace_graph_func
+> +#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+> +
+> +#endif /* __ASSEMBLY__ */
+> +
+> +#endif /* CONFIG_DYNAMIC_FTRACE */
+>  
+>  #endif /* _ASM_RISCV_FTRACE_H */
+> diff --git a/arch/riscv/kernel/ftrace.c b/arch/riscv/kernel/ftrace.c
+> index 2086f6585773..2d7ce77d4f33 100644
+> --- a/arch/riscv/kernel/ftrace.c
+> +++ b/arch/riscv/kernel/ftrace.c
+> @@ -196,6 +196,20 @@ void prepare_ftrace_return(unsigned long *parent, unsigned long self_addr,
+>  }
+>  
+>  #ifdef CONFIG_DYNAMIC_FTRACE
+> +
+> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+> +
+> +void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+> +			struct ftrace_ops *op, struct ftrace_regs *fregs)
+> +{
+> +	struct pt_regs *regs = arch_ftrace_get_regs(fregs);
+> +	unsigned long *parent = (unsigned long *)&(regs->ra);
+> +
+> +	prepare_ftrace_return(parent, ip, frame_pointer(regs));
+> +}
+> +
+> +#else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+> +
+>  extern void ftrace_graph_call(void);
+>  extern void ftrace_graph_regs_call(void);
+>  int ftrace_enable_ftrace_graph_caller(void)
+> @@ -223,5 +237,7 @@ int ftrace_disable_ftrace_graph_caller(void)
+>  	return __ftrace_modify_call((unsigned long)&ftrace_graph_regs_call,
+>  				    (unsigned long)&prepare_ftrace_return, false);
+>  }
+> +#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+> +
+>  #endif /* CONFIG_DYNAMIC_FTRACE */
+>  #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
+> -- 
+> 2.20.1
+> 
