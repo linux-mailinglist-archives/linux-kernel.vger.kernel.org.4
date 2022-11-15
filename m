@@ -2,113 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987A762A36E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DD162A373
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiKOUw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 15:52:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
+        id S238522AbiKOUxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 15:53:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238582AbiKOUwj (ORCPT
+        with ESMTP id S231222AbiKOUw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:52:39 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999B930F63;
-        Tue, 15 Nov 2022 12:52:37 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 0A6025FD07;
-        Tue, 15 Nov 2022 23:52:36 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1668545556;
-        bh=W5hJi2NJ0bqPTdJKhkYCcnAEG+dDCh2qMXVB0CfPfa0=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=XdVrPJHE+SfWL3SsZ40hp0Q6mfZHyev3hv9+o0WeSrNQwj4IcLwmIa5Hgy5I9PUaw
-         08eVwTHKZmJePvcZwJkMdVDqPm1enMMs6enQLHsc2z52AOMNqkEIw0mTWtiTcZBZQ2
-         dfLEFebLshv1Pb38dTrWEJ962ZatT5h5/b4kMzYbjUqJG8FBGc8jZe66exIg+6JccE
-         fkbn54a2hoez2h6QLwNDUB5/XeIpe49YqQFiHjBgcTVN1NcidzIi7PWc+QlJ4Bz7nm
-         xw6K0M4hQWoOTz7akNjN2Akyk/YqERufTz/cHqSzKsJ2dAY0vyC1rlusOhrRpCPEJh
-         AwNG0CtiP/Gbw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 15 Nov 2022 23:52:35 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        kernel <kernel@sberdevices.ru>,
-        Bobby Eshleman <bobby.eshleman@gmail.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>
-Subject: [RFC PATCH v1 2/3] test/vsock: add big message test
-Thread-Topic: [RFC PATCH v1 2/3] test/vsock: add big message test
-Thread-Index: AQHY+TQwn9KcvFr2LUmtZTFuocc05g==
-Date:   Tue, 15 Nov 2022 20:52:35 +0000
-Message-ID: <f0510949-cc97-7a01-5fc8-f7e855b80515@sberdevices.ru>
-In-Reply-To: <ba294dff-812a-bfc2-a43c-286f99aee0b8@sberdevices.ru>
-Accept-Language: en-US, ru-RU
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <61AB262BC80AEC438B4F4C80B53C1C7A@sberdevices.ru>
-Content-Transfer-Encoding: base64
+        Tue, 15 Nov 2022 15:52:58 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD322A1B7;
+        Tue, 15 Nov 2022 12:52:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3AF5ECE1930;
+        Tue, 15 Nov 2022 20:52:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8640C433C1;
+        Tue, 15 Nov 2022 20:52:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668545574;
+        bh=gtMPyEkqYSiyJe2RYdzhMkumSicvTGNTRY9z5emGfTk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T2k58gdPz0TNoqraxpTv+OL5+TuuxkSRMk2m7GVUYSFCa1YbI3Kx0FibpXvtI/+f+
+         ZbPAplxikkhYRjfKHmNJCHCjJu3BQVDe5EEBKDvM8io3An4OdvkvG2z6SfIDS49I8C
+         QmFYzItwSEqGHGlgNvCkjugyqAt+O28ltdtZOBBlthAm9ZF5zbiY+SJ4cyXHm7yg00
+         8+N20O8Op7FWJm5BZDq/mZNcRSVQjmI5hogBAQmc7dnhexl76+ldGiKupnNLGVNcPD
+         wDDxHSGi2Mh4roWMGx5toX229luaPJxY7Z+3Y84Gdwnas8zgvqX8DbtrCWs0i8m/LG
+         P6lEUdifAK0RQ==
+Date:   Tue, 15 Nov 2022 21:52:51 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
+        jonathanh@nvidia.com, thierry.reding@gmail.com,
+        heikki.krogerus@linux.intel.com, ajayg@nvidia.com,
+        vkoul@kernel.org, p.zabel@pengutronix.de, balbi@kernel.org,
+        mathias.nyman@intel.com, jckuo@nvidia.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v3 07/13] i2c: nvidia-gpu: Add cypress,firmware-build as
+ a well-known regex
+Message-ID: <Y3P8I9TrFYFmfTHY@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        treding@nvidia.com, jonathanh@nvidia.com, thierry.reding@gmail.com,
+        heikki.krogerus@linux.intel.com, ajayg@nvidia.com, vkoul@kernel.org,
+        p.zabel@pengutronix.de, balbi@kernel.org, mathias.nyman@intel.com,
+        jckuo@nvidia.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        singhanc@nvidia.com, linux-i2c@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org
+References: <20221114124053.1873316-1-waynec@nvidia.com>
+ <20221114124053.1873316-8-waynec@nvidia.com>
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/11/15 16:23:00 #20571948
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GcWtn7TlKaEtNCAY"
+Content-Disposition: inline
+In-Reply-To: <20221114124053.1873316-8-waynec@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VGhpcyBhZGRzIHRlc3QgZm9yIHNlbmRpbmcgbWVzc2FnZSwgYmlnZ2VyIHRoYW4gcGVlcidzIGJ1
-ZmZlciBzaXplLg0KRm9yIFNPQ0tfU0VRUEFDS0VUIHNvY2tldCBpdCBtdXN0IGZhaWwsIGFzIHRo
-aXMgdHlwZSBvZiBzb2NrZXQgaGFzDQptZXNzYWdlIHNpemUgbGltaXQuDQoNClNpZ25lZC1vZmYt
-Ynk6IEFyc2VuaXkgS3Jhc25vdiA8QVZLcmFzbm92QHNiZXJkZXZpY2VzLnJ1Pg0KLS0tDQogdG9v
-bHMvdGVzdGluZy92c29jay92c29ja190ZXN0LmMgfCA2MiArKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKw0KIDEgZmlsZSBjaGFuZ2VkLCA2MiBpbnNlcnRpb25zKCspDQoNCmRpZmYgLS1n
-aXQgYS90b29scy90ZXN0aW5nL3Zzb2NrL3Zzb2NrX3Rlc3QuYyBiL3Rvb2xzL3Rlc3RpbmcvdnNv
-Y2svdnNvY2tfdGVzdC5jDQppbmRleCAxMDdjMTExNjU4ODcuLmJiNGU4NjU3ZjFkNiAxMDA2NDQN
-Ci0tLSBhL3Rvb2xzL3Rlc3RpbmcvdnNvY2svdnNvY2tfdGVzdC5jDQorKysgYi90b29scy90ZXN0
-aW5nL3Zzb2NrL3Zzb2NrX3Rlc3QuYw0KQEAgLTU2MCw2ICs1NjAsNjMgQEAgc3RhdGljIHZvaWQg
-dGVzdF9zZXFwYWNrZXRfdGltZW91dF9zZXJ2ZXIoY29uc3Qgc3RydWN0IHRlc3Rfb3B0cyAqb3B0
-cykNCiAJY2xvc2UoZmQpOw0KIH0NCiANCitzdGF0aWMgdm9pZCB0ZXN0X3NlcXBhY2tldF9iaWdt
-c2dfY2xpZW50KGNvbnN0IHN0cnVjdCB0ZXN0X29wdHMgKm9wdHMpDQorew0KKwl1bnNpZ25lZCBs
-b25nIHNvY2tfYnVmX3NpemU7DQorCXNzaXplX3Qgc2VuZF9zaXplOw0KKwlzb2NrbGVuX3QgbGVu
-Ow0KKwl2b2lkICpkYXRhOw0KKwlpbnQgZmQ7DQorDQorCWxlbiA9IHNpemVvZihzb2NrX2J1Zl9z
-aXplKTsNCisNCisJZmQgPSB2c29ja19zZXFwYWNrZXRfY29ubmVjdChvcHRzLT5wZWVyX2NpZCwg
-MTIzNCk7DQorCWlmIChmZCA8IDApIHsNCisJCXBlcnJvcigiY29ubmVjdCIpOw0KKwkJZXhpdChF
-WElUX0ZBSUxVUkUpOw0KKwl9DQorDQorCWlmIChnZXRzb2Nrb3B0KGZkLCBBRl9WU09DSywgU09f
-Vk1fU09DS0VUU19CVUZGRVJfU0laRSwNCisJCSAgICAgICAmc29ja19idWZfc2l6ZSwgJmxlbikp
-IHsNCisJCXBlcnJvcigiZ2V0c29ja29wdCIpOw0KKwkJZXhpdChFWElUX0ZBSUxVUkUpOw0KKwl9
-DQorDQorCXNvY2tfYnVmX3NpemUrKzsNCisNCisJZGF0YSA9IG1hbGxvYyhzb2NrX2J1Zl9zaXpl
-KTsNCisJaWYgKCFkYXRhKSB7DQorCQlwZXJyb3IoIm1hbGxvYyIpOw0KKwkJZXhpdChFWElUX0ZB
-SUxVUkUpOw0KKwl9DQorDQorCXNlbmRfc2l6ZSA9IHNlbmQoZmQsIGRhdGEsIHNvY2tfYnVmX3Np
-emUsIDApOw0KKwlpZiAoc2VuZF9zaXplICE9IC0xKSB7DQorCQlmcHJpbnRmKHN0ZGVyciwgImV4
-cGVjdGVkICdzZW5kKDIpJyBmYWlsdXJlLCBnb3QgJXppXG4iLA0KKwkJCXNlbmRfc2l6ZSk7DQor
-CX0NCisNCisJY29udHJvbF93cml0ZWxuKCJDTElTRU5UIik7DQorDQorCWZyZWUoZGF0YSk7DQor
-CWNsb3NlKGZkKTsNCit9DQorDQorc3RhdGljIHZvaWQgdGVzdF9zZXFwYWNrZXRfYmlnbXNnX3Nl
-cnZlcihjb25zdCBzdHJ1Y3QgdGVzdF9vcHRzICpvcHRzKQ0KK3sNCisJaW50IGZkOw0KKw0KKwlm
-ZCA9IHZzb2NrX3NlcXBhY2tldF9hY2NlcHQoVk1BRERSX0NJRF9BTlksIDEyMzQsIE5VTEwpOw0K
-KwlpZiAoZmQgPCAwKSB7DQorCQlwZXJyb3IoImFjY2VwdCIpOw0KKwkJZXhpdChFWElUX0ZBSUxV
-UkUpOw0KKwl9DQorDQorCWNvbnRyb2xfZXhwZWN0bG4oIkNMSVNFTlQiKTsNCisNCisJY2xvc2Uo
-ZmQpOw0KK30NCisNCiAjZGVmaW5lIEJVRl9QQVRURVJOXzEgJ2EnDQogI2RlZmluZSBCVUZfUEFU
-VEVSTl8yICdiJw0KIA0KQEAgLTgzMiw2ICs4ODksMTEgQEAgc3RhdGljIHN0cnVjdCB0ZXN0X2Nh
-c2UgdGVzdF9jYXNlc1tdID0gew0KIAkJLnJ1bl9jbGllbnQgPSB0ZXN0X3NlcXBhY2tldF90aW1l
-b3V0X2NsaWVudCwNCiAJCS5ydW5fc2VydmVyID0gdGVzdF9zZXFwYWNrZXRfdGltZW91dF9zZXJ2
-ZXIsDQogCX0sDQorCXsNCisJCS5uYW1lID0gIlNPQ0tfU0VRUEFDS0VUIGJpZyBtZXNzYWdlIiwN
-CisJCS5ydW5fY2xpZW50ID0gdGVzdF9zZXFwYWNrZXRfYmlnbXNnX2NsaWVudCwNCisJCS5ydW5f
-c2VydmVyID0gdGVzdF9zZXFwYWNrZXRfYmlnbXNnX3NlcnZlciwNCisJfSwNCiAJew0KIAkJLm5h
-bWUgPSAiU09DS19TRVFQQUNLRVQgaW52YWxpZCByZWNlaXZlIGJ1ZmZlciIsDQogCQkucnVuX2Ns
-aWVudCA9IHRlc3Rfc2VxcGFja2V0X2ludmFsaWRfcmVjX2J1ZmZlcl9jbGllbnQsDQotLSANCjIu
-MjUuMQ0K
+
+--GcWtn7TlKaEtNCAY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Nov 14, 2022 at 08:40:47PM +0800, Wayne Chang wrote:
+> ccgx is refer to the cypress cypd4226 typec controller.
+> add cypress,firmware-build as a well-known regex.
+>=20
+> 16-bit value is not sufficient for descriptiva names.
+> Using string instead of u16 to make it more descriptive.
+>=20
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+
+I assume this series goes upstream as a whole via some tree. So, for the
+I2C changes:
+
+Acked-by: Wolfram Sang <wsa@kernel.org>
+
+
+--GcWtn7TlKaEtNCAY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNz/CMACgkQFA3kzBSg
+KbarLBAAioFwGEaBlz4SL9lEkJdRJkgaa9HxYO8RHVbGnlt1NW6bEOfp1ISWF71s
+OjoMfvEJTCw0+rEGB7oyH0DC0j7R3Z0ofrTPoN69bWfmZSW4MRtJX1ZuKbQixzvJ
+8SpCFir567TfEuejruTihsmLPhx/cX+kxxdFxxV3MyyyV/TeIxbEKxFIFTezXTJz
+OB+xBF7+4lqf9IwJK/BlfQAi1BlSa+5wzZOGr9HlXhOvcJj9pFfbnEg0E26U83A6
+uE1D6Tj6CfbiACYViOVoeeSDS8jQe5qvkd6QPLJ93ifJ476yUiqvqQq7vCRTEitB
+wAnc4jJrap9m61f+Up0IbrN4KB+JW6qyXtcBQs8BoIoFVU0krkj56clZhX0oZXg+
+mQYmMR7e+ZCcE7zraHPGKtaylkXBKvyvvClBofbhN4DD/mpFsuS7Wcxrb0roKe61
+h1imRVZLdAB4LyS8h4MbOXdLvHQ+ctIH4bVX6akT13wER4cuTQT/cVLNupZU8wBa
+THnrohQkVSOsDwDEumN9Wd3uncCstaeCLKd4S1phaOVvJh1L7cu5IbLUcU+LEPHM
+D7BBLYF6J8AkU9stjB88NJlrUGjq7fuahIc8IhrWizacTvsDov7ml7vc0+0bu1HS
+RdJxdVre7m/lS95qUM08G4JPdAjk514OvpZB4wIQOhk/ffmjtIg=
+=0+Ea
+-----END PGP SIGNATURE-----
+
+--GcWtn7TlKaEtNCAY--
