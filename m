@@ -2,88 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FAA629D81
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:32:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86411629D9B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238307AbiKOPbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:31:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
+        id S231297AbiKOPdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:33:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiKOPbO (ORCPT
+        with ESMTP id S229665AbiKOPc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:31:14 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1432E680;
-        Tue, 15 Nov 2022 07:30:45 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AFFTfD6026417;
-        Tue, 15 Nov 2022 15:30:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=x2ko2X3xrP6OAwA31iyaWLsAmnHHrOj2dnutRGO0xvQ=;
- b=Nr5zEzlPDVb+IRIZbccqRex2kZFWRQr1VdFySMNYNAAE2dCOqO3XWm8horfcPohCaUrv
- kGKSWHabvmxLHpZ8ikLiZ+dxhbJ442bv9aLLITbXoLEIeFpqNRulmDhrnJRx+KAEzSCR
- jAt097u+8HCqlNpZa/FCgp3lK+twGLtZ9S5w6Odwnh4cRsb7fFRxsRTioFO3aCTN2fLd
- CdJryk4TrdoZd98+bczHFOE3Oz5ipNxo88iJsmyMMZpUoKXhXSoPJcvnH7mHvIfmMLXH
- Cw8RcsLGaJEfpt36BsZ88bFNMXDaDV55+emghW2M3Ju3HBTypQan+lmC8i0uarCu8IXz QA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kv51htdvt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Nov 2022 15:30:40 +0000
-Received: from pps.filterd (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2AFFUebo015670;
-        Tue, 15 Nov 2022 15:30:40 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 3kutnem5bh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Nov 2022 15:30:40 +0000
-Received: from NALASPPMTA02.qualcomm.com (NALASPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AFFUeYG015662;
-        Tue, 15 Nov 2022 15:30:40 GMT
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (PPS) with ESMTPS id 2AFFUdDB015661
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Nov 2022 15:30:40 +0000
-Received: from shazhuss-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Tue, 15 Nov 2022 07:30:35 -0800
-From:   Shazad Hussain <quic_shazhuss@quicinc.com>
-To:     <andersson@kernel.org>, <johan@kernel.org>
-CC:     <sboyd@kernel.org>, <bmasney@redhat.com>, <agross@kernel.org>,
-        <mturquette@baylibre.com>, <ahalaney@redhat.com>,
-        Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] clk: qcom: gcc-sc8280xp: add cxo as parent for three ufs ref clks
-Date:   Tue, 15 Nov 2022 20:59:56 +0530
-Message-ID: <20221115152956.21677-1-quic_shazhuss@quicinc.com>
-X-Mailer: git-send-email 2.38.0
+        Tue, 15 Nov 2022 10:32:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A57273D;
+        Tue, 15 Nov 2022 07:32:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3424A6186A;
+        Tue, 15 Nov 2022 15:32:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85459C433C1;
+        Tue, 15 Nov 2022 15:32:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668526376;
+        bh=1L1PU7LcHMQLmP0fJq+V++VPtvtxdQUZkoNlMGwb9ak=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=vRNceK0H3tC4sH60FIUi3KHtxLfKL2+LlqanFddHdF0qPXoEuTLRIc+/jPZcnPbGk
+         Sa+DKJEqt8k6gL3fB8fuPq4lEk/xKDhK9oboCgkFrj+d8+dDwtvbld9VQVD/Kque37
+         UGHbwcpfFe6VJ/Up0MDBKzUojO/m7YYPPxmaVsneLaWfgLN9+8JkNTsiNSgkqyfkIQ
+         y8lG7JU5lOZ9uBhuCvCMEVAgu/plH0LNibtWTSiTodcDNjmUUd/48UjG214HX1Ymvd
+         ZyyEoxH1SdjHzgQx75l26nb5TCMu8qsQcSBkUxDfyvDUSmT5Zvq7ZkYJ/wJzP1ljJR
+         VnkyHbjxKfeLg==
+Date:   Tue, 15 Nov 2022 16:32:53 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH hid v12 00/15] Introduce eBPF support for HID devices
+In-Reply-To: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
+Message-ID: <nycvar.YFH.7.76.2211151631060.6045@cbobk.fhfr.pm>
+References: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: I6FDNuKTZ3SOcpP610kka_oyCnQj2kv9
-X-Proofpoint-GUID: I6FDNuKTZ3SOcpP610kka_oyCnQj2kv9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-15_08,2022-11-15_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- malwarescore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
- spamscore=0 clxscore=1011 impostorscore=0 mlxscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211150104
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,71 +58,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The three UFS reference clocks, gcc_ufs_ref_clkref_clk for external
-UFS devices, gcc_ufs_card_clkref_clk and gcc_ufs_1_card_clkref_clk for
-two PHYs are all sourced from CXO.
+On Thu, 3 Nov 2022, Benjamin Tissoires wrote:
 
-Added parent_data for all three reference clocks described above to
-reflect that all three clocks are sourced from CXO to have valid
-frequency for the ref clock needed by UFS controller driver.
+> Hi,
+> 
+> and here comes the v12 of the HID-BPF series.
+> 
+> Again, for a full explanation of HID-BPF, please refer to the last patch
+> in this series (15/15).
+> 
+> This revision contains most notably few fixes from the various kernel CI
+> bots. I also took Alexei's review into account, and we do not pollute
+> tools/include with useless hid headers.
+> 
+> I also removed most of the last checkpatch complains about adding
+> external kfunc declarations in C files. And this led me to also show in
+> samples/ how we can link together 2 BPF object files. Impressive how
+> easy it is :)
+> 
+> Cheers,
+> Benjamin
+> 
+> Benjamin Tissoires (15):
+>   HID: fix I2C_HID not selected when I2C_HID_OF_ELAN is
+>   HID: Kconfig: split HID support and hid-core compilation
+>   HID: initial BPF implementation
+>   selftests: add tests for the HID-bpf initial implementation
+>   HID: bpf jmp table: simplify the logic of cleaning up programs
+>   HID: bpf: allocate data memory for device_event BPF programs
+>   selftests/hid: add test to change the report size
+>   HID: bpf: introduce hid_hw_request()
+>   selftests/hid: add tests for bpf_hid_hw_request
+>   HID: bpf: allow to change the report descriptor
+>   selftests/hid: add report descriptor fixup tests
+>   selftests/hid: Add a test for BPF_F_INSERT_HEAD
+>   samples/hid: add new hid BPF example
+>   samples/hid: add Surface Dial example
+>   Documentation: add HID-BPF docs
 
-Fixes: d65d005f9a6c ("clk: qcom: add sc8280xp GCC driver")
-Link: https://lore.kernel.org/lkml/Y2Tber39cHuOSR%2FW@hovoldconsulting.com/
-Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
-Tested-by: Johan Hovold <johan+linaro@kernel.org>
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-Tested-by: Andrew Halaney <ahalaney@redhat.com>
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
-Reviewed-by: Reviewed-by: Brian Masney <bmasney@redhat.com>
----
-Changes since v2:
--  Tweaked commit message and added R-b T-b from v2
+This (apart from the first patch, which I've carved out into the fixes 
+branch) is now in hid.git#for-6.2/hid-bpf
 
-v2 of this patch can be found at
-https://lore.kernel.org/all/20221115102217.6381-1-quic_shazhuss@quicinc.com/
+Thanks a lot for all the effort invested into this, Benjamin!
 
-v1 of this patch can be found at
-https://lore.kernel.org/all/20221030142333.31019-1-quic_shazhuss@quicinc.com/
-
-used below patches for verification on next-20221114
-https://lore.kernel.org/lkml/20221104092045.17410-2-johan+linaro@kernel.org/
-https://lore.kernel.org/lkml/20221104092045.17410-3-johan+linaro@kernel.org/
-https://lore.kernel.org/lkml/20221111113732.461881-1-thierry.reding@gmail.com/
-
- drivers/clk/qcom/gcc-sc8280xp.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
-index a18ed88f3b82..b3198784e1c3 100644
---- a/drivers/clk/qcom/gcc-sc8280xp.c
-+++ b/drivers/clk/qcom/gcc-sc8280xp.c
-@@ -5364,6 +5364,8 @@ static struct clk_branch gcc_ufs_1_card_clkref_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(const struct clk_init_data) {
- 			.name = "gcc_ufs_1_card_clkref_clk",
-+			.parent_data = &gcc_parent_data_tcxo,
-+			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -5432,6 +5434,8 @@ static struct clk_branch gcc_ufs_card_clkref_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(const struct clk_init_data) {
- 			.name = "gcc_ufs_card_clkref_clk",
-+			.parent_data = &gcc_parent_data_tcxo,
-+			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -5848,6 +5852,8 @@ static struct clk_branch gcc_ufs_ref_clkref_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(const struct clk_init_data) {
- 			.name = "gcc_ufs_ref_clkref_clk",
-+			.parent_data = &gcc_parent_data_tcxo,
-+			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
 -- 
-2.38.0
+Jiri Kosina
+SUSE Labs
 
