@@ -2,75 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C484262A167
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B40062A170
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiKOShJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 13:37:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
+        id S229552AbiKOSkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 13:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbiKOShG (ORCPT
+        with ESMTP id S229645AbiKOSkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 13:37:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69BCDFB5
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:37:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2642B81A45
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 18:37:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 512CBC433D6;
-        Tue, 15 Nov 2022 18:37:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668537423;
-        bh=DXtBqwAJNzvabhEQWkg/v9TIqBl57Z8uQGQkk8DLJik=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Gx6gn3BUolDn9LKLn3SiegK/aNplpPWVpSisRC2HEjW0evz1s6J82zuOJ4hyJOJWe
-         J1k6iEM9O5uiqWTI4fGxaytNLcChn4nSsEgq7SrVtbqqh5Lf1fy4p1O7JZdaGqivEx
-         EVspKIdTkQDsf/u3HsCKChs/QMEjn3dXYzdkQpigFVivu4AVlnbN5O1HsM20Un++fi
-         0L+jU7eJEjI7sHbcg+GjlCTv0mQo3+PMSpROpfAOaXrf4b9fG9iKfjy+ipNzbNaVXq
-         UCwUHtMDZsrtEtnFRXLc7US238553xOarR/XQFtO5UY9dmKfiWhmnOzSBsDIy5q3Jz
-         dq40ypaEJPNxA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3D74BC395FE;
-        Tue, 15 Nov 2022 18:37:03 +0000 (UTC)
-Subject: Re: [GIT PULL] erofs fixes for 6.1-rc6
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <Y3OhbojEWZa35DVf@debian>
-References: <Y3OhbojEWZa35DVf@debian>
-X-PR-Tracked-List-Id: Development of Linux EROFS file system <linux-erofs.lists.ozlabs.org>
-X-PR-Tracked-Message-Id: <Y3OhbojEWZa35DVf@debian>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-6.1-rc6-fixes
-X-PR-Tracked-Commit-Id: 37020bbb71d911431e16c2c940b97cf86ae4f2f6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 81e7cfa3a9eb4ba6993a9c71772fdab21bc5d870
-Message-Id: <166853742324.15464.2205805184353773016.pr-tracker-bot@kernel.org>
-Date:   Tue, 15 Nov 2022 18:37:03 +0000
-To:     Gao Xiang <xiang@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Yue Hu <huyue2@coolpad.com>, linux-erofs@lists.ozlabs.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Nov 2022 13:40:09 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B939F19027;
+        Tue, 15 Nov 2022 10:40:05 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 0640E18841F7;
+        Tue, 15 Nov 2022 18:40:03 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id F042725002DE;
+        Tue, 15 Nov 2022 18:40:02 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id DF63991201E4; Tue, 15 Nov 2022 18:40:02 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+MIME-Version: 1.0
+Date:   Tue, 15 Nov 2022 19:40:02 +0100
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8 net-next 0/2] mv88e6xxx: Add MAB offload support
+In-Reply-To: <20221115161846.2st2kjxylfvlncib@skbuf>
+References: <Y3NcOYvCkmcRufIn@shredder>
+ <5559fa646aaad7551af9243831b48408@kapio-technology.com>
+ <20221115102833.ahwnahrqstcs2eug@skbuf>
+ <7c02d4f14e59a6e26431c086a9bb9643@kapio-technology.com>
+ <20221115111034.z5bggxqhdf7kbw64@skbuf>
+ <0cd30d4517d548f35042a535fd994831@kapio-technology.com>
+ <20221115122237.jfa5aqv6hauqid6l@skbuf>
+ <fb1707b55bd8629770e77969affaa2f9@kapio-technology.com>
+ <20221115145650.gs7crhkidbq5ko6v@skbuf>
+ <f229503b98d772c936f1fc8ca826a14f@kapio-technology.com>
+ <20221115161846.2st2kjxylfvlncib@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <e05f69915a2522fc1e9854194afcc87b@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 15 Nov 2022 22:25:50 +0800:
+On 2022-11-15 17:18, Vladimir Oltean wrote:
+> On Tue, Nov 15, 2022 at 05:03:01PM +0100, netdev@kapio-technology.com 
+> wrote:
+>> Yes, so you want me to simply increase the 50ms on line 58 in smi.c...
+>> 
+>> I have now tried to increase it even to 10000ms == 10s and it didn't 
+>> help,
+>> so something else must be needed...
+> 
+> Not only that, but also the one in mv88e6xxx_wait_mask().
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git tags/erofs-for-6.1-rc6-fixes
+So, I will not present you with a graph as it is a tedious process 
+(probably
+it is some descending gaussian curve wrt timeout occurring).
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/81e7cfa3a9eb4ba6993a9c71772fdab21bc5d870
+But 100ms fails, 125 I had 1 port fail, at 140, 150  and 180 I saw 
+timeouts
+resulting in fdb add fails, like (and occasional port fail):
 
-Thank you!
+mv88e6085 1002b000.ethernet-1:04: Timeout while waiting for switch
+mv88e6085 1002b000.ethernet-1:04: port 0 failed to add be:7c:96:06:9f:09 
+vid 1 to fdb: -110
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+At around 200 ms it looks like it is getting stable (like 5 runs, no 
+problems).
+
+So with the gaussian curve tail whipping ones behind (risque of failure) 
+it
+might need to be like 300 ms in my case... :-)
