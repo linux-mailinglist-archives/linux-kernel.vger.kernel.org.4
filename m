@@ -2,121 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02253629276
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:30:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E2762927A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbiKOHaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 02:30:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
+        id S230125AbiKOHab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 02:30:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiKOHaM (ORCPT
+        with ESMTP id S232212AbiKOHa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 02:30:12 -0500
-Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EF31FF94
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:30:11 -0800 (PST)
-Received: from gproxy4-pub.mail.unifiedlayer.com (gproxy4-pub.mail.unifiedlayer.com [69.89.23.142])
-        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id 9BA598032814
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:30:00 +0000 (UTC)
-Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
-        by progateway6.mail.pro1.eigbox.com (Postfix) with ESMTP id 75E6610046119
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:29:28 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id uqNsoDqHlbFxbuqNsoECJ6; Tue, 15 Nov 2022 07:29:28 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=D72Cltdj c=1 sm=1 tr=0 ts=63733fd8
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=9xFQ1JgjjksA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=nEtKGlOUtqTnfcMIYH4oMa70ypEC1rPC1+8XGcNoCD8=; b=ezGuEVLPHAPiUPeANmnDI0EhaR
-        IhoeJi0FzdpqWtdMEsPhMr/pBEygQwEtP/tDIQvoAmRvVBDcmwqcO2n+S8hIlO31tItTO/cBfQra6
-        f1hIxcekRvR0RfSue0vmcnRqnw/iwsnaedKbrqZj4d9vDKVEyD0KGqrWLGk9ZpHcSvFoDRKdlxH9T
-        xf7ZeALNzCsRWQnXR9hgkyzwgQxYEMmrDJ6NUQI2qP5AmvlqKAGYhaEVlAvrXy45q4Vs1xhE7ijVL
-        v+0YRkzn/PiUo5zFse09D/lxE63v3DAOWO/URN23gj1he40RPKUGTCTBV+QVFccx9e58U5bWj/lVM
-        LMCkhnuw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:57850 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1ouqNq-0000D1-JL;
-        Tue, 15 Nov 2022 00:29:26 -0700
-Subject: Re: [PATCH 5.15 000/131] 5.15.79-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221114124448.729235104@linuxfoundation.org>
-In-Reply-To: <20221114124448.729235104@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <8657a9ac-aa5f-7ce1-4fb0-4b52c2b16676@w6rz.net>
-Date:   Mon, 14 Nov 2022 23:29:22 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 15 Nov 2022 02:30:28 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B5A1DDE4;
+        Mon, 14 Nov 2022 23:30:27 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id cl5so22699554wrb.9;
+        Mon, 14 Nov 2022 23:30:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=m19Xg93KjBfSnHx4juiS3V4vDkrijASgcVGL6AJsgeU=;
+        b=jttYtcUfxSV6czckQ6I0GYNmW3+5cbKBXHuCFB3OOcpYe2tO+vVwffONsp9C73KGsi
+         B1uo4tLV5ey3GYFBpPbd5IvV9x8t/wIdc3LqwWGhqlRm1Hzh0n+vM2LDaJ3sOew3ZVhi
+         mRAMZ/QDj+RtF3AFwsiM7rwNzI6zcFSHBwUQZXOLgrpKjnRenRfOARWXm0kmEGLfDyv8
+         4pql44zHWHYqEsYWu/ICV9IXH7HGHJHpmKThrnnJFkAD0EglfujWgY2MpQqxfFom1tE6
+         4RP2wugeT0om3RqiOs0W3MkXS6Cm56oxL4du+j1wOERaaAYwJiw0b/jpwkJvnJ3F/NR5
+         g3ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m19Xg93KjBfSnHx4juiS3V4vDkrijASgcVGL6AJsgeU=;
+        b=CgION4FMgy2lLWxt6HA8oeUyFgsc11M41Wbti+lAQ9+xpZXTfr2yJBbpGrC6HYfjwe
+         O+Qky5yhWWDc5wceh3IYPa7lqzRGU3nsKyi9R+HHcEbzcyhEIvyzwxZEZoAKVsTroNTP
+         WtyVSjwbKWRcKqfX2hnuUsPlKUUkjYa7U9OWZIordeNFcSnrCUJPxsSNIIOJzlSENfUA
+         KzXHoQidPQ3+e0ezwYQTnkcXqY1qroGAG1NAwMteNfOF80MVnnmovlVK9FEdb8cGImOQ
+         7/UlNOnRkhzRafsecTWunh6+GviNdDeXdwSMaHRiAfUszKTWUYGAEwjq/i3h9yF4NHqL
+         FDMA==
+X-Gm-Message-State: ANoB5pkOKj8qS9G0F3IBf1BlSgiYfCK05czC3nifK1Gnlpz+Utq9y3tB
+        GfuAN+J5VfL1ralPelJQui8=
+X-Google-Smtp-Source: AA0mqf4lhcp6QtUhs0G1JpeMHMO0JKn1zVvg1TdYhDWJYuT7eH5wK+ILKKvZNPTuJDDUkvMXM37asA==
+X-Received: by 2002:a05:6000:51:b0:241:553e:5040 with SMTP id k17-20020a056000005100b00241553e5040mr9880616wrx.578.1668497426017;
+        Mon, 14 Nov 2022 23:30:26 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id c17-20020adffb11000000b002417f35767asm8276863wrr.40.2022.11.14.23.30.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 23:30:25 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 15 Nov 2022 08:30:23 +0100
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Jiri Olsa <olsajiri@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-modules@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Laight <David.Laight@aculab.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH v8 7/9] livepatch: Improve the search performance of
+ module_kallsyms_on_each_symbol()
+Message-ID: <Y3NADwGUIvfwnGTp@krava>
+References: <20221102084921.1615-8-thunder.leizhen@huawei.com>
+ <Y3HyrIwlZPYM8zYd@krava>
+ <050b7513-4a20-75c7-0574-185004770329@huawei.com>
+ <Y3IJ5GjrXBYDbfnA@krava>
+ <ad637488-930e-33c1-558c-fc03d848afa8@huawei.com>
+ <Y3IY6gzDtk1ze3u7@krava>
+ <955eebae-0b36-d13f-0199-2f1b32af7da6@huawei.com>
+ <Y3JB++KOXxMWWX35@krava>
+ <Y3JivLcvbHNcIcSB@bombadil.infradead.org>
+ <df46ad45-2de4-0300-4afa-5788463d712a@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1ouqNq-0000D1-JL
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:57850
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <df46ad45-2de4-0300-4afa-5788463d712a@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/14/22 4:44 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.79 release.
-> There are 131 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 16 Nov 2022 12:44:21 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.79-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, Nov 15, 2022 at 10:10:16AM +0800, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2022/11/14 23:46, Luis Chamberlain wrote:
+> > On Mon, Nov 14, 2022 at 02:26:19PM +0100, Jiri Olsa wrote:
+> >> I'll check on that, meanwhile if we could keep the module argument,
+> >> that'd be great
+> > 
+> > As Leizhen suggested I could just drop patches:
+> > 
+> > 7/9 livepatch: Improve the search performance of module_kallsyms_on_each_symbol()
+> > 8/9 kallsyms: Delete an unused parameter related to kallsyms_on_each_symbol()
+> > 
+> > Then after the next kernel is released this can be relooked at.
+> > If this is agreeable let me know.
+> 
+> I'm OK.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+sounds good, thanks
 
-Tested-by: Ron Economos <re@w6rz.net>
-
+jirka
