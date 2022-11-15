@@ -2,102 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6900362A37A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9F162A37C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 21:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238570AbiKOUx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 15:53:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58528 "EHLO
+        id S238581AbiKOUyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 15:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238598AbiKOUxq (ORCPT
+        with ESMTP id S238534AbiKOUyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 15:53:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DCAE51;
-        Tue, 15 Nov 2022 12:53:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76696619F4;
-        Tue, 15 Nov 2022 20:53:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B461BC433C1;
-        Tue, 15 Nov 2022 20:53:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668545624;
-        bh=QtEMXmU7rn5ebyaLLdCAgveTJ9apGDanAfmeQR5mDqw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=nIg4L4bxNYzRM4/zjuO1mZ8QdSy7qK9WvzdtoOQDHm8PK4a3YNEniblOzzgI5vgPP
-         sWV2keulBuZ72DytYmxrlX+5odfNRbrJxWJKBwRXPqenf4OL9VFJdnWEGSN8IX658v
-         tEHugTVr3zNdI+r+mTAsFHlUleYAp3UlXJ65zOvXzu7J5wNH19hQxuo3LNUOo+81fm
-         koxnMc45Jk1ndKYbfCATfDszOtvxal9gN2VpE9bENX4zAZYnKcgB0M2DKTdSsMPX7J
-         DIjf/3vZTDoLrc8rYxMfQHZ0MQVgBF6ztq5Qi+JLGMnOOp/0NIWILG9pfm9IGIBVMS
-         OYWXHQHqO+lpw==
-Date:   Tue, 15 Nov 2022 14:53:43 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH 2/2] PCI: Drop controller CONFIG_OF dependencies
-Message-ID: <20221115205343.GA1038784@bhelgaas>
+        Tue, 15 Nov 2022 15:54:09 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4E3F19;
+        Tue, 15 Nov 2022 12:54:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=rgefBHoSiK+EXXSu5hLiDgMbY02EErMFZqCWCQbOdYk=; b=lIv8xG2p/ovF7cvN7dCczlQ2lk
+        qnexkYZCZuATKDbhNtaDPeQq1hDLThWO3XPZWCFL9l4aEL34D0r/ESnm42D0YoOvyg1+CoJkdhlIU
+        czdpBf/PBY0yX86TxibDXBV19MsdHJFV9oNQWn2Rx8467FN62/UN4Rw0e7nE+qKYB0QQbZX1SD9oy
+        ymQ+Ad4YqhHb6tq4bXuoJWtTSi9wbpicICXQPhaBim+RT6xt4+xQ/LS4hSnIqkbiXoIo4Gwkm0FiN
+        8T4bMk+QbzWmzs07wcJVeAV5zEEbCjLxgNjiktIfBbF9H3f8tMLoRWv73113ee1swqGMTGrVRgtYD
+        /gO454ng==;
+Received: from [179.232.147.2] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1ov2wV-001Qsy-4W; Tue, 15 Nov 2022 21:54:03 +0100
+Message-ID: <5c00c1a5-5ba3-f9bd-1ffa-e57f4deba043@igalia.com>
+Date:   Tue, 15 Nov 2022 17:53:50 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221115193155.mqdh6pzhiba4v4pa@pali>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: RCU stall on 6.1-rc4 (and some previous releases) related to
+ ftrace
+Content-Language: en-US
+To:     paulmck@kernel.org, Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+        "Guilherme G. Piccoli" <kernel@gpiccoli.net>
+References: <1ef5fe19-a82f-835e-fda5-455e9c2b94b4@igalia.com>
+ <20221110191651.3a177417@rorschach.local.home>
+ <20221111033712.GO725751@paulmck-ThinkPad-P17-Gen-1>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20221111033712.GO725751@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 08:31:55PM +0100, Pali Rohár wrote:
-> On Tuesday 15 November 2022 12:07:34 Bjorn Helgaas wrote:
-> > On Tue, Nov 15, 2022 at 04:56:10PM +0100, Geert Uytterhoeven wrote:
-> > > On Tue, Oct 25, 2022 at 9:16 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > From: Bjorn Helgaas <bhelgaas@google.com>
-> > > >
-> > > > Many drivers depend on OF interfaces, so they won't be functional if
-> > > > CONFIG_OF is not set.  But OF provides stub functions in that case, so drop
-> > > > the OF dependencies so we can at least compile-test the drivers.
-> > 
-> > > > --- a/drivers/pci/controller/Kconfig
-> > > > +++ b/drivers/pci/controller/Kconfig
-> > > > @@ -8,7 +8,6 @@ config PCI_MVEBU
-> > > >         depends on ARCH_MVEBU || ARCH_DOVE || COMPILE_TEST
-> > > >         depends on MVEBU_MBUS
-> > > >         depends on ARM
-> > > > -       depends on OF
-> > > 
-> > > This is exactly why we have the COMPILE_TEST symbol.
-> > > There is no point in bothering all users who configure kernels with
-> > > questions about drivers that won't function anyway due to missing
-> > > dependencies, unless the user explicitly wants to do compile-testing.
-> > > 
-> > > So all of these should become:
-> > > 
-> > >     depends on OF || COMPILE_TEST
-> > 
-> > Oh, yes, thanks for pointing this out, I totally blew it here.  I
-> > dropped this while we figure it out.
+On 11/11/2022 00:37, Paul E. McKenney wrote:
+> [...]
+>> This isn't where I would put it. I would add it after the if statement.
+>> That is, at the end of the loop.
 > 
-> I agree too, it really makes sense to not provide pci-mvebu driver to
-> end users without OF - it would not work.
+> I am good either way.  Though one could argue for putting it at the
+> beginning of the loop in case every element takes that "continue" above...
 > 
-> Anyway, it is needed to declare "depends on ARM" for pci-mvebu?
-> Both supported architectures (mvebu and dove) are ARM.
+> 							Thanx, Paul
 
-If you're asking whether "depends on ARM" can be removed for
-PCI_MVEBU, I don't know the answer.  I do see that CONFIG_ARCH_MVEBU
-is mentioned in arch/arm64, which doesn't seem to set CONFIG_ARM.
-
-In any event, I would consider a change like that to be a separate
-patch.  Here I just want to focus on CONFIG_OF.
-
-Bjorn
+Thanks Paul and Steve - submitted an official version here:
+https://lore.kernel.org/lkml/20221115204847.593616-1-gpiccoli@igalia.com
