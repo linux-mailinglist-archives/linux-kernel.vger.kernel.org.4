@@ -2,262 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6876296FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 636856296FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbiKOLPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 06:15:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49950 "EHLO
+        id S230125AbiKOLPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 06:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiKOLPC (ORCPT
+        with ESMTP id S230052AbiKOLPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 15 Nov 2022 06:15:02 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BCD13D3E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:14:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668510892; x=1700046892;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ixibvKAGVDl0+Jl58911WM708GGGPwm0Pi5KOZslWWM=;
-  b=jQGRJz7PGGL1KaBJsT1CH4QUszMzW7WcBfpVV4q36M1NaS3KsNEfso0s
-   6oojKWFWh/iJ9DFE9cfSbIv9vlK06IvXWNzF5RFAlE0r+sOJpwRSKx/a7
-   aSi7Uls5XU2XxKvn+DgIdiUhOONenDKx4sitb7o6AIKb2yOP3kp54YcHj
-   wl3oNIPHQfQH5nrH5tDYxSz2ceMM7hJdVK7n9VWw94uLWyAPV4x2rYbE7
-   05BZR+ITkS22xsJRF1irkRIj2XsWX7DmC3QL4x9oLmTb5pamXvZQr2X/X
-   1sj9p4ZfCbaA4FYfGsasLZnUVpm0pj3aUshZTIAh6RMM8NxFeA9X5YoVV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="295591090"
-X-IronPort-AV: E=Sophos;i="5.96,165,1665471600"; 
-   d="scan'208";a="295591090"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 03:14:51 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="707699597"
-X-IronPort-AV: E=Sophos;i="5.96,165,1665471600"; 
-   d="scan'208";a="707699597"
-Received: from sannilnx.jer.intel.com ([10.12.26.175])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 03:14:48 -0800
-From:   Alexander Usyskin <alexander.usyskin@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Tomas Winkler <tomas.winkler@intel.com>,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] mei: add timeout to send
-Date:   Tue, 15 Nov 2022 13:14:38 +0200
-Message-Id: <20221115111438.1639527-1-alexander.usyskin@intel.com>
-X-Mailer: git-send-email 2.34.1
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D3F233AB;
+        Tue, 15 Nov 2022 03:14:58 -0800 (PST)
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MiJVG-1pQMm605pe-00fR8u; Tue, 15
+ Nov 2022 12:14:48 +0100
+Message-ID: <12d5eb57-af18-c099-9a60-6a1d564182af@gmx.com>
+Date:   Tue, 15 Nov 2022 19:14:42 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Content-Language: en-US
+To:     Wei Chen <harperchen1110@gmail.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        osandov@fb.com, sweettea-kernel@dorminy.me,
+        syzkaller-bugs@googlegroups.com
+References: <CAO4mrfdLsMZT1ytmTCK4m0xXezxskTUbQjqZoGobMVhnZgdfmw@mail.gmail.com>
+ <CAO4mrfcYtXiuuaPtm==heNarkMqTUGoKWxnmiOC3jvhfjeOBFg@mail.gmail.com>
+ <08a18fd6-3ce8-a063-90cf-e659004d0894@gmx.com>
+ <CAO4mrfcnodR8csMs7s8SCgE5k7LEk2emhEJSaKs7+Ye3NzaXGQ@mail.gmail.com>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+Subject: Re: WARNING in _btrfs_ioctl_set_received_subvol
+In-Reply-To: <CAO4mrfcnodR8csMs7s8SCgE5k7LEk2emhEJSaKs7+Ye3NzaXGQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:ibwkcpj1J7g3zglAj4IbUeajTqgWcUAeODm4RaJ8ReU95Za65qL
+ U/tCFNo0HKtYfBS7FYdpwPDR3rtLHumtlMFfg3X9qMe0omO8pYXUIUa09lKm2bkjKFwkqYl
+ xWndTgFeVMOa//3yaciqP6pLTfgXIZrg75LY5ia89odQQjTVRmPQKKhqdUoWrH6TD3+Czzc
+ ZW086im6R7jIBCU3RVtoA==
+UI-OutboundReport: notjunk:1;M01:P0:WqEgpc6N5yo=;TuEu6/Psrj6q3gKl4OwKDN3hBZ2
+ MYvEcEhlZFectI3E9FBr9e0SdrPfVADVNtDQDZe1PiV70s1EByNTVDyS83TLqrgVEWL3YtHd3
+ b6m/ukpz8juxGtNenPFCEKs8LDRTgr+Fb89PavQxPb1s0VakrPSTh4wwx0UZxr2F3OG43g6RS
+ FopViVdYVzpCQVzklc9n9G4rsKo2K2G7LMtmV2VeCXVGWbV2ierZhIYLazwtUtGsZECxa8hlR
+ 3ZkZ5HKPxG7klnUAkKDAIHVPvaTYzYSJhnbG2SmESNqRbhfFQKGNZXhIh3G6GI9/DnGqdw/9I
+ KFOnp8Vz4IfnIRZeNOnjbICuePyxXtOGO6UjeSq4Drg5ASjwOEXySidtwOkhRurSdYpYERIFd
+ VQpxvFZTuURmSN7AQWygQas1kYQFvRf92gq5kfnzKBaVOEpo139C0AGOAP6cOC557+iggmV59
+ v+NkILinnjVWkh+qq/pItxf9tT0K+52wOVrrKiaBQ5xRPVGfBEOJAw5aToPcTpORKYp67sYXJ
+ 7FRicBRp0N+ED3/VjeOTBGQX6whwsllRc++KJ17ahReHLSa6uR2wDCj0KAHwyDNuJrsGHoNIZ
+ /X9KvzKAnqNL7BauExttWW5OWF7egN9E4ppLSpJLkhXwxnEA4CskJXX6Ppoo2KntlWTAkqKk6
+ ivcJ/RjbsKwTJeV4aTu1qB0QQdcNhTlrHTKAnH951Vx/fG22ZPkyFTQL7NYbeCuA0/cOluc9w
+ BUmojzSCM0VZZapPjoEZOcXEwJR96RATOEMB0YXCr5eCGUxe91L3N+bZ/SaJe8bEzvg3E+xfv
+ j8HyXja8hQNE4u7p0RRjjFPD58z38V3Rg7bF7hKd6O0ydYPepmbC8mNKmysmo8N9NjiQqNZJ/
+ mxD8EJTvxqvyiJzHkzeY54tjfxuPI2UnjTiYxAMtWGByDdWAo1moQIkliDGhVD0jI9QiQAQ/2
+ +dHaOeTMWimTPbOqVyYbPSb/hqkIdPQOvmD6bB6vPehB+7JdXgoCmp7m6y237D7o5AhxOA==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When driver wakes up the firmware from the low power state, it is sending
-a memory ready message.
-The send is done via synchronous/blocking function to ensure that firmware
-is in ready state. However, in case of firmware undergoing reset send
-might be block forever.
-To address this issue a timeout is added to blocking write command on
-the internal bus.
 
-Introduce the __mei_cl_send_timeout function to use instead of
-__mei_cl_send in cases where timeout is required.
-The mei_cl_write has only two callers and there is no need to split
-it into two functions.
 
-Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
----
-V2: address review comments:
- - split __mei_cl_send and __mei_cl_send_timeout
- - add units to timeout KDoc
- - use MAX_SCHEDULE_TIMEOUT to squash wait to one macro
+On 2022/11/15 18:48, Wei Chen wrote:
+> Dear Linux developers,
+> 
+> Thank you for the advice. Please find the crash report in the upstream
+> release v6.0.0 below.
 
- drivers/misc/mei/bus-fixup.c | 14 +++++++++-----
- drivers/misc/mei/bus.c       | 22 ++++++++++++++++++++--
- drivers/misc/mei/client.c    | 18 ++++++++++++++----
- drivers/misc/mei/client.h    |  2 +-
- drivers/misc/mei/main.c      |  2 +-
- drivers/misc/mei/mei_dev.h   |  2 ++
- 6 files changed, 47 insertions(+), 13 deletions(-)
+You know what? Even using your v6.0.0 report, it's just doing more harm 
+than good.
 
-diff --git a/drivers/misc/mei/bus-fixup.c b/drivers/misc/mei/bus-fixup.c
-index 71fbf0bc8453..9959b8e8e91d 100644
---- a/drivers/misc/mei/bus-fixup.c
-+++ b/drivers/misc/mei/bus-fixup.c
-@@ -188,17 +188,20 @@ static int mei_fwver(struct mei_cl_device *cldev)
- 	return ret;
- }
- 
-+#define GFX_MEMORY_READY_TIMEOUT 200
-+
- static int mei_gfx_memory_ready(struct mei_cl_device *cldev)
- {
- 	struct mkhi_gfx_mem_ready req = {0};
--	unsigned int mode = MEI_CL_IO_TX_INTERNAL;
-+	unsigned int mode = MEI_CL_IO_TX_INTERNAL | MEI_CL_IO_TX_BLOCKING;
- 
- 	req.hdr.group_id = MKHI_GROUP_ID_GFX;
- 	req.hdr.command = MKHI_GFX_MEMORY_READY_CMD_REQ;
- 	req.flags = MKHI_GFX_MEM_READY_PXP_ALLOWED;
- 
- 	dev_dbg(&cldev->dev, "Sending memory ready command\n");
--	return __mei_cl_send(cldev->cl, (u8 *)&req, sizeof(req), 0, mode);
-+	return __mei_cl_send_timeout(cldev->cl, (u8 *)&req, sizeof(req), 0,
-+				     mode, GFX_MEMORY_READY_TIMEOUT);
- }
- 
- static void mei_mkhi_fix(struct mei_cl_device *cldev)
-@@ -263,12 +266,13 @@ static void mei_gsc_mkhi_fix_ver(struct mei_cl_device *cldev)
- 
- 	if (cldev->bus->pxp_mode == MEI_DEV_PXP_INIT) {
- 		ret = mei_gfx_memory_ready(cldev);
--		if (ret < 0)
-+		if (ret < 0) {
- 			dev_err(&cldev->dev, "memory ready command failed %d\n", ret);
--		else
-+		} else {
- 			dev_dbg(&cldev->dev, "memory ready command sent\n");
-+			cldev->bus->pxp_mode = MEI_DEV_PXP_SETUP;
-+		}
- 		/* we go to reset after that */
--		cldev->bus->pxp_mode = MEI_DEV_PXP_SETUP;
- 		goto out;
- 	}
- 
-diff --git a/drivers/misc/mei/bus.c b/drivers/misc/mei/bus.c
-index 1fbe127ff633..63043e8df980 100644
---- a/drivers/misc/mei/bus.c
-+++ b/drivers/misc/mei/bus.c
-@@ -32,8 +32,26 @@
-  *
-  * Return: written size bytes or < 0 on error
-  */
--ssize_t __mei_cl_send(struct mei_cl *cl, const u8 *buf, size_t length, u8 vtag,
-+inline ssize_t __mei_cl_send(struct mei_cl *cl, const u8 *buf, size_t length, u8 vtag,
- 		      unsigned int mode)
-+{
-+	return __mei_cl_send_timeout(cl, buf, length, vtag, mode, MAX_SCHEDULE_TIMEOUT);
-+}
-+
-+/**
-+ * __mei_cl_send_timeout - internal client send (write)
-+ *
-+ * @cl: host client
-+ * @buf: buffer to send
-+ * @length: buffer length
-+ * @vtag: virtual tag
-+ * @mode: sending mode
-+ * @timeout: send timeout in milliseconds for blocking writes
-+ *
-+ * Return: written size bytes or < 0 on error
-+ */
-+ssize_t __mei_cl_send_timeout(struct mei_cl *cl, const u8 *buf, size_t length, u8 vtag,
-+			      unsigned int mode, unsigned long timeout)
- {
- 	struct mei_device *bus;
- 	struct mei_cl_cb *cb;
-@@ -108,7 +126,7 @@ ssize_t __mei_cl_send(struct mei_cl *cl, const u8 *buf, size_t length, u8 vtag,
- 		cb->buf.size = 0;
- 	}
- 
--	rets = mei_cl_write(cl, cb);
-+	rets = mei_cl_write(cl, cb, timeout);
- 
- 	if (mode & MEI_CL_IO_SGL && rets == 0)
- 		rets = length;
-diff --git a/drivers/misc/mei/client.c b/drivers/misc/mei/client.c
-index 6c8b71ae32c8..02c278202ad7 100644
---- a/drivers/misc/mei/client.c
-+++ b/drivers/misc/mei/client.c
-@@ -1954,10 +1954,11 @@ int mei_cl_irq_write(struct mei_cl *cl, struct mei_cl_cb *cb,
-  *
-  * @cl: host client
-  * @cb: write callback with filled data
-+ * @timeout: send timeout in milliseconds for blocking writes
-  *
-  * Return: number of bytes sent on success, <0 on failure.
-  */
--ssize_t mei_cl_write(struct mei_cl *cl, struct mei_cl_cb *cb)
-+ssize_t mei_cl_write(struct mei_cl *cl, struct mei_cl_cb *cb, unsigned long timeout)
- {
- 	struct mei_device *dev;
- 	struct mei_msg_data *buf;
-@@ -2081,11 +2082,20 @@ ssize_t mei_cl_write(struct mei_cl *cl, struct mei_cl_cb *cb)
- 	if (blocking && cl->writing_state != MEI_WRITE_COMPLETE) {
- 
- 		mutex_unlock(&dev->device_lock);
--		rets = wait_event_interruptible(cl->tx_wait,
--				cl->writing_state == MEI_WRITE_COMPLETE ||
--				(!mei_cl_is_connected(cl)));
-+		rets = wait_event_interruptible_timeout(cl->tx_wait,
-+							cl->writing_state == MEI_WRITE_COMPLETE ||
-+							(!mei_cl_is_connected(cl)),
-+							msecs_to_jiffies(timeout));
- 		mutex_lock(&dev->device_lock);
-+		/* clean all queue on timeout as something fatal happened */
-+		if (rets == 0) {
-+			rets = -ETIME;
-+			mei_io_tx_list_free_cl(&dev->write_list, cl, NULL);
-+			mei_io_tx_list_free_cl(&dev->write_waiting_list, cl, NULL);
-+		}
- 		/* wait_event_interruptible returns -ERESTARTSYS */
-+		if (rets > 0)
-+			rets = 0;
- 		if (rets) {
- 			if (signal_pending(current))
- 				rets = -EINTR;
-diff --git a/drivers/misc/mei/client.h b/drivers/misc/mei/client.h
-index 418056fb1489..9052860bcfe0 100644
---- a/drivers/misc/mei/client.h
-+++ b/drivers/misc/mei/client.h
-@@ -246,7 +246,7 @@ int mei_cl_connect(struct mei_cl *cl, struct mei_me_client *me_cl,
- int mei_cl_irq_connect(struct mei_cl *cl, struct mei_cl_cb *cb,
- 		       struct list_head *cmpl_list);
- int mei_cl_read_start(struct mei_cl *cl, size_t length, const struct file *fp);
--ssize_t mei_cl_write(struct mei_cl *cl, struct mei_cl_cb *cb);
-+ssize_t mei_cl_write(struct mei_cl *cl, struct mei_cl_cb *cb, unsigned long timeout);
- int mei_cl_irq_write(struct mei_cl *cl, struct mei_cl_cb *cb,
- 		     struct list_head *cmpl_list);
- 
-diff --git a/drivers/misc/mei/main.c b/drivers/misc/mei/main.c
-index 930887e7e38d..632d4ae21e46 100644
---- a/drivers/misc/mei/main.c
-+++ b/drivers/misc/mei/main.c
-@@ -383,7 +383,7 @@ static ssize_t mei_write(struct file *file, const char __user *ubuf,
- 		goto out;
- 	}
- 
--	rets = mei_cl_write(cl, cb);
-+	rets = mei_cl_write(cl, cb, MAX_SCHEDULE_TIMEOUT);
- out:
- 	mutex_unlock(&dev->device_lock);
- 	return rets;
-diff --git a/drivers/misc/mei/mei_dev.h b/drivers/misc/mei/mei_dev.h
-index 8d8018428d9d..996b70a988be 100644
---- a/drivers/misc/mei/mei_dev.h
-+++ b/drivers/misc/mei/mei_dev.h
-@@ -379,6 +379,8 @@ void mei_cl_bus_rescan_work(struct work_struct *work);
- void mei_cl_bus_dev_fixup(struct mei_cl_device *dev);
- ssize_t __mei_cl_send(struct mei_cl *cl, const u8 *buf, size_t length, u8 vtag,
- 		      unsigned int mode);
-+ssize_t __mei_cl_send_timeout(struct mei_cl *cl, const u8 *buf, size_t length, u8 vtag,
-+			      unsigned int mode, unsigned long timeout);
- ssize_t __mei_cl_recv(struct mei_cl *cl, u8 *buf, size_t length, u8 *vtag,
- 		      unsigned int mode, unsigned long timeout);
- bool mei_cl_bus_rx_event(struct mei_cl *cl);
--- 
-2.34.1
+Your reports never include the most important part
 
+- The 6.0 report is the worst.
+   panic_on_warn hides the original line number.
+
+- The v5.15.76 report only make sense if one digs the full console
+   output.
+
+   I just spend several minutes on the v5.15.76 report, and you know
+   what? The line number points to btrfs_abort_transaction().
+   And what caused the abort transaction?
+
+   Nope, your email just cut it and only shows the WARN() line.
+
+   Then more time spent on your console output, you know what?
+   Fault injection:
+
+  FAULT_INJECTION: forcing a failure.
+  name failslab, interval 1, probability 0, space 0, times 0
+  CPU: 1 PID: 29222 Comm: syz-executor.0 Not tainted 5.15.76 #5
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 
+rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+  Call Trace:
+   <TASK>
+   dump_stack_lvl+0x8d/0xcf
+   should_fail+0x13c/0x160
+   should_failslab+0x5/0x10
+   kmem_cache_alloc+0x6a/0x360
+   ? __mutex_unlock_slowpath+0x3c/0x280
+   btrfs_uuid_tree_remove+0x6e/0x270
+   ? btrfs_record_root_in_trans+0x6f/0x90
+   ? start_transaction+0x115/0x970
+   _btrfs_ioctl_set_received_subvol+0x1d7/0x430
+   ? btrfs_ioctl+0x2154/0x3d50
+   btrfs_ioctl+0x2154/0x3d50
+   ? __fget_files+0x141/0x260
+   ? do_vfs_ioctl+0x150/0xaa0
+   ? btrfs_ioctl_get_supported_features+0x40/0x40
+   ? __x64_sys_ioctl+0xb6/0x100
+   __x64_sys_ioctl+0xb6/0x100
+   do_syscall_64+0x34/0xb0
+   entry_SYSCALL_64_after_hwframe+0x61/0xcb
+  RIP: 0033:0x4697f9
+  Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48 
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 
+01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64
+
+  RSP: 002b:00007f41ffc26c48 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+  RAX: ffffffffffffffda RBX: 000000000077bf80 RCX: 00000000004697f9
+  RDX: 0000000020072c40 RSI: 00000000c0c09425 RDI: 0000000000000005
+  RBP: 00007f41ffc26c80 R08: 0000000000000000 R09: 0000000000000000
+  R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
+  R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd3c817900
+
+   So, the whole situation is, we abort transaction because we hit an
+   ENOMEM.
+
+
+Thankfully the following patch should end the meaningless reports 
+completely:
+
+https://lore.kernel.org/linux-btrfs/20221103151051.28669-1-dsterba@suse.com/T/
+
+Thanks,
+Qu
+
+> 
+> [   93.080051][ T8445] Kernel panic - not syncing: panic_on_warn set ...
+> [   93.080584][ T8445] CPU: 0 PID: 8445 Comm: a.out Not tainted 6.0.0+ #39
+> [   93.081120][ T8445] Hardware name: QEMU Standard PC (i440FX + PIIX,
+> 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+> [   93.081919][ T8445] Call Trace:
+> [   93.082209][ T8445]  <TASK>
+> [   93.082478][ T8445]  dump_stack_lvl+0x1b1/0x28e
+> [   93.082897][ T8445]  ? io_alloc_page_table+0xfe/0xfe
+> [   93.083340][ T8445]  ? panic+0x81b/0x81b
+> [   93.083709][ T8445]  ? _btrfs_ioctl_set_received_subvol+0xbe0/0x1660
+> [   93.084260][ T8445]  panic+0x2c2/0x81b
+> [   93.084597][ T8445]  ? __warn+0x131/0x220
+> [   93.084955][ T8445]  ? asan.module_ctor+0x4/0x4
+> [   93.085379][ T8445]  ? _btrfs_ioctl_set_received_subvol+0xc93/0x1660
+> [   93.085933][ T8445]  __warn+0x1fc/0x220
+> [   93.086282][ T8445]  ? _btrfs_ioctl_set_received_subvol+0xc93/0x1660
+> [   93.086744][ T8445]  report_bug+0x1b3/0x2d0
+> [   93.087034][ T8445]  handle_bug+0x3d/0x70
+> [   93.087345][ T8445]  exc_invalid_op+0x16/0x40
+> [   93.087708][ T8445]  asm_exc_invalid_op+0x16/0x20
+> [   93.088121][ T8445] RIP: 0010:_btrfs_ioctl_set_received_subvol+0xc93/0x1660
+> [   93.088707][ T8445] Code: 76 e6 8a 44 89 fa 31 c0 e8 9f 55 a6 06 4c
+> 8b 6c 24 10 eb 18 e8 7e 3a 04 fe 48 c7 c7 20 75 e6 8a 44 89 fe 31 c0
+> e8 fd b4 cd fd <0f> 0b 4c 89 ef 48 c7 c6 c0 87 e6 8a ba f6 12 00 00 e9
+> a7 06 00 00
+> [   93.090000][ T8445] RSP: 0018:ffffc9000280f7a8 EFLAGS: 00010246
+> [   93.090524][ T8445] RAX: cceb294c9a36ee00 RBX: ffff88802b27c001
+> RCX: ffff88801e0cc880
+> [   93.091197][ T8445] RDX: 0000000000000000 RSI: 0000000080000000
+> RDI: 0000000000000000
+> [   93.091833][ T8445] RBP: 00000000fffffff4 R08: ffffffff816b75fc
+> R09: ffffed100c784f14
+> [   93.092488][ T8445] R10: ffffed100c784f14 R11: 0000000000000000
+> R12: ffff88802c664440
+> [   93.093079][ T8445] R13: ffff88802c6643f0 R14: 1ffff110058cc888
+> R15: 00000000fffffff4
+> [   93.093585][ T8445]  ? __wake_up_klogd+0xcc/0x100
+> [   93.094019][ T8445]  ? _btrfs_ioctl_set_received_subvol+0xc93/0x1660
+> [   93.094542][ T8445]  btrfs_ioctl+0x1cf0/0x9db0
+> [   93.094858][ T8445]  ? btrfs_ioctl_get_supported_features+0x40/0x40
+> [   93.095352][ T8445]  ? lockdep_hardirqs_on_prepare+0x428/0x790
+> [   93.095870][ T8445]  ? rcu_read_lock_sched_held+0x87/0x110
+> [   93.096361][ T8445]  ? __bpf_trace_rcu_stall_warning+0x10/0x10
+> [   93.096887][ T8445]  ? lockdep_hardirqs_on_prepare+0x428/0x790
+> [   93.097401][ T8445]  ? do_vfs_ioctl+0xc35/0x29e0
+> [   93.097853][ T8445]  ? __ia32_compat_sys_ioctl+0xb90/0xb90
+> [   93.098321][ T8445]  ? __lock_acquire+0x6080/0x6080
+> [   93.098754][ T8445]  ? slab_free_freelist_hook+0x12e/0x1a0
+> [   93.099216][ T8445]  ? tomoyo_path_number_perm+0x5be/0x790
+> [   93.099668][ T8445]  ? kfree+0xda/0x350
+> [   93.100028][ T8445]  ? tomoyo_path_number_perm+0x627/0x790
+> [   93.100500][ T8445]  ? tomoyo_check_path_acl+0x1c0/0x1c0
+> [   93.100967][ T8445]  ? rcu_read_lock_sched_held+0x87/0x110
+> [   93.101502][ T8445]  ? lockdep_hardirqs_on_prepare+0x428/0x790
+> [   93.101995][ T8445]  ? print_irqtrace_events+0x220/0x220
+> [   93.102327][ T8445]  ? vtime_user_exit+0x2b2/0x3e0
+> [   93.102647][ T8445]  ? __ct_user_exit+0xd9/0x160
+> [   93.102946][ T8445]  ? bpf_lsm_file_ioctl+0x5/0x10
+> [   93.103249][ T8445]  ? security_file_ioctl+0x9d/0xb0
+> [   93.103566][ T8445]  ? btrfs_ioctl_get_supported_features+0x40/0x40
+> [   93.103953][ T8445]  __se_sys_ioctl+0xfb/0x170
+> [   93.104232][ T8445]  do_syscall_64+0x3d/0x90
+> [   93.104501][ T8445]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [   93.104855][ T8445] RIP: 0033:0x7fbfad8e4469
+> [   93.105126][ T8445] Code: 00 f3 c3 66 2e 0f 1f 84 00 00 00 00 00 0f
+> 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b
+> 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d ff 49 2b 00 f7 d8
+> 64 89 01 48
+> [   93.106297][ T8445] RSP: 002b:00007fffb93a1248 EFLAGS: 00000202
+> ORIG_RAX: 0000000000000010
+> [   93.106853][ T8445] RAX: ffffffffffffffda RBX: 0000000000000000
+> RCX: 00007fbfad8e4469
+> [   93.107377][ T8445] RDX: 0000000020072c40 RSI: 00000000c0c09425
+> RDI: 0000000000000006
+> [   93.107901][ T8445] RBP: 00007fffb93a1260 R08: 0000000000000001
+> R09: 00007fffb93a1260
+> [   93.108441][ T8445] R10: 0000000000000001 R11: 0000000000000202
+> R12: 00005650a6c01170
+> [   93.108933][ T8445] R13: 00007fffb93a13a0 R14: 0000000000000000
+> R15: 0000000000000000
+> [   93.109418][ T8445]  </TASK>
+> [   93.109843][ T8445] Kernel Offset: disabled
+> [   93.110188][ T8445] Rebooting in 86400 seconds..
+> 
+> Best,
+> Wei
+> 
+> On Tue, 15 Nov 2022 at 18:42, Qu Wenruo <quwenruo.btrfs@gmx.com> wrote:
+>>
+>>
+>>
+>> On 2022/11/15 18:30, Wei Chen wrote:
+>>> Dear Linux developers,
+>>>
+>>> I hope the following bug report is helpful.
+>>>
+>>> Best,
+>>> Wei
+>>>
+>>> On Sun, 13 Nov 2022 at 19:38, Wei Chen <harperchen1110@gmail.com> wrote:
+>>>>
+>>>> Dear Linux Developer,
+>>>>
+>>>> Recently when using our tool to fuzz kernel, the following crash was
+>>>> triggered. The bug persists in Linux 6.0.
+>>>>
+>>>> HEAD commit:  4f5365f77018  Linux 5.15.76
+>>
+>> Not related to the bug itself, but more on the report.
+>>
+>> I'd say, if the bug persists in the latest release, then please use the
+>> latest kernel in the report.
+>> Not use the latest LTS as the commit.
+>>
+>> You know most (if not all) linux communities are working on upstream
+>> code, not some LTS branch.
+>>
+>> Thanks,
+>> Qu
+>>
+>>>> git tree: stable
+>>>> compiler: gcc 7.5.0
+>>>> console output:
+>>>> https://drive.google.com/file/d/1wkzu8jz6edriSP6TpsCGYD5AzkLajIEv/view?usp=share_link
+>>>> kernel config: https://drive.google.com/file/d/1flhc33savDkmYN6PRU5C2vXDX0LAKMvM/view?usp=share_link
+>>>> C reproducer: https://drive.google.com/file/d/1zKWsWAOcaHfPKewTG6P3pnnVfwH_WXa9/view?usp=share_link
+>>>> Syz reproducer:
+>>>> https://drive.google.com/file/d/1jUR8_6Re4xpJhyLdXqPiiV72WT-Tk8A-/view?usp=share_link
+>>>>
+>>>> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+>>>> Reported-by: Wei Chen <harperchen1110@gmail.com>
+>>>>
+>>>> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
+>>>> R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd3c817900
+>>>>    </TASK>
+>>>> ------------[ cut here ]------------
+>>>> WARNING: CPU: 1 PID: 29222 at fs/btrfs/ioctl.c:4521
+>>>> _btrfs_ioctl_set_received_subvol+0x221/0x430 fs/btrfs/ioctl.c:4521
+>>>> Modules linked in:
+>>>> CPU: 1 PID: 29222 Comm: syz-executor.0 Not tainted 5.15.76 #5
+>>>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+>>>> rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+>>>> RIP: 0010:_btrfs_ioctl_set_received_subvol+0x221/0x430 fs/btrfs/ioctl.c:4521
+>>>> Code: e8 74 34 44 ff 83 fb fb 0f 84 de 01 00 00 83 fb e2 0f 84 d5 01
+>>>> 00 00 e8 5d 34 44 ff 89 de 48 c7 c7 c0 f8 39 85 e8 9f dc 2e ff <0f> 0b
+>>>> e8 48 34 44 ff 89 d9 ba a9 11 00 00 e9 45 01 00 00 49 8b 4f
+>>>> RSP: 0018:ffffc9000aecfd40 EFLAGS: 00010286
+>>>> RAX: 0000000000000000 RBX: fffffffffffffff4 RCX: ffffc900013ed000
+>>>> RDX: 0000000000040000 RSI: ffffffff812d935c RDI: 00000000ffffffff
+>>>> RBP: ffffc9000aecfda0 R08: 0000000000000000 R09: 0000000000000001
+>>>> R10: ffffc9000aecfbe0 R11: 0000000000000003 R12: ffff888014210400
+>>>> R13: ffff8880208d2000 R14: ffff88810c4f21c0 R15: ffff88810f37b600
+>>>> FS:  00007f41ffc27700(0000) GS:ffff88813dc00000(0000) knlGS:0000000000000000
+>>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>> CR2: 00007fab915f7008 CR3: 000000002096e000 CR4: 00000000003526e0
+>>>> Call Trace:
+>>>>    <TASK>
+>>>>    btrfs_ioctl_set_received_subvol_32 fs/btrfs/ioctl.c:4584 [inline]
+>>>>    btrfs_ioctl+0x2154/0x3d50 fs/btrfs/ioctl.c:5007
+>>>>    vfs_ioctl fs/ioctl.c:51 [inline]
+>>>>    __do_sys_ioctl fs/ioctl.c:874 [inline]
+>>>>    __se_sys_ioctl fs/ioctl.c:860 [inline]
+>>>>    __x64_sys_ioctl+0xb6/0x100 fs/ioctl.c:860
+>>>>    do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>>>    do_syscall_64+0x34/0xb0 arch/x86/entry/common.c:80
+>>>>    entry_SYSCALL_64_after_hwframe+0x61/0xcb
+>>>> RIP: 0033:0x4697f9
+>>>> Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48
+>>>> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+>>>> 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+>>>> RSP: 002b:00007f41ffc26c48 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+>>>> RAX: ffffffffffffffda RBX: 000000000077bf80 RCX: 00000000004697f9
+>>>> RDX: 0000000020072c40 RSI: 00000000c0c09425 RDI: 0000000000000005
+>>>> RBP: 00007f41ffc26c80 R08: 0000000000000000 R09: 0000000000000000
+>>>> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
+>>>> R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd3c817900
+>>>>    </TASK>
+>>>>
+>>>> Best,
+>>>> Wei
