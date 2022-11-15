@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB743629BDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5670629BDC
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:20:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiKOOUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 09:20:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
+        id S230472AbiKOOUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 09:20:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiKOOUQ (ORCPT
+        with ESMTP id S230302AbiKOOUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 09:20:16 -0500
-Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098F0B96
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:20:15 -0800 (PST)
-Received: by mail-wr1-x449.google.com with SMTP id h26-20020adfaa9a000000b002364ad63bbcso2865166wrc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:20:14 -0800 (PST)
+        Tue, 15 Nov 2022 09:20:40 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8076302
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:20:38 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id 204-20020a2510d5000000b006be7970889cso13510271ybq.21
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:20:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=s58ZaaH7khykLAsdfR1PLA3uBVF9xAfHNVB2s7VvboI=;
-        b=tKfLrP+XEln6NMJiQ7YHCAJTjRksmIu8VAz+ouqeP6Xy8AiqHpXIoHExasSgJEJq9O
-         fjKKC9RvAnbsG60De+PEzPxneZuqlAT0+UBiIwpOyvp9lu/kgSxdg/xV+JTHGhLnZwG2
-         mslf4b/dJZWP2SAqbvfII/SqWfJRTu4LkrEGOPU4Q2W57CohSVgMO2WrYVIrqywyHH81
-         xPT3uZX5EoqMV4E7n9cdj5FLkNOrHgzdrNH35/At6egv1FwmcMeurd+UQswLIt19ka11
-         LnQzF/m3pKhAR44E0/dwKz6PGSiImcah8RDPFeTcyqwlKY26joADsSbvoCpNMbRILsKp
-         LpCA==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=b9Rh/h+6ZlGogt/ZH/3bghOOublc3eLBTZ62pXvqBB0=;
+        b=Le4fVp49o0yfNlNz3lamiy4HVGXzuJy2v+4u3zckXkIED6ol/l6y1jHC4u8URf3S4J
+         A9Q+huxLdU2lF0Jx5w1wIeYtPBpptsjYEWA+4ppCbLVP/AavZDXVK+3dF6CK/T8pmqIL
+         mT9tD6fqOpkYSk0/B7EJ+ELjTwnNyNOZnpDSQNOOhuxyCM7Erk74AQRZzMuAPc9TNaA/
+         u8FO9nAQC/gdhUb7I9vZTCQb/I+YKWwbydiz/d2HelSxGm8Z8YYdNg3oLjPj+JThKQNv
+         QtTIEi2GjkY2z4I6Blrw+OjeDohQkP9+JyMZEu8U1C+4CU96q/npcMzSbo8UF3Ms8OOd
+         mwHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=s58ZaaH7khykLAsdfR1PLA3uBVF9xAfHNVB2s7VvboI=;
-        b=7XDg5/sammb1Yqy8WqMEgrnhtwWP2/hDJjAvSECB4AkqXEgWvR+K4xlLoa2stiQdEZ
-         sDUeMQ1bcKFamDLHl74/ZGdT0Zz4jcz1YXEOBpJtofOHyvOqT5SlfubQII7fO0X1KuiL
-         vwzSi5Q0dWjcJ/cC4rJ2PNOl8mMYSu5SHdlwEQx+FaPclsXmP3I5jOfMu88BmwcA1/55
-         RyYSODkKxH8Or4MVnSuPVDcHkCX29Kjr3BFPivf6U0XiJxIV+4oQgUoMXFuJA0/HZs3R
-         9uSz8H/5p1/7SXzaWE/ShfGEhBCJ2uWhINFBVuE3Gm+eAJsxtdOV9221kBwyXTWFP+ZK
-         tX0A==
-X-Gm-Message-State: ANoB5plGtgTEc1DBM6/cngwxwKGd0d+r3ke4MHDVCyChabzTM/jnoqXe
-        Fzg0Tbvt/03bIc0W4rjPMll3fDl5nKPYb0sR7Q==
-X-Google-Smtp-Source: AA0mqf6Ljg11jWrIFtPTJk3CJyt+vSuoHOudsi+ev5ETQsarCeoJT8GtgT6p4NG90C4Z0sAvKD+RYLRxRUeH4QvUkg==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b9Rh/h+6ZlGogt/ZH/3bghOOublc3eLBTZ62pXvqBB0=;
+        b=qqRhFHBq84M5qMSBb6x04a5LILllm42lFlbJLf2qiy8xaftsR6ltbcK5DHDfVKFYeT
+         14hymGxggaq8FbahXb2vNAGr3p+mAYYb0kb9hwEAZ6oRCAfoMYVG5hrQsvWzEQ/+5fCe
+         QxmJeolJfDrUoYWQfpyqGlYvcT13g07eOjWdEInG93tWxZ9UQqpjpFeYTak3tEz6bF/b
+         zKrWK16I0c2XdwXcdYibMQL/9NtsAQptG2B/Iqjwfse3io2LdDDIxPlZj3l8uxKQZQBg
+         zzK/jSSl0H0EbSP0V/+omgG13ZdEJLXH6FwK2FMH3KEDJD0rP3gQ+6n9UsZ2nAU+deGi
+         6VAw==
+X-Gm-Message-State: ANoB5pmjLZxEjZ6ygaO5dAPOU54maJKQF94jN7kotUgHCtEhNWidf/AB
+        R5Eq41UOieMKmGnAYKkI/jl2kzWooktFY+/sYw==
+X-Google-Smtp-Source: AA0mqf6yqzAhYPY8h9XKWJy/KMPKONh+CM/C0jHNdmmlRWsk/D+/TB4aivrx6pejoMYtJCnNPsjtbbd4odc3kLD6Cg==
 X-Received: from peternewman10.zrh.corp.google.com ([2a00:79e0:9d:6:fe62:9ede:ae13:6fda])
- (user=peternewman job=sendgmr) by 2002:a1c:c906:0:b0:3cf:71e4:75b with SMTP
- id f6-20020a1cc906000000b003cf71e4075bmr1766758wmb.114.1668522013552; Tue, 15
- Nov 2022 06:20:13 -0800 (PST)
-Date:   Tue, 15 Nov 2022 15:19:51 +0100
+ (user=peternewman job=sendgmr) by 2002:a25:d6:0:b0:6ca:1be0:9e4c with SMTP id
+ 205-20020a2500d6000000b006ca1be09e4cmr15819340yba.567.1668522038137; Tue, 15
+ Nov 2022 06:20:38 -0800 (PST)
+Date:   Tue, 15 Nov 2022 15:19:52 +0100
+In-Reply-To: <20221115141953.816851-1-peternewman@google.com>
 Mime-Version: 1.0
+References: <20221115141953.816851-1-peternewman@google.com>
 X-Mailer: git-send-email 2.38.1.493.g58b659f92b-goog
-Message-ID: <20221115141953.816851-1-peternewman@google.com>
-Subject: [PATCH v3 0/2] x86/resctrl: fix task CLOSID update race
+Message-ID: <20221115141953.816851-2-peternewman@google.com>
+Subject: [PATCH v3 1/2] x86/resctrl: IPI all CPUs for group updates
 From:   Peter Newman <peternewman@google.com>
 To:     reinette.chatre@intel.com, fenghua.yu@intel.com
 Cc:     bp@alien8.de, derkling@google.com, eranian@google.com,
@@ -69,56 +71,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette, Fenghua,
+To rule out needing to update a CPU when deleting an rdtgroup, we must
+search the entire tasklist for group members which could be running on
+that CPU. This needs to be done while blocking updates to the tasklist
+to avoid leaving newly-created child tasks assigned to the old
+CLOSID/RMID.
 
-I've reorganized the patches for clarity, following James's guidance.
+The cost of reliably propagating a CLOSID or RMID update to a single
+task is higher than originally thought. The present understanding is
+that we must obtain the task_rq_lock() on each task to ensure that it
+observes CLOSID/RMID updates in the case that it migrates away from its
+current CPU before the update IPI reaches it.
 
-The patch series addresses the IPI race we discussed in the container
-move RFD thread[1].
+For now, just notify all the CPUs after updating the closid/rmid fields
+in impacted tasks task_structs rather than paying the cost of obtaining
+a more precise cpu mask.
 
-The first patch changes group-wide CLOSID/RMID updates to IPI all CPUs.
-Now that the synchronization cost of correctly updating a single task is
-more than originally thought, we believe that it's cheaper to IPI all
-CPUs than forming a more precise CPU mask by synchronizing with all
-tasks in an rdtgroup, especially when there is a large number of tasks
-in the group. It's possible that this update could upset users who
-frequently delete groups with few tasks. If anyone is aware of a use
-case that frequently deletes groups, we can consider mitigations.
+Signed-off-by: Peter Newman <peternewman@google.com>
+Reviewed-by: James Morse <james.morse@arm.com>
+---
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c | 52 +++++++-------------------
+ 1 file changed, 13 insertions(+), 39 deletions(-)
 
-The second one uses the new task_call_func() interface to serialize
-updating closid and rmid with any context switch of the task. AFAICT,
-the implementation of this function acts like a mutex with context
-switch, but I'm not certain whether it is intended to be one. If this is
-not how task_call_func() is meant to be used, I will instead move the
-code performing the update under sched/ where it can be done holding the
-task_rq_lock() explicitly, as Reinette has suggested before[2].
-
-Updates in v3:
- - Split the handling of multi-task and single-task operations into
-   separate patches, now that they're handled differently.
- - Clarify justification in the commit message, including moving some of
-   it out of inline code comment.
-Updates in v2:
- - Following Reinette's suggestion: use task_call_func() for single
-   task, IPI broadcast for group movements.
- - Rebased to v6.1-rc4
-
-v1: https://lore.kernel.org/lkml/20221103141641.3055981-1-peternewman@google.com/
-v2: https://lore.kernel.org/lkml/20221110135346.2209839-1-peternewman@google.com/
-
-Thanks!
--Peter
-
-[1] https://lore.kernel.org/all/CALPaoCg2-9ARbK+MEgdvdcjJtSy_2H6YeRkLrT97zgy8Aro3Vg@mail.gmail.com/
-[2] https://lore.kernel.org/lkml/d3c06fa3-83a4-7ade-6b08-3a7259aa6c4b@intel.com/
-
-Peter Newman (2):
-  x86/resctrl: IPI all CPUs for group updates
-  x86/resctrl: update task closid/rmid with task_call_func()
-
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 128 +++++++++++--------------
- 1 file changed, 58 insertions(+), 70 deletions(-)
-
---
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+index e5a48f05e787..049971efea2f 100644
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+@@ -2385,12 +2385,10 @@ static int reset_all_ctrls(struct rdt_resource *r)
+  * Move tasks from one to the other group. If @from is NULL, then all tasks
+  * in the systems are moved unconditionally (used for teardown).
+  *
+- * If @mask is not NULL the cpus on which moved tasks are running are set
+- * in that mask so the update smp function call is restricted to affected
+- * cpus.
++ * Following this operation, the caller is required to update the MSRs on all
++ * CPUs.
+  */
+-static void rdt_move_group_tasks(struct rdtgroup *from, struct rdtgroup *to,
+-				 struct cpumask *mask)
++static void rdt_move_group_tasks(struct rdtgroup *from, struct rdtgroup *to)
+ {
+ 	struct task_struct *p, *t;
+ 
+@@ -2400,16 +2398,6 @@ static void rdt_move_group_tasks(struct rdtgroup *from, struct rdtgroup *to,
+ 		    is_rmid_match(t, from)) {
+ 			WRITE_ONCE(t->closid, to->closid);
+ 			WRITE_ONCE(t->rmid, to->mon.rmid);
+-
+-			/*
+-			 * If the task is on a CPU, set the CPU in the mask.
+-			 * The detection is inaccurate as tasks might move or
+-			 * schedule before the smp function call takes place.
+-			 * In such a case the function call is pointless, but
+-			 * there is no other side effect.
+-			 */
+-			if (IS_ENABLED(CONFIG_SMP) && mask && task_curr(t))
+-				cpumask_set_cpu(task_cpu(t), mask);
+ 		}
+ 	}
+ 	read_unlock(&tasklist_lock);
+@@ -2440,7 +2428,7 @@ static void rmdir_all_sub(void)
+ 	struct rdtgroup *rdtgrp, *tmp;
+ 
+ 	/* Move all tasks to the default resource group */
+-	rdt_move_group_tasks(NULL, &rdtgroup_default, NULL);
++	rdt_move_group_tasks(NULL, &rdtgroup_default);
+ 
+ 	list_for_each_entry_safe(rdtgrp, tmp, &rdt_all_groups, rdtgroup_list) {
+ 		/* Free any child rmids */
+@@ -3099,23 +3087,19 @@ static int rdtgroup_mkdir(struct kernfs_node *parent_kn, const char *name,
+ 	return -EPERM;
+ }
+ 
+-static int rdtgroup_rmdir_mon(struct rdtgroup *rdtgrp, cpumask_var_t tmpmask)
++static int rdtgroup_rmdir_mon(struct rdtgroup *rdtgrp)
+ {
+ 	struct rdtgroup *prdtgrp = rdtgrp->mon.parent;
+ 	int cpu;
+ 
+ 	/* Give any tasks back to the parent group */
+-	rdt_move_group_tasks(rdtgrp, prdtgrp, tmpmask);
++	rdt_move_group_tasks(rdtgrp, prdtgrp);
+ 
+ 	/* Update per cpu rmid of the moved CPUs first */
+ 	for_each_cpu(cpu, &rdtgrp->cpu_mask)
+ 		per_cpu(pqr_state.default_rmid, cpu) = prdtgrp->mon.rmid;
+-	/*
+-	 * Update the MSR on moved CPUs and CPUs which have moved
+-	 * task running on them.
+-	 */
+-	cpumask_or(tmpmask, tmpmask, &rdtgrp->cpu_mask);
+-	update_closid_rmid(tmpmask, NULL);
++
++	update_closid_rmid(cpu_online_mask, NULL);
+ 
+ 	rdtgrp->flags = RDT_DELETED;
+ 	free_rmid(rdtgrp->mon.rmid);
+@@ -3140,12 +3124,12 @@ static int rdtgroup_ctrl_remove(struct rdtgroup *rdtgrp)
+ 	return 0;
+ }
+ 
+-static int rdtgroup_rmdir_ctrl(struct rdtgroup *rdtgrp, cpumask_var_t tmpmask)
++static int rdtgroup_rmdir_ctrl(struct rdtgroup *rdtgrp)
+ {
+ 	int cpu;
+ 
+ 	/* Give any tasks back to the default group */
+-	rdt_move_group_tasks(rdtgrp, &rdtgroup_default, tmpmask);
++	rdt_move_group_tasks(rdtgrp, &rdtgroup_default);
+ 
+ 	/* Give any CPUs back to the default group */
+ 	cpumask_or(&rdtgroup_default.cpu_mask,
+@@ -3157,12 +3141,7 @@ static int rdtgroup_rmdir_ctrl(struct rdtgroup *rdtgrp, cpumask_var_t tmpmask)
+ 		per_cpu(pqr_state.default_rmid, cpu) = rdtgroup_default.mon.rmid;
+ 	}
+ 
+-	/*
+-	 * Update the MSR on moved CPUs and CPUs which have moved
+-	 * task running on them.
+-	 */
+-	cpumask_or(tmpmask, tmpmask, &rdtgrp->cpu_mask);
+-	update_closid_rmid(tmpmask, NULL);
++	update_closid_rmid(cpu_online_mask, NULL);
+ 
+ 	closid_free(rdtgrp->closid);
+ 	free_rmid(rdtgrp->mon.rmid);
+@@ -3181,12 +3160,8 @@ static int rdtgroup_rmdir(struct kernfs_node *kn)
+ {
+ 	struct kernfs_node *parent_kn = kn->parent;
+ 	struct rdtgroup *rdtgrp;
+-	cpumask_var_t tmpmask;
+ 	int ret = 0;
+ 
+-	if (!zalloc_cpumask_var(&tmpmask, GFP_KERNEL))
+-		return -ENOMEM;
+-
+ 	rdtgrp = rdtgroup_kn_lock_live(kn);
+ 	if (!rdtgrp) {
+ 		ret = -EPERM;
+@@ -3206,18 +3181,17 @@ static int rdtgroup_rmdir(struct kernfs_node *kn)
+ 		    rdtgrp->mode == RDT_MODE_PSEUDO_LOCKED) {
+ 			ret = rdtgroup_ctrl_remove(rdtgrp);
+ 		} else {
+-			ret = rdtgroup_rmdir_ctrl(rdtgrp, tmpmask);
++			ret = rdtgroup_rmdir_ctrl(rdtgrp);
+ 		}
+ 	} else if (rdtgrp->type == RDTMON_GROUP &&
+ 		 is_mon_groups(parent_kn, kn->name)) {
+-		ret = rdtgroup_rmdir_mon(rdtgrp, tmpmask);
++		ret = rdtgroup_rmdir_mon(rdtgrp);
+ 	} else {
+ 		ret = -EPERM;
+ 	}
+ 
+ out:
+ 	rdtgroup_kn_unlock(kn);
+-	free_cpumask_var(tmpmask);
+ 	return ret;
+ }
+ 
+-- 
 2.38.1.493.g58b659f92b-goog
 
