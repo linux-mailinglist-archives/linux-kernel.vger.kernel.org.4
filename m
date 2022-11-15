@@ -2,93 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A83CD62903F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 03:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA8C629042
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 03:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237883AbiKOC6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 21:58:01 -0500
+        id S237670AbiKOC7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 21:59:23 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237555AbiKOC5C (ORCPT
+        with ESMTP id S236120AbiKOC7I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 21:57:02 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 759D11EC72
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 18:55:39 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxXbam_3Jjjx8HAA--.9232S3;
-        Tue, 15 Nov 2022 10:55:34 +0800 (CST)
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxLuKf_3JjmywTAA--.51398S11;
-        Tue, 15 Nov 2022 10:55:33 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 9/9] LoongArch: Enable CONFIG_KALLSYMS_ALL and CONFIG_DEBUG_FS
-Date:   Tue, 15 Nov 2022 10:55:27 +0800
-Message-Id: <20221115025527.13382-10-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221115025527.13382-1-zhangqing@loongson.cn>
-References: <20221115025527.13382-1-zhangqing@loongson.cn>
+        Mon, 14 Nov 2022 21:59:08 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9C51C927
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 18:56:20 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id r3so15745457yba.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 18:56:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rP2+Jr5cCTgUgZIDbWfHwE1FyBQ/Lf8AXckAnS2jra0=;
+        b=EzzrOhTxBDbDaxs7dGUwbenYwvFccr15alZMWpuSgRVRoAaetPTeFIxUauCEVFJZJ9
+         omClbrHbMNYAxXYboKPlmR10uz6pAo5AAAop6qfFsS47lYtKDJuZFs2nkX7/ZVnxdEiy
+         Gy3ES7u/+glZ/nJJa63v9+PWmsN++p7r/fAnRq0vtpl0ox0vMtYQ6LqsRLZxZ9WNKOXu
+         MfHhkyeUVlakcJoYTHIX3g/N5q8dBnwZ6Rj0dV6nOo5krbBwznVGfsQ+YncIjon13GtU
+         TGPB53PsRZww2w9tWWkCiOyoi3Py/9RCoKKTatQlarPtRxd0k6QeEbLlAud7yL1t341F
+         i1CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rP2+Jr5cCTgUgZIDbWfHwE1FyBQ/Lf8AXckAnS2jra0=;
+        b=vnuhWXjH1dm/lWCOPfjjAF++rdpQj6Hb/wg3vqxYnoM+dbZPZgwDgRI4cRrQPzV8bJ
+         HvHt2ZNbcJlzmy1EtrwOlJoS83F1a3NHHaaf3zskr8JvmuzWatGmGtFva4hsHXPAS/G0
+         8so25R+JRl4wKptsSyXTHYD921EfMy7iF6POy+2s0creI0O/yDxV9C8nOq7UD6F17gPh
+         z6GkaqGlvvPNscHhl+6Qm91M0qe4h25Ke3F7pywB61lPUJI0t0krRzy+xcX9E5PoLNuH
+         ZMLEB1qe9/zS6rptj5FekgIEIWoUKMYxdMB+BFz4Zbh90yHRhoVp4Ao3CiPrEWvzoEjb
+         N5Zg==
+X-Gm-Message-State: ANoB5pm6ejLqKPHicfY97Z+cEQq6aPH935URaRUVQ+jwDfw5QbgZC1cm
+        pT2hOD2BldjoPJZ1T1+9qW1dRbn3DDK11UejsEWP0Swe72xxEA==
+X-Google-Smtp-Source: AA0mqf6AkXBuybM4qk3embnuafmgJAFwRTok3oIxxM6wWRkifndj8+BKwTpRZln+M1qIv68ERvmhpQNDGq7XphGcw8I=
+X-Received: by 2002:a25:900c:0:b0:6c4:8a9:e4d2 with SMTP id
+ s12-20020a25900c000000b006c408a9e4d2mr15389222ybl.164.1668480979228; Mon, 14
+ Nov 2022 18:56:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxLuKf_3JjmywTAA--.51398S11
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7JryrGFW5Gw1kGF15WF1Dtrb_yoWDGrb_Ja
-        1agw1Dur48J397uFn7Xw48W3yDA3WUXF1FkFnrXryxZa12gr13GrWDJw15C3WYga4UWrWY
-        vaykAasxCr18tjkaLaAFLSUrUUUU8b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        v7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUAVWUZwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY6Fy7McIj6I8E
-        87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw2
-        8IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I
-        3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxV
-        WUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26F1j6w1UMIIF0xvE2Ix0cI8I
-        cVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZE
-        Xa7IU0ec_3UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114124448.729235104@linuxfoundation.org>
+In-Reply-To: <20221114124448.729235104@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 15 Nov 2022 08:26:08 +0530
+Message-ID: <CA+G9fYvdqK23zAa+=-x29Hq7BGVd2pN1_1XOp5U1X-GUWM4MAA@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/131] 5.15.79-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Defaults enable CONFIG_KALLSYMS_ALL and CONFIG_DEBUG_FS to convenient
-ftrace tests.
+On Mon, 14 Nov 2022 at 18:24, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.79 release.
+> There are 131 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 16 Nov 2022 12:44:21 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.79-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+As others reported,
+arm: allmodconfig  failed [1] due to following warnings / errors.
+
+drivers/net/ethernet/mediatek/mtk_star_emac.c: In function 'mtk_star_enable':
+drivers/net/ethernet/mediatek/mtk_star_emac.c:980:22: error: 'struct
+mtk_star_priv' has no member named 'rx_napi'; did you mean 'napi'?
+  980 |  napi_disable(&priv->rx_napi);
+      |                      ^~~~~~~
+      |                      napi
+drivers/net/ethernet/mediatek/mtk_star_emac.c:981:22: error: 'struct
+mtk_star_priv' has no member named 'tx_napi'; did you mean 'napi'?
+  981 |  napi_disable(&priv->tx_napi);
+      |                      ^~~~~~~
+      |                      napi
+
+
 ---
- arch/loongarch/configs/loongson3_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+net: ethernet: mtk-star-emac: disable napi when connect and start PHY
+failed in mtk_star_enable()
+[ Upstream commit b0c09c7f08c2467b2089bdf4adb2fbbc2464f4a8 ]
 
-diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-index 2d4678e6189a..0bbab17609b0 100644
---- a/arch/loongarch/configs/loongson3_defconfig
-+++ b/arch/loongarch/configs/loongson3_defconfig
-@@ -34,6 +34,7 @@ CONFIG_SYSFS_DEPRECATED=y
- CONFIG_RELAY=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_EXPERT=y
-+CONFIG_KALLSYMS_ALL=y
- CONFIG_USERFAULTFD=y
- CONFIG_PERF_EVENTS=y
- # CONFIG_COMPAT_BRK is not set
-@@ -845,6 +846,7 @@ CONFIG_CRYPTO_DEV_VIRTIO=m
- CONFIG_PRINTK_TIME=y
- CONFIG_STRIP_ASM_SYMS=y
- CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_FS=y
- # CONFIG_SCHED_DEBUG is not set
- CONFIG_SCHEDSTATS=y
- # CONFIG_DEBUG_PREEMPT is not set
--- 
-2.36.0
 
+[1] https://builds.tuxbuild.com/2HXmwUDUvmWI1Uc7zsdXNcsTqW1/
+
+--
+Linaro LKFT
+https://lkft.linaro.org
