@@ -2,564 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3087629F1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71864629F24
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238678AbiKOQcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 11:32:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
+        id S238680AbiKOQe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 11:34:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiKOQcH (ORCPT
+        with ESMTP id S238547AbiKOQez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 11:32:07 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F24B7F9;
-        Tue, 15 Nov 2022 08:32:05 -0800 (PST)
-Received: from [192.168.2.144] (bband-dyn193.178-41-216.t-com.sk [178.41.216.193])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 0435D3F261;
-        Tue, 15 Nov 2022 17:31:58 +0100 (CET)
-Date:   Tue, 15 Nov 2022 17:31:52 +0100
-From:   Martin Botka <martin.botka@somainline.org>
-Subject: Re: [PATCH v3 2/2] arm64: dts: Add basic support for BIQU CB1
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Martin Botka <martin.botka1@gmail.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jamipkettunen@somainline.org>,
-        Paul Bouchara <paul.bouchara@somainline.org>,
-        Jan Trmal <jtrmal@gmail.com>, Tom <takuya@takuya.tech>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Conley Lee <conleylee@foxmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Message-Id: <4XDELR.MBCEDNJRJJHR@somainline.org>
-In-Reply-To: <20221115142714.310049c4@donnerap.cambridge.arm.com>
-References: <20221114214452.1993744-1-martin.botka@somainline.org>
-        <20221114214452.1993744-2-martin.botka@somainline.org>
-        <20221114233102.3b1f96cc@slackpad.lan>
-        <CADQ2G_HXx59YYjNvhcNRonahgT3AcE_2BiU43vDJ3CRUGKwAKA@mail.gmail.com>
-        <20221115005429.57d72f64@slackpad.lan>
-        <D69CAA04-56A2-4FFD-A33D-C802084A7150@somainline.org>
-        <20221115103307.5f5b9106@donnerap.cambridge.arm.com>
-        <78EC79B1-1664-48EB-A902-9173FE59C45B@somainline.org>
-        <20221115142714.310049c4@donnerap.cambridge.arm.com>
-X-Mailer: geary/40.0
+        Tue, 15 Nov 2022 11:34:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8692EE
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:33:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668530031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=repiNXo5iHvAUL0PM+bzqCOpF/xPqjBsShePYq+SbJ0=;
+        b=MIzkmns2chm11LZ5XsierqUYGACrnaNW1WFK3fodGUN6/7+cP/gtu6DOJ+NjCd869qzszz
+        NE8yJLuCZzQp0cjuDXUwMFncwwZKJbn57UuWKLyBgUY2RDNpcMA/LcDsfEov/afEv7mtm+
+        FsK6UCC0d1k80M7jP24d3b5WG/PGgZo=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-387-y7rBaEC8OQqgo0x5jmlOHw-1; Tue, 15 Nov 2022 11:33:50 -0500
+X-MC-Unique: y7rBaEC8OQqgo0x5jmlOHw-1
+Received: by mail-ed1-f69.google.com with SMTP id y20-20020a056402271400b004630f3a32c3so10280997edd.15
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:33:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=repiNXo5iHvAUL0PM+bzqCOpF/xPqjBsShePYq+SbJ0=;
+        b=w8WeXQmlYjVj+eUw79N6w4wOHZjdUWc0ZRcRCqdF/wnuBBWtsmVF/hG0+989e806qU
+         OgJLntTRWxD+VatVBtJ2pbePuk6ET+fW48oTz75Nm+4TvFIsW6ynZbI8S17QPxRupDs9
+         YiPFbn5lQ3ViyM/HoIRPOBHzcyFygYjPAStRQZsrtaMvNwTft+BKO/EESX7DO4sBFwKu
+         EWWnvYLrhkB+TpjGWDQB3DFpLtYf15r0XXNzJWAueFRNg8Sc+CkRmKXNWZT3NaPXLgMb
+         kqTphC9uew/CbTomct3O1NRyPzOoinE8hTs67PY2//Nkw9aUvUuXnSADUcdZQqfLbFv+
+         E51g==
+X-Gm-Message-State: ANoB5pmvPCLjJgzfIOHqrwaoZ2eY+p9iGbVSiNQ9CcHULNdn7CLOhUyt
+        eGQX11dP4s/c2fSQeP3ALW74sdwCYJ+hy+QXoSDPj+sRIVVRns6xKUWyeVXudQ95Yi2NPWsZ5R3
+        +u7FVV4lZ1QhPhyoPijXs98TN
+X-Received: by 2002:aa7:db85:0:b0:463:f3a:32ce with SMTP id u5-20020aa7db85000000b004630f3a32cemr15943119edt.366.1668530029418;
+        Tue, 15 Nov 2022 08:33:49 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5GSyAEjAbyTtBDveymZpactdPH6ufaiBtqmVFF8weDzdWrbfUEIeX8pnjwdQbyTgpzzTdYkQ==
+X-Received: by 2002:aa7:db85:0:b0:463:f3a:32ce with SMTP id u5-20020aa7db85000000b004630f3a32cemr15943105edt.366.1668530029239;
+        Tue, 15 Nov 2022 08:33:49 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id g21-20020a50ee15000000b004677b1b1a70sm4994841eds.61.2022.11.15.08.33.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 08:33:48 -0800 (PST)
+Message-ID: <660117a0-07ba-069b-7b04-7b624801d735@redhat.com>
+Date:   Tue, 15 Nov 2022 17:33:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] platform/x86: hp-wmi: Ignore Smart Experience App event
+Content-Language: en-US, nl
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221114073842.205392-1-kai.heng.feng@canonical.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221114073842.205392-1-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andre,
+Hi,
 
-Had a friend check on Rpi Adapter board for me. I dont exactly
-like how they designed the board but what can we do.
-
-USB works like this:
- There is RS2229 which has USB2 connected to it and Type C.
- RS2229 takes signal from the usbotg switch
- The USB2 is then put to a hub via F1.s USB2.0 hub which then
- goes to the 4 USB A ports.
-
-This is basically the same as manta boards just that manta
-boards have 1 USB always connected to the MCU. 2 are USB A
-and 1 is 2.54mm 4P connector.
-So all in all DT between Rpi adapter and Manta boards would
-be identical.
-
-So Andre what do you think about having the Rpi adapter and Manta
-in single DT which would include the CB1 DTSI.
-This way we dont have to differenciate between them as they are
-quite literally identical as for ports and how they are wired.
-
-It seems to be USB2 that is actually connected.
-As for where the rest is wired.
- From what i can see in downstream image and trough lsusb
-nowhere. They are left alone...
-
-
-Best Regards,
-Martin
-
-On Tue, Nov 15 2022 at 02:27:14 PM +00:00:00, Andre Przywara 
-<andre.przywara@arm.com> wrote:
-> On Tue, 15 Nov 2022 12:38:59 +0100
-> Martin Botka <martin.botka@somainline.org> wrote:
+On 11/14/22 08:38, Kai-Heng Feng wrote:
+> Sometimes hp-wmi driver complains on system resume:
+> [ 483.116451] hp_wmi: Unknown event_id - 33 - 0x0
 > 
-> Hi Martin,
+> According to HP it's a feature called "HP Smart Experience App" and it's
+> safe to be ignored.
 > 
->>  On November 15, 2022 11:33:07 AM GMT+01:00, Andre Przywara 
->> <andre.przywara@arm.com> wrote:
->>  >On Tue, 15 Nov 2022 09:24:04 +0100
->>  >Martin Botka <martin.botka@somainline.org> wrote:
->>  >
->>  >Hi,
->>  >
->>  >> On November 15, 2022 1:54:29 AM GMT+01:00, Andre Przywara 
->> <andre.przywara@arm.com> wrote:
->>  >> >On Tue, 15 Nov 2022 00:44:46 +0100
->>  >> >Martin Botka <martin.botka1@gmail.com> wrote:
->>  >> >
->>  >> >Hi Martin,
->>  >> >
->>  >> >> I can totally understand how this can get confusing.
->>  >> >>
->>  >> >> Basically because of the Rpi shortage biqu decided to make an 
->> Rpi
->>  >> >> alternative.
->>  >> >>
->>  >> >> So they made CB1 which is compute module style board.
->>  >> >>
->>  >> >> And they made 3 other boards where CB1 or Rpi CM4 can be 
->> plugged in. The 3
->>  >> >> boards are:
->>  >> >>
->>  >> >> Rpi adapter which takes the Compute module style boards and 
->> turns them into
->>  >> >> SBC style with basically identical size and etc to Rpi 4.
->>  >> >>
->>  >> >> Then we have Manta M8P and M4P. These boards are MCUs for a 
->> 3D printer. But
->>  >> >> they were made for Klipper use case which requires a computer 
->> or SBC
->>  >> >> (Usually Rpi4). They combined it into 1 board.
->>  >> >> Where you get the MCU and you can plug in CM4 or CB1
->>  >> >
->>  >> >Thanks for the explanations! I was guessing along those 
->> shortage lines,
->>  >> >since the H616 is quite a step down from the RPi4CM, though 
->> probably
->>  >> >still enough for driving a 3D printer.
->>  >> Mostly yes
->>  >> >
->>  >> >> All these boards are basically taking the pins and routing 
->> them to ports.
->>  >> >
->>  >> >Yes, this is what those SoM carrier boards do ;-)
->>  >> :)
->>  >> >
->>  >> >> There is nearly 0 chips for conversion or processing of the 
->> pins from CB1
->>  >> >> or CM4 thus i do not see a reason for having parent dtsi and 
->> dts for the
->>  >> >> adapter and Manta boards.
->>  >> >
->>  >> >And the DT does not need to describe "chips" only, a lot of DT 
->> nodes
->>  >> >are about connectors, and which ports and which exact pins (out 
->> of the
->>  >> >possible pinmuxes) are actually used. The SoM itself mostly 
->> exposes
->>  >> >just pins, and the board DT describes how these pins are used 
->> (GPIO or
->>  >> >special function, for instance).
->>  >> >
->>  >> >So did you try to split this up? How would that look?
->>  >>
->>  >> The main difference between adapter and Manta boards is that 
->> adapter has 4x USB.
->>  >
->>  >So those are two double-type-A sockets? This is not really what 
->> the DT
->>  >below describes? It's perfectly fine to fix USB0 to host mode, we 
->> do this
->>  >on the Pine64 boards (both A64 and H6), for instance.
->> 
->>  Yes. But the third and fourth is also used. Third is done in 2.54 
->> 4p connector (just pins on board) and fourth is connected directly 
->> to manta stm32 MCU. So all 4 are host.
-> 
-> Wait, so you are talking about the Manta board now? I see two 
-> sockets, the
-> 2.54mm headers and the STM32 there, but the Pi4B is quite different in
-> that respect: I see four(!) USB type-A sockets (two dual-port stacks).
-> Plus the CM4 connector seems to only have pins for one USB 2.0 port
-> (D-,D+). So is this a hub chip on the underside of the board, close 
-> to the
-> USB ports? Can you read the label of that chip?
-> And where are the other H616 USB pins routed to? Are they (ab-)using 
-> the
-> PCIe pins of the CM4 connector? Or are they actually not used at all, 
-> and
-> it's all one USB port through a by-4 hub?
-> If you have a running system, "lsusb -t" should give you a clue which 
-> host
-> ports are used and if there is a hub.
-> 
-> Cheers,
-> Andre
-> 
->>  >> Manta only has 3 and 1 otg. But it has a switch to disable or 
->> enable otg.
->>  >
->>  >What does the switch do, exactly? By definition OTG works fine in 
->> both
->>  >ways. And there are pins in the connector to decide the role.
->>  The switch is just signal pin for RS2227. Its the multiplexer i 
->> mentioned. It decides if we should have the pins wired to usb type C 
->> port or normally to stm32 MCU. Thats all it does.
->>  >
->>  >Allwinner actually goes one step further and provides a full HCI 
->> to the
->>  >same PHY that the MUSB OTG controller is connected to, so you 
->> don't need
->>  >to live with the sometimes limited performance of the MUSB host 
->> mode
->>  >(which we drive without DMA). Not sure if that is the case or a 
->> problem on
->>  >the RPi4.
->>  >
->>  >> Im not opposed to splitting it up. It is probably a good idea.
->>  >> I dont see how to resolve that switch on manta boards tho.
->>  >
->>  >If the Manta board is (almost) a superset of the Pi4B, then you can
->>  >include the latter from there. Look at sun50i-a64-pine64-lts.dts or
->>  >sun50i-h6-pine-h64-model-b.dts for examples.
->>  >
->>  >Cheers,
->>  >Andre.
->>  >
->>  Yep i will split it into SoM boards.
->>  >> >> The only exception to conversion are the LEDs on the boards 
->> but since both
->>  >> >> adapter and manta boards have them this yet again eliminates 
->> need for
->>  >> >> parent style DT.
->>  >> >>
->>  >> >> Best regards,
->>  >> >> Martin
->>  >> >>
->>  >> >> On Tue, Nov 15, 2022, 12:32 AM Andre Przywara 
->> <andre.przywara@arm.com>
->>  >> >> wrote:
->>  >> >>
->>  >> >> > On Mon, 14 Nov 2022 22:44:49 +0100
->>  >> >> > Martin Botka <martin.botka@somainline.org> wrote:
->>  >> >> >
->>  >> >> > > CB1 is Compute Module style board that plugs into Rpi 
->> board style
->>  >> >> > adapter or
->>  >> >> > > Manta 3D printer boards (M4P/M8P).
->>  >> >> > >
->>  >> >> > > The board has:
->>  >> >> > >       H616 SoC
->>  >> >> > >       1GB of RAM
->>  >> >> > >       AXP313A PMIC
->>  >> >> > >
->>  >> >> > > And the actual boards that CB1 plugs in are just 
->> extension to it with
->>  >> >> > ports and
->>  >> >> > > thus are not split in DT.
->>  >> >> >
->>  >> >> > I don't really understand that sentence. There is some 
->> precedent for a
->>  >> >> > SoM/board split, look at the sun50i-a64-sopine or
->>  >> >> > sun50i-h5-emlid-neutis-n5 files. And if I see this 
->> correctly, then
->>  >> >> > there are *two* boards available for the same CB1 SoM, the 
->> PI4B and the
->>  >> >> > Manta board? Which would a strong case for a SoM .dtsi, 
->> plus the one
->>  >> >> > or two board .dts files.
->>  >> >> > I am just not sure whether that relation to the Pi4-CM is 
->> helpful or
->>  >> >> > just complicates things...
->>  >> >> >
->>  >> >> > Cheers,
->>  >> >> > Andre
->>  >> >> >
->>  >> >> > >
->>  >> >> > > Boards have:
->>  >> >> > >       4x (3x for Manta boards) USB and 1 USB OTG.
->>  >> >> > >       SDcard slot for loading images.
->>  >> >> > >       Ethernet port wired to the internal PHY.
->>  >> >> > >       2x HDMI 2.0.
->>  >> >> > >       Power and Status LEDs.
->>  >> >> > >
->>  >> >> > > Currently working:
->>  >> >> > >       Booting
->>  >> >> > >       USB
->>  >> >> > >       UART
->>  >> >> > >
->>  >> >> > > Signed-off-by: Martin Botka <martin.botka@somainline.org>
->>  >> >> > > ---
->>  >> >> > > Changes in V2:
->>  >> >> > > Add proper board compatible
->>  >> >> > > Add regulator prefix for vcc5v
->>  >> >> > > Drop okay status from PMIC
->>  >> >> > > Drop standby_param
->>  >> >> > > Changes in V3:
->>  >> >> > > Change copyright to me
->>  >> >> > > regulator_vcc5v to regulator-vcc5v
->>  >> >> > > Drop ehci0 and ohci0
->>  >> >> > >  arch/arm64/boot/dts/allwinner/Makefile        |   1 +
->>  >> >> > >  .../dts/allwinner/sun50i-h616-biqu-cb1.dts    | 178 
->> ++++++++++++++++++
->>  >> >> > >  2 files changed, 179 insertions(+)
->>  >> >> > >  create mode 100644
->>  >> >> > arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
->>  >> >> > >
->>  >> >> > > diff --git a/arch/arm64/boot/dts/allwinner/Makefile
->>  >> >> > b/arch/arm64/boot/dts/allwinner/Makefile
->>  >> >> > > index 6a96494a2e0a..223f1be73541 100644
->>  >> >> > > --- a/arch/arm64/boot/dts/allwinner/Makefile
->>  >> >> > > +++ b/arch/arm64/boot/dts/allwinner/Makefile
->>  >> >> > > @@ -38,5 +38,6 @@ dtb-$(CONFIG_ARCH_SUNXI) += 
->> sun50i-h6-pine-h64.dtb
->>  >> >> > >  dtb-$(CONFIG_ARCH_SUNXI) += 
->> sun50i-h6-pine-h64-model-b.dtb
->>  >> >> > >  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6.dtb
->>  >> >> > >  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h6-tanix-tx6-mini.dtb
->>  >> >> > > +dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-biqu-cb1.dtb
->>  >> >> > >  dtb-$(CONFIG_ARCH_SUNXI) += 
->> sun50i-h616-orangepi-zero2.dtb
->>  >> >> > >  dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h616-x96-mate.dtb
->>  >> >> > > diff --git 
->> a/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
->>  >> >> > b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
->>  >> >> > > new file mode 100644
->>  >> >> > > index 000000000000..86b5aca9b53e
->>  >> >> > > --- /dev/null
->>  >> >> > > +++ 
->> b/arch/arm64/boot/dts/allwinner/sun50i-h616-biqu-cb1.dts
->>  >> >> > > @@ -0,0 +1,178 @@
->>  >> >> > > +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
->>  >> >> > > +/*
->>  >> >> > > + * Copyright (C) 2022 Martin Botka 
->> <martin.botka@somainline.org>.
->>  >> >> > > + */
->>  >> >> > > +
->>  >> >> > > +/dts-v1/;
->>  >> >> > > +
->>  >> >> > > +#include "sun50i-h616.dtsi"
->>  >> >> > > +
->>  >> >> > > +#include <dt-bindings/gpio/gpio.h>
->>  >> >> > > +#include <dt-bindings/interrupt-controller/arm-gic.h>
->>  >> >> > > +#include <dt-bindings/leds/common.h>
->>  >> >> > > +
->>  >> >> > > +/ {
->>  >> >> > > +     model = "BIQU CB1";
->>  >> >> > > +     compatible = "biqu,cb1", "allwinner,sun50i-h616";
->>  >> >> > > +
->>  >> >> > > +     aliases {
->>  >> >> > > +             serial0 = &uart0;
->>  >> >> > > +     };
->>  >> >> > > +
->>  >> >> > > +     chosen {
->>  >> >> > > +             stdout-path = "serial0:115200n8";
->>  >> >> > > +     };
->>  >> >> > > +
->>  >> >> > > +     leds {
->>  >> >> > > +             compatible = "gpio-leds";
->>  >> >> > > +
->>  >> >> > > +             led-0 {
->>  >> >> > > +                     function = LED_FUNCTION_POWER;
->>  >> >> > > +                     color = <LED_COLOR_ID_RED>;
->>  >> >> > > +                     gpios = <&pio 2 12 
->> GPIO_ACTIVE_HIGH>; /* PC12 */
->>  >> >> > > +                     default-state = "on";
->>  >> >> > > +             };
->>  >> >> > > +
->>  >> >> > > +             led-1 {
->>  >> >> > > +                     function = LED_FUNCTION_STATUS;
->>  >> >> > > +                     color = <LED_COLOR_ID_GREEN>;
->>  >> >> > > +                     gpios = <&pio 2 13 
->> GPIO_ACTIVE_HIGH>; /* PC13 */
->>  >> >> > > +             };
->>  >> >> > > +     };
->>  >> >> > > +
->>  >> >> > > +     reg_vcc5v: regulator-vcc5v {
->>  >> >> > > +             /* board wide 5V supply directly from the 
->> USB-C socket */
->>  >> >> > > +             compatible = "regulator-fixed";
->>  >> >> > > +             regulator-name = "vcc-5v";
->>  >> >> > > +             regulator-min-microvolt = <5000000>;
->>  >> >> > > +             regulator-max-microvolt = <5000000>;
->>  >> >> > > +             regulator-always-on;
->>  >> >> > > +     };
->>  >> >> > > +
->>  >> >> > > +     reg_usb1_vbus: regulator-usb1-vbus {
->>  >> >> > > +             compatible = "regulator-fixed";
->>  >> >> > > +             regulator-name = "usb1-vbus";
->>  >> >> > > +             regulator-min-microvolt = <5000000>;
->>  >> >> > > +             regulator-max-microvolt = <5000000>;
->>  >> >> > > +             vin-supply = <&reg_vcc5v>;
->>  >> >> > > +             enable-active-high;
->>  >> >> > > +             gpio = <&pio 2 16 GPIO_ACTIVE_HIGH>; /* 
->> PC16 */
->>  >> >> > > +     };
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&ehci1 {
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&ehci2 {
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&ehci3 {
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&mmc0 {
->>  >> >> > > +     vmmc-supply = <&reg_dldo1>;
->>  >> >> > > +     cd-gpios = <&pio 5 6 GPIO_ACTIVE_LOW>;  /* PF6 */
->>  >> >> > > +     no-1-8-v;
->>  >> >> > > +     bus-width = <4>;
->>  >> >> > > +     status = "disabled";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&ohci1 {
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&ohci2 {
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&ohci3 {
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&r_i2c {
->>  >> >> > > +     status = "okay";
->>  >> >> > > +
->>  >> >> > > +     axp1530: pmic@36 {
->>  >> >> > > +             compatible = "x-powers,axp1530";
->>  >> >> > > +             reg = <0x36>;
->>  >> >> > > +             wakeup-source;
->>  >> >> > > +
->>  >> >> > > +             regulators{
->>  >> >> > > +                     reg_dcdc1: dcdc1 {
->>  >> >> > > +                             regulator-name = 
->> "axp1530-dcdc1";
->>  >> >> > > +                             regulator-min-microvolt = 
->> <500000>;
->>  >> >> > > +                             regulator-max-microvolt = 
->> <3400000>;
->>  >> >> > > +                             regulator-step-delay-us = 
->> <25>;
->>  >> >> > > +                             regulator-final-delay-us = 
->> <50>;
->>  >> >> > > +                             regulator-always-on;
->>  >> >> > > +                     };
->>  >> >> > > +
->>  >> >> > > +                     reg_dcdc2: dcdc2 {
->>  >> >> > > +                             regulator-name = 
->> "axp1530-dcdc2";
->>  >> >> > > +                             regulator-min-microvolt = 
->> <500000>;
->>  >> >> > > +                             regulator-max-microvolt = 
->> <1540000>;
->>  >> >> > > +                             regulator-step-delay-us = 
->> <25>;
->>  >> >> > > +                             regulator-final-delay-us = 
->> <50>;
->>  >> >> > > +                             regulator-ramp-delay = 
->> <200>;
->>  >> >> > > +                             regulator-always-on;
->>  >> >> > > +                     };
->>  >> >> > > +
->>  >> >> > > +                     reg_dcdc3: dcdc3 {
->>  >> >> > > +                             regulator-name = 
->> "axp1530-dcdc3";
->>  >> >> > > +                             regulator-min-microvolt = 
->> <500000>;
->>  >> >> > > +                             regulator-max-microvolt = 
->> <1840000>;
->>  >> >> > > +                             regulator-step-delay-us = 
->> <25>;
->>  >> >> > > +                             regulator-final-delay-us = 
->> <50>;
->>  >> >> > > +                             regulator-always-on;
->>  >> >> > > +                     };
->>  >> >> > > +
->>  >> >> > > +                     reg_aldo1: ldo1 {
->>  >> >> > > +                             regulator-name = 
->> "axp1530-aldo1";
->>  >> >> > > +                             regulator-min-microvolt = 
->> <1800000>;
->>  >> >> > > +                             regulator-max-microvolt = 
->> <1800000>;
->>  >> >> > > +                             regulator-step-delay-us = 
->> <25>;
->>  >> >> > > +                             regulator-final-delay-us = 
->> <50>;
->>  >> >> > > +                             regulator-always-on;
->>  >> >> > > +                     };
->>  >> >> > > +
->>  >> >> > > +                     reg_dldo1: ldo2 {
->>  >> >> > > +                             regulator-name = 
->> "axp1530-dldo1";
->>  >> >> > > +                             regulator-min-microvolt = 
->> <3300000>;
->>  >> >> > > +                             regulator-max-microvolt = 
->> <3300000>;
->>  >> >> > > +                             regulator-step-delay-us = 
->> <25>;
->>  >> >> > > +                             regulator-final-delay-us = 
->> <50>;
->>  >> >> > > +                             regulator-always-on;
->>  >> >> > > +                     };
->>  >> >> > > +             };
->>  >> >> > > +     };
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&uart0 {
->>  >> >> > > +     pinctrl-names = "default";
->>  >> >> > > +     pinctrl-0 = <&uart0_ph_pins>;
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&usbotg {
->>  >> >> > > +     /*
->>  >> >> > > +      * PHY0 pins are connected to a USB-C socket, but a 
->> role switch
->>  >> >> > > +      * is not implemented: both CC pins are pulled to 
->> GND.
->>  >> >> > > +      * The VBUS pins power the device, so a fixed 
->> peripheral mode
->>  >> >> > > +      * is the best choice.
->>  >> >> > > +      * The board can be powered via GPIOs, in this case 
->> port0 *can*
->>  >> >> > > +      * act as a host (with a cable/adapter ignoring 
->> CC), as VBUS is
->>  >> >> > > +      * then provided by the GPIOs. Any user of this 
->> setup would
->>  >> >> > > +      * need to adjust the DT accordingly: dr_mode set 
->> to "host",
->>  >> >> > > +      * enabling OHCI0 and EHCI0.
->>  >> >> > > +      */
->>  >> >> > > +     dr_mode = "peripheral";
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> > > +
->>  >> >> > > +&usbphy {
->>  >> >> > > +     usb1_vbus-supply = <&reg_usb1_vbus>;
->>  >> >> > > +     status = "okay";
->>  >> >> > > +};
->>  >> >> >
->>  >> >> >
->>  >> >
->>  >
-> 
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
+Thank you for your patch, I've applied this patch to my fixes
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
+
+Note it will show up in my fixes branch once I've pushed my
+local branch there, which might take a while.
+
+I will include this patch in my next fixes pull-req to Linus
+for the current kernel development cycle.
+
+Regards,
+
+Hans
+
+
+
+> ---
+>  drivers/platform/x86/hp-wmi.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
+> index 12449038bed12..0a99058be8130 100644
+> --- a/drivers/platform/x86/hp-wmi.c
+> +++ b/drivers/platform/x86/hp-wmi.c
+> @@ -90,6 +90,7 @@ enum hp_wmi_event_ids {
+>  	HPWMI_PEAKSHIFT_PERIOD		= 0x0F,
+>  	HPWMI_BATTERY_CHARGE_PERIOD	= 0x10,
+>  	HPWMI_SANITIZATION_MODE		= 0x17,
+> +	HPWMI_SMART_EXPERIENCE_APP	= 0x21,
+>  };
+>  
+>  /*
+> @@ -859,6 +860,8 @@ static void hp_wmi_notify(u32 value, void *context)
+>  		break;
+>  	case HPWMI_SANITIZATION_MODE:
+>  		break;
+> +	case HPWMI_SMART_EXPERIENCE_APP:
+> +		break;
+>  	default:
+>  		pr_info("Unknown event_id - %d - 0x%x\n", event_id, event_data);
+>  		break;
 
