@@ -2,100 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF45629C78
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75195629C7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238463AbiKOOoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 09:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58138 "EHLO
+        id S230133AbiKOOps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 09:45:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238510AbiKOOn5 (ORCPT
+        with ESMTP id S238159AbiKOOp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 09:43:57 -0500
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28BB2EF5A
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:42:21 -0800 (PST)
-Received: by mail-vs1-xe31.google.com with SMTP id t14so14842256vsr.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 06:42:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=84ckuklXks9HDjrkjMUEdy8dxhQSVXrlasgbqbXw1SM=;
-        b=hgUxmimdIPmB+4nNGYIJ9EdfOw9q+yFbT/NQFg3dHBOhblRrcqIQqhEEe/Z+nc60z2
-         +38wv6QLa5IcwpbYhGSbbiwsA4nVplmuGpZ8mG55oBC5VyZnOlPtpXS/+YIQCyqgU53c
-         udt6lVY4pPw3DWWmKOkiSUWUK2DJSNq4DQahxBuv5kYNb6B72sQvbccO2RY7GIROgvZI
-         3/UzWGJS6u4LfbTM8gjZYEbUIozPsPm5ucgAPfTovxj1Ru3phDypn15hV/g6w4KatfwU
-         MP+nXZQF8qAW8ovZmJ8Tx7Ry/e1DkHJ76bwr8ss8SUOCO6zFUrCmRVqwPbITO68g+dnG
-         6lVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=84ckuklXks9HDjrkjMUEdy8dxhQSVXrlasgbqbXw1SM=;
-        b=1PWry2tyfa5XiekhwNq96Z2AzhBJ868IqbuO0caPMlrCOQQK2R78mUisUrN00odQjQ
-         NLREecuSrmE/37lo1G6lTnAngWSmdCtVEZJYPMkThFC92cjSdnscfnofMVzmYhjntl5v
-         rNpwO69hYHowN1LgbejU7jtzyLMJ1KRtH5/6Se6CvdpLfxXL/moNgooZXt1LNQX231ki
-         vonbGg6TcLsezk1NLHq0yLKAI5XKw6MjNe+SDqiTjZy53S5T+Z5bu5NsFurljz6fy+hF
-         HJs6HGuml4PMbTR2uT1pIyO9LPue+e5k88EyDEKGNYMeENBVdh86kydDQUoLlnQi0fzY
-         wPxA==
-X-Gm-Message-State: ANoB5pmECj75QWyu7QOMyjhwAeWGnyaSHJvI+mBJSZ6V0VbNMjWS7Au+
-        LK4EUoDhD8MNGpL8vCSrGKOESVryfZSroJwieYO+aV/zrcg=
-X-Google-Smtp-Source: AA0mqf5RcHXLxh4wClwTJ+sdCRhxHg6wKKdKXlFyBmeMuQBZMb6iWnNvGMAHZvmHMvjFHk9vIJ7Vs0S9Whvpr/9nPxg=
-X-Received: by 2002:a05:6102:4187:b0:3aa:c58:66 with SMTP id
- cd7-20020a056102418700b003aa0c580066mr8989589vsb.47.1668523340865; Tue, 15
- Nov 2022 06:42:20 -0800 (PST)
+        Tue, 15 Nov 2022 09:45:29 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CCF2D1D3;
+        Tue, 15 Nov 2022 06:44:39 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1B7C46602A2B;
+        Tue, 15 Nov 2022 14:44:37 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1668523477;
+        bh=MIYpf0mHYDWLVle4bO/msR94U3fhD3OM3lpPL+REXds=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZWWpeYupRWST7G8bfRnYxT4+c7E8Bs/m/C2+5YC1qEiPPTjz0gwNN/ers00Vvhhu1
+         5KVmOJP873AYidT2hJdIa3GraNG6fYFH2IAP6shlqbFRl0Z3RhESkdo0dWiysJVTXc
+         qW20/OO3of6PpWUtC/o8+o9fpfZCX6ylGNUr6B6afuV3qZrf19yuOahyG3pydf4qD9
+         gHsWENDAFd5VQZVYeoHW3ntpJ3FwEJw+t4p+90T2jcs29jbEvl1gbPJfoFG8KXSC4c
+         ipb9n+16BQyUCm4qRjxgsiBtItA3rRMiHOtWB0YN9O42nsVH/H0e6JLugQ42tMO1kR
+         ahdH1PH2ACz3A==
+Message-ID: <3e9deab6-58ca-3a58-5f06-c1e4d181bc94@collabora.com>
+Date:   Tue, 15 Nov 2022 15:44:34 +0100
 MIME-Version: 1.0
-References: <20221112152928.42204-1-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20221112152928.42204-1-aidanmacdonald.0x0@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 15 Nov 2022 15:42:09 +0100
-Message-ID: <CAMRc=MeE97YAzow7MX5380_ucLdUONYqMd3+Nvd6YW_h9oHPJQ@mail.gmail.com>
-Subject: Re: [PATCH] gpio: sl28cpld: Replace irqchip mask_invert with unmask_base
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     michael@walle.cc, linus.walleij@linaro.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 1/2] dt-bindings: soc: qcom: Add bindings for Qualcomm
+ Ramp Controller
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     marijn.suijten@somainline.org, konrad.dybcio@somainline.org,
+        kernel@collabora.com, andersson@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, robh+dt@kernel.org,
+        agross@kernel.org
+References: <20221104142204.156333-1-angelogioacchino.delregno@collabora.com>
+ <20221104142204.156333-2-angelogioacchino.delregno@collabora.com>
+ <166758411781.2066027.6365889663189109123.robh@kernel.org>
+ <160cb3fc-176e-bc0e-1bff-9334478af8ec@collabora.com>
+ <342d556a-e710-590c-3c81-fcc60bbaa6e7@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <342d556a-e710-590c-3c81-fcc60bbaa6e7@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 4:29 PM Aidan MacDonald
-<aidanmacdonald.0x0@gmail.com> wrote:
->
-> Remove use of the deprecated mask_invert flag. Inverted mask
-> registers (where a '1' bit enables an IRQ) can be described more
-> directly as an unmask register.
->
-> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> ---
->  drivers/gpio/gpio-sl28cpld.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-sl28cpld.c b/drivers/gpio/gpio-sl28cpld.c
-> index 52404736ac86..2195f88c2048 100644
-> --- a/drivers/gpio/gpio-sl28cpld.c
-> +++ b/drivers/gpio/gpio-sl28cpld.c
-> @@ -70,8 +70,7 @@ static int sl28cpld_gpio_irq_init(struct platform_device *pdev,
->         irq_chip->num_irqs = ARRAY_SIZE(sl28cpld_gpio_irqs);
->         irq_chip->num_regs = 1;
->         irq_chip->status_base = base + GPIO_REG_IP;
-> -       irq_chip->mask_base = base + GPIO_REG_IE;
-> -       irq_chip->mask_invert = true;
-> +       irq_chip->unmask_base = base + GPIO_REG_IE;
->         irq_chip->ack_base = base + GPIO_REG_IP;
->
->         ret = devm_regmap_add_irq_chip_fwnode(dev, dev_fwnode(dev),
-> --
-> 2.38.1
->
+Il 15/11/22 14:36, Krzysztof Kozlowski ha scritto:
+> On 11/11/2022 11:05, AngeloGioacchino Del Regno wrote:
+>> Il 04/11/22 18:54, Rob Herring ha scritto:
+>>>
+>>> On Fri, 04 Nov 2022 15:22:03 +0100, AngeloGioacchino Del Regno wrote:
+>>>> Document bindings for the Qualcomm Ramp Controller, found on various
+>>>> legacy Qualcomm SoCs.
+>>>>
+>>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>> ---
+>>>>    .../qcom/qcom,msm8976-ramp-controller.yaml    | 37 +++++++++++++++++++
+>>>>    1 file changed, 37 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,msm8976-ramp-controller.yaml
+>>>>
+>>>
+>>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>>
+>>> yamllint warnings/errors:
+>>>
+>>> dtschema/dtc warnings/errors:
+>>> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,msm8976-ramp-controller.example.dtb: power-controller@b014000: '#power-domain-cells' is a required property
+>>> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/power-domain.yaml
+>>>
+>>> doc reference errors (make refcheckdocs):
+>>>
+>>> See https://patchwork.ozlabs.org/patch/
+>>>
+>>> This check can fail if there are any dependencies. The base for a patch
+>>> series is generally the most recent rc1.
+>>>
+>>> If you already ran 'make dt_binding_check' and didn't see the above
+>>> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+>>> date:
+>>>
+>>> pip3 install dtschema --upgrade
+>>>
+>>> Please check and re-submit.
+>>>
+>>
+>> I'm unsure about what I should do about this one.
+>> This is a power-controller, but does *not* need any #power-domain-cells, as it is
+>> standalone and doesn't require being attached to anything.
+> 
+> power-domain-cells are for power domain providers, not consumers. The
+> generic binding expect that nodes called power-controller are exactly
+> like that.
+> 
+> Solutions could be:
+> 1. Rename the node to something else. I cannot deduct the type of the
+> device based on description. What is "sequence ID" and how is it even
+> closely related to power control?
 
-Applied, thanks!
+This uC is mainly controlling DCVS, automagically plays with voltages for
+each ramp up/down step and from what I understand also decides to shut down
+or bring up *power* to "certain clocks" before ungating (CPU related, mainly
+big cluster).
+This also interacts with LMH - setting the LMH part makes it possible to
+later use CPR (otherwise CPR errors out internally and won't start, as it
+requires this controller, SAW and LMH to be set up in order to work).
 
-Bartosz
+What I've seen is that without it I can't bring up the big cluster at all,
+not even at minimum frequency, as the HF2PLL (a clock source for that cluster)
+will not power up.
+All it takes is to initialize these params and start the controller, then
+everything goes as it should.
+
+If you're wondering why my explanation may not be particularly satisfying,
+that's because downstream contains practically no information about this
+one, apart from a bunch of lines of code and because this controller is
+just a big black box.
+
+> 
+> 2. Narrow the node name in power-domain.yaml which would require changes
+> in multiple DTS and bindings.
+> 
+> 3. Do not require power-domain-cells for power-controllers, only for
+> power-domains.
+> 
+
+Solutions 2 and 3... well, I don't think that this would be really feasible
+as I envision this being the one and only driver that will ever require
+that kind of thing.
+Also, this programming was later moved to bootloaders and the only SoCs that
+will ever require this are MSM8956/76, MSM8953 and.. I think MSM8952 as well,
+but nothing more.
+
+Even if I can imagine the answer, I'm still tempted to ask: can we eventually
+just name it ramp-controller@xxxx or qcom-rc@xxxx or something "special" like
+that to overcome to this binding issue?
+
+Regards,
+Angelo
+
