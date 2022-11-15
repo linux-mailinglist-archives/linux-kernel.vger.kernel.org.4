@@ -2,98 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87392629E1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF88D629E25
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:54:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238407AbiKOPw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:52:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
+        id S230226AbiKOPye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238518AbiKOPwe (ORCPT
+        with ESMTP id S230088AbiKOPyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:52:34 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1452DAB1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:52:30 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id t10so18104160ljj.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:52:30 -0800 (PST)
+        Tue, 15 Nov 2022 10:54:32 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6DB2CDF0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:54:30 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id e13so13526126edj.7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:54:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qv1jQJ+HAdTvDoHEWeiJyxCYUc1W0oMj7+9QSvPLhVc=;
-        b=by67cHmdJG/Y3MLIFsigEaHI6UU+//XXwrX3/Ut83VA+Cmpe8/MUNVfjV21llKKtiI
-         nx7MbqtWD/pTgQIjfINnM778dG6FGptovgryInpbKTk5tzwwEhALKRvxrnybAjqGoZCW
-         VtmgjdS7Z4M7h2d43uAphVjmqQyPldFRAbVBW6O3ErHeYluHYPet2100OI5zksptMpI8
-         Ol6EAbdBAhP1H7yR9auIqrabT3cBB5yO+mc1a82AR4U092w4gXTHo/y4lFjCsTzNRkAr
-         +PpmDROj/OzHQMft5k3DIgL62g4gc2asRAQCKKTB+fqkd6rycNH5GF3EimYh+tNPfDd5
-         YhmQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MXw2DcIrd4sYwZp2Qf6GO0lRe5Jh56EBfVUnFYKu6RE=;
+        b=VdrMWd2C0zRlIU+FT+lgMorBgLSdXIaGdRiqQEjfe8ICZQFWZbSQJdhtD35B6a6TBT
+         esMxNNkTUrQltwheZBCw0jpTcMirEaF3UBLCAQJNGSC5SvqsykCjHUMWADXOU4zkzN3N
+         zRcvodFQ2fJTRSA/8SKxycjIaZ3P/YHyvJCNDYCbN9ow9C19ZSnTmkk8bvOL0M3lRLf8
+         gtDCM0hKPwxajoUeptIpXUgt8dlhddD74sFXXX+qYapzoehSlThwIpxBYUp3g2URDHqf
+         VdCp91/IM06Ap6P8h7XkNAyZa/Qo7AIm/hG/vv/5oRLcpePO4Rzhv5JYp3oS756qwqg/
+         M58A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qv1jQJ+HAdTvDoHEWeiJyxCYUc1W0oMj7+9QSvPLhVc=;
-        b=baSvPOp555VLEfJ00w8AnDSbowlxpsaejaCStCd0/Ci6yKb1GekYtgxTCc0CmeE3Ka
-         Y0BiAMHZDV2jnHdQe0rIPqzrHlViX79idMD5ByYtsW4b2pt2+4IfXwW42Zk1Ma5HEbDE
-         tvDZtee7/4PK3kQ99DGz2dbnA/0cgc92jJMPgtihT+ht5boyxTfc8t9Das7ZwROrtJop
-         yCFRh6hZ96+iHHV7+Bjtkfydbz+sPUrc3ILwHvlrDA838ulGw8RJOAwe/w/6ajSBVtkT
-         rWU5qP34mj7Tvw+RWiJqdL9vLrdLxFDJgM/8Wt/PFy9qdJk5AGYjHjoBJVq4yoJ8Weam
-         +4uw==
-X-Gm-Message-State: ANoB5pmZuXKXAWDTTHwGcaMddj3SGlb7JlM1+NdLljJkCXrvBJ7Oxd1x
-        e6DsvVLYSzrIJRx3s8UBooTUB9VmKZ4GzvoM
-X-Google-Smtp-Source: AA0mqf7gWLAjDp2it8ozEEeNxtZ/0E2c3yVOGMOdPqQ9nMgKSfpCDyG2szboeSX/KAVBrxbsqEMLzw==
-X-Received: by 2002:a2e:a401:0:b0:277:37a8:ba87 with SMTP id p1-20020a2ea401000000b0027737a8ba87mr5799824ljn.14.1668527549201;
-        Tue, 15 Nov 2022 07:52:29 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f27-20020a19381b000000b004a45ed1ae21sm2243842lfa.224.2022.11.15.07.52.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 07:52:28 -0800 (PST)
-Message-ID: <63f4d2eb-d681-a523-1a5c-9f727c3ddc7f@linaro.org>
-Date:   Tue, 15 Nov 2022 16:52:26 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MXw2DcIrd4sYwZp2Qf6GO0lRe5Jh56EBfVUnFYKu6RE=;
+        b=BEM4JGxX7mFnyBjnkA53TVxr8vA+Cb7OQJTY+F7UVLkSXczGl6OtXH2MwdfrpJcOVy
+         fgtcOZ6sf63BLDis6lOKGosIV9JjAxctgHQwnlexQiaoqBvt0x6K3/IrpCG04kOjDwT5
+         2VcKB3lmXKUnyJ8tkoQkXCaj8htk4VTknJcwsKu7Bkx3CM7XkOM6PA5Mg+on1KMrAf6E
+         GnKWtIzVIcBQ4oc7j9m8vewkmC7W7WvS/yzmtftaRyKrWhtimm334mOpY/J6nkeBEAVa
+         rElDCSLxs74/7KHi1zGVRYG3Jt55lievHjNtK9XObyQASbad9+0Nnq6AQxgrhPxvK8q7
+         6m1w==
+X-Gm-Message-State: ANoB5plz6tXRB6Z8PhuQhjUkCHj6Z7vBvQDLIbz8bAofOXGqudaupRWF
+        7qKfVAAzU6vKYv+MdO8YSqUQzMf+izjtmfFmdPX9FA==
+X-Google-Smtp-Source: AA0mqf5TE5bV3zOgHOtylol+IUxKYYKrgvfQtjxF4BS+55SiwwnZkcIcQo0LiUhdzLshA1UMU7fopza3TqY0XOlXoGY=
+X-Received: by 2002:a50:fd9a:0:b0:461:b279:1175 with SMTP id
+ o26-20020a50fd9a000000b00461b2791175mr15686083edt.124.1668527668323; Tue, 15
+ Nov 2022 07:54:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 1/9] dt-bindings: arm-smmu: Allow 3 power domains on
- SM6375 MMU500
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     patches@linaro.org, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
+References: <20221005-mt6357-support-v4-0-5d2bb58e6087@baylibre.com>
+ <20221005-mt6357-support-v4-5-5d2bb58e6087@baylibre.com> <fe898d24-54fa-56bb-8067-b422a3a52ff5@collabora.com>
+ <CAFGrd9r70XRd=4Ogei+U2QXQny7LhWr9bDCRNYco+Bsy+2XqrA@mail.gmail.com> <c426918a-8d63-5c40-4340-6c918296814f@linaro.org>
+In-Reply-To: <c426918a-8d63-5c40-4340-6c918296814f@linaro.org>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Tue, 15 Nov 2022 16:54:17 +0100
+Message-ID: <CAFGrd9o5GmqMS=MRq+EM+_T5kcHS2qftP0g0smu2W4QXBLozLA@mail.gmail.com>
+Subject: Re: [PATCH v4 5/9] dt-bindings: soc: mediatek: convert pwrap documentation
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <fabien.parent@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221115152727.9736-1-konrad.dybcio@linaro.org>
- <20221115152727.9736-2-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115152727.9736-2-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Chen Zhong <chen.zhong@mediatek.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-rtc@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 16:27, Konrad Dybcio wrote:
-> The SMMU on SM6375 requires 3 power domains to be active. Add an
-> appropriate description of that.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
+Le mar. 15 nov. 2022 =C3=A0 15:18, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> a =C3=A9crit :
+> >>> +maintainers:
+> >>> +  - Alexandre Mergnat <amergnat@baylibre.com>
+> >>
+> >> I say that the maintainer for pwrap is Flora Fu <flora.fu@mediatek.com=
+>....
+> >
+> > Flora Fu is the driver maintainer. As described in
+> > Documentation/devicetree/bindings/writing-schema.rst:
+> > maintainers
+> >   A DT specific property. Contains a list of email address(es)
+> >   for maintainers of this binding.
+> >
+> > My  understanding is this field is only for binding maintainers, but
+> > not related driver maintainers. Are we aligned ?
+>
+> Usually driver maintainer should be also binding maintainer. You can
+> have more binding maintainers than drivers (and vice versa), but it's
+> less usual to maintain driver and do not care about its Devicetree
+> binding (unless driver is also for ACPI etc. but that's not the case here=
+?).
 
+Ok, thanks for the explanations
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Regards,
+Alex
