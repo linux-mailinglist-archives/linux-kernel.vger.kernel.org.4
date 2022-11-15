@@ -2,98 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F85D62AF13
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6104262AF2C
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbiKOXFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 18:05:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
+        id S238581AbiKOXLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 18:11:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238657AbiKOXE5 (ORCPT
+        with ESMTP id S238570AbiKOXLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 18:04:57 -0500
-Received: from violet.fr.zoreil.com (violet.fr.zoreil.com [IPv6:2001:4b98:dc0:41:216:3eff:fe56:8398])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4182C64A;
-        Tue, 15 Nov 2022 15:04:52 -0800 (PST)
-Received: from violet.fr.zoreil.com ([127.0.0.1])
-        by violet.fr.zoreil.com (8.17.1/8.17.1) with ESMTP id 2AFN4UHC879484;
-        Wed, 16 Nov 2022 00:04:30 +0100
-DKIM-Filter: OpenDKIM Filter v2.11.0 violet.fr.zoreil.com 2AFN4UHC879484
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fr.zoreil.com;
-        s=v20220413; t=1668553470;
-        bh=wWl6IGieabcHk5tcHcU/MsR2mb9RDon3aUzEJtVqeq8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PmzrWsEvyzAh4WoATgWwdGGDZfr+zybW4A2FJHXK00jFiE60njJi5OSYWnsQIbIcY
-         UMeGxWPsVO11YwO3fqnP+PQh61G+v7AVgCfRjpiqHUGkvrP7eb+s6Ov8ittZxRUdB4
-         fPL8ajTQCxr8KNIqkEJKt1nGG/C1EL1dXPfyt12E=
-Received: (from romieu@localhost)
-        by violet.fr.zoreil.com (8.17.1/8.17.1/Submit) id 2AFN4TBr879483;
-        Wed, 16 Nov 2022 00:04:29 +0100
-Date:   Wed, 16 Nov 2022 00:04:29 +0100
-From:   Francois Romieu <romieu@fr.zoreil.com>
-To:     Zhang Changzhong <zhangchangzhong@huawei.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, mdf@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2 3/3] net: nixge: fix tx queue handling
-Message-ID: <Y3Qa/fjjMhctsE5w@electric-eye.fr.zoreil.com>
-References: <1668525024-38409-1-git-send-email-zhangchangzhong@huawei.com>
- <1668525024-38409-4-git-send-email-zhangchangzhong@huawei.com>
+        Tue, 15 Nov 2022 18:11:32 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03F82E9D8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:11:31 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so602077pjd.4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:11:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kylehuey.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4ckjuguz6xE0eRfA8bVi0J3H4nsbDymh+GHZEWw5n08=;
+        b=PLZmDsPzklxZ4b8mgS4haHWQSr/YfYPgxSkCXoTUJP9qno9EQvn69Pn5x1H6Dw0vKS
+         bLf5pNvKrIDk7Rn+zhBCzV1h5xoBm6gkTiPqBUdpduCHFj2FaR3Q6oBZ7I1euKKvVpZF
+         faocSd5vd1p8UELU5k7G4ZB/yEE6Ncr/RS83a9buGDdjsXGfFDzIhol7ziUpjlk3oCzm
+         x8St2XsucdS05oDsXAze+HwZOfX4ApUqsXMni/hD3yOLG/VKmCmec5feMbQswdbedJb2
+         7UxXjGd86kjyTacshQZ5X0ZEbhYzkcbFnFeMBdOANWRm8SopGGm6CKvbz/gzHfW59eqZ
+         16Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4ckjuguz6xE0eRfA8bVi0J3H4nsbDymh+GHZEWw5n08=;
+        b=rHzGGjOg3GAzRl2O/O3wRB0C160NF7VCw28qoUn++E217ZrNJszCHrrggWDgnoJ8s3
+         FQjpKVy89VDK9kWroSATOidTtdZN95Spj/BSRJWpnEZQ5E7hnXki74qjy/PTcdmfJ0F1
+         FcnUqLRGVoZHTbmz9JFVSwskn4Y5QZ8kAmiV1VohxF2HFZIgdtjE5WQ+o4QCFrkcUoTr
+         TuJqKAhzbwFsOGqDVR2/jqAJcUSROR+TlZ/o2a68xxtSUNcDC1n8tfeeFyUuYJ2VrQQz
+         ZsCOGhqV9WZ0UV0QnSaYmrK4T1dTKkQ4wxKcm3BtKm0B021RnhbpBXar3kt19C0oxcDI
+         0WBA==
+X-Gm-Message-State: ANoB5pll12wy6g3vFCFcdY98S21PEqJO5D0HPYTFvLbRjTNCC3lPPCS6
+        nkz+xnJWhcouf2hSHCGlJ0j9gA==
+X-Google-Smtp-Source: AA0mqf4loq3vghc/jvj4xbQ6I9i7XWfAYQZ+V+taawPejYNuLVIGVfefp1KPKapqN0ctJtQ4ODggbw==
+X-Received: by 2002:a17:90a:d145:b0:211:7e51:9d65 with SMTP id t5-20020a17090ad14500b002117e519d65mr592266pjw.220.1668553891109;
+        Tue, 15 Nov 2022 15:11:31 -0800 (PST)
+Received: from minbar.home.kylehuey.com (c-71-198-251-229.hsd1.ca.comcast.net. [71.198.251.229])
+        by smtp.gmail.com with ESMTPSA id f15-20020a62380f000000b0056c360af4e3sm9308372pfa.9.2022.11.15.15.11.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 15:11:30 -0800 (PST)
+From:   Kyle Huey <me@kylehuey.com>
+X-Google-Original-From: Kyle Huey <khuey@kylehuey.com>
+To:     Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>
+Subject: [PATCH v7 0/6] x86/fpu: Allow PKRU to be (once again) written by ptrace
+Date:   Tue, 15 Nov 2022 15:09:26 -0800
+Message-Id: <20221115230932.7126-1-khuey@kylehuey.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1668525024-38409-4-git-send-email-zhangchangzhong@huawei.com>
-X-Organisation: Land of Sunshine Inc.
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zhang Changzhong <zhangchangzhong@huawei.com> :
-> Currently the driver check for available space at the beginning of
-> nixge_start_xmit(), and when there is not enough space for this packet,
-> it returns NETDEV_TX_OK, which casues packet loss and memory leak.
-> 
-> Instead the queue should be stopped after the packet is added to the BD
-> when there may not be enough space for next packet. In addition, the
-> queue should be wakeup only if there is enough space for a packet with
-> max frags.
-> 
-> Fixes: 492caffa8a1a ("net: ethernet: nixge: Add support for National Instruments XGE netdev")
-> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
-> ---
->  drivers/net/ethernet/ni/nixge.c | 54 +++++++++++++++++++++++++++++------------
->  1 file changed, 38 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/ni/nixge.c b/drivers/net/ethernet/ni/nixge.c
-> index 91b7ebc..3776a03 100644
-> --- a/drivers/net/ethernet/ni/nixge.c
-> +++ b/drivers/net/ethernet/ni/nixge.c
-[...]
->  static netdev_tx_t nixge_start_xmit(struct sk_buff *skb,
-> @@ -518,10 +523,15 @@ static netdev_tx_t nixge_start_xmit(struct sk_buff *skb,
->  	cur_p = &priv->tx_bd_v[priv->tx_bd_tail];
->  	tx_skb = &priv->tx_skb[priv->tx_bd_tail];
->  
-> -	if (nixge_check_tx_bd_space(priv, num_frag + 1)) {
-> -		if (!netif_queue_stopped(ndev))
-> -			netif_stop_queue(ndev);
-> -		return NETDEV_TX_OK;
-> +	if (unlikely(nixge_check_tx_bd_space(priv, num_frag + 1))) {
-> +		/* Should not happen as last start_xmit call should have
-> +		 * checked for sufficient space and queue should only be
-> +		 * woken when sufficient space is available.
-> +		 */
+Hi.
 
-Almost. IRQ triggering after nixge_start_xmit::netif_stop_queue and
-before nixge_start_xmit::smp_mb may wrongly wake queue.
+Following last week's discussion I've reorganized this patch. The goal
+remains to restore the pre-5.14 behavior of ptrace(PTRACE_SET_REGSET,
+NT_X86_XSTATE) for the PKRU register (which was equivalent to a hardware
+XRSTOR instruction).
 
-Call me timorous but I would feel more confortable if this code could
-be tested on real hardware before being fed into -net.
+There are three different kernel APIs that write PKRU:
+1. sigreturn
+2. PTRACE_SET_REGSET with NT_X86_XSTATE
+3. KVM_SET_XSAVE
 
--- 
-Ueimor
+sigreturn restores PKRU from the fpstate and works as expected today.
+
+PTRACE_SET_REGSET restores PKRU from the thread_struct's pkru member and
+doesn't work at all.
+
+KVM_SET_XSAVE restores PKRU from the vcpu's pkru member and honors
+changes to the PKRU value in the XSAVE region but does not honor clearing
+the PKRU bit in the xfeatures mask. The KVM maintainers do not want to
+change the KVM behavior at the current time, however, so this quirk
+survives after this patch set.
+
+All three APIs ultimately call into copy_uabi_to_xstate(). Part 3 adds
+an argument to that function that is used to pass in a pointer to either
+the thread_struct's pkru or the vcpu's PKRU, for sigreturn/PTRACE_SET_REGSET
+or KVM_SET_XSAVE respectively. While this isn't strictly necessary for
+sigreturn, it makes part 5 easier. Parts 1 and 2 refactor the various
+callers of copy_uabi_to_xstate() to make that possible.
+
+Part 4 moves the existing KVM-specific PKRU handling in
+fpu_copy_uabi_to_guest_fpstate() to copy_uabi_to_xstate() where it is now
+shared amongst all three APIs. This is a no-op for sigreturn (which restores
+PKRU from the fpstate anyways) and KVM but it changes the PTRACE_SET_REGSET
+behavior to match KVM_SET_XSAVE.
+
+Part 5 emulates the hardware XRSTOR behavior where PKRU is reset to the
+hardware init value if the PKRU bit in the xfeatures mask is clear. KVM is
+excluded from this emulation by passing a NULL pkru slot pointer to
+copy_uabi_to_xstate() in this case. Passing in a pointer to the
+thread_struct's PKRU slot for sigreturn (even though sigreturn won't restore
+PKRU from that location) allows distinguishing KVM here. This changes
+the PTRACE_SET_REGSET behavior to fully match sigreturn.
+
+Part 6 is the self test that remains unchanged from v3 of this patchset.
+
+At no point in this patch set is the user-visible behavior of sigreturn
+or KVM_SET_XSAVE changed.
+
+Changelog since v6:
+- v6's part 1/2 is now split into parts 1 through 5.
+- v6's part 2/2 is now part 6.
+- Various style comments addressed.
+
+Changelog since v5:
+- Avoids a second copy from the uabi buffer as suggested.
+- Preserves old KVM_SET_XSAVE behavior where leaving the PKRU bit in the
+  XSTATE header results in PKRU remaining unchanged instead of
+  reinitializing it.
+- Fixed up patch metadata as requested.
+
+Changelog since v4:
+- Selftest additionally checks PKRU readbacks through ptrace.
+- Selftest flips all PKRU bits (except the default key).
+
+Changelog since v3:
+- The v3 patch is now part 1 of 2.
+- Adds a selftest in part 2 of 2.
+
+Changelog since v2:
+- Removed now unused variables in fpu_copy_uabi_to_guest_fpstate
+
+Changelog since v1:
+- Handles the error case of copy_to_buffer().
+
+
