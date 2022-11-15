@@ -2,127 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1E7629E02
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E637A629D0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiKOPsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
+        id S230107AbiKOPNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:13:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiKOPrx (ORCPT
+        with ESMTP id S229880AbiKOPNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:47:53 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A332CCAD
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:47:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668527272; x=1700063272;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QhtIFitBUVQQqjdVNUzXUsVTOtyY5X/TcbGpxY+iIVY=;
-  b=HkcY+aKXjWLW8K3O1SktT4A7Ri96gyKUkUe8ZOyRtawPDj9rmoWHuq66
-   Um1+eBUqxOFYBtXViRDPvzcRYrBNi/waDAAVJa0tV78O2fypwycixhmBG
-   S6QyUqRzTWWx69n3KMayfiQD2cHtEHwIPI47ceOeUhu7y0yoqL7HbUEOp
-   THhOtrV+oI4cdihRjAc8Vm0BQbzegLu66z/O/JMAs8YG93pPHT1JiT8zl
-   LQ6Sc+3oBwhRZFVF1iIOF7rHqv8UFCFimSn1yGcCIAMDBhtddkpvTPtFH
-   KUIYF/sgo/gq9Mbe3qwe/DmpeinVWvgbjGiw8MgP/Y6koCBIUaZo+1eLJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="292679226"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="292679226"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:47:51 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="968028185"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="968028185"
-Received: from bathomp1-mobl1.amr.corp.intel.com (HELO [10.209.177.76]) ([10.209.177.76])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:47:51 -0800
-Message-ID: <f8206ecf-7215-1f85-02ef-7d4f57a7898f@linux.intel.com>
-Date:   Tue, 15 Nov 2022 09:12:41 -0600
+        Tue, 15 Nov 2022 10:13:11 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CE17664;
+        Tue, 15 Nov 2022 07:13:08 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id D02185C015A;
+        Tue, 15 Nov 2022 10:13:04 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Tue, 15 Nov 2022 10:13:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1668525184; x=1668611584; bh=jmow9YieckaNq7/qOMLdjgU9NR3e
+        rVDcDci2VeJ6iDA=; b=dNwMW5KM48FWlbZdcR1a9hqusFgoKYCutCgoV8jrn6xA
+        sRIClkJQRrj4NZj5cyKpQNlmUkBp8IDMjna67bUu2DbSqvkhkrgK2exKS9CmAbcD
+        kxLe26yeWE9hDaun89ubFlv3aKUuXgJSfT8iTeF8/qvmas7nx4RaK055KhL4e8h6
+        ylrN7E3yXXYKte/s7Wc1q7LhUnq0r0yqo6lvkuDPj+Zbg5f8Bfy6c4L8Ui/OlUtI
+        fAU03UpIAS7UWmI5ObX22bpj/LY5TRyBvLcY6Ul2ZBOLpTUZqyhwOCnSdPdFYuO3
+        Zi6+csa1b975ukc4NjrrjhI2bVE03Xjugy9gc51v1Q==
+X-ME-Sender: <xms:gKxzY--3vCVLRQn3ug7V1plpIgjdmxNUhmVo88fsIm7FRvnq3Msaww>
+    <xme:gKxzY-sm5biXEe8C2VFusiDElCk9fMqxGTDQQRBHKH3OTS5G4yBOjiBk_aHjl-tAE
+    8YX2eUGwri_Yew>
+X-ME-Received: <xmr:gKxzY0AMjTx3de9gn0NAh5zq3MmZgsR3lsJSzcHbUXdCko-zgr72rFodcbhR1mB9zc2vDrIMRcF8qzhNeACOr6AfbWE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrgeeggdejgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpedvudefveekheeugeeftddvveefgfduieefudeifefgleekheegleegjeejgeeg
+    hfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
+    hoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:gKxzY2cj85ASPHydAqKFh2Hnr4I8MtBeQdOabvVPeT7Mxm8sZq7sjQ>
+    <xmx:gKxzYzNhjFqDydk8BNBoYW0VB8q1I7azkC-w5u4eBrwOx6eQNg8BGw>
+    <xmx:gKxzYwnRAwPLJstlhlsnl6ft1tXT6zqJFHWhO59fbyopHhNjymXoBQ>
+    <xmx:gKxzY-dBYnHHFFdeWCaTwo0tPgIYJCkGrlaVQQ3h3t1lsbzGQbOs2A>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 15 Nov 2022 10:13:03 -0500 (EST)
+Date:   Tue, 15 Nov 2022 17:12:58 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     netdev@kapio-technology.com
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8 net-next 2/2] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+Message-ID: <Y3Osehw6Ra28HhYv@shredder>
+References: <20221112203748.68995-1-netdev@kapio-technology.com>
+ <20221112203748.68995-3-netdev@kapio-technology.com>
+ <Y3NixroyU4XGL5j6@shredder>
+ <864c4ae8e549721ba1ac5cf6ef77db9d@kapio-technology.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH 2/4] soundwire: Provide build stubs for common functions
-Content-Language: en-US
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org, vkoul@kernel.org,
-        sanyog.r.kale@intel.com, yung-chuan.liao@linux.intel.com
-References: <20221114102956.914468-1-ckeepax@opensource.cirrus.com>
- <20221114102956.914468-3-ckeepax@opensource.cirrus.com>
- <90b01c76-fc65-a57f-9247-fae78241342c@linux.intel.com>
- <20221115110345.GM10437@ediswmail.ad.cirrus.com>
- <730128a9-46ce-02b2-f88d-c9982fff2e69@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <730128a9-46ce-02b2-f88d-c9982fff2e69@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <864c4ae8e549721ba1ac5cf6ef77db9d@kapio-technology.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/15/22 05:41, Richard Fitzgerald wrote:
-> On 15/11/2022 11:03, Charles Keepax wrote:
->> On Mon, Nov 14, 2022 at 10:13:07AM -0600, Pierre-Louis Bossart wrote:
->>>
->>>
->>> On 11/14/22 04:29, Charles Keepax wrote:
->>>> Provide stub functions when CONFIG_SOUNDWIRE is not set for functions
->>>> that are quite likely to be used from common code on devices supporting
->>>> multiple control buses.
->>>
->>> So far this case has been covered by splitting SoundWire related code
->>> away from, say I2C, and with a clear 'depends on SOUNDWIRE'. This is the
->>> case for rt5682, max98373, etc.
->>>
->>> Is this not good enough?
->>>
->>> I am not against this patch, just wondering if allowing code for
->>> different interfaces to be part of the same file will lead to confusions
->>> with e.g. register offsets or functionality exposed with different
->>> registers.
->>>
->>
->> I guess this is a bit of a grey area this one. Both work, I guess
->> the reason I was leaning this way is that in order to avoid a
->> circular dependency if I put all the soundwire DAI handling into
->> the soundwire code then I have to duplicate the snd_soc_dai_driver
->> structure into both the sdw and i2c specific code (worth noting
->> the I2S DAIs are still usable when the part is sdw to the host). But
->> there are also downsides to this approach in that it will likely have
->> some small impact on driver size when soundwire is not built in.
->>
+On Tue, Nov 15, 2022 at 11:36:38AM +0100, netdev@kapio-technology.com wrote:
+> On 2022-11-15 10:58, Ido Schimmel wrote:
+> > On Sat, Nov 12, 2022 at 09:37:48PM +0100, Hans J. Schultz wrote:
+> > > diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c
+> > > b/drivers/net/dsa/mv88e6xxx/global1_atu.c
+> > > index 8a874b6fc8e1..0a57f4e7dd46 100644
+> > > --- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
+> > > +++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
+> > > @@ -12,6 +12,7 @@
+> > > 
+> > >  #include "chip.h"
+> > >  #include "global1.h"
+> > > +#include "switchdev.h"
+> > > 
+> > >  /* Offset 0x01: ATU FID Register */
+> > > 
+> > > @@ -426,6 +427,8 @@ static irqreturn_t
+> > > mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
+> > >  	if (err)
+> > >  		goto out;
+> > > 
+> > > +	mv88e6xxx_reg_unlock(chip);
+> > 
+> > Why? At minimum such a change needs to be explained in the commit
+> > message and probably split to a separate preparatory patch, assuming the
+> > change is actually required.
 > 
-> I think we should just add the stubs. Other subsystems use stubs to help
-> with code that references stuff that might not be available.
-> 
-> Splitting all the soundwire-specifics out into a separate module works
-> for simple chips that are either I2S or soundwire. but can get messy for
-> a complex codec. I used the separate file method for CS42L42, but for a
-> driver I'm working on I abandoned that and put both DAIs in the core
-> code. I didn't notice the missing stubs because my defconfig that was
-> intended to omit soundwire apparently has something that is selecting
-> it anyway.
+> This was a change done long time ago related to that the violation handle
+> function takes the NL lock,
+> which could lead to a double-lock deadlock afair if the chip lock is taken
+> throughout the handler.
 
-It would be good if you could look into this, I don't see any 'select
-SOUNDWIRE'.
-
-I agree the premise of the split was that the device is used in one mode
-of the other, I am not sure however what the a 'complex codec' would
-change. It's likely that we will see a second level within a SoundWire
-device to deal with independent 'functions', but I don't quite see how
-this would matter.
-
-That said, I don't write codec drivers so I am not going to lay on the
-tracks over 2 stubs. We can revisit the sdw.h split as well later.
-
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Why do you need to take RTNL lock? br_switchdev_event() which receives
+the 'SWITCHDEV_FDB_ADD_TO_BRIDGE' event has this comment:
+"/* called with RTNL or RCU */"
+And it's using br_port_get_rtnl_rcu(), so looks like RCU is enough.
