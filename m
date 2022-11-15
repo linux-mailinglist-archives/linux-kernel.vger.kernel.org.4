@@ -2,112 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0BAA62965D
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92D6E629660
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:52:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238416AbiKOKw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:52:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
+        id S238445AbiKOKww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238415AbiKOKv2 (ORCPT
+        with ESMTP id S229849AbiKOKvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:51:28 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400B826564;
-        Tue, 15 Nov 2022 02:51:02 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id bs21so23559940wrb.4;
-        Tue, 15 Nov 2022 02:51:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kHCgeLA0fpuWkN3uj8aUPAizFmCCsJ1Dqq3I0wnRPWU=;
-        b=GG4hmXhCqxKmzlYOL7VTm1BeMRDNqi2IpszPTa8xfmjeMQtQPJqlN7zGzaHFVnftl0
-         KdtyUPlz/k8OV4yns0BSqXy1RkDHPJRm4UyBUam9wFX06Su+sha5n0j6rfYgSne4FVWH
-         KrrS2f6ko2zg6Lnk0dZwyhAMJgJCm2VENbOh7+uxiuzRH4hWsWZzOn+vt8L1+N4VZwnQ
-         4qZDnPZrndHhVplG+4zWuVixqmcQ8+AkO5rvdJAm3PBZaikFMz1wf8uB0kqQv76KT2mP
-         ah4H6cj0Sns6e8hVEsFtFrwuiqoc6oBhSImq8mdOhmpKCFe6Y4lXBx3AQ3ghz4MBXFvX
-         7qaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kHCgeLA0fpuWkN3uj8aUPAizFmCCsJ1Dqq3I0wnRPWU=;
-        b=x9AaTHzUAsvTmsO/m5jNrAh+ft3KnGj1k6iGgepo7LN6l5KVLnxcqutZbujWNuu6eh
-         VqDhOGvAw6rGUYm77lgqxf31hf/kMDX40M5B79aLC+wmuWkgzUY0Bu8aQoIFiT64s+h/
-         z8K1PLkRMmGE38LFKhDShfwwQh9gIZqurHbyYJjHa0UVZhi9e0ZVawmQzH8fJrPeDjQg
-         JEn38MupqqfoCAyx4zWiUQCVtlXw0MmkZ68BFBBO/m1S7e4gZZEqUUXop3nvWRQr6BkY
-         9mVeESZq0rjd/Qp6YLSLu3J6vgnTK0xvlITzIsUs3z2IVtqVoCzVxIJryvhYd6aKdy9/
-         MDhw==
-X-Gm-Message-State: ANoB5pl9/huD5gOvO7r8laHuGuV6FPfyXeuKuRris5Sg+x2ScaCP6SrN
-        dcuYvP8wdaJDOZZIcO0ActI=
-X-Google-Smtp-Source: AA0mqf4GEI373UOdrjvDzZ5pT8z3m5lebiGDE1qPpELbuVBcmrexL72FD1b57d+zN8FqQnPe9icPAw==
-X-Received: by 2002:a5d:590a:0:b0:22c:c41d:3442 with SMTP id v10-20020a5d590a000000b0022cc41d3442mr10526736wrd.494.1668509460593;
-        Tue, 15 Nov 2022 02:51:00 -0800 (PST)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id a22-20020a5d4576000000b002365254ea42sm12189900wrc.1.2022.11.15.02.50.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 02:51:00 -0800 (PST)
-Date:   Tue, 15 Nov 2022 10:50:58 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 00/95] 5.10.155-rc1 review
-Message-ID: <Y3NvEpXzNBxu29lZ@debian>
-References: <20221114124442.530286937@linuxfoundation.org>
+        Tue, 15 Nov 2022 05:51:47 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02B526AF7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 02:51:24 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1outXE-00026F-LC; Tue, 15 Nov 2022 11:51:20 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1outXC-004QF8-Tg; Tue, 15 Nov 2022 11:51:19 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1outXD-00GlyV-13; Tue, 15 Nov 2022 11:51:19 +0100
+Date:   Tue, 15 Nov 2022 11:51:18 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH 5/5] pwm: jz4740: Use regmap_{set,clear}_bits
+Message-ID: <20221115105118.l6lbxml555wsymwh@pengutronix.de>
+References: <20221024205213.327001-1-paul@crapouillou.net>
+ <20221024205213.327001-6-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gnihahu4i6fskmsc"
 Content-Disposition: inline
-In-Reply-To: <20221114124442.530286937@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221024205213.327001-6-paul@crapouillou.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
 
-On Mon, Nov 14, 2022 at 01:44:54PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.155 release.
-> There are 95 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 16 Nov 2022 12:44:21 +0000.
-> Anything received after that time might be too late.
+--gnihahu4i6fskmsc
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Build test (gcc version 11.3.1 20221016):
-mips: 63 configs -> no failure
-arm: 104 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Hello,
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+On Mon, Oct 24, 2022 at 09:52:13PM +0100, Paul Cercueil wrote:
+> Simplify a bit the code by using regmap_set_bits() and
+> regmap_clear_bits() instead of regmap_update_bits() when possible.
+>=20
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>  drivers/pwm/pwm-jz4740.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
+> index c0afc0c316a8..22fcdca66081 100644
+> --- a/drivers/pwm/pwm-jz4740.c
+> +++ b/drivers/pwm/pwm-jz4740.c
+> @@ -88,8 +88,7 @@ static int jz4740_pwm_enable(struct pwm_chip *chip, str=
+uct pwm_device *pwm)
+>  	struct jz4740_pwm_chip *jz =3D to_jz4740(chip);
+> =20
+>  	/* Enable PWM output */
+> -	regmap_update_bits(jz->map, TCU_REG_TCSRc(pwm->hwpwm),
+> -			   TCU_TCSR_PWM_EN, TCU_TCSR_PWM_EN);
+> +	regmap_set_bits(jz->map, TCU_REG_TCSRc(pwm->hwpwm), TCU_TCSR_PWM_EN);
+> =20
+>  	/* Start counter */
+>  	regmap_write(jz->map, TCU_REG_TESR, BIT(pwm->hwpwm));
+> @@ -129,8 +128,7 @@ static void jz4740_pwm_disable(struct pwm_chip *chip,=
+ struct pwm_device *pwm)
+>  	 * In TCU2 mode (channel 1/2 on JZ4750+), this must be done before the
+>  	 * counter is stopped, while in TCU1 mode the order does not matter.
+>  	 */
+> -	regmap_update_bits(jz->map, TCU_REG_TCSRc(pwm->hwpwm),
+> -			   TCU_TCSR_PWM_EN, 0);
+> +	regmap_clear_bits(jz->map, TCU_REG_TCSRc(pwm->hwpwm), TCU_TCSR_PWM_EN);
+> =20
+>  	/* Stop counter */
+>  	regmap_write(jz->map, TCU_REG_TECR, BIT(pwm->hwpwm));
+> @@ -204,8 +202,8 @@ static int jz4740_pwm_apply(struct pwm_chip *chip, st=
+ruct pwm_device *pwm,
+>  	regmap_write(jz4740->map, TCU_REG_TDFRc(pwm->hwpwm), period);
+> =20
+>  	/* Set abrupt shutdown */
+> -	regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
+> -			   TCU_TCSR_PWM_SD, TCU_TCSR_PWM_SD);
+> +	regmap_set_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
+> +			TCU_TCSR_PWM_SD);
 
-[1]. https://openqa.qa.codethink.co.uk/tests/2161
-[2]. https://openqa.qa.codethink.co.uk/tests/2162
+Nitpick: the regmap_set_bits call is short enough to be put on a single
+line.
 
+Other than that (and even if the line is kept as is):
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
--- 
-Regards
-Sudip
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--gnihahu4i6fskmsc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNzbyQACgkQwfwUeK3K
+7AmbSwf/Vbly63K/TVaQF/YqwCnO4NaI6X6YWFJGufARIlaIZaZrEjKE6vNPlZ9N
+oY5JFoew3R8sORqUkCd5NYoj6I4MObKpbXYqfI3Ws23JEbdAXxNWdAmcCTJoajeu
+1pT8AoKG/2oGjJymU+sX4G++cbxayOfS1C+osRll+fqJSoBibQaL8n6wu3kxp4iy
+aTMHB2RMrZucPHOnGzz8tpUiiGwAT60YCiEN/bGWjen43qWxiR0F933jJXqcx2qM
+ofCPSYmp1tRxdfQDXj5j4S9z4OFnIfEoTwOMJL02aXukqbZZhVELu6RjKVuQsGYF
+SV3kNxtNNYUzhjfvsM5B1Kt6KiHyyw==
+=CVFN
+-----END PGP SIGNATURE-----
+
+--gnihahu4i6fskmsc--
