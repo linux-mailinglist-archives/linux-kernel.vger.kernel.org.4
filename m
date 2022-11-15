@@ -2,59 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142CB629366
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 390CB62936B
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:42:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232512AbiKOImP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 03:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
+        id S232792AbiKOIml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 03:42:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232756AbiKOImK (ORCPT
+        with ESMTP id S230254AbiKOImi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 03:42:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB495582
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 00:42:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A7E56155A
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:42:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E34AC433D6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:42:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668501728;
-        bh=kvBS09XpTJEIyHfHC9MG/ZaSti9KUsIt1TDs3aHvIqY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=I/m6OT8hKBUPSJsly2xf44L6xj8KiD2maeIoa+VsRAAzmbAzv7InCJoR27pSL/LNe
-         S7MxF67gUPyQPaCXqDbCLqJwVLmKZAb8XZdYhWXVsAcHQKr1EtIDW6CpGcyc4803Ug
-         apSVxEggl+hkJ2yIy/pmy3qOSqaV555o8prKkzey6L3yINepZIIl5YPcmHdSYjeWfT
-         d5pLW2m2OYSlz97u0jxTF9kESNXTuVFgqqI78fXHm6oOW3ifEuxumjffqDY1e1T+Lb
-         zMngNvPa5w2Bwz1b256ygrnZDp99lXxB/AJJEbeambTceULp3qCutfqq47TFw18kl1
-         Nq8MVIimRhtbw==
-Received: by mail-ed1-f53.google.com with SMTP id x102so5625590ede.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 00:42:08 -0800 (PST)
-X-Gm-Message-State: ANoB5pkgKpX1IyFtYqWW0IwhQMdNRsMsnRZE4RJR21wAN99q9IpnCSm0
-        1OmOLjtAhX91HCI8V81OYOhZrw0ELpqRmzCoEFM=
-X-Google-Smtp-Source: AA0mqf6khhM0r68FPELDg5hxVyRYNd8WiZk1cCiOsVSeNNe1juNY/zCbEH/R1uZN5PKxUbvJ4PnbkUS0viqxgsWt+jw=
-X-Received: by 2002:a05:6402:3715:b0:462:32bf:613a with SMTP id
- ek21-20020a056402371500b0046232bf613amr13654158edb.78.1668501726670; Tue, 15
- Nov 2022 00:42:06 -0800 (PST)
+        Tue, 15 Nov 2022 03:42:38 -0500
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41605582;
+        Tue, 15 Nov 2022 00:42:35 -0800 (PST)
+Received: from [IPV6:2a01:e35:39f2:1220:da6c:81de:7fd7:e3eb] (unknown [IPv6:2a01:e35:39f2:1220:da6c:81de:7fd7:e3eb])
+        by smtp2-g21.free.fr (Postfix) with ESMTPS id 29A2120042C;
+        Tue, 15 Nov 2022 09:42:25 +0100 (CET)
+Message-ID: <9ffb34a9-3cbc-bd0e-7a92-76851a77b9ef@opteya.com>
+Date:   Tue, 15 Nov 2022 09:42:25 +0100
 MIME-Version: 1.0
-References: <20221115025527.13382-1-zhangqing@loongson.cn> <20221115025527.13382-6-zhangqing@loongson.cn>
-In-Reply-To: <20221115025527.13382-6-zhangqing@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 15 Nov 2022 16:41:54 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6ceu-UfSNBEpBJOvOtvuS8hufoiEtjAT1fXdQX+T11Kg@mail.gmail.com>
-Message-ID: <CAAhV-H6ceu-UfSNBEpBJOvOtvuS8hufoiEtjAT1fXdQX+T11Kg@mail.gmail.com>
-Subject: Re: [PATCH v6 5/9] LoongArch/ftrace: Add DYNAMIC_FTRACE_WITH_REGS support
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Jinyang He <hejinyang@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Yann Droneaud <ydroneaud@opteya.com>
+Subject: Re: [PATCH v1 3/5] random: add helpers for random numbers with given
+ floor or range
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Theodore Ts'o <tytso@mit.edu>, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221022014403.3881893-1-Jason@zx2c4.com>
+ <20221022014403.3881893-4-Jason@zx2c4.com>
+ <60574e8f-20ff-0996-5558-e9bd35e42681@opteya.com>
+ <Y3KLH4FqFbJ7bfY0@zx2c4.com>
+Content-Language: fr-FR, en-US
+Organization: OPTEYA
+In-Reply-To: <Y3KLH4FqFbJ7bfY0@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,148 +49,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Qing,
+Hi,
 
-Patch5 and Patch6 are small and related, maybe they can be combined
-with a name "LoongArch/ftrace: Add DYNAMIC_FTRACE_WITH_{ARGS,REGS}
-support"
+Le 14/11/2022 à 19:38, Jason A. Donenfeld a écrit :
+> On Mon, Nov 14, 2022 at 07:04:13PM +0100, Yann Droneaud wrote:
+>> I have a bad feeling about this one, and can't help but thinking it's going
+>> to bite someone: when asked to pick a number *between* 0 and 10,
+>> I usually think I'm allowed to pick 10 (even if I'm going to answer 7 as it should).
+> This is one of those bikeshed things you see all over the place, like
+> whether slices in a language should be [start index, end index] or
+> [start index, length], or whether arrays should be 0-based or 1-based.
+> We'll never settle this variety of dispute here.
+>
+> But in this case, there are some particular reasons why it must be this
+> way. Firstly, usage of it this way matches most of the ways the function
+> is actually used in the kernel, and fits existing semantics. This alone
+> I find compelling. But also, having all of these functions use half-open
+> intervals means that each function can take care of its entire range,
+> without having to resort to using 64-bit arithmetic, and no function is
+> a complete subset of any other function. So doing it this way makes
+> these maximally useful too.
 
-Huacai
+For get_random_below(), which replaces a modulo, <bikeshedding> and could
+have been called get_random_mod()</bikeshedding>, having an open upper
+range seems fine. It's already what can be achieved by the % operator.
 
-On Tue, Nov 15, 2022 at 10:55 AM Qing Zhang <zhangqing@loongson.cn> wrote:
->
-> This patch implements DYNAMIC_FTRACE_WITH_REGS on LoongArch, which allows
-> a traced function's arguments (and some other registers) to be captured
-> into a struct pt_regs, allowing these to be inspected and modified.
->
-> Co-developed-by: Jinyang He <hejinyang@loongson.cn>
-> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
-> ---
->  arch/loongarch/Kconfig              |  1 +
->  arch/loongarch/include/asm/ftrace.h |  3 +++
->  arch/loongarch/kernel/ftrace_dyn.c  | 17 ++++++++++++++
->  arch/loongarch/kernel/mcount-dyn.S  | 36 +++++++++++++++++++++++++++--
->  4 files changed, 55 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 615ce62422b8..12e3e91a68ae 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -90,6 +90,7 @@ config LOONGARCH
->         select HAVE_DEBUG_STACKOVERFLOW
->         select HAVE_DMA_CONTIGUOUS
->         select HAVE_DYNAMIC_FTRACE
-> +       select HAVE_DYNAMIC_FTRACE_WITH_REGS
->         select HAVE_EBPF_JIT
->         select HAVE_EXIT_THREAD
->         select HAVE_FAST_GUP
-> diff --git a/arch/loongarch/include/asm/ftrace.h b/arch/loongarch/include/asm/ftrace.h
-> index 76ca58767f4d..a3f974a7a5ce 100644
-> --- a/arch/loongarch/include/asm/ftrace.h
-> +++ b/arch/loongarch/include/asm/ftrace.h
-> @@ -28,6 +28,9 @@ struct dyn_ftrace;
->  int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
->  #define ftrace_init_nop ftrace_init_nop
->
-> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-> +#define ARCH_SUPPORTS_FTRACE_OPS 1
-> +#endif
->  #endif /* CONFIG_DYNAMIC_FTRACE */
->  #endif /* __ASSEMBLY__ */
->  #endif /* CONFIG_FUNCTION_TRACER */
-> diff --git a/arch/loongarch/kernel/ftrace_dyn.c b/arch/loongarch/kernel/ftrace_dyn.c
-> index 3fe791b6783e..ec3d951be50c 100644
-> --- a/arch/loongarch/kernel/ftrace_dyn.c
-> +++ b/arch/loongarch/kernel/ftrace_dyn.c
-> @@ -99,6 +99,23 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
->         return ftrace_modify_code(pc, old, new, true);
->  }
->
-> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-> +int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
-> +                       unsigned long addr)
-> +{
-> +       unsigned long pc;
-> +       long offset;
-> +       u32 old, new;
-> +
-> +       pc = rec->ip + LOONGARCH_INSN_SIZE;
-> +
-> +       old = larch_insn_gen_bl(pc, old_addr);
-> +       new = larch_insn_gen_bl(pc, addr);
-> +
-> +       return ftrace_modify_code(pc, old, new, true);
-> +}
-> +#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
-> +
->  void arch_ftrace_update_code(int command)
->  {
->         command |= FTRACE_MAY_SLEEP;
-> diff --git a/arch/loongarch/kernel/mcount-dyn.S b/arch/loongarch/kernel/mcount-dyn.S
-> index 0c12cc108e6f..02835186b463 100644
-> --- a/arch/loongarch/kernel/mcount-dyn.S
-> +++ b/arch/loongarch/kernel/mcount-dyn.S
-> @@ -27,7 +27,7 @@
->   * follows the LoongArch psABI well.
->   */
->
-> -       .macro  ftrace_regs_entry
-> +       .macro  ftrace_regs_entry allregs=0
->         PTR_ADDI sp, sp, -PT_SIZE
->         /* Save trace function ra at PT_ERA */
->         PTR_S   ra, sp, PT_ERA
-> @@ -43,16 +43,48 @@
->         PTR_S   a7, sp, PT_R11
->         PTR_S   fp, sp, PT_R22
->
-> +       .if \allregs
-> +       PTR_S   t0, sp, PT_R12
-> +       PTR_S   t1, sp, PT_R13
-> +       PTR_S   t2, sp, PT_R14
-> +       PTR_S   t3, sp, PT_R15
-> +       PTR_S   t4, sp, PT_R16
-> +       PTR_S   t5, sp, PT_R17
-> +       PTR_S   t6, sp, PT_R18
-> +       PTR_S   t7, sp, PT_R19
-> +       PTR_S   t8, sp, PT_R20
-> +       PTR_S   s0, sp, PT_R23
-> +       PTR_S   s1, sp, PT_R24
-> +       PTR_S   s2, sp, PT_R25
-> +       PTR_S   s3, sp, PT_R26
-> +       PTR_S   s4, sp, PT_R27
-> +       PTR_S   s5, sp, PT_R28
-> +       PTR_S   s6, sp, PT_R29
-> +       PTR_S   s7, sp, PT_R30
-> +       PTR_S   s8, sp, PT_R31
-> +       PTR_S   tp, sp, PT_R2
-> +       /* Clear it for later use as a flag sometimes. */
-> +       PTR_S   zero, sp, PT_R0
-> +       PTR_S   $r21, sp, PT_R21
-> +       .endif
-> +
->         PTR_ADDI t8, sp, PT_SIZE
->         PTR_S   t8, sp, PT_R3
->
->         .endm
->
->  SYM_CODE_START(ftrace_caller)
-> -       ftrace_regs_entry
-> +       ftrace_regs_entry allregs=0
->         b       ftrace_common
->  SYM_CODE_END(ftrace_caller)
->
-> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-> +SYM_CODE_START(ftrace_regs_caller)
-> +       ftrace_regs_entry allregs=1
-> +       b       ftrace_common
-> +SYM_CODE_END(ftrace_regs_caller)
-> +#endif
-> +
->  SYM_CODE_START(ftrace_common)
->         PTR_ADDI        a0, ra, -8      /* arg0: ip */
->         move            a1, t0          /* arg1: parent_ip */
-> --
-> 2.36.0
->
->
+But I believe it's unfortunate get_random_between() cannot be called to
+get a number up to UINT32_MAX, as get_random_between(0, UINT32_MAX) would
+be capped to UINT32_MAX - 1.
+
+When not a constant, one could hope the function can cope with a maximum
+that would grow up to and including UINT32_MAX.
+
+
+> So anyway I think the function has to be defined like this. If you'd
+> like to bikeshed over a different name than "between", though, be my
+> guest. Maybe you'd like "from" better. But probably "between" is fine,
+> and with enough good examples (as my conversion patch does) and the
+> clear succinct documentation comment, we should be good.
+
+That the conversion patch [1] that triggered my comment: I find replacing
+the following rather unpleasing, somewhat uncanny:
+
+-get_random_u32_below(1024) + 1 + get_random_u32_between(1, 1024 + 1) I 
+would prefer
+- get_random_u32_below(1024) + 1 + get_random_u32_between(1, 1024) [1]https://lore.kernel.org/lkml/20221114164558.1180362-4-Jason@zx2c4.com/
+
+Regards.
+
+-- 
+Yann Droneaud
+OPTEYA
+
