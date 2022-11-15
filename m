@@ -2,94 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A44E6291E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:36:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 385946291EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232332AbiKOGgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 01:36:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
+        id S232322AbiKOGht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 01:37:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbiKOGgR (ORCPT
+        with ESMTP id S231908AbiKOGhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 01:36:17 -0500
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AA01F9DC
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:36:12 -0800 (PST)
-Received: by mail-wm1-f43.google.com with SMTP id 129-20020a1c0287000000b003cfe48519a6so2661471wmc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:36:12 -0800 (PST)
+        Tue, 15 Nov 2022 01:37:46 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6FD1EC78
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:37:42 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id a14so22546129wru.5
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:37:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0UuKsrtaUQJeoL6SglHIU57kxBsjCPLAPtRrqxxSJak=;
+        b=aDYn8xC4iZwLEHcvbYuBDXyg+6vze6cdda5CscjPQGhfWiBZwtVH5WEQej6YAUhqtU
+         xI8tqaBQJbBndJU2wfh+yigIjD7dgu6GcqduM5t0T2gH1IuEEkvZmXqCC+hOxYhJIuIz
+         ge3DIKFr6esYlHA3ROwk7+kJ/UYNjQLpXoryYYPjLLzo4w475MJlbU12k9QUCijC6BU7
+         NIzJmZ8A7SWz2R4vnzpjO7yJ7HpAsNFfdHJ63N5QxFbjn5rlu06Xiu1m3T/0rrr4TQZs
+         YmUQ7Ha25qMBEH8hUEo83S0G9DUCuYJTXLEUdkS7R0M9zV2+K0YZmAj94L0jzklUbc6L
+         ZbqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lucaEfGhqe2TQcjXAWdO34ZK25H8iCuCpjwK71zIz9U=;
-        b=dthSXHgyVghlAUAW1toa/SOdq3dLdhkGVLqxSd4h6Vy/nseNsUR4HKYg2wlum0HzL3
-         +kt28KuovW3l2qggHtWcHBprF/IV3GxKVJUfWMIKMB61Kwu2DBXCBD5HEY3+QyDLbdEy
-         J42PB92s7XUjr1+gxHq8OjQcu+jlXu5Cd7gZ2vshfzgGYviQFIIOEmCshc4LibYr2/5c
-         tzxEwSH5Zsg7c8bUBaLdaPNmgNwXgMmU8iGHv4XkpmBvgKSlku8O6BtJSYW9CJv0UsX0
-         cVfyScRYjNB/AZUNEgFrxvmryvFOsK4qgOMw3EdKZfliUsDnxMlqKnkyAUtRXCJSRM5v
-         86ng==
-X-Gm-Message-State: ANoB5pmu1szhdBKM/sgtNfJNwWTnV18fyJSEzxnhv35+g/PHDmg//pTF
-        EwFudhyxqV27EAshPvefIsY=
-X-Google-Smtp-Source: AA0mqf6yPeh2Gmls0gbrGh64Kf8VrDiLW4ZqbPJr0XGRyNrhx2elhx6qm45J1ADcyA36JVjfQBEuVQ==
-X-Received: by 2002:a05:600c:89a:b0:3cf:ca91:7094 with SMTP id l26-20020a05600c089a00b003cfca917094mr324327wmp.24.1668494170478;
-        Mon, 14 Nov 2022 22:36:10 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id az40-20020a05600c602800b003b492753826sm14536803wmb.43.2022.11.14.22.36.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 22:36:09 -0800 (PST)
-Message-ID: <34ca6034-331c-7c6c-ddd4-f774dc8f22ce@kernel.org>
-Date:   Tue, 15 Nov 2022 07:36:08 +0100
+        bh=0UuKsrtaUQJeoL6SglHIU57kxBsjCPLAPtRrqxxSJak=;
+        b=LHTEGUJJ/aP7Z4w37GDp/e96L0cnDCuXVDutrCBD0Q+5IQ1ob3YlL28vuyqcQc2adB
+         43FvgjJVKxwcHpLKVu1v/I8sq5Y5lf2CJRZL931HpkKH5hnSvZVbFVn/WDd7hMurmnMd
+         254g0svPoPA/rCT103mibYCio2P9YCtiitqLTJZNLZCJQ0+w9vIDO+20xYO5cffdV5qY
+         tffZGLqlOvOBzgwThVkWPiFqT0PPIKGOTxEw3Lj99trXq349kvh6/GKh5nUuQBPX2OWu
+         XCxCXnoFGABjb5MyXw/IBuiCUVPUA9zViv9PxcLy+liz/5RePYcWqctWv2MrW0mXyWig
+         yZUw==
+X-Gm-Message-State: ANoB5pnU/b8Bew6BYYGuhf0K9NqjcpPFohed2vAc6jxzGf5YeXwf6JGe
+        7wPCZlpENF6L9svlunETSbo=
+X-Google-Smtp-Source: AA0mqf7TM9Xx4ma8nFWt9AmCGjecDJFIXIL4bv9HkOXZFPxhJUnhGX+sbI19rjp3Rim2FlQlLI60sA==
+X-Received: by 2002:adf:e812:0:b0:241:7277:990b with SMTP id o18-20020adfe812000000b002417277990bmr9711630wrm.672.1668494260564;
+        Mon, 14 Nov 2022 22:37:40 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id l9-20020a05600c1d0900b003cf878c4468sm22411983wms.5.2022.11.14.22.37.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 22:37:40 -0800 (PST)
+Date:   Tue, 15 Nov 2022 09:37:37 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev, Youling Tang <tangyouling@loongson.cn>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>
+Subject: arch/loongarch/kernel/traps.c:250 die() warn: variable dereferenced
+ before check 'regs' (see line 244)
+Message-ID: <202211150324.eLx8WYhx-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 02/46] kbuild: pass jobserver to cmd_ld_vmlinux.o
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Martin Liska <mliska@suse.cz>
-References: <20221114114344.18650-1-jirislaby@kernel.org>
- <20221114114344.18650-3-jirislaby@kernel.org>
- <CAK7LNASUb0PLiZahw46c0qBUn_caMWm2SrtY1Hb8Vd7RzsAwzg@mail.gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <CAK7LNASUb0PLiZahw46c0qBUn_caMWm2SrtY1Hb8Vd7RzsAwzg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14. 11. 22, 18:57, Masahiro Yamada wrote:
-> On Mon, Nov 14, 2022 at 8:44 PM Jiri Slaby (SUSE) <jirislaby@kernel.org> wrote:
->>
->> From: Jiri Slaby <jslaby@suse.cz>
->>
->> Until the link-vmlinux.sh split (cf. the commit below), the linker was
->> run with jobserver set in MAKEFLAGS. After the split, the command in
->> Makefile.vmlinux_o is not prefixed by "+" anymore, so this information
->> is lost.
->>
->> Restore it as linkers working in parallel (namely gcc LTO) make a use of
->> it. Actually, they complain, if jobserver is not set:
->>    lto-wrapper: warning: jobserver is not available: '--jobserver-auth=' is not present in 'MAKEFLAGS'
->>
->> Fixes: 5d45950dfbb1 (kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o)
-> 
-> 
-> This Fixes is wrong since GCC LTO is not in upstream code.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   094226ad94f471a9f19e8f8e7140a09c2625abaa
+commit: 4e62d1d86585e1b62b4f96ee586881dd45a443dc LoongArch: Add kdump support
+config: loongarch-randconfig-m031-20221114
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
 
-Yup, this is a left-over. Now dropped from both.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
 
-thanks,
+New smatch warnings:
+arch/loongarch/kernel/traps.c:250 die() warn: variable dereferenced before check 'regs' (see line 244)
+
+vim +/regs +250 arch/loongarch/kernel/traps.c
+
+0603839b18f4fb Huacai Chen  2022-05-31  228  void __noreturn die(const char *str, struct pt_regs *regs)
+0603839b18f4fb Huacai Chen  2022-05-31  229  {
+0603839b18f4fb Huacai Chen  2022-05-31  230  	static int die_counter;
+0603839b18f4fb Huacai Chen  2022-05-31  231  	int sig = SIGSEGV;
+0603839b18f4fb Huacai Chen  2022-05-31  232  
+0603839b18f4fb Huacai Chen  2022-05-31  233  	oops_enter();
+0603839b18f4fb Huacai Chen  2022-05-31  234  
+0603839b18f4fb Huacai Chen  2022-05-31  235  	if (notify_die(DIE_OOPS, str, regs, 0, current->thread.trap_nr,
+0603839b18f4fb Huacai Chen  2022-05-31  236  		       SIGSEGV) == NOTIFY_STOP)
+0603839b18f4fb Huacai Chen  2022-05-31  237  		sig = 0;
+0603839b18f4fb Huacai Chen  2022-05-31  238  
+0603839b18f4fb Huacai Chen  2022-05-31  239  	console_verbose();
+0603839b18f4fb Huacai Chen  2022-05-31  240  	raw_spin_lock_irq(&die_lock);
+0603839b18f4fb Huacai Chen  2022-05-31  241  	bust_spinlocks(1);
+0603839b18f4fb Huacai Chen  2022-05-31  242  
+0603839b18f4fb Huacai Chen  2022-05-31  243  	printk("%s[#%d]:\n", str, ++die_counter);
+0603839b18f4fb Huacai Chen  2022-05-31 @244  	show_registers(regs);
+                                                               ^^^^
+Dereferenced without checking.
+
+0603839b18f4fb Huacai Chen  2022-05-31  245  	add_taint(TAINT_DIE, LOCKDEP_NOW_UNRELIABLE);
+0603839b18f4fb Huacai Chen  2022-05-31  246  	raw_spin_unlock_irq(&die_lock);
+0603839b18f4fb Huacai Chen  2022-05-31  247  
+0603839b18f4fb Huacai Chen  2022-05-31  248  	oops_exit();
+0603839b18f4fb Huacai Chen  2022-05-31  249  
+4e62d1d86585e1 Youling Tang 2022-10-12 @250  	if (regs && kexec_should_crash(current))
+                                                    ^^^^
+Too late.
+
+4e62d1d86585e1 Youling Tang 2022-10-12  251  		crash_kexec(regs);
+4e62d1d86585e1 Youling Tang 2022-10-12  252  
+0603839b18f4fb Huacai Chen  2022-05-31  253  	if (in_interrupt())
+0603839b18f4fb Huacai Chen  2022-05-31  254  		panic("Fatal exception in interrupt");
+0603839b18f4fb Huacai Chen  2022-05-31  255  
+0603839b18f4fb Huacai Chen  2022-05-31  256  	if (panic_on_oops)
+0603839b18f4fb Huacai Chen  2022-05-31  257  		panic("Fatal exception");
+0603839b18f4fb Huacai Chen  2022-05-31  258  
+0603839b18f4fb Huacai Chen  2022-05-31  259  	make_task_dead(sig);
+0603839b18f4fb Huacai Chen  2022-05-31  260  }
+
 -- 
-js
+0-DAY CI Kernel Test Service
+https://01.org/lkp
 
