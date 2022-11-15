@@ -2,187 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406FB629EEE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB786629EEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238574AbiKOQYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 11:24:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43642 "EHLO
+        id S238550AbiKOQYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 11:24:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238607AbiKOQYZ (ORCPT
+        with ESMTP id S238634AbiKOQX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 11:24:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB76626B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:23:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668529403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ci9vEZZd7PIXQiAbPPazeWj16pxvXWYEaZMVH28k3eg=;
-        b=h2UBsPYm6117zn9Xj39zeaiGJIeCeJA5iJIAHKPhJLCk3rAi5utHrmw3CDAJdzFUqbxkBa
-        CN1CbL24gpAiH8pU9y8bWJQ/QSTaQhrMN8yvQU82Xq2ir/9LilTbCJ7A+ma6tCIb8MnXUg
-        OqrAtRQGqEZeCzYcZ3HNlftCp9LP04Q=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-311-y4RNgx0iNYaqvauW37ptEQ-1; Tue, 15 Nov 2022 11:23:21 -0500
-X-MC-Unique: y4RNgx0iNYaqvauW37ptEQ-1
-Received: by mail-ed1-f72.google.com with SMTP id z15-20020a05640240cf00b00461b253c220so10206731edb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:23:21 -0800 (PST)
+        Tue, 15 Nov 2022 11:23:56 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED34723154
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:23:44 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id w9-20020a056e021c8900b0030247910269so7460499ill.4
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:23:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ci9vEZZd7PIXQiAbPPazeWj16pxvXWYEaZMVH28k3eg=;
-        b=jH4yNeJ8yIYsCjBbc6JKXNaxk2Pubg+/gOIoia28xbEJbc94Z3by65cWFJzTnU2W1B
-         N87OJ903fU3G2rgLxpjRXm9Oz0oa5gCsv9WRT8m+8uMIoIoYmp0M2oXhlDuEJYo7J6Kj
-         WYGATzNgUXS1U82yWflneSCZ4nf+w8OlQrLht2+koSryB4bJbRJjTEXUasSSdA1m4g4E
-         w8sshE0opMk+bQOZjk5SiXi2lak4xa4WcQU9SafpssGebmMAs0mkL9nLt6M8kSLD8f3+
-         EZoSPmn0eZSogHkcr/EayZx5+DkruZ96cEBWhedWmp2Bzfy/A1BaXDL2lYSY/OWpcXpQ
-         BdaA==
-X-Gm-Message-State: ANoB5pnHxNDSU9LFJFpcS0F5ekWW8oqO4lcsB6P7PDcH4YvwotISIwNS
-        /yT8k1Rn6AjQ2K4e05be7arNrNIyTJpXrt3vPEVrazQvQV/5HrzX980hWMIMKbcJ+WhTV6r9HWk
-        wSIrYSTX6bLZqTceKZ/7ZoWnh
-X-Received: by 2002:a50:9e43:0:b0:461:8dc1:10b with SMTP id z61-20020a509e43000000b004618dc1010bmr15799162ede.113.1668529400607;
-        Tue, 15 Nov 2022 08:23:20 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5XyDm+yixzRI15F63g79qoETPymzFpi8YahRFdLxhZdAJ5pQYy/PBdlbLy+eAOetK9Ug4gOw==
-X-Received: by 2002:a50:9e43:0:b0:461:8dc1:10b with SMTP id z61-20020a509e43000000b004618dc1010bmr15799142ede.113.1668529400392;
-        Tue, 15 Nov 2022 08:23:20 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id d16-20020a170906305000b0078d21574986sm5613288ejd.203.2022.11.15.08.23.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 08:23:19 -0800 (PST)
-Message-ID: <7f906ecf-f115-c102-35b6-0974d98d65e1@redhat.com>
-Date:   Tue, 15 Nov 2022 17:23:19 +0100
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bfBuTsE7YaP7zgCJr/ekMBNpTHkwiL+93RieseYtP2s=;
+        b=bREDq7E+5S23xkAql9bbulLJkhVkbktca3TzXMs+ktYGqNGGV8qEo9i5XY3qTmBtC+
+         XA4aOdFijJ3qxtfXS7tipEuz10ljZy8Pc74y2Z3Ba/mKaF5EnC2Hdj461XMnnzTIe1dZ
+         A7uWvXNg4J7uB1U4S0e7BCESjksu3F0cZU1LzaGVH9GR+gB+RJJKtMxxi4zf1Ygm6CAG
+         Ad+Kw9K6+vGy0kw5yOFFNMCB/Nf/WwABOYv8glHK0THaVaozPPq2+r4zlShGevcfBzM4
+         M7BaZDtvBRVmW1jPb5rd+ylDxzylREqns1V1p2wEHs3O1okZYacOr9t6k0XOrGRkm9uH
+         v3lA==
+X-Gm-Message-State: ANoB5plVvcB1LmE3ecyReVOSFOhUo2ZLo53YKccM+Udc12H8bjRbm/Kw
+        rxfRfixWBBR5Ag7Klw45f66Xj46AW641fe+W9UaIH3ZFRj0m
+X-Google-Smtp-Source: AA0mqf4VsCoiCgt6pSGRjayzPQ7+FXLLvtQ2VfY4o5bP6XfRKXzSd3yuuOYziv5CnEyGamonV1kwBYJCAaw740xQ95pSpsGE2NXy
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 1/2] platform/surface: aggregator: Do not check for
- repeated unsequenced packets
-Content-Language: en-US, nl
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221113185951.224759-1-luzmaximilian@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221113185951.224759-1-luzmaximilian@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:1a0e:b0:302:541a:d31c with SMTP id
+ s14-20020a056e021a0e00b00302541ad31cmr5970054ild.78.1668529424350; Tue, 15
+ Nov 2022 08:23:44 -0800 (PST)
+Date:   Tue, 15 Nov 2022 08:23:44 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a2c79f05ed84c7f9@google.com>
+Subject: [syzbot] kernel BUG in workingset_activation (2)
+From:   syzbot <syzbot+644848628d5e12d5438c@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-On 11/13/22 19:59, Maximilian Luz wrote:
-> Currently, we check any received packet whether we have already seen it
-> previously, regardless of the packet type (sequenced / unsequenced). We
-> do this by checking the sequence number. This assumes that sequence
-> numbers are valid for both sequenced and unsequenced packets. However,
-> this assumption appears to be incorrect.
-> 
-> On some devices, the sequence number field of unsequenced packets (in
-> particular HID input events on the Surface Pro 9) is always zero. As a
-> result, the current retransmission check kicks in and discards all but
-> the first unsequenced packet, breaking (among other things) keyboard and
-> touchpad input.
-> 
-> Note that we have, so far, only seen packets being retransmitted in
-> sequenced communication. In particular, this happens when there is an
-> ACK timeout, causing the EC (or us) to re-send the packet waiting for an
-> ACK. Arguably, retransmission / duplication of unsequenced packets
-> should not be an issue as there is no logical condition (such as an ACK
-> timeout) to determine when a packet should be sent again.
-> 
-> Therefore, remove the retransmission check for unsequenced packets
-> entirely to resolve the issue.
-> 
-> Fixes: c167b9c7e3d6 ("platform/surface: Add Surface Aggregator subsystem")
-> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+syzbot found the following issue on:
 
-Thank you for your patch-series, I've applied this series to my
-fixes branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
+HEAD commit:    f4bc5bbb5fef Merge tag 'nfsd-5.17-2' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16c683d8700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5707221760c00a20
+dashboard link: https://syzkaller.appspot.com/bug?extid=644848628d5e12d5438c
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1691d2c2700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16cde752700000
 
-Note it will show up in my fixes branch once I've pushed my
-local branch there, which might take a while.
+Bisection is inconclusive: the issue happens on the oldest tested release.
 
-I will include this series in my next fixes pull-req to Linus
-for the current kernel development cycle.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=174c8174700000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=14cc8174700000
+console output: https://syzkaller.appspot.com/x/log.txt?x=10cc8174700000
 
-Regards,
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+644848628d5e12d5438c@syzkaller.appspotmail.com
 
-Hans
+ do_one_initcall+0x103/0x650 init/main.c:1300
+ do_initcall_level init/main.c:1373 [inline]
+ do_initcalls init/main.c:1389 [inline]
+ do_basic_setup init/main.c:1408 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1613
+ kernel_init+0x1a/0x1d0 init/main.c:1502
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+------------[ cut here ]------------
+kernel BUG at include/linux/memcontrol.h:470!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 3678 Comm: syz-executor106 Not tainted 5.17.0-rc3-syzkaller-00043-gf4bc5bbb5fef #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:folio_memcg_rcu include/linux/memcontrol.h:470 [inline]
+RIP: 0010:workingset_activation+0x4f2/0x5d0 mm/workingset.c:412
+Code: 48 89 ef e8 50 01 00 00 c6 05 da cf d3 0b 01 0f 0b e9 0e fd ff ff e8 6d 90 cc ff 48 c7 c6 c0 0c b7 89 48 89 ef e8 2e 01 00 00 <0f> 0b e8 57 90 cc ff 0f 0b e9 e6 fb ff ff e8 4b 90 cc ff 48 c7 c6
+RSP: 0018:ffffc90002ac7490 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff8880729940c0 RSI: ffffffff81ab1de2 RDI: 0000000000000003
+RBP: ffffea0001aa0000 R08: 0000000000000018 R09: 00000000ffffffff
+R10: ffffffff8908d53c R11: 00000000ffffffff R12: 0000000000000000
+R13: ffff8880b9c34da8 R14: dffffc0000000000 R15: 0000000000000003
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fa33152f1f0 CR3: 000000001b7f5000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ folio_mark_accessed+0x596/0xdd0 mm/swap.c:442
+ kvm_set_pfn_accessed arch/x86/kvm/../../../virt/kvm/kvm_main.c:2821 [inline]
+ kvm_set_pfn_accessed+0x1d8/0x220 arch/x86/kvm/../../../virt/kvm/kvm_main.c:2818
+ handle_changed_spte_acc_track arch/x86/kvm/mmu/tdp_mmu.c:233 [inline]
+ handle_changed_spte_acc_track+0x1bc/0x290 arch/x86/kvm/mmu/tdp_mmu.c:225
+ handle_changed_spte arch/x86/kvm/mmu/tdp_mmu.c:485 [inline]
+ handle_removed_tdp_mmu_page arch/x86/kvm/mmu/tdp_mmu.c:370 [inline]
+ __handle_changed_spte+0xb93/0x13e0 arch/x86/kvm/mmu/tdp_mmu.c:475
+ handle_changed_spte arch/x86/kvm/mmu/tdp_mmu.c:483 [inline]
+ handle_removed_tdp_mmu_page arch/x86/kvm/mmu/tdp_mmu.c:370 [inline]
+ __handle_changed_spte+0xb84/0x13e0 arch/x86/kvm/mmu/tdp_mmu.c:475
+ handle_changed_spte arch/x86/kvm/mmu/tdp_mmu.c:483 [inline]
+ handle_removed_tdp_mmu_page arch/x86/kvm/mmu/tdp_mmu.c:370 [inline]
+ __handle_changed_spte+0xb84/0x13e0 arch/x86/kvm/mmu/tdp_mmu.c:475
+ __tdp_mmu_set_spte+0x227/0xa70 arch/x86/kvm/mmu/tdp_mmu.c:595
+ tdp_mmu_set_spte arch/x86/kvm/mmu/tdp_mmu.c:609 [inline]
+ zap_gfn_range+0xd4c/0xe00 arch/x86/kvm/mmu/tdp_mmu.c:751
+ __kvm_tdp_mmu_zap_gfn_range+0xdc/0x110 arch/x86/kvm/mmu/tdp_mmu.c:779
+ kvm_tdp_mmu_zap_gfn_range arch/x86/kvm/mmu/tdp_mmu.h:27 [inline]
+ kvm_tdp_mmu_zap_all+0x26/0x70 arch/x86/kvm/mmu/tdp_mmu.c:791
+ kvm_mmu_zap_all+0x27c/0x2c0 arch/x86/kvm/mmu/mmu.c:5983
+ kvm_mmu_notifier_release+0x5f/0xa0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:819
+ mn_hlist_release mm/mmu_notifier.c:319 [inline]
+ __mmu_notifier_release+0x1a9/0x600 mm/mmu_notifier.c:357
+ mmu_notifier_release include/linux/mmu_notifier.h:415 [inline]
+ exit_mmap+0x543/0x670 mm/mmap.c:3136
+ __mmput+0x122/0x4b0 kernel/fork.c:1114
+ mmput+0x56/0x60 kernel/fork.c:1135
+ exit_mm kernel/exit.c:507 [inline]
+ do_exit+0xa3c/0x2a30 kernel/exit.c:793
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:935
+ __do_sys_exit_group kernel/exit.c:946 [inline]
+ __se_sys_exit_group kernel/exit.c:944 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:944
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fa3314b91f9
+Code: Unable to access opcode bytes at RIP 0x7fa3314b91cf.
+RSP: 002b:00007fffac3303d8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007fa33152e350 RCX: 00007fa3314b91f9
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000000
+R10: 0000000000000006 R11: 0000000000000246 R12: 00007fa33152e350
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:folio_memcg_rcu include/linux/memcontrol.h:470 [inline]
+RIP: 0010:workingset_activation+0x4f2/0x5d0 mm/workingset.c:412
+Code: 48 89 ef e8 50 01 00 00 c6 05 da cf d3 0b 01 0f 0b e9 0e fd ff ff e8 6d 90 cc ff 48 c7 c6 c0 0c b7 89 48 89 ef e8 2e 01 00 00 <0f> 0b e8 57 90 cc ff 0f 0b e9 e6 fb ff ff e8 4b 90 cc ff 48 c7 c6
+RSP: 0018:ffffc90002ac7490 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff8880729940c0 RSI: ffffffff81ab1de2 RDI: 0000000000000003
+RBP: ffffea0001aa0000 R08: 0000000000000018 R09: 00000000ffffffff
+R10: ffffffff8908d53c R11: 00000000ffffffff R12: 0000000000000000
+R13: ffff8880b9c34da8 R14: dffffc0000000000 R15: 0000000000000003
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fa33152f1f0 CR3: 000000001b7f5000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-> ---
->  .../surface/aggregator/ssh_packet_layer.c     | 24 +++++++++++++++----
->  1 file changed, 20 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/platform/surface/aggregator/ssh_packet_layer.c b/drivers/platform/surface/aggregator/ssh_packet_layer.c
-> index 6748fe4ac5d5..def8d7ac541f 100644
-> --- a/drivers/platform/surface/aggregator/ssh_packet_layer.c
-> +++ b/drivers/platform/surface/aggregator/ssh_packet_layer.c
-> @@ -1596,16 +1596,32 @@ static void ssh_ptl_timeout_reap(struct work_struct *work)
->  		ssh_ptl_tx_wakeup_packet(ptl);
->  }
->  
-> -static bool ssh_ptl_rx_retransmit_check(struct ssh_ptl *ptl, u8 seq)
-> +static bool ssh_ptl_rx_retransmit_check(struct ssh_ptl *ptl, const struct ssh_frame *frame)
->  {
->  	int i;
->  
-> +	/*
-> +	 * Ignore unsequenced packets. On some devices (notably Surface Pro 9),
-> +	 * unsequenced events will always be sent with SEQ=0x00. Attempting to
-> +	 * detect retransmission would thus just block all events.
-> +	 *
-> +	 * While sequence numbers would also allow detection of retransmitted
-> +	 * packets in unsequenced communication, they have only ever been used
-> +	 * to cover edge-cases in sequenced transmission. In particular, the
-> +	 * only instance of packets being retransmitted (that we are aware of)
-> +	 * is due to an ACK timeout. As this does not happen in unsequenced
-> +	 * communication, skip the retransmission check for those packets
-> +	 * entirely.
-> +	 */
-> +	if (frame->type == SSH_FRAME_TYPE_DATA_NSQ)
-> +		return false;
-> +
->  	/*
->  	 * Check if SEQ has been seen recently (i.e. packet was
->  	 * re-transmitted and we should ignore it).
->  	 */
->  	for (i = 0; i < ARRAY_SIZE(ptl->rx.blocked.seqs); i++) {
-> -		if (likely(ptl->rx.blocked.seqs[i] != seq))
-> +		if (likely(ptl->rx.blocked.seqs[i] != frame->seq))
->  			continue;
->  
->  		ptl_dbg(ptl, "ptl: ignoring repeated data packet\n");
-> @@ -1613,7 +1629,7 @@ static bool ssh_ptl_rx_retransmit_check(struct ssh_ptl *ptl, u8 seq)
->  	}
->  
->  	/* Update list of blocked sequence IDs. */
-> -	ptl->rx.blocked.seqs[ptl->rx.blocked.offset] = seq;
-> +	ptl->rx.blocked.seqs[ptl->rx.blocked.offset] = frame->seq;
->  	ptl->rx.blocked.offset = (ptl->rx.blocked.offset + 1)
->  				  % ARRAY_SIZE(ptl->rx.blocked.seqs);
->  
-> @@ -1624,7 +1640,7 @@ static void ssh_ptl_rx_dataframe(struct ssh_ptl *ptl,
->  				 const struct ssh_frame *frame,
->  				 const struct ssam_span *payload)
->  {
-> -	if (ssh_ptl_rx_retransmit_check(ptl, frame->seq))
-> +	if (ssh_ptl_rx_retransmit_check(ptl, frame))
->  		return;
->  
->  	ptl->ops.data_received(ptl, payload);
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
