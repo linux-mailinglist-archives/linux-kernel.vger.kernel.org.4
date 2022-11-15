@@ -2,163 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FDE62A1AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 20:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6019D62A1B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 20:13:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbiKOTLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 14:11:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
+        id S230295AbiKOTNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 14:13:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiKOTK6 (ORCPT
+        with ESMTP id S229882AbiKOTNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 14:10:58 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE011C92B
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 11:10:57 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id i10so29835935ejg.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 11:10:57 -0800 (PST)
+        Tue, 15 Nov 2022 14:13:11 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4903C303F9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 11:13:09 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id z14so25849530wrn.7
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 11:13:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7zUeISTpfROPOAumwGjosfHUKHNhvpIAE+hikozVXow=;
-        b=ZMjCu+EGd3BAayMpj+Qs2X8LsZTn7rQfelK9qSfJ98Twxm0/F/nAYQ5og2/Br8J+AA
-         yBSWyZFegdSg0XQPYdwZ8XU59hbNcQg7BMXIVtfd6U9sxkKsACR7NaHFQimgXCp6kN5u
-         8EmpC65NWCigc+MghndwR7IVSYUSX7wKe+uyY=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NVmIK2KbmJcILQt5r8JiDxSMthBbVHuraQkf2M+r6zU=;
+        b=glxVraLDq6ErCS0YWPINbeqZZiQ1hA5c9A2gN06m1BOXrHnUSMdK9e2OvJty/UbiDB
+         bHoNHG1ugIncwjk4bkc0mkhFtPEFIWItDdWxd8tN5gamuZfZH4zu8oJcJyLeeHq2KrT4
+         LUNaPxVGvHzY3a5yuPIthrIgp5AXd31R/JQ98XWTvxorSP2y1ym421vOQnpmwgq2Fv5l
+         N1RR9tK/aQrWqeDH7xKupWbtyUsS6yQpPC1XmOOCvxehqKnmwDQY4FeQlCmZmlF0CZt4
+         yaHgYJUPrG5+KHlXYs6knDSJTQQ3XYX0fNfE/9pJkUwr0a5ztJGryqzVvcJTBvE1IZO2
+         b7xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7zUeISTpfROPOAumwGjosfHUKHNhvpIAE+hikozVXow=;
-        b=u+98KXeW+bri3p6IXc2zQ+3jgqX9GA1F7u2edmvjdz8rRpZZOTH8SLuWJhWQFjqYXN
-         EJVF5y/w1H1mQ1JIeYFuhaCtpqp+C5Djm4jVSxBqtqhMcLDt0VweVNJW7xPyiYqZpgcc
-         DPapoDyyEpE305vs7/S5Q1YZcvctv54pDUX7W9OvJhSU33UWpEUugHXk7WuTf1CGGDYv
-         sk92Taiy6N2ffYJLkjqCbfFaGJVOnFtkbBY1EVm6NJyMw+Nwj/buGgiRuMIqzKEm/VR5
-         TAx9sjz49J1WY5NspPbwoWu8RZlVraUTn5677PSAISmo4AAYO7NxkEdyDjS6QGnzP5BQ
-         W88g==
-X-Gm-Message-State: ANoB5pkcRGy/zZ3PQ9ZhtpGw/x/lh0ZXf6wOBdqx6kYjE8x4cAGKCIv3
-        +IhlMr+e1iUvdxpppeDJcHWiqg==
-X-Google-Smtp-Source: AA0mqf6YJtScIOh84jMpYoP2ge7MMj9GKqUAOpVkXuvl3nP8qga5tGl4XjjNs92jDpYpAUgqrlQLyA==
-X-Received: by 2002:a17:906:c284:b0:7a1:6786:444f with SMTP id r4-20020a170906c28400b007a16786444fmr15014484ejz.409.1668539455702;
-        Tue, 15 Nov 2022 11:10:55 -0800 (PST)
-Received: from [192.168.1.149] ([80.208.71.65])
-        by smtp.gmail.com with ESMTPSA id ce11-20020a170906b24b00b007ad9c826d75sm5867616ejb.61.2022.11.15.11.10.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 11:10:55 -0800 (PST)
-Message-ID: <6d76cc6d-9db7-5b18-e4f1-dc220b3929a3@rasmusvillemoes.dk>
-Date:   Tue, 15 Nov 2022 20:10:53 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NVmIK2KbmJcILQt5r8JiDxSMthBbVHuraQkf2M+r6zU=;
+        b=4Rv+c4tqN5BV0upkISrQ6ZW9okixfW166X1hrK+N5dgay/9llyCl9260LTjulvQiQR
+         0M3fHN9Ldqj/JkgpmRs6cO8xCKXzszR+M9lRr5+k6JSFGgiYZWm7YGzWIhR+Bv1mTG/E
+         7KO2YI44oD/R3FcMEbqB/Ufp4reUf6gO2RgvMtVakPlSWibs2Eh4HaYRE1Hi5oRIlLMx
+         uR+bDWzTbK9dhZnZY0XWwsYNOIsvxqg7qjZbbQrhxyVQtRXYOlayd2PZ3Oz5QfuONNrb
+         3HjIm47YoBoAxB9117aiYoQ82BRud1GL0XentL/pp2ZDF7vOolO0lapHwAyYOXLKx5Wx
+         qU8g==
+X-Gm-Message-State: ANoB5pnqMUKRTo8AHb0f+Lu9O/RjXtdYPXWlqSY3l1F1eqpTY7FfYVMF
+        J5je2NWWpuDRB1CLbAAwcpodnfRRJ1MKuv+3QjM3vA==
+X-Google-Smtp-Source: AA0mqf5rwMM4FiNjOSbh6rvc1Af5bUo/EbW3oitQGTe1Umpso6zA++OkrRp2d50BRAyXtPU4Fe66/Ls4Jf6XqmRMB6A=
+X-Received: by 2002:a05:6000:1241:b0:236:d8f8:b87d with SMTP id
+ j1-20020a056000124100b00236d8f8b87dmr11346690wrx.343.1668539587668; Tue, 15
+ Nov 2022 11:13:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 5/5] iio: addac: ad74413r: add support for reset-gpio
-Content-Language: en-US, da
-To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        =?UTF-8?Q?Nuno_S=c3=a1?= <noname.nuno@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221111143921.742194-1-linux@rasmusvillemoes.dk>
- <20221111143921.742194-6-linux@rasmusvillemoes.dk>
- <20221112170705.7efe1673@jic23-huawei>
- <095a454b55cf497392a621649f24e067@analog.com>
- <20221114194447.2528f699@jic23-huawei>
- <0d6b3e4047df9f560079a562bc167bd7a0bf2d28.camel@gmail.com>
- <20221115161052.00002633@Huawei.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20221115161052.00002633@Huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221103045437.163510-1-irogers@google.com> <Y247VY99skmc1wRk@leoy-huanghe.lan>
+In-Reply-To: <Y247VY99skmc1wRk@leoy-huanghe.lan>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 15 Nov 2022 11:12:55 -0800
+Message-ID: <CAP-5=fX-Qa8y0yq5a2T=_=W59_4F-VPPHZpP4Vk3ZjnDRO8uOg@mail.gmail.com>
+Subject: Re: [PATCH v1 0/7] Fix perf trace libbpf 1.0+ compatibility
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 17.10, Jonathan Cameron wrote:
-> On Tue, 15 Nov 2022 15:49:46 +0100
-> Nuno Sá <noname.nuno@gmail.com> wrote:
-> 
->> On Mon, 2022-11-14 at 19:44 +0000, Jonathan Cameron wrote:
->>> On Mon, 14 Nov 2022 13:52:26 +0000
->>> "Tanislav, Cosmin" <Cosmin.Tanislav@analog.com> wrote:
->>>   
->>>>>
->>>>> I'm a little confused on polarity here.  The pin is a !reset so
->>>>> we need to drive it low briefly to trigger a reset.
->>>>> I'm guessing for your board the pin is set to active low? (an
->>>>> example
->>>>> in the dt would have made that clearer) Hence the pulse
->>>>> in here to 1 is actually briefly driving it low before restoring
->>>>> to high?
->>>>>
->>>>> For a pin documented as !reset that seems backwards though you
->>>>> have
->>>>> called it reset so that is fine, but this description doesn't
->>>>> make that
->>>>> celar.    
->>>>
->>>> My opinion is that the driver shouldn't exactly know the polarity
->>>> of the reset,
->>>> and just assume that setting the reset GPIO to 1 means putting it
->>>> in reset,
->>>> and setting it to 0 means bringing out of reset.  
->>>
->>> Agreed. I'd just like a comment + example in the dt-binding to make
->>> the point
->>> that the pin is !reset.
->>>
->>> Preferably with an example in the dt binding of the common case of it
->>> being wired
->>> up to an active low pin.
->>>
->>> The main oddity here is the need to pulse it rather than request it
->>> directly as
->>> in the reset state and then just set that to off.
->>>
->>>   
->>
->> Agreed... In theory we should be able to request the gpio with
->> GPIOD_OUT_HIGH and then just bring the device out of reset
-> 
-> If I recall correctly the datasheet specifically calls out that a pulse
-> should be used.  No idea if that's actually true, or if it was meant
-> to be there just to say it needs to be set for X nsecs.
+On Fri, Nov 11, 2022 at 4:09 AM Leo Yan <leo.yan@linaro.org> wrote:
+>
+> Hi Ian, Arnaldo,
+>
+> On Wed, Nov 02, 2022 at 09:54:30PM -0700, Ian Rogers wrote:
+> > Perf trace can augment system calls with a BPF program passed as an
+> > event. The BPF code for this lives in examples. This patch fixes the
+> > example code to not used deprecated/removed APIs in libbpf. As libbpf
+> > has similar header files to tools/perf/include/bpf the code is
+> > transitioned to use the more standard libbpf code and the perf BPF
+> > header files removed.
+>
+> I think you missed to update the code examples/bpf/sys_enter_openat.c,
+> either you could remove it (since it's duplicate with
+> augmented_raw_syscalls.c), or we should apply below fixing:
 
-So the data sheet says
+Arnaldo, what do you think?
 
-  The hardware reset is initiated by pulsing the RESET pin low. The
-RESET pulse width must comply with the specifications in Table 11.
+Thanks,
+Ian
 
-and table 11 says that the pulse must be min 50us, max 1ms. We don't
-really have any way whatsoever to ensure that we're not rescheduled
-right before pulling the gpio high again (deasserting the reset), so the
-pulse could effectively be much more than 1ms. But I have a hard time
-believing that that actually matters (i.e., what state would the chip be
-in if we happen to make a pulse 1234us wide?). But what might be
-relevant, and maybe where that 1ms figure really comes from, can perhaps
-be read in table 10, which lists a "device reset time" of 1ms, with the
-description
-
-  Time taken for device reset and calibration memory upload to complete
-hardware or software reset events after the device is powered up
-
-so perhaps we should ensure a 1ms delay after the reset (whether we used
-the software or gpio method). But that would be a separate fix IMO (and
-I'm not sure we actually need it).
-
-I don't mind requesting the gpio with GPIOD_OUT_HIGH, but I'd still keep
-the gpiod_set_value(, 1) in the reset function, otherwise it's a bit too
-magic for my taste.
-
-Rasmus
-
+> From f30af3b43060e482c54e113cbe90223173c69abd Mon Sep 17 00:00:00 2001
+> From: Leo Yan <leo.yan@linaro.org>
+> Date: Fri, 11 Nov 2022 12:02:24 +0000
+> Subject: [PATCH] perf trace: sys_enter_openat.c fix libbpf 1.0+ compatibility
+>
+> Avoid use of tools/perf/include/bpf/bpf.h and use the more regular BPF
+> headers.
+>
+> With fixing:
+>
+>   # ./perf trace -e examples/bpf/sys_enter_openat.c
+>   0.000 irqbalance/1025 syscalls:sys_enter_openat(AT_FDCWD, "", O_RDONLY)
+>   1.596 irqbalance/1025 syscalls:sys_enter_openat(AT_FDCWD, "", O_RDONLY)
+>   1.832 irqbalance/1025 syscalls:sys_enter_openat(AT_FDCWD, "", O_RDONLY)
+>   1.864 irqbalance/1025 syscalls:sys_enter_openat(AT_FDCWD, "", O_RDONLY)
+>
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> ---
+>  tools/perf/examples/bpf/sys_enter_openat.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/perf/examples/bpf/sys_enter_openat.c b/tools/perf/examples/bpf/sys_enter_openat.c
+> index c4481c390d23..8edfa7c147d1 100644
+> --- a/tools/perf/examples/bpf/sys_enter_openat.c
+> +++ b/tools/perf/examples/bpf/sys_enter_openat.c
+> @@ -14,7 +14,9 @@
+>   * the return value.
+>   */
+>
+> -#include <bpf/bpf.h>
+> +#include <linux/bpf.h>
+> +#include <linux/limits.h>
+> +#include <bpf/bpf_helpers.h>
+>
+>  struct syscall_enter_openat_args {
+>         unsigned long long unused;
+> @@ -25,9 +27,10 @@ struct syscall_enter_openat_args {
+>         long               mode;
+>  };
+>
+> -int syscall_enter(openat)(struct syscall_enter_openat_args *args)
+> +SEC("syscalls:sys_enter_openat")
+> +int syscall_enter_openat(struct syscall_enter_openat_args *args)
+>  {
+>         return 1;
+>  }
+>
+> -license(GPL);
+> +char _license[] SEC("license") = "GPL";
