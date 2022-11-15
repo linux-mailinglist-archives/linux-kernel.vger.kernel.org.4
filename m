@@ -2,72 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F70862AF44
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B468262AF51
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbiKOXO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 18:14:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
+        id S238725AbiKOXPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 18:15:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238692AbiKOXOb (ORCPT
+        with ESMTP id S231821AbiKOXPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 18:14:31 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7882F01F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:14:30 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id d19-20020a056e020c1300b00300b5a12c44so12081691ile.15
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:14:30 -0800 (PST)
+        Tue, 15 Nov 2022 18:15:17 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E4FF02;
+        Tue, 15 Nov 2022 15:15:15 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id z18so24139030edb.9;
+        Tue, 15 Nov 2022 15:15:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GnIjaEyd7LaVSU757Qe++o4zl3QzVferzydv3y7XN8g=;
+        b=XfL3yPVLPfRfVJj+3bI0IZ/iNIElinuD5/rHDFvsUxS1H8Dz0FnrzffKZHhK5yBzce
+         gf6tiYldxJVlLr7TwkVicuivNbyR7CF5BcJpbF2HZ2E/gaZG43GtuXNVB+5MrgJ8O+hG
+         NT4h6/ogSCcha5Lnm8y0PKnjOrr7N1s8Zd7ovO6ziSQEXiib4QqZC378YwjiJnWyiEmh
+         V6z80osN96oNW+v23kn1qPQOcdMoKGuu43Ro/lBA3y4hHD+T99phLO0dn6wbrdLNF8UB
+         owsnGDZVrbF9qpPzn6lYfgcZWOA/ef0xm521CgU9omNdZDlODDkeQItCvT7ognp+sTkZ
+         iiOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qWr5Fz2oIazLc34oMz/NuYwgSAf7HdgnPlItVksT2Sg=;
-        b=cmjuCCsaz6oGr0ohpou+GLmYHPUa6zAspK7PbDQs8rtsdUXVsAuYVjCd5qYUbMOgsa
-         oejOftARGJ+U1lAq0EgQUvolSb1MMzW9aTDMLXE6ZCiuXFiiJxNqTsSZGXRFvNHscl+9
-         RHqQkn61ZoYvd/Zy6+GnLtPPtXxvAzHAbtx/bv+P3QPr9CBKgSBdAG2qwKfQ/dkYzsqG
-         W4esZLbiMBk8MHNhs1er+qfne3wvvXGqdPooQ/3guZefJBYtg5eV+S7pby4huA0eauA3
-         jp/EXw88a4hLRikq3nrD0INjqbeB4L0vpgSZP1bHpMxzr1c2fmMXfVzlKCFKhRAk0OL4
-         uFiQ==
-X-Gm-Message-State: ANoB5pl09RCREB+TopmSfr830a0WV43DGPMTXbOBiymRwVI4icIAgnAV
-        xP9CZCLB/VyFMR9EZrRElA2c4Oct17QXruez/ava6lsMav4y
-X-Google-Smtp-Source: AA0mqf62bCnBTD4OsFcr2uvEPiAewIzGLm2RhCBq4BCclmC7+Wd9k8Q1Lsp8GY/AEJZGbCPrCU7WO2dz27XLkErTQRC8GEgtl/72
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GnIjaEyd7LaVSU757Qe++o4zl3QzVferzydv3y7XN8g=;
+        b=HyKYHO9k8uiAlDxVXn4s3rV53cDBkGhWUqp4LO5WjELh7YjrHZ9cqhKIsYwiAR6yNP
+         R0hOSRENlxibScFO+pKaokM/koqBNL/SVYDvTFAaNDiR5obRm1jGdvOEQqQsZ0U5C7CN
+         x0Xco8HS+SKfZW1glshGjyttc2johg8b+6qlyqb1QNO1BDm/9CtFpnjD9ArR2J1Md3J0
+         p83h1qr075/m1xT1mS8WYsCVizVcszG1ule/7vemA2cjFWGdXkCkUP/YBhmuO2pRo3qu
+         bPEXy5qcFUOBNG5Nm0niJliSwhQLVOmCect9Hsiet2M/oNz6mo/j9lktvyq9W9y2M2IZ
+         Evtw==
+X-Gm-Message-State: ANoB5pkBd4YFmvRVE2mpWfMsQN//ihAQtVwCta9OcpG7dr7sMkx97qQ2
+        jnPaX/aNO2Deyvi5PeZdoi8=
+X-Google-Smtp-Source: AA0mqf5gVgAxwiNiy5frJ2LdbxP0BXIuu5Pae9ceoKDptmpM+kSIoHdYKlHvkLQz9Jrry6Z3uahh5A==
+X-Received: by 2002:a05:6402:2943:b0:461:c3c9:38e6 with SMTP id ed3-20020a056402294300b00461c3c938e6mr17183988edb.350.1668554113630;
+        Tue, 15 Nov 2022 15:15:13 -0800 (PST)
+Received: from xws.localdomain ([37.120.217.162])
+        by smtp.gmail.com with ESMTPSA id b16-20020a17090630d000b00795bb7d64d8sm6122907ejb.217.2022.11.15.15.15.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 15:15:13 -0800 (PST)
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Maximilian Luz <luzmaximilian@gmail.com>
+Subject: [PATCH] platform/surface: aggregator_registry: Add support for Surface Laptop 5
+Date:   Wed, 16 Nov 2022 00:14:40 +0100
+Message-Id: <20221115231440.1338142-1-luzmaximilian@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:4415:b0:363:8849:44f7 with SMTP id
- bp21-20020a056638441500b00363884944f7mr9021563jab.24.1668554067973; Tue, 15
- Nov 2022 15:14:27 -0800 (PST)
-Date:   Tue, 15 Nov 2022 15:14:27 -0800
-In-Reply-To: <20221115123800.2680-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000082ae0405ed8a8444@google.com>
-Subject: Re: [syzbot] possible deadlock in btrfs_commit_transaction
-From:   syzbot <syzbot+52d708a0bca2efc4c9df@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Add device nodes to enable support for battery and charger status, the
+ACPI platform profile, as well as internal HID devices (including
+touchpad and keyboard) on the Surface Laptop 5.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+---
+ .../surface/surface_aggregator_registry.c        | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-Reported-and-tested-by: syzbot+52d708a0bca2efc4c9df@syzkaller.appspotmail.com
+diff --git a/drivers/platform/surface/surface_aggregator_registry.c b/drivers/platform/surface/surface_aggregator_registry.c
+index db82c2a7c567..023f126121d7 100644
+--- a/drivers/platform/surface/surface_aggregator_registry.c
++++ b/drivers/platform/surface/surface_aggregator_registry.c
+@@ -234,6 +234,19 @@ static const struct software_node *ssam_node_group_sl3[] = {
+ 	NULL,
+ };
+ 
++/* Devices for Surface Laptop 5. */
++static const struct software_node *ssam_node_group_sl5[] = {
++	&ssam_node_root,
++	&ssam_node_bat_ac,
++	&ssam_node_bat_main,
++	&ssam_node_tmp_pprof,
++	&ssam_node_hid_main_keyboard,
++	&ssam_node_hid_main_touchpad,
++	&ssam_node_hid_main_iid5,
++	&ssam_node_hid_sam_ucm_ucsi,
++	NULL,
++};
++
+ /* Devices for Surface Laptop Studio. */
+ static const struct software_node *ssam_node_group_sls[] = {
+ 	&ssam_node_root,
+@@ -345,6 +358,9 @@ static const struct acpi_device_id ssam_platform_hub_match[] = {
+ 	/* Surface Laptop 4 (13", Intel) */
+ 	{ "MSHW0250", (unsigned long)ssam_node_group_sl3 },
+ 
++	/* Surface Laptop 5 */
++	{ "MSHW0350", (unsigned long)ssam_node_group_sl5 },
++
+ 	/* Surface Laptop Go 1 */
+ 	{ "MSHW0118", (unsigned long)ssam_node_group_slg1 },
+ 
+-- 
+2.38.1
 
-Tested on:
-
-commit:         e01d50cb Merge tag 'vfio-v6.1-rc6' of https://github.c..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=1191e71e880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=47b0b2ecc119b39f
-dashboard link: https://syzkaller.appspot.com/bug?extid=52d708a0bca2efc4c9df
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14bfd679880000
-
-Note: testing is done by a robot and is best-effort only.
