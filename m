@@ -2,130 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9FE1629A29
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:28:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A87629A2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238172AbiKON2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:28:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
+        id S238211AbiKON2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:28:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiKON17 (ORCPT
+        with ESMTP id S232435AbiKON2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:27:59 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7B114038
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:27:55 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id d3so17517580ljl.1
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:27:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4CAGamBCwJlvXGLjsJzY/wgNzAR0V/YSmcsK0zwqq8s=;
-        b=eOK41ApNBaa1GYLru+QjrijP97HhH673awTACRDo3sALtzQSYyrsfwshQB5pe/xFov
-         mvDrfBKEX1V9nCTI9dovVaGRj3X5q6dcQs+aPxwrVBF08OwN+oy9Lm06DABE84im/FxT
-         DSKzd+ciO7KT6G2KaLdoRYOc34B0PYts1TZBsAWmbs78ZJH2mNAXFL/3fAOBacsb6oDu
-         W7y0qDdtcQ/Bho5unyaESb2EWaEg1f67d3MH7DRtPw75HDMihLJxKb+iImDSiqkLEwmB
-         E/CVJKY/dnZqeY9FOxaKBte0IPJjOVxYQf7ORRb6xrcknSYI1dbuyWWk2XmgCo/tDDq+
-         c2mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4CAGamBCwJlvXGLjsJzY/wgNzAR0V/YSmcsK0zwqq8s=;
-        b=zynd9s4i2yRN4Q1rwmcgeLItvyQHK0TDc6Oa4fbytG3uJVXNfNvgeVcZH3NqQpkcMZ
-         kC6cAznM0rhG3oQq44RQFLGWgOrSyPXmwxBevpH3uqqIlwtmeLskrKlos8DK4OlFbBjw
-         UodkjsvzKi8qJBZ9xhJstb6kktDeVYjJyKm9Iam6dpQV8SBhcli+G/BiBH53roWx3IGG
-         t1/cToKqldwH4qJY3YnJOc0IO03GKvQejInSdiFFJKBBKuC7iV935qjzmzfo4h7m+29s
-         +tR9i++GUhOWDpN7hSmjv6yK/vIUHQ6bkxSwVUC/aeRJ/j3LosYJQq7O9/SVee7m0DX+
-         Ec9w==
-X-Gm-Message-State: ANoB5plPt+lL+KV1s/rz3MdlviVNlMe121od+gmwIV/AkQiBW0kFkM8j
-        wIcIxUYAnLR+xxEe1Hnld9VAr+DpI5hFu9UG
-X-Google-Smtp-Source: AA0mqf6fJcy47gcfAUV27JcgRnri6g7fOH0qrvTrYn9j65yLVWJYl+kJXAMipdsNznLO/OeMb88E6A==
-X-Received: by 2002:a2e:b1c7:0:b0:277:794:cb84 with SMTP id e7-20020a2eb1c7000000b002770794cb84mr6071216lja.7.1668518873539;
-        Tue, 15 Nov 2022 05:27:53 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id t10-20020a195f0a000000b0049c86ca95bfsm2205747lfb.52.2022.11.15.05.27.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 05:27:52 -0800 (PST)
-Message-ID: <5deca781-90e6-4f72-1abc-cb0bd4777187@linaro.org>
-Date:   Tue, 15 Nov 2022 14:27:51 +0100
+        Tue, 15 Nov 2022 08:28:03 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75EA13E3F;
+        Tue, 15 Nov 2022 05:27:59 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 54F07240009;
+        Tue, 15 Nov 2022 13:27:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1668518878;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gX3uUI4yRv7S26wyE0a/h6eL5PlN9No1T6Sm4lRgxT4=;
+        b=a2gGxnhURXutAjcZSaIEJ+6B6ocRP7jvvHklxB92MhUHBprpZnk99duO1TLAbOuZdegB2H
+        BObc6a74lgAvLr5f4BXakbhTuPvnqbLuxKYH7CmFEYwRN7sFIuzj50G7sFXvXfR3hS9cv8
+        vpI9e9/qcnQXrkQvvcshngMB2I2i/zcpWV2KAs2LZ07UTeIzvZv8riSxsX7YUegOjRlHst
+        7w6DDV2ZU7nND6qWsFmE0gjPRi97307M2xX4foarhxZ7Nl0csbT0kiR9wDyL4J3Tv+1nWh
+        uqlxWFNJz9GJtuaOwmKvD/sIiOpuTiQMerdrSzzIy4E2PHQ/zOYFk5IVY6/v1Q==
+Date:   Tue, 15 Nov 2022 14:27:54 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v2 6/7] ARM: dts: r9a06g032: Add the USBF controller
+ node
+Message-ID: <20221115142754.6253881b@bootlin.com>
+In-Reply-To: <51d42fc2-0492-9077-302d-5c3be4b45cd1@linaro.org>
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+        <20221114111513.1436165-7-herve.codina@bootlin.com>
+        <51d42fc2-0492-9077-302d-5c3be4b45cd1@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 09/10] dt-bindings: phy: Add Cadence HDP-TX HDMI PHY
-Content-Language: en-US
-To:     Sandor Yu <Sandor.yu@nxp.com>, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        andrzej.hajda@intel.com, neil.armstrong@linaro.org,
-        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com, vkoul@kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        linux-imx@nxp.com, tzimmermann@suse.de, lyude@redhat.com,
-        javierm@redhat.com, ville.syrjala@linux.intel.com,
-        sam@ravnborg.org, jani.nikula@intel.com, maxime@cerno.tech,
-        penguin-kernel@I-love.SAKURA.ne.jp, oliver.brown@nxp.com
-References: <cover.1667911321.git.Sandor.yu@nxp.com>
- <a88409e6003fbb2a57df36ef4116a2cdb1c1eec1.1667911321.git.Sandor.yu@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a88409e6003fbb2a57df36ef4116a2cdb1c1eec1.1667911321.git.Sandor.yu@nxp.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/11/2022 14:00, Sandor Yu wrote:
-> Add bindings for Cadence HDP-TX HDMI PHY.
-> 
-> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
-> ---
->  .../bindings/phy/cdns,hdptx-hdmi-phy.yaml     | 50 +++++++++++++++++++
->  1 file changed, 50 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/cdns,hdptx-hdmi-phy.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/cdns,hdptx-hdmi-phy.yaml b/Documentation/devicetree/bindings/phy/cdns,hdptx-hdmi-phy.yaml
-> new file mode 100644
-> index 000000000000..c2ed17ffe6ef
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/cdns,hdptx-hdmi-phy.yaml
-> @@ -0,0 +1,50 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/cdns,hdptx-hdmi-phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Cadence HDP-TX(HDMI/DisplayPort) PHY for HDMI protocol
-> +
-> +maintainers:
-> +  - Sandor Yu <sandor.yu@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - cdns,hdptx-hdmi-phy
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      description:
+Hi Krzysztof,
 
-Same problem.
+On Tue, 15 Nov 2022 14:16:27 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+
+> On 14/11/2022 12:15, Herve Codina wrote:
+> > Add the USBF controller available in the r9a06g032 SoC.
+> >=20
+> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> > ---
+> >  arch/arm/boot/dts/r9a06g032.dtsi | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >=20
+> > diff --git a/arch/arm/boot/dts/r9a06g032.dtsi b/arch/arm/boot/dts/r9a06=
+g032.dtsi
+> > index 563024c9a4ae..a4bb069457a3 100644
+> > --- a/arch/arm/boot/dts/r9a06g032.dtsi
+> > +++ b/arch/arm/boot/dts/r9a06g032.dtsi
+> > @@ -117,6 +117,18 @@ dmamux: dma-router@a0 {
+> >  			};
+> >  		};
+> > =20
+> > +		udc: usb@4001e000 {
+> > +			compatible =3D "renesas,r9a06g032-usbf", "renesas,rzn1-usbf";
+> > +			reg =3D <0x4001e000 0x2000>;
+> > +			interrupts =3D <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
+> > +			clocks =3D <&sysctrl R9A06G032_HCLK_USBF>,
+> > +				 <&sysctrl R9A06G032_HCLK_USBPM>;
+> > +			clock-names =3D "hclkf", "hclkpm";
+> > +			power-domains =3D <&sysctrl>;
+> > +			status =3D "disabled"; =20
+>=20
+> If you provided all resources (clocks, power domains etc), why disabling =
+it?
+
+Because I forgot to remove the 'status' property ...
+'status' will be simply removed in v3.
+Sorry for this mistake.
+
+Thanks for the review,
+Herv=C3=A9
 
 
-Best regards,
-Krzysztof
-
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
