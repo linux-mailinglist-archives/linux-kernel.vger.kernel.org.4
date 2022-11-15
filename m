@@ -2,159 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED18662A1BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 20:17:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7CB62A1BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 20:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbiKOTR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 14:17:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
+        id S230421AbiKOTSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 14:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiKOTRR (ORCPT
+        with ESMTP id S230399AbiKOTR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 14:17:17 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2FF12606;
-        Tue, 15 Nov 2022 11:17:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668539836; x=1700075836;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=DHaRmLRkLBJINbjYiux9rmh9GmvZL3p2PYtSTdCo3wo=;
-  b=Lkp3BmlRKujXFarp1j5wtaz6RJS4Ro27raRlu4ChbpTP72CJvFom+VAZ
-   th0eJHmjkU1WDsGtZB7Ntg8LSBxExUehXC8HPRQHWbWc2OMrj+/KQZdKt
-   Mnw9/sdSV0NWybAxlfqUxLzwdc0EnRzcUZkQO1a+D8Q1eUErODvkmBx22
-   LtxbcgQ/GxdW4ZxJrH79nCwqec9PcFBq6SfHYQVmzQ8OEC/BZ/bigpVEk
-   j06wKoQncWhfR9qkJlIOf0nvzLw3h1Xl/Wfa4JcwwqjvRCgY99tjP6Abk
-   U4InfinkAADRITr09J0alI6s23fFGWwZ6LlgFBgvpsg1UGo8HYl/MPww6
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="312349974"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="312349974"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 11:17:15 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="616872701"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="616872701"
-Received: from slmckinn-mobl.amr.corp.intel.com (HELO guptapa-desk.intel.com) ([10.255.231.2])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 11:17:15 -0800
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>, thomas.lendacky@amd.com,
-        "H. Peter Anvin" <hpa@zytor.com>, hdegoede@redhat.com,
-        Ingo Molnar <mingo@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        Pavel Machek <pavel@ucw.cz>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David.Kaplan@amd.com, Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        antonio.gomez.iglesias@linux.intel.com
-Subject: [PATCH v3 2/2] x86/pm: Add enumeration check before spec MSRs save/restore setup
-Date:   Tue, 15 Nov 2022 11:17:06 -0800
-Message-Id: <c24db75d69df6e66c0465e13676ad3f2837a2ed8.1668539735.git.pawan.kumar.gupta@linux.intel.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <cover.1668539735.git.pawan.kumar.gupta@linux.intel.com>
-References: <cover.1668539735.git.pawan.kumar.gupta@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 15 Nov 2022 14:17:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1DA12613;
+        Tue, 15 Nov 2022 11:17:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95E8E619D9;
+        Tue, 15 Nov 2022 19:17:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE09EC433C1;
+        Tue, 15 Nov 2022 19:17:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668539877;
+        bh=KyRsvFEBwVPz5tDYyoud/S831SbVw7pwwS+jJZ8uaac=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kB9RUqdXsgq9yGL2OzsVGokrxUVQzPw2/UL/9j5PdAvKYAPTeAY/Mi9t1Tu631Woh
+         qWBj2j24P7g4lWCS3J40TBc7x4FSfBfL4sQGtCccRmTU1y2vu9JBZzxxPEqZV/Ooug
+         APpaRrVTenVXXfOyqrndBlIrUOpj9SwISUmx/mdEz0Qn8boUJ2Zg8tSIeDABi6yghT
+         uMv4JCE9aUQzSrXTYg54GhVKchv/7CFUve/VLWXIK/PFMOzb2cBd7JQLG9/9ClW8e3
+         buRp0FEL506cDaSZvcrlGRpkTUVDht1MkGvQ+NwYJVan4gHW0X9h97ikbTDuA4bO4n
+         K5OVW93HKwXmA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1ov1RS-006I43-Ki;
+        Tue, 15 Nov 2022 19:17:54 +0000
+Date:   Tue, 15 Nov 2022 19:17:54 +0000
+Message-ID: <86a64sowm5.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH] kbuild: Restore .version auto-increment behaviour for Debian/RPM packages
+In-Reply-To: <CAK7LNAT3KmNZD0Lw4F4aKF1k_No4ZeomChjy2t59WD1s8vESrw@mail.gmail.com>
+References: <20221113160237.3152770-1-maz@kernel.org>
+        <CAK7LNASoWbJ458zLTP6NuC+5Q+YHOdzVOeCKQ3MeyXQYrkjneg@mail.gmail.com>
+        <CAK7LNAT3KmNZD0Lw4F4aKF1k_No4ZeomChjy2t59WD1s8vESrw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: masahiroy@kernel.org, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, michal.lkml@markovi.net, ndesaulniers@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pm_save_spec_msr() keeps a list of all the MSRs which _might_ need to be
-saved and restored at hibernate and resume.  However, it has zero
-awareness of CPU support for these MSRs.  It mostly works by
-unconditionally attempting to manipulate these MSRs and relying on
-rdmsrl_safe() being able to handle a #GP on CPUs where the support is
-unavailable.
+On Tue, 15 Nov 2022 03:36:05 +0000,
+Masahiro Yamada <masahiroy@kernel.org> wrote:
+> 
+> On Tue, Nov 15, 2022 at 9:09 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> >
+> > On Mon, Nov 14, 2022 at 1:02 AM Marc Zyngier <maz@kernel.org> wrote:
+> > >
+> > > diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
+> > > index 60a2a63a5e90..e5c983afddab 100755
+> > > --- a/scripts/package/mkdebian
+> > > +++ b/scripts/package/mkdebian
+> > > @@ -90,7 +90,7 @@ if [ -n "$KDEB_PKGVERSION" ]; then
+> > >         packageversion=$KDEB_PKGVERSION
+> > >         revision=${packageversion##*-}
+> > >  else
+> > > -       revision=$(cat .version 2>/dev/null||echo 1)
+> > > +       revision=$(init/build-version)
+> >
+> >
+> > This does not work for out-of-tree builds
+> > because init/build-version is a check-in source file.
+> >
+> >
+> >
+> > For example, "make O=/tmp/foo bindeb-pkg" fails with:
+> > .../linux/scripts/package/mkdebian: 93: init/build-version: not found
+> >
+> >
+> > The correct code is:
+> >
+> >
+> >           revision=$($srctree/init/build-version)
+> >
+> >
+> >
+> >
+> > >         packageversion=$version-$revision
+> > >  fi
+> > >  sourcename=$KDEB_SOURCENAME
+> > > diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+> > > index 70392fd2fd29..9cbd45f497ba 100755
+> > > --- a/scripts/package/mkspec
+> > > +++ b/scripts/package/mkspec
+> > > @@ -42,7 +42,7 @@ sed -e '/^DEL/d' -e 's/^\t*//' <<EOF
+> > >         Name: kernel
+> > >         Summary: The Linux Kernel
+> > >         Version: $__KERNELRELEASE
+> > > -       Release: $(cat .version 2>/dev/null || echo 1)
+> > > +       Release: $(init/build-version)
+> >
+> >
+> > Ditto.
+> >
+> >           Release: $($srctree/init/build-version)
+> 
+> 
+> 
+> No, mkspec needs no change because binrpm-pkg builds the kernel
+> _before_ generating the spec file.
+> 
+> If you increment the .version file here again, you would have
+> the revision mismatch between the package and the actual vmlinuz.
+> 
+> 
+> 
+> Please send the change for mkdebian only.
 
-However, it's possible for reads (RDMSR) to be supported for a given MSR
-while writes (WRMSR) are not.  In this case, msr_build_context() sees a
-successful read (RDMSR) and marks the MSR as 'valid'.  Then, later, a
-write (WRMSR) fails, producing a nasty (but harmless) error message.
-This causes restore_processor_state() to try and restore it, but writing
-this MSR is not allowed on the Intel Atom N2600 leading to:
+Yup, good point on both count. Patch incoming shortly.
 
-  unchecked MSR access error: WRMSR to 0x122 (tried to write 0x0000000000000002) \
-     at rIP: 0xffffffff8b07a574 (native_write_msr+0x4/0x20)
-  Call Trace:
-   <TASK>
-   restore_processor_state
-   x86_acpi_suspend_lowlevel
-   acpi_suspend_enter
-   suspend_devices_and_enter
-   pm_suspend.cold
-   state_store
-   kernfs_fop_write_iter
-   vfs_write
-   ksys_write
-   do_syscall_64
-   ? do_syscall_64
-   ? up_read
-   ? lock_is_held_type
-   ? asm_exc_page_fault
-   ? lockdep_hardirqs_on
-   entry_SYSCALL_64_after_hwframe
+Thanks,
 
-To fix this, add the corresponding X86_FEATURE bit for each MSR.  Avoid
-trying to manipulate the MSR when the feature bit is clear. This
-required adding a X86_FEATURE bit for MSRs that do not have one already,
-but it's a small price to pay.
+	M.
 
-Fixes: 73924ec4d560 ("x86/pm: Save the MSR validity status at context setup")
-Reported-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: stable@kernel.org
----
- arch/x86/power/cpu.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-index 4cd39f304e20..11a7e28f8985 100644
---- a/arch/x86/power/cpu.c
-+++ b/arch/x86/power/cpu.c
-@@ -511,18 +511,27 @@ static int pm_cpu_check(const struct x86_cpu_id *c)
- 	return ret;
- }
- 
-+struct msr_enumeration {
-+	u32 msr_no;
-+	u32 feature;
-+};
-+
- static void pm_save_spec_msr(void)
- {
--	u32 spec_msr_id[] = {
--		MSR_IA32_SPEC_CTRL,
--		MSR_IA32_TSX_CTRL,
--		MSR_TSX_FORCE_ABORT,
--		MSR_IA32_MCU_OPT_CTRL,
--		MSR_AMD64_LS_CFG,
--		MSR_AMD64_DE_CFG,
-+	struct msr_enumeration msr_enum[] = {
-+		{MSR_IA32_SPEC_CTRL,	X86_FEATURE_MSR_SPEC_CTRL},
-+		{MSR_IA32_TSX_CTRL,	X86_FEATURE_MSR_TSX_CTRL},
-+		{MSR_TSX_FORCE_ABORT,	X86_FEATURE_TSX_FORCE_ABORT},
-+		{MSR_IA32_MCU_OPT_CTRL,	X86_FEATURE_SRBDS_CTRL},
-+		{MSR_AMD64_LS_CFG,	X86_FEATURE_LS_CFG_SSBD},
-+		{MSR_AMD64_DE_CFG,	X86_FEATURE_LFENCE_RDTSC},
- 	};
-+	int i;
- 
--	msr_build_context(spec_msr_id, ARRAY_SIZE(spec_msr_id));
-+	for (i = 0; i < ARRAY_SIZE(msr_enum); i++) {
-+		if (boot_cpu_has(msr_enum[i].feature))
-+			msr_build_context(&msr_enum[i].msr_no, 1);
-+	}
- }
- 
- static int pm_check_save_msr(void)
 -- 
-2.37.3
-
+Without deviation from the norm, progress is not possible.
