@@ -2,219 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770A3629769
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB2862976F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:31:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiKOLbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 06:31:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36414 "EHLO
+        id S229990AbiKOLbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 06:31:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiKOLbC (ORCPT
+        with ESMTP id S230123AbiKOLb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 06:31:02 -0500
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F294E1010;
-        Tue, 15 Nov 2022 03:30:59 -0800 (PST)
-Received: from wf0498.dip.tu-dresden.de ([141.76.181.242] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1ouu9U-0007nD-OJ; Tue, 15 Nov 2022 12:30:52 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com
-Subject: Re: [PATCH 4/7] thermal: rockchip: Simplify channel id logic
-Date:   Tue, 15 Nov 2022 12:30:51 +0100
-Message-ID: <3601039.e9J7NaK4W3@phil>
-In-Reply-To: <20221031175058.175698-5-sebastian.reichel@collabora.com>
-References: <20221031175058.175698-1-sebastian.reichel@collabora.com> <20221031175058.175698-5-sebastian.reichel@collabora.com>
+        Tue, 15 Nov 2022 06:31:26 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87462AE73
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:31:25 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id g12so23556337wrs.10
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:31:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UddS6z+HZ5YVbRh2ru9NrfNaV2JxWhP7gmUffyLBQnQ=;
+        b=l8EZnFK7Henaqr9gMLielppZAarrfSFm/9FuMii4B0WDnShzG3XT8QiLbKz3BZ2scB
+         o9iZkEcvXEGji+8GqnYbfi5Pombeb2e90HcRXDawAJvBXSd3NOWk521J3w5FqFlMuVf+
+         /iH4luipNlK+/dQQNXWtEciXjpQya4W2/xNR2aHkT9KrHsXVkzDThCPk9SR+8VbAwwhl
+         7/4xmYDuNNfSiu8pMHx8Zg4gEYsygpzNbZNCTvhEJO+hymU0EgN5tyeVDZoT0Abf+iE+
+         FD8AG3PiKpFT4EpQxeAhFjeUBKxS9xsL8gc0Fxgk7uw7sf0OGVRNEvHdbOHfrkeb9J6q
+         Pk0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UddS6z+HZ5YVbRh2ru9NrfNaV2JxWhP7gmUffyLBQnQ=;
+        b=UZcOByzccZFXwD6/NMS/Bi2W6qvyYoomFzIhkHqXlTrNXJRS7O9M+l/h3Fxcu7cqx4
+         9jVOzoDg/an/+NXSjfj9UJ3q2poAuFMc2/qAhWAKDu96wWReCKwlo8yl0GtXjXmKJWWT
+         z4liTQK1J8COOsjY3OneScQg9g1Dh5xGUbi+M2Fzl3FSXfebH42pMzaZpo4sH0qBnZfJ
+         iUvW87E3Cs81gwYR7wJVkGSCZUxrtOGkU/pHk/cS2b+Rj7HPttdqbbZxPdBQA+Wknum3
+         7csmjDdD/c2uYN9Cc7uSK5TACmIZYLGmrOzN2u2uU/LnW3PE8f2983pEEf1/Br66wGEU
+         W4TQ==
+X-Gm-Message-State: ANoB5plAG5tEVXp+ydX/oI4mZRJzKnBbAtb7gdEDB9aRixkIwDYdvpkZ
+        pAp8B1CB21pdXZjrmmkWbqUetA==
+X-Google-Smtp-Source: AA0mqf7e8OfdxOKRfTIFGfYs2rOT+Ob6Xy7QeTxJe/DCYWFZIgWCHvvWJKR4Si+l/C4cddXA588gig==
+X-Received: by 2002:adf:ec10:0:b0:22e:48ee:dc64 with SMTP id x16-20020adfec10000000b0022e48eedc64mr10210424wrn.319.1668511883718;
+        Tue, 15 Nov 2022 03:31:23 -0800 (PST)
+Received: from zoltan.localdomain ([81.128.185.34])
+        by smtp.gmail.com with ESMTPSA id r18-20020adfe692000000b00238df11940fsm12273091wrm.16.2022.11.15.03.31.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 03:31:22 -0800 (PST)
+From:   Alex Elder <elder@linaro.org>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org,
+        elder@kernel.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2 0/5] net: ipa: change GSI firmware load specification
+Date:   Tue, 15 Nov 2022 05:31:14 -0600
+Message-Id: <20221115113119.249893-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 31. Oktober 2022, 18:50:55 CET schrieb Sebastian Reichel:
-> Replace the channel ID lookup table by a simple offset, since
-> the channel IDs are consecutive.
+Version 2 of this series modifies the first patch only.  One section
+in the description is reworded, and the example now consistenly
+describes the SC7180 SoC, both as suggested by Krzysztof.
 
-Hmm, I don't really like going this way.
+Currently, GSI firmware must be loaded for IPA before it can be
+used--either by the modem, or by the AP.  New hardware supports a
+third option, with the bootloader taking responsibility for loading
+GSI firmware.  In that case, neither the AP nor the modem needs to
+do that.
 
-While it may be true _right now_ that all tsadcs have the cpu-sensor
-at channel "x" and the gpu-sensor at "x+1", hardware engineers are
-always waaaaay too creative in what they do.
+The first patch in this series deprecates the "modem-init" Device
+Tree property in the IPA binding, using a new "qcom,gsi-loader"
+property instead.  The second and third implement logic in the code
+to support either the "old" or the "new" way of specifying how GSI
+firmware is loaded.
 
-So I really expect a future soc to turn this around or add other
-"interesting" variants.
+The last two patches implement a new value for the "qcom,gsi-loader"
+property.  If the value is "skip", neither the AP nor modem needs to
+load the GSI firmware.  The first of these patches implements the
+change in the IPA binding; the second implements it in the code.
 
+					-Alex
 
-Heiko
+Alex Elder (5):
+  dt-bindings: net: qcom,ipa: deprecate modem-init
+  net: ipa: encapsulate decision about firmware load
+  net: ipa: introduce "qcom,gsi-loader" property
+  dt-bindings: net: qcom,ipa: support skipping GSI firmware load
+  net: ipa: permit GSI firmware loading to be skipped
 
+ .../devicetree/bindings/net/qcom,ipa.yaml     | 78 +++++++++++----
+ drivers/net/ipa/ipa_main.c                    | 95 +++++++++++++++----
+ 2 files changed, 135 insertions(+), 38 deletions(-)
 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  drivers/thermal/rockchip_thermal.c | 48 +++++++++++++-----------------
->  1 file changed, 21 insertions(+), 27 deletions(-)
-> 
-> diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
-> index 3dab31f163b3..a547e44e2b64 100644
-> --- a/drivers/thermal/rockchip_thermal.c
-> +++ b/drivers/thermal/rockchip_thermal.c
-> @@ -39,15 +39,6 @@ enum tshut_polarity {
->  	TSHUT_HIGH_ACTIVE,
->  };
->  
-> -/*
-> - * The system has two Temperature Sensors.
-> - * sensor0 is for CPU, and sensor1 is for GPU.
-> - */
-> -enum sensor_id {
-> -	SENSOR_CPU = 0,
-> -	SENSOR_GPU,
-> -};
-> -
->  /*
->   * The conversion table has the adc value and temperature.
->   * ADC_DECREMENT: the adc value is of diminishing.(e.g. rk3288_code_table)
-> @@ -82,7 +73,7 @@ struct chip_tsadc_table {
->  
->  /**
->   * struct rockchip_tsadc_chip - hold the private data of tsadc chip
-> - * @chn_id: array of sensor ids of chip corresponding to the channel
-> + * @chn_offset: the channel offset of the first channel
->   * @chn_num: the channel number of tsadc chip
->   * @tshut_temp: the hardware-controlled shutdown temperature value
->   * @tshut_mode: the hardware-controlled shutdown mode (0:CRU 1:GPIO)
-> @@ -98,7 +89,7 @@ struct chip_tsadc_table {
->   */
->  struct rockchip_tsadc_chip {
->  	/* The sensor id of chip correspond to the ADC channel */
-> -	int chn_id[SOC_MAX_SENSORS];
-> +	int chn_offset;
->  	int chn_num;
->  
->  	/* The hardware-controlled tshut property */
-> @@ -925,8 +916,8 @@ static void rk_tsadcv2_tshut_mode(int chn, void __iomem *regs,
->  }
->  
->  static const struct rockchip_tsadc_chip px30_tsadc_data = {
-> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-> +	/* cpu, gpu */
-> +	.chn_offset = 0,
->  	.chn_num = 2, /* 2 channels for tsadc */
->  
->  	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
-> @@ -949,7 +940,8 @@ static const struct rockchip_tsadc_chip px30_tsadc_data = {
->  };
->  
->  static const struct rockchip_tsadc_chip rv1108_tsadc_data = {
-> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> +	/* cpu */
-> +	.chn_offset = 0,
->  	.chn_num = 1, /* one channel for tsadc */
->  
->  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> @@ -973,7 +965,8 @@ static const struct rockchip_tsadc_chip rv1108_tsadc_data = {
->  };
->  
->  static const struct rockchip_tsadc_chip rk3228_tsadc_data = {
-> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> +	/* cpu */
-> +	.chn_offset = 0,
->  	.chn_num = 1, /* one channel for tsadc */
->  
->  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> @@ -997,8 +990,8 @@ static const struct rockchip_tsadc_chip rk3228_tsadc_data = {
->  };
->  
->  static const struct rockchip_tsadc_chip rk3288_tsadc_data = {
-> -	.chn_id[SENSOR_CPU] = 1, /* cpu sensor is channel 1 */
-> -	.chn_id[SENSOR_GPU] = 2, /* gpu sensor is channel 2 */
-> +	/* cpu, gpu */
-> +	.chn_offset = 1,
->  	.chn_num = 2, /* two channels for tsadc */
->  
->  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> @@ -1022,7 +1015,8 @@ static const struct rockchip_tsadc_chip rk3288_tsadc_data = {
->  };
->  
->  static const struct rockchip_tsadc_chip rk3328_tsadc_data = {
-> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> +	/* cpu */
-> +	.chn_offset = 0,
->  	.chn_num = 1, /* one channels for tsadc */
->  
->  	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
-> @@ -1045,8 +1039,8 @@ static const struct rockchip_tsadc_chip rk3328_tsadc_data = {
->  };
->  
->  static const struct rockchip_tsadc_chip rk3366_tsadc_data = {
-> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-> +	/* cpu, gpu */
-> +	.chn_offset = 0,
->  	.chn_num = 2, /* two channels for tsadc */
->  
->  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> @@ -1070,8 +1064,8 @@ static const struct rockchip_tsadc_chip rk3366_tsadc_data = {
->  };
->  
->  static const struct rockchip_tsadc_chip rk3368_tsadc_data = {
-> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-> +	/* cpu, gpu */
-> +	.chn_offset = 0,
->  	.chn_num = 2, /* two channels for tsadc */
->  
->  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> @@ -1095,8 +1089,8 @@ static const struct rockchip_tsadc_chip rk3368_tsadc_data = {
->  };
->  
->  static const struct rockchip_tsadc_chip rk3399_tsadc_data = {
-> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-> +	/* cpu, gpu */
-> +	.chn_offset = 0,
->  	.chn_num = 2, /* two channels for tsadc */
->  
->  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> @@ -1120,8 +1114,8 @@ static const struct rockchip_tsadc_chip rk3399_tsadc_data = {
->  };
->  
->  static const struct rockchip_tsadc_chip rk3568_tsadc_data = {
-> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
-> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
-> +	/* cpu, gpu */
-> +	.chn_offset = 0,
->  	.chn_num = 2, /* two channels for tsadc */
->  
->  	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
-> @@ -1406,7 +1400,7 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
->  	for (i = 0; i < thermal->chip->chn_num; i++) {
->  		error = rockchip_thermal_register_sensor(pdev, thermal,
->  						&thermal->sensors[i],
-> -						thermal->chip->chn_id[i]);
-> +						thermal->chip->chn_offset + i);
->  		if (error)
->  			return dev_err_probe(&pdev->dev, error,
->  				"failed to register sensor[%d].\n", i);
-> 
-
-
-
+-- 
+2.34.1
 
