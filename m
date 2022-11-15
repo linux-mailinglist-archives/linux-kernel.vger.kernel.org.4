@@ -2,199 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7EE629787
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE08629789
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:34:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238072AbiKOLdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 06:33:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
+        id S229924AbiKOLd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 06:33:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238066AbiKOLcy (ORCPT
+        with ESMTP id S238095AbiKOLdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 06:32:54 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A1F29345;
-        Tue, 15 Nov 2022 03:32:02 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 1D5C31883F5E;
-        Tue, 15 Nov 2022 11:32:00 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 1309425002DE;
-        Tue, 15 Nov 2022 11:32:00 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 09E9B9EC0023; Tue, 15 Nov 2022 11:31:59 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Tue, 15 Nov 2022 06:33:20 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952EB2A26A
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:32:21 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id c14-20020a5ea80e000000b006d6e9b05e58so7177370ioa.23
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:32:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gv7raZK4J+vZQK4qaREuUccb/QEI3hJCmjFXTPZ9tSs=;
+        b=UD1pe1udUpj6YxJEmFeEN8qGlnt6LTjiu11lS+xzOKTAjiv9IOziNDb4ss3S8O5SoT
+         tKJQNyfCMQl3qqD46JE216GQ+7mTI7Z1YOpBRm1PzzGNdmTNFwlJnptAtCsKRBBZXJWq
+         J01URt53nWtsdGP8s88ryRaaMi63VWWbivki5y4KjlmcgjqObFI7Bj9I4NQKSnO/lBI2
+         BuKQIFpvrYvVM1AxRHqA/rNkdLPpJQrzC1FtArZrFSnAHwN+EduG7iALve8M303pi2e9
+         dDu7od12n7HBHPCTulgS0za/wV340Lfm5uwmB9Mvsv2bxRX0+OAtwCqeAIJq0cfRXH0K
+         pMHg==
+X-Gm-Message-State: ANoB5pmGxH70aauOlYK1TNCLL+yoeMFcd2ikADl422O/SqXo3utGFhW2
+        JTHwhiYIB6YD8YZtgDWr+4FIXsvH1yc8JhuwyqxloegAn0Rp
+X-Google-Smtp-Source: AA0mqf5T+EYwixuXdTuy8dbJWzbOEAeD3bKP3QR1Ny+Sokm9xR0REq2tF+neOV7rZ/dsne2CTbJ+h4FHUaHWhx3RT2uQkEKquAU/
 MIME-Version: 1.0
-Date:   Tue, 15 Nov 2022 12:31:59 +0100
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 net-next 0/2] mv88e6xxx: Add MAB offload support
-In-Reply-To: <20221115111034.z5bggxqhdf7kbw64@skbuf>
-References: <20221112203748.68995-1-netdev@kapio-technology.com>
- <Y3NcOYvCkmcRufIn@shredder>
- <5559fa646aaad7551af9243831b48408@kapio-technology.com>
- <20221115102833.ahwnahrqstcs2eug@skbuf>
- <7c02d4f14e59a6e26431c086a9bb9643@kapio-technology.com>
- <20221115111034.z5bggxqhdf7kbw64@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <0cd30d4517d548f35042a535fd994831@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5e:d80f:0:b0:6dc:8db7:ee4 with SMTP id
+ l15-20020a5ed80f000000b006dc8db70ee4mr7659720iok.150.1668511940509; Tue, 15
+ Nov 2022 03:32:20 -0800 (PST)
+Date:   Tue, 15 Nov 2022 03:32:20 -0800
+In-Reply-To: <20221115110542.2538-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000084890d05ed80b57e@google.com>
+Subject: Re: [syzbot] possible deadlock in nci_start_poll
+From:   syzbot <syzbot+f1f36887d202cea1446d@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-15 12:10, Vladimir Oltean wrote:
-> On Tue, Nov 15, 2022 at 11:52:40AM +0100, netdev@kapio-technology.com 
-> wrote:
->> I had a discussion with Jacub, which resulted in me sending a mail to
->> maintainers on this. The problem is shown below...
->> 
->> the phy is marvell/6097/88e3082
->> 
->> ------------[ cut here ]------------
->> WARNING: CPU: 0 PID: 332 at drivers/net/phy/phy.c:975
->> phy_error+0x28/0x54
->> Modules linked in:
->> CPU: 0 PID: 332 Comm: kworker/0:0 Tainted: G        W          6.0.0 
->> #17
->> Hardware name: Freescale i.MX27 (Device Tree Support)
->> Workqueue: events_power_efficient phy_state_machine
->>   unwind_backtrace from show_stack+0x18/0x1c
->>   show_stack from dump_stack_lvl+0x28/0x30
->>   dump_stack_lvl from __warn+0xb8/0x114
->>   __warn from warn_slowpath_fmt+0x80/0xbc
->>   warn_slowpath_fmt from phy_error+0x28/0x54
->>   phy_error from phy_state_machine+0xbc/0x218
->>   phy_state_machine from process_one_work+0x17c/0x244
->>   process_one_work from worker_thread+0x248/0x2cc
->>   worker_thread from kthread+0xb0/0xbc
->>   kthread from ret_from_fork+0x14/0x2c
->> Exception stack(0xc4a71fb0 to 0xc4a71ff8)
->> 1fa0:                                     00000000 00000000 00000000 
->> 00000000
->> 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 
->> 00000000
->> 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
->> ---[ end trace 0000000000000000 ]---
-> 
-> Was that email public on the lists? I don't see it...
+Hello,
 
-Sorry, yes the public list was not added.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> 
-> The phy_error() is called from phy_state_machine() if one of
-> phy_check_link_status() or phy_start_aneg() fails.
-> 
-> Could you please print exactly the value of "err", as well as dig 
-> deeper
-> to see which call is failing, all the way into the PHY driver?
+Reported-and-tested-by: syzbot+f1f36887d202cea1446d@syzkaller.appspotmail.com
 
-It happens on upstart, so I would then have to hack the system upstart 
-to add trace.
+Tested on:
 
-I also have:
-mv88e6085 1002b000.ethernet-1:04: switch 0x990 detected: Marvell 
-88E6097/88E6097F, revision 2
-mv88e6085 1002b000.ethernet-1:04: configuring for fixed/rgmii-id link 
-mode
-mv88e6085 1002b000.ethernet-1:04: Link is Up - 100Mbps/Full - flow 
-control off
-mv88e6085 1002b000.ethernet-1:04 eth10 (uninitialized): PHY 
-[!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:00] driver 
-[Generic PHY] (irq=POLL)
-mv88e6085 1002b000.ethernet-1:04 eth6 (uninitialized): PHY 
-[!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:01] driver 
-[Generic PHY] (irq=POLL)
-mv88e6085 1002b000.ethernet-1:04 eth9 (uninitialized): PHY 
-[!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:02] driver 
-[Generic PHY] (irq=POLL)
-mv88e6085 1002b000.ethernet-1:04 eth5 (uninitialized): PHY 
-[!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:03] driver 
-[Generic PHY] (irq=POLL)
-mv88e6085 1002b000.ethernet-1:04 eth8 (uninitialized): PHY 
-[!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:04] driver 
-[Generic PHY] (irq=POLL)
-mv88e6085 1002b000.ethernet-1:04 eth4 (uninitialized): PHY 
-[!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:05] driver 
-[Generic PHY] (irq=POLL)
-mv88e6085 1002b000.ethernet-1:04 eth7 (uninitialized): PHY 
-[!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:06] driver 
-[Generic PHY] (irq=POLL)
-mv88e6085 1002b000.ethernet-1:04 eth3 (uninitialized): PHY 
-[!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:07] driver 
-[Generic PHY] (irq=POLL)
-mv88e6085 1002b000.ethernet-1:04 eth2 (uninitialized): PHY 
-[!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdioe:08] driver 
-[Marvell 88E1112] (irq=174)
-mv88e6085 1002b000.ethernet-1:04 eth1 (uninitialized): PHY 
-[!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdioe:09] driver 
-[Marvell 88E1112] (irq=175)
+commit:         094226ad Linux 6.1-rc5
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=102b6095880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=31242cbb858881d2
+dashboard link: https://syzkaller.appspot.com/bug?extid=f1f36887d202cea1446d
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=160ddf69880000
 
-after this and adding the ifaces to the bridge, it continues like:
-
-br0: port 1(eth10) entered blocking state
-br0: port 1(eth10) entered disabled state
-br0: port 2(eth6) entered blocking state
-br0: port 2(eth6) entered disabled state
-device eth6 entered promiscuous mode
-device eth10 entered promiscuous mode
-br0: port 3(eth9) entered blocking state
-br0: port 3(eth9) entered disabled state
-device eth9 entered promiscuous mode
-br0: port 4(eth5) entered blocking state
-br0: port 4(eth5) entered disabled state
-device eth5 entered promiscuous mode
-br0: port 5(eth8) entered blocking state
-br0: port 5(eth8) entered disabled state
-device eth8 entered promiscuous mode
-br0: port 6(eth4) entered blocking state
-br0: port 6(eth4) entered disabled state
-mv88e6085 1002b000.ethernet-1:04: Timeout while waiting for switch
-mv88e6085 1002b000.ethernet-1:04: port 0 failed to add 9a:af:03:f1:bd:0a 
-vid 1 to fdb: -110
-device eth4 entered promiscuous mode
-br0: port 7(eth7) entered blocking state
-br0: port 7(eth7) entered disabled state
-
-I don't know if that gives ay clues...?
-
-Otherwise I have to take more time to see what I can dig out. The 
-easiest for me is then to
-add some printk statements giving targeted information if told what and 
-where...
-
-> 
-> Easiest way to do that would probably be something like:
-> 
-> $ trace-cmd record -e mdio sleep 10 &
-> ... do your stuff ...
-> $ trace-cmd report
->     kworker/u4:3-337   [001]    59.054741: mdio_access:
-> 0000:00:00.3 read  phy:0x13 reg:0x01 val:0x7949
->     kworker/u4:3-337   [001]    59.054941: mdio_access:
-> 0000:00:00.3 read  phy:0x13 reg:0x09 val:0x0700
->     kworker/u4:3-337   [001]    59.055262: mdio_access:
-> 0000:00:00.3 read  phy:0x13 reg:0x0a val:0x4000
->     kworker/u4:3-337   [001]    60.075808: mdio_access:
-> 0000:00:00.3 read  phy:0x13 reg:0x1c val:0x3005
-> 
-> "val" will be negative when there is an error. This is to see quicker
-> what fails,
-> and if some MDIO access ever works.
-> 
-> If you don't want to enable CONFIG_FTRACE or install trace-cmd, you
-> could also probably do the debugging manually.
+Note: testing is done by a robot and is best-effort only.
