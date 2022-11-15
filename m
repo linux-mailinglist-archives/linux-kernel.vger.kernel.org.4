@@ -2,57 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8062629B56
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7691D629B5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238043AbiKON7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:59:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
+        id S238348AbiKOOAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 09:00:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232718AbiKON7c (ORCPT
+        with ESMTP id S230440AbiKOOAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:59:32 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86211C93D;
-        Tue, 15 Nov 2022 05:59:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EFD061796;
-        Tue, 15 Nov 2022 13:59:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31184C433D6;
-        Tue, 15 Nov 2022 13:59:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668520770;
-        bh=rb5W412jHJ/fNXONcq6nglbdvHNvzF+Z6trcJyoQiqs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WZmIZuK+5K/X909vL/BiLFOSl9OxbdgweO1tD51w1yrv8K+Ok3QSrf8r1ppfXy+St
-         ibj2tKPCR5uvlIQc7Iop6dXHehLMyVklgOdZmZbAXJqyWbn23t49eiZIzbK3oPQO5F
-         YJpwLcpL3rAIKA3cbola/HXrqCJuFKYQy3/n60t4=
-Date:   Tue, 15 Nov 2022 14:59:27 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     shaozhengchao <shaozhengchao@huawei.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.15 000/131] 5.15.79-rc1 review
-Message-ID: <Y3ObPwyWx4bEAoAt@kroah.com>
-References: <20221114124448.729235104@linuxfoundation.org>
- <CA+G9fYvdqK23zAa+=-x29Hq7BGVd2pN1_1XOp5U1X-GUWM4MAA@mail.gmail.com>
- <f0136268-63d4-66ec-98fe-b7584b388906@huawei.com>
+        Tue, 15 Nov 2022 09:00:44 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D24B2AE1B;
+        Tue, 15 Nov 2022 06:00:40 -0800 (PST)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NBSVm5t8dzmVym;
+        Tue, 15 Nov 2022 22:00:16 +0800 (CST)
+Received: from kwepemm600014.china.huawei.com (7.193.23.54) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 22:00:37 +0800
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ kwepemm600014.china.huawei.com (7.193.23.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 22:00:37 +0800
+Received: from dggpemm500005.china.huawei.com ([7.185.36.74]) by
+ dggpemm500005.china.huawei.com ([7.185.36.74]) with mapi id 15.01.2375.031;
+ Tue, 15 Nov 2022 22:00:37 +0800
+From:   "Lanhao (Lan)" <lanhao@huawei.com>
+To:     Leon Romanovsky <leon@kernel.org>,
+        "huangguangbin (A)" <huangguangbin2@huawei.com>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "shenjian (K)" <shenjian15@huawei.com>
+Subject: Re: [PATCH net-next 1/4] net: hns3: refine the tcam key convert
+ handle
+Thread-Topic: [PATCH net-next 1/4] net: hns3: refine the tcam key convert
+ handle
+Thread-Index: Adj4+p1pXXKSqJpkU0i5PY69KbRjGg==
+Date:   Tue, 15 Nov 2022 14:00:37 +0000
+Message-ID: <fc3431dc55be4968909fb746e4c1d454@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.67.102.37]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f0136268-63d4-66ec-98fe-b7584b388906@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,70 +63,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 11:34:12AM +0800, shaozhengchao wrote:
-> 
-> 
-> On 2022/11/15 10:56, Naresh Kamboju wrote:
-> > On Mon, 14 Nov 2022 at 18:24, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > > 
-> > > This is the start of the stable review cycle for the 5.15.79 release.
-> > > There are 131 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > > 
-> > > Responses should be made by Wed, 16 Nov 2022 12:44:21 +0000.
-> > > Anything received after that time might be too late.
-> > > 
-> > > The whole patch series can be found in one patch at:
-> > >          https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.79-rc1.gz
-> > > or in the git tree and branch at:
-> > >          git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> > > and the diffstat can be found below.
-> > > 
-> > > thanks,
-> > > 
-> > > greg k-h
-> > 
-> > As others reported,
-> > arm: allmodconfig  failed [1] due to following warnings / errors.
-> > 
-> > drivers/net/ethernet/mediatek/mtk_star_emac.c: In function 'mtk_star_enable':
-> > drivers/net/ethernet/mediatek/mtk_star_emac.c:980:22: error: 'struct
-> > mtk_star_priv' has no member named 'rx_napi'; did you mean 'napi'?
-> >    980 |  napi_disable(&priv->rx_napi);
-> >        |                      ^~~~~~~
-> >        |                      napi
-> > drivers/net/ethernet/mediatek/mtk_star_emac.c:981:22: error: 'struct
-> > mtk_star_priv' has no member named 'tx_napi'; did you mean 'napi'?
-> >    981 |  napi_disable(&priv->tx_napi);
-> >        |                      ^~~~~~~
-> >        |                      napi
-> > 
-> > 
-> > ---
-> > net: ethernet: mtk-star-emac: disable napi when connect and start PHY
-> > failed in mtk_star_enable()
-> > [ Upstream commit b0c09c7f08c2467b2089bdf4adb2fbbc2464f4a8 ]
-> > 
-> > 
-> > [1] https://builds.tuxbuild.com/2HXmwUDUvmWI1Uc7zsdXNcsTqW1/
-> > 
-> > --
-> > Linaro LKFT
-> > https://lkft.linaro.org
-> 
-> Yes ,For stable-5.10, commit 0a8bd81fd6aaace14979152e0540da8ff158a00a
-> ("net: ethernet: mtk-star-emac: separate tx/rx handling with two NAPIs")
-> is not merged. So, please use napi_disable(&priv->napi) instead of
-> napi_disable(&priv->rx_napi) and napi_disable(&priv->tx_napi).
-
-I think you mean 5.15 here, not 5.10, right?
-
-Can you send a properly backported version of this commit for 5.10.y and
-5.15.y so that I can queue it up?  I'll go drop this offending one from
-the queue now and push out a -rc2 so that it doesn't stall the release.
-
-thanks,
-
-greg k-h
+Q2FuIHlvdSBwbGVhc2UgZXhwbGFpbiB3aHkgZG8geW91IG5lZWQgc3BlY2lhbCBkZWZpbmUgZm9y
+IGJvb2xlYW4gQU5EPw0Kd2UgdXNlICcmJywganVzdCBkZWZpbmUgYSBiaXR3aXNlIEFORCwgbm90
+IGRlZmluZSBib29sZWFuIEFORC4NCg0KT24gVHVlLCBTZXAgMjgsIDIwMjIgYXQgMTA6Mjg6MDJB
+TSArMDgwMCwgTGVvbiBSb21hbm92c2t5IHdyb3RlOg0KPk9uIFR1ZSwgU2VwIDI3LCAyMDIyIGF0
+IDA3OjEyOjAyUE0gKzA4MDAsIEd1YW5nYmluIEh1YW5nIHdyb3RlOg0KPj4gRnJvbTogSmlhbiBT
+aGVuIDxzaGVuamlhbjE1QGh1YXdlaS5jb20+DQo+PiANCj4+IFRoZSBleHByZXNzaW9uICcoayBe
+IH52KScgaXMgZXhhY2x0eSAnKGsgJiB2KScsIGFuZCAnKGsgJiB2KSAmIGsnIGlzIA0KPj4gZXhh
+Y2x0eSAnayAmIHYnLiBTbyBzaW1wbGlmeSB0aGUgZXhwcmVzc2lvbiBmb3IgdGNhbSBrZXkgY29u
+dmVydC4NCj4+IA0KPj4gSXQgYWxzbyBhZGQgbmVjZXNzYXJ5IGJyYWNrZXRzIGZvciB0aGVtLg0K
+Pj4gDQo+PiBTaWduZWQtb2ZmLWJ5OiBKaWFuIFNoZW4gPHNoZW5qaWFuMTVAaHVhd2VpLmNvbT4N
+Cj4+IFNpZ25lZC1vZmYtYnk6IEd1YW5nYmluIEh1YW5nIDxodWFuZ2d1YW5nYmluMkBodWF3ZWku
+Y29tPg0KPj4gLS0tDQo+PiAgLi4uL25ldC9ldGhlcm5ldC9oaXNpbGljb24vaG5zMy9obnMzcGYv
+aGNsZ2VfbWFpbi5oICAgfCAxMSArKystLS0tLS0tLQ0KPj4gIDEgZmlsZSBjaGFuZ2VkLCAzIGlu
+c2VydGlvbnMoKyksIDggZGVsZXRpb25zKC0pDQo+PiANCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJz
+L25ldC9ldGhlcm5ldC9oaXNpbGljb24vaG5zMy9obnMzcGYvaGNsZ2VfbWFpbi5oIA0KPj4gYi9k
+cml2ZXJzL25ldC9ldGhlcm5ldC9oaXNpbGljb24vaG5zMy9obnMzcGYvaGNsZ2VfbWFpbi5oDQo+
+PiBpbmRleCA0OTViNjM5YjBkYzIuLjU5YmZhY2M2ODdjOSAxMDA2NDQNCj4+IC0tLSBhL2RyaXZl
+cnMvbmV0L2V0aGVybmV0L2hpc2lsaWNvbi9obnMzL2huczNwZi9oY2xnZV9tYWluLmgNCj4+ICsr
+KyBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L2hpc2lsaWNvbi9obnMzL2huczNwZi9oY2xnZV9tYWlu
+LmgNCj4+IEBAIC04MjcsMTUgKzgyNywxMCBAQCBzdHJ1Y3QgaGNsZ2VfdmZfdmxhbl9jZmcgew0K
+Pj4gICAqIFRoZW4gZm9yIGlucHV0IGtleShrKSBhbmQgbWFzayh2KSwgd2UgY2FuIGNhbGN1bGF0
+ZSB0aGUgdmFsdWUgYnkNCj4+ICAgKiB0aGUgZm9ybXVsYWU6DQo+PiAgICoJeCA9ICh+aykgJiB2
+DQo+PiAtICoJeSA9IChrIF4gfnYpICYgaw0KPj4gKyAqCXkgPSBrICYgdg0KPj4gICAqLw0KPj4g
+LSNkZWZpbmUgY2FsY194KHgsIGssIHYpICh4ID0gfihrKSAmICh2KSkgLSNkZWZpbmUgY2FsY195
+KHksIGssIHYpIFwNCj4+IC0JZG8geyBcDQo+PiAtCQljb25zdCB0eXBlb2YoaykgX2tfID0gKGsp
+OyBcDQo+PiAtCQljb25zdCB0eXBlb2YodikgX3ZfID0gKHYpOyBcDQo+PiAtCQkoeSkgPSAoX2tf
+IF4gfl92XykgJiAoX2tfKTsgXA0KPj4gLQl9IHdoaWxlICgwKQ0KPj4gKyNkZWZpbmUgY2FsY194
+KHgsIGssIHYpICgoeCkgPSB+KGspICYgKHYpKSAjZGVmaW5lIGNhbGNfeSh5LCBrLCB2KSANCj4+
+ICsoKHkpID0gKGspICYgKHYpKQ0KPg0KPkNhbiB5b3UgcGxlYXNlIGV4cGxhaW4gd2h5IGRvIHlv
+dSBuZWVkIHNwZWNpYWwgZGVmaW5lIGZvciBib29sZWFuIEFORD8NCj4NCj5UaGFua3MNCndlIHVz
+ZSAnJicsIGp1c3QgZGVmaW5lIGEgYml0d2lzZSBBTkQsIG5vdCBkZWZpbmUgYm9vbGVhbiBBTkQu
+DQo+DQo+PiAgDQo+PiAgI2RlZmluZSBIQ0xHRV9NQUNfU1RBVFNfRklFTERfT0ZGKGYpIChvZmZz
+ZXRvZihzdHJ1Y3QgDQo+PiBoY2xnZV9tYWNfc3RhdHMsIGYpKSAgI2RlZmluZSBIQ0xHRV9TVEFU
+U19SRUFEKHAsIG9mZnNldCkgKCoodTY0IA0KPj4gKikoKHU4ICopKHApICsgKG9mZnNldCkpKQ0K
+Pj4gLS0NCj4+IDIuMzMuMA0KPj4gDQo+DQoNCi0tLS0t08q8/tStvP4tLS0tLQ0Kt6K8/sjLOiBM
+ZW9uIFJvbWFub3Zza3kgPGxlb25Aa2VybmVsLm9yZz4gDQq3osvNyrG85DogMjAyMsTqOdTCMjjI
+1SAxODoyOQ0KytW8/sjLOiBodWFuZ2d1YW5nYmluIChBKSA8aHVhbmdndWFuZ2JpbjJAaHVhd2Vp
+LmNvbT4NCrOty806IGRhdmVtQGRhdmVtbG9mdC5uZXQ7IGt1YmFAa2VybmVsLm9yZzsgZWR1bWF6
+ZXRAZ29vZ2xlLmNvbTsgcGFiZW5pQHJlZGhhdC5jb207IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmc7
+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IHNoZW5qaWFuIChLKSA8c2hlbmppYW4xNUBo
+dWF3ZWkuY29tPjsgTGFuaGFvIChMYW4pIDxsYW5oYW9AaHVhd2VpLmNvbT4NCtb3zOI6IFJlOiBb
+UEFUQ0ggbmV0LW5leHQgMS80XSBuZXQ6IGhuczM6IHJlZmluZSB0aGUgdGNhbSBrZXkgY29udmVy
+dCBoYW5kbGUNCg0KT24gVHVlLCBTZXAgMjcsIDIwMjIgYXQgMDc6MTI6MDJQTSArMDgwMCwgR3Vh
+bmdiaW4gSHVhbmcgd3JvdGU6DQo+IEZyb206IEppYW4gU2hlbiA8c2hlbmppYW4xNUBodWF3ZWku
+Y29tPg0KPiANCj4gVGhlIGV4cHJlc3Npb24gJyhrIF4gfnYpJyBpcyBleGFjbHR5ICcoayAmIHYp
+JywgYW5kICcoayAmIHYpICYgaycgaXMgDQo+IGV4YWNsdHkgJ2sgJiB2Jy4gU28gc2ltcGxpZnkg
+dGhlIGV4cHJlc3Npb24gZm9yIHRjYW0ga2V5IGNvbnZlcnQuDQo+IA0KPiBJdCBhbHNvIGFkZCBu
+ZWNlc3NhcnkgYnJhY2tldHMgZm9yIHRoZW0uDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBKaWFuIFNo
+ZW4gPHNoZW5qaWFuMTVAaHVhd2VpLmNvbT4NCj4gU2lnbmVkLW9mZi1ieTogR3VhbmdiaW4gSHVh
+bmcgPGh1YW5nZ3VhbmdiaW4yQGh1YXdlaS5jb20+DQo+IC0tLQ0KPiAgLi4uL25ldC9ldGhlcm5l
+dC9oaXNpbGljb24vaG5zMy9obnMzcGYvaGNsZ2VfbWFpbi5oICAgfCAxMSArKystLS0tLS0tLQ0K
+PiAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgOCBkZWxldGlvbnMoLSkNCj4gDQo+
+IGRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC9ldGhlcm5ldC9oaXNpbGljb24vaG5zMy9obnMzcGYv
+aGNsZ2VfbWFpbi5oIA0KPiBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L2hpc2lsaWNvbi9obnMzL2hu
+czNwZi9oY2xnZV9tYWluLmgNCj4gaW5kZXggNDk1YjYzOWIwZGMyLi41OWJmYWNjNjg3YzkgMTAw
+NjQ0DQo+IC0tLSBhL2RyaXZlcnMvbmV0L2V0aGVybmV0L2hpc2lsaWNvbi9obnMzL2huczNwZi9o
+Y2xnZV9tYWluLmgNCj4gKysrIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvaGlzaWxpY29uL2huczMv
+aG5zM3BmL2hjbGdlX21haW4uaA0KPiBAQCAtODI3LDE1ICs4MjcsMTAgQEAgc3RydWN0IGhjbGdl
+X3ZmX3ZsYW5fY2ZnIHsNCj4gICAqIFRoZW4gZm9yIGlucHV0IGtleShrKSBhbmQgbWFzayh2KSwg
+d2UgY2FuIGNhbGN1bGF0ZSB0aGUgdmFsdWUgYnkNCj4gICAqIHRoZSBmb3JtdWxhZToNCj4gICAq
+CXggPSAofmspICYgdg0KPiAtICoJeSA9IChrIF4gfnYpICYgaw0KPiArICoJeSA9IGsgJiB2DQo+
+ICAgKi8NCj4gLSNkZWZpbmUgY2FsY194KHgsIGssIHYpICh4ID0gfihrKSAmICh2KSkgLSNkZWZp
+bmUgY2FsY195KHksIGssIHYpIFwNCj4gLQlkbyB7IFwNCj4gLQkJY29uc3QgdHlwZW9mKGspIF9r
+XyA9IChrKTsgXA0KPiAtCQljb25zdCB0eXBlb2YodikgX3ZfID0gKHYpOyBcDQo+IC0JCSh5KSA9
+IChfa18gXiB+X3ZfKSAmIChfa18pOyBcDQo+IC0JfSB3aGlsZSAoMCkNCj4gKyNkZWZpbmUgY2Fs
+Y194KHgsIGssIHYpICgoeCkgPSB+KGspICYgKHYpKSAjZGVmaW5lIGNhbGNfeSh5LCBrLCB2KSAN
+Cj4gKygoeSkgPSAoaykgJiAodikpDQoNCkNhbiB5b3UgcGxlYXNlIGV4cGxhaW4gd2h5IGRvIHlv
+dSBuZWVkIHNwZWNpYWwgZGVmaW5lIGZvciBib29sZWFuIEFORD8NCg0KVGhhbmtzDQoNCj4gIA0K
+PiAgI2RlZmluZSBIQ0xHRV9NQUNfU1RBVFNfRklFTERfT0ZGKGYpIChvZmZzZXRvZihzdHJ1Y3Qg
+DQo+IGhjbGdlX21hY19zdGF0cywgZikpICAjZGVmaW5lIEhDTEdFX1NUQVRTX1JFQUQocCwgb2Zm
+c2V0KSAoKih1NjQgDQo+ICopKCh1OCAqKShwKSArIChvZmZzZXQpKSkNCj4gLS0NCj4gMi4zMy4w
+DQo+IA0K
