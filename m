@@ -2,154 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A36629F17
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D90E0629F1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238674AbiKOQa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 11:30:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
+        id S230106AbiKOQcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 11:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238619AbiKOQay (ORCPT
+        with ESMTP id S231579AbiKOQb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 11:30:54 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2FFB7F9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:30:52 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id a15so18211356ljb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:30:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WgmhkilsxspOz5NWRqSMIhLipP/HJEPgQBayMZdWBrw=;
-        b=FGIToAWnLxWH/nNXH4Bc8NPARTKs+TGdOcxBxW+NwDA8ogN+41Yy9hAXq6hZYmg5rm
-         E5WwGRSzNfdPh4RKw/qzCgAmNx8PB8fXQiJY2BhtgUBmp2Wg7DPDkLXeTQW5jCRBpxUY
-         5ZI96mIUE34Ez+kcUW/KBPbPmebd5pme11C81WRfl+TtOWA8AetIBdJ4T/5GXw1AdiD8
-         A0t+yrlvyW45uGPQND8zUBzZ4ec5l4T6aWUCCFvntu2dB2D4qP1ff4rpqYZ0Q1cbiNC1
-         6tPcToXU5iuwpTLyY1xq8ZYZB7aO47yzHWDD+rngVtDKcK04TfoXgLJvMDDzuW1ExSho
-         dvBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WgmhkilsxspOz5NWRqSMIhLipP/HJEPgQBayMZdWBrw=;
-        b=4M8axniWRElBxBxpOItAXCdei916NEuP6o7QjL5h1bbsmGeXtRLSBI9hNA7lucFFZf
-         GndicRVc/hscOEl/S9c+dpaH9+Chh9+ViwR8sZQk6EP6jBih+LG5zWHtvI3n7XU2dyr6
-         UeX8tvgkCH/s4FPPkVPfOZhdv8HwKHiwY01OXP6M1NJYoUC/ej8CCHomKPbs8VG5dx/+
-         IhFBUzSzDb1vUWjRBvv1bfcie81OKdkj49Ewj5Vo7yklZs41hs09viUOj8pjnKMfQUZn
-         TOxD539k07nYivKxemEXvqRxSLXGMPw1yfIm0BBiqOPneYazqA/P/AiH4FQXBRjIPU/P
-         3PXA==
-X-Gm-Message-State: ANoB5pn0KXHoQALixaHTkDaLpBJ1J1nAkDVGplWIF/JU9g4UIxZdr1sC
-        g6TQuY5bNfT1Wn3Gp/UFe9OpoQ==
-X-Google-Smtp-Source: AA0mqf6Tx5INGoZ78d+9myc+vdTm5mzsmp5rLWprRQV1O1l0dTir56KzqEnejFqId0Li9Ws03Fr7Vw==
-X-Received: by 2002:a05:651c:2314:b0:277:2123:120e with SMTP id bi20-20020a05651c231400b002772123120emr6513113ljb.4.1668529850815;
-        Tue, 15 Nov 2022 08:30:50 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v14-20020ac258ee000000b004998d9ccb62sm2262902lfo.99.2022.11.15.08.30.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 08:30:50 -0800 (PST)
-Message-ID: <8e80a8ae-41dd-3f17-b165-eaba5335ae68@linaro.org>
-Date:   Tue, 15 Nov 2022 17:30:49 +0100
+        Tue, 15 Nov 2022 11:31:56 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF72B489
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:31:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668529915; x=1700065915;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=jS/YAyEH8uDvtuhHcy/3+/RGGpn8PTSzs5xMFFHtKWI=;
+  b=nF+jNnD6Hrnyv3HBJJZ9T/2CFsntTbNLf48EKkc/t1zI7F3qF1ERG+ty
+   vptiLKV++WxrhukplBVT4P9G13xHBu9xhqh4XaNLlnmLolIVgv5khk/zg
+   QNbNjgDllIN+mNI0NLmd28aZj1VoRHkpmxqcdk9qQPAW4fn+OnNy6eY9s
+   HZK83ceRmcUUbZmsHHGFemhuGjUUrrEX394VV835gHw899adt3dCyNNh1
+   dllB0elIaEcI/oECeCODczAvDNyW7hDK7w9bW7t7XSxJLYVtPsLXShepJ
+   c6IqqUAVFCWy22Bj4CygMp1Jb/0z3JD2UVNmZ3ZfNR48NfCU/3IdmL8G9
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="292692140"
+X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
+   d="scan'208";a="292692140"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 08:31:54 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="641267133"
+X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
+   d="scan'208";a="641267133"
+Received: from golubevv-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.58.73])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 08:31:53 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Simon Rettberg <simon.rettberg@rz.uni-freiburg.de>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2] drm/display: Don't assume dual mode adaptors support
+ i2c sub-addressing
+In-Reply-To: <Y0BbKr10gUO/xjZ/@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20221006113314.41101987@computer> <Yz7wKZnJeUzbz4Dw@intel.com>
+ <Y0BbKr10gUO/xjZ/@intel.com>
+Date:   Tue, 15 Nov 2022 18:31:31 +0200
+Message-ID: <87fsek2n8c.fsf@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 6/7] ARM: dts: r9a06g032: Add the USBF controller node
-Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-References: <20221114111513.1436165-1-herve.codina@bootlin.com>
- <20221114111513.1436165-7-herve.codina@bootlin.com>
- <51d42fc2-0492-9077-302d-5c3be4b45cd1@linaro.org>
- <20221115142754.6253881b@bootlin.com> <20221115160917.73e7b4ef@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221115160917.73e7b4ef@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 16:09, Herve Codina wrote:
-> Hi Krzysztof
-> 
-> On Tue, 15 Nov 2022 14:27:54 +0100
-> Herve Codina <herve.codina@bootlin.com> wrote:
-> 
->> Hi Krzysztof,
->>
->> On Tue, 15 Nov 2022 14:16:27 +0100
->> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->>
->>> On 14/11/2022 12:15, Herve Codina wrote:  
->>>> Add the USBF controller available in the r9a06g032 SoC.
->>>>
->>>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
->>>> ---
->>>>  arch/arm/boot/dts/r9a06g032.dtsi | 12 ++++++++++++
->>>>  1 file changed, 12 insertions(+)
->>>>
->>>> diff --git a/arch/arm/boot/dts/r9a06g032.dtsi b/arch/arm/boot/dts/r9a06g032.dtsi
->>>> index 563024c9a4ae..a4bb069457a3 100644
->>>> --- a/arch/arm/boot/dts/r9a06g032.dtsi
->>>> +++ b/arch/arm/boot/dts/r9a06g032.dtsi
->>>> @@ -117,6 +117,18 @@ dmamux: dma-router@a0 {
->>>>  			};
->>>>  		};
->>>>  
->>>> +		udc: usb@4001e000 {
->>>> +			compatible = "renesas,r9a06g032-usbf", "renesas,rzn1-usbf";
->>>> +			reg = <0x4001e000 0x2000>;
->>>> +			interrupts = <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
->>>> +				     <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
->>>> +			clocks = <&sysctrl R9A06G032_HCLK_USBF>,
->>>> +				 <&sysctrl R9A06G032_HCLK_USBPM>;
->>>> +			clock-names = "hclkf", "hclkpm";
->>>> +			power-domains = <&sysctrl>;
->>>> +			status = "disabled";    
->>>
->>> If you provided all resources (clocks, power domains etc), why disabling it?  
->>
->> Because I forgot to remove the 'status' property ...
->> 'status' will be simply removed in v3.
->> Sorry for this mistake.
->>
->> Thanks for the review,
->> Hervé
->>
-> 
-> I said something completely wrong for this point.
-> 
-> status is set disabled because it is a .dtsi and can be
-> included by several dts to represent a board.
-> This node (USB device) can be wired on some board and not on
-> some others.
-> So, the node will be enabled in each dts board that has the USBF
-> device wired and used.
+On Fri, 07 Oct 2022, Ville Syrj=C3=A4l=C3=A4 <ville.syrjala@linux.intel.com=
+> wrote:
+> On Thu, Oct 06, 2022 at 06:11:37PM +0300, Ville Syrj=C3=A4l=C3=A4 wrote:
+>> On Thu, Oct 06, 2022 at 11:33:14AM +0200, Simon Rettberg wrote:
+>> > Current dual mode adaptor ("DP++") detection code assumes that all
+>> > adaptors support i2c sub-addressing for read operations from the
+>> > DP-HDMI adaptor ID buffer.  It has been observed that multiple
+>> > adaptors do not in fact support this, and always return data starting
+>> > at register 0.  On affected adaptors, the code fails to read the proper
+>> > registers that would identify the device as a type 2 adaptor, and
+>> > handles those as type 1, limiting the TMDS clock to 165MHz, even if
+>> > the according register would announce a higher TMDS clock.
+>> > Fix this by always reading the ID buffer starting from offset 0, and
+>> > discarding any bytes before the actual offset of interest.
+>> >=20
+>> > We tried finding authoritative documentation on whether or not this is
+>> > allowed behaviour, but since all the official VESA docs are paywalled,
+>> > the best we could come up with was the spec sheet for Texas Instrument=
+s'
+>> > SNx5DP149 chip family.[1]  It explicitly mentions that sub-addressing =
+is
+>> > supported for register writes, but *not* for reads (See NOTE in
+>> > section 8.5.3).  Unless TI openly decided to violate the VESA spec, one
+>> > could take that as a hint that sub-addressing is in fact not mandated
+>> > by VESA.
+>> > The other two adaptors affected used the PS8409(A) and the LT8611,
+>> > according to the data returned from their ID buffers.
+>> >=20
+>> > [1] https://www.ti.com/lit/ds/symlink/sn75dp149.pdf
+>> >=20
+>> > Signed-off-by: Simon Rettberg <simon.rettberg@rz.uni-freiburg.de>
+>> > Reviewed-by: Rafael Gieschke <rafael.gieschke@rz.uni-freiburg.de>
+>> > ---
+>> >=20
+>> > v2 changes form last submission's feedback (thanks for taking the time=
+):
+>> > - Added a shortened version of our "background story" to the commit me=
+ssage
+>> > - Only use tmpbuf if the read offset is !=3D 0
+>>=20
+>> Bounced to intel-gfx to get the i915 CI to check it...
+>
+> CI didn't blow up, and I also gave this a quick smoking on my end
+> with both type 1 HDMI and type 2 HDMI adaptors.=20
+>
+> I'm thinking we want a cc:stable on this? I can slap that on
+> when pushing if there are no objections?
 
-So it depends on having the connector? Yes, makes sense as well.
-Actually my recommendation was about internal parts of OS, which usually
-do not require anything from board. I missed the part that it is an USB...
+I guess this fell between the cracks? :(
 
-Best regards,
-Krzysztof
+Ville, r-b? Going to push?
 
+BR,
+Jani.
+
+
+
+
+
+
+>
+>>=20
+>> >=20
+>> >  .../gpu/drm/display/drm_dp_dual_mode_helper.c | 51 +++++++++++--------
+>> >  1 file changed, 29 insertions(+), 22 deletions(-)
+>> >=20
+>> > diff --git a/drivers/gpu/drm/display/drm_dp_dual_mode_helper.c b/drive=
+rs/gpu/drm/display/drm_dp_dual_mode_helper.c
+>> > index 3ea53bb67d3b..bd61e20770a5 100644
+>> > --- a/drivers/gpu/drm/display/drm_dp_dual_mode_helper.c
+>> > +++ b/drivers/gpu/drm/display/drm_dp_dual_mode_helper.c
+>> > @@ -63,23 +63,45 @@
+>> >  ssize_t drm_dp_dual_mode_read(struct i2c_adapter *adapter,
+>> >  			      u8 offset, void *buffer, size_t size)
+>> >  {
+>> > +	u8 zero =3D 0;
+>> > +	char *tmpbuf =3D NULL;
+>> > +	/*
+>> > +	 * As sub-addressing is not supported by all adaptors,
+>> > +	 * always explicitly read from the start and discard
+>> > +	 * any bytes that come before the requested offset.
+>> > +	 * This way, no matter whether the adaptor supports it
+>> > +	 * or not, we'll end up reading the proper data.
+>> > +	 */
+>> >  	struct i2c_msg msgs[] =3D {
+>> >  		{
+>> >  			.addr =3D DP_DUAL_MODE_SLAVE_ADDRESS,
+>> >  			.flags =3D 0,
+>> >  			.len =3D 1,
+>> > -			.buf =3D &offset,
+>> > +			.buf =3D &zero,
+>> >  		},
+>> >  		{
+>> >  			.addr =3D DP_DUAL_MODE_SLAVE_ADDRESS,
+>> >  			.flags =3D I2C_M_RD,
+>> > -			.len =3D size,
+>> > +			.len =3D size + offset,
+>> >  			.buf =3D buffer,
+>> >  		},
+>> >  	};
+>> >  	int ret;
+>> >=20=20
+>> > +	if (offset) {
+>> > +		tmpbuf =3D kmalloc(size + offset, GFP_KERNEL);
+>> > +		if (!tmpbuf)
+>> > +			return -ENOMEM;
+>> > +
+>> > +		msgs[1].buf =3D tmpbuf;
+>> > +	}
+>> > +
+>> >  	ret =3D i2c_transfer(adapter, msgs, ARRAY_SIZE(msgs));
+>> > +	if (tmpbuf)
+>> > +		memcpy(buffer, tmpbuf + offset, size);
+>> > +
+>> > +	kfree(tmpbuf);
+>> > +
+>> >  	if (ret < 0)
+>> >  		return ret;
+>> >  	if (ret !=3D ARRAY_SIZE(msgs))
+>> > @@ -208,18 +230,6 @@ enum drm_dp_dual_mode_type drm_dp_dual_mode_detec=
+t(const struct drm_device *dev,
+>> >  	if (ret)
+>> >  		return DRM_DP_DUAL_MODE_UNKNOWN;
+>> >=20=20
+>> > -	/*
+>> > -	 * Sigh. Some (maybe all?) type 1 adaptors are broken and ack
+>> > -	 * the offset but ignore it, and instead they just always return
+>> > -	 * data from the start of the HDMI ID buffer. So for a broken
+>> > -	 * type 1 HDMI adaptor a single byte read will always give us
+>> > -	 * 0x44, and for a type 1 DVI adaptor it should give 0x00
+>> > -	 * (assuming it implements any registers). Fortunately neither
+>> > -	 * of those values will match the type 2 signature of the
+>> > -	 * DP_DUAL_MODE_ADAPTOR_ID register so we can proceed with
+>> > -	 * the type 2 adaptor detection safely even in the presence
+>> > -	 * of broken type 1 adaptors.
+>> > -	 */
+>> >  	ret =3D drm_dp_dual_mode_read(adapter, DP_DUAL_MODE_ADAPTOR_ID,
+>> >  				    &adaptor_id, sizeof(adaptor_id));
+>> >  	drm_dbg_kms(dev, "DP dual mode adaptor ID: %02x (err %zd)\n", adapto=
+r_id, ret);
+>> > @@ -233,11 +243,10 @@ enum drm_dp_dual_mode_type drm_dp_dual_mode_dete=
+ct(const struct drm_device *dev,
+>> >  				return DRM_DP_DUAL_MODE_TYPE2_DVI;
+>> >  		}
+>> >  		/*
+>> > -		 * If neither a proper type 1 ID nor a broken type 1 adaptor
+>> > -		 * as described above, assume type 1, but let the user know
+>> > -		 * that we may have misdetected the type.
+>> > +		 * If not a proper type 1 ID, still assume type 1, but let
+>> > +		 * the user know that we may have misdetected the type.
+>> >  		 */
+>> > -		if (!is_type1_adaptor(adaptor_id) && adaptor_id !=3D hdmi_id[0])
+>> > +		if (!is_type1_adaptor(adaptor_id))
+>> >  			drm_err(dev, "Unexpected DP dual mode adaptor ID %02x\n", adaptor_=
+id);
+>> >=20=20
+>> >  	}
+>> > @@ -343,10 +352,8 @@ EXPORT_SYMBOL(drm_dp_dual_mode_get_tmds_output);
+>> >   * @enable: enable (as opposed to disable) the TMDS output buffers
+>> >   *
+>> >   * Set the state of the TMDS output buffers in the adaptor. For
+>> > - * type2 this is set via the DP_DUAL_MODE_TMDS_OEN register. As
+>> > - * some type 1 adaptors have problems with registers (see comments
+>> > - * in drm_dp_dual_mode_detect()) we avoid touching the register,
+>> > - * making this function a no-op on type 1 adaptors.
+>> > + * type2 this is set via the DP_DUAL_MODE_TMDS_OEN register.
+>> > + * Type1 adaptors do not support any register writes.
+>> >   *
+>> >   * Returns:
+>> >   * 0 on success, negative error code on failure
+>> > --=20
+>> > 2.35.1
+>>=20
+>> --=20
+>> Ville Syrj=C3=A4l=C3=A4
+>> Intel
+
+--=20
+Jani Nikula, Intel Open Source Graphics Center
