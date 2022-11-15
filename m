@@ -2,89 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD628629F44
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1352B629F39
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 17:41:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238725AbiKOQmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 11:42:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
+        id S238681AbiKOQlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 11:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238705AbiKOQmO (ORCPT
+        with ESMTP id S238684AbiKOQlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 11:42:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5853B2B628
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 08:42:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14DD8B816DA
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 16:42:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73785C4314D;
-        Tue, 15 Nov 2022 16:42:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668530531;
-        bh=LNHlirObCpIamiHi9qypUAFL9NzP+pKUa7A+X+ZOUOU=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=if+8LcdZ9DIbe+56rjY2IIv+yE91gFSlSJ1DOOlZv3gZMw8bY/e0WwCA6QKD22STf
-         c6p/tgl8JcjjRr4SmBgHImVrSOqTSNJoNKapBsOTztoZLJP+pCTNDDXopROMaK3i6Q
-         BlagDP3ZBehy83Sxf4yhWc+y4k4wmPedpZ9yQWBAwW2mEfrV46S10FXjTCWT6lmnEi
-         4KVmH3WAX8kkrI4J58690z37Ei5wHr/ccvBBH0LPgqvpvNerPDDHTgAfQvO5ME5IcZ
-         80rC6mJdbxnHFDgtTvnvFeHhl7HPi907vHOEgB1yPEUIEpbDERZDs2tUpwhZs9c06R
-         ixJHM+VSXNigg==
-From:   Mark Brown <broonie@kernel.org>
-To:     tiwai@suse.com, lishqchn <lishqchn@qq.com>, perex@perex.cz
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        lgirdwood@gmail.com
-In-Reply-To: <tencent_59850BB028662B6F2D49D7F3624AB84CCF05@qq.com>
-References: <tencent_59850BB028662B6F2D49D7F3624AB84CCF05@qq.com>
-Subject: Re: [PATCH] Asoc: core: fix wrong size kzalloc for rtd's components member
-Message-Id: <166853052864.230692.17624573785284559319.b4-ty@kernel.org>
-Date:   Tue, 15 Nov 2022 16:42:08 +0000
+        Tue, 15 Nov 2022 11:41:50 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3EC2D764;
+        Tue, 15 Nov 2022 08:41:49 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id v3so13764259pgh.4;
+        Tue, 15 Nov 2022 08:41:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Vs3kQEHL0oTrTy5MR4m4bXaJPdcU0IKOmmtigZy0RQ=;
+        b=j1uDJjjED/dprSEJEMlZ1yfYS2WQkBO0HzjJ8V6lD93UppX4bhNioJRu/1W1T22Nma
+         w6kGSPxjxKRdya3t1xIGPPkhmONCkzLKlXjQNkkqBk6Ps0/eR1H4zpabOP2tJ4ZxbVo6
+         37ZEz5k6P/3ar+DOP7F735TH8riybkRhQOEE4916Rja/Tifsq2caYJG9Wx40EoNQcK2a
+         PAqV40oRIg+nuIX2CUSA+jeZOZjqBdqE2tVBl/b7IvDvWSnXBl+1/WRyIAQnnF4Hrc2k
+         fTAYMvbufVg14/I/hH4b3FdFAcErksij/c7UmLsnVi8znWi5pXJcVxqt9kIlnQoHVL/e
+         q7mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+Vs3kQEHL0oTrTy5MR4m4bXaJPdcU0IKOmmtigZy0RQ=;
+        b=OZk5dWYSZjUGpYTAf4dLkuSCB5VDiRyy2MgKgJUT1hxPFPVFJw7mO2GoOQ8Qt151/F
+         Kb5JZX1N8LyXQS05YoJH8PMQ97xlMqtk5ydyMdKOjLYyxljZ6BkAwHiEo/BWxj1hwq1l
+         fb0barnZt503ehUvto0jwpdSF7maTQWsb3Hj43kzaPxFY7z1IPcMZL/Tfx4XcXU6O2J9
+         4woT5iHB2kdAe4+zSmYXxG5SmSzxaY5TjZZSmko5OwHzLhix0v+OslpN2Fl5ku5RDxbp
+         9+/0UTALnb08eoPhleSoq8q5rFshxeQ5Y1YFNS9AOp5bz5Eeh2GjqJBJTVOeNrOYFwwV
+         KepQ==
+X-Gm-Message-State: ANoB5plgCdBGuhOBahPvMA4L+Uj/PvxSVgQvKPum8Hnrpblwe63DP7rK
+        FgA0qd6+7FeCvkCm3lFtWtg=
+X-Google-Smtp-Source: AA0mqf7djbrriQQMP2iaGU82u/FSoTUimc0HOuiGEe1GjVChTbR5YA+6lXVDqIK3EDM8kWDtP5UF0Q==
+X-Received: by 2002:a63:4d1d:0:b0:44b:d27e:520d with SMTP id a29-20020a634d1d000000b0044bd27e520dmr16272720pgb.124.1668530508704;
+        Tue, 15 Nov 2022 08:41:48 -0800 (PST)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id n12-20020a170902e54c00b00186f608c543sm10211678plf.304.2022.11.15.08.41.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 08:41:48 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/msm: Enable unpin/eviction by default
+Date:   Tue, 15 Nov 2022 08:42:12 -0800
+Message-Id: <20221115164212.1619306-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-8af31
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 8 Nov 2022 12:24:56 +0800, lishqchn wrote:
-> The actual space for struct snd_soc_component has been allocated by
-> snd_soc_register_component, here rtd's components are pointers to
-> components, I replace the base size from *component to component.
-> 
-> 
+From: Rob Clark <robdclark@chromium.org>
 
-Applied to
+We've had this enabled in the CrOS kernel for a while now without seeing
+issues, so let's flip the switch upstream now.
 
-   broonie/sound.git for-next
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/msm/msm_gem_shrinker.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
+diff --git a/drivers/gpu/drm/msm/msm_gem_shrinker.c b/drivers/gpu/drm/msm/msm_gem_shrinker.c
+index 8f83454ceedf..f6de1bd9d2e1 100644
+--- a/drivers/gpu/drm/msm/msm_gem_shrinker.c
++++ b/drivers/gpu/drm/msm/msm_gem_shrinker.c
+@@ -16,7 +16,7 @@
+ /* Default disabled for now until it has some more testing on the different
+  * iommu combinations that can be paired with the driver:
+  */
+-static bool enable_eviction = false;
++static bool enable_eviction = true;
+ MODULE_PARM_DESC(enable_eviction, "Enable swappable GEM buffers");
+ module_param(enable_eviction, bool, 0600);
+ 
+-- 
+2.38.1
 
-[1/1] Asoc: core: fix wrong size kzalloc for rtd's components member
-      commit: 66a796c04b639e2658b4d820dd5fbc842c8c3aae
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
