@@ -2,86 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E71D9629399
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05AEE62939F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:52:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237119AbiKOIuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 03:50:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
+        id S233032AbiKOIw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 03:52:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236432AbiKOIur (ORCPT
+        with ESMTP id S232394AbiKOIwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 03:50:47 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB62FF5B6;
-        Tue, 15 Nov 2022 00:50:44 -0800 (PST)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NBKdB2LZ4zmVt0;
-        Tue, 15 Nov 2022 16:50:22 +0800 (CST)
-Received: from kwepemm600005.china.huawei.com (7.193.23.191) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 16:50:43 +0800
-Received: from [10.67.109.54] (10.67.109.54) by kwepemm600005.china.huawei.com
- (7.193.23.191) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 15 Nov
- 2022 16:50:42 +0800
-Subject: Re: [PATCH] net: mvpp2: fix possible invalid pointer dereference
-To:     Leon Romanovsky <leon@kernel.org>
-References: <20221115044632.181769-1-tanghui20@huawei.com>
- <Y3NQ+MWftmZAuUEc@unreal>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <mw@semihalf.com>, <linux@armlinux.org.uk>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yusongping@huawei.com>
-From:   Hui Tang <tanghui20@huawei.com>
-Message-ID: <0562e5c5-6c4e-4c61-f175-c06dad61b506@huawei.com>
-Date:   Tue, 15 Nov 2022 16:50:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Tue, 15 Nov 2022 03:52:24 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD238F5B6;
+        Tue, 15 Nov 2022 00:52:23 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CE50566029B1;
+        Tue, 15 Nov 2022 08:52:21 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1668502342;
+        bh=/HIRPmCrAbi1g9Wxs/I+JuWDXoQgjWz8G2CL3MrPoHg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZsE348TFM/TKIjHKMzkZkSuv+ntrtq8yL8nArP0zQSIbD3GEFtmgY8ZK/wWr7GSDF
+         YvWIIjA5Aw2Fx0lYcVsMf7cFK5Z53kK5a5QdC3GNafwKXmImMBdflMHAinXS5cLtCJ
+         QJSUf9SmM8PZijlNpiZleCe8DDTnkameOJNs1wdh0QIHotWS0JrbIs98vnZpl4GjHj
+         F0vn3tq5w4g5/kZbsgwQzsFlQ1EYz4QeVDdLWPUwhvq6adUadDJSaOEh0lET/Y5bVc
+         LFMT8euW5koibUeKX97oNvx3mOZhBwPHXudCY5TA/RoSG9YFr5XS0GOH5UF7UmndNM
+         KPmIe7wDs78Yw==
+Message-ID: <8732f418-a8eb-3cb4-962f-2353fe8d0154@collabora.com>
+Date:   Tue, 15 Nov 2022 09:52:18 +0100
 MIME-Version: 1.0
-In-Reply-To: <Y3NQ+MWftmZAuUEc@unreal>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.109.54]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v4 2/4] arm64: dts: mt8195: Add edptx and dptx nodes
+Content-Language: en-US
+To:     =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
+        <Rex-BC.Chen@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+References: <20221110063716.25677-1-rex-bc.chen@mediatek.com>
+ <20221110063716.25677-3-rex-bc.chen@mediatek.com>
+ <73e5491a-9720-ea52-48ff-cc506c6dc582@gmail.com>
+ <bb53d1d7e3cfa75af578412d56d2c6e8fc0d1be7.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <bb53d1d7e3cfa75af578412d56d2c6e8fc0d1be7.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/11/15 16:42, Leon Romanovsky wrote:
-> On Tue, Nov 15, 2022 at 12:46:32PM +0800, Hui Tang wrote:
->> It will cause invalid pointer dereference to priv->cm3_base behind,
->> if PTR_ERR(priv->cm3_base) in mvpp2_get_sram().
+Il 15/11/22 08:58, Rex-BC Chen (陳柏辰) ha scritto:
+> On Fri, 2022-11-11 at 13:22 +0100, Matthias Brugger wrote:
 >>
->> Fixes: a59d354208a7 ("net: mvpp2: enable global flow control")
->> Signed-off-by: Hui Tang <tanghui20@huawei.com>
->> ---
->>  drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
+>> On 10/11/2022 07:37, Bo-Chen Chen wrote:
+>>> In MT8195, we use edptx as the internal display interface and use
+>>> dptx as the external display interface. Therefore, we need to add
+>>> these nodes to support the internal display and the external
+>>> display.
+>>>
+>>> - Add dp calibration data in the efuse node.
+>>> - Add edptx and dptx nodes for MT8195.
+>>>
+>>> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+>>> Reviewed-by: AngeloGioacchino Del Regno <
+>>> angelogioacchino.delregno@collabora.com>
+>>> ---
+>>>    arch/arm64/boot/dts/mediatek/mt8195.dtsi | 25
+>>> ++++++++++++++++++++++++
+>>>    1 file changed, 25 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+>>> b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+>>> index c380738d10cb..7acbef5a4517 100644
+>>> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+>>> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+>>> @@ -1244,6 +1244,9 @@
+>>>    				reg = <0x189 0x2>;
+>>>    				bits = <7 5>;
+>>>    			};
+>>> +			dp_calibration: dp-data@1ac {
+>>> +				reg = <0x1ac 0x10>;
+>>> +			};
+>>>    		};
+>>>    
+>>>    		u3phy2: t-phy@11c40000 {
+>>> @@ -2205,5 +2208,27 @@
+>>>    			clock-names = "engine", "pixel", "pll";
+>>>    			status = "disabled";
+>>>    		};
+>>> +
+>>> +		edp_tx: edp-tx@1c500000 {
+>>> +			compatible = "mediatek,mt8195-edp-tx";
+>>> +			reg = <0 0x1c500000 0 0x8000>;
+>>> +			nvmem-cells = <&dp_calibration>;
+>>> +			nvmem-cell-names = "dp_calibration_data";
+>>> +			power-domains = <&spm
+>>> MT8195_POWER_DOMAIN_EPD_TX>;
+>>> +			interrupts = <GIC_SPI 676 IRQ_TYPE_LEVEL_HIGH
+>>> 0>;
+>>> +			max-linkrate-mhz = <8100>;
+>>> +			status = "disabled";
+>>> +		};
+>>> +
+>>> +		dp_tx: dp-tx@1c600000 {
+>>> +			compatible = "mediatek,mt8195-dp-tx";
+>>> +			reg = <0 0x1c600000 0 0x8000>;
+>>> +			nvmem-cells = <&dp_calibration>;
+>>> +			nvmem-cell-names = "dp_calibration_data";
+>>> +			power-domains = <&spm
+>>> MT8195_POWER_DOMAIN_DP_TX>;
+>>> +			interrupts = <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH
+>>> 0>;
+>>> +			max-linkrate-mhz = <8100>;
+>>> +			status = "disabled";
+>>> +		};
 >>
->> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
->> index d98f7e9a480e..c92bd1922421 100644
->> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
->> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
->> @@ -7421,7 +7421,7 @@ static int mvpp2_probe(struct platform_device *pdev)
->>  			dev_warn(&pdev->dev, "Fail to alloc CM3 SRAM\n");
+>> For some not really obvious reasons we get the following errors with
+>> make CHECK_DTBS=1 mediatek/mt8195-cherry-tomato-r2.dtb
 >>
->>  		/* Enable global Flow Control only if handler to SRAM not NULL */
->> -		if (priv->cm3_base)
->> +		if (!IS_ERR_OR_NULL(priv->cm3_base))
->>  			priv->global_tx_fc = true;
->
-> The change is ok, but the patch title should include target, in your
-> case it is net -> [PATCH net] ....
+>> arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dtb:0:0:
+>> /soc/edp-tx@1c500000: failed to match any schema with compatible:
+>> ['mediatek,mt8195-edp-tx']
+>> arch/arm64/boot/dts/mediatek/mt8195-cherry-tomato-r2.dtb:0:0:
+>> /soc/dp-tx@1c600000: failed to match any schema with compatible:
+>> ['mediatek,mt8195-dp-tx']
+>>
+>> Can you please see how to fix this. Tested with next-20221111.
+>>
+>> Regards,
+>> Matthias
+>>
+> 
+> Hello Matthias,
+> 
+> I can not reproduce this issue in my local environment, but I am sure
+> the binding is in kernel master branch (v6.1-rc5):
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml?h=v6.1-rc5
+> 
+> It's strange that the message you provided said it can not find any
+> schema with ['mediatek,mt8195-edp-tx'] and ['mediatek,mt8195-dp-tx'].
+> 
 
-Thanks, I will fix it in v2.
+Matthias, I can't reproduce that either... perhaps there's something odd that's
+going on with your environment?
+
+Cheers
