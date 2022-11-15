@@ -2,205 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B23B628F94
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 02:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD7B628F9A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 02:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232166AbiKOBxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 20:53:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
+        id S232303AbiKOBzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 20:55:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231799AbiKOBx2 (ORCPT
+        with ESMTP id S231589AbiKOBzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 20:53:28 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFBE1FD
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 17:53:24 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id h193so11904442pgc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 17:53:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sJL+OLm/9HBt9VTWAdJwvOJ+g8VmirxRTL8SSjHNQVg=;
-        b=rkHRihBMn7TFJuWebxPgdWFVVvwFb3btFvnNICt5ntm9UbrFuQjanYptOIqbJHYQyN
-         4ysQw2uCUwbfzesY4/LQsyZvxgC64PUwvMLuit482dri/z3JV0iZTPh1H5EOywaT9fc4
-         iAhtFK7tij8bg8Tp40d8aAuFnUpIbMuqk8UMqe9OlqBkgv0wIv4ZOjQRHyAXR7WbMMIE
-         5y3GH4AORF8PLSYcPxXegQhBIUGjlWWmC9pGpUcPzHhQqWHtQHVZe7pqz6yeg4xxIA9r
-         QmvBz5o1VLxrcUc77Vt2WpHb9XlPavPLGzfbOuor2Ar7O9cDo9AiHlxWV/TUTuwu8h9B
-         vk1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sJL+OLm/9HBt9VTWAdJwvOJ+g8VmirxRTL8SSjHNQVg=;
-        b=1jzgDTqw8BSaF3RiLPCZtGHzeye3JugPPMs99dNUaxnd1aTO5mu18/w+nohqGQYiSx
-         2y657PnV5ziNvotzNttpd6ebh/VgD+FEyXOmSXkBvwhGMt2w8uODWFOljpARo2VmAi1P
-         K0Lfb8Ogq/gjnezbwq3IXAsfX1k5TK+5ETxwWiuB8t9Uue85Oi9NDk3FvprOZ9a8p1QB
-         xsHvU/msLRRzDXPnrzpvKyEI76Oxl9z2/WDZ7YLKfP5Uq/gJu9wYM914AcXQSTIebWOw
-         GcNM3MiIVsMbyvUVNkriH72088Pbr2P+BvFdx4hJ1hHnTvyAYPn0FTSePociVPXysbc3
-         KXMw==
-X-Gm-Message-State: ANoB5pnud7u4f9nFPfmd58G5S+38MnaEgm1/K2W8IV5JzdR1MVJrr8G3
-        fysBbikOHIfwXjR/CwEbeI+dO7GgS3tYJLFlJcp2kg==
-X-Google-Smtp-Source: AA0mqf4+D70nwiuqmYZXKiMUqWwdK5UhdmuQ2WsugSkZYryDK0evBfEeHXyPyyLhkZaBOxTRRohXjk2oboz1mvld74I=
-X-Received: by 2002:aa7:880d:0:b0:56b:676e:1815 with SMTP id
- c13-20020aa7880d000000b0056b676e1815mr16277604pfo.66.1668477203676; Mon, 14
- Nov 2022 17:53:23 -0800 (PST)
+        Mon, 14 Nov 2022 20:55:33 -0500
+Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F07717421;
+        Mon, 14 Nov 2022 17:55:32 -0800 (PST)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id C69E61E80DC8;
+        Tue, 15 Nov 2022 09:52:33 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Tyl9YcZ3otWi; Tue, 15 Nov 2022 09:52:28 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: zeming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 5C2F91E80DC6;
+        Tue, 15 Nov 2022 09:52:28 +0800 (CST)
+From:   Li zeming <zeming@nfschina.com>
+To:     vyasevich@gmail.com, nhorman@tuxdriver.com,
+        marcelo.leitner@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-sctp@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
+Subject: [PATCH] =?UTF-8?q?sctp:=20sm=5Fstatefuns:=20Remove=20unnecessary?= =?UTF-8?q?=20=E2=80=98NULL=E2=80=99=20values=20from=20Pointer?=
+Date:   Tue, 15 Nov 2022 09:55:08 +0800
+Message-Id: <20221115015508.3054-1-zeming@nfschina.com>
+X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
-References: <20221111014244.1714148-1-vannapurve@google.com>
- <20221111014244.1714148-5-vannapurve@google.com> <CAMkAt6qLC0BosvSN9Ri2XFYK65xH1E5sqJYNe6uAudb8U08rXw@mail.gmail.com>
-In-Reply-To: <CAMkAt6qLC0BosvSN9Ri2XFYK65xH1E5sqJYNe6uAudb8U08rXw@mail.gmail.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Mon, 14 Nov 2022 17:53:12 -0800
-Message-ID: <CAGtprH8TQ9ep5KQ5-U1PUBmzQQC7fBOLOfn2mNgnDLMO70ZYjg@mail.gmail.com>
-Subject: Re: [V1 PATCH 4/6] KVM: selftests: x86: Execute VMs with private memory
-To:     Peter Gonda <pgonda@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, nikunj@amd.com, seanjc@google.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 11:37 AM Peter Gonda <pgonda@google.com> wrote:
->...
-> > +static void handle_vm_exit_map_gpa_hypercall(struct kvm_vm *vm,
-> > +                               struct kvm_vcpu *vcpu)
-> > +{
-> > +       uint64_t gpa, npages, attrs, size;
-> > +
-> > +       TEST_ASSERT(vcpu->run->hypercall.nr == KVM_HC_MAP_GPA_RANGE,
-> > +               "Unhandled Hypercall %lld\n", vcpu->run->hypercall.nr);
-> > +       gpa = vcpu->run->hypercall.args[0];
-> > +       npages = vcpu->run->hypercall.args[1];
-> > +       size = npages << MIN_PAGE_SHIFT;
-> > +       attrs = vcpu->run->hypercall.args[2];
-> > +       pr_info("Explicit conversion off 0x%lx size 0x%lx to %s\n", gpa, size,
-> > +               (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED) ? "private" : "shared");
-> > +
-> > +       if (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED)
-> > +               vm_allocate_private_mem(vm, gpa, size);
-> > +       else
-> > +               vm_unback_private_mem(vm, gpa, size);
-> > +
-> > +       vcpu->run->hypercall.ret = 0;
-> > +}
-> > +
-> > +static void vcpu_work(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
-> > +       struct vm_setup_info *info)
-> > +{
-> > +       struct ucall uc;
-> > +       uint64_t cmd;
-> > +
-> > +       /*
-> > +        * Loop until the guest is done.
-> > +        */
-> > +
-> > +       while (true) {
-> > +               vcpu_run(vcpu);
-> > +
-> > +               if (vcpu->run->exit_reason == KVM_EXIT_IO) {
-> > +                       cmd = get_ucall(vcpu, &uc);
-> > +                       if (cmd != UCALL_SYNC)
-> > +                               break;
-> > +
-> > +                       TEST_ASSERT(info->ioexit_cb, "ioexit cb not present");
-> > +                       info->ioexit_cb(vm, uc.args[1]);
-> > +                       continue;
-> > +               }
->
-> Should this be integrated into the ucall library directly somehow?
-> That way users of VMs with private memory do not need special
-> handling?
->
-> After Sean's series:
-> https://lore.kernel.org/linux-arm-kernel/20220825232522.3997340-3-seanjc@google.com/
-> we have a common get_ucall() that this check could be integrated into?
->
-> > +
-> > +               if (vcpu->run->exit_reason == KVM_EXIT_HYPERCALL) {
-> > +                       handle_vm_exit_map_gpa_hypercall(vm, vcpu);
-> > +                       continue;
-> > +               }
-> > +
-> > +               TEST_FAIL("Unhandled VCPU exit reason %d\n",
-> > +                       vcpu->run->exit_reason);
-> > +               break;
-> > +       }
-> > +
-> > +       if (vcpu->run->exit_reason == KVM_EXIT_IO && cmd == UCALL_ABORT)
-> > +               TEST_FAIL("%s at %s:%ld, val = %lu", (const char *)uc.args[0],
-> > +                         __FILE__, uc.args[1], uc.args[2]);
-> > +}
-> > +
-> > +/*
-> > + * Execute guest vm with private memory memslots.
-> > + *
-> > + * Input Args:
-> > + *   info - pointer to a structure containing information about setting up a VM
-> > + *     with private memslots
-> > + *
-> > + * Output Args: None
-> > + *
-> > + * Return: None
-> > + *
-> > + * Function called by host userspace logic in selftests to execute guest vm
-> > + * logic. It will install test_mem_slot : containing the region of memory that
-> > + * would be used to test private/shared memory accesses to a memory backed by
-> > + * private memslots
-> > + */
-> > +void execute_vm_with_private_test_mem(struct vm_setup_info *info)
-> > +{
-> > +       struct kvm_vm *vm;
-> > +       struct kvm_enable_cap cap;
-> > +       struct kvm_vcpu *vcpu;
-> > +       uint64_t test_area_gpa, test_area_size;
-> > +       struct test_setup_info *test_info = &info->test_info;
-> > +
-> > +       TEST_ASSERT(info->guest_fn, "guest_fn not present");
-> > +       vm = vm_create_with_one_vcpu(&vcpu, info->guest_fn);
->
-> I am a little confused with how this library is going to work for SEV
-> VMs that want to have UPM private memory eventually.
->
-> Why should users of UPM be forced to use this very specific VM
-> creation and vCPU run loop. In the patch
-> https://lore.kernel.org/lkml/20220829171021.701198-1-pgonda@google.com/T/#m033ebc32df47a172bc6c46d4398b6c4387b7934d
-> SEV VMs need to be created specially vm_sev_create_with_one_vcpu() but
-> then callers can run the VM's vCPUs like other selftests.
->
-> How do you see this working with SEV VMs?
->
+The packet pointer is assigned first. It does not need to initialize the
+assignment.
 
-This VM creation method can be useful to run the VMs whose execution
-might call mapgpa to change the memory attributes. New VM creation
-method specific to Sev VMs can be introduced.
+Signed-off-by: Li zeming <zeming@nfschina.com>
+---
+ net/sctp/sm_statefuns.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I tried to reuse this framework earlier for Sev VM selftests via:
-1) https://lore.kernel.org/lkml/20220830224259.412342-8-vannapurve@google.com/T/#m8164d3111c9a17ebab77f01635df8930207cc65d
-2) https://lore.kernel.org/lkml/20220830224259.412342-8-vannapurve@google.com/T/#m8164d3111c9a17ebab77f01635df8930207cc65d
+diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
+index f6ee7f4040c1..714605746fee 100644
+--- a/net/sctp/sm_statefuns.c
++++ b/net/sctp/sm_statefuns.c
+@@ -3781,7 +3781,7 @@ static enum sctp_disposition sctp_sf_shut_8_4_5(
+ 					void *arg,
+ 					struct sctp_cmd_seq *commands)
+ {
+-	struct sctp_packet *packet = NULL;
++	struct sctp_packet *packet;
+ 	struct sctp_chunk *chunk = arg;
+ 	struct sctp_chunk *shut;
+ 
+-- 
+2.18.2
 
-Though these changes need to be refreshed after this updated series.
