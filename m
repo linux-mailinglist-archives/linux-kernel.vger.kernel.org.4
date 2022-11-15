@@ -2,126 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41778629998
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:06:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 048B562999E
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237915AbiKONGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:06:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        id S236982AbiKONHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:07:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiKONGW (ORCPT
+        with ESMTP id S229999AbiKONHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:06:22 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD64AE48;
-        Tue, 15 Nov 2022 05:06:21 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8C0922228E;
-        Tue, 15 Nov 2022 13:06:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1668517580; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=abSDNB14ZREuprRrpVDZ2SfZLmE2c2CRnEBuVI2uoe0=;
-        b=R8NwDXCErErXh325pGP86m7n9PjKzllyEg2/jc0O258QbhrV5Gadlve5fq0BfaRKKHYWTp
-        m/FTj3gAPS9fDeuBrG9K8HQIfgGpOQp1rRZ/zGa9lhdvFKt+vqfj3gHdDtz50ZAeZQND2H
-        0bj815krmYiM5qYVcJZghKh69gkXnMg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1668517580;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=abSDNB14ZREuprRrpVDZ2SfZLmE2c2CRnEBuVI2uoe0=;
-        b=2sLqZsZUnnA6rPPHj1v6EBn3e0c+7fa65/XpscbyIjdJ0eP1lWarvAryNS/Gn6jVzEP+fg
-        /wENRt2KczvQ88DQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F9CB13A91;
-        Tue, 15 Nov 2022 13:06:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id TZO/FcyOc2OPWAAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 15 Nov 2022 13:06:20 +0000
-Date:   Tue, 15 Nov 2022 14:06:16 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     wsa@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: smbus: add DDR support for SPD
-Message-ID: <20221115140616.555e8331@endymion.delvare>
-In-Reply-To: <20221114115606.1967080-1-clabbe@baylibre.com>
-References: <20221114115606.1967080-1-clabbe@baylibre.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Tue, 15 Nov 2022 08:07:00 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD0926AFB
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:06:58 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id x102so6537057ede.0
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:06:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CwWycAgBZx11btkkrzaVTYJbNLpNPYle/o/S+NTzqgM=;
+        b=vYxVRdNMz0n5VZYRmPPGzC91CEDXXFb8YVYHrGuEp2orpacB+c/XJ0Etqznomn5uhG
+         IScdRCHyDWhXiDmVa84951l6o91VuWLdPPJUjxu1IcVf+R3vYe109fg/DIT3OAye8dGO
+         jo+0C+S5rrByR89nlcIhw49pY82B3BjtBw2gIC3upySc/wOpcZCWBkXH/fB5qMNdHc+Z
+         bMBdMUsLS8Vgrzsp59+MrMHtuvbQE5IrgEdgpyly710UCB2lO8sAzeMM6OcHr0mLfvop
+         uw2cNwl7ssRBzbzErms/sE/jbpS8sZAa2hjyenDCqx9BAmu56a0f4o0/7K+tkWYqFdoK
+         pvcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=CwWycAgBZx11btkkrzaVTYJbNLpNPYle/o/S+NTzqgM=;
+        b=KdINhsVnVFcrm3/FLfpvfFHBt8siuK3/HvwocmwT6rfR0Oy1BPQG0JJ5nfQt0AcSoi
+         8PUSB4PcIR4+UD250wTG8KVj21CW0QGSa9vAQlhb5qRJMtXxcC76YqRG02eXZQYsdQAD
+         YOifzA01/PNpmeLVOzKx1RJ9SgjzTd0rcvblQNLaFctLX22sxtd0nB2Q22SCkU8kwGO8
+         TCXV/KKdfzoYZjAgabZWM3IQkaY0tYWqRkGELGGX9nWXUQvfd9Fv34b1jSEZ+uic8OXu
+         FNTA7L/RNNrsFKtmGqFed1vlyAL27gaQfsdaD57rO26E3x/XNAWeTrVuapG7B4P3ivII
+         DekQ==
+X-Gm-Message-State: ANoB5pm7Kg9LWcxvqgnBJLdtC9twg9LROjGUIFhCVfC/Suw+rNSZy5x9
+        q7Ghs9dCPrvz4IJHRM+iRk+IMw==
+X-Google-Smtp-Source: AA0mqf6ZxVZRs5NI9Eqvpjc3S1CVjWo9pE8CyFrlgaXR/C+NmJTl1rSgor2AhHD7JpNTYBze9wtDNg==
+X-Received: by 2002:a05:6402:3787:b0:45c:55f8:4fbf with SMTP id et7-20020a056402378700b0045c55f84fbfmr14420810edb.277.1668517617385;
+        Tue, 15 Nov 2022 05:06:57 -0800 (PST)
+Received: from [192.168.31.208] ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id hw20-20020a170907a0d400b00779cde476e4sm5471812ejc.62.2022.11.15.05.06.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 05:06:56 -0800 (PST)
+Message-ID: <cff269c8-f944-9277-9df8-653522efbba0@linaro.org>
+Date:   Tue, 15 Nov 2022 14:06:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/9] dt-bindings: arm-smmu: Allow up to 3 power-domains
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     patches@linaro.org, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221114104222.36329-1-konrad.dybcio@linaro.org>
+ <20221114104222.36329-2-konrad.dybcio@linaro.org>
+ <6fa8e3ea-2113-d930-96bc-3726d53e5bcd@linaro.org>
+ <a4b160d8-0faa-3f4c-a925-0beaf6ace721@linaro.org>
+ <0121fc03-b027-7659-5e6e-b42089c9888d@linaro.org>
+ <12578e05-ced9-e5f7-7922-0af2f2159333@linaro.org>
+ <878402e7-7f80-31c7-3a6b-989a6ca29841@linaro.org>
+ <f59ddce1-c2e1-4055-3bce-1319c68ddf94@linaro.org>
+ <4b4ca3ba-8e4d-088e-8b3e-a47ad6ecb965@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <4b4ca3ba-8e4d-088e-8b3e-a47ad6ecb965@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Corentin,
 
-On Mon, 14 Nov 2022 11:56:06 +0000, Corentin Labbe wrote:
-> On my x05 laptop I got:
-> Memory type 0x12 not supported yet, not instantiating SPD
->=20
-> Adding the 0x12 case lead to a successful instantiated SPD AT24 EEPROM.
-> i801_smbus 0000:00:1f.3: SMBus using polling
-> i2c i2c-6: 2/2 memory slots populated (from DMI)
-> at24 6-0050: 256 byte spd EEPROM, read-only
-> i2c i2c-6: Successfully instantiated SPD at 0x50
-> at24 6-0051: 256 byte spd EEPROM, read-only
->=20
-> And then, I decoded it successfully via decode-dimms.
->=20
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
-> Changes since v1:
-> - Added memory type document link
-> - Added case for LPDDR
->=20
->  drivers/i2c/i2c-smbus.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->=20
-> diff --git a/drivers/i2c/i2c-smbus.c b/drivers/i2c/i2c-smbus.c
-> index 07c92c8495a3..c85710ed9548 100644
-> --- a/drivers/i2c/i2c-smbus.c
-> +++ b/drivers/i2c/i2c-smbus.c
-> @@ -361,9 +361,15 @@ void i2c_register_spd(struct i2c_adapter *adap)
->  		return;
->  	}
-> =20
-> +	/*
-> +	 * Memory types could be found at section 7.18.2 (Memory Device =E2=80=
-=94 Type), table 78
-> +	 * https://www.dmtf.org/sites/default/files/standards/documents/DSP0134=
-_3.6.0.pdf
-> +	 */
->  	switch (common_mem_type) {
-> +	case 0x12:	/* DDR */
->  	case 0x13:	/* DDR2 */
->  	case 0x18:	/* DDR3 */
-> +	case 0x1B:	/* LPDDR */
->  	case 0x1C:	/* LPDDR2 */
->  	case 0x1D:	/* LPDDR3 */
->  		name =3D "spd";
 
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
+On 15/11/2022 14:00, Krzysztof Kozlowski wrote:
+> On 15/11/2022 13:54, Konrad Dybcio wrote:
+>>
+>>
+>> On 14/11/2022 17:58, Krzysztof Kozlowski wrote:
+>>> On 14/11/2022 16:53, Konrad Dybcio wrote:
+>>>>
+>>>> On 14/11/2022 14:00, Krzysztof Kozlowski wrote:
+>>>>> On 14/11/2022 12:17, Konrad Dybcio wrote:
+>>>>>> On 14/11/2022 12:01, Krzysztof Kozlowski wrote:
+>>>>>>> On 14/11/2022 11:42, Konrad Dybcio wrote:
+>>>>>>>> Some SMMUs require that a vote is held on as much as 3 separate PDs
+>>>>>>>> (hello Qualcomm). Allow it in bindings.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>>>>>> ---
+>>>>>>>> Changes since v1:
+>>>>>>>> - Add minItems
+>>>>>>>>
+>>>>>>>>      Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 3 ++-
+>>>>>>>>      1 file changed, 2 insertions(+), 1 deletion(-)
+>>>>>>>>
+>>>>>>>> diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+>>>>>>>> index 9066e6df1ba1..82bc696de662 100644
+>>>>>>>> --- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+>>>>>>>> +++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+>>>>>>>> @@ -159,7 +159,8 @@ properties:
+>>>>>>>>                through the TCU's programming interface.
+>>>>>>>>      
+>>>>>>>>        power-domains:
+>>>>>>>> -    maxItems: 1
+>>>>>>>> +    minItems: 0
+>>>>>>> It cannot be 0.
+>>>>>>>
+>>>>>>> minItems: 1
+>>>>>>>
+>>>>>>> Anyway you still need to restrict it per variant, as I said in previous
+>>>>>>> version.
+>>>>>> Hm.. I'm not entirely sure what you mean.. Should I add a list of
+>>>>>> compatibles
+>>>>> Yes and limit it to maxItems: 1 for "else".
+>>>>
+>>>> I tried adding:
+>>>>
+>>>>
+>>>>
+>>>>      - if:
+>>>>          properties:
+>>>>            compatible:
+>>>>              contains:
+>>>>                enum:
+>>>>                  - qcom,sm6375-smmu-500
+>>>>        then:
+>>>>          properties:
+>>>>            power-domains:
+>>>>              minItems: 3
+>>>>              maxItems: 3
+>>>>        else:
+>>>>          properties:
+>>>>            power-domains:
+>>>>              maxItems: 1
+>>>>
+>>>>
+>>>> Right under the nvidia reg if-else in the allOf, but dtbs_check throws
+>>>> errors like:
+>>>>
+>>>>
+>>>> /home/konrad/linux/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb:
+>>>> iommu@5040000: 'power-domains' does not match any of the regexes:
+>>>> 'pinctrl-[0-9]+'
+>>>>
+>>>>
+>>>> Any clues as to why?
+>>>
+>>> I don't know what code do you have there, but generic pattern is:
+>>>
+>>> https://elixir.bootlin.com/linux/v5.19-rc6/source/Documentation/devicetree/bindings/clock/samsung,exynos7-clock.yaml#L38
+>>>
+>> I tried many things, but I still don't seem to get a hang of it.. Here's
+>> my current diff rebased on top of Dmitry's recent cleanups (available at
+>> [1])
+>>
+>>
+>> diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+>> b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+>> index 28f5720824cd..55759aebc4a0 100644
+>> --- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+>> +++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
+>> @@ -200,7 +200,7 @@ properties:
+>>        maxItems: 7
+>>
+>>      power-domains:
+> 
+> As I mentioned before - minItems: 1.
+But not all SMMUs require a power domain :/
 
-Thanks,
---=20
-Jean Delvare
-SUSE L3 Support
+> 
+> Just like the link I gave you.
+> 
+>> -    maxItems: 1
+>> +    maxItems: 3
+>>
+>>      nvidia,memory-controller:
+>>        description: |
+>> @@ -364,6 +364,26 @@ allOf:
+>>                - description: interface clock required to access smmu's
+>> registers
+>>                    through the TCU's programming interface.
+>>
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            const: qcom,sm6375-smmu-500
+>> +    then:
+>> +      properties:
+>> +        power-domains:
+>> +          items:
+>> +            - description: SNoC MMU TBU RT GDSC
+>> +            - description: SNoC MMU TBU NRT GDSC
+>> +            - description: SNoC TURING MMU TBU0 GDSC
+>> +
+>> +      required:
+>> +        - power-domains
+>> +    else:
+>> +      properties:
+>> +        power-domains:
+>> +          maxItems: 1
+>> +
+>>    examples:
+>>      - |+
+>>        /* SMMU with stream matching or stream indexing */
+>>
+>>
+>> In my eyes, this should work, but I still get errors like:
+>>
+>> /home/konrad/linux/arch/arm64/boot/dts/qcom/sm8250-hdk.dtb:
+>> iommu@3da0000: power-domains: [[108, 0]] is too short
+>>
+>> as if the else: path was never taken..
+> 
+> It was, but the top-level property said that minItems=3 (implicitly), so
+> it is too short.
+So the top-level properties take precedence over the ones that come from 
+the if-then-else?? Ugh.
+
+Konrad
+> 
+> Best regards,
+> Krzysztof
+> 
