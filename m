@@ -2,111 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F69B629428
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF7762942C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238089AbiKOJTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 04:19:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44798 "EHLO
+        id S229967AbiKOJUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 04:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238074AbiKOJTB (ORCPT
+        with ESMTP id S232808AbiKOJUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 04:19:01 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022EE220F1;
-        Tue, 15 Nov 2022 01:18:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3JrxPzcorZeK61/Wcg0xBe2/JrcIdLGSAklAl931rsA=; b=gTwwKyN4DOB1IbNxKigY+Tep5Q
-        W/smCH9eIzXkbqRYiHkN3Eg2FAW400kL4lvd2gDiDAtm2cMh3exWUy7mwC5Wltsud/RWeyFTZpNEL
-        UGs60j5DZ0gacNe7ZHhKLCW/ujI6V/ka6c9cLiMFYiPs4Mzox05EUnLZpVRQWqJZWrUOgZi6z3JVS
-        oQF7M7rp+ZKh9tUp1gNHDz9iF6/qViakLpSr77FDLytxiesy2BfRrTvaQA+e09OU5AupSobnassTQ
-        gNA1CuU3RY3b9a09AGLN0ft7D4lqYAIUjrcv0kTxiX26oEWNkrLHsXMuDEna6m2wTjqSLBNW9qMbg
-        5M+y7bvw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ous4u-00GN7o-9I; Tue, 15 Nov 2022 09:18:00 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 19F75300422;
-        Tue, 15 Nov 2022 10:17:53 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EB17920167EB2; Tue, 15 Nov 2022 10:17:52 +0100 (CET)
-Date:   Tue, 15 Nov 2022 10:17:52 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Li, Xin3" <xin3.li@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>
-Subject: Re: [RESEND PATCH 5/6] KVM: x86/VMX: add kvm_vmx_reinject_nmi_irq()
- for NMI/IRQ reinjection
-Message-ID: <Y3NZQBJugRt07udw@hirez.programming.kicks-ass.net>
-References: <Y24SoNKZtj/NPSGy@hirez.programming.kicks-ass.net>
- <6097036e-063f-5175-72b2-8935b12af853@redhat.com>
- <Y24908NWCdzUNqI0@hirez.programming.kicks-ass.net>
- <6fd26a70-3774-6ae7-73ea-4653aee106f0@redhat.com>
- <Y25a0Z2tOMWYZs4j@hirez.programming.kicks-ass.net>
- <BN6PR1101MB216141A21353AB84CEA541DFA8009@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <Y26jkHfK9INwU7Yy@hirez.programming.kicks-ass.net>
- <BN6PR1101MB2161E8217F50D18C56E5864EA8059@BN6PR1101MB2161.namprd11.prod.outlook.com>
- <Y3IFo9NrAcYalBzM@hirez.programming.kicks-ass.net>
- <BN6PR1101MB2161299749E12D484DE9302BA8049@BN6PR1101MB2161.namprd11.prod.outlook.com>
+        Tue, 15 Nov 2022 04:20:05 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721CAD72
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:20:04 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id v17so12634595plo.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:20:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qe8wvLyeeBJubRjZd1BX3pqPmbT2kfkyQ9PG/WDicao=;
+        b=VXPbYOchzFjmWKkn5Ye3sE6usQmGTAegeKA8qRS6DWMMO77XFOfwcWq0A0SpxbP7Mm
+         FI8xB5XX38/h3lfi3H2LIjjzc30/pahCtVLOcTVvlb7hTgxnY0ZlvsHUBZuMCBzLOLTY
+         UOcTAUGGSO+jCDC8JlVAIhlFelSn+8C6wTW2pM4DSqJ3h/lf/OaMP4ukhwd3TSV2bGIv
+         L7MrzrnBjOX/35HOoAN2kRSLmcDRKDHucjvFhItWnlapxAcZrzCw27O9y7pxOtyw6iKu
+         L/nXudusW1EQchlp/8ZE40sNl3kRKBMctkIJ0SfQBiaqNDAWyCS7/e35LYpkTIajTFlt
+         RTJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qe8wvLyeeBJubRjZd1BX3pqPmbT2kfkyQ9PG/WDicao=;
+        b=0+YGjVxXYxCmQcM9MKpQtrsKa00QtC20FTk5dpkZ9oHPOmZn6obDglNjzyVHI+sqrt
+         d/peeRWGS0tGqpfpxhazMco0V66zPvtVLlIETDeNjWVOtk8F4LuPqLraaPkNdQkvqCkl
+         RCeIZN2NKWKD1TpIFTv9OZWj8h9HS0GrtqGCEL2w0N9Fq2Ds8GWmrSTfAxcTvDujLL4e
+         TmOpCkOy4ayIELEUvp+YFeYpZBRRNEhFX7lBJYluUU4sC7Sgbh3bZaxUMBCVctK/j/jc
+         5hrO16bwHbxKvwhD7/r1uyCRQYP6gSpMJgBHu/U7w1yLEHvvnu25UKw+Gy4F87T7HlW2
+         CIOA==
+X-Gm-Message-State: ANoB5pltJcJkFAWAdqfRgQHhBUJhP7FgfPV8p9MbRft9Zw4NCx/Hn4xJ
+        1nwWsiWeh9FnWegO1AgJIxILQu3HKHT3GSZKg4dErA==
+X-Google-Smtp-Source: AA0mqf734iwPRZTLrxH05682vZV+02EMb5JwQlRQVSnKpRpoPgD4I2wPj6N0/iHtqq1snkK4Zst80kSIESDWlg4IU6g=
+X-Received: by 2002:a17:90a:73cd:b0:213:d7cc:39cb with SMTP id
+ n13-20020a17090a73cd00b00213d7cc39cbmr1258696pjk.144.1668504003790; Tue, 15
+ Nov 2022 01:20:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN6PR1101MB2161299749E12D484DE9302BA8049@BN6PR1101MB2161.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221114192129.zkmubc6pmruuzkc7@quack3> <20221114212155.221829-1-feldsherov@google.com>
+ <fd7ebc60-811e-588a-5c55-ee540796f058@infradead.org>
+In-Reply-To: <fd7ebc60-811e-588a-5c55-ee540796f058@infradead.org>
+From:   Svyatoslav Feldsherov <feldsherov@google.com>
+Date:   Tue, 15 Nov 2022 11:19:52 +0200
+Message-ID: <CACgs1VAsvFQ+V5V8AsFN2i-azBQnD1ZdpQ+rA-NUtvLVAaNhdw@mail.gmail.com>
+Subject: Re: [PATCH v2] fs: do not update freeing inode io_list
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Lukas Czerner <lczerner@redhat.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Jan Kara <jack@suse.cz>,
+        syzbot+6ba92bd00d5093f7e371@syzkaller.appspotmail.com,
+        oferz@google.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 07:50:49AM +0000, Li, Xin3 wrote:
-> > > > But what about NMIs, afaict this is all horribly broken for NMIs.
-> > > >
-> > > > So the whole VMX thing latches the NMI (which stops NMI recursion),
-> > right?
-> > > >
-> > > > But then you drop out of noinstr code, which means any random
-> > > > exception can happen (kprobes #BP, hw_breakpoint #DB, or even #PF
-> > > > due to random nonsense like *SAN). This exception will do IRET and
-> > > > clear the NMI latch, all before you get to run any of the NMI code.
-> > >
-> > > What you said here implies that we have this problem in the existing code.
-> > > Because a fake iret stack is created to call the NMI handler in the
-> > > IDT NMI descriptor, which lastly executes the IRET instruction.
-> > 
-> > I can't follow; of course the IDT handler terminates with IRET, it has to no?
-> 
-> With FRED, ERETS/ERETU replace IRET, and use bit 28 of the popped CS field
-> to control whether to unblock NMI. If bit 28 of the field (above the selector)
-> is 1, ERETS/ERETU unblocks NMIs.
+Thank you for noticing that!
+I will send a fixed patch in 8-10 hours if no other comment will arrive.
 
-Yes, I know that. It is one of the many improvements FRED brings.
-Ideally the IBT WAIT-FOR-ENDBR state also gets squirreled away in the
-hardware exception frame, but that's still up in the air I believe :/
+On Mon, Nov 14, 2022 at 11:25 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Hi--
+>
+> Please see a small nit below.
+>
+> On 11/14/22 13:21, Svyatoslav Feldsherov wrote:
+> > After commit cbfecb927f42 ("fs: record I_DIRTY_TIME even if inode
+> > already has I_DIRTY_INODE") writeiback_single_inode can push inode with
+> > I_DIRTY_TIME set to b_dirty_time list. In case of freeing inode with
+> > I_DIRTY_TIME set this can happened after deletion of inode io_list at
+> > evict. Stack trace is following.
+> >
+> > evict
+> > fat_evict_inode
+> > fat_truncate_blocks
+> > fat_flush_inodes
+> > writeback_inode
+> > sync_inode_metadata(inode, sync=0)
+> > writeback_single_inode(inode, wbc) <- wbc->sync_mode == WB_SYNC_NONE
+> >
+> > This will lead to use after free in flusher thread.
+> >
+> > Similar issue can be triggered if writeback_single_inode in the
+> > stack trace update inode->io_list. Add explicit check to avoid it.
+> >
+> > Fixes: cbfecb927f42 ("fs: record I_DIRTY_TIME even if inode already has I_DIRTY_INODE")
+> > Reported-by: syzbot+6ba92bd00d5093f7e371@syzkaller.appspotmail.com
+> > Signed-off-by: Svyatoslav Feldsherov <feldsherov@google.com>
+> > ---
+> >  V1 -> V2:
+> >  - address review comments
+> >  - skip inode_cgwb_move_to_attached for freeing inode
+> >
+> >  fs/fs-writeback.c | 30 +++++++++++++++++++-----------
+> >  1 file changed, 19 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+> > index 443f83382b9b..c4aea096689c 100644
+> > --- a/fs/fs-writeback.c
+> > +++ b/fs/fs-writeback.c
+> > @@ -1712,18 +1712,26 @@ static int writeback_single_inode(struct inode *inode,
+> >       wb = inode_to_wb_and_lock_list(inode);
+> >       spin_lock(&inode->i_lock);
+> >       /*
+> > -      * If the inode is now fully clean, then it can be safely removed from
+> > -      * its writeback list (if any).  Otherwise the flusher threads are
+> > -      * responsible for the writeback lists.
+> > +      * If the inode is freeing, it's io_list shoudn't be updated
+>
+>                                     its
+>
+> > +      * as it can be finally deleted at this moment.
+> >        */
+> > -     if (!(inode->i_state & I_DIRTY_ALL))
+> > -             inode_cgwb_move_to_attached(inode, wb);
+> > -     else if (!(inode->i_state & I_SYNC_QUEUED)) {
+> > -             if ((inode->i_state & I_DIRTY))
+> > -                     redirty_tail_locked(inode, wb);
+> > -             else if (inode->i_state & I_DIRTY_TIME) {
+> > -                     inode->dirtied_when = jiffies;
+> > -                     inode_io_list_move_locked(inode, wb, &wb->b_dirty_time);
+> > +     if (!(inode->i_state & I_FREEING)) {
+> > +             /*
+> > +              * If the inode is now fully clean, then it can be safely
+> > +              * removed from its writeback list (if any). Otherwise the
+> > +              * flusher threads are responsible for the writeback lists.
+> > +              */
+> > +             if (!(inode->i_state & I_DIRTY_ALL))
+> > +                     inode_cgwb_move_to_attached(inode, wb);
+> > +             else if (!(inode->i_state & I_SYNC_QUEUED)) {
+> > +                     if ((inode->i_state & I_DIRTY))
+> > +                             redirty_tail_locked(inode, wb);
+> > +                     else if (inode->i_state & I_DIRTY_TIME) {
+> > +                             inode->dirtied_when = jiffies;
+> > +                             inode_io_list_move_locked(inode,
+> > +                                                       wb,
+> > +                                                       &wb->b_dirty_time);
+> > +                     }
+> >               }
+> >       }
+> >
+>
+> --
+> ~Randy
 
-Anyway.. given there is interrupt priority and NMI is pretty much on top
-of everything else the reinject crap *should* run NMI first. That way
-NMI runs with the latch disabled and whatever other pending interrupts
-will run later.
-
-But that all is still broken because afaict the current code also leaves
-noinstr -- and once you leave noinstr (or use a static_key, static_call
-or anything else that *can* change at runtime) you can't guarantee
-nothing.
+--
+Slava
