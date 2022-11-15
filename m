@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210E7629807
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D6C62980F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:03:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237997AbiKOMDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 07:03:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
+        id S238096AbiKOMDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 07:03:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237221AbiKOMDE (ORCPT
+        with ESMTP id S238072AbiKOMDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:03:04 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2D5286DF
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:02:55 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id a29so24068350lfj.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:02:55 -0800 (PST)
+        Tue, 15 Nov 2022 07:03:20 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F8229343
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:02:58 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id s8so6928944lfc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:02:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BbaZwU77Z1ouLs3jgvngmnLtPy0YsEJlCLwAlXk9eGs=;
-        b=QUhL0yGdrd3iB3ZcnCkgmArwlxWX3jxB+ogF+ySPNM30t+Ha+J2/kDkmZPQd3NbUrx
-         GpwO6nNuqUtLMSMRU5o454qjK48oApnmyf6g4FehFFkD8jDp3FQFdbSFmvC0uh/c/gFs
-         La8LSft5u7B1SDGy6EGkgxSkOyQ9THCNthTrWKve7XDdrNmw/kAEUMmaT4b/KgUi+EQf
-         UmCRXvfLDPByytE+RoEyeKTLbMiAI6DzPUznO0W+V4SZJ3peP0bUcPNIVsE4XwdTVxE4
-         pH+xl9zJFRjBpFWtiXujEfJ056dfD/2zdDpo7SVsaTPx5omi9Ra2nrS1sockA5mFZmYv
-         4/DQ==
+        bh=RjIcwISYizTMd4GfNjSCEyTXmXHAf6CHHATueef/HN8=;
+        b=eFOxtUSLZmpzuZ+rOIG8oQ+VUcQiqQP7CPntwlOX5IfDXrOr27TVUvcIeQJKozFIYu
+         X45MGLLpJe2FJi9RZZjhs4nfoG6PzrFm8Ml+/PbDJMp/PDoh7Axl0PCfZ++vBjRsTVmj
+         CgV3nZtDJ0/rgDCVac5hBKrONLjsXSjjb+nnzB3w+l0rlI3gsJ8cYtwVygTDjYq4XH5D
+         j9KkAZCo04xy8GZ/LNuqQO0IYFu5LqKEazZ5VVnq/N8R7tXJ01lCOfuq0rbOeNh53Lbc
+         WSqIsj6ZgQ3hEfWCqwpUIGA8UvQ1gUvKzwPYJw2J/T77dsRzpZz0wCminqXR2r/GWHJr
+         1x6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BbaZwU77Z1ouLs3jgvngmnLtPy0YsEJlCLwAlXk9eGs=;
-        b=mNBSBi619DQO/i0I3Vyrv1/RtdK5Pegue4dclQdZZgkmV+Ga0cyXZppFX+QbcySQ4v
-         zlASttpzgsr1pu+kaeDG8JVLUxElDVB/h2M/EV1O4OCbk6XsBxZ0jd0glgld6mwKyuSb
-         0Ilws1qqobbeWfwpuNs3zRrZ7xd7UlP0Xjtt2fd5H/SqHVVzB0iL8e8OXETngLrE8SrG
-         7n+zButqUYB/TmeVr/bNDHlJFjHkXXKdHUwZ+lLLzUUhYQp07sDWaJ2WgT4/bVhzvE0A
-         No+R6T8/w+vAxUn4wVQING5biuvb2TrtguZp9CcV1w2bIuAgtTP0HwSPUKeNhVzabbfo
-         j2IA==
-X-Gm-Message-State: ANoB5pmE9Z7k1pCBdV5QymHAgpCEXrvu800FK8UB6VYo9fc1dsoAyzOP
-        On+MEqNhR01cZRPGT0+Uo6p45Q==
-X-Google-Smtp-Source: AA0mqf7uYCrKdueUJqv0hPgUAc0aNVnzCOqAYP6HvvPf1xojk47c84bx1TNe+IkwF3HCvbMUByc5CA==
-X-Received: by 2002:ac2:55a7:0:b0:4a2:5154:ead9 with SMTP id y7-20020ac255a7000000b004a25154ead9mr5737175lfg.32.1668513775386;
-        Tue, 15 Nov 2022 04:02:55 -0800 (PST)
+        bh=RjIcwISYizTMd4GfNjSCEyTXmXHAf6CHHATueef/HN8=;
+        b=Hq+PfafjJfNcgDcjYzFPrDXw3mSl13ezhwiMcOsq0iysky4abiIQ+5rKDExH3j6clX
+         UK+ME3dJTjQR28Ck7X3SRkX/KPy28tBZ8QaEzbuPb8qzT74oUJJJHL6cCBrq2wWoJPW8
+         nyyZyUrFDDqDghHipBJxqGMzV53yRD529sllOKC8Nc9pZ3Ur1+w4wv7FoN694+c+8DEC
+         wQ6VZSbuU8xG4AsyhLGcXpbdRr76MXaS+qoEZnfBDiT0eMp58xOkX6q6l1pymv1D+kiC
+         WQlxFem/RWO+MLg3LmZ9SEgliT8SBDrB/PgGVJ4ItIPNJDDGP6t+jPaA6Gzxvi57zWQx
+         8Bew==
+X-Gm-Message-State: ANoB5pl4RdZq47MomTLmDwqhLwN9cShaDdwOfRKi23xDaoksgQTDM9cK
+        DsvGFqou4aV4peoQEB/sSdrl0w==
+X-Google-Smtp-Source: AA0mqf7zJGKPdafXhGbdYS0VR7Iqoj6lKhMNRCrXLV2on/t88JgLH5dNUEGY8Em3jgBZUTjFhWt4tw==
+X-Received: by 2002:ac2:55a9:0:b0:4aa:da5d:dfd8 with SMTP id y9-20020ac255a9000000b004aada5ddfd8mr6090205lfg.677.1668513777308;
+        Tue, 15 Nov 2022 04:02:57 -0800 (PST)
 Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id i13-20020ac25d2d000000b004b0b2212315sm2176233lfb.121.2022.11.15.04.02.54
+        by smtp.gmail.com with ESMTPSA id i13-20020ac25d2d000000b004b0b2212315sm2176233lfb.121.2022.11.15.04.02.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 04:02:54 -0800 (PST)
+        Tue, 15 Nov 2022 04:02:56 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Banajit Goswami <bgoswami@quicinc.com>,
@@ -64,9 +64,9 @@ To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         quic_srivasam@quicinc.com, quic_plai@quicinc.com
-Subject: [PATCH v2 08/11] ASoC: dt-bindings: qcom,q6prm: Split to separate schema
-Date:   Tue, 15 Nov 2022 13:02:32 +0100
-Message-Id: <20221115120235.167812-9-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 09/11] ASoC: dt-bindings: qcom,q6core: Split to separate schema
+Date:   Tue, 15 Nov 2022 13:02:33 +0100
+Message-Id: <20221115120235.167812-10-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221115120235.167812-1-krzysztof.kozlowski@linaro.org>
 References: <20221115120235.167812-1-krzysztof.kozlowski@linaro.org>
@@ -82,9 +82,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The APR/GPR bindings with services got complicated so move out the Q6PRM
-service to its own binding.  Previously the compatible was documented in
-qcom,apr.yaml.
+The APR/GPR bindings with services got complicated so move out the
+Q6Core service to its own binding.  Previously the compatible was
+documented in qcom,apr.yaml.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
@@ -93,23 +93,23 @@ Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: quic_srivasam@quicinc.com
 Cc: quic_plai@quicinc.com
 ---
- .../devicetree/bindings/sound/qcom,q6prm.yaml | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6prm.yaml
+ .../bindings/sound/qcom,q6core.yaml           | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/qcom,q6core.yaml
 
-diff --git a/Documentation/devicetree/bindings/sound/qcom,q6prm.yaml b/Documentation/devicetree/bindings/sound/qcom,q6prm.yaml
+diff --git a/Documentation/devicetree/bindings/sound/qcom,q6core.yaml b/Documentation/devicetree/bindings/sound/qcom,q6core.yaml
 new file mode 100644
-index 000000000000..f6dbb1267bfe
+index 000000000000..e240712de9ca
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/qcom,q6prm.yaml
-@@ -0,0 +1,50 @@
++++ b/Documentation/devicetree/bindings/sound/qcom,q6core.yaml
+@@ -0,0 +1,39 @@
 +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/sound/qcom,q6prm.yaml#
++$id: http://devicetree.org/schemas/sound/qcom,q6core.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Qualcomm Proxy Resource Manager (Q6PRM)
++title: Qualcomm Audio Core (Q6Core)
 +
 +maintainers:
 +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
@@ -121,36 +121,25 @@ index 000000000000..f6dbb1267bfe
 +properties:
 +  compatible:
 +    enum:
-+      - qcom,q6prm
-+
-+  clock-controller:
-+    $ref: /schemas/sound/qcom,q6dsp-lpass-clocks.yaml#
-+    unevaluatedProperties: false
-+    description: Qualcomm DSP LPASS clock controller
++      - qcom,q6core
 +
 +required:
 +  - compatible
-+  - clock-controller
 +
 +unevaluatedProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/soc/qcom,gpr.h>
++    #include <dt-bindings/soc/qcom,apr.h>
 +
-+    gpr {
++    apr {
 +        #address-cells = <1>;
 +        #size-cells = <0>;
 +
-+        service@2 {
-+            reg = <GPR_PRM_MODULE_IID>;
-+            compatible = "qcom,q6prm";
++        service@3 {
++            compatible = "qcom,q6core";
++            reg = <APR_SVC_ADSP_CORE>;
 +            qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
-+
-+            clock-controller {
-+                compatible = "qcom,q6prm-lpass-clocks";
-+                #clock-cells = <2>;
-+            };
 +        };
 +    };
 -- 
