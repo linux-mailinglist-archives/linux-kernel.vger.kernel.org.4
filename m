@@ -2,54 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3830629B77
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:04:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F729629B78
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:04:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238527AbiKOOEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 09:04:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
+        id S230308AbiKOOEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 09:04:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238522AbiKOOEg (ORCPT
+        with ESMTP id S238496AbiKOOEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 09:04:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232892C101;
-        Tue, 15 Nov 2022 06:04:33 -0800 (PST)
+        Tue, 15 Nov 2022 09:04:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152452B1B8;
+        Tue, 15 Nov 2022 06:04:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55020B8190A;
-        Tue, 15 Nov 2022 14:04:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D4DDC433C1;
-        Tue, 15 Nov 2022 14:04:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1668521071;
-        bh=VgTmIjPgaRmVRscM/fYcJA1oTDBFIUWXKRYDHy6M25U=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0CE96179B;
+        Tue, 15 Nov 2022 14:04:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02317C433D7;
+        Tue, 15 Nov 2022 14:04:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668521075;
+        bh=6Qvlg1lMg7fGpa0P20E6tpgyxeNcsHw0v3LYS/R+ins=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vi1RKXLoR4YYS14VCvQjChktMJuT10B873jt+DWrqmB3Jld2LCA1eaLYDWZyuGaqQ
-         NayCJ9hsk/FJgZgg2niY02h86lFfTmApuXb9fQ2mY30j9PT0GMgHEqMyTA/WGP/c3Q
-         3a5H/poU2ZAAyxLwAEQmkNSo6nngKBvHh87tuAZk=
-Date:   Tue, 15 Nov 2022 15:04:28 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.15 000/131] 5.15.79-rc1 review
-Message-ID: <Y3OcbKfsaCAYpLRN@kroah.com>
-References: <20221114124448.729235104@linuxfoundation.org>
- <CA+G9fYvdqK23zAa+=-x29Hq7BGVd2pN1_1XOp5U1X-GUWM4MAA@mail.gmail.com>
+        b=BuVnbGVQaBDcYpT71SQqSB0uAmvRUAFOkRj21Wbt7EacCJ0FIaRRRiQ30gUhbqYyn
+         hAv9PGVP4xcMdCqQc7V/nrbje1A50Wdwg4ZES0NWj+dDNOEczihuH+lh4MPLLW2pPT
+         j0zIaf/kWvZHjl14AjWvXe72W76fRd/F+/IZ2nDQDXPMd4FRCCfPONz2n3mgNVpKWP
+         yYaberTyw1cGR9GUf94FnGfKGcLDp4YeslxH9PEkI64JNUDrpHv1VhAkWyeTEKfhId
+         vUib+maSyDdUiqKFxtmLQGRyotiTCgRA9Xn5tflkwB3TfuYwp97lW7yUPOrXu13Yna
+         nAzwfaND15YXA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id B7B13407ED; Tue, 15 Nov 2022 11:04:31 -0300 (-03)
+Date:   Tue, 15 Nov 2022 11:04:31 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+Subject: Re: [PATCHSET 00/19] perf stat: Improve perf stat output (v1)
+Message-ID: <Y3Ocb2Ie4PCx2t1X@kernel.org>
+References: <20221114230227.1255976-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYvdqK23zAa+=-x29Hq7BGVd2pN1_1XOp5U1X-GUWM4MAA@mail.gmail.com>
+In-Reply-To: <20221114230227.1255976-1-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,42 +64,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 08:26:08AM +0530, Naresh Kamboju wrote:
-> On Mon, 14 Nov 2022 at 18:24, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 5.15.79 release.
-> > There are 131 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Wed, 16 Nov 2022 12:44:21 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.79-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
+Em Mon, Nov 14, 2022 at 03:02:08PM -0800, Namhyung Kim escreveu:
+> Hello,
 > 
-> As others reported,
-> arm: allmodconfig  failed [1] due to following warnings / errors.
+> I'm working on cleanup up the perf stat code.  The main focus this time
+> is the display logic which has various combinations of options.
 > 
-> drivers/net/ethernet/mediatek/mtk_star_emac.c: In function 'mtk_star_enable':
-> drivers/net/ethernet/mediatek/mtk_star_emac.c:980:22: error: 'struct
-> mtk_star_priv' has no member named 'rx_napi'; did you mean 'napi'?
->   980 |  napi_disable(&priv->rx_napi);
->       |                      ^~~~~~~
->       |                      napi
-> drivers/net/ethernet/mediatek/mtk_star_emac.c:981:22: error: 'struct
-> mtk_star_priv' has no member named 'tx_napi'; did you mean 'napi'?
->   981 |  napi_disable(&priv->tx_napi);
->       |                      ^~~~~~~
->       |                      napi
+> I split the code for each output mode - std, csv and json.  And then
+> organize them according to the purpose like header, prefix, value,
+> metric and footer.  I hope this would help maintaining the code a bit
+> more.
 > 
+> Also I found that cgroup support is missing or insufficient.
+> Specifically when --for-each-cgroup option is given, it'd have multiple
+> copies of the events for those cgroups.  Then the output should group
+> the result.  This is true for the normal output mode, but the metric-
+> only mode didn't support it well.
+> 
+> With this change, I can see the per-cgroup topdown metrics like below:
+> 
+>   $ sudo ./perf stat -a --topdown --for-each-cgroup user.slice,system.slice sleep 3
+>   nmi_watchdog enabled with topdown. May give wrong results.
+>   Disable with echo 0 > /proc/sys/kernel/nmi_watchdog
+> 
+>    Performance counter stats for 'system wide':
+> 
+>                                   retiring      bad speculation   frontend bound    backend bound
+>   S0-D0-C0      2  user.slice            117.3%         3.9%            47.8%           -69.1%
+>   S0-D0-C1      2  user.slice            119.8%         4.1%            49.3%           -73.2%
+>   S0-D0-C2      2  user.slice             24.4%         7.9%            68.4%             0.0%
+>   S0-D0-C3      2  user.slice             24.0%         9.2%            91.2%           -24.4%
+>   S0-D0-C0      2  system.slice           73.5%         4.0%            19.4%             3.1%
+>   S0-D0-C1      2  system.slice           90.0%         5.8%            19.7%           -15.5%
+>   S0-D0-C2      2  system.slice          101.2%         6.6%            33.4%           -41.1%
+>   S0-D0-C3      2  system.slice           90.7%         4.9%            22.3%           -18.0%
+> 
+>          3.001678216 seconds time elapsed
+> 
+> You can get it from 'perf/stat-display-v1' branch in
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
 
-Should now be fixed in -rc2
+applied locally, build testing.
+
+- Arnaldo
+ 
+> Thanks,
+> Namhyung
+> 
+> Namhyung Kim (19):
+>   perf stat: Clear screen only if output file is a tty
+>   perf stat: Split print_running() function
+>   perf stat: Split print_noise_pct() function
+>   perf stat: Split print_cgroup() function
+>   perf stat: Split aggr_printout() function
+>   perf stat: Factor out print_counter_value() function
+>   perf stat: Handle bad events in abs_printout()
+>   perf stat: Add before_metric argument
+>   perf stat: Align cgroup names
+>   perf stat: Split print_metric_headers() function
+>   perf stat: Factor out prepare_interval()
+>   perf stat: Cleanup interval print alignment
+>   perf stat: Remove impossible condition
+>   perf stat: Rework header display
+>   perf stat: Move condition to print_footer()
+>   perf stat: Factor out prefix display
+>   perf stat: Factor out print_metric_{begin,end}()
+>   perf stat: Support --for-each-cgroup and --metric-only
+>   perf stat: Add print_aggr_cgroup() for --for-each-cgroup and --topdown
+> 
+>  tools/perf/builtin-stat.c      |   8 +
+>  tools/perf/util/stat-display.c | 996 ++++++++++++++++++++-------------
+>  2 files changed, 624 insertions(+), 380 deletions(-)
+> 
+> 
+> base-commit: 7565f9617efac0c0c8e2dbd08dbe0695d56684f5
+> -- 
+> 2.38.1.493.g58b659f92b-goog
+
+-- 
+
+- Arnaldo
