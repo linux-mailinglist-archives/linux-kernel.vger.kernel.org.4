@@ -2,158 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF57262A130
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9AC62A134
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:18:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiKOSQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 13:16:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
+        id S231317AbiKOSSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 13:18:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbiKOSQz (ORCPT
+        with ESMTP id S229948AbiKOSSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 13:16:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5812FC15;
-        Tue, 15 Nov 2022 10:16:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1FA91B81A5F;
-        Tue, 15 Nov 2022 18:16:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4B96C4347C;
-        Tue, 15 Nov 2022 18:16:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668536211;
-        bh=nzoZVtAKQJIQTeBQutSbLNEtJkG6ZK7nNNBfDg5J8IA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UvaUm07ab0P3VMqxkWKNgDghtJE+sdtZU1KHbWuBHxvVyOJ9sO61YjPzGaKkmKYrq
-         f7JGa153pJJU9JEud0fFO9J4y9NOGg9zeYUr/0B3Vv52YIWEWAb5HN6sAnvqin8B4o
-         iynVRwQvBe0avgQkEsCj379VZM8etj5v6EdNlAjhkazH7zDcGIFGZTkoLBwfkHkaFs
-         p/WDMqPuvPlNZ3PUhqlPZUInDfzeXcF3LDAmHDdv8BdudC0VczKdrbCYT3XAEUs3Op
-         FuHn4kCjcsNAStEAMdonN/qbzJP09QF+zn/icCLJFKyMGC7IeAT+iAJ5Sbw75ZejZs
-         K/8Z1P7Ixxc6Q==
-Received: by mail-lf1-f54.google.com with SMTP id c1so25721791lfi.7;
-        Tue, 15 Nov 2022 10:16:51 -0800 (PST)
-X-Gm-Message-State: ANoB5pno0b0n3PePQMgINym4MGj1rooed6kql1dzP4ErKwNEa7B2AZXp
-        0EHPygDxSmoUWk22ohVqG7gONwdffhvGrPLkoA==
-X-Google-Smtp-Source: AA0mqf5ylXTe8JPsQerawu90MDYFzRHw/tk4HjTbjmj7U/3adbjHDxKMSHfzzcjyFwjdnPjfg8KUmkUC1XS9l9OLAcg=
-X-Received: by 2002:ac2:5cc3:0:b0:4ab:5a19:3455 with SMTP id
- f3-20020ac25cc3000000b004ab5a193455mr5796390lfq.462.1668536209685; Tue, 15
- Nov 2022 10:16:49 -0800 (PST)
+        Tue, 15 Nov 2022 13:18:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8B92FC25
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:17:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668536267;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zM9NVAiHgjBvRccxutMAlz4UOKHMx1Iq+kM6b0m0gaI=;
+        b=b7i+rRpK0fHQOs4humFDMLHL75Js0Ex2cCe8140CvarSn4q4XyMRCXmceLGCesFI+uh0M1
+        nQuS2QLtOHbAVwGlseupPGcaN+i2jm8YDxM+W2GiS+IiY77p3/sdn+apLU3eoKzPIYeeID
+        K//La77kciverlKmP2nfrICzUl9SUAY=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-527-Xe-okTiRNR-nclKXrxPJZQ-1; Tue, 15 Nov 2022 13:17:46 -0500
+X-MC-Unique: Xe-okTiRNR-nclKXrxPJZQ-1
+Received: by mail-wm1-f69.google.com with SMTP id az40-20020a05600c602800b003cfa26c40easo1031284wmb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:17:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zM9NVAiHgjBvRccxutMAlz4UOKHMx1Iq+kM6b0m0gaI=;
+        b=T6b7UTQnm393EyyjLf+Ptiq/+vnB352aXq6waA5PAX73NC1MuSIB73sJhU3nFu8O0U
+         iUh4/Dbz9eBoZ+vnbjH7AQL0+Xj93yzzpSGhYG4V5i5ceQ3FazPtEzi5TuTPD2sTQC6k
+         13uGGFB4HsAtlkB+T8L0pbwfMdUg0aKBDRhhGco9nhbE3Y6xEwcmJqAvglbDmhl7Xf8r
+         WdJ3T3aM/6g3lfBGA1nwGG6njv7mlikYRsJCcwP0eV7g6cjodhaWNfXvH7gKRfou7Zxs
+         qQrPal2S64DzCOup9+TwpHlHuXU4nWXB14JV3CMnz5iFn2k0jzkPevfFimONQUsKLnYf
+         Ph5w==
+X-Gm-Message-State: ANoB5pk/gi+s4cKe4L3ZlmAvtJAKx/kDaZl7RncUTU/j2+ib3NTJwakW
+        081zMKOKPjUiADmfu/xS3IrFxgzgIAum7Ega6trpNjcOKXvKJ+gy2SoiguLF+9V8wuRfg3nAY00
+        ZgyKcP8dYYnFFD0/o+5JVEjn1
+X-Received: by 2002:a05:600c:4f06:b0:3cf:a323:bfe6 with SMTP id l6-20020a05600c4f0600b003cfa323bfe6mr2434587wmq.86.1668536265078;
+        Tue, 15 Nov 2022 10:17:45 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6FRbcS4vsa5azpDI/ImCO2GqAsz5ThBO9bUYJE/LjiknvN5Mt9qC3X8dURVYSCU/NMeS3Wdw==
+X-Received: by 2002:a05:600c:4f06:b0:3cf:a323:bfe6 with SMTP id l6-20020a05600c4f0600b003cfa323bfe6mr2434558wmq.86.1668536264756;
+        Tue, 15 Nov 2022 10:17:44 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:9d00:9303:90ce:6dcb:2bc9? (p200300cbc7079d00930390ce6dcb2bc9.dip0.t-ipconnect.de. [2003:cb:c707:9d00:9303:90ce:6dcb:2bc9])
+        by smtp.gmail.com with ESMTPSA id x11-20020a5d54cb000000b002415dd45320sm12973262wrv.112.2022.11.15.10.17.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 10:17:44 -0800 (PST)
+Message-ID: <5ddf1310-b49f-6e66-a22a-6de361602558@redhat.com>
+Date:   Tue, 15 Nov 2022 19:17:43 +0100
 MIME-Version: 1.0
-References: <20221103094436.2136698-1-demonsingur@gmail.com>
- <20221103094436.2136698-2-demonsingur@gmail.com> <20221106154634.2286faf3@jic23-huawei>
- <c01b0e56563b2b6f8ef48ad90977646706a2c933.camel@gmail.com>
- <20221112154040.54dc5cf2@jic23-huawei> <c54200fb70d638c572a0596a78d956d9f61d89a4.camel@gmail.com>
- <20221115160724.00007460@Huawei.com>
-In-Reply-To: <20221115160724.00007460@Huawei.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 15 Nov 2022 12:16:41 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLt6B73XSE8dMHMGuw1N9m1v1xwr3sOEEHonGgLAYya=A@mail.gmail.com>
-Message-ID: <CAL_JsqLt6B73XSE8dMHMGuw1N9m1v1xwr3sOEEHonGgLAYya=A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: iio: addac: add AD74115
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Cosmin Tanislav <demonsingur@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v3 1/2] mm/migrate: Fix read-only page got writable when
+ recover pte
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Ives van Hoorne <ives@codesandbox.io>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Alistair Popple <apopple@nvidia.com>, stable@vger.kernel.org
+References: <20221114000447.1681003-1-peterx@redhat.com>
+ <20221114000447.1681003-2-peterx@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221114000447.1681003-2-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 10:07 AM Jonathan Cameron
-<Jonathan.Cameron@huawei.com> wrote:
->
-> On Tue, 15 Nov 2022 14:43:53 +0200
-> Cosmin Tanislav <demonsingur@gmail.com> wrote:
->
-> > On Sat, 2022-11-12 at 15:40 +0000, Jonathan Cameron wrote:
-> > > > >
-> > > > > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > > > > +    description: |
-> > > > > > +      Conversion range for ADC conversion 2.
-> > > > > > +      0 - 0V to 12V
-> > > > > > +      1 - -12V to +12V
-> > > > > > +      2 - -2.5V to +2.5V
-> > > > > > +      3 - -2.5V to 0V
-> > > > > > +      4 - 0V to 2.5V
-> > > > > > +      5 - 0V to 0.625V
-> > > > > > +      6 - -104mV to +104mV
-> > > > > > +      7 - 0V to 12V
-> > > > >
-> > > > > For a lot of similar cases we handle these numerically to give
-> > > > > a human readable dts.  Is there a strong reason not to do so here (in mv)
-> > > > >
-> > > >
-> > > > I used this approach mostly because it maps dirrectly to register values
-> > > > and because it's easier to parse. dts isn't exactly nice at handling
-> > > > negative values. I can switch it to mv array if you insist.
-> > >
-> > > We have quite a few existing cases of
-> > > adi,[output-]range-microvolt so it would be good to copy that style here.
-> > >
-> >
-> > With this:
-> >
-> >   adi,conv2-range-microvolt:
-> >     description: Conversion range for ADC conversion 2.
-> >     oneOf:
-> >       - items:
-> >           - enum: [-2500000, 0]
-> >           - const: 2500000
-> >       - items:
-> >           - enum: [-12000000, 0]
-> >           - const: 12000000
-> >       - items:
-> >           - const: -2500000
-> >           - const: 0
-> >       - items:
-> >           - const: -104000
-> >           - const: 104000
-> >       - items:
-> >           - const: 0
-> >           - const: 625000
-> >
-> > And this:
-> >
-> > adi,conv2-range-microvolt = <(-12000000) 12000000>;
-> >
-> > I get this:
-> >
-> > Documentation/devicetree/bindings/iio/addac/adi,ad74115.example.dtb:
-> > addac@0: adi,conv2-range-microvolt: 'oneOf' conditional failed,
-> > one must be fixed:
-> >         4282967296 is not one of [-2500000, 0]
-> >         4282967296 is not one of [-12000000, 0]
-> >         -2500000 was expected
-> >         -104000 was expected
-> >         625000 was expected
-> >         From schema: Documentation/devicetree/bindings/iio/addac/adi,ad74115.yaml
-> >
-> > As I said, negative numbers don't play too nice...
->
-> From what I recall we just ignore those warnings :)
->
-> Rob, do I remember correctly that there was a plan to make this work longer term?
+On 14.11.22 01:04, Peter Xu wrote:
+> Ives van Hoorne from codesandbox.io reported an issue regarding possible
+> data loss of uffd-wp when applied to memfds on heavily loaded systems.  The
+> symptom is some read page got data mismatch from the snapshot child VMs.
+> 
+> Here I can also reproduce with a Rust reproducer that was provided by Ives
+> that keeps taking snapshot of a 256MB VM, on a 32G system when I initiate
+> 80 instances I can trigger the issues in ten minutes.
+> 
+> It turns out that we got some pages write-through even if uffd-wp is
+> applied to the pte.
+> 
+> The problem is, when removing migration entries, we didn't really worry
+> about write bit as long as we know it's not a write migration entry.  That
+> may not be true, for some memory types (e.g. writable shmem) mk_pte can
+> return a pte with write bit set, then to recover the migration entry to its
+> original state we need to explicit wr-protect the pte or it'll has the
+> write bit set if it's a read migration entry.  For uffd it can cause
+> write-through.
+> 
+> The relevant code on uffd was introduced in the anon support, which is
+> commit f45ec5ff16a7 ("userfaultfd: wp: support swap and page migration",
+> 2020-04-07).  However anon shouldn't suffer from this problem because anon
+> should already have the write bit cleared always, so that may not be a
+> proper Fixes target, while I'm adding the Fixes to be uffd shmem support.
+> 
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: stable@vger.kernel.org
+> Fixes: b1f9e876862d ("mm/uffd: enable write protection for shmem & hugetlbfs")
+> Reported-by: Ives van Hoorne <ives@codesandbox.io>
+> Reviewed-by: Alistair Popple <apopple@nvidia.com>
+> Tested-by: Ives van Hoorne <ives@codesandbox.io>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>   mm/migrate.c | 8 +++++++-
+>   1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index dff333593a8a..8b6351c08c78 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -213,8 +213,14 @@ static bool remove_migration_pte(struct folio *folio,
+>   			pte = pte_mkdirty(pte);
+>   		if (is_writable_migration_entry(entry))
+>   			pte = maybe_mkwrite(pte, vma);
+> -		else if (pte_swp_uffd_wp(*pvmw.pte))
+> +		else
+> +			/* NOTE: mk_pte can have write bit set */
+> +			pte = pte_wrprotect(pte);
+> +
+> +		if (pte_swp_uffd_wp(*pvmw.pte)) {
+> +			WARN_ON_ONCE(pte_write(pte));
+>   			pte = pte_mkuffd_wp(pte);
+> +		}
+>   
+>   		if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
+>   			rmap_flags |= RMAP_EXCLUSIVE;
 
-Yes, but handling signed types is working now (since the move to
-validating dtbs directly).
+As raised, I don't agree to this generic non-uffd-wp change without 
+further, clear justification.
 
-The issue here is -microvolt is defined as unsigned. IIRC, I had some
-issue changing it, but I think that was just with the YAML encoding
-which I intend to remove. I'll give it another look and update the
-type if there's no issues.
+I won't nack it, but I won't ack it either.
 
-Rob
+-- 
+Thanks,
+
+David / dhildenb
+
