@@ -2,149 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449796290E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 04:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFFE6290E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 04:40:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232508AbiKODhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 22:37:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
+        id S235905AbiKODkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 22:40:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232424AbiKODhN (ORCPT
+        with ESMTP id S232033AbiKODkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 22:37:13 -0500
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B306813EA2;
-        Mon, 14 Nov 2022 19:37:12 -0800 (PST)
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 2AF3agF9022440;
-        Tue, 15 Nov 2022 12:36:43 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2AF3agF9022440
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1668483403;
-        bh=oBttZhSIf70D6wOgqtArJRhEfxuGyhQuhT7IykI+c5U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=r46cGzSsmIaSUCz+k4P2UvFK9znaVWmakaUSjUjwumWT4Q8tbQUEQtBQh8z58TuTJ
-         PhaUrn64erXZ3HLV7wJP0OqATzJthnZMuwWscOIcOMgY9DG9yQNUq5ZZdF+NFi65nP
-         M7uwYwBTMgFvihgGoFaS+LvGeF07DZYlzoy0BzYMo6y0dZFkMvTdVnI2E0eHespR8q
-         MiajGtgBNaLhoPCg+Q5NILOJlk+d35L3tnL7eRaYgwfrHJCRQQkz1jdmovJqissLr/
-         yU532ymxImYvXf9O3Tvs+TRzzS9sbPUWrSWFdSpq9RPiu0gNVShH0SPQ0UjF/xDiCE
-         80Z2sTn5/zktg==
-X-Nifty-SrcIP: [209.85.167.170]
-Received: by mail-oi1-f170.google.com with SMTP id n186so13596057oih.7;
-        Mon, 14 Nov 2022 19:36:42 -0800 (PST)
-X-Gm-Message-State: ANoB5plgb2pCjE4mYmrCL7fvkNxkJAjdYQPDj6AvxXiEE8tPPnErUGvx
-        SYcqGnVJEistLOnACosseK8UDakRg0vUSnVIJfo=
-X-Google-Smtp-Source: AA0mqf7mqtN8YcQyFpHOOnlQguXH+pnYodUhzdIjcOeE4bXA+rHNuKEl6G0nqVdjVY+HLCP++OVNVRPPLGp6BYj2HyE=
-X-Received: by 2002:a05:6808:1451:b0:354:94a6:a721 with SMTP id
- x17-20020a056808145100b0035494a6a721mr25034oiv.194.1668483401717; Mon, 14 Nov
- 2022 19:36:41 -0800 (PST)
+        Mon, 14 Nov 2022 22:40:06 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0506210FC7
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 19:40:05 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id k15so12960624pfg.2
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 19:40:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IzdlQonh9ksiWRR0k5Cq1A47+kjhq4OFBIwy1qdcCmg=;
+        b=ZLDkTjJFwaTtzx3Ef09Onguq8cMTLUu9IEYjbLoRUGzk6ulTDfFw+ni0uy1n1Utjjj
+         HJHHJjd4XNpN6yIrAbr8fMM5mGQ3ERZuduvwoNToYgXUJ2F7mhGkSD7hHYG95gvFtaRj
+         Ih510ouJY4TlIBwaj4F63HFxqAFxe92iA/vGZVp/00tgZd56F9LOzQXyeQBXyWrqvqD5
+         +tJjfQsDPmI3BgrCZQk1RIArWN9leJGs4MsqSi5cWwsFimv+oMiMsBgpB/+PsX90xuAk
+         jrLGuydsKvTIVXVNpOkKN2TRoeLGpP+WzLG1DhDTmHV9R3Wu/FefvswkfajppVg6jenm
+         eOjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IzdlQonh9ksiWRR0k5Cq1A47+kjhq4OFBIwy1qdcCmg=;
+        b=HVCmj1oErPEc4d+z57FTUQWLO9qcgEoESl5UKPqFp9TaYWmyN2jH4m1MCO7LFG585J
+         o0rTtvWoLH+6CXIoU/80oWZ7gcwhQSb9IxVuycyHmM9fReEwgmCkl/cmA20sEx6fyun5
+         VQr17+QznvrRgdf4oBZouL0l6XJC1QBVMIVLp9clu497kDgNDJwHhTZI/gxU2gSQ1k/l
+         sA67yuxiEwt/3h8MrDTYOnIBWON1+qhME67XT8OciPog65Pczg8XGqYy3RZP0zmqDpCP
+         apw55cPB94UX7Vdp7cyYoqniCxdVYvKue2g0UVmA7pnB2lqUpJIp7X77XRizCktaT31K
+         zRww==
+X-Gm-Message-State: ANoB5plmVreW/J5DiovRWHov5k6m2DUmrBXnqTXakHG04RRU7WC8eMJX
+        y8Z/FWd/VtxL7qzL2zvWD2zsIA==
+X-Google-Smtp-Source: AA0mqf6btc+EJX1sgkPBLfYXPRpcR1cqU2L9+Cbc/TvjhYzVhQRiZmUsPGAYH2NmA3RNvpVLWxaQYg==
+X-Received: by 2002:aa7:8396:0:b0:56b:f3b2:5543 with SMTP id u22-20020aa78396000000b0056bf3b25543mr16810448pfm.65.1668483604557;
+        Mon, 14 Nov 2022 19:40:04 -0800 (PST)
+Received: from [10.255.4.35] ([139.177.225.229])
+        by smtp.gmail.com with ESMTPSA id x13-20020a63f70d000000b0046f469a2661sm6586284pgh.27.2022.11.14.19.39.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 19:40:04 -0800 (PST)
+Message-ID: <ba8aa36a-d0d7-b716-a9c7-02c6d5a60712@bytedance.com>
+Date:   Tue, 15 Nov 2022 11:39:55 +0800
 MIME-Version: 1.0
-References: <20221113160237.3152770-1-maz@kernel.org> <CAK7LNASoWbJ458zLTP6NuC+5Q+YHOdzVOeCKQ3MeyXQYrkjneg@mail.gmail.com>
-In-Reply-To: <CAK7LNASoWbJ458zLTP6NuC+5Q+YHOdzVOeCKQ3MeyXQYrkjneg@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 15 Nov 2022 12:36:05 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT3KmNZD0Lw4F4aKF1k_No4ZeomChjy2t59WD1s8vESrw@mail.gmail.com>
-Message-ID: <CAK7LNAT3KmNZD0Lw4F4aKF1k_No4ZeomChjy2t59WD1s8vESrw@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Restore .version auto-increment behaviour for
- Debian/RPM packages
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [RFC PATCH] getting misc stats/attributes via xattr API
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     linux-fsdevel@vger.kernel.org, Dave Chinner <david@fromorbit.com>,
+        Theodore Ts'o <tytso@mit.edu>, Karel Zak <kzak@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        LSM <linux-security-module@vger.kernel.org>,
+        Ian Kent <raven@themaw.net>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        Amir Goldstein <amir73il@gmail.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        chenying.kernel@bytedance.com
+References: <YnEeuw6fd1A8usjj@miu.piliscsaba.redhat.com>
+ <e57733cd-364d-84e0-cfe0-fd41de14f434@bytedance.com>
+ <CAJfpegsVsnjUy2N+qO-j4ToScwev01AjwUA0Enp_DxroPQS30A@mail.gmail.com>
+Content-Language: en-US
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <CAJfpegsVsnjUy2N+qO-j4ToScwev01AjwUA0Enp_DxroPQS30A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 9:09 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Mon, Nov 14, 2022 at 1:02 AM Marc Zyngier <maz@kernel.org> wrote:
-> >
-> > diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-> > index 60a2a63a5e90..e5c983afddab 100755
-> > --- a/scripts/package/mkdebian
-> > +++ b/scripts/package/mkdebian
-> > @@ -90,7 +90,7 @@ if [ -n "$KDEB_PKGVERSION" ]; then
-> >         packageversion=$KDEB_PKGVERSION
-> >         revision=${packageversion##*-}
-> >  else
-> > -       revision=$(cat .version 2>/dev/null||echo 1)
-> > +       revision=$(init/build-version)
->
->
-> This does not work for out-of-tree builds
-> because init/build-version is a check-in source file.
->
->
->
-> For example, "make O=/tmp/foo bindeb-pkg" fails with:
-> .../linux/scripts/package/mkdebian: 93: init/build-version: not found
->
->
-> The correct code is:
->
->
->           revision=$($srctree/init/build-version)
->
->
->
->
-> >         packageversion=$version-$revision
-> >  fi
-> >  sourcename=$KDEB_SOURCENAME
-> > diff --git a/scripts/package/mkspec b/scripts/package/mkspec
-> > index 70392fd2fd29..9cbd45f497ba 100755
-> > --- a/scripts/package/mkspec
-> > +++ b/scripts/package/mkspec
-> > @@ -42,7 +42,7 @@ sed -e '/^DEL/d' -e 's/^\t*//' <<EOF
-> >         Name: kernel
-> >         Summary: The Linux Kernel
-> >         Version: $__KERNELRELEASE
-> > -       Release: $(cat .version 2>/dev/null || echo 1)
-> > +       Release: $(init/build-version)
->
->
-> Ditto.
->
->           Release: $($srctree/init/build-version)
+On 11/14/22 8:35 PM, Miklos Szeredi wrote:
+> On Mon, 14 Nov 2022 at 10:00, Abel Wu <wuyun.abel@bytedance.com> wrote:
+>>
+>> Hi Miklos and anyone interested in this proposal, is there any update on
+>> this? Sorry that I didn't find any..
+> 
+> No update.
+> 
+> Which part are you interested in?
 
+We noticed that atop(1) can introduce a burst cpu usage once number of
+processes becoming large. It is mostly due to the overhead of massive
+syscalls. There are similar cases like monitor agents recording system
+status and consuming resources in modern data centers. So it would be
+nice to get a bunch of info in one syscall.
 
+> 
+> Getting mount attributes?  Or a generic key-value retrieval and
+> storage interface?
 
-No, mkspec needs no change because binrpm-pkg builds the kernel
-_before_ generating the spec file.
+The latter.
 
-If you increment the .version file here again, you would have
-the revision mismatch between the package and the actual vmlinuz.
+> 
+> For the first one there are multiple proposals, one of them is adding
+> a new system call using binary structs.  The fsinfo(2) syscall was
+> deemed overdesigned and rejected.  Something simpler would probably be
+> fairly uncontroversial.
+> 
+> As for the other proposal it seems like some people would prefer a set
+> of new syscalls, while some others would like to reuse the xattr
+> syscalls.  No agreement seems to have been reached.
 
+So the divergence comes from 'how' rather than 'why', right?
 
+Thanks & Best,
+	Abel
 
-Please send the change for mkdebian only.
-
-
-
->
->
->
->
-> >         License: GPL
-> >         Group: System Environment/Kernel
-> >         Vendor: The Linux Community
-> > --
-> > 2.34.1
-> >
->
->
-> --
-> Best Regards
-> Masahiro Yamada
-
-
-
---
-Best Regards
-Masahiro Yamada
+> 
+> Also I think a notification system for mount related events is also a
+> much needed component.   I've tried to explore using the fsnotify
+> framework for this, but the code is pretty convoluted and I couldn't
+> get prototype working.
+> 
+> Thanks,
+> Miklos
