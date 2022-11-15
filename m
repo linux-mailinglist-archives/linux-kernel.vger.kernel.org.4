@@ -2,113 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 222876294AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 814796294A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 10:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238102AbiKOJpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 04:45:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
+        id S237885AbiKOJoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 04:44:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238043AbiKOJpe (ORCPT
+        with ESMTP id S237858AbiKOJoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 04:45:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0783220187
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:44:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668505478;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0vWBmmZ+MaaTNoor+4JgOmz7dmr0qFnAhYd6s3lBFUI=;
-        b=ZHZqkVd4gsKRoG+w36HetlWKjamTVqqz5J1R8YdUnfALBaAIuWel6ypBDXFQ4yd7WC/WGM
-        /GJbn9PaYw59t49u48P5jqFlX0d3EvZO38M+ccFwYDjDjUTJBScZ3PB4b6DPYig1Q4sMcA
-        AC1Dm7F8CUTRFk0p3k4ChxHhlbjoyuU=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-590-9LUjXmFMP0W1OEIAHwU-0Q-1; Tue, 15 Nov 2022 04:44:35 -0500
-X-MC-Unique: 9LUjXmFMP0W1OEIAHwU-0Q-1
-Received: by mail-pf1-f200.google.com with SMTP id cj8-20020a056a00298800b0056cee8a0cf8so7471002pfb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:44:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0vWBmmZ+MaaTNoor+4JgOmz7dmr0qFnAhYd6s3lBFUI=;
-        b=YMluWSM7D4ajp1bomNRqqGFECDhyxq0UMciiumSOYjlFmEy8Uw4avd9bHVz4nBm8Ag
-         glyR/08oaEbenNLPcrNeXPUnmk+ZyhX/C+RQE0JxoLn/UMav6hQvSi/CJu0ogpvl4wKU
-         FeWcGuqzh6j+OqK8bk0h3M3t3kIXB0USa2lwOenFVnYGMaPXklXXikhuuk4IQLxa1cnK
-         /1sYQSIPpdmAgduCcdy3AuMeeVGeRNylOqY0qabMhIAQs3oNbUCxIyy5znFLyXoNaPdf
-         POu7R0mTqKzkZ0GF/7euv2FGMkZXUBdEnW8oMLC/J1k3sOuUM6YGkZCxA82kWlaklii3
-         MiSQ==
-X-Gm-Message-State: ANoB5pkSRTaAOWMrE/aw0mauuwFD5sX1+5XvpE5sU7Y7LsNXTdtzAd10
-        dkE3zjUPdUY4YdHUKTWqnz/dKWE3cMlzddCaAm6i0+qjaXQ26NnpL12t7TVpx+gkEbXDmXDizxi
-        5mLkY8B4y3O+b6tVTcI/l+AyRwk3xYTaxBKBvvE7q
-X-Received: by 2002:a63:942:0:b0:43c:b43f:5228 with SMTP id 63-20020a630942000000b0043cb43f5228mr16064361pgj.58.1668505474022;
-        Tue, 15 Nov 2022 01:44:34 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf43WRfjzPq1IwIinTobpP8n7DU67GGyyPyGFWJnRVW1tpkA7R3+pueZU5O0fWJQkQzgWakieDpZzmd8cv37euU=
-X-Received: by 2002:a63:942:0:b0:43c:b43f:5228 with SMTP id
- 63-20020a630942000000b0043cb43f5228mr16064342pgj.58.1668505473833; Tue, 15
- Nov 2022 01:44:33 -0800 (PST)
+        Tue, 15 Nov 2022 04:44:12 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06038DF50
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 01:44:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IIRgRI+bxt8OEeRTxuNDOeSmAP0DvJvJJClTurwboCg=; b=KzZcOBG5iOC5icV64AefVB14bh
+        jpqGi0bpsb1EfjmzzK95cOcYe4jbvGPGO1yVfxukxSclFYf3lqDxJ0quWiwll+YLQp9UcEZUsH4of
+        JiUKeV9wINjda6lg4Ex6ATc7Sw+zxOQgEYyJupu2Ko2DY2E14z26/qT/gRK/Ct46tkuWyIHDh7xur
+        KlCa4o8dBQaPwSIZgoco9COTryb1Jqp/tEoMOeFuwpm/7RNl+WqHdhVlBLBin36rbyN2aDClYS21J
+        4R+uZOGP4LYXoTvw53HsFkFo0bJQDPQ09bvBThNDAM3k2+aT91IJ4Zu61B042ugeRo+zW9QbVSS6g
+        44FRLmfA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ousUA-00GOUu-FA; Tue, 15 Nov 2022 09:44:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F3E5A300392;
+        Tue, 15 Nov 2022 10:43:59 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DBAB62C24A924; Tue, 15 Nov 2022 10:43:59 +0100 (CET)
+Date:   Tue, 15 Nov 2022 10:43:59 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: CET shadow stack app compatibility
+Message-ID: <Y3NfX0zXDIZztwKL@hirez.programming.kicks-ass.net>
+References: <7d8133c7e0186bdaeb3893c1c808148dc0d11945.camel@intel.com>
 MIME-Version: 1.0
-References: <20221114131759.57883-1-elic@nvidia.com> <20221114131759.57883-3-elic@nvidia.com>
-In-Reply-To: <20221114131759.57883-3-elic@nvidia.com>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Tue, 15 Nov 2022 10:43:58 +0100
-Message-ID: <CAJaqyWdYuFJ8nvc2YuoFMO=dj_GVMSghj016jU-X75WvXPXL2g@mail.gmail.com>
-Subject: Re: [PATH v2 2/8] vdpa/mlx5: Return error on vlan ctrl commands if
- not supported
-To:     Eli Cohen <elic@nvidia.com>
-Cc:     mst@redhat.com, jasowang@redhat.com, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, si-wei.liu@oracle.com,
-        lulu@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7d8133c7e0186bdaeb3893c1c808148dc0d11945.camel@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 2:18 PM Eli Cohen <elic@nvidia.com> wrote:
->
-> Check if VIRTIO_NET_F_CTRL_VLAN is negotiated and return error if
-> control VQ command is received.
->
-> Signed-off-by: Eli Cohen <elic@nvidia.com>
 
-Acked-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+Let me hijack this and go off on a tangent..
 
-> ---
->  drivers/vdpa/mlx5/net/mlx5_vnet.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/ml=
-x5_vnet.c
-> index 3fb06dcee943..01da229d22da 100644
-> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
-> @@ -1823,6 +1823,9 @@ static virtio_net_ctrl_ack handle_ctrl_vlan(struct =
-mlx5_vdpa_dev *mvdev, u8 cmd)
->         size_t read;
->         u16 id;
->
-> +       if (!(ndev->mvdev.actual_features & BIT_ULL(VIRTIO_NET_F_CTRL_VLA=
-N)))
-> +               return status;
-> +
->         switch (cmd) {
->         case VIRTIO_NET_CTRL_VLAN_ADD:
->                 read =3D vringh_iov_pull_iotlb(&cvq->vring, &cvq->riov, &=
-vlan, sizeof(vlan));
-> --
-> 2.38.1
->
+On Mon, Nov 14, 2022 at 11:15:44PM +0000, Edgecombe, Rick P wrote:
 
+> The breakage derives from how the decision is made on whether to enable
+> shadow stack enforcement. Glibc will do this by checking a bit in the
+> elf header of the binary. It then tells the kernel to turn CET on via a
+> separate kernel API. But instead of this elf bit being selected by
+> application developers, it was mostly applied in various automated ways
+> (mostly default on) by distro builds for years. This huge amount of
+> untested enablement has not generated any visible issues for users yet,
+> because without kernel support the presence of this bit has not
+> generated any actual CET enforcement.
+
+CET is two things, ideally we're fully eradicate the term CET, never
+again mention CET, ever. Whoever at Intel decided to push that term has
+created so much confusion it's not funny :/
+
+The feature at hand here is backward edge control flow -- or shadow
+stacks (the means to implement this). Be explicit about this, do *NOT*
+use CET ever again.
+
+The other thing CET has is forward edge control flow -- or indirect
+branch tracking, this is a completely different and independent feature
+and not advertised or implemented here.
+
+These things are obviously related, but since they're two independent
+features there's the endless confusion as to which is actually meant.
+
+(go (re)watch the last plumbers conf talks on the subject -- there's
+always someone who gets is wrong)
+
+The only things that should have CET in their name are the CR4 bit and
+the two MSRs, nothing more.
+
+ELF bits should not, must not, be called CET. API, not CET, Compiler
+features, also not CET.
+
+(and I know it's too late to eradicate some of it, but please, at least
+make sure the kernel doesn't propagate this nonsense).
