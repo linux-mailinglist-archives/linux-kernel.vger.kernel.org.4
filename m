@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A836291AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 06:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 310CB6291AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 06:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbiKOFxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 00:53:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
+        id S231169AbiKOF7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 00:59:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiKOFxg (ORCPT
+        with ESMTP id S229437AbiKOF7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 00:53:36 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC14E4E;
-        Mon, 14 Nov 2022 21:53:32 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AF5rKYC070678;
-        Mon, 14 Nov 2022 23:53:20 -0600
+        Tue, 15 Nov 2022 00:59:36 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F56A12AF5;
+        Mon, 14 Nov 2022 21:59:32 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2AF5xPn1084622;
+        Mon, 14 Nov 2022 23:59:25 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1668491600;
-        bh=SENu1DXGUnieGJd6x973PQnbourxFBSlhx9GUIfc0l4=;
+        s=ti-com-17Q1; t=1668491965;
+        bh=R1VEnP6ZOuUAPff4YyL8XIjGyr9qHfePN0s6+m45uq8=;
         h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=fvplHn3R6SlFhUaTZuHYsKWvsgLY1f6TgAzWCgFecIQzoeYsycuY/fOr8ZJ/4HPZI
-         oAteA6eOGs9G4nevaV3PhigWx4WmsnD4i4s8SwsWn6Bm/3RPUuFYmewDuKgyo+ryhS
-         9/eaDEhmPz3Rk2QGflx0y+AVnVsMpOkaceCZfNUc=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AF5rKom021663
+        b=Nbkb850DVPCrJJVapTUMT/Fn6O+DTwm/sOCflSQWUmf3oHZWiEx9Gr5stZKG+STbO
+         QFbHbxlEM1+bR560WGntPDGPnl46fsksnF449KU+NW+e9e/6zzzmCL4CMl7LA1syc7
+         UFrIh+P4kz8BpUjqxowpbXO4O7MTS8EBKLT5MSg8=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2AF5xOfC033704
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 14 Nov 2022 23:53:20 -0600
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 14 Nov 2022 23:59:24 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 14
- Nov 2022 23:53:20 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
+ Nov 2022 23:59:24 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
  (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 14 Nov 2022 23:53:20 -0600
+ Frontend Transport; Mon, 14 Nov 2022 23:59:24 -0600
 Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AF5rFIr030097;
-        Mon, 14 Nov 2022 23:53:16 -0600
-Message-ID: <10c7731d-c776-15ee-50e7-406a40e657c3@ti.com>
-Date:   Tue, 15 Nov 2022 11:23:15 +0530
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2AF5xKdv013865;
+        Mon, 14 Nov 2022 23:59:21 -0600
+Message-ID: <5e07e4e1-142e-1c48-6ee0-78c537e126b9@ti.com>
+Date:   Tue, 15 Nov 2022 11:29:19 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [EXTERNAL] Re: [PATCH v7 2/5] remoteproc: pru: Add APIs to get
- and put the PRU cores
+Subject: Re: [PATCH v7 2/5] remoteproc: pru: Add APIs to get and put the PRU
+ cores
 Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>,
-        MD Danish Anwar <danishanwar@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Suman Anna <s-anna@ti.com>, "Andrew F . Davis" <afd@ti.com>,
-        <nm@ti.com>, <vigneshr@ti.com>, <srk@ti.com>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        MD Danish Anwar <danishanwar@ti.com>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        "Andrew F . Davis" <afd@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
+        <srk@ti.com>, <linux-remoteproc@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>
 References: <20221031073801.130541-1-danishanwar@ti.com>
- <20221031073801.130541-3-danishanwar@ti.com>
- <a729e4e2-2f2e-8c3e-af45-3b8276bc6522@kernel.org>
+ <20221031073801.130541-3-danishanwar@ti.com> <20221114205057.GA8042@p14s>
 From:   Md Danish Anwar <a0501179@ti.com>
-In-Reply-To: <a729e4e2-2f2e-8c3e-af45-3b8276bc6522@kernel.org>
+In-Reply-To: <20221114205057.GA8042@p14s>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -76,16 +74,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Mathieu,
 
-Hi Roger,
-
-I had responded to two of your comments on this patch earlier but missed one
-comment. Responding to that comment now.
-
-On 04/11/22 18:25, Roger Quadros wrote:
-> Hi Danish,
-> 
-> On 31/10/2022 09:37, MD Danish Anwar wrote:
+On 15/11/22 02:20, Mathieu Poirier wrote:
+> On Mon, Oct 31, 2022 at 01:07:58PM +0530, MD Danish Anwar wrote:
 >> From: Tero Kristo <t-kristo@ti.com>
 >>
 >> Add two new APIs, pru_rproc_get() and pru_rproc_put(), to the PRU
@@ -106,6 +98,15 @@ On 04/11/22 18:25, Roger Quadros wrote:
 >> Co-developed-by: Puranjay Mohan <p-mohan@ti.com>
 >> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
 >> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+> 
+> The above is very tedious to look at.  Other than yours, please replace all the
+> SoBs with Co-developed-by tags.  Even that seems to be an overkill...  Anyways,
+> for this patch and the other ones in this set.
+> 
+
+Sure, I will replace all the SoBs (other than mine) with Co-developed by tags
+for all the patches in this series.
+
 >> ---
 >>  drivers/remoteproc/pru_rproc.c | 142 +++++++++++++++++++++++++++++++--
 >>  include/linux/pruss.h          |  56 +++++++++++++
@@ -155,6 +156,22 @@ On 04/11/22 18:25, Roger Quadros wrote:
 >>  	struct pruss_mem_region mem_regions[PRU_IOMEM_MAX];
 >> +	struct device_node *client_np;
 >> +	struct mutex lock; /* client access lock */
+> 
+> Why is there a comment here when the field is already documented above?
+> 
+
+I will remove the comment from here.
+
+> I will wait for you to address Roger's comments before looking at this set
+> further.
+> 
+
+I had addressed two out of three of Roger's comments earlier. I missed one
+comment. I have responded to that now. Please have a look at this set.
+
+> Thanks,
+> Mathieu
+> 
 >>  	const char *fw_name;
 >>  	unsigned int *mapped_irq;
 >>  	struct pru_irq_rsc *pru_interrupt_map;
@@ -185,10 +202,6 @@ On 04/11/22 18:25, Roger Quadros wrote:
 >> +	}
 >> +
 >> +	get_device(&rproc->dev);
-> 
-> Why do you need a get_device() here?
-> rproc_get_by_phandle() does it right?
-> 
 >> +
 >> +	return rproc;
 >> +
@@ -229,11 +242,6 @@ On 04/11/22 18:25, Roger Quadros wrote:
 >> +	rproc = __pru_rproc_get(np, index);
 >> +	if (IS_ERR(rproc))
 >> +		return rproc;
-> 
-> Why bother doing __pru_rproc_get() if pru->client_np exists?
-> 
-> You could do the below if check first and exit if pru->client_np exists.
-> 
 >> +
 >> +	pru = rproc->priv;
 >> +	dev = &rproc->dev;
@@ -301,16 +309,6 @@ On 04/11/22 18:25, Roger Quadros wrote:
 >>  	/* PRU1 has its local RAM addresses reversed */
 >> -	if (pru->id == 1)
 >> +	if (pru->id == PRUSS_PRU1)
-> 
-> Introduction of PRUSS_PRU0/1 enum could have been a separate patch.
->
-
-Yes, Introduction of PRUSS_PRU0/1 enum could have been a separated patch in the
-same series. But from the v1 of this series, this enum has been part of this
-patch and that's why I kept it that way. We can introduce a new patch for this
-enum (and the APIs that are using the enum) in next version of the series if
-it's okay with you and Mathieu.
-
 >>  		swap(dram0, dram1);
 >>  	shrd_ram = pruss->mem_regions[PRUSS_MEM_SHRD_RAM2];
 >>  
@@ -419,9 +417,9 @@ it's okay with you and Mathieu.
 >> +}
 >> +
 >> +#endif /* __LINUX_PRUSS_H */
-> 
-> cheers,
-> -roger
+>> -- 
+>> 2.25.1
+>>
 
 Thanks,
-Danish.
+Danish
