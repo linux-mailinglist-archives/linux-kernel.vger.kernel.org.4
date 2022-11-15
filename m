@@ -2,71 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F3D6298E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7B336298E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiKOMbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 07:31:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
+        id S230398AbiKOMbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 07:31:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiKOMbA (ORCPT
+        with ESMTP id S229629AbiKOMbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:31:00 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B741C932;
-        Tue, 15 Nov 2022 04:30:59 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id d9so19285766wrm.13;
-        Tue, 15 Nov 2022 04:30:59 -0800 (PST)
+        Tue, 15 Nov 2022 07:31:34 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4EE1F2CB;
+        Tue, 15 Nov 2022 04:31:32 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id i21so21637540edj.10;
+        Tue, 15 Nov 2022 04:31:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=heQF+yUf7OPPJ/81qSJZBOwzAZ7P4r5Gfhl736W/C8g=;
-        b=K1O66LkMWAD9+WNZ0lBTjZbkXcOR49TVN2NIpTWnEuiWfpdcEvMtJesFzpvhbdmzT9
-         cd483Meg7hspAAedgrkWvcBT2QkaMgGSToQE0ZhrbmcF8cBTNx6RhoE5OjW8023vaSva
-         hbWALv4lfXfLIXZohAmtC7py2VpAObOGcZ177fcy5DXv36MtgYKqgWxmQjJ7sedxm9ws
-         Ob5cC2sTGU0BmH1vibo4vrpIuGV9o/dkkW6/V2/vGMymnpn+idkHyouRubkum/efn0AK
-         U7hyZmpOovEmZ+CPZGU2W0SpaVmw7JPveFBTLEMs1VhMwXK8btAxFqeFT3bL06f1n57k
-         ugGg==
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LtOTHKIZ6A/I3hs7BfEXlQ0kPVymIIHZKezQdn2E0uA=;
+        b=Xfz6iaQ0fCf4t3J0J/BuCbm8zGPkJSHj/zxhbbhNado/0mO7ara5PP0cExqXn9JNLH
+         dPtQaoBSrVmitxwYbrpfwIXa1zRiT9Ws/PK4WyZeS/mRawxuHFMb3QBjdL2aD25xm39R
+         Xkj2nD+LhaeGDMqoLdfGc7yn9RKKopVenXD1HRINSIWlgonUqnp35z8Adr8rb2D17hRH
+         k/hnJ0M0vG6Vh+mQAi8BXmwxOmaYGzXLrf/tSxDY1RyUlbfnCt0l68qXPgRsLjHeeOq/
+         C3S+ctJZooG1xcErFrZp88J7bPdxfIrDBqJAWqubuxU+SiYDIm4JoTkvJMU/1fJofzJD
+         tX+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=heQF+yUf7OPPJ/81qSJZBOwzAZ7P4r5Gfhl736W/C8g=;
-        b=TsjxO7zP+1LCc2+aqC6GuXVgJwdEeRdzK7GjxhdPVSjH29g8l7Q2/dfY5YqzV05V6F
-         6CYcXG0GIpZVvX83/QGRTnPsKbdUrJVhngek4hxPn+Ba/f8DHeQ2JPU1m82pjY+cgIyo
-         99OJPkH8QhGMWIBOLcRABa7Vwivxg4Mt/OlVmCcasovYt1noXOcvGSCtddG5hXc5VZa+
-         g6lKLKjdPWaBjYZFTn79XnBkJcRdafgWvYrl//dT70eRIMtb7yK8Hzng3WxpN+UcYlUc
-         fxumlZas9x6R/QleqgPc1O+eCdn0Y5g7bRP9E92tvymUMKx3Tk5q6UXB5qJzIBxKI641
-         vNpQ==
-X-Gm-Message-State: ANoB5pn5SBvvn9Q+ieVR4x6Nw4iATWi3fz3i/TTfKlI60F/moBVE8/Pt
-        651tggodmuYxbBQgPSrfXMowJ06mesyW/w==
-X-Google-Smtp-Source: AA0mqf4GuF+RTCpaeuemRjo+R3Hc2FW5+FQYZe5dx99cUQGVlTE3w22izlM+xCGojqtD28L9TirMQA==
-X-Received: by 2002:a5d:6407:0:b0:238:238:cae3 with SMTP id z7-20020a5d6407000000b002380238cae3mr10730999wru.685.1668515458233;
-        Tue, 15 Nov 2022 04:30:58 -0800 (PST)
-Received: from prasmi.home ([2a00:23c8:2501:c701:d94a:6345:c378:e255])
-        by smtp.gmail.com with ESMTPSA id v11-20020a05600c444b00b003c70191f267sm22862614wmn.39.2022.11.15.04.30.57
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LtOTHKIZ6A/I3hs7BfEXlQ0kPVymIIHZKezQdn2E0uA=;
+        b=OsLBqUrqZrY6KclkDg5OZFx+lG7HdKdgDpYC+PgykY7u0332iskhcvEbGYek42en/i
+         /RKxUHMAWU0I6F38Cm81yJgGOHRFwV17exXVsJXUGK6PIyUQsJHbvIDa/gD+M2mY2hlT
+         MepMb/HD/WGKKjAA4FFXbGJW8VdWrM+Dk71161TlUGl2RnnW1sK6qBTo3W8Awa4h07Qk
+         ee1NsVBYv/FFpcx4kMcdvp79tNWJvkgK0GTEbxjIPNDthP15Wce28W4UhkSYt+V20cWk
+         SrDZ/bru0qL14xNFpToLa5sAgxCD0fjLOo2xCEfHXM+D9243CbjOGOL9J3djrLOcC70V
+         A9LQ==
+X-Gm-Message-State: ANoB5pmlZ5ik92cmt10aWqZBTDJCcjr6MZs7W+ImYJjQDScQkIXvRCcf
+        Gb8nDVCpjabPgsoz0OlAklU=
+X-Google-Smtp-Source: AA0mqf7A2NRexDle89XEgIuAECuKXbb9AZrWTSaxs0rClZOqmgODazcce2pl1CGfyX+Z7NX97kAzQw==
+X-Received: by 2002:a05:6402:2407:b0:467:5e4f:591 with SMTP id t7-20020a056402240700b004675e4f0591mr14635237eda.414.1668515491135;
+        Tue, 15 Nov 2022 04:31:31 -0800 (PST)
+Received: from felia.fritz.box (200116b826a73f00b885958edf4850c0.dip.versatel-1u1.de. [2001:16b8:26a7:3f00:b885:958e:df48:50c0])
+        by smtp.gmail.com with ESMTPSA id l7-20020a170906644700b0077a8fa8ba55sm5372891ejn.210.2022.11.15.04.31.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 04:30:57 -0800 (PST)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH] dt-bindings: i2c: renesas,riic: Document RZ/Five SoC
-Date:   Tue, 15 Nov 2022 12:30:18 +0000
-Message-Id: <20221115123018.1182324-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Tue, 15 Nov 2022 04:31:30 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Imre Kaloz <kaloz@openwrt.org>, Krzysztof Halasa <khalasa@piap.pl>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH v2 RESEND] MAINTAINERS: adjust ARM/INTEL IXP4XX ARM ARCHITECTURE to ixp4xx clean-up
+Date:   Tue, 15 Nov 2022 13:31:02 +0100
+Message-Id: <20221115123102.22732-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -77,34 +70,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Commit c83227a5d05e ("irq/gpio: ixp4xx: Drop boardfile probe path") and
+commit 155e4306107f ("clocksource/drivers/ixp4xx: Drop boardfile probe
+path") remove files include/linux/irqchip/irq-ixp4xx.h and
+include/linux/platform_data/timer-ixp4xx.h, but miss to adjust MAINTAINERS.
 
-The RIIC block on the RZ/Five SoC is identical to one found on the RZ/G2UL
-SoC. "renesas,riic-r9a07g043" compatible string will be used on the
-RZ/Five SoC so to make this clear, update the comment to include RZ/Five
-SoC.
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about
+broken references.
 
-No driver changes are required as generic compatible string
-"renesas,riic-rz" will be used as a fallback on RZ/Five SoC.
+Remove file entries for those files in ARM/INTEL IXP4XX ARM ARCHITECTURE.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- Documentation/devicetree/bindings/i2c/renesas,riic.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v1: https://lore.kernel.org/lkml/20220601050200.22213-1-lukas.bulwahn@gmail.com/
+v2: https://lore.kernel.org/lkml/20220919081753.16934-1-lukas.bulwahn@gmail.com/
 
-diff --git a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-index d3c0d5c427ac..2291a7cd619b 100644
---- a/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-+++ b/Documentation/devicetree/bindings/i2c/renesas,riic.yaml
-@@ -19,7 +19,7 @@ properties:
-       - enum:
-           - renesas,riic-r7s72100   # RZ/A1H
-           - renesas,riic-r7s9210    # RZ/A2M
--          - renesas,riic-r9a07g043  # RZ/G2UL
-+          - renesas,riic-r9a07g043  # RZ/G2UL and RZ/Five
-           - renesas,riic-r9a07g044  # RZ/G2{L,LC}
-           - renesas,riic-r9a07g054  # RZ/V2L
-       - const: renesas,riic-rz      # RZ/A or RZ/G2L
+v1 -> v2:
+  added tags from v1, no other change.
+
+Linus, please pick this minor non-urgent clean-up patch for ixp4xx arm.
+
+ MAINTAINERS | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 547ba994ea98..e057108f2709 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2290,8 +2290,6 @@ F:	drivers/clocksource/timer-ixp4xx.c
+ F:	drivers/crypto/ixp4xx_crypto.c
+ F:	drivers/gpio/gpio-ixp4xx.c
+ F:	drivers/irqchip/irq-ixp4xx.c
+-F:	include/linux/irqchip/irq-ixp4xx.h
+-F:	include/linux/platform_data/timer-ixp4xx.h
+ 
+ ARM/INTEL KEEMBAY ARCHITECTURE
+ M:	Paul J. Murphy <paul.j.murphy@intel.com>
 -- 
-2.25.1
+2.17.1
 
