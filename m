@@ -2,97 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 271A5629057
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 04:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97AF462905A
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 04:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237654AbiKODDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 22:03:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
+        id S235865AbiKODDb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 14 Nov 2022 22:03:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237572AbiKODCm (ORCPT
+        with ESMTP id S237795AbiKODCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 22:02:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DA51D678;
-        Mon, 14 Nov 2022 19:00:17 -0800 (PST)
+        Mon, 14 Nov 2022 22:02:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F234DF50
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 19:01:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B89D061512;
-        Tue, 15 Nov 2022 03:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 162F4C433D7;
-        Tue, 15 Nov 2022 03:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668481216;
-        bh=7GwYrxfGLtv3EWezChxqb+EW1qTYQWOsMI1x0yOy/oM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=C/bEiGywRVb82J2X3iohUPsoR5VFGT138fbFv/XrIkmjGs2ZRayyC7JCaEZlnMDLC
-         3K1T4KRAtqdTekG0wTAN0zp3bcdRkrV8ZjK/kjng4ybddpNbjHoPEP2WxwojQToVph
-         z+1XmL84ug3FedJjcKeQbug0BKPQAYWWUobPpx1QAaRDLYhqEAU4EXfIv/Yc1EKN2v
-         1A1Kttu2USPTmA+F+Yp11L4ve0gbojWUX3E4K0INQ9t3agglnd0LrNSGiELzqxo0KM
-         htIZ1DFY6o1h0R3UI8Zd4eE4x3fWvjqkQHLsUYIjAlB9d2pR4AFWb38IVzM9UmQrt5
-         EGkwh/TLqp5Rw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EA42FC395FE;
-        Tue, 15 Nov 2022 03:00:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BCF061520
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:01:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09166C433C1;
+        Tue, 15 Nov 2022 03:01:34 +0000 (UTC)
+Date:   Mon, 14 Nov 2022 22:02:16 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jianlin Lv <iecedge@gmail.com>
+Cc:     alison.schofield@intel.com, davidgow@google.com,
+        thunder.leizhen@huawei.com, jianlv@ebay.com,
+        linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH] tracepoint: Allow livepatch module add trace event
+Message-ID: <20221114220216.05dd0541@gandalf.local.home>
+In-Reply-To: <CAFA-uR8TakkW=KoA_9RXcyw00Zj8+nNn2erSZ4Y9ULNM8ne11g@mail.gmail.com>
+References: <20221102160236.11696-1-iecedge@gmail.com>
+        <20221114122255.72588f45@gandalf.local.home>
+        <CAFA-uR8TakkW=KoA_9RXcyw00Zj8+nNn2erSZ4Y9ULNM8ne11g@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [patch 00/10] genirq/msi: Treewide cleanup of pointless linux/msi.h
- includes
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166848121595.31359.929419753615501478.git-patchwork-notify@kernel.org>
-Date:   Tue, 15 Nov 2022 03:00:15 +0000
-References: <20221113201935.776707081@linutronix.de>
-In-Reply-To: <20221113201935.776707081@linutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, maz@kernel.org, lee@kernel.org,
-        damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
-        james.smart@broadcom.com, dick.kennedy@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, stuyoder@gmail.com,
-        laurentiu.tudor@nxp.com, fenghua.yu@intel.com,
-        dave.jiang@intel.com, vkoul@kernel.org, dmaengine@vger.kernel.org,
-        ioana.ciornei@nxp.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        simon.horman@corigine.com, oss-drivers@corigine.com,
-        Roy.Pledge@nxp.com, diana.craciun@oss.nxp.com,
-        alex.williamson@redhat.com, cohuck@redhat.com, kvm@vger.kernel.org,
-        joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
-        iommu@lists.linux.dev
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, 15 Nov 2022 10:38:34 +0800
+Jianlin Lv <iecedge@gmail.com> wrote:
 
-This series was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Sun, 13 Nov 2022 21:33:54 +0100 (CET) you wrote:
-> While working on per device MSI domains I noticed that quite some files
-> include linux/msi.h just because.
+> On Tue, Nov 15, 2022 at 1:22 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > On Wed,  2 Nov 2022 16:02:36 +0000
+> > Jianlin Lv <iecedge@gmail.com> wrote:
+> >  
+> > > In the case of keeping the system running, the preferred method for
+> > > tracing the kernel is dynamic tracing (kprobe), but the drawback of
+> > > this method is that events are lost, especially when tracing packages
+> > > in the network stack.  
+> >
+> > I'm not against this change, but the above is where I'm a bit confused. How
+> > are events more likely to be lost with kprobes over a static event?  
 > 
-> The top level comment in the header file clearly says:
+> We have encountered a case of kprobes missing event, detailed
+> information can refer to the following link:
+> https://github.com/iovisor/bcc/issues/4198
 > 
->   Regular device drivers have no business with any of these functions....
+> Replacing kprobe with ’bpf + raw tracepoint‘,  no missing events occur.
 > 
-> [...]
 
-Here is the summary with links:
-  - [06/10] net: dpaa2: Remove linux/msi.h includes
-    https://git.kernel.org/netdev/net-next/c/515e5fb6a95e
-  - [07/10] net: nfp: Remove linux/msi.h includes
-    https://git.kernel.org/netdev/net-next/c/5fd66a0b3bb4
+Masami,
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+What's the reason that kprobes are not re-entrant when using ftrace?
 
-
+-- Steve
