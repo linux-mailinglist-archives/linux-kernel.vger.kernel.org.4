@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9DB6290CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 04:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB396290D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 04:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbiKOD3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 22:29:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
+        id S237601AbiKODeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 22:34:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbiKOD3D (ORCPT
+        with ESMTP id S237315AbiKODeS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 22:29:03 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90A9624C;
-        Mon, 14 Nov 2022 19:28:59 -0800 (PST)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NBBPz29c4zqSHG;
-        Tue, 15 Nov 2022 11:25:11 +0800 (CST)
-Received: from [10.174.187.128] (10.174.187.128) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 11:28:56 +0800
-Subject: Re: disabling halt polling broken? (was Re: [PATCH 00/14] KVM:
- Halt-polling fixes, cleanups and a new stat)
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-CC:     Wanpeng Li <wanpengli@tencent.com>, kvm <kvm@vger.kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        "Kernel Mailing List, Linux" <linux-kernel@vger.kernel.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        KVM ARM <kvmarm@lists.cs.columbia.edu>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Jon Cargille <jcargill@google.com>,
-        kvm-ppc <kvm-ppc@vger.kernel.org>,
-        David Matlack <dmatlack@google.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Jim Mattson <jmattson@google.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-References: <20210925005528.1145584-1-seanjc@google.com>
- <03f2f5ab-e809-2ba5-bd98-3393c3b843d2@de.ibm.com>
- <YVHcY6y1GmvGJnMg@google.com>
- <f37ab68c-61ce-b6fb-7a49-831bacfc7424@redhat.com>
- <43e42f5c-9d9f-9e8b-3a61-9a053a818250@de.ibm.com>
- <CABgObfYtS6wiQe=BhF3t5usr7J6q4PWE4=rwZMMukfC9wT_6fA@mail.gmail.com>
- <YVIAdVxc+q2UWB+J@google.com>
-From:   "wangyanan (Y)" <wangyanan55@huawei.com>
-Message-ID: <32810c89-44c6-6780-9d05-e49f6b897b6e@huawei.com>
-Date:   Tue, 15 Nov 2022 11:28:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.0
+        Mon, 14 Nov 2022 22:34:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90879127
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 19:33:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668483202;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mNAjDW+LqmP3hkU3UqpIHjrBEPvXtdlshMYrXjWc3V4=;
+        b=VpFp3i1AH3dOO0HD1vfAaPVAEGtJiuaJ9tb0kWuz9ViEZkAxDh/8kTwscwNHWh5ly+8Oim
+        w2XtF+tcS3i9ZSovBSbUnpfwBQeq4lI1CnOXLFHP0bMoRW8aaHAoFu3779yPC6FR0yC9Ls
+        uFsf8wC/SX0qB/sybqNLU9OpQJnXJFQ=
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
+ [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-591-65_0xc25PQCwYgVTZotcTQ-1; Mon, 14 Nov 2022 22:33:21 -0500
+X-MC-Unique: 65_0xc25PQCwYgVTZotcTQ-1
+Received: by mail-oi1-f199.google.com with SMTP id 13-20020aca280d000000b0035a3c3d34c7so4323520oix.21
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 19:33:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mNAjDW+LqmP3hkU3UqpIHjrBEPvXtdlshMYrXjWc3V4=;
+        b=hrNoeYD/MhydIo9K4bCdlfXEE24GgE5KPXdokirU8/qg+SDMocJkpelFT5A7MuKCi0
+         kc4fiZBKoZ3GXHGPpm2lVgkgv3NSOAk6F1sw4Ss+apqC4YLll63cwEGTo+oaOWIWts9Z
+         +HLv9AtFElT0NKGQltMBmE6ckfKcAdZcmURgoP69YgC1//frzmcECJ0eGXyxneEe+FL4
+         rsdKZWpVDHIjFQi7dMfYzMDNQnjrE7wLicNoZuLzsUGE2mFrufrxzFf0VmLuAGbNE6JG
+         4i/W2HyawMFrvEmxUt6ypuwAnAcEeR99Wo28MlCkluucMO7xNqeMu6Xck+BP0uqxAYWO
+         XePg==
+X-Gm-Message-State: ANoB5pl7r4PF13+PlDX3ozAT5dP8HIR78ulFkTBODYRSNZPu+a6q7GqX
+        6l2EcCq9d4VzuwDJqmcxkQU/uR1PlyNCbVBS29amO9G06aZshRV93r5t5DYxLPiH1f24VxCU/6m
+        tkDREv06tOb1B6YEH8A/yXv1xKVo39frkortxDGEd
+X-Received: by 2002:a05:6808:b03:b0:354:68aa:9c59 with SMTP id s3-20020a0568080b0300b0035468aa9c59mr7748oij.35.1668483200441;
+        Mon, 14 Nov 2022 19:33:20 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7riKn3EpEXz5oT1vSYx083Kmp/Q8XqO449ZlrBFf3Dk6NecTd0HHn6qnUm2yRb84prNFTRyc0PbB8T+HpbG6g=
+X-Received: by 2002:a05:6808:b03:b0:354:68aa:9c59 with SMTP id
+ s3-20020a0568080b0300b0035468aa9c59mr7740oij.35.1668483200138; Mon, 14 Nov
+ 2022 19:33:20 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <YVIAdVxc+q2UWB+J@google.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.187.128]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500023.china.huawei.com (7.185.36.83)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=ham
+References: <20221114131759.57883-1-elic@nvidia.com> <20221114131759.57883-6-elic@nvidia.com>
+In-Reply-To: <20221114131759.57883-6-elic@nvidia.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 15 Nov 2022 11:33:09 +0800
+Message-ID: <CACGkMEuTXO+PB+z6PpOqvov-yRhkZfXSLvs6N-_9ikixsrr-kA@mail.gmail.com>
+Subject: Re: [PATH v2 5/8] vdpa/mlx5: Avoid overwriting CVQ iotlb
+To:     Eli Cohen <elic@nvidia.com>
+Cc:     mst@redhat.com, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, si-wei.liu@oracle.com,
+        eperezma@redhat.com, lulu@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,74 +76,268 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean, Paolo,
-
-I recently also notice the behavior change of param halt_poll_ns.
-Now it loses the ability to:
-1) dynamically disable halt polling for all the running VMs
-by `echo 0 > /sys`
-2) dynamically adjust the halt polling interval for all the
-running VMs by `echo * > /sys`
-
-While in our cases, we usually use above two abilities, and
-KVM_CAP_HALT_POLL is not used yet.
-
-On 2021/9/28 1:33, Sean Christopherson wrote:
-> On Mon, Sep 27, 2021, Paolo Bonzini wrote:
->> On Mon, Sep 27, 2021 at 5:17 PM Christian Borntraeger
->> <borntraeger@de.ibm.com> wrote:
->>>> So I think there are two possibilities that makes sense:
->>>>
->>>> * track what is using KVM_CAP_HALT_POLL, and make writes to halt_poll_ns follow that
->>> what about using halt_poll_ns for those VMs that did not uses KVM_CAP_HALT_POLL and the private number for those that did.
->> Yes, that's what I meant.  David pointed out that doesn't allow you to
->> disable halt polling altogether, but for that you can always ask each
->> VM's userspace one by one, or just not use KVM_CAP_HALT_POLL. (Also, I
->> don't know about Google's usecase, but mine was actually more about
->> using KVM_CAP_HALT_POLL to *disable* halt polling on some VMs!).
-> I kinda like the idea if special-casing halt_poll_ns=0, e.g. for testing or
-> in-the-field mitigation if halt-polling is broken.  It'd be trivial to support, e.g.
-Do we have any plan to repost the diff as a fix?
-I would be very nice that this issue can be solved.
-
-Besides, I think we may need some Doc for users to describe
-how halt_poll_ns works with KVM_CAP_HALT_POLL, like
-"Documentation/virt/guest-halt-polling.rst".
-> @@ -3304,19 +3304,23 @@ void kvm_vcpu_halt(struct kvm_vcpu *vcpu)
->                  update_halt_poll_stats(vcpu, start, poll_end, !waited);
+On Mon, Nov 14, 2022 at 9:18 PM Eli Cohen <elic@nvidia.com> wrote:
 >
->          if (halt_poll_allowed) {
-> +               max_halt_poll_ns = vcpu->kvm->max_halt_poll_ns;
-> +               if (!max_halt_poll_ns || !halt_poll_ns)  <------ squish the max if halt_poll_ns==0
-> +                       max_halt_poll_ns = halt_poll_ns;
-> +
-Does this mean that KVM_CAP_HALT_POLL will not be able to
-disable halt polling for a VM individually when halt_poll_ns !=0?
->                  if (!vcpu_valid_wakeup(vcpu)) {
->                          shrink_halt_poll_ns(vcpu);
-> -               } else if (vcpu->kvm->max_halt_poll_ns) {
-> +               } else if (max_halt_poll_ns) {
->                          if (halt_ns <= vcpu->halt_poll_ns)
->                                  ;
->                          /* we had a long block, shrink polling */
->                          else if (vcpu->halt_poll_ns &&
-> -                                halt_ns > vcpu->kvm->max_halt_poll_ns)
-> +                                halt_ns > max_halt_poll_ns)
->                                  shrink_halt_poll_ns(vcpu);
->                          /* we had a short halt and our poll time is too small */
-> -                       else if (vcpu->halt_poll_ns < vcpu->kvm->max_halt_poll_ns &&
-> -                                halt_ns < vcpu->kvm->max_halt_poll_ns)
-> -                               grow_halt_poll_ns(vcpu);
-> +                       else if (vcpu->halt_poll_ns < max_halt_poll_ns &&
-> +                                halt_ns < max_halt_poll_ns)
-> +                               grow_halt_poll_ns(vcpu, max_halt_poll_ns);
->                  } else {
->                          vcpu->halt_poll_ns = 0;
->                  }
-> _______________________________________________
-> kvmarm mailing list
-> kvmarm@lists.cs.columbia.edu
-> https://lists.cs.columbia.edu/mailman/listinfo/kvmarm
-> .
-Thanks,
-Yanan
+> When qemu uses different address spaces for data and control virtqueues,
+> the current code would overwrite the control virtqueue iotlb through the
+> dup_iotlb call. Fix this by referring to the address space identifier
+> and the group to asid mapping to determine which mapping needs to be
+> updated. We also move the address space logic from mlx5 net to core
+> directory.
+>
+> Reported-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> Signed-off-by: Eli Cohen <elic@nvidia.com>
+
+Acked-by: Jason Wang <jasowang@redhat.com>
+
+Thanks
+
+> ---
+>  drivers/vdpa/mlx5/core/mlx5_vdpa.h |  5 +--
+>  drivers/vdpa/mlx5/core/mr.c        | 44 ++++++++++++++++-----------
+>  drivers/vdpa/mlx5/net/mlx5_vnet.c  | 49 ++++++------------------------
+>  3 files changed, 39 insertions(+), 59 deletions(-)
+>
+> diff --git a/drivers/vdpa/mlx5/core/mlx5_vdpa.h b/drivers/vdpa/mlx5/core/=
+mlx5_vdpa.h
+> index 6af9fdbb86b7..058fbe28107e 100644
+> --- a/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+> +++ b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+> @@ -116,8 +116,9 @@ int mlx5_vdpa_create_mkey(struct mlx5_vdpa_dev *mvdev=
+, u32 *mkey, u32 *in,
+>                           int inlen);
+>  int mlx5_vdpa_destroy_mkey(struct mlx5_vdpa_dev *mvdev, u32 mkey);
+>  int mlx5_vdpa_handle_set_map(struct mlx5_vdpa_dev *mvdev, struct vhost_i=
+otlb *iotlb,
+> -                            bool *change_map);
+> -int mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb =
+*iotlb);
+> +                            bool *change_map, unsigned int asid);
+> +int mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb =
+*iotlb,
+> +                       unsigned int asid);
+>  void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev);
+>
+>  #define mlx5_vdpa_warn(__dev, format, ...)                              =
+                           \
+> diff --git a/drivers/vdpa/mlx5/core/mr.c b/drivers/vdpa/mlx5/core/mr.c
+> index a639b9208d41..a4d7ee2339fa 100644
+> --- a/drivers/vdpa/mlx5/core/mr.c
+> +++ b/drivers/vdpa/mlx5/core/mr.c
+> @@ -511,7 +511,8 @@ void mlx5_vdpa_destroy_mr(struct mlx5_vdpa_dev *mvdev=
+)
+>         mutex_unlock(&mr->mkey_mtx);
+>  }
+>
+> -static int _mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhos=
+t_iotlb *iotlb)
+> +static int _mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev,
+> +                               struct vhost_iotlb *iotlb, unsigned int a=
+sid)
+>  {
+>         struct mlx5_vdpa_mr *mr =3D &mvdev->mr;
+>         int err;
+> @@ -519,42 +520,49 @@ static int _mlx5_vdpa_create_mr(struct mlx5_vdpa_de=
+v *mvdev, struct vhost_iotlb
+>         if (mr->initialized)
+>                 return 0;
+>
+> -       if (iotlb)
+> -               err =3D create_user_mr(mvdev, iotlb);
+> -       else
+> -               err =3D create_dma_mr(mvdev, mr);
+> +       if (mvdev->group2asid[MLX5_VDPA_DATAVQ_GROUP] =3D=3D asid) {
+> +               if (iotlb)
+> +                       err =3D create_user_mr(mvdev, iotlb);
+> +               else
+> +                       err =3D create_dma_mr(mvdev, mr);
+>
+> -       if (err)
+> -               return err;
+> +               if (err)
+> +                       return err;
+> +       }
+>
+> -       err =3D dup_iotlb(mvdev, iotlb);
+> -       if (err)
+> -               goto out_err;
+> +       if (mvdev->group2asid[MLX5_VDPA_CVQ_GROUP] =3D=3D asid) {
+> +               err =3D dup_iotlb(mvdev, iotlb);
+> +               if (err)
+> +                       goto out_err;
+> +       }
+>
+>         mr->initialized =3D true;
+>         return 0;
+>
+>  out_err:
+> -       if (iotlb)
+> -               destroy_user_mr(mvdev, mr);
+> -       else
+> -               destroy_dma_mr(mvdev, mr);
+> +       if (mvdev->group2asid[MLX5_VDPA_DATAVQ_GROUP] =3D=3D asid) {
+> +               if (iotlb)
+> +                       destroy_user_mr(mvdev, mr);
+> +               else
+> +                       destroy_dma_mr(mvdev, mr);
+> +       }
+>
+>         return err;
+>  }
+>
+> -int mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb =
+*iotlb)
+> +int mlx5_vdpa_create_mr(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb =
+*iotlb,
+> +                       unsigned int asid)
+>  {
+>         int err;
+>
+>         mutex_lock(&mvdev->mr.mkey_mtx);
+> -       err =3D _mlx5_vdpa_create_mr(mvdev, iotlb);
+> +       err =3D _mlx5_vdpa_create_mr(mvdev, iotlb, asid);
+>         mutex_unlock(&mvdev->mr.mkey_mtx);
+>         return err;
+>  }
+>
+>  int mlx5_vdpa_handle_set_map(struct mlx5_vdpa_dev *mvdev, struct vhost_i=
+otlb *iotlb,
+> -                            bool *change_map)
+> +                            bool *change_map, unsigned int asid)
+>  {
+>         struct mlx5_vdpa_mr *mr =3D &mvdev->mr;
+>         int err =3D 0;
+> @@ -566,7 +574,7 @@ int mlx5_vdpa_handle_set_map(struct mlx5_vdpa_dev *mv=
+dev, struct vhost_iotlb *io
+>                 *change_map =3D true;
+>         }
+>         if (!*change_map)
+> -               err =3D _mlx5_vdpa_create_mr(mvdev, iotlb);
+> +               err =3D _mlx5_vdpa_create_mr(mvdev, iotlb, asid);
+>         mutex_unlock(&mr->mkey_mtx);
+>
+>         return err;
+> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/ml=
+x5_vnet.c
+> index 98dd8ce8af26..3a6dbbc6440d 100644
+> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> @@ -2394,7 +2394,8 @@ static void restore_channels_info(struct mlx5_vdpa_=
+net *ndev)
+>         }
+>  }
+>
+> -static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev, struct vhos=
+t_iotlb *iotlb)
+> +static int mlx5_vdpa_change_map(struct mlx5_vdpa_dev *mvdev,
+> +                               struct vhost_iotlb *iotlb, unsigned int a=
+sid)
+>  {
+>         struct mlx5_vdpa_net *ndev =3D to_mlx5_vdpa_ndev(mvdev);
+>         int err;
+> @@ -2406,7 +2407,7 @@ static int mlx5_vdpa_change_map(struct mlx5_vdpa_de=
+v *mvdev, struct vhost_iotlb
+>
+>         teardown_driver(ndev);
+>         mlx5_vdpa_destroy_mr(mvdev);
+> -       err =3D mlx5_vdpa_create_mr(mvdev, iotlb);
+> +       err =3D mlx5_vdpa_create_mr(mvdev, iotlb, asid);
+>         if (err)
+>                 goto err_mr;
+>
+> @@ -2587,7 +2588,7 @@ static int mlx5_vdpa_reset(struct vdpa_device *vdev=
+)
+>         ++mvdev->generation;
+>
+>         if (MLX5_CAP_GEN(mvdev->mdev, umem_uid_0)) {
+> -               if (mlx5_vdpa_create_mr(mvdev, NULL))
+> +               if (mlx5_vdpa_create_mr(mvdev, NULL, 0))
+>                         mlx5_vdpa_warn(mvdev, "create MR failed\n");
+>         }
+>         up_write(&ndev->reslock);
+> @@ -2623,41 +2624,20 @@ static u32 mlx5_vdpa_get_generation(struct vdpa_d=
+evice *vdev)
+>         return mvdev->generation;
+>  }
+>
+> -static int set_map_control(struct mlx5_vdpa_dev *mvdev, struct vhost_iot=
+lb *iotlb)
+> -{
+> -       u64 start =3D 0ULL, last =3D 0ULL - 1;
+> -       struct vhost_iotlb_map *map;
+> -       int err =3D 0;
+> -
+> -       spin_lock(&mvdev->cvq.iommu_lock);
+> -       vhost_iotlb_reset(mvdev->cvq.iotlb);
+> -
+> -       for (map =3D vhost_iotlb_itree_first(iotlb, start, last); map;
+> -            map =3D vhost_iotlb_itree_next(map, start, last)) {
+> -               err =3D vhost_iotlb_add_range(mvdev->cvq.iotlb, map->star=
+t,
+> -                                           map->last, map->addr, map->pe=
+rm);
+> -               if (err)
+> -                       goto out;
+> -       }
+> -
+> -out:
+> -       spin_unlock(&mvdev->cvq.iommu_lock);
+> -       return err;
+> -}
+> -
+> -static int set_map_data(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb =
+*iotlb)
+> +static int set_map_data(struct mlx5_vdpa_dev *mvdev, struct vhost_iotlb =
+*iotlb,
+> +                       unsigned int asid)
+>  {
+>         bool change_map;
+>         int err;
+>
+> -       err =3D mlx5_vdpa_handle_set_map(mvdev, iotlb, &change_map);
+> +       err =3D mlx5_vdpa_handle_set_map(mvdev, iotlb, &change_map, asid)=
+;
+>         if (err) {
+>                 mlx5_vdpa_warn(mvdev, "set map failed(%d)\n", err);
+>                 return err;
+>         }
+>
+>         if (change_map)
+> -               err =3D mlx5_vdpa_change_map(mvdev, iotlb);
+> +               err =3D mlx5_vdpa_change_map(mvdev, iotlb, asid);
+>
+>         return err;
+>  }
+> @@ -2670,16 +2650,7 @@ static int mlx5_vdpa_set_map(struct vdpa_device *v=
+dev, unsigned int asid,
+>         int err =3D -EINVAL;
+>
+>         down_write(&ndev->reslock);
+> -       if (mvdev->group2asid[MLX5_VDPA_DATAVQ_GROUP] =3D=3D asid) {
+> -               err =3D set_map_data(mvdev, iotlb);
+> -               if (err)
+> -                       goto out;
+> -       }
+> -
+> -       if (mvdev->group2asid[MLX5_VDPA_CVQ_GROUP] =3D=3D asid)
+> -               err =3D set_map_control(mvdev, iotlb);
+> -
+> -out:
+> +       err =3D set_map_data(mvdev, iotlb, asid);
+>         up_write(&ndev->reslock);
+>         return err;
+>  }
+> @@ -3182,7 +3153,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *=
+v_mdev, const char *name,
+>                 goto err_mpfs;
+>
+>         if (MLX5_CAP_GEN(mvdev->mdev, umem_uid_0)) {
+> -               err =3D mlx5_vdpa_create_mr(mvdev, NULL);
+> +               err =3D mlx5_vdpa_create_mr(mvdev, NULL, 0);
+>                 if (err)
+>                         goto err_res;
+>         }
+> --
+> 2.38.1
+>
+
