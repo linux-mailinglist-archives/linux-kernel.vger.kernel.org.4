@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B8E62977A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:31:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B13A62977C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:31:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237091AbiKOLbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 06:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
+        id S232691AbiKOLbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 06:31:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbiKOLba (ORCPT
+        with ESMTP id S232655AbiKOLbb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 06:31:30 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5749C17E2E
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:31:28 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id o4so23625842wrq.6
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:31:28 -0800 (PST)
+        Tue, 15 Nov 2022 06:31:31 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A550C1834F
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:31:29 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id l14so23737070wrw.2
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:31:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IbFCvRl1cs7XC6NWdvqbuTmw/rqE6VsOAXoQYLExO5Q=;
-        b=cYbRnUjqpEjManEKkdqcrYyuXoBez9/oOJAeEmcI2tRlNTl1NoyEzlzIPXCdit1eE5
-         y4D3xv5gQauvoixnhhcrDQFN4mYEOSGSb+btX02JoZrVFSik0N8I1kAr2aLRC/lB3BSP
-         fcG3BL7lkVp3a+n+C/WKugTduGRsbVe4FqsctV268gfJKOjriumE4V7YaO0inFJyLFNP
-         AIPQiTykLvbSFahIuowc6lGqgxvN636Wt/Jq3kbT46mSkNiSt7OmwDzO/cdAA5zcPU/L
-         HMRBuZ2VJIDa8bXa8oXKHlRr37PSPgOYZMUGhwjyJ/lW/A/zOUp25/csQaESL47qnnaw
-         mDRg==
+        bh=QmJK2z6YewxghveqGIb9UQBF6OMvTjY+OevUyUnH0xk=;
+        b=k4Wk8SJzRhqnAXgbsU5UoMU6S3GG5pKKmOwOlxbFHnJZK2Gd1ISJplEGnPTTgav2Io
+         p7LEnsWo+qY65f9r4bO1QhQR6I4KnqEVRZPkC1UPoU1BJcIcIfyqLGVFB7l9ytX6LKg6
+         RmVHalJsc+Af9sEHGLvpgJLFysuZSAyGXkcXC8TD/7d1jjz3gJPLcr3em5oZDNlj6u0h
+         Koi50OZFkn26y6VCrs6mCrl4zccZ3ee9sJ20m7msyngMafejHfgADR+HiVh/QPIcHx9f
+         zkEl0TlYx7/uSs54/CmF2F3cGX0vHoxQB4RFA8oVgsyUlOVRS+DVFxyZm9d/jsCxKiHn
+         uOUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IbFCvRl1cs7XC6NWdvqbuTmw/rqE6VsOAXoQYLExO5Q=;
-        b=a6JkrfbBZHe34sZDbi22+dsbzd1h3ErK69rX+84Gl8YAYBwPB8EAcfsCzXKlt8Y+nY
-         U1UeZH2Ggfv/3tQaDo5lIc5aC7QX6XZuj9ws8PuhKaILfty8JUBN23qY0Vxo+ZxMy45A
-         C9h+VhrsMF7N5P/kgfgkustA3mmWdxF6fuRmdkGNlmPxV85yO2ma+Z3b1CiTf3ONkaFO
-         5ipUI+9rWZJDVUmn+TE6U+MK81iR849AZAuhDu3L9IKSbYyUqPEMbHKqCP1dnLTGEXsa
-         X0TF138VEa6Xa+vro+t2JkzJ00h/gknQjNIoR7okYpD6s14ZxlORUH3fvphGVSl4o3KU
-         3R9w==
-X-Gm-Message-State: ANoB5pk4jBYZY1nc0EdOk6fRy1pHBrmKUTJitRwjLVj3RqlJxanxMc6F
-        PkHgGmtnvq2VJfcrYjHeMajJHg==
-X-Google-Smtp-Source: AA0mqf6N5t4rvy2Ue9i7XG8n9ajha5IUsHqryq/2dLXNE/Vlf/iVvJTCgSvQPJvMOWlQH6GLHmZcEw==
-X-Received: by 2002:adf:fc8c:0:b0:235:9aae:35a6 with SMTP id g12-20020adffc8c000000b002359aae35a6mr9921596wrr.686.1668511886775;
-        Tue, 15 Nov 2022 03:31:26 -0800 (PST)
+        bh=QmJK2z6YewxghveqGIb9UQBF6OMvTjY+OevUyUnH0xk=;
+        b=M/najmoPuRUef+uzCeUoeDeoBttzS4hB1UJGxpjq8B7eRu1YG7PKT7v75Rsz5iLmlV
+         Ri1CU5YYeKpx5Zj4hz19JCeCO5CjiLLwpcNKFAhus8EQCFf6y/TsWEMMXGoU4bTOkElN
+         0daFnEiWS4w2vTGI4s8p69ZKMdDNsXOhoVeEiyTywm2s3D7VVNNEdQSp478nKjahEPPk
+         iDAu5uF4MGJnPJLIryYrrZ1vjageuAAk7PFrwve42fWGMnatxt1WOMgeYFdKKIUtHeS2
+         jzdIKCEMQqqq6UZ1bxvPz2I8RAC7uQXV6qNGgfKlB62YJXGfpzRg8sh19uoFAMJu2QXS
+         TOBw==
+X-Gm-Message-State: ANoB5pmQKtl12Hry2CXyBweNjo0X9UAekfIXj/q+cwqlb89f1Mo1gn9h
+        ZbbRdGaQcJ288rMOiWPe3V6Lhw==
+X-Google-Smtp-Source: AA0mqf5T/TlbfoU3tRLzxMxknGknMiobNOGrTYTtHcl5JPzD7NAwIFrBv5OSukCtRDjOYMCppujbXA==
+X-Received: by 2002:a5d:4903:0:b0:236:87f4:75d with SMTP id x3-20020a5d4903000000b0023687f4075dmr10004008wrq.447.1668511889176;
+        Tue, 15 Nov 2022 03:31:29 -0800 (PST)
 Received: from zoltan.localdomain ([81.128.185.34])
-        by smtp.gmail.com with ESMTPSA id r18-20020adfe692000000b00238df11940fsm12273091wrm.16.2022.11.15.03.31.25
+        by smtp.gmail.com with ESMTPSA id r18-20020adfe692000000b00238df11940fsm12273091wrm.16.2022.11.15.03.31.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 03:31:26 -0800 (PST)
+        Tue, 15 Nov 2022 03:31:27 -0800 (PST)
 From:   Alex Elder <elder@linaro.org>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
@@ -58,9 +58,9 @@ Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org,
         elder@kernel.org, linux-arm-msm@vger.kernel.org,
         netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 2/5] net: ipa: encapsulate decision about firmware load
-Date:   Tue, 15 Nov 2022 05:31:16 -0600
-Message-Id: <20221115113119.249893-3-elder@linaro.org>
+Subject: [PATCH net-next v2 3/5] net: ipa: introduce "qcom,gsi-loader" property
+Date:   Tue, 15 Nov 2022 05:31:17 -0600
+Message-Id: <20221115113119.249893-4-elder@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221115113119.249893-1-elder@linaro.org>
 References: <20221115113119.249893-1-elder@linaro.org>
@@ -76,108 +76,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GSI layer used for IPA requires firmware to be loaded.
+Introduce a new way of specifying how the GSI firmware gets loaded
+for IPA.  Currently, this is indicated by the presence or absence of
+the Boolean "modem-init" Device Tree property.  The new property
+must have a value--either "self" or "modem"--which indicates whether
+the AP or modem is the GSI firmware loader, respectively.
 
-Currently either the AP or the modem loads the firmware,
-distinguished by whether the "modem-init" Device Tree
-property is defined.
-
-Some newer systems implement a third option.  In preparation for
-that, encapsulate the code that determines how the GSI firmware
-gets loaded in a new function, ipa_firmware_loader().
+For legacy systems, the new property will not exist, and the
+"modem-init" property will be used.  For newer systems, the
+"qcom,gsi-loader" property *must* exist, and must have one of the
+two prescribed values.  It is an error to have both properties
+defined, and it is an error for the new property to have an
+unrecognized value.
 
 Signed-off-by: Alex Elder <elder@linaro.org>
 ---
- drivers/net/ipa/ipa_main.c | 39 ++++++++++++++++++++++++++++++--------
- 1 file changed, 31 insertions(+), 8 deletions(-)
+ drivers/net/ipa/ipa_main.c | 44 ++++++++++++++++++++++++++++++++------
+ 1 file changed, 37 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/net/ipa/ipa_main.c b/drivers/net/ipa/ipa_main.c
-index ebb6c9b311eb9..9e43b79d233e9 100644
+index 9e43b79d233e9..214e524dce795 100644
 --- a/drivers/net/ipa/ipa_main.c
 +++ b/drivers/net/ipa/ipa_main.c
-@@ -81,6 +81,19 @@
- /* Divider for 19.2 MHz crystal oscillator clock to get common timer clock */
- #define IPA_XO_CLOCK_DIVIDER	192	/* 1 is subtracted where used */
+@@ -87,11 +87,13 @@
+  * @IPA_LOADER_DEFER:		System not ready; try again later
+  * @IPA_LOADER_SELF:		AP loads GSI firmware
+  * @IPA_LOADER_MODEM:		Modem loads GSI firmware, signals when done
++ * @IPA_LOADER_INVALID:	GSI firmware loader specification is invalid
+  */
+ enum ipa_firmware_loader {
+ 	IPA_LOADER_DEFER,
+ 	IPA_LOADER_SELF,
+ 	IPA_LOADER_MODEM,
++	IPA_LOADER_INVALID,
+ };
  
-+/**
-+ * enum ipa_firmware_loader: How GSI firmware gets loaded
-+ *
-+ * @IPA_LOADER_DEFER:		System not ready; try again later
-+ * @IPA_LOADER_SELF:		AP loads GSI firmware
-+ * @IPA_LOADER_MODEM:		Modem loads GSI firmware, signals when done
-+ */
-+enum ipa_firmware_loader {
-+	IPA_LOADER_DEFER,
-+	IPA_LOADER_SELF,
-+	IPA_LOADER_MODEM,
-+};
-+
  /**
-  * ipa_setup() - Set up IPA hardware
-  * @ipa:	IPA pointer
-@@ -696,6 +709,18 @@ static void ipa_validate_build(void)
- 	BUILD_BUG_ON(!ipa_aggr_granularity_val(IPA_AGGR_GRANULARITY));
- }
+@@ -711,9 +713,37 @@ static void ipa_validate_build(void)
  
-+static enum ipa_firmware_loader ipa_firmware_loader(struct device *dev)
-+{
-+	if (of_property_read_bool(dev->of_node, "modem-init"))
-+		return IPA_LOADER_MODEM;
-+
-+	/* We need Trust Zone to load firmware; make sure it's available */
-+	if (qcom_scm_is_available())
-+		return IPA_LOADER_SELF;
-+
-+	return IPA_LOADER_DEFER;
-+}
-+
- /**
-  * ipa_probe() - IPA platform driver probe function
-  * @pdev:	Platform device pointer
-@@ -722,9 +747,9 @@ static void ipa_validate_build(void)
- static int ipa_probe(struct platform_device *pdev)
+ static enum ipa_firmware_loader ipa_firmware_loader(struct device *dev)
  {
- 	struct device *dev = &pdev->dev;
-+	enum ipa_firmware_loader loader;
- 	const struct ipa_data *data;
- 	struct ipa_power *power;
--	bool modem_init;
- 	struct ipa *ipa;
- 	int ret;
+-	if (of_property_read_bool(dev->of_node, "modem-init"))
++	bool modem_init;
++	const char *str;
++	int ret;
++
++	/* Look up the old and new properties by name */
++	modem_init = of_property_read_bool(dev->of_node, "modem-init");
++	ret = of_property_read_string(dev->of_node, "qcom,gsi-loader", &str);
++
++	/* If the new property doesn't exist, it's legacy behavior */
++	if (ret == -EINVAL) {
++		if (modem_init)
++			return IPA_LOADER_MODEM;
++		goto out_self;
++	}
++
++	/* Any other error on the new property means it's poorly defined */
++	if (ret)
++		return IPA_LOADER_INVALID;
++
++	/* New property value exists; if old one does too, that's invalid */
++	if (modem_init)
++		return IPA_LOADER_INVALID;
++
++	/* Modem loads GSI firmware for "modem" */
++	if (!strcmp(str, "modem"))
+ 		return IPA_LOADER_MODEM;
  
-@@ -747,11 +772,9 @@ static int ipa_probe(struct platform_device *pdev)
- 		return -EINVAL;
++	/* Any value other than "self" is an error */
++	if (strcmp(str, "self"))
++		return IPA_LOADER_INVALID;
++out_self:
+ 	/* We need Trust Zone to load firmware; make sure it's available */
+ 	if (qcom_scm_is_available())
+ 		return IPA_LOADER_SELF;
+@@ -773,6 +803,8 @@ static int ipa_probe(struct platform_device *pdev)
  	}
  
--	/* If we need Trust Zone, make sure it's available */
--	modem_init = of_property_read_bool(dev->of_node, "modem-init");
--	if (!modem_init)
--		if (!qcom_scm_is_available())
--			return -EPROBE_DEFER;
-+	loader = ipa_firmware_loader(dev);
-+	if (loader == IPA_LOADER_DEFER)
-+		return -EPROBE_DEFER;
+ 	loader = ipa_firmware_loader(dev);
++	if (loader == IPA_LOADER_INVALID)
++		return -EINVAL;
+ 	if (loader == IPA_LOADER_DEFER)
+ 		return -EPROBE_DEFER;
  
- 	/* The clock and interconnects might not be ready when we're
- 	 * probed, so might return -EPROBE_DEFER.
-@@ -796,7 +819,7 @@ static int ipa_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_endpoint_exit;
+@@ -834,20 +866,18 @@ static int ipa_probe(struct platform_device *pdev)
  
--	ret = ipa_smp2p_init(ipa, modem_init);
-+	ret = ipa_smp2p_init(ipa, loader == IPA_LOADER_MODEM);
- 	if (ret)
- 		goto err_table_exit;
+ 	dev_info(dev, "IPA driver initialized");
  
-@@ -815,7 +838,7 @@ static int ipa_probe(struct platform_device *pdev)
- 	 * call to ipa_setup() when it has finished.  In that case we're
- 	 * done here.
+-	/* If the modem is doing early initialization, it will trigger a
+-	 * call to ipa_setup() when it has finished.  In that case we're
+-	 * done here.
++	/* If the modem is loading GSI firmware, it will trigger a call to
++	 * ipa_setup() when it has finished.  In that case we're done here.
  	 */
--	if (modem_init)
-+	if (loader == IPA_LOADER_MODEM)
+ 	if (loader == IPA_LOADER_MODEM)
  		goto done;
  
- 	/* Otherwise we need to load the firmware and have Trust Zone validate
+-	/* Otherwise we need to load the firmware and have Trust Zone validate
+-	 * and install it.  If that succeeds we can proceed with setup.
+-	 */
++	/* The AP is loading GSI firmware; do so now */
+ 	ret = ipa_firmware_load(dev);
+ 	if (ret)
+ 		goto err_deconfig;
+ 
++	/* GSI firmware is loaded; proceed to setup */
+ 	ret = ipa_setup(ipa);
+ 	if (ret)
+ 		goto err_deconfig;
 -- 
 2.34.1
 
