@@ -2,156 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4575B629625
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF6D629628
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 11:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238193AbiKOKmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 05:42:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
+        id S237481AbiKOKnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 05:43:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiKOKmP (ORCPT
+        with ESMTP id S229910AbiKOKnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 05:42:15 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41011BCAB;
-        Tue, 15 Nov 2022 02:42:12 -0800 (PST)
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MvK4f-1pCHkX2gfx-00rKHW; Tue, 15
- Nov 2022 11:42:01 +0100
-Message-ID: <08a18fd6-3ce8-a063-90cf-e659004d0894@gmx.com>
-Date:   Tue, 15 Nov 2022 18:41:55 +0800
+        Tue, 15 Nov 2022 05:43:11 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD0F25C51;
+        Tue, 15 Nov 2022 02:43:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=B85cuMRk7m/GxUw8KclvU5Eto26IVRvj2aMlFbVY1SU=; b=MS5yRjBVqNX8Cz7qZ346BZzJEO
+        AFtoeic2FvsFskee3v2ZQRh3/japbhQiR5YrJ4/9KArJwNO5p0NU9rR3R+tr+z91ElT5UaRCAhApX
+        sAFKZ2zfPaKEenDMRdaw48TZqmfO4OuYRNApSXCZB5hTQ1CLXomRywfBfV5a/NyF9Z8P3zKeaH2fq
+        gGtqWJdPJ8NNDzxvtNaZv2KeLzuPciybCvHrLlsMmbS3xAL/ViJNW6kSrFMzL9fvhTJjeTW9LXX/a
+        B/xPE0BtvgrPvWWvm5nn0vCGuoAGv7cQ674hyPc57SoaaQCxhMqRdqY/TiUDXjSmVDZ4knGYd/M9e
+        XIGE2K5w==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35282)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1outP4-0001vu-6Q; Tue, 15 Nov 2022 10:42:54 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1outP0-0004iD-2t; Tue, 15 Nov 2022 10:42:50 +0000
+Date:   Tue, 15 Nov 2022 10:42:50 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Corentin LABBE <clabbe@baylibre.com>, andrew@lunn.ch,
+        calvin.johnson@oss.nxp.com, davem@davemloft.net,
+        edumazet@google.com, hkallweit1@gmail.com,
+        jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        kuba@kernel.org, lgirdwood@gmail.com, pabeni@redhat.com,
+        robh+dt@kernel.org, samuel@sholland.org, wens@csie.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        netdev@vger.kernel.org, linux-sunxi@googlegroups.com
+Subject: Re: [PATCH v4 1/3] regulator: Add of_regulator_bulk_get_all
+Message-ID: <Y3NtKgb0LpWs0RkB@shell.armlinux.org.uk>
+References: <20221115073603.3425396-1-clabbe@baylibre.com>
+ <20221115073603.3425396-2-clabbe@baylibre.com>
+ <Y3Nj4pA2+WRFvSNd@sirena.org.uk>
+ <Y3NnirK0bN71IgCo@Red>
+ <Y3NrQffcdGIjS64a@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: WARNING in _btrfs_ioctl_set_received_subvol
-Content-Language: en-US
-To:     Wei Chen <harperchen1110@gmail.com>, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        osandov@fb.com, sweettea-kernel@dorminy.me,
-        syzkaller-bugs@googlegroups.com
-References: <CAO4mrfdLsMZT1ytmTCK4m0xXezxskTUbQjqZoGobMVhnZgdfmw@mail.gmail.com>
- <CAO4mrfcYtXiuuaPtm==heNarkMqTUGoKWxnmiOC3jvhfjeOBFg@mail.gmail.com>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-In-Reply-To: <CAO4mrfcYtXiuuaPtm==heNarkMqTUGoKWxnmiOC3jvhfjeOBFg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:TUwBr+dYsbfQGGpvbC7xm3ZbDMUOc/5i9II5GMGJIQT2PmB3UVG
- 1uSgymMszwNQBHzwtVJ+vtLkOrxCLwmVz8KQfPJNn9P8TtemamEOruXd1ISXkmbZ2HXZQUL
- Tuk63OvdJoJR2I/Eb1eZ2CSvwHtDbNwSRfZNaajesm8wsmtgJqCA/aR9nCaKlLdw83HUSMg
- Z7cPMPoqvUB1HkzwHm9GA==
-UI-OutboundReport: notjunk:1;M01:P0:jLQfyklhry0=;cmYkNsuvif6sq+XhsyWE6zXM2at
- kBXNcUdjOhgeODP6QdeoBw92LTuQ8mOqORq4B8T+p4n4dOU8YfvcmETOguSlSbrJSPC6yAAjv
- kkkp08fFHw2UCkVHlmuvSksPt+rA4NTzoWCelwr0bMRcGa5qXQ2jl+SwiNKrEYMGbQGVaf1AJ
- rLNLI7PQpKDvVHLOl2orWkPJDmpdytYRl9tNDY88wDo/FQNDbwXjJB9/pC6JhmMpn2uBBNO/G
- zL0feD5eJknm4RG5Hko5SriJbs7U6p+vZw98au4p74lzAG63qWWDlpVKzDgiUBTj9fZb9n52Y
- ddmcQ6PUOGuGOjsqqnAxKd8+uXRr9SQQMpzYp0/bvrMed0MfoSaVbwJx7I/z+4HS71D190DW9
- P9e6a3Btg6vcIrRn52rI5kAa9NR2SvVFbsioIzSHelyzm3OXMTai1fWON6be+ZRK1FAh0Snbp
- VYi65UOTpzETi8vXiul/Pf+1WMmBNM/1ulYyLReZ/5toQt8rJd9y4rHW0UIXKCmXSba7M7a5o
- EZfmWTCZui3pUfZUV9haGPL6dVoBE4+k+XU7sNhsh1qhxYVCX5WiGCNlVJl89CJjQaM3N/9N1
- seNypXZx5SXFoXKqez+40Fzhhdyw370UJGqkak7BcKfQFUSMZNIIeJR2E2utVMnp/1DwpPqLj
- gXYxnZS2hdKcEeHGWYp5MKQOotI6cjbBRjHrEdDmBw+4mr4j32ZUKZWQJzqUM/0Ey4anZTIw7
- hBFlEDBkoQ3QqAEU9tCs9DoRrCw1IUq+Ij/IDQfcpi6P+e5EbADjJDT54TlbbRrn/lGBK3O0Q
- DGoZnM8iLFBUzCi79aPUti3WwirEGUM6nPZIGWsDAs1hTPTte9g2lsg7615oG7AV3oY0PakEe
- 4x4cxUdkUXkVkIlsPEhZl1vcqkquRcq47MzWYlIqLQ9ZmLf3GIvUqnjY1Yp3jPByUw9wGB13/
- 2Vr4zEnsU1ukSnOkHJzs4UU0VJQrZlUlrGjGxID6Kofgktzuckv8kYENgC9xvZOW+eN6Og==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y3NrQffcdGIjS64a@sirena.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/11/15 18:30, Wei Chen wrote:
-> Dear Linux developers,
+On Tue, Nov 15, 2022 at 10:34:41AM +0000, Mark Brown wrote:
+> On Tue, Nov 15, 2022 at 11:18:50AM +0100, Corentin LABBE wrote:
+> > Le Tue, Nov 15, 2022 at 10:03:14AM +0000, Mark Brown a écrit :
 > 
-> I hope the following bug report is helpful.
+> > > What's the use case - why would a device not know which supplies
+> > > it requires?  This just looks like an invitation to badly written
+> > > consumers TBH.
 > 
-> Best,
-> Wei
+> > The device know which supply it have, but I found only this way to made all maintainers happy.
+> > See https://lore.kernel.org/netdev/0518eef1-75a6-fbfe-96d8-bb1fc4e5178a@linaro.org/t/#m7a2e012f4c7c7058478811929774ab2af9bfcbf6
 > 
-> On Sun, 13 Nov 2022 at 19:38, Wei Chen <harperchen1110@gmail.com> wrote:
->>
->> Dear Linux Developer,
->>
->> Recently when using our tool to fuzz kernel, the following crash was
->> triggered. The bug persists in Linux 6.0.
->>
->> HEAD commit:  4f5365f77018  Linux 5.15.76
+> Well, it's not making this maintainer happy :/  If we know what
+> PHY is there why not just look up the set of supplies based on
+> the compatible of the PHY?
 
-Not related to the bug itself, but more on the report.
+It looks to me like this series fetches the regulators before the PHY
+is bound to the driver, so what you're proposing would mean that the
+core PHY code would need a table of all compatibles (which is pretty
+hard to do, they encode the vendor/device ID, not some descriptive
+name) and then a list of the regulator names. IMHO that doesn't scale.
 
-I'd say, if the bug persists in the latest release, then please use the 
-latest kernel in the report.
-Not use the latest LTS as the commit.
-
-You know most (if not all) linux communities are working on upstream 
-code, not some LTS branch.
-
-Thanks,
-Qu
-
->> git tree: stable
->> compiler: gcc 7.5.0
->> console output:
->> https://drive.google.com/file/d/1wkzu8jz6edriSP6TpsCGYD5AzkLajIEv/view?usp=share_link
->> kernel config: https://drive.google.com/file/d/1flhc33savDkmYN6PRU5C2vXDX0LAKMvM/view?usp=share_link
->> C reproducer: https://drive.google.com/file/d/1zKWsWAOcaHfPKewTG6P3pnnVfwH_WXa9/view?usp=share_link
->> Syz reproducer:
->> https://drive.google.com/file/d/1jUR8_6Re4xpJhyLdXqPiiV72WT-Tk8A-/view?usp=share_link
->>
->> IMPORTANT: if you fix the bug, please add the following tag to the commit:
->> Reported-by: Wei Chen <harperchen1110@gmail.com>
->>
->> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
->> R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd3c817900
->>   </TASK>
->> ------------[ cut here ]------------
->> WARNING: CPU: 1 PID: 29222 at fs/btrfs/ioctl.c:4521
->> _btrfs_ioctl_set_received_subvol+0x221/0x430 fs/btrfs/ioctl.c:4521
->> Modules linked in:
->> CPU: 1 PID: 29222 Comm: syz-executor.0 Not tainted 5.15.76 #5
->> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
->> rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
->> RIP: 0010:_btrfs_ioctl_set_received_subvol+0x221/0x430 fs/btrfs/ioctl.c:4521
->> Code: e8 74 34 44 ff 83 fb fb 0f 84 de 01 00 00 83 fb e2 0f 84 d5 01
->> 00 00 e8 5d 34 44 ff 89 de 48 c7 c7 c0 f8 39 85 e8 9f dc 2e ff <0f> 0b
->> e8 48 34 44 ff 89 d9 ba a9 11 00 00 e9 45 01 00 00 49 8b 4f
->> RSP: 0018:ffffc9000aecfd40 EFLAGS: 00010286
->> RAX: 0000000000000000 RBX: fffffffffffffff4 RCX: ffffc900013ed000
->> RDX: 0000000000040000 RSI: ffffffff812d935c RDI: 00000000ffffffff
->> RBP: ffffc9000aecfda0 R08: 0000000000000000 R09: 0000000000000001
->> R10: ffffc9000aecfbe0 R11: 0000000000000003 R12: ffff888014210400
->> R13: ffff8880208d2000 R14: ffff88810c4f21c0 R15: ffff88810f37b600
->> FS:  00007f41ffc27700(0000) GS:ffff88813dc00000(0000) knlGS:0000000000000000
->> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> CR2: 00007fab915f7008 CR3: 000000002096e000 CR4: 00000000003526e0
->> Call Trace:
->>   <TASK>
->>   btrfs_ioctl_set_received_subvol_32 fs/btrfs/ioctl.c:4584 [inline]
->>   btrfs_ioctl+0x2154/0x3d50 fs/btrfs/ioctl.c:5007
->>   vfs_ioctl fs/ioctl.c:51 [inline]
->>   __do_sys_ioctl fs/ioctl.c:874 [inline]
->>   __se_sys_ioctl fs/ioctl.c:860 [inline]
->>   __x64_sys_ioctl+0xb6/0x100 fs/ioctl.c:860
->>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>   do_syscall_64+0x34/0xb0 arch/x86/entry/common.c:80
->>   entry_SYSCALL_64_after_hwframe+0x61/0xcb
->> RIP: 0033:0x4697f9
->> Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48
->> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
->> 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
->> RSP: 002b:00007f41ffc26c48 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
->> RAX: ffffffffffffffda RBX: 000000000077bf80 RCX: 00000000004697f9
->> RDX: 0000000020072c40 RSI: 00000000c0c09425 RDI: 0000000000000005
->> RBP: 00007f41ffc26c80 R08: 0000000000000000 R09: 0000000000000000
->> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
->> R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffd3c817900
->>   </TASK>
->>
->> Best,
->> Wei
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
