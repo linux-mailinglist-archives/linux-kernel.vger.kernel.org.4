@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CFF629BB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57564629BA4
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 15:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbiKOOLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 09:11:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
+        id S229877AbiKOOL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 09:11:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbiKOOLZ (ORCPT
+        with ESMTP id S229626AbiKOOLT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 09:11:25 -0500
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D7010541;
-        Tue, 15 Nov 2022 06:11:21 -0800 (PST)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-13b23e29e36so16316147fac.8;
-        Tue, 15 Nov 2022 06:11:21 -0800 (PST)
+        Tue, 15 Nov 2022 09:11:19 -0500
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC13FD10;
+        Tue, 15 Nov 2022 06:11:18 -0800 (PST)
+Received: by mail-ot1-f44.google.com with SMTP id p10-20020a9d76ca000000b0066d6c6bce58so5512619otl.7;
+        Tue, 15 Nov 2022 06:11:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Ko/Jm2Crg/0IdcHGiNY7XpYLJ5KYFoRqG/YZh7PVLyY=;
-        b=FhWMyJsA3vsxjdc9rv6A/uAcrw9ZhihR+NxIiv6FSWvpqzIGcBPx79WwC7UNYllooT
-         lNX1e3xO6EW9xslIEtL3VRMAC+t1Ts1L3rJy3t560HgQ1q5aD5FoMM+RfYn4I2sZtLYS
-         CFuN/JoOTRWXk7LtZXHS1v8o/RL3ZPbafuqWHgXTsFuS/RX4KfEoiYfddXqV/akWaxHA
-         XfoP8XiJ7VIh1ubuSalIzB0pc+EwUmYjAEjD+6TpF8aj2YDNMJX3UOMJOGIBIVDx6zUZ
-         yDamXChlKRWV3ogSPEMS6Cbs6nx4758xzt490+yzRltn/tNkKI2oQfYFYw6jXChGA5gm
-         qyXA==
-X-Gm-Message-State: ANoB5plzWjaJDgWDmZRDCMB76Mp86Lej4mIS0fFTifhWMaWJghGxXlS5
-        dlG89Vh/L0GoBIa9YMZ3Zg==
-X-Google-Smtp-Source: AA0mqf4uFfNYExut1Ar/priZ+hCGhKrNBdRZ8B91gwC+ZnuPQ2gqm3VuCjdMAE7iq3CCnmQj84NR9g==
-X-Received: by 2002:a05:6870:5246:b0:13b:d7c0:d66b with SMTP id o6-20020a056870524600b0013bd7c0d66bmr472834oai.36.1668521480911;
-        Tue, 15 Nov 2022 06:11:20 -0800 (PST)
+        bh=TacVoOO9NDNFIMt31qzCtRgln1ccwtifAk7PyC4xZ0s=;
+        b=Yc81WYSMHcoQCFkUjglHBXlPO3FslTCzFdfDy8+cbx6s9/JRQVnGlBYJWBcXwsWVcK
+         Vqne5MyMZlxsNE/ziQbazFAE45WlMdVJQposhQHNxU3mNbNh0tD+NtwxQVhrUv2mYdc2
+         7YCwIWAEHfdzHVEztGWxFlHadSwdmu51xi4VrO1LGopkVNUovMrZn7mLHgpWyhqIQl75
+         dH/Z0wdHuWWwZi6xGklO24vv8TKwFE1tOh2u4x0ZLhJS38olUMBYhcvGbmwSiFzBWEoq
+         AhdFdhjAgbr+asQIhomOSa2a3+iZ0QUVsh27yJef8F3Ho4+QLv5g/cmqZ/THyrNgHqEN
+         1U2w==
+X-Gm-Message-State: ANoB5pnFTlq+kR+snLRiNr+BaMQLrxcbesrJ+CDvGdD1WFz0Njj+mEwo
+        N5+6yrvbt3ln+9SN2bdd+g==
+X-Google-Smtp-Source: AA0mqf41qwNznHD4daQ+Mhz0sumypTqDXe1dh5cjhOzl/ybpdXvQQEyrHv+3a+htI5DwxWlPOz3B+g==
+X-Received: by 2002:a05:6830:153:b0:66c:a3a8:3870 with SMTP id j19-20020a056830015300b0066ca3a83870mr8901401otp.54.1668521477402;
+        Tue, 15 Nov 2022 06:11:17 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q204-20020acaf2d5000000b0035418324b78sm4937480oih.11.2022.11.15.06.11.19
+        by smtp.gmail.com with ESMTPSA id s5-20020a4adb85000000b00499527def25sm4840834oou.47.2022.11.15.06.11.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 06:11:20 -0800 (PST)
-Received: (nullmailer pid 908580 invoked by uid 1000);
+        Tue, 15 Nov 2022 06:11:16 -0800 (PST)
+Received: (nullmailer pid 908584 invoked by uid 1000);
         Tue, 15 Nov 2022 14:11:14 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Lee Jones <lee@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org
-In-Reply-To: <20221005-mdm9615-pinctrl-yaml-v4-2-463523919c19@linaro.org>
-References: <20221005-mdm9615-pinctrl-yaml-v4-0-463523919c19@linaro.org>
- <20221005-mdm9615-pinctrl-yaml-v4-2-463523919c19@linaro.org>
-Message-Id: <166851961723.867617.14976811191392756271.robh@kernel.org>
-Subject: Re: [PATCH v4 2/2] dt-bindings: soc: qcom: convert non-smd RPM
- bindings to dt-schema
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     airlied@linux.ie, linux-kernel@vger.kernel.org,
+        konrad.dybcio@somainline.org, quic_abhinavk@quicinc.com,
+        quic_jesszhan@quicinc.com, devicetree@vger.kernel.org,
+        agross@kernel.org, robh+dt@kernel.org, quic_vpolimer@quicinc.com,
+        vkoul@kernel.org, robdclark@gmail.com,
+        dri-devel@lists.freedesktop.org, krzysztof.kozlowski+dt@linaro.org,
+        swboyd@chromium.org, dianders@chromium.org,
+        bjorn.andersson@linaro.org, quic_kalyant@quicinc.com,
+        Jonathan Marek <jonathan@marek.ca>, vinod.koul@linaro.org,
+        loic.poulain@linaro.org, dmitry.baryshkov@linaro.org,
+        daniel@ffwll.ch, angelogioacchino.delregno@somainline.org,
+        andersson@kernel.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, sean@poorly.run
+In-Reply-To: <20221115111721.891404-3-robert.foss@linaro.org>
+References: <20221115111721.891404-1-robert.foss@linaro.org>
+ <20221115111721.891404-3-robert.foss@linaro.org>
+Message-Id: <166851961892.867704.17058917320073105789.robh@kernel.org>
+Subject: Re: [PATCH v2 02/12] dt-bindings: display: msm: Add qcom,sm8350-mdss binding
 Date:   Tue, 15 Nov 2022 08:11:14 -0600
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -72,17 +76,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 15 Nov 2022 11:12:36 +0100, Neil Armstrong wrote:
-> Convert the non-SMD RPM node bindings to dt-schema, the old txt bindings
-> are now removed since all bindings were converted.
+On Tue, 15 Nov 2022 12:17:11 +0100, Robert Foss wrote:
+> Mobile Display Subsystem (MDSS) encapsulates sub-blocks
+> like DPU display controller, DSI etc. Add YAML schema for MDSS device
+> tree bindings
 > 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Acked-by: Lee Jones <lee@kernel.org>
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
 > ---
->  Documentation/devicetree/bindings/mfd/qcom-rpm.txt | 283 ---------------------
->  .../devicetree/bindings/soc/qcom/qcom,rpm.yaml     | 101 ++++++++
->  2 files changed, 101 insertions(+), 283 deletions(-)
+>  .../display/msm/qcom,sm8350-mdss.yaml         | 240 ++++++++++++++++++
+>  1 file changed, 240 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -91,14 +94,13 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/soc/qcom/qcom,rpm.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/regulator/qcom,ipc-rpm-regulator.yaml
-./Documentation/devicetree/bindings/soc/qcom/qcom,rpm.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/soc/qcom/qcom,rpm.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,rpm.example.dtb: rpm@108000: regulators: False schema does not allow {'compatible': ['qcom,rpm-pm8921-regulators'], 'vdd_l1_l2_l12_l18-supply': [[1]], 's1': {'regulator-min-microvolt': [[1225000]], 'regulator-max-microvolt': [[1225000]], 'bias-pull-down': True, 'qcom,switch-mode-frequency': [[3200000]]}, 's4': {'regulator-min-microvolt': [[1800000]], 'regulator-max-microvolt': [[1800000]], 'qcom,switch-mode-frequency': [[1600000]], 'bias-pull-down': True, 'qcom,force-mode': [[3]], 'phandle': [[1]]}}
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,rpm.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,rpm.example.dtb: rpm@108000: regulators: Unevaluated properties are not allowed ('compatible', 's1', 's4', 'vdd_l1_l2_l12_l18-supply' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,rpm.yaml
-Documentation/devicetree/bindings/soc/qcom/qcom,rpm.example.dtb:0:0: /example-0/rpm@108000/regulators: failed to match any schema with compatible: ['qcom,rpm-pm8921-regulators']
+./Documentation/devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/display/msm/mdss-common.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm8350-mdss.example.dtb: display-subsystem@ae00000: False schema does not allow {'compatible': ['qcom,sm8350-mdss'], 'reg': [[182452224, 4096]], 'reg-names': ['mdss'], 'interconnects': [[4294967295, 7, 0, 4294967295, 1, 0], [4294967295, 8, 0, 4294967295, 1, 0]], 'interconnect-names': ['mdp0-mem', 'mdp1-mem'], 'power-domains': [[4294967295, 0]], 'resets': [[4294967295, 0]], 'clocks': [[4294967295, 0], [4294967295, 27], [4294967295, 28], [4294967295, 32]], 'clock-names': ['iface', 'bus', 'nrt_bus', 'core'], 'iommus': [[4294967295, 2080, 1026]], 'interrupts': [[0, 83, 4]], 'interrupt-controller': True, '#interrupt-cells': [[1]], '#address-cells': [[1]], '#size-cells': [[1]], 'ranges': True, 'display-controller@ae01000': {'compatible': ['qcom,sm8350-dpu'], 'reg': [[182456320, 585728], [183173120, 8200]], 'reg-names': ['mdp', 'vbif'], 'clocks': [[4294967295, 27], [4294967295, 28], [4294967295, 0], [42
+ 94967295, 34], [4294967295, 32], [4294967295, 44]], 'clock-names': ['bus', 'nrt_bus', 'iface', 'lut', 'core', 'vsync'], 'assigned-clocks': [[4294967295, 44]], 'assigned-clock-rates': [[19200000]], 'operating-points-v2': [[1]], 'power-domains': [[4294967295, 6]], 'interrupts': [[0]], 'ports': {'#address-cells': [[1]], '#size-cells': [[0]], 'port@0': {'reg': [[0]], 'endpoint': {'remote-endpoint': [[2]], 'phandle': [[4]]}}}, 'opp-table': {'compatible': ['operating-points-v2'], 'phandle': [[1]], 'opp-200000000': {'opp-hz': [[0], [200000000]], 'required-opps': [[4294967295]]}, 'opp-300000000': {'opp-hz': [[0], [300000000]], 'required-opps': [[4294967295]]}, 'opp-345000000': {'opp-hz': [[0], [345000000]], 'required-opps': [[4294967295]]}, 'opp-460000000': {'opp-hz': [[0], [460000000]], 'required-opps': [[4294967295]]}}}, 'dsi@ae94000': {'compatible': ['qcom,mdss-dsi-ctrl'], 'reg': [[183058432, 1024]], 'reg-names': ['dsi_ctrl'], 'interrupts': [[4]], 'clocks': [[4294967295, 2], [4294967295,
+  5], [4294967295, 36], [4294967295, 28], [4294967295, 0], [4294967295, 27]], 'clock-names': ['byte', 'byte_intf', 'pixel', 'core', 'iface', 'bus'], 'assigned-clocks': [[4294967295, 3], [4294967295, 37]], 'assigned-clock-parents': [[3, 0], [3, 1]], 'operating-points-v2': [[4294967295]], 'power-domains': [[4294967295, 6]], 'phys': [[3]], 'phy-names': ['dsi'], 'ports': {'#address-cells': [[1]], '#size-cells': [[0]], 'port@0': {'reg': [[0]], 'endpoint': {'remote-endpoint': [[4]], 'phandle': [[2]]}}, 'port@1': {'reg': [[1]], 'endpoint': {}}}}, 'phy@ae94400': {'compatible': ['qcom,dsi-phy-5nm-8350'], 'reg': [[183059456, 512], [183059968, 640], [183060736, 608]], 'reg-names': ['dsi_phy', 'dsi_phy_lane', 'dsi_pll'], '#clock-cells': [[1]], '#phy-cells': [[0]], 'clocks': [[4294967295, 0], [4294967295, 0]], 'clock-names': ['iface', 'ref'], 'vdds-supply': [[4294967295]], 'phandle': [[3]]}, '$nodename': ['display-subsystem@ae00000']}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm8350-mdss.example.dtb: display-subsystem@ae00000: Unevaluated properties are not allowed ('#address-cells', '#interrupt-cells', '#size-cells', 'interrupt-controller', 'interrupts', 'power-domains', 'ranges', 'reg', 'reg-names', 'resets' were unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm8350-mdss.yaml
 
 doc reference errors (make refcheckdocs):
 
