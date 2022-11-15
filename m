@@ -2,162 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DAE5629123
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 05:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B1162912F
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 05:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbiKOEPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 14 Nov 2022 23:15:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48142 "EHLO
+        id S231787AbiKOEYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 14 Nov 2022 23:24:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbiKOEP1 (ORCPT
+        with ESMTP id S230199AbiKOEY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 14 Nov 2022 23:15:27 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABAC1D674;
-        Mon, 14 Nov 2022 20:15:17 -0800 (PST)
-Received: from leknes.fjasle.eu ([46.142.49.7]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1M42X0-1ounKL0J2u-0006vY; Tue, 15 Nov 2022 05:13:37 +0100
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id 258723C0C9;
-        Tue, 15 Nov 2022 05:13:10 +0100 (CET)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id C05B3974; Tue, 15 Nov 2022 05:12:46 +0100 (CET)
-Date:   Tue, 15 Nov 2022 05:12:46 +0100
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Nick Desaulniers <nick.desaulniers@gmail.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <git@xen0n.name>, Guo Ren <guoren@kernel.org>,
-        linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        asahi@lists.linux.dev, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH] scripts: subarch.include: fix SUBARCH on MacOS hosts
-Message-ID: <Y3MRvtwdjIwMHvRo@bergen.fjasle.eu>
-References: <20221113233812.36784-1-nick.desaulniers@gmail.com>
+        Mon, 14 Nov 2022 23:24:27 -0500
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFCE18345
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 20:24:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1668486265; x=1700022265;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zVm/lvO4dFPl37sNuh3RAVrx6/5Q12U80ZVEygDyPZU=;
+  b=eQGt90CxF/OiRmCxvYLxwGwwnB8R/4R5oUmmow1OuThXZ5JvugLW7rNK
+   DFCH2mllxn1S6uWyHP8T+9/+PDwSpFW7bDcoOHN/1wRPAOJKRCrjMN1fJ
+   6amRWUmEnQ3WTTkj8Sn4vKDOuP5+PGnswxj6rR95oe8YI0fqX8TcHIrBI
+   Iduybj3B0JnfzMii7sMC043l9UXLlMMTbIke3Xs0coe6kUtj6ZOn1wSDm
+   +TLfCSA8xtrk+Paqlumzl7FxA2i3TemJnRK9opJc0u6derfcfG97dJj/7
+   db33YRUtzQ/ATawo5FKLhuo1orNUsf8xQKZXpo0Npf7K5oIlJSpJ6+xTd
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,164,1665417600"; 
+   d="scan'208";a="216282794"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 15 Nov 2022 12:24:25 +0800
+IronPort-SDR: jHym3iyk1RxoXDpUrg/fd61qdA9l5lK7ftMGizauTdjzp/gsAOC1Tee0LBJOdfpZA7DQR7VSsU
+ QXFW8VWocBLkUlMGvLIRWRTea2t9pa+41Vmk0/3ld+zy9HsVCjbtNWeMUvpcVqg8FfjxvEcTgx
+ NvYGjFrWAh0nvyymknRJIxq660ZUdjXmYZeDQXlIOZbska2kKxB9oViNaH8Vy8iF5Q7fsEvi8+
+ K+c8lJdW1SH1YHeC3N8S1xn25QvZKnInVOz3QWgDFPljqtXvyVbySpspxFAoedRhyrKgewWgnC
+ CoE=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Nov 2022 19:43:22 -0800
+IronPort-SDR: UzdaJsCZtf2uI24a0ET+MXujUlUdft2CK5XPCS3/+iP7hutMiFgUcWLOYIQZvPkX6rkWllkkvV
+ J222EZwxFhAtQhwZgq97iiqTXMp/BOW9edKjzy2jNmxFracVc2vNnd5xULPhVsotQ4XuPqfV1S
+ dyDbNuIfhxvEzT6uojwYT1fKCEV/kXsfWODUJGtQq3q96qr20MSGTapfKurlySwjYjixCLJdpv
+ +jgLhCW24czzNdADI91xo6jSYGSdpyWexlOwWxl9vySWK7kKcB7eDSsc2E34oRKnFri7khMfdR
+ X5s=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Nov 2022 20:24:25 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NBCkJ0jjsz1RwtC
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 20:24:23 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1668486261; x=1671078262; bh=zVm/lvO4dFPl37sNuh3RAVrx6/5Q12U80ZV
+        EygDyPZU=; b=Oog0EPiwxGBbWXqjHLkZW/xat9OiH1vYPvJlPsA//cLW+dtK10H
+        tyBX+4IS/AVOL/uJ0wneEBcAS3vkxTuAF7QvUDLgMUVHznlnqX+UtYUFgj+NDbdS
+        49Ve81BZwUsXlNAbCcCvTXtGNfM8EwKDa28d0PqTB1VMBlgRKoJT9La5+T9CQ4rO
+        xZAt9NBRXwV8t3gp3ABnzkjWY+EVCXg+5L4tUQmRYKZSXubWWAusymxhMXdDyevF
+        GvCYWmEIz/zv6lSMQ/r2sWgV7EyZhyqdKm54DgwFzJsva8Rou8IW+aEivCQ/r60b
+        /qLHKaTvRPJm0NI+a42op/L69xLizgnQFNw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id RB9OUq_N8dLO for <linux-kernel@vger.kernel.org>;
+        Mon, 14 Nov 2022 20:24:21 -0800 (PST)
+Received: from [10.225.163.46] (unknown [10.225.163.46])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NBCk63pwsz1RvLy;
+        Mon, 14 Nov 2022 20:24:14 -0800 (PST)
+Message-ID: <97c0735c-3127-83d5-30ff-8e57c6634f6e@opensource.wdc.com>
+Date:   Tue, 15 Nov 2022 13:24:13 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ba37Kt4S81U8BtDM"
-Content-Disposition: inline
-In-Reply-To: <20221113233812.36784-1-nick.desaulniers@gmail.com>
-Jabber-ID: nicolas@jabber.no
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:ueI0HeSkWXIB3kHt2cF8B/8YIDt+WctiVHzmtFD1Jabhfjvts/h
- 9ryJmVi4rhsDY+49g1uY6pVbh7MFfmSrMl/ZBypNSj7f2ByyPWEMQtRMgcTR/fElV2v9zS1
- QT9zBcMA+5vG1Rnje7qs6KEaNggvefid/Tll1XDXw4jcSpPrXycnbL++El9tk67Hp5RCVGf
- Ou2lYrK2+y7e6OmsbMCaA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/R7+4g97Xmo=:pnXppWFSepT9OBr2AHyOEm
- JEOsOU1XZpx+1JzZhEnYFOqrD5HLyPLMCwGwj9s3ZoQIpmPABlHhN5PQzDkQ2dTZU1Pl3DtpA
- Kiyu4JUtWwxHTvMiQV4zVqZHcaknTm34TMgvEsM3VuW5m5Tm8KpdO1p2yogHxPHqsYoM852TZ
- o8vjfQWTzxHt9D3EkCRz2iOT0qNgxUBrHYuuLj+Q63IfZHTuvkAiXwR2g1q4u76mbMhG3RzVW
- L/47mV/tNmkh3tSHRGQQ/10AEWpwd2k38YxFNRfyLgFRWuXWGwy+DY2Eue7mVjGYDqT9CDRyN
- QqjaD5h7BR3ScEE8Rq1tccun/8Bl/Bxl0xamlBLSU9vROA0Q9ib4Exip21u6toPP/TxIRIRRd
- qAGylFd/wPB3X6u33fnaNDxeM3tYEQqCJVZhCSnNri2g9jpd2iiQ2Z4BNZitSaECp2OGiyULz
- mhedMG6cxj0/mOHJ5l5rbS3vZQ5Tu2yHVD2g8Gafw7hQf+K3gYXdWfZWp9coR4QMtDy3d+Iqo
- P9JEknWqZPwsJxbTTVSViBS0NsHeBPrhJtlG+HVJoWSpT4g29moefq6bQZrM08s125XZu5k2U
- e8fHevK43aZx8aRU60RHEYzHvYszGmOi40117zfAFRVIexgoolReuhj+BT1ai4MGsGkXAFjMA
- g6NCHMRivc5AAk35eGr2E/jNY1PlyMVMbKUrplYlpRu2og1NRrIQ/KIYcLJmJlC6K9MCDRMxK
- DcFeFKpWqBV5vi/mijeIYfeVhOxE0yo2gV+VSpaoz8/6r5uw7tacg3LCFd7n9EIFA1KW8AiEY
- VOO5lY1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: Deprecating and removing SLOB
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, Conor Dooley <conor@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Rustam Kovhaev <rkovhaev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        openrisc@lists.librecores.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Conor.Dooley@microchip.com, Paul Cercueil <paul@crapouillou.net>
+References: <b35c3f82-f67b-2103-7d82-7a7ba7521439@suse.cz>
+ <CA+CK2bD-uVGJ0=9uc7Lt5zwY+2PM2RTcfOhxEd65S7TvTrJULA@mail.gmail.com>
+ <c1caa5ce-eeaf-8038-2dea-051c98aade45@suse.cz> <Y260tkNHc2vFITJ3@spud>
+ <a5bba3ca-da19-293c-c01b-a28291533466@opensource.wdc.com>
+ <93079aba-362e-5d1e-e9b4-dfe3a84da750@opensource.wdc.com>
+ <44da078c-b630-a249-bf50-67df83cd8347@suse.cz>
+ <35650fd4-3152-56db-7c27-b9997e31cfc7@opensource.wdc.com>
+ <Y3JU5cfyid1rBoOy@hyeyoo>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <Y3JU5cfyid1rBoOy@hyeyoo>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/14/22 23:47, Hyeonggon Yoo wrote:
+> On Mon, Nov 14, 2022 at 08:35:31PM +0900, Damien Le Moal wrote:
+>> On 11/14/22 18:36, Vlastimil Babka wrote:
+>>> On 11/14/22 06:48, Damien Le Moal wrote:
+>>>> On 11/14/22 10:55, Damien Le Moal wrote:
+>>>>> On 11/12/22 05:46, Conor Dooley wrote:
+>>>>>> On Fri, Nov 11, 2022 at 11:33:30AM +0100, Vlastimil Babka wrote:
+>>>>>>> On 11/8/22 22:44, Pasha Tatashin wrote:
+>>>>>>>> On Tue, Nov 8, 2022 at 10:55 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+>>>>>>>>>
+>>>>>>>>> Hi,
+>>>>>>>>>
+>>>>>>>>> as we all know, we currently have three slab allocators. As we discussed
+>>>>>>>>> at LPC [1], it is my hope that one of these allocators has a future, and
+>>>>>>>>> two of them do not.
+>>>>>>>>>
+>>>>>>>>> The unsurprising reasons include code maintenance burden, other features
+>>>>>>>>> compatible with only a subset of allocators (or more effort spent on the
+>>>>>>>>> features), blocking API improvements (more on that below), and my
+>>>>>>>>> inability to pronounce SLAB and SLUB in a properly distinguishable way,
+>>>>>>>>> without resorting to spelling out the letters.
+>>>>>>>>>
+>>>>>>>>> I think (but may be proven wrong) that SLOB is the easier target of the
+>>>>>>>>> two to be removed, so I'd like to focus on it first.
+>>>>>>>>>
+>>>>>>>>> I believe SLOB can be removed because:
+>>>>>>>>>
+>>>>>>>>> - AFAIK nobody really uses it? It strives for minimal memory footprint
+>>>>>>>>> by putting all objects together, which has its CPU performance costs
+>>>>>>>>> (locking, lack of percpu caching, searching for free space...). I'm not
+>>>>>>>>> aware of any "tiny linux" deployment that opts for this. For example,
+>>>>>>>>> OpenWRT seems to use SLUB and the devices these days have e.g. 128MB
+>>>>>>>>> RAM, not up to 16 MB anymore. I've heard anecdotes that the performance
+>>>>>>>>> SLOB impact is too much for those who tried. Googling for
+>>>>>>>>> "CONFIG_SLOB=y" yielded nothing useful.
+>>>>>>>>
+>>>>>>>> I am all for removing SLOB.
+>>>>>>>>
+>>>>>>>> There are some devices with configs where SLOB is enabled by default.
+>>>>>>>> Perhaps, the owners/maintainers of those devices/configs should be
+>>>>>>>> included into this thread:
+>>>>>>>>
+>>>>>>>> tatashin@soleen:~/x/linux$ git grep SLOB=y
+>>>>>>
+>>>>>>>> arch/riscv/configs/nommu_k210_defconfig:CONFIG_SLOB=y
+>>>>>>>> arch/riscv/configs/nommu_k210_sdcard_defconfig:CONFIG_SLOB=y
+>>>>>>>> arch/riscv/configs/nommu_virt_defconfig:CONFIG_SLOB=y
+>>>>>>
+>>>>>>>
+>>>>>>> Turns out that since SLOB depends on EXPERT, many of those lack it so
+>>>>>>> running make defconfig ends up with SLUB anyway, unless I miss something.
+>>>>>>> Only a subset has both SLOB and EXPERT:
+>>>>>>>
+>>>>>>>> git grep CONFIG_EXPERT `git grep -l "CONFIG_SLOB=y"`
+>>>>>>
+>>>>>>> arch/riscv/configs/nommu_virt_defconfig:CONFIG_EXPERT=y
+>>>>>>
+>>>>>> I suppose there's not really a concern with the virt defconfig, but I
+>>>>>> did check the output of `make nommu_k210_defconfig" and despite not
+>>>>>> having expert it seems to end up CONFIG_SLOB=y in the generated .config.
+>>>>>>
+>>>>>> I do have a board with a k210 so I checked with s/SLOB/SLUB and it still
+>>>>>> boots etc, but I have no workloads or w/e to run on it.
+>>>>>
+>>>>> I sent a patch to change the k210 defconfig to using SLUB. However...
+>>>
+>>> Thanks!
+>>>
+>>>>> The current default config using SLOB gives about 630 free memory pages
+>>>>> after boot (cat /proc/vmstat). Switching to SLUB, this is down to about
+>>>>> 400 free memory pages (CONFIG_SLUB_CPU_PARTIAL is off).
+>>>
+>>> Thanks for the testing! How much RAM does the system have btw? I found 8MB
+>>> somewhere, is that correct?
+>>
+>> Yep, 8MB, that's it.
+>>
+>>> So 230 pages that's a ~920 kB difference. Last time we saw less  dramatic
+>>> difference [1]. But that was looking at Slab pages, not free pages. The
+>>> extra overhead could be also in percpu allocations, code etc.
+>>>
+>>>>> This is with a buildroot kernel 5.19 build including a shell and sd-card
+>>>>> boot. With SLUB, I get clean boots and a shell prompt as expected. But I
+>>>>> definitely see more errors with shell commands failing due to allocation
+>>>>> failures for the shell process fork. So as far as the K210 is concerned,
+>>>>> switching to SLUB is not ideal.
+>>>>>
+>>>>> I would not want to hold on kernel mm improvements because of this toy
+>>>>> k210 though, so I am not going to prevent SLOB deprecation. I just wish
+>>>>> SLUB itself used less memory :)
+>>>>
+>>>> Did further tests with kernel 6.0.1:
+>>>> * SLOB: 630 free pages after boot, shell working (occasional shell fork
+>>>> failure happen though)
+>>>> * SLAB: getting memory allocation for order 7 failures on boot already
+>>>> (init process). Shell barely working (high frequency of shell command fork
+>>>> failures)
+>>
+>> I forgot to add here that the system was down to about 500 free pages
+>> after boot (again from the shell with "cat /proc/vmstat").
+>>
+>>>> * SLUB: getting memory allocation for order 7 failures on boot. I do get a
+>>>> shell prompt but cannot run any shell command that involves forking a new
+>>>> process.
+>>
+>> For both slab and slub, I had cpu partial off, debug off and slab merge
+>> on, as I suspected that would lead to less memory overhead.
+>> I suspected memory fragmentation may be an issue but doing
+>>
+>> echo 3 > /proc/sys/vm/drop_caches
+>>
+>> before trying a shell command did not help much at all (it usually does on
+>> that board with SLOB). Note that this is all with buildroot, so this echo
+>> & redirect always works as it does not cause a shell fork.
+>>
+>>>>
+>>>> So if we want to keep the k210 support functional with a shell, we need
+>>>> slob. If we reduce that board support to only one application started as
+>>>> the init process, then I guess anything is OK.
+>>>
+>>> In [1] it was possible to save some more memory with more tuning. Some of
+>>> that required boot parameters and other code changes. In another reply [2] I
+>>> considered adding something like SLUB_TINY to take care of all that, so
+>>> looks like it would make sense to proceed with that.
+>>
+>> If you want me to test something, let me know.
+> 
+> Would you try this please?
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index a24b71041b26..1c36c4b9aaa0 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -4367,9 +4367,7 @@ static int kmem_cache_open(struct kmem_cache *s, slab_flags_t flags)
+>  	 * The larger the object size is, the more slabs we want on the partial
+>  	 * list to avoid pounding the page allocator excessively.
+>  	 */
+> -	s->min_partial = min_t(unsigned long, MAX_PARTIAL, ilog2(s->size) / 2);
+> -	s->min_partial = max_t(unsigned long, MIN_PARTIAL, s->min_partial);
+> -
+> +	s->min_partial = 0;
+>  	set_cpu_partial(s);
+>  
+>  #ifdef CONFIG_NUMA
+> 
+> 
+> and booting with and without boot parameter slub_max_order=0?
 
---ba37Kt4S81U8BtDM
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Test notes: I used Linus 6.1-rc5 as the base. That is the only thing I
+changed in buildroot default config for the sipeed maix bit card, booting
+with SD card. The test is: booting and run "cat /proc/vmstat" and register
+the nr_free_pages value. I repeated the boot + cat 3 to 4 times for each case.
 
-On Sun, 13 Nov 2022 15:38:09 -0800 Nick Desaulniers wrote:
-> When building the Linux kernel on an aarch64 MacOS based host, if we don't
-> specify a value for ARCH when invoking make, we default to arm and thus
-> multi_v7_defconfig rather than the expected arm64 and arm64's defconfig.
->=20
-> This is because subarch.include invokes `uname -m` which on MacOS hosts
-> evaluates to `arm64` but on Linux hosts evaluates to `aarch64`,
->=20
-> This allows us to build ARCH=3Darm64 natively on MacOS (as in ARCH need
-> not be specified on an aarch64-based system).
->=20
-> Utilize a negative lookahead regular expression to avoid matching arm64.
->=20
-> Signed-off-by: Nick Desaulniers <nick.desaulniers@gmail.com>
-> ---
-> This is only part 1 of
-> https://github.com/ClangBuiltLinux/linux/commit/f06333e29addbc3d714adb340=
-355f471c1dfe95a
-> I'm still working on the rest...
->=20
->  scripts/subarch.include | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/scripts/subarch.include b/scripts/subarch.include
-> index 4bd327d0ae42..aa130286b627 100644
-> --- a/scripts/subarch.include
-> +++ b/scripts/subarch.include
-> @@ -6,7 +6,7 @@
-> =20
->  SUBARCH :=3D $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
->  				  -e s/sun4u/sparc64/ \
-> -				  -e s/arm.*/arm/ -e s/sa110/arm/ \
-> +				  -e s/arm\(?:\(?!64\).*\)/arm/ -e s/sa110/arm/ \
+Here are the results:
 
-On my Debian's sed, this does not match any more at all, e.g.:
+6.1-rc5, SLOB:
+    - 623 free pages
+    - 629 free pages
+    - 629 free pages
+6.1-rc5, SLUB:
+    - 448 free pages
+    - 448 free pages
+    - 429 free pages
+6.1-rc5, SLUB + slub_max_order=0:
+    - Init error, shell prompt but no shell command working
+    - Init error, no shell prompt
+    - 508 free pages
+    - Init error, shell prompt but no shell command working
+6.1-rc5, SLUB + patch:
+    - Init error, shell prompt but no shell command working
+    - 433 free pages
+    - 448 free pages
+    - 423 free pages
+6.1-rc5, SLUB + slub_max_order=0 + patch:
+    - Init error, no shell prompt
+    - Init error, shell prompt, 499 free pages
+    - Init error, shell prompt but no shell command working
+    - Init error, no shell prompt
 
-  $ echo armv4 | sed -e 's/arm\(?:\(?!64\).*\)/arm/'
-  armv4
-=2E
+No changes for SLOB results, expected.
 
-This one works for me, but does not look such advanced:
+For default SLUB, I did get all clean boots this time and could run the
+cat command. But I do see shell fork failures if I keep running commands.
 
-  $ echo arm64 | sed -e '/^arm64$/!s/arm.*/arm/'
-  arm64
-  $ echo armv4 | sed -e '/^arm64$/!s/arm.*/arm/'
-  arm
-=2E
+For SLUB + slub_max_order=0, I only got one clean boot with 508 free
+pages. Remaining runs failed to give a shell prompt or allow running cat
+command. For the clean boot, I do see higher number of free pages.
 
-Kind regards,
-Nicolas
+SLUB with the patch was nearly identical to SLUB without the patch.
 
->  				  -e s/s390x/s390/ \
->  				  -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
->  				  -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
-> --=20
-> 2.37.0 (Apple Git-136)
+And SLUB+patch+slub_max_order=0 gave again a lot of errors/bad boot. I
+could run the cat command only once, giving 499 free pages, so better than
+regular SLUB. But it seems that the memory is more fragmented as
+allocations fail more often.
 
---=20
-epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
-=E2=86=B3 gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
-     -- frykten for herren er opphav til kunnskap --
+Hope this helps. Let me know if you want to test something else.
 
---ba37Kt4S81U8BtDM
-Content-Type: application/pgp-signature; name="signature.asc"
+Cheers.
 
------BEGIN PGP SIGNATURE-----
+-- 
+Damien Le Moal
+Western Digital Research
 
-iQIzBAABCAAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmNzEboACgkQB1IKcBYm
-EmlHbA//ZeYSkgSFZLkbtCRamaOOyoZ0M0hrB2whcGjrjCTmMYIsyouwkdjWpZnD
-OoM4OfBnSLpvSQvv7uPbz+ht14ER2UGIPRnUL9sz8RcH3tIv+8G/3jc6cjllFPCQ
-94rzOsK17UcZ6lPDhQTg7XLyNaWHNus0ATAlDzLryzOhAt/RjpzHfoppF50AjcV/
-YIaj196HpKMQ+Q3BkvG303JcyiiRwL4nZis+zJBxNc/dJClASLkinL2DamwidYMD
-wCO3s+ehEL6uxHsHgu/D4EB7oChPoaUd/ocV+mAQXNOMr5iAESQdwlsX5Yw5JnbL
-rST1qeY5XO/TnGx0p6dbxeY/WF1b9ygPT6K0/KZyXeQX1OHD1HyPP3ezdAQ+eHiz
-03vj0xksCXlvaN80xQbbX6jZxrhPZfQ76SAzqQhlggFH+V0fMTvr4Zf3us6pI1OW
-GOryQ51tssTqYgJAbbQ4G++53vnPagsI9D9mzXGnP7G/vI15HuyinARDW4M/UiL0
-J+fHtiE9tue6txb4BnL3rP5K8HrijD5KJCHux4js1cm2Bqjuv54Fsfuec42g/3Tb
-JGQyq/eC9e1XhCJ+AU1P6KPM/uU6mCbIy4RtfsMuHzpKba3qa8Ebp2FLFOg0XUMe
-LWfSVwwCx8ciDfHHEUtbk+6ZDiO17i6kg8kWwLYmlU9Wh4bq+i8=
-=xldg
------END PGP SIGNATURE-----
-
---ba37Kt4S81U8BtDM--
