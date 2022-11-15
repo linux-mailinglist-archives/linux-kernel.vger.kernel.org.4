@@ -2,80 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3ADE6292D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 721B96292E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 09:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232621AbiKOH76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 02:59:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
+        id S232558AbiKOIFo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 15 Nov 2022 03:05:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232487AbiKOH7x (ORCPT
+        with ESMTP id S232322AbiKOIFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 02:59:53 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53041FF98
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:59:51 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id bp15so23133697lfb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:59:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HJPFTJOGuPRhd7ksoWE06DkherlyxwNY/RJOZ9ATVqs=;
-        b=hO1pWG9FFw6lcA0dz0nGIKvIKA4R/SiXFR4HgemXVKeuy4ri+jgZm9KmbvhcTkPemv
-         9ZPEmoWV29gKa+KZ3+bVE3krOfiof6B2Miohku1IQFC6r1ZB2pa+OckJ9K/AgXva+/1C
-         qV8JLBtSUR8i9ufUY/1Zw5bUQqOvy6uGGzVol5BxOvWR5XsDP7P3g7Er/spdOOdVPuK5
-         9I2nC8zz2eG+VcaF1vK9Z34SeBvF/iSThHPxPxjH2jvy/9qHtcXuS56MAmVamZ7jixxm
-         1zjcu/F9Wdp4X/UurrUyZow9zrbqD+7cA+gSrPT843Smx57rhfuqTqyfHh0euoXhAWbK
-         lIvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HJPFTJOGuPRhd7ksoWE06DkherlyxwNY/RJOZ9ATVqs=;
-        b=5gqts98ZwiD2UpPV3bSlsYin6exswJfjNT1LZVV8MJw0Zcu8Xk6q2bCZmhOBBCrXCO
-         po0Xqr5lSgDU68OH5VRfWlQ8tFpgMSKIOuiTebCi697+Hqk+x7AZYPPTK6h3FzlsHiMQ
-         Vl9F4qPELuYu79FLmc/KfXYid8whBt3TRpD97nr4rzo2VhtnvNThb0n814e0EYfdN71z
-         r9d8cjniMCPjhjPMFok9Y0JiHZDdNIgdfpWlr96IhPTGLBqhWLtYH4hWOl54lz1ofxXX
-         qgZA1TB+qZpDuB+cRLFHtRb8R/hzJm20mrUHMLXBRj9ue5dWmnzO/QJTSEM0FDMCoEX1
-         KzxQ==
-X-Gm-Message-State: ANoB5pkfj3xSYp7Y+lV9zs0bnIgt8tSnweQ90J0CxaCntflWHSEy0AlG
-        ZzuNFB/HMjFnwCcsYyME6i17ug==
-X-Google-Smtp-Source: AA0mqf4DsOuYz5YY9s6MWxbp9QH+GSKO3GjqvZ5CD3NNuQLOAKv/l/8yIDLggMj1iSKZHpcGsP8elg==
-X-Received: by 2002:a05:6512:2803:b0:4a6:2ff6:f32f with SMTP id cf3-20020a056512280300b004a62ff6f32fmr6024570lfb.1.1668499190153;
-        Mon, 14 Nov 2022 23:59:50 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a27-20020a2eb55b000000b0026e8b82eba6sm2388385ljn.34.2022.11.14.23.59.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 23:59:49 -0800 (PST)
-Message-ID: <88fd2f42-6f20-7bbe-1a4d-1f482c153f07@linaro.org>
-Date:   Tue, 15 Nov 2022 08:59:48 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next 1/5] dt-bindings: net: qcom,ipa: deprecate
- modem-init
-Content-Language: en-US
-To:     Alex Elder <elder@ieee.org>, Alex Elder <elder@linaro.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org,
-        elder@kernel.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        Tue, 15 Nov 2022 03:05:41 -0500
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675D2186FD
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 00:05:40 -0800 (PST)
+Received: from [127.0.0.1] (85-237-234-20.dynamic.orange.sk [85.237.234.20])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 795AD20097;
+        Tue, 15 Nov 2022 09:05:37 +0100 (CET)
+Date:   Tue, 15 Nov 2022 09:04:39 +0100
+From:   Martin Botka <martin.botka@somainline.org>
+To:     Samuel Holland <samuel@sholland.org>
+CC:     martin.botka1@gmail.com, ~postmarketos/upstreaming@lists.sr.ht,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jami Kettunen <jamipkettunen@somainline.org>,
+        Paul Bouchara <paul.bouchara@somainline.org>,
+        Yenda <jtrmal@gmail.com>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         linux-kernel@vger.kernel.org
-References: <20221112200717.1533622-1-elder@linaro.org>
- <20221112200717.1533622-2-elder@linaro.org>
- <de98dbb4-afb5-de05-1e75-2959aa720333@linaro.org>
- <2f827660-ae9d-01dd-ded8-7fd4c2f8f8ae@ieee.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <2f827660-ae9d-01dd-ded8-7fd4c2f8f8ae@ieee.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH 1/1] regulator: axp20x: Add support for AXP1530 variant
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ac450a01-5771-be91-fda4-9b3084c9bff3@sholland.org>
+References: <20221114162459.1802174-1-martin.botka@somainline.org> <202211150623.9oWDx9Ec-lkp@intel.com> <X11DLR.YBCMARW947UJ2@somainline.org> <ac450a01-5771-be91-fda4-9b3084c9bff3@sholland.org>
+Message-ID: <8973FC7E-F973-4C99-B284-222686FFB670@somainline.org>
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,104 +51,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/11/2022 18:48, Alex Elder wrote:
-> On 11/14/22 03:56, Krzysztof Kozlowski wrote:
->> On 12/11/2022 21:07, Alex Elder wrote:
->>> GSI firmware for IPA must be loaded during initialization, either by
->>> the AP or by the modem.  The loader is currently specified based on
->>> whether the Boolean modem-init property is present.
->>>
->>> Instead, use a new property with an enumerated value to indicate
->>> explicitly how GSI firmware gets loaded.  With this in place, a
->>> third approach can be added in an upcoming patch.
->>>
->>> The new qcom,gsi-loader property has two defined values:
->>>    - self:   The AP loads GSI firmware
->>>    - modem:  The modem loads GSI firmware
->>> The modem-init property must still be supported, but is now marked
->>> deprecated.
->>>
->>> Signed-off-by: Alex Elder <elder@linaro.org>
->>> ---
->>>   .../devicetree/bindings/net/qcom,ipa.yaml     | 59 +++++++++++++++----
->>>   1 file changed, 46 insertions(+), 13 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/qcom,ipa.yaml b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
->>> index e752b76192df0..0dfd6c721e045 100644
->>> --- a/Documentation/devicetree/bindings/net/qcom,ipa.yaml
->>> +++ b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
->>> @@ -124,12 +124,22 @@ properties:
->>>         - const: ipa-clock-enabled-valid
->>>         - const: ipa-clock-enabled
->>>   
->>> +  qcom,gsi-loader:
->>> +    enum:
->>> +      - self
->>> +      - modem
->>> +    description:
->>> +      This indicates how GSI firmware should be loaded.  If the AP loads
->>
->> s/This indicates/Indicate/
->> (or any other grammar without describing DT syntax but hardware/system)
-> 
-> OK.
-> 
->>> +      and validates GSI firmware, this property has value "self".  If the
->>> +      modem does this, this property has value "modem".
->>> +
->>>     modem-init:
->>> +    deprecated: true
->>>       type: boolean
->>>       description:
->>> -      If present, it indicates that the modem is responsible for
->>> -      performing early IPA initialization, including loading and
->>> -      validating firwmare used by the GSI.
->>> +      This is the older (deprecated) way of indicating how GSI firmware
->>> +      should be loaded.  If present, the modem loads GSI firmware; if
->>> +      absent, the AP loads GSI firmware.
->>>   
->>>     memory-region:
->>>       maxItems: 1
->>> @@ -155,15 +165,36 @@ required:
->>>     - interconnects
->>>     - qcom,smem-states
->>>   
->>> -# If modem-init is not present, the AP loads GSI firmware, and
->>> -# memory-region must be specified
->>> -if:
->>> -  not:
->>> -    required:
->>> -      - modem-init
->>> -then:
->>> -  required:
->>> -    - memory-region
->>> +allOf:
->>> +  # If qcom,gsi-loader is present, modem-init must not be present
->>> +  - if:
->>> +      required:
->>> +        - qcom,gsi-loader
->>> +    then:
->>> +      properties:
->>> +        modem-init: false
->>
->> This is ok, but will not allow you to keep deprecated property in DTS
->> for the transition period. We talked about this that you need to keep
->> both or wait few cycles before applying DTS cleanups.
-> 
-> My intention is expressed in the comment.  Is it because of the
-> "if .... required ... qcom,gsi-loader"?
-> 
-> Should it be "if ... properties ... qcom,gsi-loader"?
-
-You disallow modem-init here, so it cannot be present in DTS if
-gsi-loader is present. Therefore the deprecated case like this:
-  qcom,gsi-loader = "modem"
-  modem-init;
-is not allowed by the schema.
-
-As I said, it is fine, but your DTS should wait a cycle.
 
 
-Best regards,
-Krzysztof
+On November 15, 2022 8:02:00 AM GMT+01:00, Samuel Holland <samuel@sholland.org> wrote:
+>Hi Martin,
+>
+>On 11/14/22 16:56, Martin Botka wrote:
+>> Patch depends on the MFD driver which introduces also the regulator
+>> definitions.
+>
+>Then you need to either send them together as a series, or wait until
+>the MFD portion lands in linux-next.
+>
+>Regards,
+>Samuel
+>
 
+Will do.
+Regards,
+Martin 
