@@ -2,127 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AED36297AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:42:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7486297A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 12:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232917AbiKOLmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 06:42:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
+        id S232839AbiKOLlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 06:41:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbiKOLmf (ORCPT
+        with ESMTP id S229716AbiKOLlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 06:42:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C14220BF7
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:41:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668512495;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=82+Kiwei6AcNPhpq2ed6tDfygMQDux9NKFRsOyFrZno=;
-        b=F/QtwmBuFQ0/4pXkHyZl2tt8+3L98a11au9et/4kCWiH+Zk2MdSZU/Df604mVF3uD5822e
-        by9so0ZengvapnKu+x75++/tPVX0icoC0ntfj6ckNOWJm5Zrrkl01S7OnLjLF3LEixy7RY
-        wVaNzf7ZPYgnBUdx5SnAGbvYA4HQn3M=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-663-hpkPnmmiM0-dlZ1J-LuWig-1; Tue, 15 Nov 2022 06:41:34 -0500
-X-MC-Unique: hpkPnmmiM0-dlZ1J-LuWig-1
-Received: by mail-qk1-f199.google.com with SMTP id u5-20020a05620a0c4500b006fb30780443so11234272qki.22
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:41:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=82+Kiwei6AcNPhpq2ed6tDfygMQDux9NKFRsOyFrZno=;
-        b=TKK4eUUYTlLYEV6FrGCpJTJ0ab5fZDQAAmXCN5YSD4nnfcf0ObdiqRSe6AED3DOsEW
-         db6cHmIyPd+Us2F4/2Q8Q7DoLbVXl5+F1Wn2BNr6f8FlEXuo96/C7xcE4xdfIRa9w6Lc
-         uUiSB36PsTN+hpETIz94qtmp/PFcwjPj42nPsctXkoVMKc0d7D2qiPcoQ3bea2x0QT73
-         Y3UbsYzDbPeNe8RPVmvd9XT9pRywAwV/IDEmOyQTzigc5kSNshHrd+RUlgRmJsYSp13N
-         dio+TY7W+N6/fqV+9jKrCLKKmwVba2tzZjjC3LCN7NOcDjSg/AOwSnIPUXLGbNwTrJJd
-         DYAg==
-X-Gm-Message-State: ANoB5plG0aya8ku7LUkmBltcME3rfmwiJDoh1OuhzobYX3wTzhyDnz5d
-        n2hwajRyJ2srwqZp9D5Qff1zTvC9tYpZ1WswIHiHCkWN1IE1QN8+uirLznWJatMQTswZUJfFIuh
-        Phn1W2vYkHdHHy9RDsZI2yd1/
-X-Received: by 2002:a05:622a:315:b0:3a5:fa35:f42d with SMTP id q21-20020a05622a031500b003a5fa35f42dmr2103882qtw.286.1668512493870;
-        Tue, 15 Nov 2022 03:41:33 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6Qszwx+2DWZN2OY2H/erVBB9AWIiUGMsoX2/JkOauVhdJAAq9QUl6eAI1Zvd5JAPXFYCpxvw==
-X-Received: by 2002:a05:622a:315:b0:3a5:fa35:f42d with SMTP id q21-20020a05622a031500b003a5fa35f42dmr2103862qtw.286.1668512493585;
-        Tue, 15 Nov 2022 03:41:33 -0800 (PST)
-Received: from x1 (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
-        by smtp.gmail.com with ESMTPSA id d11-20020a05620a240b00b006e2d087fd63sm8294000qkn.63.2022.11.15.03.41.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 03:41:33 -0800 (PST)
-Date:   Tue, 15 Nov 2022 06:41:31 -0500
-From:   Brian Masney <bmasney@redhat.com>
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH] gpiolib: of: Use correct fwnode for DT-probed chips
-Message-ID: <Y3N66y1jsnoZClwg@x1>
-References: <20221111113732.461881-1-thierry.reding@gmail.com>
- <Y3Kv7XoBytwwy9pC@x1>
- <20221115111800.t6i6fuszhuasvgka@SoMainline.org>
+        Tue, 15 Nov 2022 06:41:50 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48B321824
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 03:41:48 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AF8JZWD002582;
+        Tue, 15 Nov 2022 05:41:38 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=PODMain02222019;
+ bh=9KF0EFIu5GFZmsPwf8xI4U874ouEdeeDRfnS9r8p1MM=;
+ b=PGN87a+qjhcm53UrwVC9jufNnvOnsDtRRNd08d2dl3+rvQqi66GAQBlOPP3CsxMZmx3j
+ 1rIdbBZh1cjDLHYNQmEhR4YKvqJFTOIGbM/QEuhOy0BaVSH9q/Wm5u4+VaTFtObOd9CA
+ E/7uJioXpUa3QiqHzGa1Zmk5Z+XB7kqSP2uas4MWIPGpHIZo0GE64O/lKYxZVilpVeVF
+ 0VN7TTX8dT//V6zaAcdFg/R4lNljWnaOGOX3zr/NLBaq7L+SrUrP0c8Fa/B+X/8K1IPR
+ SUZsYkNLZ1O+VD9+1XvPwr5FFW7P3jA+uGBLO3iDtirdVeDod1mq2pJlN2ecMIHafkRG 6A== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3kv73yg5xa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 15 Nov 2022 05:41:38 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Tue, 15 Nov
+ 2022 05:41:36 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.20 via Frontend Transport; Tue, 15 Nov 2022 05:41:36 -0600
+Received: from [198.90.251.111] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.111])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8DD5D46B;
+        Tue, 15 Nov 2022 11:41:36 +0000 (UTC)
+Message-ID: <730128a9-46ce-02b2-f88d-c9982fff2e69@opensource.cirrus.com>
+Date:   Tue, 15 Nov 2022 11:41:36 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221115111800.t6i6fuszhuasvgka@SoMainline.org>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 2/4] soundwire: Provide build stubs for common functions
+Content-Language: en-US
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+CC:     <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
+        <sanyog.r.kale@intel.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
+References: <20221114102956.914468-1-ckeepax@opensource.cirrus.com>
+ <20221114102956.914468-3-ckeepax@opensource.cirrus.com>
+ <90b01c76-fc65-a57f-9247-fae78241342c@linux.intel.com>
+ <20221115110345.GM10437@ediswmail.ad.cirrus.com>
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <20221115110345.GM10437@ediswmail.ad.cirrus.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: OsEL-2q4-CHKB36X-TLNp32ZRVT9gneW
+X-Proofpoint-GUID: OsEL-2q4-CHKB36X-TLNp32ZRVT9gneW
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 12:18:00PM +0100, Marijn Suijten wrote:
-> On 2022-11-14 16:15:25, Brian Masney wrote:
-> > On Fri, Nov 11, 2022 at 12:37:32PM +0100, Thierry Reding wrote:
-> > > From: Thierry Reding <treding@nvidia.com>
-> > > 
-> > > The OF node store in chip->fwnode is used to explicitly override the FW
-> > > node for a GPIO chip. For chips that use the default FW node (i.e. that
-> > > of their parent device), this will be NULL and cause the chip not to be
-> > > fully registered.
-> > > 
-> > > Instead, use the GPIO device's FW node, which is set to either the node
-> > > of the parent device or the explicit override in chip->fwnode.
-> > > 
-> > > Fixes: 8afe82550240 ("gpiolib: of: Prepare of_gpiochip_add() / of_gpiochip_remove() for fwnode")
-> > > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> > > Signed-off-by: Thierry Reding <treding@nvidia.com>
-> > 
-> > Reviewed-by: Brian Masney <bmasney@redhat.com>
-> > Tested-by: Brian Masney <bmasney@redhat.com>
-> > 
-> > I separately sent a similar type of patch to fix the same issue today:
-> > https://lore.kernel.org/linux-arm-msm/20221114202943.2389489-1-bmasney@redhat.com/T/#u
+On 15/11/2022 11:03, Charles Keepax wrote:
+> On Mon, Nov 14, 2022 at 10:13:07AM -0600, Pierre-Louis Bossart wrote:
+>>
+>>
+>> On 11/14/22 04:29, Charles Keepax wrote:
+>>> Provide stub functions when CONFIG_SOUNDWIRE is not set for functions
+>>> that are quite likely to be used from common code on devices supporting
+>>> multiple control buses.
+>>
+>> So far this case has been covered by splitting SoundWire related code
+>> away from, say I2C, and with a clear 'depends on SOUNDWIRE'. This is the
+>> case for rt5682, max98373, etc.
+>>
+>> Is this not good enough?
+>>
+>> I am not against this patch, just wondering if allowing code for
+>> different interfaces to be part of the same file will lead to confusions
+>> with e.g. register offsets or functionality exposed with different
+>> registers.
+>>
 > 
-> For completeness, your linked patch fixes a synchronous external abort
-> on multiple Qualcomm platforms pointed out in [1].  This patch however
-> does not, are you sure they fix the exact same issue?
+> I guess this is a bit of a grey area this one. Both work, I guess
+> the reason I was leaning this way is that in order to avoid a
+> circular dependency if I put all the soundwire DAI handling into
+> the soundwire code then I have to duplicate the snd_soc_dai_driver
+> structure into both the sdw and i2c specific code (worth noting
+> the I2S DAIs are still usable when the part is sdw to the host). But
+> there are also downsides to this approach in that it will likely have
+> some small impact on driver size when soundwire is not built in.
 > 
-> [1]: https://lore.kernel.org/linux-arm-msm/20221115110800.35gl3j43lmbxm3jb@SoMainline.org/
 
-Thierry's patch fixes the issue that I encountered in
-of_gpiochip_match_node_and_xlate() on the Qualcomm sa8540p automotive
-board. I don't get the stack dump that you encountered. I am having
-issues with probe deferrals on UFS when trying to acquire the
-reset-gpio.
+I think we should just add the stubs. Other subsystems use stubs to help
+with code that references stuff that might not be available.
 
-The patch I posted feels hacky (hence the RFC) but if the maintainers
-agree with it then I can clean up the commit message and post a v2.
-
-Brian
-
+Splitting all the soundwire-specifics out into a separate module works
+for simple chips that are either I2S or soundwire. but can get messy for
+a complex codec. I used the separate file method for CS42L42, but for a
+driver I'm working on I abandoned that and put both DAIs in the core
+code. I didn't notice the missing stubs because my defconfig that was
+intended to omit soundwire apparently has something that is selecting
+it anyway.
