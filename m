@@ -2,204 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A5A6299A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A67A6299AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbiKONHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:07:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
+        id S238251AbiKONII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:08:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbiKONHw (ORCPT
+        with ESMTP id S237761AbiKONIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:07:52 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0D012AED;
-        Tue, 15 Nov 2022 05:07:51 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id bp15so24251879lfb.13;
-        Tue, 15 Nov 2022 05:07:51 -0800 (PST)
+        Tue, 15 Nov 2022 08:08:04 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD5526AFB
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:07:56 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id a29so24316411lfj.9
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:07:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Jit8/LMIi2E2JbS+B0jlbkJrIY5fatnANghVdci0Jow=;
-        b=TA1tZ2At0TX0fgo78X2fKrojsqeP0jXwc8xMILewE7h7gBnAqQBf9PmI+wNMvv4QpP
-         02hsHLd7H6rr/10x/JUe0EMcD0wirwv4/x9CZbN/Lu91oFIl6D/+6xWmNYEaJMGN990s
-         eYuTRXf9+uD10Z0Mr9tiG3qd9ZLYAbHhGjWDmlIHjrplE5pIiBv+FLKpbNbzqJDHzjUj
-         EFQ87Bbli6XL52haS29jJy0BJTStwIRkixJaAYYWuiIeiSI0iFpEpIFv7LFnNLxDIflF
-         NSjgT7QOKh/ndzTiD3BhkxS8Yot0gSHVICZGa9VH0QHDZB8S9QrFWK4g1JW/hV24Qowr
-         dOBg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UBJBQbBMlMmd7V0JpeZBtsA3DhYWso8sxLsDK2tqGUs=;
+        b=ZJq/7J3mBFpZpKRcyciB8c3k9If8s4TJ9Fs/6Gdk/OSb6dj9ULeJBxvRGZxYZAL3SS
+         btx+DG0MOtdXsRe3PXjzE6HcsK5pW+yEOprjXjTV2r8jMf4Ueiqh8gIz0FatRiE9ZNO1
+         VsKaV8wQLgRt8Z14GBjhG9aUsZW7bqi3WJsND8dlpH9BlzfWIelDkLo74WE3Nr1kyPGB
+         8ZRAF/FCAWqt15DJAzJpF/KaPSbAUybsLNW1vbJ1PKRlzLO6k5eX3zz2HCprQpLnMefV
+         9HvmntHWFXavknrll/SHKAk17FQSrH/m2wWyybn8HgAxF7X9y+eeh45AvY2XxbGUZxb4
+         4K/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jit8/LMIi2E2JbS+B0jlbkJrIY5fatnANghVdci0Jow=;
-        b=hjH6SuTnwXBiKpiy7t7WV4zoohKb5usE1Al7PwBIFrXkpyOhXqdpgeAC3gl5tM5qIZ
-         PBXyP24bamFOziGp5FN+EuSqbfyLz1CsEVZwKNFGoj0nsjPuj7jgxN7Va32GO5D5XF5l
-         78hCnfvqWYE2sWNdlR87wkjhM4lAbIhe5mUgekFortEFkY4nnC7DT8Z/b77PV3OB+foK
-         SLu85BBC8suw/XtuapaQFJViExaDH3wr4uZUfBov/qyEH9XqSi+FVrvN3COFlWj5EPTt
-         RbeILdYQnYj74U1QWgQ+5+9o7Wmhgq8O6GSRRe3V1VUDYgl2vPUdXyBKCJz01DbCyvfl
-         lmOw==
-X-Gm-Message-State: ANoB5pnaa2EQVNxE33K8Fzj0521m2TYz4a2KO6GmI8jKe9sWUWOJqMKi
-        2jSHJ8cbdEmbZvtOpxGqYJo=
-X-Google-Smtp-Source: AA0mqf6lk4j7FNDRj9vujNwx5fO7muYBMA1P6euzRTK5dVLh216qBJCxxpXctQBUezisiCNp3+mzSQ==
-X-Received: by 2002:a19:7608:0:b0:497:aa48:8fe7 with SMTP id c8-20020a197608000000b00497aa488fe7mr6320236lff.612.1668517669730;
-        Tue, 15 Nov 2022 05:07:49 -0800 (PST)
-Received: from pc636 (host-90-235-25-77.mobileonline.telia.com. [90.235.25.77])
-        by smtp.gmail.com with ESMTPSA id p7-20020a2eb107000000b0026de0c8098csm2510739ljl.26.2022.11.15.05.07.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 05:07:49 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Tue, 15 Nov 2022 14:07:47 +0100
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-kernel@vger.kernel.org,
-        paulmck@kernel.org, rcu@vger.kernel.org
-Subject: Re: [PATCH v2] rcu/kfree: Do not request RCU when not needed
-Message-ID: <Y3OPI/pWZ5jf4X9y@pc636>
-References: <20221109024758.2644936-1-joel@joelfernandes.org>
- <Y2z3Mb3u8bFZ12wY@pc636>
- <CAEXW_YSq89xzgyQ9Tdt1tCqz8VAfzb7kSXVZmnxDuJ65U0UZ3w@mail.gmail.com>
- <Y20EOinwcLSZHmXg@pc638.lan>
- <Y22ry4Q2OY2zovco@google.com>
- <Y3Iyka86FlUh9D1P@pc636>
- <CAEXW_YR8ycdF0Y80p2qKXQm3Qc+XA441jQZ3uiHk=TbaXngNkQ@mail.gmail.com>
+        bh=UBJBQbBMlMmd7V0JpeZBtsA3DhYWso8sxLsDK2tqGUs=;
+        b=I0VClsvteElGcJaUTTq4qpqPc/+4nuwHeAfIxWvBdwWlNMJcl1lNTaMF8t0ykIfGpw
+         Ss7XfPEMCAQPHIAeYiWyVIBd/JkBMi50a5L2CZUXnrDOAOJOweFfm2nerwhtlBUU+vyn
+         ftsQ1CFQqX7tRdI8SFqqyjG3P4p5eXuwXJ2VIASBGDuotEc+gQzWfg4pw0yl0HjpiFIP
+         ZPMXwEqQWHKDF1CLkp6G2/6DkQiad7o5zBd4GIVWNLIUPG5eD2de7N00K6uh8/TY/Mfj
+         yLXTgq+vsHfqLqwzXRNXLDLQcboGppn5IESYr3zouUKITLBEyCh48LBocEufbNaQVW7t
+         SJ9Q==
+X-Gm-Message-State: ANoB5pkMYRdBqG69x0yFWiXxai+mGYjWA8mYGgK+xslDYHRVahVbadea
+        ol6rcydFjZHNO4+auKrH4uIyAA==
+X-Google-Smtp-Source: AA0mqf4gbD4DD6OxXBHy5q68FOYR9L+0Cf+XWUOqhm+ul9x3BuzZfPL1VH2lsviiirfkCFxML6tXtA==
+X-Received: by 2002:a05:6512:3f2:b0:4a2:3e6c:a32b with SMTP id n18-20020a05651203f200b004a23e6ca32bmr5413822lfq.54.1668517674600;
+        Tue, 15 Nov 2022 05:07:54 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id t23-20020a2e8e77000000b0026c2d2a9b92sm2426054ljk.101.2022.11.15.05.07.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 05:07:53 -0800 (PST)
+Message-ID: <c9a77262-f137-21d9-58af-eb4efb8aadbf@linaro.org>
+Date:   Tue, 15 Nov 2022 14:07:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEXW_YR8ycdF0Y80p2qKXQm3Qc+XA441jQZ3uiHk=TbaXngNkQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 2/7] dt-bindings: clock: renesas,r9a06g032-sysctrl: Add
+ h2mode property
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+References: <20221114111513.1436165-1-herve.codina@bootlin.com>
+ <20221114111513.1436165-3-herve.codina@bootlin.com>
+ <a1a7fdf4-2608-d6c9-7c7a-f8e8fae3a742@linaro.org>
+In-Reply-To: <a1a7fdf4-2608-d6c9-7c7a-f8e8fae3a742@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 03:49:16PM -0500, Joel Fernandes wrote:
-> On Mon, Nov 14, 2022 at 7:20 AM Uladzislau Rezki <urezki@gmail.com> wrote:
-> >
-> > > On Thu, Nov 10, 2022 at 03:01:30PM +0100, Uladzislau Rezki wrote:
-> > > > > Hi,
-> > > > >
-> > > > > On Thu, Nov 10, 2022 at 8:05 AM Uladzislau Rezki <urezki@gmail.com> wrote:
-> > > > >
-> > > > > > > On ChromeOS, using this with the increased timeout, we see that we
-> > > > > > almost always
-> > > > > > > never need to initiate a new grace period. Testing also shows this frees
-> > > > > > large
-> > > > > > > amounts of unreclaimed memory, under intense kfree_rcu() pressure.
-> > > > > > >
-> > > > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > > > > > ---
-> > > > > > > v1->v2: Same logic but use polled grace periods instead of sampling
-> > > > > > gp_seq.
-> > > > > > >
-> > > > > > >  kernel/rcu/tree.c | 8 +++++++-
-> > > > > > >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > > > > > >
-> > > > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > > > > > > index 591187b6352e..ed41243f7a49 100644
-> > > > > > > --- a/kernel/rcu/tree.c
-> > > > > > > +++ b/kernel/rcu/tree.c
-> > > > > > > @@ -2935,6 +2935,7 @@ struct kfree_rcu_cpu_work {
-> > > > > > >
-> > > > > > >  /**
-> > > > > > >   * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace
-> > > > > > period
-> > > > > > > + * @gp_snap: The GP snapshot recorded at the last scheduling of monitor
-> > > > > > work.
-> > > > > > >   * @head: List of kfree_rcu() objects not yet waiting for a grace period
-> > > > > > >   * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiting for a
-> > > > > > grace period
-> > > > > > >   * @krw_arr: Array of batches of kfree_rcu() objects waiting for a
-> > > > > > grace period
-> > > > > > > @@ -2964,6 +2965,7 @@ struct kfree_rcu_cpu {
-> > > > > > >       struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
-> > > > > > >       raw_spinlock_t lock;
-> > > > > > >       struct delayed_work monitor_work;
-> > > > > > > +     unsigned long gp_snap;
-> > > > > > >       bool initialized;
-> > > > > > >       int count;
-> > > > > > >
-> > > > > > > @@ -3167,6 +3169,7 @@ schedule_delayed_monitor_work(struct kfree_rcu_cpu
-> > > > > > *krcp)
-> > > > > > >                       mod_delayed_work(system_wq, &krcp->monitor_work,
-> > > > > > delay);
-> > > > > > >               return;
-> > > > > > >       }
-> > > > > > > +     krcp->gp_snap = get_state_synchronize_rcu();
-> > > > > > >       queue_delayed_work(system_wq, &krcp->monitor_work, delay);
-> > > > > > >  }
-> > > > > > >
-> > > > > > How do you guarantee a full grace period for objects which proceed
-> > > > > > to be placed into an input stream that is not yet detached?
-> > > > >
-> > > > >
-> > > > > Just replying from phone as I’m OOO today.
-> > > > >
-> > > > > Hmm, so you’re saying that objects can be queued after the delayed work has
-> > > > > been queued, but processed when the delayed work is run? I’m looking at
-> > > > > this code after few years so I may have missed something.
-> > > > >
-> > > > > That’s a good point and I think I missed that. I think your version did too
-> > > > > but I’ll have to double check.
-> > > > >
-> > > > > The fix then is to sample the clock for the latest object queued, not for
-> > > > > when the delayed work is queued.
-> > > > >
-> > > > The patch i sent gurantee it. Just in case see v2:
-> > >
-> > > You are right and thank you! CBs can be queued while the monitor timer is in
-> > > progress. So we need to sample unconditionally. I think my approach is still
-> > > better since I take advantage of multiple seconds (I update snapshot on every
-> > > CB queue monitor and sample in the monitor handler).
-> > >
-> > > Whereas your patch is snapshotting before queuing the regular work and when
-> > > the work is executed (This is a much shorter duration and I bet you would be
-> > > blocking in cond_synchronize..() more often).
-> > >
-> > There is a performance test that measures a taken time and memory
-> > footprint, so you can do a quick comparison. A "rcutorture" can be
-> > run with various parameters to figure out if a patch that is in question
-> > makes any difference.
+On 15/11/2022 14:05, Krzysztof Kozlowski wrote:
+> On 14/11/2022 12:15, Herve Codina wrote:
+>> Add the h2mode property to force the USBs mode ie:
+>>  - 2 hosts
+>> or
+>>  - 1 host and 1 device
+>>
+>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+>> ---
+>>  .../bindings/clock/renesas,r9a06g032-sysctrl.yaml      | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml b/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml
+>> index 95bf485c6cec..f9e0a58aa4fb 100644
+>> --- a/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml
+>> +++ b/Documentation/devicetree/bindings/clock/renesas,r9a06g032-sysctrl.yaml
+>> @@ -39,6 +39,16 @@ properties:
+>>    '#power-domain-cells':
+>>      const: 0
+>>  
+>> +  renesas,h2mode:
+>> +    description: |
+>> +      Configure the USBs mode.
+>> +        - <0> : the USBs are in 1 host and 1 device mode.
+>> +        - <1> : the USBs are in 2 host mode.
+>> +      If the property is not present, the value used is the one already present
+>> +      in the CFG_USB register (from reset or set by the bootloader).
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    enum: [0, 1]
 > 
-> Yes sure, I am doing a run now with my patch. However, I have a
-> question -- why do you feel blocking in the kworker is not an issue?
-> You are taking a snapshot before queuing the normal kwork and then
-> reading the snapshot when the normal kwork runs. Considering it is a
-> high priority queue, the delay between when you are taking the
-> snapshot, and reading it is likely small so there is a bigger chance
-> of blocking in cond_synchronize_rcu(). Did I miss something?
-> 
-We can wait indeed in the reclaim worker. But the worker does not do any
-nasty or extra work here. If there is a need we block and wait. After a
-grace period, we are awoken and proceed.
+> 0/1 are quite cryptic. Why not making it a string which is easy to read
+> and understand? Can be something like "two-hosts" and "one-host". Or
+> anything you find more readable...
 
-Therefore i do not see the reason in handling two cases:
+...but actually you should rather make it a property of your USB
+controller, not clock controller. You have two controllers and we have a
+generic property for them - dr_mode.
 
-if (gp_done)
-    queue_work();
-else
-    queue_rcu_work();
+Best regards,
+Krzysztof
 
-it is the same if we just queue the work and check on entry. The current
-scenario is: queue the work after a grace period. This is the difference.
-
-Right if the reclaimer was a high prio kthread a time would be shorter. 
-
-In your scenario the time seems even shorter(i have not checked) because
-you update a snapshot of krcp each time a kvfree_rcu() is invoked. So
-basically even though you have objects whose grace period is passed you
-do not separate it anyhow. Because you update the:
-
-krcp->gp_snap = get_state_synchronize_rcu();
-
-too often.
-
---
-Uladzislau Rezki
