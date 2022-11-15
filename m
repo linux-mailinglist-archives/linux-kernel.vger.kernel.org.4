@@ -2,131 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F6B6291F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:44:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B26656291FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232415AbiKOGo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 01:44:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
+        id S232218AbiKOGqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 01:46:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbiKOGoz (ORCPT
+        with ESMTP id S232425AbiKOGqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 01:44:55 -0500
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D958C1836F;
-        Mon, 14 Nov 2022 22:44:53 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0VUsFbJs_1668494685;
-Received: from 30.240.98.93(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0VUsFbJs_1668494685)
-          by smtp.aliyun-inc.com;
-          Tue, 15 Nov 2022 14:44:48 +0800
-Message-ID: <ffdf1eb1-c188-b161-0e70-cad6f64c6c46@linux.alibaba.com>
-Date:   Tue, 15 Nov 2022 14:44:44 +0800
+        Tue, 15 Nov 2022 01:46:05 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424B61C912
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:46:03 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id bj12so33631293ejb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:46:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z333HxX5gPy9NORJdJPh5x75FiRSYhz5BQverCzuReI=;
+        b=BYRZsjOI09drJblN+gA12cyZBzdAun4cC1h8zEf9GkrquLLMRX5ayWTEWN4Z57waV8
+         fZTQI8SYKDcH1hwG/vI80csxKDACqnq9pIdyenEKFyszXO0zpb0aznjEeN6ATWrSJa5J
+         39IjedjKi5vX+cqOPa1k62yXGUgoyfU99WawtDeq3GgUT2t+7TpHG0oTvg63Kw6gEHXj
+         MZfj9iq2QZ2ZbDdllTg/xG5tohiRZ6eQMcKjlkqno0b/ChQAa6dzFQy56Ei8eSTnq9cS
+         Q2bmrElYaYn1MRm7XA5m32U6IyixhXIfHbvstxc73nGgmt5e2/0WniuznEoG6gMZcoks
+         C5bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z333HxX5gPy9NORJdJPh5x75FiRSYhz5BQverCzuReI=;
+        b=7bzF/RXaUNr3rvwWPALGlL+j6oOgF71Vzqohgz2JzbLBTHOM7ZnaLOPh61Ti+YvVeh
+         hCmq3fhIOFlJhxyfkipGU+Zsc2sXAM33uX6xaF6iMDkFp3pqBxghloJXsPN9jyy1jK9b
+         XMVNygeL7lqu34C6RRgVfjOazSsN2sB7wqUgAC+aWKfkqf+mlqQL/5DbJn5R7JeDmEUH
+         zdX+je7cmI4PbZDK5r1IJPqMo2XsscjXnSu0rdH6ORyUyq1oONb31icU3aBt4i2HVVSM
+         8a2YZ+jcnVMrUSCqSCMF8pfIAK6Wg2n0drLtzQCYHVUEFYdkPgwA/H1VqZCDYWYBLfjn
+         5gkg==
+X-Gm-Message-State: ANoB5pnZIMoQHlGpiES44ThJ7Mw2q3B+MpMEco7kbcs03TwqrLYLlbx5
+        ddhPU+DSbmrxyDn8eYDhbkmNzw==
+X-Google-Smtp-Source: AA0mqf4yokm7ojLEsAwKwb1SgOwx50ag245MHJ+A0ANJfRzFd5AidpHQIt6v3wBKwQUbXnMnqCZAug==
+X-Received: by 2002:a17:906:ae8b:b0:7ad:9892:921a with SMTP id md11-20020a170906ae8b00b007ad9892921amr12324383ejb.506.1668494761825;
+        Mon, 14 Nov 2022 22:46:01 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id k17-20020aa7c391000000b00467cc919072sm2809748edq.17.2022.11.14.22.46.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Nov 2022 22:46:01 -0800 (PST)
+Date:   Tue, 15 Nov 2022 07:46:00 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Deepak Gupta <debug@rivosinc.com>
+Cc:     aou@eecs.berkeley.edu, jan.kiszka@siemens.com, kbingham@kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com
+Subject: Re: [PATCH v2] scripts/gdb: add lx_current support for riscv
+Message-ID: <20221115064600.e6jzigbl23hwpuzi@kamzik>
+References: <20221111195938.1499148-2-debug@rivosinc.com>
+ <20221115012917.1781185-1-debug@rivosinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH v6 1/2] mm/tlbbatch: Introduce
- arch_tlbbatch_should_defer()
-To:     Yicong Yang <yangyicong@huawei.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        anshuman.khandual@arm.com, linux-doc@vger.kernel.org
-Cc:     corbet@lwn.net, peterz@infradead.org, arnd@arndb.de,
-        punit.agrawal@bytedance.com, linux-kernel@vger.kernel.org,
-        darren@os.amperecomputing.com, yangyicong@hisilicon.com,
-        huzhanyuan@oppo.com, lipeifeng@oppo.com, zhangshiming@oppo.com,
-        guojian@oppo.com, realmz6@gmail.com, linux-mips@vger.kernel.org,
-        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        Barry Song <21cnbao@gmail.com>, wangkefeng.wang@huawei.com,
-        prime.zeng@hisilicon.com,
-        Anshuman Khandual <khandual@linux.vnet.ibm.com>,
-        Barry Song <baohua@kernel.org>
-References: <20221115031425.44640-1-yangyicong@huawei.com>
- <20221115031425.44640-2-yangyicong@huawei.com>
-From:   haoxin <xhao@linux.alibaba.com>
-In-Reply-To: <20221115031425.44640-2-yangyicong@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221115012917.1781185-1-debug@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 14, 2022 at 05:29:17PM -0800, Deepak Gupta wrote:
+> csr_sscratch CSR holds current task_struct address when hart is in user space.
+> trap handler on entry spills csr_sscratch into "tp" (x2) register and zeroes out
+> csr_sscratch CSR. trap handler on exit reloads "tp" with expected user mode value
+> and place current task_struct address again in csr_scratch CSR.
+> 
+> This patch assumes "tp" is pointing to task_struct. If value in csr_scratch is numerically
+> greater than "tp" then it assumes csr_scratch is correct address of current task_struct.
+> This logic holds when
+>    - hart is in user space, "tp" will be less than csr_scratch.
+>    - hart is in kernel space but not in trap handler, "tp" will be more than csr_scratch.
+>    - hart is executing trap handler
+>            - "tp" is still pointing to user mode but csr_scratch contains ptr to task_struct.
+>              numerically higher.
+>            - "tp" is now pointing to task_struct but csr_scratch now contains either 0 or numerically
+>               smaller value.
 
-在 2022/11/15 上午11:14, Yicong Yang 写道:
-> From: Anshuman Khandual <khandual@linux.vnet.ibm.com>
->
-> The entire scheme of deferred TLB flush in reclaim path rests on the
-> fact that the cost to refill TLB entries is less than flushing out
-> individual entries by sending IPI to remote CPUs. But architecture
-> can have different ways to evaluate that. Hence apart from checking
-> TTU_BATCH_FLUSH in the TTU flags, rest of the decision should be
-> architecture specific.
->
-> Signed-off-by: Anshuman Khandual <khandual@linux.vnet.ibm.com>
-> [https://lore.kernel.org/linuxppc-dev/20171101101735.2318-2-khandual@linux.vnet.ibm.com/]
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-> [Rebase and fix incorrect return value type]
-> Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> Reviewed-by: Barry Song <baohua@kernel.org>
-> Tested-by: Punit Agrawal <punit.agrawal@bytedance.com>
+When is (csr_scratch != 0 && csr_scratch < tp)? IIUC, it should always be
+zero or >= tp.
+
+> 
+> Patch also adds new cached type "ulong" in scripts/gdb/linux/utils.py
+
+Please wrap commit message lines at ~74.
+
+> 
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 > ---
->   arch/x86/include/asm/tlbflush.h | 12 ++++++++++++
->   mm/rmap.c                       |  9 +--------
->   2 files changed, 13 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-> index cda3118f3b27..8a497d902c16 100644
-> --- a/arch/x86/include/asm/tlbflush.h
-> +++ b/arch/x86/include/asm/tlbflush.h
-> @@ -240,6 +240,18 @@ static inline void flush_tlb_page(struct vm_area_struct *vma, unsigned long a)
->   	flush_tlb_mm_range(vma->vm_mm, a, a + PAGE_SIZE, PAGE_SHIFT, false);
->   }
->   
-> +static inline bool arch_tlbbatch_should_defer(struct mm_struct *mm)
-> +{
-> +	bool should_defer = false;
+>  scripts/gdb/linux/cpus.py  | 15 +++++++++++++++
+>  scripts/gdb/linux/utils.py |  5 +++++
+>  2 files changed, 20 insertions(+)
+> 
+> diff --git a/scripts/gdb/linux/cpus.py b/scripts/gdb/linux/cpus.py
+> index 15fc4626d236..fd818d7896ce 100644
+> --- a/scripts/gdb/linux/cpus.py
+> +++ b/scripts/gdb/linux/cpus.py
+> @@ -173,6 +173,21 @@ def get_current_task(cpu):
+>           else:
+>               raise gdb.GdbError("Sorry, obtaining the current task is not allowed "
+>                                  "while running in userspace(EL0)")
+> +    elif utils.is_target_arch("riscv"):
+> +         current_tp = gdb.parse_and_eval("$tp")
+> +         scratch_reg = gdb.parse_and_eval("$sscratch")
 > +
-> +	/* If remote CPUs need to be flushed then defer batch the flush */
-> +	if (cpumask_any_but(mm_cpumask(mm), get_cpu()) < nr_cpu_ids)
-> +		should_defer = true;
-> +	put_cpu();
-> +
-> +	return should_defer;
-> +}
-> +
->   static inline u64 inc_mm_tlb_gen(struct mm_struct *mm)
->   {
->   	/*
-> diff --git a/mm/rmap.c b/mm/rmap.c
-> index 2ec925e5fa6a..a9ab10bc0144 100644
-> --- a/mm/rmap.c
-> +++ b/mm/rmap.c
-> @@ -685,17 +685,10 @@ static void set_tlb_ubc_flush_pending(struct mm_struct *mm, bool writable)
->    */
->   static bool should_defer_flush(struct mm_struct *mm, enum ttu_flags flags)
->   {
-> -	bool should_defer = false;
-> -
->   	if (!(flags & TTU_BATCH_FLUSH))
->   		return false;
->   
-> -	/* If remote CPUs need to be flushed then defer batch the flush */
-> -	if (cpumask_any_but(mm_cpumask(mm), get_cpu()) < nr_cpu_ids)
-> -		should_defer = true;
-> -	put_cpu();
-> -
-> -	return should_defer;
-> +	return arch_tlbbatch_should_defer(mm);
->   }
->   
-LGTM, thanks
+> +         # by default tp points to current task
+> +         current_task = current_tp.cast(task_ptr_type)
+> +         
+> +         # scratch register is set 0 in trap handler after entering kernel.
+> +         # When hart is in user mode, scratch register is pointing to task_struct.
+> +         # So when scratch register holds higher value (negative address as ulong is bigger value) than tp,
 
-Reviewed-by: Xin Hao <xhao@linux.alibaba.com>
->   /*
+Please wrap source lines at 100.
+
+> +         # then use scratch register
+> +         if (scratch_reg.cast(utils.get_ulong_type()) >  current_tp.cast(utils.get_ulong_type())):
+                                                          ^ extra space here
+
+> +             current_task = scratch_reg.cast(task_ptr_type)
+> +             
+> +         return current_task.dereference()
+>      else:
+>          raise gdb.GdbError("Sorry, obtaining the current task is not yet "
+>                             "supported with this arch")
+> diff --git a/scripts/gdb/linux/utils.py b/scripts/gdb/linux/utils.py
+> index 1553f68716cc..ddaf3089170d 100644
+> --- a/scripts/gdb/linux/utils.py
+> +++ b/scripts/gdb/linux/utils.py
+> @@ -35,12 +35,17 @@ class CachedType:
+>  
+>  
+>  long_type = CachedType("long")
+> +ulong_type = CachedType("ulong")
+>  atomic_long_type = CachedType("atomic_long_t")
+>  
+>  def get_long_type():
+>      global long_type
+>      return long_type.get_type()
+>  
+> +def get_ulong_type():
+> +    global ulong_type
+> +    return ulong_type.get_type()
+> +
+>  def offset_of(typeobj, field):
+>      element = gdb.Value(0).cast(typeobj)
+>      return int(str(element[field].address).split()[0], 16)
+> -- 
+> 2.25.1
+>
+
+Besides the line wrapping and the commit message clarification this looks
+good to me.
+
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+
+Thanks,
+drew
