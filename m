@@ -2,214 +2,1268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774EB6291CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5046291CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 07:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbiKOG0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 01:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
+        id S231704AbiKOGZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 01:25:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbiKOG0J (ORCPT
+        with ESMTP id S229732AbiKOGZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 01:26:09 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3053E1EED8;
-        Mon, 14 Nov 2022 22:26:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668493562; x=1700029562;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=1PHSc28MLoqCNxc55bftmviMW6b76byQ3VC8Hj66d3k=;
-  b=TAdMuLmyShPsit90mY2ntkEL+4TqF1LvL6OvZbLl1Y+JPufYOKyl61E5
-   TDWHFyOIwzX28Otm7Ai4Dro/IQQyPfnP18u0gqCUGC7vEHFATAmQtqHw9
-   HuT0k2iS5F2HRQ8EN/sDpzTv1vZg91v3yN/k5Ihnz5pVa5qG4035e0cg2
-   xHBo3rwRpabhtuy7erCjgQPqUO0jwutCZpm1hcR0xxC8Ts80yv0xVxZNT
-   2UiJZJIclZWlpERcw8TyryEpkuRziH5HVIvezdXHkJ4SdRS9Uwdi07Yax
-   9z7lgQ7DZdXNcISJ8Ku76x+qEVmk+/Q2fERoxg4EQwN25RfMqywRrE8ir
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="376442996"
-X-IronPort-AV: E=Sophos;i="5.96,165,1665471600"; 
-   d="scan'208";a="376442996"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 22:25:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="702314830"
-X-IronPort-AV: E=Sophos;i="5.96,165,1665471600"; 
-   d="scan'208";a="702314830"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga008.fm.intel.com with ESMTP; 14 Nov 2022 22:25:32 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 22:25:32 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 14 Nov 2022 22:25:31 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 14 Nov 2022 22:25:31 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.175)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 14 Nov 2022 22:25:31 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cE+eUcceiJGC7bGVRqE1h12eVYNYXuAEwkUOZRWApxqnOkNFtoa/w0RPa1T9ohpys1r6pVWqkpwVfkc33Pqo4RuCkxK9OCqtpUj8Tg8oy1RBeAjJkSVDMGVmQVV0QZv9ui2KkWh2DYztSdjAZWHL2u1SAOMC9WgxzGUsDkHlQoV6ZbQyjfE/fYM0Rs6pWuQNnrYHkDaT6X/MGEIhpVYzAcPgGHphRKYk81lwhcaCuso2DtsX3O5GEOR6xK+3C3+nFZD3yc8R0RjRXauLXErxz7J9jhBJC5PsMxYUJWhn0ivkku/prq89GSVLNUusqUinPe2694GpYAC299RyMw4suQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4u529f7URe1ZPrRiFESVla3tw1q+KfhBaF7xj8iP/M4=;
- b=T+4ZRyFgGd6Bes2E6rsjedk2iQTvPD/RgGx/yokFPUknOQNtUhzRVa7mcnLsYGurwKi3hhFPKbN60WbBDUlsd/DIQ7G3r7UJhRQVR2nSb/HGDhp1IjoRu3acynp9YttDwebh8EzPbcLMlL+uLRUjj57igB5tKXwvGYyNtbIiBS2qRc2C9WLIqs6KzU36rTygJCHApy73+JWAKa8wgK3JAaIRr+50GK3LuU/QSNLOrAZS014XM2x9hXWi+W9pdqrpAsLWeAZrWNxtoPzXdu+o3E/Qtc53EuJ/CDyTLQVfXKeggNbSgjq29qL0Cn6Gj1HNKNVXC7d3EG/eE9/eNzMbgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH0PR11MB4824.namprd11.prod.outlook.com (2603:10b6:510:38::13)
- by DM8PR11MB5606.namprd11.prod.outlook.com (2603:10b6:8:3c::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Tue, 15 Nov
- 2022 06:25:24 +0000
-Received: from PH0PR11MB4824.namprd11.prod.outlook.com
- ([fe80::83be:d8ee:31bb:4814]) by PH0PR11MB4824.namprd11.prod.outlook.com
- ([fe80::83be:d8ee:31bb:4814%8]) with mapi id 15.20.5813.018; Tue, 15 Nov 2022
- 06:25:24 +0000
-From:   "Mi, Dapeng1" <dapeng1.mi@intel.com>
-To:     "Christopherson,, Sean" <seanjc@google.com>
-CC:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>
-Subject: RE: [PATCH] KVM: x86: disable halt polling when powersave governor is
- used
-Thread-Topic: [PATCH] KVM: x86: disable halt polling when powersave governor
- is used
-Thread-Index: AQHYyNSFRsRhvKGUt0S7LgkC+L5J3K4DWToAgADh46CAG1uagIAgTX6g
-Date:   Tue, 15 Nov 2022 06:25:24 +0000
-Message-ID: <PH0PR11MB48245F82B9F5352878FD84B5CD049@PH0PR11MB4824.namprd11.prod.outlook.com>
-References: <20220915073121.1038840-1-dapeng1.mi@intel.com>
- <Y0BnKIW+7sqJbTyY@google.com>
- <PH0PR11MB48240C29F1DEBC79EA933285CD5E9@PH0PR11MB4824.namprd11.prod.outlook.com>
- <Y1gXseyl0f3IUnDh@google.com>
-In-Reply-To: <Y1gXseyl0f3IUnDh@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-dlp-product: dlpe-windows
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR11MB4824:EE_|DM8PR11MB5606:EE_
-x-ms-office365-filtering-correlation-id: c5d9e427-fbe0-43ca-83e1-08dac6d22e0c
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ed3Uh+EHuAXlfGYbm1wBtZQbdgSVNpVJj+YLCqXLmddF+htoV/goxvUbjfjrYPC9hwbolxjgsJWF/TApYvwxlBUoylpPVoF4fKYC2KVDYEkAfCp08al8NMs973eQz5Fer+ClR4nle02DKdZOlkEeKdmRyiExs2LJHty9ljizUhdx0PQ2NxgujyAJ4IwKRtBj4KeJoAd17/xs5LJzaSOv0L8FsfprEhzwDBw6Q+0PjkC7SzTpVfSNkj8kf3BIdu6Axia/KYAoNurooQaTOvZ+DvfZxM18Wqi3RZ9ckZvaWAt6If58iHhU1AHZ2r7V3dXS77VTJKSE6XECsjlJSBrDhAye1NRZSxYz99Z9HZffc3HFxrIpnvYqzAVtzE9e+1PRbkgd3bXEiUs5r0o15W8gYFZw5Eto+pPhnJkSBpmfWnY+/bOz0rudaQve6zZ47CZFRJLH4AO6x7T3c1ZAlATGOL4zn5lbnkYmlKoxi0kFFHQ9wNYYWxyMGJwIbO4vWCBBZgI4RE6n/MEd88gvG/p1sYG8+z7M47x21ruAWtAJ4I+ilru0n3UcTFDa8A9djdb3DR5M3cK6C0kihvEqkIvwfdU/B4BZEydhlKPB/DMs6qLoMOhB//ZEEbV1jKqO2QIVT5eoAhlW2MXIa8nIeypQhoRCVunx/zqWNEx+x25UH76J+OuPS0+E+HFsDFIG960PDF/bqo9lp3Si8gN5hBPKT/Iig+TCidKJ7vjBQY5t2V1MrcEqC9EQlAS2trLlXFjkXn2YQLfEnFL7oNtBJqsqeg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4824.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(39860400002)(376002)(366004)(136003)(451199015)(26005)(82960400001)(9686003)(316002)(86362001)(55016003)(33656002)(2906002)(41300700001)(76116006)(66556008)(64756008)(66946007)(66476007)(66446008)(38100700002)(8936002)(4326008)(8676002)(52536014)(5660300002)(186003)(122000001)(478600001)(71200400001)(54906003)(6916009)(53546011)(7696005)(6506007)(38070700005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?aN8b7m1aFUwS4LzT2MV1ABA3FZ8NaZsgtEnUM/br5HFEQ/UaXZ4ztfhx/bYs?=
- =?us-ascii?Q?0O+MwCxQMi75V71RI8wI1BM4aejDR67AlO3JJkhoTvX50shCxw/ZtoJ+OaGI?=
- =?us-ascii?Q?FirzVmaFtx/84rSMYw8gFfj1IwCYWsHNK8UJbpJ8K9CTo3O/uO/1UjjX4VeH?=
- =?us-ascii?Q?q40TTh+Sz0jSYYEjFDEbYtdM8hZhKKSdRfNhOU7OTbgb83VIYJbRPBRsRzxA?=
- =?us-ascii?Q?Zq8DceDcO3iUS42wuIxFc2aI4b2OqJf/xEfk9u4Ig+ictkJAGLOKNnztS3tB?=
- =?us-ascii?Q?gMEnBOgP6lp5aTj0TqTedPqNn4gjzhA9xCeTomyU8JGtltGSdS4Z/BG3752F?=
- =?us-ascii?Q?CJHJMRPUJ4CbnUfbmJHG9cP7PwylGKLzSNX1Rd3Ty33FxTW3i0XOtKwqKgXo?=
- =?us-ascii?Q?WbbRZ/nm3yLGQTwGMUZU/mBMfeRM7pMdCKV82qC0pRTT3tAb+5fNAkQYBID+?=
- =?us-ascii?Q?SNfv8SKrJHtJlzEiSj/O+TyFAKpsJ+iPVEr8nmXUle/hq2Y9rhQl/54MUDiJ?=
- =?us-ascii?Q?Bfib1HVYx8CToWEkA17giyUt0S3uWxTwiFBS1Rqb6BS6z8XEXCNDbBMaHQ7y?=
- =?us-ascii?Q?F1+vZTOF+ME3LUez+DtZz+Yl8gnnSOqpx2GRZND1WIcQoZtoQ7lMHuPM74MC?=
- =?us-ascii?Q?RPnJfHKnmGL+/qgQ6drvF/d0L9IQ4tUcqIFo24WGkOP1KDXCUzkRfCHMHZ9D?=
- =?us-ascii?Q?xBt8zllmCCC5mgrAIMMFE6WVYN/gLV0xe+F8RJv5a5G2Mi76wQTaf+8oxXDf?=
- =?us-ascii?Q?iwpG8GWhue8Qu76mA0QTQhO8mjUx3S4GYuKDbO/dG5RKYKD/IquGPPBwdblD?=
- =?us-ascii?Q?JuDRpOQ3oOzaUSNRP/CFVdj9q1vCT6iKc7ucNDtWtn0KHCnbD++yQKV6BdYo?=
- =?us-ascii?Q?sNON0OE2GipdVpYCgdmz1jzbiyKs3V43UoRrAv3ES93RB05VWeTtc5ArV2Kb?=
- =?us-ascii?Q?uDYcGtRemROOXlnsivhNeSnOT7V7o3/A6Qw7713YlQ0Kxo7ntkuFqjwd2pDj?=
- =?us-ascii?Q?ROwFyA7nQSxxBuKOrIur2Wbqb0GQNfvCbX5USEHOrzpvTo/S05mo0QaY6Jhj?=
- =?us-ascii?Q?O3TUnlqf8I/VrP4OKJHntUdSuetmSdSLW5Eb16h09Orpk3q8V2mkZVGkzrCS?=
- =?us-ascii?Q?bEFqY0/umyqMOwIgH1+sFskpon5z6xffEnhTIz1bMe6Jd5vytlxKTUmn9M/Q?=
- =?us-ascii?Q?11fAafoyUv/hej+DOFvmMfB+3jqPVFQR8WZDyTnYQET8K6n2cR9MEHrzl0Zb?=
- =?us-ascii?Q?vzZSYFXZftyYIQMLNryD/cZXZe76QJlvbVGuQQrBbnibyvmMmOGpqbEdQG9V?=
- =?us-ascii?Q?Do4F5X/aRlmfQlTk4/1zOb3G+3PnyS6AsKqdC9EsTZN7lGQigEzp2aEFAWg5?=
- =?us-ascii?Q?6tuXza0oNv5WMQ/CbPqF6EgBadFacMAwJvYkMokJbJUAXefq732wuYlD9hpQ?=
- =?us-ascii?Q?J+XzaUyaGUgBUB6oLlugkeObdsDwKxwd+zlG+e/Fh0UmM7mmlIOtV1TSC/GF?=
- =?us-ascii?Q?w+bCR3w6xg/8pSFVLtGarX1XK3tZsYsWwctexO2xPvqnoXsOHGgWhydYfYYs?=
- =?us-ascii?Q?6qsBgbCCxEjKLEv+ea7MYuVBN0MH6s/1rdip/OAS?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 15 Nov 2022 01:25:45 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F73EDFF6
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:25:42 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id q10-20020a056e0220ea00b00300f474693aso10788273ilv.23
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 22:25:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6U+/ZOZ7HaDy7hHfLR2m17xqd4D3CJieZBdl6kpewEs=;
+        b=ieIuEMttGFYRe1Qz/rgzlWUjXussqgE/Sso4WMwS6HeeZkiGcNC61SR4PH+aLXMWGP
+         oy9YTOkVO1yV4eVQVztqCKGK8eyk5mCf6aGb0iz3LVPM3/S5rnOIc1exs6Ow7M39VorM
+         pDFHZRuya601FBHWQ4CwymxTcn43K4hnl9hgkFyERK2/cKeMpsVvpd553PbQadlznrV0
+         ihzlRQbFtn0R+DJIGSNGgQo8wmywXH1ni/2pLC6qMbTlcAv/NFtXAWCmWhel+SDYv/1s
+         TROicT9joVX0fHPW6/Ci6pMjRVfWIx2ksqAZ79ubiMF8NDYpCLmmK8za8YjgFIsxr+lP
+         jAkQ==
+X-Gm-Message-State: ANoB5plyShETTp5ivgle8y5XL8C3giHMooO18/HkSNhbI9MmlbDimypS
+        tPGa+5LOZ34V9IAxlGis1yl3+cyBGeIdf5IM1YQtnM6/uQa5
+X-Google-Smtp-Source: AA0mqf6YS4fZmalxY3nR5/GlddHxteEvnWbSJpEwDegCeTvR5h8aGKivfiCCj4+kkBWOVoFUVUVfpajM8t8XNwO5iFSQAXZ+Zh/2
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4824.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c5d9e427-fbe0-43ca-83e1-08dac6d22e0c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2022 06:25:24.4194
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: D4ta8OGC702CLYZ1BP6DhG3FRQNq9pwM/U9y+S+slCQHUJkqbBL+BQ5JB0NR0rdVGr+Xoqf21TaiR9/qWTqj1w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR11MB5606
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:715b:0:b0:374:fc28:28e with SMTP id
+ n27-20020a02715b000000b00374fc28028emr7549908jaf.190.1668493541884; Mon, 14
+ Nov 2022 22:25:41 -0800 (PST)
+Date:   Mon, 14 Nov 2022 22:25:41 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dfcce005ed7c6c0b@google.com>
+Subject: [syzbot] KASAN: use-after-free Write in enqueue_timer
+From:   syzbot <syzbot+6fd64001c20aa99e34a4@syzkaller.appspotmail.com>
+To:     Jason@zx2c4.com, davem@davemloft.net, edumazet@google.com,
+        gregkh@linuxfoundation.org, hca@linux.ibm.com, jack@suse.cz,
+        keescook@chromium.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com,
+        yury.norov@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Sean Christopherson <seanjc@google.com>
-> Sent: Wednesday, October 26, 2022 1:07 AM
-> To: Mi, Dapeng1 <dapeng1.mi@intel.com>
-> Cc: pbonzini@redhat.com; tglx@linutronix.de; mingo@redhat.com;
-> dave.hansen@linux.intel.com; kvm@vger.kernel.org; linux-
-> kernel@vger.kernel.org; zhenyuw@linux.intel.com
-> Subject: Re: [PATCH] KVM: x86: disable halt polling when powersave
-> governor is used
->=20
-> On Sat, Oct 08, 2022, Mi, Dapeng1 wrote:
-> > > > +				!strncmp(policy->governor->name,
-> > > "powersave",
-> > >
-> > > KVM should not be comparing magic strings.  If the cpufreq subsystem
-> > > can't get
-> > > policy->policy right, then that needs to be fixed.
-> >
-> > Yeah, using magic strings looks a little bit strange, but this is what
-> > is cpufreq doing.  Currently cpufreq mechanism supports two kinds of
-> > drivers, one is the driver which has the built-in governor, like intel_=
-pstate
-> driver.
-> > For this kind of driver, the cpufreq governor is saved in the
-> > policy->policy field. The other is the traditional driver which is
-> > independent with cpufreq governor and the cpufreq governor type is
-> saved in the governor->name field.
-> > For the second kind of cpufreq driver, the policy->policy field is
-> > meaningless and we have to read the governor name.
->=20
-> That doesn't mean it's ok to bleed those internal details into KVM.  I wo=
-uld
-> much rather cpufreq provide a helper to get the effective policy, e.g.
->=20
->   unsigned int cpufreq_cpu_get_policy(unsigned int cpu)
->   {
-> 	struct cpufreq_policy *policy =3D cpufreq_cpu_get(cpu);
-> 	unsigned int pol;
->=20
-> 	if (!policy)
-> 		return CPUFREQ_POLICY_UNKNOWN;
->=20
-> 	pol =3D policy->policy
-> 	if (pol =3D=3D CPUFREQ_POLICY_UNKNOWN && policy->governor)
-> 		pol =3D cpufreq_parse_policy(policy->governor->name);
->=20
-> 	cpufreq_cpu_put(policy);
->   }
+Hello,
 
-Thanks Sean for reviewing. Would do in next version.
+syzbot found the following issue on:
+
+HEAD commit:    e01d50cbd6ee Merge tag 'vfio-v6.1-rc6' of https://github.c..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16301dae880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d53c245d72cb8f78
+dashboard link: https://syzkaller.appspot.com/bug?extid=6fd64001c20aa99e34a4
+compiler:       aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6fd64001c20aa99e34a4@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: use-after-free in hlist_add_head include/linux/list.h:929 [inline]
+BUG: KASAN: use-after-free in enqueue_timer+0x18/0xa4 kernel/time/timer.c:605
+Write at addr f9ff000024df6058 by task syz-fuzzer/2256
+Pointer tag: [f9], memory tag: [fe]
+
+CPU: 1 PID: 2256 Comm: syz-fuzzer Not tainted 6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+Call trace:
+ dump_backtrace.part.0+0xe0/0xf0 arch/arm64/kernel/stacktrace.c:156
+ dump_backtrace arch/arm64/kernel/stacktrace.c:162 [inline]
+ show_stack+0x18/0x40 arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x68/0x84 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:284 [inline]
+ print_report+0x1a8/0x4a0 mm/kasan/report.c:395
+ kasan_report+0x94/0xb4 mm/kasan/report.c:495
+ __do_kernel_fault+0x164/0x1e0 arch/arm64/mm/fault.c:320
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_tag_check_fault+0x78/0x8c arch/arm64/mm/fault.c:749
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ hlist_add_head include/linux/list.h:929 [inline]
+ enqueue_timer+0x18/0xa4 kernel/time/timer.c:605
+ mod_timer+0x14/0x20 kernel/time/timer.c:1161
+ mrp_periodic_timer_arm net/802/mrp.c:614 [inline]
+ mrp_periodic_timer+0xa0/0xc0 net/802/mrp.c:627
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ __el1_irq arch/arm64/kernel/entry-common.c:472 [inline]
+ el1_interrupt+0x38/0x6c arch/arm64/kernel/entry-common.c:486
+ el1h_64_irq_handler+0x18/0x2c arch/arm64/kernel/entry-common.c:491
+ el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:577
+ arch_local_irq_enable arch/arm64/include/asm/irqflags.h:35 [inline]
+ __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:159 [inline]
+ _raw_spin_unlock_irq+0x10/0x50 kernel/locking/spinlock.c:202
+ do_signal arch/arm64/kernel/signal.c:1071 [inline]
+ do_notify_resume+0x25c/0x13b0 arch/arm64/kernel/signal.c:1124
+ prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+ exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+ el0_interrupt+0x100/0x104 arch/arm64/kernel/entry-common.c:719
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+
+Allocated by task 20941:
+ kasan_save_stack+0x2c/0x60 mm/kasan/common.c:45
+ save_stack_info+0x38/0x130 mm/kasan/tags.c:104
+ kasan_save_alloc_info+0x14/0x20 mm/kasan/tags.c:138
+ ____kasan_kmalloc mm/kasan/common.c:371 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:330 [inline]
+ __kasan_kmalloc+0x9c/0xb0 mm/kasan/common.c:380
+ kasan_kmalloc include/linux/kasan.h:211 [inline]
+ kmalloc_trace+0x5c/0x70 mm/slab_common.c:1050
+ kmalloc include/linux/slab.h:553 [inline]
+ kzalloc include/linux/slab.h:689 [inline]
+ nci_allocate_device net/nfc/nci/core.c:1157 [inline]
+ nci_allocate_device+0x5c/0x170 net/nfc/nci/core.c:1143
+ virtual_ncidev_open+0x54/0xe0 drivers/nfc/virtual_ncidev.c:139
+ misc_open+0x124/0x170 drivers/char/misc.c:143
+ chrdev_open+0xc0/0x260 fs/char_dev.c:414
+ do_dentry_open+0x13c/0x4d0 fs/open.c:882
+ vfs_open+0x2c/0x40 fs/open.c:1013
+ do_open fs/namei.c:3557 [inline]
+ path_openat+0x568/0xee0 fs/namei.c:3713
+ do_filp_open+0x80/0x130 fs/namei.c:3740
+ do_sys_openat2+0xb4/0x16c fs/open.c:1310
+ do_sys_open fs/open.c:1326 [inline]
+ __do_sys_openat fs/open.c:1342 [inline]
+ __se_sys_openat fs/open.c:1337 [inline]
+ __arm64_sys_openat+0x64/0xb0 fs/open.c:1337
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
+ el0_svc_common.constprop.0+0x44/0xec arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x2c/0xd0 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x2c/0xb0 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0xb8/0xc0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x198/0x19c arch/arm64/kernel/entry.S:581
+
+Freed by task 20952:
+ kasan_save_stack+0x2c/0x60 mm/kasan/common.c:45
+ save_stack_info+0x38/0x130 mm/kasan/tags.c:104
+ kasan_save_free_info+0x18/0x30 mm/kasan/tags.c:143
+ ____kasan_slab_free.constprop.0+0x1b8/0x230 mm/kasan/common.c:236
+ __kasan_slab_free+0x10/0x1c mm/kasan/common.c:244
+ kasan_slab_free include/linux/kasan.h:177 [inline]
+ slab_free_hook mm/slub.c:1724 [inline]
+ slab_free_freelist_hook+0xbc/0x1fc mm/slub.c:1750
+ slab_free mm/slub.c:3661 [inline]
+ __kmem_cache_free+0x16c/0x2ec mm/slub.c:3674
+ kfree+0x60/0xb0 mm/slab_common.c:1007
+ nci_free_device+0x30/0x40 net/nfc/nci/core.c:1205
+ virtual_ncidev_close+0x74/0x80 drivers/nfc/virtual_ncidev.c:167
+ __fput+0x78/0x260 fs/file_table.c:320
+ ____fput+0x10/0x20 fs/file_table.c:348
+ task_work_run+0x80/0xe0 kernel/task_work.c:179
+ get_signal+0xc8/0x7a4 kernel/signal.c:2635
+ do_signal arch/arm64/kernel/signal.c:1071 [inline]
+ do_notify_resume+0x178/0x13b0 arch/arm64/kernel/signal.c:1124
+ prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+ exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+ el0_svc+0xac/0xb0 arch/arm64/kernel/entry-common.c:638
+ el0t_64_sync_handler+0xb8/0xc0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x198/0x19c arch/arm64/kernel/entry.S:581
+
+The buggy address belongs to the object at ffff000024df6000
+ which belongs to the cache kmalloc-2k of size 2048
+The buggy address is located 88 bytes inside of
+ 2048-byte region [ffff000024df6000, ffff000024df6800)
+
+The buggy address belongs to the physical page:
+page:00000000909ac9e4 refcount:1 mapcount:0 mapping:0000000000000000 index:0xf9ff000024df6000 pfn:0x64df0
+head:00000000909ac9e4 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0x1ffc00000010200(slab|head|node=0|zone=0|lastcpupid=0x7ff|kasantag=0x0)
+raw: 01ffc00000010200 0000000000000000 dead000000000122 fdff000002c01600
+raw: f9ff000024df6000 000000008010000d 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff000024df5e00: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
+ ffff000024df5f00: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
+>ffff000024df6000: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
+                                  ^
+ ffff000024df6100: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
+ ffff000024df6200: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
+==================================================================
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B              6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 0000000000001824 x12: 000000000000080c
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 00000000000018a8 x12: 0000000000000838
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 000000000000192c x12: 0000000000000864
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 00000000000019b0 x12: 0000000000000890
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 0000000000001a34 x12: 00000000000008bc
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 0000000000001ab8 x12: 00000000000008e8
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 0000000000001b3c x12: 0000000000000914
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 0000000000001bc0 x12: 0000000000000940
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 0000000000001c44 x12: 000000000000096c
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 0000000000001cc8 x12: 0000000000000998
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+__do_kernel_fault: 72220 callbacks suppressed
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 0000000000001d4f x12: 00000000000009c5
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 0000000000001dd3 x12: 00000000000009f1
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 0000000000001e57 x12: 0000000000000a1d
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 0000000000001edb x12: 0000000000000a49
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 0000000000001f5f x12: 0000000000000a75
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 0000000000001fe3 x12: 0000000000000aa1
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 0000000000002067 x12: 0000000000000acd
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 00000000000020eb x12: 0000000000000af9
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 000000000000216f x12: 0000000000000b25
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 00000000000021f3 x12: 0000000000000b51
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : ffff00007fbcba10 x4 : 0000000000000000 x3 : ffff80007592d000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0xcc/0xf4 kernel/softirq.c:650
+ irq_exit_rcu+0x10/0x20 kernel/softirq.c:662
+ el0_interrupt+0x54/0x104 arch/arm64/kernel/entry-common.c:717
+ __el0_irq_handler_common+0x18/0x2c arch/arm64/kernel/entry-common.c:724
+ el0t_64_irq_handler+0x10/0x20 arch/arm64/kernel/entry-common.c:729
+ el0t_64_irq+0x198/0x19c arch/arm64/kernel/entry.S:582
+---[ end trace 0000000000000000 ]---
+__do_kernel_fault: 73126 callbacks suppressed
+------------[ cut here ]------------
+Ignoring spurious kernel translation fault at virtual address ffff80007592d000
+WARNING: CPU: 1 PID: 2256 at arch/arm64/mm/fault.c:369 __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+Modules linked in:
+CPU: 1 PID: 2256 Comm: syz-fuzzer Tainted: G    B   W          6.1.0-rc5-syzkaller-00008-ge01d50cbd6ee #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+lr : __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+sp : ffff80000800bbc0
+x29: ffff80000800bbc0 x28: f3ff000004672f40 x27: 0000000000000008
+x26: ffff80000a29c008 x25: ffff80000a2a2cc0 x24: ffff80000a2c3388
+x23: 00000000a04000c9 x22: 0000000000000025 x21: ffff80007592d000
+x20: ffff80000800bc80 x19: 0000000097c18005 x18: 00000000fffffffe
+x17: 6666207373657264 x16: 6461206c61757472 x15: 697620746120746c
+x14: ffff80000a2eda70 x13: 000000000000227d x12: 0000000000000b7f
+x11: 2073736572646461 x10: ffff80000a39da70 x9 : 00000000ffffe000
+x8 : ffff80000a2eda70 x7 : ffff80000a39da70 x6 : 0000000000000000
+x5 : 0000000000017ff4 x4 : 0000000000000000 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : 0000000000000000 x0 : f3ff000004672f40
+Call trace:
+ __do_kernel_fault+0x1ac/0x1e0 arch/arm64/mm/fault.c:369
+ do_bad_area arch/arm64/mm/fault.c:473 [inline]
+ do_translation_fault+0x50/0xc0 arch/arm64/mm/fault.c:691
+ do_mem_abort+0x44/0x94 arch/arm64/mm/fault.c:825
+ el1_abort+0x40/0x60 arch/arm64/kernel/entry-common.c:367
+ el1h_64_sync_handler+0xd8/0xe4 arch/arm64/kernel/entry-common.c:427
+ el1h_64_sync+0x64/0x68 arch/arm64/kernel/entry.S:576
+ get_work_pool kernel/workqueue.c:741 [inline]
+ __queue_work+0xf4/0x4a0 kernel/workqueue.c:1458
+ queue_work_on+0x6c/0x90 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ nci_cmd_timer+0x28/0x34 net/nfc/nci/core.c:615
+ call_timer_fn.constprop.0+0x24/0x80 kernel/time/timer.c:1474
+ expire_timers+0x98/0xc4 kernel/time/timer.c:1519
+ __run_timers kernel/time/timer.c:1790 [inline]
+ __run_timers kernel/time/timer.c:1763 [inline]
+ run_timer_softirq+0xf4/0x254 kernel/time/timer.c:1803
+ _stext+0x124/0x2a4
+ ____do_softirq+0x10/0x20 arch/arm64/kernel/irq.c:79
+ call_on_irq_stack+0x2c/0x5c arch/arm64/kernel/entry.S:889
+ do_softirq_own_stack+0x1c/0x30 arch/arm64/kernel/irq.c:84
+ invoke_softirq kernel/softirq.c:452 [inline]
+ __irq_exit_rcu+0x
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
