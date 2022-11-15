@@ -2,104 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0E7629DBB
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A86B629DC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238328AbiKOPi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:38:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
+        id S238293AbiKOPko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:40:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238340AbiKOPiT (ORCPT
+        with ESMTP id S237952AbiKOPkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:38:19 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFAC2A246;
-        Tue, 15 Nov 2022 07:38:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668526699; x=1700062699;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=h9Dz/FHEPC+309z8nlhNqhBZsEpwoLFia6iUlxl7tOw=;
-  b=L6RtAlvmwp9s3tFDD44xZbjh9TjEwcKDW13KoDFJVj1WXkknc46b5apj
-   sbnJ0aNw6JxDz3ODzj1RK0f4UM4xjFfG7x4J8AYsLao4FhHXKYNmK7dOz
-   BTMQuvOk/JMuxt5KOlnN0ndiOG2F8JH20Db29XYMkk/11NfG3gkQ6mt6t
-   djNFQkGsANA3zkzthjhQFqHWgfEYCmdLyiIU1F3wJwaP2nhmEluVhXtoY
-   0WdV7el1Pk6l9K5muFmTfXE/PVZPi/PYW7fwTCGt1lQ+ilbAcDU61pu7j
-   NqNub6IfMenmwN/bc+rbWf19aOt9rneMm1M7e5+NVO9rZ9oXKGJoOpRMp
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="398571060"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="398571060"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:38:18 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="763952893"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="763952893"
-Received: from mrosso-mobl1.ger.corp.intel.com ([10.249.45.244])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 07:38:14 -0800
-Date:   Tue, 15 Nov 2022 17:38:12 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Gabriel Somlo <gsomlo@gmail.com>
-cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        kgugala@antmicro.com, mholenko@antmicro.com, joel@jms.id.au,
-        david.abdurachmanov@gmail.com, florent@enjoy-digital.fr,
-        geert@linux-m68k.org
-Subject: Re: [PATCH v3 06/14] serial: liteuart: move tty_flip_buffer_push()
- out of rx loop
-In-Reply-To: <20221112212125.448824-7-gsomlo@gmail.com>
-Message-ID: <fd1b8455-47eb-3161-4076-136e3265155@linux.intel.com>
-References: <20221112212125.448824-1-gsomlo@gmail.com> <20221112212125.448824-7-gsomlo@gmail.com>
+        Tue, 15 Nov 2022 10:40:41 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C6B29361;
+        Tue, 15 Nov 2022 07:40:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=IVRozCvsAl0N4wyUApbsWG3nXgbptg/3aW0X1ZtUpNU=; b=hbYowYFDGyWEkJvrZPomeEH0C3
+        4RwaDvc2XtrOCw7djpk3RnIsFEjmZQpjxJGsnLLm9Z/cjeWGXzH3ie4nRTl5J7GKzi1H39AU9Fc5s
+        7Pca08Uiw+FwspSXAbusiGt5nHoQMXJMSwHhbpJJZ2zQg3d6vw+hnWSIGOMkwyXXAMt0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ouy2h-002TR0-OJ; Tue, 15 Nov 2022 16:40:07 +0100
+Date:   Tue, 15 Nov 2022 16:40:07 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Daniil Tatianin <d-tatianin@yandex-team.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hao Chen <chenhao288@hisilicon.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Marco Bonelli <marco@mebeim.net>, Tom Rix <trix@redhat.com>,
+        Tonghao Zhang <xiangxia.m.yue@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org, yc-core@yandex-team.ru
+Subject: Re: [PATCH v1] net/ethtool/ioctl: ensure that we have phy ops before
+ using them
+Message-ID: <Y3Oy14CNVEttEI7T@lunn.ch>
+References: <20221114081532.3475625-1-d-tatianin@yandex-team.ru>
+ <20221114210705.216996a9@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1333663003-1668526699=:2268"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221114210705.216996a9@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1333663003-1668526699=:2268
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Sat, 12 Nov 2022, Gabriel Somlo wrote:
-
-> Calling tty_flip_buffer_push() for each individual received character
-> is overkill. Move it out of the rx loop, and only call it once per
-> set of characters received together.
+On Mon, Nov 14, 2022 at 09:07:05PM -0800, Jakub Kicinski wrote:
+> On Mon, 14 Nov 2022 11:15:32 +0300 Daniil Tatianin wrote:
+> > +	if (!(phydev && phy_ops && phy_ops->get_stats) &&
+> > +	    !ops->get_ethtool_phy_stats)
 > 
-> Signed-off-by: Gabriel Somlo <gsomlo@gmail.com>
-> ---
->  drivers/tty/serial/liteuart.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> This condition is still complicated.
 > 
-> diff --git a/drivers/tty/serial/liteuart.c b/drivers/tty/serial/liteuart.c
-> index 047d5ad32e13..ff3486860989 100644
-> --- a/drivers/tty/serial/liteuart.c
-> +++ b/drivers/tty/serial/liteuart.c
-> @@ -86,10 +86,10 @@ static void liteuart_timer(struct timer_list *t)
->  		/* no overflow bits in status */
->  		if (!(uart_handle_sysrq_char(port, ch)))
->  			uart_insert_char(port, status, 0, ch, flg);
-> -
-> -		tty_flip_buffer_push(&port->state->port);
->  	}
->  
-> +	tty_flip_buffer_push(&port->state->port);
-> +
->  	mod_timer(&uart->timer, jiffies + uart_poll_timeout(port));
->  }
+> > +		return -EOPNOTSUPP;
+> 
+> The only way this crash can happen is if driver incorrectly returns
+> non-zero stats count but doesn't have a callback to read the stats.
+> So WARN_ON() would be in order here.
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Hi Daniil
 
--- 
- i.
+I'm missing the patch itself, and b4 does not return it. Please
+consider reposting. Since this appear to be to do with PHY statistics,
+you should Cc: the PHY maintainers.
 
---8323329-1333663003-1668526699=:2268--
+       Andrew
