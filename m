@@ -2,448 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C0A62AF3F
-	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8FA762AF43
+	for <lists+linux-kernel@lfdr.de>; Wed, 16 Nov 2022 00:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiKOXOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 18:14:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
+        id S238606AbiKOXO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 18:14:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238699AbiKOXNx (ORCPT
+        with ESMTP id S237902AbiKOXN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 18:13:53 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4293E10C9;
-        Tue, 15 Nov 2022 15:13:26 -0800 (PST)
+        Tue, 15 Nov 2022 18:13:58 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FBC183A3;
+        Tue, 15 Nov 2022 15:13:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668554010; x=1700090010;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KRhW/vyWPUOjZhyNuTIAdLkOEtTZLoVpW/6M3l8rs20=;
-  b=dqnnOQse7yMWUn5S3lwfpG4fzYFcSivhmCj0D5YIoAWqGUPyKpxoJZsK
-   eXLIG+vMIPbCXEGSMUjX9bL6KF7VZvEFnlHpILilnwYFH7PgIeaKyLK25
-   S4OXhKSqWaCR0xx0iwLIHKyDDRaoMdVTRWn9pLb+0B6qUlq7zq1DW9MXS
-   liy0+o/QdfCELWxg6y3n8n+I1mxHjjX3SeWdAkMgA5O+9JAh8HeyP6Ae+
-   Y8IiHdKtovTS6TtYyY5LMeKQz66iuXBYI11KT2f70znBT4dZFwWI3m/L+
-   xgyuxRCjQV/Xa9g26WKx2CGQ/9ejSEMRbaBeDwvBxNYCBlbFgcZCz88Pp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="398679913"
+  t=1668554020; x=1700090020;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=5BVbZ2O2ILUajGmze4q+7KroLq5uNPHvl89SLW6qdJg=;
+  b=CQY/FfC5tj+Ojtm8/qXCS8dOjJ8vEXTq5Mwi+8bD7CABOgO2qZX/Jla0
+   fwjAOBsPy3bjHNdMiwFBzP2eAAEQ+A/DUXvQ+NzCpVCKXzL6sKfwJTuiS
+   WBO7Vc4u92SCtOfJjyT3emCVGbqh+mMzbBVNtTN+UqEdRBo8+LV+l3BEI
+   Bb1fVFpFOCxjh2oU+6lcmI0LRAamrzp2ctQheK2ydqef/c8xHPiwmo5Pj
+   Jbcqutn05QuNPNEnIHkI6NVrLwx26N6p60KPKjARx64erLV2KKh+xd9ho
+   tsxR1N/dsGHe+BUsjaztg/Aj0P4ZB+efzVq3FXGfzIMSzOzMKLFOk6Iee
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="292783725"
 X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="398679913"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 15:13:25 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="702625129"
+   d="scan'208";a="292783725"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 15:13:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="744793527"
 X-IronPort-AV: E=Sophos;i="5.96,167,1665471600"; 
-   d="scan'208";a="702625129"
-Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.212.7.249]) ([10.212.7.249])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 15:13:25 -0800
-Message-ID: <8f41c3d3-d814-02a8-2e38-adf599f4ce6c@intel.com>
-Date:   Tue, 15 Nov 2022 16:13:24 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.1
-Subject: Re: [PATCH 08/11] cxl/mem: Wire up event interrupts
+   d="scan'208";a="744793527"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga002.fm.intel.com with ESMTP; 15 Nov 2022 15:13:39 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 15 Nov 2022 15:13:39 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 15 Nov 2022 15:13:39 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.174)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 15 Nov 2022 15:13:39 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C3TU17h+k+lPXN7NvwZb2zfeeab3lpW5pckO3Jgme1ONrUva1mD0wPYsDIMXfJSi6MzVE/SX+jzsRbqeHJYytYv28aH5NKVZmjr7Zv/KQEj2DY6gXGE0hICN1s+AN1PuVyPlB4r7M2zhwXY/uGuoKxxR6teQNBQf9jN57MoO7gkOe1taUFgaK5fJooexYu3goHhJQa1yvzzMzm+Kd8FkJAc6j0ZgHFkjfCIh/QGcfBO1tkrRLsnrVyxX5FnMTcyf2rNkjLYRPIAI20alC+KCP0WreQp/hebYavf5biIejjwemrUrlIhF3WJZPdWzhBz/+HMKlvhIliomQX7aTn2cnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5BVbZ2O2ILUajGmze4q+7KroLq5uNPHvl89SLW6qdJg=;
+ b=KoqvclCF1Ht0Lbyn9s3LKTD70BO5G4v4FHS6PBSlRnSph7aK31asGnOa1wixv7lCdB3PVh9gCXLF4g1JYMO3kQmC2eqlH2fhj9K6x5dQHMLeGH3IpqVGDP6jblE8zFCeLpE0ZpAao1UeEiJRt0wpflTHIdcRoRR5M2M3WV+f5b34yhaT6vgW1sBpZq1GnnNgfGNi7+JxRAhouUL27PBW6a55J0Vj9z6CZYiy6KAQhFSS8vgwGbcTTTOwndZ/rZYMtClERvgnfKSR9kceHVn5/WysBdUI1OJK1QzcGluJ2UB+z6zHMtdsNLI3R04G6Uvm4ZeEhCd7ren4uKu2C9erng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
+ by PH0PR11MB5159.namprd11.prod.outlook.com (2603:10b6:510:3c::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Tue, 15 Nov
+ 2022 23:13:34 +0000
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::add7:df23:7f86:ecf3]) by MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::add7:df23:7f86:ecf3%5]) with mapi id 15.20.5813.018; Tue, 15 Nov 2022
+ 23:13:34 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "peterz@infradead.org" <peterz@infradead.org>
+CC:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v3 15/37] x86/mm: Check Shadow Stack page fault errors
+Thread-Topic: [PATCH v3 15/37] x86/mm: Check Shadow Stack page fault errors
+Thread-Index: AQHY8J5a/ZcFBTphoU2iG+E5IUjl1q4/7s4AgACKgYCAABIcAIAAIxuA
+Date:   Tue, 15 Nov 2022 23:13:34 +0000
+Message-ID: <2766aedef0780f03b81ea7dfea42dffb328e21f1.camel@intel.com>
+References: <20221104223604.29615-1-rick.p.edgecombe@intel.com>
+         <20221104223604.29615-16-rick.p.edgecombe@intel.com>
+         <Y3N8Sn65TzyD6jwL@hirez.programming.kicks-ass.net>
+         <b89565c96a0330c27ae179d96be05d2fc006121c.camel@intel.com>
+         <Y3P/qltUOcCYsXoD@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y3P/qltUOcCYsXoD@hirez.programming.kicks-ass.net>
+Accept-Language: en-US
 Content-Language: en-US
-To:     ira.weiny@intel.com, Dan Williams <dan.j.williams@intel.com>
-Cc:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
-References: <20221110185758.879472-1-ira.weiny@intel.com>
- <20221110185758.879472-9-ira.weiny@intel.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20221110185758.879472-9-ira.weiny@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|PH0PR11MB5159:EE_
+x-ms-office365-filtering-correlation-id: 915002d3-f957-4c6c-9bfd-08dac75f04e8
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0KrqZLHCQliyPachuc+GfhFLxCvjpoQHV86B6xs9lr9Xued2pPI3OLtszr3yHLZp2Zgw7aPi1mJ9BdfY6iDfMgqeC/5BND8R/sDjc80wqNRBvagQeMjGTkJF0RdBWbHWsGcxeCmcwiSGB0KcRVY3rZo06+0wxsiGAdOBjIesVycjLYq604aJQle2fvE0RzE17l4iCKH5AMAEgh1OKyJkkjxFgl4IZHNk4+fHitiVwmbrsfcjrPyzGwB3UcRPq/ZBGyMoVa0YZqXL+UPcoBRvBekPLIcinIUvAFXD8zsAZTUdsmSDKmYN7O7OqAChPN3aea+ibYHl0tvwPxLc+LpyIxpdjASDeJdP2iH78ZAg8LFU4wZK+qpQFOtFEUADByPcNI3rrvdA2Xp0bbT8qzRoYx9Bg6i7mjzzWGXs3pRPWig0xBIozva0sI+eZ7bbQZohiqWUYWV9zWCXQ6v8TsM5q6FU0TBMPMU2RrrUDoxf2mOmI7BjGOJ57AWETB5SacR787sPbYoH1laVQ083sBLdI6GRS7RL0zWBqxcbGD1CfhIB78ti6BjZZYDYB3zd8tjWHlhdgkxKmBsuaAcrdFGiG43w0+zrOzyc/hU3JfxYpqZUh5quYSnlAb0YF4esxv+YaUfMUf+vfvrRmSM8e971e/b6BV4Kuqd0YAaOu15/is/YDb77RmFschXNQvrbb3CA5AMxAnOO9UBwIoIoNUovQrJfyF5BNHB4cpwP0puLmwr3GGXbK/TBzbxharPb77ZSdbyhl2I+A4Qzwg9VkBJqXByd7BOOoih4TgJWn0uP154=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(376002)(39860400002)(136003)(346002)(366004)(451199015)(2616005)(186003)(6506007)(6512007)(122000001)(26005)(54906003)(82960400001)(38100700002)(83380400001)(5660300002)(7416002)(7406005)(4001150100001)(2906002)(66556008)(6916009)(66476007)(71200400001)(6486002)(478600001)(41300700001)(4326008)(8936002)(64756008)(316002)(8676002)(91956017)(76116006)(66446008)(66946007)(38070700005)(86362001)(36756003)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RVZvb2lkRGdiTXgvcVl1bFFUSVpvekVzaThZN21pbVBiSHRrbWd4c3hybFZW?=
+ =?utf-8?B?dzRlanV0U09zUEhKY3VhaVRacVFVU2YwVWxxOUpxM2lwK21iZk1OZU9BTDdC?=
+ =?utf-8?B?MEdxK2hKYjU0SGxVSmhvWVQwdkdSVTFOVXZPaGtsaEdnMTcyczdBcndNd0tM?=
+ =?utf-8?B?Zzd6cmc5REE1aXVKc05lMW85U1ViRm94Qjh3enEvMjZkdzE3RHVHQ044L2FB?=
+ =?utf-8?B?K1dUakpGcUF1U0l6bVJKZkhvWFV0VnIvR0hTSnRuOE9WMVlrVW50L24wenBZ?=
+ =?utf-8?B?cUZlSHNuSkdRVDJFb29QWjdCOCtEeFQwMVBSZTQ2NldIVTNXY1NieTVqanFK?=
+ =?utf-8?B?eTlIODZUNlhMVldPTjZuTU4xQ3R6N3dweERvVG5rdnNYUHhlUEtyOEVlTkpu?=
+ =?utf-8?B?djI3cy9OcWNvZHViVGxOZUJEUVllRHI5d01OYzJQc3AvSGh3WjR0WU51a21P?=
+ =?utf-8?B?bWxKS2xKTmUrTk5JNHRNMk1vNFY0S2M3eHBJVnFJNDNKUjdqY3JzNlFuRW4v?=
+ =?utf-8?B?OUM5U1B2SG94OFdMc0RMZ3VzT0VJRHVmS2xPR0d3SzcvN0JoVkMwTEk5S05l?=
+ =?utf-8?B?RlBDNTI5VFhEcDJRTTIvQUNmdm0rOE1mZExCYUc4RHI4NktIN1RkalNoY3M2?=
+ =?utf-8?B?MmVtUXlOU3l2MWVIOUVOcUp2dGdGZ3lJWXdCT05SZTczcEhjNHpPVWh4Sy9G?=
+ =?utf-8?B?NHpmazVSa0lEMllSREQ0R3hMVWI3Q1ArNFQrbGN2cmJzQ0NYcGpYY2pxYzB1?=
+ =?utf-8?B?OVhUSFAzSjY4UmloMlJkOTRQUGRCeWVmYXlMcU5GZ3luSjFXSUIyRlVpYVZh?=
+ =?utf-8?B?YTMzUDIvSFdCTCtXekdlandkMCtIZVlxQU5zbTJxNWlVeHl6K29hbGVoUHpu?=
+ =?utf-8?B?VFBBRGJRdkFwaUt4WDN1ajVYMXJiRzZiUnd2ajh0U3ErZWhBbXMyZDFITkdO?=
+ =?utf-8?B?SnNvY1pxK21ndHRkY3ozbm1OOWR3Smk3RkJNOWo4em16cmdzSVRUc3MzMEFm?=
+ =?utf-8?B?OFd3UFFmOWVMR3ovMGxycktDdGJVRkxRRE9nVS9yMXkxdjJhVWdPNkpYTDA1?=
+ =?utf-8?B?UzBqbDVINW5nR21YamlWUk80cXhoL0JIMURpWjh1M2k4dkZWV0JLeFJEZm5V?=
+ =?utf-8?B?dHorT0xNTVFRdnFQM2F3VXZRMk9TZTRqYnJnL3l5T1lDa2VsYWxRZ05oQko2?=
+ =?utf-8?B?TUN1NEl5Q1NPVHhVL0hpTmZ0TTNMT29qenA3S25TdDdZUEY3NDBkdzMvdm5U?=
+ =?utf-8?B?ZVlNWHNva3A2dHVyUlpkS0VwNm9jZjZadmEzcEhOVXdNWC96RlpZRDNqbmFi?=
+ =?utf-8?B?VE05blhLMHRQUGtFU2kvajlFMi9XZnJwQ0F1cGxVT3Z2UHNMSTRWZU5tbmor?=
+ =?utf-8?B?NUhVN0UzaG1BbEdtMDdXN25JQkdTcUg1c0VjK2VCT0VrVWpZcmpndmJvODNx?=
+ =?utf-8?B?QTlCY1V0MnZ5YmphNmlndXhJMGk2a2kwdlJqMU9kemt6OFRtZW95dFVObUFn?=
+ =?utf-8?B?THBPS0UvOUZsdGRxV2tWaWpuSXBYQU9FME54VHFkK1UzUXNHazFjdWVqeDcw?=
+ =?utf-8?B?RDJEM2M0ekFOVGgvWCtPRW9VclRtOFhGR29qbnlIWmxaUk1xUWhOUWMrVzFW?=
+ =?utf-8?B?ZUFCVlBOUWE3L2lza2ZaeDVmRHRrLzBhcTNRSDZkUjltcjI0dFZxMFNWSWNJ?=
+ =?utf-8?B?cEgrWVh0dThuUzh0L3ZGYjZYQ2lKMmlUTEdCRFFlT1BCMDZRbndmb20ydG9P?=
+ =?utf-8?B?ZWxjZnBBbWd1ZnIrcnBSWFF1elJldWVJNTJ5VXE4OHZuU1MxV2FUdVBwVnlG?=
+ =?utf-8?B?TXJLSVZnVTZOeXJJSlU3MmJsc3BWUjh6Q0puSmg2M1lXbHhpRnVMaTlTZUhV?=
+ =?utf-8?B?VUlyYVNPRmZST1JwQytETlRBSTBQWXFGS0haeGRrZWY1ZVd2QmdJd1JHTnhh?=
+ =?utf-8?B?eHFxSmYwb00zczhkZWF3ZDlrclZBS1FsQTI2NWxiMXh5d0FjWnhnazRHdXAw?=
+ =?utf-8?B?QUlrelduZ01rSkdSdGt5VXd6S01jeHR2U0FaOTNxOWY3N2pOK3U1MWhqZk5h?=
+ =?utf-8?B?YmUvQjBPTFdZUFhxTzh1cUUzdXMyVjFCVGdTMWg3OFdTaUNNY2k1NXJNc3dU?=
+ =?utf-8?B?VmZvcDVpRmhLL0FsWGxPelJHNEp1cGVEMWoyc0hXOC9wdi9tYjc5RnhUK0JJ?=
+ =?utf-8?Q?QMIwBUvzZ0aXq2yv8VaG3f8=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <31098549C6C1C44487674B0433D165A8@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 915002d3-f957-4c6c-9bfd-08dac75f04e8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2022 23:13:34.4207
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aL4RIExoh+PMik2YgHHqSbDbxXnAj3AMjBtMeXIG3gcjQ0bQih1skszx20Lh9oV6Vq2cRhbk3AxldjYT0+SlPqPQzgts5wkRaq7xBaSOva8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5159
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/10/2022 10:57 AM, ira.weiny@intel.com wrote:
-> From: Ira Weiny <ira.weiny@intel.com>
-> 
-> CXL device events are signaled via interrupts.  Each event log may have
-> a different interrupt message number.  These message numbers are
-> reported in the Get Event Interrupt Policy mailbox command.
-> 
-> Add interrupt support for event logs.  Interrupts are allocated as
-> shared interrupts.  Therefore, all or some event logs can share the same
-> message number.
-> 
-> The driver must deal with the possibility that dynamic capacity is not
-> yet supported by a device it sees.  Fallback and retry without dynamic
-> capacity if the first attempt fails.
-> 
-> Device capacity event logs interrupt as part of the informational event
-> log.  Check the event status to see which log has data.
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> 
-> ---
-> Changes from RFC v2
-> 	Adjust to new irq 16 vector allocation
-> 	Jonathan
-> 		Remove CXL_INT_RES
-> 	Use irq threads to ensure mailbox commands are executed outside irq context
-> 	Adjust for optional Dynamic Capacity log
-> ---
->   drivers/cxl/core/mbox.c      |  53 +++++++++++++-
->   drivers/cxl/cxlmem.h         |  31 ++++++++
->   drivers/cxl/pci.c            | 133 +++++++++++++++++++++++++++++++++++
->   include/uapi/linux/cxl_mem.h |   2 +
->   4 files changed, 217 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> index 879b228a98a0..1e6762af2a00 100644
-> --- a/drivers/cxl/core/mbox.c
-> +++ b/drivers/cxl/core/mbox.c
-> @@ -53,6 +53,8 @@ static struct cxl_mem_command cxl_mem_commands[CXL_MEM_COMMAND_ID_MAX] = {
->   	CXL_CMD(GET_SUPPORTED_LOGS, 0, CXL_VARIABLE_PAYLOAD, CXL_CMD_FLAG_FORCE_ENABLE),
->   	CXL_CMD(GET_EVENT_RECORD, 1, CXL_VARIABLE_PAYLOAD, 0),
->   	CXL_CMD(CLEAR_EVENT_RECORD, CXL_VARIABLE_PAYLOAD, 0, 0),
-> +	CXL_CMD(GET_EVT_INT_POLICY, 0, 0x5, 0),
-> +	CXL_CMD(SET_EVT_INT_POLICY, 0x5, 0, 0),
->   	CXL_CMD(GET_FW_INFO, 0, 0x50, 0),
->   	CXL_CMD(GET_PARTITION_INFO, 0, 0x20, 0),
->   	CXL_CMD(GET_LSA, 0x8, CXL_VARIABLE_PAYLOAD, 0),
-> @@ -791,8 +793,8 @@ static int cxl_clear_event_record(struct cxl_dev_state *cxlds,
->   				 &payload, sizeof(payload), NULL, 0);
->   }
->   
-> -static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
-> -				    enum cxl_event_log_type type)
-> +void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
-> +			     enum cxl_event_log_type type)
->   {
->   	struct cxl_get_event_payload payload;
->   	u16 pl_nr;
-> @@ -837,6 +839,7 @@ static void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
->   	} while (pl_nr > CXL_GET_EVENT_NR_RECORDS ||
->   		 payload.flags & CXL_GET_EVENT_FLAG_MORE_RECORDS);
->   }
-> +EXPORT_SYMBOL_NS_GPL(cxl_mem_get_records_log, CXL);
->   
->   /**
->    * cxl_mem_get_event_records - Get Event Records from the device
-> @@ -867,6 +870,52 @@ void cxl_mem_get_event_records(struct cxl_dev_state *cxlds)
->   }
->   EXPORT_SYMBOL_NS_GPL(cxl_mem_get_event_records, CXL);
->   
-> +int cxl_event_config_msgnums(struct cxl_dev_state *cxlds)
-> +{
-> +	struct cxl_event_interrupt_policy *policy = &cxlds->evt_int_policy;
-> +	size_t policy_size = sizeof(*policy);
-> +	bool retry = true;
-> +	int rc;
-> +
-> +	policy->info_settings = CXL_INT_MSI_MSIX;
-> +	policy->warn_settings = CXL_INT_MSI_MSIX;
-> +	policy->failure_settings = CXL_INT_MSI_MSIX;
-> +	policy->fatal_settings = CXL_INT_MSI_MSIX;
-> +	policy->dyn_cap_settings = CXL_INT_MSI_MSIX;
-> +
-> +again:
-> +	rc = cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_SET_EVT_INT_POLICY,
-> +			       policy, policy_size, NULL, 0);
-> +	if (rc < 0) {
-> +		/*
-> +		 * If the device does not support dynamic capacity it may fail
-> +		 * the command due to an invalid payload.  Retry without
-> +		 * dynamic capacity.
-> +		 */
-> +		if (retry) {
-> +			retry = false;
-> +			policy->dyn_cap_settings = 0;
-> +			policy_size = sizeof(*policy) - sizeof(policy->dyn_cap_settings);
-> +			goto again;
-> +		}
-> +		dev_err(cxlds->dev, "Failed to set event interrupt policy : %d",
-> +			rc);
-> +		memset(policy, CXL_INT_NONE, sizeof(*policy));
-> +		return rc;
-> +	}
-
-Up to you, but I think you can avoid the goto:
-
-	int retry = 2;
-	do {
-		rc = cxl_mbox_send_cmd(...);
-		if (rc == 0 || retry == 1)
-			break;
-		policy->dyn_cap_settings = 0;
-		policy_size = sizeof(*policy) - sizeof(policy->dyn_cap_settings);
-		retry--;
-	} while (retry);
-
-	if (rc < 0) {
-		dev_err(...);
-		memset(policy, ...);
-		return rc;
-	}
-
-> +
-> +	rc = cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_GET_EVT_INT_POLICY, NULL, 0,
-> +			       policy, policy_size);
-> +	if (rc < 0) {
-> +		dev_err(cxlds->dev, "Failed to get event interrupt policy : %d",
-> +			rc);
-> +		return rc;
-> +	}
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_NS_GPL(cxl_event_config_msgnums, CXL);
-> +
->   /**
->    * cxl_mem_get_partition_info - Get partition info
->    * @cxlds: The device data for the operation
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index 03da4f8f74d3..4d9c3ea30c24 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -179,6 +179,31 @@ struct cxl_endpoint_dvsec_info {
->   	struct range dvsec_range[2];
->   };
->   
-> +/**
-> + * Event Interrupt Policy
-> + *
-> + * CXL rev 3.0 section 8.2.9.2.4; Table 8-52
-> + */
-> +enum cxl_event_int_mode {
-> +	CXL_INT_NONE		= 0x00,
-> +	CXL_INT_MSI_MSIX	= 0x01,
-> +	CXL_INT_FW		= 0x02
-> +};
-> +#define CXL_EVENT_INT_MODE_MASK 0x3
-> +#define CXL_EVENT_INT_MSGNUM(setting) (((setting) & 0xf0) >> 4)
-> +struct cxl_event_interrupt_policy {
-> +	u8 info_settings;
-> +	u8 warn_settings;
-> +	u8 failure_settings;
-> +	u8 fatal_settings;
-> +	u8 dyn_cap_settings;
-> +} __packed;
-> +
-> +static inline bool cxl_evt_int_is_msi(u8 setting)
-> +{
-> +	return CXL_INT_MSI_MSIX == (setting & CXL_EVENT_INT_MODE_MASK);
-> +}
-> +
->   /**
->    * struct cxl_dev_state - The driver device state
->    *
-> @@ -246,6 +271,7 @@ struct cxl_dev_state {
->   
->   	resource_size_t component_reg_phys;
->   	u64 serial;
-> +	struct cxl_event_interrupt_policy evt_int_policy;
->   
->   	struct xarray doe_mbs;
->   
-> @@ -259,6 +285,8 @@ enum cxl_opcode {
->   	CXL_MBOX_OP_RAW			= CXL_MBOX_OP_INVALID,
->   	CXL_MBOX_OP_GET_EVENT_RECORD	= 0x0100,
->   	CXL_MBOX_OP_CLEAR_EVENT_RECORD	= 0x0101,
-> +	CXL_MBOX_OP_GET_EVT_INT_POLICY	= 0x0102,
-> +	CXL_MBOX_OP_SET_EVT_INT_POLICY	= 0x0103,
->   	CXL_MBOX_OP_GET_FW_INFO		= 0x0200,
->   	CXL_MBOX_OP_ACTIVATE_FW		= 0x0202,
->   	CXL_MBOX_OP_GET_SUPPORTED_LOGS	= 0x0400,
-> @@ -539,7 +567,10 @@ int cxl_mem_create_range_info(struct cxl_dev_state *cxlds);
->   struct cxl_dev_state *cxl_dev_state_create(struct device *dev);
->   void set_exclusive_cxl_commands(struct cxl_dev_state *cxlds, unsigned long *cmds);
->   void clear_exclusive_cxl_commands(struct cxl_dev_state *cxlds, unsigned long *cmds);
-> +void cxl_mem_get_records_log(struct cxl_dev_state *cxlds,
-> +			     enum cxl_event_log_type type);
->   void cxl_mem_get_event_records(struct cxl_dev_state *cxlds);
-> +int cxl_event_config_msgnums(struct cxl_dev_state *cxlds);
->   #ifdef CONFIG_CXL_SUSPEND
->   void cxl_mem_active_inc(void);
->   void cxl_mem_active_dec(void);
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index e0d511575b45..64b2e2671043 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -458,6 +458,138 @@ static void cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
->   	cxlds->nr_irq_vecs = nvecs;
->   }
->   
-> +struct cxl_event_irq_id {
-> +	struct cxl_dev_state *cxlds;
-> +	u32 status;
-> +	unsigned int msgnum;
-> +};
-> +
-> +static irqreturn_t cxl_event_int_thread(int irq, void *id)
-> +{
-> +	struct cxl_event_irq_id *cxlid = id;
-> +	struct cxl_dev_state *cxlds = cxlid->cxlds;
-> +
-> +	if (cxlid->status & CXLDEV_EVENT_STATUS_INFO)
-> +		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_INFO);
-> +	if (cxlid->status & CXLDEV_EVENT_STATUS_WARN)
-> +		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_WARN);
-> +	if (cxlid->status & CXLDEV_EVENT_STATUS_FAIL)
-> +		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_FAIL);
-> +	if (cxlid->status & CXLDEV_EVENT_STATUS_FATAL)
-> +		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_FATAL);
-> +	if (cxlid->status & CXLDEV_EVENT_STATUS_DYNAMIC_CAP)
-> +		cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_DYNAMIC_CAP);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static irqreturn_t cxl_event_int_handler(int irq, void *id)
-> +{
-> +	struct cxl_event_irq_id *cxlid = id;
-> +	struct cxl_dev_state *cxlds = cxlid->cxlds;
-> +	u32 status = readl(cxlds->regs.status + CXLDEV_DEV_EVENT_STATUS_OFFSET);
-> +
-> +	if (cxlid->status & status)
-> +		return IRQ_WAKE_THREAD;
-> +	return IRQ_HANDLED;
-
-IRQ_NONE since your handler did not handle anything and this is a shared 
-interrupt?
-
-> +}
-> +
-> +static void cxl_free_event_irq(void *id)
-> +{
-> +	struct cxl_event_irq_id *cxlid = id;
-> +	struct pci_dev *pdev = to_pci_dev(cxlid->cxlds->dev);
-> +
-> +	pci_free_irq(pdev, cxlid->msgnum, id);
-> +}
-> +
-> +static u32 log_type_to_status(enum cxl_event_log_type log_type)
-> +{
-> +	switch (log_type) {
-> +	case CXL_EVENT_TYPE_INFO:
-> +		return CXLDEV_EVENT_STATUS_INFO | CXLDEV_EVENT_STATUS_DYNAMIC_CAP;
-> +	case CXL_EVENT_TYPE_WARN:
-> +		return CXLDEV_EVENT_STATUS_WARN;
-> +	case CXL_EVENT_TYPE_FAIL:
-> +		return CXLDEV_EVENT_STATUS_FAIL;
-> +	case CXL_EVENT_TYPE_FATAL:
-> +		return CXLDEV_EVENT_STATUS_FATAL;
-> +	default:
-> +		break;
-> +	}
-> +	return 0;
-> +}
-> +
-> +static int cxl_request_event_irq(struct cxl_dev_state *cxlds,
-> +				 enum cxl_event_log_type log_type,
-> +				 u8 setting)
-> +{
-> +	struct device *dev = cxlds->dev;
-> +	struct pci_dev *pdev = to_pci_dev(dev);
-> +	struct cxl_event_irq_id *id;
-> +	unsigned int msgnum = CXL_EVENT_INT_MSGNUM(setting);
-> +	int irq;
-
-int rc? pci_request_irq() returns an errno or 0, not the number of irq. 
-The variable naming is a bit confusing.
-
-DJ
-
-> +
-> +	/* Disabled irq is not an error */
-> +	if (!cxl_evt_int_is_msi(setting) || msgnum > cxlds->nr_irq_vecs) {
-> +		dev_dbg(dev, "Event interrupt not enabled; %s %u %d\n",
-> +			cxl_event_log_type_str(CXL_EVENT_TYPE_INFO),
-> +			msgnum, cxlds->nr_irq_vecs);
-> +		return 0;
-> +	}
-> +
-> +	id = devm_kzalloc(dev, sizeof(*id), GFP_KERNEL);
-> +	if (!id)
-> +		return -ENOMEM;
-> +
-> +	id->cxlds = cxlds;
-> +	id->msgnum = msgnum;
-> +	id->status = log_type_to_status(log_type);
-> +
-> +	irq = pci_request_irq(pdev, id->msgnum, cxl_event_int_handler,
-> +			      cxl_event_int_thread, id,
-> +			      "%s:event-log-%s", dev_name(dev),
-> +			      cxl_event_log_type_str(log_type));
-> +	if (irq)
-> +		return irq;
-> +
-> +	devm_add_action_or_reset(dev, cxl_free_event_irq, id);
-> +	return 0;
-> +}
-> +
-> +static void cxl_event_irqsetup(struct cxl_dev_state *cxlds)
-> +{
-> +	struct device *dev = cxlds->dev;
-> +	u8 setting;
-> +
-> +	if (cxl_event_config_msgnums(cxlds))
-> +		return;
-> +
-> +	/*
-> +	 * Dynamic Capacity shares the info message number
-> +	 * Nothing to be done except check the status bit in the
-> +	 * irq thread.
-> +	 */
-> +	setting = cxlds->evt_int_policy.info_settings;
-> +	if (cxl_request_event_irq(cxlds, CXL_EVENT_TYPE_INFO, setting))
-> +		dev_err(dev, "Failed to get interrupt for %s event log\n",
-> +			cxl_event_log_type_str(CXL_EVENT_TYPE_INFO));
-> +
-> +	setting = cxlds->evt_int_policy.warn_settings;
-> +	if (cxl_request_event_irq(cxlds, CXL_EVENT_TYPE_WARN, setting))
-> +		dev_err(dev, "Failed to get interrupt for %s event log\n",
-> +			cxl_event_log_type_str(CXL_EVENT_TYPE_WARN));
-> +
-> +	setting = cxlds->evt_int_policy.failure_settings;
-> +	if (cxl_request_event_irq(cxlds, CXL_EVENT_TYPE_FAIL, setting))
-> +		dev_err(dev, "Failed to get interrupt for %s event log\n",
-> +			cxl_event_log_type_str(CXL_EVENT_TYPE_FAIL));
-> +
-> +	setting = cxlds->evt_int_policy.fatal_settings;
-> +	if (cxl_request_event_irq(cxlds, CXL_EVENT_TYPE_FATAL, setting))
-> +		dev_err(dev, "Failed to get interrupt for %s event log\n",
-> +			cxl_event_log_type_str(CXL_EVENT_TYPE_FATAL));
-> +}
-> +
->   static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   {
->   	struct cxl_register_map map;
-> @@ -525,6 +657,7 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   		return rc;
->   
->   	cxl_pci_alloc_irq_vectors(cxlds);
-> +	cxl_event_irqsetup(cxlds);
->   
->   	cxlmd = devm_cxl_add_memdev(cxlds);
->   	if (IS_ERR(cxlmd))
-> diff --git a/include/uapi/linux/cxl_mem.h b/include/uapi/linux/cxl_mem.h
-> index 7c1ad8062792..a8204802fcca 100644
-> --- a/include/uapi/linux/cxl_mem.h
-> +++ b/include/uapi/linux/cxl_mem.h
-> @@ -26,6 +26,8 @@
->   	___C(GET_SUPPORTED_LOGS, "Get Supported Logs"),                   \
->   	___C(GET_EVENT_RECORD, "Get Event Record"),                       \
->   	___C(CLEAR_EVENT_RECORD, "Clear Event Record"),                   \
-> +	___C(GET_EVT_INT_POLICY, "Get Event Interrupt Policy"),           \
-> +	___C(SET_EVT_INT_POLICY, "Set Event Interrupt Policy"),           \
->   	___C(GET_FW_INFO, "Get FW Info"),                                 \
->   	___C(GET_PARTITION_INFO, "Get Partition Information"),            \
->   	___C(GET_LSA, "Get Label Storage Area"),                          \
+T24gVHVlLCAyMDIyLTExLTE1IGF0IDIyOjA3ICswMTAwLCBQZXRlciBaaWpsc3RyYSB3cm90ZToN
+Cj4gT24gVHVlLCBOb3YgMTUsIDIwMjIgYXQgMDg6MDM6MDZQTSArMDAwMCwgRWRnZWNvbWJlLCBS
+aWNrIFAgd3JvdGU6DQo+IA0KPiA+IFRoYXQncyByaWdodC4gSSB0aGluayB0aGUgYXNzdW1wdGlv
+biB0aGF0IG5lZWRzIHRvIGJlIGJyb2tlbiBpbiB0aGUNCj4gPiByZWFkZXJzIGhlYWQgaXMgdGhh
+dCB5b3UgY2FuIHNhdGlzZnkgYSByZWFkIGZhdWx0IHdpdGggcmVhZC1vbmx5DQo+ID4gUFRFLg0K
+PiA+IFRoaXMgaXMga2luZCBvZiBiYWtlZCBpbiBhbGwgb3ZlciB0aGUgcGxhY2Ugd2l0aCB0aGUg
+emVyby1wZm4sIENPVywNCj4gPiBldGMuIE1heWJlIEkgc2hvdWxkIHRyeSB0byBzdGFydCB3aXRo
+IHRoYXQuDQo+IA0KPiBNYXliZSBzb21ldGhpbmcgbGlrZToNCj4gDQo+IENvVyAtLSBwdGVfd3Jw
+cm90ZWN0KCkgLS0gY2hhbmdlcyBhIFNTIHBhZ2UgJ1dyaXRlPTAsRGlydHk9MScgdG8NCj4gJ1dy
+aXRlPTAsRGlydHk9MCxDb1c9MScgd2hpY2ggaXMgYSAncmVndWxhcicgUk8gcGFnZS4gQSBTUyBy
+ZWFkIGZyb20NCj4gUkVUDQo+IHdpbGwgI1BGIGJlY2F1c2UgaXQgZXhwZWN0cyBhIFNTIHBhZ2Uu
+IE1ha2Ugc3VyZSB0byBicmVhayB0aGUgQ29XIHNvDQo+IGl0DQo+IGNhbiBiZSByZXN0b3JlZCB0
+byBhbiBTUyBwYWdlLCBhcyBzdWNoIGZvcmNlIHRoZSB3cml0ZSBwYXRoIGFuZA0KPiB0aWNrbGUN
+Cj4gcHRlX21rd3JpdGUoKS4NCg0KSG1tLCBUQkggSSdtIG5vdCBzdXJlIGl0J3MgbW9yZSBjbGVh
+ci4gSSB0cmllZCB0byB0YWtlIHRoaXMgYW5kIGZpbGwgaXQNCm91dCBtb3JlLiBEb2VzIGl0IHNv
+dW5kIGJldHRlcj8NCg0KDQpXaGVuIGEgcGFnZSBiZWNvbWVzIENPVyBpdCBjaGFuZ2VzIGZyb20g
+YSBzaGFkb3cgc3RhY2sgcGVybWlzc2lvbmVkDQpwYWdlIChXcml0ZT0wLERpcnR5PTEpIHRvIChX
+cml0ZT0wLERpcnR5PTAsQ29XPTEpLCB3aGljaCBpcyBzaW1wbHkNCnJlYWQtb25seSB0byB0aGUg
+Q1BVLiBXaGVuIHNoYWRvdyBzdGFjayBpcyBlbmFibGVkLCBhIFJFVCB3b3VsZA0Kbm9ybWFsbHkg
+cG9wIHRoZSBzaGFkb3cgc3RhY2sgYnkgcmVhZGluZyBpdCB3aXRoIGEgInNoYWRvdyBzdGFjayBy
+ZWFkIg0KYWNjZXNzLiBIb3dldmVyLCBpbiB0aGUgQ09XIGNhc2UgdGhlIHNoYWRvdyBzdGFjayBt
+ZW1vcnkgZG9lcyBub3QgaGF2ZQ0Kc2hhZG93IHN0YWNrIHBlcm1pc3Npb25zLCBpdCBpcyByZWFk
+LW9ubHkuIFNvIGl0IHdpbGwgZ2VuZXJhdGUgYSBmYXVsdC4NCg0KRm9yIGNvbnZlbnRpb25hbGx5
+IHdyaXRhYmxlIHBhZ2VzLCBhIHJlYWQgY2FuIGJlIHNlcnZpY2VkIHdpdGggYSByZWFkDQpvbmx5
+IFBURSwgYW5kIENPVyB3b3VsZCBub3QgaGF2ZSB0byBoYXBwZW4uIEJ1dCBmb3Igc2hhZG93IHN0
+YWNrLCB0aGVyZQ0KaXNuJ3QgdGhlIGNvbmNlcHQgb2YgcmVhZC1vbmx5IHNoYWRvdyBzdGFjayBt
+ZW1vcnkuIElmIGl0IGlzIHNoYWRvdw0Kc3RhY2sgcGVybWlzc2lvbmVkLCBpdCBjYW4gYmUgbW9k
+aWZpZWQgdmlhIENBTEwgYW5kIFJFVCBpbnN0cnVjdGlvbnMuDQpTbyBDT1cgbmVlZHMgdG8gaGFw
+cGVuIGJlZm9yZSBhbnkgbWVtb3J5IGNhbiBiZSBtYXBwZWQgd2l0aCBzaGFkb3cNCnN0YWNrIHBl
+cm1pc3Npb25zLg0KDQpTaGFkb3cgc3RhY2sgYWNjZXNzZXMgKHJlYWQgb3Igd3JpdGUpIG5lZWQg
+dG8gYmUgc2VydmljZWQgd2l0aCBzaGFkb3cNCnN0YWNrIHBlcm1pc3Npb25lZCBtZW1vcnksIHNv
+IGluIHRoZSBjYXNlIG9mIGEgc2hhZG93IHN0YWNrIHJlYWQNCmFjY2VzcywgdHJlYXQgaXQgYXMg
+YSBXUklURSBmYXVsdCBzbyBib3RoIENPVyB3aWxsIGhhcHBlbiBhbmQgdGhlIHdyaXRlDQpmYXVs
+dCBwYXRoIHdpbGwgdGlja2xlIG1heWJlX21rd3JpdGUoKSBhbmQgbWFwIHRoZSBtZW1vcnkgc2hh
+ZG93IHN0YWNrLg0K
