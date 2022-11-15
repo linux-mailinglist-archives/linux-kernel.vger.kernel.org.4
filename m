@@ -2,137 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E928762996A
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFD462996C
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238005AbiKOM4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 07:56:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
+        id S238066AbiKOM42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 07:56:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232817AbiKOM4U (ORCPT
+        with ESMTP id S237917AbiKOM4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:56:20 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6083F100F
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:56:19 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AFCdwOn030296;
-        Tue, 15 Nov 2022 12:55:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=uHNpl+0MKkbqSBfSYu/JfgMqw8KjArqCBUA4q3OOAvY=;
- b=PKE8EWvcBmCg3QxeKS+E1nU6Sex6P4AW4peAx3Uy/lDR2MhmKZGbo29TJ4Hmjz37uEoh
- 9BVmdQlP2HONDyjjQb7ESZx86b/SXqg3rqsNeIkzZbhe3CVkFCAUwSyUjtAMtDYqb/wY
- iQZmfKwGlvC4IgPYWQC6gOQglfOMbzy7ntFH6543jz4Qbe77M7vahwI3KRrG+V72fwUB
- Lqevt5DI2/qIA+ayvySCUya98/M/+A49o8BwNr0xhba4oqWTeQiVlI8by4WkrRN2WzU/
- OrbhaS5dU+PqcQnNOIillu5ESnBluzSvEcEiv+G5S1rn3vypLTVWgQv5uSf8VZJ/V3+H xQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kvanvgksg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Nov 2022 12:55:49 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AFCfRjA003378;
-        Tue, 15 Nov 2022 12:55:48 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kvanvgkrq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Nov 2022 12:55:48 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AFCpeCe000979;
-        Tue, 15 Nov 2022 12:55:45 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04fra.de.ibm.com with ESMTP id 3kt349b710-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 15 Nov 2022 12:55:45 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AFCuMrw44106210
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Nov 2022 12:56:22 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0FE36A4054;
-        Tue, 15 Nov 2022 12:55:43 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B0548A405F;
-        Tue, 15 Nov 2022 12:55:35 +0000 (GMT)
-Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.163.92.18])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 15 Nov 2022 12:55:35 +0000 (GMT)
-Date:   Tue, 15 Nov 2022 13:55:31 +0100
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     John Stultz <jstultz@google.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Connor O'Brien" <connoro@google.com>,
-        John Dias <joaodias@google.com>, Rick Yiu <rickyiu@google.com>,
-        John Kacur <jkacur@redhat.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Chris Redpath <chris.redpath@arm.com>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>, kernel-team@android.com,
-        "J . Avila" <elavila@google.com>
-Subject: Re: [PATCH RFC v4 2/3] sched: Avoid placing RT threads on cores
- handling long softirqs
-Message-ID: <Y3OMQ+1D+AHbP72+@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-References: <20221003232033.3404802-1-jstultz@google.com>
- <20221003232033.3404802-3-jstultz@google.com>
- <Y01NPB4sa8Z98ntK@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <CANDhNCoTGNANDnOQ6touhreG_UEn1-N4T4BktWFxpLPSWVfrdA@mail.gmail.com>
- <Y0+/SAWUNRnhIW9b@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <CANDhNCpQuQn_84yqErF2noAYDwdwNJQF-pr4JKVp1eZzH=+f9w@mail.gmail.com>
- <Y1FDegctcU2LrYGT@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <Y1Q3vYjlFt/Imu5w@google.com>
- <Y1TxCTq5gxh4fIEd@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
- <CANDhNCreB=Bm-X7WFp-oUtfR9uNRD=Vx8TehJ59HvF4Ke48ehQ@mail.gmail.com>
+        Tue, 15 Nov 2022 07:56:23 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA58C3BE
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:56:21 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id l12so24262960lfp.6
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:56:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wjdv2UNqYCuw6JZR6Qee1XPUfMLpqLvp5AsLB1cS+Ik=;
+        b=OwUZ+bRXRknpv394jiyHB6iYAL8S+/dF0QDWH8P7Tycz1AVEtSjbg5cAP8RAF5DPh0
+         KGf6tu9eQ6EEOAtaHOEDCy2veq6w3RXOb77aBzBeZLmZ1kLBqo1MZ0/TepJVSi0CNPj5
+         q2YbOwO3mpUEaRmbwYPi/KO++T/o5sZJgrRa//3iMyxa1/hFejq5/insq9fyAGQzCz1S
+         /Q5bx6oZZygnFE1ZAuUPfTyDQFG76WxKeXqSrC5+DM8T0qCDEJ4PFDm93WvX/KS5kMbX
+         hmf47q3XHnzrgurhmN/e3PrMs48V4rfD1TerZ9ueSXbzmpFxiPSnLoem687ai8D+0Rk5
+         W/aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wjdv2UNqYCuw6JZR6Qee1XPUfMLpqLvp5AsLB1cS+Ik=;
+        b=P7dr+THf2+h+iKs8IAe1e1KuOKt+TeRsafoH0favrzUIBBuptN3Ux5BWP8PPWWZa5c
+         ZDVw6iYq1W2BB+/a5KoLigxWvhyIDPjQSXSuI9nduz6ollrw0fqQqsqmTV9fDJx69uQI
+         X3VwqTfUMrTvdgsPJwmlUlY1QGrcSEt1mib0CIviD6hw+24S+VP6vMUduly9QtmApHQS
+         zXLoKMqL1ExH9EMovBhRkk3yxc2WBroQdzJd5vQIwuP6U4QYfC3BBTd5F4gP+Uncqz4a
+         QshHire/UVV1UFfislk2SbJwaKr4s3WG5dajIZE+L0hEyMUL/M8iukbLF9ZHfulp5zAA
+         9qvQ==
+X-Gm-Message-State: ANoB5ple5ZQZybLveVSDP1Wg8E9Gtufjk1hrcEAqbeV4j0Jb9imjYS1X
+        xX3AyeVGus8pFBTH2rzn7io74Q==
+X-Google-Smtp-Source: AA0mqf6CP8Ur/mJFML2icvGxqrOoUsXzsngCLunz9VxC5g5y+d0aiTC9FJSlSZT9+Iyq9wF5rDUCfA==
+X-Received: by 2002:a05:6512:530:b0:4a4:77a8:45a4 with SMTP id o16-20020a056512053000b004a477a845a4mr5253259lfc.654.1668516980234;
+        Tue, 15 Nov 2022 04:56:20 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id v26-20020ac258fa000000b004a8b9c68728sm2206285lfo.105.2022.11.15.04.56.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Nov 2022 04:56:19 -0800 (PST)
+Message-ID: <a4c4257b-1467-2ccb-f546-d58c6356a39a@linaro.org>
+Date:   Tue, 15 Nov 2022 13:56:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANDhNCreB=Bm-X7WFp-oUtfR9uNRD=Vx8TehJ59HvF4Ke48ehQ@mail.gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 0aD6LgasttgDP6UG-rOjnbRAo2ufcTSn
-X-Proofpoint-GUID: sZy0vt69zzz8FB0cY1TNZ0josfStXuGR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-15_07,2022-11-15_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 bulkscore=0 priorityscore=1501 suspectscore=0 adultscore=0
- lowpriorityscore=0 mlxscore=0 spamscore=0 clxscore=1011 mlxlogscore=596
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211150086
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH net-next v2 4/5] dt-bindings: net: qcom,ipa: support
+ skipping GSI firmware load
+Content-Language: en-US
+To:     Alex Elder <elder@linaro.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org,
+        elder@kernel.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221115113119.249893-1-elder@linaro.org>
+ <20221115113119.249893-5-elder@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221115113119.249893-5-elder@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 11:08:36PM -0800, John Stultz wrote:
-
-Hi John,
-...
-> > Right. So the check to deem a remote CPU unfit would (logically) look like this:
-> >
-> > (active | pending | ksoftirqd) & LONG_SOFTIRQ_MASK
-...
-> As run_ksoftirqd() basically looks at the pending set and calls
-> __do_softirq() which then moves the bits from the pending mask  to
-> active mask while they are being run.
+On 15/11/2022 12:31, Alex Elder wrote:
+> Add a new enumerated value to those defined for the qcom,gsi-loader
+> property.  If the qcom,gsi-loader is "skip", the GSI firmware will
+> already be loaded, so neither the AP nor modem is required to load
+> GSI firmware.
 > 
-> So (pending|active)&LONG_SOFTIRQ_MASK seems like it should be a
-> sufficient check regardless of if the remote cpu is in softirq or
-> ksoftirqd, no?
+> Signed-off-by: Alex Elder <elder@linaro.org>
+> ---
 
-I did not realize run_ksoftirqd()->__do_softirq() covers it.
-Sorry for the noise.
+This is a friendly reminder during the review process.
 
-Thanks!
+It looks like you received a tag and forgot to add it.
 
-> thanks
-> -john
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions. However, there's no need to repost patches *only* to add the
+tags. The upstream maintainer will do that for acks received on the
+version they apply.
+
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+
+If a tag was not added on purpose, please state why and what changed.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
