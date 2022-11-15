@@ -2,227 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBC16299A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A5A6299A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiKONHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:07:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
+        id S232235AbiKONHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:07:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238251AbiKONHM (ORCPT
+        with ESMTP id S229698AbiKONHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:07:12 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A22972494F;
-        Tue, 15 Nov 2022 05:07:09 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8DxTLb8jnNjL0UHAA--.9807S3;
-        Tue, 15 Nov 2022 21:07:08 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx9Vb6jnNjO6UTAA--.34062S2;
-        Tue, 15 Nov 2022 21:07:07 +0800 (CST)
-Subject: Re: [PATCH v2 1/2] gpio: loongson: add dts/acpi gpio support
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>, zhuyinbo@loongson.cn,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Juxin Gao <gaojuxin@loongson.cn>,
-        Bibo Mao <maobibo@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        Arnaud Patard <apatard@mandriva.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        lvjianmin <lvjianmin@loongson.cn>,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>
-References: <20221114095332.21079-1-zhuyinbo@loongson.cn>
- <CAMRc=McnEiSj1Q51pG3Lc8e+HcXE_uU7dm=1VoOa__xOgyoZPg@mail.gmail.com>
- <8b24e3df-8c22-bd09-cfc1-b27e39a05c25@loongson.cn>
- <fd5cc541-dfc6-d1cf-0865-669b11ce2e7a@xen0n.name>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <9a448680-0bb6-c4f0-93d2-29a86fede2d4@loongson.cn>
-Date:   Tue, 15 Nov 2022 21:07:05 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 15 Nov 2022 08:07:52 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0D012AED;
+        Tue, 15 Nov 2022 05:07:51 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id bp15so24251879lfb.13;
+        Tue, 15 Nov 2022 05:07:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Jit8/LMIi2E2JbS+B0jlbkJrIY5fatnANghVdci0Jow=;
+        b=TA1tZ2At0TX0fgo78X2fKrojsqeP0jXwc8xMILewE7h7gBnAqQBf9PmI+wNMvv4QpP
+         02hsHLd7H6rr/10x/JUe0EMcD0wirwv4/x9CZbN/Lu91oFIl6D/+6xWmNYEaJMGN990s
+         eYuTRXf9+uD10Z0Mr9tiG3qd9ZLYAbHhGjWDmlIHjrplE5pIiBv+FLKpbNbzqJDHzjUj
+         EFQ87Bbli6XL52haS29jJy0BJTStwIRkixJaAYYWuiIeiSI0iFpEpIFv7LFnNLxDIflF
+         NSjgT7QOKh/ndzTiD3BhkxS8Yot0gSHVICZGa9VH0QHDZB8S9QrFWK4g1JW/hV24Qowr
+         dOBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jit8/LMIi2E2JbS+B0jlbkJrIY5fatnANghVdci0Jow=;
+        b=hjH6SuTnwXBiKpiy7t7WV4zoohKb5usE1Al7PwBIFrXkpyOhXqdpgeAC3gl5tM5qIZ
+         PBXyP24bamFOziGp5FN+EuSqbfyLz1CsEVZwKNFGoj0nsjPuj7jgxN7Va32GO5D5XF5l
+         78hCnfvqWYE2sWNdlR87wkjhM4lAbIhe5mUgekFortEFkY4nnC7DT8Z/b77PV3OB+foK
+         SLu85BBC8suw/XtuapaQFJViExaDH3wr4uZUfBov/qyEH9XqSi+FVrvN3COFlWj5EPTt
+         RbeILdYQnYj74U1QWgQ+5+9o7Wmhgq8O6GSRRe3V1VUDYgl2vPUdXyBKCJz01DbCyvfl
+         lmOw==
+X-Gm-Message-State: ANoB5pnaa2EQVNxE33K8Fzj0521m2TYz4a2KO6GmI8jKe9sWUWOJqMKi
+        2jSHJ8cbdEmbZvtOpxGqYJo=
+X-Google-Smtp-Source: AA0mqf6lk4j7FNDRj9vujNwx5fO7muYBMA1P6euzRTK5dVLh216qBJCxxpXctQBUezisiCNp3+mzSQ==
+X-Received: by 2002:a19:7608:0:b0:497:aa48:8fe7 with SMTP id c8-20020a197608000000b00497aa488fe7mr6320236lff.612.1668517669730;
+        Tue, 15 Nov 2022 05:07:49 -0800 (PST)
+Received: from pc636 (host-90-235-25-77.mobileonline.telia.com. [90.235.25.77])
+        by smtp.gmail.com with ESMTPSA id p7-20020a2eb107000000b0026de0c8098csm2510739ljl.26.2022.11.15.05.07.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 05:07:49 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Tue, 15 Nov 2022 14:07:47 +0100
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-kernel@vger.kernel.org,
+        paulmck@kernel.org, rcu@vger.kernel.org
+Subject: Re: [PATCH v2] rcu/kfree: Do not request RCU when not needed
+Message-ID: <Y3OPI/pWZ5jf4X9y@pc636>
+References: <20221109024758.2644936-1-joel@joelfernandes.org>
+ <Y2z3Mb3u8bFZ12wY@pc636>
+ <CAEXW_YSq89xzgyQ9Tdt1tCqz8VAfzb7kSXVZmnxDuJ65U0UZ3w@mail.gmail.com>
+ <Y20EOinwcLSZHmXg@pc638.lan>
+ <Y22ry4Q2OY2zovco@google.com>
+ <Y3Iyka86FlUh9D1P@pc636>
+ <CAEXW_YR8ycdF0Y80p2qKXQm3Qc+XA441jQZ3uiHk=TbaXngNkQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <fd5cc541-dfc6-d1cf-0865-669b11ce2e7a@xen0n.name>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx9Vb6jnNjO6UTAA--.34062S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3WF1rurWfGw4kCw1xXFW7twb_yoWxWryDpF
-        n3AayxGFWUGr1xAr1qq34UZryayry5JwnFqF1rJa4UCryqq3Wjqr1UXF1q9F18Gr4rAF1j
-        qry8Gr47uF45ZrUanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI
-        0_JF0_Jw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCj
-        c4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8k-BtUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAEXW_YR8ycdF0Y80p2qKXQm3Qc+XA441jQZ3uiHk=TbaXngNkQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 14, 2022 at 03:49:16PM -0500, Joel Fernandes wrote:
+> On Mon, Nov 14, 2022 at 7:20 AM Uladzislau Rezki <urezki@gmail.com> wrote:
+> >
+> > > On Thu, Nov 10, 2022 at 03:01:30PM +0100, Uladzislau Rezki wrote:
+> > > > > Hi,
+> > > > >
+> > > > > On Thu, Nov 10, 2022 at 8:05 AM Uladzislau Rezki <urezki@gmail.com> wrote:
+> > > > >
+> > > > > > > On ChromeOS, using this with the increased timeout, we see that we
+> > > > > > almost always
+> > > > > > > never need to initiate a new grace period. Testing also shows this frees
+> > > > > > large
+> > > > > > > amounts of unreclaimed memory, under intense kfree_rcu() pressure.
+> > > > > > >
+> > > > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > > > > > ---
+> > > > > > > v1->v2: Same logic but use polled grace periods instead of sampling
+> > > > > > gp_seq.
+> > > > > > >
+> > > > > > >  kernel/rcu/tree.c | 8 +++++++-
+> > > > > > >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > > > > > >
+> > > > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > > > > > index 591187b6352e..ed41243f7a49 100644
+> > > > > > > --- a/kernel/rcu/tree.c
+> > > > > > > +++ b/kernel/rcu/tree.c
+> > > > > > > @@ -2935,6 +2935,7 @@ struct kfree_rcu_cpu_work {
+> > > > > > >
+> > > > > > >  /**
+> > > > > > >   * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace
+> > > > > > period
+> > > > > > > + * @gp_snap: The GP snapshot recorded at the last scheduling of monitor
+> > > > > > work.
+> > > > > > >   * @head: List of kfree_rcu() objects not yet waiting for a grace period
+> > > > > > >   * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiting for a
+> > > > > > grace period
+> > > > > > >   * @krw_arr: Array of batches of kfree_rcu() objects waiting for a
+> > > > > > grace period
+> > > > > > > @@ -2964,6 +2965,7 @@ struct kfree_rcu_cpu {
+> > > > > > >       struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
+> > > > > > >       raw_spinlock_t lock;
+> > > > > > >       struct delayed_work monitor_work;
+> > > > > > > +     unsigned long gp_snap;
+> > > > > > >       bool initialized;
+> > > > > > >       int count;
+> > > > > > >
+> > > > > > > @@ -3167,6 +3169,7 @@ schedule_delayed_monitor_work(struct kfree_rcu_cpu
+> > > > > > *krcp)
+> > > > > > >                       mod_delayed_work(system_wq, &krcp->monitor_work,
+> > > > > > delay);
+> > > > > > >               return;
+> > > > > > >       }
+> > > > > > > +     krcp->gp_snap = get_state_synchronize_rcu();
+> > > > > > >       queue_delayed_work(system_wq, &krcp->monitor_work, delay);
+> > > > > > >  }
+> > > > > > >
+> > > > > > How do you guarantee a full grace period for objects which proceed
+> > > > > > to be placed into an input stream that is not yet detached?
+> > > > >
+> > > > >
+> > > > > Just replying from phone as I’m OOO today.
+> > > > >
+> > > > > Hmm, so you’re saying that objects can be queued after the delayed work has
+> > > > > been queued, but processed when the delayed work is run? I’m looking at
+> > > > > this code after few years so I may have missed something.
+> > > > >
+> > > > > That’s a good point and I think I missed that. I think your version did too
+> > > > > but I’ll have to double check.
+> > > > >
+> > > > > The fix then is to sample the clock for the latest object queued, not for
+> > > > > when the delayed work is queued.
+> > > > >
+> > > > The patch i sent gurantee it. Just in case see v2:
+> > >
+> > > You are right and thank you! CBs can be queued while the monitor timer is in
+> > > progress. So we need to sample unconditionally. I think my approach is still
+> > > better since I take advantage of multiple seconds (I update snapshot on every
+> > > CB queue monitor and sample in the monitor handler).
+> > >
+> > > Whereas your patch is snapshotting before queuing the regular work and when
+> > > the work is executed (This is a much shorter duration and I bet you would be
+> > > blocking in cond_synchronize..() more often).
+> > >
+> > There is a performance test that measures a taken time and memory
+> > footprint, so you can do a quick comparison. A "rcutorture" can be
+> > run with various parameters to figure out if a patch that is in question
+> > makes any difference.
+> 
+> Yes sure, I am doing a run now with my patch. However, I have a
+> question -- why do you feel blocking in the kworker is not an issue?
+> You are taking a snapshot before queuing the normal kwork and then
+> reading the snapshot when the normal kwork runs. Considering it is a
+> high priority queue, the delay between when you are taking the
+> snapshot, and reading it is likely small so there is a bigger chance
+> of blocking in cond_synchronize_rcu(). Did I miss something?
+> 
+We can wait indeed in the reclaim worker. But the worker does not do any
+nasty or extra work here. If there is a need we block and wait. After a
+grace period, we are awoken and proceed.
 
+Therefore i do not see the reason in handling two cases:
 
-在 2022/11/15 下午6:17, WANG Xuerui 写道:
-> Sorry for jumping in, but...
-> 
-> On 2022/11/15 17:53, Yinbo Zhu wrote:
->>
->>
->> 在 2022/11/15 下午5:05, Bartosz Golaszewski 写道:
->>> On Mon, Nov 14, 2022 at 10:53 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
->>>>
->>>> The latest Loongson series platform use dts or acpi framework to
->>>> register gpio device resources, such as the Loongson-2 series
->>>> SoC of LOONGARCH architecture. In order to support dts, acpi and
->>>> compatibility with previous platform device resources in driver,
->>>> this patch was added.
->>>>
->>>> Signed-off-by: lvjianmin <lvjianmin@loongson.cn>
->>>> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
->>>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
->>>> Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
->>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>> ---
->>>> Change in v2:
->>>>                  1. Fixup of_loongson_gpio_get_props and remove the 
->>>> parse logic about
->>>>                     "loongson,conf_offset", "loongson,out_offset", 
->>>> "loongson,in_offset",
->>>>                     "loongson,gpio_base", "loongson,support_irq" 
->>>> then kernel driver will
->>>>                     initial them that depend compatible except 
->>>> "loongson,gpio_base".
->>>>
->>>>   arch/loongarch/include/asm/loongson.h         |  13 +
->>>>   .../include/asm/mach-loongson2ef/loongson.h   |  12 +
->>>>   .../include/asm/mach-loongson64/loongson.h    |  13 +
->>>>   drivers/gpio/Kconfig                          |   6 +-
->>>>   drivers/gpio/gpio-loongson.c                  | 422 
->>>> +++++++++++++++---
->>>>   5 files changed, 391 insertions(+), 75 deletions(-)
->>>>
->>>> diff --git a/arch/loongarch/include/asm/loongson.h 
->>>> b/arch/loongarch/include/asm/loongson.h
->>>> index 00db93edae1b..383fdda155f0 100644
->>>> --- a/arch/loongarch/include/asm/loongson.h
->>>> +++ b/arch/loongarch/include/asm/loongson.h
->>>> @@ -60,6 +60,19 @@ static inline void xconf_writeq(u64 val64, 
->>>> volatile void __iomem *addr)
->>>>          );
->>>>   }
->>>>
->>>> +/* ============== Data structrues =============== */
->>>> +
->>>> +/* gpio data */
->>>> +struct platform_gpio_data {
->>>> +       u32 gpio_conf;
->>>> +       u32 gpio_out;
->>>> +       u32 gpio_in;
->>>> +       u32 support_irq;
->>>> +       char *label;
->>>> +       int gpio_base;
->>>> +       int ngpio;
->>>> +};
->>>
->>> This is a terrible name for an exported structure. You would at least
->>> need some kind of a namespace prefix. But even then the need to add a
->>> platform data structure is very questionable. We've moved past the
->>> need for platform data in the kernel. I don't see anyone setting it up
->>> in this series either. Could you provide more explanation on why you
->>> would need it and who would use it?
->> okay, I will add a namespace prefix, about this platform data was added
->> that was to compatible with legacy platforms that do not support dts or
->> acpi, then, the mips loongson platform or loongarch loongson platform
-> 
-> Why are you trying to support "legacy" LoongArch platforms when the 
-> architecture was just upstreamed *this year*?
-the leagacy gpio driver had support LoongArch, and you can find some
-gpio register defined in arch/loongarch/include
-/asm/loongson.h in legacy gpio driver, such as LOONGSON_GPIODATA,
-The legacy gpio driver is the driver that doesn't include my gpio patch.
-> 
->> can implement the gpio device driver to initialize the
->> platform_gpio_data structure as needed after exporting the structure.
->>>
->>>> +
->>>>   /* ============== LS7A registers =============== */
->>>>   #define LS7A_PCH_REG_BASE              0x10000000UL
->>>>   /* LPC regs */
->>>> diff --git a/arch/mips/include/asm/mach-loongson2ef/loongson.h 
->>>> b/arch/mips/include/asm/mach-loongson2ef/loongson.h
->>>> index ca039b8dcde3..b261cea4fee1 100644
->>>> --- a/arch/mips/include/asm/mach-loongson2ef/loongson.h
->>>> +++ b/arch/mips/include/asm/mach-loongson2ef/loongson.h
->>>> @@ -315,4 +315,16 @@ extern unsigned long _loongson_addrwincfg_base;
->>>>
->>>>   #endif /* ! CONFIG_CPU_SUPPORTS_ADDRWINCFG */
->>>>
->>>> +/* ============== Data structrues =============== */
->>>> +
->>>> +/* gpio data */
->>>> +struct platform_gpio_data {
->>>> +       u32 gpio_conf;
->>>> +       u32 gpio_out;
->>>> +       u32 gpio_in;
->>>> +       u32 support_irq;
->>>> +       char *label;
->>>> +       int gpio_base;
->>>> +       int ngpio;
->>>> +};
->>>
->>> No idea why you would need to duplicate it like this either. And why
->>> put it in arch/.
->> because loongson platform include mips and loongarch, and the gpio 
->> device data was defined in arch/ in leagcy loongson gpio driver.  so the
->> latest loongson gpio drvier add platform_gpio_data in same dir.
-> 
-> I think at this point it's hopefully clear, that the way forward to 
-> supporting Loongson IP blocks shared between MIPS/LoongArch SoCs is to 
-> start over and do things properly, making the code as platform-agnostic 
-> as possible. Just make sure the drivers can get initialized via DT and 
-> ACPI then you're all set -- the upstream kernel is guaranteed to use one 
-> of the two well-established boot flows for every Loongson chip it 
-> supports. Be it hard-coded DT in arch/mips/boot/dts/loongson, or the 
-> LoongArch ACPI/upcoming DT, no need for hard-coding things in arch/ in 
-> either case.
-Our old platforms are used by customers, but we will not maintain those
-platforms. Adding dts/acpi support to those old platforms not only makes
-no sense, but also affects their use. Because the configuration of
-dts/acpi requires the support of the firmware team, but in fact, we have
-no one to maintain those old platforms.
+if (gp_done)
+    queue_work();
+else
+    queue_rcu_work();
 
-in a words, My patch to upstream was supposed to consider dts/acpi in
-LoongArch platform  But I have to consider the original legacy gpio
-driver and to compatible with it.
-> 
->>>
->>> [snip]
->>>
->>> I will hold off reviewing the rest of the patch until we get that 
->>> clarified.
->>>
->>> Bartosz
->>>
->>
-> 
+it is the same if we just queue the work and check on entry. The current
+scenario is: queue the work after a grace period. This is the difference.
 
+Right if the reclaimer was a high prio kthread a time would be shorter. 
+
+In your scenario the time seems even shorter(i have not checked) because
+you update a snapshot of krcp each time a kvfree_rcu() is invoked. So
+basically even though you have objects whose grace period is passed you
+do not separate it anyhow. Because you update the:
+
+krcp->gp_snap = get_state_synchronize_rcu();
+
+too often.
+
+--
+Uladzislau Rezki
