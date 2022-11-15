@@ -2,183 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD7162A15C
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:33:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11AC662A162
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbiKOSdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 13:33:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
+        id S231344AbiKOSdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 13:33:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiKOSc6 (ORCPT
+        with ESMTP id S230426AbiKOSdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 13:32:58 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57741E721;
-        Tue, 15 Nov 2022 10:32:57 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id c15so9266752qtw.8;
-        Tue, 15 Nov 2022 10:32:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ed0lFBOrsy+uYXuj7c2RkD6jUi2Vk7diKbHkFLe1HcY=;
-        b=n1dJCa7tYLJ3cGFZBNQO095b2PM74OHihOgNuOGhGjkW8JJ5zBbZkWP90flM3pfUi6
-         REaTl/XEpk3CBAsLhAosw2oOKURDW6DZY/BCiQ0rFN6GxpKNeywaxjFbUhB5rvCyJiqR
-         +WqF/GHC1tFf8qM5smwycm3BlfyXAzRwdK2GAJxn8E4tE7GIhj3Y2GWIPh0nDigsFpGJ
-         nOJwn33eI6l0nbVYH7dzC1TrWRWQdVX6Fqia0kulP7TxDSHsqb2disGShkbv7gzY1Yn/
-         VLKGvdAW6aDdts5JmCkTfjzzISgnkZeFpX/u+ap/GnDEDVB91Cf+1FAMK50Gxzh3NcOM
-         Oepw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ed0lFBOrsy+uYXuj7c2RkD6jUi2Vk7diKbHkFLe1HcY=;
-        b=b8ap//FiKcZezGI4CfEqnbJirHBpr4F31bGgVrp934sW9VOmkwqdpbkeAxTPhhQvbM
-         zYeCgqSszd4+8WgHWMV6cmhxHe0jcOZZRgoBGkjbzlIA/iktN5A4aM+SxyqsGWq4c7XU
-         45IrZrNpUODo+1nymWKNDZ7wJ6e0tAs9b/KxR8PTJnco66lf25RaIabV5se7elG8cCxk
-         8OTbpVOhpZDDdobxnlKIHTkvHhFIoSbJhlti9v/aoONvQrraIOgiZUrsct5JRakmldnB
-         vAYl83anESksTXBnK0pRQ35Bzj/+7/Q6P48QhNSBvfrPULAy6WBgO1pZ4hQtEKpxPLun
-         j7+w==
-X-Gm-Message-State: ANoB5pn+KlRhTC36g0lKx1N4K9Mbps+2MoYvawZF0ee/CfzlGC9z6egQ
-        GlVhZtjiAZKPHez1sUM95dY=
-X-Google-Smtp-Source: AA0mqf5y+6IE9CH+MFP1uJCVAAiqhugIhJFD+pcOVEmT634IOkf37MQlFcKoMgziwK5MKDeNF/d44w==
-X-Received: by 2002:a05:622a:a17:b0:39c:c0b1:be5b with SMTP id bv23-20020a05622a0a1700b0039cc0b1be5bmr17721118qtb.663.1668537157141;
-        Tue, 15 Nov 2022 10:32:37 -0800 (PST)
-Received: from localhost ([24.236.74.177])
-        by smtp.gmail.com with ESMTPSA id g6-20020a05620a40c600b006fa12a74c53sm8734899qko.61.2022.11.15.10.32.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 10:32:36 -0800 (PST)
-Date:   Tue, 15 Nov 2022 10:32:31 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Barry Song <baohua@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        haniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Tariq Toukan <ttoukan.linux@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] cpumask: improve on cpumask_local_spread()
- locality
-Message-ID: <Y3PXw8Hqn+RCMg2J@yury-laptop>
-References: <20221112190946.728270-1-yury.norov@gmail.com>
- <xhsmh7czwyvtj.mognet@vschneid.remote.csb>
+        Tue, 15 Nov 2022 13:33:21 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEA5303C6;
+        Tue, 15 Nov 2022 10:33:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D65B1B818D1;
+        Tue, 15 Nov 2022 18:33:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45185C433D7;
+        Tue, 15 Nov 2022 18:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668537189;
+        bh=iFk2C5rMscwTCjr6mbJ3SLiT1nN1ydkf/s9Is0bqib4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tvSye5iaT5YDKDCyhxf7vx/QIgVomCFkqjLlYSxYPZsFed5kggUOEmMGA1Eru2n+u
+         vWXNmEpl18df15MLFC/oHRVu0WgDsaRRHVYTRyuVHiC0YK659SlBW3NiL6w2KGnx/9
+         1wxctLBfFEZjYMRw2LKVIk8Pu+jGVSMA2k/sqlUDfiJFYCaBKL9+mPadiMMSTEOc3Z
+         LSMYOZPuQaW6IGiLbK30Vi/T6CDmsrhELNxo7UtFQB10nzeirISuCS+Ol0Q8oCwR4M
+         SJVdr1i0A1KYvGQdIduhLOba45IuHhokoOghtD9uZYOaZ7G+cuRTbJooCFqRO5qawe
+         nKMeeuH4Uqjow==
+From:   Will Deacon <will@kernel.org>
+To:     Besar Wicaksono <bwicaksono@nvidia.com>, catalin.marinas@arm.com,
+        suzuki.poulose@arm.com, mark.rutland@arm.com
+Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
+        jonathanh@nvidia.com, linux-arm-kernel@lists.infradead.org,
+        mathieu.poirier@linaro.org, thanu.rangarajan@arm.com,
+        vsethi@nvidia.com, linux-kernel@vger.kernel.org,
+        robin.murphy@arm.com, linux-tegra@vger.kernel.org,
+        treding@nvidia.com, mike.leach@linaro.org,
+        Michael.Williams@arm.com, sudeep.holla@arm.com, leo.yan@linaro.org
+Subject: Re: [PATCH v7 0/3] perf: ARM CoreSight PMU support
+Date:   Tue, 15 Nov 2022 18:32:53 +0000
+Message-Id: <166852008965.2033505.10501634922702345601.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20221111222330.48602-1-bwicaksono@nvidia.com>
+References: <20221111222330.48602-1-bwicaksono@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <xhsmh7czwyvtj.mognet@vschneid.remote.csb>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 05:24:56PM +0000, Valentin Schneider wrote:
-> Hi,
+On Fri, 11 Nov 2022 16:23:27 -0600, Besar Wicaksono wrote:
+> Add driver support for ARM CoreSight PMU device and event attributes for NVIDIA
+> implementation. The code is based on ARM Coresight PMU architecture and ACPI ARM
+> Performance Monitoring Unit table (APMT) specification below:
+>  * ARM Coresight PMU:
+>         https://developer.arm.com/documentation/ihi0091/latest
+>  * APMT: https://developer.arm.com/documentation/den0117/latest
 > 
-> On 12/11/22 11:09, Yury Norov wrote:
-> > cpumask_local_spread() currently checks local node for presence of i'th
-> > CPU, and then if it finds nothing makes a flat search among all non-local
-> > CPUs. We can do it better by checking CPUs per NUMA hops.
-> >
-> > This series is inspired by Tariq Toukan and Valentin Schneider's "net/mlx5e:
-> > Improve remote NUMA preferences used for the IRQ affinity hints"
-> >
-> > https://patchwork.kernel.org/project/netdevbpf/patch/20220728191203.4055-3-tariqt@nvidia.com/
-> >
-> > According to their measurements, for mlx5e:
-> >
-> >         Bottleneck in RX side is released, reached linerate (~1.8x speedup).
-> >         ~30% less cpu util on TX.
-> >
-> > This patch makes cpumask_local_spread() traversing CPUs based on NUMA
-> > distance, just as well, and I expect comparabale improvement for its
-> > users, as in case of mlx5e.
-> >
-> > I tested new behavior on my VM with the following NUMA configuration:
-> >
-> > root@debian:~# numactl -H
-> > available: 4 nodes (0-3)
-> > node 0 cpus: 0 1 2 3
-> > node 0 size: 3869 MB
-> > node 0 free: 3740 MB
-> > node 1 cpus: 4 5
-> > node 1 size: 1969 MB
-> > node 1 free: 1937 MB
-> > node 2 cpus: 6 7
-> > node 2 size: 1967 MB
-> > node 2 free: 1873 MB
-> > node 3 cpus: 8 9 10 11 12 13 14 15
-> > node 3 size: 7842 MB
-> > node 3 free: 7723 MB
-> > node distances:
-> > node   0   1   2   3
-> >   0:  10  50  30  70
-> >   1:  50  10  70  30
-> >   2:  30  70  10  50
-> >   3:  70  30  50  10
-> >
-> > And the cpumask_local_spread() for each node and offset traversing looks
-> > like this:
-> >
-> > node 0:   0   1   2   3   6   7   4   5   8   9  10  11  12  13  14  15
-> > node 1:   4   5   8   9  10  11  12  13  14  15   0   1   2   3   6   7
-> > node 2:   6   7   0   1   2   3   8   9  10  11  12  13  14  15   4   5
-> > node 3:   8   9  10  11  12  13  14  15   4   5   6   7   0   1   2   3
-> >
-> 
-> Is this meant as a replacement for [1]?
+> [...]
 
-No. Your series adds an iterator, and in my experience the code that
-uses iterators of that sort is almost always better and easier to
-understand than cpumask_nth() or cpumask_next()-like users.
+Applied to will (for-next/perf), thanks!
 
-My series has the only advantage that it allows keep existing codebase
-untouched.
- 
-> I like that this is changing an existing interface so that all current
-> users directly benefit from the change. Now, about half of the users of
-> cpumask_local_spread() use it in a loop with incremental @i parameter,
-> which makes the repeated bsearch a bit of a shame, but then I'm tempted to
-> say the first point makes it worth it.
-> 
-> [1]: https://lore.kernel.org/all/20221028164959.1367250-1-vschneid@redhat.com/
+[1/3] perf: arm_cspmu: Add support for ARM CoreSight PMU driver
+      https://git.kernel.org/will/c/e37dfd65731d
+[2/3] perf: arm_cspmu: Add support for NVIDIA SCF and MCF attribute
+      https://git.kernel.org/will/c/84481be7167e
 
-In terms of very common case of sequential invocation of local_spread()
-for cpus from 0 to nr_cpu_ids, the complexity of my approach is n * log n,
-and your approach is amortized O(n), which is better. Not a big deal _now_,
-as you mentioned in the other email. But we never know how things will
-evolve, right?
+Note that I had to add some MODULE_LICENSE() macros to the files so that
+modpost doesn't fail with an allmodconfig build. Please shout if that
+needs adjusting at all.
 
-So, I would take both and maybe in comment to cpumask_local_spread()
-mention that there's a better alternative for those who call the
-function for all CPUs incrementally.
+Cheers,
+-- 
+Will
 
-Thanks,
-Yury
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
