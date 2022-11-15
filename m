@@ -2,87 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048B562999E
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EBC16299A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 14:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236982AbiKONHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 08:07:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
+        id S229959AbiKONHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 08:07:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiKONHA (ORCPT
+        with ESMTP id S238251AbiKONHM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 08:07:00 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD0926AFB
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:06:58 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id x102so6537057ede.0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 05:06:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CwWycAgBZx11btkkrzaVTYJbNLpNPYle/o/S+NTzqgM=;
-        b=vYxVRdNMz0n5VZYRmPPGzC91CEDXXFb8YVYHrGuEp2orpacB+c/XJ0Etqznomn5uhG
-         IScdRCHyDWhXiDmVa84951l6o91VuWLdPPJUjxu1IcVf+R3vYe109fg/DIT3OAye8dGO
-         jo+0C+S5rrByR89nlcIhw49pY82B3BjtBw2gIC3upySc/wOpcZCWBkXH/fB5qMNdHc+Z
-         bMBdMUsLS8Vgrzsp59+MrMHtuvbQE5IrgEdgpyly710UCB2lO8sAzeMM6OcHr0mLfvop
-         uw2cNwl7ssRBzbzErms/sE/jbpS8sZAa2hjyenDCqx9BAmu56a0f4o0/7K+tkWYqFdoK
-         pvcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=CwWycAgBZx11btkkrzaVTYJbNLpNPYle/o/S+NTzqgM=;
-        b=KdINhsVnVFcrm3/FLfpvfFHBt8siuK3/HvwocmwT6rfR0Oy1BPQG0JJ5nfQt0AcSoi
-         8PUSB4PcIR4+UD250wTG8KVj21CW0QGSa9vAQlhb5qRJMtXxcC76YqRG02eXZQYsdQAD
-         YOifzA01/PNpmeLVOzKx1RJ9SgjzTd0rcvblQNLaFctLX22sxtd0nB2Q22SCkU8kwGO8
-         TCXV/KKdfzoYZjAgabZWM3IQkaY0tYWqRkGELGGX9nWXUQvfd9Fv34b1jSEZ+uic8OXu
-         FNTA7L/RNNrsFKtmGqFed1vlyAL27gaQfsdaD57rO26E3x/XNAWeTrVuapG7B4P3ivII
-         DekQ==
-X-Gm-Message-State: ANoB5pm7Kg9LWcxvqgnBJLdtC9twg9LROjGUIFhCVfC/Suw+rNSZy5x9
-        q7Ghs9dCPrvz4IJHRM+iRk+IMw==
-X-Google-Smtp-Source: AA0mqf6ZxVZRs5NI9Eqvpjc3S1CVjWo9pE8CyFrlgaXR/C+NmJTl1rSgor2AhHD7JpNTYBze9wtDNg==
-X-Received: by 2002:a05:6402:3787:b0:45c:55f8:4fbf with SMTP id et7-20020a056402378700b0045c55f84fbfmr14420810edb.277.1668517617385;
-        Tue, 15 Nov 2022 05:06:57 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id hw20-20020a170907a0d400b00779cde476e4sm5471812ejc.62.2022.11.15.05.06.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 05:06:56 -0800 (PST)
-Message-ID: <cff269c8-f944-9277-9df8-653522efbba0@linaro.org>
-Date:   Tue, 15 Nov 2022 14:06:51 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.2
-Subject: Re: [PATCH v2 1/9] dt-bindings: arm-smmu: Allow up to 3 power-domains
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     patches@linaro.org, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
+        Tue, 15 Nov 2022 08:07:12 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A22972494F;
+        Tue, 15 Nov 2022 05:07:09 -0800 (PST)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8DxTLb8jnNjL0UHAA--.9807S3;
+        Tue, 15 Nov 2022 21:07:08 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx9Vb6jnNjO6UTAA--.34062S2;
+        Tue, 15 Nov 2022 21:07:07 +0800 (CST)
+Subject: Re: [PATCH v2 1/2] gpio: loongson: add dts/acpi gpio support
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Linus Walleij <linus.walleij@linaro.org>, zhuyinbo@loongson.cn,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221114104222.36329-1-konrad.dybcio@linaro.org>
- <20221114104222.36329-2-konrad.dybcio@linaro.org>
- <6fa8e3ea-2113-d930-96bc-3726d53e5bcd@linaro.org>
- <a4b160d8-0faa-3f4c-a925-0beaf6ace721@linaro.org>
- <0121fc03-b027-7659-5e6e-b42089c9888d@linaro.org>
- <12578e05-ced9-e5f7-7922-0af2f2159333@linaro.org>
- <878402e7-7f80-31c7-3a6b-989a6ca29841@linaro.org>
- <f59ddce1-c2e1-4055-3bce-1319c68ddf94@linaro.org>
- <4b4ca3ba-8e4d-088e-8b3e-a47ad6ecb965@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <4b4ca3ba-8e4d-088e-8b3e-a47ad6ecb965@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Juxin Gao <gaojuxin@loongson.cn>,
+        Bibo Mao <maobibo@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        Arnaud Patard <apatard@mandriva.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        lvjianmin <lvjianmin@loongson.cn>,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+References: <20221114095332.21079-1-zhuyinbo@loongson.cn>
+ <CAMRc=McnEiSj1Q51pG3Lc8e+HcXE_uU7dm=1VoOa__xOgyoZPg@mail.gmail.com>
+ <8b24e3df-8c22-bd09-cfc1-b27e39a05c25@loongson.cn>
+ <fd5cc541-dfc6-d1cf-0865-669b11ce2e7a@xen0n.name>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <9a448680-0bb6-c4f0-93d2-29a86fede2d4@loongson.cn>
+Date:   Tue, 15 Nov 2022 21:07:05 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <fd5cc541-dfc6-d1cf-0865-669b11ce2e7a@xen0n.name>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: AQAAf8Dx9Vb6jnNjO6UTAA--.34062S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3WF1rurWfGw4kCw1xXFW7twb_yoWxWryDpF
+        n3AayxGFWUGr1xAr1qq34UZryayry5JwnFqF1rJa4UCryqq3Wjqr1UXF1q9F18Gr4rAF1j
+        qry8Gr47uF45ZrUanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI
+        0_JF0_Jw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCj
+        c4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8k-BtUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,154 +82,147 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 15/11/2022 14:00, Krzysztof Kozlowski wrote:
-> On 15/11/2022 13:54, Konrad Dybcio wrote:
->>
->>
->> On 14/11/2022 17:58, Krzysztof Kozlowski wrote:
->>> On 14/11/2022 16:53, Konrad Dybcio wrote:
->>>>
->>>> On 14/11/2022 14:00, Krzysztof Kozlowski wrote:
->>>>> On 14/11/2022 12:17, Konrad Dybcio wrote:
->>>>>> On 14/11/2022 12:01, Krzysztof Kozlowski wrote:
->>>>>>> On 14/11/2022 11:42, Konrad Dybcio wrote:
->>>>>>>> Some SMMUs require that a vote is held on as much as 3 separate PDs
->>>>>>>> (hello Qualcomm). Allow it in bindings.
->>>>>>>>
->>>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>>>>> ---
->>>>>>>> Changes since v1:
->>>>>>>> - Add minItems
->>>>>>>>
->>>>>>>>      Documentation/devicetree/bindings/iommu/arm,smmu.yaml | 3 ++-
->>>>>>>>      1 file changed, 2 insertions(+), 1 deletion(-)
->>>>>>>>
->>>>>>>> diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->>>>>>>> index 9066e6df1ba1..82bc696de662 100644
->>>>>>>> --- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->>>>>>>> +++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->>>>>>>> @@ -159,7 +159,8 @@ properties:
->>>>>>>>                through the TCU's programming interface.
->>>>>>>>      
->>>>>>>>        power-domains:
->>>>>>>> -    maxItems: 1
->>>>>>>> +    minItems: 0
->>>>>>> It cannot be 0.
->>>>>>>
->>>>>>> minItems: 1
->>>>>>>
->>>>>>> Anyway you still need to restrict it per variant, as I said in previous
->>>>>>> version.
->>>>>> Hm.. I'm not entirely sure what you mean.. Should I add a list of
->>>>>> compatibles
->>>>> Yes and limit it to maxItems: 1 for "else".
->>>>
->>>> I tried adding:
->>>>
->>>>
->>>>
->>>>      - if:
->>>>          properties:
->>>>            compatible:
->>>>              contains:
->>>>                enum:
->>>>                  - qcom,sm6375-smmu-500
->>>>        then:
->>>>          properties:
->>>>            power-domains:
->>>>              minItems: 3
->>>>              maxItems: 3
->>>>        else:
->>>>          properties:
->>>>            power-domains:
->>>>              maxItems: 1
->>>>
->>>>
->>>> Right under the nvidia reg if-else in the allOf, but dtbs_check throws
->>>> errors like:
->>>>
->>>>
->>>> /home/konrad/linux/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb:
->>>> iommu@5040000: 'power-domains' does not match any of the regexes:
->>>> 'pinctrl-[0-9]+'
->>>>
->>>>
->>>> Any clues as to why?
->>>
->>> I don't know what code do you have there, but generic pattern is:
->>>
->>> https://elixir.bootlin.com/linux/v5.19-rc6/source/Documentation/devicetree/bindings/clock/samsung,exynos7-clock.yaml#L38
->>>
->> I tried many things, but I still don't seem to get a hang of it.. Here's
->> my current diff rebased on top of Dmitry's recent cleanups (available at
->> [1])
->>
->>
->> diff --git a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->> b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->> index 28f5720824cd..55759aebc4a0 100644
->> --- a/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->> +++ b/Documentation/devicetree/bindings/iommu/arm,smmu.yaml
->> @@ -200,7 +200,7 @@ properties:
->>        maxItems: 7
->>
->>      power-domains:
+在 2022/11/15 下午6:17, WANG Xuerui 写道:
+> Sorry for jumping in, but...
 > 
-> As I mentioned before - minItems: 1.
-But not all SMMUs require a power domain :/
+> On 2022/11/15 17:53, Yinbo Zhu wrote:
+>>
+>>
+>> 在 2022/11/15 下午5:05, Bartosz Golaszewski 写道:
+>>> On Mon, Nov 14, 2022 at 10:53 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+>>>>
+>>>> The latest Loongson series platform use dts or acpi framework to
+>>>> register gpio device resources, such as the Loongson-2 series
+>>>> SoC of LOONGARCH architecture. In order to support dts, acpi and
+>>>> compatibility with previous platform device resources in driver,
+>>>> this patch was added.
+>>>>
+>>>> Signed-off-by: lvjianmin <lvjianmin@loongson.cn>
+>>>> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+>>>> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+>>>> Signed-off-by: Juxin Gao <gaojuxin@loongson.cn>
+>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>> ---
+>>>> Change in v2:
+>>>>                  1. Fixup of_loongson_gpio_get_props and remove the 
+>>>> parse logic about
+>>>>                     "loongson,conf_offset", "loongson,out_offset", 
+>>>> "loongson,in_offset",
+>>>>                     "loongson,gpio_base", "loongson,support_irq" 
+>>>> then kernel driver will
+>>>>                     initial them that depend compatible except 
+>>>> "loongson,gpio_base".
+>>>>
+>>>>   arch/loongarch/include/asm/loongson.h         |  13 +
+>>>>   .../include/asm/mach-loongson2ef/loongson.h   |  12 +
+>>>>   .../include/asm/mach-loongson64/loongson.h    |  13 +
+>>>>   drivers/gpio/Kconfig                          |   6 +-
+>>>>   drivers/gpio/gpio-loongson.c                  | 422 
+>>>> +++++++++++++++---
+>>>>   5 files changed, 391 insertions(+), 75 deletions(-)
+>>>>
+>>>> diff --git a/arch/loongarch/include/asm/loongson.h 
+>>>> b/arch/loongarch/include/asm/loongson.h
+>>>> index 00db93edae1b..383fdda155f0 100644
+>>>> --- a/arch/loongarch/include/asm/loongson.h
+>>>> +++ b/arch/loongarch/include/asm/loongson.h
+>>>> @@ -60,6 +60,19 @@ static inline void xconf_writeq(u64 val64, 
+>>>> volatile void __iomem *addr)
+>>>>          );
+>>>>   }
+>>>>
+>>>> +/* ============== Data structrues =============== */
+>>>> +
+>>>> +/* gpio data */
+>>>> +struct platform_gpio_data {
+>>>> +       u32 gpio_conf;
+>>>> +       u32 gpio_out;
+>>>> +       u32 gpio_in;
+>>>> +       u32 support_irq;
+>>>> +       char *label;
+>>>> +       int gpio_base;
+>>>> +       int ngpio;
+>>>> +};
+>>>
+>>> This is a terrible name for an exported structure. You would at least
+>>> need some kind of a namespace prefix. But even then the need to add a
+>>> platform data structure is very questionable. We've moved past the
+>>> need for platform data in the kernel. I don't see anyone setting it up
+>>> in this series either. Could you provide more explanation on why you
+>>> would need it and who would use it?
+>> okay, I will add a namespace prefix, about this platform data was added
+>> that was to compatible with legacy platforms that do not support dts or
+>> acpi, then, the mips loongson platform or loongarch loongson platform
+> 
+> Why are you trying to support "legacy" LoongArch platforms when the 
+> architecture was just upstreamed *this year*?
+the leagacy gpio driver had support LoongArch, and you can find some
+gpio register defined in arch/loongarch/include
+/asm/loongson.h in legacy gpio driver, such as LOONGSON_GPIODATA,
+The legacy gpio driver is the driver that doesn't include my gpio patch.
+> 
+>> can implement the gpio device driver to initialize the
+>> platform_gpio_data structure as needed after exporting the structure.
+>>>
+>>>> +
+>>>>   /* ============== LS7A registers =============== */
+>>>>   #define LS7A_PCH_REG_BASE              0x10000000UL
+>>>>   /* LPC regs */
+>>>> diff --git a/arch/mips/include/asm/mach-loongson2ef/loongson.h 
+>>>> b/arch/mips/include/asm/mach-loongson2ef/loongson.h
+>>>> index ca039b8dcde3..b261cea4fee1 100644
+>>>> --- a/arch/mips/include/asm/mach-loongson2ef/loongson.h
+>>>> +++ b/arch/mips/include/asm/mach-loongson2ef/loongson.h
+>>>> @@ -315,4 +315,16 @@ extern unsigned long _loongson_addrwincfg_base;
+>>>>
+>>>>   #endif /* ! CONFIG_CPU_SUPPORTS_ADDRWINCFG */
+>>>>
+>>>> +/* ============== Data structrues =============== */
+>>>> +
+>>>> +/* gpio data */
+>>>> +struct platform_gpio_data {
+>>>> +       u32 gpio_conf;
+>>>> +       u32 gpio_out;
+>>>> +       u32 gpio_in;
+>>>> +       u32 support_irq;
+>>>> +       char *label;
+>>>> +       int gpio_base;
+>>>> +       int ngpio;
+>>>> +};
+>>>
+>>> No idea why you would need to duplicate it like this either. And why
+>>> put it in arch/.
+>> because loongson platform include mips and loongarch, and the gpio 
+>> device data was defined in arch/ in leagcy loongson gpio driver.  so the
+>> latest loongson gpio drvier add platform_gpio_data in same dir.
+> 
+> I think at this point it's hopefully clear, that the way forward to 
+> supporting Loongson IP blocks shared between MIPS/LoongArch SoCs is to 
+> start over and do things properly, making the code as platform-agnostic 
+> as possible. Just make sure the drivers can get initialized via DT and 
+> ACPI then you're all set -- the upstream kernel is guaranteed to use one 
+> of the two well-established boot flows for every Loongson chip it 
+> supports. Be it hard-coded DT in arch/mips/boot/dts/loongson, or the 
+> LoongArch ACPI/upcoming DT, no need for hard-coding things in arch/ in 
+> either case.
+Our old platforms are used by customers, but we will not maintain those
+platforms. Adding dts/acpi support to those old platforms not only makes
+no sense, but also affects their use. Because the configuration of
+dts/acpi requires the support of the firmware team, but in fact, we have
+no one to maintain those old platforms.
 
+in a words, My patch to upstream was supposed to consider dts/acpi in
+LoongArch platform  But I have to consider the original legacy gpio
+driver and to compatible with it.
 > 
-> Just like the link I gave you.
+>>>
+>>> [snip]
+>>>
+>>> I will hold off reviewing the rest of the patch until we get that 
+>>> clarified.
+>>>
+>>> Bartosz
+>>>
+>>
 > 
->> -    maxItems: 1
->> +    maxItems: 3
->>
->>      nvidia,memory-controller:
->>        description: |
->> @@ -364,6 +364,26 @@ allOf:
->>                - description: interface clock required to access smmu's
->> registers
->>                    through the TCU's programming interface.
->>
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: qcom,sm6375-smmu-500
->> +    then:
->> +      properties:
->> +        power-domains:
->> +          items:
->> +            - description: SNoC MMU TBU RT GDSC
->> +            - description: SNoC MMU TBU NRT GDSC
->> +            - description: SNoC TURING MMU TBU0 GDSC
->> +
->> +      required:
->> +        - power-domains
->> +    else:
->> +      properties:
->> +        power-domains:
->> +          maxItems: 1
->> +
->>    examples:
->>      - |+
->>        /* SMMU with stream matching or stream indexing */
->>
->>
->> In my eyes, this should work, but I still get errors like:
->>
->> /home/konrad/linux/arch/arm64/boot/dts/qcom/sm8250-hdk.dtb:
->> iommu@3da0000: power-domains: [[108, 0]] is too short
->>
->> as if the else: path was never taken..
-> 
-> It was, but the top-level property said that minItems=3 (implicitly), so
-> it is too short.
-So the top-level properties take precedence over the ones that come from 
-the if-then-else?? Ugh.
 
-Konrad
-> 
-> Best regards,
-> Krzysztof
-> 
