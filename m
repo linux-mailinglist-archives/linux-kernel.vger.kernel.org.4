@@ -2,185 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B071C62990F
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D86B629910
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:41:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232786AbiKOMkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 07:40:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53758 "EHLO
+        id S237818AbiKOMk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 07:40:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbiKOMkr (ORCPT
+        with ESMTP id S232818AbiKOMkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:40:47 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4061FF97;
-        Tue, 15 Nov 2022 04:40:45 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 332BA1883FF1;
-        Tue, 15 Nov 2022 12:40:43 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 2A46725002DE;
-        Tue, 15 Nov 2022 12:40:43 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 20A5891201E4; Tue, 15 Nov 2022 12:40:43 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Tue, 15 Nov 2022 07:40:52 -0500
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEAB27153
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:40:51 -0800 (PST)
+Received: by mail-lj1-x234.google.com with SMTP id c25so17339919ljr.8
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:40:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9K7OHdISQ9ndYJcM7FeOopDqicN3TnOW0AKBc0hd7r4=;
+        b=EVuGADnY9FOdegDv7u0W/l+DAgxjrGyqM1nvo/0V8YD48lTvchKrzuP2BgRcg3tDPJ
+         VTWFGGJ+O2+qzQQmKcehwOqfck9Ko+M7mEXMZ+po+CfyuC2AiDE6LEoH7T2i+BcNLzOv
+         vd2wqOughcTVA4qpAdm2s09ax7/ayxh+CvjNp+MjGUOjuk3h+5B3pAeB+WmesJJmzczQ
+         druyVSwW5blhk1WfLwcnfBoTGcD0mDTYDvfY26njwbp1eXFC9py7fIZTmoHmJ7J6UG9w
+         i9D0UovTO6iCe4qUvwlgs/yq6gNIdSRlmxIr9x41MI9Z3nki6BIPmTX8VbKxA3RVMgzm
+         Zv+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9K7OHdISQ9ndYJcM7FeOopDqicN3TnOW0AKBc0hd7r4=;
+        b=DO9nNxur+s0jJybhmpWdNO8E1M0gE9wSDi+MUNWzklWYYA7rXvxyzjW5PMu77vFKwQ
+         71Z92xIxCAst0m5JHAGEdybsnAdvWekFMRVM2bumZouLbrPZFYCjGCTXHzp581pMkTKn
+         ZOzbVanz/3mclgvgI1I8XFr6Drh05sp3ZwcpxyZPkzYT2cntWdBSMOQhReLDJr7B4TvJ
+         niGQZCRdf7lJ7uScva5X6lMfei+HiDe5j9qMwvRJ5DP4xmPbkp66wfGIiGpTishxiLOn
+         Ygw+hKspoGzrerrMTDO401o+MDiJfK6POgZBBdMM/vdaRYgLrFXb4+0QXwOfzrRobenx
+         /R9Q==
+X-Gm-Message-State: ANoB5pnzSx6+u9rvl5a5FUca/kviWUQqRtcfSdu7662MVTEpDepHNePi
+        5VBU0sRu1uQ7LaxjO4aAiUgl6cp9u6IaYQ==
+X-Google-Smtp-Source: AA0mqf63kRve2WrOP8O0jvw0gQ3MiYYKl3f+DbyQEsGsomyVUGztVQISw5/2YzfQkk0nH/qPGRziAg==
+X-Received: by 2002:a2e:a814:0:b0:277:40f:4c1c with SMTP id l20-20020a2ea814000000b00277040f4c1cmr5301342ljq.410.1668516049622;
+        Tue, 15 Nov 2022 04:40:49 -0800 (PST)
+Received: from elroy-temp-vm ([20.240.130.248])
+        by smtp.gmail.com with ESMTPSA id a3-20020a05651c030300b002772414817esm2495208ljp.1.2022.11.15.04.40.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 04:40:49 -0800 (PST)
+Date:   Tue, 15 Nov 2022 12:40:48 +0000
+From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: [PATCH] staging: vt6655: change the function name s_vFillCTSHead
+Message-ID: <Y3OI0Brhp90/tbBh@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
 MIME-Version: 1.0
-Date:   Tue, 15 Nov 2022 13:40:43 +0100
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 net-next 0/2] mv88e6xxx: Add MAB offload support
-In-Reply-To: <20221115122237.jfa5aqv6hauqid6l@skbuf>
-References: <20221112203748.68995-1-netdev@kapio-technology.com>
- <Y3NcOYvCkmcRufIn@shredder>
- <5559fa646aaad7551af9243831b48408@kapio-technology.com>
- <20221115102833.ahwnahrqstcs2eug@skbuf>
- <7c02d4f14e59a6e26431c086a9bb9643@kapio-technology.com>
- <20221115111034.z5bggxqhdf7kbw64@skbuf>
- <0cd30d4517d548f35042a535fd994831@kapio-technology.com>
- <20221115122237.jfa5aqv6hauqid6l@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <61810a4b3afb7bb6de1bcbaa52080e01@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-15 13:22, Vladimir Oltean wrote:
-> On Tue, Nov 15, 2022 at 12:31:59PM +0100, netdev@kapio-technology.com 
-> wrote:
->> It happens on upstart, so I would then have to hack the system upstart 
->> to
->> add trace.
-> 
-> Hack upstart or disable the service that brings the switch ports up, 
-> and
-> bring them up manually...
-> 
->> I also have:
->> mv88e6085 1002b000.ethernet-1:04: switch 0x990 detected: Marvell 
->> 88E6097/88E6097F, revision 2
->> mv88e6085 1002b000.ethernet-1:04: configuring for fixed/rgmii-id link 
->> mode
->> mv88e6085 1002b000.ethernet-1:04: Link is Up - 100Mbps/Full - flow 
->> control off
->> mv88e6085 1002b000.ethernet-1:04 eth10 (uninitialized): PHY 
->> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:00] driver 
->> [Generic PHY] (irq=POLL)
->> mv88e6085 1002b000.ethernet-1:04 eth6 (uninitialized): PHY 
->> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:01] driver 
->> [Generic PHY] (irq=POLL)
->> mv88e6085 1002b000.ethernet-1:04 eth9 (uninitialized): PHY 
->> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:02] driver 
->> [Generic PHY] (irq=POLL)
->> mv88e6085 1002b000.ethernet-1:04 eth5 (uninitialized): PHY 
->> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:03] driver 
->> [Generic PHY] (irq=POLL)
->> mv88e6085 1002b000.ethernet-1:04 eth8 (uninitialized): PHY 
->> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:04] driver 
->> [Generic PHY] (irq=POLL)
->> mv88e6085 1002b000.ethernet-1:04 eth4 (uninitialized): PHY 
->> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:05] driver 
->> [Generic PHY] (irq=POLL)
->> mv88e6085 1002b000.ethernet-1:04 eth7 (uninitialized): PHY 
->> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:06] driver 
->> [Generic PHY] (irq=POLL)
->> mv88e6085 1002b000.ethernet-1:04 eth3 (uninitialized): PHY 
->> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdio:07] driver 
->> [Generic PHY] (irq=POLL)
->> mv88e6085 1002b000.ethernet-1:04 eth2 (uninitialized): PHY 
->> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdioe:08] driver 
->> [Marvell 88E1112] (irq=174)
->> mv88e6085 1002b000.ethernet-1:04 eth1 (uninitialized): PHY 
->> [!soc!aipi@10020000!ethernet@1002b000!mdio!switch@4!mdioe:09] driver 
->> [Marvell 88E1112] (irq=175)
->> 
->> after this and adding the ifaces to the bridge, it continues like:
->> 
->> br0: port 1(eth10) entered blocking state
->> br0: port 1(eth10) entered disabled state
->> br0: port 2(eth6) entered blocking state
->> br0: port 2(eth6) entered disabled state
->> device eth6 entered promiscuous mode
->> device eth10 entered promiscuous mode
->> br0: port 3(eth9) entered blocking state
->> br0: port 3(eth9) entered disabled state
->> device eth9 entered promiscuous mode
->> br0: port 4(eth5) entered blocking state
->> br0: port 4(eth5) entered disabled state
->> device eth5 entered promiscuous mode
->> br0: port 5(eth8) entered blocking state
->> br0: port 5(eth8) entered disabled state
->> device eth8 entered promiscuous mode
->> br0: port 6(eth4) entered blocking state
->> br0: port 6(eth4) entered disabled state
->> mv88e6085 1002b000.ethernet-1:04: Timeout while waiting for switch
->> mv88e6085 1002b000.ethernet-1:04: port 0 failed to add 
->> 9a:af:03:f1:bd:0a vid 1 to fdb: -110
-> 
-> Dumb question, but if you get errors like this, how can you test 
-> anything at all
-> in the patches that you submit?
+Remove the use of Hungarian notation, which is not used in the Linux
+kernel. Reported by checkpatch
+Add indentation to the affected function to follow the Linux kernel
+coding style. This improves visibility
 
-The answer is that I don't always get these errors... once in a while 
-(maaany resets) it does
-not happen, and all is fine.
+Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+---
+ drivers/staging/vt6655/rxtx.c | 26 +++++++++++---------------
+ 1 file changed, 11 insertions(+), 15 deletions(-)
 
-The error code is... well of course -110 (timed out).
-
-> 
->> device eth4 entered promiscuous mode
->> br0: port 7(eth7) entered blocking state
->> br0: port 7(eth7) entered disabled state
->> 
->> I don't know if that gives ay clues...?
-> 
-> Not really. That error might be related - something indicating a 
-> breakage
-> in the top-level (fec IIUC) MDIO controller, or not. There was "recent"
-> rework almost everywhere.  For example commit 35da1dfd9484 ("net: dsa:
-> mv88e6xxx: Improve performance of busy bit polling"). That also hooks
-> into the mv88e6xxx cascaded MDIO controller 
-> (mv88e6xxx_g2_smi_phy_wait),
-> so there might be something there.
-> 
-
-I can check that out, but I remember that net-next has not worked on 
-this device for quite some
-time...
-
->> 
->> Otherwise I have to take more time to see what I can dig out. The 
->> easiest
->> for me is then to add some printk statements giving targeted 
->> information if told what and
->> where...
-> 
-> Do you have a timeline for when the regression was introduced?
-> Commit 35da1dfd9484 reverts cleanly, so I suppose giving it a go with
-> that reverted might be worth a shot. Otherwise, a bisect from a known
-> working version only takes a couple of hours, and shouldn't require
-> other changes to the setup.
-
-I can't say when the regression was introduced as I used modified 
-kernels, but something
-between 5.16 and 5.17, I know there was something phy related, but it's 
-a bit more complicated,
-so it is only a guess...
-
-I would have to get the whole locked port patch set etc. on a 5.16 to 
-see if that works.
+diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+index 341e23054817..869685d27abe 100644
+--- a/drivers/staging/vt6655/rxtx.c
++++ b/drivers/staging/vt6655/rxtx.c
+@@ -21,7 +21,7 @@
+  *      s_uGetRTSCTSDuration- get rtx/cts required duration
+  *      get_rtscts_time- get rts/cts reserved time
+  *      s_uGetTxRsvTime- get frame reserved time
+- *      s_vFillCTSHead- fulfill CTS ctl header
++ *      fill_cts_header- fulfill CTS ctl header
+  *      s_vFillFragParameter- Set fragment ctl parameter.
+  *      fill_rts_header- fulfill RTS ctl header
+  *      s_vFillTxKey- fulfill tx encrypt key
+@@ -724,19 +724,15 @@ static void fill_rts_header(struct vnt_private *pDevice,
+ 	}
+ }
+ 
+-static
+-void
+-s_vFillCTSHead(
+-	struct vnt_private *pDevice,
+-	unsigned int uDMAIdx,
+-	unsigned char byPktType,
+-	void *pvCTS,
+-	unsigned int cbFrameLength,
+-	bool bNeedAck,
+-	bool bDisCRC,
+-	unsigned short wCurrentRate,
+-	unsigned char byFBOption
+-)
++static void fill_cts_header(struct vnt_private *pDevice,
++			    unsigned int uDMAIdx,
++			    unsigned char byPktType,
++			    void *pvCTS,
++			    unsigned int cbFrameLength,
++			    bool bNeedAck,
++			    bool bDisCRC,
++			    unsigned short wCurrentRate,
++			    unsigned char byFBOption)
+ {
+ 	unsigned int uCTSFrameLen = 14;
+ 
+@@ -891,7 +887,7 @@ static void generate_tx_parameter(struct vnt_private *pDevice,
+ 			buf->cts_rrv_time_ba = get_rtscts_time(pDevice, 3, byPktType, cbFrameSize, wCurrentRate);
+ 
+ 			/* Fill CTS */
+-			s_vFillCTSHead(pDevice, uDMAIdx, byPktType, pvCTS, cbFrameSize, bNeedACK, bDisCRC, wCurrentRate, byFBOption);
++			fill_cts_header(pDevice, uDMAIdx, byPktType, pvCTS, cbFrameSize, bNeedACK, bDisCRC, wCurrentRate, byFBOption);
+ 		}
+ 	} else if (byPktType == PK_TYPE_11A) {
+ 		if (pvRTS) {/* RTS_need, non PCF mode */
+-- 
+2.34.1
 
