@@ -2,77 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8EF62A102
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F93262A108
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 19:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiKOSCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 13:02:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53752 "EHLO
+        id S231935AbiKOSEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 13:04:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238391AbiKOSBs (ORCPT
+        with ESMTP id S231255AbiKOSEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 13:01:48 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03CF21E0A
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:01:46 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id o30so10204825wms.2
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:01:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q6tyLu//sUdUlLfcb+DLobo5/aUjbDUieQQrm3E0uXs=;
-        b=QKK3vP1kJ3b/VDq/Nra/LHQfVXh4tiB8yugNkjQYZiLyNuxM/Lx8EvsLd8ASSZznPf
-         NwgpqmLiYOTkSHv76ADFSf41VKWx8zQ8mJt4dsYKH+cqHNwEQX8Wh7ejXPFcFkuCw9lI
-         baMyGF7lQH9nHhZg9PVX13r8htppxYKWTRgIc=
+        Tue, 15 Nov 2022 13:04:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4485163E1
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:03:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668535428;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VZPGmCDP4PdFjMklWOBrmsqQLminbKqT3dINkdp9yW4=;
+        b=fZ+rWeSsnKXg293z9HL6yOmD7UDK9J5zQrYxWyZnh99EV/ASOnJhTN5gEz/n1rpNRm9vdd
+        Fotc7xVsMKHM2DR05YWA+e+pdgRGpyd8nNv1CH2Hkq0Vq62DW9VwagKGf/iDH5Eqw44DkJ
+        3L2ZaLM9cP1fzSvFsAyJGkDMVrpPt5o=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-591-zZLJ8pXEMX-9MHPx-YQchQ-1; Tue, 15 Nov 2022 13:03:47 -0500
+X-MC-Unique: zZLJ8pXEMX-9MHPx-YQchQ-1
+Received: by mail-qk1-f199.google.com with SMTP id bk30-20020a05620a1a1e00b006fb2378c857so13618864qkb.18
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 10:03:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q6tyLu//sUdUlLfcb+DLobo5/aUjbDUieQQrm3E0uXs=;
-        b=ltgJ/Uk1qSVTfnfPMJpJNyHhSXt9sEeemq9oEOJaSm4K7Kwsm0W9NhedavOtLSAjy4
-         G4FczOUh8KgXlwHxEhp6y0HtdLc6p0S8X5m5w/RCMUrkW1LIPuesSg1PvlosvyI8IjOL
-         y0n4SBXzJuEjDXBUQb0hg+siOsS4rm3oxTSuPPBIdMZ6vtDyyj37ZCuD1KdMt1dWMn9z
-         0kPLYLAY61kbiHslyfB1hueg7h/p+DZS1l4ev0Eipx92waF9KrcZntvucFRnq4jAWqJR
-         vNIbQs5UVlnxOfm7FMdzgO0JpMWH3Ya6OktDpjTYpjFgSCbUdvMQF0O7Cz5+UOES88l9
-         dGrA==
-X-Gm-Message-State: ANoB5pmsilBu+jNVNAKuw18LHOvWnixMQppLJMddTcevK27Lwc2PfACF
-        zdNvWak9gBIDze36RneDvJO6Yw==
-X-Google-Smtp-Source: AA0mqf7kpB6uatetwA12Z7FJMUL5Vv9yVzLk2ylYofFLk0c7x+23o2Aq0ZJU541qCl2PbDG4LWyEyw==
-X-Received: by 2002:a1c:2581:0:b0:3cf:6a83:c7a3 with SMTP id l123-20020a1c2581000000b003cf6a83c7a3mr2279349wml.21.1668535305126;
-        Tue, 15 Nov 2022 10:01:45 -0800 (PST)
-Received: from [10.211.55.3] ([167.98.215.174])
-        by smtp.googlemail.com with ESMTPSA id c2-20020a05600c0a4200b003cfd4cf0761sm14788029wmq.1.2022.11.15.10.01.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 10:01:44 -0800 (PST)
-Message-ID: <96374132-d05f-0b78-0b9c-8818c39fcec8@ieee.org>
-Date:   Tue, 15 Nov 2022 12:01:43 -0600
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VZPGmCDP4PdFjMklWOBrmsqQLminbKqT3dINkdp9yW4=;
+        b=X/MkghO97jctEWXUmFcwqiY5GIzbo8DA98emiLWzNKhGRBY8yOtbZdK8G+VylMi3f8
+         tNVFJulhvGl6UcF6BiT3A5ZxKRm6bco2jgLIS16pl5p7RqOXSEUJkCVZV0WBy//7X+SW
+         RhPViIaGi0VBUXfCf1aoff8/5ZLsf0Z5GQP7wA4e7DlSzaGmCyZjjz23+2SznEdlkfe2
+         84q4dpoZkEcrWW8j0tjg6bASGIjWYTugd+Erer2lZKRNy36QluKzAnK2DiEXxyY+8rCO
+         IdnHChrEzXSwvWm1yPL/fBrA7K1Wn3MpYlqY34tRK2LIgViiaoMzYQEyCbHUmGKFpGFo
+         ItDA==
+X-Gm-Message-State: ANoB5pmLy5E4dKTEJBK7LAqYS97BtiXn0J6xxV9c+jt6bESQL5IN+4hD
+        qf79zaWhMv3jDYj70gjywa0BH1grEuKhED3wzDYrtb6SQzLt11BWDAUBh18SFQw3ywyfX3UfGDB
+        b6us3gZoleuizJyGhRqgCJd/Y
+X-Received: by 2002:a0c:fb4f:0:b0:4bb:746b:b643 with SMTP id b15-20020a0cfb4f000000b004bb746bb643mr17508977qvq.19.1668535426682;
+        Tue, 15 Nov 2022 10:03:46 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6mtOCzP7fiXUrDhLbvxXOqillzwqzhWEmXWxlkkc1Rq2ucanEsEPbR5tAtX2D+jVp+DisnVg==
+X-Received: by 2002:a0c:fb4f:0:b0:4bb:746b:b643 with SMTP id b15-20020a0cfb4f000000b004bb746bb643mr17508949qvq.19.1668535426426;
+        Tue, 15 Nov 2022 10:03:46 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id e8-20020ac86708000000b003431446588fsm7455092qtp.5.2022.11.15.10.03.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 10:03:46 -0800 (PST)
+Date:   Tue, 15 Nov 2022 13:03:44 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ives van Hoorne <ives@codesandbox.io>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mm/migrate: Fix read-only page got writable when
+ recover pte
+Message-ID: <Y3PUgOUYx6ECN405@x1n>
+References: <20221110203132.1498183-1-peterx@redhat.com>
+ <20221110203132.1498183-2-peterx@redhat.com>
+ <9af36be3-313b-e39c-85bb-bf30011bccb8@redhat.com>
+ <Y3KgYeMTdTM0FN5W@x1n>
+ <ec8b3c86-d3b2-f898-7297-c20a58ae2ac1@redhat.com>
+ <Y3O5bCXSbvKJrjRL@x1n>
+ <82d7a142-8c78-4168-37e9-7b677b18987a@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH net-next v2 4/5] dt-bindings: net: qcom,ipa: support
- skipping GSI firmware load
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alex Elder <elder@linaro.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org,
-        elder@kernel.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221115113119.249893-1-elder@linaro.org>
- <20221115113119.249893-5-elder@linaro.org>
- <a4c4257b-1467-2ccb-f546-d58c6356a39a@linaro.org>
-Content-Language: en-US
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <a4c4257b-1467-2ccb-f546-d58c6356a39a@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <82d7a142-8c78-4168-37e9-7b677b18987a@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,11 +89,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/15/22 06:56, Krzysztof Kozlowski wrote:
-> This is a friendly reminder during the review process.
+On Tue, Nov 15, 2022 at 06:22:03PM +0100, David Hildenbrand wrote:
+> That's precisely what I had in mind recently, and I am happy to hear that
+> you have similar idea:
+> 
+> https://lkml.kernel.org/r/20221108174652.198904-6-david@redhat.com
+> 
+> "
+> Note that we don't optimize for the actual migration case:
+> (1) When migration succeeds the new PTE will not be writable because the
+>     source PTE was not writable (protnone); in the future we
+>     might just optimize that case similarly by reusing
+>     can_change_pte_writable()/can_change_pmd_writable() when removing
+>     migration PTEs.
+> "
 
-Yes as soon as I saw your message I remembered that I'd forgotten
-to add your reviewed-by tag.  I can send v3, but if the network
-maintainers are willing they could generously add it for me.
+I see, sorry I haven't yet read it, but sounds doable indeed.
 
-					-Alex
+> 
+> Currently, "readable_migration_entry" is even wrong: it might be PROT_NONE
+> and not even readable.
+
+Do you mean mprotect(PROT_NONE)?
+
+If we read the "read migration entry" as "migration entry with no write
+bit", it seems still fine, and code-wise after pte recovered it should
+still be PROT_NONE iiuc because mk_pte() will just make a pte without
+e.g. _PRESENT bit set on x86 while it'll have the _PROT_NONE bit.
+
+May not keep true for numa balancing though: when migration happens after a
+numa hint applied to a pte, it seems to me it's prone to lose the hint
+after migration completes (assuming this migration is not the numa
+balancing operation itself caused by a page access).  Doesn't sound like a
+severe issue though even if I didn't miss something, since if the page got
+moved around the original hint may need to reconsider anyway.
+
+-- 
+Peter Xu
+
