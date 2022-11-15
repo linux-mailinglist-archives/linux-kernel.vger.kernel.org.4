@@ -2,49 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A62EF6297E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F23CC6298E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 13:30:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiKOMBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 07:01:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
+        id S230322AbiKOMaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 07:30:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiKOMBq (ORCPT
+        with ESMTP id S229629AbiKOMaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 07:01:46 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488EB10B0
-        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 04:01:42 -0800 (PST)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NBPsW30K6zmW1D;
-        Tue, 15 Nov 2022 20:01:19 +0800 (CST)
-Received: from kwepemm600020.china.huawei.com (7.193.23.147) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 20:01:39 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 15 Nov 2022 20:01:38 +0800
-From:   Peng Zhang <zhangpeng362@huawei.com>
-To:     <ericvh@gmail.com>, <lucho@ionkov.net>, <asmadeus@codewreck.org>,
-        <linux_oss@crudebyte.com>, <dhowells@redhat.com>,
-        <jlayton@kernel.org>, <v9fs-developer@lists.sourceforge.net>
-CC:     <linux-kernel@vger.kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        <syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com>
-Subject: [PATCH] fscache: fix OOB Read in __fscache_acquire_volume
-Date:   Tue, 15 Nov 2022 12:27:01 +0000
-Message-ID: <20221115122701.2117502-1-zhangpeng362@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 15 Nov 2022 07:30:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B44E1CB04;
+        Tue, 15 Nov 2022 04:30:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF9DA6171D;
+        Tue, 15 Nov 2022 12:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 00E23C43470;
+        Tue, 15 Nov 2022 12:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668515416;
+        bh=RDrvuxjFUp6i9QW7KL1QZyCZe3XLJgNRwHhIsYgr+9Y=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=pehsHjJwAm5ezTK8RwskGP5wGcesefgb1XS8VgyhENEdxN4nqbaHmrBneW92WXs9u
+         wC0jSW0QTgaD3ormS7KlrOQNDQrz49NBw18Y7fubFg2RvBnjjK6o1DqLMUAYbtEsCn
+         3P5kr5CVr/W4144h/7uspnkd06wBP0+Hfmg0UVJuK0J51sBtIzQURMG8sMDOXYl3QA
+         XO4oV/CnGcEkQuw7pnNmpOXWu5WMj37kblFtrKeRmn48o9swi4F9WZwPb6mXX/YP8Q
+         y2IkGNGYj2t85MR1ra+5HhGyi4fL/ezHFM/+yYqLwdS6jb6+kWDXDcJ5Am+9kVuqwv
+         SZil/h6S/vcWQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D9083C395F5;
+        Tue, 15 Nov 2022 12:30:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600020.china.huawei.com (7.193.23.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v3] net: phy: marvell: add sleep time after enabling the
+ loopback bit
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166851541587.30368.11058064913336167873.git-patchwork-notify@kernel.org>
+Date:   Tue, 15 Nov 2022 12:30:15 +0000
+References: <20221114065302.10625-1-aminuddin.jamaluddin@intel.com>
+In-Reply-To: <20221114065302.10625-1-aminuddin.jamaluddin@intel.com>
+To:     Aminuddin Jamaluddin <aminuddin.jamaluddin@intel.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mohammad.athari.ismail@intel.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, tee.min.tan@intel.com,
+        muhammad.husaini.zulkifli@intel.com, hong.aun.looi@intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,96 +61,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ZhangPeng <zhangpeng362@huawei.com>
+Hello:
 
-Syzbot reported slab-out-of-bounds Read in __fscache_acquire_volume.
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in memcmp+0x16f/0x1c0 lib/string.c:757
-Read of size 8 at addr ffff888016f3aa90 by task syz-executor344/3613
+On Mon, 14 Nov 2022 14:53:02 +0800 you wrote:
+> Sleep time is added to ensure the phy to be ready after loopback
+> bit was set. This to prevent the phy loopback test from failing.
+> 
+> Fixes: 020a45aff119 ("net: phy: marvell: add Marvell specific PHY loopback")
+> Cc: <stable@vger.kernel.org> # 5.15.x
+> Signed-off-by: Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>
+> Signed-off-by: Aminuddin Jamaluddin <aminuddin.jamaluddin@intel.com>
+> 
+> [...]
 
-CPU: 0 PID: 3613 Comm: syz-executor344 Not tainted
-6.0.0-rc2-syzkaller-00327-g8379c0b31fbc #0
-Hardware name: Google Compute Engine/Google Compute Engine, BIOS
-Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- memcmp+0x16f/0x1c0 lib/string.c:757
- memcmp include/linux/fortify-string.h:420 [inline]
- fscache_volume_same fs/fscache/volume.c:133 [inline]
- fscache_hash_volume fs/fscache/volume.c:171 [inline]
- __fscache_acquire_volume+0x76c/0x1080 fs/fscache/volume.c:328
- fscache_acquire_volume include/linux/fscache.h:204 [inline]
- v9fs_cache_session_get_cookie+0x143/0x240 fs/9p/cache.c:34
- v9fs_session_init+0x1166/0x1810 fs/9p/v9fs.c:473
- v9fs_mount+0xba/0xc90 fs/9p/vfs_super.c:126
- legacy_get_tree+0x105/0x220 fs/fs_context.c:610
- vfs_get_tree+0x89/0x2f0 fs/super.c:1530
- do_new_mount fs/namespace.c:3040 [inline]
- path_mount+0x1326/0x1e20 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f7d5064b1d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89
-f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
-f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd1700c028 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 00007ffd1700c060 RCX: 00007f7d5064b1d9
-RDX: 0000000020000040 RSI: 0000000020000000 RDI: 0000000000000000
-RBP: 0000000000000000 R08: 0000000020000200 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000f4240
-R13: 0000000000000000 R14: 00007ffd1700c04c R15: 00007ffd1700c050
-==================================================================
+Here is the summary with links:
+  - [net,v3] net: phy: marvell: add sleep time after enabling the loopback bit
+    https://git.kernel.org/netdev/net/c/18c532e44939
 
-The type of a->key[0] is char. If the length of cache volume key is
-greater than 127, the value of a->key[0] is less than 0. In this case,
-klen becomes much larger than 255 after type conversion, because the
-type of klen is size_t. As a result, memcmp() is read out of bounds. Fix
-this by adding a check on the length of the key in
-v9fs_cache_session_get_cookie().
-
-Reported-by: syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com
-Fixes: 24e42e32d347 ("9p: Use fscache indexing rewrite and reenable caching")
-Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
----
- fs/9p/cache.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/fs/9p/cache.c b/fs/9p/cache.c
-index cebba4eaa0b5..2688840b734e 100644
---- a/fs/9p/cache.c
-+++ b/fs/9p/cache.c
-@@ -21,12 +21,20 @@ int v9fs_cache_session_get_cookie(struct v9fs_session_info *v9ses,
- {
- 	struct fscache_volume *vcookie;
- 	char *name, *p;
-+	size_t nlen;
- 
- 	name = kasprintf(GFP_KERNEL, "9p,%s,%s",
- 			 dev_name, v9ses->cachetag ?: v9ses->aname);
- 	if (!name)
- 		return -ENOMEM;
- 
-+	nlen = strlen(name);
-+	if (nlen > 127) {
-+		pr_err("Invalid cache volume key length: %d\n", nlen);
-+		kfree(name);
-+		return -EINVAL;
-+	}
-+
- 	for (p = name; *p; p++)
- 		if (*p == '/')
- 			*p = ';';
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
