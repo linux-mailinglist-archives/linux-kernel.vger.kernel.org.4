@@ -2,51 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0F5629256
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB27629258
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 08:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232380AbiKOHRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 02:17:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41228 "EHLO
+        id S231136AbiKOHSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 02:18:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbiKOHRh (ORCPT
+        with ESMTP id S231993AbiKOHSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 02:17:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C227D1DF05;
-        Mon, 14 Nov 2022 23:17:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77BEDB816E1;
-        Tue, 15 Nov 2022 07:17:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E19C2C433C1;
-        Tue, 15 Nov 2022 07:17:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668496653;
-        bh=H6ycuvdmMnn4fzX+ZhFbcKEoEHYAguQOKDxX4bdPxmU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K8Iu51xsk/uma9VXUC+KtCaKc2k728Hhu9iT9hakP+zjNbkf1Sm0z0curl0rL/35R
-         PocaKKjpqrbp1nxraFy82R+x8FNWAmWrYRmzkDWtc1nijLQnzpjQnga5Er6HM1Zgqu
-         UE0K+IhEiOpnSK2Ne/d9u/HKuE5mjx0j3/hW33KGErn967xK8DSF6p/WJHHierWd7k
-         tQ0qy4XFdHSzoyYOiCAfd5j5sO7nu09fGYfA4X3yr7ZpLZvNOQ/Xg4aE1h53V1E+zU
-         nWZUP4SxrvjrUrN11IqTyVScrhmx3braNGbRgsdCkbdpdK2Z6qxdNHizNUKJUVamPk
-         2KW6vf9csSJyA==
-From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-        Tobias Klauser <tklauser@distanz.ch>
-Subject: [PATCH 4/4] tty: serial: altera_jtaguart: remove struct altera_jtaguart
-Date:   Tue, 15 Nov 2022 08:17:24 +0100
-Message-Id: <20221115071724.5185-4-jirislaby@kernel.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221115071724.5185-1-jirislaby@kernel.org>
-References: <20221115071724.5185-1-jirislaby@kernel.org>
+        Tue, 15 Nov 2022 02:18:25 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7AB2037C
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:18:22 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id q5so6969753ilt.13
+        for <linux-kernel@vger.kernel.org>; Mon, 14 Nov 2022 23:18:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dDOq5hHv6AVi/wyrBOv5M+hykVo3T4Nk4to/mUGyDKs=;
+        b=tegEvnzZulUoHKycows8UYUSa1Fr1t9i8JqMMRxEiyZGpKw44PbG7oNArutszNdjz5
+         QwhzWmCuAGffg2UpDQefgCp7+hN62skzDZQ8/xMRKAy4RhjAQkhhmnE2GQi/QEkM+0g0
+         4C6gXNHASDAVueKeUBXG9Z6QX4VncaxpRTe4lAUY1LzcByz38EKhBzCg6FoCF2V5cM1W
+         JXSG2vhSe9PMEx0O+ji0o32Ib7RY2B6N32vF+YSQQ8jgqOcydQpZjoK+LLZKb1Rh9+qs
+         SLkoDcMtebP0C9Dj9cSIn8MKJbqmgqDHxa4uHZ9x+COZPHHzHCBLh/l6S/aSZp2yPJSO
+         +QUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dDOq5hHv6AVi/wyrBOv5M+hykVo3T4Nk4to/mUGyDKs=;
+        b=bi/7dHVDFyo4cHeLeka9bf1LcPp1o3O+w9CrlImrI2xg2LjRx37zE5Vurm3WEuYPpl
+         IeVb5467oYtlpcIoeyueHXHK7tyl+qqEHfdwwF98PFL8XwTmeqeOxQo8vl0Xp4dhxumU
+         O5x0HpOrRhOR/3MjU3l/EIuAkCwks5MQNx9n0LXTCHr/1bsaJnZdI7EuH7y88jhQFu4g
+         QBN5ZyB5zCvzCv3J/pEG6fXVo7rU+tBYJO7jcvwJhabfaI72KG3HTT3j6RCYd2NqJgbC
+         oW6VwYbLTqhuvX8LjONIcCG1JRlcLRPqjCV++xOojKggJbLLLWfLC7OhJl8kGx1FlRlB
+         Grcg==
+X-Gm-Message-State: ANoB5pl10iStrs761yt/YwdGU4vfRjGAV8DNIMT1bAvBYlUe+7c8jzbV
+        IuY+1MFY1M9agmgb03JC91y+LVWozC67p12T2HxnJA==
+X-Google-Smtp-Source: AA0mqf4Sf29emJ35AtROAr+iIyOB/tVwFXqaeA8RmhHDmiRGXi1SiHL7tmyGBtYlosGaCQ0hefr1mtpb6FYSGqBXSTg=
+X-Received: by 2002:a05:6e02:cce:b0:300:cf38:174f with SMTP id
+ c14-20020a056e020cce00b00300cf38174fmr8031185ilj.22.1668496701950; Mon, 14
+ Nov 2022 23:18:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20221102035301.512892-1-zhangsong34@huawei.com>
+ <CAKfTPtCcYySw2ZC_pr8=3KFPmAAVN=1h8=5jWkW5YXyy11sehg@mail.gmail.com>
+ <b45f96b6-e0b2-22bb-eda1-2468d6fbe104@huawei.com> <CAKfTPtDrWCenxtVcunjS3pGD81TdLf2EkhO_YcdfxnUHXpVF3w@mail.gmail.com>
+ <4bad43c0-40a4-dc39-7214-f2c3321a47ee@huawei.com> <CAKfTPtCwUvkqnzs9n0G+cyE5h5QdgwoKF-gNu+4A5g4NHNRe9w@mail.gmail.com>
+ <7d887171-491a-1d36-0926-d0486aacc9c2@huawei.com> <CAKfTPtCHZm2AKemnpE1UvQPsgpB5ycFdjkJa1pHQS-=DYJ2-KA@mail.gmail.com>
+In-Reply-To: <CAKfTPtCHZm2AKemnpE1UvQPsgpB5ycFdjkJa1pHQS-=DYJ2-KA@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Tue, 15 Nov 2022 08:18:10 +0100
+Message-ID: <CAKfTPtAMdQD9S-mbLszeu2pjB4YB2A+1OM5NUV_2xDzCTCc7Qw@mail.gmail.com>
+Subject: Re: [PATCH] sched/fair: Introduce priority load balance for CFS
+To:     Song Zhang <zhangsong34@huawei.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,121 +73,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It contains only struct uart_port, so no need for another structure.
-Remove it and convert the rest to use struct uart_port directly.
+On Mon, 14 Nov 2022 at 17:42, Vincent Guittot
+<vincent.guittot@linaro.org> wrote:
+>
+> On Sat, 12 Nov 2022 at 03:51, Song Zhang <zhangsong34@huawei.com> wrote:
+> >
+> > Hi, Vincent
+> >
+> > On 2022/11/3 17:22, Vincent Guittot wrote:
+> > > On Thu, 3 Nov 2022 at 10:20, Song Zhang <zhangsong34@huawei.com> wrote:
+> > >>
+> > >>
+> > >>
+> > >> On 2022/11/3 16:33, Vincent Guittot wrote:
+> > >>> On Thu, 3 Nov 2022 at 04:01, Song Zhang <zhangsong34@huawei.com> wrote:
+> > >>>>
+> > >>>> Thanks for your reply!
+> > >>>>
+> > >>>> On 2022/11/3 2:01, Vincent Guittot wrote:
+> > >>>>> On Wed, 2 Nov 2022 at 04:54, Song Zhang <zhangsong34@huawei.com> wrote:
+> > >>>>>>
+> > >>>>>
+> > >>>>> This really looks like a v3 of
+> > >>>>> https://lore.kernel.org/all/20220810015636.3865248-1-zhangsong34@huawei.com/
+> > >>>>>
+> > >>>>> Please keep versioning.
+> > >>>>>
+> > >>>>>> Add a new sysctl interface:
+> > >>>>>> /proc/sys/kernel/sched_prio_load_balance_enabled
+> > >>>>>
+> > >>>>> We don't want to add more sysctl knobs for the scheduler, we even
+> > >>>>> removed some. Knob usually means that you want to fix your use case
+> > >>>>> but the solution doesn't make sense for all cases.
+> > >>>>>
+> > >>>>
+> > >>>> OK, I will remove this knobs later.
+> > >>>>
+> > >>>>>>
+> > >>>>>> 0: default behavior
+> > >>>>>> 1: enable priority load balance for CFS
+> > >>>>>>
+> > >>>>>> For co-location with idle and non-idle tasks, when CFS do load balance,
+> > >>>>>> it is reasonable to prefer migrating non-idle tasks and migrating idle
+> > >>>>>> tasks lastly. This will reduce the interference by SCHED_IDLE tasks
+> > >>>>>> as much as possible.
+> > >>>>>
+> > >>>>> I don't agree that it's always the best choice to migrate a non-idle task 1st.
+> > >>>>>
+> > >>>>> CPU0 has 1 non idle task and CPU1 has 1 non idle task and hundreds of
+> > >>>>> idle task and there is an imbalance between the 2 CPUS: migrating the
+> > >>>>> non idle task from CPU1 to CPU0 is not the best choice
+> > >>>>>
+> > >>>>
+> > >>>> If the non idle task on CPU1 is running or cache hot, it cannot be
+> > >>>> migrated and idle tasks can also be migrated from CPU1 to CPU0. So I
+> > >>>> think it does not matter.
+> > >>>
+> > >>> What I mean is that migrating non idle tasks first is not a universal
+> > >>> win and not always what we want.
+> > >>>
+> > >>
+> > >> But migrating online tasks first is mostly a trade-off that
+> > >> non-idle(Latency Sensitive) tasks can obtain more CPU time and minimize
+> > >> the interference caused by IDLE tasks. I think this makes sense in most
+> > >> cases, or you can point out what else I need to think about it ?
+> > >>
+> > >> Best regards.
+> > >>
+> > >>>>
+> > >>>>>>
+> > >>>>>> Testcase:
+> > >>>>>> - Spawn large number of idle(SCHED_IDLE) tasks occupy CPUs
+> > >>>>>
+> > >>>>> What do you mean by a large number ?
+> > >>>>>
+> > >>>>>> - Let non-idle tasks compete with idle tasks for CPU time.
+> > >>>>>>
+> > >>>>>> Using schbench to test non-idle tasks latency:
+> > >>>>>> $ ./schbench -m 1 -t 10 -r 30 -R 200
+> > >>>>>
+> > >>>>> How many CPUs do you have ?
+> > >>>>>
+> > >>>>
+> > >>>> OK, some details may not be mentioned.
+> > >>>> My virtual machine has 8 CPUs running with a schbench process and 5000
+> > >>>> idle tasks. The idle task is a while dead loop process below:
+> > >>>
+> > >>> How can you care about latency when you start 10 workers on 8 vCPUs
+> > >>> with 5000 non idle threads ?
+> > >>>
+> > >>
+> > >> No no no... spawn 5000 idle(SCHED_IDLE) processes not 5000 non-idle
+> > >> threads, and with 10 non-idle schbench workers on 8 vCPUs.
+> > >
+> > > yes spawn 5000 idle tasks but my point remains the same
+> > >
+> >
+> > I am so sorry that I have not received your reply for a long time, and I
+> > am still waiting for it anxiously. In fact, migrating non-idle tasks 1st
+> > works well in most scenarios, so it maybe possible to add a
+> > sched_feat(LB_PRIO) to enable or disable that. Finally, I really hope
+> > you can give me some better advice.
+>
+> I have seen that you posted a v4 5 days ago which is on my list to be reviewed.
+>
+> My concern here remains that selecting non idle task 1st is not always
+> the best choices as for example when you have 1 non idle task per cpu
+> and thousands of idle tasks moving around. Then regarding your use
+> case, the weight of the 5000 idle threads is around twice more than
+> the weight of your non idle bench: sum weight of idle threads is 15k
+> whereas the weight of your bench is around 6k IIUC how RPS run. This
+> also means that the idle threads will take a significant times of the
+> system: 5000 / 7000 ticks. I don't understand how you can care about
+> latency in such extreme case and I'm interested to get the real use
+> case where you can have such situation.
+>
+> All that to say that idle task remains cfs task with a small but not
+> null weight and we should not make them special other than by not
+> preempting at wakeup.
 
-Cc: Tobias Klauser <tklauser@distanz.ch>
-Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
----
- drivers/tty/serial/altera_jtaguart.c | 29 +++++++++-------------------
- 1 file changed, 9 insertions(+), 20 deletions(-)
+Also, as mentioned for a previous version, a task with nice prio 19
+has a weight of 15 so if you replace the 5k idle threads with 1k cfs
+w/ nice prio 19 threads, you will face a similar problem. So you can't
+really care only on the idle property of a task
 
-diff --git a/drivers/tty/serial/altera_jtaguart.c b/drivers/tty/serial/altera_jtaguart.c
-index 6808abd27785..9f843d1cee40 100644
---- a/drivers/tty/serial/altera_jtaguart.c
-+++ b/drivers/tty/serial/altera_jtaguart.c
-@@ -50,13 +50,6 @@
- #define ALTERA_JTAGUART_CONTROL_AC_MSK		0x00000400
- #define ALTERA_JTAGUART_CONTROL_WSPACE_MSK	0xFFFF0000
- 
--/*
-- * Local per-uart structure.
-- */
--struct altera_jtaguart {
--	struct uart_port port;
--};
--
- static unsigned int altera_jtaguart_tx_space(struct uart_port *port, u32 *ctlp)
- {
- 	u32 ctl = readl(port->membase + ALTERA_JTAGUART_CONTROL_REG);
-@@ -115,9 +108,8 @@ static void altera_jtaguart_set_termios(struct uart_port *port,
- 		tty_termios_copy_hw(termios, old);
- }
- 
--static void altera_jtaguart_rx_chars(struct altera_jtaguart *pp)
-+static void altera_jtaguart_rx_chars(struct uart_port *port)
- {
--	struct uart_port *port = &pp->port;
- 	unsigned char ch;
- 	unsigned long status;
- 
-@@ -134,9 +126,8 @@ static void altera_jtaguart_rx_chars(struct altera_jtaguart *pp)
- 	tty_flip_buffer_push(&port->state->port);
- }
- 
--static void altera_jtaguart_tx_chars(struct altera_jtaguart *pp)
-+static void altera_jtaguart_tx_chars(struct uart_port *port)
- {
--	struct uart_port *port = &pp->port;
- 	unsigned int count;
- 	u8 ch;
- 
-@@ -151,8 +142,6 @@ static void altera_jtaguart_tx_chars(struct altera_jtaguart *pp)
- static irqreturn_t altera_jtaguart_interrupt(int irq, void *data)
- {
- 	struct uart_port *port = data;
--	struct altera_jtaguart *pp =
--	    container_of(port, struct altera_jtaguart, port);
- 	unsigned int isr;
- 
- 	isr = (readl(port->membase + ALTERA_JTAGUART_CONTROL_REG) >>
-@@ -161,9 +150,9 @@ static irqreturn_t altera_jtaguart_interrupt(int irq, void *data)
- 	spin_lock(&port->lock);
- 
- 	if (isr & ALTERA_JTAGUART_CONTROL_RE_MSK)
--		altera_jtaguart_rx_chars(pp);
-+		altera_jtaguart_rx_chars(port);
- 	if (isr & ALTERA_JTAGUART_CONTROL_WE_MSK)
--		altera_jtaguart_tx_chars(pp);
-+		altera_jtaguart_tx_chars(port);
- 
- 	spin_unlock(&port->lock);
- 
-@@ -265,7 +254,7 @@ static const struct uart_ops altera_jtaguart_ops = {
- };
- 
- #define ALTERA_JTAGUART_MAXPORTS 1
--static struct altera_jtaguart altera_jtaguart_ports[ALTERA_JTAGUART_MAXPORTS];
-+static struct uart_port altera_jtaguart_ports[ALTERA_JTAGUART_MAXPORTS];
- 
- #if defined(CONFIG_SERIAL_ALTERA_JTAGUART_CONSOLE)
- 
-@@ -308,7 +297,7 @@ static void altera_jtaguart_console_putc(struct uart_port *port, unsigned char c
- static void altera_jtaguart_console_write(struct console *co, const char *s,
- 					  unsigned int count)
- {
--	struct uart_port *port = &(altera_jtaguart_ports + co->index)->port;
-+	struct uart_port *port = &altera_jtaguart_ports[co->index];
- 
- 	uart_console_write(port, s, count, altera_jtaguart_console_putc);
- }
-@@ -320,7 +309,7 @@ static int __init altera_jtaguart_console_setup(struct console *co,
- 
- 	if (co->index < 0 || co->index >= ALTERA_JTAGUART_MAXPORTS)
- 		return -EINVAL;
--	port = &altera_jtaguart_ports[co->index].port;
-+	port = &altera_jtaguart_ports[co->index];
- 	if (port->membase == NULL)
- 		return -ENODEV;
- 	return 0;
-@@ -400,7 +389,7 @@ static int altera_jtaguart_probe(struct platform_device *pdev)
- 	if (i >= ALTERA_JTAGUART_MAXPORTS)
- 		return -EINVAL;
- 
--	port = &altera_jtaguart_ports[i].port;
-+	port = &altera_jtaguart_ports[i];
- 
- 	res_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	if (res_mem)
-@@ -444,7 +433,7 @@ static int altera_jtaguart_remove(struct platform_device *pdev)
- 	if (i == -1)
- 		i = 0;
- 
--	port = &altera_jtaguart_ports[i].port;
-+	port = &altera_jtaguart_ports[i];
- 	uart_remove_one_port(&altera_jtaguart_driver, port);
- 	iounmap(port->membase);
- 
--- 
-2.38.1
-
+>
+> >
+> > Best regards.
+> >
+> > Song Zhang
