@@ -2,174 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F59629DA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4556D629DA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 15 Nov 2022 16:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238130AbiKOPfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 15 Nov 2022 10:35:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36632 "EHLO
+        id S238263AbiKOPgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 15 Nov 2022 10:36:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbiKOPf3 (ORCPT
+        with ESMTP id S231473AbiKOPf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 15 Nov 2022 10:35:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BC5E033;
-        Tue, 15 Nov 2022 07:35:28 -0800 (PST)
+        Tue, 15 Nov 2022 10:35:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D222E033
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 07:35:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D435AB81999;
-        Tue, 15 Nov 2022 15:35:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9DFAC433D6;
-        Tue, 15 Nov 2022 15:35:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668526525;
-        bh=Kk6YE6r7+pV85S3KUOQG/FfC1eR+wtQ/SfWrFF0Vwo0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TS9/0fFZ//65FVU5AEZsNoQzTvjEDGLEiFolQK6eKm5ThlnM6G28vQ32n/lC2loKY
-         cMQ/4EQMA2lGumG0hh0M0sAnLjGeFA/3SWL6vaD+nthfLXE8FvkZ+UsCN9bXnZz1xv
-         w7kH227NwrCeyzkLF19cS7UX78V6B3j3QKNZ1tdKpVQu7T8ODjGanq4InZfPt0pFVz
-         26QbEOIzq/R3Bx075GNflt8yl27iwRpItzU+bzccWPxIcuIgKMfFhqmuoJ981K07dl
-         JLBDMt95hvQKVsoQhByILWrmm39ATKLDX6oL7/9AQtdLbF7Q5kcJiVAOOdjqlz7xIL
-         w67nE3xmB2BMA==
-Date:   Tue, 15 Nov 2022 09:35:10 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Tom Talpey <tom@talpey.com>
-Cc:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] ksmbd: replace one-element arrays with flexible-array
- members
-Message-ID: <Y3OxronfaPYv9qGP@work>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A4AD61884
+        for <linux-kernel@vger.kernel.org>; Tue, 15 Nov 2022 15:35:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDC18C433D6;
+        Tue, 15 Nov 2022 15:35:53 +0000 (UTC)
+Date:   Tue, 15 Nov 2022 15:35:49 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Topi Miettinen <toiwoton@gmail.com>
+Cc:     Joey Gouly <joey.gouly@arm.com>, Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lennart Poettering <lennart@poettering.net>,
+        Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jeremy Linton <jeremy.linton@arm.com>, linux-mm@kvack.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-abi-devel@lists.sourceforge.net, nd@arm.com, shuah@kernel.org
+Subject: Re: [PATCH v1 1/2] mm: Implement memory-deny-write-execute as a prctl
+Message-ID: <Y3Ox1QxAzdouCGUr@arm.com>
+References: <20221026150457.36957-1-joey.gouly@arm.com>
+ <20221026150457.36957-2-joey.gouly@arm.com>
+ <202210281053.904BE2F@keescook>
+ <20221110112714.GA1201@e124191.cambridge.arm.com>
+ <Y2zojDe0Oj4OSbIc@arm.com>
+ <45419a7d-04dd-2749-2534-6ba3bbd5d060@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <45419a7d-04dd-2749-2534-6ba3bbd5d060@gmail.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element arrays are deprecated, and we are replacing them with flexible
-array members instead. So, replace one-element arrays with flexible-array
-members in multiple structs in fs/ksmbd/smb_common.h and one in
-fs/ksmbd/smb2pdu.h.
+On Sat, Nov 12, 2022 at 08:11:24AM +0200, Topi Miettinen wrote:
+> On 10.11.2022 14.03, Catalin Marinas wrote:
+> > On Thu, Nov 10, 2022 at 11:27:14AM +0000, Joey Gouly wrote:
+> > > On Fri, Oct 28, 2022 at 11:51:00AM -0700, Kees Cook wrote:
+> > > > On Wed, Oct 26, 2022 at 04:04:56PM +0100, Joey Gouly wrote:
+> > > > > diff --git a/mm/mmap.c b/mm/mmap.c
+> > > > > index 099468aee4d8..42eaf6683216 100644
+> > > > > --- a/mm/mmap.c
+> > > > > +++ b/mm/mmap.c
+> > > > > @@ -1409,6 +1409,9 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
+> > > > >   			vm_flags |= VM_NORESERVE;
+> > > > >   	}
+> > > > > +	if (map_deny_write_exec(NULL, vm_flags))
+> > > > > +		return -EACCES;
+> > > > > +
+> > > > 
+> > > > This seems like the wrong place to do the check -- that the vma argument
+> > > > is a hard-coded "NULL" is evidence that something is wrong. Shouldn't
+> > > > it live in mmap_region()? What happens with MAP_FIXED, when there is
+> > > > an underlying vma? i.e. an MAP_FIXED will, I think, bypass the intended
+> > > > check. For example, we had "c" above:
+> > > > 
+> > > >       c)	mmap(PROT_READ);
+> > > > 	mprotect(PROT_READ|PROT_EXEC);		// fails
+> > > > 
+> > > > But this would allow another case:
+> > > > 
+> > > >       e)	addr = mmap(..., PROT_READ, ...);
+> > > > 	mmap(addr, ..., PROT_READ | PROT_EXEC, MAP_FIXED, ...);	// passes
+> > > 
+> > > I can move the check into mmap_region() but it won't fix the MAP_FIXED
+> > > example that you showed here.
+> > > 
+> > > mmap_region() calls do_mas_munmap(..) which will unmap overlapping regions.
+> > > However the `vma` for the 'old' region is not kept around, and a new vma will
+> > > be allocated later on "vma = vm_area_alloc(mm);", and the vm_flags are just set
+> > > to what is passed into mmap_region(), so map_deny_write_exec(vma, vm_flags)
+> > > will just be as good as passing NULL.
+> > > 
+> > > It's possible to save the vm_flags from the region that is unmapped, but Catalin
+> > > suggested it might be better if that is part of a later extension, what do you
+> > > think?
+> > 
+> > I thought initially we should keep the behaviour close to what systemd
+> > achieves via SECCOMP while only relaxing an mprotect(PROT_EXEC) if the
+> > vma is already executable (i.e. check actual permission change not just
+> > the PROT_* flags).
+> > 
+> > We could pass the old vm_flags for that region (and maybe drop the vma
+> > pointer entirely, just check old and new vm_flags). But this feels like
+> > tightening slightly systemd's MDWE approach. If user-space doesn't get
+> > confused by this, I'm fine to go with it. Otherwise we can add a new
+> > flag later for this behaviour
+> > 
+> > I guess that's more of a question for Topi on whether point tightening
+> > point (e) is feasible/desirable.
+> 
+> I think we want 1:1 compatibility with seccomp() for the basic version, so
+> MAP_FIXED shouldn't change the verdict. Later we can introduce more versions
+> (perhaps even less strict, too) when it's requested by configuration, like
+> MemoryDenyWriteExecute=[relaxed | strict].
 
-Important to mention is that doing a build before/after this patch results
-in no binary output differences.
+Are you ok with allowing mprotect(PROT_EXEC|PROT_BTI) if the mapping is
+already PROT_EXEC? Or you'd rather reject that as well?
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE routines
-on memcpy() and help us make progress towards globally enabling
--fstrict-flex-arrays=3 [1].
-
-Link: https://github.com/KSPP/linux/issues/242
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- fs/ksmbd/smb2pdu.c    |  4 ++--
- fs/ksmbd/smb2pdu.h    |  2 +-
- fs/ksmbd/smb_common.h | 12 ++++++------
- 3 files changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index 9306e10753f9..ae7a3b000c61 100644
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -3438,7 +3438,7 @@ static int smb2_populate_readdir_entry(struct ksmbd_conn *conn, int info_level,
- 		goto free_conv_name;
- 	}
- 
--	struct_sz = readdir_info_level_struct_sz(info_level) - 1 + conv_len;
-+	struct_sz = readdir_info_level_struct_sz(info_level) + conv_len;
- 	next_entry_offset = ALIGN(struct_sz, KSMBD_DIR_INFO_ALIGNMENT);
- 	d_info->last_entry_off_align = next_entry_offset - struct_sz;
- 
-@@ -3690,7 +3690,7 @@ static int reserve_populate_dentry(struct ksmbd_dir_info *d_info,
- 		return -EOPNOTSUPP;
- 
- 	conv_len = (d_info->name_len + 1) * 2;
--	next_entry_offset = ALIGN(struct_sz - 1 + conv_len,
-+	next_entry_offset = ALIGN(struct_sz + conv_len,
- 				  KSMBD_DIR_INFO_ALIGNMENT);
- 
- 	if (next_entry_offset > d_info->out_buf_len) {
-diff --git a/fs/ksmbd/smb2pdu.h b/fs/ksmbd/smb2pdu.h
-index 092fdd3f8750..aa5dbe54f5a1 100644
---- a/fs/ksmbd/smb2pdu.h
-+++ b/fs/ksmbd/smb2pdu.h
-@@ -443,7 +443,7 @@ struct smb2_posix_info {
- 	/* SidBuffer contain two sids (UNIX user sid(16), UNIX group sid(16)) */
- 	u8 SidBuffer[32];
- 	__le32 name_len;
--	u8 name[1];
-+	u8 name[];
- 	/*
- 	 * var sized owner SID
- 	 * var sized group SID
-diff --git a/fs/ksmbd/smb_common.h b/fs/ksmbd/smb_common.h
-index 318c16fa81da..e663ab9ea759 100644
---- a/fs/ksmbd/smb_common.h
-+++ b/fs/ksmbd/smb_common.h
-@@ -277,14 +277,14 @@ struct file_directory_info {
- 	__le64 AllocationSize;
- 	__le32 ExtFileAttributes;
- 	__le32 FileNameLength;
--	char FileName[1];
-+	char FileName[];
- } __packed;   /* level 0x101 FF resp data */
- 
- struct file_names_info {
- 	__le32 NextEntryOffset;
- 	__u32 FileIndex;
- 	__le32 FileNameLength;
--	char FileName[1];
-+	char FileName[];
- } __packed;   /* level 0xc FF resp data */
- 
- struct file_full_directory_info {
-@@ -299,7 +299,7 @@ struct file_full_directory_info {
- 	__le32 ExtFileAttributes;
- 	__le32 FileNameLength;
- 	__le32 EaSize;
--	char FileName[1];
-+	char FileName[];
- } __packed; /* level 0x102 FF resp */
- 
- struct file_both_directory_info {
-@@ -317,7 +317,7 @@ struct file_both_directory_info {
- 	__u8   ShortNameLength;
- 	__u8   Reserved;
- 	__u8   ShortName[24];
--	char FileName[1];
-+	char FileName[];
- } __packed; /* level 0x104 FFrsp data */
- 
- struct file_id_both_directory_info {
-@@ -337,7 +337,7 @@ struct file_id_both_directory_info {
- 	__u8   ShortName[24];
- 	__le16 Reserved2;
- 	__le64 UniqueId;
--	char FileName[1];
-+	char FileName[];
- } __packed;
- 
- struct file_id_full_dir_info {
-@@ -354,7 +354,7 @@ struct file_id_full_dir_info {
- 	__le32 EaSize; /* EA size */
- 	__le32 Reserved;
- 	__le64 UniqueId; /* inode num - le since Samba puts ino in low 32 bit*/
--	char FileName[1];
-+	char FileName[];
- } __packed; /* level 0x105 FF rsp data */
- 
- struct smb_version_values {
 -- 
-2.34.1
-
+Catalin
